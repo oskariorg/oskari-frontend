@@ -1,0 +1,195 @@
+@CHARSET "UTF-8";
+
+.olDraggingDown {
+    cursor: default !important;
+}
+
+.drag-tool {
+    cursor: default !important;
+}
+
+/* mapMenu style is defined in it html sourcecode*/
+/* background-image: url (  "../images /zoombar.png "  ); */
+#zoomboxtool {
+    z-index: 10000000 !important;
+}
+
+#zoomBox.olHandlerBoxZoomBox {
+    z-index: 1000 !important;
+    /*border: 2px solid #707070;*/
+    border: 2px solid #f5a72b;
+    position: absolute;
+    background-color: #f5e4ca; /*white;*/
+    font-size: 1px;
+    filter: alpha(opacity = 50);
+    opacity: 0.50;
+}
+
+#OpenLayersZoombar {
+    background-image: url( "../images/zoombar.png" );
+    left: 7px !important;
+    top: 30px !important;
+    width: 18px !important;
+    height: 176px !important;
+    position: absolute !important;
+    z-index: 10 !important;
+}
+
+#zoomLevelTitleId {
+    display: none;
+    position: absolute;
+    left: 40px;
+    top: 80px;
+    z-index: 10000000 !important;
+}
+
+#zoomLevelTitle1 {
+    position: absolute;
+    top: 24px;
+    left: 0px;
+}
+
+#zoomLevelTitle2 {
+    position: absolute;
+    top: 60px;
+    left: 0px;
+}
+
+#zoomLevelTitle3 {
+    position: absolute;
+    top: 92px;
+    left: 0px;
+}
+
+#zoomLevelTitle4 {
+    position: absolute;
+    top: 112px;
+    left: 0px;
+}
+
+#zoomLevelTitle5 {
+    position: absolute;
+    top: 135px;
+    left: 0px;
+}
+
+#zoomLevel_arrow {
+    background-image: url(../images/zoombar_title_left_arrow.png);
+    height: 14px;
+    width: 7px;
+    position: absolute;
+    left: 0px;
+}
+
+#zoomLevel_title {
+    font-family: Verdana, Tahoma, Helvetica, Arial;
+    font-size: 11px;
+    background-image: url(../images/zoombar_title_center.png);
+    white-space: nowrap;
+    height: 14px;
+    width: 70px;
+    position: absolute;
+    left: 7px;
+    vertical-align: middle;
+}
+
+#zoomLevel_label {
+    position: relative;
+    bottom: 3px;
+    text-align: left;
+}
+
+#zoomLevel_right {
+    background-image: url(../images/zoombar_right.png);
+    height: 14px;
+    width: 1px;
+    position: absolute;
+    left: 77px;
+}
+
+#mouseposition {
+    z-index: 100000 !important;
+    position: absolute;
+    right: 0px;
+    /*top: 0px;*/
+    bottom: 0px;
+    background-color: #ffffff !important;
+    opacity: 0.7;
+    filter: alpha(opacity =     70);
+    font-size: 12px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* map control tools icons */
+.map_control_tool_prev {
+    background-image: url( "../images/takaisin.png" ) !important;
+}
+
+.map_control_tool_next {
+    background-image: url( "../images/eteen.png" ) !important;
+}
+
+.map_control_navigate_tool {
+    background-image: url( "../images/valinta.png" ) !important;}
+
+.map_control_zoom_tool {
+    background-image: url( "../images/zoom.png" ) !important;
+}
+
+.map_control_measure_menu {
+    background-image: url( "../images/mitta_expand.png" ) !important;
+}
+
+.map_control_measure_area_tool {
+    background-image: url( "../images/mitta_reitti.png" ) !important;
+}
+
+.map_control_measure_tool {
+    background-image: url( "../images/mitta.png" ) !important;
+}
+
+.map_control_map_print_tool {
+    background-image: url( "../images/tulosta.png" ) !important;
+}
+
+.map_control_map_link_tool {
+    background-image: url( "../images/tee_linkki.png" ) !important;
+}
+
+.map_control_full_screen_tool {
+    background-position: center;
+    background-image: url( "../images/laajenna.png");
+}
+
+.map_control_full_screen_tool_fs {
+    background-position: center;
+    background-image: url( "../images/keita_kasaan.png");
+}
+
+.opacity_25 {
+    filter: alpha(opacity = 25);
+    opacity: 0.25;
+}
+
+.opacity_50 {
+    filter: alpha(opacity = 50);
+    opacity: 0.50;
+}
+
+.opacity_75 {
+    filter: alpha(opacity = 75);
+    opacity: 0.75;
+}
+
+.opacity_80 {
+    filter: alpha(opacity = 80);
+    opacity: 0.80;
+}
+
+.opacity_85 {
+    filter: alpha(opacity = 85);
+    opacity: 0.85;
+}

@@ -1,0 +1,48 @@
+<div xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:exslt="http://exslt.org/common">
+   <h1 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml" xmlns:srv="http://www.isotc211.org/2005/srv" class="metadataHeading">Karttapaikka</h1>
+   <table xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml" xmlns:srv="http://www.isotc211.org/2005/srv" class="metadata">
+      <tbody>
+         <tr>
+            <th class="metadataTitle">Päivämäärä</th>
+            <td class="metadataContent">1996-09-17 (Luonti)</td>
+         </tr>
+         <tr>
+            <th class="metadataTitle">Organisaation nimi</th>
+            <td class="metadataContent">Maanmittauslaitos</td>
+         </tr>
+         <tr>
+            <th class="metadataTitle">Palvelun tiivistelmä</th>
+            <td class="metadataContent">Palvelun kautta pääsee tutustumaan Maanmittauslaitoksen maastokarttoihin ja ilmakuviin. Voit hakea karttoja koko Suomesta
+               mm. paikannimillä ja koordinaateilla.
+               
+               Karttahaun lisäksi palvelusta löytyy monia muita ominaisuuksia, kuten koordinaattien muunnos ja karttalinkin tekeminen. Palvelun
+               kautta voit myös tilata erilaisia painettuja karttoja.
+            </td>
+         </tr>
+         <tr>
+            <th class="metadataTitle">Päivämäärä</th>
+            <td class="metadataContent">1996-09-17 (Luonti)</td>
+         </tr>
+         <tr>
+            <th class="metadataTitle">Verkko-osoite</th>
+            <td class="metadataContent"><a target="_blank" href="http://www.karttapaikka.fi">http://www.karttapaikka.fi</a></td>
+         </tr>
+         <tr>
+            <th class="metadataTitle">Tiedostotunniste</th>
+            <td class="metadataContent">07dec67a-54a0-42f6-88d1-4198d9d526bf</td>
+         </tr>
+         <tr>
+            <th class="metadataTitle">Metatiedon kieli</th>
+            <td class="metadataContent">Suomi</td>
+         </tr>
+         <tr>
+            <th class="metadataTitle">Organisaation nimi</th>
+            <td class="metadataContent">Maanmittauslaitos</td>
+         </tr>
+         <tr>
+            <th class="metadataTitle">Metatiedon päiväys</th>
+            <td class="metadataContent">2012-01-20T09:40:132012-01-20T09:40:13</td>
+         </tr>
+      </tbody>
+   </table>
+</div>

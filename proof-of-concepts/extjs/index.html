@@ -1,0 +1,194 @@
+<!doctype html>
+<!--[if lt IE 9]><html class="ie"><![endif]-->
+<!--[if gte IE 9]><!-->
+<html>
+<!--<![endif]-->
+
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="" />
+<meta name="keywords" content="" />
+
+<title>oskari.org - ExtJS PoC</title>
+
+<link rel="shortcut icon" href="favicon.ico">
+<link
+	href='http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700,700italic,800,800italic,600italic,600'
+	rel='stylesheet' type='text/css'>
+
+<!--  STYLES -->
+<link href="../../proof-of-concepts/oskari/bundle/style1/css/divman.css"
+	rel="stylesheet" />
+<link href="../../proof-of-concepts/oskari/bundle/style1/css/index.css"
+	rel="stylesheet" />
+<link href="../../proof-of-concepts/oskari/bundle/style1/css/style.css"
+	rel="stylesheet" />
+
+
+<!--  EXTJS -->
+<link rel="stylesheet" type="text/css"
+	href="http://cdn.sencha.io/ext-4.1.0-gpl/resources/css/ext-all.css" />
+
+<!--[if lt IE 9]>
+<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<!--  OSKARI -->
+<script type="text/javascript"
+	src="../../packages/framework/bundle/bundle/build/yui.js"></script>
+	
+<!--  OPENLAYERS -->
+<script type="text/javascript" src="../../samples/openlayers/startup.js"></script>
+
+<!--  LOG4JS -->
+<script type="text/javascript" src="../../libraries/log4js/log4js.js"></script>
+
+<!--  RIGHTJS -->
+<script src="../../libraries/rightjs/javascripts/right.js"></script>
+<script src="../../libraries/rightjs/javascripts/right/slider.js"></script>
+<script src="../../libraries/rightjs/javascripts/right-dnd.js"></script>
+<script src="../../libraries/rightjs/javascripts/right/resizable.js"></script>
+<script src="../../libraries/rightjs/javascripts/right/sortable.js"></script>
+
+<!--  JQUERY -->
+<script src="../../libraries/jquery/jquery-1.7.1.min.js"></script>
+
+
+<!--  EXTJS -->
+
+<script type="text/javascript"
+	src="http://cdn.sencha.io/ext-4.1.0-gpl/ext-all.js"></script>
+<script type="text/javascript"
+    src="http://dev.sencha.com/deploy/ext-4.1.0-gpl/examples/portal/all-classes.js"></script>
+
+<script type="text/javascript" src="index.js"></script>
+
+</head>
+
+<body>
+
+<nav id="maptools">
+<div id="loginbar">
+</div>
+<div id="menubar">
+</div>
+<div id="divider">
+</div>
+<div id="toolbar">
+	<div class"toolrow">
+	<div class="tool floatLeft"></div>
+	<div class="tool"></div> 
+	<div class="tool floatRight"></div>
+	</div>
+	<div class"toolrow">
+	<div class="tool floatLeft"></div>
+	<div class="tool"></div> 
+	<div class="tool floatRight"></div>
+	</div>
+	<div class"toolrow">
+	<div class="tool floatLeft"></div>
+	<div class="tool"></div> 
+	<div class="tool floatRight"></div>
+	</div>
+</div>
+</nav>
+
+<nav id="sidebar" class="sidebar-toggle">
+
+<section id="logo" class="clearfix">
+<div class="floatleft logo"><a href="index.html" class="logo"></a></div>
+<div class="floatleft">
+<p>oskari.org</p>
+</div>
+</section>
+
+<section id="logo-only" class="clearfix">
+<div class="floatright logo"><a class="logo" href="index.html"></a></div>
+</section>
+
+<section>
+<ul id="mainmenu">
+	<li class="mainlevel"><a href="#">Kartat</a></li>
+	<li class="mainlevel"><a href="#">Metatietohaku</a></li>
+	<li class="mainlevel"><a class="expand" href="inspire.html">Inspire-direktiivi</a>
+	<ul class="flyoutmenu clearfix">
+		<li class="sublevel-1"><a class="active" href="#">Inspire-tuki</a>
+		<ul class="sublevel-2">
+			<li><a href="#">Inspire lyhyesti</a></li>
+			<li><a href="#">Direktiivi, laki ja asetus</a></li>
+			<li><a href="#">Velvoitetut viranomaiset</a></li>
+			<li><a href="#">Aikataulu</a></li>
+			<li><a class="active" href="#">Täytäntöönpanosäännöt</a></li>
+			<li><a href="#">Paikkatietoryhmät</a></li>
+			<li><a href="#">Aineistoluettelo</a></li>
+			<li><a href="#">Tietotuotemäärittelyt</a>
+			<ul class="sublevel-3">
+				<li><a class="active" href="#">Kansalliset
+				Inspire-tietotuotemäärittelyt</a></li>
+			</ul>
+			</li>
+			<li><a href="#">Metatiedot</a>
+			<ul class="sublevel-3">
+				<li><a href="#">Aineistojen kuvailu</a></li>
+				<li><a href="#">Palvelun kuvailu</a></li>
+				<li><a href="#">Metatietojen ylläpitotavat</a></li>
+			</ul>
+			</li>
+			<li><a href="#">Verkkopalvelut</a></li>
+			<li><a href="#">Seuranta ja raportointi</a></li>
+		</ul>
+		</li>
+		<li class="sublevel-1"><a href="#">Inspire-verkosto</a>
+		<ul class="sublevel-2">
+			<li><a href="#">Liity verkostoon / päivitä tietojasi</a></li>
+			<li><a href="#">Toimintasuunnitelmat</a></li>
+			<li><a href="#">Katsaukset toimintaan</a></li>
+			<li><a href="#">Ohjausryhmä</a></li>
+			<li><a href="#">Työryhmät</a></li>
+			<li><a href="#">Termit ja ontologiat</a></li>
+			<li><a href="#">Viitearkkitehtuuri</a></li>
+			<li><a href="#">Strategiatyö</a></li>
+		</ul>
+		</li>
+		<li class="sublevel-1"><a href="#">Paikkatietoasiain
+		neuvottelukunta</a>
+		<ul class="sublevel-2">
+			<li><a href="#">Jäsenet</a></li>
+			<li><a href="#">Kokoukset 2011</a></li>
+			<li><a href="#">Kokoukset 2010</a></li>
+		</ul>
+		</li>
+		<li class="sublevel-1"><a href="#">Koulutus</a>
+		<ul class="sublevel-2">
+			<li><a href="#">Aiemmat koulutukset</a></li>
+			<li><a href="#">Opastusvideot</a></li>
+		</ul>
+		</li>
+	</ul>
+	</li>
+	<li class="mainlevel"><a class="expand" href="#">Uutiset ja
+	tiedotteet</a></li>
+	<li class="mainlevel"><a href="#">Positio-lehti</a></li>
+	<li class="mainlevel"><a class="expand" href="#">Ohjeet ja
+	ehdot</a></li>
+</ul>
+<div id="searchform">
+<form method="post" action=""><input type="search" name="query"
+	id="query" value="" placeholder="Hae sivustolta..." /> <input
+	type="submit" name="search" id="search" value="Hae" /></form>
+</div>
+<div id="lang">
+<p><a href="#">på svenska</a> | <a href="#">in English</a></p>
+</div>
+</section>
+
+</nav>
+
+<div id="content">
+<div id="mapdiv"></div>
+</div>
+
+</body>
+
+</html>

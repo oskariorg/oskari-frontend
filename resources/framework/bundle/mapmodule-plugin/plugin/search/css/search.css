@@ -1,0 +1,42 @@
+div.search-div {
+    top: 10px;
+    right : 10px;
+}
+div.search-div div.close {
+    float: right;
+}
+div.search-div input[type=text] {
+    width: 124px !important;
+}
+div.search-div input[type=button] {
+    width: 35px;
+    margin-left: 3px;
+}
+
+div.search-div div.results {
+    border: 1px solid;
+    background: white;
+    max-width: 255px;
+    width: 255px;
+    overflow: hidden;
+    margin-top: 5px;
+}
+div.search-div div.results div.header {
+  background: #DDDDDD;
+}
+div.search-div div.results div.content table {
+    width: 100%;
+    text-align: center;
+    border-spacing: 2px;
+}
+div.search-div div.results div.content table tr {
+    cursor: pointer;
+}
+/*
+#search-loading-image {
+    position: absolute;
+    right: 56px;
+    top: 6px;
+    z-index: 10001;
+}
+*/

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>dojotoolkit / Basic</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link rel="stylesheet"
+		href="http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/claro/claro.css">
+		<style>
+			#logo {
+				height: 64px;
+				background-image: url('xwiki-logo.png');
+				background-repeat: no-repeat;
+			}
+			#map-div {
+				height: 512px;
+				width: 512px;
+			}
+			div.layer {
+				border: 1pt solid gray;
+				margin: 8px;
+				padding-left: 8px;
+				padding-bottom: 8px;
+			}
+			p.layer {
+				font-family: 'Helvetica';
+			}
+			.slider {
+				width: 80%;
+			}
+			.mapBox {
+				padding: 8px;
+			}
+			.controlBox {
+				padding: 8px;
+			}
+
+		</style>
+		<script type="text/javascript"
+		src="../../packages/framework/bundle/bundle/build/yui.js"></script>
+		<script type="text/javascript" src="../../samples/openlayers/startup.js"></script>
+		<script type="text/javascript" src="../../libraries/log4js/log4js.js"></script>
+		<!-- load dojo and provide config via data attribute -->
+		<script
+		src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js"
+		data-dojo-config="async: true, parseOnLoad:true"></script>
+		<script type="text/javascript" src="index.js"></script>
+	</head>
+	<body class="claro">
+		<div id="logo"></div>
+		<div class="container" id="container">
+			<div id="content1" class="mapBox" >
+				<div id="map-div" class="debug"></div>
+			</div>
+			<div id="content2" class="controlBox" >
+				<div id="layerselection"></div>
+			</div>
+		</div>
+	</body>
+</html>

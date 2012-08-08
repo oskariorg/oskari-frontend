@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Basic usage</title>
+<link href="bundle/shared/styles/examples.css" rel="stylesheet" />
+<link href="bundle/shared/styles/examples-offline.css" rel="stylesheet" />
+<link href="../../libraries/kendoui/source/styles/kendo.common.css"
+	rel="stylesheet" />
+<!-- link href="../../libraries/kendoui/source/styles/kendo.default.css"
+	rel="stylesheet" /-->
+<link href="bundle/style1/style.css"
+	rel="stylesheet" />
+
+<script type="text/javascript"
+	src="../../packages/framework/bundle/bundle/build/yui.js"></script>
+<script type="text/javascript" src="../../samples/openlayers/startup.js"></script>
+<!-- module: logging -->
+<script type="text/javascript" src="../../libraries/log4js/log4js.js"></script>
+
+
+<!-- script src="../../libraries/kendoui/source/js/jquery.min.js"></script-->
+<script src="../../libraries/jquery/jquery-1.7.1.min.js"></script>
+<script src="../../libraries/kendoui/source/js/kendo.core.js"></script>
+<script src="../../libraries/kendoui/source/js/kendo.fx.js"></script>
+<script src="../../libraries/kendoui/source/js/kendo.panelbar.js"></script>
+<script src="../../libraries/kendoui/source/js/kendo.draganddrop.js"></script>
+<script src="../../libraries/kendoui/source/js/kendo.slider.js"></script>
+<script src="index.js"></script>
+</head>
+<body>
+<div id="example" class="k-content">
+<div id="mapster">
+<ul id="panelbar">
+	<li class="k-state-active"><span class="k-link k-state-selected">Kartta</span>
+	<div style="padding: 0px;">
+	<div class="map">
+	<div id="map-div" class="mapdiv"></div>
+	</div>
+
+	</div>
+	</li>
+
+	<li><span>Valitut karttatasot</span>
+	<div id="layerselection"></div>
+	</li>
+	<li disabled="disabled">Karttatasot</li>
+
+</ul>
+<div id="bottom"></div>
+</div>
+<style scoped>
+#mapster {
+	width: 300px;
+	margin: 0 auto;
+	padding: 47px 0 0 0;
+	background: url('bundle/content/panelbar/orgHead.png') transparent
+		no-repeat 0 0;
+}
+
+#bottom {
+	width: 300px;
+	height: 90px;
+	background: url('bundle/content/panelbar/orgFoot.png') transparent
+		no-repeat 0 0;
+}
+
+.mapdiv {
+	width: 300px;
+	height: 300px;
+}
+</style>
+<script>
+                $(document).ready(function() {
+                	Oskari.$("KPI", Oskari.clazz.create('Oskari.poc.kendo.KendoSample'));
+                	Oskari.$("KPI").start();
+                    
+                    $("#panelbar").kendoPanelBar({
+                        expandMode: "single"
+                    });
+                });
+            </script></div>
+</body>
+</html>

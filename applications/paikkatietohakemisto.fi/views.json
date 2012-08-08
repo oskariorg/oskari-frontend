@@ -1,0 +1,89 @@
+{
+	"views": [
+		{
+			"id": 2,
+			"name": "",
+			"state": {
+				"toolbar": {
+					"state": "{\"selected\":{\"id\":\"select\",\"group\":\"basictools\"}}"
+				},
+				"layerselection2": {
+					"state": "{}"
+				},
+				"search": {
+					"state": "{}"
+				},
+				"openlayers-default-theme": {
+					"state": "{}"
+				},
+				"statehandler": {
+					"state": "{}"
+				},
+				"divmanazer": {
+					"state": "{}"
+				},
+				"layerselector2": {
+					"state": "{\"tab\":\"Aiheittain\",\"groups\":[],\"filter\":\"\"}"
+				},
+				"infobox": {
+					"state": "{}"
+				},
+				"publisher": {
+					"state": "{}"
+				},
+				"personaldata": {
+					"state": "{}"
+				},
+				"coordinatedisplay": {
+					"state": "{}"
+				},
+				"mapfull": {
+					"state": "{\"selectedLayers\":[{\"id\":\"base_35\",\"opacity\":100}],\"zoom\":2,\"east\":513120,\"north\":6950042}"
+				}
+			},
+			"isPublic": false
+		}, {
+			"id": 1,
+			"name": "default",
+			"state": {
+				"toolbar": {
+					"state": "{}"
+				},
+				"layerselection2": {
+					"state": "{}"
+				},
+				"search": {
+					"state": "{}"
+				},
+				"openlayers-default-theme": {
+					"state": "{}"
+				},
+				"statehandler": {
+					"state": "{}"
+				},
+				"divmanazer": {
+					"state": "{}"
+				},
+				"layerselector2": {
+					"state": "{}"
+				},
+				"infobox": {
+					"state": "{}"
+				},
+				"publisher": {
+					"state": "{}"
+				},
+				"personaldata": {
+					"state": "{}"
+				},
+				"coordinatedisplay": {
+					"state": "{}"
+				},
+				"mapfull": {
+					"state": "{\n    \"east\": \"517620\",\n    \"north\": \"6874042\",\n    \"selectedLayers\": [{\"id\": \"base_35\"}],\n    \"zoom\": 1\n}"
+				}
+			},
+			"isPublic": false
+		}
+	]
+}

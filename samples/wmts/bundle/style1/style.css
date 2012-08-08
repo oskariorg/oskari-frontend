@@ -1,0 +1,185 @@
+body {
+	font-family: 'Verdana';
+	padding: 8pt;
+}
+
+#map-full {
+	width: 100%;
+	height: 100% /* -moz-box-shadow :   0 0 1em #000030;
+	-webkit-box-shadow: 0 0 1em #000030;
+	box-shadow: 0 0 1em #000030;*/
+}
+
+#map-container {
+	width: 100%;
+	height: 100%;
+}
+
+.main-app {
+	border: 0;
+}
+
+ 
+.mapster {
+	border: 0;
+	background-color: #fdfdfd;
+	/* fallback color if gradients are not supported */
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff),
+		to(#ddd) );
+	background: -webkit-linear-gradient(top, #fff, #ddd);
+	background: -moz-linear-gradient(top, #fff, #ddd);
+	background: -ms-linear-gradient(top, #fff, #ddd);
+	background: -o-linear-gradient(top, #fff, #ddd);
+	background: linear-gradient(to bottom, #fff, #ddd);
+	/* current standard, but unimplemented and subject to change */
+}
+
+div.main {
+	height: 100%;
+	width: 100%;
+	/*overflow: auto;*/
+	overflow: hidden;
+}
+
+div.main_right {
+	float: right;
+	height: 100%;
+	width: 96%;
+	background-color: #fefefe;
+	border: 1pt solid red;
+}
+
+div.main_left {
+	float: left;
+	border: 1pt solid gold;
+	height: 100%;
+	background-color: gold;
+	text-align: center;
+	padding-top: 8pt;
+	width: 48px;
+}
+
+.toolsmenu_left {
+	border: 0;
+}
+
+.toolsmenu_right {
+	border: 0;
+}
+
+.toolsmenu {
+	border: 0;
+	background-color: white;
+	padding: 24pt;
+	/*-moz-box-shadow :   0 0 2em #000030;
+		-webkit-box-shadow: 0 0 2em #000030;
+		box-shadow: 0 0 2em #000030;*/
+}
+
+span.menutitle {
+	font-family: 'Verdana';
+	font-size: 16pt;
+	color: #c0c0c0;
+	display: block;
+	padding: 4pt;
+}
+
+.toolsmenuleft_items {
+	padding-top: 24pt;
+}
+
+.toolsmenuleft_items div {
+	font-family: 'Verdana', font-size :   12pt;
+	height: 32pt;
+}
+
+.menubutton {
+	border: 0;
+	background-color: white;
+	text-align: left;
+	vertical-align: middle;
+	text-transform: uppercase;
+	border-bottom: 1pt solid #fdfdfd;
+}
+
+.menubutton:hover {
+	background-color: #fcfcfd;
+}
+
+.menubutton-inner {
+	
+}
+
+.toolsbar {
+	border: 0;
+	background-color: white;
+	background-image: url('logo.png');
+	background-repeat: no-repeat;
+	background-position: 5 16;
+}
+
+.toolsbarIcon {
+	
+}
+
+.toolsmenuitem {
+	width: 92%;
+}
+
+.bndlsbar {
+	border: 0;
+	background-color: #fdfdfd;
+	
+}
+      
+
+.bndlsbar-btn {
+	border: 1pt solid #f5f5f5;
+	background-color: white;
+	/*background-color: #c0d0e0;*/
+	
+	/* fallback color if gradients are not supported */
+	/*background: -webkit-gradient(linear, left top, left bottom, from(#fdfdfd),
+		to(#dadada) );
+	background: -webkit-linear-gradient(top, #fdfdfd, #dadada);
+	background: -moz-linear-gradient(top, #fdfdfd, #dadada);
+	background: -ms-linear-gradient(top, #fdfdfd, #dadada);
+	background: -o-linear-gradient(top, #fdfdfd, #dadada);
+	background: linear-gradient(to bottom, #fdfdfd, #dadada);*/
+}
+
+.bndlsbar-btn:hover {
+	background-color: #fafafa;
+}
+
+span.bndlsbar-inner {
+	/*color: red;*/	
+}
+
+/* temp */
+
+.bndls-searchservice {
+	background-image: url('ui/resource/btn-searchservice.png');
+	background-repeat: no-repeat;
+	background-position: 4 4;
+		
+}
+
+.bndls-layerselector {
+	background-image: url('ui/resource/btn-layerselector.png');
+	background-repeat: no-repeat;
+	background-position: 4 4;
+	
+}
+
+.bndls-layerselection {
+	background-image: url('ui/resource/btn-layerselection.png');
+	background-repeat: no-repeat;
+	background-position: 4 4;
+	
+}
+
+.bndlsplaceholder {
+	border: 0;
+}
+

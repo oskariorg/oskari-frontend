@@ -1,0 +1,65 @@
+#loginbar {
+	width: 100%;
+	height: 100px;
+	/*border: 1pt dashed white;*/
+}
+
+#menubar {
+	width: 100%;
+	height: 240px;
+	/*border: 1pt dashed white;*/
+}
+
+#divider {
+	/*border: 1pt dashed white;*/
+	width: 100%;
+	height: 10px;
+}
+
+#toolbar {
+	/*border: 1pt dashed white;*/
+	width: 100%;
+	height: 160px;
+	background-color: #333438;
+}
+
+.tool {
+	display: inline-block;
+	width: 40px;
+	height: 40px;
+	background-image:
+		url('../../../../../resources/paikkatietoikkuna/Ikonit_16x16/Pixicon16px_0000s_0000s_0027_Mouse-Pointer-1.png')
+		;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-color: #333438;
+}
+
+/*.layer {
+	border: 1pt solid white;
+	margin: 8px;
+	height: 80px;
+	padding-left: 8px;
+	padding-bottom: 8px;
+}
+*/
+.slider {
+	width: 200px;
+}
+
+a.logo {
+	display: inline-block;	
+	width: 34px;
+	height: 34px;
+	background-image:	url('img/logo.png');
+	background-repeat: no-repeat;
+	
+}
+
+div.logo {
+	width: 34px;
+	height: 34px;
+	margin:0 ;
+	padding:0;
+}
+

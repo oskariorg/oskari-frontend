@@ -1,0 +1,22 @@
+/* Accordion */
+div.accordion div.accordion_panel {
+    background-color : #f3f3f3;
+    border: 1pt solid #c0d0d0;
+    margin : 0;
+    padding : 0;
+    background-image: url( "../images/icon-arrow-right.png" );
+    background-position: 12px 12px;
+    background-repeat: no-repeat;
+}
+div.accordion_panel div.header {
+    font-weight : bold;
+    padding: 8px 10px 8px 40px;
+    font: 14pt Arial,sans-serif;
+}
+div.accordion div.accordion_panel.open {
+    background-image: url( "../images/icon-arrow-down.png" );
+    background-color : #FFFFFF;
+}
+div.accordion div.accordion_panel div.content {
+    padding : 5px;
+}

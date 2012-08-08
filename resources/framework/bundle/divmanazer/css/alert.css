@@ -1,0 +1,72 @@
+/*!
+ * Bootstrap v2.0.3
+ *
+ * Copyright 2012 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world @twitter by @mdo and @fat.
+ */
+
+.oskari-alert {
+  padding: 8px 35px 8px 14px;
+  margin-bottom: 18px;
+  margin-top: 8px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  background-color: #fcf8e3;
+  border: 1px solid #fbeed5;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  color: #c09853;
+}
+.oskari-alert-heading {
+  color: inherit;
+}
+.oskari-alert-icon-close {
+  position: relative;
+  top: -2px;
+  right: -21px;
+  line-height: 18px;
+  float: right;
+  	display: inline-block;
+	margin-top: -2px;
+	width: 24px;
+	height: 24px;
+	background-image: url('../../../../../resources/paikkatietoikkuna/Ikonit_16x16/Pixicon16px_0005s_0002_X.png');
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-color: #333438;
+	-webkit-border-radius: 12px;
+	-moz-border-radius: 12px;
+	border-radius: 12px;
+	margin-right: 2px;
+	margin-left: auto;
+}
+.oskari-alert-success {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #468847;
+}
+.oskari-alert-danger,
+.oskari-alert-error {
+  background-color: #f2dede;
+  border-color: #eed3d7;
+  color: #b94a48;
+}
+.oskari-alert-info {
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+  color: #3a87ad;
+}
+.oskari-alert-block {
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+.oskari-alert-block > p,
+.oskari-alert-block > ul {
+  margin-bottom: 0;
+}
+.oskari-alert-block p + p {
+  margin-top: 5px;
+}

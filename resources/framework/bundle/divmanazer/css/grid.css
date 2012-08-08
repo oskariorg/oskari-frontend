@@ -1,0 +1,12 @@
+
+th.asc {
+    background-image: url("../images/asc_arrow.png");
+    background-repeat:no-repeat;
+    background-position:center center;
+}
+
+th.desc {
+    background-image: url("../images/desc_arrow.png");
+    background-repeat:no-repeat;
+    background-position:center center;
+}

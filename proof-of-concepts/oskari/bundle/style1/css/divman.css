@@ -1,0 +1,159 @@
+.oskari-flyout {
+	border: 1px solid white;
+	/*border-top: 8px solid #ffde00;;*/
+	border-top: 8px solid #333438;
+	/*opacity: .8;*/
+	background-color: #fafafa;
+	position: absolute;
+	z-index: 1500;
+	margin: 0px;
+	padding: 0px;
+	height: 512px;
+}
+.oskari-attached {
+	width: 640px;
+	/*height: 480px;*/
+	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.80);
+	-moz-box-shadow: 0px 3px 8px black;
+	-webkit-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.80);
+}
+.oskari-detached {
+	width: 640px;
+	/*height: 480px;*/
+	box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.80);
+	-moz-box-shadow: 0px 3px 8px black;
+	-webkit-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.80);
+}
+.oskari-minimized {
+	width: 640px;
+	height: 24px;
+	overflow: hidden;
+}
+.oskari-closed {
+	display: none;
+	/*left: -3000;
+	 top: -3000;*/
+}
+.oskari-flyouttoolbar {
+	height: 24px;
+	width: 100%;
+	display: block;
+}
+.oskari-flyout-title {
+	padding-left: 12px;
+	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+	width: 72%;
+	display: inline-block;
+	height: 24px;
+}
+.oskari-flyouttool-detach {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	background-image: url('../../../../../resources/paikkatietoikkuna/Ikonit_16x16/Pixicon16px_0000s_0000s_0016_Arrow-Right.png');
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-color: #333438;
+}
+.oskari-flyouttool-attach {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	background-image: url('../../../../../resources/paikkatietoikkuna/Ikonit_16x16/Pixicon16px_0000s_0000s_0009_Arrow-Left.png');
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-color: #333438;
+}
+.oskari-flyouttool-minimize {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	background-image: url('../../../../../resources/paikkatietoikkuna/Ikonit_16x16/Pixicon16px_0000s_0000s_0026_Download-2.png');
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-color: #333438;
+}
+.oskari-flyouttool-restore {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	background-image: url('../../../../../resources/paikkatietoikkuna/Ikonit_16x16/Pixicon16px_0000s_0000s_0023_Upload-3.png');
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-color: #333438;
+}
+.oskari-flyouttool-close {
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	background-image: url('../../../../../resources/paikkatietoikkuna/Ikonit_16x16/Pixicon16px_0012s_0002_x.png');
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-color: #333438;
+}
+.oskari-flyoutcontent {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+.oskari-flyoutcontentcontainer { /*margin: 8px;*/
+	display: block;
+	width: 100%;
+	height: 92%;
+	padding: 0;
+	border: 0;
+	overflow: auto;
+}
+.oskari-tile {
+	margin: 0;
+	padding: 0;
+	cursor: pointer;
+	height: 40px;
+	width: 172px;
+	border: 0;
+	border-bottom: 1pt solid white;
+	background-color: #333438;
+}
+.oskari-tile-title {
+	text-indent: 4px;
+	margin: 0;
+	padding: 0;
+	float: left;
+	height: 40px;
+	width: 126px;
+	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+	text-align: left;
+	text-transform: uppercase;
+	color: white;
+	font-weight: bold;
+}
+.oskari-tile-status {
+	margin: 0;
+	padding: 0;
+	float: right;
+	text-align: center;
+	display: inline-block;
+	/*background-color: gold;*/
+	height: 36px;
+	width: 20px;
+	font-weight: bold;
+	color: white;
+	font-weight: bold;
+	padding: 2px;
+}
+.oskari-tile-close {
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	background-image: url('../../../../../resources/paikkatietoikkuna/Ikonit_16x16/Pixicon16px_0012s_0002_x.png');
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-color: #333438;
+	position: relative;
+	top: 10px;
+}

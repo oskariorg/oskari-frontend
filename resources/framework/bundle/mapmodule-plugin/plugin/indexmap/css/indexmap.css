@@ -1,0 +1,54 @@
+.olControlOverviewMapElement  {
+    padding: 5px !important;
+    background-color: #FFFFFF !important;
+    border-color: #D0D0D0 !important;
+    border-style: solid;
+    border-left-width: 2px;
+    border-top-width: 2px;
+    
+}
+#olControlOverviewMapMaximizeButton
+{
+    position: absolute !important;
+    right: 10px;
+    bottom: 2px;
+    
+}
+
+#OpenLayers_Control_minimizeDiv
+{
+    width: 47px !important;
+    height: 47px !important;
+    right: 0px;
+    bottom: 0px;
+    cursor: default;
+    background-image: url("../images/ikoni_indeksikartta_akt.png") !important;
+}
+
+#olControlOverviewMapMaximizeButton_innerImage, #OpenLayers_Control_minimizeDiv_innerImage{
+    display: none !important;
+}
+
+#olControlOverviewMapMaximizeButton{
+    width: 47px !important;
+    height: 47px !important;
+    right: 0px;
+    bottom: 0px;
+    cursor: default;
+    background-image: url("../images/ikoni_indeksikartta.png") !important;
+}
+
+#olControlOverviewMapMaximizeButton:hover
+{
+    background-image: url("../images/ikoni_indeksikartta_akt.png") !important;
+}
+
+#OpenLayers_Control_minimizeDiv{
+    position: absolute !important;
+    right: 0px;
+    bottom: 0px;
+}
+
+.olControlOverviewMapExtentRectangle  {
+    border:2px dashed #f47729 !important;
+}

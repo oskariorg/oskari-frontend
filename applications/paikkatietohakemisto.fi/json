@@ -1,0 +1,35 @@
+{
+    "class": "fi.paikkatietoikkuna.metadata.csw.servlet.MetadataServlet$MetadataSearchResults",
+    "matched": 1,
+    "mdcs": [
+        {
+            "abstractText": "Espoon kaupungin yllÃ¤pitÃ¤mÃ¤ sijaintitarkka kaavan pohjakartta-aineisto, maastoa, rakennettua ympÃ¤ristÃ¶Ã¤ ja kiinteistÃ¶jaotusta kuvaavia tietoja. Tuotettu stereotyÃ¶skentelyllÃ¤, maastomittauksella ja digitoimalla. Aineistoa yllÃ¤pidetÃ¤Ã¤n jatkuvasti. KiinteistÃ¶tiedon ajantasaistuksen viive on pari pÃ¤ivÃ¤Ã¤, uusien rakennusten noin viikko maastoon merkinnÃ¤stÃ¤. Muun aineiston pÃ¤ivitys enintÃ¤Ã¤n 3 v viiveellÃ¤. Saatavissa on indeksikartta, josta selviÃ¤Ã¤ tuotantotapa, yllÃ¤pitomuoto ja ajantasaistusvuosi.",
+            "browseGraphic": "/geonetwork/srv/fi/resources.get.uuid?access=public&uuid=d542e024-4e6a-4be5-a154-778e33116833&fname=kanta_s.png",
+            "class": "fi.paikkatietoikkuna.metadata.csw.MetadataWithDcInfo",
+            "dateStamp": "2011-03-22T15:50:56",
+            "env": [
+                {
+                    "westBoundLongitude": 358911.7134508261,
+                    "eastBoundLongitude": 382536.4910289571,
+                    "southBoundLatitude": 6638851.108500211,
+                    "northBoundLatitude": 6695275.423244574
+                }
+            ],
+            "identifier": "d542e024-4e6a-4be5-a154-778e33116833",
+            "language": null,
+            "onlineResources": [
+                "http://www.espoo.fi/default.asp?path=1;28;11866;11869;39339;22071;46700;22215",
+                "?"
+            ],
+            "rights": null,
+            "source": null,
+            "subject": null,
+            "title": "Espoon kantakartta",
+            "type": null,
+            "uri": null
+        }
+    ],
+    "next": -1,
+    "returned": 1,
+    "total": 1
+}

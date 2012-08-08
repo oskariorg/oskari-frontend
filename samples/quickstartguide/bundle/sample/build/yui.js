@@ -1,0 +1,2 @@
+/* This is a packed Oskari bundle (bundle script version Thu Dec 08 2011 10:07:15 GMT+0200 (Suomen normaaliaika)) */ 
+Oskari.clazz.define("Oskari.mapframework.bundle.SampleBundleInstance",function(){},{start:function(){alert("Started!")},update:function(){},stop:function(){alert("Stopped!")}},{protocol:["Oskari.bundle.BundleInstance"]});

@@ -1,0 +1,6 @@
+@CHARSET "UTF-8";
+
+/* featuredata download tools icons */
+.featuredata_download_tool {
+	background-image: url( "../images/download_xml.png" ) !important;
+}

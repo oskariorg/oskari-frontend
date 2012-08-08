@@ -1,0 +1,412 @@
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext>SET CURRENT=C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext>SET YUICOMPRESSOR=C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext>pushd "../tools/bundle/yui" 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\tools\bundle\yui>md build 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\tools\bundle\yui>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js bundle.js  1>build/bundle-yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\tools\bundle\yui>echo /* This is a packed Oskari bundle (bundle script version Thu Feb 09 2012 13:49:03 GMT+0200 (Suomen normaaliaika)) */  1>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\tools\bundle\yui>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js yui.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\tools\bundle\yui>popd
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext>pushd "bundle/extstartup" 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extstartup>md build 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extstartup>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js bundle.js  1>build/bundle-yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extstartup>echo /* This is a packed Oskari bundle (bundle script version Thu Feb 09 2012 13:49:03 GMT+0200 (Suomen normaaliaika)) */  1>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extstartup>popd
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext>pushd "bundle/extportal" 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>md build 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js bundle.js  1>build/bundle-yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>echo /* This is a packed Oskari bundle (bundle script version Thu Feb 09 2012 13:49:03 GMT+0200 (Suomen normaaliaika)) */  1>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/ComponentQuery.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/Template.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/XTemplateParser.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/IdGenerator.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/JsonP.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/Operation.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/Request.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/ResultSet.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/SortTypes.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/Types.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/validations.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/association/Association.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/reader/Reader.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/writer/Writer.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/draw/Color.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/draw/Draw.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/draw/Matrix.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/draw/engine/ImageExporter.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/draw/engine/SvgExporter.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/fx/CubicBezier.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/fx/PropertyHandler.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/fx/target/Target.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/ClassList.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/ContextItem.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/Bindable.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/ElementContainer.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/Filter.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/Memento.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/Observable.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/Offset.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/ProtoElement.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/Queue.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/Region.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/Renderable.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/Sorter.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/Layer.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/ShadowPool.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/ZIndexManager.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/dd/DragDropManager.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/dd/DragTracker.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/dd/Registry.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/dd/ScrollManager.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/form/FieldAncestor.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/form/action/Action.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/form/action/Submit.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/form/field/Field.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/form/field/VTypes.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/grid/LockingView.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/grid/PagingScroller.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/grid/feature/Feature.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/grid/feature/Grouping.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/grid/plugin/HeaderResizer.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/container/boxOverflow/None.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/panel/Proxy.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/resizer/Resizer.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/resizer/ResizeTracker.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/resizer/SplitterTracker.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/slider/Thumb.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/Animate.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/ClickRepeater.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/ComponentDragger.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/CSS.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/Floating.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/KeyMap.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/KeyNav.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/TextMetrics.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/ElementLoader.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/ComponentLoader.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/XTemplateCompiler.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/XTemplate.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/Batch.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/Connection.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/Ajax.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/Field.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/reader/Json.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/reader/Array.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/writer/Json.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/proxy/Proxy.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/proxy/Client.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/proxy/Memory.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/proxy/Server.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/proxy/JsonP.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/fx/target/Component.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/fx/target/Element.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/fx/target/CompositeElement.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/fx/target/ElementCSS.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/fx/target/CompositeElementCSS.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/fx/target/Sprite.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/fx/target/CompositeSprite.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/Layout.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/component/Component.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/component/Auto.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/component/Draw.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/state/Provider.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/state/Manager.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/state/Stateful.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/AbstractMixedCollection.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/Grouper.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/HashMap.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/AbstractManager.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/ComponentManager.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/AbstractComponent.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/ModelManager.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/PluginManager.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/fx/Queue.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/Point.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/util/MixedCollection.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/container/DockingContainer.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/AbstractStore.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/Errors.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/StoreManager.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/proxy/Ajax.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/Model.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/Store.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/data/ArrayStore.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/draw/CompositeSprite.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/draw/Surface.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/fx/Manager.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/fx/Animator.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/fx/Anim.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/Context.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/selection/Model.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/selection/DataViewModel.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/Component.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/draw/Component.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/FocusManager.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/Img.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/LoadMask.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/view/AbstractView.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/Shadow.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/dd/DragDrop.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/dd/DD.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/dd/DDProxy.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/dd/DDTarget.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/dd/DropTarget.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/dd/DropZone.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/dd/StatusProxy.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/dd/DragSource.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/draw/SpriteDD.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/draw/Sprite.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/draw/engine/Svg.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/draw/engine/Vml.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/dd/DragZone.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/form/CheckboxManager.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/form/Label.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/form/Labelable.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/form/action/Load.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/grid/ColumnComponentLayout.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/grid/Lockable.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/grid/header/DragZone.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/grid/header/DropZone.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/grid/plugin/HeaderReorderer.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/component/Body.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/component/Button.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/component/Dock.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/component/FieldSet.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/component/ProgressBar.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/ProgressBar.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/component/Tab.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/component/field/Field.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/form/field/Base.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/form/field/Checkbox.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/component/field/Slider.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/component/field/Text.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/form/field/Text.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/component/field/TextArea.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/form/field/TextArea.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/container/Container.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/container/Auto.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/container/AbstractContainer.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/container/Container.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/container/Viewport.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/form/FieldSet.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/grid/header/Container.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/container/Anchor.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/container/Absolute.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/container/Column.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/container/Fit.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/container/Card.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/layout/container/boxOverflow/Scroller.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/menu/Item.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/menu/CheckItem.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/menu/KeyNav.js  1>>build/yui.js 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/menu/Manager.js  1>>build/yui.js 
+Pys„ytet„„nk” komentojonoty” (K/E)? 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/button/Button.js  1>>build/yui.js 
+Pys„ytet„„nk” komentojonoty” (K/E)? 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/button/Split.js  1>>build/yui.js 
+Pys„ytet„„nk” komentojonoty” (K/E)? 
+
+C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext\bundle\extportal>java -jar C:\Omat\EclipseWorkspace\portti-map-framework-js2-portlet\docroot\samples\ext/"../tools/bundle/yui/yuicompressor-2.4.6.jar" --charset UTF-8 --line-break 4096 --type js ../../../../../sencha/ext-4.1.0-beta-2/src/menu/Separator.js  1>>build/yui.js 
+Pys„ytet„„nk” komentojonoty” (K/E)? 

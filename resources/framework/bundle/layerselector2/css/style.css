@@ -1,0 +1,118 @@
+
+/* "tab" content */
+div.layerselector2 div.allLayersTabContent {
+	border-left: 1px solid #999999;
+	border-right: 1px solid #999999;
+	border-top: 0px solid #999999;
+	border-bottom: 1px solid #999999;
+	color: #000000;
+	height: 90%;
+}
+div.layerselector2 div.allLayersTabContent div.filter {
+	padding-top: 10px; 
+	padding-left: 10px; 
+	padding-bottom: 10px;
+}
+/* layer list container */
+div.layerselector2 div.layerList {
+	overflow: auto;
+	height : 85%;
+	width : 100%;
+	margin : 0px;
+}
+/* layer group container */
+div.layerselector2 div.layerGroup {
+    background-color : #f3f3f3;
+    border: 1pt solid #c0d0d0;
+    margin : 0;
+    padding : 0;
+	background-image: url( "../images/icon-arrow-right.png" );
+    background-position: 12px 12px;
+	background-repeat: no-repeat;
+}
+div.layerselector2 div.layerGroup div.groupHeader {
+	font-weight : bold;
+	padding: 8px 10px 8px 40px;
+	font: 14pt Arial,sans-serif;
+}
+div.layerselector2 div.layerGroup.open {
+	background-image: url( "../images/icon-arrow-down.png" );
+    background-color : #FFFFFF;
+}
+
+/* layer container */
+div.layerselector2 div.layer {
+    padding: 6px 10px 6px 40px;
+    background-color : #ffffff;
+}
+div.layerselector2 div.layer.odd {
+    background-color : #f3f3f3;
+}
+div.layerselector2 div.layer input {
+    float : left;
+    margin-right : 5px;
+}
+div.layerselector2 div.layer div.layer-tools {
+    float : right;
+}
+div.layerselector2 div.layer div.layer-icon {
+    float : left;
+	width : 16px;
+	height : 16px;
+	background-repeat: no-repeat;
+}
+div.layerselector2 div.layer div.layer-info {
+    width: 16px;
+	margin-left : 5px;
+	float : right;
+}
+
+/* inspire/organization grouping controls */
+div.layerselector2 div.groupingTabs {
+   background: url("../images/tab_bg.png") repeat-x scroll center bottom; /* #FFFFFF*/
+    clear: left;
+    float: left;
+    font : 12pt  Arial,sans-serif;
+    font-weight: bold;
+    overflow: hidden;
+    padding: 0;
+    width: 100%;
+}
+div.layerselector2 div.groupingTabs ul {
+    float: left;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+div.layerselector2 div.groupingTabs ul li{
+    display: block;
+    float: left;
+    list-style: none outside none;
+    margin: 10px 0 0;
+    padding: 0;
+    right: 50%;
+}
+div.layerselector2 div.groupingTabs ul li a {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-bottom: 1px solid #999999;
+    color: #3333FF;
+    display: block;
+    float: left;
+    padding: 10px 20px;
+    position: relative;
+    text-decoration: none;
+}
+
+div.layerselector2 div.groupingTabs ul li.active a {
+	border-left: 1px solid #999999;
+	border-right: 1px solid #999999;
+	border-top: 1px solid #999999;
+	border-bottom: 0px solid #999999;
+	color: #000000;
+}
+
+div.layerselector2 div.groupingTabs ul li.fill a {
+   width: 100%;
+}

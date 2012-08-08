@@ -1,0 +1,34 @@
+/* Selected row hightlighting */
+.featuredata tbody tr.selected {
+    background-color: #FEF2BA;
+}
+/* Override common table settings */
+.featuredata th, .featuredata td  {
+    text-align: left;
+    padding-left : 2px;
+    padding-right: 15px;
+}
+/* Override sort img position */
+.featuredata th.asc {
+    background-position:right center;
+}
+/* Override sort img position */
+.featuredata th.desc {
+    background-position:right center;
+}
+
+.featuredata div.tab-content {
+    max-height: 535px;
+    overflow: auto;
+}
+div.featuredataplugin {
+    top : 450px;
+    right : 30px;
+    display : block;
+    color : #3C3C3C;
+    background : white;    
+    font-size : 12px;
+    font-weight : bold;
+    border: 1px solid;
+    padding: 5px;
+}

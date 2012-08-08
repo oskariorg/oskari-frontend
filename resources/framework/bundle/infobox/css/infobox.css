@@ -1,0 +1,50 @@
+div.popupHeader {
+	background-color:#424343;
+	color:#FFFFFF;
+	position:relative;
+	left: 10px;
+	top: -32px;
+	border-radius: 6px 6px 0px 0px;
+  padding: 15px;
+}
+
+div.popupHeaderArrow {
+	width: 0;
+	height: 0;
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent; 
+
+	border-right:10px solid #424343;
+	
+	margin-top: -10px;
+}
+
+
+div.popupContent {
+	background-color:#FFFFFF;
+	position:relative;
+	left: 10px;
+	top: -32px;
+	height: 200px;
+	border-radius: 0px 0px 6px 6px;
+	padding-left: 20px; 
+	padding-top: 20px;
+  padding-bottom: 20px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+div.olPopupContent {
+    overflow: visible;
+    padding: 0px;
+}
+
+div.popupContent hr.infoboxLine {
+	border: 1px solid;
+	width: 90%;
+	margin-top: 10px;
+}
+
+div.popupContent span.infoboxActionLinks {
+	padding-right: 15px;
+	padding-left: 15px;
+} 
