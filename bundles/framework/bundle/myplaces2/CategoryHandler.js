@@ -229,13 +229,9 @@ function(instance) {
      */
     _getMapLayerJson : function(categoryModel) {
         var baseJson = this._getMapLayerJsonBase();
-        // wmsurl = "/karttatiili/myplaces?myCat="
-        // FIXME: wmsurl from conf - live version gets from portal-ext.properties?
-        //baseJson.wmsUrl = this.instance.conf.wmsUrl + categoryModel.getId() + "&";
-        baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + categoryModel.getId() + "&";
+        baseJson.wmsUrl = this.instance.conf.wmsUrl + categoryModel.getId() + "&";
+        //baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + categoryModel.getId() + "&";
         baseJson.name = categoryModel.getName();
-        
-        //wmsUrl:"http://www.paikkatietoikkuna.fi/geoserver/wms?CQL_FILTER=uuid='"+userKey+"'"
         baseJson.id = this._getMapLayerId(categoryModel.getId());
         return baseJson;
     },
