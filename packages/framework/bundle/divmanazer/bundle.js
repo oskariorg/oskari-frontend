@@ -119,6 +119,9 @@ Oskari.clazz
     "type" : "text/css",
     "src" : "../../../../resources/framework/bundle/divmanazer/css/grid.css"
       },{
+    "type" : "text/css",
+    "src" : "../../../../resources/framework/bundle/divmanazer/css/popup.css"
+      },{
 	"type" : "text/css",
 	"src" : "../../../../resources/framework/bundle/divmanazer/css/popover.css"
       }]
