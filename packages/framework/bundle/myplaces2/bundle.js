@@ -65,6 +65,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/myplaces2/request/StopDrawingRequestHandler.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/myplaces2/request/EditPlaceRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/myplaces2/request/EditCategoryRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/myplaces2/request/EditRequestHandler.js"
 		},
 		/* service */
 		{

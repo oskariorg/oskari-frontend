@@ -266,7 +266,24 @@ function(url, uuid, sandbox, defaultName) {
             if (isNew && success) {
                 me._addCategory(list[0]);
             } else {
-                // TODO: update model in store maybe?
+                // update models updateDate in store
+                var category = me.findCategory(list[0].getId());
+                if (category) {
+                    // update values
+                    category.setName(categoryModel.getName());
+                    category.setDotSize(categoryModel.getDotSize());
+                    category.setDotColor(categoryModel.getDotColor());
+                    
+                    category.setLineWidth(categoryModel.getLineWidth());
+                    category.setLineColor(categoryModel.getLineColor());
+                    
+                    category.setAreaLineWidth(categoryModel.getAreaLineWidth());
+                    category.setAreaLineColor(categoryModel.getAreaLineColor());
+                    category.setAreaFillColor(categoryModel.getAreaFillColor());
+                } else {
+                    // couldn't load it -> failed to save it
+                    success = false;
+                }
             }
             me._notifyDataChanged();
             callback(success, list[0], isNew);
@@ -404,6 +421,11 @@ function(url, uuid, sandbox, defaultName) {
                 // update models updateDate in store
                 var myplace = me.findMyPlace(list[0].getId());
                 if (myplace) {
+                    // update values
+                    myplace.setName(myplaceModel.getName());
+                    myplace.setDescription(myplaceModel.getDescription());
+                    myplace.setCategoryID(myplaceModel.getCategoryID());
+                    myplace.setGeometry(myplaceModel.getGeometry());
                     myplace.setUpdateDate(list[0].getUpdateDate());
                 } else {
                     // couldn't load it -> failed to save it

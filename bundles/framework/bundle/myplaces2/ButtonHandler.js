@@ -120,7 +120,6 @@ function(instance) {
         var popover = Oskari.clazz.create('Oskari.userinterface.component.Popover', 
             this.instance.getLocalization('title'));
         this.popover = popover;
-        // top would be nice but it will go off the screen
         this.popover.setPlacement('top');
         // place it next to the buttons we added
         this.popover.attachTo('#toolbar div.toolrow[tbgroup=myplaces]');

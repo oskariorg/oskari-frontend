@@ -13,6 +13,7 @@ function(instance) {
     this.instance = instance;
     // init layers from link (for printing) on initial load
     this.initialLoad = true;
+    this.linkTemplate = undefined;
 }, {
     __name : 'MyPlacesCategoryHandler',
     /**
@@ -27,6 +28,10 @@ function(instance) {
      * implements Module protocol init method
      */
     init : function() {
+        this.categoryEditTemplate = jQuery('<div><a class="button save" href="JavaScript:void(0);"></a>' +
+                    '<a class="button cancel" href="JavaScript:void(0);"></a>' +
+                '</div>');
+        this.linkTemplate = jQuery('<a href="JavaScript:void(0);"></a>');
     },
     /**
      * @method start
@@ -44,6 +49,30 @@ function(instance) {
                 sandbox.registerForEventByName(me, p);
             }
         }
+        
+        // categoryedit
+        jQuery('div.myplaces2category a.button.save').live('click', function() {
+            // TODO: save form
+            var values = me.editForm.getValues();
+            var errors = me.validateCategoryFormValues(values);
+            if(errors.length != 0) {
+                alert('errors!');
+                return;
+            }
+            var category = me.getCategoryFromFormValues(values);
+            me.saveCategory(category);
+            
+            //alert(JSON.stringify(values));
+            me.popover.hide();
+        });
+        jQuery('div.myplaces2category a.button.cancel').live('click', function() {
+            me.popover.hide();
+            me.editForm = undefined;
+        });
+        var popover = Oskari.clazz.create('Oskari.userinterface.component.Popover', 
+            'edit kat');
+        this.popover = popover;
+        this.popover.setPlacement('right');
     },
         
     /**
@@ -267,7 +296,111 @@ function(instance) {
                 sandbox.request(this.getName(), r);
             } 
         }
+    },
+    
+    editCategory : function(category) {
+        var me = this;
+        var form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.CategoryForm', me.instance);
+        var values = {
+            name : category.getName(),
+            id : category.getId(),
+            dot : {
+                size : category.getDotSize(),
+                color : category.getDotColor()
+            },
+            line : {
+                size : category.getLineWidth(),
+                color : category.getLineColor()
+            },
+            area : {
+                size : category.getAreaLineWidth(),
+                lineColor : category.getAreaLineColor(),
+                fillColor : category.getAreaFillColor()
+            }
+        };
+        
+        form.setValues(values);
+        var content = form.getForm(); 
+        var controls = me.categoryEditTemplate.clone();
+        // TODO: localization
+        controls.find('a.button.save').append('Tallenna');
+        controls.find('a.button.cancel').append('Peruuta');
+        
+        content.append(controls);
+        this.editForm = form;
+        // place it next to the personal data maplayer select
+        this.popover.attachTo('div.personaldata ul li select');
+        // hax attach our own style class for binding buttons
+        this.popover.data.tip().addClass('myplaces2category');
+        me.popover.setContent(content);
+        me.popover.show();
+    },
+    
+    validateCategoryFormValues : function(values) {
+        var errors = [];
+        if(!values) {
+            return errors;
+        }
+        var loc = this.instance.getLocalization('validation');
+        
+        if(!values.name)
+        {
+            errors.push({field : 'name', error : loc.categoryName});
+        }
+        /*
+         * TODO: validate 
+            category.setDotSize(formValues.category.dot.size);
+            category.setDotColor(formValues.category.dot.color);
+            
+            category.setLineWidth(formValues.category.line.size);
+            category.setLineColor(formValues.category.line.color);
+            
+            category.setAreaLineWidth(formValues.category.area.size);
+            category.setAreaLineColor(formValues.category.area.lineColor);
+            category.setAreaFillColor(formValues.category.area.fillColor);
+         */
+        return errors;
+    },
+    getCategoryFromFormValues : function(values) {
+        var category = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory');
+        category.setName(values.name);
+        category.setId(values.id);
+        
+        category.setDotSize(values.dot.size);
+        category.setDotColor(values.dot.color);
+        
+        category.setLineWidth(values.line.size);
+        category.setLineColor(values.line.color);
+        
+        category.setAreaLineWidth(values.area.size);
+        category.setAreaLineColor(values.area.lineColor);
+        category.setAreaFillColor(values.area.fillColor);
+        return category;
+    },
+    saveCategory : function(category) {
+        var me = this;
+        var loc = me.instance.getLocalization('notification');
+        var serviceCallback = function(blnSuccess, model, blnNew) {
+            if (blnSuccess) {
+                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                dialog.show(loc.categorySaved.title, loc.categorySaved.message);
+                dialog.fadeout();
+                // refresh map layer on map -> send update request
+                var layerId = me._getMapLayerId(category.getId());
+                var request = me.instance.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')(layerId, true);
+                me.instance.sandbox.request(me, request);
+            } else {
+                // blnNew should always be true since we are adding a category
+                if (blnNew) {
+                    alert(loc['error'].addCategory);
+                } else {
+                    alert(loc['error'].editCategory);
+                }
+            }
+        }
+        this.instance.getService().saveCategory(category, serviceCallback);
     }
+
 }, {
     /**
      * @property {String[]} protocol

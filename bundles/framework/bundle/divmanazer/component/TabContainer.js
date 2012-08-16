@@ -21,14 +21,12 @@ function(pEmptyMsg) {
     else {
         this.emptyMsg = 'No content';
     }
-    
     this.template = jQuery('<div class="oskariTabs">' + this.emptyMsg + '</div>');
             
     this.templateTabs = jQuery('<div class="tabsHeader"><ul></ul></div><br clear="all"/>' +
             '<div class="tabsContent"></div>');
             
     this.ui = this.template.clone();
-    
 }, {
     /**
      * @method addPanel
@@ -93,7 +91,8 @@ function(pEmptyMsg) {
         }
         var headerContainer = this.ui.find('ul');
         headerContainer.find('li').removeClass('active');
-        var tabs = this.ui.find('div.tab-content');
+        // only direct children since we can have another tabcontainer inside
+        var tabs = this.ui.children().children('div.tab-content');
         tabs.hide();
         panel.getHeader().addClass('active');
         panel.getContainer().show();

@@ -12,6 +12,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
 function(instance) {
     this.instance = instance;
     this.newCategoryId = '-new-';
+    this.placeId = undefined;
+    this.initialValues = undefined;
     
     var loc = instance.getLocalization('placeform');
     
@@ -56,12 +58,22 @@ function(instance) {
                 option.append(cat.getName());
                 option.attr('value', cat.getId());
                 // find another way if we want to keep selection between places
-                if(cat.isDefault()) {
+                if(this.initialValues) {
+                    if(this.initialValues.place.category == cat.getId()) {
+                        option.attr('selected', 'selected');
+                    }
+                }
+                else if(cat.isDefault()) {
                     option.attr('selected', 'selected');
                 }
                 selection.append(option);
             }
             this._bindCategoryChange();
+        }
+        
+        if(this.initialValues) {
+            ui.find('input[name=placename]').attr('value', this.initialValues.place.name);
+            ui.find('textarea[name=placedesc]').append(this.initialValues.place.desc);
         }
         return ui;
     },
@@ -86,11 +98,34 @@ function(instance) {
                 desc : placeDesc,
                 category : categorySelection
             };
+            if(this.placeId) {
+                values.place.id = this.placeId;
+            }
         }
         if(this.categoryForm) {
            values.category = this.categoryForm.getValues();
         }
         return values;
+    },
+    /**
+     * @method setValues
+     * Sets form values from object.
+     * @param {Object} data place data as formatted in #getValues() 
+     */
+    setValues : function(data) {
+        this.placeId = data.place.id;
+        // infobox will make us lose our reference so search 
+        // from document using the form-class
+        var onScreenForm = this._getOnScreenForm();
+        
+        if(onScreenForm.length > 0) {
+            // found form on screen
+            onScreenForm.find('input[name=placename]').val(data.place.name);
+            onScreenForm.find('textarea[name=placedesc]').val(data.place.desc);
+            onScreenForm.find('select[name=category]').val(data.place.category);
+        }
+        
+        this.initialValues = data;
     },
     /**
      * @method _bindCategoryChange

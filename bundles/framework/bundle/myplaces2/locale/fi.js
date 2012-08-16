@@ -78,6 +78,26 @@ Oskari.registerLocalization({
               }
           }
           
+      },
+      "notification" : {
+          "placeAdded" : {
+              "title" : "Kohde tallennettu",
+              "message" : "Löydät kohteen Omat Tiedot alta."
+          },
+          "categorySaved" : {
+              "title" : "Karttataso tallennettu",
+              "message" : "Karttatason muutokset tallennettu."
+          },
+          "error" : {
+              "addCategory" : "Virhe! Tason tallennus epäonnistui, paikkaa ei tallennettu",
+              "editCategory" : "Virhe! Tason tallennus epäonnistui",
+              "savePlace" : "Virhe! Paikkaa ei tallennettu",
+              "generic" : "Virhe! Tiedoissa virheitä"
+          }
+      },
+      "validation" : {
+          "placeName" : "Kohteen nimi puuttuu",
+          "categoryName" : "Tason nimi puuttuu"
       }
     }
       

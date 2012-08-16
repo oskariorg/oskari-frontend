@@ -75,6 +75,9 @@ Oskari.clazz
         "src" : "../../../../bundles/framework/bundle/divmanazer/component/TabContainer.js"
       }, {
         "type" : "text/javascript",
+        "src" : "../../../../bundles/framework/bundle/divmanazer/component/TabDropdownContainer.js"
+      }, {
+        "type" : "text/javascript",
         "src" : "../../../../bundles/framework/bundle/divmanazer/component/TabPanel.js"
       },{
         "type" : "text/javascript",
@@ -82,6 +85,9 @@ Oskari.clazz
       }, {
         "type" : "text/javascript",
         "src" : "../../../../bundles/framework/bundle/divmanazer/component/Alert.js"
+      },{
+        "type" : "text/javascript",
+        "src" : "../../../../bundles/framework/bundle/divmanazer/component/Popup.js"
       },{
         "type" : "text/javascript",
         "src" : "../../../../bundles/framework/bundle/divmanazer/component/Popover.js"

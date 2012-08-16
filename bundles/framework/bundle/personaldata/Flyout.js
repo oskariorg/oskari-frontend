@@ -14,7 +14,6 @@ function(instance) {
     this.container = null;
     this.state = null;
     
-    this.templateNotLoggedIn = null;
 	this.template = null;
 	this.templateTabHeader = null;
     this.templateTabContent = null;
@@ -116,12 +115,11 @@ function(instance) {
             this.instance.getLocalization('notLoggedIn'));
         this.tabsContainer.insertTo(flyout);
         
-        /*
         if(!sandbox.getUser().isLoggedIn()) {
-            jQuery(me.container).append(me.templateNotLoggedIn.clone());
+            //jQuery(me.container).append(me.templateNotLoggedIn.clone());
             return;
         }
-        */
+        
         // now we can presume user is logged in
 		for(var tabId in this.tabsData) {
 			var tab = this.tabsData[tabId];

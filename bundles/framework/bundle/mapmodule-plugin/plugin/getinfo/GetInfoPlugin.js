@@ -12,6 +12,7 @@ function() {
     this.pluginName = null;
     this._sandbox = null;
     this._map = null;
+    this.enabled = true;
 }, {
     /** @static @property __name plugin name */
     __name : 'SearchPlugin',
@@ -132,6 +133,9 @@ function() {
      */
     stopPlugin : function(sandbox) {
         var me = this;
+        // hide infobox if open
+        me._closeGfiInfo();
+        
         if (sandbox && sandbox.register) {
             this._sandbox = sandbox;
         }
@@ -166,17 +170,32 @@ function() {
     stop : function(sandbox) {
     },
     /**
+     * @method setEnabled
+     * Enables or disables gfi functionality
+     * @param {Boolean} blnEnabled
+     *          true to enable, false to disable
+     */
+    setEnabled : function(blnEnabled) {
+        var me = this;
+        if(blnEnabled == true) {
+            // enable with a small delay 
+            // so myplaces draw finish will not trigger this
+            setTimeout(function() {
+                me.enabled = true;
+            }, 500);
+        }
+        else {
+            this.enabled = false;
+        }
+    },
+    /**
      * @property {Object} eventHandlers
      * @static
      */
     eventHandlers : {
-        'ToolSelectedEvent' : function(event) {
-            // TODO: get rid of magic strings
-            if (event.getToolName == 'map_control_select_tool') {
-                this._getinfoTool.activate();
-            } else {
-                this._getinfoTool.deactivate();
-            }
+        'Toolbar.ToolSelectedEvent' : function(event) {
+            this.setEnabled(('basictools' == event.getGroupId() &&
+                 'select' == event.getToolId()));
         },
         'AfterDeactivateAllOpenlayersMapControlsButNotMeasureToolsEvent' : function(event) {
             this.afterDeactivateAllOpenlayersMapControlsButNotMeasureToolsEvent();
@@ -185,6 +204,10 @@ function() {
             this.afterDeactivateAllOpenlayersMapControlsEvent(event);
         },
         'MapClickedEvent' : function(evt) {
+            if(!this.enabled) {
+                // disabled, do nothing
+                return;
+            }
 
             var me = this;
             var ajaxUrl = "/web/fi/kartta" + "?p_p_id=Portti2Map_WAR_portti2mapportlet" + "&p_p_lifecycle=1" + "&p_p_state=exclusive" + "&p_p_mode=view" + "&p_p_col_id=column-1" + "&p_p_col_count=1" + "&_Portti2Map_WAR" + "_portti2mapportlet" + "_fi.mml.baseportlet.CMD=ajax.jsp&";
@@ -215,22 +238,10 @@ function() {
                     }
                 },
                 success : function(resp) {
-                    var rn = "InfoBox.ShowInfoBoxRequest";
-                    var rb = me._sandbox.getRequestBuilder(rn);
-                    var content = [];
-                    content.push({
-                        html : JSON.stringify(resp, null, 4),
-                        actions : {
-                            "Ok" : function() {
-                                var rn = "InfoBox.HideInfoBoxRequest";
-                                var rb = me._sandbox.getRequestBuilder(rn);
-                                var r = rb("getinforesult");
-                                me._sandbox.request(me, r);
-                            }
-                        }
-                    });
-                    var r = rb("getinforesult", "GetInfo Result", content, lonlat, true);
-                    me._sandbox.request(me, r);
+                    var content = me._formatResponseForInfobox(resp);
+                    if(content.length > 0) {
+                        me._showGfiInfo(content, lonlat);
+                    }
                 },
                 error : function() {
                     alert("GetInfo failed.");
@@ -274,6 +285,100 @@ function() {
         var me = this;
         me._sandbox.printDebug("GETINFO HOVER " + loc.lat + "," + loc.lon);
     },
+    /**
+     * @method _closeGfiInfo
+     * @private
+     * Closes the infobox with GFI data 
+     */
+    _closeGfiInfo : function() {
+        var rn = "InfoBox.HideInfoBoxRequest";
+        var rb = this._sandbox.getRequestBuilder(rn);
+        var r = rb("getinforesult");
+        this._sandbox.request(this, r);
+    },
+    /**
+     * @method _showGfiInfo
+     * @private
+     * Shows given content in given location using infobox bundle 
+     * @param {Object[]} content infobox content array
+     * @param {OpenLayers.LonLat} lonlat location for the GFI data
+     */
+    _showGfiInfo : function(content,lonlat) {
+        var me = this;
+        // setup close button as an extra content
+        content.push({
+            html: '', // no data to show, only to add button
+            actions : {
+                // TODO: localization
+                "Ok" : function() {
+                    me._closeGfiInfo();
+                }
+            }
+        });
+        // send out the request
+        var rn = "InfoBox.ShowInfoBoxRequest";
+        var rb = this._sandbox.getRequestBuilder(rn);
+        var r = rb("getinforesult", "GetInfo Result", content, lonlat, true);
+        this._sandbox.request(me, r);
+        
+    },
+    /**
+     * @method _formatResponseForInfobox
+     * @private
+     * Parses the GFI JSON response to a content array that can be 
+     * shown with infobox bundle
+     * @param {Object} response response from json query
+     * @return {Object[]} 
+     */
+    _formatResponseForInfobox : function(response) {
+
+        var content = [];
+        if(!response || !response.data) {
+            return content;
+        }
+        var me = this;
+        var dataList = [];
+        // TODO: fix in serverside!
+        if (!response.data.length) {
+            // not an array
+            dataList.push(response.data);
+        } else {
+            dataList = response.data;
+        }
+
+        for (var ii = 0; ii < dataList.length; ii++) {
+            var html = '';
+            var data = dataList[ii];
+
+            if (data.presentationType == 'TEXT') {
+                html = '<div style="overflow:auto">' + data.content + '</div>';
+            } else {
+                html = '<br/><table>';
+                var even = false;
+                // TODO: not tested
+                var jsonData = data.content;
+                for (attr in jsonData) {
+                    var value = jsonData[attr];
+                    if (value.startsWith('http://')) {
+                        value = '<a href="' + value + '" target="_blank">' + value + '</a>';
+                    }
+                    html = html + '<tr style="padding: 5px;';
+                    if (!even) {
+                        html = html + ' background-color: #EEEEEE';
+                    }
+                    even = !even;
+                    html = html + '"><td style="padding: 2px">' + attr + '</td><td style="padding: 2px">' + value + '</td></tr>';
+                }
+                html + '</table>';
+            }
+
+            content.push({
+                html : html
+            });
+        }
+        return content;
+    },
+
     /**
      * converts given array to CSV
      *

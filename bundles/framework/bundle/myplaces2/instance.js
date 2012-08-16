@@ -60,6 +60,30 @@ function() {
         return this.myPlacesService;
     },
     /**
+     * @method getDrawPlugin
+     * Returns reference to the draw plugin
+     * @return {Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin}
+     */
+    getDrawPlugin : function() {
+        return this.view.drawPlugin;
+    },
+    /**
+     * @method getCategoryHandler
+     * Returns reference to the category handler
+     * @return {Oskari.mapframework.bundle.myplaces2.CategoryHandler}
+     */
+    getCategoryHandler : function() {
+        return this.categoryHandler;
+    },
+    /**
+     * @method getMainView
+     * Returns reference to the main view
+     * @return {Oskari.mapframework.bundle.myplaces2.view.MainView}
+     */
+    getMainView : function() {
+        return this.view;
+    },
+    /**
      * @method update
      * implements BundleInstance protocol update method - does nothing atm
      */
@@ -81,8 +105,6 @@ function() {
         // handles toolbar buttons related to my places 
         this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.ButtonHandler", this);
         this.buttons.start();
-            
-        // request personaldata bundle to add my places tab?
         
         var user = sandbox.getUser();
         if(!user.isLoggedIn()) {
@@ -110,6 +132,9 @@ function() {
         this.view = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.view.MainView", this);
         this.view.start();
         
+        this.editRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler', sandbox, me);
+        sandbox.addRequestHandler('MyPlaces.EditPlaceRequest', this.editRequestHandler);
+        sandbox.addRequestHandler('MyPlaces.EditCategoryRequest', this.editRequestHandler);
     },
     /**
      * @method stop

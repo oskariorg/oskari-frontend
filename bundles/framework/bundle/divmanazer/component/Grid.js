@@ -60,9 +60,11 @@ function() {
      * @method setColumnValueRenderer
      * When rendering the field value the given renderer function is called if given.
      * The function takes the value as parameter and should return the processed value:
-     * function({String} value) {
+     * function({String} value, {Object} rowData) {
      *     return value;
      * }
+     * RowData parameter includes the object being rendered including 
+     * the value so renderer has access to id and such
      * @param {String} fieldName field name we want to process before showing in ui
      * @param {String} renderer function that will process the value
      */
@@ -275,7 +277,7 @@ function() {
                     else {
                         var renderer = this.valueRenderer[key];
                         if(renderer) {
-                            value = renderer(value);
+                            value = renderer(value, data);
                         } 
                         cell.append(value);
                     }

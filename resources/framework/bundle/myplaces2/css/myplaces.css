@@ -10,10 +10,10 @@ div.myplacesform select {
     width: 90%;
 }
 /* Smaller fields for category inputs in table */
-div.myplacesform div.myplacescategoryform table input {
+div.myplacescategoryform table input {
     width: 10px;
 }
-div.myplacesform div.myplacescategoryform input.oskaricolor {
+div.myplacescategoryform input.oskaricolor {
     height : 20px;
     width : 50px;
     border : 1px solid;

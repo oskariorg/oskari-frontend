@@ -103,7 +103,7 @@ function() {
      */
     setupInitialSelection : function() {
         // check if form has an initial selection box
-        var initialGeometry = jQuery('#metadataBbox').val();
+        var initialGeometry = jQuery('#tmpMetadataBbox').val();
         if(initialGeometry) {
             var wkt = new OpenLayers.Format.WKT();
             var features = wkt.read(initialGeometry);
@@ -124,12 +124,14 @@ function() {
         // remove hilight from select and move it to pan
         this.buttons.select.css('backgroundColor','#333438');
         this.buttons.pan.css('backgroundColor','#000000');
-        // update metadata search form fields
-        jQuery('#metadataBbox').val(geometry);
+        
         // transform coordinates to 'EPSG:4326'
         var currentProj = this.drawPlugin.getMapModule().getMap().getProjectionObject();
-        var strBounds = geometry.transform(currentProj, new OpenLayers.Projection("EPSG:4326")).getBounds().toString();
-        jQuery('#tmpMetadataBbox').val(strBounds.replace(/,/g, "_"));
+        
+        // update metadata search form fields
+        jQuery('#tmpMetadataBbox').val(geometry);
+        
+        jQuery('#metadataBbox').val(geometry.transform(currentProj, new OpenLayers.Projection("EPSG:4326")));
     },
 
     /**

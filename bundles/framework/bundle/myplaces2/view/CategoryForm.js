@@ -11,6 +11,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.CategoryForm",
  */
 function(instance) {
     this.instance = instance;
+    // problems in demo with autodetect
+    jscolor.dir = '/Oskari/libraries/jscolor/';
     
     var loc = instance.getLocalization('categoryform');
     
@@ -36,6 +38,8 @@ function(instance) {
         areaLineColor : '000000',
         areaFillColor : 'FFF71C'
     };
+    this.categoryId = undefined;
+    this.initialValues = undefined;
 }, {
     /**
      * @method getForm
@@ -47,16 +51,35 @@ function(instance) {
         this._populatePointTool(table);
         this._populateLineTool(table);
         this._populateAreaTool(table);
-        // bind pickers, this is a workaround since Openlayers popup will lose any bindings
-        // with live it is rebinded on render 
-        // apparently jscolor can manage without this \o/
-        /*
-        jQuery('div.myplacescategoryform input.oskaricolor').live('click', function() {
-            if(!this.picker) {
-                this.picker = new jscolor.color(this);
-                this.picker.showPicker();
-            }
-        });*/
+        
+        if(this.initialValues) {
+            ui.find('input[name=categoryname]').attr('value', this.initialValues.name);
+            ui.find('input[name=dotSize]').attr('value', this.initialValues.dot.size);
+            //document.getElementById('myColor').color.fromString('F2C80A')
+            var dotColor = ui.find('input[name=dotColor]');
+            dotColor.attr('value', this.initialValues.dot.color);
+            new jscolor.color(dotColor[0]);
+            //.fromString(this.initialValues.dot.color)
+            //.attr('value', this.initialValues.dot.color);
+            ui.find('input[name=lineSize]').attr('value', this.initialValues.line.size);
+            
+            var lineColor = ui.find('input[name=lineColor]');
+            lineColor.attr('value', this.initialValues.line.color);
+            new jscolor.color(lineColor[0]);
+            //ui.find('input[name=lineColor]').attr('value', this.initialValues.line.color);
+            
+            ui.find('input[name=areaLineSize]').attr('value', this.initialValues.area.size);
+            
+            var areaLineColor = ui.find('input[name=areaLineColor]');
+            areaLineColor.attr('value', this.initialValues.area.lineColor);
+            new jscolor.color(areaLineColor[0]);
+            //ui.find('input[name=areaLineColor]').attr('value', this.initialValues.area.lineColor);
+            
+            var areaFillColor = ui.find('input[name=areaFillColor]');
+            areaFillColor.attr('value', this.initialValues.area.fillColor);
+            new jscolor.color(areaFillColor[0]);
+            //ui.find('input[name=areaFillColor]').attr('value', this.initialValues.area.fillColor);
+        }
         return ui;
     },
     /**
@@ -74,6 +97,9 @@ function(instance) {
             // found form on screen
             var catName = onScreenForm.find('input[name=categoryname]').val();
             values.name = catName;
+            if(this.categoryId) {
+                values.id = this.categoryId;
+            }
             var dotSize = onScreenForm.find('input[name=dotSize]').val();
             var dotColor = onScreenForm.find('input[name=dotColor]').val();
             values.dot = {
@@ -96,6 +122,32 @@ function(instance) {
             }
         }
         return values;
+    },
+    /**
+     * @method setValues
+     * Sets form values from object.
+     * @param {Object} data place data as formatted in #getValues() 
+     */
+    setValues : function(data) {
+        this.categoryId = data.id;
+        // infobox will make us lose our reference so search 
+        // from document using the form-class
+        var onScreenForm = this._getOnScreenForm();
+        
+        if(onScreenForm.length > 0) {
+            // found form on screen
+            onScreenForm.find('input[name=categoryname]').val(data.name);
+            onScreenForm.find('input[name=dotSize]').val(data.dot.size);
+            onScreenForm.find('input[name=dotColor]').val(data.dot.color);
+            onScreenForm.find('input[name=lineSize]').val(data.line.size);
+            onScreenForm.find('input[name=lineColor]').val(data.line.color);
+            
+            onScreenForm.find('input[name=areaLineSize]').val(data.area.size);
+            onScreenForm.find('input[name=areaLineColor]').val(data.area.lineColor);
+            onScreenForm.find('input[name=areaFillColor]').val(data.area.fillColor);
+        }
+        
+        this.initialValues = data;
     },
     _createInput : function(name, value, classes) {
         var input = this.templateTextInput.clone();
