@@ -12,6 +12,7 @@ function() {
     this.template = jQuery('<div class="divmanazerpopup"><h3></h3><div class="content"></div><div class="actions"></div></div>');
     this.templateButton = jQuery('<div class="button"><a href="JavaScript:void(0);"></a></div>');
     this.dialog = null;
+    this.overlay = null;
 }, {
     /**
      * @method show
@@ -69,6 +70,9 @@ function() {
      */
     close : function(noAnimation) {
         var me = this;
+        if(this.overlay) {
+        	this.overlay.close();
+        }
         if(noAnimation) { 
             me.dialog.remove();
         }
@@ -81,11 +85,11 @@ function() {
     },
     alignment : ['left', 'right', 'top', 'bottom'],
     moveTo :function(target, alignment) {
-        //get the position of the placeholder element
         var align = 'right';
         if(alignment && jQuery.inArray(alignment, this.alignment) != -1) {
         	align = alignment;
         }
+        //get the position of the target element
         var tar = jQuery(target);
         var pos = tar.offset();
         var targetWidth = tar.outerWidth();
@@ -112,13 +116,18 @@ function() {
         }  
         this.dialog.addClass('arrow');
         this.dialog.addClass(alignment);
-        //this.dialog.addClass('bottom');
-        //show the menu directly over the placeholder
+        //move dialog to correct location
         this.dialog.css( {
                 'left': left + "px",
                 'top': top + "px",
                 'margin-left' : 0,
                 'margin-top' : 0
         } );
+    },
+    makeModal : function() {
+    	var overlay = Oskari.clazz.create('Oskari.userinterface.component.Overlay');
+    	overlay.overlay('body');
+    	this.overlay = overlay;
+    	overlay.followResizing(true);
     }
 });
