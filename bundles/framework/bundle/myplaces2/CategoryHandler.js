@@ -328,7 +328,7 @@ function(instance) {
     	okBtn.setTitle(loc.buttons.ok);
     	okBtn.addClass('primary');
     	okBtn.setHandler(function() {
-            dialog.close();
+            dialog.close(true);
     	});
     	var content = jQuery('<ul></ul>');
     	for(var i = 0 ; i < errors.length; ++i) {
@@ -394,9 +394,9 @@ function(instance) {
             } else {
                 // blnNew should always be true since we are adding a category
                 if (blnNew) {
-                    alert(loc['error'].addCategory);
+                	me.instance.showMessage(loc['error'].title, loc['error'].addCategory);
                 } else {
-                    alert(loc['error'].editCategory);
+                	me.instance.showMessage(loc['error'].title, loc['error'].editCategory);
                 }
             }
         }

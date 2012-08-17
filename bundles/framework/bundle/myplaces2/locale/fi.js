@@ -95,10 +95,10 @@ Oskari.registerLocalization({
               "message" : "Karttatason muutokset tallennettu."
           },
           "error" : {
-              "addCategory" : "Virhe! Tason tallennus epäonnistui, paikkaa ei tallennettu",
-              "editCategory" : "Virhe! Tason tallennus epäonnistui",
+              "addCategory" : "Tason tallennus epäonnistui, paikkaa ei tallennettu",
+              "editCategory" : "Tason tallennus epäonnistui",
               "savePlace" : "Virhe! Paikkaa ei tallennettu",
-              "generic" : "Virhe! Tiedoissa virheitä"
+              "title" : "Virhe!"
           }
       },
       "validation" : {

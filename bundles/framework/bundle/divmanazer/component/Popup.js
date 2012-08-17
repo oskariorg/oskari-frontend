@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
 function() {
     this.template = jQuery('<div class="divmanazerpopup"><h3></h3><div class="content"></div><div class="actions"></div></div>');
     this.templateButton = jQuery('<div class="button"><a href="JavaScript:void(0);"></a></div>');
-    this.dialog = null;
+    this.dialog = this.template.clone();
     this.overlay = null;
 }, {
     /**
@@ -23,9 +23,8 @@ function() {
      */
     show : function(title, message, buttons) {
     	var me = this;
-        this.dialog = this.template.clone();
-        this.dialog.find('h3').append(title);
-        this.dialog.find('div.content').append(message);
+        this.dialog.find('h3').html(title);
+        this.dialog.find('div.content').html(message);
         if(buttons && buttons.length > 0) {
         	var actionDiv = this.dialog.find('div.actions');
         	for(var i = 0 ; i < buttons.length; ++i) {
@@ -39,7 +38,7 @@ function() {
         	});
         }
         jQuery('body').append(this.dialog);
-        // setup location
+        // center on screen
         this.dialog.css('margin-left', -(this.dialog.width()/2) + 'px');
         this.dialog.css('margin-top', -(this.dialog.height()/2) + 'px');
     },
@@ -57,6 +56,14 @@ function() {
         setTimeout(function() { 
             me.close();
         }, timer);
+    },
+    /**
+     * @method addClass
+     * Adds a class for formatting the popup
+     * @param {String} pClass css class name
+     */
+    addClass : function(pClass) {
+    	this.dialog.addClass(pClass);
     },
     /**
      * @method close
@@ -109,6 +116,13 @@ function() {
         	top = (top + targetHeight) + 5 ;
     	 	left = left + (targetWidth/2) - (dialogWidth/2);
         }  
+        if(left < 0) {
+        	left = 0;
+        }
+        if(top < 0) {
+        	top = 0;
+        }
+        // TODO: check for right and bottom as well
         this.dialog.addClass('arrow');
         this.dialog.addClass(alignment);
         //move dialog to correct location

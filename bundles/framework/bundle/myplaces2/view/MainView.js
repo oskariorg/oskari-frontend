@@ -246,10 +246,10 @@ function(instance) {
                     // blnNew should always be true since we are adding a category
                     var loc = me.instance.getLocalization('notification')['error'];
                     if(blnNew) {
-                        alert(loc.addCategory);
+                		me.instance.showMessage(loc['error'].title, loc['error'].addCategory);
                     }
                     else {
-                        alert(loc.editCategory);
+                		me.instance.showMessage(loc['error'].title, loc['error'].editCategory);
                     }
                 }
             }
@@ -272,7 +272,7 @@ function(instance) {
         if(!values) {
             // should not happen
             var loc = me.instance.getLocalization('notification')['error'];
-            alert(loc.generic);
+    		me.instance.showMessage(loc.title, loc.savePlace);
             return;
         }
         var place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlace');
@@ -316,7 +316,7 @@ function(instance) {
             }
             else {
                 var loc = me.instance.getLocalization('notification')['error'];
-                alert(loc.savePlace);
+        		me.instance.showMessage(loc.title, loc.savePlace);
             }
         }
         this.instance.getService().saveMyPlace(place,serviceCallback);
