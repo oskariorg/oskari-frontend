@@ -19,22 +19,17 @@ function() {
      * Shows an info popup
      * @param {String} title
      * @param {String} message
-     * @param {Object} actions buttons with syntax {ButtonName: ButtonCallback}
+     * @param {Oskari.userinterface.component.Button[]} buttons buttons to show on dialog
      */
-    show : function(title, message, actions) {
+    show : function(title, message, buttons) {
     	var me = this;
         this.dialog = this.template.clone();
         this.dialog.find('h3').append(title);
         this.dialog.find('div.content').append(message);
-        if(actions) {
+        if(buttons && buttons.length > 0) {
         	var actionDiv = this.dialog.find('div.actions');
-		  	for(var key in actions){
-	            var value = actions[key];
-	            var actionLink = this.templateButton.clone();
-	            var link = actionLink.find('a');
-	            link.append(key);
-	            link.bind('click', value);
-	            actionDiv.append(actionLink);
+        	for(var i = 0 ; i < buttons.length; ++i) {
+        		buttons[i].insertTo(actionDiv);
         	}
         }
         else {

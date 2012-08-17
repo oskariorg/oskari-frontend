@@ -34,6 +34,7 @@ Oskari.registerLocalization({
       },
       "buttons" : {
           "cancel" : "Peruuta",
+          "ok" : "OK",
           "finish" : "Lopeta piirto",
           "save" : "Tallenna"
       },
@@ -76,8 +77,13 @@ Oskari.registerLocalization({
                     "linecolor" : "Viivanväri",
                     "size" : "Viivan paksuus"
               }
+          },
+          "edit" : {
+              "title" : "Muokkaa karttatasoa",
+              "save" : "Tallenna",
+              "cancel" : "Peruuta"
+          	
           }
-          
       },
       "notification" : {
           "placeAdded" : {
@@ -96,6 +102,7 @@ Oskari.registerLocalization({
           }
       },
       "validation" : {
+          "title" : "Tiedoissa puutteita:",
           "placeName" : "Kohteen nimi puuttuu",
           "categoryName" : "Tason nimi puuttuu"
       }

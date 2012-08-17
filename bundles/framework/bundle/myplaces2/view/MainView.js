@@ -172,26 +172,40 @@ function(instance) {
     },
     /**
      * @method _validateForm
-     * Validates form data
+     * Validates form data, returns an object array if any errors. 
+     * Error objects have field and error properties ({field : 'name', error: 'Name missing'}). 
      * @private
      * @param {Object} values form values as returned by Oskari.mapframework.bundle.myplaces2.view.PlaceForm.getValues()
-     * @return {Boolean} true if values are ok
+     * @return {Object[]} 
      */
     _validateForm : function(values) {
-        var blnOk = true;
-        var loc = this.instance.getLocalization('validation');
+        var errors = [];
        
+        var errors = this.instance.getCategoryHandler().validateCategoryFormValues(values.category);
+        
         if(!values.place.name)
         {
-             alert(loc.placeName);
-             blnOk = false;
+        	var loc = this.instance.getLocalization('validation');
+            errors.push({name : 'name' , error: loc.placeName});
         }
-        var errors = this.instance.getCategoryHandler().validateCategoryFormValues(values.category);
-        if(errors.length != 0) {
-            alert(errors);
-            blnOk = false;
-        }
-        return blnOk;
+        return errors;
+    },
+    _showValidationErrorMessage : function(errors) {
+        var loc = this.instance.getLocalization();
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+    	okBtn.setTitle(loc.buttons.ok);
+    	okBtn.addClass('primary');
+    	okBtn.setHandler(function() {
+            dialog.close();
+    	});
+    	var content = jQuery('<ul></ul>');
+    	for(var i = 0 ; i < errors.length; ++i) {
+    		var row = jQuery('<li></li>');
+    		row.append(errors[i]['error'])
+    		content.append(row);
+    	}
+    	dialog.show(loc.validation.title, content, [okBtn]);
     },
     /**
      * @method _saveForm
@@ -208,7 +222,9 @@ function(instance) {
         var me = this;
         var formValues = this.form.getValues();
         // validation
-        if(!this._validateForm(formValues)) {
+        var errors = this._validateForm(formValues);
+        if(errors.length != 0) {
+            this._showValidationErrorMessage(errors);
             return;
         }
         // validation passed -> go save stuff

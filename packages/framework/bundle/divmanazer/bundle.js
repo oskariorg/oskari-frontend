@@ -92,6 +92,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             "src" : "../../../../bundles/framework/bundle/divmanazer/component/Overlay.js"
         }, {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/component/Button.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/divmanazer/component/Popover.js"
         }, {
             "type" : "text/javascript",
@@ -123,6 +126,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
         }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/divmanazer/css/popup.css"
+        }, {
+            "type" : "text/css",
+            "src" : "../../../../resources/framework/bundle/divmanazer/css/button.css"
         }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/divmanazer/css/overlay.css"

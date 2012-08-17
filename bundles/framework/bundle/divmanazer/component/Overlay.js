@@ -71,7 +71,6 @@ function() {
         if(this._resizingWorkaround) {
         	clearTimeout(this._resizingWorkaround);
         }
-    	//target.unbind('resize', this['resize']);
     },
     bindClickToClose : function() {
     	var me = this;
