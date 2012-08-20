@@ -230,6 +230,19 @@ function(instance) {
             }
         },
         /**
+         * @method MyPlaces.MyPlaceSelectedEvent
+         * Place was selected
+         * @param {Oskari.mapframework.bundle.myplaces2.event.MyPlaceSelectedEvent} event
+         */
+        'MyPlaces.MyPlaceSelectedEvent' : function(event) {
+        	if(!event.getPlace()) {
+        		// cleanup
+	            // ask toolbar to select default tool
+	            var toolbarRequest = this.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
+	            this.instance.sandbox.request(this, toolbarRequest);
+        	}
+        },
+        /**
          * @method MyPlaces.FinishedDrawingEvent
          * TODO: should request toolbar to select some default tool
          * @param {Oskari.mapframework.bundle.myplaces2.event.FinishedDrawingEvent} event
@@ -242,9 +255,9 @@ function(instance) {
             this.instance.sandbox.request(this, toolbarRequest);
             // disable ignore to act normally after ^request
             this.ignoreEvents = false;
-            if(this.popover) {
-                this.popover.hide();
-            }
+	        if(this.dialog) {
+	            this.dialog.close();
+	        }
         }
     }
 }, {
