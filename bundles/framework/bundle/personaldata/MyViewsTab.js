@@ -13,13 +13,89 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
  */
 function(instance, localization) {
     this.instance = instance;
-    this.template = jQuery('<div><a href="JavaScript: void(0);"></a></div> ' + '<div style="border: 1px solid; margin: 20px; ' + 'padding: 25px;" class="response"></div>' + '<div class="viewsList"></div>');
+    this.template = jQuery('<div class="viewsList volatile"></div>');
     this.templateViewRow = jQuery('<div class="view">' + '<div class="name"><a href="JavaScript:void(0);">' + '</a></div></div>');
     this.templateViewTools = jQuery('<div class="tools">' + '<div class="edit">' + '<a href="JavaScript:void(0);">' + '</a></div>' + '<div class="publish">' + '<a href="JavaScript:void(0);">' + '</a></div>' + '<div class="delete">' + '<a href="JavaScript:void(0);">' + '</a></div></div>');
     this.loc = localization;
     this.container = null;
-    this.debugCounter = 0;
+    
+    var sandbox = instance.sandbox;
+    var me = this;
+    // add save view button to toolbar if we get the statehandler request
+    var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
+    if (rbState) {
+        var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+        sandbox.request(instance, reqBuilder('save_view', 'viewtools', {
+            iconCls : 'tool-save-view',
+            tooltip: 'Tallenna näkymä',
+            sticky: false,
+            callback : function() {
+				me._promptForViewName();
+            }
+        }));
+    }
+    // disable button for non logged in users
+    if(!sandbox.getUser().isLoggedIn()) {
+        var reqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
+        sandbox.request(instance, reqBuilder('save_view', 'viewtools', false));
+    }
 }, {
+    /**
+     * @method _promptForViewName
+     * @private
+     */
+    _promptForViewName : function() {
+    	var me = this;
+    	
+    	var form = Oskari.clazz.create('Oskari.userinterface.component.Form');
+    	var nameInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput', 'name');
+    	//nameInput.setLabel(this.loc.popup.label);
+    	nameInput.setPlaceholder(this.loc.popup.placeholder);
+    	nameInput.setValidator(function(inputField)  {
+    		var value = inputField.getValue();
+    		var name = inputField.getName();
+    		var errors = [];
+            if (!value) {
+            	errors.push({
+        			"field": name, 
+        			"error" :  me.loc.save.error_noname
+    			});
+            	return errors;
+           	}
+            if (value.indexOf('<') >= 0) {
+            	errors.push({
+        			"field": name, 
+        			"error" :  me.loc.save.error_illegalchars
+    			});
+            } 
+            return errors;
+    	});
+    	form.addField(nameInput);
+    	
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+    	okBtn.setTitle(this.loc.popup.save);
+    	okBtn.addClass('primary');
+    	
+    	var sandbox = this.instance.sandbox;
+    	okBtn.setHandler(function() {
+            var errors = form.validate();
+            if (errors.length == 0) {
+			    var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
+			    sandbox.request(instance, rbState(nameInput.getValue()));
+    			dialog.close();
+            } else {
+            	form.showErrors();
+            }
+    	});
+    	var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+    	cancelBtn.setTitle(this.loc.popup.cancel);
+    	cancelBtn.setHandler(function() {
+            dialog.close(true);
+    	});
+
+    	dialog.show(this.loc.popup.title, form.getForm(), [cancelBtn, okBtn]);
+    },
     /**
      * @method getName
      * @return {String} name of the component
@@ -46,17 +122,7 @@ function(instance, localization) {
         var me = this;
         var content = me.template.clone();
         me.container = container;
-        content.find('a').html('> Tallenna näkymä <');
         container.append(content);
-
-        var instance = me.instance;
-        var sandbox = instance.getSandbox();
-        content.find('a').bind('click', function() {
-            var rb = sandbox.getRequestBuilder('StateHandler' + '.SaveStateRequest');
-            if (rb) {
-                sandbox.request(instance, rb());
-            }
-        });
         me._refreshViewsList();
     },
     /**
@@ -66,8 +132,9 @@ function(instance, localization) {
     _refreshViewsList : function() {
         var me = this;
         var listContainer = me.container.find('.viewsList');
+        // '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR_portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_portti2mapportlet_fi' + '.mml.baseportlet.CMD=ajax.jsp&' +'action_route=GetViews' 
         jQuery.ajax({
-            url : '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR_portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_portti2mapportlet_fi' + '.mml.baseportlet.CMD=ajax.jsp&' + 'action_route=GetViews',
+            url : me.instance.sandbox.getAjaxUrl() + 'action_route=GetViews',
             type : 'POST',
             dataType : 'json',
             beforeSend : function(x) {
@@ -119,8 +186,9 @@ function(instance, localization) {
                         jQuery('div.modalmessage ' + 'div.e_illegal').show();
                     } else {
                         $.modal.close();
+                        // '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR_' + 'portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_' + 'portti2mapportlet_' + 'fi.mml.baseportlet.CMD=' + 'ajax.jsp' 
                         jQuery.ajax({
-                            url : '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR_' + 'portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_' + 'portti2mapportlet_' + 'fi.mml.baseportlet.CMD=' + 'ajax.jsp' + '&action_route=RenameView',
+                            url : me.instance.sandbox.getAjaxUrl() + '&action_route=RenameView',
                             type : 'POST',
                             data : 'id=' + view.id + '&newName=' + viewName,
                             dataType : 'json',
@@ -165,7 +233,7 @@ function(instance, localization) {
         var viewName = container.find('div.name a');
         viewName.append(viewData.name);
         viewName.bind('click', function() {
-            var rb = sandbox.getRequestBuilder('StateHandler' + '.SetStateRequest');
+            var rb = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
             if (rb) {
                 var req = rb(viewData.state);
                 /*
@@ -210,8 +278,9 @@ function(instance, localization) {
             } else {
                 publishTool.html(me.loc['publish']);
             }
+            // '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR_portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_portti2mapportlet_fi' + '.mml.baseportlet.CMD=ajax.jsp' + 
             jQuery.ajax({
-                url : '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR_portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_portti2mapportlet_fi' + '.mml.baseportlet.CMD=ajax.jsp' + '&action_route=AdjustViewAccess' + '&id=' + id + '&isPublic=' + view.isPublic,
+                url : me.instance.sandbox.getAjaxUrl() + '&action_route=AdjustViewAccess' + '&id=' + id + '&isPublic=' + view.isPublic,
                 type : 'POST',
                 dataType : 'json',
                 beforeSend : function(x) {
@@ -240,8 +309,9 @@ function(instance, localization) {
                 ok.name = "delete_ok";
                 ok.text = me.loc.button ? me.loc.button.yes : "Kyllä";
                 ok.onclick = function() {
+                	// '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR' + '_portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_' + 'portti2mapportlet_fi' + '.mml.baseportlet.CMD=ajax.jsp' + 
                     jQuery.ajax({
-                        url : '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR' + '_portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_' + 'portti2mapportlet_fi' + '.mml.baseportlet.CMD=ajax.jsp' + '&action_route=DeleteView' + '&id=' + id,
+                        url : me.instance.sandbox.getAjaxUrl() + '&action_route=DeleteView' + '&id=' + id,
                         type : 'POST',
                         dataType : 'json',
                         beforeSend : function(x) {
@@ -323,34 +393,8 @@ function(instance, localization) {
          * TODO: reload views list here
          */
         'StateSavedEvent' : function(event) {
-            this.container.find('div.response').html('Tallennettu tila: <hr/>' + this.serializeJSON(event.getState()));
-            this.debugCounter++;
+            this.container.find('div.response').html('Tallennettu tila: <hr/>' + JSON.stringify(event.getState()));
             this._refreshViewsList();
-        }
-    },
-    // TODO: move to some util
-    serializeJSON : function(obj) {
-        var me = this;
-        var t = typeof (obj);
-        if (t != "object" || obj === null) {
-            // simple data type
-            if (t == "string")
-                obj = '"' + obj + '"';
-            return String(obj);
-        } else {
-            // array or object
-            var json = [], arr = (obj && obj.constructor == Array);
-
-            jQuery.each(obj, function(k, v) {
-                t = typeof (v);
-                if (t == "string") {
-                    v = '"' + v + '"';
-                } else if (t == "object" & v !== null) {
-                    v = me.serializeJSON(v)
-                }
-                json.push(( arr ? "" : '"' + k + '":') + String(v));
-            });
-            return ( arr ? "[" : "{") + String(json) + ( arr ? "]" : "}");
         }
     },
     /**

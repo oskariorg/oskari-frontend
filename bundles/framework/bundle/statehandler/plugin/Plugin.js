@@ -67,6 +67,7 @@ function() {
     },
     /**
      * @method saveState
+     * @param {String} viewName name for the view
      * @param {Object} state JSON presentation of application state
      * If param is not given, uses 
      * Oskari.mapframework.bundle.ui.module.statehandler.StateHandlerModule.getCurrentState()
@@ -74,7 +75,7 @@ function() {
      * Saves the state.
 	 * @throws "Implement your own"
      */
-    saveState : function(state) {
+    saveState : function(viewName, state) {
         throw "Implement your own";
     }
 });

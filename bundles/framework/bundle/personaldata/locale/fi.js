@@ -33,7 +33,32 @@ Oskari.registerLocalization({
                 edit : "Muokkaa",
                 publish : "Julkiseksi",
                 unpublish : "Yksityiseksi",
-                "delete" : "Poista"
+                "delete" : "Poista",
+                
+                
+		        'popup' : {
+		        	"title" : 'Näkymän tallennus',
+		            'label' : 'Näkymän nimi:',
+		            'placeholder' : 'Anna näkymälle nimi',
+		            'save' : 'Tallenna',
+		            'cancel' : 'Peruuta',
+		            'error_noname' : 'Syötä nimi'
+		        },
+		        'save' : {
+		            success : 'Näkymä tallennettu',
+		            error : 'Tapahtui virhe - Näkymää ei tallennettu',
+		            error_noname : 'Nimi ei voi olla tyhjä',
+		            error_illegalchars : 'Nimessä on luvattomia merkkejä',
+		            msg : {
+		                view_name : 'Näkymän nimi'
+		            },
+		            button : {
+		                save : 'Tallenna',
+		                cancel : 'Peruuta'
+		            }
+		        }
+		        
+		        
             },
             publishedmaps : {
                 title : "Julkaistut kartat"
