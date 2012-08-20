@@ -18,7 +18,84 @@ function(instance, localization) {
     this.templateViewTools = jQuery('<div class="tools">' + '<div class="edit">' + '<a href="JavaScript:void(0);">' + '</a></div>' + '<div class="publish">' + '<a href="JavaScript:void(0);">' + '</a></div>' + '<div class="delete">' + '<a href="JavaScript:void(0);">' + '</a></div></div>');
     this.loc = localization;
     this.container = null;
+    
+    var sandbox = instance.sandbox;
+    var me = this;
+    // add save view button to toolbar if we get the statehandler request
+    var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
+    if (rbState) {
+        var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+        sandbox.request(instance, reqBuilder('save_view', 'viewtools', {
+            iconCls : 'tool-save-view',
+            tooltip: 'Tallenna näkymä',
+            sticky: false,
+            callback : function() {
+				me._promptForViewName();
+            }
+        }));
+    }
+    // disable button for non logged in users
+    if(!sandbox.getUser().isLoggedIn()) {
+        var reqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
+        sandbox.request(instance, reqBuilder('save_view', 'viewtools', false));
+    }
 }, {
+    /**
+     * @method _promptForViewName
+     * @private
+     */
+    _promptForViewName : function() {
+    	var me = this;
+    	
+    	var form = Oskari.clazz.create('Oskari.userinterface.component.Form');
+    	var nameInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput', 'name');
+    	//nameInput.setLabel(this.loc.popup.label);
+    	nameInput.setPlaceholder(this.loc.popup.placeholder);
+    	nameInput.setValidator(function(inputField)  {
+    		var value = inputField.getValue();
+    		var name = inputField.getName();
+    		var errors = [];
+            if (!value) {
+            	errors.push({
+        			"field": name, 
+        			"error" :  me.loc.save.error_noname
+    			});
+            	return errors;
+           	}
+            if (value.indexOf('<') >= 0) {
+            	errors.push({
+        			"field": name, 
+        			"error" :  me.loc.save.error_illegalchars
+    			});
+            } 
+            return errors;
+    	});
+    	form.addField(nameInput);
+    	
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+    	okBtn.setTitle(this.loc.popup.save);
+    	okBtn.addClass('primary');
+    	
+    	var sandbox = this.instance.sandbox;
+    	okBtn.setHandler(function() {
+            var errors = form.validate();
+            if (errors.length == 0) {
+			    var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
+			    sandbox.request(instance, rbState(nameInput.getValue()));
+    			dialog.close();
+            } else {
+            	form.showErrors();
+            }
+    	});
+    	var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+    	cancelBtn.setTitle(this.loc.popup.cancel);
+    	cancelBtn.setHandler(function() {
+            dialog.close(true);
+    	});
+
+    	dialog.show(this.loc.popup.title, form.getForm(), [cancelBtn, okBtn]);
+    },
     /**
      * @method getName
      * @return {String} name of the component
