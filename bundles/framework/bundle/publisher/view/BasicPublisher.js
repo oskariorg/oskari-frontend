@@ -34,7 +34,7 @@ Oskari.clazz
     			   '<div class="field">' + 
     	    		   '<div class="help icon-info" ' + 
 			   'title="' + localization.name.tooltip + '" ' +
-			   'helptags="portti,name" ' +
+			   'helptags="portti,help,publisher,name" ' +
 			   '></div>' +
     	    		   '<label for="name">' + 
 			   localization.name.label + 
@@ -46,7 +46,7 @@ Oskari.clazz
     			   '<div class="field">' + 
     	    		   '<div class="help icon-info" ' + 
 			   'title="' + localization.language.tooltip + '" ' +
-			   'helptags="portti,language" ' +
+			   'helptags="portti,help,publisher,language" ' +
 			   '></div>' + 
     	    		   '<label for="language">' + 
 			   localization.language.label + 
@@ -217,13 +217,13 @@ Oskari.clazz
 				    var okBtn = 
 					dialog.createCloseButton("OK");
 				    okBtn.addClass('primary');
-				    dialog.show(me.loc['help'], 
+				    dialog.show(me.loc.help, 
 						content, 
 						[ okBtn ]);
 				    dialog.moveTo(btn, 'bottom');
 				},
 				error : function() {
-				    alert(me.loc['nohelp']);
+				    alert(me.loc.error.nohelp);
 				}
 			    });
 			});
