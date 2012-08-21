@@ -66,6 +66,22 @@ function() {
     	this.dialog.addClass(pClass);
     },
     /**
+     * @method createCloseButton
+     * Convenience method that creates a close button with 
+     * given label that can be given to show() method
+     * @param {String} label button label
+     * @return {Oskari.userinterface.component.Button} button that closes the dialog
+     */
+    createCloseButton : function(label) {
+    	var me = this;
+    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+    	okBtn.setTitle(label);
+    	okBtn.setHandler(function() {
+            me.close(true);
+    	});
+    	return okBtn;
+    },
+    /**
      * @method close
      * Removes the popup after given time has passed
      * @param {Boolean} noAnimation true to close immediately (optional, defaults to fade out animation)

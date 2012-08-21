@@ -30,7 +30,10 @@ function(instance, localization) {
             tooltip: 'Tallenna näkymä',
             sticky: false,
             callback : function() {
-				me._promptForViewName();
+				me._promptForViewName(function(name) {
+				    var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
+				    sandbox.request(instance, rbState(name));	
+				});
             }
         }));
     }
@@ -44,13 +47,18 @@ function(instance, localization) {
      * @method _promptForViewName
      * @private
      */
-    _promptForViewName : function() {
+    _promptForViewName : function(successCallback,viewName) {
     	var me = this;
     	
     	var form = Oskari.clazz.create('Oskari.userinterface.component.Form');
     	var nameInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput', 'name');
     	//nameInput.setLabel(this.loc.popup.label);
     	nameInput.setPlaceholder(this.loc.popup.placeholder);
+    	var title = this.loc.popup.title;
+    	if(viewName) {
+    		title = this.loc.popup.edit;
+    		nameInput.setValue(viewName);
+    	}
     	nameInput.setValidator(function(inputField)  {
     		var value = inputField.getValue();
     		var name = inputField.getName();
@@ -74,26 +82,20 @@ function(instance, localization) {
     	
     	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
     	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-    	okBtn.setTitle(this.loc.popup.save);
+    	okBtn.setTitle(this.loc.button.save);
     	okBtn.addClass('primary');
     	
     	var sandbox = this.instance.sandbox;
     	okBtn.setHandler(function() {
             var errors = form.validate();
             if (errors.length == 0) {
-			    var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
-			    sandbox.request(instance, rbState(nameInput.getValue()));
+            	successCallback(nameInput.getValue());
     			dialog.close();
             } else {
             	form.showErrors();
             }
     	});
-    	var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-    	cancelBtn.setTitle(this.loc.popup.cancel);
-    	cancelBtn.setHandler(function() {
-            dialog.close(true);
-    	});
-
+    	var cancelBtn = dialog.createCloseButton(this.loc.button.cancel);
     	dialog.show(this.loc.popup.title, form.getForm(), [cancelBtn, okBtn]);
     },
     /**
@@ -126,13 +128,41 @@ function(instance, localization) {
         me._refreshViewsList();
     },
     /**
+     * @method _renderViewsList
+     * Refreshes the tab contents
+     */
+    _renderViewsList : function(views) {
+
+        if (!views) {
+        	views = [];
+        }
+        var me = this;
+        var listContainer = me.container.find('.viewsList');
+        listContainer.html('');
+        this.viewData = views;
+        for (var i = 0; i < me.viewData.length; i++) {
+            var datum = me.viewData[i];
+            var vc = me.createViewContainer(datum);
+            listContainer.append(vc);
+        }
+        listContainer.find('div.view:odd').addClass('odd');
+        listContainer.find('div.view:even').removeClass('odd');
+        /*
+        // TODO: preferrably call some this.instance.updateTile() so we can calculate my places etc to tile number as well
+        var tile = me.instance.plugins['Oskari.userinterface.Tile'];
+        var ctr = tile.container;
+        var ts = jQuery(ctr).find('.oskari-tile-status');
+        ts.empty();
+        ts.append('(' + views.length + ')');
+        */
+    },
+
+    /**
      * @method _refreshViewsList
      * Refreshes the tab contents
      */
     _refreshViewsList : function() {
-        var me = this;
-        var listContainer = me.container.find('.viewsList');
-        // '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR_portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_portti2mapportlet_fi' + '.mml.baseportlet.CMD=ajax.jsp&' +'action_route=GetViews' 
+        var me = this; 
         jQuery.ajax({
             url : me.instance.sandbox.getAjaxUrl() + 'action_route=GetViews',
             type : 'POST',
@@ -143,27 +173,13 @@ function(instance, localization) {
                 }
             },
             success : function(response) {
-                listContainer.html('');
-                if (response.views && response.views.length > 0) {
-                    //				alert(JSON.stringify(response.views, null, 4));
-                    me.viewData = response.views;
-                    for (var i = 0; i < me.viewData.length; i++) {
-                        var datum = me.viewData[i];
-                        var vc = me.createViewContainer(datum);
-                        listContainer.append(vc);
-                    }
-                    listContainer.find('div.view:odd').addClass('odd');
-                    listContainer.find('div.view:even').removeClass('odd');
-                    var tile = me.instance
-                    .plugins['Oskari.userinterface.Tile'];
-                    var ctr = tile.container;
-                    var ts = jQuery(ctr).find('.oskari-tile-status');
-                    ts.empty();
-                    ts.append('(' + response.views.length + ')');
-                }
+            	me._renderViewsList(response.views);
             },
             error : function() {
-                alert(me.loc['efailtogetmyviews']);
+    			var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+		    	var button = dialog.createCloseButton(me.loc.button.ok);
+				button.addClass('primary');
+		    	dialog.show(me.loc['error'].title, me.loc['error'].loadfailed, [button]);
             }
         });
     },
@@ -173,53 +189,35 @@ function(instance, localization) {
     editView : function(view) {
         var me = this;
         var sandbox = this.instance.getSandbox();
-        var title = this.loc.edit ? this.loc.edit : 'Muokkaa näkymää';
-        var msg = '<div class="e_noname" ' + 'style="display: inline-block; ' + 'color: red; display: none;">' + (this.loc.error_noname ? this.loc.error_noname : 'Nimi ei voi olla tyhjä!') + '<br />' + '</div>' + '<div class="e_illegal" ' + 'style="display: inline-block; ' + 'color: red; display: none;">' + '<br />' + (this.loc.error_illegalchars ? this.loc.error_illegalchars : 'Nimessä on virheellisiä merkkejä') + '<br />' + '</div>' + (this.loc.msg ? this.loc.msg.view_name : 'Näkymän nimi') + ": " + '<input name="viewName" value="' + view.name + '" ' + 'type="text" class="viewName" />';
-        var save = {
-            name : 'button_save',
-            text : (this.loc.button ? this.loc.button.save : 'Tallenna'),
-            close : false,
-            onclick : function(e) {
-                var viewName = jQuery('div.modalmessage ' + 'input.viewName').val();
-                if (viewName) {
-                    if (viewName.indexOf('<') >= 0) {
-                        jQuery('div.modalmessage ' + 'div.e_illegal').show();
-                    } else {
-                        $.modal.close();
-                        // '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR_' + 'portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_' + 'portti2mapportlet_' + 'fi.mml.baseportlet.CMD=' + 'ajax.jsp' 
-                        jQuery.ajax({
-                            url : me.instance.sandbox.getAjaxUrl() + '&action_route=RenameView',
-                            type : 'POST',
-                            data : 'id=' + view.id + '&newName=' + viewName,
-                            dataType : 'json',
-                            beforeSend : function(x) {
-                                if (x && x.overrideMimeType) {
-                                    x.overrideMimeType("application/j-son;charset=UTF-8");
-                                }
-                            },
-                            success : function(response) {
-                                me._refreshViewsList();
-                            },
-                            error : function() {
-                                alert(me.loc.e_fail);
-                            }
-                        });
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        
+        var successCallback = function(newName) {
+            jQuery.ajax({
+                url : me.instance.sandbox.getAjaxUrl() + '&action_route=RenameView',
+                type : 'POST',
+                data : 'id=' + view.id + '&newName=' + newName,
+                dataType : 'json',
+                beforeSend : function(x) {
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
                     }
-                } else {
-                    jQuery('div.modalmessage div.e_noname').show();
+                },
+                success : function(response) {
+			    	dialog.show(this.loc['popup'].title, this.loc['save'].success);
+			    	dialog.fadeout();
+                    me._refreshViewsList();
+                },
+                error : function() {
+			    	var button = dialog.createCloseButton(me.loc.button.ok);
+    				button.addClass('primary');
+			    	dialog.show(me.loc['error'].title, me.loc['error'].notsaved, [button]);
                 }
-            }
+            });
         };
-        var cancel = {
-            name : 'button_cancel',
-            text : (this.loc.button ? this.loc.button.cancel : 'Peruuta'),
-            close : true
-        };
-        var reqName = 'userinterface.ModalDialogRequest';
-        var reqBuilder = sandbox.getRequestBuilder(reqName);
-        var req = reqBuilder(title, msg, [save, cancel]);
-        sandbox.request(this.instance, req);
+
+        this._promptForViewName(successCallback, view.name);
     },
+
     /**
      * @method getViewContainer
      * @return {jQuery} returns jQuery object representing a row
@@ -393,7 +391,16 @@ function(instance, localization) {
          * TODO: reload views list here
          */
         'StateSavedEvent' : function(event) {
-            this.container.find('div.response').html('Tallennettu tila: <hr/>' + JSON.stringify(event.getState()));
+	    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        	if(event.isError()) {
+        		// tallennus epäonnistui
+		    	var button = dialog.createCloseButton(this.loc.button.ok);
+				button.addClass('primary');
+		    	dialog.show(this.loc['error'].title, this.loc['error'].notsaved, [button]);
+        		return;
+        	}
+	    	dialog.show(this.loc['popup'].title, this.loc['save'].success);
+	    	dialog.fadeout();
             this._refreshViewsList();
         }
     },

@@ -95,7 +95,7 @@ function(ajaxUrl) {
                 }
             },
             url : this._ajaxUrl + 'action_route=AddView',
-            data : nameParam + "myViewState=" + JSON.stringify(state) + "currentViewId=" + me.handler.getCurrentViewId(),
+            data : nameParam + "myViewState=" + JSON.stringify(state) + "&currentViewId=" + me.handler.getCurrentViewId(),
             success : function(newView) {
                 me._sandbox.notifyAll(event);
                 me.handler.setCurrentViewId(newView.id);
