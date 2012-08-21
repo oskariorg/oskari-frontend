@@ -54,7 +54,8 @@ Oskari.registerLocalization({
                 button : {
                     ok : 'OK',
                     save : 'Tallenna',
-                    cancel : 'Peruuta'
+                    cancel : 'Peruuta',
+                    "toolbarsave" : 'Tallenna näkymä'
                 },
                 "error" : {
                 	"title" : "Virhe",
