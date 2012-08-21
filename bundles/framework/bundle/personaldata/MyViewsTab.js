@@ -27,7 +27,7 @@ function(instance, localization) {
         var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
         sandbox.request(instance, reqBuilder('save_view', 'viewtools', {
             iconCls : 'tool-save-view',
-            tooltip: 'Tallenna näkymä',
+            tooltip: localization.button.toolbarsave,
             sticky: false,
             callback : function() {
 				me._promptForViewName(function(name) {
