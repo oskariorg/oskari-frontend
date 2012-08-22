@@ -215,12 +215,14 @@ function() {
             var lonlat = evt.getLonLat();
             var lon = lonlat.lon;
             var lat = lonlat.lat;
+	    var popupid = "wfs" + lon + "_" + lat;
             var x = evt.getMouseX();
             var y = evt.getMouseY();
             var projection = 'EPSG:3067';
             var width = this._sandbox.getMap().getWidth();
             var height = this._sandbox.getMap().getHeight();
             var bbox = this._sandbox.getMap().getBbox();
+	    var zoom = this._sandbox.getMap().getZoom();
 
             var selected = this._sandbox.findAllSelectedMapLayers();
             var layerIds = ""
@@ -238,17 +240,50 @@ function() {
                     }
                 },
                 success : function(resp) {
-                    var content = me._formatResponseForInfobox(resp);
-                    if(content.length > 0) {
-                        me._showGfiInfo(content, lonlat);
-                    }
+		    if (resp.data &&
+			resp.data.features &&
+			resp.data.features[0] &&
+			resp.data.features[0].children &&
+			resp.data.features[0].children[0]) {
+
+			var raw = resp.data.features[0].children[0];
+			var title = "WFS";
+			if (raw['pnr_PaikanNimi']['pnr:kirjoitusasu']) {
+			    title = raw['pnr_PaikanNimi']['pnr:kirjoitusasu'];
+			}
+			var pretty = JSON.stringify(raw, null, 4);
+			var content = {};
+			content.html = '<pre>' + pretty + '</pre>';
+			content.actions = {};
+			content.actions.ok = function() {
+			    var rn = "InfoBox.HideInfoBoxRequest";
+			    var rb = me._sandbox.getRequestBuilder(rn);
+			    var r = rb(popupid);
+			    me._sandbox.request(me, r);
+			};
+			var rn = "InfoBox.ShowInfoBoxRequest";
+			var rb = me._sandbox.getRequestBuilder(rn);
+			var r = rb(popupid, 
+				   title, 
+				   [ content ], 
+				   lonlat, 
+				   false);
+			me._sandbox.request(me, r);
+		    }
                 },
                 error : function() {
                     alert("GetInfo failed.");
                 },
                 type : 'POST',
                 dataType : 'json',
-                url : ajaxUrl + 'action_route=GetFeatureInfoWMS' + "&layerIds=" + layerIds + "&projection=" + projection + "&x=" + x + "&y=" + y + "&lon=" + lon + "&lat=" + lat + "&width=" + width + "&height=" + height + "&bbox=" + bbox
+                url : ajaxUrl + 
+		    'action_route=GetFeatureInfoWMS' + 
+		    '&layerIds=' + layerIds + 
+		    '&projection=' + projection + 
+		    '&x=' + x + '&y=' + y + 
+		    '&lon=' + lon + '&lat=' + lat + 
+		    '&width=' + width + '&height=' + height + 
+		    '&bbox=' + bbox + '&zoom=' + zoom
             });
 
             // if (this._activated) {
