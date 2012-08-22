@@ -241,6 +241,8 @@ function() {
                 },
                 success : function(resp) {
 		    if (resp.data &&
+			resp.data.type &&
+			resp.data.type == "WFS_LAYER" &&
 			resp.data.features &&
 			resp.data.features[0] &&
 			resp.data.features[0].children &&
@@ -269,6 +271,11 @@ function() {
 				   lonlat, 
 				   false);
 			me._sandbox.request(me, r);
+		    } else {
+			var content = me._formatResponseForInfobox(resp);
+			if(content.length > 0) {
+                            me._showGfiInfo(content, lonlat);
+			}
 		    }
                 },
                 error : function() {
