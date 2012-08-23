@@ -28,7 +28,7 @@ body {
 }
 .oskari-flyout-title {
 	float: left;
-	margin-left: 16px;
+	margin-left: 20px;
 	margin-top: 4px;
 	display: inline-block;
 	font: 19px/24px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
@@ -201,7 +201,7 @@ body {
 
 .oskari-flyoutcontent {
 	margin: 0;
-	padding: 0 10px 10px;
+	padding: 20px 20px 20px;
 	border: 0;
 	/*overflow: auto;*/
 	

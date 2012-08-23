@@ -5,7 +5,20 @@ div.divmanazerpopup {
     top : 50%;
     left : 50%;
     background-color : white;
-    border: 5px solid #333333;
+    
+    -moz-background-clip: border;     /* Firefox 3.6 */
+	-webkit-background-clip: border;  /* Safari 4? Chrome 6? */
+	background-clip: border-box;      /* Firefox 4, Safari 5, Opera 10, IE 9 */
+				
+	-moz-background-clip: padding;     /* Firefox 3.6 */
+	-webkit-background-clip: padding;  /* Safari 4? Chrome 6? */
+	background-clip: padding-box;      /* Firefox 4, Safari 5, Opera 10, IE 9 */
+				
+	-moz-background-clip: content;     /* Firefox 3.6 */
+	-webkit-background-clip: content;  /* Safari 4? Chrome 6? */
+	background-clip: content-box;      /* Firefox 4, Safari 5, Opera 10, IE 9 */
+    
+    border: 5px solid rgba(0,0,0,0.2);
     border-radius : 7px;
     /*
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.80);
