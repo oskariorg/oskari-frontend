@@ -17,6 +17,7 @@ function() {
 	this.started = false;
 	this.plugins = {};
 	this.localization = null;
+	this.publisher = null;
 }, {
 	/**
 	 * @static
@@ -29,14 +30,6 @@ function() {
 	 */
 	"getName" : function() {
 		return this.__name;
-	},
-	/**
-	 * @method setSandbox
-	 * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-	 * Sets the sandbox reference to this component
-	 */
-	setSandbox : function(sandbox) {
-		this.sandbox = sandbox;
 	},
 	/**
 	 * @method getSandbox

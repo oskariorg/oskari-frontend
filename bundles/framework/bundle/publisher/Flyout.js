@@ -70,7 +70,7 @@ function(instance) {
      * @return {String} localized text for the title of the flyout
      */
     getTitle : function() {
-        return this.instance.getLocalization('title');
+        return this.instance.getLocalization('flyouttitle');
     },
     /**
      * @method getDescription
@@ -119,9 +119,15 @@ function(instance) {
         }
         else {
             // proceed with publisher view
+            this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.StartView', 
+                this.instance, 
+                this.instance.getLocalization('StartView'));
+                /*    
+            // proceed with publisher view
             this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.BasicPublisher', 
                 this.instance, 
-                this.instance.getLocalization('BasicView'));    
+                this.instance.getLocalization('BasicView'));
+                */    
         }
         
         this.view.render(flyout);
