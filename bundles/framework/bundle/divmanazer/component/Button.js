@@ -10,7 +10,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
  * @static
  */
 function() {
-    this.template = jQuery('<div class="oskaributton"><input type="button"/></div>');
+    //this.template = jQuery('<div class="oskaributton"><input type="button"/></div>');
+    this.template = jQuery('<input type="button"/>');
     this.title = null;
     this.ui = this.template.clone();
     this.handler = null;
@@ -23,7 +24,7 @@ function() {
     setTitle : function(pTitle) {
         this.title = pTitle;
         if(this.ui) {
-        	this.ui.find('input').attr('value', pTitle);
+        	this.ui.attr('value', pTitle);
         }
     },
     addClass : function(pClass) {
@@ -44,10 +45,10 @@ function() {
      */
     setHandler : function(pHandler) {
     	if(this.handler) {
-    		this.ui.find('input').unbind('click', this.handler);
+    		this.ui.unbind('click', this.handler);
     	}
         this.handler = pHandler; 
-		this.ui.find('input').bind('click', this.handler);
+		this.ui.bind('click', this.handler);
     },
     /**
      * @method destroy
