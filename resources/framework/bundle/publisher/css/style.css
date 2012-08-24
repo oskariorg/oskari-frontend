@@ -7,78 +7,81 @@ div.publisher {
     
 }
 
-div.publisher div.basic_publisher {
+#contentMap.mapPublishMode {
+    margin-left: 255px;
+}
+div.publisher div.startview div.icon-info, div.basic_publisher div.icon-info {
+	float : right;
+}
+div.publisher div.startview div.buttons {    
+	text-align: center;
+}
+
+div.publisher div.startview div.layerlist {
+	border : 1px solid;
+	padding : 10px;
+}
+div.publisher div.startview div.layerlist h4 {
+	font-size : 14px;
+	line-height: 15px;
+    padding-bottom: 5px;
+}
+div.publisher div.startview ul {
+    list-style: disc inside none;
+    padding : 5px;
+}
+div.publisher div.startview div.error ul li {
+	color : red;
+}
+
+#contentMap div.basic_publisher {
+	background : white;
+	position : absolute;
     height: 100%;
-    width: 100%;
+    top : 0;
+    left : 0;
+    z-index : 20;
+    width : 255px;
 }
 
-div.publisher div.basic_publisher div.form {
+div.basic_publisher > div.header {
+    background-color: #FDF8D9;
+}
+
+div.basic_publisher div.form {
     display: inline-block;
     width : 230px;
 }
 
-div.publisher div.basic_publisher div.form {
-    display: inline-block;
-    width : 230px;
-}
 
-div.publisher div.customsize input {
+div.basic_publisher div.customsize input {
     width: 47px;
 }
-div.publisher div.customsize input.error {
+div.basic_publisher div.customsize input.error {
     border: 1px solid red;
 }
-div.publisher div.basic_publisher div.form div.field input, div.field select {
+div.basic_publisher div.form div.field input, div.field select {
     width : 100%;
 }
-div.publisher div.help {
-    float : right;
-}
 
-div.publisher div.basic_publisher div.form div.options {
+div.basic_publisher div.form div.options {
     overflow: auto;
 }
 
-div.options {
+div.basic_publisher div.options {
 	padding-bottom: 10px;
 }
 
-div.field {
+div.basic_publisher div.field {
 	padding: 5px;
 }
 
-div.field input {
+div.basic_publisher div.field input {
 	margin-bottom: 5px;
 	margin-top: 5px;
 }
 
-
-div.publisher div.map {
-    width : 360px;
-    float: right;
-}
-div.publisher div.map div.preview {
-    height: 400px;    
-}
-div.publisher div.map div.locationdata {
-    display: inline-block;
-    float: right;
-}
-
-/* Accordion */
-div.accordion div.accordion_panel div.content div.tool {
-    margin : 5px 10px;
-}
-div.accordion div.accordion_panel div.content div.tool input {
-    margin-right: 10px;
-    vertical-align: bottom;
-}
-
 /* Buttons */
-div.publisher div.buttons {
-    /*position: absolute;
-    bottom : 35px; */
-}
-div.publisher div.buttons input {
+div.basic_publisher div.buttons input {
     margin : 5px;
 }
