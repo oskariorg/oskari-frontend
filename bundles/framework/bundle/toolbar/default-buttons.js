@@ -114,30 +114,20 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 				link += '&showMarker=false&forceCache=true';
 				
 				
-				var linkContent = 
-					'<textarea rows="3" cols="100">' +
+		    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+		    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+		    	okBtn.setTitle(locales.link.ok);
+		    	okBtn.addClass('primary');
+		    	okBtn.setHandler(function() {
+		            dialog.close();
+		    	});
+		    	
+		    	var linkContent = 
+					'<textarea rows="3" cols="80">' +
 					locales.link.prefixUrl + 
 					link +
 					'</textarea>';
-				
-				var ok = {
-				  name : "ok",
-				  text : locales.link.ok,
-				  close : true,
-				  onclick : function() { }
-				};
-				
-				
-				var onShow = function(dialog) {
-				  if ($.dontshowmodaldialogs) {
-				    dialog.close();
-				  }
-				}
-
-				var buttons = [ ok ];
-				var reqName = 'userinterface.ModalDialogRequest';
-				var reqBuilder2 = me.getSandbox().getRequestBuilder(reqName);	
-				me.getSandbox().request(me, reqBuilder2(locales.link.title, linkContent, buttons, onShow));
+		    	dialog.show(locales.link.title, linkContent, [okBtn]);
             }
         });
         
@@ -170,7 +160,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 				link += layers;
 				link += '&p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&showMarker=false&forceCache=true&mapmode=print&viewId=2&noSavedState=true';
 				link = window.location.pathname + '?' + link;
-				//window.open (link,"Print", "location=1,status=1,scrollbars=1,width=850,height=800");
 				window.open (link,"Print", "location=1,status=1,scrollbars=yes,width=850,height=800");
 				
 				

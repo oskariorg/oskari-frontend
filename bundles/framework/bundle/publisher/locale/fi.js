@@ -8,12 +8,12 @@ Oskari.registerLocalization({
           "domain" : {
               "label" : "Sivusto, jolla kartta julkaistaan",
               "placeholder" : "ilman http- tai www-etuliitteitä",
-              "tooltip" : "tooltip"
+              "tooltip" : "Kirjoita sivuston www-osoite eli domain-nimi ilman http- ja www-etuliitteitä, tai alasivun osoitetta. Esimerkiksi omakotisivu.com."
           },
           "name" : {
               "label" : "Kartan nimi",
               "placeholder" : "pakollinen",
-              "tooltip" : "tooltip"
+              "tooltip" : "Anna kartelle kuvaileva nimi. Huomioi kieli valintaa tehdessäsi."
           },
           "language" : {
               "label": "Kieli",
@@ -22,15 +22,15 @@ Oskari.registerLocalization({
                   "sv" : "Ruotsi",
                   "en" : "Englanti"
               },
-              "tooltip" : "tooltip"
+              "tooltip" : "Valitse kartan käyttöliittymän ja aineiston kieli."
           },
           "size" : {
               "label" : "Koko",
-              "tooltip" : "tooltip"
+              "tooltip" : "Valitse tai määrittele kartalle koko, jossa haluat esittää sen sivuillasi. Näet vaikutuksen esikatselukartassa."
           },
           "tools" : {
               "label" : "Näytettävät työkalut",
-              "tooltip" : "tooltip",
+              "tooltip" : "Valitse kartalla näytettävät työkalut. Näet niiden sijoittelun esikatselukartassa.",
               "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin" : "Mittakaavajana",
               "Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin" : "Indeksikartta",
               "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar" : "Mittakaavan säätö",
@@ -57,17 +57,19 @@ Oskari.registerLocalization({
           "layerselection" : {
               "label" : "Näytä karttatasot valikossa",
               "info" : "Valitse karttapohjat. Voit tehdä oletusvalinnan esikatselunäkymästä.",
-              "tooltip" : "tooltip",
+              "tooltip" : "Karttapohja näkyy kartan alimmaisena kerroksena. Kun valitset karttatasoja karttapohjaksi, vain yksi valituista tasoista näkyy kerralla ja käyttäjä voi vaihdella niiden välillä. Oletusvalinnan voit tehdä esikatselukartassa.",
               "promote" : "Haluatko näyttää myös ilmakuvia?"
           },
           "preview" : "Julkaistavan kartan esikatselu",
           "location" : "Sijainti ja mittakaavataso",
           "zoomlevel" : "Mittakaavataso",
+          "help" : "Ohje",
           "error" : {
               "size"  : "Virhe kokomäärityksissä",
               "domain" : "Sivusto on pakollinen tieto",
               "domainStart" : "Anna sivusto ilman http- tai www-etuliitteitä",
-              "name" : "Nimi on pakollinen tieto"
+              "name" : "Nimi on pakollinen tieto",
+	      "nohelp" : "Ohjetta ei löytynyt"
           }
       },
       "NotLoggedView" : {

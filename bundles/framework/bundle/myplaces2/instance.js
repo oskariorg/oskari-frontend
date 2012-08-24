@@ -52,6 +52,23 @@ function() {
         return this._localization;
     },
     /**
+     * @method showMessage
+     * Shows user a message with ok button
+     * @param {String} title popup title
+     * @param {String} message popup message
+     */
+    showMessage : function(title, message) {
+        var loc = this.instance.getLocalization();
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+    	okBtn.setTitle(loc.buttons.ok);
+    	okBtn.addClass('primary');
+    	okBtn.setHandler(function() {
+            dialog.close(true);
+    	});
+    	dialog.show(title, message, [okBtn]);
+    },
+    /**
      * @method getService
      * Returns the my places main service
      * @return {Oskari.mapframework.bundle.myplaces2.service.MyPlacesService}
@@ -117,9 +134,9 @@ function() {
 
         var defaultCategoryName = this.getLocalization('category').defaultName;
         
-        var actionUrl = '/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&myplaces=WFS';
+        var actionUrl = this.conf.queryUrl; 
+        //'/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&myplaces=WFS';
         // this.conf.queryUrl; 
-        // '/action?myplaces=WFS&';
         // back end communication
         this.myPlacesService = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService', 
             actionUrl, user.getUuid(), sandbox, defaultCategoryName);

@@ -13,7 +13,6 @@ function(instance) {
     this.instance = instance;
     // init layers from link (for printing) on initial load
     this.initialLoad = true;
-    this.linkTemplate = undefined;
 }, {
     __name : 'MyPlacesCategoryHandler',
     /**
@@ -28,10 +27,6 @@ function(instance) {
      * implements Module protocol init method
      */
     init : function() {
-        this.categoryEditTemplate = jQuery('<div><a class="button save" href="JavaScript:void(0);"></a>' +
-                    '<a class="button cancel" href="JavaScript:void(0);"></a>' +
-                '</div>');
-        this.linkTemplate = jQuery('<a href="JavaScript:void(0);"></a>');
     },
     /**
      * @method start
@@ -49,30 +44,6 @@ function(instance) {
                 sandbox.registerForEventByName(me, p);
             }
         }
-        
-        // categoryedit
-        jQuery('div.myplaces2category a.button.save').live('click', function() {
-            // TODO: save form
-            var values = me.editForm.getValues();
-            var errors = me.validateCategoryFormValues(values);
-            if(errors.length != 0) {
-                alert('errors!');
-                return;
-            }
-            var category = me.getCategoryFromFormValues(values);
-            me.saveCategory(category);
-            
-            //alert(JSON.stringify(values));
-            me.popover.hide();
-        });
-        jQuery('div.myplaces2category a.button.cancel').live('click', function() {
-            me.popover.hide();
-            me.editForm = undefined;
-        });
-        var popover = Oskari.clazz.create('Oskari.userinterface.component.Popover', 
-            'edit kat');
-        this.popover = popover;
-        this.popover.setPlacement('right');
     },
         
     /**
@@ -229,13 +200,9 @@ function(instance) {
      */
     _getMapLayerJson : function(categoryModel) {
         var baseJson = this._getMapLayerJsonBase();
-        // wmsurl = "/karttatiili/myplaces?myCat="
-        // FIXME: wmsurl from conf - live version gets from portal-ext.properties?
-        //baseJson.wmsUrl = this.instance.conf.wmsUrl + categoryModel.getId() + "&";
-        baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + categoryModel.getId() + "&";
+        baseJson.wmsUrl = this.instance.conf.wmsUrl + categoryModel.getId() + "&";
+        //baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + categoryModel.getId() + "&";
         baseJson.name = categoryModel.getName();
-        
-        //wmsUrl:"http://www.paikkatietoikkuna.fi/geoserver/wms?CQL_FILTER=uuid='"+userKey+"'"
         baseJson.id = this._getMapLayerId(categoryModel.getId());
         return baseJson;
     },
@@ -320,22 +287,57 @@ function(instance) {
         };
         
         form.setValues(values);
-        var content = form.getForm(); 
-        var controls = me.categoryEditTemplate.clone();
-        // TODO: localization
-        controls.find('a.button.save').append('Tallenna');
-        controls.find('a.button.cancel').append('Peruuta');
+        var content = form.getForm();
         
-        content.append(controls);
-        this.editForm = form;
-        // place it next to the personal data maplayer select
-        this.popover.attachTo('div.personaldata ul li select');
-        // hax attach our own style class for binding buttons
-        this.popover.data.tip().addClass('myplaces2category');
-        me.popover.setContent(content);
-        me.popover.show();
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+    	
+        var buttons = [];
+    	var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        var btnLoc = this.instance.getLocalization('buttons');
+        var catLoc = this.instance.getLocalization('categoryform').edit;
+    	saveBtn.setTitle(btnLoc.save);
+    	saveBtn.addClass('primary');
+    	saveBtn.setHandler(function() {
+            var values = form.getValues();
+            var errors = me.validateCategoryFormValues(values);
+            if(errors.length != 0) {
+                me.showValidationErrorMessage(errors);
+                return;
+            }
+            var category = me.getCategoryFromFormValues(values);
+            me.saveCategory(category);
+            
+            dialog.close();
+        });
+    	var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+    	cancelBtn.setTitle(btnLoc.cancel);
+    	cancelBtn.setHandler(function() {
+            dialog.close();
+    	});
+        buttons.push(cancelBtn);
+        buttons.push(saveBtn);
+        
+    	dialog.show(catLoc.title, content, buttons);
+    	dialog.moveTo('div.personaldata ul li select', 'right');
+    	dialog.makeModal();
     },
-    
+    showValidationErrorMessage : function(errors) {
+        var loc = this.instance.getLocalization();
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+    	okBtn.setTitle(loc.buttons.ok);
+    	okBtn.addClass('primary');
+    	okBtn.setHandler(function() {
+            dialog.close(true);
+    	});
+    	var content = jQuery('<ul></ul>');
+    	for(var i = 0 ; i < errors.length; ++i) {
+    		var row = jQuery('<li></li>');
+    		row.append(errors[i]['error'])
+    		content.append(row);
+    	}
+    	dialog.show(loc.validation.title, content, [okBtn]);
+    },
     validateCategoryFormValues : function(values) {
         var errors = [];
         if(!values) {
@@ -392,9 +394,9 @@ function(instance) {
             } else {
                 // blnNew should always be true since we are adding a category
                 if (blnNew) {
-                    alert(loc['error'].addCategory);
+                	me.instance.showMessage(loc['error'].title, loc['error'].addCategory);
                 } else {
-                    alert(loc['error'].editCategory);
+                	me.instance.showMessage(loc['error'].title, loc['error'].editCategory);
                 }
             }
         }

@@ -23,8 +23,8 @@ Oskari.registerLocalization({
                         "title" : "Kohteen poistaminen",
                         "confirm" : "Haluatko poistaa kohteen ",
                         "success" : "Onnistui",
-                        "error" :"Epäonnistui! Kokeile uudestaan myöhemmin",
-                        "cancel" :"Kohdetta ei poistettu"
+                        "error" : "Epäonnistui! Kokeile uudestaan myöhemmin",
+                        "cancel" : "Kohdetta ei poistettu"
                     }
                 }
             },
@@ -33,7 +33,39 @@ Oskari.registerLocalization({
                 edit : "Muokkaa",
                 publish : "Julkiseksi",
                 unpublish : "Yksityiseksi",
-                "delete" : "Poista"
+                "delete" : "Poista",
+                'popup' : {
+                	'edit' : 'Vaihda näkymän nimi',
+                    "title" : 'Näkymän tallennus',
+                    'label' : 'Näkymän nimi:',
+                    'placeholder' : 'Anna näkymälle nimi',
+                    'save' : 'Tallenna',
+                    'cancel' : 'Peruuta',
+                    'error_noname' : 'Syötä nimi'
+                },
+                'save' : {
+                    "success" : 'Näkymä tallennettu',
+                    error_noname : 'Nimi ei voi olla tyhjä',
+                    error_illegalchars : 'Nimessä on luvattomia merkkejä',
+                    msg : {
+                        view_name : 'Näkymän nimi'
+                    }
+                },
+                button : {
+                    ok : 'OK',
+                    save : 'Tallenna',
+                    cancel : 'Peruuta',
+                    "toolbarsave" : 'Tallenna näkymä'
+                },
+                "error" : {
+                	"title" : "Virhe",
+                	"notsaved" : "Näkymää ei tallennettu",
+                	"loadfailed" : "Näkymien lataus epäonnistui"
+                },
+                msg : {
+                    delete_view : "Poistetaanko näkymä",
+                    confirm_delete : "Poiston varmistus"
+                }
             },
             publishedmaps : {
                 title : "Julkaistut kartat"
@@ -48,11 +80,6 @@ Oskari.registerLocalization({
                 changePassword : "Muuta salasana",
                 removeAccount : "Poista tili"
             }
-        },
-        edit : 'Muokkaa_näkymää',
-        msg : {
-            delete_view : "Poistetaanko näkymä",
-            confirm_delete : "Poiston varmistus"
         },
         button : {
             yes : "Kyllä",

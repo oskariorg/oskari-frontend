@@ -13,13 +13,91 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
  */
 function(instance, localization) {
     this.instance = instance;
-    this.template = jQuery('<div><a href="JavaScript: void(0);"></a></div> ' + '<div style="border: 1px solid; margin: 20px; ' + 'padding: 25px;" class="response"></div>' + '<div class="viewsList"></div>');
+    this.template = jQuery('<div class="viewsList volatile"></div>');
     this.templateViewRow = jQuery('<div class="view">' + '<div class="name"><a href="JavaScript:void(0);">' + '</a></div></div>');
     this.templateViewTools = jQuery('<div class="tools">' + '<div class="edit">' + '<a href="JavaScript:void(0);">' + '</a></div>' + '<div class="publish">' + '<a href="JavaScript:void(0);">' + '</a></div>' + '<div class="delete">' + '<a href="JavaScript:void(0);">' + '</a></div></div>');
     this.loc = localization;
     this.container = null;
-    this.debugCounter = 0;
+    
+    var sandbox = instance.sandbox;
+    var me = this;
+    // add save view button to toolbar if we get the statehandler request
+    var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
+    if (rbState) {
+        var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+        sandbox.request(instance, reqBuilder('save_view', 'viewtools', {
+            iconCls : 'tool-save-view',
+            tooltip: localization.button.toolbarsave,
+            sticky: false,
+            callback : function() {
+				me._promptForViewName(function(name) {
+				    var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
+				    sandbox.request(instance, rbState(name));	
+				});
+            }
+        }));
+    }
+    // disable button for non logged in users
+    if(!sandbox.getUser().isLoggedIn()) {
+        var reqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
+        sandbox.request(instance, reqBuilder('save_view', 'viewtools', false));
+    }
 }, {
+    /**
+     * @method _promptForViewName
+     * @private
+     */
+    _promptForViewName : function(successCallback,viewName) {
+    	var me = this;
+    	
+    	var form = Oskari.clazz.create('Oskari.userinterface.component.Form');
+    	var nameInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput', 'name');
+    	//nameInput.setLabel(this.loc.popup.label);
+    	nameInput.setPlaceholder(this.loc.popup.placeholder);
+    	var title = this.loc.popup.title;
+    	if(viewName) {
+    		title = this.loc.popup.edit;
+    		nameInput.setValue(viewName);
+    	}
+    	nameInput.setValidator(function(inputField)  {
+    		var value = inputField.getValue();
+    		var name = inputField.getName();
+    		var errors = [];
+            if (!value) {
+            	errors.push({
+        			"field": name, 
+        			"error" :  me.loc.save.error_noname
+    			});
+            	return errors;
+           	}
+            if (value.indexOf('<') >= 0) {
+            	errors.push({
+        			"field": name, 
+        			"error" :  me.loc.save.error_illegalchars
+    			});
+            } 
+            return errors;
+    	});
+    	form.addField(nameInput);
+    	
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+    	okBtn.setTitle(this.loc.button.save);
+    	okBtn.addClass('primary');
+    	
+    	var sandbox = this.instance.sandbox;
+    	okBtn.setHandler(function() {
+            var errors = form.validate();
+            if (errors.length == 0) {
+            	successCallback(nameInput.getValue());
+    			dialog.close();
+            } else {
+            	form.showErrors();
+            }
+    	});
+    	var cancelBtn = dialog.createCloseButton(this.loc.button.cancel);
+    	dialog.show(this.loc.popup.title, form.getForm(), [cancelBtn, okBtn]);
+    },
     /**
      * @method getName
      * @return {String} name of the component
@@ -46,28 +124,47 @@ function(instance, localization) {
         var me = this;
         var content = me.template.clone();
         me.container = container;
-        content.find('a').html('> Tallenna näkymä <');
         container.append(content);
-
-        var instance = me.instance;
-        var sandbox = instance.getSandbox();
-        content.find('a').bind('click', function() {
-            var rb = sandbox.getRequestBuilder('StateHandler' + '.SaveStateRequest');
-            if (rb) {
-                sandbox.request(instance, rb());
-            }
-        });
         me._refreshViewsList();
     },
+    /**
+     * @method _renderViewsList
+     * Refreshes the tab contents
+     */
+    _renderViewsList : function(views) {
+
+        if (!views) {
+        	views = [];
+        }
+        var me = this;
+        var listContainer = me.container.find('.viewsList');
+        listContainer.html('');
+        this.viewData = views;
+        for (var i = 0; i < me.viewData.length; i++) {
+            var datum = me.viewData[i];
+            var vc = me.createViewContainer(datum);
+            listContainer.append(vc);
+        }
+        listContainer.find('div.view:odd').addClass('odd');
+        listContainer.find('div.view:even').removeClass('odd');
+        /*
+        // TODO: preferrably call some this.instance.updateTile() so we can calculate my places etc to tile number as well
+        var tile = me.instance.plugins['Oskari.userinterface.Tile'];
+        var ctr = tile.container;
+        var ts = jQuery(ctr).find('.oskari-tile-status');
+        ts.empty();
+        ts.append('(' + views.length + ')');
+        */
+    },
+
     /**
      * @method _refreshViewsList
      * Refreshes the tab contents
      */
     _refreshViewsList : function() {
-        var me = this;
-        var listContainer = me.container.find('.viewsList');
+        var me = this; 
         jQuery.ajax({
-            url : '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR_portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_portti2mapportlet_fi' + '.mml.baseportlet.CMD=ajax.jsp&' + 'action_route=GetViews',
+            url : me.instance.sandbox.getAjaxUrl() + 'action_route=GetViews',
             type : 'POST',
             dataType : 'json',
             beforeSend : function(x) {
@@ -76,27 +173,13 @@ function(instance, localization) {
                 }
             },
             success : function(response) {
-                listContainer.html('');
-                if (response.views && response.views.length > 0) {
-                    //				alert(JSON.stringify(response.views, null, 4));
-                    me.viewData = response.views;
-                    for (var i = 0; i < me.viewData.length; i++) {
-                        var datum = me.viewData[i];
-                        var vc = me.createViewContainer(datum);
-                        listContainer.append(vc);
-                    }
-                    listContainer.find('div.view:odd').addClass('odd');
-                    listContainer.find('div.view:even').removeClass('odd');
-                    var tile = me.instance
-                    .plugins['Oskari.userinterface.Tile'];
-                    var ctr = tile.container;
-                    var ts = jQuery(ctr).find('.oskari-tile-status');
-                    ts.empty();
-                    ts.append('(' + response.views.length + ')');
-                }
+            	me._renderViewsList(response.views);
             },
             error : function() {
-                alert(me.loc['efailtogetmyviews']);
+    			var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+		    	var button = dialog.createCloseButton(me.loc.button.ok);
+				button.addClass('primary');
+		    	dialog.show(me.loc['error'].title, me.loc['error'].loadfailed, [button]);
             }
         });
     },
@@ -106,52 +189,35 @@ function(instance, localization) {
     editView : function(view) {
         var me = this;
         var sandbox = this.instance.getSandbox();
-        var title = this.loc.edit ? this.loc.edit : 'Muokkaa näkymää';
-        var msg = '<div class="e_noname" ' + 'style="display: inline-block; ' + 'color: red; display: none;">' + (this.loc.error_noname ? this.loc.error_noname : 'Nimi ei voi olla tyhjä!') + '<br />' + '</div>' + '<div class="e_illegal" ' + 'style="display: inline-block; ' + 'color: red; display: none;">' + '<br />' + (this.loc.error_illegalchars ? this.loc.error_illegalchars : 'Nimessä on virheellisiä merkkejä') + '<br />' + '</div>' + (this.loc.msg ? this.loc.msg.view_name : 'Näkymän nimi') + ": " + '<input name="viewName" value="' + view.name + '" ' + 'type="text" class="viewName" />';
-        var save = {
-            name : 'button_save',
-            text : (this.loc.button ? this.loc.button.save : 'Tallenna'),
-            close : false,
-            onclick : function(e) {
-                var viewName = jQuery('div.modalmessage ' + 'input.viewName').val();
-                if (viewName) {
-                    if (viewName.indexOf('<') >= 0) {
-                        jQuery('div.modalmessage ' + 'div.e_illegal').show();
-                    } else {
-                        $.modal.close();
-                        jQuery.ajax({
-                            url : '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR_' + 'portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_' + 'portti2mapportlet_' + 'fi.mml.baseportlet.CMD=' + 'ajax.jsp' + '&action_route=RenameView',
-                            type : 'POST',
-                            data : 'id=' + view.id + '&newName=' + viewName,
-                            dataType : 'json',
-                            beforeSend : function(x) {
-                                if (x && x.overrideMimeType) {
-                                    x.overrideMimeType("application/j-son;charset=UTF-8");
-                                }
-                            },
-                            success : function(response) {
-                                me._refreshViewsList();
-                            },
-                            error : function() {
-                                alert(me.loc.e_fail);
-                            }
-                        });
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        
+        var successCallback = function(newName) {
+            jQuery.ajax({
+                url : me.instance.sandbox.getAjaxUrl() + '&action_route=RenameView',
+                type : 'POST',
+                data : 'id=' + view.id + '&newName=' + newName,
+                dataType : 'json',
+                beforeSend : function(x) {
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
                     }
-                } else {
-                    jQuery('div.modalmessage div.e_noname').show();
+                },
+                success : function(response) {
+			    	dialog.show(this.loc['popup'].title, this.loc['save'].success);
+			    	dialog.fadeout();
+                    me._refreshViewsList();
+                },
+                error : function() {
+			    	var button = dialog.createCloseButton(me.loc.button.ok);
+    				button.addClass('primary');
+			    	dialog.show(me.loc['error'].title, me.loc['error'].notsaved, [button]);
                 }
-            }
+            });
         };
-        var cancel = {
-            name : 'button_cancel',
-            text : (this.loc.button ? this.loc.button.cancel : 'Peruuta'),
-            close : true
-        };
-        var reqName = 'userinterface.ModalDialogRequest';
-        var reqBuilder = sandbox.getRequestBuilder(reqName);
-        var req = reqBuilder(title, msg, [save, cancel]);
-        sandbox.request(this.instance, req);
+
+        this._promptForViewName(successCallback, view.name);
     },
+
     /**
      * @method getViewContainer
      * @return {jQuery} returns jQuery object representing a row
@@ -165,7 +231,7 @@ function(instance, localization) {
         var viewName = container.find('div.name a');
         viewName.append(viewData.name);
         viewName.bind('click', function() {
-            var rb = sandbox.getRequestBuilder('StateHandler' + '.SetStateRequest');
+            var rb = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
             if (rb) {
                 var req = rb(viewData.state);
                 /*
@@ -210,8 +276,9 @@ function(instance, localization) {
             } else {
                 publishTool.html(me.loc['publish']);
             }
+            // '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR_portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_portti2mapportlet_fi' + '.mml.baseportlet.CMD=ajax.jsp' + 
             jQuery.ajax({
-                url : '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR_portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_portti2mapportlet_fi' + '.mml.baseportlet.CMD=ajax.jsp' + '&action_route=AdjustViewAccess' + '&id=' + id + '&isPublic=' + view.isPublic,
+                url : me.instance.sandbox.getAjaxUrl() + '&action_route=AdjustViewAccess' + '&id=' + id + '&isPublic=' + view.isPublic,
                 type : 'POST',
                 dataType : 'json',
                 beforeSend : function(x) {
@@ -240,8 +307,9 @@ function(instance, localization) {
                 ok.name = "delete_ok";
                 ok.text = me.loc.button ? me.loc.button.yes : "Kyllä";
                 ok.onclick = function() {
+                	// '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR' + '_portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_' + 'portti2mapportlet_fi' + '.mml.baseportlet.CMD=ajax.jsp' + 
                     jQuery.ajax({
-                        url : '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR' + '_portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_' + 'portti2mapportlet_fi' + '.mml.baseportlet.CMD=ajax.jsp' + '&action_route=DeleteView' + '&id=' + id,
+                        url : me.instance.sandbox.getAjaxUrl() + '&action_route=DeleteView' + '&id=' + id,
                         type : 'POST',
                         dataType : 'json',
                         beforeSend : function(x) {
@@ -323,34 +391,17 @@ function(instance, localization) {
          * TODO: reload views list here
          */
         'StateSavedEvent' : function(event) {
-            this.container.find('div.response').html('Tallennettu tila: <hr/>' + this.serializeJSON(event.getState()));
-            this.debugCounter++;
+	    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        	if(event.isError()) {
+        		// tallennus epäonnistui
+		    	var button = dialog.createCloseButton(this.loc.button.ok);
+				button.addClass('primary');
+		    	dialog.show(this.loc['error'].title, this.loc['error'].notsaved, [button]);
+        		return;
+        	}
+	    	dialog.show(this.loc['popup'].title, this.loc['save'].success);
+	    	dialog.fadeout();
             this._refreshViewsList();
-        }
-    },
-    // TODO: move to some util
-    serializeJSON : function(obj) {
-        var me = this;
-        var t = typeof (obj);
-        if (t != "object" || obj === null) {
-            // simple data type
-            if (t == "string")
-                obj = '"' + obj + '"';
-            return String(obj);
-        } else {
-            // array or object
-            var json = [], arr = (obj && obj.constructor == Array);
-
-            jQuery.each(obj, function(k, v) {
-                t = typeof (v);
-                if (t == "string") {
-                    v = '"' + v + '"';
-                } else if (t == "object" & v !== null) {
-                    v = me.serializeJSON(v)
-                }
-                json.push(( arr ? "" : '"' + k + '":') + String(v));
-            });
-            return ( arr ? "[" : "{") + String(json) + ( arr ? "]" : "}");
         }
     },
     /**

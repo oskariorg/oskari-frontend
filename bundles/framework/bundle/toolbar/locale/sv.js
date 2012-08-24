@@ -1,5 +1,5 @@
 Oskari.registerLocalization({
-	"lang" : "fi",
+	"lang" : "sv",
 	"key" : "Toolbar",
 	"value" : {
 		'buttons' : {

@@ -34,6 +34,7 @@ Oskari.registerLocalization({
       },
       "buttons" : {
           "cancel" : "Peruuta",
+          "ok" : "OK",
           "finish" : "Lopeta piirto",
           "save" : "Tallenna"
       },
@@ -76,8 +77,13 @@ Oskari.registerLocalization({
                     "linecolor" : "Viivanväri",
                     "size" : "Viivan paksuus"
               }
+          },
+          "edit" : {
+              "title" : "Muokkaa karttatasoa",
+              "save" : "Tallenna",
+              "cancel" : "Peruuta"
+          	
           }
-          
       },
       "notification" : {
           "placeAdded" : {
@@ -89,13 +95,14 @@ Oskari.registerLocalization({
               "message" : "Karttatason muutokset tallennettu."
           },
           "error" : {
-              "addCategory" : "Virhe! Tason tallennus epäonnistui, paikkaa ei tallennettu",
-              "editCategory" : "Virhe! Tason tallennus epäonnistui",
+              "addCategory" : "Tason tallennus epäonnistui, paikkaa ei tallennettu",
+              "editCategory" : "Tason tallennus epäonnistui",
               "savePlace" : "Virhe! Paikkaa ei tallennettu",
-              "generic" : "Virhe! Tiedoissa virheitä"
+              "title" : "Virhe!"
           }
       },
       "validation" : {
+          "title" : "Tiedoissa puutteita:",
           "placeName" : "Kohteen nimi puuttuu",
           "categoryName" : "Tason nimi puuttuu"
       }

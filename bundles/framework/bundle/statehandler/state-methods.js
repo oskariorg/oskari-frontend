@@ -47,7 +47,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
         // reinit with startup params
         var me = this;
 		// get initial state from server
-		// TODO: some parameter needs to tell we dont want the state saved in session
+    	this._currentViewId = this._defaultViewId;
 		if(this._startupState) {
             me._resetComponentsWithNoStateData(me.useState(this._startupState));
 		}
@@ -55,6 +55,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
             jQuery.ajax({
                 dataType : "json",
                 type : "GET",
+                // noSavedState=true parameter tells we dont want the state saved in session
                 url : me.sandbox.getAjaxUrl() + 'action_route=GetMapConfiguration&noSavedState=true',
                 success : function(data) {
                     me._startupState = data;
@@ -104,15 +105,15 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
      * itself.
      * All actual implementations are done in plugins.
      */
-    saveState : function(pluginName) {
+    saveState : function(viewName, pluginName) {
         if(!pluginName) {
             for(var pluginName in this._pluginInstances) {
-                this.saveState(pluginName);
+                this.saveState(viewName, pluginName);
             }
             return;
         }
         this.sandbox.printDebug('[' + this.getName() + ']' + ' saving state with ' + pluginName);
-        this._pluginInstances[pluginName].saveState();
+        this._pluginInstances[pluginName].saveState(viewName);
     },
     /**
      * @method getCurrentState
