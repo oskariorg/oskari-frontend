@@ -237,6 +237,37 @@ function() {
 		var me = this;
 		this.plugins['Oskari.userinterface.Flyout'].createUi();
 		this.plugins['Oskari.userinterface.Tile'].refresh();
+	},
+	/**
+	 * @method setPublishMode
+	 * Transform the map view to publisher mode if parameter is true
+	 * @param {Boolean} blnEnabled
+	 */
+	setPublishMode : function(blnEnabled) {
+		var me = this;
+    	var map = jQuery('#contentMap');
+    	var tools = jQuery('#maptools');
+    	
+    	// TODO: close all flyouts/popups/gfi?
+    	//  me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
+		if (blnEnabled == true) {
+    		map.addClass('mapPublishMode');
+    		    
+            // proceed with publisher view
+            this.publisher = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.BasicPublisher', 
+                this, this.getLocalization('BasicView'));
+            this.publisher.render(map);
+            this.publisher.setEnabled(true);
+    	}
+    	else {
+    		map.removeClass('mapPublishMode');
+    		// me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
+    		if(this.publisher) {
+    			// FIXME: some JS error occurs when changing values in basic publisher and canceling publish mode after that
+            	this.publisher.setEnabled(false);
+    			this.publisher.destroy();
+    		}
+    	}
 	}
 }, {
 	/**

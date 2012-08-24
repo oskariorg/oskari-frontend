@@ -15,7 +15,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 function(instance, localization) {
     var me = this;
     this.instance = instance;
-    this.template = jQuery('<div class="basic_publisher">' + '<div class="form">' + '<div class="field">' + '<div class="help icon-info" ' + 'title="' + localization.domain.tooltip + '" ' + 'helptags="portti,help,publisher,domain" ' + '></div>' + '<label for="domain">' + localization.domain.label + '</label><br clear="all" />' + '<input name="domain" placeholder="' + localization.domain.placeholder + '"/>' + '</div>' + '<div class="field">' + '<div class="help icon-info" ' + 'title="' + localization.name.tooltip + '" ' + 'helptags="portti,help,publisher,name" ' + '></div>' + '<label for="name">' + localization.name.label + '</label><br clear="all" />' + '<input name="name" placeholder="' + localization.name.placeholder + '"/>' + '</div>' + '<div class="field">' + '<div class="help icon-info" ' + 'title="' + localization.language.tooltip + '" ' + 'helptags="portti,help,publisher,language" ' + '></div>' + '<label for="language">' + localization.language.label + '</label><br clear="all" />' + '<select name="language"></select>' + '</div>' + '<div class="buttons">' + '</div>' + '</div>' + '<div class="map">' + localization.preview +
+    this.template = jQuery('<div class="basic_publisher">' + '<div class="header"><h3>' + '</h3></div>' + 
+    '<div class="form">' + '<div class="field">' + '<div class="help icon-info" ' + 'title="' + localization.domain.tooltip + '" ' + 'helptags="portti,help,publisher,domain" ' + '></div>' + '<label for="domain">' + localization.domain.label + '</label><br clear="all" />' + '<input name="domain" placeholder="' + localization.domain.placeholder + '"/>' + '</div>' + '<div class="field">' + '<div class="help icon-info" ' + 'title="' + localization.name.tooltip + '" ' + 'helptags="portti,help,publisher,name" ' + '></div>' + '<label for="name">' + localization.name.label + '</label><br clear="all" />' + '<input name="name" placeholder="' + localization.name.placeholder + '"/>' + '</div>' + '<div class="field">' + '<div class="help icon-info" ' + 'title="' + localization.language.tooltip + '" ' + 'helptags="portti,help,publisher,language" ' + '></div>' + '<label for="language">' + localization.language.label + '</label><br clear="all" />' + '<select name="language"></select>' + '</div>' + '<div class="buttons">' + '</div>' + '</div>' + '<div class="map">' + localization.preview +
     // '<div class="preview">' + '</div>' +
     '<div class="maplocation">' + localization.location + '<div class="locationdata"></div>' + '</div>' + '<div class="options">' + '</div>' + '</div>' + '</div>');
 
@@ -111,43 +112,8 @@ function(instance, localization) {
         var me = this;
         var content = this.template.clone();
 
-        // TODO: move this to "UIUtil" or sth like that
-        // Help popups (PORTTISK-812)
-        content.find('[helptags]').each(function(i, e) {
-            var btn = jQuery(e);
-            var taglist = btn.attr("helptags");
-            var reqname = 'InfoBox.ShowInfoBoxRequest';
-            var builder = me.instance.sandbox.getRequestBuilder(reqname);
-            btn.bind('click', function(e) {
-                jQuery.ajax({
-                    url : me.instance.sandbox.getAjaxUrl() + '&action_route=GetArticlesByTag' + '&tags="' + taglist + '"',
-                    type : 'GET',
-                    dataType : 'json',
-                    success : function(resp) {
-                        var content = resp.articles[0].content;
-                        var idx = content.indexOf("<![CDATA[");
-                        if (idx >= 0) {
-                            content = content.substring(idx + 9);
-                        }
-                        idx = content.indexOf("]]>");
-                        if (idx >= 0) {
-                            content = content.substring(0, idx);
-                        }
-                        var dialog = Oskari.clazz.create('Oskari.userinterface' + '.component.Popup');
-                        var okBtn = dialog.createCloseButton("OK");
-                        okBtn.addClass('primary');
-                        dialog.show(me.loc.help, content, [okBtn]);
-                        dialog.moveTo(btn, 'bottom');
-                    },
-                    error : function() {
-                        alert(me.loc.error.nohelp);
-                    }
-                });
-            });
-        });
-        // End help popups.
-
         this.mainPanel = content;
+        content.find('div.header h3').append(this.loc.title);
 
         // language options are rendered based on localization
         var languageSelection = content.find('select[name=language]');
@@ -499,7 +465,7 @@ function(instance, localization) {
         var cancelBtn = jQuery('<input type="button" name="cancel" />');
         cancelBtn.val(this.loc.buttons.cancel);
         cancelBtn.bind('click', function() {
-            me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
+        	me.instance.setPublishMode(false);
         });
 
         buttonCont.append(cancelBtn);
@@ -754,5 +720,8 @@ function(instance, localization) {
         } else {
             this._disablePreview();
         }
+    },
+    destroy : function() {
+    	this.mainPanel.remove();
     }
 });

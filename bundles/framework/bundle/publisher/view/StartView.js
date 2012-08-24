@@ -19,7 +19,7 @@ function(instance, localization) {
 	this.templateLayerList = jQuery("<div class='layerlist'><h4></h4><ul></ul></div>");
 	this.templateListItem = jQuery("<li></li>");
 	this.templateError = jQuery('<div class="error"><ul></ul></div>');
-	this.templateInfo = jQuery("<div class='info'></div>");
+	this.templateInfo = jQuery("<div class='icon-info'></div>");
 	this.loc = localization;
 	this.content = undefined;
 	this.buttons = {};
@@ -39,7 +39,11 @@ function(instance, localization) {
 		var continueButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
 		continueButton.addClass('primary');
 		continueButton.setTitle(this.loc.buttons['continue']);
+        continueButton.setHandler(function() {
+        	me.instance.setPublishMode(true);
+        });
 		this.buttons['continue'] = continueButton;
+		
 		
 		var cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
 		cancelButton.setTitle(this.loc.buttons['cancel']);

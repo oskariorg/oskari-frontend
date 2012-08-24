@@ -6,6 +6,7 @@ Oskari.registerLocalization({
       "flyouttitle" : "Siirry julkaisemaan",
       "desc" : "",
       "BasicView" : {
+      	  "title" : "Julkaise kartta",
           "domain" : {
               "label" : "Sivusto, jolla kartta julkaistaan",
               "placeholder" : "ilman http- tai www-etuliitteitä",

@@ -122,12 +122,6 @@ function(instance) {
             this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.StartView', 
                 this.instance, 
                 this.instance.getLocalization('StartView'));
-                /*    
-            // proceed with publisher view
-            this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.BasicPublisher', 
-                this.instance, 
-                this.instance.getLocalization('BasicView'));
-                */    
         }
         
         this.view.render(flyout);
