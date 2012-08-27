@@ -98,6 +98,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             "src" : "../../../../bundles/framework/bundle/divmanazer/component/Form.js"
         }, {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/component/UIHelper.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/divmanazer/component/FormInput.js"
         }, {
             "type" : "text/javascript",

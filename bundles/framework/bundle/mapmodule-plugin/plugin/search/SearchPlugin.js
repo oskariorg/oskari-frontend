@@ -139,6 +139,7 @@ function(config) {
      */
     stopPlugin : function(sandbox) {
 
+        this.container.remove();
         for(p in this.eventHandlers ) {
             sandbox.unregisterFromEventByName(this, p);
         }
@@ -146,7 +147,6 @@ function(config) {
         sandbox.unregister(this);
         this._map = null;
         this._sandbox = null;
-        this.container.remove();
     },
     /**
      * @method start

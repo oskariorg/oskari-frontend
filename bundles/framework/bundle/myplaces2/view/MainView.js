@@ -193,12 +193,7 @@ function(instance) {
     _showValidationErrorMessage : function(errors) {
         var loc = this.instance.getLocalization();
     	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-    	okBtn.setTitle(loc.buttons.ok);
-    	okBtn.addClass('primary');
-    	okBtn.setHandler(function() {
-            dialog.close();
-    	});
+    	var okBtn = dialog.createCloseButton(loc.buttons.ok);
     	var content = jQuery('<ul></ul>');
     	for(var i = 0 ; i < errors.length; ++i) {
     		var row = jQuery('<li></li>');

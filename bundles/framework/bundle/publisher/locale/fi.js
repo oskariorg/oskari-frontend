@@ -3,9 +3,12 @@ Oskari.registerLocalization({
     "key" : "Publisher",
     "value" : {
       "title" : "Julkaise kartta",
+      "flyouttitle" : "Siirry julkaisemaan",
       "desc" : "",
       "BasicView" : {
+      	  "title" : "Julkaise kartta",
           "domain" : {
+          	  "title" : "Julkaisupaikka",
               "label" : "Sivusto, jolla kartta julkaistaan",
               "placeholder" : "ilman http- tai www-etuliitteitä",
               "tooltip" : "Kirjoita sivuston www-osoite eli domain-nimi ilman http- ja www-etuliitteitä, tai alasivun osoitetta. Esimerkiksi omakotisivu.com."
@@ -52,6 +55,7 @@ Oskari.registerLocalization({
           },
           "buttons" : {
               "save" : "Tallenna",
+              "ok" : "OK",
               "cancel" : "Peruuta"
           },
           "layerselection" : {
@@ -65,11 +69,12 @@ Oskari.registerLocalization({
           "zoomlevel" : "Mittakaavataso",
           "help" : "Ohje",
           "error" : {
+              "title"  : "Virhe!",
               "size"  : "Virhe kokomäärityksissä",
               "domain" : "Sivusto on pakollinen tieto",
               "domainStart" : "Anna sivusto ilman http- tai www-etuliitteitä",
               "name" : "Nimi on pakollinen tieto",
-	      "nohelp" : "Ohjetta ei löytynyt"
+	      	  "nohelp" : "Ohjetta ei löytynyt"
           }
       },
       "NotLoggedView" : {
@@ -78,6 +83,17 @@ Oskari.registerLocalization({
           "signupUrl" : "/web/fi/login",
           "register" : "Registeröidy",
           "registerUrl" : "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+      },
+      "StartView" : {
+          "text" : "Voit julkaista tässä tekemäsi karttanäkymän osana esim. omaa tai yrityksesi sivustoa.",
+          "layerlist_title" : "Julkaistavissa olevat karttatasot",
+          "layerlist_empty" : "Yksikään valitsemasi karttataso ei ole julkaistavissa, tarkista valintasi.",
+          "layerlist_denied" : "Ei julkaistavissa",
+          "denied_tooltip" : "Kartta-aineiston tuottaja ei ole antanut oikeuksia julkaista kaikkia valitsemistasi tasoista",
+          "buttons" : {
+          	"continue" : "Jatka",
+          	"cancel" : "Peruuta"
+          }
       }
     }
 });
