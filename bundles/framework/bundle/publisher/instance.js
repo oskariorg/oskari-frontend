@@ -263,7 +263,6 @@ function() {
     		map.removeClass('mapPublishMode');
     		// me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
     		if(this.publisher) {
-    			// FIXME: some JS error occurs when changing values in basic publisher and canceling publish mode after that
             	this.publisher.setEnabled(false);
     			this.publisher.destroy();
     		}

@@ -68,18 +68,12 @@ div.basic_publisher div.form div.field input, div.field select {
 
 div.basic_publisher > div.content {
     overflow: auto;
-	height: 100%;
+	height: 89%;
 }
 
 div.basic_publisher div.options {
 	padding-bottom: 10px;
 }
-/*
-div.basic_publisher div.oskarifield input {
-	margin-bottom: 5px;
-	margin-top: 5px;
-}
-*/
 
 /* Buttons */
 div.basic_publisher div.buttons input {
