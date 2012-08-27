@@ -425,9 +425,11 @@ Oskari.clazz
                     }
                     var html = '';
                     if (datum.presentationType == 'TEXT') {
+                        alert(datum.content);
                         html = '<div style="overflow:auto">' + 
                             datum.content + '</div>';
                     } else {
+                        alert(datum.content);
                         html = '<br/><table>';
                         var even = false;
                         var jsonData = datum.content;
@@ -523,14 +525,14 @@ Oskari.clazz
 
                     for (var di = 0; di < data.length; di++) {
                         var datum = data[di];
-                        var features = datum.features;
-                        if (!(features && features.length)) {
-                            continue;
-                        }
                         var layerId = datum.layerId;
                         var type = datum.type;
 
                         if (type == "WFS_LAYER") {
+                            var features = datum.features;
+                            if (!(features && features.length)) {
+                                continue;
+                            }
                             for (var fi = 0; fi < features.length; fi++) {
                                 var fea = features[fi];
                                 var children = fea.children;
