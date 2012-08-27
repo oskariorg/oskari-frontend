@@ -15,7 +15,7 @@ function() {
     this.enabled = true;
 }, {
     /** @static @property __name plugin name */
-    __name : 'SearchPlugin',
+    __name : 'GetInfoPlugin',
 
     /**
      * @method getName
