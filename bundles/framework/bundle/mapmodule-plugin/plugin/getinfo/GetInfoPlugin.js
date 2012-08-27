@@ -560,7 +560,7 @@ Oskari.clazz
                         }
                     }
                     return { fragments : coll, 
-                             title : title,
+                             title : title
                            };
                 },
             
