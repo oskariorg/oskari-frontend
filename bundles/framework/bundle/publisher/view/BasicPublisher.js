@@ -15,11 +15,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 function(instance, localization) {
     var me = this;
     this.instance = instance;
-    this.template = jQuery('<div class="basic_publisher">' + '<div class="header"><h3>' + '</h3></div>' + 
-    '<div class="form">' + '<div class="field">' + '<div class="help icon-info" ' + 'title="' + localization.domain.tooltip + '" ' + 'helptags="portti,help,publisher,domain" ' + '></div>' + '<label for="domain">' + localization.domain.label + '</label><br clear="all" />' + '<input name="domain" placeholder="' + localization.domain.placeholder + '"/>' + '</div>' + '<div class="field">' + '<div class="help icon-info" ' + 'title="' + localization.name.tooltip + '" ' + 'helptags="portti,help,publisher,name" ' + '></div>' + '<label for="name">' + localization.name.label + '</label><br clear="all" />' + '<input name="name" placeholder="' + localization.name.placeholder + '"/>' + '</div>' + '<div class="field">' + '<div class="help icon-info" ' + 'title="' + localization.language.tooltip + '" ' + 'helptags="portti,help,publisher,language" ' + '></div>' + '<label for="language">' + localization.language.label + '</label><br clear="all" />' + '<select name="language"></select>' + '</div>' + '<div class="buttons">' + '</div>' + '</div>' + '<div class="map">' + localization.preview +
-    // '<div class="preview">' + '</div>' +
-    '<div class="maplocation">' + localization.location + '<div class="locationdata"></div>' + '</div>' + '<div class="options">' + '</div>' + '</div>' + '</div>');
+    this.template = jQuery('<div class="basic_publisher">' + 
+    	'<div class="header"><div class="icon-close"></div><h3></h3></div>' +
+    	'<div class="content">' +   
+    	'</div>' +
+    '</div>');
 
+    this.templateButtonsDiv = jQuery('<div class="buttons"></div>');
     this.templateHelp = jQuery('<div class="help icon-info"></div>');
     this.templateTool = jQuery('<div class="tool ">' + '<input type="checkbox"/>' + '<span></span></div>');
     this.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
@@ -114,13 +116,7 @@ function(instance, localization) {
 
         this.mainPanel = content;
         content.find('div.header h3').append(this.loc.title);
-
-        // language options are rendered based on localization
-        var languageSelection = content.find('select[name=language]');
-        var langOpts = this.loc.language.options;
-        for (var opt in langOpts) {
-            languageSelection.append('<option value="' + opt + '">' + langOpts[opt] + '</option>');
-        }
+        
 
         this.handleMapMoved();
 
@@ -128,6 +124,14 @@ function(instance, localization) {
 
         var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
         this.accordion = accordion;
+        
+        var form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.BasicPublisherForm',this.loc);
+        this.locationForm = form;
+        form.init();
+        var panel = form.getPanel();
+        panel.open();
+        accordion.addPanel(panel);
+        
         accordion.addPanel(this._createSizePanel());
         accordion.addPanel(this._createToolsPanel());
 
@@ -136,11 +140,15 @@ function(instance, localization) {
         this._populateMapLayerPanel();
 
         accordion.addPanel(this.maplayerPanel);
-        accordion.insertTo(content.find('div.options'));
+        var contentDiv = content.find('div.content');
+        accordion.insertTo(contentDiv);
 
         // buttons
-        this._addButtons(content);
-
+        // close
+        container.find('div.header div.icon-close').bind('click', function() {
+        	me.instance.setPublishMode(false);
+        });
+        contentDiv.append(this._getButtons());
     },
     /**
      * @method _setSelectedSize
@@ -157,6 +165,7 @@ function(instance, localization) {
         for (var i = 0; i < me.sizeOptions.length; ++i) {
             var option = me.sizeOptions[i];
             if (option.selected) {
+            	// reference to openlayers map.div
                 var mapElement = jQuery(mapModule.getMap().div);
                 if (option.id == "custom") {
                     var width = widthInput.val();
@@ -403,7 +412,7 @@ function(instance, localization) {
         var lon = mapVO.getX();
         var lat = mapVO.getY();
         var zoom = mapVO.getZoom();
-        this.mainPanel.find('div.locationdata').html('N: ' + lat + ' E: ' + lon + ' ' + this.loc.zoomlevel + ': ' + zoom);
+        //this.mainPanel.find('div.locationdata').html('N: ' + lat + ' E: ' + lon + ' ' + this.loc.zoomlevel + ': ' + zoom);
     },
     /**
      * @method setupLayersList
@@ -448,19 +457,20 @@ function(instance, localization) {
         }
     },
     /**
-     * @method _addButtons
+     * @method _getButtons
      * @private
-     * @param {jQuery} container reference to DOM element this component will be
-     * rendered to
-     * Renders publisher buttons to given DOM element
+     * Renders publisher buttons to DOM snippet and returns it.
+     * @return {jQuery} container with buttons
      */
-    _addButtons : function(container) {
+    _getButtons : function() {
         var me = this;
-        var buttonCont = container.find('div.buttons');
+                
+        var buttonCont = this.templateButtonsDiv.clone();
+        
         var saveBtn = jQuery('<input type="button" name="save" />');
         saveBtn.val(this.loc.buttons.save);
         saveBtn.bind('click', function() {
-            me._gatherSelections(container);
+            me._gatherSelections();
         });
         var cancelBtn = jQuery('<input type="button" name="cancel" />');
         cancelBtn.val(this.loc.buttons.cancel);
@@ -470,6 +480,19 @@ function(instance, localization) {
 
         buttonCont.append(cancelBtn);
         buttonCont.append(saveBtn);
+        return buttonCont;
+    },
+    
+    _showValidationErrorMessage : function(errors) {
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+    	var okBtn = dialog.createCloseButton(this.loc.buttons.ok);
+    	var content = jQuery('<ul></ul>');
+    	for(var i = 0 ; i < errors.length; ++i) {
+    		var row = jQuery('<li></li>');
+    		row.append(errors[i]['error'])
+    		content.append(row);
+    	}
+    	dialog.show(this.loc['error'].title, content, [okBtn]);
     },
     /**
      * @method _gatherSelections
@@ -478,28 +501,16 @@ function(instance, localization) {
      */
     _gatherSelections : function() {
         var container = this.mainPanel;
-        var domain = container.find('input[name=domain]').val();
         var sandbox = this.instance.getSandbox();
-        if (!this._checkLength(domain, 1)) {
-            alert(this.loc.error.domain);
-            return;
-        }
-        if (domain.startsWith('http') || domain.startsWith('www')) {
-            alert(this.loc.error.domainStart);
-            return;
-        }
-        var name = container.find('input[name=name]').val();
-        if (!this._checkLength(name, 1)) {
-            alert(this.loc.error.name);
-            return;
-        }
+        
+        var errors = this.locationForm.validate();
+        var values = this.locationForm.getValues();
         var map = sandbox.getMap();
-        var language = container.find('select[name=language]').val();
         var size = container.find('input[name=size]:checked').val();
         var selections = {
-            domain : domain,
-            name : name,
-            language : language,
+            domain : values.domain,
+            name : values.name,
+            language : values.language,
             plugins : [],
             layers : [],
             north : Math.floor(map.getY()),
@@ -523,8 +534,10 @@ function(instance, localization) {
                     height : height
                 };
             } else {
-                alert(this.loc.error.size);
-                return;
+            	errors.push({
+            		field : 'size',
+            		error : this.loc['error'].size
+            	});
             }
         } else {
 
@@ -555,9 +568,16 @@ function(instance, localization) {
         if (sandbox.getStatefulComponents()['infobox']) {
             selections["infobox"] = sandbox.getStatefulComponents()['infobox'].getState();
         }
+        
+        if(errors.length > 0) {
+        	// TODO: messages
+        	this._showValidationErrorMessage(errors);
+        	return;
+        }
 
         var url = sandbox.getAjaxUrl();
         alert(JSON.stringify(selections, null, 4));
+        return;
 
         jQuery.ajax({
             url : url + '&action_route=Publish',
@@ -576,27 +596,6 @@ function(instance, localization) {
                 alert("Fail");
             }
         });
-    },
-    /**
-     * @method _checkLength
-     * @private
-     * @param {String} pStr string to validate
-     * @param {Number} min min length (optional)
-     * @param {Number} max max length (optional)
-     * Validates string length
-     */
-    _checkLength : function(pStr, min, max) {
-        if (pStr) {
-            var str = jQuery.trim(pStr.toString());
-            if (min && str.length < min) {
-                return false;
-            }
-            if (max && str.length > max) {
-                return false;
-            }
-            return true;
-        }
-        return false;
     },
     /**
      * @method _validateNumberRange

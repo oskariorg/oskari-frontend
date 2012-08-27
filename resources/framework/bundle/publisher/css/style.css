@@ -43,14 +43,16 @@ div.publisher div.startview div.error ul li {
     z-index : 20;
     width : 255px;
 }
+#contentMap div.basic_publisher div.content {
+    padding : 10px;
+}
 
 div.basic_publisher > div.header {
     background-color: #FDF8D9;
+    padding: 5px 10px;
 }
-
-div.basic_publisher div.form {
-    display: inline-block;
-    width : 230px;
+div.basic_publisher > div.header div.icon-close {
+    float: right;
 }
 
 
@@ -64,22 +66,20 @@ div.basic_publisher div.form div.field input, div.field select {
     width : 100%;
 }
 
-div.basic_publisher div.form div.options {
+div.basic_publisher > div.content {
     overflow: auto;
+	height: 100%;
 }
 
 div.basic_publisher div.options {
 	padding-bottom: 10px;
 }
-
-div.basic_publisher div.field {
-	padding: 5px;
-}
-
-div.basic_publisher div.field input {
+/*
+div.basic_publisher div.oskarifield input {
 	margin-bottom: 5px;
 	margin-top: 5px;
 }
+*/
 
 /* Buttons */
 div.basic_publisher div.buttons input {

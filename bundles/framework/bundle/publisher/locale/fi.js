@@ -8,6 +8,7 @@ Oskari.registerLocalization({
       "BasicView" : {
       	  "title" : "Julkaise kartta",
           "domain" : {
+          	  "title" : "Julkaisupaikka",
               "label" : "Sivusto, jolla kartta julkaistaan",
               "placeholder" : "ilman http- tai www-etuliitteitä",
               "tooltip" : "Kirjoita sivuston www-osoite eli domain-nimi ilman http- ja www-etuliitteitä, tai alasivun osoitetta. Esimerkiksi omakotisivu.com."
@@ -54,6 +55,7 @@ Oskari.registerLocalization({
           },
           "buttons" : {
               "save" : "Tallenna",
+              "ok" : "OK",
               "cancel" : "Peruuta"
           },
           "layerselection" : {
@@ -67,11 +69,12 @@ Oskari.registerLocalization({
           "zoomlevel" : "Mittakaavataso",
           "help" : "Ohje",
           "error" : {
+              "title"  : "Virhe!",
               "size"  : "Virhe kokomäärityksissä",
               "domain" : "Sivusto on pakollinen tieto",
               "domainStart" : "Anna sivusto ilman http- tai www-etuliitteitä",
               "name" : "Nimi on pakollinen tieto",
-	      "nohelp" : "Ohjetta ei löytynyt"
+	      	  "nohelp" : "Ohjetta ei löytynyt"
           }
       },
       "NotLoggedView" : {
