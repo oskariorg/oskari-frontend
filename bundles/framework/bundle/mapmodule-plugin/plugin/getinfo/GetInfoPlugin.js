@@ -425,11 +425,9 @@ Oskari.clazz
                     }
                     var html = '';
                     if (datum.presentationType == 'TEXT') {
-                        alert(datum.content);
                         html = '<div style="overflow:auto">' + 
                             datum.content + '</div>';
                     } else {
-                        alert(datum.content);
                         html = '<br/><table>';
                         var even = false;
                         var jsonData = datum.content;
