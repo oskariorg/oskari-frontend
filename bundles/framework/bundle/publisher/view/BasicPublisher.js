@@ -362,17 +362,12 @@ function(instance, localization) {
         
         var errors = this.locationForm.validate();
         var values = this.locationForm.getValues();
-        var map = sandbox.getMap();
         var size = container.find('input[name=size]:checked').val();
         var selections = {
             domain : values.domain,
             name : values.name,
             language : values.language,
-            plugins : [],
-            layers : [],
-            north : Math.floor(map.getY()),
-            east : Math.floor(map.getX()),
-            zoom : map.getZoom()
+            plugins : []
         };
         for (var i = 0; i < this.tools.length; ++i) {
             if (this.tools[i].selected) {
@@ -409,12 +404,15 @@ function(instance, localization) {
                 }
             }
         }
-        var layerValues = this.maplayerPanel.getValues();
+        
         // if maplayer plugin is enabled
-        if (layerValues.showLayerSelection) {
-            // TODO: layerselection plugin config
+        var layerValues = this.maplayerPanel.getValues();
+        if (layerValues.layerSelection) {
+            selections.plugins.push(layerValues.layerSelection);
         }
-        selections.layers = layerValues.layers;
+        
+        var mapFullState = sandbox.getStatefulComponents()['mapfull'].getState();
+        selections.mapstate = mapFullState;
         
         // saves possible open gfi popups
         if (sandbox.getStatefulComponents()['infobox']) {

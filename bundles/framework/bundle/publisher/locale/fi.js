@@ -87,7 +87,7 @@ Oskari.registerLocalization({
       "StartView" : {
           "text" : "Voit julkaista tässä tekemäsi karttanäkymän osana esim. omaa tai yrityksesi sivustoa.",
           "layerlist_title" : "Julkaistavissa olevat karttatasot",
-          "layerlist_empty" : "Yksikään valitsemasi karttataso ei ole julkaistavissa, tarkista valintasi.",
+          "layerlist_empty" : "Valitsemiasi karttatasoja ei voida julkaista. Valitut karttatasot -valikosta näet, voiko karttatason julkaista.",
           "layerlist_denied" : "Ei julkaistavissa",
           "denied_tooltip" : "Kartta-aineiston tuottaja ei ole antanut oikeuksia julkaista kaikkia valitsemistasi tasoista",
           "buttons" : {

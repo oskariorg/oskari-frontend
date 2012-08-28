@@ -32,7 +32,6 @@ function(localization, instance) {
     this.showLayerSelection = false;
 }, {
 	init : function() {
-    	this.setupLayersList();
 		if(!this.panel) {
 	        this.panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
 	        this.panel.setTitle(this.loc.layers.label);
@@ -44,19 +43,16 @@ function(localization, instance) {
 	},
 	getValues : function() {
 		var values = {
-			showLayerSelection : true,
-			layers : []
 		};
-        // FIXME: figure out how to resolve selected layers properly
-		this._setupLayersList();
-        for (var i = 0; i < this.layers.length; ++i) {
-            if (this.layers[i].selected || (this.layers[i].id == this.defaultBaseLayer)) {
-                values.layers.push({
-                    id : this.layers[i].id,
-                    opacity : this.layers[i].opacity
-                });
-            }
-        }
+		if(this.showLayerSelection) {
+			values.layerSelection = {
+				id : 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
+				conf : {
+					defaultBaseLayer : this.defaultBaseLayer
+				}
+			}
+		}
+		
 		return values;
     },
 	validate : function() {
@@ -64,23 +60,23 @@ function(localization, instance) {
 		return errors;
    },
     /**
-     * @method setupLayersList
+     * @method getLayersList
      * Handles the published map layer selection
      * FIXME: this is completely under construction, rights aren't managed in any
      * way etc
      */
-    setupLayersList : function() {
-        this.layers = [];
+    getLayersList : function() {
+        var layers = [];
         var selectedLayers = this.instance.sandbox.findAllSelectedMapLayers();
         for (var i = 0; i < selectedLayers.length; ++i) {
-            // TODO: if rights then
             var layer = {
                 id : selectedLayers[i].getId(),
                 name : selectedLayers[i].getName(),
                 opacity : selectedLayers[i].getOpacity()
             };
-            this.layers.push(layer);
+            layers.push(layer);
         }
+        return layers;
     },
     /**
      * @method _populateMapLayerPanel
@@ -128,9 +124,10 @@ function(localization, instance) {
                 }
             };
         };
-        for (var i = 0; i < this.layers.length; ++i) {
+        var layers = this.getLayersList();
+        for (var i = 0; i < layers.length; ++i) {
         	
-            var layer = this.layers[i];
+            var layer = layers[i];
             var layerContainer = this.templateTool.clone();
             layerContainer.attr('data-id', layer.id);
             layerContainer.find('span').append(layer.name);
