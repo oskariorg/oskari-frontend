@@ -125,7 +125,7 @@ function(instance, localization) {
         var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
         this.accordion = accordion;
         
-        var form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.BasicPublisherForm',this.loc);
+        var form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLocationForm',this.loc);
         this.locationForm = form;
         form.init();
         var panel = form.getPanel();
@@ -319,12 +319,10 @@ function(instance, localization) {
             return;
         }
         // if layer selection = ON -> show content
-        var layerTable = jQuery('<table></table>');
-        var closureMagic = function(row, layer) {
+        var closureMagic = function(layer) {
             return function() {
                 var checkbox = jQuery(this);
                 var isChecked = checkbox.is(':checked');
-                var cells = row.find('td');
                 layer.selected = isChecked;
                 if (isChecked) {
                     me.defaultBaseLayer = layer.id;
@@ -334,19 +332,20 @@ function(instance, localization) {
             };
         };
         for (var i = 0; i < this.layers.length; ++i) {
+        	
             var layer = this.layers[i];
-            var row = this.templateLayerRow.clone();
-            row.attr('data-id', layer.id);
-            var cells = row.find('td');
+            var layerContainer = this.templateTool.clone();
+            layerContainer.attr('data-id', layer.id);
+            layerContainer.find('span').append(layer.name);
+            var input = layerContainer.find('input');
+            
             if (this.defaultBaseLayer && this.defaultBaseLayer == layer.id) {
-                jQuery(cells[0]).find('input').attr('checked', 'checked');
+                input.attr('checked', 'checked');
                 layer.selected = true;
             }
-            jQuery(cells[0]).find('input').change(closureMagic(row, layer));
-            jQuery(cells[1]).append(layer.name);
-            layerTable.append(row);
+            input.change(closureMagic(layer));
+            contentPanel.append(layerContainer);
         }
-        contentPanel.append(layerTable);
 
         if (this.config.layers.promote && this.config.layers.promote.length > 0) {
             this._populateLayerPromotion(contentPanel);
@@ -361,36 +360,59 @@ function(instance, localization) {
         var me = this;
         var sandbox = this.instance.getSandbox();
         var addRequestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
+        var removeRequestBuilder = sandbox.getRequestBuilder('RemoveMapLayerRequest');
         var closureMagic = function(layer) {
             return function() {
-                sandbox.request(me.instance.getName(), addRequestBuilder(layer.getId(), true));
+                var checkbox = jQuery(this);
+                var isChecked = checkbox.is(':checked');
+                if (isChecked) {
+                	sandbox.request(me.instance, addRequestBuilder(layer.getId(), true));
+                } else {
+                	sandbox.request(me.instance, removeRequestBuilder(layer.getId()));
+                }
             };
         };
-        // TODO: check that layer isn't added yet
+        
         for (var i = 0; i < this.config.layers.promote.length; ++i) {
             var promotion = this.config.layers.promote[i];
-            var promoLayerList = jQuery('<ul></ul>');
-            var added = false;
-            for (var j = 0; j < promotion.id.length; ++j) {
-
-                if (!sandbox.isLayerAlreadySelected(promotion.id[j])) {
-                    var item = jQuery('<li><a href="JavaScript:void(0);"></a></li>');
-                    var layer = sandbox.findMapLayerFromAllAvailable(promotion.id[j]);
-                    // promo layer found in system
-                    if (layer) {
-                        var link = item.find('a');
-                        link.append(layer.getName());
-                        link.bind('click', closureMagic(layer));
-                        promoLayerList.append(item);
-                        added = true;
-                    }
+            var promoLayerList = this._getActualPromotionLayers(promotion.id);
+		
+            if (promoLayerList.length > 0) {
+                contentPanel.append(promotion.text);
+            	for (var j = 0; j < promoLayerList.length; ++j) {
+            		var layer = promoLayerList[j];
+                	var layerContainer = this.templateTool.clone();
+		            layerContainer.attr('data-id', layer.getId());
+		            layerContainer.find('span').append(layer.getName());
+		            var input = layerContainer.find('input');
+        			input.change(closureMagic(layer));
+                    promoLayerList.push(layerContainer);
+                	contentPanel.append(promoLayerList[i]);
                 }
             }
-            if (added) {
-                contentPanel.append(promotion.text);
-                contentPanel.append(promoLayerList);
+        }
+    },
+    /**
+     * @method _getActualPromotionLayers
+     * Checks given layer list and returns any layer that is found on the system but not yet selected.
+     * The returned list contains the list that we should promote.
+     * @param {String[]} list - list of layer ids that we want to promote
+     * @return {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]} filtered list of promoted layers
+     * @private
+     */
+    _getActualPromotionLayers : function(list) {
+        var sandbox = this.instance.getSandbox();
+        var layersToPromote = [];
+        for (var j = 0; j < list.length; ++j) {
+            if (!sandbox.isLayerAlreadySelected(list[j])) {
+            	var layer = sandbox.findMapLayerFromAllAvailable(list[j]);
+	            // promo layer found in system
+                if (layer) {
+                	layersToPromote.push(layer);
+                }
             }
         }
+        return layersToPromote;
     },
     /**
      * @method handleLayerSelectionChanged
@@ -467,19 +489,21 @@ function(instance, localization) {
                 
         var buttonCont = this.templateButtonsDiv.clone();
         
-        var saveBtn = jQuery('<input type="button" name="save" />');
-        saveBtn.val(this.loc.buttons.save);
-        saveBtn.bind('click', function() {
-            me._gatherSelections();
-        });
-        var cancelBtn = jQuery('<input type="button" name="cancel" />');
-        cancelBtn.val(this.loc.buttons.cancel);
-        cancelBtn.bind('click', function() {
+        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        cancelBtn.setTitle(this.loc.buttons.cancel);
+        cancelBtn.setHandler(function() {
         	me.instance.setPublishMode(false);
         });
-
-        buttonCont.append(cancelBtn);
-        buttonCont.append(saveBtn);
+		cancelBtn.insertTo(buttonCont);
+		
+        var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        saveBtn.setTitle(this.loc.buttons.save);
+        saveBtn.addClass('primary');
+        saveBtn.setHandler(function() {
+            me._gatherSelections();
+        });
+		saveBtn.insertTo(buttonCont);
+		
         return buttonCont;
     },
     
