@@ -252,6 +252,7 @@ function() {
     	//  me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
 		if (blnEnabled == true) {
     		map.addClass('mapPublishMode');
+            me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
     		    
             // proceed with publisher view
             this.publisher = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.BasicPublisher', 

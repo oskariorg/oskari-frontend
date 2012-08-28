@@ -399,6 +399,13 @@ Oskari.clazz
 	    "updateExtension" : function(extension, request) {
 	      var me = this;
 	      var extensions = me.extensions;
+	      if(!extension) {
+	      	// if extension not spesified, do it for all
+	      	for(var i = 0; i < extensions.length; ++i) {
+	      		this.updateExtension(extensions[i].extension, request);
+	      	}
+	      	return;
+	      }
 	      var extensionsByName = this.extensionsByName;
 	      var extensionInfo = extensionsByName[extension.getName()];
 	      var extensionState = extensionInfo.state;
