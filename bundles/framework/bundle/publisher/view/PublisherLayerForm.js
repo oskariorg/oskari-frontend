@@ -87,6 +87,8 @@ function(localization, instance) {
     getLayersList : function() {
         var layers = [];
         var selectedLayers = this.instance.sandbox.findAllSelectedMapLayers();
+        return selectedLayers;
+        /*
         for (var i = 0; i < selectedLayers.length; ++i) {
             var layer = {
                 id : selectedLayers[i].getId(),
@@ -96,6 +98,7 @@ function(localization, instance) {
             layers.push(layer);
         }
         return layers;
+        */
     },
     /**
      * @method _populateMapLayerPanel
@@ -138,9 +141,12 @@ function(localization, instance) {
                 var isChecked = checkbox.is(':checked');
                 layer.selected = isChecked;
                 if (isChecked) {
-                    me.defaultBaseLayer = layer.id;
-                } else if (me.defaultBaseLayer == layer.id) {
-                    me.defaultBaseLayer = null;
+                	me.plugin.addBaseLayer(layer);
+                    //me.defaultBaseLayer = layer.id;
+                } else {
+                	//  if (me.defaultBaseLayer == layer.id) 
+                    //me.defaultBaseLayer = null;
+                	me.plugin.removeBaseLayer(layer);
                 }
             };
         };
@@ -149,11 +155,11 @@ function(localization, instance) {
         	
             var layer = layers[i];
             var layerContainer = this.templateTool.clone();
-            layerContainer.attr('data-id', layer.id);
-            layerContainer.find('span').append(layer.name);
+            layerContainer.attr('data-id', layer.getId());
+            layerContainer.find('span').append(layer.getName());
             var input = layerContainer.find('input');
             
-            if (this.defaultBaseLayer && this.defaultBaseLayer == layer.id) {
+            if (this.defaultBaseLayer && this.defaultBaseLayer == layer.getId()) {
                 input.attr('checked', 'checked');
                 layer.selected = true;
             }

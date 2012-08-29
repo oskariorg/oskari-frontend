@@ -18,6 +18,7 @@ function() {
 	this.plugins = {};
 	this.localization = null;
 	this.publisher = null;
+	this.disabledLayers = null;
 }, {
 	/**
 	 * @static
@@ -242,16 +243,20 @@ function() {
 	 * @method setPublishMode
 	 * Transform the map view to publisher mode if parameter is true
 	 * @param {Boolean} blnEnabled
+	 * @param {Layer[]} deniedLayers layers that the user can't publish
 	 */
-	setPublishMode : function(blnEnabled) {
+	setPublishMode : function(blnEnabled, deniedLayers) {
 		var me = this;
     	var map = jQuery('#contentMap');
     	var tools = jQuery('#maptools');
     	
-    	// TODO: close all flyouts/popups/gfi?
-    	//  me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
 		if (blnEnabled == true) {
+			this.disabledLayers = deniedLayers;
+			// remove denied
+    		this._removeLayers();
+			
     		map.addClass('mapPublishMode');
+    		// close all flyouts - TODO: how about popups/gfi?
             me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
     		    
             // proceed with publisher view
@@ -262,12 +267,44 @@ function() {
     	}
     	else {
     		map.removeClass('mapPublishMode');
-    		// me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
+    		this._addLayers();
     		if(this.publisher) {
             	this.publisher.setEnabled(false);
     			this.publisher.destroy();
     		}
     	}
+	},
+	/**
+	 * @method _addLayers
+	 * Adds temporarily removed layers to map
+	 */
+	_addLayers : function() {
+		var me = this;
+		var sandbox = this.sandbox;
+        var addRequestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
+		if(this.disabledLayers) {
+			for(var i=0; i < this.disabledLayers.length; ++i) {
+				// remove
+				var layer = this.disabledLayers[i];
+            	sandbox.request(me, addRequestBuilder(layer.getId(), true));
+			}
+		}
+	},
+	/**
+	 * @method _removeLayers
+	 * Removes temporarily layers from map that the user cant publish
+	 */
+	_removeLayers : function() {
+		var me = this;
+		var sandbox = this.sandbox;
+        var removeRequestBuilder = sandbox.getRequestBuilder('RemoveMapLayerRequest');
+		if(this.disabledLayers) {
+			for(var i=0; i < this.disabledLayers.length; ++i) {
+				// remove
+				var layer = this.disabledLayers[i];
+            	sandbox.request(me, removeRequestBuilder(layer.getId()));
+			}
+		}
 	}
 }, {
 	/**
