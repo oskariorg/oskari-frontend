@@ -436,7 +436,7 @@ Oskari.clazz
                         (datum.content && datum.content.parsed)) {
                         html = '<br/><table>';
                         var even = false;
-                        var jsonData = datum.content;
+                        var jsonData = datum.content.parsed;
                         for (attr in jsonData) {
                             var value = jsonData[attr];
                             if (value == null) {
