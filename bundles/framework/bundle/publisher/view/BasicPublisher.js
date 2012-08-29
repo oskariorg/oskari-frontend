@@ -264,19 +264,6 @@ function(instance, localization) {
         return panel;
     },
     /**
-     * @method handleLayerSelectionChanged
-     * Updates the maplayer panel with current maplayer selections
-     */
-    handleLayerSelectionChanged : function() {
-    	// TODO: check if we need this anymore
-    	/*
-        this.setupLayersList();
-        var contentPanel = this.maplayerPanel.getContainer();
-        contentPanel.empty();
-        this._populateMapLayerPanel();
-        */
-    },
-    /**
      * @method handleMapMoved
      * Updates the coordinate display to show current map center location
      */

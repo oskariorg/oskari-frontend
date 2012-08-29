@@ -40,7 +40,7 @@ function(instance, localization) {
 		continueButton.addClass('primary');
 		continueButton.setTitle(this.loc.buttons['continue']);
         continueButton.setHandler(function() {
-        	me.instance.setPublishMode(true);
+        	me.instance.setPublishMode(true, me.getLayersWithoutPublishRights());
         });
 		this.buttons['continue'] = continueButton;
 		
@@ -70,7 +70,7 @@ function(instance, localization) {
         var selectedLayers = this.instance.sandbox.findAllSelectedMapLayers();
         for (var i = 0; i < selectedLayers.length; ++i) {
         	var layer = selectedLayers[i];
-        	if(layer.getPermission('publish') == 'no_publication_permission') {
+        	if(!this._hasPublishRight(layer)) {
         		deniedLayers.push(layer);
         	}
         	else {
@@ -121,5 +121,19 @@ function(instance, localization) {
 	},
 	handleLayerSelectionChanged : function() {
 		this.renderLayerLists();
+	},
+	_hasPublishRight : function(layer) {
+		return !(layer.getPermission('publish') == 'no_publication_permission');
+	},
+	getLayersWithoutPublishRights : function() {
+        var deniedLayers = [];
+        var selectedLayers = this.instance.sandbox.findAllSelectedMapLayers();
+        for (var i = 0; i < selectedLayers.length; ++i) {
+        	var layer = selectedLayers[i];
+        	if(!this._hasPublishRight(layer)) {
+        		deniedLayers.push(layer);
+        	}
+        }
+        return deniedLayers;
 	}
 });
