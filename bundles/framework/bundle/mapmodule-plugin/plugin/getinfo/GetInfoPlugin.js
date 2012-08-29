@@ -424,15 +424,19 @@ Oskari.clazz
                         return null;
                     }
                     var html = '';
-                    if (datum.presentationType == 'TEXT') {
-                        html = '<div style="overflow:auto">' + 
-                            datum.content + '</div>';
-                    } else if (typeof datum.content.html == 'function') {
-                        html = datum.content.html();
-                    } else {
+                    var contentType = (typeof datum.content);
+                    var hasHtml = false;
+                    if (contentType == 'string') {
+                        hasHtml = (datum.content.indexOf('<html>') >= 0);
+                        hasHtml = hasHtml ||
+                            (datum.content.indexOf('<HTML>') >= 0);
+                    }
+
+                    if (datum.presentationType == 'JSON' ||
+                        (datum.content && datum.content.parsed)) {
                         html = '<br/><table>';
                         var even = false;
-                        var jsonData = datum.content;
+                        var jsonData = datum.content.parsed;
                         for (attr in jsonData) {
                             var value = jsonData[attr];
                             if (value == null) {
@@ -457,7 +461,12 @@ Oskari.clazz
                                 attr + '</td><td style="padding: 2px">' + 
                                 value + '</td></tr>';
                         }
-                        html = html + '</table>';
+                        html = html + '</table>';        
+                
+//                  } else if ((datum.presentationType == 'TEXT') || hasHtml) {
+                    } else {
+                        html = '<div style="overflow:auto">' + 
+                            datum.content + '</div>';
                     }
                     return html;
                 },
