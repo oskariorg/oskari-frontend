@@ -203,7 +203,7 @@ function(instance, localization) {
                     }
                 },
                 success : function(response) {
-			    	dialog.show(this.loc['popup'].title, this.loc['save'].success);
+			    	dialog.show(me.loc['popup'].title, me.loc['save'].success);
 			    	dialog.fadeout();
                     me._refreshViewsList();
                 },
