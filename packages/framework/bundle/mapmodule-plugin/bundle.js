@@ -132,11 +132,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
         },
         
         /**
-         * MapLayer plugin
+         * MapLayer selection plugin
          */
         {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/layers/LayerSelectionPlugin.js"
+        },
+        {
+            "type" : "text/css",
+            "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/layers/css/layersselection.css"
         },
 		/**
 		 * Layers plugin

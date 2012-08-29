@@ -14,6 +14,7 @@ function() {
     this.pluginName = null;
     this._sandbox = null;
     this._map = null;
+    this.element = undefined;
 }, {
     /** @static @property __name module name */
     __name : 'LayerSelectionPlugin',
@@ -84,6 +85,8 @@ function() {
      * 			reference to application sandbox
      */
     init : function(sandbox) {
+        this.template = jQuery("<div class='layerSelectionPlugin'>" +
+            "</div>");
     },
     /**
      * @method startPlugin
@@ -102,6 +105,12 @@ function() {
             sandbox.registerForEventByName(this, p);
         }
 
+        // get div where the map is rendered from openlayers
+        var parentContainer = jQuery(this._map.div);
+        if(!this.element) {
+            this.element = this.template.clone();
+        }		
+        parentContainer.append(this.element);
     },
     /**
      * @method stopPlugin
@@ -113,15 +122,18 @@ function() {
      * 			reference to application sandbox
      */
     stopPlugin : function(sandbox) {
-
+        
         for(p in this.eventHandlers) {
             sandbox.unregisterFromEventByName(this, p);
         }
 
         sandbox.unregister(this);
-
-        this._map = null;
-        this._sandbox = null;
+        // remove ui
+        
+        if(this.element) {
+	        this.element.remove();
+	        this.element = undefined;
+        }
     },
     /**
      * @method start
