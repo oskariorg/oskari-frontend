@@ -433,7 +433,8 @@ Oskari.clazz
                         var jsonData = datum.content;
                         for (attr in jsonData) {
                             var value = jsonData[attr];
-                            if (value.startsWith('http://')) {
+                            // if (value.startsWith('http://')) {
+                            if (value.indexOf('http://') == 0) {
                                 value = '<a href="' + value + 
                                     '" target="_blank">' + value + 
                                     '</a>';
