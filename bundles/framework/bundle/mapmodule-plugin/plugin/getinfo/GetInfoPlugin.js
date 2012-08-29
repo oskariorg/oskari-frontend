@@ -427,6 +427,8 @@ Oskari.clazz
                     if (datum.presentationType == 'TEXT') {
                         html = '<div style="overflow:auto">' + 
                             datum.content + '</div>';
+                    } else if (typeof datum.content.html == 'function') {
+                        html = datum.content.html();
                     } else {
                         html = '<br/><table>';
                         var even = false;
