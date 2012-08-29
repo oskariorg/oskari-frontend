@@ -424,11 +424,16 @@ Oskari.clazz
                         return null;
                     }
                     var html = '';
-                    if (datum.presentationType == 'TEXT') {
+                    var contentType = (typeof datum.content);
+                    var hasHtml = false;
+                    if (contentType == 'string') {
+                        hasHtml = (datum.content.indexOf('<html>') >= 0);
+                        hasHtml = hasHtml ||
+                            (datum.content.indexOf('<HTML>') >= 0);
+                    }
+                    if ((datum.presentationType == 'TEXT') || hasHtml) {
                         html = '<div style="overflow:auto">' + 
                             datum.content + '</div>';
-                    } else if (typeof datum.content.html == 'function') {
-                        html = datum.content.html();
                     } else {
                         html = '<br/><table>';
                         var even = false;
