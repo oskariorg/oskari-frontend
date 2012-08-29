@@ -504,6 +504,7 @@ function(instance, localization) {
                 this.normalMapPlugins.push(plugin);
             }
         }
+        this.maplayerPanel.start();
 
         this._setSelectedSize();
 
@@ -535,6 +536,7 @@ function(instance, localization) {
                 delete this.tools[i].plugin;
             }
         }
+        this.maplayerPanel.stop();
 
         // return map size to normal
         var mapElement = jQuery(mapModule.getMap().div);

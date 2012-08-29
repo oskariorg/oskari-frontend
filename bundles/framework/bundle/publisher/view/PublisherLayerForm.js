@@ -12,6 +12,7 @@ function(localization, instance) {
 	this.loc = localization;
 	this.instance = instance;
 	this.panel = null;
+	this.plugin = null;
 	
     this.templateHelp = jQuery('<div class="help icon-info"></div>');
     this.templateTool = jQuery('<div class="tool"><input type="checkbox"/><span></span></div>');
@@ -36,10 +37,28 @@ function(localization, instance) {
 	        this.panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
 	        this.panel.setTitle(this.loc.layers.label);
 		}
+		
+		this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin');
 	},
 	getPanel : function() {
         this._populateMapLayerPanel();
 		return this.panel;
+	},
+	_enablePlugin : function(blnEnabled) {
+        if (blnEnabled) {
+            this.plugin.startPlugin(this.instance.sandbox);
+        } else {
+            this.plugin.stopPlugin(this.instance.sandbox);
+        }
+	},
+	start : function() {
+        var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
+        mapModule.registerPlugin(this.plugin);
+	},
+	stop : function() {
+		this._enablePlugin(false);
+        var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
+        mapModule.unregisterPlugin(this.plugin);
 	},
 	getValues : function() {
 		var values = {
@@ -105,6 +124,7 @@ function(localization, instance) {
             var checkbox = jQuery(this);
             var isChecked = checkbox.is(':checked');
             me.showLayerSelection = isChecked;
+    		me._enablePlugin(isChecked);
             contentPanel.empty();
             me._populateMapLayerPanel();
         });
