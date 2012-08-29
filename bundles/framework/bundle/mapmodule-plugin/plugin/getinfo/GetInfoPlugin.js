@@ -431,10 +431,9 @@ Oskari.clazz
                         hasHtml = hasHtml ||
                             (datum.content.indexOf('<HTML>') >= 0);
                     }
-                    if ((datum.presentationType == 'TEXT') || hasHtml) {
-                        html = '<div style="overflow:auto">' + 
-                            datum.content + '</div>';
-                    } else {
+
+                    if (datum.presentationType == 'JSON' ||
+                        (datum.content && datum.content.parsed)) {
                         html = '<br/><table>';
                         var even = false;
                         var jsonData = datum.content;
@@ -462,7 +461,12 @@ Oskari.clazz
                                 attr + '</td><td style="padding: 2px">' + 
                                 value + '</td></tr>';
                         }
-                        html = html + '</table>';
+                        html = html + '</table>';        
+                
+//                  } else if ((datum.presentationType == 'TEXT') || hasHtml) {
+                    } else {
+                        html = '<div style="overflow:auto">' + 
+                            datum.content + '</div>';
                     }
                     return html;
                 },
