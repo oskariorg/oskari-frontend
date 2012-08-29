@@ -34,6 +34,7 @@ function(localization) {
 	}
 }, {
 	init : function() {
+		var me = this;
 		for(var fkey in this.fields) {
 			var data = this.fields[fkey];
 			var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput', fkey);
@@ -52,7 +53,7 @@ function(localization) {
             if (value.startsWith('http') || value.startsWith('www')) {
             	errors.push({
         			"field": name, 
-        			"error" :  this.loc['error'].domainStart
+        			"error" :  me.loc['error'].domainStart
     			});
             	return errors;
            	}
