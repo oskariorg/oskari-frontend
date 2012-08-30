@@ -393,13 +393,12 @@ function() {
     },
     
     _createUI : function() {
-        // get div where the map is rendered from openlayers
         var me = this;
-        var parentContainer = jQuery(this._map.div);
-        var pluginLocation = parentContainer.find('.mapplugin.left');
         if(!this.element) {
             this.element = this.template.clone();
         }		
+		
+        
         var pluginLoc = this.getMapModule().getLocalization('plugin');
         var myLoc = pluginLoc[this.__name];
         var header = this.element.find('div.header'); 
@@ -418,7 +417,18 @@ function() {
         
         this.setupLayers();
         
-        parentContainer.append(this.element);
+    	// get div where the map is rendered from openlayers
+        var parentContainer = jQuery('div.mapplugins.left');
+        if(!parentContainer || parentContainer.length == 0) {
+        	// fallback to OL map div
+        	parentContainer = jQuery(this._map.div);
+        	content.addClass('mapplugin');
+        	parentContainer.append(this.element);
+        }
+        else {
+        	// write always as first plugin
+        	parentContainer.find('div').first().before(this.element);
+        }
     }
 }, {
     /**
