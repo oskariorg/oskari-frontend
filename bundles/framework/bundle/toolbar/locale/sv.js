@@ -4,10 +4,10 @@ Oskari.registerLocalization({
 	"value" : {
 		'buttons' : {
 	    	'link' : {
-	    		'tooltip' :'Linkki',
+	    		'tooltip' :'Länk',
 	    		'prefixUrl' :'www.paikkatietoikkkuna.fi/web/fi/kartta?',
-	    		'ok' : 'Åk',
-	    		'title': 'Urli'
+	    		'ok' : 'Ok',
+	    		'title': 'Länk till kartvyn'
 	    	},
 	    	'print' : {
 	    		'tooltip' :'Print'
