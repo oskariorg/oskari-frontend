@@ -113,7 +113,17 @@ function() {
         }
 		
 		this._createUI();
-		var me = this;
+
+		// reacting to conf
+		if(this.conf && this.conf.baseLayers) {
+			// TODO: currently not tested, TEST ON PUBLISHED MAP!
+			for(var i = 0; i < this.conf.baseLayers.length; ++i) {
+				this.addBaseLayer(this.conf.baseLayers[i]);
+			}
+			if(this.conf.defaultBase) {
+				this.selectBaseLayer(this.conf.defaultBase);
+			}
+		}
     },
     /**
      * @method stopPlugin
@@ -182,6 +192,12 @@ function() {
      * Does nothing, protocol method for mapmodule-plugin
      */
     preselectLayers : function(layers) {
+    },
+    selectBaseLayer : function(layerId) {
+        var baseLayersDiv = this.element.find('div.content div.baselayers');
+    	var input = div.find('input[value=' + layerId + ']');
+    	input.attr('checked', 'checked');
+		this._changedBaseLayer();
     },
     /**
      * @method addLayer
@@ -380,6 +396,7 @@ function() {
         // get div where the map is rendered from openlayers
         var me = this;
         var parentContainer = jQuery(this._map.div);
+        var pluginLocation = parentContainer.find('.mapplugin.left');
         if(!this.element) {
             this.element = this.template.clone();
         }		
