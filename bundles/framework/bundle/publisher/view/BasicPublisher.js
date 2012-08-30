@@ -396,6 +396,8 @@ function(instance, localization) {
         var layerValues = this.maplayerPanel.getValues();
         if (layerValues.layerSelection) {
             selections.plugins.push(layerValues.layerSelection);
+			selections.defaultBase = layerValues.defaultBase;
+			selections.baseLayers = layerValues.baseLayers;
         }
         
         var mapFullState = sandbox.getStatefulComponents()['mapfull'].getState();

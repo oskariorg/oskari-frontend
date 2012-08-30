@@ -4,18 +4,35 @@
   position: absolute;
   top:20px;
   right:20px;
-  height:20px;
-  width:200px;
-  padding: 5px;
+  max-width:200px;
   z-index:100000000 !important;
 }
 .layerSelectionPlugin div.header {
   background-color: #333333 !important;
   color: white !important;
+  padding: 8px;
 }
 .layerSelectionPlugin div.content {
   background-color: white;
 }
 .layerSelectionPlugin div.header div.header-icon {
 	float : right;
+    margin-left: 10px;
+}
+
+.layerSelectionPlugin div.content div.layers, .layerSelectionPlugin div.content div.baselayers {
+  padding: 10px;
+}
+
+.layerSelectionPlugin div.content div.layer {
+    margin: 5px 0;
+}
+
+.layerSelectionPlugin div.content div.layer input {
+    float : left;
+    margin-right : 10px;
+}
+.layerSelectionPlugin div.content div.baseLayerHeader {
+  background-color: #DDDDDD;
+  padding: 10px;
 }
