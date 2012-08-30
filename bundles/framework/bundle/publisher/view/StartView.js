@@ -123,7 +123,8 @@ function(instance, localization) {
 		this.renderLayerLists();
 	},
 	_hasPublishRight : function(layer) {
-		return !(layer.getPermission('publish') == 'no_publication_permission');
+		// permission might be "no_publication_permission" or nothing at all
+		return layer.getPermission('publish') == 'publication_permission_ok';
 	},
 	getLayersWithoutPublishRights : function() {
         var deniedLayers = [];

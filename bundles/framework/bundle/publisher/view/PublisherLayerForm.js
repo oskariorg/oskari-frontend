@@ -26,10 +26,6 @@ function(localization, instance) {
             preselect : 'base_35'
         }
     };
-    this.defaultBaseLayer = null;
-    if (this.config.layers.preselect) {
-        this.defaultBaseLayer = this.config.layers.preselect;
-    }
     this.showLayerSelection = false;
 }, {
 	init : function() {
@@ -67,8 +63,12 @@ function(localization, instance) {
 			values.layerSelection = {
 				id : 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
 				conf : {
-					defaultBaseLayer : this.defaultBaseLayer
 				}
+			}
+			var pluginValues = this.plugin.getBaseLayers();
+			if(pluginValues.defaultBase) {
+				values.layerSelection.conf.baseLayers = pluginValues.baseLayers;
+				values.layerSelection.conf.defaultBaseLayer = pluginValues.defaultBase; 
 			}
 		}
 		
@@ -142,10 +142,7 @@ function(localization, instance) {
                 layer.selected = isChecked;
                 if (isChecked) {
                 	me.plugin.addBaseLayer(layer);
-                    //me.defaultBaseLayer = layer.id;
                 } else {
-                	//  if (me.defaultBaseLayer == layer.id) 
-                    //me.defaultBaseLayer = null;
                 	me.plugin.removeBaseLayer(layer);
                 }
             };
@@ -159,9 +156,11 @@ function(localization, instance) {
             layerContainer.find('span').append(layer.getName());
             var input = layerContainer.find('input');
             
-            if (this.defaultBaseLayer && this.defaultBaseLayer == layer.getId()) {
+            if (this.config.layers.preselect && 
+            	this.config.layers.preselect == layer.getId()) {
                 input.attr('checked', 'checked');
                 layer.selected = true;
+                this.plugin.addBaseLayer(layer);
             }
             input.change(closureMagic(layer));
             contentPanel.append(layerContainer);
@@ -187,8 +186,10 @@ function(localization, instance) {
                 var isChecked = checkbox.is(':checked');
                 if (isChecked) {
                 	sandbox.request(me.instance, addRequestBuilder(layer.getId(), true));
+                	me.plugin.addLayer(layer);
                 } else {
                 	sandbox.request(me.instance, removeRequestBuilder(layer.getId()));
+                	me.plugin.removeLayer(layer);
                 }
             };
         };
