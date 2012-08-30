@@ -5,3 +5,14 @@
     position : absolute;
     z-index: 15000;
 }
+div.mapplugins.left {
+    position : absolute;
+    z-index: 15000;
+    top : 20px;
+    right : 20px;
+}
+div.mapplugins.left > div {
+	display: inline-block;
+    margin-left: 20px;
+    vertical-align: top;
+}

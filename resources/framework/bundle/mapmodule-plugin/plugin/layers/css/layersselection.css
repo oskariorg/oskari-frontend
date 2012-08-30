@@ -1,11 +1,15 @@
 
-.layerSelectionPlugin {
-  display:block;
+div.mapplugin.layerSelectionPlugin {
   position: absolute;
   top:20px;
   right:20px;
-  max-width:200px;
   z-index:100000000 !important;
+}
+.layerSelectionPlugin {
+	/*
+  display:block;
+  */
+  max-width:200px;
 }
 .layerSelectionPlugin div.header {
   background-color: #333333 !important;
