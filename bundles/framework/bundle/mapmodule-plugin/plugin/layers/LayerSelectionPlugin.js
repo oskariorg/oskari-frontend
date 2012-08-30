@@ -86,12 +86,13 @@ function() {
      */
     init : function(sandbox) {
         this.template = jQuery("<div class='layerSelectionPlugin'>" +
-        	'<div class="header"><div class="header-icon"></div></div>' +
+        	'<div class="header"><div class="header-icon icon-maximize"></div></div>' +
         	'<div class="content"><div class="layers"></div><div class="baselayers"></div></div>' +
             "</div>");
         this.templateLayer = jQuery("<div class='layer'><span></span></div>");
-        this.templateCheckbox = jQuery("<input type='checkbox' checked='checked' />");
+        this.templateCheckbox = jQuery("<input type='checkbox' />");
         this.templateRadiobutton = jQuery("<input type='radio' name='defaultBaselayer'/>");
+    	this.templateBaseLayerHeader = jQuery('<div class="baseLayerHeader"></div>');
         
     },
     /**
@@ -112,6 +113,17 @@ function() {
         }
 		
 		this._createUI();
+
+		// reacting to conf
+		if(this.conf && this.conf.baseLayers) {
+			// TODO: currently not tested, TEST ON PUBLISHED MAP!
+			for(var i = 0; i < this.conf.baseLayers.length; ++i) {
+				this.addBaseLayer(this.conf.baseLayers[i]);
+			}
+			if(this.conf.defaultBase) {
+				this.selectBaseLayer(this.conf.defaultBase);
+			}
+		}
     },
     /**
      * @method stopPlugin
@@ -181,6 +193,12 @@ function() {
      */
     preselectLayers : function(layers) {
     },
+    selectBaseLayer : function(layerId) {
+        var baseLayersDiv = this.element.find('div.content div.baselayers');
+    	var input = div.find('input[value=' + layerId + ']');
+    	input.attr('checked', 'checked');
+		this._changedBaseLayer();
+    },
     /**
      * @method addLayer
      */
@@ -194,21 +212,63 @@ function() {
     	
     	var input = this.templateCheckbox.clone();
     	input.attr('value', layer.getId());
-        /*input.change(function() {
-            var checkbox = jQuery(this);
-            var isChecked = checkbox.is(':checked');
-            // remove current
-            var div = me.layerRefs[layer.getId()];
-        	div.remove();
-            if (isChecked) {
-				me.addBaseLayer(layer);
-            } else {
-				me.removeBaseLayer(layer);
-            }
-        });*/
+    	if(layer.isVisible()) {
+    		input.attr('checked', 'checked');
+    	}
+    	this._bindCheckbox(input, layer);
+    	
         div.find('span').before(input);
         this.layerRefs[layer.getId()] = div;
         layersDiv.append(div);
+    },
+    /**
+     * @method removeLayer
+     */
+    _bindCheckbox : function(input, layer) {
+    	var me = this;
+
+        input.change(function() {
+            var checkbox = jQuery(this);
+            var isChecked = checkbox.is(':checked');
+            if (isChecked) {
+    			// send request to show map layer
+				me._setLayerVisible(layer, true);
+            } else {
+        		// send request to hide map layer
+				me._setLayerVisible(layer, false);
+            }
+        });
+    },
+    /**
+     * @method removeLayer
+     */
+    _setLayerVisible : function(layer, blnVisible) {
+    	var sandbox = this._sandbox;
+        var visibilityRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
+        var request = visibilityRequestBuilder(layer.getId(), blnVisible);
+        sandbox.request(this, request);
+        
+        // ensure that checkbox is in correct state
+        var div = this.layerRefs[layer.getId()];
+        var input = div.find('input');
+		if(blnVisible) {
+			if(!input.is(':checked')) {
+    			input.attr('checked', 'checked');
+			}
+		}
+		else {
+			if(input.is(':checked')) {
+    			input.removeAttr('checked');
+			}
+		}
+    },
+    /**
+     * @method removeLayer
+     */
+    removeLayer : function(layer) {
+        var div = this.layerRefs[layer.getId()];
+    	div.remove();
+    	delete this.layerRefs[layer.getId()];
     },
     /**
      * @method addBaseLayer
@@ -221,6 +281,12 @@ function() {
 		input.remove();
 		input = this.templateRadiobutton.clone();
     	input.attr('value', layer.getId());
+    	
+    	var me = this;
+    	input.bind('change', function(evt) {
+			me._changedBaseLayer();
+		});
+		
         div.find('span').before(input);
 		
         var baseLayersDiv = this.element.find('div.content div.baselayers');
@@ -228,10 +294,13 @@ function() {
         if(baseLayersDiv.find('div.layer').length == 0) {
 	        var pluginLoc = this.getMapModule().getLocalization('plugin');
 	        var myLoc = pluginLoc[this.__name];
-	    	baseLayersDiv.append(myLoc.chooseDefaultBaseLayer);
+	        var header = this.templateBaseLayerHeader.clone();
+	        header.append(myLoc.chooseDefaultBaseLayer);
+	    	baseLayersDiv.before(header);
 	    	input.attr('checked', 'checked');
         }
     	baseLayersDiv.append(div);
+		me._changedBaseLayer();
     },
     /**
      * @method removeBaseLayer
@@ -244,23 +313,41 @@ function() {
 		input.remove();
 		input = this.templateCheckbox.clone();
     	input.attr('value', layer.getId());
+    	this._bindCheckbox(input, layer);
         div.find('span').before(input);
         
+        // default back as visible when returning from baselayers
         var layersDiv = this.element.find('div.content div.layers');
     	layersDiv.append(div);
+		this._setLayerVisible(layer, true);
     	
     	// remove text if nothing to select 
         var baseLayersDiv = this.element.find('div.content div.baselayers');
         var baseLayers = baseLayersDiv.find('div.layer');
         if(baseLayers.length == 0) {
-	    	baseLayersDiv.empty();
+        	
+        	var baselayerHeader = this.element.find('div.content div.baseLayerHeader');
+        	baselayerHeader.remove();
         }
         else {
         	var checked = baseLayers.find('input:checked');
         	if(checked.length == 0) {
-        		// defeault to something
+        		// if the selected one was removed -> default to first
         		jQuery(baseLayers.find('input').get(0)).attr('checked', 'checked');
+        		// notify baselayer change
+				this._changedBaseLayer();
         	}
+        }
+    },
+    /**
+     * @method removeBaseLayer
+     */
+    _changedBaseLayer : function() {
+        var values = this.getBaseLayers();
+        for(var i = 0 ; i < values.baseLayers.length; ++i) {
+			var layerId = values.baseLayers[i];
+        	var layer = this._sandbox.findMapLayerFromSelectedMapLayers(layerId);
+    		this._setLayerVisible(layer, (values.defaultBase == layerId));
         }
     },
     /**
@@ -270,21 +357,6 @@ function() {
     	var me = this;
         delete this.layerRefs;
         this.layerRefs = {};
-        /*
-        var closureMagic = function(layer) {
-            return function() {
-                var checkbox = jQuery(this);
-                var isChecked = checkbox.is(':checked');
-                // remove current
-                var div = me.layerRefs[layer.getId()];
-            	div.remove();
-                if (isChecked) {
-					me.addBaseLayer(layer);
-                } else {
-					me.removeBaseLayer(layer);
-                }
-            };
-        };*/
         
         var layers = this._sandbox.findAllSelectedMapLayers();
         for(var i = 0; i < layers.length; ++i) {
@@ -292,19 +364,41 @@ function() {
         }
     },
     openSelection : function() {
+        var icon = this.element.find('div.header div.header-icon');
+        icon.removeClass('icon-maximize'); 
+        icon.addClass('icon-minimize'); 
         var content = this.element.find('div.content').show();
     },
-    closeSelection : function() {
+    closeSelection : function() { 
+        var icon = this.element.find('div.header div.header-icon');
+        icon.removeClass('icon-minimize');
+        icon.addClass('icon-maximize'); 
         var content = this.element.find('div.content').hide();
+    },
+    getBaseLayers : function() { 
+        var inputs = this.element.find('div.content div.baselayers div.layer input');
+    	var layers = [];
+    	var checkedLayer = null;
+    	for(var i=0; i < inputs.length; ++i) {
+    		var input = jQuery(inputs[i]);
+    		layers.push(input.val());
+    		if(input.is(':checked')) {
+    			checkedLayer = input.val();
+    		}
+    	}
+    	return {
+    		baseLayers : layers,
+    		defaultBase : checkedLayer
+    	}
     },
     
     _createUI : function() {
-        // get div where the map is rendered from openlayers
         var me = this;
-        var parentContainer = jQuery(this._map.div);
         if(!this.element) {
             this.element = this.template.clone();
         }		
+		
+        
         var pluginLoc = this.getMapModule().getLocalization('plugin');
         var myLoc = pluginLoc[this.__name];
         var header = this.element.find('div.header'); 
@@ -323,7 +417,18 @@ function() {
         
         this.setupLayers();
         
-        parentContainer.append(this.element);
+    	// get div where the map is rendered from openlayers
+        var parentContainer = jQuery('div.mapplugins.left');
+        if(!parentContainer || parentContainer.length == 0) {
+        	// fallback to OL map div
+        	parentContainer = jQuery(this._map.div);
+        	content.addClass('mapplugin');
+        	parentContainer.append(this.element);
+        }
+        else {
+        	// write always as first plugin
+        	parentContainer.find('div').first().before(this.element);
+        }
     }
 }, {
     /**

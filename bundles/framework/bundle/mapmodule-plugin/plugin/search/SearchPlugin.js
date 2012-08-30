@@ -67,7 +67,7 @@ function(config) {
         var pluginLoc = this.getMapModule().getLocalization('plugin');
         this.loc = pluginLoc[this.__name];
         
-        this.template = jQuery('<div class="mapplugin search-div">' +
+        this.template = jQuery('<div class="search-div">' +
             '<div class="search-textarea-and-button">' +
                 '<input placeholder="' + this.loc['placeholder'] + '" type="text" />' +
                 '<input type="button" value="' + this.loc['search'] + '" name="search" />' +
@@ -197,11 +197,17 @@ function(config) {
     _createUI : function() {
     	var sandbox = this._sandbox;
     	var me = this;
-    	// get div where the map is rendered from openlayers
-    	var parentContainer = jQuery(this._map.div);
     	
 		var content = this.template.clone();
 		this.container = content;
+		
+    	// get div where the map is rendered from openlayers
+        var parentContainer = jQuery('div.mapplugins.left');
+        if(!parentContainer || parentContainer.length == 0) {
+        	// fallback to OL map div
+        	parentContainer = jQuery(this._map.div);
+        	content.addClass('mapplugin');
+        }
         
         // bind events
         var me = this;
@@ -331,7 +337,7 @@ function(config) {
 			var lat = msg.locations[0].lat;
 			var zoom = msg.locations[0].zoomLevel;
 			
-        	this._sandbox.request(this.getName(), this._sandbox.getRequestBuilder('MapMoveRequest')(lon, lat, zoom, true));
+        	this._sandbox.request(this.getName(), this._sandbox.getRequestBuilder('MapMoveRequest')(lon, lat, zoom, false));
 		} else {
 		    
             // many results, show all
@@ -390,7 +396,7 @@ function(config) {
 			var lon = values[0];
 			var lat = values[1];
 			var zoom = values[2];
-        	this._sandbox.request(this.getName(), this._sandbox.getRequestBuilder('MapMoveRequest')(lon, lat, zoom, true));
+        	this._sandbox.request(this.getName(), this._sandbox.getRequestBuilder('MapMoveRequest')(lon, lat, zoom, false));
 	},
 	
     /**
