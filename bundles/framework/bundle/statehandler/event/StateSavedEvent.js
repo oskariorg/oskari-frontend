@@ -46,7 +46,7 @@ Oskari.clazz.define(
      * @param {Boolean} true if state couldn't be saved 
      */
     setError : function(blnError) {
-        return this._error = (blnError == true);
+        this._error = (blnError == true);
     }
 }, {
     /**
