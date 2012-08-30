@@ -22,6 +22,10 @@ Oskari.registerLocalization({
 		    "LogoPlugin" : {
 		        "terms" : "Käyttöehdot"
 		    },
+		    "LayerSelectionPlugin" : {
+		        "title" : "Karttatasot",
+		        "chooseDefaultBaseLayer" : "Valitse karttapohja"
+		    },
             "SearchPlugin" : {
                 "placeholder" : "Hae paikkoja/osoitteita", // rightpanel_search_find_places_textbox_value
                 "search" : "Hae", // rightpanel_search_find_places_button_value

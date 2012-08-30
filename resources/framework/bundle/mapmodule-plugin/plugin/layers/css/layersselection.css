@@ -1,0 +1,21 @@
+
+.layerSelectionPlugin {
+  display:block;
+  position: absolute;
+  top:20px;
+  right:20px;
+  height:20px;
+  width:200px;
+  padding: 5px;
+  z-index:100000000 !important;
+}
+.layerSelectionPlugin div.header {
+  background-color: #333333 !important;
+  color: white !important;
+}
+.layerSelectionPlugin div.content {
+  background-color: white;
+}
+.layerSelectionPlugin div.header div.header-icon {
+	float : right;
+}

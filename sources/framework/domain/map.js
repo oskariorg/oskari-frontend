@@ -83,8 +83,8 @@ function() {
      *            zoom map zoomlevel
      */
     moveTo : function(x, y, zoom) {
-        this._centerX = x;
-        this._centerY = y;
+        this._centerX = Math.floor(x);
+        this._centerY = Math.floor(y);
         this._zoom = zoom;
     },
     /**

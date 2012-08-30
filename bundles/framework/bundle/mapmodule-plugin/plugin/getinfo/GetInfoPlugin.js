@@ -424,16 +424,30 @@ Oskari.clazz
                         return null;
                     }
                     var html = '';
-                    if (datum.presentationType == 'TEXT') {
-                        html = '<div style="overflow:auto">' + 
-                            datum.content + '</div>';
-                    } else {
+                    var contentType = (typeof datum.content);
+                    var hasHtml = false;
+                    if (contentType == 'string') {
+                        hasHtml = (datum.content.indexOf('<html>') >= 0);
+                        hasHtml = hasHtml ||
+                            (datum.content.indexOf('<HTML>') >= 0);
+                    }
+
+                    if (datum.presentationType == 'JSON' ||
+                        (datum.content && datum.content.parsed)) {
                         html = '<br/><table>';
                         var even = false;
-                        var jsonData = datum.content;
+                        var jsonData = datum.content.parsed;
                         for (attr in jsonData) {
                             var value = jsonData[attr];
-                            if (value.startsWith('http://')) {
+                            if (value == null) {
+                                continue;
+                            }
+                            if ((value.startsWith &&
+                                 value.startsWith('http://')) ||
+                                (value.indexOf &&
+                                 value.indexOf('http://') == 0)) {
+                            // if (value.startsWith('http://')) {
+                            // if (value.indexOf('http://') == 0) {
                                 value = '<a href="' + value + 
                                     '" target="_blank">' + value + 
                                     '</a>';
@@ -447,7 +461,12 @@ Oskari.clazz
                                 attr + '</td><td style="padding: 2px">' + 
                                 value + '</td></tr>';
                         }
-                        html = html + '</table>';
+                        html = html + '</table>';        
+                
+//                  } else if ((datum.presentationType == 'TEXT') || hasHtml) {
+                    } else {
+                        html = '<div style="overflow:auto">' + 
+                            datum.content + '</div>';
                     }
                     return html;
                 },
@@ -545,10 +564,11 @@ Oskari.clazz
 			                title = pnimi['pnr:kirjoitusasu'];
 		                    }
                                     // TODO: Generate pretty html
-                                    var pretty = JSON.stringify(child,
-                                                                null,
-                                                                4);
-                                    pretty = '<pre>' + pretty + '</pre>';
+                                    // var pretty = JSON.stringify(child,
+                                    //                             null,
+                                    //                             4);
+                                    // pretty = '<pre>' + pretty + '</pre>';
+                                    var pretty = this._json2html(child);
                                     coll.push(pretty);
                                 }
                             }
@@ -560,10 +580,67 @@ Oskari.clazz
                         }
                     }
                     return { fragments : coll, 
-                             title : title,
+                             title : title
                            };
                 },
             
+                _json2html : function(node) {
+                    var me = this;
+                    if (node == null) {
+                        return '';
+                    }
+                    var even = true;
+                    var html = '<table>';
+                    for (var key in node) {
+                        var value = node[key];
+                        var vType = (typeof value).toLowerCase();
+                        var vPres = ''
+                        switch (vType) {
+                        case 'string':
+                            if (value.startsWith('http://')) {
+                                valpres = 
+                                    '<a href="' + value + 
+                                    '" target="_blank">' + value + 
+                                    '</a>';
+                            } else {                                
+                                valpres = value;
+                            }
+                            break;
+                        case 'undefined':
+                            valpres = 'n/a';
+                            break;
+                        case 'boolean':
+                            valpres = (value ? 'true' : 'false');
+                            break;
+                        case 'number':
+                            valpres = '' + number + '';
+                            break;
+                        case 'function':
+                            valpres = '?';
+                            break;
+                        case 'object':
+                            valpres = this._json2html(value);
+                            break;
+                        default:
+                            valpres = '';
+                        }
+                        even = !even;
+                        html += '<tr style="padding: 5px;';
+                        if (even) {
+                            html += '">';
+                        } else {
+                            html += ' background-color: #EEEEEE;">';
+                        }
+                        html += '' +
+                            '<td style="padding: 2px;">' + key + '</td>';
+                        html += '' + 
+                            '<td style="padding: 2px;">' + valpres + '</td>';
+                        html += '</tr>';
+                    }
+                    html += '</table>';
+                    return html;
+                },
+
                 /**
                  * Shows multiple features in an infobox
                  * 

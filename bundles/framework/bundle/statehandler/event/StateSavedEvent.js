@@ -39,7 +39,7 @@ Oskari.clazz.define(
      * @return {Boolean} true if state couldn't be saved 
      */
     isError : function() {
-        return this._state;
+        return this._error;
     },
     /**
      * @method setError

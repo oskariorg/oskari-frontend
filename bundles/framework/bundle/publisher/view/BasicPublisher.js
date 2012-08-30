@@ -27,8 +27,6 @@ function(instance, localization) {
     this.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
     this.templateCustomSize = jQuery('<div class="customsize">' + '<input type="text" disabled="true" name="width" ' + 'placeholder="' + localization.sizes.width + '"/> x ' + '<input type="text" disabled="true" ' + 'name="height" placeholder="' + localization.sizes.height + '"/></div>');
 
-    this.templateLayerRow = jQuery('<tr data-id="">' + '<td><input type="checkbox" /></td>' + '<td></td>' + '</tr>');
-    this.templateUseAsDefault = jQuery('<a href="JavaScript:void(0);">' + localization.layers.useAsDefaultLayer + '</a>');
     /**
      * @property tools
      */
@@ -55,7 +53,6 @@ function(instance, localization) {
         selected : true
     }];
 
-    this.showLayerSelection = false;
 
     this.sizeOptions = [{
         id : 'small',
@@ -81,23 +78,8 @@ function(instance, localization) {
     }];
 
     this.loc = localization;
-    this.config = {
-        layers : {
-            promote : [{
-                text : this.loc.layerselection.promote,
-                id : [24] // , 203
-            }],
-            preselect : 'base_35'
-        }
-    };
     this.accordion = null;
 
-    this.setupLayersList();
-
-    this.defaultBaseLayer = null;
-    if (this.config.layers.preselect) {
-        this.defaultBaseLayer = this.config.layers.preselect;
-    }
     this.maplayerPanel = null;
     this.mainPanel = null;
     this.normalMapPlugins = [];
@@ -116,16 +98,14 @@ function(instance, localization) {
 
         this.mainPanel = content;
         content.find('div.header h3').append(this.loc.title);
-        
-
-        this.handleMapMoved();
 
         container.append(content);
+        var contentDiv = content.find('div.content');
 
         var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
         this.accordion = accordion;
         
-        var form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.BasicPublisherForm',this.loc);
+        var form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLocationForm',this.loc);
         this.locationForm = form;
         form.init();
         var panel = form.getPanel();
@@ -135,12 +115,10 @@ function(instance, localization) {
         accordion.addPanel(this._createSizePanel());
         accordion.addPanel(this._createToolsPanel());
 
-        this.maplayerPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
-        this.maplayerPanel.setTitle(this.loc.layers.label);
-        this._populateMapLayerPanel();
+        this.maplayerPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLayerForm', this.loc, this.instance);
+        this.maplayerPanel.init();
 
-        accordion.addPanel(this.maplayerPanel);
-        var contentDiv = content.find('div.content');
+        accordion.addPanel(this.maplayerPanel.getPanel());
         accordion.insertTo(contentDiv);
 
         // buttons
@@ -286,123 +264,6 @@ function(instance, localization) {
         return panel;
     },
     /**
-     * @method _populateMapLayerPanel
-     * @private
-     * Populates the map layers panel in publisher
-     */
-    _populateMapLayerPanel : function() {
-
-        var me = this;
-        var contentPanel = this.maplayerPanel.getContainer();
-
-        // tooltip
-        var tooltipCont = this.templateHelp.clone();
-        tooltipCont.attr('title', this.loc.layerselection.tooltip);
-        contentPanel.append(tooltipCont);
-
-        // tool selection
-        var toolContainer = this.templateTool.clone();
-        toolContainer.find('span').append(this.loc.layerselection.label);
-        if (this.showLayerSelection) {
-            toolContainer.find('input').attr('checked', 'checked');
-        }
-        contentPanel.append(toolContainer);
-        contentPanel.append(this.loc.layerselection.info);
-        toolContainer.find('input').change(function() {
-            var checkbox = jQuery(this);
-            var isChecked = checkbox.is(':checked');
-            me.showLayerSelection = isChecked;
-            contentPanel.empty();
-            me._populateMapLayerPanel();
-        });
-        if (!this.showLayerSelection) {
-            return;
-        }
-        // if layer selection = ON -> show content
-        var layerTable = jQuery('<table></table>');
-        var closureMagic = function(row, layer) {
-            return function() {
-                var checkbox = jQuery(this);
-                var isChecked = checkbox.is(':checked');
-                var cells = row.find('td');
-                layer.selected = isChecked;
-                if (isChecked) {
-                    me.defaultBaseLayer = layer.id;
-                } else if (me.defaultBaseLayer == layer.id) {
-                    me.defaultBaseLayer = null;
-                }
-            };
-        };
-        for (var i = 0; i < this.layers.length; ++i) {
-            var layer = this.layers[i];
-            var row = this.templateLayerRow.clone();
-            row.attr('data-id', layer.id);
-            var cells = row.find('td');
-            if (this.defaultBaseLayer && this.defaultBaseLayer == layer.id) {
-                jQuery(cells[0]).find('input').attr('checked', 'checked');
-                layer.selected = true;
-            }
-            jQuery(cells[0]).find('input').change(closureMagic(row, layer));
-            jQuery(cells[1]).append(layer.name);
-            layerTable.append(row);
-        }
-        contentPanel.append(layerTable);
-
-        if (this.config.layers.promote && this.config.layers.promote.length > 0) {
-            this._populateLayerPromotion(contentPanel);
-        }
-    },
-    /**
-     * @method _populateLayerPromotion
-     * @private
-     * Populates the layer promotion part of the map layers panel in publisher
-     */
-    _populateLayerPromotion : function(contentPanel) {
-        var me = this;
-        var sandbox = this.instance.getSandbox();
-        var addRequestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
-        var closureMagic = function(layer) {
-            return function() {
-                sandbox.request(me.instance.getName(), addRequestBuilder(layer.getId(), true));
-            };
-        };
-        // TODO: check that layer isn't added yet
-        for (var i = 0; i < this.config.layers.promote.length; ++i) {
-            var promotion = this.config.layers.promote[i];
-            var promoLayerList = jQuery('<ul></ul>');
-            var added = false;
-            for (var j = 0; j < promotion.id.length; ++j) {
-
-                if (!sandbox.isLayerAlreadySelected(promotion.id[j])) {
-                    var item = jQuery('<li><a href="JavaScript:void(0);"></a></li>');
-                    var layer = sandbox.findMapLayerFromAllAvailable(promotion.id[j]);
-                    // promo layer found in system
-                    if (layer) {
-                        var link = item.find('a');
-                        link.append(layer.getName());
-                        link.bind('click', closureMagic(layer));
-                        promoLayerList.append(item);
-                        added = true;
-                    }
-                }
-            }
-            if (added) {
-                contentPanel.append(promotion.text);
-                contentPanel.append(promoLayerList);
-            }
-        }
-    },
-    /**
-     * @method handleLayerSelectionChanged
-     * Updates the maplayer panel with current maplayer selections
-     */
-    handleLayerSelectionChanged : function() {
-        this.setupLayersList();
-        var contentPanel = this.maplayerPanel.getContainer();
-        contentPanel.empty();
-        this._populateMapLayerPanel();
-    },
-    /**
      * @method handleMapMoved
      * Updates the coordinate display to show current map center location
      */
@@ -413,25 +274,6 @@ function(instance, localization) {
         var lat = mapVO.getY();
         var zoom = mapVO.getZoom();
         //this.mainPanel.find('div.locationdata').html('N: ' + lat + ' E: ' + lon + ' ' + this.loc.zoomlevel + ': ' + zoom);
-    },
-    /**
-     * @method setupLayersList
-     * Handles the published map layer selection
-     * FIXME: this is completely under construction, rights aren't managed in any
-     * way etc
-     */
-    setupLayersList : function() {
-        this.layers = [];
-        var selectedLayers = this.instance.sandbox.findAllSelectedMapLayers();
-        for (var i = 0; i < selectedLayers.length; ++i) {
-            // TODO: if rights then
-            var layer = {
-                id : selectedLayers[i].getId(),
-                name : selectedLayers[i].getName(),
-                opacity : selectedLayers[i].getOpacity()
-            };
-            this.layers.push(layer);
-        }
     },
     /**
      * @method _activatePreviewPlugin
@@ -467,19 +309,21 @@ function(instance, localization) {
                 
         var buttonCont = this.templateButtonsDiv.clone();
         
-        var saveBtn = jQuery('<input type="button" name="save" />');
-        saveBtn.val(this.loc.buttons.save);
-        saveBtn.bind('click', function() {
-            me._gatherSelections();
-        });
-        var cancelBtn = jQuery('<input type="button" name="cancel" />');
-        cancelBtn.val(this.loc.buttons.cancel);
-        cancelBtn.bind('click', function() {
+        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        cancelBtn.setTitle(this.loc.buttons.cancel);
+        cancelBtn.setHandler(function() {
         	me.instance.setPublishMode(false);
         });
-
-        buttonCont.append(cancelBtn);
-        buttonCont.append(saveBtn);
+		cancelBtn.insertTo(buttonCont);
+		
+        var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        saveBtn.setTitle(this.loc.buttons.save);
+        saveBtn.addClass('primary');
+        saveBtn.setHandler(function() {
+            me._gatherSelections();
+        });
+		saveBtn.insertTo(buttonCont);
+		
         return buttonCont;
     },
     
@@ -505,17 +349,12 @@ function(instance, localization) {
         
         var errors = this.locationForm.validate();
         var values = this.locationForm.getValues();
-        var map = sandbox.getMap();
         var size = container.find('input[name=size]:checked').val();
         var selections = {
             domain : values.domain,
             name : values.name,
             language : values.language,
-            plugins : [],
-            layers : [],
-            north : Math.floor(map.getY()),
-            east : Math.floor(map.getX()),
-            zoom : map.getZoom()
+            plugins : []
         };
         for (var i = 0; i < this.tools.length; ++i) {
             if (this.tools[i].selected) {
@@ -552,18 +391,16 @@ function(instance, localization) {
                 }
             }
         }
-        // jos karttatasot rastittu
-        if (this.showLayerSelection) {
-            // TODO: layerselection plugin config
+        
+        // if maplayer plugin is enabled
+        var layerValues = this.maplayerPanel.getValues();
+        if (layerValues.layerSelection) {
+            selections.plugins.push(layerValues.layerSelection);
         }
-        for (var i = 0; i < this.layers.length; ++i) {
-            if (this.layers[i].selected || (this.layers[i].id == this.defaultBaseLayer)) {
-                selections.layers.push({
-                    id : this.layers[i].id,
-                    opacity : this.layers[i].opacity
-                });
-            }
-        }
+        
+        var mapFullState = sandbox.getStatefulComponents()['mapfull'].getState();
+        selections.mapstate = mapFullState;
+        
         // saves possible open gfi popups
         if (sandbox.getStatefulComponents()['infobox']) {
             selections["infobox"] = sandbox.getStatefulComponents()['infobox'].getState();
@@ -654,6 +491,7 @@ function(instance, localization) {
                 this.normalMapPlugins.push(plugin);
             }
         }
+        this.maplayerPanel.start();
 
         this._setSelectedSize();
 
@@ -685,6 +523,7 @@ function(instance, localization) {
                 delete this.tools[i].plugin;
             }
         }
+        this.maplayerPanel.stop();
 
         // return map size to normal
         var mapElement = jQuery(mapModule.getMap().div);

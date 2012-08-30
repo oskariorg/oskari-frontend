@@ -46,6 +46,10 @@ div.divmanazerpopup div.actions {
     text-align: center;
 }
 
+div.divmanazerpopup div.actions input {
+    margin : 10px;
+}
+
 .divmanazerpopup.arrow:after, .divmanazerpopup.arrow:before {
 	border: solid transparent;
 	content: " ";

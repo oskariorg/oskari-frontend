@@ -74,6 +74,9 @@ function(name) {
     getValue : function() {
     	return this._field.find('input').val();
     },
+    setValue : function(value) {
+    	return this._field.find('input').attr('value', value);
+    },
     getName : function() {
     	return this._name;
     },

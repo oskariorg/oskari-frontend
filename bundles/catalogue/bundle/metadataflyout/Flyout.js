@@ -37,9 +37,9 @@ function(instance, locale, loader) {
 	this.titles = {};
 	this.tabs = {};
 	this.browseGraphic = null;
-	
+
 	/* @Alert for some notifications */
-	this.compileTemplates() ;
+	this.compileTemplates();
 	this.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
 
 	/**
@@ -69,8 +69,8 @@ function(instance, locale, loader) {
 	};
 
 }, {
-	compileTemplates: function() {
-		
+	compileTemplates : function() {
+
 	},
 	/**
 	 * @property template HTML templates for the User Interface
@@ -185,9 +185,7 @@ function(instance, locale, loader) {
 
 		this.alert.insertTo(this.container);
 
-
 		this.container.append(content);
-		
 
 	},
 	stopPlugin : function() {
@@ -250,64 +248,22 @@ function(instance, locale, loader) {
 	 * @method loadMetadataForState
 	 */
 	loadMetadataForState : function() {
-
 		var me = this;
 		var views = this.views;
 		var viewId = this.contentState.view;
-
 		var metadata = this.contentState.metadata;
+		var url = me.instance.getLoader().getURLForView(viewId, metadata.uuid, metadata.RS_Identifier_Code, metadata.RS_Identifier_CodeSpace);
 
-		me.instance.getLoader().loadMetadata(viewId, metadata.uuid, metadata.RS_Identifier_Code, metadata.RS_Identifier_CodeSpace, function(data) {
+		function handler(request) {
+			views[viewId].html(request.responseText);
+			views[viewId].css("display", "");
+		}
 
-			var context = views[viewId];
-			context.empty();
-			
-			if( me.instance.getLoader().dev) {
-				me.alert.setContent('Development Mode!','error');
-			}
-			
-			var embeddables = jQuery(data);
-			var rootEl = $(embeddables[0].documentElement);
-			window.junkster = embeddables;
-
-			/* HACK BEGIN */
-			/* Let's fix HREFs to click events */
-			var links = rootEl.find("a[href]");
-
-			jQuery.each(links, function(index, ahref) {
-
-				var el = jQuery(ahref);
-				var href = el.attr('href');
-				if(!href)
-					return;
-				if(!href[0] == '?')
-					return;
-
-				var splits = href.split("&");
-				var argMap = {};
-				jQuery.each(splits, function(index, part) {
-					var keyVal = part.split("=");
-					argMap[keyVal[0]] = keyVal[1];
-				});
-
-				el.attr('href', null);
-				el.click({
-					viewId : viewId,
-					uuid : argMap['uuid']
-				}, function(arg) {
-					var data = arg.data;
-					var uuid = data.uuid;
-
-					me.showMetadata(uuid);
-				});
-			});
-
-			context.append(rootEl);
-			
-			/* HACK END */
-			context.fadeIn();
-
+		var request = OpenLayers.Request.GET({
+			url : url,
+			callback : handler
 		});
+
 	},
 	/**
 	 * @method loadMetadataJSONForState
@@ -347,7 +303,7 @@ function(instance, locale, loader) {
 		 * Let's post Envelope to some layer
 		 */
 		if(extentEnvelope) {
-			this.instance.showExtentOnMap(this.contentState.metadata.uuid, extentEnvelope,metadataJson);
+			this.instance.showExtentOnMap(this.contentState.metadata.uuid, extentEnvelope, metadataJson);
 		}
 
 	},
@@ -361,16 +317,12 @@ function(instance, locale, loader) {
 	 * styled with bundled CSS.
 	 */
 	showMetadata : function(uuid, RS_Identifier_Code, RS_Identifier_CodeSpace) {
-
 		this.contentState.metadata.uuid = uuid;
 		this.contentState.metadata.RS_Identifier_Code = RS_Identifier_Code;
 		this.contentState.metadata.RS_Identifier_CodeSpace = RS_Identifier_CodeSpace;
-
 		this.instance.getSandbox().printDebug("showMetadata { uuid=" + uuid + ", view=" + this.contentState.view + "}");
-
 		this.loadMetadataJSONForState();
 		this.showMetadataView(this.contentState.view);
-
 	},
 	/**
 	 * @method scheduleShowMetadata

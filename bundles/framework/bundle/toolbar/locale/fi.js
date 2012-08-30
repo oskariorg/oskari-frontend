@@ -7,7 +7,7 @@ Oskari.registerLocalization({
 	    		'tooltip' :'Linkki',
 	    		'prefixUrl' :'www.paikkatietoikkkuna.fi/web/fi/kartta?',
 	    		'ok' : 'Ok',
-	    		'title': 'Urli'
+	    		'title': 'Linkki karttanäkymään'
 	    	},
 	    	'print' : {
 	    		'tooltip' :'Tulosta'
