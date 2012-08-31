@@ -13,6 +13,10 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
 function() {
     this.template = jQuery('<div class="accordion_panel">' + 
                '<div class="header">' +
+	               '<div class="headerIcon icon-arrow-right">' +
+	               '</div>' + 
+	               '<div class="headerText">' +
+	               '</div>' + 
                '</div>' + 
                '<div class="content">' +
                '</div>' +
@@ -47,6 +51,9 @@ function() {
      */
     open : function() {
         this.html.addClass('open');
+        var header = this.html.find('div.header div.headerIcon'); 
+        header.removeClass('icon-arrow-right');
+		header.addClass('icon-arrow-down');
         this.html.find('div.content').show();
     },
     /**
@@ -55,6 +62,9 @@ function() {
      */
     close : function() {
         this.html.removeClass('open');
+        var header = this.html.find('div.header div.headerIcon');
+		header.removeClass('icon-arrow-down'); 
+        header.addClass('icon-arrow-right');
         this.html.find('div.content').hide();
     },
     /**
@@ -64,7 +74,7 @@ function() {
      */
     setTitle : function(pTitle) {
         this.title = pTitle;
-        var header = this.html.find('div.header'); 
+        var header = this.html.find('div.header div.headerText'); 
         header.append(this.title);
     },
     /**
