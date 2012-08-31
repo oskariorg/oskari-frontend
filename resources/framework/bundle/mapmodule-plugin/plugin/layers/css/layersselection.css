@@ -6,9 +6,6 @@ div.mapplugin.layerSelectionPlugin {
   z-index:100000000 !important;
 }
 .layerSelectionPlugin {
-	/*
-  display:block;
-  */
   max-width:200px;
 }
 .layerSelectionPlugin div.header {
@@ -20,8 +17,9 @@ div.mapplugin.layerSelectionPlugin {
   background-color: white;
 }
 .layerSelectionPlugin div.header div.header-icon {
-	float : right;
-    margin-left: 10px;
+	display : inline-block;
+    margin-right: 10px;
+    vertical-align: middle;
 }
 
 .layerSelectionPlugin div.content div.layers, .layerSelectionPlugin div.content div.baselayers {

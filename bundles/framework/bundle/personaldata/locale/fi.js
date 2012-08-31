@@ -41,30 +41,29 @@ Oskari.registerLocalization({
                     'placeholder' : 'Anna näkymälle nimi',
                     'save' : 'Tallenna',
                     'cancel' : 'Peruuta',
-                    'error_noname' : 'Syötä nimi'
+                    'error_noname' : 'Syötä nimi',
+                    'deletetitle' : 'Poiston varmistus',
+                    'deletemsg' : 'Poistetaanko näkymä'
                 },
                 'save' : {
                     "success" : 'Näkymä tallennettu',
-                    error_noname : 'Nimi ei voi olla tyhjä',
-                    error_illegalchars : 'Nimessä on luvattomia merkkejä',
-                    msg : {
-                        view_name : 'Näkymän nimi'
+                    "error_noname" : 'Nimi ei voi olla tyhjä',
+                    "error_illegalchars" : 'Nimessä on luvattomia merkkejä',
+                    "msg" : {
+                        "view_name" : 'Näkymän nimi'
                     }
                 },
-                button : {
-                    ok : 'OK',
-                    save : 'Tallenna',
-                    cancel : 'Peruuta',
+                "button" : {
+                    "ok" : 'OK',
+                    "save" : 'Tallenna',
+                    "cancel" : 'Peruuta',
                     "toolbarsave" : 'Tallenna näkymä'
                 },
                 "error" : {
                 	"title" : "Virhe",
                 	"notsaved" : "Näkymää ei tallennettu",
+                	"notdeleted" : "Näkymän poisto epäonnistui",
                 	"loadfailed" : "Näkymien lataus epäonnistui"
-                },
-                msg : {
-                    delete_view : "Poistetaanko näkymä",
-                    confirm_delete : "Poiston varmistus"
                 }
             },
             publishedmaps : {

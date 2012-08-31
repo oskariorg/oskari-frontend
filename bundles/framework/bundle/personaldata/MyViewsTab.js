@@ -301,45 +301,8 @@ function(instance, localization) {
             var viewContainer = jQuery(this).closest('div.view');
             var id = viewContainer.attr('view_id');
             var view = me.getViewById(id);
-
-            if (view) {
-                var ok = {};
-                ok.name = "delete_ok";
-                ok.text = me.loc.button ? me.loc.button.yes : "Kyllä";
-                ok.onclick = function() {
-                	// '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR' + '_portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_' + 'portti2mapportlet_fi' + '.mml.baseportlet.CMD=ajax.jsp' + 
-                    jQuery.ajax({
-                        url : me.instance.sandbox.getAjaxUrl() + '&action_route=DeleteView' + '&id=' + id,
-                        type : 'POST',
-                        dataType : 'json',
-                        beforeSend : function(x) {
-                            if (x && x.overrideMimeType) {
-                                x.overrideMimeType("application/j-son;charset=UTF-8");
-                            }
-                        },
-                        success : function(response) {
-                            viewContainer.remove();
-                            me._refreshViewsList();
-                        },
-                        error : function() {
-                            alert(loc['efailtoremovemyview']);
-                        }
-                    });
-                };
-
-                var cancel = {};
-                cancel.name = "delete_cancel";
-                cancel.text = me.loc.button ? me.loc.button.no : "Ei";
-                cancel.close = true;
-
-                var rb = sandbox.getRequestBuilder('userinterface' + '.ModalDialogRequest');
-                var title = me.loc.msg ? me.loc.msg.confirm_delete : "Poiston varmistus";
-                var msg = me.loc.msg ? me.loc.msg.delete_view : "Poistetaanko näkymä";
-                msg += " '" + view.name + "'?";
-                var req = rb(title, msg, [ok, cancel]);
-                sandbox.request(me.instance, req);
-            } else {
-                return;
+            if(view) {
+            	me._confirmDelete(view);
             }
         });
         return container;
@@ -369,6 +332,52 @@ function(instance, localization) {
 
     },
     /**
+     * @method _confirmDelete
+     */
+    _confirmDelete : function(view) {
+    	var me = this;
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+    	okBtn.setTitle(this.loc.button.save);
+    	okBtn.addClass('primary');
+    	
+    	var sandbox = this.instance.sandbox;
+    	okBtn.setHandler(function() {
+			me._deleteView(view);
+			dialog.close();
+    	});
+    	var cancelBtn = dialog.createCloseButton(this.loc.button.cancel);
+    	dialog.show(me.loc.popup.deletetitle, me.loc.popup.deletemsg, [cancelBtn, okBtn]);
+    	dialog.makeModal();
+    },
+    /**
+     * @method _deleteView
+     */
+    _deleteView : function(view) {
+    	var me = this;
+    	// '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR' + '_portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_' + 'portti2mapportlet_fi' + '.mml.baseportlet.CMD=ajax.jsp' + 
+        jQuery.ajax({
+            url : me.instance.sandbox.getAjaxUrl() + '&action_route=DeleteView&id=' + view.id,
+            type : 'POST',
+            beforeSend : function(x) {
+                if (x && x.overrideMimeType) {
+                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                }
+            },
+            success : function(response) {
+                me._refreshViewsList();
+            },
+            error : function() {
+	    		var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        		// delete failed
+		    	var button = dialog.createCloseButton(this.loc.button.ok);
+				button.addClass('primary');
+		    	dialog.show(this.loc['error'].title, this.loc['error'].notdeleted, [button]);
+        		return;
+            }
+        });
+    },
+    /**
      * @method unbindEvents
      * Unregister tab as eventlistener
      */
@@ -388,19 +397,20 @@ function(instance, localization) {
     eventHandlers : {
         /**
          * @method StateSavedEvent
-         * TODO: reload views list here
          */
         'StateSavedEvent' : function(event) {
 	    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         	if(event.isError()) {
-        		// tallennus epäonnistui
+        		// save failed
 		    	var button = dialog.createCloseButton(this.loc.button.ok);
 				button.addClass('primary');
 		    	dialog.show(this.loc['error'].title, this.loc['error'].notsaved, [button]);
         		return;
         	}
+        	
 	    	dialog.show(this.loc['popup'].title, this.loc['save'].success);
 	    	dialog.fadeout();
+	    	// reload views on success
             this._refreshViewsList();
         }
     },

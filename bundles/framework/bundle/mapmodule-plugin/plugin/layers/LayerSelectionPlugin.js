@@ -66,14 +66,12 @@ function() {
      * Interface method for the module protocol
      */
     register : function() {
-        /*this.getMapModule().setLayerPlugin('layers', this);*/
     },
     /**
      * @method unregister
      * Interface method for the module protocol
      */
     unregister : function() {
-        /*this.getMapModule().setLayerPlugin('layers', null);*/
     },
     /**
      * @method init
@@ -86,7 +84,7 @@ function() {
      */
     init : function(sandbox) {
         this.template = jQuery("<div class='layerSelectionPlugin'>" +
-        	'<div class="header"><div class="header-icon icon-maximize"></div></div>' +
+        	'<div class="header"><div class="header-icon icon-arrow-white-right"></div></div>' +
         	'<div class="content"><div class="layers"></div><div class="baselayers"></div></div>' +
             "</div>");
         this.templateLayer = jQuery("<div class='layer'><span></span></div>");
@@ -141,8 +139,8 @@ function() {
         }
 
         sandbox.unregister(this);
-        // remove ui
         
+        // remove ui
         if(this.element) {
 	        this.element.remove();
 	        this.element = undefined;
@@ -173,9 +171,6 @@ function() {
      * @static
      */
     eventHandlers : {
-        'AfterMapLayerAddEvent' : function(event) {
-        	// TODO: update ui
-        }
     },
 
     /**
@@ -193,14 +188,24 @@ function() {
      */
     preselectLayers : function(layers) {
     },
+    /**
+     * @method selectBaseLayer
+     * Tries to find given layer from baselayers and select it programmatically
+     * @param {String} layerId id for layer to select
+     */
     selectBaseLayer : function(layerId) {
         var baseLayersDiv = this.element.find('div.content div.baselayers');
-    	var input = div.find('input[value=' + layerId + ']');
+        if(!baseLayersDiv || baseLayersDiv.length == 0) {
+        	return;
+        }
+    	var input = baseLayersDiv.find('input[value=' + layerId + ']');
     	input.attr('checked', 'checked');
 		this._changedBaseLayer();
     },
     /**
      * @method addLayer
+     * Adds given layer to the selection
+     * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer} layer layer to add
      */
     addLayer : function(layer) {
     	var me = this;
@@ -222,7 +227,11 @@ function() {
         layersDiv.append(div);
     },
     /**
-     * @method removeLayer
+     * @method _bindCheckbox
+     * Binds given checkbox to control given layers visibility
+     * @param {jQuery} input input to bind
+     * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer} layer layer to control
+     * @private
      */
     _bindCheckbox : function(input, layer) {
     	var me = this;
@@ -240,7 +249,11 @@ function() {
         });
     },
     /**
-     * @method removeLayer
+     * @method _setLayerVisible
+     * Makes given layer visible or hides it
+     * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer} layer layer to control
+     * @param {Boolean} blnVisible true to show, false to hide
+     * @private
      */
     _setLayerVisible : function(layer, blnVisible) {
     	var sandbox = this._sandbox;
@@ -264,6 +277,8 @@ function() {
     },
     /**
      * @method removeLayer
+     * Removes given layer from the selection
+     * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer} layer layer to remove
      */
     removeLayer : function(layer) {
         var div = this.layerRefs[layer.getId()];
@@ -272,6 +287,8 @@ function() {
     },
     /**
      * @method addBaseLayer
+     * Assumes that the layer is already added as normal layer and moves it to being a base layer
+     * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer} layer layer to move
      */
     addBaseLayer : function(layer) {
         var div = this.layerRefs[layer.getId()];
@@ -304,6 +321,8 @@ function() {
     },
     /**
      * @method removeBaseLayer
+     * Assumes that the layer is already added as base layer and moves it to being a normal layer
+     * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer} layer layer to move
      */
     removeBaseLayer : function(layer) {
         var div = this.layerRefs[layer.getId()];
@@ -340,7 +359,9 @@ function() {
         }
     },
     /**
-     * @method removeBaseLayer
+     * @method _changedBaseLayer
+     * Checks which layer is currently the selected base layer, shows it and hides the rest  
+     * @private
      */
     _changedBaseLayer : function() {
         var values = this.getBaseLayers();
@@ -352,6 +373,7 @@ function() {
     },
     /**
      * @method setupLayers
+     * Adds all the maps selected layers to the selection.
      */
     setupLayers : function() {
     	var me = this;
@@ -363,18 +385,32 @@ function() {
 			me.addLayer(layers[i]);
         }
     },
+    /**
+     * @method openSelection
+     * Programmatically opens the plugins interface as if user had clicked it open
+     */
     openSelection : function() {
         var icon = this.element.find('div.header div.header-icon');
-        icon.removeClass('icon-maximize'); 
-        icon.addClass('icon-minimize'); 
+        icon.removeClass('icon-arrow-white-right'); 
+        icon.addClass('icon-arrow-white-down'); 
         var content = this.element.find('div.content').show();
     },
+    /**
+     * @method closeSelection
+     * Programmatically closes the plugins interface as if user had clicked it close
+     */
     closeSelection : function() { 
         var icon = this.element.find('div.header div.header-icon');
-        icon.removeClass('icon-minimize');
-        icon.addClass('icon-maximize'); 
+        icon.removeClass('icon-arrow-white-down');
+        icon.addClass('icon-arrow-white-right'); 
         var content = this.element.find('div.content').hide();
     },
+    /**
+     * @method getBaseLayers
+     * Returns list of the current base layers and which one is selected
+     * @return {Object} returning object has property baseLayers as a {String[]} list of base layer ids and 
+     * {String} defaultBase as the selected base layers id
+     */
     getBaseLayers : function() { 
         var inputs = this.element.find('div.content div.baselayers div.layer input');
     	var layers = [];
@@ -391,7 +427,14 @@ function() {
     		defaultBase : checkedLayer
     	}
     },
-    
+    /**
+     * @method  _createUI
+     * Creates the whole ui from scratch and writes the plugin in to the UI.
+     * Tries to find the plugins placeholder with 'div.mapplugins.left' selector.
+     * If it exists, checks if there are other bundles and writes itself as the first one.
+     * If the placeholder doesn't exist the plugin is written to the mapmodules div element.  
+     * @private
+     */
     _createUI : function() {
         var me = this;
         if(!this.element) {
@@ -426,8 +469,16 @@ function() {
         	parentContainer.append(this.element);
         }
         else {
-        	// write always as first plugin
-        	parentContainer.find('div').first().before(this.element);
+        	// add always as first plugin
+        	var existingPlugins = parentContainer.find('div'); 
+        	if(!existingPlugins || existingPlugins.length == 0) {
+        		// no existing plugins -> just put it there
+        		parentContainer.append(this.element);
+        	}
+        	else {
+        		// put in front of existing plugins
+        		existingPlugins.first().before(this.element);
+        	}
         }
     }
 }, {
