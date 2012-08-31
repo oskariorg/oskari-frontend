@@ -66,7 +66,7 @@ function(instance) {
 				'<div class="layer-title"></div>' + 
 				'<div class="layer-keywords"></div>' + // <br clear="all" /> 
 			'</div>');
-		this.templateLayerGroup = jQuery('<div class="layerGroup"><div class="groupHeader"><span class="groupName"></span><span class="layerCount"></span></div></div>');
+		this.templateLayerGroup = jQuery('<div class="layerGroup"><div class="groupIcon"></div><div class="groupHeader"><span class="groupName"></span><span class="layerCount"></span></div></div>');
 		this.groupingTools = [
 			{
 				"title" : this.instance.getLocalization('filter').inspire,
@@ -132,6 +132,8 @@ function(instance) {
         jQuery(this.container).find('div.groupingTabs li').removeClass('active');
         var layerGroups = jQuery(this.container).find('div.layerList div.layerGroup');
         layerGroups.removeClass('open');
+        layerGroups.find('div.groupIcon').removeClass('icon-arrow-down');
+        layerGroups.find('div.groupIcon').addClass('icon-arrow-right');
         jQuery(this.container).find('input[name=text-filter]').val('');
     },
     setContentState : function(state) {
@@ -174,6 +176,8 @@ function(instance) {
                 if(groupTitleContainer) {
                     var groupContainer = groupTitleContainer.parent().parent();
                     groupContainer.addClass('open');
+			        groupContainer.find('div.groupIcon').removeClass('icon-arrow-right');
+			        groupContainer.find('div.groupIcon').addClass('icon-arrow-down');
                     groupContainer.find('div.layer').show();
                 }
             }
@@ -260,6 +264,8 @@ function(instance) {
 				if(visibleLayers.length == 0) {
 					// clear 'open' flag at this point
 					groupDiv.removeClass('open');
+			        groupDiv.find('div.groupIcon').removeClass('icon-arrow-down');
+			        groupDiv.find('div.groupIcon').addClass('icon-arrow-right');
 					// and hide the group
 					groupDiv.hide();
 				}
@@ -268,6 +274,8 @@ function(instance) {
 					// mark group with open flag if not already flagged
 					if(!groupDiv.hasClass('open')) {
 						groupDiv.addClass('open');
+				        groupDiv.find('div.groupIcon').removeClass('icon-arrow-right');
+				        groupDiv.find('div.groupIcon').addClass('icon-arrow-down');
 					}
 					
                     visibleLayers.removeClass('odd');
@@ -281,6 +289,8 @@ function(instance) {
 			layerGroups.show();
 			// layer groups are closed by default so remove 'open' flag
 			layerGroups.removeClass('open');
+	        layerGroups.find('div.groupIcon').removeClass('icon-arrow-down');
+	        layerGroups.find('div.groupIcon').addClass('icon-arrow-right');
 			// and hide layers
 			layerGroups.find('div.layer').hide();
 		}
@@ -427,11 +437,15 @@ function(instance) {
 			// layer is open -> close it
 			if(isOpen) {
 				groupDiv.removeClass('open');
+		        groupDiv.find('div.groupIcon').removeClass('icon-arrow-down');
+		        groupDiv.find('div.groupIcon').addClass('icon-arrow-right');
 				groupDiv.find('div.layer').hide();
 			}
 			// layer is closed -> open it
 			else {
 				groupDiv.addClass('open');
+		        groupDiv.find('div.groupIcon').removeClass('icon-arrow-right');
+				groupDiv.find('div.groupIcon').addClass('icon-arrow-down');
                 // show only the layers that match filtering keyword
                 var filter = jQuery(me.container).find('input[name=text-filter]').val();
                 if(filter) {
