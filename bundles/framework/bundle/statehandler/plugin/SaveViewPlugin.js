@@ -73,15 +73,19 @@ Oskari.clazz
              */
             saveState : function(viewName, pState) {
               var state = pState;
-              var nameParam = "";
+              var me = this;
               if (!state) {
                 state = this.handler.getCurrentState();
               }
+              
+              var data = {
+              	currentViewId : me.handler.getCurrentViewId(),
+              	viewData : JSON.stringify(state)
+              };
               if (viewName) {
-                nameParam = "viewName=" + viewName + '&';
+                data.viewName = viewName;
               }
 
-              var me = this;
               
               var loc = this.handler.getLocalization('save');
               var builder = me._sandbox.getEventBuilder('StateSavedEvent');
@@ -89,7 +93,7 @@ Oskari.clazz
               // save to ajaxUrl
               jQuery.ajax(
                 {
-                  dataType : "json",
+                  //dataType : "json",
                   type : "POST",
                   beforeSend : function(x) {
                     if (x && x.overrideMimeType) {
@@ -97,11 +101,7 @@ Oskari.clazz
                     }
                   },
                   url : this._ajaxUrl + 'action_route=AddView',
-                  data : nameParam + 
-                    "viewData=" + 
-                    JSON.stringify(state) + 
-                    "&currentViewId=" + 
-                    me.handler.getCurrentViewId(),
+                  data : data,
                   success : function(newView) {
                     me._sandbox.notifyAll(event);
                     me.handler.setCurrentViewId(newView.id);
