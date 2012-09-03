@@ -292,6 +292,7 @@ function(config) {
      * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer} layer layer to move
      */
     addBaseLayer : function(layer) {
+        if (!layer.getId) return;
         var div = this.layerRefs[layer.getId()];
     	div.remove();
     	
@@ -466,6 +467,7 @@ function(config) {
         if(!parentContainer || parentContainer.length == 0) {
         	// fallback to OL map div
         	parentContainer = jQuery(this._map.div);
+            var content = this.element.find('div.content');
         	content.addClass('mapplugin');
         	parentContainer.append(this.element);
         }
