@@ -9,12 +9,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
  * @method create called automatically on construction
  * @static
  */
-function() {
+function(config) {
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
     this._map = null;
     this.element = undefined;
+    this.conf = config;
 }, {
     /** @static @property __name module name */
     __name : 'LayerSelectionPlugin',

@@ -62,13 +62,13 @@ function(localization, instance) {
 		if(this.showLayerSelection) {
 			values.layerSelection = {
 				id : 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
-				conf : {
+				config : {
 				}
 			}
 			var pluginValues = this.plugin.getBaseLayers();
 			if(pluginValues.defaultBase) {
-				values.layerSelection.conf.baseLayers = pluginValues.baseLayers;
-				values.layerSelection.conf.defaultBaseLayer = pluginValues.defaultBase; 
+				values.layerSelection.config.baseLayers = pluginValues.baseLayers;
+				values.layerSelection.config.defaultBaseLayer = pluginValues.defaultBase; 
 			}
 		}
 		
