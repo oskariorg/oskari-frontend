@@ -89,30 +89,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             tooltip: locales.link.tooltip,
             sticky: false,
             callback : function() {
-                var mapFullComponent = me.getSandbox().getStatefulComponents()['mapfull'].getState();
-				var link = 
-					'zoomLevel='+ mapFullComponent['zoom'] +
-					'&coord=' + mapFullComponent['east'] +'_'+ mapFullComponent['north'] +
-					'&mapLayers=';
-				
-				var layers ='';
-				
-				for ( var i = 0; i < mapFullComponent['selectedLayers'].length; i++) {
-					if (!mapFullComponent['selectedLayers'][i].hidden) {
-						if (layers != '') {
-							layers +=',';
-						}
-						layers +=mapFullComponent['selectedLayers'][i].id+'+'+mapFullComponent['selectedLayers'][i].opacity
-						if (mapFullComponent['selectedLayers'][i].style) {
-							layers +='+'+mapFullComponent['selectedLayers'][i].style;
-						} else {
-							layers +='+';
-						}
-					} 
-				}
-				link += layers;
-				link += '&showMarker=false&forceCache=true';
-				
+				var linkParams = me.getSandbox().generateMapLinkParameters();
 				
 		    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 		    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -125,7 +102,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 		    	var linkContent = 
 					'<textarea rows="3" cols="80">' +
 					locales.link.prefixUrl + 
-					link +
+					linkParams +
 					'</textarea>';
 		    	dialog.show(locales.link.title, linkContent, [okBtn]);
             }
@@ -136,33 +113,10 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             tooltip: locales.print.tooltip,
             sticky: false,
             callback : function() {
-                var mapFullComponent = me.getSandbox().getStatefulComponents()['mapfull'].getState();
-				var link = 
-					'zoomLevel='+ mapFullComponent['zoom'] +
-					'&coord=' + mapFullComponent['east'] +'_'+ mapFullComponent['north'] +
-					'&mapLayers=';
-				
-				var layers ='';
-				
-				for ( var i = 0; i < mapFullComponent['selectedLayers'].length; i++) {
-					if (!mapFullComponent['selectedLayers'][i].hidden) {
-						if (layers != '') {
-							layers +=',';
-						}
-						layers +=mapFullComponent['selectedLayers'][i].id+'+'+mapFullComponent['selectedLayers'][i].opacity
-						if (mapFullComponent['selectedLayers'][i].style) {
-							layers +='+'+mapFullComponent['selectedLayers'][i].style;
-						} else {
-							layers +='+';
-						}
-					} 
-				}
-				link += layers;
-				link += '&p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&showMarker=false&forceCache=true&mapmode=print&viewId=2&noSavedState=true';
-				link = window.location.pathname + '?' + link;
+				var linkParams = me.getSandbox().generateMapLinkParameters();
+				linkParams += '&p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&showMarker=false&forceCache=true&mapmode=print&viewId=2';
+				var link = window.location.pathname + '?' + linkParams;
 				window.open (link,"Print", "location=1,status=1,scrollbars=yes,width=850,height=800");
-				
-				
 			}
         });
         
