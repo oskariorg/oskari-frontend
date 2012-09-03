@@ -420,8 +420,8 @@ function(instance, localization) {
         }
 
         var url = sandbox.getAjaxUrl();
-        alert(JSON.stringify(selections, null, 4));
-        return;
+        // alert(JSON.stringify(selections, null, 4));
+        // return;
 
         jQuery.ajax({
             url : url + '&action_route=Publish',
