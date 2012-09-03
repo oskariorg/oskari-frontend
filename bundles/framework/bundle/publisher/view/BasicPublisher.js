@@ -358,9 +358,14 @@ function(instance, localization) {
         };
         for (var i = 0; i < this.tools.length; ++i) {
             if (this.tools[i].selected) {
-                selections.plugins.push({
+            	var tmpTool = {
                     id : this.tools[i].id
-                });
+                };
+                if(this.tools[i].config) {
+                	tmpTool.config = this.tools[i].config; 
+                } 
+            	
+                selections.plugins.push(tmpTool);
             }
         }
         if (size == 'custom') {
@@ -415,8 +420,8 @@ function(instance, localization) {
         }
 
         var url = sandbox.getAjaxUrl();
-        alert(JSON.stringify(selections, null, 4));
-        return;
+        // alert(JSON.stringify(selections, null, 4));
+        // return;
 
         jQuery.ajax({
             url : url + '&action_route=Publish',
