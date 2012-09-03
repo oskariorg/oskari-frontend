@@ -252,18 +252,6 @@ function() {
             this.handleChangeMapLayerOpacityRequest(request);
             return true;
         },
-        'StartMapPublisherRequest' : function(request) {
-            this.handleStartMapPublisherRequest(request);
-            return true;
-        },
-        'GenerateHtmlLinkToMapRequest' : function(request) {
-            this.handleGenerateHtmlLinkToMapRequest(request);
-            return true;
-        },
-        'GenerateHtmlPrintToMapRequest' : function(request) {
-            this.handleGenerateHtmlPrintToMapRequest(request);
-            return true;
-        },
         'ChangeMapLayerStyleRequest' : function(request) {
             this.handleChangeMapLayerStyleRequest(request);
             return true;

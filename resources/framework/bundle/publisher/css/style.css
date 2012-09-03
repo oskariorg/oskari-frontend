@@ -37,7 +37,8 @@ div.publisher div.startview div.error ul li {
     height: 100%;
     top : 0;
     left : 0;
-    z-index : 20;
+    /* sidebar has 3, we want to open it on top of this */
+    z-index : 2;
     width : 255px;
 }
 #contentMap div.basic_publisher div.content {
