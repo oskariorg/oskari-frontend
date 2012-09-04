@@ -152,6 +152,7 @@ function() {
         this.editRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler', sandbox, me);
         sandbox.addRequestHandler('MyPlaces.EditPlaceRequest', this.editRequestHandler);
         sandbox.addRequestHandler('MyPlaces.EditCategoryRequest', this.editRequestHandler);
+        sandbox.addRequestHandler('MyPlaces.DeleteCategoryRequest', this.editRequestHandler);
     },
     /**
      * @method stop

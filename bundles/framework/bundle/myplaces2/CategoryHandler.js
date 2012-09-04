@@ -401,6 +401,11 @@ function(instance) {
             }
         }
         this.instance.getService().saveCategory(category, serviceCallback);
+    },
+    deleteCategory : function(category) {
+        var me = this;
+        var loc = me.instance.getLocalization('notification');
+		alert('TODO: delete category');        
     }
 
 }, {

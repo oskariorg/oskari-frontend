@@ -10,6 +10,7 @@ Oskari.registerLocalization({
                 title : "Kohteet",
                 nocategories : "Et ole vielä tallentanut kohteita",
                 "editCategory" : "Muokkaa tasoa",
+                "deleteCategory" : "Poista taso",
                 "grid" : {
                     "name" : "Nimi",
                     "desc" : "Kuvaus",
