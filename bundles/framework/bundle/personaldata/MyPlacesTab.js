@@ -294,11 +294,11 @@ function(instance, localization) {
                 var category = service.findCategory(categoryId);
                 if(!category) {
                     // removed
-                    this.tabsContainer.removePanel(this.tabPanels[id]);
-                    this.tabPanels[id].grid = undefined;
-                    delete this.tabPanels[id].grid;
-                    this.tabPanels[id] = undefined;
-                    delete this.tabPanels[id];
+                    this.tabsContainer.removePanel(this.tabPanels[categoryId]);
+                    this.tabPanels[categoryId].grid = undefined;
+                    delete this.tabPanels[categoryId].grid;
+                    this.tabPanels[categoryId] = undefined;
+                    delete this.tabPanels[categoryId];
                 }
             }
     },

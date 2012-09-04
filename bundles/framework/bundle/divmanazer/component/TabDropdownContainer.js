@@ -46,6 +46,7 @@ function(pEmptyMsg) {
         var header = this.templateTabOption.clone();
         header.append(panel.getTitle());
         headerContainer.append(header);
+        panel.setHeader(header);
         
         panel.insertTo(this.ui.find('div.tabsContent'));
         this.panels.push(panel);

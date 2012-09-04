@@ -36,7 +36,10 @@ Oskari.registerLocalization({
           "cancel" : "Peruuta",
           "ok" : "OK",
           "finish" : "Lopeta piirto",
-          "save" : "Tallenna"
+          "save" : "Tallenna",
+	      "movePlaces" : 'Siirrä paikat ja poista',
+		  "deleteCategory" : 'Poista',
+		  "deleteCategoryAndPlaces" : 'Poista paikkoineen'
       },
       "placeform" : {
           "title" : "Kohteen tiedot",
@@ -82,7 +85,6 @@ Oskari.registerLocalization({
               "title" : "Muokkaa karttatasoa",
               "save" : "Tallenna",
               "cancel" : "Peruuta"
-          	
           }
       },
       "notification" : {
@@ -94,11 +96,19 @@ Oskari.registerLocalization({
               "title" : "Karttataso tallennettu",
               "message" : "Karttatason muutokset tallennettu."
           },
+          "categoryDelete" : {
+		        "title" : 'Karttatason poisto',
+		        "deleteConfirmMove" : 'Karttataso: "{0}". Sisältää paikkoja: {1} kpl. Haluatko siirtää paikat oletuskarttatasolle "{2}"?',
+		        "deleteConfirm" : 'Poistetaanko karttataso: "{0}"?',
+		        "deleted" : 'Poistettu'
+          },
           "error" : {
               "addCategory" : "Tason tallennus epäonnistui, paikkaa ei tallennettu",
               "editCategory" : "Tason tallennus epäonnistui",
               "savePlace" : "Virhe! Paikkaa ei tallennettu",
-              "title" : "Virhe!"
+              "title" : "Virhe!",
+        	  "deleteCategory" : 'Virhe poistossa!',
+		      "deleteDefault" : 'Oletuskarttatasoa ei voi poistaa'
           }
       },
       "validation" : {

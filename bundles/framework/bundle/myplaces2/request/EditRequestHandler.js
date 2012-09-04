@@ -73,7 +73,7 @@ function(sandbox, instance) {
         var service = this.instance.getService();
         var category = service.findCategory(request.getId());
         if(category) {
-            this.instance.getCategoryHandler().deleteCategory(category);
+            this.instance.getCategoryHandler().confirmDeleteCategory(category);
         }
     }
 }, {

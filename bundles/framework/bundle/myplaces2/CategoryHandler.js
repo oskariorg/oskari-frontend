@@ -226,7 +226,7 @@ function(instance) {
             },
             isQueryable:false,
             minScale:12000000,
-            opacity:75,
+            opacity: 50,
             metaType: this.instance.idPrefix,
             orgName: catLoc.organization,
             inspire: catLoc.inspire,
@@ -402,12 +402,136 @@ function(instance) {
         }
         this.instance.getService().saveCategory(category, serviceCallback);
     },
-    deleteCategory : function(category) {
+    /**
+     * @method confirmDeleteCategory
+     * Shows a confirmation dialog with buttons to continue. 
+     * If category has places -> asks if they will be moved to default category or deleted
+     * If category is empty -> only has delete and cancel
+     * The message will also be different for both cases.
+     */
+    confirmDeleteCategory : function(category) {
         var me = this;
+        var btnLoc = me.instance.getLocalization('buttons');
+        var service = this.instance.getService();
+        var defaultCategory = service.getDefaultCategory();
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        if(defaultCategory.getId() == category.getId()) {
+        	// cannot delete default category
+        	var loc = me.instance.getLocalization();
+			var okBtn = dialog.createCloseButton(loc.buttons.ok);
+    		dialog.show(loc.notification.error.title, loc.notification.error.deleteDefault, [okBtn]);
+        	return;
+        }
+        var places = service.getPlacesInCategory(category.getId());
+        
+    	var buttons = [];
+    	
+    	var cancelBtn = dialog.createCloseButton(btnLoc.cancel);
+    	buttons.push(cancelBtn);
+    	
         var loc = me.instance.getLocalization('notification');
-		alert('TODO: delete category');        
+    	var content = '';
+    	if(places.length > 0) {
+	    	
+	    	var deleteBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+	    	deleteBtn.setTitle(btnLoc.deleteCategoryAndPlaces);
+	    	deleteBtn.setHandler(function() {
+				dialog.close();
+            	// delete category and each place in it
+                me._deleteCategory(category, false);
+	    	});    
+	    	buttons.push(deleteBtn);		
+	    	
+	    	var moveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+	    	moveBtn.setTitle(btnLoc.movePlaces);
+	    	moveBtn.addClass('primary');
+	    	moveBtn.setHandler(function() {
+				dialog.close();
+        		// move the places in the category to default category
+                me._deleteCategory(category, true); 
+	    	});     
+	    	buttons.push(moveBtn);		
+	    	var locParams = [category.getName(), places.length, defaultCategory.getName()];
+	    	content = this._formatMessage(loc.categoryDelete.deleteConfirmMove, locParams);
+    	}    	
+    	else {
+    		
+	    	var deleteBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+	    	deleteBtn.setTitle(btnLoc.deleteCategory);
+	    	deleteBtn.addClass('primary');
+	    	buttons.push(deleteBtn);
+	    	deleteBtn.setHandler(function() {
+				dialog.close();
+            	// delete category and each place in it (none since there aren't any places there')
+                me._deleteCategory(category, false);
+	    	});
+	    	
+	    	content = this._formatMessage(loc.categoryDelete.deleteConfirm, [category.getName()]);
+    	}
+        
+    	dialog.show(loc.categoryDelete.title, content, buttons);
+    	dialog.makeModal();        
+    },
+	/**
+	 *@method _formatMessage
+	 * Formats given message with the given params array values
+	 * Example:  _formatMessage("Hello {0}!", ["World"]);
+	 * @param msg message to be formatted
+	 * @param params array of params that has values for {arrayIndex} in param msg
+     * @private
+	 */
+    _formatMessage : function(msg, params) {
+        var formatted = msg;
+        for(var i = 0; i < params.length; ++i) {
+            formatted = formatted.replace("{" + i + "}", params[i]);
+        }
+        return formatted;
+    },
+    
+    /**
+     * @method _deleteCategory
+     * Internal method start actual category delete after confirm
+     * @private
+     */
+    _deleteCategory : function(category, movePlaces) {
+        var me = this;
+        var catId = category.getId();
+        // wrap callback to get it into the scope we want
+        var callBackWrapper = function(success) {
+            me._deleteCategoryCallback(success, movePlaces, catId);
+        };
+        var service = this.instance.getService();
+		service.deleteCategory(catId, movePlaces, callBackWrapper);
+    },
+    /**
+     * @method _deleteCategoryCallback
+     * Internal method to handle server response for category delete
+     * @private
+     */
+    _deleteCategoryCallback : function(success, movePlaces, categoryId) {
+		var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var service = this.instance.getService();
+        var me = this;
+        if(success) {
+            if(movePlaces) {
+            	// places moved to default category -> update it
+    			var defCat = service.getDefaultCategory();
+    			var layerId = this._getMapLayerId(defCat.getId());
+		        var request = this.instance.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')(layerId, true);
+		        this.instance.sandbox.request(this, request);
+            }
+            // NOTE OK 
+        	var loc = me.instance.getLocalization();
+    		dialog.show(loc.notification.categoryDelete.title, loc.notification.categoryDelete.deleted);
+    		dialog.fadeout();
+        }
+        else {
+        	// error handling
+        	var loc = me.instance.getLocalization();
+			var okBtn = dialog.createCloseButton(btnLoc.buttons.ok);
+    		dialog.show(loc.notification.error.title, loc.notification.error.deleteCategory, [okBtn]);
+        }
     }
-
 }, {
     /**
      * @property {String[]} protocol
