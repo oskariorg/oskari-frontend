@@ -31,12 +31,12 @@ function(instance) {
     this.templateTextInput = jQuery('<input type="text"/>');
     this.defaults = {
         dotSize : 4,
-        dotColor : '6996FF',
+        dotColor : 'cc9900',
         lineSize : 2,
-        lineColor : '82202A',
-        areaLineSize : 1,
-        areaLineColor : '000000',
-        areaFillColor : 'FFF71C'
+        lineColor : 'cc9900',
+        areaLineSize : 2,
+        areaLineColor : 'cc9900',
+        areaFillColor : 'ffdc00'
     };
     this.categoryId = undefined;
     this.initialValues = undefined;

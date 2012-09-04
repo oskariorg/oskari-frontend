@@ -18,6 +18,7 @@ function(instance, localization) {
     this.tabPanels = {};
     
     this.linkTemplate = jQuery('<a href="JavaScript:void(0);"></a>');
+    this.iconTemplate = jQuery('<div class="icon"></div>');
 }, {
     /**
      * @method getName
@@ -53,9 +54,15 @@ function(instance, localization) {
             var categories = service.getAllCategories();
             var places = service.getAllMyPlaces();
             var me = this;
-            var linkClosure = function(id) {
+            var editLinkClosure = function(id) {
                 return function() {
                     var request = me.instance.sandbox.getRequestBuilder('MyPlaces.EditCategoryRequest')(id);
+                    me.instance.sandbox.request(me.instance, request);
+                };
+            }
+            var deletelinkClosure = function(id) {
+                return function() {
+                    var request = me.instance.sandbox.getRequestBuilder('MyPlaces.DeleteCategoryRequest')(id);
                     me.instance.sandbox.request(me.instance, request);
                 };
             }
@@ -72,10 +79,16 @@ function(instance, localization) {
                 this._populatePlaces(id);
                 panel.getContainer().empty();
                 panel.grid.renderTo(panel.getContainer());
+                
                 var editLink = this.linkTemplate.clone();
                 editLink.append(this.loc.editCategory);
-                editLink.bind('click', linkClosure(id));
+                editLink.bind('click', editLinkClosure(id));
                 panel.getContainer().append(editLink);
+                
+                var deleteLink = this.linkTemplate.clone();
+                deleteLink.append(this.loc.deleteCategory);
+                deleteLink.bind('click', deletelinkClosure(id));
+                panel.getContainer().append(deleteLink);
             }
             this._removeObsoleteCategories();
         }
@@ -124,11 +137,17 @@ function(instance, localization) {
      * @private
      */
     _deletePlace : function(data) {
-        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+    	var me = this;
+    	var sandbox = this.instance.sandbox;
         var loc = this.loc.notification['delete'];
-        var confirmMsg = loc.confirm + '"' + data.name + '"' + '?';
-        if(confirm(confirmMsg)) {
-            var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+    	okBtn.setTitle(loc.btnDelete);
+    	okBtn.addClass('primary');
+
+    	okBtn.setHandler(function() {
+			dialog.close();
+            var service = sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
             var callback = function(isSuccess) {
                 if(isSuccess) {
                     dialog.show(loc.title, loc.success);
@@ -139,11 +158,29 @@ function(instance, localization) {
                 dialog.fadeout();
             };
             service.deleteMyPlace(data.id, callback);
+    	});
+    	var cancelBtn = dialog.createCloseButton(loc.btnCancel);    
+        var confirmMsg = loc.confirm + '"' + data.name + '"' + '?';
+    	dialog.show(loc.title, confirmMsg, [cancelBtn, okBtn]);
+    	dialog.makeModal();
+    },
+    /**
+     * @method getDrawModeFromGeometry
+     * Returns a matching drawmode string-key for the geometry
+     * @param geometry openlayers geometry from my place model
+     */
+    _getDrawModeFromGeometry : function(geometry) {
+        var olClass = geometry.CLASS_NAME;
+        if('OpenLayers.Geometry.Point' === olClass) {
+        	return 'point';
+        } 
+        else if('OpenLayers.Geometry.LineString' === olClass) {
+        	return 'line';
         }
-        else {
-            dialog.show(loc.title, loc['cancel']);
-            dialog.fadeout();
+        else if('OpenLayers.Geometry.Polygon' === olClass){
+        	return 'area';
         }
+        return null;
     },
     /**
      * @method _populatePlaces
@@ -163,6 +200,11 @@ function(instance, localization) {
         // set up the link from name field
         var nameRenderer = function(name, data) {
             var link = me.linkTemplate.clone();
+            var linkIcon = me.iconTemplate.clone();
+            var shape = me._getDrawModeFromGeometry(data.geometry);
+            linkIcon.addClass('myplaces-' + shape);
+            link.append(linkIcon);
+            
             link.append(name);
             link.bind('click', function() {
                 me._showPlace(data.geometry,data.categoryId);
@@ -241,9 +283,10 @@ function(instance, localization) {
         if(time.length > 0) {
             value = time[0];
         }
-        if(time.length > 1) {
+        // skip time
+        /*if(time.length > 1) {
             value = value  + ' ' + time[1];
-        }
+        }*/
         return value;
     },
     /**
@@ -257,11 +300,11 @@ function(instance, localization) {
                 var category = service.findCategory(categoryId);
                 if(!category) {
                     // removed
-                    this.tabsContainer.removePanel(this.tabPanels[id]);
-                    this.tabPanels[id].grid = undefined;
-                    delete this.tabPanels[id].grid;
-                    this.tabPanels[id] = undefined;
-                    delete this.tabPanels[id];
+                    this.tabsContainer.removePanel(this.tabPanels[categoryId]);
+                    this.tabPanels[categoryId].grid = undefined;
+                    delete this.tabPanels[categoryId].grid;
+                    this.tabPanels[categoryId] = undefined;
+                    delete this.tabPanels[categoryId];
                 }
             }
     },
