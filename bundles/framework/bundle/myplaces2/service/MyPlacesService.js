@@ -142,7 +142,7 @@ function(url, uuid, sandbox, defaultName) {
             //var myplace = me.findMyPlace(list[0].get('id'));
             //myplace.set('updateDate', list[0].get('updateDate'));
             me._notifyDataChanged();
-            callback(success, list[0]);
+            callback(success);
         };
         // need to wrap callback and call changes notify if ever called directly
         this.wfstStore.commitMyPlaces(placesInDeleteCategory, callBackWrapper);
@@ -231,7 +231,7 @@ function(url, uuid, sandbox, defaultName) {
 
         // call actual category delete once category has been cleared of places
         // successfully
-        var callBackWrapper = function(success, list) {
+        var callBackWrapper = function(success) {
             if (success) {
                 me._deleteEmptyCategory(categoryId, callback);
             } else {
