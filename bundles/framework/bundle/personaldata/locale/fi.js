@@ -23,6 +23,8 @@ Oskari.registerLocalization({
                     "delete" : {
                         "title" : "Kohteen poistaminen",
                         "confirm" : "Haluatko poistaa kohteen ",
+                        "btnDelete" : "Poista",
+                        "btnCancel" : "Peruuta",
                         "success" : "Onnistui",
                         "error" : "Epäonnistui! Kokeile uudestaan myöhemmin",
                         "cancel" : "Kohdetta ei poistettu"

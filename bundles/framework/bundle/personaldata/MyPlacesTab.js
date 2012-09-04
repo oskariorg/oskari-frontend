@@ -137,11 +137,17 @@ function(instance, localization) {
      * @private
      */
     _deletePlace : function(data) {
-        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+    	var me = this;
+    	var sandbox = this.instance.sandbox;
         var loc = this.loc.notification['delete'];
-        var confirmMsg = loc.confirm + '"' + data.name + '"' + '?';
-        if(confirm(confirmMsg)) {
-            var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+    	okBtn.setTitle(loc.btnDelete);
+    	okBtn.addClass('primary');
+
+    	okBtn.setHandler(function() {
+			dialog.close();
+            var service = sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
             var callback = function(isSuccess) {
                 if(isSuccess) {
                     dialog.show(loc.title, loc.success);
@@ -152,11 +158,11 @@ function(instance, localization) {
                 dialog.fadeout();
             };
             service.deleteMyPlace(data.id, callback);
-        }
-        else {
-            dialog.show(loc.title, loc['cancel']);
-            dialog.fadeout();
-        }
+    	});
+    	var cancelBtn = dialog.createCloseButton(loc.btnCancel);    
+        var confirmMsg = loc.confirm + '"' + data.name + '"' + '?';
+    	dialog.show(loc.title, confirmMsg, [cancelBtn, okBtn]);
+    	dialog.makeModal();
     },
     /**
      * @method getDrawModeFromGeometry
