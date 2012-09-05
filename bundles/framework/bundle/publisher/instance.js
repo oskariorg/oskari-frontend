@@ -151,7 +151,16 @@ function() {
          * @param {Oskari.mapframework.event.common.AfterMapMoveEvent} event
          */
         'AfterMapMoveEvent' : function(event) {
+        	// TODO: not needed anymore?
             this.plugins['Oskari.userinterface.Flyout'].handleMapMoved();
+        },
+        /**
+         * @method Publisher.MapPublishedEvent
+         * @param {Oskari.mapframework.bundle.publisher.event.MapPublishedEvent} event
+         */
+        'Publisher.MapPublishedEvent' : function(event) {
+        	// TODO: generate url
+        	alert(event.getId());
         },
         /**
          * @method userinterface.ExtensionUpdatedEvent

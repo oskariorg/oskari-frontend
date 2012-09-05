@@ -117,10 +117,11 @@ function(config) {
 		if(this.conf && this.conf.baseLayers) {
 			// TODO: currently not tested, TEST ON PUBLISHED MAP!
 			for(var i = 0; i < this.conf.baseLayers.length; ++i) {
-				this.addBaseLayer(this.conf.baseLayers[i]);
+        		var layer = sandbox.findMapLayerFromSelectedMapLayers(this.conf.baseLayers[i]);
+				this.addBaseLayer(layer);
 			}
-			if(this.conf.defaultBase) {
-				this.selectBaseLayer(this.conf.defaultBase);
+			if(this.conf.defaultBaseLayer) {
+				this.selectBaseLayer(this.conf.defaultBaseLayer);
 			}
 		}
     },
@@ -426,7 +427,7 @@ function(config) {
     	}
     	return {
     		baseLayers : layers,
-    		defaultBase : checkedLayer
+    		defaultBaseLayer : checkedLayer
     	}
     },
     /**

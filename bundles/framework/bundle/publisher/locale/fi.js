@@ -74,7 +74,8 @@ Oskari.registerLocalization({
               "domain" : "Sivusto on pakollinen tieto",
               "domainStart" : "Anna sivusto ilman http- tai www-etuliitteitä",
               "name" : "Nimi on pakollinen tieto",
-	      	  "nohelp" : "Ohjetta ei löytynyt"
+	      	  "nohelp" : "Ohjetta ei löytynyt",
+              "saveFailed" : "Kartan julkaisu epäonnistui, yritä myöhemmin uudelleen"
           }
       },
       "NotLoggedView" : {

@@ -66,9 +66,9 @@ function(localization, instance) {
 				}
 			}
 			var pluginValues = this.plugin.getBaseLayers();
-			if(pluginValues.defaultBase) {
+			if(pluginValues.defaultBaseLayer) {
 				values.layerSelection.config.baseLayers = pluginValues.baseLayers;
-				values.layerSelection.config.defaultBaseLayer = pluginValues.defaultBase; 
+				values.layerSelection.config.defaultBaseLayer = pluginValues.defaultBaseLayer; 
 			}
 		}
 		
