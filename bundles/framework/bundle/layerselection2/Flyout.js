@@ -251,12 +251,13 @@ Oskari.clazz
                         var ftr = this._createLayerFooter(layer, layerDiv);
                         footer.append(ftr);
                         slider.show();
+                        slider.setValue(layer.getOpacity());
                     }
-
                 },
                 _addSlider : function(layer) {
                     var me = this;
                     var lyrId = layer.getId();
+                    var opa = layer.getOpacity();
                     var slider = me._sliders[lyrId];
                     if (!slider 
                         || !slider.setStyle
@@ -303,8 +304,6 @@ Oskari.clazz
                                   });
                         me._sliders[lyrId] = slider;
                     }
-                    var opa = layer.getOpacity();
-                    slider.setValue(opa);
                     // only render if visible on screen
                     var lS = 'layout-slider-' + lyrId; 
                     var oS = 'opacity-slider-' + lyrId;
@@ -312,6 +311,7 @@ Oskari.clazz
                         jQuery('#' + oS).length > 0) {
                         slider.insertTo(lS);
                         slider.assignTo(oS);
+                        slider.setValue(opa);
                     } else {
                         // Terrible, terrible kludge to work around
                         // some rightjs issues
@@ -335,6 +335,7 @@ Oskari.clazz
                                 }
                             }, 100);
                     }
+                    slider.setValue(opa);
                     return slider.hide();
                 },
                 /**
