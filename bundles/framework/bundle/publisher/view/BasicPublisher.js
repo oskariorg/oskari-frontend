@@ -442,7 +442,6 @@ function(instance, localization) {
             data : {
             	pubdata : JSON.stringify(selections)
             },
-            dataType : 'json',
             beforeSend : function(x) {
                 if (x && x.overrideMimeType) {
                     x.overrideMimeType("application/j-son; charset=UTF-8");

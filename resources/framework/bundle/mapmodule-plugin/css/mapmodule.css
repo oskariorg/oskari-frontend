@@ -10,9 +10,11 @@ div.mapplugins.left {
     z-index: 15000;
     top : 20px;
     right : 20px;
+    text-align: right;
+    max-width : 85%;
 }
 div.mapplugins.left > div {
 	display: inline-block;
-    margin-left: 20px;
+    margin: 5px;
     vertical-align: top;
 }
