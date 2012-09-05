@@ -286,12 +286,16 @@ function(instance) {
         var sandbox = this.instance.sandbox;
         var serviceCallback = function(blnSuccess, model, blnNew) {
             if(blnSuccess) {
+                // add map layer to map (we could check if its already there but core will handle that)
+                var layerId = me.instance.getCategoryHandler()._getMapLayerId(place.getCategoryID());
+				var requestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
+                var request = requestBuilder(layerId, true);
+                sandbox.request(me, request);
                 if(!blnNew) {
                     // refresh map layer on map -> send update request
-                    var layerId = me.instance.getCategoryHandler()._getMapLayerId(place.getCategoryID());
-                    var requestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
-                    var request = requestBuilder(layerId, true);
-                    sandbox.request(me, request);
+                    var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
+                    var updateRequest = updateRequestBuilder(layerId, true);
+                    sandbox.request(me, updateRequest);
                     // refresh old layer as well if category changed
                     if(oldCategory != place.getCategoryID()) {
                         layerId = me.instance.getCategoryHandler()._getMapLayerId(oldCategory);
