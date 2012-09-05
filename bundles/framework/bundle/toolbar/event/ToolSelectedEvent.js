@@ -42,5 +42,9 @@ function(toolId, groupId) {
         return this._groupId;
     }
 }, {
+    /**
+     * @property {String[]} protocol
+     * @static
+     */
     'protocol' : ['Oskari.mapframework.event.Event']
 });

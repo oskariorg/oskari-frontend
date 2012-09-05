@@ -15,7 +15,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         /* basic tools */
         this.addToolButton('reset', 'history', {
             iconCls : 'tool-reset',
-            tooltip: 'Paluu aloitusnäkymään',
+            tooltip: locales.history.reset,
             sticky: false,
             callback : function() {                
                 // statehandler reset state
@@ -30,7 +30,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         });
         this.addToolButton('history_back', 'history', {
             iconCls : 'tool-history-back',
-            tooltip: 'Taaksepäin historiassa',
+            tooltip: locales.history.back,
             sticky: false,
             callback : function() {
                 me.getSandbox().request(me, reqBuilder('map_control_tool_prev'));
@@ -38,7 +38,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         });
         this.addToolButton('history_forward', 'history', {
             iconCls : 'tool-history-forward',
-            tooltip: 'Eteenpäin historiassa',
+            tooltip: locales.history.next,
             sticky: false,
             callback : function() {
                 me.getSandbox().request(me, reqBuilder('map_control_tool_next'));
@@ -48,7 +48,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         /* basic tools */
         this.addToolButton('zoombox', 'basictools', {
             iconCls : 'tool-zoombox',
-            tooltip: 'Zoom',
+            tooltip: locales.zoom,
             sticky: true,
             callback : function() {
                 me.getSandbox().request(me, reqBuilder('map_control_zoom_tool'));
@@ -56,7 +56,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         });
         this.addToolButton('select', 'basictools', {
             iconCls : 'tool-pan',
-            tooltip: 'Pan',
+            tooltip: locales.pan,
             selected : true,
             sticky: true,
             callback : function() {
@@ -67,7 +67,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         /* Measurements area */
         this.addToolButton('measureline', 'measuretools', {
             iconCls : 'tool-measure-line',
-            tooltip: 'Measure line',
+            tooltip: locales.measure.line,
             sticky: true,
             callback : function() {
                 me.getSandbox().request(me, reqBuilder('map_control_measure_tool'));
@@ -76,7 +76,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         
         this.addToolButton('measurearea', 'measuretools', {
             iconCls : 'tool-measure-area',
-            tooltip: 'Measure area',
+            tooltip: locales.measure.area,
             sticky: true,
             callback : function() {
                 me.getSandbox().request(me, reqBuilder('map_control_measure_area_tool'));

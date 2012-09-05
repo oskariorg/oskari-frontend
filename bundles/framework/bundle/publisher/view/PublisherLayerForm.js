@@ -66,9 +66,9 @@ function(localization, instance) {
 				}
 			}
 			var pluginValues = this.plugin.getBaseLayers();
-			if(pluginValues.defaultBase) {
+			if(pluginValues.defaultBaseLayer) {
 				values.layerSelection.config.baseLayers = pluginValues.baseLayers;
-				values.layerSelection.config.defaultBaseLayer = pluginValues.defaultBase; 
+				values.layerSelection.config.defaultBaseLayer = pluginValues.defaultBaseLayer; 
 			}
 		}
 		
@@ -186,10 +186,10 @@ function(localization, instance) {
                 var isChecked = checkbox.is(':checked');
                 if (isChecked) {
                 	sandbox.request(me.instance, addRequestBuilder(layer.getId(), true));
-                	me.plugin.addLayer(layer);
+                	//me.plugin.addLayer(layer);
                 } else {
                 	sandbox.request(me.instance, removeRequestBuilder(layer.getId()));
-                	me.plugin.removeLayer(layer);
+                	//me.plugin.removeLayer(layer);
                 }
             };
         };
