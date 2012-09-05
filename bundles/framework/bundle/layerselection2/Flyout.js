@@ -232,6 +232,7 @@ Oskari.clazz
                                               isInScale, 
                                               isGeometryMatch) {
                     var footer = layerDiv.find('div.layer-tools');
+                    var slider = this._addSlider(layer);
 
                     if (!layer.isVisible()) {
                         layerDiv.addClass('hidden');
@@ -249,16 +250,19 @@ Oskari.clazz
                     } else {
                         var ftr = this._createLayerFooter(layer, layerDiv);
                         footer.append(ftr);
-                        this._addSlider(layer);
+                        slider.show();
                     }
 
                 },
                 _addSlider : function(layer) {
-
                     var me = this;
-                    var slider = me._sliders[layer.getId()];
-                    if (!slider) {
-                        var slider = new Slider(
+                    var lyrId = layer.getId();
+                    var slider = me._sliders[lyrId];
+                    if (!slider 
+                        || !slider.setStyle
+                        || !slider.handle 
+                        || !slider.handle.setStyle) {
+                        slider = new Slider(
                             {
                                 min : 0,
                                 max : 100
@@ -297,13 +301,15 @@ Oskari.clazz
                                       me._layerOpacityChanged(layer, 
                                                               event.value);
                                   });
-                        me._sliders[layer.getId()] = slider;
+                        me._sliders[lyrId] = slider;
                     }
-                    slider.setValue(layer.getOpacity());
+                    var opa = layer.getOpacity();
+                    slider.setValue(opa);
                     // only render if visible on screen
-                    var lS = 'layout-slider-' + layer.getId(); 
-                    var oS = 'opacity-slider-' + layer.getId();
-                    if (jQuery('#' + lS).length > 0) {
+                    var lS = 'layout-slider-' + lyrId; 
+                    var oS = 'opacity-slider-' + lyrId;
+                    if (jQuery('#' + lS).length > 0 &&
+                        jQuery('#' + oS).length > 0) {
                         slider.insertTo(lS);
                         slider.assignTo(oS);
                     } else {
@@ -311,20 +317,25 @@ Oskari.clazz
                         // some rightjs issues
                         setTimeout(
                             function() {
-                                if (jQuery('#' + lS).length > 0) {
+                                if (jQuery('#' + lS).length > 0 &&
+                                    jQuery('#' + oS).length > 0) {
                                     slider.insertTo(lS);
                                     slider.assignTo(oS);
+                                    slider.setValue(opa);
                                 } else {
                                     setTimeout(
                                         function() {
-                                            if (jQuery('#' + lS).length > 0) {
+                                            if (jQuery('#' + lS).length > 0 &&
+                                                jQuery('#' + oS).length > 0) {
                                                 slider.insertTo(lS);
                                                 slider.assignTo(oS);
+                                                slider.setValue(opa);
                                             }
                                         }, 500);
                                 }
                             }, 100);
                     }
+                    return slider.hide();
                 },
                 /**
                  * @method _layerOrderChanged
@@ -805,15 +816,21 @@ Oskari.clazz
                         var layerContainer = this._createLayerContainer(layer);
                         // footer tools
                         var footer = layerContainer.find('div.layer-tools');
-                        if (!layer.isVisible()) {
-                            layerContainer.addClass('hidden');
-                            footer.append(this._createLayerFooterHidden(layer));
-                        } else if (!layer.isInScale(scale)) {
-                            layerContainer.addClass('out-of-scale');
-                            footer.append(this._createLayerFooterOutOfScale(layer));
-                        } else {
-                            footer.append(this._createLayerFooter(layer, layerContainer));
-                        }
+
+                        this._appendLayerFooter(layerContainer, 
+                                                layer, 
+                                                layer.isInScale(scale), 
+                                                true);
+
+                        // if (!layer.isVisible()) {
+                        //     layerContainer.addClass('hidden');
+                        //     footer.append(this._createLayerFooterHidden(layer));
+                        // } else if (!layer.isInScale(scale)) {
+                        //     layerContainer.addClass('out-of-scale');
+                        //     footer.append(this._createLayerFooterOutOfScale(layer));
+                        // } else {
+                        //     footer.append(this._createLayerFooter(layer, layerContainer));
+                        // }
                         var previousLayers = [];
                         // insert to top
                         if (layer.isBaseLayer() && keepLayersOrder != true) {
