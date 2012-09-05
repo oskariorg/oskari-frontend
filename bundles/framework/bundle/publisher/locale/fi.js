@@ -5,6 +5,10 @@ Oskari.registerLocalization({
       "title" : "Julkaise kartta",
       "flyouttitle" : "Siirry julkaisemaan",
       "desc" : "",
+      "published" : {
+      	"title" : "Kartta julkaistu",
+      	"desc" : "Voit viittaa siihen alla olevalla urlilla"
+      },
       "BasicView" : {
       	  "title" : "Julkaise kartta",
           "domain" : {
