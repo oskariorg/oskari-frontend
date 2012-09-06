@@ -106,11 +106,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/myplaces2/instance.js"
         }, {
-            /*
-            "type" : "text/javascript",
-            "src" : "../../../../libraries/rightjs/javascripts/right/colorpicker.js"
-        }, {
-            */
+        //     
+        //     "type" : "text/javascript",
+        //     "src" : "../../../../libraries/rightjs/javascripts/right/colorpicker.js"
+        // }, {
+        //     
            // NOTE! EXTERNAL LIBRARY!
             "type" : "text/javascript",
             "src" : "../../../../libraries/jscolor/jscolor.js"
