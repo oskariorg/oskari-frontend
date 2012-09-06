@@ -203,12 +203,9 @@ function(instance, localization) {
         var viewName = container.find('div.name a');
         viewName.append(viewData.name);
         viewName.bind('click', function() {
-            var rb = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
-            if (rb) {
-                var req = rb(viewData.state);
-                req.setCurrentViewId(viewData.id);
-                sandbox.request(me.instance, req);
-            }
+            // FIXME: debugging code - open published map in a new window
+            window.open ('/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&published=true&viewId=' + viewData.id,
+                "Published", "location=1,status=1,scrollbars=yes,width=850,height=800");
         });
         container.attr('view_id', viewData.id);
 
@@ -216,10 +213,12 @@ function(instance, localization) {
         var editTool = tools.find('div.edit a');
         editTool.append(this.loc['edit']);
         editTool.bind('click', function() {
-            var viewContainer = jQuery(this).closest('div.view');
-            var id = viewContainer.attr('view_id');
-            var view = me.getViewById(id);
-            me.editView(view);
+            var rb = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
+            if (rb) {
+                var req = rb(viewData.state);
+                req.setCurrentViewId(viewData.id);
+                sandbox.request(me.instance, req);
+            }
         });
         var publishTool = tools.find('div.publish a');
         if (viewData.isPublic) {

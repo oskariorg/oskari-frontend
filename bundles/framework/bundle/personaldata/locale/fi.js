@@ -73,9 +73,9 @@ Oskari.registerLocalization({
             },
             publishedmaps : {
                 title : "Julkaistut kartat",
-                edit : "Muokkaa",
-                publish : "Julkiseksi",
-                unpublish : "Yksityiseksi",
+                edit : "Näytä kartalla",
+                publish : "Julkaise kartta",
+                unpublish : "Peru julkaisu",
                 "delete" : "Poista",
                 'popup' : {
                     'edit' : 'Vaihda kartan nimi',

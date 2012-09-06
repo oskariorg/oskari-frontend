@@ -125,7 +125,6 @@ function(instance, localization) {
         var content = me.template.clone();
         me.container = container;
         container.append(content);
-        alert('test');
         me._refreshViewsList();
     },
     /**
