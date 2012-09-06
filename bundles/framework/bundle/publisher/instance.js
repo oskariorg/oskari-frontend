@@ -174,6 +174,7 @@ function() {
       		var content = loc['published'].desc + '<br/>' + textarea;
       			
 	    	dialog.show(loc['published'].title, content, [okBtn]);
+	    	this.setPublishMode(false);
         },
         /**
          * @method userinterface.ExtensionUpdatedEvent
