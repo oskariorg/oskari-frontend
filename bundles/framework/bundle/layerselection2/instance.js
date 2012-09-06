@@ -184,6 +184,21 @@ function() {
             if(event._creator != this.getName()) {
                 this.plugins['Oskari.userinterface.Flyout'].handleLayerStyleChanged(event.getMapLayer());
             }
+        },     /**
+         * @method userinterface.ExtensionUpdatedEvent
+         * Disable preview on close, otherwise enable preview
+         */
+        'userinterface.ExtensionUpdatedEvent' : function(event) {
+            var me = this;
+            if(event.getExtension().getName() != me.getName()) {
+                // wasn't me -> do nothing
+                return;
+            }
+            var doOpen = event.getViewState() != "close";
+            
+            if (doOpen) {
+            	this.plugins['Oskari.userinterface.Flyout'].createUi();
+            }
         }
 	},
 
