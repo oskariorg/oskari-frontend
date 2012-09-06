@@ -1,2 +1,0 @@
-/* This is a packed Oskari bundle (bundle script version Thu May 31 2012 12:23:19 GMT+0300 (Suomen kesäaika)) */ 
-Oskari.clazz.define("Oskari.mapframework.event.Event",function(){throw"mapframework.event.Event should not be used";this._name=null;this._creator=null},{getName:function(){throw"Running default implementation of Event.getName(). implement your own!"},setCreator:function(a){this._creator=a},getCreator:function(){return this._creator}});
