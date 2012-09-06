@@ -7,7 +7,8 @@ Oskari.registerLocalization({
       "desc" : "",
       "published" : {
       	"title" : "Kartta julkaistu",
-      	"desc" : "Voit viittaa siihen alla olevalla urlilla"
+      	"desc" : "Voit liittää sen sivullesi lisäämällä alla olevan koodin:",
+      	"urlPrefix" : "http://www.paikkatietoikkuna.fi/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&published=true"
       },
       "BasicView" : {
       	  "title" : "Julkaise kartta",
