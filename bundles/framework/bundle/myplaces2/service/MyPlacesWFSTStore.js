@@ -344,6 +344,9 @@ function(url, uuid) {
         var uuid = this.uuid;
         var feats = response.features;
         if (feats == null || feats.length == 0) {
+	        if (cb) {
+	            cb();
+	        }
             return;
         }
             

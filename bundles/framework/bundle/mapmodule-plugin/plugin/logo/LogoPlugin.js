@@ -192,7 +192,6 @@ function(config) {
 	    	var url = myLoc["termsLink"]
 	    	window.open(url, '_blank');
 	    });
-	    logoplugin
     }
 }, {
     /**

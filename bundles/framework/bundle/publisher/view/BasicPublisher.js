@@ -320,7 +320,10 @@ function(instance, localization) {
         saveBtn.setTitle(this.loc.buttons.save);
         saveBtn.addClass('primary');
         saveBtn.setHandler(function() {
-            me._gatherSelections();
+            var selections = me._gatherSelections();
+            if(selections) {
+            	me._publishMap(selections);
+            }
         });
 		saveBtn.insertTo(buttonCont);
 		
@@ -341,7 +344,8 @@ function(instance, localization) {
     /**
      * @method _gatherSelections
      * @private
-     * Gathers publisher selections and sends them to server
+     * Gathers publisher selections and returns them as JSON object
+     * @return {Object}
      */
     _gatherSelections : function() {
         var container = this.mainPanel;
@@ -418,27 +422,41 @@ function(instance, localization) {
         	this._showValidationErrorMessage(errors);
         	return;
         }
+        return selections;
 
+    },
+    _publishMap : function(selections) {
+    	var me = this;
+        var sandbox = this.instance.getSandbox();
         var url = sandbox.getAjaxUrl();
-        // alert(JSON.stringify(selections, null, 4));
-        // return;
-
+		var errorHandler = function() {
+	    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+	    	var okBtn = dialog.createCloseButton(me.loc.buttons.ok);
+	    	dialog.show(me.loc['error'].title, me.loc['error'].saveFailed, [okBtn]);
+        };
+        
+        // make the ajax call
         jQuery.ajax({
             url : url + '&action_route=Publish',
             type : 'POST',
-            data : 'pubdata=' + JSON.stringify(selections),
-            dataType : 'json',
+            data : {
+            	pubdata : JSON.stringify(selections)
+            },
             beforeSend : function(x) {
                 if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;" + "charset=UTF-8");
+                    x.overrideMimeType("application/j-son; charset=UTF-8");
                 }
             },
             success : function(response) {
-                alert("Ok");
+            	if(response.id > 0) {
+			        var event = sandbox.getEventBuilder('Publisher.MapPublishedEvent')(response.id);
+			        sandbox.notifyAll(event);
+            	}
+            	else {
+            		errorHandler();
+            	}
             },
-            error : function() {
-                alert("Fail");
-            }
+            error : errorHandler
         });
     },
     /**

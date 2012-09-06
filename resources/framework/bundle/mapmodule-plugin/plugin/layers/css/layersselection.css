@@ -28,11 +28,12 @@ div.mapplugin.layerSelectionPlugin {
 
 .layerSelectionPlugin div.content div.layer {
     margin: 5px 0;
+    text-align: left;
 }
 
 .layerSelectionPlugin div.content div.layer input {
-    float : left;
     margin-right : 10px;
+    float : left;
 }
 .layerSelectionPlugin div.content div.baseLayerHeader {
   background-color: #DDDDDD;

@@ -151,7 +151,22 @@ function() {
          * @param {Oskari.mapframework.event.common.AfterMapMoveEvent} event
          */
         'AfterMapMoveEvent' : function(event) {
+        	// TODO: not needed anymore?
             this.plugins['Oskari.userinterface.Flyout'].handleMapMoved();
+        },
+        /**
+         * @method Publisher.MapPublishedEvent
+         * @param {Oskari.mapframework.bundle.publisher.event.MapPublishedEvent} event
+         */
+        'Publisher.MapPublishedEvent' : function(event) {
+	    	var loc = this.getLocalization();
+	    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+	    	var okBtn = dialog.createCloseButton(loc['BasicView'].buttons.ok);
+	    	
+        	// TODO: generate url
+      		var content = loc['published'].desc + ':<br/>' +
+      			'/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&published=true&viewId=' + event.getId();
+	    	dialog.show(loc['published'].title, content, [okBtn]);
         },
         /**
          * @method userinterface.ExtensionUpdatedEvent

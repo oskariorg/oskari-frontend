@@ -16,6 +16,7 @@ function(config) {
     this._map = null;
     this.element = undefined;
     this.conf = config;
+    this.initialSetup = true;
 }, {
     /** @static @property __name module name */
     __name : 'LayerSelectionPlugin',
@@ -112,17 +113,6 @@ function(config) {
         }
 		
 		this._createUI();
-
-		// reacting to conf
-		if(this.conf && this.conf.baseLayers) {
-			// TODO: currently not tested, TEST ON PUBLISHED MAP!
-			for(var i = 0; i < this.conf.baseLayers.length; ++i) {
-				this.addBaseLayer(this.conf.baseLayers[i]);
-			}
-			if(this.conf.defaultBase) {
-				this.selectBaseLayer(this.conf.defaultBase);
-			}
-		}
     },
     /**
      * @method stopPlugin
@@ -172,6 +162,48 @@ function(config) {
      * @static
      */
     eventHandlers : {
+        /**
+         * @method AfterMapLayerRemoveEvent
+         * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent} event
+         * 
+         * Removes the layer from selection
+         */
+        'AfterMapLayerRemoveEvent' : function(event) {
+        	this.removeLayer(event.getMapLayer());
+        },
+        /**
+         * @method AfterMapLayerAddEvent
+         * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
+         * 
+         * Adds the layer to selection
+         */
+        'AfterMapLayerAddEvent' : function(event) {
+        	this.addLayer(event.getMapLayer());
+        },
+        /**
+         * @method AfterMapMoveEvent
+         * @param {Oskari.mapframework.event.common.AfterMapMoveEvent} event
+         * 
+         * Adds the layer to selection
+         */
+        'AfterMapMoveEvent' : function(event) {
+        	// setup initial state here since we are using selected layers to create ui
+        	// and plugin is started before any layers have been added
+        	if(this.initialSetup) {
+        		this.initialSetup = false;
+        		
+				// reacting to conf
+				if(this.conf && this.conf.baseLayers) {
+					for(var i = 0; i < this.conf.baseLayers.length; ++i) {
+		        		var layer = this._sandbox.findMapLayerFromSelectedMapLayers(this.conf.baseLayers[i]);
+						this.addBaseLayer(layer);
+					}
+					if(this.conf.defaultBaseLayer) {
+						this.selectBaseLayer(this.conf.defaultBaseLayer);
+					}
+				}
+        	}
+        }
     },
 
     /**
@@ -292,7 +324,9 @@ function(config) {
      * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer} layer layer to move
      */
     addBaseLayer : function(layer) {
-        if (!layer.getId) return;
+        if (!layer || !layer.getId) {
+        	return;
+    	}
         var div = this.layerRefs[layer.getId()];
     	div.remove();
     	
@@ -370,7 +404,7 @@ function(config) {
         for(var i = 0 ; i < values.baseLayers.length; ++i) {
 			var layerId = values.baseLayers[i];
         	var layer = this._sandbox.findMapLayerFromSelectedMapLayers(layerId);
-    		this._setLayerVisible(layer, (values.defaultBase == layerId));
+    		this._setLayerVisible(layer, (values.defaultBaseLayer == layerId));
         }
     },
     /**
@@ -426,7 +460,7 @@ function(config) {
     	}
     	return {
     		baseLayers : layers,
-    		defaultBase : checkedLayer
+    		defaultBaseLayer : checkedLayer
     	}
     },
     /**

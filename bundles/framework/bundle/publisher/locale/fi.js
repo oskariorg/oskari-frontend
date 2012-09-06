@@ -5,6 +5,10 @@ Oskari.registerLocalization({
       "title" : "Julkaise kartta",
       "flyouttitle" : "Siirry julkaisemaan",
       "desc" : "",
+      "published" : {
+      	"title" : "Kartta julkaistu",
+      	"desc" : "Voit viittaa siihen alla olevalla urlilla"
+      },
       "BasicView" : {
       	  "title" : "Julkaise kartta",
           "domain" : {
@@ -74,7 +78,8 @@ Oskari.registerLocalization({
               "domain" : "Sivusto on pakollinen tieto",
               "domainStart" : "Anna sivusto ilman http- tai www-etuliitteitä",
               "name" : "Nimi on pakollinen tieto",
-	      	  "nohelp" : "Ohjetta ei löytynyt"
+	      	  "nohelp" : "Ohjetta ei löytynyt",
+              "saveFailed" : "Kartan julkaisu epäonnistui, yritä myöhemmin uudelleen"
           }
       },
       "NotLoggedView" : {

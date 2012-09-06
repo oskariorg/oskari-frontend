@@ -448,6 +448,10 @@ function(id) {
     },
     setZoomLevel : function(newZoomLevel, suppressEvent) {
         //console.log('zoom to ' + requestedZoomLevel);
+        if(newZoomLevel == this._map.getZoom()) {
+        	// do nothing if requested zoom is same as current
+        	return;
+        }
         if(newZoomLevel < 0 || newZoomLevel > this._map.getNumZoomLevels) {
             newZoomLevel = this._map.getZoom();
         }
