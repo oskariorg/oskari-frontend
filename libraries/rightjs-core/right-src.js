@@ -6924,7 +6924,7 @@ if (needs_css_engine_patch) {
 }
 
 // globalizing the top-level variables
-$ext(window, Object.without(RightJS, 'version', 'modules'));
+$ext(window, Object.without(RightJS, 'version', 'modules', '$'));
 
 return RightJS;
 })(window, document, Object, Array, String, Function, Number, Math);
