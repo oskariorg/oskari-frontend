@@ -96,7 +96,7 @@ function(instance, localization) {
             }
     	});
     	var cancelBtn = dialog.createCloseButton(this.loc.button.cancel);
-    	dialog.show(this.loc.popup.title, form.getForm(), [cancelBtn, okBtn]);
+    	dialog.show(title, form.getForm(), [cancelBtn, okBtn]);
     },
     /**
      * @method getName
@@ -125,6 +125,7 @@ function(instance, localization) {
         var content = me.template.clone();
         me.container = container;
         container.append(content);
+        alert('test');
         me._refreshViewsList();
     },
     /**
@@ -147,14 +148,6 @@ function(instance, localization) {
         }
         listContainer.find('div.view:odd').addClass('odd');
         listContainer.find('div.view:even').removeClass('odd');
-        /*
-        // TODO: preferrably call some this.instance.updateTile() so we can calculate my places etc to tile number as well
-        var tile = me.instance.plugins['Oskari.userinterface.Tile'];
-        var ctr = tile.container;
-        var ts = jQuery(ctr).find('.oskari-tile-status');
-        ts.empty();
-        ts.append('(' + views.length + ')');
-        */
     },
 
     /**
@@ -162,57 +155,37 @@ function(instance, localization) {
      * Refreshes the tab contents
      */
     _refreshViewsList : function() {
-        var me = this; 
-        jQuery.ajax({
-            url : me.instance.sandbox.getAjaxUrl() + 'action_route=GetViews',
-            type : 'POST',
-            dataType : 'json',
-            beforeSend : function(x) {
-                if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
-                }
-            },
-            success : function(response) {
-            	me._renderViewsList(response.views);
-            },
-            error : function() {
-    			var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-		    	var button = dialog.createCloseButton(me.loc.button.ok);
-				button.addClass('primary');
-		    	dialog.show(me.loc['error'].title, me.loc['error'].loadfailed, [button]);
+        var me = this;
+        var service = me.instance.getViewService();
+        service.loadViews('USER', function(isSuccess, response) {
+            if (isSuccess) {
+                me._renderViewsList(response.views);
+            } else {
+                me._showErrorMessage(me.loc['error'].loadfailed);
             }
         });
     },
+
     /**
      * @method editView
      */
     editView : function(view) {
         var me = this;
         var sandbox = this.instance.getSandbox();
-    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var service = me.instance.getViewService();
         
         var successCallback = function(newName) {
-            jQuery.ajax({
-                url : me.instance.sandbox.getAjaxUrl() + '&action_route=RenameView',
-                type : 'POST',
-                data : 'id=' + view.id + '&newName=' + newName,
-                dataType : 'json',
-                beforeSend : function(x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
-                    }
-                },
-                success : function(response) {
-			    	dialog.show(me.loc['popup'].title, me.loc['save'].success);
-			    	dialog.fadeout();
+            service.renameView(view.id, newName, function(isSuccess) {
+                if(isSuccess) {
+                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                    dialog.show(me.loc['popup'].title, me.loc['save'].success);
+                    dialog.fadeout();
                     me._refreshViewsList();
-                },
-                error : function() {
-			    	var button = dialog.createCloseButton(me.loc.button.ok);
-    				button.addClass('primary');
-			    	dialog.show(me.loc['error'].title, me.loc['error'].notsaved, [button]);
                 }
-            });
+                else {
+                    me._showErrorMessage(me.loc['error'].notsaved);
+                }
+            })
         };
 
         this._promptForViewName(successCallback, view.name);
@@ -234,14 +207,6 @@ function(instance, localization) {
             var rb = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
             if (rb) {
                 var req = rb(viewData.state);
-                /*
-                 var mfst = (typeof viewData.state.mapfull.state);
-                 // TODO: Why is this needed?
-                 if (mfst == "string") {
-                 viewData.state.mapfull.state =
-                 JSON.parse(viewData.state.mapfull.state);
-                 }
-                 */
                 req.setCurrentViewId(viewData.id);
                 sandbox.request(me.instance, req);
             }
@@ -263,6 +228,7 @@ function(instance, localization) {
         } else {
             publishTool.append(this.loc['publish']);
         }
+        var service = me.instance.getViewService();
         publishTool.bind('click', function() {
             var viewContainer = jQuery(this).closest('div.view');
             var id = viewContainer.attr('view_id');
@@ -270,27 +236,21 @@ function(instance, localization) {
             if (!view) {
                 return;
             }
-            view.isPublic = !view.isPublic;
-            if (view.isPublic) {
-                publishTool.html(me.loc['unpublish']);
-            } else {
-                publishTool.html(me.loc['publish']);
-            }
-            // '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR_portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_portti2mapportlet_fi' + '.mml.baseportlet.CMD=ajax.jsp' + 
-            jQuery.ajax({
-                url : me.instance.sandbox.getAjaxUrl() + '&action_route=AdjustViewAccess' + '&id=' + id + '&isPublic=' + view.isPublic,
-                type : 'POST',
-                dataType : 'json',
-                beforeSend : function(x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+            var newState = !view.isPublic;
+            service.makeViewPublic(id, newState, function(isSuccess) {
+                if(isSuccess) {
+                    view.isPublic = newState;
+                    if (view.isPublic) {
+                        publishTool.html(me.loc['unpublish']);
+                    } else {
+                        publishTool.html(me.loc['publish']);
                     }
-                },
-                success : function(response) {
-                    me._refreshViewsList();
-                },
-                error : function() {
-                    alert(loc['efailtoremovemyview']);
+                }
+                else if(newState) {
+                    me._showErrorMessage(me.loc['error'].makePublic);
+                }
+                else {
+                    me._showErrorMessage(me.loc['error'].makePrivate);
                 }
             });
         });
@@ -314,9 +274,8 @@ function(instance, localization) {
                 return this.viewData[i];
             }
         }
-        // TODO: error handling?
-        alert('Couldnt find view for id: ' + id);
-        return null;
+        // couldn't find view -> show an error
+        this._showErrorMessage(me.loc['error'].generic);
     },
     /**
      * @method bindEvents
@@ -329,7 +288,6 @@ function(instance, localization) {
         for (p in this.eventHandlers) {
             sandbox.registerForEventByName(this, p);
         }
-
     },
     /**
      * @method _confirmDelete
@@ -355,27 +313,25 @@ function(instance, localization) {
      */
     _deleteView : function(view) {
     	var me = this;
-    	// '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR' + '_portti2mapportlet' + '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' + '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_' + 'portti2mapportlet_fi' + '.mml.baseportlet.CMD=ajax.jsp' + 
-        jQuery.ajax({
-            url : me.instance.sandbox.getAjaxUrl() + '&action_route=DeleteView&id=' + view.id,
-            type : 'POST',
-            beforeSend : function(x) {
-                if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
-                }
-            },
-            success : function(response) {
+    	var service = me.instance.getViewService();
+    	service.deleteView(view, function(isSuccess) {
+    		if(isSuccess) {
                 me._refreshViewsList();
-            },
-            error : function() {
-	    		var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        		// delete failed
-		    	var button = dialog.createCloseButton(this.loc.button.ok);
-				button.addClass('primary');
-		    	dialog.show(this.loc['error'].title, this.loc['error'].notdeleted, [button]);
-        		return;
-            }
-        });
+    		}
+    		else {
+    			me._showErrorMessage(me.loc['error'].notdeleted);
+    		}
+    	});
+    },
+    /**
+     * @method _showErrorMessage
+     */
+    _showErrorMessage : function(msg) {
+		var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+		// delete failed
+    	var button = dialog.createCloseButton(this.loc.button.ok);
+		button.addClass('primary');
+    	dialog.show(this.loc['error'].title, msg, [button]);
     },
     /**
      * @method unbindEvents
@@ -399,15 +355,13 @@ function(instance, localization) {
          * @method StateSavedEvent
          */
         'StateSavedEvent' : function(event) {
-	    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         	if(event.isError()) {
         		// save failed
-		    	var button = dialog.createCloseButton(this.loc.button.ok);
-				button.addClass('primary');
-		    	dialog.show(this.loc['error'].title, this.loc['error'].notsaved, [button]);
+        		this._showErrorMessage(this.loc['error'].notsaved);
         		return;
         	}
         	
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 	    	dialog.show(this.loc['popup'].title, this.loc['save'].success);
 	    	dialog.fadeout();
 	    	// reload views on success
