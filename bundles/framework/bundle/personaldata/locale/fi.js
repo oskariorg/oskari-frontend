@@ -37,6 +37,12 @@ Oskari.registerLocalization({
                 publish : "Julkiseksi",
                 unpublish : "Yksityiseksi",
                 "delete" : "Poista",
+                "grid" : {
+                    "name" : "Nimi",
+                    "publish" : "Julkaisu",
+                    "edit" : " ",
+                    "delete" : " "
+                },
                 'popup' : {
                 	'edit' : 'Vaihda näkymän nimi',
                     "title" : 'Näkymän tallennus',
@@ -80,7 +86,7 @@ Oskari.registerLocalization({
                 "grid" : {
                     "name" : "Nimi",
                     "domain" : "Julkaisupaikka",
-                    "publish" : " ",
+                    "publish" : "Tila",
                     "edit" : " ",
                     "delete" : " "
                 },

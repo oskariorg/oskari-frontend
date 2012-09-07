@@ -164,6 +164,8 @@ function(instance, localization) {
     /**
      * @method _getGridModel
      * Wraps views to Oskari.userinterface.component.GridModel
+     * @return {Oskari.userinterface.component.GridModel} 
+     * @private
      */
     _getGridModel : function(views) {
 
@@ -187,8 +189,11 @@ function(instance, localization) {
         return gridModel;
     },
     /**
-     * @method _getGridModel
-     * Wraps views to Oskari.userinterface.component.GridModel
+     * @method _getGrid
+     * Creates Oskari.userinterface.component.Grid and populates it with given model
+     * @param {Oskari.userinterface.component.GridModel} model to populate the grid with
+     * @return {Oskari.userinterface.component.Grid}
+     * @private
      */
     _getGrid : function(model) {
         var me = this;
@@ -243,7 +248,7 @@ function(instance, localization) {
         var service = instance.getViewService();
         var publishRenderer = function(name, data) {
             var link = me.templateLink.clone();
-            link.append(name);
+            link.html(name);
             link.bind('click', function() {
                 var view = me.getViewById(data.id);
                 if(view) {
@@ -252,10 +257,11 @@ function(instance, localization) {
                         if(isSuccess) {
                             view.isPublic = newState;
                             if (view.isPublic) {
-                                link.html(me.loc['unpublish']);
+                                data.publish = me.loc['unpublish'];
                             } else {
-                                link.html(me.loc['publish']);
+                                data.publish = me.loc['publish'];
                             }
+                            link.html(data.publish);
                         }
                         else if(newState) {
                             me._showErrorMessage(me.loc['error'].makePublic);
