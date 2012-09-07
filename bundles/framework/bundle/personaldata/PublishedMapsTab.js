@@ -14,90 +14,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
 function(instance, localization) {
     this.instance = instance;
     this.template = jQuery('<div class="viewsList volatile"></div>');
-    this.templateViewRow = jQuery('<div class="view">' + '<div class="name"><a href="JavaScript:void(0);">' + '</a></div></div>');
-    this.templateViewTools = jQuery('<div class="tools">' + '<div class="edit">' + '<a href="JavaScript:void(0);">' + '</a></div>' + '<div class="publish">' + '<a href="JavaScript:void(0);">' + '</a></div>' + '<div class="delete">' + '<a href="JavaScript:void(0);">' + '</a></div></div>');
+    this.templateLink = jQuery('<a href="JavaScript:void(0);"></a>');
     this.loc = localization;
     this.container = null;
-    
-    var sandbox = instance.sandbox;
-    var me = this;
-    // add save view button to toolbar if we get the statehandler request
-    var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
-    if (rbState) {
-        var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
-        sandbox.request(instance, reqBuilder('save_view', 'viewtools', {
-            iconCls : 'tool-save-view',
-            tooltip: localization.button.toolbarsave,
-            sticky: false,
-            callback : function() {
-                me._promptForViewName(function(name) {
-                    var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
-                    sandbox.request(instance, rbState(name));   
-                });
-            }
-        }));
-    }
-    // disable button for non logged in users
-    if(!sandbox.getUser().isLoggedIn()) {
-        var reqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
-        sandbox.request(instance, reqBuilder('save_view', 'viewtools', false));
-    }
 }, {
-    /**
-     * @method _promptForViewName
-     * @private
-     */
-    _promptForViewName : function(successCallback,viewName) {
-        var me = this;
-        
-        var form = Oskari.clazz.create('Oskari.userinterface.component.Form');
-        var nameInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput', 'name');
-        //nameInput.setLabel(this.loc.popup.label);
-        nameInput.setPlaceholder(this.loc.popup.placeholder);
-        var title = this.loc.popup.title;
-        if(viewName) {
-            title = this.loc.popup.edit;
-            nameInput.setValue(viewName);
-        }
-        nameInput.setValidator(function(inputField)  {
-            var value = inputField.getValue();
-            var name = inputField.getName();
-            var errors = [];
-            if (!value) {
-                errors.push({
-                    "field": name, 
-                    "error" :  me.loc.save.error_noname
-                });
-                return errors;
-            }
-            if (value.indexOf('<') >= 0) {
-                errors.push({
-                    "field": name, 
-                    "error" :  me.loc.save.error_illegalchars
-                });
-            } 
-            return errors;
-        });
-        form.addField(nameInput);
-        
-        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        okBtn.setTitle(this.loc.button.save);
-        okBtn.addClass('primary');
-        
-        var sandbox = this.instance.sandbox;
-        okBtn.setHandler(function() {
-            var errors = form.validate();
-            if (errors.length == 0) {
-                successCallback(nameInput.getValue());
-                dialog.close();
-            } else {
-                form.showErrors();
-            }
-        });
-        var cancelBtn = dialog.createCloseButton(this.loc.button.cancel);
-        dialog.show(title, form.getForm(), [cancelBtn, okBtn]);
-    },
     /**
      * @method getName
      * @return {String} name of the component
@@ -138,15 +58,11 @@ function(instance, localization) {
         }
         var me = this;
         var listContainer = me.container.find('.viewsList');
-        listContainer.html('');
+        listContainer.empty();
         this.viewData = views;
-        for (var i = 0; i < me.viewData.length; i++) {
-            var datum = me.viewData[i];
-            var vc = me.createViewContainer(datum);
-            listContainer.append(vc);
-        }
-        listContainer.find('div.view:odd').addClass('odd');
-        listContainer.find('div.view:even').removeClass('odd');
+        var model = this._getGridModel(views);
+        var grid = this._getGrid(model);
+        grid.renderTo(listContainer);
     },
 
     /**
@@ -165,106 +81,7 @@ function(instance, localization) {
         });
     },
 
-    /**
-     * @method editView
-     */
-    editView : function(view) {
-        var me = this;
-        var sandbox = this.instance.getSandbox();
-        var service = me.instance.getViewService();
-        
-        var successCallback = function(newName) {
-            service.renameView(view.id, newName, function(isSuccess) {
-                if(isSuccess) {
-                    var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                    dialog.show(me.loc['popup'].title, me.loc['save'].success);
-                    dialog.fadeout();
-                    me._refreshViewsList();
-                }
-                else {
-                    me._showErrorMessage(me.loc['error'].notsaved);
-                }
-            })
-        };
 
-        this._promptForViewName(successCallback, view.name);
-    },
-
-    /**
-     * @method getViewContainer
-     * @return {jQuery} returns jQuery object representing a row
-     * in the views listing
-     */
-    createViewContainer : function(viewData) {
-        var me = this;
-        var sandbox = this.instance.getSandbox();
-        var container = this.templateViewRow.clone();
-        var tools = this.templateViewTools.clone();
-        var viewName = container.find('div.name a');
-        viewName.append(viewData.name);
-        viewName.bind('click', function() {
-            // FIXME: debugging code - open published map in a new window
-            window.open ('/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&published=true&viewId=' + viewData.id,
-                "Published", "location=1,status=1,scrollbars=yes,width=850,height=800");
-        });
-        container.attr('view_id', viewData.id);
-
-        container.append(tools);
-        var editTool = tools.find('div.edit a');
-        editTool.append(this.loc['edit']);
-        editTool.bind('click', function() {
-            var rb = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
-            if (rb) {
-                var req = rb(viewData.state);
-                req.setCurrentViewId(viewData.id);
-                sandbox.request(me.instance, req);
-            }
-        });
-        var publishTool = tools.find('div.publish a');
-        if (viewData.isPublic) {
-            publishTool.append(this.loc['unpublish']);
-        } else {
-            publishTool.append(this.loc['publish']);
-        }
-        var service = me.instance.getViewService();
-        publishTool.bind('click', function() {
-            var viewContainer = jQuery(this).closest('div.view');
-            var id = viewContainer.attr('view_id');
-            var view = me.getViewById(id);
-            if (!view) {
-                return;
-            }
-            var newState = !view.isPublic;
-            service.makeViewPublic(id, newState, function(isSuccess) {
-                if(isSuccess) {
-                    view.isPublic = newState;
-                    if (view.isPublic) {
-                        publishTool.html(me.loc['unpublish']);
-                    } else {
-                        publishTool.html(me.loc['publish']);
-                    }
-                }
-                else if(newState) {
-                    me._showErrorMessage(me.loc['error'].makePublic);
-                }
-                else {
-                    me._showErrorMessage(me.loc['error'].makePrivate);
-                }
-            });
-        });
-        var deleteTool = tools.find('div.delete a');
-        deleteTool.append(this.loc['delete']);
-
-        deleteTool.bind('click', function() {
-            var viewContainer = jQuery(this).closest('div.view');
-            var id = viewContainer.attr('view_id');
-            var view = me.getViewById(id);
-            if(view) {
-                me._confirmDelete(view);
-            }
-        });
-        return container;
-    },
     getViewById : function(id) {
         for (var i = 0; i < this.viewData.length; ++i) {
             // found what we were looking for
@@ -344,6 +161,130 @@ function(instance, localization) {
         }
     },
 
+    /**
+     * @method _getGridModel
+     * Wraps views to Oskari.userinterface.component.GridModel
+     * @return {Oskari.userinterface.component.GridModel} 
+     * @private
+     */
+    _getGridModel : function(views) {
+
+        var gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
+        gridModel.setIdField('id');
+        for(var i = 0; i < views.length; ++i) {
+            var view = views[i];
+            var isPublic = (view.isPublic === true);
+            var data = {
+                'id': view.id,
+                'state' : view.state,
+                'name' : view.name,
+                'domain' : view.pubDomain,
+                'isPublic' : isPublic,
+                'edit' : this.loc.edit,
+                'publish' : isPublic ? this.loc.unpublish : this.loc.publish,
+                'delete' : this.loc['delete']
+            };
+            gridModel.addData(data);
+        }
+        return gridModel;
+    },
+    /**
+     * @method _getGrid
+     * Creates Oskari.userinterface.component.Grid and populates it with given model
+     * @param {Oskari.userinterface.component.GridModel} model to populate the grid with
+     * @return {Oskari.userinterface.component.Grid}
+     * @private
+     */
+    _getGrid : function(model) {
+        var me = this;
+        var instance = this.instance;
+        var sandbox = instance.getSandbox();
+        var visibleFields = ['name', 'domain', 'publish', 'edit', 'delete'];
+        var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+        grid.setDataModel(model);
+        grid.setVisibleFields(visibleFields);
+        // set up the link from name field
+        var nameRenderer = function(name, data) {
+            var link = me.templateLink.clone();
+            link.append(name);
+            link.bind('click', function() {
+                // FIXME: debugging code - open published map in a new window
+                window.open ('/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&published=true&viewId=' + data.id,
+                    "Published", "location=1,status=1,scrollbars=yes,width=850,height=800");
+            });
+            return link;
+        };
+        grid.setColumnValueRenderer('name', nameRenderer);
+        // set up the link from edit field
+        var editRenderer = function(name, data) {
+            var link = me.templateLink.clone();
+            link.append(name);
+            link.bind('click', function() {
+                var rb = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
+                if (rb) {
+                    var req = rb(data.state);
+                    req.setCurrentViewId(data.id);
+                    sandbox.request(instance, req);
+                }
+            });
+            return link;
+        };
+        grid.setColumnValueRenderer('edit', editRenderer);
+        // set up the link from edit field
+        var deleteRenderer = function(name, data) {
+            var link = me.templateLink.clone();
+            link.append(name);
+            link.bind('click', function() {
+                var view = me.getViewById(data.id);
+                if(view) {
+                    me._confirmDelete(view);
+                }
+            });
+            return link;
+        };
+        grid.setColumnValueRenderer('delete', deleteRenderer);
+        
+        // set up the link from edit field
+        var service = instance.getViewService();
+        var publishRenderer = function(name, data) {
+            var link = me.templateLink.clone();
+            link.html(name);
+            link.bind('click', function() {
+                var view = me.getViewById(data.id);
+                if(view) {
+                    var newState = !view.isPublic;
+                    service.makeViewPublic(data.id, newState, function(isSuccess) {
+                        if(isSuccess) {
+                            view.isPublic = newState;
+                            if (view.isPublic) {
+                                data.publish = me.loc['unpublish'];
+                            } else {
+                                data.publish = me.loc['publish'];
+                            }
+                            link.html(data.publish);
+                        }
+                        else if(newState) {
+                            me._showErrorMessage(me.loc['error'].makePublic);
+                        }
+                        else {
+                            me._showErrorMessage(me.loc['error'].makePrivate);
+                        }
+                    });
+                }
+            });
+            return link;
+        };
+        grid.setColumnValueRenderer('publish', publishRenderer);
+        
+        // setup localization
+        for(var i=0; i < visibleFields.length; ++i) {
+            var key = visibleFields[i];
+            grid.setColumnUIName(key, this.loc.grid[key]);
+        }
+        
+        
+        return grid;
+    },
     /**
      * @property {Object} eventHandlers
      * @static
