@@ -77,6 +77,13 @@ Oskari.registerLocalization({
                 publish : "Julkaise kartta",
                 unpublish : "Peru julkaisu",
                 "delete" : "Poista",
+                "grid" : {
+                    "name" : "Nimi",
+                    "domain" : "Julkaisupaikka",
+                    "publish" : " ",
+                    "edit" : " ",
+                    "delete" : " "
+                },
                 'popup' : {
                     'edit' : 'Vaihda kartan nimi',
                     "title" : 'Kartan tallennus',
