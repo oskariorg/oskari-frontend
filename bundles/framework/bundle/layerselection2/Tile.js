@@ -84,6 +84,39 @@ function(instance) {
     setState : function(state) {
         console.log("Tile.setState", this, state);
     },
+    notifyUser : function() {
+        var me = this;
+        var status = this.container.children('.oskari-tile-status');
+        
+        // stop current animation
+        status.stop();
+        // blink 2 times
+        this._blink(status, 2);
+    },
+    _blink : function(element, count) {
+        var me = this;
+        if(!element) {
+            return;
+        }
+        if(!count) {
+            count = 1;
+        }
+        // animate to low opacity
+        element.animate({
+            opacity: 0.25,
+        }, 500, function() {
+            // on complete, animate back to fully visible
+             element.animate({
+                opacity: 1,
+            }, 500,function() {
+                // on complete, check and adjust the count parameter
+                // recurse if count has not been reached yet
+                if(count > 1) {
+                    me._blink(element, --count);
+                }
+            });
+        });  
+    },
     /**
      * @method refresh
      * Creates the UI for a fresh start
@@ -101,7 +134,7 @@ function(instance) {
         var status = this.container.children('.oskari-tile-status');
         status.addClass('icon-bubble-right');
         status.html(layerCount);
-
+        this.notifyUser();
     }
 }, {
     /**
