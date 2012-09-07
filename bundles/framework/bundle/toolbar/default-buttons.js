@@ -116,7 +116,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 				var linkParams = me.getSandbox().generateMapLinkParameters();
 				linkParams += '&p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&showMarker=false&forceCache=true&mapmode=print&viewId=2';
 				var link = window.location.pathname + '?' + linkParams;
-				window.open (link,"Print", "location=1,status=1,scrollbars=yes,width=850,height=800");
+				window.open (link,"Print", "location=1,status=1,scrollbars=1,width=850,height=1200");
 			}
         });
         
