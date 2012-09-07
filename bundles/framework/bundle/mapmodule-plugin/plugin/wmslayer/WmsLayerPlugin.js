@@ -173,8 +173,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin', function() {
 
                     openLayer.opacity = layer.getOpacity() / 100;
 
-                    this.attachLoadingStatusToLayer(openLayer, true, layer);
-
                     this._map.addLayer(openLayer);
 
                     this._sandbox.printDebug(" [SnappyWMSLayer]  Created SnappyGrid for WMS WITH SUBLAYERS for " + layer.getId());
@@ -206,8 +204,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin', function() {
 
                 openLayer.opacity = layer.getOpacity() / 100;
 
-                this.attachLoadingStatusToLayer(openLayer, true, layer);
-
                 this._map.addLayer(openLayer);
 
                 this._sandbox.printDebug(" [SnappyWMSLayer]  Created SnappyGrid for WMS WITH SUBLAYERS for " + layer.getId());
@@ -238,7 +234,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin', function() {
                 buffer : 0
             });
 
-            this.attachLoadingStatusToLayer(openLayer, true, layer);
             openLayer.opacity = layer.getOpacity() / 100;
 
             this._map.addLayer(openLayer);
@@ -371,36 +366,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin', function() {
                 });
             }
         }
-    },
-    /**
-     * Registeres load events to layer that will notify when map is ready
-     *
-     * @param {Object}
-     *            openLayer openLayer object
-     * @param {Boolean}
-     *            isWms is this a wms layer
-     * @param {Layer}
-     *            portti layer
-     */
-    attachLoadingStatusToLayer : function(openLayer, isWms, layer) {
-        var sandbox = this._sandbox;
-        var me = this;
-        
-		
-        var statusText = this.getMapModule().getLocalization('status_update_map') + " '" + layer.getName() + "'...";
-
-        /* Notify that loading has started */
-        openLayer.events.register("loadstart", openLayer, function() {
-            sandbox.request(me, sandbox.getRequestBuilder('ActionStartRequest')(openLayer.id, statusText, true));
-        });
-        /* Notify that Map is ready */
-        openLayer.events.register("loadend", openLayer, function() {
-            sandbox.request(me, sandbox.getRequestBuilder('ActionReadyRequest')(openLayer.id, true));
-        });
-        /* Notify that Map is ready */
-        openLayer.events.register("loadcancel", openLayer, function() {
-            sandbox.request(me, sandbox.getRequestBuilder('ActionReadyRequest')(openLayer.id, true));
-        });
     }
 }, {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]

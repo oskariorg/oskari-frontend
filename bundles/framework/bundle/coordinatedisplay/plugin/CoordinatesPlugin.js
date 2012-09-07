@@ -69,19 +69,24 @@ function(config) {
             jQuery('<div class="cbDiv">' +
                    ' <div class="cbSpansWrapper">' + 
                    ' <div class="cbRow">' + 
-               '  <span class="cbLabel" axis="lat">N: </span>' +
-               '  <span class="cbValue" axis="lat"></span>' +
+               '  <div class="cbLabel" axis="lat">P: </div>' +
+               '  <div class="cbValue" axis="lat"></div>' +
                ' </div>' +
-               ' <div class="cbRow">' + 
-               '  <span class="cbLabel" axis="lon">E: </span>' +
+               '  <br clear="both">' +
+               ' <div class="cbRow">' +
+               '  <div class="cbLabel" axis="lon">I: </div>' +
+               '  <div class="cbValue" axis="lon"></div>' + 
+               /*
+               '  <span class="cbLabel" axis="lon">I: </span>' +
                '  <span class="cbValue" axis="lon"></span>' +
+               */
                ' </div>' +
                ' </div>' + 
-               ' <div class="cbSelection">'+
+               /*' <div class="cbSelection">'+
                '  <div style="float:left">ETRS89</div>' + 
                '  <div class="cbArrowDown"></div>' + 
                '  <br clear="both">'+
-               ' </div>' +
+               ' </div>' +*/
                '</div>');
     },
     /**
