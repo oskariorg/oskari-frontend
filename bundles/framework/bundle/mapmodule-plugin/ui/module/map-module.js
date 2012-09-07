@@ -81,35 +81,6 @@ function(id) {
         this._navigationHistoryTool.clear();
     },
     /**
-     * Registeres load events to layer that will notify when map
-     * is ready
-     *
-     * @param {Object}
-     *            openLayer openLayer object
-     *
-     * @param {Layer}
-     *            portti layer
-     */
-    attachLoadingStatusToLayer : function(openLayer, layer) {
-        var sandbox = this._sandbox;
-        var mapModule = this;
-
-        var statusText = this.getLocalization('status_update_map') + " '" + layer.getName() + "'...";
-
-        /* Notify that loading has started */
-        openLayer.events.register("loadstart", openLayer, function() {
-            sandbox.request(mapModule, sandbox.getRequestBuilder('ActionStartRequest')(openLayer.id, statusText, true));
-        });
-        /* Notify that Map is ready */
-        openLayer.events.register("loadend", openLayer, function() {
-            sandbox.request(mapModule, sandbox.getRequestBuilder('ActionReadyRequest')(openLayer.id, true));
-        });
-        /* Notify that Map is ready */
-        openLayer.events.register("loadcancel", openLayer, function() {
-            sandbox.request(mapModule, sandbox.getRequestBuilder('ActionReadyRequest')(openLayer.id, true));
-        });
-    },
-    /**
      * governance
      */
 
