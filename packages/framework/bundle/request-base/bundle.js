@@ -61,13 +61,8 @@ function() {
 		{
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/request/request.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/request/action/action-ready-request.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/request/action/action-start-request.js"
-		}],
+		}
+                ],
 		"resources" : []
 	},
 	"bundle" : {

@@ -262,8 +262,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WfsLayerPlugin', function() {
 
 			// var mapModule = this.getMapModule();
 
-			this.mapModule.attachLoadingStatusToLayer(wfsMapImageLayer, layer);
-
 			wfsMapImageLayer.opacity = layer.getOpacity() / 100;
 
 			this._map.addLayer(wfsMapImageLayer);
