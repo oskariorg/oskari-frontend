@@ -22,13 +22,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
 	"source" : {
 
 		"scripts" : [
-		
-		{
-			// External lib - rightjs tooltips - http://rightjs.org/ui/tooltips
-			"type" : "text/javascript",
-			"src" : "../../../../libraries/rightjs-ui.js"
-		},
-		
 		{
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/layerselector2/instance.js"
