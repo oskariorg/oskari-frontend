@@ -103,11 +103,11 @@ function(instance) {
         }
         // animate to low opacity
         element.animate({
-            opacity: 0.25,
+            opacity: 0.25
         }, 500, function() {
             // on complete, animate back to fully visible
              element.animate({
-                opacity: 1,
+                opacity: 1
             }, 500,function() {
                 // on complete, check and adjust the count parameter
                 // recurse if count has not been reached yet
