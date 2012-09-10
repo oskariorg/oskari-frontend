@@ -167,19 +167,6 @@ function() {
       			
 	    	dialog.show(loc['published'].title, content, [okBtn]);
 	    	this.setPublishMode(false);
-        },
-        /**
-         * @method userinterface.ExtensionUpdatedEvent
-         * Disable preview on close, otherwise enable preview
-         */
-        'userinterface.ExtensionUpdatedEvent' : function(event) {
-            var me = this;
-            if(event.getExtension().getName() != me.getName()) {
-                // wasn't me -> do nothing
-                return;
-            }
-            var doOpen = event.getViewState() != "close";
-            this.plugins['Oskari.userinterface.Flyout'].setEnabled(doOpen);
         }
 	},
 

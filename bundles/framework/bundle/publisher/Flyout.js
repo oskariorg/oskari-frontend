@@ -21,7 +21,6 @@ function(instance) {
 
     this.template = null;
     this.view = null;
-    this.active = false;
 }, {
     /**
      * @method getName
@@ -132,23 +131,6 @@ function(instance) {
     handleLayerSelectionChanged : function() {
         if(this.view && this.view.handleLayerSelectionChanged) {
             this.view.handleLayerSelectionChanged();
-        }
-    },
-    /**
-     * @method setEnabled
-     * @param {Boolean} isEnabled
-     * Calls the current views setEnabled method if state changes. 
-     * Doesn't call if en
-     */
-    setEnabled : function(isEnabled) {
-        if(this.active == isEnabled) {
-            // already in requested state
-            return;
-        }
-        // otherwise change state
-        this.active = isEnabled;
-        if(this.view && this.view.setEnabled) {
-            this.view.setEnabled(isEnabled);
         }
     }
 }, {
