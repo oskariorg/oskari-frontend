@@ -66,7 +66,7 @@ function(instance) {
 				'<div class="layer-title"></div>' + 
 				'<div class="layer-keywords"></div>' + // <br clear="all" /> 
 			'</div>');
-		this.templateLayerGroup = jQuery('<div class="layerGroup"><div class="groupIcon"></div><div class="groupHeader"><span class="groupName"></span><span class="layerCount"></span></div></div>');
+		this.templateLayerGroup = jQuery('<div class="layerGroup"><div class="header"><div class="groupIcon"></div><div class="groupHeader"><span class="groupName"></span><span class="layerCount"></span></div></div></div>');
 		this.groupingTools = [
 			{
 				"title" : this.instance.getLocalization('filter').inspire,
@@ -429,10 +429,10 @@ function(instance) {
 		
 		// clone from layer group template
 		var layerGroupDiv = this.templateLayerGroup.clone();
-		var groupHeader = jQuery(layerGroupDiv).find('div.groupHeader');
-		groupHeader.find('span.groupName').append(groupName);
-		groupHeader.click(function() {
-    		var groupDiv = jQuery(this).parent();
+    	var groupHeader = jQuery(layerGroupDiv).find('div.header');
+        groupHeader.find('span.groupName').append(groupName);
+        groupHeader.click(function() {
+        	var groupDiv = jQuery(this).parent();
 			var isOpen = groupDiv.hasClass('open');
 			// layer is open -> close it
 			if(isOpen) {
