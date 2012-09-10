@@ -65,7 +65,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         });
         
         /* Measurements area */
-        this.addToolButton('measureline', 'measuretools', {
+        this.addToolButton('measureline', 'basictools', {
             iconCls : 'tool-measure-line',
             tooltip: locales.measure.line,
             sticky: true,
@@ -74,7 +74,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             }
         });
         
-        this.addToolButton('measurearea', 'measuretools', {
+        this.addToolButton('measurearea', 'basictools', {
             iconCls : 'tool-measure-area',
             tooltip: locales.measure.area,
             sticky: true,

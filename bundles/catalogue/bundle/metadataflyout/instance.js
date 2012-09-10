@@ -239,11 +239,11 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 	startExtension : function() {
 
 		this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.Flyout', this, this.getLocale()['flyout'], this.getLoader());
-		this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.Tile', this, this.getLocale()['tile']);
+		//this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.Tile', this, this.getLocale()['tile']);
 	},
 	stopExtension : function() {
 		this.plugins['Oskari.userinterface.Flyout'] = null;
-		this.plugins['Oskari.userinterface.Tile'] = null;
+		//this.plugins['Oskari.userinterface.Tile'] = null;
 	},
 	getTitle : function() {
 		return this.getLocale()['title'];

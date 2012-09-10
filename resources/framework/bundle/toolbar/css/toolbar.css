@@ -15,7 +15,7 @@
     cursor: pointer;
 }
 #toolbar div.toolrow div.tool.selected, #toolbar div.toolrow div.tool:hover:not(.disabled), #toolbar div.toolrow div.tool:active:not(.disabled) {
-    background-color: #000000;
+    background-color: #212121;
 }
 #toolbar div.toolrow div.tool.disabled, div.tool.disabled {
     cursor: default;
