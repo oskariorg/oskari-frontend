@@ -64,9 +64,6 @@ function() {
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/core/core-map-methods.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/core/core-status-methods.js"
 		}
 
 		/*

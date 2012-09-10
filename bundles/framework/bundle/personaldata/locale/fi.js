@@ -37,6 +37,12 @@ Oskari.registerLocalization({
                 publish : "Julkiseksi",
                 unpublish : "Yksityiseksi",
                 "delete" : "Poista",
+                "grid" : {
+                    "name" : "Nimi",
+                    "publish" : "Julkaisu",
+                    "edit" : " ",
+                    "delete" : " "
+                },
                 'popup' : {
                 	'edit' : 'Vaihda näkymän nimi',
                     "title" : 'Näkymän tallennus',
@@ -64,13 +70,59 @@ Oskari.registerLocalization({
                 },
                 "error" : {
                 	"title" : "Virhe",
+                    "generic" : "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin",
                 	"notsaved" : "Näkymää ei tallennettu",
                 	"notdeleted" : "Näkymän poisto epäonnistui",
-                	"loadfailed" : "Näkymien lataus epäonnistui"
+                	"makePublic" : "Näkymän julkaiseminen epäonnistui",
+                    "makePrivate" : "Näkymän vaihtaminen yksityiseksi epäonnistui"
                 }
             },
             publishedmaps : {
-                title : "Julkaistut kartat"
+                title : "Julkaistut kartat",
+                edit : "Näytä kartalla",
+                publish : "Julkaise kartta",
+                unpublish : "Peru julkaisu",
+                "delete" : "Poista",
+                "grid" : {
+                    "name" : "Nimi",
+                    "domain" : "Julkaisupaikka",
+                    "publish" : "Tila",
+                    "edit" : " ",
+                    "delete" : " "
+                },
+                'popup' : {
+                    'edit' : 'Vaihda kartan nimi',
+                    "title" : 'Kartan tallennus',
+                    'label' : 'Kartan nimi:',
+                    'placeholder' : 'Anna kartalle nimi',
+                    'save' : 'Tallenna',
+                    'cancel' : 'Peruuta',
+                    'error_noname' : 'Syötä nimi',
+                    'deletetitle' : 'Poiston varmistus',
+                    'deletemsg' : 'Poistetaanko julkaistu kartta'
+                },
+                'save' : {
+                    "success" : 'Kartta tallennettu',
+                    "error_noname" : 'Nimi ei voi olla tyhjä',
+                    "error_illegalchars" : 'Nimessä on luvattomia merkkejä',
+                    "msg" : {
+                        "view_name" : 'Kartan nimi'
+                    }
+                },
+                "button" : {
+                    "ok" : 'OK',
+                    "save" : 'Tallenna',
+                    "cancel" : 'Peruuta',
+                    "toolbarsave" : 'Tallenna kartta'
+                },
+                "error" : {
+                    "title" : "Virhe",
+                    "generic" : "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin",
+                    "notsaved" : "Karttaa ei tallennettu",
+                    "notdeleted" : "Kartan poisto epäonnistui",
+                    "makePublic" : "Kartan julkaiseminen epäonnistui",
+                    "makePrivate" : "Kartan vaihtaminen yksityiseksi epäonnistui"
+                }
             },
             account : {
                 title : "Tilin tiedot",

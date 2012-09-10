@@ -286,10 +286,6 @@ function() {
 						buffer : 0
 					});
 
-			// var mapModule = this.getMapModule();
-
-			this.mapModule.attachLoadingStatusToLayer(wfsMapImageLayer, layer);
-
 			wfsMapImageLayer.opacity = layer.getOpacity() / 100;
 
 			this._map.addLayer(wfsMapImageLayer);

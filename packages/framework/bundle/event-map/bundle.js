@@ -99,9 +99,6 @@ function() {
 			"src" : "../../../../sources/framework/event/common/mouse-hover-event.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/action/action-statuses-changed-event.js"
-		}, {
-			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/event/common/MapLayerEvent.js"
 		}
         ],

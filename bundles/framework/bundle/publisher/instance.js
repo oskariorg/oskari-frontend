@@ -162,24 +162,30 @@ function() {
 	    	var loc = this.getLocalization();
 	    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 	    	var okBtn = dialog.createCloseButton(loc['BasicView'].buttons.ok);
+	    	okBtn.addClass('primary');
 	    	
-        	// TODO: generate url
-      		var content = loc['published'].desc + ':<br/>' +
-      			'/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&published=true&viewId=' + event.getId();
+	    	var url = loc['published'].urlPrefix + '&viewId=' + event.getId();
+	    	var iframeCode = '<iframe src="' + url + '" width="' + event.getWidth() + 
+	    					'" height="' + event.getHeight() + '"></iframe>';
+	    	var textarea = 
+				'<textarea rows="3" cols="80">' +
+				iframeCode +
+				'</textarea>';
+      		var content = loc['published'].desc + '<br/>' + textarea;
+      			
 	    	dialog.show(loc['published'].title, content, [okBtn]);
+	    	this.setPublishMode(false);
         },
         /**
          * @method userinterface.ExtensionUpdatedEvent
          * Disable preview on close, otherwise enable preview
          */
         'userinterface.ExtensionUpdatedEvent' : function(event) {
-
             var me = this;
             if(event.getExtension().getName() != me.getName()) {
                 // wasn't me -> do nothing
                 return;
             }
-
             var doOpen = event.getViewState() != "close";
             this.plugins['Oskari.userinterface.Flyout'].setEnabled(doOpen);
         }

@@ -412,6 +412,7 @@ function(instance, localization) {
         var mapFullState = sandbox.getStatefulComponents()['mapfull'].getState();
         selections.mapstate = mapFullState;
         
+        
         // saves possible open gfi popups
         if (sandbox.getStatefulComponents()['infobox']) {
             selections["infobox"] = sandbox.getStatefulComponents()['infobox'].getState();
@@ -439,21 +440,23 @@ function(instance, localization) {
         jQuery.ajax({
             url : url + '&action_route=Publish',
             type : 'POST',
+            dataType : "json",
             data : {
             	pubdata : JSON.stringify(selections)
             },
             beforeSend : function(x) {
                 if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son; charset=UTF-8");
+                    x.overrideMimeType("application/j-son;charset=UTF-8");
                 }
             },
             success : function(response) {
             	if(response.id > 0) {
-			        var event = sandbox.getEventBuilder('Publisher.MapPublishedEvent')(response.id);
+			        var event = sandbox.getEventBuilder('Publisher.MapPublishedEvent')(response.id,
+			        	selections.size.width, selections.size.height);
 			        sandbox.notifyAll(event);
             	}
             	else {
-            		errorHandler();
+        			errorHandler();
             	}
             },
             error : errorHandler

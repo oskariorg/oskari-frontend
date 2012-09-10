@@ -17,6 +17,7 @@ function() {
 	this.started = false;
 	this.template = null;
 	this.plugins = {};
+	this.viewService = null;
 }, {
 	/**
 	 * @static
@@ -44,6 +45,13 @@ function() {
 	 */
 	getSandbox : function() {
 		return this.sandbox;
+	},
+	/**
+	 * @method getViewService
+	 * @return {Oskari.mapframework.bundle.personaldata.service.ViewService}
+	 */
+	getViewService : function() {
+		return this.viewService;
 	},
     /**
      * @method getLocalization
@@ -78,6 +86,7 @@ function() {
 
 		var sandbox = Oskari.$("sandbox");
 		me.sandbox = sandbox;
+		this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService', sandbox.getAjaxUrl());
 
 		sandbox.register(me);
 		for(p in me.eventHandlers) {
