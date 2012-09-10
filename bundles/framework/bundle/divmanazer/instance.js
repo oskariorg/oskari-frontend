@@ -47,6 +47,10 @@ Oskari.clazz
 	    init : function(sandbox) {
 
 	    },
+	    
+	    getExtensionByName: function(name) {
+	    	return this.extensionsByName[name];
+	    },
 	    /**
 	       7	 * @method getSandbox
 	    */
