@@ -147,14 +147,6 @@ function() {
             this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
         },
         /**
-         * @method AfterMapMoveEvent
-         * @param {Oskari.mapframework.event.common.AfterMapMoveEvent} event
-         */
-        'AfterMapMoveEvent' : function(event) {
-        	// TODO: not needed anymore?
-            this.plugins['Oskari.userinterface.Flyout'].handleMapMoved();
-        },
-        /**
          * @method Publisher.MapPublishedEvent
          * @param {Oskari.mapframework.bundle.publisher.event.MapPublishedEvent} event
          */
