@@ -210,21 +210,15 @@ Oskari.clazz
                                                 layer.isInScale(scale), 
                                                 true);
                     }
-
+                    
                     // RIGHTJS sortable event handling
                     //TODO: get rid of sortableBinded and UNBIND?
                     if (!this.sortableBinded) {
                         this.sortableBinded = true;
-                        jQuery('.selectedLayersList')
-                            .on('finish', 
-                                function(event) {
-                                     // event.list;  // target list
-                                     // event.item;  // handled item
-                                     // event.index; // index of related item
-                                     // event.event; // original event object
-                                    me._layerOrderChanged(event.index);
-                                }
-                               );
+                        RightJS('.selectedLayersList').on('finish', function(event) {
+                            me._layerOrderChanged(event.index);
+                        }); 
+
                     }
                 },
                 _appendLayerFooter : function(layerDiv, 
