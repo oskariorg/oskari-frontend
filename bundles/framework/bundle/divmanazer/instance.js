@@ -142,7 +142,7 @@ function() {
 		'<div class="oskari-flyout-title">' + '<p></p>' + '</div>' + '<div class="oskari-flyouttools">' + 
 		'<div class="oskari-flyouttool-help">' + '</div>' + '<div class="oskari-flyouttool-attach">' + '</div>' + 
 		'<div class="oskari-flyouttool-detach">' + '</div>' + '<div class="oskari-flyouttool-minimize">' + '</div>' + 
-		'<div class="oskari-flyouttool-restore">' + '</div>' + '<div class="oskari-flyouttool-close">' + '</div>' + 
+		'<div class="oskari-flyouttool-restore">' + '</div>' + '<div class="oskari-flyouttool-close icon-close icon-close:hover">' + '</div>' + 
 		'</div>' + '</div>' + '<div class="oskari-flyoutcontentcontainer">' + 
 		'<div class="oskari-flyoutcontent"></div>' + '</div>' + '</div>'
 
