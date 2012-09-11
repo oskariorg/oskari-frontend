@@ -38,6 +38,8 @@ div.popupContent {
 div.olPopupContent {
     overflow: visible;
     padding: 0px;
+    padding: 25px 20px 50px;
+    top: -25px; left: -20px;
 }
 
 div.popupContent hr.infoboxLine {
@@ -64,7 +66,9 @@ div.popupContent span.infoboxActionLinks {
     background-size: auto auto;
     height: 16px;
     width: 16px;
-    left: 380px;
+    right: 20px;
+    position: absolute;
+    top: 14px;
 }
 
 
