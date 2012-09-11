@@ -98,7 +98,7 @@ function() {
     	this._contentDiv = jQuery('<div class="popupContent"></div>');
     	this._contentWrapper = jQuery('<div class="contentWrapper"></div>');
     	this._actionLink = jQuery('<span class="infoboxActionLinks"><a href="#"></a></span>');
-    	this._contentSeparator = jQuery('<hr class="infoboxLine">');
+    	this._contentSeparator = jQuery('<div class="infoboxLine">separator</div>');
     },
     
     /**
@@ -159,7 +159,7 @@ function() {
                    arrow.outerHTML() +
                    header.outerHTML()+
                    contentDiv.outerHTML(),
-                   false);
+                   true);
                    
 		popup.setBackgroundColor('transparent');
 		this._popups[id] = {
