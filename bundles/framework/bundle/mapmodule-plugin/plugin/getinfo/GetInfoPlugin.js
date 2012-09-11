@@ -675,7 +675,7 @@ Oskari.clazz
 		               data.title, 
 		               [ content ], 
 		               data.lonlat, 
-		               false);
+		               true);
                     me._sandbox.request(me, r);
                 }
             },

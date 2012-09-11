@@ -94,7 +94,9 @@ function() {
 			
 		// templates
 		this._arrow =  jQuery('<div class="popupHeaderArrow"></div>');
-    	this._header = jQuery('<div class="popupHeader"></div>');
+    	this._header = jQuery('<div></div>');
+    	this._headerWrapper = jQuery('<div class="popupHeader"></div>');
+    	this._headerCloseButton = jQuery('<div class="olPopupCloseBox" style="position: absolute; top: 17px;"></div>');
     	this._contentDiv = jQuery('<div class="popupContent"></div>');
     	this._contentWrapper = jQuery('<div class="contentWrapper"></div>');
     	this._actionLink = jQuery('<span class="infoboxActionLinks"><a href="#"></a></span>');
@@ -128,9 +130,14 @@ function() {
     	 
     	var arrow = this._arrow.clone();
     	var header = this._header.clone();
+    	var headerWrapper = this._headerWrapper.clone();
     	var contentDiv = this._contentDiv.clone();
+    	var closeButton = this._headerCloseButton.clone();
     	
     	header.append(title);
+    	headerWrapper.append(header);
+    	headerWrapper.append(closeButton);
+    	
     	
     	for(var i =0;i < contentData.length;i++) {
     		if(i != 0) {
@@ -157,9 +164,9 @@ function() {
                    new OpenLayers.LonLat(lonlat.lon,lonlat.lat),
                    new OpenLayers.Size(400,200),
                    arrow.outerHTML() +
-                   header.outerHTML()+
+                   headerWrapper.outerHTML()+
                    contentDiv.outerHTML(),
-                   true);
+                   false);
                    
 		popup.setBackgroundColor('transparent');
 		this._popups[id] = {
@@ -179,10 +186,14 @@ function() {
 		popup.events.on({
 			"click": function(evt) {
 				var link = jQuery(evt.target);
-				var i = link.attr('contentdata');
-				var text = link.html();
-				if(contentData[i] && contentData[i].actions && contentData[i].actions[text]) {
-					contentData[i].actions[text]();
+				if (link.hasClass('olPopupCloseBox')) { // Close button
+					me.close(id);
+				} else { // Action links
+					var i = link.attr('contentdata');
+					var text = link.html();
+					if(contentData[i] && contentData[i].actions && contentData[i].actions[text]) {
+						contentData[i].actions[text]();
+					}
 				}
 			},
 			scope: popup
