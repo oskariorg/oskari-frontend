@@ -658,10 +658,17 @@ Oskari.clazz
 		        me._sandbox.request(me, r);                 
                     };
                     
-                    for (var di = 0; di < data.fragments.length; di++) {
-                        content.html += data.fragments[di];
-                        content.html += '<br /><hr /><br />';
-                    }
+                for (var di = 0; di < data.fragments.length; di++) {
+                	content.html +='<div style="background-color: #424343;margin-top: 14px; margin-bottom: 10px;">' + 
+                	'<div class="icon-bubble-left">' +
+                	'<div style="vertical-align: middle; padding-top: 2px; padding-right: 4px; text-align:center;"> ' + 
+                	(di+1) +'</div></div></div>';
+                    content.html += data.fragments[di];
+                    //content.html += '<br /><hr /><br />';
+                }
+            
+            data.title = 'Kohdetiedot';
+                
 		    var rn = "InfoBox.ShowInfoBoxRequest";
 		    var rb = me._sandbox.getRequestBuilder(rn);
 		    var r = rb(data.popupid, 

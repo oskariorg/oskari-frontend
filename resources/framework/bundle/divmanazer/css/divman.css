@@ -13,14 +13,14 @@ body {
 /* flyout toolbar */
 
 .oskari-flyoutheading {
-	background-color: #ffdc00;
-	border-top: 1px solid #ffee7a;
+	background-color: #ffd400;
+	border-top: 1px solid #ffdf00;
 	border-bottom: 1px solid #ebb819;
-	height: 16px;
+	height: 14px;
 	width: 100%;
 }
 .oskari-flyouttoolbar {
-	height: 48px;
+	height: 57px;
 	width: 100%;
 	background-color: #fdf8d9;
 	border-top: #fdfdfd;
@@ -29,30 +29,27 @@ body {
 .oskari-flyout-title {
 	float: left;
 	margin-left: 20px;
-	margin-top: 4px;
+	margin-top: 12px;
+	height: 20px;
 	display: inline-block;
-	font: 19px/24px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 }
+.oskari-flyout-title p {
+	margin: 0; padding: 0;
+	font: 16px/20px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+}
+
 /** flyout toolbar tools and tool states  */
 
 .oskari-flyouttools {
 	float: right;
-	margin-right: 8px;
+	margin-right: 25px;
+	height: 16px;
 	display: inline-block;
-	margin-top: 4px;
+	margin-top: 15px;
 }
 .oskari-flyouttool-detach {
-	display: inline-block;
-	width: 24px;
-	height: 24px;
-	background-image: url('../../../../../resources/paikkatietoikkuna/Ikonit_16x16/Pixicon16px_0000s_0000s_0016_Arrow-Right.png');
-	background-repeat: no-repeat;
-	background-position: center center;
-	background-color: #333438;
-	-webkit-border-radius: 12px;
-	-moz-border-radius: 12px;
-	border-radius: 12px;
-	margin-right: 2px;
+	display: none;
+	/* visualise here if this tool required */
 }
 .oskari-detached .oskari-flyouttool-detach {
 	display: none;
@@ -61,33 +58,15 @@ body {
 	display: none;
 }
 .oskari-flyouttool-attach {
-	display: inline-block;
-	width: 24px;
-	height: 24px;
-	background-image: url('../../../../../resources/paikkatietoikkuna/Ikonit_16x16/Pixicon16px_0000s_0000s_0009_Arrow-Left.png');
-	background-repeat: no-repeat;
-	background-position: center center;
-	background-color: #333438;
-	-webkit-border-radius: 12px;
-	-moz-border-radius: 12px;
-	border-radius: 12px;
-	margin-right: 2px;
+	/* visualise here if this tool required */
+	display: none;
 }
 .oskari-attached .oskari-flyouttool-attach {
 	display: none;
 }
 .oskari-flyouttool-minimize {
-	display: inline-block;
-	width: 24px;
-	height: 24px;
-	background-image: url('../../../../../resources/paikkatietoikkuna/Ikonit_16x16/Pixicon16px_0002s_0000_Pause.png');
-	background-repeat: no-repeat;
-	background-position: center center;
-	background-color: #333438;
-	-webkit-border-radius: 12px;
-	-moz-border-radius: 12px;
-	border-radius: 12px;
-	margin-right: 2px;
+	/* visualise here if this tool required */
+	display: none;
 }
 .oskari-attached .oskari-flyouttool-minimize {
 	display: none;
@@ -96,31 +75,12 @@ body {
 	display: none;
 }
 .oskari-flyouttool-restore {
+	/* visualise here if this tool required */
 	display: none;
-	width: 24px;
-	height: 24px;
-	background-image: url('../../../../../resources/paikkatietoikkuna/Ikonit_16x16/Pixicon16px_0012s_0019_Play.png');
-	background-repeat: no-repeat;
-	background-position: center center;
-	background-color: #333438;
-	-webkit-border-radius: 12px;
-	-moz-border-radius: 12px;
-	border-radius: 12px;
-	margin-right: 2px;
 }
 .oskari-flyouttool-help {
-	/*display: none;*/
-	width: 24px;
-	height: 24px;
-	background-image: url('../../../../../resources/paikkatietoikkuna/Ikonit_16x16/Pixicon16px_0016s_0001_Book-1.png');
-	background-repeat: no-repeat;
-	background-position: center center;
-	background-color: #333438;
-	-webkit-border-radius: 12px;
-	-moz-border-radius: 12px;
-	border-radius: 12px;
-	margin-right: 2px;
-		display: inline-block;
+	/* visualise here if this tool required */
+	display: none;
 }
 .oskari-minimized .oskari-flyouttool-restore {
 	display: inline-block;
@@ -133,32 +93,22 @@ body {
 }
 .oskari-flyouttool-close {
 	display: inline-block;
-	margin-top: 8px;
-	width: 24px;
-	height: 24px;
-	background-image: url('../../../../../resources/paikkatietoikkuna/Ikonit_16x16/Pixicon16px_0005s_0002_X.png');
+	width: 16px;
+	height: 16px;
+	background-image: url('../images/icon-close.png');
 	background-repeat: no-repeat;
-	background-position: center center;
-	background-color: #333438;
-	-webkit-border-radius: 12px;
-	-moz-border-radius: 12px;
-	border-radius: 12px;
 	margin-right: 2px;
 	margin-left: auto;
 }
 
 /* flyout */
 .oskari-flyout {
-	/*border: 1px solid white;*/
-	/*border-top: 8px solid #ffde00;;*/
-	/*border-top: 8px solid #333438;*/
-	/*opacity: .8;*/
 	background-color: #fafafa;
 	position: absolute;
 	z-index: 1100;
 	margin: 0px;
 	padding: 0px;
-	border: 0;
+	border: 1px solid rgba(0,0,0,0.2);
 }
 
 /* flyout states */
@@ -167,17 +117,17 @@ body {
 	width: 640px;
 	/*height: 480px;*/
 
-	box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.80);
+	/*box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.80);
 	-moz-box-shadow: 0px 3px 8px black;
 	-webkit-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.80);
-	
+	*/
 	}
 .oskari-detached {
 	width: 640px;
 	/*height: 480px;*/
-	box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.80);
+	/*box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.80);
 	-moz-box-shadow: 0px 3px 8px black;
-	-webkit-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.80);
+	-webkit-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.80);*/
 	
 }
 /*.oskari-minimized {
@@ -201,22 +151,19 @@ body {
 
 .oskari-flyoutcontent {
 	margin: 0;
-	padding: 20px 20px 20px;
+	padding: 20px 20px 20px 25px;
 	border: 0;
 	/*overflow: auto;*/
 	
 }
-.oskari-flyoutcontentcontainer { /*margin: 8px;*/
+.oskari-flyoutcontentcontainer { 
 	width: 100%;
 	height: 100%;
 	padding: 0;
 	border: 0;
 	overflow: auto;
 	max-height: 640px; /* MEDIA QUERY FOR THIS ONE */
-	
-	/*border-left: 1px solid #fdfdfd;
-	border-right: 1px solid #fdfdfd;
-	border-bottom: 1px solid #fdfdfd;*/
+		
 	/* overflow: auto; */
 }
 
@@ -224,47 +171,57 @@ body {
 /* tile states */
 
 .oskari-tile-attached {
-	border: 0;
-	border-bottom: 1pt solid white;
+	border-bottom: 1px solid white;
 	background-color: white;
 }
 .oskari-tile-detached {
-	border: 0;
-	border-bottom: 1pt solid white;
+	border-top: 1px solid #484846;
+	border-bottom: 1px solid #212121;
 	background-color: white;
 }
 .oskari-tile-minimized {
-	border: 0;
-	border-bottom: 1pt dashed white;
-	background-color: #55565a;
+	border-top: 1px solid #484846;
+	border-bottom: 1px solid #212121;
+	background-color: #2d2d2d;
+	
 }
 .oskari-tile-closed {
-	border: 0;
-	border-bottom: 1pt solid white;
-	background-color: #333438;
-
+	border-top: 1px solid #484846;
+	border-bottom: 1px solid #212121;
+	background-color: #2d2d2d;
 }
 
+.oskari-tile-container {
+	
+}
 .oskari-tile {
+	
 	margin: 0;
 	padding: 0;
 	cursor: pointer;
-	height: 40px;
-	width: 172px;
+	height: 31px;
+	width: 153px;
+	border-top: 1px solid #484846;
+	border-bottom: 1px solid #212121;
 }
 
 .oskari-tile-title {
-	text-indent: 4px;
+	display: inline-block;
 	margin: 0;
+	margin-top: 2px;
+	margin-left: 20px;
 	padding: 0;
 	float: left;
-	height: 40px;
-	width: 126px;
-	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+	height: 28px;
+	width: 96px;
+	
+	font-family: Arial, Helvetica;
+	font-weight: bold;
+	font-size: 11px;
 	text-align: left;
 	text-transform: uppercase;
 	/*color: white;*/
-	font-weight: bold;
+	
 }
 
 .oskari-tile-attached .oskari-tile-title {
@@ -273,8 +230,8 @@ body {
 .oskari-tile-detached .oskari-tile-title {
 	color: #333438;
 }
-.oskari-tile-detached .oskari-tile-title {
-	color: #333438;
+.oskari-tile-minimized .oskari-tile-title {
+	color: white;
 }
 .oskari-tile-closed  .oskari-tile-title {
 	color: white;
@@ -286,21 +243,11 @@ body {
 	display: inline-block;
     font-size: 11px;
     font-weight: bold;
-	height: 36px;
+	height: 28px;
 	width: 20px;
     margin: 1px;
     padding: 3px 1px;
 }
 .oskari-tile-close {
-	margin: 0;
-	padding: 0;
-	display: inline-block;
-	width: 16px;
-	height: 16px;
-	background-image: url('../../../../../resources/paikkatietoikkuna/Ikonit_16x16/Pixicon16px_0012s_0002_x.png');
-	background-repeat: no-repeat;
-	background-position: center center;
-	background-color: #333438;
-	position: relative;
-	top: 10px;
+	display: none;
 }

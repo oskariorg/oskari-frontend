@@ -147,14 +147,6 @@ function() {
             this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
         },
         /**
-         * @method AfterMapMoveEvent
-         * @param {Oskari.mapframework.event.common.AfterMapMoveEvent} event
-         */
-        'AfterMapMoveEvent' : function(event) {
-        	// TODO: not needed anymore?
-            this.plugins['Oskari.userinterface.Flyout'].handleMapMoved();
-        },
-        /**
          * @method Publisher.MapPublishedEvent
          * @param {Oskari.mapframework.bundle.publisher.event.MapPublishedEvent} event
          */
@@ -175,19 +167,6 @@ function() {
       			
 	    	dialog.show(loc['published'].title, content, [okBtn]);
 	    	this.setPublishMode(false);
-        },
-        /**
-         * @method userinterface.ExtensionUpdatedEvent
-         * Disable preview on close, otherwise enable preview
-         */
-        'userinterface.ExtensionUpdatedEvent' : function(event) {
-            var me = this;
-            if(event.getExtension().getName() != me.getName()) {
-                // wasn't me -> do nothing
-                return;
-            }
-            var doOpen = event.getViewState() != "close";
-            this.plugins['Oskari.userinterface.Flyout'].setEnabled(doOpen);
         }
 	},
 
