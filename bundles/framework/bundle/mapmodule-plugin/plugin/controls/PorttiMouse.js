@@ -212,13 +212,13 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
     },
     defaultWheelUp : function(evt) {
         // center map to mouse location
-        this.mapmodule.centerMapByPixels(evt.xy.x, evt.xy.y, true, true);
+        //this.mapmodule.centerMapByPixels(evt.xy.x, evt.xy.y, true, true);
         // zoom
         this.mapmodule.zoomIn();
     },
     defaultWheelDown : function(evt) {
         // center map to mouse location
-        this.mapmodule.centerMapByPixels(evt.xy.x, evt.xy.y, true, true);
+        //this.mapmodule.centerMapByPixels(evt.xy.x, evt.xy.y, true, true);
         // zoom
         this.mapmodule.zoomOut();
     },
