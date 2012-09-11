@@ -74,6 +74,7 @@ function() {
 
 		this.flyoutContainer = jQuery(document.body);
 		this.tileContainer = jQuery("#menubar");
+		this.tileContainer.addClass("oskari-tile-container");
 
 		/*
 		 * setup requests and handlers
@@ -130,10 +131,20 @@ function() {
 	"templates" : {
 
 		/* menu tile */
-		"Oskari.userinterface.Tile" : '<div class="oskari-tile oskari-tile-closed">' + '<div class="oskari-tile-title"></div>' + '<div class="oskari-tile-status"></div>' + '<div class="oskari-tile-close">' + '</div>' + '</div>',
+		"Oskari.userinterface.Tile" : '<div class="oskari-tile oskari-tile-closed">' + 
+		'<div class="oskari-tile-title"></div>' + 
+		'<div class="oskari-tile-status"></div>' + 
+		'</div>',
 
 		/* flyout */
-		"Oskari.userinterface.Flyout" : '<div class="oskari-flyout oskari-closed">' + '<div class="oskari-flyouttoolbar">' + '<div class="oskari-flyoutheading"></div>' + '<div class="oskari-flyout-title">' + '<p></p>' + '</div>' + '<div class="oskari-flyouttools">' + '<div class="oskari-flyouttool-help">' + '</div>' + '<div class="oskari-flyouttool-attach">' + '</div>' + '<div class="oskari-flyouttool-detach">' + '</div>' + '<div class="oskari-flyouttool-minimize">' + '</div>' + '<div class="oskari-flyouttool-restore">' + '</div>' + '<div class="oskari-flyouttool-close">' + '</div>' + '</div>' + '</div>' + '<div class="oskari-flyoutcontentcontainer">' + '<div class="oskari-flyoutcontent"></div>' + '</div>' + '</div>'
+		"Oskari.userinterface.Flyout" : '<div class="oskari-flyout oskari-closed">' + 
+		'<div class="oskari-flyouttoolbar">' + '<div class="oskari-flyoutheading"></div>' + 
+		'<div class="oskari-flyout-title">' + '<p></p>' + '</div>' + '<div class="oskari-flyouttools">' + 
+		'<div class="oskari-flyouttool-help">' + '</div>' + '<div class="oskari-flyouttool-attach">' + '</div>' + 
+		'<div class="oskari-flyouttool-detach">' + '</div>' + '<div class="oskari-flyouttool-minimize">' + '</div>' + 
+		'<div class="oskari-flyouttool-restore">' + '</div>' + '<div class="oskari-flyouttool-close">' + '</div>' + 
+		'</div>' + '</div>' + '<div class="oskari-flyoutcontentcontainer">' + 
+		'<div class="oskari-flyoutcontent"></div>' + '</div>' + '</div>'
 
 	},
 
@@ -295,17 +306,6 @@ function() {
 
 			me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [extension, 'toggle']);
 		});
-		var close = tile.children('.oskari-tile-close');
-		close.hide();
-		/*
-		 close.click(function() {
-
-		 me.getSandbox()
-		 .postRequestByName('userinterface' +
-		 '.RemoveExtensionRequest',
-		 [extension ]);
-		 });
-		 */
 		plugin.setEl(tile.get());
 
 		return tile;
@@ -542,12 +542,12 @@ function() {
 	 */
 	"defaults" : {
 		"detach" : {
-			"left" : "222px",
-			"top" : "100px"
+			"left" : "212px",
+			"top" : "50px"
 		},
 		"attach" : {
-			"left" : "212px",
-			"top" : "100px"
+			"left" : "192px",
+			"top" : "30px"
 		}
 	},
 

@@ -171,47 +171,57 @@ body {
 /* tile states */
 
 .oskari-tile-attached {
-	border: 0;
-	border-bottom: 1pt solid white;
+	border-bottom: 1px solid white;
 	background-color: white;
 }
 .oskari-tile-detached {
-	border: 0;
-	border-bottom: 1pt solid white;
+	border-top: 1px solid #484846;
+	border-bottom: 1px solid #212121;
 	background-color: white;
 }
 .oskari-tile-minimized {
-	border: 0;
-	border-bottom: 1pt dashed white;
-	background-color: #55565a;
+	border-top: 1px solid #484846;
+	border-bottom: 1px solid #212121;
+	background-color: #2d2d2d;
+	
 }
 .oskari-tile-closed {
-	border: 0;
-	border-bottom: 1pt solid white;
-	background-color: #333438;
-
+	border-top: 1px solid #484846;
+	border-bottom: 1px solid #212121;
+	background-color: #2d2d2d;
 }
 
+.oskari-tile-container {
+	
+}
 .oskari-tile {
+	
 	margin: 0;
 	padding: 0;
 	cursor: pointer;
-	height: 40px;
-	width: 172px;
+	height: 31px;
+	width: 153px;
+	border-top: 1px solid #484846;
+	border-bottom: 1px solid #212121;
 }
 
 .oskari-tile-title {
-	text-indent: 4px;
+	display: inline-block;
 	margin: 0;
+	margin-top: 2px;
+	margin-left: 20px;
 	padding: 0;
 	float: left;
-	height: 40px;
-	width: 126px;
-	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+	height: 28px;
+	width: 96px;
+	
+	font-family: Arial, Helvetica;
+	font-weight: bold;
+	font-size: 11px;
 	text-align: left;
 	text-transform: uppercase;
 	/*color: white;*/
-	font-weight: bold;
+	
 }
 
 .oskari-tile-attached .oskari-tile-title {
@@ -220,8 +230,8 @@ body {
 .oskari-tile-detached .oskari-tile-title {
 	color: #333438;
 }
-.oskari-tile-detached .oskari-tile-title {
-	color: #333438;
+.oskari-tile-minimized .oskari-tile-title {
+	color: white;
 }
 .oskari-tile-closed  .oskari-tile-title {
 	color: white;
@@ -233,21 +243,11 @@ body {
 	display: inline-block;
     font-size: 11px;
     font-weight: bold;
-	height: 36px;
+	height: 28px;
 	width: 20px;
     margin: 1px;
     padding: 3px 1px;
 }
 .oskari-tile-close {
-	margin: 0;
-	padding: 0;
-	display: inline-block;
-	width: 16px;
-	height: 16px;
-	background-image: url('../../../../../resources/paikkatietoikkuna/Ikonit_16x16/Pixicon16px_0012s_0002_x.png');
-	background-repeat: no-repeat;
-	background-position: center center;
-	background-color: #333438;
-	position: relative;
-	top: 10px;
+	display: none;
 }
