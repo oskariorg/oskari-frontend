@@ -178,7 +178,7 @@ function() {
 		
 		popup.events.on({
 			"click": function(evt) {
-				var link = jQuery(evt.originalTarget);
+				var link = jQuery(evt.target);
 				var i = link.attr('contentdata');
 				var text = link.html();
 				if(contentData[i] && contentData[i].actions && contentData[i].actions[text]) {
