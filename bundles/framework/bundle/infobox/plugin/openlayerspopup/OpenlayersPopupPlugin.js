@@ -200,6 +200,39 @@ function() {
 		});
 		
 		openlayersMap.addPopup(popup);
+		this._panMapToShowPopup(lonlat);
+		
+    },
+    /**
+     * @method _panMapToShowPopup
+     * @private
+     * Pans map if gfi popup would be out of screen
+     * @param {OpenLayers.LonLat} lonlat where to show the popup
+     */
+    _panMapToShowPopup : function(lonlat) {
+        var pixels = this._map.getViewPortPxFromLonLat(lonlat);
+        var size = this._map.getCurrentSize();
+        var width = size.w;
+        var height = size.h;
+        // if infobox would be out of screen 
+        // -> move map to make infobox visible on screen
+        var panx = 0;
+        var pany = 0;
+        var infoboxWidth = 450;
+        var infoboxHeight = 300; 
+        if( pixels.x + infoboxWidth > width) {
+            panx = width - (pixels.x + infoboxWidth);
+        }
+        if( pixels.y + infoboxHeight > height) {
+            pany = height - (pixels.y + infoboxHeight);
+        }
+        // check that we are not "over the top"
+        else if(pixels.y < 25) {
+            pany = 25;
+        }
+        if(panx != 0 || pany != 0) {
+            this.getMapModule().panMapByPixels(-panx, -pany);
+        }
     },
     /**
      * @method close

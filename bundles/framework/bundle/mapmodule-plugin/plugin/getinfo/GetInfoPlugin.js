@@ -253,7 +253,6 @@ function() {
                         parsed.popupid = popupid;
                         parsed.lonlat = lonlat;
                         me._showFeatures(parsed);
-                        me._panMapToShowGfiInfo(x,y);
                     }
                 },
                 error : function() {
@@ -263,13 +262,6 @@ function() {
                 dataType : 'json',
                 url : ajaxUrl + 'action_route=GetFeatureInfoWMS' + '&layerIds=' + layerIds + '&projection=' + projection + '&x=' + x + '&y=' + y + '&lon=' + lon + '&lat=' + lat + '&width=' + width + '&height=' + height + '&bbox=' + bbox + '&zoom=' + zoom
             });
-
-            // if (this._activated) {
-            //   this.buildWMSQueryOrWFSFeatureInfoRequest(lonlat,
-            // 					    mouseX,
-            // 					    mouseY);
-            // }
-
         },
         'AfterHighlightMapLayerEvent' : function(event) {
             this._activated = true;
@@ -297,36 +289,6 @@ function() {
     handleGetInfoHover : function(loc, clickLocation, options) {
         var me = this;
         me._sandbox.printDebug("GETINFO HOVER " + loc.lat + "," + loc.lon);
-    },
-    /**
-     * @method _panMapToShowGfiInfo
-     * @private
-     * Pans map if gfi popup would be out of screen
-     * @param {Number} x mouse click x 
-     * @param {Number} y mouse click y
-     */
-    _panMapToShowGfiInfo : function(x, y) {
-        var width = this._sandbox.getMap().getWidth();
-        var height = this._sandbox.getMap().getHeight();
-        // if infobox would be out of screen 
-        // -> move map to make infobox visible on screen
-        var panx = 0;
-        var pany = 0;
-        var infoboxWidth = 450;
-        var infoboxHeight = 300; 
-        if( x + infoboxWidth > width) {
-            panx = width - (x + infoboxWidth);
-        }
-        if( y + infoboxHeight > height) {
-            pany = height - (y + infoboxHeight);
-        }
-        // check that we are not "over the top"
-        else if(y < 25) {
-            pany = 25;
-        }
-        if(panx != 0 || pany != 0) {
-            this.getMapModule().panMapByPixels(-panx, -pany);
-        }
     },
     /**
      * @method _closeGfiInfo
