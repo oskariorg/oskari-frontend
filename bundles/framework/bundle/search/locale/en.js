@@ -1,8 +1,8 @@
 Oskari.registerLocalization({
-    "lang" : "en",
-    "key" : "Search",
-    "value" : {
-      "title" : "Haku en",
-      "desc" : ""
-    }
+  "lang": "en",
+  "key": "Search",
+  "value": {
+    "title": "Haku en",
+    "desc": ""
+  }
 });
