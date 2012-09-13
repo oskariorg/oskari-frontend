@@ -14,7 +14,7 @@ Oskari.registerLocalization({
       "title": "Julkaise kartta",
       "domain": {
         "title": "Julkaisupaikka",
-        "label": "\"",
+        "label": "Sivusto, jolla kartta julkaistaan",
         "placeholder": "ilman http- tai www-etuliitteitä",
         "tooltip": "Kirjoita sivuston www-osoite eli domain-nimi ilman http- ja www-etuliitteitä tai alasivun osoitetta. Esimerkiksi omakotisivu.com."
       },
@@ -34,7 +34,7 @@ Oskari.registerLocalization({
       },
       "size": {
         "label": "Koko",
-        "tooltip": "\""
+        "tooltip": "Valitse tai määrittele kartalle koko, jossa haluat esittää sen sivuillasi. Näet vaikutuksen esikatselukartassa."
       },
       "tools": {
         "label": "Näytettävät työkalut",
@@ -78,7 +78,7 @@ Oskari.registerLocalization({
       "layerselection": {
         "label": "Näytä karttatasot valikossa",
         "info": "Valitse karttapohjat. Voit tehdä oletusvalinnan esikatselunäkymästä.",
-        "tooltip": "\"",
+        "tooltip": "Karttapohja näkyy kartan alimmaisena kerroksena. Kun valitset karttatasoja karttapohjaksi, vain yksi valituista tasoista näkyy kerralla ja käyttäjä voi vaihdella niiden välillä. Oletusvalinnan voit tehdä esikatselukartassa.",
         "promote": "Haluatko näyttää myös ilmakuvia?"
       },
       "preview": "Julkaistavan kartan esikatselu",
@@ -105,7 +105,7 @@ Oskari.registerLocalization({
     "StartView": {
       "text": "Voit julkaista tässä tekemäsi karttanäkymän osana esim. omaa tai yrityksesi sivustoa.",
       "layerlist_title": "Julkaistavissa olevat karttatasot",
-      "layerlist_empty": "\"",
+      "layerlist_empty": "Valitsemiasi karttatasoja ei voida julkaista. Valitut karttatasot -valikosta näet, voiko karttatason julkaista.",
       "layerlist_denied": "Ei julkaistavissa",
       "denied_tooltip": "Kartta-aineistojen tuottajat eivät ole antaneet näille aineistoilleen julkaisuoikeutta muissa verkkopalveluissa. Tarkista julkaisuoikeus Valitut karttatasot -valikosta ennen julkaisua.",
       "buttons": {

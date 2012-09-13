@@ -27,7 +27,7 @@ Oskari.registerLocalization({
         "search": "Sök",
         "close": "Stäng sökresultat",
         "noresults": "Inga träff",
-        "toomanyresults": "\"",
+        "toomanyresults": "över 100 träffar, avgränsa sökningen.",
         "column_name": "Namn",
         "column_village": "Kommun",
         "column_type": "Typ"

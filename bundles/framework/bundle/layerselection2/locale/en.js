@@ -23,7 +23,7 @@ Oskari.registerLocalization({
         "need-login": "Vaatii kirjautumisen",
         "can_be_published_by_provider": {
           "label": "Tiedontuottajana julkaistavissa",
-          "tooltip": "\""
+          "tooltip": "Karttatason julkaisemiseen tarvitaan tiedontuottajan oikeudet. Mikäli olet tiedontuottaja, ota yhteyttä Paikkatietoikkunan tukipalveluun ja pyydä julkaisuoikeuksia"
         },
         "can_be_published": {
           "label": "Julkaistavissa",
