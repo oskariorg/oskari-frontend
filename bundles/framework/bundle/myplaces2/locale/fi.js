@@ -43,9 +43,7 @@ Oskari.registerLocalization({
         },
         "placeform" : {
             "title" : "Kohteen tiedot",
-            "tooltip" : "Kun lisäät kohteen kartalle, se tallentuu Omiin tietoihisi. " + 
-                "Anna kohteelle nimi ja kuvaus. Voit valita, mille karttatasolle tallennat kohteen tai lisätä uuden " + 
-                "karttatason valitsemalla 'Uusi taso…' karttatasojen pudotusvalikosta.",
+            "tooltip" : "Kun lisäät kohteen kartalle, se tallentuu Omiin tietoihisi. Anna kohteelle nimi ja kuvaus. Voit valita, mille karttatasolle tallennat kohteen tai lisätä uuden karttatason valitsemalla 'Uusi taso…' karttatasojen pudotusvalikosta.",
             "placename" : {
                 "placeholder" : "Anna kohteelle nimi"
             },
