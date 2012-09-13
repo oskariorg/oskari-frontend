@@ -32,8 +32,8 @@ Oskari.registerLocalization({
                 "placeholder" : "Hae paikkoja/osoitteita",
                 "search" : "Hae",
                 "close" : "Sulje hakutulokset",
-                "noresults" : 'Haulla ei löytynyt tuloksia',
-                "toomanyresults" : 'Löytyi yli 100 tulosta, tarkenna hakua.',
+                "noresults" : "Haulla ei löytynyt tuloksia",
+                "toomanyresults" : "Löytyi yli 100 tulosta, tarkenna hakua.",
                 "column_name" : "Nimi",
                 "column_village" : "Kunta",
                 "column_type" : "Tyyppi"
