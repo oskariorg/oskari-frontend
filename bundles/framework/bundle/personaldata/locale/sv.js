@@ -4,8 +4,7 @@ Oskari.registerLocalization({
     value : {
 	title : "Omat tiedot",
 	desc : "Omat tiedot",
-	notLoggedIn : "Rekisteröityneenä käyttäjänä löydät " + 
-	    "Omista tiedoista tallentamasi karttanäkymät.",
+	notLoggedIn : "Rekisteröityneenä käyttäjänä löydät Omista tiedoista tallentamasi karttanäkymät.",
 	tabs : {
 	    myplaces : {
 		title : "Omat paikat"	

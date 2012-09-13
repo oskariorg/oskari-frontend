@@ -12,19 +12,19 @@ Oskari.registerLocalization({
 	    	"error_noname" : "Syötä nimi"
 	    },
 	    "save" : {
-	    	success : "Näkymä tallennettu",
-	    	error : "Tapahtui virhe - Näkymää ei tallennettu",
-		error_noname : "Nimi ei voi olla tyhjä",
-		error_illegalchars : "Nimessä on luvattomia merkkejä",
-		title : {
-		    save_view : "Näkymän tallennus"
+	    	"success" : "Näkymä tallennettu",
+	    	"error" : "Tapahtui virhe - Näkymää ei tallennettu",
+		"error_noname" : "Nimi ei voi olla tyhjä",
+		"error_illegalchars" : "Nimessä on luvattomia merkkejä",
+		"title" : {
+		    "save_view" : "Näkymän tallennus"
 		},
-		msg : { 
-		    view_name : "Näkymän nimi"
+		"msg" : { 
+		    "view_name" : "Näkymän nimi"
 		},
-		button : {
-		    save : "Tallenna",
-		    cancel : "Peruuta"
+		"button" : {
+		    "save" : "Tallenna",
+		    "cancel" : "Peruuta"
 		}
 	    }
 	}
