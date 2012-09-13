@@ -29,8 +29,8 @@ function(name) {
     this._contentCheckMsg = 'illegal characters';
     
     this._bindFocusAndBlur();
-    // word characters, digits and whitespace allowed
-    this._regExp = /[\s\w\d\.]*/;
+    // word characters, digits, whitespace and '-' allowed
+    this._regExp = /[\s\w\d\.-]*/;
 }, {
     /**
      * @method setLabel
@@ -119,11 +119,16 @@ function(name) {
     },
     /**
      * @method getValue
-     * Returns fields value
+     * Returns fields value. 
+     * @param {Boolean} blnFilteredValue true to filter contents to include only safe characters (optional)
      * @return {String}
      */
-    getValue : function() {
-    	return this._field.find('input').val();
+    getValue : function(blnFilteredValue) {
+        var value = this._field.find('input').val();
+        if(blnFilteredValue) {
+            value = value.match(this._regExp);
+        }
+    	return value;
     },
     /**
      * @method _checkValue
@@ -132,10 +137,10 @@ function(name) {
      * @private
      */
     _checkValue : function() {
-        var value = this._field.find('input').val();
-        var tested = value.match(this._regExp);
+        var value = this.getValue();
+        var filtered = this.getValue(true);
         // if values match, everything ok
-        return (value == tested);
+        return (value == filtered);
     },
     /**
      * @method setValue
@@ -168,9 +173,14 @@ function(name) {
     },
 	
     /**
-     * @method validate
-     * Returns errors array or empty array if no errors
-     * @return {Object[]}
+     * @method setValidator
+     * The given validator function should returns an errors array or empty array if no errors.
+     * The array consists of objects like this:
+     * {
+     *   "field": this.getName(), 
+     *   "error" : 'error message'
+     * }
+     * @param {Function} pValidator validator function
      */
     setValidator : function(pValidator) {
     	this._validator = pValidator;
