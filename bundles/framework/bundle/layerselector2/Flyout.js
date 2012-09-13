@@ -22,6 +22,7 @@ function(instance) {
 	// default grouping
 	this.grouping = 'getInspireName';
 	this.groupingTools = [];
+	this.filterField = null;
 }, {
 	/**
 	 * @method getName
@@ -58,13 +59,13 @@ function(instance) {
 		var me = this;
 		this.template = jQuery('<div class="groupingTabs"><ul></ul></div><br clear="all"/>' +
 				'<div class="allLayersTabContent">' + 
-				'<div class="filter"><input name="text-filter" type="text" /></div>' + 
+                '<div class="filter"></div>' + 
 				'<div class="layerList volatile"></div></div>');
 				
 		this.templateLayer = jQuery('<div class="layer"><input type="checkbox" /> ' +
 				'<div class="layer-tools"><div class="layer-icon"></div><div class="layer-info"></div></div>' + 
 				'<div class="layer-title"></div>' + 
-				'<div class="layer-keywords"></div>' + // <br clear="all" /> 
+				'<div class="layer-keywords"></div>' + 
 			'</div>');
 		this.templateLayerGroup = jQuery('<div class="layerGroup"><div class="header"><div class="groupIcon"></div><div class="groupHeader"><span class="groupName"></span><span class="layerCount"></span></div></div></div>');
 		this.groupingTools = [
@@ -134,7 +135,7 @@ function(instance) {
         layerGroups.removeClass('open');
         layerGroups.find('div.groupIcon').removeClass('icon-arrow-down');
         layerGroups.find('div.groupIcon').addClass('icon-arrow-right');
-        jQuery(this.container).find('input[name=text-filter]').val('');
+        this.filterField.setValue('');
     },
     setContentState : function(state) {
         
@@ -163,12 +164,11 @@ function(instance) {
         if(!filter) {
             filter = '';
         }
-        jQuery(this.container).find('input[name=text-filter]').val(filter);
+        this.filterField.setValue(filter);
         this._filterLayers(state.filter);
         
         if(!state.filter && state.groups) {
             var layerGroups = jQuery(this.container).find('div.layerList div.layerGroup');
-            //groupContainer.addClass('remove');
             for(var i=0; i < state.groups.length; ++i) {
                 var group = state.groups[i];
                 
@@ -184,7 +184,7 @@ function(instance) {
         }
     },
     getContentState : function() {
-        var filterText = jQuery(this.container).find('input[name=text-filter]').val();
+        var filterText = this.filterField.getValue();
         var openGroups = [];  
         
         var layerGroups = jQuery(this.container).find('div.layerList div.layerGroup.open');
@@ -218,14 +218,17 @@ function(instance) {
 		
 		var toolsContainer = cel.find('div.groupingTabs ul');
 		this._populateGroupingTools(toolsContainer);
-		var field = cel.find('input[name=text-filter]');
-		field.attr('placeholder', this.instance.getLocalization('filter').text);
-		field.keyup(function() {
-    		var field = jQuery(this);
-    		var value = field.val();
-    		me._filterLayers(value);
-		});
 		
+		
+        var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
+        field.setPlaceholder(this.instance.getLocalization('filter').text);
+        field.addClearButton();
+        field.bindChange(function(event) {
+            me._filterLayers(field.getValue());
+        }, true);
+        cel.find('div.filter').append(field.getField());
+        this.filterField = field;
+        
 		// populate layer list
 		var layerListContainer = cel.find('div.layerList');
 		this._populateLayerList(layerListContainer);
@@ -372,7 +375,7 @@ function(instance) {
 			// write layer count to last group
 			layerGroupContainer.find('span.layerCount').html(' (' + layerCount +')');
 			// do filtering (in case this was initiated by grouping change etc)
-			var keyword = jQuery(this.container).find('input[name=text-filter]').val();
+			var keyword = this.filterField.getValue();
 			me._filterLayers(keyword);
 		}
 	},
@@ -447,7 +450,7 @@ function(instance) {
 		        groupDiv.find('div.groupIcon').removeClass('icon-arrow-right');
 				groupDiv.find('div.groupIcon').addClass('icon-arrow-down');
                 // show only the layers that match filtering keyword
-                var filter = jQuery(me.container).find('input[name=text-filter]').val();
+                var filter = me.filterField.getValue();
                 if(filter) {
                     groupDiv.find('div.layer div.layer-keywords:contains(' + filter.toLowerCase() + ')').parent().show();
                 }
@@ -490,42 +493,31 @@ function(instance) {
 		var icon = tools.find('div.layer-icon'); 
 		if(layer.isBaseLayer()) {
             icon.addClass('layer-base');
-			//icon.addClass('base');
 			icon.attr('title', tooltips['type-base']);
-			// tooltip = mapservice_basemap_image_tooltip
 		}
 		else if(layer.isLayerOfType('WMS')) {
 			if(layer.isGroupLayer()) {
                 icon.addClass('layer-group');
-				//icon.addClass('group');
 			}
 			else {
                 icon.addClass('layer-wms');
-				//icon.addClass('wms');
 			}
 			icon.attr('title', tooltips['type-wms']);
-			// tooltip = mapservice_maplayer_image_tooltip
 		}
 		// FIXME: WMTS is an addition done by an outside bundle so this shouldn't be here
 		// but since it would require some refactoring to make this general
 		// I'll just leave this like it was on old implementation
 		else if(layer.isLayerOfType('WMTS')) {
-			//icon.addClass('wmts');
             icon.addClass('layer-wmts');
 			icon.attr('title', tooltips['type-wms']);
-			// tooltip = mapservice_maplayer_image_tooltip
 		}
 		else if(layer.isLayerOfType('WFS')) {
-			//icon.addClass('wfs');
             icon.addClass('layer-wfs');
 			icon.attr('title', tooltips['type-wfs']);
-			// tooltip = selected_layers_module_wfs_icon_tooltip
 		}
 		else if(layer.isLayerOfType('VECTOR')) {
-			//icon.addClass('vector');
             icon.addClass('layer-vector');
 			icon.attr('title', tooltips['type-wms']);
-			// tooltip = mapservice_maplayer_image_tooltip
 		}
 		
 		
