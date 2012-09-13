@@ -61,7 +61,14 @@ function(instance) {
      * that will be used to create the UI
      */
     startPlugin : function() {
-        this.template = jQuery('<div class="searchContainer">' + '<div class="controls">' + '<input class="search_field" ' + 'type="text" ' + 'name="search" />' + '<input class="search_button" ' + 'type="button" ' + 'name="btn_find" />' + '</div>' + '<div><br></div>' + '<div class="info"></div>' + '<div><br></div>' + '<div class="resultList"></div>' + '</div>');
+        this.template = jQuery('<div class="searchContainer">' + 
+                '<div class="controls">' + 
+                '</div>' + 
+                '<div><br></div>' + 
+                '<div class="info"></div>' + 
+                '<div><br></div>' + 
+                '<div class="resultList"></div>' + 
+            '</div>');
         this.templateResultTable = jQuery('<table class="search_result">' + '<thead><tr></tr></thead>' + '<tbody></tbody>' + '</table>');
         this.templateResultTableHeader = jQuery('<th><a href="JavaScript:void(0);"></a></th>');
 
@@ -145,58 +152,51 @@ function(instance) {
 
         var searchContainer = this.template.clone();
 
-        var field = searchContainer.find('input[name=search]');
-        field.on('change', function(event) {
+        var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
+        
+        field.bindChange(function(event) {
             if (me.state === null) {
                 me.state = {};
             }
-            me.state.searchtext = field.val();
+            me.state.searchtext = field.getValue();
         });
-        this._bindClearButton(field);
+        field.addClearButton();
+        
+        var button = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        button.setTitle(this.instance.getLocalization('searchButton'));
 
         var doSearch = function() {
-            field.attr('disabled', 'disabled');
-            button.attr('disabled', 'disabled');
+            field.setEnabled(false);
+            button.setEnabled(false);
 
             var resultList = searchContainer.find('div.resultList');
             resultList.empty();
             // TODO: make some gif go round and round so user knows
             // something is happening
-            me.instance.service.doSearch(field.val(), function(data) {
-                field.removeAttr('disabled');
-                button.removeAttr('disabled');
-                me._renderResults(data, field.val());
+            me.instance.service.doSearch(field.getValue(), function(data) {
+                field.setEnabled(true);
+                button.setEnabled(true);
+                me._renderResults(data, field.getValue());
             }, function(data) {
-                field.removeAttr('disabled');
-                button.removeAttr('disabled');
-                alert('vihre!');
+                field.setEnabled(true);
+                button.setEnabled(true);
+                
+                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                var okBtn = dialog.createCloseButton('OK');
+                var msg = me.instance.getLocalization('searchservice_search_alert_title');
+                dialog.show(msg, msg, [okBtn]);
             });
         };
 
-        var button = searchContainer.find('input[name=btn_find]');
-        var buttonLocale = this.instance.getLocalization('searchButton');
-
-        button.val(buttonLocale);
-        button.bind('click', doSearch);
-
-        field.keypress(function(event) {
-            if (event.which == 13) {
-                doSearch();
-            }
-        });
-
+        button.setHandler(doSearch);
+        field.bindEnterKey(doSearch);
+        
+        var controls = searchContainer.find('div.controls');
+        controls.append(field.getField());
+        controls.append(button.getButton());
+        
         flyout.append(searchContainer);
 
-    },
-
-    _bindClearButton : function(field) {
-        var clearButton = jQuery('<div class="icon-close" ' + 'style="margin-left: 0px; ' + 'position: relative; ' + 'display: inline-block; ' + 'left: -20px; ' + 'top: 3px;">' + '</div>');
-
-        clearButton.bind('click', function() {
-            field.val('');
-            field.trigger('keyup');
-        });
-        field.after(clearButton);
     },
 
     _renderResults : function(result, searchKey) {

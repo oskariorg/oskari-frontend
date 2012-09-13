@@ -27,8 +27,26 @@ function() {
         	this.ui.attr('value', pTitle);
         }
     },
+    /**
+     * @method addClass
+     * Adds a css class to the button
+     * @param {String} pClass class to be added
+     */
     addClass : function(pClass) {
     	this.ui.addClass(pClass);
+    },
+    /**
+     * @method setEnabled
+     * Enables/Disables the button
+     * @param {Boolean} blnEnabled true to enable, false to disable
+     */
+    setEnabled : function(blnEnabled) {
+        if(blnEnabled === true) {
+            this.ui.removeAttr('disabled');
+        }
+        else {
+            this.ui.attr('disabled', 'disabled');
+        }
     },
     /**
      * @method getTitle
@@ -65,5 +83,13 @@ function() {
      */
     insertTo : function(container) {
         container.append(this.ui);
+    },
+    /**
+     * @method getButton
+     * Returns this buttons DOM element.
+     * @return {jQuery} reference to DOM element
+     */
+    getButton : function() {
+        return this.ui;
     }
 });

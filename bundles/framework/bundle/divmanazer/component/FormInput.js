@@ -12,6 +12,7 @@ function(name) {
     this.template = jQuery('<div class="oskarifield"><label></label><input type="text" /></div>');
     this.templateErrors = jQuery('<div class="error"></div>');
     this.templateTooltip = jQuery('<div class="icon-info"></div>');
+    this.templateClearButton = jQuery('<div class="icon-close" style="margin-left: 0px; position: relative; display: inline-block; left: -20px; top: 3px;"></div>');
     this._field = this.template.clone();
     
 	var label = this._field.find('label');
@@ -27,10 +28,21 @@ function(name) {
     
     this._bindFocusAndBlur();
 }, {
+    /**
+     * @method setLabel
+     * Sets the fields label
+     * @param {String} pLabel
+     */
 	setLabel : function(pLabel) {
 		var label = this._field.find('label');
 		label.html(pLabel);
 	},
+    /**
+     * @method setTooltip
+     * Sets the fields tooltip and possible help tags
+     * @param {String} pTooltip tooltip text
+     * @param {String} pDataTags comma separated list of article tags identifying the help article for this field
+     */
 	setTooltip : function(pTooltip, pDataTags) {
 		// TODO: check existing tooltip
 		var tooltip = this.templateTooltip.clone();
@@ -42,10 +54,21 @@ function(name) {
 		var label = this._field.find('label');
 		label.before(tooltip);
 	},
+    /**
+     * @method setPlaceholder
+     * Sets the fields placeholder text
+     * @param {String} pLabel
+     */
 	setPlaceholder : function(pLabel) {
 		var input = this._field.find('input');
 		input.attr('placeholder', pLabel);
 	},
+    /**
+     * @method setRequired
+     * Adds a validator to the field requiring content on the field
+     * @param {Boolean} blnParam true to require content on the field
+     * @param {String} reqMsg error message to show when validation fails (field is empty)
+     */
 	setRequired : function(blnParam, reqMsg) {
 		this._required = (blnParam == true);
 		if(reqMsg) {
@@ -74,14 +97,42 @@ function(name) {
     getField : function() {
     	return this._field;
     },
+    /**
+     * @method getValue
+     * Returns fields value
+     * @return {String}
+     */
     getValue : function() {
     	return this._field.find('input').val();
     },
+    /**
+     * @method setValue
+     * Sets the fields value
+     * @param {String} value
+     */
     setValue : function(value) {
-    	return this._field.find('input').attr('value', value);
+    	this._field.find('input').attr('value', value);
     },
+    /**
+     * @method getName
+     * Returns fields name
+     * @return {String}
+     */
     getName : function() {
     	return this._name;
+    },
+    /**
+     * @method setEnabled
+     * Enables/Disables the button
+     * @param {Boolean} blnEnabled true to enable, false to disable
+     */
+    setEnabled : function(blnEnabled) {
+        if(blnEnabled === true) {
+            this._field.find('input').removeAttr('disabled');
+        }
+        else {
+            this._field.find('input').attr('disabled', 'disabled');
+        }
     },
 	
     /**
@@ -163,7 +214,7 @@ function(name) {
     },
     /**
      * @method bindEnterKey
-     * Enables/Disables map movement with keyboard to fields focus/blur 
+     * Binds <enter> keypress to trigger given function 
      * @param {Function} callback method that is called if enter is pressed on the input 
      */
     bindEnterKey : function(callback) {
@@ -174,6 +225,34 @@ function(name) {
                 callback();
             }
         });
+    },
+    /**
+     * @method bindChange
+     * Bind function to fields change event
+     * @param {Function} callback method that is called if enter is pressed on the input 
+     */
+    bindChange : function(callback) {
+        var me = this;
+        var input = this._field.find('input');
+        
+        input.on('change', function(event) {
+            callback(event);
+        });
+    },
+    /**
+     * @method addClearButton
+     * Adds a clear button to the field 
+     */
+    addClearButton : function() {
+
+        var clearButton =  this.templateClearButton.clone();
+        var input = this._field.find('input');
+        clearButton.bind('click', function() {
+            input.val('');
+            input.trigger('change');
+            input.trigger('keyup');
+        });
+        input.after(clearButton);
     },
     /**
      * @method _bindFocusAndBlur
