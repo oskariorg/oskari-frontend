@@ -136,6 +136,7 @@ function(instance) {
     showPlaceForm : function(location, place) {
         var me = this;
         var sandbox = this.instance.sandbox;
+        sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
         var loc = this.instance.getLocalization();
         this.form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.PlaceForm', this.instance);
         var categories = this.instance.getService().getAllCategories();
@@ -337,6 +338,7 @@ function(instance) {
         sandbox.request(this, request);
         this.form.destroy();
         this.form = undefined;
+        sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
     }
 }, {
     /**

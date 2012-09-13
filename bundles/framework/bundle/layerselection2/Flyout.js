@@ -712,71 +712,24 @@ Oskari.clazz
                     
                     // publish permissions
                     var publishPermission = layer.getPermission('publish');
-                    //alert(layer.getName() + " " +publishPermission);
-                    /*
-                     var publishPermLocKey = null;
-                     if (publishPermission === -1) {
-                     publishPermLocKey = 'notavailable';
-                     } else if (publishPermission === 0) {
-                     publishPermLocKey = 'guest';
-                     } else if (publishPermission === 1) {
-                     publishPermLocKey = 'loggedin';
-                     } else if (publishPermission === 2) {
-                     publishPermLocKey = 'official';
-                     }
-                     if (publishPermLocKey) {
-                     tools.find('div.layer-rights').html(loc.rights[publishPermLocKey]);
-                     }
-
-                     alert(sandbox.getUser().isLoggedIn());
-                     */
-                    //alert(sandbox.getUser().isLoggedIn());
-
-                    if (!sandbox.getUser().isLoggedIn()) {
-
-                        if (publishPermission == 'can_be_published') {
-
-                            if (loc.rights && loc.rights['login-url']) {
-                                tools.find('div.layer-rights').html(loc.rights['login-url']);
-                            } else {
-                                tools.find('div.layer-rights').html('<a href="/web/fi/login">login</a>');
-                            }
-                            if (loc.rights && loc.rights['need-login']) {
-                                tools.find('div.layer-rights').attr("title", loc.rights['need-login']);
-                            } else {
-                                tools.find('div.layer-rights').attr("title", 'Login required');
-                            }
-
-                        } else {
-
-                            if (loc.rights && loc.rights['no_publication_permission'] && loc.rights['no_publication_permission'].label) {
-                                tools.find('div.layer-rights').html(loc.rights['no_publication_permission'].label);
-                            } else {
-                                tools.find('div.layer-rights').html('Publication not permitted');
-                            }
-                            if (loc.rights && loc.rights['no_publication_permission'] && loc.rights['no_publication_permission'].tooltip) {
-                                tools.find('div.layer-rights').attr("title", loc.rights['no_publication_permission'].tooltip);
-                            } else {
-                                tools.find('div.layer-rights').attr("title", 'Publication not permitted.');
-                            }
+                    
+                    if(publishPermission == 'publication_permission_ok') {
+                        if(sandbox.getUser().isLoggedIn()) {
+                            tools.find('div.layer-rights').html(loc.rights['can_be_published_map_user'].label);
+                            tools.find('div.layer-rights').attr("title", loc.rights['can_be_published_map_user'].tooltip);
                         }
-
-                    } else {
-
-                        if (loc.rights && loc.rights[publishPermission] && loc.rights[publishPermission].label) {
-                            tools.find('div.layer-rights').html(loc.rights[publishPermission].label);
-                        } else {
-                            tools.find('div.layer-rights').html(publishPermission);
-                        }
-
-                        if (loc.rights && loc.rights[publishPermission] && loc.rights[publishPermission].tooltip) {
-                            tools.find('div.layer-rights').attr("title", loc.rights[publishPermission].tooltip);
-                        } else {
-                            tools.find('div.layer-rights').attr("title", publishPermission);
+                        else {
+                            tools.find('div.layer-rights').html(loc.rights['login-url']);
+                            tools.find('div.layer-rights').attr("title", loc.rights['need-login']);
                         }
                     }
-                    //tools.find('div.layer-rights').html(publishPermission);
-
+                    else {
+                        //if(publishPermission == 'no_publication_permission') {
+                            tools.find('div.layer-rights').html(loc.rights['no_publication_permission'].label);
+                            tools.find('div.layer-rights').attr("title", loc.rights['no_publication_permission'].tooltip);
+                        //}
+                    }
+                    
                     // slider
                     var opacitySlider = tools.find('div.layout-slider');
                     opacitySlider.attr('id', 'layout-slider-' + layer.getId());

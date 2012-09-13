@@ -4,7 +4,7 @@ Oskari.registerLocalization({
     "value" : {
         "title" : "Omat tiedot",
         "desc" : "Omat tiedot",
-        "notLoggedIn" : "Omiin tietoihin voit tallentaa omia karttanäkymiä ja kohteita sekä nähdä muille sivustoille julkaisemasi kartat. Kirjaudu palveluun.",
+        "notLoggedIn" : "Omiin tietoihin voit tallentaa omia karttanäkymiä ja kohteita sekä nähdä muille sivustoille julkaisemasi kartat. <a href='/web/fi/login'>Kirjaudu palveluun</a>.",
         "tabs" : {
             "myplaces" : {
                 "title" : "Kohteet",
