@@ -60,6 +60,9 @@ function(instance, localization) {
     		title = this.loc.popup.edit;
     		nameInput.setValue(viewName);
     	}
+        nameInput.setRequired(true, me.loc.save.error_noname);
+        nameInput.setContentCheck(true, me.loc.save.error_illegalchars);
+        /*
     	nameInput.setValidator(function(inputField)  {
     		var value = inputField.getValue();
     		var name = inputField.getName();
@@ -79,6 +82,7 @@ function(instance, localization) {
             } 
             return errors;
     	});
+    	*/
     	form.addField(nameInput);
     	
     	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');

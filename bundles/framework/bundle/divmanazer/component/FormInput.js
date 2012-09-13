@@ -25,8 +25,12 @@ function(name) {
     this._validator = null;
     this._required = false;
     this._requiredMsg = 'required';
+    this._contentCheck = false;
+    this._contentCheckMsg = 'illegal characters';
     
     this._bindFocusAndBlur();
+    // word characters, digits and whitespace allowed
+    this._regExp = /[\s\w\d\.]*/;
 }, {
     /**
      * @method setLabel
@@ -75,6 +79,22 @@ function(name) {
 			this._requiredMsg = reqMsg;	
 		}
 	},
+    /**
+     * @method setCharacterCheck
+     * Adds a validator to the field requiring content to match certain rules.
+     * @param {Boolean} blnParam true to require content validation on the field
+     * @param {String} errorMsg error message to show when validation fails
+     * @param {Pattern} regexp pattern to check content with (optional)
+     */
+    setContentCheck : function(blnParam, errorMsg, regexp) {
+        this._contentCheck = (blnParam == true);
+        if(regexp) {
+            this._regExp = regexp;
+        }
+        if(errorMsg) {
+            this._contentCheckMsg = errorMsg; 
+        }
+    },
 	
 	showErrors : function(errors) {
 		this.clearErrors();
@@ -104,6 +124,18 @@ function(name) {
      */
     getValue : function() {
     	return this._field.find('input').val();
+    },
+    /**
+     * @method _checkValue
+     * Checks the field contents against a regexp pattern and returns true if contents match
+     * @return {Boolean}
+     * @private
+     */
+    _checkValue : function() {
+        var value = this._field.find('input').val();
+        var tested = value.match(this._regExp);
+        // if values match, everything ok
+        return (value == tested);
     },
     /**
      * @method setValue
@@ -162,13 +194,14 @@ function(name) {
     			});
     		}    		
     	}
-    	/*
-        if (value.indexOf('<') >= 0) {
-        	errors.push({
-    			"field": this.getName(), 
-    			"error" : 'illegalchars'
-			});
-        } */
+        if(this._contentCheck) {
+            if(!this._checkValue()) {
+                errors.push({
+                    "field": this.getName(), 
+                    "error" : this._contentCheckMsg
+                });
+            }           
+        }
     	return errors;
     },
     
