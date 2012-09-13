@@ -4,8 +4,7 @@ Oskari.registerLocalization({
     "value" : {
         "title" : "Omat tiedot",
         "desc" : "Omat tiedot",
-        "notLoggedIn" : "Omiin tietoihin voit tallentaa omia karttanäkymiä ja kohteita " + 
-                        "sekä nähdä muille sivustoille julkaisemasi kartat. Kirjaudu palveluun.",
+        "notLoggedIn" : "Omiin tietoihin voit tallentaa omia karttanäkymiä ja kohteita sekä nähdä muille sivustoille julkaisemasi kartat. Kirjaudu palveluun.",
         "tabs" : {
             "myplaces" : {
                 "title" : "Kohteet",
@@ -44,30 +43,30 @@ Oskari.registerLocalization({
                     "edit" : " ",
                     "delete" : " "
                 },
-                'popup' : {
-                    'edit' : 'Vaihda näkymän nimi',
-                    "title" : 'Näkymän tallennus',
-                    'label' : 'Näkymän nimi:',
-                    'placeholder' : 'Anna näkymälle nimi',
-                    'save' : 'Tallenna',
-                    'cancel' : 'Peruuta',
-                    'error_noname' : 'Syötä nimi',
-                    'deletetitle' : 'Poiston varmistus',
-                    'deletemsg' : 'Poistetaanko näkymä'
+                "popup" : {
+                    "edit" : "Vaihda näkymän nimi",
+                    "title" : "Näkymän tallennus",
+                    "label" : "Näkymän nimi:",
+                    "placeholder" : "Anna näkymälle nimi",
+                    "save" : "Tallenna",
+                    "cancel" : "Peruuta",
+                    "error_noname" : "Sytöä nimi",
+                    "deletetitle" : "Poiston varmistus",
+                    "deletemsg" : "Poistetaanko näkymä"
                 },
-                'save' : {
-                    "success" : 'Näkymä tallennettu.',
-                    "error_noname" : 'Nimi ei voi olla tyhjä.',
-                    "error_illegalchars" : 'Nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.',
+                "save" : {
+                    "success" : "Näkymä tallennettu.",
+                    "error_noname" : "Nimi ei voi olla tyhjä.",
+                    "error_illegalchars" : "Nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
                     "msg" : {
-                        "view_name" : 'Näkymän nimi'
+                        "view_name" : "Näkymän nimi"
                     }
                 },
                 "button" : {
-                    "ok" : 'OK',
-                    "save" : 'Tallenna',
-                    "cancel" : 'Peruuta',
-                    "toolbarsave" : 'Tallenna näkymä'
+                    "ok" : "OK",
+                    "save" : "Tallenna",
+                    "cancel" : "Peruuta",
+                    "toolbarsave" : "Tallenna näkymä"
                 },
                 "error" : {
                     "title" : "Virhe!",
@@ -92,30 +91,30 @@ Oskari.registerLocalization({
                     "edit" : " ",
                     "delete" : " "
                 },
-                'popup' : {
-                    'edit' : 'Vaihda kartan nimi',
-                    "title" : 'Kartan tallennus',
-                    'label' : 'Kartan nimi:',
-                    'placeholder' : 'Anna kartalle nimi',
-                    'save' : 'Tallenna',
-                    'cancel' : 'Peruuta',
-                    'error_noname' : 'Syötä nimi',
-                    'deletetitle' : 'Poiston varmistus',
-                    'deletemsg' : 'Poistetaanko julkaistu kartta'
+                "popup" : {
+                    "edit" : "Vaihda kartan nimi",
+                    "title" : "Kartan tallennus",
+                    "label" : "Kartan nimi:",
+                    "placeholder" : "Anna kartalle nimi",
+                    "save" : "Tallenna",
+                    "cancel" : "Peruuta",
+                    "error_noname" : "Syötä nimi",
+                    "deletetitle" : "Poiston varmistus",
+                    "deletemsg" : "Poistetaanko julkaistu kartta"
                 },
-                'save' : {
-                    "success" : 'Kartta tallennettu.',
-                    "error_noname" : 'Nimi ei voi olla tyhjä.',
-                    "error_illegalchars" : 'Nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.',
+                "save" : {
+                    "success" : "Kartta tallennettu.",
+                    "error_noname" : "Nimi ei voi olla tyhjä.",
+                    "error_illegalchars" : "Nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
                     "msg" : {
-                        "view_name" : 'Kartan nimi'
+                        "view_name" : "Kartan nimi"
                     }
                 },
                 "button" : {
-                    "ok" : 'OK',
-                    "save" : 'Tallenna',
-                    "cancel" : 'Peruuta',
-                    "toolbarsave" : 'Tallenna kartta'
+                    "ok" : "OK",
+                    "save" : "Tallenna",
+                    "cancel" : "Peruuta",
+                    "toolbarsave" : "Tallenna kartta"
                 },
                 "error" : {
                     "title" : "Virhe!",
