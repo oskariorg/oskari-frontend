@@ -7,7 +7,7 @@ Oskari.registerLocalization({
         "desc" : "",
         "published" : {
             "title" : "Kartta julkaistu",
-            "desc" : "Voit liittää sen sivullesi lisäämällä alla olevan koodin:",
+            "desc" : "Voit liittää kartan internet-sivustollesi lisäämällä sinne alla olevan HTML-koodin:",
             "urlPrefix" : "http://www.paikkatietoikkuna.fi/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&published=true"
         },
         "BasicView" : {
@@ -80,7 +80,7 @@ Oskari.registerLocalization({
                 "domainStart" : "Anna sivusto ilman http- tai www-etuliitteitä",
                 "name" : "Nimi on pakollinen tieto",
                 "nohelp" : "Ohjetta ei löytynyt",
-                "saveFailed" : "Kartan julkaisu epäonnistui, yritä myöhemmin uudelleen"
+                "saveFailed" : "Kartan julkaisu epäonnistui. Yritä myöhemmin uudelleen."
             }
         },
         "NotLoggedView" : {

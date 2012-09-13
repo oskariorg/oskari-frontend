@@ -16,8 +16,8 @@ Oskari.registerLocalization({
                     "desc" : "Kuvaus",
                     "createDate" : "Luotu",
                     "updateDate" : "Päivitetty",
-                    "edit" : "Muokkaa",
-                    "delete" : "Poista"
+                    "edit" : " ",
+                    "delete" : " "
                 },
                 "notification" : {
                     "delete" : {
@@ -50,9 +50,9 @@ Oskari.registerLocalization({
                     "placeholder" : "Anna näkymälle nimi",
                     "save" : "Tallenna",
                     "cancel" : "Peruuta",
-                    "error_noname" : "Sytöä nimi",
+                    "error_noname" : "Syötä nimi",
                     "deletetitle" : "Poiston varmistus",
-                    "deletemsg" : "Poistetaanko näkymä"
+                    "deletemsg" : "Haluatko poistaa näkymän?"
                 },
                 "save" : {
                     "success" : "Näkymä tallennettu.",
@@ -71,10 +71,10 @@ Oskari.registerLocalization({
                 "error" : {
                     "title" : "Virhe!",
                     "generic" : "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin",
-                    "notsaved" : "Näkymää ei tallennettu.",
+                    "notsaved" : "Näkymän tallentaminen epäonnistui.",
                     "notdeleted" : "Näkymän poisto epäonnistui",
-                    "makePublic" : "Näkymän julkaiseminen epäonnistui",
-                    "makePrivate" : "Näkymän vaihtaminen yksityiseksi epäonnistui",
+                    "makePublic" : "Näkymän muuttaminen julkiseksi epäonnistui. Yritä myöhemmin uudelleen.",
+                    "makePrivate" : "Näkymän muuttaminen yksityiseksi epäonnistui. Yritä myöhemmin uudelleen.",
                     "loadfailed" : "Näkymien lataus epäonnistui."
                 }
             },
@@ -98,9 +98,9 @@ Oskari.registerLocalization({
                     "placeholder" : "Anna kartalle nimi",
                     "save" : "Tallenna",
                     "cancel" : "Peruuta",
-                    "error_noname" : "Syötä nimi",
+                    "error_noname" : "Anna kartalle nimi",
                     "deletetitle" : "Poiston varmistus",
-                    "deletemsg" : "Poistetaanko julkaistu kartta"
+                    "deletemsg" : "Haluatko poistaa julkaistun kartan? Tämän jälkeen kartta ei näy sivustollasi."
                 },
                 "save" : {
                     "success" : "Kartta tallennettu.",
@@ -119,10 +119,10 @@ Oskari.registerLocalization({
                 "error" : {
                     "title" : "Virhe!",
                     "generic" : "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin.",
-                    "notsaved" : "Karttaa ei tallennettu.",
+                    "notsaved" : "Kartan tallentaminen epäonnistui.",
                     "notdeleted" : "Kartan poisto epäonnistui.",
-                    "makePublic" : "Kartan julkaiseminen epäonnistui.",
-                    "makePrivate" : "Kartan vaihtaminen yksityiseksi epäonnistui."
+                    "makePublic" : "Kartan julkaiseminen epäonnistui. Yritä myöhemmin uudelleen.",
+                    "makePrivate" : "Kartan vaihtaminen yksityiseksi epäonnistui. Yritä myöhemmin uudelleen."
                 }
             },
             "account" : {

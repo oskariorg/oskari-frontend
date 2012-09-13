@@ -348,7 +348,7 @@ function(instance, localization) {
     	var me = this;
     	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
     	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-    	okBtn.setTitle(this.loc.button.save);
+    	okBtn.setTitle(this.loc['delete']);
     	okBtn.addClass('primary');
     	
     	var sandbox = this.instance.sandbox;

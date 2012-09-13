@@ -37,9 +37,9 @@ Oskari.registerLocalization({
             "cancel" : "Peruuta",
             "finish" : "Lopeta piirto",
             "save" : "Tallenna",
-            "movePlaces" : "Siirrä paikat ja poista",
+            "movePlaces" : "Siirrä kohteet ja poista",
             "deleteCategory" : "Poista",
-            "deleteCategoryAndPlaces" : "Poista paikkoineen"
+            "deleteCategoryAndPlaces" : "Poista kohteet"
         },
         "placeform" : {
             "title" : "Kohteen tiedot",
@@ -96,8 +96,8 @@ Oskari.registerLocalization({
             },
             "categoryDelete" : {
                 "title" : "Karttatason poisto",
-                "deleteConfirmMove" : "Karttataso: \"{0}\". Sisältää paikkoja: {1} kpl. Haluatko siirtää paikat oletuskarttatasolle \"{2}\"?",
-                "deleteConfirm" : "Poistetaanko karttataso: \"{0}\"?",
+                "deleteConfirmMove" : "Karttataso: \"{0}\" sisältää kohteita {1} kpl. Haluatko poistaa tason ja siirtää sen kohteet oletuskarttatasolle \"{2}\"?",
+                "deleteConfirm" : "Haluatko poistaa karttatason \"{0}\"?",
                 "deleted" : "Poistettu"
             },
             "error" : {
