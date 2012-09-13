@@ -540,9 +540,12 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
      */
     postRequestByName : function(requestName, requestArgs) {
         var me = this;
+        var requestBuilder = me.getRequestBuilder(requestName);
+        if(!requestBuilder) {
+            return;
+        }
         window.setTimeout(function() {
             me.printDebug("#!#!#! POSTING --------------> requestByName " + requestName);
-            var requestBuilder = me.getRequestBuilder(requestName);
             var request = requestBuilder.apply(me, requestArgs);
             var creatorComponent = "postmaster";
 

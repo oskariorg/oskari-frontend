@@ -31,7 +31,7 @@ Oskari.registerLocalization({
 		removeAccount : "Poista tili"
 	    }
 	},
-	edit : 'Muokkaa_näkymää',
+	edit : "Muokkaa_näkymää",
 	msg : {
 	    delete_view : "Poistetaanko näkymä",
 	    confirm_delete : "Poiston varmistus"

@@ -26,8 +26,8 @@ Oskari.registerLocalization({
                 "placeholder" : "Sök plats/adress",
                 "search" : "Sök",
                 "close" : "Stäng sökresultat",
-                "noresults" : 'Inga tr\u00E4ff',
-                "toomanyresults" : '\u00F6ver 100 tr\u00E4ffar, avgr\u00E4nsa s\u00F6kningen.',
+                "noresults" : "Inga tr\u00E4ff",
+                "toomanyresults" : "\u00F6ver 100 tr\u00E4ffar, avgr\u00E4nsa s\u00F6kningen.",
                 "column_name" : "Namn",
                 "column_village" : "Kommun",
                 "column_type" : "Typ"

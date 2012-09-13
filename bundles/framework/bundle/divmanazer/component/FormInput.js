@@ -18,11 +18,14 @@ function(name) {
 	label.attr('for', name);
 	
 	var input = this._field.find('input');
+	
 	input.attr('name', name);
     this._name = name;
     this._validator = null;
     this._required = false;
     this._requiredMsg = 'required';
+    
+    this._bindFocusAndBlur();
 }, {
 	setLabel : function(pLabel) {
 		var label = this._field.find('label');
@@ -157,5 +160,61 @@ function(name) {
             return false;
         }
         return true;
+    },
+    /**
+     * @method bindEnterKey
+     * Enables/Disables map movement with keyboard to fields focus/blur 
+     * @param {Function} callback method that is called if enter is pressed on the input 
+     */
+    bindEnterKey : function(callback) {
+        var me = this;
+        var input = this._field.find('input');
+        input.keypress(function(event){
+            if(me._isEnterPress(event)) {
+                callback();
+            }
+        });
+    },
+    /**
+     * @method _bindFocusAndBlur
+     * Enables/Disables map movement with keyboard to fields focus/blur 
+     * @private 
+     */
+    _bindFocusAndBlur : function() {
+        
+        var sandbox = Oskari.$('sandbox');
+        if(!sandbox) {
+            return;
+        }
+        var enabler = sandbox.getRequestBuilder('EnableMapKeyboardMovementRequest');
+        var disabler = sandbox.getRequestBuilder('DisableMapKeyboardMovementRequest');
+        if(!enabler || !disabler) {
+            return;
+        }
+        // all set, ready to bind requests
+        var input = this._field.find('input');
+        input.focus(function(){
+            sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
+        });
+        input.blur(function(){
+            sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+        });
+    },
+    /**
+     * @method _isEnterPress
+     * Detects if <enter> key was pressed and calls #_doSearch if it was
+     * @private
+     * @param {Object} event
+     *      keypress event object from browser
+     */
+    _isEnterPress : function(event) {
+        var keycode;
+        if (window.event) {
+            keycode = window.event.keyCode;
+        } else if (event) {
+            keycode = event.which;
+        } 
+        // true if <enter>
+        return (event.keyCode == 13);
     }
 });

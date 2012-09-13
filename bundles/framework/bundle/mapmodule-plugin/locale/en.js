@@ -26,8 +26,8 @@ Oskari.registerLocalization({
                 "placeholder" : "Find places",
                 "search" : "Find",
                 "close" : "Close search results",
-                "noresults" : 'No results found',
-                "toomanyresults" : 'Over 100 results found. Please define your search',
+                "noresults" : "No results found",
+                "toomanyresults" : "Over 100 results found. Please define your search",
                 "column_name" : "Name",
                 "column_village" : "Municipality",
                 "column_type" : "Type"

@@ -350,6 +350,18 @@ function(id) {
             this.notifyMoveEnd();
         }
     },
+    panMapByPixels : function(pX, pY, suppressStart, suppressEnd) {
+        // usually programmatically for gfi centering
+        this._map.pan(pX, pY);
+        this._updateDomain();
+        // send note about map change
+        if(suppressStart !== true) {
+            this.notifyStartMove();
+        }
+        if(suppressEnd !== true) {
+            this.notifyMoveEnd();
+        }
+    },
     moveMapByPixels : function(pX, pY, suppressStart, suppressEnd) {
         // usually by mouse
         this._map.moveByPx(pX, pY);
