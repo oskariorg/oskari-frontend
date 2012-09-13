@@ -230,14 +230,18 @@ function(name) {
      * @method bindChange
      * Bind function to fields change event
      * @param {Function} callback method that is called if enter is pressed on the input 
+     * @param {Boolean} blnImmediate true to bind to keyup event, false to bind to change event 
      */
-    bindChange : function(callback) {
+    bindChange : function(callback, blnImmediate) {
         var me = this;
         var input = this._field.find('input');
         
-        input.on('change', function(event) {
-            callback(event);
-        });
+        if(!blnImmediate) {
+            input.on('change', callback);
+        }
+        else {
+            input.keyup(callback); 
+        }
     },
     /**
      * @method addClearButton

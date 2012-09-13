@@ -25,7 +25,9 @@ function(instance, localization) {
     this.templateHelp = jQuery('<div class="help icon-info"></div>');
     this.templateTool = jQuery('<div class="tool ">' + '<input type="checkbox"/>' + '<span></span></div>');
     this.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
-    this.templateCustomSize = jQuery('<div class="customsize">' + '<input type="text" disabled="true" name="width" ' + 'placeholder="' + localization.sizes.width + '"/> x ' + '<input type="text" disabled="true" ' + 'name="height" placeholder="' + localization.sizes.height + '"/></div>');
+    this.templateCustomSize = jQuery('<div class="customsize">' + '<input type="text" name="width" ' + 
+            'placeholder="' + localization.sizes.width + '"/> x ' + 
+            '<input type="text" ' + 'name="height" placeholder="' + localization.sizes.height + '"/></div>');
 
     /**
      * @property tools
@@ -127,6 +129,14 @@ function(instance, localization) {
         	me.instance.setPublishMode(false);
         });
         contentDiv.append(this._getButtons());
+        
+        var inputs = this.mainPanel.find('input[type=text]');
+        inputs.focus(function(){
+            me.instance.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
+        });
+        inputs.blur(function(){
+            me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+        });
     },
     /**
      * @method _setSelectedSize
@@ -188,12 +198,6 @@ function(instance, localization) {
         var closureMagic = function(tool) {
             return function() {
                 var size = contentPanel.find('input[name=size]:checked').val();
-                var customInputs = contentPanel.find('div.customsize input');
-                if (size == 'custom') {
-                    customInputs.removeAttr("disabled");
-                } else {
-                    customInputs.attr("disabled", true);
-                }
                 // reset previous setting
                 for (var i = 0; i < me.sizeOptions.length; ++i) {
                     me.sizeOptions[i].selected = false;
@@ -217,6 +221,11 @@ function(instance, localization) {
         }
         var customSizes = this.templateCustomSize.clone();
         var inputs = customSizes.find('input');
+        inputs.focus(function(){
+            var radio = contentPanel.find('input[name=size][value=custom]');
+            radio.attr('checked', 'checked');
+            radio.trigger('change');
+        });
         inputs.bind('keyup', function() {
             me._setSelectedSize();
         });

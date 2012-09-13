@@ -267,6 +267,8 @@ function(instance) {
     
     editCategory : function(category) {
         var me = this;
+        
+        this.instance.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
         var form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.CategoryForm', me.instance);
         var values = {
             name : category.getName(),
@@ -308,6 +310,7 @@ function(instance) {
             me.saveCategory(category);
             
             dialog.close();
+            me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
         });
     	var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
     	cancelBtn.setTitle(btnLoc.cancel);

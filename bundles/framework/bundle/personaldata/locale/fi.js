@@ -4,7 +4,7 @@ Oskari.registerLocalization({
   "value": {
     "title": "Omat tiedot",
     "desc": "Omat tiedot",
-    "notLoggedIn": "Omiin tietoihin voit tallentaa omia karttanäkymiä ja kohteita sekä nähdä muille sivustoille julkaisemasi kartat. Kirjaudu palveluun.",
+    "notLoggedIn": "Omiin tietoihin voit tallentaa omia karttanäkymiä ja kohteita sekä nähdä muille sivustoille julkaisemasi kartat.  <a href='/web/fi/login'>Kirjaudu palveluun</a>.",
     "tabs": {
       "myplaces": {
         "title": "Kohteet",
@@ -57,7 +57,7 @@ Oskari.registerLocalization({
         "save": {
           "success": "Näkymä tallennettu.",
           "error_noname": "Nimi ei voi olla tyhjä.",
-          "error_illegalchars": "\"",
+          "error_illegalchars": "Nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
           "msg": {
             "view_name": "Näkymän nimi"
           }
@@ -105,7 +105,7 @@ Oskari.registerLocalization({
         "save": {
           "success": "Kartta tallennettu.",
           "error_noname": "Nimi ei voi olla tyhjä.",
-          "error_illegalchars": "\"",
+          "error_illegalchars": "Nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
           "msg": {
             "view_name": "Kartan nimi"
           }
