@@ -1,10 +1,14 @@
-/* Copyright (c) 2006-2011 by OpenLayers Contributors (see authors.txt for       * full list of contributors). Published under the Clear BSD license.
-* See http://svn.openlayers.org/trunk/openlayers/license.txt for the            * full text of the license. */
+/* Copyright (c) 2006-2011 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the Clear BSD license.
+ * See http://svn.openlayers.org/trunk/openlayers/license.txt for the
+ * * full text of the license. */
 
 /**
- * Copyright (c) 2011 National Land Survey of Finland.
+ * Copyright (c) 2011,2012 National Land Survey of Finland.
  */
-OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
+OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
+{
+    clickTimerId : null,
     performedDrag : false,
     wheelObserver : null,
     _hoverEvent : null,
@@ -35,9 +39,29 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
     init : function(sandbox) {
         // this.sandbox.printDebug("[PorttiMouse] init called.");
     }, */
+    queueClick : function(evt) {        
+        this.clickTimerId = window.setTimeout(
+           OpenLayers.Function.bind(
+               this.click, 
+               this, 
+               evt), 
+           300
+       );
+    },
+    click : function(evt) {
+        if (this.clickTimerId != null) {
+            window.clearTimeout(this.clickTimerId);
+            this.clickTimerId = null;
+            this.defaultDblClick(evt);
+        } else {
+            var event = 
+                this.single ? OpenLayers.Util.extend({}, evt) : null;
+            this.queueClick(event);
+        }
+    },
     initialize : function() {
         OpenLayers.Control.prototype.initialize.apply(this, arguments);
-    },
+    },    
     destroy : function() {
         //this.sandbox.unregister(this);
         if(this.handler) {
@@ -46,7 +70,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
         this.handler = null;
 
         this.map.events.un({
-            "click" : this.defaultClick,
+            "click" : this.click,
             "dblclick" : this.defaultDblClick,
             "mousedown" : this.defaultMouseDown,
             "mouseup" : this.defaultMouseUp,
@@ -187,16 +211,40 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
                 //this.mapmodule.adjustZoomLevel(0, false);
                 this.mapmodule.notifyMoveEnd();
             } else {
-                // Moved from defaultclick
-                var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
-                var builder = this.sandbox.getEventBuilder('MapClickedEvent');
-                var evt = builder(lonlat, evt.xy.x, evt.xy.y);
-                this.sandbox.notifyAll(evt, true);
+                this.mouseUp(evt);
             }
         }
         document.onselectstart = null;
         this.mouseDragStart = null;
         this.map.div.style.cursor = "";
+    },
+    sendMapClickEvent : function(evt) {
+        this.mouseUpTimerId = null;
+        this.clickTimerId = null;
+        if (evt) {
+            var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
+            var builder = this.sandbox.getEventBuilder('MapClickedEvent');
+            var evt = builder(lonlat, evt.xy.x, evt.xy.y);
+            this.sandbox.notifyAll(evt, true);
+        }
+    },
+    queueMouseUp : function(evt) {        
+        var me = this;
+        this.mouseUpTimerId = window.setTimeout(
+            function() {
+                me.sendMapClickEvent(evt);
+            }, 300
+       );
+    },
+    mouseUp : function(evt) {
+        if (this.mouseUpTimerId != null) {
+            window.clearTimeout(this.mouseUpTimerId);
+            this.mouseUpTimerId = null;
+            this.defaultDblClick(evt);
+        } else {
+            var event = OpenLayers.Util.extend({}, evt);
+            this.queueMouseUp(event);
+        }
     },
     defaultMouseOut : function(evt) {
         if(this.mouseDragStart != null && OpenLayers.Util.mouseLeft(evt, this.map.eventsDiv)) {
