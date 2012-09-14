@@ -261,7 +261,9 @@ function(instance, localization) {
         };
         for (var i = 0; i < this.tools.length; ++i) {
             var toolContainer = this.templateTool.clone();
-            var toolname = this.loc.tools[this.tools[i].id];
+            var pluginKey = this.tools[i].id;
+            pluginKey = pluginKey.substring(pluginKey.lastIndexOf('.') + 1);
+            var toolname = this.loc.tools[pluginKey];
             toolContainer.find('span').append(toolname);
             if (this.tools[i].selected) {
                 toolContainer.find('input').attr('checked', 'checked');

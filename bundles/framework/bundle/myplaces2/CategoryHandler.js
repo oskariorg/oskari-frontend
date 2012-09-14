@@ -13,6 +13,7 @@ function(instance) {
     this.instance = instance;
     // init layers from link (for printing) on initial load
     this.initialLoad = true;
+    this.validateTool = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
 }, {
     __name : 'MyPlacesCategoryHandler',
     /**
@@ -341,6 +342,33 @@ function(instance) {
     	}
     	dialog.show(loc.validation.title, content, [okBtn]);
     },
+    /**
+     * @method hasIllegalChars
+     * Checks value for problematic characters
+     * @return {Boolean} true if value has illegal characters 
+     */
+    hasIllegalChars : function(value) {
+        this.validateTool.setValue(value);
+        return !this.validateTool.checkValue();
+    },
+    /**
+     * @method _validateNumber
+     * Checks value for number and number range
+     * @return {Boolean} true if value is ok 
+     * @private
+     */
+    _validateNumber : function(value, min, max) {
+        return this.validateTool.validateNumberRange(value, min, max);
+    },
+    /**
+     * @method _isColor
+     * Checks value for a hex color
+     * @return {Boolean} true if ok, false -> not a color
+     * @private
+     */
+    _isColor : function(value) {
+        return this.validateTool.validateHexColor(value);
+    },
     validateCategoryFormValues : function(values) {
         var errors = [];
         if(!values) {
@@ -348,22 +376,34 @@ function(instance) {
         }
         var loc = this.instance.getLocalization('validation');
         
-        if(!values.name)
-        {
+        if(!values.name) {
             errors.push({field : 'name', error : loc.categoryName});
         }
-        /*
-         * TODO: validate 
-            category.setDotSize(formValues.category.dot.size);
-            category.setDotColor(formValues.category.dot.color);
-            
-            category.setLineWidth(formValues.category.line.size);
-            category.setLineColor(formValues.category.line.color);
-            
-            category.setAreaLineWidth(formValues.category.area.size);
-            category.setAreaLineColor(formValues.category.area.lineColor);
-            category.setAreaFillColor(formValues.category.area.fillColor);
-         */
+        else if(this.hasIllegalChars(values.name)) {
+            errors.push({field : 'name', error : loc.categoryNameIllegal});
+        }
+        
+        if(!this._validateNumber(values.dot.size, 1, 50)) {
+            errors.push({field : 'dotSize', error : loc.dotSize});
+        }
+        if(!this._isColor(values.dot.color)) {
+            errors.push({field : 'dotColor', error : loc.dotColor});
+        }
+        if(!this._validateNumber(values.line.size, 1, 50)) {
+            errors.push({field : 'lineSize', error : loc.lineSize});
+        }
+        if(!this._isColor(values.line.color)) {
+            errors.push({field : 'lineColor', error : loc.lineColor});
+        }
+        if(!this._validateNumber(values.area.size, 0, 50)) {
+            errors.push({field : 'areaLineSize', error : loc.areaLineSize});
+        }
+        if(!this._isColor(values.area.lineColor)) {
+            errors.push({field : 'areaLineColor', error : loc.areaLineColor});
+        }
+        if(!this._isColor(values.area.fillColor)) {
+            errors.push({field : 'areaFillColor', error : loc.areaFillColor});
+        }
         return errors;
     },
     getCategoryFromFormValues : function(values) {
