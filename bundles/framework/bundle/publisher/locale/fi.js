@@ -79,6 +79,8 @@ Oskari.registerLocalization(
                     "size": "Virhe kokomäärityksissä",
                     "domain": "Sivusto on pakollinen tieto",
                     "domainStart": "Anna sivusto ilman http- tai www-etuliitteitä",
+                    "nameIllegalCharacters": "Nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
+                    "domainIllegalCharacters": "Sivustossa on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
                     "name": "Nimi on pakollinen tieto",
                     "nohelp": "Ohjetta ei löytynyt",
                     "saveFailed": "Kartan julkaisu epäonnistui. Yritä myöhemmin uudelleen."

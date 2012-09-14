@@ -173,10 +173,11 @@ function(instance) {
             resultList.empty();
             // TODO: make some gif go round and round so user knows
             // something is happening
-            me.instance.service.doSearch(field.getValue(), function(data) {
+            var searchKey = field.getValue(true)
+            me.instance.service.doSearch(searchKey, function(data) {
                 field.setEnabled(true);
                 button.setEnabled(true);
-                me._renderResults(data, field.getValue());
+                me._renderResults(data, searchKey);
             }, function(data) {
                 field.setEnabled(true);
                 button.setEnabled(true);
@@ -200,7 +201,7 @@ function(instance) {
     },
 
     _renderResults : function(result, searchKey) {
-        if (!result || !result.totalCount) {
+        if (!result || typeof result.totalCount != 'number') {
             return;
         }
 
