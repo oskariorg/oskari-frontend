@@ -97,6 +97,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 		    	okBtn.addClass('primary');
 		    	okBtn.setHandler(function() {
 		            dialog.close();
+                    me.getSandbox().postRequestByName('EnableMapKeyboardMovementRequest');
 		    	});
 		    	
 		    	var linkContent = 
@@ -104,6 +105,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 					locales.link.prefixUrl + 
 					linkParams +
 					'</textarea>';
+                me.getSandbox().postRequestByName('DisableMapKeyboardMovementRequest');
 		    	dialog.show(locales.link.title, linkContent, [okBtn]);
             }
         });

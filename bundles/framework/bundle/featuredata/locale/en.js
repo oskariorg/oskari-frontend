@@ -1,8 +1,8 @@
 Oskari.registerLocalization({
-    "lang" : "en",
-    "key" : "FeatureData",
-    "value" : {
-        "title" : "Kohdetiedot en",
-        "desc" : ""
-    }
+  "lang": "en",
+  "key": "FeatureData",
+  "value": {
+    "title": "Kohdetiedot en",
+    "desc": ""
+  }
 });

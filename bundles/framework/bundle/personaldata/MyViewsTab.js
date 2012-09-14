@@ -60,25 +60,8 @@ function(instance, localization) {
     		title = this.loc.popup.edit;
     		nameInput.setValue(viewName);
     	}
-    	nameInput.setValidator(function(inputField)  {
-    		var value = inputField.getValue();
-    		var name = inputField.getName();
-    		var errors = [];
-            if (!value) {
-            	errors.push({
-        			"field": name, 
-        			"error" :  me.loc.save.error_noname
-    			});
-            	return errors;
-           	}
-            if (value.indexOf('<') >= 0) {
-            	errors.push({
-        			"field": name, 
-        			"error" :  me.loc.save.error_illegalchars
-    			});
-            } 
-            return errors;
-    	});
+        nameInput.setRequired(true, me.loc.save.error_noname);
+        nameInput.setContentCheck(true, me.loc.save.error_illegalchars);
     	form.addField(nameInput);
     	
     	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -348,7 +331,7 @@ function(instance, localization) {
     	var me = this;
     	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
     	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-    	okBtn.setTitle(this.loc.button.save);
+    	okBtn.setTitle(this.loc['delete']);
     	okBtn.addClass('primary');
     	
     	var sandbox = this.instance.sandbox;

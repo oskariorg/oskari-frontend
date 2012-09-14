@@ -12,6 +12,7 @@ function(name) {
     this.template = jQuery('<div class="oskarifield"><label></label><input type="text" /></div>');
     this.templateErrors = jQuery('<div class="error"></div>');
     this.templateTooltip = jQuery('<div class="icon-info"></div>');
+    this.templateClearButton = jQuery('<div class="icon-close" style="margin-left: 0px; position: relative; display: inline-block; left: -20px; top: 3px;"></div>');
     this._field = this.template.clone();
     
 	var label = this._field.find('label');
@@ -24,13 +25,29 @@ function(name) {
     this._validator = null;
     this._required = false;
     this._requiredMsg = 'required';
+    this._contentCheck = false;
+    this._contentCheckMsg = 'illegal characters';
     
     this._bindFocusAndBlur();
+    // word characters, digits, whitespace and '-' allowed
+    this._regExp = /[\s\w\d\.-]*/;
+    this._colorRegExp = /^([A-Fa-f0-9]{6})$/;
 }, {
+    /**
+     * @method setLabel
+     * Sets the fields label
+     * @param {String} pLabel
+     */
 	setLabel : function(pLabel) {
 		var label = this._field.find('label');
 		label.html(pLabel);
 	},
+    /**
+     * @method setTooltip
+     * Sets the fields tooltip and possible help tags
+     * @param {String} pTooltip tooltip text
+     * @param {String} pDataTags comma separated list of article tags identifying the help article for this field
+     */
 	setTooltip : function(pTooltip, pDataTags) {
 		// TODO: check existing tooltip
 		var tooltip = this.templateTooltip.clone();
@@ -42,16 +59,43 @@ function(name) {
 		var label = this._field.find('label');
 		label.before(tooltip);
 	},
+    /**
+     * @method setPlaceholder
+     * Sets the fields placeholder text
+     * @param {String} pLabel
+     */
 	setPlaceholder : function(pLabel) {
 		var input = this._field.find('input');
 		input.attr('placeholder', pLabel);
 	},
+    /**
+     * @method setRequired
+     * Adds a validator to the field requiring content on the field
+     * @param {Boolean} blnParam true to require content on the field
+     * @param {String} reqMsg error message to show when validation fails (field is empty)
+     */
 	setRequired : function(blnParam, reqMsg) {
 		this._required = (blnParam == true);
 		if(reqMsg) {
 			this._requiredMsg = reqMsg;	
 		}
 	},
+    /**
+     * @method setCharacterCheck
+     * Adds a validator to the field requiring content to match certain rules.
+     * @param {Boolean} blnParam true to require content validation on the field
+     * @param {String} errorMsg error message to show when validation fails
+     * @param {Pattern} regexp pattern to check content with (optional)
+     */
+    setContentCheck : function(blnParam, errorMsg, regexp) {
+        this._contentCheck = (blnParam == true);
+        if(regexp) {
+            this._regExp = regexp;
+        }
+        if(errorMsg) {
+            this._contentCheckMsg = errorMsg; 
+        }
+    },
 	
 	showErrors : function(errors) {
 		this.clearErrors();
@@ -74,20 +118,58 @@ function(name) {
     getField : function() {
     	return this._field;
     },
-    getValue : function() {
-    	return this._field.find('input').val();
+    /**
+     * @method getValue
+     * Returns fields value. 
+     * @param {Boolean} blnFilteredValue true to filter contents to include only safe characters (optional)
+     * @return {String}
+     */
+    getValue : function(blnFilteredValue) {
+        var value = this._field.find('input').val();
+        if(blnFilteredValue) {
+            value = value.match(this._regExp);
+        }
+    	return value;
     },
+    /**
+     * @method setValue
+     * Sets the fields value
+     * @param {String} value
+     */
     setValue : function(value) {
-    	return this._field.find('input').attr('value', value);
+    	this._field.find('input').attr('value', value);
     },
+    /**
+     * @method getName
+     * Returns fields name
+     * @return {String}
+     */
     getName : function() {
     	return this._name;
     },
+    /**
+     * @method setEnabled
+     * Enables/Disables the button
+     * @param {Boolean} blnEnabled true to enable, false to disable
+     */
+    setEnabled : function(blnEnabled) {
+        if(blnEnabled === true) {
+            this._field.find('input').removeAttr('disabled');
+        }
+        else {
+            this._field.find('input').attr('disabled', 'disabled');
+        }
+    },
 	
     /**
-     * @method validate
-     * Returns errors array or empty array if no errors
-     * @return {Object[]}
+     * @method setValidator
+     * The given validator function should returns an errors array or empty array if no errors.
+     * The array consists of objects like this:
+     * {
+     *   "field": this.getName(), 
+     *   "error" : 'error message'
+     * }
+     * @param {Function} pValidator validator function
      */
     setValidator : function(pValidator) {
     	this._validator = pValidator;
@@ -111,13 +193,14 @@ function(name) {
     			});
     		}    		
     	}
-    	/*
-        if (value.indexOf('<') >= 0) {
-        	errors.push({
-    			"field": this.getName(), 
-    			"error" : 'illegalchars'
-			});
-        } */
+        if(this._contentCheck) {
+            if(!this.checkValue()) {
+                errors.push({
+                    "field": this.getName(), 
+                    "error" : this._contentCheckMsg
+                });
+            }           
+        }
     	return errors;
     },
     
@@ -143,6 +226,17 @@ function(name) {
         return false;
     },
     /**
+     * @method checkValue
+     * Checks the field contents against a regexp pattern and returns true if contents match
+     * @return {Boolean}
+     */
+    checkValue : function() {
+        var value = this.getValue();
+        var filtered = this.getValue(true);
+        // if values match, everything ok
+        return (value == filtered);
+    },
+    /**
      * @method validateNumberRange
      * @param {Object} value number to validate
      * @param {Number} min min value
@@ -162,8 +256,17 @@ function(name) {
         return true;
     },
     /**
+     * @method validateHexColor
+     * Validates a color hex-string with out the starting #-character
+     * @param {String} value hex-string to validate
+     */
+    validateHexColor : function(value) {
+        return this._colorRegExp.test(value);
+    },
+    
+    /**
      * @method bindEnterKey
-     * Enables/Disables map movement with keyboard to fields focus/blur 
+     * Binds <enter> keypress to trigger given function 
      * @param {Function} callback method that is called if enter is pressed on the input 
      */
     bindEnterKey : function(callback) {
@@ -174,6 +277,38 @@ function(name) {
                 callback();
             }
         });
+    },
+    /**
+     * @method bindChange
+     * Bind function to fields change event
+     * @param {Function} callback method that is called if enter is pressed on the input 
+     * @param {Boolean} blnImmediate true to bind to keyup event, false to bind to change event 
+     */
+    bindChange : function(callback, blnImmediate) {
+        var me = this;
+        var input = this._field.find('input');
+        
+        if(!blnImmediate) {
+            input.on('change', callback);
+        }
+        else {
+            input.keyup(callback); 
+        }
+    },
+    /**
+     * @method addClearButton
+     * Adds a clear button to the field 
+     */
+    addClearButton : function() {
+
+        var clearButton =  this.templateClearButton.clone();
+        var input = this._field.find('input');
+        clearButton.bind('click', function() {
+            input.val('');
+            input.trigger('change');
+            input.trigger('keyup');
+        });
+        input.after(clearButton);
     },
     /**
      * @method _bindFocusAndBlur

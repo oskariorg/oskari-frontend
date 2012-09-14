@@ -136,6 +136,7 @@ function(instance) {
     showPlaceForm : function(location, place) {
         var me = this;
         var sandbox = this.instance.sandbox;
+        sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
         var loc = this.instance.getLocalization();
         this.form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.PlaceForm', this.instance);
         var categories = this.instance.getService().getAllCategories();
@@ -180,13 +181,21 @@ function(instance) {
      */
     _validateForm : function(values) {
         var errors = [];
-       
-        var errors = this.instance.getCategoryHandler().validateCategoryFormValues(values.category);
+        var categoryHandler = this.instance.getCategoryHandler();
+        var errors = categoryHandler.validateCategoryFormValues(values.category);
         
+        var loc = this.instance.getLocalization('validation');
         if(!values.place.name)
         {
-        	var loc = this.instance.getLocalization('validation');
             errors.push({name : 'name' , error: loc.placeName});
+        }
+        else if(categoryHandler.hasIllegalChars(values.place.name))
+        {
+            errors.push({name : 'name' , error: loc.placeNameIllegal});
+        } 
+        if(categoryHandler.hasIllegalChars(values.place.desc))
+        {
+            errors.push({name : 'desc' , error: loc.descIllegal});
         }
         return errors;
     },
@@ -337,6 +346,7 @@ function(instance) {
         sandbox.request(this, request);
         this.form.destroy();
         this.form = undefined;
+        sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
     }
 }, {
     /**

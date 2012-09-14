@@ -1,17 +1,14 @@
-/*
- * Locale for en
- */
 Oskari.registerLocalization({
-    "lang" : "en",
-    "key" : "userinterface.UserGuide",
-    "value" : {
-	"title" : "Guide",
-	"desc" : "",	
-	"flyout" : {
-	    "title" : "Guide"    
-	},
-	"tile" : {
-	    "title" : "Guide"      
-	}
+  "lang": "en",
+  "key": "userinterface.UserGuide",
+  "value": {
+    "title": "Guide",
+    "desc": "",
+    "flyout": {
+      "title": "Guide"
+    },
+    "tile": {
+      "title": "Guide"
     }
+  }
 });
