@@ -25,8 +25,12 @@ function(name) {
     this._validator = null;
     this._required = false;
     this._requiredMsg = 'required';
+    this._contentCheck = false;
+    this._contentCheckMsg = 'illegal characters';
     
     this._bindFocusAndBlur();
+    // word characters, digits, whitespace and '-' allowed
+    this._regExp = /[\s\w\d\.-]*/;
 }, {
     /**
      * @method setLabel
@@ -75,6 +79,22 @@ function(name) {
 			this._requiredMsg = reqMsg;	
 		}
 	},
+    /**
+     * @method setCharacterCheck
+     * Adds a validator to the field requiring content to match certain rules.
+     * @param {Boolean} blnParam true to require content validation on the field
+     * @param {String} errorMsg error message to show when validation fails
+     * @param {Pattern} regexp pattern to check content with (optional)
+     */
+    setContentCheck : function(blnParam, errorMsg, regexp) {
+        this._contentCheck = (blnParam == true);
+        if(regexp) {
+            this._regExp = regexp;
+        }
+        if(errorMsg) {
+            this._contentCheckMsg = errorMsg; 
+        }
+    },
 	
 	showErrors : function(errors) {
 		this.clearErrors();
@@ -99,11 +119,28 @@ function(name) {
     },
     /**
      * @method getValue
-     * Returns fields value
+     * Returns fields value. 
+     * @param {Boolean} blnFilteredValue true to filter contents to include only safe characters (optional)
      * @return {String}
      */
-    getValue : function() {
-    	return this._field.find('input').val();
+    getValue : function(blnFilteredValue) {
+        var value = this._field.find('input').val();
+        if(blnFilteredValue) {
+            value = value.match(this._regExp);
+        }
+    	return value;
+    },
+    /**
+     * @method _checkValue
+     * Checks the field contents against a regexp pattern and returns true if contents match
+     * @return {Boolean}
+     * @private
+     */
+    _checkValue : function() {
+        var value = this.getValue();
+        var filtered = this.getValue(true);
+        // if values match, everything ok
+        return (value == filtered);
     },
     /**
      * @method setValue
@@ -136,9 +173,14 @@ function(name) {
     },
 	
     /**
-     * @method validate
-     * Returns errors array or empty array if no errors
-     * @return {Object[]}
+     * @method setValidator
+     * The given validator function should returns an errors array or empty array if no errors.
+     * The array consists of objects like this:
+     * {
+     *   "field": this.getName(), 
+     *   "error" : 'error message'
+     * }
+     * @param {Function} pValidator validator function
      */
     setValidator : function(pValidator) {
     	this._validator = pValidator;
@@ -162,13 +204,14 @@ function(name) {
     			});
     		}    		
     	}
-    	/*
-        if (value.indexOf('<') >= 0) {
-        	errors.push({
-    			"field": this.getName(), 
-    			"error" : 'illegalchars'
-			});
-        } */
+        if(this._contentCheck) {
+            if(!this._checkValue()) {
+                errors.push({
+                    "field": this.getName(), 
+                    "error" : this._contentCheckMsg
+                });
+            }           
+        }
     	return errors;
     },
     
