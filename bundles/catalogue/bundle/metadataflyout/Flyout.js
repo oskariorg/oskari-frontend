@@ -271,12 +271,19 @@ function(instance, locale, loader) {
 	loadMetadataJSONForState : function() {
 
 		var me = this;
+        if(!this.contentState || 
+            !this.contentState.metadata || 
+            !this.contentState.uuid) {
+                // nothing to load
+            return false;
+        }
 		var metadata = this.contentState.metadata;
 
 		this.instance.getLoader().loadMetadata('json', metadata.uuid, metadata.RS_Identifier_Code, metadata.RS_Identifier_CodeSpace, function(data) {
 			var metadataJson = data.mdcs[0];
 			me.processJSON(metadataJson);
 		}, 'json');
+		return true;
 	},
 	/**
 	 * @method processJSON
@@ -342,9 +349,9 @@ function(instance, locale, loader) {
 	 */
 	setContentState : function(contentState) {
 		this.contentState = contentState;
-		this.loadMetadataJSONForState();
-		this.showMetadataView(this.contentState.view);
-
+		if(this.loadMetadataJSONForState()) {
+            this.showMetadataView(this.contentState.view);
+		}
 	},
 	/**
 	 * @method getContentState
