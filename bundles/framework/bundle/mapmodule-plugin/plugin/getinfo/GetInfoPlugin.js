@@ -197,6 +197,9 @@ function() {
      * @static
      */
     eventHandlers : {
+        'EscPressedEvent' : function(evt) {
+          this._closeGfiInfo();
+        },
         'Toolbar.ToolSelectedEvent' : function(event) {
             this.setEnabled(('basictools' == event.getGroupId() && 'select' == event.getToolId()));
         },
