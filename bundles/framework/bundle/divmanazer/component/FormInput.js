@@ -31,6 +31,7 @@ function(name) {
     this._bindFocusAndBlur();
     // word characters, digits, whitespace and '-' allowed
     this._regExp = /[\s\w\d\.-]*/;
+    this._colorRegExp = /^([A-Fa-f0-9]{6})$/;
 }, {
     /**
      * @method setLabel
@@ -131,18 +132,6 @@ function(name) {
     	return value;
     },
     /**
-     * @method _checkValue
-     * Checks the field contents against a regexp pattern and returns true if contents match
-     * @return {Boolean}
-     * @private
-     */
-    _checkValue : function() {
-        var value = this.getValue();
-        var filtered = this.getValue(true);
-        // if values match, everything ok
-        return (value == filtered);
-    },
-    /**
      * @method setValue
      * Sets the fields value
      * @param {String} value
@@ -205,7 +194,7 @@ function(name) {
     		}    		
     	}
         if(this._contentCheck) {
-            if(!this._checkValue()) {
+            if(!this.checkValue()) {
                 errors.push({
                     "field": this.getName(), 
                     "error" : this._contentCheckMsg
@@ -237,6 +226,17 @@ function(name) {
         return false;
     },
     /**
+     * @method checkValue
+     * Checks the field contents against a regexp pattern and returns true if contents match
+     * @return {Boolean}
+     */
+    checkValue : function() {
+        var value = this.getValue();
+        var filtered = this.getValue(true);
+        // if values match, everything ok
+        return (value == filtered);
+    },
+    /**
      * @method validateNumberRange
      * @param {Object} value number to validate
      * @param {Number} min min value
@@ -255,6 +255,15 @@ function(name) {
         }
         return true;
     },
+    /**
+     * @method validateHexColor
+     * Validates a color hex-string with out the starting #-character
+     * @param {String} value hex-string to validate
+     */
+    validateHexColor : function(value) {
+        return this._colorRegExp.test(value);
+    },
+    
     /**
      * @method bindEnterKey
      * Binds <enter> keypress to trigger given function 

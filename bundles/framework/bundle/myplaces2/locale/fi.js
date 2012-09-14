@@ -112,7 +112,17 @@ Oskari.registerLocalization({
     "validation": {
       "title": "Tiedoissa puutteita:",
       "placeName": "Kohteen nimi puuttuu.",
-      "categoryName": "Tason nimi puuttuu."
+      "categoryName": "Tason nimi puuttuu.",
+      "placeNameIllegal": "Kohteen nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
+      "descIllegal" : "Kohteen kuvauksessa on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
+      "categoryNameIllegal": "Tason nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
+      "dotSize": "Pisteen koko ei ole sallituissa rajoissa (1-50).",
+      "dotColor": "Pisteen väri virheellinen.",
+      "lineSize": "Viivan koko ei ole sallituissa rajoissa (1-50).",
+      "lineColor": "Viivan väri virheellinen.",
+      "areaLineSize": "Alueen viivan koko ei ole sallituissa rajoissa (0-50).",
+      "areaLineColor": "Alueen viivan väri virheellinen.",
+      "areaFillColor": "Alueen täyttöväri virheellinen."
     }
   }
 });
