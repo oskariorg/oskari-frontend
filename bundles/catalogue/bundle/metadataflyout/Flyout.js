@@ -321,6 +321,9 @@ function(instance, locale, loader) {
 		var metadata = this.contentState.metadata;
 
 		this.instance.getLoader().loadMetadata('json', metadata.uuid, metadata.RS_Identifier_Code, metadata.RS_Identifier_CodeSpace, function(data) {
+			if( !data  || !data.mdcs || !data.mdcs.length || data.mdcs.length == 0 ) {
+				return;
+			}
 			var metadataJson = data.mdcs[0];
 			me.processJSON(metadataJson);
 		}, 'json');
