@@ -38,12 +38,12 @@ function() {
 	 * @property tileContainer (#menubar)
 	 */
 	this.tileContainer = null;
-	
+
 	/**
 	 * @property flyoutZIndexBase
 	 */
 	this.flyoutZIndexBase = 1100;
-	
+
 	/**
 	 * @property menubarContainerId
 	 */
@@ -105,7 +105,24 @@ function() {
 		this.requestHandlers['modal'] = Oskari.clazz.create('Oskari.userinterface.bundle.ui.request.ModalDialogRequestHandler', this);
 		sandbox.addRequestHandler('userinterface.ModalDialogRequest', this.requestHandlers['modal']);
 
+		/* removed for some reason or another */
 		//		sandbox.registerAsStateful(this.mediator.bundleId, this);
+
+		/* IE fixes for flyout height others use CSS media query */
+		if(jQuery.browser.msie && jQuery.browser.version < "9.0") {
+			var toFix = this.compiledTemplates['Oskari.userinterface.Flyout'].children('.oskari-flyoutcontentcontainer');
+			var height = this.flyoutContainer.height();
+			var ieFixClasses = this.ieFixClasses;
+			for(var n = 0; n < ieFixClasses.length; n++) {
+				var fix = ieFixClasses[n];
+
+				if(height >= fix.min && height <= fix.max) {
+					toFix.addClass(fix.cls);
+					break;
+				}
+			}
+
+		}
 
 	},
 	/**
@@ -141,20 +158,10 @@ function() {
 	"templates" : {
 
 		/* menu tile */
-		"Oskari.userinterface.Tile" : '<div class="oskari-tile oskari-tile-closed">' + 
-		'<div class="oskari-tile-title"></div>' + 
-		'<div class="oskari-tile-status"></div>' + 
-		'</div>',
+		"Oskari.userinterface.Tile" : '<div class="oskari-tile oskari-tile-closed">' + '<div class="oskari-tile-title"></div>' + '<div class="oskari-tile-status"></div>' + '</div>',
 
 		/* flyout */
-		"Oskari.userinterface.Flyout" : '<div class="oskari-flyout oskari-closed">' + 
-		'<div class="oskari-flyouttoolbar">' + '<div class="oskari-flyoutheading"></div>' + 
-		'<div class="oskari-flyout-title">' + '<p></p>' + '</div>' + '<div class="oskari-flyouttools">' + 
-		'<div class="oskari-flyouttool-help">' + '</div>' + '<div class="oskari-flyouttool-attach">' + '</div>' + 
-		'<div class="oskari-flyouttool-detach">' + '</div>' + '<div class="oskari-flyouttool-minimize">' + '</div>' + 
-		'<div class="oskari-flyouttool-restore">' + '</div>' + '<div class="oskari-flyouttool-close icon-close icon-close:hover">' + '</div>' + 
-		'</div>' + '</div>' + '<div class="oskari-flyoutcontentcontainer">' + 
-		'<div class="oskari-flyoutcontent"></div>' + '</div>' + '</div>'
+		"Oskari.userinterface.Flyout" : '<div class="oskari-flyout oskari-closed">' + '<div class="oskari-flyouttoolbar">' + '<div class="oskari-flyoutheading"></div>' + '<div class="oskari-flyout-title">' + '<p></p>' + '</div>' + '<div class="oskari-flyouttools">' + '<div class="oskari-flyouttool-help">' + '</div>' + '<div class="oskari-flyouttool-attach">' + '</div>' + '<div class="oskari-flyouttool-detach">' + '</div>' + '<div class="oskari-flyouttool-minimize">' + '</div>' + '<div class="oskari-flyouttool-restore">' + '</div>' + '<div class="oskari-flyouttool-close icon-close icon-close:hover">' + '</div>' + '</div>' + '</div>' + '<div class="oskari-flyoutcontentcontainer">' + '<div class="oskari-flyoutcontent"></div>' + '</div>' + '</div>'
 
 	},
 
@@ -463,12 +470,12 @@ function() {
 			} else if(extensionState == 'restore') {
 				state = 'minimize';
 			}
-			
+
 		}
 
 		var flyoutInfo = extensionInfo['plugins']['Oskari.userinterface.Flyout'];
 
-		/* opening  flyouts 'attached' closes previously attachily opened  flyout(s) */  
+		/* opening  flyouts 'attached' closes previously attachily opened  flyout(s) */
 		if(state == 'attach' && flyoutInfo) {
 			var ops = me.flyoutOps;
 			var closeOp = ops['close'];
@@ -681,19 +688,17 @@ function() {
 				"left" : extensionInfo.viewState.left,
 				"top" : extensionInfo.viewState.top
 			};
-			
+
 			/*
 			 * to top
 			 */
 			me.shuffleZIndices(flyout);
 
-			/* 
+			/*
 			 * with style
 			 */
 			me.applyTransition(flyout, "detach", me.flyoutTransitions);
-			
-			
-			
+
 			var viewState = me.getFlyoutViewState(flyout, "detach");
 			extensionInfo.viewState = viewState;
 
@@ -702,24 +707,19 @@ function() {
 		"attach" : function(flyout, flyoutPlugin, extensionInfo, extensions) {
 			var me = this;
 
-		
 			/*
 			 * to top
 			 */
 			me.shuffleZIndices(flyout);
 
-			/* 
+			/*
 			 * with style
 			 */
 
 			me.applyTransition(flyout, "attach", me.flyoutTransitions);
 
-			
-
 			var viewState = me.getFlyoutViewState(flyout, "attach");
 			extensionInfo.viewState = viewState;
-
-			
 
 		},
 		/** @method minimize */
@@ -747,7 +747,7 @@ function() {
 				viewState : "close"
 			};
 			me.applyTransition(flyout, "close", me.flyoutTransitions);
-			
+
 		}
 	},
 
@@ -920,19 +920,44 @@ function() {
 		for(var n = 0; n < zarray.length; n++) {
 			var idx = zarray[n];
 			zprops[idx] = min + n;
-			if(zextns[idx].state != 'detach')
-				continue;
+			/*if(zextns[idx].state != 'detach')
+			 continue;*/
 
 			zflyout[idx].css("z-index", zprops[zarray[n]]);
 		}
 
 		/*
-		 * finally bump the requested flyout to top 
+		 * finally bump the requested flyout to top
 		 */
 		toTop.css("z-index", min + zarray.length + 2);
-		
 
-	}
+	},
+	ieFixClasses : [{
+		min : 400,
+		max : 599,
+		cls : "oskari-flyoutcontentcontainer_IE_400_599"
+	}, {
+		min : 600,
+		max : 799,
+		cls : "oskari-flyoutcontentcontainer_IE_600_799"
+	}, {
+		min : 800,
+		max : 999,
+		cls : "oskari-flyoutcontentcontainer_IE_800_999"
+	}, {
+		min : 1000,
+		max : 1199,
+		cls : "oskari-flyoutcontentcontainer_IE_1000_1199"
+	}, {
+		min : 1200,
+		max : 1399,
+		cls : "oskari-flyoutcontentcontainer_IE_1200_1399"
+	}, {
+		min : 1400,
+		max : 9999,
+		cls : "oskari-flyoutcontentcontainer_IE_1400"
+	}]
+
 }, {
 	"protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Stateful']
 });
