@@ -211,7 +211,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
                 //this.mapmodule.adjustZoomLevel(0, false);
                 this.mapmodule.notifyMoveEnd();
             } else {
-                this.mouseUp(evt);
+                // sthis.mouseUp(evt);
             }
         }
         document.onselectstart = null;
@@ -219,7 +219,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
         this.map.div.style.cursor = "";
     },
     sendMapClickEvent : function(evt) {
-        this.mouseUpTimerId = null;
+        // this.mouseUpTimerId = null;
         this.clickTimerId = null;
         if (evt) {
             var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
@@ -228,24 +228,24 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
             this.sandbox.notifyAll(evt, true);
         }
     },
-    queueMouseUp : function(evt) {        
-        var me = this;
-        this.mouseUpTimerId = window.setTimeout(
-            function() {
-                me.sendMapClickEvent(evt);
-            }, 300
-       );
-    },
-    mouseUp : function(evt) {
-        if (this.mouseUpTimerId != null) {
-            window.clearTimeout(this.mouseUpTimerId);
-            this.mouseUpTimerId = null;
-            this.defaultDblClick(evt);
-        } else {
-            var event = OpenLayers.Util.extend({}, evt);
-            this.queueMouseUp(event);
-        }
-    },
+    // queueMouseUp : function(evt) {        
+    //     var me = this;
+    //     this.mouseUpTimerId = window.setTimeout(
+    //         function() {
+    //             me.sendMapClickEvent(evt);
+    //         }, 300
+    //    );
+    // },
+    // mouseUp : function(evt) {
+    //     if (this.mouseUpTimerId != null) {
+    //         window.clearTimeout(this.mouseUpTimerId);
+    //         this.mouseUpTimerId = null;
+    //         this.defaultDblClick(evt);
+    //     } else {
+    //         var event = OpenLayers.Util.extend({}, evt);
+    //         this.queueMouseUp(event);
+    //     }
+    // },
     defaultMouseOut : function(evt) {
         if(this.mouseDragStart != null && OpenLayers.Util.mouseLeft(evt, this.map.eventsDiv)) {
             if(this.zoomBox) {

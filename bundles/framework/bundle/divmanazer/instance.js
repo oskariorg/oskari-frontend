@@ -38,6 +38,16 @@ function() {
 	 * @property tileContainer (#menubar)
 	 */
 	this.tileContainer = null;
+	
+	/**
+	 * @property flyoutZIndexBase
+	 */
+	this.flyoutZIndexBase = 1100;
+	
+	/**
+	 * @property menubarContainerId
+	 */
+	this.menubarContainerId = "#menubar";
 
 }, {
 
@@ -73,7 +83,7 @@ function() {
 		this.compileTemplates();
 
 		this.flyoutContainer = jQuery(document.body);
-		this.tileContainer = jQuery("#menubar");
+		this.tileContainer = jQuery(this.menubarContainerId);
 		this.tileContainer.addClass("oskari-tile-container");
 
 		/*
@@ -453,15 +463,12 @@ function() {
 			} else if(extensionState == 'restore') {
 				state = 'minimize';
 			}
-			/* ... */
-			/**
-			 * side effects
-			 */
-
+			
 		}
 
 		var flyoutInfo = extensionInfo['plugins']['Oskari.userinterface.Flyout'];
 
+		/* opening  flyouts 'attached' closes previously attachily opened  flyout(s) */  
 		if(state == 'attach' && flyoutInfo) {
 			var ops = me.flyoutOps;
 			var closeOp = ops['close'];
@@ -500,6 +507,7 @@ function() {
 			}
 		}
 
+		/* let's transition flyout if one exists */
 		if(flyoutInfo) {
 			var flyoutPlugin = flyoutInfo.plugin;
 			var flyout = flyoutInfo.el;
@@ -513,6 +521,7 @@ function() {
 
 		}
 
+		/* let's transition menu tile if one exists */
 		var tileInfo = extensionInfo['plugins']['Oskari.userinterface.Tile'];
 		if(tileInfo) {
 			var tilePlugin = tileInfo.plugin;
@@ -672,12 +681,18 @@ function() {
 				"left" : extensionInfo.viewState.left,
 				"top" : extensionInfo.viewState.top
 			};
-			/*flyout.animate(toState, 200, 'cubicIn', function() {
-				var viewState = me.getFlyoutViewState(flyout, "detach");
-				extensionInfo.viewState = viewState;
-			});*/
+			
+			/*
+			 * to top
+			 */
+			me.shuffleZIndices(flyout);
 
+			/* 
+			 * with style
+			 */
 			me.applyTransition(flyout, "detach", me.flyoutTransitions);
+			
+			
 			
 			var viewState = me.getFlyoutViewState(flyout, "detach");
 			extensionInfo.viewState = viewState;
@@ -687,19 +702,24 @@ function() {
 		"attach" : function(flyout, flyoutPlugin, extensionInfo, extensions) {
 			var me = this;
 
-			/*flyout.removeAttr("style");*/
+		
+			/*
+			 * to top
+			 */
+			me.shuffleZIndices(flyout);
+
+			/* 
+			 * with style
+			 */
+
 			me.applyTransition(flyout, "attach", me.flyoutTransitions);
 
-			/*flyout.css('left', me.defaults.attach.left);
-			 flyout.css('top', me.defaults.attach.top);*/
+			
 
 			var viewState = me.getFlyoutViewState(flyout, "attach");
 			extensionInfo.viewState = viewState;
 
-			/*if(extensionInfo.draggable) {
-			 extensionInfo.draggable.destroy();
-			 extensionInfo.draggable = null;
-			 }*/
+			
 
 		},
 		/** @method minimize */
@@ -727,11 +747,7 @@ function() {
 				viewState : "close"
 			};
 			me.applyTransition(flyout, "close", me.flyoutTransitions);
-
-			/*if(extensionInfo.draggable) {
-			 extensionInfo.draggable.destroy();
-			 extensionInfo.draggable = null;
-			 }*/
+			
 		}
 	},
 
@@ -866,7 +882,8 @@ function() {
 	 *
 	 * @method shuffleZIndexes
 	 *
-	 * called after dragStop to restore some reasonable z-indexes
+	 * called after dragStop (or updateExtension) to restore some reasonable z-indexes
+	 * as well as bump the requested flyout on top of others
 	 *
 	 */
 	shuffleZIndices : function(toTop) {
@@ -909,7 +926,11 @@ function() {
 			zflyout[idx].css("z-index", zprops[zarray[n]]);
 		}
 
+		/*
+		 * finally bump the requested flyout to top 
+		 */
 		toTop.css("z-index", min + zarray.length + 2);
+		
 
 	}
 }, {

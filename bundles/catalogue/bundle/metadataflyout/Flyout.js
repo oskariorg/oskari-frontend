@@ -192,9 +192,10 @@ function(instance, locale, loader) {
 		this.container.empty();
 	},
 	getTitle : function() {
-		return "Metadata";
+		return this.locale.title;
 	},
 	getDescription : function() {
+		
 	},
 	getOptions : function() {
 
@@ -210,6 +211,9 @@ function(instance, locale, loader) {
 	 */
 	openMetadataView : function(viewId, target) {
 		var me = this;
+		if( !this.contentState) {
+			return;
+		}
 		var metadata = this.contentState.metadata;
 
 		this.instance.getLoader().openMetadata(viewId, metadata.uuid, metadata.RS_Identifier_Code, metadata.RS_Identifier_CodeSpace, function(data) {
@@ -250,19 +254,60 @@ function(instance, locale, loader) {
 	loadMetadataForState : function() {
 		var me = this;
 		var views = this.views;
+		
+		if(!this.contentState || !this.contentState.metadata || !this.contentState.metadata.uuid) {
+			return false;
+		}
+		
 		var viewId = this.contentState.view;
 		var metadata = this.contentState.metadata;
-		var url = me.instance.getLoader().getURLForView(viewId, metadata.uuid, metadata.RS_Identifier_Code, metadata.RS_Identifier_CodeSpace);
 
 		function handler(request) {
 			views[viewId].html(request.responseText);
+			
+			 /* HACK BEGIN */
+            /* Let's fix HREFs to click events */
+            var links = views[viewId].find("a[href]");
+
+            jQuery.each(links, function(index, ahref) {
+
+                var el = jQuery(ahref);
+                var href = el.attr('href');
+                if(!href) {
+                    return;
+                }
+                if(!href[0] == '?') {
+                    return;
+                }
+
+                var splits = href.split("&");
+                var argMap = {};
+                jQuery.each(splits, function(index, part) {
+                    var keyVal = part.split("=");
+                    argMap[keyVal[0]] = keyVal[1];
+                });
+
+                el.attr('href', null);
+                el.click({
+                    viewId : viewId,
+                    uuid : argMap['uuid']
+                }, function(arg) {
+                    var data = arg.data;
+                    var uuid = data.uuid;
+
+                    me.showMetadata(uuid);
+                });
+            });
+
+			/* HACK END */
+			
 			views[viewId].css("display", "");
+			
+			
+			
 		}
 
-		var request = OpenLayers.Request.GET({
-			url : url,
-			callback : handler
-		});
+		me.instance.getLoader().loadGeonetworkAjaxHTML(handler,viewId, metadata.uuid, metadata.RS_Identifier_Code, metadata.RS_Identifier_CodeSpace);
 
 	},
 	/**
@@ -271,15 +316,15 @@ function(instance, locale, loader) {
 	loadMetadataJSONForState : function() {
 
 		var me = this;
-        if(!this.contentState || 
-            !this.contentState.metadata || 
-            !this.contentState.uuid) {
-                // nothing to load
-            return false;
-        }
+		if(!this.contentState || !this.contentState.metadata || !this.contentState.metadata.uuid) {
+			return false;
+		}
 		var metadata = this.contentState.metadata;
 
 		this.instance.getLoader().loadMetadata('json', metadata.uuid, metadata.RS_Identifier_Code, metadata.RS_Identifier_CodeSpace, function(data) {
+			if( !data  || !data.mdcs || !data.mdcs.length || data.mdcs.length == 0 ) {
+				return;
+			}
 			var metadataJson = data.mdcs[0];
 			me.processJSON(metadataJson);
 		}, 'json');
@@ -324,6 +369,8 @@ function(instance, locale, loader) {
 	 * styled with bundled CSS.
 	 */
 	showMetadata : function(uuid, RS_Identifier_Code, RS_Identifier_CodeSpace) {
+		this.resetContentState();
+		
 		this.contentState.metadata.uuid = uuid;
 		this.contentState.metadata.RS_Identifier_Code = RS_Identifier_Code;
 		this.contentState.metadata.RS_Identifier_CodeSpace = RS_Identifier_CodeSpace;
@@ -348,9 +395,13 @@ function(instance, locale, loader) {
 	 * restore state from store
 	 */
 	setContentState : function(contentState) {
+		if( !contentState) {
+			this.resetContentState();
+			return;
+		}
 		this.contentState = contentState;
 		if(this.loadMetadataJSONForState()) {
-            this.showMetadataView(this.contentState.view);
+			this.showMetadataView(this.contentState.view);
 		}
 	},
 	/**
@@ -360,7 +411,20 @@ function(instance, locale, loader) {
 	 */
 	getContentState : function() {
 		return this.contentState;
+	},
+	resetContentState : function() {
+		this.contentState = {
+			metadata : {
+				uuid : null,
+				RS_Identifier_Code : null,
+				RS_Identifier_CodeSpace : null
+			},
+			view : 'abstract'
+
+		};
 	}
+
+
 }, {
 	'protocol' : ['Oskari.userinterface.Flyout']
 });

@@ -63,14 +63,26 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.service.MetadataLoad
 			},
 			success : function(data, textStatus) {
 
-				cb(data);
+				cb(data,true);
 			},
 			error : function(jqXHR, textStatus, errorThrown) {
-				alert(textStatus);
+				cb(null,false);
 
 			}
 		});
 
+	},
+	
+	/**
+	 * Helper to circumvent jQuery ajax html hassles
+	 */
+	loadGeonetworkAjaxHTML: function(handler,viewId, metadata_uuid, metadata_RS_Identifier_Code, metadata_RS_Identifier_CodeSpace) {
+		var uri = this.getURLForView(viewId, metadata_uuid, metadata_RS_Identifier_Code, metadata_RS_Identifier_CodeSpace);
+
+		var request = OpenLayers.Request.GET({
+			url : uri,
+			callback : handler
+		});
 	},
 	/**
 	 * @method openMetadata
