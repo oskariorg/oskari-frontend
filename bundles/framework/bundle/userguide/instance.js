@@ -109,14 +109,15 @@ function() {
         // draw ui
         me.createUi();
         
-        // bind help tags
+        // get help content
         var helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', sandbox);
-        helper.getHelpArticle('help,tag,list', 'contentPart', function(isSuccess, pContent) {
-            var content = pContent;
-            if(!isSuccess) {
-                content = 'error';
-            }
-            me.plugins['Oskari.userinterface.Flyout'].setContent(content);
+        helper.getHelpArticle(this._localization.help.tags, 
+            this._localization.help.contentPart, function(isSuccess, pContent) {
+                var content = pContent;
+                if(!isSuccess) {
+                    content = this._localization.error.generic;
+                }
+                me.plugins['Oskari.userinterface.Flyout'].setContent(content);
         });
     },
     /**
