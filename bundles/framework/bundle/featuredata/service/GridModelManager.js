@@ -26,7 +26,7 @@ function() {
         var models = this._getModels(data);
 
         // calculate "all" data model
-        if(data.featureDatas.size() < 2) {
+        if(data.featureDatas.length < 2) {
             // we can shortcut and just copy to only featuredata to allModel
             for(var feature in models) {
                 // should loop only once and set this

@@ -108,6 +108,16 @@ function() {
         //sandbox.registerAsStateful(this.mediator.bundleId, this);
         // draw ui
         me.createUi();
+        
+        // bind help tags
+        var helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', sandbox);
+        helper.getHelpArticle('help,tag,list', 'contentPart', function(isSuccess, pContent) {
+            var content = pContent;
+            if(!isSuccess) {
+                content = 'error';
+            }
+            me.plugins['Oskari.userinterface.Flyout'].setContent(content);
+        });
     },
     /**
      * @method init
@@ -147,7 +157,7 @@ function() {
          * @method userinterface.ExtensionUpdatedEvent
          */
         'userinterface.ExtensionUpdatedEvent' : function(event) {
-
+/*
             var me = this;
 
             if(event.getExtension().getName() != me.getName()) {
@@ -158,7 +168,7 @@ function() {
             var doOpen = event.getViewState() != "close";
 
             me.toggleUserInterface(doOpen);
-
+*/
         }
     },
 
@@ -284,6 +294,7 @@ function() {
     startExtension : function() {
         /*this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.userguide.Flyout', this,
          * this.getLocalization()['flyout']););*/
+        this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.userguide.Flyout', this);
         this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.userguide.Tile', this, this.getLocalization('tile'));
     },
     /**
@@ -325,6 +336,7 @@ function() {
         var me = this;
 
         this.plugins['Oskari.userinterface.Tile'].refresh();
+        this.plugins['Oskari.userinterface.Flyout'].setContent('');
     }
 }, {
     /**
