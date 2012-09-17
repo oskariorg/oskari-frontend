@@ -110,21 +110,27 @@ function(endpointUrl) {
                 //me.sandbox.printWarn("WFS _processGridUpdate response id not match to latest wfs query id --> Skipping response.");
             }
         };
-
-        var url = "&flow_pm_wfsLayerId=" + mapLayer.getId() + 
-                "&flow_pm_bbox_min_x=" + params.getBbox().left + 
-                "&flow_pm_bbox_min_y=" + params.getBbox().bottom + 
-                "&flow_pm_bbox_max_x=" + params.getBbox().right + 
-                "&flow_pm_bbox_max_y=" + params.getBbox().top + 
-                "&flow_pm_map_width=" + params.getMapWidth() + 
-                "&flow_pm_map_heigh=" + params.getMapHeight() + 
-                "&flow_pm_map_wfs_query_id=" + me._generateWfsTableQueryId() + 
-                "&actionKey=QUERY_FIND_RAW_DATA_TO_TABLE";
+        
+        // NOTE:  flow_pm_map_heigh is not an error, server actually uses the typoed version
         var query =  jQuery.ajax({
             dataType : "json",
             type : "POST",
-            url : this.endpointUrl + url,
-            data : url,
+            data : {
+                "flow_pm_wfsLayerId" : mapLayer.getId(),
+                "flow_pm_bbox_min_x" : params.getBbox().left,
+                "flow_pm_bbox_min_y" : params.getBbox().bottom,
+                "flow_pm_bbox_max_x" : params.getBbox().right,
+                "flow_pm_bbox_max_y" : params.getBbox().top,
+                "flow_pm_map_width" : params.getMapWidth(),
+                "flow_pm_map_heigh" : params.getMapHeight(), 
+                "flow_pm_map_wfs_query_id" : me._generateWfsTableQueryId()
+            },
+            beforeSend : function(x) {
+                if (x && x.overrideMimeType) {
+                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                }
+            },
+            url : this.endpointUrl + "&actionKey=QUERY_FIND_RAW_DATA_TO_TABLE",
             success : onReady
         });
         this.pendingOperations[mapLayer.getId()].query = query;
