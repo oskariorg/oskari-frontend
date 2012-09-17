@@ -118,7 +118,6 @@ function() {
 
 				if(height >= fix.min && height <= fix.max) {
 					toFix.addClass(fix.cls);
-					console.log("FIXING IE CLS ", fix.cls);
 					break;
 				}
 			}
