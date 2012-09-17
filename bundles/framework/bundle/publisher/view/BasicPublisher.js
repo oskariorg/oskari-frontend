@@ -137,6 +137,9 @@ function(instance, localization) {
         inputs.blur(function(){
             me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
         });
+        
+        var helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', this.instance.sandbox);
+        helper.processHelpLinks('title', content, 'error', 'errormsg');
     },
     /**
      * @method _setSelectedSize
