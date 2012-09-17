@@ -27,6 +27,8 @@ function() {
         this.dialog.find('div.content').html(message);
         if(buttons && buttons.length > 0) {
         	var actionDiv = this.dialog.find('div.actions');
+        	// TODO: save button references and clean up previous buttons
+        	actionDiv.empty();
         	for(var i = 0 ; i < buttons.length; ++i) {
         		buttons[i].insertTo(actionDiv);
         	}
@@ -101,7 +103,18 @@ function() {
 	        }, 500);
         }
     },
+    /**
+     * @property alignment
+     * Options for #moveTo() alignment parameter
+     * @static
+     */
     alignment : ['left', 'right', 'top', 'bottom'],
+    /**
+     * @method moveTo
+     * Removes the popup after given time has passed
+     * @param {jQuery} target - target element which the popup should point
+     * @param {String} alignment - one of #alignment (optional, defaults to right)
+     */
     moveTo :function(target, alignment) {
         var align = 'right';
         if(alignment && jQuery.inArray(alignment, this.alignment) != -1) {
@@ -149,6 +162,22 @@ function() {
                 'margin-top' : 0
         } );
     },
+    /**
+     * @method resetPosition
+     * Resets any previous locations and centers the popup on screen
+     */
+    resetPosition : function() {
+        this.dialog.removeClass('arrow');
+        for(var i = 0; i < this.alignment.length; ++i) {
+            this.dialog.removeClass(this.alignment[i]);
+        }
+        this.dialog.removeAttr('style');
+    },
+    /**
+     * @method makeModal
+     * Creates an Oskari.userinterface.component.Overlay under 
+     * the popup to block user input outside the popup
+     */
     makeModal : function() {
     	var overlay = Oskari.clazz.create('Oskari.userinterface.component.Overlay');
     	overlay.overlay('body');
