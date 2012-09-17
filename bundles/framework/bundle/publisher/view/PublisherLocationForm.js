@@ -45,6 +45,7 @@ function(localization) {
 		}
 		
 		this.fields['domain'].field.setRequired(true, this.loc['error'].domain);
+        this.fields['domain'].field.setContentCheck(true, this.loc['error'].domainIllegalCharacters);
 		this.fields['domain'].field.setValidator(function(inputField) {
 			
     		var value = inputField.getValue();
@@ -60,6 +61,7 @@ function(localization) {
             return errors;
 		});
 		this.fields['name'].field.setRequired(true, this.loc['error'].name);
+        this.fields['name'].field.setContentCheck(true, this.loc['error'].nameIllegalCharacters);
 		
         // language options are rendered based on localization
     	var langField = this.langField.template.clone();

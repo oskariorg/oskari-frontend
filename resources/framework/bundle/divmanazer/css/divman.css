@@ -95,8 +95,6 @@ body {
 	display: inline-block;
 	width: 16px;
 	height: 16px;
-	background-image: url('../images/icon-close.png');
-	background-repeat: no-repeat;
 	margin-right: 2px;
 	margin-left: auto;
 }

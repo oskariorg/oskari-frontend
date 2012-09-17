@@ -75,13 +75,13 @@ function(instance) {
         this.templateResultTableRow = jQuery('<tr>' + '<td><a href="JavaScript:void(0);"></a></td>' + '<td></td>' + '<td></td>' + '</tr>');
 
         this.resultHeaders = [{
-            title : 'Nimi',
+            title : this.instance.getLocalization('grid').name,
             prop : 'name'
         }, {
-            title : 'Kylä',
+            title : this.instance.getLocalization('grid').village,
             prop : 'village'
         }, {
-            title : 'Tyyppi',
+            title : this.instance.getLocalization('grid').type,
             prop : 'type'
         }];
     },
@@ -173,10 +173,11 @@ function(instance) {
             resultList.empty();
             // TODO: make some gif go round and round so user knows
             // something is happening
-            me.instance.service.doSearch(field.getValue(), function(data) {
+            var searchKey = field.getValue(true)
+            me.instance.service.doSearch(searchKey, function(data) {
                 field.setEnabled(true);
                 button.setEnabled(true);
-                me._renderResults(data, field.getValue());
+                me._renderResults(data, searchKey);
             }, function(data) {
                 field.setEnabled(true);
                 button.setEnabled(true);
@@ -200,7 +201,7 @@ function(instance) {
     },
 
     _renderResults : function(result, searchKey) {
-        if (!result || !result.totalCount) {
+        if (!result || typeof result.totalCount != 'number') {
             return;
         }
 
@@ -224,7 +225,16 @@ function(instance) {
             resultList.append(al + ':' + nf);
             return;
         } else {
-            info.append(this.instance.getLocalization('searchResultCount') + result.totalCount + this.instance.getLocalization('searchResultDescription'));
+            info.append(this.instance.getLocalization('searchResultCount') + 
+                    result.totalCount + this.instance.getLocalization('searchResultCount2'));
+            info.append('<br/>');
+            
+            if(result.hasMore) {
+                // more results available
+                info.append(this.instance.getLocalization('searchResultDescriptionMoreResults'));
+                info.append('<br/>');
+            }
+            info.append(this.instance.getLocalization('searchResultDescriptionOrdering'));
         }
 
         if (result.totalCount == 1) {
@@ -274,7 +284,9 @@ function(instance) {
         }
 
         this._populateResultTable(tableBody);
-        resultList.append('<div><h3>Tulokset:' + result.totalCount + ' hakutulosta haulla ' + searchKey + '</h3></div>');
+        resultList.append('<div><h3>' + 
+            this.instance.getLocalization('searchResults') + result.totalCount + 
+            this.instance.getLocalization('searchResultsDescription') + searchKey + '</h3></div>');
         resultList.append(table);
     },
 

@@ -181,7 +181,8 @@ function() {
         if(!state || !state.popups) {
             return;
         }
-        // good to go
+        // good to go -> close existing and open ones saved in state
+        this.popupPlugin.close();
         for(var i = 0 ; i < state.popups.length; ++i) {
             var data = state.popups[i];
             this.popupPlugin.popup(data.id, data.title, data.data, data.lonlat);
