@@ -192,9 +192,10 @@ function(instance, locale, loader) {
 		this.container.empty();
 	},
 	getTitle : function() {
-		return "Metadata";
+		return this.locale.title;
 	},
 	getDescription : function() {
+		
 	},
 	getOptions : function() {
 
