@@ -15,8 +15,6 @@ function(instance, localization) {
     this.instance = instance;
     this.template = jQuery('<div class="viewsList volatile"></div>');
     this.templateLink = jQuery('<a href="JavaScript:void(0);"></a>');
-    //this.templateViewRow = jQuery('<div class="view">' + '<div class="name"><a href="JavaScript:void(0);">' + '</a></div></div>');
-    //this.templateViewTools = jQuery('<div class="tools">' + '<div class="edit">' + '<a href="JavaScript:void(0);">' + '</a></div>' + '<div class="publish">' + '<a href="JavaScript:void(0);">' + '</a></div>' + '<div class="delete">' + '<a href="JavaScript:void(0);">' + '</a></div></div>');
     this.loc = localization;
     this.container = null;
     
@@ -128,15 +126,6 @@ function(instance, localization) {
         var model = this._getGridModel(views);
         var grid = this._getGrid(model);
         grid.renderTo(listContainer);
-        /*
-        for (var i = 0; i < me.viewData.length; i++) {
-            var datum = me.viewData[i];
-            var vc = me.createViewContainer(datum);
-            listContainer.append(vc);
-        }
-        listContainer.find('div.view:odd').addClass('odd');
-        listContainer.find('div.view:even').removeClass('odd');
-        */
     },
 
     /**
@@ -216,7 +205,7 @@ function(instance, localization) {
         var me = this;
         var instance = this.instance;
         var sandbox = instance.getSandbox();
-        var visibleFields = ['name', 'publish', 'edit', 'delete'];
+        var visibleFields = ['name', /*'publish',*/ 'edit', 'delete'];
         var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
         grid.setDataModel(model);
         grid.setVisibleFields(visibleFields);
@@ -263,6 +252,7 @@ function(instance, localization) {
         grid.setColumnValueRenderer('delete', deleteRenderer);
         
         // set up the link from edit field
+        /*
         var service = instance.getViewService();
         var publishRenderer = function(name, data) {
             var link = me.templateLink.clone();
@@ -293,6 +283,7 @@ function(instance, localization) {
             return link;
         };
         grid.setColumnValueRenderer('publish', publishRenderer);
+        */
         
         // setup localization
         for(var i=0; i < visibleFields.length; ++i) {
