@@ -73,7 +73,7 @@
 			/*dialog.addClass('myplaces2');*/
 
 			me._content.html(value);
-		},
+		}
 	}, {
 		/**
 		 * @property {String[]} protocol array of superclasses as {String}
