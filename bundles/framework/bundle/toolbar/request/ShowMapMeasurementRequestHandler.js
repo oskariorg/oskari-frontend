@@ -41,8 +41,6 @@
 		handleRequest : function(core, request) {
 			var sandbox = core.getSandbox();
 
-			console.log(request);
-
 			this._showMeasurementResults(request.getValue());
 		},
 		getValue : function() {

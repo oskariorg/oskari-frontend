@@ -228,8 +228,8 @@ function() {
            } else if( order ===2) {
             	out = measure.toFixed(3) + " " + units+"2";
             }   
-            sandbox.printDebug(out + " " + ( finished ? "FINISHED" : "CONTINUES"));
-            console.log(event);
+            /*sandbox.printDebug(out + " " + ( finished ? "FINISHED" : "CONTINUES"));*/
+            
             var geomAsText = null;
             var geomMimeType = null;
             if( finished ) {
