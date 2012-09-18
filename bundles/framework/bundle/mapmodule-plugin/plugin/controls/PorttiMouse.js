@@ -40,9 +40,9 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
         // this.sandbox.printDebug("[PorttiMouse] init called.");
     }, */
     queueClick : function(evt) {        
-        this.clickTimerId = window.setTimeout(
+        var me = this;
            OpenLayers.Function.bind(
-               this.click, 
+               this.defaultClick, 
                this, 
                evt), 
            300
@@ -54,8 +54,9 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
             this.clickTimerId = null;
             this.defaultDblClick(evt);
         } else {
-            var event = 
-                this.single ? OpenLayers.Util.extend({}, evt) : null;
+            // var event = 
+            //     this.single ? OpenLayers.Util.extend({}, evt) : null;
+            var event = OpenLayers.Util.extend({}, evt);
             this.queueClick(event);
         }
     },
@@ -89,7 +90,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
     },
     draw : function() {
        this.map.events.on({
-            "click" : this.defaultClick,
+            "click" : this.click,
             "dblclick" : this.defaultDblClick,
             "mousedown" : this.defaultMouseDown,
             "mouseup" : this.defaultMouseUp,
@@ -120,6 +121,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
             // this.sandbox.getRequestBuilder('MapModulePlugin.MapClickRequest')
             // (this.map.getLonLatFromViewPortPx(evt.xy),
             // evt.xy.x, evt.xy.y));
+            this.sendMapClickEvent(evt);
         }
         return notAfterDrag;
     },
