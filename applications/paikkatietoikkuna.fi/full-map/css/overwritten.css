@@ -5,6 +5,7 @@ input[type="text"] {
 
 table td {
 	text-align: left;
+	vertical-align: top;
 }
 
 table {
