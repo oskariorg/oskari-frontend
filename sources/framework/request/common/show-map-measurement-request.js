@@ -20,9 +20,12 @@ Oskari.clazz.define('Oskari.mapframework.request.common.ShowMapMeasurementReques
  * @param {String}
  *            value message to be shown
  */
-function(value) {
+function(value,finished,geometry,geometryMimeType) {
     this._creator = null;
     this._value = value;
+    this._geometry = geometry;
+    this._finished = finished;
+    this._geometryMimeType = geometryMimeType;
 }, {
     /** @static @property __name request name */
     __name : "ShowMapMeasurementRequest",
@@ -39,6 +42,29 @@ function(value) {
      */
     getValue : function() {
         return this._value;
+    },
+    
+    /**
+     * @method getGeometry
+     * @return {Object} geometry if one exists
+     */
+    getGeometry: function() {
+    	return this._geometry;
+    },
+    /**
+     * @method getGeometryMimeType
+     * @return {String} mime type for geometry if one exists
+     */
+    getGeometryMimeType: function() {
+    	return this._geometryMimeType;
+    },
+    
+    /**
+     * @method isFinished
+     * @return {Boolean} true/false if measurement has been finished or not 
+     */
+    isFinished: function() {
+    	return this._finished;
     }
 }, {
     /**

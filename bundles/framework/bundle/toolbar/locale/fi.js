@@ -23,6 +23,10 @@ Oskari.registerLocalization({
         "line": "Mittaa etäisyys",
         "area": "Mittaa alue"
       }
+    },
+    "measure" : {
+    	"title" : "Mittaustulokset",
+    	"close" : "Sulje"
     }
   }
 });

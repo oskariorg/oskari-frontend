@@ -12,6 +12,10 @@ Oskari.registerLocalization({
       "print": {
         "tooltip": "Print"
       }
+    },
+    "measure" : {
+    	"title" : "?",
+    	"close" : "Stäng"
     }
   }
 });

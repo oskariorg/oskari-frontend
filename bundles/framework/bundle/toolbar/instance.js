@@ -83,6 +83,9 @@ function() {
         sandbox.addRequestHandler('Toolbar.ToolButtonStateRequest', this.requestHandlers.toolButtonRequestHandler);
         sandbox.addRequestHandler('Toolbar.SelectToolButtonRequest', this.requestHandlers.toolButtonRequestHandler);
         
+        /* temporary fix */
+        sandbox.addRequestHandler('ShowMapMeasurementRequest', this.requestHandlers.showMapMeasurementRequestHandler);
+        
         sandbox.registerAsStateful(this.mediator.bundleId, this);
         
         // TODO: check if we want to do this
@@ -101,7 +104,8 @@ function() {
         this.templateTool = jQuery('<div class="tool"></div>');
 
 		this.requestHandlers = {
-			toolButtonRequestHandler : Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ToolButtonRequestHandler', me)
+			toolButtonRequestHandler : Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ToolButtonRequestHandler', me),
+			showMapMeasurementRequestHandler : Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ShowMapMeasurementRequestHandler', me)
 		};
 	},
     /**
@@ -150,6 +154,16 @@ function() {
 				sandbox.unregisterFromEventByName(me, p);
 			}
 		}
+		
+		/* temporary fix */
+        sandbox.removeRequestHandler('ShowMapMeasurementRequest', this.requestHandlers.showMapMeasurementRequestHandler);
+        
+		sandbox.removeRequestHandler('Toolbar.AddToolButtonRequest', this.requestHandlers.toolButtonRequestHandler);
+        sandbox.removeRequestHandler('Toolbar.RemoveToolButtonRequest', this.requestHandlers.toolButtonRequestHandler);
+        sandbox.removeRequestHandler('Toolbar.ToolButtonStateRequest', this.requestHandlers.toolButtonRequestHandler);
+        sandbox.removeRequestHandler('Toolbar.SelectToolButtonRequest', this.requestHandlers.toolButtonRequestHandler);
+        
+		
         this.sandbox.unregisterStateful(this.mediator.bundleId);
 		me.sandbox.unregister(me);
 		me.started = false;
