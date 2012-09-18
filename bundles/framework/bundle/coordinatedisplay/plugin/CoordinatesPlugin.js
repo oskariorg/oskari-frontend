@@ -9,14 +9,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
  * @param {Object} config
  *      JSON config with params needed to run the plugin
  */
-function(config) {
+function(config,locale) {
+    this._conf = config;
+	this._locale = locale;
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
     this._map = null;
-    this._conf = config;
-    this.__elements = {};
+    this._elements = {};
     this.__templates = {};
+    
 }, {
     /** @static @property __name plugin name */
     __name : 'CoordinatesPlugin',
@@ -69,24 +71,18 @@ function(config) {
             jQuery('<div class="cbDiv">' +
                    ' <div class="cbSpansWrapper">' + 
                    ' <div class="cbRow">' + 
-               '  <div class="cbLabel" axis="lat">P: </div>' +
+               '  <div class="cbCrsLabel"></div>' +
+               ' </div>' +
+                   ' <div class="cbRow">' + 
+               '  <div class="cbLabel cbLabelN" axis="lat"></div>' +
                '  <div class="cbValue" axis="lat"></div>' +
                ' </div>' +
                '  <br clear="both">' +
                ' <div class="cbRow">' +
-               '  <div class="cbLabel" axis="lon">I: </div>' +
+               '  <div class="cbLabel cbLabelE" axis="lon"></div>' +
                '  <div class="cbValue" axis="lon"></div>' + 
-               /*
-               '  <span class="cbLabel" axis="lon">I: </span>' +
-               '  <span class="cbValue" axis="lon"></span>' +
-               */
                ' </div>' +
                ' </div>' + 
-               /*' <div class="cbSelection">'+
-               '  <div style="float:left">ETRS89</div>' + 
-               '  <div class="cbArrowDown"></div>' + 
-               '  <br clear="both">'+
-               ' </div>' +*/
                '</div>');
     },
     /**
@@ -134,9 +130,9 @@ function(config) {
             sandbox.unregisterFromEventByName(this, p);
         }
         
-        if(this.__elements['etrs89']) {
-            this.__elements['etrs89'].remove();
-            delete this.__elements['etrs89'];
+        if(this._elements['display']) {
+            this._elements['display'].remove();
+            delete this._elements['display'];
         }
 
         sandbox.unregister(this);
@@ -172,13 +168,21 @@ function(config) {
         var me = this;
         // get div where the map is rendered from openlayers
         var parentContainer = jQuery(this._map.div);
-        
-        if(!me.__elements['etrs89']) {
-            me.__elements['etrs89'] = me.__templates['latlondiv'].clone();
+		var el = me._elements['display'];
+        if(!me._elements['display']) {
+            el = me._elements['display'] = me.__templates['latlondiv'].clone();
         }
-        parentContainer.append(me.__elements['etrs89']);
+        
+        var crs = me._map.getProjection();
+        var crsText = me._locale['crs'][crs];
+        
+        el.find('.cbCrsLabel').html(crsText);
+        el.find('.cbLabelN').html(me._locale['compass']['N']);
+        el.find('.cbLabelE').html(me._locale['compass']['E']);
+        
+        parentContainer.append(el);
         this.update();
-        me.__elements['etrs89'].show();
+        el.show();
     },
     /**
      * @method update
@@ -198,8 +202,9 @@ function(config) {
         }
         var me = this;
         var latlon = data['latlon'];
-        var spanLat = me.__elements['etrs89'].find('.cbValue[axis="lat"]');
-        var spanLon = me.__elements['etrs89'].find('.cbValue[axis="lon"]');
+        var el = me._elements['display'];
+        var spanLat = el.find('.cbValue[axis="lat"]');
+        var spanLon = el.find('.cbValue[axis="lon"]');
         if(spanLat && spanLon) {
             spanLat.text(latlon.lat);
             spanLon.text(latlon.lon);
