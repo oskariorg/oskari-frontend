@@ -41,6 +41,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
     }, */
     queueClick : function(evt) {        
         var me = this;
+        this.clickTimerId = window.setTimeout(
            OpenLayers.Function.bind(
                this.defaultClick, 
                this, 
