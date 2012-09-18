@@ -183,5 +183,16 @@ function() {
     	overlay.overlay('body');
     	this.overlay = overlay;
     	overlay.followResizing(true);
+    },
+    
+     /** 
+     * @method setContent
+     * Sets dialog content element
+     * @param {HTML/DOM/jQueryObject}
+     */
+    setContent: function(content) {
+    	var contentEl = this.dialog.find('div.content');
+    	contentEl.empty();
+    	contentEl.append(content);
     }
 });
