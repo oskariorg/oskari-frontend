@@ -73,7 +73,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
 
         this.map.events.un({
             "click" : this.click,
-            "dblclick" : this.defaultDblClick,
+//            "dblclick" : this.defaultDblClick,
             "mousedown" : this.defaultMouseDown,
             "mouseup" : this.defaultMouseUp,
             "mousemove" : this.defaultMouseMove,
@@ -92,7 +92,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
     draw : function() {
        this.map.events.on({
             "click" : this.click,
-            "dblclick" : this.defaultDblClick,
+//            "dblclick" : this.defaultDblClick,
             "mousedown" : this.defaultMouseDown,
             "mouseup" : this.defaultMouseUp,
             "mousemove" : this.defaultMouseMove,
