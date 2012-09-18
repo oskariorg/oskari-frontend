@@ -7,13 +7,11 @@
     background : white;    
     font-size : 12px;
     z-index : 64738;
-    font-weight : bold;
-    border: 1px dotted #333438;
+    border: 1px solid #c4c4c4;
 }
 .cbSelection {
     color : white;
     background : #3C3C3C;
-    font-weight : bold;
     padding : 10px;
 }
 

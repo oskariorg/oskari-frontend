@@ -1,3 +1,8 @@
+div.search div.searchDescription {
+	margin: 0;
+	margin-bottom: 8px;
+}
+
 div.search div.searchContainer {
     height: 90%;
 }

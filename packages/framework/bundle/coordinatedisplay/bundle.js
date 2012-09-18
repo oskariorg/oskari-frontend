@@ -23,16 +23,26 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisp
 
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/" + 
-			        "coordinatedisplay/instance.js"
+			"src" : "../../../../bundles/framework/bundle/coordinatedisplay/instance.js"
 		}, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/" + 
-                    "coordinatedisplay/plugin/CoordinatesPlugin.js"
+            "src" : "../../../../bundles/framework/bundle/coordinatedisplay/plugin/CoordinatesPlugin.js"
         }, {
 		    "type" : "text/css",
-		    "src" : "../../../../resources/framework/bundle/" + 
-		            "coordinatedisplay/css/coordinatedisplay.css"	  
+		    "src" : "../../../../resources/framework/bundle/coordinatedisplay/css/coordinatedisplay.css"	  
+		}],
+		"locales" : [{
+			"lang" : "fi",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/coordinatedisplay/locale/fi.js"
+		}, {
+			"lang" : "sv",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/coordinatedisplay/locale/sv.js"
+		}, {
+			"lang" : "en",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/coordinatedisplay/locale/en.js"
 		}]
 	},
 	"bundle" : {

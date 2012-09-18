@@ -15,7 +15,12 @@ Oskari.registerLocalization({
     },
     "measure" : {
     	"title" : "?",
-    	"close" : "Stäng"
+    	"close" : "Stäng",
+    	"guidance" : {
+    		"measureline" : "???",
+    		"measurearea" : "???"
+    	}
+
     }
   }
 });

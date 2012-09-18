@@ -15,7 +15,12 @@ Oskari.registerLocalization({
     },
     "measure" : {
     	"title" : "Measurement results",
-    	"close" : "Close"
+    	"close" : "Close",
+    	"guidance" : {
+    		"measureline" : "???",
+    		"measurearea" : "???"
+    	}
+
     }
   }
 });

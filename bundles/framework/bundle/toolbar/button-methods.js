@@ -71,7 +71,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         button.bind('click', function(event) {
             me._clickButton(pId, pGroup);
         });
-        group.append(button);
+
+		/* add first or last to group (default last)*/        
+        if( pConfig['prepend'])
+        	group.prepend(button); 
+        else 
+        	group.append(button);
     },
     /**
      * @method _clickButton
