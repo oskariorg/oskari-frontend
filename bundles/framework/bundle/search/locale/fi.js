@@ -12,7 +12,10 @@ Oskari.registerLocalization({
     "searchResultDescriptionOrdering": "Voit järjestää tuloksia alla olevassa taulukossa klikkaamalla sarakeotsikkoa.",
     "searchResults": "Tulokset: ",
     "searchResultsDescription": " hakutulosta haulla ",
-    "searchservice_search_alert_title": "Virhe",
+    "searchservice_search_alert_title": "Virhe: ",
+    "cannot_be_empty": "Hakusana ei voi olla",
+    "too_short": "Hakusana on liian lyhyt.",
+    "too_many_stars": "Liian monta *-merkkiä",
     "searchservice_search_not_found_anything_text": "Haulla ei löytynyt yhtään tulosta.",
     "grid": {
        "name" : "Nimi",

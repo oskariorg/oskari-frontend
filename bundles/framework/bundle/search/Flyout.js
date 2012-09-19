@@ -220,7 +220,7 @@ function(instance) {
         var inst = this.instance;
         // error handling
         if (result.totalCount == -1) {
-            resultList.append('searchservice_search_alert_title: ' + result.errorText);
+            resultList.append(this.instance.getLocalization('searchservice_search_alert_title') + this.instance.getLocalization(result.errorText));
             return;
         } else if (result.totalCount == 0) {
             var alK = 'searchservice_search_alert_title';
