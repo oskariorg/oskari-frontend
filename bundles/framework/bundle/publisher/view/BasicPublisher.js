@@ -16,8 +16,7 @@ function(instance, localization) {
     var me = this;
     this.instance = instance;
     this.template = jQuery('' + 
-                           '<div class="basic_publisher" ' + 
-                           'style="z-index: 64738;">' + 
+                           '<div class="basic_publisher">' + 
     	                   '<div class="header">' + 
                            '<div class="icon-close">' + 
                            '</div>' + 
