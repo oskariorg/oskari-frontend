@@ -1253,7 +1253,7 @@ Oskari = (function() {
 	    this.log("loading CSS " + sScriptSrc);
 	    var h = document.getElementsByTagName("head").length ? document
 		.getElementsByTagName("head")[0] : document.body;
-	    //if (!preloaded()) {
+	    if (!preloaded()) {
                 if (jQuery.browser.msie) {
                     document.createStyleSheet(sScriptSrc);
                 } else {
@@ -1264,7 +1264,7 @@ Oskari = (function() {
 	            s.href = fn;
 	            h.appendChild(s);
                 }
-            //}
+            }
 	},
 	/**
 	 * @method self
