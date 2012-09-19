@@ -32,7 +32,7 @@ function(blnEnable) {
      */
     isEnabled : function() {
         return this._enable;
-    },
+    }
 }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
