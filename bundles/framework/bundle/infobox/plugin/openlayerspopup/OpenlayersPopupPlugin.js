@@ -175,8 +175,8 @@ function() {
 		    lonlat : lonlat,
 		    popup : popup
 		}
-		jQuery(popup.div).css('overflow','');
-		jQuery(popup.groupDiv).css('overflow','');
+		jQuery(popup.div).css('overflow','visible');
+		jQuery(popup.groupDiv).css('overflow','visible');
 		// override
 		popup.events.un({
 			"click": popup.onclick,

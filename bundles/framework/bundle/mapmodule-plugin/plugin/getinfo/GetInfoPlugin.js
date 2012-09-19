@@ -352,7 +352,8 @@ function() {
             //                  } else if ((datum.presentationType == 'TEXT') ||
             // hasHtml) {
         } else {
-            html = '<div style="overflow:auto">' + datum.content + '</div>';
+            // style="overflow:auto"
+            html = '<div>' + datum.content + '</div>';
         }
         return html;
     },

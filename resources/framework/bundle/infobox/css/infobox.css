@@ -31,7 +31,7 @@ div.popupContent {
 	padding-right: 18px; 
 	padding-bottom: 20px;
 	overflow-y: auto;
-	overflow-x: hidden;
+	overflow-x: auto;
 	border: 1px solid;
 	border-color:#424343;
 }
