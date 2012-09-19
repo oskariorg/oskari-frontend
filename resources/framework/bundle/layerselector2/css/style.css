@@ -70,7 +70,7 @@ div.layerselector2 div.layer div.layer-info {
 
 /* inspire/organization grouping controls */
 div.layerselector2 div.groupingTabs {
-   background: url("../images/tab_bg.png") repeat-x scroll center bottom; /* #FFFFFF*/
+   background: url('/Oskari/resources/framework/bundle/layerselector2/images/tab_bg.png') repeat-x scroll center bottom; /* #FFFFFF*/
     clear: left;
     float: left;
     font : 12pt  Arial,sans-serif;
