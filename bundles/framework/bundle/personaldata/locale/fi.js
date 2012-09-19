@@ -16,8 +16,8 @@ Oskari.registerLocalization({
           "desc": "Kuvaus",
           "createDate": "Luotu",
           "updateDate": "Päivitetty",
-          "edit": " ",
-          "delete": " "
+          "edit": "Muokkaa",
+          "delete": "Poista"
         },
         "notification": {
           "delete": {

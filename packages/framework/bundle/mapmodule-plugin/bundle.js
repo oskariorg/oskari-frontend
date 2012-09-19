@@ -66,14 +66,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
             "src" : "../../../../sources/framework/request/common/show-map-measurement-request.js"
         }, 
 		/**
-		 *
+		 * GFI
 		 */
+		/*
 		{
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/getinfo/GetInfoAdapter.js"
-		}, {
+		}, */ 
+		{
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/getinfo/GetFeatureInfoHandler.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/GetFeatureInfoRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/GetFeatureInfoActivationRequest.js"
         }, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/getinfo/GetInfoPlugin.js"

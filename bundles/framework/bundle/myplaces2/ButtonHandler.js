@@ -119,6 +119,7 @@ function(instance) {
 
         // notify plugin to start drawing new geometry
         this.sendDrawRequest(config);
+        this.instance.enableGfi(false);
     },
     /**
      * @method startNewDrawing
@@ -226,7 +227,9 @@ function(instance) {
         'Toolbar.ToolSelectedEvent' : function(event) {
             if(!this.ignoreEvents) {
                 // changed tool -> cancel any drawing
+                // do not trigger when we return drawing tool to 
                 this.sendStopDrawRequest(true);
+                this.instance.enableGfi(true);
             }
         },
         /**
@@ -244,7 +247,7 @@ function(instance) {
         },
         /**
          * @method MyPlaces.FinishedDrawingEvent
-         * TODO: should request toolbar to select some default tool
+         * Requests toolbar to select default tool
          * @param {Oskari.mapframework.bundle.myplaces2.event.FinishedDrawingEvent} event
          */
         'MyPlaces.FinishedDrawingEvent' : function(event) {
@@ -255,6 +258,8 @@ function(instance) {
             this.instance.sandbox.request(this, toolbarRequest);
             // disable ignore to act normally after ^request
             this.ignoreEvents = false;
+            // select tool selection will enable gfi -> disable it again
+            this.instance.enableGfi(false);
 	        if(this.dialog) {
 	            this.dialog.close();
 	        }

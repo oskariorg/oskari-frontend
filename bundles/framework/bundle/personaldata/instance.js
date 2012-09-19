@@ -204,7 +204,6 @@ function() {
 
 		this.plugins['Oskari.userinterface.Flyout'].createUi();
 		this.plugins['Oskari.userinterface.Tile'].refresh();
-
 	}
 }, {
 	/**

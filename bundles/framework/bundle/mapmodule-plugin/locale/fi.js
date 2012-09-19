@@ -28,6 +28,9 @@ Oskari.registerLocalization({
         "title": "Karttatasot",
         "chooseDefaultBaseLayer": "Valitse karttapohja"
       },
+      "GetInfoPlugin": {
+        "title": "Kohdetiedot"
+      },
       "SearchPlugin": {
         "placeholder": "Hae paikkoja/osoitteita",
         "search": "Hae",

@@ -10,6 +10,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 	_addDefaultButtons : function() {
 	    var me = this;
         var reqBuilder = this.getSandbox().getRequestBuilder('ToolSelectionRequest');
+        var gfiReqBuilder = this.getSandbox().getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
         var locales = me.getLocalization('buttons');
         
         /* basic tools */
@@ -51,6 +52,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             tooltip: locales.zoom,
             sticky: true,
             callback : function() {
+                me.getSandbox().request(me, gfiReqBuilder(false));
                 me.getSandbox().request(me, reqBuilder('map_control_zoom_tool'));
             }
         });
@@ -60,6 +62,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             selected : true,
             sticky: true,
             callback : function() {
+                me.getSandbox().request(me, gfiReqBuilder(true));
                 me.getSandbox().request(me, reqBuilder('map_control_navigate_tool'));
             }
         });
@@ -70,6 +73,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             tooltip: locales.measure.line,
             sticky: true,
             callback : function() {
+                me.getSandbox().request(me, gfiReqBuilder(false));
                 me.getSandbox().request(me, reqBuilder('map_control_measure_tool'));
             }
         });
@@ -79,6 +83,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             tooltip: locales.measure.area,
             sticky: true,
             callback : function() {
+                me.getSandbox().request(me, gfiReqBuilder(false));
                 me.getSandbox().request(me, reqBuilder('map_control_measure_area_tool'));
             }
         });

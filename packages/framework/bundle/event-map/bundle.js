@@ -75,9 +75,6 @@ function() {
 			"src" : "../../../../sources/framework/event/common/after-map-layer-remove-event.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/after-get-feature-info-event.js"
-		}, {
-			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/event/common/after-map-move-event.js"
 		}, {
 			"type" : "text/javascript",

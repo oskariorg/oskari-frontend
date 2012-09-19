@@ -347,6 +347,7 @@ function(instance) {
         this.form.destroy();
         this.form = undefined;
         sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+        this.instance.enableGfi(true);
     }
 }, {
     /**
