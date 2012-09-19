@@ -248,18 +248,6 @@ function() {
             url : ajaxUrl + 'action_route=GetFeatureInfoWMS'
         });
     },
-    /*
-        _getBBString : function(request) {
-     var extent = request.getBoundingBox();
-     if(!extent) {
-     extent = this.getInfoPlugin.getMapModule().getMap().getExtent();
-     }
-        return extent.left + ',' +
-extent.bottom + ',' +
-extent.right + ',' +
-extent.top;
-    },
-    */
     /**
      * @method _closeGfiInfo
      * @private

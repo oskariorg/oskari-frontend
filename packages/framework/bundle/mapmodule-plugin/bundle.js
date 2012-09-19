@@ -67,12 +67,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
         }, 
 		/**
 		 * GFI
-		 */
-		/*
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/getinfo/GetInfoAdapter.js"
-		}, */ 
+		 */ 
 		{
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/getinfo/GetFeatureInfoHandler.js"
