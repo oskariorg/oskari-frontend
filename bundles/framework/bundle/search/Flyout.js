@@ -61,7 +61,8 @@ function(instance) {
      * that will be used to create the UI
      */
     startPlugin : function() {
-        this.template = jQuery('<div class="searchContainer">' + 
+        this.template = jQuery('<div class="searchContainer">' +
+        		'<div class="searchDescription"></div>'+ 
                 '<div class="controls">' + 
                 '</div>' + 
                 '<div><br></div>' + 
@@ -151,6 +152,10 @@ function(instance) {
         flyout.empty();
 
         var searchContainer = this.template.clone();
+        
+        var searchDescription = searchContainer.find('div.searchDescription');
+        searchDescription.html(this.instance.getLocalization('searchDescription'));
+        
 
         var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
         
@@ -210,12 +215,12 @@ function(instance) {
         var me = this;
 
         var info = jQuery(this.container).find('div.info');
-        info.empty();
+        /*info.empty();*/
 
         var inst = this.instance;
         // error handling
         if (result.totalCount == -1) {
-            resultList.append('searchservice_search_alert_title: ' + result.errorText);
+            resultList.append(this.instance.getLocalization('searchservice_search_alert_title') + result.errorText);
             return;
         } else if (result.totalCount == 0) {
             var alK = 'searchservice_search_alert_title';

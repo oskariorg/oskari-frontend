@@ -218,23 +218,28 @@ function() {
         var me = this;
         function measurementsHandler(event, finished) {
             var sandbox = me._sandbox;
-            // var geometry = event.geometry;
+            var geometry = event.geometry;
             var units = event.units;
             var order = event.order;
             var measure = event.measure;
-            var out = measure.toFixed(3) + " " + units;
-            /*
-            if(order == 1) {
-                out += sandbox.getText('mapcontrolsservice_measure_length_title') + ": " + measure.toFixed(3) + " " + units;
-            } else {
-                out += // "<div style='float:left;'>"
-                sandbox.getText('mapcontrolsservice_measure_area_title') + ": " + measure.toFixed(3) + " " + units;
-                // + "<sup
-                // style='font-size:6px;color:#000000;'>2</sup></div>";
+            var out = null;
+            if( order === 1) {
+            	out = measure.toFixed(3) + " " + units;
+           } else if( order ===2) {
+            	out = measure.toFixed(3) + " " + units+"2";
+            }   
+            /*sandbox.printDebug(out + " " + ( finished ? "FINISHED" : "CONTINUES"));*/
+            
+            var geomAsText = null;
+            var geomMimeType = null;
+            if( finished ) {
+            	if( OpenLayers.Format['GeoJSON'] ) {
+            		var format = new (OpenLayers.Format['GeoJSON'])();
+            		geomAsText = format.write(geometry,true);
+            		geomMimeType = "application/json";
+            	}
             }
-            */
-            sandbox.printDebug(out + " " + ( finished ? "FINISHED" : "CONTINUES"));
-            sandbox.request(me, sandbox.getRequestBuilder('ShowMapMeasurementRequest')(out));
+            sandbox.request(me, sandbox.getRequestBuilder('ShowMapMeasurementRequest')(out,finished,geomAsText, geomMimeType ));
         };
 
         for(var key in this._measureControls) {

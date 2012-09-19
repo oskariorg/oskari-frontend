@@ -12,6 +12,15 @@ Oskari.registerLocalization({
       "print": {
         "tooltip": "Print"
       }
+    },
+    "measure" : {
+    	"title" : "Measurement results",
+    	"close" : "Close",
+    	"guidance" : {
+    		"measureline" : "???",
+    		"measurearea" : "???"
+    	}
+
     }
   }
 });

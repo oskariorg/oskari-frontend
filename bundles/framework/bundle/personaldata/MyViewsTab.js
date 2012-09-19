@@ -28,6 +28,7 @@ function(instance, localization) {
             iconCls : 'tool-save-view',
             tooltip: localization.button.toolbarsave,
             sticky: false,
+            prepend: true,
             callback : function() {
 				me._promptForViewName(function(name) {
 				    var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
