@@ -96,7 +96,7 @@ function() {
 		this._arrow =  jQuery('<div class="popupHeaderArrow"></div>');
     	this._header = jQuery('<div></div>');
     	this._headerWrapper = jQuery('<div class="popupHeader"></div>');
-    	this._headerCloseButton = jQuery('<div class="olPopupCloseBox" style="position: absolute; top: 17px;"></div>');
+    	this._headerCloseButton = jQuery('<div class="olPopupCloseBox icon-close-white" style="position: absolute; top: 12px;"></div>');
     	this._contentDiv = jQuery('<div class="popupContent"></div>');
     	this._contentWrapper = jQuery('<div class="contentWrapper"></div>');
     	this._actionLink = jQuery('<span class="infoboxActionLinks"><a href="#"></a></span>');
