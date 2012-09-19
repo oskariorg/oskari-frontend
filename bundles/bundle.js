@@ -1253,15 +1253,17 @@ Oskari = (function() {
 	    this.log("loading CSS " + sScriptSrc);
 	    var h = document.getElementsByTagName("head").length ? document
 		.getElementsByTagName("head")[0] : document.body;
-            if (jQuery.browser.msie) {
-                document.createStyleSheet(sScriptSrc);
-            } else {
-	        var fn = sScriptSrc;
-	        var s = document.createElement("link");
-	        s.type = "text/css";
-	        s.rel = "stylesheet";
-	        s.href = fn;
-	        h.appendChild(s);
+	    if (!preloaded()) {
+                if (jQuery.browser.msie) {
+                    document.createStyleSheet(sScriptSrc);
+                } else {
+	            var fn = sScriptSrc;
+	            var s = document.createElement("link");
+	            s.type = "text/css";
+	            s.rel = "stylesheet";
+	            s.href = fn;
+	            h.appendChild(s);
+                }
             }
 	},
 	/**
