@@ -81,6 +81,9 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
             "mouseup" : this.defaultMouseUp,
             "mousemove" : this.defaultMouseMove,
             "mouseout" : this.defaultMouseOut,
+            "touchstart" : this.defaultMouseDown,
+            "touchend" : this.defaultMouseUp,
+            "touchmove" : this.defaultMouseMove,
             scope : this
         });
 
@@ -100,6 +103,9 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
             "mouseup" : this.defaultMouseUp,
             "mousemove" : this.defaultMouseMove,
             "mouseout" : this.defaultMouseOut,
+            "touchstart" : this.defaultMouseDown,
+            "touchend" : this.defaultMouseUp,
+            "touchmove" : this.defaultMouseMove,
             scope : this
         });
 
