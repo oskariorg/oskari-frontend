@@ -132,6 +132,7 @@ Oskari.registerLocalization({
         "nickName": "Nimimerkki",
         "email": "Sähköpostiosoite",
         "changeInfo": "Muuta tietoja",
+        "changeInfoUrl": "/web/fi/profiili",
         "changePassword": "Muuta salasana",
         "removeAccount": "Poista tili"
       }
