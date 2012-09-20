@@ -81,9 +81,9 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
             "mouseup" : this.defaultMouseUp,
             "mousemove" : this.defaultMouseMove,
             "mouseout" : this.defaultMouseOut,
-            "touchstart" : this.defaultMouseDown,
-            "touchend" : this.defaultMouseUp,
-            "touchmove" : this.defaultMouseMove,
+            "touchstart" : this.defaultTouchStart,
+            "touchend" : this.defaultTouchEnd,
+            "touchmove" : this.defaultTouchMove,
             scope : this
         });
 
@@ -103,9 +103,9 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
             "mouseup" : this.defaultMouseUp,
             "mousemove" : this.defaultMouseMove,
             "mouseout" : this.defaultMouseOut,
-            "touchstart" : this.defaultMouseDown,
-            "touchend" : this.defaultMouseUp,
-            "touchmove" : this.defaultMouseMove,
+            "touchstart" : this.defaultTouchStart,
+            "touchend" : this.defaultTouchEnd,
+            "touchmove" : this.defaultTouchMove,
             scope : this
         });
 
@@ -147,6 +147,45 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
         }
         // OpenLayers.Event.stop(evt);
         return false;
+    },
+    defaultTouchStart : function(event) {
+        var touch = event.touches[0];
+        var x = touch.pageX;
+        var y = touch.pageY;
+        this.mouseDragStart = { x : x, y : y};
+        document.onselectstart = OpenLayers.Function.False;
+    },
+    defaultTouchMove : function(event) {
+
+        event.preventDefault();
+        var curX = event.targetTouches[0].pageX;
+        var curY = event.targetTouches[0].pageY;
+        // record the mouse position, used in onWheelEvent
+        this.mousePosition = { x : curX, y : curY};
+
+        if(this.mouseDragStart != null) {
+            if(this.performedDrag === false) {
+                // send event on first move after mouse down
+                this.mapmodule.notifyStartMove();
+            }
+            var deltaX = this.mouseDragStart.x - curX;
+            var deltaY = this.mouseDragStart.y - curY;
+            this.mapmodule.moveMapByPixels(deltaX, deltaY, true, true);
+            this.mouseDragStart = this._clone(this.mousePosition);
+            this.map.div.style.cursor = "move";
+            this.performedDrag = true;
+        } 
+    },
+    defaultTouchEnd : function(evt) {
+        if(this.performedDrag) {
+            this.mapmodule.notifyMoveEnd();
+        }
+        document.onselectstart = null;
+        this.mouseDragStart = null;
+        this.map.div.style.cursor = "";
+    },
+    _clone : function(obj) {
+         return eval(uneval(obj));
     },
     defaultMouseDown : function(evt) {
         if(!this.isReallyLeftClick(evt)) {
