@@ -152,7 +152,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
         var touch = event.touches[0];
         var x = touch.pageX;
         var y = touch.pageY;
-        this.mouseDragStart = { x : x, y : y};
+        this.mouseDragStart = this._clone({ x : x, y : y});
         document.onselectstart = OpenLayers.Function.False;
     },
     defaultTouchMove : function(event) {
@@ -170,8 +170,8 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
             }
             var deltaX = this.mouseDragStart.x - curX;
             var deltaY = this.mouseDragStart.y - curY;
-            this.mapmodule.moveMapByPixels(deltaX, deltaY, true, true);
             this.mouseDragStart = this._clone(this.mousePosition);
+            this.mapmodule.moveMapByPixels(deltaX, deltaY, true, true);
             this.map.div.style.cursor = "move";
             this.performedDrag = true;
         } 
