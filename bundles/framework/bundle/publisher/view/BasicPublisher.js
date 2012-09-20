@@ -15,8 +15,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 function(instance, localization) {
     var me = this;
     this.instance = instance;
-    this.template = jQuery('<div class="basic_publisher">' + 
-    	'<div class="header"><div class="icon-close"></div><h3></h3></div>' +
+    this.template = jQuery('' + 
+                           '<div class="basic_publisher">' + 
+    	                   '<div class="header">' + 
+                           '<div class="icon-close">' + 
+                           '</div>' + 
+                           '<h3></h3>' + 
+                           '</div>' +
     	'<div class="content">' +   
     	'</div>' +
     '</div>');

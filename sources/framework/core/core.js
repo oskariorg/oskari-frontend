@@ -228,10 +228,6 @@ function() {
             this.handleSearchRequest(request);
             return true;
         },
-        // 'GetFeatureInfoRequest' : function(request) {
-        // this.handleGetFeatureInfoRequest(request);
-        // return true;
-        // },
         'ShowMapLayerInfoRequest' : function(request) {
             this.handleShowMapLayerInfoRequest(request);
             return true;

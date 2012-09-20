@@ -36,7 +36,7 @@ div.publisher div.startview div.error ul li {
 	position : absolute;
     height: 100%;
     top : 0;
-    left : 0;
+    left : 40px;
     /* sidebar has 3, we want to open it on top of this */
     z-index : 2;
     width : 255px;

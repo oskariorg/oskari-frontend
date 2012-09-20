@@ -75,9 +75,6 @@ function() {
 			"src" : "../../../../sources/framework/request/common/remove-map-layer-request.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/request/common/get-feature-info-request.js"
-		}, {
-			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/request/common/map-move-request.js"
 		}, {
 			"type" : "text/javascript",

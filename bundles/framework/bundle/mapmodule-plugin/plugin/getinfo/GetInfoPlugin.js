@@ -13,6 +13,7 @@ function() {
     this._sandbox = null;
     this._map = null;
     this.enabled = true;
+    this.infoboxId = 'getinforesult';
 }, {
     /** @static @property __name plugin name */
     __name : 'GetInfoPlugin',
@@ -63,18 +64,10 @@ function() {
      */
     init : function(sandbox) {
         var me = this;
-        if (sandbox && sandbox.register) {
-            this._sandbox = sandbox;
-        }
+        
+        this._sandbox = sandbox;
         this._sandbox.printDebug("[GetInfoPlugin] init");
-        var gfi = {};
-        gfi.pkg = 'Oskari.mapframework.mapmodule-plugin.getinfo';
-        gfi.cls = 'GetFeatureInfoHandler';
-        gfi.fqn = gfi.pkg + '.' + gfi.cls;
-        gfi.hndlr = Oskari.clazz.create(gfi.fqn, this._sandbox, me);
-        this.requestHandlers = {};
-        this.requestHandlers.getFeatureInfoHandler = gfi.hndlr;
-        this._sandbox.addRequestHandler(gfi.cls, gfi.hndlr);
+        this.getGFIHandler = Oskari.clazz.create('Oskari.mapframework.mapmodule-plugin.getinfo.GetFeatureInfoHandler', me);
     },
     /**
      * @method register
@@ -105,28 +98,12 @@ function() {
         }
         this._map = this.getMapModule().getMap();
 
-        /**
-         * getinfo
-         */
-        this._getinfoTool = new (Oskari.$("OpenLayers.Control.GetInfoAdapter"))({
-            callback : function(loc, clickLocation, options) {
-                me.handleGetInfo(loc, clickLocation, options);
-            },
-            hoverCallback : function(loc, clickLocation, options) {
-                me.handleGetInfoHover(loc, clickLocation, options);
-            }
-        });
-
-        this.getMapModule().addMapControl('getinfo', this._getinfoTool);
-
         this._sandbox.register(this);
         for (p in this.eventHandlers ) {
             this._sandbox.registerForEventByName(this, p);
         }
-        // sandbox.printDebug("[GetInfoPlugin] Registering " +
-        // this.requestHandlers.mapClickHandler);
-        // sandbox.addRequestHandler('MapModulePlugin.MapClickRequest',
-        // this.requestHandlers.mapClickHandler);
+        this._sandbox.addRequestHandler('MapModulePlugin.GetFeatureInfoRequest', this.getGFIHandler);
+        this._sandbox.addRequestHandler('MapModulePlugin.GetFeatureInfoActivationRequest', this.getGFIHandler);
     },
     /**
      * @method stopPlugin
@@ -148,8 +125,6 @@ function() {
         for (p in this.eventHandlers ) {
             this._sandbox.unregisterFromEventByName(this, p);
         }
-        // sandbox.removeRequestHandler('MapModulePlugin.MapClickRequest',
-        // this.requestHandlers.mapClickHandler);
         this._sandbox.unregister(this);
         this._map = null;
         this._sandbox = null;
@@ -181,15 +156,10 @@ function() {
      *          true to enable, false to disable
      */
     setEnabled : function(blnEnabled) {
-        var me = this;
-        if (blnEnabled == true) {
-            // enable with a small delay
-            // so myplaces draw finish will not trigger this
-            setTimeout(function() {
-                me.enabled = true;
-            }, 500);
-        } else {
-            this.enabled = false;
+        this.enabled = (blnEnabled === true);
+        // close existing if disabled
+        if(!this.enabled) {
+            this._closeGfiInfo();
         }
     },
     /**
@@ -200,77 +170,15 @@ function() {
         'EscPressedEvent' : function(evt) {
           this._closeGfiInfo();
         },
-        'Toolbar.ToolSelectedEvent' : function(event) {
-            this.setEnabled(('basictools' == event.getGroupId() && 'select' == event.getToolId()));
-        },
-        'AfterDeactivateAllOpenlayersMapControlsButNotMeasureToolsEvent' : function(event) {
-            this.afterDeactivateAllOpenlayersMapControlsButNotMeasureToolsEvent();
-        },
-        'AfterDeactivateAllOpenlayersMapControlsEvent' : function(event) {
-            this.afterDeactivateAllOpenlayersMapControlsEvent(event);
-        },
         'MapClickedEvent' : function(evt) {
             if (!this.enabled) {
                 // disabled, do nothing
                 return;
             }
-
-            var me = this;
-            var ajaxUrl = "/web/fi/kartta" + "?p_p_id=Portti2Map_WAR_portti2mapportlet" + "&p_p_lifecycle=1" + "&p_p_state=exclusive" + "&p_p_mode=view" + "&p_p_col_id=column-1" + "&p_p_col_count=1" + "&_Portti2Map_WAR" + "_portti2mapportlet" + "_fi.mml.baseportlet.CMD=ajax.jsp&";
-
             var lonlat = evt.getLonLat();
-            var lon = lonlat.lon;
-            var lat = lonlat.lat;
-            var popupid = "gfi" + lon + "_" + lat;
             var x = evt.getMouseX();
             var y = evt.getMouseY();
-            var projection = 'EPSG:3067';
-            var width = this._sandbox.getMap().getWidth();
-            var height = this._sandbox.getMap().getHeight();
-
-            var bbox = this._sandbox.getMap().getBbox();
-            var zoom = this._sandbox.getMap().getZoom();
-
-            var selected = this._sandbox.findAllSelectedMapLayers();
-            var layerIds = ""
-            for (var i = 0; i < selected.length; i++) {
-                if (layerIds !== "") {
-                    layerIds += ",";
-                }
-                layerIds += selected[i].getId();
-            }
-
-            jQuery.ajax({
-                beforeSend : function(x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
-                    }
-                },
-                success : function(resp) {
-                    if (resp.data && resp.data instanceof Array) {
-                        resp.lonlat = lonlat;
-                        var parsed = me._parseGfiResponse(resp);
-                        if (!parsed) {
-                            return;
-                        }
-                        parsed.popupid = popupid;
-                        parsed.lonlat = lonlat;
-                        me._showFeatures(parsed);
-                    }
-                },
-                error : function() {
-                    alert("GetInfo failed.");
-                },
-                type : 'POST',
-                dataType : 'json',
-                url : ajaxUrl + 'action_route=GetFeatureInfoWMS' + '&layerIds=' + layerIds + '&projection=' + projection + '&x=' + x + '&y=' + y + '&lon=' + lon + '&lat=' + lat + '&width=' + width + '&height=' + height + '&bbox=' + bbox + '&zoom=' + zoom
-            });
-        },
-        'AfterHighlightMapLayerEvent' : function(event) {
-            this._activated = true;
-        },
-        'AfterDimMapLayerEvent' : function(event) {
-            this._activated = false;
+            this.handleGetInfo(lonlat, x, y);
         }
     },
     /**
@@ -283,15 +191,62 @@ function() {
         var me = this;
         return this.eventHandlers[event.getName()].apply(this, [event]);
     },
-    handleGetInfo : function(loc, clickLocation, options) {
+    handleGetInfo : function(lonlat, x, y) {
         var me = this;
-        me._sandbox.printDebug("GETINFO " + loc.lat + "," + loc.lon);
-        this.buildWMSQueryOrWFSFeatureInfoRequest(loc, clickLocation.x, clickLocation.y);
 
-    },
-    handleGetInfoHover : function(loc, clickLocation, options) {
         var me = this;
-        me._sandbox.printDebug("GETINFO HOVER " + loc.lat + "," + loc.lon);
+        var ajaxUrl = this._sandbox.getAjaxUrl(); 
+
+        var lon = lonlat.lon;
+        var lat = lonlat.lat;
+        
+        var mapVO = this._sandbox.getMap();
+        var selected = this._sandbox.findAllSelectedMapLayers();
+        var layerIds = ""
+        for (var i = 0; i < selected.length; i++) {
+            if (layerIds !== "") {
+                layerIds += ",";
+            }
+            layerIds += selected[i].getId();
+        }
+
+        jQuery.ajax({
+            beforeSend : function(x) {
+                if (x && x.overrideMimeType) {
+                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                }
+            },
+            success : function(resp) {
+                if (resp.data && resp.data instanceof Array) {
+                    resp.lonlat = lonlat;
+                    var parsed = me._parseGfiResponse(resp);
+                    if (!parsed) {
+                        return;
+                    }
+                    parsed.popupid = me.infoboxId;
+                    parsed.lonlat = lonlat;
+                    me._showFeatures(parsed);
+                }
+            },
+            error : function() {
+                alert("GetInfo failed.");
+            },
+            data : {
+                layerIds : layerIds,
+                projection : me.mapModule.getProjection(),
+                x : x,
+                y : y,
+                lon : lon,
+                lat : lat,
+                width : mapVO.getWidth(),
+                height : mapVO.getHeight(),
+                bbox : mapVO.getBbox().toBBOX(),
+                zoom : mapVO.getZoom()
+            },
+            type : 'POST',
+            dataType : 'json',
+            url : ajaxUrl + 'action_route=GetFeatureInfoWMS'
+        });
     },
     /**
      * @method _closeGfiInfo
@@ -301,7 +256,7 @@ function() {
     _closeGfiInfo : function() {
         var rn = "InfoBox.HideInfoBoxRequest";
         var rb = this._sandbox.getRequestBuilder(rn);
-        var r = rb("getinforesult");
+        var r = rb(this.infoboxId);
         this._sandbox.request(this, r);
     },
     /**
@@ -313,22 +268,11 @@ function() {
      */
     _showGfiInfo : function(content, lonlat) {
         var me = this;
-        // setup close button as an extra content
-        content.push({
-            html : '', // no data to show, only to add button
-            actions : {
-                // TODO: localization
-                "Ok" : function() {
-                    me._closeGfiInfo();
-                }
-            }
-        });
         // send out the request
         var rn = "InfoBox.ShowInfoBoxRequest";
         var rb = this._sandbox.getRequestBuilder(rn);
         var r = rb("getinforesult", "GetInfo Result", content, lonlat, true);
         this._sandbox.request(me, r);
-
     },
     /**
      * @method _formatResponseForInfobox
@@ -408,7 +352,8 @@ function() {
             //                  } else if ((datum.presentationType == 'TEXT') ||
             // hasHtml) {
         } else {
-            html = '<div style="overflow:auto">' + datum.content + '</div>';
+            // style="overflow:auto"
+            html = '<div>' + datum.content + '</div>';
         }
         return html;
     },
@@ -433,37 +378,6 @@ function() {
         return separatedValues;
     },
 
-    /***********************************************************
-     * Build WMS GetFeatureInfo request
-     *
-     * @param {Object}
-     *            e
-     */
-    buildWMSQueryOrWFSFeatureInfoRequest : function(lonlat, mouseX, mouseY) {
-
-        var me = this;
-        var sandbox = me._sandbox;
-        var allHighlightedLayers = me._sandbox.findAllHighlightedLayers();
-
-        this._projectionCode = 'EPSG:3067';
-
-        if (allHighlightedLayers[0] && allHighlightedLayers[0] != null && (allHighlightedLayers[0].isLayerOfType('WMS') || allHighlightedLayers[0].isLayerOfType('WMTS'))) {
-
-            var mapWidth = me._sandbox.getMap().getWidth();
-            var mapHeight = me._sandbox.getMap().getHeight();
-            var bbox = me._sandbox.getMap().getBbox();
-
-            var queryLayerIds = me._sandbox.findAllHighlightedLayers();
-
-            var b = me._sandbox.getRequestBuilder('GetFeatureInfoRequest');
-            var r = b(queryLayerIds, lonlat.lon, lonlat.lat, mouseX, mouseY, mapWidth, mapHeight, bbox, this._projectionCode);
-            me._sandbox.request(this, r);
-
-        } else if (allHighlightedLayers[0] && allHighlightedLayers[0] != null && allHighlightedLayers[0].isLayerOfType('VECTOR')) {
-            this.getMapModule().notifyAll(me._sandbox.getEventBuilder('FeaturesGetInfoEvent')(allHighlightedLayers[0], null, lonlat.lon, lonlat.lat, this._map.getProjection, "GetFeatureInfo"));
-
-        }
-    },
     /**
      * Flattens a GFI response
      *
@@ -502,11 +416,6 @@ function() {
                         if (pnimi && pnimi['pnr:kirjoitusasu']) {
                             title = pnimi['pnr:kirjoitusasu'];
                         }
-                        // TODO: Generate pretty html
-                        // var pretty = JSON.stringify(child,
-                        //                             null,
-                        //                             4);
-                        // pretty = '<pre>' + pretty + '</pre>';
                         var pretty = this._json2html(child);
                         coll.push(pretty);
                     }
@@ -586,20 +495,18 @@ function() {
         var content = {};
         content.html = '';
         content.actions = {};
-        content.actions.ok = function() {
-            var rn = "InfoBox.HideInfoBoxRequest";
-            var rb = me._sandbox.getRequestBuilder(rn);
-            var r = rb(data.popupid);
-            me._sandbox.request(me, r);
-        };
-
         for (var di = 0; di < data.fragments.length; di++) {
-            content.html += '<div style="background-color: #424343;margin-top: 14px; margin-bottom: 10px;">' + '<div class="icon-bubble-left">' + '<div style="vertical-align: middle; padding-top: 2px; padding-right: 4px; text-align:center;"> ' + (di + 1) + '</div></div></div>';
+            content.html += '<div style="background-color: #424343;margin-top: 14px; margin-bottom: 10px;">' + 
+                '<div class="icon-bubble-left">' + 
+                '<div style="vertical-align: middle; padding-top: 2px; padding-right: 4px; text-align:center;"> ' + 
+                (di + 1) + 
+                '</div></div></div>';
             content.html += data.fragments[di];
-            //content.html += '<br /><hr /><br />';
         }
 
-        data.title = 'Kohdetiedot';
+        var pluginLoc = this.getMapModule().getLocalization('plugin');
+        var myLoc = pluginLoc[this.__name];
+        data.title = myLoc.title;
 
         var rn = "InfoBox.ShowInfoBoxRequest";
         var rb = me._sandbox.getRequestBuilder(rn);
@@ -607,5 +514,9 @@ function() {
         me._sandbox.request(me, r);
     }
 }, {
+    /**
+     * @property {Object} protocol
+     * @static
+     */
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });

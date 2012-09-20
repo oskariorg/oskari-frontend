@@ -262,6 +262,9 @@ function(id) {
 
         return this._map;
     },
+    getProjection : function() {
+        return this._projectionCode;
+    },
     /**
      * @method createBaseLayer
      *

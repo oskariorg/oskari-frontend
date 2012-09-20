@@ -69,6 +69,17 @@ function() {
     	dialog.show(title, message, [okBtn]);
     },
     /**
+     * @method enableGfi
+     * Enables/disables the gfi functionality
+     * @param {Boolean} blnEnable true to enable, false to disable
+     */
+    enableGfi : function(blnEnable) {
+        var gfiReqBuilder = this.sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+        if(gfiReqBuilder) {
+            this.sandbox.request(this.buttons, gfiReqBuilder(blnEnable));
+        }
+    },
+    /**
      * @method getService
      * Returns the my places main service
      * @return {Oskari.mapframework.bundle.myplaces2.service.MyPlacesService}
