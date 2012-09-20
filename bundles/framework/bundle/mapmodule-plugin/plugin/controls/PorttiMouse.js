@@ -84,6 +84,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
             "touchstart" : this.defaultTouchStart,
             "touchend" : this.defaultTouchEnd,
             "touchmove" : this.defaultTouchMove,
+            "gesturechange" : this.pinchZoom,
             scope : this
         });
 
@@ -106,6 +107,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
             "touchstart" : this.defaultTouchStart,
             "touchend" : this.defaultTouchEnd,
             "touchmove" : this.defaultTouchMove,
+            "gesturechange" : this.pinchZoom,
             scope : this
         });
 
@@ -147,6 +149,15 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
         }
         // OpenLayers.Event.stop(evt);
         return false;
+    },
+    pinchZoom : function(event) {
+        e.preventDefault();
+        var scale = event.scale;
+        if(scale < 1.0) {
+            this.mapmodule.zoomOut();
+        } else if(scale > 1.0) {
+            this.mapmodule.zoomIn();
+        }
     },
     defaultTouchStart : function(event) {
         var touch = event.touches[0];
