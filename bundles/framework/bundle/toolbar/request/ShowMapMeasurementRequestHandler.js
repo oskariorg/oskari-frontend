@@ -20,6 +20,7 @@
 		var title = loc['title'];
 		me._title = title;
 		me._dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+		me._dialog.addClass('measurement');
 
 		var buttons = [];
 		var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
