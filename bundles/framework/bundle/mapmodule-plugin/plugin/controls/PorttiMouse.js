@@ -171,7 +171,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
         } else if(scale > 1.0) {
             this.mapmodule.zoomIn();
         }
-        e.preventDefault();
+        event.preventDefault();
     },
     defaultTouchStart : function(event) {
         var touch = event.touches[0];
@@ -182,6 +182,10 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
     },
     defaultTouchMove : function(event) {
         if(this.inGesture) {
+            return;
+        }
+        if(event.targetTouches.length > 1) {
+            this.pinchZoom(event);
             return;
         }
         event.preventDefault();
