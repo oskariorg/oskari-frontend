@@ -84,11 +84,6 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
             "touchstart" : this.defaultTouchStart,
             "touchend" : this.defaultTouchEnd,
             "touchmove" : this.defaultTouchMove,
-            
-            "gesturestart" : this.gestureStart,
-            "gesturechange" : this.pinchZoom,
-            "gestureend" : this.gestureEnd,
-            
             scope : this
         });
 
@@ -111,11 +106,6 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
             "touchstart" : this.defaultTouchStart,
             "touchend" : this.defaultTouchEnd,
             "touchmove" : this.defaultTouchMove,
-            
-            "gesturestart" : this.gestureStart,
-            "gesturechange" : this.pinchZoom,
-            "gestureend" : this.gestureEnd,
-            
             scope : this
         });
 
@@ -158,12 +148,6 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
         // OpenLayers.Event.stop(evt);
         return false;
     },
-    gestureStart : function(event) {
-        this.inGesture = true;
-    },
-    gestureEnd : function(event) {
-        this.inGesture = false;
-    },
     pinchZoom : function(event) {
         var scale = event.scale;
         if(scale < 1.0) {
@@ -174,6 +158,9 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
         event.preventDefault();
     },
     defaultTouchStart : function(event) {
+        if(event.touches.length != 1) {
+            return;
+        }
         var touch = event.touches[0];
         var x = touch.pageX;
         var y = touch.pageY;
@@ -181,9 +168,6 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
         document.onselectstart = OpenLayers.Function.False;
     },
     defaultTouchMove : function(event) {
-        if(this.inGesture) {
-            return;
-        }
         if(event.targetTouches.length > 1) {
             this.pinchZoom(event);
             return;
