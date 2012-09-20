@@ -152,7 +152,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
         var touch = event.touches[0];
         var x = touch.pageX;
         var y = touch.pageY;
-        this.mouseDragStart = this._clone({ x : x, y : y});
+        this.mouseDragStart = { x : x, y : y};
         document.onselectstart = OpenLayers.Function.False;
     },
     defaultTouchMove : function(event) {
