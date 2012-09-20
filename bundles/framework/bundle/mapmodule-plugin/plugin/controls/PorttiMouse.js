@@ -170,7 +170,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
             }
             var deltaX = this.mouseDragStart.x - curX;
             var deltaY = this.mouseDragStart.y - curY;
-            this.mouseDragStart = this._clone(this.mousePosition);
+            this.mouseDragStart = this.mousePosition;
             this.mapmodule.moveMapByPixels(deltaX, deltaY, true, true);
             this.map.div.style.cursor = "move";
             this.performedDrag = true;
