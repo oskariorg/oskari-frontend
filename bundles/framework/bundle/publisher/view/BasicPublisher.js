@@ -472,7 +472,7 @@ function(instance, localization) {
             success : function(response) {
             	if(response.id > 0) {
 			        var event = sandbox.getEventBuilder('Publisher.MapPublishedEvent')(response.id,
-			        	selections.size.width, selections.size.height);
+			        	selections.size.width, selections.size.height, selections.language);
 			        sandbox.notifyAll(event);
             	}
             	else {

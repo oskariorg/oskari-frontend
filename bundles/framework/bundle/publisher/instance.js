@@ -156,7 +156,9 @@ function() {
 	    	var okBtn = dialog.createCloseButton(loc['BasicView'].buttons.ok);
 	    	okBtn.addClass('primary');
 	    	
-	    	var url = loc['published'].urlPrefix + '&viewId=' + event.getId();
+	    	// /published/{language}/{mapId}
+	    	var url = loc['published'].urlPrefix + 
+	    	      '/published/' + event.getLanguage() + '/' + event.getId();
 	    	var iframeCode = '<iframe src="' + url + '" width="' + event.getWidth() + 
 	    					'" height="' + event.getHeight() + '"></iframe>';
 	    	var textarea = 
