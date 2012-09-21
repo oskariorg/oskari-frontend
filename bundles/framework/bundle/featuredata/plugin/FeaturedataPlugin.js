@@ -122,8 +122,6 @@ function(config) {
         }
 
         sandbox.unregister(this);
-        this._map = null;
-        this._sandbox = null;
     },
     /**
      * @method start

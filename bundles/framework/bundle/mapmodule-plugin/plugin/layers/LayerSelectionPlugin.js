@@ -380,7 +380,6 @@ function(config) {
         var baseLayersDiv = this.element.find('div.content div.baselayers');
         var baseLayers = baseLayersDiv.find('div.layer');
         if(baseLayers.length == 0) {
-        	
         	var baselayerHeader = this.element.find('div.content div.baseLayerHeader');
         	baselayerHeader.remove();
         }

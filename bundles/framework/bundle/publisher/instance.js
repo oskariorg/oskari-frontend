@@ -266,12 +266,13 @@ function() {
             this.publisher.setEnabled(true);
     	}
     	else {
-    		map.removeClass('mapPublishMode');
-    		this._addLayers();
     		if(this.publisher) {
             	this.publisher.setEnabled(false);
     			this.publisher.destroy();
     		}
+    		// first return all needed plugins before adding the layers back
+            map.removeClass('mapPublishMode');
+            this._addLayers();
     	}
 	},
 	/**
