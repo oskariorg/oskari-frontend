@@ -185,13 +185,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/wmslayer/SnappyGrid.js"
 		},
 		/**
-		 * WFS plugin
-		 */
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/wfslayer/WfsLayerPlugin.js"
-		},
-		/**
 		 * Vector Layer plugin
 		 */
 		{
