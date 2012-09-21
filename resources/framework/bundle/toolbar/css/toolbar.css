@@ -22,3 +22,7 @@
     opacity:0.25;
     filter:alpha(opacity=25); /* For IE8 and earlier */
 }
+
+.divmanazerpopup.oskari-measurement {
+	max-width: 260px; 	
+}
