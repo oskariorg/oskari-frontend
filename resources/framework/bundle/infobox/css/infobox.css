@@ -53,6 +53,8 @@ div.popupContent {
 div.olPopup {
 	margin: 0;
 	padding: 0;
+	background-color: #ffffff;
+		
 }
 div.olPopupContent {
     overflow: visible;
