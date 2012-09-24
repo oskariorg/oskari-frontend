@@ -21,12 +21,14 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
     this._modulesByName = {};
     this._statefuls = {};
 
-    this.debugRequests = true;
-    this.debugEvents = true;
+	/* as of 2012-09-24 debug by default false */
+    this.debugRequests = false;
+    this.debugEvents = false;
     this.requestEventLog = [];
     this.requestEventStack = [];
 
-    this.gatherDebugRequests = true;
+	/* as of 2012-09-24 debug by default false */
+    this.gatherDebugRequests = false;
     this.maxGatheredRequestsAndEvents = 4096;
     // TODO: move to some conf?
     this.requestAndEventGather = [];
@@ -34,10 +36,33 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
     this._user = null;
     this._ajaxUrl = null;
 }, {
+	
+	/**
+	 * @method disableDebug
+	 * disables debug messaging and sequence diagram gathering
+	 * if( core is set ) also core debug will be disabled
+	 */
     disableDebug : function() {
         this.debugRequests = false;
         this.debugEvents = false;
         this.gatherDebugRequests = false;
+        if( this._core ) {
+        	this._core.disableDebug();
+        }
+    },
+    
+    /** @method enableDebug
+     * enables debug messaging and sequence diagram gathering (by default not enabled)
+     * if( core is set ) also core debug will be enabled
+     */
+    enableDebug : function() {
+        this.debugRequests = true;
+        this.debugEvents = true;
+        this.gatherDebugRequests = true;
+        if( this._core ) {
+        	this._core.enableDebug();
+        }
+
     },
 
     /**
