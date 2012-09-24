@@ -162,11 +162,18 @@ function() {
     	var openlayersMap = this.getMapModule().getMap();
     	var popup = new OpenLayers.Popup(id,
                    new OpenLayers.LonLat(lonlat.lon,lonlat.lat),
-                   new OpenLayers.Size(400,200),
+                   new OpenLayers.Size(400,300),
                    arrow.outerHTML() +
                    headerWrapper.outerHTML()+
-                   contentDiv.outerHTML(),
+                   contentDiv.outerHTML(),               
                    false);
+        popup.moveTo = function(px) {
+        	if ((px != null) && (this.div != null)) {
+            	this.div.style.left = px.x + "px";
+            	var topy = px.y-20;
+            	this.div.style.top = topy + "px";
+        	}
+    	};
                    
 		popup.setBackgroundColor('transparent');
 		this._popups[id] = {
