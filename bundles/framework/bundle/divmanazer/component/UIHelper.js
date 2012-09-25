@@ -33,7 +33,8 @@ function(sandbox) {
                 var okBtn = dialog.createCloseButton("OK");
                 okBtn.addClass('primary');
         	    if(isSuccess) {
-                    dialog.show(title, pContent, [okBtn]);
+        	        // help articles have only 'static' content
+                    dialog.show(title, pContent['static'], [okBtn]);
                     dialog.moveTo(btn, 'bottom');
         	    }
         	    else {
@@ -46,7 +47,7 @@ function(sandbox) {
             var btn = jQuery(e);
             var taglist = btn.attr("helptags");
             btn.bind('click', function() {
-                me.getHelpArticle(taglist, undefined, getCallback(btn));
+                me.getHelpArticle(taglist, getCallback(btn));
             });
         });
     },
@@ -55,16 +56,14 @@ function(sandbox) {
      * Fetches an article from the server
      * "helptags" attribute with a popup showing the help article
      * @param {String} taglist - comma-separated list of article tags identifying the article
-     * @param {String} contentPart - element name in the article we want (optional)
      * @param {Function} callback - function that is called on completion. Functions first param is 
      *   boolean that indicates success, second parameter is the loaded content if it was successfully loaded 
      */
-    getHelpArticle : function(taglist, contentPart, callback) {
+    getHelpArticle : function(taglist, callback) {
         var me = this;
         jQuery.ajax({
-            url : me.sandbox.getAjaxUrl() + '&action_route=GetArticlesByTag', //&tags="' + taglist + '"',
+            url : me.sandbox.getAjaxUrl() + 'action_route=GetArticlesByTag',
             data : {
-                part : contentPart,
                 tags : taglist
             },
             type : 'GET',
@@ -75,16 +74,12 @@ function(sandbox) {
                 }
             },
             success : function(resp) {
-                var content = resp.articles[0].content;
-                var idx = content.indexOf("<![CDATA[");
-                if (idx >= 0) {
-                    content = content.substring(idx + 9);
+                if(resp && resp.articles[0] && resp.articles[0].content) {
+                    callback(true, resp.articles[0].content);
                 }
-                idx = content.indexOf("]]>");
-                if (idx >= 0) {
-                    content = content.substring(0, idx);
+                else {
+                    callback(false);
                 }
-                callback(true, content);
             },
             error : function() {
                 callback(false);
