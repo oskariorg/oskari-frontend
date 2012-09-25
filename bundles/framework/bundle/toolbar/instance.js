@@ -148,6 +148,8 @@ function() {
 			var me = this;
 			var sandbox = this.getSandbox();
 
+
+			/* we'll show prompt if measure tool has been selected */
 			if(!me.measureTools[event.getGroupId()]) {
 				return;
 			}

@@ -456,6 +456,12 @@ jQuery(document).ready(function() {
     var main = Oskari.clazz.create('Oskari.paikkatietoikkuna.Main');
     main.processArgs(args);
 
+    if (ajaxUrl.indexOf('http') == 0) {        
+        var hostIdx = ajaxUrl.indexOf('://') + 3;
+        var pathIdx = ajaxUrl.indexOf('/', hostIdx);
+        ajaxUrl = ajaxUrl.substring(pathIdx);
+    }
+
     jQuery.ajax({
         type : 'POST',
         dataType : 'json',

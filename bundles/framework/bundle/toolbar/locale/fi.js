@@ -26,7 +26,7 @@ Oskari.registerLocalization({
     },
     "measure" : {
     	"title" : "Mittaustulokset",
-    	"close" : "Sulje",
+    	"close" : "Lopeta",
     	"guidance" : {
     		"measureline" : "Osoita mitattava matka kartalta. Lopeta mittaaminen hiiren kaksoisnapautuksella.",
     		"measurearea" : "Osoita mitattava alue kartalta. Lopeta mittaaminen hiiren kaksoisnapautuksella."

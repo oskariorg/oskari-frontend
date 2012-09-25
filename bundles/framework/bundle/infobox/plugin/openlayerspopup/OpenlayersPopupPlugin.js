@@ -100,6 +100,7 @@ function() {
     	this._contentDiv = jQuery('<div class="popupContent"></div>');
     	this._contentWrapper = jQuery('<div class="contentWrapper"></div>');
     	this._actionLink = jQuery('<span class="infoboxActionLinks"><a href="#"></a></span>');
+        this._actionButton = jQuery('<span class="infoboxActionLinks"><input type="button" /></span>');
     	this._contentSeparator = jQuery('<div class="infoboxLine">separator</div>');
     },
     
@@ -119,6 +120,8 @@ function() {
      * contentData format example:
      * [{
 	 * 	html: "",
+     *  useButtons: true,
+     *  primaryButton: "<button label>",
 	 *  actions : {
 	 * 	   "Tallenna" : callbackFunction,
 	 * 	   "Sulje" : callbackFunction
@@ -138,7 +141,6 @@ function() {
     	headerWrapper.append(header);
     	headerWrapper.append(closeButton);
     	
-    	
     	for(var i =0;i < contentData.length;i++) {
     		if(i != 0) {
 		  		contentDiv.append(this._contentSeparator.clone());
@@ -147,13 +149,27 @@ function() {
 		  	var contentWrapper = this._contentWrapper.clone();
 		  	contentWrapper.append(html);
 		  	var action = contentData[i].actions;
-		  	for(var key in action){
+            var useButtons = (contentData[i].useButtons == true);
+            var primaryButton = contentData[i].primaryButton;
+		  	for(var key in action){ 
 	            var attrName = key;
 	            var attrValue = action[key];
-	            var actionLink = this._actionLink.clone();
-	            var link = actionLink.find('a'); 
-	            link.attr('contentdata', i);
-	            link.append(attrName);
+	            var actionLink = null;
+	            if(useButtons) {
+	               actionLink = this._actionButton.clone();
+                   var btn = actionLink.find('input'); 
+                   btn.attr('contentdata', i);
+                   btn.attr('value', attrName);
+                   if(attrName == primaryButton) {
+                       btn.addClass('primary');
+                   }
+	            }
+	            else {
+                   actionLink = this._actionLink.clone();
+                   var link = actionLink.find('a');
+                   link.attr('contentdata', i);
+                   link.append(attrName);
+	            } 
 	            contentWrapper.append(actionLink);
         	}
 		  	contentDiv.append(contentWrapper);
@@ -162,11 +178,18 @@ function() {
     	var openlayersMap = this.getMapModule().getMap();
     	var popup = new OpenLayers.Popup(id,
                    new OpenLayers.LonLat(lonlat.lon,lonlat.lat),
-                   new OpenLayers.Size(400,200),
+                   new OpenLayers.Size(400,300),
                    arrow.outerHTML() +
                    headerWrapper.outerHTML()+
-                   contentDiv.outerHTML(),
+                   contentDiv.outerHTML(),               
                    false);
+        popup.moveTo = function(px) {
+        	if ((px != null) && (this.div != null)) {
+            	this.div.style.left = px.x + "px";
+            	var topy = px.y-20;
+            	this.div.style.top = topy + "px";
+        	}
+    	};
                    
 		popup.setBackgroundColor('transparent');
 		this._popups[id] = {
@@ -185,12 +208,16 @@ function() {
 		
 		popup.events.on({
 			"click": function(evt) {
-				var link = jQuery(evt.target);
+				var link = jQuery(evt.target||evt.srcElement);
 				if (link.hasClass('olPopupCloseBox')) { // Close button
 					me.close(id);
 				} else { // Action links
 					var i = link.attr('contentdata');
-					var text = link.html();
+                    //var text = link.html();
+					var text = link.attr('value');
+					if(!text) {
+					    text = link.html();
+					}
 					if(contentData[i] && contentData[i].actions && contentData[i].actions[text]) {
 						contentData[i].actions[text]();
 					}

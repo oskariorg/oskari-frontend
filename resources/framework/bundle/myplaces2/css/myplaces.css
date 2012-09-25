@@ -2,12 +2,15 @@ div.myplacesform div.help {
     float : right;
 }
 /* Wide fields for place inputs  */
+div.myplacesform div.field {
+    padding-bottom: 10px;
+}
 div.myplacesform input {
     width: 80%;
 }
 div.myplacesform textarea, 
 div.myplacesform select {
-    width: 90%;
+    width: 80%;
 }
 /* Smaller fields for category inputs in table */
 div.myplacescategoryform table input {

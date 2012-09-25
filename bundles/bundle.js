@@ -15,6 +15,17 @@
  */
 Oskari = (function() {
 
+	var isDebug = false;
+
+	var logMsg = function(msg) {
+		if(!isDebug){ 
+			return;
+		}
+			
+	    if(window.console && window.console.debug)
+		window.console.debug(what);
+	}
+
     /**
      * @class Oskari.bundle_locale
      */
@@ -755,7 +766,7 @@ Oskari = (function() {
 	construct : function() {
 	    var args = arguments;
 	    if(!args[0]) {
-		alert("construct() got null args[0]! ignoring...");
+		logMsg("construct() got null args[0]! ignoring...");
 		return;
 	    }
 	    var parts = args[0].split('.');
@@ -776,7 +787,7 @@ Oskari = (function() {
 	 */
 	createArrArgs : function(args) {
 	    if(!args[0]) {
-		alert("createArrArgs got null args[0]! ignoring...");
+		logMsg("createArrArgs got null args[0]! ignoring...");
 		return;
 	    }
 	    var parts = args[0].split('.');
@@ -797,12 +808,12 @@ Oskari = (function() {
 	    var args = arguments;
 	    if(!arguments || !arguments[0]) {
 		for(var argid in arguments) {
-		    alert(argid + " : " + arguments[argid]);
+		    logMsg(argid + " : " + arguments[argid]);
 		}
-		alert("builder : " + arguments);
+		logMsg("builder : " + arguments);
 	    }
 	    if(!args[0]) {
-		alert("builder got null args[0]! ignoring...");
+		logMsg("builder got null args[0]! ignoring...");
 		return;
 	    }
 	    var parts = args[0].split('.');
@@ -839,7 +850,7 @@ Oskari = (function() {
 	"metadata" : function() {
 	    var args = arguments;
 	    if(!args[0]) {
-		alert("metadata got null args[0]! ignoring...");
+		logMsg("metadata got null args[0]! ignoring...");
 		return;
 	    }
 	    var parts = args[0].split('.');
@@ -860,7 +871,7 @@ Oskari = (function() {
 	"protocol" : function() {
 	    var args = arguments;
 	    if(!args[0]) {
-		alert("protocol got null args[0]! ignoring...");
+		logMsg("protocol got null args[0]! ignoring...");
 		return;
 	    }
 	    var parts = args[0].split('.');
@@ -1222,27 +1233,15 @@ Oskari = (function() {
 	     * document.getElementById("debug"); if (!del) return;
 	     * del.appendChild(d);
 	     */
-	    if(mode != 'dev')
-		return;
-	    if(window.console && window.console.debug)
-		window.console.debug(what);
+	   logMsg(what);
 	},
 	/**
 	 * @method log a loggin and debuggin function
 	 *
 	 */
 	"log" : function(what) {
-	    if(mode != 'dev')
-		return;
-	    // log(what);
-	    /*
-	     * var d = document.createElement('div');
-	     * d.appendChild(document.createTextNode(what)); var del =
-	     * document.getElementById("debug"); if (!del) return;
-	     * del.appendChild(d);
-	     */
-	    if(window.console && window.console.debug)
-		window.console.debug(what);
+	    logMsg(what);
+		
 	},
 	/**
 	 * @method loadCss
@@ -2295,6 +2294,9 @@ Oskari = (function() {
 	},
 	getLoaderMode : function() {
 	    return mode;
+	},
+	setDebugMode: function(d) {
+		isDebug = d;
 	},
 	setSupportBundleAsync : function(a) {
 	    supportBundleAsync = a;

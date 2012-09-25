@@ -6,7 +6,7 @@ Oskari.registerLocalization({
     "desc": "",
     "help": {
         "tags" : "karttaikkuna,pikaohje",
-        "contentPart" : "contentPart"
+        "contentPart" : "body"
     },
     "error": {
         "title" : "Virhe!",

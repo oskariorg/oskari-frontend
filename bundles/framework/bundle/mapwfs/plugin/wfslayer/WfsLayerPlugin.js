@@ -75,7 +75,7 @@ function() {
 			this._sandbox
 					.printDebug("[WfsLayerPlugin] got AfterMapMoveEvent from "
 							+ creator);
-			this.afterAfterMapMoveEvent(event);
+			this.afterAfterMapMoveEvent();
 		},
 		'AfterMapLayerAddEvent' : function(event) {
 			this.afterMapLayerAddEvent(event);
@@ -179,7 +179,7 @@ function() {
 	 */
 	afterMapLayerAddEvent : function(event) {
 		this.addMapLayerToMap(event.getMapLayer(), event.getKeepLayersOrder(), event.isBasemap());
-//		this.updateWfsImages(this.getName());
+        this.afterAfterMapMoveEvent();
 	},
 	/**
 	 * primitive for adding layer to this map
@@ -382,15 +382,10 @@ updateWfsImages : function(creator) {
         this.service.scheduleWFSMapLayerUpdate(mapLayer, bbox, mapWidth, mapHeight, this.getName());
         this.service.startPollers();
     },
-    afterAfterMapMoveEvent : function(event) {
-        // from tilesgridplugin
+    afterAfterMapMoveEvent : function() {
         this.tileStrategy.update();
         this._tilesLayer.redraw();
-        // /from tilesgridplugin
-                        
     	this.updateWfsImages(this.getName());
-    	// pointless since updateWfsImages will remove any existing anyways
-    	//this.removeHighlightOnMapLayer();
     },
     
     
@@ -491,7 +486,7 @@ updateWfsImages : function(creator) {
                          "&flow_pm_zoom_level=" + map.getZoom() +
                          "&flow_pm_map_width=" + map.getWidth() + 
                          "&flow_pm_map_heigh=" + map.getHeight() + 
-                         "&actionKey=GET_HIGHLIGHT_WFS_FEATURE_IMAGE_BY_POINT";
+                         "&action_route=GET_HIGHLIGHT_WFS_FEATURE_IMAGE_BY_POINT";
 
         var keepCollection = sandbox.isCtrlKeyDown();
         

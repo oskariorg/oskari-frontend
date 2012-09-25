@@ -48,13 +48,6 @@ function(plugin) {
     getName : function() {
         return this.__name;
     },
-    processGetFeaturesPngImageForMapFormat : function(mapLayer, onReady, minX, minY, maxX, maxY, mapWidth, mapHeight, mapZoom) {
-        var mapLayerId = mapLayer.getId();
-
-        var url = this.pngUrl + "&flow_pm_wfsLayerId=" + mapLayerId + "&flow_pm_bbox_min_x=" + minX + "&flow_pm_bbox_min_y=" + minY + "&flow_pm_bbox_max_x=" + maxX + "&flow_pm_bbox_max_y=" + maxY + "&flow_pm_map_width=" + mapWidth + "&flow_pm_map_heigh=" + mapHeight + "&flow_pm_zoom_level=" + mapZoom + "&actionKey=GET_PNG_MAP";
-
-        onReady(url);
-    },
     // Core methods start
     scheduleMapLayerRearrangeAfterWfsMapTilesAreReady : function() {
         this._doMapLayerReArrange = true;
@@ -143,17 +136,6 @@ function(plugin) {
                 /* Create png request */
                 var bbox = request.getBbox();
                 var mapZoom = this.sandbox.getMap().getZoom();
-                // sandbox.getOpenLayersMapComponent().getZoom();
-                // sandbox.printDebug("              imageOnReady : " +
-                // imageOnReady);
-                /*
-                this.sandbox.printDebug("          bbox.bounds.left : " + bbox.bounds.left);
-                this.sandbox.printDebug("        bbox.bounds.bottom : " + bbox.bounds.bottom);
-                this.sandbox.printDebug("         bbox.bounds.right : " + bbox.bounds.right);
-                this.sandbox.printDebug("           bbox.bounds.top : " + bbox.bounds.top);
-                this.sandbox.printDebug("      _TILE_SIZE_IN_PIXELS : " + this._TILE_SIZE_IN_PIXELS);
-                this.sandbox.printDebug("                   mapZoom : " + mapZoom);
-*/
                 var url = this.pngUrl + 
                         "&flow_pm_wfsLayerId=" + request.getMapLayer().getId() + 
                         "&flow_pm_bbox_min_x=" + bbox.bounds.left + 
@@ -163,7 +145,7 @@ function(plugin) {
                         "&flow_pm_map_width=" + this._TILE_SIZE_IN_PIXELS + 
                         "&flow_pm_map_heigh=" + this._TILE_SIZE_IN_PIXELS + 
                         "&flow_pm_zoom_level=" + mapZoom + 
-                        "&actionKey=GET_PNG_MAP";
+                        "&action_route=GET_PNG_MAP";
 
                 var requestedLayerName = "WFS_LAYER_IMAGE_" + 
                                          request.getMapLayer().getId() + 
@@ -237,7 +219,7 @@ function(plugin) {
                     "&flow_pm_bbox_max_y=" + bbox.top + 
                     "&flow_pm_map_width=" + mapWidth + 
                     "&flow_pm_map_heigh=" + mapHeight + 
-                    "&actionKey=GET_HIGHLIGHT_WFS_FEATURE_IMAGE";
+                    "&action_route=GET_HIGHLIGHT_WFS_FEATURE_IMAGE";
             this.plugin.drawImageTile(layer, url, bbox, "HIGHLIGHTED_FEATURE", event.isKeepSelection());
             
         } finally {

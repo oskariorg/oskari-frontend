@@ -93,6 +93,15 @@ function() {
         //sandbox.registerAsStateful(this.mediator.bundleId, this);
 		// draw ui
 		me.createUi();
+		
+        // check if preselected layers included wfs layers -> act if they are added now 
+        var layers = sandbox.findAllSelectedMapLayers();
+        for(var i = 0; i < layers.length; ++i) {
+            if (layers[i].isLayerOfType('WFS')) {
+                this.plugin.update();
+                this.plugins['Oskari.userinterface.Flyout'].layerAdded(layers[i]);
+            }
+        } 
 	},
 	/**
 	 * @method init

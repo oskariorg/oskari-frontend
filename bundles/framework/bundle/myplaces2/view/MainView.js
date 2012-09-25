@@ -154,6 +154,8 @@ function(instance) {
         
         var content = [{
             html : me.form.getForm(categories),
+            useButtons: true,
+            primaryButton: loc.buttons.save,
             actions : {}
         }];
         // cancel button

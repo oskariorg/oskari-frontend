@@ -111,11 +111,16 @@ function() {
         
         // get help content
         var helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', sandbox);
-        helper.getHelpArticle(this.getLocalization('help').tags, 
-            this.getLocalization('help').contentPart, function(isSuccess, pContent) {
+        var helpContentPart = me.getLocalization('help').contentPart;
+        helper.getHelpArticle(
+            this.getLocalization('help').tags, 
+            function(isSuccess, pContent) {
                 var content = pContent;
                 if(!isSuccess) {
                     content = me.getLocalization('error').generic;
+                }
+                else if(content[helpContentPart]){
+                    content = content[helpContentPart];
                 }
                 me.plugins['Oskari.userinterface.Flyout'].setContent(content);
         });

@@ -21,12 +21,14 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
     this._modulesByName = {};
     this._statefuls = {};
 
-    this.debugRequests = true;
-    this.debugEvents = true;
+	/* as of 2012-09-24 debug by default false */
+    this.debugRequests = false;
+    this.debugEvents = false;
     this.requestEventLog = [];
     this.requestEventStack = [];
 
-    this.gatherDebugRequests = true;
+	/* as of 2012-09-24 debug by default false */
+    this.gatherDebugRequests = false;
     this.maxGatheredRequestsAndEvents = 4096;
     // TODO: move to some conf?
     this.requestAndEventGather = [];
@@ -34,10 +36,33 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
     this._user = null;
     this._ajaxUrl = null;
 }, {
+	
+	/**
+	 * @method disableDebug
+	 * disables debug messaging and sequence diagram gathering
+	 * if( core is set ) also core debug will be disabled
+	 */
     disableDebug : function() {
         this.debugRequests = false;
         this.debugEvents = false;
         this.gatherDebugRequests = false;
+        if( this._core ) {
+        	this._core.disableDebug();
+        }
+    },
+    
+    /** @method enableDebug
+     * enables debug messaging and sequence diagram gathering (by default not enabled)
+     * if( core is set ) also core debug will be enabled
+     */
+    enableDebug : function() {
+        this.debugRequests = true;
+        this.debugEvents = true;
+        this.gatherDebugRequests = true;
+        if( this._core ) {
+        	this._core.enableDebug();
+        }
+
     },
 
     /**
@@ -501,11 +526,26 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
         return rv;
     },
 
+	/**
+	 * @method requestByName
+	 * Modules can request work to be done using this method.
+	 *
+	 * This is a utility to work with request names instead of constructing
+	 * request objects 
+	 * 
+	 * @param {Oskari.mapframework.module.Module/String} creator
+     *            that created request. This can be either actual
+     *            module or the name of the module. Both are
+     *            accepted.
+     * @param {String} requestName (this is NOT the class name)
+     * @param {Array} requestArgs REQUIRED though patched for backwards compatibility
+     * 
+	 */
     requestByName : function(creator, requestName, requestArgs) {
 
         this.printDebug("#!#!#! --------------> requestByName " + requestName);
         var requestBuilder = this.getRequestBuilder(requestName);
-        var request = requestBuilder.apply(this, requestArgs);
+        var request = requestBuilder.apply(this, requestArgs||[]);
 
         var creatorComponent = null;
         if (creator.getName != null) {
@@ -535,8 +575,25 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
         return rv;
     },
 
+	/**
+	 * @property postMasterComponent
+	 * @static
+	 */
+	postMasterComponent : "postmaster",
+	
     /**
-     *
+     * @method postRequestByName
+     * 
+     * This posts a request for processing. 
+     * 
+     * NOTE! This is asynchronous - by design.
+     * 
+	 *
+     * This attempts to loose some stack frames as well as provide
+     * some yield time for the browser. 
+     * 
+     * @param {String} requestName (this is NOT the class name)
+     * @param {Array} requestArgs REQUIRED though patched for backwards compatibility
      */
     postRequestByName : function(requestName, requestArgs) {
         var me = this;
@@ -545,24 +602,27 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
             return;
         }
         window.setTimeout(function() {
-            me.printDebug("#!#!#! POSTING --------------> requestByName " + requestName);
-            var request = requestBuilder.apply(me, requestArgs);
-            var creatorComponent = "postmaster";
-
+            
+            var request = requestBuilder.apply(me, requestArgs||[]);
+            var creatorComponent = this.postMasterComponent;
             me._core.setObjectCreator(request, creatorComponent);
-
-            me.printDebug("Module '" + creatorComponent + "' is POSTING a request for '" + me.getObjectName(request) + "'...");
 
             if (me.gatherDebugRequests) {
                 me.pushRequestAndEventGather(creatorComponent + "->Sandbox: ", me.getObjectName(request));
             }
             var rv = null;
 
-            me.debugPushRequest(creatorComponent, request);
+			if (this.debugRequests) {
+	            me.debugPushRequest(creatorComponent, request);
+	        }
+	        
             rv = me._core.processRequest(request);
-            me.debugPopRequest();
+            
+            if (this.debugRequests) {
+            	me.debugPopRequest();
+            }
 
-        }, 10);
+        }, 0);
 
     },
 

@@ -63,8 +63,8 @@ function() {
     this._services
     this._servicesByQName = {};
 
-    /* Are we currently printing debug */
-    this._debug = true;
+    /* Are we currently printing debug (as of 2012-09-24 debug by default false)*/
+    this._debug = false;
 
     /* Wizard url */
     this._mapPublisherWizardUrl
@@ -501,6 +501,14 @@ function() {
      */
     disableDebug : function() {
         this._debug = false;
+    },
+    
+     /**
+     * @method enableDebug
+     * Disables debugging
+     */
+    enableDebug : function() {
+        this._debug = true;
     },
 
     /**
