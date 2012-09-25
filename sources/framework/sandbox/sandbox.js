@@ -603,7 +603,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
         }
         window.setTimeout(function() {
             
-            var request = requestBuilder.apply(me, requestArgs);
+            var request = requestBuilder.apply(me, requestArgs||[]);
             var creatorComponent = this.postMasterComponent;
             me._core.setObjectCreator(request, creatorComponent);
 
