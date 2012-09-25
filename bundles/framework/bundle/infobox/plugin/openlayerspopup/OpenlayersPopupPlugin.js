@@ -151,7 +151,7 @@ function() {
 		  	var action = contentData[i].actions;
             var useButtons = (contentData[i].useButtons == true);
             var primaryButton = contentData[i].primaryButton;
-		  	for(var key in action){
+		  	for(var key in action){ 
 	            var attrName = key;
 	            var attrValue = action[key];
 	            var actionLink = null;
@@ -208,7 +208,7 @@ function() {
 		
 		popup.events.on({
 			"click": function(evt) {
-				var link = jQuery(evt.target);
+				var link = jQuery(evt.target||evt.srcElement);
 				if (link.hasClass('olPopupCloseBox')) { // Close button
 					me.close(id);
 				} else { // Action links
