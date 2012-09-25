@@ -313,7 +313,13 @@ function() {
 		title.append(plugin.getTitle());
 		var status = tile.children('.oskari-tile-status');
 
-		title.click(function() {
+		tile.click(function() {
+			//plugin.setExtensionState();
+
+			me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [extension, 'toggle']);
+		});
+
+		/*title.click(function() {
 			//plugin.setExtensionState();
 
 			me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [extension, 'toggle']);
@@ -323,6 +329,8 @@ function() {
 
 			me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [extension, 'toggle']);
 		});
+		*/
+		
 		plugin.setEl(tile.get());
 
 		return tile;
