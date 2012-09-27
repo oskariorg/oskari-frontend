@@ -122,6 +122,7 @@ function() {
             link.bind('click', function() {
                 // show userguide popup with data
                 me.additionalDataHandler.handler(link, content);
+                return false;
             });
             return link;
         } 
