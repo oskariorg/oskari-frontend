@@ -226,6 +226,7 @@ function() {
                 for(var i = 0; i < selection.length; ++i) {
                     me.select(selection[i][idField], true);
                 }
+                return false;
             };
         };
         for(var i=0; i < fieldNames.length; ++i) {

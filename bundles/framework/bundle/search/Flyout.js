@@ -278,6 +278,7 @@ function(instance) {
                 } else {
                     headerContainer.parent().addClass('asc');
                 }
+                return false;
             };
         };
         for (var i = 0; i < this.resultHeaders.length; ++i) {
@@ -301,6 +302,7 @@ function(instance) {
         var closureMagic = function(scopedValue) {
             return function() {
                 me._resultClicked(scopedValue);
+                return false;
             };
         };
         var locations = this.lastResult.locations;
