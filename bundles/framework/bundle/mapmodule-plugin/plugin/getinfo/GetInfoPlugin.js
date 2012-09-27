@@ -381,9 +381,10 @@ function() {
     /**
      * Flattens a GFI response
      *
-     * @param {Object} data
+     * @param {Object} data     
      */
     _parseGfiResponse : function(resp) {
+    	var sandbox = this._sandbox;
         var data = resp.data;
         var coll = [];
         var lonlat = resp.lonlat;
@@ -397,6 +398,8 @@ function() {
         for (var di = 0; di < data.length; di++) {
             var datum = data[di];
             var layerId = datum.layerId;
+            var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+            var layerName =  layer ? layer.getName() : '';
             var type = datum.type;
 
             if (type == "WFS_LAYER") {
@@ -417,23 +420,36 @@ function() {
                             title = pnimi['pnr:kirjoitusasu'];
                         }
                         var pretty = this._json2html(child);
-                        coll.push(pretty);
+                        coll.push({
+                        	markup: pretty,
+                        	layerId: layerId,
+                        	layerName: layerName});
                     }
                 }
             } else {
                 var pretty = this._formatGfiDatum(datum);
                 if (pretty != null) {
-                    coll.push(pretty);
+                    coll.push({
+                        	markup: pretty,
+                        	layerId: layerId,
+                        	layerName: layerName});
                 }
             }
         }
+        
+        /*
+         * returns { fragments: coll, title: title }
+         *  
+         *  fragments is an array of JSON { markup: '<html-markup>', layerName: 'nameforlayer', layerId: idforlayer } 
+         */
+        
         return {
             fragments : coll,
             title : title
         };
     },
 
-    _json2html : function(node) {
+    _json2html : function(node,layerName) {
         var me = this;
         if (node == null) {
             return '';
@@ -491,17 +507,29 @@ function() {
      * @param {Array} data
      */
     _showFeatures : function(data) {
+    	
+    	/* data is { fragments: coll, title: title } */
+    	/* fragments is an array of JSON { markup: '<html-markup>', layerName: 'nameforlayer', layerId: idforlayer } */
         var me = this;
         var content = {};
         content.html = '';
         content.actions = {};
         for (var di = 0; di < data.fragments.length; di++) {
-            content.html += '<div style="background-color: #424343;margin-top: 14px; margin-bottom: 10px;">' + 
-                '<div class="icon-bubble-left">' + 
-                '<div style="vertical-align: middle; padding-top: 2px; padding-right: 4px; text-align:center;"> ' + 
-                (di + 1) + 
-                '</div></div></div>';
-            content.html += data.fragments[di];
+			var fragment =   data.fragments[di]      	
+        	var fragmentTitle = fragment.layerName;
+        	var fragmentMarkup = fragment.markup;
+        	
+             content.html += 
+               '<div style="background-color: #424343;margin-top: 14px; margin-bottom: 10px;">' + 
+                 '<div class="icon-bubble-left" style="color:white;height:15px;">' + 
+                    '<div style="vertical-align: middle; padding-top: 2px; padding-right: 4px; text-align:center;float:left;display:inline;"> ' + 
+                       /*(di + 1) + */ 
+                    '</div><span style="padding-left:32px;">'+
+                     fragmentTitle +
+                  '</span></div>'+
+                '</div>';
+                
+            content.html += fragmentMarkup;
         }
 
         var pluginLoc = this.getMapModule().getLocalization('plugin');
