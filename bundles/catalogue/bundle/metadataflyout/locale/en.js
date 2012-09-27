@@ -28,7 +28,7 @@ Oskari.registerLocalization({
       "pdf": "Printout",
       "select_metadata_prompt": "Select metadata by clicking one of the icons.",
       "metadata_printout_title": "METADATA PRINTOUT",
-      "linkto": "Link to this Metadata",
+      "linkto": "Link to this metadata",
       "tabs": {
         "abstract": {
           "abstract": "",

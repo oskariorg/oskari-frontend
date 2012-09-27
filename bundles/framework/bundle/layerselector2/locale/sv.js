@@ -14,7 +14,7 @@ Oskari.registerLocalization({
     },
     "tooltip": {
       "type-base": "Bakgrundskarta",
-      "type-wms": "Kartlager",
+      "type-wms": "kartlager",
       "type-wfs": "Dataprodukt"
     }
   }

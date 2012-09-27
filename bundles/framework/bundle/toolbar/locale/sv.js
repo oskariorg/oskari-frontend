@@ -10,7 +10,7 @@ Oskari.registerLocalization({
         "title": "Länk till kartvyn"
       },
       "print": {
-        "tooltip": "Print"
+        "tooltip": "Skriv ut"
       }
     },
     "measure" : {

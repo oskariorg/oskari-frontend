@@ -26,9 +26,9 @@ Oskari.registerLocalization({
       "xml": "XML",
       "map": "Omfattning",
       "pdf": "Utskrift",
-      "select_metadata_prompt": "VÃ¤lj metadata...",
+      "select_metadata_prompt": "Välj metadata genom att klicka på ikonerna",
       "metadata_printout_title": "METATIETOTULOSTE",
-      "linkto": "AnvÃ¤nd denna lÃ¤nk fÃ¶r att lÃ¤nka till den hÃ¤r metadatan",
+      "linkto": "Metadatalänk",
       "tabs": {
         "abstract": {
           "abstract": "",
