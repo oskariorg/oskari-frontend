@@ -14,7 +14,7 @@ function() {
     this._map = null;
     this.enabled = true;
     this.infoboxId = 'getinforesult';
-    this.__gfiRequests = [];
+    this.__gfiRequests = null;
 }, {
     /** @static @property __name plugin name */
     __name : 'GetInfoPlugin',
@@ -181,8 +181,8 @@ function() {
             var y = evt.getMouseY();
             this.handleGetInfo(lonlat, x, y);
         },
-        'MapMoveEvent' : function(event) {
-            this.abortGfiRequests();
+        'MapMovedEvent' : function(evt) {
+            this.cancelGfiRequests();
         }
     },
     /**
@@ -195,11 +195,11 @@ function() {
         var me = this;
         return this.eventHandlers[event.getName()].apply(this, [event]);
     },
-    abortGfiRequests : function() {
-        this.__gfiRequests.each(function(req) {
-                                    req.abort();
+    cancelGfiRequests : function() {
+        this.__gfiRequests.each(function(idx, req) {
+                                    req.abort()
                                 });
-        this.__gfiRequests.length = 0;        
+        this.__gfiRequests.length = 0;
     },
     handleGetInfo : function(lonlat, x, y) {
         var me = this;
@@ -212,30 +212,29 @@ function() {
         
         var mapVO = this._sandbox.getMap();
         var selected = this._sandbox.findAllSelectedMapLayers();
-        var layerIds = ""
+        var layerIds = "";
         for (var i = 0; i < selected.length; i++) {
             if (layerIds !== "") {
                 layerIds += ",";
             }
             layerIds += selected[i].getId();
         }
+
         var gfiReqs = this.__gfiRequests;
         var newGfiRequest = jQuery.ajax(
             {
-                beforeSend : function(req) {
-                    if (req && req.overrideMimeType) {
-                        req.overrideMimeType("application/j-son;" +
-                                             "charset=UTF-8");
+                beforeSend : function(r) {
+                    if (r && r.overrideMimeType) {
+                        r.overrideMimeType("application/j-son;charset=UTF-8");
                     }
-                    this.abortGfiRequests();
-                    gfiReqs.push(req);
+                    gfiReqs.push(r);
                 },
-                complete : function(req) {
-                    var reqIdx = gfiReqs.indexOf(req);
+                complete : function(r) {
+                    var reqIdx = gfiReqs.indexOf(r);
                     if (reqIdx >= 0) {
                         gfiReqs.splice(reqIdx, 1);
                     }
-                },                
+                },
                 success : function(resp) {
                     if (resp.data && resp.data instanceof Array) {
                         resp.lonlat = lonlat;
@@ -402,10 +401,9 @@ function() {
     /**
      * Flattens a GFI response
      *
-     * @param {Object} data     
+     * @param {Object} data
      */
     _parseGfiResponse : function(resp) {
-    	var sandbox = this._sandbox;
         var data = resp.data;
         var coll = [];
         var lonlat = resp.lonlat;
@@ -419,8 +417,6 @@ function() {
         for (var di = 0; di < data.length; di++) {
             var datum = data[di];
             var layerId = datum.layerId;
-            var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-            var layerName =  layer ? layer.getName() : '';
             var type = datum.type;
 
             if (type == "WFS_LAYER") {
@@ -441,36 +437,23 @@ function() {
                             title = pnimi['pnr:kirjoitusasu'];
                         }
                         var pretty = this._json2html(child);
-                        coll.push({
-                        	markup: pretty,
-                        	layerId: layerId,
-                        	layerName: layerName});
+                        coll.push(pretty);
                     }
                 }
             } else {
                 var pretty = this._formatGfiDatum(datum);
                 if (pretty != null) {
-                    coll.push({
-                        	markup: pretty,
-                        	layerId: layerId,
-                        	layerName: layerName});
+                    coll.push(pretty);
                 }
             }
         }
-        
-        /*
-         * returns { fragments: coll, title: title }
-         *  
-         *  fragments is an array of JSON { markup: '<html-markup>', layerName: 'nameforlayer', layerId: idforlayer } 
-         */
-        
         return {
             fragments : coll,
             title : title
         };
     },
 
-    _json2html : function(node,layerName) {
+    _json2html : function(node) {
         var me = this;
         if (node == null) {
             return '';
@@ -528,29 +511,17 @@ function() {
      * @param {Array} data
      */
     _showFeatures : function(data) {
-    	
-    	/* data is { fragments: coll, title: title } */
-    	/* fragments is an array of JSON { markup: '<html-markup>', layerName: 'nameforlayer', layerId: idforlayer } */
         var me = this;
         var content = {};
         content.html = '';
         content.actions = {};
         for (var di = 0; di < data.fragments.length; di++) {
-			var fragment =   data.fragments[di]      	
-        	var fragmentTitle = fragment.layerName;
-        	var fragmentMarkup = fragment.markup;
-        	
-             content.html += 
-               '<div style="background-color: #424343;margin-top: 14px; margin-bottom: 10px;">' + 
-                 '<div class="icon-bubble-left" style="color:white;height:15px;">' + 
-                    '<div style="vertical-align: middle; padding-top: 2px; padding-right: 4px; text-align:center;float:left;display:inline;"> ' + 
-                       /*(di + 1) + */ 
-                    '</div><span style="padding-left:32px;">'+
-                     fragmentTitle +
-                  '</span></div>'+
-                '</div>';
-                
-            content.html += fragmentMarkup;
+            content.html += '<div style="background-color: #424343;margin-top: 14px; margin-bottom: 10px;">' + 
+                '<div class="icon-bubble-left">' + 
+                '<div style="vertical-align: middle; padding-top: 2px; padding-right: 4px; text-align:center;"> ' + 
+                (di + 1) + 
+                '</div></div></div>';
+            content.html += data.fragments[di];
         }
 
         var pluginLoc = this.getMapModule().getLocalization('plugin');
