@@ -58,15 +58,15 @@ function(instance, localization) {
                 return function() {
                     var request = me.instance.sandbox.getRequestBuilder('MyPlaces.EditCategoryRequest')(id);
                     me.instance.sandbox.request(me.instance, request);
+                    return false;
                 };
-                return false;
             }
             var deletelinkClosure = function(id) {
                 return function() {
                     var request = me.instance.sandbox.getRequestBuilder('MyPlaces.DeleteCategoryRequest')(id);
                     me.instance.sandbox.request(me.instance, request);
+                    return false;
                 };
-                return false;
             }
             
             for(var i = 0; i < categories.length; ++i) {
