@@ -283,7 +283,13 @@ function(instance, localization) {
         // setup localization
         for(var i=0; i < visibleFields.length; ++i) {
             var key = visibleFields[i];
-            grid.setColumnUIName(key, this.loc.grid[key]);
+            var coluiname = 'grid.' + key;
+            if (this.loc &&
+                this.loc.grid &&
+                this.loc.grid[key]) {
+                coluiname = this.loc.grid[key];
+            }
+            grid.setColumnUIName(key, coluiname);
         }
         
         

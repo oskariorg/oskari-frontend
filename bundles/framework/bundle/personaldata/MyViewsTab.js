@@ -24,9 +24,15 @@ function(instance, localization) {
     var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
     if (rbState) {
         var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+        var tbstt = 'localization.button.toolbarsave';
+        if (localization && 
+            localization.button && 
+            localization.button.toolbarsave) {
+            tbstt = localization.button.toolbarsave;
+        }
         sandbox.request(instance, reqBuilder('save_view', 'viewtools', {
             iconCls : 'tool-save-view',
-            tooltip: localization.button.toolbarsave,
+            tooltip: tbstt,
             sticky: false,
             prepend: true,
             callback : function() {
@@ -292,7 +298,13 @@ function(instance, localization) {
         // setup localization
         for(var i=0; i < visibleFields.length; ++i) {
             var key = visibleFields[i];
-            grid.setColumnUIName(key, this.loc.grid[key]);
+            var coluiname = 'grid.' + key;
+            if (this.loc &&
+               this.loc.grid &&
+                this.loc.grid[key]) {
+                coluiname = this.loc.grid[key];
+            }
+            grid.setColumnUIName(key, coluiname);
         }
         
         return grid;
