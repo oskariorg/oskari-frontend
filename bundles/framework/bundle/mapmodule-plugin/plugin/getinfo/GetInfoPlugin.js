@@ -14,6 +14,7 @@ function() {
     this._map = null;
     this.enabled = true;
     this.infoboxId = 'getinforesult';
+    this.__gfiRequests = [];
 }, {
     /** @static @property __name plugin name */
     __name : 'GetInfoPlugin',
@@ -179,6 +180,9 @@ function() {
             var x = evt.getMouseX();
             var y = evt.getMouseY();
             this.handleGetInfo(lonlat, x, y);
+        },
+        'MapMoveEvent' : function(event) {
+            this.abortGfiRequests();
         }
     },
     /**
@@ -190,6 +194,12 @@ function() {
     onEvent : function(event) {
         var me = this;
         return this.eventHandlers[event.getName()].apply(this, [event]);
+    },
+    abortGfiRequests : function() {
+        this.__gfiRequests.each(function(req) {
+                                    req.abort();
+                                });
+        this.__gfiRequests.length = 0;        
     },
     handleGetInfo : function(lonlat, x, y) {
         var me = this;
@@ -209,44 +219,54 @@ function() {
             }
             layerIds += selected[i].getId();
         }
-
-        jQuery.ajax({
-            beforeSend : function(x) {
-                if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
-                }
-            },
-            success : function(resp) {
-                if (resp.data && resp.data instanceof Array) {
-                    resp.lonlat = lonlat;
-                    var parsed = me._parseGfiResponse(resp);
-                    if (!parsed) {
-                        return;
+        var gfiReqs = this.__gfiRequests;
+        var newGfiRequest = jQuery.ajax(
+            {
+                beforeSend : function(req) {
+                    if (req && req.overrideMimeType) {
+                        req.overrideMimeType("application/j-son;" +
+                                             "charset=UTF-8");
                     }
-                    parsed.popupid = me.infoboxId;
-                    parsed.lonlat = lonlat;
-                    me._showFeatures(parsed);
-                }
-            },
-            error : function() {
-                alert("GetInfo failed.");
-            },
-            data : {
-                layerIds : layerIds,
-                projection : me.mapModule.getProjection(),
-                x : x,
-                y : y,
-                lon : lon,
-                lat : lat,
-                width : mapVO.getWidth(),
-                height : mapVO.getHeight(),
-                bbox : mapVO.getBbox().toBBOX(),
-                zoom : mapVO.getZoom()
-            },
-            type : 'POST',
-            dataType : 'json',
-            url : ajaxUrl + 'action_route=GetFeatureInfoWMS'
-        });
+                    gfiReqs.push(req);
+                },
+                complete : function(req) {
+                    var reqIdx = gfiReqs.indexOf(req);
+                    if (reqIdx >= 0) {
+                        gfiReqs.splice(reqIdx, 1);
+                    }
+                },                
+                success : function(resp) {
+                    if (resp.data && resp.data instanceof Array) {
+                        resp.lonlat = lonlat;
+                        var parsed = me._parseGfiResponse(resp);
+                        if (!parsed) {
+                            return;
+                        }
+                        parsed.popupid = me.infoboxId;
+                        parsed.lonlat = lonlat;
+                        me._showFeatures(parsed);
+                    }
+                },
+                error : function() {
+                    alert("GetInfo failed.");
+                },
+                data : {
+                    layerIds : layerIds,
+                    projection : me.mapModule.getProjection(),
+                    x : x,
+                    y : y,
+                    lon : lon,
+                    lat : lat,
+                    width : mapVO.getWidth(),
+                    height : mapVO.getHeight(),
+                    bbox : mapVO.getBbox().toBBOX(),
+                    zoom : mapVO.getZoom()
+                },
+                type : 'POST',
+                dataType : 'json',
+                url : ajaxUrl + 'action_route=GetFeatureInfoWMS'
+            }
+        );
     },
     /**
      * @method _closeGfiInfo
