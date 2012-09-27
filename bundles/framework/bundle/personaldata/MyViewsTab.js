@@ -221,6 +221,7 @@ function(instance, localization) {
                     req.setCurrentViewId(data.id);
                     sandbox.request(instance, req);
                 }
+                return false;
             });
             return link;
         };
@@ -234,6 +235,7 @@ function(instance, localization) {
                 if(view) {
                     me.editView(view);
                 }
+                return false;
             });
             return link;
         };
@@ -247,6 +249,7 @@ function(instance, localization) {
                 if(view) {
                     me._confirmDelete(view);
                 }
+                return false;
             });
             return link;
         };
