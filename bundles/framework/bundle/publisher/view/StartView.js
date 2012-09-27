@@ -47,8 +47,8 @@ Oskari.clazz.define(
             var txt = 'loc.buttons.continue';
             if (this.loc &&
                 this.loc.buttons &&
-                this.loc.buttons.continue) {
-                txt = this.loc.buttons.continue;
+                this.loc.buttons['continue']) {
+                txt = this.loc.buttons['continue'];
             }
 	    continueButton.setTitle(txt);
             continueButton.setHandler(function() {
