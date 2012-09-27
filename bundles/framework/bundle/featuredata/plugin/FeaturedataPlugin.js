@@ -159,16 +159,8 @@ function(config) {
         var link = me.__elements['main'].find('a');
         link.html(this.instance.getLocalization('title'));
         link.bind('click', function() {
-                me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'detach']);
-            /*
-            if(me.open) {
-                me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
-            }
-            else {
-                me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'detach']);
-            }
-            me.open = !me.open;
-            */
+            me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'detach']);
+            return false;        
         });
         parentContainer.append(me.__elements['main']);
         this.update();

@@ -90,7 +90,6 @@ function() {
 		var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
 		sandbox.request(this, request);
 
-        //sandbox.registerAsStateful(this.mediator.bundleId, this);
 		// draw ui
 		me.createUi();
 		
@@ -210,7 +209,6 @@ function() {
 
 		sandbox.request(this, request);
 
-        //this.sandbox.unregisterStateful(this.mediator.bundleId);
 		this.sandbox.unregister(this);
 		this.started = false;
 	},
@@ -223,7 +221,6 @@ function() {
 	 */
 	startExtension : function() {
 		this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.Flyout', this);
-		//this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.Tile', this);
 	},
 	/**
 	 * @method stopExtension
@@ -232,7 +229,6 @@ function() {
 	 */
 	stopExtension : function() {
 		this.plugins['Oskari.userinterface.Flyout'] = null;
-		//this.plugins['Oskari.userinterface.Tile'] = null;
 	},
 	/**
 	 * @method getPlugins
@@ -263,7 +259,6 @@ function() {
 	createUi : function() {
 		var me = this;
 		this.plugins['Oskari.userinterface.Flyout'].createUi();
-		//this.plugins['Oskari.userinterface.Tile'].refresh();
         var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
         var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin', { instance : this });
         mapModule.registerPlugin(plugin);
