@@ -59,12 +59,14 @@ function(instance, localization) {
                     var request = me.instance.sandbox.getRequestBuilder('MyPlaces.EditCategoryRequest')(id);
                     me.instance.sandbox.request(me.instance, request);
                 };
+                return false;
             }
             var deletelinkClosure = function(id) {
                 return function() {
                     var request = me.instance.sandbox.getRequestBuilder('MyPlaces.DeleteCategoryRequest')(id);
                     me.instance.sandbox.request(me.instance, request);
                 };
+                return false;
             }
             
             for(var i = 0; i < categories.length; ++i) {
@@ -208,6 +210,7 @@ function(instance, localization) {
             link.append(name);
             link.bind('click', function() {
                 me._showPlace(data.geometry,data.categoryId);
+                return false;
             });
             return link;
         };
@@ -218,6 +221,7 @@ function(instance, localization) {
             link.append(name);
             link.bind('click', function() {
                 me._editPlace(data);
+                return false;
             });
             return link;
         };
@@ -228,6 +232,7 @@ function(instance, localization) {
             link.append(name);
             link.bind('click', function() {
                 me._deletePlace(data);
+                return false;
             });
             return link;
         };

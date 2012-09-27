@@ -184,6 +184,7 @@ function(config) {
 			var linkParams = sandbox.generateMapLinkParameters();
 	    	var url = myLoc.mapLinkBase + sandbox.generateMapLinkParameters();
 	    	window.open(url, '_blank');
+            return false;
 	    });
         
         var link = this.element.find('a');
@@ -191,6 +192,7 @@ function(config) {
         link.bind('click', function(){
 	    	var url = myLoc["termsLink"]
 	    	window.open(url, '_blank');
+            return false;
 	    });
     }
 }, {
