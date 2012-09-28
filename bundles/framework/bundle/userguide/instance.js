@@ -119,7 +119,7 @@ function() {
         var tagsTxt = 'help.tags';
         if (this.getLocalization('help') &&
             this.getLocalization('help').tags) {
-            tagsTxt = this.getLocalization('help');
+            tagsTxt = this.getLocalization('help').tags;
         }
         helper.getHelpArticle(
             tagsTxt, 
@@ -128,7 +128,7 @@ function() {
                 var errorTxt = 'error.generic';
                 if (me.getLocalization('error') && 
                     me.getLocalization('error').generic) {
-                    errorTxt = me.getLocalization('error');
+                    errorTxt = me.getLocalization('error').generic;
                 }
                 if(!isSuccess) {
                     content = errorTxt;
