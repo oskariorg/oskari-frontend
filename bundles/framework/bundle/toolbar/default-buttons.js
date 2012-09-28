@@ -3,13 +3,15 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 		var karr = key.split('.');
 		var val = this.getLocalization('buttons');
 		if(!(val && val.length)) {
-			return '<missing_localisation>';
+		    return '!' + key + '!';
 		}
-		for(var i = karr.length; --i >= 0; ) {
-                    val = val[karr[karr.length - 1 - i]];
+                var pts = 'buttons';
+		for(var i = 0; i < karr.length; i++ ) {
+                    val = val[karr[i]];
+                    pts += '.' + karr[i];
 		}
 		if( typeof val !== 'string') {
-			return '<missing_localisation>';
+		    return pts;
 		}
 		return val;
 	},
