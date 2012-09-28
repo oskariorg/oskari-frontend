@@ -13,9 +13,6 @@
 	 *          reference to toolbarInstance that handles the buttons
 	 */
 	function(toolbar) {
-            if (!(toolbar && toolbar.getLocalization)) {
-                alert("No toolbar!");
-            }
 		var me = this;
 		me._toolbar = toolbar;
 

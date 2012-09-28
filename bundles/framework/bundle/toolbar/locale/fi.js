@@ -20,6 +20,7 @@ Oskari.registerLocalization({
       "pan": "Liikuta karttaa",
       "zoom": "Lähennä",
       "measure": {
+        "title": "Mittaa",
         "line": "Mittaa etäisyys",
         "area": "Mittaa alue"
       }

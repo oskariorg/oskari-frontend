@@ -20,6 +20,7 @@ Oskari.registerLocalization({
       "pan": "Flytta kartan",
       "zoom": "Zooma in",
       "measure": {
+        "title": "Mät",
         "line": "Mät avstånd",
         "area": "Mät areal"
       }
