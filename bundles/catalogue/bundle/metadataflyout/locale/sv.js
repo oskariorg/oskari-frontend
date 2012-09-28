@@ -1,70 +1,80 @@
 Oskari.registerLocalization({
-  "lang": "sv",
-  "key": "catalogue.bundle.metadataflyout",
+  "lang": " sv",
+  "key": " catalogue.bundle.metadataflyout",
   "value": {
-    "title": "Metadata",
-    "desc": "",
+    "title": " Metadata",
+    "desc": " ",
     "loader": {
-      "json": "/catalogue/portti-metadata-printout-service/MetadataServlet?",
-      "abstract": "/geonetwork/srv/sv/metadata.show.portti.abstract?",
-      "inspire": "/geonetwork/srv/sv/metadata.show.portti?",
-      "jhs": "/geonetwork/srv/sv/metadata.show.portti.jhs158?",
-      "xml": "/geonetwork/srv/sv/iso19139.xml?",
-      "schemas": "/geonetwork/srv/sv/metadata.show.portti.skeemat?"
+      "json": " /catalogue/portti-metadata-printout-service/MetadataServlet?",
+      "abstract": " /geonetwork/srv/sv/metadata.show.portti.abstract?",
+      "inspire": " /geonetwork/srv/sv/metadata.show.portti?",
+      "jhs": " /geonetwork/srv/sv/metadata.show.portti.jhs158?",
+      "pdf": " /catalogue/portti-metadata-printout-service/MetadataPrintoutServlet?lang=sv&title=METADATAUTSKRIFT&metadataresource",
+      "xml": " /geonetwork/srv/sv/iso19139.xml?",
+      "schemas": " /geonetwork/srv/sv/metadata.show.portti.skeemat?"
     },
     "layer": {
-      "name": "Metadata",
-      "description": "",
-      "orgName": "Metadata",
-      "inspire": "Metadata"
+      "name": " Metadata",
+      "description": " ",
+      "orgName": " Metadata",
+      "inspire": " Metadata"
     },
     "flyout": {
-      "title": "Metadata",
-      "abstract": "Abstrakt",
-      "inspire": "INSPIRE",
-      "jhs": "JHS",
-      "xml": "XML",
-      "map": "Omfattning",
-      "pdf": "Utskrift",
-      "select_metadata_prompt": "Välj metadata genom att klicka på ikonerna",
-      "metadata_printout_title": "METATIETOTULOSTE",
-      "linkto": "Metadatalänk",
+      "title": " Metadata",
+      "abstract": " Abstrakt",
+      "inspire": " INSPIRE",
+      "jhs": " JHS",
+      "xml": " XML",
+      "map": " Omfattning",
+      "pdf": " Utskrift",
+      "select_metadata_prompt": " Välj metadata genom att klicka på ikonerna",
+      "metadata_printout_title": " METATIETOTULOSTE",
+      "linkto": " Metadatalänk",
       "tabs": {
         "abstract": {
-          "abstract": "",
-          "jhs": "Näytä JHS metatieto",
-          "inspire": "Näytä INSPIRE metatieto",
-          "xml": "Näytä ISO 19139 XML"
+          "abstract": " ",
+          "jhs": "Visa JHS",
+          "inspire": "Visa INSPIRE",
+          "xml": {
+            "text": "Öppna ISO 19139 XML",
+            "target": " _blank"
+          },
+          "pdf": {
+            "text": "Öppna PDF-utskrift",
+            "target": " _blank"
+          }
         },
         "jhs": {
-          "abstract": "Näytä vain perustiedot",
-          "jhs": "",
-          "inspire": "Näytä INSPIRE metatieto",
-          "xml": "Näytä ISO 19139 XML"
+          "abstract": "Visa basuppgifter",
+          "jhs": " ",
+          "inspire": "Visa INSPIRE",
+          "xml": {
+            "text": "Öppna ISO 19139 XML",
+            "target": " _blank"
+          },
+          "pdf": {
+            "text": "Öppna PDF-utskrift",
+            "target": " _blank"
+          }
         },
         "inspire": {
-          "abstract": "Näytä vain perustiedot",
-          "jhs": "Näytä JHS metatieto",
-          "inspire": "",
-          "xml": "Näytä ISO 19139 XML"
-        },
-        "xml": {
-          "abstract": "Näytä vain perustiedot",
-          "jhs": "Näytä JHS metatieto",
-          "inspire": "Näytä INSPIRE metatieto",
-          "xml": ""
-        },
-        "pdf": {
-          "abstract": "Näytä vain perustiedot",
-          "jhs": "Näytä JHS metatieto",
-          "inspire": "Näytä INSPIRE metatieto",
-          "xml": "Näytä ISO 19139 XML"
+          "abstract": "Visa basuppgifter",
+          "jhs": "Visa JHS",
+          "inspire": " ",
+          "xml": {
+            "text": "Öppna ISO 19139 XML",
+            "target": " _blank"
+          },
+          "pdf": {
+            "text": "Öppna PDF-utskrift",
+            "target": " _blank"
+          }
         }
       }
     },
     "tile": {
-      "title": "Metadata",
-      "tooltip": "?"
+      "title": " Metadata",
+      "tooltip": "Metadata innehåller uppgifter om användningsvillkor och tillgång till datamaterial."
     }
   }
 });
