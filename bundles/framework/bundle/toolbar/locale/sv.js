@@ -18,12 +18,12 @@ Oskari.registerLocalization({
         "next": "Nästa"
       },
       "pan": "Flytta kartan",
-      "zoom": "Zooma in",
-      "measure": {
-        "title": "Mät",
-        "line": "Mät avstånd",
-        "area": "Mät areal"
-      }
+      "zoom": "Zooma in"
+    },
+    "measure": {
+      "title": "Mät",
+      "line": "Mät avstånd",
+      "area": "Mät areal"
     }
   }
 });

@@ -18,12 +18,12 @@ Oskari.registerLocalization({
         "next": "Next"
       },
       "pan": "Pan map view",
-      "zoom": "Zoom in",
-      "measure": {
-        "title": "Measure",
-        "line": "Measure distance",
-        "area": "Measure area"
-      }
+      "zoom": "Zoom in"
+    },
+    "measure": {
+      "title": "Measure",
+      "line": "Measure distance",
+      "area": "Measure area"
     }
   }
 });
