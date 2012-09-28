@@ -17,9 +17,6 @@
 		me._toolbar = toolbar;
 
 		var loc = this._toolbar.getLocalization('measure');
-            if (!loc) {
-                alert("No localization for 'measure'");
-            }
 		var title = loc['title'];
 		me._title = title;
 		me._dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
