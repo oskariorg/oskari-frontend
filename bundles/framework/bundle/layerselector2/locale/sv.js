@@ -1,21 +1,21 @@
 Oskari.registerLocalization({
-  "lang": "sv",
-  "key": "LayerSelector",
+  "lang": " sv",
+  "key": " LayerSelector",
   "value": {
-    "title": "Karttatasot SV",
-    "desc": "",
+    "title": "kartlager",
+    "desc": " ",
     "errors": {
-      "loadFailed": "Karttatasojen latauksessa tapahtui virhe. SV"
+      "loadFailed": " Fel i nedladdningen av kartlager. Ladda ned sidan på nytt i din läsare och välj kartlagren."
     },
     "filter": {
-      "text": "Hae karttatasoja SV",
-      "inspire": "Aiheittain SV",
-      "organization": "Tiedontuottajittain SV"
+      "text": " Sök kartlager",
+      "inspire": " Enligt tema",
+      "organization": " Enligt dataproducent"
     },
     "tooltip": {
-      "type-base": "Bakgrundskarta",
-      "type-wms": "kartlager",
-      "type-wfs": "Dataprodukt"
+      "type-base": " Bakgrundskarta",
+      "type-wms": " kartlager",
+      "type-wfs": " Dataprodukt"
     }
   }
 });

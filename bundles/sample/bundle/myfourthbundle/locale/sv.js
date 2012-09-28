@@ -1,8 +1,8 @@
 Oskari.registerLocalization({
-  "lang": "sv",
-  "key": "MyFourthBundle",
+  "lang": " sv",
+  "key": " MyFourthBundle",
   "value": {
-    "tooltip": "Click me!",
-    "toolClicked": "Tool clicked"
+    "tooltip": " Click me!",
+    "toolClicked": " Tool clicked"
   }
 });

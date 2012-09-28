@@ -1,26 +1,28 @@
 Oskari.registerLocalization({
-  "lang": "en",
-  "key": "Toolbar",
+  "lang": " en",
+  "key": " Toolbar",
   "value": {
     "buttons": {
       "link": {
-        "tooltip": "Link",
-        "prefixUrl": "www.paikkatietoikkuna.fi/web/fi/kartta?",
-        "ok": "Ok",
-        "title": "Url"
+        "tooltip": " Link",
+        "prefixUrl": " www.paikkatietoikkuna.fi/web/fi/kartta?",
+        "ok": " Ok",
+        "title": " Link to map view"
       },
       "print": {
-        "tooltip": "Print"
+        "tooltip": " Print"
+      },
+      "history": {
+        "reset": "Return to default view",
+        "back": "Back",
+        "next": "Next"
+      },
+      "pan": "Pan map view",
+      "zoom": "Zoom in",
+      "measure": {
+        "line": "Measure distance",
+        "area": "Measure area"
       }
-    },
-    "measure" : {
-    	"title" : "Measurement results",
-    	"close" : "Close",
-    	"guidance" : {
-    		"measureline" : "???",
-    		"measurearea" : "???"
-    	}
-
     }
   }
 });

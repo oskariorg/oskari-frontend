@@ -1,21 +1,21 @@
 Oskari.registerLocalization({
-  "lang": "en",
-  "key": "LayerSelector",
+  "lang": " en",
+  "key": " LayerSelector",
   "value": {
-    "title": "Karttatasot EN",
-    "desc": "",
+    "title": "Map layers",
+    "desc": " ",
     "errors": {
-      "loadFailed": "Karttatasojen latauksessa tapahtui virhe. EN"
+      "loadFailed": " Error downloading map layers. Reload the page in your browser and select map layers."
     },
     "filter": {
-      "text": "Hae karttatasoja EN",
-      "inspire": "Aiheittain EN",
-      "organization": "Tiedontuottajittain EN"
+      "text": " Search map layers",
+      "inspire": " By theme",
+      "organization": " By data providers"
     },
     "tooltip": {
-      "type-base": "Background map",
-      "type-wms": "Map layer",
-      "type-wfs": "Data product"
+      "type-base": " Background map",
+      "type-wms": " Map layer",
+      "type-wfs": " Data product"
     }
   }
 });

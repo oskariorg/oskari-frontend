@@ -1,14 +1,22 @@
 Oskari.registerLocalization({
-  "lang": "sv",
-  "key": "userinterface.UserGuide",
+  "lang": " sv",
+  "key": " userinterface.UserGuide",
   "value": {
-    "title": "Guide",
-    "desc": "",
+    "title": " Hjälp",
+    "desc": " ",
     "flyout": {
-      "title": "Guide"
+      "title": " Hjälp"
     },
     "tile": {
-      "title": "Guide"
+      "title": " Bruksanvisningar för karta"
+    },
+    "error": {
+      "title": "",
+      "generic": ""
+    },
+    "help": {
+      "tags": "",
+      "contentPart": ""
     }
   }
 });
