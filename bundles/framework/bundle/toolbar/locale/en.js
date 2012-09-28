@@ -1,16 +1,16 @@
 Oskari.registerLocalization({
-  "lang": " en",
-  "key": " Toolbar",
+  "lang": "en",
+  "key": "Toolbar",
   "value": {
     "buttons": {
       "link": {
-        "tooltip": " Link",
-        "prefixUrl": " www.paikkatietoikkuna.fi/web/fi/kartta?",
-        "ok": " Ok",
-        "title": " Link to map view"
+        "tooltip": "Link",
+        "prefixUrl": "www.paikkatietoikkuna.fi/web/fi/kartta?",
+        "ok": "Ok",
+        "title": "Link to map view"
       },
       "print": {
-        "tooltip": " Print"
+        "tooltip": "Print"
       },
       "history": {
         "reset": "Return to default view",

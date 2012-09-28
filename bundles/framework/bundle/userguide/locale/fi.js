@@ -1,14 +1,14 @@
 Oskari.registerLocalization({
-  "lang": " fi",
-  "key": " userinterface.UserGuide",
+  "lang": "fi",
+  "key": "userinterface.UserGuide",
   "value": {
-    "title": " Ohje",
-    "desc": " ",
+    "title": "Ohje",
+    "desc": "",
     "flyout": {
-      "title": " Ohje"
+      "title": "Ohje"
     },
     "tile": {
-      "title": " Kartan käyttöohje"
+      "title": "Kartan käyttöohje"
     },
     "error": {
       "title": "Virhe!",

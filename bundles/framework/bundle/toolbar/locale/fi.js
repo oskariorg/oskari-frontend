@@ -1,27 +1,27 @@
 Oskari.registerLocalization({
-  "lang": " fi",
-  "key": " Toolbar",
+  "lang": "fi",
+  "key": "Toolbar",
   "value": {
     "buttons": {
       "link": {
-        "tooltip": " Linkki",
-        "prefixUrl": " www.paikkatietoikkuna.fi/web/fi/kartta?",
-        "ok": " Ok",
-        "title": " Linkki karttanäkymään"
+        "tooltip": "Linkki",
+        "prefixUrl": "www.paikkatietoikkuna.fi/web/fi/kartta?",
+        "ok": "Ok",
+        "title": "Linkki karttanäkymään"
       },
       "print": {
-        "tooltip": " Tulosta"
+        "tooltip": "Tulosta"
       },
       "history": {
-        "reset": " Paluu oletusnäkymään",
-        "back": " Takaisin",
-        "next": " Eteenpäin"
+        "reset": "Paluu oletusnäkymään",
+        "back": "Takaisin",
+        "next": "Eteenpäin"
       },
-      "pan": " Liikuta karttaa",
-      "zoom": " Lähennä",
+      "pan": "Liikuta karttaa",
+      "zoom": "Lähennä",
       "measure": {
-        "line": " Mittaa etäisyys",
-        "area": " Mittaa alue"
+        "line": "Mittaa etäisyys",
+        "area": "Mittaa alue"
       }
     }
   }

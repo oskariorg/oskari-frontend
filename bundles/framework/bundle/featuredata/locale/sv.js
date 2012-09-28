@@ -1,9 +1,9 @@
 Oskari.registerLocalization({
-  "lang": " sv",
-  "key": " FeatureData",
+  "lang": "sv",
+  "key": "FeatureData",
   "value": {
-    "title": " Kohdetiedot sv",
-    "desc": " ",
+    "title": "Kohdetiedot sv",
+    "desc": "",
     "loading": "Laddar ned",
     "showmore": "Visa",
     "nodata": "Kartlagren du valt saknar uppgifter om objekt.",

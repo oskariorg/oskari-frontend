@@ -1,6 +1,6 @@
 Oskari.registerLocalization({
   "lang": "sv",
-  "key": " PersonalData",
+  "key": "PersonalData",
   "value": {
     "title": "Mina uppgifter",
     "desc": "Mina uppgifter",
@@ -88,8 +88,8 @@ Oskari.registerLocalization({
           "name": "Namn",
           "domain": "Kartinställnigar",
           "publish": "Status",
-          "edit": "  ",
-          "delete": "  "
+          "edit": "",
+          "delete": ""
         },
         "popup": {
           "edit": "Byt namn på kartan",

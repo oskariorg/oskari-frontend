@@ -1,6 +1,6 @@
 Oskari.registerLocalization({
-  "lang": " sv",
-  "key": " Publisher",
+  "lang": "sv",
+  "key": "Publisher",
   "value": {
     "title": "Definiera kartan som ska avskiljas",
     "flyouttitle": "Definiera karta",
@@ -8,7 +8,7 @@ Oskari.registerLocalization({
     "published": {
       "title": "Kartan har avskilts",
       "desc": "Inbädda kartan genom att tillägga HTML-koden nedan på din webbplats.",
-      "urlPrefix": " http://www.paikkatietoikkuna.fi"
+      "urlPrefix": "http://www.paikkatietoikkuna.fi"
     },
     "BasicView": {
       "title": "Inbädda kartan",
@@ -34,7 +34,7 @@ Oskari.registerLocalization({
       },
       "size": {
         "label": "Storlek",
-        "tooltip": "Välj eller definiera storleken på kartan som visas på din webbplats. Kartan förhandsvisas i den valda storleken. "
+        "tooltip": "Välj eller definiera storleken på kartan som visas på din webbplats. Kartan förhandsvisas i den valda storleken."
       },
       "tools": {
         "label": "Verktyg",
@@ -105,9 +105,9 @@ Oskari.registerLocalization({
     "NotLoggedView": {
       "text": "Logga in i tjänsten för att definiera en karta som ska inbäddas.",
       "signup": "Logga in",
-      "signupUrl": " /web/fi/login",
+      "signupUrl": "/web/fi/login",
       "register": "Registrera dig",
-      "registerUrl": " /web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+      "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
     },
     "StartView": {
       "text": "Du kan inbädda den kartvy som du definierat här på din egen eller din arbetsgivares webbplats.",

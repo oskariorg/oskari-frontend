@@ -1,12 +1,12 @@
 Oskari.registerLocalization({
-  "lang": " sv",
-  "key": " Search",
+  "lang": "sv",
+  "key": "Search",
   "value": {
     "title": "Ortnamnssökning",
     "desc": "",
     "searchDescription": "Sök ortnamn, adress eller fastighetsbeteckning.",
     "searchButton": "Sök",
-    "searchResultCount": "Sökningen gav  ",
+    "searchResultCount": "Sökningen gav",
     "searchResultDescription": "resultat. <br/> Precisera sökningen för mera kompakta resultat. <br/> Du kan även ordna resultaten i tabellen nedan genom att klicka på kolumnrubrikerna.",
     "searchResults": "",
     "searchResultsDescription": "",

@@ -1,79 +1,79 @@
 Oskari.registerLocalization({
-  "lang": " sv",
-  "key": " catalogue.bundle.metadataflyout",
+  "lang": "sv",
+  "key": "catalogue.bundle.metadataflyout",
   "value": {
-    "title": " Metadata",
-    "desc": " ",
+    "title": "Metadata",
+    "desc": "",
     "loader": {
-      "json": " /catalogue/portti-metadata-printout-service/MetadataServlet?",
-      "abstract": " /geonetwork/srv/sv/metadata.show.portti.abstract?",
-      "inspire": " /geonetwork/srv/sv/metadata.show.portti?",
-      "jhs": " /geonetwork/srv/sv/metadata.show.portti.jhs158?",
-      "pdf": " /catalogue/portti-metadata-printout-service/MetadataPrintoutServlet?lang=sv&title=METADATAUTSKRIFT&metadataresource",
-      "xml": " /geonetwork/srv/sv/iso19139.xml?",
-      "schemas": " /geonetwork/srv/sv/metadata.show.portti.skeemat?"
+      "json": "/catalogue/portti-metadata-printout-service/MetadataServlet?",
+      "abstract": "/geonetwork/srv/sv/metadata.show.portti.abstract?",
+      "inspire": "/geonetwork/srv/sv/metadata.show.portti?",
+      "jhs": "/geonetwork/srv/sv/metadata.show.portti.jhs158?",
+      "pdf": "/catalogue/portti-metadata-printout-service/MetadataPrintoutServlet?lang=sv&title=METADATAUTSKRIFT&metadataresource",
+      "xml": "/geonetwork/srv/sv/iso19139.xml?",
+      "schemas": "/geonetwork/srv/sv/metadata.show.portti.skeemat?"
     },
     "layer": {
-      "name": " Metadata",
-      "description": " ",
-      "orgName": " Metadata",
-      "inspire": " Metadata"
+      "name": "Metadata",
+      "description": "",
+      "orgName": "Metadata",
+      "inspire": "Metadata"
     },
     "flyout": {
-      "title": " Metadata",
-      "abstract": " Abstrakt",
-      "inspire": " INSPIRE",
-      "jhs": " JHS",
-      "xml": " XML",
-      "map": " Omfattning",
-      "pdf": " Utskrift",
-      "select_metadata_prompt": " Välj metadata genom att klicka på ikonerna",
-      "metadata_printout_title": " METATIETOTULOSTE",
-      "linkto": " Metadatalänk",
+      "title": "Metadata",
+      "abstract": "Abstrakt",
+      "inspire": "INSPIRE",
+      "jhs": "JHS",
+      "xml": "XML",
+      "map": "Omfattning",
+      "pdf": "Utskrift",
+      "select_metadata_prompt": "Välj metadata genom att klicka på ikonerna",
+      "metadata_printout_title": "METATIETOTULOSTE",
+      "linkto": "Metadatalänk",
       "tabs": {
         "abstract": {
-          "abstract": " ",
+          "abstract": "",
           "jhs": "Visa JHS",
           "inspire": "Visa INSPIRE",
           "xml": {
             "text": "Öppna ISO 19139 XML",
-            "target": " _blank"
+            "target": "_blank"
           },
           "pdf": {
             "text": "Öppna PDF-utskrift",
-            "target": " _blank"
+            "target": "_blank"
           }
         },
         "jhs": {
           "abstract": "Visa basuppgifter",
-          "jhs": " ",
+          "jhs": "",
           "inspire": "Visa INSPIRE",
           "xml": {
             "text": "Öppna ISO 19139 XML",
-            "target": " _blank"
+            "target": "_blank"
           },
           "pdf": {
             "text": "Öppna PDF-utskrift",
-            "target": " _blank"
+            "target": "_blank"
           }
         },
         "inspire": {
           "abstract": "Visa basuppgifter",
           "jhs": "Visa JHS",
-          "inspire": " ",
+          "inspire": "",
           "xml": {
             "text": "Öppna ISO 19139 XML",
-            "target": " _blank"
+            "target": "_blank"
           },
           "pdf": {
             "text": "Öppna PDF-utskrift",
-            "target": " _blank"
+            "target": "_blank"
           }
         }
       }
     },
     "tile": {
-      "title": " Metadata",
+      "title": "Metadata",
       "tooltip": "Metadata innehåller uppgifter om användningsvillkor och tillgång till datamaterial."
     }
   }

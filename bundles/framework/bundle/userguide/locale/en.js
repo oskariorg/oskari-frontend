@@ -1,14 +1,14 @@
 Oskari.registerLocalization({
-  "lang": " en",
-  "key": " userinterface.UserGuide",
+  "lang": "en",
+  "key": "userinterface.UserGuide",
   "value": {
-    "title": " Help",
-    "desc": " ",
+    "title": "Help",
+    "desc": "",
     "flyout": {
-      "title": " Help"
+      "title": "Help"
     },
     "tile": {
-      "title": " Map user guide"
+      "title": "Map user guide"
     },
     "error": {
       "title": "",

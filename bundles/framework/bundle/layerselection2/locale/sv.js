@@ -1,6 +1,6 @@
 Oskari.registerLocalization({
   "lang": "sv",
-  "key": " LayerSelection",
+  "key": "LayerSelection",
   "value": {
     "title": "Valda kartlager",
     "desc": "",
@@ -19,7 +19,7 @@ Oskari.registerLocalization({
         "guest": "Logga in för att avskilja och inbädda detta kartlager.",
         "loggedin": "Får publiceras",
         "official": "Får publiceras för myndighetsbruk.",
-        "login-url": " <a href='/web/fi/login'>Logga in</a>",
+        "login-url": "<a href='/web/fi/login'>Logga in</a>",
         "need-login": "Du måste logga in.",
         "can_be_published_by_provider": {
           "label": "Får publiceras av dataproducenter",

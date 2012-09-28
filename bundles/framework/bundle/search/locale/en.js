@@ -1,12 +1,12 @@
 Oskari.registerLocalization({
-  "lang": " en",
-  "key": " Search",
+  "lang": "en",
+  "key": "Search",
   "value": {
     "title": "Place name search",
-    "desc": " ",
+    "desc": "",
     "searchDescription": "Search by place name, address or real estate unit identifier.",
     "searchButton": "Searh",
-    "searchResultCount": "The search returned ",
+    "searchResultCount": "The search returned",
     "searchResultDescription": "results.  <br/> Define the search to decrease the number of results.  <br/> You can also order results in the table below by clicking the column headings.",
     "searchResults": "",
     "searchResultsDescription": "",

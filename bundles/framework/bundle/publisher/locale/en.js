@@ -1,14 +1,14 @@
 Oskari.registerLocalization({
-  "lang": " en",
-  "key": " Publisher",
+  "lang": "en",
+  "key": "Publisher",
   "value": {
     "title": "Create map to be embedded",
     "flyouttitle": "Create map",
-    "desc": " ",
+    "desc": "",
     "published": {
       "title": "Your map has been created",
       "desc": "Embed the map by adding the HTML code below to your website.",
-      "urlPrefix": " http://www.paikkatietoikkuna.fi"
+      "urlPrefix": "http://www.paikkatietoikkuna.fi"
     },
     "BasicView": {
       "title": "Embed map",
@@ -105,9 +105,9 @@ Oskari.registerLocalization({
     "NotLoggedView": {
       "text": "You need to log in before using the embedding function.",
       "signup": "Log in",
-      "signupUrl": " /web/fi/login",
+      "signupUrl": "/web/fi/login",
       "register": "Register",
-      "registerUrl": " /web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+      "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
     },
     "StartView": {
       "text": "You can embed the map view you just created on your own or your employer's website.",

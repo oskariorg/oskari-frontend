@@ -1,9 +1,9 @@
 Oskari.registerLocalization({
-  "lang": " en",
-  "key": " StateHandler",
+  "lang": "en",
+  "key": "StateHandler",
   "value": {
-    "title": " StateHandler",
-    "desc": " ",
+    "title": "StateHandler",
+    "desc": "",
     "reset": "Reset defaults",
     "popup": {
       "label": "Name of map view:",

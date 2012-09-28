@@ -1,6 +1,6 @@
 Oskari.registerLocalization({
   "lang": "en",
-  "key": " PersonalData",
+  "key": "PersonalData",
   "value": {
     "title": "My data",
     "desc": "My data",
@@ -88,8 +88,8 @@ Oskari.registerLocalization({
           "name": "Name",
           "domain": "Map settings",
           "publish": "Status",
-          "edit": "  ",
-          "delete": "  "
+          "edit": "",
+          "delete": ""
         },
         "popup": {
           "edit": "Change map name",

@@ -1,9 +1,9 @@
 Oskari.registerLocalization({
-  "lang": " sv",
-  "key": " StateHandler",
+  "lang": "sv",
+  "key": "StateHandler",
   "value": {
-    "title": " StateHandler",
-    "desc": " ",
+    "title": "StateHandler",
+    "desc": "",
     "reset": "धterställ standardinställningar",
     "popup": {
       "label": "Namnet på vyn:",

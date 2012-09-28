@@ -1,8 +1,8 @@
 Oskari.registerLocalization({
-  "lang": " fi",
-  "key": " MyFourthBundle",
+  "lang": "fi",
+  "key": "MyFourthBundle",
   "value": {
-    "tooltip": " Napauta",
-    "toolClicked": " Napautettu"
+    "tooltip": "Napauta",
+    "toolClicked": "Napautettu"
   }
 });

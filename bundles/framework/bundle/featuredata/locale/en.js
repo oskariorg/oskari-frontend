@@ -1,9 +1,9 @@
 Oskari.registerLocalization({
-  "lang": " en",
-  "key": " FeatureData",
+  "lang": "en",
+  "key": "FeatureData",
   "value": {
-    "title": " Kohdetiedot en",
-    "desc": " ",
+    "title": "Kohdetiedot en",
+    "desc": "",
     "loading": "Loading",
     "showmore": "Show",
     "nodata": "Selected map levels contain no place data.",
