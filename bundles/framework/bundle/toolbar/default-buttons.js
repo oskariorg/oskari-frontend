@@ -42,7 +42,7 @@ Oskari.clazz
                 this.addToolButton(
                     'reset', 'history', {
                         iconCls : 'tool-history-forward',
-                        tooltip: this.l('history.next'),
+                        tooltip: me.l('history.next'),
                         sticky: false,
                         callback : function() {
                             var rn = 'map_control_tool_next';
@@ -54,7 +54,7 @@ Oskari.clazz
                 this.addToolButton(
                     'zoombox', 'basictools', {
                         iconCls : 'tool-zoombox',
-                        tooltip: this.l('zoom'),
+                        tooltip: me.l('zoom'),
                         sticky: true,
                         callback : function() {
                             var rn = 'map_control_zoom_tool';
@@ -65,7 +65,7 @@ Oskari.clazz
                 this.addToolButton(
                     'select', 'basictools', {
                         iconCls : 'tool-pan',
-                        tooltip: this.l('pan'),
+                        tooltip: me.l('pan'),
                         selected : true,
                         sticky: true,
                         callback : function() {
@@ -79,7 +79,7 @@ Oskari.clazz
                 this.addToolButton(
                     'measureline', 'basictools', {
                         iconCls : 'tool-measure-line',
-                        tooltip: this.l('measure.line'),
+                        tooltip: me.l('measure.line'),
                         sticky: true,
                         callback : function() {
                             var rn = 'map_control_measure_tool';
@@ -91,7 +91,7 @@ Oskari.clazz
                 this.addToolButton(
                     'measurearea', 'basictools', {
                         iconCls : 'tool-measure-area',
-                        tooltip: this.l('measure.area'),
+                        tooltip: me.l('measure.area'),
                         sticky: true,
                         callback : function() {
                             var rn = 'map_control_measure_area_tool';
@@ -103,7 +103,7 @@ Oskari.clazz
                 this.addToolButton(
                     'link', 'viewtools', {
                         iconCls : 'tool-link',
-                        tooltip: this.l('link.tooltip'),
+                        tooltip: me.l('link.tooltip'),
                         sticky: false,
                         callback : function() {
 			    var linkParams = 
@@ -112,7 +112,7 @@ Oskari.clazz
                             var okcn = 'Oskari.userinterface.component.Button';
 		    	    var dialog = Oskari.clazz.create(pcn);
 		    	    var okBtn = Oskari.clazz.create(okcn);
-		    	    okBtn.setTitle(this.l('link.ok'));
+		    	    okBtn.setTitle(me.l('link.ok'));
 		    	    okBtn.addClass('primary');
 		    	    okBtn.setHandler(
                                 function() {
@@ -125,12 +125,12 @@ Oskari.clazz
 		    	                   
 		    	    var linkContent = 
 				'<textarea rows="3" cols="80">' +
-				this.l('link.prefixUrl') + 
+				me.l('link.prefixUrl') + 
 				linkParams +
 				'</textarea>';
                             var rn = 'DisableMapKeyboardMovementRequest';
                             me.getSandbox().postRequestByName(rn);
-		    	    dialog.show(this.l('link.title'), 
+		    	    dialog.show(me.l('link.title'), 
                                         linkContent, 
                                         [okBtn]);
                         }
@@ -139,7 +139,7 @@ Oskari.clazz
                 this.addToolButton(
                     'print', 'viewtools', {
                         iconCls : 'tool-print',
-                        tooltip: this.l('print.tooltip'),
+                        tooltip: me.l('print.tooltip'),
                         sticky: false,
                         callback : function() {
                             var wopParm =
