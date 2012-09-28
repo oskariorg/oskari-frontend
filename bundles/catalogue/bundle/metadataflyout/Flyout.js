@@ -248,6 +248,16 @@ function(instance, locale, loader) {
 		this.loadMetadataForState();
 
 	},
+	
+	resetBrowseGraphic : function(img) {
+		var bgEl = jQuery(this.browseGraphic);
+		bgEl.empty();
+		
+		var img = img || jQuery('<img />');
+		bgEl.append(img);
+		
+	},
+	
 	/**
 	 * @method loadMetadataForState
 	 */
@@ -261,6 +271,10 @@ function(instance, locale, loader) {
 		
 		var viewId = this.contentState.view;
 		var metadata = this.contentState.metadata;
+
+		
+		views[viewId].empty();
+		
 
 		function handler(request) {
 			views[viewId].html(request.responseText);
@@ -336,19 +350,21 @@ function(instance, locale, loader) {
 	processJSON : function(metadataJson) {
 		var browseGraphicUrl = metadataJson.browseGraphic;
 		var extentEnvelope = metadataJson.env;
-
 		/*
 		 * Let's display the browse graphic image
 		 */
 		if(browseGraphicUrl) {
-			var img = jQuery(this.browseGraphic).children('img');
+			
+			var img = jQuery('<img />'); 
+			this.resetBrowseGraphic(img);
 
 			if(this.instance.getLoader().dev) {
 				img.attr('src', 'espoo_johtokartta_s.png');
 			} else {
 				img.attr('src', browseGraphicUrl);
 			}
-
+		} else {
+			this.resetBrowseGraphic();
 		}
 
 		/*
