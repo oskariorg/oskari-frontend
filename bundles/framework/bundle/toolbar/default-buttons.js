@@ -6,7 +6,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 			return '<missing_localisation>';
 		}
 		for(var i = karr.length; --i >= 0; ) {
-			val = val[karr[i]];
+                    val = val[karr[karr.length - 1 - i]];
 		}
 		if( typeof val !== 'string') {
 			return '<missing_localisation>';
