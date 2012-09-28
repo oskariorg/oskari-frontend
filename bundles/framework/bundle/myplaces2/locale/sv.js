@@ -1,6 +1,6 @@
 Oskari.registerLocalization({
-  "lang": "",
-  "key": "",
+  "lang": "sv",
+  "key": "MyPlaces2",
   "value": {
     "title": "Objekt",
     "desc": "",
