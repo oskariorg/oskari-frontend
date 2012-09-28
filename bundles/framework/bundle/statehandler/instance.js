@@ -19,8 +19,8 @@ function() {
     this._historyPollingInterval = 1500;
     this._historyTimer = null;
     this._historyPrevious = [];
-    this._historyEnabled = true;
     this._historyNext = [];
+    this._historyEnabled = true;
 
 	// TODO: default view from conf?
     this._defaultViewId = 1;
@@ -161,32 +161,32 @@ function() {
         return handler.apply(this, [event]);
 
     },
+    
+  
+    
     /**
      * @property {Object} eventHandlers
      * @static
      */
     eventHandlers : {
         'AfterMapMoveEvent' : function(event) {
-            var me = this;
-            if (this._historyEnabled === true) {
-
-                // we might get multiple events on one move so give a bit
-                // tolerance between moves
-                if (this._historyTimer) {
-                    clearTimeout(this._historyTimer);
-                    this._historyTimer = null;
-                }
-                this._historyTimer = setTimeout(function() {
-                    var mapfull = me.sandbox.getStatefulComponents()['mapfull'];
-                    if (mapfull) {
-                        var state = mapfull.getState();
-                        //this._currentHistoryStep = state;
-                        me._historyPrevious.push(state);
-                    }
-                }, this._historyPollingInterval);
-            }
+           var me = this;
+           me._pushState();
+        },
+        'AfterMapLayerAddEvent' : function(event) {
+           var me = this;
+           me._pushState();
+        },
+        'AfterMapLayerRemoveEvent' : function(event) {
+           var me = this;
+           me._pushState();
+        },
+        'AfterChangeMapLayerStyleEvent': function(event) {
+           var me = this;
+           me._pushState();
         }
     },
+    
     historyMoveNext : function() {
         if (this._historyNext.length > 0) {
             var state = this._historyNext.pop();
