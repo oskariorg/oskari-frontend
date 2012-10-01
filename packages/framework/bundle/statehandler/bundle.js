@@ -20,10 +20,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundle"
 
         "scripts" : [
 		{
-			// External lib - jquery.simplemodal - http://???
-            "type" : 'text/javascript',
-            "src" : '../../../../libraries/jquery/plugins/jquery.simplemodal.js'
-        }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/statehandler/instance.js"
         },{
@@ -35,9 +31,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundle"
         },{
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/statehandler/plugin/SaveViewPlugin.js"
-        }
-        
-        ,{
+        },{
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/statehandler/request/SetStateRequest.js"
         },{
@@ -46,32 +40,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundle"
         },{
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/statehandler/event/StateSavedEvent.js"
-        }
-        
-        
-        // dummy request for demo
-        ,{
+        },{
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/statehandler/request/SaveStateRequest.js"
         },{
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/statehandler/request/SaveStateRequestHandler.js"
         }
-        ],
-
-		"locales" : [{
-			"lang" : "fi",
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/statehandler/locale/fi.js"
-		}, {
-			"lang" : "sv",
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/statehandler/locale/sv.js"
-		}, {
-			"lang" : "en",
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/statehandler/locale/en.js"
-		}]
+        ]
     },
     "bundle" : {
         "manifest" : {

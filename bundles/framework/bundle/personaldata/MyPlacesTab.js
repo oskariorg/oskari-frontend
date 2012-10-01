@@ -270,8 +270,8 @@ function(instance, localization) {
                 'desc' : places[i].getDescription(),
                 'geometry' : places[i].getGeometry(),
                 'categoryId' : places[i].getCategoryID(),
-                'edit' : this.loc.grid['edit'],
-                'delete' : this.loc.grid['delete'],
+                'edit' : this.loc['edit'],
+                'delete' : this.loc['delete'],
                 'createDate' : this._formatDate(service, places[i].getCreateDate()),
                 'updateDate' : this._formatDate(service, places[i].getUpdateDate())
             });

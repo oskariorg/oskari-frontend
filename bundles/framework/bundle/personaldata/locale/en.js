@@ -11,13 +11,15 @@ Oskari.registerLocalization({
         "nocategories": "You have not yet saved the places.",
         "editCategory": "Edit map layer",
         "deleteCategory": "Delete map layer",
+        "edit": "Edit",
+        "delete": "Delete",
         "grid": {
           "name": "Name",
           "desc": "Description",
           "createDate": "Created",
           "updateDate": "Updated",
-          "edit": "",
-          "delete": ""
+          "edit": " ",
+          "delete": " "
         },
         "notification": {
           "delete": {
@@ -40,13 +42,13 @@ Oskari.registerLocalization({
         "grid": {
           "name": "Name",
           "publish": "Published",
-          "edit": "",
-          "delete": ""
+          "edit": " ",
+          "delete": " "
         },
         "popup": {
           "edit": "Change the name of the map view",
           "title": "Save map view",
-          "label": "Name of map view",
+          "label": "Name of map view:",
           "placeholder": "Give the map view a name",
           "save": "Save",
           "cancel": "Cancel",
@@ -74,7 +76,7 @@ Oskari.registerLocalization({
           "notsaved": "The map view could not be saved.",
           "notdeleted": "The map view could not be deleted.",
           "makePublic": "The map view could not be published. Please try again later.",
-          "makePrivate": "The map view could not be unpublished.Please try again later.",
+          "makePrivate": "The map view could not be unpublished. Please try again later.",
           "loadfailed": "The map views could not be downloaded."
         }
       },
@@ -88,8 +90,8 @@ Oskari.registerLocalization({
           "name": "Name",
           "domain": "Map settings",
           "publish": "Status",
-          "edit": "",
-          "delete": ""
+          "edit": " ",
+          "delete": " "
         },
         "popup": {
           "edit": "Change map name",
@@ -126,7 +128,7 @@ Oskari.registerLocalization({
         }
       },
       "account": {
-        "title": "Account information",
+        "title": "My account",
         "firstName": "First name",
         "lastName": "Last name",
         "nickName": "Nickname",
@@ -134,7 +136,7 @@ Oskari.registerLocalization({
         "changeInfo": "Change your account information",
         "changePassword": "Change your password",
         "removeAccount": "Delete your account",
-        "changeInfoUrl": ""
+        "changeInfoUrl": "/web/en/profile"
       }
     },
     "button": {

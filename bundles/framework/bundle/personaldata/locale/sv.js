@@ -11,13 +11,15 @@ Oskari.registerLocalization({
         "nocategories": "Du har ännu inte lagrat objekten.",
         "editCategory": "Editera kartlager",
         "deleteCategory": "Ta bort kartlager",
+        "edit": "Editera",
+        "delete": "Ta bort",
         "grid": {
           "name": "Namn",
           "desc": "Beskrivning",
           "createDate": "Skapad",
           "updateDate": "Uppdaterad",
-          "edit": "",
-          "delete": ""
+          "edit": " ",
+          "delete": " "
         },
         "notification": {
           "delete": {
@@ -40,8 +42,8 @@ Oskari.registerLocalization({
         "grid": {
           "name": "Namn",
           "publish": "Vyn är offentlig",
-          "edit": "",
-          "delete": ""
+          "edit": " ",
+          "delete": " "
         },
         "popup": {
           "edit": "Byt namn på vyn",
@@ -126,15 +128,15 @@ Oskari.registerLocalization({
         }
       },
       "account": {
-        "title": "Uppgifter om användarkonto",
+        "title": "Användarkonto",
         "firstName": "Förnamn",
         "lastName": "Efternamn",
         "nickName": "Signatur",
         "email": "E-postadress",
-        "changeInfo": "दndra uppgifter",
+        "changeInfo": "Ändra uppgifter",
         "changePassword": "Byt ut lösenordet",
         "removeAccount": "Radera konto",
-        "changeInfoUrl": ""
+        "changeInfoUrl": "/web/sv/profil"
       }
     },
     "button": {
