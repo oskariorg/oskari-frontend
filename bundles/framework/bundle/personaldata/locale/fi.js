@@ -11,13 +11,15 @@ Oskari.registerLocalization({
         "nocategories": "Et ole vielä tallentanut kohteita.",
         "editCategory": "Muokkaa tasoa",
         "deleteCategory": "Poista taso",
+        "edit": "Muokkaa",
+        "delete": "Poista",
         "grid": {
           "name": "Nimi",
           "desc": "Kuvaus",
           "createDate": "Luotu",
           "updateDate": "Päivitetty",
-          "edit": "Muokkaa",
-          "delete": "Poista"
+          "edit": " ",
+          "delete": " "
         },
         "notification": {
           "delete": {

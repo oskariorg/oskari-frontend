@@ -11,13 +11,15 @@ Oskari.registerLocalization({
         "nocategories": "Du har ännu inte lagrat objekten.",
         "editCategory": "Editera kartlager",
         "deleteCategory": "Ta bort kartlager",
+        "edit": "Editera",
+        "delete": "Ta bort",
         "grid": {
           "name": "Namn",
           "desc": "Beskrivning",
           "createDate": "Skapad",
           "updateDate": "Uppdaterad",
-          "edit": "Editera",
-          "delete": "Ta bort"
+          "edit": " ",
+          "delete": " "
         },
         "notification": {
           "delete": {
@@ -126,7 +128,7 @@ Oskari.registerLocalization({
         }
       },
       "account": {
-        "title": "Uppgifter om användarkonto",
+        "title": "Användarkonto",
         "firstName": "Förnamn",
         "lastName": "Efternamn",
         "nickName": "Signatur",

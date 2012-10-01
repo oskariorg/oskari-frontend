@@ -1,20 +1,4 @@
 Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance', 'default-buttons', {
-	l : function(key) {
-		var karr = key.split('.');
-		var val = this.getLocalization('buttons');
-		if(!(val && val.length)) {
-		    return '!' + key + '!';
-		}
-                var pts = 'buttons';
-		for(var i = 0; i < karr.length; i++ ) {
-                    val = val[karr[i]];
-                    pts += '.' + karr[i];
-		}
-		if( typeof val !== 'string') {
-		    return pts;
-		}
-		return val;
-	},
 	/**
 	 * @method _addDefaultButtons
 	 * @private
@@ -25,6 +9,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 	 */
 	_addDefaultButtons : function() {
 		var me = this;
+        var loc = this.getLocalization('buttons');
 		var reqBuilder = this.getSandbox().getRequestBuilder('ToolSelectionRequest');
 		var gfiRn = 'MapModulePlugin.GetFeatureInfoActivationRequest';
 		var gfiReqBuilder = this.getSandbox().getRequestBuilder(gfiRn);
@@ -32,7 +17,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 		/* basic tools */
 		this.addToolButton('reset', 'history', {
 			iconCls : 'tool-reset',
-			tooltip : me.l('history.reset'),
+			tooltip : loc.history.reset,
 			sticky : false,
 			callback : function() {
 				// statehandler reset state
@@ -47,7 +32,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 		});
 		this.addToolButton('history_back', 'history', {
 			iconCls : 'tool-history-back',
-			tooltip : me.l('history.back'),
+			tooltip : loc.history.back,
 			sticky : false,
 			callback : function() {
 				me.getSandbox().request(me, reqBuilder('map_control_tool_prev'));
@@ -55,7 +40,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 		});
 		this.addToolButton('history_forward', 'history', {
 			iconCls : 'tool-history-forward',
-			tooltip : me.l('history.next'),
+			tooltip : loc.history.next,
 			sticky : false,
 			callback : function() {
 				me.getSandbox().request(me, reqBuilder('map_control_tool_next'));
@@ -65,7 +50,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 		/* basic tools */
 		this.addToolButton('zoombox', 'basictools', {
 			iconCls : 'tool-zoombox',
-			tooltip : me.l('zoom'),
+			tooltip : loc.zoom,
 			sticky : true,
 			callback : function() {
 				var rn = 'map_control_zoom_tool';
@@ -75,7 +60,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 		});
 		this.addToolButton('select', 'basictools', {
 			iconCls : 'tool-pan',
-			tooltip : me.l('pan'),
+			tooltip : loc.pan,
 			selected : true,
 			sticky : true,
 			callback : function() {
@@ -88,7 +73,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 		/* Measurements area */
 		this.addToolButton('measureline', 'basictools', {
 			iconCls : 'tool-measure-line',
-			tooltip : me.l('measure.line'),
+			tooltip : loc.measure.line,
 			sticky : true,
 			callback : function() {
 				var rn = 'map_control_measure_tool';
@@ -99,7 +84,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 
 		this.addToolButton('measurearea', 'basictools', {
 			iconCls : 'tool-measure-area',
-			tooltip : me.l('measure.area'),
+			tooltip : loc.measure.area,
 			sticky : true,
 			callback : function() {
 				var rn = 'map_control_measure_area_tool';
@@ -110,7 +95,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 
 		this.addToolButton('link', 'viewtools', {
 			iconCls : 'tool-link',
-			tooltip : me.l('link.tooltip'),
+			tooltip : loc.link.tooltip,
 			sticky : false,
 			callback : function() {
 				var linkParams = me.getSandbox().generateMapLinkParameters();
@@ -118,27 +103,29 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 				var okcn = 'Oskari.userinterface.component.Button';
 				var dialog = Oskari.clazz.create(pcn);
 				var okBtn = Oskari.clazz.create(okcn);
-				okBtn.setTitle(me.l('link.ok'));
+				okBtn.setTitle(loc.link.ok);
 				okBtn.addClass('primary');
 				okBtn.setHandler(function() {
 					var rn = 'EnableMapKeyboardMovementRequest';
 					dialog.close();
 					me.getSandbox().postRequestByName(rn);
 				});
-				var linkContent = '<textarea rows="3" cols="80">' + me.l('link.prefixUrl') + linkParams + '</textarea>';
+				var linkContent = '<textarea rows="3" cols="80">' + loc.link.prefixUrl + linkParams + '</textarea>';
 				var rn = 'DisableMapKeyboardMovementRequest';
 				me.getSandbox().postRequestByName(rn);
-				dialog.show(me.l('link.title'), linkContent, [okBtn]);
+				dialog.show(loc.link.title, linkContent, [okBtn]);
 			}
 		});
 
 		this.addToolButton('print', 'viewtools', {
 			iconCls : 'tool-print',
-			tooltip : me.l('print.tooltip'),
+			tooltip : loc.print.tooltip,
 			sticky : false,
 			callback : function() {
 				var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
-				var link = window.location.pathname + '?' + me.getSandbox().generateMapLinkParameters() + '&p_p_id=Portti2Map_WAR_portti2mapportlet' + '&p_p_lifecycle=0' + '&p_p_state=exclusive' + '&showMarker=false' + '&forceCache=true' + '&mapmode=print' + '&viewId=2';
+				var link = window.location.pathname + '?' + me.getSandbox().generateMapLinkParameters() + 
+				    '&p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive' + 
+				    '&showMarker=false&forceCache=true&mapmode=print&viewId=2';
 				window.open(link, "Print", wopParm);
 			}
 		});
