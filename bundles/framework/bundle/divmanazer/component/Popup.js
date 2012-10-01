@@ -184,7 +184,6 @@ function() {
     	this.overlay = overlay;
     	overlay.followResizing(true);
     },
-<<<<<<< HEAD
     
      /** 
      * @method setContent
@@ -195,7 +194,8 @@ function() {
     	var contentEl = this.dialog.find('div.content');
     	contentEl.empty();
     	contentEl.append(content);
-=======
+    },
+    	
     /**
      * @method makeDraggable
      * Makes dialog draggable with jQuery Event Drag plugin
@@ -208,7 +208,6 @@ function() {
     	       top: event.offsetY,
     	       left: event.offsetX
     	   })
-    });
->>>>>>> Guided tour bundle builded using full sample example
+    	 });
     }
 });
