@@ -416,7 +416,24 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
                 "Require-Bundle-Instance" : []
             },
             instanceProps : {}
-        }]
+        }, {
+            title : 'Guided tour',
+            fi : 'Guided tour',
+            sv : 'Guided tour',
+            en : 'Guided tour',
+            bundlename : 'guidedtour',
+            bundleinstancename : 'guidedtour',
+            metadata : {
+                "Import-Bundle" : {
+                    "myplaces2" : {
+                        bundlePath : '/Oskari/packages/sample/bundle/'
+                    }
+                },
+                "Require-Bundle-Instance" : []
+            },
+            instanceProps : {}
+        }
+        ]
     }
 });
 
@@ -474,6 +491,27 @@ jQuery(document).ready(function() {
         url : ajaxUrl + 'action_route=GetAppSetup&viewId=1',
         success : function(appSetup) {
             if (appSetup.startupSequence && appSetup.configuration) {
+                appSetup.configuration['guidedtour'] =
+                    { 'state' : {}, 'conf' : {} };
+                appSetup.startupSequence['16'] =
+                    {
+                        'instanceProps' : {},
+                        'title' : 'Guided Tour',
+                        'bundleinstancename' : 'guidedtour',
+                        'fi' : 'guidedtour',
+                        'sv' : 'guidedtour',
+                        'en' : 'guidedtour',
+                        'bundlename' : 'guidedtour',
+                        'metadata' : {
+                            'Import-Bundle' : {
+                                'guidedtour' : {
+                                    'bundlePath' : '/Oskari/packages/sample/bundle/'
+                                }
+                            },
+                            'Require-Bundle-Instance' : [ ]
+                        }
+                    };
+
                 main.appSetup.startupSequence = appSetup.startupSequence;
                 main.appConfig = appSetup.configuration;
                 main.start(function(instance) {
