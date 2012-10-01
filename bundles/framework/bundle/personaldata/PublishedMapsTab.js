@@ -211,6 +211,7 @@ function(instance, localization) {
                 // FIXME: debugging code - open published map in a new window
                 window.open ('/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&published=true&viewId=' + data.id,
                     "Published", "location=1,status=1,scrollbars=yes,width=850,height=800");
+                return false;
             });
             return link;
         };
@@ -226,6 +227,7 @@ function(instance, localization) {
                     req.setCurrentViewId(data.id);
                     sandbox.request(instance, req);
                 }
+                return false;
             });
             return link;
         };
@@ -239,6 +241,7 @@ function(instance, localization) {
                 if(view) {
                     me._confirmDelete(view);
                 }
+                return false;
             });
             return link;
         };
@@ -271,6 +274,7 @@ function(instance, localization) {
                         }
                     });
                 }
+                return false;
             });
             return link;
         };
@@ -279,7 +283,13 @@ function(instance, localization) {
         // setup localization
         for(var i=0; i < visibleFields.length; ++i) {
             var key = visibleFields[i];
-            grid.setColumnUIName(key, this.loc.grid[key]);
+            var coluiname = 'grid.' + key;
+            if (this.loc &&
+                this.loc.grid &&
+                this.loc.grid[key]) {
+                coluiname = this.loc.grid[key];
+            }
+            grid.setColumnUIName(key, coluiname);
         }
         
         

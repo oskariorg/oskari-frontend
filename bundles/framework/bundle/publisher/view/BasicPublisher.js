@@ -63,25 +63,25 @@ function(instance, localization) {
 
     this.sizeOptions = [{
         id : 'small',
-        width : 375,
-        height : 300
+        width : 580,
+        height : 387
     }, {
         id : 'medium',
-        width : 500,
-        height : 400,
+        width : 700,
+        height : 525,
         selected : true // default option
     }, {
         id : 'large',
-        width : 640,
-        height : 512
+        width : 1240,
+        height : 700
     }, {
         id : 'custom',
-        width : 'max 1000',
+        width : '1000',
         height : 1000,
-        minWidth : 50,
+        minWidth : 30,
         minHeight : 20,
-        maxWidth : 1000,
-        maxHeight : 1000
+        maxWidth : 4000,
+        maxHeight : 2000
     }];
 
     this.loc = localization;

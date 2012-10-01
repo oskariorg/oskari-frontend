@@ -14,6 +14,11 @@ function() {
     this._map = null;
     this.enabled = true;
     this.infoboxId = 'getinforesult';
+    this._pendingAjaxQuery = {
+    	busy: false,
+    	jqhr: null,
+    	timestamp: null
+    };
 }, {
     /** @static @property __name plugin name */
     __name : 'GetInfoPlugin',
@@ -179,6 +184,9 @@ function() {
             var x = evt.getMouseX();
             var y = evt.getMouseY();
             this.handleGetInfo(lonlat, x, y);
+        },
+        'AfterMapMoveEvent' : function(evt) {
+        	this._cancelAjaxRequest();
         }
     },
     /**
@@ -191,27 +199,104 @@ function() {
         var me = this;
         return this.eventHandlers[event.getName()].apply(this, [event]);
     },
+    
+    _cancelAjaxRequest: function() {
+    	var me = this;
+    	if( !me._pendingAjaxQuery.busy ) {
+    		return;
+    	}
+    	var jqhr = me._pendingAjaxQuery.jqhr;
+    	me._pendingAjaxQuery.jqhr = null;
+    	if( !jqhr) {
+    		return;
+    	}    	
+    	this._sandbox.printDebug("[GetInfoPlugin] Abort jqhr ajax request");
+    	jqhr.abort();
+    	jqhr = null;
+    	me._pendingAjaxQuery.busy = false;
+    },
+    
+    _startAjaxRequest: function(dteMs) {
+    	var me = this;
+		me._pendingAjaxQuery.busy = true;
+		me._pendingAjaxQuery.timestamp = dteMs;
+
+    },
+    
+    _finishAjaxRequest: function() {
+    	var me = this;
+    	me._pendingAjaxQuery.busy = false;
+        me._pendingAjaxQuery.jqhr = null;
+        this._sandbox.printDebug("[GetInfoPlugin] finished jqhr ajax request");
+    },
+    
+    _buildLayerIdList: function()  {
+    	var selected = this._sandbox.findAllSelectedMapLayers();
+        var layerIds = "";
+        
+        for (var i = 0; i < selected.length; i++) {
+        	var layer = selected[i]
+        	/* added 2012-09-27 */        	
+			if( !layer.isVisible() ) {
+				continue;
+			}
+			        	
+            if (layerIds !== "") {
+                layerIds += ",";
+            }
+
+            layerIds += layer.getId();
+        }
+        
+        return layerIds;
+    },
+    
+    _notifyAjaxFailure: function() {
+    	 var me = this;
+    	 me._sandbox.printDebug("[GetInfoPlugin] GetFeatureInfo AJAX failed");
+    },
+    
+    _isAjaxRequestBusy: function() {
+    	var me = this;
+    	return me._pendingAjaxQuery.busy;
+    },
+    
+	/**
+	 * @method handleGetInfo
+	 * send ajax request to get feature info for given location for any visible layers
+	 * 
+	 * backend processes given layer (ids) as WMS GetFeatureInfo or WFS requests 
+	 * (or in the future WMTS GetFeatureInfo)
+	 * 
+	 * aborts any pending ajax query
+	 * 
+	 */            
     handleGetInfo : function(lonlat, x, y) {
         var me = this;
-
-        var me = this;
+        
+        var dte = new Date();
+        var dteMs = dte.getTime();
+        
+        if( me._pendingAjaxQuery.busy && me._pendingAjaxQuery.timestamp &&  
+        	dteMs - me._pendingAjaxQuery.timestamp < 500 ) {
+        	me._sandbox.printDebug("[GetInfoPlugin] GetFeatureInfo NOT SENT (time difference < 500ms)");
+        	return; 
+        } 
+        
+        me._cancelAjaxRequest();
+        me._startAjaxRequest(dteMs);
+		
         var ajaxUrl = this._sandbox.getAjaxUrl(); 
 
         var lon = lonlat.lon;
         var lat = lonlat.lat;
         
-        var mapVO = this._sandbox.getMap();
-        var selected = this._sandbox.findAllSelectedMapLayers();
-        var layerIds = ""
-        for (var i = 0; i < selected.length; i++) {
-            if (layerIds !== "") {
-                layerIds += ",";
-            }
-            layerIds += selected[i].getId();
-        }
+        var mapVO = me._sandbox.getMap();
+        var layerIds = me._buildLayerIdList();
 
         jQuery.ajax({
             beforeSend : function(x) {
+            	me._pendingAjaxQuery.jqhr = x;
                 if (x && x.overrideMimeType) {
                     x.overrideMimeType("application/j-son;charset=UTF-8");
                 }
@@ -225,11 +310,26 @@ function() {
                     }
                     parsed.popupid = me.infoboxId;
                     parsed.lonlat = lonlat;
+                    
+                    if( !me._isAjaxRequestBusy() ) {
+                    	return;
+                    }
+                    
                     me._showFeatures(parsed);
+                    
                 }
+               	
+               	me._finishAjaxRequest();
             },
             error : function() {
-                alert("GetInfo failed.");
+            	me._finishAjaxRequest();
+                me._notifyAjaxFailure();
+            },
+            always: function() {
+            	me._finishAjaxRequest();
+            },
+            complete: function() {
+            	me._finishAjaxRequest();
             },
             data : {
                 layerIds : layerIds,
@@ -381,9 +481,10 @@ function() {
     /**
      * Flattens a GFI response
      *
-     * @param {Object} data
+     * @param {Object} data     
      */
     _parseGfiResponse : function(resp) {
+    	var sandbox = this._sandbox;
         var data = resp.data;
         var coll = [];
         var lonlat = resp.lonlat;
@@ -397,6 +498,8 @@ function() {
         for (var di = 0; di < data.length; di++) {
             var datum = data[di];
             var layerId = datum.layerId;
+            var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+            var layerName =  layer ? layer.getName() : '';
             var type = datum.type;
 
             if (type == "WFS_LAYER") {
@@ -417,23 +520,36 @@ function() {
                             title = pnimi['pnr:kirjoitusasu'];
                         }
                         var pretty = this._json2html(child);
-                        coll.push(pretty);
+                        coll.push({
+                        	markup: pretty,
+                        	layerId: layerId,
+                        	layerName: layerName});
                     }
                 }
             } else {
                 var pretty = this._formatGfiDatum(datum);
                 if (pretty != null) {
-                    coll.push(pretty);
+                    coll.push({
+                        	markup: pretty,
+                        	layerId: layerId,
+                        	layerName: layerName});
                 }
             }
         }
+        
+        /*
+         * returns { fragments: coll, title: title }
+         *  
+         *  fragments is an array of JSON { markup: '<html-markup>', layerName: 'nameforlayer', layerId: idforlayer } 
+         */
+        
         return {
             fragments : coll,
             title : title
         };
     },
 
-    _json2html : function(node) {
+    _json2html : function(node,layerName) {
         var me = this;
         if (node == null) {
             return '';
@@ -491,18 +607,34 @@ function() {
      * @param {Array} data
      */
     _showFeatures : function(data) {
+    	
+    	/* data is { fragments: coll, title: title } */
+    	/* fragments is an array of JSON { markup: '<html-markup>', layerName: 'nameforlayer', layerId: idforlayer } */
         var me = this;
+        var contentHtml = [];
         var content = {};
         content.html = '';
         content.actions = {};
         for (var di = 0; di < data.fragments.length; di++) {
-            content.html += '<div style="background-color: #424343;margin-top: 14px; margin-bottom: 10px;">' + 
-                '<div class="icon-bubble-left">' + 
-                '<div style="vertical-align: middle; padding-top: 2px; padding-right: 4px; text-align:center;"> ' + 
-                (di + 1) + 
-                '</div></div></div>';
-            content.html += data.fragments[di];
+			var fragment =   data.fragments[di]      	
+        	var fragmentTitle = fragment.layerName;
+        	var fragmentMarkup = fragment.markup;
+        	
+        	contentHtml.push('<div>');
+            contentHtml.push( 
+               '<div style="border:1pt solid navy;background-color: #424343;margin-top: 14px; margin-bottom: 10px;height:15px;">' +  
+                 '<div class="icon-bubble-left" style="height:15px;display:inline;float:left;"><div></div></div>'+
+                 '<div style="color:white;float:left;display:inline;margin-left:8px;">'+fragmentTitle +'</div>'+
+               '</div>');
+            
+            if( fragmentMarkup ) {   
+            	contentHtml.push(fragmentMarkup);
+            }
+			contentHtml.push('</div>');
         }
+        
+        content.html = contentHtml.join('');
+
 
         var pluginLoc = this.getMapModule().getLocalization('plugin');
         var myLoc = pluginLoc[this.__name];

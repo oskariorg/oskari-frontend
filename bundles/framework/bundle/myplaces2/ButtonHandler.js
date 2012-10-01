@@ -73,7 +73,10 @@ function(instance) {
         var guestPostfix = ' - ' + this.instance.getLocalization('guest').loginShort;
         for(var tool in this.buttons) {
             var toolLoc = loc[tool];
-            var tooltip = toolLoc.tooltip
+            var tooltip = tool + '.tooltip';
+            if (toolLoc && toolLoc.tooltip) {
+                tooltip = toolLoc.tooltip;
+            }
             if(!user.isLoggedIn()) {
                 tooltip = tooltip + guestPostfix;
             }

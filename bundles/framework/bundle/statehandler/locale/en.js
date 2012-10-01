@@ -4,27 +4,27 @@ Oskari.registerLocalization({
   "value": {
     "title": "StateHandler",
     "desc": "",
-    "reset": "Oletusasetusten palautus",
+    "reset": "Reset defaults",
     "popup": {
-      "label": "Näkymän nimi:",
-      "save": "Tallenna",
-      "cancel": "Peruuta",
-      "error_noname": "Syötä nimi"
+      "label": "Name of map view:",
+      "save": "Save",
+      "cancel": "Cancel",
+      "error_noname": "Type the name"
     },
     "save": {
-      "success": "Näkymä tallennettu",
-      "error": "Tapahtui virhe - Näkymää ei tallennettu",
-      "error_noname": "Nimi ei voi olla tyhjä",
-      "error_illegalchars": "Nimessä on luvattomia merkkejä",
+      "success": "The map view has been saved.",
+      "error": "Error - the map view has not been saved.",
+      "error_noname": "The name field cannot be blank",
+      "error_illegalchars": "The name contains disallowed characters.",
       "title": {
-        "save_view": "Näkymän tallennus"
+        "save_view": "Save map view"
       },
       "msg": {
-        "view_name": "Näkymän nimi"
+        "view_name": "Name of map view:"
       },
       "button": {
-        "save": "Tallenna",
-        "cancel": "Peruuta"
+        "save": "Save",
+        "cancel": "Cancel"
       }
     }
   }

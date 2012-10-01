@@ -122,6 +122,7 @@ function() {
             link.bind('click', function() {
                 // show userguide popup with data
                 me.additionalDataHandler.handler(link, content);
+                return false;
             });
             return link;
         } 
@@ -226,6 +227,7 @@ function() {
                 for(var i = 0; i < selection.length; ++i) {
                     me.select(selection[i][idField], true);
                 }
+                return false;
             };
         };
         for(var i=0; i < fieldNames.length; ++i) {

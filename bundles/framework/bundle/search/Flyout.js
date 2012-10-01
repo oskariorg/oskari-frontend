@@ -14,6 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.Flyout',
 function(instance) {
     this.instance = instance;
     this.container = null;
+    
     this.state = null;
 
     this.template = null;
@@ -27,6 +28,8 @@ function(instance) {
     // last sort parameters are saved so we can change sort direction
     // if the same column is sorted again
     this.lastSort = null;
+    
+    this._searchContainer = null;
 }, {
     /**
      * @method getName
@@ -152,6 +155,7 @@ function(instance) {
         flyout.empty();
 
         var searchContainer = this.template.clone();
+        this._searchContainer = searchContainer;
         
         var searchDescription = searchContainer.find('div.searchDescription');
         searchDescription.html(this.instance.getLocalization('searchDescription'));
@@ -176,6 +180,10 @@ function(instance) {
 
             var resultList = searchContainer.find('div.resultList');
             resultList.empty();
+            var info = searchContainer.find('div.info');
+	        info.empty();
+
+            
             // TODO: make some gif go round and round so user knows
             // something is happening
             var searchKey = field.getValue(true)
@@ -210,13 +218,14 @@ function(instance) {
             return;
         }
 
-        var resultList = jQuery(this.container).find('div.resultList');
+        var resultList = this._searchContainer.find('div.resultList');
+        resultList.empty();
         this.lastResult = result;
         var me = this;
 
-        var info = jQuery(this.container).find('div.info');
-        /*info.empty();*/
-
+        var info = this._searchContainer.find('div.info');
+        info.empty();
+        
         var inst = this.instance;
         // error handling
         if (result.totalCount == -1) {
@@ -278,6 +287,7 @@ function(instance) {
                 } else {
                     headerContainer.parent().addClass('asc');
                 }
+                return false;
             };
         };
         for (var i = 0; i < this.resultHeaders.length; ++i) {
@@ -301,6 +311,7 @@ function(instance) {
         var closureMagic = function(scopedValue) {
             return function() {
                 me._resultClicked(scopedValue);
+                return false;
             };
         };
         var locations = this.lastResult.locations;

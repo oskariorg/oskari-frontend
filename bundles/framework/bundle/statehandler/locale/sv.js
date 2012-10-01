@@ -4,27 +4,27 @@ Oskari.registerLocalization({
   "value": {
     "title": "StateHandler",
     "desc": "",
-    "reset": "Oletusasetusten palautus",
+    "reset": "धterställ standardinställningar",
     "popup": {
-      "label": "Näkymän nimi:",
-      "save": "Tallenna",
-      "cancel": "Peruuta",
-      "error_noname": "Syötä nimi"
+      "label": "Namnet på vyn:",
+      "save": "Lagra",
+      "cancel": "Tillbaka",
+      "error_noname": "Skriv namnet"
     },
     "save": {
-      "success": "Näkymä tallennettu",
-      "error": "Tapahtui virhe - Näkymää ei tallennettu",
-      "error_noname": "Nimi ei voi olla tyhjä",
-      "error_illegalchars": "Nimessä on luvattomia merkkejä",
+      "success": "Vyn har lagrats",
+      "error": "Fel - Vyn har inte lagrats.",
+      "error_noname": "Namnet kan inte vara tomt",
+      "error_illegalchars": "I namnet ingår otillåtna tecken",
       "title": {
-        "save_view": "Näkymän tallennus"
+        "save_view": "Lagra vy"
       },
       "msg": {
-        "view_name": "Näkymän nimi"
+        "view_name": "Namnet på vyn"
       },
       "button": {
-        "save": "Tallenna",
-        "cancel": "Peruuta"
+        "save": "Lagra",
+        "cancel": "Tillbaka"
       }
     }
   }

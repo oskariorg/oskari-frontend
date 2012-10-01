@@ -9,6 +9,7 @@ Oskari.registerLocalization({
       "abstract": "/geonetwork/srv/sv/metadata.show.portti.abstract?",
       "inspire": "/geonetwork/srv/sv/metadata.show.portti?",
       "jhs": "/geonetwork/srv/sv/metadata.show.portti.jhs158?",
+      "pdf": "/catalogue/portti-metadata-printout-service/MetadataPrintoutServlet?lang=sv&title=METADATAUTSKRIFT&metadataresource",
       "xml": "/geonetwork/srv/sv/iso19139.xml?",
       "schemas": "/geonetwork/srv/sv/metadata.show.portti.skeemat?"
     },
@@ -26,45 +27,54 @@ Oskari.registerLocalization({
       "xml": "XML",
       "map": "Omfattning",
       "pdf": "Utskrift",
-      "select_metadata_prompt": "VÃ¤lj metadata...",
+      "select_metadata_prompt": "Välj metadata genom att klicka på ikonerna",
       "metadata_printout_title": "METATIETOTULOSTE",
-      "linkto": "AnvÃ¤nd denna lÃ¤nk fÃ¶r att lÃ¤nka till den hÃ¤r metadatan",
+      "linkto": "Metadatalänk",
       "tabs": {
         "abstract": {
           "abstract": "",
-          "jhs": "Näytä JHS metatieto",
-          "inspire": "Näytä INSPIRE metatieto",
-          "xml": "Näytä ISO 19139 XML"
+          "jhs": "Visa JHS",
+          "inspire": "Visa INSPIRE",
+          "xml": {
+            "text": "Öppna ISO 19139 XML",
+            "target": "_blank"
+          },
+          "pdf": {
+            "text": "Öppna PDF-utskrift",
+            "target": "_blank"
+          }
         },
         "jhs": {
-          "abstract": "Näytä vain perustiedot",
+          "abstract": "Visa basuppgifter",
           "jhs": "",
-          "inspire": "Näytä INSPIRE metatieto",
-          "xml": "Näytä ISO 19139 XML"
+          "inspire": "Visa INSPIRE",
+          "xml": {
+            "text": "Öppna ISO 19139 XML",
+            "target": "_blank"
+          },
+          "pdf": {
+            "text": "Öppna PDF-utskrift",
+            "target": "_blank"
+          }
         },
         "inspire": {
-          "abstract": "Näytä vain perustiedot",
-          "jhs": "Näytä JHS metatieto",
+          "abstract": "Visa basuppgifter",
+          "jhs": "Visa JHS",
           "inspire": "",
-          "xml": "Näytä ISO 19139 XML"
-        },
-        "xml": {
-          "abstract": "Näytä vain perustiedot",
-          "jhs": "Näytä JHS metatieto",
-          "inspire": "Näytä INSPIRE metatieto",
-          "xml": ""
-        },
-        "pdf": {
-          "abstract": "Näytä vain perustiedot",
-          "jhs": "Näytä JHS metatieto",
-          "inspire": "Näytä INSPIRE metatieto",
-          "xml": "Näytä ISO 19139 XML"
+          "xml": {
+            "text": "Öppna ISO 19139 XML",
+            "target": "_blank"
+          },
+          "pdf": {
+            "text": "Öppna PDF-utskrift",
+            "target": "_blank"
+          }
         }
       }
     },
     "tile": {
       "title": "Metadata",
-      "tooltip": "?"
+      "tooltip": "Metadata innehåller uppgifter om användningsvillkor och tillgång till datamaterial."
     }
   }
 });

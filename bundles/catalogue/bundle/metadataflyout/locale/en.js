@@ -9,6 +9,7 @@ Oskari.registerLocalization({
       "abstract": "/geonetwork/srv/en/metadata.show.portti.abstract?",
       "inspire": "/geonetwork/srv/en/metadata.show.portti?",
       "jhs": "/geonetwork/srv/en/metadata.show.portti.jhs158?",
+      "pdf": "/catalogue/portti-metadata-printout-service/MetadataPrintoutServlet?lang=sv&title=METADATAPRINTOUT&metadataresource",
       "xml": "/geonetwork/srv/en/iso19139.xml?",
       "schemas": "/geonetwork/srv/en/metadata.show.portti.skeemat?"
     },
@@ -26,34 +27,46 @@ Oskari.registerLocalization({
       "xml": "XML",
       "map": "Geographic Extent",
       "pdf": "Printout",
-      "select_metadata_prompt": "Select metadata by clicking one of the icons.",
+      "select_metadata_prompt": "Select metadata by clicking the icons.",
       "metadata_printout_title": "METADATA PRINTOUT",
-      "linkto": "Link to this Metadata",
+      "linkto": "Link to this metadata",
       "tabs": {
         "abstract": {
           "abstract": "",
-          "jhs": "Show JHS metadata",
-          "inspire": "Show INSPIRE metadata",
+          "jhs": "Show JHS",
+          "inspire": "Show INSPIRE",
           "xml": {
-            "text": "Näytä ISO 19139 XML",
+            "text": "Open ISO 19139 XML",
+            "target": "_blank"
+          },
+          "pdf": {
+            "text": "Open PDF-printout",
             "target": "_blank"
           }
         },
         "jhs": {
-          "abstract": "Show Abstract",
+          "abstract": "Show abstract",
           "jhs": "",
-          "inspire": "Show INSPIRE metadata",
+          "inspire": "Show INSPIRE",
           "xml": {
-            "text": "Show ISO 19139 XML",
+            "text": "Open ISO 19139 XML",
+            "target": "_blank"
+          },
+          "pdf": {
+            "text": "Open PDF-printout",
             "target": "_blank"
           }
         },
         "inspire": {
-          "abstract": "Show Abstract",
-          "jhs": "Show JHS metadata",
+          "abstract": "Show abstract",
+          "jhs": "Show JHS",
           "inspire": "",
           "xml": {
-            "text": "Show ISO 19139 XML",
+            "text": "Open ISO 19139 XML",
+            "target": "_blank"
+          },
+          "pdf": {
+            "text": "Open PDF-printout",
             "target": "_blank"
           }
         }
@@ -61,7 +74,7 @@ Oskari.registerLocalization({
     },
     "tile": {
       "title": "Metadata",
-      "tooltip": "?"
+      "tooltip": "Metadata contains information about terms of use and availability of data."
     }
   }
 });

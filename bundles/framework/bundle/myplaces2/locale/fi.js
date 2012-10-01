@@ -39,11 +39,11 @@ Oskari.registerLocalization({
       "save": "Tallenna",
       "movePlaces": "Siirrä kohteet ja poista",
       "deleteCategory": "Poista",
-      "deleteCategoryAndPlaces": "Poista kohteet"
+      "deleteCategoryAndPlaces": "Poista kohteineen"
     },
     "placeform": {
       "title": "Kohteen tiedot",
-      "tooltip": "Kun lisäät kohteen kartalle, se tallentuu Omiin tietoihisi. Anna kohteelle nimi ja kuvaus. Voit valita, mille karttatasolle tallennat kohteen tai lisätä uuden karttatason valitsemalla 'Uusi taso…' karttatasojen pudotusvalikosta.",
+      "tooltip": "Kun lisäät kohteen kartalle, se tallentuu Omiin tietoihisi. Anna kohteelle nimi ja kuvaus. Voit valita, mille karttatasolle tallennat kohteen tai lisätä uuden karttatason valitsemalla 'Uusi taso' karttatasojen pudotusvalikosta.",
       "placename": {
         "placeholder": "Anna kohteelle nimi"
       },
@@ -75,7 +75,7 @@ Oskari.registerLocalization({
         "area": {
           "label": "Alue",
           "fillcolor": "Täyttöväri",
-          "linecolor": "Viivanväri",
+          "linecolor": "Viivan väri",
           "size": "Viivan paksuus"
         }
       },
@@ -96,9 +96,9 @@ Oskari.registerLocalization({
       },
       "categoryDelete": {
         "title": "Karttatason poisto",
-        "deleteConfirmMove": "Karttataso: \"{0}\" sisältää kohteita {1} kpl. Haluatko poistaa tason ja siirtää sen kohteet oletuskarttatasolle \"{2}\"?",
-        "deleteConfirm": "Haluatko poistaa karttatason \"{0}\"?",
-        "deleted": "Poistettu"
+        "deleteConfirmMove": "Karttataso: {0} sisältää kohteita {1} kpl. Haluatko poistaa tason ja siirtää sen kohteet oletuskarttatasolle {2}?",
+        "deleteConfirm": "Haluatko poistaa karttatason {0}?",
+        "deleted": "Karttataso poistettu."
       },
       "error": {
         "addCategory": "Tason tallennus epäonnistui. Kohdetta ei ole tallennettu.",
@@ -106,7 +106,7 @@ Oskari.registerLocalization({
         "savePlace": "Kohteen tallentaminen ei onnistunut.",
         "title": "Virhe!",
         "deleteCategory": "Virhe poistossa!",
-        "deleteDefault": "Oletuskarttatasoa ei voi poistaa"
+        "deleteDefault": "Oletuskarttatasoa ei voi poistaa."
       }
     },
     "validation": {
@@ -114,7 +114,7 @@ Oskari.registerLocalization({
       "placeName": "Kohteen nimi puuttuu.",
       "categoryName": "Tason nimi puuttuu.",
       "placeNameIllegal": "Kohteen nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
-      "descIllegal" : "Kohteen kuvauksessa on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
+      "descIllegal": "Kohteen kuvauksessa on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
       "categoryNameIllegal": "Tason nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
       "dotSize": "Pisteen koko ei ole sallituissa rajoissa (1-50).",
       "dotColor": "Pisteen väri virheellinen.",

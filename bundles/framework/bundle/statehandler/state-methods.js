@@ -40,15 +40,21 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
      * implementation.
      */
     resetState : function() {
+    	var me = this;
+    	me._historyEnabled = false;
+        me._historyPrevious = [];
+	    me._historyNext = [];
+
+    	
         for(var pluginName in this._pluginInstances) {
-            this.sandbox.printDebug('[' + this.getName() + ']' + ' resetting state on ' + pluginName);
-            this._pluginInstances[pluginName].resetState();
+            me.sandbox.printDebug('[' + me.getName() + ']' + ' resetting state on ' + pluginName);
+            me._pluginInstances[pluginName].resetState();
         }
         // reinit with startup params
-        var me = this;
+     
 		// get initial state from server
-    	this._currentViewId = this._defaultViewId;
-		if(this._startupState) {
+    	me._currentViewId = this._defaultViewId;
+		if(me._startupState) {
             me._resetComponentsWithNoStateData(me.useState(this._startupState));
 		}
 		else {
@@ -60,13 +66,19 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
                 success : function(data) {
                     me._startupState = data;
                     me._resetComponentsWithNoStateData(me.useState(data));
+                    me._historyEnabled = true;
                 },
                 error : function() {
                     alert('error loading conf');
+                    me._historyEnabled = true;
+                },
+                complete: function() {
+                	me._historyEnabled = true;
                 }
             });
 		}
         
+        me._historyEnabled = true;
     },
     /**
      * @method _resetComponentsWithNoStateData
@@ -140,6 +152,92 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
      */
     getSavedState : function(pluginName) {
         return this._pluginInstances[pluginName].getState();
+    },
+    
+    _stateComparators: [
+     	{ 
+     		rule: 'nohistory',
+     		cmp: function(prevState,nextState) {
+    			if( !prevState ) {
+    				return true;
+	    		}
+    		}
+    	},{
+    		rule: 'location',
+    		cmp: function(prevState,nextState) {
+    			if( prevState.east != nextState.east ||
+    			prevState.north != nextState.north 
+    				) {
+    				return true;
+    			}	
+	    		if( prevState.zoom != nextState.zoom ) {
+    				return true;
+    			}
+    		}
+    	},{
+    		rule: 'layers',
+    		cmp: function(prevState,nextState) {
+    			var me = this;
+    			var prevLayers = prevState.selectedLayers;
+    			var nextLayers = nextState.selectedLayers;
+    			
+	    		if( prevLayers.length != nextLayers.length ) {
+    				return true;
+    			}
+    			for( var ln = 0 ; ln < nextLayers.length;ln++ ) {
+    				var prevLayer = prevLayers[ln];
+    				var nextLayer = nextLayers[ln];
+    				
+    				me.sandbox.printDebug("[StateHandler] comparing layer state "+prevLayer.id +" vs "+nextLayer.id);
+    				
+    				
+	    			if( prevLayer.id !== nextLayer.id ) {
+    					return true;
+    				}
+    				if( prevLayer.opacity !== nextLayer.opacity ) {
+	    				return true;
+    				}
+    				if( prevLayer.hidden !== nextLayer.hidden ) {
+    					return true;
+    				}
+    				if( prevLayer.style !== nextLayer.style ) {
+    					return true;
+    				}
+    			}
+    			
+    			return false;
+    		}
+    	}
+    ],
+    
+    _compareState: function(prevState,nextState) {
+    	var me = this;
+    	for( var sc = 0 ; sc < me._stateComparators.length ; sc++ ) {
+    		var cmp = me._stateComparators[sc];
+    		me.sandbox.printDebug("[StateHandler] comparing state "+cmp.rule);
+    		if( cmp.cmp.apply(this,[prevState,nextState])) {
+    			me.sandbox.printDebug("[StateHandler] comparing state MATCH "+cmp.rule);
+    			return true;
+    		}
+    	}
+    	return false;
+    },
+    
+    _pushState: function() {
+    	var me = this;
+    	if (me._historyEnabled === true) {
+			   var history = me._historyPrevious;
+               var mapfull = me.sandbox.getStatefulComponents()['mapfull'];
+               if (mapfull) {
+                  var state = mapfull.getState();
+                  
+                  var prevState = history.length == 0 ? null : history[history.length-1];
+                  if( me._compareState( prevState, state) ) {
+                  	me._historyPrevious.push(state);
+                  	me._historyNext = [];
+                  }
+               }
+        }
     }
 });
 

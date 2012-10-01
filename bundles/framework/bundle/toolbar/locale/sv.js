@@ -10,17 +10,20 @@ Oskari.registerLocalization({
         "title": "Länk till kartvyn"
       },
       "print": {
-        "tooltip": "Print"
-      }
+        "tooltip": "Skriv ut"
+      },
+      "history": {
+        "reset": "Tillbaka till standardvyn",
+        "back": "Föregående",
+        "next": "Nästa"
+      },
+      "pan": "Flytta kartan",
+      "zoom": "Zooma in"
     },
-    "measure" : {
-    	"title" : "?",
-    	"close" : "Stäng",
-    	"guidance" : {
-    		"measureline" : "???",
-    		"measurearea" : "???"
-    	}
-
+    "measure": {
+      "title": "Mät",
+      "line": "Mät avstånd",
+      "area": "Mät areal"
     }
   }
 });
