@@ -491,8 +491,9 @@ jQuery(document).ready(function() {
         url : ajaxUrl + 'action_route=GetAppSetup&viewId=1',
         success : function(appSetup) {
             if (appSetup.startupSequence && appSetup.configuration) {
-                Oskari.bundle_facade.playBundle({ 'state' : {}, 'conf' : {} },
-                                               function() {});
+                Oskari.bundle_facade.playBundle(
+                    {'guidedtour' : { 'state' : {}, 'conf' : {} }},
+                    function() {});
                 // appSetup.configuration['guidedtour'] =
                 //     { 'state' : {}, 'conf' : {} };
 
