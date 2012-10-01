@@ -226,7 +226,7 @@ function() {
             if( order === 1) {
             	out = measure.toFixed(3) + " " + units;
            } else if( order ===2) {
-            	out = measure.toFixed(3) + " " + units+"2";
+            	out = measure.toFixed(3) + " " + units + "<sup>2</sup>";
             }   
             /*sandbox.printDebug(out + " " + ( finished ? "FINISHED" : "CONTINUES"));*/
             

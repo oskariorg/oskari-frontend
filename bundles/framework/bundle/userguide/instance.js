@@ -111,13 +111,28 @@ function() {
         
         // get help content
         var helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', sandbox);
-        var helpContentPart = me.getLocalization('help').contentPart;
+        var helpContentPart = 'help.contentPart';
+        if (me.getLocalization('help') &&
+            me.getLocalization('help').contentPart) {
+            helpContentPart = me.getLocalization('help').contentPart;
+        }
+        var tagsTxt = 'help.tags';
+        if (this.getLocalization('help') &&
+            this.getLocalization('help').tags) {
+            tagsTxt = this.getLocalization('help').tags;
+        }
+
         helper.getHelpArticle(
-            this.getLocalization('help').tags, 
+            tagsTxt, 
             function(isSuccess, pContent) {
                 var content = pContent;
+                var errorTxt = 'error.generic';
+                if (me.getLocalization('error') && 
+                    me.getLocalization('error').generic) {
+                    errorTxt = me.getLocalization('error').generic;
+                }
                 if(!isSuccess) {
-                    content = me.getLocalization('error').generic;
+                    content = errorTxt;
                 }
                 else if(content[helpContentPart]){
                     content = content[helpContentPart];

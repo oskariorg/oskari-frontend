@@ -4,20 +4,22 @@ Oskari.registerLocalization({
   "value": {
     "title": "Omat tiedot",
     "desc": "Omat tiedot",
-    "notLoggedIn": "Omiin tietoihin voit tallentaa omia karttanäkymiä ja kohteita sekä nähdä muille sivustoille julkaisemasi kartat.  <a href='/web/fi/login'>Kirjaudu palveluun</a>.",
+    "notLoggedIn": "Omiin tietoihin voit tallentaa omia karttanäkymiä ja kohteita sekä nähdä muille sivustoille julkaisemasi kartat. <a href='/web/fi/login'>Kirjaudu palveluun</a>.",
     "tabs": {
       "myplaces": {
         "title": "Kohteet",
         "nocategories": "Et ole vielä tallentanut kohteita.",
         "editCategory": "Muokkaa tasoa",
         "deleteCategory": "Poista taso",
+        "edit": "Muokkaa",
+        "delete": "Poista",
         "grid": {
           "name": "Nimi",
           "desc": "Kuvaus",
           "createDate": "Luotu",
           "updateDate": "Päivitetty",
-          "edit": "Muokkaa",
-          "delete": "Poista"
+          "edit": " ",
+          "delete": " "
         },
         "notification": {
           "delete": {
@@ -70,9 +72,9 @@ Oskari.registerLocalization({
         },
         "error": {
           "title": "Virhe!",
-          "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin",
+          "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin.",
           "notsaved": "Näkymän tallentaminen epäonnistui.",
-          "notdeleted": "Näkymän poisto epäonnistui",
+          "notdeleted": "Näkymän poisto epäonnistui.",
           "makePublic": "Näkymän muuttaminen julkiseksi epäonnistui. Yritä myöhemmin uudelleen.",
           "makePrivate": "Näkymän muuttaminen yksityiseksi epäonnistui. Yritä myöhemmin uudelleen.",
           "loadfailed": "Näkymien lataus epäonnistui."
@@ -86,7 +88,7 @@ Oskari.registerLocalization({
         "delete": "Poista",
         "grid": {
           "name": "Nimi",
-          "domain": "Julkaisupaikka",
+          "domain": "Kartan tiedot",
           "publish": "Tila",
           "edit": " ",
           "delete": " "
@@ -132,9 +134,9 @@ Oskari.registerLocalization({
         "nickName": "Nimimerkki",
         "email": "Sähköpostiosoite",
         "changeInfo": "Muuta tietoja",
-        "changeInfoUrl": "/web/fi/profiili",
         "changePassword": "Muuta salasana",
-        "removeAccount": "Poista tili"
+        "removeAccount": "Poista tili",
+        "changeInfoUrl": "/web/fi/profiili"
       }
     },
     "button": {

@@ -5,22 +5,32 @@ Oskari.registerLocalization({
     "buttons": {
       "link": {
         "tooltip": "Link",
-        "prefixUrl": "www.paikkatietoikkuna.fi/web/fi/kartta?",
+        "prefixUrl": "www.paikkatietoikkuna.fi/web/en/map-window?",
         "ok": "Ok",
-        "title": "Url"
+        "title": "Link to map view"
       },
       "print": {
         "tooltip": "Print"
+      },
+      "history": {
+        "reset": "Return to default view",
+        "back": "Back",
+        "next": "Next"
+      },
+      "pan": "Pan map view",
+      "zoom": "Zoom in",
+      "measure": {
+        "line": "Measure distance",
+        "area": "Measure area"
       }
     },
     "measure" : {
-    	"title" : "Measurement results",
-    	"close" : "Close",
-    	"guidance" : {
-    		"measureline" : "???",
-    		"measurearea" : "???"
-    	}
-
+        "title" : "Mittaustulokset",
+        "close" : "Lopeta",
+        "guidance" : {
+            "measureline" : "Osoita mitattava matka kartalta. Lopeta mittaaminen hiiren kaksoisnapautuksella.",
+            "measurearea" : "Osoita mitattava alue kartalta. Lopeta mittaaminen hiiren kaksoisnapautuksella."
+        }
     }
   }
 });

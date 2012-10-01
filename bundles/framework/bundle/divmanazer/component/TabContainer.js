@@ -55,6 +55,7 @@ function(pEmptyMsg) {
         // bind tab changing
         link.bind('click', function() {
             me.select(panel);
+            return false;
         });
     },
     /**

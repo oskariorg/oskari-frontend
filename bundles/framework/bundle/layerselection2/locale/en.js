@@ -2,50 +2,50 @@ Oskari.registerLocalization({
   "lang": "en",
   "key": "LayerSelection",
   "value": {
-    "title": "Valitut karttatasot",
+    "title": "Selected map layers",
     "desc": "",
     "layer": {
-      "style": "Tyyli",
-      "show": "Näytä",
-      "hide": "Piilota",
-      "hidden": "Karttataso on tilapäisesti piilotettu",
-      "out-of-scale": "Tällä karttatasolla ei ole aineistoa valitulla mittakaavatasolla.",
-      "move-to-scale": "Siirry sopivalle mittakaavatasolle",
-      "out-of-content-area": "Tällä karttatasolla ei ole aineistoa tässä sijainnissa",
-      "move-to-content-area": "Siirry kattavuusalueen keskipisteeseen",
-      "description": "Kuvaus",
+      "style": "Style",
+      "show": "Show",
+      "hide": "Hide",
+      "hidden": "The map has been temporarily hidden.",
+      "out-of-scale": "Data in this map layer cannot be shown at the selected scale level.",
+      "move-to-scale": "Go to a suitable scale level.",
+      "out-of-content-area": "The map layer contais no data at this location.",
+      "move-to-content-area": "Move to the centre of the content area.",
+      "description": "Description",
       "rights": {
-        "notavailable": "Ei julkaistavissa",
-        "guest": "Kirjaudu sisään julkaistaksesi karttatason",
-        "loggedin": "Julkaistavissa",
-        "official": "Viranomaiskäyttöön julkaistavissa",
-        "login-url": "<a href='/web/fi/login'>Kirjaudu sis&auml;&auml;n julkaistaksesi</a>",
-        "need-login": "Vaatii kirjautumisen",
+        "notavailable": "Publication prohibited.",
+        "guest": "Log in to publish this map layer.",
+        "loggedin": "Publication permitted",
+        "official": "Publication permitted for use by authorities.",
+        "login-url": "<a href='/web/en/login'>Log in</a>",
+        "need-login": "You must log in.",
         "can_be_published_by_provider": {
-          "label": "Tiedontuottajana julkaistavissa",
-          "tooltip": "Karttatason julkaisemiseen tarvitaan tiedontuottajan oikeudet. Mikäli olet tiedontuottaja, ota yhteyttä Paikkatietoikkunan tukipalveluun ja pyydä julkaisuoikeuksia"
+          "label": "Publication permitted for data providers.",
+          "tooltip": "Data provider rights are required to publish this map layer. If you are a data provider, please contact the support service of Paikkatietoikkuna and request rights to publish."
         },
         "can_be_published": {
-          "label": "Julkaistavissa",
-          "tooltip": "Karttatason voi julkaista upotetussa karttaikkunassa ilman käyttömäärärajoitusta"
+          "label": "Publication permitted",
+          "tooltip": "The map layer can be published in an embedded map window without limiting the number of users."
         },
         "can_be_published_map_user": {
-          "label": "Julkaistavissa",
-          "tooltip": "Karttatason voi julkaista upotetussa karttaikkunassa. Viikoittainen käyttömäärä voi olla rajoitettu"
+          "label": "Publication permitted",
+          "tooltip": "The map layer can be published in an embedded map window and the number of users per week may be limited."
         },
         "no_publication_permission": {
-          "label": "Ei julkaistavissa",
-          "tooltip": "Karttatason julkaisemiseen upotetussa karttaikkunassa ei ole tiedontuottajan lupaa"
+          "label": "Publication prohibited.",
+          "tooltip": "The data provider has not granted permission to publish this map layer in an embedded map window."
         },
         "can_be_published_by_authority": {
-          "label": "Julkaistavissa",
-          "tooltip": "Karttatason voi julkaista upotetussa karttaikkunassa ilman käyttömäärärajoitusta"
+          "label": "Publication permitted",
+          "tooltip": "The map layer can be published in an embedded map window without usage limits."
         }
       },
       "tooltip": {
-        "type-base": "Taustakartta",
-        "type-wms": "Karttataso",
-        "type-wfs": "Tietotuote"
+        "type-base": "Background map",
+        "type-wms": "Map layer",
+        "type-wfs": "Data product"
       }
     }
   }

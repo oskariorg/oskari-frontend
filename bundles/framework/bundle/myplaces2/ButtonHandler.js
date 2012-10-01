@@ -69,11 +69,10 @@ function(instance) {
     init : function() {
         var loc = this.instance.getLocalization('tools');
         var user = this.instance.sandbox.getUser();
-        // different tooltip for guests?
+        // different tooltip for guests - "Please log in to use"
         var guestPostfix = ' - ' + this.instance.getLocalization('guest').loginShort;
         for(var tool in this.buttons) {
-            var toolLoc = loc[tool];
-            var tooltip = toolLoc.tooltip
+            var tooltip = loc[tool]['tooltip'];
             if(!user.isLoggedIn()) {
                 tooltip = tooltip + guestPostfix;
             }

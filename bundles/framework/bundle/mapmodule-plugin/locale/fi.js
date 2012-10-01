@@ -28,9 +28,6 @@ Oskari.registerLocalization({
         "title": "Karttatasot",
         "chooseDefaultBaseLayer": "Valitse karttapohja"
       },
-      "GetInfoPlugin": {
-        "title": "Kohdetiedot"
-      },
       "SearchPlugin": {
         "placeholder": "Hae paikkoja/osoitteita",
         "search": "Hae",
@@ -40,6 +37,9 @@ Oskari.registerLocalization({
         "column_name": "Nimi",
         "column_village": "Kunta",
         "column_type": "Tyyppi"
+      },
+      "GetInfoPlugin": {
+        "title": "Kohdetiedot"
       }
     }
   }

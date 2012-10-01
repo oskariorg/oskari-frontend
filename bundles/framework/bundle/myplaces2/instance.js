@@ -46,8 +46,13 @@ function() {
         if(!this._localization) {
             this._localization = Oskari.getLocalization(this.getName());
         }
-        if(key) {
-            return this._localization[key];
+        if (key) {
+            if (this._localization &&
+                this._localization[key]) {
+                return this._localization[key];
+            } else {
+                return key;
+            }
         }
         return this._localization;
     },

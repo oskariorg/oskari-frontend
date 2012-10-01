@@ -4,23 +4,23 @@ Oskari.registerLocalization({
   "value": {
     "title": "Paikkahaku",
     "desc": "",
+    "searchDescription": "Hae paikannimeä, osoitetta tai kiinteistötunnusta.",
     "searchButton": "Hae",
-    "searchDescription" : "Syötä hakukenttään paikannimi, osoite tai kiinteistötunnus.",
     "searchResultCount": "Hakusi palautti ",
     "searchResultCount2": " tulosta",
     "searchResultDescriptionMoreResults": "Tarkentamalla hakua voit tiivistää tulosten joukkoa.",
     "searchResultDescriptionOrdering": "Voit järjestää tuloksia alla olevassa taulukossa klikkaamalla sarakeotsikkoa.",
     "searchResults": "Tulokset: ",
-    "searchResultsDescription": " hakutulosta haulla ",
+    "searchResultsDescription": " hakutulosta haulla",
     "searchservice_search_alert_title": "Virhe: ",
-    "cannot_be_empty": "Hakusana ei voi olla",
-    "too_short": "Hakusana on liian lyhyt.",
-    "too_many_stars": "Liian monta *-merkkiä",
     "searchservice_search_not_found_anything_text": "Haulla ei löytynyt yhtään tulosta.",
+    "too_short": "Hakusana on liian lyhyt.",
+    "cannot_be_empty": "Hakusana ei voi olla tyhjä.",
+    "too_many_stars": "Liian monta *-merkkiä.",
     "grid": {
-       "name" : "Nimi",
-       "village" : "Kunta",
-       "type" : "Tyyppi"   
+      "name": "Nimi",
+      "village": "Kunta",
+      "type": "Tyyppi"
     }
   }
 });

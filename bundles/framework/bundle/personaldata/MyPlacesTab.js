@@ -58,12 +58,14 @@ function(instance, localization) {
                 return function() {
                     var request = me.instance.sandbox.getRequestBuilder('MyPlaces.EditCategoryRequest')(id);
                     me.instance.sandbox.request(me.instance, request);
+                    return false;
                 };
             }
             var deletelinkClosure = function(id) {
                 return function() {
                     var request = me.instance.sandbox.getRequestBuilder('MyPlaces.DeleteCategoryRequest')(id);
                     me.instance.sandbox.request(me.instance, request);
+                    return false;
                 };
             }
             
@@ -208,6 +210,7 @@ function(instance, localization) {
             link.append(name);
             link.bind('click', function() {
                 me._showPlace(data.geometry,data.categoryId);
+                return false;
             });
             return link;
         };
@@ -218,6 +221,7 @@ function(instance, localization) {
             link.append(name);
             link.bind('click', function() {
                 me._editPlace(data);
+                return false;
             });
             return link;
         };
@@ -228,6 +232,7 @@ function(instance, localization) {
             link.append(name);
             link.bind('click', function() {
                 me._deletePlace(data);
+                return false;
             });
             return link;
         };
@@ -265,8 +270,8 @@ function(instance, localization) {
                 'desc' : places[i].getDescription(),
                 'geometry' : places[i].getGeometry(),
                 'categoryId' : places[i].getCategoryID(),
-                'edit' : this.loc.grid['edit'],
-                'delete' : this.loc.grid['delete'],
+                'edit' : this.loc['edit'],
+                'delete' : this.loc['delete'],
                 'createDate' : this._formatDate(service, places[i].getCreateDate()),
                 'updateDate' : this._formatDate(service, places[i].getUpdateDate())
             });

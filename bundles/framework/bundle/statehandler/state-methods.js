@@ -40,15 +40,21 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
      * implementation.
      */
     resetState : function() {
+    	var me = this;
+    	me._historyEnabled = false;
+        me._historyPrevious = [];
+	    me._historyNext = [];
+
+    	
         for(var pluginName in this._pluginInstances) {
-            this.sandbox.printDebug('[' + this.getName() + ']' + ' resetting state on ' + pluginName);
-            this._pluginInstances[pluginName].resetState();
+            me.sandbox.printDebug('[' + me.getName() + ']' + ' resetting state on ' + pluginName);
+            me._pluginInstances[pluginName].resetState();
         }
         // reinit with startup params
-        var me = this;
+     
 		// get initial state from server
-    	this._currentViewId = this._defaultViewId;
-		if(this._startupState) {
+    	me._currentViewId = this._defaultViewId;
+		if(me._startupState) {
             me._resetComponentsWithNoStateData(me.useState(this._startupState));
 		}
 		else {
@@ -60,13 +66,19 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
                 success : function(data) {
                     me._startupState = data;
                     me._resetComponentsWithNoStateData(me.useState(data));
+                    me._historyEnabled = true;
                 },
                 error : function() {
                     alert('error loading conf');
+                    me._historyEnabled = true;
+                },
+                complete: function() {
+                	me._historyEnabled = true;
                 }
             });
 		}
         
+        me._historyEnabled = true;
     },
     /**
      * @method _resetComponentsWithNoStateData
@@ -141,6 +153,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
     getSavedState : function(pluginName) {
         return this._pluginInstances[pluginName].getState();
     }
+    
+   
 });
 
 	

@@ -2,13 +2,21 @@ Oskari.registerLocalization({
   "lang": "sv",
   "key": "userinterface.UserGuide",
   "value": {
-    "title": "Guide",
+    "title": "Hjälp",
     "desc": "",
     "flyout": {
-      "title": "Guide"
+      "title": "Hjälp"
     },
     "tile": {
-      "title": "Guide"
+      "title": "Bruksanvisningar"
+    },
+    "error": {
+      "title": "",
+      "generic": ""
+    },
+    "help": {
+      "tags": "karttaikkuna,pikaohje",
+      "contentPart": "body"
     }
   }
 });

@@ -2,50 +2,50 @@ Oskari.registerLocalization({
   "lang": "sv",
   "key": "LayerSelection",
   "value": {
-    "title": "Valitut karttatasot",
+    "title": "Valda kartlager",
     "desc": "",
     "layer": {
-      "style": "Tyyli",
-      "show": "Näytä",
-      "hide": "Piilota",
-      "hidden": "Karttataso on tilapäisesti piilotettu",
-      "out-of-scale": "Tällä karttatasolla ei ole aineistoa valitulla mittakaavatasolla.",
-      "move-to-scale": "Siirry sopivalle mittakaavatasolle",
-      "out-of-content-area": "Tällä karttatasolla ei ole aineistoa tässä sijainnissa",
-      "move-to-content-area": "Siirry kattavuusalueen keskipisteeseen",
-      "description": "Kuvaus",
+      "style": "Stil",
+      "show": "Visa",
+      "hide": "Göm",
+      "hidden": "Kartan är tillfälligt gömd.",
+      "out-of-scale": "Data som ingår i detta kartlager kan inte visas på den valda skalnivån.",
+      "move-to-scale": "Gå till en lämplig skalnivå.",
+      "out-of-content-area": "Detta kartlager saknar innehåll vid dessa koordinater.",
+      "move-to-content-area": "Gå till täckningsområdets mittpunkt.",
+      "description": "Beskrivning",
       "rights": {
-        "notavailable": "Ei julkaistavissa",
-        "guest": "Kirjaudu sisään julkaistaksesi karttatason",
-        "loggedin": "Julkaistavissa",
-        "official": "Viranomaiskäyttöön julkaistavissa",
-        "login-url": "<a href='/web/fi/login'>Kirjaudu sis&auml;&auml;n julkaistaksesi</a>",
-        "need-login": "Vaatii kirjautumisen",
+        "notavailable": "Får inte publiceras.",
+        "guest": "Logga in för att avskilja och inbädda detta kartlager.",
+        "loggedin": "Får publiceras",
+        "official": "Får publiceras för myndighetsbruk.",
+        "login-url": "<a href='/web/sv/login'>Logga in</a>",
+        "need-login": "Du måste logga in.",
         "can_be_published_by_provider": {
-          "label": "Tiedontuottajana julkaistavissa",
-          "tooltip": "Karttatason julkaisemiseen tarvitaan tiedontuottajan oikeudet. Mikäli olet tiedontuottaja, ota yhteyttä Paikkatietoikkunan tukipalveluun ja pyydä julkaisuoikeuksia"
+          "label": "Får publiceras av dataproducenter",
+          "tooltip": "För att publicera detta kartlager krävs dataproducenträttigheter. Om du är dataproducent, kontakta Paikkatietoikkunas stödtjänst och be om publiceringsrättigheter."
         },
         "can_be_published": {
-          "label": "Julkaistavissa",
-          "tooltip": "Karttatason voi julkaista upotetussa karttaikkunassa ilman käyttömäärärajoitusta"
+          "label": "Får publiceras",
+          "tooltip": "Kartlagret får publiceras i ett inbäddat kartfönster utan att begränsa antalet användare."
         },
         "can_be_published_map_user": {
-          "label": "Julkaistavissa",
-          "tooltip": "Karttatason voi julkaista upotetussa karttaikkunassa. Viikoittainen käyttömäärä voi olla rajoitettu"
+          "label": "Får publiceras",
+          "tooltip": "Kartlagret får publiceras i ett inbäddat kartfönster. Antalet användare per vecka kan vara begränsat."
         },
         "no_publication_permission": {
-          "label": "Ei julkaistavissa",
-          "tooltip": "Karttatason julkaisemiseen upotetussa karttaikkunassa ei ole tiedontuottajan lupaa"
+          "label": "Får inte publiceras.",
+          "tooltip": "Dataproducenten har inte beviljat tillstånd att publicera kartlagret i ett inbäddat kartfönster."
         },
         "can_be_published_by_authority": {
-          "label": "Julkaistavissa",
-          "tooltip": "Karttatason voi julkaista upotetussa karttaikkunassa ilman käyttömäärärajoitusta"
+          "label": "Får publiceras",
+          "tooltip": "Kartlagret får publiceras i ett inbäddat kartfönster utan användningsbegränsningar."
         }
       },
       "tooltip": {
-        "type-base": "Taustakartta",
-        "type-wms": "Karttataso",
-        "type-wfs": "Tietotuote"
+        "type-base": "Bakgrundskarta",
+        "type-wms": "Kartlager",
+        "type-wfs": "Dataprodukt"
       }
     }
   }
