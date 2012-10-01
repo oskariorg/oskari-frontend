@@ -491,26 +491,29 @@ jQuery(document).ready(function() {
         url : ajaxUrl + 'action_route=GetAppSetup&viewId=1',
         success : function(appSetup) {
             if (appSetup.startupSequence && appSetup.configuration) {
-                appSetup.configuration['guidedtour'] =
-                    { 'state' : {}, 'conf' : {} };
-                appSetup.startupSequence['16'] =
-                    {
-                        'instanceProps' : {},
-                        'title' : 'Guided Tour',
-                        'bundleinstancename' : 'guidedtour',
-                        'fi' : 'guidedtour',
-                        'sv' : 'guidedtour',
-                        'en' : 'guidedtour',
-                        'bundlename' : 'guidedtour',
-                        'metadata' : {
-                            'Import-Bundle' : {
-                                'guidedtour' : {
-                                    'bundlePath' : '/Oskari/packages/sample/bundle/'
-                                }
-                            },
-                            'Require-Bundle-Instance' : [ ]
-                        }
-                    };
+                Oskari.bundle_facade.playBundle({ 'state' : {}, 'conf' : {} },
+                                               function() {});
+                // appSetup.configuration['guidedtour'] =
+                //     { 'state' : {}, 'conf' : {} };
+
+                // appSetup.startupSequence['16'] =
+                //     {
+                //         'instanceProps' : {},
+                //         'title' : 'Guided Tour',
+                //         'bundleinstancename' : 'guidedtour',
+                //         'fi' : 'guidedtour',
+                //         'sv' : 'guidedtour',
+                //         'en' : 'guidedtour',
+                //         'bundlename' : 'guidedtour',
+                //         'metadata' : {
+                //             'Import-Bundle' : {
+                //                 'guidedtour' : {
+                //                     'bundlePath' : '/Oskari/packages/sample/bundle/'
+                //                 }
+                //             },
+                //             'Require-Bundle-Instance' : [ ]
+                //         }
+                //     };
 
                 main.appSetup.startupSequence = appSetup.startupSequence;
                 main.appConfig = appSetup.configuration;
