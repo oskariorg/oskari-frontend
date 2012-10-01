@@ -39,23 +39,6 @@ Oskari.registerLocalization({
       "tools": {
         "label": "Näytettävät työkalut",
         "tooltip": "Valitse kartalla näytettävät työkalut. Näet niiden sijoittelun esikatselukartassa.",
-        "Oskari": {
-          "mapframework": {
-            "bundle": {
-              "mapmodule": {
-                "plugin": {
-                  "ScaleBarPlugin": "Mittakaavajana",
-                  "IndexMapPlugin": "Indeksikartta",
-                  "Portti2Zoombar": "Mittakaavasäädin",
-                  "SearchPlugin": "Osoite- ja paikannimihaku"
-                }
-              }
-            },
-            "mapmodule": {
-              "GetInfoPlugin": "Kohdetietojen kyselytyökalu"
-            }
-          }
-        },
         "ScaleBarPlugin": "Mittakaavajana",
         "IndexMapPlugin": "Indeksikartta",
         "Portti2Zoombar": "Mittakaavasäädin",

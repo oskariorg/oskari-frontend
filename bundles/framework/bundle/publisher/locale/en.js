@@ -2,7 +2,7 @@ Oskari.registerLocalization({
   "lang": "en",
   "key": "Publisher",
   "value": {
-    "title": "Create map to be embedded",
+    "title": "Create map",
     "flyouttitle": "Create map",
     "desc": "",
     "published": {
@@ -39,28 +39,11 @@ Oskari.registerLocalization({
       "tools": {
         "label": "Tools",
         "tooltip": "Select the tools to be shown on the map. Their placement is displayed in the map preview.",
-        "Oskari": {
-          "mapframework": {
-            "bundle": {
-              "mapmodule": {
-                "plugin": {
-                  "ScaleBarPlugin": "Scale line",
-                  "IndexMapPlugin": "Index map",
-                  "Portti2Zoombar": "Scale scrollbar",
-                  "SearchPlugin": "Address and place name search"
-                }
-              }
-            },
-            "mapmodule": {
-              "GetInfoPlugin": "Query tool for place data"
-            }
-          }
-        },
-        "ScaleBarPlugin": "",
-        "IndexMapPlugin": "",
-        "Portti2Zoombar": "",
-        "SearchPlugin": "",
-        "GetInfoPlugin": ""
+        "ScaleBarPlugin": "Scale line",
+        "IndexMapPlugin": "Index map",
+        "Portti2Zoombar": "Scale scrollbar",
+        "SearchPlugin": "Address and place name search",
+        "GetInfoPlugin": "Query tool for place data"
       },
       "layers": {
         "label": "Map levels",
@@ -105,9 +88,9 @@ Oskari.registerLocalization({
     "NotLoggedView": {
       "text": "You need to log in before using the embedding function.",
       "signup": "Log in",
-      "signupUrl": "/web/fi/login",
+      "signupUrl": "/web/en/login",
       "register": "Register",
-      "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+      "registerUrl": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
     },
     "StartView": {
       "text": "You can embed the map view you just created on your own or your employer's website.",

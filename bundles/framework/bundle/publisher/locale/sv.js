@@ -2,7 +2,7 @@ Oskari.registerLocalization({
   "lang": "sv",
   "key": "Publisher",
   "value": {
-    "title": "Definiera kartan som ska avskiljas",
+    "title": "Definiera karta",
     "flyouttitle": "Definiera karta",
     "desc": "",
     "published": {
@@ -39,31 +39,14 @@ Oskari.registerLocalization({
       "tools": {
         "label": "Verktyg",
         "tooltip": "Välj verktygen som visas på kartan. Du kan se deras placering på den förhandsvisade kartan.",
-        "Oskari": {
-          "mapframework": {
-            "bundle": {
-              "mapmodule": {
-                "plugin": {
-                  "ScaleBarPlugin": "Skalsträcka",
-                  "IndexMapPlugin": "Indexkarta",
-                  "Portti2Zoombar": "Skalans glidreglage",
-                  "SearchPlugin": "Adress- och ortnamnssökning"
-                }
-              }
-            },
-            "mapmodule": {
-              "GetInfoPlugin": "Verktyg för förfrågan som gäller uppgifter om objektet"
-            }
-          }
-        },
-        "ScaleBarPlugin": "",
-        "IndexMapPlugin": "",
-        "Portti2Zoombar": "",
-        "SearchPlugin": "",
-        "GetInfoPlugin": ""
+        "ScaleBarPlugin": "Skalsträcka",
+        "IndexMapPlugin": "Indexkarta",
+        "Portti2Zoombar": "Skalans glidreglage",
+        "SearchPlugin": "Adress- och ortnamnssökning",
+        "GetInfoPlugin": "Verktyg för förfrågan som gäller uppgifter om objektet"
       },
       "layers": {
-        "label": "kartlager",
+        "label": "Kartlager",
         "defaultLayer": "(Förvald kartlager)",
         "useAsDefaultLayer": "Använd som förvald kartlager"
       },
@@ -105,9 +88,9 @@ Oskari.registerLocalization({
     "NotLoggedView": {
       "text": "Logga in i tjänsten för att definiera en karta som ska inbäddas.",
       "signup": "Logga in",
-      "signupUrl": "/web/fi/login",
+      "signupUrl": "/web/sv/login",
       "register": "Registrera dig",
-      "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+      "registerUrl": "/web/sv/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
     },
     "StartView": {
       "text": "Du kan inbädda den kartvy som du definierat här på din egen eller din arbetsgivares webbplats.",

@@ -16,8 +16,8 @@ Oskari.registerLocalization({
           "desc": "Kuvaus",
           "createDate": "Luotu",
           "updateDate": "Päivitetty",
-          "edit": "",
-          "delete": ""
+          "edit": "Muokkaa",
+          "delete": "Poista"
         },
         "notification": {
           "delete": {
@@ -40,8 +40,8 @@ Oskari.registerLocalization({
         "grid": {
           "name": "Nimi",
           "publish": "Julkaisu",
-          "edit": "",
-          "delete": ""
+          "edit": " ",
+          "delete": " "
         },
         "popup": {
           "edit": "Vaihda näkymän nimi",
@@ -70,7 +70,7 @@ Oskari.registerLocalization({
         },
         "error": {
           "title": "Virhe!",
-          "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin",
+          "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin.",
           "notsaved": "Näkymän tallentaminen epäonnistui.",
           "notdeleted": "Näkymän poisto epäonnistui.",
           "makePublic": "Näkymän muuttaminen julkiseksi epäonnistui. Yritä myöhemmin uudelleen.",
@@ -88,8 +88,8 @@ Oskari.registerLocalization({
           "name": "Nimi",
           "domain": "Kartan tiedot",
           "publish": "Tila",
-          "edit": "",
-          "delete": ""
+          "edit": " ",
+          "delete": " "
         },
         "popup": {
           "edit": "Vaihda kartan nimi",
