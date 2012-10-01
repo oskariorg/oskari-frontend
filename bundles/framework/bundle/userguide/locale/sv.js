@@ -8,15 +8,15 @@ Oskari.registerLocalization({
       "title": "Hjälp"
     },
     "tile": {
-      "title": "Bruksanvisningar för karta"
+      "title": "Bruksanvisningar"
     },
     "error": {
       "title": "",
       "generic": ""
     },
     "help": {
-      "tags": "",
-      "contentPart": ""
+      "tags": "karttaikkuna,pikaohje",
+      "contentPart": "body"
     }
   }
 });

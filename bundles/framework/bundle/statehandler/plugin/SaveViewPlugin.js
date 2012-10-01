@@ -86,8 +86,6 @@ Oskari.clazz
                 data.viewName = viewName;
               }
 
-              
-              var loc = this.handler.getLocalization('save');
               var builder = me._sandbox.getEventBuilder('StateSavedEvent');
               var event = builder(viewName, state);
               // save to ajaxUrl

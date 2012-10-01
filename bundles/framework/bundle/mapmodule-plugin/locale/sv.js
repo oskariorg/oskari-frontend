@@ -21,8 +21,8 @@ Oskari.registerLocalization({
     "plugin": {
       "LogoPlugin": {
         "terms": "Användningsvillkor",
-        "termsLink": "",
-        "mapLinkBase": ""
+        "termsLink": "http://www.paikkatietoikkuna.fi/web/sv/anvandningsvillkor",
+        "mapLinkBase": "http://www.paikkatietoikkuna.fi/web/sv/kartfonstret?"
       },
       "LayerSelectionPlugin": {
         "title": "",

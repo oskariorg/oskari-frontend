@@ -2,7 +2,7 @@ Oskari.registerLocalization({
   "lang": "sv",
   "key": "LayerSelector",
   "value": {
-    "title": "kartlager",
+    "title": "Kartlager",
     "desc": "",
     "errors": {
       "loadFailed": "Fel i nedladdningen av kartlager. Ladda ned sidan på nytt i din läsare och välj kartlagren."
