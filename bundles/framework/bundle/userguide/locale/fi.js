@@ -16,7 +16,7 @@ Oskari.registerLocalization({
     },
     "help": {
       "tags": "karttaikkuna,pikaohje",
-      "contentPart": "contentPart"
+      "contentPart": "body"
     }
   }
 });
