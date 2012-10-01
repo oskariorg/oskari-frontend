@@ -11,13 +11,15 @@ Oskari.registerLocalization({
         "nocategories": "You have not yet saved the places.",
         "editCategory": "Edit map layer",
         "deleteCategory": "Delete map layer",
+        "edit": "Edit",
+        "delete": "Delete",
         "grid": {
           "name": "Name",
           "desc": "Description",
           "createDate": "Created",
           "updateDate": "Updated",
-          "edit": "Edit",
-          "delete": "Delete"
+          "edit": " ",
+          "delete": " "
         },
         "notification": {
           "delete": {
@@ -126,7 +128,7 @@ Oskari.registerLocalization({
         }
       },
       "account": {
-        "title": "Account information",
+        "title": "My account",
         "firstName": "First name",
         "lastName": "Last name",
         "nickName": "Nickname",
