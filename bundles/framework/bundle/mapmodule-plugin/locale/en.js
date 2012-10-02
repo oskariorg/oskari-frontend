@@ -25,7 +25,7 @@ Oskari.registerLocalization({
         "mapLinkBase": "http://www.paikkatietoikkuna.fi/web/en/map-window?"
       },
       "LayerSelectionPlugin": {
-        "title": "",
+        "title": "Object data",
         "chooseDefaultBaseLayer": "Select background map layer"
       },
       "SearchPlugin": {
@@ -39,7 +39,7 @@ Oskari.registerLocalization({
         "column_type": "Type"
       },
       "GetInfoPlugin": {
-        "title": ""
+        "title": "Map layers"
       }
     }
   }

@@ -5,14 +5,14 @@ Oskari.registerLocalization({
     "title": "Help",
     "desc": "",
     "flyout": {
-      "title": "Help"
+      "title": "Paikkatietoikkuna user guide"
     },
     "tile": {
       "title": "Map user guide"
     },
     "error": {
-      "title": "",
-      "generic": ""
+      "title": "Error!",
+      "generic": "Loading user guide failed. Please try again later."
     },
     "help": {
       "tags": "karttaikkuna,pikaohje",

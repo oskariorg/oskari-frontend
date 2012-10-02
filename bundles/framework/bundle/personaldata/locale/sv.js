@@ -4,7 +4,7 @@ Oskari.registerLocalization({
   "value": {
     "title": "Mina uppgifter",
     "desc": "Mina uppgifter",
-    "notLoggedIn": "",
+    "notLoggedIn": "Du kan lagra dina egna kartvyer och titta på kartor som du har inbäddat på andra webbplatser i Mina uppgifter. <a href='/web/sv/login'>Logga in</a>.",
     "tabs": {
       "myplaces": {
         "title": "Objekt",
@@ -81,10 +81,10 @@ Oskari.registerLocalization({
         }
       },
       "publishedmaps": {
-        "title": "Avskilda kartor",
+        "title": "Inbäddade",
         "edit": "Visa på kartan",
         "publish": "Avskilj karta",
-        "unpublish": "धterta avskiljandet",
+        "unpublish": "Återta avskiljandet",
         "delete": "Ta bort",
         "grid": {
           "name": "Namn",

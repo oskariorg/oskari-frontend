@@ -5,7 +5,7 @@ Oskari.registerLocalization({
     "title": "Ohje",
     "desc": "",
     "flyout": {
-      "title": "Ohje"
+      "title": "Kartan käyttöohje"
     },
     "tile": {
       "title": "Kartan käyttöohje"

@@ -25,7 +25,7 @@ Oskari.registerLocalization({
         "mapLinkBase": "http://www.paikkatietoikkuna.fi/web/sv/kartfonstret?"
       },
       "LayerSelectionPlugin": {
-        "title": "",
+        "title": "Kartlager",
         "chooseDefaultBaseLayer": "Välj bottenkarta"
       },
       "SearchPlugin": {
@@ -39,7 +39,7 @@ Oskari.registerLocalization({
         "column_type": "Typ"
       },
       "GetInfoPlugin": {
-        "title": ""
+        "title": "Objektuppgifter"
       }
     }
   }
