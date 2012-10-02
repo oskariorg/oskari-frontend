@@ -2,6 +2,10 @@
  * @class Oskari.mapframework.bundle.layerselection2.Flyout
  *
  * Renders the "selected layers" flyout.
+ * 
+ * To-do: (critical) replace create/destroy div to show/hide div when modifiying tools 
+ * for shown layers 
+ * To-do: fix some method naming issues  (f.ex. layer footer is in a dual role)
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
@@ -62,7 +66,11 @@ function(instance) {
         // sortable component
         this.template = jQuery('<ul class="selectedLayersList sortable" ' + 'data-sortable=\'{' + 'itemCss: "li.layer.selected", ' + 'handleCss: "div.layer-title" ' + '}\'></ul>');
 
-        this.templateLayer = jQuery('<li class="layer selected">' + '<div class="layer-info">' + '<div class="layer-icon"></div>' + '<div class="layer-tool-remove"></div>' + '<div class="layer-title"><h4></h4></div>' + '</div>' + '<div class="stylesel">' + '<label for="style">' + loc['style'] + '</label>' + '<select name="style"></select></div>' + '<div class="layer-tools volatile">' + '</div>' + '</li>');
+        this.templateLayer = jQuery('<li class="layer selected">' + 
+        '<div class="layer-info">' + '<div class="layer-icon"></div>' + 
+        	'<div class="layer-tool-remove"></div>' + '<div class="layer-title"><h4></h4></div>' + '</div>' + 
+        	'<div class="stylesel">' + '<label for="style">' + loc['style'] + '</label>' + 
+        	'<select name="style"></select></div>' + '<div class="layer-tools volatile">' + '</div>' + '</li>');
 
         // footers are changed based on layer state
         this.templateLayerFooterTools = jQuery('<div class="left-tools">' + 
@@ -118,7 +126,7 @@ function(instance) {
      */
     setState : function(state) {
         this.state = state;
-        console.log("Flyout.setState", this, state);
+        /*console.log("Flyout.setState", this, state);*/
     },
     /**
      * @method createUi
@@ -157,36 +165,47 @@ function(instance) {
         }
     },
     _appendLayerFooter : function(layerDiv, layer, isInScale, isGeometryMatch) {
-        var footer = layerDiv.find('div.layer-tools');
-        var slider = this._addSlider(layer);
-
+        var toolsDiv = layerDiv.find('div.layer-tools');
+		
+		/* fix: we need this at anytime for slider to work */ 
+        var footer = this._createLayerFooter(layer, layerDiv);
+        
+        /*console.log("IS VISIBLE AT APPENDLAYERFOOTER "+layer.isVisible());*/
+        
         if (!layer.isVisible()) {
-            layerDiv.addClass('hidden');
-            footer.append(this._createLayerFooterHidden(layer));
+            toolsDiv.addClass('hidden');
+            footer.css("display","none");
+            toolsDiv.append(this._createLayerFooterHidden(layer));
         } else if (!isInScale) {
             var oosFtr = this._createLayerFooterOutOfScale(layer);
-            layerDiv.addClass('out-of-scale');
-            footer.append(oosFtr);
+            toolsDiv.addClass('out-of-scale');
+            footer.css("display","none");            
+            toolsDiv.append(oosFtr);
         } else if (!isGeometryMatch) {
             var oocaFtr = this._createLayerFooterOutOfContentArea(layer);
-            layerDiv.addClass('out-of-content');
-            footer.append(oocaFtr);
+            toolsDiv.addClass('out-of-content');
+            footer.css("display","none");
+            toolsDiv.append(oocaFtr);
         } else {
-            var ftr = this._createLayerFooter(layer, layerDiv);
-            footer.append(ftr);
-            slider.show();
-            slider.setValue(layer.getOpacity());
+        	footer.css("display","");
         }
+         
+     	toolsDiv.append(footer);
+        
+ 	    var slider = this._addSlider(layer,layerDiv);
+         
     },
-    _addSlider : function(layer) {
+    
+    _addSlider : function(layer,layerDiv) {
         var me = this;
         var lyrId = layer.getId();
         var opa = layer.getOpacity();
-        var slider = me._sliders[lyrId];
-        if (!slider || !slider.setStyle || !slider.handle || !slider.handle.setStyle) {
+        /*var slider = me._sliders[lyrId];
+        if (!slider || !slider.setStyle || !slider.handle || !slider.handle.setStyle) {*/
             slider = new Slider({
                 min : 0,
-                max : 100
+                max : 100,
+                value: opa
             });
 
             slider.setStyle({
@@ -198,7 +217,7 @@ function(instance) {
                 'margin' : 0
             });
 
-            slider.level.hide();
+            /*slider.level.hide();*/
 
             slider.handle.setStyle({
                 'background-color' : 'transparent',
@@ -213,12 +232,28 @@ function(instance) {
                 me._layerOpacityChanged(layer, event.value);
             });
             me._sliders[lyrId] = slider;
-        }
+        /*}*/
         // only render if visible on screen
         var lS = 'layout-slider-' + lyrId;
         var oS = 'opacity-slider-' + lyrId;
-        if (jQuery('#' + lS).length > 0 && jQuery('#' + oS).length > 0) {
-            slider.insertTo(lS);
+        
+         // slider
+        var tools = layerDiv.find('.left-tools');
+        var opacitySlider = tools.find('div.layout-slider');
+        opacitySlider.attr('id', 'layout-slider-' + layer.getId());
+
+        var opacityInput = tools.find('input.opacity-slider');
+        opacityInput.attr('id', 'opacity-slider-' + layer.getId());
+        
+        slider.insertTo(lS);
+        slider.assignTo(oS);
+        
+        /* the kind of code below shall never again be written */
+       
+        /*if (jQuery('#' + lS).length > 0 && jQuery('#' + oS).length > 0) {*/
+       	/*console.log("IS DIV "+((jQuery('#' + lS).length > 0 && jQuery('#' + oS).length > 0) ));
+       	console.log("INSERTTO");
+           slider.insertTo(lS);
             slider.assignTo(oS);
             slider.setValue(opa);
         } else {
@@ -239,9 +274,9 @@ function(instance) {
                     }, 500);
                 }
             }, 100);
-        }
-        slider.setValue(opa);
-        return slider.hide();
+        }*/
+        /*slider.setValue(opa);*/
+        return slider;//.hide();
     },
     /**
      * @method _layerOrderChanged
@@ -386,10 +421,13 @@ function(instance) {
 
         // teardown previous footer & layer state classes
         var footer = layerDiv.find('div.layer-tools');
-        footer.empty();
+        footer.empty(); 
+       	
         layerDiv.removeClass('hidden');
         layerDiv.removeClass('out-of-scale');
         layerDiv.removeClass('out-of-content');
+        
+        this._sliders[layer.getId()] = null;
 
         this._appendLayerFooter(layerDiv, layer, isInScale, isGeometryMatch);
     },
@@ -426,7 +464,10 @@ function(instance) {
      * externally
      */
     handleLayerOpacityChanged : function(layer) {
-        this._addSlider(layer);
+        /*this._addSlider(layer);*/
+        if( this._sliders[layer.getId()] ) {  
+        	this._sliders[layer.getId()].setValue(layer.getOpacity());
+       	}        
     },
     /**
      * @method handleLayerStyleChanged
@@ -457,6 +498,7 @@ function(instance) {
         var me = this;
         var sandbox = me.instance.getSandbox();
         var msg = this.templateLayerFooterOutOfScale.clone();
+        msg.addClass("layer-msg-for-outofscale");
         var reqName = 'MapModulePlugin.MapMoveByLayerContentRequest';
         var requestBuilder = sandbox.getRequestBuilder(reqName);
         msg.find('a').bind('click', function() {
@@ -481,6 +523,7 @@ function(instance) {
         var me = this;
         var sandbox = me.instance.getSandbox();
         var msg = this.templateLayerFooterHidden.clone();
+        msg.addClass("layer-msg-for-hidden");
         var reqName = 'MapModulePlugin.MapLayerVisibilityRequest';
         var visibilityRequestBuilder = sandbox.getRequestBuilder(reqName);
         msg.find('a').bind('click', function() {
@@ -505,6 +548,7 @@ function(instance) {
         var me = this;
         var sandbox = me.instance.getSandbox();
         var msg = this.templateLayerFooterOutOfContentArea.clone();
+        msg.addClass("layer-msg-for-outofcontentarea");
         var reqName = 'MapModulePlugin.MapMoveByLayerContentRequest';
         var requestBuilder = sandbox.getRequestBuilder(reqName);
         msg.find('a').bind('click', function() {
@@ -584,12 +628,7 @@ function(instance) {
             //}
         }
 
-        // slider
-        var opacitySlider = tools.find('div.layout-slider');
-        opacitySlider.attr('id', 'layout-slider-' + layer.getId());
-
-        var opacityInput = tools.find('input.opacity-slider');
-        opacityInput.attr('id', 'opacity-slider-' + layer.getId());
+       
 
         return tools;
     },
@@ -619,7 +658,6 @@ function(instance) {
             // footer tools
             var footer = layerContainer.find('div.layer-tools');
 
-            this._appendLayerFooter(layerContainer, layer, layer.isInScale(scale), true);
 
             var previousLayers = [];
             // insert to top
@@ -636,12 +674,17 @@ function(instance) {
             } else {
                 listContainer.append(layerContainer);
             }
+            
+            this._appendLayerFooter(layerContainer, layer, layer.isInScale(scale), true);
+
         }
         // remove layer
         else {
             var layerDiv = jQuery(this.container).find('li[layer_id=' + layer.getId() + ']');
             if (layerDiv) {
+            	this._sliders[layer.getId()] = null;
                 layerDiv.remove();
+                
             }
         }
     },
