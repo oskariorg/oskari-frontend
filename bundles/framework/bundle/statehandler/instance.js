@@ -465,6 +465,8 @@ function() {
                 sandbox.request(mapmodule.getName(), rbAdd(layer.id, true));
                 if(layer.hidden) {
                     sandbox.request(mapmodule.getName(), visibilityRequestBuilder(layer.id, false));
+                } else {
+                	sandbox.request(mapmodule.getName(), visibilityRequestBuilder(layer.id, true));
                 }
                 if(layer.style) {
                     sandbox.request(mapmodule.getName(), styleReqBuilder(layer.id, layer.style));
