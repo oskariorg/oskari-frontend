@@ -198,8 +198,8 @@ function(mapLayerUrl, sandbox) {
 			success : function(pResp) {
 				me._loadAllLayersAjaxCallBack(pResp, callbackSuccess);
 			},
-			error : function() {
-				if(callbackFailure) {
+			error : function(jqXHR, textStatus) {
+				if(callbackFailure && jqXHR.status != 0) {
 					callbackFailure();
 				}
 			}

@@ -5,7 +5,7 @@ Oskari.registerLocalization({
     "title": "Kartlager",
     "desc": "",
     "errors": {
-      "loadFailed": "Fel i nedladdningen av kartlager. Ladda ned sidan på nytt i din läsare och välj kartlagren."
+      "loadFailed": "Fel i laddningen av kartlager. Ladda ned sidan på nytt i din läsare och välj kartlagren."
     },
     "filter": {
       "text": "Sök kartlager",

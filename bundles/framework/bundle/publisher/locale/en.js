@@ -46,7 +46,7 @@ Oskari.registerLocalization({
         "GetInfoPlugin": "Query tool for place data"
       },
       "layers": {
-        "label": "Map levels",
+        "label": "Map layers",
         "defaultLayer": "(Default layer)",
         "useAsDefaultLayer": "Use as default layer"
       },
@@ -64,12 +64,12 @@ Oskari.registerLocalization({
         "cancel": "Cancel"
       },
       "layerselection": {
-        "label": "Show map levels in menu",
+        "label": "Show map layers in menu",
         "info": "Select background maps. You can set the default background map in the map preview window.",
-        "tooltip": "The background map is shown as the bottom layer of the map. When you select map levels to be used as the bottom layer, only one level is visible at a time and you can switch between them. You can set the default background map in the map preview.",
+        "tooltip": "The background map is shown as the bottom layer of the map. When you select map layers to be used as the bottom layer, only one layer is visible at a time and you can switch between them. You can set the default background map in the map preview.",
         "promote": "Show aerial images?"
       },
-      "preview": "Preview of map that will be embedded.",
+      "preview": "Preview of the map to be embedded.",
       "location": "Location and zoom level",
       "zoomlevel": "Zoom level",
       "help": "Help",
@@ -80,9 +80,9 @@ Oskari.registerLocalization({
         "domainStart": "Omit prefixes http or www from the website name",
         "name": "Name is required information",
         "nohelp": "No help is available",
-        "saveFailed": "Map embedding failed. Try again later.",
-        "nameIllegalCharacters": "",
-        "domainIllegalCharacters": ""
+        "saveFailed": "Map publishing failed. Try again later.",
+        "nameIllegalCharacters": "The name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
+        "domainIllegalCharacters": "The web site name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens."
       }
     },
     "NotLoggedView": {
@@ -94,10 +94,10 @@ Oskari.registerLocalization({
     },
     "StartView": {
       "text": "You can embed the map view you just created on your own or your employer's website.",
-      "layerlist_title": "Embeddable map levels",
-      "layerlist_empty": "The map levels you selected cannot be embedded. The menu Selected map levels shows whether or not a map level can be embedded.",
+      "layerlist_title": "Embeddable map layers",
+      "layerlist_empty": "The map layers you selected cannot be embedded. The menu Selected map layers shows whether or not a map layer can be embedded.",
       "layerlist_denied": "Cannot be embedded",
-      "denied_tooltip": "The providers of this map data have not granted permission to publish these materials on other websites. Check rights to publish in the menu Selected map levels before embedding.",
+      "denied_tooltip": "The providers of this map data have not granted permission to publish these materials on other websites. Check rights to publish in the menu Selected map layers before embedding.",
       "buttons": {
         "continue": "Continue",
         "cancel": "Cancel"

@@ -25,11 +25,11 @@ Oskari.registerLocalization({
       }
     },
     "measure" : {
-        "title" : "Mittaustulokset",
-        "close" : "Lopeta",
+        "title" : "Mätningsresultat",
+        "close" : "Avbryt",
         "guidance" : {
-            "measureline" : "Osoita mitattava matka kartalta. Lopeta mittaaminen hiiren kaksoisnapautuksella.",
-            "measurearea" : "Osoita mitattava alue kartalta. Lopeta mittaaminen hiiren kaksoisnapautuksella."
+            "measureline" : "Peka ut sträckan som ska mätas på kartan. Sluta mätningen genom att dubbelklicka.",
+            "measurearea" : "Peka ut området som ska mätas på kartan. Sluta mätningen genom att dubbelklicka."
         }
     }
   }

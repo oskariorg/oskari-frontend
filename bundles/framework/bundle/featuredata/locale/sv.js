@@ -2,7 +2,7 @@ Oskari.registerLocalization({
   "lang": "sv",
   "key": "FeatureData",
   "value": {
-    "title": "Kohdetiedot sv",
+    "title": "Objektuppgifter",
     "desc": "",
     "loading": "Laddar ned",
     "showmore": "Visa",

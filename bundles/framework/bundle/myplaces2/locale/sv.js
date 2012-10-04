@@ -113,16 +113,16 @@ Oskari.registerLocalization({
       "title": "Brister i uppgifterna:",
       "placeName": "Objektets namn saknas.",
       "categoryName": "kartlagrets namn saknas.",
-      "placeNameIllegal": "",
-      "descIllegal": "",
-      "categoryNameIllegal": "",
-      "dotSize": "",
-      "dotColor": "",
-      "lineSize": "",
-      "lineColor": "",
-      "areaLineSize": "",
-      "areaLineColor": "",
-      "areaFillColor": ""
+      "placeNameIllegal": "I objekts namnet ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck.",
+      "descIllegal": "I objekts beskrivning ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck.",
+      "categoryNameIllegal": "I kartlagers beskrivning ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck.",
+      "dotSize": "Punkternas storlek är utanför de tillåtna gränserna (1-50).",
+      "dotColor": "Punktens färg är felaktig.",
+      "lineSize": "Linjens storlek är utanför de tillåtna gränserna (1-50).",
+      "lineColor": "Linjens färg är felaktig.",
+      "areaLineSize": "Områdets konturlinje är utanför de tillåtna gränserna (0-50).",
+      "areaLineColor": "Färgen på områdets omkretslinje är felaktig.",
+      "areaFillColor": "Områdets ifyllnadsfärg är felaktig."
     }
   }
 });

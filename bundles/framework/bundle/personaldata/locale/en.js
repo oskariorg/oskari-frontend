@@ -4,7 +4,7 @@ Oskari.registerLocalization({
   "value": {
     "title": "My data",
     "desc": "My data",
-    "notLoggedIn": "",
+    "notLoggedIn": "You can save map views and browse maps that you have embedded on other websites in My data. <a href='/web/en/login'>Log in</a>.",
     "tabs": {
       "myplaces": {
         "title": "Places",
@@ -81,7 +81,7 @@ Oskari.registerLocalization({
         }
       },
       "publishedmaps": {
-        "title": "Published maps",
+        "title": "Embedded maps",
         "edit": "Show on the map",
         "publish": "Publish map",
         "unpublish": "Unpublish map",
