@@ -231,14 +231,27 @@ function() {
     },
     
     _buildLayerIdList: function()  {
-    	var selected = this._sandbox.findAllSelectedMapLayers();
-        var layerIds = "";
+        var me = this;
+    	var selected = me._sandbox.findAllSelectedMapLayers();
+        var layerIds = null;
+        
+ 		var mapScale = me._sandbox.getMap().getScale();
         
         for (var i = 0; i < selected.length; i++) {
         	var layer = selected[i]
-        	/* added 2012-09-27 */        	
+
+        	if( !layer.isInScale(mapScale) ) {
+				continue;
+			}
+			if( !layer.isFeatureInfoEnabled() ) {
+				continue;
+			}        	
 			if( !layer.isVisible() ) {
 				continue;
+			}
+			
+			if( !layerIds ) {
+				layerIds = "";
 			}
 			        	
             if (layerIds !== "") {
@@ -284,6 +297,15 @@ function() {
         } 
         
         me._cancelAjaxRequest();
+        
+        var layerIds = me._buildLayerIdList();
+        
+        /* let's not start anything we cant' resolve */
+        if( !layerIds  ) {
+        	me._sandbox.printDebug("[GetInfoPlugin] NO layers with featureInfoEnabled, in scale and visible");
+        	return;
+        }
+        
         me._startAjaxRequest(dteMs);
 		
         var ajaxUrl = this._sandbox.getAjaxUrl(); 
@@ -292,7 +314,7 @@ function() {
         var lat = lonlat.lat;
         
         var mapVO = me._sandbox.getMap();
-        var layerIds = me._buildLayerIdList();
+       
 
         jQuery.ajax({
             beforeSend : function(x) {
