@@ -21,7 +21,6 @@ function(instance) {
 
     this.template = null;
     this.view = null;
-    this.active = false;
 }, {
     /**
      * @method getName
@@ -70,7 +69,7 @@ function(instance) {
      * @return {String} localized text for the title of the flyout
      */
     getTitle : function() {
-        return this.instance.getLocalization('title');
+        return this.instance.getLocalization('flyouttitle');
     },
     /**
      * @method getDescription
@@ -111,17 +110,16 @@ function(instance) {
         
         // check if the user is logged in
         // FIXME: always show logged in view 
-        //if(!sandbox.getUser().isLoggedIn()) {
-        if(false) {
+        if(!sandbox.getUser().isLoggedIn()) {
             this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.NotLoggedIn', 
                 this.instance, 
                 this.instance.getLocalization('NotLoggedView'));
         }
         else {
             // proceed with publisher view
-            this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.BasicPublisher', 
+            this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.StartView', 
                 this.instance, 
-                this.instance.getLocalization('BasicView'));    
+                this.instance.getLocalization('StartView'));
         }
         
         this.view.render(flyout);
@@ -133,32 +131,6 @@ function(instance) {
     handleLayerSelectionChanged : function() {
         if(this.view && this.view.handleLayerSelectionChanged) {
             this.view.handleLayerSelectionChanged();
-        }
-    },
-    /**
-     * @method handleMapMoved
-     * Calls the current views handleMapMoved method
-     */
-    handleMapMoved : function() {
-        if(this.view && this.view.handleMapMoved) {
-            this.view.handleMapMoved();
-        }
-    },
-    /**
-     * @method setEnabled
-     * @param {Boolean} isEnabled
-     * Calls the current views setEnabled method if state changes. 
-     * Doesn't call if en
-     */
-    setEnabled : function(isEnabled) {
-        if(this.active == isEnabled) {
-            // already in requested state
-            return;
-        }
-        // otherwise change state
-        this.active = isEnabled;
-        if(this.view && this.view.setEnabled) {
-            this.view.setEnabled(isEnabled);
         }
     }
 }, {

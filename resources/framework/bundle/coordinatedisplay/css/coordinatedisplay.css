@@ -1,18 +1,18 @@
 .cbDiv {
-    position : fixed;
-    top : 360px;
+    position : absolute;
+    top : 340px;
     right : 30px;
     display : block;
     color : #3C3C3C;
     background : white;    
     font-size : 12px;
     z-index : 64738;
-    font-weight : bold;
+    border: 1px solid #c4c4c4;
+    width: 120px;
 }
 .cbSelection {
     color : white;
     background : #3C3C3C;
-    font-weight : bold;
     padding : 10px;
 }
 
@@ -38,9 +38,13 @@
 .cbLabel {
 /*    width : 20%; */
     text-align : left;
+    float:left
 }
 
 .cbValue {
 /*    width : 80%; */
     text-align : right;
+    float:right;
+    padding-right: 20px;
+    padding-bottom: 5px;
 }

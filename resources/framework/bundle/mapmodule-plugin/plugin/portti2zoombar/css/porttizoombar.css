@@ -6,17 +6,17 @@ div.pzbDiv {
 div.pzbDiv div.pzbDiv-plus {
     width : 18px;
     height : 18px;
-    background-image : url("../images/zoombar_plus.png");
+    background-image : url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_plus.png');
 }
 
 div.pzbDiv div.pzbDiv-minus {
     width : 18px;
     height : 18px;
-    background-image : url("../images/zoombar_minus.png");
+    background-image : url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_minus.png');
 }
 div.pzbDiv div.rui-slider-vertical {
     background-color : transparent;
-    background-image : url("../images/zoombar.png");
+    background-image : url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar.png');
     height : 148px;
     width : 18px;
     border : 0;
@@ -24,7 +24,7 @@ div.pzbDiv div.rui-slider-vertical {
 }
 div.pzbDiv div.handle {
     background-color : transparent;
-    background-image : url("../images/zoombar_cursor.png");
+    background-image : url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_cursor.png');
     width : 17px;
     height : 18px;
     border:0;

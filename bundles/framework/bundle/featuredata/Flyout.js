@@ -246,22 +246,20 @@ function(instance) {
                 var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
                 // if multiple featuredatas, we will have a "__featureName" field in "all" model -> rename it for ui
                 grid.setColumnUIName('__featureName', this.instance.getLocalization('featureNameAll'));
-                /*
-                grid.setColumnValueRenderer('__featureName', function(value) {
-                    return '<b>' + value + ' </b>';
-                });*/
                 // set selection handler
                 grid.addSelectionListener(function(pGrid, dataId) {
                     me._handleGridSelect(layer, dataId);
                 });
                 
                 // set popup handler for inner data
-                grid.setAdditionalDataHandler(this.instance.getLocalization('showmore'), 
+                var showMore = this.instance.getLocalization('showmore');
+                grid.setAdditionalDataHandler(showMore, 
                     function(link, content) {
-                        
-                        var reqBuilder = me.instance.sandbox.getRequestBuilder('userguide.ShowUserGuideRequest');
-                        var request = reqBuilder({ extension: 'featuredata', placement: "bottom", el: link, content: content });
-                        me.instance.sandbox.request(me.instance.getName(), request);
+                        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                        var okBtn = dialog.createCloseButton("OK");
+                        okBtn.addClass('primary');
+                        dialog.show(showMore, content, [okBtn]);
+                        dialog.moveTo(link, 'bottom');
                 });
                 
                 var visibleFields = [];

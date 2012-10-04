@@ -116,7 +116,6 @@ function(instance) {
         this.tabsContainer.insertTo(flyout);
         
         if(!sandbox.getUser().isLoggedIn()) {
-            //jQuery(me.container).append(me.templateNotLoggedIn.clone());
             return;
         }
         

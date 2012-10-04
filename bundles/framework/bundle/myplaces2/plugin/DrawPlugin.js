@@ -89,18 +89,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
      */
     finishedDrawing : function() {
         this.toggleControl();
-        var drawing = {
-            geometry : this.getDrawing()
-        };
-        if(this.editMode) {
-        	drawing.modification = this.editMode;
-        }
-        else {
+        if(!this.editMode) {
 	        // programmatically select the drawn feature ("not really supported by openlayers")
 	        // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
         	this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
         }
-        var event = this._sandbox.getEventBuilder('MyPlaces.FinishedDrawingEvent')(drawing);
+        var event = this._sandbox.getEventBuilder('MyPlaces.FinishedDrawingEvent')(this.getDrawing(), this.editMode);
         this._sandbox.notifyAll(event);
     },
     /**

@@ -13,6 +13,7 @@ function(instance) {
     this.instance = instance;
     this.buttonGroup = 'myplaces';
     this.ignoreEvents = false;
+    this.dialog = null;
     var me = this;
     this.buttons = {
         'point' : {
@@ -68,11 +69,10 @@ function(instance) {
     init : function() {
         var loc = this.instance.getLocalization('tools');
         var user = this.instance.sandbox.getUser();
-        // different tooltip for guests?
+        // different tooltip for guests - "Please log in to use"
         var guestPostfix = ' - ' + this.instance.getLocalization('guest').loginShort;
         for(var tool in this.buttons) {
-            var toolLoc = loc[tool];
-            var tooltip = toolLoc.tooltip
+            var tooltip = loc[tool]['tooltip'];
             if(!user.isLoggedIn()) {
                 tooltip = tooltip + guestPostfix;
             }
@@ -104,27 +104,6 @@ function(instance) {
             var stateReqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
             sandbox.request(this, stateReqBuilder(undefined, this.buttonGroup, false));
         }
-        
-        // bind buttons 
-        jQuery('div.myplaces2 div.button.cancel').live('click', function() {
-            // ask toolbar to select default tool
-            var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
-            me.instance.sandbox.request(me, toolbarRequest);
-            me.sendStopDrawRequest(true);
-        });
-        jQuery('div.myplaces2 div.button.finish').live('click', function() {
-            me.sendStopDrawRequest();
-        });
-        
-        // enable draw helper
-        var popover = Oskari.clazz.create('Oskari.userinterface.component.Popover', 
-            this.instance.getLocalization('title'));
-        this.popover = popover;
-        this.popover.setPlacement('top');
-        // place it next to the buttons we added
-        this.popover.attachTo('#toolbar div.toolrow[tbgroup=myplaces]');
-        // hax attach our own style class for setting max-width 
-        this.popover.data.tip().addClass('myplaces2');
     },
         
     /**
@@ -139,6 +118,7 @@ function(instance) {
 
         // notify plugin to start drawing new geometry
         this.sendDrawRequest(config);
+        this.instance.enableGfi(false);
     },
     /**
      * @method startNewDrawing
@@ -150,30 +130,51 @@ function(instance) {
         var startRequest = this.instance.sandbox.getRequestBuilder('MyPlaces.StartDrawingRequest')(config);
         this.instance.sandbox.request(this, startRequest);
 
-        // show only relevant tools
-        //this.module.setDisableMapEvents(true);
-        //me.uiItems.basicControls.hide();
         if(!config.geometry) {
-            // show only when not editing?
+            // show only when drawing new place
+            this._showDrawHelper(config.drawMode);
             
-            // show help popup with cancel and finished buttons
-            var locTool = this.instance.getLocalization('tools')[config.drawMode];
-            var content = this.templateGuide.clone();
-            content.find('div.guide').append(locTool["new"]);
-            
-            var locBtns = this.instance.getLocalization('buttons');
-            var cancel = content.find('div.cancel');
-            cancel.append(locBtns["cancel"]);
-            var finish = content.find('div.finish');
-            if(config.drawMode == 'point') {
-                finish.hide();
-            }
-            else {
-                finish.append(locBtns["finish"]);
-            }
-            this.popover.setContent(content);
-            this.popover.show();
         }
+    },
+    /**
+     * @method update
+     * implements Module protocol update method
+     */
+    _showDrawHelper : function(drawMode) {
+    	var me = this;
+        // show help popup with cancel and finished buttons
+        var locTool = this.instance.getLocalization('tools')[drawMode];
+        var locBtns = this.instance.getLocalization('buttons');
+    	var title = this.instance.getLocalization('title');
+    	var message = locTool["new"];
+    	
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+    	this.dialog = dialog;
+        var buttons = [];
+    	var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+    	cancelBtn.setTitle(locBtns["cancel"]);
+    	cancelBtn.setHandler(function() {
+            // ask toolbar to select default tool
+            var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
+            me.instance.sandbox.request(me, toolbarRequest);
+            me.sendStopDrawRequest(true);
+    	});
+        buttons.push(cancelBtn);
+        
+        if(drawMode != 'point') {
+	    	var finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+	
+	    	finishBtn.setTitle(locBtns["finish"]);
+	    	finishBtn.addClass('primary');
+	    	finishBtn.setHandler(function() {
+            	me.sendStopDrawRequest();
+	        });
+        	buttons.push(finishBtn);
+	    }
+        
+    	dialog.show(title, message, buttons);
+    	dialog.addClass('myplaces2');
+    	dialog.moveTo('#toolbar div.toolrow[tbgroup=myplaces]', 'top');
     },
     /**
      * @method sendStopDrawRequest
@@ -185,16 +186,8 @@ function(instance) {
         var me = this;
         var request = this.instance.sandbox.getRequestBuilder('MyPlaces.StopDrawingRequest')(isCancel);
         this.instance.sandbox.request(this, request);
-        if(this.popover) {
-            this.popover.hide();
-        }
-        // true if pressed finish drawing button
-        if(isCancel == true) {
-            //this.module.setDisableMapEvents(false);
-
-            // show only relevant tools
-            //me.uiItems.basicControls.show();
-            //me.uiItems.drawControls.hide();
+        if(this.dialog) {
+            this.dialog.close();
         }
     },
     /**
@@ -233,12 +226,27 @@ function(instance) {
         'Toolbar.ToolSelectedEvent' : function(event) {
             if(!this.ignoreEvents) {
                 // changed tool -> cancel any drawing
+                // do not trigger when we return drawing tool to 
                 this.sendStopDrawRequest(true);
+                this.instance.enableGfi(true);
             }
         },
         /**
+         * @method MyPlaces.MyPlaceSelectedEvent
+         * Place was selected
+         * @param {Oskari.mapframework.bundle.myplaces2.event.MyPlaceSelectedEvent} event
+         */
+        'MyPlaces.MyPlaceSelectedEvent' : function(event) {
+        	if(!event.getPlace()) {
+        		// cleanup
+	            // ask toolbar to select default tool
+	            var toolbarRequest = this.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
+	            this.instance.sandbox.request(this, toolbarRequest);
+        	}
+        },
+        /**
          * @method MyPlaces.FinishedDrawingEvent
-         * TODO: should request toolbar to select some default tool
+         * Requests toolbar to select default tool
          * @param {Oskari.mapframework.bundle.myplaces2.event.FinishedDrawingEvent} event
          */
         'MyPlaces.FinishedDrawingEvent' : function(event) {
@@ -249,9 +257,11 @@ function(instance) {
             this.instance.sandbox.request(this, toolbarRequest);
             // disable ignore to act normally after ^request
             this.ignoreEvents = false;
-            if(this.popover) {
-                this.popover.hide();
-            }
+            // select tool selection will enable gfi -> disable it again
+            this.instance.enableGfi(false);
+	        if(this.dialog) {
+	            this.dialog.close();
+	        }
         }
     }
 }, {

@@ -113,17 +113,14 @@ function(url, uuid) {
             category.setDefault("true" === featAtts['default']);
             category.setName(featAtts['category_name']);
             category.setLineWidth(featAtts['stroke_width']);
-            category.setLineColor(featAtts['stroke_color']);
-            // TODO: copies of line params as these are new for Oskari 12
-            category.setAreaLineWidth(featAtts['stroke_width']);
-            category.setAreaLineColor(featAtts['stroke_color']);
-            // ^^^^^^^^
-            category.setAreaFillColor(featAtts['fill_color']);
-            category.setDotColor(featAtts['dot_color']);
+            category.setLineColor(this._formatColorFromServer(featAtts['stroke_color']));
+            category.setAreaLineWidth(featAtts['border_width']);
+            category.setAreaLineColor(this._formatColorFromServer(featAtts['border_color']));
+            category.setAreaFillColor(this._formatColorFromServer(featAtts['fill_color']));
+            category.setDotColor(this._formatColorFromServer(featAtts['dot_color']));
             category.setDotSize(featAtts['dot_size']);
             category.setUUID(uuid);
 
-            //service._addCategory(category);
             list.push(category);
         }
 
@@ -132,6 +129,28 @@ function(url, uuid) {
         }
 
     },
+    /**
+     * @method  _formatColorFromServer
+     * @private
+     * Removes prefix #-character if present
+     */
+    _formatColorFromServer : function(color) {
+    	if(color.charAt(0) == '#') {
+    		return color.substring(1);
+    	}
+    	return color;
+  	},
+    /**
+     * @method  _prefixColorForServer
+     * @private
+     * Adds prefix #-character if not present
+     */
+    _prefixColorForServer : function(color) {
+    	if(color.charAt(0) != '#') {
+    		return '#' + color;
+    	}
+    	return color;
+  	},
 
     /**
      * @method commitCategories
@@ -154,9 +173,11 @@ function(url, uuid) {
                 'category_name' : m.getName(),
                 'default' : m.isDefault(),
                 'stroke_width' : m.getLineWidth(),
-                'stroke_color' : m.getLineColor(),
-                'fill_color' : m.getAreaFillColor(),
-                'dot_color' : m.getDotColor(),
+                'stroke_color' : this._prefixColorForServer(m.getLineColor()),
+                'border_width' : m.getAreaLineWidth(),
+                'border_color' : this._prefixColorForServer(m.getAreaLineColor()),
+                'fill_color' : this._prefixColorForServer(m.getAreaFillColor()),
+                'dot_color' : this._prefixColorForServer(m.getDotColor()),
                 'dot_size' : m.getDotSize(),
                 'uuid' : uuid
             };
@@ -323,6 +344,9 @@ function(url, uuid) {
         var uuid = this.uuid;
         var feats = response.features;
         if (feats == null || feats.length == 0) {
+	        if (cb) {
+	            cb();
+	        }
             return;
         }
             

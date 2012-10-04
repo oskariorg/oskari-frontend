@@ -14,7 +14,6 @@ function(instance) {
 	this.instance = instance;
 	this.container = null;
 	this.template = null;
-	this.badge = Oskari.clazz.create('Oskari.userinterface.component.Badge');
 }, {
 	/**
 	 * @method getName
@@ -36,8 +35,6 @@ function(instance) {
 	 */
 	setEl : function(el, width, height) {
 		this.container = jQuery(el);
-		 var status = this.container.children('.oskari-tile-status');
-	      this.badge.insertTo(status);
 	},
 	/**
 	 * @method startPlugin
@@ -88,16 +85,6 @@ function(instance) {
 	 * Creates the UI for a fresh start
 	 */
 	refresh : function() {
-		var me = this;
-		var instance = me.instance;
-		var cel = this.container;
-		var tpl = this.template;
-		var sandbox = instance.getSandbox();
-		
-        var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-		var layers = mapLayerService.getAllLayers();
-
-		this.badge.setContent(''+layers.length);
 	}
 }, {
 	/**

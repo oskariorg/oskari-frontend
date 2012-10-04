@@ -13,6 +13,7 @@ Oskari.clazz.define(
     function(name, state) {
     	this._name = name;
     	this._state = state;
+    	this._error = false;
 }, {
     /** @static @property __name event name */
     __name : "StateSavedEvent",
@@ -32,6 +33,20 @@ Oskari.clazz.define(
      */
     getState : function() {
         return this._state;
+    },
+    /**
+     * @method isError
+     * @return {Boolean} true if state couldn't be saved 
+     */
+    isError : function() {
+        return this._error;
+    },
+    /**
+     * @method setError
+     * @param {Boolean} true if state couldn't be saved 
+     */
+    setError : function(blnError) {
+        this._error = (blnError == true);
     }
 }, {
     /**

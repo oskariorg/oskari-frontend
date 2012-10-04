@@ -136,6 +136,7 @@ function(instance) {
     showPlaceForm : function(location, place) {
         var me = this;
         var sandbox = this.instance.sandbox;
+        sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
         var loc = this.instance.getLocalization();
         this.form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.PlaceForm', this.instance);
         var categories = this.instance.getService().getAllCategories();
@@ -153,6 +154,8 @@ function(instance) {
         
         var content = [{
             html : me.form.getForm(categories),
+            useButtons: true,
+            primaryButton: loc.buttons.save,
             actions : {}
         }];
         // cancel button
@@ -172,26 +175,43 @@ function(instance) {
     },
     /**
      * @method _validateForm
-     * Validates form data
+     * Validates form data, returns an object array if any errors. 
+     * Error objects have field and error properties ({field : 'name', error: 'Name missing'}). 
      * @private
      * @param {Object} values form values as returned by Oskari.mapframework.bundle.myplaces2.view.PlaceForm.getValues()
-     * @return {Boolean} true if values are ok
+     * @return {Object[]} 
      */
     _validateForm : function(values) {
-        var blnOk = true;
+        var errors = [];
+        var categoryHandler = this.instance.getCategoryHandler();
+        var errors = categoryHandler.validateCategoryFormValues(values.category);
+        
         var loc = this.instance.getLocalization('validation');
-       
         if(!values.place.name)
         {
-             alert(loc.placeName);
-             blnOk = false;
+            errors.push({name : 'name' , error: loc.placeName});
         }
-        var errors = this.instance.getCategoryHandler().validateCategoryFormValues(values.category);
-        if(errors.length != 0) {
-            alert(errors);
-            blnOk = false;
+        else if(categoryHandler.hasIllegalChars(values.place.name))
+        {
+            errors.push({name : 'name' , error: loc.placeNameIllegal});
+        } 
+        if(categoryHandler.hasIllegalChars(values.place.desc))
+        {
+            errors.push({name : 'desc' , error: loc.descIllegal});
         }
-        return blnOk;
+        return errors;
+    },
+    _showValidationErrorMessage : function(errors) {
+        var loc = this.instance.getLocalization();
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+    	var okBtn = dialog.createCloseButton(loc.buttons.ok);
+    	var content = jQuery('<ul></ul>');
+    	for(var i = 0 ; i < errors.length; ++i) {
+    		var row = jQuery('<li></li>');
+    		row.append(errors[i]['error'])
+    		content.append(row);
+    	}
+    	dialog.show(loc.validation.title, content, [okBtn]);
     },
     /**
      * @method _saveForm
@@ -208,7 +228,9 @@ function(instance) {
         var me = this;
         var formValues = this.form.getValues();
         // validation
-        if(!this._validateForm(formValues)) {
+        var errors = this._validateForm(formValues);
+        if(errors.length != 0) {
+            this._showValidationErrorMessage(errors);
             return;
         }
         // validation passed -> go save stuff
@@ -230,10 +252,10 @@ function(instance) {
                     // blnNew should always be true since we are adding a category
                     var loc = me.instance.getLocalization('notification')['error'];
                     if(blnNew) {
-                        alert(loc.addCategory);
+                		me.instance.showMessage(loc['error'].title, loc['error'].addCategory);
                     }
                     else {
-                        alert(loc.editCategory);
+                		me.instance.showMessage(loc['error'].title, loc['error'].editCategory);
                     }
                 }
             }
@@ -256,7 +278,7 @@ function(instance) {
         if(!values) {
             // should not happen
             var loc = me.instance.getLocalization('notification')['error'];
-            alert(loc.generic);
+    		me.instance.showMessage(loc.title, loc.savePlace);
             return;
         }
         var place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlace');
@@ -275,12 +297,16 @@ function(instance) {
         var sandbox = this.instance.sandbox;
         var serviceCallback = function(blnSuccess, model, blnNew) {
             if(blnSuccess) {
+                // add map layer to map (we could check if its already there but core will handle that)
+                var layerId = me.instance.getCategoryHandler()._getMapLayerId(place.getCategoryID());
+				var requestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
+                var request = requestBuilder(layerId, true);
+                sandbox.request(me, request);
                 if(!blnNew) {
                     // refresh map layer on map -> send update request
-                    var layerId = me.instance.getCategoryHandler()._getMapLayerId(place.getCategoryID());
-                    var requestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
-                    var request = requestBuilder(layerId, true);
-                    sandbox.request(me, request);
+                    var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
+                    var updateRequest = updateRequestBuilder(layerId, true);
+                    sandbox.request(me, updateRequest);
                     // refresh old layer as well if category changed
                     if(oldCategory != place.getCategoryID()) {
                         layerId = me.instance.getCategoryHandler()._getMapLayerId(oldCategory);
@@ -300,7 +326,7 @@ function(instance) {
             }
             else {
                 var loc = me.instance.getLocalization('notification')['error'];
-                alert(loc.savePlace);
+        		me.instance.showMessage(loc.title, loc.savePlace);
             }
         }
         this.instance.getService().saveMyPlace(place,serviceCallback);
@@ -322,6 +348,8 @@ function(instance) {
         sandbox.request(this, request);
         this.form.destroy();
         this.form = undefined;
+        sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+        this.instance.enableGfi(true);
     }
 }, {
     /**

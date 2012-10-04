@@ -1,17 +1,22 @@
-/*
- * Locale for en
- */
 Oskari.registerLocalization({
-    "lang" : "en",
-    "key" : "userinterface.UserGuide",
-    "value" : {
-	"title" : "Guide",
-	"desc" : "",	
-	"flyout" : {
-	    "title" : "Guide"    
-	},
-	"tile" : {
-	    "title" : "Guide"      
-	}
+  "lang": "en",
+  "key": "userinterface.UserGuide",
+  "value": {
+    "title": "Help",
+    "desc": "",
+    "flyout": {
+      "title": "Paikkatietoikkuna user guide"
+    },
+    "tile": {
+      "title": "Map user guide"
+    },
+    "error": {
+      "title": "Error!",
+      "generic": "Loading user guide failed. Please try again later."
+    },
+    "help": {
+      "tags": "karttaikkuna,pikaohje",
+      "contentPart": "body"
     }
+  }
 });

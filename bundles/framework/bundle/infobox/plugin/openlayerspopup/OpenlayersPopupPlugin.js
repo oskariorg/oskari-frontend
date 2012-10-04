@@ -94,11 +94,14 @@ function() {
 			
 		// templates
 		this._arrow =  jQuery('<div class="popupHeaderArrow"></div>');
-    	this._header = jQuery('<div class="popupHeader"></div>');
+    	this._header = jQuery('<div></div>');
+    	this._headerWrapper = jQuery('<div class="popupHeader"></div>');
+    	this._headerCloseButton = jQuery('<div class="olPopupCloseBox icon-close-white" style="position: absolute; top: 12px;"></div>');
     	this._contentDiv = jQuery('<div class="popupContent"></div>');
     	this._contentWrapper = jQuery('<div class="contentWrapper"></div>');
     	this._actionLink = jQuery('<span class="infoboxActionLinks"><a href="#"></a></span>');
-    	this._contentSeparator = jQuery('<hr class="infoboxLine">');
+        this._actionButton = jQuery('<span class="infoboxActionLinks"><input type="button" /></span>');
+    	this._contentSeparator = jQuery('<div class="infoboxLine">separator</div>');
     },
     
     /**
@@ -117,6 +120,8 @@ function() {
      * contentData format example:
      * [{
 	 * 	html: "",
+     *  useButtons: true,
+     *  primaryButton: "<button label>",
 	 *  actions : {
 	 * 	   "Tallenna" : callbackFunction,
 	 * 	   "Sulje" : callbackFunction
@@ -128,9 +133,13 @@ function() {
     	 
     	var arrow = this._arrow.clone();
     	var header = this._header.clone();
+    	var headerWrapper = this._headerWrapper.clone();
     	var contentDiv = this._contentDiv.clone();
+    	var closeButton = this._headerCloseButton.clone();
     	
     	header.append(title);
+    	headerWrapper.append(header);
+    	headerWrapper.append(closeButton);
     	
     	for(var i =0;i < contentData.length;i++) {
     		if(i != 0) {
@@ -140,13 +149,27 @@ function() {
 		  	var contentWrapper = this._contentWrapper.clone();
 		  	contentWrapper.append(html);
 		  	var action = contentData[i].actions;
-		  	for(var key in action){
+            var useButtons = (contentData[i].useButtons == true);
+            var primaryButton = contentData[i].primaryButton;
+		  	for(var key in action){ 
 	            var attrName = key;
 	            var attrValue = action[key];
-	            var actionLink = this._actionLink.clone();
-	            var link = actionLink.find('a'); 
-	            link.attr('contentdata', i);
-	            link.append(attrName);
+	            var actionLink = null;
+	            if(useButtons) {
+	               actionLink = this._actionButton.clone();
+                   var btn = actionLink.find('input'); 
+                   btn.attr('contentdata', i);
+                   btn.attr('value', attrName);
+                   if(attrName == primaryButton) {
+                       btn.addClass('primary');
+                   }
+	            }
+	            else {
+                   actionLink = this._actionLink.clone();
+                   var link = actionLink.find('a');
+                   link.attr('contentdata', i);
+                   link.append(attrName);
+	            } 
 	            contentWrapper.append(actionLink);
         	}
 		  	contentDiv.append(contentWrapper);
@@ -155,11 +178,18 @@ function() {
     	var openlayersMap = this.getMapModule().getMap();
     	var popup = new OpenLayers.Popup(id,
                    new OpenLayers.LonLat(lonlat.lon,lonlat.lat),
-                   new OpenLayers.Size(400,200),
+                   new OpenLayers.Size(400,300),
                    arrow.outerHTML() +
-                   header.outerHTML()+
-                   contentDiv.outerHTML(),
+                   headerWrapper.outerHTML()+
+                   contentDiv.outerHTML(),               
                    false);
+        popup.moveTo = function(px) {
+        	if ((px != null) && (this.div != null)) {
+            	this.div.style.left = px.x + "px";
+            	var topy = px.y-20;
+            	this.div.style.top = topy + "px";
+        	}
+    	};
                    
 		popup.setBackgroundColor('transparent');
 		this._popups[id] = {
@@ -168,8 +198,8 @@ function() {
 		    lonlat : lonlat,
 		    popup : popup
 		}
-		jQuery(popup.div).css('overflow','');
-		jQuery(popup.groupDiv).css('overflow','');
+		jQuery(popup.div).css('overflow','visible');
+		jQuery(popup.groupDiv).css('overflow','visible');
 		// override
 		popup.events.un({
 			"click": popup.onclick,
@@ -178,17 +208,58 @@ function() {
 		
 		popup.events.on({
 			"click": function(evt) {
-				var link = jQuery(evt.originalTarget);
-				var i = link.attr('contentdata');
-				var text = link.html();
-				if(contentData[i] && contentData[i].actions && contentData[i].actions[text]) {
-					contentData[i].actions[text]();
+				var link = jQuery(evt.target||evt.srcElement);
+				if (link.hasClass('olPopupCloseBox')) { // Close button
+					me.close(id);
+				} else { // Action links
+					var i = link.attr('contentdata');
+                    //var text = link.html();
+					var text = link.attr('value');
+					if(!text) {
+					    text = link.html();
+					}
+					if(contentData[i] && contentData[i].actions && contentData[i].actions[text]) {
+						contentData[i].actions[text]();
+					}
 				}
 			},
 			scope: popup
 		});
 		
 		openlayersMap.addPopup(popup);
+		this._panMapToShowPopup(lonlat);
+		
+    },
+    /**
+     * @method _panMapToShowPopup
+     * @private
+     * Pans map if gfi popup would be out of screen
+     * @param {OpenLayers.LonLat} lonlat where to show the popup
+     */
+    _panMapToShowPopup : function(lonlat) {
+        var pixels = this._map.getViewPortPxFromLonLat(lonlat);
+        var size = this._map.getCurrentSize();
+        var width = size.w;
+        var height = size.h;
+        // if infobox would be out of screen 
+        // -> move map to make infobox visible on screen
+        var panx = 0;
+        var pany = 0;
+        var infoboxWidth = 450;
+        var infoboxHeight = 300; 
+        if( pixels.x + infoboxWidth > width) {
+            panx = width - (pixels.x + infoboxWidth);
+        }
+        if( pixels.y + infoboxHeight > height) {
+            pany = height - (pixels.y + infoboxHeight);
+        }
+        // check that we are not "over the top"
+        else if(pixels.y < 25) {
+            pany = 25;
+        }
+        if(panx != 0 || pany != 0) {
+            this.getMapModule().panMapByPixels(-panx, -pany);
+        }
     },
     /**
      * @method close

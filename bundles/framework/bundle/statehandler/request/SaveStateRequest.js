@@ -9,9 +9,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.request.SaveStateRe
 /**
  * @method create called automatically on construction
  * @static
+ * @param {String} viewname for the view to be saved
  */
-function() {
-    this._creator = null;
+function(viewname) {
+    this._viewName = viewname;
 }, {
     /** @static @property __name request name */
     __name : "StateHandler.SaveStateRequest",
@@ -21,6 +22,13 @@ function() {
      */
     getName : function() {
         return this.__name;
+    },
+    /**
+     * @method getViewName
+     * @return {String} name for the view to be saved
+     */
+    getViewName : function() {
+        return this._viewName;
     }
 }, {
     /**

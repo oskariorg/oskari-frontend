@@ -25,3 +25,8 @@ div.view div.tools div {
 	display: inline-block;
 	margin-right : 5px;
 }
+
+div.personaldata td div.icon {
+    display: inline-block;
+    vertical-align: top;
+}

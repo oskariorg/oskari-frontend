@@ -13,6 +13,10 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
 function() {
     this.template = jQuery('<div class="accordion_panel">' + 
                '<div class="header">' +
+	               '<div class="headerIcon icon-arrow-right">' +
+	               '</div>' + 
+	               '<div class="headerText">' +
+	               '</div>' + 
                '</div>' + 
                '<div class="content">' +
                '</div>' +
@@ -21,23 +25,48 @@ function() {
     this.content = null;
     this.html=this.template.clone();
     
+    var me = this;
     var header = this.html.find('div.header'); 
     header.click(function() {
-        var panelDiv = jQuery(this).parent();
-        var isOpen = panelDiv.hasClass('open');
-        // panel is open -> close it
-        if(isOpen) {
-            panelDiv.removeClass('open');
-            panelDiv.find('div.content').hide();
-        }
-        // panel is closed -> open it
-        else {
-            panelDiv.addClass('open');
-            panelDiv.find('div.content').show();
-        }
+    	if(me.isOpen()) {
+    		me.close();
+    	}
+    	else {
+    		me.open();
+    	}
     });
     this.html.find('div.content').hide();
 }, {
+    /**
+     * @method isOpen
+     * Returns true if panel is currently open
+     * @return 
+     */
+    isOpen : function() {
+        return this.html.hasClass('open');
+    },
+    /**
+     * @method open
+     * Opens the panel programmatically
+     */
+    open : function() {
+        this.html.addClass('open');
+        var header = this.html.find('div.header div.headerIcon'); 
+        header.removeClass('icon-arrow-right');
+		header.addClass('icon-arrow-down');
+        this.html.find('div.content').show();
+    },
+    /**
+     * @method close
+     * Closes the panel programmatically
+     */
+    close : function() {
+        this.html.removeClass('open');
+        var header = this.html.find('div.header div.headerIcon');
+		header.removeClass('icon-arrow-down'); 
+        header.addClass('icon-arrow-right');
+        this.html.find('div.content').hide();
+    },
     /**
      * @method setTitle
      * Sets the panel title
@@ -45,7 +74,7 @@ function() {
      */
     setTitle : function(pTitle) {
         this.title = pTitle;
-        var header = this.html.find('div.header'); 
+        var header = this.html.find('div.header div.headerText'); 
         header.append(this.title);
     },
     /**

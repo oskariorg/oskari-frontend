@@ -1,10 +1,15 @@
-/* Copyright (c) 2006-2011 by OpenLayers Contributors (see authors.txt for       * full list of contributors). Published under the Clear BSD license.
-* See http://svn.openlayers.org/trunk/openlayers/license.txt for the            * full text of the license. */
+/* Copyright (c) 2006-2011 by OpenLayers Contributors (see authors.txt for
+ * full list of contributors). Published under the Clear BSD license.
+ * See http://svn.openlayers.org/trunk/openlayers/license.txt for the
+ * * full text of the license. */
 
 /**
- * Copyright (c) 2011 National Land Survey of Finland.
+ * Copyright (c) 2011,2012 National Land Survey of Finland.
  */
-OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
+OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
+{
+    oldxy : { x : 0, y : 0 },
+    clickTimerId : null,
     performedDrag : false,
     wheelObserver : null,
     _hoverEvent : null,
@@ -35,9 +40,33 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
     init : function(sandbox) {
         // this.sandbox.printDebug("[PorttiMouse] init called.");
     }, */
+    queueClick : function(evt) {        
+        var me = this;
+        this.clickTimerId = window.setTimeout(
+           OpenLayers.Function.bind(
+               this.defaultClick, 
+               this, 
+               evt), 
+           300
+       );
+    },
+    click : function(evt) {
+        if (this.clickTimerId != null) {
+            window.clearTimeout(this.clickTimerId);
+            this.clickTimerId = null;
+            this.defaultDblClick(evt);
+        } else {
+            // var event = 
+            //     this.single ? OpenLayers.Util.extend({}, evt) : null;
+            var event = OpenLayers.Util.extend({}, evt);
+            this.queueClick(event);
+        }
+        this.oldxy.x = evt.xy.x;
+        this.oldxy.y = evt.xy.y;
+    },
     initialize : function() {
         OpenLayers.Control.prototype.initialize.apply(this, arguments);
-    },
+    },    
     destroy : function() {
         //this.sandbox.unregister(this);
         if(this.handler) {
@@ -46,12 +75,15 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
         this.handler = null;
 
         this.map.events.un({
-            "click" : this.defaultClick,
-            "dblclick" : this.defaultDblClick,
+            "click" : this.click,
+//            "dblclick" : this.defaultDblClick,
             "mousedown" : this.defaultMouseDown,
             "mouseup" : this.defaultMouseUp,
             "mousemove" : this.defaultMouseMove,
             "mouseout" : this.defaultMouseOut,
+            "touchstart" : this.defaultTouchStart,
+            "touchend" : this.defaultTouchEnd,
+            "touchmove" : this.defaultTouchMove,
             scope : this
         });
 
@@ -65,12 +97,15 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
     },
     draw : function() {
        this.map.events.on({
-            "click" : this.defaultClick,
-            "dblclick" : this.defaultDblClick,
+            "click" : this.click,
+//            "dblclick" : this.defaultDblClick,
             "mousedown" : this.defaultMouseDown,
             "mouseup" : this.defaultMouseUp,
             "mousemove" : this.defaultMouseMove,
             "mouseout" : this.defaultMouseOut,
+            "touchstart" : this.defaultTouchStart,
+            "touchend" : this.defaultTouchEnd,
+            "touchmove" : this.defaultTouchMove,
             scope : this
         });
 
@@ -85,9 +120,10 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
         OpenLayers.Event.observe(document, "mousewheel", this.wheelObserver);
     },
     defaultClick : function(evt) {
-        if(!this.isReallyLeftClick(evt)) {
+        if (!this.isReallyLeftClick(evt)) {
             return;
         }
+        this.clickTimerId = null;
         var notAfterDrag = !this.performedDrag;
         this.performedDrag = false;
         if(notAfterDrag) {
@@ -96,14 +132,75 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
             // this.sandbox.getRequestBuilder('MapModulePlugin.MapClickRequest')
             // (this.map.getLonLatFromViewPortPx(evt.xy),
             // evt.xy.x, evt.xy.y));
+            this.sendMapClickEvent(evt);
         }
         return notAfterDrag;
     },
     defaultDblClick : function(evt) {
-        this.mapmodule.centerMapByPixels(evt.xy.x, evt.xy.y, true, true);
-        this.mapmodule.zoomIn();
+        if ((evt.xy.x == this.oldxy.x) &&
+            (evt.xy.y == this.oldxy.y)) {
+            this.mapmodule.centerMapByPixels(evt.xy.x, 
+                                             evt.xy.y, 
+                                             true, 
+                                             true);
+            this.mapmodule.zoomIn();
+        }
         // OpenLayers.Event.stop(evt);
         return false;
+    },
+    pinchZoom : function(event) {
+        var scale = event.scale;
+        if(scale < 1.0) {
+            this.mapmodule.zoomOut();
+        } else if(scale > 1.0) {
+            this.mapmodule.zoomIn();
+        }
+        event.preventDefault();
+    },
+    defaultTouchStart : function(event) {
+        if(event.touches.length != 1) {
+            return;
+        }
+        var touch = event.touches[0];
+        var x = touch.pageX;
+        var y = touch.pageY;
+        this.mouseDragStart = { x : x, y : y};
+        document.onselectstart = OpenLayers.Function.False;
+    },
+    defaultTouchMove : function(event) {
+        if(event.targetTouches.length > 1) {
+            this.pinchZoom(event);
+            return;
+        }
+        event.preventDefault();
+        var curX = event.targetTouches[0].pageX;
+        var curY = event.targetTouches[0].pageY;
+        // record the mouse position, used in onWheelEvent
+        this.mousePosition = { x : curX, y : curY};
+
+        if(this.mouseDragStart != null) {
+            if(this.performedDrag === false) {
+                // send event on first move after mouse down
+                this.mapmodule.notifyStartMove();
+            }
+            var deltaX = this.mouseDragStart.x - curX;
+            var deltaY = this.mouseDragStart.y - curY;
+            this.mouseDragStart = this.mousePosition;
+            this.mapmodule.moveMapByPixels(deltaX, deltaY, true, true);
+            this.map.div.style.cursor = "move";
+            this.performedDrag = true;
+        } 
+    },
+    defaultTouchEnd : function(evt) {
+        if(this.performedDrag) {
+            this.mapmodule.notifyMoveEnd();
+        }
+        document.onselectstart = null;
+        this.mouseDragStart = null;
+        this.map.div.style.cursor = "";
+    },
+    _clone : function(obj) {
+         return eval(uneval(obj));
     },
     defaultMouseDown : function(evt) {
         if(!this.isReallyLeftClick(evt)) {
@@ -187,17 +284,41 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
                 //this.mapmodule.adjustZoomLevel(0, false);
                 this.mapmodule.notifyMoveEnd();
             } else {
-                // Moved from defaultclick
-                var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
-                var builder = this.sandbox.getEventBuilder('MapClickedEvent');
-                var evt = builder(lonlat, evt.xy.x, evt.xy.y);
-                this.sandbox.notifyAll(evt, true);
+                // sthis.mouseUp(evt);
             }
         }
         document.onselectstart = null;
         this.mouseDragStart = null;
         this.map.div.style.cursor = "";
     },
+    sendMapClickEvent : function(evt) {
+        // this.mouseUpTimerId = null;
+        this.clickTimerId = null;
+        if (evt) {
+            var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
+            var builder = this.sandbox.getEventBuilder('MapClickedEvent');
+            var evt = builder(lonlat, evt.xy.x, evt.xy.y);
+            this.sandbox.notifyAll(evt, true);
+        }
+    },
+    // queueMouseUp : function(evt) {        
+    //     var me = this;
+    //     this.mouseUpTimerId = window.setTimeout(
+    //         function() {
+    //             me.sendMapClickEvent(evt);
+    //         }, 300
+    //    );
+    // },
+    // mouseUp : function(evt) {
+    //     if (this.mouseUpTimerId != null) {
+    //         window.clearTimeout(this.mouseUpTimerId);
+    //         this.mouseUpTimerId = null;
+    //         this.defaultDblClick(evt);
+    //     } else {
+    //         var event = OpenLayers.Util.extend({}, evt);
+    //         this.queueMouseUp(event);
+    //     }
+    // },
     defaultMouseOut : function(evt) {
         if(this.mouseDragStart != null && OpenLayers.Util.mouseLeft(evt, this.map.eventsDiv)) {
             if(this.zoomBox) {
@@ -212,13 +333,13 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
     },
     defaultWheelUp : function(evt) {
         // center map to mouse location
-        this.mapmodule.centerMapByPixels(evt.xy.x, evt.xy.y, true, true);
+        //this.mapmodule.centerMapByPixels(evt.xy.x, evt.xy.y, true, true);
         // zoom
         this.mapmodule.zoomIn();
     },
     defaultWheelDown : function(evt) {
         // center map to mouse location
-        this.mapmodule.centerMapByPixels(evt.xy.x, evt.xy.y, true, true);
+        //this.mapmodule.centerMapByPixels(evt.xy.x, evt.xy.y, true, true);
         // zoom
         this.mapmodule.zoomOut();
     },
