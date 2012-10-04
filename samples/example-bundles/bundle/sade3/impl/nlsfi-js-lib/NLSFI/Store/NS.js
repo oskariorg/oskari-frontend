@@ -1,1 +1,0 @@
-NLSFI.Store = {};
