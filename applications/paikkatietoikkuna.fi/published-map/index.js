@@ -213,6 +213,7 @@ jQuery(document).ready(function() {
     ajaxUrl += getAdditionalParam('zoomLevel');
     ajaxUrl += getAdditionalParam('coord');
     ajaxUrl += getAdditionalParam('mapLayers');
+    ajaxUrl += getAdditionalParam('oldId');
     ajaxUrl += getAdditionalParam('viewId');
     
     
