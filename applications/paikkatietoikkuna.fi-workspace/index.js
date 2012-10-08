@@ -1,7 +1,47 @@
+/*
+ * 
+ * @class Oskari.paikkatietoikkuna.standalone.Main
+ * 
+ * Let's start app in hybrid fashion for developing additional bundles
+ * to paikkatietoikkuna.fi.
+ *
+ * All framework bundle code is loaded from servers in preloaded mode.
+ * All additional bundles will be loaded from workspace in develop mode.
+ *
+ * This will load bundles in this order
+ *
+ * 1) Map (preloaded from server)
+ * 2) DIV Manazer (preloaded from server)
+ * 3) Additional framework bundles (preloaded from server)
+ * 4) Any workspace bundles in dev mode
+ *
+ */
 Oskari.clazz.define('Oskari.paikkatietoikkuna.standalone.Main', function() {
+	/**
+	 * @property appSetup
+	 * this will be loaded from json file appsetup.json
+	 */
 	this.appSetup = null;
+	
+	/**
+	 * @property appConfig
+	 * this will be loaded from json file config.json
+	 */
 	this.appConfig = null;
+	
+	/**
+	 * @property sandbox
+	 * this will be initialized after mapfull has instantiated Oskari framework core and sandbox
+	 */
+	this.sandbox = null;
 }, {
+	getSandbox: function() {
+		return this.sandbox;
+	},
+	/**
+	 * @method downloadConfig
+	 * loads bundle config (from local file)
+	 */
 	downloadConfig : function(notifyCallback) {
 		var me = this;
 		jQuery.ajax({
@@ -19,6 +59,12 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.standalone.Main', function() {
 			}
 		});
 	},
+	
+	/**
+	 * @method downloadAppSetup
+	 * jquery load of application base bundle setup (from local file)
+	 *  
+	 */
 	downloadAppSetup : function(notifyCallback) {
 		var me = this;
 		jQuery.ajax({
@@ -36,22 +82,38 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.standalone.Main', function() {
 			}
 		});
 	},
-	startBaseBundles: function() {
+	
+	/**
+	 * @method startBaseBundles
+	 * 
+	 * starts base bundless preloaded from server  
+	 * 
+	 */
+	startBaseBundles : function() {
 		// check that both setup and config are loaded
 		// before actually starting the application
 		var me = this;
-		if(!( me.appSetup && me.appConfig) ) {
+		if(!(me.appSetup && me.appConfig)) {
 			return;
 		}
-		
+
 		var app = Oskari.app;
 		app.setApplicationSetup(me.appSetup);
 		app.setConfiguration(me.appConfig);
 		app.startApplication(function(startupInfos) {
-				// all bundles have been loaded
-				me.startAdditionalBundles();
+			// all bundles have been loaded
+			me.sandbox = Oskari.$("sandbox");
+			me.startAdditionalBundles();
 		});
 	},
+	
+	/**
+	 * @method start
+	 * starts the application by loading setup and config
+	 * and starting the basebundles preloaded from server followed by additional bundles
+	 * from workspace in development moede
+	 * 
+	 */
 	start : function() {
 		var me = this;
 
@@ -63,7 +125,12 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.standalone.Main', function() {
 		});
 	},
 	
-	
+	/**
+	 * @method startAdditionalBundles
+	 * 
+	 * this will load any declared bundles from workspace
+	 * 
+	 */
 	startAdditionalBundles : function() {
 		var me = this;
 
@@ -74,48 +141,29 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.standalone.Main', function() {
 		/* we now have The Sandbox (instantiated in mapfull) which will be used to dispatch request and events */
 		var sandbox = Oskari.$("sandbox");
 
-		/* 1st launch divman ( see below )*/
-		Oskari.bundle_facade.playBundle(me.configs.divman, function() {
+		/* at this point we have divman so we can start any bundles that require divman */
+		var bndlLen = me.configs.bundles.length;
+		var bndlCount = 0;
+		for(var n = 0; n < bndlLen; n++) {
 
-			/* at this point we have divman so we can start any bundles that require divman */
-			var bndlLen = me.configs.bundles.length;
-			var bndlCount = 0;
-			for(var n = 0; n < bndlLen; n++) {
-
-				Oskari.bundle_facade.playBundle(me.configs.bundles[n], function() {
-					bndlCount++;
-					if(bndlCount == bndlLen) {
-						me.bundleConfigurationReady();
-					}
-				});
-			}
-
-		});
+			Oskari.bundle_facade.playBundle(me.configs.bundles[n], function() {
+				bndlCount++;
+				if(bndlCount == bndlLen) {
+					me.bundleConfigurationReady();
+				}
+			});
+		}
 	},
-	
+	/**
+	 * @property configs additional bundle configs
+	 * @static
+	 */
 	configs : {
-		divman : {
-			"title" : "Oskari DIV Manazer",
-			"en" : "Oskari DIV Manazer",
-			"fi" : "Oskari DIV Manazer",
-			"sv" : "Oskari DIV Manazer",
-			"bundleinstancename" : "divmanazer",
-			"bundlename" : "divmanazer",
-			"instanceProps" : {  },
-			"metadata" : {
-				"Import-Bundle" : {
-					"divmanazer" : {
-						"bundlePath" : "../../packages/framework/bundle/"
-					}
-				},
-				"Require-Bundle-Instance" : []
-			}
-		},
 		bundles : [{
-			"title" : "My3rd",
-			"en" : "My3rd",
-			"fi" : "My3rd",
-			"sv" : "My3rd",
+			"title" : "layerselector2",
+			"en" : "layerselector2",
+			"fi" : "layerselector2",
+			"sv" : "layerselector2",
 			"bundleinstancename" : "layerselector2",
 			"bundlename" : "layerselector2",
 			"instanceProps" : {  },
@@ -128,10 +176,10 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.standalone.Main', function() {
 				"Require-Bundle-Instance" : []
 			}
 		}, {
-			"title" : "My3rd",
-			"en" : "My3rd",
-			"fi" : "My3rd",
-			"sv" : "My3rd",
+			"title" : "layerselection2",
+			"en" : "layerselection2",
+			"fi" : "layerselection2",
+			"sv" : "layerselection2",
 			"bundleinstancename" : "layerselection2",
 			"bundlename" : "layerselection2",
 			"instanceProps" : {  },
@@ -144,10 +192,10 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.standalone.Main', function() {
 				"Require-Bundle-Instance" : []
 			}
 		}, {
-			"title" : "My3rd",
-			"en" : "My3rd",
-			"fi" : "My3rd",
-			"sv" : "My3rd",
+			"title" : "toolbar",
+			"en" : "toolbar",
+			"fi" : "toolbar",
+			"sv" : "toolbar",
 			"bundleinstancename" : "toolbar",
 			"bundlename" : "toolbar",
 			"instanceProps" : {  },
@@ -160,10 +208,10 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.standalone.Main', function() {
 				"Require-Bundle-Instance" : []
 			}
 		}, {
-			"title" : "My3rd",
-			"en" : "My3rd",
-			"fi" : "My3rd",
-			"sv" : "My3rd",
+			"title" : "metadataflyout",
+			"en" : "metadataflyout",
+			"fi" : "metadataflyout",
+			"sv" : "metadataflyout",
 			"bundleinstancename" : "metadataflyout",
 			"bundlename" : "metadataflyout",
 			"instanceProps" : {  },
@@ -176,10 +224,10 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.standalone.Main', function() {
 				"Require-Bundle-Instance" : []
 			}
 		}, {
-			"title" : "My3rd",
-			"en" : "My3rd",
-			"fi" : "My3rd",
-			"sv" : "My3rd",
+			"title" : "coordinatedisplay",
+			"en" : "coordinatedisplay",
+			"fi" : "coordinatedisplay",
+			"sv" : "coordinatedisplay",
 			"bundleinstancename" : "coordinatedisplay",
 			"bundlename" : "coordinatedisplay",
 			"instanceProps" : {  },
@@ -192,10 +240,10 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.standalone.Main', function() {
 				"Require-Bundle-Instance" : []
 			}
 		}, {
-			"title" : "My3rd",
-			"en" : "My3rd",
-			"fi" : "My3rd",
-			"sv" : "My3rd",
+			"title" : "search",
+			"en" : "search",
+			"fi" : "search",
+			"sv" : "search",
 			"bundleinstancename" : "search",
 			"bundlename" : "search",
 			"instanceProps" : {  },
@@ -208,10 +256,10 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.standalone.Main', function() {
 				"Require-Bundle-Instance" : []
 			}
 		}, {
-			"title" : "My3rd",
-			"en" : "My3rd",
-			"fi" : "My3rd",
-			"sv" : "My3rd",
+			"title" : "personaldata",
+			"en" : "personaldata",
+			"fi" : "personaldata",
+			"sv" : "personaldata",
 			"bundleinstancename" : "personaldata",
 			"bundlename" : "personaldata",
 			"instanceProps" : {  },
@@ -224,10 +272,10 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.standalone.Main', function() {
 				"Require-Bundle-Instance" : []
 			}
 		}, {
-			"title" : "My3rd",
-			"en" : "My3rd",
-			"fi" : "My3rd",
-			"sv" : "My3rd",
+			"title" : "infobox",
+			"en" : "infobox",
+			"fi" : "infobox",
+			"sv" : "infobox",
 			"bundleinstancename" : "infobox",
 			"bundlename" : "infobox",
 			"instanceProps" : {  },
@@ -242,20 +290,35 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.standalone.Main', function() {
 		}]
 	},
 
+	/**
+	 * @method bundleConfigurationReady
+	 * 
+	 * this will be called when any bundles have been loaded
+	 * 
+	 */
 	bundleConfigurationReady : function() {
-
-		Oskari.$("sandbox").findRegisteredModuleInstance('catalogue.bundle.metadataflyout').loader.dev = true
-		Oskari.$("sandbox").postRequestByName('InfoBox.ShowInfoBoxRequest', ['jexp', 'JEP', [{
-			html : "<div><br />x<br />x</div>"
-		}], Oskari.$("sandbox").findRegisteredModuleInstance("MainMapModule").getMap().getCenter(), true])
+		var me = this;
+		var sandbox = me.getSandbox();
+		
+			
 	}
 });
 
+/*
+ * application jQuery entry point
+ */
 jQuery(document).ready(function() {
+	
 	Oskari.setLang('fi');
+	
+	/* This will enable to load javascripts from server */
 	Oskari.setLoaderMode('dev');
 	Oskari.setPreloaded(true);
 	Oskari.setBundleBasePath('../');
+	
+	/* this will start the application and load part of the application from server 
+	 * and additional functionality from workspace */
+	
 	var main = Oskari.clazz.create('Oskari.paikkatietoikkuna.standalone.Main');
 	main.start();
 
