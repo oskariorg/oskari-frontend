@@ -1,0 +1,2 @@
+META-INF/
+WEB-INF/
