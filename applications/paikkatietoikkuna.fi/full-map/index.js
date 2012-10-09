@@ -483,6 +483,11 @@ jQuery(document).ready(
         ajaxUrl += getAdditionalParam('oldId');
         ajaxUrl += getAdditionalParam('viewId');
         
+        ajaxUrl += getAdditionalParam('isCenterMarker');
+        ajaxUrl += getAdditionalParam('address')
+        ajaxUrl += getAdditionalParam('showGetFeatureInfo');
+        ajaxUrl += getAdditionalParam('nationalCadastralReference')
+        
         if (!language) {
             // default to finnish
             language = 'fi';

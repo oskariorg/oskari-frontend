@@ -216,7 +216,11 @@ jQuery(document).ready(function() {
     ajaxUrl += getAdditionalParam('oldId');
     ajaxUrl += getAdditionalParam('viewId');
     
-    
+    ajaxUrl += getAdditionalParam('isCenterMarker');
+    ajaxUrl += getAdditionalParam('address')
+    ajaxUrl += getAdditionalParam('showGetFeatureInfo');
+    ajaxUrl += getAdditionalParam('nationalCadastralReference')
+        
     Oskari.setLang(language);
 
     Oskari.setLoaderMode('dev');

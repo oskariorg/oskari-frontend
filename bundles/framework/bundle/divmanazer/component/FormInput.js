@@ -30,7 +30,7 @@ function(name) {
     
     this._bindFocusAndBlur();
     // word characters, digits, whitespace and '-' allowed
-    this._regExp = /[\s\w\d\.-äöåÄÖÅ]*/;
+    this._regExp = /[\s\w\d\.\-äöåÄÖÅ]*/;
     this._colorRegExp = /^([A-Fa-f0-9]{6})$/;
 }, {
     /**
