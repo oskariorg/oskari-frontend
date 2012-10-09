@@ -86,6 +86,22 @@
 				},
 				"Require-Bundle-Instance": []
 			}
+		},{
+			"title" : "Oskari DIV Manazer",
+			"en" : "Oskari DIV Manazer",
+			"fi" : "Oskari DIV Manazer",
+			"sv" : "Oskari DIV Manazer",
+			"bundleinstancename" : "divmanazer",
+			"bundlename" : "divmanazer",
+			"instanceProps" : {  },
+			"metadata" : {
+				"Import-Bundle" : {
+					"divmanazer" : {
+						"bundlePath" : "../../packages/framework/bundle/"
+					}
+				},
+				"Require-Bundle-Instance" : []
+			}
 		}
 	]
 }
