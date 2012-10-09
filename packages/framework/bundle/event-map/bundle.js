@@ -75,9 +75,6 @@ function() {
 			"src" : "../../../../sources/framework/event/common/after-map-layer-remove-event.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/after-get-feature-info-event.js"
-		}, {
-			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/event/common/after-map-move-event.js"
 		}, {
 			"type" : "text/javascript",
@@ -97,9 +94,6 @@ function() {
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/event/common/mouse-hover-event.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/action/action-statuses-changed-event.js"
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/event/common/MapLayerEvent.js"

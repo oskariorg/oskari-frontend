@@ -1,0 +1,124 @@
+div.divmanazerpopup {
+    max-width : 500px;
+    min-width : 200px;
+    position : fixed;
+    top : 50%;
+    left : 50%;
+    background-color : white;
+    
+    -moz-background-clip: border;     /* Firefox 3.6 */
+	-webkit-background-clip: border;  /* Safari 4? Chrome 6? */
+	background-clip: border-box;      /* Firefox 4, Safari 5, Opera 10, IE 9 */
+				
+	-moz-background-clip: padding;     /* Firefox 3.6 */
+	-webkit-background-clip: padding;  /* Safari 4? Chrome 6? */
+	background-clip: padding-box;      /* Firefox 4, Safari 5, Opera 10, IE 9 */
+				
+	-moz-background-clip: content;     /* Firefox 3.6 */
+	-webkit-background-clip: content;  /* Safari 4? Chrome 6? */
+	background-clip: content-box;      /* Firefox 4, Safari 5, Opera 10, IE 9 */
+    
+    border: 5px solid rgba(0,0,0,0.2);
+    border-radius : 7px;
+    /*
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.80);
+    -moz-box-shadow: 0px 3px 3px black;
+    -webkit-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.80);
+    */
+    z-index: 9000;
+}
+div.divmanazerpopup h3 {
+    background-color: #FDF8D9;
+    border-radius: 5px 5px 0 0;
+    font-size: 18px;
+    line-height: 28px;
+    padding: 5px 10px;
+}
+div.divmanazerpopup div.content {
+    margin : 10px;
+    /*overflow: auto;*/
+}
+div.divmanazerpopup div.content ul {
+    margin : 10px;
+}
+div.divmanazerpopup div.actions {
+    margin : 10px;
+    text-align: center;
+}
+
+div.divmanazerpopup div.actions input {
+    margin : 10px;
+}
+
+.divmanazerpopup.arrow:after, .divmanazerpopup.arrow:before {
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	/*pointer-events: none; */
+}
+/* Bottom alignment */
+.divmanazerpopup.bottom:after, .divmanazerpopup.bottom:before {
+	bottom: 100%;
+}
+.divmanazerpopup.bottom:after {
+	border-bottom-color: #FDF8D9;
+	border-width: 5px;
+	margin-left: -5px;
+	left: 50%;
+}
+.divmanazerpopup.bottom:before {
+	border-bottom-color: #000000;
+	border-width: 6px;
+	margin-left: -6px;
+	left: 50%;
+}
+/* top alignment */
+.divmanazerpopup.top:after, .divmanazerpopup.top:before {
+	top: 100%;
+}
+.divmanazerpopup.top:after {
+	border-top-color: #FFFFFF;
+	border-width: 5px;
+	margin-left: -5px;
+	left: 50%;
+}
+.divmanazerpopup.top:before {
+	border-top-color: #000000;
+	border-width: 6px;
+	margin-left: -6px;
+	left: 50%;
+}
+/* left alignment */
+.divmanazerpopup.left:after, .divmanazerpopup.left:before {
+	left: 100%;
+}
+.divmanazerpopup.left:after {
+	border-left-color: #FDF8D9;
+	border-width: 5px;
+	margin-top: -5px;
+	top: 50%;
+}
+.divmanazerpopup.left:before {
+	border-left-color: #000000;
+	border-width: 6px;
+	margin-top: -6px;
+	top: 50%;
+}
+/* right alignment */
+.divmanazerpopup.right:after, .divmanazerpopup.right:before {
+	right: 100%;
+}
+.divmanazerpopup.right:after {
+	border-right-color: #FDF8D9;
+	border-width: 5px;
+	margin-top: -5px;
+	top: 50%;
+}
+.divmanazerpopup.right:before {
+	border-right-color: #000000;
+	border-width: 6px;
+	margin-top: -6px;
+	top: 50%;
+}

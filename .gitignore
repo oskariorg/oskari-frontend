@@ -1,2 +1,6 @@
-META-INF/
-WEB-INF/
+liferay-portlet.xml
+.project
+*~
+docroot/WEB-INF/classes
+bin/
+dist/

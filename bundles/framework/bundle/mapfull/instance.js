@@ -88,18 +88,12 @@ function() {
 			}
 		}));
 */		
-		
+
 		map.render(this.mapDivId);
         // startup plugins
         if(this.conf.plugins) {
             var plugins = this.conf.plugins;
             for(var i = 0; i < plugins.length; i++) {
-               /* 
-                // TODO: annoying so skip for debuggin
-                if(plugins[i].id == 'Oskari.mapframework.mapmodule.GetInfoPlugin') {
-                    continue;
-                }
-                */
                 plugins[i].instance = Oskari.clazz.create(plugins[i].id, plugins[i].config);
                 module.registerPlugin(plugins[i].instance);
                 module.startPlugin(plugins[i].instance);
@@ -162,17 +156,6 @@ function() {
 		  
         this._createUi();
 		sandbox.registerAsStateful(this.mediator.bundleId, this);
-		// TODO: StartMapWithLinkEnhancement should alter the state we give here
-		
-        /*
-        // debug state
-        this.state = {
-            east : '397898',
-            north : '6673381',
-            zoom : 9,
-            selectedLayers : [{id : 'base_35'}]
-        };
-        */
         this.setState(this.state);
 	},
     /**

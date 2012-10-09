@@ -40,6 +40,14 @@ function() {
         return this.title;
     },
     /**
+     * @method setHeader
+     * @return {jQuery} reference to header DOM element
+     * Sets the tabs header DOM element
+     */
+    setHeader : function(reference) {
+        this.header = reference;
+    },
+    /**
      * @method getHeader
      * @return {jQuery} reference to DOM element
      * Returns the tabs header DOM element

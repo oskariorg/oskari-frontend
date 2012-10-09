@@ -81,35 +81,6 @@ function(id) {
         this._navigationHistoryTool.clear();
     },
     /**
-     * Registeres load events to layer that will notify when map
-     * is ready
-     *
-     * @param {Object}
-     *            openLayer openLayer object
-     *
-     * @param {Layer}
-     *            portti layer
-     */
-    attachLoadingStatusToLayer : function(openLayer, layer) {
-        var sandbox = this._sandbox;
-        var mapModule = this;
-
-        var statusText = this.getLocalization('status_update_map') + " '" + layer.getName() + "'...";
-
-        /* Notify that loading has started */
-        openLayer.events.register("loadstart", openLayer, function() {
-            sandbox.request(mapModule, sandbox.getRequestBuilder('ActionStartRequest')(openLayer.id, statusText, true));
-        });
-        /* Notify that Map is ready */
-        openLayer.events.register("loadend", openLayer, function() {
-            sandbox.request(mapModule, sandbox.getRequestBuilder('ActionReadyRequest')(openLayer.id, true));
-        });
-        /* Notify that Map is ready */
-        openLayer.events.register("loadcancel", openLayer, function() {
-            sandbox.request(mapModule, sandbox.getRequestBuilder('ActionReadyRequest')(openLayer.id, true));
-        });
-    },
-    /**
      * governance
      */
 
@@ -291,6 +262,9 @@ function(id) {
 
         return this._map;
     },
+    getProjection : function() {
+        return this._projectionCode;
+    },
     /**
      * @method createBaseLayer
      *
@@ -379,6 +353,18 @@ function(id) {
             this.notifyMoveEnd();
         }
     },
+    panMapByPixels : function(pX, pY, suppressStart, suppressEnd) {
+        // usually programmatically for gfi centering
+        this._map.pan(pX, pY);
+        this._updateDomain();
+        // send note about map change
+        if(suppressStart !== true) {
+            this.notifyStartMove();
+        }
+        if(suppressEnd !== true) {
+            this.notifyMoveEnd();
+        }
+    },
     moveMapByPixels : function(pX, pY, suppressStart, suppressEnd) {
         // usually by mouse
         this._map.moveByPx(pX, pY);
@@ -448,6 +434,10 @@ function(id) {
     },
     setZoomLevel : function(newZoomLevel, suppressEvent) {
         //console.log('zoom to ' + requestedZoomLevel);
+        if(newZoomLevel == this._map.getZoom()) {
+        	// do nothing if requested zoom is same as current
+        	return;
+        }
         if(newZoomLevel < 0 || newZoomLevel > this._map.getNumZoomLevels) {
             newZoomLevel = this._map.getZoom();
         }

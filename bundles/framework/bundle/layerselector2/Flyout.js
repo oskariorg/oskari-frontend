@@ -22,6 +22,7 @@ function(instance) {
 	// default grouping
 	this.grouping = 'getInspireName';
 	this.groupingTools = [];
+	this.filterField = null;
 }, {
 	/**
 	 * @method getName
@@ -58,15 +59,15 @@ function(instance) {
 		var me = this;
 		this.template = jQuery('<div class="groupingTabs"><ul></ul></div><br clear="all"/>' +
 				'<div class="allLayersTabContent">' + 
-				'<div class="filter"><input name="text-filter" type="text" /></div>' + 
+                '<div class="filter"></div>' + 
 				'<div class="layerList volatile"></div></div>');
 				
 		this.templateLayer = jQuery('<div class="layer"><input type="checkbox" /> ' +
 				'<div class="layer-tools"><div class="layer-icon"></div><div class="layer-info"></div></div>' + 
 				'<div class="layer-title"></div>' + 
-				'<div class="layer-keywords"></div>' + // <br clear="all" /> 
+				'<div class="layer-keywords"></div>' + 
 			'</div>');
-		this.templateLayerGroup = jQuery('<div class="layerGroup"><div class="groupHeader"><span class="groupName"></span><span class="layerCount"></span></div></div>');
+		this.templateLayerGroup = jQuery('<div class="layerGroup"><div class="header"><div class="groupIcon"></div><div class="groupHeader"><span class="groupName"></span><span class="layerCount"></span></div></div></div>');
 		this.groupingTools = [
 			{
 				"title" : this.instance.getLocalization('filter').inspire,
@@ -132,7 +133,9 @@ function(instance) {
         jQuery(this.container).find('div.groupingTabs li').removeClass('active');
         var layerGroups = jQuery(this.container).find('div.layerList div.layerGroup');
         layerGroups.removeClass('open');
-        jQuery(this.container).find('input[name=text-filter]').val('');
+        layerGroups.find('div.groupIcon').removeClass('icon-arrow-down');
+        layerGroups.find('div.groupIcon').addClass('icon-arrow-right');
+        this.filterField.setValue('');
     },
     setContentState : function(state) {
         
@@ -161,12 +164,11 @@ function(instance) {
         if(!filter) {
             filter = '';
         }
-        jQuery(this.container).find('input[name=text-filter]').val(filter);
+        this.filterField.setValue(filter);
         this._filterLayers(state.filter);
         
         if(!state.filter && state.groups) {
             var layerGroups = jQuery(this.container).find('div.layerList div.layerGroup');
-            //groupContainer.addClass('remove');
             for(var i=0; i < state.groups.length; ++i) {
                 var group = state.groups[i];
                 
@@ -174,13 +176,15 @@ function(instance) {
                 if(groupTitleContainer) {
                     var groupContainer = groupTitleContainer.parent().parent();
                     groupContainer.addClass('open');
+			        groupContainer.find('div.groupIcon').removeClass('icon-arrow-right');
+			        groupContainer.find('div.groupIcon').addClass('icon-arrow-down');
                     groupContainer.find('div.layer').show();
                 }
             }
         }
     },
     getContentState : function() {
-        var filterText = jQuery(this.container).find('input[name=text-filter]').val();
+        var filterText = this.filterField.getValue();
         var openGroups = [];  
         
         var layerGroups = jQuery(this.container).find('div.layerList div.layerGroup.open');
@@ -214,14 +218,17 @@ function(instance) {
 		
 		var toolsContainer = cel.find('div.groupingTabs ul');
 		this._populateGroupingTools(toolsContainer);
-		var field = cel.find('input[name=text-filter]');
-		field.attr('placeholder', this.instance.getLocalization('filter').text);
-		field.keyup(function() {
-    		var field = jQuery(this);
-    		var value = field.val();
-    		me._filterLayers(value);
-		});
 		
+		
+        var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
+        field.setPlaceholder(this.instance.getLocalization('filter').text);
+        field.addClearButton();
+        field.bindChange(function(event) {
+            me._filterLayers(field.getValue());
+        }, true);
+        cel.find('div.filter').append(field.getField());
+        this.filterField = field;
+        
 		// populate layer list
 		var layerListContainer = cel.find('div.layerList');
 		this._populateLayerList(layerListContainer);
@@ -260,6 +267,8 @@ function(instance) {
 				if(visibleLayers.length == 0) {
 					// clear 'open' flag at this point
 					groupDiv.removeClass('open');
+			        groupDiv.find('div.groupIcon').removeClass('icon-arrow-down');
+			        groupDiv.find('div.groupIcon').addClass('icon-arrow-right');
 					// and hide the group
 					groupDiv.hide();
 				}
@@ -268,6 +277,8 @@ function(instance) {
 					// mark group with open flag if not already flagged
 					if(!groupDiv.hasClass('open')) {
 						groupDiv.addClass('open');
+				        groupDiv.find('div.groupIcon').removeClass('icon-arrow-right');
+				        groupDiv.find('div.groupIcon').addClass('icon-arrow-down');
 					}
 					
                     visibleLayers.removeClass('odd');
@@ -281,6 +292,8 @@ function(instance) {
 			layerGroups.show();
 			// layer groups are closed by default so remove 'open' flag
 			layerGroups.removeClass('open');
+	        layerGroups.find('div.groupIcon').removeClass('icon-arrow-down');
+	        layerGroups.find('div.groupIcon').addClass('icon-arrow-right');
 			// and hide layers
 			layerGroups.find('div.layer').hide();
 		}
@@ -362,7 +375,7 @@ function(instance) {
 			// write layer count to last group
 			layerGroupContainer.find('span.layerCount').html(' (' + layerCount +')');
 			// do filtering (in case this was initiated by grouping change etc)
-			var keyword = jQuery(this.container).find('input[name=text-filter]').val();
+			var keyword = this.filterField.getValue();
 			me._filterLayers(keyword);
 		}
 	},
@@ -419,21 +432,25 @@ function(instance) {
 		
 		// clone from layer group template
 		var layerGroupDiv = this.templateLayerGroup.clone();
-		var groupHeader = jQuery(layerGroupDiv).find('div.groupHeader');
-		groupHeader.find('span.groupName').append(groupName);
-		groupHeader.click(function() {
-    		var groupDiv = jQuery(this).parent();
+    	var groupHeader = jQuery(layerGroupDiv).find('div.header');
+        groupHeader.find('span.groupName').append(groupName);
+        groupHeader.click(function() {
+        	var groupDiv = jQuery(this).parent();
 			var isOpen = groupDiv.hasClass('open');
 			// layer is open -> close it
 			if(isOpen) {
 				groupDiv.removeClass('open');
+		        groupDiv.find('div.groupIcon').removeClass('icon-arrow-down');
+		        groupDiv.find('div.groupIcon').addClass('icon-arrow-right');
 				groupDiv.find('div.layer').hide();
 			}
 			// layer is closed -> open it
 			else {
 				groupDiv.addClass('open');
+		        groupDiv.find('div.groupIcon').removeClass('icon-arrow-right');
+				groupDiv.find('div.groupIcon').addClass('icon-arrow-down');
                 // show only the layers that match filtering keyword
-                var filter = jQuery(me.container).find('input[name=text-filter]').val();
+                var filter = me.filterField.getValue();
                 if(filter) {
                     groupDiv.find('div.layer div.layer-keywords:contains(' + filter.toLowerCase() + ')').parent().show();
                 }
@@ -476,50 +493,50 @@ function(instance) {
 		var icon = tools.find('div.layer-icon'); 
 		if(layer.isBaseLayer()) {
             icon.addClass('layer-base');
-			//icon.addClass('base');
 			icon.attr('title', tooltips['type-base']);
-			// tooltip = mapservice_basemap_image_tooltip
 		}
 		else if(layer.isLayerOfType('WMS')) {
 			if(layer.isGroupLayer()) {
                 icon.addClass('layer-group');
-				//icon.addClass('group');
 			}
 			else {
                 icon.addClass('layer-wms');
-				//icon.addClass('wms');
 			}
 			icon.attr('title', tooltips['type-wms']);
-			// tooltip = mapservice_maplayer_image_tooltip
 		}
 		// FIXME: WMTS is an addition done by an outside bundle so this shouldn't be here
 		// but since it would require some refactoring to make this general
 		// I'll just leave this like it was on old implementation
 		else if(layer.isLayerOfType('WMTS')) {
-			//icon.addClass('wmts');
             icon.addClass('layer-wmts');
 			icon.attr('title', tooltips['type-wms']);
-			// tooltip = mapservice_maplayer_image_tooltip
 		}
 		else if(layer.isLayerOfType('WFS')) {
-			//icon.addClass('wfs');
             icon.addClass('layer-wfs');
 			icon.attr('title', tooltips['type-wfs']);
-			// tooltip = selected_layers_module_wfs_icon_tooltip
 		}
 		else if(layer.isLayerOfType('VECTOR')) {
-			//icon.addClass('vector');
             icon.addClass('layer-vector');
 			icon.attr('title', tooltips['type-wms']);
-			// tooltip = mapservice_maplayer_image_tooltip
 		}
 		
 		
         if(layer.getDataUrl()) {
 		    tools.find('div.layer-info').addClass('icon-info');
         	tools.find('div.layer-info').click(function() {
-				alert('TODO: send ShowOverlayPopupRequest with ' + layer.getDataUrl());
-				// 'ShowOverlayPopupRequest\',[\'' + dataUrl + '\']
+				  var rn = 'catalogue.ShowMetadataRequest';
+				  var uuid = layer.getDataUrl();
+				  var idx = uuid.indexOf('uuid=');
+				  if (idx >= 0) {
+				      uuid = uuid.substring(idx + 5);
+				  }
+				  idx = uuid.indexOf('&');
+				  if (idx >= 0) {
+				      uuid = uuid.substring(0, idx);
+				  }
+				  sandbox.postRequestByName(rn, [
+				      { uuid : uuid }
+				  ]);
 			});
 		}
 		

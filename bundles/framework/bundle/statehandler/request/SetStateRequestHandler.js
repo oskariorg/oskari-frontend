@@ -18,12 +18,12 @@ function(sandbox, statehandler) {
 	 * @method handleRequest 
 	 * @param {Oskari.mapframework.core.Core} core
 	 * 		reference to the application core (reference sandbox core.getSandbox())
-	 * @param {Oskari.mapframework.bundle.statehandler.request.SaveStateRequest} request
+	 * @param {Oskari.mapframework.bundle.statehandler.request.SetStateRequest} request
 	 * 		request to handle
 	 */
     handleRequest : function(core, request) {
         if(request.getState()) {
-	    this.statehandler.setCurrentViewId(request.getCurrentViewId());
+	    	this.statehandler.setCurrentViewId(request.getCurrentViewId());
             this.statehandler.useState(request.getState());
         }
         else {

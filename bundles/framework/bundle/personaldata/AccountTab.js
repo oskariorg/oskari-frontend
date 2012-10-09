@@ -21,33 +21,10 @@ function(instance, localization) {
 	addTabContent : function(container) {
 		var content = this.template.clone();
 		container.append(content);
-		this._createAccount(container);
-		
-		
-		/*
-                jQuery.ajax({
-                    type : 'POST',
-                    url : 'http://demo.paikkatietoikkuna.fi/web/fi/kartta' 
-                        + '?p_p_id=Portti2Map_WAR_portti2mapportlet' 
-                        + '&p_p_lifecycle=1' 
-                        + '&p_p_state=exclusive' 
-                        + '&p_p_mode=view' 
-                        + '&p_p_col_id=column-1' 
-                        + '&p_p_col_count=1' 
-                        + '&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp' 
-                        + '&action_route=GetUserData',
-                    success : function(responseText) {
-                        var resp = eval('(' + responseText + ')');
-                        jQuery(me.personalDataTab).find(".personaldata_first").text(resp.firstName);
-                        jQuery(me.personalDataTab).find(".personaldata_last").text(resp.lastName);
-                        jQuery(me.personalDataTab).find(".personaldata_login").text(resp.loginName);
-                        jQuery(me.personalDataTab).find(".personaldata_nick").text(resp.nickName);
-                    }
-                });
-                */
+		this._createAccountTab(container);
 	},
 	
-    _createAccount : function(container) {
+    _createAccountTab : function(container) {
         var me = this;
         var sandbox = me.instance.getSandbox();
         var fieldTemplate = jQuery('<div class="dataField"><div class="label"></div><div class="value"></div><br clear="all" /></div>');
@@ -83,15 +60,7 @@ function(instance, localization) {
         var bottomLinks = [
         {
         	label : localization.changeInfo,
-        	href : 'JavaScript:void(0);'
-        },
-        {
-        	label : localization.changePassword,
-        	href : 'JavaScript:void(0);'
-        },
-        {
-        	label : localization.removeAccount,
-        	href : 'JavaScript:void(0);'
+        	href : localization.changeInfoUrl
         }
         ];
         var bottomLinksContainer = container.find('div.bottomlinks');

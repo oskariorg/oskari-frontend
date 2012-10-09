@@ -17,6 +17,8 @@ function() {
 	this.started = false;
 	this.plugins = {};
 	this.localization = null;
+	this.publisher = null;
+	this.disabledLayers = null;
 }, {
 	/**
 	 * @static
@@ -29,14 +31,6 @@ function() {
 	 */
 	"getName" : function() {
 		return this.__name;
-	},
-	/**
-	 * @method setSandbox
-	 * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-	 * Sets the sandbox reference to this component
-	 */
-	setSandbox : function(sandbox) {
-		this.sandbox = sandbox;
 	},
 	/**
 	 * @method getSandbox
@@ -153,26 +147,28 @@ function() {
             this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
         },
         /**
-         * @method AfterMapMoveEvent
-         * @param {Oskari.mapframework.event.common.AfterMapMoveEvent} event
+         * @method Publisher.MapPublishedEvent
+         * @param {Oskari.mapframework.bundle.publisher.event.MapPublishedEvent} event
          */
-        'AfterMapMoveEvent' : function(event) {
-            this.plugins['Oskari.userinterface.Flyout'].handleMapMoved();
-        },
-        /**
-         * @method userinterface.ExtensionUpdatedEvent
-         * Disable preview on close, otherwise enable preview
-         */
-        'userinterface.ExtensionUpdatedEvent' : function(event) {
-
-            var me = this;
-            if(event.getExtension().getName() != me.getName()) {
-                // wasn't me -> do nothing
-                return;
-            }
-
-            var doOpen = event.getViewState() != "close";
-            this.plugins['Oskari.userinterface.Flyout'].setEnabled(doOpen);
+        'Publisher.MapPublishedEvent' : function(event) {
+	    	var loc = this.getLocalization();
+	    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+	    	var okBtn = dialog.createCloseButton(loc['BasicView'].buttons.ok);
+	    	okBtn.addClass('primary');
+	    	
+	    	// /published/{language}/{mapId}
+	    	var url = loc['published'].urlPrefix + 
+	    	      '/published/' + event.getLanguage() + '/' + event.getId();
+	    	var iframeCode = '<iframe src="' + url + '" width="' + event.getWidth() + 
+	    					'" height="' + event.getHeight() + '"></iframe>';
+	    	var textarea = 
+				'<textarea rows="3" cols="80">' +
+				iframeCode +
+				'</textarea>';
+      		var content = loc['published'].desc + '<br/>' + textarea;
+      			
+	    	dialog.show(loc['published'].title, content, [okBtn]);
+	    	this.setPublishMode(false);
         }
 	},
 
@@ -244,6 +240,74 @@ function() {
 		var me = this;
 		this.plugins['Oskari.userinterface.Flyout'].createUi();
 		this.plugins['Oskari.userinterface.Tile'].refresh();
+	},
+	/**
+	 * @method setPublishMode
+	 * Transform the map view to publisher mode if parameter is true
+	 * @param {Boolean} blnEnabled
+	 * @param {Layer[]} deniedLayers layers that the user can't publish
+	 */
+	setPublishMode : function(blnEnabled, deniedLayers) {
+		var me = this;
+    	var map = jQuery('#contentMap');
+    	var tools = jQuery('#maptools');
+    	
+		if (blnEnabled == true) {
+			this.disabledLayers = deniedLayers;
+			// remove denied
+    		this._removeLayers();
+			
+    		map.addClass('mapPublishMode');
+    		// close all flyouts - TODO: how about popups/gfi?
+            me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
+    		    
+            // proceed with publisher view
+            this.publisher = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.BasicPublisher', 
+                this, this.getLocalization('BasicView'));
+            this.publisher.render(map);
+            this.publisher.setEnabled(true);
+    	}
+    	else {
+    		if(this.publisher) {
+            	this.publisher.setEnabled(false);
+    			this.publisher.destroy();
+    		}
+    		// first return all needed plugins before adding the layers back
+            map.removeClass('mapPublishMode');
+            this._addLayers();
+    	}
+	},
+	/**
+	 * @method _addLayers
+	 * Adds temporarily removed layers to map
+	 */
+	_addLayers : function() {
+		var me = this;
+		var sandbox = this.sandbox;
+        var addRequestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
+		if(this.disabledLayers) {
+			for(var i=0; i < this.disabledLayers.length; ++i) {
+				// remove
+				var layer = this.disabledLayers[i];
+            	sandbox.request(me, addRequestBuilder(layer.getId(), true));
+			}
+		}
+	},
+	/**
+	 * @method _removeLayers
+	 * Removes temporarily layers from map that the user cant publish
+	 */
+	_removeLayers : function() {
+		var me = this;
+		var sandbox = this.sandbox;
+        var removeRequestBuilder = sandbox.getRequestBuilder('RemoveMapLayerRequest');
+		if(this.disabledLayers) {
+			for(var i=0; i < this.disabledLayers.length; ++i) {
+				// remove
+				var layer = this.disabledLayers[i];
+            	sandbox.request(me, removeRequestBuilder(layer.getId()));
+			}
+		}
 	}
 }, {
 	/**

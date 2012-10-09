@@ -13,9 +13,15 @@ function() {
     this._sandbox = null;
     this._map = null;
     this.enabled = true;
+    this.infoboxId = 'getinforesult';
+    this._pendingAjaxQuery = {
+    	busy: false,
+    	jqhr: null,
+    	timestamp: null
+    };
 }, {
     /** @static @property __name plugin name */
-    __name : 'SearchPlugin',
+    __name : 'GetInfoPlugin',
 
     /**
      * @method getName
@@ -26,7 +32,8 @@ function() {
     },
     /**
      * @method getMapModule
-     * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map
+     * @return {Oskari.mapframework.ui.module.common.MapModule}
+     * reference to map
      * module
      */
     getMapModule : function() {
@@ -34,12 +41,13 @@ function() {
     },
     /**
      * @method setMapModule
-     * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map
+     * @param {Oskari.mapframework.ui.module.common.MapModule}
+     * reference to map
      * module
      */
     setMapModule : function(mapModule) {
         this.mapModule = mapModule;
-        if(mapModule) {
+        if (mapModule) {
             this.pluginName = mapModule.getName() + this.__name;
         }
     },
@@ -61,15 +69,10 @@ function() {
      */
     init : function(sandbox) {
         var me = this;
-        if (sandbox && sandbox.register) {
-            this._sandbox = sandbox;
-        }
+        
+        this._sandbox = sandbox;
         this._sandbox.printDebug("[GetInfoPlugin] init");
-        var gfih = 'Oskari.mapframework.mapmodule-plugin.getinfo.GetFeatureInfoHandler';
-        this.requestHandlers = {
-            getFeatureInfoHandler : Oskari.clazz.create(gfih, this._sandbox, me)
-        };
-        this._sandbox.addRequestHandler('GetFeatureInfoRequest', this.requestHandlers.getFeatureInfoHandler);
+        this.getGFIHandler = Oskari.clazz.create('Oskari.mapframework.mapmodule-plugin.getinfo.GetFeatureInfoHandler', me);
     },
     /**
      * @method register
@@ -100,28 +103,12 @@ function() {
         }
         this._map = this.getMapModule().getMap();
 
-        /**
-         * getinfo
-         */
-        this._getinfoTool = new (Oskari.$("OpenLayers.Control.GetInfoAdapter"))({
-            callback : function(loc, clickLocation, options) {
-                me.handleGetInfo(loc, clickLocation, options);
-            },
-            hoverCallback : function(loc, clickLocation, options) {
-                me.handleGetInfoHover(loc, clickLocation, options);
-            }
-        });
-
-        this.getMapModule().addMapControl('getinfo', this._getinfoTool);
-
         this._sandbox.register(this);
         for (p in this.eventHandlers ) {
             this._sandbox.registerForEventByName(this, p);
         }
-        // sandbox.printDebug("[GetInfoPlugin] Registering " +
-        // this.requestHandlers.mapClickHandler);
-        // sandbox.addRequestHandler('MapModulePlugin.MapClickRequest',
-        // this.requestHandlers.mapClickHandler);
+        this._sandbox.addRequestHandler('MapModulePlugin.GetFeatureInfoRequest', this.getGFIHandler);
+        this._sandbox.addRequestHandler('MapModulePlugin.GetFeatureInfoActivationRequest', this.getGFIHandler);
     },
     /**
      * @method stopPlugin
@@ -135,7 +122,7 @@ function() {
         var me = this;
         // hide infobox if open
         me._closeGfiInfo();
-        
+
         if (sandbox && sandbox.register) {
             this._sandbox = sandbox;
         }
@@ -143,8 +130,6 @@ function() {
         for (p in this.eventHandlers ) {
             this._sandbox.unregisterFromEventByName(this, p);
         }
-        // sandbox.removeRequestHandler('MapModulePlugin.MapClickRequest',
-        // this.requestHandlers.mapClickHandler);
         this._sandbox.unregister(this);
         this._map = null;
         this._sandbox = null;
@@ -176,16 +161,10 @@ function() {
      *          true to enable, false to disable
      */
     setEnabled : function(blnEnabled) {
-        var me = this;
-        if(blnEnabled == true) {
-            // enable with a small delay 
-            // so myplaces draw finish will not trigger this
-            setTimeout(function() {
-                me.enabled = true;
-            }, 500);
-        }
-        else {
-            this.enabled = false;
+        this.enabled = (blnEnabled === true);
+        // close existing if disabled
+        if(!this.enabled) {
+            this._closeGfiInfo();
         }
     },
     /**
@@ -193,76 +172,21 @@ function() {
      * @static
      */
     eventHandlers : {
-        'Toolbar.ToolSelectedEvent' : function(event) {
-            this.setEnabled(('basictools' == event.getGroupId() &&
-                 'select' == event.getToolId()));
-        },
-        'AfterDeactivateAllOpenlayersMapControlsButNotMeasureToolsEvent' : function(event) {
-            this.afterDeactivateAllOpenlayersMapControlsButNotMeasureToolsEvent();
-        },
-        'AfterDeactivateAllOpenlayersMapControlsEvent' : function(event) {
-            this.afterDeactivateAllOpenlayersMapControlsEvent(event);
+        'EscPressedEvent' : function(evt) {
+          this._closeGfiInfo();
         },
         'MapClickedEvent' : function(evt) {
-            if(!this.enabled) {
+            if (!this.enabled) {
                 // disabled, do nothing
                 return;
             }
-
-            var me = this;
-            var ajaxUrl = "/web/fi/kartta" + "?p_p_id=Portti2Map_WAR_portti2mapportlet" + "&p_p_lifecycle=1" + "&p_p_state=exclusive" + "&p_p_mode=view" + "&p_p_col_id=column-1" + "&p_p_col_count=1" + "&_Portti2Map_WAR" + "_portti2mapportlet" + "_fi.mml.baseportlet.CMD=ajax.jsp&";
-
             var lonlat = evt.getLonLat();
-            var lon = lonlat.lon;
-            var lat = lonlat.lat;
             var x = evt.getMouseX();
             var y = evt.getMouseY();
-            var projection = 'EPSG:3067';
-            var width = this._sandbox.getMap().getWidth();
-            var height = this._sandbox.getMap().getHeight();
-            var bbox = this._sandbox.getMap().getBbox();
-
-            var selected = this._sandbox.findAllSelectedMapLayers();
-            var layerIds = ""
-            for (var i = 0; i < selected.length; i++) {
-                if (layerIds !== "") {
-                    layerIds += ",";
-                }
-                layerIds += selected[i].getId();
-            }
-
-            jQuery.ajax({
-                beforeSend : function(x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
-                    }
-                },
-                success : function(resp) {
-                    var content = me._formatResponseForInfobox(resp);
-                    if(content.length > 0) {
-                        me._showGfiInfo(content, lonlat);
-                    }
-                },
-                error : function() {
-                    alert("GetInfo failed.");
-                },
-                type : 'POST',
-                dataType : 'json',
-                url : ajaxUrl + 'action_route=GetFeatureInfoWMS' + "&layerIds=" + layerIds + "&projection=" + projection + "&x=" + x + "&y=" + y + "&lon=" + lon + "&lat=" + lat + "&width=" + width + "&height=" + height + "&bbox=" + bbox
-            });
-
-            // if (this._activated) {
-            //   this.buildWMSQueryOrWFSFeatureInfoRequest(lonlat,
-            // 					    mouseX,
-            // 					    mouseY);
-            // }
-
+            this.handleGetInfo(lonlat, x, y);
         },
-        'AfterHighlightMapLayerEvent' : function(event) {
-            this._activated = true;
-        },
-        'AfterDimMapLayerEvent' : function(event) {
-            this._activated = false;
+        'AfterMapMoveEvent' : function(evt) {
+        	this._cancelAjaxRequest();
         }
     },
     /**
@@ -275,65 +199,214 @@ function() {
         var me = this;
         return this.eventHandlers[event.getName()].apply(this, [event]);
     },
-    handleGetInfo : function(loc, clickLocation, options) {
-        var me = this;
-        me._sandbox.printDebug("GETINFO " + loc.lat + "," + loc.lon);
-        this.buildWMSQueryOrWFSFeatureInfoRequest(loc, clickLocation.x, clickLocation.y);
+    
+    _cancelAjaxRequest: function() {
+    	var me = this;
+    	if( !me._pendingAjaxQuery.busy ) {
+    		return;
+    	}
+    	var jqhr = me._pendingAjaxQuery.jqhr;
+    	me._pendingAjaxQuery.jqhr = null;
+    	if( !jqhr) {
+    		return;
+    	}    	
+    	this._sandbox.printDebug("[GetInfoPlugin] Abort jqhr ajax request");
+    	jqhr.abort();
+    	jqhr = null;
+    	me._pendingAjaxQuery.busy = false;
+    },
+    
+    _startAjaxRequest: function(dteMs) {
+    	var me = this;
+		me._pendingAjaxQuery.busy = true;
+		me._pendingAjaxQuery.timestamp = dteMs;
 
     },
-    handleGetInfoHover : function(loc, clickLocation, options) {
+    
+    _finishAjaxRequest: function() {
+    	var me = this;
+    	me._pendingAjaxQuery.busy = false;
+        me._pendingAjaxQuery.jqhr = null;
+        this._sandbox.printDebug("[GetInfoPlugin] finished jqhr ajax request");
+    },
+    
+    _buildLayerIdList: function()  {
         var me = this;
-        me._sandbox.printDebug("GETINFO HOVER " + loc.lat + "," + loc.lon);
+    	var selected = me._sandbox.findAllSelectedMapLayers();
+        var layerIds = null;
+        
+ 		var mapScale = me._sandbox.getMap().getScale();
+        
+        for (var i = 0; i < selected.length; i++) {
+        	var layer = selected[i]
+
+        	if( !layer.isInScale(mapScale) ) {
+				continue;
+			}
+			if( !layer.isFeatureInfoEnabled() ) {
+				continue;
+			}        	
+			if( !layer.isVisible() ) {
+				continue;
+			}
+			
+			if( !layerIds ) {
+				layerIds = "";
+			}
+			        	
+            if (layerIds !== "") {
+                layerIds += ",";
+            }
+
+            layerIds += layer.getId();
+        }
+        
+        return layerIds;
+    },
+    
+    _notifyAjaxFailure: function() {
+    	 var me = this;
+    	 me._sandbox.printDebug("[GetInfoPlugin] GetFeatureInfo AJAX failed");
+    },
+    
+    _isAjaxRequestBusy: function() {
+    	var me = this;
+    	return me._pendingAjaxQuery.busy;
+    },
+    
+	/**
+	 * @method handleGetInfo
+	 * send ajax request to get feature info for given location for any visible layers
+	 * 
+	 * backend processes given layer (ids) as WMS GetFeatureInfo or WFS requests 
+	 * (or in the future WMTS GetFeatureInfo)
+	 * 
+	 * aborts any pending ajax query
+	 * 
+	 */            
+    handleGetInfo : function(lonlat, x, y) {
+        var me = this;
+        
+        var dte = new Date();
+        var dteMs = dte.getTime();
+        
+        if( me._pendingAjaxQuery.busy && me._pendingAjaxQuery.timestamp &&  
+        	dteMs - me._pendingAjaxQuery.timestamp < 500 ) {
+        	me._sandbox.printDebug("[GetInfoPlugin] GetFeatureInfo NOT SENT (time difference < 500ms)");
+        	return; 
+        } 
+        
+        me._cancelAjaxRequest();
+        
+        var layerIds = me._buildLayerIdList();
+        
+        /* let's not start anything we cant' resolve */
+        if( !layerIds  ) {
+        	me._sandbox.printDebug("[GetInfoPlugin] NO layers with featureInfoEnabled, in scale and visible");
+        	return;
+        }
+        
+        me._startAjaxRequest(dteMs);
+		
+        var ajaxUrl = this._sandbox.getAjaxUrl(); 
+
+        var lon = lonlat.lon;
+        var lat = lonlat.lat;
+        
+        var mapVO = me._sandbox.getMap();
+       
+
+        jQuery.ajax({
+            beforeSend : function(x) {
+            	me._pendingAjaxQuery.jqhr = x;
+                if (x && x.overrideMimeType) {
+                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                }
+            },
+            success : function(resp) {
+                if (resp.data && resp.data instanceof Array) {
+                    resp.lonlat = lonlat;
+                    var parsed = me._parseGfiResponse(resp);
+                    if (!parsed) {
+                        return;
+                    }
+                    parsed.popupid = me.infoboxId;
+                    parsed.lonlat = lonlat;
+                    
+                    if( !me._isAjaxRequestBusy() ) {
+                    	return;
+                    }
+                    
+                    me._showFeatures(parsed);
+                    
+                }
+               	
+               	me._finishAjaxRequest();
+            },
+            error : function() {
+            	me._finishAjaxRequest();
+                me._notifyAjaxFailure();
+            },
+            always: function() {
+            	me._finishAjaxRequest();
+            },
+            complete: function() {
+            	me._finishAjaxRequest();
+            },
+            data : {
+                layerIds : layerIds,
+                projection : me.mapModule.getProjection(),
+                x : x,
+                y : y,
+                lon : lon,
+                lat : lat,
+                width : mapVO.getWidth(),
+                height : mapVO.getHeight(),
+                bbox : mapVO.getBbox().toBBOX(),
+                zoom : mapVO.getZoom()
+            },
+            type : 'POST',
+            dataType : 'json',
+            url : ajaxUrl + 'action_route=GetFeatureInfoWMS'
+        });
     },
     /**
      * @method _closeGfiInfo
      * @private
-     * Closes the infobox with GFI data 
+     * Closes the infobox with GFI data
      */
     _closeGfiInfo : function() {
         var rn = "InfoBox.HideInfoBoxRequest";
         var rb = this._sandbox.getRequestBuilder(rn);
-        var r = rb("getinforesult");
+        var r = rb(this.infoboxId);
         this._sandbox.request(this, r);
     },
     /**
      * @method _showGfiInfo
      * @private
-     * Shows given content in given location using infobox bundle 
+     * Shows given content in given location using infobox bundle
      * @param {Object[]} content infobox content array
      * @param {OpenLayers.LonLat} lonlat location for the GFI data
      */
-    _showGfiInfo : function(content,lonlat) {
+    _showGfiInfo : function(content, lonlat) {
         var me = this;
-        // setup close button as an extra content
-        content.push({
-            html: '', // no data to show, only to add button
-            actions : {
-                // TODO: localization
-                "Ok" : function() {
-                    me._closeGfiInfo();
-                }
-            }
-        });
         // send out the request
         var rn = "InfoBox.ShowInfoBoxRequest";
         var rb = this._sandbox.getRequestBuilder(rn);
         var r = rb("getinforesult", "GetInfo Result", content, lonlat, true);
         this._sandbox.request(me, r);
-        
     },
     /**
      * @method _formatResponseForInfobox
      * @private
-     * Parses the GFI JSON response to a content array that can be 
+     * Parses the GFI JSON response to a content array that can be
      * shown with infobox bundle
      * @param {Object} response response from json query
-     * @return {Object[]} 
+     * @return {Object[]}
      */
     _formatResponseForInfobox : function(response) {
-
         var content = [];
-        if(!response || !response.data) {
+        if (!response || !response.data) {
             return content;
         }
         var me = this;
@@ -347,36 +420,64 @@ function() {
         }
 
         for (var ii = 0; ii < dataList.length; ii++) {
-            var html = '';
             var data = dataList[ii];
-
-            if (data.presentationType == 'TEXT') {
-                html = '<div style="overflow:auto">' + data.content + '</div>';
-            } else {
-                html = '<br/><table>';
-                var even = false;
-                // TODO: not tested
-                var jsonData = data.content;
-                for (attr in jsonData) {
-                    var value = jsonData[attr];
-                    if (value.startsWith('http://')) {
-                        value = '<a href="' + value + '" target="_blank">' + value + '</a>';
-                    }
-                    html = html + '<tr style="padding: 5px;';
-                    if (!even) {
-                        html = html + ' background-color: #EEEEEE';
-                    }
-                    even = !even;
-                    html = html + '"><td style="padding: 2px">' + attr + '</td><td style="padding: 2px">' + value + '</td></tr>';
-                }
-                html + '</table>';
+            html = me._formatGfiDatum(data);
+            if (html != null) {
+                content.push({
+                    html : html
+                });
             }
-
-            content.push({
-                html : html
-            });
         }
         return content;
+    },
+
+    /**
+     * Formats a GFI datum
+     *
+     * @param datum
+     */
+    _formatGfiDatum : function(datum) {
+        if (!datum.presentationType) {
+            return null;
+        }
+        var html = '';
+        var contentType = ( typeof datum.content);
+        var hasHtml = false;
+        if (contentType == 'string') {
+            hasHtml = (datum.content.indexOf('<html>') >= 0);
+            hasHtml = hasHtml || (datum.content.indexOf('<HTML>') >= 0);
+        }
+
+        if (datum.presentationType == 'JSON' || (datum.content && datum.content.parsed)) {
+            html = '<br/><table>';
+            var even = false;
+            var jsonData = datum.content.parsed;
+            for (attr in jsonData) {
+                var value = jsonData[attr];
+                if (value == null) {
+                    continue;
+                }
+                if ((value.startsWith && value.startsWith('http://')) || (value.indexOf && value.indexOf('http://') == 0)) {
+                    // if (value.startsWith('http://')) {
+                    // if (value.indexOf('http://') == 0) {
+                    value = '<a href="' + value + '" target="_blank">' + value + '</a>';
+                }
+                html = html + '<tr style="padding: 5px;';
+                if (!even) {
+                    html = html + ' background-color: #EEEEEE';
+                }
+                even = !even;
+                html = html + '"><td style="padding: 2px">' + attr + '</td><td style="padding: 2px">' + value + '</td></tr>';
+            }
+            html = html + '</table>';
+
+            //                  } else if ((datum.presentationType == 'TEXT') ||
+            // hasHtml) {
+        } else {
+            // style="overflow:auto"
+            html = '<div>' + datum.content + '</div>';
+        }
+        return html;
     },
 
     /**
@@ -399,38 +500,177 @@ function() {
         return separatedValues;
     },
 
-    /***********************************************************
-     * Build WMS GetFeatureInfo request
+    /**
+     * Flattens a GFI response
      *
-     * @param {Object}
-     *            e
+     * @param {Object} data     
      */
-    buildWMSQueryOrWFSFeatureInfoRequest : function(lonlat, mouseX, mouseY) {
+    _parseGfiResponse : function(resp) {
+    	var sandbox = this._sandbox;
+        var data = resp.data;
+        var coll = [];
+        var lonlat = resp.lonlat;
+        var title = lonlat.lon + ", " + lonlat.lat;
 
-        var me = this;
-        var sandbox = me._sandbox;
-        var allHighlightedLayers = me._sandbox.findAllHighlightedLayers();
-
-        this._projectionCode = 'EPSG:3067';
-
-        if (allHighlightedLayers[0] && allHighlightedLayers[0] != null && (allHighlightedLayers[0].isLayerOfType('WMS') || allHighlightedLayers[0].isLayerOfType('WMTS'))) {
-
-            var mapWidth = me._sandbox.getMap().getWidth();
-            var mapHeight = me._sandbox.getMap().getHeight();
-            var bbox = me._sandbox.getMap().getBbox();
-
-            var queryLayerIds = me._sandbox.findAllHighlightedLayers();
-
-            var b = me._sandbox.getRequestBuilder('GetFeatureInfoRequest');
-            var r = b(queryLayerIds, lonlat.lon, lonlat.lat, mouseX, mouseY, mapWidth, mapHeight, bbox, this._projectionCode);
-            me._sandbox.request(this, r);
-
-        } else if (allHighlightedLayers[0] && allHighlightedLayers[0] != null && allHighlightedLayers[0].isLayerOfType('VECTOR')) {
-            this.getMapModule().notifyAll(me._sandbox
-            .getEventBuilder('FeaturesGetInfoEvent')(allHighlightedLayers[0], null, lonlat.lon, lonlat.lat, this._map.getProjection, "GetFeatureInfo"));
-
+        var layerCount = resp.layerCount;
+        if (layerCount == 0 || data.length == 0 || !( data instanceof Array)) {
+            return;
         }
+
+        for (var di = 0; di < data.length; di++) {
+            var datum = data[di];
+            var layerId = datum.layerId;
+            var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+            var layerName =  layer ? layer.getName() : '';
+            var type = datum.type;
+
+            if (type == "WFS_LAYER") {
+                var features = datum.features;
+                if (!(features && features.length)) {
+                    continue;
+                }
+                for (var fi = 0; fi < features.length; fi++) {
+                    var fea = features[fi];
+                    var children = fea.children;
+                    if (!(children && children.length)) {
+                        continue;
+                    }
+                    for (var ci = 0; ci < children.length; ci++) {
+                        var child = children[ci];
+                        var pnimi = child['pnr_PaikanNimi'];
+                        if (pnimi && pnimi['pnr:kirjoitusasu']) {
+                            title = pnimi['pnr:kirjoitusasu'];
+                        }
+                        var pretty = this._json2html(child);
+                        coll.push({
+                        	markup: pretty,
+                        	layerId: layerId,
+                        	layerName: layerName});
+                    }
+                }
+            } else {
+                var pretty = this._formatGfiDatum(datum);
+                if (pretty != null) {
+                    coll.push({
+                        	markup: pretty,
+                        	layerId: layerId,
+                        	layerName: layerName});
+                }
+            }
+        }
+        
+        /*
+         * returns { fragments: coll, title: title }
+         *  
+         *  fragments is an array of JSON { markup: '<html-markup>', layerName: 'nameforlayer', layerId: idforlayer } 
+         */
+        
+        return {
+            fragments : coll,
+            title : title
+        };
+    },
+
+    _json2html : function(node,layerName) {
+        var me = this;
+        if (node == null) {
+            return '';
+        }
+        var even = true;
+        var html = '<table>';
+        for (var key in node) {
+            var value = node[key];
+            var vType = ( typeof value).toLowerCase();
+            var vPres = ''
+            switch (vType) {
+                case 'string':
+                    if (value.startsWith('http://')) {
+                        valpres = '<a href="' + value + '" target="_blank">' + value + '</a>';
+                    } else {
+                        valpres = value;
+                    }
+                    break;
+                case 'undefined':
+                    valpres = 'n/a';
+                    break;
+                case 'boolean':
+                    valpres = ( value ? 'true' : 'false');
+                    break;
+                case 'number':
+                    valpres = '' + number + '';
+                    break;
+                case 'function':
+                    valpres = '?';
+                    break;
+                case 'object':
+                    valpres = this._json2html(value);
+                    break;
+                default:
+                    valpres = '';
+            }
+            even = !even;
+            html += '<tr style="padding: 5px;';
+            if (even) {
+                html += '">';
+            } else {
+                html += ' background-color: #EEEEEE;">';
+            }
+            html += '' + '<td style="padding: 2px;">' + key + '</td>';
+            html += '' + '<td style="padding: 2px;">' + valpres + '</td>';
+            html += '</tr>';
+        }
+        html += '</table>';
+        return html;
+    },
+
+    /**
+     * Shows multiple features in an infobox
+     *
+     * @param {Array} data
+     */
+    _showFeatures : function(data) {
+    	
+    	/* data is { fragments: coll, title: title } */
+    	/* fragments is an array of JSON { markup: '<html-markup>', layerName: 'nameforlayer', layerId: idforlayer } */
+        var me = this;
+        var contentHtml = [];
+        var content = {};
+        content.html = '';
+        content.actions = {};
+        for (var di = 0; di < data.fragments.length; di++) {
+			var fragment =   data.fragments[di]      	
+        	var fragmentTitle = fragment.layerName;
+        	var fragmentMarkup = fragment.markup;
+        	
+        	contentHtml.push('<div>');
+            contentHtml.push( 
+               '<div style="border:1pt solid navy;background-color: #424343;margin-top: 14px; margin-bottom: 10px;height:15px;">' +  
+                 '<div class="icon-bubble-left" style="height:15px;display:inline;float:left;"><div></div></div>'+
+                 '<div style="color:white;float:left;display:inline;margin-left:8px;">'+fragmentTitle +'</div>'+
+               '</div>');
+            
+            if( fragmentMarkup ) {   
+            	contentHtml.push(fragmentMarkup);
+            }
+			contentHtml.push('</div>');
+        }
+        
+        content.html = contentHtml.join('');
+
+
+        var pluginLoc = this.getMapModule().getLocalization('plugin');
+        var myLoc = pluginLoc[this.__name];
+        data.title = myLoc.title;
+
+        var rn = "InfoBox.ShowInfoBoxRequest";
+        var rb = me._sandbox.getRequestBuilder(rn);
+        var r = rb(data.popupid, data.title, [content], data.lonlat, true);
+        me._sandbox.request(me, r);
     }
 }, {
+    /**
+     * @property {Object} protocol
+     * @static
+     */
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });

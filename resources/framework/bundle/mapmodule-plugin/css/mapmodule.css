@@ -5,3 +5,16 @@
     position : absolute;
     z-index: 15000;
 }
+div.mapplugins.left {
+    position : absolute;
+    z-index: 15000;
+    top : 20px;
+    right : 20px;
+    text-align: right;
+    max-width : 85%;
+}
+div.mapplugins.left > div {
+	display: inline-block;
+    margin: 5px;
+    vertical-align: top;
+}

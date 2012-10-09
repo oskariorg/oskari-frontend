@@ -1,18 +1,36 @@
 Oskari.registerLocalization({
-	"lang" : "fi",
-	"key" : "Toolbar",
-	"value" : {
-		'buttons' : {
-	    	'link' : {
-	    		'tooltip' :'Link',
-	    		'prefixUrl' :'www.paikkatietoikkkuna.fi/web/fi/kartta?',
-	    		'ok' : 'Ok',
-	    		'title': 'Url'
-	    	},
-	    	'print' : {
-	    		'tooltip' :'Print'
-	    	}
-	    }
-	    
-	}
+  "lang": "en",
+  "key": "Toolbar",
+  "value": {
+    "buttons": {
+      "link": {
+        "tooltip": "Link",
+        "prefixUrl": "www.paikkatietoikkuna.fi/web/en/map-window?",
+        "ok": "Ok",
+        "title": "Link to map view"
+      },
+      "print": {
+        "tooltip": "Print"
+      },
+      "history": {
+        "reset": "Return to default view",
+        "back": "Back",
+        "next": "Next"
+      },
+      "pan": "Pan map view",
+      "zoom": "Zoom in",
+      "measure": {
+        "line": "Measure distance",
+        "area": "Measure area"
+      }
+    },
+    "measure" : {
+        "title" : "Measurements",
+        "close" : "Cancel",
+        "guidance" : {
+            "measureline" : "Measure a line on the map. Double-click to stop measuring.",
+            "measurearea" : "Measure an area on the map. Double-click to stop measuring."
+        }
+    }
+  }
 });

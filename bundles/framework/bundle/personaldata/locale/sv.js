@@ -1,44 +1,147 @@
 Oskari.registerLocalization({
-    lang : "sv",
-    key : "PersonalData",
-    value : {
-	title : "Omat tiedot",
-	desc : "Omat tiedot",
-	notLoggedIn : "Rekisteröityneenä käyttäjänä löydät " + 
-	    "Omista tiedoista tallentamasi karttanäkymät.",
-	tabs : {
-	    myplaces : {
-		title : "Omat paikat"	
-	    },
-	    myviews : {
-		title : "Omat näkymät",
-		edit : "Muokkaa",
-		publish : "Julkiseksi",
-		unpublish : "Yksityiseksi",
-		"delete" : "Poista"
-	    },
-	    publishedmaps : {
-		title : "Julkaistut kartat"	
-	    },
-	    account : {
-		title : "Tilin tiedot",
-		firstName : "Etunimi",
-		lastName : "Sukunimi",
-		nickName : "Nimimerkki",
-		email : "Sähköpostiosoite",
-		changeInfo : "Muuta tietoja",
-		changePassword : "Muuta salasana",
-		removeAccount : "Poista tili"
-	    }
-	},
-	edit : 'Muokkaa_näkymää',
-	msg : {
-	    delete_view : "Poistetaanko näkymä",
-	    confirm_delete : "Poiston varmistus"
-	},
-	button : {
-	    yes : "Kyllä",
-	    no : "Ei"
-	}
+  "lang": "sv",
+  "key": "PersonalData",
+  "value": {
+    "title": "Mina uppgifter",
+    "desc": "Mina uppgifter",
+    "notLoggedIn": "Du kan lagra dina egna kartvyer och titta på kartor som du har inbäddat på andra webbplatser i Mina uppgifter. <a href='/web/sv/login'>Logga in</a>.",
+    "tabs": {
+      "myplaces": {
+        "title": "Objekt",
+        "nocategories": "Du har ännu inte lagrat objekten.",
+        "editCategory": "Editera kartlager",
+        "deleteCategory": "Ta bort kartlager",
+        "edit": "Editera",
+        "delete": "Ta bort",
+        "grid": {
+          "name": "Namn",
+          "desc": "Beskrivning",
+          "createDate": "Skapad",
+          "updateDate": "Uppdaterad",
+          "edit": " ",
+          "delete": " "
+        },
+        "notification": {
+          "delete": {
+            "title": "Ta bort objekt",
+            "confirm": "Vill du ta bort detta objekt?",
+            "btnDelete": "Ta bort",
+            "btnCancel": "Tillbaka",
+            "success": "Objektet har tagits bort.",
+            "error": "Objektet kunde inte tas bort. Prova på nytt senare.",
+            "cancel": "Objektet har inte tagits bort."
+          }
+        }
+      },
+      "myviews": {
+        "title": "Mina vyer",
+        "edit": "Editera",
+        "publish": "Offentliggör",
+        "unpublish": "Gör privat",
+        "delete": "Ta bort",
+        "grid": {
+          "name": "Namn",
+          "publish": "Vyn är offentlig",
+          "edit": " ",
+          "delete": " "
+        },
+        "popup": {
+          "edit": "Byt namn på vyn",
+          "title": "Lagra vy",
+          "label": "Vyns namn",
+          "placeholder": "Namnge vy",
+          "save": "Lagra",
+          "cancel": "Tillbaka",
+          "error_noname": "Skriv namnet",
+          "deletetitle": "Bekräfta radering",
+          "deletemsg": "Vill du ta bort denna vy?"
+        },
+        "save": {
+          "success": "Vyn har lagrats.",
+          "error_noname": "Namnet kan inte vara tomt.",
+          "error_illegalchars": "I namnet ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck.",
+          "msg": {
+            "view_name": "Vyns namn"
+          }
+        },
+        "button": {
+          "ok": "OK",
+          "save": "Lagra",
+          "cancel": "Tillbaka",
+          "toolbarsave": "Lagra vy"
+        },
+        "error": {
+          "title": "Fel!",
+          "generic": "Systemfel. Försök på nytt senare.",
+          "notsaved": "Vyn kunde inte lagras.",
+          "notdeleted": "Vyn kunde inte tas bort.",
+          "makePublic": "Vyn kunde inte göras offentlig Försök på nytt senare.",
+          "makePrivate": "Vyn kunde inte göras privat. Försök på nytt senare.",
+          "loadfailed": "Vyerna kunde inte laddas ned."
+        }
+      },
+      "publishedmaps": {
+        "title": "Inbäddade",
+        "edit": "Visa på kartan",
+        "publish": "Avskilj karta",
+        "unpublish": "Återta avskiljandet",
+        "delete": "Ta bort",
+        "grid": {
+          "name": "Namn",
+          "domain": "Kartinställnigar",
+          "publish": "Status",
+          "edit": "",
+          "delete": ""
+        },
+        "popup": {
+          "edit": "Byt namn på kartan",
+          "title": "Lagra karta",
+          "label": "Kartans namn:",
+          "placeholder": "Namnge kartan",
+          "save": "Lagra",
+          "cancel": "Tillbaka",
+          "error_noname": "Namnge kartan",
+          "deletetitle": "Vill du ta bort denna karta?",
+          "deletemsg": "Vill du ta bort den inbäddade kartan? Efter detta syns kartan inte längre på din webbplats."
+        },
+        "save": {
+          "success": "Kartan har lagrats.",
+          "error_noname": "Namnet kan inte vara tomt.",
+          "error_illegalchars": "I namnet ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck.",
+          "msg": {
+            "view_name": "Kartans namn"
+          }
+        },
+        "button": {
+          "ok": "OK",
+          "save": "Lagra",
+          "cancel": "Tillbaka",
+          "toolbarsave": "Lagra karta"
+        },
+        "error": {
+          "title": "Fel!",
+          "generic": "Systemfel. Försök på nytt senare.",
+          "notsaved": "Kartan kunde inte lagras.",
+          "notdeleted": "Kartan kunde inte tas bort.",
+          "makePublic": "Kartan kunde inte göras offentlig. Försök på nytt senare.",
+          "makePrivate": "Kartan kunde inte göras privat. Försök på nytt senare."
+        }
+      },
+      "account": {
+        "title": "Användarkonto",
+        "firstName": "Förnamn",
+        "lastName": "Efternamn",
+        "nickName": "Signatur",
+        "email": "E-postadress",
+        "changeInfo": "Ändra uppgifter",
+        "changePassword": "Byt ut lösenordet",
+        "removeAccount": "Radera konto",
+        "changeInfoUrl": "/web/sv/profil"
+      }
+    },
+    "button": {
+      "yes": "Ja",
+      "no": "Nej"
     }
+  }
 });

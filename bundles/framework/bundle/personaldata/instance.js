@@ -17,6 +17,7 @@ function() {
 	this.started = false;
 	this.template = null;
 	this.plugins = {};
+	this.viewService = null;
 }, {
 	/**
 	 * @static
@@ -44,6 +45,13 @@ function() {
 	 */
 	getSandbox : function() {
 		return this.sandbox;
+	},
+	/**
+	 * @method getViewService
+	 * @return {Oskari.mapframework.bundle.personaldata.service.ViewService}
+	 */
+	getViewService : function() {
+		return this.viewService;
 	},
     /**
      * @method getLocalization
@@ -78,6 +86,7 @@ function() {
 
 		var sandbox = Oskari.$("sandbox");
 		me.sandbox = sandbox;
+		this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService', sandbox.getAjaxUrl());
 
 		sandbox.register(me);
 		for(p in me.eventHandlers) {
@@ -91,26 +100,6 @@ function() {
 
 		// draw ui
 		me.createUi();
-		
-        // add save view button to toolbar if we get the statehandler request
-        var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
-        if (rbState) {
-            var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
-            sandbox.request(me, reqBuilder('save_view', 'viewtools', {
-                iconCls : 'tool-save-view',
-                tooltip: 'Tallenna näkymä',
-                sticky: false,
-                callback : function() {
-                    sandbox.request(me, rbState());
-                }
-            }));
-        }
-        // disable button for non logged in users
-        
-        if(!sandbox.getUser().isLoggedIn()) {
-            var reqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
-            sandbox.request(me, reqBuilder('save_view', 'viewtools', false));
-        }
 	},
 	/**
 	 * @method init
@@ -215,7 +204,6 @@ function() {
 
 		this.plugins['Oskari.userinterface.Flyout'].createUi();
 		this.plugins['Oskari.userinterface.Tile'].refresh();
-
 	}
 }, {
 	/**

@@ -43,39 +43,39 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox','map-methods',
 		        }
 			},
 
-			/**
-			 * Method for registering OpenLayers map component. We cannot handle
-			 * all events by using normal request-event cycle due to the fact
-			 * that some things happen way too often (e.g. mouse move)
-			 * 
-			 * this is why, we have to register some components directly and
-			 * bypass eventhandling
-			 * 
-			 * @param {Object}
-			 *            map
-			 */
-			/*registerOpenLayersMapComponent : function(map) {
-				this._core.registerOpenLayersMapComponent(map);
-			},*/
-
-			/**
-			 * Method for registering mouse movement on openlayers map. These
-			 * operations can occur very often so we must optimize this.
-			 * 
-			 * @param {Object}
-			 *            event
-			 */
-			/*registerMouseMovementForOpenlayersMap : function(x, y) {
-				this._core.registerMouseMovementForOpenlayersMap(x, y);
-			},*/
-
 			isMapFullScreenMode : function() {
 				return this._core.isMapFullScreenMode();
 			},
 
-			generatePublishedMapLinkToFinnishGeoportalPage : function() {
-				return this._core
-						.generatePublishedMapLinkToFinnishGeoportalPage();
+			generateMapLinkParameters : function() {
+                var mapFullComponent = this.getStatefulComponents()['mapfull'];
+                if(!mapFullComponent) {
+					return;
+                }
+                var state = mapFullComponent.getState();
+				var link = 
+					'zoomLevel='+ state['zoom'] +
+					'&coord=' + state['east'] +'_'+ state['north'] +
+					'&mapLayers=';
+				
+				var layers ='';
+				
+				for ( var i = 0; i < state['selectedLayers'].length; i++) {
+					if (!state['selectedLayers'][i].hidden) {
+						if (layers != '') {
+							layers +=',';
+						}
+						layers +=state['selectedLayers'][i].id+'+'+state['selectedLayers'][i].opacity
+						if (state['selectedLayers'][i].style) {
+							layers +='+'+state['selectedLayers'][i].style;
+						} else {
+							layers +='+';
+						}
+					} 
+				}
+				link += layers;
+				link += '&showMarker=false&forceCache=true&noSavedState=true';
+				return link;
 			},
 			
     		doSniffing : function(layersArray) {

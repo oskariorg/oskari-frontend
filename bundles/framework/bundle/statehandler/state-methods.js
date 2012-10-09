@@ -40,32 +40,45 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
      * implementation.
      */
     resetState : function() {
+    	var me = this;
+    	me._historyEnabled = false;
+        me._historyPrevious = [];
+	    me._historyNext = [];
+
+    	
         for(var pluginName in this._pluginInstances) {
-            this.sandbox.printDebug('[' + this.getName() + ']' + ' resetting state on ' + pluginName);
-            this._pluginInstances[pluginName].resetState();
+            me.sandbox.printDebug('[' + me.getName() + ']' + ' resetting state on ' + pluginName);
+            me._pluginInstances[pluginName].resetState();
         }
         // reinit with startup params
-        var me = this;
+     
 		// get initial state from server
-		// TODO: some parameter needs to tell we dont want the state saved in session
-		if(this._startupState) {
+    	me._currentViewId = this._defaultViewId;
+		if(me._startupState) {
             me._resetComponentsWithNoStateData(me.useState(this._startupState));
 		}
 		else {
             jQuery.ajax({
                 dataType : "json",
                 type : "GET",
+                // noSavedState=true parameter tells we dont want the state saved in session
                 url : me.sandbox.getAjaxUrl() + 'action_route=GetMapConfiguration&noSavedState=true',
                 success : function(data) {
                     me._startupState = data;
                     me._resetComponentsWithNoStateData(me.useState(data));
+                    me._historyEnabled = true;
                 },
                 error : function() {
                     alert('error loading conf');
+                    me._historyEnabled = true;
+                },
+                complete: function() {
+                	me._historyEnabled = true;
                 }
             });
 		}
         
+        me._historyEnabled = true;
     },
     /**
      * @method _resetComponentsWithNoStateData
@@ -104,15 +117,15 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
      * itself.
      * All actual implementations are done in plugins.
      */
-    saveState : function(pluginName) {
+    saveState : function(viewName, pluginName) {
         if(!pluginName) {
             for(var pluginName in this._pluginInstances) {
-                this.saveState(pluginName);
+                this.saveState(viewName, pluginName);
             }
             return;
         }
         this.sandbox.printDebug('[' + this.getName() + ']' + ' saving state with ' + pluginName);
-        this._pluginInstances[pluginName].saveState();
+        this._pluginInstances[pluginName].saveState(viewName);
     },
     /**
      * @method getCurrentState
@@ -140,6 +153,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
     getSavedState : function(pluginName) {
         return this._pluginInstances[pluginName].getState();
     }
+    
+   
 });
 
 	

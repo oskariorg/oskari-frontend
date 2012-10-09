@@ -13,7 +13,7 @@ function(instance) {
     this.instance = instance;
     // init layers from link (for printing) on initial load
     this.initialLoad = true;
-    this.linkTemplate = undefined;
+    this.validateTool = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
 }, {
     __name : 'MyPlacesCategoryHandler',
     /**
@@ -28,10 +28,6 @@ function(instance) {
      * implements Module protocol init method
      */
     init : function() {
-        this.categoryEditTemplate = jQuery('<div><a class="button save" href="JavaScript:void(0);"></a>' +
-                    '<a class="button cancel" href="JavaScript:void(0);"></a>' +
-                '</div>');
-        this.linkTemplate = jQuery('<a href="JavaScript:void(0);"></a>');
     },
     /**
      * @method start
@@ -49,30 +45,6 @@ function(instance) {
                 sandbox.registerForEventByName(me, p);
             }
         }
-        
-        // categoryedit
-        jQuery('div.myplaces2category a.button.save').live('click', function() {
-            // TODO: save form
-            var values = me.editForm.getValues();
-            var errors = me.validateCategoryFormValues(values);
-            if(errors.length != 0) {
-                alert('errors!');
-                return;
-            }
-            var category = me.getCategoryFromFormValues(values);
-            me.saveCategory(category);
-            
-            //alert(JSON.stringify(values));
-            me.popover.hide();
-        });
-        jQuery('div.myplaces2category a.button.cancel').live('click', function() {
-            me.popover.hide();
-            me.editForm = undefined;
-        });
-        var popover = Oskari.clazz.create('Oskari.userinterface.component.Popover', 
-            'edit kat');
-        this.popover = popover;
-        this.popover.setPlacement('right');
     },
         
     /**
@@ -229,13 +201,9 @@ function(instance) {
      */
     _getMapLayerJson : function(categoryModel) {
         var baseJson = this._getMapLayerJsonBase();
-        // wmsurl = "/karttatiili/myplaces?myCat="
-        // FIXME: wmsurl from conf - live version gets from portal-ext.properties?
-        //baseJson.wmsUrl = this.instance.conf.wmsUrl + categoryModel.getId() + "&";
-        baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + categoryModel.getId() + "&";
+        baseJson.wmsUrl = this.instance.conf.wmsUrl + categoryModel.getId() + "&";
+        //baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + categoryModel.getId() + "&";
         baseJson.name = categoryModel.getName();
-        
-        //wmsUrl:"http://www.paikkatietoikkuna.fi/geoserver/wms?CQL_FILTER=uuid='"+userKey+"'"
         baseJson.id = this._getMapLayerId(categoryModel.getId());
         return baseJson;
     },
@@ -259,7 +227,7 @@ function(instance) {
             },
             isQueryable:false,
             minScale:12000000,
-            opacity:75,
+            opacity: 50,
             metaType: this.instance.idPrefix,
             orgName: catLoc.organization,
             inspire: catLoc.inspire,
@@ -300,6 +268,8 @@ function(instance) {
     
     editCategory : function(category) {
         var me = this;
+        
+        this.instance.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
         var form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.CategoryForm', me.instance);
         var values = {
             name : category.getName(),
@@ -320,22 +290,85 @@ function(instance) {
         };
         
         form.setValues(values);
-        var content = form.getForm(); 
-        var controls = me.categoryEditTemplate.clone();
-        // TODO: localization
-        controls.find('a.button.save').append('Tallenna');
-        controls.find('a.button.cancel').append('Peruuta');
+        var content = form.getForm();
         
-        content.append(controls);
-        this.editForm = form;
-        // place it next to the personal data maplayer select
-        this.popover.attachTo('div.personaldata ul li select');
-        // hax attach our own style class for binding buttons
-        this.popover.data.tip().addClass('myplaces2category');
-        me.popover.setContent(content);
-        me.popover.show();
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+    	
+        var buttons = [];
+    	var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        var btnLoc = this.instance.getLocalization('buttons');
+        var catLoc = this.instance.getLocalization('categoryform').edit;
+    	saveBtn.setTitle(btnLoc.save);
+    	saveBtn.addClass('primary');
+    	saveBtn.setHandler(function() {
+            var values = form.getValues();
+            var errors = me.validateCategoryFormValues(values);
+            if(errors.length != 0) {
+                me.showValidationErrorMessage(errors);
+                return;
+            }
+            var category = me.getCategoryFromFormValues(values);
+            me.saveCategory(category);
+            
+            dialog.close();
+            me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+        });
+    	var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+    	cancelBtn.setTitle(btnLoc.cancel);
+    	cancelBtn.setHandler(function() {
+            dialog.close();
+    	});
+        buttons.push(cancelBtn);
+        buttons.push(saveBtn);
+        
+    	dialog.show(catLoc.title, content, buttons);
+    	dialog.moveTo('div.personaldata ul li select', 'right');
+    	dialog.makeModal();
     },
-    
+    showValidationErrorMessage : function(errors) {
+        var loc = this.instance.getLocalization();
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+    	okBtn.setTitle(loc.buttons.ok);
+    	okBtn.addClass('primary');
+    	okBtn.setHandler(function() {
+            dialog.close(true);
+    	});
+    	var content = jQuery('<ul></ul>');
+    	for(var i = 0 ; i < errors.length; ++i) {
+    		var row = jQuery('<li></li>');
+    		row.append(errors[i]['error'])
+    		content.append(row);
+    	}
+    	dialog.show(loc.validation.title, content, [okBtn]);
+    },
+    /**
+     * @method hasIllegalChars
+     * Checks value for problematic characters
+     * @return {Boolean} true if value has illegal characters 
+     */
+    hasIllegalChars : function(value) {
+        this.validateTool.setValue(value);
+        return !this.validateTool.checkValue();
+    },
+    /**
+     * @method _validateNumber
+     * Checks value for number and number range
+     * @return {Boolean} true if value is ok 
+     * @private
+     */
+    _validateNumber : function(value, min, max) {
+        return this.validateTool.validateNumberRange(value, min, max);
+    },
+    /**
+     * @method _isColor
+     * Checks value for a hex color
+     * @return {Boolean} true if ok, false -> not a color
+     * @private
+     */
+    _isColor : function(value) {
+        return this.validateTool.validateHexColor(value);
+    },
     validateCategoryFormValues : function(values) {
         var errors = [];
         if(!values) {
@@ -343,22 +376,34 @@ function(instance) {
         }
         var loc = this.instance.getLocalization('validation');
         
-        if(!values.name)
-        {
+        if(!values.name) {
             errors.push({field : 'name', error : loc.categoryName});
         }
-        /*
-         * TODO: validate 
-            category.setDotSize(formValues.category.dot.size);
-            category.setDotColor(formValues.category.dot.color);
-            
-            category.setLineWidth(formValues.category.line.size);
-            category.setLineColor(formValues.category.line.color);
-            
-            category.setAreaLineWidth(formValues.category.area.size);
-            category.setAreaLineColor(formValues.category.area.lineColor);
-            category.setAreaFillColor(formValues.category.area.fillColor);
-         */
+        else if(this.hasIllegalChars(values.name)) {
+            errors.push({field : 'name', error : loc.categoryNameIllegal});
+        }
+        
+        if(!this._validateNumber(values.dot.size, 1, 50)) {
+            errors.push({field : 'dotSize', error : loc.dotSize});
+        }
+        if(!this._isColor(values.dot.color)) {
+            errors.push({field : 'dotColor', error : loc.dotColor});
+        }
+        if(!this._validateNumber(values.line.size, 1, 50)) {
+            errors.push({field : 'lineSize', error : loc.lineSize});
+        }
+        if(!this._isColor(values.line.color)) {
+            errors.push({field : 'lineColor', error : loc.lineColor});
+        }
+        if(!this._validateNumber(values.area.size, 0, 50)) {
+            errors.push({field : 'areaLineSize', error : loc.areaLineSize});
+        }
+        if(!this._isColor(values.area.lineColor)) {
+            errors.push({field : 'areaLineColor', error : loc.areaLineColor});
+        }
+        if(!this._isColor(values.area.fillColor)) {
+            errors.push({field : 'areaFillColor', error : loc.areaFillColor});
+        }
         return errors;
     },
     getCategoryFromFormValues : function(values) {
@@ -392,15 +437,144 @@ function(instance) {
             } else {
                 // blnNew should always be true since we are adding a category
                 if (blnNew) {
-                    alert(loc['error'].addCategory);
+                	me.instance.showMessage(loc['error'].title, loc['error'].addCategory);
                 } else {
-                    alert(loc['error'].editCategory);
+                	me.instance.showMessage(loc['error'].title, loc['error'].editCategory);
                 }
             }
         }
         this.instance.getService().saveCategory(category, serviceCallback);
+    },
+    /**
+     * @method confirmDeleteCategory
+     * Shows a confirmation dialog with buttons to continue. 
+     * If category has places -> asks if they will be moved to default category or deleted
+     * If category is empty -> only has delete and cancel
+     * The message will also be different for both cases.
+     */
+    confirmDeleteCategory : function(category) {
+        var me = this;
+        var btnLoc = me.instance.getLocalization('buttons');
+        var service = this.instance.getService();
+        var defaultCategory = service.getDefaultCategory();
+    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        if(defaultCategory.getId() == category.getId()) {
+        	// cannot delete default category
+        	var loc = me.instance.getLocalization();
+			var okBtn = dialog.createCloseButton(loc.buttons.ok);
+    		dialog.show(loc.notification.error.title, loc.notification.error.deleteDefault, [okBtn]);
+        	return;
+        }
+        var places = service.getPlacesInCategory(category.getId());
+        
+    	var buttons = [];
+    	
+    	var cancelBtn = dialog.createCloseButton(btnLoc.cancel);
+    	buttons.push(cancelBtn);
+    	
+        var loc = me.instance.getLocalization('notification');
+    	var content = '';
+    	if(places.length > 0) {
+	    	
+	    	var deleteBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+	    	deleteBtn.setTitle(btnLoc.deleteCategoryAndPlaces);
+	    	deleteBtn.setHandler(function() {
+				dialog.close();
+            	// delete category and each place in it
+                me._deleteCategory(category, false);
+	    	});    
+	    	buttons.push(deleteBtn);		
+	    	
+	    	var moveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+	    	moveBtn.setTitle(btnLoc.movePlaces);
+	    	moveBtn.addClass('primary');
+	    	moveBtn.setHandler(function() {
+				dialog.close();
+        		// move the places in the category to default category
+                me._deleteCategory(category, true); 
+	    	});     
+	    	buttons.push(moveBtn);		
+	    	var locParams = [category.getName(), places.length, defaultCategory.getName()];
+	    	content = this._formatMessage(loc.categoryDelete.deleteConfirmMove, locParams);
+    	}    	
+    	else {
+    		
+	    	var deleteBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+	    	deleteBtn.setTitle(btnLoc.deleteCategory);
+	    	deleteBtn.addClass('primary');
+	    	buttons.push(deleteBtn);
+	    	deleteBtn.setHandler(function() {
+				dialog.close();
+            	// delete category and each place in it (none since there aren't any places there')
+                me._deleteCategory(category, false);
+	    	});
+	    	
+	    	content = this._formatMessage(loc.categoryDelete.deleteConfirm, [category.getName()]);
+    	}
+        
+    	dialog.show(loc.categoryDelete.title, content, buttons);
+    	dialog.makeModal();        
+    },
+	/**
+	 *@method _formatMessage
+	 * Formats given message with the given params array values
+	 * Example:  _formatMessage("Hello {0}!", ["World"]);
+	 * @param msg message to be formatted
+	 * @param params array of params that has values for {arrayIndex} in param msg
+     * @private
+	 */
+    _formatMessage : function(msg, params) {
+        var formatted = msg;
+        for(var i = 0; i < params.length; ++i) {
+            formatted = formatted.replace("{" + i + "}", params[i]);
+        }
+        return formatted;
+    },
+    
+    /**
+     * @method _deleteCategory
+     * Internal method start actual category delete after confirm
+     * @private
+     */
+    _deleteCategory : function(category, movePlaces) {
+        var me = this;
+        var catId = category.getId();
+        // wrap callback to get it into the scope we want
+        var callBackWrapper = function(success) {
+            me._deleteCategoryCallback(success, movePlaces, catId);
+        };
+        var service = this.instance.getService();
+		service.deleteCategory(catId, movePlaces, callBackWrapper);
+    },
+    /**
+     * @method _deleteCategoryCallback
+     * Internal method to handle server response for category delete
+     * @private
+     */
+    _deleteCategoryCallback : function(success, movePlaces, categoryId) {
+		var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var service = this.instance.getService();
+        var me = this;
+        if(success) {
+            if(movePlaces) {
+            	// places moved to default category -> update it
+    			var defCat = service.getDefaultCategory();
+    			var layerId = this._getMapLayerId(defCat.getId());
+		        var request = this.instance.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')(layerId, true);
+		        this.instance.sandbox.request(this, request);
+            }
+            // NOTE OK 
+        	var loc = me.instance.getLocalization();
+    		dialog.show(loc.notification.categoryDelete.title, loc.notification.categoryDelete.deleted);
+    		dialog.fadeout();
+        }
+        else {
+        	// error handling
+        	var loc = me.instance.getLocalization();
+			var okBtn = dialog.createCloseButton(btnLoc.buttons.ok);
+    		dialog.show(loc.notification.error.title, loc.notification.error.deleteCategory, [okBtn]);
+        }
     }
-
 }, {
     /**
      * @property {String[]} protocol

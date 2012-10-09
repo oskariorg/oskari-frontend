@@ -63,8 +63,8 @@ function() {
     this._services
     this._servicesByQName = {};
 
-    /* Are we currently printing debug */
-    this._debug = true;
+    /* Are we currently printing debug (as of 2012-09-24 debug by default false)*/
+    this._debug = false;
 
     /* Wizard url */
     this._mapPublisherWizardUrl
@@ -228,10 +228,6 @@ function() {
             this.handleSearchRequest(request);
             return true;
         },
-        // 'GetFeatureInfoRequest' : function(request) {
-        // this.handleGetFeatureInfoRequest(request);
-        // return true;
-        // },
         'ShowMapLayerInfoRequest' : function(request) {
             this.handleShowMapLayerInfoRequest(request);
             return true;
@@ -250,18 +246,6 @@ function() {
         },
         'ChangeMapLayerOpacityRequest' : function(request) {
             this.handleChangeMapLayerOpacityRequest(request);
-            return true;
-        },
-        'StartMapPublisherRequest' : function(request) {
-            this.handleStartMapPublisherRequest(request);
-            return true;
-        },
-        'GenerateHtmlLinkToMapRequest' : function(request) {
-            this.handleGenerateHtmlLinkToMapRequest(request);
-            return true;
-        },
-        'GenerateHtmlPrintToMapRequest' : function(request) {
-            this.handleGenerateHtmlPrintToMapRequest(request);
             return true;
         },
         'ChangeMapLayerStyleRequest' : function(request) {
@@ -517,6 +501,14 @@ function() {
      */
     disableDebug : function() {
         this._debug = false;
+    },
+    
+     /**
+     * @method enableDebug
+     * Disables debugging
+     */
+    enableDebug : function() {
+        this._debug = true;
     },
 
     /**

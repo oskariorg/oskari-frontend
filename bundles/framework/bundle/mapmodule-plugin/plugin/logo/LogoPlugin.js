@@ -61,8 +61,8 @@ function(config) {
      * 			reference to application sandbox
      */
     init : function(sandbox) {
-        this.template = jQuery("<div class='logoplugin'>" +
-                "<span class='terms'><a href='JavaScript:void(0);'></a></span>" +
+        this.template = jQuery("<div class='logoplugin'><div class='icon'></div>" +
+                "<div class='terms'><a href='JavaScript:void(0);'></a></div>" +
             "</div>");
     },
     /**
@@ -179,11 +179,20 @@ function(config) {
         var pluginLoc = this.getMapModule().getLocalization('plugin');
         var myLoc = pluginLoc[this.__name];
         
-        var link = this.element.find('a');
-        link.append(myLoc["terms"]);
+        var link = this.element.find('div.icon');
         link.bind('click', function(){
-	    	var url = sandbox.generatePublishedMapLinkToFinnishGeoportalPage();
+			var linkParams = sandbox.generateMapLinkParameters();
+	    	var url = myLoc.mapLinkBase + sandbox.generateMapLinkParameters();
 	    	window.open(url, '_blank');
+            return false;
+	    });
+        
+        var link = this.element.find('a');
+        link.append(myLoc["terms"]); // 
+        link.bind('click', function(){
+	    	var url = myLoc["termsLink"]
+	    	window.open(url, '_blank');
+            return false;
 	    });
     }
 }, {

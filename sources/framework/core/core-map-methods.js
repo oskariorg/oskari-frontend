@@ -63,36 +63,6 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-methods', {
         }
     },
 
-    handleStartMapPublisherRequest : function(request) {
-        if(this._mapPublisherWizardUrl == null) {
-            throw "User cannot move to wizard!";
-        }
-
-        var event = this.getEventBuilder(
-        'AfterStartMapPublisherEvent')(this._mapPublisherWizardUrl);
-        this.copyObjectCreatorToFrom(event, request);
-        this.dispatch(event);
-    },
-    handleGenerateHtmlLinkToMapRequest : function(request) {
-
-        var event = this.getEventBuilder(
-        'AfterGenerateHtmlLinkToMapEvent')(this.generateUrlToCurrentPage() + this.generateHtmlLinkParameters(this._map, this._selectedLayers, null));
-        this.copyObjectCreatorToFrom(event, request);
-        this.dispatch(event);
-    },
-    handleGenerateHtmlPrintToMapRequest : function(request) {
-        var event = this.getEventBuilder(
-        'AfterGenerateHtmlPrintToMapEvent')(this.generateUrlToPrintPage() + this.generateHtmlLinkParameters(this._map, this._selectedLayers, 'print=true'));
-        this.copyObjectCreatorToFrom(event, request);
-        this.dispatch(event);
-    },
-    generateUrlToPrintPage : function() {
-        var printUrl = Oskari.$().startup.printUrl;
-        if(printUrl == null) {
-            throw "Print url is not set. Cannot print.";
-        }
-        return printUrl;
-    },
     generateUrlToCurrentPage : function() {
 
         var locationPath = window.location.pathname;
@@ -104,69 +74,6 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-methods', {
 
         var baseUrl = window.location.protocol + "//" + window.location.host + locationPath;
         return baseUrl;
-    },
-    generatePublishedMapLinkToFinnishGeoportalPage : function() {
-        /* Reorder selected layers array */
-        var reOrdered = new Array();
-        /* Add first baselayers */
-        for(var i = 0; i < this._selectedLayers.length; i++) {
-            if(this._selectedLayers[i].isBaseLayer()) {
-                reOrdered.push(this._selectedLayers[i]);
-            }
-        }
-        /* And then second normal layers */
-        for(var i = 0; i < this._selectedLayers.length; i++) {
-            if(!this._selectedLayers[i].isBaseLayer()) {
-                reOrdered.push(this._selectedLayers[i]);
-            }
-        }
-
-        return Oskari.$().startup.finnishGeoportalMapUrl + this.generateHtmlLinkParameters(this._map, reOrdered, "keepLayersOrder=false");
-    },
-    generateHtmlLinkParameters : function(map, selectedLayers, additionalParams) {
-
-        /* url encoded comma */
-        var LAYER_SEPARATOR = ",";
-        var ATTRIBUTE_SEPARATOR = "+";
-
-        var zoom = map.getZoom();
-        var lat = map.getX();
-        var lon = map.getY();
-
-        /* layers */
-        var layerString = "";
-        for(var i = 0; i < selectedLayers.length; i++) {
-            var layer = selectedLayers[i];
-
-            if(layerString.length > 0) {
-                layerString += LAYER_SEPARATOR;
-            }
-
-            var opacity = layer.getOpacity();
-            var style;
-
-            if(layer.isBaseLayer() || typeof layer.getCurrentStyle != "function" || layer.getCurrentStyle() == null || layer.getCurrentStyle().getName() == null) {
-                style = "!default!";
-            } else {
-                style = layer.getCurrentStyle().getName();
-            }
-            layerString += layer.getId() + ATTRIBUTE_SEPARATOR + opacity + ATTRIBUTE_SEPARATOR + style;
-        }
-
-        /* marker visible or not? */
-        var markerVisibleString = "false";
-        if(map.isMarkerVisible()) {
-            markerVisibleString = "true";
-        }
-
-        if(additionalParams != null) {
-            additionalParams = "&" + additionalParams;
-        } else {
-            additionalParams = "";
-        }
-        var html = "?zoomLevel=" + zoom + "&coord=" + lat + "_" + lon + "&mapLayers=" + layerString + "&showMarker=" + markerVisibleString + "&forceCache=true" + additionalParams;
-
-        return html;
     },
     handleDrawPolygonRequest : function(request) {
         var polygon = request.getPolygon();

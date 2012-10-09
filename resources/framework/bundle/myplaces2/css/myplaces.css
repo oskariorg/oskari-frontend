@@ -2,16 +2,19 @@ div.myplacesform div.help {
     float : right;
 }
 /* Wide fields for place inputs  */
+div.myplacesform div.field {
+    padding-bottom: 10px;
+}
 div.myplacesform input {
     width: 80%;
 }
 div.myplacesform textarea, 
 div.myplacesform select {
-    width: 90%;
+    width: 80%;
 }
 /* Smaller fields for category inputs in table */
 div.myplacescategoryform table input {
-    width: 10px;
+    width: 50px;
 }
 div.myplacescategoryform input.oskaricolor {
     height : 20px;
@@ -30,6 +33,6 @@ div.myplaces2 div.buttons div.button {
     box-shadow: 5px 5px 5px #888;
 }
 
-.oskari-popover.myplaces2 {
+.divmanazerpopup.myplaces2 {
     max-width: 260px;
 }    

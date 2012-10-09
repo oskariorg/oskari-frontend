@@ -62,12 +62,15 @@ Oskari.clazz
 	     * 		structure and if parameter key is given
 	     */
 	    getLocalization : function(key) {
-    	      if(!this._localization) {
+    	      if (!this._localization) {
     		this._localization = Oskari.getLocalization(this.getName());
     	      }
-    	      if(key) {
+    	      if (key && this._localization[key]) {
     		return this._localization[key];
     	      }
+              if (!this.localization) {
+                  return {};
+              }
 	      return this._localization;
 	    },
 	    /**

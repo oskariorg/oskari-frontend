@@ -73,6 +73,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
             "src" : "../../../../bundles/framework/bundle/myplaces2/request/EditCategoryRequest.js"
         }, {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/myplaces2/request/DeleteCategoryRequest.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/myplaces2/request/EditRequestHandler.js"
 		},
 		/* service */
@@ -103,11 +106,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/myplaces2/instance.js"
         }, {
-            /*
-            "type" : "text/javascript",
-            "src" : "../../../../libraries/rightjs/javascripts/right/colorpicker.js"
-        }, {
-            */
            // NOTE! EXTERNAL LIBRARY!
             "type" : "text/javascript",
             "src" : "../../../../libraries/jscolor/jscolor.js"
@@ -122,16 +120,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
             "lang" : "fi",
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/myplaces2/locale/fi.js"
-        }
-        /*, {
+        }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/search/locale/sv.js"
+            "src" : "../../../../bundles/framework/bundle/myplaces2/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/search/locale/en.js"
-        }*/
+            "src" : "../../../../bundles/framework/bundle/myplaces2/locale/en.js"
+        }
        ]
 	},
     "bundle" : {

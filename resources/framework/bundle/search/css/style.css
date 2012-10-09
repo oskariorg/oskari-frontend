@@ -1,3 +1,8 @@
+div.search div.searchDescription {
+	margin: 0;
+	margin-bottom: 8px;
+}
+
 div.search div.searchContainer {
     height: 90%;
 }
@@ -25,15 +30,7 @@ div.search div.resultList {
     vertical-align: top; 
     text-align: left; 
 }
-
-div.controls input.search_button {
-	padding-left:30px;
-	padding-right:30px;
-} 
-
-div.controls input.search_field {
-	padding-bottom:6px;
-	padding-top:6px;
+div.controls div.oskarifield {
+    display : inline-block;
 }
-
 

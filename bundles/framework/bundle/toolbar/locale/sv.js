@@ -1,18 +1,36 @@
 Oskari.registerLocalization({
-	"lang" : "fi",
-	"key" : "Toolbar",
-	"value" : {
-		'buttons' : {
-	    	'link' : {
-	    		'tooltip' :'Linkki',
-	    		'prefixUrl' :'www.paikkatietoikkkuna.fi/web/fi/kartta?',
-	    		'ok' : 'Åk',
-	    		'title': 'Urli'
-	    	},
-	    	'print' : {
-	    		'tooltip' :'Print'
-	    	}
-	    }
-	    
-	}
+  "lang": "sv",
+  "key": "Toolbar",
+  "value": {
+    "buttons": {
+      "link": {
+        "tooltip": "Länk",
+        "prefixUrl": "www.paikkatietoikkuna.fi/web/sv/kartfonstret?",
+        "ok": "Ok",
+        "title": "Länk till kartvyn"
+      },
+      "print": {
+        "tooltip": "Skriv ut"
+      },
+      "history": {
+        "reset": "Tillbaka till standardvyn",
+        "back": "Föregående",
+        "next": "Nästa"
+      },
+      "pan": "Flytta kartan",
+      "zoom": "Zooma in",
+      "measure": {
+        "line": "Mät avstånd",
+        "area": "Mät areal"
+      }
+    },
+    "measure" : {
+        "title" : "Mätningsresultat",
+        "close" : "Avbryt",
+        "guidance" : {
+            "measureline" : "Peka ut sträckan som ska mätas på kartan. Sluta mätningen genom att dubbelklicka.",
+            "measurearea" : "Peka ut området som ska mätas på kartan. Sluta mätningen genom att dubbelklicka."
+        }
+    }
+  }
 });

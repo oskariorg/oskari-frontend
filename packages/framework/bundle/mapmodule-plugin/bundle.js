@@ -66,14 +66,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
             "src" : "../../../../sources/framework/request/common/show-map-measurement-request.js"
         }, 
 		/**
-		 *
-		 */
+		 * GFI
+		 */ 
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/getinfo/GetInfoAdapter.js"
-		}, {
-			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/getinfo/GetFeatureInfoHandler.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/GetFeatureInfoRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/GetFeatureInfoActivationRequest.js"
         }, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/getinfo/GetInfoPlugin.js"
@@ -100,6 +103,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
             "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/search/SearchPlugin.js"
         },
         {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/search/service/searchservice.js"
+        }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/search/css/search.css"
         },
@@ -131,6 +137,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
             "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/scalebar/ScaleBarPlugin.js"
         },
         
+        /**
+         * MapLayer selection plugin
+         */
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/layers/LayerSelectionPlugin.js"
+        },
+        {
+            "type" : "text/css",
+            "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/layers/css/layersselection.css"
+        },
 		/**
 		 * Layers plugin
 		 */
@@ -166,13 +183,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/wmslayer/SnappyGrid.js"
-		},
-		/**
-		 * WFS plugin
-		 */
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/wfslayer/WfsLayerPlugin.js"
 		},
 		/**
 		 * Vector Layer plugin
