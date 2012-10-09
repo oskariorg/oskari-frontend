@@ -144,6 +144,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
         }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/divmanazer/css/popover.css"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../resources/framework/bundle/divmanazer/js/jquery.event.drag-1.5.min.js"
         }]
     },
     "bundle" : {

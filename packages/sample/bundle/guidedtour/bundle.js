@@ -28,6 +28,12 @@ function() {
         "scripts" : [{
             "type" : "text/javascript",
             "src" : "../../../../bundles/sample/bundle/guidedtour/instance.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../resources/sample/bundle/guidedtour/js/jquery.cookie.js"
+        }, {
+            "type" : "text/css",
+            "src" : "../../../../resources/sample/bundle/guidedtour/css/style.css"
         }],
 
         "locales" : [{
