@@ -81,8 +81,8 @@ Oskari.registerLocalization({
         "name": "Namnet är en nödvändig uppgift",
         "nohelp": "Ingen anvisning",
         "saveFailed": "Avskiljandet av kartan misslyckades. Försök på nytt senare.",
-        "nameIllegalCharacters": "",
-        "domainIllegalCharacters": ""
+        "nameIllegalCharacters": "I namnet ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck.",
+        "domainIllegalCharacters": "I webbsidans namnet ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck."
       }
     },
     "NotLoggedView": {

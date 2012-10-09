@@ -5,7 +5,7 @@ Oskari.registerLocalization({
     "title": "Map layers",
     "desc": "",
     "errors": {
-      "loadFailed": "Error downloading map layers. Reload the page in your browser and select map layers."
+      "loadFailed": "Error loading map layers. Reload the page in your browser and select map layers."
     },
     "filter": {
       "text": "Search map layers",

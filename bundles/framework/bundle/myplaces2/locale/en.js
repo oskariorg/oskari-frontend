@@ -28,7 +28,7 @@ Oskari.registerLocalization({
       "area": {
         "tooltip": "Add area",
         "new": "Add break points to your area polygon by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'.",
-        "edit": "Edit the shape of the area polygon by clicking and dragging the break points on its edge line.",
+        "edit": "Edit the shape of the area by clicking and dragging the break points on its edge line.",
         "save": "Save shape"
       }
     },
@@ -43,7 +43,7 @@ Oskari.registerLocalization({
     },
     "placeform": {
       "title": "Place data",
-      "tooltip": "A place put on the map will be saved in My places. Give the place a name and describe it. You can select the map level where the place will be put, or choose a new map level by selecting 'New level' in the map level drop down menu.",
+      "tooltip": "A place put on the map will be saved in My places. Give the place a name and describe it. You can select the map layer where the place will be stored, or choose a new map layer by selecting 'New layer' in the map layer drop-down menu.",
       "placename": {
         "placeholder": "Give the place a name"
       },
@@ -52,13 +52,13 @@ Oskari.registerLocalization({
       },
       "category": {
         "label": "Map level",
-        "new": "New level"
+        "new": "New layer..."
       }
     },
     "categoryform": {
       "name": {
         "label": "Name",
-        "placeholder": "Give the map level a name"
+        "placeholder": "Give the map layer a name"
       },
       "drawing": {
         "label": "Style",
@@ -80,7 +80,7 @@ Oskari.registerLocalization({
         }
       },
       "edit": {
-        "title": "Edit map level",
+        "title": "Edit map layer",
         "save": "Save",
         "cancel": "Back"
       }
@@ -91,38 +91,38 @@ Oskari.registerLocalization({
         "message": "The place can be found in the My data menu"
       },
       "categorySaved": {
-        "title": "Map level saved",
-        "message": "Map level edits saved"
+        "title": "Map layer saved",
+        "message": "Map layer edits saved"
       },
       "categoryDelete": {
-        "title": "Delete map level",
-        "deleteConfirmMove": "Map level {0} contains {1} objects. Do you want to delete the map level and move the places on it to the default map level {2} ?",
-        "deleteConfirm": "Delete map level {0}?",
-        "deleted": "Map level deleted"
+        "title": "Delete map layer",
+        "deleteConfirmMove": "Map layer {0} contains {1} objects. Do you want to delete the map layer and move the places on it to the default map layer {2} ?",
+        "deleteConfirm": "Delete map layer {0}?",
+        "deleted": "Map layer deleted"
       },
       "error": {
-        "addCategory": "The map level could not be saved. The place has not been saved.",
-        "editCategory": "The map level could not be saved.",
+        "addCategory": "The map layer could not be saved. The place has not been saved.",
+        "editCategory": "The map layer could not be saved.",
         "savePlace": "The place could not be saved.",
         "title": "Error!",
         "deleteCategory": "Error occurred while deleting!",
-        "deleteDefault": "The default map level cannot be deleted."
+        "deleteDefault": "The default map layer cannot be deleted."
       }
     },
     "validation": {
       "title": "Data contains errors:",
       "placeName": "Place name missing.",
-      "categoryName": "Map level name missing.",
-      "placeNameIllegal": "",
-      "descIllegal": "",
-      "categoryNameIllegal": "",
-      "dotSize": "",
-      "dotColor": "",
-      "lineSize": "",
-      "lineColor": "",
-      "areaLineSize": "",
-      "areaLineColor": "",
-      "areaFillColor": ""
+      "categoryName": "Map layer name missing.",
+      "placeNameIllegal": "The object name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
+      "descIllegal": "The object description contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
+      "categoryNameIllegal": "The layer description contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
+      "dotSize": "The dot size does not fit the size limits (1-50).",
+      "dotColor": "Wrong dot colour.",
+      "lineSize": "The line size does not fit the size limits (1-50).",
+      "lineColor": "Wrong line colour.",
+      "areaLineSize": "The area edge size does not fit the limits (0-50).",
+      "areaLineColor": "Wrong area edge line colour.",
+      "areaFillColor": "Wrong fill-in colour."
     }
   }
 });
