@@ -960,23 +960,31 @@ Oskari = (function() {
 		}
 	    };
 	    var f = false;
-	    for(var n = 0; n < me.fileList.length; n++) {
-		var fn = me.fileList[n].src;
+	    for (var n = 0; n < me.fileList.length; n++) {
+                var st = null;
+                var fn = '/Oskari/empty.js';
+                if (!preloaded()) {
+		    fn = me.fileList[n].src;
+                }
 		var st = me.buildScriptTag(fn, onFileLoaded);
-		if(st) {
-		    // If this breaks something, revert to using
-		    // the empty.js-hack in buildScriptTag...
-		    if (preloaded()) {
-			onFileLoaded();
-		    } else {
-			fragment.appendChild(st);
-			f = true;
-		    }
-		}
+                if (st) {
+                    fragment.appendChild(st);
+                    f = true;
+                }
+		// if(st) {
+		//     // If this breaks something, revert to using
+		//     // the empty.js-hack in buildScriptTag...
+		//     if (preloaded()) {
+		// 	onFileLoaded();
+		//     } else {
+		// 	fragment.appendChild(st);
+		// 	f = true;
+		//     }
+                //  }
 	    }
-	    if(f)
+	    if (f) {
 		head.appendChild(fragment);
-
+            }
 	},
 	/**
 	 * @method buildScriptTag
