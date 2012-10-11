@@ -521,7 +521,7 @@ function(instance) {
 		}
 		
 		
-        if(layer.getDataUrl()) {
+        if(layer.getMetadataIdentifier()) {
 		    tools.find('div.layer-info').addClass('icon-info');
         	tools.find('div.layer-info').click(function() {
 				  var rn = 'catalogue.ShowMetadataRequest';
