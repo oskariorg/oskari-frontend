@@ -40,6 +40,9 @@ function() {
     
     /* is layer visible */
     this._visible = null;
+    
+    /* link to metadata service */
+    this._metadataIdentifier = null;
 
     /* Max scale for layer */
     this._maxScale = null;
@@ -410,5 +413,18 @@ function() {
      */
     isLayerOfType : function(flavour) {
         return flavour == 'WFS' || flavour == 'wfs';
+    },
+    
+    /**
+     * @method getMetadataIdentifier
+     */
+    getMetadataIdentifier: function() {
+    	return this._metadataIdentifier;
+    },
+    /**
+     * @method setMetadataIdentifier
+     */
+    setMetadataIdentifier: function(metadataid) {
+    	this._metadataIdentifier = metadataid;
     }
 });

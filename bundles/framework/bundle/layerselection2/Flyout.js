@@ -586,24 +586,13 @@ function(instance) {
         });
 
         // data url link
-        if (!layer.getDataUrl()) {
+        if (!layer.getMetadataIdentifier()) {
             // no functionality -> hide
             tools.find('div.layer-description').hide();
         } else {
             tools.find('div.icon-info').bind('click', function() {
                 var rn = 'catalogue.ShowMetadataRequest';
-                var uuid = layer.getDataUrl();
-                var idx = uuid.indexOf('uuid=');
-                if (idx >= 0) {
-                    uuid = uuid.substring(idx + 5);
-                }
-                idx = uuid.indexOf('&');
-                if (idx >= 0) {
-                    uuid = uuid.substring(0, idx);
-                }
-                var uuidObj = {
-                    uuid : uuid
-                };
+                var uuid = layer.getMetadataIdentifier();
                 sandbox.postRequestByName(rn, [{
                     uuid : uuid
                 }]);

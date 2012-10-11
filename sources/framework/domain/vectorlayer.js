@@ -68,6 +68,8 @@ function() {
     this._geometryWKT = null;
     
     this._visible = true;
+    
+    this._metadataIdentifier = null;
 }, {
     /**
      * @method setGeometryWKT
@@ -462,5 +464,19 @@ function() {
      */
     getStyles: function() {
     	return [];
+    },
+    
+        /**
+     * @method getMetadataIdentifier
+     */
+    getMetadataIdentifier: function() {
+    	return this._metadataIdentifier;
+    },
+    /**
+     * @method setMetadataIdentifier
+     */
+    setMetadataIdentifier: function(metadataid) {
+    	this._metadataIdentifier = metadataid;
     }
+
 });
