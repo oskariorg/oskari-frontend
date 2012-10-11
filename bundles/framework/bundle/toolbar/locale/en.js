@@ -5,7 +5,7 @@ Oskari.registerLocalization({
     "buttons": {
       "link": {
         "tooltip": "Link",
-        "prefixUrl": "www.paikkatietoikkuna.fi/web/fi/kartta?",
+        "prefixUrl": "www.paikkatietoikkuna.fi/web/en/map-window?",
         "ok": "Ok",
         "title": "Link to map view"
       },
@@ -23,6 +23,14 @@ Oskari.registerLocalization({
         "line": "Measure distance",
         "area": "Measure area"
       }
+    },
+    "measure" : {
+        "title" : "Measurements",
+        "close" : "Cancel",
+        "guidance" : {
+            "measureline" : "Measure a line on the map. Double-click to stop measuring.",
+            "measurearea" : "Measure an area on the map. Double-click to stop measuring."
+        }
     }
   }
 });

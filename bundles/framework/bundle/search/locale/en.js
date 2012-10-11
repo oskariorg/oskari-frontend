@@ -5,23 +5,22 @@ Oskari.registerLocalization({
     "title": "Place name search",
     "desc": "",
     "searchDescription": "Search by place name, address or real estate unit identifier.",
-    "searchButton": "Searh",
-    "searchResultCount": "The search returned",
-    "searchResultDescription": "results.  <br/> Define the search to decrease the number of results.  <br/> You can also order results in the table below by clicking the column headings.",
-    "searchResults": "",
-    "searchResultsDescription": "",
-    "searchservice_search_alert_title": "",
-    "searchservice_search_not_found_anything_text": "The search failed to return any results.",
-    "searchResultCount2": "",
-    "searchResultDescriptionMoreResults": "",
-    "searchResultDescriptionOrdering": "",
-    "too_short": "",
-    "cannot_be_empty": "",
-    "too_many_stars": "",
+    "searchButton": "Search",
+    "searchResultCount": "The search returned ",
+    "searchResultCount2": " results.",
+    "searchResultDescriptionMoreResults": "Define the search to decrease the number of results.",
+    "searchResultDescriptionOrdering": "You can also order results in the table below by clicking the column headings.",
+    "searchResults": "Results: ",
+    "searchResultsDescription": " search results ",
+    "searchservice_search_alert_title": "Error: ",
+    "searchservice_search_not_found_anything_text": "The search returned no results.",
+    "too_short": "Your search term is too short.",
+    "cannot_be_empty": "The search term cannot be empty",
+    "too_many_stars": "Too many stars (*)",
     "grid": {
-      "name": "",
-      "village": "",
-      "type": ""
+      "name": "Name",
+      "village": "Municipality",
+      "type": "Type"
     }
   }
 });

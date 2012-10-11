@@ -1,3 +1,0 @@
-
-These are ExtJS licensed GPL v 3 and proprietary
-even though scripts may update *.js sources to include nls.fi license

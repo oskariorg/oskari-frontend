@@ -4,20 +4,22 @@ Oskari.registerLocalization({
   "value": {
     "title": "Mina uppgifter",
     "desc": "Mina uppgifter",
-    "notLoggedIn": "",
+    "notLoggedIn": "Du kan lagra dina egna kartvyer och titta på kartor som du har inbäddat på andra webbplatser i Mina uppgifter. <a href='/web/sv/login'>Logga in</a>.",
     "tabs": {
       "myplaces": {
         "title": "Objekt",
         "nocategories": "Du har ännu inte lagrat objekten.",
         "editCategory": "Editera kartlager",
         "deleteCategory": "Ta bort kartlager",
+        "edit": "Editera",
+        "delete": "Ta bort",
         "grid": {
           "name": "Namn",
           "desc": "Beskrivning",
           "createDate": "Skapad",
           "updateDate": "Uppdaterad",
-          "edit": "",
-          "delete": ""
+          "edit": " ",
+          "delete": " "
         },
         "notification": {
           "delete": {
@@ -40,8 +42,8 @@ Oskari.registerLocalization({
         "grid": {
           "name": "Namn",
           "publish": "Vyn är offentlig",
-          "edit": "",
-          "delete": ""
+          "edit": " ",
+          "delete": " "
         },
         "popup": {
           "edit": "Byt namn på vyn",
@@ -79,10 +81,10 @@ Oskari.registerLocalization({
         }
       },
       "publishedmaps": {
-        "title": "Avskilda kartor",
+        "title": "Inbäddade",
         "edit": "Visa på kartan",
         "publish": "Avskilj karta",
-        "unpublish": "धterta avskiljandet",
+        "unpublish": "Återta avskiljandet",
         "delete": "Ta bort",
         "grid": {
           "name": "Namn",
@@ -126,15 +128,15 @@ Oskari.registerLocalization({
         }
       },
       "account": {
-        "title": "Uppgifter om användarkonto",
+        "title": "Användarkonto",
         "firstName": "Förnamn",
         "lastName": "Efternamn",
         "nickName": "Signatur",
         "email": "E-postadress",
-        "changeInfo": "दndra uppgifter",
+        "changeInfo": "Ändra uppgifter",
         "changePassword": "Byt ut lösenordet",
         "removeAccount": "Radera konto",
-        "changeInfoUrl": ""
+        "changeInfoUrl": "/web/sv/profil"
       }
     },
     "button": {

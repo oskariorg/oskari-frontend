@@ -39,23 +39,6 @@ Oskari.registerLocalization({
       "tools": {
         "label": "Näytettävät työkalut",
         "tooltip": "Valitse kartalla näytettävät työkalut. Näet niiden sijoittelun esikatselukartassa.",
-        "Oskari": {
-          "mapframework": {
-            "bundle": {
-              "mapmodule": {
-                "plugin": {
-                  "ScaleBarPlugin": "Mittakaavajana",
-                  "IndexMapPlugin": "Indeksikartta",
-                  "Portti2Zoombar": "Mittakaavasäädin",
-                  "SearchPlugin": "Osoite- ja paikannimihaku"
-                }
-              }
-            },
-            "mapmodule": {
-              "GetInfoPlugin": "Kohdetietojen kyselytyökalu"
-            }
-          }
-        },
         "ScaleBarPlugin": "Mittakaavajana",
         "IndexMapPlugin": "Indeksikartta",
         "Portti2Zoombar": "Mittakaavasäädin",
@@ -99,7 +82,7 @@ Oskari.registerLocalization({
         "nohelp": "Ohjetta ei löytynyt",
         "saveFailed": "Kartan julkaisu epäonnistui. Yritä myöhemmin uudelleen.",
         "nameIllegalCharacters": "Nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
-        "domainIllegalCharacters": "Sivustossa on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki."
+        "domainIllegalCharacters": "Sivuston nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki."
       }
     },
     "NotLoggedView": {

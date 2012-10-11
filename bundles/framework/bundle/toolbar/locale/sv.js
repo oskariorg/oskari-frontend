@@ -5,7 +5,7 @@ Oskari.registerLocalization({
     "buttons": {
       "link": {
         "tooltip": "Länk",
-        "prefixUrl": "www.paikkatietoikkuna.fi/web/fi/kartta?",
+        "prefixUrl": "www.paikkatietoikkuna.fi/web/sv/kartfonstret?",
         "ok": "Ok",
         "title": "Länk till kartvyn"
       },
@@ -23,6 +23,14 @@ Oskari.registerLocalization({
         "line": "Mät avstånd",
         "area": "Mät areal"
       }
+    },
+    "measure" : {
+        "title" : "Mätningsresultat",
+        "close" : "Avbryt",
+        "guidance" : {
+            "measureline" : "Peka ut sträckan som ska mätas på kartan. Sluta mätningen genom att dubbelklicka.",
+            "measurearea" : "Peka ut området som ska mätas på kartan. Sluta mätningen genom att dubbelklicka."
+        }
     }
   }
 });

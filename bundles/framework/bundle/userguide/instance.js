@@ -121,6 +121,7 @@ function() {
             this.getLocalization('help').tags) {
             tagsTxt = this.getLocalization('help').tags;
         }
+
         helper.getHelpArticle(
             tagsTxt, 
             function(isSuccess, pContent) {

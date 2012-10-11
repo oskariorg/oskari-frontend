@@ -152,93 +152,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
      */
     getSavedState : function(pluginName) {
         return this._pluginInstances[pluginName].getState();
-    },
-    
-    _stateComparators: [
-     	{ 
-     		rule: 'nohistory',
-     		cmp: function(prevState,nextState) {
-    			if( !prevState ) {
-    				return true;
-	    		}
-    		}
-    	},{
-    		rule: 'location',
-    		cmp: function(prevState,nextState) {
-    			if( prevState.east != nextState.east ||
-    			prevState.north != nextState.north 
-    				) {
-    				return true;
-    			}	
-	    		if( prevState.zoom != nextState.zoom ) {
-    				return true;
-    			}
-    		}
-    	},{
-    		rule: 'layers',
-    		cmp: function(prevState,nextState) {
-    			var me = this;
-    			var prevLayers = prevState.selectedLayers;
-    			var nextLayers = nextState.selectedLayers;
-    			
-	    		if( prevLayers.length != nextLayers.length ) {
-    				return true;
-    			}
-    			for( var ln = 0 ; ln < nextLayers.length;ln++ ) {
-    				var prevLayer = prevLayers[ln];
-    				var nextLayer = nextLayers[ln];
-    				
-    				me.sandbox.printDebug("[StateHandler] comparing layer state "+prevLayer.id +" vs "+nextLayer.id);
-    				
-    				
-	    			if( prevLayer.id !== nextLayer.id ) {
-    					return true;
-    				}
-    				if( prevLayer.opacity !== nextLayer.opacity ) {
-	    				return true;
-    				}
-    				if( prevLayer.hidden !== nextLayer.hidden ) {
-    					return true;
-    				}
-    				if( prevLayer.style !== nextLayer.style ) {
-    					return true;
-    				}
-    			}
-    			
-    			return false;
-    		}
-    	}
-    ],
-    
-    _compareState: function(prevState,nextState) {
-    	var me = this;
-    	for( var sc = 0 ; sc < me._stateComparators.length ; sc++ ) {
-    		var cmp = me._stateComparators[sc];
-    		me.sandbox.printDebug("[StateHandler] comparing state "+cmp.rule);
-    		if( cmp.cmp.apply(this,[prevState,nextState])) {
-    			me.sandbox.printDebug("[StateHandler] comparing state MATCH "+cmp.rule);
-    			return true;
-    		}
-    	}
-    	return false;
-    },
-    
-    _pushState: function() {
-    	var me = this;
-    	if (me._historyEnabled === true) {
-			   var history = me._historyPrevious;
-               var mapfull = me.sandbox.getStatefulComponents()['mapfull'];
-               if (mapfull) {
-                  var state = mapfull.getState();
-                  
-                  var prevState = history.length == 0 ? null : history[history.length-1];
-                  if( me._compareState( prevState, state) ) {
-                  	me._historyPrevious.push(state);
-                  	me._historyNext = [];
-                  }
-               }
-        }
     }
+    
+   
 });
 
 	

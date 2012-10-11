@@ -1,1 +1,0 @@
-//mapframework.ui.manager.mapportal = {};

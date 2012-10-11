@@ -12,6 +12,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
  *
  */
 function() {
+	
     this._localization = null;
     this._pluginInstances = {};
     this._startupState = null;
@@ -184,35 +185,15 @@ function() {
         'AfterChangeMapLayerStyleEvent': function(event) {
            var me = this;
            me._pushState();
+        },
+        'MapLayerVisibilityChangedEvent' : function(event) {
+           var me = this;
+           me._pushState();
+        	
         }
     },
     
-    historyMoveNext : function() {
-        if (this._historyNext.length > 0) {
-            var state = this._historyNext.pop();
-            this._historyPrevious.push(state);
-            var mapfull = this.sandbox.getStatefulComponents()['mapfull'];
-            if (mapfull) {
-                this._historyEnabled = false;
-                mapfull.setState(state);
-                this._historyEnabled = true;
-            }
-        }
-    },
-    historyMovePrevious : function() {
-        if (this._historyPrevious.length > 0) {
-            var state = this._historyPrevious.pop();
-            // insert to first
-            //this._historyNext.splice(0,0,state);
-            this._historyNext.push(state);
-            var mapfull = this.sandbox.getStatefulComponents()['mapfull'];
-            if (mapfull) {
-                this._historyEnabled = false;
-                mapfull.setState(state);
-                this._historyEnabled = true;
-            }
-        }
-    },
+ 
 
     /**
      * @method registerPlugin
@@ -281,7 +262,249 @@ function() {
      */
     getCurrentViewId : function() {
         return this._currentViewId;
+    },
+
+	/* state pop / push ie undo redo begins here */
+    
+    _stateComparators: [
+     	{ 
+     		rule: 'nohistory',
+     		cmp: function(prevState,nextState) {
+    			if( !prevState ) {
+    				return true;
+	    		}
+    		}
+    	},{
+    		rule: 'location',
+    		cmp: function(prevState,nextState) {
+    			if( prevState.east != nextState.east ||
+    			prevState.north != nextState.north 
+    				) {
+    				return true;
+    			}	
+	    		if( prevState.zoom != nextState.zoom ) {
+    				return true;
+    			}
+    		}
+    	},{
+    		rule: 'layers',
+    		cmp: function(prevState,nextState) {
+    			var me = this;
+    			var prevLayers = prevState.selectedLayers;
+    			var nextLayers = nextState.selectedLayers;
+    			
+	    		if( prevLayers.length != nextLayers.length ) {
+    				return true;
+    			}
+    			for( var ln = 0 ; ln < nextLayers.length;ln++ ) {
+    				var prevLayer = prevLayers[ln];
+    				var nextLayer = nextLayers[ln];
+    				
+    				me.sandbox.printDebug("[StateHandler] comparing layer state "+prevLayer.id +" vs "+nextLayer.id);
+    				
+    				
+	    			if( prevLayer.id !== nextLayer.id ) {
+    					return true;
+    				}
+    				if( prevLayer.opacity !== nextLayer.opacity ) {
+	    				return true;
+    				}
+    				if( prevLayer.hidden !== nextLayer.hidden ) {
+    					return true;
+    				}
+    				if( prevLayer.style !== nextLayer.style ) {
+    					return true;
+    				}
+    			}
+    			
+    			return false;
+    		}
+    	}
+    ],
+    
+    _compareState: function(prevState,nextState,returnFirst) {
+    	var cmpResult = { result: false, rule: null, rulesMatched: {} };
+    	
+    	var me = this;
+    	for( var sc = 0 ; sc < me._stateComparators.length ; sc++ ) {
+    		var cmp = me._stateComparators[sc];
+    		me.sandbox.printDebug("[StateHandler] comparing state "+cmp.rule);
+    		if( cmp.cmp.apply(this,[prevState,nextState])) {
+    			me.sandbox.printDebug("[StateHandler] comparing state MATCH "+cmp.rule);
+    			cmpResult.result = true;
+    			cmpResult.rule = cmp.rule;
+    			cmpResult.rulesMatched[cmp.rule] = cmp.rule;
+    			if( returnFirst ) {
+    				return cmpResult;
+    			}
+    		}
+    	}
+    	return cmpResult;
+    },
+    
+    _pushState: function() {
+    	var me = this;
+    	if (me._historyEnabled ) {
+			   var history = me._historyPrevious;
+               
+               var state = this._getMapState();
+                  
+               var prevState = history.length == 0 ? null : history[history.length-1];
+               var cmpResult = me._compareState( prevState, state, true );
+               if( cmpResult.result ) {
+                  	me.sandbox.printDebug("[StateHandler] PUSHING state");
+                  	state.rule = cmpResult.rule;
+                  	me._historyPrevious.push(state);
+                  	me._historyNext = [];
+               }
+        }
+    },
+       
+    historyMoveNext : function() {
+    	 var sandbox = this.getSandbox();
+        if (this._historyNext.length > 0) {
+            var state = this._historyNext.pop();
+            this._historyPrevious.push(state);
+
+           	var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            this._historyEnabled = false;                
+            
+			var currentState = this._getMapState();
+            this._setMapState(mapmodule,state,currentState);
+            this._historyEnabled = true;
+        }
+    },
+    
+    historyMovePrevious : function() {
+    	 var sandbox = this.getSandbox();
+    	 switch(this._historyPrevious.length) {
+    	 case 0:
+    	  	/* hard reset */
+        	/*this.resetState();*/
+    		break;
+    	 case 1:
+    	 	/* soft reset (retains the future) */
+    	 	var nextHistory = this._historyNext;
+        	this.resetState();
+        	this._historyNext = nextHistory; 
+        	break;    	
+         default:
+         	/* pops current state */
+        	var cstate = this._historyPrevious.pop(); /* currentstate */
+        	this._historyNext.push(cstate);
+        	var state = this._historyPrevious[this._historyPrevious.length-1];            
+            var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            var currentState = this._getMapState();
+            this._historyEnabled = false;
+            this._setMapState(mapmodule,state,currentState);
+            this._historyEnabled = true;            
+            break;
+        }
+    },
+    
+    /**
+	 * @method getMapState
+	 * Returns bundle state as JSON
+	 * @return {Object} 
+	 */
+	_getMapState : function() {
+        // get applications current state
+        var sandbox = this.getSandbox();
+        var map = sandbox.getMap();
+        var selectedLayers = sandbox.findAllSelectedMapLayers();
+        var zoom = map.getZoom();
+        var lat = map.getX();
+        var lon = map.getY();
+
+        var state = {
+            north : lon,
+            east : lat,
+            zoom : map.getZoom(),
+            selectedLayers : []
+        };
+        
+        for(var i = 0; i < selectedLayers.length; i++) {
+            var layer = selectedLayers[i];
+            var layerJson = {
+                id : layer.getId(),
+                opacity : layer.getOpacity()
+            };
+            if(!layer.isVisible()) {
+                layerJson.hidden = true;
+            }
+            // check if we have a style selected and doesn't have THE magic string
+            if(layer.getCurrentStyle && 
+                layer.getCurrentStyle() && 
+                layer.getCurrentStyle().getName() &&
+                layer.getCurrentStyle().getName() != "!default!") {
+                layerJson.style = layer.getCurrentStyle().getName();
+            }
+            state.selectedLayers.push(layerJson);
+        }
+		
+		return state;
+	},
+    
+    _setMapState: function(mapmodule,state,currentState) {  
+    	var sandbox = this.getSandbox();
+        
+        var cmpResult = this._compareState(currentState,state,false);
+     
+        // setting state
+        if(state.selectedLayers && cmpResult.rulesMatched['layers'] ) {
+        	sandbox.printDebug("[StateHandler] restoring LAYER state");        	
+        	this._teardownState(mapmodule);
+	        
+            var rbAdd = sandbox.getRequestBuilder('AddMapLayerRequest');
+            var rbOpacity = sandbox.getRequestBuilder('ChangeMapLayerOpacityRequest');
+            var visibilityRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
+            var styleReqBuilder = sandbox.getRequestBuilder('ChangeMapLayerStyleRequest');
+            var len = state.selectedLayers.length;
+            for(var i = 0; i < len; ++i ) {
+                var layer = state.selectedLayers[i];
+                sandbox.request(mapmodule.getName(), rbAdd(layer.id, true));
+                if(layer.hidden) {
+                    sandbox.request(mapmodule.getName(), visibilityRequestBuilder(layer.id, false));
+                } else {
+                	sandbox.request(mapmodule.getName(), visibilityRequestBuilder(layer.id, true));
+                }
+                if(layer.style) {
+                    sandbox.request(mapmodule.getName(), styleReqBuilder(layer.id, layer.style));
+                }
+                if(layer.opacity) {
+                    sandbox.request(mapmodule.getName(), rbOpacity(layer.id, layer.opacity));
+                }
+            }
+        }
+
+        if(state.east) {
+        	sandbox.printDebug("[StateHandler] restoring LOCATION state");
+            this.getSandbox().getMap().moveTo( 
+                state.east,
+                state.north,
+                state.zoom);
+        }
+
+        // FIXME: this is what start-map-with -enhancements should be doing, they are just doing it in wrong place
+        sandbox.syncMapState(true);
+    },
+    /**
+     * @method _teardownState
+     * Tears down previous state so we can set a new one.
+     * @private
+     * @param {Oskari.mapframework.module.Module} module 
+     *      any registered module so we can just send out requests
+     */
+    _teardownState : function(module) {
+    	var sandbox = this.getSandbox();
+        var selectedLayers = sandbox.findAllSelectedMapLayers();
+        // remove all current layers
+        var rbRemove = sandbox.getRequestBuilder('RemoveMapLayerRequest');
+        for(var i = 0; i < selectedLayers.length; i++) {
+            sandbox.request(module.getName(), rbRemove(selectedLayers[i].getId()));
+        }
     }
+    
 }, {
     "protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module']
 });

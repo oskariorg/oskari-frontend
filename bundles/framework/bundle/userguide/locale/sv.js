@@ -5,18 +5,18 @@ Oskari.registerLocalization({
     "title": "Hjälp",
     "desc": "",
     "flyout": {
-      "title": "Hjälp"
+      "title": "Så här använder du Paikkatietoikkuna"
     },
     "tile": {
-      "title": "Bruksanvisningar för karta"
+      "title": "Bruksanvisningar"
     },
     "error": {
-      "title": "",
-      "generic": ""
+      "title": "Fel!",
+      "generic": "Laddningen av anvisningarna misslyckades. Försök på nytt senare."
     },
     "help": {
-      "tags": "",
-      "contentPart": ""
+      "tags": "karttaikkuna,pikaohje",
+      "contentPart": "body"
     }
   }
 });

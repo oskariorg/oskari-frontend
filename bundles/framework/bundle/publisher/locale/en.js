@@ -2,7 +2,7 @@ Oskari.registerLocalization({
   "lang": "en",
   "key": "Publisher",
   "value": {
-    "title": "Create map to be embedded",
+    "title": "Create map",
     "flyouttitle": "Create map",
     "desc": "",
     "published": {
@@ -39,31 +39,14 @@ Oskari.registerLocalization({
       "tools": {
         "label": "Tools",
         "tooltip": "Select the tools to be shown on the map. Their placement is displayed in the map preview.",
-        "Oskari": {
-          "mapframework": {
-            "bundle": {
-              "mapmodule": {
-                "plugin": {
-                  "ScaleBarPlugin": "Scale line",
-                  "IndexMapPlugin": "Index map",
-                  "Portti2Zoombar": "Scale scrollbar",
-                  "SearchPlugin": "Address and place name search"
-                }
-              }
-            },
-            "mapmodule": {
-              "GetInfoPlugin": "Query tool for place data"
-            }
-          }
-        },
-        "ScaleBarPlugin": "",
-        "IndexMapPlugin": "",
-        "Portti2Zoombar": "",
-        "SearchPlugin": "",
-        "GetInfoPlugin": ""
+        "ScaleBarPlugin": "Scale line",
+        "IndexMapPlugin": "Index map",
+        "Portti2Zoombar": "Scale scrollbar",
+        "SearchPlugin": "Address and place name search",
+        "GetInfoPlugin": "Query tool for place data"
       },
       "layers": {
-        "label": "Map levels",
+        "label": "Map layers",
         "defaultLayer": "(Default layer)",
         "useAsDefaultLayer": "Use as default layer"
       },
@@ -81,12 +64,12 @@ Oskari.registerLocalization({
         "cancel": "Cancel"
       },
       "layerselection": {
-        "label": "Show map levels in menu",
+        "label": "Show map layers in menu",
         "info": "Select background maps. You can set the default background map in the map preview window.",
-        "tooltip": "The background map is shown as the bottom layer of the map. When you select map levels to be used as the bottom layer, only one level is visible at a time and you can switch between them. You can set the default background map in the map preview.",
+        "tooltip": "The background map is shown as the bottom layer of the map. When you select map layers to be used as the bottom layer, only one layer is visible at a time and you can switch between them. You can set the default background map in the map preview.",
         "promote": "Show aerial images?"
       },
-      "preview": "Preview of map that will be embedded.",
+      "preview": "Preview of the map to be embedded.",
       "location": "Location and zoom level",
       "zoomlevel": "Zoom level",
       "help": "Help",
@@ -97,24 +80,24 @@ Oskari.registerLocalization({
         "domainStart": "Omit prefixes http or www from the website name",
         "name": "Name is required information",
         "nohelp": "No help is available",
-        "saveFailed": "Map embedding failed. Try again later.",
-        "nameIllegalCharacters": "",
-        "domainIllegalCharacters": ""
+        "saveFailed": "Map publishing failed. Try again later.",
+        "nameIllegalCharacters": "The name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
+        "domainIllegalCharacters": "The web site name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens."
       }
     },
     "NotLoggedView": {
       "text": "You need to log in before using the embedding function.",
       "signup": "Log in",
-      "signupUrl": "/web/fi/login",
+      "signupUrl": "/web/en/login",
       "register": "Register",
-      "registerUrl": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+      "registerUrl": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
     },
     "StartView": {
       "text": "You can embed the map view you just created on your own or your employer's website.",
-      "layerlist_title": "Embeddable map levels",
-      "layerlist_empty": "The map levels you selected cannot be embedded. The menu Selected map levels shows whether or not a map level can be embedded.",
+      "layerlist_title": "Embeddable map layers",
+      "layerlist_empty": "The map layers you selected cannot be embedded. The menu Selected map layers shows whether or not a map layer can be embedded.",
       "layerlist_denied": "Cannot be embedded",
-      "denied_tooltip": "The providers of this map data have not granted permission to publish these materials on other websites. Check rights to publish in the menu Selected map levels before embedding.",
+      "denied_tooltip": "The providers of this map data have not granted permission to publish these materials on other websites. Check rights to publish in the menu Selected map layers before embedding.",
       "buttons": {
         "continue": "Continue",
         "cancel": "Cancel"

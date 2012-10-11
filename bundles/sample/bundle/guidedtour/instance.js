@@ -104,22 +104,27 @@ function() {
      * BundleInstance protocol method
      */
     start : function() {
-        var me = this;
-        // Should this not come as a param?
-        var sandbox = Oskari.$('sandbox');
-        this.sandbox = sandbox;
+        // Check cookie 'tourseen'. Value '1' means that tour is not to be started
+        // jQuery cookie plugin: resources/sample/bundle/guidedtour/js/jquery.cookie.js | github.com/carhartl/jquery-cookie/
+        if (jQuery.cookie('tourseen') != '1') {
+          var me = this;
+          // Should this not come as a param?
+          var sandbox = Oskari.$('sandbox');
+          this.sandbox = sandbox;
 
-        this.localization = Oskari.getLocalization(this.getName());
+          this.localization = Oskari.getLocalization(this.getName());
         
-        // register to sandbox as a module
-        sandbox.register(me);
+          // register to sandbox as a module
+          sandbox.register(me);
         
-        me._startGuide();
+          me._startGuide();
+        }
     },
     _startGuide : function() {
         var me = this;
         this.guideStep = 0;
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        dialog.makeDraggable();
         this._showGuideContentForStep(this.guideStep, dialog);
     },
     
@@ -131,9 +136,29 @@ function() {
             return this.ref.getLocalization('page1').title
         },
         getContent : function() {
-            var me = this;
+            var me = this.ref;
+            var loc = me.getLocalization('page1');
             var content = jQuery('<div></div>');
             content.append(this.ref.getLocalization('page1').message);
+            content.append('<br><br>');
+            var checkboxTemplate = jQuery('<input type="checkbox" name="tourseen" id="tourseen" value="1">');
+            var checkbox = checkboxTemplate.clone();
+            var labelTemplate = jQuery('<label for="tourseen"></label>');
+            var label = labelTemplate.clone();
+            label.append(loc.label);
+            checkbox.bind('change', function() {
+              if (jQuery(this).attr('checked')) {
+                // Set cookie not to show guided tour again
+                jQuery.cookie("tourseen", "1", { expires: 365 });
+              }
+              else {
+                // Revert to show guided tour on startup
+                jQuery.cookie("tourseen", "0", { expires: 1 });
+              }
+            });
+            content.append(checkbox);
+            content.append('&nbsp;');
+            content.append(label);
             return content;
         }
     },
@@ -142,10 +167,11 @@ function() {
             this.ref = inst;
         },
         getTitle : function() {
-            return this.ref.getLocalization('page2').title
+            return this.ref.getLocalization('page2').title + '<span>1/8</span>';
         },
         getContent : function() {
             var me = this.ref;
+            me._openExtension('Search');
             var loc = me.getLocalization('page2');
             var content = jQuery('<div></div>');
             content.append(loc.message);
@@ -153,23 +179,258 @@ function() {
             var openLink = linkTemplate.clone();
             openLink.append(loc.openLink);
             openLink.bind('click', function() {
+                me._openExtension('Search');
+                openLink.hide();
+                closeLink.show();
+            });
+            var closeLink = linkTemplate.clone();
+            closeLink.append(loc.closeLink);
+            closeLink.bind('click', function() {
+                me._closeExtension('Search');
+                openLink.show();
+                closeLink.hide();
+            });
+            content.append('<br><br>');
+            content.append(openLink);
+            content.append(closeLink);
+            closeLink.show();
+            openLink.hide();
+            return content;
+        }/*,
+        getPositionRef : function() {
+            var loc = this.ref.getLocalization('page2');
+            return jQuery("div.oskari-tile-title:contains('" + loc.tileText + "')");
+        },
+        positionAlign : 'right'*/
+        
+    },
+    {
+        setScope : function(inst) {
+            this.ref = inst;
+        },
+        getTitle : function() {
+            return this.ref.getLocalization('page3').title + '<span>2/8</span>';
+        },
+        getContent : function() {
+            var me = this.ref;
+            me._openExtension('LayerSelector');
+            var loc = me.getLocalization('page3');
+            var content = jQuery('<div></div>');
+            content.append(loc.message);
+            var linkTemplate = jQuery('<a href="#"></a>');
+            var openLink = linkTemplate.clone();
+            openLink.append(loc.openLink);
+            openLink.bind('click', function() {
+                me._openExtension('LayerSelector');
+                openLink.hide();
+                closeLink.show();
+            });
+            var closeLink = linkTemplate.clone();
+            closeLink.append(loc.closeLink);
+            closeLink.bind('click', function() {
+                me._closeExtension('LayerSelector');
+                openLink.show();
+                closeLink.hide();
+            });
+            content.append('<br><br>');
+            content.append(openLink);
+            content.append(closeLink);
+            closeLink.show();
+            openLink.hide();
+            return content;
+        }/*,
+        getPositionRef : function() {
+            var loc = this.ref.getLocalization('page3');
+            return jQuery("div.oskari-tile-title:contains('" + loc.tileText + "')");
+        },
+        positionAlign : 'right'*/
+        
+    },
+    {
+        setScope : function(inst) {
+            this.ref = inst;
+        },
+        getTitle : function() {
+            return this.ref.getLocalization('page4').title + '<span>3/8</span>';
+        },
+        getContent : function() {
+            var me = this.ref;
+            me._openExtension('LayerSelection');
+            var loc = me.getLocalization('page4');
+            var content = jQuery('<div></div>');
+            content.append(loc.message);
+            var linkTemplate = jQuery('<a href="#"></a>');
+            var openLink = linkTemplate.clone();
+            openLink.append(loc.openLink);
+            openLink.bind('click', function() {
+                me._openExtension('LayerSelection');
+                openLink.hide();
+                closeLink.show();
+            });
+            var closeLink = linkTemplate.clone();
+            closeLink.append(loc.closeLink);
+            closeLink.bind('click', function() {
+                me._closeExtension('LayerSelection');
+                openLink.show();
+                closeLink.hide();
+            });
+            content.append('<br><br>');
+            content.append(openLink);
+            content.append(closeLink);
+            closeLink.show();
+            openLink.hide();
+            return content;
+        }/*,
+        getPositionRef : function() {
+            var loc = this.ref.getLocalization('page4');
+            return jQuery("div.oskari-tile-title:contains('" + loc.tileText + "')");
+        },
+        positionAlign : 'right'*/
+        
+    },
+    {
+        setScope : function(inst) {
+            this.ref = inst;
+        },
+        getTitle : function() {
+            return this.ref.getLocalization('page5').title + '<span>4/8</span>';
+        },
+        getContent : function() {
+            var me = this.ref;
+            me._openExtension('PersonalData');
+            var loc = me.getLocalization('page5');
+            var content = jQuery('<div></div>');
+            content.append(loc.message);
+            var linkTemplate = jQuery('<a href="#"></a>');
+            var openLink = linkTemplate.clone();
+            openLink.append(loc.openLink);
+            openLink.bind('click', function() {
                 me._openExtension('PersonalData');
+                openLink.hide();
+                closeLink.show();
             });
             var closeLink = linkTemplate.clone();
             closeLink.append(loc.closeLink);
             closeLink.bind('click', function() {
                 me._closeExtension('PersonalData');
+                openLink.show();
+                closeLink.hide();
             });
+            content.append('<br><br>');
             content.append(openLink);
-            content.append(' - ');
             content.append(closeLink);
+            closeLink.show();
+            openLink.hide();
+            return content;
+        }/*,
+        getPositionRef : function() {
+            var loc = this.ref.getLocalization('page5');
+            return jQuery("div.oskari-tile-title:contains('" + loc.tileText + "')");
+        },
+        positionAlign : 'right'*/
+        
+    },
+    {
+        setScope : function(inst) {
+            this.ref = inst;
+        },
+        getTitle : function() {
+            return this.ref.getLocalization('page6').title + '<span>5/8</span>';
+        },
+        getContent : function() {
+            var me = this.ref;
+            me._openExtension('Publisher');
+            var loc = me.getLocalization('page6');
+            var content = jQuery('<div></div>');
+            content.append(loc.message);
+            var linkTemplate = jQuery('<a href="#"></a>');
+            var openLink = linkTemplate.clone();
+            openLink.append(loc.openLink);
+            openLink.bind('click', function() {
+                me._openExtension('Publisher');
+                openLink.hide();
+                closeLink.show();
+            });
+            var closeLink = linkTemplate.clone();
+            closeLink.append(loc.closeLink);
+            closeLink.bind('click', function() {
+                me._closeExtension('Publisher');
+                openLink.show();
+                closeLink.hide();
+            });
+            content.append('<br><br>');
+            content.append(openLink);
+            content.append(closeLink);
+            closeLink.show();
+            openLink.hide();
+            return content;
+        }/*,
+        getPositionRef : function() {
+            var loc = this.ref.getLocalization('page6');
+            return jQuery("div.oskari-tile-title:contains('" + loc.tileText + "')");
+        },
+        positionAlign : 'right'*/
+        
+    },
+    {
+        setScope : function(inst) {
+            this.ref = inst;
+        },
+        getTitle : function() {
+            return this.ref.getLocalization('page7').title + '<span>6/8</span>';
+        },
+        getContent : function() {
+            var me = this.ref;
+            me._closeExtension('Publisher');
+            var loc = me.getLocalization('page7');
+            var content = jQuery('<div></div>');
+            content.append(loc.message);
             return content;
         },
         getPositionRef : function() {
-            var loc = this.ref.getLocalization('page2');
-            return jQuery("div.oskari-tile-title:contains('" + loc.tileText + "')");
+            return jQuery("#toolbar");
         },
         positionAlign : 'right'
+        
+    },
+    {
+        setScope : function(inst) {
+            this.ref = inst;
+        },
+        getTitle : function() {
+            return this.ref.getLocalization('page8').title + '<span>7/8</span>';
+        },
+        getContent : function() {
+            var me = this.ref;
+            var loc = me.getLocalization('page8');
+            var content = jQuery('<div></div>');
+            content.append(loc.message);
+            return content;
+        },
+        getPositionRef : function() {
+            return jQuery(".panbuttonDiv");
+        },
+        positionAlign : 'left'
+        
+    },
+    {
+        setScope : function(inst) {
+            this.ref = inst;
+        },
+        getTitle : function() {
+            return this.ref.getLocalization('page9').title + '<span>8/8</span>';
+        },
+        getContent : function() {
+            var me = this.ref;
+            var loc = me.getLocalization('page9');
+            var content = jQuery('<div></div>');
+            content.append(loc.message);
+            return content;
+        },
+        getPositionRef : function() {
+            return jQuery(".pzbDiv");
+        },
+        positionAlign : 'left'
         
     }
     ],
@@ -202,13 +463,13 @@ function() {
     _getDialogButton : function(dialog) {
         var me = this;
         var buttons = [];
-        var cancelBtn = dialog.createCloseButton('cancel');
+        var cancelBtn = dialog.createCloseButton('Sulje');
         buttons.push(cancelBtn);
         
         
-        if(this.guideStep != 0) {
+        if(this.guideStep > 1) {
             var prevBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            prevBtn.setTitle('previous');
+            prevBtn.setTitle('Edellinen');
             prevBtn.setHandler(function() {
                 me.guideStep--;
                 me._showGuideContentForStep(me.guideStep, dialog);
@@ -216,18 +477,29 @@ function() {
             buttons.push(prevBtn);    
         }
         
-        // check this._guideSteps.length <> this.guideStep and return next or finish?
-        if(this.guideStep < this._guideSteps.length - 1) {
-            var nextBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            nextBtn.setTitle('next');
+        if(this.guideStep == 0) {
+          var nextBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            nextBtn.setTitle('Aloita');
             nextBtn.setHandler(function() {
                 me.guideStep++;
                 me._showGuideContentForStep(me.guideStep, dialog);
             });
-            buttons.push(nextBtn);   
+            buttons.push(nextBtn);
+        }
+        // check this._guideSteps.length <> this.guideStep and return next or finish?
+        else if(this.guideStep < this._guideSteps.length - 1) {
+            var nextBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            nextBtn.setTitle('Seuraava');
+            nextBtn.setHandler(function() {
+                me.guideStep++;
+                me._showGuideContentForStep(me.guideStep, dialog);
+            });
+            buttons.push(nextBtn);
+            // custom class for positioned popups
+            dialog.addClass('bluetitle');
         }
         else if(this.guideStep == this._guideSteps.length - 1) {
-            var finishBtn = dialog.createCloseButton('finished');
+            var finishBtn = dialog.createCloseButton('Valmis');
             buttons.push(finishBtn);
         }
         
