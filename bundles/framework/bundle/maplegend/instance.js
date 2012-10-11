@@ -147,7 +147,7 @@ function() {
 		 * Calls flyouts handleLayerSelectionChanged() method
 		 */
 		'AfterMapLayerRemoveEvent' : function(event) {			
-			this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged(event.getMapLayer(), false);
+			this.plugins['Oskari.userinterface.Flyout'].refresh();
 		},
 		/**
 		 * @method AfterMapLayerAddEvent
@@ -156,15 +156,16 @@ function() {
 		 * Calls flyouts handleLayerSelectionChanged() method
 		 */
 		'AfterMapLayerAddEvent' : function(event) {			
-			this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged(event.getMapLayer(), true, event.getKeepLayersOrder());
+			this.plugins['Oskari.userinterface.Flyout'].refresh();
 		},
 		  /**
          * @method AfterChangeMapLayerStyleEvent
          */
         'AfterChangeMapLayerStyleEvent' : function(event) {
-            if(event._creator != this.getName()) {
-                this.plugins['Oskari.userinterface.Flyout'].handleLayerStyleChanged(event.getMapLayer());
-            }
+			this.plugins['Oskari.userinterface.Flyout'].refresh();
+        },
+        'AfterRearrangeSelectedMapLayerEvent': function(event) {
+			this.plugins['Oskari.userinterface.Flyout'].refresh();        	
         }
 	},
 
