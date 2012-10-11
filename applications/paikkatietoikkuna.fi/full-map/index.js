@@ -46,25 +46,25 @@ Oskari.clazz.define(
                         .bundlesInstanceInfos
                         .mapfull
                         .bundleInstance;
-                    var ugStartup =
-                        {
-                            'instanceProps': {},
-                            'title': 'Guided Tour',
-                            'bundleinstancename': 'guidedtour',
-                            'fi': 'guidedtour',
-                            'sv': 'guidedtour',
-                            'en': 'guidedtour',
-                            'bundlename': 'guidedtour',
-                            'metadata': {
-                                'Import-Bundle': {
-                                    'guidedtour': {
-                                        'bundlePath': '/Oskari/packages/sample/bundle/'
-                                    }
-                                },
-                                'Require-Bundle-Instance': [ ]
-                            }
-                        };
-                    Oskari.bundle_facade.playBundle(ugStartup, function() {});
+                    // var ugStartup =
+                    //     {
+                    //         'instanceProps': {},
+                    //         'title': 'Guided Tour',
+                    //         'bundleinstancename': 'guidedtour',
+                    //         'fi': 'guidedtour',
+                    //         'sv': 'guidedtour',
+                    //         'en': 'guidedtour',
+                    //         'bundlename': 'guidedtour',
+                    //         'metadata': {
+                    //             'Import-Bundle': {
+                    //                 'guidedtour': {
+                    //                     'bundlePath': '/Oskari/packages/sample/bundle/'
+                    //                 }
+                    //             },
+                    //             'Require-Bundle-Instance': [ ]
+                    //         }
+                    //     };
+                    // Oskari.bundle_facade.playBundle(ugStartup, function() {});
                 }
             );
         },
@@ -444,7 +444,25 @@ Oskari.clazz.define(
                         "Require-Bundle-Instance" : []
                     },
                     instanceProps : {}
-                }]
+                },
+                {                    
+                    'title': 'GuidedTour',
+                    'bundleinstancename': 'GuidedTour',
+                    'fi': 'guidedtour',
+                    'sv': 'guidedtour',
+                    'en': 'guidedtour',
+                    'bundlename': 'GuidedTour',
+                    'metadata': {
+                        'Import-Bundle': {
+                            'guidedtour': {
+                                'bundlePath': '/Oskari/packages/sample/bundle/'
+                            }
+                        },
+                        'Require-Bundle-Instance': [ ]
+                    },
+                    'instanceProps': {}
+                }
+            ]
         }
     });
 
