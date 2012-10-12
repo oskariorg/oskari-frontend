@@ -2,13 +2,13 @@ Oskari.registerLocalization(
     {
         "lang": "fi",
         "key": "GuidedTour",
-        "button": {
-            "next" : "Seuraava",
-            "previous" : "Edellinen",
-            "start" : "Aloita",
-            "finish" : "Valmis"
-        },
         "value": {
+            "button": {
+                "next" : "Seuraava",
+                "previous" : "Edellinen",
+                "start" : "Aloita",
+                "finish" : "Valmis"
+            },
             "title": "Tervetuloa",
             "desc": "",
             "page1": {
