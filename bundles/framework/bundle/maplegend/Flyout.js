@@ -1,7 +1,9 @@
 /**
  * @class Oskari.mapframework.bundle.maplegend.Flyout
  *
- * Renders the "all layers" flyout.
+ * Renders any Legend Images (such as returned from WMS GetLegendGraphic)
+ * for any selected layers.
+ * 
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
 
@@ -15,6 +17,7 @@ function(instance) {
 	this.instance = instance;
 	this.container = null;
 	this.templateLayer = null;
+	this.templateLayerLegend = null;
 	this.state = null;
 
 }, {
@@ -51,7 +54,8 @@ function(instance) {
 
 		var me = this;
 		me.templateLayer = 
-			jQuery('<div class="maplegend-layer"><div class="maplegend-legend"><img /></div><div class="maplegend-tools"><div class="layer-description"><div class="icon-info"></div></div></div></div>');
+			jQuery('<div class="maplegend-layer"><div class="maplegend-tools"><div class="layer-description"><div class="icon-info"></div></div></div></div>');
+		me.templateLayerLegend = jQuery('<div class="maplegend-legend"><img /></div>');
 	},
 	/**
 	 * @method stopPlugin
@@ -110,8 +114,7 @@ function(instance) {
 	 * @method _populateLayerList
 	 * @private
 	 * @param {Object} layerListContainer reference to jQuery object representing the layerlist placeholder
-	 * Renders layer information as list to the given container object.
-	 * Layers are sorted by grouping & name
+	 * Renders legend images as an accordion for the selected layers.
 	 */
 	_populateLayerList : function() {
 		var me = this;
@@ -151,20 +154,29 @@ function(instance) {
 		var me = this;
 		var sandbox = me.instance.getSandbox();
 		var layerDiv = this.templateLayer.clone();
-
-		var imgDiv = layerDiv.find('img');
-		
-		/*var legendUrl = 
-			'http://kartta.liikennevirasto.fi/maaliikenne/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=liikennemaarat&style=KAVLras';*/
-		var legendUrl = layer.getLegendImage ? layer.getLegendImage() : null;
-		if( legendUrl ) {
-			var img = new Image();
-			img.onload = function() {
-				imgDiv.attr('src',legendUrl);
-				img.onload = null;
-			}		
-			img.src = legendUrl;
+	
+		/* let's not show same image multiple times */		
+		var imagesAdded = {};
+		/* main layer div */
+		var legendDiv = me._createLegendDiv(layer,imagesAdded);
+		if( legendDiv ) {
+			layerDiv.append(legendDiv);
 		}
+		
+		/* optional sublayers */
+		var sublayers = layer.getSubLayers ? layer.getSubLayers() : null ;
+		if( sublayers ) {
+			for( var sl = 0 ; sl < sublayers.length ; sl++ ) {
+				var sublayer = sublayers[sl];
+				var subLayerlegendDiv = me._createLegendDiv(sublayer,imagesAdded);
+				if( !subLayerlegendDiv ) {
+					continue;
+				}
+				layerDiv.append(subLayerlegendDiv);
+			}			
+		}
+		
+		/* metadata link */
 		var uuid = layer.getMetadataIdentifier();
 		var tools = layerDiv.find('.maplegend-tools');
 		if (!uuid) {
@@ -181,6 +193,35 @@ function(instance) {
         }
 
 		return layerDiv;
+	},
+	
+	/**
+	 * @method _createLegendDiv
+	 * creates legend image div for layer 
+	 */
+	_createLegendDiv: function(layer,imagesAdded) {
+		var me = this;
+		var legendUrl = layer.getLegendImage ? layer.getLegendImage() : null;
+		if( !( legendUrl && legendUrl != '' && !imagesAdded[legendUrl] ) ) {
+			return;
+		}
+
+		
+		var legendDiv = me.templateLayerLegend.clone();
+		
+		
+		var imgDiv = legendDiv.find('img');
+		/*var legendUrl = 
+			'http://kartta.liikennevirasto.fi/maaliikenne/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=liikennemaarat&style=KAVLras';*/
+		imagesAdded[legendUrl] = true;
+		var img = new Image();
+		img.onload = function() {
+			imgDiv.attr('src',legendUrl);
+			img.onload = null;
+		}		
+		img.src = legendUrl;
+		
+		return legendDiv;
 	}
 }, {
 	/**
