@@ -455,7 +455,7 @@ Oskari.clazz.define(
                     'metadata': {
                         'Import-Bundle': {
                             'guidedtour': {
-                                'bundlePath': '/Oskari/packages/sample/bundle/'
+                                'bundlePath': '/Oskari/packages/framework/bundle/'
                             }
                         },
                         'Require-Bundle-Instance': [ ]
