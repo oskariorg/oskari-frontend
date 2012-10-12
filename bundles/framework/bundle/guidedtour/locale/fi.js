@@ -7,7 +7,8 @@ Oskari.registerLocalization(
                 "next" : "Seuraava",
                 "previous" : "Edellinen",
                 "start" : "Aloita",
-                "finish" : "Valmis"
+                "finish" : "Valmis",
+                "close" : "Sulje"
             },
             "title": "Tervetuloa",
             "desc": "",
