@@ -461,6 +461,22 @@ Oskari.clazz.define(
                         'Require-Bundle-Instance': [ ]
                     },
                     'instanceProps': {}
+                },{
+                    title : 'Legends',
+                    fi : 'Karttaselitteet',
+                    sv : 'Förklaringar',
+                    en : 'Legends',
+                    bundlename : 'maplegend',
+                    bundleinstancename : 'maplegend',
+                    metadata : {
+                        "Import-Bundle" : {
+                            "maplegend" : {
+                                bundlePath : '/Oskari/packages/framework/bundle/'
+                            }
+                        },
+                        "Require-Bundle-Instance" : []
+                    },
+                    instanceProps : {}
                 }
             ]
         }

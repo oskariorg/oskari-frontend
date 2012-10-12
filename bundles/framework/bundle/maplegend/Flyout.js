@@ -1,7 +1,9 @@
 /**
  * @class Oskari.mapframework.bundle.maplegend.Flyout
  *
- * Renders the "all layers" flyout.
+ * Renders any Legend Images (such as returned from WMS GetLegendGraphic)
+ * for any selected layers.
+ * 
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
 
@@ -14,10 +16,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
 function(instance) {
 	this.instance = instance;
 	this.container = null;
-	this.template = null;
 	this.templateLayer = null;
-	this.templateLayerGroup = null;
-	this.templateGroupingTool = null;
+	this.templateLayerLegend = null;
 	this.state = null;
 
 }, {
@@ -53,11 +53,9 @@ function(instance) {
 	startPlugin : function() {
 
 		var me = this;
-		this.template = jQuery('<div class="layerList volatile"></div></div>');
-
-		this.templateLayer = jQuery('<div class="layer"><img /> ' + '<div class="layer-tools"><div class="layer-icon"></div><div class="layer-info"></div></div>' + '<div class="layer-title"></div>' + '<div class="layer-keywords"></div>' + '</div>');
-		this.templateLayerGroup = jQuery('<div class="layerGroup"><div class="header"><div class="groupIcon"></div><div class="groupHeader"><span class="groupName"></span><span class="layerCount"></span></div></div></div>');
-		this.templateGroupingTool = jQuery('<li><a href="JavaScript:void(0);"></a></li>');
+		me.templateLayer = 
+			jQuery('<div class="maplegend-layer"><div class="maplegend-tools"><div class="layer-description"><div class="icon-info"></div></div></div></div>');
+		me.templateLayerLegend = jQuery('<div class="maplegend-legend"><img /></div>');
 	},
 	/**
 	 * @method stopPlugin
@@ -107,98 +105,45 @@ function(instance) {
 		};
 	},
 	createUi : function() {
-		var me = this;
-		var sandbox = me.instance.getSandbox();
-
-		// clear container
-		var cel = jQuery(this.container);
-		cel.empty();
-
-		// clone content container from template
-		var content = this.template.clone();
-		// add content container to flyout
-		cel.append(content);
-
 		this.refresh();
 	},
 	refresh : function() {
-		var cel = jQuery(this.container);
-		var layerListContainer = cel.find('div.layerList');
-		this._populateLayerList(layerListContainer);
+		this._populateLayerList();
 	},
 	/**
 	 * @method _populateLayerList
 	 * @private
 	 * @param {Object} layerListContainer reference to jQuery object representing the layerlist placeholder
-	 * Renders layer information as list to the given container object.
-	 * Layers are sorted by grouping & name
+	 * Renders legend images as an accordion for the selected layers.
 	 */
-	_populateLayerList : function(layerListContainer) {
+	_populateLayerList : function() {
 		var me = this;
+		var cel = jQuery(this.container);
+		cel.empty();
+		
+		var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+		accordion.insertTo(cel);
+		
 		var sandbox = this.instance.getSandbox();
-		// clear list
-		layerListContainer.empty();
-
+		
 		// populate selected layer list
 		var layers = sandbox.findAllSelectedMapLayers().slice(0);
 
-		var layerGroupContainer = null;
-		var layerGroup = null;
-		var layerCount = 0;
-		var isOddLayer = true;
-		for(var n = 0; n < layers.length; ++n) {
+		for(var n = layers.length-1; n >= 0; n--) {
 			var layer = layers[n];
 			var groupAttr = layer.getName();
 			var layerContainer = this._createLayerContainer(layer);
-			var layerGroupContainer = this._createLayerGroupContainer(groupAttr);
-			layerListContainer.append(layerGroupContainer);
-			layerGroupContainer.append(layerContainer);
-			layerCount++;
-
+			
+			var accordionPanel = 
+				Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+			accordionPanel.open();
+			accordionPanel.setTitle(layer.getName());
+			accordionPanel.getContainer().append(me._createLayerContainer(layer));
+			accordion.addPanel(accordionPanel);
 		}
 
 	},
-	/**
-	 * @method _createLayerGroupContainer
-	 * @private
-	 * Creates the layer group containers
-	 * @param {String} groupName title for the group
-	 */
-	_createLayerGroupContainer : function(groupName) {
-		var me = this;
-		var sandbox = me.instance.getSandbox();
 
-		// clone from layer group template
-		var layerGroupDiv = this.templateLayerGroup.clone();
-		// let's start opened
-		layerGroupDiv.addClass('open');
-		layerGroupDiv.find('div.groupIcon').removeClass('icon-arrow-right');
-		layerGroupDiv.find('div.groupIcon').addClass('icon-arrow-down');
-
-		var groupHeader = jQuery(layerGroupDiv).find('div.header');
-		groupHeader.find('span.groupName').append(groupName);
-		groupHeader.click(function() {
-			var groupDiv = jQuery(this).parent();
-			var isOpen = groupDiv.hasClass('open');
-			// layer is open -> close it
-			if(isOpen) {
-				groupDiv.removeClass('open');
-				groupDiv.find('div.groupIcon').removeClass('icon-arrow-down');
-				groupDiv.find('div.groupIcon').addClass('icon-arrow-right');
-				groupDiv.find('div.layer').hide();
-			}
-			// layer is closed -> open it
-			else {
-				groupDiv.addClass('open');
-				groupDiv.find('div.groupIcon').removeClass('icon-arrow-right');
-				groupDiv.find('div.groupIcon').addClass('icon-arrow-down');
-
-				var visibleLayers = groupDiv.find('div.layer');
-				visibleLayers.show();
-			}
-		});
-		return layerGroupDiv;
-	},
 	/**
 	 * @method _createLayerContainer
 	 * @private
@@ -206,24 +151,77 @@ function(instance) {
 	 * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer to render
 	 */
 	_createLayerContainer : function(layer) {
-
+		var me = this;
+		var sandbox = me.instance.getSandbox();
 		var layerDiv = this.templateLayer.clone();
-
-		var imgDiv = layerDiv.find('img');
-		
-		/*var legendUrl = 
-			'http://kartta.liikennevirasto.fi/maaliikenne/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=liikennemaarat&style=KAVLras';*/
-		var legendUrl = layer.getLegendImage();
-		if( legendUrl ) {
-			var img = new Image();
-			img.onload = function() {
-				imgDiv.attr('src',legendUrl);
-				img.onload = null;
-			}		
-			img.src = legendUrl;
+	
+		/* let's not show same image multiple times */		
+		var imagesAdded = {};
+		/* main layer div */
+		var legendDiv = me._createLegendDiv(layer,imagesAdded);
+		if( legendDiv ) {
+			layerDiv.append(legendDiv);
 		}
+		
+		/* optional sublayers */
+		var sublayers = layer.getSubLayers ? layer.getSubLayers() : null ;
+		if( sublayers ) {
+			for( var sl = 0 ; sl < sublayers.length ; sl++ ) {
+				var sublayer = sublayers[sl];
+				var subLayerlegendDiv = me._createLegendDiv(sublayer,imagesAdded);
+				if( !subLayerlegendDiv ) {
+					continue;
+				}
+				layerDiv.append(subLayerlegendDiv);
+			}			
+		}
+		
+		/* metadata link */
+		var uuid = layer.getMetadataIdentifier();
+		var tools = layerDiv.find('.maplegend-tools');
+		if (!uuid) {
+            // no functionality -> hide
+            tools.find('div.layer-description').hide();
+        } else {
+            tools.find('div.icon-info').bind('click', function() {
+                var rn = 'catalogue.ShowMetadataRequest';
+                
+                sandbox.postRequestByName(rn, [{
+                    uuid : uuid
+                }]);
+            });
+        }
 
 		return layerDiv;
+	},
+	
+	/**
+	 * @method _createLegendDiv
+	 * creates legend image div for layer 
+	 */
+	_createLegendDiv: function(layer,imagesAdded) {
+		var me = this;
+		var legendUrl = layer.getLegendImage ? layer.getLegendImage() : null;
+		if( !( legendUrl && legendUrl != '' && !imagesAdded[legendUrl] ) ) {
+			return;
+		}
+
+		
+		var legendDiv = me.templateLayerLegend.clone();
+		
+		
+		var imgDiv = legendDiv.find('img');
+		/*var legendUrl = 
+			'http://kartta.liikennevirasto.fi/maaliikenne/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=liikennemaarat&style=KAVLras';*/
+		imagesAdded[legendUrl] = true;
+		var img = new Image();
+		img.onload = function() {
+			imgDiv.attr('src',legendUrl);
+			img.onload = null;
+		}		
+		img.src = legendUrl;
+		
+		return legendDiv;
 	}
 }, {
 	/**

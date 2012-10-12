@@ -228,7 +228,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.domain.WmtsLayer', function() {
         this._queryable = queryable;
     },
     getQueryable : function() {
-        return this._queryable;
+    	return this._queryable;
     },
     setAsGroupLayer : function() {
         this._type = "GROUP_LAYER";

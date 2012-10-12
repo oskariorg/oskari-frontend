@@ -192,7 +192,7 @@ function() {
 		var services = [];
 		
 		var mapLayerService = Oskari.clazz.create('Oskari.mapframework.service.MapLayerService',
-                conf.globalMapAjaxUrl + 'action_route=GetMapLayers' , this.core.getSandbox());
+                conf.globalMapAjaxUrl + 'action_route=GetMapLayers&lang='+Oskari.getLang() , this.core.getSandbox());
         services.push(mapLayerService);
         
        // TODO: maybe we should set the map state in another bundle so we can setup core/map in mapfull
