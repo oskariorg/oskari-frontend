@@ -14,13 +14,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
 function(instance) {
 	this.instance = instance;
 	this.container = null;
-	this.template = null;
 	this.templateLayer = null;
-	this.templateLayerGroup = null;
-	this.templateGroupingTool = null;
+	this.templateLayerFooterTools =null;
 	this.state = null;
 
 }, {
+	templates: {
+		layer: '<div class="maplegend-layer"><img /></div>',
+		tools: '<div class="maplegend-tools"><div class="layer-description"><div class="icon-info"></div></div></div>'
+	},
 	/**
 	 * @method getName
 	 * @return {String} the name for the component
@@ -53,9 +55,10 @@ function(instance) {
 	startPlugin : function() {
 
 		var me = this;
-
-		this.templateLayer = jQuery('<div class="layer"><img /> ' + '<div class="layer-tools"><div class="layer-icon"></div><div class="layer-info"></div></div>' + '<div class="layer-title"></div>' + '<div class="layer-keywords"></div>' + '</div>');
-		this.templateLayerGroup = jQuery('<div class="layerGroup"><div class="header"><div class="groupIcon"></div><div class="groupHeader"><span class="groupName"></span><span class="layerCount"></span></div></div></div>');
+		me.templateLayer = 
+			jQuery(this.templates.layer);
+		me.templateLayerFooterTools = 
+			jQuery(this.templates.tools);
 		
 	},
 	/**
@@ -106,12 +109,6 @@ function(instance) {
 		};
 	},
 	createUi : function() {
-		var me = this;
-		var sandbox = me.instance.getSandbox();
-
-		// clear container
-		
-
 		this.refresh();
 	},
 	refresh : function() {
@@ -159,7 +156,8 @@ function(instance) {
 	 * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer to render
 	 */
 	_createLayerContainer : function(layer) {
-
+		var me = this;
+		var sandbox = me.instance.getSandbox();
 		var layerDiv = this.templateLayer.clone();
 
 		var imgDiv = layerDiv.find('img');
@@ -175,6 +173,22 @@ function(instance) {
 			}		
 			img.src = legendUrl;
 		}
+		var uuid = layer.getMetadataIdentifier();
+		var tools = this.templateLayerFooterTools.clone();
+		if (!uuid) {
+            // no functionality -> hide
+            tools.find('div.layer-description').hide();
+        } else {
+            tools.find('div.icon-info').bind('click', function() {
+                var rn = 'catalogue.ShowMetadataRequest';
+                
+                sandbox.postRequestByName(rn, [{
+                    uuid : uuid
+                }]);
+            });
+        }
+        layerDiv.append(tools);;
+
 
 		return layerDiv;
 	}
