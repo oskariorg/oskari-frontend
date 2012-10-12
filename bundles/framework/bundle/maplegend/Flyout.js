@@ -15,14 +15,9 @@ function(instance) {
 	this.instance = instance;
 	this.container = null;
 	this.templateLayer = null;
-	this.templateLayerFooterTools =null;
 	this.state = null;
 
 }, {
-	templates: {
-		layer: '<div class="maplegend-layer"><img /></div>',
-		tools: '<div class="maplegend-tools"><div class="layer-description"><div class="icon-info"></div></div></div>'
-	},
 	/**
 	 * @method getName
 	 * @return {String} the name for the component
@@ -56,10 +51,7 @@ function(instance) {
 
 		var me = this;
 		me.templateLayer = 
-			jQuery(this.templates.layer);
-		me.templateLayerFooterTools = 
-			jQuery(this.templates.tools);
-		
+			jQuery('<div class="maplegend-layer"><div class="maplegend-tools"><div class="layer-description"><div class="icon-info"></div></div></div><div class="maplegend-legend"><img /></div></div>');
 	},
 	/**
 	 * @method stopPlugin
@@ -134,7 +126,7 @@ function(instance) {
 		// populate selected layer list
 		var layers = sandbox.findAllSelectedMapLayers().slice(0);
 
-		for(var n = 0; n < layers.length; ++n) {
+		for(var n = layers.length-1; n >= 0; n--) {
 			var layer = layers[n];
 			var groupAttr = layer.getName();
 			var layerContainer = this._createLayerContainer(layer);
@@ -162,9 +154,9 @@ function(instance) {
 
 		var imgDiv = layerDiv.find('img');
 		
-		/*var legendUrl = 
-			'http://kartta.liikennevirasto.fi/maaliikenne/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=liikennemaarat&style=KAVLras';*/
-		var legendUrl = layer.getLegendImage();
+		var legendUrl = 
+			'http://kartta.liikennevirasto.fi/maaliikenne/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=liikennemaarat&style=KAVLras';
+		/*var legendUrl = layer.getLegendImage();*/
 		if( legendUrl ) {
 			var img = new Image();
 			img.onload = function() {
@@ -173,8 +165,8 @@ function(instance) {
 			}		
 			img.src = legendUrl;
 		}
-		var uuid = layer.getMetadataIdentifier();
-		var tools = this.templateLayerFooterTools.clone();
+		var uuid = 'xxx'; //layer.getMetadataIdentifier();
+		var tools = layerDiv.find('.maplegend-tools');
 		if (!uuid) {
             // no functionality -> hide
             tools.find('div.layer-description').hide();
@@ -187,8 +179,6 @@ function(instance) {
                 }]);
             });
         }
-        layerDiv.append(tools);;
-
 
 		return layerDiv;
 	}
