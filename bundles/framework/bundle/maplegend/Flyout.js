@@ -51,7 +51,7 @@ function(instance) {
 
 		var me = this;
 		me.templateLayer = 
-			jQuery('<div class="maplegend-layer"><div class="maplegend-tools"><div class="layer-description"><div class="icon-info"></div></div></div><div class="maplegend-legend"><img /></div></div>');
+			jQuery('<div class="maplegend-layer"><div class="maplegend-legend"><img /></div><div class="maplegend-tools"><div class="layer-description"><div class="icon-info"></div></div></div></div>');
 	},
 	/**
 	 * @method stopPlugin
@@ -154,9 +154,9 @@ function(instance) {
 
 		var imgDiv = layerDiv.find('img');
 		
-		/*var legendUrl = 
-			'http://kartta.liikennevirasto.fi/maaliikenne/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=liikennemaarat&style=KAVLras';*/
-		var legendUrl = layer.getLegendImage ? layer.getLegendImage() : null;
+		var legendUrl = 
+			'http://kartta.liikennevirasto.fi/maaliikenne/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=liikennemaarat&style=KAVLras';
+		/*var legendUrl = layer.getLegendImage ? layer.getLegendImage() : null;*/
 		if( legendUrl ) {
 			var img = new Image();
 			img.onload = function() {
@@ -165,7 +165,7 @@ function(instance) {
 			}		
 			img.src = legendUrl;
 		}
-		var uuid = layer.getMetadataIdentifier();
+		var uuid = 'xxx'; //layer.getMetadataIdentifier();
 		var tools = layerDiv.find('.maplegend-tools');
 		if (!uuid) {
             // no functionality -> hide
