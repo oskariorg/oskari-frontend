@@ -93,19 +93,10 @@ function() {
 
 		// draw ui
 		me.createUi();
-		
-    	var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
     	
         sandbox.registerAsStateful(this.mediator.bundleId, this);
-        
-		var successCB = function() {
-			// massive update so just recreate the whole ui
-			me.createUi();
-		};
-		var failureCB = function() {
-			alert(me.getLocalization('errors').loadFailed);
-		};
-		mapLayerService.loadAllLayersAjax(successCB, failureCB);
+       
+		
 	},
 	/**
 	 * @method init
