@@ -154,9 +154,9 @@ function(instance) {
 
 		var imgDiv = layerDiv.find('img');
 		
-		var legendUrl = 
-			'http://kartta.liikennevirasto.fi/maaliikenne/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=liikennemaarat&style=KAVLras';
-		/*var legendUrl = layer.getLegendImage();*/
+		/*var legendUrl = 
+			'http://kartta.liikennevirasto.fi/maaliikenne/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=liikennemaarat&style=KAVLras';*/
+		var legendUrl = layer.getLegendImage();
 		if( legendUrl ) {
 			var img = new Image();
 			img.onload = function() {
@@ -165,7 +165,7 @@ function(instance) {
 			}		
 			img.src = legendUrl;
 		}
-		var uuid = 'xxx'; //layer.getMetadataIdentifier();
+		var uuid = layer.getMetadataIdentifier();
 		var tools = layerDiv.find('.maplegend-tools');
 		if (!uuid) {
             // no functionality -> hide
