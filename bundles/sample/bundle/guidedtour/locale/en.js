@@ -1,5 +1,5 @@
 Oskari.registerLocalization({
-  "lang": "fi",
+  "lang": "en",
   "key": "GuidedTour",
   "value": {
     "title": "Tervetuloa",
