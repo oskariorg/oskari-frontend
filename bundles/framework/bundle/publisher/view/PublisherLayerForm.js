@@ -186,10 +186,10 @@ function(localization, instance) {
                 var isChecked = checkbox.is(':checked');
                 if (isChecked) {
                 	sandbox.request(me.instance, addRequestBuilder(layer.getId(), true));
-                	//me.plugin.addLayer(layer);
+                	// promoted layers go directly to baselayers
+                    me.plugin.addBaseLayer(layer);
                 } else {
                 	sandbox.request(me.instance, removeRequestBuilder(layer.getId()));
-                	//me.plugin.removeLayer(layer);
                 }
             };
         };

@@ -359,7 +359,11 @@ function(mapLayerUrl, sandbox) {
 
         baseLayer.setMaxScale(baseMapJson.maxScale);
         baseLayer.setMinScale(baseMapJson.minScale);
+        
         baseLayer.setDataUrl(baseMapJson.dataUrl);
+        baseLayer.setMetadataIdentifier(baseMapJson.dataUrl_uuid);
+        
+        
         baseLayer.setOrganizationName(baseMapJson.orgName);
         baseLayer.setInspireName(baseMapJson.inspire);
 
@@ -445,6 +449,7 @@ function(mapLayerUrl, sandbox) {
             layer.setMinScale(mapLayerJson.minScale);
             layer.setDescription(mapLayerJson.subtitle);
             layer.setDataUrl(mapLayerJson.dataUrl);
+            layer.setMetadataIdentifier(mapLayerJson.dataUrl_uuid);
             layer.setOrganizationName(mapLayerJson.orgName);
             layer.setInspireName(mapLayerJson.inspire);
             layer.setOrderNumber(mapLayerJson.orderNumber);

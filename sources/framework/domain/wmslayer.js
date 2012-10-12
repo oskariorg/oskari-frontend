@@ -92,6 +92,8 @@ function() {
     this._geometry = [];
     // wellknown text for polygon geometry
     this._geometryWKT = null;
+    
+    this._metadataIdentifier = null;
 }, {
     /**
      * @method setGeometryWKT
@@ -649,5 +651,18 @@ function() {
      */
     isLayerOfType : function(flavour) {
         return flavour === 'WMS' || flavour === 'wms';
+    },
+    
+    /**
+     * @method getMetadataIdentifier
+     */
+    getMetadataIdentifier: function() {
+    	return this._metadataIdentifier;
+    },
+    /**
+     * @method setMetadataIdentifier
+     */
+    setMetadataIdentifier: function(metadataid) {
+    	this._metadataIdentifier = metadataid;
     }
 });
