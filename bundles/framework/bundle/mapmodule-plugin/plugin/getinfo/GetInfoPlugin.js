@@ -240,6 +240,10 @@ function() {
         for (var i = 0; i < selected.length; i++) {
         	var layer = selected[i]
 
+			if( !layer.getQueryable() ) {
+				continue;
+			}
+
         	if( !layer.isInScale(mapScale) ) {
 				continue;
 			}
