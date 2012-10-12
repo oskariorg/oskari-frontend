@@ -492,8 +492,14 @@ Oskari.clazz.define(
         _getDialogButton : function(dialog) {
             var me = this;
             var buttons = [];
-            var cancelBtn = dialog.createCloseButton('Sulje');
-            buttons.push(cancelBtn);
+            var closeTxt = '!button.close!';
+            if (this.localization &&
+                this.localization.button &&
+                this.localization.button.previous) {
+                closeTxt = this.localization.button.close;
+            }
+            var closeBtn = dialog.createCloseButton(closeTxt);
+            buttons.push(closeBtn);
                         
             if (this.guideStep > 1) {
                 var bn = 'Oskari.userinterface.component.Button';
