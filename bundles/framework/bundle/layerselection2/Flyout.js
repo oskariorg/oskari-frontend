@@ -326,11 +326,11 @@ function(instance) {
         var stylesel = layerDiv.find('div.stylesel');
         stylesel.hide();
 
-        if (layer.getStyles && layer.getStyles().size > 1) {
+        if (layer.getStyles && layer.getStyles().length > 1) {
             var hasOpts = false;
             var styles = layer.getStyles();
             var sel = stylesel.find('select');
-            for (var i = 0; i < styles.size(); i++) {
+            for (var i = 0; i < styles.length; i++) {
                 if (styles[i].getName()) {
                     var opt = jQuery('<option value="' + styles[i].getName() + '">' + styles[i].getTitle() + '</option>');
                     sel.append(opt);
@@ -346,7 +346,6 @@ function(instance) {
                 sandbox.request(me.instance.getName(), req);
             });
             if (hasOpts) {
-
                 sel.val(layer.getCurrentStyle().getName());
                 stylesel.show();
             }
