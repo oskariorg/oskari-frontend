@@ -172,26 +172,6 @@ function() {
         return this._mousePositionY;
     },
     /**
-     * @method setMapKeyboardMovementsEnabled
-     * true if map keyboard movement should be enabled
-     *
-     * @param {Boolean} value
-     *            true if map keyboard movement should be enabled
-     */
-    setMapKeyboardMovementsEnabled : function(value) {
-        this._mapKeyboardMovementsEnabled = value;
-    },
-    /**
-     * @method getMapKeyboardMovementsEnabled
-     * true if map keyboard movement should be enabled
-     *
-     * @return {Boolean}
-     *            true if map keyboard movement should be enabled
-     */
-    getMapKeyboardMovementsEnabled : function() {
-        return this._mapKeyboardMovementsEnabled;
-    },
-    /**
      * @method setScale
      * Scale in map implementation (openlayers)
      *

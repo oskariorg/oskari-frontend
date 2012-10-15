@@ -65,8 +65,13 @@ function() {
      */
     init : function(sandbox) {
         var me = this;
+        var mapMovementHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMovementControlsRequestHandler', me.getMapModule());
         this.requestHandlers = {
-            toolSelectionHandler : Oskari.clazz.create('Oskari.mapframework.mapmodule.ToolSelectionHandler', sandbox, me)
+            'ToolSelectionRequest' : Oskari.clazz.create('Oskari.mapframework.mapmodule.ToolSelectionHandler', sandbox, me),
+            'EnableMapKeyboardMovementRequest' : mapMovementHandler,
+            'DisableMapKeyboardMovementRequest' : mapMovementHandler,
+            'EnableMapMouseMovementRequest' : mapMovementHandler,
+            'DisableMapMouseMovementRequest' : mapMovementHandler
         };
     },
     /**
@@ -83,7 +88,9 @@ function() {
 
         sandbox.register(this);
 
-        sandbox.addRequestHandler('ToolSelectionRequest', this.requestHandlers.toolSelectionHandler);
+        for(var reqName in this.requestHandlers ) {
+            sandbox.addRequestHandler(reqName, this.requestHandlers[reqName]);
+        }
 
         for(var p in this.eventHandlers ) {
             sandbox.registerForEventByName(this, p);
@@ -101,6 +108,10 @@ function() {
      */
     stopPlugin : function(sandbox) {
 
+        for(var reqName in this.requestHandlers ) {
+            sandbox.removeRequestHandler(reqName, this.requestHandlers[reqName]);
+        }
+        
         for(p in this.eventHandlers ) {
             sandbox.unregisterFromEventByName(this, p);
         }
@@ -135,12 +146,6 @@ function() {
      * @static
      */
     eventHandlers : {
-        'AfterDisableMapKeyboardMovementEvent' : function(event) {
-            this._keyboardControls.deactivate();
-        },
-        'AfterEnableMapKeyboardMovementEvent' : function(event) {
-            this._keyboardControls.activate();
-        },
         /**
          * @method Toolbar.ToolSelectedEvent
          * @param {Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent} event

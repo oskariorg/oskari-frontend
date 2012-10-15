@@ -73,7 +73,14 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
             this.handler.destroy();
         }
         this.handler = null;
+        this.unregisterMouseEvents();
 
+        OpenLayers.Control.prototype.destroy.apply(this, arguments);
+    },
+    draw : function() {
+        this.registerMouseEvents();
+    },
+    unregisterMouseEvents : function() {
         this.map.events.un({
             "click" : this.click,
 //            "dblclick" : this.defaultDblClick,
@@ -92,10 +99,8 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
         OpenLayers.Event.stopObserving(window, "mousewheel", this.wheelObserver);
         OpenLayers.Event.stopObserving(document, "mousewheel", this.wheelObserver);
         this.wheelObserver = null;
-
-        OpenLayers.Control.prototype.destroy.apply(this, arguments);
     },
-    draw : function() {
+    registerMouseEvents : function() {
        this.map.events.on({
             "click" : this.click,
 //            "dblclick" : this.defaultDblClick,
@@ -110,7 +115,6 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
         });
 
         this.registerWheelEvents();
-
     },
     registerWheelEvents : function() {
         this.wheelObserver = OpenLayers.Function.bindAsEventListener(this.onWheelEvent, this);
