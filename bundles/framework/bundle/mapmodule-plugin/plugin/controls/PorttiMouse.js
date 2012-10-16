@@ -15,9 +15,11 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
     _hoverEvent : null,
     name : 'PorttiMouse',
     events : new OpenLayers.Events(),
-    constructor : function(config) {
-        this.sandbox = config.sandbox;
-        this.mapmodule = config.mapmodule;
+    constructor : function(module) {
+        // for some reason, this isn't called
+        // see initialize() instead
+        this.mapmodule = module;
+        this.sandbox = module.getSandbox();
     },
     isReallyLeftClick : function(evt) {
         var isLeftClick = OpenLayers.Event.isLeftClick(evt);
@@ -66,6 +68,10 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
     },
     initialize : function() {
         OpenLayers.Control.prototype.initialize.apply(this, arguments);
+        if(arguments.length > 0){
+            this.mapmodule = arguments[0];
+            this.sandbox = this.mapmodule.getSandbox();
+        }
     },    
     destroy : function() {
         //this.sandbox.unregister(this);

@@ -42,6 +42,7 @@ Oskari.registerLocalization({
         "ScaleBarPlugin": "Mittakaavajana",
         "IndexMapPlugin": "Indeksikartta",
         "Portti2Zoombar": "Mittakaavasäädin",
+        "ControlsPlugin": "Kartan liikuttaminen",
         "SearchPlugin": "Osoite- ja paikannimihaku",
         "GetInfoPlugin": "Kohdetietojen kyselytyökalu"
       },
