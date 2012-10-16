@@ -4,8 +4,6 @@ div.mapplugin.search-div {
     
 }
 div.search-div div.close {
-	position: absolute;
-	right: 20px; top: 40px;
 	margin: 4px; 
     float: right;
 }
