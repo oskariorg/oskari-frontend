@@ -352,12 +352,15 @@ function(config) {
 				xref.append(name);
 				xref.click(function() {
 					me._resultClicked(jQuery(this).attr('data-location'));
+					return false;
 				});
 
 				jQuery(cells[1]).append(municipality);
 				jQuery(cells[2]).append(type);
 				tableBody.append(row);
 			}
+			
+			tableBody.find(":odd").addClass("odd");
 
 			content.html(table);
 			resultsContainer.show();
@@ -374,7 +377,7 @@ function(config) {
 			 });
 			 });
 			 */
-			tableBody.find(":odd").addClass("odd");
+			
 		}
 	},
 	/**

@@ -18,7 +18,6 @@ div.search-div input[type=button] {
 }
 
 div.search-div div.results {
-	/*padding: 8px;*/ 
     background: white;
     min-width: 256px;
     max-width: 312px;
@@ -29,7 +28,6 @@ div.search-div div.results {
     
 }
 div.search-div div.results div.header {
-  /*background: #DDDDDD;*/
  	height: 28px;
  	width: 100%;
 }
@@ -39,7 +37,7 @@ div.search-div div.results div.content table {
     border-spacing: 2px;
 }
 
-div.search-div div.results div.content table.search-results thead th {
+table.search-results thead th {
 	text-align: left;
 	padding: 2px;
 	padding-left: 4px;
@@ -47,24 +45,19 @@ div.search-div div.results div.content table.search-results thead th {
     font-weight: bold;
 }
 
-div.search-div div.results div.content table.search-results tbody {
-		
-} 
-
-
-div.search-div div.results div.content table.search-results tbody tr.odd {
+table.search-results tbody tr.odd {
 	background-color : #f3f3f3;
 }
 
 
-div.search-div div.results div.content table.search-results tbody tr td {
+table.search-results tbody tr td {
 	text-align: left;
 	padding: 2px;
 	padding-left: 4px;
 	padding-right: 12px;
 }
 
-div.search-div div.results div.content table.search-results tbody tr td  a {
+table.search-results tbody tr td a {
 	text-align: left;
 	cursor: pointer;
 	text-decoration: none;
