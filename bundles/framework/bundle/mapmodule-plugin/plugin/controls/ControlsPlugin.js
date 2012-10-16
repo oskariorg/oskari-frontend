@@ -24,6 +24,14 @@ function() {
         return this.pluginName;
     },
     /**
+     * @method hasUI
+     * @return {Boolean} true
+     * This plugin has an UI so always returns true
+     */
+    hasUI : function() {
+        return true;
+    },
+    /**
      * @method getMapModule
      * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map
      * module
@@ -39,7 +47,10 @@ function() {
      */
     setMapModule : function(mapModule) {
         this.mapModule = mapModule;
-        this.pluginName = mapModule.getName() + this.__name;
+        if (mapModule) {
+            this.pluginName = mapModule.getName() + this.__name;
+            this._createMapControls();
+        }
     },
     /**
      * @method register
@@ -95,7 +106,6 @@ function() {
         for(var p in this.eventHandlers ) {
             sandbox.registerForEventByName(this, p);
         }
-
         this.addMapControls();
     },
     /**
@@ -117,6 +127,7 @@ function() {
         }
 
         sandbox.unregister(this);
+        this.removeMapControls();
 
         this._map = null;
         this._sandbox = null;
@@ -166,15 +177,60 @@ function() {
     onEvent : function(event) {
         return this.eventHandlers[event.getName()].apply(this, [event]);
     },
-    /***********************************************************
+    /**
+     * @method addMapControls
      * Add necessary controls on the map
-     *
-     * @param {Oskari.mapframework.sandbox.Sandbox}
-     *            sandbox
      */
-    addMapControls : function(sandbox) {
+    addMapControls : function() {
         var me = this;
-                
+
+        this.getMapModule().addMapControl('zoomBoxTool', this._zoomBoxTool);
+        this._zoomBoxTool.deactivate();
+
+        this.getMapModule().addMapControl('keyboardControls', this._keyboardControls);
+        this.getMapModule().getMapControl('keyboardControls').activate();
+
+        this.getMapModule().addMapControl('measureControls_line', this._measureControls.line);
+        this._measureControls.line.deactivate();
+        this.getMapModule().addMapControl('measureControls_area', this._measureControls.area);
+        this._measureControls.area.deactivate();
+        this.getMapModule().addMapControl('mouseControls', this._mouseControls);
+    },
+    /**
+     * @method removeMapControls
+     * Remove added controls from the map
+     * 
+     */
+    removeMapControls : function() {
+        
+        this._zoomBoxTool.deactivate();
+        this.getMapModule().removeMapControl('zoomBoxTool', this._zoomBoxTool);
+
+        this._keyboardControls.deactivate();
+        this.getMapModule().removeMapControl('keyboardControls', this._keyboardControls);
+
+        this._measureControls.line.deactivate();
+        this._measureControls.area.deactivate();
+        this.getMapModule().removeMapControl('measureControls_line', this._measureControls.line);
+        this.getMapModule().removeMapControl('measureControls_area', this._measureControls.area);
+        this._mouseControls.deactivate();
+        this._mouseControls.unregisterMouseEvents();
+        this.getMapModule().removeMapControl('mouseControls', this._mouseControls);
+    },
+    
+    /**
+     * @method _createMapControls
+     * Add necessary controls on the map
+     * @private
+     */
+    _createMapControls : function() {
+        var me = this;
+        var sandbox = me._sandbox;
+        // check if already created
+        if(this._zoomBoxTool) {
+            return;
+        }
+        
         // zoom tool
         OpenLayers.Control.ZoomBox.prototype.draw = function() {
             this.handler = new OpenLayers.Handler.Box(this, {
@@ -189,17 +245,9 @@ function() {
         this._zoomBoxTool = new OpenLayers.Control.ZoomBox({
             alwaysZoom : true
         });
-
-        this.getMapModule().addMapControl('zoomBoxTool', this._zoomBoxTool);
-        this._zoomBoxTool.deactivate();
-
+        
         // Map movement/keyboard control
-        this._keyboardControls = new OpenLayers.Control.PorttiKeyboard({
-            core : this._sandbox._core,
-            mapmodule : this.getMapModule()
-        });
-        this.getMapModule().addMapControl('keyboardControls', this._keyboardControls);
-        this.getMapModule().getMapControl('keyboardControls').activate();
+        this._keyboardControls = new OpenLayers.Control.PorttiKeyboard(me.getMapModule());
         
         // Measure tools
         var optionsLine = {
@@ -219,8 +267,7 @@ function() {
             line : (new OpenLayers.Control.Measure(OpenLayers.Handler.Path, optionsLine)),
             area : (new OpenLayers.Control.Measure(OpenLayers.Handler.Polygon, optionsPolygon))
         };
-
-        var me = this;
+        
         function measurementsHandler(event, finished) {
             var sandbox = me._sandbox;
             var geometry = event.geometry;
@@ -229,20 +276,20 @@ function() {
             var measure = event.measure;
             var out = null;
             if( order === 1) {
-            	out = measure.toFixed(3) + " " + units;
+                out = measure.toFixed(3) + " " + units;
            } else if( order ===2) {
-            	out = measure.toFixed(3) + " " + units + "<sup>2</sup>";
+                out = measure.toFixed(3) + " " + units + "<sup>2</sup>";
             }   
             /*sandbox.printDebug(out + " " + ( finished ? "FINISHED" : "CONTINUES"));*/
             
             var geomAsText = null;
             var geomMimeType = null;
             if( finished ) {
-            	if( OpenLayers.Format['GeoJSON'] ) {
-            		var format = new (OpenLayers.Format['GeoJSON'])();
-            		geomAsText = format.write(geometry,true);
-            		geomMimeType = "application/json";
-            	}
+                if( OpenLayers.Format['GeoJSON'] ) {
+                    var format = new (OpenLayers.Format['GeoJSON'])();
+                    geomAsText = format.write(geometry,true);
+                    geomMimeType = "application/json";
+                }
             }
             sandbox.request(me, sandbox.getRequestBuilder('ShowMapMeasurementRequest')(out,finished,geomAsText, geomMimeType ));
         };
@@ -258,19 +305,9 @@ function() {
                 }
             });
         }
-        this.getMapModule().addMapControl('measureControls_line', this._measureControls.line);
-        this._measureControls.line.deactivate();
-        this.getMapModule().addMapControl('measureControls_area', this._measureControls.area);
-        this._measureControls.area.deactivate();
-
-        // mouse control
-        this._mouseControls = new OpenLayers.Control.PorttiMouse({
-            sandbox : this._sandbox,
-            mapmodule : this.getMapModule()
-        });
-        this.getMapModule().addMapControl('mouseControls', this._mouseControls);
         
-
+        // mouse control
+        this._mouseControls = new OpenLayers.Control.PorttiMouse(me.getMapModule());
     }
 }, {
     /**
