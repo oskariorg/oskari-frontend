@@ -1,8 +1,12 @@
 div.mapplugin.search-div {
     top: 10px;
     right : 10px;
+    
 }
 div.search-div div.close {
+	position: absolute;
+	right: 20px; top: 40px;
+	margin: 4px; 
     float: right;
 }
 div.search-div input[type=text] {
@@ -14,29 +18,55 @@ div.search-div input[type=button] {
 }
 
 div.search-div div.results {
-    border: 1px solid;
+	/*padding: 8px;*/ 
     background: white;
-    max-width: 255px;
-    width: 255px;
+    min-width: 256px;
+    max-width: 312px;
+    max-height: 312px;
     overflow: hidden;
-    margin-top: 5px;
+    border: 1px solid #f3f3f3;
+    overflow: scroll;
+    
 }
 div.search-div div.results div.header {
-  background: #DDDDDD;
+  /*background: #DDDDDD;*/
+ 	height: 28px;
+ 	width: 100%;
 }
 div.search-div div.results div.content table {
     width: 100%;
     text-align: center;
     border-spacing: 2px;
 }
-div.search-div div.results div.content table tr {
-    cursor: pointer;
+
+div.search-div div.results div.content table.search-results thead th {
+	text-align: left;
+	padding: 2px;
+	padding-left: 4px;
+	padding-right: 12px;
+    font-weight: bold;
 }
-/*
-#search-loading-image {
-    position: absolute;
-    right: 56px;
-    top: 6px;
-    z-index: 10001;
+
+div.search-div div.results div.content table.search-results tbody {
+		
+} 
+
+
+div.search-div div.results div.content table.search-results tbody tr.odd {
+	background-color : #f3f3f3;
 }
-*/
+
+
+div.search-div div.results div.content table.search-results tbody tr td {
+	text-align: left;
+	padding: 2px;
+	padding-left: 4px;
+	padding-right: 12px;
+}
+
+div.search-div div.results div.content table.search-results tbody tr td  a {
+	text-align: left;
+	cursor: pointer;
+	text-decoration: none;
+	color: #0085D1;
+}
