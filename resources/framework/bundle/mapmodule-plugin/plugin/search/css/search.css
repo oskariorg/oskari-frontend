@@ -1,41 +1,4 @@
-div.search div.searchDescription {
-	margin: 0;
-	margin-bottom: 8px;
-}
 
-div.search div.searchContainer {
-    height: 90%;
-}
-div.search div.resultList {
-    height: 90%;
-    overflow: auto;
-    padding: 0;
-    margin : 5px;
-    border: 1px solid #DDDDDD;
-}
-.search table.search_result {
-    border-top : 0px;
-}
-.info {
-	padding-left: 5px;
-}
-.search table.search_result th { 
-   /* border-bottom: 1px solid #3c3c3c;*/ 
-    vertical-align: top; 
-    text-align: left; 
-}
-
-.search table.search_result td {
-    padding : 3px; 
-    vertical-align: top; 
-    text-align: left; 
-}
-div.controls div.oskarifield {
-    display : inline-block;
-}
-
-
-/*
 div.mapplugin.search-div {
     top: 10px;
     right : 10px;
@@ -67,13 +30,16 @@ div.search-div div.results div.header {
  	height: 28px;
  	width: 100%;
 }
-div.search-div div.results div.content table {
-    width: 100%;
+
+table.search-results {
+	width: 100%;
+	margin: 4px;
     text-align: center;
     border-spacing: 2px;
+
 }
 
-table.search-results thead th {
+table.search-results th {
 	text-align: left;
 	padding: 2px;
 	padding-left: 4px;
@@ -81,22 +47,18 @@ table.search-results thead th {
     font-weight: bold;
 }
 
-table.search-results tbody tr.odd {
+table.search-results tr.odd {
 	background-color : #f3f3f3;
 }
 
 
-table.search-results tbody tr td {
+table.search-results td {
 	text-align: left;
 	padding: 2px;
 	padding-left: 4px;
 	padding-right: 12px;
 }
 
-table.search-results tbody tr td a {
-	text-align: left;
-	cursor: pointer;
-	text-decoration: none;
+table.search-results a {
 	color: #0085D1;
 }
-*/
