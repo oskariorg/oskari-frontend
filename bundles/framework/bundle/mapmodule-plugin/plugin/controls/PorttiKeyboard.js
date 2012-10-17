@@ -17,7 +17,6 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
         this.sandbox = mapmodule.getSandbox();
     },
     initialize : function() {
-        alert('jee');
         OpenLayers.Control.prototype.initialize.apply(this, arguments);
         if(arguments.length > 0){
             this.mapmodule = arguments[0];
