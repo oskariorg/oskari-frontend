@@ -26,6 +26,9 @@ function() {
 
     this._dataUrl = null;
 
+    /* is this layer queryable (GetFeatureInfo) boolean */
+    this._queryable = true;
+    
     /*
      * Array of sublayers. Notice that only type BASE_LAYER can
      * have sublayers.
@@ -100,6 +103,22 @@ function() {
      */
     getGeometry : function() {
         return this._geometry;
+    },
+    /**
+     * @method setQueryable
+     * True if we should call GFI on the layer
+     * @param {Boolean} queryable
+     */
+    setQueryable : function(queryable) {
+        this._queryable = queryable;
+    },
+    /**
+     * @method getQueryable
+     * True if we should call GFI on the layer
+     * @param {Boolean} queryable
+     */
+    getQueryable : function() {
+        return this._queryable;
     },
     /**
      * @method addPermission

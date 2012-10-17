@@ -240,7 +240,7 @@ function() {
         for (var i = 0; i < selected.length; i++) {
         	var layer = selected[i]
 
-			if( !layer.getQueryable() ) {
+			if( !layer.getQueryable || !layer.getQueryable() ) {
 				continue;
 			}
 
