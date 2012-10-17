@@ -13,9 +13,17 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
     core : null,
     constructor : function(mapmodule) {
         //this.core = config.core;
-        this.sandbox = mapmodule.getSandbox();
         this.mapmodule = mapmodule;
+        this.sandbox = mapmodule.getSandbox();
     },
+    initialize : function() {
+        alert('jee');
+        OpenLayers.Control.prototype.initialize.apply(this, arguments);
+        if(arguments.length > 0){
+            this.mapmodule = arguments[0];
+            this.sandbox = this.mapmodule.getSandbox();
+        }
+    },    
     draw : function() {
         this.handler = new OpenLayers.Handler.Keyboard(this, {
             "keydown" : this.defaultKeyDown,
