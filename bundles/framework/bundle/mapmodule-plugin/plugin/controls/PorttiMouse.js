@@ -163,14 +163,15 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 	initialize : function(options) {
 		this.handlers = {};
 		OpenLayers.Control.prototype.initialize.apply(this, arguments);
-
-		if(arguments.length > 0) {
-			this.mapmodule = arguments[0];
-			this.sandbox = this.mapmodule.getSandbox();
-			this._hoverEventBuilder = this.sandbox.getEventBuilder("MouseHoverEvent") 
-			this._hoverEvent = this._hoverEventBuilder();
-			this._mapClickedBuilder = this.sandbox.getEventBuilder('MapClickedEvent');
-		}
+	},
+	
+	/* @method setup */	
+	setup: function(mapmodule) {
+		this.mapmodule = mapmodule;
+		this.sandbox = this.mapmodule.getSandbox();
+		this._hoverEventBuilder = this.sandbox.getEventBuilder("MouseHoverEvent") 
+		this._hoverEvent = this._hoverEventBuilder();
+		this._mapClickedBuilder = this.sandbox.getEventBuilder('MapClickedEvent');
 
 	},
 	/**

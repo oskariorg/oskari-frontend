@@ -307,7 +307,8 @@ function() {
         }
         
         // mouse control
-        this._mouseControls = new OpenLayers.Control.PorttiMouse(this.getMapModule());
+        this._mouseControls = new OpenLayers.Control.PorttiMouse();
+        this._mouseControls.setup(this.getMapModule());
     }
 }, {
     /**
