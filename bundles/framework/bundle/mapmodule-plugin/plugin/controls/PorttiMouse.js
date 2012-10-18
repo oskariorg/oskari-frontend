@@ -461,6 +461,9 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 	},
 	/* mapmodule notifications */
 	defaultHoverMove : function(evt) {
+		if(  this.panned ) {
+			return;
+		}
 		/* may be this should dispatch to mapmodule */
 		var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
 		this._hoverEvent.set(lonlat.lon, lonlat.lat, false, evt.pageX, evt.pageY);
@@ -468,6 +471,9 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 		this.sandbox.notifyAll(this._hoverEvent, true);
 	},
 	defaultHoverPause : function(evt) {
+		if(  this.panned ) {
+			return;
+		}
 		/* may be this should dispatch to mapmodule */
 		var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
 

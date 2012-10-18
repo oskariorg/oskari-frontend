@@ -247,7 +247,8 @@ function() {
         });
         
         // Map movement/keyboard control
-        this._keyboardControls = new OpenLayers.Control.PorttiKeyboard(this.getMapModule());
+        this._keyboardControls = new OpenLayers.Control.PorttiKeyboard();
+        this._keyboardControls.setup(this.getMapModule());
         
         // Measure tools
         var optionsLine = {
