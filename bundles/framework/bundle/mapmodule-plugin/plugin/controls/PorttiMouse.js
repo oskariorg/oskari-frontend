@@ -15,7 +15,7 @@
 
 /* Attempting to replace previous PorttiMouse implementation with OpenLayers.Control.Navigation
 * with added Hover and Drag handler in a supporting role.
-* 
+*
 */
 
 /**
@@ -164,12 +164,11 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 		this.handlers = {};
 		OpenLayers.Control.prototype.initialize.apply(this, arguments);
 	},
-	
-	/* @method setup */	
-	setup: function(mapmodule) {
+	/* @method setup */
+	setup : function(mapmodule) {
 		this.mapmodule = mapmodule;
 		this.sandbox = this.mapmodule.getSandbox();
-		this._hoverEventBuilder = this.sandbox.getEventBuilder("MouseHoverEvent") 
+		this._hoverEventBuilder = this.sandbox.getEventBuilder("MouseHoverEvent")
 		this._hoverEvent = this._hoverEventBuilder();
 		this._mapClickedBuilder = this.sandbox.getEventBuilder('MapClickedEvent');
 
@@ -272,11 +271,28 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 			"pause" : this.defaultHoverPause
 		};
 
+		var me = this;		
+		
+		/* trying to prevent IE8 from dying to hover events */
 		var hoverOptions = {
+			pixelTolerance : 1.1,
+			/* minor hack to support IE performance */
+			passesTolerance : function(px) {
+			var passes = true;
+			if( me.panned ) 
+				return false;
+			if(this.pixelTolerance && this.px) {
+				var dpx = Math.sqrt(Math.pow(this.px.x - px.x, 2) + Math.pow(this.px.y - px.y, 2));
 
+				if(dpx < this.pixelTolerance) {
+					passes = false;
+				}
+			}			
+			return passes;
+		}
 		};
 		this.handlers.hover = new OpenLayers.Handler.Hover(this, hoverCallbacks, hoverOptions);
-
+		
 		this.dragPan = new OpenLayers.Control.DragPan(OpenLayers.Util.extend({
 			map : this.map,
 			documentDrag : this.documentDrag
@@ -298,6 +314,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 		}
 
 	},
+	
 	/**
 	 * Method: defaultClick
 	 *
@@ -311,7 +328,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 		} else {
 			this.sendMapClickEvent(evt);
 		}
-		
+
 	},
 	/**
 	 * Method: defaultDblClick
@@ -426,15 +443,14 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 		if(this.kinetic) {
 			this.kinetic.update(xy);
 		}
-		if( !this.panned) {
+		if(!this.panned) {
 			this.mapmodule.notifyStartMove();
 		}
 		this.panned = true;
-		this.map.pan(
-		 this.handlers.drag.last.x - xy.x,
-		 this.handlers.drag.last.y - xy.y,
-		 {dragging: true, animate: false}
-		 );
+		this.map.pan(this.handlers.drag.last.x - xy.x, this.handlers.drag.last.y - xy.y, {
+			dragging : true,
+			animate : false
+		});
 		/*this.mapmodule.panMapByPixels(this.handlers.drag.last.x - xy.x, this.handlers.drag.last.y - xy.y, true, false, true);*/
 	},
 	panMapDone : function(xy) {
@@ -457,11 +473,11 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 				});
 			}
 			this.panned = false;
-		} 
+		}
 	},
 	/* mapmodule notifications */
 	defaultHoverMove : function(evt) {
-		if(  this.panned ) {
+		if(this.panned) {
 			return;
 		}
 		/* may be this should dispatch to mapmodule */
@@ -471,7 +487,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 		this.sandbox.notifyAll(this._hoverEvent, true);
 	},
 	defaultHoverPause : function(evt) {
-		if(  this.panned ) {
+		if(this.panned) {
 			return;
 		}
 		/* may be this should dispatch to mapmodule */
@@ -503,4 +519,3 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 	},
 	CLASS_NAME : "OpenLayers.Control.PorttiMouse"
 });
-
