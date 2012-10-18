@@ -44,7 +44,7 @@ Oskari.registerLocalization(
                     "IndexMapPlugin": "Index map",
                     "PanButtons" : "PanButtons",
                     "Portti2Zoombar": "Scale scrollbar",
-                    "ControlsPlugin": "Map movement",
+                    "ControlsPlugin": "Panning on",
                     "SearchPlugin": "Address and place name search",
                     "GetInfoPlugin": "Query tool for place data"
                 },
