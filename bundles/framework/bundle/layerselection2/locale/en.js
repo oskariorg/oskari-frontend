@@ -2,7 +2,7 @@ Oskari.registerLocalization({
   "lang": "en",
   "key": "LayerSelection",
   "value": {
-    "title": "Selected map layers",
+    "title": "Selected layers",
     "desc": "",
     "layer": {
       "style": "Style",

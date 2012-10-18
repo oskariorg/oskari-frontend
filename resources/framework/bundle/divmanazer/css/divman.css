@@ -162,6 +162,7 @@ body {
 	width: 153px;
 	border-top: 1px solid #484846;
 	border-bottom: 1px solid #212121;
+	line-height: 24px;
 }
 .oskari-tile-title {
 	display: inline-block;
@@ -171,7 +172,7 @@ body {
 	padding: 0;
 	float: left;
 	height: 28px;
-	width: 96px;
+	width: 108px;
 	font-family: Arial, Helvetica;
 	font-weight: bold;
 	font-size: 11px;
@@ -201,7 +202,7 @@ body {
 	height: 20px;
 	width: 20px;
 	margin: 1px;
-	padding: 3px 1px;
+	padding: 1px;
 }
 .oskari-tile-close {
 	display: none;
