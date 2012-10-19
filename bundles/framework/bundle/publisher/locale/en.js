@@ -42,7 +42,7 @@ Oskari.registerLocalization(
                     "tooltip": "Select the tools to be shown on the map. Their placement is displayed in the map preview.",
                     "ScaleBarPlugin": "Scale line",
                     "IndexMapPlugin": "Index map",
-                    "PanButtons" : "PanButtons",
+                    "PanButtons" : "Panning tool",
                     "Portti2Zoombar": "Scale scrollbar",
                     "ControlsPlugin": "Panning on",
                     "SearchPlugin": "Address and place name search",

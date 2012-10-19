@@ -42,7 +42,7 @@ Oskari.registerLocalization(
                     "tooltip": "Valitse kartalla näytettävät työkalut. Näet niiden sijoittelun esikatselukartassa.",
                     "ScaleBarPlugin": "Mittakaavajana",
                     "IndexMapPlugin": "Indeksikartta",
-                    "PanButtons" : "PanButtons",
+                    "PanButtons" : "Panorointitoiminto",
                     "Portti2Zoombar": "Mittakaavasäädin",
                     "ControlsPlugin": "Kartan liikuttaminen",
                     "SearchPlugin": "Osoite- ja paikannimihaku",

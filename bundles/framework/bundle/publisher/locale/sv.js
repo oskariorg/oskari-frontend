@@ -42,7 +42,7 @@ Oskari.registerLocalization(
                     "tooltip": "Välj verktygen som visas på kartan. Du kan se deras placering på den förhandsvisade kartan.",
                     "ScaleBarPlugin": "Skalsträcka",
                     "IndexMapPlugin": "Indexkarta",
-                    "PanButtons" : "PanButtons",
+                    "PanButtons" : "Panoreringsverktyg",
                     "Portti2Zoombar": "Skalans glidreglage",
                     "ControlsPlugin": "Panorering på",
                     "SearchPlugin": "Adress- och ortnamnssökning",
