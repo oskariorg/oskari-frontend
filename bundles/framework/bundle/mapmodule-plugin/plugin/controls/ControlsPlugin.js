@@ -214,7 +214,6 @@ function() {
         this.getMapModule().removeMapControl('measureControls_line', this._measureControls.line);
         this.getMapModule().removeMapControl('measureControls_area', this._measureControls.area);
         this._mouseControls.deactivate();
-        this._mouseControls.unregisterMouseEvents();
         this.getMapModule().removeMapControl('mouseControls', this._mouseControls);
     },
     
