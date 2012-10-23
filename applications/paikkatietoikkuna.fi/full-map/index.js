@@ -91,18 +91,6 @@ Oskari.clazz.define(
             startupSequence : [
                 // openlayers
                 {
-                    /*   callback : function() {
-                     // FIXME: this isn't the right place to initiate this
-                     // seems EPSG3067.js might be loaded before proj4js-compressed.js which causes problems
-                     Proj4js.getScriptLocation = function() {
-                     // FIXME: hardcoding
-                     return "/Oskari/libraries/proj4js-1.0.1/defs";
-                     };
-                     Proj4js.defs = {
-                     "EPSG:3067" : "+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs",
-                     "EPSG:4326" : "+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
-                     };
-                     },*/
                     // style selection may be done with CSS Links also - just for demo
                     title : 'OpenLayers',
                     fi : 'OpenLayers',
@@ -179,10 +167,6 @@ Oskari.clazz.define(
                             "runtime" : {
                                 bundlePath : '/Oskari/packages/framework/bundle/'
                             },
-                            // kovakoodattu konffi
-                            /*	"layers" : {
-                             bundlePath : '/Oskari/proof-of-concepts/oskari/bundle/'
-                             },*/
                             "mapmodule-plugin" : {
                                 bundlePath : '/Oskari/packages/framework/bundle/'
                             },
@@ -195,17 +179,6 @@ Oskari.clazz.define(
                             "mapfull" : {
                                 bundlePath : '/Oskari/packages/framework/bundle/'
                             }
-                            // paketointi scriptin luontia avustava bundle
-                            /*
-                             USAGE: setup callback in the last bundle in sequence:
-                             callback : function() {
-                             Oskari.clazz.create('Oskari.tools.Yui').showYuiBuildCmd();
-                             },
-                             ,
-                             "yui" : {
-                             bundlePath : '/Oskari/packages/tools/bundle/'
-                             }
-                             */
                         },
                         "Require-Bundle-Instance" : []
 
@@ -246,9 +219,6 @@ Oskari.clazz.define(
                     },
                     instanceProps : {}
                 }, {
-                    /*    callback : function() {
-                     Oskari.setLoaderMode('dev');
-                     }, */
                     title : 'StateHandler',
                     fi : 'jquery',
                     sv : '?',
@@ -477,6 +447,22 @@ Oskari.clazz.define(
                         "Require-Bundle-Instance" : []
                     },
                     instanceProps : {}
+                },{
+                    title : 'PostProcessor',
+                    fi : 'PostProcessor',
+                    sv : 'PostProcessor',
+                    en : 'PostProcessor',
+                    bundlename : 'postprocessor',
+                    bundleinstancename : 'postprocessor',
+                    metadata : {
+                        "Import-Bundle" : {
+                            "postprocessor" : {
+                                bundlePath : '/Oskari/packages/framework/bundle/'
+                            }
+                        },
+                        "Require-Bundle-Instance" : []
+                    },
+                    instanceProps : {}
                 }
             ]
         }
@@ -539,7 +525,11 @@ jQuery(document).ready(
         ajaxUrl += getAdditionalParam('isCenterMarker');
         ajaxUrl += getAdditionalParam('address')
         ajaxUrl += getAdditionalParam('showGetFeatureInfo');
-        ajaxUrl += getAdditionalParam('nationalCadastralReference')
+        ajaxUrl += getAdditionalParam('nationalCadastralReference');
+        
+        ajaxUrl += getAdditionalParam('nationalCadastralReferenceHighlight');
+        ajaxUrl += getAdditionalParam('wfsFeature');
+        ajaxUrl += getAdditionalParam('wfsHighlightLayer');
         
         if (!language) {
             // default to finnish

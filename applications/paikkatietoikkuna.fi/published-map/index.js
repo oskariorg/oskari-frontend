@@ -172,6 +172,22 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Published', function() {
                 "Require-Bundle-Instance" : []
             },
             instanceProps : {}
+        },{
+            title : 'PostProcessor',
+            fi : 'PostProcessor',
+            sv : 'PostProcessor',
+            en : 'PostProcessor',
+            bundlename : 'postprocessor',
+            bundleinstancename : 'postprocessor',
+            metadata : {
+                "Import-Bundle" : {
+                    "postprocessor" : {
+                        bundlePath : '/Oskari/packages/framework/bundle/'
+                    }
+                },
+                "Require-Bundle-Instance" : []
+            },
+            instanceProps : {}
         }]
     }
 });
@@ -219,7 +235,11 @@ jQuery(document).ready(function() {
     ajaxUrl += getAdditionalParam('isCenterMarker');
     ajaxUrl += getAdditionalParam('address')
     ajaxUrl += getAdditionalParam('showGetFeatureInfo');
-    ajaxUrl += getAdditionalParam('nationalCadastralReference')
+    ajaxUrl += getAdditionalParam('nationalCadastralReference');
+    
+    ajaxUrl += getAdditionalParam('nationalCadastralReferenceHighlight');
+    ajaxUrl += getAdditionalParam('wfsFeature');
+    ajaxUrl += getAdditionalParam('wfsHighlightLayer');
         
     Oskari.setLang(language);
 
