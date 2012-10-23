@@ -151,6 +151,12 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 	 *     true.
 	 */
 	autoActivate : true,
+	
+	/*
+	 * APIProperty: useCenterMapInWheelZoom
+	 * {Boolean} Use map center when wheel zooming (true to revert default openlayers functionality)
+	 */
+	useCenterMapInWheelZoom: true,
 
 	/**
 	 * Constructor: OpenLayers.Control.Navigation
@@ -372,8 +378,15 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 		var deltaY = evt.xy.y - size.h / 2;
 		var newRes = this.map.baseLayer.getResolutionForZoom(newZoom);
 		var zoomPoint = this.map.getLonLatFromPixel(evt.xy);
-		var newCenter = new OpenLayers.LonLat(zoomPoint.lon + deltaX * newRes, zoomPoint.lat + deltaY * newRes);
+		var newCenter = null;
+		
+		if( this.useCenterMapInWheelZoom ) {
+			newCenter = this.map.getCenter();
+		} else {
+			newCenter = new OpenLayers.LonLat(zoomPoint.lon + deltaX * newRes, zoomPoint.lat + deltaY * newRes);
+		}
 		/*this.map.setCenter(newCenter, newZoom);*/
+		
 		this.sendMapSetCenter(newCenter, newZoom);
 	},
 	/**
