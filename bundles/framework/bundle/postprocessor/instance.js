@@ -122,10 +122,15 @@ function() {
         'MapLayerEvent' : function(event) {
             // layerId in event is null for initial ajax load
             if('add' == event.getOperation() && !event.getLayerId()) {
-                var isAdded = this._addLayer(this.state.highlightFeatureLayerId);
-                if(isAdded) {
-                    this._highlightFeature(this.state.highlightFeatureLayerId, this.state.highlightFeatureId);
-                }
+                this.inProgress = this._addLayer(this.state.highlightFeatureLayerId);
+            }
+        },
+        'AfterMapLayerAddEvent' : function(event) {
+            // layerId in event is null for initial ajax load
+            if(this.inProgress && 
+                event.getMapLayer().getId() == this.state.highlightFeatureLayerId) {
+                this.inProgress = false;
+                this._highlightFeature(this.state.highlightFeatureLayerId, this.state.highlightFeatureId);
             }
         }
     },
