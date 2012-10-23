@@ -34,21 +34,19 @@ function() {
      */
     "start" : function() {
         var me = this;
-        
         var sandbox = Oskari.$("sandbox");
         this.sandbox = sandbox;
         if(this.state) {
             var hiliteLayerId = this.state.highlightFeatureLayerId; 
             
             if(hiliteLayerId) {
-                var isAdded = this._addLayer(hiliteLayerId);
-                if(isAdded) {
+                var isLoaded = sandbox.findMapLayerFromAllAvailable(hiliteLayerId) != null;
+                if(isLoaded) {
                     this._highlightFeature(hiliteLayerId, this.state.highlightFeatureId);
                 }
                 else {
                     // layer not loaded ->
                     // register listening to 'MapLayerEvent' and let it trigger a retry
-                    //sandbox.register(me);
                     for(p in me.eventHandlers) {
                         sandbox.registerForEventByName(me, p);
                     }
@@ -56,25 +54,6 @@ function() {
             }
             
         }
-    },
-    /**
-     * @method _addLayer
-     * @private
-     * Adds the layer if its not yet selected
-     */
-    _addLayer : function(layerId) {
-        var notSelected = this.sandbox.findMapLayerFromSelectedMapLayers(layerId) == null;
-        if(notSelected) {
-            var isLoaded = this.sandbox.findMapLayerFromAllAvailable(layerId) != null;
-            if(isLoaded) {
-                this.sandbox.postRequestByName('AddMapLayerRequest', [layerId, true]);
-                return true;
-            }
-            else {
-                return false;
-            }
-        }
-        return true;
     },
     /**
      * @method _highlightFeature
@@ -86,7 +65,15 @@ function() {
             var layer = this.sandbox.findMapLayerFromAllAvailable(layerId);
             if(layer) {
                 var builder = this.sandbox.getEventBuilder('WFSFeaturesSelectedEvent');
-                var event = builder([featureId], layer);
+                var featureIdList = [];
+                // check if the param is already an array
+                if(Object.prototype.toString.call( featureId ) === '[object Array]' ) {
+                    featureIdList = featureId;
+                }
+                else {
+                    featureIdList.push(featureId);
+                }
+                var event = builder(featureIdList, layer);
                 this.sandbox.notifyAll(event);
             }
             else {
@@ -116,20 +103,12 @@ function() {
         /**
          * @method MapLayerEvent
          * If start has already campleted hilighting, this won't trigger, if not
-         * this adds the layer to the map and calls highlight no the selected target
+         * this calls highlight no the selected target
          * @param {Oskari.mapframework.event.common.MapLayerEvent} event
          */
         'MapLayerEvent' : function(event) {
             // layerId in event is null for initial ajax load
             if('add' == event.getOperation() && !event.getLayerId()) {
-                this.inProgress = this._addLayer(this.state.highlightFeatureLayerId);
-            }
-        },
-        'AfterMapLayerAddEvent' : function(event) {
-            // layerId in event is null for initial ajax load
-            if(this.inProgress && 
-                event.getMapLayer().getId() == this.state.highlightFeatureLayerId) {
-                this.inProgress = false;
                 this._highlightFeature(this.state.highlightFeatureLayerId, this.state.highlightFeatureId);
             }
         }

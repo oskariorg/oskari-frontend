@@ -270,31 +270,26 @@ function() {
             }
 		}
 
-		/** Here checks at layer is selected */
-		if (this._sandbox.isLayerAlreadySelected(layer.getId())) {
 
-			var ols = new OpenLayers.Size(256, 256);
+		var ols = new OpenLayers.Size(256, 256);
 
-			var wfsMapImageLayer = new OpenLayers.Layer.Image(layerName,
-					imageUrl, boundsObj, ols, {
-						scales : layerScales,
-						transparent : true,
-						format : "image/png",
-						isBaseLayer : false,
-						displayInLayerSwitcher : true,
-						visibility : true,
-						buffer : 0
-					});
+		var wfsMapImageLayer = new OpenLayers.Layer.Image(layerName,
+				imageUrl, boundsObj, ols, {
+					scales : layerScales,
+					transparent : true,
+					format : "image/png",
+					isBaseLayer : false,
+					displayInLayerSwitcher : true,
+					visibility : true,
+					buffer : 0
+				});
 
-			wfsMapImageLayer.opacity = layer.getOpacity() / 100;
+		wfsMapImageLayer.opacity = layer.getOpacity() / 100;
 
-			this._map.addLayer(wfsMapImageLayer);
-			wfsMapImageLayer.setVisibility(true);
-			wfsMapImageLayer.redraw(true);
+		this._map.addLayer(wfsMapImageLayer);
+		wfsMapImageLayer.setVisibility(true);
+		wfsMapImageLayer.redraw(true);
 
-		}
-
-		var layers = Oskari.$().sandbox.findAllSelectedMapLayers();
 		var opLayersLength = this._map.layers.length;
 
 		var changeLayer = this._map.getLayersByName('Markers');
