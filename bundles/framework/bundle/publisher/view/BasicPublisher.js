@@ -56,6 +56,9 @@ function(instance, localization) {
         id : 'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
         selected : false
     }, {
+        id : 'Oskari.mapframework.mapmodule.ControlsPlugin',
+        selected : true
+    }, {
         id : 'Oskari.mapframework.mapmodule.GetInfoPlugin',
         selected : true
     }];

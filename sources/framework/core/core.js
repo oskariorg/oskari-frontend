@@ -236,14 +236,6 @@ function() {
             this.handleRearrangeSelectedMapLayerRequest(request);
             return true;
         },
-        'DisableMapKeyboardMovementRequest' : function(request) {
-            this.handleDisableMapKeyboardMovementRequest(request);
-            return true;
-        },
-        'EnableMapKeyboardMovementRequest' : function(request) {
-            this.handleEnableMapKeyboardMovementRequest(request);
-            return true;
-        },
         'ChangeMapLayerOpacityRequest' : function(request) {
             this.handleChangeMapLayerOpacityRequest(request);
             return true;

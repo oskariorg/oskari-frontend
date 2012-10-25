@@ -62,6 +62,20 @@
             },
             "Require-Bundle-Instance" : [  ]
         }
+      },{ 
+        "title" : "Oskari coordinatedisplay",
+        "en" : "Oskari coordinatedisplay",
+        "fi" : "Oskari coordinatedisplay",
+        "sv" : "Oskari coordinatedisplay",
+        "bundleinstancename" : "coordinatedisplay",
+        "bundlename" : "coordinatedisplay",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "coordinatedisplay" : { "bundlePath" : "../../../packages/framework/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
       },
       { 
         "title" : "My3rd",

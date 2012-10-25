@@ -307,6 +307,19 @@ function(id) {
 
         this._updateDomain();
     },
+    
+    /**
+     * @method centerMap
+     * centers map and sets zoom level
+     * sends AfterMapMoveEvent notification if not suppressed   
+     */
+    centerMap: function(lonlat,zoom, suppressEnd) {
+    	this._map.setCenter(lonlat,zoom,false);
+    	this._updateDomain();
+    	if(suppressEnd !== true) {
+            this.notifyMoveEnd();
+        }
+    },
     zoomIn : function() {
         this.adjustZoomLevel(1);
     },
@@ -332,7 +345,8 @@ function(id) {
         var size = this._map.getSize();
         this.panMapByPixels(0, 0.75 * size.h);
     },
-    panMapByPixels : function(pX, pY, suppressStart, suppressEnd) {
+    /* duplicate method removed */
+    /*panMapByPixels : function(pX, pY, suppressStart, suppressEnd) {
         // usually by keyboard
         var mapPixels = this._map.getViewPortPxFromLonLat(this._map.getCenter());
         var newXY = new OpenLayers.Pixel(mapPixels.x + pX, mapPixels.y + pY);
@@ -353,9 +367,11 @@ function(id) {
             this.notifyMoveEnd();
         }
     },
-    panMapByPixels : function(pX, pY, suppressStart, suppressEnd) {
+    */
+    panMapByPixels : function(pX, pY, suppressStart, suppressEnd,isDrag) {
         // usually programmatically for gfi centering
-        this._map.pan(pX, pY);
+        this._map.pan(pX, pY,{dragging: (isDrag?true:false), animate: false});
+        
         this._updateDomain();
         // send note about map change
         if(suppressStart !== true) {

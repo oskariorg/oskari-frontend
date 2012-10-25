@@ -5,10 +5,10 @@ Oskari.registerLocalization({
     "title": "Ohje",
     "desc": "",
     "flyout": {
-      "title": "Kartan käyttöohje"
+      "title": "Kartan ohje"
     },
     "tile": {
-      "title": "Kartan käyttöohje"
+      "title": "Kartan ohje"
     },
     "error": {
       "title": "Virhe!",

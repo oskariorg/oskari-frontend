@@ -84,12 +84,6 @@ function() {
 			"src" : "../../../../sources/framework/event/common/after-show-map-layer-info-event.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/after-disable-map-keyboard-movement-event.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/event/common/after-enable-map-keyboard-movement-event.js"
-		}, {
-			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/event/common/after-hide-map-marker-event.js"
 		}, {
 			"type" : "text/javascript",

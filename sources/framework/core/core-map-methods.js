@@ -15,24 +15,6 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-methods', {
         var map = this._map;
         map.updateMousePosition(x, y);
     },
-    handleEnableMapKeyboardMovementRequest : function(request) {
-        var map = this._map;
-        map.setMapKeyboardMovementsEnabled(true);
-
-        var event = this.getEventBuilder(
-        'AfterEnableMapKeyboardMovementEvent')();
-        this.copyObjectCreatorToFrom(event, request);
-        this.dispatch(event);
-    },
-    handleDisableMapKeyboardMovementRequest : function(request) {
-        var map = this._map;
-        map.setMapKeyboardMovementsEnabled(false);
-
-        var event = this.getEventBuilder(
-        'AfterDisableMapKeyboardMovementEvent')();
-        this.copyObjectCreatorToFrom(event, request);
-        this.dispatch(event);
-    },
     doSniffing : function(layersArray) {
         /* Check if map movements should be logged */
         if(this._doSniffing) {

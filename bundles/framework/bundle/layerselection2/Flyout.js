@@ -326,11 +326,11 @@ function(instance) {
         var stylesel = layerDiv.find('div.stylesel');
         stylesel.hide();
 
-        if (layer.getStyles && layer.getStyles().size > 1) {
+        if (layer.getStyles && layer.getStyles().length > 1) {
             var hasOpts = false;
             var styles = layer.getStyles();
             var sel = stylesel.find('select');
-            for (var i = 0; i < styles.size(); i++) {
+            for (var i = 0; i < styles.length; i++) {
                 if (styles[i].getName()) {
                     var opt = jQuery('<option value="' + styles[i].getName() + '">' + styles[i].getTitle() + '</option>');
                     sel.append(opt);
@@ -346,7 +346,6 @@ function(instance) {
                 sandbox.request(me.instance.getName(), req);
             });
             if (hasOpts) {
-
                 sel.val(layer.getCurrentStyle().getName());
                 stylesel.show();
             }
@@ -586,24 +585,13 @@ function(instance) {
         });
 
         // data url link
-        if (!layer.getDataUrl()) {
+        if (!layer.getMetadataIdentifier()) {
             // no functionality -> hide
             tools.find('div.layer-description').hide();
         } else {
             tools.find('div.icon-info').bind('click', function() {
                 var rn = 'catalogue.ShowMetadataRequest';
-                var uuid = layer.getDataUrl();
-                var idx = uuid.indexOf('uuid=');
-                if (idx >= 0) {
-                    uuid = uuid.substring(idx + 5);
-                }
-                idx = uuid.indexOf('&');
-                if (idx >= 0) {
-                    uuid = uuid.substring(0, idx);
-                }
-                var uuidObj = {
-                    uuid : uuid
-                };
+                var uuid = layer.getMetadataIdentifier();
                 sandbox.postRequestByName(rn, [{
                     uuid : uuid
                 }]);

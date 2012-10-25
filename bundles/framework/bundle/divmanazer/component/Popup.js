@@ -194,5 +194,20 @@ function() {
     	var contentEl = this.dialog.find('div.content');
     	contentEl.empty();
     	contentEl.append(content);
+    },
+    	
+    /**
+     * @method makeDraggable
+     * Makes dialog draggable with jQuery Event Drag plugin
+     */
+    makeDraggable : function() {
+        var me = this;
+        me.dialog.addClass('draggable');
+        me.dialog.bind('drag', function(event) {
+    	   me.dialog.css({
+    	       top: event.offsetY,
+    	       left: event.offsetX
+    	   })
+    	 });
     }
 });

@@ -26,6 +26,9 @@ function() {
 
     this._dataUrl = null;
 
+    /* is this layer queryable (GetFeatureInfo) boolean */
+    this._queryable = true;
+    
     /*
      * Array of sublayers. Notice that only type BASE_LAYER can
      * have sublayers.
@@ -40,6 +43,9 @@ function() {
     
     /* is layer visible */
     this._visible = null;
+    
+    /* link to metadata service */
+    this._metadataIdentifier = null;
 
     /* Max scale for layer */
     this._maxScale = null;
@@ -97,6 +103,22 @@ function() {
      */
     getGeometry : function() {
         return this._geometry;
+    },
+    /**
+     * @method setQueryable
+     * True if we should call GFI on the layer
+     * @param {Boolean} queryable
+     */
+    setQueryable : function(queryable) {
+        this._queryable = queryable;
+    },
+    /**
+     * @method getQueryable
+     * True if we should call GFI on the layer
+     * @param {Boolean} queryable
+     */
+    getQueryable : function() {
+        return this._queryable;
     },
     /**
      * @method addPermission
@@ -410,5 +432,18 @@ function() {
      */
     isLayerOfType : function(flavour) {
         return flavour == 'WFS' || flavour == 'wfs';
+    },
+    
+    /**
+     * @method getMetadataIdentifier
+     */
+    getMetadataIdentifier: function() {
+    	return this._metadataIdentifier;
+    },
+    /**
+     * @method setMetadataIdentifier
+     */
+    setMetadataIdentifier: function(metadataid) {
+    	this._metadataIdentifier = metadataid;
     }
 });

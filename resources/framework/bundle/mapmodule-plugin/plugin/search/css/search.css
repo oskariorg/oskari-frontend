@@ -1,3 +1,4 @@
+
 div.mapplugin.search-div {
     top: 10px;
     right : 10px;
@@ -14,12 +15,13 @@ div.search-div input[type=button] {
 }
 
 div.search-div div.results {
-    border: 1px solid;
+    border: 1px solid #f3f3f3;
     background: white;
     max-width: 255px;
     width: 255px;
-    overflow: hidden;
+    overflow: scroll;
     margin-top: 5px;
+    padding: 4px;
 }
 div.search-div div.results div.header {
   background: #DDDDDD;
@@ -32,6 +34,38 @@ div.search-div div.results div.content table {
 div.search-div div.results div.content table tr {
     cursor: pointer;
 }
+
+/* IE8 Cleared */
+table.search-results td {
+	text-align: left;
+	padding: 2px;
+	padding-left: 4px;
+	padding-right: 12px;
+}
+
+table.search-results tr.odd {
+	background-color : #f3f3f3;
+}
+
+table.search-results {
+	width: 100%;
+	margin: 4px;
+    
+
+}
+
+table.search-results a {
+	color: #0085D1;
+}
+
+table.search-results th {
+	text-align: left;
+	padding: 2px;
+	padding-left: 4px;
+	padding-right: 12px;
+    font-weight: bold;
+}
+
 /*
 #search-loading-image {
     position: absolute;
@@ -40,3 +74,4 @@ div.search-div div.results div.content table tr {
     z-index: 10001;
 }
 */
+

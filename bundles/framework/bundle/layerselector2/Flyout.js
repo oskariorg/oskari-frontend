@@ -521,19 +521,11 @@ function(instance) {
 		}
 		
 		
-        if(layer.getDataUrl()) {
+        if(layer.getMetadataIdentifier()) {
 		    tools.find('div.layer-info').addClass('icon-info');
         	tools.find('div.layer-info').click(function() {
 				  var rn = 'catalogue.ShowMetadataRequest';
-				  var uuid = layer.getDataUrl();
-				  var idx = uuid.indexOf('uuid=');
-				  if (idx >= 0) {
-				      uuid = uuid.substring(idx + 5);
-				  }
-				  idx = uuid.indexOf('&');
-				  if (idx >= 0) {
-				      uuid = uuid.substring(0, idx);
-				  }
+				  var uuid = layer.getMetadataIdentifier();				 
 				  sandbox.postRequestByName(rn, [
 				      { uuid : uuid }
 				  ]);

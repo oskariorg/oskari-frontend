@@ -61,13 +61,14 @@ function() {
 		/**
 		 * map
 		 */
-		{
+		/*{
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/request/common/disable-map-keyboard-movement-request.js"
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/request/common/enable-map-keyboard-movement-request.js"
-		}, {
+		}, */ 
+		{
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/request/common/add-map-layer-request.js"
 		}, {
