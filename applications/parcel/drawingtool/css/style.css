@@ -1,0 +1,12 @@
+@media screen {
+	body {
+		margin: 0;
+		padding: 0;
+	}
+	#mapdiv {
+		width: 100%;
+	}
+	#contentMap {
+		height: 100%;
+	}
+}
