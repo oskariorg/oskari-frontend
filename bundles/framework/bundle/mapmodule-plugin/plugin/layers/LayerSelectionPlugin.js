@@ -278,6 +278,7 @@ function(config) {
     updateLayer : function(layer) {
     	var div = this.layerRefs[layer.getId()];
         var input = div.find('input');
+        var blnVisible = layer.isVisible(); 
 		if(blnVisible) {
 			if(!input.is(':checked')) {
     			input.attr('checked', 'checked');
