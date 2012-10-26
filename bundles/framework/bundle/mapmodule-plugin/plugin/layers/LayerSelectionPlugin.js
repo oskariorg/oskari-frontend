@@ -250,10 +250,9 @@ function(config) {
     	
     	var input = this.templateCheckbox.clone();
     	input.attr('value', layer.getId());
+    	input.attr('layerVisibilityOnAddLayer', layer.isVisible() ? "TRUE" : "FALSE");
+    	
     	if(layer.isVisible()) {
-    		/*input.attr('checked', 'checked');'/
-    		 * 
-    		 */
     		input.attr('checked', true);
     	} else {
     		input.attr('checked', false);
@@ -263,6 +262,9 @@ function(config) {
         div.find('span').before(input);
         this.layerRefs[layer.getId()] = div;
         layersDiv.append(div);
+        
+       
+
     },
     /**
      * @method _bindCheckbox
