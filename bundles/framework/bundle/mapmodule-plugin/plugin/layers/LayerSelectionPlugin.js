@@ -251,7 +251,12 @@ function(config) {
     	var input = this.templateCheckbox.clone();
     	input.attr('value', layer.getId());
     	if(layer.isVisible()) {
-    		input.attr('checked', 'checked');
+    		/*input.attr('checked', 'checked');'/
+    		 * 
+    		 */
+    		input.attr('checked', true);
+    	} else {
+    		input.attr('checked', false);
     	}
     	this._bindCheckbox(input, layer);
     	
