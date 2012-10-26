@@ -450,6 +450,7 @@ function(mapLayerUrl, sandbox) {
             layer.setDescription(mapLayerJson.subtitle);
             layer.setDataUrl(mapLayerJson.dataUrl);
             layer.setMetadataIdentifier(mapLayerJson.dataUrl_uuid);
+            layer.setBackendStatus(mapLayerJson.backendStatus);
             layer.setOrganizationName(mapLayerJson.orgName);
             layer.setInspireName(mapLayerJson.inspire);
             layer.setOrderNumber(mapLayerJson.orderNumber);
