@@ -44,6 +44,16 @@ function() {
         }
         return false;
     },
+    showPanels : function() {
+        for(var i = 0; i < this.panels.length; i++) {
+            this.panels[i].setVisible(true);
+        }
+    },
+    hidePanels : function() {
+        for(var i = 0; i < this.panels.length; i++) {
+            this.panels[i].setVisible(false);
+        }
+    },
     /**
      * @method insertTo
      * Adds this accordion to given container.

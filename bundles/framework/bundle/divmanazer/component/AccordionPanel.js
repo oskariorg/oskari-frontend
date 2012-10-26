@@ -37,6 +37,15 @@ function() {
     });
     this.html.find('div.content').hide();
 }, {
+    setVisible : function(bln) {
+        // checking since we dont assume param is boolean
+        if(bln == true) {
+            this.html.show();
+        }
+        else {
+            this.html.hide();
+        }
+    },
     /**
      * @method isOpen
      * Returns true if panel is currently open
