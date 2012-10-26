@@ -185,7 +185,7 @@ function(config) {
          * @method MapModulePlugin_MapLayerVisibilityRequest
          * refreshes checkbox state based on visibility
          */
-        'MapModulePlugin.MapLayerVisibilityRequest' : function(event) {
+        'MapLayerVisibilityChangedEvent' : function(event) {
         	this.updateLayer(event.getMapLayer());
         },
       
