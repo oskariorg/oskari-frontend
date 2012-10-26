@@ -319,8 +319,12 @@ function(instance, localization) {
         }
         if (enabled) {
             tool.plugin.startPlugin(this.instance.sandbox);
+            tool._isPluginStarted = true;
         } else {
-            tool.plugin.stopPlugin(this.instance.sandbox);
+        	if( tool._isPluginStarted ) {
+        		tool._isPluginStarted = false;
+            	tool.plugin.stopPlugin(this.instance.sandbox);
+           } 
         }
     },
     /**
