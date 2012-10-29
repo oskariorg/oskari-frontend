@@ -10,7 +10,8 @@ Oskari.registerLocalization({
     "filter": {
       "text": "Search map layers",
       "inspire": "By theme",
-      "organization": "By data providers"
+      "organization": "By data providers",
+      "published" : "Published"
     },
     "tooltip": {
       "type-base": "Background map",
