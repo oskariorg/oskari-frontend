@@ -57,8 +57,12 @@ function(instance) {
         inspireTab.groupingMethod = 'getInspireName';
         var orgTab = Oskari.clazz.create("Oskari.mapframework.bundle.layerselector2.view.LayersTab", this.instance, this.instance.getLocalization('filter').organization);
         orgTab.groupingMethod = 'getOrganizationName';
+        
+        var publishedTab = Oskari.clazz.create("Oskari.mapframework.bundle.layerselector2.view.PublishedLayersTab", this.instance, this.instance.getLocalization('filter').published);
+        
 		this.layerTabs.push(inspireTab);
         this.layerTabs.push(orgTab);
+        this.layerTabs.push(publishedTab);
 	},
 	/**
 	 * @method stopPlugin 
@@ -153,10 +157,12 @@ function(instance) {
         
         for(var i = 0; i < this.layerTabs.length; ++i) {
           var tab = this.layerTabs[i];
-          // populate tab
-          var layersCopy = layers.slice(0);
-          var groups = this._getLayerGroups(layersCopy, tab.groupingMethod);
-          tab.showLayerGroups(groups);
+          // populate tab if it has grouping method
+          if(tab.groupingMethod) {
+              var layersCopy = layers.slice(0);
+              var groups = this._getLayerGroups(layersCopy, tab.groupingMethod);
+              tab.showLayerGroups(groups);
+          }
         }
     },
 	/**

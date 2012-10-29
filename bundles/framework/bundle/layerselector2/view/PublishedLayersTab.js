@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.layerselector2.view.LayersTab
+ * @class Oskari.mapframework.bundle.layerselector2.view.PublishedLayersTab
  * 
  * 
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
+Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLayersTab",
 
 /**
  * @method create called automatically on construction

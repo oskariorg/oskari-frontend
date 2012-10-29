@@ -8,9 +8,10 @@ Oskari.registerLocalization({
       "loadFailed": "Karttatasojen latauksessa tapahtui virhe. Lataa sivu selaimeesi uudelleen ja valitse karttatasot."
     },
     "filter": {
-      "text": "Hae karttatasoja",
-      "inspire": "Aiheittain",
-      "organization": "Tiedontuottajittain"
+      "text" : "Hae karttatasoja",
+      "inspire" : "Aiheittain",
+      "organization" : "Tiedontuottajittain",
+      "published" : "Julkaistut"
     },
     "tooltip": {
       "type-base": "Taustakartta",
