@@ -84,7 +84,15 @@ function() {
     setTitle : function(pTitle) {
         this.title = pTitle;
         var header = this.html.find('div.header div.headerText'); 
-        header.append(this.title);
+        header.html(this.title);
+    },
+    /**
+     * @method getTitle
+     * Gets the panel title
+     * @return {String}
+     */
+    getTitle : function() {
+        return this.title;
     },
     /**
      * @method setContent

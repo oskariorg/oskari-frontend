@@ -54,7 +54,9 @@ function(instance) {
 		this.template = jQuery('<div class="allLayersTabContent"></div>');
 		
         var inspireTab = Oskari.clazz.create("Oskari.mapframework.bundle.layerselector2.view.LayersTab", this.instance, this.instance.getLocalization('filter').inspire);
+        inspireTab.groupingMethod = 'getInspireName';
         var orgTab = Oskari.clazz.create("Oskari.mapframework.bundle.layerselector2.view.LayersTab", this.instance, this.instance.getLocalization('filter').organization);
+        orgTab.groupingMethod = 'getOrganizationName';
 		this.layerTabs.push(inspireTab);
         this.layerTabs.push(orgTab);
 	},
@@ -188,29 +190,26 @@ function(instance) {
 		
         var tabContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
         tabContainer.insertTo(cel);
-        
+        for(var i = 0; i < this.layerTabs.length; ++i) {
+            var tab = this.layerTabs[i];
+            tabContainer.addPanel(tab.getTabPanel());
+        }
+        this.populateLayers();
+	},
+    populateLayers : function() {
+        var sandbox = this.instance.getSandbox();
         // populate layer list
         var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
         var layers = mapLayerService.getAllLayers();
         
         for(var i = 0; i < this.layerTabs.length; ++i) {
-		  var tab = this.layerTabs[i];
+          var tab = this.layerTabs[i];
           // populate tab
-          var inspireLayers = layers.slice(0);
-          var groups = this._getLayerGroups(inspireLayers, 'getInspireName')
+          var layersCopy = layers.slice(0);
+          var groups = this._getLayerGroups(layersCopy, tab.groupingMethod);
           tab.showLayerGroups(groups);
-          
-		  tabContainer.addPanel(tab.getTabPanel());
-		}		
-		/*
-		
-		// select layers that were possibly added before this bundle was loaded
-		var selectedLayers = sandbox.findAllSelectedMapLayers();
-		for(var i = 0; i < selectedLayers.length; ++i) {
-			this.handleLayerSelectionChanged(selectedLayers[i], true);
-		}
-		*/
-	},
+        }
+    },
 	/**
 	 * @method _getLayerGroups
 	 * @private
@@ -230,10 +229,8 @@ function(instance) {
             var layer = layers[n];
             var groupAttr = layer[groupingMethod]();
             if (!group || group.getTitle() != groupAttr) {
-                if (group) {
-                    groupList.push(group);
-                }
                 group = Oskari.clazz.create("Oskari.mapframework.bundle.layerselector2.model.LayerGroup", groupAttr);
+                groupList.push(group);
             }
             group.addLayer(layer);
 
@@ -270,8 +267,10 @@ function(instance) {
      * let's refresh ui to match current layer selection
      */
 	handleLayerSelectionChanged : function(layer, isSelected) {
-		//var layerDiv = jQuery(this.container).find('div[layer_id=' + layer.getId() +']');
-		//layerDiv.find('input').attr('checked', (isSelected == true));
+      for(var i = 0; i < this.layerTabs.length; ++i) {
+          var tab = this.layerTabs[i];
+	      tab.setLayerSelected(layer.getId(), isSelected);
+	  }
 	},
     /**
      * @method handleLayerModified
@@ -281,9 +280,12 @@ function(instance) {
      */
     handleLayerModified : function(layer) {
         var me = this;
-		//var layerDiv = jQuery(this.container).find('div[layer_id=' + layer.getId() +']');
-		//jQuery(layerDiv).find('.layer-title').html(layer.getName());
+        for (var i = 0; i < this.layerTabs.length; ++i) {
+            var tab = this.layerTabs[i];
+            tab.setLayerName(layer.getId(), layer.getName());
+        }
     },
+
     /**
      * @method handleLayerAdded
 	 * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer
@@ -292,7 +294,7 @@ function(instance) {
      */
     handleLayerAdded : function(layer) {
         var me = this;
-        //me.createUi();
+        this.populateLayers();
         // we could just add the layer to correct group and update the layer count for the group
         // but saving time to do other finishing touches
 		//var layerListContainer = jQuery(this.container).find('div.layerList');
@@ -306,7 +308,7 @@ function(instance) {
      */
     handleLayerRemoved : function(layerId) {
         var me = this;
-        //me.createUi();
+        this.populateLayers();
         // we could  just remove the layer and update the layer count for the group
         // but saving time to do other finishing touches
 		//var layerListContainer = jQuery(this.container).find('div.layerList');

@@ -44,6 +44,11 @@ function() {
         }
         return false;
     },
+    removeAllPanels : function() {
+        for(var i = 0; i < this.panels.length; i++) {
+            this.removePanel(this.panels[i]);
+        }
+    },
     showPanels : function() {
         for(var i = 0; i < this.panels.length; i++) {
             this.panels[i].setVisible(true);
@@ -61,5 +66,8 @@ function() {
      */
     insertTo : function(container) {
         container.append(this.ui);
+    },
+    getContainer : function() {
+        return this.ui;
     }
 });

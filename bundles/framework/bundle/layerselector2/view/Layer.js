@@ -36,6 +36,13 @@ function(layer, sandbox, localization) {
             this.ui.hide();
         }
     },
+    setSelected : function(isSelected) {
+        // checking since we dont assume param is boolean
+        this.ui.find('input').attr('checked', (isSelected == true));
+    },
+    setLayerName : function(newName) {
+        this.ui.find('.layer-title').html(newName);
+    },
     getContainer : function() {
         return this.ui;
     },
@@ -48,20 +55,10 @@ function(layer, sandbox, localization) {
     _createLayerContainer : function(layer) {
         var me = this;
         var sandbox = this.sandbox;
-        var addRequestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
-        var removeRequestBuilder = sandbox.getRequestBuilder('RemoveMapLayerRequest');
         
         // clone from layer template
         var layerDiv = this.template.clone();
         
-        // setup filtering keywords and hide them from ui
-        /*
-        var keywords = jQuery(layerDiv).find('.layer-keywords');
-        keywords.append(layer.getName().toLowerCase());
-        keywords.append(' ' + layer.getInspireName().toLowerCase());
-        keywords.append(' ' + layer.getOrganizationName().toLowerCase());
-        keywords.hide();
-        */
         var tooltips = this.localization['tooltip'];
         var tools = jQuery(layerDiv).find('div.layer-tools');
         var icon = tools.find('div.layer-icon'); 
@@ -114,13 +111,10 @@ function(layer, sandbox, localization) {
             var request = null;
             if(checkbox.is(':checked')) {
                 sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), true]);
-                //request = addRequestBuilder(layer.getId(), true);
             }
             else {
                 sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
-                //request = removeRequestBuilder(layer.getId());
             }
-            //sandbox.request(me.instance.getName(), request);
         });
         
         return layerDiv;
