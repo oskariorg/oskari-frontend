@@ -1,8 +1,16 @@
+
+/**
+ * @class Oskari.mapframework.mapmodule-plugin.request.MapLayerUpdateRequest
+ * 
+ * class for requesting map layer update / refresh
+ *  
+ */
 Oskari.clazz.define(
     'Oskari.mapframework.mapmodule-plugin.request.MapLayerUpdateRequest', 
-    function(layerId, forced) {
+    function(layerId, forced,optParameters) {
     this._layerId = layerId;
     this._forced = forced;
+    this._parameters = optParameters;
 }, {
     __name : "MapModulePlugin.MapLayerUpdateRequest",
     getName : function() {
@@ -17,6 +25,12 @@ Oskari.clazz.define(
             return this._forced;
         }
         return false;
+    },
+    getParameters: function() {
+    	return this._parameters;
+    },
+    setParameters: function(p) {
+    	this._parameters = p;
     }
 
 }, {

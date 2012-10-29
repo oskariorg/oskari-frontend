@@ -70,6 +70,8 @@ function() {
     this._visible = true;
     
     this._metadataIdentifier = null;
+    
+    this._backendStatus = null;
 }, {
     /**
      * @method setGeometryWKT
@@ -477,6 +479,18 @@ function() {
      */
     setMetadataIdentifier: function(metadataid) {
     	this._metadataIdentifier = metadataid;
+    },
+    /**
+     * @method getBackendStatus
+     */
+    getBackendStatus: function() {
+    	return this._backendStatus;
+    },
+    /**
+     * @method setBackendStatus
+     */
+    setBackendStatus: function(backendStatus) {
+    	this._backendStatus = backendStatus;
     }
 
 });
