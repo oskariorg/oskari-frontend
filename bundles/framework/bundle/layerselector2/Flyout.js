@@ -99,82 +99,30 @@ function(instance) {
 		this.state = state;
 		console.log("Flyout.setState", this, state);
 	},
-    /**
-     * @method _teardownState
-     * @private
-     * Tears down previous content state so we can set a new one
-     */
-    _teardownContentState : function() {
-        
-        jQuery(this.container).find('div.groupingTabs li').removeClass('active');
-        var layerGroups = jQuery(this.container).find('div.layerList div.layerGroup');
-        layerGroups.removeClass('open');
-        layerGroups.find('div.groupIcon').removeClass('icon-arrow-down');
-        layerGroups.find('div.groupIcon').addClass('icon-arrow-right');
-        this.filterField.setValue('');
-    },
     setContentState : function(state) {
-        return;
-        this._teardownContentState();    
-        // or just: this.createUi(); ??
-        
         // prepare for complete state reset
         if(!state) {
             state = {};
         }
         
-        // default need to be set incase we don't have complete state information
-        if(!state.tab) {
-            state.tab = this.groupingTools[0].title;
-        }
-        var activeTab = jQuery(this.container).find('div.groupingTabs li:contains(' + state.tab + ')');
-        activeTab.addClass('active');
-        for(var i=0; i < this.groupingTools.length; ++i) {
-            var group = this.groupingTools[i];
-            if(group.title == state.tab) {
-                group.callback();
-            }
-        }
-        
-        var filter = state.filter;
-        if(!filter) {
-            filter = '';
-        }
-        this.filterField.setValue(filter);
-        this._filterLayers(state.filter);
-        
-        if(!state.filter && state.groups) {
-            var layerGroups = jQuery(this.container).find('div.layerList div.layerGroup');
-            for(var i=0; i < state.groups.length; ++i) {
-                var group = state.groups[i];
-                
-                var groupTitleContainer = layerGroups.find('span.groupName:contains(' + group + ')');
-                if(groupTitleContainer) {
-                    var groupContainer = groupTitleContainer.parent().parent();
-                    groupContainer.addClass('open');
-			        groupContainer.find('div.groupIcon').removeClass('icon-arrow-right');
-			        groupContainer.find('div.groupIcon').addClass('icon-arrow-down');
-                    groupContainer.find('div.layer').show();
-                }
+        for(var i = 0; i < this.layerTabs.length; ++i) {
+            var tab = this.layerTabs[i];
+            if(tab.getTitle() == state.tab) {
+                tabContainer.select(tab.getTabPanel());
+                tab.setState(state);
             }
         }
     },
     getContentState : function() {
-        return;
-        var filterText = this.filterField.getValue();
-        var openGroups = [];  
-        
-        var layerGroups = jQuery(this.container).find('div.layerList div.layerGroup.open');
-        for(var i=0; i < layerGroups.length; ++i) {
-            var group = layerGroups[i];
-            openGroups.push(jQuery(group).find('.groupName').text());
+        var state = {};
+        for(var i = 0; i < this.layerTabs.length; ++i) {
+            var tab = this.layerTabs[i];
+            if(this.tabContainer.isSelected(tab.getTabPanel())) {
+                state = tab.getState();
+                break;
+            }
         }
-        var activeTab = jQuery(this.container).find('div.groupingTabs li.active').text();
-        return {
-            tab : activeTab,
-            filter : filterText,
-            groups : openGroups
-        };
+        return state;
     },
 	/**
 	 * @method createUi
@@ -188,12 +136,13 @@ function(instance) {
 		var cel = jQuery(this.container);
 		cel.empty();
 		
-        var tabContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
-        tabContainer.insertTo(cel);
+        this.tabContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
+        this.tabContainer.insertTo(cel);
         for(var i = 0; i < this.layerTabs.length; ++i) {
             var tab = this.layerTabs[i];
-            tabContainer.addPanel(tab.getTabPanel());
+            this.tabContainer.addPanel(tab.getTabPanel());
         }
+        //tabContainer.addTabChangeListener -> filter with same keyword when changing tabs?
         this.populateLayers();
 	},
     populateLayers : function() {

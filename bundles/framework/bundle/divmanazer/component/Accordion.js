@@ -45,9 +45,8 @@ function() {
         return false;
     },
     removeAllPanels : function() {
-        for(var i = 0; i < this.panels.length; i++) {
-            this.removePanel(this.panels[i]);
-        }
+        this.ui.empty();
+        this.panels = [];
     },
     showPanels : function() {
         for(var i = 0; i < this.panels.length; i++) {

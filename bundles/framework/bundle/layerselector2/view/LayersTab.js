@@ -16,8 +16,38 @@ function(instance, title) {
     this.layerContainers = {};
     this._createUI();
 }, {
+    getTitle : function() {
+        return this.title;
+    },
     getTabPanel : function() {
         return this.tabPanel;
+    },
+    getState : function() {
+        var state = {
+            tab : this.getTitle(),
+            filter : this.filterField.getValue(),
+            groups : []
+        };
+        /*
+        var layerGroups = jQuery(this.container).find('div.layerList div.layerGroup.open');
+        for(var i=0; i < layerGroups.length; ++i) {
+            var group = layerGroups[i];
+            state.groups.push(jQuery(group).find('.groupName').text());
+        }*/
+        return state;
+    },
+    setState : function(state) {
+        if(!state) {
+            return;
+        }
+        
+        if(!state.filter) {
+            this.filterField.setValue(state.filter);
+            this.filterLayers(state.filter);
+        }
+        if(state.groups && state.groups.length > 0) {
+            // should open panels in this.accordion where groups[i] == panel.title
+        }
     },
     _createUI : function() {
         
@@ -74,6 +104,8 @@ function(instance, title) {
         for(var i = 0; i < selectedLayers.length; ++i) {
             this.setLayerSelected(selectedLayers[i].getId(), true);
         }
+                    
+        this.filterLayers(this.filterField.getValue());
     },
     /**
      * @method _filterLayers
@@ -136,6 +168,6 @@ function(instance, title) {
     },
     setLayerName : function(layerId, newName) {
         var layerCont = this.layerContainers[layerId];
-        layerCont.setSelected(isSelected);
+        layerCont.setLayerName(newName);
     }
 });
