@@ -11,7 +11,7 @@ Oskari.registerLocalization({
       "text": "Sök kartlager",
       "inspire": "Enligt tema",
       "organization": "Enligt dataproducent",
-      "published" : "Published SV"
+      "published" : "Användare"
     },
     "tooltip": {
       "type-base": "Bakgrundskarta",

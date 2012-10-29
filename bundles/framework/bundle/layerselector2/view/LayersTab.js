@@ -55,13 +55,15 @@ function(instance, title) {
         this.tabPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
         this.tabPanel.setTitle(this.title);
         
-        this.filterField = this.getFilterField();
-        this.tabPanel.getContainer().append(this.filterField.getField());
+        this.tabPanel.getContainer().append(this.getFilterField().getField());
         
         this.accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
         this.accordion.insertTo(this.tabPanel.getContainer());
     },
     getFilterField : function() {
+        if(this.filterField) {
+            return this.filterField;
+        }
         var me = this;
         var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
         field.setPlaceholder(this.instance.getLocalization('filter').text);
@@ -69,6 +71,7 @@ function(instance, title) {
         field.bindChange(function(event) {
             me.filterLayers(field.getValue());
         }, true);
+        this.filterField = field;
         return field;
     },
     showLayerGroups : function(groups) {
@@ -174,10 +177,14 @@ function(instance, title) {
     },
     setLayerSelected : function(layerId, isSelected) {
         var layerCont = this.layerContainers[layerId];
-        layerCont.setSelected(isSelected);
+        if(layerCont) {
+            layerCont.setSelected(isSelected);
+        }
     },
     setLayerName : function(layerId, newName) {
         var layerCont = this.layerContainers[layerId];
-        layerCont.setLayerName(newName);
+        if(layerCont) {
+            layerCont.setLayerName(newName);
+        }
     }
 });

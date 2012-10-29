@@ -11,7 +11,7 @@ Oskari.registerLocalization({
       "text": "Search map layers",
       "inspire": "By theme",
       "organization": "By data providers",
-      "published" : "Published"
+      "published" : "Users"
     },
     "tooltip": {
       "type-base": "Background map",

@@ -11,7 +11,11 @@ Oskari.registerLocalization({
       "text" : "Hae karttatasoja",
       "inspire" : "Aiheittain",
       "organization" : "Tiedontuottajittain",
-      "published" : "Julkaistut"
+      "published" : "Käyttäjät"
+    },
+    "published": {
+      "organization" : "Julkaistu taso",
+      "inspire" : "Julkaistu taso"
     },
     "tooltip": {
       "type-base": "Taustakartta",

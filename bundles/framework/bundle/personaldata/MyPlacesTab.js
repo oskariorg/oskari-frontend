@@ -54,6 +54,13 @@ function(instance, localization) {
             var categories = service.getAllCategories();
             var places = service.getAllMyPlaces();
             var me = this;
+            var publishLinkClosure = function(id, isPublic) {
+                return function() {
+                    var request = me.instance.sandbox.getRequestBuilder('MyPlaces.PublishCategoryRequest')(id, isPublic);
+                    me.instance.sandbox.request(me.instance, request);
+                    return false;
+                };
+            }
             var editLinkClosure = function(id) {
                 return function() {
                     var request = me.instance.sandbox.getRequestBuilder('MyPlaces.EditCategoryRequest')(id);
@@ -91,6 +98,19 @@ function(instance, localization) {
                 deleteLink.append(this.loc.deleteCategory);
                 deleteLink.bind('click', deletelinkClosure(id));
                 panel.getContainer().append(deleteLink);
+                
+                var publishLink = this.linkTemplate.clone();
+                var isPublic = categories[i].isPublic();
+                if(isPublic) {
+                    publishLink.append('TBD: lukko kuva');
+                    publishLink.attr('title', 'TBD: Taso on yksityinen. Muuta taso julkiseksi klikkaamalla.');
+                }
+                else {
+                    publishLink.append('TBD: lukko auki kuva');
+                    publishLink.attr('title', 'TBD: Taso on julkinen. Muuta taso yksityiseksi klikkaamalla.');
+                }
+                publishLink.bind('click', publishLinkClosure(id, !isPublic));
+                panel.getContainer().append(publishLink);
             }
             this._removeObsoleteCategories();
         }

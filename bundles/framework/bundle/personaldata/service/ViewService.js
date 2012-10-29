@@ -55,7 +55,7 @@ function(viewUrl) {
         }
 
         jQuery.ajax({
-            url : me._viewUrl + '&action_route=GetViews',
+            url : me._viewUrl + 'action_route=GetViews',
             data : {
                 viewType : type
             },
@@ -88,7 +88,7 @@ function(viewUrl) {
         var me = this;
 
         jQuery.ajax({
-            url : me._viewUrl + '&action_route=DeleteView',
+            url : me._viewUrl + 'action_route=DeleteView',
             data : {
                 id : view.id
             },
@@ -123,7 +123,7 @@ function(viewUrl) {
         var me = this;
 
         jQuery.ajax({
-            url : me._viewUrl + '&action_route=AdjustViewAccess',
+            url : me._viewUrl + 'action_route=AdjustViewAccess',
             data : {
                 id : id,
                 isPublic : isPublic
@@ -159,7 +159,7 @@ function(viewUrl) {
         var me = this;
 
         jQuery.ajax({
-            url : me._viewUrl + '&action_route=RenameView',
+            url : me._viewUrl + 'action_route=RenameView',
             type : 'POST',
             data : {
                 id : id,

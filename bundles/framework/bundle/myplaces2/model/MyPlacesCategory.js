@@ -11,6 +11,7 @@ function() {
     this.id = undefined;
     this.name = undefined;
     this._isDefault = false;
+    this._isPublic = false;
     this.lineWidth = 1;
     this.lineColor = '993300';
     this.areaLineWidth = 1;
@@ -61,6 +62,20 @@ function() {
      */
     isDefault : function() {
         return (this._isDefault == true);
+    },
+    /**
+     * @method setPublic 
+     * @param {Boolean} value
+     */
+    setPublic : function(value) {
+        this._isPublic = (value == true);
+    },
+    /**
+     * @method isPublic
+     * @return {Boolean}
+     */
+    isPublic : function() {
+        return (this._isPublic == true);
     },
     /**
      * @method setLineWidth

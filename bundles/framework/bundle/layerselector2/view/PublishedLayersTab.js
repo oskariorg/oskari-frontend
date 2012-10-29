@@ -1,7 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.layerselector2.view.PublishedLayersTab
  * 
- * 
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLayersTab",
 
@@ -51,25 +50,127 @@ function(instance, title) {
         }
     },
     _createUI : function() {
-        
+        var me = this;
         this.tabPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
         this.tabPanel.setTitle(this.title);
+        this.tabPanel.setSelectionHandler(function(wasSelected) {
+            if(wasSelected) {
+                me.tabSelected();
+            }
+            else {
+                me.tabUnselected();
+            }
+        });
         
-        this.filterField = this.getFilterField();
-        this.tabPanel.getContainer().append(this.filterField.getField());
+        this.tabPanel.getContainer().append(this.getFilterField().getField());
         
         this.accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
         this.accordion.insertTo(this.tabPanel.getContainer());
     },
     getFilterField : function() {
+        if(this.filterField) {
+            return this.filterField;
+        }
         var me = this;
         var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
         field.setPlaceholder(this.instance.getLocalization('filter').text);
         field.addClearButton();
         field.bindChange(function(event) {
-            me.filterLayers(field.getValue());
+            alert('go ajax');
         }, true);
+        this.filterField = field;
         return field;
+    },
+    tabSelected : function() {
+        alert('TODO: json query for users');
+        //this._getLayerGroups(jsonResponse)
+    },
+    tabUnselected : function() {
+        //alert('unselected');
+    },
+    /**
+     * @method _getLayerGroups
+     * @private
+     */
+    _getLayerGroups : function(jsonResponse) {
+        // FIXME: work in progress, no actual data yet so not tested
+        var me = this;
+        var sandbox = this.instance.getSandbox();
+
+        var groupList = [];
+        var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        var userUuid = sandbox.getUser().getUuid();
+        var group = null;
+        for (var n = 0; n < jsonResponse.length; ++n) {
+            var groupJSON = jsonResponse[n];
+            if (!group || group.getTitle() != groupJSON.name) {
+                group = Oskari.clazz.create("Oskari.mapframework.bundle.layerselector2.model.LayerGroup", groupJSON.name);
+                groupList.push(group);
+            }
+            for (var i = 0; i < jsonResponse.layers.length; ++i) {
+                var layerJson = jsonResponse.layers[i];
+                var layer = this._getPublishedLayer(layerJson, mapLayerService, userUuid == groupJSON.uuid);
+                layer.setDescription(groupJSON.name); // user name as "subtitle"
+                group.addLayer(layer);
+            }
+        }
+        return groupList;
+    },
+    /**
+     * @method _getPublishedLayer
+     * Populates the category based data to the base maplayer json
+     * @private 
+     * @return maplayer json for the category
+     */
+    _getPublishedLayer : function(jsonResponse, mapLayerService, hasPermission) {
+        var baseJson = this._getMapLayerJsonBase();
+        baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + jsonResponse.id + "&"; // this.instance.conf.wmsUrl
+        //baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + categoryModel.getId() + "&";
+        baseJson.name = jsonResponse.name;
+        baseJson.id = 'myplaces_' + '<id>';
+        var layer = mapLayerService.createMapLayer(baseJson);
+        mapLayerService.addLayer(layer);
+        
+        // TODO: check this here or where?
+        if(hasPermission) {
+            baseJson.permissions = {
+                "publish" : "publication_permission_ok" 
+            }
+        }
+        else {
+            baseJson.permissions = {
+                "publish" : "no_publication_permission"
+            }
+        }
+        return layer;
+    },
+    /**
+     * @method _getMapLayerJsonBase
+     * Returns a base model for maplayer json to create my places map layer
+     * @private 
+     * @return {Object}
+     */
+    _getMapLayerJsonBase : function() {
+        var catLoc = this.instance.getLocalization('published');
+        var json = {
+            wmsName: 'ows:my_places_categories',
+            descriptionLink:"",
+            type: "wmslayer",
+            baseLayerId:-1,
+            legendImage:"",
+            gfi : 'disabled',
+            formats: {
+               value:"text/html"
+            },
+            isQueryable:false,
+            minScale:12000000,
+            opacity: 50,
+            metaType: 'published',
+            orgName: catLoc.organization,
+            inspire: catLoc.inspire,
+            maxScale:1
+        };
+        return json;
     },
     showLayerGroups : function(groups) {
         var me = this;
@@ -174,10 +275,14 @@ function(instance, title) {
     },
     setLayerSelected : function(layerId, isSelected) {
         var layerCont = this.layerContainers[layerId];
-        layerCont.setSelected(isSelected);
+        if(layerCont) {
+            layerCont.setSelected(isSelected);
+        }
     },
     setLayerName : function(layerId, newName) {
         var layerCont = this.layerContainers[layerId];
-        layerCont.setLayerName(newName);
+        if(layerCont) {
+            layerCont.setLayerName(newName);
+        }
     }
 });

@@ -574,7 +574,46 @@ function(instance) {
 			var okBtn = dialog.createCloseButton(btnLoc.buttons.ok);
     		dialog.show(loc.notification.error.title, loc.notification.error.deleteCategory, [okBtn]);
         }
-    }
+    },
+    confirmPublishCategory : function(category, makePublic) {
+        var me = this;
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var buttons = [];
+        
+        var cancelBtn = dialog.createCloseButton('Cancel');
+        buttons.push(cancelBtn);
+        
+        var operationalBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        operationalBtn.addClass('primary');
+        buttons.push(operationalBtn);        
+        if(makePublic) {
+            operationalBtn.setTitle('Muuta julkiseksi');
+            operationalBtn.setHandler(function() {
+                dialog.close();
+                me._handlePublishCategory(category, makePublic);
+            });    
+            dialog.show('Muuta karttataso julkiseksi', 'Olet muuttamassa karttatasoa "Omat paikat" julkiseksi. ' + 
+                'Voit jakaa julkisen karttatason verkossa tai julkaista sen karttana toiseen verkkopalveluun.', buttons);
+        }
+        else {
+            operationalBtn.setTitle('Muuta yksityiseksi');
+            operationalBtn.setHandler(function() {
+                dialog.close();
+                me._handlePublishCategory(category, makePublic);
+            });    
+            dialog.show('Muuta karttataso yksityiseksi', 'Olet muuttamassa karttatasoa "Omat paikat" yksityiseksi. ' + 
+                'Tämän jälkeen et voi jakaa tai julkaista sitä karttana.', buttons);
+        }
+    },
+    
+    _handlePublishCategory : function(category, makePublic) {
+        if(makePublic) {
+            alert('TODO: publish');
+        }
+        else {
+            alert('TODO: unpublish');
+        }
+   }
 }, {
     /**
      * @property {String[]} protocol

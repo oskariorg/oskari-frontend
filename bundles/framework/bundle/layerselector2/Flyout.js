@@ -146,7 +146,7 @@ function(instance) {
             var tab = this.layerTabs[i];
             this.tabContainer.addPanel(tab.getTabPanel());
         }
-        //tabContainer.addTabChangeListener -> filter with same keyword when changing tabs?
+        //this.tabContainer.addTabChangeListener(me._tabsChanged); // -> filter with same keyword when changing tabs?
         this.populateLayers();
 	},
     populateLayers : function() {
@@ -165,6 +165,21 @@ function(instance) {
           }
         }
     },
+    /*
+    _tabsChanged : function(previousTab, newTab) {
+        if(previousTab) {
+            tabSelected
+            tabUnselected
+            // 
+            if(newTab) {
+                alert('changed from ' +  previousTab.getTitle() + ' to ' + newTab.getTitle());
+            }
+        }
+        else if(newTab) {
+                alert('selected ' + newTab.getTitle());
+            }
+    },
+    */
 	/**
 	 * @method _getLayerGroups
 	 * @private
@@ -182,6 +197,10 @@ function(instance) {
         var group = null;
         for (var n = 0; n < layers.length; ++n) {
             var layer = layers[n];
+            if(layer.getMetaType && layer.getMetaType() == 'published') {
+                // skip published layers
+                continue;
+            }
             var groupAttr = layer[groupingMethod]();
             if (!group || group.getTitle() != groupAttr) {
                 group = Oskari.clazz.create("Oskari.mapframework.bundle.layerselector2.model.LayerGroup", groupAttr);
