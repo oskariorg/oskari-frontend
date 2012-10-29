@@ -151,6 +151,17 @@ function(instance, localization) {
 			dialog.close();
             var service = sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
             var callback = function(isSuccess) {
+            	
+            	/* let's refresh map also if there */
+            	var categoryId = data.categoryId;
+            	var layerId = 'myplaces_' + categoryId; 
+        		var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+        		if(layer) {
+        			var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
+        			var updateRequest = updateRequestBuilder(layerId, true);
+                    sandbox.request(me.instance, updateRequest);    
+        		}
+            	
                 if(isSuccess) {
                     dialog.show(loc.title, loc.success);
                 }
