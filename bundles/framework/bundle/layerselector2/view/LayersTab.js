@@ -28,6 +28,7 @@ function(instance, title) {
             filter : this.filterField.getValue(),
             groups : []
         };
+        // TODO: groups listing
         /*
         var layerGroups = jQuery(this.container).find('div.layerList div.layerGroup.open');
         for(var i=0; i < layerGroups.length; ++i) {
@@ -46,7 +47,7 @@ function(instance, title) {
             this.filterLayers(state.filter);
         }
         if(state.groups && state.groups.length > 0) {
-            // should open panels in this.accordion where groups[i] == panel.title
+            // TODO: should open panels in this.accordion where groups[i] == panel.title
         }
     },
     _createUI : function() {
@@ -90,9 +91,6 @@ function(instance, title) {
                     Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.view.Layer',
                     layer, this.instance.sandbox, this.instance.getLocalization());
                 var layerContainer = layerWrapper.getContainer();
-                if(n%2 == 1) {
-                    layerContainer.addClass('odd');
-                }
                 groupContainer.append(layerContainer);
                 
                 this.layerContainers[layer.getId()] = layerWrapper;
@@ -136,6 +134,12 @@ function(instance, title) {
                 layerCont.setVisible(bln);
                 if(bln) {
                     visibleLayerCount++;
+                    if(visibleLayerCount%2 == 1) {
+                        layerCont.getContainer().addClass('odd');
+                    }
+                    else {
+                        layerCont.getContainer().removeClass('odd');
+                    }
                     // open the panel if matching layers
                     group.layerListPanel.open();
                 }
@@ -156,6 +160,12 @@ function(instance, title) {
                 var layerId = layer.getId();
                 var layerCont = this.layerContainers[layerId];
                 layerCont.setVisible(true);
+                if(n%2 == 1) {
+                    layerCont.getContainer().addClass('odd');
+                }
+                else {
+                    layerCont.getContainer().removeClass('odd');
+                }
             }
             group.layerListPanel.setVisible(true);
             group.layerListPanel.close();
