@@ -13,13 +13,15 @@ function(layer, sandbox, localization) {
     this.sandbox = sandbox;
     this.localization = localization;
     this.layer = layer;
-    this.template = jQuery('<div class="layer"><input type="checkbox" /> ' +
-                '<div class="layer-tools"><div class="layer-icon"></div><div class="layer-info"></div></div>' + 
-                '<div class="layer-title"></div>' + 
-                //'<div class="layer-keywords"></div>' + 
-            '</div>');
+    this.backendStatus = null;
     this.ui = this._createLayerContainer(layer);
 }, {
+	__template : '<div class="layer"><input type="checkbox" /> ' +
+                '<div class="layer-tools"><div class="layer-backendstatus-icon"></div>' +
+                '<div class="layer-icon"></div><div class="layer-info"></div></div>' + 
+                '<div class="layer-title"></div>' + 
+                //'<div class="layer-keywords"></div>' + 
+            '</div>',
     /**
      * @method getId
      * @return {String} layer id
@@ -40,8 +42,48 @@ function(layer, sandbox, localization) {
         // checking since we dont assume param is boolean
         this.ui.find('input').attr('checked', (isSelected == true));
     },
-    setLayerName : function(newName) {
+    
+    /**
+     * @method updateLayerContent
+     */
+    updateLayerContent : function(layer) {
+    	
+    	/* set title */
+    	var newName = layer.getName();
         this.ui.find('.layer-title').html(newName);
+        
+        /* set/clear alert if required */
+        var prevBackendStatus = this.backendStatus; 
+       	var currBackendStatus = layer.getBackendStatus();
+       	var loc = this.localization['backendStatus'] ;
+       	var locForPrevBackendStatus = prevBackendStatus ? loc[prevBackendStatus] : null;
+       	var locForCurrBackendStatus = currBackendStatus ? loc[currBackendStatus] : null;
+       	var clsForPrevBackendStatus = locForPrevBackendStatus ? locForPrevBackendStatus.iconClass : null;
+       	var clsForCurrBackendStatus = locForCurrBackendStatus ? locForCurrBackendStatus.iconClass : null;
+       	var tipForPrevBackendStatus = locForPrevBackendStatus ? locForPrevBackendStatus.tooltip : null;
+       	var tipForCurrBackendStatus = locForCurrBackendStatus ? locForCurrBackendStatus.tooltip : null;
+		var elBackendStatus = this.ui.find('.layer-backendstatus-icon');
+		if( clsForPrevBackendStatus ) {
+			/* update or clear */
+			if( clsForPrevBackendStatus != clsForCurrBackendStatus  ) {
+				elBackendStatus.removeClass(clsForPrevBackendStatus);	
+			}
+		}
+		if( clsForCurrBackendStatus ) {
+			/* update or set */
+			if( clsForPrevBackendStatus != clsForCurrBackendStatus  ) {
+				elBackendStatus.addClass(clsForCurrBackendStatus);	
+			}
+		}
+		if( tipForCurrBackendStatus ) {
+			if( tipForPrevBackendStatus != tipForCurrBackendStatus  ) {
+				elBackendStatus.attr('title',tipForCurrBackendStatus);	
+			}	
+		} else if( tipForPrevBackendStatus ) {
+			elBackendStatus.attr('title','');
+		}
+		this.backendStatus = currBackendStatus;
+       
     },
     getContainer : function() {
         return this.ui;
@@ -56,8 +98,9 @@ function(layer, sandbox, localization) {
         var me = this;
         var sandbox = this.sandbox;
         
-        // clone from layer template
-        var layerDiv = this.template.clone();
+        // create from layer template 
+        // (was clone-from-template but template was only used once so there was some overhead)  
+        var layerDiv = jQuery(this.__template);
         
         var tooltips = this.localization['tooltip'];
         var tools = jQuery(layerDiv).find('div.layer-tools');

@@ -117,3 +117,11 @@ div.layerselector2 div.groupingTabs ul li.active a {
 div.layerselector2 div.groupingTabs ul li.fill a {
    width: 100%;
 }
+
+div.layerselector2 div.layer div.layer-backendstatus-icon {
+    float : left;
+	width : 20px;
+	height : 16px;
+	margin-right: 4px;
+	background-repeat: no-repeat;
+}
