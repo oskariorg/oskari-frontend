@@ -205,6 +205,16 @@ function(instance) {
         //baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + categoryModel.getId() + "&";
         baseJson.name = categoryModel.getName();
         baseJson.id = this._getMapLayerId(categoryModel.getId());
+        if(categoryModel.isPublic()) {
+            baseJson.permissions = {
+                "publish" : "publication_permission_ok" 
+            }
+        }
+        else {
+            baseJson.permissions = {
+                "publish" : "no_publication_permission"
+            }
+        }
         return baseJson;
     },
     /**
@@ -579,6 +589,7 @@ function(instance) {
         var me = this;
         var loc = me.instance.getLocalization();
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var service = this.instance.getService();
         var buttons = [];
         
         var cancelBtn = dialog.createCloseButton(loc.buttons.cancel);
@@ -586,32 +597,47 @@ function(instance) {
         
         var operationalBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         operationalBtn.addClass('primary');
+        operationalBtn.setHandler(function() {
+            service.publishCategory(category.getId(), makePublic, function(wasSuccess) {
+                me._handlePublishCategory(category, makePublic, wasSuccess);
+            });
+            dialog.close();
+        });
         buttons.push(operationalBtn);        
         if(makePublic) {
             operationalBtn.setTitle(loc.buttons.changeToPublic);
-            operationalBtn.setHandler(function() {
-                dialog.close();
-                me._handlePublishCategory(category, makePublic);
-            });
             dialog.show(loc.notification.categoryToPublic.title, loc.notification.categoryToPublic.message, buttons);
         }
         else {
             operationalBtn.setTitle(loc.buttons.changeToPrivate);
-            operationalBtn.setHandler(function() {
-                dialog.close();
-                me._handlePublishCategory(category, makePublic);
-            });
             dialog.show(loc.notification.categoryToPrivate.title, loc.notification.categoryToPrivate.message, buttons);
         }
     },
     
-    _handlePublishCategory : function(category, makePublic) {
-        var service = this.instance.getService();
+    _handlePublishCategory : function(category, makePublic, wasSuccess) {
+        if(!wasSuccess) {
+            alert('operation failed - ajax call reported error');
+            return;
+        }
+        var sandbox = this.instance.sandbox;
+        // check map layers for categorychanges
+        var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        //var mapLayers = mapLayerService.getAllLayersByMetaType(this.instance.idPrefix);
+        var mapLayer = mapLayerService.findMapLayer(this._getMapLayerId(category.getId()));
+        if(!mapLayer) {
+            // maplayer not found, this should not be possible
+            alert('operation failed - failed to find corresponding layer');
+            return;
+        }
+        // TODO: check that setting the permission is enough or
+        // do we need to send an event to make bundles see the updated permissions 
         if(makePublic) {
-            alert('TODO: publish');
+            mapLayer.addPermission("publish", "publication_permission_ok");
+            alert('TODO: published');
         }
         else {
-            alert('TODO: unpublish');
+            mapLayer.addPermission("publish", "no_publication_permission");
+            alert('TODO: unpublished');
         }
    }
 }, {

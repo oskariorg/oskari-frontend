@@ -150,7 +150,7 @@ function(instance, title) {
         //baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + categoryModel.getId() + "&";
         baseJson.name = jsonResponse.name;
         baseJson.id = 'myplaces_' + jsonResponse.id;
-        // TODO: check this here or where?
+
         if(usersOwnLayer) {
             baseJson.permissions = {
                 "publish" : "publication_permission_ok" 

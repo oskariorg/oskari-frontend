@@ -605,10 +605,6 @@ function(mapLayerUrl, sandbox) {
 			var foundLayer = this.findMapLayer(id);
             throw "Trying to add map layer with id '" + id + " (" + name + ")' but that id is already reserved for '" + foundLayer.getName() + "'";
 		}
-        /*
-        if(foundLayer != null) {
-            throw "Trying to add map layer with id '" + id + " (" + name + ")' but that id is already reserved for '" + foundLayer.getName() + "'";
-        }*/
     },
     /**
      * @method findMapLayer
@@ -637,11 +633,9 @@ function(mapLayerUrl, sandbox) {
             var layer = layerList[i];
             /* recurse to sublayers */
             var subLayers = layer.getSubLayers();
-            for(var j = 0; j < subLayers.length; j++) {
-                var subLayer = this.findMapLayer(id, subLayers);
-                if(subLayer != null) {
-                    return subLayer;
-                }
+            var subLayer = this.findMapLayer(id, subLayers);
+            if(subLayer != null) {
+                return subLayer;
             }
         }
 
