@@ -9,6 +9,10 @@ Oskari.registerLocalization({
       "myplaces": {
         "title": "Kohteet",
         "nocategories": "Et ole vielä tallentanut kohteita.",
+        "publishCategory": {
+            "publishTooltip": "Taso on yksityinen. Muuta taso julkiseksi klikkaamalla.",
+            "unpublishTooltip": "Taso on julkinen. Muuta taso yksityiseksi klikkaamalla."
+        },
         "editCategory": "Muokkaa tasoa",
         "deleteCategory": "Poista taso",
         "edit": "Muokkaa",

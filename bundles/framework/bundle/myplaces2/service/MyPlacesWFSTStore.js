@@ -120,6 +120,10 @@ function(url, uuid) {
             category.setDotColor(this._formatColorFromServer(featAtts['dot_color']));
             category.setDotSize(featAtts['dot_size']);
             category.setUUID(uuid);
+            if(featAtts['publisher_name']) {
+                category.setPublic(true);
+            }
+             
 
             list.push(category);
         }

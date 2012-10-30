@@ -349,9 +349,10 @@ function(url, uuid, sandbox, defaultName) {
     },
 
     /**
-     * Tries to find category with given coordinates
+     * Tries to find a place with given coordinates
      *
-     * @param id
+     * @param {OpenLayers.LonLat} lonlat
+     * @param {Number} zoom zoomlevel
      */
     findMyPlaceByLonLat : function(lonlat, zoom) {
         var places = [];
@@ -384,9 +385,10 @@ function(url, uuid, sandbox, defaultName) {
         return places;
     },
     /**
-     * Tries to find category with given id
-     *
-     * @param id
+     * @method findMyPlace
+     * Tries to find place with given id
+     * @param {Number} id
+     * @return {Oskari.mapframework.bundle.myplaces2.model.MyPlace}
      */
     findMyPlace : function(id) {
         var index = this.findBy(this._placesList, 'id', id);
@@ -396,9 +398,10 @@ function(url, uuid, sandbox, defaultName) {
         return null;
     },
     /**
+     * @method findCategory
      * Tries to find category with given id
-     *
-     * @param id
+     * @param {Number} id
+     * @return {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory}
      */
     findCategory : function(id) {
         var index = this.findBy(this._categoryList, 'id', id);
@@ -456,8 +459,70 @@ function(url, uuid, sandbox, defaultName) {
         this.wfstStore.commitMyPlaces([myplaceModel], callBackWrapper);
     },
 
+    /**
+     * @method getAllMyPlaces
+     * Returns all users my places
+     * @return {Oskari.mapframework.bundle.myplaces2.model.MyPlace[]}
+     */
     getAllMyPlaces : function() {
         return this._placesList;
+    },
+
+  
+    /**
+     * @method publishCategory
+     * Method marks the category published or unpublished
+     * @param {Number} categoryId
+     * @param {Boolean} makePublic true to publish, false to unpublish
+     * @param {Function} callback function receives a boolean parameter with true on successful operation
+     */
+    publishCategory : function(categoryId, makePublic, callback) {
+        var category = this.findCategory(categoryId);
+        if(!category) {
+            // category not found
+            callback(false);
+        }
+        var me = this;
+        var ajaxUrl = this._sandbox.getAjaxUrl();
+        jQuery.ajax({
+            type : "GET",
+            dataType : 'json',
+            beforeSend : function(x) {
+                if (x && x.overrideMimeType) {
+                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                }
+            },
+            data : {
+                id : category.getId(),
+                makePublic : makePublic
+            },
+            url : ajaxUrl + 'action_route=PublishMyPlaceLayer',
+            success : function(pResp) {
+                me._handlePublishCategoryResponse(pResp, category, callback);
+            },
+            error : function(jqXHR, textStatus) {
+                if (jqXHR.status != 0) {
+                    callback(false);
+                }
+            }
+        });
+    },
+
+    /**
+     * @method _handlePublishCategoryResponse
+     * Internal method to handle server response for category publish/unpublish
+     * @private
+     */
+    _handlePublishCategoryResponse : function(response, category,callback) {
+        // TODO: check something from response
+        if(response) {
+            category.setPublic(true);
+            this._notifyDataChanged();
+            callback(true);
+        }
+        else {
+            callback(false);
+        }
     }
 }, {
     'protocol' : ['Oskari.mapframework.service.Service']

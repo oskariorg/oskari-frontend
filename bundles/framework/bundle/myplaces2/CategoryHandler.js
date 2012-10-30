@@ -205,6 +205,16 @@ function(instance) {
         //baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + categoryModel.getId() + "&";
         baseJson.name = categoryModel.getName();
         baseJson.id = this._getMapLayerId(categoryModel.getId());
+        if(categoryModel.isPublic()) {
+            baseJson.permissions = {
+                "publish" : "publication_permission_ok" 
+            }
+        }
+        else {
+            baseJson.permissions = {
+                "publish" : "no_publication_permission"
+            }
+        }
         return baseJson;
     },
     /**
@@ -577,41 +587,57 @@ function(instance) {
     },
     confirmPublishCategory : function(category, makePublic) {
         var me = this;
+        var loc = me.instance.getLocalization();
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var service = this.instance.getService();
         var buttons = [];
         
-        var cancelBtn = dialog.createCloseButton('Cancel');
+        var cancelBtn = dialog.createCloseButton(loc.buttons.cancel);
         buttons.push(cancelBtn);
         
         var operationalBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         operationalBtn.addClass('primary');
+        operationalBtn.setHandler(function() {
+            service.publishCategory(category.getId(), makePublic, function(wasSuccess) {
+                me._handlePublishCategory(category, makePublic, wasSuccess);
+            });
+            dialog.close();
+        });
         buttons.push(operationalBtn);        
         if(makePublic) {
-            operationalBtn.setTitle('Muuta julkiseksi');
-            operationalBtn.setHandler(function() {
-                dialog.close();
-                me._handlePublishCategory(category, makePublic);
-            });    
-            dialog.show('Muuta karttataso julkiseksi', 'Olet muuttamassa karttatasoa "Omat paikat" julkiseksi. ' + 
-                'Voit jakaa julkisen karttatason verkossa tai julkaista sen karttana toiseen verkkopalveluun.', buttons);
+            operationalBtn.setTitle(loc.buttons.changeToPublic);
+            dialog.show(loc.notification.categoryToPublic.title, loc.notification.categoryToPublic.message, buttons);
         }
         else {
-            operationalBtn.setTitle('Muuta yksityiseksi');
-            operationalBtn.setHandler(function() {
-                dialog.close();
-                me._handlePublishCategory(category, makePublic);
-            });    
-            dialog.show('Muuta karttataso yksityiseksi', 'Olet muuttamassa karttatasoa "Omat paikat" yksityiseksi. ' + 
-                'Tämän jälkeen et voi jakaa tai julkaista sitä karttana.', buttons);
+            operationalBtn.setTitle(loc.buttons.changeToPrivate);
+            dialog.show(loc.notification.categoryToPrivate.title, loc.notification.categoryToPrivate.message, buttons);
         }
     },
     
-    _handlePublishCategory : function(category, makePublic) {
+    _handlePublishCategory : function(category, makePublic, wasSuccess) {
+        if(!wasSuccess) {
+            alert('operation failed - ajax call reported error');
+            return;
+        }
+        var sandbox = this.instance.sandbox;
+        // check map layers for categorychanges
+        var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        //var mapLayers = mapLayerService.getAllLayersByMetaType(this.instance.idPrefix);
+        var mapLayer = mapLayerService.findMapLayer(this._getMapLayerId(category.getId()));
+        if(!mapLayer) {
+            // maplayer not found, this should not be possible
+            alert('operation failed - failed to find corresponding layer');
+            return;
+        }
+        // TODO: check that setting the permission is enough or
+        // do we need to send an event to make bundles see the updated permissions 
         if(makePublic) {
-            alert('TODO: publish');
+            mapLayer.addPermission("publish", "publication_permission_ok");
+            alert('TODO: published');
         }
         else {
-            alert('TODO: unpublish');
+            mapLayer.addPermission("publish", "no_publication_permission");
+            alert('TODO: unpublished');
         }
    }
 }, {

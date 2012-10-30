@@ -82,7 +82,30 @@ function(instance, title) {
         return field;
     },
     tabSelected : function() {
-        alert('TODO: json query for users');
+        // update data if now done so yet
+        if(this.layerGroups.length == 0) {
+            var me = this;
+            var ajaxUrl = this.instance.sandbox.getAjaxUrl();
+            jQuery.ajax({
+                type : "GET",
+                dataType: 'json',
+                beforeSend: function(x) {
+                  if(x && x.overrideMimeType) {
+                   x.overrideMimeType("application/j-son;charset=UTF-8");
+                  }
+                 },
+                url : ajaxUrl + 'action_route=GetPublishedMyPlaceLayers',
+                success : function(pResp) {
+                    me._populateLayerGroups(pResp);
+                    me.showLayerGroups(me.layerGroups);
+                },
+                error : function(jqXHR, textStatus) {
+                    if(jqXHR.status != 0) {
+                        alert('error while getting published layers');
+                    }
+                }
+            });
+        }
         //this._getLayerGroups(jsonResponse)
     },
     tabUnselected : function() {
@@ -92,12 +115,12 @@ function(instance, title) {
      * @method _getLayerGroups
      * @private
      */
-    _getLayerGroups : function(jsonResponse) {
+    _populateLayerGroups : function(jsonResponse) {
         // FIXME: work in progress, no actual data yet so not tested
         var me = this;
         var sandbox = this.instance.getSandbox();
+        this.layerGroups = [];
 
-        var groupList = [];
         var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
         var userUuid = sandbox.getUser().getUuid();
         var group = null;
@@ -105,16 +128,15 @@ function(instance, title) {
             var groupJSON = jsonResponse[n];
             if (!group || group.getTitle() != groupJSON.name) {
                 group = Oskari.clazz.create("Oskari.mapframework.bundle.layerselector2.model.LayerGroup", groupJSON.name);
-                groupList.push(group);
+                this.layerGroups.push(group);
             }
-            for (var i = 0; i < jsonResponse.layers.length; ++i) {
-                var layerJson = jsonResponse.layers[i];
-                var layer = this._getPublishedLayer(layerJson, mapLayerService, userUuid == groupJSON.uuid);
+            for (var i = 0; i < groupJSON.layers.length; ++i) {
+                var layerJson = groupJSON.layers[i];
+                var layer = this._getPublishedLayer(layerJson, mapLayerService, userUuid == groupJSON.id);
                 layer.setDescription(groupJSON.name); // user name as "subtitle"
                 group.addLayer(layer);
             }
         }
-        return groupList;
     },
     /**
      * @method _getPublishedLayer
@@ -122,17 +144,14 @@ function(instance, title) {
      * @private 
      * @return maplayer json for the category
      */
-    _getPublishedLayer : function(jsonResponse, mapLayerService, hasPermission) {
+    _getPublishedLayer : function(jsonResponse, mapLayerService, usersOwnLayer) {
         var baseJson = this._getMapLayerJsonBase();
         baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + jsonResponse.id + "&"; // this.instance.conf.wmsUrl
         //baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + categoryModel.getId() + "&";
         baseJson.name = jsonResponse.name;
-        baseJson.id = 'myplaces_' + '<id>';
-        var layer = mapLayerService.createMapLayer(baseJson);
-        mapLayerService.addLayer(layer);
-        
-        // TODO: check this here or where?
-        if(hasPermission) {
+        baseJson.id = 'myplaces_' + jsonResponse.id;
+
+        if(usersOwnLayer) {
             baseJson.permissions = {
                 "publish" : "publication_permission_ok" 
             }
@@ -141,6 +160,11 @@ function(instance, title) {
             baseJson.permissions = {
                 "publish" : "no_publication_permission"
             }
+        }
+        
+        var layer = mapLayerService.createMapLayer(baseJson);
+        if(!usersOwnLayer) {
+            mapLayerService.addLayer(layer);
         }
         return layer;
     },
