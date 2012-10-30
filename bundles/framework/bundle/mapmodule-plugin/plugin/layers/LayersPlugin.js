@@ -299,18 +299,24 @@ function() {
      */
     isInGeometry : function(layer) {
         var geometries = layer.getGeometry();
-        var bounds = null;
+        if( !geometries ) {
+        	return true;
+        }
+        if( geometries.length == 0 ) {
+        	return true;
+        }
+
+        var viewBounds = this.getMap().getExtent();
         for(var i = 0; i < geometries.length; ++i) {
-            if(!bounds) {
-                bounds = geometries[i].getBounds();
-            } else {
-                bounds.extend(geometries[i].getBounds());
+            var bounds = geometries[i].getBounds();
+            if( !bounds ) {
+            	continue;
+            }
+            if( bounds.intersectsBounds(viewBounds) ) {
+            	return true;
             }
         }
-        if(bounds) {
-            return this.getMap().getExtent().intersectsBounds(bounds);
-        }
-        return true;
+        return false;
     },
     /**
      * @method notifyLayerVisibilityChanged

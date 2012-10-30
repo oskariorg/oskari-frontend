@@ -303,10 +303,10 @@ function(instance, title) {
             layerCont.setSelected(isSelected);
         }
     },
-    setLayerName : function(layerId, newName) {
+    updateLayerContent : function(layerId, layer) {
         var layerCont = this.layerContainers[layerId];
         if(layerCont) {
-            layerCont.setLayerName(newName);
+            layerCont.updateLayerContent(layer);
         }
     }
 });

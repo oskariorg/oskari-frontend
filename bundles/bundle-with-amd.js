@@ -24,7 +24,7 @@ Oskari = (function() {
 		}
 
 		if(window.console && window.console.debug)
-			window.console.debug(what);
+			window.console.debug(msg);
 	}
 	/**
 	 * @class Oskari.bundle_locale

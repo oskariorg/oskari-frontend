@@ -256,7 +256,7 @@ function(instance) {
         var me = this;
         for (var i = 0; i < this.layerTabs.length; ++i) {
             var tab = this.layerTabs[i];
-            tab.setLayerName(layer.getId(), layer.getName());
+            tab.updateLayerContent(layer.getId(), layer);
         }
     },
 
