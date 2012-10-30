@@ -577,36 +577,36 @@ function(instance) {
     },
     confirmPublishCategory : function(category, makePublic) {
         var me = this;
+        var loc = me.instance.getLocalization();
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         var buttons = [];
         
-        var cancelBtn = dialog.createCloseButton('Cancel');
+        var cancelBtn = dialog.createCloseButton(loc.buttons.cancel);
         buttons.push(cancelBtn);
         
         var operationalBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         operationalBtn.addClass('primary');
         buttons.push(operationalBtn);        
         if(makePublic) {
-            operationalBtn.setTitle('Muuta julkiseksi');
+            operationalBtn.setTitle(loc.buttons.changeToPublic);
             operationalBtn.setHandler(function() {
                 dialog.close();
                 me._handlePublishCategory(category, makePublic);
-            });    
-            dialog.show('Muuta karttataso julkiseksi', 'Olet muuttamassa karttatasoa "Omat paikat" julkiseksi. ' + 
-                'Voit jakaa julkisen karttatason verkossa tai julkaista sen karttana toiseen verkkopalveluun.', buttons);
+            });
+            dialog.show(loc.notification.categoryToPublic.title, loc.notification.categoryToPublic.message, buttons);
         }
         else {
-            operationalBtn.setTitle('Muuta yksityiseksi');
+            operationalBtn.setTitle(loc.buttons.changeToPrivate);
             operationalBtn.setHandler(function() {
                 dialog.close();
                 me._handlePublishCategory(category, makePublic);
-            });    
-            dialog.show('Muuta karttataso yksityiseksi', 'Olet muuttamassa karttatasoa "Omat paikat" yksityiseksi. ' + 
-                'Tämän jälkeen et voi jakaa tai julkaista sitä karttana.', buttons);
+            });
+            dialog.show(loc.notification.categoryToPrivate.title, loc.notification.categoryToPrivate.message, buttons);
         }
     },
     
     _handlePublishCategory : function(category, makePublic) {
+        var service = this.instance.getService();
         if(makePublic) {
             alert('TODO: publish');
         }

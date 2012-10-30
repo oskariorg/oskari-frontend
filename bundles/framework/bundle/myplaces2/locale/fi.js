@@ -39,7 +39,9 @@ Oskari.registerLocalization({
       "save": "Tallenna",
       "movePlaces": "Siirrä kohteet ja poista",
       "deleteCategory": "Poista",
-      "deleteCategoryAndPlaces": "Poista kohteineen"
+      "deleteCategoryAndPlaces": "Poista kohteineen",
+      "changeToPublic": "Muuta julkiseksi",
+      "changeToPrivate": "Muuta yksityiseksi"
     },
     "placeform": {
       "title": "Kohteen tiedot",
@@ -99,6 +101,14 @@ Oskari.registerLocalization({
         "deleteConfirmMove": "Karttataso: {0} sisältää kohteita {1} kpl. Haluatko poistaa tason ja siirtää sen kohteet oletuskarttatasolle {2}?",
         "deleteConfirm": "Haluatko poistaa karttatason {0}?",
         "deleted": "Karttataso poistettu."
+      },
+      "categoryToPublic": {
+        "title": "Muuta karttataso julkiseksi",
+        "message": "Olet muuttamassa karttatasoa \"Omat paikat\" julkiseksi. Voit jakaa julkisen karttatason verkossa tai julkaista sen karttana toiseen verkkopalveluun."
+      },
+      "categoryToPrivate": {
+        "title": "Muuta karttataso yksityiseksi",
+        "message": "Olet muuttamassa karttatasoa \"Omat paikat\" yksityiseksi. Tämän jälkeen et voi jakaa tai julkaista sitä karttana."
       },
       "error": {
         "addCategory": "Tason tallennus epäonnistui. Kohdetta ei ole tallennettu.",

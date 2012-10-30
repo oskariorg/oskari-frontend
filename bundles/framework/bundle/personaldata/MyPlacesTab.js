@@ -102,12 +102,13 @@ function(instance, localization) {
                 var publishLink = this.linkTemplate.clone();
                 var isPublic = categories[i].isPublic();
                 if(isPublic) {
+                    
                     publishLink.append('TBD: lukko kuva');
-                    publishLink.attr('title', 'TBD: Taso on yksityinen. Muuta taso julkiseksi klikkaamalla.');
+                    publishLink.attr('title', this.loc.publishCategory.publishTooltip);
                 }
                 else {
                     publishLink.append('TBD: lukko auki kuva');
-                    publishLink.attr('title', 'TBD: Taso on julkinen. Muuta taso yksityiseksi klikkaamalla.');
+                    publishLink.attr('title', this.loc.publishCategory.unpublishTooltip);
                 }
                 publishLink.bind('click', publishLinkClosure(id, !isPublic));
                 panel.getContainer().append(publishLink);
