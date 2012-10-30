@@ -20,11 +20,11 @@ Oskari.registerLocalization({
 		},
 		"backendStatus" : {
 			"DOWN" : {
-				"tooltip" : "??? Karttataso ei ole saatavilla tällä hetkellä.",
+				"tooltip" : "The map layer is currently unavailable.",
 				"iconClass" : "backendstatus-down"
 			},
 			"MAINTENANCE" : {
-				"tooltip" : "??? Karttatason saatavuudessa on tiedossa käyttökatkoja lähipäivinä.",
+				"tooltip" : "The map layer may be periodically unavailable during the next few days.",
 				"iconClass" : "backendstatus-maintenance"
 			}
 		}
