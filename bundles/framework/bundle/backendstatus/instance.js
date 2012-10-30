@@ -247,8 +247,8 @@ function() {
 			},
 			type : 'POST',
 			dataType : 'json',
-			/*url : ajaxUrl + 'action_route=GetBackendStatus'*/
-			url : 'GetBackendStatus.json'
+			url : ajaxUrl + 'action_route=GetBackendStatus'
+			/*url : 'GetBackendStatus.json'*/
 		});
 	},
 	_processResponse : function(resp) {
