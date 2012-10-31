@@ -604,13 +604,16 @@ function(instance) {
             dialog.close();
         });
         buttons.push(operationalBtn);        
+        var locParams = [category.getName()];
         if(makePublic) {
             operationalBtn.setTitle(loc.buttons.changeToPublic);
-            dialog.show(loc.notification.categoryToPublic.title, loc.notification.categoryToPublic.message, buttons);
+            var msg = this._formatMessage(loc.notification.categoryToPublic.message, locParams);
+            dialog.show(loc.notification.categoryToPublic.title, msg, buttons);
         }
         else {
             operationalBtn.setTitle(loc.buttons.changeToPrivate);
-            dialog.show(loc.notification.categoryToPrivate.title, loc.notification.categoryToPrivate.message, buttons);
+            var msg = this._formatMessage(loc.notification.categoryToPrivate.message, locParams);
+            dialog.show(loc.notification.categoryToPrivate.title, msg, buttons);
         }
     },
     

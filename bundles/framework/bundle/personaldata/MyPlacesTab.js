@@ -90,16 +90,19 @@ function(instance, localization) {
                 panel.grid.renderTo(panel.getContainer());
                 
                 var editLink = this.linkTemplate.clone();
+                editLink.addClass('categoryOp');
                 editLink.append(this.loc.editCategory);
                 editLink.bind('click', editLinkClosure(id));
                 panel.getContainer().append(editLink);
                 
                 var deleteLink = this.linkTemplate.clone();
+                deleteLink.addClass('categoryOp');
                 deleteLink.append(this.loc.deleteCategory);
                 deleteLink.bind('click', deletelinkClosure(id));
                 panel.getContainer().append(deleteLink);
                 
                 var publishLink = this.linkTemplate.clone();
+                publishLink.addClass('categoryOp');
                 var isPublic = categories[i].isPublic();
                 if(isPublic) {
                     

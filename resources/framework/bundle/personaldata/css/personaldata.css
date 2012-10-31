@@ -30,3 +30,7 @@ div.personaldata td div.icon {
     display: inline-block;
     vertical-align: top;
 }
+
+div.personaldata a.categoryOp {
+    margin : 5px;
+}
