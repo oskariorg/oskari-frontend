@@ -164,7 +164,15 @@ function(instance, title) {
         
         var layer = mapLayerService.createMapLayer(baseJson);
         if(!usersOwnLayer) {
-            mapLayerService.addLayer(layer);
+            // catch exception if the layer is already added to maplayer service
+            // reloading published layers will crash otherwise
+            // myplaces bundle will add users own layers so we dont even have to try it
+            try {
+                mapLayerService.addLayer(layer);
+            }
+            catch(ignored) {
+                // layer already added, ignore
+            }
         }
         return layer;
     },

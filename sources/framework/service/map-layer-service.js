@@ -233,7 +233,6 @@ function(mapLayerUrl, sandbox) {
      * 	 Returns an array of layers added to the service for example via #addLayer()
      */
     getAllLayers : function() {
-        var lang = Oskari.$().sandbox.getLanguage();
         return this._loadedLayersList;
     },
     /**
