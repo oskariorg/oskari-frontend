@@ -248,35 +248,7 @@ function(instance) {
         slider.insertTo(lS);
         slider.assignTo(oS);
         
-        /* the kind of code below shall never again be written */
-       
-        /*if (jQuery('#' + lS).length > 0 && jQuery('#' + oS).length > 0) {*/
-       	/*console.log("IS DIV "+((jQuery('#' + lS).length > 0 && jQuery('#' + oS).length > 0) ));
-       	console.log("INSERTTO");
-           slider.insertTo(lS);
-            slider.assignTo(oS);
-            slider.setValue(opa);
-        } else {
-            // Terrible, terrible kludge to work around
-            // some rightjs issues
-            setTimeout(function() {
-                if (jQuery('#' + lS).length > 0 && jQuery('#' + oS).length > 0) {
-                    slider.insertTo(lS);
-                    slider.assignTo(oS);
-                    slider.setValue(opa);
-                } else {
-                    setTimeout(function() {
-                        if (jQuery('#' + lS).length > 0 && jQuery('#' + oS).length > 0) {
-                            slider.insertTo(lS);
-                            slider.assignTo(oS);
-                            slider.setValue(opa);
-                        }
-                    }, 500);
-                }
-            }, 100);
-        }*/
-        /*slider.setValue(opa);*/
-        return slider;//.hide();
+        return slider;
     },
     /**
      * @method _layerOrderChanged
@@ -599,26 +571,28 @@ function(instance) {
         }
 
         // publish permissions
+        this._updatePublishPermissionText(layer, tools);
+
+        return tools;
+    },
+    _updatePublishPermissionText : function(layer, footer) {
+        var sandbox = this.instance.getSandbox();
+        var loc = this.instance.getLocalization('layer');
+        
         var publishPermission = layer.getPermission('publish');
 
         if (publishPermission == 'publication_permission_ok') {
             if (sandbox.getUser().isLoggedIn()) {
-                tools.find('div.layer-rights').html(loc.rights['can_be_published_map_user'].label);
-                tools.find('div.layer-rights').attr("title", loc.rights['can_be_published_map_user'].tooltip);
+                footer.find('div.layer-rights').html(loc.rights['can_be_published_map_user'].label);
+                footer.find('div.layer-rights').attr("title", loc.rights['can_be_published_map_user'].tooltip);
             } else {
-                tools.find('div.layer-rights').html(loc.rights['login-url']);
-                tools.find('div.layer-rights').attr("title", loc.rights['need-login']);
+                footer.find('div.layer-rights').html(loc.rights['login-url']);
+                footer.find('div.layer-rights').attr("title", loc.rights['need-login']);
             }
         } else {
-            //if(publishPermission == 'no_publication_permission') {
-            tools.find('div.layer-rights').html(loc.rights['no_publication_permission'].label);
-            tools.find('div.layer-rights').attr("title", loc.rights['no_publication_permission'].tooltip);
-            //}
+            footer.find('div.layer-rights').html(loc.rights['no_publication_permission'].label);
+            footer.find('div.layer-rights').attr("title", loc.rights['no_publication_permission'].tooltip);
         }
-
-       
-
-        return tools;
     },
     /**
      * @method handleLayerSelectionChanged
@@ -688,6 +662,9 @@ function(instance) {
         var me = this;
         var layerDiv = jQuery(this.container).find('li[layer_id=' + layer.getId() + ']');
         jQuery(layerDiv).find('.layer-title h4').html(layer.getName());
+        
+        var footer = layerDiv.find('div.layer-tools');
+        this._updatePublishPermissionText(layer, footer);
     }
 }, {
     /**

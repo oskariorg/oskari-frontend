@@ -498,7 +498,14 @@ function(url, uuid, sandbox, defaultName) {
             },
             url : ajaxUrl + 'action_route=PublishMyPlaceLayer',
             success : function(pResp) {
-                me._handlePublishCategoryResponse(pResp, category, callback);
+                if(pResp) {
+                    category.setPublic(makePublic);
+                    callback(true);
+                    me._notifyDataChanged();
+                }
+                else {
+                    callback(false);
+                }
             },
             error : function(jqXHR, textStatus) {
                 if (jqXHR.status != 0) {
@@ -506,23 +513,6 @@ function(url, uuid, sandbox, defaultName) {
                 }
             }
         });
-    },
-
-    /**
-     * @method _handlePublishCategoryResponse
-     * Internal method to handle server response for category publish/unpublish
-     * @private
-     */
-    _handlePublishCategoryResponse : function(response, category,callback) {
-        // TODO: check something from response
-        if(response) {
-            category.setPublic(true);
-            this._notifyDataChanged();
-            callback(true);
-        }
-        else {
-            callback(false);
-        }
     }
 }, {
     'protocol' : ['Oskari.mapframework.service.Service']

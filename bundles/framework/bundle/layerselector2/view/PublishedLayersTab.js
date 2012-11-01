@@ -76,10 +76,13 @@ function(instance, title) {
         field.setPlaceholder(this.instance.getLocalization('filter').text);
         field.addClearButton();
         field.bindChange(function(event) {
-            alert('go ajax');
+            alert('Search TBD');
         }, false);
         this.filterField = field;
         return field;
+    },
+    tabSelected : function() {
+        this.layerGroups
     },
     tabSelected : function() {
         // update data if now done so yet
@@ -116,7 +119,6 @@ function(instance, title) {
      * @private
      */
     _populateLayerGroups : function(jsonResponse) {
-        // FIXME: work in progress, no actual data yet so not tested
         var me = this;
         var sandbox = this.instance.getSandbox();
         this.layerGroups = [];
@@ -312,9 +314,7 @@ function(instance, title) {
         }
     },
     updateLayerContent : function(layerId, layer) {
-        var layerCont = this.layerContainers[layerId];
-        if(layerCont) {
-            layerCont.updateLayerContent(layer);
-        }
+        // empty the listing to trigger refresh when this tab is selected again
+        this.showLayerGroups([]);
     }
 });
