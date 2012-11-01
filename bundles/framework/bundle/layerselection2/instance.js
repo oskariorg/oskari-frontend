@@ -197,9 +197,9 @@ function() {
             var doOpen = event.getViewState() != "close";
             
             /* let's not redo everything we've already done */
-            /*if (doOpen) {
-            	this.plugins['Oskari.userinterface.Flyout'].createUi();
-            }*/
+            if (doOpen) {
+            	this.plugins['Oskari.userinterface.Flyout'].refresh();
+            }
         }
 	},
 

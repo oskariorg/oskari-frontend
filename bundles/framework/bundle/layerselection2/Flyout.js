@@ -665,6 +665,23 @@ function(instance) {
         
         var footer = layerDiv.find('div.layer-tools');
         this._updatePublishPermissionText(layer, footer);
+    },
+    
+    /** 
+     * @method refresh 
+     * utitity to temporarily support rightjs sliders (again)
+     */
+    refresh: function() {
+    	var me = this;
+    	var sandbox = me.instance.getSandbox();
+        var layers = sandbox.findAllSelectedMapLayers();
+        
+        for (var n = layers.length - 1; n >= 0; --n) {
+            var layer = layers[n];
+            
+           	this.handleLayerOpacityChanged(layer);
+           
+        }
     }
 }, {
     /**
