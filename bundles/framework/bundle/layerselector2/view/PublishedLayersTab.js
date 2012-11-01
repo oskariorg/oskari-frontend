@@ -77,7 +77,7 @@ function(instance, title) {
         field.addClearButton();
         field.bindChange(function(event) {
             alert('go ajax');
-        }, true);
+        }, false);
         this.filterField = field;
         return field;
     },

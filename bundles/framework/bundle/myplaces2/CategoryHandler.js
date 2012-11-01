@@ -636,11 +636,9 @@ function(instance) {
         // do we need to send an event to make bundles see the updated permissions 
         if(makePublic) {
             mapLayer.addPermission("publish", "publication_permission_ok");
-            alert('TODO: published');
         }
         else {
             mapLayer.addPermission("publish", "no_publication_permission");
-            alert('TODO: unpublished');
         }
    }
 }, {
