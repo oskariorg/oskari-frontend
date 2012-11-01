@@ -181,21 +181,25 @@ function() {
             }
         },
         'AfterMapMoveEvent' : function() {
-            var me = this;
-            // throttle requests with small delay
-            if(this._previousTimer) {
-                clearTimeout(this._previousTimer);
-                this._previousTimer = null;
-            }
-            this._visibilityCheckOrder++;
-            this._previousTimer = setTimeout(function() {
-                me._checkLayersVisibility(me._visibilityCheckOrder);
-            }, this._visibilityPollingInterval);
+           this._scheduleVisiblityCheck();
         },
         'AfterMapLayerAddEvent' : function(event) {
             // parse geom if available
             this._parseGeometryForLayer(event.getMapLayer());
+            this._scheduleVisiblityCheck();
         }
+    },
+    
+    _scheduleVisiblityCheck : function() {
+    	 var me = this;
+        if(this._previousTimer) {
+            clearTimeout(this._previousTimer);
+        	this._previousTimer = null;
+       	}
+		this._visibilityCheckOrder++;
+        this._previousTimer = setTimeout(function() {
+        	me._checkLayersVisibility(me._visibilityCheckOrder);
+        }, this._visibilityPollingInterval);
     },
 
     /**
