@@ -112,7 +112,7 @@ function(instance) {
         for(var i = 0; i < this.layerTabs.length; ++i) {
             var tab = this.layerTabs[i];
             if(tab.getTitle() == state.tab) {
-                tabContainer.select(tab.getTabPanel());
+                this.tabContainer.select(tab.getTabPanel());
                 tab.setState(state);
             }
         }
