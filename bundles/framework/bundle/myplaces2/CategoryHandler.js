@@ -626,21 +626,23 @@ function(instance) {
         var sandbox = this.instance.sandbox;
         // check map layers for categorychanges
         var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-        //var mapLayers = mapLayerService.getAllLayersByMetaType(this.instance.idPrefix);
-        var mapLayer = mapLayerService.findMapLayer(this._getMapLayerId(category.getId()));
+        
+        var layerId = this._getMapLayerId(category.getId());
+        var mapLayer = mapLayerService.findMapLayer(layerId);
         if(!mapLayer) {
             // maplayer not found, this should not be possible
             alert('operation failed - failed to find corresponding layer');
             return;
-        }
-        // TODO: check that setting the permission is enough or
-        // do we need to send an event to make bundles see the updated permissions 
+        } 
         if(makePublic) {
             mapLayer.addPermission("publish", "publication_permission_ok");
         }
         else {
             mapLayer.addPermission("publish", "no_publication_permission");
         }
+        // send an event to notify other bundles of updated permissions
+        var event = sandbox.getEventBuilder('MapLayerEvent')(layerId, 'update');
+        sandbox.notifyAll(event);
    }
 }, {
     /**
