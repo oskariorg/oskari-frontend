@@ -346,15 +346,17 @@ function() {
         var map = this.getMap();
         if(scaleOk && geometryMatch && layer.isVisible()) {
             // show non-baselayer if in scale, in geometry and layer visible
-            var mapLayer = map.getLayersByName('layer_' + layer.getId());
-            if(mapLayer && mapLayer.setVisibility) {
+            var mapLayers = map.getLayersByName('layer_' + layer.getId());
+            if(mapLayers && mapLayers.length == 1 ) {
+            	var mapLayer = mapLayers[0];
                 mapLayer.setVisibility(true);
                 mapLayer.display(true);
             }
         } else {
             // otherwise hide non-baselayer
             var mapLayer = map.getLayersByName('layer_' + layer.getId());
-            if(mapLayer && mapLayer.setVisibility) {
+			if(mapLayers && mapLayers.length == 1 ) {
+            	var mapLayer = mapLayers[0];
                 mapLayer.setVisibility(false);
                 mapLayer.display(false);
             }
