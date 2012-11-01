@@ -22,6 +22,8 @@ function() {
     this.ui = null;
     this._requestHandlers = {};
     this.attachedToDefault = false;
+    this.helper = null;
+    this.isContentLoaded = false;
 }, {
     "templates" : {
         "userguide" : '<div class="oskari-userguide"><span class="oskari-prompt"></span><br /></div>'
@@ -111,34 +113,9 @@ function() {
         
         // get help content
         var helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', sandbox);
-        var helpContentPart = 'help.contentPart';
-        if (me.getLocalization('help') &&
-            me.getLocalization('help').contentPart) {
-            helpContentPart = me.getLocalization('help').contentPart;
-        }
-        var tagsTxt = 'help.tags';
-        if (this.getLocalization('help') &&
-            this.getLocalization('help').tags) {
-            tagsTxt = this.getLocalization('help').tags;
-        }
-
-        helper.getHelpArticle(
-            tagsTxt, 
-            function(isSuccess, pContent) {
-                var content = pContent;
-                var errorTxt = 'error.generic';
-                if (me.getLocalization('error') && 
-                    me.getLocalization('error').generic) {
-                    errorTxt = me.getLocalization('error').generic;
-                }
-                if(!isSuccess) {
-                    content = errorTxt;
-                }
-                else if(content[helpContentPart]){
-                    content = content[helpContentPart];
-                }
-                me.plugins['Oskari.userinterface.Flyout'].setContent(content);
-        });
+        this.helper = helper;
+        
+       
     },
     /**
      * @method init
@@ -178,20 +155,64 @@ function() {
          * @method userinterface.ExtensionUpdatedEvent
          */
         'userinterface.ExtensionUpdatedEvent' : function(event) {
-/*
+
             var me = this;
 
             if(event.getExtension().getName() != me.getName()) {
-                // wasn't me -> do nothing
+                // not me -> do nothing
                 return;
             }
 
-            var doOpen = event.getViewState() != "close";
+            var isOpen = event.getViewState() != "close";
 
-            me.toggleUserInterface(doOpen);
-*/
+            me.displayContent(isOpen);
+
         }
     },
+    
+    /**
+     * @method displayContent
+     */
+    "displayContent" : function (isOpen) {
+    	var me = this;
+    	if( !isOpen) {
+    		return;
+    	}
+    	if( me.isContentLoaded ) {
+    		return;
+    	}
+    	
+	    var helpContentPart = 'help.contentPart';
+        if (me.getLocalization('help') &&
+            me.getLocalization('help').contentPart) {
+            helpContentPart = me.getLocalization('help').contentPart;
+        }
+        var tagsTxt = 'help.tags';
+        if (this.getLocalization('help') &&
+            this.getLocalization('help').tags) {
+            tagsTxt = this.getLocalization('help').tags;
+        }
+
+        this.helper.getHelpArticle(
+            tagsTxt, 
+            function(isSuccess, pContent) {
+                var content = pContent;
+                var errorTxt = 'error.generic';
+                if (me.getLocalization('error') && 
+                    me.getLocalization('error').generic) {
+                    errorTxt = me.getLocalization('error').generic;
+                }
+                if(!isSuccess) {
+                    content = errorTxt;
+                }
+                else if(content[helpContentPart]){
+                    content = content[helpContentPart];
+                }
+                me.plugins['Oskari.userinterface.Flyout'].setContent(content);
+                me.isContentLoaded = true;
+        });
+    },
+    
 
     /**
      * @method toggleUserInterface
