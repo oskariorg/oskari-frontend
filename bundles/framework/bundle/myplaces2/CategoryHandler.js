@@ -605,6 +605,7 @@ function(instance) {
         });
         buttons.push(operationalBtn);        
         var locParams = [category.getName()];
+
         if(makePublic) {
             operationalBtn.setTitle(loc.buttons.changeToPublic);
             var msg = this._formatMessage(loc.notification.categoryToPublic.message, locParams);
