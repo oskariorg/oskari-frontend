@@ -319,10 +319,32 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 			"up" : this.wheelUp,
 			"down" : this.wheelDown
 		}, this.mouseWheelOptions);
+		
+	
+		
 		if(OpenLayers.Control.PinchZoom) {
+			var pinchZoomOptions = this.pinchZoomOptions||{};
+			
+			pinchZoomOptions.pinchDone = function(evt, start, last) {
+					this.applyTransform("");
+					var zoom = this.map.getZoomForResolution(this.map.getResolution() / last.scale, true);
+					if(zoom !== this.map.getZoom() || !this.currentCenter.equals(this.pinchOrigin)) {
+						var resolution = this.map.getResolutionForZoom(zoom);
+
+						var location = this.map.getLonLatFromPixel(this.pinchOrigin);
+						var zoomPixel = this.currentCenter;
+						var size = this.map.getSize();
+
+						location.lon += resolution * ((size.w / 2) - zoomPixel.x);
+						location.lat -= resolution * ((size.h / 2) - zoomPixel.y);
+
+						me.sendMapSetCenter(location, zoom);
+					}
+			};
+				
 			this.pinchZoom = new OpenLayers.Control.PinchZoom(OpenLayers.Util.extend({
 				map : this.map
-			}, this.pinchZoomOptions));
+			}, pinchZoomOptions));
 		}
 
 	},
