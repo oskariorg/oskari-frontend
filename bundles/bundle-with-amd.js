@@ -2228,7 +2228,7 @@ Oskari = (function() {
 				seq : seq,
 				bndl : null,
 				player : null,
-				startupInfo : startupInfo,
+				startupInfo : startupInfo
 			};
 
 			function schedule() {
