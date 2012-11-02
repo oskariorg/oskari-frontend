@@ -386,7 +386,7 @@ function() {
 
         for(var i = 0; i < layers.length; i++) {
 
-            if(layers[i].isBaseLayer()) {
+            if(layers[i].isBaseLayer()||layers[i].isGroupLayer()) {
                 for(var bl = 0; bl < layers[i].getSubLayers().length; bl++) {
                     var changeLayer = this._map.getLayersByName('basemap_' + layers[i]
                     .getSubLayers()[bl].getId());
