@@ -271,7 +271,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin', function() {
         if(!layer.isLayerOfType('WMS'))
             return;
 
-        if(layer.isBaseLayer()) {
+        if(layer.isBaseLayer()||layer.isGroupLayer()) {
             var baseLayerId = "";
             if(layer.getSubLayers().length > 0) {
                 for(var i = 0; i < layer.getSubLayers().length; i++) {
@@ -298,7 +298,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.WmsLayerPlugin', function() {
             return null;
         }
 
-        if(layer.isBaseLayer()) {
+        if(layer.isBaseLayer()||layer.isGroupLayer()) {
             var baseLayerId = "";
             if(layer.getSubLayers().length > 0) {
                 var olLayers = [];
