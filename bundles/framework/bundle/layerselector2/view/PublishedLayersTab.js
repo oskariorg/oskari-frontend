@@ -76,13 +76,10 @@ function(instance, title) {
         field.setPlaceholder(this.instance.getLocalization('filter').text);
         field.addClearButton();
         field.bindChange(function(event) {
-            alert('Search TBD');
+            me._search(field.getValue());
         }, false);
         this.filterField = field;
         return field;
-    },
-    tabSelected : function() {
-        this.layerGroups
     },
     tabSelected : function() {
         // update data if now done so yet
@@ -238,74 +235,54 @@ function(instance, title) {
             this.setLayerSelected(selectedLayers[i].getId(), true);
         }
                     
-        this.filterLayers(this.filterField.getValue());
+        //this.filterLayers(this.filterField.getValue());
     },
     /**
-     * @method _filterLayers
+     * @method _search
      * @private
      * @param {String} keyword
      *      keyword to filter layers by
      * Shows and hides layers by comparing the given keyword to the text in layer containers layer-keywords div.
      * Also checks if all layers in a group is hidden and hides the group as well.
      */
-    filterLayers : function(keyword) {
+   
+    _search : function(keyword) {
         
-        // show all groups
-        this.accordion.showPanels();
-        if(!keyword || keyword.length == 0) {
-            this._showAllLayers();
+        var me = this;
+
+        if (!keyword || keyword.length == 0) {
+            // show all
+            this.updateLayerContent();
             return;
         }
-        // filter
-        for(var i = 0; i < this.layerGroups.length; ++i) {
-            var group = this.layerGroups[i];
-            var layers = group.getLayers();
-            var visibleLayerCount = 0;
-            for(var n = 0; n < layers.length; ++n) {
-                var layer = layers[n];
-                var layerId = layer.getId();
-                var layerCont = this.layerContainers[layerId];
-                var bln = group.matchesKeyword(layerId, keyword);
-                layerCont.setVisible(bln);
-                if(bln) {
-                    visibleLayerCount++;
-                    if(visibleLayerCount%2 == 1) {
-                        layerCont.getContainer().addClass('odd');
-                    }
-                    else {
-                        layerCont.getContainer().removeClass('odd');
-                    }
-                    // open the panel if matching layers
-                    group.layerListPanel.open();
+        // empty previous
+        this.showLayerGroups([]);
+        
+        // search
+        jQuery.ajax({
+            type : "GET",
+            dataType : 'json',
+            beforeSend : function(x) {
+                if (x && x.overrideMimeType) {
+                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                }
+            },
+            data : {
+                searchKey : keyword
+            },
+            url : ajaxUrl + 'action_route=FreeFindFromMyPlaceLayers',
+            success : function(pResp) {
+                me._populateLayerGroups(pResp);
+                me.showLayerGroups(me.layerGroups);
+            },
+            error : function(jqXHR, textStatus) {
+                if (jqXHR.status != 0) {
+                    alert('error while getting published layers');
                 }
             }
-            group.layerListPanel.setVisible(visibleLayerCount > 0);
-            group.layerListPanel.setTitle(group.getTitle() + ' (' + visibleLayerCount +  '/' + layers.length + ')');
-        }
-        // TODO: check if there are no groups visible -> show 'no matches' notification?
-    },
-    
-    _showAllLayers : function() {
-        for(var i = 0; i < this.layerGroups.length; ++i) {
-            var group = this.layerGroups[i];
-            var layers = group.getLayers();
-            
-            for(var n = 0; n < layers.length; ++n) {
-                var layer = layers[n];
-                var layerId = layer.getId();
-                var layerCont = this.layerContainers[layerId];
-                layerCont.setVisible(true);
-                if(n%2 == 1) {
-                    layerCont.getContainer().addClass('odd');
-                }
-                else {
-                    layerCont.getContainer().removeClass('odd');
-                }
-            }
-            group.layerListPanel.setVisible(true);
-            group.layerListPanel.close();
-            group.layerListPanel.setTitle(group.getTitle() + ' (' + layers.length + ')');
-        }
+        });
+        // TODO: check if there are no groups visible -> show 'no matches'
+        // notification?
     },
     setLayerSelected : function(layerId, isSelected) {
         var layerCont = this.layerContainers[layerId];
@@ -316,5 +293,6 @@ function(instance, title) {
     updateLayerContent : function(layerId, layer) {
         // empty the listing to trigger refresh when this tab is selected again
         this.showLayerGroups([]);
+        this.tabSelected();
     }
 });
