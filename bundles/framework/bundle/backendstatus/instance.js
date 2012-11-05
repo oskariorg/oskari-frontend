@@ -19,10 +19,13 @@ function() {
 		jqhr : null,
 		timestamp : null
 	};
-	this.timeInterval = 10000;
+	this.timeInterval = this.ajaxSettings.defaultTimeThreshold;
 	this.backendStatus = {};
 	this.backendExtendedStatus = {};
 }, {
+	ajaxSettings: {
+		defaultTimeThreshold: 30000
+	},
 	/**
 	 * @static
 	 * @property __name
@@ -55,8 +58,8 @@ function() {
 		var ajaxUrl = this.getSandbox().getAjaxUrl();
 		var url = ajaxUrl + 'action_route=GetBackendStatus';
 		
-		//return url;
-		return 'GetBackendStatus.json';
+		return url;
+		/*return 'GetBackendStatus.json';*/
 	},
 	
 	/**
