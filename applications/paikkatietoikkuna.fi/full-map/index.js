@@ -448,6 +448,22 @@ Oskari.clazz.define(
                     },
                     instanceProps : {}
                 },{
+                    title : 'BackendStatus',
+                    fi : 'Taustajärjestelmien saatavuustiedot',
+                    sv : '???',
+                    en : 'Backend Status',
+                    bundlename : 'backendstatus',
+                    bundleinstancename : 'backendstatus',
+                    metadata : {
+                        "Import-Bundle" : {
+                            "backendstatus" : {
+                                bundlePath : '/Oskari/packages/framework/bundle/'
+                            }
+                        },
+                        "Require-Bundle-Instance" : []
+                    },
+                    instanceProps : {}
+                },{
                     title : 'PostProcessor',
                     fi : 'PostProcessor',
                     sv : 'PostProcessor',
