@@ -302,8 +302,8 @@ function() {
 				}
 			},
 			success : function(resp) {
-				me._processResponse(resp);
 				me._finishAjaxRequest();
+				me._processResponse(resp);
 			},
 			error : function() {
 				me._finishAjaxRequest();
