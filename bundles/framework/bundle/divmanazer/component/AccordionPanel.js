@@ -46,6 +46,10 @@ function() {
             this.html.hide();
         }
     },
+    isVisible : function() {
+        // checking since we dont assume param is boolean
+        return this.html.is(":visible");
+    },
     /**
      * @method isOpen
      * Returns true if panel is currently open

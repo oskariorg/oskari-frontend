@@ -84,6 +84,7 @@ function(instance, title) {
     tabSelected : function() {
         // update data if now done so yet
         if(this.layerGroups.length == 0) {
+            this.accordion.showMessage(this.instance.getLocalization('loading'));
             var me = this;
             var ajaxUrl = this.instance.sandbox.getAjaxUrl();
             jQuery.ajax({
@@ -101,7 +102,8 @@ function(instance, title) {
                 },
                 error : function(jqXHR, textStatus) {
                     if(jqXHR.status != 0) {
-                        alert('error while getting published layers');
+                        var Loc = me.instance.getLocalization('errors');
+                        me._showMessage(loc.title, location.generic);
                     }
                 }
             });
@@ -136,6 +138,25 @@ function(instance, title) {
                 group.addLayer(layer);
             }
         }
+    },
+    
+    /**
+     * @method _showMessage
+     * Shows user a message with ok button
+     * @private
+     * @param {String} title popup title
+     * @param {String} message popup message
+     */
+    _showMessage : function(title, message) {
+        var loc = this.instance.getLocalization();
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        okBtn.setTitle(loc.buttons.ok);
+        okBtn.addClass('primary');
+        okBtn.setHandler(function() {
+            dialog.close(true);
+        });
+        dialog.show(title, message, [okBtn]);
     },
     /**
      * @method _getPublishedLayer
@@ -230,12 +251,17 @@ function(instance, title) {
             this.accordion.addPanel(groupPanel);
         }
         
-        var selectedLayers = this.instance.sandbox.findAllSelectedMapLayers();
-        for(var i = 0; i < selectedLayers.length; ++i) {
-            this.setLayerSelected(selectedLayers[i].getId(), true);
+        if(this.layerGroups.length == 0) {
+            // empty result
+            var loc = this.instance.getLocalization('errors');
+            this.accordion.showMessage(loc.noResults);
         }
-                    
-        //this.filterLayers(this.filterField.getValue());
+        else {
+            var selectedLayers = this.instance.sandbox.findAllSelectedMapLayers();
+            for(var i = 0; i < selectedLayers.length; ++i) {
+                this.setLayerSelected(selectedLayers[i].getId(), true);
+            }   
+        }
     },
     /**
      * @method _search
@@ -257,6 +283,7 @@ function(instance, title) {
         }
         // empty previous
         this.showLayerGroups([]);
+        this.accordion.showMessage(this.instance.getLocalization('loading'));
         
         // search
         jQuery.ajax({
@@ -277,7 +304,8 @@ function(instance, title) {
             },
             error : function(jqXHR, textStatus) {
                 if (jqXHR.status != 0) {
-                    alert('error while getting published layers');
+                    var Loc = me.instance.getLocalization('errors');
+                    me._showMessage(loc.title, location.generic);
                 }
             }
         });
