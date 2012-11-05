@@ -39,7 +39,9 @@ Oskari.registerLocalization({
       "save": "Save",
       "movePlaces": "Move places and delete",
       "deleteCategory": "Delete",
-      "deleteCategoryAndPlaces": "Delete category and places"
+      "deleteCategoryAndPlaces": "Delete category and places",
+      "changeToPublic": "Change to public",
+      "changeToPrivate": "Change to private"
     },
     "placeform": {
       "title": "Place data",
@@ -99,6 +101,14 @@ Oskari.registerLocalization({
         "deleteConfirmMove": "Map layer {0} contains {1} objects. Do you want to delete the map layer and move the places on it to the default map layer {2} ?",
         "deleteConfirm": "Delete map layer {0}?",
         "deleted": "Map layer deleted"
+      },
+      "categoryToPublic": {
+        "title": "TBD: Change map layer to public",
+        "message": "TBD: Olet muuttamassa karttatasoa \"{0}\" julkiseksi. Voit jakaa julkisen karttatason verkossa tai julkaista sen karttana toiseen verkkopalveluun."
+      },
+      "categoryToPrivate": {
+        "title": "TBD: Change map layer to private",
+        "message": "TBD: Olet muuttamassa karttatasoa \"{0}\" yksityiseksi. Tämän jälkeen et voi jakaa tai julkaista sitä karttana."
       },
       "error": {
         "addCategory": "The map layer could not be saved. The place has not been saved.",

@@ -13,6 +13,10 @@ Oskari.registerLocalization({
 			"organization" : "Enligt dataproducent",
 			"published" : "Användare"
 		},
+        "published" : {
+            "organization" : "Publicerad kartlager",
+            "inspire" : "Publicerad kartlager"
+        },
 		"tooltip" : {
 			"type-base" : "Bakgrundskarta",
 			"type-wms" : "kartlager",

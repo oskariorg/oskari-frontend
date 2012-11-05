@@ -13,6 +13,10 @@ Oskari.registerLocalization({
 			"organization" : "By data providers",
 			"published" : "Users"
 		},
+        "published" : {
+            "organization" : "Published map layer",
+            "inspire" : "Published map layer"
+        },
 		"tooltip" : {
 			"type-base" : "Background map",
 			"type-wms" : "Map layer",
