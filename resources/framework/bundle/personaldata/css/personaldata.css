@@ -34,3 +34,7 @@ div.personaldata td div.icon {
 div.personaldata a.categoryOp {
     margin : 5px;
 }
+
+div.personaldata a.categoryOp div.icon {
+  display: inline-block;
+}

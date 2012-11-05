@@ -5,8 +5,12 @@ Oskari.registerLocalization({
 		"title" : "Karttatasot",
 		"desc" : "",
 		"errors" : {
-			"loadFailed" : "Karttatasojen latauksessa tapahtui virhe. Lataa sivu selaimeesi uudelleen ja valitse karttatasot."
+            "title": "Virhe!",
+            "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin.",
+			"loadFailed" : "Karttatasojen latauksessa tapahtui virhe. Lataa sivu selaimeesi uudelleen ja valitse karttatasot.",
+			"noResults": "Haulla ei löytynyt yhtään tulosta."
 		},
+        "loading" : "Ladataan...",
 		"filter" : {
 			"text" : "Hae karttatasoja",
 			"inspire" : "Aiheittain",

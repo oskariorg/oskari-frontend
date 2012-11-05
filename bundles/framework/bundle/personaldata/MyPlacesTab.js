@@ -104,14 +104,18 @@ function(instance, localization) {
                 var publishLink = this.linkTemplate.clone();
                 publishLink.addClass('categoryOp');
                 var isPublic = categories[i].isPublic();
+                var publishIcon = this.iconTemplate.clone();
+                
                 if(isPublic) {
-                    publishLink.append('TBD: lukko auki kuva');
+                    publishIcon.addClass('icon-public');
                     publishLink.attr('title', this.loc.publishCategory.publicTooltip);
                 }
                 else {
-                    publishLink.append('TBD: lukko kuva');
+                    publishIcon.addClass('icon-private');
+                    //publishLink.append('TBD: lukko kuva');
                     publishLink.attr('title', this.loc.publishCategory.privateTooltip);
                 }
+                publishLink.append(publishIcon);
                 publishLink.bind('click', publishLinkClosure(id, !isPublic));
                 panel.getContainer().append(publishLink);
             }

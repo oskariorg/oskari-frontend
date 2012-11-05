@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Accordion',
  */
 function() {
     this.template = jQuery('<div class="accordion"></div>');
+    this.templateMsg = jQuery('<div class="accordionmsg"></div>');
     this.panels = [];
     this.ui = this.template.clone();
 }, {
@@ -20,6 +21,9 @@ function() {
      * @param {Oskari.userinterface.component.AccordionPanel} panel
      */
     addPanel : function(panel) {
+        // clear any message before adding panel
+        this.removeMessage();
+        
         this.panels.push(panel);
         panel.insertTo(this.ui);
     },
@@ -47,6 +51,19 @@ function() {
     removeAllPanels : function() {
         this.ui.empty();
         this.panels = [];
+    },
+    removeMessage : function() {
+        var msgContainer = this.ui.find("div.accordionmsg");
+        if(msgContainer.length > 0) {
+            msgContainer.remove();
+        }
+    },
+    showMessage : function(message) {
+        this.removeMessage();
+        
+        var msgContainer = this.templateMsg.clone();
+        msgContainer.append(message);
+        this.ui.append(msgContainer);
     },
     showPanels : function() {
         for(var i = 0; i < this.panels.length; i++) {

@@ -125,6 +125,7 @@ function(instance, title) {
             return;
         }
         // filter
+        var visibleGroupCount = 0;
         for(var i = 0; i < this.layerGroups.length; ++i) {
             var group = this.layerGroups[i];
             var layers = group.getLayers();
@@ -148,9 +149,22 @@ function(instance, title) {
                 }
             }
             group.layerListPanel.setVisible(visibleLayerCount > 0);
+            if(group.layerListPanel.isVisible()) {
+                visibleGroupCount++;   
+            }
             group.layerListPanel.setTitle(group.getTitle() + ' (' + visibleLayerCount +  '/' + layers.length + ')');
         }
-        // TODO: check if there are no groups visible -> show 'no matches' notification?
+        
+        // check if there are no groups visible -> show 'no matches' notification
+        // else clear any previous message
+        if(visibleGroupCount == 0) {
+            // empty result
+            var loc = this.instance.getLocalization('errors');
+            this.accordion.showMessage(loc.noResults);
+        }
+        else {
+            this.accordion.removeMessage();
+        }
     },
     
     _showAllLayers : function() {

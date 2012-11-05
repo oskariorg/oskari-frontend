@@ -5,14 +5,22 @@ Oskari.registerLocalization({
 		"title" : "Kartlager",
 		"desc" : "",
 		"errors" : {
-			"loadFailed" : "Fel i laddningen av kartlager. Ladda ned sidan på nytt i din läsare och välj kartlagren."
+            "title": "Fel!",
+            "generic": "Systemfel. Försök på nytt senare.",
+			"loadFailed" : "Fel i laddningen av kartlager. Ladda ned sidan på nytt i din läsare och välj kartlagren.",
+            "noResults": "ökningen gav inga resultat."
 		},
+        "loading" : "Laddar...",
 		"filter" : {
 			"text" : "Sök kartlager",
 			"inspire" : "Enligt tema",
 			"organization" : "Enligt dataproducent",
 			"published" : "Användare"
 		},
+        "published" : {
+            "organization" : "Publicerad kartlager",
+            "inspire" : "Publicerad kartlager"
+        },
 		"tooltip" : {
 			"type-base" : "Bakgrundskarta",
 			"type-wms" : "kartlager",

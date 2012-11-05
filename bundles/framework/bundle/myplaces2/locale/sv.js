@@ -39,7 +39,9 @@ Oskari.registerLocalization({
       "save": "Lagra",
       "movePlaces": "Flytta objekt och ta bort",
       "deleteCategory": "Ta bort",
-      "deleteCategoryAndPlaces": "Ta bort kategori inklusive objekt"
+      "deleteCategoryAndPlaces": "Ta bort kategori inklusive objekt",
+      "changeToPublic": "Change to public",
+      "changeToPrivate": "Change to private"
     },
     "placeform": {
       "title": "Uppgifter om objektet",
@@ -99,6 +101,14 @@ Oskari.registerLocalization({
         "deleteConfirmMove": "Kartlager: {0} innehåller {1} st. objekt. Vill du ta bort nivån och flytta objekten på den till det förvalda kartlagret {2} ?",
         "deleteConfirm": "Vill du ta bort kartlagret {0}?",
         "deleted": "Kartlagret borttaget"
+      },
+      "categoryToPublic": {
+        "title": "TBD: Change map layer to public",
+        "message": "TBD: Olet muuttamassa karttatasoa \"{0}\" julkiseksi. Voit jakaa julkisen karttatason verkossa tai julkaista sen karttana toiseen verkkopalveluun."
+      },
+      "categoryToPrivate": {
+        "title": "TBD: Change map layer to private",
+        "message": "TBD: Olet muuttamassa karttatasoa \"{0}\" yksityiseksi. Tämän jälkeen et voi jakaa tai julkaista sitä karttana."
       },
       "error": {
         "addCategory": "Kartlagret kunde inte lagras. Objektet har inte lagrats.",
