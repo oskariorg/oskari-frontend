@@ -160,6 +160,17 @@ function(layer, sandbox, localization) {
             }
         });
         
+        /*
+         * backend status
+         */
+        var elBackendStatus = tools.find('.layer-backendstatus-icon');
+        elBackendStatus.click(function() {
+            var mapLayerId = layer.getId();              
+            sandbox.postRequestByName('ShowMapLayerInfoRequest', [
+                      mapLayerId
+            ]);
+        });
+        
         return layerDiv;
     }
 }, {

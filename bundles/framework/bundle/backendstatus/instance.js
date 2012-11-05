@@ -1,8 +1,8 @@
 /**
  * @class Oskari.mapframework.bundle.backendstatus.BackendStatusBundleInstance
  *
- * Utility bundle to manage updating backend status information to
- * and other bundles interested.
+ * Utility bundle to manage updating backend status information.
+ * Updates information only when LayerSelector2 is being opened.
  *
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundleInstance",
@@ -19,9 +19,13 @@ function() {
 		jqhr : null,
 		timestamp : null
 	};
-	this.timeInterval = 10000;
+	this.timeInterval = this.ajaxSettings.defaultTimeThreshold;
 	this.backendStatus = {};
+	this.backendExtendedStatus = {};
 }, {
+	ajaxSettings: {
+		defaultTimeThreshold: 30000
+	},
 	/**
 	 * @static
 	 * @property __name
@@ -49,6 +53,15 @@ function() {
 	getSandbox : function() {
 		return this._sandbox;
 	},
+	
+	getAjaxUrl: function(key) {
+		var ajaxUrl = this.getSandbox().getAjaxUrl();
+		var url = ajaxUrl + 'action_route=GetBackendStatus';
+		
+		return url;
+		/*return 'GetBackendStatus.json';*/
+	},
+	
 	/**
 	 * @method start
 	 * implements BundleInstance protocol start method
@@ -98,9 +111,23 @@ function() {
 		return handler.apply(this, [event]);
 
 	},
+	
+	/**
+	 * @property extensionsByName
+	 * @static
+	 * extensions that trigger update
+	 * 
+	 */
 	extensionsByName : {
 		'LayerSelector' : true
 	},
+	
+	/**
+	 * @property extensionStatesByName
+	 * @static
+	 * extension states that trigger update
+	 * 
+	 */
 	extensionStatesByName : {
 		'attach' : true,
 		'detach' : true
@@ -111,6 +138,10 @@ function() {
 	 * @static
 	 */
 	eventHandlers : {
+		
+		/**
+		 * @method ExtensionUpdatedEvent
+		 */
 		'userinterface.ExtensionUpdatedEvent' : function(event) {
 
 			var extension = event.getExtension();
@@ -131,7 +162,47 @@ function() {
 			}
 
 			this.updateBackendStatus();
+		},
+		
+		/**
+		 * @method AfterShowMapLayerInfoEvent
+		 */
+		
+		'AfterShowMapLayerInfoEvent' : function(event) {
+			
+			var mapLayer = event.getMapLayer();
+			var mapLayerId = mapLayer.getId();
+			var mapLayerBackendStatus = mapLayer.getBackendStatus();
+			console.log("ABOUT to show information for "+mapLayerId,mapLayer,mapLayerBackendStatus);
+
+			if( !mapLayerBackendStatus ) {
+				return;
+			}
+						
+			var backendExtendedStatusForLayer = 
+				this.backendExtendedStatus[mapLayerId];
+			
+			console.log("MIGHT show information for "+mapLayerId,mapLayer,backendExtendedStatusForLayer);
+							
+			if( !backendExtendedStatusForLayer) {
+				return;
+			}
+			
+			var infoUrl = backendExtendedStatusForLayer.infourl;
+			if( !infoUrl ) {
+				return;
+			}
+						
+			console.log("WOULD show information for "+mapLayerId,mapLayer,infoUrl);	
+							
+			this.openURLinWindow(infoUrl);
 		}
+	},
+	
+	openURLinWindow: function(infoUrl) {
+		var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
+		var link = infoUrl;
+		window.open(link, "BackendStatus", wopParm);	
 	},
 
 	/**
@@ -220,7 +291,8 @@ function() {
 
 		me._cancelAjaxRequest();
 		me._startAjaxRequest(dteMs);
-		var ajaxUrl = sandbox.getAjaxUrl();
+		
+		var ajaxUrl = me.getAjaxUrl();
 
 		jQuery.ajax({
 			beforeSend : function(x) {
@@ -247,7 +319,7 @@ function() {
 			},
 			type : 'POST',
 			dataType : 'json',
-			url : ajaxUrl + 'action_route=GetBackendStatus'
+			url : ajaxUrl
 			/*url : 'GetBackendStatus.json'*/
 		});
 	},
@@ -262,6 +334,7 @@ function() {
 		}
 
 		var changeNotifications = {};
+		var extendedStatuses = {};
 		
 		for(var n = 0; n < backendStatusArr.length; n++) {
 			var data = backendStatusArr[n];
@@ -269,9 +342,11 @@ function() {
 			if( !this.backendStatus[layerId] ) {
 				changeNotifications[layerId] = {
 						status: data.status };
+				extendedStatuses[layerId] = data;
 				/*sandbox.printDebug("[BackendStatus] "+layerId+" new alert");*/						
 			} else if( this.backendStatus[layerId].status != data.status ) {
 				changeNotifications[layerId] = { status: data.status };
+				extendedStatuses[layerId] = data;
 				/*sandbox.printDebug("[BackendStatus] "+layerId+" changed alert");*/
 			} 	
 		}
@@ -283,10 +358,14 @@ function() {
 			}
 		}
 		
+		this.backendExtendedStatus = extendedStatuses; 
+		
 		var maplayers = {};
 		
 		for( p in changeNotifications ) {
 			this.backendStatus[p] = changeNotifications[p];
+			
+			
 			var maplayer = sandbox.findMapLayerFromAllAvailable(p);
 			if (!maplayer) {
 				continue;
