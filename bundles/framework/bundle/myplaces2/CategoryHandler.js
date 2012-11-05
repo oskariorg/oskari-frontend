@@ -231,11 +231,11 @@ function(instance) {
             type: "wmslayer",
             baseLayerId:-1,
             legendImage:"",
-            gfi : 'disabled',
+      //      gfi : 'disabled',
             formats: {
                value:"text/html"
             },
-            isQueryable:false,
+            isQueryable:true,
             minScale:12000000,
             opacity: 50,
             metaType: this.instance.idPrefix,
@@ -351,6 +351,24 @@ function(instance) {
     		content.append(row);
     	}
     	dialog.show(loc.validation.title, content, [okBtn]);
+    },
+    /**
+     * @method _showMessage
+     * Shows user a message with ok button
+     * @private
+     * @param {String} title popup title
+     * @param {String} message popup message
+     */
+    _showMessage : function(title, message) {
+        var loc = this.instance.getLocalization();
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        okBtn.setTitle(loc.buttons.ok);
+        okBtn.addClass('primary');
+        okBtn.setHandler(function() {
+            dialog.close(true);
+        });
+        dialog.show(title, message, [okBtn]);
     },
     /**
      * @method hasIllegalChars
@@ -620,7 +638,8 @@ function(instance) {
     
     _handlePublishCategory : function(category, makePublic, wasSuccess) {
         if(!wasSuccess) {
-            alert('operation failed - ajax call reported error');
+            var loc = this.instance.getLocalization("notification");
+            this._showMessage(loc['error'].title, loc['error'].generic);
             return;
         }
         var sandbox = this.instance.sandbox;
@@ -631,7 +650,8 @@ function(instance) {
         var mapLayer = mapLayerService.findMapLayer(layerId);
         if(!mapLayer) {
             // maplayer not found, this should not be possible
-            alert('operation failed - failed to find corresponding layer');
+            var loc = this.instance.getLocalization("notification");
+            this._showMessage(loc['error'].title, loc['error'].generic);
             return;
         } 
         if(makePublic) {

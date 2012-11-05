@@ -115,6 +115,7 @@ Oskari.registerLocalization({
         "editCategory": "The map layer could not be saved.",
         "savePlace": "The place could not be saved.",
         "title": "Error!",
+        "generic": "System error. Please try again later.",
         "deleteCategory": "Error occurred while deleting!",
         "deleteDefault": "The default map layer cannot be deleted."
       }

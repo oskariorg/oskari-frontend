@@ -37,6 +37,11 @@ function() {
     });
     this.html.find('div.content').hide();
 }, {
+    /**
+     * @method setVisible
+     * Shows/hides the panel
+     * @param {Boolean} bln - true to show, false to hide
+     */
     setVisible : function(bln) {
         // checking since we dont assume param is boolean
         if(bln == true) {
@@ -46,6 +51,11 @@ function() {
             this.html.hide();
         }
     },
+    /**
+     * @method isVisible
+     * Returns true if panel is currently visible
+     * @return {Boolean}
+     */
     isVisible : function() {
         // checking since we dont assume param is boolean
         return this.html.is(":visible");
@@ -53,7 +63,7 @@ function() {
     /**
      * @method isOpen
      * Returns true if panel is currently open
-     * @return 
+     * @return {Boolean}
      */
     isOpen : function() {
         return this.html.hasClass('open');

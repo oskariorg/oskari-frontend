@@ -115,6 +115,7 @@ Oskari.registerLocalization({
         "editCategory": "Kartlagret kunde inte lagras.",
         "savePlace": "Objektet kunde inte lagras.",
         "title": "Fel!",
+        "generic": "Systemfel. Försök på nytt senare.",
         "deleteCategory": "Fel i borttagningen!",
         "deleteDefault": "Den förvalda kartlagret kan inte tas bort."
       }

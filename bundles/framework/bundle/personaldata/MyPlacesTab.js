@@ -112,7 +112,6 @@ function(instance, localization) {
                 }
                 else {
                     publishIcon.addClass('icon-private');
-                    //publishLink.append('TBD: lukko kuva');
                     publishLink.attr('title', this.loc.publishCategory.privateTooltip);
                 }
                 publishLink.append(publishIcon);

@@ -115,6 +115,7 @@ Oskari.registerLocalization({
         "editCategory": "Tason tallennus epäonnistui.",
         "savePlace": "Kohteen tallentaminen ei onnistunut.",
         "title": "Virhe!",
+        "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin.",
         "deleteCategory": "Virhe poistossa!",
         "deleteDefault": "Oletuskarttatasoa ei voi poistaa."
       }

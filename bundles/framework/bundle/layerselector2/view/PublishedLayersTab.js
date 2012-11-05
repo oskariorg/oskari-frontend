@@ -76,10 +76,28 @@ function(instance, title) {
         field.setPlaceholder(this.instance.getLocalization('filter').text);
         field.addClearButton();
         field.bindChange(function(event) {
-            me._search(field.getValue());
-        }, false);
+            me._searchTrigger(field.getValue());
+        }, true);
         this.filterField = field;
         return field;
+    },
+    _searchTrigger : function(keyword) {
+        var me = this;
+        // clear any previous search if search field changes
+        if(this.searchTimer) {
+            clearTimeout(this.searchTimer);
+        }
+        // if field is was cleared -> do immediately
+        if (!keyword || keyword.length == 0) {
+            me._search(keyword);
+        }
+        else {
+        // else use a small timeout to see if user is typing more
+            this.searchTimer = setTimeout(function() {
+                me._search(keyword);
+                me.searchTimer = undefined;
+            }, 500);
+        }
     },
     tabSelected : function() {
         // update data if now done so yet
@@ -101,17 +119,14 @@ function(instance, title) {
                     me.showLayerGroups(me.layerGroups);
                 },
                 error : function(jqXHR, textStatus) {
-                    if(jqXHR.status != 0) {
-                        var Loc = me.instance.getLocalization('errors');
-                        me._showMessage(loc.title, location.generic);
-                    }
+                    var loc = me.instance.getLocalization('errors');
+                    me.accordion.showMessage(loc.generic);
                 }
             });
         }
-        //this._getLayerGroups(jsonResponse)
     },
     tabUnselected : function() {
-        //alert('unselected');
+
     },
     /**
      * @method _getLayerGroups
@@ -140,24 +155,6 @@ function(instance, title) {
         }
     },
     
-    /**
-     * @method _showMessage
-     * Shows user a message with ok button
-     * @private
-     * @param {String} title popup title
-     * @param {String} message popup message
-     */
-    _showMessage : function(title, message) {
-        var loc = this.instance.getLocalization();
-        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        okBtn.setTitle(loc.buttons.ok);
-        okBtn.addClass('primary');
-        okBtn.setHandler(function() {
-            dialog.close(true);
-        });
-        dialog.show(title, message, [okBtn]);
-    },
     /**
      * @method _getPublishedLayer
      * Populates the category based data to the base maplayer json
@@ -210,11 +207,11 @@ function(instance, title) {
             type: "wmslayer",
             baseLayerId:-1,
             legendImage:"",
-            gfi : 'disabled',
+            //gfi : 'disabled',
             formats: {
                value:"text/html"
             },
-            isQueryable:false,
+            isQueryable:true,
             minScale:12000000,
             opacity: 50,
             metaType: 'published',
@@ -303,10 +300,8 @@ function(instance, title) {
                 me.showLayerGroups(me.layerGroups);
             },
             error : function(jqXHR, textStatus) {
-                if (jqXHR.status != 0) {
-                    var Loc = me.instance.getLocalization('errors');
-                    me._showMessage(loc.title, location.generic);
-                }
+                var loc = me.instance.getLocalization('errors');
+                me.accordion.showMessage(loc.generic);
             }
         });
         // TODO: check if there are no groups visible -> show 'no matches'
