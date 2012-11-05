@@ -59,7 +59,17 @@ div.layerselector2 div.accordion div.accordion_panel div.content {
 div.layerselector2 div.layer div.layer-backendstatus-icon {
     float : left;
 	width : 20px;
-	height : 16px;
+	height: 16px;
 	margin-right: 4px;
 	background-repeat: no-repeat;
+}
+
+div.layerselector2 div.layer div.backendstatus-down {
+	height: 20px !important;
+	margin-bottom: 2px;	
+}
+
+div.layerselector2 div.layer div.backendstatus-maintenance {
+	height: 20px !important;
+	margin-bottom: 2px;	
 }
