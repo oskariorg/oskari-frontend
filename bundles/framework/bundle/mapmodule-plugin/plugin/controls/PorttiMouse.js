@@ -360,7 +360,20 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 			/*this.map.zoomOut();*/
 			this.sendMapZoomOut();
 		} else {
-			this.sendMapClickEvent(evt);
+			var isIE8 = navigator.userAgent.indexOf("MSIE 8.0") !=-1 ;
+			if( isIE8 ) {
+				var now = new Date().getTime();
+
+				if( this.lastDblClickMs ) {
+					if( !((now - this.lastDblClickMs) < 1000 ) ) {
+						this.sendMapClickEvent(evt);
+					}
+				} else {
+					this.sendMapClickEvent(evt);
+				}
+			} else {
+				this.sendMapClickEvent(evt);
+			}
 		}
 
 	},
@@ -391,6 +404,12 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 		} else {
 			newCenter = new OpenLayers.LonLat(zoomPoint.lon + deltaX * newRes, zoomPoint.lat + deltaY * newRes);
 		}
+		
+		var isIE8 = navigator.userAgent.indexOf("MSIE 8.0") !=-1 ;
+		if( isIE8 ) {
+			this.lastDblClickMs = new Date().getTime();
+		}
+
 		this.sendMapSetCenter(newCenter, newZoom);
 	},
 	/**
