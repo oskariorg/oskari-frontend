@@ -21,7 +21,7 @@
     right: 0px;
     bottom: 0px;
     cursor: default;
-    background: url('../images/component-indexmap_hover.png')  !important;
+    background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png')  !important;
     
 }
 
@@ -35,12 +35,12 @@
     right: 0px;
     bottom: 0px;
     cursor: default;
-    background: url('../images/component-indexmap.png') 0px 0px !important;
+    background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap.png') 0px 0px !important;
 }
 
 #olControlOverviewMapMaximizeButton:hover
 {
-    background: url('../images/component-indexmap_hover.png') !important;
+    background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png') !important;
 }
 
 #OpenLayers_Control_minimizeDiv{
