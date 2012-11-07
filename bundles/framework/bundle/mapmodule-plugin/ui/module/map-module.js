@@ -10,11 +10,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
  *
  * @param {String} id
  * 		Unigue ID for this map
+ * @param {String} imageUrl
+ *      markerimage base url
  *
  */
-function(id) {
+function(id, imageUrl) {
 
     this._id = id;
+    this._imageUrl = imageUrl;
 
     this._controls = {};
     this._layerPlugins = {};
@@ -621,9 +624,9 @@ function(id) {
         this._map.addLayer(layerMarkers);
 
         var size = new OpenLayers.Size(32, 32);
-        var offset = new OpenLayers.Pixel(0, -size.h);
+        var offset = new OpenLayers.Pixel(-16, -size.h);
 
-        var icon = new OpenLayers.Icon(Oskari.$().startup.imageLocation + '/resource/icons/paikkamerkinta.png', size, offset);
+        var icon = new OpenLayers.Icon(this._imageUrl + '/framework/bundle/mapmodule-plugin/images/marker.png', size, offset);
         var marker = new OpenLayers.Marker(centerMapLonLat, icon);
         layerMarkers.addMarker(marker);
     },
