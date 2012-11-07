@@ -218,7 +218,7 @@ jQuery(document).ready(function() {
         style : 'style1'
     };
     if(!ajaxUrl) {
-    	alert('Ajax URL not set - cannot proceed');
+        jQuery('#mapdiv').append('Unable to start');
     	return;
     } 
     if(!language) {
@@ -272,19 +272,13 @@ jQuery(document).ready(function() {
             if (appSetup.startupSequence && appSetup.configuration) {
                 main.appSetup.startupSequence = appSetup.startupSequence;
                 main.appConfig = appSetup.configuration;
-                /*
-                if (width > 0 && height > 0) {
-                    main.appConfig.mapfull.conf.size = {
-                        width : width,
-                        height : height
-                    };
-                }
-                */
                 main.start();
             }
         },
-        error : function() {
-            alert('GetMapConfiguration failed.');
+        error : function(jqXHR, textStatus) {
+            if (jqXHR.status != 0) {
+                jQuery('#mapdiv').append('Unable to start');
+            }
         }
     });
 
