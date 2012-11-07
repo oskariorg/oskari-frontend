@@ -461,7 +461,8 @@ function() {
                 if (value == null) {
                     continue;
                 }
-                
+                // if value is an array -> format it first
+                // TODO: maybe some nicer formatting? 
                 if(Object.prototype.toString.call( value ) === '[object Array]' ) {
                     var placeHolder = '';
                     for(var i=0; i < value.length; ++i ) {

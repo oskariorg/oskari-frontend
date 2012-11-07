@@ -85,7 +85,8 @@ function(config) {
             },
             layers : [graphic],
             size : new OpenLayers.Size(120, 173),
-            autoPan : false
+            autoPan : false,
+            controls : []
         };
 
         /* Indexmap */
