@@ -12,13 +12,15 @@ Oskari.clazz.define('Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnh
 
         var mapLayers = core.getRequestParameter('mapLayers');
         var markerVisible = core.getRequestParameter('showMarker');
+        var markerVisibleOption2 = core.getRequestParameter('isCenterMarker');
+        
         var keepLayersOrder = core.getRequestParameter('keepLayersOrder');
 
         if(keepLayersOrder === null) {
             keepLayersOrder = true;
         } 
 
-        core.getMap().setMarkerVisible(markerVisible == 'true');
+        core.getMap().setMarkerVisible(markerVisible == 'true' || markerVisibleOption2 == 'true');
 
         if(coord === null || zoomLevel === null) {
             // not a link
