@@ -67,9 +67,6 @@ function(config) {
 
     },
     _createUI : function() {
-        if(this._indexMap) {
-            return;
-        }
         /* overview map */
         var graphic = new OpenLayers.Layer.Image('Overview map image', 
             this.getMapModule().getImageUrl() + this._indexMapUrl, 
