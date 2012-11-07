@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
      * starts the application with bundle definitions declared
      * in property appSetup.startupSequence
      */
-    start : function() {
+    start : function(cb) {
 
         var me = this;
 
@@ -38,6 +38,9 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
         app.setConfiguration(appConfig);
         app.startApplication(function(startupInfos) {
             me.instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
+            if(cb) {
+                cb(me.instance);
+            }
             // var ugStartup =
             //     {
             //         'instanceProps': {},
@@ -561,6 +564,16 @@ jQuery(document).ready(function() {
         var pathIdx = ajaxUrl.indexOf('/', hostIdx);
         ajaxUrl = ajaxUrl.substring(pathIdx);
     }
+    var gfiParamHandler = function(sandbox) {
+        if(getURLParameter('showGetFeatureInfo') != 'true') {
+            return;
+        }
+        var lon  = sandbox.getMap().getX();
+        var lat  = sandbox.getMap().getY();
+        var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+        var px = mapModule.getMap().getViewPortPxFromLonLat({lon : lon, lat: lat});
+        sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
+    }
 
     jQuery.ajax({
         type : 'POST',
@@ -579,6 +592,7 @@ jQuery(document).ready(function() {
                     var sb = instance.getSandbox();
                     //sandbox.disableDebug();
                     //sandbox._core.disableDebug();
+                    gfiParamHandler(sb);
                 });
             } else {
                 jQuery('#mapdiv').append('Unable to start');
