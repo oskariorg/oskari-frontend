@@ -202,12 +202,16 @@ function() {
      */
     makeDraggable : function() {
         var me = this;
-        me.dialog.addClass('draggable');
+        /*me.dialog.addClass('draggable');
         me.dialog.bind('drag', function(event) {
     	   me.dialog.css({
     	       top: event.offsetY,
     	       left: event.offsetX
     	   })
-    	 });
+    	 });*/
+    	me.dialog.css("position","absolute");
+		me.dialog.draggable({
+				scroll: false
+			});
     }
 });

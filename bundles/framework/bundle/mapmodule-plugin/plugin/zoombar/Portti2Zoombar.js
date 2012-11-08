@@ -16,7 +16,7 @@ function(config) {
     this.__templates = {};
     this.__elements = {};
     this.__parent = null;
-    this._slider
+    this._slider = null;
     this._zoombar_messages = {};
     this._suppressEvents = false;
     this._conf = config;
@@ -72,7 +72,7 @@ function(config) {
         this.__templates['zoombar'] = jQuery('<div class="mapplugin pzbDiv" title="Koko Suomi">' + 
             '<div class="pzbDiv-plus"></div>' + 
             '<input type=\'hidden\' />' + 
-            '<div class="slider"></div>' + 
+            '<div style="height:200px;border:1pt solid red;" class="slider"></div>' + 
             '<div class="pzbDiv-minus"></div>' + 
         '</div>');
     },
@@ -124,15 +124,14 @@ function(config) {
         me.__elements['zoombarSlider'].find('input').attr('id', inputId);
         me.__elements['zoombarSlider'].find('div.slider').attr('id', sliderId);
         jQuery(me.__parent).append(me.__elements['zoombarSlider']);
-        me._slider = new Slider({
+        /*me._slider = new Slider({
             min : 0,
             max : 12,
             value : 0,
             direction : 'y'
         }).insertTo(sliderId).assignTo(inputId);
-
         me._slider.level.hide();
-
+		
         var tooltips = me.getMapModule().getLocalization('zoombar_tooltip');
 
         me._slider.on('change', function(event) {
@@ -146,6 +145,19 @@ function(config) {
                 me.getMapModule().zoomTo(event.value);
             }
         });
+        */
+       	var sliderEl = me.__elements['zoombarSlider'].find('div.slider');
+       	sliderEl.slider({
+            orientation: "vertical",
+            range: "min",
+            min: 0,
+            max: this._map.getNumZoomLevels()-1,
+            value: this._map.getZoom(),
+            slide: function( event, ui ) {
+                me.getMapModule().zoomTo( ui.value );
+            }
+        });
+       
         var plus = me.__elements['zoombarSlider'].find('.pzbDiv-plus');
         plus.bind('click', function(event) {
             if(me._slider.getValue() < 12) {
