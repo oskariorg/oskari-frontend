@@ -104,11 +104,11 @@ Oskari.registerLocalization({
       },
       "categoryToPublic": {
         "title": "Muuta karttataso julkiseksi",
-        "message": "Olet muuttamassa karttatasoa \"{0}\" julkiseksi. Voit jakaa julkisen karttatason verkossa tai julkaista sen karttana toiseen verkkopalveluun."
+        "message": "Olet muuttamassa karttatasoa \"{0}\" julkiseksi. Voit jakaa julkisen karttatason verkossa tai julkaista sen karttana toiseen verkkopalveluun. Muut käyttäjät voivat myös katsoa karttatasoa Paikkatietoikkunassa."
       },
       "categoryToPrivate": {
         "title": "Muuta karttataso yksityiseksi",
-        "message": "Olet muuttamassa karttatasoa \"{0}\" yksityiseksi. Tämän jälkeen et voi jakaa tai julkaista sitä karttana."
+        "message": "Olet muuttamassa karttatasoa \"{0}\" yksityiseksi. Tämän jälkeen et voi jakaa tai julkaista karttana, eivätkä muut käyttäjät näe sitä Paikkatietoikkunassa."
       },
       "error": {
         "addCategory": "Tason tallennus epäonnistui. Kohdetta ei ole tallennettu.",
