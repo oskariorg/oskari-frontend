@@ -69,10 +69,10 @@ function(config) {
     init : function() {
         var me = this;
         // templates
-        this.__templates['zoombar'] = jQuery('<div class="mapplugin pzbDiv" title="Koko Suomi">' + 
+        this.__templates['zoombar'] = jQuery('<div class="oskariui mapplugin pzbDiv" title="Koko Suomi">' + 
             '<div class="pzbDiv-plus"></div>' + 
             '<input type=\'hidden\' />' + 
-            '<div style="height:200px;border:1pt solid red;" class="slider"></div>' + 
+            '<div class="slider"></div>' + 
             '<div class="pzbDiv-minus"></div>' + 
         '</div>');
     },
@@ -121,8 +121,11 @@ function(config) {
 
         var inputId = 'pzb-input-' + this.getName();
         var sliderId = 'pzb-slider-' + this.getName();
+        var sliderEl = me.__elements['zoombarSlider'].find('div.slider');
+
         me.__elements['zoombarSlider'].find('input').attr('id', inputId);
-        me.__elements['zoombarSlider'].find('div.slider').attr('id', sliderId);
+        sliderEl.attr('id', sliderId);
+        
         jQuery(me.__parent).append(me.__elements['zoombarSlider']);
         /*me._slider = new Slider({
             min : 0,
@@ -147,7 +150,8 @@ function(config) {
         });
         */
        	var sliderEl = me.__elements['zoombarSlider'].find('div.slider');
-       	sliderEl.slider({
+       	sliderEl.css("height",(this._map.getNumZoomLevels()*11)+"px")
+       	me._slider = sliderEl.slider({
             orientation: "vertical",
             range: "min",
             min: 0,
@@ -157,17 +161,18 @@ function(config) {
                 me.getMapModule().zoomTo( ui.value );
             }
         });
+        
        
         var plus = me.__elements['zoombarSlider'].find('.pzbDiv-plus');
         plus.bind('click', function(event) {
-            if(me._slider.getValue() < 12) {
-                me.getMapModule().zoomTo(me._slider.getValue() + 1);
+            if(me._slider.slider('value') < 12) {
+                me.getMapModule().zoomTo(me._slider.slider('value') + 1);
             }
         });
         var minus = me.__elements['zoombarSlider'].find('.pzbDiv-minus');
         minus.bind('click', function(event) {
-            if(me._slider.getValue() > 0) {
-                me.getMapModule().zoomTo(me._slider.getValue() - 1);
+            if(me._slider.slider('value') > 0) {
+                me.getMapModule().zoomTo(me._slider.slider('value') - 1);
             }
         });
         // override default location if configured
@@ -196,7 +201,8 @@ function(config) {
         if(me._slider) {
             // disable events in "onChange"
             this._suppressEvents = true;
-            me._slider.setValue(value);
+            /*me._slider.setValue(value);*/
+           me._slider.slider('value',value);
             this._suppressEvents = false;
         }
     },

@@ -76,7 +76,7 @@ function(instance) {
         this.templateLayerFooterTools = jQuery('<div class="left-tools">' + 
             '<div class="layer-visibility">' + '<a href="JavaScript:void(0);">' + loc['hide'] + '</a>' + '&nbsp;' + 
                 '<span class="temphidden" ' + 'style="display: none;">' + loc['hidden'] + '</span>' + '</div>' + 
-            '<div class="layer-opacity">' + '<div style="border: 1pt solid red; width:200px;height:20px;"class="layout-slider" id="layout-slider">' + '</div> ' + 
+            '<div class="oskariui layer-opacity">' + '<div class="layout-slider" id="layout-slider">' + '</div> ' + 
             '<div class="opacity-slider" style="display:inline-block">' + 
             '<input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />%</div>' + 
             '</div>' + '</div>' + '<div class="right-tools">' +
@@ -214,6 +214,7 @@ function(instance) {
         var sliderEl = layerDiv.find('.layout-slider');
         var slider = sliderEl.slider({
         	min: 0, max: 100,	
+        	value: opa,
         	/*change: function(event,ui) {
                 me._layerOpacityChanged(layer, ui.value);
            	},*/
@@ -226,54 +227,6 @@ function(instance) {
 		});
 		
         me._sliders[lyrId] = slider;
-        
-           /* slider = new Slider({
-                min : 0,
-                max : 100,
-                value: opa
-            });
-
-            slider.setStyle({
-                'background-color' : 'transparent',
-                'background-image' : 'url("/Oskari' + '/resources/framework/bundle' + '/layerselection2/images' + '/opacity_slider.png")',
-                'height' : '5px',
-                'width' : '150px',
-                'border' : '0',
-                'margin' : 0
-            });
-
-            slider.level.hide();
-
-            slider.handle.setStyle({
-                'background-color' : 'transparent',
-                'background-image' : 'url("/Oskari' + '/resources/framework/bundle' + '/layerselection2/images' + '/opacity_index.png")',
-                'width' : '15px',
-                'height' : '15px',
-                'border' : '0',
-                'margin-left' : 0
-            });
-
-            slider.on('change', function(event) {
-                me._layerOpacityChanged(layer, event.value);
-            });
-            me._sliders[lyrId] = slider;
-      
-        // only render if visible on screen
-        var lS = 'layout-slider-' + lyrId;
-        var oS = 'opacity-slider-' + lyrId;
-        
-         // slider
-        var tools = layerDiv.find('.left-tools');
-        var opacitySlider = tools.find('div.layout-slider');
-        opacitySlider.attr('id', 'layout-slider-' + layer.getId());
-
-        var opacityInput = tools.find('input.opacity-slider');
-        opacityInput.attr('id', 'opacity-slider-' + layer.getId());
-        
-        slider.insertTo(lS);
-        slider.assignTo(oS);
-        
-        */
         
         return slider;
     },
