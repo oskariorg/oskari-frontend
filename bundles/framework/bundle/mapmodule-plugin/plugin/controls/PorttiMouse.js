@@ -154,9 +154,15 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 	
 	/*
 	 * APIProperty: useCenterMapInWheelZoom
-	 * {Boolean} Use map center when wheel zooming (true to revert default openlayers functionality)
+	 * {Boolean} Use map center when wheel zooming (set to false to revert to default openlayers functionality)
 	 */
 	useCenterMapInWheelZoom: true,
+
+	/*
+	 * APIProperty: useCenterMapInWheelZoom
+	 * {Boolean} Use map center when wheel zooming (set to true to revert default openlayers functionality)
+	 */
+	useCenterMapInDblClickZoom: false,
 
 	/**
 	 * Constructor: OpenLayers.Control.Navigation
@@ -313,10 +319,32 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 			"up" : this.wheelUp,
 			"down" : this.wheelDown
 		}, this.mouseWheelOptions);
+		
+	
+		
 		if(OpenLayers.Control.PinchZoom) {
+			var pinchZoomOptions = this.pinchZoomOptions||{};
+			
+			pinchZoomOptions.pinchDone = function(evt, start, last) {
+					this.applyTransform("");
+					var zoom = this.map.getZoomForResolution(this.map.getResolution() / last.scale, true);
+					if(zoom !== this.map.getZoom() || !this.currentCenter.equals(this.pinchOrigin)) {
+						var resolution = this.map.getResolutionForZoom(zoom);
+
+						var location = this.map.getLonLatFromPixel(this.pinchOrigin);
+						var zoomPixel = this.currentCenter;
+						var size = this.map.getSize();
+
+						location.lon += resolution * ((size.w / 2) - zoomPixel.x);
+						location.lat -= resolution * ((size.h / 2) - zoomPixel.y);
+
+						me.sendMapSetCenter(location, zoom);
+					}
+			};
+				
 			this.pinchZoom = new OpenLayers.Control.PinchZoom(OpenLayers.Util.extend({
 				map : this.map
-			}, this.pinchZoomOptions));
+			}, pinchZoomOptions));
 		}
 
 	},
@@ -332,7 +360,20 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 			/*this.map.zoomOut();*/
 			this.sendMapZoomOut();
 		} else {
-			this.sendMapClickEvent(evt);
+			var isIE8 = navigator.userAgent.indexOf("MSIE 8.0") !=-1 ;
+			if( isIE8 ) {
+				var now = new Date().getTime();
+
+				if( this.lastDblClickMs ) {
+					if( !((now - this.lastDblClickMs) < 1000 ) ) {
+						this.sendMapClickEvent(evt);
+					}
+				} else {
+					this.sendMapClickEvent(evt);
+				}
+			} else {
+				this.sendMapClickEvent(evt);
+			}
 		}
 
 	},
@@ -343,9 +384,33 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 	 * evt - {Event}
 	 */
 	defaultDblClick : function(evt) {
-		var newCenter = this.map.getLonLatFromViewPortPx(evt.xy);
-		/*this.map.setCenter(newCenter, this.map.zoom + 1);*/
-		this.sendMapZoomIn();
+		var deltaZ = 1;
+		var currentZoom = this.map.getZoom();
+		var newZoom = this.map.getZoom() + Math.round(deltaZ);
+		newZoom = Math.max(newZoom, 0);
+		newZoom = Math.min(newZoom, this.map.getNumZoomLevels());
+		if(newZoom === currentZoom) {
+			return;
+		}
+		var size = this.map.getSize();
+		var deltaX = size.w / 2 - evt.xy.x;
+		var deltaY = evt.xy.y - size.h / 2;
+		var newRes = this.map.baseLayer.getResolutionForZoom(newZoom);
+		var zoomPoint = this.map.getLonLatFromPixel(evt.xy);
+		var newCenter = null;
+		
+		if( this.useCenterMapInDblClickZoom ) {
+			newCenter = this.map.getCenter();
+		} else {
+			newCenter = new OpenLayers.LonLat(zoomPoint.lon + deltaX * newRes, zoomPoint.lat + deltaY * newRes);
+		}
+		
+		var isIE8 = navigator.userAgent.indexOf("MSIE 8.0") !=-1 ;
+		if( isIE8 ) {
+			this.lastDblClickMs = new Date().getTime();
+		}
+
+		this.sendMapSetCenter(newCenter, newZoom);
 	},
 	/**
 	 * Method: defaultDblRightClick
@@ -354,8 +419,6 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 	 * evt - {Event}
 	 */
 	defaultDblRightClick : function(evt) {
-		var newCenter = this.map.getLonLatFromViewPortPx(evt.xy);
-		/*this.map.setCenter(newCenter, this.map.zoom - 1);*/
 		this.sendMapZoomOut();
 	},
 	/**

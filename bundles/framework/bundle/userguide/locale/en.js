@@ -15,7 +15,7 @@ Oskari.registerLocalization({
       "generic": "Loading user guide failed. Please try again later."
     },
     "help": {
-      "tags": "karttaikkuna,pikaohje",
+      "tags": "map window,user guide",
       "contentPart": "body"
     }
   }

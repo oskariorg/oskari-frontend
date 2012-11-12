@@ -233,7 +233,6 @@ function(mapLayerUrl, sandbox) {
      * 	 Returns an array of layers added to the service for example via #addLayer()
      */
     getAllLayers : function() {
-        var lang = Oskari.$().sandbox.getLanguage();
         return this._loadedLayersList;
     },
     /**
@@ -450,6 +449,7 @@ function(mapLayerUrl, sandbox) {
             layer.setDescription(mapLayerJson.subtitle);
             layer.setDataUrl(mapLayerJson.dataUrl);
             layer.setMetadataIdentifier(mapLayerJson.dataUrl_uuid);
+            layer.setBackendStatus(mapLayerJson.backendStatus);
             layer.setOrganizationName(mapLayerJson.orgName);
             layer.setInspireName(mapLayerJson.inspire);
             layer.setOrderNumber(mapLayerJson.orderNumber);
@@ -604,10 +604,6 @@ function(mapLayerUrl, sandbox) {
 			var foundLayer = this.findMapLayer(id);
             throw "Trying to add map layer with id '" + id + " (" + name + ")' but that id is already reserved for '" + foundLayer.getName() + "'";
 		}
-        /*
-        if(foundLayer != null) {
-            throw "Trying to add map layer with id '" + id + " (" + name + ")' but that id is already reserved for '" + foundLayer.getName() + "'";
-        }*/
     },
     /**
      * @method findMapLayer
@@ -636,11 +632,9 @@ function(mapLayerUrl, sandbox) {
             var layer = layerList[i];
             /* recurse to sublayers */
             var subLayers = layer.getSubLayers();
-            for(var j = 0; j < subLayers.length; j++) {
-                var subLayer = this.findMapLayer(id, subLayers);
-                if(subLayer != null) {
-                    return subLayer;
-                }
+            var subLayer = this.findMapLayer(id, subLayers);
+            if(subLayer != null) {
+                return subLayer;
             }
         }
 

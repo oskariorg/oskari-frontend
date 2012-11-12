@@ -38,9 +38,32 @@ function() {
     this.html.find('div.content').hide();
 }, {
     /**
+     * @method setVisible
+     * Shows/hides the panel
+     * @param {Boolean} bln - true to show, false to hide
+     */
+    setVisible : function(bln) {
+        // checking since we dont assume param is boolean
+        if(bln == true) {
+            this.html.show();
+        }
+        else {
+            this.html.hide();
+        }
+    },
+    /**
+     * @method isVisible
+     * Returns true if panel is currently visible
+     * @return {Boolean}
+     */
+    isVisible : function() {
+        // checking since we dont assume param is boolean
+        return this.html.is(":visible");
+    },
+    /**
      * @method isOpen
      * Returns true if panel is currently open
-     * @return 
+     * @return {Boolean}
      */
     isOpen : function() {
         return this.html.hasClass('open');
@@ -75,7 +98,15 @@ function() {
     setTitle : function(pTitle) {
         this.title = pTitle;
         var header = this.html.find('div.header div.headerText'); 
-        header.append(this.title);
+        header.html(this.title);
+    },
+    /**
+     * @method getTitle
+     * Gets the panel title
+     * @return {String}
+     */
+    getTitle : function() {
+        return this.title;
     },
     /**
      * @method setContent

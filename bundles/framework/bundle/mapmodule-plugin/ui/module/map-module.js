@@ -10,11 +10,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
  *
  * @param {String} id
  * 		Unigue ID for this map
+ * @param {String} imageUrl
+ *      markerimage base url
  *
  */
-function(id) {
+function(id, imageUrl) {
 
     this._id = id;
+    this._imageUrl = imageUrl;
 
     this._controls = {};
     this._layerPlugins = {};
@@ -46,6 +49,14 @@ function(id) {
     this._navigationHistoryTool.id = "navigationhistory";
     this._localization = null;
 }, {
+    
+    getImageUrl : function() {
+        if(!this._imageUrl) {
+            // default if not set 
+            return "/Oskari/resources";
+        }
+        return this._imageUrl;
+    },
     /*
      * map controls - storage for controls by id
      */
@@ -131,9 +142,9 @@ function(id) {
         }
 
         this.requestHandlers = {
-            mapLayerUpdateHandler : Oskari.clazz.create('Oskari.mapframework.mapmodule-plugin' + '.request.MapLayerUpdateRequestHandler', sandbox, this),
-            mapMoveRequestHandler : Oskari.clazz.create('Oskari.mapframework.mapmodule-plugin' + '.request.MapMoveRequestHandler', sandbox, this),
-            clearHistoryHandler : Oskari.clazz.create('Oskari.mapframework.mapmodule-plugin' + '.controls.ClearHistoryHandler', sandbox, this)
+            mapLayerUpdateHandler : Oskari.clazz.create('Oskari.mapframework.mapmodule-plugin.request.MapLayerUpdateRequestHandler', sandbox, this),
+            mapMoveRequestHandler : Oskari.clazz.create('Oskari.mapframework.mapmodule-plugin.request.MapMoveRequestHandler', sandbox, this),
+            clearHistoryHandler : Oskari.clazz.create('Oskari.mapframework.mapmodule-plugin.controls.ClearHistoryHandler', sandbox, this)
         };
         sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
         sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
@@ -518,14 +529,12 @@ function(id) {
      * Calculate layer scales return: calculated mapscales
      */
     calculateLayerScales : function(maxScale, minScale) {
-        var layerScales = new Array();
-
-        if(minScale && maxScale) {
-            this.layerScales = [];
-            for(var i = 0; i < this._mapScales.length; i++) {
-                if(minScale >= this._mapScales[i] && maxScale <= this._mapScales[i])
+        var layerScales = [];
+        for(var i = 0; i < this._mapScales.length; i++) {
+            if((!minScale || minScale >= this._mapScales[i]) &&  
+               (!maxScale || maxScale <= this._mapScales[i])) {
                     layerScales.push(this._mapScales[i]);
-            }
+               }
         }
         return layerScales;
     },
@@ -621,9 +630,9 @@ function(id) {
         this._map.addLayer(layerMarkers);
 
         var size = new OpenLayers.Size(32, 32);
-        var offset = new OpenLayers.Pixel(0, -size.h);
+        var offset = new OpenLayers.Pixel(-16, -size.h);
 
-        var icon = new OpenLayers.Icon(Oskari.$().startup.imageLocation + '/resource/icons/paikkamerkinta.png', size, offset);
+        var icon = new OpenLayers.Icon(this.getImageUrl() + '/framework/bundle/mapmodule-plugin/images/marker.png', size, offset);
         var marker = new OpenLayers.Marker(centerMapLonLat, icon);
         layerMarkers.addMarker(marker);
     },

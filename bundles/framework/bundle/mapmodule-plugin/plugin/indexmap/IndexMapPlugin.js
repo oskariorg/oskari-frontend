@@ -16,8 +16,7 @@ function(config) {
     this._map = null;
     this._conf = config;
     this._indexMap = null;
-    // TODO: location was previously gotten from Oskari.$.startup, but this might not be any better
-    this._indexMapUrl = '/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/suomi25m_tm35fin.png';
+    this._indexMapUrl = '/framework/bundle/mapmodule-plugin/plugin/indexmap/images/suomi25m_tm35fin.png';
 }, {
     /** @static @property __name plugin name */
     __name : 'IndexMapPlugin',
@@ -66,8 +65,12 @@ function(config) {
      */
     init : function(sandbox) {
 
+    },
+    _createUI : function() {
         /* overview map */
-        var graphic = new OpenLayers.Layer.Image('Overview map image', this._indexMapUrl, new OpenLayers.Bounds(26783, 6608595, 852783, 7787250), new OpenLayers.Size(120, 173));
+        var graphic = new OpenLayers.Layer.Image('Overview map image', 
+            this.getMapModule().getImageUrl() + this._indexMapUrl, 
+            new OpenLayers.Bounds(26783, 6608595, 852783, 7787250), new OpenLayers.Size(120, 173));
 
         /*
          * create an overview map control with non-default
@@ -82,15 +85,12 @@ function(config) {
             },
             layers : [graphic],
             size : new OpenLayers.Size(120, 173),
-            autoPan : false
+            autoPan : false,
+            controls : []
         };
 
         /* Indexmap */
         this._indexMap = new OpenLayers.Control.OverviewMap(controlOptions);
-        //
-        //this._overviewMap.id = "index-map-" + this.getName();
-        //this._overviewMap.title = 'mapcontrolsservice_indexmap_title';
-
     },
     /**
      * @method register
@@ -119,6 +119,7 @@ function(config) {
     startPlugin : function(sandbox) {
         this._sandbox = sandbox;
         this._map = this.getMapModule().getMap();
+        this._createUI();
 
         sandbox.register(this);
         for(p in this.eventHandlers ) {

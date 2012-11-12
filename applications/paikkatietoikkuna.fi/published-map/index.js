@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Published', function() {
      * starts the application with bundle definitions declared
      * in property appSetup.startupSequence
      */
-    start : function() {
+    start : function(cb) {
 
         var me = this;
 
@@ -38,6 +38,9 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Published', function() {
         app.setConfiguration(appConfig);
         app.startApplication(function(startupInfos) {
             me.instance = startupInfos.bundlesInstanceInfos['mapfull'].bundleInstance;
+            if(cb) {
+                cb(me.instance);
+            }
         });
     },
     /**
@@ -218,7 +221,7 @@ jQuery(document).ready(function() {
         style : 'style1'
     };
     if(!ajaxUrl) {
-    	alert('Ajax URL not set - cannot proceed');
+        jQuery('#mapdiv').append('Unable to start');
     	return;
     } 
     if(!language) {
@@ -259,6 +262,17 @@ jQuery(document).ready(function() {
         ajaxUrl = ajaxUrl.substring(pathIdx);
     }
 
+    var gfiParamHandler = function(sandbox) {
+        if(getURLParameter('showGetFeatureInfo') != 'true') {
+            return;
+        }
+        var lon  = sandbox.getMap().getX();
+        var lat  = sandbox.getMap().getY();
+        var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+        var px = mapModule.getMap().getViewPortPxFromLonLat({lon : lon, lat: lat});
+        sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
+    }
+    
     jQuery.ajax({
         type : 'GET',
         dataType : 'json',
@@ -272,19 +286,16 @@ jQuery(document).ready(function() {
             if (appSetup.startupSequence && appSetup.configuration) {
                 main.appSetup.startupSequence = appSetup.startupSequence;
                 main.appConfig = appSetup.configuration;
-                /*
-                if (width > 0 && height > 0) {
-                    main.appConfig.mapfull.conf.size = {
-                        width : width,
-                        height : height
-                    };
-                }
-                */
-                main.start();
+                main.start(function(instance) {
+                    var sb = instance.getSandbox();
+                    gfiParamHandler(sb);
+                });
             }
         },
-        error : function() {
-            alert('GetMapConfiguration failed.');
+        error : function(jqXHR, textStatus) {
+            if (jqXHR.status != 0) {
+                jQuery('#mapdiv').append('Unable to start');
+            }
         }
     });
 

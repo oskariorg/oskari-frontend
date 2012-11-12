@@ -24,7 +24,7 @@ Oskari = (function() {
 		}
 
 		if(window.console && window.console.debug)
-			window.console.debug(what);
+			window.console.debug(msg);
 	}
 	/**
 	 * @class Oskari.bundle_locale
@@ -2228,7 +2228,7 @@ Oskari = (function() {
 				seq : seq,
 				bndl : null,
 				player : null,
-				startupInfo : startupInfo,
+				startupInfo : startupInfo
 			};
 
 			function schedule() {

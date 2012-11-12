@@ -39,7 +39,9 @@ Oskari.registerLocalization({
       "save": "Save",
       "movePlaces": "Move places and delete",
       "deleteCategory": "Delete",
-      "deleteCategoryAndPlaces": "Delete category and places"
+      "deleteCategoryAndPlaces": "Delete category and places",
+      "changeToPublic": "Make public",
+      "changeToPrivate": "Make private"
     },
     "placeform": {
       "title": "Place data",
@@ -100,11 +102,20 @@ Oskari.registerLocalization({
         "deleteConfirm": "Delete map layer {0}?",
         "deleted": "Map layer deleted"
       },
+      "categoryToPublic": {
+        "title": "Make map layer public",        
+        "message": "You are making the map layer \"{0}\" public. You can share links to a public map layer with other internet users or embed the map layer as a map window on another website. Other users can also view the map layer in Paikkatietoikkuna."
+      },
+      "categoryToPrivate": {
+        "title": "Make map layer private",        
+        "message": "You are making the map layer \"{0}\" private. After this it will no longer be possible to share it with other users or embed it on another website. Other users can no longer view the map layer in Paikkatietoikkuna."
+      },
       "error": {
         "addCategory": "The map layer could not be saved. The place has not been saved.",
         "editCategory": "The map layer could not be saved.",
         "savePlace": "The place could not be saved.",
         "title": "Error!",
+        "generic": "System error. Please try again later.",
         "deleteCategory": "Error occurred while deleting!",
         "deleteDefault": "The default map layer cannot be deleted."
       }

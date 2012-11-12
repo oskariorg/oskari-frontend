@@ -15,10 +15,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
  */
 function(viewUrl) {
     this._viewUrl = viewUrl;
-    // '/web/fi/kartta' + '?p_p_id=Portti2Map_WAR' + '_portti2mapportlet' +
-    // '&p_p_lifecycle=1' + '&p_p_state=exclusive' + '&p_p_mode=view' +
-    // '&p_p_col_id=column-1' + '&p_p_col_count=1' + '&_Portti2Map_WAR_' +
-    // 'portti2mapportlet_fi' + '.mml.baseportlet.CMD=ajax.jsp' +
 }, {
     /** @static @property __qname fully qualified name for service */
     __qname : "Oskari.mapframework.bundle.personaldata.service.ViewService",
@@ -55,7 +51,7 @@ function(viewUrl) {
         }
 
         jQuery.ajax({
-            url : me._viewUrl + '&action_route=GetViews',
+            url : me._viewUrl + 'action_route=GetViews',
             data : {
                 viewType : type
             },
@@ -88,7 +84,7 @@ function(viewUrl) {
         var me = this;
 
         jQuery.ajax({
-            url : me._viewUrl + '&action_route=DeleteView',
+            url : me._viewUrl + 'action_route=DeleteView',
             data : {
                 id : view.id
             },
@@ -123,7 +119,7 @@ function(viewUrl) {
         var me = this;
 
         jQuery.ajax({
-            url : me._viewUrl + '&action_route=AdjustViewAccess',
+            url : me._viewUrl + 'action_route=AdjustViewAccess',
             data : {
                 id : id,
                 isPublic : isPublic
@@ -159,7 +155,7 @@ function(viewUrl) {
         var me = this;
 
         jQuery.ajax({
-            url : me._viewUrl + '&action_route=RenameView',
+            url : me._viewUrl + 'action_route=RenameView',
             type : 'POST',
             data : {
                 id : id,

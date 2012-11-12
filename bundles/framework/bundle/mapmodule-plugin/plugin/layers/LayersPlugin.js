@@ -181,21 +181,25 @@ function() {
             }
         },
         'AfterMapMoveEvent' : function() {
-            var me = this;
-            // throttle requests with small delay
-            if(this._previousTimer) {
-                clearTimeout(this._previousTimer);
-                this._previousTimer = null;
-            }
-            this._visibilityCheckOrder++;
-            this._previousTimer = setTimeout(function() {
-                me._checkLayersVisibility(me._visibilityCheckOrder);
-            }, this._visibilityPollingInterval);
+           this._scheduleVisiblityCheck();
         },
         'AfterMapLayerAddEvent' : function(event) {
             // parse geom if available
             this._parseGeometryForLayer(event.getMapLayer());
+            this._scheduleVisiblityCheck();
         }
+    },
+    
+    _scheduleVisiblityCheck : function() {
+    	 var me = this;
+        if(this._previousTimer) {
+            clearTimeout(this._previousTimer);
+        	this._previousTimer = null;
+       	}
+		this._visibilityCheckOrder++;
+        this._previousTimer = setTimeout(function() {
+        	me._checkLayersVisibility(me._visibilityCheckOrder);
+        }, this._visibilityPollingInterval);
     },
 
     /**
@@ -299,18 +303,24 @@ function() {
      */
     isInGeometry : function(layer) {
         var geometries = layer.getGeometry();
-        var bounds = null;
+        if( !geometries ) {
+        	return true;
+        }
+        if( geometries.length == 0 ) {
+        	return true;
+        }
+
+        var viewBounds = this.getMap().getExtent();
         for(var i = 0; i < geometries.length; ++i) {
-            if(!bounds) {
-                bounds = geometries[i].getBounds();
-            } else {
-                bounds.extend(geometries[i].getBounds());
+            var bounds = geometries[i].getBounds();
+            if( !bounds ) {
+            	continue;
+            }
+            if( bounds.intersectsBounds(viewBounds) ) {
+            	return true;
             }
         }
-        if(bounds) {
-            return this.getMap().getExtent().intersectsBounds(bounds);
-        }
-        return true;
+        return false;
     },
     /**
      * @method notifyLayerVisibilityChanged
@@ -322,36 +332,38 @@ function() {
      *            layer layer to check against
      */
     notifyLayerVisibilityChanged : function(layer) {
-        var scaleOk = layer.isVisible();
-        var geometryMatch = layer.isVisible();
-        // if layer is visible check actual values
-        if(layer.isVisible()) {
-            scaleOk = this._isInScale(layer);
-            geometryMatch = this.isInGeometry(layer);
-        }
-        // setup openlayers visibility
-        // NOTE: DO NOT CHANGE visibility in internal layer object (it will
-        // change in UI also)
-        // this is for optimization purposes
-        var map = this.getMap();
-        if(scaleOk && geometryMatch && layer.isVisible()) {
-            // show non-baselayer if in scale, in geometry and layer visible
-            var mapLayer = map.getLayersByName('layer_' + layer.getId());
-            if(mapLayer && mapLayer.setVisibility) {
-                mapLayer.setVisibility(true);
-                mapLayer.display(true);
-            }
-        } else {
-            // otherwise hide non-baselayer
-            var mapLayer = map.getLayersByName('layer_' + layer.getId());
-            if(mapLayer && mapLayer.setVisibility) {
-                mapLayer.setVisibility(false);
-                mapLayer.display(false);
-            }
-        }
-        var event = this._sandbox.getEventBuilder('MapLayerVisibilityChangedEvent')(layer, scaleOk, geometryMatch);
-        this._sandbox.notifyAll(event);
-    },
+        var scaleOk = layer.isVisible();
+        var geometryMatch = layer.isVisible();
+        // if layer is visible check actual values
+        if(layer.isVisible()) {
+            scaleOk = this._isInScale(layer);
+            geometryMatch = this.isInGeometry(layer);
+        }
+        // setup openlayers visibility
+        // NOTE: DO NOT CHANGE visibility in internal layer object (it will
+        // change in UI also)
+        // this is for optimization purposes
+        var map = this.getMap();
+        if(scaleOk && geometryMatch && layer.isVisible()) {
+            // show non-baselayer if in scale, in geometry and layer visible
+            var mapLayers = map.getLayersByName('layer_' + layer.getId());
+            var mapLayer = mapLayers.length ? mapLayers[0] : null;
+            if(mapLayer && !mapLayer.getVisibility()) {
+                mapLayer.setVisibility(true);
+                mapLayer.display(true);
+            }
+        } else {
+            // otherwise hide non-baselayer
+            var mapLayers = map.getLayersByName('layer_' + layer.getId());
+            var mapLayer = mapLayers.length ? mapLayers[0]: null;
+            if(mapLayer && mapLayer.getVisibility()) {
+                mapLayer.setVisibility(false);
+                mapLayer.display(false);
+            }
+        }
+        var event = this._sandbox.getEventBuilder('MapLayerVisibilityChangedEvent')(layer, scaleOk, geometryMatch);
+        this._sandbox.notifyAll(event);
+    },
     /**
      * @method _afterRearrangeSelectedMapLayerEvent
      *

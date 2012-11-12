@@ -9,6 +9,10 @@ Oskari.registerLocalization({
       "myplaces": {
         "title": "Places",
         "nocategories": "You have not yet saved the places.",
+        "publishCategory": {
+            "privateTooltip": "The map layer is private. Click the map layer to make it public.",
+            "publicTooltip": "The map layer is public. Click the map layer to make it private."
+        },
         "editCategory": "Edit map layer",
         "deleteCategory": "Delete map layer",
         "edit": "Edit",

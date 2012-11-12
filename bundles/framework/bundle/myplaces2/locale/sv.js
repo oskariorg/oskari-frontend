@@ -39,7 +39,9 @@ Oskari.registerLocalization({
       "save": "Lagra",
       "movePlaces": "Flytta objekt och ta bort",
       "deleteCategory": "Ta bort",
-      "deleteCategoryAndPlaces": "Ta bort kategori inklusive objekt"
+      "deleteCategoryAndPlaces": "Ta bort kategori inklusive objekt",
+      "changeToPublic": "Ändra till offentlig",
+      "changeToPrivate": "Ändra till privat"
     },
     "placeform": {
       "title": "Uppgifter om objektet",
@@ -100,11 +102,20 @@ Oskari.registerLocalization({
         "deleteConfirm": "Vill du ta bort kartlagret {0}?",
         "deleted": "Kartlagret borttaget"
       },
+      "categoryToPublic": {
+        "title": "Offentliggör kartlagret",        
+        "message": "Du håller på att offentliggöra kartlagret \"{0}\". Du kan skicka länkar till ett offentligt kartlager till andra internetanvändare eller inbädda det som en karta i en annan webbtjänst. Andra användare kan även titta på kartlagret i Paikkatietoikkuna."
+      },
+      "categoryToPrivate": {
+        "title": "Gör kartlagret privat",
+        "message": "Du håller på att göra kartlagret \"{0}\" privat. Efter detta kan du inte längre skicka länkar från kart-lagret eller inbädda det som en karta, andra användare kan inte heller titta på det i Paikkatietoikkuna."
+      },
       "error": {
         "addCategory": "Kartlagret kunde inte lagras. Objektet har inte lagrats.",
         "editCategory": "Kartlagret kunde inte lagras.",
         "savePlace": "Objektet kunde inte lagras.",
         "title": "Fel!",
+        "generic": "Systemfel. Försök på nytt senare.",
         "deleteCategory": "Fel i borttagningen!",
         "deleteDefault": "Den förvalda kartlagret kan inte tas bort."
       }

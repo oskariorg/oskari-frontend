@@ -180,6 +180,15 @@ function(config) {
         'AfterMapLayerAddEvent' : function(event) {
         	this.addLayer(event.getMapLayer());
         },
+        
+        /**
+         * @method MapModulePlugin_MapLayerVisibilityRequest
+         * refreshes checkbox state based on visibility
+         */
+        'MapLayerVisibilityChangedEvent' : function(event) {
+        	this.updateLayer(event.getMapLayer());
+        },
+      
         /**
          * @method AfterMapMoveEvent
          * @param {Oskari.mapframework.event.common.AfterMapMoveEvent} event
@@ -250,15 +259,39 @@ function(config) {
     	
     	var input = this.templateCheckbox.clone();
     	input.attr('value', layer.getId());
+    	
     	if(layer.isVisible()) {
-    		input.attr('checked', 'checked');
+    		input.attr('checked', true);
+    	} else {
+    		input.attr('checked', false);
     	}
     	this._bindCheckbox(input, layer);
     	
         div.find('span').before(input);
         this.layerRefs[layer.getId()] = div;
         layersDiv.append(div);
+        
+       
+
     },
+    
+    updateLayer : function(layer) {
+    	var div = this.layerRefs[layer.getId()];
+        var input = div.find('input');
+        var blnVisible = layer.isVisible(); 
+		if(blnVisible) {
+			if(!input.is(':checked')) {
+    			input.attr('checked', 'checked');
+			}
+		}
+		else {
+			if(input.is(':checked')) {
+    			input.removeAttr('checked');
+			}
+		}
+    	
+    },
+    
     /**
      * @method _bindCheckbox
      * Binds given checkbox to control given layers visibility
@@ -294,8 +327,9 @@ function(config) {
         var request = visibilityRequestBuilder(layer.getId(), blnVisible);
         sandbox.request(this, request);
         
+        /* moved to event handling */
         // ensure that checkbox is in correct state
-        var div = this.layerRefs[layer.getId()];
+        /*var div = this.layerRefs[layer.getId()];
         var input = div.find('input');
 		if(blnVisible) {
 			if(!input.is(':checked')) {
@@ -306,7 +340,7 @@ function(config) {
 			if(input.is(':checked')) {
     			input.removeAttr('checked');
 			}
-		}
+		}*/
     },
     /**
      * @method removeLayer

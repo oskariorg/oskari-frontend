@@ -70,6 +70,8 @@ function() {
     this._geometry = [];
     // wellknown text for polygon geometry
     this._geometryWKT = null;
+    
+    this._backendStatus = null;
 }, {
     /**
      * @method setGeometryWKT
@@ -445,5 +447,17 @@ function() {
      */
     setMetadataIdentifier: function(metadataid) {
     	this._metadataIdentifier = metadataid;
+    },
+    /**
+     * @method getBackendStatus
+     */
+    getBackendStatus: function() {
+    	return this._backendStatus;
+    },
+    /**
+     * @method setBackendStatus
+     */
+    setBackendStatus: function(backendStatus) {
+    	this._backendStatus = backendStatus;
     }
 });

@@ -461,6 +461,20 @@ function() {
                 if (value == null) {
                     continue;
                 }
+                // if value is an array -> format it first
+                // TODO: maybe some nicer formatting? 
+                if(Object.prototype.toString.call( value ) === '[object Array]' ) {
+                    var placeHolder = '';
+                    for(var i=0; i < value.length; ++i ) {
+                        var obj = value[i];
+                        for (objAttr in obj) {
+                            placeHolder = placeHolder + objAttr + ": " + obj[objAttr] + '<br/>';
+                        }
+                        placeHolder = placeHolder + '<br/>';
+                    }
+                    value = placeHolder;
+                }
+                
                 if ((value.startsWith && value.startsWith('http://')) || (value.indexOf && value.indexOf('http://') == 0)) {
                     // if (value.startsWith('http://')) {
                     // if (value.indexOf('http://') == 0) {
