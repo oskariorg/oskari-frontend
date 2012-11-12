@@ -581,17 +581,11 @@ function(instance) {
         
         var publishPermission = layer.getPermission('publish');
 
-        if (publishPermission == 'publication_permission_ok') {
-            if (sandbox.getUser().isLoggedIn()) {
-                footer.find('div.layer-rights').html(loc.rights['can_be_published_map_user'].label);
-                footer.find('div.layer-rights').attr("title", loc.rights['can_be_published_map_user'].tooltip);
-            } else {
-                footer.find('div.layer-rights').html(loc.rights['login-url']);
-                footer.find('div.layer-rights').attr("title", loc.rights['need-login']);
-            }
-        } else {
-            footer.find('div.layer-rights').html(loc.rights['no_publication_permission'].label);
-            footer.find('div.layer-rights').attr("title", loc.rights['no_publication_permission'].tooltip);
+        if (publishPermission == 'publication_permission_ok' && 
+            sandbox.getUser().isLoggedIn()) {
+                
+            footer.find('div.layer-rights').html(loc.rights['can_be_published_map_user'].label);
+            footer.find('div.layer-rights').attr("title", loc.rights['can_be_published_map_user'].tooltip);
         }
     },
     /**
