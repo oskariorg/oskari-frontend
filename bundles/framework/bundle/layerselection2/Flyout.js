@@ -203,6 +203,9 @@ function(instance) {
      	toolsDiv.append(footer);
         
  	    var slider = this._addSlider(layer,layerDiv);
+ 	     	    
+        var opa = layerDiv.find('div.layer-opacity input.opacity');
+        opa.attr('value', layer.getOpacity());
          
     },
     
