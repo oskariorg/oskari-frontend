@@ -60,7 +60,7 @@ div.layerselection2 div.layer-tools div.left-tools div.layer-visibility {
 }
 div.layerselection2 div.layer-tools div.left-tools div.layer-opacity {
     display: inline-block;
-    background-image: url('../images/opacity_slider.png');
+    background-image: url('/Oskari/resources/framework/bundle/layerselection2/images/opacity_slider.png');
     background-repeat: no-repeat;    
     
 
