@@ -230,25 +230,7 @@ function() {
 			.get()[0];
 			var handle = extensionInfo.draggableHandle;
 			extensionInfo.draggableTarget = flyoutTarget;
-			/* RightJS works but hassles too much */
-			/*extensionInfo.draggable = new Draggable(flyoutTarget, {
-				handle : handle,
-				scroll : false,
-				onStop : function(draggable, event) {
-
-					me.shuffleZIndices(flyout);
-
-					// draggable hassles with height - should not 
-					flyout.css("height", "");
-
-					var viewState = me.getFlyoutViewState(flyout, "detach");
-
-					extensionInfo.viewState = viewState;
-					me.notifyExtensionViewStateChange(extensionInfo);
-				}
-			});
-			*/
-			/* jQueryUI won't work */
+			/* jQueryUI won't work without this */
 			flyout.css("position","absolute");
 			
 			var useHelper = false;
@@ -268,8 +250,7 @@ function() {
 				scroll: false,
 				stack: '.oskari-flyout',
 				create: function(event,ui) {
-					/*ui.helper.css("position","absolute");*/
-					
+				
 				},
 				start: function(){
 					if( useHelper ) { flyout.css("display","none"); }
@@ -295,30 +276,11 @@ function() {
 					
 				}
 			});
-			
-			 /*flyout.addClass('draggable');*/
-			 
-        	/* flyout.drag("start",function(){
-			$( this ).addClass("active");						   
-		})
-		.drag(function( ev, dd ){
-			$( this ).css({
-				top: dd.offsetY,
-				left: dd.offsetX
-			});
-		})
-		.drag("end",function(){
-			$( this ).removeClass("active");						   
-		});*/
-	    	 
 
 			var fcc = flyout.children('.oskari-flyoutcontentcontainer');
 			var fcccc = fcc.children('.oskari-flyoutcontent');
 
 			var el = fcc.children('.oskari-flyoutcontent');
-
-			/*RightJS.$(flyout.get()[0]).makeResizable({});*/
-			/*RightJS.$(fcc.get()[0]).makeResizable({direction:'bottom'});*/
 
 			flyoutPlugin.setEl(el.get());
 
