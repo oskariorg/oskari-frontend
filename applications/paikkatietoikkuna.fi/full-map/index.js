@@ -180,6 +180,23 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
             },
             instanceProps : {}
         },
+        {
+            title : 'OskariUI',
+            fi : 'OskariUI',
+            sv : 'OskariUI',
+            en : 'OskariUI',
+            bundlename : 'oskariui',
+            bundleinstancename : 'oskariui',
+            metadata : {
+                "Import-Bundle" : {
+                    "oskariui" : {
+                        bundlePath : '/Oskari/packages/framework/bundle/'
+                    }
+                },
+                "Require-Bundle-Instance" : []
+            },
+            instanceProps : {}
+        },
         // Oskari DIV Manazer
         {
             title : 'Oskari DIV Manazer',
