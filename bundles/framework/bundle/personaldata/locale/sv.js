@@ -10,8 +10,8 @@ Oskari.registerLocalization({
         "title": "Objekt",
         "nocategories": "Du har ännu inte lagrat objekten.",
         "publishCategory": {
-            "privateTooltip": "Maplayer is private. Click to make it public.",
-            "publicTooltip": "Maplayer is public. Click to make it private."
+            "privateTooltip": "Kartlagret är privat. Klicka på lagret för att offentliggöra det.",
+            "publicTooltip": "Kartlagret är offentliggöra. Klicka på lagret för att privat det."
         },
         "editCategory": "Editera kartlager",
         "deleteCategory": "Ta bort kartlager",

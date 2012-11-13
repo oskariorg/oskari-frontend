@@ -40,8 +40,8 @@ Oskari.registerLocalization({
       "movePlaces": "Flytta objekt och ta bort",
       "deleteCategory": "Ta bort",
       "deleteCategoryAndPlaces": "Ta bort kategori inklusive objekt",
-      "changeToPublic": "Change to public",
-      "changeToPrivate": "Change to private"
+      "changeToPublic": "Ändra till offentlig",
+      "changeToPrivate": "Ändra till privat"
     },
     "placeform": {
       "title": "Uppgifter om objektet",
@@ -103,12 +103,12 @@ Oskari.registerLocalization({
         "deleted": "Kartlagret borttaget"
       },
       "categoryToPublic": {
-        "title": "TBD: Change map layer to public",
-        "message": "TBD: Olet muuttamassa karttatasoa \"{0}\" julkiseksi. Voit jakaa julkisen karttatason verkossa tai julkaista sen karttana toiseen verkkopalveluun."
+        "title": "Offentliggör kartlagret",        
+        "message": "Du håller på att offentliggöra kartlagret \"{0}\". Du kan skicka länkar till ett offentligt kartlager till andra internetanvändare eller inbädda det som en karta i en annan webbtjänst. Andra användare kan även titta på kartlagret i Paikkatietoikkuna."
       },
       "categoryToPrivate": {
-        "title": "TBD: Change map layer to private",
-        "message": "TBD: Olet muuttamassa karttatasoa \"{0}\" yksityiseksi. Tämän jälkeen et voi jakaa tai julkaista sitä karttana."
+        "title": "Gör kartlagret privat",
+        "message": "Du håller på att göra kartlagret \"{0}\" privat. Efter detta kan du inte längre skicka länkar från kart-lagret eller inbädda det som en karta, andra användare kan inte heller titta på det i Paikkatietoikkuna."
       },
       "error": {
         "addCategory": "Kartlagret kunde inte lagras. Objektet har inte lagrats.",
