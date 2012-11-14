@@ -147,6 +147,7 @@ function() {
      */
     removePermission : function(action) {
         this._permissions[action] = null;
+        delete this._permissions[action];
     },
     /**
      * @method getPermission

@@ -394,6 +394,13 @@ function() {
         return this._type === "BASE_LAYER";
     },
     /**
+     * @method isGroupLayer
+     * @return {Boolean} true if this is a group layer (=has sublayers)
+     */
+    isGroupLayer : function() {
+        return false;
+    },
+    /**
      * @method isInScale
      * @param {Number} scale scale to compare to
      * @return {Boolean} true if given scale is between this layers min/max scales. Always return true for base-layers.

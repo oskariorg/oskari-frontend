@@ -247,9 +247,6 @@ function() {
         	if( !layer.isInScale(mapScale) ) {
 				continue;
 			}
-			if( !layer.isFeatureInfoEnabled() ) {
-				continue;
-			}        	
 			if( !layer.isVisible() ) {
 				continue;
 			}

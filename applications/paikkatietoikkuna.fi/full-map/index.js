@@ -605,11 +605,8 @@ jQuery(document).ready(function() {
             if (appSetup.startupSequence && appSetup.configuration) {
                 main.appSetup.startupSequence = appSetup.startupSequence;
                 main.appConfig = appSetup.configuration;
-                // some build script uncommenting magic here? logging should be disabled before this!
                 main.start(function(instance) {
                     var sb = instance.getSandbox();
-                    //sb.disableDebug();
-                    //sb._core.disableDebug();
                     gfiParamHandler(sb);
                 });
             } else {

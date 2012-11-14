@@ -230,7 +230,7 @@ function() {
     _parseGeometryForLayer : function(layer) {
 
         // parse geometry if available
-        if(layer.getGeometry().length == 0) {
+        if(layer.getGeometry && layer.getGeometry().length == 0) {
             var layerWKTGeom = layer.getGeometryWKT();
             if(!layerWKTGeom) {
                 // no wkt, dont parse

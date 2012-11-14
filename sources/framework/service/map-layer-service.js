@@ -18,7 +18,7 @@ function() {
      * @method parseLayerData
      * Interface method declaration. Implementation should do the parsing from JSON to MapLayer Object
      * 
-     * @param {Object} layer layer object? TODO: check
+     * @param {Object} layer layer object
      * @param {Object} layerJson JSON data representing the map layer
      * @param {Oskari.mapframework.service.MapLayerService} maplayerService
      * reference to map layer service
@@ -363,16 +363,29 @@ function(mapLayerUrl, sandbox) {
         baseLayer.setMetadataIdentifier(baseMapJson.dataUrl_uuid);
         
         
-        baseLayer.setOrganizationName(baseMapJson.orgName);
-        baseLayer.setInspireName(baseMapJson.inspire);
+        if(baseMapJson.orgName) {
+            baseLayer.setOrganizationName(baseMapJson.orgName);
+        }
+        else {
+            baseLayer.setOrganizationName("");
+        }
+        
+        if(baseMapJson.inspire) {
+            baseLayer.setInspireName(baseMapJson.inspire);
+        }
+        else {
+            baseLayer.setInspireName("");
+        }
+        baseLayer.setLegendImage(baseMapJson.legendImage);
+        baseLayer.setDescription(baseMapJson.info);
 
-        baseLayer.setFeatureInfoEnabled(false);
+        baseLayer.setQueryable(false);
         
         if(baseMapJson.permissions) {
-            	for(var perm in baseMapJson.permissions) {
-            		baseLayer.addPermission(perm, baseMapJson.permissions[perm]);	
-            	}
-            }
+        	for(var perm in baseMapJson.permissions) {
+        		baseLayer.addPermission(perm, baseMapJson.permissions[perm]);	
+        	}
+        }
 
 
         for(var i = 0; i < baseMapJson.subLayer.length; i++) {
@@ -385,20 +398,17 @@ function(mapLayerUrl, sandbox) {
         if(baseMapJson.opacity != null) {
             baseLayer.setOpacity(baseMapJson.opacity);
         } else if(baseLayer.getSubLayers().length > 0) {
-            baseLayer.setOpacity(baseLayer.getSubLayers()[0].getOpacity());
+            var subLayerOpacity = baseLayer.getSubLayers()[0].getOpacity();
+            if(subLayerOpacity != null) {
+                baseLayer.setOpacity(subLayerOpacity);
+            }
+            else {
+                baseLayer.setOpacity(100);
+            }
         } else {
             baseLayer.setOpacity(100);
         }
 
-        /* Legend image */
-        if(baseMapJson.legendImage != null && baseMapJson.legendImage != "") {
-            baseLayer.setLegendImage(baseMapJson.legendImage);
-        }
-
-        /* Info */
-        if(baseMapJson.info != null && baseMapJson.info != "") {
-            baseLayer.setDescription(baseMapJson.info);
-        }
 
         return baseLayer;
     },
@@ -423,14 +433,9 @@ function(mapLayerUrl, sandbox) {
             }
             layer = Oskari.clazz.create(this.typeMapping[mapLayerJson.type]);
 
-            /*
-             * these may be implemented as jsonHandler
-             */
+            //these may be implemented as jsonHandler
             if(mapLayerJson.type == 'wmslayer') {
                 this._populateWmsMapLayerAdditionalData(layer, mapLayerJson);
-            } else if(mapLayerJson.type == 'wmtslayer') {
-            	// FIXME: WMTS is from a bundle, why is this in here? 
-                this._populateWmtsMapLayerAdditionalData(layer, mapLayerJson);
             } else if(mapLayerJson.type == 'vectorlayer') {
                 layer.setStyledLayerDescriptor(mapLayerJson.styledLayerDescriptor);
             }
@@ -443,19 +448,40 @@ function(mapLayerUrl, sandbox) {
             layer.setAsNormalLayer();
             layer.setId(mapLayerId);
             layer.setName(mapLayerJson.name);
-            layer.setOpacity(mapLayerJson.opacity);
+            
+            if(mapLayerJson.opacity != null) {
+                layer.setOpacity(mapLayerJson.opacity);
+            }
+            else {
+                layer.setOpacity(100);
+            }
             layer.setMaxScale(mapLayerJson.maxScale);
             layer.setMinScale(mapLayerJson.minScale);
             layer.setDescription(mapLayerJson.subtitle);
-            layer.setDataUrl(mapLayerJson.dataUrl);
+            //layer.setDataUrl(mapLayerJson.dataUrl);
             layer.setMetadataIdentifier(mapLayerJson.dataUrl_uuid);
-            layer.setBackendStatus(mapLayerJson.backendStatus);
-            layer.setOrganizationName(mapLayerJson.orgName);
-            layer.setInspireName(mapLayerJson.inspire);
-            layer.setOrderNumber(mapLayerJson.orderNumber);
+            if(mapLayerJson.backendStatus && layer.setBackendStatus) {
+                layer.setBackendStatus(mapLayerJson.backendStatus);
+            }
+            if(mapLayerJson.orgName) {
+                layer.setOrganizationName(mapLayerJson.orgName);
+            }
+            else {
+                layer.setOrganizationName("");
+            }
+            
+            if(mapLayerJson.inspire) {
+                layer.setInspireName(mapLayerJson.inspire);
+            }
+            else {
+                layer.setInspireName("");
+            }
+            //layer.setOrderNumber(mapLayerJson.orderNumber);
             layer.setVisible(true);
             
-            layer.setGeometryWKT(mapLayerJson.geom);
+            if(mapLayerJson.geom && layer.setGeometryWKT) {
+                layer.setGeometryWKT(mapLayerJson.geom);
+            }
             if(mapLayerJson.permissions) {
             	for(var perm in mapLayerJson.permissions) {
             		layer.addPermission(perm, mapLayerJson.permissions[perm]);	
@@ -497,30 +523,6 @@ function(mapLayerUrl, sandbox) {
         }
         // default to enabled, only check if it is disabled
         layer.setFeatureInfoEnabled(jsonLayer.gfi !== 'disabled');
-        return this._populateStyles(layer, jsonLayer);
-    },
-    /**
-     * @method _populateWmtsMapLayerAdditionalData
-     * @deprecated
-	 * 
-	 * FIXME: WMTS is from a bundle, why is this in here?  
-	 * Same things are done in Oskari.mapframework.wmts.service.WmtsLayerModelBuilder 
-     * 
-     * Parses WMTS specific data from JSON to a Oskari.mapframework.wmts.domain.WmtsLayer Object
-     * 
-     * @private 
-     * @param {Oskari.mapframework.wmts.domain.WmtsLayer} layer
-     * @param {Object} jsonLayer JSON presentation for a WMTS layer
-     * @return {Oskari.mapframework.wmts.domain.WmtsLayer} returns the same layer object with populated values for convenience
-     */
-    _populateWmtsMapLayerAdditionalData : function(layer, jsonLayer) {
-        layer.setWmtsName(jsonLayer.wmtsName);
-        if(jsonLayer.wmtsUrl) {
-            var wmtsUrls = jsonLayer.wmtsUrl.split(",");
-            for(var i = 0; i < wmtsUrls.length; i++) {
-                layer.addWmtsUrl(wmtsUrls[i]);
-            }
-        }
         return this._populateStyles(layer, jsonLayer);
     },
     /**
@@ -579,10 +581,12 @@ function(mapLayerUrl, sandbox) {
             layer.selectStyle("");
         }
 
-        layer.setQueryable(jsonLayer.isQueryable);
+        layer.setQueryable((jsonLayer.isQueryable == true));
         layer.setLegendImage(jsonLayer.legendImage);
         layer.setDataUrl(jsonLayer.dataUrl);
-        layer.setQueryFormat(jsonLayer.formats.value);
+        if(jsonLayer.formats && jsonLayer.formats.value) {
+            layer.setQueryFormat(jsonLayer.formats.value);
+        }
 
         return layer;
     },
