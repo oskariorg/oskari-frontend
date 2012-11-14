@@ -265,7 +265,7 @@ function(config) {
 	/**
 	 * @method _doSearch
 	 * @private
-	 * Sends out a Oskari.mapframework.request.common.SearchRequest with results callback #_showResults
+	 * Uses SearchService to make the actual search and calls  #_showResults
 	 */
 	_doSearch : function() {
 		if(this._searchInProgess == true) {

@@ -133,16 +133,8 @@ function() {
             this.handleAddMapLayerRequest(request);
             return true;
         },
-        'ManageFeaturesRequest' : function(request) {
-            this.handleManageFeaturesRequest(request);
-            return true;
-        },
         'RemoveMapLayerRequest' : function(request) {
             this.handleRemoveMapLayerRequest(request);
-            return true;
-        },
-        'SearchRequest' : function(request) {
-            this.handleSearchRequest(request);
             return true;
         },
         'ShowMapLayerInfoRequest' : function(request) {
@@ -161,34 +153,6 @@ function() {
             this.handleChangeMapLayerStyleRequest(request);
             return true;
         },
-        'DrawPolygonRequest' : function(request) {
-            this.handleDrawPolygonRequest(request);
-            return true;
-        },
-        'DrawSelectedPolygonRequest' : function(request) {
-            this.handleDrawSelectedPolygonRequest(request);
-            return true;
-        },
-        'SelectPolygonRequest' : function(request) {
-            this.handleSelectPolygonRequest(request);
-            return true;
-        },
-        'ErasePolygonRequest' : function(request) {
-            this.handleErasePolygonRequest(request);
-            return true;
-        },
-        'UpdateHiddenValueRequest' : function(request) {
-            this.handleUpdateHiddenValueRequest(request);
-            return true;
-        },
-        'DeactivateAllOpenlayersMapControlsButNotMeasureToolsRequest' : function(request) {
-            this.handleDeactivateAllOpenlayersMapControlsButNotMeasureToolsRequest(request);
-            return true;
-        },
-        'DeactivateAllOpenlayersMapControlsRequest' : function(request) {
-            this.handleDeactivateAllOpenlayersMapControlsRequest(request);
-            return true;
-        },
         'HighlightMapLayerRequest' : function(request) {
             this.handleHighlightMapLayerRequest(request);
             return true;
@@ -197,44 +161,8 @@ function() {
             this.handleHighlightWFSFeatureRequest(request);
             return true;
         },
-        'RemovePolygonRequest' : function(request) {
-            this.handleRemovePolygonRequest(request);
-            return true;
-        },
-        'HideWizardRequest' : function(request) {
-            this.handleHideWizardRequest(request);
-            return true;
-        },
-        'ShowWizardRequest' : function(request) {
-            this.handleShowWizardRequest(request);
-            return true;
-        },
-        'ShowNetServiceCentreRequest' : function(request) {
-            this.handleShowNetServiceCentreRequest(request);
-            return true;
-        },
-        'HideNetServiceCentreRequest' : function(request) {
-            this.handleHideNetServiceCentreRequest(request);
-            return true;
-        },
-        'NetServiceCenterRequest' : function(request) {
-            this.handleNetServiceCenterRequest(request);
-            return true;
-        },
         'HideMapMarkerRequest' : function(request) {
             this.handleHideMapMarkerRequest(request);
-            return true;
-        },
-        'UpdateNetServiceCentreRequest' : function(request) {
-            this.handleUpdateNetServiceCentreRequest(request);
-            return true;
-        },
-        'ActionStartRequest' : function(request) {
-            this.handleActionStartRequest(request);
-            return true;
-        },
-        'ActionReadyRequest' : function(request) {
-            this.handleActionReadyRequest(request);
             return true;
         },
         'DimMapLayerRequest' : function(request) {

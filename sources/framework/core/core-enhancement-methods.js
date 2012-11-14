@@ -1,16 +1,21 @@
 /**
- * Runs through all enhancements that can do schedule some events.
+ * @class Oskari.mapframework.core.Core.enhancementMethods
+ *
+ * This category class adds enhancement methods to Oskari core as they were in
+ * the class itself.
  */
-
 Oskari.clazz.category(
-//
-		'Oskari.mapframework.core.Core', 'enhancement-methods',
-		//
-		{
-
-			doEnhancements : function(enhancements) {
-				for ( var i = 0; i < enhancements.length; i++) {
-					enhancements[i].enhance(this);
-				}
-			}
-		});
+'Oskari.mapframework.core.Core', 'enhancement-methods',
+{
+    /**
+     * @method doEnhancements
+     * Runs all given enhancements (calls enhance method)
+     *
+     * @param {Oskari.mapframework.enhancement.Enhancement[]} enhancements array of enhancements to run
+     */
+    doEnhancements : function(enhancements) {
+        for (var i = 0; i < enhancements.length; i++) {
+            enhancements[i].enhance(this);
+        }
+    }
+}); 
