@@ -1,178 +1,101 @@
 /**
- * @class Oskari.mapframework.core.RequestHandler
- * A protocol class for registered request handlers. You need to implement a
- * class
- * with this protocol and register it to sandbox for a custom request handler.
- * <pre>
- * var requestHandler = Oskari.clazz.create(
- * 			'Oskari.mapframework.bundle.your-bundle.request.YourRequestHandler').
- * sandbox.addRequestHandler('NameForYourRequest', requestHandler);
- * </pre>
- *
- * In the above sandbox is reference to Oskari.mapframework.sandbox.Sandbox.
- */
-Oskari.clazz.define('Oskari.mapframework.core.RequestHandler',
-/**
- * @method create called automatically on construction
- * @static
- *
- * Always extend this class, never use as is. Once the handler is reqistered
- * to sandbox for a given request, Oskari framework will call
- * the #handleRequest method when a Oskari.mapframework.module.Module
- * sends a matching request via sandbox.
- * (Module must also be registered to sandbox to be able to send requests).
- */
-function() {
-}, {
-    /**
-     * @method handleRequest
-     * @param {Oskari.mapframework.core.Core} core
-     * 		reference to the application core (reference sandbox core.getSandbox())
-     * @param {Oskari.mapframework.request.Request} request
-     * 		implementing class for the request protocol
-     */
-    handleRequest : function(core, request) {
-        throw "Implement your own";
-    }
-});
-
-/**
  * @class Oskari.mapframework.core.Core
+ * 
+ * This is the Oskari core. Bundles can register modules and services here for other bundles to reference.
+ * Requests and events are forwarded through the core to handlers.
  * TODO: Move handlers (and events as well as requests) to handler bundles with
  * registrable handlers
  */
 Oskari.clazz.define('Oskari.mapframework.core.Core',
-/* constructor */
 
+/**
+ * @method create called automatically on construction
+ * @static
+ */
 function() {
 
-    /* Currently selected layers, array of MapLayer objects */
+    // Currently selected layers, array of MapLayer objects
     this._selectedLayers = new Array();
 
-    /* Currently Highlighted maplayers */
+    // Currently Highlighted maplayers
     this._mapLayersHighlighted = new Array();
 
-    /* map object */
+    // map domain object
     this._map
 
-    /* Sandbox that handles communication */
+    // Sandbox that handles communication
     this._sandbox = Oskari.clazz.create('Oskari.mapframework.sandbox.Sandbox', this);
     Oskari.$("sandbox", this._sandbox);
 
-    /* array of services available */
-    this._services
+    // array of services available
+    this._services = [];
     this._servicesByQName = {};
 
-    /* Are we currently printing debug (as of 2012-09-24 debug by default false)*/
+    // Are we currently printing debug (as of 2012-09-24 debug by default false)
     this._debug = false;
 
-    /* Wizard url */
-    this._mapPublisherWizardUrl
-
-    /* whether to sniff usage or not */
+    // whether to sniff usage or not
     this._doSniffing = false;
 
-    /* Our asynchronous wfs request tiler */
-    this._wfsRequestTiler
-
-    /* is Ctrl key down */
+    // is Ctrl key down
     this._ctrlKeyDown = false;
 
-    /* is Map moving by keyboard or mouse */
-    //this._mapMoving = false;
-
-    /* Map of currently ongoing actions */
-    this._ongoingActions = {};
-
-    /* Shortcut to language service */
-    //this._languageService;
-
-    /* Allow multiple highlight layers */
+    // Allow multiple highlight layers
     this._allowMultipleHighlightLayers = false;
-
-    /* How many wfs tiles application is currently loading */
-    this._currentlyFetchingWfsTiles = 0;
 
     /*
      * If published map is started using id in url, it is stored
      * here. Later it is used in sniffer.
      */
-    this._mapIdFromUrl
+    this._mapIdFromUrl;
 
     this._availableRequestsByName = {};
     this._availableEventsByName = {};
 },
-
-/* prototype */
 {
 
     /**
      * @method init
-     * Inits core
+     * Inits Oskari core so bundles can reference components/services through sandbox
      *
-     * @param {Oskari.mapframework.service.Service[]}services
+     * @param {Oskari.mapframework.service.Service[]} services
      *            array of services that are available
-     * @param enhancements
-     *            array of enhancements that should be done to
-     *            map before starting
+     * @param {Oskari.mapframework.enhancement.Enhancement[]} enhancements
+     *            array of enhancements that should be executed before starting map
      */
     init : function(services, enhancements) {
         this.printDebug("Initializing core...");
 
         var sandbox = this._sandbox;
 
-        /* Create holder for runtime components */
-        Oskari.$().mapframework.runtime.components = new Array();
-
-
-        /* Register all important objects */
-        this.registerFrameworkComponentToRuntimeEnvironment(this, "core");
-        this.registerFrameworkComponentToRuntimeEnvironment(this._sandbox, "sandbox");
-
-        /* Store variables for later use */
+        // Store variables for later use
         this._services = services;
-        /* Register services */
+        // Register services
         if (services) {
             for (var s = 0; s < services.length; s++) {
                 this.registerService(services[s]);
             }
         }
 
-        /* build up domain */
+        // build up domain
         this.printDebug("Sandbox ready, building up domain...");
         this._map = Oskari.clazz.create('Oskari.mapframework.domain.Map');
 
-        this.printDebug("Domain ready, creating UI...");
-
-        /* run all enhancements */
+        // run all enhancements
         this.enhancements = enhancements;
         var me = this;
-        me.start();
-        this.dispatch(this.getEventBuilder('CoreInitFinishedEvent')());
+        me._start();
     },
     /**
-     * @method registerAsStateful
-     * Registers given bundle instance to sandbox as stateful
-     *
-     * @param {Oskari.mapframework.service.Service}
-     *            service service to register
+     * @method start
+     * Starts the core and runs all registered enhancements. This is called by init.
+     * @private
      */
-    registerService : function(service) {
-        this._servicesByQName[service.getQName()] = service;
-        this.registerFrameworkComponentToRuntimeEnvironment(service, service.getName());
-    },
+    _start : function() {
 
-    start : function() {
+        this.doEnhancements(this.enhancements);
 
-        var enhancements = this.enhancements;
-
-        /* UI is now complete, start all modules */
-        this.printDebug("UI ready, running enhancements...");
-        this.doEnhancements(enhancements);
-
-        this.printDebug("Enhancements ready, starting modules...");
-
-        /* Check for network sniffing */
+        // Check for network sniffing
         if (this._doSniffing) {
             // Find map id from url and use that later for log requests
             this._mapIdFromUrl = this.getRequestParameter("id");
@@ -182,21 +105,16 @@ function() {
             if (snifferService) {
                 snifferService.startSniffing();
             }
-
-        }
-
-        if (this._wfsRequestTiler != null) {
-            this._wfsRequestTiler.init();
         }
         this.printDebug("Modules started. Core ready.");
-        this.dispatch(this.getEventBuilder('CoreReadyEvent')());
     },
 
     /**
+     * @method dispatch
      * Dispatches given event to sandbox
      *
-     * @param {Object}
-     *            event
+     * @param {Oskari.mapframework.event.Event}
+     *            event - event to dispatch
      */
     dispatch : function(event) {
         this._sandbox.notifyAll(event);
@@ -206,10 +124,9 @@ function() {
      * @property defaultRequestHandlers
      * @static
      * Default Request handlers
-     *
-     * NOTE: duplicate keys in this props produce unexpected
-     * results at least when using WebKit
-     *
+     * Core still handles some Requests sent by bundles. 
+     * TODO: Request handling should be moved to apropriate bundles.
+     * NOTE: only one request handler can be registered/request
      */
     defaultRequestHandlers : {
         'AddMapLayerRequest' : function(request) {
@@ -342,8 +259,10 @@ function() {
     },
 
     /**
-     * Handles all requests. Returns true, if request was
-     * handled, false otherwise
+     * @method processRequest
+     * Forwards requests to corresponding request handlers. 
+     * @param {Oskari.mapframework.request.Request} request to forward
+     * @return {Boolean} Returns true, if request was handled, false otherwise
      */
     processRequest : function(request) {
 
@@ -354,14 +273,8 @@ function() {
         } else {
             var handlerClsInstance = this.externalHandlerCls[requestName];
             if (handlerClsInstance) {
-
-                /*
-                 * protocol:
-                 * Oskari.mapframework.core.RequestHandler
-                 * .handleRequest(core)
-                 */
+                 // protocol: Oskari.mapframework.core.RequestHandler.handleRequest(core)
                 rv = handlerClsInstance.handleRequest(this, request);
-
             } else {
                 handlerFunc = this.defaultRequestHandlers['__default'];
                 rv = handlerFunc.apply(this, [request]);
@@ -373,75 +286,85 @@ function() {
         return rv;
     },
 
-    /*
-     * one handler / request ?
+    /**
+     * @property externalHandlerCls
+     * @static
+     * External Request handlers that bundles have registered are stored here
+     * NOTE: only one request handler can be registered/request
      */
     externalHandlerCls : {
 
     },
 
-    /*
-     * one handler / request ?
+    /**
+     * @method addRequestHandler
+     * Registers a request handler for requests with the given name 
+     * NOTE: only one request handler can be registered/request
+     * @param {String} requestName - name of the request
+     * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
      */
     addRequestHandler : function(requestName, handlerClsInstance) {
         this.externalHandlerCls[requestName] = handlerClsInstance;
     },
 
-    /*
-     * one handler / request ?
+    /**
+     * @method removeRequestHandler
+     * Unregisters a request handler for requests with the given name 
+     * NOTE: only one request handler can be registered/request
+     * @param {String} requestName - name of the request
+     * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
      */
     removeRequestHandler : function(requestName, handlerInstance) {
         if (this.externalHandlerCls[requestName] === handlerInstance)
             this.externalHandlerCls[requestName] = null;
     },
 
-    getQNameForRequest : function(name) {
+    /**
+     * @method _getQNameForRequest
+     * Maps the request name to the corresponding request class name
+     * @param {String} name - name of the request
+     * @return {String} request class name matching the given request name
+     * @private
+     */
+    _getQNameForRequest : function(name) {
         var qname = this._availableRequestsByName[name];
         if (!qname) {
             this.printDebug("#!#!# ! Updating request metadata...");
             var allRequests = Oskari.clazz.protocol('Oskari.mapframework.request.Request');
-
             for (p in allRequests) {
-
                 var pdefsp = allRequests[p];
-
                 var reqname = pdefsp._class.prototype.getName();
-
                 this._availableRequestsByName[reqname] = p;
             }
             this.printDebug("#!#!# ! Finished Updating request metadata...");
-
             qname = this._availableRequestsByName[name];
-
         }
-
-        // this.printDebug("#!#!# ! map request to class " + name
-        // + " -> " + qname);
 
         return qname;
     },
 
-    /*
-     * Var args
+    /**
+     * @method getRequestBuilder
+     * Gets a builder method for the request by request name
+     * @param {String} name - name of the request
+     * @return {Function} builder method for given request name or undefined if not found
      */
-    createRequest : function() {
-
-        arguments[0] = this.getQNameForRequest(arguments[0]);
-
-        var request = Oskari.clazz.createArrArgs(arguments);
-
-        return request;
-    },
-
-    getRequestBuilder : function() {
-        var qname = this.getQNameForRequest(arguments[0]);
+    getRequestBuilder : function(requestName) {
+        var qname = this._getQNameForRequest(requestName);
         if (!qname) {
             return undefined;
         }
         return Oskari.clazz.builder(qname);
     },
 
-    getQNameForEvent : function(name) {
+    /**
+     * @method _getQNameForEvent
+     * Maps the event name to the corresponding event class name
+     * @param {String} name - name of the event
+     * @return {String} event class name matching the given event name
+     * @private
+     */
+    _getQNameForEvent : function(name) {
         var qname = this._availableEventsByName[name];
         if (!qname) {
             this.printDebug("#!#!# ! Updating event metadata...");
@@ -450,37 +373,24 @@ function() {
 
             for (p in allRequests) {
                 var pdefsp = allRequests[p];
-
                 var reqname = pdefsp._class.prototype.getName();
-
                 this._availableEventsByName[reqname] = p;
             }
             this.printDebug("#!#!# ! Finished Updating event metadata...");
-
             qname = this._availableEventsByName[name];
-
         }
-
-        // this.printDebug("#!#!# ! map event to class " + name
-        // + " -> " + qname);
 
         return qname;
     },
 
-    /*
-     * Var args
+    /**
+     * @method getEventBuilder
+     * Gets a builder method for the event by event name
+     * @param {String} eventName - name of the event
+     * @return {Function} builder method for given event name or undefined if not found
      */
-    createEvent : function() {
-
-        arguments[0] = this.getQNameForEvent(arguments[0]);
-
-        var request = Oskari.clazz.createArrArgs(arguments);
-
-        return request;
-    },
-
-    getEventBuilder : function() {
-        var qname = this.getQNameForEvent(arguments[0]);
+    getEventBuilder : function(eventName) {
+        var qname = this._getQNameForEvent(eventName);
         if (!qname) {
             return undefined;
         }
@@ -489,7 +399,7 @@ function() {
 
     /**
      * @method disableDebug
-     * Disables debugging
+     * Disables debug logging
      */
     disableDebug : function() {
         this._debug = false;
@@ -497,7 +407,7 @@ function() {
     
      /**
      * @method enableDebug
-     * Disables debugging
+     * Enables debug logging
      */
     enableDebug : function() {
         this._debug = true;
@@ -513,10 +423,9 @@ function() {
 
     /**
      * @method printDebug
-     * Prints given text to console
+     * Prints given text to browser console
      *
-     * @param {String}
-     *            text message
+     * @param {String} text message
      */
     printDebug : function(text) {
         if (this._debug && window.console != null) {
@@ -529,10 +438,9 @@ function() {
     },
 
     /**
-     * Prints given warn text to console
+     * Prints given warn text to browser console
      *
-     * @param {Object}
-     *            text
+     * @param {String} text
      */
     printWarn : function(text) {
         if (window.console != null) {
@@ -540,132 +448,56 @@ function() {
         }
     },
 
-    getService : function(type) {
-
-        var svc = this._servicesByQName[type];
-        if (svc)
-            return svc;
-        /*
-         * for(var i=0; i<this._services.length; i++) { if
-         * (this._services[i] instanceof type) { return
-         * this._services[i]; } }
-         */
-
-        throw "Cannot find service with type '" + type + "'";
-    },
-
     /**
-     * Returns module with given name that is registered to
-     * sandbox
+     * @method registerService
+     * Registers given service to Oskari so bundles can get reference to it from sandbox
      *
-     * @param {Object}
-     *            name
+     * @param {Oskari.mapframework.service.Service}
+     *            service service to register
      */
-    findRegisteredModule : function(name) {
-        return this._sandbox.findRegisteredModule;
+    registerService : function(service) {
+        this._servicesByQName[service.getQName()] = service;
+        //this.registerFrameworkComponentToRuntimeEnvironment(service, service.getName());
     },
 
     /**
-     * Returns map object
+     * @method getService
+     * Returns a registered service with given name
+     *
+     * @param {String} name
+     * @return {Oskari.mapframework.service.Service}
+     *            service or undefined if not found
+     */
+    getService : function(type) {
+        return this._servicesByQName[type];
+    },
+
+    /**
+     * @method getMap
+     * Returns map domain object
+     *
+     * @return {Oskari.mapframework.domain.Map}
      */
     getMap : function() {
         return this._map;
     },
 
     /**
-     * Registers given component to runtime dom tree, so that it
-     * can be accessed later
+     * @method getSandbox
+     * Returns reference to sandbox
      *
-     * @param {Object}
-     *            component
-     * @param {Object}
-     *            name
-     */
-    registerFrameworkComponentToRuntimeEnvironment : function(component, name) {
-        this.printDebug("registering framework component '" + name + "' to runtime");
-        Oskari.$().mapframework.runtime.components[name] = component;
-
-    },
-
-    unregisterFrameworkComponentFromRuntimeEnvironment : function(component, name) {
-        this.printDebug("unregistering framework component '" + name + "' from runtime");
-        Oskari.$().mapframework.runtime.components[name] = null;
-
-    },
-
-    /**
-     * Returns sandbox
+     * @return {Oskari.mapframework.sandbox.Sandbox}
      */
     getSandbox : function() {
         return this._sandbox;
     },
 
     /**
-     * How many WFS tiles are currently being fetched
-     */
-    getCountOfWfsTilesBeingFetched : function() {
-        return this._currentlyFetchingWfsTiles;
-    },
-
-    /**
-     * Check if arrays items are the same
-     *
-     * @param {Object}
-     *            checkedArray
-     */
-    checkArrayIfTheseAreSame : function(checkedArray) {
-        if (checkedArray.length > 1) {
-            var firstArrayItem = checkedArray[0];
-            for (var i = 1; i < checkedArray.length; i++) {
-                if (checkedArray[i] != firstArrayItem && checkedArray[i] != null) {
-                    return false;
-                }
-            }
-            return true;
-        } else {
-            return false;
-        }
-    },
-
-    /**
-     * Schedules a rearrange
-     */
-    scheduleMapLayerRearrangeAfterWfsMapTilesAreReady : function() {
-        // TODO:requestiler changed to service
-        // this._wfsRequestTiler.scheduleMapLayerRearrangeAfterWfsMapTilesAreReady();
-    },
-
-    /**
-     * Get language for application
-     */
-    getLanguage : function() {
-        return Oskari.getLang();
-        //this._languageService.getLanguage();
-    },
-
-    /** *********************************************************
-     * Get browser window size.
-     */
-    getBrowserWindowSize : function() {
-        // var height = jQuery(window).height();
-        if (jQuery.browser.opera && window.innerHeight != null) {
-            var height = window.innerHeight;
-        }
-        var width = jQuery(window).width();
-
-        var size = {};
-        size.height = jQuery(window).height();
-        // height;
-        size.width = width;
-
-        this.printDebug("Got browser window size is: width: " + size.width + " px, height:" + size.height + " px.");
-
-        return size;
-    },
-
-    /**
-     * Returns a request parameter
+     * @method getRequestParameter
+     * Returns a request parameter from query string
      * http://javablog.info/2008/04/17/url-request-parameters-using-javascript/
+     * @param {String} name - parameter name
+     * @return {String} value for the parameter or null if not found
      */
     getRequestParameter : function(name) {
         name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
@@ -680,24 +512,38 @@ function() {
     },
 
     /**
-     * method previously known as jQuery
-     */
-    domSelector : function(arg) {
-        return jQuery(arg);
-    },
-
-    /**
-     * request / event helpers
+     * @method getObjectName
+     * Returns Oskari event/request name from the event/request object
+     * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} obj
+     * @return {String} name
      */
     getObjectName : function(obj) {
         return obj["__name"];
     },
+    /**
+     * @method getObjectCreator
+     * Returns Oskari event/request creator from the event/request object
+     * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} obj
+     * @return {String} creator
+     */
     getObjectCreator : function(obj) {
         return obj["_creator"];
     },
+    /**
+     * @method setObjectCreator
+     * Sets a creator to Oskari event/request object
+     * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} obj
+     * @param {String} creator
+     */
     setObjectCreator : function(obj, creator) {
         obj["_creator"] = creator;
     },
+    /**
+     * @method copyObjectCreatorToFrom
+     * Copies creator from objFrom to objTo
+     * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} objTo
+     * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} objFrom
+     */
     copyObjectCreatorToFrom : function(objTo, objFrom) {
         objTo["_creator"] = objFrom["_creator"];
     }

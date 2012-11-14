@@ -74,7 +74,7 @@ function(instance) {
         /**
          * @method MyPlaces.MyPlacesChangedEvent
          * Checks if categories have been changed and updates corresponding maplayers accordingly
-         * @param {Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent} event
+         * @param {Oskari.mapframework.myplaces.event.MyPlacesChangedEvent} event
          */
         'MyPlaces.MyPlacesChangedEvent' : function(event) {
             this._handlePlacesChanged();

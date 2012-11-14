@@ -71,15 +71,6 @@ function() {
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/core/core-key-listener-methods.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/core/event/CoreInitFinishedEvent.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/core/event/CoreReadyEvent.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/core/event/ToolSelectedEvent.js"
 		}],
 		"resources" : []
 	},

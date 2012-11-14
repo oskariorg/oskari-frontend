@@ -230,7 +230,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
     register : function(module) {
         this._modules.push(module);
         this._modulesByName[module.getName()] = module;
-        this._core.registerFrameworkComponentToRuntimeEnvironment(module, module.getName());
+        //this._core.registerFrameworkComponentToRuntimeEnvironment(module, module.getName());
         return module.init(this);
     },
 
@@ -244,8 +244,9 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
         }
         this._modules = remainingModules;
         this._modulesByName[module.getName()] = undefined;
+        delete this._modulesByName[module.getName()];
 
-        this._core.unregisterFrameworkComponentFromRuntimeEnvironment(module, module.getName());
+        //this._core.unregisterFrameworkComponentFromRuntimeEnvironment(module, module.getName());
         // return module.deinit(this);
     },
 
@@ -699,10 +700,11 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
     },
 
     /**
-     * Returns registered module with given name if such exists.
+     * @method findRegisteredModuleInstance
+     * Returns module with given name that is registered to sandbox
      *
-     * @param {Object}
-     *            name
+     * @param {String} name for the module
+     * @return {Oskari.mapframework.module.Module}
      */
     findRegisteredModuleInstance : function(name) {
         return this._modulesByName[name];
@@ -716,10 +718,12 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
     },
 
     /**
-     * Checks whether a module by given name is registered.
+     * @method findRegisteredModule
+     * Returns module with given name that is registered to sandbox
+     * //TODO: this is just weird, plaease check AND REMOVE!
      *
-     * @param {Object}
-     *            name
+     * @param {String} name for the module
+     * @return {Oskari.mapframework.module.Module}
      */
     findRegisteredModule : function(name) {
         return this._modulesByName[name] ? this._modulesByName[name].getName() : null;
@@ -740,20 +744,33 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
         return this._core.getRequestParameter(name);
     },
 
-    /***********************************************************
-     * Get language.
-     */
-    getLanguage : function() {
-        return this._core.getLanguage();
-    },
 
     /***********************************************************
      * Get browser window size.
      */
     getBrowserWindowSize : function() {
-        return this._core.getBrowserWindowSize();
+        // var height = jQuery(window).height();
+        if (jQuery.browser.opera && window.innerHeight != null) {
+            var height = window.innerHeight;
+        }
+        var width = jQuery(window).width();
+
+        var size = {};
+        size.height = jQuery(window).height();
+        // height;
+        size.width = width;
+
+        this.printDebug("Got browser window size is: width: " + size.width + " px, height:" + size.height + " px.");
+
+        return size;
     },
 
+    /**
+     * method previously known as jQuery
+     */
+    domSelector : function(arg) {
+        return jQuery(arg);
+    },
     /**
      * JSON Event support
      */
