@@ -59,10 +59,10 @@ function() {
 		"scripts" : [{
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/service/service.js"
-		}, {
+		} /*, {
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/service/language-service.js"
-		}],
+		}*/],
 		"resources" : []
 	},
 	"bundle" : {

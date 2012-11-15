@@ -123,8 +123,7 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-layer-methods', {
             mapLayer.setType("BASE_LAYER");
         }
 
-        // if we need keep layers order, i.e. when come map to
-        // link or mappublisher wizard
+        // if we need keep layers order, i.e. when map is accessed by link
         if (keepLayersOrder != null && keepLayersOrder) {
             this._selectedLayers.push(mapLayer);
         }
