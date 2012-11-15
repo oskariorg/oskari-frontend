@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.personaldata.Tile
+ * @class Oskari.framework.bundle.personaldata.Tile
  * Renders the "personal data" tile.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Tile',

@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.layerselector2.Flyout
+ * @class Oskari.framework.bundle.layerselector2.Flyout
  * 
  * Renders the "all layers" flyout.
  */

@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.toolbar.ToolbarBundle
+ * @class Oskari.framework.bundle.toolbar.ToolbarBundle
  * Definition for bundle. See source for details.
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundle", function() {

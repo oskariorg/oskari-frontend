@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.postprocessor.PostProcessorBundle
+ * @class Oskari.framework.bundle.postprocessor.PostProcessorBundle
  *
  * Used for highlighting wfs features on pageload etc. Calls other bundles to accomplish stuff 
  * after everything has been loaded and started.

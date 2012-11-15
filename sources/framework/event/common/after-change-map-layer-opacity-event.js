@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.event.common.AfterChangeMapLayerOpacityEvent
+ * @class Oskari.framework.event.common.AfterChangeMapLayerOpacityEvent
  *
  * Triggers when a
  * Oskari.mapframework.request.common.ChangeMapLayerOpacityRequest is received.

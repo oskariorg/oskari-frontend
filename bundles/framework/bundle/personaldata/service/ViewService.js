@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.personaldata.service.ViewService
+ * @class Oskari.framework.bundle.personaldata.service.ViewService
  *
  * Requests for a search to be made with the given query and provides
  * callbacks

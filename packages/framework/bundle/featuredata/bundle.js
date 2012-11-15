@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.featuredata.FeatureDataBundle
+ * @class Oskari.framework.bundle.featuredata.FeatureDataBundle
  *
  * Definition for bundle. See source for details.
  */

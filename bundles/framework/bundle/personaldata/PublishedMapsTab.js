@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.personaldata.PublishedMapsTab
+ * @class Oskari.framework.bundle.personaldata.PublishedMapsTab
  * Renders the "personal data/published map" tab.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',

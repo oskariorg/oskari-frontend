@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.backendstatus.BackendStatusBundleInstance
+ * @class Oskari.framework.bundle.backendstatus.BackendStatusBundleInstance
  *
  * Utility bundle to manage updating backend status information.
  * Updates information only when LayerSelector2 is being opened.

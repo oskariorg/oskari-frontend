@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.userguide.Flyout
+ * @class Oskari.framework.bundle.userguide.Flyout
  *
  * Renders the "help" flyout.
  */

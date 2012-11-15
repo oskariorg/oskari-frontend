@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.domain.WmsLayer
+ * @class Oskari.framework.domain.WmsLayer
  *
  * MapLayer of type WMS
  */
@@ -658,28 +658,34 @@ function() {
     
     /**
      * @method getMetadataIdentifier
+     * Gets the identifier (uuid style) for getting layers metadata
+     * @return {String}
      */
     getMetadataIdentifier: function() {
     	return this._metadataIdentifier;
     },
     /**
      * @method setMetadataIdentifier
+     * Sets the identifier (uuid style) for getting layers metadata
+     * @param {String} metadataid
      */
     setMetadataIdentifier: function(metadataid) {
     	this._metadataIdentifier = metadataid;
     },
     /**
      * @method getBackendStatus
+     * Status text for layer operatibility (f.ex. 'DOWN')
+     * @return {String}
      */
     getBackendStatus: function() {
     	return this._backendStatus;
     },
     /**
      * @method setBackendStatus
+     * Status text for layer operatibility (f.ex. 'DOWN')
+     * @param {String} backendStatus
      */
     setBackendStatus: function(backendStatus) {
     	this._backendStatus = backendStatus;
     }
-    
-    
 });

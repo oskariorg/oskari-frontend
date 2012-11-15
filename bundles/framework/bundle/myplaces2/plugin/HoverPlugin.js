@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.plugin.HoverPlugin
+ * @class Oskari.framework.bundle.myplaces2.plugin.HoverPlugin
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.HoverPlugin', function() {
     this.mapModule = null;

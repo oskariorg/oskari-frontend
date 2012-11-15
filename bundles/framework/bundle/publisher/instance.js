@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.publisher.PublisherBundleInstance
+ * @class Oskari.framework.bundle.publisher.PublisherBundleInstance
  *
  * Main component and starting point for the "map publisher" functionality. 
  * 

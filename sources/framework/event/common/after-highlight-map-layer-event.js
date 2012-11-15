@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.event.common.AfterHighlightMapLayerEvent
+ * @class Oskari.framework.event.common.AfterHighlightMapLayerEvent
  *
  * Triggers when a given map layer has been requested to be
  * "highlighted" on map. This means f.ex. a WMS layer GetFeatureInfo clicks needs

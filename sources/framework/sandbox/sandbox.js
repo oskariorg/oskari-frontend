@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.sandbox.Sandbox
+ * @class Oskari.framework.sandbox.Sandbox
  *
  * Module init/start/stop methods get reference to sandbox through the Oskari
  * Module protocol.

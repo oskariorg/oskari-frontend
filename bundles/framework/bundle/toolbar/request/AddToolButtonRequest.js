@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.toolbar.request.AddToolButtonRequest
+ * @class Oskari.framework.bundle.toolbar.request.AddToolButtonRequest
  * Requests for toolbar to add button with given config
  * 
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.

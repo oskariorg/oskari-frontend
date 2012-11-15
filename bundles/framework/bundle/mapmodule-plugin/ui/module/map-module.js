@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.ui.module.common.MapModule
+ * @class Oskari.framework.ui.module.common.MapModule
  * Provides map functionality/Wraps actual map implementation (Openlayers)
  *
  */

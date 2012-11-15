@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.mapmodule.request.MapMovementControlsRequestHandler
+ * @class Oskari.framework.bundle.mapmodule.request.MapMovementControlsRequestHandler
  * Handles map movement control requests
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementControlsRequestHandler', 

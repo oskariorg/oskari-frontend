@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.view.PlaceForm
+ * @class Oskari.framework.bundle.myplaces2.view.PlaceForm
  * 
  * Shows a form for my place
  */

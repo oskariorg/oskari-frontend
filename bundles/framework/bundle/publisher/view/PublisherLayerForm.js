@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.publisher.view.PublisherLayerForm
+ * @class Oskari.framework.bundle.publisher.view.PublisherLayerForm
  * 
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerForm',

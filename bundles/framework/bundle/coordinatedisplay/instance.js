@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisplayBundleInstance
+ * @class Oskari.framework.bundle.coordinatedisplay.CoordinateDisplayBundleInstance
  *
  * Registers and starts the
  * Oskari.mapframework.bundle.coordinatedisplay.plugin.CoordinatesPlugin plugin for main map.

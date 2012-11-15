@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayerContentRequestHandler
+ * @class Oskari.framework.bundle.mapmodule.request.MapMoveByLayerContentRequestHandler
  * Provides functionality to:
  * - Move the map to zoom level that is in scale with the requested maplayer.
  * - Move the map to given layers geometry if it has one.

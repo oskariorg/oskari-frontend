@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.layerselector2.LayerSelectorBundle
+ * @class Oskari.framework.bundle.layerselector2.LayerSelectorBundle
  *
  * Definition for bundle. See source for details.
  */

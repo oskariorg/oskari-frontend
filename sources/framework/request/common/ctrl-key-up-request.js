@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.request.common.CtrlKeyUpRequest
+ * @class Oskari.framework.request.common.CtrlKeyUpRequest
  *
  * Requests for core to handle ctrl button key release
  * Opposite of Oskari.mapframework.request.common.CtrlKeyDownRequest

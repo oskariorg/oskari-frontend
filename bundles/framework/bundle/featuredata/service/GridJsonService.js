@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.featuredata.service.GridJsonService
+ * @class Oskari.framework.bundle.featuredata.service.GridJsonService
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.service.GridJsonService', 
 

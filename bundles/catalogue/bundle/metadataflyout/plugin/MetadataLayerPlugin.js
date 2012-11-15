@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.mapmodule.MetadataLayerPlugin
+ * @class Oskari.framework.mapmodule.MetadataLayerPlugin
  */
 Oskari.clazz.define('Oskari.mapframework.mapmodule.MetadataLayerPlugin', 
 		    function() {

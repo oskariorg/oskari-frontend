@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.layerselector2.view.PublishedLayersTab
+ * @class Oskari.framework.bundle.layerselector2.view.PublishedLayersTab
  * 
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.PublishedLayersTab",

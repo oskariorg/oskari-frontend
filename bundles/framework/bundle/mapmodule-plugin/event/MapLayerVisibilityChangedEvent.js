@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.mapmodule.event.MapLayerVisibilityChangedEvent
+ * @class Oskari.framework.bundle.mapmodule.event.MapLayerVisibilityChangedEvent
  * 
  * This is used to notify that layers visibility has changed. Either the map has 
  * moved out of the layers scale range or the layers geometry is no longer in the maps viewport.

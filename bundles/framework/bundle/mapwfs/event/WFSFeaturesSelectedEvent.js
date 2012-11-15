@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.mapwfs.event.WFSFeaturesSelectedEvent
+ * @class Oskari.framework.bundle.mapwfs.event.WFSFeaturesSelectedEvent
  *
  * Used to indicate tha a WFS Feature has been selected and components should highlight it in UI
  */

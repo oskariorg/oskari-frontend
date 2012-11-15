@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.runtime.Bundle
+ * @class Oskari.framework.runtime.Bundle
  *
  */
 Oskari.clazz.define("Oskari.mapframework.runtime.Bundle",

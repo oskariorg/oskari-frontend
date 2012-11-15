@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.personaldata.Flyout
+ * @class Oskari.framework.bundle.personaldata.Flyout
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
 

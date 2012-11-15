@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.event.FinishedDrawingEvent
+ * @class Oskari.framework.bundle.myplaces2.event.FinishedDrawingEvent
  * 
  * Used to notify components that the drawing has been finished. 
  */

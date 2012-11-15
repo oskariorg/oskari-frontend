@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerPlugin
+ * @class Oskari.framework.bundle.mapwfs.plugin.wfslayer.WfsLayerPlugin
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerPlugin', 
 

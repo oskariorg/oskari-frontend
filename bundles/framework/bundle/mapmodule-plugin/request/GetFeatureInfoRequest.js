@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.mapmodule.request.GetFeatureInfoRequest
+ * @class Oskari.framework.bundle.mapmodule.request.GetFeatureInfoRequest
  *
  * Requests for a get feature info for the clicked spot on the map to be shown.
  * 

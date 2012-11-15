@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.service.MapLayerServiceModelBuilder
+ * @class Oskari.framework.service.MapLayerServiceModelBuilder
  * Protocol/interface declaration for MapLayer JSON parser implementations.
  * Provides an interface for bundles to add custom map layer implementations/data.
  * Used to parse a JSON into a given maplayer object. Used in conjuntion with 
@@ -29,7 +29,7 @@ function() {
 });
 
 /**
- * @class Oskari.mapframework.service.MapLayerService
+ * @class Oskari.framework.service.MapLayerService
  *
  * Handles everything MapLayer related.
  * Sends out Oskari.mapframework.event.common.MapLayerEvent

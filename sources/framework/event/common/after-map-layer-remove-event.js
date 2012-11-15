@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.event.common.AfterMapLayerRemoveEvent
+ * @class Oskari.framework.event.common.AfterMapLayerRemoveEvent
  *
  * Notifies application bundles that a map layer has been removed from selected
  * layers.

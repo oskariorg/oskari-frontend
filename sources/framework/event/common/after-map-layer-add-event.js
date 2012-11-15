@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.event.common.AfterMapLayerAddEvent
+ * @class Oskari.framework.event.common.AfterMapLayerAddEvent
  *
  * Notifies application bundles that a map layer has been added to selected
  * layers.

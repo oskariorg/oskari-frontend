@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.core.Core.enhancementMethods
+ * @class Oskari.framework.core.Core.enhancementMethods
  *
  * This category class adds enhancement methods to Oskari core as they were in
  * the class itself.

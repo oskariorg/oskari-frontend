@@ -1,12 +1,16 @@
 /**
- * @class Oskari.mapframework.core.Core.mapLayerMethods
+ * @class Oskari.framework.core.Core.mapLayerMethods
  *
  * This category class adds map layers related methods to Oskari core as they were in
  * the class itself.
+ * @deprecated
  */
 Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-layer-methods', {
 
-    
+    /**
+     *
+     * @deprecated 
+     */
     findBaselayerBySublayerIdFromAllAvailable : function(sublayerid) {
         var layer = null;
         var mapLayerService = this.getService('Oskari.mapframework.service.MapLayerService');
@@ -30,6 +34,7 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-layer-methods', {
     
     /**
      * Destroy all Highlighted layers
+     * @deprecated
      */
     _destroyAllHighLightedMapLayers : function() {
         var highlightedMapLayers = this.getAllHighlightedMapLayers();

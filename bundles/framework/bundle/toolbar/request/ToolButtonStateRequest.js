@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.toolbar.request.ToolButtonStateRequest
+ * @class Oskari.framework.bundle.toolbar.request.ToolButtonStateRequest
  * Requests for toolbar to enable/disable a button.
  * 
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.

@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.gridcalc.TileQueue
+ * @class Oskari.framework.gridcalc.TileQueue
  *
  * This is a class to manage a set of
  * Oskari.mapframework.gridcalc.QueuedTile objects

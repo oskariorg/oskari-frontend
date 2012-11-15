@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.mapwfs.MapWfsBundleBundle
+ * @class Oskari.framework.bundle.mapwfs.MapWfsBundleBundle
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs.MapWfsBundle", function() {
 }, {

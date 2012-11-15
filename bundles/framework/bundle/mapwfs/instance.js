@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.mapwfs.MapWfsBundleInstance
+ * @class Oskari.framework.bundle.mapwfs.MapWfsBundleInstance
  * Adds WFS click selection support for map.
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs.MapWfsBundleInstance",

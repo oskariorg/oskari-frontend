@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.maplegend.Flyout
+ * @class Oskari.framework.bundle.maplegend.Flyout
  *
  * Renders any Legend Images (such as returned from WMS GetLegendGraphic)
  * for any selected layers.

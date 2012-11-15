@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.mapmodule.request.DisableMapMouseMovementRequest
+ * @class Oskari.framework.bundle.mapmodule.request.DisableMapMouseMovementRequest
  *
  * Requests for mouse control on map to be disabled. 
  * Opposite of

@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.personaldata.MyViewsTab
+ * @class Oskari.framework.bundle.personaldata.MyViewsTab
  * Renders the "personal data/my views" tab.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',

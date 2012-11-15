@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.statehandler.request.SetStateRequestHandler
+ * @class Oskari.framework.bundle.statehandler.request.SetStateRequestHandler
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.request.SetStateRequestHandler', 
 /**

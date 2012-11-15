@@ -1,6 +1,6 @@
 
 /**
- * @class Oskari.mapframework.mapmodule-plugin.request.MapLayerUpdateRequest
+ * @class Oskari.framework.mapmodule-plugin.request.MapLayerUpdateRequest
  * 
  * class for requesting map layer update / refresh
  *  

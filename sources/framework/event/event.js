@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.event.Event
+ * @class Oskari.framework.event.Event
  *
  * Superclass for all Oskari events.
  * Consider this as an abstract class and only use it by extending.

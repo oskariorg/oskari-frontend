@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.event.common.AfterChangeMapLayerStyleEvent
+ * @class Oskari.framework.event.common.AfterChangeMapLayerStyleEvent
  *
  * Triggers when a
  * Oskari.mapframework.request.common.ChangeMapLayerStyleRequest is received.

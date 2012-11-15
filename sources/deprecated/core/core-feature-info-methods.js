@@ -3,6 +3,7 @@
  * @TBD get rid of this one
  * 
  * IMPLEMENT GETFEATUREINFO in AN EXTENSION BUNDLE
+ * @deprecated
  * 
  */
 Oskari.clazz

@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequestHandler
+ * @class Oskari.framework.bundle.mapmodule.request.MapLayerVisibilityRequestHandler
  * Shows/hides the maplayer specified in the request in OpenLayers implementation.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequestHandler', 

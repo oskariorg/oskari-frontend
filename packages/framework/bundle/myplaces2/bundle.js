@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.MyPlacesBundle
+ * @class Oskari.framework.bundle.myplaces2.MyPlacesBundle
  *
  * Definition for bundle. See source for details.
  */

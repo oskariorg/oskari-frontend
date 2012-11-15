@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent
+ * @class Oskari.framework.bundle.toolbar.event.ToolSelectedEvent
  * 
  * Used to notify components that a tool has been selected and 
  * components should cancel their tool related operations if any. 

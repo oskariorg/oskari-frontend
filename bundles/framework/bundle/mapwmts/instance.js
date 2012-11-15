@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.MapWmtsBundleInstance
+ * @class Oskari.framework.bundle.MapWmtsBundleInstance
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.MapWmtsBundleInstance", function(b) {
 	this.name = 'MapWmts';

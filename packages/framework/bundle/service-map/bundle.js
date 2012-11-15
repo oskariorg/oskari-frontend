@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.service.map.Bundle
+ * @class Oskari.framework.service.map.Bundle
  *
  */
 Oskari.clazz.define("Oskari.mapframework.service.map.Bundle",

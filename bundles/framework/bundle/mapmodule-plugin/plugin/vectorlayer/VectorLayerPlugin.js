@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.mapmodule.VectorLayerPlugin
+ * @class Oskari.framework.mapmodule.VectorLayerPlugin
  */
 Oskari.clazz
 		.define(

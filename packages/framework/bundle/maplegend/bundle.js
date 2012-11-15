@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.maplegend.MapLegendBundle
+ * @class Oskari.framework.bundle.maplegend.MapLegendBundle
  *
  * Bundle to add Map Layer Legends to application. 
  * 

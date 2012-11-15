@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.layerselector2.LayerSelectorBundleInstance
+ * @class Oskari.framework.bundle.layerselector2.LayerSelectorBundleInstance
  *
  * Main component and starting point for the "all layers" functionality. 
  * Lists all the layers available in Oskari.mapframework.service.MapLayerService and updates 

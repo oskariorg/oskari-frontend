@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.search.Flyout
+ * @class Oskari.framework.bundle.search.Flyout
  *
  * Renders the "search" flyout.
  */

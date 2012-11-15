@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.request.common.ShowMapMeasurementRequest
+ * @class Oskari.framework.request.common.ShowMapMeasurementRequest
  *
  * Requests for the given value to be shown in UI.
  *

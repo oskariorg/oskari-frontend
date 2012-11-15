@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.featuredata.service.GridModelManager
+ * @class Oskari.framework.bundle.featuredata.service.GridModelManager
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.service.GridModelManager',
 

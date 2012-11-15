@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.publisher.PublisherBundle
+ * @class Oskari.framework.bundle.publisher.PublisherBundle
  *
  * Definition for bundle. See source for details.
  */

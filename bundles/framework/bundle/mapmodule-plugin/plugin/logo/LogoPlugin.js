@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.mappublished.LogoPlugin
+ * @class Oskari.framework.bundle.mappublished.LogoPlugin
  * Provides the NLS logo and link to terms of use for published map
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',

@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.domain.WizardStep
+ * @class Oskari.framework.domain.WizardStep
  *
  * Used in map publish wizard? TODO: check docs
  * @deprecated

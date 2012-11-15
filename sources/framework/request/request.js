@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.request.Request
+ * @class Oskari.framework.request.Request
  *
  * Superclass for all Oskari requests.
  * Consider this as an abstract class and only use it by extending.

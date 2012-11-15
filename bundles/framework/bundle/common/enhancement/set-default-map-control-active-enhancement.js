@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.enhancement.common.SetDefaultMapControlActiveEnhancement
+ * @class Oskari.framework.enhancement.common.SetDefaultMapControlActiveEnhancement
  *
  * @deprecated
  * This enchancement set default map control

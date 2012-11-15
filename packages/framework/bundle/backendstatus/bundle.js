@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.backendstatus.BackendStatusBundle
+ * @class Oskari.framework.bundle.backendstatus.BackendStatusBundle
  *
  * Definition for bundle. See source for details.
  */

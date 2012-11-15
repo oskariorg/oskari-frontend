@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.layerselection2.Flyout
+ * @class Oskari.framework.bundle.layerselection2.Flyout
  *
  * Renders the "selected layers" flyout.
  * 

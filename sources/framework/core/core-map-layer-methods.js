@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.core.Core.mapLayerMethods
+ * @class Oskari.framework.core.Core.mapLayerMethods
  *
  * This category class adds map layers related methods to Oskari core as they were in
  * the class itself.

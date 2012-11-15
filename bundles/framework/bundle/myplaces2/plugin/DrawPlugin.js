@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin
+ * @class Oskari.framework.bundle.myplaces2.plugin.DrawPlugin
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', function() {
     this.mapModule = null;

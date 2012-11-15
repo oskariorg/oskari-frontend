@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.publisher.Flyout
+ * @class Oskari.framework.bundle.publisher.Flyout
  *
  * Renders the "publish wizard" flyout. The flyout shows different view 
  * depending of application state. Currently implemented views are:

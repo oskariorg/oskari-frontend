@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.event.common.MouseHoverEvent
+ * @class Oskari.framework.event.common.MouseHoverEvent
  *
  * Notification about mouse hovering over the map
  */

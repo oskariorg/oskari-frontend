@@ -1,7 +1,8 @@
 /**
- * @class Oskari.mapframework.core.Core.domainMethods
+ * @class Oskari.framework.core.Core.domainMethods
  * 
  * This category class adds domain object methods to Oskari core as they were in the class itself.
+ * @deprecated
  */
 Oskari.clazz.category(
 'Oskari.mapframework.core.Core', 'build-domain-methods',
@@ -13,8 +14,9 @@ Oskari.clazz.category(
      * them to Oskari.mapframework.service.MapLayerService
      *
      * @param {Object[]} allLayersJson JSON array presentation of map layers
+     * @deprecated
      */
-    createMapLayerDomain : function(allLayersJson) {
+    _createMapLayerDomain : function(allLayersJson) {
         if (!allLayersJson || !allLayersJson.layers) {
             return;
         }

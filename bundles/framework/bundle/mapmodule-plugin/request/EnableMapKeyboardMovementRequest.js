@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.mapmodule.request.EnableMapKeyboardMovementRequest
+ * @class Oskari.framework.bundle.mapmodule.request.EnableMapKeyboardMovementRequest
  *
  * Requests for keyboard control on map to be enabled. This is usually requested
  * after the disable event to reactivate the keyboard controls after leaving a

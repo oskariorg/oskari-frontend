@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.mapmodule.plugin.PanButtons
+ * @class Oskari.framework.bundle.mapmodule.plugin.PanButtons
  *
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',

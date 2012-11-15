@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.layerselector2.view.Layer
+ * @class Oskari.framework.bundle.layerselector2.view.Layer
  * 
  * 
  */

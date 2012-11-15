@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin
+ * @class Oskari.framework.bundle.mapmodule.plugin.IndexMapPlugin
  * Provides indexmap functionality for map
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',

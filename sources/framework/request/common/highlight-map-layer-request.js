@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.request.common.HighlightMapLayerRequest
+ * @class Oskari.framework.request.common.HighlightMapLayerRequest
  *
  * Requests for given map layer to be "highlighted" on map.
  * This means f.ex. a WMS layer to enable GetFeatureInfo clicks,

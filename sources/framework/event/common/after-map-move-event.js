@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.event.common.AfterMapMoveEvent
+ * @class Oskari.framework.event.common.AfterMapMoveEvent
  *
  * Notifies application bundles that a map has moved.
  * See Oskari.mapframework.request.common.MapMoveRequest

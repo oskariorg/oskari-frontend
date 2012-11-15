@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.mappublished.SearchPlugin
+ * @class Oskari.framework.bundle.mappublished.SearchPlugin
  * Provides a search functionality and result panel for published map
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',

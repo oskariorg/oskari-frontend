@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.gridcalc.QueuedTile
+ * @class Oskari.framework.gridcalc.QueuedTile
  *
  * TODO: check doc
  * This class provides Tile information

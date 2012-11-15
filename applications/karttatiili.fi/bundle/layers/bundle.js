@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.SampleBundleInstance
+ * @class Oskari.framework.bundle.SampleBundleInstance
  */
 
 /**
- * @class Oskari.mapframework.bundle.SampleBundle
+ * @class Oskari.framework.bundle.SampleBundle
  *
  */
 Oskari.clazz.define("Oskari.karttatiili.layers.Bundle",

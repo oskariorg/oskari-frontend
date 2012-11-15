@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.PluginMapModuleBundleInstance
+ * @class Oskari.framework.bundle.PluginMapModuleBundleInstance
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundleInstance", function(b) {
 	this.name = 'mapmodule';

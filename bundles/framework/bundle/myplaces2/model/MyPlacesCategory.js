@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory
+ * @class Oskari.framework.bundle.myplaces2.model.MyPlacesCategory
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory', 
 

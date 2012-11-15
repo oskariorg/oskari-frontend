@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.event.common.FeaturesGetInfoEvent
+ * @class Oskari.framework.event.common.FeaturesGetInfoEvent
  *
  * Feature info event for #Oskari.mapframework.domain.VectorLayer.
  *

@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.ButtonHandler
+ * @class Oskari.framework.bundle.myplaces2.ButtonHandler
  * 
  * Handles the buttons for myplaces functionality
  */

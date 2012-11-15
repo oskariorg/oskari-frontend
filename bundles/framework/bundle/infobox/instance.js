@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance
+ * @class Oskari.framework.bundle.infobox.InfoBoxBundleInstance
  *
  * Main component and starting point for the "infobox" functionality.
  * Provides functionality for other bundles (GFI/WFS featuretype/Search)

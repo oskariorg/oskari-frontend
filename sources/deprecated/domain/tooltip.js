@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.domain.Tooltip
+ * @class Oskari.framework.domain.Tooltip
  * @deprecated (?)
  *
  * Tooltip, not used anywhere?
