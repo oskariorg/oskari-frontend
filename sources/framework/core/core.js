@@ -93,7 +93,7 @@ function() {
      */
     _start : function() {
 
-        this.doEnhancements(this.enhancements);
+        this._doEnhancements(this.enhancements);
 
         // Check for network sniffing
         if (this._doSniffing) {
@@ -130,31 +130,31 @@ function() {
      */
     defaultRequestHandlers : {
         'AddMapLayerRequest' : function(request) {
-            this.handleAddMapLayerRequest(request);
+            this._handleAddMapLayerRequest(request);
             return true;
         },
         'RemoveMapLayerRequest' : function(request) {
-            this.handleRemoveMapLayerRequest(request);
+            this._handleRemoveMapLayerRequest(request);
             return true;
         },
         'ShowMapLayerInfoRequest' : function(request) {
-            this.handleShowMapLayerInfoRequest(request);
+            this._handleShowMapLayerInfoRequest(request);
             return true;
         },
         'RearrangeSelectedMapLayerRequest' : function(request) {
-            this.handleRearrangeSelectedMapLayerRequest(request);
+            this._handleRearrangeSelectedMapLayerRequest(request);
             return true;
         },
         'ChangeMapLayerOpacityRequest' : function(request) {
-            this.handleChangeMapLayerOpacityRequest(request);
+            this._handleChangeMapLayerOpacityRequest(request);
             return true;
         },
         'ChangeMapLayerStyleRequest' : function(request) {
-            this.handleChangeMapLayerStyleRequest(request);
+            this._handleChangeMapLayerStyleRequest(request);
             return true;
         },
         'HighlightMapLayerRequest' : function(request) {
-            this.handleHighlightMapLayerRequest(request);
+            this._handleHighlightMapLayerRequest(request);
             return true;
         },
         'HighlightWFSFeatureRequest' : function(request) {
@@ -162,19 +162,19 @@ function() {
             return true;
         },
         'HideMapMarkerRequest' : function(request) {
-            this.handleHideMapMarkerRequest(request);
+            this._handleHideMapMarkerRequest(request);
             return true;
         },
         'DimMapLayerRequest' : function(request) {
-            this.handleDimMapLayerRequest(request);
+            this._handleDimMapLayerRequest(request.getMapLayerId());
             return true;
         },
         'CtrlKeyDownRequest' : function(request) {
-            this.handleCtrlKeyDownRequest(request);
+            this._handleCtrlKeyDownRequest();
             return true;
         },
         'CtrlKeyUpRequest' : function(request) {
-            this.handleCtrlKeyUpRequest(request);
+            this._handleCtrlKeyUpRequest();
             return true;
         },
         '__default' : function(request) {

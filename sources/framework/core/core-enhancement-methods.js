@@ -8,12 +8,13 @@ Oskari.clazz.category(
 'Oskari.mapframework.core.Core', 'enhancement-methods',
 {
     /**
-     * @method doEnhancements
+     * @method _doEnhancements
      * Runs all given enhancements (calls enhance method)
      *
      * @param {Oskari.mapframework.enhancement.Enhancement[]} enhancements array of enhancements to run
+     * @private
      */
-    doEnhancements : function(enhancements) {
+    _doEnhancements : function(enhancements) {
         for (var i = 0; i < enhancements.length; i++) {
             enhancements[i].enhance(this);
         }
