@@ -76,5 +76,3 @@ function(mapLayerId, keepLayersOrder, isBasemap, isExternal) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-
-/* Inheritance */
