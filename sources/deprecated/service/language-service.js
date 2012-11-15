@@ -7,6 +7,7 @@
  * 
  * @param {Object}
  *            currentLanguage current user language, can be "fi", "sv" or "en"
+ * @deprecated
  */
 Oskari.clazz.define(
     'Oskari.mapframework.service.LanguageService',
