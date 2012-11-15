@@ -1,34 +1,4 @@
 /**
- * @class Oskari.mapframework.service.MapLayerServiceModelBuilder
- * Protocol/interface declaration for MapLayer JSON parser implementations.
- * Provides an interface for bundles to add custom map layer implementations/data.
- * Used to parse a JSON into a given maplayer object. Used in conjuntion with 
- * Oskari.mapframework.service.MapLayerService.registerLayerModel() and 
- * Oskari.mapframework.service.MapLayerService.registerLayerModelBuilder()
- */
-Oskari.clazz.define('Oskari.mapframework.service.MapLayerServiceModelBuilder',
-
-/**
- * @method create called automatically on construction
- * @static
- */
-function() {
-}, {
-    /**
-     * @method parseLayerData
-     * Interface method declaration. Implementation should do the parsing from JSON to MapLayer Object
-     * 
-     * @param {Object} layer layer object
-     * @param {Object} layerJson JSON data representing the map layer
-     * @param {Oskari.mapframework.service.MapLayerService} maplayerService
-     * reference to map layer service
-     */
-    parseLayerData : function(layer, layerJson, maplayerService) {
-
-    }
-});
-
-/**
  * @class Oskari.mapframework.service.MapLayerService
  *
  * Handles everything MapLayer related.
@@ -48,7 +18,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
  */
 function(mapLayerUrl, sandbox) {
 
-    /** searchUrl url that will give us results */
     this._mapLayerUrl = mapLayerUrl;
     this._sandbox = sandbox;
     this._loadedLayersList = new Array();
@@ -170,14 +139,6 @@ function(mapLayerUrl, sandbox) {
         // TODO: notify if layer not found?
     },
     /**
-     * @method loadAllLayers
-     * @deprecated what should this do when we have separate #loadAllLayersAjax()?
-	 * @throws Error as default, not implemented yet
-     */
-    loadAllLayers : function() {
-        throw 'TBD: loading not implemented';
-    },
-    /**
      * @method loadAllLayersAjax
      * Loads layers JSON using the ajax URL given on #create() 
      * and parses it to internal layer objects by calling #createMapLayer() and #addLayer()
@@ -210,6 +171,7 @@ function(mapLayerUrl, sandbox) {
      * Internal callback method for ajax loading in #loadAllLayersAjax()
      * @param {Object} pResp ajax response in JSON format
      * @param {Function} callbackSuccess method to be called when layers have been loaded succesfully
+     * @private
      */
     _loadAllLayersAjaxCallBack : function(pResp, callbackSuccess) {
 	    var allLayers = pResp.layers;
@@ -229,18 +191,19 @@ function(mapLayerUrl, sandbox) {
     },
     /**
      * @method getAllLayers
+     * Returns an array of layers added to the service for example via #addLayer()
      * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]} 
-     * 	 Returns an array of layers added to the service for example via #addLayer()
      */
     getAllLayers : function() {
         return this._loadedLayersList;
     },
     /**
      * @method getAllLayersByMetaType
+     * Returns an array of layers added to the service that have the given metatype (layer.getMetaType() === type).
+     * 
      * @param {String} type
      *            metatype to filter the layers with
      * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
-     * 	 Returns an array of layers added to the service that have the given metatype (layer.getMetaType() === type).
      */
     getAllLayersByMetaType : function(type) {
         var list = [];
@@ -343,7 +306,6 @@ function(mapLayerUrl, sandbox) {
      */
     _createGroupMapLayer : function(baseMapJson, isBase) {
 
-        /** TODO check wfs vs wms * */
         var baseLayer = Oskari.clazz.create('Oskari.mapframework.domain.WmsLayer');
         if(isBase) {
             baseLayer.setAsBaseLayer();
@@ -389,12 +351,12 @@ function(mapLayerUrl, sandbox) {
 
 
         for(var i = 0; i < baseMapJson.subLayer.length; i++) {
-            // Notice that we are adding layers to baselayers subclass array
+            // Notice that we are adding layers to baselayers sublayers array
             var subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
             baseLayer.getSubLayers().push(subLayer);
         }
 
-        /* Opacity */
+        // Opacity
         if(baseMapJson.opacity != null) {
             baseLayer.setOpacity(baseMapJson.opacity);
         } else if(baseLayer.getSubLayers().length > 0) {
@@ -617,7 +579,7 @@ function(mapLayerUrl, sandbox) {
      * @param {String}
      *            id layer id we want to find
      * @param {Array}
-     *            layerList (optional) array of maplayer objects, defaults to all added layers
+     *            layerList (optional) array of maplayer objects, defaults to all layers
      * @return {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} 
      * 	layerModel if found matching id or null if not found
      */
@@ -652,5 +614,3 @@ function(mapLayerUrl, sandbox) {
      */
     'protocol' : ['Oskari.mapframework.service.Service']
 });
-
-/* Inheritance */
