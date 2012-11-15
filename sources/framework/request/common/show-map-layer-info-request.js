@@ -47,5 +47,3 @@ function(mapLayerId) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-
-/* Inheritance */
