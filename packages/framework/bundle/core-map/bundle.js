@@ -62,35 +62,6 @@ function() {
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/core/core-map-methods.js"
 		}
-		/*
-        {
-            "type" : "text/javascript",
-            "src" : "../../../../sources/framework/core/core-feature-info-methods.js"
-        }, */
-		/*
-		 * { "type" : "text/javascript", "src" :
-		 * "../../../../sources/framework/core/core-search-methods.js" },
-		 */
-		/*
-		 * { "type" : "text/javascript", "src" :
-		 * "../../../../sources/framework/core/core-wizard-methods.js" },
-		 */
-		/*
-		 * { "type" : "text/javascript", "src" :
-		 * "../../../../sources/framework/core/core-mapasker-methods.js" },
-		 */
-		/*
-		 * { "type" : "text/javascript", "src" :
-		 * "../../../../sources/framework/core/core-net-service-center-methods.js" },
-		 */
-		/*
-		 * { "type" : "text/javascript", "src" :
-		 * "../../../../sources/framework/core/core-status-methods.js" },
-		 */
-		/*
-		 * { "type" : "text/javascript", "src" :
-		 * "../../../../sources/framework/core/wfs-request-tiler.js" },
-		 */
 		],
 		"resources" : []
 	},

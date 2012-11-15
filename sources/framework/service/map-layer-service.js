@@ -632,9 +632,10 @@ function(mapLayerUrl, sandbox) {
             }
 
         }
+        // didnt find layer from base level, try sublayers
         for(var i = 0; i < layerList.length; i++) {
             var layer = layerList[i];
-            /* recurse to sublayers */
+            // recurse to sublayers
             var subLayers = layer.getSubLayers();
             var subLayer = this.findMapLayer(id, subLayers);
             if(subLayer != null) {

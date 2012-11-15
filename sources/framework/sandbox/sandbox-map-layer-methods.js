@@ -14,23 +14,10 @@ Oskari.clazz.category(
 				return layer;
 			},
 
-			/*******************************************************************
-			 * Finds basemap layer by sublayer id.
-			 * 
-			 * @param {Object}
-			 *            sublayerid
-			 */
-			findBaselayerBySublayerIdFromAllAvailable : function(sublayerid) {
-				var layer = this._core
-						.findBaselayerBySublayerIdFromAllAvailable(sublayerid);
-				return layer;
-			},
-
 			/**
 			 * @method findAllSelectedMapLayers
+             * Returns all currently selected map layers
 			 * @return {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
-		 	 * 		
-		 	 * Returns all currently selected map layers
 			 */
 			findAllSelectedMapLayers : function() {
 				var layersList = this._core.getAllSelectedLayers();
@@ -54,21 +41,6 @@ Oskari.clazz.category(
 			 */
 			isLayerAlreadySelected : function(id) {
 				return this._core.isLayerAlreadySelected(id);
-			},
-
-			/**
-			 * Returs is wfs layers selected
-			 */
-			isWfsLayersSelected : function() {
-				return this._core.isWfsLayersSelected();
-			},
-
-			/**
-			 * Returns all currently selected wfs map layers
-			 */
-			findAllSelectedWFSMapLayers : function() {
-				var layers = this._core.getAllSelectedWfsLayers();
-				return layers;
 			},
 
 			/**

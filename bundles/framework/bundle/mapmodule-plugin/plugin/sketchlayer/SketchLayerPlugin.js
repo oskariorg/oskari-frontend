@@ -112,7 +112,11 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.SketchLayerPlugin', function(
         'AfterRemovePolygonEvent' : function(event) {
             this.afterRemovePolygonEvent(event);
         },
-        'ToolSelectedEvent' : function(event) {
+        /**
+         * @method Toolbar.ToolSelectedEvent
+         * @param {Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent} event
+         */
+        'Toolbar.ToolSelectedEvent' : function(event) {
             // this._WMSQueryTool = false;
             
             // TODO: get rid of magic strings
