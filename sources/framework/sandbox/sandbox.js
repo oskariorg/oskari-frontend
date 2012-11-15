@@ -1,13 +1,21 @@
 /**
  * @class Oskari.mapframework.sandbox.Sandbox
- *
- * Module init/start/stop methods get reference to sandbox through the Oskari
- * Module protocol.
- * TODO: documentation TBD
+ * 
+ * Sandbox is the component providing bundles ways to get information about the status of the system 
+ * and communicate to other bundles using requests and events. Sandbox is created at the same time as
+ * Oskari.mapframework.core.Core. Module init/start/stop methods get reference to sandbox through 
+ * the Oskari Module protocol.
  */
-Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
+Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', 
 
-    /* Core */
+/**
+ * @method create called automatically on construction
+ * @static
+ * 
+ * @param {Oskari.mapframework.core.Core} core
+ */
+function(core) {
+
     this._core = core;
 
     /*
@@ -27,11 +35,12 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
     this.requestEventLog = [];
     this.requestEventStack = [];
 
+    // TODO: move to some conf?
 	/* as of 2012-09-24 debug by default false */
     this.gatherDebugRequests = false;
     this.maxGatheredRequestsAndEvents = 4096;
-    // TODO: move to some conf?
     this.requestAndEventGather = [];
+    this._eventLoopGuard = 0;
 
     this._user = null;
     this._ajaxUrl = null;
@@ -39,7 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
 	
 	/**
 	 * @method disableDebug
-	 * disables debug messaging and sequence diagram gathering
+	 * Disables debug messaging and sequence diagram gathering
 	 * if( core is set ) also core debug will be disabled
 	 */
     disableDebug : function() {
@@ -51,8 +60,9 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
         }
     },
     
-    /** @method enableDebug
-     * enables debug messaging and sequence diagram gathering (by default not enabled)
+    /** 
+     * @method enableDebug
+     * Enables debug messaging and sequence diagram gathering (by default not enabled)
      * if( core is set ) also core debug will be enabled
      */
     enableDebug : function() {
@@ -66,29 +76,39 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
     },
 
     /**
-     * Utility method for printing some debug
+     * @method printDebug
+     * Utility method for printing debug messages to browser console
+     * @param {String} text - message to print
      */
     printDebug : function(text) {
-        /* forward debugging to core */
         this._core.printDebug(text);
     },
 
     /**
+     * @method printWarn
+     * Utility method for printing warn messages to browser console
+     * @param {String} text
+     */
+    printWarn : function(text) {
+        /* forward warning to core */
+        this._core.printWarn(text);
+    },
+    /**
      * @method setUser
-     * @param {Object} userData
-     *     JSON presentation of user
+     * 
      * Creates Oskari.mapframework.domain.User from the given data as current
      * user
+     * @param {Object} userData
+     *     JSON presentation of user
      */
     setUser : function(userData) {
-        /* Create a user object */
         this._user = Oskari.clazz.create('Oskari.mapframework.domain.User', userData);
     },
     /**
      * @method getUser
-     * @return {Oskari.mapframework.domain.User} user
-     *
      * Returns current user. See #setUser
+     * 
+     * @return {Oskari.mapframework.domain.User} user
      */
     getUser : function() {
         if (!this._user) {
@@ -100,36 +120,25 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
 
     /**
      * @method setAjaxUrl
+     * Sets a global Url that is used to communicate with the server
      * @param {String} pUrl
-     *     Url that is used to communicate with the server
      */
     setAjaxUrl : function(pUrl) {
         this._ajaxUrl = pUrl;
     },
     /**
      * @method getAjaxUrl
-     * @return {String} user
-     *
-     * Returns ajax url for the application. See #setAjaxUrl
+     * Returns global ajax url for the application. See #setAjaxUrl
+     * @return {String}
      */
     getAjaxUrl : function() {
         return this._ajaxUrl;
     },
 
-    /**
-     * Prints given warn text to console
-     *
-     * @param {Object}
-     *            text
-     */
-    printWarn : function(text) {
-        /* forward warning to core */
-        this._core.printWarn(text);
-    },
 
     /**
      * @method registerService
-     * Registers given service to core
+     * Registers given service to Oskari system
      *
      * @param {Oskari.mapframework.service.Service}
      *            service service to register
@@ -140,8 +149,9 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
     /**
      * Method for asking a registered service
      *
-     * @param {Object}
+     * @param {String}
      *            serviceQName that identifies the service in the core
+     * @return {Oskari.mapframework.service.Service}
      */
     getService : function(type) {
         return this._core.getService(type);
@@ -154,7 +164,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
      *            pBundleId bundle instance id to which the state will be mapped
      * to
      * @param {Oskari.bundle.BundleInstance}
-     *            pInstance reference to actual instance
+     *            pInstance reference to actual bundle instance
      */
     registerAsStateful : function(pBundleId, pInstance) {
         this._statefuls[pBundleId] = pInstance;
@@ -164,8 +174,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
      * Unregisters given bundle instance from stateful bundles in sandbox
      *
      * @param {String}
-     *            pBundleId bundle instance id to which the state will be mapped
-     * to
+     *            pBundleId bundle instance id which to unregister
      */
     unregisterStateful : function(pBundleId) {
         this._statefuls[pBundleId] = null;
@@ -177,7 +186,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
      * #registerAsStateful).
      * The objects propertynames match the instance id and property value is
      * reference to the stateful component.
-     *
+     * @return {Object}
      */
     getStatefulComponents : function() {
         return this._statefuls;
@@ -193,10 +202,16 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
     register : function(module) {
         this._modules.push(module);
         this._modulesByName[module.getName()] = module;
-        //this._core.registerFrameworkComponentToRuntimeEnvironment(module, module.getName());
         return module.init(this);
     },
 
+    /**
+     * @method unregister
+     * Unregisters given module from sandbox
+     *
+     * @param {Oskari.mapframework.module.Module}
+     *            module
+     */
     unregister : function(module) {
         var remainingModules = [];
         for (var m = 0; m < this._modules.length; m++) {
@@ -208,32 +223,15 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
         this._modules = remainingModules;
         this._modulesByName[module.getName()] = undefined;
         delete this._modulesByName[module.getName()];
-
-        //this._core.unregisterFrameworkComponentFromRuntimeEnvironment(module, module.getName());
-        // return module.deinit(this);
     },
 
     /**
+     * @method registerForEventByName
      * Registers given module to listen to given event
      *
-     * @param {Object}
-     *            module
-     * @param {Object}
-     *            event
+     * @param {Oskari.mapframework.module.Module} module
+     * @param {String} eventName
      */
-    registerForEvent : function(module, event) {
-        var eventName = event.getName();
-        this._core.printDebug("Sandbox is registering module '" + module.getName() + "' to event '" + eventName + "'");
-        var oldListeners = this._listeners[eventName];
-        if (oldListeners == null) {
-            oldListeners = new Array();
-            this._listeners[eventName] = oldListeners;
-        }
-
-        oldListeners.push(module);
-        this._core.printDebug("There are currently " + oldListeners.length + " listeners for event '" + eventName + "'");
-        delete event;
-    },
     registerForEventByName : function(module, eventName) {
 
         this._core.printDebug("#*#*#* Sandbox is registering module '" + module.getName() + "' to event '" + eventName + "'");
@@ -245,43 +243,25 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
 
         oldListeners.push(module);
         this._core.printDebug("There are currently " + oldListeners.length + " listeners for event '" + eventName + "'");
-
     },
 
     /**
-     * Unregisters given module from given event
+     * @method unregisterFromEventByName
+     * Unregisters given module from listening to given event
      *
-     * @param {Object}
-     *            module
-     * @param {Object}
-     *            event
+     * @param {Oskari.mapframework.module.Module} module
+     * @param {String} eventName
      */
-    unregisterFromEvent : function(module, event) {
-        var eventName = event.getName();
-        this._core.printDebug("Sandbox is unregistering module '" + module.getName() + "' from event '" + eventName + "'");
-        var oldListeners = this._listeners[eventName];
-        if (oldListeners == null) {
-            // return no listeners
-        }
-
-        var deleteIndex = oldListeners.indexOf(module);
-        if (deleteIndex > -1) {
-            oldListeners.splice(deleteIndex, 1);
-            this._core.printDebug("Module unregistered successfully from event");
-        } else {
-            this._core.printDebug("Module does not listen to that event, skipping.");
-        }
-        delete event;
-    },
     unregisterFromEventByName : function(module, eventName) {
         this._core.printDebug("Sandbox is unregistering module '" + module.getName() + "' from event '" + eventName + "'");
         var oldListeners = this._listeners[eventName];
         if (oldListeners == null) {
-            // return no listeners
+            // no listeners
+            this._core.printDebug("Module does not listen to that event, skipping.");
+            return;
         }
 
         var deleteIndex = -1;
-        // oldListeners.indexOf(module);
         for (var d = 0; d < oldListeners.length; d++) {
             if (oldListeners[d] == module) {
                 deleteIndex = d;
@@ -294,53 +274,34 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
         } else {
             this._core.printDebug("Module does not listen to that event, skipping.");
         }
-
-    },
-
-    /**
-     * Starts all registered modules
-     *
-     */
-    startModules : function() {
-
-        /**
-         * to avoid infinity let's store length
-         * before calling out starts
-         * modules may accidently lengthen  this._modules
-         * during start
-         */
-        var modulesLength = this._modules.length;
-        for (var i = 0; i < modulesLength; i++) {
-            var module = this._modules[i];
-
-            module.start(this);
-
-        }
     },
 
     /**
      * @method getRequestBuilder
-     * @param {String} name request name that we are creating
      *
-     * access to request builder that creates requests by name
+     * Access to request builder that creates requests by name
      * rather than by class name
+     * @param {String} name request name that we are creating
+     * @return {Function} builder function for given request
      */
     getRequestBuilder : function(name) {
         return this._core.getRequestBuilder(name);
     },
 
     /**
-     * access to event builder that creates events by name
-     * rather than by class name
+     * @method getRequestBuilder
      *
+     * Access to event builder that creates events by name
+     * 
+     * @param {String} name request name that we are creating
+     * @return {Function} builder function for given event
      */
     getEventBuilder : function(name) {
         return this._core.getEventBuilder(name);
     },
 
-    eventLoopGuard : 0,
 
-    debugPushRequest : function(creator, req) {
+    _debugPushRequest : function(creator, req) {
         if (!this.debugRequests)
             return;
         var reqLog = {
@@ -352,18 +313,18 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
         if (this.requestEventLog.length > 64)
             this.requestEventLog.shift();
     },
-    debugPopRequest : function() {
+    _debugPopRequest : function() {
         if (!this.debugRequests)
             return;
         this.requestEventStack.pop();
     },
 
-    debugPushEvent : function(creator, target, evt) {
+    _debugPushEvent : function(creator, target, evt) {
         if (!this.debugEvents)
             return;
-        this.eventLoopGuard++;
+        this._eventLoopGuard++;
 
-        if (this.eventLoopGuard > 64)
+        if (this._eventLoopGuard > 64)
             throw "Events Looped?";
 
         var evtLog = {
@@ -376,17 +337,13 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
         if (this.requestEventLog.length > 64)
             this.requestEventLog.shift();
     },
-    debugPopEvent : function() {
+    _debugPopEvent : function() {
         if (!this.debugEvents)
             return;
-        this.eventLoopGuard--;
+        this._eventLoopGuard--;
 
         this.requestEventStack.pop();
     },
-    // TODO: document or move elsewhere
-    /*doWfsLayerRelatedQueries : function(creator, mapLayer) {
-    this._core.doWfsLayerRelatedQueries(creator, mapLayer);
-    },*/
 
     /**
      * @method ajax
@@ -483,9 +440,9 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
 
         var rv = null;
 
-        this.debugPushRequest(creatorComponent, request);
+        this._debugPushRequest(creatorComponent, request);
         rv = this._core.processRequest(request);
-        this.debugPopRequest();
+        this._debugPopRequest();
 
         return rv;
     },
@@ -532,9 +489,9 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
 
         var rv = null;
 
-        this.debugPushRequest(creatorComponent, request);
+        this._debugPushRequest(creatorComponent, request);
         rv = this._core.processRequest(request);
-        this.debugPopRequest();
+        this._debugPopRequest();
 
         return rv;
     },
@@ -577,13 +534,13 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
             var rv = null;
 
 			if (this.debugRequests) {
-	            me.debugPushRequest(creatorComponent, request);
+	            me._debugPushRequest(creatorComponent, request);
 	        }
 	        
             rv = me._core.processRequest(request);
             
             if (this.debugRequests) {
-            	me.debugPopRequest();
+            	me._debugPopRequest();
             }
 
         }, 0);
@@ -649,7 +606,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
 
                 this.debugPushEvent(this.getObjectCreator(event), module, event);
                 module.onEvent(event);
-                this.debugPopEvent();
+                this._debugPopEvent();
             }
         } else {
             if (!retainEvent) {
