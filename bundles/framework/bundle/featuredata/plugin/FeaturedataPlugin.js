@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.featuredata.plugin.FeaturedataPlugin
+ * @class Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin
  * Provides a coordinate display for map
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin',

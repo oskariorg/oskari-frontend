@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.ui.module.common.mapmodule.Plugin
+ * @class Oskari.mapframework.ui.module.common.mapmodule.Plugin
  */
 Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.Plugin',
 /**

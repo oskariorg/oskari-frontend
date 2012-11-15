@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.mapmodule.request.MapMoveByLayerContentRequest
+ * @class Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayerContentRequest
  * Requests map to move to location/scale where given layer has content
  * 
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.

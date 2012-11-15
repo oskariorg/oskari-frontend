@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.mapmodule-plugin.event.MapClickedEvent
+ * @class Oskari.mapframework.mapmodule-plugin.event.MapClickedEvent
  */
 Oskari.clazz.define(
     'Oskari.mapframework.mapmodule-plugin.event.MapClickedEvent',

@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.event.common.MapMoveStartEvent
+ * @class Oskari.mapframework.event.common.MapMoveStartEvent
  *
  * Notifies application bundles that a map has began moving (is being dragged).
  * Oskari.mapframework.event.common.AfterMapMoveEvent is sent when dragging is

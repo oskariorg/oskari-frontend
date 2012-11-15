@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.infobox.InfoBoxBundle
+ * @class Oskari.mapframework.bundle.infobox.InfoBoxBundle
  *
  * Definition for bundle. See source for details.
  */

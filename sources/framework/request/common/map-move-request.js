@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.request.common.MapMoveRequest
+ * @class Oskari.mapframework.request.common.MapMoveRequest
  *
  * Requests for the map to move to given location and zoom level/bounds. 
  * Map sends out Oskari.mapframework.event.common.AfterMapMoveEvent after it has 

@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.request.common.DimMapLayerRequest
+ * @class Oskari.mapframework.request.common.DimMapLayerRequest
  *
  * Requests for given "highlighted" map layer to be "dimmed" on map.
  * This means f.ex. a WMS layer to disable GetFeatureInfo clicks,

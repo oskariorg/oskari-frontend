@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.event.CoreInitFinishedEvent
+ * @class Oskari.mapframework.event.CoreInitFinishedEvent
  *
  * Triggers when Oskari core has finished initialization
  */

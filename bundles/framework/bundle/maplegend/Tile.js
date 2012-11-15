@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.maplegend.Tile
+ * @class Oskari.mapframework.bundle.maplegend.Tile
  * Renders the "all layers" tile.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Tile',

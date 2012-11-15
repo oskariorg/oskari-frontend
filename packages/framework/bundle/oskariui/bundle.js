@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.oskariui.OskariUIBundle
+ * @class Oskari.mapframework.bundle.oskariui.OskariUIBundle
  *
  * Bundle to add Map Layer Legends to application. 
  * 

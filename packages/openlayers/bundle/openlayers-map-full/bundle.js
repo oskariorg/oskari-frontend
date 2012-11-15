@@ -1,9 +1,9 @@
 /**
- * @class Oskari.framework.bundle.SampleBundleInstance
+ * @class Oskari.mapframework.bundle.SampleBundleInstance
  */
 
 /**
- * @class Oskari.framework.bundle.SampleBundle
+ * @class Oskari.mapframework.bundle.SampleBundle
  * 
  */
 

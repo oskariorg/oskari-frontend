@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.myplaces2.request.EditRequestHandler
+ * @class Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler
  * Handles sequests for a saved "my place" or my places categorires to be opened for editing
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler', 

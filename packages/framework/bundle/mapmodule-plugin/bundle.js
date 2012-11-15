@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.PluginMapModuleBundle
+ * @class Oskari.mapframework.bundle.PluginMapModuleBundle
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function() {
 	this.singleton = null;

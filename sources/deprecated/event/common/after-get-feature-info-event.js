@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.event.common.AfterGetFeatureInfoEvent
+ * @class Oskari.mapframework.event.common.AfterGetFeatureInfoEvent
  *
  * Triggers on GetFeatureInfoRequest.
  * See Oskari.mapframework.request.common.GetFeatureInfoRequest and

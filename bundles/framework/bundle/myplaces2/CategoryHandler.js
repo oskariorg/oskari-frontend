@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.myplaces2.CategoryHandler
+ * @class Oskari.mapframework.bundle.myplaces2.CategoryHandler
  * 
  * Handles category related functionality for my places (map layers etc)
  */

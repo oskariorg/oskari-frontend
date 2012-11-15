@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.mapmodule.plugin.ScaleBarPlugin
+ * @class Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin
  * Provides scalebar functionality for map
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',

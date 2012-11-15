@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.mapwfs.service.WfsTileService
+ * @class Oskari.mapframework.bundle.mapwfs.service.WfsTileService
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.service.WfsTileService', 
 /** 

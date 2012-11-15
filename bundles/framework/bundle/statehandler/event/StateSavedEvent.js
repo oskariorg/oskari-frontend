@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.statehandler.event.StateSavedEvent
+ * @class Oskari.mapframework.bundle.statehandler.event.StateSavedEvent
  * 
  * This is used to notify that application state has been saved and any listing should refresh
  */

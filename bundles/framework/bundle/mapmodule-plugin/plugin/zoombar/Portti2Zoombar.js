@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.mapmodule.plugin.Portti2Zoombar
+ * @class Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar
  *
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',

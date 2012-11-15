@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.personaldata.PersonalDataBundleInstance
+ * @class Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance
  *
  * Main component and starting point for the personal data functionality.
  * 

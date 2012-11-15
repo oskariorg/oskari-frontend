@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.statehandler.Plugin
+ * @class Oskari.mapframework.bundle.statehandler.Plugin
  * 
  * Protocol/interface declaration for 
  * Oskari.mapframework.bundle.ui.module.statehandler.StateHandlerModule plugins.

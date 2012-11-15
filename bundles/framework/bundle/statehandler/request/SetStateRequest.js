@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.statehandler.request.SetStateRequest
+ * @class Oskari.mapframework.bundle.statehandler.request.SetStateRequest
  * Requests state to be set
  * 
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.

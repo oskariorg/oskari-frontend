@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.core.RequestHandler
+ * @class Oskari.mapframework.core.RequestHandler
  * A protocol class for registered request handlers. You need to implement a
  * class with this protocol and register it to sandbox for a custom request handler.
  * <pre>

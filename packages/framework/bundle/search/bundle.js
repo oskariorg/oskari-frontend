@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.search.SearchBundle
+ * @class Oskari.mapframework.bundle.search.SearchBundle
  *
  * Definition for bundle. See source for details.
  */

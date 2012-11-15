@@ -1,5 +1,5 @@
 /*
- * @class Oskari.framework.bundle.layerselection2.Tile
+ * @class Oskari.mapframework.bundle.layerselection2.Tile
  *
  * Renders the "selected layers" tile.
  */

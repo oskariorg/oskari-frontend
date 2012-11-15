@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.myplaces2.service.MyPlacesWFSTStore
+ * @class Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore
  *
  * Transforms Ext Model & OpenLayers geometry to WFS Transactions
  *

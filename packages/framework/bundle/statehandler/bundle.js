@@ -1,6 +1,6 @@
 
 /**
- * @class Oskari.framework.bundle.statehandler.StateHandlerBundle
+ * @class Oskari.mapframework.bundle.statehandler.StateHandlerBundle
  * Bundle definition for Oskari.mapframework.bundle.statehandler.StateHandlerBundleInstance
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundle", function() {

@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.mapmodule.request.GetFeatureInfoActivationRequest
+ * @class Oskari.mapframework.bundle.mapmodule.request.GetFeatureInfoActivationRequest
  * Requests GFI functionality to be activated or disabled
  * 
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.

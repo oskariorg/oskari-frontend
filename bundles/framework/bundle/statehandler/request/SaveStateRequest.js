@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.statehandler.request.SaveStateRequest
+ * @class Oskari.mapframework.bundle.statehandler.request.SaveStateRequest
  * Requests state to be saved
  * 
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.

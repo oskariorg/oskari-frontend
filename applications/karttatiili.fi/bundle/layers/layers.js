@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.complexbundle.NlsFiLayerConfig
+ * @class Oskari.mapframework.complexbundle.NlsFiLayerConfig
  *
  * Map configuration
  */

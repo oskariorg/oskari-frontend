@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.publisher.view.BasicPublisher
+ * @class Oskari.mapframework.bundle.publisher.view.BasicPublisher
  * Renders the "publisher" view for basic use case
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',

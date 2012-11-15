@@ -1,6 +1,6 @@
 
 /**
- * @class Oskari.framework.OpenLayersBundleCommand
+ * @class Oskari.mapframework.OpenLayersBundleCommand
  */
 Oskari.clazz
 		.define(

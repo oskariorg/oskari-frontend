@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.event.common.AfterShowMapLayerInfoEvent
+ * @class Oskari.mapframework.event.common.AfterShowMapLayerInfoEvent
  * 
  * Triggers on Oskari.mapframework.request.common.ShowMapLayerInfoRequest.
  * Populates the layer reference matching the id in request.

@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.mapmodule.plugin.LayerSelectionPlugin
+ * @class Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin
  *
  * This is a plugin to bring more functionality for the mapmodules map
  * implementation. It provides a maplayer selection "dropdown" on top of the map. 

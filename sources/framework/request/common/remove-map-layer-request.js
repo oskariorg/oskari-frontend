@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.request.common.RemoveMapLayerRequest
+ * @class Oskari.mapframework.request.common.RemoveMapLayerRequest
  *
  * Requests for given map layer to be removed on map. Triggers a 
  * Oskari.mapframework.event.common.AfterMapLayerRemoveEvent.

@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.mapmodule.plugin.LayersPlugin
+ * @class Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin
  *
  * This is a plugin to bring more functionality for the mapmodules map
  * implementation. It provides handling for rearranging layer order and

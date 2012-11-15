@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.event.common.AfterRearrangeSelectedMapLayerEvent
+ * @class Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent
  * 
  * Used to notify that maplayer order has been changed in Oskari core.
  */

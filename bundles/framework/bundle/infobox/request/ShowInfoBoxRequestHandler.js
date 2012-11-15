@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.infobox.request.ShowInfoBoxRequestHandler
+ * @class Oskari.mapframework.bundle.infobox.request.ShowInfoBoxRequestHandler
  * Handles Oskari.mapframework.bundle.infobox.request.ShowInfoBoxRequest to show an info box/popup.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.infobox.request.ShowInfoBoxRequestHandler', 

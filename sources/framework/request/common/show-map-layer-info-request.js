@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.request.common.ShowMapLayerInfoRequest
+ * @class Oskari.mapframework.request.common.ShowMapLayerInfoRequest
  *
  * Requests for additional information for the given map layer to be shown in the UI.
  * (In practice the legend image for the requested layer is shown by 

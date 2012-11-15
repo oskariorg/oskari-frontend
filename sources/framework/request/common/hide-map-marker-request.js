@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.request.common.HideMapMarkerRequest
+ * @class Oskari.mapframework.request.common.HideMapMarkerRequest
  *
  * Request for any markers shown on map to be hidden
  */

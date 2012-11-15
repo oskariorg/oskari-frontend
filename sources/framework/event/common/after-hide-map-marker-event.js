@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.event.common.AfterHideMapMarkerEvent
+ * @class Oskari.mapframework.event.common.AfterHideMapMarkerEvent
  *
  * Triggers on Oskari.mapframework.request.common.HideMapMarkerRequest
  * FIXME: propably an unnecessary step that could be handled with the request

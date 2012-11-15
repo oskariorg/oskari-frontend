@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.toolbar.request.ToolButtonRequestHandler
+ * @class Oskari.mapframework.bundle.toolbar.request.ToolButtonRequestHandler
  * Handles Oskari.mapframework.bundle.toolbar.request.AddToolButtonRequest,
  * Oskari.mapframework.bundle.toolbar.request.RemoveToolButtonRequest and
  * Oskari.mapframework.bundle.toolbar.request.ToolButtonStateRequest

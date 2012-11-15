@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.toolbar.request.SelectToolButtonRequest
+ * @class Oskari.mapframework.bundle.toolbar.request.SelectToolButtonRequest
  * Requests for toolbar to act as if user had clicked a button or returns a defuult tool if
  * create params aren't given.
  * 

@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.mapfull.MapFullBundleInstance
+ * @class Oskari.mapframework.bundle.mapfull.MapFullBundleInstance
  * 
  * The full map window application. Begins building the application on #start() method call.
  */

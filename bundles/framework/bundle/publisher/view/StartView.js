@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.publisher.view.StartView
+ * @class Oskari.mapframework.bundle.publisher.view.StartView
  * Renders the "publisher" view for users that are logged in and can publish maps.
  * This is an initial screen where the user is told that the map will move in to a publisher view.
  */

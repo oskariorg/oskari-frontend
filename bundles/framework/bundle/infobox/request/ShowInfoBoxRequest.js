@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.infobox.request.ShowInfoBoxRequest
+ * @class Oskari.mapframework.bundle.infobox.request.ShowInfoBoxRequest
  * Requests a map popup/infobox to be shown
  * 
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.

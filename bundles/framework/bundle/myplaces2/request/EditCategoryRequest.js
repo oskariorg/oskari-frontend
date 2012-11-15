@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.myplaces2.request.EditCategoryRequest
+ * @class Oskari.mapframework.bundle.myplaces2.request.EditCategoryRequest
  * Requests a "my place" maplayer/category to be opened for editing
  * 
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.

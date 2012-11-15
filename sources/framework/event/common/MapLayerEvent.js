@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.event.common.MapLayerEvent
+ * @class Oskari.mapframework.event.common.MapLayerEvent
  *
  * Notifies application bundles that a map layers data(e.g. name) has changed or
  * that a layer has been added to/removed from Oskari.mapframework.service.MapLayerService

@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.request.common.ChangeMapLayerStyleRequest
+ * @class Oskari.mapframework.request.common.ChangeMapLayerStyleRequest
  *
  * Changes style map layer with given id
  * 

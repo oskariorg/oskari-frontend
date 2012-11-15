@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.statehandler.plugin.SaveViewPlugin
+ * @class Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlugin
  * Provides functionality to save the current state as the users My Views.
  * Adds a button to the toolbar for saving a view.
  *

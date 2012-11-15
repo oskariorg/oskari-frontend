@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.toolbar.ToolbarBundleInstance
+ * @class Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance
  *
  * Main component and starting point for the "toolbar" functionality.
  * Provides functionality for other bundles to add buttons

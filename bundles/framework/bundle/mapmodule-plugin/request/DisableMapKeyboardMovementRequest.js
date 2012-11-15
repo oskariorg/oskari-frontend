@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.mapmodule.request.DisableMapKeyboardMovementRequest
+ * @class Oskari.mapframework.bundle.mapmodule.request.DisableMapKeyboardMovementRequest
  *
  * Requests for keyboard control on map to be disabled. This is usually requested
  * so that typing on a textfield doesn't move the map on the background.

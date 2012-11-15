@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.domain.Map
+ * @class Oskari.mapframework.domain.Map
  *
  * Represents the values of the map implementation (openlayers)
  * Map module updates this domain object before sending out MapMoveEvents using

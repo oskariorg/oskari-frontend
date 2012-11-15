@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.event.common.AfterDimMapLayerEvent
+ * @class Oskari.mapframework.event.common.AfterDimMapLayerEvent
  *
  * Triggers when a given "highlighted" map layer has been requested to be
  * "dimmed" on map. This means f.ex. a WMS layer GetFeatureInfo clicks needs to

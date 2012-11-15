@@ -1,6 +1,6 @@
 
 /**
- * @class Oskari.framework.bundle.userguide.request.ShowUserGuideRequest
+ * @class Oskari.mapframework.bundle.userguide.request.ShowUserGuideRequest
  * 
  *   
  */

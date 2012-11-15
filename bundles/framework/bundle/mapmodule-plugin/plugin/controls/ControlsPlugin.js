@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.mapmodule.ControlsPlugin
+ * @class Oskari.mapframework.mapmodule.ControlsPlugin
  * Provides tools for measurement/zoombox
  */
 Oskari.clazz.define('Oskari.mapframework.mapmodule.ControlsPlugin',

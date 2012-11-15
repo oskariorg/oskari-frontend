@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.domain.VectorLayer
+ * @class Oskari.mapframework.domain.VectorLayer
  *
  * MapLayer of type Vector
  */

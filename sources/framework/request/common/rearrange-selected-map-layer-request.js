@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.request.common.RearrangeSelectedMapLayerRequest
+ * @class Oskari.mapframework.request.common.RearrangeSelectedMapLayerRequest
  *
  * Requests that the given maplayer is moved to a new position in the selected maplayers stack.
  * 

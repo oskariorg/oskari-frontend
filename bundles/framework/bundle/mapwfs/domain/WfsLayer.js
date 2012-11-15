@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.domain.WfsLayer
+ * @class Oskari.mapframework.domain.WfsLayer
  *
  * MapLayer of type WFS
  */

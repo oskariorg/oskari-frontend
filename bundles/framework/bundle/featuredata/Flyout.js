@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.featuredata.Flyout
+ * @class Oskari.mapframework.bundle.featuredata.Flyout
  *
  * Renders the "featuredata" flyout.
  */

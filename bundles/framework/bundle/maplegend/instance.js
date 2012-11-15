@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.maplegend.MapLegendBundleInstance
+ * @class Oskari.mapframework.bundle.maplegend.MapLegendBundleInstance
  *
  * Main component and starting point for the "all layers" functionality. 
  * Lists all the layers available in Oskari.mapframework.service.MapLayerService and updates 

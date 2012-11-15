@@ -1,5 +1,5 @@
 	/**
-	 * @class Oskari.framework.bundle.toolbar.request.ShowMapMeasurementRequestHandler
+	 * @class Oskari.mapframework.bundle.toolbar.request.ShowMapMeasurementRequestHandler
 	 *
 	 * A Temporarily placed handler for showing map measurement (intermediate) results
 	 *

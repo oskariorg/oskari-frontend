@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.domain.User
+ * @class Oskari.mapframework.domain.User
  *
  * Contains information about a logged in user.
  * If #isLoggedIn returns true, other methods should return info about user. 

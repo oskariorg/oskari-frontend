@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.layerselection2.LayerSelectionBundleInstance
+ * @class Oskari.mapframework.bundle.layerselection2.LayerSelectionBundleInstance
  *
  * Main component and starting point for the "selected layers" functionality.
  * Lists all the layers available in Oskari.mapframework.sandbox.Sandbox.findAllSelectedMapLayers()

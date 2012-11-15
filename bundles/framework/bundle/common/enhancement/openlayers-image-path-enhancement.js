@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.enhancement.common.OpenLayersImagePathEnhancement
+ * @class Oskari.mapframework.enhancement.common.OpenLayersImagePathEnhancement
  * This enhancement will alter openlayers image path
  * TODO: refactor OpenLayers global access
  */

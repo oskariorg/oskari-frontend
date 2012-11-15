@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.statehandler.StateHandlerBundleInstance
+ * @class Oskari.mapframework.bundle.statehandler.StateHandlerBundleInstance
  * Handles modules implementing Stateful protocol to get application state
  * and uses the registered plugin to handle saving the state.
  */

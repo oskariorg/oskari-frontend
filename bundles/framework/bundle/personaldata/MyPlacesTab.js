@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.personaldata.MyPlacesTab
+ * @class Oskari.mapframework.bundle.personaldata.MyPlacesTab
  * Renders the "personal data" myplaces tab.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyPlacesTab',

@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.myplaces2.view.CategoryForm
+ * @class Oskari.mapframework.bundle.myplaces2.view.CategoryForm
  * 
  * Shows a form for a myplaces category
  */

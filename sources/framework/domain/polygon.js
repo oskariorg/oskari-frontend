@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.domain.Polygon
+ * @class Oskari.mapframework.domain.Polygon
  *
  * Used by Oskari.mapframework.mapmodule.SketchLayerPlugin that does some weird
  * stuff like setting id -1 OR -2.

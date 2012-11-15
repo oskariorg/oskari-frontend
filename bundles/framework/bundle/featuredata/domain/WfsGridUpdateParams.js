@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.featuredata.domain.WfsGridUpdateParams
+ * @class Oskari.mapframework.bundle.featuredata.domain.WfsGridUpdateParams
  * 
  * Convenience class to store parameters for WFS Grid update scheduling
  */

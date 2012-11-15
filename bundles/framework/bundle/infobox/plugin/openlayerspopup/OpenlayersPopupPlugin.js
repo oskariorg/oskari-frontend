@@ -36,7 +36,7 @@ jQuery.fn.outerHTML = function (arg) {
 };
 
 /**
- * @class Oskari.framework.bundle.infobox.plugin.mapmodule.OpenlayersPopupPlugin
+ * @class Oskari.mapframework.bundle.infobox.plugin.mapmodule.OpenlayersPopupPlugin
  * 
  * Extends jquery by defining outerHtml() method for it. (TODO: check if we really want to do it here).
  * Provides a customized popup functionality for Openlayers map.

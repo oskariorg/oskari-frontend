@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.search.SearchBundleInstance
+ * @class Oskari.mapframework.bundle.search.SearchBundleInstance
  *
  * Main component and starting point for the "search" functionality. 
  * Provides search functionality for the map.

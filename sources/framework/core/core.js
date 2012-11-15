@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.core.Core
+ * @class Oskari.mapframework.core.Core
  * 
  * This is the Oskari core. Bundles can register modules and services here for other bundles to reference.
  * Requests and events are forwarded through the core to handlers.

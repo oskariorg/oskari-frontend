@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.domain.WmsLayer
+ * @class Oskari.mapframework.domain.WmsLayer
  *
  * MapLayer of type WMS
  */
@@ -177,9 +177,19 @@ function() {
     getId : function() {
         return this._id;
     },
+    /**
+     * @method setQueryFormat
+     * @param {String} queryFormat 
+     *          f.ex. 'text/html'
+     */
     setQueryFormat : function(queryFormat) {
         this._queryFormat = queryFormat;
     },
+    /**
+     * @method getQueryFormat
+     * f.ex. 'text/html'
+     * @return {String}
+     */
     getQueryFormat : function() {
         return this._queryFormat;
     },
@@ -310,9 +320,6 @@ function() {
         return this._description;
     },
     
-    
-    
-    
     /**
      * @method addSubLayer
      * @param {Oskari.mapframework.domain.WmsLayer} map layer
@@ -388,8 +395,6 @@ function() {
     /**
      * @method setOrderNumber
      * @param {Number} orderNumber
-     * 
-     * TODO: check if actually {Number}
      */
     setOrderNumber : function(orderNumber) {
         this._orderNumber = orderNumber;
@@ -397,7 +402,6 @@ function() {
     /**
      * @method getOrderNumber
      * @return {Number} orderNumber
-     * TODO: check if actually {Number}
      */
     getOrderNumber : function() {
         return this._orderNumber;
@@ -588,7 +592,7 @@ function() {
     },
     /**
      * @method setAsGroupLayer
-     * sets layer type to GROUP_LAYER
+     * Sets layer type to GROUP_LAYER
      */
     setAsGroupLayer : function() {
         this._type = "GROUP_LAYER";

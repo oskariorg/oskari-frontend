@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.publisher.event.MapPublishedEvent
+ * @class Oskari.mapframework.bundle.publisher.event.MapPublishedEvent
  * 
  * Used to notify components that a new published map is available.
  */

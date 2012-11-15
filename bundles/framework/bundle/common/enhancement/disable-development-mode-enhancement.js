@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.enhancement.common.DisableDevelopmentModeEnhancement
+ * @class Oskari.mapframework.enhancement.common.DisableDevelopmentModeEnhancement
  * Disables debug logging and enables usage logging based on environment
  */
 Oskari.clazz.define('Oskari.mapframework.enhancement.common.DisableDevelopmentModeEnhancement', 

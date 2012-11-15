@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.coordinatedisplay.CoordinateDisplayBundle
+ * @class Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisplayBundle
  *
  * Definition for bundle. See source for details.
  */

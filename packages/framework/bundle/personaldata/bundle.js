@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.personaldata.PersonalDataBundle
+ * @class Oskari.mapframework.bundle.personaldata.PersonalDataBundle
  *
  * Definition for bundle. See source for details.
  */

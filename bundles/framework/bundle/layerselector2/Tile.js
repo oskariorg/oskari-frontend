@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.layerselector2.Tile
+ * @class Oskari.mapframework.bundle.layerselector2.Tile
  * Renders the "all layers" tile.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Tile',

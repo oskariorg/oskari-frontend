@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.event.common.FeaturesAvailableEvent
+ * @class Oskari.mapframework.event.common.FeaturesAvailableEvent
  *
  * Used to add/replace features on a
  * Oskari.mapframework.domain.VectorLayer

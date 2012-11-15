@@ -1,5 +1,5 @@
 /*
- * @class Oskari.framework.bundle.search.Tile
+ * @class Oskari.mapframework.bundle.search.Tile
  * 
  * Renders the "search" tile.
  */

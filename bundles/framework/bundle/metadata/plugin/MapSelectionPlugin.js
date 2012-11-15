@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.metadata.plugin.MapSelectionPlugin
+ * @class Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlugin
  *
  * Provides functionality to draw a selection box on the map
  */

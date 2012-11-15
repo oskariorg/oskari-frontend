@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.request.common.ChangeMapLayerOpacityRequest
+ * @class Oskari.mapframework.request.common.ChangeMapLayerOpacityRequest
  * Requests opacity change for maplayer with given id
  * 
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.

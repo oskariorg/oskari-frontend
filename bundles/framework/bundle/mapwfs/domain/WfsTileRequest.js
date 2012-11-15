@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.mapwfs.domain.WfsTileRequest
+ * @class Oskari.mapframework.bundle.mapwfs.domain.WfsTileRequest
  * 
  * TODO: desc
  */

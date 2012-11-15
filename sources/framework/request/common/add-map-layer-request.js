@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.request.common.AddMapLayerRequest
+ * @class Oskari.mapframework.request.common.AddMapLayerRequest
  *
  * Requests for given map layer to be added on map. Opposite of 
  * Oskari.mapframework.request.common.RemoveMapLayerRequest

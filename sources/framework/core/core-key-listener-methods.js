@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.core.Core.keyListenerMethods
+ * @class Oskari.mapframework.core.Core.keyListenerMethods
  *
  * This category class adds key listener methods to Oskari core as they were in
  * the class itself.

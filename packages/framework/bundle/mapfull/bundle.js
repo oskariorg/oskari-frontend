@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.mapfull.MapFullBundle
+ * @class Oskari.mapframework.bundle.mapfull.MapFullBundle
  * 
  */
 Oskari.clazz

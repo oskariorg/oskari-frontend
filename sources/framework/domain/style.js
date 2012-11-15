@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.domain.Style
+ * @class Oskari.mapframework.domain.Style
  *
  * Map Layer Style
  */

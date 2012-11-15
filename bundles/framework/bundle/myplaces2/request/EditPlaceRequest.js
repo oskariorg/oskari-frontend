@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.myplaces2.request.EditPlaceRequest
+ * @class Oskari.mapframework.bundle.myplaces2.request.EditPlaceRequest
  * Requests a saved "my place" to be opened for editing
  * 
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.

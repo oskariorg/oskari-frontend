@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.myplaces2.MyPlacesBundleInstance
+ * @class Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance
  * 
  * My places functionality
  */

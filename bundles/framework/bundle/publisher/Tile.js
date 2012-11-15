@@ -1,5 +1,5 @@
 /*
- * @class Oskari.framework.bundle.publisher.Tile
+ * @class Oskari.mapframework.bundle.publisher.Tile
  *
  * Renders the "map publisher" tile.
  */

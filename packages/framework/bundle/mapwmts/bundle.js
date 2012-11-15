@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.MapWmtsBundle
+ * @class Oskari.mapframework.bundle.MapWmtsBundle
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.MapWmtsBundle", function() {
 }, {

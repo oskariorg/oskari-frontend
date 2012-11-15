@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.event.ToolSelectedEvent
+ * @class Oskari.mapframework.event.ToolSelectedEvent
  * @deprecated Use Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent instead
  */
 Oskari.clazz.define(

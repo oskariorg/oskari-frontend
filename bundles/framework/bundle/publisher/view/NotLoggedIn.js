@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.publisher.view.NotLoggedIn
+ * @class Oskari.mapframework.bundle.publisher.view.NotLoggedIn
  * Renders the "publisher" view for users that haven't logged in.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.NotLoggedIn',

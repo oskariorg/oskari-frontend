@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.service.SearchService
+ * @class Oskari.mapframework.service.SearchService
  *
  * Requests for a search to be made with the given query and provides
  * callbacks

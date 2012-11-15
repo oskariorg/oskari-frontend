@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.featuredata.FeatureDataBundleInstance
+ * @class Oskari.mapframework.bundle.featuredata.FeatureDataBundleInstance
  *
  * Main component and starting point for the "featuredata" functionality. 
  * 

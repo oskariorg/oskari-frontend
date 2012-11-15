@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.personaldata.AccountTab
+ * @class Oskari.mapframework.bundle.personaldata.AccountTab
  * Renders the "personal data" tile.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.AccountTab',

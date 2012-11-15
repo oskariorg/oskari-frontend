@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.infobox.request.HideInfoBoxRequestHandler
+ * @class Oskari.mapframework.bundle.infobox.request.HideInfoBoxRequestHandler
  * Handles Oskari.mapframework.bundle.infobox.request.HideInfoBoxRequest to hide info box.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.infobox.request.HideInfoBoxRequestHandler', 
