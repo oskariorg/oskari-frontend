@@ -604,7 +604,7 @@ function(core) {
                     }
                 }
 
-                this.debugPushEvent(this.getObjectCreator(event), module, event);
+                this._debugPushEvent(this.getObjectCreator(event), module, event);
                 module.onEvent(event);
                 this._debugPopEvent();
             }
