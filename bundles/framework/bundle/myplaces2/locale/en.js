@@ -53,7 +53,7 @@ Oskari.registerLocalization({
         "placeholder": "Describe the place"
       },
       "category": {
-        "label": "Map level",
+        "label": "Map layer",
         "new": "New layer..."
       }
     },
