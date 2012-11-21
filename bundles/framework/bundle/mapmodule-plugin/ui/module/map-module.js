@@ -196,9 +196,9 @@ function(id, imageUrl) {
         }
 
         this.requestHandlers = {
-            mapLayerUpdateHandler : Oskari.clazz.create('Oskari.mapframework.mapmodule-plugin.request.MapLayerUpdateRequestHandler', sandbox, this),
-            mapMoveRequestHandler : Oskari.clazz.create('Oskari.mapframework.mapmodule-plugin.request.MapMoveRequestHandler', sandbox, this),
-            clearHistoryHandler : Oskari.clazz.create('Oskari.mapframework.mapmodule-plugin.controls.ClearHistoryHandler', sandbox, this)
+            mapLayerUpdateHandler : Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler', sandbox, this),
+            mapMoveRequestHandler : Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
+            clearHistoryHandler : Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.controls.ClearHistoryHandler', sandbox, this)
         };
         sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
         sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
@@ -913,11 +913,11 @@ function(id, imageUrl) {
         }
     },
 
-    /***********************************************************
-     * Module onEvent handler
-     *
-     * @param {Object}
-     *            event
+    /**
+     * @method onEvent
+     * @param {Oskari.mapframework.event.Event} event a Oskari event object
+     * Event is handled forwarded to correct #eventHandlers if found or discarded
+     * if not.
      */
     onEvent : function(event) {
         var handler = this.eventHandlers[event.getName()];

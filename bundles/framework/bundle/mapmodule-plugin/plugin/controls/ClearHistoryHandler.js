@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.mapframework.mapmodule-plugin.controls.ClearHistoryHandler',
+Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.controls.ClearHistoryHandler',
 function(sandbox, mapModule) {
     this.mapModule = mapModule;
     this.sandbox = sandbox;
