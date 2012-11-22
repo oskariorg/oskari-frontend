@@ -107,7 +107,7 @@ function(config) {
             sandbox.registerForEventByName(this, p);
         }
         this._draw();
-        this.setZoombarValue(this._map.getZoom());
+        this._setZoombarValue(this._map.getZoom());
     },
     /**
      * @method _draw
@@ -180,7 +180,13 @@ function(config) {
             }
         }
     },
-    setZoombarValue : function(value) {
+    /**
+     * @method _setZoombarValue
+     * Sets the zoombar slider value
+     * @private
+     * @param {Number} value new Zoombar value
+     */
+    _setZoombarValue : function(value) {
         var me = this;
         if(me._slider) {
             // disable events in "onChange"
@@ -192,9 +198,9 @@ function(config) {
     },
     /**
      * @method stopPlugin
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      * mapmodule.Plugin protocol method.
-     * Unregisters self from sandbox
+     * Unregisters self from sandbox and removes plugins UI.
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      */
     stopPlugin : function(sandbox) {
 
@@ -215,7 +221,7 @@ function(config) {
         'AfterMapMoveEvent' : function(event) {
             if(this._sandbox) {
                 var me = this;
-                me.setZoombarValue(event.getZoom());
+                me._setZoombarValue(event.getZoom());
             }
         }
     },
