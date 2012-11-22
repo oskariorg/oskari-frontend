@@ -1,6 +1,10 @@
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar
- *
+ * 
+ * Zoombar implementation with jQuery UI and refined graphics. Location can be configured,
+ * but defaults on top of the map with placement details on the css-file.
+ * 
+ * See http://www.oskari.org/trac/wiki/DocumentationBundleMapModulePluginPorttiZoombar
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
 
@@ -36,16 +40,16 @@ function(config) {
     },
     /**
      * @method getMapModule
-     * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map
-     * module
+     * Returns reference to map module
+     * @return {Oskari.mapframework.ui.module.common.MapModule} 
      */
     getMapModule : function() {
         return this.mapModule;
     },
     /**
      * @method hasUI
-     * @return {Boolean} true
      * This plugin has an UI so always returns true
+     * @return {Boolean} true
      */
     hasUI : function() {
         return true;
@@ -102,15 +106,16 @@ function(config) {
         for(p in this.eventHandlers) {
             sandbox.registerForEventByName(this, p);
         }
-        this.draw();
+        this._draw();
         this.setZoombarValue(this._map.getZoom());
     },
     /**
-     * @method draw
-     *
-     * SimpleDiv
+     * @method _draw
+     * @private
+     * 
+     * Draws the zoombar on the screen.
      */
-    draw : function() {
+    _draw : function() {
         var me = this;
         if(!me.__parent) {
             me.__parent = this._map.div;
@@ -127,28 +132,7 @@ function(config) {
         sliderEl.attr('id', sliderId);
         
         jQuery(me.__parent).append(me.__elements['zoombarSlider']);
-        /*me._slider = new Slider({
-            min : 0,
-            max : 12,
-            value : 0,
-            direction : 'y'
-        }).insertTo(sliderId).assignTo(inputId);
-        me._slider.level.hide();
-		
-        var tooltips = me.getMapModule().getLocalization('zoombar_tooltip');
 
-        me._slider.on('change', function(event) {
-            // update tooltip
-            var tooltip = tooltips['zoomLvl-' + event.value];
-            if(tooltip) {
-                me.__elements['zoombarSlider'].attr('title', tooltip);
-            }
-            // zoom map if not suppressed
-            if(!this._suppressEvents) {
-                me.getMapModule().zoomTo(event.value);
-            }
-        });
-        */
        	var sliderEl = me.__elements['zoombarSlider'].find('div.slider');
        	sliderEl.css("height",(this._map.getNumZoomLevels()*11)+"px")
        	me._slider = sliderEl.slider({

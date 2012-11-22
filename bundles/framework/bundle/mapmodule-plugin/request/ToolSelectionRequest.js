@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.ToolSelectionRequest
  * 
- * Requests a tool to be activated on the map
+ * Requests a tool to be activated on the map. Currently also used to trigger history navigation.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.ToolSelectionRequest', 
 /**
@@ -17,14 +17,13 @@ function(toolId) {
     /** @static @property tools available tools to select */
     tools : {
         navigate : 'map_control_navigate_tool',
+        zoom : 'map_control_zoom_tool',
         previous : 'map_control_tool_prev',
         next : 'map_control_tool_prev',
-        select : 'map_control_select_tool',
-        zoom : 'map_control_zoom_tool',
-        draw_area : 'map_control_draw_area_tool',
         measure : 'map_control_measure_tool',
         measure_area : 'map_control_measure_area_tool',
-        info : 'map_control_show_info_tool'
+        select : 'map_control_select_tool',
+        draw_area : 'map_control_draw_area_tool'
     },
     /** @static @property __name request name */
     __name : "ToolSelectionRequest",
