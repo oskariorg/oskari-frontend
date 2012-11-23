@@ -92,13 +92,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/getinfo/GetInfoPlugin.js"
 		},
 		/**
-		 * 	sketch layer plugin
-		 */
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/sketchlayer/SketchLayerPlugin.js"
-		},
-		/**
 		 * Markers plugin
 		 */
 		{
