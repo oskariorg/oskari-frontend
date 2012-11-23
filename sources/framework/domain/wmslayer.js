@@ -645,7 +645,8 @@ function() {
 
         // Check layer scales only normal layers
         if(!this.isBaseLayer()) {
-            if(scale > this.getMaxScale() && scale < this.getMinScale()) {
+            if((scale > this.getMaxScale()  || !this.getMaxScale()) && 
+               (scale < this.getMinScale())  || !this.getMinScale()) {
                 _return = true;
             }
         }
