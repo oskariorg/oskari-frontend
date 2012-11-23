@@ -123,13 +123,7 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Published', function() {
                   "service-base":{
                      "bundlePath":"/Oskari/packages/framework/bundle/"
                   },
-                  "common":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  },
                   "event-map-layer":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  },
-                  "runtime":{
                      "bundlePath":"/Oskari/packages/framework/bundle/"
                   },
                   "request-map-layer":{
