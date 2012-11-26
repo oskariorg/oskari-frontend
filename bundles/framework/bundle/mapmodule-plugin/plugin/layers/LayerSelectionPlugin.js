@@ -135,6 +135,7 @@ function(config) {
         if(this.element) {
 	        this.element.remove();
 	        this.element = undefined;
+	        delete this.element;
         }
     },
     /**
@@ -496,10 +497,9 @@ function(config) {
         var me = this;
         if(!this.element) {
             this.element = this.template.clone();
-        }		
-		
+        }
         
-        var pluginLoc = this.getMapModule().getLocalization('plugin');
+        var pluginLoc = this.getMapModule().getLocalization('plugin', true);
         var myLoc = pluginLoc[this.__name];
         var header = this.element.find('div.header'); 
         header.append(myLoc.title);

@@ -1,7 +1,10 @@
 /**
  * @class Oskari.mapframework.bundle.publisher.PublisherBundleInstance
  *
- * Main component and starting point for the "map publisher" functionality. 
+ * Main component and starting point for the "map publisher" functionality. Publisher 
+ * is a wizardish tool to configure a subset of map functionality. It uses the map
+ * plugin functionality to start and stop plugins when the map is running. Also it 
+ * changes plugin language and map size.
  * 
  * See Oskari.mapframework.bundle.publisher.PublisherBundle for bundle definition. 
  *
@@ -60,7 +63,7 @@ function() {
     },
 	/**
 	 * @method start
-	 * implements BundleInstance protocol start methdod
+	 * Implements BundleInstance protocol start method
 	 */
 	"start" : function() {
 		var me = this;
@@ -86,35 +89,33 @@ function() {
 
         //sandbox.registerAsStateful(this.mediator.bundleId, this);
 		// draw ui
-		me.createUi();
+		me._createUi();
 	},
 	/**
 	 * @method init
-	 * implements Module protocol init method - does nothing atm
+	 * Implements Module protocol init method - does nothing atm
 	 */
 	"init" : function() {
 		return null;
 	},
 	/**
 	 * @method update
-	 * implements BundleInstance protocol update method - does nothing atm
+	 * Implements BundleInstance protocol update method - does nothing atm
 	 */
 	"update" : function() {
 
 	},
 	/**
 	 * @method onEvent
+     * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
 	 * @param {Oskari.mapframework.event.Event} event a Oskari event object
-	 * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
 	 */
 	onEvent : function(event) {
-
 		var handler = this.eventHandlers[event.getName()];
-		if(!handler)
-			return;
-
+		if(!handler) {
+            return;
+		}
 		return handler.apply(this, [event]);
-
 	},
     /**
      * @property {Object} eventHandlers
@@ -174,7 +175,7 @@ function() {
 
 	/**
 	 * @method stop
-	 * implements BundleInstance protocol stop method
+	 * Implements BundleInstance protocol stop method
 	 */
 	"stop" : function() {
 		var sandbox = this.sandbox();
@@ -183,7 +184,6 @@ function() {
 		}
 
 		var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
-
 		sandbox.request(this, request);
 
         //this.sandbox.unregisterStateful(this.mediator.bundleId);
@@ -233,17 +233,21 @@ function() {
 		return this.getLocalization('desc');
 	},
 	/**
-	 * @method createUi
-	 * (re)creates the UI for "selected layers" functionality
+	 * @method _createUi
+	 * @private
+	 * (re)creates the UI for "publisher" functionality
 	 */
-	createUi : function() {
+	_createUi : function() {
 		var me = this;
 		this.plugins['Oskari.userinterface.Flyout'].createUi();
 		this.plugins['Oskari.userinterface.Tile'].refresh();
 	},
 	/**
 	 * @method setPublishMode
-	 * Transform the map view to publisher mode if parameter is true
+	 * Transform the map view to publisher mode if parameter is true and back to normal if false.
+	 * Makes note about the map layers that the user cant publish, removes them for publish mode and 
+	 * returns them when exiting the publish mode.
+	 * 
 	 * @param {Boolean} blnEnabled
 	 * @param {Layer[]} deniedLayers layers that the user can't publish
 	 */
@@ -254,6 +258,7 @@ function() {
     	
 		if (blnEnabled == true) {
 			this.disabledLayers = deniedLayers;
+			this.oskariLang = Oskari.getLang();
 			// remove denied
     		this._removeLayers();
 			
@@ -268,6 +273,7 @@ function() {
             this.publisher.setEnabled(true);
     	}
     	else {
+            Oskari.setLang(this.oskariLang);
     		if(this.publisher) {
             	this.publisher.setEnabled(false);
     			this.publisher.destroy();

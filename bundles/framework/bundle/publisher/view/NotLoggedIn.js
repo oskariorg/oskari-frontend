@@ -1,6 +1,8 @@
 /**
  * @class Oskari.mapframework.bundle.publisher.view.NotLoggedIn
- * Renders the "publisher" view for users that haven't logged in.
+ * Publisher view for users that haven't logged in. Publisher can only be used
+ * when logged in because maps are linked to a user. Asks the user to log in 
+ * and offers links to login/register. 
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.NotLoggedIn',
 
@@ -17,13 +19,12 @@ function(instance, localization) {
 	this.template = jQuery("<div class='notLoggedIn'></div>");
 	this.signupTemplate = jQuery("<div class='notLoggedIn'><a></a></div>");
 	this.registerTemplate = jQuery("<div class='notLoggedIn'><a></a></div>");	
-
 	this.loc = localization;
 }, {
     /**
      * @method render
+     * Renders the view to given DOM element
      * @param {jQuery} container reference to DOM element this component will be rendered to
-     * Renders component to given DOM element
      */
 	render : function(container) {
 	    var me = this;
