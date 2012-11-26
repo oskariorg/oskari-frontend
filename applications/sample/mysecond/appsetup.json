@@ -27,7 +27,6 @@
         "metadata" : { 
             "Import-Bundle" : { 
             	"oskariui" : { "bundlePath" : "../../../packages/framework/bundle/" },
-                "common" : { "bundlePath" : "../../../packages/framework/bundle/" },
                 "core-base" : { "bundlePath" : "../../../packages/framework/bundle/" },
                 "core-map" : { "bundlePath" : "../../../packages/framework/bundle/" },
                 "domain" : { "bundlePath" : "../../../packages/framework/bundle/" },
@@ -40,7 +39,6 @@
                 "request-base" : { "bundlePath" : "../../../packages/framework/bundle/" },
                 "request-map" : { "bundlePath" : "../../../packages/framework/bundle/" },
                 "request-map-layer" : { "bundlePath" : "../../../packages/framework/bundle/" },
-                "runtime" : { "bundlePath" : "../../../packages/framework/bundle/" },
                 "sandbox-base" : { "bundlePath" : "../../../packages/framework/bundle/" },
                 "sandbox-map" : { "bundlePath" : "../../../packages/framework/bundle/" },
                 "service-base" : { "bundlePath" : "../../../packages/framework/bundle/" },

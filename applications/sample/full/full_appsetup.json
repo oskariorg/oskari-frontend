@@ -48,13 +48,7 @@
             "service-base":{
                "bundlePath":"../../../packages/framework/bundle/"
             },
-            "common":{
-               "bundlePath":"../../../packages/framework/bundle/"
-            },
             "event-map-layer":{
-               "bundlePath":"../../../packages/framework/bundle/"
-            },
-            "runtime":{
                "bundlePath":"../../../packages/framework/bundle/"
             },
             "request-map-layer":{

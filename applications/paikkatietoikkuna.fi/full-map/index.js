@@ -153,13 +153,7 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
                     "service-map" : {
                         bundlePath : '/Oskari/packages/framework/bundle/'
                     },
-                    "common" : {
-                        bundlePath : '/Oskari/packages/framework/bundle/'
-                    },
                     "domain" : {
-                        bundlePath : '/Oskari/packages/framework/bundle/'
-                    },
-                    "runtime" : {
                         bundlePath : '/Oskari/packages/framework/bundle/'
                     },
                     "mapmodule-plugin" : {
