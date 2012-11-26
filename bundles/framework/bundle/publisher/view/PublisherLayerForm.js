@@ -40,19 +40,22 @@ function(localization, instance) {
         this._populateMapLayerPanel();
 		return this.panel;
 	},
-	_enablePlugin : function(blnEnabled) {
+	enablePlugin : function(blnEnabled) {
         if (blnEnabled) {
             this.plugin.startPlugin(this.instance.sandbox);
         } else {
             this.plugin.stopPlugin(this.instance.sandbox);
         }
 	},
+	isEnabled : function() {
+	    return this.showLayerSelection; 
+	},
 	start : function() {
         var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
         mapModule.registerPlugin(this.plugin);
 	},
 	stop : function() {
-		this._enablePlugin(false);
+		this.enablePlugin(false);
         var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
         mapModule.unregisterPlugin(this.plugin);
 	},
@@ -79,26 +82,14 @@ function(localization, instance) {
 		return errors;
    },
     /**
-     * @method getLayersList
-     * Handles the published map layer selection
-     * FIXME: this is completely under construction, rights aren't managed in any
-     * way etc
+     * @method _getLayersList
+     * @private
+     * Returns the published map layer selection
      */
-    getLayersList : function() {
+    _getLayersList : function() {
         var layers = [];
         var selectedLayers = this.instance.sandbox.findAllSelectedMapLayers();
         return selectedLayers;
-        /*
-        for (var i = 0; i < selectedLayers.length; ++i) {
-            var layer = {
-                id : selectedLayers[i].getId(),
-                name : selectedLayers[i].getName(),
-                opacity : selectedLayers[i].getOpacity()
-            };
-            layers.push(layer);
-        }
-        return layers;
-        */
     },
     /**
      * @method _populateMapLayerPanel
@@ -127,7 +118,7 @@ function(localization, instance) {
             var checkbox = jQuery(this);
             var isChecked = checkbox.is(':checked');
             me.showLayerSelection = isChecked;
-    		me._enablePlugin(isChecked);
+    		me.enablePlugin(isChecked);
             contentPanel.empty();
             me._populateMapLayerPanel();
         });
@@ -147,7 +138,7 @@ function(localization, instance) {
                 }
             };
         };
-        var layers = this.getLayersList();
+        var layers = this._getLayersList();
         for (var i = 0; i < layers.length; ++i) {
         	
             var layer = layers[i];

@@ -254,6 +254,7 @@ function() {
     	
 		if (blnEnabled == true) {
 			this.disabledLayers = deniedLayers;
+			this.oskariLang = Oskari.getLang();
 			// remove denied
     		this._removeLayers();
 			
@@ -268,6 +269,7 @@ function() {
             this.publisher.setEnabled(true);
     	}
     	else {
+            Oskari.setLang(this.oskariLang);
     		if(this.publisher) {
             	this.publisher.setEnabled(false);
     			this.publisher.destroy();

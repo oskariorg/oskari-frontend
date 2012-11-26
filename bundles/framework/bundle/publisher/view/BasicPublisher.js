@@ -15,8 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 function(instance, localization) {
     var me = this;
     this.instance = instance;
-    this.template = jQuery('' + 
-                           '<div class="basic_publisher">' + 
+    this.template = jQuery('<div class="basic_publisher">' + 
     	                   '<div class="header">' + 
                            '<div class="icon-close">' + 
                            '</div>' + 
@@ -32,7 +31,7 @@ function(instance, localization) {
     this.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
     this.templateCustomSize = jQuery('<div class="customsize">' + '<input type="text" name="width" ' + 
             'placeholder="' + localization.sizes.width + '"/> x ' + 
-            '<input type="text" ' + 'name="height" placeholder="' + localization.sizes.height + '"/></div>');
+            '<input type="text" name="height" placeholder="' + localization.sizes.height + '"/></div>');
 
     /**
      * @property tools
@@ -115,7 +114,7 @@ function(instance, localization) {
         var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
         this.accordion = accordion;
         
-        var form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLocationForm',this.loc);
+        var form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLocationForm',this.loc, this);
         this.locationForm = form;
         form.init();
         var panel = form.getPanel();
@@ -190,6 +189,7 @@ function(instance, localization) {
         }
         // notify openlayers that size has changed
         mapModule.getMap().updateSize();
+        this._updateDomain();
     },
     /**
      * @method _createSizePanel
@@ -273,6 +273,7 @@ function(instance, localization) {
                 me._activatePreviewPlugin(tool, isChecked);
             };
         };
+        
         for (var i = 0; i < this.tools.length; ++i) {
             var toolContainer = this.templateTool.clone();
             var pluginKey = this.tools[i].id;
@@ -587,8 +588,10 @@ function(instance, localization) {
         // remove width definition to resume size correctly
         mapElement.width('');
         mapElement.height(jQuery(window).height());
+        
         // notify openlayers that size has changed
         mapModule.getMap().updateSize();
+        this._updateDomain();
 
         // resume normal plugins
         for (var i = 0; i < this.normalMapPlugins.length; ++i) {
@@ -601,6 +604,19 @@ function(instance, localization) {
 
         mapModule.unregisterPlugin(this.logoPlugin);
         this.logoPlugin.stopPlugin(me.instance.sandbox);
+    },
+    _updateDomain : function() {
+        
+        var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
+        
+        var mapVO = this.instance.sandbox.getMap();
+        mapVO.setExtent(mapModule.getMap().getExtent());
+        mapVO.setMaxExtent(mapModule.getMap().getMaxExtent());
+        mapVO.setBbox(mapModule.getMap().calculateBounds());
+        
+        var mapElement = jQuery(mapModule.getMap().div);
+        mapVO.setWidth(mapElement.width());
+        mapVO.setHeight(mapElement.height());
     },
     /**
      * @method setEnabled
@@ -618,5 +634,36 @@ function(instance, localization) {
     },
     destroy : function() {
     	this.mainPanel.remove();
+    },
+    setPluginLanguage : function(lang) {
+        Oskari.setLang(lang);
+
+        for (var i = 0; i < this.tools.length; ++i) {
+            var tool = this.tools[i];
+            if(tool._isPluginStarted) {
+                // stop and start if enabled to change language
+                this._activatePreviewPlugin(tool, false);
+                this._activatePreviewPlugin(tool, true);
+            }
+        }
+        // stop and start if enabled to change language
+        if(this.maplayerPanel.isEnabled()) {
+            var values = this.maplayerPanel.plugin.getBaseLayers();
+            
+            this.maplayerPanel.enablePlugin(false);
+            this.maplayerPanel.enablePlugin(true);
+            
+            var baseLayers = values.baseLayers;
+            var selectedBase = values.defaultBaseLayer;
+            for (var i = 0; i < baseLayers.length; ++i) {
+                var layer = this.instance.sandbox.findMapLayerFromSelectedMapLayers(baseLayers[i]);
+                this.maplayerPanel.plugin.addBaseLayer(layer);
+            }
+            this.maplayerPanel.plugin.selectBaseLayer(selectedBase);
+        }
+        
+        // stop and start if enabled to change language
+        this.logoPlugin.stopPlugin(this.instance.sandbox);
+        this.logoPlugin.startPlugin(this.instance.sandbox);
     }
 });

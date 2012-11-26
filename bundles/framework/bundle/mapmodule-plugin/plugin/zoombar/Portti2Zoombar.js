@@ -110,6 +110,24 @@ function(config) {
         this._setZoombarValue(this._map.getZoom());
     },
     /**
+     * @method stopPlugin
+     * mapmodule.Plugin protocol method.
+     * Unregisters self from sandbox and removes plugins UI.
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     */
+    stopPlugin : function(sandbox) {
+
+        if(this.__elements['zoombarSlider']) {
+            this.__elements['zoombarSlider'].remove();
+            this._slider.remove();
+            delete this.__elements['zoombarSlider'];
+        }
+        sandbox.unregister(this);
+
+        //this._map = null;
+        this._sandbox = null;
+    },
+    /**
      * @method _draw
      * @private
      * 
@@ -195,23 +213,6 @@ function(config) {
            me._slider.slider('value',value);
             this._suppressEvents = false;
         }
-    },
-    /**
-     * @method stopPlugin
-     * mapmodule.Plugin protocol method.
-     * Unregisters self from sandbox and removes plugins UI.
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     */
-    stopPlugin : function(sandbox) {
-
-        if(this.__elements['zoombarSlider']) {
-            this.__elements['zoombarSlider'].remove();
-            this._slider.remove();
-        }
-        sandbox.unregister(this);
-
-        //this._map = null;
-        this._sandbox = null;
     },
     /**
      * @property {Object} eventHandlers

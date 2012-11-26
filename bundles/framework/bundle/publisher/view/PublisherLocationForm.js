@@ -7,9 +7,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLocation
 /**
  * @method create called automatically on construction
  * @static
+ * @param {Object} localization
+ *       publisher localization data
+ * @param {Oskari.mapframework.bundle.publisher.view.BasicPublisher} publisher
+ *       publisher reference for language change
  */
-function(localization) {
+function(localization, publisher) {
 	this.loc = localization;
+    this._publisher = publisher;
 	this.fields = {
 		'domain' : {
 			"label" : localization.domain.label,
@@ -70,9 +75,17 @@ function(localization) {
         for (var opt in langOpts) {
         	var option = this.langField.optionTemplate.clone();
         	option.attr('value', opt);
+        	if(opt == Oskari.getLang()) {
+        	    option.attr('selected','selected');
+        	}
         	option.append(langOpts[opt]);
             languageSelection.append(option);
         }
+        // plugins should change language when user changes selection
+        languageSelection.change(function()
+        {
+            me._publisher.setPluginLanguage(jQuery(this).attr('value'));
+        });
         this.langField.field = langField;
 	},
 	getPanel : function() {

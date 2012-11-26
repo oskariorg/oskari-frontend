@@ -165,12 +165,13 @@ function(id, imageUrl) {
      * If key-parameter is not given, returns the whole localization data.
      *
      * @param {String} key (optional) if given, returns the value for key
+     * @param {Boolean} force (optional) true to force reload for localization data
      * @return {String/Object} returns single localization string or
      * 		JSON object for complete data depending on localization
      * 		structure and if parameter key is given
      */
-    getLocalization : function(key) {
-        if(!this._localization) {
+    getLocalization : function(key, force) {
+        if(!this._localization || force === true) {
             this._localization = Oskari.getLocalization('MapModule');
         }
         if(key) {
