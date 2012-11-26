@@ -341,20 +341,23 @@ function() {
 			var layerId = data.maplayer_id;
 			if( !this.backendStatus[layerId] ) {
 				changeNotifications[layerId] = {
-						status: data.status };
+						status: data.status, changed: true };
 				extendedStatuses[layerId] = data;
 				/*sandbox.printDebug("[BackendStatus] "+layerId+" new alert");*/						
 			} else if( this.backendStatus[layerId].status != data.status ) {
-				changeNotifications[layerId] = { status: data.status };
+				changeNotifications[layerId] = { status: data.status, changed: true };
 				extendedStatuses[layerId] = data;
 				/*sandbox.printDebug("[BackendStatus] "+layerId+" changed alert");*/
-			} 	
+			}  else {
+				changeNotifications[layerId] = { status: data.status, changed: false };
+				extendedStatuses[layerId] = data;
+			}
 		}
 		
 		for( p in this.backendStatus ) {
 			if( !changeNotifications[p] && this.backendStatus[p].status != null ) {
-				changeNotifications[p] = { status: null };
-				/*sandbox.printDebug("[BackendStatus] "+layerId+" alert closed");*/ 
+				changeNotifications[p] = { status: null, changed: true };
+				/*sandbox.printDebug("[BackendStatus] "+p+" alert closed");*/ 
 			}
 		}
 		
@@ -365,13 +368,15 @@ function() {
 		for( p in changeNotifications ) {
 			this.backendStatus[p] = changeNotifications[p];
 			
-			
 			var maplayer = sandbox.findMapLayerFromAllAvailable(p);
 			if (!maplayer) {
 				continue;
 			}
-			maplayers[p] = maplayer;
 			maplayer.setBackendStatus(this.backendStatus[p].status);
+			
+			if( changeNotifications[p].changed ) {
+				maplayers[p] = maplayer;
+			}
 		}
 		
 		for( p in maplayers ) {

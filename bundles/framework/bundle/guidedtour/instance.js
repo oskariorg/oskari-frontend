@@ -130,6 +130,7 @@ Oskari.clazz.define(
             var pn = 'Oskari.userinterface.component.Popup';
             var dialog = Oskari.clazz.create(pn);
             dialog.makeDraggable();
+            dialog.addClass('guidedtour');
             this._showGuideContentForStep(this.guideStep, dialog);
         },
         
