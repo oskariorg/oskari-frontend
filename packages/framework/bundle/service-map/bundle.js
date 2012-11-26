@@ -61,13 +61,7 @@ function() {
 			"src" : "../../../../sources/framework/service/usage-sniffer-service.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/service/get-feature-info-service.js"
-		}, {
-			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/service/map-layer-service.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/service/search-service.js"
 		}],
 		"resources" : []
 	},

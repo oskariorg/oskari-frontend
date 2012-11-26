@@ -61,25 +61,10 @@ function() {
 			"src" : "../../../../sources/framework/core/core.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/core/core-build-domain-methods.js"
-		}, {
-			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/core/core-enhancement-methods.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/core/core-language-methods.js"
-		}, {
-			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/core/core-key-listener-methods.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/core/event/CoreInitFinishedEvent.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/core/event/CoreReadyEvent.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/core/event/ToolSelectedEvent.js"
 		}],
 		"resources" : []
 	},

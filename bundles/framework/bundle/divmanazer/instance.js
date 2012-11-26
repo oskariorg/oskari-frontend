@@ -230,20 +230,50 @@ function() {
 			.get()[0];
 			var handle = extensionInfo.draggableHandle;
 			extensionInfo.draggableTarget = flyoutTarget;
-			extensionInfo.draggable = new Draggable(flyoutTarget, {
-				handle : handle,
-				scroll : false,
-				onStop : function(draggable, event) {
-
+			/* jQueryUI won't work without this */
+			flyout.css("position","absolute");
+			
+			var useHelper = false;
+			
+			extensionInfo.draggable = $(flyout).draggable({
+				handle: jQuery(handle),
+				helper: useHelper ? function() {
+					var el = jQuery('<div />');
+					
+					el.css("width",flyout.css("width"));
+					el.css("height",flyout.css("height"));
+					el.css("border","2px solid rgba(0,0,0,.5)");
+					el.css("z-index",flyout.css("z-index"));
+					
+					return el;
+				}: null,
+				scroll: false,
+				stack: '.oskari-flyout',
+				create: function(event,ui) {
+				
+				},
+				start: function(){
+					if( useHelper ) { flyout.css("display","none"); }
+				},
+				drag: function() {
+				
+				},
+				
+				stop: function(event,ui) {
+					if( useHelper ) {
+						flyout.css("top",ui.helper.css("top"));
+						flyout.css("left",ui.helper.css("left"));
+					}
 					me.shuffleZIndices(flyout);
-
-					/* draggable hassles with height - should not */
-					flyout.css("height", "");
-
+					if( useHelper ) {
+						flyout.css("display","");
+					}
+					//flyout.css("height", "");
 					var viewState = me.getFlyoutViewState(flyout, "detach");
 
 					extensionInfo.viewState = viewState;
 					me.notifyExtensionViewStateChange(extensionInfo);
+					
 				}
 			});
 
@@ -251,9 +281,6 @@ function() {
 			var fcccc = fcc.children('.oskari-flyoutcontent');
 
 			var el = fcc.children('.oskari-flyoutcontent');
-
-			/*RightJS.$(flyout.get()[0]).makeResizable({});*/
-			/*RightJS.$(fcc.get()[0]).makeResizable({direction:'bottom'});*/
 
 			flyoutPlugin.setEl(el.get());
 
@@ -561,6 +588,76 @@ function() {
 
 		this.sandbox.notifyAll(evt, true);
 	},
+	
+	/*
+	 * @static @property validStates
+	 */
+	"validStates" : {
+		"attach" : {
+			"attach" : true,
+			"detach" : false,
+			"close" : false,
+			"minimize" : false,
+			"restore" : false,
+			"drawer" : false,
+			"curtain" : false
+		},
+		"detach" : {
+			"attach" : false,
+			"detach" : true,
+			"close" : false,
+			"minimize" : false,
+			"restore" : false,
+			"drawer" : false,
+			"curtain" : false
+		},
+		"minimize" : {
+			"attach" : true,
+			"detach" : true,
+			"close" : false,
+			"minimize" : true,
+			"restore" : false,
+			"drawer" : false,
+			"curtain" : false
+		},
+		"restore" : {
+			"attach" : false,
+			"detach" : true,
+			"close" : false,
+			"minimize" : false,
+			"restore" : true,
+			"drawer" : false,
+			"curtain" : false
+		},
+		"close" : {
+			"attach" : false,
+			"detach" : false,
+			"close" : true,
+			"minimize" : false,
+			"restore" : false,
+			"drawer" : false,
+			"curtain" : false				
+		},
+		"drawer" : {
+			"attach" : false,
+			"detach" : false,
+			"close" : false,
+			"minimize" : false,
+			"restore" : false,
+			"drawer" : true,
+			"curtain" : false 	
+		},
+		"shade" : {
+			"attach" : false,
+			"detach" : false,
+			"close" : false,
+			"minimize" : false,
+			"restore" : false,
+			"drawer" : false,
+			"curtain" : true		
+		}
+	},
+	
 	/**
 	 * @static @property flyout default positioning
 	 */

@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.guidedtour.GuidedTourBundleInstance
+ * @class Oskari.mapframework.bundle.guidedtour.GuidedTourBundleInstance
  *  
  * Add this to startupsequence to get this bundle started
  {

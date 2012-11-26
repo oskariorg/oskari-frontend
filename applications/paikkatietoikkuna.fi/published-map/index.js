@@ -86,6 +86,23 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Published', function() {
             },
             instanceProps : {}
         },
+        {
+            title : 'OskariUI',
+            fi : 'OskariUI',
+            sv : 'OskariUI',
+            en : 'OskariUI',
+            bundlename : 'oskariui',
+            bundleinstancename : 'oskariui',
+            metadata : {
+                "Import-Bundle" : {
+                    "oskariui" : {
+                        bundlePath : '/Oskari/packages/framework/bundle/'
+                    }
+                },
+                "Require-Bundle-Instance" : []
+            },
+            instanceProps : {}
+        },
 
         // main app
         {

@@ -53,5 +53,3 @@ function(mapLayerId, opacity) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-
-/* Inheritance */

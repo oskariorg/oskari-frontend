@@ -2,6 +2,7 @@
  * @class Oskari.mapframework.enhancement.common.OpenLayersImagePathEnhancement
  * This enhancement will alter openlayers image path
  * TODO: refactor OpenLayers global access
+ * @deprecated
  */
 Oskari.clazz.define('Oskari.mapframework.enhancement.common.OpenLayersImagePathEnhancement', 
 
@@ -43,5 +44,3 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.enhancement.Enhancement']
 });
-
-/* Inheritance */

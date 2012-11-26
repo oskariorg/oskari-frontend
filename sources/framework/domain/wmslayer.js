@@ -147,6 +147,7 @@ function() {
      */
     removePermission : function(action) {
         this._permissions[action] = null;
+        delete this._permissions[action];
     },
     /**
      * @method getPermission
@@ -176,9 +177,19 @@ function() {
     getId : function() {
         return this._id;
     },
+    /**
+     * @method setQueryFormat
+     * @param {String} queryFormat 
+     *          f.ex. 'text/html'
+     */
     setQueryFormat : function(queryFormat) {
         this._queryFormat = queryFormat;
     },
+    /**
+     * @method getQueryFormat
+     * f.ex. 'text/html'
+     * @return {String}
+     */
     getQueryFormat : function() {
         return this._queryFormat;
     },
@@ -309,9 +320,6 @@ function() {
         return this._description;
     },
     
-    
-    
-    
     /**
      * @method addSubLayer
      * @param {Oskari.mapframework.domain.WmsLayer} map layer
@@ -387,8 +395,6 @@ function() {
     /**
      * @method setOrderNumber
      * @param {Number} orderNumber
-     * 
-     * TODO: check if actually {Number}
      */
     setOrderNumber : function(orderNumber) {
         this._orderNumber = orderNumber;
@@ -396,7 +402,6 @@ function() {
     /**
      * @method getOrderNumber
      * @return {Number} orderNumber
-     * TODO: check if actually {Number}
      */
     getOrderNumber : function() {
         return this._orderNumber;
@@ -587,7 +592,7 @@ function() {
     },
     /**
      * @method setAsGroupLayer
-     * sets layer type to GROUP_LAYER
+     * Sets layer type to GROUP_LAYER
      */
     setAsGroupLayer : function() {
         this._type = "GROUP_LAYER";
@@ -640,7 +645,8 @@ function() {
 
         // Check layer scales only normal layers
         if(!this.isBaseLayer()) {
-            if(scale > this.getMaxScale() && scale < this.getMinScale()) {
+            if((scale > this.getMaxScale()  || !this.getMaxScale()) && 
+               (scale < this.getMinScale())  || !this.getMinScale()) {
                 _return = true;
             }
         }
@@ -657,28 +663,34 @@ function() {
     
     /**
      * @method getMetadataIdentifier
+     * Gets the identifier (uuid style) for getting layers metadata
+     * @return {String}
      */
     getMetadataIdentifier: function() {
     	return this._metadataIdentifier;
     },
     /**
      * @method setMetadataIdentifier
+     * Sets the identifier (uuid style) for getting layers metadata
+     * @param {String} metadataid
      */
     setMetadataIdentifier: function(metadataid) {
     	this._metadataIdentifier = metadataid;
     },
     /**
      * @method getBackendStatus
+     * Status text for layer operatibility (f.ex. 'DOWN')
+     * @return {String}
      */
     getBackendStatus: function() {
     	return this._backendStatus;
     },
     /**
      * @method setBackendStatus
+     * Status text for layer operatibility (f.ex. 'DOWN')
+     * @param {String} backendStatus
      */
     setBackendStatus: function(backendStatus) {
     	this._backendStatus = backendStatus;
     }
-    
-    
 });

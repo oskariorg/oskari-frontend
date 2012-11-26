@@ -40,10 +40,11 @@ function(title) {
         return this.layers;
     },
     _getSearchIndex : function(layer) {
-        var val = layer.getName().toLowerCase() +  ' ' + 
-            layer.getInspireName().toLowerCase() +  ' ' +
-            layer.getOrganizationName().toLowerCase();
-        return val;
+        var val = layer.getName() +  ' ' + 
+            layer.getInspireName() +  ' ' +
+            layer.getOrganizationName();
+        // TODO: maybe filter out undefined texts
+        return val.toLowerCase();
     },
     matchesKeyword : function(layerId, keyword) {
         var searchableIndex = this.searchIndex[layerId];

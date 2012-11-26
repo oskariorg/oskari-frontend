@@ -1,6 +1,9 @@
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin
- * Provides indexmap functionality for map
+ * 
+ * Provides indexmap functionality for map. Uses image from plugin resources as the index map.
+ * 
+ * See http://www.oskari.org/trac/wiki/DocumentationBundleMapModulePluginIndexMap
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
 /**
@@ -49,15 +52,14 @@ function(config) {
     },
     /**
      * @method hasUI
-     * @return {Boolean} true
      * This plugin has an UI so always returns true
+     * @return {Boolean} true
      */
     hasUI : function() {
         return true;
     },
     /**
      * @method init
-     *
      * Interface method for the module protocol
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
@@ -66,6 +68,12 @@ function(config) {
     init : function(sandbox) {
 
     },
+    /**
+     * @method _createUI
+     * @private
+     * 
+     * Constructs/initializes the indexmap  control for the map.
+     */
     _createUI : function() {
         /* overview map */
         var graphic = new OpenLayers.Layer.Image('Overview map image', 
@@ -94,7 +102,6 @@ function(config) {
     },
     /**
      * @method register
-     *
      * Interface method for the module protocol
      */
     register : function() {
@@ -102,7 +109,6 @@ function(config) {
     },
     /**
      * @method unregister
-     *
      * Interface method for the module protocol
      */
     unregister : function() {
@@ -110,8 +116,8 @@ function(config) {
     },
     /**
      * @method startPlugin
-     *
-     * Interface method for the plugin protocol
+     * Interface method for the plugin protocol.
+     * Adds the indexmap to the map as control.
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      *          reference to application sandbox
@@ -129,8 +135,8 @@ function(config) {
     },
     /**
      * @method stopPlugin
-     *
-     * Interface method for the plugin protocol
+     * Interface method for the plugin protocol.
+     * Removes the indexmap from the map controls.
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      *          reference to application sandbox
@@ -149,7 +155,6 @@ function(config) {
     },
     /**
      * @method start
-     *
      * Interface method for the module protocol
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
@@ -159,7 +164,6 @@ function(config) {
     },
     /**
      * @method stop
-     *
      * Interface method for the module protocol
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
