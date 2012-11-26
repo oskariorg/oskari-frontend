@@ -247,15 +247,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
             "src" : "../../../../resources/framework/bundle/mapmodule-plugin/css/mapmodule.css"
         }],
 		"locales" : [{
-			"lang" : "fi",
+		    // when lang is undefined, loader loads each language file, publisher needs localization for each 
+			//"lang" : "fi",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/locale/fi.js"
 		}, {
-			"lang" : "sv",
+			//"lang" : "sv",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/locale/sv.js"
 		}, {
-			"lang" : "en",
+			//"lang" : "en",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/locale/en.js"
 		}]

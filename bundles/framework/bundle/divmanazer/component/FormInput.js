@@ -176,7 +176,12 @@ function(name) {
     },
     /**
      * @method validate
-     * Returns errors array or empty array if no errors
+     * Returns errors array or empty array if no errors. Each error object in the array 
+     * has properties "field" with the field name as value and error with the error message as value:
+     * {
+     *     field : <field name>,
+     *     error : <error message>
+     * }  
      * @return {Object[]}
      */
     validate : function() {

@@ -41,7 +41,9 @@ function() {
      */
     setMapModule : function(mapModule) {
         this.mapModule = mapModule;
-        this.pluginName = mapModule.getName() + this.__name;
+        if(mapModule) {
+            this.pluginName = mapModule.getName() + this.__name;
+        }
     },
 
     /**

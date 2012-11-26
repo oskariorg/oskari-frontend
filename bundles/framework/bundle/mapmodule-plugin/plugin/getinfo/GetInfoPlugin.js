@@ -697,7 +697,7 @@ function() {
 
         content.html = contentHtml.join('');
 
-        var pluginLoc = this.getMapModule().getLocalization('plugin');
+        var pluginLoc = this.getMapModule().getLocalization('plugin', true);
         var myLoc = pluginLoc[this.__name];
         data.title = myLoc.title;
 
