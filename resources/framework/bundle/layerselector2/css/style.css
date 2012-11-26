@@ -73,3 +73,8 @@ div.layerselector2 div.layer div.backendstatus-maintenance {
 	height: 20px !important;
 	margin-bottom: 2px;	
 }
+
+div.layerselector2 div.layer div.backendstatus-ok {
+	height: 20px !important;
+	margin-bottom: 2px;	
+}

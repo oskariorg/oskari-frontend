@@ -27,6 +27,10 @@ Oskari.registerLocalization({
 			"type-wfs" : "Tietotuote"
 		},
 		"backendStatus" : {
+			"OK" : {
+				"tooltip" : "Karttataso on saatavilla tällä hetkellä.",
+				"iconClass" : "backendstatus-ok"
+			},
 			"DOWN" : {
 				"tooltip" : "Karttataso ei ole saatavilla tällä hetkellä.",
 				"iconClass" : "backendstatus-down"

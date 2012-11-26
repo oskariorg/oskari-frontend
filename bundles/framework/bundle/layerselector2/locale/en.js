@@ -27,6 +27,10 @@ Oskari.registerLocalization({
 			"type-wfs" : "Data product"
 		},
 		"backendStatus" : {
+			"OK" : {
+				"tooltip" : "The map layer is currently available.",
+				"iconClass" : "backendstatus-ok"
+			},
 			"DOWN" : {
 				"tooltip" : "The map layer is currently unavailable.",
 				"iconClass" : "backendstatus-down"

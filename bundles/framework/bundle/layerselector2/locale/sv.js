@@ -27,6 +27,10 @@ Oskari.registerLocalization({
 			"type-wfs" : "Dataprodukt"
 		},
 		"backendStatus" : {
+			"OK" : {
+				"tooltip" : "artlagret är tillgängligt just nu.",
+				"iconClass" : "backendstatus-ok"
+			},
 			"DOWN" : {
 				"tooltip" : "Kartlagret är inte tillgängligt just nu.",
 				"iconClass" : "backendstatus-down"
