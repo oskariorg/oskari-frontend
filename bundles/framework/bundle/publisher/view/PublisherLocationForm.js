@@ -1,6 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.publisher.view.PublisherLocationForm
  * 
+ * Represents the basic info view for the publisher as an Oskari.userinterface.component.AccordionPanel
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLocationForm',
 
@@ -38,6 +39,11 @@ function(localization, publisher) {
 		optionTemplate : jQuery('<option></option>')
 	}
 }, {
+    /**
+     * @method init
+     * Creates the set of Oskari.userinterface.component.FormInput to be shown on the panel and 
+     * sets up validation etc.
+     */
 	init : function() {
 		var me = this;
 		for(var fkey in this.fields) {
@@ -88,6 +94,11 @@ function(localization, publisher) {
         });
         this.langField.field = langField;
 	},
+    /**
+     * @method getPanel
+     * Returns the UI panel and populates it with the data that we want to show the user.
+     * @return {Oskari.userinterface.component.AccordionPanel}
+     */
 	getPanel : function() {
         var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
         panel.setTitle(this.loc.domain.title);
@@ -99,6 +110,17 @@ function(localization, publisher) {
 		contentPanel.append(this.langField.field);
 		return panel;
 	},
+    /**
+     * @method getValues
+     * Returns the selections the user has done with the form inputs.
+     * {
+     *     domain : <domain field value>,
+     *     name : <name field value>,
+     *     language : <language user selected>
+     * }
+     * 
+     * @return {Object}
+     */
 	getValues : function() {
 		var values = {};
 		for(var fkey in this.fields) {
@@ -108,6 +130,13 @@ function(localization, publisher) {
 		values.language = this.langField.field.find('select[name=language]').val();
 		return values;
     },
+    /**
+     * @method validate
+     * Returns any errors found in validation or an empty
+     * array if valid. Error object format is defined in Oskari.userinterface.component.FormInput
+     * validate() function.
+     * @return {Object[]}
+     */
 	validate : function() {
 		var errors = [];
 		for(var fkey in this.fields) {

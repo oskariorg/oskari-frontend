@@ -1,6 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.publisher.view.BasicPublisher
- * Renders the "publisher" view for basic use case
+ * Renders the publishers "publish mode" sidebar view where the user can make 
+ * selections regarading the map to publish.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
@@ -97,9 +98,9 @@ function(instance, localization) {
 }, {
     /**
      * @method render
+     * Renders view to given DOM element
      * @param {jQuery} container reference to DOM element this component will be
      * rendered to
-     * Renders component to given DOM element
      */
     render : function(container) {
         var me = this;
@@ -291,7 +292,7 @@ function(instance, localization) {
     },
     /**
      * @method handleMapMoved
-     * Updates the coordinate display to show current map center location
+     * Does nothing currently.
      */
     handleMapMoved : function() {
 
@@ -304,9 +305,9 @@ function(instance, localization) {
     /**
      * @method _activatePreviewPlugin
      * @private
+     * Enables or disables a plugin on map
      * @param {Object} tool tool definition as in #tools property
      * @param {Boolean} enabled, true to enable plugin, false to disable
-     * Enables or disables a plugin on map
      */
     _activatePreviewPlugin : function(tool, enabled) {
         if (!tool.plugin && enabled) {
@@ -360,6 +361,13 @@ function(instance, localization) {
         return buttonCont;
     },
     
+    /**
+     * @method _showValidationErrorMessage
+     * @private
+     * Takes an error array as defined by Oskari.userinterface.component.FormInput validate() and 
+     * shows the errors on a  Oskari.userinterface.component.Popup
+     * @param {Object[]} errors validation error objects to show 
+     */
     _showValidationErrorMessage : function(errors) {
     	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
     	var okBtn = dialog.createCloseButton(this.loc.buttons.ok);
@@ -456,6 +464,12 @@ function(instance, localization) {
         return selections;
 
     },
+    /**
+     * @method _publishMap
+     * @private
+     * Sends the gathered map data to the server to save them/publish the map.
+     * @param {Object} selections map data as returned by _gatherSelections()
+     */
     _publishMap : function(selections) {
     	var me = this;
         var sandbox = this.instance.getSandbox();
@@ -605,6 +619,12 @@ function(instance, localization) {
         mapModule.unregisterPlugin(this.logoPlugin);
         this.logoPlugin.stopPlugin(me.instance.sandbox);
     },
+    /**
+     * @method _updateDomain
+     * @private
+     * Updates the map domain object so GFI and other functionalities depending on it works
+     * even after size changes.
+     */
     _updateDomain : function() {
         
         var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
@@ -620,10 +640,10 @@ function(instance, localization) {
     },
     /**
      * @method setEnabled
-     * @param {Boolean} isEnabled true to enable preview, false to disable
-     * preview
      * "Activates" the published map preview when enabled
      * and returns to normal mode on disable
+     * @param {Boolean} isEnabled true to enable preview, false to disable
+     * preview
      */
     setEnabled : function(isEnabled) {
         if (isEnabled) {
@@ -632,9 +652,19 @@ function(instance, localization) {
             this._disablePreview();
         }
     },
+    /**
+     * @method destroy
+     * Destroyes/removes this view from the screen.
+     */
     destroy : function() {
     	this.mainPanel.remove();
     },
+    /**
+     * @method setPluginLanguage
+     * Changes system language with Oskari.setLang and stops/starts plugins to make 
+     * them rewrite their UI with the new language.
+     * @param {String} lang language code
+     */
     setPluginLanguage : function(lang) {
         Oskari.setLang(lang);
 
