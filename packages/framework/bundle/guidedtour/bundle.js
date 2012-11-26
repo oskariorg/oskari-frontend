@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.guidedtour.GuidedTourBundle
+ * @class Oskari.mapframework.bundle.guidedtour.GuidedTourBundle
  *
  * Definition for bundle. See source for details.
  */

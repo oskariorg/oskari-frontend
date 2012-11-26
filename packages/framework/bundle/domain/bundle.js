@@ -59,9 +59,6 @@ function() {
 		"scripts" : [{
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/domain/wmslayer.js"
-/*		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/domain/wfslayer.js" */
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/domain/vectorlayer.js"
@@ -71,30 +68,6 @@ function() {
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/domain/style.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/domain/polygon.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/domain/tooltip.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/domain/wizard-options.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/domain/wizard-step.js"
-/*		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/domain/wfs-tile-request.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/domain/wfs-grid-scheduled-request.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/domain/QueuedTile.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/domain/TileQueue.js" */
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/domain/user.js"

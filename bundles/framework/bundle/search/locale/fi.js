@@ -21,6 +21,10 @@ Oskari.registerLocalization({
       "name": "Nimi",
       "village": "Kunta",
       "type": "Tyyppi"
+    },
+    "resultBox" : {
+    	"close" : "Sulje",
+    	"title" : "Paikkahaun tulokset"
     }
   }
 });

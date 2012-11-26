@@ -11,7 +11,6 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterHideMapMarkerEvent',
  * @static
  */
 function() {
-    this._creator = null;
 }, {
     /** @static @property __name event name */
     __name : "AfterHideMapMarkerEvent",
@@ -29,5 +28,3 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.event.Event']
 });
-
-/* Inheritance */

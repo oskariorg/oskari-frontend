@@ -3,6 +3,8 @@
  *
  * This is a plugin to bring more functionality for the mapmodules map
  * implementation. It provides a maplayer selection "dropdown" on top of the map. 
+ * 
+ * See http://www.oskari.org/trac/wiki/DocumentationBundleMapModulePluginLayerSelectionPlugin
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
 /**
@@ -49,8 +51,8 @@ function(config) {
     },
     /**
      * @method hasUI
+     * This plugin has an UI so always returns true
      * @return {Boolean}
-     * This plugin doesn't have an UI so always returns false
      */
     hasUI : function() {
         return true;
@@ -58,7 +60,6 @@ function(config) {
     /**
      * @method getMap
      * @return {OpenLayers.Map} reference to map implementation
-     *
      */
     getMap : function() {
         return this._map;
@@ -77,9 +78,8 @@ function(config) {
     },
     /**
      * @method init
-     *
      * Interface method for the module protocol. Initializes the request
-     * handlers.
+     * handlers/templates.
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      * 			reference to application sandbox
@@ -99,7 +99,7 @@ function(config) {
      * @method startPlugin
      *
      * Interface method for the plugin protocol. Registers requesthandlers and
-     * eventlisteners.
+     * eventlisteners. Creates the plugin UI.
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      * 			reference to application sandbox
@@ -118,7 +118,7 @@ function(config) {
      * @method stopPlugin
      *
      * Interface method for the plugin protocol. Unregisters requesthandlers and
-     * eventlisteners.
+     * eventlisteners. Removes the plugin UI.
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      * 			reference to application sandbox
@@ -139,7 +139,6 @@ function(config) {
     },
     /**
      * @method start
-     *
      * Interface method for the module protocol
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
@@ -149,7 +148,6 @@ function(config) {
     },
     /**
      * @method stop
-     *
      * Interface method for the module protocol
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
@@ -228,7 +226,7 @@ function(config) {
      * @method preselectLayers
      * Does nothing, protocol method for mapmodule-plugin
      */
-    preselectLayers : function(layers) {
+    preselectLayers : function() {
     },
     /**
      * @method selectBaseLayer
@@ -275,6 +273,11 @@ function(config) {
 
     },
     
+    /**
+     * @method updateLayer
+     * Updates input state (checked or not) for the layer according to layer visibility 
+     * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer} layer layer to add
+     */
     updateLayer : function(layer) {
     	var div = this.layerRefs[layer.getId()];
         var input = div.find('input');
@@ -326,21 +329,6 @@ function(config) {
         var visibilityRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
         var request = visibilityRequestBuilder(layer.getId(), blnVisible);
         sandbox.request(this, request);
-        
-        /* moved to event handling */
-        // ensure that checkbox is in correct state
-        /*var div = this.layerRefs[layer.getId()];
-        var input = div.find('input');
-		if(blnVisible) {
-			if(!input.is(':checked')) {
-    			input.attr('checked', 'checked');
-			}
-		}
-		else {
-			if(input.is(':checked')) {
-    			input.removeAttr('checked');
-			}
-		}*/
     },
     /**
      * @method removeLayer
@@ -442,7 +430,7 @@ function(config) {
     },
     /**
      * @method setupLayers
-     * Adds all the maps selected layers to the selection.
+     * Adds all the maps selected layers to the plugins selection menu.
      */
     setupLayers : function() {
     	var me = this;

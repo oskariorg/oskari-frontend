@@ -1,6 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PanButtons
- *
+ * Adds on-screen pan buttons on the map. In the middle of the pan buttons is a state reset button.
+ * See http://www.oskari.org/trac/wiki/DocumentationBundleMapModulePluginPanButtons
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
 
@@ -42,8 +43,8 @@ function(config) {
     },
     /**
      * @method hasUI
-     * @return {Boolean} true
      * This plugin has an UI so always returns true
+     * @return {Boolean} true
      */
     hasUI : function() {
         return true;
@@ -103,9 +104,9 @@ function(config) {
 
     /**
      * @method startPlugin
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      * mapmodule.Plugin protocol method.
-     * Sets sandbox and registers self to sandbox
+     * Sets sandbox and registers self to sandbox. Constructs the plugin UI and displays it.
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      */
     startPlugin : function(sandbox) {
         this._sandbox = sandbox;
@@ -182,14 +183,15 @@ function(config) {
             }, 50);
         }
 
-        this.draw();
+        this._draw();
     },
 
     /**
      * @method stopPlugin
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      * mapmodule.Plugin protocol method.
-     * Unregisters self from sandbox
+     * Unregisters self from sandbox and removes plugins UI from screen.
+     * 
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      */
     stopPlugin : function(sandbox) {
         if (this.__elements['panbuttons']) {
@@ -207,11 +209,12 @@ function(config) {
     },
 
     /**
-     * @method draw
+     * @method _draw
+     * @private
      *
-     * SimpleDiv
+     * Creates the UI and binds the button functionality to it.
      */
-    draw : function() {
+    _draw : function() {
         var me = this;
         if (!me.__parent) {
             me.__parent = this._map.div;
@@ -314,24 +317,24 @@ function(config) {
 
     /**
      * @method onEvent
-     * @param {Oskari.mapframework.event.Event} event a Oskari event object
      * Event is handled forwarded to correct #eventHandlers if found or
      * discarded* if not.
+     * @param {Oskari.mapframework.event.Event} event a Oskari event object
      */
     onEvent : function(event) {
         return this.eventHandlers[event.getName()].apply(this, [event]);
     },
     /**
      * @method start
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      * Module protocol method - does nothing atm
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      */
     start : function(sandbox) {
     },
     /**
      * @method stop
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      * Module protocol method - does nothing atm
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      */
     stop : function(sandbox) {
     }

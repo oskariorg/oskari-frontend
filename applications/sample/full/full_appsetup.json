@@ -17,6 +17,9 @@
             },
             "openlayers-single-full":{
                "bundlePath":"../../../packages/openlayers/bundle/"
+            },
+            "oskariui":{
+               "bundlePath":"../../../packages/framework/bundle/"
             }
          },
          "Require-Bundle-Instance":[
@@ -406,7 +409,7 @@
       "metadata":{
          "Import-Bundle":{
             "guidedtour":{
-               "bundlePath":"../../../packages/sample/bundle/"
+               "bundlePath":"../../../packages/framework/bundle/"
             }
          },
          "Require-Bundle-Instance":[

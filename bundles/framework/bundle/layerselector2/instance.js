@@ -270,14 +270,6 @@ function() {
      */
     getState : function() {
         return this.plugins['Oskari.userinterface.Flyout'].getContentState();
-        /*
-        var state = {
-            
-            
-        };
-        
-        return state;
-        */
     }
 }, {
 	/**

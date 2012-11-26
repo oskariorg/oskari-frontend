@@ -203,21 +203,12 @@ function(instance, title) {
         var catLoc = this.instance.getLocalization('published');
         var json = {
             wmsName: 'ows:my_places_categories',
-            descriptionLink:"",
             type: "wmslayer",
-            baseLayerId:-1,
-            legendImage:"",
-            //gfi : 'disabled',
-            formats: {
-               value:"text/html"
-            },
             isQueryable:true,
-            minScale:12000000,
             opacity: 50,
             metaType: 'published',
             orgName: catLoc.organization,
-            inspire: catLoc.inspire,
-            maxScale:1
+            inspire: catLoc.inspire
         };
         return json;
     },

@@ -1,5 +1,15 @@
 /**
  * @class Oskari.mapframework.mapmodule.GetInfoPlugin
+ *
+ * Listens to map clicks and requests server for information about the map
+ * location for all
+ * the layers that have the flag queryable set to true and layer scales matching
+ * the current zoom level.
+ * Handles MapModulePlugin.GetFeatureInfoRequest and
+ * MapModulePlugin.GetFeatureInfoActivationRequest.
+ *
+ * See
+ * http://www.oskari.org/trac/wiki/DocumentationBundleMapModulePluginGetInfoPlugin
  */
 Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
 
@@ -15,9 +25,9 @@ function() {
     this.enabled = true;
     this.infoboxId = 'getinforesult';
     this._pendingAjaxQuery = {
-    	busy: false,
-    	jqhr: null,
-    	timestamp: null
+        busy : false,
+        jqhr : null,
+        timestamp : null
     };
 }, {
     /** @static @property __name plugin name */
@@ -53,8 +63,8 @@ function() {
     },
     /**
      * @method hasUI
-     * @return {Boolean} true
      * This plugin has an UI so always returns true
+     * @return {Boolean} true
      */
     hasUI : function() {
         return true;
@@ -69,10 +79,10 @@ function() {
      */
     init : function(sandbox) {
         var me = this;
-        
+
         this._sandbox = sandbox;
         this._sandbox.printDebug("[GetInfoPlugin] init");
-        this.getGFIHandler = Oskari.clazz.create('Oskari.mapframework.mapmodule-plugin.getinfo.GetFeatureInfoHandler', me);
+        this.getGFIHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.getinfo.GetFeatureInfoHandler', me);
     },
     /**
      * @method register
@@ -90,7 +100,6 @@ function() {
     },
     /**
      * @method startPlugin
-     *
      * Interface method for the plugin protocol
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
@@ -112,7 +121,6 @@ function() {
     },
     /**
      * @method stopPlugin
-     *
      * Interface method for the plugin protocol
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
@@ -136,7 +144,6 @@ function() {
     },
     /**
      * @method start
-     *
      * Interface method for the module protocol
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
@@ -146,7 +153,6 @@ function() {
     },
     /**
      * @method stop
-     *
      * Interface method for the module protocol
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
@@ -163,7 +169,7 @@ function() {
     setEnabled : function(blnEnabled) {
         this.enabled = (blnEnabled === true);
         // close existing if disabled
-        if(!this.enabled) {
+        if (!this.enabled) {
             this._closeGfiInfo();
         }
     },
@@ -173,7 +179,7 @@ function() {
      */
     eventHandlers : {
         'EscPressedEvent' : function(evt) {
-          this._closeGfiInfo();
+            this._closeGfiInfo();
         },
         'MapClickedEvent' : function(evt) {
             if (!this.enabled) {
@@ -186,7 +192,7 @@ function() {
             this.handleGetInfo(lonlat, x, y);
         },
         'AfterMapMoveEvent' : function(evt) {
-        	this._cancelAjaxRequest();
+            this._cancelAjaxRequest();
         }
     },
     /**
@@ -199,130 +205,162 @@ function() {
         var me = this;
         return this.eventHandlers[event.getName()].apply(this, [event]);
     },
-    
-    _cancelAjaxRequest: function() {
-    	var me = this;
-    	if( !me._pendingAjaxQuery.busy ) {
-    		return;
-    	}
-    	var jqhr = me._pendingAjaxQuery.jqhr;
-    	me._pendingAjaxQuery.jqhr = null;
-    	if( !jqhr) {
-    		return;
-    	}    	
-    	this._sandbox.printDebug("[GetInfoPlugin] Abort jqhr ajax request");
-    	jqhr.abort();
-    	jqhr = null;
-    	me._pendingAjaxQuery.busy = false;
-    },
-    
-    _startAjaxRequest: function(dteMs) {
-    	var me = this;
-		me._pendingAjaxQuery.busy = true;
-		me._pendingAjaxQuery.timestamp = dteMs;
 
-    },
-    
-    _finishAjaxRequest: function() {
-    	var me = this;
-    	me._pendingAjaxQuery.busy = false;
-        me._pendingAjaxQuery.jqhr = null;
-        this._sandbox.printDebug("[GetInfoPlugin] finished jqhr ajax request");
-    },
-    
-    _buildLayerIdList: function()  {
+    /**
+     * @method _cancelAjaxRequest
+     * @private
+     * Cancels any GetInfo ajax request that might be executing.
+     */
+    _cancelAjaxRequest : function() {
         var me = this;
-    	var selected = me._sandbox.findAllSelectedMapLayers();
+        if (!me._pendingAjaxQuery.busy) {
+            return;
+        }
+        var jqhr = me._pendingAjaxQuery.jqhr;
+        me._pendingAjaxQuery.jqhr = null;
+        if (!jqhr) {
+            return;
+        }
+        this._sandbox.printDebug("[GetInfoPlugin] Abort jqhr ajax request");
+        jqhr.abort();
+        jqhr = null;
+        me._pendingAjaxQuery.busy = false;
+    },
+
+    /**
+     * @method _buildLayerIdList
+     * @private
+     * Constructs a layer list for valid layers for info queries
+     * @return
+     * {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
+     */
+    _buildLayerIdList : function() {
+        var me = this;
+        var selected = me._sandbox.findAllSelectedMapLayers();
         var layerIds = null;
-        
- 		var mapScale = me._sandbox.getMap().getScale();
-        
+
+        var mapScale = me._sandbox.getMap().getScale();
+
         for (var i = 0; i < selected.length; i++) {
-        	var layer = selected[i]
+            var layer = selected[i]
 
-			if( !layer.getQueryable || !layer.getQueryable() ) {
-				continue;
-			}
+            if (!layer.getQueryable || !layer.getQueryable()) {
+                continue;
+            }
 
-        	if( !layer.isInScale(mapScale) ) {
-				continue;
-			}
-			if( !layer.isFeatureInfoEnabled() ) {
-				continue;
-			}        	
-			if( !layer.isVisible() ) {
-				continue;
-			}
-			
-			if( !layerIds ) {
-				layerIds = "";
-			}
-			        	
+            if (!layer.isInScale(mapScale)) {
+                continue;
+            }
+            if (!layer.isVisible()) {
+                continue;
+            }
+
+            if (!layerIds) {
+                layerIds = "";
+            }
+
             if (layerIds !== "") {
                 layerIds += ",";
             }
 
             layerIds += layer.getId();
         }
-        
+
         return layerIds;
     },
-    
-    _notifyAjaxFailure: function() {
-    	 var me = this;
-    	 me._sandbox.printDebug("[GetInfoPlugin] GetFeatureInfo AJAX failed");
+
+    /**
+     * @method _startAjaxRequest
+     * @private
+     * Sets internal flags to show that an ajax request is executing currently.
+     * @param {Number} dteMs current time in milliseconds
+     */
+    _startAjaxRequest : function(dteMs) {
+        var me = this;
+        me._pendingAjaxQuery.busy = true;
+        me._pendingAjaxQuery.timestamp = dteMs;
+
     },
-    
-    _isAjaxRequestBusy: function() {
-    	var me = this;
-    	return me._pendingAjaxQuery.busy;
+    /**
+     * @method _finishAjaxRequest
+     * @private
+     * Clears internal flags of executing ajax requests so we are clear to start
+     * another.
+     */
+    _finishAjaxRequest : function() {
+        var me = this;
+        me._pendingAjaxQuery.busy = false;
+        me._pendingAjaxQuery.jqhr = null;
+        this._sandbox.printDebug("[GetInfoPlugin] finished jqhr ajax request");
     },
-    
-	/**
-	 * @method handleGetInfo
-	 * send ajax request to get feature info for given location for any visible layers
-	 * 
-	 * backend processes given layer (ids) as WMS GetFeatureInfo or WFS requests 
-	 * (or in the future WMTS GetFeatureInfo)
-	 * 
-	 * aborts any pending ajax query
-	 * 
-	 */            
+    /**
+     * @method _notifyAjaxFailure
+     * @private
+     * Prints debug about ajax call failure.
+     */
+    _notifyAjaxFailure : function() {
+        var me = this;
+        me._sandbox.printDebug("[GetInfoPlugin] GetFeatureInfo AJAX failed");
+    },
+
+    /**
+     * @method _isAjaxRequestBusy
+     * @private
+     * Checks internal flags if and ajax requests is currently executing.
+     * @return {Boolean} true if an ajax request is executing currently
+     */
+    _isAjaxRequestBusy : function() {
+        var me = this;
+        return me._pendingAjaxQuery.busy;
+    },
+
+    /**
+     * @method handleGetInfo
+     * Send ajax request to get feature info for given location for any
+     * visible/valid/queryable layers.
+     * Backend processes given layer (ids) as WMS GetFeatureInfo or WFS requests
+     * (or in the future WMTS GetFeatureInfo). Aborts any pending ajax query.
+     *
+     * @param {OpenLayers.LonLat}
+     *            lonlat coordinates
+     * @param {Number}
+     *            x mouseclick on map x coordinate (in pixels)
+     * @param {Number}
+     *            y mouseclick on map y coordinate (in pixels)
+     */
     handleGetInfo : function(lonlat, x, y) {
         var me = this;
-        
+
         var dte = new Date();
         var dteMs = dte.getTime();
-        
-        if( me._pendingAjaxQuery.busy && me._pendingAjaxQuery.timestamp &&  
-        	dteMs - me._pendingAjaxQuery.timestamp < 500 ) {
-        	me._sandbox.printDebug("[GetInfoPlugin] GetFeatureInfo NOT SENT (time difference < 500ms)");
-        	return; 
-        } 
-        
-        me._cancelAjaxRequest();
-        
-        var layerIds = me._buildLayerIdList();
-        
-        /* let's not start anything we cant' resolve */
-        if( !layerIds  ) {
-        	me._sandbox.printDebug("[GetInfoPlugin] NO layers with featureInfoEnabled, in scale and visible");
-        	return;
+
+        if (me._pendingAjaxQuery.busy && me._pendingAjaxQuery.timestamp && dteMs - me._pendingAjaxQuery.timestamp < 500) {
+            me._sandbox.printDebug("[GetInfoPlugin] GetFeatureInfo NOT SENT (time difference < 500ms)");
+            return;
         }
-        
+
+        me._cancelAjaxRequest();
+
+        var layerIds = me._buildLayerIdList();
+
+        // let's not start anything we cant' resolve
+        if (!layerIds) {
+            me._sandbox.printDebug("[GetInfoPlugin] NO layers with featureInfoEnabled, in scale and visible");
+            return;
+        }
+
         me._startAjaxRequest(dteMs);
-		
-        var ajaxUrl = this._sandbox.getAjaxUrl(); 
+
+        var ajaxUrl = this._sandbox.getAjaxUrl();
 
         var lon = lonlat.lon;
         var lat = lonlat.lat;
-        
+
         var mapVO = me._sandbox.getMap();
-       
 
         jQuery.ajax({
             beforeSend : function(x) {
-            	me._pendingAjaxQuery.jqhr = x;
+                me._pendingAjaxQuery.jqhr = x;
                 if (x && x.overrideMimeType) {
                     x.overrideMimeType("application/j-son;charset=UTF-8");
                 }
@@ -336,26 +374,26 @@ function() {
                     }
                     parsed.popupid = me.infoboxId;
                     parsed.lonlat = lonlat;
-                    
-                    if( !me._isAjaxRequestBusy() ) {
-                    	return;
+
+                    if (!me._isAjaxRequestBusy()) {
+                        return;
                     }
-                    
+
                     me._showFeatures(parsed);
-                    
+
                 }
-               	
-               	me._finishAjaxRequest();
+
+                me._finishAjaxRequest();
             },
             error : function() {
-            	me._finishAjaxRequest();
+                me._finishAjaxRequest();
                 me._notifyAjaxFailure();
             },
-            always: function() {
-            	me._finishAjaxRequest();
+            always : function() {
+                me._finishAjaxRequest();
             },
-            complete: function() {
-            	me._finishAjaxRequest();
+            complete : function() {
+                me._finishAjaxRequest();
             },
             data : {
                 layerIds : layerIds,
@@ -436,9 +474,82 @@ function() {
     },
 
     /**
-     * Formats a GFI datum
-     *
-     * @param datum
+     * @method _parseGfiResponse
+     * @private
+     * Parses and formats a GFI response
+     * @param {Object} resp response data to format
+     * @return {Object} object { fragments: coll, title: title } where
+     *  fragments is an array of JSON { markup: '<html-markup>', layerName:
+     * 'nameforlayer', layerId: idforlayer }
+     */
+    _parseGfiResponse : function(resp) {
+        var sandbox = this._sandbox;
+        var data = resp.data;
+        var coll = [];
+        var lonlat = resp.lonlat;
+        var title = lonlat.lon + ", " + lonlat.lat;
+
+        var layerCount = resp.layerCount;
+        if (layerCount == 0 || data.length == 0 || !( data instanceof Array)) {
+            return;
+        }
+
+        for (var di = 0; di < data.length; di++) {
+            var datum = data[di];
+            var layerId = datum.layerId;
+            var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+            var layerName = layer ? layer.getName() : '';
+            var type = datum.type;
+
+            if (type == "WFS_LAYER") {
+                var features = datum.features;
+                if (!(features && features.length)) {
+                    continue;
+                }
+                for (var fi = 0; fi < features.length; fi++) {
+                    var fea = features[fi];
+                    var children = fea.children;
+                    if (!(children && children.length)) {
+                        continue;
+                    }
+                    for (var ci = 0; ci < children.length; ci++) {
+                        var child = children[ci];
+                        var pnimi = child['pnr_PaikanNimi'];
+                        if (pnimi && pnimi['pnr:kirjoitusasu']) {
+                            title = pnimi['pnr:kirjoitusasu'];
+                        }
+                        var pretty = this._json2html(child);
+                        coll.push({
+                            markup : pretty,
+                            layerId : layerId,
+                            layerName : layerName
+                        });
+                    }
+                }
+            } else {
+                var pretty = this._formatGfiDatum(datum);
+                if (pretty != null) {
+                    coll.push({
+                        markup : pretty,
+                        layerId : layerId,
+                        layerName : layerName
+                    });
+                }
+            }
+        }
+
+        return {
+            fragments : coll,
+            title : title
+        };
+    },
+
+    /**
+     * @method _formatGfiDatum
+     * @private
+     * Formats a GFI HTML or JSON object to result HTML
+     * @param {Object} datum response data to format
+     * @return {String} formatted HMTL
      */
     _formatGfiDatum : function(datum) {
         if (!datum.presentationType) {
@@ -462,10 +573,10 @@ function() {
                     continue;
                 }
                 // if value is an array -> format it first
-                // TODO: maybe some nicer formatting? 
-                if(Object.prototype.toString.call( value ) === '[object Array]' ) {
+                // TODO: maybe some nicer formatting?
+                if (Object.prototype.toString.call(value) === '[object Array]') {
                     var placeHolder = '';
-                    for(var i=0; i < value.length; ++i ) {
+                    for (var i = 0; i < value.length; ++i) {
                         var obj = value[i];
                         for (objAttr in obj) {
                             placeHolder = placeHolder + objAttr + ": " + obj[objAttr] + '<br/>';
@@ -474,10 +585,8 @@ function() {
                     }
                     value = placeHolder;
                 }
-                
+
                 if ((value.startsWith && value.startsWith('http://')) || (value.indexOf && value.indexOf('http://') == 0)) {
-                    // if (value.startsWith('http://')) {
-                    // if (value.indexOf('http://') == 0) {
                     value = '<a href="' + value + '" target="_blank">' + value + '</a>';
                 }
                 html = html + '<tr style="padding: 5px;';
@@ -488,108 +597,21 @@ function() {
                 html = html + '"><td style="padding: 2px">' + attr + '</td><td style="padding: 2px">' + value + '</td></tr>';
             }
             html = html + '</table>';
-
-            //                  } else if ((datum.presentationType == 'TEXT') ||
-            // hasHtml) {
         } else {
-            // style="overflow:auto"
             html = '<div>' + datum.content + '</div>';
         }
         return html;
     },
 
     /**
-     * converts given array to CSV
-     *
-     * @param {Object}
-     *            array
+     * @method _json2html
+     * @private
+     * Parses and formats a WFS layers JSON GFI response
+     * @param {Object} node response data to format
+     * @param {String} layerName name of the layer for this data
+     * @return {String} formatted HMTL
      */
-    arrayToCSV : function(array) {
-        var me = this;
-        var separatedValues = "";
-
-        for (var i = 0; i < array.length; i++) {
-            separatedValues += array[i];
-            if (i < array.length - 1) {
-                separatedValues += ",";
-            }
-        }
-
-        return separatedValues;
-    },
-
-    /**
-     * Flattens a GFI response
-     *
-     * @param {Object} data     
-     */
-    _parseGfiResponse : function(resp) {
-    	var sandbox = this._sandbox;
-        var data = resp.data;
-        var coll = [];
-        var lonlat = resp.lonlat;
-        var title = lonlat.lon + ", " + lonlat.lat;
-
-        var layerCount = resp.layerCount;
-        if (layerCount == 0 || data.length == 0 || !( data instanceof Array)) {
-            return;
-        }
-
-        for (var di = 0; di < data.length; di++) {
-            var datum = data[di];
-            var layerId = datum.layerId;
-            var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-            var layerName =  layer ? layer.getName() : '';
-            var type = datum.type;
-
-            if (type == "WFS_LAYER") {
-                var features = datum.features;
-                if (!(features && features.length)) {
-                    continue;
-                }
-                for (var fi = 0; fi < features.length; fi++) {
-                    var fea = features[fi];
-                    var children = fea.children;
-                    if (!(children && children.length)) {
-                        continue;
-                    }
-                    for (var ci = 0; ci < children.length; ci++) {
-                        var child = children[ci];
-                        var pnimi = child['pnr_PaikanNimi'];
-                        if (pnimi && pnimi['pnr:kirjoitusasu']) {
-                            title = pnimi['pnr:kirjoitusasu'];
-                        }
-                        var pretty = this._json2html(child);
-                        coll.push({
-                        	markup: pretty,
-                        	layerId: layerId,
-                        	layerName: layerName});
-                    }
-                }
-            } else {
-                var pretty = this._formatGfiDatum(datum);
-                if (pretty != null) {
-                    coll.push({
-                        	markup: pretty,
-                        	layerId: layerId,
-                        	layerName: layerName});
-                }
-            }
-        }
-        
-        /*
-         * returns { fragments: coll, title: title }
-         *  
-         *  fragments is an array of JSON { markup: '<html-markup>', layerName: 'nameforlayer', layerId: idforlayer } 
-         */
-        
-        return {
-            fragments : coll,
-            title : title
-        };
-    },
-
-    _json2html : function(node,layerName) {
+    _json2html : function(node, layerName) {
         var me = this;
         if (node == null) {
             return '';
@@ -642,39 +664,38 @@ function() {
     },
 
     /**
-     * Shows multiple features in an infobox
-     *
+     * @method _showFeatures
+     * Shows multiple features in an infobox.
+     * Parameter data is in format:
+     * 
+     *  { fragments: coll, title: title } 
+     * fragments is an array of JSON { markup: '<html-markup>', layerName:
+     * 'nameforlayer', layerId: idforlayer }
+     * 
      * @param {Array} data
      */
     _showFeatures : function(data) {
-    	
-    	/* data is { fragments: coll, title: title } */
-    	/* fragments is an array of JSON { markup: '<html-markup>', layerName: 'nameforlayer', layerId: idforlayer } */
+
         var me = this;
         var contentHtml = [];
         var content = {};
         content.html = '';
         content.actions = {};
         for (var di = 0; di < data.fragments.length; di++) {
-			var fragment =   data.fragments[di]      	
-        	var fragmentTitle = fragment.layerName;
-        	var fragmentMarkup = fragment.markup;
-        	
-        	contentHtml.push('<div>');
-            contentHtml.push( 
-               '<div style="border:1pt solid navy;background-color: #424343;margin-top: 14px; margin-bottom: 10px;height:15px;">' +  
-                 '<div class="icon-bubble-left" style="height:15px;display:inline;float:left;"><div></div></div>'+
-                 '<div style="color:white;float:left;display:inline;margin-left:8px;">'+fragmentTitle +'</div>'+
-               '</div>');
-            
-            if( fragmentMarkup ) {   
-            	contentHtml.push(fragmentMarkup);
-            }
-			contentHtml.push('</div>');
-        }
-        
-        content.html = contentHtml.join('');
+            var fragment = data.fragments[di]
+            var fragmentTitle = fragment.layerName;
+            var fragmentMarkup = fragment.markup;
 
+            contentHtml.push('<div>');
+            contentHtml.push('<div style="border:1pt solid navy;background-color: #424343;margin-top: 14px; margin-bottom: 10px;height:15px;">' + '<div class="icon-bubble-left" style="height:15px;display:inline;float:left;"><div></div></div>' + '<div style="color:white;float:left;display:inline;margin-left:8px;">' + fragmentTitle + '</div>' + '</div>');
+
+            if (fragmentMarkup) {
+                contentHtml.push(fragmentMarkup);
+            }
+            contentHtml.push('</div>');
+        }
+
+        content.html = contentHtml.join('');
 
         var pluginLoc = this.getMapModule().getLocalization('plugin');
         var myLoc = pluginLoc[this.__name];

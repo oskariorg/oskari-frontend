@@ -16,59 +16,41 @@ Oskari.clazz.define('Oskari.mapframework.domain.Map',
  */
 function() {
 
-    /** @property {Number} _centerX map longitude (float) */
+    // @property {Number} _centerX map longitude (float)
     this._centerX = null;
 
-    /** @property {Number} _centerY map latitude (float) */
+    // @property {Number} _centerY map latitude (float)
     this._centerY = null;
 
-    /** @property {Number} _zoom map zoom level (0-12) */
+    // @property {Number} _zoom map zoom level (0-12)
     this._zoom = null;
 
-    /** @deprecated not being updated */
-    this._mousePositionX = null;
-
-    /** @deprecated not being updated */
-    this._mousePositionY = null;
-
-    /** @property {Boolean} _mapKeyboardMovementsEnabled true if keyboard should
-     * move map (used to disable map movement when focused on textfields) */
-    this._mapKeyboardMovementsEnabled = null;
-
-    /** @property {Number} _scale map scale (float) */
+    // @property {Number} _scale map scale (float)
     this._scale = null;
 
-    /** @property {OpenLayers.Bounds} _bbox map bounding box */
+    // @property {OpenLayers.Bounds} _bbox map bounding box
     this._bbox = null;
 
-    /** @property {Boolean} true if marker is being shown */
+    // @property {Boolean} true if marker is being shown
     this._markerVisible = null;
 
-    /** @property {Number} width map window width */
+    // @property {Number} width map window width
     this.width = null;
 
-    /** @property {Number} height  map window height */
+    // @property {Number} height  map window height
     this.height = null;
 
-    /* added 2011-09-02 */
-    /** @property {Number} resolution current map resolution (float) */
+    // @property {Number} resolution current map resolution (float)
     this.resolution = null;
-    /**
-     * @property {OpenLayers.Bounds} extent
-     * current map extent
-     *  { left: NaN, top: NaN, right: NaN, bottom: NaN }
-     */
+    
+    // @property {OpenLayers.Bounds} current map extent { left: NaN, top: NaN, right: NaN, bottom: NaN }
     this.extent = null;
-    /**
-     * @property {OpenLayers.Bounds} maxExtent
-     * maximumExtent configured for the map
-     *  { left: NaN, top: NaN, right: NaN, bottom: NaN }
-     */
+    
+    // @property {OpenLayers.Bounds} maximumExtent configured for the map { left: NaN, top: NaN, right: NaN, bottom: NaN }
     this.maxExtent = null;
 
-    /** @property {Boolean} _isMoving true when map is being dragged */
+    // @property {Boolean} _isMoving true when map is being dragged 
     this._isMoving = false;
-
 }, {
     /**
      * @method moveTo
@@ -136,40 +118,6 @@ function() {
      */
     getZoom : function() {
         return this._zoom;
-    },
-    /**
-     * @method updateMousePosition
-     *
-     * Updates the mouse position in map domain
-     * @param {Number} x mouseposition x coordinate
-     * @param {Number} y mouseposition y coordinate
-     * @deprecated
-     */
-    updateMousePosition : function(x, y) {
-        this._mousePositionX = x;
-        this._mousePositionY = y;
-    },
-    /**
-     * @method getMousePositionX
-     *
-     * Returns the mouse position coordinate (not being updated)
-     * @return {Number}
-     *           mouse position coordinate x
-     * @deprecated
-     */
-    getMousePositionX : function() {
-        return this._mousePositionX;
-    },
-    /**
-     * @method getMousePositionY
-     *
-     * Returns the mouse position coordinate (not being updated)
-     * @return {Number}
-     *           mouse position coordinate y
-     * @deprecated
-     */
-    getMousePositionY : function() {
-        return this._mousePositionY;
     },
     /**
      * @method setScale

@@ -73,5 +73,3 @@ function(value,finished,geometry,geometryMimeType) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-
-/* Inheritance */
