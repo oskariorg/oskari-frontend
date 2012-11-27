@@ -468,6 +468,22 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
                 "Require-Bundle-Instance" : []
             },
             instanceProps : {}
+        },{
+            title : 'Printout',
+            fi : 'Karttatuloste',
+            sv : 'Kartutskrift',
+            en : 'Map Printout',
+            bundlename : 'printout',
+            bundleinstancename : 'printout',
+            metadata : {
+                "Import-Bundle" : {
+                    "printout" : {
+                        bundlePath : '/Oskari/packages/framework/bundle/'
+                    }
+                },
+                "Require-Bundle-Instance" : []
+            },
+            instanceProps : {}
         }, {
             title : 'PostProcessor',
             fi : 'PostProcessor',
