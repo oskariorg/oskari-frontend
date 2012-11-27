@@ -13,36 +13,41 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
  * @param {Object} localization
  *      localization data in JSON format
  */
-function(instance, localization) {
+function(instance, localization, backendConfiguration) {
 	var me = this;
+	this.isEnabled = false;
 	this.instance = instance;
 	this.template = jQuery('<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '</div>');
 
 	this.templateButtonsDiv = jQuery('<div class="buttons"></div>');
 	this.templateHelp = jQuery('<div class="help icon-info"></div>');
 	this.templateTool = jQuery('<div class="tool ">' + '<input type="checkbox"/>' + '<span></span></div>');
+	this.templatePreview = jQuery('<div class="preview"><img /></div>'); 
 	this.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
 	
-	this.backendConfiguration = {
-		formatProducers: {
-			"application/pdf" : 
-				"http://viljonkkatu02.nls.fi:8080/portti-map-imaging-0.0.1-SNAPSHOT/imaging/service/thumbnail/maplink.pdf?",
-			"image/png" :
-				"http://viljonkkatu02.nls.fi:8080/portti-map-imaging-0.0.1-SNAPSHOT/imaging/service/thumbnail/maplink.png?"
-		} 
-	};
+	this.backendConfiguration = backendConfiguration;
 
+	 
 	this.sizeOptions = [{
-		id : 'A4'
-	}, {
-		id : 'A4_Landscape',
+		id : 'A4',
+		classForPreview: 'preview-portrait',
 		selected : true // default option
 	}, {
-		id : 'A3'
+		id : 'A4_Landscape',
+		classForPreview: 'preview-landscape'
 	}, {
-		id : 'A3_Landscape'
+		id : 'A3',
+		classForPreview: 'preview-portrait'
+	}, {
+		id : 'A3_Landscape',
+		classForPreview: 'preview-landscape'
 	}];
-
+	
+	this.sizeOptionsMap = {};
+	for( var s = 0; s < this.sizeOptions.length;s++) {
+		this.sizeOptionsMap[this.sizeOptions[s].id] = this.sizeOptions[s]; 
+	}
+	
 	this.loc = localization;
 	this.accordion = null;
 
@@ -74,6 +79,11 @@ function(instance, localization) {
 		sizePanel.open();
 
 		accordion.addPanel(sizePanel);
+		
+		var previewPanel = this._createPreviewPanel();		
+		previewPanel.open();
+
+		accordion.addPanel(previewPanel);
 
 		accordion.insertTo(contentDiv);
 
@@ -94,6 +104,8 @@ function(instance, localization) {
 		// bind help tags
 		var helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', this.instance.sandbox);
 		helper.processHelpLinks(this.loc.help, content, this.loc.error.title, this.loc.error.nohelp);
+		
+		this.updateMapPreview();
 	},
 	/**
 	 * @method _setSelectedSize
@@ -101,7 +113,7 @@ function(instance, localization) {
 	 * Adjusts the map size according to printout selection
 	 */
 	_setSelectedSize : function() {
-
+		this.refresh();
 	},
 	/**
 	 * @method _createSizePanel
@@ -127,7 +139,7 @@ function(instance, localization) {
 					me.sizeOptions[i].selected = false;
 				}
 				tool.selected = true;
-				me._setSelectedSize();
+				me._setSelectedSize(tool);
 			};
 		};
 		for(var i = 0; i < this.sizeOptions.length; ++i) {
@@ -149,18 +161,68 @@ function(instance, localization) {
 
 		return panel;
 	},
+	
 	/**
-	 * @method handleMapMoved
-	 * Does nothing currently.
+	 * @method _createSizePanel
+	 * @private
+	 * Creates the size selection panel for printout
+	 * @return {jQuery} Returns the created panel
 	 */
-	handleMapMoved : function() {
-
-		var mapVO = this.instance.sandbox.getMap();
-		var lon = mapVO.getX();
-		var lat = mapVO.getY();
-		var zoom = mapVO.getZoom();
-		//this.mainPanel.find('div.locationdata').html('N: ' + lat + ' E: ' + lon + ' ' + this.loc.zoomlevel + ': ' + zoom);
+	_createPreviewPanel : function() {
+		var me = this;
+		var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+		panel.setTitle(this.loc.preview.label);
+		var contentPanel = panel.getContainer();		
+				
+		var previewContent = this.templatePreview.clone();
+		
+		contentPanel.append(previewContent);			
+		
+		/* side effect */
+		var previewImgDiv = previewContent.find('img');
+		previewImgDiv.click(function(){
+			me.showFullScaleMapPreview();
+		});
+		this.previewContent = previewContent;
+		return panel;
 	},
+	
+	updateMapPreview: function() {
+		
+		var selections = this._gatherSelections("image/png");
+		var urlBase = this.backendConfiguration.formatProducers[selections.format];
+		var maplinkArgs = selections.maplinkArgs ;
+		var pageSizeArgs = "&pageSize="+selections.pageSize ;
+		var previewScaleArgs = "&scaledWidth=200"
+		var url = urlBase + maplinkArgs + pageSizeArgs + previewScaleArgs;
+		
+		this.previewContent.removeClass('preview-portrait');
+		this.previewContent.removeClass('preview-landscape');
+		this.previewContent.addClass(
+			this.sizeOptionsMap[selections.pageSize].classForPreview
+		);
+		
+		var previewImgDiv = this.previewContent.find('img');
+		var img = new Image();
+		img.onload = function() {
+			previewImgDiv.attr('src',url);
+			img.onload = null;
+		}		
+		img.src = url;
+	},
+	
+	showFullScaleMapPreview: function() {
+		
+		var selections = this._gatherSelections("image/png");
+		var urlBase = this.backendConfiguration.formatProducers[selections.format];
+		var maplinkArgs = selections.maplinkArgs ;
+		var pageSizeArgs = "&pageSize="+selections.pageSize ;
+		var url = urlBase + maplinkArgs + pageSizeArgs;
+		
+		this.openURLinWindow(url);
+		
+	},
+	
 	/**
 	 * @method _getButtons
 	 * @private
@@ -216,7 +278,7 @@ function(instance, localization) {
 	 * Gathers printout selections and returns them as JSON object
 	 * @return {Object}
 	 */
-	_gatherSelections : function() {
+	_gatherSelections : function(format) {
 		var container = this.mainPanel;
 		var sandbox = this.instance.getSandbox();
 		var errors = [];
@@ -230,7 +292,7 @@ function(instance, localization) {
 			language : values.language,
 			pageSize: size,
 			maplinkArgs: maplinkArgs,
-			format : "application/pdf" // TEMP: FIX until selection i 
+			format : format || "application/pdf"  
 		};
 
 		console.log("[Printout] PrintoutSelections",selections);
@@ -345,7 +407,14 @@ function(instance, localization) {
 	destroy : function() {
 		this.mainPanel.remove();
 	},
-	setEnabled : function() {
-
+	setEnabled : function(e) {
+		this.isEnabled = e;
+	},
+	getEnabled : function() {
+		return this.isEnabled;
+	},
+	
+	refresh: function() {
+		this.updateMapPreview();
 	}
 });

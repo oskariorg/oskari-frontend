@@ -24,8 +24,12 @@ Oskari.registerLocalization(
                 },
                 "size": {
                     "label": "Storlek",
-                    "tooltip": "Välj eller definiera storleken på kartan som visas på din webbplats. Kartan förhandsvisas i den valda storleken."
-                },              
+                    "tooltip": "Välj eller definiera storleken på kartan. Kartan förhandsvisas i den valda storleken."
+                },     
+				"preview": {
+                    "label": "Förhandsgransningsvy",
+                    "tooltip": "."
+                },
                 "sizes": {
                     "small": "Liten",
                     "medium": "Medelstor",
@@ -35,16 +39,16 @@ Oskari.registerLocalization(
                     "height": "höjd"
                 },
                 "buttons": {
-                    "save": "PDF???",
+                    "save": "Ladda ned PDF-utskriften",
                     "ok": "OK",
                     "cancel": "Avbryt"
                 },
-                "preview": "Förhandsgranskningsvy för karta som ska ???.",
+                "preview": "Förhandsgranskningsvy för kartan som ska skrivas ut.",
                 "location": "Läge och skalnivå.",
                 "zoomlevel": "Skalnivå",
                 "help": "Anvisning",
                 "error": {
-                    "title": "Fel!",
+                    "title": "Fel",
                     "size": "Fel i storleksdefinitionerna",
                     "name": "Namnet är en nödvändig uppgift",
                     "nohelp": "Ingen anvisning",
@@ -53,7 +57,7 @@ Oskari.registerLocalization(
                 }
             },
             "StartView": {
-                "text": "Du kan ??? den kartvy som du definierat.",
+                "text": "Du kan skriva ut den kartvy som du definierat till PDF-utskrift eller PNG-bildfilen???",
                 "buttons": {
                     "continue": "Fortsätt",
                     "cancel": "Tillbaka"

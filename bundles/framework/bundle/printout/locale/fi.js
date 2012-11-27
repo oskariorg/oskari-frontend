@@ -26,6 +26,10 @@ Oskari.registerLocalization(
                     "label": "Koko",
                     "tooltip": "Valitse tai määrittele kartalle koko, jossa haluat esittää sen sivuillasi. Näet vaikutuksen esikatselukartassa."
                 },
+                "preview": {
+                    "label": "Esikatselu",
+                    "tooltip": "."
+                },
                 "sizes": {
                     "A4": "A4-tuloste",
                     "A4_Landscape": "A4-vaakatuloste",
@@ -35,7 +39,7 @@ Oskari.registerLocalization(
                     "height": "korkeus"
                 },
                 "buttons": {
-                    "save": "Hae PDF-tuloste",
+                    "save": "Hae tuloste",
                     "ok": "OK",
                     "cancel": "Peruuta"
                 },
@@ -53,7 +57,7 @@ Oskari.registerLocalization(
                 }
             },
             "StartView": {
-                "text": "Voit tulostaa tässä tekemäsi karttanäkymän.",
+                "text": "Voit tulostaa tekemäsi karttanäkymän PNG kuvaksi tai PDF-tulosteeksi.",
                 "buttons": {
                     "continue": "Jatka",
                     "cancel": "Peruuta"

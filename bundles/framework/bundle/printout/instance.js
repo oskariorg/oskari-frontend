@@ -1,13 +1,13 @@
 /**
  * @class Oskari.mapframework.bundle.printout.PrintoutBundleInstance
  *
- * Main component and starting point for the "map printout" functionality. Printout 
+ * Main component and starting point for the "map printout" functionality. Printout
  * is a wizardish tool to configure a printout .
- * 
- * See Oskari.mapframework.bundle.printout.PrintoutBundle for bundle definition. 
+ *
+ * See Oskari.mapframework.bundle.printout.PrintoutBundle for bundle definition.
  *
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance", 
+Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance",
 
 /**
  * @method create called automatically on construction
@@ -18,7 +18,19 @@ function() {
 	this.started = false;
 	this.plugins = {};
 	this.localization = null;
-	this.printout = null;	
+	this.printout = null;
+	this.buttonGroup = 'viewtools';
+	this.ignoreEvents = false;
+	this.dialog = null;
+	this.printoutHandler = null;
+	this.backendConfiguration = {
+		formatProducers : {
+			"application/pdf" : "http://viljonkkatu02.nls.fi:8080/portti-map-imaging-0.0.1-SNAPSHOT/imaging/service/thumbnail/maplink.pdf?",
+			"image/png" : "http://viljonkkatu02.nls.fi:8080/portti-map-imaging-0.0.1-SNAPSHOT/imaging/service/thumbnail/maplink.png?"
+		}
+	};
+	var me = this;
+
 }, {
 	/**
 	 * @static
@@ -27,7 +39,7 @@ function() {
 	__name : 'Printout',
 	/**
 	 * @method getName
-	 * @return {String} the name for the component 
+	 * @return {String} the name for the component
 	 */
 	"getName" : function() {
 		return this.__name;
@@ -39,25 +51,25 @@ function() {
 	getSandbox : function() {
 		return this.sandbox;
 	},
-    /**
-     * @method getLocalization
-     * Returns JSON presentation of bundles localization data for current language.
-     * If key-parameter is not given, returns the whole localization data.
-     * 
-     * @param {String} key (optional) if given, returns the value for key
-     * @return {String/Object} returns single localization string or
-     * 		JSON object for complete data depending on localization
-     * 		structure and if parameter key is given
-     */
-    getLocalization : function(key) {
-    	if(!this._localization) {
-    		this._localization = Oskari.getLocalization(this.getName());
-    	}
-    	if(key) {
-    		return this._localization[key];
-    	}
-        return this._localization;
-    },
+	/**
+	 * @method getLocalization
+	 * Returns JSON presentation of bundles localization data for current language.
+	 * If key-parameter is not given, returns the whole localization data.
+	 *
+	 * @param {String} key (optional) if given, returns the value for key
+	 * @return {String/Object} returns single localization string or
+	 * 		JSON object for complete data depending on localization
+	 * 		structure and if parameter key is given
+	 */
+	getLocalization : function(key) {
+		if(!this._localization) {
+			this._localization = Oskari.getLocalization(this.getName());
+		}
+		if(key) {
+			return this._localization[key];
+		}
+		return this._localization;
+	},
 	/**
 	 * @method start
 	 * Implements BundleInstance protocol start method
@@ -72,19 +84,40 @@ function() {
 
 		var sandbox = Oskari.$("sandbox");
 		me.sandbox = sandbox;
-		
+
 		this.localization = Oskari.getLocalization(this.getName());
-		
+
 		sandbox.register(me);
 		for(p in me.eventHandlers) {
 			sandbox.registerForEventByName(me, p);
+		}
+
+		// requesthandler
+		this.printoutHandler = Oskari.clazz.create('Oskari.mapframework.bundle.printout.request.PrintMapRequestHandler', sandbox, function() {
+			me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'attach']);
+		});
+		sandbox.addRequestHandler('printout.PrintMapRequest', this.printoutHandler);
+		// request toolbar to add buttons
+		var addBtnRequestBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+		var btns = {
+			'print' : {
+				iconCls : 'tool-print',
+				tooltip : '',
+				sticky : true,
+				callback : function() {
+					me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'attach']);
+				}
+			}
+		};
+		for(var tool in btns) {
+			sandbox.request(this, addBtnRequestBuilder(tool, this.buttonGroup, btns[tool]));
 		}
 
 		//Let's extend UI
 		var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
 		sandbox.request(this, request);
 
-        //sandbox.registerAsStateful(this.mediator.bundleId, this);
+		//sandbox.registerAsStateful(this.mediator.bundleId, this);
 		// draw ui
 		me._createUi();
 	},
@@ -104,48 +137,27 @@ function() {
 	},
 	/**
 	 * @method onEvent
-     * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+	 * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
 	 * @param {Oskari.mapframework.event.Event} event a Oskari event object
 	 */
 	onEvent : function(event) {
 		var handler = this.eventHandlers[event.getName()];
 		if(!handler) {
-            return;
+			return;
 		}
 		return handler.apply(this, [event]);
 	},
-    /**
-     * @property {Object} eventHandlers
-     * @static
-     */
+	/**
+	 * @property {Object} eventHandlers
+	 * @static
+	 */
 	eventHandlers : {
-        /**
-         * @method AfterMapLayerRemoveEvent
-         * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent} event
-         * 
-         * Calls flyouts handleLayerSelectionChanged() method
-         */
-        'AfterMapLayerRemoveEvent' : function(event) {
-            this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
-        },
-        /**
-         * @method AfterMapLayerAddEvent
-         * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
-         * 
-         * Calls flyouts handleLayerSelectionChanged() method
-         */
-        'AfterMapLayerAddEvent' : function(event) {
-            this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
-        },
-        /**
-         * @method MapLayerEvent
-         * @param {Oskari.mapframework.event.common.MapLayerEvent} event
-         */
-        'MapLayerEvent' : function(event) {
-            this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged();
-        }
+		'MapLayerVisibilityChangedEvent' : function(event) {
+			if(this.printout) {
+				this.printout.refresh();
+			}
+		}
 	},
-
 	/**
 	 * @method stop
 	 * Implements BundleInstance protocol stop method
@@ -156,10 +168,13 @@ function() {
 			sandbox.unregisterFromEventByName(this, p);
 		}
 
+		sandbox.removeRequestHandler('printout.PrintMapRequest', this.printoutHandler);
+		this.printoutHandler = null;
+
 		var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
 		sandbox.request(this, request);
 
-        //this.sandbox.unregisterStateful(this.mediator.bundleId);
+		//this.sandbox.unregisterStateful(this.mediator.bundleId);
 		this.sandbox.unregister(this);
 		this.started = false;
 	},
@@ -192,15 +207,15 @@ function() {
 		return this.plugins;
 	},
 	/**
-	 * @method getTitle 
-	 * @return {String} localized text for the title of the component 
+	 * @method getTitle
+	 * @return {String} localized text for the title of the component
 	 */
 	getTitle : function() {
 		return this.getLocalization('title');
 	},
 	/**
-	 * @method getDescription 
-	 * @return {String} localized text for the description of the component 
+	 * @method getDescription
+	 * @return {String} localized text for the description of the component
 	 */
 	getDescription : function() {
 		return this.getLocalization('desc');
@@ -218,41 +233,38 @@ function() {
 	/**
 	 * @method setPublishMode
 	 * Transform the map view to printout mode if parameter is true and back to normal if false.
-	 * Makes note about the map layers that the user cant publish, removes them for publish mode and 
+	 * Makes note about the map layers that the user cant publish, removes them for publish mode and
 	 * returns them when exiting the publish mode.
-	 * 
+	 *
 	 * @param {Boolean} blnEnabled
 	 */
 	setPublishMode : function(blnEnabled) {
 		var me = this;
-    	var map = jQuery('#contentMap');
-    	var tools = jQuery('#maptools');
-    	
-		if (blnEnabled == true) {
+		var map = jQuery('#contentMap');
+		var tools = jQuery('#maptools');
+
+		if(blnEnabled == true) {
 			this.oskariLang = Oskari.getLang();
-			
-            me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
-    		    
-            // proceed with publisher view
-            this.publisher = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.BasicPrintout', 
-                this, this.getLocalization('BasicView'));
-            this.publisher.render(map);
-            this.publisher.setEnabled(true);
-    	}
-    	else {
-            Oskari.setLang(this.oskariLang);
-    		if(this.publisher) {
-            	this.publisher.setEnabled(false);
-    			this.publisher.destroy();
-    		}
-    	}
+
+			me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
+
+			// proceed with printout view
+			this.printout = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.BasicPrintout', this, this.getLocalization('BasicView'), this.backendConfiguration);
+			this.printout.render(map);
+			this.printout.setEnabled(true);
+		} else {
+			Oskari.setLang(this.oskariLang);
+			if(this.printout) {
+				this.printout.setEnabled(false);
+				this.printout.destroy();
+				this.printout = null;
+			}
+		}
 	}
-	
-	
 }, {
 	/**
 	 * @property {String[]} protocol
-	 * @static 
+	 * @static
 	 */
 	"protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
 });

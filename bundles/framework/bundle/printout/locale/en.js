@@ -26,6 +26,11 @@ Oskari.registerLocalization(
                     "label": "Size",
                     "tooltip": "Select or define the size of the map to be embedded on your website. The map preview is displayed in the selected size."
                 },
+   				"preview": {
+                    "label": "Preview",
+                    "tooltip": "."
+                },
+
                 "sizes": {
                     "small": "Small",
                     "medium": "Medium",

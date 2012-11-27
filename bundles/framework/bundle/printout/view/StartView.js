@@ -18,8 +18,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.StartView',
 function(instance, localization) {
     this.instance = instance;
     this.template = jQuery("<div class='startview'><div class='content'></div><div class='buttons'></div></div>");
-    this.templateLayerList = jQuery("<div class='layerlist'><h4></h4><ul></ul></div>");
-    this.templateListItem = jQuery("<li></li>");
     this.templateError = jQuery('<div class="error"><ul></ul></div>');
     this.templateInfo = jQuery("<div class='icon-info'></div>");
     this.loc = localization;
@@ -36,10 +34,9 @@ function(instance, localization) {
         var me = this;
         var content = this.template.clone();
         this.content = content;
-        var txt = "<missing_localisation>";
-        if (this.loc && this.loc.text) {
-            txt = this.loc.txt;
-        }
+     
+        var txt = this.loc.text;
+
         content.find('div.content').before(txt);
         container.append(content);
 
@@ -68,13 +65,6 @@ function(instance, localization) {
 
         cancelButton.insertTo(content.find('div.buttons'));
         continueButton.insertTo(content.find('div.buttons'));
-        
-    },
-    /**
-     * @method handleLayerSelectionChanged
-     * Clears previous layer listing and renders a new one to the view.
-     */
-    handleLayerSelectionChanged : function() {
         
     }
   

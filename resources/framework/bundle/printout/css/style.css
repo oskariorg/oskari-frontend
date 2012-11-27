@@ -1,88 +1,88 @@
-
 div.notLoggedIn {
 	padding: 10px;
 }
-
 div.printout {
-    
-}
 
-#contentMap.mapPublishMode {
-    margin-left: 255px;
+}
+/*#contentMap.mapPrintoutMode {
+ margin-left: 255px;
+ }*/
+#contentMap div.basic_printout {
+	background: white;
+	position: absolute;
+	height: 100%;
+	top: 0;
+	left: 40px;
+	/* sidebar has 3, we want to open it on top of this */
+	z-index: 2;
+	width: 255px;
+}
+#contentMap div.basic_publisher div.content {
+	padding: 10px;
 }
 div.printout div.startview div.icon-info, div.basic_printout div.icon-info {
-	float : right;
-}
-
-div.printout div.startview div.layerlist {
-	border : 1px solid;
-	padding : 10px;
-}
-div.printout div.startview div.layerlist h4 {
-	font-size : 14px;
-	line-height: 15px;
-    padding-bottom: 5px;
-}
-div.printout div.startview ul {
-    list-style: disc inside none;
-    padding : 5px;
+	float: right;
 }
 div.printout div.startview div.error ul li {
-	color : red;
+	color: red;
 }
-
-#contentMap div.basic_printout {
-	background : white;
-	position : absolute;
-    height: 100%;
-    top : 0;
-    left : 40px;
-    /* sidebar has 3, we want to open it on top of this */
-    z-index : 2;
-    width : 255px;
-}
-#contentMap div.basic_printout div.content {
-    padding : 10px;
-}
-
 div.basic_printout > div.header {
-    background-color: #FDF8D9;
-    padding: 5px 10px;
+	background-color: #FDF8D9;
+	padding: 5px 10px;
 }
 div.basic_printout > div.header div.icon-close {
-    float: right;
-}
-
-div.basic_printout div.customsize input {
-    width: 40px;
-}
-div.basic_printout div.customsize input.error {
-    border: 1px solid red;
+	float: right;
 }
 div.basic_printout div.form div.field input, div.field select {
-    width : 100%;
+	width: 100%;
 }
-
 div.basic_printout > div.content {
-    overflow: auto;
+	overflow: auto;
 	height: 89%;
 }
-
 div.basic_printout div.tool {
 	margin: 5px;
 }
-
 div.basic_printout div.tool input {
-    margin-right: 10px;
+	margin-right: 10px;
 }
-
 /* Buttons */
 div.basic_printout div.buttons, div.printout div.startview div.buttons {
-	margin : 10px;
-    text-align : center;
+	margin: 10px;
+	text-align: center;
+}
+div.basic_printout div.buttons input, div.printout div.startview div.buttons input {
+	margin-left: 10px;
+	margin-right: 10px;
 }
 
-div.basic_printout div.buttons input, div.printout div.startview div.buttons input {
-    margin-left: 10px;
-    margin-right: 10px;
+div.basic_printout div.preview-portrait {
+	margin: 8px;
+	padding: 5px; 
+	width: 200px;
+	height: 290px;
+	background-color: white;
+	border-bottom-color: #C0D0E0;
+	border-bottom-style: solid;
+	border-bottom-width: 1pt;		
+	border-top-color: #C0D0E0;
+	border-top-style: solid;
+	border-top-width: 1pt;
+	box-shadow: 0 0 8px #D0D0D0;
 }
+
+div.basic_printout div.preview-landscape {
+	margin: 8px;
+	padding: 5px;
+	width: 200px;
+	height: 140px;
+	background-color: white;
+	border-bottom-color: #C0D0E0;
+	border-bottom-style: solid;
+	border-bottom-width: 1pt;		
+	border-top-color: #C0D0E0;
+	border-top-style: solid;
+	border-top-width: 1pt;
+	box-shadow: 0 0 8px #D0D0D0;
+}
+

@@ -110,15 +110,6 @@ function(instance) {
                 this.instance.getLocalization('StartView'));
         
         this.view.render(flyout);
-    },
-    /**
-     * @method handleLayerSelectionChanged
-     * Calls the current views handleLayerSelectionChanged method if one is defined
-     */
-    handleLayerSelectionChanged : function() {
-        if(this.view && this.view.handleLayerSelectionChanged) {
-            this.view.handleLayerSelectionChanged();
-        }
     }
 }, {
     /**

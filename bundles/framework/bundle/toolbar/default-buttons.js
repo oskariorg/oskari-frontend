@@ -117,7 +117,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 			}
 		});
 
-		this.addToolButton('print', 'viewtools', {
+		/*this.addToolButton('print', 'viewtools', {
 			iconCls : 'tool-print',
 			tooltip : loc.print.tooltip,
 			sticky : false,
@@ -128,6 +128,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 				    '&showMarker=false&forceCache=true&mapmode=print&viewId=2';
 				window.open(link, "Print", wopParm);
 			}
-		});
+		});*/
 	}
 });
