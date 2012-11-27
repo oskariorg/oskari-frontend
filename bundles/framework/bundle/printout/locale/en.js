@@ -32,12 +32,10 @@ Oskari.registerLocalization(
                 },
 
                 "sizes": {
-                    "small": "Small",
-                    "medium": "Medium",
-                    "large": "Large",
-                    "custom": "Custom size",
-                    "width": "width",
-                    "height": "height"
+                    "A4": "A4-portrait",
+                    "A4_Landscape": "A4-landscape",
+                    "A3": "A3-portrait",
+                    "A3_Landscape": "A3-landscape"
                 },
                 "buttons": {
                     "save": "Get PDF Printout",
@@ -49,7 +47,7 @@ Oskari.registerLocalization(
                 "zoomlevel": "Zoom level",
                 "help": "Help",
                 "error": {
-                    "title": "Error!",
+                    "title": "Error",
                     "size": "Error in size definitions",
                     "name": "Name is required information",
                     "nohelp": "No help is available",

@@ -30,13 +30,11 @@ Oskari.registerLocalization(
                     "label": "Förhandsgransningsvy",
                     "tooltip": "."
                 },
-                "sizes": {
-                    "small": "Liten",
-                    "medium": "Medelstor",
-                    "large": "Stor",
-                    "custom": "Definiera storlek",
-                    "width": "bredd",
-                    "height": "höjd"
+               "sizes": {
+                    "A4": "A4-utskrift",
+                    "A4_Landscape": "A4-horisontell",
+                    "A3": "A3-utskrift",
+                    "A3_Landscape": "A3-horisontell"
                 },
                 "buttons": {
                     "save": "Ladda ned PDF-utskriften",

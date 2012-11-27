@@ -34,9 +34,7 @@ Oskari.registerLocalization(
                     "A4": "A4-tuloste",
                     "A4_Landscape": "A4-vaakatuloste",
                     "A3": "A3-tuloste",
-                    "A3_Landscape": "A3-vaakatuloste",
-                    "width": "leveys",
-                    "height": "korkeus"
+                    "A3_Landscape": "A3-vaakatuloste"
                 },
                 "buttons": {
                     "save": "Hae tuloste",
