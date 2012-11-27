@@ -295,7 +295,7 @@ function(instance, localization, backendConfiguration) {
 			format : format || "application/pdf"  
 		};
 
-		console.log("[Printout] PrintoutSelections",selections);
+		
         
         if(errors.length > 0) {
         	// TODO: messages
