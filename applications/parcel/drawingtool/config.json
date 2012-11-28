@@ -20,8 +20,6 @@
 					"id": "Oskari.mapframework.mapmodule.ControlsPlugin"
 				}, {
 					"id": "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin"
-				}, {
-					"id": "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"
 				}
 			],
 			"layers": [

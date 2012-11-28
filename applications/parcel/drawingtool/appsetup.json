@@ -68,9 +68,6 @@
 					"request-map-layer": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					},
-					"runtime": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					},
 					"sandbox-base": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					},
