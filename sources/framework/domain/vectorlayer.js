@@ -70,6 +70,8 @@ function() {
     this._visible = true;
     
     this._metadataIdentifier = null;
+    
+    this._backendStatus = null;
 }, {
     /**
      * @method setGeometryWKT
@@ -412,7 +414,8 @@ function() {
 
         // Check layer scales only normal layers
         if(!this.isBaseLayer()) {
-            if(scale > this.getMaxScale() && scale < this.getMinScale()) {
+            if((scale > this.getMaxScale()  || !this.getMaxScale()) && 
+               (scale < this.getMinScale())  || !this.getMinScale()) {
                 _return = true;
             }
         }
@@ -425,7 +428,7 @@ function() {
     isVisible : function() {
         return this._visible;
     },
-        /**
+    /**
      * @method setVisible
      * @param {Boolean} visible true if this is should be shown
      */
@@ -444,16 +447,16 @@ function() {
     
     /**
      * @method setMetaType
-     * @param {String} type used to group layers by f.ex. functionality. 
      * Layers can be fetched based on metatype f.ex. 'myplaces'
+     * @param {String} type used to group layers by f.ex. functionality. 
      */
     setMetaType : function(type) {
         this._metaType = type;
     },
     /**
      * @method getMetaType
-     * @return {String} type used to group layers by f.ex. functionality. 
      * Layers can be fetched based on metatype f.ex. 'myplaces'
+     * @return {String} type used to group layers by f.ex. functionality. 
      */
     getMetaType : function() {
         return this._metaType;
@@ -461,22 +464,44 @@ function() {
     
     /**
      * @method getStyles
+     * Gets layer styles
+     * @return {Oskari.mapframework.domain.Style[]} 
      */
     getStyles: function() {
     	return [];
     },
     
-        /**
+    /**
      * @method getMetadataIdentifier
+     * Gets the identifier (uuid style) for getting layers metadata
+     * @return {String}
      */
     getMetadataIdentifier: function() {
     	return this._metadataIdentifier;
     },
     /**
      * @method setMetadataIdentifier
+     * Sets the identifier (uuid style) for getting layers metadata
+     * @param {String} metadataid
      */
     setMetadataIdentifier: function(metadataid) {
     	this._metadataIdentifier = metadataid;
+    },
+    /**
+     * @method getBackendStatus
+     * Status text for layer operatibility (f.ex. 'DOWN')
+     * @return {String}
+     */
+    getBackendStatus: function() {
+    	return this._backendStatus;
+    },
+    /**
+     * @method setBackendStatus
+     * Status text for layer operatibility (f.ex. 'DOWN')
+     * @param {String} backendStatus
+     */
+    setBackendStatus: function(backendStatus) {
+    	this._backendStatus = backendStatus;
     }
 
 });

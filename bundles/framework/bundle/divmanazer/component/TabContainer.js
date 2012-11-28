@@ -81,13 +81,12 @@ function(pEmptyMsg) {
      */
     select : function(panel) {
         var previousPanel = null;
-        if(this.tabChangeListeners.length > 0) {
-            // get previous panel for listeners if any
-            for(var i = 0; i < this.panels.length; i++) {
-                if(this.isSelected(this.panels[i])) {
-                    previousPanel = this.panels[i];
-                    break;
-                }
+        // get previous panel for listeners if any
+        for(var i = 0; i < this.panels.length; i++) {
+            if(this.isSelected(this.panels[i])) {
+                previousPanel = this.panels[i];
+                previousPanel.handleSelection(false);
+                break;
             }
         }
         var headerContainer = this.ui.find('ul');
@@ -97,6 +96,7 @@ function(pEmptyMsg) {
         tabs.hide();
         panel.getHeader().addClass('active');
         panel.getContainer().show();
+        panel.handleSelection(true);
         // notify listeners
         for(var i = 0; i < this.tabChangeListeners.length; i++) {
             this.tabChangeListeners[i](previousPanel, panel);

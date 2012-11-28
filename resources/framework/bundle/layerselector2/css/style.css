@@ -1,25 +1,3 @@
-
-/* "tab" content */
-div.layerselector2 div.allLayersTabContent {
-	border-left: 1px solid #999999;
-	border-right: 1px solid #999999;
-	border-top: 0px solid #999999;
-	border-bottom: 1px solid #999999;
-	color: #000000;
-	height: 90%;
-}
-div.layerselector2 div.allLayersTabContent div.filter {
-	padding-top: 10px; 
-	padding-left: 10px; 
-	padding-bottom: 10px;
-}
-/* layer list container */
-div.layerselector2 div.layerList {
-	overflow: auto;
-	height : 85%;
-	width : 100%;
-	margin : 0px;
-}
 /* layer group container */
 div.layerselector2 div.layerGroup {
     background-color : #f3f3f3;
@@ -68,52 +46,30 @@ div.layerselector2 div.layer div.layer-info {
 	float : right;
 }
 
-/* inspire/organization grouping controls */
-div.layerselector2 div.groupingTabs {
-   background: url('/Oskari/resources/framework/bundle/layerselector2/images/tab_bg.png') repeat-x scroll center bottom; /* #FFFFFF*/
-    clear: left;
-    float: left;
-    font : 12pt  Arial,sans-serif;
-    font-weight: bold;
-    overflow: hidden;
-    padding: 0;
-    width: 100%;
+div.layerselector2 div.tab-content {
+  padding : 0;
 }
-div.layerselector2 div.groupingTabs ul {
-    float: left;
-    list-style: none outside none;
-    margin: 0;
-    padding: 0;
-    text-align: center;
+div.layerselector2 div.tab-content div.oskarifield {
+  padding: 10px;
 }
 
-div.layerselector2 div.groupingTabs ul li{
-    display: block;
-    float: left;
-    list-style: none outside none;
-    margin: 10px 0 0;
+div.layerselector2 div.accordion div.accordion_panel div.content {
     padding: 0;
-    right: 50%;
 }
-div.layerselector2 div.groupingTabs ul li a {
-    background: none repeat scroll 0 0 #FFFFFF;
-    border-bottom: 1px solid #999999;
-    color: #3333FF;
-    display: block;
-    float: left;
-    padding: 10px 20px;
-    position: relative;
-    text-decoration: none;
+div.layerselector2 div.layer div.layer-backendstatus-icon {
+    float : left;
+	width : 20px;
+	height: 16px;
+	margin-right: 4px;
+	background-repeat: no-repeat;
 }
 
-div.layerselector2 div.groupingTabs ul li.active a {
-	border-left: 1px solid #999999;
-	border-right: 1px solid #999999;
-	border-top: 1px solid #999999;
-	border-bottom: 0px solid #999999;
-	color: #000000;
+div.layerselector2 div.layer div.backendstatus-down {
+	height: 20px !important;
+	margin-bottom: 2px;	
 }
 
-div.layerselector2 div.groupingTabs ul li.fill a {
-   width: 100%;
+div.layerselector2 div.layer div.backendstatus-maintenance {
+	height: 20px !important;
+	margin-bottom: 2px;	
 }

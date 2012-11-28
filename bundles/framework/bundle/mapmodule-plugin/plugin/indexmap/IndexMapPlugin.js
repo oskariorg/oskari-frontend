@@ -1,6 +1,9 @@
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin
- * Provides indexmap functionality for map
+ * 
+ * Provides indexmap functionality for map. Uses image from plugin resources as the index map.
+ * 
+ * See http://www.oskari.org/trac/wiki/DocumentationBundleMapModulePluginIndexMap
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
 /**
@@ -16,8 +19,7 @@ function(config) {
     this._map = null;
     this._conf = config;
     this._indexMap = null;
-    // TODO: location was previously gotten from Oskari.$.startup, but this might not be any better
-    this._indexMapUrl = '/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/suomi25m_tm35fin.png';
+    this._indexMapUrl = '/framework/bundle/mapmodule-plugin/plugin/indexmap/images/suomi25m_tm35fin.png';
 }, {
     /** @static @property __name plugin name */
     __name : 'IndexMapPlugin',
@@ -50,15 +52,14 @@ function(config) {
     },
     /**
      * @method hasUI
-     * @return {Boolean} true
      * This plugin has an UI so always returns true
+     * @return {Boolean} true
      */
     hasUI : function() {
         return true;
     },
     /**
      * @method init
-     *
      * Interface method for the module protocol
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
@@ -66,8 +67,18 @@ function(config) {
      */
     init : function(sandbox) {
 
+    },
+    /**
+     * @method _createUI
+     * @private
+     * 
+     * Constructs/initializes the indexmap  control for the map.
+     */
+    _createUI : function() {
         /* overview map */
-        var graphic = new OpenLayers.Layer.Image('Overview map image', this._indexMapUrl, new OpenLayers.Bounds(26783, 6608595, 852783, 7787250), new OpenLayers.Size(120, 173));
+        var graphic = new OpenLayers.Layer.Image('Overview map image', 
+            this.getMapModule().getImageUrl() + this._indexMapUrl, 
+            new OpenLayers.Bounds(26783, 6608595, 852783, 7787250), new OpenLayers.Size(120, 173));
 
         /*
          * create an overview map control with non-default
@@ -82,19 +93,15 @@ function(config) {
             },
             layers : [graphic],
             size : new OpenLayers.Size(120, 173),
-            autoPan : false
+            autoPan : false,
+            controls : []
         };
 
         /* Indexmap */
         this._indexMap = new OpenLayers.Control.OverviewMap(controlOptions);
-        //
-        //this._overviewMap.id = "index-map-" + this.getName();
-        //this._overviewMap.title = 'mapcontrolsservice_indexmap_title';
-
     },
     /**
      * @method register
-     *
      * Interface method for the module protocol
      */
     register : function() {
@@ -102,7 +109,6 @@ function(config) {
     },
     /**
      * @method unregister
-     *
      * Interface method for the module protocol
      */
     unregister : function() {
@@ -110,8 +116,8 @@ function(config) {
     },
     /**
      * @method startPlugin
-     *
-     * Interface method for the plugin protocol
+     * Interface method for the plugin protocol.
+     * Adds the indexmap to the map as control.
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      *          reference to application sandbox
@@ -119,6 +125,7 @@ function(config) {
     startPlugin : function(sandbox) {
         this._sandbox = sandbox;
         this._map = this.getMapModule().getMap();
+        this._createUI();
 
         sandbox.register(this);
         for(p in this.eventHandlers ) {
@@ -128,8 +135,8 @@ function(config) {
     },
     /**
      * @method stopPlugin
-     *
-     * Interface method for the plugin protocol
+     * Interface method for the plugin protocol.
+     * Removes the indexmap from the map controls.
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      *          reference to application sandbox
@@ -148,7 +155,6 @@ function(config) {
     },
     /**
      * @method start
-     *
      * Interface method for the module protocol
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
@@ -158,7 +164,6 @@ function(config) {
     },
     /**
      * @method stop
-     *
      * Interface method for the module protocol
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox

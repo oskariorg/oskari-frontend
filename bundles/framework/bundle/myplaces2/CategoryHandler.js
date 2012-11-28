@@ -74,7 +74,7 @@ function(instance) {
         /**
          * @method MyPlaces.MyPlacesChangedEvent
          * Checks if categories have been changed and updates corresponding maplayers accordingly
-         * @param {Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent} event
+         * @param {Oskari.mapframework.myplaces.event.MyPlacesChangedEvent} event
          */
         'MyPlaces.MyPlacesChangedEvent' : function(event) {
             this._handlePlacesChanged();
@@ -205,6 +205,16 @@ function(instance) {
         //baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + categoryModel.getId() + "&";
         baseJson.name = categoryModel.getName();
         baseJson.id = this._getMapLayerId(categoryModel.getId());
+        if(categoryModel.isPublic()) {
+            baseJson.permissions = {
+                "publish" : "publication_permission_ok" 
+            }
+        }
+        else {
+            baseJson.permissions = {
+                "publish" : "no_publication_permission"
+            }
+        }
         return baseJson;
     },
     /**
@@ -217,21 +227,12 @@ function(instance) {
         var catLoc = this.instance.getLocalization('category');
         var json = {
             wmsName: 'ows:my_places_categories',
-            descriptionLink:"",
             type: "wmslayer",
-            baseLayerId:-1,
-            legendImage:"",
-            gfi : 'disabled',
-            formats: {
-               value:"text/html"
-            },
-            isQueryable:false,
-            minScale:12000000,
+            isQueryable:true,
             opacity: 50,
             metaType: this.instance.idPrefix,
             orgName: catLoc.organization,
-            inspire: catLoc.inspire,
-            maxScale:1
+            inspire: catLoc.inspire
         };
         return json;
     },
@@ -341,6 +342,24 @@ function(instance) {
     		content.append(row);
     	}
     	dialog.show(loc.validation.title, content, [okBtn]);
+    },
+    /**
+     * @method _showMessage
+     * Shows user a message with ok button
+     * @private
+     * @param {String} title popup title
+     * @param {String} message popup message
+     */
+    _showMessage : function(title, message) {
+        var loc = this.instance.getLocalization();
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        okBtn.setTitle(loc.buttons.ok);
+        okBtn.addClass('primary');
+        okBtn.setHandler(function() {
+            dialog.close(true);
+        });
+        dialog.show(title, message, [okBtn]);
     },
     /**
      * @method hasIllegalChars
@@ -574,7 +593,68 @@ function(instance) {
 			var okBtn = dialog.createCloseButton(btnLoc.buttons.ok);
     		dialog.show(loc.notification.error.title, loc.notification.error.deleteCategory, [okBtn]);
         }
-    }
+    },
+    confirmPublishCategory : function(category, makePublic) {
+        var me = this;
+        var loc = me.instance.getLocalization();
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var service = this.instance.getService();
+        var buttons = [];
+        
+        var cancelBtn = dialog.createCloseButton(loc.buttons.cancel);
+        buttons.push(cancelBtn);
+        
+        var operationalBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        operationalBtn.addClass('primary');
+        operationalBtn.setHandler(function() {
+            service.publishCategory(category.getId(), makePublic, function(wasSuccess) {
+                me._handlePublishCategory(category, makePublic, wasSuccess);
+            });
+            dialog.close();
+        });
+        buttons.push(operationalBtn);        
+        var locParams = [category.getName()];
+
+        if(makePublic) {
+            operationalBtn.setTitle(loc.buttons.changeToPublic);
+            var msg = this._formatMessage(loc.notification.categoryToPublic.message, locParams);
+            dialog.show(loc.notification.categoryToPublic.title, msg, buttons);
+        }
+        else {
+            operationalBtn.setTitle(loc.buttons.changeToPrivate);
+            var msg = this._formatMessage(loc.notification.categoryToPrivate.message, locParams);
+            dialog.show(loc.notification.categoryToPrivate.title, msg, buttons);
+        }
+    },
+    
+    _handlePublishCategory : function(category, makePublic, wasSuccess) {
+        if(!wasSuccess) {
+            var loc = this.instance.getLocalization("notification");
+            this._showMessage(loc['error'].title, loc['error'].generic);
+            return;
+        }
+        var sandbox = this.instance.sandbox;
+        // check map layers for categorychanges
+        var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        
+        var layerId = this._getMapLayerId(category.getId());
+        var mapLayer = mapLayerService.findMapLayer(layerId);
+        if(!mapLayer) {
+            // maplayer not found, this should not be possible
+            var loc = this.instance.getLocalization("notification");
+            this._showMessage(loc['error'].title, loc['error'].generic);
+            return;
+        } 
+        if(makePublic) {
+            mapLayer.addPermission("publish", "publication_permission_ok");
+        }
+        else {
+            mapLayer.addPermission("publish", "no_publication_permission");
+        }
+        // send an event to notify other bundles of updated permissions
+        var event = sandbox.getEventBuilder('MapLayerEvent')(layerId, 'update');
+        sandbox.notifyAll(event);
+   }
 }, {
     /**
      * @property {String[]} protocol

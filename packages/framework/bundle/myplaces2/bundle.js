@@ -76,6 +76,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
             "src" : "../../../../bundles/framework/bundle/myplaces2/request/DeleteCategoryRequest.js"
         }, {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/myplaces2/request/PublishCategoryRequest.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/myplaces2/request/EditRequestHandler.js"
 		},
 		/* service */

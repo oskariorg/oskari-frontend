@@ -1,7 +1,10 @@
 /**
  * @class Oskari.mapframework.bundle.mapfull.MapFullBundleInstance
  * 
- * The full map window application. Begins building the application on #start() method call.
+ * Initializes Oskari core and starts a map window application. Much of the map related properties
+ * and initial state are read from bundle configuration/state. 
+ * 
+ * See bundle documentation at http://www.oskari.org/trac/wiki/DocumentationBundleMapfull
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance", 
 /**
@@ -17,7 +20,7 @@ function() {
     /**
      * @property {String} mapDivId
      * ID of the DOM element the map will be rendered to 
-     * TODO: setup as a config parameter
+     * Configurable through conf.mapElement
      */
 	this.mapDivId = "mapdiv";
 }, {
@@ -71,23 +74,12 @@ function() {
             adjustMapSize();
         }
         
-		var module = Oskari.clazz.create('Oskari.mapframework.ui.module.common.MapModule', "Main");
+		var module = Oskari.clazz.create('Oskari.mapframework.ui.module.common.MapModule', "Main", this.conf.imageLocation);
 
 		this.mapmodule = module;
 		var map = this.sandbox.register(module);
 		
         module.start(this.sandbox);
-
-        
-		// touch navigation - breaks porttimouse drag handling 
-		// should create a plugin for this
-		/*
-		map.addControl(new OpenLayers.Control.TouchNavigation({
-			dragPanOptions : {
-				enableKinetic : true
-			}
-		}));
-*/		
 
 		map.render(this.mapDivId);
         // startup plugins
@@ -107,7 +99,7 @@ function() {
      * @method start
      * Implements BundleInstance protocol start method.
      * Initializes Oskari core and Oskari.mapframework.service.MapLayerService.
-     * Creates the map view by calling #_createUi() and moves it to location and zoom
+     * Creates the map view and moves it to location and zoom
      * level specified by #state.
      * 
      * Also defines Proj4js.defs for "EPSG:3067" and "EPSG:4326".
@@ -128,6 +120,11 @@ function() {
 		var sandbox = core.getSandbox();
 		this.sandbox = sandbox;
 		
+		// take map div ID from config if available
+		if(conf && conf.mapElement) {
+		    this.mapDivId = conf.mapElement;
+		}
+		
         // Init user
         sandbox.setUser(conf.user);
         sandbox.setAjaxUrl(conf.globalMapAjaxUrl);
@@ -138,9 +135,6 @@ function() {
 		// create enhancements
 		var enhancements = [];
 		enhancements.push(Oskari.clazz.create('Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnhancement'));
-
-		// OpenLayersImagePathEnhancement
-	    // OpenLayers.ImgPath = Oskari.$().startup.imageLocation + "/lib/openlayers/img/";
         
 		core.init(services, enhancements);
 		
@@ -234,7 +228,8 @@ function() {
 	
     /**
      * @method setState
-     * Sets the map state to one specified in the parameter
+     * Sets the map state to one specified in the parameter. State is bundle specific, check the
+     * bundle documentation for details.
      * @param {Object} state bundle state as JSON
      */
     setState : function(state) {
@@ -270,12 +265,13 @@ function() {
                 state.north,
                 state.zoom);
         }
-        // FIXME: this is what start-map-with -enhancements should be doing, they are just doing it in wrong place
+
         this.sandbox.syncMapState(true);
     },
 	/**
 	 * @method getState
-	 * Returns bundle state as JSON
+	 * Returns bundle state as JSON. State is bundle specific, check the
+     * bundle documentation for details.
 	 * @return {Object} 
 	 */
 	getState : function() {

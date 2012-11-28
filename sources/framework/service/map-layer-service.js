@@ -1,34 +1,4 @@
 /**
- * @class Oskari.mapframework.service.MapLayerServiceModelBuilder
- * Protocol/interface declaration for MapLayer JSON parser implementations.
- * Provides an interface for bundles to add custom map layer implementations/data.
- * Used to parse a JSON into a given maplayer object. Used in conjuntion with 
- * Oskari.mapframework.service.MapLayerService.registerLayerModel() and 
- * Oskari.mapframework.service.MapLayerService.registerLayerModelBuilder()
- */
-Oskari.clazz.define('Oskari.mapframework.service.MapLayerServiceModelBuilder',
-
-/**
- * @method create called automatically on construction
- * @static
- */
-function() {
-}, {
-    /**
-     * @method parseLayerData
-     * Interface method declaration. Implementation should do the parsing from JSON to MapLayer Object
-     * 
-     * @param {Object} layer layer object? TODO: check
-     * @param {Object} layerJson JSON data representing the map layer
-     * @param {Oskari.mapframework.service.MapLayerService} maplayerService
-     * reference to map layer service
-     */
-    parseLayerData : function(layer, layerJson, maplayerService) {
-
-    }
-});
-
-/**
  * @class Oskari.mapframework.service.MapLayerService
  *
  * Handles everything MapLayer related.
@@ -48,7 +18,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
  */
 function(mapLayerUrl, sandbox) {
 
-    /** searchUrl url that will give us results */
     this._mapLayerUrl = mapLayerUrl;
     this._sandbox = sandbox;
     this._loadedLayersList = new Array();
@@ -100,6 +69,7 @@ function(mapLayerUrl, sandbox) {
     },
     /**
      * @method addLayer
+     * Adds the layer to them Oskari system so it can be added to the map etc.
      * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layerModel
      *            parsed layer model to be added (must be of type declared in #typeMapping)
      * @param {Boolean} suppressEvent (optional)
@@ -170,14 +140,6 @@ function(mapLayerUrl, sandbox) {
         // TODO: notify if layer not found?
     },
     /**
-     * @method loadAllLayers
-     * @deprecated what should this do when we have separate #loadAllLayersAjax()?
-	 * @throws Error as default, not implemented yet
-     */
-    loadAllLayers : function() {
-        throw 'TBD: loading not implemented';
-    },
-    /**
      * @method loadAllLayersAjax
      * Loads layers JSON using the ajax URL given on #create() 
      * and parses it to internal layer objects by calling #createMapLayer() and #addLayer()
@@ -210,6 +172,7 @@ function(mapLayerUrl, sandbox) {
      * Internal callback method for ajax loading in #loadAllLayersAjax()
      * @param {Object} pResp ajax response in JSON format
      * @param {Function} callbackSuccess method to be called when layers have been loaded succesfully
+     * @private
      */
     _loadAllLayersAjaxCallBack : function(pResp, callbackSuccess) {
 	    var allLayers = pResp.layers;
@@ -229,19 +192,19 @@ function(mapLayerUrl, sandbox) {
     },
     /**
      * @method getAllLayers
+     * Returns an array of layers added to the service for example via #addLayer()
      * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]} 
-     * 	 Returns an array of layers added to the service for example via #addLayer()
      */
     getAllLayers : function() {
-        var lang = Oskari.$().sandbox.getLanguage();
         return this._loadedLayersList;
     },
     /**
      * @method getAllLayersByMetaType
+     * Returns an array of layers added to the service that have the given metatype (layer.getMetaType() === type).
+     * 
      * @param {String} type
      *            metatype to filter the layers with
      * @return {Mixed[]/Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]}
-     * 	 Returns an array of layers added to the service that have the given metatype (layer.getMetaType() === type).
      */
     getAllLayersByMetaType : function(type) {
         var list = [];
@@ -344,7 +307,6 @@ function(mapLayerUrl, sandbox) {
      */
     _createGroupMapLayer : function(baseMapJson, isBase) {
 
-        /** TODO check wfs vs wms * */
         var baseLayer = Oskari.clazz.create('Oskari.mapframework.domain.WmsLayer');
         if(isBase) {
             baseLayer.setAsBaseLayer();
@@ -364,42 +326,52 @@ function(mapLayerUrl, sandbox) {
         baseLayer.setMetadataIdentifier(baseMapJson.dataUrl_uuid);
         
         
-        baseLayer.setOrganizationName(baseMapJson.orgName);
-        baseLayer.setInspireName(baseMapJson.inspire);
+        if(baseMapJson.orgName) {
+            baseLayer.setOrganizationName(baseMapJson.orgName);
+        }
+        else {
+            baseLayer.setOrganizationName("");
+        }
+        
+        if(baseMapJson.inspire) {
+            baseLayer.setInspireName(baseMapJson.inspire);
+        }
+        else {
+            baseLayer.setInspireName("");
+        }
+        baseLayer.setLegendImage(baseMapJson.legendImage);
+        baseLayer.setDescription(baseMapJson.info);
 
-        baseLayer.setFeatureInfoEnabled(false);
+        baseLayer.setQueryable(false);
         
         if(baseMapJson.permissions) {
-            	for(var perm in baseMapJson.permissions) {
-            		baseLayer.addPermission(perm, baseMapJson.permissions[perm]);	
-            	}
-            }
+        	for(var perm in baseMapJson.permissions) {
+        		baseLayer.addPermission(perm, baseMapJson.permissions[perm]);	
+        	}
+        }
 
 
         for(var i = 0; i < baseMapJson.subLayer.length; i++) {
-            // Notice that we are adding layers to baselayers subclass array
+            // Notice that we are adding layers to baselayers sublayers array
             var subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
             baseLayer.getSubLayers().push(subLayer);
         }
 
-        /* Opacity */
+        // Opacity
         if(baseMapJson.opacity != null) {
             baseLayer.setOpacity(baseMapJson.opacity);
         } else if(baseLayer.getSubLayers().length > 0) {
-            baseLayer.setOpacity(baseLayer.getSubLayers()[0].getOpacity());
+            var subLayerOpacity = baseLayer.getSubLayers()[0].getOpacity();
+            if(subLayerOpacity != null) {
+                baseLayer.setOpacity(subLayerOpacity);
+            }
+            else {
+                baseLayer.setOpacity(100);
+            }
         } else {
             baseLayer.setOpacity(100);
         }
 
-        /* Legend image */
-        if(baseMapJson.legendImage != null && baseMapJson.legendImage != "") {
-            baseLayer.setLegendImage(baseMapJson.legendImage);
-        }
-
-        /* Info */
-        if(baseMapJson.info != null && baseMapJson.info != "") {
-            baseLayer.setDescription(baseMapJson.info);
-        }
 
         return baseLayer;
     },
@@ -424,14 +396,9 @@ function(mapLayerUrl, sandbox) {
             }
             layer = Oskari.clazz.create(this.typeMapping[mapLayerJson.type]);
 
-            /*
-             * these may be implemented as jsonHandler
-             */
+            //these may be implemented as jsonHandler
             if(mapLayerJson.type == 'wmslayer') {
                 this._populateWmsMapLayerAdditionalData(layer, mapLayerJson);
-            } else if(mapLayerJson.type == 'wmtslayer') {
-            	// FIXME: WMTS is from a bundle, why is this in here? 
-                this._populateWmtsMapLayerAdditionalData(layer, mapLayerJson);
             } else if(mapLayerJson.type == 'vectorlayer') {
                 layer.setStyledLayerDescriptor(mapLayerJson.styledLayerDescriptor);
             }
@@ -444,18 +411,40 @@ function(mapLayerUrl, sandbox) {
             layer.setAsNormalLayer();
             layer.setId(mapLayerId);
             layer.setName(mapLayerJson.name);
-            layer.setOpacity(mapLayerJson.opacity);
+            
+            if(mapLayerJson.opacity != null) {
+                layer.setOpacity(mapLayerJson.opacity);
+            }
+            else {
+                layer.setOpacity(100);
+            }
             layer.setMaxScale(mapLayerJson.maxScale);
             layer.setMinScale(mapLayerJson.minScale);
             layer.setDescription(mapLayerJson.subtitle);
-            layer.setDataUrl(mapLayerJson.dataUrl);
+            //layer.setDataUrl(mapLayerJson.dataUrl);
             layer.setMetadataIdentifier(mapLayerJson.dataUrl_uuid);
-            layer.setOrganizationName(mapLayerJson.orgName);
-            layer.setInspireName(mapLayerJson.inspire);
-            layer.setOrderNumber(mapLayerJson.orderNumber);
+            if(mapLayerJson.backendStatus && layer.setBackendStatus) {
+                layer.setBackendStatus(mapLayerJson.backendStatus);
+            }
+            if(mapLayerJson.orgName) {
+                layer.setOrganizationName(mapLayerJson.orgName);
+            }
+            else {
+                layer.setOrganizationName("");
+            }
+            
+            if(mapLayerJson.inspire) {
+                layer.setInspireName(mapLayerJson.inspire);
+            }
+            else {
+                layer.setInspireName("");
+            }
+            //layer.setOrderNumber(mapLayerJson.orderNumber);
             layer.setVisible(true);
             
-            layer.setGeometryWKT(mapLayerJson.geom);
+            if(mapLayerJson.geom && layer.setGeometryWKT) {
+                layer.setGeometryWKT(mapLayerJson.geom);
+            }
             if(mapLayerJson.permissions) {
             	for(var perm in mapLayerJson.permissions) {
             		layer.addPermission(perm, mapLayerJson.permissions[perm]);	
@@ -497,30 +486,6 @@ function(mapLayerUrl, sandbox) {
         }
         // default to enabled, only check if it is disabled
         layer.setFeatureInfoEnabled(jsonLayer.gfi !== 'disabled');
-        return this._populateStyles(layer, jsonLayer);
-    },
-    /**
-     * @method _populateWmtsMapLayerAdditionalData
-     * @deprecated
-	 * 
-	 * FIXME: WMTS is from a bundle, why is this in here?  
-	 * Same things are done in Oskari.mapframework.wmts.service.WmtsLayerModelBuilder 
-     * 
-     * Parses WMTS specific data from JSON to a Oskari.mapframework.wmts.domain.WmtsLayer Object
-     * 
-     * @private 
-     * @param {Oskari.mapframework.wmts.domain.WmtsLayer} layer
-     * @param {Object} jsonLayer JSON presentation for a WMTS layer
-     * @return {Oskari.mapframework.wmts.domain.WmtsLayer} returns the same layer object with populated values for convenience
-     */
-    _populateWmtsMapLayerAdditionalData : function(layer, jsonLayer) {
-        layer.setWmtsName(jsonLayer.wmtsName);
-        if(jsonLayer.wmtsUrl) {
-            var wmtsUrls = jsonLayer.wmtsUrl.split(",");
-            for(var i = 0; i < wmtsUrls.length; i++) {
-                layer.addWmtsUrl(wmtsUrls[i]);
-            }
-        }
         return this._populateStyles(layer, jsonLayer);
     },
     /**
@@ -579,10 +544,12 @@ function(mapLayerUrl, sandbox) {
             layer.selectStyle("");
         }
 
-        layer.setQueryable(jsonLayer.isQueryable);
+        layer.setQueryable((jsonLayer.isQueryable == true));
         layer.setLegendImage(jsonLayer.legendImage);
         layer.setDataUrl(jsonLayer.dataUrl);
-        layer.setQueryFormat(jsonLayer.formats.value);
+        if(jsonLayer.formats && jsonLayer.formats.value) {
+            layer.setQueryFormat(jsonLayer.formats.value);
+        }
 
         return layer;
     },
@@ -604,10 +571,6 @@ function(mapLayerUrl, sandbox) {
 			var foundLayer = this.findMapLayer(id);
             throw "Trying to add map layer with id '" + id + " (" + name + ")' but that id is already reserved for '" + foundLayer.getName() + "'";
 		}
-        /*
-        if(foundLayer != null) {
-            throw "Trying to add map layer with id '" + id + " (" + name + ")' but that id is already reserved for '" + foundLayer.getName() + "'";
-        }*/
     },
     /**
      * @method findMapLayer
@@ -617,7 +580,7 @@ function(mapLayerUrl, sandbox) {
      * @param {String}
      *            id layer id we want to find
      * @param {Array}
-     *            layerList (optional) array of maplayer objects, defaults to all added layers
+     *            layerList (optional) array of maplayer objects, defaults to all layers
      * @return {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} 
      * 	layerModel if found matching id or null if not found
      */
@@ -632,15 +595,14 @@ function(mapLayerUrl, sandbox) {
             }
 
         }
+        // didnt find layer from base level, try sublayers
         for(var i = 0; i < layerList.length; i++) {
             var layer = layerList[i];
-            /* recurse to sublayers */
+            // recurse to sublayers
             var subLayers = layer.getSubLayers();
-            for(var j = 0; j < subLayers.length; j++) {
-                var subLayer = this.findMapLayer(id, subLayers);
-                if(subLayer != null) {
-                    return subLayer;
-                }
+            var subLayer = this.findMapLayer(id, subLayers);
+            if(subLayer != null) {
+                return subLayer;
             }
         }
 
@@ -653,5 +615,3 @@ function(mapLayerUrl, sandbox) {
      */
     'protocol' : ['Oskari.mapframework.service.Service']
 });
-
-/* Inheritance */

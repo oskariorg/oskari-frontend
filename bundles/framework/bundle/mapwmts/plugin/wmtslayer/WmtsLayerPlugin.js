@@ -125,7 +125,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         var layerDef = layer.getWmtsLayerDef();
 
         var layerName = null;
-        if(layer.isBaseLayer()) {
+        if(layer.isBaseLayer()||layer.isGroupLayer()) {
             layerName = 'basemap_' + layer.getId();
         } else {
             layerName = 'layer_' + layer.getId();
@@ -194,7 +194,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         if(!layer.isLayerOfType('WMTS'))
             return;
 
-        if(layer.isBaseLayer()) {
+        if(layer.isBaseLayer()||layer.isGroupLayer()) {
             var baseLayerId = "";
             if(layer.getSubLayers().length > 0) {
                 for(var i = 0; i < layer.getSubLayers().length; i++) {
@@ -217,7 +217,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         if(!layer.isLayerOfType('WMTS'))
             return null;
 
-        if(layer.isBaseLayer()) {
+        if(layer.isBaseLayer()||layer.isGroupLayer()) {
             var baseLayerId = "";
             if(layer.getSubLayers().length > 0) {
                 for(var i = 0; i < layer.getSubLayers().length; i++) {
@@ -238,7 +238,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         if(!layer.isLayerOfType('WMTS'))
             return;
 
-        if(layer.isBaseLayer()) {
+        if(layer.isBaseLayer()||layer.isGroupLayer()) {
             if(layer.getSubLayers().length > 0) {
                 for(var bl = 0; bl < layer.getSubLayers().length; bl++) {
                     var mapLayer = this._map.getLayersByName('basemap_' + layer

@@ -39,7 +39,9 @@ Oskari.registerLocalization({
       "save": "Tallenna",
       "movePlaces": "Siirrä kohteet ja poista",
       "deleteCategory": "Poista",
-      "deleteCategoryAndPlaces": "Poista kohteineen"
+      "deleteCategoryAndPlaces": "Poista kohteineen",
+      "changeToPublic": "Muuta julkiseksi",
+      "changeToPrivate": "Muuta yksityiseksi"
     },
     "placeform": {
       "title": "Kohteen tiedot",
@@ -100,11 +102,20 @@ Oskari.registerLocalization({
         "deleteConfirm": "Haluatko poistaa karttatason {0}?",
         "deleted": "Karttataso poistettu."
       },
+      "categoryToPublic": {
+        "title": "Muuta karttataso julkiseksi",
+        "message": "Olet muuttamassa karttatasoa \"{0}\" julkiseksi. Voit jakaa julkisen karttatason verkossa tai julkaista sen karttana toiseen verkkopalveluun. Muut käyttäjät voivat myös katsoa karttatasoa Paikkatietoikkunassa."
+      },
+      "categoryToPrivate": {
+        "title": "Muuta karttataso yksityiseksi",
+        "message": "Olet muuttamassa karttatasoa \"{0}\" yksityiseksi. Tämän jälkeen et voi jakaa tai julkaista karttana, eivätkä muut käyttäjät näe sitä Paikkatietoikkunassa."
+      },
       "error": {
         "addCategory": "Tason tallennus epäonnistui. Kohdetta ei ole tallennettu.",
         "editCategory": "Tason tallennus epäonnistui.",
         "savePlace": "Kohteen tallentaminen ei onnistunut.",
         "title": "Virhe!",
+        "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin.",
         "deleteCategory": "Virhe poistossa!",
         "deleteDefault": "Oletuskarttatasoa ei voi poistaa."
       }

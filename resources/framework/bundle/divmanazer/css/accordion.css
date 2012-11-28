@@ -24,3 +24,7 @@ div.accordion div.accordion_panel.open {
 div.accordion div.accordion_panel div.content {
     padding : 5px;
 }
+
+div.accordion div.accordionmsg {
+    padding : 10px;
+}

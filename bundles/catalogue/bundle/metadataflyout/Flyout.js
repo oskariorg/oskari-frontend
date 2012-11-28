@@ -258,6 +258,7 @@ function(instance, locale, loader) {
 		
 	},
 	
+	
 	/**
 	 * @method loadMetadataForState
 	 */
@@ -282,17 +283,20 @@ function(instance, locale, loader) {
 			 /* HACK BEGIN */
             /* Let's fix HREFs to click events */
             var links = views[viewId].find("a[href]");
+	    var isMetaLink = new RegExp("^\\?.*");
+		
 
             jQuery.each(links, function(index, ahref) {
 
                 var el = jQuery(ahref);
                 var href = el.attr('href');
+
                 if(!href) {
-                    return;
+                   return;
                 }
-                if(!href[0] == '?') {
-                    return;
-                }
+                if(!isMetaLink.test(href) ) {
+		   return;
+ 		}
 
                 var splits = href.split("&");
                 var argMap = {};
@@ -300,6 +304,8 @@ function(instance, locale, loader) {
                     var keyVal = part.split("=");
                     argMap[keyVal[0]] = keyVal[1];
                 });
+
+		
 
                 el.attr('href', null);
                 el.click({
@@ -324,6 +330,7 @@ function(instance, locale, loader) {
 		me.instance.getLoader().loadGeonetworkAjaxHTML(handler,viewId, metadata.uuid, metadata.RS_Identifier_Code, metadata.RS_Identifier_CodeSpace);
 
 	},
+	
 	/**
 	 * @method loadMetadataJSONForState
 	 */

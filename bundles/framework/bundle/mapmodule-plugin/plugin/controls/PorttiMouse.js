@@ -1,439 +1,597 @@
+/* new implementation */
+/* this is based on Navigation Control with Hover handler instead of MouseDefaults and some other stuff */
+
 /* Copyright (c) 2006-2011 by OpenLayers Contributors (see authors.txt for
- * full list of contributors). Published under the Clear BSD license.
- * See http://svn.openlayers.org/trunk/openlayers/license.txt for the
- * * full text of the license. */
+* full list of contributors). Published under the Clear BSD license.
+* See http://svn.openlayers.org/trunk/openlayers/license.txt for the
+* full text of the license. */
 
 /**
- * Copyright (c) 2011,2012 National Land Survey of Finland.
+ * @requires OpenLayers/Control/ZoomBox.js
+ * @requires OpenLayers/Handler/MouseWheel.js
+ * @requires OpenLayers/Handler/Click.js
+ * @requires OpenLayers/Handler/Drag.js
  */
-OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control,
-{
-    oldxy : { x : 0, y : 0 },
-    clickTimerId : null,
-    performedDrag : false,
-    wheelObserver : null,
-    _hoverEvent : null,
-    name : 'PorttiMouse',
-    events : new OpenLayers.Events(),
-    constructor : function(config) {
-        this.sandbox = config.sandbox;
-        this.mapmodule = config.mapmodule;
-    },
-    isReallyLeftClick : function(evt) {
-        var isLeftClick = OpenLayers.Event.isLeftClick(evt);
-        if(isLeftClick === false) {
-            return false;
-        }
-        if(isLeftClick === true) {
-            return true;
-        }
-        if(isLeftClick != 0) {
-            return false;
-        }
-        return true;
-    },
-    /*
-    getName : function() {
-        // this.sandbox.printDebug("[PorttiMouse] getName: " + this.name);
-        return this.name;
-    },
-    init : function(sandbox) {
-        // this.sandbox.printDebug("[PorttiMouse] init called.");
-    }, */
-    queueClick : function(evt) {        
-        var me = this;
-        this.clickTimerId = window.setTimeout(
-           OpenLayers.Function.bind(
-               this.defaultClick, 
-               this, 
-               evt), 
-           300
-       );
-    },
-    click : function(evt) {
-        if (this.clickTimerId != null) {
-            window.clearTimeout(this.clickTimerId);
-            this.clickTimerId = null;
-            this.defaultDblClick(evt);
-        } else {
-            // var event = 
-            //     this.single ? OpenLayers.Util.extend({}, evt) : null;
-            var event = OpenLayers.Util.extend({}, evt);
-            this.queueClick(event);
-        }
-        this.oldxy.x = evt.xy.x;
-        this.oldxy.y = evt.xy.y;
-    },
-    initialize : function() {
-        OpenLayers.Control.prototype.initialize.apply(this, arguments);
-    },    
-    destroy : function() {
-        //this.sandbox.unregister(this);
-        if(this.handler) {
-            this.handler.destroy();
-        }
-        this.handler = null;
 
-        this.map.events.un({
-            "click" : this.click,
-//            "dblclick" : this.defaultDblClick,
-            "mousedown" : this.defaultMouseDown,
-            "mouseup" : this.defaultMouseUp,
-            "mousemove" : this.defaultMouseMove,
-            "mouseout" : this.defaultMouseOut,
-            "touchstart" : this.defaultTouchStart,
-            "touchend" : this.defaultTouchEnd,
-            "touchmove" : this.defaultTouchMove,
-            scope : this
-        });
+/* Attempting to replace previous PorttiMouse implementation with OpenLayers.Control.Navigation
+* with added Hover and Drag handler in a supporting role.
+*
+*/
 
-        // unregister mousewheel events specifically on the window and document
-        OpenLayers.Event.stopObserving(window, "DOMMouseScroll", this.wheelObserver);
-        OpenLayers.Event.stopObserving(window, "mousewheel", this.wheelObserver);
-        OpenLayers.Event.stopObserving(document, "mousewheel", this.wheelObserver);
-        this.wheelObserver = null;
+/**
+ * Class: OpenLayers.Control.Navigation
+ * The navigation control handles map browsing with mouse events (dragging,
+ *     double-clicking, and scrolling the wheel).  Create a new navigation
+ *     control with the <OpenLayers.Control.Navigation> control.
+ *
+ *     Note that this control is added to the map by default (if no controls
+ *     array is sent in the options object to the <OpenLayers.Map>
+ *     constructor).
+ *
+ * Inherits:
+ *  - <OpenLayers.Control>
+ */
+OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 
-        OpenLayers.Control.prototype.destroy.apply(this, arguments);
-    },
-    draw : function() {
-       this.map.events.on({
-            "click" : this.click,
-//            "dblclick" : this.defaultDblClick,
-            "mousedown" : this.defaultMouseDown,
-            "mouseup" : this.defaultMouseUp,
-            "mousemove" : this.defaultMouseMove,
-            "mouseout" : this.defaultMouseOut,
-            "touchstart" : this.defaultTouchStart,
-            "touchend" : this.defaultTouchEnd,
-            "touchmove" : this.defaultTouchMove,
-            scope : this
-        });
+	/**
+	 * Property: type
+	 * {OpenLayers.Control.TYPES}
+	 */
+	type : OpenLayers.Control.TYPE_TOOL,
 
-        this.registerWheelEvents();
+	/**
+	 * Property: panned
+	 * {Boolean} The map moved.
+	 */
+	panned : false,
 
-    },
-    registerWheelEvents : function() {
-        this.wheelObserver = OpenLayers.Function.bindAsEventListener(this.onWheelEvent, this);
-        // register mousewheel events specifically on the window and document
-        OpenLayers.Event.observe(window, "DOMMouseScroll", this.wheelObserver);
-        OpenLayers.Event.observe(window, "mousewheel", this.wheelObserver);
-        OpenLayers.Event.observe(document, "mousewheel", this.wheelObserver);
-    },
-    defaultClick : function(evt) {
-        if (!this.isReallyLeftClick(evt)) {
-            return;
-        }
-        this.clickTimerId = null;
-        var notAfterDrag = !this.performedDrag;
-        this.performedDrag = false;
-        if(notAfterDrag) {
-            // moved to mouseup
-            // this.sandbox.request(this,
-            // this.sandbox.getRequestBuilder('MapModulePlugin.MapClickRequest')
-            // (this.map.getLonLatFromViewPortPx(evt.xy),
-            // evt.xy.x, evt.xy.y));
-            this.sendMapClickEvent(evt);
-        }
-        return notAfterDrag;
-    },
-    defaultDblClick : function(evt) {
-        if ((evt.xy.x == this.oldxy.x) &&
-            (evt.xy.y == this.oldxy.y)) {
-            this.mapmodule.centerMapByPixels(evt.xy.x, 
-                                             evt.xy.y, 
-                                             true, 
-                                             true);
-            this.mapmodule.zoomIn();
-        }
-        // OpenLayers.Event.stop(evt);
-        return false;
-    },
-    pinchZoom : function(event) {
-        var scale = event.scale;
-        if(scale < 1.0) {
-            this.mapmodule.zoomOut();
-        } else if(scale > 1.0) {
-            this.mapmodule.zoomIn();
-        }
-        event.preventDefault();
-    },
-    defaultTouchStart : function(event) {
-        if(event.touches.length != 1) {
-            return;
-        }
-        var touch = event.touches[0];
-        var x = touch.pageX;
-        var y = touch.pageY;
-        this.mouseDragStart = { x : x, y : y};
-        document.onselectstart = OpenLayers.Function.False;
-    },
-    defaultTouchMove : function(event) {
-        if(event.targetTouches.length > 1) {
-            this.pinchZoom(event);
-            return;
-        }
-        event.preventDefault();
-        var curX = event.targetTouches[0].pageX;
-        var curY = event.targetTouches[0].pageY;
-        // record the mouse position, used in onWheelEvent
-        this.mousePosition = { x : curX, y : curY};
+	/**
+	 * Property: interval
+	 * {Integer} The number of milliseconds that should ellapse before
+	 *     panning the map again. Defaults to 1 millisecond. In most cases
+	 *     you won't want to change this value. For slow machines/devices
+	 *     larger values can be tried out.
+	 */
+	interval : 1,
 
-        if(this.mouseDragStart != null) {
-            if(this.performedDrag === false) {
-                // send event on first move after mouse down
-                this.mapmodule.notifyStartMove();
-            }
-            var deltaX = this.mouseDragStart.x - curX;
-            var deltaY = this.mouseDragStart.y - curY;
-            this.mouseDragStart = this.mousePosition;
-            this.mapmodule.moveMapByPixels(deltaX, deltaY, true, true);
-            this.map.div.style.cursor = "move";
-            this.performedDrag = true;
-        } 
-    },
-    defaultTouchEnd : function(evt) {
-        if(this.performedDrag) {
-            this.mapmodule.notifyMoveEnd();
-        }
-        document.onselectstart = null;
-        this.mouseDragStart = null;
-        this.map.div.style.cursor = "";
-    },
-    _clone : function(obj) {
-         return eval(uneval(obj));
-    },
-    defaultMouseDown : function(evt) {
-        if(!this.isReallyLeftClick(evt)) {
-            return;
-        }
-        this.mouseDragStart = evt.xy.clone();
-        this.performedDrag = false;
-        if(evt.shiftKey) {
-            this.map.div.style.cursor = "crosshair";
-            this.zoomBox = OpenLayers.Util.createDiv('zoomBox', this.mouseDragStart, null, null, "absolute", "2px solid red");
-            this.zoomBox.style.backgroundColor = "white";
-            this.zoomBox.style.filter = "alpha(opacity=50)";
-            // IE
-            this.zoomBox.style.opacity = "0.50";
-            this.zoomBox.style.fontSize = "1px";
-            this.zoomBox.style.zIndex = this.map.Z_INDEX_BASE["Popup"] - 1;
-            this.map.eventsDiv.appendChild(this.zoomBox);
-        }
+	/**
+	 * APIProperty: documentDrag
+	 * {Boolean} If set to true, mouse dragging will continue even if the
+	 *     mouse cursor leaves the map viewport. Default is false.
+	 */
+	documentDrag : false,
 
-        document.onselectstart = OpenLayers.Function.False;
+	/**
+	 * Property: kinetic
+	 * {OpenLayers.Kinetic} The OpenLayers.Kinetic object.
+	 */
+	kinetic : null,
 
-        //this.sandbox.request(this,
-        // this.sandbox.getRequestBuilder('MapMoveStartRequest')());
-    },
-    defaultMouseMove : function(evt) {
-        // record the mouse position, used in onWheelEvent
-        this.mousePosition = evt.xy.clone();
+	/**
+	 * APIProperty: enableKinetic
+	 * {Boolean} Set this option to enable "kinetic dragging". Can be
+	 *     set to true or to an object. If set to an object this
+	 *     object will be passed to the {<OpenLayers.Kinetic>}
+	 *     constructor. Defaults to false.
+	 */
+	enableKinetic : false,
 
-        if(this.mouseDragStart != null) {
-            if(this.zoomBox) {
-                var deltaX = Math.abs(this.mouseDragStart.x - evt.xy.x);
-                var deltaY = Math.abs(this.mouseDragStart.y - evt.xy.y);
-                this.zoomBox.style.width = Math.max(1, deltaX) + "px";
-                this.zoomBox.style.height = Math.max(1, deltaY) + "px";
-                if(evt.xy.x < this.mouseDragStart.x) {
-                    this.zoomBox.style.left = evt.xy.x + "px";
-                }
-                if(evt.xy.y < this.mouseDragStart.y) {
-                    this.zoomBox.style.top = evt.xy.y + "px";
-                }
-            } else {
-                if(this.performedDrag === false) {
-                    // send event on first move after mouse down
-                    this.mapmodule.notifyStartMove();
-                }
-                var deltaX = this.mouseDragStart.x - evt.xy.x;
-                var deltaY = this.mouseDragStart.y - evt.xy.y;
-                this.mapmodule.moveMapByPixels(deltaX, deltaY, true, true);
-                this.mouseDragStart = evt.xy.clone();
-                this.map.div.style.cursor = "move";
-            }
-            this.performedDrag = true;
-        } else {
-            this.notifyHover(evt);
-        }
-    },
-    defaultMouseUp : function(evt) {
-        if(!this.isReallyLeftClick(evt)) {
-            return;
-        }
-        if(this.zoomBox) {
-            this.zoomBoxEnd(evt);
-        } else {
-            if(this.performedDrag) {
-                //this.mapmodule.moveMapToLanLot(this.map.center);
-                //this.mapmodule.notifyMoveEnd();
-                // FIXME: This is an ugly hack to update history...
-                var nh = this.mapmodule._navigationHistoryTool;
-                var state = nh.getState();
-                nh.previousStack.unshift(state);
-                if(nh.previousStack.length > 1) {
-                    nh.onPreviousChange(nh.previousStack[1], nh.previousStack.length - 1);
-                }
-                if(nh.previousStack.length > (nh.limit + 1)) {
-                    nh.previousStack.pop();
-                }
-                if(nh.nextStack.length > 0) {
-                    nh.nextStack = [];
-                    nh.onNextChange(null, 0);
-                }
-                //this.mapmodule.adjustZoomLevel(0, false);
-                this.mapmodule.notifyMoveEnd();
-            } else {
-                // sthis.mouseUp(evt);
-            }
-        }
-        document.onselectstart = null;
-        this.mouseDragStart = null;
-        this.map.div.style.cursor = "";
-    },
-    sendMapClickEvent : function(evt) {
-        // this.mouseUpTimerId = null;
-        this.clickTimerId = null;
-        if (evt) {
-            var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
-            var builder = this.sandbox.getEventBuilder('MapClickedEvent');
-            var evt = builder(lonlat, evt.xy.x, evt.xy.y);
-            this.sandbox.notifyAll(evt, true);
-        }
-    },
-    // queueMouseUp : function(evt) {        
-    //     var me = this;
-    //     this.mouseUpTimerId = window.setTimeout(
-    //         function() {
-    //             me.sendMapClickEvent(evt);
-    //         }, 300
-    //    );
-    // },
-    // mouseUp : function(evt) {
-    //     if (this.mouseUpTimerId != null) {
-    //         window.clearTimeout(this.mouseUpTimerId);
-    //         this.mouseUpTimerId = null;
-    //         this.defaultDblClick(evt);
-    //     } else {
-    //         var event = OpenLayers.Util.extend({}, evt);
-    //         this.queueMouseUp(event);
-    //     }
-    // },
-    defaultMouseOut : function(evt) {
-        if(this.mouseDragStart != null && OpenLayers.Util.mouseLeft(evt, this.map.eventsDiv)) {
-            if(this.zoomBox) {
-                this.removeZoomBox();
-            }
-            // send event that dragging has stopped
-            //this.mapmodule.moveMapToLanLot(this.map.center);
-            this.mapmodule.notifyMoveEnd();
-            this.mouseDragStart = null;
-            this.map.div.style.cursor = "";
-        }
-    },
-    defaultWheelUp : function(evt) {
-        // center map to mouse location
-        //this.mapmodule.centerMapByPixels(evt.xy.x, evt.xy.y, true, true);
-        // zoom
-        this.mapmodule.zoomIn();
-    },
-    defaultWheelDown : function(evt) {
-        // center map to mouse location
-        //this.mapmodule.centerMapByPixels(evt.xy.x, evt.xy.y, true, true);
-        // zoom
-        this.mapmodule.zoomOut();
-    },
-    zoomBoxEnd : function(evt) {
-        if(this.mouseDragStart != null) {
-            if(Math.abs(this.mouseDragStart.x - evt.xy.x) > 5 || Math.abs(this.mouseDragStart.y - evt.xy.y) > 5) {
-                // TODO: refactor map references so that we only pass pixels to
-                // mapmodule?
-                var start = this.map.getLonLatFromViewPortPx(this.mouseDragStart);
-                var end = this.map.getLonLatFromViewPortPx(evt.xy);
-                var top = Math.max(start.lat, end.lat);
-                var bottom = Math.min(start.lat, end.lat);
-                var left = Math.min(start.lon, end.lon);
-                var right = Math.max(start.lon, end.lon);
-                var bounds = new OpenLayers.Bounds(left, bottom, right, top);
-                this.mapmodule.zoomToExtent(bounds, true);
-            } else {
-                this.mapmodule.centerMapByPixels(evt.xy.x, evt.xy.y, true, true);
-                this.mapmodule.zoomIn();
-            }
-            this.removeZoomBox();
-        }
-    },
-    removeZoomBox : function() {
-        this.map.eventsDiv.removeChild(this.zoomBox);
-        this.zoomBox = null;
-    },
-    notifyHover : function(evt) {
-        if(this.mapmodule.getStealth()) {
-            // ignore if in "stealth mode"
-            return;
-        }
+	/**
+	 * APIProperty: kineticInterval
+	 * {Integer} Interval in milliseconds between 2 steps in the "kinetic
+	 *     scrolling". Applies only if enableKinetic is set. Defaults
+	 *     to 10 milliseconds.
+	 */
+	kineticInterval : 10,
 
-        if(!this._hoverEvent) {
-            this._hoverEvent = this.sandbox.getEventBuilder("MouseHoverEvent")();
-        }
-        var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
+	/**
+	 * Property: pinchZoom
+	 * {<OpenLayers.Control.PinchZoom>}
+	 */
+	pinchZoom : null,
 
-        this._hoverEvent.set(lonlat.lon, lonlat.lat);
+	/**
+	 * APIProperty: pinchZoomOptions
+	 * {Object} Options passed to the PinchZoom control.
+	 */
+	pinchZoomOptions : null,
 
-        this.sandbox.notifyAll(this._hoverEvent, true);
-    },
-    /**
-     *  Mouse ScrollWheel code thanks to
-     * http://adomas.org/javascript-mouse-wheel/
-     */
-    onWheelEvent : function(e) {
-        // first determine whether or not the wheeling was inside the map
-        var inMap = false;
-        var elem = OpenLayers.Event.element(e);
-        while(elem != null) {
-            if(this.map && elem == this.map.div) {
-                inMap = true;
-                break;
-            }
-            // check if we mousewheel over a popup
-            if(elem.className == 'olPopup') {
-            	inMap = false;
-            	break;
-            }
-            elem = elem.parentNode;
-        }
+	/**
+	 * APIProperty: documentDrag
+	 * {Boolean} Allow panning of the map by dragging outside map viewport.
+	 *     Default is false.
+	 */
+	documentDrag : false,
 
-        if(inMap) {
+	/**
+	 * Property: zoomBox
+	 * {<OpenLayers.Control.ZoomBox>}
+	 */
+	zoomBox : null,
 
-            var delta = 0;
-            if(!e) {
-                e = window.event;
-            }
-            if(e.wheelDelta) {
-                delta = e.wheelDelta / 120;
-                if(window.opera && window.opera.version() < 9.2) {
-                    delta = -delta;
-                }
-            } else if(e.detail) {
-                delta = -e.detail / 3;
-            }
-            if(delta) {
-                // add the mouse position to the event because mozilla has a bug
-                // with clientX and clientY
-                // (see https://bugzilla.mozilla.org/show_bug.cgi?id=352179)
-                // getLonLatFromViewPortPx(e) returns wrong values
-                e.xy = this.mousePosition;
-                if(delta < 0) {
-                    this.defaultWheelDown(e);
-                } else {
-                    this.defaultWheelUp(e);
-                }
-                // prevent browser scrolling when zooming with mouse wheel
-                e.preventDefault();
-            }
-            // only wheel the map, not the window
-            OpenLayers.Event.stop(e);
-        }
-    },
-    CLASS_NAME : "OpenLayers.Control.PorttiMouse"
+	/**
+	 * APIProperty: zoomBoxEnabled
+	 * {Boolean} Whether the user can draw a box to zoom
+	 */
+	zoomBoxEnabled : true,
+
+	/**
+	 * APIProperty: zoomWheelEnabled
+	 * {Boolean} Whether the mousewheel should zoom the map
+	 */
+	zoomWheelEnabled : true,
+
+	/**
+	 * Property: mouseWheelOptions
+	 * {Object} Options passed to the MouseWheel control (only useful if
+	 *     <zoomWheelEnabled> is set to true)
+	 */
+	mouseWheelOptions : null,
+
+	/**
+	 * APIProperty: handleRightClicks
+	 * {Boolean} Whether or not to handle right clicks. Default is false.
+	 */
+	handleRightClicks : false,
+
+	/**
+	 * APIProperty: zoomBoxKeyMask
+	 * {Integer} <OpenLayers.Handler> key code of the key, which has to be
+	 *    pressed, while drawing the zoom box with the mouse on the screen.
+	 *    You should probably set handleRightClicks to true if you use this
+	 *    with MOD_CTRL, to disable the context menu for machines which use
+	 *    CTRL-Click as a right click.
+	 * Default: <OpenLayers.Handler.MOD_SHIFT
+	 */
+	zoomBoxKeyMask : OpenLayers.Handler.MOD_SHIFT,
+
+	/**
+	 * APIProperty: autoActivate
+	 * {Boolean} Activate the control when it is added to a map.  Default is
+	 *     true.
+	 */
+	autoActivate : true,
+	
+	/*
+	 * APIProperty: useCenterMapInWheelZoom
+	 * {Boolean} Use map center when wheel zooming (set to false to revert to default openlayers functionality)
+	 */
+	useCenterMapInWheelZoom: true,
+
+	/*
+	 * APIProperty: useCenterMapInWheelZoom
+	 * {Boolean} Use map center when wheel zooming (set to true to revert default openlayers functionality)
+	 */
+	useCenterMapInDblClickZoom: false,
+
+	/**
+	 * Constructor: OpenLayers.Control.Navigation
+	 * Create a new navigation control
+	 *
+	 * Parameters:
+	 * options - {Object} An optional object whose properties will be set on
+	 *                    the control
+	 */
+	initialize : function(options) {
+		this.handlers = {};
+		OpenLayers.Control.prototype.initialize.apply(this, arguments);
+	},
+	/* @method setup */
+	setup : function(mapmodule) {
+		this.mapmodule = mapmodule;
+		this.sandbox = this.mapmodule.getSandbox();
+		this._hoverEventBuilder = this.sandbox.getEventBuilder("MouseHoverEvent")
+		this._hoverEvent = this._hoverEventBuilder();
+		this._mapClickedBuilder = this.sandbox.getEventBuilder('MapClickedEvent');
+
+	},
+	/**
+	 * Method: destroy
+	 * The destroy method is used to perform any clean up before the control
+	 * is dereferenced.  Typically this is where event listeners are removed
+	 * to prevent memory leaks.
+	 */
+	destroy : function() {
+		this.deactivate();
+
+		if(this.zoomBox) {
+			this.zoomBox.destroy();
+		}
+		this.zoomBox = null;
+
+		if(this.pinchZoom) {
+			this.pinchZoom.destroy();
+		}
+		this.pinchZoom = null;
+
+		OpenLayers.Control.prototype.destroy.apply(this, arguments);
+	},
+	/**
+	 * Method: activate
+	 */
+	activate : function() {
+		this.handlers.drag.activate();
+		if(this.zoomWheelEnabled) {
+			this.handlers.wheel.activate();
+		}
+
+		this.handlers.click.activate();
+		this.handlers.hover.activate();
+
+		if(this.zoomBoxEnabled) {
+			this.zoomBox.activate();
+		}
+		if(this.pinchZoom) {
+			this.pinchZoom.activate();
+		}
+		return OpenLayers.Control.prototype.activate.apply(this, arguments);
+	},
+	/**
+	 * Method: deactivate
+	 */
+	deactivate : function() {
+		if(this.pinchZoom) {
+			this.pinchZoom.deactivate();
+		}
+		this.zoomBox.deactivate();
+		this.handlers.drag.deactivate();
+		this.handlers.click.deactivate();
+		this.handlers.wheel.deactivate();
+		this.handlers.hover.deactivate();
+		return OpenLayers.Control.prototype.deactivate.apply(this, arguments);
+	},
+	/**
+	 * Method: draw
+	 */
+	draw : function() {
+		if(this.enableKinetic) {
+			var config = {
+				interval : this.kineticInterval
+			};
+			if( typeof this.enableKinetic === "object") {
+				config = OpenLayers.Util.extend(config, this.enableKinetic);
+			}
+			this.kinetic = new OpenLayers.Kinetic(config);
+		}
+		this.handlers.drag = new OpenLayers.Handler.Drag(this, {
+			"move" : this.panMap,
+			"done" : this.panMapDone,
+			"down" : this.panMapStart
+		}, {
+			interval : this.interval,
+			documentDrag : this.documentDrag
+		});
+
+		// disable right mouse context menu for support of right click events
+		if(this.handleRightClicks) {
+			this.map.viewPortDiv.oncontextmenu = OpenLayers.Function.False;
+		}
+
+		var clickCallbacks = {
+			'click' : this.defaultClick,
+			'dblclick' : this.defaultDblClick,
+			'dblrightclick' : this.defaultDblRightClick
+		};
+		var clickOptions = {
+			'double' : true,
+			'stopDouble' : true
+		};
+		this.handlers.click = new OpenLayers.Handler.Click(this, clickCallbacks, clickOptions);
+
+		var hoverCallbacks = {
+			"move" : this.defaultHoverMove,
+			"pause" : this.defaultHoverPause
+		};
+
+		var me = this;		
+		
+		/* trying to prevent IE8 from dying to hover events */
+		var hoverOptions = {
+			pixelTolerance : 1.1,
+			/* minor hack to support IE performance */
+			passesTolerance : function(px) {
+			var passes = true;
+			if( me.panned ) 
+				return false;
+			if(this.pixelTolerance && this.px) {
+				var dpx = Math.sqrt(Math.pow(this.px.x - px.x, 2) + Math.pow(this.px.y - px.y, 2));
+
+				if(dpx < this.pixelTolerance) {
+					passes = false;
+				}
+			}			
+			return passes;
+		}
+		};
+		this.handlers.hover = new OpenLayers.Handler.Hover(this, hoverCallbacks, hoverOptions);
+		
+		this.dragPan = new OpenLayers.Control.DragPan(OpenLayers.Util.extend({
+			map : this.map,
+			documentDrag : this.documentDrag
+		}, this.dragPanOptions));
+		this.zoomBox = new OpenLayers.Control.ZoomBox({
+			map : this.map,
+			keyMask : this.zoomBoxKeyMask
+		});
+		this.dragPan.draw();
+		this.zoomBox.draw();
+		this.handlers.wheel = new OpenLayers.Handler.MouseWheel(this, {
+			"up" : this.wheelUp,
+			"down" : this.wheelDown
+		}, this.mouseWheelOptions);
+		
+	
+		
+		if(OpenLayers.Control.PinchZoom) {
+			var pinchZoomOptions = this.pinchZoomOptions||{};
+			
+			pinchZoomOptions.pinchDone = function(evt, start, last) {
+					this.applyTransform("");
+					var zoom = this.map.getZoomForResolution(this.map.getResolution() / last.scale, true);
+					if(zoom !== this.map.getZoom() || !this.currentCenter.equals(this.pinchOrigin)) {
+						var resolution = this.map.getResolutionForZoom(zoom);
+
+						var location = this.map.getLonLatFromPixel(this.pinchOrigin);
+						var zoomPixel = this.currentCenter;
+						var size = this.map.getSize();
+
+						location.lon += resolution * ((size.w / 2) - zoomPixel.x);
+						location.lat -= resolution * ((size.h / 2) - zoomPixel.y);
+
+						me.sendMapSetCenter(location, zoom);
+					}
+			};
+				
+			this.pinchZoom = new OpenLayers.Control.PinchZoom(OpenLayers.Util.extend({
+				map : this.map
+			}, pinchZoomOptions));
+		}
+
+	},
+	
+	/**
+	 * Method: defaultClick
+	 *
+	 * Parameters:
+	 * evt - {Event}
+	 */
+	defaultClick : function(evt) {
+		if(evt.lastTouches && evt.lastTouches.length == 2) {
+			/*this.map.zoomOut();*/
+			this.sendMapZoomOut();
+		} else {
+			var isIE8 = navigator.userAgent.indexOf("MSIE 8.0") !=-1 ;
+			if( isIE8 ) {
+				var now = new Date().getTime();
+
+				if( this.lastDblClickMs ) {
+					if( !((now - this.lastDblClickMs) < 1000 ) ) {
+						this.sendMapClickEvent(evt);
+					}
+				} else {
+					this.sendMapClickEvent(evt);
+				}
+			} else {
+				this.sendMapClickEvent(evt);
+			}
+		}
+
+	},
+	/**
+	 * Method: defaultDblClick
+	 *
+	 * Parameters:
+	 * evt - {Event}
+	 */
+	defaultDblClick : function(evt) {
+		var deltaZ = 1;
+		var currentZoom = this.map.getZoom();
+		var newZoom = this.map.getZoom() + Math.round(deltaZ);
+		newZoom = Math.max(newZoom, 0);
+		newZoom = Math.min(newZoom, this.map.getNumZoomLevels());
+		if(newZoom === currentZoom) {
+			return;
+		}
+		var size = this.map.getSize();
+		var deltaX = size.w / 2 - evt.xy.x;
+		var deltaY = evt.xy.y - size.h / 2;
+		var newRes = this.map.baseLayer.getResolutionForZoom(newZoom);
+		var zoomPoint = this.map.getLonLatFromPixel(evt.xy);
+		var newCenter = null;
+		
+		if( this.useCenterMapInDblClickZoom ) {
+			newCenter = this.map.getCenter();
+		} else {
+			newCenter = new OpenLayers.LonLat(zoomPoint.lon + deltaX * newRes, zoomPoint.lat + deltaY * newRes);
+		}
+		
+		var isIE8 = navigator.userAgent.indexOf("MSIE 8.0") !=-1 ;
+		if( isIE8 ) {
+			this.lastDblClickMs = new Date().getTime();
+		}
+
+		this.sendMapSetCenter(newCenter, newZoom);
+	},
+	/**
+	 * Method: defaultDblRightClick
+	 *
+	 * Parameters:
+	 * evt - {Event}
+	 */
+	defaultDblRightClick : function(evt) {
+		this.sendMapZoomOut();
+	},
+	/**
+	 * Method: wheelChange
+	 *
+	 * Parameters:
+	 * evt - {Event}
+	 * deltaZ - {Integer}
+	 */
+	wheelChange : function(evt, deltaZ) {
+		var currentZoom = this.map.getZoom();
+		var newZoom = this.map.getZoom() + Math.round(deltaZ);
+		newZoom = Math.max(newZoom, 0);
+		newZoom = Math.min(newZoom, this.map.getNumZoomLevels());
+		if(newZoom === currentZoom) {
+			return;
+		}
+		var size = this.map.getSize();
+		var deltaX = size.w / 2 - evt.xy.x;
+		var deltaY = evt.xy.y - size.h / 2;
+		var newRes = this.map.baseLayer.getResolutionForZoom(newZoom);
+		var zoomPoint = this.map.getLonLatFromPixel(evt.xy);
+		var newCenter = null;
+		
+		if( this.useCenterMapInWheelZoom ) {
+			newCenter = this.map.getCenter();
+		} else {
+			newCenter = new OpenLayers.LonLat(zoomPoint.lon + deltaX * newRes, zoomPoint.lat + deltaY * newRes);
+		}
+		/*this.map.setCenter(newCenter, newZoom);*/
+		
+		this.sendMapSetCenter(newCenter, newZoom);
+	},
+	/**
+	 * Method: wheelUp
+	 * User spun scroll wheel up
+	 *
+	 * Parameters:
+	 * evt - {Event}
+	 * delta - {Integer}
+	 */
+	wheelUp : function(evt, delta) {
+		this.wheelChange(evt, delta || 1);
+	},
+	/**
+	 * Method: wheelDown
+	 * User spun scroll wheel down
+	 *
+	 * Parameters:
+	 * evt - {Event}
+	 * delta - {Integer}
+	 */
+	wheelDown : function(evt, delta) {
+		this.wheelChange(evt, delta || -1);
+	},
+	/**
+	 * Method: disableZoomBox
+	 */
+	disableZoomBox : function() {
+		this.zoomBoxEnabled = false;
+		this.zoomBox.deactivate();
+	},
+	/**
+	 * Method: enableZoomBox
+	 */
+	enableZoomBox : function() {
+		this.zoomBoxEnabled = true;
+		if(this.active) {
+			this.zoomBox.activate();
+		}
+	},
+	/**
+	 * Method: disableZoomWheel
+	 */
+
+	disableZoomWheel : function() {
+		this.zoomWheelEnabled = false;
+		this.handlers.wheel.deactivate();
+	},
+	/**
+	 * Method: enableZoomWheel
+	 */
+
+	enableZoomWheel : function() {
+		this.zoomWheelEnabled = true;
+		if(this.active) {
+			this.handlers.wheel.activate();
+		}
+	},
+	/* drag pan */
+	panMapStart : function() {
+		if(this.kinetic) {
+			this.kinetic.begin();
+		}
+		this.panned = false;
+	},
+	panMap : function(xy) {
+		if(this.kinetic) {
+			this.kinetic.update(xy);
+		}
+		if(!this.panned) {
+			this.mapmodule.notifyStartMove();
+		}
+		this.panned = true;
+		this.map.pan(this.handlers.drag.last.x - xy.x, this.handlers.drag.last.y - xy.y, {
+			dragging : true,
+			animate : false
+		});
+		/*this.mapmodule.panMapByPixels(this.handlers.drag.last.x - xy.x, this.handlers.drag.last.y - xy.y, true, false, true);*/
+	},
+	panMapDone : function(xy) {
+		if(this.panned) {
+			var res = null;
+			if(this.kinetic) {
+				res = this.kinetic.end(xy);
+			}
+			/*this.map.pan(
+			 this.handlers.drag.x - xy.x,
+			 this.handlers.drag.y - xy.y,
+			 {dragging: !!res, animate: false}
+			 );*/
+			this.mapmodule.panMapByPixels(this.handlers.drag.x - xy.x, this.handlers.drag.y - xy.y, true, false, false);
+			if(res) {
+				var self = this;
+				this.kinetic.move(res, function(x, y, end) {
+					/*self.map.pan(x, y, {dragging: !end, animate: false});*/
+					self.mapmodule.panMapByPixels(x, y, true, false, false);
+				});
+			}
+			this.panned = false;
+		}
+	},
+	/* mapmodule notifications */
+	defaultHoverMove : function(evt) {
+		if(this.panned) {
+			return;
+		}
+		/* may be this should dispatch to mapmodule */
+		var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
+		this._hoverEvent.set(lonlat.lon, lonlat.lat, false, evt.pageX, evt.pageY);
+
+		this.sandbox.notifyAll(this._hoverEvent, true);
+	},
+	defaultHoverPause : function(evt) {
+		if(this.panned) {
+			return;
+		}
+		/* may be this should dispatch to mapmodule */
+		var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
+
+		var hoverEvent = this._hoverEventBuilder();
+		hoverEvent.set(lonlat.lon, lonlat.lat, false, evt.pageX, evt.pageY);
+
+		this.sandbox.notifyAll(hoverEvent);
+	},
+	sendMapClickEvent : function(evt) {
+		/* may be this should dispatch to mapmodule */
+		var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
+
+		var evt = this._mapClickedBuilder(lonlat, evt.xy.x, evt.xy.y);
+		this.sandbox.notifyAll(evt);
+	},
+	sendMapSetCenter : function(newCenter, newZoom) {
+		/* this implicitly calls mapmodule.notifyMoveEnd() which sends AfterMapMoveEvent */
+		this.mapmodule.centerMap(newCenter, newZoom);
+	},
+	sendMapZoomOut : function() {
+		/* this implicitly calls mapmodule.notifyMoveEnd() which sends AfterMapMoveEvent */
+		this.mapmodule.zoomOut();
+	},
+	sendMapZoomIn : function() {
+		/* this implicitly calls mapmodule.notifyMoveEnd() which sends AfterMapMoveEvent */
+		this.mapmodule.zoomIn();
+	},
+	CLASS_NAME : "OpenLayers.Control.PorttiMouse"
 });

@@ -21,6 +21,10 @@ Oskari.registerLocalization({
       "name": "Name",
       "village": "Municipality",
       "type": "Type"
+    },
+    "resultBox" : {
+    	"close" : "Close",
+    	"title" : "Search Results"
     }
   }
 });

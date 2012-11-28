@@ -197,8 +197,8 @@ function(plugin) {
                 throw "Trying to highlight feature from layer that is not WFS layer!";
             }
             
-            var featureId = event.getWfsFeatureIds()[0];
-            if(!featureId) {
+            var featureIdList = event.getWfsFeatureIds();
+            if(!featureIdList && featureIdList.length > 0) {
                 // clear out any previous selection if nothing selected
                 if(!event.isKeepSelection()) {
                     this.plugin.removeHighlightOnMapLayer(layer.getId());
@@ -210,9 +210,9 @@ function(plugin) {
 
             var mapWidth = map.getWidth();
             var mapHeight = map.getHeight();
-            var url = this.pngUrl + 
+            var me = this;
+            var url = me.pngUrl + 
                     "&flow_pm_wfsLayerId=" + layer.getId() + 
-                    "&wfsFeatureId=" + featureId + 
                     "&flow_pm_bbox_min_x=" + bbox.left + 
                     "&flow_pm_bbox_min_y=" + bbox.bottom + 
                     "&flow_pm_bbox_max_x=" + bbox.right + 
@@ -220,7 +220,13 @@ function(plugin) {
                     "&flow_pm_map_width=" + mapWidth + 
                     "&flow_pm_map_heigh=" + mapHeight + 
                     "&action_route=GET_HIGHLIGHT_WFS_FEATURE_IMAGE";
-            this.plugin.drawImageTile(layer, url, bbox, "HIGHLIGHTED_FEATURE", event.isKeepSelection());
+            var recDraw = function(featureId) {
+                me.plugin.drawImageTile(layer, url + "&wfsFeatureId=" + featureId, 
+                bbox, "HIGHLIGHTED_FEATURE", true);
+            }
+            for(var i = 0 ; i < featureIdList.length; ++i) {
+                recDraw(featureIdList[i]);
+            }
             
         } finally {
             /* Request handled */

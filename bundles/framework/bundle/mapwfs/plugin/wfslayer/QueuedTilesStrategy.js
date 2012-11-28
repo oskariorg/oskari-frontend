@@ -24,10 +24,10 @@ Oskari.clazz.define("Oskari.mapframework.gridcalc.QueuedTilesStrategy",
 			this.autoActivate = true;
 			this.autoDestroy = false;
 
-			/** grid implementation that calculates tile bounds */
+			// grid implementation that calculates tile bounds
 			this.grid = null;
 
-			/** current data bounds */
+			// current data bounds
 			this.bounds = null;
 
 			for (p in options)

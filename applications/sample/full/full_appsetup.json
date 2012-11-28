@@ -17,6 +17,9 @@
             },
             "openlayers-single-full":{
                "bundlePath":"../../../packages/openlayers/bundle/"
+            },
+            "oskariui":{
+               "bundlePath":"../../../packages/framework/bundle/"
             }
          },
          "Require-Bundle-Instance":[
@@ -45,13 +48,7 @@
             "service-base":{
                "bundlePath":"../../../packages/framework/bundle/"
             },
-            "common":{
-               "bundlePath":"../../../packages/framework/bundle/"
-            },
             "event-map-layer":{
-               "bundlePath":"../../../packages/framework/bundle/"
-            },
-            "runtime":{
                "bundlePath":"../../../packages/framework/bundle/"
             },
             "request-map-layer":{
@@ -406,7 +403,7 @@
       "metadata":{
          "Import-Bundle":{
             "guidedtour":{
-               "bundlePath":"../../../packages/sample/bundle/"
+               "bundlePath":"../../../packages/framework/bundle/"
             }
          },
          "Require-Bundle-Instance":[

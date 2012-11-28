@@ -76,7 +76,7 @@ function(instance) {
         this.templateLayerFooterTools = jQuery('<div class="left-tools">' + 
             '<div class="layer-visibility">' + '<a href="JavaScript:void(0);">' + loc['hide'] + '</a>' + '&nbsp;' + 
                 '<span class="temphidden" ' + 'style="display: none;">' + loc['hidden'] + '</span>' + '</div>' + 
-            '<div class="layer-opacity">' + '<div class="layout-slider" id="layout-slider">' + '</div> ' + 
+            '<div class="oskariui layer-opacity">' + '<div class="layout-slider" id="layout-slider">' + '</div> ' + 
             '<div class="opacity-slider" style="display:inline-block">' + 
             '<input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />%</div>' + 
             '</div>' + '</div>' + '<div class="right-tools">' +
@@ -126,7 +126,7 @@ function(instance) {
      */
     setState : function(state) {
         this.state = state;
-        /*console.log("Flyout.setState", this, state);*/
+        
     },
     /**
      * @method createUi
@@ -153,14 +153,26 @@ function(instance) {
             // footer tools
             this._appendLayerFooter(layerContainer, layer, layer.isInScale(scale), true);
         }
+        
+        listContainer.sortable({
+        	/*change: function(event,ui) {
+        		var item = ui.item ;
+        		me._layerOrderChanged(item)
+        	},*/
+        	stop: function(event,ui) {
+        		var item = ui.item ;
+        		me._layerOrderChanged(item)
+        	}
+        });
+        listContainer.disableSelection();
 
         // RIGHTJS sortable event handling
         //TODO: get rid of sortableBinded and UNBIND?
         if (!this.sortableBinded) {
             this.sortableBinded = true;
-            RightJS('.selectedLayersList').on('finish', function(event) {
+            /*RightJS('.selectedLayersList').on('finish', function(event) {
                 me._layerOrderChanged(event.index);
-            });
+            });*/
 
         }
     },
@@ -169,8 +181,6 @@ function(instance) {
 		
 		/* fix: we need this at anytime for slider to work */ 
         var footer = this._createLayerFooter(layer, layerDiv);
-        
-        /*console.log("IS VISIBLE AT APPENDLAYERFOOTER "+layer.isVisible());*/
         
         if (!layer.isVisible()) {
             toolsDiv.addClass('hidden');
@@ -193,6 +203,9 @@ function(instance) {
      	toolsDiv.append(footer);
         
  	    var slider = this._addSlider(layer,layerDiv);
+ 	     	    
+        var opa = layerDiv.find('div.layer-opacity input.opacity');
+        opa.attr('value', layer.getOpacity());
          
     },
     
@@ -200,83 +213,25 @@ function(instance) {
         var me = this;
         var lyrId = layer.getId();
         var opa = layer.getOpacity();
-        /*var slider = me._sliders[lyrId];
-        if (!slider || !slider.setStyle || !slider.handle || !slider.handle.setStyle) {*/
-            slider = new Slider({
-                min : 0,
-                max : 100,
-                value: opa
-            });
-
-            slider.setStyle({
-                'background-color' : 'transparent',
-                'background-image' : 'url("/Oskari' + '/resources/framework/bundle' + '/layerselection2/images' + '/opacity_slider.png")',
-                'height' : '5px',
-                'width' : '150px',
-                'border' : '0',
-                'margin' : 0
-            });
-
-            /*slider.level.hide();*/
-
-            slider.handle.setStyle({
-                'background-color' : 'transparent',
-                'background-image' : 'url("/Oskari' + '/resources/framework/bundle' + '/layerselection2/images' + '/opacity_index.png")',
-                'width' : '15px',
-                'height' : '15px',
-                'border' : '0',
-                'margin-left' : 0
-            });
-
-            slider.on('change', function(event) {
-                me._layerOpacityChanged(layer, event.value);
-            });
-            me._sliders[lyrId] = slider;
-        /*}*/
-        // only render if visible on screen
-        var lS = 'layout-slider-' + lyrId;
-        var oS = 'opacity-slider-' + lyrId;
         
-         // slider
-        var tools = layerDiv.find('.left-tools');
-        var opacitySlider = tools.find('div.layout-slider');
-        opacitySlider.attr('id', 'layout-slider-' + layer.getId());
-
-        var opacityInput = tools.find('input.opacity-slider');
-        opacityInput.attr('id', 'opacity-slider-' + layer.getId());
+        var sliderEl = layerDiv.find('.layout-slider');
+        var slider = sliderEl.slider({
+        	min: 0, max: 100,	
+        	value: opa,
+        	/*change: function(event,ui) {
+                me._layerOpacityChanged(layer, ui.value);
+           	},*/
+            slide: function(event,ui) {
+                me._layerOpacityChanged(layer, ui.value);
+            },
+            stop: function(event,ui) {
+            	me._layerOpacityChanged(layer, ui.value);
+            }
+		});
+		
+        me._sliders[lyrId] = slider;
         
-        slider.insertTo(lS);
-        slider.assignTo(oS);
-        
-        /* the kind of code below shall never again be written */
-       
-        /*if (jQuery('#' + lS).length > 0 && jQuery('#' + oS).length > 0) {*/
-       	/*console.log("IS DIV "+((jQuery('#' + lS).length > 0 && jQuery('#' + oS).length > 0) ));
-       	console.log("INSERTTO");
-           slider.insertTo(lS);
-            slider.assignTo(oS);
-            slider.setValue(opa);
-        } else {
-            // Terrible, terrible kludge to work around
-            // some rightjs issues
-            setTimeout(function() {
-                if (jQuery('#' + lS).length > 0 && jQuery('#' + oS).length > 0) {
-                    slider.insertTo(lS);
-                    slider.assignTo(oS);
-                    slider.setValue(opa);
-                } else {
-                    setTimeout(function() {
-                        if (jQuery('#' + lS).length > 0 && jQuery('#' + oS).length > 0) {
-                            slider.insertTo(lS);
-                            slider.assignTo(oS);
-                            slider.setValue(opa);
-                        }
-                    }, 500);
-                }
-            }, 100);
-        }*/
-        /*slider.setValue(opa);*/
-        return slider;//.hide();
+        return slider;
     },
     /**
      * @method _layerOrderChanged
@@ -284,9 +239,18 @@ function(instance) {
      * Notify Oskari that layer order should be changed
      * @param {Number} newIndex index where the moved layer is now
      */
-    _layerOrderChanged : function(newIndex) {
+    _layerOrderChanged : function(item) {
         var allNodes = jQuery(this.container).find('.selectedLayersList li');
-        var movedId = jQuery(allNodes[newIndex]).attr('layer_id');
+        var movedId = item.attr('layer_id');
+        var newIndex = -1;
+        
+        allNodes.each(function(index,el) {
+        	if( $(this).attr('layer_id') == movedId) {
+        		newIndex = index;
+        		return false;
+        	}	
+        	return true;
+        });
         if (newIndex > -1) {
             // the layer order is reversed in presentation
             // the lowest layer has the highest index
@@ -326,11 +290,11 @@ function(instance) {
         var stylesel = layerDiv.find('div.stylesel');
         stylesel.hide();
 
-        if (layer.getStyles && layer.getStyles().size > 1) {
+        if (layer.getStyles && layer.getStyles().length > 1) {
             var hasOpts = false;
             var styles = layer.getStyles();
             var sel = stylesel.find('select');
-            for (var i = 0; i < styles.size(); i++) {
+            for (var i = 0; i < styles.length; i++) {
                 if (styles[i].getName()) {
                     var opt = jQuery('<option value="' + styles[i].getName() + '">' + styles[i].getTitle() + '</option>');
                     sel.append(opt);
@@ -346,7 +310,6 @@ function(instance) {
                 sandbox.request(me.instance.getName(), req);
             });
             if (hasOpts) {
-
                 sel.val(layer.getCurrentStyle().getName());
                 stylesel.show();
             }
@@ -397,6 +360,9 @@ function(instance) {
             var request = builder(layer.getId());
             sandbox.request(me.instance.getName(), request);
         });
+
+        
+        
         return layerDiv;
     },
     /**
@@ -464,9 +430,9 @@ function(instance) {
      * externally
      */
     handleLayerOpacityChanged : function(layer) {
-        /*this._addSlider(layer);*/
+        
         if( this._sliders[layer.getId()] ) {  
-        	this._sliders[layer.getId()].setValue(layer.getOpacity());
+        	this._sliders[layer.getId()].slider('value',layer.getOpacity());
        	}        
     },
     /**
@@ -600,26 +566,22 @@ function(instance) {
         }
 
         // publish permissions
-        var publishPermission = layer.getPermission('publish');
-
-        if (publishPermission == 'publication_permission_ok') {
-            if (sandbox.getUser().isLoggedIn()) {
-                tools.find('div.layer-rights').html(loc.rights['can_be_published_map_user'].label);
-                tools.find('div.layer-rights').attr("title", loc.rights['can_be_published_map_user'].tooltip);
-            } else {
-                tools.find('div.layer-rights').html(loc.rights['login-url']);
-                tools.find('div.layer-rights').attr("title", loc.rights['need-login']);
-            }
-        } else {
-            //if(publishPermission == 'no_publication_permission') {
-            tools.find('div.layer-rights').html(loc.rights['no_publication_permission'].label);
-            tools.find('div.layer-rights').attr("title", loc.rights['no_publication_permission'].tooltip);
-            //}
-        }
-
-       
+        this._updatePublishPermissionText(layer, tools);
 
         return tools;
+    },
+    _updatePublishPermissionText : function(layer, footer) {
+        var sandbox = this.instance.getSandbox();
+        var loc = this.instance.getLocalization('layer');
+        
+        var publishPermission = layer.getPermission('publish');
+
+        if (publishPermission == 'publication_permission_ok' && 
+            sandbox.getUser().isLoggedIn()) {
+                
+            footer.find('div.layer-rights').html(loc.rights['can_be_published_map_user'].label);
+            footer.find('div.layer-rights').attr("title", loc.rights['can_be_published_map_user'].tooltip);
+        }
     },
     /**
      * @method handleLayerSelectionChanged
@@ -689,6 +651,26 @@ function(instance) {
         var me = this;
         var layerDiv = jQuery(this.container).find('li[layer_id=' + layer.getId() + ']');
         jQuery(layerDiv).find('.layer-title h4').html(layer.getName());
+        
+        var footer = layerDiv.find('div.layer-tools');
+        this._updatePublishPermissionText(layer, footer);
+    },
+    
+    /** 
+     * @method refresh 
+     * utitity to temporarily support rightjs sliders (again)
+     */
+    refresh: function() {
+    	var me = this;
+    	var sandbox = me.instance.getSandbox();
+        var layers = sandbox.findAllSelectedMapLayers();
+        
+        for (var n = layers.length - 1; n >= 0; --n) {
+            var layer = layers[n];
+            
+           	this.handleLayerOpacityChanged(layer);
+           
+        }
     }
 }, {
     /**

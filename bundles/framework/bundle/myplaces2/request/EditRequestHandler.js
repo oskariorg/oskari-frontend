@@ -35,6 +35,9 @@ function(sandbox, instance) {
         else if(request.getName() == 'MyPlaces.DeleteCategoryRequest') {
             this._handleDeleteCategory(sandbox, request);
         }
+        else if(request.getName() == 'MyPlaces.PublishCategoryRequest') {
+            this._handlePublishCategory(sandbox, request);
+        }
     },
     _handleEditPlace : function(sandbox, request) {
         this.sandbox.printDebug("[Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler] edit requested for place " + request.getId());
@@ -74,6 +77,14 @@ function(sandbox, instance) {
         var category = service.findCategory(request.getId());
         if(category) {
             this.instance.getCategoryHandler().confirmDeleteCategory(category);
+        }
+    },
+    _handlePublishCategory : function(sandbox, request) {
+        this.sandbox.printDebug("[Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler] (un/)publish requested for category " + request.getId());
+        var service = this.instance.getService();
+        var category = service.findCategory(request.getId());
+        if(category) {
+            this.instance.getCategoryHandler().confirmPublishCategory(category, request.isPublic());
         }
     }
 }, {

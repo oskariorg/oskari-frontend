@@ -12,7 +12,6 @@
     position: absolute !important;
     right: 10px;
     bottom: 2px;
-    
 }
 
 #OpenLayers_Control_minimizeDiv
@@ -22,10 +21,7 @@
     right: 0px;
     bottom: 0px;
     cursor: default;
-    /*background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/ikoni_indeksikartta_akt.png') !important; 
-    resources\framework\bundle\mapmodule-plugin\plugin\indexmap\css */
-   
-    background: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') 0px  -46px  !important;
+    background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png')  !important;
     
 }
 
@@ -39,14 +35,12 @@
     right: 0px;
     bottom: 0px;
     cursor: default;
-    background: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') 0px 0px !important;
-    /* background-image: url('../images/ikoni_indeksikartta.png') !important; */
+    background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap.png') 0px 0px !important;
 }
 
 #olControlOverviewMapMaximizeButton:hover
 {
-    background: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') 0px  -46px !important;
-    /* background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/ikoni_indeksikartta_akt.png') !important; */
+    background: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png') !important;
 }
 
 #OpenLayers_Control_minimizeDiv{

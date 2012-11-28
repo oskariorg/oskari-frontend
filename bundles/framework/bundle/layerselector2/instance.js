@@ -100,7 +100,8 @@ function() {
         
 		var successCB = function() {
 			// massive update so just recreate the whole ui
-			me.createUi();
+			//me.plugins['Oskari.userinterface.Flyout'].populateLayers();
+			// added through maplayerevent
 		};
 		var failureCB = function() {
 			alert(me.getLocalization('errors').loadFailed);
@@ -269,14 +270,6 @@ function() {
      */
     getState : function() {
         return this.plugins['Oskari.userinterface.Flyout'].getContentState();
-        /*
-        var state = {
-            
-            
-        };
-        
-        return state;
-        */
     }
 }, {
 	/**

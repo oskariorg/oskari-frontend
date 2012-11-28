@@ -26,6 +26,9 @@ function() {
 
     this._dataUrl = null;
 
+    /* is this layer queryable (GetFeatureInfo) boolean */
+    this._queryable = true;
+    
     /*
      * Array of sublayers. Notice that only type BASE_LAYER can
      * have sublayers.
@@ -67,6 +70,8 @@ function() {
     this._geometry = [];
     // wellknown text for polygon geometry
     this._geometryWKT = null;
+    
+    this._backendStatus = null;
 }, {
     /**
      * @method setGeometryWKT
@@ -100,6 +105,22 @@ function() {
      */
     getGeometry : function() {
         return this._geometry;
+    },
+    /**
+     * @method setQueryable
+     * True if we should call GFI on the layer
+     * @param {Boolean} queryable
+     */
+    setQueryable : function(queryable) {
+        this._queryable = queryable;
+    },
+    /**
+     * @method getQueryable
+     * True if we should call GFI on the layer
+     * @param {Boolean} queryable
+     */
+    getQueryable : function() {
+        return this._queryable;
     },
     /**
      * @method addPermission
@@ -373,6 +394,13 @@ function() {
         return this._type === "BASE_LAYER";
     },
     /**
+     * @method isGroupLayer
+     * @return {Boolean} true if this is a group layer (=has sublayers)
+     */
+    isGroupLayer : function() {
+        return false;
+    },
+    /**
      * @method isInScale
      * @param {Number} scale scale to compare to
      * @return {Boolean} true if given scale is between this layers min/max scales. Always return true for base-layers.
@@ -386,7 +414,8 @@ function() {
 
         // Check layer scales only normal layers
         if(!this.isBaseLayer()) {
-            if(scale > this.getMaxScale() && scale < this.getMinScale()) {
+            if((scale > this.getMaxScale()  || !this.getMaxScale()) && 
+               (scale < this.getMinScale())  || !this.getMinScale()) {
                 _return = true;
             }
         }
@@ -426,5 +455,17 @@ function() {
      */
     setMetadataIdentifier: function(metadataid) {
     	this._metadataIdentifier = metadataid;
+    },
+    /**
+     * @method getBackendStatus
+     */
+    getBackendStatus: function() {
+    	return this._backendStatus;
+    },
+    /**
+     * @method setBackendStatus
+     */
+    setBackendStatus: function(backendStatus) {
+    	this._backendStatus = backendStatus;
     }
 });
