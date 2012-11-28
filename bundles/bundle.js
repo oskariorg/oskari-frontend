@@ -324,32 +324,32 @@ Oskari = (function() {
 	 */
 	"compatibility" : function(bp, pp, sp, pdefsp) {
 	    return;
-	    var gpp = window[pp];
-	    if(!gpp) {
-		gpp = {};
-		window[pp] = gpp;
-	    }
-	    var ctx = gpp;
+	    // var gpp = window[pp];
+	    // if(!gpp) {
+	    //     gpp = {};
+	    //     window[pp] = gpp;
+	    // }
+	    // var ctx = gpp;
 
-	    var sps = sp.split('.');
-	    for(var s = 0; s < sps.length - 1; s++) {
-		var spname = sps[s];
-		var gsp = ctx[spname];
-		if(!gsp) {
-		    gsp = {};
-		    ctx[spname] = gsp;
-		}
-		ctx = gsp;
-	    }
+	    // var sps = sp.split('.');
+	    // for(var s = 0; s < sps.length - 1; s++) {
+	    //     var spname = sps[s];
+	    //     var gsp = ctx[spname];
+	    //     if(!gsp) {
+	    //         gsp = {};
+	    //         ctx[spname] = gsp;
+	    //     }
+	    //     ctx = gsp;
+	    // }
 
-	    var me = this;
+	    // var me = this;
 
-	    var ctxFunc = function() {
+	    // var ctxFunc = function() {
 
-		return me.applyCompatClass(this, bp, pp, sp, arguments);
-	    };
-	    ctxFunc.prototype = pdefsp._class.prototype;
-	    ctx[sps[sps.length - 1]] = ctxFunc;
+	    //     return me.applyCompatClass(this, bp, pp, sp, arguments);
+	    // };
+	    // ctxFunc.prototype = pdefsp._class.prototype;
+	    // ctx[sps[sps.length - 1]] = ctxFunc;
 	},
 	/**
 	 * @method applyCompatClass
@@ -1454,7 +1454,7 @@ Oskari = (function() {
 		    me.log("loading previously pending sources for " + bundleImpl + " " + srcState.state + " or what?");
 		} else {
 		    throw "INVALID_STATE: at " + bundleImpl;
-		    return;
+		    // return;
 		}
 	    } else {
 		srcState = {
