@@ -17,7 +17,7 @@ Oskari.registerLocalization(
             },
             "page1": {
                 "title": "Tervetuloa Paikkatietoikkunan karttanäkymään",
-                "message" : "Jos olet ensimmäistä kertaa Paikkatietoikkunan karttapalvelussamme, pikaoppaamme auttaa sinut alkuun."
+                "message" : "Jos olet ensimmäistä kertaa Paikkatietoikkunan karttapalvelussa, pikaoppaamme auttaa sinut alkuun."
             },
             "page2": {
                 "title": "Haku",
