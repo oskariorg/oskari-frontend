@@ -88,3 +88,6 @@ div.basic_printout div.preview-landscape {
 	cursor: pointer;
 }
 
+div.basic_printout div.location {
+	height: 30px;
+}
