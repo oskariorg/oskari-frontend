@@ -437,8 +437,9 @@ function() {
 				continue;
 			}
 			maplayer.setBackendStatus(this.backendStatus[p].status);
-
-			if(changeNotifications[p].changed) {
+			
+			/* forcing DOWN to be notified - we do not know if layerselector2 has shown the msg or not...*/
+			if(changeNotifications[p].changed|| "DOWN" == maplayer.getBackendStatus()) {
 				maplayers[p] = maplayer;
 			}
 		}
