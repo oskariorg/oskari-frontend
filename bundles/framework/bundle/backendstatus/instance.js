@@ -201,10 +201,10 @@ function() {
 			var mapLayerBackendStatus = mapLayer.getBackendStatus();
 			/*console.log("ABOUT to show information for "+mapLayerId,mapLayer,mapLayerBackendStatus);*/
 
-			if(!mapLayerBackendStatus) {
+			/*if(!mapLayerBackendStatus) {
 				this.showFeedbackDialog('missing_backendstatus_status');
 				return;
-			}
+			}*/
 
 			var backendExtendedStatusForLayer = this.backendExtendedStatus[mapLayerId];
 
