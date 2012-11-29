@@ -30,7 +30,6 @@ Oskari.registerLocalization(
                     "label": "Preview",
                     "tooltip": "Click the small preview to open a larger preview"
                 },
-
                 "sizes": {
                     "A4": "A4-portrait",
                     "A4_Landscape": "A4-landscape",

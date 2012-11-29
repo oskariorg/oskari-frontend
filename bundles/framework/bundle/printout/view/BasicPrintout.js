@@ -24,7 +24,7 @@ function(instance, localization, backendConfiguration) {
 	this.templateTool = jQuery('<div class="tool ">' + '<input type="checkbox"/>' + '<span></span></div>');
 	this.templates = {
 		preview : jQuery('<div class="preview"><img /></div>'),
-		location : jQuery('<div class="preview"><img /></div>'),
+		location : jQuery('<div class="preview"><img /></div>')
 	};
 	this.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
 	
