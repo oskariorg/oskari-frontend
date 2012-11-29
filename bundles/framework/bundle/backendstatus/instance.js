@@ -199,7 +199,7 @@ function() {
 			var mapLayer = event.getMapLayer();
 			var mapLayerId = mapLayer.getId();
 			var mapLayerBackendStatus = mapLayer.getBackendStatus();
-			console.log("ABOUT to show information for "+mapLayerId,mapLayer,mapLayerBackendStatus);
+			/*console.log("ABOUT to show information for "+mapLayerId,mapLayer,mapLayerBackendStatus);*/
 
 			/*if(!mapLayerBackendStatus) {
 				this.showFeedbackDialog('missing_backendstatus_status');
@@ -208,7 +208,7 @@ function() {
 
 			var backendExtendedStatusForLayer = this.backendExtendedStatus[mapLayerId];
 
-			console.log("MIGHT show information for "+mapLayerId,mapLayer,backendExtendedStatusForLayer);
+			/*console.log("MIGHT show information for "+mapLayerId,mapLayer,backendExtendedStatusForLayer);*/
 
 			if(!backendExtendedStatusForLayer) {
 				this.showFeedbackDialog('missing_backendstatus_information');
@@ -221,7 +221,7 @@ function() {
 				return;
 			}
 
-			console.log("WOULD show information for "+mapLayerId,mapLayer,infoUrl);
+			/*console.log("WOULD show information for "+mapLayerId,mapLayer,infoUrl);*/
 
 			this.openURLinWindow(infoUrl);
 		},
