@@ -27,30 +27,29 @@ function(instance, localization, backendConfiguration) {
 		location : jQuery('<div class="preview"><img /></div>')
 	};
 	this.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
-	
+
 	this.backendConfiguration = backendConfiguration;
 
-	 
 	this.sizeOptions = [{
 		id : 'A4',
-		classForPreview: 'preview-portrait',
+		classForPreview : 'preview-portrait',
 		selected : true // default option
 	}, {
 		id : 'A4_Landscape',
-		classForPreview: 'preview-landscape'
+		classForPreview : 'preview-landscape'
 	}, {
 		id : 'A3',
-		classForPreview: 'preview-portrait'
+		classForPreview : 'preview-portrait'
 	}, {
 		id : 'A3_Landscape',
-		classForPreview: 'preview-landscape'
+		classForPreview : 'preview-landscape'
 	}];
-	
+
 	this.sizeOptionsMap = {};
-	for( var s = 0; s < this.sizeOptions.length;s++) {
-		this.sizeOptionsMap[this.sizeOptions[s].id] = this.sizeOptions[s]; 
+	for(var s = 0; s < this.sizeOptions.length; s++) {
+		this.sizeOptionsMap[this.sizeOptions[s].id] = this.sizeOptions[s];
 	}
-	
+
 	this.loc = localization;
 	this.accordion = null;
 
@@ -79,13 +78,13 @@ function(instance, localization, backendConfiguration) {
 		sizePanel.open();
 
 		accordion.addPanel(sizePanel);
-		
-		var previewPanel = this._createPreviewPanel();		
+
+		var previewPanel = this._createPreviewPanel();
 		previewPanel.open();
 
 		accordion.addPanel(previewPanel);
-		
-		var scalePanel = this._createLocationAndScalePanel();		
+
+		var scalePanel = this._createLocationAndScalePanel();
 		scalePanel.open();
 
 		accordion.addPanel(scalePanel);
@@ -109,7 +108,7 @@ function(instance, localization, backendConfiguration) {
 		// bind help tags
 		var helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', this.instance.sandbox);
 		helper.processHelpLinks(this.loc.help, content, this.loc.error.title, this.loc.error.nohelp);
-		
+
 		this.updateMapPreview();
 	},
 	/**
@@ -162,11 +161,9 @@ function(instance, localization, backendConfiguration) {
 			toolContainer.find('input').attr('value', option.id);
 			toolContainer.find('input').change(closureMagic(option));
 		}
-		
 
 		return panel;
 	},
-	
 	/**
 	 * @method _createSizePanel
 	 * @private
@@ -177,25 +174,24 @@ function(instance, localization, backendConfiguration) {
 		var me = this;
 		var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
 		panel.setTitle(this.loc.preview.label);
-		var contentPanel = panel.getContainer();		
-		
+		var contentPanel = panel.getContainer();
+
 		var tooltipCont = this.templateHelp.clone();
 		tooltipCont.attr('title', this.loc.preview.tooltip);
 		contentPanel.append(tooltipCont);
-				
+
 		var previewContent = this.templates.preview.clone();
-		
-		contentPanel.append(previewContent);			
-		
+
+		contentPanel.append(previewContent);
+
 		/* side effect */
 		var previewImgDiv = previewContent.find('img');
-		previewImgDiv.click(function(){
+		previewImgDiv.click(function() {
 			me.showFullScaleMapPreview();
 		});
 		this.previewContent = previewContent;
 		return panel;
 	},
-	
 	/**
 	 * @method _createSizePanel
 	 * @private
@@ -206,55 +202,50 @@ function(instance, localization, backendConfiguration) {
 		var me = this;
 		var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
 		panel.setTitle(this.loc.location.label);
-		var contentPanel = panel.getContainer();		
-		
+		var contentPanel = panel.getContainer();
+
 		var tooltipCont = this.templateHelp.clone();
 		tooltipCont.attr('title', this.loc.location.tooltip);
 		contentPanel.append(tooltipCont);
-				
+
 		var scaleContent = this.templates.location.clone();
-		
-		contentPanel.append(scaleContent);			
-				
+
+		contentPanel.append(scaleContent);
+
 		return panel;
 	},
-	
-	updateMapPreview: function() {
-		
+	updateMapPreview : function() {
+
 		var selections = this._gatherSelections("image/png");
 		var urlBase = this.backendConfiguration.formatProducers[selections.format];
-		var maplinkArgs = selections.maplinkArgs ;
-		var pageSizeArgs = "&pageSize="+selections.pageSize ;
+		var maplinkArgs = selections.maplinkArgs;
+		var pageSizeArgs = "&pageSize=" + selections.pageSize;
 		var previewScaleArgs = "&scaledWidth=200"
 		var url = urlBase + maplinkArgs + pageSizeArgs + previewScaleArgs;
-		
+
 		this.previewContent.removeClass('preview-portrait');
 		this.previewContent.removeClass('preview-landscape');
-		this.previewContent.addClass(
-			this.sizeOptionsMap[selections.pageSize].classForPreview
-		);
-		
+		this.previewContent.addClass(this.sizeOptionsMap[selections.pageSize].classForPreview);
+
 		var previewImgDiv = this.previewContent.find('img');
 		var img = new Image();
 		img.onload = function() {
-			previewImgDiv.attr('src',url);
+			previewImgDiv.attr('src', url);
 			img.onload = null;
-		}		
+		}
 		img.src = url;
 	},
-	
-	showFullScaleMapPreview: function() {
-		
+	showFullScaleMapPreview : function() {
+
 		var selections = this._gatherSelections("image/png");
 		var urlBase = this.backendConfiguration.formatProducers[selections.format];
-		var maplinkArgs = selections.maplinkArgs ;
-		var pageSizeArgs = "&pageSize="+selections.pageSize ;
+		var maplinkArgs = selections.maplinkArgs;
+		var pageSizeArgs = "&pageSize=" + selections.pageSize;
 		var url = urlBase + maplinkArgs + pageSizeArgs;
-		
+
 		this.openURLinWindow(url);
-		
+
 	},
-	
 	/**
 	 * @method _getButtons
 	 * @private
@@ -316,34 +307,30 @@ function(instance, localization, backendConfiguration) {
 		var errors = [];
 		var values = {};
 		var size = container.find('input[name=size]:checked').val();
-		
+
 		var maplinkArgs = sandbox.generateMapLinkParameters();
-		
+
 		var selections = {
 			name : values.name,
 			language : values.language,
-			pageSize: size,
-			maplinkArgs: maplinkArgs,
-			format : format || "application/pdf"  
+			pageSize : size,
+			maplinkArgs : maplinkArgs,
+			format : format || "application/pdf"
 		};
 
-		
-        
-        if(errors.length > 0) {
-        	// TODO: messages
-        	this._showValidationErrorMessage(errors);
-        	return;
-        }
+		if(errors.length > 0) {
+			// TODO: messages
+			this._showValidationErrorMessage(errors);
+			return;
+		}
 		return selections;
 
 	},
-	
 	openURLinWindow : function(infoUrl) {
 		var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
 		var link = infoUrl;
 		window.open(link, "BasicPrintout", wopParm);
 	},
-	
 	/**
 	 * @method _printMap
 	 * @private
@@ -359,39 +346,37 @@ function(instance, localization, backendConfiguration) {
 			var okBtn = dialog.createCloseButton(me.loc.buttons.ok);
 			dialog.show(me.loc['error'].title, me.loc['error'].saveFailed, [okBtn]);
 		};
-		
 		/* Temp begin */
 		var urlBase = this.backendConfiguration.formatProducers[selections.format];
-		var maplinkArgs = selections.maplinkArgs ;
-		var pageSizeArgs = "&pageSize="+selections.pageSize ;
-		var url = urlBase + maplinkArgs + pageSizeArgs ;
-		 
-		 /* Temp end */
+		var maplinkArgs = selections.maplinkArgs;
+		var pageSizeArgs = "&pageSize=" + selections.pageSize;
+		var url = urlBase + maplinkArgs + pageSizeArgs;
+
+		/* Temp end */
 		this.openURLinWindow(url);
-		
-		
+
 		// make the ajax call
 		/*jQuery.ajax({
-			url : url + '&action_route=Printout',
-			type : 'POST',
-			dataType : "json",
-			data : {
-				pubdata : JSON.stringify(selections)
-			},
-			beforeSend : function(x) {
-				if(x && x.overrideMimeType) {
-					x.overrideMimeType("application/j-son;charset=UTF-8");
-				}
-			},
-			success : function(response) {
-				if(response.id > 0) {
+		 url : url + '&action_route=Printout',
+		 type : 'POST',
+		 dataType : "json",
+		 data : {
+		 pubdata : JSON.stringify(selections)
+		 },
+		 beforeSend : function(x) {
+		 if(x && x.overrideMimeType) {
+		 x.overrideMimeType("application/j-son;charset=UTF-8");
+		 }
+		 },
+		 success : function(response) {
+		 if(response.id > 0) {
 
-				} else {
-					errorHandler();
-				}
-			},
-			error : errorHandler
-		});*/
+		 } else {
+		 errorHandler();
+		 }
+		 },
+		 error : errorHandler
+		 });*/
 	},
 	/**
 	 * @method _validateNumberRange
@@ -445,8 +430,7 @@ function(instance, localization, backendConfiguration) {
 	getEnabled : function() {
 		return this.isEnabled;
 	},
-	
-	refresh: function() {
+	refresh : function() {
 		this.updateMapPreview();
 	}
 });

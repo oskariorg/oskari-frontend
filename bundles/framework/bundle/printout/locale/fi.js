@@ -44,7 +44,7 @@ Oskari.registerLocalization(
                 "location": {                	
 	                "label" : "Sijainti ja mittakaavataso",
 	                "tooltip" : "Mittakaavataso vastaa toistaiseksi selaimen näkymän mittakaavaa.",
-                	"zoomlevel": "Mittakaavataso",
+                	"zoomlevel": "Mittakaavataso"
                 },
                 "help": "Ohje",
                 "error": {

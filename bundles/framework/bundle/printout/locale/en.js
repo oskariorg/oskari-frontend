@@ -44,7 +44,7 @@ Oskari.registerLocalization(
                 "location": {
                 	"label" : "Location and zoom level",
                 	"tooltip" : "Printout scale matches the scale of the map in browser.",
-                	"zoomlevel": "Zoom level",
+                	"zoomlevel": "Zoom level"
                 },
                 "help": "Help",
                 "error": {
