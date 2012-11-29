@@ -12,10 +12,12 @@ Oskari.registerLocalization(
             },
             "title": "Tervetuloa",
             "desc": "",
+            "tourseen" : {
+                "label" : "Älä näytä tätä viestiä uudelleen"
+            },
             "page1": {
                 "title": "Tervetuloa Paikkatietoikkunan karttanäkymään",
-                "message" : "Jos olet ensimmäistä kertaa Paikkatietoikkunan karttapalvelussamme, pikaoppaamme auttaa sinut alkuun.",
-                "label" : "Älä näytä tätä viestiä uudelleen"
+                "message" : "Jos olet ensimmäistä kertaa Paikkatietoikkunan karttapalvelussamme, pikaoppaamme auttaa sinut alkuun."
             },
             "page2": {
                 "title": "Haku",
