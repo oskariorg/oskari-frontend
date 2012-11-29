@@ -388,7 +388,9 @@ function() {
 		}
 
 		var changeNotifications = {};
-		var extendedStatuses = {};
+		
+		/* let's update AllKnown */
+		var extendedStatuses = allKnown ? {} : this.backendExtendedStatus;
 
 		for(var n = 0; n < backendStatusArr.length; n++) {
 			var data = backendStatusArr[n];
