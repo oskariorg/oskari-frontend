@@ -28,7 +28,7 @@ Oskari.registerLocalization(
                 },
                 "preview": {
                     "label": "Esikatselu",
-                    "tooltip": "."
+                    "tooltip": "Suuremman esikatselukuvan saat karttakuvaa napauttamalla."
                 },
                 "sizes": {
                     "A4": "A4-tuloste",
@@ -41,9 +41,11 @@ Oskari.registerLocalization(
                     "ok": "OK",
                     "cancel": "Peruuta"
                 },
-                "preview": "Tulostettavan kartan esikatselu",
-                "location": "Sijainti ja mittakaavataso",
-                "zoomlevel": "Mittakaavataso",
+                "location": {                	
+	                "label" : "Sijainti ja mittakaavataso",
+	                "tooltip" : "Mittakaavataso vastaa toistaiseksi selaimen näkymän mittakaavaa.",
+                	"zoomlevel": "Mittakaavataso",
+                },
                 "help": "Ohje",
                 "error": {
                     "title": "Virhe",

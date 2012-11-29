@@ -181,13 +181,12 @@ function() {
 	/**
 	 * @method startExtension
 	 * implements Oskari.userinterface.Extension protocol startExtension method
-	 * Creates a flyout and a tile:
+	 * Creates a flyout 
 	 * Oskari.mapframework.bundle.printout.Flyout
-	 * Oskari.mapframework.bundle.printout.Tile
 	 */
 	startExtension : function() {
 		this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.printout.Flyout', this);
-		this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.printout.Tile', this);
+		/*this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.printout.Tile', this);*/
 	},
 	/**
 	 * @method stopExtension
@@ -196,7 +195,7 @@ function() {
 	 */
 	stopExtension : function() {
 		this.plugins['Oskari.userinterface.Flyout'] = null;
-		this.plugins['Oskari.userinterface.Tile'] = null;
+		/*this.plugins['Oskari.userinterface.Tile'] = null;*/
 	},
 	/**
 	 * @method getPlugins
@@ -228,7 +227,7 @@ function() {
 	_createUi : function() {
 		var me = this;
 		this.plugins['Oskari.userinterface.Flyout'].createUi();
-		this.plugins['Oskari.userinterface.Tile'].refresh();
+		/*this.plugins['Oskari.userinterface.Tile'].refresh();*/
 	},
 	/**
 	 * @method setPublishMode

@@ -69,6 +69,7 @@ div.basic_printout div.preview-portrait {
 	border-top-style: solid;
 	border-top-width: 1pt;
 	box-shadow: 0 0 8px #D0D0D0;
+	cursor: pointer;
 }
 
 div.basic_printout div.preview-landscape {
@@ -84,5 +85,6 @@ div.basic_printout div.preview-landscape {
 	border-top-style: solid;
 	border-top-width: 1pt;
 	box-shadow: 0 0 8px #D0D0D0;
+	cursor: pointer;
 }
 

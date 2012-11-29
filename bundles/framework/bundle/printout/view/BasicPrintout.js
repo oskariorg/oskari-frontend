@@ -22,7 +22,10 @@ function(instance, localization, backendConfiguration) {
 	this.templateButtonsDiv = jQuery('<div class="buttons"></div>');
 	this.templateHelp = jQuery('<div class="help icon-info"></div>');
 	this.templateTool = jQuery('<div class="tool ">' + '<input type="checkbox"/>' + '<span></span></div>');
-	this.templatePreview = jQuery('<div class="preview"><img /></div>'); 
+	this.templates = {
+		preview : jQuery('<div class="preview"><img /></div>'),
+		location : jQuery('<div class="preview"><img /></div>'),
+	};
 	this.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
 	
 	this.backendConfiguration = backendConfiguration;
@@ -51,10 +54,7 @@ function(instance, localization, backendConfiguration) {
 	this.loc = localization;
 	this.accordion = null;
 
-	this.maplayerPanel = null;
 	this.mainPanel = null;
-	this.normalMapPlugins = [];
-	this.latestGFI = null;
 }, {
 	/**
 	 * @method render
@@ -84,6 +84,11 @@ function(instance, localization, backendConfiguration) {
 		previewPanel.open();
 
 		accordion.addPanel(previewPanel);
+		
+		var scalePanel = this._createLocationAndScalePanel();		
+		scalePanel.open();
+
+		accordion.addPanel(scalePanel);
 
 		accordion.insertTo(contentDiv);
 
@@ -173,8 +178,12 @@ function(instance, localization, backendConfiguration) {
 		var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
 		panel.setTitle(this.loc.preview.label);
 		var contentPanel = panel.getContainer();		
+		
+		var tooltipCont = this.templateHelp.clone();
+		tooltipCont.attr('title', this.loc.preview.tooltip);
+		contentPanel.append(tooltipCont);
 				
-		var previewContent = this.templatePreview.clone();
+		var previewContent = this.templates.preview.clone();
 		
 		contentPanel.append(previewContent);			
 		
@@ -184,6 +193,29 @@ function(instance, localization, backendConfiguration) {
 			me.showFullScaleMapPreview();
 		});
 		this.previewContent = previewContent;
+		return panel;
+	},
+	
+	/**
+	 * @method _createSizePanel
+	 * @private
+	 * Creates the size selection panel for printout
+	 * @return {jQuery} Returns the created panel
+	 */
+	_createLocationAndScalePanel : function() {
+		var me = this;
+		var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+		panel.setTitle(this.loc.location.label);
+		var contentPanel = panel.getContainer();		
+		
+		var tooltipCont = this.templateHelp.clone();
+		tooltipCont.attr('title', this.loc.location.tooltip);
+		contentPanel.append(tooltipCont);
+				
+		var scaleContent = this.templates.location.clone();
+		
+		contentPanel.append(scaleContent);			
+				
 		return panel;
 	},
 	

@@ -28,7 +28,7 @@ Oskari.registerLocalization(
                 },
    				"preview": {
                     "label": "Preview",
-                    "tooltip": "."
+                    "tooltip": "Click the small preview to open a larger preview"
                 },
 
                 "sizes": {
@@ -42,9 +42,11 @@ Oskari.registerLocalization(
                     "ok": "OK",
                     "cancel": "Cancel"
                 },
-                "preview": "Preview of the map to be printed.",
-                "location": "Location and zoom level",
-                "zoomlevel": "Zoom level",
+                "location": {
+                	"label" : "Location and zoom level",
+                	"tooltip" : "Printout scale matches the scale of the map in browser.",
+                	"zoomlevel": "Zoom level",
+                },
                 "help": "Help",
                 "error": {
                     "title": "Error",

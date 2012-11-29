@@ -28,7 +28,7 @@ Oskari.registerLocalization(
                 },     
 				"preview": {
                     "label": "Förhandsgransningsvy",
-                    "tooltip": "."
+                    "tooltip": "Klicka på den lilla förhandsgransningsvyn för att öppna en större förhandsgransningsvy"
                 },
                "sizes": {
                     "A4": "A4-utskrift",
@@ -40,10 +40,12 @@ Oskari.registerLocalization(
                     "save": "Ladda ned PDF-utskriften",
                     "ok": "OK",
                     "cancel": "Avbryt"
+                },                
+                "location": { 
+                	"label" : "Läge och skalnivå.",
+                	"tooltip" : "Utskriftens skalnivå motsvarar skalnivån i webbläsaren.",
+                	"zoomlevel": "Skalnivå"
                 },
-                "preview": "Förhandsgranskningsvy för kartan som ska skrivas ut.",
-                "location": "Läge och skalnivå.",
-                "zoomlevel": "Skalnivå",
                 "help": "Anvisning",
                 "error": {
                     "title": "Fel",
