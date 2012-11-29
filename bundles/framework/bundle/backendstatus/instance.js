@@ -377,6 +377,7 @@ function() {
 		});
 	},
 	_processResponse : function(resp, allKnown) {
+		var me = this;
 		var sandbox = this._sandbox;
 		var evtBuilder = sandbox.getEventBuilder('MapLayerEvent');
 
@@ -445,7 +446,7 @@ function() {
 		}
 
 		if(allKnown) {
-
+			me._pendingAjaxQuery.timestamp = null;
 		} else {
 			for(p in maplayers ) {
 				var evt = evtBuilder(p, 'update');

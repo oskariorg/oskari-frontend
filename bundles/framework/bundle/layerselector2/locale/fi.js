@@ -38,6 +38,10 @@ Oskari.registerLocalization({
 			"MAINTENANCE" : {
 				"tooltip" : "Karttatason saatavuudessa on tiedossa käyttökatkoja lähipäivinä.",
 				"iconClass" : "backendstatus-maintenance"
+			},
+			"UNKNOWN" : {
+				"tooltip" : "",
+				"iconClass" : "backendstatus-ok"
 			}
 		}
 	}

@@ -28,7 +28,7 @@ Oskari.registerLocalization({
 		},
 		"backendStatus" : {
 			"OK" : {
-				"tooltip" : "artlagret är tillgängligt just nu.",
+				"tooltip" : "Kartlagret är tillgängligt just nu.",
 				"iconClass" : "backendstatus-ok"
 			},
 			"DOWN" : {
@@ -38,6 +38,10 @@ Oskari.registerLocalization({
 			"MAINTENANCE" : {
 				"tooltip" : "Avbrott i kartlagrets tillgänglighet är att vänta inom de närmaste dagarna.",
 				"iconClass" : "backendstatus-maintenance"
+			},
+			"UNKNOWN" : {
+				"tooltip" : "",
+				"iconClass" : "backendstatus-ok"
 			}
 		}
 	}
