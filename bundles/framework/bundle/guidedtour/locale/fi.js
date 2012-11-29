@@ -64,7 +64,7 @@ Oskari.registerLocalization(
             },
             "page9": {
                 "title": "Lähentäminen ja loitontaminen",
-                "message" : "Lähennä ja loitonna karttaa mittakaavasäätimestä tai plus- ja miinusmerkeistä säätimen yhteydessä. Vinkki: Voit lähentää ja loitontaa näppäimistön plus- ja miinusnäppäimillä tai lähentää kaksoisosoittamalla karttaa."
+                "message" : "Lähennä ja loitonna karttaa mittakaavasäätimestä tai plus- ja miinusmerkeistä säätimen yhteydessä. Vinkki: Voit lähentää ja loitontaa näppäimistön plus- ja miinusnäppäimillä tai lähentää kaksoisosoittamalla karttaa. Voit myös lähentää ja loitontaa hiiren rullaa vierittämällä."
             }
         }
     }

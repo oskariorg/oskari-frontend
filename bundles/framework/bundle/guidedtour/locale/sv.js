@@ -10,61 +10,61 @@ Oskari.registerLocalization(
                 "finish" : "Valmis",
                 "close" : "Sulje"
             },
-            "title": "Tervetuloa",
+            "title": "Välkommen",
             "desc": "",
             "tourseen" : {
-                "label" : "Älä näytä tätä viestiä uudelleen"
+                "label" : "Visa inte detta meddelande i fortsättningen"
             },
             "page1": {
-                "title": "Tervetuloa Paikkatietoikkunan karttanäkymään",
-                "message" : "Jos olet ensimmäistä kertaa Paikkatietoikkunan karttapalvelussamme, pikaoppaamme auttaa sinut alkuun."
+                "title": "Välkommen till kartvyn i Paikkatietoikkuna",
+                "message" : "Om detta är ditt första besök till karttjänsten i Paikkatietoikkuna, får du hjälp av vår snabbguide med att komma igång."
             },
             "page2": {
-                "title": "Haku",
-                "message" : "Haun avulla voit siirtyä suoraan etsimääsi paikkaan.",
-                "openLink" : "Näytä haku",
-                "closeLink" : "Piilota haku",
-                "tileText" : "Haku"
+                "title": "Sök",
+                "message" : "Visa inte detta meddelande i fortsättningen",
+                "openLink" : "Visa sökrutan",
+                "closeLink" : "Göm sökrutan",
+                "tileText" : "Sök"
             },
             "page3": {
-                "title": "Karttatasot",
-                "message" : "Karttasoista valitset näkyviin eri tiedontuottajien aineistoja. Klikkaa kategoria auki ja valitse joku karttataso.",
-                "openLink" : "Näytä karttatasot",
-                "closeLink" : "Piilota karttatasot",
-                "tileText" : "Karttatasot"
+                "title": "Kartlager",
+                "message" : "Du kan välja de dataprodukter som visas i kartlagren. Klicka på en kategori för att öppna den och välj ett kartlager eller skriv några bokstäver som ingår i namnet på den dataprodukt du söker i sökfältet.",
+                "openLink" : "Visa kartlagren",
+                "closeLink" : "Göm kartlagren",
+                "tileText" : "Kartlager"
             },
             "page4": {
-                "title": "Valitut karttatasot",
-                "message" : "Raahaa karttatasoja uuteen järjestykseen ja säädä niiden läpinäkyvyyttä. Näet muutokset karttaikkunassa.",
-                "openLink" : "Näytä valitut karttatasot",
-                "closeLink" : "Piilota valitut karttatasot",
-                "tileText" : "Valitut karttatasot"
+                "title": "Valda kartlager",
+                "message" : "Du kan ändra på kartlagrens ordning genom att klicka och dra, samt ändra på deras genomskinlighet. Du ser ändringarna i kartfönstret.",
+                "openLink" : "Visa valda kartlager",
+                "closeLink" : "Göm valda kartlager",
+                "tileText" : "Valda kartlager"
             },
             "page5": {
-                "title": "Omat tiedot",
-                "message" : "Kaikki lisäämäsi kohteet, tallentamasi näkymät ja julkaisemasi kartat löytyvät täältä kun olet kirjautuneena sisään. Pääset myös muokkaamaan omia tietojasi täältä.",
-                "openLink" : "Näytä omat tiedot",
-                "closeLink" : "Piilota omat tiedot",
-                "tileText" : "Omat tiedot"
+                "title": "Mina uppgifter",
+                "message" : "Alla de objekt som du märkt på kartan, de kartvyer du lagrat och kartor du inbäddat på webben visas här när du är inloggad. Du kan även ändra dina uppgifter här.",
+                "openLink" : "Visa mina uppgifter",
+                "closeLink" : "Göm min uppgifter",
+                "tileText" : "Mina uppgifter"
             },
             "page6": {
-                "title": "Julkaise kartta",
-                "message" : "Kokoamasi kartan voit julkaista helposti internet-sivustollasi. Määrittelet vain ensin kartan koon ja käyttöliitymän, ja kopioit lopuksi rivin HTML-koodia sivustollesi.",
-                "openLink" : "Näytä kartan julkaisu",
-                "closeLink" : "Piilota kartan julkaisu",
-                "tileText" : "Julkaise kartta"
+                "title": "Definiera karta",
+                "message" : "Du kan lätt inbädda på din webbplats en karta som du har definierat här. Bestäm kartans storlek och användargränssnitt och kopiera en rad med HTML-kod och klistra den på din webbsida.",
+                "openLink" : "Visa definiera karta",
+                "closeLink" : "Göm definiera karta",
+                "tileText" : "Definiera karta"
             },
             "page7": {
-                "title": "Työkalut",
-                "message" : "Työkalujen avulla mm. lisäät kohteita, tallennat näkymän, lähetät linkin näkymään tai perut muutoksen kartalla. Työkalujen selitteet näet kun pidät hetken hiiren kursoria niiden päällä."
+                "title": "Verktyg",
+                "message" : "Med hjälp av verktygen kan du bl.a. tillägga objekt, lagra en kartvy, skapa en länk till en kartvy eller gå tillbaka till en tidigare vy på kartan. Du kan se verktygens förklaringar när du håller muspekaren en stund på dem."
             },
             "page8": {
-                "title": "Liikkuminen kartalla",
-                "message" : "Voit siirtää karttaa raahaamalla tai panorointinuolia käyttäen. Palauta kartta oletustilaan nuolten keskellä olevasta painikkeesta. Vinkki: Myös näppäimistön nuolinäppäimet panoroivat karttaa."
+                "title": "Flytta kartvyn",
+                "message" : "Du kan flytta kartvyn genom att klicka och dra på kartan eller med hjälp av panoreringskontrollerna. Du kan återgå till startläget genom att klicka på knappen i mitten av panoreringskontrollerna. Tips: Du kan även panorera kartan genom att trycka på piltangenterna på ditt tangentbord."
             },
             "page9": {
-                "title": "Lähentäminen ja loitontaminen",
-                "message" : "Lähennä ja loitonna karttaa mittakaavasäätimestä tai plus- ja miinusmerkeistä säätimen yhteydessä. Vinkki: Voit lähentää ja loitontaa näppäimistön plus- ja miinusnäppäimillä tai lähentää kaksoisosoittamalla karttaa."
+                "title": "Zooma in och zooma ut",
+                "message" : "Du kan zooma in och ut på kartan med skalans glidreglage eller med hjälp av plus- och minusknapparna bredvid glidreglaget. Tips: Du kan zooma in och ut med hjälp av plus- och minustangenterna på ditt tangentbord eller zooma in genom att dubbelklicka på kartan. Du kan även använda rullhjulet på din mus för att zooma ut och in på kartan."
             }
         }
     }
