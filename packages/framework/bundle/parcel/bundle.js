@@ -30,7 +30,7 @@ function() {
 	 * bundle
 	 */
 	"update" : function(manager, bundle, bi, info) {
-
+        manager.alert("RECEIVED update notification " + info);
 	}
 },
 
@@ -38,67 +38,163 @@ function() {
  * metadata
  */
 {
+    "protocol" : ["Oskari.bundle.Bundle"],
+    "source" : {
+        "scripts" : [
+        /* event */
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/event/FinishedDrawingEvent.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/event/ParcelHoverEvent.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/event/ParcelChangedEvent.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/event/ParcelSelectedEvent.js"
+        },
+        /* model */
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/model/Parcel.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/model/ParcelCategory.js"
+        },
+        /* plugin */
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/plugin/DrawPlugin.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/plugin/HoverPlugin.js"
+        },
+        /* request */
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/request/StopDrawingRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/request/StartDrawingRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/request/GetGeometryRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/request/GetGeometryRequestHandler.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/request/StartDrawingRequestHandler.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/request/StopDrawingRequestHandler.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/request/EditPlaceRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/request/EditCategoryRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/request/DeleteCategoryRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/request/PublishCategoryRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/request/EditRequestHandler.js"
+        },
+        /* service */
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/service/ParcelService.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/service/ParcelWFSTStore.js"
+        },
+        /* ui */
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/view/MainView.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/view/PlaceForm.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/view/CategoryForm.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/ButtonHandler.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/CategoryHandler.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/instance.js"
+        }, {
+           // NOTE! EXTERNAL LIBRARY!
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/jscolor/jscolor.js"
+        },
+        // css
+        {
+            "type" : "text/css",
+            "src" : "../../../../resources/framework/bundle/parcel/css/parcel.css"
+        }],
 
-	"protocol" : ["Oskari.bundle.Bundle"],
-	"source" : {
-		"scripts" : [{
-			"type" : "text/css",
-			"src" : "../../../../resources/framework/bundle/parcel/css/style.css"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/parcel/instance.js"
-		}],
-		"locales" : [{
-			"lang" : "fi",
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/parcel/locale/fi.js"
-		}, {
-			"lang" : "sv",
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/parcel/locale/sv.js"
-		}, {
-			"lang" : "en",
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/parcel/locale/en.js"
-		}]
-	},
-	"bundle" : {
-		"manifest" : {
-			"Bundle-Identifier" : "parcel",
-			"Bundle-Name" : "parcel",
-			"Bundle-Author" : [{
-				"Name" : "ev",
-				"Organisation" : "nls.fi",
-				"Temporal" : {
-					"Start" : "2009",
-					"End" : "2011"
-				},
-				"Copyleft" : {
-					"License" : {
-						"License-Name" : "EUPL",
-						"License-Online-Resource" : "http://www.paikkatietoikkuna.fi/license"
-					}
-				}
-			}],
-			"Bundle-Name-Locale" : {
-				"fi" : {
-					"Name" : " style-1",
-					"Title" : " style-1"
-				},
-				"en" : {}
-			},
-			"Bundle-Version" : "1.0.0",
-			"Import-Namespace" : ["Oskari"],
-			"Import-Bundle" : {}
+        "locales" : [{
+            "lang" : "fi",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/locale/fi.js"
+        }, {
+            "lang" : "sv",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/locale/sv.js"
+        }, {
+            "lang" : "en",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/locale/en.js"
+        }
+       ]
+    },
+    "bundle" : {
+        "manifest" : {
+            "Bundle-Identifier" : "parcel",
+            "Bundle-Name" : "parcel",
+            "Bundle-Author" : [{
+                "Name" : "jjk",
+                "Organisation" : "nls.fi",
+                "Temporal" : {
+                    "Start" : "2009",
+                    "End" : "2011"
+                },
+                "Copyleft" : {
+                    "License" : {
+                        "License-Name" : "EUPL",
+                        "License-Online-Resource" : "http://www.paikkatietoikkuna.fi/license"
+                    }
+                }
+            }],
+            "Bundle-Name-Locale" : {
+                "fi" : {
+                    "Name" : " style-1",
+                    "Title" : " style-1"
+                },
+                "en" : {}
+            },
+            "Bundle-Version" : "1.0.0",
+            "Import-Namespace" : ["Oskari", "jquery"],
+            "Import-Bundle" : {}
+        }
+    },
 
-		}
-	},
-
-	/**
-	 * @static
-	 * @property dependencies
-	 */
-	"dependencies" : []
+    /**
+     * @static
+     * @property dependencies
+     */
+    "dependencies" : ["jquery"]
 
 });
 

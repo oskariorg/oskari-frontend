@@ -130,19 +130,19 @@
     background: url('../icons/icons.png') -448px 0px;
 }
 
-.myplaces-draw-area, .parcel-draw-area {
+.myplaces-draw-area {
     width: 32px;
     height: 32px;
     background: url('../icons/icons.png') -480px 0px;
 }
 
-.myplaces-draw-line, .parcel-draw-line {
+.myplaces-draw-line {
     width: 32px;
     height: 32px;
     background: url('../icons/icons.png') -512px 0px;
 }
 
-.myplaces-draw-point, .parcel-draw-point {
+.myplaces-draw-point {
     width: 32px;
     height: 32px;
     background: url('../icons/icons.png') -544px 0px;

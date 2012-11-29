@@ -1,5 +1,5 @@
 jQuery(document).ready(function() {
-	Oskari.setLang('en');
+	Oskari.setLang('fi');
 	Oskari.setLoaderMode('dev');
 	var appSetup;
 	var appConfig;
