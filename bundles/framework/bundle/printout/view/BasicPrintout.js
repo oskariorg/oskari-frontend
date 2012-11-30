@@ -84,10 +84,10 @@ function(instance, localization, backendConfiguration) {
 
 		accordion.addPanel(previewPanel);
 
-		var scalePanel = this._createLocationAndScalePanel();
+		/*var scalePanel = this._createLocationAndScalePanel();
 		scalePanel.open();
 
-		accordion.addPanel(scalePanel);
+		accordion.addPanel(scalePanel);*/
 
 		accordion.insertTo(contentDiv);
 
