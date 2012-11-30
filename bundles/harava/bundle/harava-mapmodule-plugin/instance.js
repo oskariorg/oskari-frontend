@@ -20,7 +20,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapModulePluginBundleInstance",
         //  **************************************
         //    Your code here
         //  **************************************
-        alert('Hello World');
+        //alert('Hello World');
         //  **************************************
         //    Your code ends
         //  **************************************

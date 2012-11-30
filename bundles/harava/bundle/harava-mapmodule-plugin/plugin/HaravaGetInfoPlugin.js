@@ -71,7 +71,7 @@ function() {
         var me = this;
         this._sandbox = sandbox;
         this._sandbox.printDebug("[GetInfoPlugin] init");
-        this.getGFIHandler = Oskari.clazz.create('Oskari.mapframework.mapmodule-plugin.getinfo.GetFeatureInfoHandler', me);
+        this.getGFIHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.getinfo.GetFeatureInfoHandler', me);
     },
     /**
      * @method register
@@ -314,7 +314,6 @@ function() {
         
         var mapVO = me._sandbox.getMap();
        
-
         jQuery.ajax({
             beforeSend : function(x) {
             	me._pendingAjaxQuery.jqhr = x;
