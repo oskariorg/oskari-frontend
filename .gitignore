@@ -4,3 +4,4 @@ liferay-portlet.xml
 docroot/WEB-INF/classes
 bin/
 dist/
+META-INF/
