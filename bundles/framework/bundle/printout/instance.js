@@ -25,8 +25,10 @@ function() {
 	this.printoutHandler = null;
 	this.backendConfiguration = {
 		formatProducers : {
-			"application/pdf" : "http://viljonkkatu02.nls.fi:8080/portti-map-imaging-0.0.1-SNAPSHOT/imaging/service/thumbnail/maplink.pdf?",
-			"image/png" : "http://viljonkkatu02.nls.fi:8080/portti-map-imaging-0.0.1-SNAPSHOT/imaging/service/thumbnail/maplink.png?"
+			"application/pdf" : 
+				"http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.pdf?",
+			"image/png" : 
+				"http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.png?"
 		}
 	};
 	var me = this;
@@ -105,7 +107,7 @@ function() {
 				tooltip : '',
 				sticky : true,
 				callback : function() {
-					me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'attach']);
+					me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'attach']);
 				}
 			}
 		};
