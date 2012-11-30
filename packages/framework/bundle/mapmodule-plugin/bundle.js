@@ -98,6 +98,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/markers/MarkersPlugin.js"
 		},
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/RemoveMarkerRequest.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/MarkerRequestHandler.js"
+        },
         /**
          * Search plugin
          */
@@ -229,15 +237,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/zoombar/Portti2Zoombar.js"
 		}, {
 		    "type" : "text/css",
-		    "src" : "../../../../resources/framework/bundle/" + 
-		            "mapmodule-plugin/plugin/portti2zoombar/css/porttizoombar.css"	  
+		    "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/css/porttizoombar.css"	  
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/panbuttons/PanButtons.js"
 		},{
 		    "type" : "text/css",
-		    "src" : "../../../../resources/framework/bundle/" + 
-		            "mapmodule-plugin/plugin/panbuttons/css/panbuttons.css"	  
+		    "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/css/panbuttons.css"	  
 		},{
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/instance.js"

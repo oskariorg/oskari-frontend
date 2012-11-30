@@ -62,6 +62,7 @@ function() {
      *          reference to application sandbox
      */
     init : function(sandbox) {
+        this.requestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MarkerRequestHandler', this);
     },
 
     /**
@@ -92,8 +93,8 @@ function() {
         this._map = this.getMapModule().getMap();
 
         this._createMapMarkersLayer();
-
         sandbox.register(this);
+        this._sandbox.addRequestHandler('MapModulePlugin.RemoveMarkerRequest', this.requestHandler);
         for (p in this.eventHandlers ) {
             sandbox.registerForEventByName(this, p);
         }
@@ -107,6 +108,8 @@ function() {
      */
     stopPlugin : function(sandbox) {
 
+        this._sandbox.removeRequestHandler('MapModulePlugin.RemoveMarkerRequest', this.requestHandler);
+        
         for (p in this.eventHandlers ) {
             sandbox.unregisterFromEventByName(this, p);
         }
@@ -152,6 +155,22 @@ function() {
     onEvent : function(event) {
         return this.eventHandlers[event.getName()].apply(this, [event]);
     },
+    
+    /**
+     * @method removeMapMarkers
+     * Creates an OpenLayers Markers layer names "Markers" and adds it to the map.
+     * @param {String[]} idList
+     *      list of markers to remove or null to remove all, remove by id not implemented yet (optional, removes all markers)
+     * 
+     */
+    removeMapMarkers : function(idList) {
+        var mapModule = this.getMapModule();
+        // FIXME: temporary fix - calling private method on mapModule (DO NOT DO THIS)
+        // fix when making the proper marker plugin functionality
+        if(mapModule) {
+            mapModule._removeMarkers();
+        }
+    },
 
     /**
      * @method _createMapMarkersLayer
@@ -162,7 +181,6 @@ function() {
         var sandbox = this._sandbox;
         var layerMarkers = new OpenLayers.Layer.Markers("Markers");
         this._map.addLayer(layerMarkers);
-
     },
 
     /**
