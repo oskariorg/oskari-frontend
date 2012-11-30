@@ -139,11 +139,11 @@ function() {
         this.buttons.start();
         
         var user = sandbox.getUser();
-        if(!user.isLoggedIn()) {
+/*TODO: LOGGING        if(!user.isLoggedIn()) {
             // guest users don't need anything else
             return;
         }
-        // handles category related logic - syncs categories to parcels map layers etc
+*/        // handles category related logic - syncs categories to parcels map layers etc
         this.categoryHandler = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.CategoryHandler', this);
         this.categoryHandler.start();
 
