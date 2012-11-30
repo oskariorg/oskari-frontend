@@ -3,15 +3,15 @@ Oskari.registerLocalization(
         "lang": "fi",
         "key": "Printout",
         "value": {
-            "title": "Tulosta kartta",
+            "title": "Tulosta näkymä",
             "flyouttitle": "Siirry tulostamaan",
             "desc": "",
             "BasicView": {
-                "title": "Tulosta kartta",
+                "title": "Tulosta näkymä",
                 "name": {
                     "label": "Kartan nimi",
                     "placeholder": "pakollinen",
-                    "tooltip": "Anna kartalle kuvaileva nimi. Huomioi käyttöliittymän kieli."
+                    "tooltip": "Anna näkymälle kuvaileva nimi. Huomioi käyttöliittymän kieli."
                 },
                 "language": {
                     "label": "Kieli",
@@ -24,11 +24,11 @@ Oskari.registerLocalization(
                 },
                 "size": {
                     "label": "Koko",
-                    "tooltip": "Valitse tai määrittele kartalle koko, jossa haluat esittää sen sivuillasi. Näet vaikutuksen esikatselukartassa."
+                    "tooltip": "Valitse arkkikoko. Näet vaikutuksen esikatselukartassa."
                 },
                 "preview": {
                     "label": "Esikatselu",
-                    "tooltip": "Suuremman esikatselukuvan saat karttakuvaa napauttamalla."
+                    "tooltip": "Suuremman esikatselukuvan saat kuvaa napauttamalla."
                 },
                 "sizes": {
                     "A4": "A4-tuloste",
@@ -52,7 +52,7 @@ Oskari.registerLocalization(
                     "size": "Virhe kokomäärityksissä",
                     "name": "Nimi on pakollinen tieto",
                     "nohelp": "Ohjetta ei löytynyt",
-                    "saveFailed": "Kartan tulostus epäonnistui. Yritä myöhemmin uudelleen.",
+                    "saveFailed": "Näkymän tulostus epäonnistui. Yritä myöhemmin uudelleen.",
                     "nameIllegalCharacters": "Nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki."
                 }
             },

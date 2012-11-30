@@ -3,11 +3,11 @@ Oskari.registerLocalization(
         "lang": "sv",
         "key": "Printout",
         "value": {
-            "title": "Definiera kartutskrift",
-            "flyouttitle": "Definiera karta",
+            "title": "Skriv ut kartvyn",
+            "flyouttitle": "Skriv ut kartvyn",
             "desc": "",
             "BasicView": {
-                "title": "Kartutskrift",
+                "title": "Skriv ut kartvyn",
                 "name": {
                     "label": "Kartans namn",
                     "placeholder": "obligatorisk uppgift",
@@ -24,16 +24,16 @@ Oskari.registerLocalization(
                 },
                 "size": {
                     "label": "Storlek",
-                    "tooltip": "Välj eller definiera storleken på kartan. Kartan förhandsvisas i den valda storleken."
+                    "tooltip": "Välj storleken på kartan. Kartan förhandsvisas i den valda storleken."
                 },     
 				"preview": {
                     "label": "Förhandsgransningsvy",
                     "tooltip": "Klicka på den lilla förhandsgransningsvyn för att öppna en större förhandsgransningsvy"
                 },
                "sizes": {
-                    "A4": "A4-utskrift",
+                    "A4": "A4",
                     "A4_Landscape": "A4-horisontell",
-                    "A3": "A3-utskrift",
+                    "A3": "A3",
                     "A3_Landscape": "A3-horisontell"
                 },
                 "buttons": {
