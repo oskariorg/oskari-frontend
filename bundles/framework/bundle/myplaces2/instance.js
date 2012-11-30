@@ -169,6 +169,7 @@ function() {
         sandbox.addRequestHandler('MyPlaces.EditPlaceRequest', this.editRequestHandler);
         sandbox.addRequestHandler('MyPlaces.EditCategoryRequest', this.editRequestHandler);
         sandbox.addRequestHandler('MyPlaces.DeleteCategoryRequest', this.editRequestHandler);
+        sandbox.addRequestHandler('MyPlaces.PublishCategoryRequest', this.editRequestHandler);
     },
     /**
      * @method stop

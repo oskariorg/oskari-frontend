@@ -1,5 +1,5 @@
 /**
- * @class Oskari.framework.bundle.metadata.MetadataSearchInstance
+ * @class Oskari.mapframework.bundle.metadata.MetadataSearchInstance
  * 
  * This bundle adds a selection box plugin to the map and updates the metadata
  * search forms hidden fields to pass that selection to the search implementation

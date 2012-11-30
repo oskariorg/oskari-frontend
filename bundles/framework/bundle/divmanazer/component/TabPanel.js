@@ -16,6 +16,7 @@ function() {
     this.title = null;
     this.content = null;
     this.header = null;
+    this.selectionHandler = null;
     this.html=this.template.clone();
     this.html.hide();
 }, {
@@ -83,6 +84,24 @@ function() {
         return this.html;
     },
 
+    /**
+     * @method setSelectionHandler
+     * Sets a handler function that is called when the panel is selected or unselected.
+     * The function receives a boolean parameter indicating if the panel was selected (true) or unselected(false)
+     * @param {Function} pHandler handler function
+     */
+    setSelectionHandler : function(pHandler) {
+        this.selectionHandler = pHandler;
+    },
+    /**
+     * @method handleSelection
+     * @param {Boolean} true if panel was selected, false if unselected
+     */
+    handleSelection : function(isSelected) {
+        if(this.selectionHandler) {
+            this.selectionHandler(isSelected == true);
+        }
+    },
     /**
      * @method insertTo
      * Adds this panel to given container.

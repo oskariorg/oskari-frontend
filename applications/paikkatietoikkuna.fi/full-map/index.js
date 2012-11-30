@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
      * starts the application with bundle definitions declared
      * in property appSetup.startupSequence
      */
-    start : function() {
+    start : function(cb) {
 
         var me = this;
 
@@ -37,7 +37,30 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
         app.startApplication(function(startupInfos) {
-            me.instance = startupInfos.bundlesInstanceInfos['mapfull'].bundleInstance;
+            me.instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
+            if(cb) {
+                cb(me.instance);
+            }
+            // var ugStartup =
+            //     {
+            //         'instanceProps': {},
+            //         'title': 'Guided Tour',
+            //         'bundleinstancename': 'guidedtour',
+            //         'fi': 'guidedtour',
+            //         'sv': 'guidedtour',
+            //         'en': 'guidedtour',
+            //         'bundlename': 'guidedtour',
+            //         'metadata': {
+            //             'Import-Bundle': {
+            //                 'guidedtour': {
+            //                     'bundlePath':
+            // '/Oskari/packages/sample/bundle/'
+            //                 }
+            //             },
+            //             'Require-Bundle-Instance': [ ]
+            //         }
+            //     };
+            // Oskari.bundle_facade.playBundle(ugStartup, function() {});
         });
     },
     /**
@@ -49,8 +72,8 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
         'mapfull' : {
             // properties that will be made available before bundle start()
             // 'key' : 'value'
-            // can be accessed in mapfull.start() like: alert('This should return
-            // "value" :' + this.key);
+            // can be accessed in mapfull.start() like:
+            // alert('This should return "value" :' + this.key);
         }
     },
 
@@ -63,18 +86,6 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
         startupSequence : [
         // openlayers
         {
-            /*   callback : function() {
-            // FIXME: this isn't the right place to initiate this
-            // seems EPSG3067.js might be loaded before proj4js-compressed.js which causes problems
-            Proj4js.getScriptLocation = function() {
-            // FIXME: hardcoding
-            return "/Oskari/libraries/proj4js-1.0.1/defs";
-            };
-            Proj4js.defs = {
-            "EPSG:3067" : "+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs",
-            "EPSG:4326" : "+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
-            };
-            },*/
             // style selection may be done with CSS Links also - just for demo
             title : 'OpenLayers',
             fi : 'OpenLayers',
@@ -142,19 +153,9 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
                     "service-map" : {
                         bundlePath : '/Oskari/packages/framework/bundle/'
                     },
-                    "common" : {
-                        bundlePath : '/Oskari/packages/framework/bundle/'
-                    },
                     "domain" : {
                         bundlePath : '/Oskari/packages/framework/bundle/'
                     },
-                    "runtime" : {
-                        bundlePath : '/Oskari/packages/framework/bundle/'
-                    },
-                    // kovakoodattu konffi
-                    /*	"layers" : {
-                     bundlePath : '/Oskari/proof-of-concepts/oskari/bundle/'
-                     },*/
                     "mapmodule-plugin" : {
                         bundlePath : '/Oskari/packages/framework/bundle/'
                     },
@@ -167,20 +168,26 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
                     "mapfull" : {
                         bundlePath : '/Oskari/packages/framework/bundle/'
                     }
-                    // paketointi scriptin luontia avustava bundle
-                    /*
-                     USAGE: setup callback in the last bundle in sequence:
-                     callback : function() {
-                     Oskari.clazz.create('Oskari.tools.Yui').showYuiBuildCmd();
-                     },
-                     ,
-                     "yui" : {
-                     bundlePath : '/Oskari/packages/tools/bundle/'
-                     }
-                     */
                 },
                 "Require-Bundle-Instance" : []
 
+            },
+            instanceProps : {}
+        },
+        {
+            title : 'OskariUI',
+            fi : 'OskariUI',
+            sv : 'OskariUI',
+            en : 'OskariUI',
+            bundlename : 'oskariui',
+            bundleinstancename : 'oskariui',
+            metadata : {
+                "Import-Bundle" : {
+                    "oskariui" : {
+                        bundlePath : '/Oskari/packages/framework/bundle/'
+                    }
+                },
+                "Require-Bundle-Instance" : []
             },
             instanceProps : {}
         },
@@ -218,9 +225,6 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
             },
             instanceProps : {}
         }, {
-            /*    callback : function() {
-             Oskari.setLoaderMode('dev');
-             }, */
             title : 'StateHandler',
             fi : 'jquery',
             sv : '?',
@@ -416,6 +420,70 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
                 "Require-Bundle-Instance" : []
             },
             instanceProps : {}
+        }, {
+            'title' : 'GuidedTour',
+            'bundleinstancename' : 'GuidedTour',
+            'fi' : 'guidedtour',
+            'sv' : 'guidedtour',
+            'en' : 'guidedtour',
+            'bundlename' : 'GuidedTour',
+            'metadata' : {
+                'Import-Bundle' : {
+                    'guidedtour' : {
+                        'bundlePath' : '/Oskari/packages/framework/bundle/'
+                    }
+                },
+                'Require-Bundle-Instance' : []
+            },
+            'instanceProps' : {}
+        }, {
+            title : 'Legends',
+            fi : 'Karttaselitteet',
+            sv : 'Förklaringar',
+            en : 'Legends',
+            bundlename : 'maplegend',
+            bundleinstancename : 'maplegend',
+            metadata : {
+                "Import-Bundle" : {
+                    "maplegend" : {
+                        bundlePath : '/Oskari/packages/framework/bundle/'
+                    }
+                },
+                "Require-Bundle-Instance" : []
+            },
+            instanceProps : {}
+        }, {
+            title : 'BackendStatus',
+            fi : 'Taustajärjestelmien saatavuustiedot',
+            sv : '???',
+            en : 'Backend Status',
+            bundlename : 'backendstatus',
+            bundleinstancename : 'backendstatus',
+            metadata : {
+                "Import-Bundle" : {
+                    "backendstatus" : {
+                        bundlePath : '/Oskari/packages/framework/bundle/'
+                    }
+                },
+                "Require-Bundle-Instance" : []
+            },
+            instanceProps : {}
+        }, {
+            title : 'PostProcessor',
+            fi : 'PostProcessor',
+            sv : 'PostProcessor',
+            en : 'PostProcessor',
+            bundlename : 'postprocessor',
+            bundleinstancename : 'postprocessor',
+            metadata : {
+                "Import-Bundle" : {
+                    "postprocessor" : {
+                        bundlePath : '/Oskari/packages/framework/bundle/'
+                    }
+                },
+                "Require-Bundle-Instance" : []
+            },
+            instanceProps : {}
         }]
     }
 });
@@ -424,28 +492,74 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
  * Start when dom ready
  */
 jQuery(document).ready(function() {
-
     var args = {
         oskariLoaderMode : 'dev',
         style : 'style1'
     };
-    // TODO: setup url & language
-    //var ajaxUrl = "/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&";
 
     if (!ajaxUrl) {
         alert('Ajax URL not set - cannot proceed');
         return;
     }
+
+    function getURLParameter(name) {
+        var re = name + '=' + '([^&]*)(&|$)';
+        var value = RegExp(re).exec(location.search);
+        if (value && value.length && value.length > 1) {
+            value = value[1];
+        }
+        if (value) {
+            return decodeURI(value);
+        }
+        return null;
+    }
+
+    // returns empty string if parameter doesn't exist
+    // otherwise returns '<param>=<param value>&'
+
+    function getAdditionalParam(param) {
+        var value = getURLParameter(param);
+        if (value) {
+            return param + '=' + value + '&';
+        }
+        return '';
+    }
+
+    var args = {
+        oskariLoaderMode : 'yui',
+        style : 'style1'
+    };
+    if (!ajaxUrl) {
+        alert('Ajax URL not set - cannot proceed');
+        return;
+    }
+
+    // populate url with possible control parameters
+    ajaxUrl += getAdditionalParam('zoomLevel');
+    ajaxUrl += getAdditionalParam('coord');
+    ajaxUrl += getAdditionalParam('mapLayers');
+    ajaxUrl += getAdditionalParam('oldId');
+    ajaxUrl += getAdditionalParam('viewId');
+
+    ajaxUrl += getAdditionalParam('isCenterMarker');
+    ajaxUrl += getAdditionalParam('address')
+    ajaxUrl += getAdditionalParam('showGetFeatureInfo');
+    ajaxUrl += getAdditionalParam('nationalCadastralReference');
+
+    ajaxUrl += getAdditionalParam('nationalCadastralReferenceHighlight');
+    ajaxUrl += getAdditionalParam('wfsFeature');
+    ajaxUrl += getAdditionalParam('wfsHighlightLayer');
+
     if (!language) {
         // default to finnish
         language = 'fi';
     }
-
-    if (location.search && location.search.length > 1) {
-        ajaxUrl += location.search.substr(1, location.search.length) + '&';
-    }
-
     Oskari.setLang(language);
+
+    // if (location.search && location.search.length > 1) {
+    //     ajaxUrl +=
+    //         location.search.substr(1, location.search.length) + '&';
+    // }
 
     Oskari.setLoaderMode('dev');
     Oskari.setPreloaded(false);
@@ -456,10 +570,20 @@ jQuery(document).ready(function() {
     var main = Oskari.clazz.create('Oskari.paikkatietoikkuna.Main');
     main.processArgs(args);
 
-    if (ajaxUrl.indexOf('http') == 0) {        
+    if (ajaxUrl.indexOf('http') == 0) {
         var hostIdx = ajaxUrl.indexOf('://') + 3;
         var pathIdx = ajaxUrl.indexOf('/', hostIdx);
         ajaxUrl = ajaxUrl.substring(pathIdx);
+    }
+    var gfiParamHandler = function(sandbox) {
+        if(getURLParameter('showGetFeatureInfo') != 'true') {
+            return;
+        }
+        var lon  = sandbox.getMap().getX();
+        var lat  = sandbox.getMap().getY();
+        var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+        var px = mapModule.getMap().getViewPortPxFromLonLat({lon : lon, lat: lat});
+        sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
     }
 
     jQuery.ajax({
@@ -470,24 +594,23 @@ jQuery(document).ready(function() {
                 x.overrideMimeType("application/j-son;charset=UTF-8");
             }
         },
-
-        url : ajaxUrl + 'action_route=GetAppSetup&viewId=1',
+        url : ajaxUrl + 'action_route=GetAppSetup',
         success : function(appSetup) {
             if (appSetup.startupSequence && appSetup.configuration) {
                 main.appSetup.startupSequence = appSetup.startupSequence;
                 main.appConfig = appSetup.configuration;
                 main.start(function(instance) {
-                              var sb = instance.getSandbox();
-                               //sandbox.disableDebug();
-                               //sandbox._core.disableDebug();
-                           });
+                    var sb = instance.getSandbox();
+                    gfiParamHandler(sb);
+                });
             } else {
-                alert(JSON.stringify(appSetup));
+                jQuery('#mapdiv').append('Unable to start');
             }
         },
-        error : function() {
-            alert("Unable to start.");
+        error : function(jqXHR, textStatus) {
+            if (jqXHR.status != 0) {
+                jQuery('#mapdiv').append('Unable to start');
+            }
         }
     });
-
-}); 
+});

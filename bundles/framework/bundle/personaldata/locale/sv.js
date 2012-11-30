@@ -9,6 +9,10 @@ Oskari.registerLocalization({
       "myplaces": {
         "title": "Objekt",
         "nocategories": "Du har ännu inte lagrat objekten.",
+        "publishCategory": {
+            "privateTooltip": "Kartlagret är privat. Klicka på lagret för att offentliggöra det.",
+            "publicTooltip": "Kartlagret är offentliggöra. Klicka på lagret för att privat det."
+        },
         "editCategory": "Editera kartlager",
         "deleteCategory": "Ta bort kartlager",
         "edit": "Editera",

@@ -1,9 +1,41 @@
+.backendstatus-down {
+    width: 20px;
+    height: 20px;
+    background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: 0px 0px !important;
+}
+
+.backendstatus-maintenance {
+    width: 20px;
+    height: 20px;
+    background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -46px 0px !important;
+}
+
+.backendstatus-maintenance-pending {
+    width: 20px;
+    height: 20px;
+    background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -92px 0px !important;
+}
+
 .component-indexmap {
     width: 46px;
     height: 46px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: 0px 0px !important;
+    background-position: -138px 0px !important;
+}
+
+.component-indexmap:hover {
+    width: 46px;
+    height: 46px;
+    background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -138px -46px !important;
 }
 
 .component-tab-bg {
@@ -11,7 +43,7 @@
     height: 26px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -46px 0px !important;
+    background-position: -184px 0px !important;
 }
 
 .icon-arrow-down {
@@ -19,7 +51,7 @@
     height: 15px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -92px 0px !important;
+    background-position: -230px 0px !important;
 }
 
 .icon-arrow-right {
@@ -27,7 +59,7 @@
     height: 15px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -138px 0px !important;
+    background-position: -276px 0px !important;
 }
 
 .icon-arrow-white-down {
@@ -35,7 +67,7 @@
     height: 15px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -184px 0px !important;
+    background-position: -322px 0px !important;
 }
 
 .icon-arrow-white-right {
@@ -43,7 +75,7 @@
     height: 15px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -230px 0px !important;
+    background-position: -368px 0px !important;
 }
 
 .icon-bubble-left {
@@ -51,7 +83,7 @@
     height: 15px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -276px 0px !important;
+    background-position: -414px 0px !important;
 }
 
 .icon-bubble-right {
@@ -59,7 +91,7 @@
     height: 21px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -322px 0px !important;
+    background-position: -460px 0px !important;
 }
 
 .icon-close {
@@ -67,7 +99,15 @@
     height: 16px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -368px 0px !important;
+    background-position: -506px 0px !important;
+}
+
+.icon-close:hover {
+    width: 16px;
+    height: 16px;
+    background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -506px -46px !important;
 }
 
 .icon-close-white {
@@ -75,15 +115,7 @@
     height: 20px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -414px 0px !important;
-}
-
-.icon-drag-corner {
-    width: 23px;
-    height: 23px;
-    background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
-    background-repeat: no-repeat !important;
-    background-position: -460px 0px !important;
+    background-position: -552px 0px !important;
 }
 
 .icon-drag {
@@ -91,7 +123,31 @@
     height: 16px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -506px 0px !important;
+    background-position: -598px 0px !important;
+}
+
+.icon-drag:hover {
+    width: 16px;
+    height: 16px;
+    background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -598px -46px !important;
+}
+
+.icon-drag-corner {
+    width: 23px;
+    height: 23px;
+    background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -644px 0px !important;
+}
+
+.icon-drag-corner:hover {
+    width: 23px;
+    height: 23px;
+    background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -644px -46px !important;
 }
 
 .icon-info {
@@ -99,7 +155,15 @@
     height: 16px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -552px 0px !important;
+    background-position: -690px 0px !important;
+}
+
+.icon-info:hover {
+    width: 16px;
+    height: 16px;
+    background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -690px -46px !important;
 }
 
 .icon-maximize {
@@ -107,7 +171,15 @@
     height: 16px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -598px 0px !important;
+    background-position: -736px 0px !important;
+}
+
+.icon-maximize:hover {
+    width: 16px;
+    height: 16px;
+    background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -736px -46px !important;
 }
 
 .icon-minimize {
@@ -115,23 +187,31 @@
     height: 16px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -644px 0px !important;
+    background-position: -782px 0px !important;
+}
+
+.icon-minimize:hover {
+    width: 16px;
+    height: 16px;
+    background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -782px -46px !important;
 }
 
 .icon-private {
-    width: 28px;
-    height: 28px;
+    width: 18px;
+    height: 18px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -690px 0px !important;
+    background-position: -828px 0px !important;
 }
 
 .icon-public {
-    width: 28px;
-    height: 28px;
+    width: 18px;
+    height: 18px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -736px 0px !important;
+    background-position: -874px 0px !important;
 }
 
 .icon-restore {
@@ -139,7 +219,15 @@
     height: 16px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -782px 0px !important;
+    background-position: -920px 0px !important;
+}
+
+.icon-restore:hover {
+    width: 16px;
+    height: 16px;
+    background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -920px -46px !important;
 }
 
 .icon-select-geometry {
@@ -147,7 +235,7 @@
     height: 23px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -828px 0px !important;
+    background-position: -966px 0px !important;
 }
 
 .layer-base {
@@ -155,7 +243,7 @@
     height: 16px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -874px 0px !important;
+    background-position: -1012px 0px !important;
 }
 
 .layer-gfi-1 {
@@ -163,7 +251,7 @@
     height: 16px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -920px 0px !important;
+    background-position: -1058px 0px !important;
 }
 
 .layer-gfi-2 {
@@ -171,7 +259,7 @@
     height: 16px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -966px 0px !important;
+    background-position: -1104px 0px !important;
 }
 
 .layer-group {
@@ -179,7 +267,7 @@
     height: 16px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1012px 0px !important;
+    background-position: -1150px 0px !important;
 }
 
 .layer-vector {
@@ -187,7 +275,7 @@
     height: 16px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1058px 0px !important;
+    background-position: -1196px 0px !important;
 }
 
 .layer-wfs {
@@ -195,7 +283,7 @@
     height: 16px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1104px 0px !important;
+    background-position: -1242px 0px !important;
 }
 
 .layer-wms {
@@ -203,7 +291,7 @@
     height: 16px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1150px 0px !important;
+    background-position: -1288px 0px !important;
 }
 
 .layer-wmts {
@@ -211,7 +299,7 @@
     height: 16px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1196px 0px !important;
+    background-position: -1334px 0px !important;
 }
 
 .myplaces-area {
@@ -219,7 +307,7 @@
     height: 28px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1242px 0px !important;
+    background-position: -1380px 0px !important;
 }
 
 .myplaces-draw-area {
@@ -227,7 +315,7 @@
     height: 32px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1288px 0px !important;
+    background-position: -1426px 0px !important;
 }
 
 .myplaces-draw-line {
@@ -235,7 +323,7 @@
     height: 32px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1334px 0px !important;
+    background-position: -1472px 0px !important;
 }
 
 .myplaces-draw-point {
@@ -243,7 +331,7 @@
     height: 32px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1380px 0px !important;
+    background-position: -1518px 0px !important;
 }
 
 .myplaces-line {
@@ -251,7 +339,7 @@
     height: 28px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1426px 0px !important;
+    background-position: -1564px 0px !important;
 }
 
 .myplaces-point {
@@ -259,7 +347,7 @@
     height: 28px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1472px 0px !important;
+    background-position: -1610px 0px !important;
 }
 
 .tool-history-back {
@@ -267,7 +355,7 @@
     height: 32px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1518px 0px !important;
+    background-position: -1656px 0px !important;
 }
 
 .tool-history-forward {
@@ -275,7 +363,7 @@
     height: 32px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1564px 0px !important;
+    background-position: -1702px 0px !important;
 }
 
 .tool-link {
@@ -283,7 +371,7 @@
     height: 32px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1610px 0px !important;
+    background-position: -1748px 0px !important;
 }
 
 .tool-measure-area {
@@ -291,7 +379,7 @@
     height: 32px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1656px 0px !important;
+    background-position: -1794px 0px !important;
 }
 
 .tool-measure-line {
@@ -299,7 +387,7 @@
     height: 32px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1702px 0px !important;
+    background-position: -1840px 0px !important;
 }
 
 .tool-pan {
@@ -307,7 +395,7 @@
     height: 32px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1748px 0px !important;
+    background-position: -1886px 0px !important;
 }
 
 .tool-print {
@@ -315,7 +403,7 @@
     height: 32px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1794px 0px !important;
+    background-position: -1932px 0px !important;
 }
 
 .tool-reset {
@@ -323,7 +411,7 @@
     height: 32px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1840px 0px !important;
+    background-position: -1978px 0px !important;
 }
 
 .tool-save-view {
@@ -331,7 +419,7 @@
     height: 32px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1886px 0px !important;
+    background-position: -2024px 0px !important;
 }
 
 .tool-zoombox {
@@ -339,6 +427,6 @@
     height: 32px;
     background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
     background-repeat: no-repeat !important;
-    background-position: -1932px 0px !important;
+    background-position: -2070px 0px !important;
 }
 

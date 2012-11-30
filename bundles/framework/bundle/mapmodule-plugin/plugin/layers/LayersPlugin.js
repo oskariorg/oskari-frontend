@@ -19,7 +19,7 @@ function() {
     this._sandbox = null;
     this._map = null;
     this._supportedFormats = {};
-    // visibility checks are cpu intensive so only make them when tha map has
+    // visibility checks are cpu intensive so only make them when the map has
     // stopped moving
     // after map move stopped -> activate a timer that will
     // do the check after _visibilityPollingInterval milliseconds
@@ -56,8 +56,8 @@ function() {
     },
     /**
      * @method hasUI
-     * @return {Boolean}
      * This plugin doesn't have an UI so always returns false
+     * @return {Boolean}
      */
     hasUI : function() {
         return false;
@@ -65,7 +65,6 @@ function() {
     /**
      * @method getMap
      * @return {OpenLayers.Map} reference to map implementation
-     *
      */
     getMap : function() {
         return this._map;
@@ -75,14 +74,12 @@ function() {
      * Interface method for the module protocol
      */
     register : function() {
-        /*this.getMapModule().setLayerPlugin('layers', this);*/
     },
     /**
      * @method unregister
      * Interface method for the module protocol
      */
     unregister : function() {
-        /*this.getMapModule().setLayerPlugin('layers', null);*/
     },
     /**
      * @method init
@@ -181,21 +178,30 @@ function() {
             }
         },
         'AfterMapMoveEvent' : function() {
-            var me = this;
-            // throttle requests with small delay
-            if(this._previousTimer) {
-                clearTimeout(this._previousTimer);
-                this._previousTimer = null;
-            }
-            this._visibilityCheckOrder++;
-            this._previousTimer = setTimeout(function() {
-                me._checkLayersVisibility(me._visibilityCheckOrder);
-            }, this._visibilityPollingInterval);
+           this._scheduleVisiblityCheck();
         },
         'AfterMapLayerAddEvent' : function(event) {
             // parse geom if available
             this._parseGeometryForLayer(event.getMapLayer());
+            this._scheduleVisiblityCheck();
         }
+    },
+    /**
+     * @method _scheduleVisiblityCheck
+     * @private
+     * Schedules a visibility check on selected layers. After given timeout
+     * calls  _checkLayersVisibility()
+     */
+    _scheduleVisiblityCheck : function() {
+    	 var me = this;
+        if(this._previousTimer) {
+            clearTimeout(this._previousTimer);
+        	this._previousTimer = null;
+       	}
+		this._visibilityCheckOrder++;
+        this._previousTimer = setTimeout(function() {
+        	me._checkLayersVisibility(me._visibilityCheckOrder);
+        }, this._visibilityPollingInterval);
     },
 
     /**
@@ -216,17 +222,19 @@ function() {
     /**
      * @method _parseGeometryForLayer
      * @private
+     * 
+     * If layer.getGeometry() is empty, tries to parse layer.getGeometryWKT()
+     * and set parsed geometry to the layer
+     * 
      * @param
      * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
      *            layer layer for which to parse geometry
      *
-     * If layer.getGeometry() is empty, tries to parse layer.getGeometryWKT()
-     * and set parsed geometry to the layer
      */
     _parseGeometryForLayer : function(layer) {
 
         // parse geometry if available
-        if(layer.getGeometry().length == 0) {
+        if(layer.getGeometry && layer.getGeometry().length == 0) {
             var layerWKTGeom = layer.getGeometryWKT();
             if(!layerWKTGeom) {
                 // no wkt, dont parse
@@ -283,6 +291,7 @@ function() {
      * @param
      * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
      *            layer layer to check scale against
+     * @return {Boolean} true maplayer is visible in current zoomlevel
      */
     _isInScale : function(layer) {
         var scale = this._sandbox.getMap().getScale();
@@ -290,71 +299,78 @@ function() {
     },
     /**
      * @method isInGeometry
-     * If the given layer has geometry, checks if it is the maps viewport.
+     * If the given layer has geometry, checks if it is visible in the maps viewport.
      * If layer doesn't have geometry, returns always true since then we can't
      * determine this.
      * @param
      * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
      *            layer layer to check against
+     * @return {Boolean} true if geometry is visible or cant determine if it isnt
      */
     isInGeometry : function(layer) {
         var geometries = layer.getGeometry();
-        var bounds = null;
+        if( !geometries ) {
+        	return true;
+        }
+        if( geometries.length == 0 ) {
+        	return true;
+        }
+
+        var viewBounds = this.getMap().getExtent();
         for(var i = 0; i < geometries.length; ++i) {
-            if(!bounds) {
-                bounds = geometries[i].getBounds();
-            } else {
-                bounds.extend(geometries[i].getBounds());
+            var bounds = geometries[i].getBounds();
+            if( !bounds ) {
+            	continue;
+            }
+            if( bounds.intersectsBounds(viewBounds) ) {
+            	return true;
             }
         }
-        if(bounds) {
-            return this.getMap().getExtent().intersectsBounds(bounds);
-        }
-        return true;
+        return false;
     },
     /**
      * @method notifyLayerVisibilityChanged
-     * If the given layer has geometry, checks if it is the maps viewport.
-     * If layer doesn't have geometry, returns always true since then we can't
-     * determine this.
+     * Notifies bundles about layer visibility changes by sending MapLayerVisibilityChangedEvent.
      * @param
      * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
      *            layer layer to check against
      */
     notifyLayerVisibilityChanged : function(layer) {
-        var scaleOk = layer.isVisible();
-        var geometryMatch = layer.isVisible();
-        // if layer is visible check actual values
-        if(layer.isVisible()) {
-            scaleOk = this._isInScale(layer);
-            geometryMatch = this.isInGeometry(layer);
-        }
-        // setup openlayers visibility
-        // NOTE: DO NOT CHANGE visibility in internal layer object (it will
-        // change in UI also)
-        // this is for optimization purposes
-        var map = this.getMap();
-        if(scaleOk && geometryMatch && layer.isVisible()) {
-            // show non-baselayer if in scale, in geometry and layer visible
-            var mapLayer = map.getLayersByName('layer_' + layer.getId());
-            if(mapLayer && mapLayer.setVisibility) {
-                mapLayer.setVisibility(true);
-                mapLayer.display(true);
-            }
-        } else {
-            // otherwise hide non-baselayer
-            var mapLayer = map.getLayersByName('layer_' + layer.getId());
-            if(mapLayer && mapLayer.setVisibility) {
-                mapLayer.setVisibility(false);
-                mapLayer.display(false);
-            }
-        }
-        var event = this._sandbox.getEventBuilder('MapLayerVisibilityChangedEvent')(layer, scaleOk, geometryMatch);
-        this._sandbox.notifyAll(event);
-    },
+        var scaleOk = layer.isVisible();
+        var geometryMatch = layer.isVisible();
+        // if layer is visible check actual values
+        if(layer.isVisible()) {
+            scaleOk = this._isInScale(layer);
+            geometryMatch = this.isInGeometry(layer);
+        }
+        // setup openlayers visibility
+        // NOTE: DO NOT CHANGE visibility in internal layer object (it will
+        // change in UI also)
+        // this is for optimization purposes
+        var map = this.getMap();
+        if(scaleOk && geometryMatch && layer.isVisible()) {
+            // show non-baselayer if in scale, in geometry and layer visible
+            var mapLayers = map.getLayersByName('layer_' + layer.getId());
+            var mapLayer = mapLayers.length ? mapLayers[0] : null;
+            if(mapLayer && !mapLayer.getVisibility()) {
+                mapLayer.setVisibility(true);
+                mapLayer.display(true);
+            }
+        } else {
+            // otherwise hide non-baselayer
+            var mapLayers = map.getLayersByName('layer_' + layer.getId());
+            var mapLayer = mapLayers.length ? mapLayers[0]: null;
+            if(mapLayer && mapLayer.getVisibility()) {
+                mapLayer.setVisibility(false);
+                mapLayer.display(false);
+            }
+        }
+        var event = this._sandbox.getEventBuilder('MapLayerVisibilityChangedEvent')(layer, scaleOk, geometryMatch);
+        this._sandbox.notifyAll(event);
+    },
     /**
      * @method _afterRearrangeSelectedMapLayerEvent
-     *
+     * @private
      * Handles AfterRearrangeSelectedMapLayerEvent.
      * Changes the layer order in Openlayers to match the selected layers list in
      * Oskari.
@@ -386,7 +402,7 @@ function() {
 
         for(var i = 0; i < layers.length; i++) {
 
-            if(layers[i].isBaseLayer()) {
+            if(layers[i].isBaseLayer()||layers[i].isGroupLayer()) {
                 for(var bl = 0; bl < layers[i].getSubLayers().length; bl++) {
                     var changeLayer = this._map.getLayersByName('basemap_' + layers[i]
                     .getSubLayers()[bl].getId());

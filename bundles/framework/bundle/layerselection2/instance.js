@@ -191,14 +191,15 @@ function() {
         'userinterface.ExtensionUpdatedEvent' : function(event) {
             var me = this;
             if(event.getExtension().getName() != me.getName()) {
-                // wasn't me -> do nothing
+                // not me -> do nothing
                 return;
             }
             var doOpen = event.getViewState() != "close";
             
-            if (doOpen) {
-            	this.plugins['Oskari.userinterface.Flyout'].createUi();
-            }
+            /* let's not redo everything we've already done */
+            /*if (doOpen) {
+            	this.plugins['Oskari.userinterface.Flyout'].refresh();
+            }*/
         }
 	},
 

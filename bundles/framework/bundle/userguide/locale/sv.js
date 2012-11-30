@@ -15,7 +15,7 @@ Oskari.registerLocalization({
       "generic": "Laddningen av anvisningarna misslyckades. Försök på nytt senare."
     },
     "help": {
-      "tags": "karttaikkuna,pikaohje",
+      "tags": "kartfönstret,snappguide",
       "contentPart": "body"
     }
   }

@@ -54,6 +54,13 @@ function(instance, localization) {
             var categories = service.getAllCategories();
             var places = service.getAllMyPlaces();
             var me = this;
+            var publishLinkClosure = function(id, isPublic) {
+                return function() {
+                    var request = me.instance.sandbox.getRequestBuilder('MyPlaces.PublishCategoryRequest')(id, isPublic);
+                    me.instance.sandbox.request(me.instance, request);
+                    return false;
+                };
+            }
             var editLinkClosure = function(id) {
                 return function() {
                     var request = me.instance.sandbox.getRequestBuilder('MyPlaces.EditCategoryRequest')(id);
@@ -83,14 +90,33 @@ function(instance, localization) {
                 panel.grid.renderTo(panel.getContainer());
                 
                 var editLink = this.linkTemplate.clone();
+                editLink.addClass('categoryOp');
                 editLink.append(this.loc.editCategory);
                 editLink.bind('click', editLinkClosure(id));
                 panel.getContainer().append(editLink);
                 
                 var deleteLink = this.linkTemplate.clone();
+                deleteLink.addClass('categoryOp');
                 deleteLink.append(this.loc.deleteCategory);
                 deleteLink.bind('click', deletelinkClosure(id));
                 panel.getContainer().append(deleteLink);
+                
+                var publishLink = this.linkTemplate.clone();
+                publishLink.addClass('categoryOp');
+                var isPublic = categories[i].isPublic();
+                var publishIcon = this.iconTemplate.clone();
+                
+                if(isPublic) {
+                    publishIcon.addClass('icon-public');
+                    publishLink.attr('title', this.loc.publishCategory.publicTooltip);
+                }
+                else {
+                    publishIcon.addClass('icon-private');
+                    publishLink.attr('title', this.loc.publishCategory.privateTooltip);
+                }
+                publishLink.append(publishIcon);
+                publishLink.bind('click', publishLinkClosure(id, !isPublic));
+                panel.getContainer().append(publishLink);
             }
             this._removeObsoleteCategories();
         }
@@ -151,6 +177,17 @@ function(instance, localization) {
 			dialog.close();
             var service = sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
             var callback = function(isSuccess) {
+            	
+            	/* let's refresh map also if there */
+            	var categoryId = data.categoryId;
+            	var layerId = 'myplaces_' + categoryId; 
+        		var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+        		if(layer) {
+        			var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
+        			var updateRequest = updateRequestBuilder(layerId, true);
+                    sandbox.request(me.instance, updateRequest);    
+        		}
+            	
                 if(isSuccess) {
                     dialog.show(loc.title, loc.success);
                 }

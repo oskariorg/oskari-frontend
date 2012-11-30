@@ -1,20 +1,18 @@
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin
  * Provides scalebar functionality for map
+ * See http://www.oskari.org/trac/wiki/DocumentationBundleMapModulePluginScaleBar
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
 /**
  * @method create called automatically on construction
  * @static
- * @param {Object} config
- *      JSON config with params needed to run the plugin
  */
-function(config) {
+function() {
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
     this._map = null;
-    this._conf = config;
     this._scalebar = null;
 }, {
     /** @static @property __name plugin name */
@@ -48,28 +46,25 @@ function(config) {
     },
     /**
      * @method hasUI
-     * @return {Boolean} true
      * This plugin has an UI so always returns true
+     * @return {Boolean} true
      */
     hasUI : function() {
         return true;
     },
     /**
      * @method init
-     *
-     * Interface method for the module protocol
+     * Interface method for the module protocol.
+     * Initializes the OpenLayers.Control.ScaleLine
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      *          reference to application sandbox
      */
     init : function(sandbox) {
-
         this._scalebar = new OpenLayers.Control.ScaleLine();
-        //this._scalebar.id = 'scaleBar';
     },
     /**
      * @method register
-     *
      * Interface method for the module protocol
      */
     register : function() {
@@ -77,7 +72,6 @@ function(config) {
     },
     /**
      * @method unregister
-     *
      * Interface method for the module protocol
      */
     unregister : function() {
@@ -85,8 +79,8 @@ function(config) {
     },
     /**
      * @method startPlugin
-     *
-     * Interface method for the plugin protocol
+     * Interface method for the plugin protocol.
+     * Adds the scalebar to the map controls.
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      *          reference to application sandbox
@@ -103,8 +97,8 @@ function(config) {
     },
     /**
      * @method stopPlugin
-     *
-     * Interface method for the plugin protocol
+     * Interface method for the plugin protocol.
+     * Removes the scalebar from map controls.
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      *          reference to application sandbox
@@ -123,7 +117,6 @@ function(config) {
     },
     /**
      * @method start
-     *
      * Interface method for the module protocol
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
@@ -133,7 +126,6 @@ function(config) {
     },
     /**
      * @method stop
-     *
      * Interface method for the module protocol
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
@@ -155,10 +147,9 @@ function(config) {
 
     /**
      * @method onEvent
-     * @param {Oskari.mapframework.event.Event} event a Oskari event object
      * Event is handled forwarded to correct #eventHandlers if found or discarded
-     * if
-     * not.
+     * if not.
+     * @param {Oskari.mapframework.event.Event} event a Oskari event object
      */
     onEvent : function(event) {
         return this.eventHandlers[event.getName()].apply(this, [event]);

@@ -80,5 +80,3 @@ function(centerX, centerY, zoom, marker) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-
-/* Inheritance */

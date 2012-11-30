@@ -300,11 +300,13 @@ function(instance) {
                 // add map layer to map (we could check if its already there but core will handle that)
                 var layerId = me.instance.getCategoryHandler()._getMapLayerId(place.getCategoryID());
 				var requestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
+                var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
+
                 var request = requestBuilder(layerId, true);
                 sandbox.request(me, request);
+
                 if(!blnNew) {
                     // refresh map layer on map -> send update request
-                    var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
                     var updateRequest = updateRequestBuilder(layerId, true);
                     sandbox.request(me, updateRequest);
                     // refresh old layer as well if category changed
@@ -313,6 +315,9 @@ function(instance) {
                         request = requestBuilder(layerId, true);
                         sandbox.request(me, request);
                     }
+                } else {
+                    var updateRequest = updateRequestBuilder(layerId, true);
+                    sandbox.request(me, updateRequest);                	
                 }
                 
                 me._cleanupPopup();

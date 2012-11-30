@@ -21,6 +21,10 @@ Oskari.registerLocalization({
       "name": "Namn",
       "village": "Kommun",
       "type": "Typ"
+    },
+    "resultBox" : {
+    	"close" : "Stäng",
+    	"title" : "Sökresultat"
     }
   }
 });

@@ -1,27 +1,59 @@
-Oskari.clazz.define(
-		'Oskari.mapframework.request.common.RearrangeSelectedMapLayerRequest',
-		function(mapLayerId, toPosition) {
-			this._creator = null;
+/**
+ * @class Oskari.mapframework.request.common.RearrangeSelectedMapLayerRequest
+ *
+ * Requests that the given maplayer is moved to a new position in the selected maplayers stack.
+ * 
+ * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
+ * Oskari.mapframework.request.Request superclass documents how to send one.
+ */
+Oskari.clazz.define('Oskari.mapframework.request.common.RearrangeSelectedMapLayerRequest', 
 
-			this._mapLayerId = mapLayerId;
+/**
+ * @method create called automatically on construction
+ * @static
+ *
+ * @param {String}
+ *            mapLayerId id of map layer used in
+ * Oskari.mapframework.service.MapLayerService
+ * @param {Number} toPosition
+ *            new position index for the layer
+ */
+function(mapLayerId, toPosition) {
+    this._mapLayerId = mapLayerId;
+    this._toPosition = toPosition;
+}, {
+    /** @static @property __name request name */
+    __name : "RearrangeSelectedMapLayerRequest",
+    /**
+     * @method getName
+     * @return {String} request name
+     */
+    getName : function() {
+        return this.__name;
+    },
 
-			this._toPosition = toPosition;
-		}, {
-			__name : "RearrangeSelectedMapLayerRequest",
-			getName : function() {
-				return this.__name;
-			},
+    /**
+     * @method getMapLayerId
+     * id for map layer used in
+     * Oskari.mapframework.service.MapLayerService
+     * @return {String} 
+     */
+    getMapLayerId : function() {
+        return this._mapLayerId;
+    },
 
-			getMapLayerId : function() {
-				return this._mapLayerId;
-			},
-
-			getToPosition : function() {
-				return this._toPosition;
-			}
-		},
-		{
-			'protocol' : ['Oskari.mapframework.request.Request']
-		});
-
-/* Inheritance */
+    /**
+     * @method getToPosition
+     * New position index for the layer
+     * @return {Number}
+     */
+    getToPosition : function() {
+        return this._toPosition;
+    }
+}, {
+    /**
+     * @property {String[]} protocol array of superclasses as {String}
+     * @static
+     */
+    'protocol' : ['Oskari.mapframework.request.Request']
+}); 
