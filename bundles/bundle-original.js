@@ -8,17 +8,9 @@
  *
  * @to-do - class instance checks against class metadata - protocol
  *        implementation validation
- * 
- * 2012-11-30 additions
- * - dropped compatibility for pre 2010-04 clazzes
- * - removed fixed root package requirement 'Oskari.'. 
- * - removed unused pluggable clazz system to reduced some string ops in clazz.XXX calls
- * - inheritance with extend() or extend: [] meta
- * - inheritance implemented as a brutal copy down of super clazz methods
- * - super clazz contstructors applied behind the scenes in top-down order
- * - this implementation does *not* implement native js  instanceof for classhierarchies  
- * - inheritance supports pushing down new method categories applied to superclazzes
- * - this implementation does not provide super.func() calls - may be added at a later stage
+ *
+ *
+ *
  *
  */
 Oskari = (function() {
@@ -333,6 +325,76 @@ Oskari = (function() {
 
 		},
 		/**
+		 * @method compatibility
+		 * @private
+		 *
+		 * applies compatibility layer for Oskari/Paikkatietoikkuna classes for
+		 * framework versions 2 to 5
+		 * @deprecated
+		 */
+		"compatibility" : function(bp, pp, sp, pdefsp) {
+			return;
+			var gpp = window[pp];
+			if(!gpp) {
+				gpp = {};
+				window[pp] = gpp;
+			}
+			var ctx = gpp;
+
+			var sps = sp.split('.');
+			for(var s = 0; s < sps.length - 1; s++) {
+				var spname = sps[s];
+				var gsp = ctx[spname];
+				if(!gsp) {
+					gsp = {};
+					ctx[spname] = gsp;
+				}
+				ctx = gsp;
+			}
+
+			var me = this;
+
+			var ctxFunc = function() {
+
+				return me.applyCompatClass(this, bp, pp, sp, arguments);
+			};
+			ctxFunc.prototype = pdefsp._class.prototype;
+			ctx[sps[sps.length - 1]] = ctxFunc;
+		},
+		/**
+		 * @method applyCompatClass
+		 * @private
+		 * @deprecated
+		 *
+		 * Applies compatibility layer for given class to global namespace
+		 *
+		 */
+		"applyCompatClass" : function(inst, bp, pp, sp, instargs) {
+
+			try {
+				var pdefsp = null;
+
+				var pdef = this.impl.packages[pp];
+				if(!pdef) {
+					pdef = {};
+					this.impl.packages[pp] = pdef;
+				}
+				pdefsp = pdef[sp];
+
+				if(!pdefsp)
+					throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
+
+				pdefsp._constructor.apply(inst, instargs);
+				return inst;
+			} catch (err) {
+				// TODO: use printDebug or whatnot
+				// console.log(err);
+				// console.log(" at CREATING " + bp + ":" + pp + "." + sp
+				// + " arguments " + instargs.length);
+			}
+
+		},
+		/**
 		 * @method define
 		 *
 		 * Creates a class definition
@@ -386,20 +448,6 @@ Oskari = (function() {
 				}
 				var catName = cdef;
 				pdefsp._category[catName] = catFuncs;
-				if(args.length > 3) {
-
-					var extnds = args[3].extend;
-					for(var e = 0; extnds && e < extnds.length; e++) {
-						var superClazz = this.lookup(extnds[e]);
-						if( !superClazz._composition.subClazz )
-							superClazz._composition.subClazz = {};
-						superClazz._composition.subClazz[extnds[e]] = pdefsp;
-						pdefsp._composition.superClazz = superClazz;
-					}
-
-					this.updateMetadata(bp, pp, sp, pdefsp, args[3]);
-				}
-
 				this.pullDown(pdefsp);
 				this.pushDown(pdefsp);
 
@@ -435,6 +483,7 @@ Oskari = (function() {
 
 			this.impl.inheritance[cdef] = compo;
 			pdef[sp] = pdefsp;
+			this.compatibility(bp, pp, sp, pdefsp);
 
 			var catName = cdef;
 			pdefsp._category[catName] = args[2];
@@ -505,7 +554,7 @@ Oskari = (function() {
 				};
 				this.impl.inheritance[cdef] = compo;
 				pdef[sp] = pdefsp;
-
+				this.compatibility(bp, pp, sp, pdefsp);
 			}
 
 			var catName = args[1];
@@ -572,7 +621,7 @@ Oskari = (function() {
 				};
 				this.impl.inheritance[cdef] = compo;
 				pdef[sp] = pdefsp;
-
+				this.compatibility(bp, pp, sp, pdefsp);
 			}
 
 			return pdefsp;
@@ -585,7 +634,6 @@ Oskari = (function() {
 				superClazz._composition.subClazz = {};
 			superClazz._composition.subClazz[args[0]] = subClazz;
 			subClazz._composition.superClazz = superClazz;
-			this.pullDown(subClazz);
 		},
 		composition : function() {
 			var cdef = arguments[0];
@@ -658,13 +706,8 @@ Oskari = (function() {
 			}
 
 			var prot = pdefsp._class.prototype;
-			var constructors = [];
 			for(var s = clazzHierarchy.length - 1; s >= 0; s--) {
 				var cn = clazzHierarchy[s]._composition.clazzName;
-
-				var ctor = clazzHierarchy[s]._constructor;
-				constructors.push(ctor);
-
 				for(var c in clazzHierarchy[s]._category ) {
 					var catName = cn + "#" + c;
 					var catFuncs = clazzHierarchy[s]._category[c];
@@ -674,12 +717,12 @@ Oskari = (function() {
 					}
 				}
 			}
-			pdefsp._constructors = constructors;
 
 			return clazz;
 		},
+		
 		printAncestry : function() {
-			var pdefsp = this.lookup.apply(this, arguments);
+			var pdefsp = this.lookup.apply(this,arguments);			
 			if(!pdefsp._composition.superClazz) {
 				return;
 			}
@@ -687,6 +730,7 @@ Oskari = (function() {
 			var clazzHierarchy = [];
 			clazzHierarchy.push(pdefsp);
 
+		
 			var spr = pdefsp;
 			while(true) {
 				spr = spr._composition.superClazz;
@@ -696,54 +740,47 @@ Oskari = (function() {
 				clazzHierarchy.push(spr);
 			}
 
+			
 			for(var s = clazzHierarchy.length - 1; s >= 0; s--) {
-				console.log("                 ".substring(0, clazzHierarchy.length - s) + "|_ " + clazzHierarchy[s]._composition.clazzName);
-			}
+				console.log("                 ".substring(0,clazzHierarchy.length-s)+"|_ "+clazzHierarchy[s]._composition.clazzName);
+			}			
 		},
+			
 		printHierarchy : function() {
-			var pdefsp = this.lookup.apply(this, arguments);
+			var pdefsp = this.lookup.apply(this,arguments);
 			if(!pdefsp._composition.subClazz) {
 				return;
 			}
 			var clazzHierarchy = [];
 			var taskList = [];
-
-			taskList.push({
-				c : null,
-				sub : pdefsp,
-				level : 0
-			});
-
+			
+			taskList.push({ c: null, sub: pdefsp, level:0});
+		
 			while(true) {
 				var task = taskList.shift();
 				if(!task) {
 					break;
-
+			
 				}
 				/*clazzHierarchy.push({ level: task.level, sub: task.sub });*/
-				clazzHierarchy.push("                 ".substring(0, task.level) + "|_ " + task.sub._composition.clazzName);
+				clazzHierarchy.push("                 ".substring(0,task.level)+"|_ "+task.sub._composition.clazzName);
 
 				var pdefc = task.c;
 				var pdefsub = task.sub;
-				if(!pdefsub._composition.subClazz)
+				if( !pdefsub._composition.subClazz) 
 					continue;
-
-				for(var p in pdefsub._composition.subClazz ) {
-					taskList.push({
-						c : pdefc,
-						sub : pdefsub._composition.subClazz[p],
-						level : task.level + 1
-					});
+					
+				for( var p in pdefsub._composition.subClazz ) {
+					taskList.push({ c: pdefc, sub: pdefsub._composition.subClazz[p], level: task.level+1});
 				}
 			}
-
-			for(var s = 0; s < clazzHierarchy.length; s++) {
+			
+			for(var s = 0; s < clazzHierarchy.length ; s++) {
 				console.log(clazzHierarchy[s]);
 			}
-
+						
 		},
-		slicer : Array.prototype.slice,
-
+		
 		/*
 		 * @method create
 		 *
@@ -757,9 +794,9 @@ Oskari = (function() {
 			var args = arguments;
 			if(args.length == 0)
 				throw "missing arguments";
-			var instargs = this.slicer.apply(arguments, [1])/*[];
-			 for(var n = 1; n < args.length; n++)
-			 instargs.push(args[n]);*/
+			var instargs = [];
+			for(var n = 1; n < args.length; n++)
+			instargs.push(args[n]);
 
 			var cdef = args[0];
 
@@ -788,12 +825,6 @@ Oskari = (function() {
 				throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
 
 			var inst = new pdefsp._class();
-			var ctors = pdefsp._constructors;
-			if(ctors) {
-				for(var c = 0; c < ctors.length; c++) {
-					ctors[c].apply(inst, instargs);
-				}
-			}
 			pdefsp._constructor.apply(inst, instargs);
 			return inst;
 		},
@@ -886,12 +917,6 @@ Oskari = (function() {
 			pdefsp._builder = function() {
 				var instargs = arguments;
 				var inst = new pdefsp._class();
-				var ctors = pdefsp._constructors;
-				if(ctors) {
-					for(var c = 0; c < ctors.length; c++) {
-						ctors[c].apply(inst, instargs);
-					}
-				}
 				pdefsp._constructor.apply(inst, instargs);
 				return inst;
 			};
@@ -909,7 +934,7 @@ Oskari = (function() {
 	 *
 	 */
 	var clazz = function() {
-		this.def = null;
+
 		this.ns = {};
 		this.alias = {};
 
@@ -918,18 +943,6 @@ Oskari = (function() {
 
 	clazz.prototype = {
 
-		get : function() {
-			/*		var args = arguments;
-			 var parts = args[0].split('.');
-			 var bp = parts[0];
-
-			 var ai = this.ns[bp];
-			 if(!ai)
-			 throw "clazz: ns NOT bound " + bp;
-			 */
-			var ai = this.def;
-			return ai;
-		},
 		/*
 		 * @method self @param adapter identifier
 		 *
@@ -949,9 +962,6 @@ Oskari = (function() {
 		 * registers an adapter to the class system
 		 */
 		adapt : function(base, adapter) {
-			if(!this.def)
-				this.def = adapter;
-
 			this.ns[base] = adapter;
 		},
 		/**
@@ -964,7 +974,15 @@ Oskari = (function() {
 		 * Parameters differ for different class adapters
 		 */
 		define : function() {
-			var ai = this.get.apply(this, arguments);
+			var args = arguments;
+			if(args.length == 0 || !args[0])
+				return this.ns;
+			var parts = args[0].split('.');
+			var bp = parts[0];
+
+			var ai = this.ns[bp];
+			if(!ai)
+				throw "clazz: ns NOT bound " + bp;
 
 			return ai.define.apply(ai, arguments);
 
@@ -977,19 +995,43 @@ Oskari = (function() {
 		 *            Parameters differ for different class adapters
 		 */
 		category : function() {
-			var ai = this.get.apply(this, arguments);
+			var args = arguments;
+			if(args.length == 0 || !args[0])
+				return this.ns;
+			var parts = args[0].split('.');
+			var bp = parts[0];
+
+			var ai = this.ns[bp];
+			if(!ai)
+				throw "clazz: ns NOT bound " + bp;
 
 			return ai.category.apply(ai, arguments);
 
 		},
 		composition : function() {
-			var ai = this.get.apply(this, arguments);
+			var args = arguments;
+			if(args.length == 0 || !args[0])
+				return this.ns;
+			var parts = args[0].split('.');
+			var bp = parts[0];
+
+			var ai = this.ns[bp];
+			if(!ai)
+				throw "clazz: ns NOT bound " + bp;
 
 			return ai.composition.apply(ai, arguments);
 
 		},
 		extend : function() {
-			var ai = this.get.apply(this, arguments);
+			var args = arguments;
+			if(args.length == 0 || !args[0])
+				return this.ns;
+			var parts = args[0].split('.');
+			var bp = parts[0];
+
+			var ai = this.ns[bp];
+			if(!ai)
+				throw "clazz: ns NOT bound " + bp;
 
 			return ai.extend.apply(ai, arguments);
 
@@ -1001,7 +1043,12 @@ Oskari = (function() {
 		 *
 		 */
 		create : function() {
-			var ai = this.get.apply(this, arguments);
+			var args = arguments;
+			var parts = args[0].split('.');
+			var bp = parts[0];
+			var ai = this.ns[bp];
+			if(!ai)
+				throw "clazz: ns NOT bound " + bp;
 
 			return ai.create.apply(ai, arguments);
 
@@ -1014,7 +1061,16 @@ Oskari = (function() {
 		 * Constructs an instance with a property object
 		 */
 		construct : function() {
-			var ai = this.get.apply(this, arguments);
+			var args = arguments;
+			if(!args[0]) {
+				logMsg("construct() got null args[0]! ignoring...");
+				return;
+			}
+			var parts = args[0].split('.');
+			var bp = parts[0];
+			var ai = this.ns[bp];
+			if(!ai)
+				throw "clazz: ns NOT bound " + bp;
 
 			return ai.construct.apply(ai, arguments);
 
@@ -1027,7 +1083,16 @@ Oskari = (function() {
 		 *
 		 */
 		createArrArgs : function(args) {
-			var ai = this.get.apply(this, arguments);
+			if(!args[0]) {
+				logMsg("createArrArgs got null args[0]! ignoring...");
+				return;
+			}
+			var parts = args[0].split('.');
+			var bp = parts[0];
+			var ai = this.ns[bp];
+			if(!ai)
+				throw "clazz: ns NOT bound " + bp;
+
 			return ai.create.apply(ai, args);
 
 		},
@@ -1037,7 +1102,22 @@ Oskari = (function() {
 		 *            returns a class instance builder that can be reused
 		 */
 		builder : function() {
-			var ai = this.get.apply(this, arguments);
+			var args = arguments;
+			if(!arguments || !arguments[0]) {
+				for(var argid in arguments) {
+					logMsg(argid + " : " + arguments[argid]);
+				}
+				logMsg("builder : " + arguments);
+			}
+			if(!args[0]) {
+				logMsg("builder got null args[0]! ignoring...");
+				return;
+			}
+			var parts = args[0].split('.');
+			var bp = parts[0];
+			var ai = this.ns[bp];
+			if(!ai)
+				throw "clazz: ns NOT bound " + bp;
 
 			return ai.builder.apply(ai, arguments);
 		},
@@ -1065,7 +1145,16 @@ Oskari = (function() {
 		 * @param classname
 		 */
 		"metadata" : function() {
-			var ai = this.get.apply(this, arguments);
+			var args = arguments;
+			if(!args[0]) {
+				logMsg("metadata got null args[0]! ignoring...");
+				return;
+			}
+			var parts = args[0].split('.');
+			var bp = parts[0];
+			var ai = this.ns[bp];
+			if(!ai)
+				throw "clazz: ns NOT bound " + bp;
 
 			return ai.metadata.apply(ai, arguments);
 		},
@@ -1077,23 +1166,52 @@ Oskari = (function() {
 		 *
 		 */
 		"protocol" : function() {
-			var ai = this.get.apply(this, arguments);
+			var args = arguments;
+			if(!args[0]) {
+				logMsg("protocol got null args[0]! ignoring...");
+				return;
+			}
+			var parts = args[0].split('.');
+			var bp = parts[0];
+			var ai = this.ns[bp];
+			if(!ai)
+				throw "clazz: ns NOT bound " + bp;
 
 			return ai.protocol.apply(ai, arguments);
 		},
 		"purge" : function() {
-			var ai = this.get.apply(this, arguments);
+			var args = arguments;			
+			var parts = args[0].split('.');
+			var bp = parts[0];
+
+			var ai = this.ns[bp];
+			if(!ai)
+				throw "clazz: ns NOT bound " + bp;
 
 			return ai.purge.apply(ai, arguments);
 
 		},
 		"printAncestry" : function() {
-			var ai = this.get.apply(this, arguments);
+			var args = arguments;			
+			var parts = args[0].split('.');
+			var bp = parts[0];
+
+			var ai = this.ns[bp];
+			if(!ai)
+				throw "clazz: ns NOT bound " + bp;
+
 			return ai.printAncestry.apply(ai, arguments);
 
 		},
 		"printHierarchy" : function() {
-			var ai = this.get.apply(this, arguments);
+			var args = arguments;			
+			var parts = args[0].split('.');
+			var bp = parts[0];
+
+			var ai = this.ns[bp];
+			if(!ai)
+				throw "clazz: ns NOT bound " + bp;
+
 			return ai.printHierarchy.apply(ai, arguments);
 
 		}
@@ -1160,12 +1278,6 @@ Oskari = (function() {
 			var numFiles = this.filesRequested;
 			if(numFiles == 0) {
 				me.callback();
-				me.manager.notifyLoaderStateChanged(me, true);
-				return;
-			}
-			if(preloaded()) {
-				me.callback();
-				me.manager.notifyLoaderStateChanged(me, true);
 				return;
 			}
 
@@ -1183,6 +1295,19 @@ Oskari = (function() {
 			var f = false;
 			for(var n = 0; n < me.fileList.length; n++) {
 
+				// # Method 1: empty hack
+				// var st = null;
+				// var fn = '/Oskari/empty.js';
+				// if (!preloaded()) {
+				//     fn = me.fileList[n].src;
+				// }
+				// var st = me.buildScriptTag(fn, onFileLoaded);
+				// if (st) {
+				//     fragment.appendChild(st);
+				//     f = true;
+				// }
+
+				// # Method 2: skip loading
 				var fn = me.fileList[n].src;
 				var st = me.buildScriptTag(fn, onFileLoaded);
 				if(st) {
@@ -1270,6 +1395,64 @@ Oskari = (function() {
 		"getState" : function() {
 
 			return this.state;
+		},
+		/**
+		 * @method processRequest
+		 * @param requestJson
+		 * @deprecated
+		 *
+		 */
+		"processRequest" : function(requestJson) {
+			/*
+			 * find module to process request based on Export-Request
+			 * declarations key requestJson.name call modules
+			 * onRequest[requestJson.name](
+			 */
+			var reqm = this.requestMediator[requestJson.name];
+			reqm.dispatchRequest(requestJson);
+		},
+		/**
+		 * @method postRequest
+		 * @param requestJson
+		 * @param callback
+		 * @deprecated
+		 */
+		"postRequest" : function(requestJson, callback) {
+			/*
+			 * processes request (with core )
+			 *
+			 * create request find module to process request based on
+			 * Export-Request declarations ... ASYNC
+			 */
+			var reqm = this.requestMediator[requestJson.name];
+			setTimeout(function() {
+				reqm.dispatchRequest(requestJson);
+				callback();
+			}, 0);
+		},
+		/**
+		 * @method dispatchRequest
+		 * @param requestJson
+		 * @returns
+		 * @deprecated
+		 */
+		"dispatchRequest" : function(requestJson) {
+			var bi = this["instance"];
+			return (bi["onRequest"][requestJson.name] || bi["onRequest"]["*"]).apply(bi, requestJson.args);
+		},
+		/**
+		 * @method dispatchEvent
+		 * @param event
+		 * @deprecated
+		 */
+		"dispatchEvent" : function(event) {
+
+			/*
+			 * dispatches event to module this module should not receive any
+			 * events not declared in Import-Event
+			 */
+			var bi = this["instance"];
+			bi["onEvent"][event].apply(bi, [event]);
 		}
 	};
 
@@ -1349,6 +1532,17 @@ Oskari = (function() {
 			sinks : {}
 		};
 
+		/* use mapframework OR listen to ANY mapframework events and re-dispatch */
+		this.stateForEvents = {
+			sources : {},
+			sinks : {}
+		};
+
+		this.stateForRequests = {
+			sinks : {},
+			sources : {}
+		};
+
 		this.triggers = [];
 
 		this.loaderStateListeners = [];
@@ -1356,13 +1550,13 @@ Oskari = (function() {
 
 	bundle_manager.prototype = {
 		purge : function() {
-			for(var p in this.sources ) {
+			for( var p in this.sources ) {
 				delete this.sources[p];
 			}
-			for(var p in this.stateForBundleDefinitions ) {
+			for( var p in this.stateForBundleDefinitions ) {
 				delete this.stateForBundleDefinitions[p].loader;
 			}
-			for(var p in this.stateForBundleSources ) {
+			for( var p in this.stateForBundleSources ) {
 				delete this.stateForBundleSources[p].loader;
 			}
 		},
