@@ -50,11 +50,18 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-methods', {
 
     /**
      * @method generateMapLinkParameters
-     * Generates query string for an URL that has the maps state with coordinates, zoom and selected map layers 
-     *
+     * Generates query string for an URL that has the maps state with coordinates, zoom and selected map layers
+     * 
+     * Options syntax/supported fields:  {
+     *     marker : <boolean, default false>,
+     *     forceCache : <boolean, default true>,
+     *     noSavedState : <boolean, default true>
+     * } 
+     * 
+     * @param {Object} options - overrides default parameter values (optional) 
      * @return {String}
      */
-    generateMapLinkParameters : function() {
+    generateMapLinkParameters : function(options) {
         var mapFullComponent = this.getStatefulComponents()['mapfull'];
         if (!mapFullComponent) {
             return;
@@ -78,7 +85,29 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-methods', {
             }
         }
         link += layers;
-        link += '&showMarker=false&forceCache=true&noSavedState=true';
+        if(options) {
+            if(options.marker == true) {
+                link += '&showMarker=true';
+            }
+            else {
+                link += '&showMarker=false';
+            }
+            if(options.forceCache == false) {
+                link += '&forceCache=false';
+            }
+            else {
+                link += '&forceCache=true';
+            }
+            if(options.noSavedState == false) {
+                link += '&noSavedState=false';
+            }
+            else {
+                link += '&noSavedState=true';
+            }
+        }
+        else {
+            link += '&showMarker=false&forceCache=true&noSavedState=true';
+        }
         return link;
     },
 

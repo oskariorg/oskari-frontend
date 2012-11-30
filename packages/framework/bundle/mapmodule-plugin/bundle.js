@@ -98,6 +98,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/markers/MarkersPlugin.js"
 		},
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/RemoveMarkerRequest.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/MarkerRequestHandler.js"
+        },
         /**
          * Search plugin
          */
