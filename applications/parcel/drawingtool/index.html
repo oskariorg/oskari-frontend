@@ -1,35 +1,72 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Parcel Drawing Tool</title>
-		<!-- ############# css ################# -->
+<head>
+    <title>Parcel Drawing Tool</title>
 
-		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <!-- ############# css ################# -->
+    <link rel="stylesheet" type="text/css" href="../css/icons.css" />
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <!-- ############# /css ################# -->
 
-		<link rel="stylesheet" type="text/css" href="css/style.css" />
+    <!--  OPENLAYERS -->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js">
+    </script>
+</head>
+<body>
 
-		<!-- ############# /css ################# -->
-	</head>
-	<body>
+<nav id="maptools">
+    <div id="loginbar">
+    </div>
+    <div id="menubar">
+    </div>
+    <div id="divider">
+    </div>
+    <div id="toolbar">
+    </div>
+</nav>
 
-		<div id="contentMap">
-			<div id="mapdiv"><!-- Map will be here. --></div>
-		</div>
+<div id="contentMap">
+    <div id="mapdiv"><!-- Map will be here. --></div>
+</div>
 
-		<!-- ############# Javascript ################# -->
 
-		<!--  OSKARI -->
-		<script type="text/javascript"
-		src="../../../bundles/bundle.js"></script>
+<!-- ############# Javascript ################# -->
 
-		<!--  RIGHTJS (flyout)-->
-		<script type="text/javascript"
-		src="../../../libraries/rightjs/javascripts/right.js"></script>
-		<script type="text/javascript"
-		src="../../../libraries/rightjs/javascripts/right/slider.js"></script>
+<!--  OSKARI -->
+<script type="text/javascript"
+    src="../../../bundles/bundle.js">
+</script>
 
-		<script type="text/javascript" src="index.js"></script>
+<!--  LOG4JS -->
+<script type="text/javascript" 
+    src="../../../libraries/log4js/log4js.js">
+</script>
 
-		<!-- ############# /Javascript ################# -->
-	</body>
+<!--  RIGHTJS (flyout)-->
+<script type="text/javascript" 
+    src="../../../libraries/rightjs/javascripts/right.js">
+</script>
+
+<script type="text/javascript" 
+    src="../../../libraries/rightjs/javascripts/right/dnd.js">
+</script>
+
+<script type="text/javascript" 
+    src="../../../libraries/rightjs/javascripts/right/resizable.js">
+</script>
+
+<!--  RIGHTJS (selected layers) -->
+<script type="text/javascript" 
+    src="../../../libraries/rightjs/javascripts/right/sortable.js">
+</script>
+
+<script type="text/javascript" 
+    src="../../../libraries/rightjs/javascripts/right/slider.js">
+</script>
+
+<script type="text/javascript" src="index.js">
+</script>
+
+<!-- ############# /Javascript ################# -->
+</body>
 </html>
