@@ -449,6 +449,7 @@ function() {
 
 		if(allKnown) {
 			me._pendingAjaxQuery.timestamp = null;
+			me.backendStatus = {};
 		} else {
 			for(p in maplayers ) {
 				var evt = evtBuilder(p, 'update');
