@@ -49,6 +49,9 @@ Oskari.registerLocalization({
       "placename": {
         "placeholder": "Give the place a name"
       },
+      "placelink": {
+        "placeholder": "Link the place to an URL"
+      },
       "placedesc": {
         "placeholder": "Describe the place"
       },

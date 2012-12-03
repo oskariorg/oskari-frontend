@@ -364,6 +364,7 @@ function(url, uuid) {
             place.setId(id);
             place.setName(featAtts['name']);
             place.setDescription(featAtts['place_desc']);
+            place.setLink(featAtts['link']);
             place.setCategoryID(featAtts['category_id']);
             place.setCreateDate(featAtts['created']);
             place.setUpdateDate(featAtts['updated']);
@@ -429,6 +430,7 @@ function(url, uuid) {
             var featAtts = {
                 'name' : m.getName(),
                 'place_desc' : m.getDescription(),
+                'link' : m.getLink(),
                 'category_id' : m.getCategoryID(),
                 'uuid' : uuid
             };

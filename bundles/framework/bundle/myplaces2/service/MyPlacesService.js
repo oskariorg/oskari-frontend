@@ -35,7 +35,7 @@ function(url, uuid, sandbox, defaultName) {
     },
     /**
      * @method init
-     * Initializes the service and loads 
+     * Initializes the service and loads places/categories
      */
     init : function() {
         // preload stuff
@@ -75,7 +75,11 @@ function(url, uuid, sandbox, defaultName) {
         this.wfstStore.getCategories(initialLoadCallBackCategories);
         this.wfstStore.getMyPlaces(initialLoadCallBackPlaces);
     },
-    /** Internal usage */
+    /** 
+     * @method _createDefaultCategory
+     * @private
+     * Creates a default category for the user
+     */
     _createDefaultCategory : function() {
     	var me = this;
         var defaultCategory = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory');
@@ -117,7 +121,12 @@ function(url, uuid, sandbox, defaultName) {
         this.saveCategory(defaultCategory, defaultCategoryCreationCallback);
     },
 
-    /** Internal usage */
+    /**
+     * @method _addCategory
+     * @private
+     * Adds the category to the selection
+     * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory} categoryModel
+     */
     _addCategory : function(categoryModel) {
         if(categoryModel.isDefault()) {
             this.defaultCategory = categoryModel;
@@ -125,7 +134,14 @@ function(url, uuid, sandbox, defaultName) {
         this._categoryList.push(categoryModel);
     },
 
-    /** Internal usage */
+    /**
+     * @method _movePlacesToCategory
+     * @private
+     * Moves places from one category to another and calls given callback when done.
+     * @param {Number} oldCategoryId source category id
+     * @param {Number} newCategoryId destination category id
+     * @param {Function} callback function to call when done, receives boolean as argument(true == successful)
+     */
     _movePlacesToCategory : function(oldCategoryId, newCategoryId, callback) {
         var me = this;
         var placesInDeleteCategory = this.getPlacesInCategory(oldCategoryId);
@@ -148,7 +164,13 @@ function(url, uuid, sandbox, defaultName) {
         this.wfstStore.commitMyPlaces(placesInDeleteCategory, callBackWrapper);
     },
 
-    /** Internal usage */
+    /**
+     * @method _deletePlacesInCategory
+     * @private
+     * Deletes all places in given category
+     * @param {Number} categoryId category id to delete from
+     * @param {Function} callback function to call when done, receives boolean as argument(true == successful)
+     */
     _deletePlacesInCategory : function(categoryId, callback) {
         var placesInDeleteCategory = this.getPlacesInCategory(categoryId);
         var idList = [];
@@ -444,6 +466,7 @@ function(url, uuid, sandbox, defaultName) {
                     // update values
                     myplace.setName(myplaceModel.getName());
                     myplace.setDescription(myplaceModel.getDescription());
+                    myplace.setLink(myplaceModel.getLink());
                     myplace.setCategoryID(myplaceModel.getCategoryID());
                     myplace.setGeometry(myplaceModel.getGeometry());
                     myplace.setUpdateDate(list[0].getUpdateDate());
