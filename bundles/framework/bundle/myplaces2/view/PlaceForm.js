@@ -96,6 +96,10 @@ function(instance) {
             // found form on screen
             var placeName = onScreenForm.find('input[name=placename]').val();
             var placeLink = onScreenForm.find('input[name=placelink]').val();
+            if(placeLink && 
+                (placeLink.indexOf('://') == -1 || placeLink.indexOf('://') > 6)) {
+                placeLink = 'http://' + placeLink;
+            }
             var placeDesc = onScreenForm.find('textarea[name=placedesc]').val();
             var categorySelection = onScreenForm.find('select[name=category]').val();
             values.place = {
