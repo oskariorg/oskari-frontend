@@ -83,6 +83,14 @@ function() {
         this._sandbox = sandbox;
         this._sandbox.printDebug("[GetInfoPlugin] init");
         this.getGFIHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.getinfo.GetFeatureInfoHandler', me);
+        
+        this.templateTable = jQuery('<table></table>');
+        this.templateTableRow = jQuery('<tr style="padding: 5px;"></tr>');
+        this.templateTableCell = jQuery('<td style="padding: 2px"></td>');
+        
+        this.templateHeader = jQuery('<div style="border:1pt solid navy;background-color: #424343;margin-top: 14px; margin-bottom: 10px;height:15px;">' + 
+                '<div class="icon-bubble-left" style="height:15px;display:inline;float:left;"></div>');
+        this.templateHeaderTitle = jQuery('<div style="color:white;float:left;display:inline;margin-left:8px;"></div>');
     },
     /**
      * @method register
@@ -545,11 +553,53 @@ function() {
     },
 
     /**
+     * @method _formatJSONValue
+     * @private
+     * Formats a GFI response value to a jQuery object
+     * @param {pValue} datum response data to format
+     * @return {jQuery} formatted HMTL
+     */
+    _formatJSONValue : function(pValue) {
+        if (!pValue) {
+            return;
+        }
+        var value = jQuery('<span></span>');
+        // if value is an array -> format it first
+        // TODO: maybe some nicer formatting?
+        if (Object.prototype.toString.call(pValue) === '[object Array]') {
+            var placeHolder = '';
+            for (var i = 0; i < pValue.length; ++i) {
+                var obj = pValue[i];
+                for (objAttr in obj) {
+                    var innerValue = _formatJSONValue(obj[objAttr], datum);
+                    if (!innerValue) {
+                        continue;
+                    }
+                    value.append(obj);
+                    value.append(": ");
+                    value.append(innerValue);
+                    value.append('<br/>');
+                }
+            }
+        }
+        else if (pValue.indexOf && pValue.indexOf('http://') == 0) {
+            var label = value;
+            var link = jQuery('<a target="_blank"></a>');
+            link.attr('href', pValue);
+            link.append(pValue);
+            value.append(link);
+        }
+        else {
+            value.append(pValue);
+        }
+        return value;
+    },
+    /**
      * @method _formatGfiDatum
      * @private
      * Formats a GFI HTML or JSON object to result HTML
      * @param {Object} datum response data to format
-     * @return {String} formatted HMTL
+     * @return {jQuery} formatted HMTL
      */
     _formatGfiDatum : function(datum) {
         if (!datum.presentationType) {
@@ -563,50 +613,12 @@ function() {
             hasHtml = (datum.content.indexOf('<html>') >= 0);
             hasHtml = hasHtml || (datum.content.indexOf('<HTML>') >= 0);
         }
-        // <br/> eteen?
-        var _formatJSONValue = function(pValue, datum) {
-            if (!pValue) {
-                return;
-            }
-            var value = jQuery('<span></span>');
-            // if value is an array -> format it first
-            // TODO: maybe some nicer formatting?
-            if (Object.prototype.toString.call(pValue) === '[object Array]') {
-                var placeHolder = '';
-                for (var i = 0; i < pValue.length; ++i) {
-                    var obj = pValue[i];
-                    for (objAttr in obj) {
-                        value.append(_formatJSONValue(obj[objAttr], datum));
-                        value.append('<br/>');
-                        //placeHolder = placeHolder + objAttr + ": " + obj[objAttr] + '<br/>';
-                    }
-                    //placeHolder = placeHolder + '<br/>';
-                }
-                //value = placeHolder;
-            }
-            else if (pValue.indexOf && pValue.indexOf('http://') == 0) {
-                var label = value;
-                var link = jQuery('<a target="_blank"></a>');
-                link.attr('href', pValue);
-                link.append(pValue);
-                //value = '<a href="' + value + '" target="_blank">' + label + '</a>';
-                value.append(link);
-            }
-            else {
-                value.append(pValue);
-            }
-            return value;
-        } 
-        this.templateTable = jQuery('<table></table>');
-        this.templateTableRow = jQuery('<tr style="padding: 5px;"></tr>');
-        this.templateTableCell = jQuery('<td style="padding: 2px"></td>');
         if (datum.presentationType == 'JSON' || (datum.content && datum.content.parsed)) {
-            var table = this.templateTable.clone(); 
-            //html = '<table>';
+            var table = this.templateTable.clone();
             var even = false;
             var jsonData = datum.content.parsed;
             for (attr in jsonData) {
-                var value = _formatJSONValue(jsonData[attr], datum);
+                var value = this._formatJSONValue(jsonData[attr], datum);
                 if (!value) {
                     continue;
                 }
@@ -623,15 +635,12 @@ function() {
                 var valueCell = this.templateTableCell.clone();
                 valueCell.append(value);
                 row.append(valueCell);
-                //html = html + '"><td style="padding: 2px">' + attr + '</td><td style="padding: 2px">' + value + '</td></tr>';
             }
             return table;
-            //html = html + '</table>';
         } else {
             var value = jQuery('<div></div>');
             value.append(datum.content);
             return value;
-            //html = '<div>' + datum.content + '</div>';
         }
         return html;
     },
@@ -710,7 +719,6 @@ function() {
     _showFeatures : function(data) {
 
         var me = this;
-        var contentHtml = [];
         var content = {};
         var wrapper = jQuery('<div></div>');
         content.html = '';
@@ -721,28 +729,20 @@ function() {
             var fragmentMarkup = fragment.markup;
 
             var contentWrapper = jQuery('<div></div>');
-            //contentHtml.push('<div>');
-            var headerWrapper = jQuery('<div style="border:1pt solid navy;background-color: #424343;margin-top: 14px; margin-bottom: 10px;height:15px;">' + 
-            '<div class="icon-bubble-left" style="height:15px;display:inline;float:left;"></div>');
-            //<div></div> // empty div between
             
-            var titleWrapper = jQuery('<div style="color:white;float:left;display:inline;margin-left:8px;"></div>');
+            var headerWrapper = this.templateHeader.clone();
+            var titleWrapper = this.templateHeaderTitle.clone();
             titleWrapper.append(fragmentTitle); 
             headerWrapper.append(titleWrapper);
             contentWrapper.append(headerWrapper);
             
-            //'<div style="color:white;float:left;display:inline;margin-left:8px;">' + fragmentTitle + '</div>' 
-            //'</div>');
 
             if (fragmentMarkup) {
                 contentWrapper.append(fragmentMarkup);
-                //contentHtml.push(fragmentMarkup);
             }
             wrapper.append(contentWrapper);
-            //contentHtml.push('</div>');
         }
         content.html = wrapper;
-        //content.html = contentHtml.join('');
 
         var pluginLoc = this.getMapModule().getLocalization('plugin', true);
         var myLoc = pluginLoc[this.__name];
