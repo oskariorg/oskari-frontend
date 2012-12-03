@@ -96,9 +96,12 @@ function(instance) {
             // found form on screen
             var placeName = onScreenForm.find('input[name=placename]').val();
             var placeLink = onScreenForm.find('input[name=placelink]').val();
-            if(placeLink && 
-                (placeLink.indexOf('://') == -1 || placeLink.indexOf('://') > 6)) {
-                placeLink = 'http://' + placeLink;
+            if(placeLink) {
+                if(placeLink.indexOf('://') == -1 || placeLink.indexOf('://') > 6) {
+                    placeLink = 'http://' + placeLink;
+                }
+                placeLink = placeLink.replace("<", '');
+                placeLink = placeLink.replace(">", '');
             }
             var placeDesc = onScreenForm.find('textarea[name=placedesc]').val();
             var categorySelection = onScreenForm.find('select[name=category]').val();
