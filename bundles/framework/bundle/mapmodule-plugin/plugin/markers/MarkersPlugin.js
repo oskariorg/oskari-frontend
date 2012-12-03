@@ -142,11 +142,6 @@ function() {
      * @static 
      */
     eventHandlers : {
-        /*
-        'AfterHideMapMarkerEvent' : function(event) {
-            this._afterHideMapMarkerEvent(event);
-        }
-        */
     },
 
     /** 
@@ -183,24 +178,8 @@ function() {
         var sandbox = this._sandbox;
         var layerMarkers = new OpenLayers.Layer.Markers("Markers");
         this._map.addLayer(layerMarkers);
-    },
-
-    /**
-     * @methodafterHideMapMarkerEvent
-     * @private
-     * Handle HideMapMarkerEvent. Hides the markers layer.
-     *
-     * @param {Oskari.mapframework.event.common.AfterHideMapMarkerEvent}
-     *            event
-     */
-    /*
-    _afterHideMapMarkerEvent : function(event) {
-        var markerLayer = this._map.getLayersByName("Markers");
-        if (markerLayer != null && markerLayer[0] != null) {
-            markerLayer[0].setVisibility(false);
-        }
     }
-    */
+
 }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
