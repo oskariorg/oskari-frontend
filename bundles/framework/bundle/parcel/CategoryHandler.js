@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.CategoryHandler
  * 
- * Handles category related functionality for my places (map layers etc)
+ * Handles category related functionality for parcel (map layers etc)
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.parcel.CategoryHandler",
 
@@ -157,7 +157,7 @@ function(instance) {
     },
     /**
      * @method addLayerToMap
-     * Adds the my places map layer to selected if it is not there already
+     * Adds the parcel map layer to selected if it is not there already
      */
     addLayerToMap : function(categoryId) {
         var layerId = this._getMapLayerId(categoryId);
@@ -170,7 +170,7 @@ function(instance) {
     },
     /**
      * @method addLayerToService
-     * Adds the my places map layer service
+     * Adds the parcel map layer service
      */
     addLayerToService : function(category) {
         // add maplayer to Oskari
@@ -219,14 +219,14 @@ function(instance) {
     },
     /**
      * @method _getMapLayerJsonBase
-     * Returns a base model for maplayer json to create my places map layer
+     * Returns a base model for maplayer json to create parcel map layer
      * @private 
      * @return {Object}
      */
     _getMapLayerJsonBase : function() {
         var catLoc = this.instance.getLocalization('category');
         var json = {
-            wmsName: 'ows:my_places_categories',
+            wmsName: 'ows:parcels_categories',
             type: "wmslayer",
             isQueryable:true,
             opacity: 50,

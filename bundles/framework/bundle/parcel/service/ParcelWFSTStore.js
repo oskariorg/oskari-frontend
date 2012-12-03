@@ -44,15 +44,17 @@ function(url, uuid) {
             version : '1.1.0',
             srsName : 'EPSG:3067',
             featureType : 'categories',
-            featureNS : 'http://www.paikkatietoikkuna.fi',
+            featureNS : 'http://xml.nls.fi/ktjkiiwfs/2010/02',
+            featurePrefix : 'ktjkiiwfs',
             url : url
         });
-        this.protocols['my_places'] = new OpenLayers.Protocol.WFS({
+        this.protocols['parcels'] = new OpenLayers.Protocol.WFS({
             version : '1.1.0',
             srsName : 'EPSG:3067',
             geometryName : 'geometry',
-            featureType : 'my_places',
-            featureNS : 'http://www.paikkatietoikkuna.fi',
+            featureType : 'parcels',
+            featureNS : 'http://xml.nls.fi/ktjkiiwfs/2010/02',
+            featurePrefix : 'ktjkiiwfs',
             url : url
         });
     },
@@ -326,7 +328,7 @@ function(url, uuid) {
             value : uuid
         });
 
-        var p = this.protocols['my_places'];
+        var p = this.protocols['parcels'];
 
         var me = this;
         p.read({
@@ -389,7 +391,7 @@ function(url, uuid) {
      */
     getParcelByIdList : function(idList, cb) {
         var uuid = this.uuid;
-        var p = this.protocols['my_places'];
+        var p = this.protocols['parcels'];
         //var geoserverId = p.featureType + '.' + idList[0];
 
         var filter = new OpenLayers.Filter.Logical({
@@ -418,7 +420,7 @@ function(url, uuid) {
      * handles insert & update (NO delete here see next moethd)
      */
     commitParcel : function(list, callback) {
-        var p = this.protocols['my_places'];
+        var p = this.protocols['parcels'];
         var uuid = this.uuid;
         var features = [];
         for (var l = 0; l < list.length; l++) {
@@ -503,7 +505,7 @@ function(url, uuid) {
      * delete a list of parcels from backend
      */
     deleteParcel : function(list, callback) {
-        var p = this.protocols['my_places'];
+        var p = this.protocols['parcels'];
         var uuid = this.uuid;
         var features = [];
         for (var l = 0; l < list.length; l++) {

@@ -1,9 +1,9 @@
 /**
- * @class Oskari.framework.bundle.parcel.DrawingTool
+ * @class Oskari.mapframework.bundle.parcel.DrawingTool
  *
  * Definition for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.framework.bundle.parcel.DrawingTool",
+Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingTool",
 
 /**
  * @contructor
@@ -20,7 +20,7 @@ function() {
 	 */
 	"create" : function() {
 		var me = this;
-		var inst = Oskari.clazz.create("Oskari.framework.bundle.parcel.DrawingToolInstance");
+		var inst = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.DrawingToolInstance");
 		return inst;
 
 	},
@@ -199,4 +199,4 @@ function() {
 });
 
 // Install this bundle by instantating the Bundle Class
-Oskari.bundle_manager.installBundleClass("parcel", "Oskari.framework.bundle.parcel.DrawingTool");
+Oskari.bundle_manager.installBundleClass("parcel", "Oskari.mapframework.bundle.parcel.DrawingTool");

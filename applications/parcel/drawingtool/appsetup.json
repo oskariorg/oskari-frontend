@@ -184,27 +184,6 @@
       "instanceProps":{
 
       },
-      "title":"Haku",
-      "bundleinstancename":"search",
-      "fi":"search",
-      "sv":"search",
-      "en":"search",
-      "bundlename":"search",
-      "metadata":{
-         "Import-Bundle":{
-            "search":{
-               "bundlePath":"../../../packages/framework/bundle/"
-            }
-         },
-         "Require-Bundle-Instance":[
-
-         ]
-      }
-   },
-   {
-      "instanceProps":{
-
-      },
       "title":"Karttatasot",
       "bundleinstancename":"layerselector2",
       "fi":"layerselector",
@@ -268,28 +247,7 @@
       "instanceProps":{
 
       },
-      "title":"Karttajulkaisu",
-      "bundleinstancename":"publisher",
-      "fi":"jquery",
-      "sv":"?",
-      "en":"?",
-      "bundlename":"publisher",
-      "metadata":{
-         "Import-Bundle":{
-            "publisher":{
-               "bundlePath":"../../../packages/framework/bundle/"
-            }
-         },
-         "Require-Bundle-Instance":[
-
-         ]
-      }
-   },
-   {
-      "instanceProps":{
-
-      },
-      "title":"Koordinaattin�ytt�",
+      "title":"Coordinate Display",
       "bundleinstancename":"coordinatedisplay",
       "fi":"coordinatedisplay",
       "sv":"?",
@@ -298,27 +256,6 @@
       "metadata":{
          "Import-Bundle":{
             "coordinatedisplay":{
-               "bundlePath":"../../../packages/framework/bundle/"
-            }
-         },
-         "Require-Bundle-Instance":[
-
-         ]
-      }
-   },
-   {
-      "instanceProps":{
-
-      },
-      "title":"UserGuide",
-      "bundleinstancename":"userguide",
-      "fi":"userguide",
-      "sv":"?",
-      "en":"?",
-      "bundlename":"userguide",
-      "metadata":{
-         "Import-Bundle":{
-            "userguide":{
                "bundlePath":"../../../packages/framework/bundle/"
             }
          },
@@ -382,27 +319,6 @@
       "metadata":{
          "Import-Bundle":{
             "parcel":{
-               "bundlePath":"../../../packages/framework/bundle/"
-            }
-         },
-         "Require-Bundle-Instance":[
-
-         ]
-      }
-   },
-   {
-      "instanceProps":{
-
-      },
-      "title":"Guided Tour",
-      "bundleinstancename":"guidedtour",
-      "fi":"Guided Tour",
-      "sv":"Guided Tour",
-      "en":"Guided Tour",
-      "bundlename":"guidedtour",
-      "metadata":{
-         "Import-Bundle":{
-            "guidedtour":{
                "bundlePath":"../../../packages/framework/bundle/"
             }
          },

@@ -15,14 +15,6 @@
 
       }
    },
-   "userguide":{
-      "state":{
-
-      },
-      "conf":{
-
-      }
-   },
    "layerselector2":{
       "state":{
 
@@ -51,7 +43,7 @@
          "north":"6874042"
       },
       "conf":{
-         "globalMapAjaxUrl":"/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&",
+         "globalMapAjaxUrl":"",
          "plugins":[
             {
                "id":"Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin"
@@ -193,30 +185,7 @@
          }
       }
    },
-   "personaldata":{
-      "state":{
-
-      },
-      "conf":{
-      }
-   },
-   "publisher":{
-      "state":{
-
-      },
-      "conf":{
-
-      }
-   },
    "openlayers-default-theme":{
-      "state":{
-
-      },
-      "conf":{
-
-      }
-   },
-   "search":{
       "state":{
 
       },
@@ -253,8 +222,8 @@
 
       },
       "conf":{
-         "queryUrl":"/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&myplaces=WFS",
-         "wmsUrl":"/karttatiili/myplaces?myCat="
+         "queryUrl":"https://ws.nls.fi/ktjkii/wfs/wfs",
+         "wmsUrl":""
       }
    },
    "infobox":{

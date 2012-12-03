@@ -1,8 +1,8 @@
 /**
- * @class Oskari.framework.bundle.parcel.DrawingToolInstance
+ * @class Oskari.mapframework.bundle.parcel.DrawingToolInstance
  */
 
-Oskari.clazz.define("Oskari.framework.bundle.parcel.DrawingToolInstance",
+Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
 
 /**
  * @method create called automatically on construction
