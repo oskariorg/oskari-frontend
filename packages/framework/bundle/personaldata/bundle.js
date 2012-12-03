@@ -23,11 +23,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundle"
 		"scripts" : [{
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/personaldata/instance.js"
-
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/personaldata/Flyout.js"
-
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/personaldata/Tile.js"
@@ -48,8 +46,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundle"
 			"src" : "../../../../bundles/framework/bundle/personaldata/AccountTab.js"
 		}, {
 		    "type" : "text/css",
-		    "src" : "../../../../resources/framework/bundle/" + 
-		            "personaldata/css/personaldata.css"		  
+		    "src" : "../../../../resources/framework/bundle/personaldata/css/personaldata.css"		  
 		}],
 		
 		"locales" : [{
