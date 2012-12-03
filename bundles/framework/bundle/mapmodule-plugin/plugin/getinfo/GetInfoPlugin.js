@@ -571,7 +571,7 @@ function() {
             for (var i = 0; i < pValue.length; ++i) {
                 var obj = pValue[i];
                 for (objAttr in obj) {
-                    var innerValue = _formatJSONValue(obj[objAttr], datum);
+                    var innerValue = this._formatJSONValue(obj[objAttr], datum);
                     if (!innerValue) {
                         continue;
                     }
