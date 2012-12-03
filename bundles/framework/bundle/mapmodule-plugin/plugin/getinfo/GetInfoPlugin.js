@@ -571,7 +571,7 @@ function() {
             for (var i = 0; i < pValue.length; ++i) {
                 var obj = pValue[i];
                 for (objAttr in obj) {
-                    var innerValue = this._formatJSONValue(obj[objAttr], datum);
+                    var innerValue = this._formatJSONValue(obj[objAttr]);
                     if (!innerValue) {
                         continue;
                     }
@@ -618,7 +618,7 @@ function() {
             var even = false;
             var jsonData = datum.content.parsed;
             for (attr in jsonData) {
-                var value = this._formatJSONValue(jsonData[attr], datum);
+                var value = this._formatJSONValue(jsonData[attr]);
                 if (!value) {
                     continue;
                 }
