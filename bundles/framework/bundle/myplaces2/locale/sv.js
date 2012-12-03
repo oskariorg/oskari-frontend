@@ -50,7 +50,7 @@ Oskari.registerLocalization({
         "placeholder": "Namnge objektet"
       },
       "placelink": {
-        "placeholder": "URL"
+        "placeholder": "Ge URL-address"
       },
       "placedesc": {
         "placeholder": "Beskriv objektet"

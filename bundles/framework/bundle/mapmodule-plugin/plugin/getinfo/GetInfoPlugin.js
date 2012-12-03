@@ -463,7 +463,7 @@ function() {
 
         for (var ii = 0; ii < dataList.length; ii++) {
             var data = dataList[ii];
-            html = me._formatGfiDatum(data);
+            var html = me._formatGfiDatum(data);
             if (html != null) {
                 content.push({
                     html : html
@@ -555,6 +555,7 @@ function() {
         if (!datum.presentationType) {
             return null;
         }
+        
         var html = '';
         var contentType = ( typeof datum.content);
         var hasHtml = false;
@@ -562,43 +563,75 @@ function() {
             hasHtml = (datum.content.indexOf('<html>') >= 0);
             hasHtml = hasHtml || (datum.content.indexOf('<HTML>') >= 0);
         }
-
+        // <br/> eteen?
+        var _formatJSONValue = function(pValue, datum) {
+            if (!pValue) {
+                return;
+            }
+            var value = jQuery('<span></span>');
+            // if value is an array -> format it first
+            // TODO: maybe some nicer formatting?
+            if (Object.prototype.toString.call(pValue) === '[object Array]') {
+                var placeHolder = '';
+                for (var i = 0; i < pValue.length; ++i) {
+                    var obj = pValue[i];
+                    for (objAttr in obj) {
+                        value.append(_formatJSONValue(obj[objAttr], datum));
+                        value.append('<br/>');
+                        //placeHolder = placeHolder + objAttr + ": " + obj[objAttr] + '<br/>';
+                    }
+                    //placeHolder = placeHolder + '<br/>';
+                }
+                //value = placeHolder;
+            }
+            else if (pValue.indexOf && pValue.indexOf('http://') == 0) {
+                var label = value;
+                var link = jQuery('<a target="_blank"></a>');
+                link.attr('href', pValue);
+                link.append(pValue);
+                //value = '<a href="' + value + '" target="_blank">' + label + '</a>';
+                value.append(link);
+            }
+            else {
+                value.append(pValue);
+            }
+            return value;
+        } 
+        this.templateTable = jQuery('<table></table>');
+        this.templateTableRow = jQuery('<tr style="padding: 5px;"></tr>');
+        this.templateTableCell = jQuery('<td style="padding: 2px"></td>');
         if (datum.presentationType == 'JSON' || (datum.content && datum.content.parsed)) {
-            html = '<br/><table>';
+            var table = this.templateTable.clone(); 
+            //html = '<table>';
             var even = false;
             var jsonData = datum.content.parsed;
             for (attr in jsonData) {
-                var value = jsonData[attr];
-                if (value == null) {
+                var value = _formatJSONValue(jsonData[attr], datum);
+                if (!value) {
                     continue;
                 }
-                // if value is an array -> format it first
-                // TODO: maybe some nicer formatting?
-                if (Object.prototype.toString.call(value) === '[object Array]') {
-                    var placeHolder = '';
-                    for (var i = 0; i < value.length; ++i) {
-                        var obj = value[i];
-                        for (objAttr in obj) {
-                            placeHolder = placeHolder + objAttr + ": " + obj[objAttr] + '<br/>';
-                        }
-                        placeHolder = placeHolder + '<br/>';
-                    }
-                    value = placeHolder;
-                }
-
-                if ((value.startsWith && value.startsWith('http://')) || (value.indexOf && value.indexOf('http://') == 0)) {
-                    value = '<a href="' + value + '" target="_blank">' + value + '</a>';
-                }
-                html = html + '<tr style="padding: 5px;';
+                var row = this.templateTableRow.clone();
+                table.append(row);
                 if (!even) {
-                    html = html + ' background-color: #EEEEEE';
+                    row.css('background-color', '#EEEEEE');
                 }
                 even = !even;
-                html = html + '"><td style="padding: 2px">' + attr + '</td><td style="padding: 2px">' + value + '</td></tr>';
+                
+                var labelCell = this.templateTableCell.clone();
+                labelCell.append(attr);
+                row.append(labelCell);
+                var valueCell = this.templateTableCell.clone();
+                valueCell.append(value);
+                row.append(valueCell);
+                //html = html + '"><td style="padding: 2px">' + attr + '</td><td style="padding: 2px">' + value + '</td></tr>';
             }
-            html = html + '</table>';
+            return table;
+            //html = html + '</table>';
         } else {
-            html = '<div>' + datum.content + '</div>';
+            var value = jQuery('<div></div>');
+            value.append(datum.content);
+            return value;
+            //html = '<div>' + datum.content + '</div>';
         }
         return html;
     },
@@ -679,6 +712,7 @@ function() {
         var me = this;
         var contentHtml = [];
         var content = {};
+        var wrapper = jQuery('<div></div>');
         content.html = '';
         content.actions = {};
         for (var di = 0; di < data.fragments.length; di++) {
@@ -686,16 +720,29 @@ function() {
             var fragmentTitle = fragment.layerName;
             var fragmentMarkup = fragment.markup;
 
-            contentHtml.push('<div>');
-            contentHtml.push('<div style="border:1pt solid navy;background-color: #424343;margin-top: 14px; margin-bottom: 10px;height:15px;">' + '<div class="icon-bubble-left" style="height:15px;display:inline;float:left;"><div></div></div>' + '<div style="color:white;float:left;display:inline;margin-left:8px;">' + fragmentTitle + '</div>' + '</div>');
+            var contentWrapper = jQuery('<div></div>');
+            //contentHtml.push('<div>');
+            var headerWrapper = jQuery('<div style="border:1pt solid navy;background-color: #424343;margin-top: 14px; margin-bottom: 10px;height:15px;">' + 
+            '<div class="icon-bubble-left" style="height:15px;display:inline;float:left;"></div>');
+            //<div></div> // empty div between
+            
+            var titleWrapper = jQuery('<div style="color:white;float:left;display:inline;margin-left:8px;"></div>');
+            titleWrapper.append(fragmentTitle); 
+            headerWrapper.append(titleWrapper);
+            contentWrapper.append(headerWrapper);
+            
+            //'<div style="color:white;float:left;display:inline;margin-left:8px;">' + fragmentTitle + '</div>' 
+            //'</div>');
 
             if (fragmentMarkup) {
-                contentHtml.push(fragmentMarkup);
+                contentWrapper.append(fragmentMarkup);
+                //contentHtml.push(fragmentMarkup);
             }
-            contentHtml.push('</div>');
+            wrapper.append(contentWrapper);
+            //contentHtml.push('</div>');
         }
-
-        content.html = contentHtml.join('');
+        content.html = wrapper;
+        //content.html = contentHtml.join('');
 
         var pluginLoc = this.getMapModule().getLocalization('plugin', true);
         var myLoc = pluginLoc[this.__name];
