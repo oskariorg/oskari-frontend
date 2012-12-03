@@ -26,32 +26,25 @@ function() {
 
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/" + 
-			        "infobox/instance.js"
+			"src" : "../../../../bundles/framework/bundle/infobox/instance.js"
 		}, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/" + 
-                    "infobox/plugin/openlayerspopup/OpenlayersPopupPlugin.js"
+            "src" : "../../../../bundles/framework/bundle/infobox/plugin/openlayerspopup/OpenlayersPopupPlugin.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/" + 
-                    "infobox/request/ShowInfoBoxRequest.js"
+            "src" : "../../../../bundles/framework/bundle/infobox/request/ShowInfoBoxRequest.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/" + 
-                    "infobox/request/ShowInfoBoxRequestHandler.js"
+            "src" : "../../../../bundles/framework/bundle/infobox/request/ShowInfoBoxRequestHandler.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/" + 
-                    "infobox/request/HideInfoBoxRequest.js"
+            "src" : "../../../../bundles/framework/bundle/infobox/request/HideInfoBoxRequest.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/" + 
-                    "infobox/request/HideInfoBoxRequestHandler.js"
+            "src" : "../../../../bundles/framework/bundle/infobox/request/HideInfoBoxRequestHandler.js"
         }, {
 		    "type" : "text/css",
-		    "src" : "../../../../resources/framework/bundle/" + 
-		            "infobox/css/infobox.css"	  
+		    "src" : "../../../../resources/framework/bundle/infobox/css/infobox.css"	  
 		}]
 	},
 	"bundle" : {
