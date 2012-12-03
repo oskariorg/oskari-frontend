@@ -575,7 +575,7 @@ function() {
                     if (!innerValue) {
                         continue;
                     }
-                    value.append(obj);
+                    value.append(objAttr);
                     value.append(": ");
                     value.append(innerValue);
                     value.append('<br/>');
