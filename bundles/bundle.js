@@ -8,16 +8,15 @@
  *
  * @to-do - class instance checks against class metadata - protocol
  *        implementation validation
- * 
+ *
  * 2012-11-30 additions
- * - dropped compatibility for pre 2010-04 clazzes
- * - removed fixed root package requirement 'Oskari.'. 
- * - removed unused pluggable clazz system to reduced some string ops in clazz.XXX calls
+ * - dropped compatibility for pre 2010-04 classes
+ * - removed fixed root package requirement 'Oskari.' - implementing namespaces
  * - inheritance with extend() or extend: [] meta
  * - inheritance implemented as a brutal copy down of super clazz methods
- * - super clazz contstructors applied behind the scenes in top-down order
- * - this implementation does *not* implement native js  instanceof for classhierarchies  
- * - inheritance supports pushing down new method categories applied to superclazzes
+ * - super clazz constructors applied behind the scenes in top-down order
+ * - this implementation does *not* implement native js  instanceof for class hierarchies
+ * - inheritance supports pushing down new method categories applied to super classes
  * - this implementation does not provide super.func() calls - may be added at a later stage
  *
  */
@@ -391,7 +390,7 @@ Oskari = (function() {
 					var extnds = args[3].extend;
 					for(var e = 0; extnds && e < extnds.length; e++) {
 						var superClazz = this.lookup(extnds[e]);
-						if( !superClazz._composition.subClazz )
+						if(!superClazz._composition.subClazz)
 							superClazz._composition.subClazz = {};
 						superClazz._composition.subClazz[extnds[e]] = pdefsp;
 						pdefsp._composition.superClazz = superClazz;
@@ -908,8 +907,10 @@ Oskari = (function() {
 	 * different class libraries
 	 *
 	 */
-	var clazz = function() {
-		this.def = null;
+	var clazz = function(regExp, adapter) {
+		this.defRex = new RegExp(regExp);
+		this.def = adapter;
+		this.hasOtherNs = false; 
 		this.ns = {};
 		this.alias = {};
 
@@ -919,15 +920,17 @@ Oskari = (function() {
 	clazz.prototype = {
 
 		get : function() {
-			/*		var args = arguments;
-			 var parts = args[0].split('.');
-			 var bp = parts[0];
+			var args = arguments;
+			if(!this.hasOtherNs || this.defRex.test(args[0])) {
+				return this.def;
+			}
+			
+			var parts = args[0].split('.');
+			var bp = parts[0];
 
-			 var ai = this.ns[bp];
-			 if(!ai)
-			 throw "clazz: ns NOT bound " + bp;
-			 */
-			var ai = this.def;
+			var ai = this.ns[bp];
+			if(!ai)
+				throw "clazz: ns NOT bound " + bp;
 			return ai;
 		},
 		/*
@@ -949,10 +952,8 @@ Oskari = (function() {
 		 * registers an adapter to the class system
 		 */
 		adapt : function(base, adapter) {
-			if(!this.def)
-				this.def = adapter;
-
 			this.ns[base] = adapter;
+			this.hasOtherNs = true;
 		},
 		/**
 		 * @method define
@@ -1099,12 +1100,12 @@ Oskari = (function() {
 		}
 	};
 
-	clazz.prototype.singleton = new clazz();
+	clazz.prototype.singleton = new clazz('^Oskari(.*)', nativeadapter);
 
 	/*
 	 * registers the default native class adapter for Oskari
 	 */
-	clazz.prototype.singleton.adapt('Oskari', nativeadapter);
+	/*clazz.prototype.singleton.adapt('Oskari', nativeadapter);*/
 
 	var bundle_loader_id = 0;
 	/**
@@ -2421,6 +2422,11 @@ Oskari = (function() {
 			;
 			return ga.apply(cs, arguments);
 		},
+		
+		/** @static 
+		 *  @property Oskari.clazzadapter
+		 *  prototype for a class namespace adapter class
+		 */
 		clazzadapter : clazzadapter,
 
 		run : function(func) {
