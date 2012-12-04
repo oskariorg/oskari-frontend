@@ -26,7 +26,7 @@ function() {
 	this.backendExtendedStatus = {};
 }, {
 	ajaxSettings : {
-		defaultTimeThreshold : 30000
+		defaultTimeThreshold : 15000
 	},
 	/**
 	 * @method getLocalization
@@ -235,7 +235,7 @@ function() {
 			var me = this;
 			window.setTimeout(function() {
 				me.updateBackendStatus(true);
-			}, 1000);
+			}, 0);
 		}
 	},
 
