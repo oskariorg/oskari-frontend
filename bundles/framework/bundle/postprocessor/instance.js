@@ -79,7 +79,7 @@ function() {
                 }
                 var event = builder(featureIdList, layer);
                 this.sandbox.notifyAll(event);
-                alert('jee');
+                
                 var points = this.state.featurePoints;
                 if(points) {
                     this._showPoints(points);
