@@ -294,8 +294,13 @@ function(instance, locale, loader) {
 					
 				jQuery.each(part.text().split("\.\n"), function(nn, txtPart) {
 					
+					var trimmed = jQuery.trim(txtPart);
+					if( trimmed.length == 0 ) {
+						return;
+					}	
+					
 					var newPart = jQuery('<div />');
-					newPart.text(jQuery.trim(txtPart)+".");
+					newPart.text(trimmed+".");
 					newContainerPart.append(newPart);
 				});
 				
