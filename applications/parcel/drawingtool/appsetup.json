@@ -145,51 +145,6 @@
       }
    },
    {
-      "title":"Karttatasot",
-      "bundleinstancename":"layerselector2",
-      "fi":"layerselector",
-      "sv":"layerselector",
-      "en":"layerselector",
-      "bundlename":"layerselector2",
-      "metadata":{
-         "Import-Bundle":{
-            "layerselector2":{
-               "bundlePath":"../../../packages/framework/bundle/"
-            }
-         }
-      }
-   },
-   {
-      "title":"Valitut karttatasot",
-      "bundleinstancename":"layerselection2",
-      "fi":"layerselection",
-      "sv":"?",
-      "en":"?",
-      "bundlename":"layerselection2",
-      "metadata":{
-         "Import-Bundle":{
-            "layerselection2":{
-               "bundlePath":"../../../packages/framework/bundle/"
-            }
-         }
-      }
-   },
-   {
-      "title":"Omat tiedot",
-      "bundleinstancename":"personaldata",
-      "fi":"personaldata",
-      "sv":"?",
-      "en":"?",
-      "bundlename":"personaldata",
-      "metadata":{
-         "Import-Bundle":{
-            "personaldata":{
-               "bundlePath":"../../../packages/framework/bundle/"
-            }
-         }
-      }
-   },
-   {
       "title":"Coordinate Display",
       "bundleinstancename":"coordinatedisplay",
       "fi":"coordinatedisplay",
@@ -229,6 +184,21 @@
       "metadata":{
          "Import-Bundle":{
             "featuredata":{
+               "bundlePath":"../../../packages/framework/bundle/"
+            }
+         }
+      }
+   },
+   {
+      "title":"Parcel Selector",
+      "bundleinstancename":"parcelselector",
+      "fi":"Määräalan valinta",
+      "sv":"Platsar",
+      "en":"Parcel selector",
+      "bundlename":"parcelselector",
+      "metadata":{
+         "Import-Bundle":{
+            "parcelselector":{
                "bundlePath":"../../../packages/framework/bundle/"
             }
          }

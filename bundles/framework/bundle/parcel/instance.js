@@ -139,20 +139,29 @@ function() {
         this.buttons.start();
         
         var user = sandbox.getUser();
-/*TODO: LOGGING        if(!user.isLoggedIn()) {
+        if(!user.isLoggedIn()) {
             // guest users don't need anything else
             return;
         }
-*/        // handles category related logic - syncs categories to parcels map layers etc
+        // handles category related logic - syncs categories to parcels map layers etc
         this.categoryHandler = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.CategoryHandler', this);
         this.categoryHandler.start();
 
         var defaultCategoryName = this.getLocalization('category').defaultName;
         
         var actionUrl = this.conf.queryUrl;
+        // If transaction URL is empty or undefined, use action URL for transactions.
+        var transactionUrl = this.conf.transactionUrl || actionUrl;
+        if(this.conf.proxyUrl) {
+            // TODO: PARCEL do we need this?
+            // Use proxy if requesting features cross-domain.
+            // Notice, OpenLayers will automatically encode URL parameters.
+            OpenLayers.ProxyHost = this.conf.proxyUrl;
+        }
+        
         // back end communication
         this.parcelService = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelService',
-            actionUrl, user.getUuid(), sandbox, defaultCategoryName);
+            actionUrl, transactionUrl, user.getUuid(), sandbox, defaultCategoryName);
         // register service so personal data can access it
         this.sandbox.registerService(this.parcelService);
         // init loads the places/categories
@@ -175,7 +184,7 @@ function() {
     stop : function() {
         this.sandbox = null;
     }
-    
+
 }, {
     /**
      * @property {String[]} protocol

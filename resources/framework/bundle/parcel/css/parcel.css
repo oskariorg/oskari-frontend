@@ -25,7 +25,7 @@ div.parcelcategoryform input.oskaricolor {
     font-size : 0;
 }
 
-div.parcel2 div.buttons div.button {
+div.parcel div.buttons div.button {
     margin : 10px;
     padding : 10px;
     border : 1px solid;
@@ -33,6 +33,6 @@ div.parcel2 div.buttons div.button {
     box-shadow: 5px 5px 5px #888;
 }
 
-.divmanazerpopup.parcel2 {
+.divmanazerpopup.parcel {
     max-width: 260px;
 }    

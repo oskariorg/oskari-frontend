@@ -8,18 +8,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelService',
  * @method create called automatically on construction
  * @static
  * @param {String} url
+ * @param {String} transactionUrl
  * @param {String} uuid current users uuid
  * @param {Oskari.mapframework.sandbox.Sandbox} sandbox reference to Oskari sandbox
  * @param {String} categoryName default category name
  * 
  */
-function(url, uuid, sandbox, defaultName) {
+function(url, transActionUrl, uuid, sandbox, defaultName) {
 
     // list of loaded categories & parcel
     this._categoryList = [];
     this._placesList = [];
 
-    this.wfstStore = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelWFSTStore', url, uuid);
+    this.wfstStore = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelWFSTStore', url, transActionUrl, uuid);
     this._sandbox = sandbox;
     this.defaultCategory = null;
     this.defaultCategoryName = defaultName;
