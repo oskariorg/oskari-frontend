@@ -96,13 +96,6 @@ function() {
     	var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
     	
         sandbox.registerAsStateful(this.mediator.bundleId, this);
-        
-		var successCB = function() {
-		};
-		var failureCB = function() {
-			alert(me.getLocalization('errors').loadFailed);
-		};
-		mapLayerService.loadAllLayersAjax(successCB, failureCB);
 	},
 	/**
 	 * @method init
