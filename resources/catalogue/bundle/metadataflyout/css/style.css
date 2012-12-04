@@ -96,7 +96,7 @@
 	
 }
 
-.metadataflyout_content_abstract div  table tr td div {
+.metadataflyout_content_abstract_section {
 	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
 		Helvetica, Arial, sans-serif;
 	text-align: left;
@@ -159,7 +159,7 @@
 	
 }
 
-.metadataflyout_content_jhs div  table tr td div {
+.metadataflyout_content_jhs_section {
 	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
 		Helvetica, Arial, sans-serif;
 	text-align: left;
@@ -221,7 +221,7 @@
 	/*border: 1pt solid magenta;*/
 }
 
-.metadataflyout_content_inspire div  table tr td div {
+.metadataflyout_content_inspire_section {
 	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
 		Helvetica, Arial, sans-serif;
 	text-align: left;
