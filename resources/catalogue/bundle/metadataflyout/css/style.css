@@ -8,9 +8,7 @@
 	
 }
 
-div.metadataflyout_content td.metadataContent {
-	white-space: pre-line;
-}
+
 
 .metadataflyout_content_tabs {
 	margin: 0; padding: 0;
@@ -98,6 +96,17 @@ div.metadataflyout_content td.metadataContent {
 	
 }
 
+.metadataflyout_content_abstract div  table tr td div {
+	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
+		Helvetica, Arial, sans-serif;
+	text-align: left;
+		display: block;
+	margin-top: 4px;
+	margin-left: 24px;
+	margin-bottom: 8px;
+
+	
+}
 
 /* jhs */
 }
