@@ -2,7 +2,7 @@ Oskari.registerLocalization({
 	"lang" : "fi",
 	"key" : "ParcelSelector",
 	"value" : {
-		"title" : "Hae",
+		"title" : "Hae palsta",
 		"desc" : "",
 		"button" : "Hae",
 		"errors" : {

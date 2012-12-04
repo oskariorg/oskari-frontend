@@ -16,6 +16,8 @@ function(instance) {
     this.dialog = null;
     var me = this;
     this.buttons = {
+        /* Points and areas are not required because areas 
+         * are loaded from the server and are only split by using lines.
         'point' : {
             iconCls : 'parcel-draw-point',
             tooltip : '',
@@ -26,16 +28,6 @@ function(instance) {
                 });
             }
         },
-        'line' : {
-            iconCls : 'parcel-draw-line',
-            tooltip : '',
-            sticky : true,
-            callback : function() {
-                me.startNewDrawing({
-                    drawMode : 'line'
-                });
-            }
-        },
         'area' : {
             iconCls : 'parcel-draw-area',
             tooltip : '',
@@ -43,6 +35,17 @@ function(instance) {
             callback : function() {
                 me.startNewDrawing({
                     drawMode : 'area'
+                });
+            }
+        },
+        */
+        'line' : {
+            iconCls : 'parcel-draw-line',
+            tooltip : '',
+            sticky : true,
+            callback : function() {
+                me.startNewDrawing({
+                    drawMode : 'line'
                 });
             }
         }
@@ -78,6 +81,18 @@ function(instance) {
             }
             this.buttons[tool].tooltip = tooltip;
         }
+
+        // Remove unnecessary toolbar buttons.
+        this.instance.getSandbox().request( this.getName(),
+            this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('reset', 'history'));
+        this.instance.getSandbox().request( this.getName(),
+            this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('history_back', 'history'));
+        this.instance.getSandbox().request( this.getName(),
+            this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('history_forward', 'history'));
+        this.instance.getSandbox().request( this.getName(),
+            this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('link', 'viewtools'));
+        this.instance.getSandbox().request( this.getName(),
+            this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('print', 'viewtools'));
     },
     /**
      * @method start
