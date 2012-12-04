@@ -1,36 +1,4 @@
 {
-   "toolbar":{
-      "state":{
-
-      },
-      "conf":{
-
-      }
-   },
-   "layerselection2":{
-      "state":{
-
-      },
-      "conf":{
-
-      }
-   },
-   "layerselector2":{
-      "state":{
-
-      },
-      "conf":{
-
-      }
-   },
-   "metadataflyout":{
-      "state":{
-
-      },
-      "conf":{
-
-      }
-   },
    "mapfull":{
       "state":{
          "selectedLayers":[
@@ -185,61 +153,12 @@
          }
       }
    },
-   "openlayers-default-theme":{
-      "state":{
-
-      },
-      "conf":{
-
-      }
-   },
-   "featuredata":{
-      "state":{
-
-      },
-      "conf":{
-
-      }
-   },
-   "divmanazer":{
-      "state":{
-
-      },
-      "conf":{
-
-      }
-   },
-   "statehandler":{
-      "state":{
-
-      },
-      "conf":{
-
-      }
-   },
    "parcel":{
-      "state":{
-
-      },
       "conf":{
          "queryUrl":"https://ws.nls.fi/ktjkii/wfs/wfs",
-         "wmsUrl":""
-      }
-   },
-   "infobox":{
-      "state":{
-
-      },
-      "conf":{
-
-      }
-   },
-   "coordinatedisplay":{
-      "state":{
-
-      },
-      "conf":{
-
+         "transactionUrl":"",
+         "wmsUrl":"",
+         "proxyUrl":""
       }
    }
 }

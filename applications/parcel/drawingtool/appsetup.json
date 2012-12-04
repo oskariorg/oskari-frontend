@@ -1,9 +1,6 @@
 { 
   "startupSequence" : [
    {
-      "instanceProps":{
-
-      },
       "title":"OpenLayers",
       "bundleinstancename":"openlayers-default-theme",
       "fi":"OpenLayers",
@@ -21,16 +18,10 @@
             "oskariui":{
                "bundlePath":"../../../packages/framework/bundle/"
             }
-         },
-         "Require-Bundle-Instance":[
-
-         ]
+         }
       }
    },
    {
-      "instanceProps":{
-
-      },
       "title":"Map",
       "bundleinstancename":"mapfull",
       "fi":"Map",
@@ -90,16 +81,10 @@
             "event-map":{
                "bundlePath":"../../../packages/framework/bundle/"
             }
-         },
-         "Require-Bundle-Instance":[
-
-         ]
+         }
       }
    },
    {
-      "instanceProps":{
-
-      },
       "title":"Oskari DIV Manazer",
       "bundleinstancename":"divmanazer",
       "fi":"Oskari DIV Manazer",
@@ -111,16 +96,10 @@
             "divmanazer":{
                "bundlePath":"../../../packages/framework/bundle/"
             }
-         },
-         "Require-Bundle-Instance":[
-
-         ]
+         }
       }
    },
    {
-      "instanceProps":{
-
-      },
       "title":"Toolbar",
       "bundleinstancename":"toolbar",
       "fi":"toolbar",
@@ -132,16 +111,10 @@
             "toolbar":{
                "bundlePath":"../../../packages/framework/bundle/"
             }
-         },
-         "Require-Bundle-Instance":[
-
-         ]
+         }
       }
    },
    {
-      "instanceProps":{
-
-      },
       "title":"StateHandler",
       "bundleinstancename":"statehandler",
       "fi":"jquery",
@@ -153,16 +126,10 @@
             "statehandler":{
                "bundlePath":"../../../packages/framework/bundle/"
             }
-         },
-         "Require-Bundle-Instance":[
-
-         ]
+         }
       }
    },
    {
-      "instanceProps":{
-
-      },
       "title":"Info Box",
       "bundleinstancename":"infobox",
       "fi":"infobox",
@@ -174,16 +141,10 @@
             "infobox":{
                "bundlePath":"../../../packages/framework/bundle/"
             }
-         },
-         "Require-Bundle-Instance":[
-
-         ]
+         }
       }
    },
    {
-      "instanceProps":{
-
-      },
       "title":"Karttatasot",
       "bundleinstancename":"layerselector2",
       "fi":"layerselector",
@@ -195,16 +156,10 @@
             "layerselector2":{
                "bundlePath":"../../../packages/framework/bundle/"
             }
-         },
-         "Require-Bundle-Instance":[
-
-         ]
+         }
       }
    },
    {
-      "instanceProps":{
-
-      },
       "title":"Valitut karttatasot",
       "bundleinstancename":"layerselection2",
       "fi":"layerselection",
@@ -216,16 +171,10 @@
             "layerselection2":{
                "bundlePath":"../../../packages/framework/bundle/"
             }
-         },
-         "Require-Bundle-Instance":[
-
-         ]
+         }
       }
    },
    {
-      "instanceProps":{
-
-      },
       "title":"Omat tiedot",
       "bundleinstancename":"personaldata",
       "fi":"personaldata",
@@ -237,16 +186,10 @@
             "personaldata":{
                "bundlePath":"../../../packages/framework/bundle/"
             }
-         },
-         "Require-Bundle-Instance":[
-
-         ]
+         }
       }
    },
    {
-      "instanceProps":{
-
-      },
       "title":"Coordinate Display",
       "bundleinstancename":"coordinatedisplay",
       "fi":"coordinatedisplay",
@@ -258,16 +201,10 @@
             "coordinatedisplay":{
                "bundlePath":"../../../packages/framework/bundle/"
             }
-         },
-         "Require-Bundle-Instance":[
-
-         ]
+         }
       }
    },
    {
-      "instanceProps":{
-
-      },
       "title":"Metadata Flyout",
       "bundleinstancename":"metadataflyout",
       "fi":"metadataflyout",
@@ -279,16 +216,10 @@
             "metadataflyout":{
                "bundlePath":"../../../packages/catalogue/bundle/"
             }
-         },
-         "Require-Bundle-Instance":[
-
-         ]
+         }
       }
    },
    {
-      "instanceProps":{
-
-      },
       "title":"Featuredata",
       "bundleinstancename":"featuredata",
       "fi":"Kohdetiedot",
@@ -300,16 +231,10 @@
             "featuredata":{
                "bundlePath":"../../../packages/framework/bundle/"
             }
-         },
-         "Require-Bundle-Instance":[
-
-         ]
+         }
       }
    },
    {
-      "instanceProps":{
-
-      },
       "title":"Parcel",
       "bundleinstancename":"parcel",
       "fi":"Määräala",
@@ -321,10 +246,7 @@
             "parcel":{
                "bundlePath":"../../../packages/framework/bundle/"
             }
-         },
-         "Require-Bundle-Instance":[
-
-         ]
+         }
       }
    }
 ]
