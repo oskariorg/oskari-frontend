@@ -424,7 +424,7 @@ if(resp.length > 0) {
      * Closes the infobox with GFI data
      */
     _closeGfiInfo : function() {
-        var rn = "InfoBox.HideInfoBoxRequest";
+        var rn = "HaravaInfoBox.HideInfoBoxRequest";
         var rb = this._sandbox.getRequestBuilder(rn);
         var r = rb(this.infoboxId);
         this._sandbox.request(this, r);
@@ -439,7 +439,7 @@ if(resp.length > 0) {
     _showGfiInfo : function(content, lonlat) {
         var me = this;
         // send out the request
-        var rn = "InfoBox.ShowInfoBoxRequest";
+        var rn = "HaravaInfoBox.ShowInfoBoxRequest";
         var rb = this._sandbox.getRequestBuilder(rn);
         var r = rb("getinforesult", "GetInfo Result", content, lonlat, true);
         this._sandbox.request(me, r);
@@ -706,7 +706,7 @@ if(resp.length > 0) {
         /*var pluginLoc = this.getMapModule().getLocalization('plugin');
         var myLoc = pluginLoc[this.__name];
         data.title = myLoc.title;*/
-        var rn = "InfoBox.ShowInfoBoxRequest";
+        var rn = "HaravaInfoBox.ShowInfoBoxRequest";
         var rb = me._sandbox.getRequestBuilder(rn);
         var r = rb(data.popupid, "Info", [content], data.lonlat, true);
         me._sandbox.request(me, r);
