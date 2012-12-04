@@ -115,21 +115,6 @@
       }
    },
    {
-      "title":"StateHandler",
-      "bundleinstancename":"statehandler",
-      "fi":"jquery",
-      "sv":"?",
-      "en":"?",
-      "bundlename":"statehandler",
-      "metadata":{
-         "Import-Bundle":{
-            "statehandler":{
-               "bundlePath":"../../../packages/framework/bundle/"
-            }
-         }
-      }
-   },
-   {
       "title":"Info Box",
       "bundleinstancename":"infobox",
       "fi":"infobox",
@@ -154,21 +139,6 @@
       "metadata":{
          "Import-Bundle":{
             "coordinatedisplay":{
-               "bundlePath":"../../../packages/framework/bundle/"
-            }
-         }
-      }
-   },
-   {
-      "title":"Featuredata",
-      "bundleinstancename":"featuredata",
-      "fi":"Kohdetiedot",
-      "sv":"?",
-      "en":"?",
-      "bundlename":"featuredata",
-      "metadata":{
-         "Import-Bundle":{
-            "featuredata":{
                "bundlePath":"../../../packages/framework/bundle/"
             }
          }
