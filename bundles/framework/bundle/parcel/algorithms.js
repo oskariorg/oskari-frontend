@@ -8,6 +8,7 @@
         var markerMouseOffset = new OpenLayers.Pixel(0, 0);
         var markerIcon = new OpenLayers.Icon('img/marker.png',markerSize,markerOffset);
         var intersectionPoints = [];
+        var splitPolygons;
         var activeMarker = null;
 
         // Debug variables
@@ -28,7 +29,7 @@
 	            }
 	          ]
 	       }
-	    };
+	    }
         var styleMap = [];
 
 
@@ -1777,10 +1778,7 @@ controls.modify.mode = OpenLayers.Control.ModifyFeature.DRAG;
             var lonlat = map.getLonLatFromPixel(new OpenLayers.Pixel(evt.xy.x,evt.xy.y))
             lonlat.lon -= markerMouseOffset.lon;
             lonlat.lat -= markerMouseOffset.lat;
-console.log("***");
-console.log(activeMarker.polygonEdge);
             activeMarker.lonlat = activeMarkerProjection(lonlat);
-console.log(activeMarker.lonlat);
 //            activeMarker.lonlat.lon -= markerMouseOffset.lon;
 //            activeMarker.lonlat.lat -= markerMouseOffset.lat;
             markers.redraw();
@@ -1845,16 +1843,39 @@ console.log(activeMarker.lonlat);
             comp[activeMarker.polylineEdge].x = xm+unitVec[0]*activeMarker.dist;
             comp[activeMarker.polylineEdge].y = ym+unitVec[1]*activeMarker.dist;
 */
-            activeMarker = null;
+            if (splitPolygons !== null) {
+                var comp = [];
+//                for (var i = 0; i < 2; i++) {
+                    comp[0] = splitPolygons[0].geometry.components[0].components;
+                    if (activeMarker.first) {
+                        comp[0][splitPolygons[0].polygonCorners[0]].x = activeMarker.lonlat.lon;
+                        comp[0][splitPolygons[0].polygonCorners[0]].y = activeMarker.lonlat.lat;
+                    } else {
+                        comp[0][splitPolygons[0].polygonCorners[1]].x = activeMarker.lonlat.lon;
+                        comp[0][splitPolygons[0].polygonCorners[1]].y = activeMarker.lonlat.lat;
+                    }
+                    comp[1] = splitPolygons[1].geometry.components[0].components;
+                    if (activeMarker.first) {
+                        comp[1][splitPolygons[1].polygonCorners[1]].x = activeMarker.lonlat.lon;
+                        comp[1][splitPolygons[1].polygonCorners[1]].y = activeMarker.lonlat.lat;
+                    } else {
+                        comp[1][splitPolygons[1].polygonCorners[0]].x = activeMarker.lonlat.lon;
+                        comp[1][splitPolygons[1].polygonCorners[0]].y = activeMarker.lonlat.lat;
+                    }
+//                }
+
+            }
+
+//          activeMarker = null; tämä ehkä voisi olla null
             markers.redraw();
             vectors.redraw();
+            split.redraw();
         }
 
        /**
         *
         */
         function activeMarkerProjection(refLonlat) {
-
             var point = {x: refLonlat.lon, y: refLonlat.lat};
             var polygonID = activeMarker.polygonID;
             var polygon = vectors.getFeatureById(polygonID);
@@ -1873,7 +1894,13 @@ console.log(activeMarker.lonlat);
             }
             activeMarker.polygonEdge = (edge+minDistInd+nEdges-1)%nEdges;
 
-            return (new OpenLayers.LonLat(projPoints[minDistInd].x,projPoints[minDistInd].y));
+//            return (new OpenLayers.LonLat(projPoints[minDistInd].x,projPoints[minDistInd].y));
+
+
+
+            // Temp:
+            activeMarker.polygonEdge = edge;
+            return (new OpenLayers.LonLat(projPoints[1].x,projPoints[1].y));
         }
 
 
@@ -2184,7 +2211,7 @@ console.log("Selected");
                 }
             }
             if (!accepted) vectors.removeFeatures([feature]);
-console.log(vectors);
+
             vectors.redraw();
         }
 
@@ -2202,7 +2229,7 @@ console.log(vectors);
             var i;
 
             // kerätään leikkauspisteet, kaksi kappaletta
-            var intersections = [];
+/*            var intersections = [];
             var intersectionsX = [];
             var intersectionsY = [];
             polygon_loop:
@@ -2219,8 +2246,8 @@ console.log(vectors);
                     }
                 }
             }
-
-            if (intersections.length<1) return null;
+*/
+            if (intersectionPoints.length<1) return null;
 
 /*
 
@@ -2247,21 +2274,35 @@ console.log(vectors);
             }
 */
 
+/*            if (intersections[0][2] > intersections[1][2]) {
+                intersections.splice(1,0,intersections[0]);
+                intersectionsX.splice(1,0,intersections[0]);
+                intersectionsY.splice(1,0,intersections[0]);
+                intersections.splice(0,1);
+                intersectionsX.splice(0,1);
+                intersectionsY.splice(0,1);
+            }
+*/
             // leikkaus
             points = [];
-            for (i=0; i<intersections[0][0]+1; i++) {
+            var polygonCorners1 = [];
+            for (i=0; i<intersectionPoints[0][6]+1; i++) {
                 point = new OpenLayers.Geometry.Point(polygonEdges[i][0], polygonEdges[i][1]);
                 points.push(point);
             }
-            point = new OpenLayers.Geometry.Point(intersectionsX[0],intersectionsY[0]);
+            point = new OpenLayers.Geometry.Point(intersectionPoints[0][0][0],intersectionPoints[0][0][1]);
             points.push(point);
-            for (i = intersections[0][2]+1; i < intersections[1][2]+1; i++) {
-                point = new OpenLayers.Geometry.Point(polylineEdges[intersections[0][1]][i][0],polylineEdges[intersections[0][1]][i][1]);
+            polygonCorners1.push(points.length-1);
+
+            for (var i = intersectionPoints[0][5]+1; i < intersectionPoints[1][5]+1; i++) {
+                point = new OpenLayers.Geometry.Point(polylineEdges[intersectionPoints[0][4]][i][0],polylineEdges[intersectionPoints[0][4]][i][1]);
                 points.push(point);
             }
-            point = new OpenLayers.Geometry.Point(intersectionsX[1],intersectionsY[1]);
+
+            point = new OpenLayers.Geometry.Point(intersectionPoints[1][0][0],intersectionPoints[1][0][1]);
             points.push(point);
-            for (i=intersections[1][0]+1; i<polygonEdges.length; i++) {
+            polygonCorners1.push(points.length-1);
+            for (i=intersectionPoints[1][6]+1; i<polygonEdges.length; i++) {
                 point = new OpenLayers.Geometry.Point(polygonEdges[i][0], polygonEdges[i][1]);
                 points.push(point);
             }
@@ -2269,24 +2310,32 @@ console.log(vectors);
             var style1 = OpenLayers.Util.applyDefaults(style1, OpenLayers.Feature.Vector.style['default']);
             style1.fillColor = getRandomColor();
             polygon1.style = style1;
+            polygon1.polygonCorners = polygonCorners1;
+
 
             points = [];
-            for (i=intersections[0][0]+1; i<intersections[1][0]+1; i++) {
+            var polygonCorners2 = [];
+            for (i=intersectionPoints[0][6]+1; i<intersectionPoints[1][6]+1; i++) {
                 point = new OpenLayers.Geometry.Point(polygonEdges[i][0], polygonEdges[i][1]);
                 points.push(point);
             }
-            point = new OpenLayers.Geometry.Point(intersectionsX[1],intersectionsY[1]);
+            point = new OpenLayers.Geometry.Point(intersectionPoints[1][0][0],intersectionPoints[1][0][1]);
             points.push(point);
-            for (i = intersections[1][2]; i > intersections[0][2]; i--) {
-                point = new OpenLayers.Geometry.Point(polylineEdges[intersections[0][1]][i][0],polylineEdges[intersections[0][1]][i][1]);
+            polygonCorners2.push(points.length-1);
+
+            for (i = intersectionPoints[1][5]; i > intersectionPoints[0][5]; i--) {
+                point = new OpenLayers.Geometry.Point(polylineEdges[intersectionPoints[0][4]][i][0],polylineEdges[intersectionPoints[0][4]][i][1]);
                 points.push(point);
             }
-            point = new OpenLayers.Geometry.Point(intersectionsX[0],intersectionsY[0]);
+
+            point = new OpenLayers.Geometry.Point(intersectionPoints[0][0][0],intersectionPoints[0][0][1]);
             points.push(point);
+            polygonCorners2.push(points.length-1);
             var polygon2 = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Polygon([new OpenLayers.Geometry.LinearRing(points)]));
             var style2 = OpenLayers.Util.applyDefaults(style2, OpenLayers.Feature.Vector.style['default']);
             style2.fillColor = getRandomColor();
             polygon2.style = style2;
+            polygon2.polygonCorners = polygonCorners2;
 
             return [polygon1,polygon2];
         }
@@ -2296,6 +2345,8 @@ console.log(vectors);
          * 
          */
         function doSplit() {
+            document.getElementById("split_button").disabled = true;
+
             var features = vectors.features;
             var geometry;
             var vertices;
@@ -2399,31 +2450,55 @@ console.log(vectors);
             for (var i=0; i<polylineEdges.length; i++) {
                 var line = vectors.getFeatureById(polylineEdges[i][0][4]);
                 var comp = line.geometry.components;
-                var outsidePoints = 0;
-                polyline_loop:
                 for (var j=0; j<polylineEdges[i].length; j++) {
+                    if (numIntersections > 1) {
+                        comp[j].outside = (typeof comp[j].outside === 'undefined');
+                        continue;
+                    }
                     for (var k=0; k<polygonEdges.length; k++) {
                         var p = intersection(polylineEdges[i][j],polygonEdges[k]);
                         if (p === null) {
-                            comp[j].outside = (numIntersections > 0);
-                            outsidePoints++;
+                            comp[j].outside = (numIntersections < 1);
                         } else {
                             comp[j].outside = false;
-                            intersectionPoints.push([p,polygonEdges[k][4],polygonEdges[k][5],polylineEdges[i][j][4],j-outsidePoints]);
+                            intersectionPoints.push([p,polygonEdges[k][4],polygonEdges[k][5],polylineEdges[i][j][4],i,j,k]);
                             if (numIntersections === 0) {
                                 comp[j].x = p[0];
                                 comp[j].y = p[1];
                                 numIntersections++;
                             } else {
-                                break polyline_loop;
+                                numIntersections++;
+                                comp[j+1].x = p[0];
+                                comp[j+1].y = p[1];
+                                comp[j+1].outside = false;
+                                break;
                             }
                         }
                     }
                 }
+                if (intersectionPoints[0][6] > intersectionPoints[1][6]) intersectionPoints.reverse();
+                if (intersectionPoints[0][5] > intersectionPoints[1][5]) {
+                    polylineEdges[i].reverse();
+                    for (var l = 0; l < polylineEdges[i].length; l++) {
+                        var temp0 = polylineEdges[i][l][0];
+                        var temp1 = polylineEdges[i][l][1];
+                        polylineEdges[i][l][0] = polylineEdges[i][l][2];
+                        polylineEdges[i][l][1] = polylineEdges[i][l][3];
+                        polylineEdges[i][l][2] =temp0;
+                        polylineEdges[i][l][3] =temp1;
+                    }
+                    intersectionPoints[0][5] = polylineEdges[i].length-1-intersectionPoints[0][5];
+                    intersectionPoints[1][5] = polylineEdges[i].length-1-intersectionPoints[1][5];
+                }
+
+                comp[polylineEdges[i].length].outside = (typeof comp[j].outside === 'undefined');
                 var j = 0;
                 while (j<comp.length) {
                     if (comp[j].outside) {
                         comp.splice(j,1);
+//                        for (var i = 0; i < intersectionPoints.length; i++) {
+//                            if (intersectionPoints[i][5] > j) intersectionPoints[i][5]--;
+//                        }
                         continue;
                     }
                     j++;
@@ -2482,7 +2557,6 @@ console.log(vectors);
 //console.log(swPoint);
                 swPoints.push(swPoint);
             }
-console.log("..");
             //to-do: erikoistapaukset huomioiva algoritmi
             //tässä nyt workaround ilmeisimpään ongelmaan
             var xEps = 0.00001;
@@ -2493,7 +2567,6 @@ console.log("..");
 
             swPoint = new Point(polygonEdges[nInd][2]+xEps,polygonEdges[nInd][3]+yEps);
             swPoints.push(swPoint);
-console.log(swPoints);
             var swPolygon = new Polygon(swPoints);
 
 /*console.log("--------");
@@ -2626,6 +2699,8 @@ console.log(sweep_line.find({edge:1}));
             }
 */
             var marker;
+            var minPolygonEdge = Number.POSITIVE_INFINITY;
+            var minPolygonEdgeIndex = -1;
             for (var i=0; i<intersectionPoints.length; i++) {
                 var point = new OpenLayers.Geometry.Point(intersectionPoints[i][0][0],intersectionPoints[i][0][1]);
                 marker = new OpenLayers.Marker(new OpenLayers.LonLat(point.x,point.y),markerIcon.clone());
@@ -2634,10 +2709,16 @@ console.log(sweep_line.find({edge:1}));
                 marker.polygonEdge = intersectionPoints[i][2];
                 marker.polylineID = intersectionPoints[i][3];
                 marker.polylineEdge = intersectionPoints[i][4];
+                marker.first = false;
+                if (marker.polygonEdge < minPolygonEdge) {
+                    minPolygonEdge = marker.polygonEdge;
+                    minPolygonEdgeIndex = i;
+                }
 //                marker.lonlat0 = new OpenLayers.LonLat(marker.lonlat.lon, marker.lonlat.lat);
 //                marker.dist0 = distance(vertices[edgeInd],activeMarker.lonlat0);
                 markers.addMarker(marker);
             }
+            if (minPolygonEdgeIndex >= 0) markers.markers[minPolygonEdgeIndex].first = true;
 
             // Lisää tarvittaessa uudet välipisteet
 /*            var line;
@@ -2710,7 +2791,7 @@ console.log(markerInfo);
 */
 
             // simppeli splittaus tässä vaiheessa
-            var splitPolygons = generateSplitPolygons(polygonEdges,polylineEdges);
+            splitPolygons = generateSplitPolygons(polygonEdges,polylineEdges);
             split.removeAllFeatures();
             if (splitPolygons !== null) split.addFeatures(splitPolygons);
 
@@ -2743,4 +2824,3 @@ console.log(markerInfo);
                 offImages[i].src = "theme/default/img/" + roots[i] + "_on.png";
             }
         })();
-
