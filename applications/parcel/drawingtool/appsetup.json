@@ -160,21 +160,6 @@
       }
    },
    {
-      "title":"Metadata Flyout",
-      "bundleinstancename":"metadataflyout",
-      "fi":"metadataflyout",
-      "sv":"?",
-      "en":"?",
-      "bundlename":"metadataflyout",
-      "metadata":{
-         "Import-Bundle":{
-            "metadataflyout":{
-               "bundlePath":"../../../packages/catalogue/bundle/"
-            }
-         }
-      }
-   },
-   {
       "title":"Featuredata",
       "bundleinstancename":"featuredata",
       "fi":"Kohdetiedot",

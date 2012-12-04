@@ -25,12 +25,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelWFSTStore',
  * @method create called automatically on construction
  * @static
  * @param {String} url
+ * @param {String} transactionUrl
  * @param {String} uuid current users uuid
  */
-function(url, uuid) {
+function(url, transactionUrl, uuid) {
     this.uuid = uuid;
     this.protocols = {};
     this.url = url;
+    this.transactionUrl = transactionUrl;
 }, {
 
     /**
@@ -564,4 +566,5 @@ function(url, uuid) {
     disconnect : function() {
 
     }
+    
 });
