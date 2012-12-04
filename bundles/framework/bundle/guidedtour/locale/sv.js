@@ -4,11 +4,11 @@ Oskari.registerLocalization(
         "key": "GuidedTour",
         "value": {
             "button": {
-                "next" : "Seuraava",
-                "previous" : "Edellinen",
-                "start" : "Aloita",
-                "finish" : "Valmis",
-                "close" : "Sulje"
+                "next" : "Nästa",
+                "previous" : "Föregående",
+                "start" : "Starta",
+                "finish" : "Klar",
+                "close" : "Avbryt"
             },
             "title": "Välkommen",
             "desc": "",
