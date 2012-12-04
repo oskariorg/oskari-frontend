@@ -36,6 +36,8 @@ function() {
         var me = this;
         var sandbox = Oskari.$("sandbox");
         this.sandbox = sandbox;
+        
+        sandbox.register(this);
         if(this.state) {
             var hiliteLayerId = this.state.highlightFeatureLayerId; 
             
@@ -77,7 +79,7 @@ function() {
                 }
                 var event = builder(featureIdList, layer);
                 this.sandbox.notifyAll(event);
-                
+                alert('jee');
                 var points = this.state.featurePoints;
                 if(points) {
                     this._showPoints(points);
@@ -100,7 +102,7 @@ function() {
         var count = 0;
         for(; count < points.length; ++count) {
             var point = points[count];
-            var olPoint = new OpenLayers.Geometry.Point(point.lon, point.lat);
+            var olPoint = new OpenLayers.Geometry.Point(point.lat, point.lon);
             olPoints.addPoint(olPoint);
         }
         var bounds = olPoints.getBounds();
