@@ -350,24 +350,13 @@ function(mapLayerUrl, sandbox) {
         	}
         }
 
-		var subFirstMetadata = baseLayer.getMetadataIdentifier();
-
         for(var i = 0; i < baseMapJson.subLayer.length; i++) {
             // Notice that we are adding layers to baselayers sublayers array
             var subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
             
-            
-            if(!subFirstMetadata ) {
-            	subFirstMetadata = subLayer.getMetadataIdentifier();
-            }
-            
             baseLayer.getSubLayers().push(subLayer);
         }
         
-        if( !baseLayer.getMetadataIdentifier() && subFirstMetadata ) {
-        	baseLayer.setMetadataIdentifier(subFirstMetadata);	
-        }
-
         // Opacity
         if(baseMapJson.opacity != null) {
             baseLayer.setOpacity(baseMapJson.opacity);
