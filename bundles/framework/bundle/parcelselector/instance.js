@@ -2,10 +2,9 @@
  * @class Oskari.mapframework.bundle.parcelselector.ParcelSelectorInstance
  *
  * Main component and starting point for the "parcel" functionality. 
- * Lists all the layers available in Oskari.mapframework.service.MapLayerService and updates 
- * UI if Oskari.mapframework.event.common.MapLayerEvent is received.
+ * Requests parcel FID for updating the map.
  * 
- * See Oskari.mapframework.bundle.parcelselector.ParcelSelector for bundle definition. 
+ * See Oskari.mapframework.bundle.parcelselector.ParcelSelector for bundle definition.
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.parcelselector.ParcelSelectorInstance", 
 
@@ -23,7 +22,7 @@ function() {
 	 * @static
 	 * @property __name
 	 */
-	__name : 'LayerSelector',
+	__name : 'ParcelSelector',
 	/**
 	 * @method getName
 	 * @return {String} the name for the component 
@@ -128,11 +127,10 @@ function() {
 	 * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
 	 */
 	onEvent : function(event) {
-
 		var handler = this.eventHandlers[event.getName()];
-		if(!handler)
-			return;
-
+		if(!handler){
+		    return;
+		}
 		return handler.apply(this, [event]);
 
 	},

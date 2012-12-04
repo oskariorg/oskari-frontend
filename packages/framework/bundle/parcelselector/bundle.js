@@ -41,13 +41,7 @@ function() {
             "src" : "../../../../bundles/framework/bundle/parcelselector/model/LayerGroup.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcelselector/view/Layer.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcelselector/view/LayersTab.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcelselector/view/PublishedLayersTab.js"
+            "src" : "../../../../bundles/framework/bundle/parcelselector/view/ParcelsTab.js"
         }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/parcelselector/css/parcelselector.css"

@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.parcelselector.Tile
- * Renders the "all layers" tile.
+ * Renders the "parcel selector" tile.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.parcelselector.Tile',
 

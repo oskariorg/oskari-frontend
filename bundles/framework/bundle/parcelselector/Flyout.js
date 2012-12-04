@@ -14,9 +14,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcelselector.Flyout',
 function(instance) {
 	this.instance = instance;
 	this.container = null;
-	this.template = null;
 	this.state = null;
-	this.layerTabs = [];
+	this.parcelTabs = [];
 }, {
 	/**
 	 * @method getName
@@ -51,21 +50,14 @@ function(instance) {
 	startPlugin : function() {
 		
 		var me = this;
-		this.template = jQuery('<div class="allLayersTabContent"></div>');
 		
-        var inspireTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.LayersTab", this.instance, this.instance.getLocalization('filter').inspire);
+        var inspireTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').inspire);
         inspireTab.groupingMethod = 'getInspireName';
-        var orgTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.LayersTab", this.instance, this.instance.getLocalization('filter').organization);
+        var orgTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').organization);
         orgTab.groupingMethod = 'getOrganizationName';
         
-		this.layerTabs.push(inspireTab);
-        this.layerTabs.push(orgTab);
-        
-        // add published tab based on config
-        if(this.instance.conf && this.instance.conf.showPublishedTab == true) {
-            var publishedTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.PublishedLayersTab", this.instance, this.instance.getLocalization('filter').published);
-            this.layerTabs.push(publishedTab);
-        }
+		this.parcelTabs.push(inspireTab);
+        this.parcelTabs.push(orgTab);
 	},
 	/**
 	 * @method stopPlugin 
@@ -112,8 +104,8 @@ function(instance) {
             state = {};
         }
         
-        for(var i = 0; i < this.layerTabs.length; ++i) {
-            var tab = this.layerTabs[i];
+        for(var i = 0; i < this.parcelTabs.length; ++i) {
+            var tab = this.parcelTabs[i];
             if(tab.getTitle() == state.tab) {
                 this.tabContainer.select(tab.getTabPanel());
                 tab.setState(state);
@@ -122,8 +114,8 @@ function(instance) {
     },
     getContentState : function() {
         var state = {};
-        for(var i = 0; i < this.layerTabs.length; ++i) {
-            var tab = this.layerTabs[i];
+        for(var i = 0; i < this.parcelTabs.length; ++i) {
+            var tab = this.parcelTabs[i];
             if(this.tabContainer.isSelected(tab.getTabPanel())) {
                 state = tab.getState();
                 break;
@@ -145,152 +137,11 @@ function(instance) {
 		
         this.tabContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
         this.tabContainer.insertTo(cel);
-        for(var i = 0; i < this.layerTabs.length; ++i) {
-            var tab = this.layerTabs[i];
+        for(var i = 0; i < this.parcelTabs.length; ++i) {
+            var tab = this.parcelTabs[i];
             this.tabContainer.addPanel(tab.getTabPanel());
         }
-        //this.tabContainer.addTabChangeListener(me._tabsChanged); // -> filter with same keyword when changing tabs?
-        this.populateLayers();
-	},
-    populateLayers : function() {
-        var sandbox = this.instance.getSandbox();
-        // populate layer list
-        var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-        var layers = mapLayerService.getAllLayers();
-        
-        for(var i = 0; i < this.layerTabs.length; ++i) {
-          var tab = this.layerTabs[i];
-          // populate tab if it has grouping method
-          if(tab.groupingMethod) {
-              var layersCopy = layers.slice(0);
-              var groups = this._getLayerGroups(layersCopy, tab.groupingMethod);
-              tab.showLayerGroups(groups);
-          }
-        }
-    },
-    /*
-    _tabsChanged : function(previousTab, newTab) {
-        if(previousTab) {
-            tabSelected
-            tabUnselected
-            // 
-            if(newTab) {
-                alert('changed from ' +  previousTab.getTitle() + ' to ' + newTab.getTitle());
-            }
-        }
-        else if(newTab) {
-                alert('selected ' + newTab.getTitle());
-            }
-    },
-    */
-	/**
-	 * @method _getLayerGroups
-	 * @private
-	 */
-	_getLayerGroups : function(layers, groupingMethod) {
-        var me = this;
-        var sandbox = this.instance.getSandbox();
-
-        var groupList = [];
-
-        // sort layers by grouping & name
-        layers.sort(function(a, b) {
-            return me._layerListComparator(a, b, groupingMethod);
-        });
-        var group = null;
-        for (var n = 0; n < layers.length; ++n) {
-            var layer = layers[n];
-            if(layer.getMetaType && layer.getMetaType() == 'published') {
-                // skip published layers
-                continue;
-            }
-            var groupAttr = layer[groupingMethod]();
-            if (!group || group.getTitle() != groupAttr) {
-                group = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.model.LayerGroup", groupAttr);
-                groupList.push(group);
-            }
-            group.addLayer(layer);
-
-        }
-        return groupList;
-    },
-    /**
-     * @method _layerListComparator
-     * Uses the private property #grouping to sort layer objects in the wanted order for rendering
-     * The #grouping property is the method name that is called on layer objects.
-     * If both layers have same group, they are ordered by layer.getName()
-     * @private
-     * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} a comparable layer 1
-     * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} b comparable layer 2
-     * @param {String} groupingMethod method name to sort by
-     */
-    _layerListComparator : function(a, b, groupingMethod) {
-        var nameA = a[groupingMethod]().toLowerCase();
-        var nameB = b[groupingMethod]().toLowerCase();
-        if(nameA == nameB) {
-            nameA = a.getName().toLowerCase();
-            nameB = b.getName().toLowerCase();          
-        }
-        if (nameA < nameB) {return -1}
-        if (nameA > nameB) {return 1}
-        return 0;
-    },
-    /**
-     * @method handleLayerSelectionChanged
-	 * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer
-     *           layer that was changed
-	 * @param {Boolean} isSelected
-     *           true if layer is selected, false if removed from selection
-     * let's refresh ui to match current layer selection
-     */
-	handleLayerSelectionChanged : function(layer, isSelected) {
-      for(var i = 0; i < this.layerTabs.length; ++i) {
-          var tab = this.layerTabs[i];
-	      tab.setLayerSelected(layer.getId(), isSelected);
-	  }
-	},
-    /**
-     * @method handleLayerModified
-	 * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer
-     *           layer that was modified
-     * let's refresh ui to match current layers
-     */
-    handleLayerModified : function(layer) {
-        var me = this;
-        for (var i = 0; i < this.layerTabs.length; ++i) {
-            var tab = this.layerTabs[i];
-            tab.updateLayerContent(layer.getId(), layer);
-        }
-    },
-
-    /**
-     * @method handleLayerAdded
-	 * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer
-     *           layer that was added
-     * let's refresh ui to match current layers
-     */
-    handleLayerAdded : function(layer) {
-        var me = this;
-        this.populateLayers();
-        // we could just add the layer to correct group and update the layer count for the group
-        // but saving time to do other finishing touches
-		//var layerListContainer = jQuery(this.container).find('div.layerList');
-		//this._populateLayerList(layerListContainer);
-    },
-    /**
-     * @method handleLayerRemoved
-     * @param {String} layerId
-     *           id of layer that was removed
-     * let's refresh ui to match current layers
-     */
-    handleLayerRemoved : function(layerId) {
-        var me = this;
-        this.populateLayers();
-        // we could  just remove the layer and update the layer count for the group
-        // but saving time to do other finishing touches
-		//var layerListContainer = jQuery(this.container).find('div.layerList');
-		//this._populateLayerList(layerListContainer);
-    }
+	}
 }, {
 	/**
 	 * @property {String[]} protocol

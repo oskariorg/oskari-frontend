@@ -1,6 +1,6 @@
 Oskari.registerLocalization({
 	"lang" : "sv",
-	"key" : "LayerSelector",
+	"key" : "ParcelSelector",
 	"value" : {
 		"title" : "Kartlager",
 		"desc" : "",

@@ -1,8 +1,8 @@
 Oskari.registerLocalization({
 	"lang" : "fi",
-	"key" : "LayerSelector",
+	"key" : "ParcelSelector",
 	"value" : {
-		"title" : "Karttatasot",
+		"title" : "Etsi",
 		"desc" : "",
 		"errors" : {
             "title": "Virhe!",

@@ -1,8 +1,8 @@
 Oskari.registerLocalization({
 	"lang" : "en",
-	"key" : "LayerSelector",
+	"key" : "ParcelSelector",
 	"value" : {
-		"title" : "Map layers",
+		"title" : "Search",
 		"desc" : "",
 		"errors" : {
             "title": "Error!",
