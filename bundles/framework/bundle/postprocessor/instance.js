@@ -59,6 +59,8 @@ function() {
      * @method _highlightFeature
      * @private
      * Adds the layer if its not yet selected
+     * @param {String} layerId
+     * @param {String/String[]} featureId single or array of feature ids to hilight
      */
     _highlightFeature : function(layerId, featureId) {
         if(featureId && layerId) {
@@ -75,10 +77,45 @@ function() {
                 }
                 var event = builder(featureIdList, layer);
                 this.sandbox.notifyAll(event);
+                
+                var points = this.state.featurePoints;
+                if(points) {
+                    this._showPoints(points);
+                } 
             }
             else {
                 this.sandbox.printWarn('Postprocessing failed for feature ' + featureId + 
                 ' and layer ' + layerId);
+            }
+        }
+    },
+    /**
+     * @method _showPoints
+     * @private
+     * Sends a mapmoverequest to fit the points on the map viewport
+     * @param {Object[]} points array of objects containing lon/lat properties
+     */
+    _showPoints : function(points) {
+        var olPoints = new OpenLayers.Geometry.MultiPoint();
+        var count = 0;
+        for(; count < points.length; ++count) {
+            var point = points[count];
+            var olPoint = new OpenLayers.Geometry.Point(point.lon, point.lat);
+            olPoints.addPoint(olPoint);
+        }
+        var bounds = olPoints.getBounds();
+        var centroid = olPoints.getCentroid();
+        
+        var rb = this.sandbox.getRequestBuilder('MapMoveRequest');
+        if(rb && count > 0) {
+            if(count == 1) {
+                // zoom to level 9 if a single point
+                var req = rb(centroid.x, centroid.y, 9);
+                this.sandbox.request(this, req);
+            }
+            else {
+                var req = rb(centroid.x, centroid.y, bounds);
+                this.sandbox.request(this, req);
             }
         }
     },
