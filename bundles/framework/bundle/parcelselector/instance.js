@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.parcelselector.ParcelSelectorInstance
  *
- * Main component and starting point for the "parcel" functionality. 
+ * Main component and starting point for the "parcel selector" functionality. 
  * Requests parcel FID for updating the map.
  * 
  * See Oskari.mapframework.bundle.parcelselector.ParcelSelector for bundle definition.
@@ -98,9 +98,6 @@ function() {
         sandbox.registerAsStateful(this.mediator.bundleId, this);
         
 		var successCB = function() {
-			// massive update so just recreate the whole ui
-			//me.plugins['Oskari.userinterface.Flyout'].populateLayers();
-			// added through maplayerevent
 		};
 		var failureCB = function() {
 			alert(me.getLocalization('errors').loadFailed);

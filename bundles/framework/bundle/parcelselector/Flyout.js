@@ -48,16 +48,13 @@ function(instance) {
 	 * Interface method implementation, assigns the HTML templates that will be used to create the UI 
 	 */
 	startPlugin : function() {
-		
 		var me = this;
 		
-        var inspireTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').inspire);
-        inspireTab.groupingMethod = 'getInspireName';
-        var orgTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').organization);
-        orgTab.groupingMethod = 'getOrganizationName';
+        var parcelTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').parcel);
+        var registerUnitTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').registerUnit);
         
-		this.parcelTabs.push(inspireTab);
-        this.parcelTabs.push(orgTab);
+		this.parcelTabs.push(parcelTab);
+        this.parcelTabs.push(registerUnitTab);
 	},
 	/**
 	 * @method stopPlugin 

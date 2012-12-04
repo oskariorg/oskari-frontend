@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.parcelselector.view.ParcelsTab
- * 
- * 
+ *
+ *
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab",
 
@@ -28,32 +28,55 @@ function(instance, title) {
         return state;
     },
     setState : function(state) {
-        if(!state) {
+        if (!state) {
             return;
         }
-        
-        if(!state.filter) {
+
+        if (!state.filter) {
             this.filterField.setValue(state.filter);
             this.filterLayers(state.filter);
         }
     },
     _createUI : function() {
-        
+
         this.tabPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
         this.tabPanel.setTitle(this.title);
-        
-        this.tabPanel.getContainer().append(this.getFilterField().getField());
+
+        this.tabPanel.getContainer().append(this._getFilterField().getField());
+        this._getActionButton().insertTo(this.tabPanel.getContainer());
     },
-    getFilterField : function() {
-        if(this.filterField) {
+    _getFilterField : function() {
+        if (this.filterField) {
             return this.filterField;
         }
         var me = this;
         var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
         field.setPlaceholder(this.instance.getLocalization('filter').text);
+        field.bindEnterKey(function() {me._startAction.call(me)});
         field.addClearButton();
         this.filterField = field;
         return field;
+    },
+    _getActionButton : function() {
+        if (this.actionButton) {
+            return this.actionButton;
+        }
+        var me = this;
+        var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        // Make button visually primary button.
+        btn.addClass('primary');
+        btn.setTitle(this.instance.getLocalization('button'));
+        btn.setHandler(function() {me._startAction.call(me)});
+        this.actionButton = btn;
+        return btn;
+    },
+    _startAction : function() {
+        var input = this._getFilterField().getValue();
+        if( !input || isNaN(input) ) {
+            alert(this.instance.getLocalization('errors').illegalInput);
+        }
+        
+        // TODO: Start the flow.        
     }
-
+    
 });

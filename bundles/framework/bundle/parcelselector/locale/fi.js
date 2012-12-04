@@ -2,24 +2,21 @@ Oskari.registerLocalization({
 	"lang" : "fi",
 	"key" : "ParcelSelector",
 	"value" : {
-		"title" : "Etsi",
+		"title" : "Hae",
 		"desc" : "",
+		"button" : "Hae",
 		"errors" : {
             "title": "Virhe!",
             "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin.",
-			"loadFailed" : "Karttatasojen latauksessa tapahtui virhe. Lataa sivu selaimeesi uudelleen ja valitse karttatasot.",
-			"noResults": "Haulla ei löytynyt yhtään tulosta."
+			"loadFailed" : "Tietojen latauksessa tapahtui virhe. Lataa sivu selaimeesi uudelleen.",
+			"noResults": "Haulla ei löytynyt yhtään tulosta.",
+			"illegalInput" : "Tunnisteen pitää olla numero."
 		},
         "loading" : "Ladataan...",
 		"filter" : {
-			"text" : "Hae karttatasoja",
-			"inspire" : "Aiheittain",
-			"organization" : "Tiedontuottajittain",
-			"published" : "Käyttäjät"
-		},
-		"published" : {
-			"organization" : "Julkaistu taso",
-			"inspire" : "Julkaistu taso"
+			"text" : "Määräalan tunniste",
+			"parcel" : "Palsta",
+			"registerUnit" : "Rekisteriyksikkö"
 		},
 		"tooltip" : {
 			"type-base" : "Taustakartta",
