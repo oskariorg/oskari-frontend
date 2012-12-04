@@ -285,7 +285,7 @@ function(instance, locale, loader) {
 			/* Let's split at .\n to DIVs */
 			
 			jQuery.each(newContent.find('.metadataContent'),function(n,p) {
-				console.log(n, part);
+				
 				var part = jQuery(p);
 				var parent = part.parent();
 				/*parent.remove(part);*/
@@ -293,7 +293,7 @@ function(instance, locale, loader) {
 				var newContainerPart = jQuery('<td />');
 					
 				jQuery.each(part.text().split("\.\n"), function(nn, txtPart) {
-					console.log(n,nn, jQuery.trim(txtPart));
+					
 					var newPart = jQuery('<div />');
 					newPart.text(jQuery.trim(txtPart)+".");
 					newContainerPart.append(newPart);
