@@ -40,21 +40,7 @@ function() {
         sandbox.register(this);
         if(this.state) {
             var hiliteLayerId = this.state.highlightFeatureLayerId; 
-            
-            if(hiliteLayerId) {
-                var isLoaded = sandbox.findMapLayerFromAllAvailable(hiliteLayerId) != null;
-                if(isLoaded) {
-                    this._highlightFeature(hiliteLayerId, this.state.highlightFeatureId);
-                }
-                else {
-                    // layer not loaded ->
-                    // register listening to 'MapLayerEvent' and let it trigger a retry
-                    for(p in me.eventHandlers) {
-                        sandbox.registerForEventByName(me, p);
-                    }
-                }
-            }
-            
+            this._highlightFeature(hiliteLayerId, this.state.highlightFeatureId);
         }
     },
     /**
@@ -66,29 +52,29 @@ function() {
      */
     _highlightFeature : function(layerId, featureId) {
         if(featureId && layerId) {
-            var layer = this.sandbox.findMapLayerFromAllAvailable(layerId);
-            if(layer) {
-                var builder = this.sandbox.getEventBuilder('WFSFeaturesSelectedEvent');
-                var featureIdList = [];
-                // check if the param is already an array
-                if(Object.prototype.toString.call( featureId ) === '[object Array]' ) {
-                    featureIdList = featureId;
-                }
-                else {
-                    featureIdList.push(featureId);
-                }
-                var event = builder(featureIdList, layer);
-                this.sandbox.notifyAll(event);
-                
-                var points = this.state.featurePoints;
-                if(points) {
-                    this._showPoints(points);
-                } 
+            
+            // move map to location
+            var points = this.state.featurePoints;
+            if(points) {
+                this._showPoints(points);
+            }
+             
+            // request for highlight image, note that the map must be in correct
+            // location BEFORE this or we get a blank image
+            var builder = this.sandbox.getEventBuilder('WFSFeaturesSelectedEvent');
+            var featureIdList = [];
+            // check if the param is already an array
+            if(Object.prototype.toString.call( featureId ) === '[object Array]' ) {
+                featureIdList = featureId;
             }
             else {
-                this.sandbox.printWarn('Postprocessing failed for feature ' + featureId + 
-                ' and layer ' + layerId);
+                featureIdList.push(featureId);
             }
+            // create dummy layer since the real one might not be available and we only need it for id
+            var dummyLayer = Oskari.clazz.create('Oskari.mapframework.domain.WfsLayer');
+            dummyLayer.setId(layerId);
+            var event = builder(featureIdList, dummyLayer);
+            this.sandbox.notifyAll(event);
         }
     },
     /**
