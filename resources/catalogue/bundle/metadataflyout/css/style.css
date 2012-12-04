@@ -8,6 +8,10 @@
 	
 }
 
+div.metadataflyout_content td.metadataContent {
+	white-space: pre-line;
+}
+
 .metadataflyout_content_tabs {
 	margin: 0; padding: 0;
 	
