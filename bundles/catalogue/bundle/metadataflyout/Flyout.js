@@ -299,7 +299,7 @@ function(instance, locale, loader) {
 						return;
 					}	
 					
-					var newPart = jQuery('<div />');
+					var newPart = jQuery('<div class="metadataflyout_content_section"/>');
 					newPart.text(trimmed+".");
 					newContainerPart.append(newPart);
 				});
@@ -470,6 +470,11 @@ function(instance, locale, loader) {
 
 		};
 	}
+	
+	
 }, {
 	'protocol' : ['Oskari.userinterface.Flyout']
 });
+
+
+
