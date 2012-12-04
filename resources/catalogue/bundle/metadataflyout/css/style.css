@@ -57,9 +57,9 @@
 	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
 		Helvetica, Arial, sans-serif;
 	text-align: left;
-	text-transform: uppercase;
+	
 	display: none;
-
+	margin-bottom: 8px;
 }
 
 .metadataflyout_content_abstract div  h1 {
@@ -72,8 +72,8 @@
 }
 
 .metadataflyout_content_abstract div  table {
-	margin-right: 8px;
-	margin-left: 8px;
+	margin-right: 0px;
+	margin-left: 0px;
 }
 
 .metadataflyout_content_abstract div table tr th {
@@ -119,9 +119,9 @@
 	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
 		Helvetica, Arial, sans-serif;
 	text-align: left;
-	text-transform: uppercase;
-	display: none;
 	
+	display: none;
+	margin-bottom: 8px;
 
 }
 
@@ -135,8 +135,8 @@
 }
 
 .metadataflyout_content_jhs div  table {
-	margin-right: 8px;
-	margin-left: 8px;
+	margin-right: 0px;
+	margin-left: 0px;
 }
 
 .metadataflyout_content_jhs table tr th {
@@ -183,8 +183,9 @@
 	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
 		Helvetica, Arial, sans-serif;
 	text-align: left;
-	text-transform: uppercase;
+	
 	display: none;
+	margin-bottom: 8px;
 }
 
 .metadataflyout_content_inspire div   h1 {
@@ -196,8 +197,8 @@
 }
 
 .metadataflyout_content_inspire div  table {
-	margin-right: 8px;
-	margin-left: 8px;
+	margin-right: 0px;
+	margin-left: 0px;
 }
 
 .metadataflyout_content_inspire div  table tr th {
