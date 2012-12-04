@@ -148,14 +148,6 @@ function() {
             "lang" : "fi",
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/locale/fi.js"
-        }, {
-            "lang" : "sv",
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/locale/sv.js"
-        }, {
-            "lang" : "en",
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/locale/en.js"
         }
        ]
     },
@@ -181,8 +173,7 @@ function() {
                 "fi" : {
                     "Name" : " style-1",
                     "Title" : " style-1"
-                },
-                "en" : {}
+                }
             },
             "Bundle-Version" : "1.0.0",
             "Import-Namespace" : ["Oskari", "jquery"],

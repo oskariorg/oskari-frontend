@@ -51,14 +51,6 @@ function() {
             "lang" : "fi",
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcelselector/locale/fi.js"
-        }, {
-            "lang" : "sv",
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcelselector/locale/sv.js"
-        }, {
-            "lang" : "en",
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcelselector/locale/en.js"
         }]
     },
     "bundle" : {

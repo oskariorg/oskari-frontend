@@ -4,8 +4,8 @@
       "title":"OpenLayers",
       "bundleinstancename":"openlayers-default-theme",
       "fi":"OpenLayers",
-      "sv":"OpenLayers",
-      "en":"OpenLayers",
+      "sv":"?",
+      "en":"?",
       "bundlename":"openlayers-default-theme",
       "metadata":{
          "Import-Bundle":{
@@ -25,8 +25,8 @@
       "title":"Map",
       "bundleinstancename":"mapfull",
       "fi":"Map",
-      "sv":"Map",
-      "en":"Map",
+      "sv":"?",
+      "en":"?",
       "bundlename":"mapfull",
       "metadata":{
          "Import-Bundle":{
@@ -88,8 +88,8 @@
       "title":"Oskari DIV Manazer",
       "bundleinstancename":"divmanazer",
       "fi":"Oskari DIV Manazer",
-      "sv":"Oskari DIV Manazer",
-      "en":"Oskari DIV Manazer",
+      "sv":"?",
+      "en":"?",
       "bundlename":"divmanazer",
       "metadata":{
          "Import-Bundle":{
@@ -103,8 +103,8 @@
       "title":"Toolbar",
       "bundleinstancename":"toolbar",
       "fi":"toolbar",
-      "sv":"toolbar",
-      "en":"toolbar",
+      "sv":"?",
+      "en":"?",
       "bundlename":"toolbar",
       "metadata":{
          "Import-Bundle":{
@@ -118,8 +118,8 @@
       "title":"StateHandler",
       "bundleinstancename":"statehandler",
       "fi":"jquery",
-      "sv":"jquery",
-      "en":"jquery",
+      "sv":"?",
+      "en":"?",
       "bundlename":"statehandler",
       "metadata":{
          "Import-Bundle":{
@@ -133,8 +133,8 @@
       "title":"Info Box",
       "bundleinstancename":"infobox",
       "fi":"infobox",
-      "sv":"infobox",
-      "en":"infobox",
+      "sv":"?",
+      "en":"?",
       "bundlename":"infobox",
       "metadata":{
          "Import-Bundle":{
@@ -178,8 +178,8 @@
       "title":"Parcel Selector",
       "bundleinstancename":"parcelselector",
       "fi":"Määräalan valinta",
-      "sv":"Platsar",
-      "en":"Parcel selector",
+      "sv":"?",
+      "en":"?",
       "bundlename":"parcelselector",
       "metadata":{
          "Import-Bundle":{
@@ -193,8 +193,8 @@
       "title":"Parcel",
       "bundleinstancename":"parcel",
       "fi":"Määräala",
-      "sv":"Platsar",
-      "en":"Parcel",
+      "sv":"?",
+      "en":"?",
       "bundlename":"parcel",
       "metadata":{
          "Import-Bundle":{
