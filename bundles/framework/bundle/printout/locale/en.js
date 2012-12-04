@@ -3,11 +3,11 @@ Oskari.registerLocalization(
         "lang": "en",
         "key": "Printout",
         "value": {
-            "title": "Print map",
-            "flyouttitle": "Print map",
+            "title": "Print Map view",
+            "flyouttitle": "Print Map view",
             "desc": "",
             "BasicView": {
-                "title": "Print map",             
+                "title": "Print Map view",             
                 "name": {
                     "label": "The name of the map",
                     "placeholder": "required",
@@ -24,7 +24,7 @@ Oskari.registerLocalization(
                 },
                 "size": {
                     "label": "Size",
-                    "tooltip": "Select or define the size of the map to be embedded on your website. The map preview is displayed in the selected size."
+                    "tooltip": "Select size of the printout. The map preview is displayed in the selected size."
                 },
    				"preview": {
                     "label": "Preview",
@@ -57,7 +57,7 @@ Oskari.registerLocalization(
                 }
             },
             "StartView": {
-                "text": "You can print the map view you just created.",
+                "text": "You can print the Map view you just created.",
                 "buttons": {
                     "continue": "Continue",
                     "cancel": "Cancel"

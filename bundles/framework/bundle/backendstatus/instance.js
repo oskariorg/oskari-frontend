@@ -26,7 +26,7 @@ function() {
 	this.backendExtendedStatus = {};
 }, {
 	ajaxSettings : {
-		defaultTimeThreshold : 30000
+		defaultTimeThreshold : 15000
 	},
 	/**
 	 * @method getLocalization
@@ -235,7 +235,7 @@ function() {
 			var me = this;
 			window.setTimeout(function() {
 				me.updateBackendStatus(true);
-			}, 1000);
+			}, 0);
 		}
 	},
 
@@ -449,6 +449,7 @@ function() {
 
 		if(allKnown) {
 			me._pendingAjaxQuery.timestamp = null;
+			me.backendStatus = {};
 		} else {
 			for(p in maplayers ) {
 				var evt = evtBuilder(p, 'update');

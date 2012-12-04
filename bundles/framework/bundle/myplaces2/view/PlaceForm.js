@@ -23,6 +23,9 @@ function(instance) {
                 'title="' + loc.tooltip + '"></div>' + 
                 '<input type="text" name="placename" placeholder="' + loc.placename.placeholder + '"/>' +
             '</div>' +
+            '<div class="field">' + 
+                '<input type="text" name="placelink" placeholder="' + loc.placelink.placeholder + '"/>' +
+            '</div>' +
             '<div class="field">' +  
                 '<textarea name="placedesc" placeholder="' + loc.placedesc.placeholder + '">' +
                 '</textarea>' +
@@ -73,6 +76,7 @@ function(instance) {
         
         if(this.initialValues) {
             ui.find('input[name=placename]').attr('value', this.initialValues.place.name);
+            ui.find('input[name=placelink]').attr('value', this.initialValues.place.link);
             ui.find('textarea[name=placedesc]').append(this.initialValues.place.desc);
         }
         return ui;
@@ -91,10 +95,19 @@ function(instance) {
         if(onScreenForm.length > 0) {
             // found form on screen
             var placeName = onScreenForm.find('input[name=placename]').val();
+            var placeLink = onScreenForm.find('input[name=placelink]').val();
+            if(placeLink) {
+                if(placeLink.indexOf('://') == -1 || placeLink.indexOf('://') > 6) {
+                    placeLink = 'http://' + placeLink;
+                }
+                placeLink = placeLink.replace("<", '');
+                placeLink = placeLink.replace(">", '');
+            }
             var placeDesc = onScreenForm.find('textarea[name=placedesc]').val();
             var categorySelection = onScreenForm.find('select[name=category]').val();
             values.place = {
                 name : placeName,
+                link : placeLink,
                 desc : placeDesc,
                 category : categorySelection
             };
@@ -121,6 +134,7 @@ function(instance) {
         if(onScreenForm.length > 0) {
             // found form on screen
             onScreenForm.find('input[name=placename]').val(data.place.name);
+            onScreenForm.find('input[name=placelink]').val(data.place.link);
             onScreenForm.find('textarea[name=placedesc]').val(data.place.desc);
             onScreenForm.find('select[name=category]').val(data.place.category);
         }
