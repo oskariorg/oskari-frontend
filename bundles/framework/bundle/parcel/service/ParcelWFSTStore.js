@@ -15,9 +15,6 @@
  * Oskari.clazz.create('Oskari.mapframework.service.ParcelWFSTStore','http://tiuhti.nls.fi/geoserver/wfs','1234');
  * storE.connect(); storE.getParcel(service);
  *
- *
- * @TODO DELETE
- *
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelWFSTStore', 
 

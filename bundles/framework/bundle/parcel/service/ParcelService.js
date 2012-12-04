@@ -38,16 +38,6 @@ function(url, transActionUrl, uuid, sandbox) {
         // preload stuff
         var me = this;
         this.wfstStore.connect();
-        var loadedPlaces = false;
-    
-        var initialLoadCallBackPlaces = function(places) {
-            if(places) {
-                me._placesList = places;
-            }
-            loadedPlaces = true;
-        };
-    
-        this.wfstStore.getParcel(initialLoadCallBackPlaces);
     },
 
     /**
