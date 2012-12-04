@@ -13,7 +13,7 @@
  *
  * storE =
  * Oskari.clazz.create('Oskari.mapframework.service.ParcelWFSTStore','http://tiuhti.nls.fi/geoserver/wfs','1234');
- * storE.connect(); storE.getCategories(service); storE.getParcel(service);
+ * storE.connect(); storE.getParcel(service);
  *
  *
  * @TODO DELETE
@@ -42,14 +42,6 @@ function(url, transactionUrl, uuid) {
      */
     connect : function() {
         var url = this.url;
-        this.protocols['categories'] = new OpenLayers.Protocol.WFS({
-            version : '1.1.0',
-            srsName : 'EPSG:3067',
-            featureType : 'categories',
-            featureNS : 'http://xml.nls.fi/ktjkiiwfs/2010/02',
-            featurePrefix : 'ktjkiiwfs',
-            url : url
-        });
         this.protocols['parcels'] = new OpenLayers.Protocol.WFS({
             version : '1.1.0',
             srsName : 'EPSG:3067',
@@ -59,246 +51,6 @@ function(url, transactionUrl, uuid) {
             featurePrefix : 'ktjkiiwfs',
             url : url
         });
-    },
-
-    /**
-     * @method getCategories
-     *
-     * loads categories from backend to given service filters by
-     * initialised user uuid
-     */
-    getCategories : function(cb) {
-        var uuid = this.uuid;
-        var uuidFilter = new OpenLayers.Filter.Comparison({
-            type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "uuid",
-            value : uuid
-        });
-        var p = this.protocols['categories'];
-
-        var me = this;
-
-        p.read({
-            filter : uuidFilter,
-            callback : function(response) {
-                me._handleCategoriesResponse(response, cb);
-            }
-        })
-
-    },
-
-    /**
-     * @method _handleCategoriesResponse
-     *
-     * processes ajax response from backend adds categories to
-     * given service
-     */
-    _handleCategoriesResponse : function(response, cb) {
-        var uuid = this.uuid;
-        var feats = response.features;
-        // if nothing found, stop here and make the callback
-        if (feats == null || feats.length == 0) {
-            if (cb) {
-                cb();
-            }
-            return;
-        }
-        var list = [];
-
-        // found categories, proceed normally
-        for (var n = 0; n < feats.length; n++) {
-            var f = feats[n];
-            var featAtts = f.attributes;
-
-            var id = this._parseNumericId(f.fid);
-
-            var category = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.ParcelCategory');
-            category.setId(id);
-            category.setDefault("true" === featAtts['default']);
-            category.setName(featAtts['category_name']);
-            category.setLineWidth(featAtts['stroke_width']);
-            category.setLineColor(this._formatColorFromServer(featAtts['stroke_color']));
-            category.setAreaLineWidth(featAtts['border_width']);
-            category.setAreaLineColor(this._formatColorFromServer(featAtts['border_color']));
-            category.setAreaFillColor(this._formatColorFromServer(featAtts['fill_color']));
-            category.setDotColor(this._formatColorFromServer(featAtts['dot_color']));
-            category.setDotSize(featAtts['dot_size']);
-            category.setUUID(uuid);
-            if(featAtts['publisher_name']) {
-                category.setPublic(true);
-            }
-             
-
-            list.push(category);
-        }
-
-        if (cb) {
-            cb(list);
-        }
-
-    },
-    /**
-     * @method  _formatColorFromServer
-     * @private
-     * Removes prefix #-character if present
-     */
-    _formatColorFromServer : function(color) {
-    	if(color.charAt(0) == '#') {
-    		return color.substring(1);
-    	}
-    	return color;
-  	},
-    /**
-     * @method  _prefixColorForServer
-     * @private
-     * Adds prefix #-character if not present
-     */
-    _prefixColorForServer : function(color) {
-    	if(color.charAt(0) != '#') {
-    		return '#' + color;
-    	}
-    	return color;
-  	},
-
-    /**
-     * @method commitCategories
-     *
-     * handles insert & update (NO delete here see next moethd)
-     */
-    commitCategories : function(list, callback) {
-        var uuid = this.uuid;
-        var p = this.protocols['categories'];
-        var me = this;
-
-        var features = [];
-        for (var l = 0; l < list.length; l++) {
-            var m = list[l];
-            var m_id = m.getId();
-
-            // TODO: add area line width and area line color after support on server
-            // TODO: also prefix colors with # so server doesn't need to (handle it on load also)?
-            var featAtts = {
-                'category_name' : m.getName(),
-                'default' : m.isDefault(),
-                'stroke_width' : m.getLineWidth(),
-                'stroke_color' : this._prefixColorForServer(m.getLineColor()),
-                'border_width' : m.getAreaLineWidth(),
-                'border_color' : this._prefixColorForServer(m.getAreaLineColor()),
-                'fill_color' : this._prefixColorForServer(m.getAreaFillColor()),
-                'dot_color' : this._prefixColorForServer(m.getDotColor()),
-                'dot_size' : m.getDotSize(),
-                'uuid' : uuid
-            };
-            var feat = new OpenLayers.Feature.Vector(null, featAtts);
-
-            // console.log('saving category - id: ' + m_id);
-            if (!m_id) {
-                feat.toState(OpenLayers.State.INSERT);
-            } else {
-                feat.fid = p.featureType + '.' + m_id;
-                // toState handles some workflow stuff and doesn't work here
-                feat.state = OpenLayers.State.UPDATE;
-            }
-            features.push(feat);
-        }
-        p.commit(features, {
-            callback : function(response) {
-
-                me._handleCommitCategoriesResponse(response, list, callback);
-            }
-        });
-
-    },
-
-    /**
-     * @method _handleCommitCategoriesResponse
-     *
-     */
-    _handleCommitCategoriesResponse : function(response, list, cb) {
-
-        if (response.success()) {
-
-            var features = response.reqFeatures;
-            // deal with inserts, updates, and deletes
-            var state, feature;
-            var destroys = [];
-            var insertIds = response.insertIds || [];
-
-            for (var i = 0, len = features.length; i < len; ++i) {
-                feature = features[i];
-                state = feature.state;
-                if (state) {
-                    if (state == OpenLayers.State.INSERT) {
-                        feature.fid = insertIds[i];
-                        feature.attributes.id = feature.fid;
-                        var id = this._parseNumericId(feature.fid);
-                        list[i].setId(id);
-                    }
-                    feature.state = null;
-                }
-            }
-
-            cb(true, list);
-
-        } else {
-
-            cb(false, list);
-        }
-
-    },
-
-    /*
-     * @method deleteCategories
-     *
-     * delete a list of categories from backend
-     */
-    deleteCategories : function(list, callback) {
-        var p = this.protocols['categories'];
-        var uuid = this.uuid;
-        var features = [];
-        for (var l = 0; l < list.length; l++) {
-            var m_id = list[l];
-
-            if (!m_id) {
-                continue;
-            }
-
-            var featAtts = {
-                'uuid' : uuid
-            };
-
-            var feat = new OpenLayers.Feature.Vector(null, featAtts);
-
-            feat.fid = p.featureType + '.' + m_id;
-
-            feat.state = OpenLayers.State.DELETE;
-            features.push(feat);
-        }
-
-        var me = this;
-        p.commit(features, {
-            callback : function(response) {
-                me._handleDeleteCategoriesResponse(response, list, callback);
-            }
-        });
-    },
-
-    /**
-     * @method handleDeleteCategoriesResponse
-     *
-     */
-    _handleDeleteCategoriesResponse : function(response, list, cb) {
-
-        /**
-         * Let's call service
-         */
-        if (response.success()) {
-            cb(true, list);
-
-        } else {
-            cb(false, list);
-        }
-
     },
 
     /**
@@ -368,7 +120,6 @@ function(url, transactionUrl, uuid) {
             place.setId(id);
             place.setName(featAtts['name']);
             place.setDescription(featAtts['place_desc']);
-            place.setCategoryID(featAtts['category_id']);
             place.setCreateDate(featAtts['created']);
             place.setUpdateDate(featAtts['updated']);
             place.setGeometry(f.geometry);
@@ -433,7 +184,6 @@ function(url, transactionUrl, uuid) {
             var featAtts = {
                 'name' : m.getName(),
                 'place_desc' : m.getDescription(),
-                'category_id' : m.getCategoryID(),
                 'uuid' : uuid
             };
 

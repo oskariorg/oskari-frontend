@@ -11,7 +11,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.view.PlaceForm",
  */
 function(instance) {
     this.instance = instance;
-    this.newCategoryId = '-new-';
     this.placeId = undefined;
     this.initialValues = undefined;
     
@@ -27,50 +26,17 @@ function(instance) {
                 '<textarea name="placedesc" placeholder="' + loc.placedesc.placeholder + '">' +
                 '</textarea>' +
             '</div>' +
-            '<div class="field">' + 
-                '<label for="category">' + loc.category.label + '</label><br clear="all" />' +
-                '<select name="category">' +
-                '</select>' +
-            '</div>' +
         '</div>');
     this.templateOption = jQuery('<option></option>');
-    this.categoryForm = undefined;
 }, {
     /**
      * @method getForm
-     * @param {Oskari.mapframework.bundle.parcel.model.ParcelCategory[]} categories array containing available categories
      * @return {jQuery} jquery reference for the form 
      */
-    getForm : function(categories) {
+    getForm : function() {
         var ui = this.template.clone();
         var loc = this.instance.getLocalization('placeform');
         // TODO: if a place is given for editing -> populate fields here
-        // populate category options
-        if(categories) {
-            var selection = ui.find('select[name=category]');
-            var option = this.templateOption.clone();
-            option.append(loc.category['new']);
-            option.attr('value', this.newCategoryId);
-            selection.append(option);
-            for(var i = 0; i < categories.length; ++i) {
-                var cat = categories[i];
-                var option = this.templateOption.clone();
-                option.append(cat.getName());
-                option.attr('value', cat.getId());
-                // find another way if we want to keep selection between places
-                if(this.initialValues) {
-                    if(this.initialValues.place.category == cat.getId()) {
-                        option.attr('selected', 'selected');
-                    }
-                }
-                else if(cat.isDefault()) {
-                    option.attr('selected', 'selected');
-                }
-                selection.append(option);
-            }
-            this._bindCategoryChange();
-        }
-        
         if(this.initialValues) {
             ui.find('input[name=placename]').attr('value', this.initialValues.place.name);
             ui.find('textarea[name=placedesc]').append(this.initialValues.place.desc);
@@ -92,18 +58,13 @@ function(instance) {
             // found form on screen
             var placeName = onScreenForm.find('input[name=placename]').val();
             var placeDesc = onScreenForm.find('textarea[name=placedesc]').val();
-            var categorySelection = onScreenForm.find('select[name=category]').val();
             values.place = {
                 name : placeName,
                 desc : placeDesc,
-                category : categorySelection
             };
             if(this.placeId) {
                 values.place.id = this.placeId;
             }
-        }
-        if(this.categoryForm) {
-           values.category = this.categoryForm.getValues();
         }
         return values;
     },
@@ -122,38 +83,9 @@ function(instance) {
             // found form on screen
             onScreenForm.find('input[name=placename]').val(data.place.name);
             onScreenForm.find('textarea[name=placedesc]').val(data.place.desc);
-            onScreenForm.find('select[name=category]').val(data.place.category);
         }
         
         this.initialValues = data;
-    },
-    /**
-     * @method _bindCategoryChange
-     * Binds change listener for category selection.
-     * NOTE! THIS IS A WORKAROUND since infobox uses OpenLayers popup which accepts
-     * only HTML -> any bindings will be lost
-     * @private
-     * @param {String} newCategoryId category id for the new category option == when we need to react
-     */
-    _bindCategoryChange : function() {
-        var me = this;
-        var onScreenForm = this._getOnScreenForm();
-        onScreenForm.find('select[name=category]').live('change', function() {
-            var value = jQuery(this).val();
-            // fetch new reference from screen because the closure scoped  
-            // is not proper reference with our live binding
-            var form = me._getOnScreenForm();
-            // show category form
-            if(value == me.newCategoryId) {
-                me.categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.view.CategoryForm', me.instance);
-                form.append(me.categoryForm.getForm());
-            }
-            // remove category form is initialized
-            else if(me.categoryForm) {
-                me.categoryForm.destroy();
-                me.categoryForm = undefined;
-            }
-        });
     },
     /**
      * @method destroy
@@ -162,11 +94,6 @@ function(instance) {
     destroy : function() {
         // unbind live bindings
         var onScreenForm = this._getOnScreenForm();
-        onScreenForm.find('select[name=category]').die();
-        if (this.categoryForm) {
-            this.categoryForm.destroy();
-            this.categoryForm = undefined;
-        }
     },
     /**
      * @method _getOnScreenForm

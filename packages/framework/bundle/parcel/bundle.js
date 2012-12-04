@@ -59,9 +59,6 @@ function() {
         {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/model/Parcel.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/model/ParcelCategory.js"
         },
         /* plugin */
         {
@@ -95,15 +92,6 @@ function() {
             "src" : "../../../../bundles/framework/bundle/parcel/request/EditPlaceRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/request/EditCategoryRequest.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/request/DeleteCategoryRequest.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/request/PublishCategoryRequest.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/request/EditRequestHandler.js"
         },
         /* service */
@@ -123,13 +111,7 @@ function() {
             "src" : "../../../../bundles/framework/bundle/parcel/view/PlaceForm.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/view/CategoryForm.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/ButtonHandler.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/CategoryHandler.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/instance.js"

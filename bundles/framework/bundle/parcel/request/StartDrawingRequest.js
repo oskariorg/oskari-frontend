@@ -1,7 +1,6 @@
 Oskari.clazz.define('Oskari.mapframework.bundle.parcel.request.StartDrawingRequest', 
 
 function(config) {
-    // TODO: do we pass selected category colors here?
     if (config.geometry) {
         // editing existing
         this._geometry = config.geometry;

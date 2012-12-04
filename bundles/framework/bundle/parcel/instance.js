@@ -12,7 +12,6 @@ function() {
     this._localization = null;
     this.sandbox = null;
     this.buttons = undefined;
-    this.categoryHandler = undefined;
     this.parcelService = undefined;
     this.idPrefix = 'parcel';
 }, {
@@ -100,14 +99,6 @@ function() {
         return this.view.drawPlugin;
     },
     /**
-     * @method getCategoryHandler
-     * Returns reference to the category handler
-     * @return {Oskari.mapframework.bundle.parcel.CategoryHandler}
-     */
-    getCategoryHandler : function() {
-        return this.categoryHandler;
-    },
-    /**
      * @method getMainView
      * Returns reference to the main view
      * @return {Oskari.mapframework.bundle.parcel.view.MainView}
@@ -143,11 +134,6 @@ function() {
             // guest users don't need anything else
             return;
         }
-        // handles category related logic - syncs categories to parcels map layers etc
-        this.categoryHandler = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.CategoryHandler', this);
-        this.categoryHandler.start();
-
-        var defaultCategoryName = this.getLocalization('category').defaultName;
         
         var actionUrl = this.conf.queryUrl;
         // If transaction URL is empty or undefined, use action URL for transactions.
@@ -161,10 +147,10 @@ function() {
         
         // back end communication
         this.parcelService = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelService',
-            actionUrl, transactionUrl, user.getUuid(), sandbox, defaultCategoryName);
+            actionUrl, transactionUrl, user.getUuid(), sandbox);
         // register service so personal data can access it
         this.sandbox.registerService(this.parcelService);
-        // init loads the places/categories
+        // init loads the places
         this.parcelService.init();
         
         // handles parcels insert form etc
@@ -173,9 +159,6 @@ function() {
         
         this.editRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.EditRequestHandler', sandbox, me);
         sandbox.addRequestHandler('Parcel.EditPlaceRequest', this.editRequestHandler);
-        sandbox.addRequestHandler('Parcel.EditCategoryRequest', this.editRequestHandler);
-        sandbox.addRequestHandler('Parcel.DeleteCategoryRequest', this.editRequestHandler);
-        sandbox.addRequestHandler('Parcel.PublishCategoryRequest', this.editRequestHandler);
     },
     /**
      * @method stop

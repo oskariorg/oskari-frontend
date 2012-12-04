@@ -9,7 +9,6 @@ function() {
     this.id = undefined;
     this.name = undefined;
     this.description = undefined;
-    this.categoryID = undefined;
     this.geometry = undefined;
     this.createDate = undefined;
     this.updateDate = undefined; 
@@ -56,20 +55,6 @@ function() {
     getDescription : function() {
         return this.description;
     },
-    /**
-     * @method setCategoryID 
-     * @param {Number} value
-     */
-    setCategoryID : function(value) {
-        this.categoryID = value;
-    },
-    /**
-     * @method getCategoryID 
-     * @return {Number}
-     */
-    getCategoryID : function() {
-        return this.categoryID;
-    }, 
     /**
      * @method setGeometry 
      * @param {OpenLayers.Geometry} value

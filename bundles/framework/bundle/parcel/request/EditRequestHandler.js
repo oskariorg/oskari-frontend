@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.request.EditRequestHandler
- * Handles sequests for a saved "parcel" or parcels categorires to be opened for editing
+ * Handles sequests for a saved "parcel" or parcels to be opened for editing
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.parcel.request.EditRequestHandler', 
 
@@ -21,22 +21,13 @@ function(sandbox, instance) {
      * Shows/hides the maplayer specified in the request in OpenLayers implementation.
      * @param {Oskari.mapframework.core.Core} core
      *      reference to the application core (reference sandbox core.getSandbox())
-     * @param {Oskari.mapframework.bundle.parcel.request.EditPlaceRequest/Oskari.mapframework.bundle.parcel.request.EditCategoryRequest} request
+     * @param {Oskari.mapframework.bundle.parcel.request.EditPlaceRequest} request
      *      request to handle
      */
     handleRequest : function(core, request) {
         var sandbox = core.getSandbox();
         if(request.getName() == 'Parcel.EditPlaceRequest') {
             this._handleEditPlace(sandbox, request);
-        }
-        else if(request.getName() == 'Parcel.EditCategoryRequest') {
-            this._handleEditCategory(sandbox, request);
-        }
-        else if(request.getName() == 'Parcel.DeleteCategoryRequest') {
-            this._handleDeleteCategory(sandbox, request);
-        }
-        else if(request.getName() == 'Parcel.PublishCategoryRequest') {
-            this._handlePublishCategory(sandbox, request);
         }
     },
     _handleEditPlace : function(sandbox, request) {
@@ -63,30 +54,6 @@ function(sandbox, instance) {
             */
         }
     },
-    _handleEditCategory : function(sandbox, request) {
-        this.sandbox.printDebug("[Oskari.mapframework.bundle.parcel.request.EditRequestHandler] edit requested for category " + request.getId());
-        var service = this.instance.getService();
-        var category = service.findCategory(request.getId());
-        if(category) {
-            this.instance.getCategoryHandler().editCategory(category);
-        }
-    },
-    _handleDeleteCategory : function(sandbox, request) {
-        this.sandbox.printDebug("[Oskari.mapframework.bundle.parcel.request.EditRequestHandler] delete requested for category " + request.getId());
-        var service = this.instance.getService();
-        var category = service.findCategory(request.getId());
-        if(category) {
-            this.instance.getCategoryHandler().confirmDeleteCategory(category);
-        }
-    },
-    _handlePublishCategory : function(sandbox, request) {
-        this.sandbox.printDebug("[Oskari.mapframework.bundle.parcel.request.EditRequestHandler] (un/)publish requested for category " + request.getId());
-        var service = this.instance.getService();
-        var category = service.findCategory(request.getId());
-        if(category) {
-            this.instance.getCategoryHandler().confirmPublishCategory(category, request.isPublic());
-        }
-    }
 }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}

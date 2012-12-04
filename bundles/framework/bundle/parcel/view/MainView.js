@@ -139,21 +139,18 @@ function(instance) {
         sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
         var loc = this.instance.getLocalization();
         this.form = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.view.PlaceForm', this.instance);
-        var categories = this.instance.getService().getAllCategories();
         if(place) {
             var param = {
                 place : {
                     id: place.getId(),
                     name : place.getName(),
-                    desc : place.getDescription(),
-                    category : place.getCategoryID()
+                    desc : place.getDescription()
                 }
             };
             this.form.setValues(param);
         }
         
         var content = [{
-            html : me.form.getForm(categories),
             useButtons: true,
             primaryButton: loc.buttons.save,
             actions : {}
@@ -183,21 +180,10 @@ function(instance) {
      */
     _validateForm : function(values) {
         var errors = [];
-        var categoryHandler = this.instance.getCategoryHandler();
-        var errors = categoryHandler.validateCategoryFormValues(values.category);
-        
         var loc = this.instance.getLocalization('validation');
         if(!values.place.name)
         {
             errors.push({name : 'name' , error: loc.placeName});
-        }
-        else if(categoryHandler.hasIllegalChars(values.place.name))
-        {
-            errors.push({name : 'name' , error: loc.placeNameIllegal});
-        } 
-        if(categoryHandler.hasIllegalChars(values.place.desc))
-        {
-            errors.push({name : 'desc' , error: loc.descIllegal});
         }
         return errors;
     },
@@ -217,8 +203,6 @@ function(instance) {
      * @method _saveForm
      * @private
      * Handles save button on parcels form.
-     * If a new category has been defined -> saves it and calls _savePlace() 
-     * for saving the actual place data after making the new category available.
      */
     _saveForm : function() {
         // form not open, nothing to do
@@ -234,41 +218,11 @@ function(instance) {
             return;
         }
         // validation passed -> go save stuff
-        // new category given -> save it first 
-        if(formValues.category) {
-            
-            var category = this.instance.getCategoryHandler().getCategoryFromFormValues(formValues.category);
-            
-            var serviceCallback = function(blnSuccess, model, blnNew) {
-                if(blnSuccess) {
-                    // add category as a maplayer to oskari maplayer service
-                    // NOTE! added as a map layer to maplayer service through categoryhandler getting an event
-                    //me.instance.addLayerToService(model);
-                    // save the actual place
-                    formValues.place.category = model.getId();
-                    me.__savePlace(formValues.place);
-                }
-                else {
-                    // blnNew should always be true since we are adding a category
-                    var loc = me.instance.getLocalization('notification')['error'];
-                    if(blnNew) {
-                		me.instance.showMessage(loc['error'].title, loc['error'].addCategory);
-                    }
-                    else {
-                		me.instance.showMessage(loc['error'].title, loc['error'].editCategory);
-                    }
-                }
-            }
-            this.instance.getService().saveCategory(category,serviceCallback);
-        }
-        // category selected from list -> save place
-        else {
-            this.__savePlace(formValues.place);
-        }
+        this.__savePlace(formValues.place);
     },
     /**
      * @method __savePlace
-     * Handles save place after possible category save
+     * Handles save place.
      * @private
      * @param {Object} values place properties
      */
@@ -282,15 +236,12 @@ function(instance) {
             return;
         }
         var place = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.Parcel');
-        var oldCategory = -1;
         if(values.id) {
             place = this.instance.getService().findParcel(values.id);
-            oldCategory = place.getCategoryID();
         }
         place.setId(values.id);
         place.setName(values.name);
         place.setDescription(values.desc);
-        place.setCategoryID(values.category);
         // fetch the latest geometry if edited after FinishedDrawingEvent
         place.setGeometry(this.drawPlugin.getDrawing());
         
@@ -298,7 +249,6 @@ function(instance) {
         var serviceCallback = function(blnSuccess, model, blnNew) {
             if(blnSuccess) {
                 // add map layer to map (we could check if its already there but core will handle that)
-                var layerId = me.instance.getCategoryHandler()._getMapLayerId(place.getCategoryID());
 				var requestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
                 var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
 
@@ -309,12 +259,6 @@ function(instance) {
                     // refresh map layer on map -> send update request
                     var updateRequest = updateRequestBuilder(layerId, true);
                     sandbox.request(me, updateRequest);
-                    // refresh old layer as well if category changed
-                    if(oldCategory != place.getCategoryID()) {
-                        layerId = me.instance.getCategoryHandler()._getMapLayerId(oldCategory);
-                        request = requestBuilder(layerId, true);
-                        sandbox.request(me, request);
-                    }
                 } else {
                     var updateRequest = updateRequestBuilder(layerId, true);
                     sandbox.request(me, updateRequest);                	
