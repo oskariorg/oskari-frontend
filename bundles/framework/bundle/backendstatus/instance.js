@@ -330,14 +330,14 @@ function() {
 	updateBackendStatus : function(allKnown) {
 		var me = this;
 		var sandbox = me._sandbox;
-		if(me._pendingAjaxQuery.busy) {
+		if(!allKnown && me._pendingAjaxQuery.busy) {
 			sandbox.printDebug("[BackendStatus] updateBackendStatus NOT SENT previous query is busy");
 			return;
 		}
 		var dte = new Date();
 		var dteMs = dte.getTime();
 
-		if(me._pendingAjaxQuery.timestamp && dteMs - me._pendingAjaxQuery.timestamp < me.timeInterval) {
+		if(!allKnown && me._pendingAjaxQuery.timestamp && dteMs - me._pendingAjaxQuery.timestamp < me.timeInterval) {
 			sandbox.printDebug("[BackendStatus] updateBackendStatus NOT SENT (time difference < " + me.timeInterval + "ms)");
 			return;
 		}
