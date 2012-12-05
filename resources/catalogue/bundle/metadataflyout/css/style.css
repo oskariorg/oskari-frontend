@@ -82,6 +82,8 @@
 	text-align: left;
 	display: block;
 	text-transform: uppercase;
+	vertical-align: top;
+	vertical-align: top;
 }
 
 .metadataflyout_content_abstract div  table tr td {
@@ -92,6 +94,8 @@
 	margin-top: 4px;
 	margin-left: 24px;
 	margin-bottom: 8px;
+	vertical-align: top;
+	vertical-align: top;
 
 	
 }
@@ -136,6 +140,7 @@
 	text-align: left;
 	/*text-transform: uppercase;*/
 	display: block;
+	vertical-align: top;
 }
 
 .metadataflyout_content_jhs table tr td {
@@ -146,7 +151,7 @@
 	margin-top: 4px;
 	margin-left: 24px;
 	margin-bottom: 8px;
-
+	vertical-align: top;
 	
 }
 
@@ -189,6 +194,7 @@
 	display: block;
 	
 	text-transform: uppercase;
+	vertical-align: top;
 }
 
 .metadataflyout_content_inspire div  table tr td {
@@ -199,6 +205,7 @@
 	margin-top: 4px;
 	margin-left: 24px;
 	margin-bottom: 8px;
+	vertical-align: top;
 	/*border: 1pt solid magenta;*/
 }
 
