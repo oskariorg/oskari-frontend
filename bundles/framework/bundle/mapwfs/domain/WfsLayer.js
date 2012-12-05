@@ -18,7 +18,7 @@ function() {
     this._type = null;
 
     /* opacity from 0 to 100 */
-    this._opacity = null;
+    this._opacity = 100;
 
     this._inspireName = null;
 
