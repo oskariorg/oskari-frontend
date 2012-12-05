@@ -42,6 +42,7 @@ div.layerselector2 div.layer div.layer-icon {
 }
 div.layerselector2 div.layer div.layer-info {
     width: 16px;
+    height: 16px;
 	margin-left : 5px;
 	float : right;
 }
