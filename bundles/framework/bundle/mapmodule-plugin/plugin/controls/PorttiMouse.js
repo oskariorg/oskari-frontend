@@ -156,7 +156,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 	 * APIProperty: useCenterMapInWheelZoom
 	 * {Boolean} Use map center when wheel zooming (set to false to revert to default openlayers functionality)
 	 */
-	useCenterMapInWheelZoom: true,
+	useCenterMapInWheelZoom: false,
 
 	/*
 	 * APIProperty: useCenterMapInWheelZoom
