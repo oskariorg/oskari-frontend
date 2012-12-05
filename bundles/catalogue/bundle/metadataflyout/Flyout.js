@@ -273,44 +273,45 @@ function(instance, locale, loader) {
 		views[viewId].empty();
 
 		function handler(request) {
-			
+
 			/* We'll have to process the text to enhance readability */
 			/* We cannot modify the source */
-			
+
 			var newContent = jQuery('<div />');
 			newContent.html(request.responseText);
 
 			/* HACK BEGIN */
 
 			/* Let's split at .\n to DIVs */
-			
-			jQuery.each(newContent.find('.metadataContent'),function(n,p) {
-				
+
+			jQuery.each(newContent.find('.metadataContent'), function(n, p) {
+
 				var part = jQuery(p);
 				var parent = part.parent();
 				/*parent.remove(part);*/
-				
+
 				var newContainerPart = jQuery('<td />');
-					
+
 				jQuery.each(part.text().split("\.\n"), function(nn, txtPart) {
-					
+
 					var trimmed = jQuery.trim(txtPart);
-					if( trimmed.length == 0 ) {
+					if(trimmed.length == 0) {
 						return;
-					}	
-					
+					}
+
 					var newPart = jQuery('<div class="metadataflyout_content_section"/>');
-					newPart.text(trimmed+".");
+					newPart.text(trimmed + ".");
 					newContainerPart.append(newPart);
 				});
-				
+
 				part.remove();
 				parent.append(newContainerPart);
+				
+				me._linkify(newContainerPart);
 			});
-			
 			/* Let's fix HREFs to click events */
 			/* We cannot modify the source */
-			
+
 			var links = newContent.find("a[href]");
 			var isMetaLink = new RegExp("^\\?.*");
 
@@ -469,12 +470,30 @@ function(instance, locale, loader) {
 			view : 'abstract'
 
 		};
+	},
+	/**
+	 * _linkify:
+	 *
+	 * slightly modified  http://code.google.com/p/jquery-linkify/
+	 *
+	 */
+	_linkify : function(el) {
+		var inputText = el.html();
+
+		//URLs starting with http://, https://, or ftp://
+		var replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+		var replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
+
+		//URLs starting with www. (without // before it, or it'd re-link the ones done above)
+		var replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+		replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
+
+		//Change email addresses to mailto:: links
+		/*var replacePattern3 = /(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})/gim;
+		 replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');*/
+
+		el.html(replacedText);
 	}
-	
-	
 }, {
 	'protocol' : ['Oskari.userinterface.Flyout']
 });
-
-
-
