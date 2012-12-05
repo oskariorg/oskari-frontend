@@ -24,6 +24,11 @@ function() {
 	this.timeInterval = this.ajaxSettings.defaultTimeThreshold;
 	this.backendStatus = {};
 	this.backendExtendedStatus = {};
+	
+	/* IE debug ... */
+	this.gotStartupEvent = false;
+	this.gotStartupTimeoutEvent = false;
+	this.gotStartupProcessCall = false;
 }, {
 	ajaxSettings : {
 		defaultTimeThreshold : 15000
@@ -233,9 +238,11 @@ function() {
 			/* this is where we get after layers.json has been read from server to maplayer service */
 			/* we do not know the order of bundles and modules notifications though */
 			var me = this;
+			me.gotStartupEvent = true;
 			window.setTimeout(function() {
+				me.gotStartupTimeoutEvent = true;
 				me.updateBackendStatus(true);
-			}, 0);
+			}, 15);
 		}
 	},
 
@@ -329,6 +336,7 @@ function() {
 	},
 	updateBackendStatus : function(allKnown) {
 		var me = this;
+		me.gotStartupProcessCall = me.gotStartupProcessCall || allKnown;
 		var sandbox = me._sandbox;
 		if(!allKnown && me._pendingAjaxQuery.busy) {
 			sandbox.printDebug("[BackendStatus] updateBackendStatus NOT SENT previous query is busy");
