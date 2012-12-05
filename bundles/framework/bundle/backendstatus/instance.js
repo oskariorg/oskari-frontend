@@ -20,15 +20,19 @@ function() {
 		jqhr : null,
 		timestamp : null
 	};
-	
+
 	this.timeInterval = this.ajaxSettings.defaultTimeThreshold;
 	this.backendStatus = {};
 	this.backendExtendedStatus = {};
-	
+
 	/* IE debug ... */
 	this.gotStartupEvent = false;
 	this.gotStartupTimeoutEvent = false;
 	this.gotStartupProcessCall = false;
+
+	/* maplayerservice */
+	this._mapLayerService = null;
+
 }, {
 	ajaxSettings : {
 		defaultTimeThreshold : 15000
@@ -111,9 +115,16 @@ function() {
 		var sandbox = Oskari.$("sandbox");
 		me._sandbox = sandbox;
 
+		me._mapLayerService = sandbox.getService("Oskari.mapframework.service.MapLayerService");
+
 		sandbox.register(me);
 		for(p in me.eventHandlers) {
 			sandbox.registerForEventByName(me, p);
+		}
+
+		/* we may have missed the maplayerevent */
+		if(me._mapLayerService.isAllLayersLoaded() && !me.gotStartupProcessCall) {
+			me.updateBackendStatus(true);
 		}
 	},
 	/**
@@ -207,9 +218,9 @@ function() {
 			/*console.log("ABOUT to show information for "+mapLayerId,mapLayer,mapLayerBackendStatus);*/
 
 			/*if(!mapLayerBackendStatus) {
-				this.showFeedbackDialog('missing_backendstatus_status');
-				return;
-			}*/
+			 this.showFeedbackDialog('missing_backendstatus_status');
+			 return;
+			 }*/
 
 			var backendExtendedStatusForLayer = this.backendExtendedStatus[mapLayerId];
 
@@ -247,17 +258,16 @@ function() {
 	},
 
 	/**
-	 * 
+	 *
 	 */
-	showFeedbackDialog: function(context) {
-		var feedBackTextx = this.getLocalization('feedback')[context] ;
-		
-		var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-		dialog.show(feedBackTextx['title'],feedBackTextx['message']);
-		dialog.fadeout();
-				
-	},
+	showFeedbackDialog : function(context) {
+		var feedBackTextx = this.getLocalization('feedback')[context];
 
+		var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+		dialog.show(feedBackTextx['title'], feedBackTextx['message']);
+		dialog.fadeout();
+
+	},
 	openURLinWindow : function(infoUrl) {
 		var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
 		var link = infoUrl;
@@ -396,7 +406,7 @@ function() {
 		}
 
 		var changeNotifications = {};
-		
+
 		/* let's update AllKnown */
 		var extendedStatuses = allKnown ? {} : this.backendExtendedStatus;
 
@@ -448,9 +458,9 @@ function() {
 				continue;
 			}
 			maplayer.setBackendStatus(this.backendStatus[p].status);
-			
+
 			/* forcing DOWN to be notified - we do not know if layerselector2 has shown the msg or not...*/
-			if(changeNotifications[p].changed|| "DOWN" == maplayer.getBackendStatus()) {
+			if(changeNotifications[p].changed || "DOWN" == maplayer.getBackendStatus()) {
 				maplayers[p] = maplayer;
 			}
 		}

@@ -20,6 +20,7 @@ function(mapLayerUrl, sandbox) {
 
     this._mapLayerUrl = mapLayerUrl;
     this._sandbox = sandbox;
+    this._allLayersAjaxLoaded = false;
     this._loadedLayersList = new Array();
 	// used to detect duplicate ids since looping through the list is slow
 	this._reservedLayerIds = {};
@@ -31,7 +32,8 @@ function(mapLayerUrl, sandbox) {
      */
     this.typeMapping = {
         wmslayer : 'Oskari.mapframework.domain.WmsLayer',
-    	// FIXME: WMTS is from a bundle, why is this in here?
+    	// FIXME: WMTS is from a bundle, why is this in here? 
+    	// - probably added here due to some load ordering issue at least in older releases
         wmtslayer : 'Oskari.mapframework.wmts.domain.WmtsLayer',
         wfslayer : 'Oskari.mapframework.domain.WfsLayer',
         vectorlayer : 'Oskari.mapframework.domain.VectorLayer'
@@ -184,12 +186,22 @@ function(mapLayerUrl, sandbox) {
 			}
 		}
         // notify components of added layer if not suppressed
+        this._allLayersAjaxLoaded = true;
         var event = this._sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
         this._sandbox.notifyAll(event);
 		if(callbackSuccess) {
 			callbackSuccess();
 		}
     },
+    
+    /**
+     * @method isAllLayersLoaded
+     * @return {Boolean}
+     */
+    isAllLayersLoaded : function() {
+    	return this._allLayersAjaxLoaded ;
+    },
+    
     /**
      * @method getAllLayers
      * Returns an array of layers added to the service for example via #addLayer()
