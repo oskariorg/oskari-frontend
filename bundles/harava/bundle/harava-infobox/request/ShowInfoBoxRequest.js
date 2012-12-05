@@ -22,9 +22,11 @@ Oskari.clazz
 	   * @param {Boolean} hidePrevious
 	   * 		if true, hides any previous popups when showing this, defaults to false
 	   * @param {Integer} width
-	   * 		popup width
-	   *  @param {Integer} height
-	   * 		popup height
+	   * 		popup width, if not set default is 200 px
+	   * @param {Integer} height
+	   * 		popup height, if not set default is 150 px
+	   * @param {Boolean} centerMap
+	   * 		if true, centers map to selected coordinates, defaults to false
 	   *  
 	   * contentData format example:
 	   * [{
@@ -35,7 +37,7 @@ Oskari.clazz
 	   * }
 	   * }]
 	   */
-	  function(id,title, content, position, hidePrevious, width, height) {
+	  function(id,title, content, position, hidePrevious, width, height,centerMap) {
 	    this._creator = null;
 	    this._id = id;
 	    this._title = title;
@@ -44,6 +46,7 @@ Oskari.clazz
 	    this._hidePrevious = (hidePrevious == true);
 	    this._width = (width || 200);
 	    this._height = (height || 150);
+	    this._centerMap = (centerMap == true);
 	  }, {
 	    /** @static @property __name request name */
 	    __name : "HaravaInfoBox.ShowInfoBoxRequest",
@@ -110,6 +113,13 @@ Oskari.clazz
 	     */
 	    getWidth : function() {
 	      return this._width;
+	    },
+	    /**
+	     * @method getCenterMap
+	     * @returns {Boolean} if true, centers map to selected coordinates
+	     */
+	    getCenterMap : function(){
+	    	return this._centerMap;
 	    }
 	    
 	  }, {

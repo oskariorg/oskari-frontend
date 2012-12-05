@@ -120,6 +120,8 @@ function() {
      * 		popup width
      * @param {Integer} height
      * 		popup height
+     * @param {Boolean} centerMap
+     * 		if true, centers map to selected coordinates
      * 
      * Displays a popup with given title and data in the given coordinates.
      * 
@@ -134,7 +136,7 @@ function() {
 	 * }
 	 * }]
      */
-    popup : function(id, title, contentData, lonlat, hidePrevious, width, height) {
+    popup : function(id, title, contentData, lonlat, hidePrevious, width, height, centerMap) {
     	var me = this;
     	 
     	var arrow = this._arrow.clone();
@@ -149,8 +151,12 @@ function() {
         
         // Check if map is over than 900 x 400 pixels bigger then we can change also info to bigger
         if(mapWidth>900 && mapHeight>400){
-        	width = 300;
-        	height = 200;
+        	if(width<400){
+        		width = 400;
+        	}
+        	if(height<250){
+        		height = 250;
+        	}
         }
     	
     	header.append(title);
@@ -260,24 +266,29 @@ function() {
 		var titleHeight = jQuery('div.popupHeader').height();
 		jQuery('div.popupHeader').width(width-arrowWidth);
 		jQuery('div.popupContent').height(height-titleHeight);
-		this._panMapToShowPopup(lonlat,width,height);
+		
+		if(centerMap){
+			this._centerMapToSelectedCoordinate(lonlat,width,height);
+		} else {
+			this._panMapToShowPopup(lonlat,width,height);
+		}
 		
     },
     /**
-     * @method _panMapToShowPopup
+     * @method _centerMapToSelectedCoordinate
      * @private
-     * Pans map to show popup
+     * Centers map to popup position
      * @param {OpenLayers.LonLat} lonlat where to show the popup
      * @param {Integer} popupWidthPx,  popup width in pixels
-     * @param {Integer} popupHeighPx, popup height in pixels
+     * @param {Integer} popupHeightPx, popup height in pixels
      */
-    _panMapToShowPopup : function(lonlat, popupWidthPx, popupHeighPx) {
+    _centerMapToSelectedCoordinate: function(lonlat,popupWidthPx,popupHeightPx){
     	var popupPixels = this._map.getPixelFromLonLat(lonlat);
     	var mapCenterPixels = this._map.getPixelFromLonLat(this._map.getCenter());
     	
     	var offset = 10;
     	var infoboxWidth = popupWidthPx + offset;
-        var infoboxHeight = popupHeighPx + offset;
+        var infoboxHeight = popupHeightPx + offset;
         var size = this._map.getCurrentSize();
         var width = size.w;
         var height = size.h;        
@@ -287,7 +298,43 @@ function() {
         		y: popupPixels.y
         };
         var popupLonLat =this._map.getLonLatFromPixel(point);
-        this._map.panTo(popupLonLat);
+        this._map.setCenter(popupLonLat);
+        this.getMapModule()._updateDomain();
+    },
+    /**
+     * @method _panMapToShowPopup
+     * @private
+     * Pans map to show popup
+     * @param {OpenLayers.LonLat} lonlat where to show the popup
+     * @param {Integer} popupWidthPx,  popup width in pixels
+     * @param {Integer} popupHeightPx, popup height in pixels
+     */
+    _panMapToShowPopup : function(lonlat, popupWidthPx, popupHeightPx) {
+        var pixels = this._map.getViewPortPxFromLonLat(lonlat);
+        var size = this._map.getCurrentSize();
+        var width = size.w;
+        var height = size.h;
+        // if infobox would be out of screen 
+        // -> move map to make infobox visible on screen
+        var panx = 0;
+        var pany = 0;
+        var popupMarginWidthPx = 15;
+        var popupMarginHeightPx = 10;
+        var infoboxWidth = popupWidthPx+popupMarginWidthPx;
+        var infoboxHeight = popupHeightPx+popupMarginHeightPx; 
+        if( pixels.x + infoboxWidth > width) {
+            panx = width - (pixels.x + infoboxWidth);
+        }
+        if( pixels.y + infoboxHeight > height) {
+            pany = height - (pixels.y + infoboxHeight);
+        }
+        // check that we are not "over the top"
+        else if(pixels.y < 25) {
+            pany = 25;
+        }
+        if(panx != 0 || pany != 0) {
+            this.getMapModule().panMapByPixels(-panx, -pany);
+        }
         
         
     },

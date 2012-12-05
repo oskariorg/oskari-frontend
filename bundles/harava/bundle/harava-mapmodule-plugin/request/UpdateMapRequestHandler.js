@@ -27,6 +27,7 @@ function(sandbox, mapModule) {
     handleRequest : function(core, request) {
     	var openlayersMap = this.mapModule.getMap();
     	openlayersMap.updateSize();
+    	this.mapModule._updateDomain();
    }
 }, {
     /**
