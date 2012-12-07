@@ -71,7 +71,7 @@ function() {
         var me = this;
         this._sandbox = sandbox;
         this._sandbox.printDebug("[GetInfoPlugin] init");
-        this.getGFIHandler = Oskari.clazz.create('Oskari.mapframework.mapmodule-plugin.getinfo.GetFeatureInfoHandler', me);
+        this.getGFIHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.getinfo.GetFeatureInfoHandler', me);
     },
     /**
      * @method register
@@ -314,7 +314,6 @@ function() {
         
         var mapVO = me._sandbox.getMap();
        
-
         jQuery.ajax({
             beforeSend : function(x) {
             	me._pendingAjaxQuery.jqhr = x;
@@ -323,73 +322,75 @@ function() {
                 }
             },
             success : function(resp) {
-if(resp.length > 0) {
-	var coll = [];
-	// First element of the response array has organization spesific data
-	if(resp[0]) {
-		$.each(resp[0].organizations, function(k, org){
-			if(typeof Organization !== "undefined") {
-				if(Organization.mapEnlarged) {
-					var pretty = "<ul><li>Nimi: "+org.name+"</li><li>Luotu: "+org.created+"</li></ul>";
-					coll.push({markup: pretty, layerId: org.layerId, layerName: org.layerName});					
-				} else {
-					var pretty = "<div class='info_content'>"+org.name+"</div>";
-					coll.push({markup: pretty, layerId: org.layerId, layerName: org.layerName});
-				}
-				$.each(org.functions, function(k, func){
-					eval(func);
+            	var mapWidth = mapVO.getWidth();
+            	var showAll = false;
+            	if(mapWidth>500)
+            	{
+            		showAll = true;
+            	}
+            	
+            	var infoCol = resp.informationCollections;
+            	var orgz = resp.organizations;
+            	var projz = resp.projects;
+            	var coll = [];
+            	
+            	// First get organization spesific data
+            	$.each(orgz, function(k, org){
+            		if(!showAll){
+						var pretty = "<ul><li>"+org.name+"</li></ul>";
+						coll.push({markup: pretty, layerId: org.layerId, layerName: org.layerName});
+					} else {
+						var pretty = "<ul><li>"+org.name+"</li>"+org.html+"</ul>";
+						coll.push({markup: pretty, layerId: org.layerId, layerName: org.layerName});
+					}
+					
+					if(typeof Organization !== "undefined") {
+						$.each(org.functions, function(k, func){
+							eval(func);
+						});
+					}
+            	});
+            	
+            	// Second get project spesific data
+            	$.each(projz, function(k, proj){
+					if(!showAll){
+						var pretty = "<ul><li>"+proj.name+"</li></ul>";
+						coll.push({markup: pretty, layerId: proj.layerId, layerName: proj.layerName});
+					} else {
+						var pretty = "<ul><li>"+proj.name+"</li>"+proj.html+"</ul>";
+						coll.push({markup: pretty, layerId: proj.layerId, layerName: proj.layerName});
+					}
+					
+					if(typeof Project !== "undefined") {
+						$.each(proj.functions, function(k, func){
+							eval(func);
+						});
+					}
 				});
-			} else {
-				var pretty = "<ul><li>Nimi: "+org.name+"</li><li>Luotu: "+org.created+"</li></ul>";
-				coll.push({markup: pretty, layerId: org.layerId, layerName: org.layerName});
-			}
-		});
-	}
-	// Second element of the response array has project spesific data
-	if(resp[1]) {
-		$.each(resp[1].projects, function(k, proj){
-			if(typeof Project !== "undefined") {
-				if(Project.mapEnlarged) {
-					var pretty = "<ul><li>Nimi: "+proj.name+"</li><li>Luotu: "+proj.created+"</li></ul>";
-					coll.push({markup: pretty, layerId: proj.layerId, layerName: proj.layerName});					
-				} else {
-					var pretty = "<div class='info_content'>"+proj.name+"</div>";
-					coll.push({markup: pretty, layerId: proj.layerId, layerName: proj.layerName});
-				}
-				$.each(proj.functions, function(k, func){
-					eval(func);
+            	
+            	// Third get information collection spesific data
+				$.each(infoCol, function(k, info){
+					if(!showAll){
+						var pretty = "<ul><li>"+info.name+"</li></ul>";
+						coll.push({markup: pretty, layerId: info.layerId, layerName: info.layerName});
+					} else {
+						var pretty = "<ul><li>"+info.name+"</li>"+info.html+"</ul>";
+						coll.push({markup: pretty, layerId: info.layerId, layerName: info.layerName});
+					}
+					
+					if(typeof InformationCollection !== "undefined") {
+						$.each(info.functions, function(k, func){
+							eval(func);
+						});
+					}
 				});
-			} else {
-				var pretty = "<ul><li>Nimi: "+proj.name+"</li><li>Luotu: "+proj.created+"</li></ul>";
-				coll.push({markup: pretty, layerId: proj.layerId, layerName: proj.layerName});
-			}
-		});
-	}
-	// Third element of the response array has information collection spesific data
-	if(resp[2]) {
-		$.each(resp[2].information_collections, function(k, info){
-			if(typeof InformationCollection !== "undefined") {
-				if(InformationCollection.mapEnlarged) {
-					var pretty = "<ul><li>Nimi: "+info.name+"</li><li>Luotu: "+info.created+"</li></ul>";
-					coll.push({markup: pretty, layerId: info.layerId, layerName: info.layerName});					
-				} else {
-					var pretty = "<div class='info_content'>"+info.name+"</div>";
-					coll.push({markup: pretty, layerId: info.layerId, layerName: info.layerName});
+				
+				if(coll.length>0){
+					var parsed = {fragments: coll, title: "Tiedot"};
+					parsed.lonlat = lonlat;
+					parsed.popupid = me.infoboxId; 
+					me._showFeatures(parsed);
 				}
-				$.each(info.functions, function(k, func){
-					eval(func);
-				});
-			} else {
-				var pretty = "<ul><li>Nimi: "+info.name+"</li><li>Luotu: "+info.created+"</li></ul>";
-				coll.push({markup: pretty, layerId: info.layerId, layerName: info.layerName});
-			}
-		});
-	}
-	var parsed = {fragments: coll, title: "Tiedot"};
-	parsed.lonlat = lonlat;
-	parsed.popupid = me.infoboxId; 
-	me._showFeatures(parsed);
-}		
             	me._finishAjaxRequest();
             },
             error : function() {
@@ -412,7 +413,8 @@ if(resp.length > 0) {
                 width : mapVO.getWidth(),
                 height : mapVO.getHeight(),
                 bbox : mapVO.getBbox().toBBOX(),
-                zoom : mapVO.getZoom()
+                zoom : mapVO.getZoom(),
+                lang: Oskari.getLang()
             },
             type : 'POST',
             dataType : 'json',
@@ -425,7 +427,7 @@ if(resp.length > 0) {
      * Closes the infobox with GFI data
      */
     _closeGfiInfo : function() {
-        var rn = "InfoBox.HideInfoBoxRequest";
+        var rn = "HaravaInfoBox.HideInfoBoxRequest";
         var rb = this._sandbox.getRequestBuilder(rn);
         var r = rb(this.infoboxId);
         this._sandbox.request(this, r);
@@ -440,7 +442,7 @@ if(resp.length > 0) {
     _showGfiInfo : function(content, lonlat) {
         var me = this;
         // send out the request
-        var rn = "InfoBox.ShowInfoBoxRequest";
+        var rn = "HaravaInfoBox.ShowInfoBoxRequest";
         var rb = this._sandbox.getRequestBuilder(rn);
         var r = rb("getinforesult", "GetInfo Result", content, lonlat, true);
         this._sandbox.request(me, r);
@@ -707,7 +709,7 @@ if(resp.length > 0) {
         /*var pluginLoc = this.getMapModule().getLocalization('plugin');
         var myLoc = pluginLoc[this.__name];
         data.title = myLoc.title;*/
-        var rn = "InfoBox.ShowInfoBoxRequest";
+        var rn = "HaravaInfoBox.ShowInfoBoxRequest";
         var rb = me._sandbox.getRequestBuilder(rn);
         var r = rb(data.popupid, "Info", [content], data.lonlat, true);
         me._sandbox.request(me, r);

@@ -48,11 +48,22 @@ function() {
         },
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/plugin/HaravaGetInfoPlugin.js"
+            "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/plugin/getinfo/HaravaGetInfoPlugin.js"
         },
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/plugin/HaravaWMSLayerPlugin.js"
+            "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/plugin/wmslayer/HaravaWMSLayerPlugin.js"
+        },
+        /*
+         * Requests and handlers
+         **/
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/request/UpdateMapRequest.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/request/UpdateMapRequestHandler.js"
         }
         ]
     },
@@ -65,7 +76,7 @@ function() {
                 "Organisation" : "Dimenteq Oy",
                 "Temporal" : {
                     "Start" : "2012",
-                    "End" : "2014"
+                    "End" : "2013"
                 },
                 "Copyleft" : {
                     "License" : {
