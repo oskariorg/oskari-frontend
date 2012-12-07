@@ -9,9 +9,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab",
  * @method create called automatically on construction
  * @static
  */
-function(instance, title) {
+function(instance, title, fidPrefix) {
     this.instance = instance;
     this.title = title;
+    // Make sure that if prefix is falsy, it will be empty not undefined.
+    this.fidPrefix = fidPrefix || "";
     this._createUI();
 }, {
     getTitle : function() {
@@ -74,9 +76,11 @@ function(instance, title) {
         var input = this._getFilterField().getValue();
         if( !input || isNaN(input) ) {
             alert(this.instance.getLocalization('errors').illegalInput);
+        } else {
+            // TODO: Start the flow.
+            alert("prefix: " + this.fidPrefix + input);
         }
         
-        // TODO: Start the flow.        
     }
     
 });

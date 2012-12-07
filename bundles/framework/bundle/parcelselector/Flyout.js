@@ -49,9 +49,17 @@ function(instance) {
 	 */
 	startPlugin : function() {
 		var me = this;
-		
-        var parcelTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').parcel);
-        var registerUnitTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').registerUnit);
+
+        var conf = this.instance.conf;
+        var parcelFidPrefix;
+        var registerUnitFidPrefix;
+        if (conf) {
+            parcelFidPrefix = conf.parcelFidPrefix;
+            registerUnitFidPrefix = conf.registerUnitFidPrefix;
+        }
+
+        var parcelTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').parcel, parcelFidPrefix);
+        var registerUnitTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').registerUnit, registerUnitFidPrefix);
         
 		this.parcelTabs.push(parcelTab);
         this.parcelTabs.push(registerUnitTab);

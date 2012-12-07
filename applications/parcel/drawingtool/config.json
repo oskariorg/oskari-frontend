@@ -160,5 +160,11 @@
          "wmsUrl":"",
          "proxyUrl":""
       }
+   },
+   "parcelselector":{
+      "conf":{
+         "parcelFidPrefix":"FI.KTJkii-PalstanTietoja-",
+         "registerUnitFidPrefix":"FI.KTJkii-RekisteriyksikonTietoja-"
+      }
    }
 }
