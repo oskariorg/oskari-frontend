@@ -9,16 +9,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelService',
  * @static
  * @param {String} url
  * @param {String} transactionUrl
- * @param {String} uuid current users uuid
  * @param {Oskari.mapframework.sandbox.Sandbox} sandbox reference to Oskari sandbox
  * 
  */
-function(url, transActionUrl, uuid, sandbox) {
+function(url, transActionUrl, sandbox) {
 
     // list of loaded parcel
     this._placesList = [];
 
-    this.wfstStore = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelWFSTStore', url, transActionUrl, uuid);
+    this.wfstStore = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelWFSTStore', url, transActionUrl);
     this._sandbox = sandbox;
 }, {
     __qname : "Oskari.mapframework.bundle.parcel.service.ParcelService",

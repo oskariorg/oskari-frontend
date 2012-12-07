@@ -4,9 +4,6 @@
  * Transforms Ext Model & OpenLayers geometry to WFS Transactions
  *
  *
- * NEEDS: URL to WFS service UUID for storing to some speficic user
- *
- *
  * Sample Usage:
  *
  * service = Oskari.bundle_manager.instances[12].impl.parcelService; // TEMP
@@ -23,10 +20,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelWFSTStore',
  * @static
  * @param {String} url
  * @param {String} transactionUrl
- * @param {String} uuid current users uuid
  */
-function(url, transactionUrl, uuid) {
-    this.uuid = uuid;
+function(url, transactionUrl) {
     this.protocols = {};
     this.url = url;
     this.transactionUrl = transactionUrl;
@@ -64,41 +59,12 @@ function(url, transactionUrl, uuid) {
     },
 
     /**
-     * @method getPlaces
-     *
-     * loads places from backend to given service filters by
-     * initialised user uuid
-     *
-     */
-    getParcel : function(cb) {
-        var uuid = this.uuid;
-
-        var uuidFilter = new OpenLayers.Filter.Comparison({
-            type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "uuid",
-            value : uuid
-        });
-
-        var p = this.protocols['parcels'];
-
-        var me = this;
-        p.read({
-            filter : uuidFilter,
-            callback : function(response) {
-                me._handleParcelResponse(response, cb);
-            }
-        })
-
-    },
-
-    /**
      * @method _handleParcelResponse
      * processes ajax response from backend
      * @param response server response
      * @param cb callback to call with the model list as param
      */
     _handleParcelResponse : function(response, cb) {
-        var uuid = this.uuid;
         var feats = response.features;
         if (feats == null || feats.length == 0) {
 	        if (cb) {
@@ -120,7 +86,6 @@ function(url, transactionUrl, uuid) {
             place.setCreateDate(featAtts['created']);
             place.setUpdateDate(featAtts['updated']);
             place.setGeometry(f.geometry);
-            place.setUUID(uuid);
 
             list.push(place);
             //service._addParcel(place);
@@ -140,17 +105,11 @@ function(url, transactionUrl, uuid) {
      * load places with an id list
      */
     getParcelByIdList : function(idList, cb) {
-        var uuid = this.uuid;
         var p = this.protocols['parcels'];
-        //var geoserverId = p.featureType + '.' + idList[0];
 
         var filter = new OpenLayers.Filter.Logical({
             type : OpenLayers.Filter.Logical.AND,
-            filters : [new OpenLayers.Filter.Comparison({
-                type : OpenLayers.Filter.Comparison.EQUAL_TO,
-                property : "uuid",
-                value : uuid
-            }), new OpenLayers.Filter.FeatureId({
+            filters : [new OpenLayers.Filter.FeatureId({
                 fids : idList
             })]
         });
@@ -171,7 +130,6 @@ function(url, transactionUrl, uuid) {
      */
     commitParcel : function(list, callback) {
         var p = this.protocols['parcels'];
-        var uuid = this.uuid;
         var features = [];
         for (var l = 0; l < list.length; l++) {
             var m = list[l];
@@ -181,7 +139,6 @@ function(url, transactionUrl, uuid) {
             var featAtts = {
                 'name' : m.getName(),
                 'place_desc' : m.getDescription(),
-                'uuid' : uuid
             };
 
             var feat = new OpenLayers.Feature.Vector(geom, featAtts);
@@ -255,7 +212,6 @@ function(url, transactionUrl, uuid) {
      */
     deleteParcel : function(list, callback) {
         var p = this.protocols['parcels'];
-        var uuid = this.uuid;
         var features = [];
         for (var l = 0; l < list.length; l++) {
             var m_id = list[l];
@@ -265,7 +221,6 @@ function(url, transactionUrl, uuid) {
             }
 
             var featAtts = {
-                'uuid' : uuid
             };
 
             var feat = new OpenLayers.Feature.Vector(null, featAtts);

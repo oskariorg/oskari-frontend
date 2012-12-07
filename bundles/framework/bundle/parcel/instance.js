@@ -129,25 +129,19 @@ function() {
         this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.ButtonHandler", this);
         this.buttons.start();
         
-        var user = sandbox.getUser();
-        if(!user.isLoggedIn()) {
-            // guest users don't need anything else
-            return;
-        }
-        
         var actionUrl = this.conf.queryUrl;
         // If transaction URL is empty or undefined, use action URL for transactions.
         var transactionUrl = this.conf.transactionUrl || actionUrl;
         if(this.conf.proxyUrl) {
-            // TODO: PARCEL do we need this?
             // Use proxy if requesting features cross-domain.
+            // Also, proxy is required to provide application specific authorization for WFS data.
             // Notice, OpenLayers will automatically encode URL parameters.
             OpenLayers.ProxyHost = this.conf.proxyUrl;
         }
         
         // back end communication
         this.parcelService = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelService',
-            actionUrl, transactionUrl, user.getUuid(), sandbox);
+            actionUrl, transactionUrl, sandbox);
         // register service so personal data can access it
         this.sandbox.registerService(this.parcelService);
         // init loads the places

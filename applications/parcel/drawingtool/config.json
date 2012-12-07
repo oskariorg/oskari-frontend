@@ -147,7 +147,7 @@
          "user":{
             "lastName":"",
             "nickName":"",
-            "userUUID":"dummyPwToKeepEditorsOn",
+            "userUUID":"",
             "firstName":"",
             "loginName":""
          }

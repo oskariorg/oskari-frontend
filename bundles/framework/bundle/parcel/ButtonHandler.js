@@ -71,14 +71,8 @@ function(instance) {
      */
     init : function() {
         var loc = this.instance.getLocalization('tools');
-        var user = this.instance.sandbox.getUser();
-        // different tooltip for guests - "Please log in to use"
-        var guestPostfix = ' - ' + this.instance.getLocalization('guest').loginShort;
         for(var tool in this.buttons) {
             var tooltip = loc[tool]['tooltip'];
-            if(!user.isLoggedIn()) {
-                tooltip = tooltip + guestPostfix;
-            }
             this.buttons[tool].tooltip = tooltip;
         }
 
@@ -114,11 +108,6 @@ function(instance) {
         }
         
         var user = this.instance.sandbox.getUser();
-        if(!user.isLoggedIn()) {
-            // disable toolbar buttons for guests
-            var stateReqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
-            sandbox.request(this, stateReqBuilder(undefined, this.buttonGroup, false));
-        }
     },
         
     /**
