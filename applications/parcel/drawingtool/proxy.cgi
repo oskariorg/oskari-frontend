@@ -12,66 +12,66 @@ import urllib2
 import cgi
 import sys, os
 
+# Proxy configurations. -->
+
 # Authentication info
 top_level_url = "https://ws.nls.fi"
+
+# Username and password are meant to be 
+# application specific authentication information.
+# Then, users themselves do not need to authenticate for data.
+# User login to the web page should be required instead to make sure
+# user has rights for the use of application and this proxy.
+username = ""
+password = ""
 
 # Designed to prevent Open Proxy type stuff.
 allowedHosts = ['ws.nls.fi']
 
+# <-- Procy configurations.
+
 method = os.environ["REQUEST_METHOD"]
 
 if method == "POST":
-    qs = os.environ["QUERY_STRING"]
-    d = cgi.parse_qs(qs)
-    if d.has_key("username"):
-        username = d["username"][0]
-    if d.has_key("password"):
-        password = d["password"][0]
     if d.has_key("url"):
         url = d["url"][0]
-    else:
-        url = "http://www.openlayers.org"
 else:
     fs = cgi.FieldStorage()
-    url = fs.getvalue('url', "http://www.openlayers.org")
-    username = fs.getvalue('username')
-    password = fs.getvalue('password')
+    url = fs.getvalue('url', top_level_url)
 
 try:
     host = url.split("/")[2]
-    if allowedHosts and not host in allowedHosts:
+    # Check that all the necessary configurations are available.
+    if not username or not password or not allowedHosts or not host in allowedHosts:
         print "Status: 502 Bad Gateway"
         print "Content-Type: text/plain"
         print
         print "This proxy does not allow you to access that location (%s)." % (host)
+        print "Check proxy.cgi configurations."
         print
         print os.environ
   
     elif url.startswith("http://") or url.startswith("https://"):
 
-        if username or password:
-            # Authentication starts -->
-    
-            # create a password manager
-            password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
-            
-            # Add the username and password.
-            # If we knew the realm, we could use it instead of None.
-            password_mgr.add_password(None, top_level_url, username, password)
-            
-            handler = urllib2.HTTPBasicAuthHandler(password_mgr)
-            
-            # create "opener" (OpenerDirector instance)
-            opener = urllib2.build_opener(handler)
-            
-            # use the opener to fetch a URL
-            #opener.open(a_url)
-            
-            # Install the opener.
-            # Now all calls to urllib2.urlopen use our opener.
-            urllib2.install_opener(opener)
-        
-            # <-- Authentication ends
+          # Authentication starts -->
+  
+          # create a password manager
+          password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+          
+          # Add the username and password.
+          # If we knew the realm, we could use it instead of None.
+          password_mgr.add_password(None, top_level_url, username, password)
+          
+          handler = urllib2.HTTPBasicAuthHandler(password_mgr)
+          
+          # create "opener" (OpenerDirector instance)
+          opener = urllib2.build_opener(handler)
+          
+          # Install the opener.
+          # Now all calls to urllib2.urlopen use our opener.
+          urllib2.install_opener(opener)
+      
+          # <-- Authentication ends
     
         if method == "POST":
             length = int(os.environ["CONTENT_LENGTH"])
