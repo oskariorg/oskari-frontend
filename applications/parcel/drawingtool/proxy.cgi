@@ -37,7 +37,7 @@ if method == "POST":
         url = d["url"][0]
 else:
     fs = cgi.FieldStorage()
-    url = fs.getvalue('url', top_level_url)
+    url = fs.getvalue('url')
 
 try:
     host = url.split("/")[2]
@@ -53,26 +53,26 @@ try:
   
     elif url.startswith("http://") or url.startswith("https://"):
 
-          # Authentication starts -->
-  
-          # create a password manager
-          password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
-          
-          # Add the username and password.
-          # If we knew the realm, we could use it instead of None.
-          password_mgr.add_password(None, top_level_url, username, password)
-          
-          handler = urllib2.HTTPBasicAuthHandler(password_mgr)
-          
-          # create "opener" (OpenerDirector instance)
-          opener = urllib2.build_opener(handler)
-          
-          # Install the opener.
-          # Now all calls to urllib2.urlopen use our opener.
-          urllib2.install_opener(opener)
-      
-          # <-- Authentication ends
+        # Authentication starts -->
+
+        # create a password manager
+        password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+        
+        # Add the username and password.
+        # If we knew the realm, we could use it instead of None.
+        password_mgr.add_password(None, top_level_url, username, password)
+        
+        handler = urllib2.HTTPBasicAuthHandler(password_mgr)
+        
+        # create "opener" (OpenerDirector instance)
+        opener = urllib2.build_opener(handler)
+        
+        # Install the opener.
+        # Now all calls to urllib2.urlopen use our opener.
+        urllib2.install_opener(opener)
     
+        # <-- Authentication ends
+  
         if method == "POST":
             length = int(os.environ["CONTENT_LENGTH"])
             headers = {"Content-Type": os.environ["CONTENT_TYPE"]}
