@@ -9,11 +9,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab",
  * @method create called automatically on construction
  * @static
  */
-function(instance, title, fidPrefix) {
+function(instance, title, selectedEventName) {
     this.instance = instance;
     this.title = title;
-    // Make sure that if prefix is falsy, it will be empty not undefined.
-    this.fidPrefix = fidPrefix || "";
+    this.selectedEventName = selectedEventName;
     this._createUI();
 }, {
     getTitle : function() {
@@ -76,11 +75,15 @@ function(instance, title, fidPrefix) {
         var input = this._getFilterField().getValue();
         if( !input || isNaN(input) ) {
             alert(this.instance.getLocalization('errors').illegalInput);
-        } else {
-            // TODO: Start the flow.
-            alert("prefix: " + this.fidPrefix + input);
+
+        } else if ( this.selectedEventName ) {
+            if( !this.selectedEvent ) {
+                // Create the event the first time it is needed.
+                this.selectedEvent = this.instance.sandbox.getEventBuilder(this.selectedEventName)(input);
+            }
+            // Start the flow by sending the event.
+            this.instance.sandbox.notifyAll(this.selectedEvent);
         }
-        
     }
     
 });

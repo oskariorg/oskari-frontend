@@ -126,22 +126,19 @@ function() {
         sandbox.printDebug("Initializing parcel module...");
         
         // handles toolbar buttons related to parcels 
-        this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.ButtonHandler", this);
+        this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.handler.ButtonHandler", this);
         this.buttons.start();
-        
-        var actionUrl = this.conf.queryUrl;
-        // If transaction URL is empty or undefined, use action URL for transactions.
-        var transactionUrl = this.conf.transactionUrl || actionUrl;
-        if(this.conf.proxyUrl) {
+
+        if(this.conf && this.conf.proxyUrl) {
             // Use proxy if requesting features cross-domain.
             // Also, proxy is required to provide application specific authorization for WFS data.
             // Notice, OpenLayers will automatically encode URL parameters.
             OpenLayers.ProxyHost = this.conf.proxyUrl;
         }
-        
+
         // back end communication
         this.parcelService = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelService',
-            actionUrl, transactionUrl, sandbox);
+            this.conf, sandbox);
         // register service so personal data can access it
         this.sandbox.registerService(this.parcelService);
         // init loads the places
@@ -153,6 +150,10 @@ function() {
         
         this.editRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.EditRequestHandler', sandbox, me);
         sandbox.addRequestHandler('Parcel.EditPlaceRequest', this.editRequestHandler);
+        
+        // handles selection events related to parcels 
+        this.parcelSelectorHandler = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.handler.ParcelSelectorHandler", this);
+        this.parcelSelectorHandler.start();
     },
     /**
      * @method stop
