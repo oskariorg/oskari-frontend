@@ -50,17 +50,9 @@ function(instance) {
 	startPlugin : function() {
 		var me = this;
 
-        var conf = this.instance.conf;
-        var parcelFidPrefix;
-        var registerUnitFidPrefix;
-        if (conf) {
-            parcelFidPrefix = conf.parcelFidPrefix;
-            registerUnitFidPrefix = conf.registerUnitFidPrefix;
-        }
+        var parcelTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').parcel, 'ParcelSelector.ParcelSelectedEvent');
+        var registerUnitTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').registerUnit, 'ParcelSelector.RegisteredUnitSelectedEvent');
 
-        var parcelTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').parcel, parcelFidPrefix);
-        var registerUnitTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').registerUnit, registerUnitFidPrefix);
-        
 		this.parcelTabs.push(parcelTab);
         this.parcelTabs.push(registerUnitTab);
 	},

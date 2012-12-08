@@ -48,6 +48,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
 	            this.drawLayer.addFeatures(features);
 	            // preselect it for modification
 	            this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
+	            
+        // TODO OOOOOOOOOOOO
+        this._map.zoomToExtent(params.geometry.getDataExtent());
+	            
 	        } else {
 	            // otherwise activate requested draw control for new geometry
 	            this.editMode = false;
@@ -133,12 +137,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         };
 
         this.drawLayer = new OpenLayers.Layer.Vector("Parcel Draw Layer", {
-            /*style: {
-             strokeColor: "#ff00ff",
-             strokeWidth: 3,
-             fillOpacity: 0,
-             cursor: "pointer"
-             },*/
             eventListeners : {
                 "featuresadded" : function(layer) {
                 	// send an event that the drawing has been completed

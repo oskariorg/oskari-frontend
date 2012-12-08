@@ -138,7 +138,7 @@ function() {
 
         // back end communication
         this.parcelService = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelService',
-            this.conf, sandbox);
+            this);
         // register service so personal data can access it
         this.sandbox.registerService(this.parcelService);
         // init loads the places

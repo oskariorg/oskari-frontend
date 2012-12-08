@@ -40,6 +40,12 @@ function() {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcelselector/view/ParcelsTab.js"
         }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcelselector/event/ParcelSelectedEvent.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcelselector/event/RegisteredUnitSelectedEvent.js"
+        }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/parcelselector/css/parcelselector.css"
         }],

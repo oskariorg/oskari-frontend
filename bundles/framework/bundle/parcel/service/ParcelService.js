@@ -12,13 +12,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelService',
  * @param {Oskari.mapframework.sandbox.Sandbox} sandbox reference to Oskari sandbox
  * 
  */
-function(url, transActionUrl, sandbox) {
+function(instance) {
 
     // list of loaded parcel
     this._placesList = [];
 
-    this.wfstStore = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelWFSTStore', url, transActionUrl);
-    this._sandbox = sandbox;
+    this.wfstStore = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelWFSTStore', instance);
+    this._sandbox = instance.getSandbox();
 }, {
     __qname : "Oskari.mapframework.bundle.parcel.service.ParcelService",
     getQName : function() {
@@ -37,6 +37,14 @@ function(url, transActionUrl, sandbox) {
         // preload stuff
         var me = this;
         this.wfstStore.connect();
+    },
+
+    loadParcel : function(fid) {
+        this.wfstStore.getParcelByIdList([fid]);
+    },
+
+    loadRegisteredUnit :  function(fid) {
+        this.wfstStore.getRegisteredUnitByIdList([fid]);
     },
 
     /**

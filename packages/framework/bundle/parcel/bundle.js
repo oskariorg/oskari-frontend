@@ -111,7 +111,10 @@ function() {
             "src" : "../../../../bundles/framework/bundle/parcel/view/PlaceForm.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/ButtonHandler.js"
+            "src" : "../../../../bundles/framework/bundle/parcel/handler/ButtonHandler.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/handler/ParcelSelectorHandler.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/instance.js"

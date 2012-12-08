@@ -21,10 +21,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelWFSTStore',
  * @param {String} url
  * @param {String} transactionUrl
  */
-function(url, transactionUrl) {
+function(instance) {
     this.protocols = {};
-    this.url = url;
-    this.transactionUrl = transactionUrl;
+    this.instance = instance;
+    this.url = instance.conf.queryUrl;
+    this.transactionUrl = instance.conf.transactionUrl;
 }, {
 
     /**
@@ -37,8 +38,15 @@ function(url, transactionUrl) {
         this.protocols['parcels'] = new OpenLayers.Protocol.WFS({
             version : '1.1.0',
             srsName : 'EPSG:3067',
-            geometryName : 'geometry',
-            featureType : 'parcels',
+            featureType : this.instance.conf.parselFeatureType,
+            featureNS : 'http://xml.nls.fi/ktjkiiwfs/2010/02',
+            featurePrefix : 'ktjkiiwfs',
+            url : url
+        });
+        this.protocols['registeredUnits'] = new OpenLayers.Protocol.WFS({
+            version : '1.1.0',
+            srsName : 'EPSG:3067',
+            featureType : this.instance.conf.registerUnitFeatureType,
             featureNS : 'http://xml.nls.fi/ktjkiiwfs/2010/02',
             featurePrefix : 'ktjkiiwfs',
             url : url
@@ -100,27 +108,47 @@ function(url, transactionUrl) {
     /**
      * @method getParcelByIdList
      * @param idList array of parcel ids to be loaded
+     *
+     * load places with an id list
+     */
+    getParcelByIdList : function(idList) {
+        this._getPlaceByIdList(this.protocols['parcels'], idList);
+    },
+
+    /**
+     * @method getParcelByIdList
+     * @param idList array of parcel ids to be loaded
      * @param cb callback that will receive a list of loaded models as param
      *
      * load places with an id list
      */
-    getParcelByIdList : function(idList, cb) {
-        var p = this.protocols['parcels'];
+    getRegisteredUnitByIdList : function(idList) {
+        this._getPlaceByIdList( this.protocols['registeredUnits'], idList);
+    },
 
-        var filter = new OpenLayers.Filter.Logical({
-            type : OpenLayers.Filter.Logical.AND,
-            filters : [new OpenLayers.Filter.FeatureId({
-                fids : idList
-            })]
+    _getPlaceByIdList : function(protocol, idList, cb) {
+        var me = this;
+        
+        var filter = new OpenLayers.Filter.FeatureId({
+            fids : idList
         });
 
         var me = this;
-        p.read({
+        protocol.read({
             filter : filter,
             callback : function(response) {
-                me._handleParcelResponse(response, cb);
+//                me._handleParcelResponse(response, cb);
+if( response && response.features && response.features.length > 0 ) {
+    console.log("RESPONSE succ");
+    var config = { geometry : response.features[0] };
+    // TODO: Needs to be done in module.
+//        var startRequest = me.instance.getSandbox().getRequestBuilder('Parcel.StartDrawingRequest')(config);
+//        me.instance.getSandbox().request(me, startRequest);    
+} else {
+    console.log("RESPONSE ERRORI");
+}
             }
-        })
+        });
     },
 
     /**

@@ -138,12 +138,11 @@
         "conf": {
             "queryUrl": "https://ws.nls.fi/ktjkii/wfs/wfs",
             "transactionUrl": "",
-            "wmsUrl": "",
-            "proxyUrl": "",
+            "proxyUrl": "proxy.cgi?url=",
             "parcelFidPrefix": "FI.KTJkii-PalstanTietoja-",
-            "parcelFeatureType": "",
+            "parcelFeatureType": "PalstanTietoja",
             "registerUnitFidPrefix": "FI.KTJkii-RekisteriyksikonTietoja-",
-            "registerUnitFeatureType": ""
+            "registerUnitFeatureType": "RekisteriyksikonTietoja"
         }
     }
 }

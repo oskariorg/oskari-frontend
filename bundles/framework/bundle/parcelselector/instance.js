@@ -258,6 +258,22 @@ function() {
      */
     getState : function() {
         return this.plugins['Oskari.userinterface.Flyout'].getContentState();
+    },
+    /**
+     * @method showMessage
+     * Shows user a message with ok button
+     * @param {String} title popup title
+     * @param {String} message popup message
+     */
+    showMessage : function(title, message) {
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        okBtn.setTitle(this.getLocalization('buttons').ok);
+        okBtn.addClass('primary');
+        okBtn.setHandler(function() {
+            dialog.close(true);
+        });
+        dialog.show(title, message, [okBtn]);
     }
 }, {
 	/**

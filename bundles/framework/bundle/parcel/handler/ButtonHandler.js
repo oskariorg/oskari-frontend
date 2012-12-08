@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.parcel.ButtonHandler
+ * @class Oskari.mapframework.bundle.parcel.handler.ButtonHandler
  * 
  * Handles the buttons for parcel functionality
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.parcel.ButtonHandler",
+Oskari.clazz.define("Oskari.mapframework.bundle.parcel.handler.ButtonHandler",
 
 /**
  * @method create called automatically on construction
@@ -106,8 +106,6 @@ function(instance) {
         for(var tool in this.buttons) {
             sandbox.request(this, reqBuilder(tool, this.buttonGroup, this.buttons[tool]));
         }
-        
-        var user = this.instance.sandbox.getUser();
     },
         
     /**
@@ -209,14 +207,11 @@ function(instance) {
      * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
      */
     onEvent : function(event) {
-
         var handler = this.eventHandlers[event.getName()];
         if(!handler) {
             return;
         }
-
         return handler.apply(this, [event]);
-
     },
     /**
      * @property {Object} eventHandlers

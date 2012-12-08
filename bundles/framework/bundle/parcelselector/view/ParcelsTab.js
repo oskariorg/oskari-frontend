@@ -53,7 +53,9 @@ function(instance, title, selectedEventName) {
         var me = this;
         var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
         field.setPlaceholder(this.instance.getLocalization('filter').text);
-        field.bindEnterKey(function() {me._startAction.call(me)});
+        field.bindEnterKey(function() {
+            me._startAction.call(me)
+        });
         field.addClearButton();
         this.filterField = field;
         return field;
@@ -67,23 +69,21 @@ function(instance, title, selectedEventName) {
         // Make button visually primary button.
         btn.addClass('primary');
         btn.setTitle(this.instance.getLocalization('button'));
-        btn.setHandler(function() {me._startAction.call(me)});
+        btn.setHandler(function() {
+            me._startAction.call(me)
+        });
         this.actionButton = btn;
         return btn;
     },
     _startAction : function() {
         var input = this._getFilterField().getValue();
-        if( !input || isNaN(input) ) {
-            alert(this.instance.getLocalization('errors').illegalInput);
+        if (!input || isNaN(input)) {
+            this.instance.showMessage(this.instance.getLocalization('title'), this.instance.getLocalization('errors').illegalInput);
 
-        } else if ( this.selectedEventName ) {
-            if( !this.selectedEvent ) {
-                // Create the event the first time it is needed.
-                this.selectedEvent = this.instance.sandbox.getEventBuilder(this.selectedEventName)(input);
-            }
+        } else if (this.selectedEventName) {
+            var selectedEvent = this.instance.sandbox.getEventBuilder(this.selectedEventName)(input);
             // Start the flow by sending the event.
-            this.instance.sandbox.notifyAll(this.selectedEvent);
+            this.instance.sandbox.notifyAll(selectedEvent);
         }
     }
-    
-});
+}); 
