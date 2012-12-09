@@ -47,9 +47,6 @@ function() {
             "src" : "../../../../bundles/framework/bundle/parcel/event/FinishedDrawingEvent.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/event/ParcelHoverEvent.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/event/ParcelChangedEvent.js"
         }, {
             "type" : "text/javascript",
@@ -59,9 +56,6 @@ function() {
         {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/plugin/DrawPlugin.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/plugin/HoverPlugin.js"
         },
         /* request */
         {
