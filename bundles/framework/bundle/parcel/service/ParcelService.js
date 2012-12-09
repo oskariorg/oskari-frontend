@@ -36,12 +36,33 @@ function(instance) {
         this._wfst.loadRegisterUnit(fid, cb);
     },
 
+    savePlace : function(feature, featureType, cb) {
+        if (feature && featureType) {
+            if (featureType === this._instance.conf.parcelFeatureType) {
+                saveParcel(feature, cb);
+
+            } else if (featureType === this._instance.conf.parcelFeatureType) {
+                saveRegisterUnit(feature, cb);
+
+            } else {
+                cb();
+            }
+
+        } else {
+            cb();
+        }
+    },
+
     saveParcel : function(feature, cb) {
-        this._wfst.saveParcel(feature, cb);
+        if (feature) {
+            this._wfst.saveParcel(feature, cb);
+        }
     },
 
     saveRegisterUnit : function(feature, cb) {
-        this._wfst.saveRegisterUnit(feature, cb);
+        if (feature) {
+            this._wfst.saveRegisterUnit(feature, cb);
+        }
     }
 }, {
     'protocol' : ['Oskari.mapframework.service.Service']

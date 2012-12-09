@@ -67,7 +67,7 @@ function(instance) {
             if (!this.ignoreEvents) {
                 if (event && event.getFid()) {
                     this.instance.getService().loadParcel(event.getFid(), function(feature) {
-                        me._loadCallback.call(me, feature);
+                        me._loadCallback.call(me, feature, me.instance.conf.parcelFeatureType);
                     });
                 }
             }
@@ -77,7 +77,7 @@ function(instance) {
             if (!this.ignoreEvents) {
                 if (event && event.getFid()) {
                     this.instance.getService().loadRegisterUnit(event.getFid(), function(feature) {
-                        me._loadCallback.call(me, feature);
+                        me._loadCallback.call(me, feature, me.instance.conf.registerUnitFeatureType);
                     });
                 }
             }
@@ -86,9 +86,9 @@ function(instance) {
     /**
      *
      */
-    _loadCallback : function(feature) {
+    _loadCallback : function(feature, featureType) {
         if (feature) {
-            this.instance.getDrawPlugin().drawFeature(feature);
+            this.instance.getDrawPlugin().drawFeature(feature, featureType);
         }
     }
 }, {

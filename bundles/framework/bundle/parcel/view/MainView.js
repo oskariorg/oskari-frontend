@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.ParcelBundleInstance
- * 
- * Registers and starts the 
+ *
+ * Registers and starts the
  * Oskari.mapframework.bundle.parcel.plugin.CoordinatesPlugin plugin for main map.
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.parcel.view.MainView",
@@ -18,7 +18,7 @@ function(instance) {
     __name : 'ParcelMainView',
     /**
      * @method getName
-     * @return {String} the name for the component 
+     * @return {String} the name for the component
      */
     getName : function() {
         return this.__name;
@@ -42,15 +42,15 @@ function(instance) {
      */
     start : function() {
         var me = this;
-        
+
         var sandbox = this.instance.sandbox;
         sandbox.register(me);
-        for(p in me.eventHandlers) {
+        for (p in me.eventHandlers) {
             sandbox.registerForEventByName(me, p);
         }
-        
+
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        
+
         // register plugin for map (drawing for parcels)
         var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin');
         mapModule.registerPlugin(drawPlugin);
@@ -63,7 +63,7 @@ function(instance) {
      */
     stop : function() {
         var sandbox = this.instance.sandbox;
-        for(p in this.eventHandlers) {
+        for (p in this.eventHandlers) {
             sandbox.unregisterFromEventByName(this, p);
         }
         sandbox.unregister(this);
@@ -74,14 +74,11 @@ function(instance) {
      * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
      */
     onEvent : function(event) {
-
         var handler = this.eventHandlers[event.getName()];
-        if(!handler) {
+        if (!handler) {
             return;
         }
-
         return handler.apply(this, [event]);
-
     },
     /**
      * @property {Object} eventHandlers
@@ -112,7 +109,7 @@ function(instance) {
      * @param {Oskari.mapframework.bundle.parcel.event.FinishedDrawingEvent} event
      */
     _handleFinishedDrawingEvent : function(event) {
-        var center = event.getDrawing().getCentroid();
+        var center = event.getDrawing().geometry.getCentroid();
         var lonlat = {
             lon : center.x,
             lat : center.y
@@ -123,27 +120,18 @@ function(instance) {
      * @method showPlaceForm
      * Displays a form popup on given location. Prepopulates the form if place is given
      * @param {OpenLayers.LonLat} location location to point with the popup
-     * @param {Oskari.mapframework.bundle.parcel.model.Parcel} place prepoluate form with place data (optional)
      */
-    showPlaceForm : function(location, place) {
+    showPlaceForm : function(location) {
         var me = this;
         var sandbox = this.instance.sandbox;
         sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
         var loc = this.instance.getLocalization();
         this.form = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.view.PlaceForm', this.instance);
-        if(place) {
-            var param = {
-                place : {
-                    name : place.getName(),
-                    desc : place.getDescription()
-                }
-            };
-            this.form.setValues(param);
-        }
-        
+
         var content = [{
-            useButtons: true,
-            primaryButton: loc.buttons.save,
+            html : me.form.getForm(),
+            useButtons : true,
+            primaryButton : loc.buttons.save,
             actions : {}
         }];
         // cancel button
@@ -152,43 +140,45 @@ function(instance) {
             // ask toolbar to select default tool
             var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
             me.instance.sandbox.request(me, toolbarRequest);
-        }; 
+        };
         // save button
         content[0].actions[loc.buttons.save] = function() {
             me._saveForm();
-        }; 
+        };
 
         var request = sandbox.getRequestBuilder('InfoBox.ShowInfoBoxRequest')(this.popupId, loc.placeform.title, content, location, true);
         sandbox.request(me.getName(), request);
     },
     /**
      * @method _validateForm
-     * Validates form data, returns an object array if any errors. 
-     * Error objects have field and error properties ({field : 'name', error: 'Name missing'}). 
+     * Validates form data, returns an object array if any errors.
+     * Error objects have field and error properties ({field : 'name', error: 'Name missing'}).
      * @private
      * @param {Object} values form values as returned by Oskari.mapframework.bundle.parcel.view.PlaceForm.getValues()
-     * @return {Object[]} 
+     * @return {Object[]}
      */
     _validateForm : function(values) {
         var errors = [];
         var loc = this.instance.getLocalization('validation');
-        if(!values.place.name)
-        {
-            errors.push({name : 'name' , error: loc.placeName});
+        if (!values.place.name) {
+            errors.push({
+                name : 'name',
+                error : loc.placeName
+            });
         }
         return errors;
     },
     _showValidationErrorMessage : function(errors) {
         var loc = this.instance.getLocalization();
-    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-    	var okBtn = dialog.createCloseButton(loc.buttons.ok);
-    	var content = jQuery('<ul></ul>');
-    	for(var i = 0 ; i < errors.length; ++i) {
-    		var row = jQuery('<li></li>');
-    		row.append(errors[i]['error'])
-    		content.append(row);
-    	}
-    	dialog.show(loc.validation.title, content, [okBtn]);
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var okBtn = dialog.createCloseButton(loc.buttons.ok);
+        var content = jQuery('<ul></ul>');
+        for (var i = 0; i < errors.length; ++i) {
+            var row = jQuery('<li></li>');
+            row.append(errors[i]['error'])
+            content.append(row);
+        }
+        dialog.show(loc.validation.title, content, [okBtn]);
     },
     /**
      * @method _saveForm
@@ -197,14 +187,14 @@ function(instance) {
      */
     _saveForm : function() {
         // form not open, nothing to do
-        if(!this.form) {
+        if (!this.form) {
             return;
         }
         var me = this;
         var formValues = this.form.getValues();
         // validation
         var errors = this._validateForm(formValues);
-        if(errors.length != 0) {
+        if (errors.length != 0) {
             this._showValidationErrorMessage(errors);
             return;
         }
@@ -220,57 +210,26 @@ function(instance) {
     __savePlace : function(values) {
         var me = this;
         // form not open, nothing to do
-        if(!values) {
+        if (!values) {
             // should not happen
             var loc = me.instance.getLocalization('notification')['error'];
-    		me.instance.showMessage(loc.title, loc.savePlace);
+            me.instance.showMessage(loc.title, loc.savePlace);
             return;
         }
-        var place = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.model.Parcel');
-        if(values.id) {
-            place = this.instance.getService().findParcel(values.id);
-        }
-        place.setId(values.id);
-        place.setName(values.name);
-        place.setDescription(values.desc);
-        // fetch the latest geometry if edited after FinishedDrawingEvent
-        place.setGeometry(this.drawPlugin.getDrawing());
-        
         var sandbox = this.instance.sandbox;
-        var serviceCallback = function(blnSuccess, model, blnNew) {
-            if(blnSuccess) {
-                // add map layer to map (we could check if its already there but core will handle that)
-				var requestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
-                var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
-
-                var request = requestBuilder(layerId, true);
-                sandbox.request(me, request);
-
-                if(!blnNew) {
-                    // refresh map layer on map -> send update request
-                    var updateRequest = updateRequestBuilder(layerId, true);
-                    sandbox.request(me, updateRequest);
-                } else {
-                    var updateRequest = updateRequestBuilder(layerId, true);
-                    sandbox.request(me, updateRequest);                	
-                }
-                
+        var serviceCallback = function(blnSuccess) {
+            if (blnSuccess) {
                 me._cleanupPopup();
-
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 var loc = me.instance.getLocalization('notification').placeAdded;
                 dialog.show(loc.title, loc.message);
                 dialog.fadeout();
-                // remove drawing
-                me.drawPlugin.stopDrawing();
-                me.drawPlugin.clearDrawing();
-            }
-            else {
+            } else {
                 var loc = me.instance.getLocalization('notification')['error'];
-        		me.instance.showMessage(loc.title, loc.savePlace);
+                me.instance.showMessage(loc.title, loc.savePlace);
             }
         }
-        this.instance.getService().saveParcel(place,serviceCallback);
+        this.instance.getService().savePlace(this.drawPlugin.getDrawing(), this.drawPlugin.getFeatureType(), serviceCallback);
     },
     /**
      * @method _cleanupPopup
@@ -281,7 +240,7 @@ function(instance) {
      */
     _cleanupPopup : function() {
         // form not open, nothing to do
-        if(!this.form) {
+        if (!this.form) {
             return;
         }
         var sandbox = this.instance.sandbox;
@@ -295,7 +254,7 @@ function(instance) {
 }, {
     /**
      * @property {String[]} protocol
-     * @static 
+     * @static
      */
     protocol : ['Oskari.mapframework.module.Module']
 });

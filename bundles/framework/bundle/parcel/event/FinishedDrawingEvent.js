@@ -7,11 +7,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.event.FinishedDrawingEven
 /**
  * @method create called automatically on construction
  * @static
- * @param {OpenLayers.Geometry} geometry the drawing that was finished
- * @param {Boolean} blnEdit true if the geometry was opened in edit mode
+ * @param {OpenLayers.Feature} feature the drawing that was finished
+ * @param {Boolean} blnEdit true if the feature was opened in edit mode
  */
-function(geometry, blnEdit) {
-    this._drawing = geometry;
+function(feature, blnEdit) {
+    this._drawing = feature;
     this._modification = (blnEdit == true);
 }, {
     /**
@@ -24,8 +24,8 @@ function(geometry, blnEdit) {
     },
     /**
      * @method getDrawing
-     * Returns the drawings geometry
-     * @return {OpenLayers.Geometry}
+     * Returns the drawings feature
+     * @return {OpenLayers.Feature}
      */
     getDrawing : function() {
         return this._drawing;

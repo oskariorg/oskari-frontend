@@ -10,9 +10,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
     this.drawLayer = null;
     this.editMode = false;
     this.currentDrawMode = null;
+    this.currentFeatureType = null;
 }, {
-    __name : 'Parcel.DrawPlugin',
-
     getName : function() {
         return this.pluginName;
     },
@@ -22,12 +21,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
     setMapModule : function(mapModule) {
         this.mapModule = mapModule;
         this._map = mapModule.getMap();
-        this.pluginName = mapModule.getName() + this.__name;
+        this.pluginName = mapModule.getName() + 'Parcel.DrawPlugin';
     },
     /**
-     * 
+     *
      */
-    drawFeature : function(feature) {
+    drawFeature : function(feature, featureType) {
         // remove possible old drawing
         this.drawLayer.removeAllFeatures();
         this.editMode = true;
@@ -36,7 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         this.drawLayer.addFeatures(features);
         // preselect it for modification
         this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
-
+        this.currentFeatureType = featureType;
         // Zoom to the loaded feature.
         this._map.zoomToExtent(this.drawLayer.getDataExtent());
     },
@@ -85,12 +84,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
      */
     clearDrawing : function() {
         // clear drawing
-        this.drawLayer.removeAllFeatures();        
+        this.drawLayer.removeAllFeatures();
+        this.currentFeatureType = null;
     },
-    
-    saveDrawing: function() {
-        // TODO
-        console.log("Save puuttuu....");
+
+    saveDrawing : function() {
+        this.finishedDrawing();
     },
 
     forceFinishDraw : function() {
@@ -150,17 +149,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
      */
     init : function(sandbox) {
         var me = this;
-        this.requestHandlers = {
-            startDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StartDrawingRequestHandler', sandbox, me),
-            stopDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StopDrawingRequestHandler', sandbox, me),
-            saveDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.SaveDrawingRequestHandler', sandbox, me)
-        };
 
         this.drawLayer = new OpenLayers.Layer.Vector("Parcel Draw Layer", {
             eventListeners : {
                 "featuresadded" : function(layer) {
-                    // send an event that the drawing has been completed
-                    me.finishedDrawing();
                 }
             }
         });
@@ -179,7 +171,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
 
         // doesn't really need to be in array, but lets keep it for future development
         this.modifyControls = {
-            //select : new OpenLayers.Control.SelectFeature(me.drawLayer),
             modify : new OpenLayers.Control.ModifyFeature(me.drawLayer)
         };
         this._map.addLayers([me.drawLayer]);
@@ -191,14 +182,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         }
         // no harm in activating straight away
         this.modifyControls.modify.activate();
+
+        this.requestHandlers = {
+            startDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StartDrawingRequestHandler', sandbox, me),
+            stopDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StopDrawingRequestHandler', sandbox, me),
+            saveDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.SaveDrawingRequestHandler', sandbox, me)
+        };
     },
     /**
-     * Returns the drawn geometry from the draw layer
+     * Returns the drawn feature from the draw layer
      * @method
      */
     getDrawing : function() {
-        return this.drawLayer.features[0].geometry;
+        return this.drawLayer.features[0];
     },
+    setFeatureType : function(featureType) {
+        this.currentFeatureType = featureType;
+    },
+    getFeatureType : function() {
+        return this.currentFeatureType;
+    },    
     register : function() {
 
     },
@@ -206,19 +209,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
     },
     startPlugin : function(sandbox) {
         this._sandbox = sandbox;
-
         sandbox.register(this);
         sandbox.addRequestHandler('Parcel.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
         sandbox.addRequestHandler('Parcel.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
         sandbox.addRequestHandler('Parcel.SaveDrawingRequest', this.requestHandlers.saveDrawingHandler);
     },
     stopPlugin : function(sandbox) {
-
         sandbox.removeRequestHandler('Parcel.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
         sandbox.removeRequestHandler('Parcel.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
         sandbox.removeRequestHandler('Parcel.SaveDrawingRequest', this.requestHandlers.saveDrawingHandler);
         sandbox.unregister(this);
-
         this._map = null;
         this._sandbox = null;
     },
