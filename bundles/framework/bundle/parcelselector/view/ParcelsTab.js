@@ -1,7 +1,5 @@
 /**
  * @class Oskari.mapframework.bundle.parcelselector.view.ParcelsTab
- *
- *
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab",
 
@@ -15,37 +13,24 @@ function(instance, title, selectedEventName) {
     this.selectedEventName = selectedEventName;
     this._createUI();
 }, {
-    getTitle : function() {
-        return this.title;
-    },
+    /**
+     * 
+     */
     getTabPanel : function() {
         return this.tabPanel;
     },
-    getState : function() {
-        var state = {
-            tab : this.getTitle(),
-            filter : this.filterField.getValue(),
-        };
-        return state;
-    },
-    setState : function(state) {
-        if (!state) {
-            return;
-        }
-
-        if (!state.filter) {
-            this.filterField.setValue(state.filter);
-            this.filterLayers(state.filter);
-        }
-    },
+    /**
+     *
+     */
     _createUI : function() {
-
         this.tabPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
         this.tabPanel.setTitle(this.title);
-
         this.tabPanel.getContainer().append(this._getFilterField().getField());
         this._getActionButton().insertTo(this.tabPanel.getContainer());
     },
+    /**
+     *
+     */
     _getFilterField : function() {
         if (this.filterField) {
             return this.filterField;
@@ -60,6 +45,9 @@ function(instance, title, selectedEventName) {
         this.filterField = field;
         return field;
     },
+    /**
+     *
+     */
     _getActionButton : function() {
         if (this.actionButton) {
             return this.actionButton;
@@ -75,6 +63,9 @@ function(instance, title, selectedEventName) {
         this.actionButton = btn;
         return btn;
     },
+    /**
+     *
+     */
     _startAction : function() {
         var input = this._getFilterField().getValue();
         if (!input || isNaN(input)) {
@@ -86,4 +77,4 @@ function(instance, title, selectedEventName) {
             this.instance.sandbox.notifyAll(selectedEvent);
         }
     }
-}); 
+});

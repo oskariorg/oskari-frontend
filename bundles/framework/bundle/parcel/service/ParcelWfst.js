@@ -16,7 +16,7 @@ function(instance) {
     this.protocols['parcel'] = new OpenLayers.Protocol.WFS({
         version : '1.1.0',
         srsName : 'EPSG:3067',
-        featureType : instance.conf.parselFeatureType,
+        featureType : instance.conf.parcelFeatureType,
         featureNS : 'http://xml.nls.fi/ktjkiiwfs/2010/02',
         featurePrefix : 'ktjkiiwfs',
         url : instance.conf.queryUrl
@@ -34,7 +34,7 @@ function(instance) {
     this.protocols['parcelCommit'] = new OpenLayers.Protocol.WFS({
         version : '1.1.0',
         srsName : 'EPSG:3067',
-        featureType : this.instance.conf.parselFeatureType,
+        featureType : this.instance.conf.parcelFeatureType,
         featureNS : 'http://xml.nls.fi/ktjkiiwfs/2010/02',
         featurePrefix : 'ktjkiiwfs',
         url : urlCommit

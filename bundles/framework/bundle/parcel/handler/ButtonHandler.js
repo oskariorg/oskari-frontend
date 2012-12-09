@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.handler.ButtonHandler
- * 
+ *
  * Handles the buttons for parcel functionality
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.parcel.handler.ButtonHandler",
@@ -16,18 +16,6 @@ function(instance) {
     this.dialog = null;
     var me = this;
     this.buttons = {
-        /* Points and areas are not required because areas 
-         * are loaded from the server and are only split by using lines.
-        'point' : {
-            iconCls : 'parcel-draw-point',
-            tooltip : '',
-            sticky : true,
-            callback : function() {
-                me.startNewDrawing({
-                    drawMode : 'point'
-                });
-            }
-        },
         'area' : {
             iconCls : 'parcel-draw-area',
             tooltip : '',
@@ -38,7 +26,6 @@ function(instance) {
                 });
             }
         },
-        */
         'line' : {
             iconCls : 'parcel-draw-line',
             tooltip : '',
@@ -50,17 +37,12 @@ function(instance) {
             }
         }
     };
-    this.templateGuide = jQuery('<div><div class="guide"></div>' +
-            '<div class="buttons">' +
-                '<div class="cancel button"></div>' +
-                '<div class="finish button"></div>' +
-            '</div>' +
-        '</div>');
+    this.templateGuide = jQuery('<div><div class="guide"></div>' + '<div class="buttons">' + '<div class="cancel button"></div>' + '<div class="finish button"></div>' + '</div>' + '</div>');
 }, {
     __name : 'ParcelButtonHandler',
     /**
      * @method getName
-     * @return {String} the name for the component 
+     * @return {String} the name for the component
      */
     getName : function() {
         return this.__name;
@@ -71,22 +53,17 @@ function(instance) {
      */
     init : function() {
         var loc = this.instance.getLocalization('tools');
-        for(var tool in this.buttons) {
+        for (var tool in this.buttons) {
             var tooltip = loc[tool]['tooltip'];
             this.buttons[tool].tooltip = tooltip;
         }
 
         // Remove unnecessary toolbar buttons.
-        this.instance.getSandbox().request( this.getName(),
-            this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('reset', 'history'));
-        this.instance.getSandbox().request( this.getName(),
-            this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('history_back', 'history'));
-        this.instance.getSandbox().request( this.getName(),
-            this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('history_forward', 'history'));
-        this.instance.getSandbox().request( this.getName(),
-            this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('link', 'viewtools'));
-        this.instance.getSandbox().request( this.getName(),
-            this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('print', 'viewtools'));
+        this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('reset', 'history'));
+        this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('history_back', 'history'));
+        this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('history_forward', 'history'));
+        this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('link', 'viewtools'));
+        this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('print', 'viewtools'));
     },
     /**
      * @method start
@@ -94,20 +71,20 @@ function(instance) {
      */
     start : function() {
         var me = this;
-        
+
         var sandbox = this.instance.sandbox;
         sandbox.register(me);
-        for(p in me.eventHandlers) {
+        for (p in me.eventHandlers) {
             sandbox.registerForEventByName(me, p);
         }
-        
+
         // request toolbar to add buttons
         var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
-        for(var tool in this.buttons) {
+        for (var tool in this.buttons) {
             sandbox.request(this, reqBuilder(tool, this.buttonGroup, this.buttons[tool]));
         }
     },
-        
+
     /**
      * @method startNewDrawing
      * Resets currently selected place and sends a draw request to plugin with given config
@@ -132,10 +109,10 @@ function(instance) {
         var startRequest = this.instance.sandbox.getRequestBuilder('Parcel.StartDrawingRequest')(config);
         this.instance.sandbox.request(this, startRequest);
 
-        if(!config.geometry) {
+        if (!config.geometry) {
             // show only when drawing new place
             this._showDrawHelper(config.drawMode);
-            
+
         }
     },
     /**
@@ -143,44 +120,44 @@ function(instance) {
      * implements Module protocol update method
      */
     _showDrawHelper : function(drawMode) {
-    	var me = this;
+        var me = this;
         // show help popup with cancel and finished buttons
         var locTool = this.instance.getLocalization('tools')[drawMode];
         var locBtns = this.instance.getLocalization('buttons');
-    	var title = this.instance.getLocalization('title');
-    	var message = locTool["new"];
-    	
-    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-    	this.dialog = dialog;
+        var title = this.instance.getLocalization('title');
+        var message = locTool["new"];
+
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        this.dialog = dialog;
         var buttons = [];
-    	var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-    	cancelBtn.setTitle(locBtns["cancel"]);
-    	cancelBtn.setHandler(function() {
+        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        cancelBtn.setTitle(locBtns["cancel"]);
+        cancelBtn.setHandler(function() {
             // ask toolbar to select default tool
             var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
             me.instance.sandbox.request(me, toolbarRequest);
             me.sendStopDrawRequest(true);
-    	});
+        });
         buttons.push(cancelBtn);
-        
-        if(drawMode != 'point') {
-	    	var finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-	
-	    	finishBtn.setTitle(locBtns["finish"]);
-	    	finishBtn.addClass('primary');
-	    	finishBtn.setHandler(function() {
-            	me.sendStopDrawRequest();
-	        });
-        	buttons.push(finishBtn);
-	    }
-        
-    	dialog.show(title, message, buttons);
-    	dialog.addClass('parcel');
-    	dialog.moveTo('#toolbar div.toolrow[tbgroup=parcel]', 'top');
+
+        if (drawMode != 'point') {
+            var finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+
+            finishBtn.setTitle(locBtns["finish"]);
+            finishBtn.addClass('primary');
+            finishBtn.setHandler(function() {
+                me.sendStopDrawRequest();
+            });
+            buttons.push(finishBtn);
+        }
+
+        dialog.show(title, message, buttons);
+        dialog.addClass('parcel');
+        dialog.moveTo('#toolbar div.toolrow[tbgroup=parcel]', 'top');
     },
     /**
      * @method sendStopDrawRequest
-     * Sends a StopDrawingRequest. 
+     * Sends a StopDrawingRequest.
      * Changes the panel controls to match the application state (new/edit) if propagateEvent != true
      * @param {Boolean} isCancel boolean param for StopDrawingRequest, true == canceled, false = finish drawing (dblclick)
      */
@@ -188,7 +165,7 @@ function(instance) {
         var me = this;
         var request = this.instance.sandbox.getRequestBuilder('Parcel.StopDrawingRequest')(isCancel);
         this.instance.sandbox.request(this, request);
-        if(this.dialog) {
+        if (this.dialog) {
             this.dialog.close();
         }
     },
@@ -208,7 +185,7 @@ function(instance) {
      */
     onEvent : function(event) {
         var handler = this.eventHandlers[event.getName()];
-        if(!handler) {
+        if (!handler) {
             return;
         }
         return handler.apply(this, [event]);
@@ -223,9 +200,9 @@ function(instance) {
          * @param {Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent} event
          */
         'Toolbar.ToolSelectedEvent' : function(event) {
-            if(!this.ignoreEvents) {
+            if (!this.ignoreEvents) {
                 // changed tool -> cancel any drawing
-                // do not trigger when we return drawing tool to 
+                // do not trigger when we return drawing tool to
                 this.sendStopDrawRequest(true);
                 this.instance.enableGfi(true);
             }
@@ -236,12 +213,12 @@ function(instance) {
          * @param {Oskari.mapframework.bundle.parcel.event.ParcelSelectedEvent} event
          */
         'Parcel.ParcelSelectedEvent' : function(event) {
-        	if(!event.getPlace()) {
-        		// cleanup
-	            // ask toolbar to select default tool
-	            var toolbarRequest = this.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
-	            this.instance.sandbox.request(this, toolbarRequest);
-        	}
+            if (!event.getPlace()) {
+                // cleanup
+                // ask toolbar to select default tool
+                var toolbarRequest = this.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
+                this.instance.sandbox.request(this, toolbarRequest);
+            }
         },
         /**
          * @method Parcel.FinishedDrawingEvent
@@ -258,15 +235,15 @@ function(instance) {
             this.ignoreEvents = false;
             // select tool selection will enable gfi -> disable it again
             this.instance.enableGfi(false);
-	        if(this.dialog) {
-	            this.dialog.close();
-	        }
+            if (this.dialog) {
+                this.dialog.close();
+            }
         }
     }
 }, {
     /**
      * @property {String[]} protocol
-     * @static 
+     * @static
      */
     protocol : ['Oskari.mapframework.module.Module']
 });

@@ -15,13 +15,12 @@ function() {
     this.parcelService = undefined;
     this.idPrefix = 'parcel';
 }, {
-    __name : 'Parcel',
     /**
      * @method getName
      * @return {String} the name for the component 
      */
     getName : function() {
-        return this.__name;
+        return 'Parcel';
     },
     /**
      * @method getSandbox

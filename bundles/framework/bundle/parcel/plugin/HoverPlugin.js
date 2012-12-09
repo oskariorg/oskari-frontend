@@ -7,7 +7,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.HoverPlugin', func
     this._sandbox = null;
     this._map = null;
 }, {
-    __name : 'Parcel.HoverPlugin',
 
     getName : function() {
         return this.pluginName;
@@ -18,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.HoverPlugin', func
     setMapModule : function(mapModule) {
         this.mapModule = mapModule;
         this._map = mapModule.getMap();
-        this.pluginName = mapModule.getName() + this.__name;
+        this.pluginName = mapModule.getName() + 'Parcel.HoverPlugin';
     },
     /**
      * Initializes the plugin:
@@ -28,8 +27,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.HoverPlugin', func
      */
     init : function(sandbox) {
         var me = this;
-			
-			
+
         OpenLayers.Control.Hover = OpenLayers.Class(OpenLayers.Control, {                
             defaultHandlerOptions: {
                 'delay': 500,
@@ -76,35 +74,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.HoverPlugin', func
         this._map.addControl(this.hoverControl);
 
     },
-    // should activate when omat paikat layer is shown
+    // should activate when layer is shown
     activate : function() {
         this.hoverControl.activate();
 
     },
-    // should activate when omat paikat layer is not shown
+    // should dectivate when layer is not shown
     deactivate : function() {
         this.hoverControl.deactivate();
-    },
-    
+    },    
     register : function() {
-
     },
     unregister : function() {
     },
     startPlugin : function(sandbox) {
         this._sandbox = sandbox;
-
         sandbox.register(this);
 
     },
     stopPlugin : function(sandbox) {
-
         sandbox.unregister(this);
-
         this._map = null;
         this._sandbox = null;
     },
-    /* @method start
+    /**
+     * @method start
      * called from sandbox
      */
     start : function(sandbox) {

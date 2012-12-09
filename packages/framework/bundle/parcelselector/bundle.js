@@ -44,7 +44,7 @@ function() {
             "src" : "../../../../bundles/framework/bundle/parcelselector/event/ParcelSelectedEvent.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcelselector/event/RegisteredUnitSelectedEvent.js"
+            "src" : "../../../../bundles/framework/bundle/parcelselector/event/RegisterUnitSelectedEvent.js"
         }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/parcelselector/css/parcelselector.css"

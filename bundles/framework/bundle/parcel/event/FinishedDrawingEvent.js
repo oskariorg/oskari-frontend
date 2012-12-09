@@ -1,9 +1,9 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.event.FinishedDrawingEvent
- * 
- * Used to notify components that the drawing has been finished. 
+ *
+ * Used to notify components that the drawing has been finished.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.parcel.event.FinishedDrawingEvent', 
+Oskari.clazz.define('Oskari.mapframework.bundle.parcel.event.FinishedDrawingEvent',
 /**
  * @method create called automatically on construction
  * @static
@@ -14,15 +14,13 @@ function(geometry, blnEdit) {
     this._drawing = geometry;
     this._modification = (blnEdit == true);
 }, {
-    /** @static @property __name event name */
-    __name : "Parcel.FinishedDrawingEvent",
     /**
      * @method getName
      * Returns event name
      * @return {String}
      */
     getName : function() {
-        return this.__name;
+        return "Parcel.FinishedDrawingEvent";
     },
     /**
      * @method getDrawing
@@ -34,7 +32,7 @@ function(geometry, blnEdit) {
     },
     /**
      * @method isModification
-     * Returns true if drawing was initially opened for editing (not a new one) 
+     * Returns true if drawing was initially opened for editing (not a new one)
      * @return {Boolean}
      */
     isModification : function() {

@@ -13,14 +13,12 @@ function(instance) {
     this._instance = instance;
     this._wfst = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelWfst', instance);
 }, {
-    __qname : "Oskari.mapframework.bundle.parcel.service.ParcelService",
     getQName : function() {
-        return this.__qname;
+        return "Oskari.mapframework.bundle.parcel.service.ParcelService";
     },
 
-    __name : "ParcelService",
     getName : function() {
-        return this.__name;
+        return "ParcelService";
     },
 
     /**
@@ -44,7 +42,7 @@ function(instance) {
 
     saveRegisterUnit : function(feature, cb) {
         this._wfst.saveRegisterUnit(feature, cb);
-    },
+    }
 }, {
     'protocol' : ['Oskari.mapframework.service.Service']
-}); 
+});
