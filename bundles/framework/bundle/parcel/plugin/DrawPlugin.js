@@ -25,6 +25,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         this.pluginName = mapModule.getName() + this.__name;
     },
     /**
+     * 
+     */
+    drawFeature : function(feature) {
+        // remove possible old drawing
+        this.drawLayer.removeAllFeatures();
+        this.editMode = true;
+        // add feature to draw layer
+        var features = [feature];
+        this.drawLayer.addFeatures(features);
+        // preselect it for modification
+        this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
+
+        // Zoom to the loaded feature.
+        this._map.zoomToExtent(this.drawLayer.getDataExtent());
+    },
+    /**
      * Enables the draw control for given params.drawMode.
      * Clears the layer of any previously drawn features.
      * TODO: draws the given params.geometry with params.style
@@ -32,59 +48,58 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
      * @method
      */
     startDrawing : function(params) {
-        if(params.isModify) {
+        if (params.isModify) {
             // preselect it for modification
             this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
+
+        } else {
+            if (params.geometry) {
+                // sent existing geometry == edit mode
+                this.editMode = true;
+                // add feature to draw layer
+                var features = [new OpenLayers.Feature.Vector(params.geometry)];
+                this.drawLayer.addFeatures(features);
+                // preselect it for modification
+                this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
+
+            } else {
+                // otherwise activate requested draw control for new geometry
+                this.editMode = false;
+                this.toggleControl(params.drawMode);
+            }
         }
-        else {
-	        // remove possible old drawing
-	        this.drawLayer.removeAllFeatures();
-        	
-	        if(params.geometry) {
-	            // sent existing geometry == edit mode
-	            this.editMode = true;
-	            // add feature to draw layer
-	            var features = [new OpenLayers.Feature.Vector(params.geometry)];
-	            this.drawLayer.addFeatures(features);
-	            // preselect it for modification
-	            this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
-	            
-        // TODO OOOOOOOOOOOO
-        this._map.zoomToExtent(params.geometry.getDataExtent());
-	            
-	        } else {
-	            // otherwise activate requested draw control for new geometry
-	            this.editMode = false;
-	            this.toggleControl(params.drawMode);
-	        }
-        }
-    
 
     },
     /**
-     * Disables all draw controls and
-     * clears the layer of any drawn features
+     * Disables all draw controls.
      * @method
      */
     stopDrawing : function() {
         // disable all draw controls
         this.toggleControl();
+    },
+
+    /**
+     * Clears the layer of any drawn features
+     * @method
+     */
+    clearDrawing : function() {
         // clear drawing
-        this.drawLayer.removeAllFeatures();
+        this.drawLayer.removeAllFeatures();        
     },
-    
+
     forceFinishDraw : function() {
-    	try {
-    		this.drawControls[this.currentDrawMode].finishSketch();
-    	}
-    	catch(error) {
-    		// happens when the sketch isn't even started -> reset state
-        	this.stopDrawing();
-	        var event = this._sandbox.getEventBuilder('Parcel.ParcelSelectedEvent')();
-	        this._sandbox.notifyAll(event);
-    	}
+        try {
+            this.drawControls[this.currentDrawMode].finishSketch();
+        } catch(error) {
+            // happens when the sketch isn't even started -> reset state
+            this.stopDrawing();
+            this.clearDrawing();
+            var event = this._sandbox.getEventBuilder('Parcel.ParcelSelectedEvent')();
+            this._sandbox.notifyAll(event);
+        }
     },
-    
+
     /**
      * Called when drawing is finished.
      * Disables all draw controls and
@@ -93,10 +108,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
      */
     finishedDrawing : function() {
         this.toggleControl();
-        if(!this.editMode) {
-	        // programmatically select the drawn feature ("not really supported by openlayers")
-	        // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
-        	this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
+        if (!this.editMode) {
+            // programmatically select the drawn feature ("not really supported by openlayers")
+            // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
+            this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
         }
         var event = this._sandbox.getEventBuilder('Parcel.FinishedDrawingEvent')(this.getDrawing(), this.editMode);
         this._sandbox.notifyAll(event);
@@ -109,11 +124,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
      * @method
      */
     toggleControl : function(drawMode) {
-    	this.currentDrawMode = drawMode;
-    	
-        for(var key in this.drawControls) {
+        this.currentDrawMode = drawMode;
+
+        for (var key in this.drawControls) {
             var control = this.drawControls[key];
-            if(drawMode == key) {
+            if (drawMode == key) {
                 control.activate();
             } else {
                 control.deactivate();
@@ -139,38 +154,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         this.drawLayer = new OpenLayers.Layer.Vector("Parcel Draw Layer", {
             eventListeners : {
                 "featuresadded" : function(layer) {
-                	// send an event that the drawing has been completed
+                    // send an event that the drawing has been completed
                     me.finishedDrawing();
                 }
             }
         });
-        
+
         this.drawControls = {
-            point : new OpenLayers.Control.DrawFeature(me.drawLayer, 
-                                                       OpenLayers.Handler.Point),
-            line : new OpenLayers.Control.DrawFeature(me.drawLayer, 
-                                                      OpenLayers.Handler.Path),
-            area : new OpenLayers.Control.DrawFeature(me.drawLayer, 
-                                                      OpenLayers.Handler.Polygon),
-            box : new OpenLayers.Control.DrawFeature(me.drawLayer, 
-                        OpenLayers.Handler.RegularPolygon, {
-                            handlerOptions: {
-                                sides: 4,
-                                irregular: true
-                            }
-                        })
+            point : new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.Point),
+            line : new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.Path),
+            area : new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.Polygon),
+            box : new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.RegularPolygon, {
+                handlerOptions : {
+                    sides : 4,
+                    irregular : true
+                }
+            })
         };
-        
+
         // doesn't really need to be in array, but lets keep it for future development
         this.modifyControls = {
-        	//select : new OpenLayers.Control.SelectFeature(me.drawLayer),
-        	modify : new OpenLayers.Control.ModifyFeature(me.drawLayer)
+            //select : new OpenLayers.Control.SelectFeature(me.drawLayer),
+            modify : new OpenLayers.Control.ModifyFeature(me.drawLayer)
         };
         this._map.addLayers([me.drawLayer]);
-        for(var key in this.drawControls) {
+        for (var key in this.drawControls) {
             this._map.addControl(this.drawControls[key]);
         }
-        for(var key in this.modifyControls) {
+        for (var key in this.modifyControls) {
             this._map.addControl(this.modifyControls[key]);
         }
         // no harm in activating straight away

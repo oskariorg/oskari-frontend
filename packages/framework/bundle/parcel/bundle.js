@@ -100,7 +100,7 @@ function() {
             "src" : "../../../../bundles/framework/bundle/parcel/service/ParcelService.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/service/ParcelWFSTStore.js"
+            "src" : "../../../../bundles/framework/bundle/parcel/service/ParcelWfst.js"
         },
         /* ui */
         {

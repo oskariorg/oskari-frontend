@@ -272,6 +272,7 @@ function(instance) {
                 dialog.fadeout();
                 // remove drawing
                 me.drawPlugin.stopDrawing();
+                me.drawPlugin.clearDrawing();
             }
             else {
                 var loc = me.instance.getLocalization('notification')['error'];

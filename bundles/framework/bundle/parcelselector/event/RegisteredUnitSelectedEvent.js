@@ -3,17 +3,17 @@
  * 
  * Used to notify components that ... 
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.parcelselector.event.RegisteredUnitSelectedEvent', 
+Oskari.clazz.define('Oskari.mapframework.bundle.parcelselector.event.RegisterUnitSelectedEvent', 
 /**
  * @method create called automatically on construction
  * @static
  * @param {String} fid some information you wish to communicate with the event
  */
 function(fid) {
-    this._fid = fid;
+    this.fid = fid;
 }, {
     /** @static @property __name event name */
-    __name : "ParcelSelector.RegisteredUnitSelectedEvent",
+    __name : "ParcelSelector.RegisterUnitSelectedEvent",
     /**
      * @method getName
      * Returns event name
@@ -28,7 +28,7 @@ function(fid) {
      * @return {String}
      */
     getFid : function() {
-        return this._fid;
+        return this.fid;
     }
 }, {
     'protocol' : ['Oskari.mapframework.event.Event']

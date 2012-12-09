@@ -12,9 +12,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.handler.ParcelSelectorHan
 function(instance) {
     this.instance = instance;
     this.ignoreEvents = false;
-    var me = this;
 }, {
-    __name : 'ParcelParcelSelectorHandler',
+    __name : 'ParcelSelectorHandler',
     /**
      * @method getName
      * @return {String} the name for the component
@@ -64,18 +63,32 @@ function(instance) {
      */
     eventHandlers : {
         'ParcelSelector.ParcelSelectedEvent' : function(event) {
+            var me = this;
             if (!this.ignoreEvents) {
-                this.instance.getService().loadParcel(event.getFid(), function(data) {
-                    var x = data;
-                });
+                if (event && event.getFid()) {
+                    this.instance.getService().loadParcel(event.getFid(), function(feature) {
+                        me._loadCallback.call(me, feature);
+                    });
+                }
             }
         },
-        'ParcelSelector.RegisteredUnitSelectedEvent' : function(event) {
+        'ParcelSelector.RegisterUnitSelectedEvent' : function(event) {
+            var me = this;
             if (!this.ignoreEvents) {
-                this.instance.getService().loadRegisteredUnit(event.getFid(), function(data) {
-                    var x = data;
-                });
+                if (event && event.getFid()) {
+                    this.instance.getService().loadRegisterUnit(event.getFid(), function(feature) {
+                        me._loadCallback.call(me, feature);
+                    });
+                }
             }
+        }
+    },
+    /**
+     *
+     */
+    _loadCallback : function(feature) {
+        if (feature) {
+            this.instance.getDrawPlugin().drawFeature(feature);
         }
     }
 }, {
