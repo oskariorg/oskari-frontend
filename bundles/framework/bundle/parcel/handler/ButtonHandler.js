@@ -57,12 +57,14 @@ function(instance) {
             this.buttons[tool].tooltip = tooltip;
         }
 
-        // Remove unnecessary toolbar buttons.
-        this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('reset', 'history'));
-        this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('history_back', 'history'));
-        this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('history_forward', 'history'));
-        this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('link', 'viewtools'));
-        this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('print', 'viewtools'));
+        if (this.instance.conf && this.instance.conf.hideSomeToolbarButtons && (this.instance.conf.hideSomeToolbarButtons === "hide" || this.instance.conf.hideSomeToolbarButtons === "true" )) {
+            // Remove unnecessary toolbar buttons.
+            this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('reset', 'history'));
+            this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('history_back', 'history'));
+            this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('history_forward', 'history'));
+            this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('link', 'viewtools'));
+            this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('print', 'viewtools'));
+        }
     },
     /**
      * @method start

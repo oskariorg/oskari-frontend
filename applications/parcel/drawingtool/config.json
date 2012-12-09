@@ -139,6 +139,7 @@
             "queryUrl": "https://ws.nls.fi/ktjkii/wfs/wfs",
             "parcelFeatureType": "PalstanTietoja",
             "registerUnitFeatureType": "RekisteriyksikonTietoja",
+            "hideSomeToolbarButtons": "hide",
             "transactionUrl": "",
             "proxyUrl": "proxy.cgi?url="
         }
