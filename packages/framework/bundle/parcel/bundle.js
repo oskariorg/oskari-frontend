@@ -60,16 +60,22 @@ function() {
         /* request */
         {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/request/SaveDrawingRequest.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/request/StopDrawingRequest.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/request/StartDrawingRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/request/StartDrawingRequestHandler.js"
+            "src" : "../../../../bundles/framework/bundle/parcel/request/SaveDrawingRequestHandler.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/request/StopDrawingRequestHandler.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/request/StartDrawingRequestHandler.js"
         },
         /* service */
         {

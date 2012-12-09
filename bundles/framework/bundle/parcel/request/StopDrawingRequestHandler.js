@@ -1,5 +1,5 @@
 Oskari.clazz.define(
-        'Oskari.mapframework.bundle.parcel.request.StopDrawingRequestPluginHandler',
+        'Oskari.mapframework.bundle.parcel.request.StopDrawingRequestHandler',
         
         function(sandbox, drawPlugin) {
             this.sandbox = sandbox;
@@ -7,7 +7,7 @@ Oskari.clazz.define(
         },
         {
             handleRequest: function(core,request) {
-                this.sandbox.printDebug("[Oskari.mapframework.bundle.parcel.request.StopDrawingRequestPluginHandler] Stop drawing");
+                this.sandbox.printDebug("[Oskari.mapframework.bundle.parcel.request.StopDrawingRequestHandler] Stop drawing");
                 if(request.isCancel()) {
                     // we wish to clear the drawing without sending further events
                     this.drawPlugin.stopDrawing();

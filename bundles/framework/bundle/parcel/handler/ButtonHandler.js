@@ -35,6 +35,14 @@ function(instance) {
                     drawMode : 'line'
                 });
             }
+        },
+        'save' : {
+            iconCls : 'tool-save-view',
+            tooltip : '',
+            sticky : true,
+            callback : function() {
+                me.saveDrawing();
+            }
         }
     };
     this.templateGuide = jQuery('<div><div class="guide"></div>' + '<div class="buttons">' + '<div class="cancel button"></div>' + '<div class="finish button"></div>' + '</div>' + '</div>');
@@ -101,19 +109,23 @@ function(instance) {
         this.instance.enableGfi(false);
     },
     /**
+     *
+     */
+    saveDrawing : function() {
+        var request = this.instance.sandbox.getRequestBuilder('Parcel.SaveDrawingRequest')();
+        this.instance.sandbox.request(this, request);
+    },
+    /**
      * @method startNewDrawing
      * Sends a StartDrawRequest with given params. Changes the panel controls to match the application state (new/edit)
      * @param config params for StartDrawRequest
      */
     sendDrawRequest : function(config) {
-        var me = this;
         var startRequest = this.instance.sandbox.getRequestBuilder('Parcel.StartDrawingRequest')(config);
         this.instance.sandbox.request(this, startRequest);
-
         if (!config.geometry) {
             // show only when drawing new place
             this._showDrawHelper(config.drawMode);
-
         }
     },
     /**

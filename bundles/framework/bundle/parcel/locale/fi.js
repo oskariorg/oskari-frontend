@@ -25,6 +25,9 @@ Oskari.registerLocalization({
         "new": "Lisää alueen taitepisteet klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella tai painamalla 'Lopeta piirto'.",
         "edit": "Muokkaa muotoa raahaamalla reunaviivan taitepisteitä.",
         "save": "Tallenna muoto"
+      },
+      "save": {
+          "tooltip": "Tallenna"
       }
     },
     "buttons": {

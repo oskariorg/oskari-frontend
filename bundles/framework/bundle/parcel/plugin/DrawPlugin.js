@@ -87,6 +87,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         // clear drawing
         this.drawLayer.removeAllFeatures();        
     },
+    
+    saveDrawing: function() {
+        // TODO
+        console.log("Save puuttuu....");
+    },
 
     forceFinishDraw : function() {
         try {
@@ -146,8 +151,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
     init : function(sandbox) {
         var me = this;
         this.requestHandlers = {
-            startDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StartDrawingRequestPluginHandler', sandbox, me),
-            stopDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StopDrawingRequestPluginHandler', sandbox, me),
+            startDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StartDrawingRequestHandler', sandbox, me),
+            stopDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StopDrawingRequestHandler', sandbox, me),
+            saveDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.SaveDrawingRequestHandler', sandbox, me)
         };
 
         this.drawLayer = new OpenLayers.Layer.Vector("Parcel Draw Layer", {
@@ -204,11 +210,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         sandbox.register(this);
         sandbox.addRequestHandler('Parcel.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
         sandbox.addRequestHandler('Parcel.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
+        sandbox.addRequestHandler('Parcel.SaveDrawingRequest', this.requestHandlers.saveDrawingHandler);
     },
     stopPlugin : function(sandbox) {
 
         sandbox.removeRequestHandler('Parcel.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
         sandbox.removeRequestHandler('Parcel.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
+        sandbox.removeRequestHandler('Parcel.SaveDrawingRequest', this.requestHandlers.saveDrawingHandler);
         sandbox.unregister(this);
 
         this._map = null;
