@@ -148,7 +148,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         this.requestHandlers = {
             startDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StartDrawingRequestPluginHandler', sandbox, me),
             stopDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StopDrawingRequestPluginHandler', sandbox, me),
-            getGeometryHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.GetGeometryRequestPluginHandler', sandbox, me)
         };
 
         this.drawLayer = new OpenLayers.Layer.Vector("Parcel Draw Layer", {
@@ -205,14 +204,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         sandbox.register(this);
         sandbox.addRequestHandler('Parcel.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
         sandbox.addRequestHandler('Parcel.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
-        sandbox.addRequestHandler('Parcel.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
-
     },
     stopPlugin : function(sandbox) {
 
         sandbox.removeRequestHandler('Parcel.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
         sandbox.removeRequestHandler('Parcel.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
-        sandbox.removeRequestHandler('Parcel.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
         sandbox.unregister(this);
 
         this._map = null;

@@ -72,12 +72,6 @@ function() {
             "src" : "../../../../bundles/framework/bundle/parcel/request/StartDrawingRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/request/GetGeometryRequest.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/request/GetGeometryRequestHandler.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/request/StartDrawingRequestHandler.js"
         }, {
             "type" : "text/javascript",

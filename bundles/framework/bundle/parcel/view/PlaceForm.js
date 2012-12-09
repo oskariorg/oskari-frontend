@@ -11,7 +11,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.view.PlaceForm",
  */
 function(instance) {
     this.instance = instance;
-    this.placeId = undefined;
     this.initialValues = undefined;
     
     var loc = instance.getLocalization('placeform');
@@ -27,7 +26,6 @@ function(instance) {
                 '</textarea>' +
             '</div>' +
         '</div>');
-    this.templateOption = jQuery('<option></option>');
 }, {
     /**
      * @method getForm
@@ -62,9 +60,6 @@ function(instance) {
                 name : placeName,
                 desc : placeDesc,
             };
-            if(this.placeId) {
-                values.place.id = this.placeId;
-            }
         }
         return values;
     },
@@ -74,7 +69,6 @@ function(instance) {
      * @param {Object} data place data as formatted in #getValues() 
      */
     setValues : function(data) {
-        this.placeId = data.place.id;
         // infobox will make us lose our reference so search 
         // from document using the form-class
         var onScreenForm = this._getOnScreenForm();

@@ -134,7 +134,6 @@ function(instance) {
         if(place) {
             var param = {
                 place : {
-                    id: place.getId(),
                     name : place.getName(),
                     desc : place.getDescription()
                 }
