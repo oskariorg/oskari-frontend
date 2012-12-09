@@ -56,14 +56,6 @@ function(instance) {
         mapModule.registerPlugin(drawPlugin);
         mapModule.startPlugin(drawPlugin);
         this.drawPlugin = drawPlugin;
-        
-        // register plugin for map (hover tooltip for parcels)
-        // TODO: start when a parcel layer is added and stop when last is removed?
-        /*var hoverPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.plugin.HoverPlugin');
-        mapModule.registerPlugin(hoverPlugin);
-        mapModule.startPlugin(hoverPlugin);
-        this.hoverPlugin = hoverPlugin;
-        */
     },
     /**
      * @method update

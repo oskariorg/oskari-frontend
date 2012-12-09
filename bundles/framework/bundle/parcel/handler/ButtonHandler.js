@@ -39,13 +39,12 @@ function(instance) {
     };
     this.templateGuide = jQuery('<div><div class="guide"></div>' + '<div class="buttons">' + '<div class="cancel button"></div>' + '<div class="finish button"></div>' + '</div>' + '</div>');
 }, {
-    __name : 'ParcelButtonHandler',
     /**
      * @method getName
      * @return {String} the name for the component
      */
     getName : function() {
-        return this.__name;
+        return 'ParcelButtonHandler';
     },
     /**
      * @method init

@@ -147,9 +147,6 @@ function() {
         this.view = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.view.MainView", this);
         this.view.start();
         
-        this.editRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.EditRequestHandler', sandbox, me);
-        sandbox.addRequestHandler('Parcel.EditPlaceRequest', this.editRequestHandler);
-        
         // handles selection events related to parcels 
         this.parcelSelectorHandler = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.handler.ParcelSelectorHandler", this);
         this.parcelSelectorHandler.start();

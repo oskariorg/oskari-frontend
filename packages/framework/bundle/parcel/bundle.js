@@ -55,11 +55,6 @@ function() {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/event/ParcelSelectedEvent.js"
         },
-        /* model */
-        {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/model/Parcel.js"
-        },
         /* plugin */
         {
             "type" : "text/javascript",
@@ -87,12 +82,6 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/request/StopDrawingRequestHandler.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/request/EditPlaceRequest.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/request/EditRequestHandler.js"
         },
         /* service */
         {
