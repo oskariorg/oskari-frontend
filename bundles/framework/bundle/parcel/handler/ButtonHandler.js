@@ -96,11 +96,10 @@ function(instance) {
 
     /**
      * @method _startNewDrawing
-     * Sends a draw request to plugin with given config.
+     * Sends a request to plugin with given config to inform that certain tool has been selected.
      * @param config params for StartDrawRequest
      */
     _startNewDrawing : function(config) {
-        // notify components to reset any saved "selected place" data
         var event = this.instance.sandbox.getEventBuilder('Parcel.ParcelSelectedEvent')();
         this.instance.sandbox.notifyAll(event);
 

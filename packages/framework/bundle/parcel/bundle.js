@@ -47,9 +47,6 @@ function() {
             "src" : "../../../../bundles/framework/bundle/parcel/event/FinishedDrawingEvent.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/parcel/event/ParcelChangedEvent.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/event/ParcelSelectedEvent.js"
         },
         /* plugin */
