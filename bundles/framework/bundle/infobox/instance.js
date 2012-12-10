@@ -80,7 +80,7 @@ function() {
 		sandbox.addRequestHandler('InfoBox.ShowInfoBoxRequest', this.requestHandlers.showInfoHandler);
 		sandbox.addRequestHandler('InfoBox.HideInfoBoxRequest', this.requestHandlers.hideInfoHandler);
 
-        sandbox.registerAsStateful(this.mediator.bundleId, this);
+        //sandbox.registerAsStateful(this.mediator.bundleId, this);
 	},
 	/**
 	 * @method init
@@ -164,7 +164,7 @@ function() {
 	stop : function() {
 		var me = this;
         var sandbox = this.sandbox;
-        sandbox.unregisterStateful(this.mediator.bundleId);
+        //sandbox.unregisterStateful(this.mediator.bundleId);
 		for(var p in me.eventHandlers) {
 			if(p) {
 				sandbox.unregisterFromEventByName(me, p);
