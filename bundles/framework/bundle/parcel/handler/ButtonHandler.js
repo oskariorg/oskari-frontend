@@ -105,7 +105,6 @@ function(instance) {
 
         // notify plugin to start drawing new geometry
         this._sendDrawRequest(config);
-        this.instance.enableGfi(false);
     },
     /**
      *
@@ -229,7 +228,6 @@ function(instance) {
                 // changed tool -> cancel any drawing
                 // do not trigger when we return drawing tool to
                 this.sendCancelDrawRequest();
-                this.instance.enableGfi(true);
             }
         },
         /**
@@ -258,8 +256,6 @@ function(instance) {
             this.instance.sandbox.request(this, toolbarRequest);
             // disable ignore to act normally after ^request
             this.ignoreEvents = false;
-            // select tool selection will enable gfi -> disable it again
-            this.instance.enableGfi(false);
             if (this.dialog) {
                 this.dialog.close();
             }
