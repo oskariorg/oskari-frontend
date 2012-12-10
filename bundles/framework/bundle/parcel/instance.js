@@ -60,7 +60,7 @@ function() {
      * @param {String} message popup message
      */
     showMessage : function(title, message) {
-        var loc = this.instance.getLocalization();
+        var loc = this.getLocalization();
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         okBtn.setTitle(loc.buttons.ok);

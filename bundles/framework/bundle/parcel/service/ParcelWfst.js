@@ -109,11 +109,13 @@ function(instance) {
             feature.toState(OpenLayers.State.INSERT);
 
         } else {
-            // toState handles some workflow stuff and doesn't work here
-            feat.state = OpenLayers.State.UPDATE;
+            // toState may handle some workflow stuff and may not work here
+            feature.toState(OpenLayers.State.UPDATE);
+            // just to be sure
+            feature.state = OpenLayers.State.UPDATE;
         }
         // Commit feature to the server.
-        p.commit([feature], {
+        protocol.commit([feature], {
             callback : function(response) {
                 // Change feature state to its original value after operation
                 // because state was set above for the commit.

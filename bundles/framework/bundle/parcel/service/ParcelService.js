@@ -39,10 +39,10 @@ function(instance) {
     savePlace : function(feature, featureType, cb) {
         if (feature && featureType) {
             if (featureType === this._instance.conf.parcelFeatureType) {
-                saveParcel(feature, cb);
+                this.saveParcel(feature, cb);
 
-            } else if (featureType === this._instance.conf.parcelFeatureType) {
-                saveRegisterUnit(feature, cb);
+            } else if (featureType === this._instance.conf.registerUnitFeatureType) {
+                this.saveRegisterUnit(feature, cb);
 
             } else {
                 cb();
