@@ -85,6 +85,11 @@ function() {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/service/ParcelWfst.js"
         },
+        /* splitter */
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/split/ParcelSplit.js"
+        },
         /* ui */
         {
             "type" : "text/javascript",

@@ -11,6 +11,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
     this.editMode = false;
     this.currentDrawMode = null;
     this.currentFeatureType = null;
+    // Created in init.
+    this.splitter = null;
 }, {
     getName : function() {
         return this.pluginName;
@@ -188,6 +190,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
             stopDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StopDrawingRequestHandler', sandbox, me),
             saveDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.SaveDrawingRequestHandler', sandbox, me)
         };
+        
+        this.splitter = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.split.ParcelSplit', this);
+        this.splitter.init();
     },
     /**
      * Returns the drawn feature from the draw layer
