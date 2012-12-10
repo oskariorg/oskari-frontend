@@ -4,9 +4,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.request.StartDrawingReque
     handleRequest : function(core, request) {
         var drawMode = request.getDrawMode();
         this.drawPlugin.startDrawing({
-            drawMode : request.getDrawMode(),
-            geometry : request.getGeometry(),
-            isModify : request.isModify(),
+            drawMode : request.getDrawMode()
         });
     }
 }, {

@@ -8,7 +8,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
     this._map = null;
     this.drawControls = null;
     this.drawLayer = null;
-    this.editMode = false;
     this.currentDrawMode = null;
     this.currentFeatureType = null;
     // Created in init.
@@ -109,7 +108,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         // remove possible old drawing
         this.drawLayer.removeAllFeatures();
         this.currentFeatureType = null;
-        this.editMode = true;
         // add feature to draw layer
         // This feature will be the parcel that may be edited by the tools.
         var features = [feature];
@@ -130,33 +128,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
      * @method
      */
     startDrawing : function(params) {
-        if (params.isModify) {
-            console.log("startDrawing : modify");
-            // preselect it for modification
-            this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
-
-        } else {
-            // Check if the parms contain a geometry that has been drawn to edit the parcel.
-            if (params.geometry) {
-                console.log("startDrawing : params.geometry");
-                // sent existing geometry == edit mode
-                this.editMode = true;
-                // add feature to draw layer
-                // This is a new feature that maybe handled later with the parcel feature.
-                // For example, splitting may be done by using these.
-                // TODO: New layer or same layer for these?
-                var features = [new OpenLayers.Feature.Vector(params.geometry)];
-                this.drawLayer.addFeatures(features);
-                // preselect it for modification
-                this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
-
-            } else {
-                console.log("startDrawing : else");
-                // otherwise activate requested draw control for new geometry
-                this.editMode = false;
-                this.toggleControl(params.drawMode);
-            }
-        }
+        // activate requested draw control for new geometry
+        this.toggleControl(params.drawMode);
     },
     /**
      * Called when the user finishes sketching.
@@ -207,12 +180,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
     saveDrawing : function() {
         if (this.drawLayer.features[0]) {
             this.toggleControl();
-            if (!this.editMode) {
-                // programmatically select the drawn feature ("not really supported by openlayers")
-                // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
-                this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
-            }
-            var event = this._sandbox.getEventBuilder('Parcel.FinishedDrawingEvent')(this.getDrawing(), this.editMode);
+            // programmatically select the drawn feature ("not really supported by openlayers")
+            // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
+            this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
+            var event = this._sandbox.getEventBuilder('Parcel.FinishedDrawingEvent')(this.getDrawing());
             this._sandbox.notifyAll(event);
         }
     },

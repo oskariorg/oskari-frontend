@@ -116,8 +116,8 @@ function(instance) {
         this.instance.sandbox.request(this, request);
     },
     /**
-     * @method _startNewDrawing
-     * Sends a StartDrawRequest with given params. Changes the panel controls to match the application state (new/edit)
+     * @method _sendDrawRequest
+     * Sends a StartDrawingRequest with given params. Changes the panel controls to match the application state (new/edit)
      * @param config params for StartDrawRequest
      */
     _sendDrawRequest : function(config) {
