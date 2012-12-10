@@ -31,20 +31,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         this.drawLayer = new OpenLayers.Layer.Vector("Parcel Draw Layer", {
             eventListeners : {
                 "featuresadded" : function(layer) {
+                    // Because a new feature was added, do splitting.
+                    me.splitFeature();
                 }
             }
         });
 
         this.drawControls = {
-            point : new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.Point),
             line : new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.Path),
             area : new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.Polygon),
-            box : new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.RegularPolygon, {
-                handlerOptions : {
-                    sides : 4,
-                    irregular : true
-                }
-            })
         };
 
         // doesn't really need to be in array, but lets keep it for future development
@@ -136,12 +131,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
      */
     startDrawing : function(params) {
         if (params.isModify) {
+            console.log("startDrawing : modify");
             // preselect it for modification
             this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
 
         } else {
             // Check if the parms contain a geometry that has been drawn to edit the parcel.
             if (params.geometry) {
+                console.log("startDrawing : params.geometry");
                 // sent existing geometry == edit mode
                 this.editMode = true;
                 // add feature to draw layer
@@ -154,17 +151,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
                 this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
 
             } else {
+                console.log("startDrawing : else");
                 // otherwise activate requested draw control for new geometry
                 this.editMode = false;
                 this.toggleControl(params.drawMode);
             }
         }
-
     },
     /**
-     * Called when the user finishes sketching by double clicking while drawing or by accepting with some button.
-     * This function is meant to provide the actual functionality for request handlers.
+     * Called when the user finishes sketching.
+     * This function is provided for request handlers.
      *
+     * Notice, "featuresadded" is listened separately. Therefore, double clicked finishing is handled
+     * that way. Also, when sketching is finished here, the flow continues in "featuresadded" listener.
+     * 
      * Splits the parcel feature according to the editing.
      *
      *@method
@@ -172,13 +172,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
     finishSketchDraw : function() {
         try {
             this.drawControls[this.currentDrawMode].finishSketch();
-            splitFeature();
 
         } catch(error) {
             // happens when the sketch isn't even started -> reset state
             var event = this._sandbox.getEventBuilder('Parcel.ParcelSelectedEvent')();
             this._sandbox.notifyAll(event);
         }
+        
     },
     /**
      * Cancel tool editing action.
@@ -191,9 +191,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
     cancelDrawing : function() {
         // disable all draw controls
         this.toggleControl();
-        // clear drawing
-        // TODO: instead remove only the one, not the original
-        // this.drawLayer.removeAllFeatures();
     },
     /**
      * Starts the save flow for the feature on the map.

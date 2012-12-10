@@ -1,6 +1,4 @@
-Oskari.clazz.define('Oskari.mapframework.bundle.parcel.request.StartDrawingRequest', 
-
-function(config) {
+Oskari.clazz.define('Oskari.mapframework.bundle.parcel.request.StartDrawingRequest', function(config) {
     if (config.geometry) {
         // editing existing
         this._geometry = config.geometry;
@@ -16,9 +14,8 @@ function(config) {
     }
 
 }, {
-    __name : "Parcel.StartDrawingRequest",
     getName : function() {
-        return this.__name;
+        return "Parcel.StartDrawingRequest";
     },
 
     isModify : function() {
@@ -44,4 +41,4 @@ function(config) {
     }
 }, {
     'protocol' : ['Oskari.mapframework.request.Request']
-});
+}); 
