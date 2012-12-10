@@ -45,7 +45,6 @@ function(instance) {
             }
         }
     };
-    this.templateGuide = jQuery('<div><div class="guide"></div>' + '<div class="buttons">' + '<div class="cancel button"></div>' + '<div class="finish button"></div>' + '</div>' + '</div>');
 }, {
     /**
      * @method getName
@@ -81,7 +80,7 @@ function(instance) {
     start : function() {
         var me = this;
 
-        var sandbox = this.instance.sandbox;
+        var sandbox = this.instance.getSandbox();
         sandbox.register(me);
         for (p in me.eventHandlers) {
             sandbox.registerForEventByName(me, p);
@@ -152,17 +151,6 @@ function(instance) {
         });
         buttons.push(cancelBtn);
 
-        if (drawMode != 'point') {
-            var finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-
-            finishBtn.setTitle(locBtns["finish"]);
-            finishBtn.addClass('primary');
-            finishBtn.setHandler(function() {
-                me.sendStopDrawRequest();
-            });
-            buttons.push(finishBtn);
-        }
-
         dialog.show(title, message, buttons);
         dialog.addClass('parcel');
         dialog.moveTo('#toolbar div.toolrow[tbgroup=parcel]', 'top');
@@ -192,7 +180,7 @@ function(instance) {
         if (this.dialog) {
             this.dialog.close();
         }
-    },    
+    },
     /**
      * @method update
      * implements Module protocol update method
@@ -237,7 +225,6 @@ function(instance) {
          */
         'Parcel.ParcelSelectedEvent' : function(event) {
             if (!event.getPlace()) {
-                // cleanup
                 // ask toolbar to select default tool
                 var toolbarRequest = this.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
                 this.instance.sandbox.request(this, toolbarRequest);

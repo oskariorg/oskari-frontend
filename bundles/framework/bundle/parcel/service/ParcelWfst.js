@@ -50,47 +50,52 @@ function(instance) {
 }, {
 
     /**
-     *
+     * @param Requires the downloaded feature as a parameter or undefined if error occurred.
      */
     loadParcel : function(fid, cb) {
         this._downloadFeature(fid, this.protocols['parcel'], cb);
     },
     /**
-     *
+     * @param cb Requires the downloaded feature as a parameter or undefined if error occurred.
      */
     loadRegisterUnit : function(fid, cb) {
         this._downloadFeature(fid, this.protocols['registerUnit'], cb);
     },
 
     /**
-     *
+     * @param cb Requires information about the success as boolean parameter.
      */
     saveParcel : function(feature, cb) {
         this._commitFeature(feature, this.protocols['parcelCommit'], cb);
     },
     /**
-     *
+     * @param cb Requires information about the success as boolean parameter.
      */
     saveRegisterUnit : function(feature, cb) {
         this._commitFeature(feature, this.protocols['registerUnitCommit'], cb);
     },
 
     /**
-     *
+     * @param cb Requires the downloaded feature as a parameter or undefined if error occurred.
      */
     _downloadFeature : function(fid, protocol, cb) {
+        var me = this;
         var filter = new OpenLayers.Filter.FeatureId({
             fids : [fid]
         });
+        var loc = this.instance.getLocalization('notification').placeLoading;
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        dialog.show(loc.title, loc.message);
         protocol.read({
             filter : filter,
             callback : function(response) {
+                dialog.close();
                 if (response && response.features && response.features.length > 0) {
-                    console.log("RESPONSE succ");
                     cb(response.features[0]);
 
                 } else {
-                    console.log("RESPONSE ERRORI");
+                    var locError = me.instance.getLocalization('notification')['error'];
+                    me.instance.showMessage(locError.title, locError.loadPlace);
                     cb();
                 }
             }
@@ -98,7 +103,7 @@ function(instance) {
     },
 
     /**
-     *
+     * @param cb Requires information about the success as boolean parameter.
      */
     _commitFeature : function(feature, protocol, cb) {
         var me = this;
@@ -114,14 +119,24 @@ function(instance) {
             // just to be sure
             feature.state = OpenLayers.State.UPDATE;
         }
+        // Show dialog to inform about the asynchronous operation.
+        var dialogAdding = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var loc = this.instance.getLocalization('notification').placeAdding;
+        dialogAdding.show(loc.title, loc.message);
         // Commit feature to the server.
         protocol.commit([feature], {
             callback : function(response) {
+                dialogAdding.close();
                 // Change feature state to its original value after operation
                 // because state was set above for the commit.
                 feature.state = featureState;
-                // TODO: Handle response. Something may have gone wrong.
-                cb(true);
+                var success = response && !response.error;
+                if (!success) {
+                    var locError = me.instance.getLocalization('notification')['error'];
+                    me.instance.showMessage(locError.title, locError.savePlace);
+                }
+                // Callback requires information about the success.
+                cb(success);
             }
         });
     }

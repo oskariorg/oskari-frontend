@@ -7,10 +7,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.event.FinishedDrawingEven
 /**
  * @method create called automatically on construction
  * @static
- * @param {OpenLayers.Feature.Vector} feature the drawing that was finished
  */
-function(feature) {
-    this._drawing = feature;
+function() {
 }, {
     /**
      * @method getName
@@ -19,15 +17,7 @@ function(feature) {
      */
     getName : function() {
         return "Parcel.FinishedDrawingEvent";
-    },
-    /**
-     * @method getDrawing
-     * Returns the drawings feature
-     * @return {OpenLayers.Feature.Vector}
-     */
-    getDrawing : function() {
-        return this._drawing;
-    },
+    }
 }, {
     'protocol' : ['Oskari.mapframework.event.Event']
 });

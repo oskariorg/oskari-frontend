@@ -11,7 +11,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcel.DrawingToolInstance",
 function() {
     this._localization = null;
     this.sandbox = null;
-    this.buttons = undefined;
     this.parcelService = undefined;
     this.idPrefix = 'parcel';
 }, {
@@ -113,10 +112,6 @@ function() {
         var me = this;
         sandbox.printDebug("Initializing parcel module...");
         
-        // handles toolbar buttons related to parcels 
-        this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.handler.ButtonHandler", this);
-        this.buttons.start();
-
         if(this.conf && this.conf.proxyUrl) {
             // Use proxy if requesting features cross-domain.
             // Also, proxy is required to provide application specific authorization for WFS data.

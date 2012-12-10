@@ -1,7 +1,8 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.plugin.DrawPlugin
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', function() {
+Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', function(instance) {
+    this.instance = instance;
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
@@ -30,6 +31,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         this.drawLayer = new OpenLayers.Layer.Vector("Parcel Draw Layer", {
             eventListeners : {
                 "featuresadded" : function(layer) {
+                    // Make sure that all the component states are in sync, such as dialogs.
+                    var event = me._sandbox.getEventBuilder('Parcel.FinishedDrawingEvent')();
+                    me._sandbox.notifyAll(event);
+                    // Disable all draw controls.
+                    // Then, the user needs to reselect what to do next.
+                    // At the moment, this creates some consistency in the usability.
+                    me.toggleControl();
+        
                     // Because a new feature was added, do splitting.
                     me.splitFeature();
                 }
@@ -117,6 +126,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         this.currentFeatureType = featureType;
         // Zoom to the loaded feature.
         this._map.zoomToExtent(this.drawLayer.getDataExtent());
+
+        // Show tool buttons only after the parcel has been loaded.
+        // Because parcel may be removed only by loading a new one.
+        // The buttons can be shown after this. If a new parcel is loaded,
+        // buttons can still be shown.
+        if (!this.buttons) {
+            // handles toolbar buttons related to parcels
+            this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.handler.ButtonHandler", this.instance);
+            this.buttons.start();
+        }
     },
     /**
      * Enables the draw control for given params.drawMode.
@@ -137,7 +156,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
      *
      * Notice, "featuresadded" is listened separately. Therefore, double clicked finishing is handled
      * that way. Also, when sketching is finished here, the flow continues in "featuresadded" listener.
-     * 
+     *
      * Splits the parcel feature according to the editing.
      *
      *@method
@@ -154,7 +173,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
             var event = this._sandbox.getEventBuilder('Parcel.ParcelSelectedEvent')();
             this._sandbox.notifyAll(event);
         }
-        
     },
     /**
      * Cancel tool editing action.
@@ -176,17 +194,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
      * When a save tool is selected, the flow starts.
      *
      * Disables all draw controls and
-     * sends a Parcel.FinishedDrawingEvent with the drawn feature.
+     * sends a SaveDrawingEvent with the drawn feature.
      *
      * @method
      */
     saveDrawing : function() {
         if (this.drawLayer.features[0]) {
             this.toggleControl();
-            // programmatically select the drawn feature ("not really supported by openlayers")
-            // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
-            this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
-            var event = this._sandbox.getEventBuilder('Parcel.FinishedDrawingEvent')(this.getDrawing());
+            var event = this._sandbox.getEventBuilder('Parcel.SaveDrawingEvent')(this.getDrawing());
             this._sandbox.notifyAll(event);
         }
     },
@@ -239,7 +254,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
      * called from sandbox
      */
     stop : function(sandbox) {
-    },    
+    },
     register : function() {
     },
     unregister : function() {

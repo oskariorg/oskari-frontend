@@ -52,7 +52,7 @@ function(instance) {
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
         // register plugin for map (drawing for parcels)
-        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin');
+        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', this.instance);
         mapModule.registerPlugin(drawPlugin);
         mapModule.startPlugin(drawPlugin);
         this.drawPlugin = drawPlugin;
@@ -95,10 +95,10 @@ function(instance) {
             this._cleanupPopup();
         },
         /**
-         * @method Parcel.FinishedDrawingEvent
-         * @param {Oskari.mapframework.bundle.parcel.event.FinishedDrawingEvent} event
+         * @method Parcel.SaveDrawingEvent
+         * @param {Oskari.mapframework.bundle.parcel.event.SaveDrawingEvent} event
          */
-        'Parcel.FinishedDrawingEvent' : function(event) {
+        'Parcel.SaveDrawingEvent' : function(event) {
             this._handleFinishedDrawingEvent(event);
         }
     },
@@ -216,17 +216,11 @@ function(instance) {
             me.instance.showMessage(loc.title, loc.savePlace);
             return;
         }
-        var sandbox = this.instance.sandbox;
+
+        // Callback handles the end of the asynchronous operation.
         var serviceCallback = function(blnSuccess) {
             if (blnSuccess) {
                 me._cleanupPopup();
-                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                var loc = me.instance.getLocalization('notification').placeAdded;
-                dialog.show(loc.title, loc.message);
-                dialog.fadeout();
-            } else {
-                var loc = me.instance.getLocalization('notification')['error'];
-                me.instance.showMessage(loc.title, loc.savePlace);
             }
         }
         this.instance.getService().savePlace(this.drawPlugin.getDrawing(), this.drawPlugin.getFeatureType(), serviceCallback);
