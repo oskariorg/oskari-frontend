@@ -145,6 +145,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
     finishSketchDraw : function() {
         try {
             this.drawControls[this.currentDrawMode].finishSketch();
+            // Because flow has been quite by specific button.
+            // Remove control. Then, user needs to choose the correct tool again.
+            this.toggleControl();
 
         } catch(error) {
             // happens when the sketch isn't even started -> reset state
