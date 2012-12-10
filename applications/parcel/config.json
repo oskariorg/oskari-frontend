@@ -124,7 +124,7 @@
                     "inspire": "Taustakartta"
                 }
             ],
-            "imageLocation": "/Oskari/resources",
+            "imageLocation": "../../resources",
             "user": {
                 "lastName": "",
                 "nickName": "",
