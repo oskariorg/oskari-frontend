@@ -24,7 +24,19 @@ function(instance) {
      * Initializations to be called after construction.
      */
     init : function() {
-        // TODO
-        console.log("ParcelSplitter init TODO Remove this loging text");
+    },
+    /**
+     * Splits the parcel.
+     * 
+     * {Oskari.mapframework.bundle.parcel.DrawingToolInstance} instance provides the features that are used for the splitting.
+     */
+    split : function() {
+        console.log("ParcelSplitter split TODO Remove this loging text");
+        var me = this;
+        var sandbox = me.instance.getSandbox();
+        var drawPlugin = me.instance.getDrawPlugin();
+        var openLayersMap = drawPlugin.getMapModule().getMap();
+        var parcelLayer = drawPlugin.drawLayer;
+        var parcelFeature = parcelLayer.features[0];
     }
 });

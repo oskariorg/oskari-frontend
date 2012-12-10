@@ -96,7 +96,7 @@ function(instance) {
 
     /**
      * @method startNewDrawing
-     * Resets currently selected place and sends a draw request to plugin with given config
+     * Sends a draw request to plugin with given config.
      * @param config params for StartDrawRequest
      */
     startNewDrawing : function(config) {
@@ -149,7 +149,8 @@ function(instance) {
             // ask toolbar to select default tool
             var toolbarRequest = me.instance.sandbox.getRequestBuilder('Toolbar.SelectToolButtonRequest')();
             me.instance.sandbox.request(me, toolbarRequest);
-            me.sendStopDrawRequest(true);
+            // Send cancel information in request. This will remove, the feature.
+            me.sendCancelDrawRequest();
         });
         buttons.push(cancelBtn);
 
@@ -172,16 +173,28 @@ function(instance) {
      * @method sendStopDrawRequest
      * Sends a StopDrawingRequest.
      * Changes the panel controls to match the application state (new/edit) if propagateEvent != true
-     * @param {Boolean} isCancel boolean param for StopDrawingRequest, true == canceled, false = finish drawing (dblclick)
      */
-    sendStopDrawRequest : function(isCancel) {
+    sendStopDrawRequest : function() {
         var me = this;
-        var request = this.instance.sandbox.getRequestBuilder('Parcel.StopDrawingRequest')(isCancel);
+        var request = this.instance.sandbox.getRequestBuilder('Parcel.StopDrawingRequest')();
         this.instance.sandbox.request(this, request);
         if (this.dialog) {
             this.dialog.close();
         }
     },
+    /**
+     * @method sendCancelDrawRequest
+     * Sends a CancelDrawingRequest.
+     * Changes the panel controls to match the application state (new/edit) if propagateEvent != true
+     */
+    sendCancelDrawRequest : function() {
+        var me = this;
+        var request = this.instance.sandbox.getRequestBuilder('Parcel.CancelDrawingRequest')();
+        this.instance.sandbox.request(this, request);
+        if (this.dialog) {
+            this.dialog.close();
+        }
+    },    
     /**
      * @method update
      * implements Module protocol update method
@@ -216,7 +229,7 @@ function(instance) {
             if (!this.ignoreEvents) {
                 // changed tool -> cancel any drawing
                 // do not trigger when we return drawing tool to
-                this.sendStopDrawRequest(true);
+                this.sendCancelDrawRequest();
                 this.instance.enableGfi(true);
             }
         },

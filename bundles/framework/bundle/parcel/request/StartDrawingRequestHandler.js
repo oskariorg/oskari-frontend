@@ -1,6 +1,4 @@
-Oskari.clazz.define('Oskari.mapframework.bundle.parcel.request.StartDrawingRequestHandler', function(sandbox, drawPlugin) {
-
-    this.sandbox = sandbox;
+Oskari.clazz.define('Oskari.mapframework.bundle.parcel.request.StartDrawingRequestHandler', function(drawPlugin) {
     this.drawPlugin = drawPlugin;
 }, {
     handleRequest : function(core, request) {
@@ -9,7 +7,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.request.StartDrawingReque
             drawMode : request.getDrawMode(),
             geometry : request.getGeometry(),
             isModify : request.isModify(),
-            style : ''
         });
     }
 }, {

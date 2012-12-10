@@ -17,130 +17,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
     getName : function() {
         return this.pluginName;
     },
-    getMapModule : function() {
-        return this.mapModule;
-    },
-    setMapModule : function(mapModule) {
-        this.mapModule = mapModule;
-        this._map = mapModule.getMap();
-        this.pluginName = mapModule.getName() + 'Parcel.DrawPlugin';
-    },
-    /**
-     *
-     */
-    drawFeature : function(feature, featureType) {
-        // remove possible old drawing
-        this.drawLayer.removeAllFeatures();
-        this.editMode = true;
-        // add feature to draw layer
-        var features = [feature];
-        this.drawLayer.addFeatures(features);
-        // preselect it for modification
-        this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
-        this.currentFeatureType = featureType;
-        // Zoom to the loaded feature.
-        this._map.zoomToExtent(this.drawLayer.getDataExtent());
-    },
-    /**
-     * Enables the draw control for given params.drawMode.
-     * Clears the layer of any previously drawn features.
-     * TODO: draws the given params.geometry with params.style
-     * @param params includes drawMode, geometry and style
-     * @method
-     */
-    startDrawing : function(params) {
-        if (params.isModify) {
-            // preselect it for modification
-            this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
-
-        } else {
-            if (params.geometry) {
-                // sent existing geometry == edit mode
-                this.editMode = true;
-                // add feature to draw layer
-                var features = [new OpenLayers.Feature.Vector(params.geometry)];
-                this.drawLayer.addFeatures(features);
-                // preselect it for modification
-                this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
-
-            } else {
-                // otherwise activate requested draw control for new geometry
-                this.editMode = false;
-                this.toggleControl(params.drawMode);
-            }
-        }
-
-    },
-    /**
-     * Disables all draw controls.
-     * @method
-     */
-    stopDrawing : function() {
-        // disable all draw controls
-        this.toggleControl();
-    },
-
-    /**
-     * Clears the layer of any drawn features
-     * @method
-     */
-    clearDrawing : function() {
-        // clear drawing
-        this.drawLayer.removeAllFeatures();
-        this.currentFeatureType = null;
-    },
-
-    saveDrawing : function() {
-        this.finishedDrawing();
-    },
-
-    forceFinishDraw : function() {
-        try {
-            this.drawControls[this.currentDrawMode].finishSketch();
-        } catch(error) {
-            // happens when the sketch isn't even started -> reset state
-            this.stopDrawing();
-            this.clearDrawing();
-            var event = this._sandbox.getEventBuilder('Parcel.ParcelSelectedEvent')();
-            this._sandbox.notifyAll(event);
-        }
-    },
-
-    /**
-     * Called when drawing is finished.
-     * Disables all draw controls and
-     * sends a Parcel.FinishedDrawingEvent with the drawn the geometry.
-     * @method
-     */
-    finishedDrawing : function() {
-        this.toggleControl();
-        if (!this.editMode) {
-            // programmatically select the drawn feature ("not really supported by openlayers")
-            // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
-            this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
-        }
-        var event = this._sandbox.getEventBuilder('Parcel.FinishedDrawingEvent')(this.getDrawing(), this.editMode);
-        this._sandbox.notifyAll(event);
-    },
-    /**
-     * Enables the given draw control
-     * Disables all the other draw controls
-     * @param drawMode draw control to activate (if undefined, disables all
-     * controls)
-     * @method
-     */
-    toggleControl : function(drawMode) {
-        this.currentDrawMode = drawMode;
-
-        for (var key in this.drawControls) {
-            var control = this.drawControls[key];
-            if (drawMode == key) {
-                control.activate();
-            } else {
-                control.deactivate();
-            }
-        }
-    },
     /**
      * Initializes the plugin:
      * - layer that is used for drawing
@@ -186,46 +62,201 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         this.modifyControls.modify.activate();
 
         this.requestHandlers = {
-            startDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StartDrawingRequestHandler', sandbox, me),
-            stopDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StopDrawingRequestHandler', sandbox, me),
-            saveDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.SaveDrawingRequestHandler', sandbox, me)
+            startDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StartDrawingRequestHandler', me),
+            stopDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StopDrawingRequestHandler', me),
+            cancelDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.CancelDrawingRequestHandler', me),
+            saveDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.SaveDrawingRequestHandler', me)
         };
-        
+
         this.splitter = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.split.ParcelSplit', this);
         this.splitter.init();
-    },
-    /**
-     * Returns the drawn feature from the draw layer
-     * @method
-     */
-    getDrawing : function() {
-        return this.drawLayer.features[0];
-    },
-    setFeatureType : function(featureType) {
-        this.currentFeatureType = featureType;
-    },
-    getFeatureType : function() {
-        return this.currentFeatureType;
-    },    
-    register : function() {
-
-    },
-    unregister : function() {
     },
     startPlugin : function(sandbox) {
         this._sandbox = sandbox;
         sandbox.register(this);
         sandbox.addRequestHandler('Parcel.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
         sandbox.addRequestHandler('Parcel.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
+        sandbox.addRequestHandler('Parcel.CancelDrawingRequest', this.requestHandlers.cancelDrawingHandler);
         sandbox.addRequestHandler('Parcel.SaveDrawingRequest', this.requestHandlers.saveDrawingHandler);
     },
     stopPlugin : function(sandbox) {
         sandbox.removeRequestHandler('Parcel.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
         sandbox.removeRequestHandler('Parcel.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
+        sandbox.removeRequestHandler('Parcel.CancelDrawingRequest', this.requestHandlers.cancelDrawingHandler);
         sandbox.removeRequestHandler('Parcel.SaveDrawingRequest', this.requestHandlers.saveDrawingHandler);
         sandbox.unregister(this);
         this._map = null;
         this._sandbox = null;
+    },
+    getMapModule : function() {
+        return this.mapModule;
+    },
+    setMapModule : function(mapModule) {
+        this.mapModule = mapModule;
+        this._map = mapModule.getMap();
+        this.pluginName = mapModule.getName() + 'Parcel.DrawPlugin';
+    },
+    /**
+     * Draw new feature to the map and zoom to its extent.
+     *
+     * Removes previous features if any on the map before adding the new feature to the parcel draw layer.
+     *
+     * This is called when the parcel is loaded from the server or if the parcel should be replaced by new one.
+     *
+     * The given feature may later be edited by tools selected from the UI. Notice, if feature should be edited by tools,
+     * use other functions provided by this class for that.
+     *
+     * @param {OpenLayers.Feature.Vector} feature The feature that is added to the draw layer. May not be undefined or null.
+     * @param {String} featureType The feature type of the feature. This is required when feature is committed to the server.
+     * @method
+     */
+    drawFeature : function(feature, featureType) {
+        // remove possible old drawing
+        this.drawLayer.removeAllFeatures();
+        this.currentFeatureType = null;
+        this.editMode = true;
+        // add feature to draw layer
+        // This feature will be the parcel that may be edited by the tools.
+        var features = [feature];
+        this.drawLayer.addFeatures(features);
+        // preselect it for modification
+        this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
+        this.currentFeatureType = featureType;
+        // Zoom to the loaded feature.
+        this._map.zoomToExtent(this.drawLayer.getDataExtent());
+    },
+    /**
+     * Enables the draw control for given params.drawMode.
+     *
+     * This function is meant for the tool buttons actions.
+     * When a tool is selected, corresponding feature can be drawn on the map.
+     *
+     * @param {Object} params includes isModify, drawMode, geometry.
+     * @method
+     */
+    startDrawing : function(params) {
+        if (params.isModify) {
+            // preselect it for modification
+            this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
+
+        } else {
+            // Check if the parms contain a geometry that has been drawn to edit the parcel.
+            if (params.geometry) {
+                // sent existing geometry == edit mode
+                this.editMode = true;
+                // add feature to draw layer
+                // This is a new feature that maybe handled later with the parcel feature.
+                // For example, splitting may be done by using these.
+                // TODO: New layer or same layer for these?
+                var features = [new OpenLayers.Feature.Vector(params.geometry)];
+                this.drawLayer.addFeatures(features);
+                // preselect it for modification
+                this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
+
+            } else {
+                // otherwise activate requested draw control for new geometry
+                this.editMode = false;
+                this.toggleControl(params.drawMode);
+            }
+        }
+
+    },
+    /**
+     * Called when the user finishes sketching by double clicking while drawing or by accepting with some button.
+     * This function is meant to provide the actual functionality for request handlers.
+     *
+     * Splits the parcel feature according to the editing.
+     *
+     *@method
+     */
+    finishSketchDraw : function() {
+        try {
+            this.drawControls[this.currentDrawMode].finishSketch();
+            splitFeature();
+
+        } catch(error) {
+            // happens when the sketch isn't even started -> reset state
+            var event = this._sandbox.getEventBuilder('Parcel.ParcelSelectedEvent')();
+            this._sandbox.notifyAll(event);
+        }
+    },
+    /**
+     * Cancel tool editing action.
+     *
+     * Remove the cancelled feature.
+     * Disables all draw controls.
+     *
+     * @method
+     */
+    cancelDrawing : function() {
+        // disable all draw controls
+        this.toggleControl();
+        // clear drawing
+        // TODO: instead remove only the one, not the original
+        // this.drawLayer.removeAllFeatures();
+    },
+    /**
+     * Starts the save flow for the feature on the map.
+     * If feature does not exists, does nothing.
+     *
+     * This function is meant for the tool buttons actions.
+     * When a save tool is selected, the flow starts.
+     *
+     * Disables all draw controls and
+     * sends a Parcel.FinishedDrawingEvent with the drawn feature.
+     *
+     * @method
+     */
+    saveDrawing : function() {
+        if (this.drawLayer.features[0]) {
+            this.toggleControl();
+            if (!this.editMode) {
+                // programmatically select the drawn feature ("not really supported by openlayers")
+                // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
+                this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
+            }
+            var event = this._sandbox.getEventBuilder('Parcel.FinishedDrawingEvent')(this.getDrawing(), this.editMode);
+            this._sandbox.notifyAll(event);
+        }
+    },
+
+    /**
+     * Enables the given draw control.
+     * Disables all the other draw controls.
+     * @param drawMode draw control to activate (if undefined, disables all
+     * controls)
+     * @method
+     */
+    toggleControl : function(drawMode) {
+        this.currentDrawMode = drawMode;
+
+        for (var key in this.drawControls) {
+            var control = this.drawControls[key];
+            if (drawMode == key) {
+                control.activate();
+            } else {
+                control.deactivate();
+            }
+        }
+    },
+    /**
+     * @return {OpenLayers.Feature.Vector} Returns the drawn vector feature from the draw layer. May be undefined if no feature.
+     * @method
+     */
+    getDrawing : function() {
+        return this.drawLayer.features[0];
+    },
+    /**
+     * @param {String} featureType The feature type of the parcel feature. This is used when feature is commited to the server.
+     */
+    setFeatureType : function(featureType) {
+        this.currentFeatureType = featureType;
+    },
+    /**
+     * @param {String} The feature type of the parcel feature. This is used when feature is commited to the server.
+     */
+    getFeatureType : function() {
+        return this.currentFeatureType;
     },
     /* @method start
      * called from sandbox
@@ -235,9 +266,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
     /**
      * @method stop
      * called from sandbox
-     *
      */
     stop : function(sandbox) {
+    },    
+    register : function() {
+    },
+    unregister : function() {
+    },
+    /**
+     * Handles the splitting of the parcel feature
+     * and replaces the feature hold by this instance.
+     */
+    splitFeature : function() {
+        this.splitter.split();
     }
 }, {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]

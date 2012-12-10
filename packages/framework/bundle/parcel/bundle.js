@@ -66,6 +66,9 @@ function() {
             "src" : "../../../../bundles/framework/bundle/parcel/request/StopDrawingRequest.js"
         }, {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/request/CancelDrawingRequest.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/request/StartDrawingRequest.js"
         }, {
             "type" : "text/javascript",
@@ -73,6 +76,9 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/request/StopDrawingRequestHandler.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/request/CancelDrawingRequestHandler.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/request/StartDrawingRequestHandler.js"
