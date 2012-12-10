@@ -21,7 +21,7 @@ function(instance) {
             tooltip : '',
             sticky : true,
             callback : function() {
-                me.startNewDrawing({
+                me._startNewDrawing({
                     drawMode : 'area'
                 });
             }
@@ -31,7 +31,7 @@ function(instance) {
             tooltip : '',
             sticky : true,
             callback : function() {
-                me.startNewDrawing({
+                me._startNewDrawing({
                     drawMode : 'line'
                 });
             }
@@ -41,7 +41,7 @@ function(instance) {
             tooltip : '',
             sticky : true,
             callback : function() {
-                me.saveDrawing();
+                me._saveDrawing();
             }
         }
     };
@@ -95,32 +95,32 @@ function(instance) {
     },
 
     /**
-     * @method startNewDrawing
+     * @method _startNewDrawing
      * Sends a draw request to plugin with given config.
      * @param config params for StartDrawRequest
      */
-    startNewDrawing : function(config) {
+    _startNewDrawing : function(config) {
         // notify components to reset any saved "selected place" data
         var event = this.instance.sandbox.getEventBuilder('Parcel.ParcelSelectedEvent')();
         this.instance.sandbox.notifyAll(event);
 
         // notify plugin to start drawing new geometry
-        this.sendDrawRequest(config);
+        this._sendDrawRequest(config);
         this.instance.enableGfi(false);
     },
     /**
      *
      */
-    saveDrawing : function() {
+    _saveDrawing : function() {
         var request = this.instance.sandbox.getRequestBuilder('Parcel.SaveDrawingRequest')();
         this.instance.sandbox.request(this, request);
     },
     /**
-     * @method startNewDrawing
+     * @method _startNewDrawing
      * Sends a StartDrawRequest with given params. Changes the panel controls to match the application state (new/edit)
      * @param config params for StartDrawRequest
      */
-    sendDrawRequest : function(config) {
+    _sendDrawRequest : function(config) {
         var startRequest = this.instance.sandbox.getRequestBuilder('Parcel.StartDrawingRequest')(config);
         this.instance.sandbox.request(this, startRequest);
         if (!config.geometry) {
