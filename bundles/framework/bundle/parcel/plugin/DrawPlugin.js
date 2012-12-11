@@ -13,6 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
     this.currentFeatureType = null;
     // Created in init.
     this.splitter = null;
+    this.splitSelection =false;
 }, {
     getName : function() {
         return this.pluginName;
@@ -47,7 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
 
         this.drawControls = {
             line : new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.Path),
-            area : new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.Polygon),
+            area : new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.Polygon)
         };
 
         // doesn't really need to be in array, but lets keep it for future development
