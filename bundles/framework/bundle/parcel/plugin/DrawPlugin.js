@@ -227,6 +227,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         }
     },
     /**
+     * @return {OpenLayers.Layer.Vector} Returns the drawn vector layer.
+     * @method
+     */
+    getDrawingLayer : function() {
+        return this.drawLayer;
+    },
+    /**
      * @return {OpenLayers.Feature.Vector} Returns the drawn vector feature from the draw layer. May be undefined if no feature.
      * @method
      */
