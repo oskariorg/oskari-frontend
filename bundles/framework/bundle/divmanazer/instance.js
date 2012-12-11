@@ -223,59 +223,7 @@ function() {
 		if(flyoutPlugin != null) {
 			flyout = this.createFlyout(extension, flyoutPlugin, count, extensionInfo);
 
-			extensionInfo.draggableHandle = flyout.children(
-			'.oskari-flyouttoolbar').get()[0];
-
-			var flyoutTarget = flyout
-			.get()[0];
-			var handle = extensionInfo.draggableHandle;
-			extensionInfo.draggableTarget = flyoutTarget;
-			/* jQueryUI won't work without this */
-			flyout.css("position","absolute");
-			
-			var useHelper = false;
-			
-			extensionInfo.draggable = $(flyout).draggable({
-				handle: jQuery(handle),
-				helper: useHelper ? function() {
-					var el = jQuery('<div />');
-					
-					el.css("width",flyout.css("width"));
-					el.css("height",flyout.css("height"));
-					el.css("border","2px solid rgba(0,0,0,.5)");
-					el.css("z-index",flyout.css("z-index"));
-					
-					return el;
-				}: null,
-				scroll: false,
-				stack: '.oskari-flyout',
-				create: function(event,ui) {
-				
-				},
-				start: function(){
-					if( useHelper ) { flyout.css("display","none"); }
-				},
-				drag: function() {
-				
-				},
-				
-				stop: function(event,ui) {
-					if( useHelper ) {
-						flyout.css("top",ui.helper.css("top"));
-						flyout.css("left",ui.helper.css("left"));
-					}
-					me.shuffleZIndices(flyout);
-					if( useHelper ) {
-						flyout.css("display","");
-					}
-					//flyout.css("height", "");
-					var viewState = me.getFlyoutViewState(flyout, "detach");
-
-					extensionInfo.viewState = viewState;
-					me.notifyExtensionViewStateChange(extensionInfo);
-					
-				}
-			});
+			this._applyDraggableToFlyout(flyout, extensionInfo, '.oskari-flyouttoolbar')
 
 			var fcc = flyout.children('.oskari-flyoutcontentcontainer');
 			var fcccc = fcc.children('.oskari-flyoutcontent');
@@ -326,6 +274,80 @@ function() {
 		return extensionInfo;
 	},
 	/**
+	 * @method _applyDraggableToFlyout
+	 * applies draggable handle to flyouts title bar
+	 */
+	_applyDraggableToFlyout : function(flyout, extensionInfo, cls) {
+		var me = this;
+		var handle = flyout.children(cls).get()[0];
+		var flyoutTarget = flyout.get()[0];
+
+		extensionInfo.draggableHandle = handle;
+		extensionInfo.draggableTarget = flyoutTarget;
+
+		/* jQueryUI won't work without this */
+		flyout.css("position", "absolute");
+
+		var useHelper = false;
+
+		extensionInfo.draggable = $(flyout).draggable({
+			handle : jQuery(handle),
+			helper : useHelper ? function() {
+				var el = jQuery('<div />');
+
+				el.css("width", flyout.css("width"));
+				el.css("height", flyout.css("height"));
+				el.css("border", "2px solid rgba(0,0,0,.5)");
+				el.css("z-index", flyout.css("z-index"));
+
+				return el;
+			} : null,
+			scroll : false,
+			stack : '.oskari-flyout',
+			create : function(event, ui) {
+
+			},
+			start : function() {
+				if(useHelper) {
+					flyout.css("display", "none");
+				} else {
+					/* ask Mr bill gate$ about this one */
+					if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
+						flyout.css('width',flyout.width()+"px"); 
+					}
+
+				}
+			},
+			drag : function() {
+
+			},
+			stop : function(event, ui) {
+				if(useHelper) {
+					flyout.css("top", ui.helper.css("top"));
+					flyout.css("left", ui.helper.css("left"));
+				} else {
+					if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
+						/* ask Mr bill gate$ about this one */
+						if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
+							flyout.css('width',''); 
+						}
+
+					}
+				}
+				me.shuffleZIndices(flyout);
+				if(useHelper) {
+					flyout.css("display", "");
+				}
+				//flyout.css("height", "");
+				var viewState = me.getFlyoutViewState(flyout, "detach");
+
+				extensionInfo.viewState = viewState;
+				me.notifyExtensionViewStateChange(extensionInfo);
+
+			}
+		});
+	},
+	/**
 	 * @method createTile
 	 *
 	 * creates menubar tile using the tile template
@@ -345,19 +367,18 @@ function() {
 
 			me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [extension, 'toggle']);
 		});
-
 		/*title.click(function() {
-			//plugin.setExtensionState();
+		 //plugin.setExtensionState();
 
-			me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [extension, 'toggle']);
-		});
-		status.click(function() {
-			//plugin.setExtensionState();
+		 me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [extension, 'toggle']);
+		 });
+		 status.click(function() {
+		 //plugin.setExtensionState();
 
-			me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [extension, 'toggle']);
-		});
-		*/
-		
+		 me.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [extension, 'toggle']);
+		 });
+		 */
+
 		plugin.setEl(tile.get());
 
 		return tile;
@@ -588,7 +609,6 @@ function() {
 
 		this.sandbox.notifyAll(evt, true);
 	},
-	
 	/*
 	 * @static @property validStates
 	 */
@@ -600,7 +620,7 @@ function() {
 			"minimize" : false,
 			"restore" : false,
 			"drawer" : false,
-			"curtain" : false
+			"sidebar" : false
 		},
 		"detach" : {
 			"attach" : false,
@@ -609,7 +629,7 @@ function() {
 			"minimize" : false,
 			"restore" : false,
 			"drawer" : false,
-			"curtain" : false
+			"sidebar" : false
 		},
 		"minimize" : {
 			"attach" : true,
@@ -618,7 +638,7 @@ function() {
 			"minimize" : true,
 			"restore" : false,
 			"drawer" : false,
-			"curtain" : false
+			"sidebar" : false
 		},
 		"restore" : {
 			"attach" : false,
@@ -627,7 +647,7 @@ function() {
 			"minimize" : false,
 			"restore" : true,
 			"drawer" : false,
-			"curtain" : false
+			"sidebar" : false
 		},
 		"close" : {
 			"attach" : false,
@@ -636,7 +656,7 @@ function() {
 			"minimize" : false,
 			"restore" : false,
 			"drawer" : false,
-			"curtain" : false				
+			"sidebar" : false
 		},
 		"drawer" : {
 			"attach" : false,
@@ -645,19 +665,19 @@ function() {
 			"minimize" : false,
 			"restore" : false,
 			"drawer" : true,
-			"curtain" : false 	
+			"sidebar" : false
 		},
-		"shade" : {
+		"sidebar" : {
 			"attach" : false,
 			"detach" : false,
 			"close" : false,
 			"minimize" : false,
 			"restore" : false,
 			"drawer" : false,
-			"curtain" : true		
+			"sidebar" : true
 		}
 	},
-	
+
 	/**
 	 * @static @property flyout default positioning
 	 */
@@ -961,8 +981,7 @@ function() {
 				var flyout = flyoutInfo.el;
 
 				var viewState = extensionInfo.viewState;
-				flyout.removeAttr("style");
-				flyout.css("left", viewState.left), flyout.css("top", viewState.top);
+				flyout.removeAttr("style"); flyout.css("left", viewState.left), flyout.css("top", viewState.top);
 				flyout.width(viewState.width);
 				flyout.height(viewState.height);
 				flyout.css("z-index", viewState['z-index']);
