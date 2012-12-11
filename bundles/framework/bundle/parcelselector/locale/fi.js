@@ -9,7 +9,7 @@ Oskari.registerLocalization({
 			"illegalInput" : "Tunnisteen pitää olla numero."
 		},
 		"filter" : {
-			"text" : "Määräalan tunniste",
+			"text" : "Kiinteistötunnus",
 			"parcel" : "Palsta",
 			"registerUnit" : "Rekisteriyksikkö"
 		},
