@@ -109,7 +109,7 @@ function(instance) {
      * @param {Oskari.mapframework.bundle.parcel.event.FinishedDrawingEvent} event
      */
     _handleFinishedDrawingEvent : function(event) {
-        var center = event.getDrawing().geometry.getCentroid();
+        var center = event.getLayer().features[0].geometry.getCentroid();
         var lonlat = {
             lon : center.x,
             lat : center.y
@@ -132,7 +132,7 @@ function(instance) {
         var defaultValues = {
             place : {}
         };
-        var feature = this.drawPlugin.getDrawing();
+        var feature = this.drawPlugin.getLayer().features[0];
         if (feature.attributes) {
             // Here we suppose that server uses "nimi" property for the place name.
             defaultValues.place.name = feature.attributes.nimi;
@@ -239,7 +239,7 @@ function(instance) {
         }
         var name = values ? values.name : undefined;
         var description = values ? values.desc : undefined;
-        this.instance.getService().savePlace(this.drawPlugin.getDrawing(), this.drawPlugin.getFeatureType(), name, description, serviceCallback);
+        this.instance.getService().savePlace(this.drawPlugin.getLayer(), this.drawPlugin.getFeatureType(), name, description, serviceCallback);
     },
     /**
      * @method _cleanupPopup
