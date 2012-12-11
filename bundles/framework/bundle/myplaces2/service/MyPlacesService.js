@@ -11,9 +11,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
  * @param {String} uuid current users uuid
  * @param {Oskari.mapframework.sandbox.Sandbox} sandbox reference to Oskari sandbox
  * @param {String} categoryName default category name
+ * @param {Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance} pInstance 
+ *  instance to notify if problems with default category 
  * 
  */
-function(url, uuid, sandbox, defaultName) {
+function(url, uuid, sandbox, defaultName, pInstance) {
 
     // list of loaded categories & myplaces
     this._categoryList = [];
@@ -23,6 +25,7 @@ function(url, uuid, sandbox, defaultName) {
     this._sandbox = sandbox;
     this.defaultCategory = null;
     this.defaultCategoryName = defaultName;
+    this._instance = pInstance;
 }, {
     __qname : "Oskari.mapframework.bundle.myplaces2.service.MyPlacesService",
     getQName : function() {
@@ -52,8 +55,8 @@ function(url, uuid, sandbox, defaultName) {
             }
             loadedCategories = true;
     
-            if (me.getAllCategories().length === 0 && me.defaultCategoryName) {
-                // user has no categories, propably a new user
+            if (!me.getDefaultCategory()) {
+                // user doesn't have default category, propably a new user
                 // create a default category
                 me._createDefaultCategory();
             } else if (loadedPlaces) {
@@ -84,6 +87,10 @@ function(url, uuid, sandbox, defaultName) {
     	var me = this;
         var defaultCategory = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory');
         defaultCategory.setName(me.defaultCategoryName);
+        if(!me.defaultCategoryName) {
+            // should not happen
+            defaultCategory.setName('My map layer');
+        }
         defaultCategory.setLineWidth(2);
         defaultCategory.setLineColor('cc9900');
         defaultCategory.setAreaLineWidth(2);
@@ -99,20 +106,8 @@ function(url, uuid, sandbox, defaultName) {
             if (me.getAllCategories().length === 0) {
                 // something went wrong and we should propably just show error
                 // message instead of my places functionality
-                alert("error couldn't create default category");
-                
-                // FIXME: for debuggin: 
-                /*
-                alert('manually adding default category for now - This is debug version - remove from MyPlacesService.init()');
-                
-                var defaultCategory = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory');
-                defaultCategory.setName(me.defaultCategoryName);
-                defaultCategory.setDefault(true);
-                defaultCategory.setId('debug');
-                me._addCategory(defaultCategory);
-                me._notifyDataChanged();
-                */
-                // /FIXME: for debuggin ^ 
+                me._instance.forceDisable();
+                 
             } else {
                 me._notifyDataChanged();
             }
@@ -238,6 +233,12 @@ function(url, uuid, sandbox, defaultName) {
         return returnValue;
     },
 
+    /**
+     * @method getPlacesInCategory
+     * Returns all places in given category or empty array if none.
+     * @param {Number} categoryId category id to delete from
+     * @return {Oskari.mapframework.bundle.myplaces2.model.MyPlace[]}
+     */
     getPlacesInCategory : function(categoryId) {
         var placesInCategory = [];
         for (var i = 0; i < this._placesList.length; i++) {
@@ -248,6 +249,14 @@ function(url, uuid, sandbox, defaultName) {
         return placesInCategory;
     },
 
+    /**
+     * @method deleteCategory
+     * Deletes all places in given category or moves the places to default category. After that
+     * deletes the category.
+     * @param {Number} categoryId category id to delete 
+     * @param {Boolean} movePlacesToDefault true to move places, false to delete
+     * @param {Function} callback function to call when done, receives boolean as argument(true == successful)
+     */
     deleteCategory : function(categoryId, movePlacesToDefault, callback) {
         var me = this;
 
@@ -272,7 +281,13 @@ function(url, uuid, sandbox, defaultName) {
         }
     },
 
-    /** Internal handling only */
+    /**
+     * @method _deleteEmptyCategory
+     * @private
+     * Deletes given category. Assumes its empty.
+     * @param {Number} categoryId category id to delete
+     * @param {Function} callback function to call when done, receives boolean as argument(true == successful)
+     */
     _deleteEmptyCategory : function(categoryId, callback) {
 
         var me = this;
@@ -287,7 +302,13 @@ function(url, uuid, sandbox, defaultName) {
         this.wfstStore.deleteCategories([categoryId], callBackWrapper);
     },
 
-    /** Internal list handling only */
+    /**
+     * @method _removeCategory
+     * @private
+     * Removes given category from internal data structure. Called when similar backend function 
+     * has returned successfully.
+     * @param {Number} categoryId category id to delete
+     */
     _removeCategory : function(categoryId) {
         for (var i = 0; i < this._categoryList.length; i++) {
             if (this._categoryList[i].getId() == categoryId) {
@@ -297,6 +318,13 @@ function(url, uuid, sandbox, defaultName) {
         }
     },
 
+    /**
+     * @method saveCategory
+     * Saves given category to backend and internal data structure. Adds it if new and updates if existing (has an id).
+     * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory} categoryModel category to save
+     * @param {Function} callback function to call when done, receives boolean as 
+     *      first argument(true == successful), categoryModel as second parameter and boolean as third parameter (true if the category was new)  
+     */
     saveCategory : function(categoryModel, callback) {
         var me = this;
         var isNew = !(categoryModel.getId());
@@ -331,31 +359,63 @@ function(url, uuid, sandbox, defaultName) {
         this.wfstStore.commitCategories([categoryModel], callBackWrapper);
     },
 
+    /**
+     * @method getAllCategories
+     * Returns all categories ("maplayers" for my places) that is loaded in the system. 
+     * @return {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory[]}  
+     */
     getAllCategories : function() {
         return this._categoryList;
     },
 
+    /**
+     * @method getDefaultCategory
+     * Returns users default category or undefined 
+     * @return {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory}  
+     */
     getDefaultCategory : function() {
         return this.defaultCategory;
     },
 
-    /** Internal usage */
+    /**
+     * @method _addMyPlace
+     * @private
+     * Adds given place to internal data structure. Called when similar backend function 
+     * has returned successfully.
+     * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlace} myplaceModel place to add
+     */
     _addMyPlace : function(myplaceModel) {
         this._placesList.push(myplaceModel);
     },
-    /** Internal list handling only */
+    /**
+     * @method _removeMyPlace
+     * @private
+     * Removes given place from internal data structure. Called when similar backend function 
+     * has returned successfully.
+     * @param {Number} placeId id for place to remove
+     */
     _removeMyPlace : function(placeId) {
         var index = this.findBy(this._placesList, 'id', placeId);
         if (index !== -1) {
             this._placesList.splice(index, 1);
         }
     },
-    /** Internal usage */
+    /**
+     * @method _notifyDataChanged
+     * @private
+     * Notifies components that places/categories have changed with 'MyPlaces.MyPlacesChangedEvent'
+     */
     _notifyDataChanged : function() {
         var event = this._sandbox.getEventBuilder('MyPlaces.MyPlacesChangedEvent')();
         this._sandbox.notifyAll(event);
     },
 
+    /**
+     * @method deleteMyPlace
+     * Deletes place matching given id.
+     * @param {Number} placeId id for place to delete
+     * @param {Function} callback function to call when done, receives boolean as argument(true == successful)
+     */
     deleteMyPlace : function(placeId, callback) {
         var me = this;
         var callBackWrapper = function(success, list) {
@@ -371,10 +431,12 @@ function(url, uuid, sandbox, defaultName) {
     },
 
     /**
-     * Tries to find a place with given coordinates
+     * @method findMyPlaceByLonLat
+     * Tries to find places in given coordinates
      *
      * @param {OpenLayers.LonLat} lonlat
      * @param {Number} zoom zoomlevel
+     * @return {Oskari.mapframework.bundle.myplaces2.model.MyPlace[]}
      */
     findMyPlaceByLonLat : function(lonlat, zoom) {
         var places = [];
@@ -434,14 +496,15 @@ function(url, uuid, sandbox, defaultName) {
     },
 
     /**
-     * Tries to find object from the given list
+     * @method findBy
+     * Tries to find object from the given list. 
+     * Abstraction method used by findCategory and findMyPlace.
      *
+     * @param {Object} list list to loop through
+     * @param {String} attrName attribute to compare against
+     * @param {Object} attrValue value we want to find
      *
-     * @param list list to loop through
-     * @param attrName attribute to compare against
-     * @param attrValue value we want to find
-     *
-     * @return index on the list where the object was found or -1 if not found
+     * @return {Number} index on the list where the object was found or -1 if not found
      */
     findBy : function(list, attrName, attrValue) {
         for (var i = 0; i < list.length; i++) {
@@ -452,6 +515,13 @@ function(url, uuid, sandbox, defaultName) {
         }
         return -1;
     },
+    /**
+     * @method saveMyPlace
+     * Saves given category to backend and internal data structure. Adds it if new and updates if existing (has an id).
+     * @return {Oskari.mapframework.bundle.myplaces2.model.MyPlace} myplaceModel place to save
+     * @param {Function} callback function to call when done, receives boolean as 
+     *      first argument(true == successful), myplaceModel as second parameter and boolean as third parameter (true if the category was new)  
+     */
     saveMyPlace : function(myplaceModel, callback) {
         var me = this;
         var isNew = !(myplaceModel.getId());
