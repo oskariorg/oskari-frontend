@@ -305,16 +305,21 @@ function() {
 			scroll : false,
 			stack : '.oskari-flyout',
 			create : function(event, ui) {
-
+				/* IE8 works fine BUT IE9 needs fixed width to not jump flyout width during and after dragging */
+				if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
+					flyout.css('width',flyout.width()+"px"); 
+				}
 			},
 			start : function() {
 				if(useHelper) {
 					flyout.css("display", "none");
 				} else {
-					/* ask Mr bill gate$ about this one */
-					if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
+					/* Attempt to fix IE9 vs. draggable flyout width issues */
+					/* this did not work */
+					/* if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
 						flyout.css('width',flyout.width()+"px"); 
 					}
+					*/
 
 				}
 			},
@@ -326,13 +331,15 @@ function() {
 					flyout.css("top", ui.helper.css("top"));
 					flyout.css("left", ui.helper.css("left"));
 				} else {
-					if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
-						/* ask Mr bill gate$ about this one */
+					/* Attempt to fix IE9 vs. draggable flyout width issues */
+					/* this did not work */
+					/*if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
 						if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
 							flyout.css('width',''); 
 						}
 
-					}
+					}*/
+					
 				}
 				me.shuffleZIndices(flyout);
 				if(useHelper) {
