@@ -201,7 +201,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
     saveDrawing : function() {
         if (this.drawLayer.features[0]) {
             this.toggleControl();
-            var event = this._sandbox.getEventBuilder('Parcel.SaveDrawingEvent')(this.getLayer());
+            var event = this._sandbox.getEventBuilder('Parcel.SaveDrawingEvent')(this.getDrawing());
             this._sandbox.notifyAll(event);
         }
     },
@@ -226,11 +226,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         }
     },
     /**
-     * @return {OpenLayers.Feature.Vector} Returns the draw layer that contains parcel.
+     * @return {OpenLayers.Feature.Vector} Returns the drawn vector feature from the draw layer. May be undefined if no feature.
      * @method
      */
-    getLayer : function() {
-        return this.drawLayer;
+    getDrawing : function() {
+        return this.drawLayer.features[0];
     },
     /**
      * @param {String} featureType The feature type of the parcel feature. This is used when feature is commited to the server.

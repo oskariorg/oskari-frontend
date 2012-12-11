@@ -1,16 +1,16 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.event.SaveDrawingEvent
  *
- * Used to notify components that the drawing has been finished and the layer features should be saved.
+ * Used to notify components that the drawing has been finished and the feature should be saved.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.parcel.event.SaveDrawingEvent',
 /**
  * @method create called automatically on construction
  * @static
- * @param {OpenLayers.Layer.Vector} layer The layer that should be saved.
+ * @param {OpenLayers.Feature.Vector} feature The feature that should be saved.
  */
-function(layer) {
-    this._layer = layer;
+function(feature) {
+    this._drawing = feature;
 }, {
     /**
      * @method getName
@@ -21,12 +21,12 @@ function(layer) {
         return "Parcel.SaveDrawingEvent";
     },
     /**
-     * @method getLayer
-     * Returns the drawings Layer.
-     * @return {OpenLayers.Layer.Vector}
+     * @method getDrawing
+     * Returns the drawings feature
+     * @return {OpenLayers.Feature.Vector}
      */
-    getLayer : function() {
-        return this._layer;
+    getDrawing : function() {
+        return this._drawing;
     },
 }, {
     'protocol' : ['Oskari.mapframework.event.Event']

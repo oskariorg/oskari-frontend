@@ -36,13 +36,13 @@ function(instance) {
         this._wfst.loadRegisterUnit(fid, cb);
     },
 
-    savePlace : function(layer, featureType, placeName, placeDescription, cb) {
-        if (layer && featureType) {
+    savePlace : function(feature, featureType, placeName, placeDescription, cb) {
+        if (feature && featureType) {
             if (featureType === this._instance.conf.parcelFeatureType) {
-                this.saveParcel(layer, placeName, placeDescription, cb);
+                this.saveParcel(feature, placeName, placeDescription, cb);
 
             } else if (featureType === this._instance.conf.registerUnitFeatureType) {
-                this.saveRegisterUnit(layer, placeName, placeDescription, cb);
+                this.saveRegisterUnit(feature, placeName, placeDescription, cb);
 
             } else {
                 cb();
@@ -53,15 +53,15 @@ function(instance) {
         }
     },
 
-    saveParcel : function(layer, placeName, placeDescription, cb) {
-        if (layer) {
-            this._wfst.saveParcel(layer, placeName, placeDescription, cb);
+    saveParcel : function(feature, placeName, placeDescription, cb) {
+        if (feature) {
+            this._wfst.saveParcel(feature, placeName, placeDescription, cb);
         }
     },
 
-    saveRegisterUnit : function(layer, placeName, placeDescription, cb) {
-        if (layer) {
-            this._wfst.saveRegisterUnit(layer, placeName, placeDescription, cb);
+    saveRegisterUnit : function(feature, placeName, placeDescription, cb) {
+        if (feature) {
+            this._wfst.saveRegisterUnit(feature, placeName, placeDescription, cb);
         }
     }
 }, {

@@ -65,14 +65,14 @@ function(instance) {
     /**
      * @param cb Requires information about the success as boolean parameter.
      */
-    saveParcel : function(layer, placeName, placeDescription, cb) {
-        this._commitFeature(layer, placeName, placeDescription, this.protocols['parcelCommit'], cb);
+    saveParcel : function(feature, placeName, placeDescription, cb) {
+        this._commitFeature(feature, placeName, placeDescription, this.protocols['parcelCommit'], cb);
     },
     /**
      * @param cb Requires information about the success as boolean parameter.
      */
-    saveRegisterUnit : function(layer, placeName, placeDescription, cb) {
-        this._commitFeature(layer, placeName, placeDescription, this.protocols['registerUnitCommit'], cb);
+    saveRegisterUnit : function(feature, placeName, placeDescription, cb) {
+        this._commitFeature(feature, placeName, placeDescription, this.protocols['registerUnitCommit'], cb);
     },
 
     /**
@@ -105,13 +105,12 @@ function(instance) {
     /**
      * @param cb Requires information about the success as boolean parameter.
      */
-    _commitFeature : function(layer, placeName, placeDescription, protocol, cb) {
+    _commitFeature : function(feature, placeName, placeDescription, protocol, cb) {
         var me = this;
 
         // Set the place and description for the feature if they are given.
         // If they are not given, then do not set them.
-        var feature = layer.features[0];
-        if (feature && feature.attributes) {
+        if (feature.attributes) {
             if (placeName) {
                 // Here we suppose that server uses "nimi" property for the place name.
                 feature.attributes.nimi = placeName;
@@ -123,21 +122,34 @@ function(instance) {
             }
         }
 
-        // Set correct state information for the commit.
-        me._setCommitFeatureStates(layer);
+        // Insert feature to the server if transaction URL differs from the query URL that has given the feature.
+        // Otherwise, update data if the query server is same as the transaction server.
+        var featureState = feature.state;
+        if (this.instance.conf.transactionUrl && this.instance.conf.queryUrl != this.instance.conf.transactionUrl) {
+            feature.toState(OpenLayers.State.INSERT);
+
+        } else {
+            // toState may handle some workflow stuff and may not work here
+            feature.toState(OpenLayers.State.UPDATE);
+            // just to be sure
+            feature.state = OpenLayers.State.UPDATE;
+        }
 
         // Before commit, change the fid to be number.
         // Query server may give a prefix in fid but it is not wanted in commit.
-        layer.features[0].fid = me._parseFidNumber(feature.fid);
+        feature.fid = me._parseFidNumber(feature.fid);
 
         // Show dialog to inform about the asynchronous operation.
         var dialogAdding = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         var loc = this.instance.getLocalization('notification').placeAdding;
         dialogAdding.show(loc.title, loc.message);
         // Commit feature to the server.
-        protocol.commit(layer.features, {
+        protocol.commit([feature], {
             callback : function(response) {
                 dialogAdding.close();
+                // Change feature state to its original value after operation
+                // because state was set above for the commit.
+                feature.state = featureState;
                 var success = response && !response.error;
                 if (!success) {
                     var locError = me.instance.getLocalization('notification')['error'];
@@ -148,7 +160,6 @@ function(instance) {
             }
         });
     },
-
     /**
      * Removes the possible string prefix from the given fid.
      *
@@ -163,20 +174,5 @@ function(instance) {
             newFid = parseInt(newFid.match(/(\d+)$/)[0], 10);
         }
         return newFid;
-    },
-    /**
-     * Inits the state for features for the commit.
-     * @param {Object} layer
-     */
-    _setCommitFeatureStates : function(layer) {
-        // Insert feature to the server if transaction URL differs from the query URL that has given the feature.
-        // Otherwise, update data if the query server is same as the transaction server.
-        var state = (this.instance.conf.transactionUrl && this.instance.conf.queryUrl != this.instance.conf.transactionUrl) ? OpenLayers.State.INSERT : OpenLayers.State.UPDATE;
-        for (var i = 0; i < layer.features.length; ++i) {
-            var feature = layer.features[i];
-            feature.toState(state);
-            // just to be sure
-            feature.state = state;
-        }
     }
 });
