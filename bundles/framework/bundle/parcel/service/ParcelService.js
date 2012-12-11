@@ -36,13 +36,13 @@ function(instance) {
         this._wfst.loadRegisterUnit(fid, cb);
     },
 
-    savePlace : function(feature, featureType, cb) {
+    savePlace : function(feature, featureType, placeName, placeDescription, cb) {
         if (feature && featureType) {
             if (featureType === this._instance.conf.parcelFeatureType) {
-                this.saveParcel(feature, cb);
+                this.saveParcel(feature, placeName, placeDescription, cb);
 
             } else if (featureType === this._instance.conf.registerUnitFeatureType) {
-                this.saveRegisterUnit(feature, cb);
+                this.saveRegisterUnit(feature, placeName, placeDescription, cb);
 
             } else {
                 cb();
@@ -53,15 +53,15 @@ function(instance) {
         }
     },
 
-    saveParcel : function(feature, cb) {
+    saveParcel : function(feature, placeName, placeDescription, cb) {
         if (feature) {
-            this._wfst.saveParcel(feature, cb);
+            this._wfst.saveParcel(feature, placeName, placeDescription, cb);
         }
     },
 
-    saveRegisterUnit : function(feature, cb) {
+    saveRegisterUnit : function(feature, placeName, placeDescription, cb) {
         if (feature) {
-            this._wfst.saveRegisterUnit(feature, cb);
+            this._wfst.saveRegisterUnit(feature, placeName, placeDescription, cb);
         }
     }
 }, {

@@ -65,14 +65,14 @@ function(instance) {
     /**
      * @param cb Requires information about the success as boolean parameter.
      */
-    saveParcel : function(feature, cb) {
-        this._commitFeature(feature, this.protocols['parcelCommit'], cb);
+    saveParcel : function(feature, placeName, placeDescription, cb) {
+        this._commitFeature(feature, placeName, placeDescription, this.protocols['parcelCommit'], cb);
     },
     /**
      * @param cb Requires information about the success as boolean parameter.
      */
-    saveRegisterUnit : function(feature, cb) {
-        this._commitFeature(feature, this.protocols['registerUnitCommit'], cb);
+    saveRegisterUnit : function(feature, placeName, placeDescription, cb) {
+        this._commitFeature(feature, placeName, placeDescription, this.protocols['registerUnitCommit'], cb);
     },
 
     /**
@@ -105,8 +105,23 @@ function(instance) {
     /**
      * @param cb Requires information about the success as boolean parameter.
      */
-    _commitFeature : function(feature, protocol, cb) {
+    _commitFeature : function(feature, placeName, placeDescription, protocol, cb) {
         var me = this;
+
+        // Set the place and description for the feature if they are given.
+        // If they are not given, then do not set them.
+        if (feature.attributes) {
+            if (placeName) {
+                // Here we suppose that server uses "nimi" property for the place name.
+                feature.attributes.nimi = placeName;
+            }
+            if (placeDescription || typeof placeDescription === "string") {
+                // Set the place description also if an empty string is given.
+                // Here we suppose that server uses "kuvaus" property for the place description.
+                feature.attributes.kuvaus = placeDescription;
+            }
+        }
+
         // Insert feature to the server if transaction URL differs from the query URL that has given the feature.
         // Otherwise, update data if the query server is same as the transaction server.
         var featureState = feature.state;
@@ -119,6 +134,11 @@ function(instance) {
             // just to be sure
             feature.state = OpenLayers.State.UPDATE;
         }
+
+        // Before commit, change the fid to be number.
+        // Query server may give a prefix in fid but it is not wanted in commit.
+        feature.fid = me._parseFidNumber(feature.fid);
+
         // Show dialog to inform about the asynchronous operation.
         var dialogAdding = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         var loc = this.instance.getLocalization('notification').placeAdding;
@@ -139,5 +159,20 @@ function(instance) {
                 cb(success);
             }
         });
+    },
+    /**
+     * Removes the possible string prefix from the given fid.
+     *
+     * @param {String} fid
+     * @return {String} Parsed fid. Notice, this will return only positive numbers. "-" is also parsed away.
+     */
+    _parseFidNumber : function(fid) {
+        var newFid = fid;
+        if (newFid && ( typeof newFid) === "string" && newFid.length > 0 && !isNaN(newFid.substr(length - 1))) {
+            // Get the number from the end of the string.
+            // Possible string prefix is removed.
+            newFid = parseInt(newFid.match(/(\d+)$/)[0], 10);
+        }
+        return newFid;
     }
 });

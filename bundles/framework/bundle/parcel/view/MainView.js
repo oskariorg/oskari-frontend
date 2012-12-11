@@ -128,6 +128,20 @@ function(instance) {
         var loc = this.instance.getLocalization();
         this.form = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.view.PlaceForm', this.instance);
 
+        // Get default value from the feature.
+        var defaultValues = {
+            place : {}
+        };
+        var feature = this.drawPlugin.getDrawing();
+        if (feature.attributes) {
+            // Here we suppose that server uses "nimi" property for the place name.
+            defaultValues.place.name = feature.attributes.nimi;
+            // Here we suppose that server uses "kuvaus" property for the place description.
+            defaultValues.place.desc = feature.attributes.kuvaus;
+        }
+        // Set the default values for the form.
+        this.form.setValues(defaultValues);
+
         var content = [{
             html : me.form.getForm(),
             useButtons : true,
@@ -223,7 +237,9 @@ function(instance) {
                 me._cleanupPopup();
             }
         }
-        this.instance.getService().savePlace(this.drawPlugin.getDrawing(), this.drawPlugin.getFeatureType(), serviceCallback);
+        var name = values ? values.name : undefined;
+        var description = values ? values.desc : undefined;
+        this.instance.getService().savePlace(this.drawPlugin.getDrawing(), this.drawPlugin.getFeatureType(), name, description, serviceCallback);
     },
     /**
      * @method _cleanupPopup
