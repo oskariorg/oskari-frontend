@@ -31,10 +31,39 @@ function(drawPlugin) {
      * {Oskari.mapframework.bundle.parcel.DrawingToolInstance} instance provides the features that are used for the splitting.
      */
     split : function() {
-        console.log("ParcelSplitter split TODO Remove this loging text");
-        var me = this;
-        var openLayersMap = me.drawPlugin.getMapModule().getMap();
-        var parcelLayer = me.drawPlugin.drawLayer;
-        var parcelFeature = parcelLayer.features[0];
+        if (this.drawPlugin.splitSelection) return;
+        //var openLayersMap = this.drawPlugin.getMapModule().getMap();
+        var parcelLayer = this.drawPlugin.drawLayer;
+        var featureInd = parcelLayer.features.length-1;
+        if (featureInd < 1) return;
+        this.drawPlugin.splitSelection = true;
+        var basePolygon = parcelLayer.features[0].geometry;
+        var operatingGeometry = parcelLayer.features[featureInd].geometry;
+        switch (operatingGeometry.CLASS_NAME) {
+            case "OpenLayers.Geometry.Polygon":
+                this.splitHole(basePolygon,operatingGeometry);
+                parcelLayer.redraw();
+                break;
+            case "OpenLayers.Geometry.LineString":
+                break;
+        }
+    },
+
+
+    /*
+     *
+     */
+    splitHole : function(outPolygon,inPolygon) {
+        outPolygon.addComponent(inPolygon.components[0]);
+    },
+
+    /*
+     *
+     */
+    splitLine : function(outPolygon,inPolygon) {
+
+
+
     }
+
 });
