@@ -30,7 +30,7 @@ function(instance) {
         url : instance.conf.queryUrl
     });
 
-    var urlCommit = instance.conf.transitionUrl || instance.conf.queryUrl;
+    var urlCommit = instance.conf.transactionUrl || instance.conf.queryUrl;
     this.protocols['parcelCommit'] = new OpenLayers.Protocol.WFS({
         version : '1.1.0',
         srsName : 'EPSG:3067',
