@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
     this.currentFeatureType = null;
     // Created in init.
     this.splitter = null;
-    this.splitSelection =false;
+    this.splitSelection = false;
 }, {
     getName : function() {
         return this.pluginName;
@@ -39,31 +39,38 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
                     // Then, the user needs to reselect what to do next.
                     // At the moment, this creates some consistency in the usability.
                     me.toggleControl();
-        
+
                     // Because a new feature was added, do splitting.
                     me.splitFeature();
+                },
+                "featuremodified" : function(event) {
                 }
             }
         });
+
+        // doesn't really need to be in array, but lets keep it for future development
+        this.selectControl = new OpenLayers.Control.SelectFeature(me.drawLayer)
+        this._map.addControl(this.selectControl);
+        this.selectControl.events.register("featurehighlighted", this, function(event) {
+            console.log("high featuren area: " + event.feature.geometry.getArea().toFixed(3));
+        });
+        // no harm in activating straight away
+        this.selectControl.activate();
+
+        // doesn't really need to be in array, but lets keep it for future development
+        this.modifyControl = new OpenLayers.Control.ModifyFeature(me.drawLayer);
+        this._map.addControl(this.modifyControl);
+        // no harm in activating straight away
+        this.modifyControl.activate();
 
         this.drawControls = {
             line : new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.Path),
             area : new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.Polygon)
         };
-
-        // doesn't really need to be in array, but lets keep it for future development
-        this.modifyControls = {
-            modify : new OpenLayers.Control.ModifyFeature(me.drawLayer)
-        };
         this._map.addLayers([me.drawLayer]);
         for (var key in this.drawControls) {
             this._map.addControl(this.drawControls[key]);
         }
-        for (var key in this.modifyControls) {
-            this._map.addControl(this.modifyControls[key]);
-        }
-        // no harm in activating straight away
-        this.modifyControls.modify.activate();
 
         this.requestHandlers = {
             startDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StartDrawingRequestHandler', me),
@@ -123,7 +130,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         var features = [feature];
         this.drawLayer.addFeatures(features);
         // preselect it for modification
-        this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
+        this.modifyControl.selectControl.select(this.drawLayer.features[0]);
+        this.selectControl.select(this.drawLayer.features[0]);
         this.currentFeatureType = featureType;
         // Zoom to the loaded feature.
         this._map.zoomToExtent(this.drawLayer.getDataExtent());
