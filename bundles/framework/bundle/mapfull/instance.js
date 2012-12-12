@@ -90,9 +90,6 @@ function() {
                 module.registerPlugin(plugins[i].instance);
                 module.startPlugin(plugins[i].instance);
             }
-            var geolocation = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.GeoLocationPlugin');
-            module.registerPlugin(geolocation);
-            module.startPlugin(geolocation);
         }
         
 		this.map = map;
