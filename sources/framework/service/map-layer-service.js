@@ -433,11 +433,23 @@ function(mapLayerUrl, sandbox) {
             layer.setMaxScale(mapLayerJson.maxScale);
             layer.setMinScale(mapLayerJson.minScale);
             layer.setDescription(mapLayerJson.subtitle);
-            //layer.setDataUrl(mapLayerJson.dataUrl);
+            
+            // metadata 
+            layer.setDataUrl(mapLayerJson.dataUrl);             
             layer.setMetadataIdentifier(mapLayerJson.dataUrl_uuid);
+            if( !layer.getMetadataIdentifier() && layer.getDataUrl() ) {
+            	var tempPartsForMetadata = layer.getDataUrl().split("uuid=");
+            	if( tempPartsForMetadata.length == 2 ) {
+            		layer.setMetadataIdentifier(tempPartsForMetadata[1]);
+            	}
+            }
+            
+            // backendstatus 
             if(mapLayerJson.backendStatus && layer.setBackendStatus) {
                 layer.setBackendStatus(mapLayerJson.backendStatus);
             }
+                        
+            // for grouping: organisation and inspire 
             if(mapLayerJson.orgName) {
                 layer.setOrganizationName(mapLayerJson.orgName);
             }
@@ -451,12 +463,14 @@ function(mapLayerUrl, sandbox) {
             else {
                 layer.setInspireName("");
             }
-            //layer.setOrderNumber(mapLayerJson.orderNumber);
             layer.setVisible(true);
             
+            // extent  
             if(mapLayerJson.geom && layer.setGeometryWKT) {
                 layer.setGeometryWKT(mapLayerJson.geom);
             }
+            
+            // permissions
             if(mapLayerJson.permissions) {
             	for(var perm in mapLayerJson.permissions) {
             		layer.addPermission(perm, mapLayerJson.permissions[perm]);	
@@ -558,7 +572,7 @@ function(mapLayerUrl, sandbox) {
 
         layer.setQueryable((jsonLayer.isQueryable == true));
         layer.setLegendImage(jsonLayer.legendImage);
-        layer.setDataUrl(jsonLayer.dataUrl);
+        
         if(jsonLayer.formats && jsonLayer.formats.value) {
             layer.setQueryFormat(jsonLayer.formats.value);
         }

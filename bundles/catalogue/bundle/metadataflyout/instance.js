@@ -69,23 +69,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 		"wmsUrl" : "x",
 		"opacity" : 60,
 		"checked" : "false",
-		"styledLayerDescriptor" : '<StyledLayerDescriptor version="1.0.0" ' 
-		+ 'xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd" ' + 
-		'    xmlns="http://www.opengis.net/sld" ' + 
-		'    xmlns:ogc="http://www.opengis.net/ogc" ' +
-		 '    xmlns:xlink="http://www.w3.org/1999/xlink" ' +
-		  '    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> ' + 
-		  '  <NamedLayer> ' + '    <Name>Simple point with stroke</Name> ' +
-		   '   <UserStyle><Title>GeoServer SLD Cook Book: Simple point with stroke</Title> ' +
-		    '    <FeatureTypeStyle><Rule>' + '<PolygonSymbolizer>' +
-		     ' <Graphic><Mark><WellKnownName>circle</WellKnownName>'+
-		     '<Fill>' + '        <CssParameter name="fill">#000040</CssParameter>' + '       </Fill>'+
-		     '<Stroke>' + '          <CssParameter name="stroke">#000040</CssParameter>' + 
-		     '           <CssParameter name="stroke-width">2</CssParameter>' + '          </Stroke>'+
-		     '</Mark><Size>12</Size></Graphic>' + '     </PolygonSymbolizer>' +
-		      '<TextSymbolizer><Label><ogc:PropertyName>title</ogc:PropertyName></Label>' +
-		       '<Fill><CssParameter name="fill">#000000</CssParameter></Fill></TextSymbolizer>' +
-		        '</Rule></FeatureTypeStyle>' + '</UserStyle></NamedLayer></StyledLayerDescriptor>'
+		"styledLayerDescriptor" : '<StyledLayerDescriptor version="1.0.0" ' + 'xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd" ' + '    xmlns="http://www.opengis.net/sld" ' + '    xmlns:ogc="http://www.opengis.net/ogc" ' + '    xmlns:xlink="http://www.w3.org/1999/xlink" ' + '    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> ' + '  <NamedLayer> ' + '    <Name>Simple point with stroke</Name> ' + '   <UserStyle><Title>GeoServer SLD Cook Book: Simple point with stroke</Title> ' + '    <FeatureTypeStyle><Rule>' + '<PolygonSymbolizer>' + ' <Graphic><Mark><WellKnownName>circle</WellKnownName>' + '<Fill>' + '        <CssParameter name="fill">#000040</CssParameter>' + '       </Fill>' + '<Stroke>' + '          <CssParameter name="stroke">#000040</CssParameter>' + '           <CssParameter name="stroke-width">2</CssParameter>' + '          </Stroke>' + '</Mark><Size>12</Size></Graphic>' + '     </PolygonSymbolizer>' + '<TextSymbolizer><Label><ogc:PropertyName>title</ogc:PropertyName></Label>' + '<Fill><CssParameter name="fill">#000000</CssParameter></Fill></TextSymbolizer>' + '</Rule></FeatureTypeStyle>' + '</UserStyle></NamedLayer></StyledLayerDescriptor>'
 	},
 
 	/**
@@ -107,7 +91,8 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 		this.sandbox = sandbox;
 
 		/* loader */
-		this.loader = Oskari.clazz.create("Oskari.catalogue.bundle.metadataflyout.service.MetadataLoader", this.getLocale()['loader'], sandbox);
+		this.loader = Oskari.clazz.create("Oskari.catalogue.bundle.metadataflyout.service.MetadataLoader", 
+			this.getLocale()['loader'], sandbox);
 
 		sandbox.register(this);
 
@@ -116,22 +101,23 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 		}
 
 		/* request handler */
-		this._requestHandlers['catalogue.ShowMetadataRequest'] = Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.request.ShowMetadataRequestHandler', sandbox, this);
+		this._requestHandlers['catalogue.ShowMetadataRequest'] = 
+			Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.request.ShowMetadataRequestHandler', sandbox, this);
+			
 		sandbox.addRequestHandler('catalogue.ShowMetadataRequest', this._requestHandlers['catalogue.ShowMetadataRequest']);
-		;
 
 		/* layer && layer plugin */
 		var layerSpec = {};
-		
-		for( var p in this.layerSpec ) {
+
+		for(var p in this.layerSpec ) {
 			layerSpec[p] = this.layerSpec[p];
 		}
-		
+
 		var layerLocale = this.getLocale()['layer'];
-		for( var p in layerLocale ) {
+		for(var p in layerLocale ) {
 			layerSpec[p] = layerLocale[p];
 		}
-		
+
 		var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 		var mapLayer = mapLayerService.createMapLayer(layerSpec);
 		mapLayerService.addLayer(mapLayer, true);
@@ -139,13 +125,13 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 
 		var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 		var layerPlugin = Oskari.clazz.create('Oskari.mapframework.mapmodule.MetadataLayerPlugin');
-		layerPlugin.setMapLayer(mapLayer); /* must have this one before register */
-		
+		layerPlugin.setMapLayer(mapLayer);
+		/* must have this one before register */
+
 		mapModule.registerPlugin(layerPlugin);
 		mapModule.startPlugin(layerPlugin);
 		this.layerPlugin = layerPlugin;
-		
-		
+
 		/*layerPlugin.addMapLayerToMap(mapLayer, true, false);*/
 
 		/* */
@@ -238,7 +224,9 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 	},
 	startExtension : function() {
 
-		this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.Flyout', this, this.getLocale()['flyout'], this.getLoader());
+		this.plugins['Oskari.userinterface.Flyout'] = 
+			Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.Flyout', this, this.getLocale()['flyout'], this.getLoader());
+			
 		//this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.Tile', this, this.getLocale()['tile']);
 	},
 	stopExtension : function() {
@@ -258,17 +246,17 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 	 * @method scheduleShowMetadata
 	 * schedules a refresh of the UI to load metadata asynchronously
 	 */
-	scheduleShowMetadata : function(uuid, RS_Identifier_Code, getRS_Identifier_CodeSpace) {
+	scheduleShowMetadata : function(allMetadata) {
 
 		/** update flyout content */
-		this.plugins['Oskari.userinterface.Flyout'].scheduleShowMetadata(uuid, RS_Identifier_Code, getRS_Identifier_CodeSpace);
+		this.plugins['Oskari.userinterface.Flyout'].scheduleShowMetadata(allMetadata);
 
 		this.getSandbox().requestByName(this, 'userinterface.UpdateExtensionRequest', [this, 'detach']);
 	},
 	/**
 	 *  @method showExtentOnMap
 	 */
-	showExtentOnMap : function(uuid, env,atts) {
+	showExtentOnMap : function(uuid, env, atts) {
 
 		var me = this;
 		if(!env)
@@ -283,7 +271,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 			var ep = e.toGeometry();
 
 			var ef = new OpenLayers.Feature.Vector(ep);
-			ef.attributes = atts  || ef.attributes;
+			ef.attributes = atts || ef.attributes;
 			feats.push(ef);
 		}
 
