@@ -95,6 +95,9 @@ function(instance, locale) {
 			page.init();
 			var panel = page.getPanel();
 			accordion.addPanel(panel)
+			if( n == 0) {
+				panel.open();
+			}
 			this.pages[data.uuid||(data.RS_Identifier_CodeSpace+":"+data.RS_Identifier_Code)] = {
 				page: page,
 				panel: panel

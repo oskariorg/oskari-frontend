@@ -193,6 +193,7 @@ function(instance, locale) {
 		/* Accordion support */
 		var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
 		panel.setTitle(this.contentState.title);
+		
 		var contentPanel = panel.getContainer();
 
 		contentPanel.append(this.container);
