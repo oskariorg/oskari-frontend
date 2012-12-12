@@ -235,6 +235,15 @@ function(id, imageUrl) {
         return this._pluginInstances;
     },
     /**
+     * @method getPluginInstance
+     * Returns plugin with given name if it registered on the map
+     * @param {String} pluginName name of the plugin to get
+     * @return {Oskari.mapframework.ui.module.common.mapmodule.Plugin}
+     */
+    getPluginInstance : function(pluginName) {
+        return this._pluginInstances[this.getName() + pluginName];
+    },
+    /**
      * @method isPluginActivated
      * Checks if a plugin matching the given name is registered to the map
      * @param {String} pluginName name of the plugin to check
@@ -365,6 +374,19 @@ function(id, imageUrl) {
      */
     getMap : function() {
         return this._map;
+    },
+    /**
+     * @method transformCoordinates
+     * Transforms coordinates from given projection to the maps projectino.
+     * @param {OpenLayers.LonLat} pLonlat  
+     * @param {String} srs projection for given lonlat params like "EPSG:4326"
+     * @return {OpenLayers.LonLat} transformed coordinates
+     */
+    transformCoordinates : function(pLonlat, srs) {
+        return pLonlat.transform(
+            new OpenLayers.Projection(srs), 
+            this.getMap().getProjectionObject()
+        );
     },
     /**
      * @method createMap

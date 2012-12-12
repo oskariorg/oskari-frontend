@@ -90,6 +90,9 @@ function() {
                 module.registerPlugin(plugins[i].instance);
                 module.startPlugin(plugins[i].instance);
             }
+            var geolocation = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.GeoLocationPlugin');
+            module.registerPlugin(geolocation);
+            module.startPlugin(geolocation);
         }
         
 		this.map = map;
@@ -137,7 +140,6 @@ function() {
 		enhancements.push(Oskari.clazz.create('Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnhancement'));
         
 		core.init(services, enhancements);
-		
 		// setup initial maplayers
     	var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 	    var initialLayers = conf.layers;
@@ -149,8 +151,17 @@ function() {
 	    }
 		  
         this._createUi();
+        
 		sandbox.registerAsStateful(this.mediator.bundleId, this);
-        this.setState(this.state);
+		
+		var skipLocation = false;
+		if(this.mapmodule.isPluginActivated('GeoLocationPlugin')) {
+		    // get plugin
+		    var plugin = this.mapmodule.getPluginInstance('GeoLocationPlugin');
+		    skipLocation = plugin.hasSetLocation();
+		}
+		
+        this.setState(this.state, skipLocation);
 	},
     /**
      * @method _teardownState
@@ -231,8 +242,9 @@ function() {
      * Sets the map state to one specified in the parameter. State is bundle specific, check the
      * bundle documentation for details.
      * @param {Object} state bundle state as JSON
+     * @param {Boolean} ignoreLocation true to NOT set map location based on state
      */
-    setState : function(state) {
+    setState : function(state, ignoreLocation) {
         var mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
         this._teardownState(mapmodule);
         
@@ -259,7 +271,7 @@ function() {
         }
 
 
-        if(state.east) {
+        if(state.east && ignoreLocation == false) {
             this.sandbox.getMap().moveTo( 
                 state.east,
                 state.north,

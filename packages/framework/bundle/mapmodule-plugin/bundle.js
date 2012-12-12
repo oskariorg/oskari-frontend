@@ -202,6 +202,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/vectorlayer/VectorLayerPlugin.js"
 		},
+        /**
+         * GeoLocation plugin
+         */
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/location/GeoLocationPlugin.js"
+        },
+		
 		/**
 		 * Requests & handlers
 		 */
