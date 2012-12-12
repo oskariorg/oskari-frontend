@@ -706,9 +706,6 @@ function() {
         
         content.html = contentHtml.join('');
 
-        /*var pluginLoc = this.getMapModule().getLocalization('plugin');
-        var myLoc = pluginLoc[this.__name];
-        data.title = myLoc.title;*/
         var rn = "HaravaInfoBox.ShowInfoBoxRequest";
         var rb = me._sandbox.getRequestBuilder(rn);
         var r = rb(data.popupid, "Info", [content], data.lonlat, true);

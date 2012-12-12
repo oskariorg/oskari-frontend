@@ -1267,7 +1267,7 @@ Oskari = (function() {
 		.getElementsByTagName("head")[0] : document.body;
 	    if (!preloaded()) {
                 if (jQuery.browser.msie) {
-                    document.createStyleSheet(sScriptSrc);
+                	document.createStyleSheet(sScriptSrc);
                 } else {
 	            var fn = sScriptSrc;
 	            var s = document.createElement("link");

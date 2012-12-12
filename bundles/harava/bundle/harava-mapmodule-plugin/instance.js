@@ -74,14 +74,14 @@ function() {
      * BundleInstance protocol method
      */
     stop : function() {
-/*
+
     	var sandbox = this.sandbox();
         for(p in this.eventHandlers) {
             sandbox.unregisterFromEventByName(this, p);
         }
 
         // request handler cleanup 
-        sandbox.removeRequestHandler('userguide.ShowUserGuideRequest', this._requestHandlers['userguide.ShowUserGuideRequest']);
+        sandbox.removeRequestHandler('UpdateMapRequest', this.requestHandlers['updateMapRequest']);
 
         var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
 
@@ -90,7 +90,6 @@ function() {
         //this.sandbox.unregisterStateful(this.mediator.bundleId);
         this.sandbox.unregister(this);
         this.started = false;
-        */
     },
     /**
 	 * @method init
