@@ -336,7 +336,12 @@ function(mapLayerUrl, sandbox) {
         
         baseLayer.setDataUrl(baseMapJson.dataUrl);
         baseLayer.setMetadataIdentifier(baseMapJson.dataUrl_uuid);
-        
+        if( !baseLayer.getMetadataIdentifier() && baseLayer.getDataUrl() ) {
+            	var tempPartsForMetadata = baseLayer.getDataUrl().split("uuid=");
+            	if( tempPartsForMetadata.length == 2 ) {
+            		baseLayer.setMetadataIdentifier(tempPartsForMetadata[1]);
+            	}
+            }
         
         if(baseMapJson.orgName) {
             baseLayer.setOrganizationName(baseMapJson.orgName);

@@ -100,8 +100,18 @@ function(instance, locale) {
 			}
 			this.pages[data.uuid||(data.RS_Identifier_CodeSpace+":"+data.RS_Identifier_Code)] = {
 				page: page,
-				panel: panel
+				panel: panel,
+				data: data
 			}; 
+		}
+		
+		for(p in this.pages ) {
+			var pageInfo = this.pages[p];
+			if( !pageInfo ) {	
+				continue;
+			}
+			var data = pageInfo.data;
+			var page = pageInfo.page
 			page.scheduleShowMetadata(data.uuid, data.RS_Identifier_Code, data.RS_Identifier_CodeSpace);
 		}
 	},
