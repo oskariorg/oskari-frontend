@@ -50,17 +50,17 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 			"type" : "text/css",
 			"src" : "../../../../resources/catalogue/bundle/metadataflyout/css/style.css"
 		},
-		/* ], "locales" : [ */ 
+		 ], "locales" : [  
 		{
-			"language" : "fi",
+			"lang" : "fi",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/catalogue/bundle/metadataflyout/locale/fi.js"
 		},{
-			"language" : "en",
+			"lang" : "en",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/catalogue/bundle/metadataflyout/locale/en.js"
 		},{
-			"language" : "sv",
+			"lang" : "sv",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/catalogue/bundle/metadataflyout/locale/sv.js"
 		}],
