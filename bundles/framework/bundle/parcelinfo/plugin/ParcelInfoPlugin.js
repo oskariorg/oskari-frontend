@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.parcelinfo.plugin.ParcelInfoPlugin
- * Provides a coordinate display for map
+ * Provides information about the selected feature.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.parcelinfo.plugin.ParcelInfoPlugin',
 /**
@@ -9,16 +9,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcelinfo.plugin.ParcelInfoPlug
  * @param {Object} config
  *      JSON config with params needed to run the plugin
  */
-function(config,locale) {
+function(config, locale) {
     this._conf = config;
-	this._locale = locale;
+    this._locale = locale;
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
     this._map = null;
     this._elements = {};
     this.__templates = {};
-    
+
 }, {
     /** @static @property __name plugin name */
     __name : 'ParcelInfoPlugin',
@@ -45,7 +45,7 @@ function(config,locale) {
      */
     setMapModule : function(mapModule) {
         this.mapModule = mapModule;
-        if(mapModule) {
+        if (mapModule) {
             this.pluginName = mapModule.getName() + this.__name;
         }
     },
@@ -66,24 +66,7 @@ function(config,locale) {
      *          reference to application sandbox
      */
     init : function(sandbox) {
-
-        this.__templates['latlondiv'] = 
-            jQuery('<div class="piDiv">' +
-                   ' <div class="piSpansWrapper">' + 
-                   ' <div class="piRow">' + 
-               '  <div class="piCrsLabel"></div>' +
-               ' </div>' +
-                   ' <div class="piRow">' + 
-               '  <div class="piLabel piLabelN" axis="lat"></div>' +
-               '  <div class="piValue" axis="lat"></div>' +
-               ' </div>' +
-               '  <br clear="both">' +
-               ' <div class="piRow">' +
-               '  <div class="piLabel piLabelE" axis="lon"></div>' +
-               '  <div class="piValue" axis="lon"></div>' + 
-               ' </div>' +
-               ' </div>' + 
-               '</div>');
+        this.__templates['infodiv'] = jQuery('<div>' + '<table class="piMain">' + '<tr>' + '<td class="piHeaderLabel" colspan="2"></td>' + '</tr>' + '<tr>' + '<td class="piLabel piLabelName" infotype="name"></td>' + '<td class="piValue" infotype="name"></td>' + '</tr>' + '<tr>' + '<td class="piLabel piLabelArea" infotype="area"></td>' + '<td class="piValue" infotype="area"></td>' + '</tr>' + '<tr>' + '<td class="piLabel piLabelLength" infotype="length"></td>' + '<td class="piValue" infotype="length"></td>' + '</tr>' + '</table>' + '</div>');
     },
     /**
      * @method register
@@ -112,7 +95,7 @@ function(config,locale) {
 
         sandbox.register(this);
         this._createUI();
-        for(p in this.eventHandlers ) {
+        for (p in this.eventHandlers ) {
             sandbox.registerForEventByName(this, p);
         }
     },
@@ -126,11 +109,11 @@ function(config,locale) {
      */
     stopPlugin : function(sandbox) {
 
-        for(p in this.eventHandlers ) {
+        for (p in this.eventHandlers ) {
             sandbox.unregisterFromEventByName(this, p);
         }
-        
-        if(this._elements['display']) {
+
+        if (this._elements['display']) {
             this._elements['display'].remove();
             delete this._elements['display'];
         }
@@ -168,46 +151,45 @@ function(config,locale) {
         var me = this;
         // get div where the map is rendered from openlayers
         var parentContainer = jQuery(this._map.div);
-		var el = me._elements['display'];
-        if(!me._elements['display']) {
-            el = me._elements['display'] = me.__templates['latlondiv'].clone();
+        var el = me._elements['display'];
+        if (!me._elements['display']) {
+            el = me._elements['display'] = me.__templates['infodiv'].clone();
         }
-        
-        var crs = me._map.getProjection();
-        var crsText = me._locale['crs'][crs];
-        
-        el.find('.piCrsLabel').html(crsText);
-        el.find('.piLabelN').html(me._locale['compass']['N']);
-        el.find('.piLabelE').html(me._locale['compass']['E']);
-        
+
+        el.find('.piHeaderLabel').html(me._locale['header']);
+        el.find('.piLabelName').html(me._locale['info']['name']);
+        el.find('.piLabelArea').html(me._locale['info']['area']);
+        el.find('.piLabelLength').html(me._locale['info']['length']);
+
         parentContainer.append(el);
         this.update();
         el.show();
     },
     /**
      * @method update
-     * @param {Object} data contains lat/lon information to show on UI
-     * Updates the given coordinates to the UI
+     * @param {Object} data contains information to show on UI
+     * Updates the given information to the UI
      */
     update : function(data) {
-        if(!data || !data.latlon) {
-            // update with map coordinates if coordinates not given
-            var map = this._sandbox.getMap();
+        if (!data || !data.info) {
             data = {
-                'latlon' : {
-                    'lat' : map.getY(),
-                    'lon' : map.getX()
+                'info' : {
+                    'name' : '',
+                    'area' : '',
+                    'length' : ''
                 }
             };
         }
         var me = this;
-        var latlon = data['latlon'];
+        var info = data['info'];
         var el = me._elements['display'];
-        var spanLat = el.find('.piValue[axis="lat"]');
-        var spanLon = el.find('.piValue[axis="lon"]');
-        if(spanLat && spanLon) {
-            spanLat.text(latlon.lat);
-            spanLon.text(latlon.lon);
+        var spanName = el.find('.piValue[infotype="name"]');
+        var spanArea = el.find('.piValue[infotype="area"]');
+        var spanLength = el.find('.piValue[infotype="length"]');
+        if (spanName && spanArea && spanLength) {
+            spanName.text(info.name);
+            spanArea.text(info.area);
+            spanLength.text(info.length);
         }
     },
 
@@ -223,20 +205,13 @@ function(config,locale) {
          */
         'MouseHoverEvent' : function(event) {
             this.update({
-                'latlon' : {
-                    'lat' : Math.floor(event.getLat()),
-                    'lon' : Math.floor(event.getLon())
+                'info' : {
+                    'name' : 'todo',
+                    'area' : 'todo',
+                    'length' : 'todo'
                 }
             });
-        },
-        /**
-         * @method AfterMapMoveEvent
-         * Shows map center coordinates after map move
-         */
-        'AfterMapMoveEvent' : function(event) {
-            this.update();
         }
-
     },
 
     /**

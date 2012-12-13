@@ -1,47 +1,26 @@
-.piDiv {
-    position : absolute;
-    bottom : 30px;
-    right : 30px;
-    display : block;
-    color : #3C3C3C;
-    background : white;    
-    font-size : 12px;
-    z-index : 64738;
+.piMain {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    display: block;
+    color: #3C3C3C;
+    background: white;
+    font-size: 12px;
+    z-index: 64738;
     border: 1px solid #c4c4c4;
-    width: 120px;
-}
-.piSelection {
-    color : white;
-    background : #3C3C3C;
-    padding : 10px;
-}
-
-.piSpansWrapper {
-    width : 100%;
     padding : 5px 10px 5px 10px;
 }
 
-.piRow {
-}
-
-.piArrowDown {
-    float : right;
-    width : 0;
-    height : 0;
-    border-left : 8px solid transparent;
-    border-right : 8px solid transparent;
-    border-top : 8px solid #707070;
-    margin-top : 4px;
+.piHeaderLabel {
+    text-align: center;
+    font-weight: bold;
 }
 
 .piLabel {
-    text-align : left;
-    float:left
+    font-weight: bold;
+    text-align: left;
 }
 
 .piValue {
-    text-align : right;
-    float:right;
-    padding-right: 20px;
-    padding-bottom: 5px;
+    text-align: right;
 }

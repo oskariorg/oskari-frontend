@@ -5,12 +5,11 @@ Oskari.registerLocalization({
 		"title" : "",
 		"desc" : "",
 		"display" : {
-			"crs" : {
-				"EPSG:3067" : "ETRS89-TM35FIN"
-			},
-			"compass" : {
-				"N" : "P: ",
-				"E" : "I: "
+		    "header" : "Valitun paikan info",
+			"info" : {
+			    "name" : "Nimi: ",
+				"area" : "Pinta-ala: ",
+				"length" : "Piiri: "
 			}
 		}
 	}
