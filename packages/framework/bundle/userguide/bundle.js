@@ -55,9 +55,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundle", func
 			"type" : "text/css",
 			"src" : "../../../../resources/framework/bundle/userguide/css/style.css"
 		}],
-		
-		"locales" : [
-		
+		"locales" : [		
 		{
 			"lang" : "fi",
 			"type" : "text/javascript",
@@ -70,9 +68,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundle", func
 			"lang" : "sv",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/userguide/locale/en.js"
-		}
-		
-		]
+		}]
 	},
 	"bundle" : {
 		/**
