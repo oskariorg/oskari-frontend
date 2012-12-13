@@ -582,7 +582,7 @@ function() {
                 }
             }
         }
-        else if (pValue.indexOf && pValue.indexOf('http://') == 0) {
+        else if (pValue.indexOf && pValue.indexOf('://') > 0 && pValue.indexOf('://') < 7) {
             var label = value;
             var link = jQuery('<a target="_blank"></a>');
             link.attr('href', pValue);

@@ -33,6 +33,9 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 
 		}, {
 			"type" : "text/javascript",
+			"src" : "../../../../bundles/catalogue/bundle/metadataflyout/view/MetadataPage.js"
+		},{
+			"type" : "text/javascript",
 			"src" : "../../../../bundles/catalogue/bundle/metadataflyout/Flyout.js"
 		}, {
 			"type" : "text/javascript",
