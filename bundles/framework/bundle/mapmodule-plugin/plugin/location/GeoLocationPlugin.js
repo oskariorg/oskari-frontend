@@ -1,6 +1,6 @@
 /**
- * @class Oskari.mapframework.bundle.mappublished.GeoLocationPlugin
- *
+ * @class Oskari.mapframework.bundle.mappublished.GeoLocationPlugin 
+ * 
  * Tries to locate the user by using HTML5 GeoLocation services or tries a fallback to 
  * http://dev.maxmind.com/geoip/javascript GeoIP if GeoLocation is not available.
  * Centers the map on the users location with zoom level 6 if location is determined successfully.
@@ -195,7 +195,8 @@ function() {
                 timeout:6000
             });
         }
-        else if(geoip_latitude && geoip_longitude) {
+        else if(typeof window.geoip_latitude == 'function' && 
+                typeof window.geoip_longitude == 'function') {
             // if available, use http://dev.maxmind.com/geoip/javascript
             var lat = geoip_latitude();
             var lon = geoip_longitude();
