@@ -48,6 +48,6 @@ function(title) {
     },
     matchesKeyword : function(layerId, keyword) {
         var searchableIndex = this.searchIndex[layerId];
-        return searchableIndex.indexOf(keyword) != -1;
+        return searchableIndex.indexOf(keyword.toLowerCase()) != -1;
     }
 });
