@@ -183,6 +183,13 @@ function() {
                 var lat = position.coords.latitude;
                 var lon = position.coords.longitude;
                 callback(lon, lat);
+            }, function(errors) {
+                //ignored
+            }, {
+                // accept and hour long cached position
+                maximumAge:3600000,
+                // timeout after 6 seconds
+                timeout:6000
             });
         }
         else if(geoip_latitude && geoip_longitude) {
