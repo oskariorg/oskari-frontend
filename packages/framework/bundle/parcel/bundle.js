@@ -121,7 +121,7 @@ function() {
         {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/parcel/css/style.css"
-        },         {
+        }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/parcel/css/icons.css"
         }],

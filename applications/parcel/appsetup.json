@@ -166,6 +166,20 @@
                     }
                 }
             }
+        }, {
+            "title": "Parcel Info",
+            "bundleinstancename": "parcelinfo",
+            "fi": "Paikan info",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "parcelinfo",
+            "metadata": {
+                "Import-Bundle": {
+                    "parcel": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    }
+                }
+            }
         }
     ]
 }
