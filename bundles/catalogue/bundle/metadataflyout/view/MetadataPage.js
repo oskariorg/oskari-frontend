@@ -60,7 +60,6 @@ function(instance, locale) {
 
 	};
 
-
 	/**
 	 * @property panel {Oskari.userinterface.component.AccordionPanel}
 	 */
@@ -84,7 +83,7 @@ function(instance, locale) {
 	 */
 	templates : {
 		content : "<div class='metadataflyout_content'></div>",
-		browseGraphic : "<div class='metadataflyout_content_browseGraphic'><img /></div>",
+		browseGraphic : "<div class='metadataflyout_content_browseGraphic'></div>",
 		viewTabs : "<div class='metadataflyout_content_tabs'></div>",
 		viewTab : "<div class='metadataflyout_content_tab'></div>",
 		titles : {
@@ -189,16 +188,15 @@ function(instance, locale) {
 		this.alert.insertTo(this.container);
 
 		this.container.append(content);
-		
+
 		/* Accordion support */
 		var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
 		panel.setTitle(this.contentState.title);
-		
+
 		var contentPanel = panel.getContainer();
 
 		contentPanel.append(this.container);
 		this.panel = panel;
-	
 
 	},
 	destroy : function() {
@@ -265,8 +263,10 @@ function(instance, locale) {
 		var bgEl = jQuery(this.browseGraphic);
 		bgEl.empty();
 
-		var img = img || jQuery('<img />');
-		bgEl.append(img);
+		if(img) {
+			/*var img = img || jQuery('<img />');*/
+			bgEl.append(img);
+		}
 
 	},
 	/**
@@ -297,15 +297,20 @@ function(instance, locale) {
 
 			/* Let's split at .\n to DIVs */
 
-			jQuery.each(newContent.find('.metadataContent'), function(n, p) {
+			jQuery.each(newContent.find('td.metadataContent'), function(n, p) {
 
 				var part = jQuery(p);
 				var parent = part.parent();
 				/*parent.remove(part);*/
 
-				var newContainerPart = jQuery('<td />');
+				var newContainerPart = jQuery('<td class="metadataContent"/>');
+				
+				/* hack to fix ultraloooong URLs */
+				if( part.hasClass("MD_DigitalTransferOptions"))
+					newContainerPart.addClass("MD_DigitalTransferOptions");
 
-				jQuery.each(part.text().split("\.\n"), function(nn, txtPart) {
+				var partSplice = part.text().split("\.\n")
+				jQuery.each(partSplice, function(nn, txtPart) {
 
 					var trimmed = jQuery.trim(txtPart);
 					if(trimmed.length == 0) {
@@ -313,13 +318,15 @@ function(instance, locale) {
 					}
 
 					var newPart = jQuery('<div class="metadataflyout_content_section"/>');
-					newPart.text(trimmed + ".");
+					if(partSplice.length > 1) {
+						newPart.text(trimmed + ".");
+					} else {
+						newPart.text(trimmed);
+					}
 					newContainerPart.append(newPart);
 				});
-
 				part.remove();
 				parent.append(newContainerPart);
-
 				me._linkify(newContainerPart);
 			});
 			/* Let's fix HREFs to click events */
@@ -370,19 +377,17 @@ function(instance, locale) {
 		me.instance.getLoader().loadGeonetworkAjaxHTML(handler, viewId, metadata.uuid, metadata.RS_Identifier_Code, metadata.RS_Identifier_CodeSpace);
 
 	},
-	
 	_updatePanel : function() {
 		var me = this;
 		var metadataJson = me.contentState.metadataJson;
-		if( !metadataJson) {
+		if(!metadataJson) {
 			return;
 		}
-		var title = metadataJson.title ;
-		if( title ) {
+		var title = metadataJson.title;
+		if(title) {
 			this.panel.setTitle(title);
 		}
 	},
-	
 	/**
 	 * @method loadMetadataJSONForState
 	 */
@@ -413,18 +418,27 @@ function(instance, locale) {
 		/*
 		 * Let's display the browse graphic image
 		 */
+		this.resetBrowseGraphic();
+
 		if(browseGraphicUrl) {
 
 			var img = jQuery('<img />');
-			this.resetBrowseGraphic(img);
 
+			var url = null;
 			if(this.instance.getLoader().dev) {
-				img.attr('src', 'espoo_johtokartta_s.png');
+				url = 'espoo_johtokartta_s.png';
 			} else {
-				img.attr('src', browseGraphicUrl);
+				url = browseGraphicUrl;
 			}
-		} else {
-			this.resetBrowseGraphic();
+
+			var imgObj = new Image();
+			imgObj.onload = function() {
+				img.attr('src', url);
+				imgObj.onload = null;
+			};
+			imgObj.src = url;
+
+			this.resetBrowseGraphic(img);
 		}
 
 		/*
@@ -433,16 +447,15 @@ function(instance, locale) {
 		if(extentEnvelope) {
 			this.instance.showExtentOnMap(this.contentState.metadata.uuid, extentEnvelope, metadataJson);
 		}
-		
-		me.contentState.metadataJson = metadataJson; 
-		
+
+		me.contentState.metadataJson = metadataJson;
+
 		me._updatePanel();
 
 	},
 	resetContentState : function() {
 
 	},
-	
 	/**
 	 * @method showMetadata
 	 *
