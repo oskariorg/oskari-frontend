@@ -105,5 +105,9 @@ function() {
     update : function() {
     }
 }, {
+	/**
+     * @property {String[]} protocol
+     * @static 
+     */
     protocol : ['Oskari.bundle.BundleInstance']
 });

@@ -24,6 +24,18 @@ function(locale) {
     	jqhr: null,
     	timestamp: null
     };
+    
+    this.featureStyle = new OpenLayers.StyleMap({
+        "default": new OpenLayers.Style(
+            {
+                pointRadius: 8,
+                strokeColor: "#1C7372",
+                fillColor: "#1C7372",
+                fillOpacity: 0.3,
+                strokeOpacity: 0.4,
+                strokeWidth: 3
+        })
+    });
 }, {
     /** @static @property __name plugin name */
     __name : 'HaravaDrawSearchGeometryPlugin',
@@ -78,16 +90,7 @@ function(locale) {
         this._sandbox.printDebug("[HaravaDrawSearchGeometryPlugin] init");
         
         var openlayersMap = this.mapModule.getMap();
-        var my_style = new OpenLayers.StyleMap({
-            "default": new OpenLayers.Style(
-                {
-                    pointRadius: 8,
-                    strokeColor: "#1C7372",
-                    fillColor: "#1C7372",
-                    fillOpacity: 0.4,
-                    strokeWidth: 3
-            })
-        });
+        
     	me._searchLayer = new OpenLayers.Layer.Vector("Harava search geometry layer", {
     		eventListeners : {
                 "featuresadded" : function(layer) {
@@ -95,10 +98,10 @@ function(locale) {
                     me.finishedDrawing();
                 }
             },
-            styleMap: my_style
+            styleMap: this.featureStyle
     	});
     	me._oldSearchLayer = new OpenLayers.Layer.Vector("Harava old search geometry layer", {
-    		styleMap: my_style
+    		styleMap: this.featureStyle
     	});
     	openlayersMap.addLayers([me._searchLayer,me._oldSearchLayer]);
     	
@@ -150,7 +153,12 @@ function(locale) {
     	// Do default tool selection
     	$('#searchbygeom-point').trigger('click');
     },
-    handleSearchByGeom : function(geom) {
+    /**
+     * @method _handleSearchByGeom
+     * Handle geometry area selection
+     * @param {String} geom geometry string
+     */
+    _handleSearchByGeom : function(geom) {
         var me = this;
         
         var dte = new Date();
@@ -272,8 +280,6 @@ function(locale) {
 						});*/
 					}
 				});
-            	
-            	
             	
             	// Third get information collection spesific data
             	var infoName = null;
@@ -397,6 +403,11 @@ function(locale) {
         });
         
     },
+    /**
+     * @method _cancelAjaxRequest
+     * @private
+     * Cancel ajax request 
+     */
     _cancelAjaxRequest: function() {
     	var me = this;
     	if( !me._pendingAjaxQuery.busy ) {
@@ -412,21 +423,34 @@ function(locale) {
     	jqhr = null;
     	me._pendingAjaxQuery.busy = false;
     },
-    
+    /**
+     * @method _starAjaxRequest
+     * @private
+     * Start ajax request 
+     */
     _startAjaxRequest: function(dteMs) {
     	var me = this;
 		me._pendingAjaxQuery.busy = true;
 		me._pendingAjaxQuery.timestamp = dteMs;
 
     },
-    
+    /**
+     * @method _finishAjaxRequest
+     * @private
+     * Finish ajax request 
+     */
     _finishAjaxRequest: function() {
     	var me = this;
     	me._pendingAjaxQuery.busy = false;
         me._pendingAjaxQuery.jqhr = null;
         this._sandbox.printDebug("[HaravaDrawSearchGeometryPlugin] finished jqhr ajax request");
     },
-    
+    /**
+     * @method _buildLayerList
+     * @private
+     * Build visible layer id list 
+     * @return {Array} layer ids
+     */
     _buildLayerIdList: function()  {
         var me = this;
     	var selected = me._sandbox.findAllSelectedMapLayers();
@@ -460,16 +484,29 @@ function(locale) {
         
         return layerIds;
     },
-    
+    /**
+     * @method _notifyAjaxFailure
+     * @private
+     * Notify ajax failure 
+     */
     _notifyAjaxFailure: function() {
     	 var me = this;
     	 me._sandbox.printDebug("[HaravaDrawSearchGeometryPlugin] GetFeatureInfo AJAX failed");
     },
-    
+    /**
+     * @method _isAjaxRequestBusy
+     * @private
+     * Check at if ajax request is busy
+     * @return {Boolean} true if ajax request is busy, else false
+     */
     _isAjaxRequestBusy: function() {
     	var me = this;
     	return me._pendingAjaxQuery.busy;
     },
+    /**
+     * @method removeAllDrawings
+     * Remove drawed area selection on openlayer map
+     */
     removeAllDrawings: function(){
     	var me = this;
     	if(me._searchLayer!=null){
@@ -478,7 +515,11 @@ function(locale) {
     	if(me._oldSearchLayer!=null){
     		me._oldSearchLayer.removeAllFeatures();
     	}
-    },    
+    },
+    /**
+     * @method finishedDrawing
+     * Finish drawing
+     */
     finishedDrawing : function(){
     	var me = this;
     	var feat = me._searchLayer.features[0];
@@ -498,7 +539,7 @@ function(locale) {
 	    		Oskari.clazz.globals.sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon,lat,x,y]);
 	        	
 	    	} else {
-	    		me.handleSearchByGeom(feat.geometry.toString());
+	    		me._handleSearchByGeom(feat.geometry.toString());
 	    	}
     	}
     	me._searchLayer.removeAllFeatures();
@@ -549,8 +590,10 @@ function(locale) {
      * @param {String} searchMode search mode of plugin
      */
     startSearch : function(searchMode){
-    	var me = this;    	
-    	this.toggleControl(searchMode);
+    	var me = this;
+    	me._closeGfiInfo();
+    	me.removeAllDrawings();
+    	me.toggleControl(searchMode);
     	
     },
     /**
@@ -622,7 +665,17 @@ function(locale) {
         if (sandbox && sandbox.register) {
             this._sandbox = sandbox;
         }
-       
+        
+        var openlayersMap = this.mapModule.getMap();
+        
+        if(me._searchLayer!=null){
+        	openlayersMap.removeLayer(me._searchLayer);
+    	}
+    	if(me._oldSearchLayer!=null){
+    		openlayersMap.removeLayer(me._oldSearchLayer);
+    	}
+        
+        
         this._sandbox.unregister(this);
         this._map = null;
         this._sandbox = null;

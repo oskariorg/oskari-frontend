@@ -198,7 +198,11 @@ function() {
         var me = this;
         return this.eventHandlers[event.getName()].apply(this, [event]);
     },
-    
+    /**
+     * @method _cancelAjaxRequest
+     * @private
+     * Cancels ajax request
+     */
     _cancelAjaxRequest: function() {
     	var me = this;
     	if( !me._pendingAjaxQuery.busy ) {
@@ -214,21 +218,34 @@ function() {
     	jqhr = null;
     	me._pendingAjaxQuery.busy = false;
     },
-    
+    /**
+     * @method _startAjaxRequest
+     * @private
+     * Start ajax request
+     * @param dteMs {Integer} Datetime timestamp in milliseconds 
+     */
     _startAjaxRequest: function(dteMs) {
     	var me = this;
 		me._pendingAjaxQuery.busy = true;
 		me._pendingAjaxQuery.timestamp = dteMs;
 
     },
-    
+    /**
+     * @method _finishAjaxRequest
+     * @private
+     * Finish ajax request
+     */
     _finishAjaxRequest: function() {
     	var me = this;
     	me._pendingAjaxQuery.busy = false;
         me._pendingAjaxQuery.jqhr = null;
         this._sandbox.printDebug("[GetInfoPlugin] finished jqhr ajax request");
     },
-    
+    /**
+     * @method _buildLayerIdList
+     * @private
+     * @returns {Array} visible layer ids
+     */
     _buildLayerIdList: function()  {
         var me = this;
     	var selected = me._sandbox.findAllSelectedMapLayers();
@@ -262,12 +279,21 @@ function() {
         
         return layerIds;
     },
-    
+    /**
+     * @method _notifyAjaxFailure
+     * @private
+     * notifying ajax failure
+     */
     _notifyAjaxFailure: function() {
     	 var me = this;
     	 me._sandbox.printDebug("[GetInfoPlugin] GetFeatureInfo AJAX failed");
     },
-    
+    /**
+     * @method _isAjaxRequestBusy
+     * @private
+     * Checks if ajax request is busy
+     * @returns {Boolean} true if busy, else false
+     */
     _isAjaxRequestBusy: function() {
     	var me = this;
     	return me._pendingAjaxQuery.busy;
@@ -462,7 +488,6 @@ function() {
         }
         var me = this;
         var dataList = [];
-        // TODO: fix in serverside!
         if (!response.data.length) {
             // not an array
             dataList.push(response.data);
@@ -483,9 +508,11 @@ function() {
     },
 
     /**
+     * @method _formatFGfiDatum
+     * @private
      * Formats a GFI datum
      *
-     * @param datum
+     * @param {Array} datum 
      */
     _formatGfiDatum : function(datum) {
         if (!datum.presentationType) {
@@ -521,17 +548,15 @@ function() {
                 html = html + '"><td style="padding: 2px">' + attr + '</td><td style="padding: 2px">' + value + '</td></tr>';
             }
             html = html + '</table>';
-
-            //                  } else if ((datum.presentationType == 'TEXT') ||
-            // hasHtml) {
         } else {
-            // style="overflow:auto"
             html = '<div>' + datum.content + '</div>';
         }
         return html;
     },
 
     /**
+     * @method arrayToCSV
+     * @private
      * converts given array to CSV
      *
      * @param {Object}
@@ -552,6 +577,8 @@ function() {
     },
 
     /**
+     * @method _parseGfiResponse
+     * @private
      * Flattens a GFI response
      *
      * @param {Object} data     
@@ -621,7 +648,13 @@ function() {
             title : title
         };
     },
-
+    /**
+     * @method _json2html
+     * @private
+     * @param {Array} node
+     * @param {String} layerName
+     * @returns {String} converted html presentation of json
+     */
     _json2html : function(node,layerName) {
         var me = this;
         if (node == null) {
@@ -675,6 +708,8 @@ function() {
     },
 
     /**
+     * @method _showFeatures
+     * @private
      * Shows multiple features in an infobox
      *
      * @param {Array} data

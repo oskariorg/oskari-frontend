@@ -1,5 +1,5 @@
 /**
- *
+ * @class Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin
  */
 Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin', function() {
     this.mapModule = null;
@@ -8,14 +8,30 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
     this._map = null;
     this._supportedFormats = {};
 }, {
+	/** @static @property __name plugin name */
     __name : 'HaravaWMSLayerPlugin',
-
+    /**
+     * @method getName
+     * @return {String} plugin name
+     */
     getName : function() {
         return this.pluginName;
     },
+    /**
+     * @method getMapModule
+     * @return {Oskari.mapframework.ui.module.common.MapModule}
+     * reference to map
+     * module
+     */
     getMapModule : function() {
         return this.mapModule;
     },
+    /**
+     * @method setMapModule
+     * @param {Oskari.mapframework.ui.module.common.MapModule}
+     * reference to map
+     * module
+     */
     setMapModule : function(mapModule) {
         this.mapModule = mapModule;
         this.pluginName = mapModule.getName() + this.__name;
@@ -28,14 +44,38 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
     hasUI : function() {
         return false;
     },
+    /**
+     * @method register
+     * Interface method for the plugin protocol
+     */
     register : function() {
         this.getMapModule().setLayerPlugin('wmslayer', this);
     },
+    /**
+     * @method unregister
+     * Interface method for the plugin protocol
+     */
     unregister : function() {
         this.getMapModule().setLayerPlugin('wmslayer', null);
     },
+    /**
+     * @method init
+     *
+     * Interface method for the module protocol
+     *
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     *          reference to application sandbox
+     */
     init : function(sandbox) {
     },
+    /**
+     * @method startPlugin
+     *
+     * Interface method for the plugin protocol
+     *
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     *          reference to application sandbox
+     */
     startPlugin : function(sandbox) {
         this._sandbox = sandbox;
         this._map = this.getMapModule().getMap();
@@ -45,6 +85,14 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
             sandbox.registerForEventByName(this, p);
         }
     },
+    /**
+     * @method stopPlugin
+     *
+     * Interface method for the plugin protocol
+     *
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     *          reference to application sandbox
+     */
     stopPlugin : function(sandbox) {
 
         for(p in this.eventHandlers) {
@@ -56,18 +104,30 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
         this._map = null;
         this._sandbox = null;
     },
-    /* @method start
-     * called from sandbox
+    /**
+     * @method start
+     *
+     * Interface method for the module protocol
+     *
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     *          reference to application sandbox
      */
     start : function(sandbox) {
     },
     /**
      * @method stop
-     * called from sandbox
      *
+     * Interface method for the module protocol
+     *
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     *          reference to application sandbox
      */
     stop : function(sandbox) {
     },
+    /**
+     * @property {Object} eventHandlers
+     * @static
+     */
     eventHandlers : {
         'AfterMapLayerAddEvent' : function(event) {
             this.afterMapLayerAddEvent(event);
@@ -82,12 +142,19 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
             this.afterChangeMapLayerStyleEvent(event);
         }
     },
-
+    /**
+     * @method onEvent
+     * @param {Oskari.mapframework.event.Event} event a Oskari event object
+     * Event is handled forwarded to correct #eventHandlers if found or discarded
+     * if not.
+     */
     onEvent : function(event) {
         return this.eventHandlers[event.getName()].apply(this, [event]);
     },
     /**
-     *
+     * @method preselectLayers
+     * Adds given layers to map if of type WMS
+     * @param {Oskari.mapframework.domain.WmsLayer[]} layers
      */
     preselectLayers : function(layers) {
 
@@ -104,17 +171,22 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
         }
 
     },
-    /***************************************************************************
-     * Handle AfterMapLaeyrAddEvent
-     *
-     * @param {Object}
+    /**
+     * Handle _afterMapLayerAddEvent
+     * @private 
+     * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent}
      *            event
      */
     afterMapLayerAddEvent : function(event) {
         this.addMapLayerToMap(event.getMapLayer(), event.getKeepLayersOrder(), event.isBasemap());
     },
     /**
-     * primitive for adding layer to this map
+     * @method _addMapLayerToMap
+     * @private
+     * Adds a single WMS layer to this map
+     * @param {Oskari.mapframework.domain.WmsLayer} layer
+     * @param {Boolean} keepLayerOnTop
+     * @param {Boolean} isBaseMap
      */
     addMapLayerToMap : function(layer, keepLayerOnTop, isBaseMap) {
 
@@ -258,10 +330,11 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
             }
         }
     },
-    /***************************************************************************
+    /**
+     * @method _afterMapLayerRemoveEvent
      * Handle AfterMapLayerRemoveEvent
-     *
-     * @param {Object}
+     * @private
+     * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent}
      *            event
      */
     afterMapLayerRemoveEvent : function(event) {
@@ -269,6 +342,12 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
 
         this.removeMapLayerFromMap(layer);
     },
+    /**
+     * @method _afterMapLayerRemoveEvent
+     * Removes the layer from the map
+     * @private
+     * @param {Oskari.mapframework.domain.WmsLayer} layer
+     */
     removeMapLayerFromMap : function(layer) {
 
         if(!layer.isLayerOfType('WMS'))
@@ -295,6 +374,12 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
             remLayer[0].destroy();
         }
     },
+    /**
+     * @method getOLMapLayers
+     * Returns references to OpenLayers layer objects for requested layer or null if layer is not added to map. 
+     * @param {Oskari.mapframework.domain.WmsLayer} layer 
+     * @return {OpenLayers.Layer[]}
+     */
     getOLMapLayers : function(layer) {
 
         if(!layer.isLayerOfType('WMS')) {
@@ -318,10 +403,11 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
         }
         return null;
     },
-    /***************************************************************************
+    /**
+     * @method _afterChangeMapLayerOpacityEvent
      * Handle AfterChangeMapLayerOpacityEvent
-     *
-     * @param {Object}
+     * @private
+     * @param {Oskari.mapframework.event.common.AfterChangeMapLayerOpacityEvent}
      *            event
      */
     afterChangeMapLayerOpacityEvent : function(event) {
@@ -351,10 +437,10 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
             }
         }
     },
-    /***************************************************************************
+    /**
      * Handle AfterChangeMapLayerStyleEvent
-     *
-     * @param {Object}
+     * @private
+     * @param {Oskari.mapframework.event.common.AfterChangeMapLayerStyleEvent}
      *            event
      */
     afterChangeMapLayerStyleEvent : function(event) {
@@ -371,5 +457,9 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
         }
     }
 }, {
+	/**
+     * @property {String[]} protocol array of superclasses as {String}
+     * @static
+     */
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
