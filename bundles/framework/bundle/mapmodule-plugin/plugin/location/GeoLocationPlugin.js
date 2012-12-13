@@ -1,6 +1,9 @@
 /**
  * @class Oskari.mapframework.bundle.mappublished.GeoLocationPlugin
- * Tries to 
+ *
+ * Tries to locate the user by using HTML5 GeoLocation services or tries a fallback to 
+ * http://dev.maxmind.com/geoip/javascript GeoIP if GeoLocation is not available.
+ * Centers the map on the users location with zoom level 6 if location is determined successfully.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.GeoLocationPlugin',
 /**
@@ -43,11 +46,11 @@ function() {
     },
     /**
      * @method hasUI
-     * @return {Boolean} true
-     * This plugin has an UI so always returns true
+     * @return {Boolean} false
+     * This plugin doesn't have an UI so always returns false
      */
     hasUI : function() {
-        return true;
+        return false;
     },
     /**
      * @method init
