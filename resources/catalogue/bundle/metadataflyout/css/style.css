@@ -75,6 +75,7 @@
 	margin-left: 24px;
 	margin-bottom: 8px;
 	vertical-align: top;	
+	border: 0;
 }
 
 
@@ -115,6 +116,7 @@
 	margin-left: 24px;
 	margin-bottom: 8px;
 	vertical-align: top;
+	border: 0;
 }
 /* inspire */
 
@@ -154,6 +156,7 @@
 	margin-bottom: 8px;
 	vertical-align: top;
 	/*border: 1pt solid magenta;*/
+	border: 0;
 }
 .metadataflyout_content_inspire table tr td a {
 	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
