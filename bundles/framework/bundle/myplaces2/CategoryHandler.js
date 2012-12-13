@@ -74,7 +74,7 @@ function(instance) {
         /**
          * @method MyPlaces.MyPlacesChangedEvent
          * Checks if categories have been changed and updates corresponding maplayers accordingly
-         * @param {Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent} event
+         * @param {Oskari.mapframework.myplaces.event.MyPlacesChangedEvent} event
          */
         'MyPlaces.MyPlacesChangedEvent' : function(event) {
             this._handlePlacesChanged();
@@ -227,21 +227,12 @@ function(instance) {
         var catLoc = this.instance.getLocalization('category');
         var json = {
             wmsName: 'ows:my_places_categories',
-            descriptionLink:"",
             type: "wmslayer",
-            baseLayerId:-1,
-            legendImage:"",
-      //      gfi : 'disabled',
-            formats: {
-               value:"text/html"
-            },
             isQueryable:true,
-            minScale:12000000,
             opacity: 50,
             metaType: this.instance.idPrefix,
             orgName: catLoc.organization,
-            inspire: catLoc.inspire,
-            maxScale:1
+            inspire: catLoc.inspire
         };
         return json;
     },

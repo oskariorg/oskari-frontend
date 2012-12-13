@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.GetFeatureInfoRequest
  *
- * Requests for a get feature info for the clicked spot on the map to be shown.
+ * Requests for a get feature info for the given spot on the map to be shown.
  * 
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.

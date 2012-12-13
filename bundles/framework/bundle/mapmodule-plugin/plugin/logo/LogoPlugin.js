@@ -1,20 +1,18 @@
 /**
  * @class Oskari.mapframework.bundle.mappublished.LogoPlugin
- * Provides the NLS logo and link to terms of use for published map
+ * Displays the NLS logo and provides a link to terms of use on top of the map.
+ * Gets base urls from localization files.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
 /**
  * @method create called automatically on construction
  * @static
- * @param {Object} config
- * 		JSON config with params needed to run the plugin
  */
-function(config) {
+function() {
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
     this._map = null;
-    this._conf = config;
     this.template = null;
     this.element = null;
 }, {
@@ -122,7 +120,6 @@ function(config) {
     },
     /**
      * @method start
-     *
      * Interface method for the module protocol
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
@@ -132,7 +129,6 @@ function(config) {
     },
     /**
      * @method stop
-     *
      * Interface method for the module protocol
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
@@ -145,10 +141,6 @@ function(config) {
 	 * @static 
 	 */
     eventHandlers : {
-    	/*
-        'DummyEvent' : function(event) {
-            alert(event.getName());
-        }*/
     },
 
 	/** 
@@ -176,7 +168,7 @@ function(config) {
         		
         parentContainer.append(this.element);
         
-        var pluginLoc = this.getMapModule().getLocalization('plugin');
+        var pluginLoc = this.getMapModule().getLocalization('plugin', true);
         var myLoc = pluginLoc[this.__name];
         
         var link = this.element.find('div.icon');

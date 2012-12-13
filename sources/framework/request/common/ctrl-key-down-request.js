@@ -13,7 +13,6 @@ Oskari.clazz.define('Oskari.mapframework.request.common.CtrlKeyDownRequest',
  * @static
  */
 function() {
-    this._creator = null;
 }, {
     /** @static @property __name request name */
     __name : "CtrlKeyDownRequest",
@@ -31,5 +30,3 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-
-/* Inheritance */

@@ -1,8 +1,8 @@
 /**
- * @class Oskari.mapframework.mapmodule-plugin.getinfo.GetFeatureInfoHandler
+ * @class Oskari.mapframework.bundle.mapmodule.getinfo.GetFeatureInfoHandler
  * Handles requests regarding GFI functionality
  */
-Oskari.clazz.define('Oskari.mapframework.mapmodule-plugin.getinfo.GetFeatureInfoHandler',
+Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.getinfo.GetFeatureInfoHandler',
 /**
  * @method create called automatically on construction
  * @static

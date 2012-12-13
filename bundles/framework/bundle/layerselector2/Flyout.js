@@ -58,11 +58,14 @@ function(instance) {
         var orgTab = Oskari.clazz.create("Oskari.mapframework.bundle.layerselector2.view.LayersTab", this.instance, this.instance.getLocalization('filter').organization);
         orgTab.groupingMethod = 'getOrganizationName';
         
-        //var publishedTab = Oskari.clazz.create("Oskari.mapframework.bundle.layerselector2.view.PublishedLayersTab", this.instance, this.instance.getLocalization('filter').published);
-        
 		this.layerTabs.push(inspireTab);
         this.layerTabs.push(orgTab);
-        //this.layerTabs.push(publishedTab);
+        
+        // add published tab based on config
+        if(this.instance.conf && this.instance.conf.showPublishedTab == true) {
+            var publishedTab = Oskari.clazz.create("Oskari.mapframework.bundle.layerselector2.view.PublishedLayersTab", this.instance, this.instance.getLocalization('filter').published);
+            this.layerTabs.push(publishedTab);
+        }
 	},
 	/**
 	 * @method stopPlugin 

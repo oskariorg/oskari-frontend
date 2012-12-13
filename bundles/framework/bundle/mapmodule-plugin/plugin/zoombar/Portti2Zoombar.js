@@ -1,6 +1,10 @@
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar
- *
+ * 
+ * Zoombar implementation with jQuery UI and refined graphics. Location can be configured,
+ * but defaults on top of the map with placement details on the css-file.
+ * 
+ * See http://www.oskari.org/trac/wiki/DocumentationBundleMapModulePluginPorttiZoombar
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
 
@@ -16,7 +20,7 @@ function(config) {
     this.__templates = {};
     this.__elements = {};
     this.__parent = null;
-    this._slider
+    this._slider = null;
     this._zoombar_messages = {};
     this._suppressEvents = false;
     this._conf = config;
@@ -36,16 +40,16 @@ function(config) {
     },
     /**
      * @method getMapModule
-     * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map
-     * module
+     * Returns reference to map module
+     * @return {Oskari.mapframework.ui.module.common.MapModule} 
      */
     getMapModule : function() {
         return this.mapModule;
     },
     /**
      * @method hasUI
-     * @return {Boolean} true
      * This plugin has an UI so always returns true
+     * @return {Boolean} true
      */
     hasUI : function() {
         return true;
@@ -69,7 +73,7 @@ function(config) {
     init : function() {
         var me = this;
         // templates
-        this.__templates['zoombar'] = jQuery('<div class="mapplugin pzbDiv" title="Koko Suomi">' + 
+        this.__templates['zoombar'] = jQuery('<div class="oskariui mapplugin pzbDiv" title="Koko Suomi">' + 
             '<div class="pzbDiv-plus"></div>' + 
             '<input type=\'hidden\' />' + 
             '<div class="slider"></div>' + 
@@ -102,15 +106,34 @@ function(config) {
         for(p in this.eventHandlers) {
             sandbox.registerForEventByName(this, p);
         }
-        this.draw();
-        this.setZoombarValue(this._map.getZoom());
+        this._draw();
+        this._setZoombarValue(this._map.getZoom());
     },
     /**
-     * @method draw
-     *
-     * SimpleDiv
+     * @method stopPlugin
+     * mapmodule.Plugin protocol method.
+     * Unregisters self from sandbox and removes plugins UI.
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      */
-    draw : function() {
+    stopPlugin : function(sandbox) {
+
+        if(this.__elements['zoombarSlider']) {
+            this.__elements['zoombarSlider'].remove();
+            this._slider.remove();
+            delete this.__elements['zoombarSlider'];
+        }
+        sandbox.unregister(this);
+
+        //this._map = null;
+        this._sandbox = null;
+    },
+    /**
+     * @method _draw
+     * @private
+     * 
+     * Draws the zoombar on the screen.
+     */
+    _draw : function() {
         var me = this;
         if(!me.__parent) {
             me.__parent = this._map.div;
@@ -121,41 +144,37 @@ function(config) {
 
         var inputId = 'pzb-input-' + this.getName();
         var sliderId = 'pzb-slider-' + this.getName();
+        var sliderEl = me.__elements['zoombarSlider'].find('div.slider');
+
         me.__elements['zoombarSlider'].find('input').attr('id', inputId);
-        me.__elements['zoombarSlider'].find('div.slider').attr('id', sliderId);
+        sliderEl.attr('id', sliderId);
+        
         jQuery(me.__parent).append(me.__elements['zoombarSlider']);
-        me._slider = new Slider({
-            min : 0,
-            max : 12,
-            value : 0,
-            direction : 'y'
-        }).insertTo(sliderId).assignTo(inputId);
 
-        me._slider.level.hide();
-
-        var tooltips = me.getMapModule().getLocalization('zoombar_tooltip');
-
-        me._slider.on('change', function(event) {
-            // update tooltip
-            var tooltip = tooltips['zoomLvl-' + event.value];
-            if(tooltip) {
-                me.__elements['zoombarSlider'].attr('title', tooltip);
-            }
-            // zoom map if not suppressed
-            if(!this._suppressEvents) {
-                me.getMapModule().zoomTo(event.value);
+       	var sliderEl = me.__elements['zoombarSlider'].find('div.slider');
+       	sliderEl.css("height",(this._map.getNumZoomLevels()*11)+"px")
+       	me._slider = sliderEl.slider({
+            orientation: "vertical",
+            range: "min",
+            min: 0,
+            max: this._map.getNumZoomLevels()-1,
+            value: this._map.getZoom(),
+            slide: function( event, ui ) {
+                me.getMapModule().zoomTo( ui.value );
             }
         });
+        
+       
         var plus = me.__elements['zoombarSlider'].find('.pzbDiv-plus');
         plus.bind('click', function(event) {
-            if(me._slider.getValue() < 12) {
-                me.getMapModule().zoomTo(me._slider.getValue() + 1);
+            if(me._slider.slider('value') < 12) {
+                me.getMapModule().zoomTo(me._slider.slider('value') + 1);
             }
         });
         var minus = me.__elements['zoombarSlider'].find('.pzbDiv-minus');
         minus.bind('click', function(event) {
-            if(me._slider.getValue() > 0) {
-                me.getMapModule().zoomTo(me._slider.getValue() - 1);
+            if(me._slider.slider('value') > 0) {
+                me.getMapModule().zoomTo(me._slider.slider('value') - 1);
             }
         });
         // override default location if configured
@@ -179,31 +198,21 @@ function(config) {
             }
         }
     },
-    setZoombarValue : function(value) {
+    /**
+     * @method _setZoombarValue
+     * Sets the zoombar slider value
+     * @private
+     * @param {Number} value new Zoombar value
+     */
+    _setZoombarValue : function(value) {
         var me = this;
         if(me._slider) {
             // disable events in "onChange"
             this._suppressEvents = true;
-            me._slider.setValue(value);
+            /*me._slider.setValue(value);*/
+           me._slider.slider('value',value);
             this._suppressEvents = false;
         }
-    },
-    /**
-     * @method stopPlugin
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     * mapmodule.Plugin protocol method.
-     * Unregisters self from sandbox
-     */
-    stopPlugin : function(sandbox) {
-
-        if(this.__elements['zoombarSlider']) {
-            this.__elements['zoombarSlider'].remove();
-            this._slider.remove();
-        }
-        sandbox.unregister(this);
-
-        //this._map = null;
-        this._sandbox = null;
     },
     /**
      * @property {Object} eventHandlers
@@ -213,7 +222,7 @@ function(config) {
         'AfterMapMoveEvent' : function(event) {
             if(this._sandbox) {
                 var me = this;
-                me.setZoombarValue(event.getZoom());
+                me._setZoombarValue(event.getZoom());
             }
         }
     },

@@ -10,14 +10,8 @@ Oskari.clazz.define('Oskari.mapframework.domain.Style',
  * @static
  */
 function() {
-
-    /** style name */
     this._name = null;
-
-    /** style title */
     this._title = null;
-
-    /** style legend */
     this._legend = null;
 }, {
 

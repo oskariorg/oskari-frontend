@@ -76,7 +76,7 @@ function(instance) {
         this.templateLayerFooterTools = jQuery('<div class="left-tools">' + 
             '<div class="layer-visibility">' + '<a href="JavaScript:void(0);">' + loc['hide'] + '</a>' + '&nbsp;' + 
                 '<span class="temphidden" ' + 'style="display: none;">' + loc['hidden'] + '</span>' + '</div>' + 
-            '<div class="layer-opacity">' + '<div class="layout-slider" id="layout-slider">' + '</div> ' + 
+            '<div class="oskariui layer-opacity">' + '<div class="layout-slider" id="layout-slider">' + '</div> ' + 
             '<div class="opacity-slider" style="display:inline-block">' + 
             '<input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />%</div>' + 
             '</div>' + '</div>' + '<div class="right-tools">' +
@@ -126,7 +126,7 @@ function(instance) {
      */
     setState : function(state) {
         this.state = state;
-        /*console.log("Flyout.setState", this, state);*/
+        
     },
     /**
      * @method createUi
@@ -153,14 +153,26 @@ function(instance) {
             // footer tools
             this._appendLayerFooter(layerContainer, layer, layer.isInScale(scale), true);
         }
+        
+        listContainer.sortable({
+        	/*change: function(event,ui) {
+        		var item = ui.item ;
+        		me._layerOrderChanged(item)
+        	},*/
+        	stop: function(event,ui) {
+        		var item = ui.item ;
+        		me._layerOrderChanged(item)
+        	}
+        });
+        listContainer.disableSelection();
 
         // RIGHTJS sortable event handling
         //TODO: get rid of sortableBinded and UNBIND?
         if (!this.sortableBinded) {
             this.sortableBinded = true;
-            RightJS('.selectedLayersList').on('finish', function(event) {
+            /*RightJS('.selectedLayersList').on('finish', function(event) {
                 me._layerOrderChanged(event.index);
-            });
+            });*/
 
         }
     },
@@ -169,8 +181,6 @@ function(instance) {
 		
 		/* fix: we need this at anytime for slider to work */ 
         var footer = this._createLayerFooter(layer, layerDiv);
-        
-        /*console.log("IS VISIBLE AT APPENDLAYERFOOTER "+layer.isVisible());*/
         
         if (!layer.isVisible()) {
             toolsDiv.addClass('hidden');
@@ -193,6 +203,9 @@ function(instance) {
      	toolsDiv.append(footer);
         
  	    var slider = this._addSlider(layer,layerDiv);
+ 	     	    
+        var opa = layerDiv.find('div.layer-opacity input.opacity');
+        opa.attr('value', layer.getOpacity());
          
     },
     
@@ -200,53 +213,23 @@ function(instance) {
         var me = this;
         var lyrId = layer.getId();
         var opa = layer.getOpacity();
-        /*var slider = me._sliders[lyrId];
-        if (!slider || !slider.setStyle || !slider.handle || !slider.handle.setStyle) {*/
-            slider = new Slider({
-                min : 0,
-                max : 100,
-                value: opa
-            });
-
-            slider.setStyle({
-                'background-color' : 'transparent',
-                'background-image' : 'url("/Oskari' + '/resources/framework/bundle' + '/layerselection2/images' + '/opacity_slider.png")',
-                'height' : '5px',
-                'width' : '150px',
-                'border' : '0',
-                'margin' : 0
-            });
-
-            /*slider.level.hide();*/
-
-            slider.handle.setStyle({
-                'background-color' : 'transparent',
-                'background-image' : 'url("/Oskari' + '/resources/framework/bundle' + '/layerselection2/images' + '/opacity_index.png")',
-                'width' : '15px',
-                'height' : '15px',
-                'border' : '0',
-                'margin-left' : 0
-            });
-
-            slider.on('change', function(event) {
-                me._layerOpacityChanged(layer, event.value);
-            });
-            me._sliders[lyrId] = slider;
-        /*}*/
-        // only render if visible on screen
-        var lS = 'layout-slider-' + lyrId;
-        var oS = 'opacity-slider-' + lyrId;
         
-         // slider
-        var tools = layerDiv.find('.left-tools');
-        var opacitySlider = tools.find('div.layout-slider');
-        opacitySlider.attr('id', 'layout-slider-' + layer.getId());
-
-        var opacityInput = tools.find('input.opacity-slider');
-        opacityInput.attr('id', 'opacity-slider-' + layer.getId());
-        
-        slider.insertTo(lS);
-        slider.assignTo(oS);
+        var sliderEl = layerDiv.find('.layout-slider');
+        var slider = sliderEl.slider({
+        	min: 0, max: 100,	
+        	value: opa,
+        	/*change: function(event,ui) {
+                me._layerOpacityChanged(layer, ui.value);
+           	},*/
+            slide: function(event,ui) {
+                me._layerOpacityChanged(layer, ui.value);
+            },
+            stop: function(event,ui) {
+            	me._layerOpacityChanged(layer, ui.value);
+            }
+		});
+		
+        me._sliders[lyrId] = slider;
         
         return slider;
     },
@@ -256,9 +239,18 @@ function(instance) {
      * Notify Oskari that layer order should be changed
      * @param {Number} newIndex index where the moved layer is now
      */
-    _layerOrderChanged : function(newIndex) {
+    _layerOrderChanged : function(item) {
         var allNodes = jQuery(this.container).find('.selectedLayersList li');
-        var movedId = jQuery(allNodes[newIndex]).attr('layer_id');
+        var movedId = item.attr('layer_id');
+        var newIndex = -1;
+        
+        allNodes.each(function(index,el) {
+        	if( $(this).attr('layer_id') == movedId) {
+        		newIndex = index;
+        		return false;
+        	}	
+        	return true;
+        });
         if (newIndex > -1) {
             // the layer order is reversed in presentation
             // the lowest layer has the highest index
@@ -368,6 +360,9 @@ function(instance) {
             var request = builder(layer.getId());
             sandbox.request(me.instance.getName(), request);
         });
+
+        
+        
         return layerDiv;
     },
     /**
@@ -435,9 +430,9 @@ function(instance) {
      * externally
      */
     handleLayerOpacityChanged : function(layer) {
-        /*this._addSlider(layer);*/
+        
         if( this._sliders[layer.getId()] ) {  
-        	this._sliders[layer.getId()].setValue(layer.getOpacity());
+        	this._sliders[layer.getId()].slider('value',layer.getOpacity());
        	}        
     },
     /**

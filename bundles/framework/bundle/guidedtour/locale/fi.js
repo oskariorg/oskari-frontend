@@ -12,10 +12,12 @@ Oskari.registerLocalization(
             },
             "title": "Tervetuloa",
             "desc": "",
+            "tourseen" : {
+                "label" : "Älä näytä tätä viestiä uudelleen"
+            },
             "page1": {
                 "title": "Tervetuloa Paikkatietoikkunan karttanäkymään",
-                "message" : "Jos olet ensimmäistä kertaa Paikkatietoikkunan karttapalvelussamme, pikaoppaamme auttaa sinut alkuun.",
-                "label" : "Älä näytä tätä viestiä uudelleen"
+                "message" : "Jos olet ensimmäistä kertaa Paikkatietoikkunan karttapalvelussa, pikaoppaamme auttaa sinut alkuun."
             },
             "page2": {
                 "title": "Haku",
@@ -62,7 +64,7 @@ Oskari.registerLocalization(
             },
             "page9": {
                 "title": "Lähentäminen ja loitontaminen",
-                "message" : "Lähennä ja loitonna karttaa mittakaavasäätimestä tai plus- ja miinusmerkeistä säätimen yhteydessä. Vinkki: Voit lähentää ja loitontaa näppäimistön plus- ja miinusnäppäimillä tai lähentää kaksoisosoittamalla karttaa."
+                "message" : "Lähennä ja loitonna karttaa mittakaavasäätimestä tai plus- ja miinusmerkeistä säätimen yhteydessä. Vinkki: Voit lähentää ja loitontaa näppäimistön plus- ja miinusnäppäimillä tai lähentää kaksoisosoittamalla karttaa. Voit myös lähentää ja loitontaa hiiren rullaa vierittämällä."
             }
         }
     }

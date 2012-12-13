@@ -105,7 +105,7 @@ function() {
     eventHandlers : {
         /**
          * @method MapClickedEvent
-         * @param {Oskari.mapframework.mapmodule-plugin.event.MapClickedEvent} event
+         * @param {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event
          */
         'MapClickedEvent' : function(event) {
             alert('Map clicked');

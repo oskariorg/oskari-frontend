@@ -1,6 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.publisher.view.BasicPublisher
- * Renders the "publisher" view for basic use case
+ * Renders the publishers "publish mode" sidebar view where the user can make 
+ * selections regarading the map to publish.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 
@@ -15,8 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
 function(instance, localization) {
     var me = this;
     this.instance = instance;
-    this.template = jQuery('' + 
-                           '<div class="basic_publisher">' + 
+    this.template = jQuery('<div class="basic_publisher">' + 
     	                   '<div class="header">' + 
                            '<div class="icon-close">' + 
                            '</div>' + 
@@ -32,7 +32,7 @@ function(instance, localization) {
     this.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
     this.templateCustomSize = jQuery('<div class="customsize">' + '<input type="text" name="width" ' + 
             'placeholder="' + localization.sizes.width + '"/> x ' + 
-            '<input type="text" ' + 'name="height" placeholder="' + localization.sizes.height + '"/></div>');
+            '<input type="text" name="height" placeholder="' + localization.sizes.height + '"/></div>');
 
     /**
      * @property tools
@@ -98,9 +98,9 @@ function(instance, localization) {
 }, {
     /**
      * @method render
+     * Renders view to given DOM element
      * @param {jQuery} container reference to DOM element this component will be
      * rendered to
-     * Renders component to given DOM element
      */
     render : function(container) {
         var me = this;
@@ -115,7 +115,7 @@ function(instance, localization) {
         var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
         this.accordion = accordion;
         
-        var form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLocationForm',this.loc);
+        var form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLocationForm',this.loc, this);
         this.locationForm = form;
         form.init();
         var panel = form.getPanel();
@@ -190,6 +190,7 @@ function(instance, localization) {
         }
         // notify openlayers that size has changed
         mapModule.getMap().updateSize();
+        this._updateDomain();
     },
     /**
      * @method _createSizePanel
@@ -273,6 +274,7 @@ function(instance, localization) {
                 me._activatePreviewPlugin(tool, isChecked);
             };
         };
+        
         for (var i = 0; i < this.tools.length; ++i) {
             var toolContainer = this.templateTool.clone();
             var pluginKey = this.tools[i].id;
@@ -290,7 +292,7 @@ function(instance, localization) {
     },
     /**
      * @method handleMapMoved
-     * Updates the coordinate display to show current map center location
+     * Does nothing currently.
      */
     handleMapMoved : function() {
 
@@ -303,9 +305,9 @@ function(instance, localization) {
     /**
      * @method _activatePreviewPlugin
      * @private
+     * Enables or disables a plugin on map
      * @param {Object} tool tool definition as in #tools property
      * @param {Boolean} enabled, true to enable plugin, false to disable
-     * Enables or disables a plugin on map
      */
     _activatePreviewPlugin : function(tool, enabled) {
         if (!tool.plugin && enabled) {
@@ -359,6 +361,13 @@ function(instance, localization) {
         return buttonCont;
     },
     
+    /**
+     * @method _showValidationErrorMessage
+     * @private
+     * Takes an error array as defined by Oskari.userinterface.component.FormInput validate() and 
+     * shows the errors on a  Oskari.userinterface.component.Popup
+     * @param {Object[]} errors validation error objects to show 
+     */
     _showValidationErrorMessage : function(errors) {
     	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
     	var okBtn = dialog.createCloseButton(this.loc.buttons.ok);
@@ -455,6 +464,12 @@ function(instance, localization) {
         return selections;
 
     },
+    /**
+     * @method _publishMap
+     * @private
+     * Sends the gathered map data to the server to save them/publish the map.
+     * @param {Object} selections map data as returned by _gatherSelections()
+     */
     _publishMap : function(selections) {
     	var me = this;
         var sandbox = this.instance.getSandbox();
@@ -587,8 +602,10 @@ function(instance, localization) {
         // remove width definition to resume size correctly
         mapElement.width('');
         mapElement.height(jQuery(window).height());
+        
         // notify openlayers that size has changed
         mapModule.getMap().updateSize();
+        this._updateDomain();
 
         // resume normal plugins
         for (var i = 0; i < this.normalMapPlugins.length; ++i) {
@@ -603,11 +620,30 @@ function(instance, localization) {
         this.logoPlugin.stopPlugin(me.instance.sandbox);
     },
     /**
+     * @method _updateDomain
+     * @private
+     * Updates the map domain object so GFI and other functionalities depending on it works
+     * even after size changes.
+     */
+    _updateDomain : function() {
+        
+        var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
+        
+        var mapVO = this.instance.sandbox.getMap();
+        mapVO.setExtent(mapModule.getMap().getExtent());
+        mapVO.setMaxExtent(mapModule.getMap().getMaxExtent());
+        mapVO.setBbox(mapModule.getMap().calculateBounds());
+        
+        var mapElement = jQuery(mapModule.getMap().div);
+        mapVO.setWidth(mapElement.width());
+        mapVO.setHeight(mapElement.height());
+    },
+    /**
      * @method setEnabled
-     * @param {Boolean} isEnabled true to enable preview, false to disable
-     * preview
      * "Activates" the published map preview when enabled
      * and returns to normal mode on disable
+     * @param {Boolean} isEnabled true to enable preview, false to disable
+     * preview
      */
     setEnabled : function(isEnabled) {
         if (isEnabled) {
@@ -616,7 +652,48 @@ function(instance, localization) {
             this._disablePreview();
         }
     },
+    /**
+     * @method destroy
+     * Destroyes/removes this view from the screen.
+     */
     destroy : function() {
     	this.mainPanel.remove();
+    },
+    /**
+     * @method setPluginLanguage
+     * Changes system language with Oskari.setLang and stops/starts plugins to make 
+     * them rewrite their UI with the new language.
+     * @param {String} lang language code
+     */
+    setPluginLanguage : function(lang) {
+        Oskari.setLang(lang);
+
+        for (var i = 0; i < this.tools.length; ++i) {
+            var tool = this.tools[i];
+            if(tool._isPluginStarted) {
+                // stop and start if enabled to change language
+                this._activatePreviewPlugin(tool, false);
+                this._activatePreviewPlugin(tool, true);
+            }
+        }
+        // stop and start if enabled to change language
+        if(this.maplayerPanel.isEnabled()) {
+            var values = this.maplayerPanel.plugin.getBaseLayers();
+            
+            this.maplayerPanel.enablePlugin(false);
+            this.maplayerPanel.enablePlugin(true);
+            
+            var baseLayers = values.baseLayers;
+            var selectedBase = values.defaultBaseLayer;
+            for (var i = 0; i < baseLayers.length; ++i) {
+                var layer = this.instance.sandbox.findMapLayerFromSelectedMapLayers(baseLayers[i]);
+                this.maplayerPanel.plugin.addBaseLayer(layer);
+            }
+            this.maplayerPanel.plugin.selectBaseLayer(selectedBase);
+        }
+        
+        // stop and start if enabled to change language
+        this.logoPlugin.stopPlugin(this.instance.sandbox);
+        this.logoPlugin.startPlugin(this.instance.sandbox);
     }
 });

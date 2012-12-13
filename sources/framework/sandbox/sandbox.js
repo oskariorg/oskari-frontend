@@ -1,13 +1,21 @@
 /**
  * @class Oskari.mapframework.sandbox.Sandbox
- *
- * Module init/start/stop methods get reference to sandbox through the Oskari
- * Module protocol.
- * TODO: documentation TBD
+ * 
+ * Sandbox is the component providing bundles ways to get information about the status of the system 
+ * and communicate to other bundles using requests and events. Sandbox is created at the same time as
+ * Oskari.mapframework.core.Core. Module init/start/stop methods get reference to sandbox through 
+ * the Oskari Module protocol.
  */
-Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
+Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', 
 
-    /* Core */
+/**
+ * @method create called automatically on construction
+ * @static
+ * 
+ * @param {Oskari.mapframework.core.Core} core
+ */
+function(core) {
+
     this._core = core;
 
     /*
@@ -27,11 +35,12 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
     this.requestEventLog = [];
     this.requestEventStack = [];
 
+    // TODO: move to some conf?
 	/* as of 2012-09-24 debug by default false */
     this.gatherDebugRequests = false;
     this.maxGatheredRequestsAndEvents = 4096;
-    // TODO: move to some conf?
     this.requestAndEventGather = [];
+    this._eventLoopGuard = 0;
 
     this._user = null;
     this._ajaxUrl = null;
@@ -39,7 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
 	
 	/**
 	 * @method disableDebug
-	 * disables debug messaging and sequence diagram gathering
+	 * Disables debug messaging and sequence diagram gathering
 	 * if( core is set ) also core debug will be disabled
 	 */
     disableDebug : function() {
@@ -51,8 +60,9 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
         }
     },
     
-    /** @method enableDebug
-     * enables debug messaging and sequence diagram gathering (by default not enabled)
+    /** 
+     * @method enableDebug
+     * Enables debug messaging and sequence diagram gathering (by default not enabled)
      * if( core is set ) also core debug will be enabled
      */
     enableDebug : function() {
@@ -66,29 +76,39 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
     },
 
     /**
-     * Utility method for printing some debug
+     * @method printDebug
+     * Utility method for printing debug messages to browser console
+     * @param {String} text - message to print
      */
     printDebug : function(text) {
-        /* forward debugging to core */
         this._core.printDebug(text);
     },
 
     /**
+     * @method printWarn
+     * Utility method for printing warn messages to browser console
+     * @param {String} text
+     */
+    printWarn : function(text) {
+        /* forward warning to core */
+        this._core.printWarn(text);
+    },
+    /**
      * @method setUser
-     * @param {Object} userData
-     *     JSON presentation of user
+     * 
      * Creates Oskari.mapframework.domain.User from the given data as current
      * user
+     * @param {Object} userData
+     *     JSON presentation of user
      */
     setUser : function(userData) {
-        /* Create a user object */
         this._user = Oskari.clazz.create('Oskari.mapframework.domain.User', userData);
     },
     /**
      * @method getUser
-     * @return {Oskari.mapframework.domain.User} user
-     *
      * Returns current user. See #setUser
+     * 
+     * @return {Oskari.mapframework.domain.User} user
      */
     getUser : function() {
         if (!this._user) {
@@ -100,48 +120,25 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
 
     /**
      * @method setAjaxUrl
+     * Sets a global Url that is used to communicate with the server
      * @param {String} pUrl
-     *     Url that is used to communicate with the server
      */
     setAjaxUrl : function(pUrl) {
         this._ajaxUrl = pUrl;
     },
     /**
      * @method getAjaxUrl
-     * @return {String} user
-     *
-     * Returns ajax url for the application. See #setAjaxUrl
+     * Returns global ajax url for the application. See #setAjaxUrl
+     * @return {String}
      */
     getAjaxUrl : function() {
         return this._ajaxUrl;
     },
 
-    /**
-     * Prints given warn text to console
-     *
-     * @param {Object}
-     *            text
-     */
-    printWarn : function(text) {
-        /* forward warning to core */
-        this._core.printWarn(text);
-    },
-
-    /**
-     * Method for asking localized message
-     * @deprecated Use new locale system instead
-     *
-     * @param {Object}
-     *            messageKey that should give you localized test
-     */
-    getText : function(messageKey, params) {
-        this._core.printDebug('sandbox.getText() is deprecated - Use new locale system instead');
-        return this._core.getText(messageKey, params);
-    },
 
     /**
      * @method registerService
-     * Registers given service to core
+     * Registers given service to Oskari system
      *
      * @param {Oskari.mapframework.service.Service}
      *            service service to register
@@ -152,36 +149,12 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
     /**
      * Method for asking a registered service
      *
-     * @param {Object}
+     * @param {String}
      *            serviceQName that identifies the service in the core
+     * @return {Oskari.mapframework.service.Service}
      */
     getService : function(type) {
         return this._core.getService(type);
-    },
-    /**
-     * Shows popup message with given title key and message key.
-     *
-     * @param title_key
-     *            key for title
-     * @param message_key
-     *            key for actual message
-     *
-     * @param placeholders
-     *            placeholders enable you to replace parts of
-     *            message by replacing special strings inside
-     *            message. placeholders are marked inside
-     *            message using ##number## notation and these
-     *            replacements should be given in an array for
-     *            this method. For example givin calling
-     *            showPopup('key', 'message', ['this is
-     *            replacement 1', 'this is replacement 2']);
-     *            method will replace ##0## with 'this is
-     *            replacement 1' and ##1## with 'this is
-     *            replacement 2'
-     *
-     */
-    showPopupText : function(title_key, message_key, placeholders) {
-        return this._core.showPopupText(title_key, message_key, placeholders);
     },
     /**
      * @method registerAsStateful
@@ -191,7 +164,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
      *            pBundleId bundle instance id to which the state will be mapped
      * to
      * @param {Oskari.bundle.BundleInstance}
-     *            pInstance reference to actual instance
+     *            pInstance reference to actual bundle instance
      */
     registerAsStateful : function(pBundleId, pInstance) {
         this._statefuls[pBundleId] = pInstance;
@@ -201,8 +174,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
      * Unregisters given bundle instance from stateful bundles in sandbox
      *
      * @param {String}
-     *            pBundleId bundle instance id to which the state will be mapped
-     * to
+     *            pBundleId bundle instance id which to unregister
      */
     unregisterStateful : function(pBundleId) {
         this._statefuls[pBundleId] = null;
@@ -214,7 +186,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
      * #registerAsStateful).
      * The objects propertynames match the instance id and property value is
      * reference to the stateful component.
-     *
+     * @return {Object}
      */
     getStatefulComponents : function() {
         return this._statefuls;
@@ -222,7 +194,7 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
 
     /**
      * @method register
-     * Registers given module to sandbox
+     * Registers given module to sandbox and calls the modules init() method
      *
      * @param {Oskari.mapframework.module.Module}
      *            module
@@ -230,10 +202,16 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
     register : function(module) {
         this._modules.push(module);
         this._modulesByName[module.getName()] = module;
-        this._core.registerFrameworkComponentToRuntimeEnvironment(module, module.getName());
         return module.init(this);
     },
 
+    /**
+     * @method unregister
+     * Unregisters given module from sandbox
+     *
+     * @param {Oskari.mapframework.module.Module}
+     *            module
+     */
     unregister : function(module) {
         var remainingModules = [];
         for (var m = 0; m < this._modules.length; m++) {
@@ -244,32 +222,16 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
         }
         this._modules = remainingModules;
         this._modulesByName[module.getName()] = undefined;
-
-        this._core.unregisterFrameworkComponentFromRuntimeEnvironment(module, module.getName());
-        // return module.deinit(this);
+        delete this._modulesByName[module.getName()];
     },
 
     /**
+     * @method registerForEventByName
      * Registers given module to listen to given event
      *
-     * @param {Object}
-     *            module
-     * @param {Object}
-     *            event
+     * @param {Oskari.mapframework.module.Module} module
+     * @param {String} eventName
      */
-    registerForEvent : function(module, event) {
-        var eventName = event.getName();
-        this._core.printDebug("Sandbox is registering module '" + module.getName() + "' to event '" + eventName + "'");
-        var oldListeners = this._listeners[eventName];
-        if (oldListeners == null) {
-            oldListeners = new Array();
-            this._listeners[eventName] = oldListeners;
-        }
-
-        oldListeners.push(module);
-        this._core.printDebug("There are currently " + oldListeners.length + " listeners for event '" + eventName + "'");
-        delete event;
-    },
     registerForEventByName : function(module, eventName) {
 
         this._core.printDebug("#*#*#* Sandbox is registering module '" + module.getName() + "' to event '" + eventName + "'");
@@ -281,43 +243,25 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
 
         oldListeners.push(module);
         this._core.printDebug("There are currently " + oldListeners.length + " listeners for event '" + eventName + "'");
-
     },
 
     /**
-     * Unregisters given module from given event
+     * @method unregisterFromEventByName
+     * Unregisters given module from listening to given event
      *
-     * @param {Object}
-     *            module
-     * @param {Object}
-     *            event
+     * @param {Oskari.mapframework.module.Module} module
+     * @param {String} eventName
      */
-    unregisterFromEvent : function(module, event) {
-        var eventName = event.getName();
-        this._core.printDebug("Sandbox is unregistering module '" + module.getName() + "' from event '" + eventName + "'");
-        var oldListeners = this._listeners[eventName];
-        if (oldListeners == null) {
-            // return no listeners
-        }
-
-        var deleteIndex = oldListeners.indexOf(module);
-        if (deleteIndex > -1) {
-            oldListeners.splice(deleteIndex, 1);
-            this._core.printDebug("Module unregistered successfully from event");
-        } else {
-            this._core.printDebug("Module does not listen to that event, skipping.");
-        }
-        delete event;
-    },
     unregisterFromEventByName : function(module, eventName) {
         this._core.printDebug("Sandbox is unregistering module '" + module.getName() + "' from event '" + eventName + "'");
         var oldListeners = this._listeners[eventName];
         if (oldListeners == null) {
-            // return no listeners
+            // no listeners
+            this._core.printDebug("Module does not listen to that event, skipping.");
+            return;
         }
 
         var deleteIndex = -1;
-        // oldListeners.indexOf(module);
         for (var d = 0; d < oldListeners.length; d++) {
             if (oldListeners[d] == module) {
                 deleteIndex = d;
@@ -330,165 +274,35 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
         } else {
             this._core.printDebug("Module does not listen to that event, skipping.");
         }
-
-    },
-
-    /**
-     * Starts all registered modules
-     *
-     */
-    startModules : function() {
-
-        /**
-         * to avoid infinity let's store length
-         * before calling out starts
-         * modules may accidently lengthen  this._modules
-         * during start
-         */
-        var modulesLength = this._modules.length;
-        for (var i = 0; i < modulesLength; i++) {
-            var module = this._modules[i];
-
-            module.start(this);
-
-        }
     },
 
     /**
      * @method getRequestBuilder
-     * @param {String} name request name that we are creating
      *
-     * access to request builder that creates requests by name
+     * Access to request builder that creates requests by name
      * rather than by class name
+     * @param {String} name request name that we are creating
+     * @return {Function} builder function for given request
      */
     getRequestBuilder : function(name) {
         return this._core.getRequestBuilder(name);
     },
 
     /**
-     * access to event builder that creates events by name
-     * rather than by class name
+     * @method getEventBuilder
      *
+     * Access to event builder that creates events by name
+     * 
+     * @param {String} name request name that we are creating
+     * @return {Function} builder function for given event
      */
     getEventBuilder : function(name) {
         return this._core.getEventBuilder(name);
     },
 
-    eventLoopGuard : 0,
-
-    debugPushRequest : function(creator, req) {
-        if (!this.debugRequests)
-            return;
-        var reqLog = {
-            from : creator,
-            reqName : req.getName()
-        };
-        this.requestEventStack.push(reqLog);
-        this.requestEventLog.push(reqLog);
-        if (this.requestEventLog.length > 64)
-            this.requestEventLog.shift();
-    },
-    debugPopRequest : function() {
-        if (!this.debugRequests)
-            return;
-        this.requestEventStack.pop();
-    },
-
-    debugPushEvent : function(creator, target, evt) {
-        if (!this.debugEvents)
-            return;
-        this.eventLoopGuard++;
-
-        if (this.eventLoopGuard > 64)
-            throw "Events Looped?";
-
-        var evtLog = {
-            from : creator,
-            to : target.getName(),
-            evtName : evt.getName()
-        };
-        this.requestEventStack.push(evtLog);
-        this.requestEventLog.push(evtLog);
-        if (this.requestEventLog.length > 64)
-            this.requestEventLog.shift();
-    },
-    debugPopEvent : function() {
-        if (!this.debugEvents)
-            return;
-        this.eventLoopGuard--;
-
-        this.requestEventStack.pop();
-    },
-    // TODO: document or move elsewhere
-    /*doWfsLayerRelatedQueries : function(creator, mapLayer) {
-    this._core.doWfsLayerRelatedQueries(creator, mapLayer);
-    },*/
-
-    /**
-     * @method ajax
-     * @param {String} url
-     * 		URL to call
-     * @param {Function} success
-     * 		callback for succesful action
-     * @param {Function} failure
-     * 		callback for failed action
-     * @param {Function} complete - NOTE! NOT IMPLEMENTED YET
-     * 		callback on action completed
-     * @param {String} data (optional)
-     * 		data to post - NOTE! NOT IMPLEMENTED YET
-     *
-     * Makes an ajax request to url with given callbacks.
-     * Detects available framework and uses it to make the call.
-     * TODO: complete and data params not implemented
-     */
-    ajax : function(url, success, failure, complete, data) {
-        // use ExtJS as default
-        if (Ext && Ext.Ajax && Ext.Ajax.request) {
-            Ext.Ajax.request({
-                url : url,
-                //scope : this,
-                success : success,
-                failure : failure
-            });
-        }
-        // fallback #1 jQuery
-        else if (jQuery && jQuery.ajax) {
-
-            // wrapping response to an object similar to what EXTJS impl uses
-            var wrapperCB = function(pResp) {
-                var wrapper = {
-                    responseText : pResp
-                };
-                success(wrapper);
-            };
-            // if data != null -> type = POST
-            var type = "GET";
-            if (data) {
-                type = "POST";
-            }
-
-            jQuery.ajax({
-                type : type,
-                url : url,
-                beforeSend : function(x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
-                    }
-                },
-                success : wrapperCB,
-                error : failure
-            });
-
-        }
-        // TODO: fallback #2 Openlayers?
-        else {
-            alert("Couldn't make ajax call");
-        }
-    },
-
     /**
      * @method request
-     * Modules can request work to be done using this method
+     * Registered modules can request work to be done using this method
      *
      * @param {Oskari.mapframework.module.Module/String} creator
      *            that created request. This can be either actual
@@ -498,37 +312,38 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
      *            request to be performed
      */
     request : function(creator, request) {
-        var creatorComponent = null;
+        var creatorName = null;
         if (creator.getName != null) {
-            creatorComponent = this.findRegisteredModule(creator.getName());
+            creatorName = creator.getName();
         } else {
-            creatorComponent = this.findRegisteredModule(creator);
+            creatorName = creator;
         }
+        var creatorComponent = this.findRegisteredModuleInstance(creatorName);
 
         if (creatorComponent == null) {
             throw "Attempt to create request with unknown component '" + creator + "' as creator";
         }
 
-        this._core.setObjectCreator(request, creatorComponent);
+        this._core.setObjectCreator(request, creatorName);
 
-        this.printDebug("Module '" + creatorComponent + "' is requesting for '" + this.getObjectName(request) + "'...");
+        this.printDebug("Module '" + creatorName + "' is requesting for '" + this.getObjectName(request) + "'...");
 
         if (this.gatherDebugRequests) {
-            this.pushRequestAndEventGather(creatorComponent + "->Sandbox: ", this.getObjectName(request));
+            this._pushRequestAndEventGather(creatorName + "->Sandbox: ", this.getObjectName(request));
         }
 
         var rv = null;
 
-        this.debugPushRequest(creatorComponent, request);
+        this._debugPushRequest(creatorName, request);
         rv = this._core.processRequest(request);
-        this.debugPopRequest();
+        this._debugPopRequest();
 
         return rv;
     },
 
 	/**
 	 * @method requestByName
-	 * Modules can request work to be done using this method.
+	 * Registered modules can request work to be done using this method.
 	 *
 	 * This is a utility to work with request names instead of constructing
 	 * request objects 
@@ -537,63 +352,39 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
      *            that created request. This can be either actual
      *            module or the name of the module. Both are
      *            accepted.
-     * @param {String} requestName (this is NOT the class name)
-     * @param {Array} requestArgs REQUIRED though patched for backwards compatibility
-     * 
+     * @param {String} requestName (this is NOT the request class name)
+     * @param {Array} requestArgs (optional)
+     * @return {Boolean} Returns true, if request was handled, false otherwise
 	 */
     requestByName : function(creator, requestName, requestArgs) {
 
         this.printDebug("#!#!#! --------------> requestByName " + requestName);
         var requestBuilder = this.getRequestBuilder(requestName);
         var request = requestBuilder.apply(this, requestArgs||[]);
-
-        var creatorComponent = null;
-        if (creator.getName != null) {
-            creatorComponent = this.findRegisteredModule(creator.getName());
-        } else {
-            creatorComponent = this.findRegisteredModule(creator);
-        }
-
-        if (creatorComponent == null) {
-            throw "Attempt to create request with unknown component '" + creator + "' as creator";
-        }
-
-        this._core.setObjectCreator(request, creatorComponent);
-
-        this.printDebug("Module '" + creatorComponent + "' is requesting for '" + this.getObjectName(request) + "'...");
-
-        if (this.gatherDebugRequests) {
-            this.pushRequestAndEventGather(creatorComponent + "->Sandbox: ", this.getObjectName(request));
-        }
-
-        var rv = null;
-
-        this.debugPushRequest(creatorComponent, request);
-        rv = this._core.processRequest(request);
-        this.debugPopRequest();
-
-        return rv;
+        return this.request(creator, request);
     },
 
 	/**
 	 * @property postMasterComponent
 	 * @static
+	 * Used as request/event sender if creator cannot be determined
 	 */
 	postMasterComponent : "postmaster",
 	
     /**
      * @method postRequestByName
      * 
-     * This posts a request for processing. 
+     * This posts a request for processing. As the method doesn't require 
+     * a registered bundle to be the sender of the request
+     * #postMasterComponent property will be used as creator
      * 
      * NOTE! This is asynchronous - by design.
-     * 
 	 *
      * This attempts to loose some stack frames as well as provide
      * some yield time for the browser. 
      * 
-     * @param {String} requestName (this is NOT the class name)
-     * @param {Array} requestArgs REQUIRED though patched for backwards compatibility
+     * @param {String} requestName (this is NOT the request class name)
+     * @param {Array} requestArgs (optional)
      */
     postRequestByName : function(requestName, requestArgs) {
         var me = this;
@@ -608,18 +399,18 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
             me._core.setObjectCreator(request, creatorComponent);
 
             if (me.gatherDebugRequests) {
-                me.pushRequestAndEventGather(creatorComponent + "->Sandbox: ", me.getObjectName(request));
+                me._pushRequestAndEventGather(creatorComponent + "->Sandbox: ", me.getObjectName(request));
             }
             var rv = null;
 
 			if (this.debugRequests) {
-	            me.debugPushRequest(creatorComponent, request);
+	            me._debugPushRequest(creatorComponent, request);
 	        }
 	        
             rv = me._core.processRequest(request);
             
             if (this.debugRequests) {
-            	me.debugPopRequest();
+            	me._debugPopRequest();
             }
 
         }, 0);
@@ -627,182 +418,282 @@ Oskari.clazz.define('Oskari.mapframework.sandbox.Sandbox', function(core) {
     },
 
     /**
+     * @method _findModulesInterestedIn
      * Internal method for finding modules that are interested
      * in given event
-     *
-     * @param {Object}
-     *            event
-     * @return null if no interested parties are found, array of
-     *         modules otherwise
+     * @private 
+     * @param {Oskari.mapframework.event.Event} event
+     * @return {Oskari.mapframework.module.Module[]} modules listening to the event
      */
-    findModulesInterestedIn : function(event) {
+    _findModulesInterestedIn : function(event) {
         var eventName = event.getName();
         var currentListeners = this._listeners[eventName];
+        if(!currentListeners) {
+            return [];
+        }
         return currentListeners;
     },
 
     /**
-     * Finds out modules that are interested in given event and
+     * @method notifyAll
+     * Finds out registered modules that are interested in given event and
      * notifies them
      *
-     * @param {Object}
-     *            event
+     * @param {Oskari.mapframework.event.Event} event - event to send
+     * @param {Boolean} retainEvent true to not send event but only print debug which modules are listening, usually left undefined (optional)
      */
     notifyAll : function(event, retainEvent) {
 
-        //var module = {};
         var eventName;
         if (!retainEvent) {
 
             eventName = event.getName();
-
             this._core.printDebug("Sandbox received notifyall for event '" + eventName + "'");
-            /*
-             module.name = "|_Sandbox_|";
-             module.request = " -> " +eventName;
-             this.requestAndEventGather.push(module);
-             var rowMarker = {};
-             rowMarker.name = "   \\/";
-             rowMarker.request = "";
-             this.requestAndEventGather.push(rowMarker);
-             */
         }
 
-        var modules = this.findModulesInterestedIn(event);
-        if (modules != null) {
+        var modules = this._findModulesInterestedIn(event);
+        if (!retainEvent) {
+            this._core.printDebug("Found " + modules.length + " interested modules");
+        }
+        for (var i = 0; i < modules.length; i++) {
+            var module = modules[i];
             if (!retainEvent) {
-                this._core.printDebug("Found " + modules.length + " interested modules");
-            }
-            for (var i = 0; i < modules.length; i++) {
-                var module = modules[i];
-                if (!retainEvent) {
-                    this._core.printDebug("Notifying module '" + module.getName() + "'.");
+                this._core.printDebug("Notifying module '" + module.getName() + "'.");
 
-                    if (this.gatherDebugRequests) {
-                        this.pushRequestAndEventGather("Sandbox->" + module.getName() + ":", eventName);
-                    }
+                if (this.gatherDebugRequests) {
+                    this._pushRequestAndEventGather("Sandbox->" + module.getName() + ":", eventName);
                 }
+            }
 
-                this.debugPushEvent(this.getObjectCreator(event), module, event);
-                module.onEvent(event);
-                this.debugPopEvent();
-            }
-        } else {
-            if (!retainEvent) {
-                this._core.printDebug("No interested modules found.");
-            }
+            this._debugPushEvent(this.getObjectCreator(event), module, event);
+            module.onEvent(event);
+            this._debugPopEvent();
         }
 
-        /* finally clean event memory */
-        if (!retainEvent)
+        // finally clean event memory
+        if (!retainEvent) {
             delete event;
+        }
     },
 
     /**
-     * Returns registered module with given name if such exists.
+     * @method findRegisteredModuleInstance
+     * Returns module with given name if it is registered to sandbox
      *
-     * @param {Object}
-     *            name
+     * @param {String} name for the module
+     * @return {Oskari.mapframework.module.Module} registered module or null if not found
      */
     findRegisteredModuleInstance : function(name) {
         return this._modulesByName[name];
-
-        /*for (var i = 0; i < this._modules.length; i++) {
-         if (this._modules[i].getName() == name) {
-         return this._modules[i];
-         }
-         }
-         return null;*/
     },
 
     /**
-     * Checks whether a module by given name is registered.
-     *
-     * @param {Object}
-     *            name
-     */
-    findRegisteredModule : function(name) {
-        return this._modulesByName[name] ? this._modulesByName[name].getName() : null;
-
-        /*for (var i = 0; i < this._modules.length; i++) {
-         if (this._modules[i].getName() == name) {
-         return name;
-         }
-         }
-         return null;*/
-    },
-
-    /**
-     * Returns a request parameter
+     * @method getRequestParameter
+     * Returns a request parameter from query string
      * http://javablog.info/2008/04/17/url-request-parameters-using-javascript/
+     * @param {String} name - parameter name
+     * @return {String} value for the parameter or null if not found
      */
     getRequestParameter : function(name) {
         return this._core.getRequestParameter(name);
     },
 
-    /***********************************************************
-     * Get language.
-     */
-    getLanguage : function() {
-        return this._core.getLanguage();
-    },
 
-    /***********************************************************
-     * Get browser window size.
+    /**
+     * @method getBrowserWindowSize
+     * Returns an object with properties width and height as the window size in pixels
+     * @return {Object} object with properties width and height as the window size in pixels
      */
     getBrowserWindowSize : function() {
-        return this._core.getBrowserWindowSize();
+        if (jQuery.browser.opera && window.innerHeight != null) {
+            var height = window.innerHeight;
+        }
+        var width = jQuery(window).width();
+
+        var size = {};
+        size.height = jQuery(window).height();
+        size.width = width;
+
+        this.printDebug("Got browser window size is: width: " + size.width + " px, height:" + size.height + " px.");
+
+        return size;
     },
 
     /**
-     * JSON Event support
-     */
-    /**
-     * request / event helpers
+     * @method getObjectName
+     * Returns Oskari event/request name from the event/request object
+     * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} obj
+     * @return {String} name
      */
     getObjectName : function(obj) {
         return this._core.getObjectName(obj);
     },
+    /**
+     * @method getObjectCreator
+     * Returns Oskari event/request creator from the event/request object
+     * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} obj
+     * @return {String} creator
+     */
     getObjectCreator : function(obj) {
         return this._core.getObjectCreator(obj);
     },
+    /**
+     * @method setObjectCreator
+     * Sets a creator to Oskari event/request object
+     * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} obj
+     * @param {String} creator
+     */
     setObjectCreator : function(obj, creator) {
         return this._core.setObjectCreator(obj, creator);
     },
+    /**
+     * @method copyObjectCreatorToFrom
+     * Copies creator from objFrom to objTo
+     * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} objTo
+     * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} objFrom
+     */
     copyObjectCreatorToFrom : function(objTo, objFrom) {
         return this._core.copyObjectCreatorToFrom(objTo, objFrom);
     },
 
     /**
-     * one handler / request ?
+     * @method addRequestHandler
+     * Registers a request handler for requests with the given name 
+     * NOTE: only one request handler can be registered/request
+     * @param {String} requestName - name of the request
+     * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
      */
     addRequestHandler : function(requestName, handlerClsInstance) {
         return this._core.addRequestHandler(requestName, handlerClsInstance);
     },
 
     /**
-     * one handler / request ?
+     * @method removeRequestHandler
+     * Unregisters a request handler for requests with the given name 
+     * NOTE: only one request handler can be registered/request
+     * @param {String} requestName - name of the request
+     * @param {Oskari.mapframework.core.RequestHandler} handlerClsInstance request handler
      */
     removeRequestHandler : function(requestName, handlerInstance) {
         return this._core.removeRequestHandler(requestName, handlerInstance);
     },
-    pushRequestAndEventGather : function(name, request) {
+    
+    /**
+     * @method _debugPushRequest
+     * @private
+     * Adds request to list so we can show a debugging diagram with
+     * popUpSeqDiagram() method
+     * 
+     * @param {String} creator name for the component sending the request
+     * @param {Oskari.mapframework.request.Request} req - request that was sent
+     */
+    _debugPushRequest : function(creator, req) {
+        if (!this.debugRequests) {
+            return;
+        }
+        var reqLog = {
+            from : creator,
+            reqName : req.getName()
+        };
+        this.requestEventStack.push(reqLog);
+        this.requestEventLog.push(reqLog);
+        if (this.requestEventLog.length > 64) {
+            this.requestEventLog.shift();
+        }
+    },
+    /**
+     * @method _debugPopRequest
+     * @private
+     * Pops the request from the debugging stack
+     */
+    _debugPopRequest : function() {
+        if (!this.debugRequests) {
+            return;
+        }
+        this.requestEventStack.pop();
+    },
+
+    /**
+     * @method _debugPushEvent
+     * @private
+     * Adds event to list so we can show a debugging diagram with
+     * popUpSeqDiagram() method
+     * 
+     * @param {String} creator - name for the component sending the event
+     * @param {Oskari.mapframework.module.Module} target - module that is receiving the event
+     * @param {Oskari.mapframework.event.Event} evt - event that was sent
+     */
+    _debugPushEvent : function(creator, target, evt) {
+        if (!this.debugEvents) {
+            return;
+        }
+        this._eventLoopGuard++;
+
+        if (this._eventLoopGuard > 64) {
+            throw "Events Looped?";
+        }
+
+        var evtLog = {
+            from : creator,
+            to : target.getName(),
+            evtName : evt.getName()
+        };
+        this.requestEventStack.push(evtLog);
+        this.requestEventLog.push(evtLog);
+        if (this.requestEventLog.length > 64) {
+            this.requestEventLog.shift();
+        }
+    },
+    
+    /**
+     * @method _debugPopRequest
+     * @private
+     * Pops the event from the debugging stack
+     */
+    _debugPopEvent : function() {
+        if (!this.debugEvents) {
+            return;
+        }
+        this._eventLoopGuard--;
+        this.requestEventStack.pop();
+    },
+
+    /**
+     * @method _pushRequestAndEventGather
+     * @private
+     * Adds request/event to list so we can show a debugging diagram with
+     * popUpSeqDiagram() method
+     * 
+     * @param {String} name for the component sending the request
+     * @param {Oskari.mapframework.request.Request/Oskari.mapframework.event.Event} req - request that was sent
+     */
+    _pushRequestAndEventGather : function(name, request) {
         var module = {};
         module.name = name;
         module.request = request;
         this.requestAndEventGather.push(module);
-        if (this.requestAndEventGather.length > this.maxGatheredRequestsAndEvents)
+        if (this.requestAndEventGather.length > this.maxGatheredRequestsAndEvents) {
             this.requestAndEventGather.shift();
-
+        }
     },
+    /**
+     * @method popUpSeqDiagram
+     * Opens a new window containing a sequence diagram of requests and events that has been sent 
+     * for debugging purposes. Uses request/event creator to be set so to get usable diagram, requests
+     * should be sent from registered modules (instead of postRequestByName()). 
+     * 
+     * Use #enableDebug() to enable data gathering.
+     * 
+     * Uses www.websequencediagrams.com to create the diagram.
+     */
     popUpSeqDiagram : function() {
-        var seq_html = '<html><head></head><body><div class=wsd wsd_style="modern-blue" ><pre>';
+        var seq_html = '<html><head></head><body><div class="wsd" wsd_style="modern-blue"><pre>';
         var seq_commands = '';
         for (x in this.requestAndEventGather) {
             seq_commands += this.requestAndEventGather[x].name + this.requestAndEventGather[x].request + "\n";
         }
         if (seq_commands != '') {
-            seq_html += seq_commands + '</pre></div><script type="text/javascript" src="http://www.websequencediagrams.com/service.js"></script></body>';
+            seq_html += seq_commands + '</pre></div><script type="text/javascript" src="http://www.websequencediagrams.com/service.js"></script></body></html>';
             var openedWindow = window.open();
             openedWindow.document.write(seq_html);
             this.requestAndEventGather = [];

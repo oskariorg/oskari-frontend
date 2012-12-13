@@ -1,17 +1,37 @@
 /**
  * @class Oskari.mapframework.mapmodule.ControlsPlugin
- * Provides tools for measurement/zoombox
+ * 
+ * Adds mouse and keyboard controls to the map and adds tools controls 
+ * for zoombox and measurement (line/area). Also adds request handling for 
+ * ToolSelectionRequest, EnableMapKeyboardMovementRequest, DisableMapKeyboardMovementRequest,
+ * EnableMapMouseMovementRequest and DisableMapMouseMovementRequest.
+ * Overrides OpenLayers keyboard/mouse controls with PorttiKeyboard and PorttiMouse.
+ * 
+ * default configuration for mouse as of 2012-12-05:
+ * 
+ * 
+    {
+               "id":"Oskari.mapframework.mapmodule.ControlsPlugin",
+               "config" : {
+               		"mouse" : {
+            	   		"useCenterMapInWheelZoom" : false,
+ 						"useCenterMapInDblClickZoom": false
+ 					}	
+               }
+     }
+ * 
  */
 Oskari.clazz.define('Oskari.mapframework.mapmodule.ControlsPlugin',
 /**
  * @method create called automatically on construction
  * @static
  */
-function() {
+function(config) {
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
     this._map = null;
+    this.conf = config||{};
 }, {
     /** @static @property __name plugin name */
     __name : 'ControlsPlugin',
@@ -106,7 +126,7 @@ function() {
         for(var p in this.eventHandlers ) {
             sandbox.registerForEventByName(this, p);
         }
-        this.addMapControls();
+        this._addMapControls();
     },
     /**
      * @method stopPlugin
@@ -127,7 +147,7 @@ function() {
         }
 
         sandbox.unregister(this);
-        this.removeMapControls();
+        this._removeMapControls();
 
         this._map = null;
         this._sandbox = null;
@@ -178,10 +198,11 @@ function() {
         return this.eventHandlers[event.getName()].apply(this, [event]);
     },
     /**
-     * @method addMapControls
+     * @method _addMapControls
      * Add necessary controls on the map
+     * @private
      */
-    addMapControls : function() {
+    _addMapControls : function() {
         var me = this;
 
         this.getMapModule().addMapControl('zoomBoxTool', this._zoomBoxTool);
@@ -197,11 +218,11 @@ function() {
         this.getMapModule().addMapControl('mouseControls', this._mouseControls);
     },
     /**
-     * @method removeMapControls
+     * @method _removeMapControls
      * Remove added controls from the map
-     * 
+     * @private
      */
-    removeMapControls : function() {
+    _removeMapControls : function() {
         
         this._zoomBoxTool.deactivate();
         this.getMapModule().removeMapControl('zoomBoxTool', this._zoomBoxTool);
@@ -219,7 +240,8 @@ function() {
     
     /**
      * @method _createMapControls
-     * Add necessary controls on the map
+     * Constructs/initializes necessary controls for the map. After this they can be added to the map
+     * with _addMapControls().
      * @private
      */
     _createMapControls : function() {
@@ -307,7 +329,7 @@ function() {
         }
         
         // mouse control
-        this._mouseControls = new OpenLayers.Control.PorttiMouse();
+        this._mouseControls = new OpenLayers.Control.PorttiMouse(this.conf['mouse']);
         this._mouseControls.setup(this.getMapModule());
     }
 }, {

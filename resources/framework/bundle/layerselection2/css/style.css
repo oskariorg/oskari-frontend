@@ -49,8 +49,7 @@ div.layerselection2 .layer.selected div.layer-tools {
 div.layerselection2 div.layer-tools div.layout-slider {
 	width: 140px;
     display: inline-block;
-    margin-right: 15px;
-    margin-left: 10px;
+    margin-right: 16px;
 }
 div.layerselection2 div.layer-tools div.left-tools {
     display: inline-block;
@@ -60,8 +59,11 @@ div.layerselection2 div.layer-tools div.left-tools div.layer-visibility {
     display: inline-block;
 }
 div.layerselection2 div.layer-tools div.left-tools div.layer-opacity {
-    padding-right: 5px;
     display: inline-block;
+    background-image: url('/Oskari/resources/framework/bundle/layerselection2/images/opacity_slider.png');
+    background-repeat: no-repeat;    
+    
+
 }
 div.layerselection2 div.layer-tools div.left-tools div.layer-opacity input.opacity {
     padding: 1px;

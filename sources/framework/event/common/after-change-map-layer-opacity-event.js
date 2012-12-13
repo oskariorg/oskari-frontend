@@ -13,11 +13,9 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterChangeMapLayerOpacity
  *
  * @param
  * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
- *            mapLayer dimmed maplayer
+ *            mapLayer 
  */
 function(mapLayer) {
-    this._creator = null;
-
     this._mapLayer = mapLayer;
 }, {
     /** @static @property __name event name */
@@ -45,5 +43,3 @@ function(mapLayer) {
      */
     'protocol' : ['Oskari.mapframework.event.Event']
 });
-
-/* Inheritance */

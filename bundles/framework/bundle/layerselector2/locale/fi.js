@@ -27,6 +27,10 @@ Oskari.registerLocalization({
 			"type-wfs" : "Tietotuote"
 		},
 		"backendStatus" : {
+			"OK" : {
+				"tooltip" : "Karttataso on saatavilla tällä hetkellä.",
+				"iconClass" : "backendstatus-ok"
+			},
 			"DOWN" : {
 				"tooltip" : "Karttataso ei ole saatavilla tällä hetkellä.",
 				"iconClass" : "backendstatus-down"
@@ -34,6 +38,10 @@ Oskari.registerLocalization({
 			"MAINTENANCE" : {
 				"tooltip" : "Karttatason saatavuudessa on tiedossa käyttökatkoja lähipäivinä.",
 				"iconClass" : "backendstatus-maintenance"
+			},
+			"UNKNOWN" : {
+				"tooltip" : "",
+				"iconClass" : "backendstatus-ok"
 			}
 		}
 	}

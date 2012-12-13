@@ -1,6 +1,8 @@
 /**
  * @class Oskari.mapframework.bundle.mappublished.SearchPlugin
- * Provides a search functionality and result panel for published map
+ * Provides a search functionality and result panel for published map.
+ * Uses same backend as search bundle: 
+ * http://www.oskari.org/trac/wiki/DocumentationBundleSearchBackend
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
 /**
@@ -49,22 +51,22 @@ function(config) {
 	},
 	/**
 	 * @method hasUI
+     * This plugin has an UI so always returns true
 	 * @return {Boolean} true
-	 * This plugin has an UI so always returns true
 	 */
 	hasUI : function() {
 		return true;
 	},
 	/**
 	 * @method init
-	 *
-	 * Interface method for the module protocol
+	 * Interface method for the module protocol.
+	 * Initializes ui templates and search service.
 	 *
 	 * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
 	 * 			reference to application sandbox
 	 */
 	init : function(sandbox) {
-		var pluginLoc = this.getMapModule().getLocalization('plugin');
+		var pluginLoc = this.getMapModule().getLocalization('plugin', true);
 		this.loc = pluginLoc[this.__name];
 
 		this.template = jQuery('<div class="search-div">' + 
@@ -105,8 +107,8 @@ function(config) {
 	},
 	/**
 	 * @method startPlugin
-	 *
-	 * Interface method for the plugin protocol
+	 * Interface method for the plugin protocol.
+	 * Adds the plugin UI on the map.
 	 *
 	 * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
 	 * 			reference to application sandbox
@@ -123,8 +125,8 @@ function(config) {
 	},
 	/**
 	 * @method stopPlugin
-	 *
 	 * Interface method for the plugin protocol
+     * Removes the plugin UI from the map.
 	 *
 	 * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
 	 * 			reference to application sandbox
@@ -142,7 +144,6 @@ function(config) {
 	},
 	/**
 	 * @method start
-	 *
 	 * Interface method for the module protocol
 	 *
 	 * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
@@ -152,7 +153,6 @@ function(config) {
 	},
 	/**
 	 * @method stop
-	 *
 	 * Interface method for the module protocol
 	 *
 	 * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
@@ -164,17 +164,14 @@ function(config) {
 	 * @property {Object} eventHandlers
 	 * @static
 	 */
-	eventHandlers : {/*
-		 'DummyEvent' : function(event) {
-		 alert(event.getName());
-		 }*/
+	eventHandlers : {
 	},
 
 	/**
 	 * @method onEvent
+     * Event is handled forwarded to correct #eventHandlers if found or discarded
+     * if not.
 	 * @param {Oskari.mapframework.event.Event} event a Oskari event object
-	 * Event is handled forwarded to correct #eventHandlers if found or discarded
-	 * if not.
 	 */
 	onEvent : function(event) {
 		return this.eventHandlers[event.getName()].apply(this, [event]);
@@ -265,7 +262,7 @@ function(config) {
 	/**
 	 * @method _doSearch
 	 * @private
-	 * Sends out a Oskari.mapframework.request.common.SearchRequest with results callback #_showResults
+	 * Uses SearchService to make the actual search and calls  #_showResults
 	 */
 	_doSearch : function() {
 		if(this._searchInProgess == true) {
@@ -291,12 +288,13 @@ function(config) {
 	/**
 	 * @method _showResults
 	 * @private
+     * Renders the results of the search or shows an error message if nothing was found.
+     * Coordinates and zoom level of the searchresult item is written in data-href
+     * attribute in the tr tag of search result HTML table. Also binds click listeners to <tr> tags.
+     * Listener reads the data-href attribute and calls #_resultClicked with it for click handling.
+     * 
 	 * @param {Object} msg
 	 * 			Result JSON returned by search functionality
-	 * Renders the results of the search or shows an error message if nothing was found.
-	 * Coordinates and zoom level of the searchresult item is written in data-href
-	 * attribute in the tr tag of search result HTML table. Also binds click listeners to <tr> tags.
-	 * Listener reads the data-href attribute and calls #_resultClicked with it for click handling.
 	 */
 	_showResults : function(msg) {
 		// check if there is a problem with search string
@@ -364,28 +362,15 @@ function(config) {
 
 			content.html(table);
 			resultsContainer.show();
-
-			/*
-			 tableBody.find('tr[data-location]').addClass('clickable').click(
-			 function() {
-			 me._resultClicked(jQuery(this).attr('data-location'));
-			 }).find('a').hover( function() {
-			 jQuery(this).parents('tr').unbind('click');
-			 }, function() {
-			 jQuery(this).parents('tr').click( function() {
-			 me._resultClicked(jQuery(this).attr('data-location'));
-			 });
-			 });
-			 */
 			
 		}
 	},
 	/**
 	 * @method _resultClicked
+     * Click event handler for search result HTML table rows.
+     * Parses paramStr and sends out Oskari.mapframework.request.common.MapMoveRequest
 	 * @private
 	 * @param {String} paramStr String that has coordinates and zoom level separated with '---'.
-	 * Click event handler for search result HTML table rows.
-	 * Parses paramStr and sends out Oskari.mapframework.request.common.MapMoveRequest
 	 */
 	_resultClicked : function(paramStr) {
 		var values = paramStr.split('---');
@@ -396,8 +381,8 @@ function(config) {
 	},
 	/**
 	 * @method _enableSearch
+     * Resets the 'search in progress' flag and removes the loading icon
 	 * @private
-	 * Resets the 'search in progress' flag and removes the loading icon
 	 */
 	_enableSearch : function() {
 		this._searchInProgess = false;
@@ -411,8 +396,7 @@ function(config) {
 	_hideSearch : function() {
 
 		this.container.find('div.results').hide();
-
-		/* Send hide marker request */
+		// Send hide marker request
 		this._sandbox.request(this.getName(), this._sandbox.getRequestBuilder('HideMapMarkerRequest')());
 	}
 }, {

@@ -49,11 +49,14 @@ Oskari.registerLocalization({
       "placename": {
         "placeholder": "Give the place a name"
       },
+      "placelink": {
+        "placeholder": "Give a URL"
+      },
       "placedesc": {
         "placeholder": "Describe the place"
       },
       "category": {
-        "label": "Map level",
+        "label": "Map layer",
         "new": "New layer..."
       }
     },

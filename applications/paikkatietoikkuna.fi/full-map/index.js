@@ -153,13 +153,7 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
                     "service-map" : {
                         bundlePath : '/Oskari/packages/framework/bundle/'
                     },
-                    "common" : {
-                        bundlePath : '/Oskari/packages/framework/bundle/'
-                    },
                     "domain" : {
-                        bundlePath : '/Oskari/packages/framework/bundle/'
-                    },
-                    "runtime" : {
                         bundlePath : '/Oskari/packages/framework/bundle/'
                     },
                     "mapmodule-plugin" : {
@@ -177,6 +171,23 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
                 },
                 "Require-Bundle-Instance" : []
 
+            },
+            instanceProps : {}
+        },
+        {
+            title : 'OskariUI',
+            fi : 'OskariUI',
+            sv : 'OskariUI',
+            en : 'OskariUI',
+            bundlename : 'oskariui',
+            bundleinstancename : 'oskariui',
+            metadata : {
+                "Import-Bundle" : {
+                    "oskariui" : {
+                        bundlePath : '/Oskari/packages/framework/bundle/'
+                    }
+                },
+                "Require-Bundle-Instance" : []
             },
             instanceProps : {}
         },
@@ -457,6 +468,22 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
                 "Require-Bundle-Instance" : []
             },
             instanceProps : {}
+        },{
+            title : 'Printout',
+            fi : 'Karttatuloste',
+            sv : 'Kartutskrift',
+            en : 'Map Printout',
+            bundlename : 'printout',
+            bundleinstancename : 'printout',
+            metadata : {
+                "Import-Bundle" : {
+                    "printout" : {
+                        bundlePath : '/Oskari/packages/framework/bundle/'
+                    }
+                },
+                "Require-Bundle-Instance" : []
+            },
+            instanceProps : {}
         }, {
             title : 'PostProcessor',
             fi : 'PostProcessor',
@@ -588,11 +615,8 @@ jQuery(document).ready(function() {
             if (appSetup.startupSequence && appSetup.configuration) {
                 main.appSetup.startupSequence = appSetup.startupSequence;
                 main.appConfig = appSetup.configuration;
-                // some build script uncommenting magic here? logging should be disabled before this!
                 main.start(function(instance) {
                     var sb = instance.getSandbox();
-                    //sb.disableDebug();
-                    //sb._core.disableDebug();
                     gfiParamHandler(sb);
                 });
             } else {

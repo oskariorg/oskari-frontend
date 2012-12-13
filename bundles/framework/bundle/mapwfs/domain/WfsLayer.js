@@ -18,7 +18,7 @@ function() {
     this._type = null;
 
     /* opacity from 0 to 100 */
-    this._opacity = null;
+    this._opacity = 100;
 
     this._inspireName = null;
 
@@ -394,6 +394,13 @@ function() {
         return this._type === "BASE_LAYER";
     },
     /**
+     * @method isGroupLayer
+     * @return {Boolean} true if this is a group layer (=has sublayers)
+     */
+    isGroupLayer : function() {
+        return false;
+    },
+    /**
      * @method isInScale
      * @param {Number} scale scale to compare to
      * @return {Boolean} true if given scale is between this layers min/max scales. Always return true for base-layers.
@@ -407,7 +414,8 @@ function() {
 
         // Check layer scales only normal layers
         if(!this.isBaseLayer()) {
-            if(scale > this.getMaxScale() && scale < this.getMinScale()) {
+            if((scale > this.getMaxScale()  || !this.getMaxScale()) && 
+               (scale < this.getMinScale())  || !this.getMinScale()) {
                 _return = true;
             }
         }
