@@ -15,6 +15,8 @@ function(instance) {
 	this.instance = instance;
 	this.parcelTabs = [];
     this.container = null;
+    // State is required for closing by command.
+    this.state = null;
 }, {
 	/**
 	 * @method getName
@@ -63,12 +65,28 @@ function(instance) {
 	 */
 	stopPlugin : function() {
 	},
+    /**
+     * @method setState 
+     * @param {String} state
+     *      close/minimize/maximize etc
+     * Interface method implementation, does nothing atm 
+     */
+    setState : function(state) {
+        this.state = state;
+    },	
 	/**
 	 * @method getTitle 
 	 * @return {String} localized text for the title of the flyout 
 	 */
 	getTitle : function() {
 		return this.instance.getLocalization('title');
+	},
+	/**
+	 * @method getInstance
+	 * @return {Oskari.mapframework.bundle.parcelselector.ParcelSelectorInstance} 
+	 */
+	getInstance : function() {
+	    return this.instance;
 	},
 	/**
 	 * @method createUi

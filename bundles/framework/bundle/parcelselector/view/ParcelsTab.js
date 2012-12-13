@@ -75,6 +75,8 @@ function(instance, title, selectedEventName) {
             var selectedEvent = this.instance.sandbox.getEventBuilder(this.selectedEventName)(input);
             // Start the flow by sending the event.
             this.instance.sandbox.notifyAll(selectedEvent);
+            // Close the flyout.
+            this.instance.getSandbox().postRequestByName("userinterface.UpdateExtensionRequest", [this.instance, "close"]);
         }
     }
 });
