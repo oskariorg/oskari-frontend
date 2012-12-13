@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.parcelselector.Flyout
- * 
+ *
  * Renders the "parcels" flyout.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.parcelselector.Flyout',
@@ -12,43 +12,43 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcelselector.Flyout',
  *    reference to component that created the flyout
  */
 function(instance) {
-	this.instance = instance;
-	this.parcelTabs = [];
+    this.instance = instance;
+    this.parcelTabs = [];
     this.container = null;
     // State is required for closing by command.
     this.state = null;
 }, {
-	/**
-	 * @method getName
-	 * @return {String} the name for the component 
-	 */
-	getName : function() {
-		return 'Oskari.mapframework.bundle.parcelselector.Flyout';
-	},
-	/**
-	 * @method setEl
-	 * @param {Object} el 
-	 * 		reference to the container in browser
-	 * @param {Number} width 
-	 * 		container size(?) - not used
-	 * @param {Number} height 
-	 * 		container size(?) - not used 
-	 * 
-	 * Interface method implementation
-	 */
-	setEl : function(el, width, height) {
-		this.container = el[0];
-		if(!jQuery(this.container).hasClass('parcelselector')) {
-			jQuery(this.container).addClass('parcelselector');
-		}
-	},
-	/**
-	 * @method startPlugin 
-	 * 
-	 * Interface method implementation, assigns the HTML templates that will be used to create the UI 
-	 */
-	startPlugin : function() {
-		var me = this;
+    /**
+     * @method getName
+     * @return {String} the name for the component
+     */
+    getName : function() {
+        return 'Oskari.mapframework.bundle.parcelselector.Flyout';
+    },
+    /**
+     * @method setEl
+     * @param {Object} el
+     * 		reference to the container in browser
+     * @param {Number} width
+     * 		container size(?) - not used
+     * @param {Number} height
+     * 		container size(?) - not used
+     *
+     * Interface method implementation
+     */
+    setEl : function(el, width, height) {
+        this.container = el[0];
+        if (!jQuery(this.container).hasClass('parcelselector')) {
+            jQuery(this.container).addClass('parcelselector');
+        }
+    },
+    /**
+     * @method startPlugin
+     *
+     * Interface method implementation, assigns the HTML templates that will be used to create the UI
+     */
+    startPlugin : function() {
+        var me = this;
 
         var parcelTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').parcel, 'ParcelSelector.ParcelSelectedEvent');
         var registerUnitTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').registerUnit, 'ParcelSelector.RegisterUnitSelectedEvent');
@@ -57,44 +57,44 @@ function(instance) {
         // So, easier to use because it is shown as a default.
         this.parcelTabs.push(registerUnitTab);
         this.parcelTabs.push(parcelTab);
-	},
-	/**
-	 * @method stopPlugin 
-	 * 
-	 * Interface method implementation, does nothing atm 
-	 */
-	stopPlugin : function() {
-	},
+    },
     /**
-     * @method setState 
+     * @method stopPlugin
+     *
+     * Interface method implementation, does nothing atm
+     */
+    stopPlugin : function() {
+    },
+    /**
+     * @method setState
      * @param {String} state
      *      close/minimize/maximize etc
-     * Interface method implementation, does nothing atm 
+     * Interface method implementation, does nothing atm
      */
     setState : function(state) {
         this.state = state;
-    },	
-	/**
-	 * @method getTitle 
-	 * @return {String} localized text for the title of the flyout 
-	 */
-	getTitle : function() {
-		return this.instance.getLocalization('title');
-	},
-	/**
-	 * @method getInstance
-	 * @return {Oskari.mapframework.bundle.parcelselector.ParcelSelectorInstance} 
-	 */
-	getInstance : function() {
-	    return this.instance;
-	},
-	/**
-	 * @method createUi
-	 * Creates the UI for a fresh start
-	 */
-	createUi : function() {
-		var me = this;
-		var sandbox = me.instance.getSandbox();
+    },
+    /**
+     * @method getTitle
+     * @return {String} localized text for the title of the flyout
+     */
+    getTitle : function() {
+        return this.instance.getLocalization('title');
+    },
+    /**
+     * @method getInstance
+     * @return {Oskari.mapframework.bundle.parcelselector.ParcelSelectorInstance}
+     */
+    getInstance : function() {
+        return this.instance;
+    },
+    /**
+     * @method createUi
+     * Creates the UI for a fresh start
+     */
+    createUi : function() {
+        var me = this;
+        var sandbox = me.instance.getSandbox();
 
         // clear container
         var cel = jQuery(this.container);
@@ -102,15 +102,15 @@ function(instance) {
 
         this.tabContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
         this.tabContainer.insertTo(cel);
-        for(var i = 0; i < this.parcelTabs.length; ++i) {
+        for (var i = 0; i < this.parcelTabs.length; ++i) {
             var tab = this.parcelTabs[i];
             this.tabContainer.addPanel(tab.getTabPanel());
         }
-	}
+    }
 }, {
-	/**
-	 * @property {String[]} protocol
-	 * @static 
-	 */
-	'protocol' : ['Oskari.userinterface.Flyout']
+    /**
+     * @property {String[]} protocol
+     * @static
+     */
+    'protocol' : ['Oskari.userinterface.Flyout']
 });

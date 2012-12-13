@@ -209,6 +209,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
      */
     saveDrawing : function() {
         if (this.drawLayer.features[0]) {
+            // Select the feature that is going to be saved.
+            // Then, it is shown for the user if user has unselected it before pressing save button.
+            this.modifyControl.selectControl.select(this.drawLayer.features[0]);
             this.toggleControl();
             var event = this._sandbox.getEventBuilder('Parcel.SaveDrawingEvent')(this.getDrawing());
             this._sandbox.notifyAll(event);
