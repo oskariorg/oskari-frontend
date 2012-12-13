@@ -139,9 +139,27 @@ function(layer, sandbox, localization) {
             tools.find('div.layer-info').addClass('icon-info');
             tools.find('div.layer-info').click(function() {
                   var rn = 'catalogue.ShowMetadataRequest';
-                  var uuid = layer.getMetadataIdentifier();              
+                  var uuid = layer.getMetadataIdentifier();
+                     var additionalUuids = [];
+                var additionalUuidsCheck = {};
+                additionalUuidsCheck[uuid] = true; 
+                var subLayers = layer.getSubLayers(); 
+                if( subLayers && subLayers.length > 0 ) {
+                	for( var s = 0 ; s < subLayers.length;s++) {
+                		var subUuid = subLayers[s].getMetadataIdentifier();
+                		if( subUuid && subUuid != "" && !additionalUuidsCheck[subUuid] ) { 
+                			additionalUuidsCheck[subUuid] = true;
+                			additionalUuids.push({
+                				uuid: subUuid
+                			});
+                			 
+                		}
+                	}
+                	
+                }
+                                
                   sandbox.postRequestByName(rn, [
-                      { uuid : uuid }
+                      { uuid : uuid }, additionalUuids
                   ]);
             });
         }
