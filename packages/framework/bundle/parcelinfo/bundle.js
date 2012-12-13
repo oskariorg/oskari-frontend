@@ -31,6 +31,9 @@ function() {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcelinfo/instance.js"
         }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcelinfo/plugin/ParcelInfoPlugin.js"
+        }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/parcelinfo/css/parcelinfo.css"
         }],

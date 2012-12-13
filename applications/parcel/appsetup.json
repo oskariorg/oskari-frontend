@@ -175,7 +175,7 @@
             "bundlename": "parcelinfo",
             "metadata": {
                 "Import-Bundle": {
-                    "parcel": {
+                    "parcelinfo": {
                         "bundlePath": "../../packages/framework/bundle/"
                     }
                 }
