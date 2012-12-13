@@ -44,7 +44,7 @@ function(title) {
             layer.getInspireName() +  ' ' +
             layer.getOrganizationName();
         // TODO: maybe filter out undefined texts
-        return val.toLowerCase();
+        return val;
     },
     matchesKeyword : function(layerId, keyword) {
         var searchableIndex = this.searchIndex[layerId];
