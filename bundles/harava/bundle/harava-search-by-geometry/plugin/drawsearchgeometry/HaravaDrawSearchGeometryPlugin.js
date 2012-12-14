@@ -232,29 +232,39 @@ function(locale) {
             	var infoCol = resp.informationCollections;
             	var orgz = resp.organisations;
             	var projz = resp.projects;
-            	var coll = [];
+            	var html = '';
             	
             	// First get organization spesific data
             	var orgName = null;
             	var orgId = null;
-            	var orgPretty = "";
+            	var orgHtml = "";
             	var orgFirstId = null;
             	var orgFunction ="";
             	
+            	if(orgz.length>0){
+            		if(showAll){
+            			orgHtml += '<table class="org-table harava-gfi-table gfi-full"><tr><td colspan="8" class="harava-gfi-header">'+resp.organizationsLang+'</td></tr>';
+            			orgHtml += resp.organizationsHeader;
+            		}
+            		else{
+            			orgHtml += '<table class="org-table harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.organizationsLang+'</td></tr>';
+            		}
+            	}
             	$.each(orgz, function(k, org){
             		if(!showAll){
             			if(orgFirstId==null){
             				orgFirstId = org.layerId;
             			}
             			if(typeof Organization !== "undefined"){
-            				orgPretty += "<ul><li><a class='searchbygeom-link' onclick='Organization.highlightTable(\""+org.layerId+"\");Organization.showOrganizationInfo(\""+org.layerId+"\", true);'>"+org.name+"</a></li></ul>";
+            				orgHtml += '<tr><td colspan="4" class="harava-gfi-content-mini"><ul><li><a class="searchbygeom-link" onclick="Organization.highlightTable(\''+org.layerId+'\');Organization.showOrganizationInfo(\''+org.layerId+'\', true);">'+org.name+'</a></li></ul></td></tr>';
+            				
             			} else {
-            				orgPretty += "<ul><li>"+org.name+"</li></ul>";
+            				orgHtml += '<tr><td colspan="4" class="harava-gfi-content-mini"><ul><li>'+org.name+'</li></ul></td></tr>';
             			}
             			orgName = org.layerName;
             			orgId = org.layerId;
 					} else {
-						orgPretty += "<ul><li>"+org.name+"</li>"+org.html+"</ul>";
+						orgHtml += org.html;
 						orgName = org.layerName;
 						orgId = org.layerId;
 					}
@@ -262,18 +272,26 @@ function(locale) {
 					if(typeof Organization !== "undefined" && orgFirstId!=null) {
 						Organization.highlightTable(orgFirstId);
 						Organization.showOrganizationInfo(orgFirstId, true);
-						/*$.each(org.functions, function(k, func){
-							eval(func);
-						});*/
 					}
             	});
-            	
+            	if(orgz.length>0){
+            		orgHtml += '</table>';
+            	}
             	
             	// Second get project spesific data
             	var projName = null;
             	var projId = null;
-            	var projPretty = "";
+            	var projHtml = "";
             	var projFirstId = null;
+            	if(projz.length>0){
+            		if(showAll){
+            			projHtml += '<table class="proj-table harava-gfi-table gfi-full"><tr><td colspan="7" class="harava-gfi-header">'+resp.projectsLang+'</td></tr>';
+            			projHtml += resp.projectsHeader;
+            		}
+            		else{
+            			projHtml += '<table class="proj-table harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.projectsLang+'</td></tr>';
+            		}
+            	}
             	$.each(projz, function(k, proj){
             		if(projFirstId==null){
             			projFirstId = proj.layerId;
@@ -281,14 +299,14 @@ function(locale) {
             		
 					if(!showAll){
 						if(typeof Project !== "undefined"){
-							projPretty += "<ul><li><a class='searchbygeom-link' onclick='Project.highlightTable(\""+proj.layerId+"\");Project.showProjectInfo(\""+proj.layerId+"\", true);'>"+proj.name+"</a></li></ul>";
+							projHtml += '<tr><td colspan="4" class="harava-gfi-content-mini"><ul><li><a class="searchbygeom-link" onclick="Project.highlightTable(\''+proj.layerId+'\');Project.showProjectInfo(\''+proj.layerId+'\', true);">'+proj.name+'</a></li></ul></td></tr>';
             			} else {
-            				projPretty += "<ul><li>"+proj.name+"</li></ul>";
+            				projHtml += '<tr><td colspan="4" class="harava-gfi-content-mini"><ul><li>'+proj.name+'</li></ul></td></tr>';
             			}
 						projName = proj.layerName;
 						projId = proj.layerId;
 					} else {
-						projPretty += "<ul><li>"+proj.name+"</li>"+proj.html+"</ul>";
+						projHtml += proj.html;
 						projName = proj.layerName;
 						projId = proj.layerId;
 					}
@@ -296,33 +314,41 @@ function(locale) {
 					if(typeof Project !== "undefined" && projFirstId!=null) {
 						Project.highlightTable(projFirstId);
 						Project.showProjectInfo(projFirstId, true);
-						/*
-						$.each(proj.functions, function(k, func){
-							eval(func);
-						});*/
 					}
 				});
+            	if(projz.length>0){
+            		projHtml += '</table>';
+            	}
             	
             	// Third get information collection spesific data
             	var infoName = null;
             	var infoId = null;
-            	var infoPretty = "";
+            	var infoHtml = "";
             	var infoFirstId = null;
+            	if(infoCol.length>0){
+            		if(showAll){
+            			infoHtml += '<table class="infocol-table harava-gfi-table gfi-full"><tr><td colspan="7" class="harava-gfi-header">'+resp.informationCollectionsLang+'</td></tr>';
+            			infoHtml += resp.informationCollectionsHeader;
+            		}
+            		else{
+            			infoHtml += '<table class="infocol-table harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.informationCollectionsLang+'</td></tr>';
+            		}
+            	}
             	$.each(infoCol, function(k, info){
             		if(infoFirstId==null){
             			infoFirstId = info.layerId;
         			}
 					if(!showAll){
 						if(typeof InformationCollection !== "undefined"){
-							infoPretty += "<ul><li><a class='searchbygeom-link' onclick='InformationCollection.highlightTable(\""+info.layerId+"\");InformationCollection.showCollectionInfo(\""+info.layerId+"\", true);'>"+info.name+"</a></li></ul>";
+							infoHtml += '<tr><td colspan="4" class="harava-gfi-content-mini"><ul><li><a class="searchbygeom-link" onclick="InformationCollection.highlightTable(\''+info.layerId+'\');InformationCollection.showCollectionInfo(\''+info.layerId+'\', true);">'+info.name+'</a></li></ul></td></tr>';
             			} else {
-            				infoPretty += "<ul><li>"+info.name+"</li></ul>";
+            				infoHtml += '<tr><td colspan="4" class="harava-gfi-content-mini"><ul><li>'+info.name+'</li></ul></td></tr>';
             			}
 
 						infoName = info.layerName;
 						infoId = info.layerId;
 					} else {
-						infoPretty += "<ul><li>"+info.name+"</li>"+info.html+"</ul>";
+						infoHtml += info.html;
 						infoName = info.layerName;
 						infoId = info.layerId;
 					}
@@ -330,70 +356,68 @@ function(locale) {
 					if(typeof InformationCollection !== "undefined" &&  infoFirstId!=null) {
 						InformationCollection.highlightTable(infoFirstId);
 						InformationCollection.showCollectionInfo(infoFirstId, true);
-						/*
-						$.each(info.functions, function(k, func){
-							eval(func);
-						});
-						*/
 					}
-				});
+				});            	
+            	if(infoCol.length>0){
+            		infoHtml += '</table>';
+            	}
             	
             	/* Resolve showing order */
             	if(typeof InformationCollection !== "undefined"){
             		if(infoName!=null && infoId!=null){
-                		coll.push({markup: infoPretty, layerId: infoId, layerName: infoName});
+                		html += infoHtml;
                 	}
             		
             		if(orgName!=null && orgId!=null){
-                		coll.push({markup: orgPretty, layerId: orgId, layerName: orgName});
+            			html += orgHtml;
                 	}
                 	
                 	if(projName!=null && projId!=null){
-                		coll.push({markup: projPretty, layerId: projId, layerName: projName});
+                		html += projHtml;
                 	}
             	}
             	else if(typeof Project !== "undefined"){
             		if(projName!=null && projId!=null){
-                		coll.push({markup: projPretty, layerId: projId, layerName: projName});
+            			html += projHtml;
                 	}
             		
             		if(orgName!=null && orgId!=null){
-                		coll.push({markup: orgPretty, layerId: orgId, layerName: orgName});
+            			html += orgHtml;
                 	}               	
                 	
                 	if(infoName!=null && infoId!=null){
-                		coll.push({markup: infoPretty, layerId: infoId, layerName: infoName});
+                		html += infoHtml;
                 	}
             	}
             	else if(typeof Organization !== "undefined"){
             		if(orgName!=null && orgId!=null){
-                		coll.push({markup: orgPretty, layerId: orgId, layerName: orgName});
+            			html += orgHtml;
                 	}
                 	
                 	if(projName!=null && projId!=null){
-                		coll.push({markup: projPretty, layerId: projId, layerName: projName});
+                		html += projHtml;
                 	}
                 	
                 	if(infoName!=null && infoId!=null){
-                		coll.push({markup: infoPretty, layerId: infoId, layerName: infoName});
+                		html += infoHtml;
                 	}
             	} else {
             		if(orgName!=null && orgId!=null){
-                		coll.push({markup: orgPretty, layerId: orgId, layerName: orgName});
+            			html += orgHtml;
                 	}
                 	
                 	if(projName!=null && projId!=null){
-                		coll.push({markup: projPretty, layerId: projId, layerName: projName});
+                		html += projHtml;
                 	}
                 	
                 	if(infoName!=null && infoId!=null){
-                		coll.push({markup: infoPretty, layerId: infoId, layerName: infoName});
+                		html += infoHtml;
                 	}
             	}
             	
-				if(coll.length>0){
+				if(html!=''){
 					var lonlat = new OpenLayers.LonLat(resp.center.lon, resp.center.lat);
-					var parsed = {fragments: coll, title: "Tiedot"};
+					var parsed = {html: html, title: "Tiedot"};
 					parsed.lonlat = lonlat;
 					parsed.popupid = me.infoboxId; 
 					me._showFeatures(parsed);
@@ -411,7 +435,6 @@ function(locale) {
 			    			return false;
 			    		});
 			    	} else {
-			    		
 			    		alert(me._locale.tooltips.searchNotFound);
 			    	}
 				}
@@ -592,32 +615,10 @@ function(locale) {
      * @param {Array} data
      */
     _showFeatures : function(data) {
-    	/* data is { fragments: coll, title: title } */
-    	/* fragments is an array of JSON { markup: '<html-markup>', layerName: 'nameforlayer', layerId: idforlayer } */
-        var me = this;
+    	var me = this;
         var contentHtml = [];
         var content = {};
-        content.html = '';
-        content.actions = {};
-        for (var di = 0; di < data.fragments.length; di++) {
-		var fragment =   data.fragments[di]      	
-        	var fragmentTitle = fragment.layerName;
-        	var fragmentMarkup = fragment.markup;
-        	
-        	contentHtml.push('<div>');
-            contentHtml.push( 
-               '<div style="border:1pt solid navy;background-color: #424343;margin-top: 14px; margin-bottom: 10px;height:15px;">' +  
-                 '<div class="icon-bubble-left" style="height:15px;display:inline;float:left;"><div></div></div>'+
-                 '<div style="color:white;float:left;display:inline;margin-left:8px;">'+fragmentTitle +'</div>'+
-               '</div>');
-            if( fragmentMarkup ) {   
-            	contentHtml.push(fragmentMarkup);
-            }
-			contentHtml.push('</div>');
-        }
-        
-        content.html = contentHtml.join('');
-
+        content.html = data.html;
         var rn = "HaravaInfoBox.ShowInfoBoxRequest";
         var rb = me._sandbox.getRequestBuilder(rn);
         var r = rb(data.popupid, "Info", [content], data.lonlat, true);

@@ -53,7 +53,11 @@ function() {
         {
             "type" : "text/javascript",
             "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/plugin/wmslayer/HaravaWMSLayerPlugin.js"
-        },        
+        },
+        {
+		    "type" : "text/css",
+		    "src" : "../../../../resources/harava/bundle/harava-mapmodule-plugin/css/style.css"	  
+		},
         /*
          * Requests and handlers
          **/
