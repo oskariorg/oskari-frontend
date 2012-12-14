@@ -29,8 +29,8 @@ password = ""
 
 # Designed to prevent Open Proxy type stuff.
 # Notice, this defines the target hosts that this proxy will send requests to.
-# This is also important on the authorization point of view. Also notice, that
-# if target requires authorization, it asks for passwords that should only be given
+# This is also important on the authorization point of view. Also notice, if
+# target requires authorization, it asks for passwords that should only be given
 # to the trusted sites.
 allowedHosts = ['ws.nls.fi']
 
