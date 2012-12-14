@@ -2,6 +2,11 @@ div.layerselection2 .layer.selected {
     border: 1pt solid #c0d0e0;
     margin: 0 5px 5px 0;
 }
+
+div.layerselection2 .layer.selected span {
+    position: absolute; margin-left: -1.3em;
+}
+div
 div.layerselection2 .layer.selected.out-of-scale, div.layerselection2 .layer.selected.out-of-content, div.layerselection2 .layer.selected.hidden {
 	color: #909090;
 }
@@ -14,8 +19,10 @@ div.layerselection2 .layer.selected div.layer-info {
 div.layerselection2 ul.selectedLayersList {
 	/*height: 100%;*/
     /*overflow: auto;*/
-    list-style: none;
+    list-style-type: none;
     padding: 0;
+    margin:0;
+    width: 100%;
 }
 
 div.layerselection2 .layer.selected div.layer-info div.layer-title {
