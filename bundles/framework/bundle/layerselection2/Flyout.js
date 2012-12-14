@@ -156,7 +156,7 @@ function(instance) {
         
         listContainer.sortable({
             connectWith: ".selectedLayersList sortable ui-sortable"
-        }).disableSelection();
+        });
         	/*change: function(event,ui) {
         		var item = ui.item ;
         		me._layerOrderChanged(item)
@@ -166,7 +166,7 @@ function(instance) {
         		me._layerOrderChanged(item)
         	}*/
         
-        /*listContainer.disableSelection();*/
+        listContainer.disableSelection();
 
         // RIGHTJS sortable event handling
         //TODO: get rid of sortableBinded and UNBIND?
