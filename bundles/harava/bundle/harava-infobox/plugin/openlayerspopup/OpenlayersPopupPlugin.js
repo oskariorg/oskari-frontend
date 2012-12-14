@@ -264,7 +264,7 @@ function() {
 		var arrowWidth =parseInt($('div.popupHeaderArrow').css('borderRightWidth'),10);
 		var titleHeight = jQuery('div.popupHeader').height();
 		jQuery('div.popupHeader').width(width-arrowWidth);
-		jQuery('div.popupContent').height(height-titleHeight);
+		jQuery('div.popupContent').height(height-titleHeight-12);
 		
 		if(centerMap){
 			this._centerMapToSelectedCoordinate(lonlat,width,height);
