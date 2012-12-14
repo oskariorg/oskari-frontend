@@ -120,22 +120,40 @@ function(locale) {
     	
     	jQuery('#searchbygeom').append('<div class="search-by-geometry">'
     			+ '<div id="searchbygeom-point" class="searchbygeom-tool searchbygeom-point" title="'+this._locale.tooltips.searchByPoint+'">&nbsp;</div>'
-    			+ '<div id="searchbygeom-line" class="searchbygeom-tool searchbygeom-line" title="'+this._locale.tooltips.searchByLine+'">&nbsp;</div>'
+    			//+ '<div id="searchbygeom-line" class="searchbygeom-tool searchbygeom-line" title="'+this._locale.tooltips.searchByLine+'">&nbsp;</div>'
+    			+ '<div id="searchbygeom-mapextent" class="searchbygeom-tool searchbygeom-mapextent" title="'+this._locale.tooltips.searchByMapExtent+'">&nbsp;</div>'
     			+ '<div id="searchbygeom-regular-polygon" class="searchbygeom-tool searchbygeom-regular-polygon" title="'+this._locale.tooltips.searchByRegularPolygon+'">&nbsp;</div>'
     			+ '<div id="searchbygeom-polygon" class="searchbygeom-tool searchbygeom-polygon" title="'+this._locale.tooltips.searchByPolygon+'">&nbsp;</div></div>');    	
     	
     	jQuery('.searchbygeom-tool').live('click', function(){
-    		jQuery('.searchbygeom-tool').removeClass('active');
-    		jQuery(this).addClass('active');
-    		
+    		    		
     		var id = this.id;
+    		if(id!='searchbygeom-mapextent'){
+    			jQuery('.searchbygeom-tool').removeClass('active');
+    			jQuery(this).addClass('active');
+    		}
+    		
     		switch(id){
     			case 'searchbygeom-point':
     				me.toggleControl('point');
     				break;
-    			case 'searchbygeom-line':
-    				me.toggleControl('line'); 
+    			case 'searchbygeom-mapextent':
+    				//me.toggleControl('mapextent');
+    				var openlayersMap = me.mapModule.getMap();
+    	        	var mapExtent = openlayersMap.getExtent();
+    	        	var mapExtentPolygon = 'POLYGON(('+mapExtent.left+' ' +mapExtent.top + ','+mapExtent.right+' ' +mapExtent.top + ','+mapExtent.right+' ' +mapExtent.bottom + ','+mapExtent.left+' ' +mapExtent.bottom + ','+mapExtent.left+' ' +mapExtent.top + '))';
+    	        	me._handleSearchByGeom(mapExtentPolygon,'mapextent');
+    	        	me._closeGfiInfo();
+			    	me.removeAllDrawings();
+			    	jQuery('#searchbygeom-mapextent').addClass('active');
+			    	window.setTimeout(function(){
+			    		jQuery('#searchbygeom-mapextent').removeClass('active');
+			    	},200);
+			    	
     				break;
+    			/*case 'searchbygeom-line':
+    				me.toggleControl('line'); 
+    				break;*/
     			case 'searchbygeom-polygon':
     				me.toggleControl('polygon'); 
     				break;
@@ -157,10 +175,14 @@ function(locale) {
      * @method _handleSearchByGeom
      * Handle geometry area selection
      * @param {String} geom geometry string
+     * @param {String} tool name, overrides currentSearchMode
      */
-    _handleSearchByGeom : function(geom) {
+    _handleSearchByGeom : function(geom, tool) {
         var me = this;
-        
+        var type = this.currentSearchMode;
+        if(tool!=null){
+        	type=tool;
+        }
         var dte = new Date();
         var dteMs = dte.getTime();
         
@@ -375,6 +397,23 @@ function(locale) {
 					parsed.lonlat = lonlat;
 					parsed.popupid = me.infoboxId; 
 					me._showFeatures(parsed);
+				} else {
+			    	me._closeGfiInfo();
+			    	me.removeAllDrawings();
+			    	
+			    	if(Message!=null && typeof Message.createMessage === "function" 
+			    		&& typeof Message.showMessage === "function" 
+			    			&& typeof Message.closeMessage === "function"){
+			    		Message.createMessage(me._locale.tooltips.searchNotFound,me._locale.tooltips.searchNotFoundOkButton);
+			    		Message.showMessage();
+			    		$("#aMessage").click(function(){
+			    			Message.closeMessage();
+			    			return false;
+			    		});
+			    	} else {
+			    		
+			    		alert(me._locale.tooltips.searchNotFound);
+			    	}
 				}
             	me._finishAjaxRequest();
             },
@@ -393,7 +432,7 @@ function(locale) {
                 projection : me.mapModule.getProjection(),
                 geom : geom,
                 lang: Oskari.getLang(),
-                type: this.currentSearchMode,
+                type: type,
                 zoom : mapVO.getZoom(),
                 buffer: buffer
             },
@@ -593,8 +632,7 @@ function(locale) {
     	var me = this;
     	me._closeGfiInfo();
     	me.removeAllDrawings();
-    	me.toggleControl(searchMode);
-    	
+    	me.toggleControl(searchMode);    	
     },
     /**
      * Enables the given search control

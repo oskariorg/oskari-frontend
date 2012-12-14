@@ -30,7 +30,8 @@ function(searchMode) {
         point : 'point',
         line : 'line',
         polygon : 'polygon',
-    	regularPolygon: 'regularPolygon'
+    	regularPolygon: 'regularPolygon',
+    	mapextent: 'mapextent'
     },
     /**
      * @method getSearchMode

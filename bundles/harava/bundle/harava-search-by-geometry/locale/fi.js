@@ -9,8 +9,10 @@ Oskari.registerLocalization({
 				"searchByPoint": "Hae osoittamalla piste",
 				"searchByLine": "Hae piirtämällä viiva",
 				"searchByRegularPolygon": "Hae piirtämällä suorakaide",
-				"searchByPolygon": "Hae piirtämällä monikulmio"
-					
+				"searchByPolygon": "Hae piirtämällä monikulmio",
+				"searchByMapExtent": "Hae kartan alueelta",
+				"searchNotFound": "Alueelta ei löytynyt yhtään organisaatiota, hanketta tai tiedonhankintaa.",
+				"searchNotFoundOkButton": "OK"
 			}
 		}
 	}

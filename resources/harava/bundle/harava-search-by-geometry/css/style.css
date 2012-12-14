@@ -31,6 +31,15 @@
     background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/selectPoint_active.png') no-repeat !important;
 }
 
+.searchbygeom-mapextent{
+    background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/selectMapExtent.png') no-repeat;
+    background-position: center center;
+}
+.searchbygeom-mapextent.active{
+    background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/selectMapExtent_active.png') no-repeat !important;
+}
+
+
 .searchbygeom-line{
     background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/selectLine.png') no-repeat;
     background-position: center center;
