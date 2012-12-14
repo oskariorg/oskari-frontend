@@ -267,7 +267,7 @@ function() {
 		jQuery('div.popupContent').height(height-titleHeight-12);
 		
 		if(centerMap){
-			this._centerMapToSelectedCoordinate(lonlat,width,height);
+			this._centerMapToSelectedCoordinate(lonlat);
 		} else {
 			this._panMapToShowPopup(lonlat,width,height);
 		}
@@ -278,26 +278,9 @@ function() {
      * @private
      * Centers map to popup position
      * @param {OpenLayers.LonLat} lonlat where to show the popup
-     * @param {Integer} popupWidthPx,  popup width in pixels
-     * @param {Integer} popupHeightPx, popup height in pixels
      */
-    _centerMapToSelectedCoordinate: function(lonlat,popupWidthPx,popupHeightPx){
-    	var popupPixels = this._map.getPixelFromLonLat(lonlat);
-    	var mapCenterPixels = this._map.getPixelFromLonLat(this._map.getCenter());
-    	
-    	var offset = 10;
-    	var infoboxWidth = popupWidthPx + offset;
-        var infoboxHeight = popupHeightPx + offset;
-        var size = this._map.getCurrentSize();
-        var width = size.w;
-        var height = size.h;        
-        
-        var point = {
-        		x: popupPixels.x,
-        		y: popupPixels.y
-        };
-        var popupLonLat =this._map.getLonLatFromPixel(point);
-        this._map.setCenter(popupLonLat);
+    _centerMapToSelectedCoordinate: function(lonlat){
+        this._map.setCenter(lonlat);
         this.getMapModule()._updateDomain();
     },
     /**
@@ -318,7 +301,7 @@ function() {
         var panx = 0;
         var pany = 0;
         var popupMarginWidthPx = 15;
-        var popupMarginHeightPx = 10;
+        var popupMarginHeightPx = 0;
         var infoboxWidth = popupWidthPx+popupMarginWidthPx;
         var infoboxHeight = popupHeightPx+popupMarginHeightPx; 
         if( pixels.x + infoboxWidth > width) {
@@ -329,12 +312,13 @@ function() {
         }
         // check that we are not "over the top"
         else if(pixels.y < 25) {
-            pany = 25;
+            pany = 25;            
         }
+
         if(panx != 0 || pany != 0) {
             this.getMapModule().panMapByPixels(-panx, -pany);
         }
-        
+        this.getMapModule()._updateDomain();
         
     },
     /**
