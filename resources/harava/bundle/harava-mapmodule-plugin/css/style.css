@@ -25,3 +25,7 @@ td.harava-gfi-content{
 	border: 1px solid #A59B78;
 	padding:5px;
 }
+
+td.harava-gfi-content-header{
+	background-color: #E0D7BC;
+}
