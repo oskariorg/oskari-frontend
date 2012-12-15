@@ -9,6 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
     this._map = null;
     this.drawControls = null;
     this.drawLayer = null;
+    this.editLayer = null;
     this.currentDrawMode = null;
     this.currentFeatureType = null;
     // Created in init.
@@ -48,6 +49,49 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
             }
         });
 
+        this.editLayer = new OpenLayers.Layer.Vector("Parcel Edit Layer", {
+            eventListeners : {
+                "featuremodified" : function(event) {
+                    var operatingFeature = this.features[0];
+                    if (operatingFeature.geometry.CLASS_NAME === "OpenLayers.Geometry.LineString") {
+                        var lineRunLength = operatingFeature.geometry.components.length-1;
+                        var polygon1 = me.drawLayer.features[0];
+                        var polygon2 = me.drawLayer.features[1];
+                        var ind1 = polygon1.polygonCorners[0];
+//                        operatingFeature.geometry.components[0] = polygon1.geometry.components[0].components[ind1];
+                        var ind2 = polygon1.polygonCorners[1];
+//                        operatingFeature.geometry.components[lineRunLength] = polygon1.geometry.components[0].components[ind2];
+                        var diff = ind2-ind1-1;
+                        polygon1.geometry.components[0].components.splice(ind1+1,diff);
+//debugger;
+                        for (var i = 1; i < lineRunLength; i++) {
+//console.log(i);
+                            polygon1.geometry.components[0].components.splice(ind1+i,0,operatingFeature.geometry.components[i]);
+                        }
+                        polygon1.polygonCorners[1] = polygon1.polygonCorners[0]+lineRunLength;
+
+                        ind1 = polygon2.polygonCorners[0];
+                        ind2 = polygon2.polygonCorners[1];
+                        diff = ind2-ind1-1;
+                        polygon2.geometry.components[0].components.splice(ind1+1,diff);
+
+                        for (i = 1; i < lineRunLength; i++) {
+                            polygon2.geometry.components[0].components.splice(ind1+1,0,operatingFeature.geometry.components[i]);
+                        }
+                        polygon2.polygonCorners[1] = polygon2.polygonCorners[0]+lineRunLength;
+
+                        this.map.controls[10].deactivate();
+                        this.map.controls[10].activate();
+
+                    }
+                    this.redraw();
+                    me.drawLayer.redraw();
+                }
+            }
+        });
+
+
+
         // doesn't really need to be in array, but lets keep it for future development
         this.selectControl = new OpenLayers.Control.SelectFeature(me.drawLayer)
         this._map.addControl(this.selectControl);
@@ -63,6 +107,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         // no harm in activating straight away
         this.modifyControl.activate();
 
+        // doesn't really need to be in array, but lets keep it for future development
+        this.selectEditControl = new OpenLayers.Control.SelectFeature(me.editLayer);
+        this._map.addControl(this.selectEditControl);
+        this.selectEditControl.events.register("featurehighlighted", this, function(event) {
+        });
+        // no harm in activating straight away
+        this.selectEditControl.activate();
+
+        // doesn't really need to be in array, but lets keep it for future development
+        this.modifyEditControl = new OpenLayers.Control.ModifyFeature(me.editLayer);
+        this._map.addControl(this.modifyEditControl);
+        // no harm in activating straight away
+        this.modifyEditControl.activate();
+
         this.drawControls = {
             line : new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.Path),
             area : new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.Polygon)
@@ -71,6 +129,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         for (var key in this.drawControls) {
             this._map.addControl(this.drawControls[key]);
         }
+        this._map.addLayers([me.editLayer]);
 
         this.requestHandlers = {
             startDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StartDrawingRequestHandler', me),
@@ -130,7 +189,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         var features = [feature];
         this.drawLayer.addFeatures(features);
         // preselect it for modification
-        this.modifyControl.selectControl.select(this.drawLayer.features[0]);
+        // this.modifyControl.selectControl.select(this.drawLayer.features[0]);
         this.selectControl.select(this.drawLayer.features[0]);
         this.currentFeatureType = featureType;
         // Zoom to the loaded feature.

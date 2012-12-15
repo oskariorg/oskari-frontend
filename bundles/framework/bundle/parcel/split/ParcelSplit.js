@@ -8,19 +8,67 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.split.ParcelSplit',
 /**
  * @method create called automatically on construction
  * @static
- * @param {Oskari.mapframework.bundle.parcel.plugin.DrawPlugin} drawPlugin
+ * @param {} drawPlugin
  *          Plugin provides other elements for use if required by this class.
  */
 function(drawPlugin) {
     // Class constructor initializes variables here.
     // Plugin provides other elements for use if required by this class.
+
+   /**
+    * @property drawPlugin
+    *
+    *
+    */
     this.drawPlugin = drawPlugin;
+
+   /**
+    * @property intersectionPoints
+    *
+    *
+    */
     this.intersectionPoints = [];
+
+   /**
+    * @property markers
+    *
+    *
+    */
     this.markers = null;
+
+   /**
+    * @property markerSize
+    *
+    *
+    */
     this.markerSize = new OpenLayers.Size(21,25);
+
+   /**
+    * @property markerIcon
+    *
+    *
+    */
     this.markerIcon = new OpenLayers.Icon('img/marker.png',this.markerSize,this.markerOffset);
+
+   /**
+    * @property splitPolygons
+    *
+    *
+    */
     this.splitPolygons = [];
+
+   /**
+    * @property map
+    *
+    *
+    */
     this.map = this.drawPlugin.getMapModule().getMap();
+
+   /**
+    * @property map.activeMarker
+    *
+    *
+    */
     this.map.activeMarker = null;
 }, {
 
@@ -28,19 +76,27 @@ function(drawPlugin) {
     // Items that are meant for private use only have _ prefix.
 
     /**
+     * @method init
+     *
      * Initializations to be called after construction.
      */
     init : function() {
     },
+
     /**
+     * @method split
+     *
      * Splits the parcel.
      * 
      * {Oskari.mapframework.bundle.parcel.DrawingToolInstance} instance provides the features that are used for the splitting.
      */
     split : function() {
+        this.map.controls[8].deactivate();
         if (this.drawPlugin.splitSelection) return;
+
         //var openLayersMap = this.drawPlugin.getMapModule().getMap();
         var parcelLayer = this.drawPlugin.drawLayer;
+        var editLayer = this.drawPlugin.editLayer;
         var featureInd = parcelLayer.features.length-1;
         if (featureInd < 1) return;
         this.drawPlugin.splitSelection = true;
@@ -50,9 +106,12 @@ function(drawPlugin) {
             case "OpenLayers.Geometry.Polygon":
                 this.splitHole(basePolygon,operatingFeature);
                 parcelLayer.redraw();
+                editLayer.redraw();
                 break;
             case "OpenLayers.Geometry.LineString":
                 this.splitLine(basePolygon,operatingFeature);
+                parcelLayer.redraw();
+                editLayer.redraw();
                 break;
         }
         parcelLayer.redraw();
@@ -60,17 +119,29 @@ function(drawPlugin) {
 
 
     /*
+     * @method splitHole
      *
+     * @param {} outPolygon
+     * @param {} inPolygon
      */
     splitHole : function(outPolygon,inPolygon) {
+        var parcelLayer = this.drawPlugin.drawLayer;
+        var editLayer = this.drawPlugin.editLayer;
         outPolygon.geometry.addComponent(inPolygon.geometry.components[0]);
+        editLayer.addFeatures([inPolygon]);
+        parcelLayer.features.splice(parcelLayer.features.length-1,1);
     },
 
+
     /*
+     * @method splitLine
      *
+     * @param {} polygon
+     * @param {} line
      */
     splitLine : function(polygon,line) {
             var parcelLayer = this.drawPlugin.drawLayer;
+            var editLayer = this.drawPlugin.editLayer;
             var vertices;
             var polygonEdges = [];
             var polylineEdges = [];
@@ -151,7 +222,7 @@ function(drawPlugin) {
                 }
             }
 
-            this.markers = new OpenLayers.Layer.Markers( "Markers" );
+            this.markers = new OpenLayers.Layer.Markers("Markers");
             //this.map.addLayers([this.markers]);
             //this.map.setLayerIndex(this.markers, 100000);
             var minPolygonEdge = Number.POSITIVE_INFINITY;
@@ -185,9 +256,19 @@ function(drawPlugin) {
 
             parcelLayer.removeAllFeatures();
             parcelLayer.addFeatures(this.splitPolygons);
+
+            editLayer.addFeatures([line]);
+            OpenLayers.Feature.Vector.style['default']['strokeWidth'] = '2';
     },
 
 
+    /*
+     * @method generateSplitPolygons
+     *
+     * @param {} polygonEdges
+     * @param {} polylineEdges
+     * @return {} returns single localization string or
+     */
     generateSplitPolygons : function(polygonEdges, polylineEdges) {
         var point;
         var point1 = null;
@@ -238,7 +319,6 @@ function(drawPlugin) {
         polygon1.style = style1;
         polygon1.polygonCorners = polygonCorners1;
 
-
         points2 = [];
         var polygonCorners2 = [];
         for (i=this.intersectionPoints[0][6]+1; i<this.intersectionPoints[1][6]+1; i++) {
@@ -270,7 +350,8 @@ function(drawPlugin) {
 
 
     /*
-     *
+     * @method getRandomColor
+     * @return {} returns single localization string or
      */
     getRandomColor : function() {
         var letters = '0123456789ABCDEF'.split('');
@@ -283,7 +364,11 @@ function(drawPlugin) {
 
 
     /*
+     * @method intersection
      *
+     * @param {} edge1
+     * @param {} edge2
+     * @return {} returns single localization string or
      */
     intersection : function(edge1,edge2) {
         var Ax = edge1[0];
@@ -343,23 +428,27 @@ function(drawPlugin) {
         return [x,y];
     },
 
-        /*
-         *
-         */
-        selectActiveMarker : function(evt) {
-            OpenLayers.Event.stop(evt);
-            var xy = this.map.events.getMousePosition(evt);
-            var pixel = new OpenLayers.Pixel(xy.x,xy.y);
-            var xyLonLat = this.map.getLonLatFromPixel(pixel);
-            this.map.activeMarker = evt.object;
-            this.markerMouseOffset.lon = xyLonLat.lon-this.map.activeMarker.lonlat.lon;
-            this.markerMouseOffset.lat = xyLonLat.lat-this.map.activeMarker.lonlat.lat;
-            this.map.events.register("mouseup", this.map, this.freezeActiveMarker);
-            this.map.events.register("mousemove", this.map, this.moveActiveMarker);
-        },
+	/*
+	 * @method selectActiveMarker
+	 *
+	 * @param {} evt
+	 */
+	selectActiveMarker : function(evt) {
+	    OpenLayers.Event.stop(evt);
+	    var xy = this.map.events.getMousePosition(evt);
+	    var pixel = new OpenLayers.Pixel(xy.x,xy.y);
+	    var xyLonLat = this.map.getLonLatFromPixel(pixel);
+	    this.map.activeMarker = evt.object;
+	    this.markerMouseOffset.lon = xyLonLat.lon-this.map.activeMarker.lonlat.lon;
+	    this.markerMouseOffset.lat = xyLonLat.lat-this.map.activeMarker.lonlat.lat;
+	    this.map.events.register("mouseup", this.map, this.freezeActiveMarker);
+	    this.map.events.register("mousemove", this.map, this.moveActiveMarker);
+	},
 
         /*
+         * @method moveActiveMarker
          *
+         * @param {} evt
          */
         moveActiveMarker : function (evt) {
             var lonlat = this.map.getLonLatFromPixel(new OpenLayers.Pixel(evt.xy.x,evt.xy.y))
@@ -371,7 +460,9 @@ function(drawPlugin) {
         },
 
         /*
+         * @method freezeActiveMarker
          *
+         * @param {} evt
          */
         freezeActiveMarker : function(evt) {
             this.map.events.unregister("mousemove",this.map,this.moveActiveMarker);
@@ -415,7 +506,10 @@ function(drawPlugin) {
         },
 
        /**
+        * @method activeMarkerProjection
         *
+        * @param {} drawPlugin
+ 	* @return {} returns single localization string or
         */
         activeMarkerProjection : function(refLonlat) {
             var parcelLayer = this.drawPlugin.drawLayer;
@@ -445,9 +539,14 @@ function(drawPlugin) {
         },
 
 
-       /**
-        *
-        */
+      /**
+       * @method projection
+       *
+       * @param {} q
+       * @param {} p0
+       * @param {} p1
+       * @return {String/Object} returns single localization string or
+       */
        projection : function(q,p0,p1) {
            var a = p1.x-p0.x;
            var b = p1.y-p0.y;
@@ -475,15 +574,22 @@ function(drawPlugin) {
 
 
        /**
+        * @method dotProduct
         *
+        * @param {} a
+        * @param {} b
+	    * @return {} returns single localization string or
         */
         dotProduct : function(a,b) {
-           return a.x* b.x+ a.y*b.y;
+           return a.x*b.x+ a.y*b.y;
         },
 
 
        /**
+        * @method isNumber
         *
+        * @param {} n
+     	* @return {} returns single localization string or
         */
         isNumber : function(n) {
           return (!isNaN(parseFloat(n)))&&(isFinite(n));
