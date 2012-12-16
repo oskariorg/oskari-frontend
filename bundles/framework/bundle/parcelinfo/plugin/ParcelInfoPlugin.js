@@ -12,23 +12,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcelinfo.plugin.ParcelInfoPlug
 function(config, locale) {
     this._conf = config;
     this._locale = locale;
-    this.mapModule = null;
-    this.pluginName = null;
+    this._mapModule = null;
     this._sandbox = null;
     this._map = null;
     this._elements = {};
-    this.__templates = {};
+    this._templates = {};
+    this._layers = [];
+    this._selectedFeature = null;
 
 }, {
-    /** @static @property __name plugin name */
-    __name : 'ParcelInfoPlugin',
-
     /**
      * @method getName
      * @return {String} plugin name
      */
     getName : function() {
-        return this.pluginName;
+        return 'ParcelInfoPlugin';
     },
     /**
      * @method getMapModule
@@ -36,7 +34,7 @@ function(config, locale) {
      * module
      */
     getMapModule : function() {
-        return this.mapModule;
+        return this._mapModule;
     },
     /**
      * @method setMapModule
@@ -44,10 +42,7 @@ function(config, locale) {
      * module
      */
     setMapModule : function(mapModule) {
-        this.mapModule = mapModule;
-        if (mapModule) {
-            this.pluginName = mapModule.getName() + this.__name;
-        }
+        this._mapModule = mapModule;
     },
     /**
      * @method hasUI
@@ -66,21 +61,19 @@ function(config, locale) {
      *          reference to application sandbox
      */
     init : function(sandbox) {
-        this.__templates['infodiv'] = jQuery('<div>' + '<table class="piMain">' + '<tr>' + '<td class="piHeaderLabel" colspan="2"></td>' + '</tr>' + '<tr>' + '<td class="piLabel piLabelName" infotype="name"></td>' + '<td class="piValue" infotype="name"></td>' + '</tr>' + '<tr>' + '<td class="piLabel piLabelArea" infotype="area"></td>' + '<td class="piValue" infotype="area"></td>' + '</tr>' + '<tr>' + '<td class="piLabel piLabelLength" infotype="length"></td>' + '<td class="piValue" infotype="length"></td>' + '</tr>' + '</table>' + '</div>');
+        this._templates['infodiv'] = jQuery('<div>' + '<table class="piMain">' + '<tr>' + '<td class="piHeaderLabel" colspan="3"></td>' + '</tr>' + '<tr>' + '<td class="piLabel piLabelName" infotype="name"></td>' + '<td class="piLabelValue" infotype="name" colspan="2"></td>' + '</tr>' + '<tr>' + '<td class="piLabel piLabelArea" infotype="area"></td>' + '<td class="piValue" infotype="area"></td>' + '<td class="piUnit" infotype="area"></td>' + '</tr>' + '<tr>' + '<td class="piLabel piLabelLength" infotype="length"></td>' + '<td class="piValue" infotype="length"></td>' + '<td class="piUnit" infotype="length"></td>' + '</tr>' + '</table>' + '</div>');
     },
     /**
      * @method register
      * Interface method for the plugin protocol
      */
     register : function() {
-
     },
     /**
      * @method unregister
      * Interface method for the plugin protocol
      */
     unregister : function() {
-
     },
     /**
      * @method startPlugin
@@ -153,7 +146,7 @@ function(config, locale) {
         var parentContainer = jQuery(this._map.div);
         var el = me._elements['display'];
         if (!me._elements['display']) {
-            el = me._elements['display'] = me.__templates['infodiv'].clone();
+            el = me._elements['display'] = me._templates['infodiv'].clone();
         }
 
         el.find('.piHeaderLabel').html(me._locale['header']);
@@ -183,13 +176,17 @@ function(config, locale) {
         var me = this;
         var info = data['info'];
         var el = me._elements['display'];
-        var spanName = el.find('.piValue[infotype="name"]');
+        var spanName = el.find('.piLabelValue[infotype="name"]');
         var spanArea = el.find('.piValue[infotype="area"]');
+        var spanAreaUnit = el.find('.piUnit[infotype="area"]');
         var spanLength = el.find('.piValue[infotype="length"]');
+        var spanLengthUnit = el.find('.piUnit[infotype="length"]');
         if (spanName && spanArea && spanLength) {
             spanName.text(info.name);
             spanArea.text(info.area);
+            spanAreaUnit.html(me._map.units + "&sup2;");
             spanLength.text(info.length);
+            spanLengthUnit.text(me._map.units);
         }
     },
 
@@ -200,17 +197,19 @@ function(config, locale) {
 
     eventHandlers : {
         /**
-         * @method MouseHoverEvent
-         * See PorttiMouse.notifyHover
+         * @method
          */
-        'MouseHoverEvent' : function(event) {
-            this.update({
-                'info' : {
-                    'name' : 'todo',
-                    'area' : 'todo',
-                    'length' : 'todo'
-                }
-            });
+        'ParcelInfo.ParcelLayerRegisterEvent' : function(event) {
+            var me = this;
+            if (event && event.getLayer()) {
+                me._registerLayer(event.getLayer());
+            }
+        },
+        'ParcelInfo.ParcelLayerUnregisterEvent' : function(event) {
+            var me = this;
+            if (event && event.getLayer()) {
+                me._unregisterLayer(event.getLayer());
+            }
         }
     },
 
@@ -222,6 +221,63 @@ function(config, locale) {
      */
     onEvent : function(event) {
         return this.eventHandlers[event.getName()].apply(this, [event]);
+    },
+
+    /**
+     *
+     */
+    _registerLayer : function(layer) {
+        var me = this;
+        if (jQuery.inArray(layer, me._layers) === -1) {
+            layer.events.register("featureselected", me, me._updateInfoSelected);
+            layer.events.register("featureunselected", me, me._updateInfoUnselected);
+            layer.events.register("featuremodified", me, me._updateInfo);
+            layer.events.register("vertexmodified", me, me._updateInfo);
+            this._layers.push(layer);
+        }
+    },
+    /**
+     *
+     */
+    _unregisterLayer : function(layer) {
+        var me = this;
+        var index = jQuery.inArray(layer, me._layers);
+        if (index != -1) {
+            layer.events.unregister("featureselected", me, me._updateInfoSelected);
+            layer.events.unregister("featureunselected", me, me._updateInfoUnselected);
+            layer.events.unregister("featuremodified", me, me._updateInfo);
+            layer.events.unregister("vertexmodified", me, me._updateInfo);
+            this_layers.splice(index, 1);
+        }
+    },
+    _updateInfoSelected : function(event) {
+        this._selectedFeature = null;
+        if (event) {
+            this._selectedFeature = event.feature;
+        }
+        // Update info for the given feature if any.
+        this._updateInfo(event);
+    },
+    _updateInfoUnselected : function(event) {
+        this._selectedFeature = null;
+        // Set to default values because none is selected.
+        this.update();
+    },
+    /**
+     *
+     */
+    _updateInfo : function(event) {
+        var me = this;
+        // Update the info only for the selected feature.
+        if (event && event.feature && event.feature.geometry && event.feature === me._selectedFeature) {
+            me.update({
+                'info' : {
+                    'name' : event.feature.attributes.nimi || event.feature.attributes.name || '',
+                    'area' : event.feature.geometry.getArea().toFixed(0),
+                    'length' : event.feature.geometry.getLength().toFixed(0)
+                }
+            });
+        }
     }
 }, {
     /**

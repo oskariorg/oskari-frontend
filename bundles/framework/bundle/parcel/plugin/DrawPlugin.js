@@ -43,11 +43,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
 
                     // Because a new feature was added, do splitting.
                     me.splitFeature();
-                },
-                "featuremodified" : function(event) {
                 }
             }
         });
+
+        this.selectControl = new OpenLayers.Control.SelectFeature(me.drawLayer);
+        this._map.addControl(this.selectControl);
+        // no harm in activating straight away
+        this.selectControl.activate();
+
+        this.modifyControl = new OpenLayers.Control.ModifyFeature(me.drawLayer);
+        this._map.addControl(this.modifyControl);
+        // no harm in activating straight away
+        this.modifyControl.activate();
 
         this.editLayer = new OpenLayers.Layer.Vector("Parcel Edit Layer", {
             eventListeners : {
@@ -90,32 +98,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
             }
         });
 
-
-
-        // doesn't really need to be in array, but lets keep it for future development
-        this.selectControl = new OpenLayers.Control.SelectFeature(me.drawLayer)
-        this._map.addControl(this.selectControl);
-        this.selectControl.events.register("featurehighlighted", this, function(event) {
-            console.log("high featuren area: " + event.feature.geometry.getArea().toFixed(3));
-        });
-        // no harm in activating straight away
-        this.selectControl.activate();
-
-        // doesn't really need to be in array, but lets keep it for future development
-        this.modifyControl = new OpenLayers.Control.ModifyFeature(me.drawLayer);
-        this._map.addControl(this.modifyControl);
-        // no harm in activating straight away
-        this.modifyControl.activate();
-
-        // doesn't really need to be in array, but lets keep it for future development
         this.selectEditControl = new OpenLayers.Control.SelectFeature(me.editLayer);
         this._map.addControl(this.selectEditControl);
-        this.selectEditControl.events.register("featurehighlighted", this, function(event) {
-        });
         // no harm in activating straight away
         this.selectEditControl.activate();
 
-        // doesn't really need to be in array, but lets keep it for future development
         this.modifyEditControl = new OpenLayers.Control.ModifyFeature(me.editLayer);
         this._map.addControl(this.modifyEditControl);
         // no harm in activating straight away
@@ -150,6 +137,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         sandbox.addRequestHandler('Parcel.SaveDrawingRequest', this.requestHandlers.saveDrawingHandler);
     },
     stopPlugin : function(sandbox) {
+        // Let possible info box know that this layer should not be followed.
+        var event = sandbox.getEventBuilder('ParcelInfo.ParcelLayerUnregisterEvent')(this.getDrawingLayer());
+        sandbox.notifyAll(event);
+
+        // Remove request handlers.
         sandbox.removeRequestHandler('Parcel.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
         sandbox.removeRequestHandler('Parcel.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
         sandbox.removeRequestHandler('Parcel.CancelDrawingRequest', this.requestHandlers.cancelDrawingHandler);
@@ -184,13 +176,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         // remove possible old drawing
         this.drawLayer.removeAllFeatures();
         this.currentFeatureType = null;
+
+        // Let possible parcel info bundle know that layer should be followed.
+        // Notice, parcel info should be initialized before this call to make it get an event.
+        // Therefore, this is not called during init when layer is created. Another, way might
+        // be to set dependency or certain creation order between bundles. But, the dependency is
+        // not mandatory to make this bundle work and the order is required only if info should be
+        // updated from this bundle.
+        var event = this._sandbox.getEventBuilder('ParcelInfo.ParcelLayerRegisterEvent')(this.getDrawingLayer());
+        this._sandbox.notifyAll(event);
+
         // add feature to draw layer
         // This feature will be the parcel that may be edited by the tools.
         var features = [feature];
         this.drawLayer.addFeatures(features);
         // preselect it for modification
-        // this.modifyControl.selectControl.select(this.drawLayer.features[0]);
-        this.selectControl.select(this.drawLayer.features[0]);
+        this.modifyControl.selectControl.select(this.drawLayer.features[0]);
         this.currentFeatureType = featureType;
         // Zoom to the loaded feature.
         this._map.zoomToExtent(this.drawLayer.getDataExtent());
@@ -332,6 +333,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
      * called from sandbox
      */
     stop : function(sandbox) {
+        // Let possible info box know that this layer should not be followed.
+        var event = sandbox.getEventBuilder('ParcelInfo.ParcelLayerUnregisterEvent')(getDrawingLayer());
+        sandbox.notifyAll(event);
     },
     register : function() {
     },

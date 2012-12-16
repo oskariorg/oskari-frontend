@@ -21,6 +21,15 @@
     text-align: left;
 }
 
+.piLabelValue {
+    text-align: left;
+}
+
 .piValue {
     text-align: right;
+}
+
+.piUnit {
+    text-align: left;
+    padding-left: 4px;
 }

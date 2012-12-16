@@ -51,6 +51,12 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/event/ParcelSelectedEvent.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/event/ParcelInfoLayerRegisterEvent.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/event/ParcelInfoLayerUnregisterEvent.js"
         },
         /* plugin */
         {
