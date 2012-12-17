@@ -284,6 +284,7 @@ function(drawPlugin) {
                 break;
         }
         parcelLayer.redraw();
+        return operatingFeature;
     },
 
 

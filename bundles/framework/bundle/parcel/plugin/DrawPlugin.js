@@ -233,8 +233,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         // This feature will be the parcel that may be edited by the tools.
         var features = [feature];
         this.drawLayer.addFeatures(features);
-        // preselect it for modification
-        this.modifyControl.selectControl.select(this.drawLayer.features[0]);
+        
         this.currentFeatureType = featureType;
         // Zoom to the loaded feature.
         this._map.zoomToExtent(this.drawLayer.getDataExtent());
@@ -389,7 +388,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
      * and replaces the feature hold by this instance.
      */
     splitFeature : function() {
-        this.splitter.split();
+        var operatingFeature = this.splitter.split();
+        if (operatingFeature != undefined) {
+        	this.modifyEditControl.selectFeature(operatingFeature);
+        }
     }
 }, {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
