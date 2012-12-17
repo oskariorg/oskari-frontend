@@ -60,12 +60,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
             eventListeners : {
                 "featuremodified" : function(event) {
 
-                    var markerLayer = this.map.getLayersByName("Parcel Markers Layer")[0];
-                    var order = markerLayer.markers[0].firstLine;
-                    var mInd = order ? 0 :1;
-
                     var operatingFeature = this.features[0];
                     if (operatingFeature.geometry.CLASS_NAME === "OpenLayers.Geometry.LineString") {
+                        var markerLayer = this.map.getLayersByName("Parcel Markers Layer")[0];
+                        var order = markerLayer.markers[0].firstLine;
+                        var mInd = order ? 0 : 1;
+
                         var lineRunLength = operatingFeature.geometry.components.length-1;
 
                         operatingFeature.geometry.components[0].x = markerLayer.markers[mInd].lonlat.lon;
