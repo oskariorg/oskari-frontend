@@ -4,6 +4,9 @@
             "selectedLayers": [
                 {
                     "id": "base_35"
+                },
+                {
+                	"id": "kiinteistorajat"
                 }
             ],
             "zoom": 1,
@@ -122,6 +125,11 @@
                     ],
                     "orgName": "Taustakartta",
                     "inspire": "Taustakartta"
+                },{
+                	"id": "kiinteistorajat",
+                	"type": "wmslayer",
+                	"wmsUrl" : "http://a.karttatiili.fi/dataset/kiinteistorekisteri/service/wms,http://b.karttatiili.fi/dataset/kiinteistorekisteri/service/wms,http://c.karttatiili.fi/dataset/kiinteistorekisteri/service/wms,http://d.karttatiili.fi/dataset/kiinteistorekisteri/service/wms",
+                	"wmsName": "ktj_kiinteistorajat"
                 }
             ],
             "imageLocation": "../../resources",
