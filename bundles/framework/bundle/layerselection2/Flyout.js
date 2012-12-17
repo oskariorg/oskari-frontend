@@ -156,7 +156,7 @@ function(instance) {
         
         var fixHelper = function(e, ui) {
 			ui.children().each(function() {
-			$(this).width($(this).width());
+			jQuery(this).height(jQuery(this).height());
 			});
 			return ui;
 		};
