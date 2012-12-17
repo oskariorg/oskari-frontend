@@ -154,17 +154,7 @@ function(instance) {
             this._appendLayerFooter(layerContainer, layer, layer.isInScale(scale), true);
         }
         
-        listContainer.sortable({
-        	/*change: function(event,ui) {
-        		var item = ui.item ;
-        		me._layerOrderChanged(item)
-        	},*/
-        	/*stop: function(event,ui) {
-        		var item = ui.item ;
-        		me._layerOrderChanged(item)
-        	}*/
-        });
-        listContainer.disableSelection();
+        listContainer.sortable().disableSelection();
 
         // RIGHTJS sortable event handling
         //TODO: get rid of sortableBinded and UNBIND?
