@@ -155,8 +155,6 @@ function(instance) {
         }
         
         listContainer.sortable({
-            connectWith: ".selectedLayersList sortable ui-sortable"
-        });
         	/*change: function(event,ui) {
         		var item = ui.item ;
         		me._layerOrderChanged(item)
@@ -165,7 +163,7 @@ function(instance) {
         		var item = ui.item ;
         		me._layerOrderChanged(item)
         	}*/
-        
+        });
         listContainer.disableSelection();
 
         // RIGHTJS sortable event handling
