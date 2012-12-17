@@ -373,14 +373,6 @@ body {
 	}
 }
 
-@media only screen and (min-width:1024px) and (max-width:1024px) {
-	
-	.oskari-flyoutcontent {
-		margin: 30px;
-		padding: 20px 20px 20px 25px;
-		border: 0;
-	}
-}
 
 
 /* IE8 TEMP fixes */
