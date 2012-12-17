@@ -154,22 +154,15 @@ function(instance) {
             this._appendLayerFooter(layerContainer, layer, layer.isInScale(scale), true);
         }
         
-        var fixHelper = function(e, ui) {
-			ui.children().each(function() {
-			jQuery(this).height(jQuery(this).height());
-			});
-			return ui;
-		};
         listContainer.sortable({
-        	helper: fixHelper
         	/*change: function(event,ui) {
         		var item = ui.item ;
         		me._layerOrderChanged(item)
-        	},
+        	},*/
         	stop: function(event,ui) {
         		var item = ui.item ;
         		me._layerOrderChanged(item)
-        	}*/
+        	}
         });
         listContainer.disableSelection();
 

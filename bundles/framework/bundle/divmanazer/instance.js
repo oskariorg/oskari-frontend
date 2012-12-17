@@ -288,7 +288,7 @@ function() {
 		/* jQueryUI won't work without this */
 		flyout.css("position", "absolute");
 
-		var useHelper = false;
+		var useHelper = true;
 
 		extensionInfo.draggable = $(flyout).draggable({
 			handle : jQuery(handle),
@@ -316,14 +316,25 @@ function() {
 				} else {
 					/* Attempt to fix IE9 vs. draggable flyout width issues */
 					/* this did not work */
+					/* if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
+						flyout.css('width',flyout.width()+"px"); 
+					}
+					*/
+
+				}
+			},
+			drag : function() {
+				if(useHelper) {
+					flyout.css("display", "none");
+				} else {
+					/* Attempt to fix IE9 vs. draggable flyout width issues */
+					/* this did not work */
 					 if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
 						flyout.css('width',flyout.width()+"px"); 
 					}
 					
 
 				}
-			},
-			drag : function() {
 
 			},
 			stop : function(event, ui) {
@@ -333,12 +344,12 @@ function() {
 				} else {
 					/* Attempt to fix IE9 vs. draggable flyout width issues */
 					/* this did not work */
-					if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
+					/*if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
 						if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
 							flyout.css('width',''); 
 						}
 
-					}
+					}*/
 					
 				}
 				me.shuffleZIndices(flyout);
