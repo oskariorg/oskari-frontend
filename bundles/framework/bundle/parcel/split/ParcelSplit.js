@@ -29,12 +29,6 @@ function(drawPlugin) {
     */
     this.intersectionPoints = [];
 
-   /**
-    * @property markers
-    *
-    *
-    */
-    this.markers = null;
 
    /**
     * @property markerSize
@@ -42,6 +36,13 @@ function(drawPlugin) {
     *
     */
     this.markerSize = new OpenLayers.Size(21,25);
+
+   /**
+    * @property markerOffset
+    *
+    *
+    */
+    this.markerOffset = new OpenLayers.Pixel(-(this.markerSize.w/2), -this.markerSize.h);
 
    /**
     * @property markerIcon
@@ -94,11 +95,179 @@ function(drawPlugin) {
         this.map.controls[8].deactivate();
         if (this.drawPlugin.splitSelection) return;
 
-        //var openLayersMap = this.drawPlugin.getMapModule().getMap();
         var parcelLayer = this.drawPlugin.drawLayer;
         var editLayer = this.drawPlugin.editLayer;
+
+        this.map.moveActiveMarker = function(evt) {
+            var lonlat = this.getLonLatFromPixel(new OpenLayers.Pixel(evt.xy.x,evt.xy.y))
+            lonlat.lon -= this.activeMarker.markerMouseOffset.lon;
+            lonlat.lat -= this.activeMarker.markerMouseOffset.lat;
+            this.activeMarker.lonlat = this.activeMarkerProjection(lonlat);
+            this.getLayersByName("Parcel Markers Layer")[0].redraw();
+            OpenLayers.Event.stop(evt);
+        };
+
+        this.map.freezeActiveMarker = function(evt) {
+            this.events.unregister("mousemove",this,this.moveActiveMarker);
+            this.events.unregister("mouseup",this,this.freezeActiveMarker);
+            OpenLayers.Event.stop(evt);
+
+            var lonlat = this.getLonLatFromPixel(new OpenLayers.Pixel(evt.xy.x,evt.xy.y))
+            lonlat.lon -= this.activeMarker.markerMouseOffset.lon;
+            lonlat.lat -= this.activeMarker.markerMouseOffset.lat;
+            this.activeMarker.lonlat = this.activeMarkerProjection(lonlat);
+
+            var parcelLayer = this.getLayersByName("Parcel Draw Layer")[0];
+            var editLayer = this.getLayersByName("Parcel Edit Layer")[0];
+            var markerLayer = this.getLayersByName("Parcel Markers Layer")[0];
+            var line = parcelLayer.getFeatureById(this.activeMarker.polylineID);
+            var edgeInd = this.activeMarker.polylineEdge;
+
+            var operatingLine = editLayer.features[0];
+            var polygon1 = parcelLayer.features[0];
+            var polygon2 = parcelLayer.features[1];
+
+            var lineInd;
+            if (this.activeMarker.firstLine) {
+                lineInd = 0;
+                operatingLine.geometry.components[lineInd].x = this.activeMarker.lonlat.lon;
+                operatingLine.geometry.components[lineInd].y = this.activeMarker.lonlat.lat;
+
+            } else {
+                lineInd = operatingLine.geometry.components.length-1;
+                operatingLine.geometry.components[lineInd].x = this.activeMarker.lonlat.lon;
+                operatingLine.geometry.components[lineInd].y = this.activeMarker.lonlat.lat;
+            }
+
+            if (this.activeMarker.first) {
+                polygon1.geometry.components[0].components[polygon1.polygonCorners[0]] = operatingLine.geometry.components[lineInd];
+                polygon2.geometry.components[0].components[polygon2.polygonCorners[1]] = operatingLine.geometry.components[lineInd];
+            } else {
+                var nInd = operatingLine.geometry.components.length-1;
+                polygon1.geometry.components[0].components[polygon1.polygonCorners[1]] = operatingLine.geometry.components[lineInd];
+                polygon2.geometry.components[0].components[polygon2.polygonCorners[0]] = operatingLine.geometry.components[lineInd];
+            }
+            editLayer.redraw();
+            parcelLayer.redraw();
+
+            this.controls[9].activate();
+            this.controls[10].activate();
+            this.controls[11].activate();
+            this.controls[12].activate();
+
+        };
+
+        this.map.pointProjection = function(q,p0,p1) {
+            var dotProduct  = function(a,b) {
+                return a.x*b.x+ a.y*b.y;
+            };
+
+            var a = p1.x-p0.x;
+            var b = p1.y-p0.y;
+            var c = q.x*(p1.x-p0.x)+q.y*(p1.y-p0.y);
+            var d = p0.y-p1.y;
+            var e = p1.x-p0.x;
+            var f = p0.y*(p1.x-p0.x)-p0.x*(p1.y-p0.y);
+            var pq = {x:-(c*e-b*f)/(b*d-a*e), y:(c*d-a*f)/(b*d-a*e)};
+
+            // Tarkistetaan onko segmentin sisällä
+            var p0p1 = {x:p1.x-p0.x, y:p1.y-p0.y};
+            var pqp1 = {x:p1.x-pq.x, y:p1.y-pq.y};
+            var dp = dotProduct(p0p1,pqp1);
+            var l =  dotProduct(p0p1,p0p1);
+            if (dp < 0) {
+                pq.x = p1.x;
+               pq.y = p1.y;
+            } else if (dp > l) {
+                pq.x = p0.x;
+                pq.y = p0.y;
+            }
+            return pq;
+       }; // huom. tapaus nimittäjä==0
+
+
+        this.map.activeMarkerProjection  = function(refLonlat) {
+            var parcelLayer = this.getLayersByName("Parcel Draw Layer")[0];
+
+            var point = {x: refLonlat.lon, y: refLonlat.lat};
+            // var polygonID = this.activeMarker.polygonID;
+            // var polygon = parcelLayer.getFeatureById(polygonID);
+            var edge = this.activeMarker.polygonEdge;
+            //var vertices = polygon.geometry.getVertices();
+            var vertices = this.backupVertices;
+            var nEdges = vertices.length;
+            var inds = [(edge-1+nEdges)%nEdges,edge,(edge+1+nEdges)%nEdges,(edge+2+nEdges)%nEdges];
+            var projPoints = [];
+            var distances = [];
+            var distance = function(p1,p2) {
+                var x1;
+                var isNumber = function isNumber(n) {
+                    return (!isNaN(parseFloat(n)))&&(isFinite(n));
+                };
+
+                if (isNumber(p1.lon)) {
+                    x1 = p1.lon;
+                } else if (isNumber(p1.x)) {
+                    x1 = p1.x;
+                } else if (isNumber(p1[0])) {
+                    x1 = p1[0];
+                } else {
+                    return null;
+                }
+
+                var y1;
+                if (isNumber(p1.lat)) {
+                    y1 = p1.lat;
+                } else if (isNumber(p1.y)) {
+                    y1 = p1.y;
+                } else if (isNumber(p1[1])) {
+                    y1 = p1[1];
+                } else {
+                    return null;
+                }
+
+                var x2;
+                if (isNumber(p2.lon)) {
+                    x2 = p2.lon;
+                } else if (isNumber(p2.x)) {
+                    x2 = p2.x;
+                } else if (isNumber(p2[0])) {
+                    x2 = p2[0];
+                } else {
+                    return null;
+                }
+
+                var y2;
+                if (isNumber(p2.lat)) {
+                    y2 = p2.lat;
+                } else if (isNumber(p2.y)) {
+                    y2 = p2.y;
+                } else if (isNumber(p2[1])) {
+                    y2 = p2[1];
+                } else {
+                    return null;
+                }
+                return Math.sqrt(Math.pow(x2-x1,2)+Math.pow(y2-y1,2));
+            };
+
+            var minDistInd = 0;
+            for (var i = 0; i < 3; i++) {
+                projPoints[i] = this.pointProjection(point,vertices[inds[i]],vertices[inds[i+1]]);
+                distances[i] = distance(point,projPoints[i]);
+                if (distances[i] < distances[minDistInd]) minDistInd = i;
+            }
+            this.activeMarker.polygonEdge = (edge+minDistInd+nEdges-1)%nEdges;
+
+            // return (new OpenLayers.LonLat(projPoints[minDistInd].x,projPoints[minDistInd].y));
+
+            // kun vain yksi väli mahdollinen:
+            this.activeMarker.polygonEdge = edge;
+            return (new OpenLayers.LonLat(projPoints[1].x,projPoints[1].y));
+        };
+
         var featureInd = parcelLayer.features.length-1;
         if (featureInd < 1) return;
+
         this.drawPlugin.splitSelection = true;
         var basePolygon = parcelLayer.features[0];
         var operatingFeature = parcelLayer.features[featureInd];
@@ -130,6 +299,10 @@ function(drawPlugin) {
         outPolygon.geometry.addComponent(inPolygon.geometry.components[0]);
         editLayer.addFeatures([inPolygon]);
         parcelLayer.features.splice(parcelLayer.features.length-1,1);
+        this.map.controls[7].deactivate();
+        this.map.controls[8].deactivate();
+        this.map.controls[13].deactivate();
+        this.map.controls[14].deactivate();
     },
 
 
@@ -142,6 +315,7 @@ function(drawPlugin) {
     splitLine : function(polygon,line) {
             var parcelLayer = this.drawPlugin.drawLayer;
             var editLayer = this.drawPlugin.editLayer;
+            var markerLayer = this.drawPlugin.markerLayer;
             var vertices;
             var polygonEdges = [];
             var polylineEdges = [];
@@ -196,8 +370,10 @@ function(drawPlugin) {
                         }
                     }
                 }
+                var reversed = false;
                 if (this.intersectionPoints[0][6] > this.intersectionPoints[1][6]) this.intersectionPoints.reverse();
                 if (this.intersectionPoints[0][5] > this.intersectionPoints[1][5]) {
+                    reversed = true;
                     polylineEdges[i].reverse();
                     for (var l = 0; l < polylineEdges[i].length; l++) {
                         var temp0 = polylineEdges[i][l][0];
@@ -222,12 +398,10 @@ function(drawPlugin) {
                 }
             }
 
-            this.markers = new OpenLayers.Layer.Markers("Markers");
-            //this.map.addLayers([this.markers]);
-            //this.map.setLayerIndex(this.markers, 100000);
             var minPolygonEdge = Number.POSITIVE_INFINITY;
             var minPolygonEdgeIndex = -1;
             var marker;
+
             for (i=0; i<this.intersectionPoints.length; i++) {
                 var point = new OpenLayers.Geometry.Point(this.intersectionPoints[i][0][0],this.intersectionPoints[i][0][1]);
                 marker = new OpenLayers.Marker(new OpenLayers.LonLat(point.x,point.y),this.markerIcon.clone());
@@ -235,25 +409,37 @@ function(drawPlugin) {
                 marker.polygonID = this.intersectionPoints[i][1];
                 marker.polygonEdge = this.intersectionPoints[i][2];
                 marker.polylineID = this.intersectionPoints[i][3];
-                marker.polylineEdge = this.intersectionPoints[i][4];
+                marker.polylineEdge = this.intersectionPoints[i][5];
                 marker.first = false;
-                marker.markerOffset = new OpenLayers.Pixel(-(this.markerSize.w/2), -this.markerSize.h);
+                marker.firstLine = ((i===0)&&(!reversed))||((i>0)&&(reversed));
                 marker.markerMouseOffset = new OpenLayers.LonLat(0, 0);
 
                 if (marker.polygonEdge < minPolygonEdge) {
                     minPolygonEdge = marker.polygonEdge;
                     minPolygonEdgeIndex = i;
                 }
-                this.markers.addMarker(marker);
-            }
-            if (minPolygonEdgeIndex >= 0) this.markers.markers[minPolygonEdgeIndex].first = true;
 
-            for (i=0; i<this.markers.markers.length; i++) {
-                this.markers.markers[i].events.register("mousedown", marker, this.selectActiveMarker);
+                markerLayer.addMarker(marker);
+            }
+            if (minPolygonEdgeIndex >= 0) markerLayer.markers[minPolygonEdgeIndex].first = true;
+
+            this.map.controls[7].deactivate();
+            this.map.controls[8].deactivate();
+            this.map.controls[9].deactivate();
+            this.map.controls[10].deactivate();
+            this.map.controls[11].deactivate();
+            this.map.controls[12].deactivate();
+            this.map.controls[13].deactivate();
+            this.map.controls[14].deactivate();
+
+
+            for (i=0; i<markerLayer.markers.length; i++) {
+                markerLayer.markers[i].events.register("mousedown", marker, this.selectActiveMarker);
             }
 
             this.splitPolygons = this.generateSplitPolygons(polygonEdges,polylineEdges);
 
+            this.map.backupVertices = parcelLayer.features[0].geometry.getVertices();
             parcelLayer.removeAllFeatures();
             parcelLayer.addFeatures(this.splitPolygons);
 
@@ -439,160 +625,10 @@ function(drawPlugin) {
 	    var pixel = new OpenLayers.Pixel(xy.x,xy.y);
 	    var xyLonLat = this.map.getLonLatFromPixel(pixel);
 	    this.map.activeMarker = evt.object;
-	    this.markerMouseOffset.lon = xyLonLat.lon-this.map.activeMarker.lonlat.lon;
-	    this.markerMouseOffset.lat = xyLonLat.lat-this.map.activeMarker.lonlat.lat;
-	    this.map.events.register("mouseup", this.map, this.freezeActiveMarker);
-	    this.map.events.register("mousemove", this.map, this.moveActiveMarker);
-	},
-
-        /*
-         * @method moveActiveMarker
-         *
-         * @param {} evt
-         */
-        moveActiveMarker : function (evt) {
-            var lonlat = this.map.getLonLatFromPixel(new OpenLayers.Pixel(evt.xy.x,evt.xy.y))
-            lonlat.lon -= this.markerMouseOffset.lon;
-            lonlat.lat -= this.markerMouseOffset.lat;
-            this.map.activeMarker.lonlat = this.map.activeMarkerProjection(lonlat);
-            markers.redraw();
-            OpenLayers.Event.stop(evt);
-        },
-
-        /*
-         * @method freezeActiveMarker
-         *
-         * @param {} evt
-         */
-        freezeActiveMarker : function(evt) {
-            this.map.events.unregister("mousemove",this.map,this.moveActiveMarker);
-            this.map.events.unregister("mouseup",this.map,this.freezeActiveMarker);
-            OpenLayers.Event.stop(evt);
-
-
-            var lonlat = this.map.getLonLatFromPixel(new OpenLayers.Pixel(evt.xy.x,evt.xy.y))
-            lonlat.lon -= this.markerMouseOffset.lon;
-            lonlat.lat -= this.markerMouseOffset.lat;
-            this.map.activeMarker.lonlat = this.activeMarkerProjection(lonlat);
-
-
-            var parcelLayer = this.drawPlugin.drawLayer;
-            var line = parcelLayer.getFeatureById(this.map.activeMarker.polylineID);
-//            var vertices = line.geometry.getVertices();
-            var edgeInd = this.map.activeMarker.polylineEdge;
-
-            if (splitPolygons !== null) {
-                var comp = [];
-                comp[0] = splitPolygons[0].geometry.components[0].components;
-                if (this.map.activeMarker.first) {
-                    comp[0][splitPolygons[0].polygonCorners[0]].x = this.map.activeMarker.lonlat.lon;
-                    comp[0][splitPolygons[0].polygonCorners[0]].y = this.map.activeMarker.lonlat.lat;
-                } else {
-                    comp[0][splitPolygons[0].polygonCorners[1]].x = this.map.activeMarker.lonlat.lon;
-                    comp[0][splitPolygons[0].polygonCorners[1]].y = this.map.activeMarker.lonlat.lat;
-                }
-                comp[1] = splitPolygons[1].geometry.components[0].components;
-                if (this.map.activeMarker.first) {
-                    comp[1][splitPolygons[1].polygonCorners[1]].x = this.map.activeMarker.lonlat.lon;
-                    comp[1][splitPolygons[1].polygonCorners[1]].y = this.map.activeMarker.lonlat.lat;
-                } else {
-                    comp[1][splitPolygons[1].polygonCorners[0]].x = this.map.activeMarker.lonlat.lon;
-                    comp[1][splitPolygons[1].polygonCorners[0]].y = this.map.activeMarker.lonlat.lat;
-                }
-            }
-
-            markers.redraw();
-            parcelLayer.redraw();
-        },
-
-       /**
-        * @method activeMarkerProjection
-        *
-        * @param {} drawPlugin
- 	* @return {} returns single localization string or
-        */
-        activeMarkerProjection : function(refLonlat) {
-            var parcelLayer = this.drawPlugin.drawLayer;
-            var point = {x: refLonlat.lon, y: refLonlat.lat};
-            var polygonID = this.map.activeMarker.polygonID;
-            var polygon = parcelLayer.getFeatureById(polygonID);
-            var edge = this.map.activeMarker.polygonEdge;
-            var vertices = polygon.geometry.getVertices();
-            var nEdges = vertices.length;
-            var inds = [(edge-1+nEdges)%nEdges,edge,(edge+1+nEdges)%nEdges,(edge+2+nEdges)%nEdges];
-            var projPoints = [];
-            var distances = [];
-
-            var minDistInd = 0;
-            for (var i = 0; i < 3; i++) {
-                projPoints[i] = this.projection(point,vertices[inds[i]],vertices[inds[i+1]]);
-                distances[i] = this.distance(point,projPoints[i]);
-                if (distances[i] < distances[minDistInd]) minDistInd = i;
-            }
-            this.map.activeMarker.polygonEdge = (edge+minDistInd+nEdges-1)%nEdges;
-
-//            return (new OpenLayers.LonLat(projPoints[minDistInd].x,projPoints[minDistInd].y));
-
-            // kun vain yksi väli mahdollinen:
-            this.map.activeMarker.polygonEdge = edge;
-            return (new OpenLayers.LonLat(projPoints[1].x,projPoints[1].y));
-        },
-
-
-      /**
-       * @method projection
-       *
-       * @param {} q
-       * @param {} p0
-       * @param {} p1
-       * @return {String/Object} returns single localization string or
-       */
-       projection : function(q,p0,p1) {
-           var a = p1.x-p0.x;
-           var b = p1.y-p0.y;
-           var c = q.x*(p1.x-p0.x)+q.y*(p1.y-p0.y);
-           var d = p0.y-p1.y;
-           var e = p1.x-p0.x;
-           var f = p0.y*(p1.x-p0.x)-p0.x*(p1.y-p0.y);
-           var pq = {x:-(c*e-b*f)/(b*d-a*e), y:(c*d-a*f)/(b*d-a*e)};
-
-           // Tarkistetaan onko segmentin sisällä
-           var p0p1 = {x:p1.x-p0.x, y:p1.y-p0.y};
-           var pqp1 = {x:p1.x-pq.x, y:p1.y-pq.y};
-           var dp = this.dotProduct(p0p1,pqp1);
-           var l =  this.dotProduct(p0p1,p0p1);
-           if (dp < 0) {
-               pq.x = p1.x;
-               pq.y = p1.y;
-           } else if (dp > l) {
-               pq.x = p0.x;
-               pq.y = p0.y;
-           }
-
-           return pq;
-       }, // tapaus nimittäjä==0
-
-
-       /**
-        * @method dotProduct
-        *
-        * @param {} a
-        * @param {} b
-	    * @return {} returns single localization string or
-        */
-        dotProduct : function(a,b) {
-           return a.x*b.x+ a.y*b.y;
-        },
-
-
-       /**
-        * @method isNumber
-        *
-        * @param {} n
-     	* @return {} returns single localization string or
-        */
-        isNumber : function(n) {
-          return (!isNaN(parseFloat(n)))&&(isFinite(n));
-        }
+	    this.map.activeMarker.markerMouseOffset.lon = xyLonLat.lon-this.map.activeMarker.lonlat.lon;
+	    this.map.activeMarker.markerMouseOffset.lat = xyLonLat.lat-this.map.activeMarker.lonlat.lat;
+	    this.map.events.register("mouseup", this.map, this.map.freezeActiveMarker);
+	    this.map.events.register("mousemove", this.map, this.map.moveActiveMarker);
+	}
 
 });
