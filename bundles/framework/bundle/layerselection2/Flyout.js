@@ -154,7 +154,14 @@ function(instance) {
             this._appendLayerFooter(layerContainer, layer, layer.isInScale(scale), true);
         }
         
+        var fixHelper = function(e, ui) {
+			ui.children().each(function() {
+			$(this).width($(this).width());
+			});
+			return ui;
+		};
         listContainer.sortable({
+        	helper: fixHelper
         	/*change: function(event,ui) {
         		var item = ui.item ;
         		me._layerOrderChanged(item)
@@ -163,18 +170,8 @@ function(instance) {
         		var item = ui.item ;
         		me._layerOrderChanged(item)
         	}*/
-        	 connectWith: '.selectedLayersList sortable',
-    		cursor: 'pointer'
-			}).droppable({
-    		accept: '.button',
-    		activeClass: 'highlight',
-    		drop: function(event, ui) {
-        		var $li = $('<div>').html('List ' + ui.draggable.html());
-        		$li.appendTo(this);
-   		 }
-	
         });
-       /* listContainer.disableSelection();*/
+        listContainer.disableSelection();
 
         // RIGHTJS sortable event handling
         //TODO: get rid of sortableBinded and UNBIND?
