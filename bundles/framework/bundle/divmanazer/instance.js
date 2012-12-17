@@ -288,7 +288,7 @@ function() {
 		/* jQueryUI won't work without this */
 		flyout.css("position", "absolute");
 
-		var useHelper = true;
+		var useHelper = false;
 
 		extensionInfo.draggable = $(flyout).draggable({
 			handle : jQuery(handle),
@@ -316,10 +316,10 @@ function() {
 				} else {
 					/* Attempt to fix IE9 vs. draggable flyout width issues */
 					/* this did not work */
-					/* if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
+				 if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
 						flyout.css('width',flyout.width()+"px"); 
 					}
-					*/
+					
 
 				}
 			},
@@ -331,6 +331,7 @@ function() {
 					/* this did not work */
 					 if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
 						flyout.css('width',flyout.width()+"px"); 
+						alert(test);
 					}
 					
 
