@@ -50,86 +50,120 @@ Oskari.clazz.define(
             content.find('div.content').before(txt);
             container.append(content);
             
-            if (false) {
-                var continueButton =
-                    Oskari.clazz.create(
+            var continueButton =
+                Oskari.clazz.create(
                         'Oskari.userinterface.component.Button'
                     );
-                continueButton.addClass('primary');
-                var txt = 'loc.buttons.continue';
-                if (this.loc && 
+            continueButton.addClass('primary');
+            var txt = 'loc.buttons.continue';
+            if (this.loc && 
                     this.loc.buttons && 
                     this.loc.buttons['continue']) {
                     txt = this.loc.buttons['continue'];
                 }
-                continueButton.setTitle(txt);
-                continueButton.setHandler(
+            continueButton.setTitle(txt);
+            continueButton.setHandler(
                     function() {
                         var layers =
                             me.getLayersWithoutPublishRights();
                         me.instance.setPublishMode(true, layers);
                     }
                 );
-                this.buttons['continue'] = continueButton;
-                continueButton.insertTo(content.find('div.buttons'));
-            } else {
-                var helper = Oskari.clazz.create(
-                    'Oskari.userinterface.component.UIHelper', 
-                    me.instance.sandbox
-                );
-                helper.getHelpArticle(
-                    'termsofuse, mappublication, ' + Oskari.getLang(),
-                    function(status, response) {
-                        var dlg =
-                            Oskari.clazz.create(
-                                'Oskari.userinterface.component.Popup'
-                            );
-                        var btns = [];
-                        var rejectB =
-                            Oskari.clazz.create(
-                                'Oskari.userinterface.component.Button'
-                            );
-                        rejectB.setTitle(me.loc.tou.reject);
-                        rejectB.setHandler(
-                            function() {
-                                dlg.close(true);
-                            }
-                        );
-                        var acceptB =
-                            Oskari.clazz.create(
-                                'Oskari.userinterface.component.Button'
-                            );
-                        acceptB.setTitle(me.loc.tou.accept);
-                        acceptB.setHandler(
-                            function() {
-                                me.markTouAccepted();
-                                dlg.close(true);
-                            }
-                        );
-                                           
+            this.buttons['continue'] = continueButton;
 
-                        if (status) {
-                            var msgDivW = jQuery(document).width() * 0.3;
-                            var msgDivH = jQuery(document).height() * 0.6;
-                            var msgDiv = 
-                                jQuery('<div/>', {
-                                           cls : 'terms_of_use-popup',
-                                           html : response.body,
-                                           width : msgDivW,
-                                           height : msgDivH,
-                                       });
-                            // msgDiv.height(msgDiv.parent('div').height());
-                            msgDiv.css('overflow', 'auto');
-                            dlg.show(response.title,
-                                     msgDiv,
-                                     [ acceptB, rejectB ]);
-                            dlg.setContent(msgDiv);
+            jQuery.ajax(
+                {
+                    url : me.instance.sandbox.getAjaxUrl() + 
+                        'action_route=foobarbaz',
+                    type : 'GET',
+                    dataType : 'json',
+                    error : function() {
+                        this.success({ 'touAccepted' : 'false' });
+                    },
+                    beforeSend : function(x) {                
+                        if (x && x.overrideMimeType) {
+                            x.overrideMimeType(
+                                "application/j-son;charset=UTF-8"
+                            );
+                        }
+                    },
+                    success : function(resp) {
+                        if (resp === null || resp.touAccepted === 'false') {
+                            var helper = Oskari.clazz.create(
+                                'Oskari.userinterface.component.UIHelper', 
+                                me.instance.sandbox
+                            );
+                            helper.getHelpArticle(
+                                'termsofuse, mappublication, ' + 
+                                    Oskari.getLang(),
+                                function(status, response) {
+                                    var dlg =
+                                        Oskari.clazz.create(
+                                            'Oskari.userinterface.component'
+                                                + '.Popup'
+                                        );
+                                    var btns = [];
+                                    var rejectB =
+                                        Oskari.clazz.create(
+                                            'Oskari.userinterface.component'
+                                                + '.Button'
+                                        );
+                                    rejectB.setTitle(me.loc.tou.reject);
+                                    rejectB.setHandler(
+                                        function() {
+                                            dlg.close(true);
+                                        }
+                                    );
+                                    var acceptB =
+                                        Oskari.clazz.create(
+                                            'Oskari.userinterface.component'
+                                                + '.Button'
+                                        );
+                                    acceptB.setTitle(me.loc.tou.accept);
+                                    acceptB.setHandler(
+                                        function() {
+                                            me.markTouAccepted();
+                                            continueButton.insertTo(
+                                                content.find('div.buttons')
+                                            );
+                                            dlg.close(true);
+                                        }
+                                    );
+
+                                    if (status) {
+                                        var msgDivW = 
+                                            jQuery(document).width() * 0.3;
+                                        var msgDivH = 
+                                            jQuery(document).height() * 0.6;
+                                        var msgDiv = 
+                                            jQuery(
+                                                '<div/>', 
+                                                {
+                                                    cls : 'terms_of_use-popup',
+                                                    html : response.body,
+                                                    width : msgDivW,
+                                                    height : msgDivH
+                                                }
+                                            );
+                                        msgDiv.css('overflow', 'auto');
+                                        dlg.show(response.title,
+                                                 msgDiv,
+                                                 [ acceptB, rejectB ]);
+                                        dlg.setContent(msgDiv);
+                                    } else {
+                                        alert(me.loc.tou.notfound);
+                                    }
+                                }
+                            );
                         } else {
-                            alert(me.loc.tou.notfound);
+                            continueButton.insertTo(
+                                content.find('div.buttons')
+                            );
                         }
                     }
-                );
-            }
+                }
+            );
+                        
 
             var cancelButton = 
                 Oskari.clazz.create(
