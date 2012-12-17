@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         this.editLayer = new OpenLayers.Layer.Vector("Parcel Edit Layer", {
             eventListeners : {
                 "featuremodified" : function(event) {
-					console.log('fm');
+
                     var operatingFeature = this.features[0];
                     if (operatingFeature.geometry.CLASS_NAME === "OpenLayers.Geometry.LineString") {
                         var markerLayer = this.map.getLayersByName("Parcel Markers Layer")[0];
@@ -366,6 +366,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         if (operatingFeature != undefined) {
         	this.controls.select.select(operatingFeature);
         	this.controls.modify.selectFeature(operatingFeature);
+        	this.controls.modify.activate();
         }
     }
 }, {
