@@ -165,7 +165,6 @@ function(instance) {
         	}
         });
         listContainer.disableSelection();
-        alert(3);
 
         // RIGHTJS sortable event handling
         //TODO: get rid of sortableBinded and UNBIND?

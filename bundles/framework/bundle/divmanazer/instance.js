@@ -316,27 +316,14 @@ function() {
 				} else {
 					/* Attempt to fix IE9 vs. draggable flyout width issues */
 					/* this did not work */
-				 if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
+					/* if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
 						flyout.css('width',flyout.width()+"px"); 
 					}
-					
+					*/
 
 				}
 			},
 			drag : function() {
-				alert(1);
-				if(useHelper) {
-					flyout.css("display", "none");
-				} else {
-					/* Attempt to fix IE9 vs. draggable flyout width issues */
-					/* this did not work */
-					 if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
-						flyout.css('width',flyout.width()+"px"); 
-						alert(2);
-					}
-					
-
-				}
 
 			},
 			stop : function(event, ui) {
