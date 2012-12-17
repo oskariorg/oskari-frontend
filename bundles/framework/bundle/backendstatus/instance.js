@@ -397,14 +397,18 @@ function() {
 	_processResponse : function(resp, allKnown) {
 		var me = this;
 		var sandbox = this._sandbox;
-		var evtBuilder = sandbox.getEventBuilder('MapLayerEvent');
+		if(!resp) {
+            sandbox.printDebug("[BackendStatus] empty data from server");
+            return;		    
+		}
 
 		var backendStatusArr = resp.backendstatus;
 		if(!backendStatusArr || backendStatusArr.length == undefined) {
 			sandbox.printDebug("[BackendStatus] backendStatus NO data");
 			return;
 		}
-
+		
+        var evtBuilder = sandbox.getEventBuilder('MapLayerEvent');
 		var changeNotifications = {};
 
 		/* let's update AllKnown */
