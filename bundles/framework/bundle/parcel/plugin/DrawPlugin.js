@@ -7,6 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
     this.pluginName = null;
     this._sandbox = null;
     this._map = null;
+    this.controls = null;
     this.drawControls = null;
     this.drawLayer = null;
     this.editLayer = null;
@@ -48,18 +49,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
             }
         });
 
-        this.selectControl = new OpenLayers.Control.SelectFeature(me.drawLayer);
-        this._map.addControl(this.selectControl);
-        this.selectControl.activate();
-
-        this.modifyControl = new OpenLayers.Control.ModifyFeature(me.drawLayer);
-        this._map.addControl(this.modifyControl);
-        this.modifyControl.activate();
-
         this.editLayer = new OpenLayers.Layer.Vector("Parcel Edit Layer", {
             eventListeners : {
                 "featuremodified" : function(event) {
-
+					console.log('fm');
                     var operatingFeature = this.features[0];
                     if (operatingFeature.geometry.CLASS_NAME === "OpenLayers.Geometry.LineString") {
                         var markerLayer = this.map.getLayersByName("Parcel Markers Layer")[0];
@@ -105,9 +98,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
                         }
                         polygon2.polygonCorners[1] = polygon2.polygonCorners[0]+lineRunLength;
 
-                        this.map.controls[10].deactivate();
-                        this.map.controls[10].activate();
-
                     }
                     this.redraw();
                     me.drawLayer.redraw();
@@ -115,36 +105,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
             }
         });
 
-        this.markerLayer = new OpenLayers.Layer.Markers("Parcel Markers Layer", {
-        });
+		this.markerLayer = new OpenLayers.Layer.Markers("Parcel Markers Layer", {});
+		
+        var selectEditControl = new OpenLayers.Control.SelectFeature(me.editLayer)
+        this._map.addControl(selectEditControl);
+        selectEditControl.activate();
 
-        // doesn't really need to be in array, but lets keep it for future development
-        this.selectControl = new OpenLayers.Control.SelectFeature(me.drawLayer)
-        this._map.addControl(this.selectControl);
-        this.selectControl.events.register("featurehighlighted", this, function(event) {
-            console.log("high featuren area: " + event.feature.geometry.getArea().toFixed(3));
-        });
-        // no harm in activating straight away
-        this.selectControl.activate();
-
-        // doesn't really need to be in array, but lets keep it for future development
-        this.modifyControl = new OpenLayers.Control.ModifyFeature(me.drawLayer);
-        this._map.addControl(this.modifyControl);
-        // no harm in activating straight away
-        this.modifyControl.activate();
-
-        // doesn't really need to be in array, but lets keep it for future development
-        this.selectEditControl = new OpenLayers.Control.SelectFeature(me.editLayer);
-        this._map.addControl(this.selectEditControl);
-        this.selectEditControl.events.register("featurehighlighted", this, function(event) {
-        });
-        // no harm in activating straight away
-        this.selectEditControl.activate();
-
-        // doesn't really need to be in array, but lets keep it for future development
-        this.modifyEditControl = new OpenLayers.Control.ModifyFeature(me.editLayer);
-        this._map.addControl(this.modifyEditControl);
-        this.modifyEditControl.activate();
+        var modifyEditControl = new OpenLayers.Control.ModifyFeature(me.editLayer);
+        this._map.addControl(modifyEditControl);
+        modifyEditControl.activate();
+        
+		this.controls = {
+			select: selectEditControl,
+			modify: modifyEditControl
+		};
 
         this.drawControls = {
             line : new OpenLayers.Control.DrawFeature(me.drawLayer, OpenLayers.Handler.Path),
@@ -313,6 +287,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         if (this.drawLayer.features[0]) {
             // Select the feature that is going to be saved.
             // Then, it is shown for the user if user has unselected it before pressing save button.
+            // TODO: this needs to be fixed. You're not supposed to use the selectControl inside the modifyControl!
             this.modifyControl.selectControl.select(this.drawLayer.features[0]);
             this.toggleControl();
             var event = this._sandbox.getEventBuilder('Parcel.SaveDrawingEvent')(this.getDrawing());
@@ -390,7 +365,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
     splitFeature : function() {
         var operatingFeature = this.splitter.split();
         if (operatingFeature != undefined) {
-        	this.modifyEditControl.selectFeature(operatingFeature);
+        	this.controls.select.select(operatingFeature);
+        	this.controls.modify.selectFeature(operatingFeature);
+        	//this.modifyEditControl.selectFeature(operatingFeature);
         }
     }
 }, {

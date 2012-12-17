@@ -92,7 +92,6 @@ function(drawPlugin) {
      * {Oskari.mapframework.bundle.parcel.DrawingToolInstance} instance provides the features that are used for the splitting.
      */
     split : function() {
-        this.map.controls[8].deactivate();
         if (this.drawPlugin.splitSelection) return;
 
         var parcelLayer = this.drawPlugin.drawLayer;
@@ -149,12 +148,6 @@ function(drawPlugin) {
             }
             editLayer.redraw();
             parcelLayer.redraw();
-
-            this.controls[9].activate();
-            this.controls[10].activate();
-            this.controls[11].activate();
-            this.controls[12].activate();
-
         };
 
         this.map.pointProjection = function(q,p0,p1) {
@@ -300,10 +293,6 @@ function(drawPlugin) {
         outPolygon.geometry.addComponent(inPolygon.geometry.components[0]);
         editLayer.addFeatures([inPolygon]);
         parcelLayer.features.splice(parcelLayer.features.length-1,1);
-        this.map.controls[7].deactivate();
-        this.map.controls[8].deactivate();
-        this.map.controls[13].deactivate();
-        this.map.controls[14].deactivate();
     },
 
 
@@ -404,7 +393,9 @@ function(drawPlugin) {
             var marker;
 
             for (i=0; i<this.intersectionPoints.length; i++) {
+            	
                 var point = new OpenLayers.Geometry.Point(this.intersectionPoints[i][0][0],this.intersectionPoints[i][0][1]);
+                
                 marker = new OpenLayers.Marker(new OpenLayers.LonLat(point.x,point.y),this.markerIcon.clone());
                 marker.setOpacity(0.8);
                 marker.polygonID = this.intersectionPoints[i][1];
@@ -421,22 +412,14 @@ function(drawPlugin) {
                 }
 
                 markerLayer.addMarker(marker);
+                
             }
             if (minPolygonEdgeIndex >= 0) markerLayer.markers[minPolygonEdgeIndex].first = true;
-
-            this.map.controls[7].deactivate();
-            this.map.controls[8].deactivate();
-            this.map.controls[9].deactivate();
-            this.map.controls[10].deactivate();
-            this.map.controls[11].deactivate();
-            this.map.controls[12].deactivate();
-            this.map.controls[13].deactivate();
-            this.map.controls[14].deactivate();
-
 
             for (i=0; i<markerLayer.markers.length; i++) {
                 markerLayer.markers[i].events.register("mousedown", marker, this.selectActiveMarker);
             }
+
 
             this.splitPolygons = this.generateSplitPolygons(polygonEdges,polylineEdges);
 
