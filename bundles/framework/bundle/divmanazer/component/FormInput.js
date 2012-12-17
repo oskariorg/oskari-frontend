@@ -29,8 +29,8 @@ function(name) {
     this._contentCheckMsg = 'illegal characters';
     
     this._bindFocusAndBlur();
-    // word characters, digits, whitespace and '-' allowed
-    this._regExp = /[\s\w\d\.\-äöåÄÖÅ]*/;
+    // word characters, digits, whitespace and chars '-,.?!' allowed
+    this._regExp = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*/;
     this._colorRegExp = /^([A-Fa-f0-9]{6})$/;
 }, {
     /**
@@ -176,7 +176,12 @@ function(name) {
     },
     /**
      * @method validate
-     * Returns errors array or empty array if no errors
+     * Returns errors array or empty array if no errors. Each error object in the array 
+     * has properties "field" with the field name as value and error with the error message as value:
+     * {
+     *     field : <field name>,
+     *     error : <error message>
+     * }  
      * @return {Object[]}
      */
     validate : function() {

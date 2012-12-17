@@ -66,7 +66,7 @@ function(config) {
 	 * 			reference to application sandbox
 	 */
 	init : function(sandbox) {
-		var pluginLoc = this.getMapModule().getLocalization('plugin');
+		var pluginLoc = this.getMapModule().getLocalization('plugin', true);
 		this.loc = pluginLoc[this.__name];
 
 		this.template = jQuery('<div class="search-div">' + 

@@ -1,10 +1,10 @@
 /**
  * @class Oskari.mapframework.bundle.publisher.Flyout
  *
- * Renders the "publish wizard" flyout. The flyout shows different view 
+ * Renders the "publisher" flyout. The flyout shows different view 
  * depending of application state. Currently implemented views are:
- * Oskari.mapframework.bundle.publisher.view.NotLoggedIn and
- * Oskari.mapframework.bundle.publisher.view.BasicPublisher.
+ * Oskari.mapframework.bundle.publisher.view.NotLoggedIn (shown for guests) and
+ * Oskari.mapframework.bundle.publisher.view.StartView (shown for logged in users).
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.publisher.Flyout',
 
@@ -54,11 +54,9 @@ function(instance) {
      */
     startPlugin : function() {
         this.template = jQuery('<div></div>');
-
     },
     /**
      * @method stopPlugin
-     *
      * Interface method implementation, does nothing atm
      */
     stopPlugin : function() {
@@ -84,7 +82,6 @@ function(instance) {
      * Interface method implementation, does nothing atm
      */
     getOptions : function() {
-
     },
     /**
      * @method setState
@@ -98,7 +95,8 @@ function(instance) {
     },
     /**
      * @method createUi
-     * Creates the UI for a fresh start
+     * Creates the UI for a fresh start.
+     * Selects the view to show based on user (guest/loggedin)
      */
     createUi : function() {
         var me = this;
@@ -126,7 +124,7 @@ function(instance) {
     },
     /**
      * @method handleLayerSelectionChanged
-     * Calls the current views handleLayerSelectionChanged method
+     * Calls the current views handleLayerSelectionChanged method if one is defined
      */
     handleLayerSelectionChanged : function() {
         if(this.view && this.view.handleLayerSelectionChanged) {

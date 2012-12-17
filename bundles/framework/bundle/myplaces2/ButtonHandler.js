@@ -101,11 +101,18 @@ function(instance) {
         var user = this.instance.sandbox.getUser();
         if(!user.isLoggedIn()) {
             // disable toolbar buttons for guests
-            var stateReqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
-            sandbox.request(this, stateReqBuilder(undefined, this.buttonGroup, false));
+            this.disableButtons();
         }
     },
-        
+    /**
+     * @method disableButtons
+     * Disables draw buttons
+     */
+    disableButtons : function() {
+        var sandbox = this.instance.sandbox;
+        var stateReqBuilder = sandbox.getRequestBuilder('Toolbar.ToolButtonStateRequest');
+        sandbox.request(this, stateReqBuilder(undefined, this.buttonGroup, false));
+    },  
     /**
      * @method startNewDrawing
      * Resets currently selected place and sends a draw request to plugin with given config

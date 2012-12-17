@@ -2,7 +2,7 @@ Oskari.registerLocalization({
   "lang": "en",
   "key": "Search",
   "value": {
-    "title": "Place name search",
+    "title": "Location Search",
     "desc": "",
     "searchDescription": "Search by place name, address or real estate unit identifier.",
     "searchButton": "Search",

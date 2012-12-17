@@ -167,7 +167,21 @@ function(instance) {
             if (me.state === null) {
                 me.state = {};
             }
-            me.state.searchtext = field.getValue();
+            var value = field.getValue();
+            me.state.searchtext = value;
+            if(!value) {
+                // remove results when field is emptied
+                var info = searchContainer.find('div.info');
+                info.empty();
+                var resultList = searchContainer.find('div.resultList');
+                resultList.empty();
+                
+                // try to remove markers if request is available when field is emptied
+                var reqBuilder = sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkerRequest');
+                if(reqBuilder) {
+                    sandbox.request(me.instance.getName(), reqBuilder());
+                }        
+            }
         });
         field.addClearButton();
         
@@ -186,7 +200,7 @@ function(instance) {
             
             // TODO: make some gif go round and round so user knows
             // something is happening
-            var searchKey = field.getValue(true)
+            var searchKey = field.getValue(true);
             me.instance.service.doSearch(searchKey, function(data) {
                 field.setEnabled(true);
                 button.setEnabled(true);

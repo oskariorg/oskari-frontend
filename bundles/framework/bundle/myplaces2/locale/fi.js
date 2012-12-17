@@ -49,6 +49,9 @@ Oskari.registerLocalization({
       "placename": {
         "placeholder": "Anna kohteelle nimi"
       },
+      "placelink": {
+        "placeholder": "Anna URL-osoite"
+      },
       "placedesc": {
         "placeholder": "Kuvaile kohdetta"
       },

@@ -4,65 +4,67 @@ Oskari.registerLocalization(
         "key": "GuidedTour",
         "value": {
             "button": {
-                "next" : "Seuraava",
-                "previous" : "Edellinen",
-                "start" : "Aloita",
-                "finish" : "Valmis",
-                "close" : "Sulje"
+                "next" : "Next",
+                "previous" : "Previous",
+                "start" : "Start",
+                "finish" : "Finish",
+                "close" : "Close"
             },
-            "title": "Tervetuloa",
+            "title": "Welcome",
             "desc": "",
+            "tourseen" : {
+                "label" : "Do not show this message again"
+            },
             "page1": {
-                "title": "Tervetuloa Paikkatietoikkunan karttanäkymään",
-                "message" : "Jos olet ensimmäistä kertaa Paikkatietoikkunan karttapalvelussamme, pikaoppaamme auttaa sinut alkuun.",
-                "label" : "Älä näytä tätä viestiä uudelleen"
+                "title": "Welcome to the Paikkatietoikkuna map window",
+                "message" : "If this is your first visit to the Paikkatietoikkuna map service, our quick start guide will help you to get started."
             },
             "page2": {
-                "title": "Haku",
-                "message" : "Haun avulla voit siirtyä suoraan etsimääsi paikkaan.",
-                "openLink" : "Näytä haku",
-                "closeLink" : "Piilota haku",
-                "tileText" : "Haku"
+                "title": "Search",
+                "message" : "Use the search function to move the map view directly to the place you are looking for.",
+                "openLink" : "Show search",
+                "closeLink" : "Hide search",
+                "tileText" : "Search"
             },
             "page3": {
-                "title": "Karttatasot",
-                "message" : "Karttasoista valitset näkyviin eri tiedontuottajien aineistoja. Klikkaa kategoria auki ja valitse joku karttataso.",
-                "openLink" : "Näytä karttatasot",
-                "closeLink" : "Piilota karttatasot",
-                "tileText" : "Karttatasot"
+                "title": "Map layers",
+                "message" : "You can select the data products to be shown on the map by selecting map layers. Click a category to open it and select a layer or write a few letters that are included in the name of the data product you are looking for in the search field.",
+                "openLink" : "Show map layers",
+                "closeLink" : "Hide map layers",
+                "tileText" : "Map layers"
             },
             "page4": {
-                "title": "Valitut karttatasot",
-                "message" : "Raahaa karttatasoja uuteen järjestykseen ja säädä niiden läpinäkyvyyttä. Näet muutokset karttaikkunassa.",
-                "openLink" : "Näytä valitut karttatasot",
-                "closeLink" : "Piilota valitut karttatasot",
-                "tileText" : "Valitut karttatasot"
+                "title": "Selected map layers",
+                "message" : "You can change the order in which map layers are displayed by clicking and draging, as well as change their transparency. Changes are shown in the map window.",
+                "openLink" : "Show selected map layers",
+                "closeLink" : "Hide selected map layers",
+                "tileText" : "Selected map layers"
             },
             "page5": {
-                "title": "Omat tiedot",
-                "message" : "Kaikki lisäämäsi kohteet, tallentamasi näkymät ja julkaisemasi kartat löytyvät täältä kun olet kirjautuneena sisään. Pääset myös muokkaamaan omia tietojasi täältä.",
-                "openLink" : "Näytä omat tiedot",
-                "closeLink" : "Piilota omat tiedot",
-                "tileText" : "Omat tiedot"
+                "title": "My data",
+                "message" : "All of the places which you have marked on the map, your saved map views and embedded maps are displayed here when you are logged in to the service.",
+                "openLink" : "Show my data",
+                "closeLink" : "Hide my data",
+                "tileText" : "My data"
             },
             "page6": {
-                "title": "Julkaise kartta",
-                "message" : "Kokoamasi kartan voit julkaista helposti internet-sivustollasi. Määrittelet vain ensin kartan koon ja käyttöliitymän, ja kopioit lopuksi rivin HTML-koodia sivustollesi.",
-                "openLink" : "Näytä kartan julkaisu",
-                "closeLink" : "Piilota kartan julkaisu",
-                "tileText" : "Julkaise kartta"
+                "title": "Create map",
+                "message" : "You can easily embed a map you have created on your webite. Simply definte the size and user interface of your map and copy and paste a line of HTML-code on your webpage",
+                "openLink" : "Show create map",
+                "closeLink" : "Hide create map",
+                "tileText" : "Create map"
             },
             "page7": {
-                "title": "Työkalut",
-                "message" : "Työkalujen avulla mm. lisäät kohteita, tallennat näkymän, lähetät linkin näkymään tai perut muutoksen kartalla. Työkalujen selitteet näet kun pidät hetken hiiren kursoria niiden päällä."
+                "title": "Tools",
+                "message" : "Use the tools to add places, save a map view, share a link to a map view or return to an earlier map view. Keep your mouse pointer on top of a tool for a moment to see its tool tip."
             },
             "page8": {
-                "title": "Liikkuminen kartalla",
-                "message" : "Voit siirtää karttaa raahaamalla tai panorointinuolia käyttäen. Palauta kartta oletustilaan nuolten keskellä olevasta painikkeesta. Vinkki: Myös näppäimistön nuolinäppäimet panoroivat karttaa."
+                "title": "Pan the map view",
+                "message" : "You can move the view on the map by clicking and dragging or with the panning controls. Return to the default view by clicking the button in the middle of the panning controls. Tip: You can also pan the map with the arrow keys on your keyboard."
             },
             "page9": {
-                "title": "Lähentäminen ja loitontaminen",
-                "message" : "Lähennä ja loitonna karttaa mittakaavasäätimestä tai plus- ja miinusmerkeistä säätimen yhteydessä. Vinkki: Voit lähentää ja loitontaa näppäimistön plus- ja miinusnäppäimillä tai lähentää kaksoisosoittamalla karttaa."
+                "title": "Zoom in and zoom out",
+                "message" : "You can zoom in and out on the map using the scale scrollbar or the plus and minus buttons next to the scrollbar. Tip: You can also zoom using the plus and minus keys on your keyboard or zoom in by double-clicking the map. It is also possible to zoom with the scroll wheel of your mouse."
             }
         }
     }

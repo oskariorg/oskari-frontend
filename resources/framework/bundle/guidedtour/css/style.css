@@ -1,37 +1,37 @@
 /* Override popup styles */
 
-.divmanazerpopup {
+.divmanazerpopup.guidedtour {
     font-family: Arial, sans-serif;
 }
 
-.divmanazerpopup h3 {
+.divmanazerpopup.guidedtour h3 {
     margin: 0;
     font-weight: normal;
 }
 
-div.divmanazerpopup.bluetitle h3 {
+div.divmanazerpopup.guidedtour.bluetitle h3 {
     color: #fff;
     background-color: #1995fd;
     border-radius: 3px 3px 0 0;
 }
 
-div.divmanazerpopup.bluetitle h3 span {
+div.divmanazerpopup.guidedtour.bluetitle h3 span {
     float: right;
     font-size: 13px;
     padding-top: 3px;
 }
 
-.divmanazerpopup .content {
+.divmanazerpopup.guidedtour .content {
     font-size: 13px;
     line-height: 18px;
 }
 
-.divmanazerpopup .content a {
+.divmanazerpopup.guidedtour .content a {
     color: #0090ff;
     text-decoration: underline;
 }
 
-.divmanazerpopup .actions input {
+.divmanazerpopup.guidedtour .actions input {
     display: inline-block;
     zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
     *display: inline;
@@ -55,14 +55,14 @@ div.divmanazerpopup.bluetitle h3 span {
     background: -moz-linear-gradient(top,  #3a97ee,  #217ad4);
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#3a97ee', endColorstr='#217ad4');
 }
-.divmanazerpopup .actions input:hover {
+.divmanazerpopup.guidedtour .actions input:hover {
     text-decoration: none;
     color: #fff;
     background: -webkit-gradient(linear, left top, left bottom, from(#3a97ee), to(#217ad4));
     background: -moz-linear-gradient(top,  #59abf8,  #2b8df0);
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#3a97ee', endColorstr='#217ad4');
 }
-.divmanazerpopup .actions input:active {
+.divmanazerpopup.guidedtour .actions input:active {
     position: relative;
     top: 1px;
     color: #19456d;
@@ -72,10 +72,10 @@ div.divmanazerpopup.bluetitle h3 span {
     filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#217ad4', endColorstr='#3a97ee');
 }
 
-.divmanazerpopup.arrow:after, .divmanazerpopup.arrow:before {
+.divmanazerpopup.guidedtour.arrow:after, .divmanazerpopup.guidedtour.arrow:before {
     display: none;
 }
 
-.divmanazerpopup.draggable {
+.divmanazerpopup.guidedtour.draggable {
     cursor: move;
 }

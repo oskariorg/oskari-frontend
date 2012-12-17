@@ -130,11 +130,14 @@ Oskari.clazz.define(
             var pn = 'Oskari.userinterface.component.Popup';
             var dialog = Oskari.clazz.create(pn);
             dialog.makeDraggable();
+            dialog.addClass('guidedtour');
             this._showGuideContentForStep(this.guideStep, dialog);
         },
         
         _guideSteps : [
             {
+                appendTourSeenCheckbox : true,
+
                 setScope : function(inst) {
                     this.ref = inst;
                 },
@@ -146,35 +149,6 @@ Oskari.clazz.define(
                     var loc = me.getLocalization('page1');
                     var content = jQuery('<div></div>');
                     content.append(this.ref.getLocalization('page1').message);
-                    content.append('<br><br>');
-                    var checkboxTemplate = 
-                        jQuery('<input type="checkbox" '
-                               + 'name="pti_tour_seen" '
-                               + 'id="pti_tour_seen" '
-                               + 'value="1">');
-                    var checkbox = checkboxTemplate.clone();
-                    var labelTemplate = 
-                        jQuery('<label for="pti_tour_seen"></label>');
-                    var label = labelTemplate.clone();
-                    label.append(loc.label);
-                    checkbox.bind(
-                        'change', 
-                        function() {
-                            if (jQuery(this).attr('checked')) {
-                                // Set cookie not to show guided tour again
-                                jQuery.cookie(
-                                    "pti_tour_seen", "1", { expires: 365 }
-                                );
-                            } else {
-                                // Revert to show guided tour on startup
-                                jQuery.cookie(
-                                    "pti_tour_seen", "0", { expires: 1 }
-                                );
-                            }
-                        });
-                    content.append(checkbox);
-                    content.append('&nbsp;');
-                    content.append(label);
                     return content;
                 }
             }, {
@@ -442,6 +416,8 @@ Oskari.clazz.define(
                 positionAlign : 'left'
                 
             }, {
+                appendTourSeenCheckbox : true,
+
                 setScope : function(inst) {
                     this.ref = inst;
                 },
@@ -467,7 +443,40 @@ Oskari.clazz.define(
             var step = this._guideSteps[stepIndex];
             step.setScope(this);
             var buttons = this._getDialogButton(dialog);
-            dialog.show(step.getTitle(), step.getContent(), buttons);
+            var title = step.getTitle();
+            var content = step.getContent();
+            if (step.appendTourSeenCheckbox) {                 
+                content.append('<br><br>');
+                var checkboxTemplate = 
+                    jQuery('<input type="checkbox" '
+                           + 'name="pti_tour_seen" '
+                           + 'id="pti_tour_seen" '
+                           + 'value="1">');
+                var checkbox = checkboxTemplate.clone();
+                var labelTemplate = 
+                    jQuery('<label for="pti_tour_seen"></label>');
+                var label = labelTemplate.clone();
+                label.append(this.getLocalization('tourseen').label);
+                checkbox.bind(
+                    'change', 
+                    function() {
+                        if (jQuery(this).attr('checked')) {
+                            // Set cookie not to show guided tour again
+                            jQuery.cookie(
+                                "pti_tour_seen", "1", { expires: 365 }
+                            );
+                        } else {
+                            // Revert to show guided tour on startup
+                            jQuery.cookie(
+                                "pti_tour_seen", "0", { expires: 1 }
+                            );
+                        }
+                    });
+                content.append(checkbox);
+                content.append('&nbsp;');
+                content.append(label);
+            }
+            dialog.show(title, content, buttons);
             if(step.getPositionRef) {
                 dialog.moveTo(step.getPositionRef(), step.positionAlign);
             } else {
@@ -500,7 +509,7 @@ Oskari.clazz.define(
             }
             var closeBtn = dialog.createCloseButton(closeTxt);
             buttons.push(closeBtn);
-                        
+            
             if (this.guideStep > 1) {
                 var bn = 'Oskari.userinterface.component.Button';
                 var prevBtn = Oskari.clazz.create(bn);

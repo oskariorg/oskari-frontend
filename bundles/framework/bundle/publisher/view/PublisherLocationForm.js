@@ -1,15 +1,21 @@
 /**
  * @class Oskari.mapframework.bundle.publisher.view.PublisherLocationForm
  * 
+ * Represents the basic info view for the publisher as an Oskari.userinterface.component.AccordionPanel
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLocationForm',
 
 /**
  * @method create called automatically on construction
  * @static
+ * @param {Object} localization
+ *       publisher localization data
+ * @param {Oskari.mapframework.bundle.publisher.view.BasicPublisher} publisher
+ *       publisher reference for language change
  */
-function(localization) {
+function(localization, publisher) {
 	this.loc = localization;
+    this._publisher = publisher;
 	this.fields = {
 		'domain' : {
 			"label" : localization.domain.label,
@@ -33,6 +39,11 @@ function(localization) {
 		optionTemplate : jQuery('<option></option>')
 	}
 }, {
+    /**
+     * @method init
+     * Creates the set of Oskari.userinterface.component.FormInput to be shown on the panel and 
+     * sets up validation etc.
+     */
 	init : function() {
 		var me = this;
 		for(var fkey in this.fields) {
@@ -70,11 +81,24 @@ function(localization) {
         for (var opt in langOpts) {
         	var option = this.langField.optionTemplate.clone();
         	option.attr('value', opt);
+        	if(opt == Oskari.getLang()) {
+        	    option.attr('selected','selected');
+        	}
         	option.append(langOpts[opt]);
             languageSelection.append(option);
         }
+        // plugins should change language when user changes selection
+        languageSelection.change(function()
+        {
+            me._publisher.setPluginLanguage(jQuery(this).attr('value'));
+        });
         this.langField.field = langField;
 	},
+    /**
+     * @method getPanel
+     * Returns the UI panel and populates it with the data that we want to show the user.
+     * @return {Oskari.userinterface.component.AccordionPanel}
+     */
 	getPanel : function() {
         var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
         panel.setTitle(this.loc.domain.title);
@@ -86,6 +110,17 @@ function(localization) {
 		contentPanel.append(this.langField.field);
 		return panel;
 	},
+    /**
+     * @method getValues
+     * Returns the selections the user has done with the form inputs.
+     * {
+     *     domain : <domain field value>,
+     *     name : <name field value>,
+     *     language : <language user selected>
+     * }
+     * 
+     * @return {Object}
+     */
 	getValues : function() {
 		var values = {};
 		for(var fkey in this.fields) {
@@ -95,6 +130,13 @@ function(localization) {
 		values.language = this.langField.field.find('select[name=language]').val();
 		return values;
     },
+    /**
+     * @method validate
+     * Returns any errors found in validation or an empty
+     * array if valid. Error object format is defined in Oskari.userinterface.component.FormInput
+     * validate() function.
+     * @return {Object[]}
+     */
 	validate : function() {
 		var errors = [];
 		for(var fkey in this.fields) {
