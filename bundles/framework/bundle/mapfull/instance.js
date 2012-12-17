@@ -268,7 +268,7 @@ function() {
         }
 
 
-        if(state.east && ignoreLocation == false) {
+        if(state.east && ignoreLocation !== true) {
             this.sandbox.getMap().moveTo( 
                 state.east,
                 state.north,
