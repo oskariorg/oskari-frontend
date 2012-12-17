@@ -324,6 +324,7 @@ function() {
 				}
 			},
 			drag : function() {
+				alert(1);
 				if(useHelper) {
 					flyout.css("display", "none");
 				} else {
@@ -331,7 +332,7 @@ function() {
 					/* this did not work */
 					 if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
 						flyout.css('width',flyout.width()+"px"); 
-						alert(test);
+						alert(2);
 					}
 					
 
