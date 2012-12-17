@@ -155,18 +155,26 @@ function(instance) {
         }
         
         listContainer.sortable({
-            connectWith: ".selectedLayersList sortable ui-sortable"
-        });
         	/*change: function(event,ui) {
         		var item = ui.item ;
         		me._layerOrderChanged(item)
-        	},*/
-        	/*stop: function(event,ui) {
+        	},
+        	stop: function(event,ui) {
         		var item = ui.item ;
         		me._layerOrderChanged(item)
         	}*/
-        
-        listContainer.disableSelection();
+        	 connectWith: '.selectedLayersList sortable',
+    		cursor: 'pointer'
+			}).droppable({
+    		accept: '.button',
+    		activeClass: 'highlight',
+    		drop: function(event, ui) {
+        		var $li = $('<div>').html('List ' + ui.draggable.html());
+        		$li.appendTo(this);
+   		 }
+	
+        });
+       /* listContainer.disableSelection();*/
 
         // RIGHTJS sortable event handling
         //TODO: get rid of sortableBinded and UNBIND?

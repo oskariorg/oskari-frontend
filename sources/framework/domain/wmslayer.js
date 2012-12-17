@@ -507,6 +507,9 @@ function() {
                     style = this._styles[i];
                     if(style.getName() == styleName) {
                         this._currentStyle = style;
+                        if(style.getLegend() != "") {
+                        	this._legendImage = style.getLegend();
+                        }
                         return;
                     }
                 }
