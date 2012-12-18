@@ -15,7 +15,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
     useState : function(state) {
         if(!state) {
             // dont do anything if we dont have a saved state
-            return;
+            return [];
         }
         var components = this.sandbox.getStatefulComponents();
         var loopedComponents = [];
