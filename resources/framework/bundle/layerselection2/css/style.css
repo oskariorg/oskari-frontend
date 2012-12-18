@@ -16,7 +16,7 @@ div.layerselection2 .layer.selected div.layer-info {
 div.layerselection2 ul.selectedLayersList {
 	height: 100%;
     overflow: auto;
-    list-style-type: circle;
+    list-style-type: none;
     padding: 0;
     margin:0;
 }
