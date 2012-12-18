@@ -63,7 +63,7 @@ function() {
      * @param {String} message popup message
      */
     showMessage : function(title, message) {
-        var loc = this.instance.getLocalization();
+        var loc = this.getLocalization();
     	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
     	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
     	okBtn.setTitle(loc.buttons.ok);
@@ -72,6 +72,18 @@ function() {
             dialog.close(true);
     	});
     	dialog.show(title, message, [okBtn]);
+    },
+    /**
+     * @method forceDisable
+     * Disables the functionality since something went wrong 
+     * (couldnt create default category)
+     */
+    forceDisable : function() {
+        this.buttons.disableButtons();
+        var loc = this.getLocalization();
+      
+        this.showMessage(loc.category.organization + ' - ' +
+             loc.notification.error.title, loc.notification.error.generic);
     },
     /**
      * @method enableGfi
@@ -155,7 +167,7 @@ function() {
         // this.conf.queryUrl; 
         // back end communication
         this.myPlacesService = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService', 
-            actionUrl, user.getUuid(), sandbox, defaultCategoryName);
+            actionUrl, user.getUuid(), sandbox, defaultCategoryName, this);
         // register service so personal data can access it
         this.sandbox.registerService(this.myPlacesService);
         // init loads the places/categories

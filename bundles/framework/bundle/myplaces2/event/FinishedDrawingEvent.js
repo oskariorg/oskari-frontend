@@ -41,5 +41,9 @@ function(geometry, blnEdit) {
         return this._modification;
     }
 }, {
+    /**
+     * @property {String[]} protocol array of superclasses as {String}
+     * @static
+     */
     'protocol' : ['Oskari.mapframework.event.Event']
 });

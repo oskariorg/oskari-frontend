@@ -195,7 +195,7 @@ function(instance, locale, loader) {
 		return this.locale.title;
 	},
 	getDescription : function() {
-		
+
 	},
 	getOptions : function() {
 
@@ -211,7 +211,7 @@ function(instance, locale, loader) {
 	 */
 	openMetadataView : function(viewId, target) {
 		var me = this;
-		if( !this.contentState) {
+		if(!this.contentState) {
 			return;
 		}
 		var metadata = this.contentState.metadata;
@@ -248,89 +248,114 @@ function(instance, locale, loader) {
 		this.loadMetadataForState();
 
 	},
-	
 	resetBrowseGraphic : function(img) {
 		var bgEl = jQuery(this.browseGraphic);
 		bgEl.empty();
-		
+
 		var img = img || jQuery('<img />');
 		bgEl.append(img);
-		
+
 	},
-	
-	
 	/**
 	 * @method loadMetadataForState
 	 */
 	loadMetadataForState : function() {
 		var me = this;
 		var views = this.views;
-		
+
 		if(!this.contentState || !this.contentState.metadata || !this.contentState.metadata.uuid) {
 			return false;
 		}
-		
+
 		var viewId = this.contentState.view;
 		var metadata = this.contentState.metadata;
 
-		
 		views[viewId].empty();
-		
 
 		function handler(request) {
-			views[viewId].html(request.responseText);
-			
-			 /* HACK BEGIN */
-            /* Let's fix HREFs to click events */
-            var links = views[viewId].find("a[href]");
-	    var isMetaLink = new RegExp("^\\?.*");
-		
 
-            jQuery.each(links, function(index, ahref) {
+			/* We'll have to process the text to enhance readability */
+			/* We cannot modify the source */
 
-                var el = jQuery(ahref);
-                var href = el.attr('href');
+			var newContent = jQuery('<div />');
+			newContent.html(request.responseText);
 
-                if(!href) {
-                   return;
-                }
-                if(!isMetaLink.test(href) ) {
-		   return;
- 		}
+			/* HACK BEGIN */
 
-                var splits = href.split("&");
-                var argMap = {};
-                jQuery.each(splits, function(index, part) {
-                    var keyVal = part.split("=");
-                    argMap[keyVal[0]] = keyVal[1];
-                });
+			/* Let's split at .\n to DIVs */
 
-		
+			jQuery.each(newContent.find('.metadataContent'), function(n, p) {
 
-                el.attr('href', null);
-                el.click({
-                    viewId : viewId,
-                    uuid : argMap['uuid']
-                }, function(arg) {
-                    var data = arg.data;
-                    var uuid = data.uuid;
+				var part = jQuery(p);
+				var parent = part.parent();
+				/*parent.remove(part);*/
 
-                    me.showMetadata(uuid);
-                });
-            });
+				var newContainerPart = jQuery('<td />');
 
+				jQuery.each(part.text().split("\.\n"), function(nn, txtPart) {
+
+					var trimmed = jQuery.trim(txtPart);
+					if(trimmed.length == 0) {
+						return;
+					}
+
+					var newPart = jQuery('<div class="metadataflyout_content_section"/>');
+					newPart.text(trimmed + ".");
+					newContainerPart.append(newPart);
+				});
+
+				part.remove();
+				parent.append(newContainerPart);
+				
+				me._linkify(newContainerPart);
+			});
+			/* Let's fix HREFs to click events */
+			/* We cannot modify the source */
+
+			var links = newContent.find("a[href]");
+			var isMetaLink = new RegExp("^\\?.*");
+
+			jQuery.each(links, function(index, ahref) {
+
+				var el = jQuery(ahref);
+				var href = el.attr('href');
+
+				if(!href) {
+					return;
+				}
+				if(!isMetaLink.test(href)) {
+					return;
+				}
+
+				var splits = href.split("&");
+				var argMap = {};
+				jQuery.each(splits, function(index, part) {
+					var keyVal = part.split("=");
+					argMap[keyVal[0]] = keyVal[1];
+				});
+
+				el.attr('href', null);
+				el.click({
+					viewId : viewId,
+					uuid : argMap['uuid']
+				}, function(arg) {
+					var data = arg.data;
+					var uuid = data.uuid;
+
+					me.showMetadata(uuid);
+				});
+			});
 			/* HACK END */
-			
+
+			views[viewId].append(newContent);
 			views[viewId].css("display", "");
-			
-			
-			
+
 		}
 
-		me.instance.getLoader().loadGeonetworkAjaxHTML(handler,viewId, metadata.uuid, metadata.RS_Identifier_Code, metadata.RS_Identifier_CodeSpace);
+
+		me.instance.getLoader().loadGeonetworkAjaxHTML(handler, viewId, metadata.uuid, metadata.RS_Identifier_Code, metadata.RS_Identifier_CodeSpace);
 
 	},
-	
 	/**
 	 * @method loadMetadataJSONForState
 	 */
@@ -343,7 +368,7 @@ function(instance, locale, loader) {
 		var metadata = this.contentState.metadata;
 
 		this.instance.getLoader().loadMetadata('json', metadata.uuid, metadata.RS_Identifier_Code, metadata.RS_Identifier_CodeSpace, function(data) {
-			if( !data  || !data.mdcs || !data.mdcs.length || data.mdcs.length == 0 ) {
+			if(!data || !data.mdcs || !data.mdcs.length || data.mdcs.length == 0) {
 				return;
 			}
 			var metadataJson = data.mdcs[0];
@@ -361,8 +386,8 @@ function(instance, locale, loader) {
 		 * Let's display the browse graphic image
 		 */
 		if(browseGraphicUrl) {
-			
-			var img = jQuery('<img />'); 
+
+			var img = jQuery('<img />');
 			this.resetBrowseGraphic(img);
 
 			if(this.instance.getLoader().dev) {
@@ -393,7 +418,7 @@ function(instance, locale, loader) {
 	 */
 	showMetadata : function(uuid, RS_Identifier_Code, RS_Identifier_CodeSpace) {
 		this.resetContentState();
-		
+
 		this.contentState.metadata.uuid = uuid;
 		this.contentState.metadata.RS_Identifier_Code = RS_Identifier_Code;
 		this.contentState.metadata.RS_Identifier_CodeSpace = RS_Identifier_CodeSpace;
@@ -418,7 +443,7 @@ function(instance, locale, loader) {
 	 * restore state from store
 	 */
 	setContentState : function(contentState) {
-		if( !contentState) {
+		if(!contentState) {
 			this.resetContentState();
 			return;
 		}
@@ -445,9 +470,30 @@ function(instance, locale, loader) {
 			view : 'abstract'
 
 		};
+	},
+	/**
+	 * _linkify:
+	 *
+	 * slightly modified  http://code.google.com/p/jquery-linkify/
+	 *
+	 */
+	_linkify : function(el) {
+		var inputText = el.html();
+
+		//URLs starting with http://, https://, or ftp://
+		var replacePattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+		var replacedText = inputText.replace(replacePattern1, '<a href="$1" target="_blank">$1</a>');
+
+		//URLs starting with www. (without // before it, or it'd re-link the ones done above)
+		var replacePattern2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+		replacedText = replacedText.replace(replacePattern2, '$1<a href="http://$2" target="_blank">$2</a>');
+
+		//Change email addresses to mailto:: links
+		/*var replacePattern3 = /(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})/gim;
+		 replacedText = replacedText.replace(replacePattern3, '<a href="mailto:$1">$1</a>');*/
+
+		el.html(replacedText);
 	}
-
-
 }, {
 	'protocol' : ['Oskari.userinterface.Flyout']
 });

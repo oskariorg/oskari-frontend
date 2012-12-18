@@ -11,6 +11,7 @@ function() {
     this.description = undefined;
     this.categoryID = undefined;
     this.geometry = undefined;
+    this.link = undefined;
     this.createDate = undefined;
     this.updateDate = undefined; 
 }, {
@@ -55,6 +56,20 @@ function() {
      */
     getDescription : function() {
         return this.description;
+    },
+    /**
+     * @method setLink 
+     * @param {String} value
+     */
+    setLink : function(value) {
+        this.link = value;
+    },
+    /**
+     * @method getLink
+     * @return {String}
+     */
+    getLink : function() {
+        return this.link;
     },
     /**
      * @method setCategoryID 

@@ -168,7 +168,7 @@ function() {
         		
         parentContainer.append(this.element);
         
-        var pluginLoc = this.getMapModule().getLocalization('plugin');
+        var pluginLoc = this.getMapModule().getLocalization('plugin', true);
         var myLoc = pluginLoc[this.__name];
         
         var link = this.element.find('div.icon');

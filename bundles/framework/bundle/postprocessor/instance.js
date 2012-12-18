@@ -36,49 +36,74 @@ function() {
         var me = this;
         var sandbox = Oskari.$("sandbox");
         this.sandbox = sandbox;
+        
+        sandbox.register(this);
         if(this.state) {
             var hiliteLayerId = this.state.highlightFeatureLayerId; 
-            
-            if(hiliteLayerId) {
-                var isLoaded = sandbox.findMapLayerFromAllAvailable(hiliteLayerId) != null;
-                if(isLoaded) {
-                    this._highlightFeature(hiliteLayerId, this.state.highlightFeatureId);
-                }
-                else {
-                    // layer not loaded ->
-                    // register listening to 'MapLayerEvent' and let it trigger a retry
-                    for(p in me.eventHandlers) {
-                        sandbox.registerForEventByName(me, p);
-                    }
-                }
-            }
-            
+            this._highlightFeature(hiliteLayerId, this.state.highlightFeatureId);
         }
     },
     /**
      * @method _highlightFeature
      * @private
      * Adds the layer if its not yet selected
+     * @param {String} layerId
+     * @param {String/String[]} featureId single or array of feature ids to hilight
      */
     _highlightFeature : function(layerId, featureId) {
         if(featureId && layerId) {
-            var layer = this.sandbox.findMapLayerFromAllAvailable(layerId);
-            if(layer) {
-                var builder = this.sandbox.getEventBuilder('WFSFeaturesSelectedEvent');
-                var featureIdList = [];
-                // check if the param is already an array
-                if(Object.prototype.toString.call( featureId ) === '[object Array]' ) {
-                    featureIdList = featureId;
-                }
-                else {
-                    featureIdList.push(featureId);
-                }
-                var event = builder(featureIdList, layer);
-                this.sandbox.notifyAll(event);
+            
+            // move map to location
+            var points = this.state.featurePoints;
+            if(points) {
+                this._showPoints(points);
+            }
+             
+            // request for highlight image, note that the map must be in correct
+            // location BEFORE this or we get a blank image
+            var builder = this.sandbox.getEventBuilder('WFSFeaturesSelectedEvent');
+            var featureIdList = [];
+            // check if the param is already an array
+            if(Object.prototype.toString.call( featureId ) === '[object Array]' ) {
+                featureIdList = featureId;
             }
             else {
-                this.sandbox.printWarn('Postprocessing failed for feature ' + featureId + 
-                ' and layer ' + layerId);
+                featureIdList.push(featureId);
+            }
+            // create dummy layer since the real one might not be available and we only need it for id
+            var dummyLayer = Oskari.clazz.create('Oskari.mapframework.domain.WfsLayer');
+            dummyLayer.setId(layerId);
+            var event = builder(featureIdList, dummyLayer);
+            this.sandbox.notifyAll(event);
+        }
+    },
+    /**
+     * @method _showPoints
+     * @private
+     * Sends a mapmoverequest to fit the points on the map viewport
+     * @param {Object[]} points array of objects containing lon/lat properties
+     */
+    _showPoints : function(points) {
+        var olPoints = new OpenLayers.Geometry.MultiPoint();
+        var count = 0;
+        for(; count < points.length; ++count) {
+            var point = points[count];
+            var olPoint = new OpenLayers.Geometry.Point(point.lat, point.lon);
+            olPoints.addPoint(olPoint);
+        }
+        var bounds = olPoints.getBounds();
+        var centroid = olPoints.getCentroid();
+        
+        var rb = this.sandbox.getRequestBuilder('MapMoveRequest');
+        if(rb && count > 0) {
+            if(count == 1) {
+                // zoom to level 9 if a single point
+                var req = rb(centroid.x, centroid.y, 9);
+                this.sandbox.request(this, req);
+            }
+            else {
+                var req = rb(centroid.x, centroid.y, bounds);
+                this.sandbox.request(this, req);
             }
         }
     },

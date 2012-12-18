@@ -165,12 +165,13 @@ function(id, imageUrl) {
      * If key-parameter is not given, returns the whole localization data.
      *
      * @param {String} key (optional) if given, returns the value for key
+     * @param {Boolean} force (optional) true to force reload for localization data
      * @return {String/Object} returns single localization string or
      * 		JSON object for complete data depending on localization
      * 		structure and if parameter key is given
      */
-    getLocalization : function(key) {
-        if(!this._localization) {
+    getLocalization : function(key, force) {
+        if(!this._localization || force === true) {
             this._localization = Oskari.getLocalization('MapModule');
         }
         if(key) {
@@ -232,6 +233,15 @@ function(id, imageUrl) {
      */
     getPluginInstances : function() {
         return this._pluginInstances;
+    },
+    /**
+     * @method getPluginInstance
+     * Returns plugin with given name if it registered on the map
+     * @param {String} pluginName name of the plugin to get
+     * @return {Oskari.mapframework.ui.module.common.mapmodule.Plugin}
+     */
+    getPluginInstance : function(pluginName) {
+        return this._pluginInstances[this.getName() + pluginName];
     },
     /**
      * @method isPluginActivated
@@ -364,6 +374,19 @@ function(id, imageUrl) {
      */
     getMap : function() {
         return this._map;
+    },
+    /**
+     * @method transformCoordinates
+     * Transforms coordinates from given projection to the maps projectino.
+     * @param {OpenLayers.LonLat} pLonlat  
+     * @param {String} srs projection for given lonlat params like "EPSG:4326"
+     * @return {OpenLayers.LonLat} transformed coordinates
+     */
+    transformCoordinates : function(pLonlat, srs) {
+        return pLonlat.transform(
+            new OpenLayers.Projection(srs), 
+            this.getMap().getProjectionObject()
+        );
     },
     /**
      * @method createMap

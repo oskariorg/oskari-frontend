@@ -7,17 +7,31 @@
  * EnableMapMouseMovementRequest and DisableMapMouseMovementRequest.
  * Overrides OpenLayers keyboard/mouse controls with PorttiKeyboard and PorttiMouse.
  * 
+ * default configuration for mouse as of 2012-12-05:
+ * 
+ * 
+    {
+               "id":"Oskari.mapframework.mapmodule.ControlsPlugin",
+               "config" : {
+               		"mouse" : {
+            	   		"useCenterMapInWheelZoom" : false,
+ 						"useCenterMapInDblClickZoom": false
+ 					}	
+               }
+     }
+ * 
  */
 Oskari.clazz.define('Oskari.mapframework.mapmodule.ControlsPlugin',
 /**
  * @method create called automatically on construction
  * @static
  */
-function() {
+function(config) {
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
     this._map = null;
+    this.conf = config||{};
 }, {
     /** @static @property __name plugin name */
     __name : 'ControlsPlugin',
@@ -315,7 +329,7 @@ function() {
         }
         
         // mouse control
-        this._mouseControls = new OpenLayers.Control.PorttiMouse();
+        this._mouseControls = new OpenLayers.Control.PorttiMouse(this.conf['mouse']);
         this._mouseControls.setup(this.getMapModule());
     }
 }, {

@@ -27,6 +27,10 @@ Oskari.registerLocalization({
 			"type-wfs" : "Data product"
 		},
 		"backendStatus" : {
+			"OK" : {
+				"tooltip" : "The map layer is currently available.",
+				"iconClass" : "backendstatus-ok"
+			},
 			"DOWN" : {
 				"tooltip" : "The map layer is currently unavailable.",
 				"iconClass" : "backendstatus-down"
@@ -34,6 +38,10 @@ Oskari.registerLocalization({
 			"MAINTENANCE" : {
 				"tooltip" : "The map layer may be periodically unavailable during the next few days.",
 				"iconClass" : "backendstatus-maintenance"
+			},
+			"UNKNOWN" : {
+				"tooltip" : "",
+				"iconClass" : "backendstatus-ok"
 			}
 		}
 	}

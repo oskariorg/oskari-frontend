@@ -27,6 +27,10 @@ Oskari.registerLocalization({
 			"type-wfs" : "Dataprodukt"
 		},
 		"backendStatus" : {
+			"OK" : {
+				"tooltip" : "Kartlagret är tillgängligt just nu.",
+				"iconClass" : "backendstatus-ok"
+			},
 			"DOWN" : {
 				"tooltip" : "Kartlagret är inte tillgängligt just nu.",
 				"iconClass" : "backendstatus-down"
@@ -34,6 +38,10 @@ Oskari.registerLocalization({
 			"MAINTENANCE" : {
 				"tooltip" : "Avbrott i kartlagrets tillgänglighet är att vänta inom de närmaste dagarna.",
 				"iconClass" : "backendstatus-maintenance"
+			},
+			"UNKNOWN" : {
+				"tooltip" : "",
+				"iconClass" : "backendstatus-ok"
 			}
 		}
 	}

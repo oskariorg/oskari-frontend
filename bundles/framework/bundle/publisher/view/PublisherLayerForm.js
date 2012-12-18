@@ -1,12 +1,19 @@
 /**
  * @class Oskari.mapframework.bundle.publisher.view.PublisherLayerForm
  * 
+ * Represents a layer listing view for the publisher as an Oskari.userinterface.component.AccordionPanel
+ * and control for the published map layer selection plugin. Has functionality to promote layers 
+ * to users and let the user select base layers for the published map.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerForm',
 
 /**
  * @method create called automatically on construction
  * @static
+ * @param {Object} localization
+ *      localization data in JSON format
+ * @param {Oskari.mapframework.bundle.publisher.PublisherBundleInstance} instance
+ *      reference to component that created this view
  */
 function(localization, instance) {
 	this.loc = localization;
@@ -28,6 +35,11 @@ function(localization, instance) {
     };
     this.showLayerSelection = false;
 }, {
+    /**
+     * @method init
+     * Creates the Oskari.userinterface.component.AccordionPanel where the UI is rendered and 
+     * the Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin
+     */
 	init : function() {
 		if(!this.panel) {
 	        this.panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
@@ -36,26 +48,70 @@ function(localization, instance) {
 		
 		this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin');
 	},
+    /**
+     * @method getPanel
+     * Returns the UI panel and populates it with the data that we want to show the user.
+     * @return {Oskari.userinterface.component.AccordionPanel}
+     */
 	getPanel : function() {
         this._populateMapLayerPanel();
 		return this.panel;
 	},
-	_enablePlugin : function(blnEnabled) {
+    /**
+     * @method enablePlugin
+     * Controls the LayerSelectionPlugin by calling start/stop.
+     * @param {Boolean} true to start the plugin, false to stop it
+     */
+	enablePlugin : function(blnEnabled) {
         if (blnEnabled) {
             this.plugin.startPlugin(this.instance.sandbox);
         } else {
             this.plugin.stopPlugin(this.instance.sandbox);
         }
 	},
+    /**
+     * @method isEnabled
+     * Returns the state of the plugin.
+     * @return {Boolean} true if the plugin is visible on screen.
+     */
+	isEnabled : function() {
+	    return this.showLayerSelection; 
+	},
+    /**
+     * @method start
+     * Registers the plugin to MainMapModule
+     */
 	start : function() {
         var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
         mapModule.registerPlugin(this.plugin);
 	},
+    /**
+     * @method stop
+     * Unregisters the plugin from MainMapModule
+     */
 	stop : function() {
-		this._enablePlugin(false);
+		this.enablePlugin(false);
         var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
         mapModule.unregisterPlugin(this.plugin);
 	},
+    /**
+     * @method getValues
+     * Returns the selections the user has done with the layer selection as an object.
+     * If the plugin is enabled, the values will contain a property 'layerSelection':
+     * {
+     *     id : 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
+     *     config : {
+     *          baseLayers : [<array of layer ids that the user has selected as base layers>],
+     *          defaultBaseLayer : <id of a base layer that should be selected by default>
+     *     }
+     * }
+     * If the plugin is disabled, will return an empty object. Note that the user can select
+     * any layer as a base layer for published map. It is not restricted to usual base layers. 
+     * Also base layer in published maps mean that it is the bottom layer and only one base layer 
+     * is visible at any time.
+     * 
+     * @return {Object}
+     */
 	getValues : function() {
 		var values = {
 		};
@@ -71,34 +127,29 @@ function(localization, instance) {
 				values.layerSelection.config.defaultBaseLayer = pluginValues.defaultBaseLayer; 
 			}
 		}
-		
 		return values;
     },
+    /**
+     * @method validate
+     * Returns any errors found in validation (currently doesn't check anything) or an empty
+     * array if valid. Error object format is defined in Oskari.userinterface.component.FormInput
+     * validate() function.
+     * @return {Object[]}
+     */
 	validate : function() {
 		var errors = [];
 		return errors;
    },
     /**
-     * @method getLayersList
-     * Handles the published map layer selection
-     * FIXME: this is completely under construction, rights aren't managed in any
-     * way etc
+     * @method _getLayersList
+     * @private
+     * Returns the published map layer selection
+     * @return {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
      */
-    getLayersList : function() {
+    _getLayersList : function() {
         var layers = [];
         var selectedLayers = this.instance.sandbox.findAllSelectedMapLayers();
         return selectedLayers;
-        /*
-        for (var i = 0; i < selectedLayers.length; ++i) {
-            var layer = {
-                id : selectedLayers[i].getId(),
-                name : selectedLayers[i].getName(),
-                opacity : selectedLayers[i].getOpacity()
-            };
-            layers.push(layer);
-        }
-        return layers;
-        */
     },
     /**
      * @method _populateMapLayerPanel
@@ -127,7 +178,7 @@ function(localization, instance) {
             var checkbox = jQuery(this);
             var isChecked = checkbox.is(':checked');
             me.showLayerSelection = isChecked;
-    		me._enablePlugin(isChecked);
+    		me.enablePlugin(isChecked);
             contentPanel.empty();
             me._populateMapLayerPanel();
         });
@@ -147,7 +198,7 @@ function(localization, instance) {
                 }
             };
         };
-        var layers = this.getLayersList();
+        var layers = this._getLayersList();
         for (var i = 0; i < layers.length; ++i) {
         	
             var layer = layers[i];

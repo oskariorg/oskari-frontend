@@ -26,32 +26,25 @@ function() {
 
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/bundle/" + 
-			        "harava-infobox/instance.js"
+			"src" : "../../../../bundles/harava/bundle/harava-infobox/instance.js"
 		}, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/" + 
-                    "harava-infobox/plugin/openlayerspopup/OpenlayersPopupPlugin.js"
+            "src" : "../../../../bundles/harava/bundle/harava-infobox/plugin/openlayerspopup/OpenlayersPopupPlugin.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/" + 
-                    "harava-infobox/request/ShowInfoBoxRequest.js"
+            "src" : "../../../../bundles/harava/bundle/harava-infobox/request/ShowInfoBoxRequest.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/" + 
-                    "harava-infobox/request/ShowInfoBoxRequestHandler.js"
+            "src" : "../../../../bundles/harava/bundle/harava-infobox/request/ShowInfoBoxRequestHandler.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/" + 
-                    "harava-infobox/request/HideInfoBoxRequest.js"
+            "src" : "../../../../bundles/harava/bundle/harava-infobox/request/HideInfoBoxRequest.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/" + 
-                    "harava-infobox/request/HideInfoBoxRequestHandler.js"
+            "src" : "../../../../bundles/harava/bundle/harava-infobox/request/HideInfoBoxRequestHandler.js"
         }, {
 		    "type" : "text/css",
-		    "src" : "../../../../resources/harava/bundle/" + 
-		            "harava-infobox/css/infobox.css"	  
+		    "src" : "../../../../resources/harava/bundle/harava-infobox/css/infobox.css"	  
 		}]
 	},
 	"bundle" : {

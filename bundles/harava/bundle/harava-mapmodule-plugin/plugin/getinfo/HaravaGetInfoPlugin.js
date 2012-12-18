@@ -198,7 +198,11 @@ function() {
         var me = this;
         return this.eventHandlers[event.getName()].apply(this, [event]);
     },
-    
+    /**
+     * @method _cancelAjaxRequest
+     * @private
+     * Cancels ajax request
+     */
     _cancelAjaxRequest: function() {
     	var me = this;
     	if( !me._pendingAjaxQuery.busy ) {
@@ -214,21 +218,34 @@ function() {
     	jqhr = null;
     	me._pendingAjaxQuery.busy = false;
     },
-    
+    /**
+     * @method _startAjaxRequest
+     * @private
+     * Start ajax request
+     * @param dteMs {Integer} Datetime timestamp in milliseconds 
+     */
     _startAjaxRequest: function(dteMs) {
     	var me = this;
 		me._pendingAjaxQuery.busy = true;
 		me._pendingAjaxQuery.timestamp = dteMs;
 
     },
-    
+    /**
+     * @method _finishAjaxRequest
+     * @private
+     * Finish ajax request
+     */
     _finishAjaxRequest: function() {
     	var me = this;
     	me._pendingAjaxQuery.busy = false;
         me._pendingAjaxQuery.jqhr = null;
         this._sandbox.printDebug("[GetInfoPlugin] finished jqhr ajax request");
     },
-    
+    /**
+     * @method _buildLayerIdList
+     * @private
+     * @returns {Array} visible layer ids
+     */
     _buildLayerIdList: function()  {
         var me = this;
     	var selected = me._sandbox.findAllSelectedMapLayers();
@@ -262,12 +279,21 @@ function() {
         
         return layerIds;
     },
-    
+    /**
+     * @method _notifyAjaxFailure
+     * @private
+     * notifying ajax failure
+     */
     _notifyAjaxFailure: function() {
     	 var me = this;
     	 me._sandbox.printDebug("[GetInfoPlugin] GetFeatureInfo AJAX failed");
     },
-    
+    /**
+     * @method _isAjaxRequestBusy
+     * @private
+     * Checks if ajax request is busy
+     * @returns {Boolean} true if busy, else false
+     */
     _isAjaxRequestBusy: function() {
     	var me = this;
     	return me._pendingAjaxQuery.busy;
@@ -332,16 +358,23 @@ function() {
             	var infoCol = resp.informationCollections;
             	var orgz = resp.organizations;
             	var projz = resp.projects;
-            	var coll = [];
-            	
+            	var html = '';
+
             	// First get organization spesific data
+            	if(orgz.length>0){
+            		if(showAll){
+            			html += '<table class="org-table harava-gfi-table gfi-full"><tr><td colspan="8" class="harava-gfi-header">'+resp.organizationsLang+'</td></tr>';
+            			html += resp.organizationsHeader;
+            		}
+            		else{
+            			html += '<table class="org-table harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.organizationsLang+'</td></tr>';
+            		}
+            	}
             	$.each(orgz, function(k, org){
             		if(!showAll){
-						var pretty = "<ul><li>"+org.name+"</li></ul>";
-						coll.push({markup: pretty, layerId: org.layerId, layerName: org.layerName});
+						html += '<tr><td colspan="4" class="harava-gfi-content-mini"><ul><li>'+org.name+'</li></ul></td></tr>';
 					} else {
-						var pretty = "<ul><li>"+org.name+"</li>"+org.html+"</ul>";
-						coll.push({markup: pretty, layerId: org.layerId, layerName: org.layerName});
+						html += org.html;
 					}
 					
 					if(typeof Organization !== "undefined") {
@@ -350,15 +383,25 @@ function() {
 						});
 					}
             	});
+            	if(orgz.length>0){
+            		html += '</table>';
+            	}
             	
             	// Second get project spesific data
+            	if(projz.length>0){
+            		if(showAll){
+            			html += '<table class="proj-table harava-gfi-table gfi-full"><tr><td colspan="7" class="harava-gfi-header">'+resp.projectsLang+'</td></tr>';
+            			html += resp.projectsHeader;
+            		}
+            		else{
+            			html += '<table class="proj-table harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.projectsLang+'</td></tr>';
+            		}
+            	}
             	$.each(projz, function(k, proj){
 					if(!showAll){
-						var pretty = "<ul><li>"+proj.name+"</li></ul>";
-						coll.push({markup: pretty, layerId: proj.layerId, layerName: proj.layerName});
+						html += '<tr><td colspan="4" class="harava-gfi-content-mini"><ul><li>'+proj.name+'</li></ul></td></tr>';						
 					} else {
-						var pretty = "<ul><li>"+proj.name+"</li>"+proj.html+"</ul>";
-						coll.push({markup: pretty, layerId: proj.layerId, layerName: proj.layerName});
+						html +=proj.html;						
 					}
 					
 					if(typeof Project !== "undefined") {
@@ -367,15 +410,25 @@ function() {
 						});
 					}
 				});
+            	if(projz.length>0){
+            		html += '</table>';
+            	}
             	
             	// Third get information collection spesific data
+            	if(infoCol.length>0){
+            		if(showAll){
+            			html += '<table class="infocol-table harava-gfi-table gfi-full"><tr><td colspan="7" class="harava-gfi-header">'+resp.informationCollectionsLang+'</td></tr>';
+            			html += resp.informationCollectionsHeader;
+            		}
+            		else{
+            			html += '<table class="infocol-table harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.informationCollectionsLang+'</td></tr>';
+            		}
+            	}
 				$.each(infoCol, function(k, info){
 					if(!showAll){
-						var pretty = "<ul><li>"+info.name+"</li></ul>";
-						coll.push({markup: pretty, layerId: info.layerId, layerName: info.layerName});
+						html += '<tr><td colspan="4" class="harava-gfi-content-mini"><ul><li>'+info.name+'</li></ul></td></tr>';
 					} else {
-						var pretty = "<ul><li>"+info.name+"</li>"+info.html+"</ul>";
-						coll.push({markup: pretty, layerId: info.layerId, layerName: info.layerName});
+						html += info.html;
 					}
 					
 					if(typeof InformationCollection !== "undefined") {
@@ -384,9 +437,12 @@ function() {
 						});
 					}
 				});
+				if(infoCol.length>0){
+            		html += '</table>';
+            	}
 				
-				if(coll.length>0){
-					var parsed = {fragments: coll, title: "Tiedot"};
+				if(html!=''){
+					var parsed = {html: html, title: "Tiedot"};
 					parsed.lonlat = lonlat;
 					parsed.popupid = me.infoboxId; 
 					me._showFeatures(parsed);
@@ -448,267 +504,17 @@ function() {
         this._sandbox.request(me, r);
     },
     /**
-     * @method _formatResponseForInfobox
+     * @method _showFeatures
      * @private
-     * Parses the GFI JSON response to a content array that can be
-     * shown with infobox bundle
-     * @param {Object} response response from json query
-     * @return {Object[]}
-     */
-    _formatResponseForInfobox : function(response) {
-        var content = [];
-        if (!response || !response.data) {
-            return content;
-        }
-        var me = this;
-        var dataList = [];
-        // TODO: fix in serverside!
-        if (!response.data.length) {
-            // not an array
-            dataList.push(response.data);
-        } else {
-            dataList = response.data;
-        }
-
-        for (var ii = 0; ii < dataList.length; ii++) {
-            var data = dataList[ii];
-            html = me._formatGfiDatum(data);
-            if (html != null) {
-                content.push({
-                    html : html
-                });
-            }
-        }
-        return content;
-    },
-
-    /**
-     * Formats a GFI datum
-     *
-     * @param datum
-     */
-    _formatGfiDatum : function(datum) {
-        if (!datum.presentationType) {
-            return null;
-        }
-        var html = '';
-        var contentType = ( typeof datum.content);
-        var hasHtml = false;
-        if (contentType == 'string') {
-            hasHtml = (datum.content.indexOf('<html>') >= 0);
-            hasHtml = hasHtml || (datum.content.indexOf('<HTML>') >= 0);
-        }
-
-        if (datum.presentationType == 'JSON' || (datum.content && datum.content.parsed)) {
-            html = '<br/><table>';
-            var even = false;
-            var jsonData = datum.content.parsed;
-            for (attr in jsonData) {
-                var value = jsonData[attr];
-                if (value == null) {
-                    continue;
-                }
-                if ((value.startsWith && value.startsWith('http://')) || (value.indexOf && value.indexOf('http://') == 0)) {
-                    // if (value.startsWith('http://')) {
-                    // if (value.indexOf('http://') == 0) {
-                    value = '<a href="' + value + '" target="_blank">' + value + '</a>';
-                }
-                html = html + '<tr style="padding: 5px;';
-                if (!even) {
-                    html = html + ' background-color: #EEEEEE';
-                }
-                even = !even;
-                html = html + '"><td style="padding: 2px">' + attr + '</td><td style="padding: 2px">' + value + '</td></tr>';
-            }
-            html = html + '</table>';
-
-            //                  } else if ((datum.presentationType == 'TEXT') ||
-            // hasHtml) {
-        } else {
-            // style="overflow:auto"
-            html = '<div>' + datum.content + '</div>';
-        }
-        return html;
-    },
-
-    /**
-     * converts given array to CSV
-     *
-     * @param {Object}
-     *            array
-     */
-    arrayToCSV : function(array) {
-        var me = this;
-        var separatedValues = "";
-
-        for (var i = 0; i < array.length; i++) {
-            separatedValues += array[i];
-            if (i < array.length - 1) {
-                separatedValues += ",";
-            }
-        }
-
-        return separatedValues;
-    },
-
-    /**
-     * Flattens a GFI response
-     *
-     * @param {Object} data     
-     */
-    _parseGfiResponse : function(resp) {
-    	var sandbox = this._sandbox;
-        var data = resp.data;
-        var coll = [];
-        var lonlat = resp.lonlat;
-        var title = lonlat.lon + ", " + lonlat.lat;
-
-        var layerCount = resp.layerCount;
-        if (layerCount == 0 || data.length == 0 || !( data instanceof Array)) {
-            return;
-        }
-
-        for (var di = 0; di < data.length; di++) {
-            var datum = data[di];
-            var layerId = datum.layerId;
-            var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-            var layerName =  layer ? layer.getName() : '';
-            var type = datum.type;
-
-            if (type == "WFS_LAYER") {
-                var features = datum.features;
-                if (!(features && features.length)) {
-                    continue;
-                }
-                for (var fi = 0; fi < features.length; fi++) {
-                    var fea = features[fi];
-                    var children = fea.children;
-                    if (!(children && children.length)) {
-                        continue;
-                    }
-                    for (var ci = 0; ci < children.length; ci++) {
-                        var child = children[ci];
-                        var pnimi = child['pnr_PaikanNimi'];
-                        if (pnimi && pnimi['pnr:kirjoitusasu']) {
-                            title = pnimi['pnr:kirjoitusasu'];
-                        }
-                        var pretty = this._json2html(child);
-                        coll.push({
-                        	markup: pretty,
-                        	layerId: layerId,
-                        	layerName: layerName});
-                    }
-                }
-            } else {
-                var pretty = this._formatGfiDatum(datum);
-                if (pretty != null) {
-                    coll.push({
-                        	markup: pretty,
-                        	layerId: layerId,
-                        	layerName: layerName});
-                }
-            }
-        }
-        
-        /*
-         * returns { fragments: coll, title: title }
-         *  
-         *  fragments is an array of JSON { markup: '<html-markup>', layerName: 'nameforlayer', layerId: idforlayer } 
-         */
-        
-        return {
-            fragments : coll,
-            title : title
-        };
-    },
-
-    _json2html : function(node,layerName) {
-        var me = this;
-        if (node == null) {
-            return '';
-        }
-        var even = true;
-        var html = '<table>';
-        for (var key in node) {
-            var value = node[key];
-            var vType = ( typeof value).toLowerCase();
-            var vPres = ''
-            switch (vType) {
-                case 'string':
-                    if (value.startsWith('http://')) {
-                        valpres = '<a href="' + value + '" target="_blank">' + value + '</a>';
-                    } else {
-                        valpres = value;
-                    }
-                    break;
-                case 'undefined':
-                    valpres = 'n/a';
-                    break;
-                case 'boolean':
-                    valpres = ( value ? 'true' : 'false');
-                    break;
-                case 'number':
-                    valpres = '' + number + '';
-                    break;
-                case 'function':
-                    valpres = '?';
-                    break;
-                case 'object':
-                    valpres = this._json2html(value);
-                    break;
-                default:
-                    valpres = '';
-            }
-            even = !even;
-            html += '<tr style="padding: 5px;';
-            if (even) {
-                html += '">';
-            } else {
-                html += ' background-color: #EEEEEE;">';
-            }
-            html += '' + '<td style="padding: 2px;">' + key + '</td>';
-            html += '' + '<td style="padding: 2px;">' + valpres + '</td>';
-            html += '</tr>';
-        }
-        html += '</table>';
-        return html;
-    },
-
-    /**
      * Shows multiple features in an infobox
      *
      * @param {Array} data
      */
     _showFeatures : function(data) {
-    	/* data is { fragments: coll, title: title } */
-    	/* fragments is an array of JSON { markup: '<html-markup>', layerName: 'nameforlayer', layerId: idforlayer } */
         var me = this;
         var contentHtml = [];
         var content = {};
-        content.html = '';
-        content.actions = {};
-        for (var di = 0; di < data.fragments.length; di++) {
-		var fragment =   data.fragments[di]      	
-        	var fragmentTitle = fragment.layerName;
-        	var fragmentMarkup = fragment.markup;
-        	
-        	contentHtml.push('<div>');
-            contentHtml.push( 
-               '<div style="border:1pt solid navy;background-color: #424343;margin-top: 14px; margin-bottom: 10px;height:15px;">' +  
-                 '<div class="icon-bubble-left" style="height:15px;display:inline;float:left;"><div></div></div>'+
-                 '<div style="color:white;float:left;display:inline;margin-left:8px;">'+fragmentTitle +'</div>'+
-               '</div>');
-            if( fragmentMarkup ) {   
-            	contentHtml.push(fragmentMarkup);
-            }
-			contentHtml.push('</div>');
-        }
-        
-        content.html = contentHtml.join('');
-
-        /*var pluginLoc = this.getMapModule().getLocalization('plugin');
-        var myLoc = pluginLoc[this.__name];
-        data.title = myLoc.title;*/
+        content.html = data.html;
         var rn = "HaravaInfoBox.ShowInfoBoxRequest";
         var rb = me._sandbox.getRequestBuilder(rn);
         var r = rb(data.popupid, "Info", [content], data.lonlat, true);
