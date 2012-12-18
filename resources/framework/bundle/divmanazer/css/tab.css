@@ -13,7 +13,7 @@ div.oskariTabs div.tab-content {
 
 /* tab headers */
 div.oskariTabs div.tabsHeader {
-   background: url('/Oskari/resources/framework/bundle/divmanazer/images/tab_bg.png') repeat-x scroll center bottom; /* #FFFFFF*/
+   background: url('../images/tab_bg.png') repeat-x scroll center bottom; /* #FFFFFF*/
     clear: left;
     float: left;
     font : 12pt  Arial,sans-serif;

@@ -6,17 +6,17 @@ div.pzbDiv {
 div.pzbDiv div.pzbDiv-plus {
     width : 18px;
     height : 46px;
-    background-image : url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_plus_patched.png');
+    background-image : url('../images/zoombar_plus_patched.png');
 }
 
 div.pzbDiv div.pzbDiv-minus {
     width : 18px;
     height : 18px;
-    background-image : url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_minus.png');
+    background-image : url('../images/zoombar_minus.png');
 }
 div.pzbDiv div.rui-slider-vertical {
     background-color : transparent;
-    background-image : url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar.png');
+    background-image : url('../images/zoombar.png');
     height : 148px;
     width : 18px;
     border : 0;
