@@ -107,13 +107,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
 
 		this.markerLayer = new OpenLayers.Layer.Markers("Parcel Markers Layer", {});
 		
-        var selectEditControl = new OpenLayers.Control.SelectFeature(me.editLayer)
+        var selectEditControl = new OpenLayers.Control.SelectFeature(me.editLayer);
         this._map.addControl(selectEditControl);
-        selectEditControl.activate();
 
         var modifyEditControl = new OpenLayers.Control.ModifyFeature(me.editLayer);
         this._map.addControl(modifyEditControl);
-        modifyEditControl.activate();
         
 		this.controls = {
 			select: selectEditControl,
@@ -367,6 +365,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         	this.controls.select.select(operatingFeature);
         	this.controls.modify.selectFeature(operatingFeature);
         	this.controls.modify.activate();
+        	
+        	// Make sure the marker layer is topmost (previous activations push the vector layer too high)
+			var index = Math.max(this._map.Z_INDEX_BASE['Feature'] , this.markerLayer.getZIndex()) + 1;
+			this.markerLayer.setZIndex(index);
         }
     }
 }, {
