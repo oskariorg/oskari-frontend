@@ -1,6 +1,7 @@
 div.layerselection2 .layer.selected {
     border: 1pt solid #c0d0e0;
     margin: 0 5px 5px 0;
+    height: 70px;
 }
 
 div
@@ -15,6 +16,7 @@ div.layerselection2 .layer.selected div.layer-info {
 
 div.layerselection2 ul.selectedLayersList {
 	height: 100%;
+	width: 100%;
     overflow: auto;
     list-style-type: none;
     padding: 0;
