@@ -100,6 +100,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
                         }
                         polygon2.polygonCorners[1] = polygon2.polygonCorners[0]+lineRunLength;
 
+						// Redo selection so the info box knows where we're at
+						me.controls.select.select(me.getDrawing());
+   
                     }
                     this.redraw();
                     me.drawLayer.redraw();
@@ -329,6 +332,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         return this.drawLayer;
     },
     /**
+     * TODO: This method needs to be informed which polygon is to be saved.
+     * 
      * @return {OpenLayers.Feature.Vector} Returns the drawn vector feature from the draw layer. May be undefined if no feature.
      * @method
      */
@@ -375,6 +380,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         	this.controls.select.select(operatingFeature);
         	this.controls.modify.selectFeature(operatingFeature);
         	this.controls.modify.activate();
+        	
+        	this.controls.select.select(this.getDrawing());
         	
         	// Make sure the marker layer is topmost (previous activations push the vector layer too high)
 			var index = Math.max(this._map.Z_INDEX_BASE['Feature'] , this.markerLayer.getZIndex()) + 1;
