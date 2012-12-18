@@ -80,15 +80,16 @@ div.popupContent span.infoboxActionLinks {
 .olPopupCloseBox {
 	cursor: pointer;
     background-attachment: scroll;
-    background-clip: border-box;
+    //background-clip: border-box;
     background-color: transparent;
     background-origin: padding-box;
-    background-position: -368px 0px;
-    background-repeat: repeat;
+    background-repeat: no-repeat;
     background-size: auto auto;
     right: 0px;
     position: absolute;
     top: 14px;
+    height: 17px;
+    width: 17px;
 }
 
 
