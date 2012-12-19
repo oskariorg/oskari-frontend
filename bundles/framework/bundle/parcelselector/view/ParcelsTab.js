@@ -29,6 +29,7 @@ function(instance, title, selectedEventName) {
     },
     /**
      * @method _createUI
+     * @private
      * Creates the tab view that is shown for the user.
      * The view contains filter field for the fid and button to start the request for the feature.
      */
@@ -40,6 +41,7 @@ function(instance, title, selectedEventName) {
     },
     /**
      * @method _getFilterField
+     * @private
      * @return {Oskari.userinterface.component.FormInput} Input text edit box for the fid.
      */
     _getFilterField : function() {
@@ -58,6 +60,7 @@ function(instance, title, selectedEventName) {
     },
     /**
      * @method _getActionButton
+     * @private
      * @return {Oskari.userinterface.component.Button} Button to start action that sends an event for other bundles.
      */
     _getActionButton : function() {
@@ -77,6 +80,7 @@ function(instance, title, selectedEventName) {
     },
     /**
      * @method _startAction
+     * @private
      * Starts the action by sending the event if parcel fid is given correctly.
      * Closes the bundle view if event is sent.
      */
