@@ -104,6 +104,11 @@ Oskari.registerLocalization(
                 "buttons": {
                     "continue": "Jatka",
                     "cancel": "Peruuta"
+                },
+                "tou" : {
+                    "notfound" : "Käyttöehtoja ei löytynyt",
+                    "reject" : "Hylkää",
+                    "accept" : "Hyväksy"
                 }
             }
         }
