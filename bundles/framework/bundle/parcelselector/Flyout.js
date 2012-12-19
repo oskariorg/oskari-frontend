@@ -8,8 +8,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcelselector.Flyout',
 /**
  * @method create called automatically on construction
  * @static
- * @param {Oskari.mapframework.bundle.parcelselector.ParcelSelectorInstance} instance
- *    reference to component that created the flyout
+ * @param {Oskari.mapframework.bundle.parcelselector.ParcelSelectorInstance}
+ *          instance reference to component that created the flyout
  */
 function(instance) {
     this.instance = instance;
@@ -45,7 +45,7 @@ function(instance) {
     /**
      * @method startPlugin
      *
-     * Interface method implementation, assigns the HTML templates that will be used to create the UI
+     * Interface method implementation, assigns tab views that will be used to create the UI.
      */
     startPlugin : function() {
         var me = this;
@@ -67,9 +67,9 @@ function(instance) {
     },
     /**
      * @method setState
+     * Interface method implementation, does nothing atm
      * @param {String} state
      *      close/minimize/maximize etc
-     * Interface method implementation, does nothing atm
      */
     setState : function(state) {
         this.state = state;

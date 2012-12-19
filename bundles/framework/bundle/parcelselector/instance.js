@@ -2,9 +2,18 @@
  * @class Oskari.mapframework.bundle.parcelselector.ParcelSelectorInstance
  *
  * Main component and starting point for the "parcel selector" functionality.
- * Requests parcel FID for updating the map.
+ * This bundle shows Tile in UI to open Flyout that asks for a parcel FID that is used
+ * to send an event for another bundle. Then, another bundle may update the map with
+ * the requested feature.
  *
- * See Oskari.mapframework.bundle.parcelselector.ParcelSelector for bundle definition.
+ * This instance does not require any configurations in application config.json file.
+ * 
+ * This bundle does not listen for any events.
+ * This bundle sends following events:
+ * See, {Oskari.mapframework.bundle.parcelselector.event.ParcelSelectedEvent}
+ * and {Oskari.mapframework.bundle.parcelselector.event.ParcelSelectedEvent}.
+ * 
+ * See {Oskari.mapframework.bundle.parcelselector.ParcelSelector} for bundle definition.
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.parcelselector.ParcelSelectorInstance",
 
@@ -17,20 +26,15 @@ function() {
     this.plugins = {}
 }, {
     /**
-     * @static
-     * @property __name
-     */
-    __name : 'ParcelSelector',
-    /**
      * @method getName
      * @return {String} the name for the component
      */
     "getName" : function() {
-        return this.__name;
+        return 'ParcelSelector';
     },
     /**
      * @method getSandbox
-     * @return {Oskari.mapframework.sandbox.Sandbox}
+     * @return {Oskari.mapframework.sandbox.Sandbox} Oskari sandbox.
      */
     getSandbox : function() {
         return this.sandbox;

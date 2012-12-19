@@ -1,35 +1,32 @@
 /**
  * @class Oskari.mapframework.bundle.parcelselector.event.ParcelSelectedEvent
- * 
- * Used to notify components that ... 
+ *
+ * Notifies components that parcel with the given fid has been selected.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.parcelselector.event.ParcelSelectedEvent', 
+Oskari.clazz.define('Oskari.mapframework.bundle.parcelselector.event.ParcelSelectedEvent',
 /**
  * @method create called automatically on construction
  * @static
- * @param {String} fid some information you wish to communicate with the event
+ * @param {String} fid The feature ID that defines the parcel that has been selected.
  */
 function(fid) {
     this._fid = fid;
 }, {
-    /** @static @property __name event name */
-    __name : "ParcelSelector.ParcelSelectedEvent",
     /**
      * @method getName
-     * Returns event name
-     * @return {String}
+     * @return {String} Event name.
      */
     getName : function() {
-        return this.__name;
+        return "ParcelSelector.ParcelSelectedEvent";
     },
     /**
      * @method getFid
-     * Returns parameter that components reacting to event should know about
-     * @return {String}
+     * Returns parameter that components reacting to event should know about.
+     * @return {String} The feature ID that defines the parcel that has been selected.
      */
     getFid : function() {
         return this._fid;
     }
 }, {
     'protocol' : ['Oskari.mapframework.event.Event']
-});
+}); 

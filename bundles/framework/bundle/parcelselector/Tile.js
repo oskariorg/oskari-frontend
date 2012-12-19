@@ -7,8 +7,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcelselector.Tile',
 /**
  * @method create called automatically on construction
  * @static
- * @param {Oskari.mapframework.bundle.parcelselector.ParcelSelectorInstance} instance
- * 		reference to component that created the tile
+ * @param {Oskari.mapframework.bundle.parcelselector.ParcelSelectorInstance}
+ *          instance reference to component that created the tile
  */
 function(instance) {
     this.instance = instance;
