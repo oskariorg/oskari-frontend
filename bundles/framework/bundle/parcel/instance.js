@@ -24,7 +24,8 @@
  * * registerUnitFeatureType - feature type that is used when register units are requested for features
  * * hideSomeToolbarButtons - hide means that hide some buttons of other bundles that may not be usefull
  *                            for this bundel from toolbar. If this parameter is left out or 'false' it
- *                            means that show all buttons of other bundles.
+ *                            means that show all buttons of other bundles. For more specific implementation,
+ *                            see {Oskari.mapframework.bundle.parcel.handler.ButtonHandler} init -function.
  * * transactionUrl - URL that is used for WFST saving. If not defined, queryUrl is used for this.
  *                    Notice, if queryUrl and transactionUrl differ WFST uses INSERT, otherwise UPDATE.
  * * proxyUrl - If set, OpenLayers uses this for proxy.
