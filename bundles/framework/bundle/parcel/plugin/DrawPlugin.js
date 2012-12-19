@@ -31,7 +31,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
      */
     init : function(sandbox) {
         var me = this;
-
+		// This layer will first contain the downloaded feature. After the split is done, that feature 
+		// removed from the layer
         this.drawLayer = new OpenLayers.Layer.Vector("Parcel Draw Layer", {
             eventListeners : {
                 "featuresadded" : function(layer) {
@@ -49,6 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
             }
         });
 
+		// This layer will contain the geometry that will split the original feature.
         this.editLayer = new OpenLayers.Layer.Vector("Parcel Edit Layer", {
             eventListeners : {
                 "featuremodified" : function(event) {
@@ -98,6 +100,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
                         }
                         polygon2.polygonCorners[1] = polygon2.polygonCorners[0]+lineRunLength;
 
+						// Redo selection so the info box knows where we're at
+						me.controls.select.select(me.getDrawing());
+   
                     }
                     this.redraw();
                     me.drawLayer.redraw();
@@ -105,15 +110,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
             }
         });
 
+		// This layer will contain markers which show the points where the operation line
+		// crosses with the border of the original layer. Those points may be moved to adjust
+		// the split.
 		this.markerLayer = new OpenLayers.Layer.Markers("Parcel Markers Layer", {});
 		
-        var selectEditControl = new OpenLayers.Control.SelectFeature(me.editLayer)
+		// The select control applies to the edit layer and the drawing layer as we will select the polygon to save for visuals
+        var selectEditControl = new OpenLayers.Control.SelectFeature([me.editLayer, me.drawLayer]);
         this._map.addControl(selectEditControl);
-        selectEditControl.activate();
 
         var modifyEditControl = new OpenLayers.Control.ModifyFeature(me.editLayer);
         this._map.addControl(modifyEditControl);
-        modifyEditControl.activate();
         
 		this.controls = {
 			select: selectEditControl,
@@ -284,12 +291,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
      * @method
      */
     saveDrawing : function() {
-        if (this.drawLayer.features[0]) {
+    	// If editLayer is empty, no split has been done
+        if (this.editLayer.features.length > 0) {
+        	
             // Select the feature that is going to be saved.
             // Then, it is shown for the user if user has unselected it before pressing save button.
-            this.controls.modify.selectFeature(this.drawLayer.features[0]);
+            var featureToSave = this.getDrawing();
+            
+            this.controls.select.select(featureToSave);
             this.toggleControl();
-            var event = this._sandbox.getEventBuilder('Parcel.SaveDrawingEvent')(this.getDrawing());
+            var event = this._sandbox.getEventBuilder('Parcel.SaveDrawingEvent')(featureToSave);
             this._sandbox.notifyAll(event);
         }
     },
@@ -321,6 +332,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         return this.drawLayer;
     },
     /**
+     * TODO: This method needs to be informed which polygon is to be saved.
+     * 
      * @return {OpenLayers.Feature.Vector} Returns the drawn vector feature from the draw layer. May be undefined if no feature.
      * @method
      */
@@ -367,6 +380,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.plugin.DrawPlugin', funct
         	this.controls.select.select(operatingFeature);
         	this.controls.modify.selectFeature(operatingFeature);
         	this.controls.modify.activate();
+        	
+        	this.controls.select.select(this.getDrawing());
+        	
+        	// Make sure the marker layer is topmost (previous activations push the vector layer too high)
+			var index = Math.max(this._map.Z_INDEX_BASE['Feature'] , this.markerLayer.getZIndex()) + 1;
+			this.markerLayer.setZIndex(index);
         }
     }
 }, {

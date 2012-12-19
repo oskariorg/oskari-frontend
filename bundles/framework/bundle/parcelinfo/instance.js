@@ -1,8 +1,16 @@
 /**
  * @class Oskari.mapframework.bundle.parcelinfo.ParcelInfoInstance
  *
+ * This bundle shows the name, area, and length information about the selected feature of
+ * registered layers on the map.
+ *
+ * Does not require any configurations in application config.json.
+ *
+ * This bundle does not send any events. This bundel listens for events with the following name:
+ * 'ParcelInfo.ParcelLayerRegisterEvent' and 'ParcelInfo.ParcelLayerUnregisterEvent'.
+ *
  * Registers and starts the
- * Oskari.mapframework.bundle.parcelinfo.plugin.ParcelInfoPlugin plugin for main map.
+ * {Oskari.mapframework.bundle.parcelinfo.plugin.ParcelInfoPlugin} plugin for main map.
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.parcelinfo.ParcelInfoInstance",
 
@@ -16,13 +24,12 @@ function() {
     this._localization = null;
     this._plugin = null;
 }, {
-    __name : 'parcelinfo',
     /**
      * @method getName
      * @return {String} the name for the component
      */
     getName : function() {
-        return this.__name;
+        return 'parcelinfo';
     },
     /**
      * @method setSandbox
@@ -34,7 +41,7 @@ function() {
     },
     /**
      * @method getSandbox
-     * @return {Oskari.mapframework.sandbox.Sandbox}
+     * @return {Oskari.mapframework.sandbox.Sandbox} Oskari sandbox
      */
     getSandbox : function() {
         return this.sandbox;
@@ -44,7 +51,6 @@ function() {
      * implements BundleInstance protocol update method - does nothing atm
      */
     update : function() {
-        var me = this;
     },
     /**
      * @method getLocalization

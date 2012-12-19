@@ -1,6 +1,15 @@
 /**
  * @class Oskari.mapframework.bundle.parcelinfo.plugin.ParcelInfoPlugin
- * Provides information about the selected feature.
+ *
+ * Shows name, area and length information about the selected feature on the map.
+ *
+ * This plugin does not send any events. This plugin listens for events with the following name:
+ * 'ParcelInfo.ParcelLayerRegisterEvent' and 'ParcelInfo.ParcelLayerUnregisterEvent'. By using events,
+ * other bundles may register and unregister layers for this bundle. Then, this bundle may show information
+ * about the selected feature and update information when the feature is modified.
+ *
+ * This plugin also registers to listen feature selection and modification events of the layers that are registered
+ * for this plugin.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.parcelinfo.plugin.ParcelInfoPlugin',
 /**
@@ -55,12 +64,14 @@ function(config, locale) {
     /**
      * @method init
      *
-     * Interface method for the module protocol
+     * Interface method for the module protocol.
+     * Initializes the plugin.
      *
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      *          reference to application sandbox
      */
     init : function(sandbox) {
+        // Define the template that is used to show information in UI.
         this._templates['infodiv'] = jQuery('<div>' + '<table class="piMain">' + '<tr>' + '<td class="piHeaderLabel" colspan="3"></td>' + '</tr>' + '<tr>' + '<td class="piLabel piLabelName" infotype="name"></td>' + '<td class="piLabelValue" infotype="name" colspan="2"></td>' + '</tr>' + '<tr>' + '<td class="piLabel piLabelArea" infotype="area"></td>' + '<td class="piValue" infotype="area"></td>' + '<td class="piUnit" infotype="area"></td>' + '</tr>' + '<tr>' + '<td class="piLabel piLabelLength" infotype="length"></td>' + '<td class="piValue" infotype="length"></td>' + '<td class="piUnit" infotype="length"></td>' + '</tr>' + '</table>' + '</div>');
     },
     /**
@@ -136,8 +147,7 @@ function(config, locale) {
     /**
      * @method _createUI
      * @private
-     * Creates UI for coordinate display and places it on the maps
-     * div where this plugin registered.
+     * Creates UI for information display and places it on the maps div where this plugin registered.
      */
     _createUI : function() {
         var sandbox = this._sandbox;
@@ -165,6 +175,8 @@ function(config, locale) {
      */
     update : function(data) {
         if (!data || !data.info) {
+            // Because data has not been given,
+            // initialize with empty data.
             data = {
                 'info' : {
                     'name' : '',
@@ -173,6 +185,7 @@ function(config, locale) {
                 }
             };
         }
+        // Show the data in the UI component.
         var me = this;
         var info = data['info'];
         var el = me._elements['display'];
@@ -184,6 +197,7 @@ function(config, locale) {
         if (spanName && spanArea && spanLength) {
             spanName.text(info.name);
             spanArea.text(info.area);
+            // Use HTML because of the special HTML character.
             spanAreaUnit.html(me._map.units + "&sup2;");
             spanLength.text(info.length);
             spanLengthUnit.text(me._map.units);
@@ -202,12 +216,14 @@ function(config, locale) {
         'ParcelInfo.ParcelLayerRegisterEvent' : function(event) {
             var me = this;
             if (event && event.getLayer()) {
+                // Register the given layer for this plugin.
                 me._registerLayer(event.getLayer());
             }
         },
         'ParcelInfo.ParcelLayerUnregisterEvent' : function(event) {
             var me = this;
             if (event && event.getLayer()) {
+                // Unregister the given layer from this plugin.
                 me._unregisterLayer(event.getLayer());
             }
         }
@@ -224,11 +240,16 @@ function(config, locale) {
     },
 
     /**
-     *
+     * @method _registerLayer
+     * @private
+     * @param layer The layer whose features should be followed
+     *              by this plugin to show information about the selected feature.
      */
     _registerLayer : function(layer) {
         var me = this;
         if (jQuery.inArray(layer, me._layers) === -1) {
+            // Layer has not been registered before.
+            // Therefore, register it now.
             layer.events.register("featureselected", me, me._updateInfoSelected);
             layer.events.register("featureunselected", me, me._updateInfoUnselected);
             layer.events.register("featuremodified", me, me._updateInfo);
@@ -237,12 +258,15 @@ function(config, locale) {
         }
     },
     /**
-     *
+     * @method _unregisterLayer
+     * @private
+     * @param layer The layer whose features should not be followed anymore.
      */
     _unregisterLayer : function(layer) {
         var me = this;
         var index = jQuery.inArray(layer, me._layers);
         if (index != -1) {
+            // Layer was found. So, unregister it.
             layer.events.unregister("featureselected", me, me._updateInfoSelected);
             layer.events.unregister("featureunselected", me, me._updateInfoUnselected);
             layer.events.unregister("featuremodified", me, me._updateInfo);
@@ -250,6 +274,11 @@ function(config, locale) {
             this_layers.splice(index, 1);
         }
     },
+    /**
+     * @method _updateInfoSelected
+     * @private
+     * @param event Event sent by the layer when feature is selected.
+     */
     _updateInfoSelected : function(event) {
         this._selectedFeature = null;
         if (event) {
@@ -258,13 +287,20 @@ function(config, locale) {
         // Update info for the given feature if any.
         this._updateInfo(event);
     },
+    /**
+     * @method _updateInfoUnselected
+     * @private
+     * @param event Event sent by the layer when feature is unselected.
+     */
     _updateInfoUnselected : function(event) {
         this._selectedFeature = null;
         // Set to default values because none is selected.
         this.update();
     },
     /**
-     *
+     * @method _updateInfo
+     * @private
+     * @param event Event send by the layer when feature is modified.
      */
     _updateInfo : function(event) {
         var me = this;

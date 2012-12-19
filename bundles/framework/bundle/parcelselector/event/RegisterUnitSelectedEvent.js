@@ -1,9 +1,9 @@
 /**
  * @class Oskari.mapframework.bundle.parcelselector.event.ParcelSelectedEvent
- * 
- * Used to notify components that ... 
+ *
+ * The feature ID that defines the register unit that has been selected.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.parcelselector.event.RegisterUnitSelectedEvent', 
+Oskari.clazz.define('Oskari.mapframework.bundle.parcelselector.event.RegisterUnitSelectedEvent',
 /**
  * @method create called automatically on construction
  * @static
@@ -12,24 +12,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcelselector.event.RegisterUni
 function(fid) {
     this.fid = fid;
 }, {
-    /** @static @property __name event name */
-    __name : "ParcelSelector.RegisterUnitSelectedEvent",
     /**
      * @method getName
-     * Returns event name
-     * @return {String}
+     * @return {String} Event name.
      */
     getName : function() {
-        return this.__name;
+        return "ParcelSelector.RegisterUnitSelectedEvent";
     },
     /**
-     * @method getFid 
-     * Returns parameter that components reacting to event should know about
-     * @return {String}
+     * @method getFid
+     * Returns parameter that components reacting to event should know about.
+     * @return {String} The feature ID that defines the register unit that has been selected.
      */
     getFid : function() {
         return this.fid;
     }
 }, {
     'protocol' : ['Oskari.mapframework.event.Event']
-});
+}); 
