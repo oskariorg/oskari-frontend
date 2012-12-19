@@ -1,8 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.parcel.ParcelBundleInstance
+ * @class Oskari.mapframework.bundle.parcel.view.MainView
  *
- * Registers and starts the
- * Oskari.mapframework.bundle.parcel.plugin.CoordinatesPlugin plugin for main map.
+ * Handles events related to the tool selections.
+ * Also, starts the saving flow for the feature data when 'Parcel.SaveDrawingEvent' is received.
+ * If saving flow is started, this view shows the save form before continuing to the WFST operation.
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.parcel.view.MainView",
 
@@ -15,13 +16,12 @@ function(instance) {
     this.popupId = 'parcelForm';
     this.form = undefined;
 }, {
-    __name : 'ParcelMainView',
     /**
      * @method getName
      * @return {String} the name for the component
      */
     getName : function() {
-        return this.__name;
+        return 'ParcelMainView';
     },
     /**
      * @method getSandbox
@@ -96,6 +96,7 @@ function(instance) {
         },
         /**
          * @method Parcel.SaveDrawingEvent
+         * Shows the save form.
          * @param {Oskari.mapframework.bundle.parcel.event.SaveDrawingEvent} event
          */
         'Parcel.SaveDrawingEvent' : function(event) {
@@ -104,8 +105,8 @@ function(instance) {
     },
     /**
      * @method _handleFinishedDrawingEvent
-     * Handles custom event when drawing is finished
      * @private
+     * Shows the saving form.
      * @param {Oskari.mapframework.bundle.parcel.event.FinishedDrawingEvent} event
      */
     _handleFinishedDrawingEvent : function(event) {
@@ -182,6 +183,11 @@ function(instance) {
         }
         return errors;
     },
+    /**
+     * @method __showValidationErrorMessage
+     * @private
+     * @param {Object[]} errors Error objects have field and error properties ({field : 'name', error: 'Name missing'}).
+     */
     _showValidationErrorMessage : function(errors) {
         var loc = this.instance.getLocalization();
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');

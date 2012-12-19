@@ -1,13 +1,13 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.event.ParcelLayerUnregisterEvent
  * 
- * Used to notify components that ... 
+ * Use to notify ParcelInfo bundle that the given layer should not be followed by that bundle anymore.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.parcel.event.ParcelLayerUnregisterEvent', 
 /**
  * @method create called automatically on construction
  * @static
- * @param {OpenLayers.} layer Layer object that should not be follwed anymore by the bundle.
+ * @param {OpenLayers.Layer.Vector} layer Layer object that should not be follwed anymore by the bundle.
  */
 function(layer) {
     this._layer = layer;
@@ -15,7 +15,7 @@ function(layer) {
     /**
      * @method getName
      * Returns event name
-     * @return {String}
+     * @return {String} The event name.
      */
     getName : function() {
         return "ParcelInfo.ParcelLayerUnregisterEvent";
@@ -23,7 +23,7 @@ function(layer) {
     /**
      * @method getLayer
      * Returns parameter that components reacting to event should know about
-     * @return {String}
+     * @return {String} The layer that ParcelInfo bundle should unregister.
      */
     getLayer : function() {
         return this._layer;
