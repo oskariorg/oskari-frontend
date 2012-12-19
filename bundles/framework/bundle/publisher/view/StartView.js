@@ -55,13 +55,13 @@ Oskari.clazz.define(
                         'Oskari.userinterface.component.Button'
                     );
             continueButton.addClass('primary');
-            var txt = 'loc.buttons.continue';
+            var continueTxt = 'loc.buttons.continue';
             if (this.loc && 
                     this.loc.buttons && 
                     this.loc.buttons['continue']) {
-                    txt = this.loc.buttons['continue'];
+                    continueTxt = this.loc.buttons['continue'];
                 }
-            continueButton.setTitle(txt);
+            continueButton.setTitle(continueTxt);
             continueButton.setHandler(
                     function() {
                         var layers =
@@ -169,13 +169,13 @@ Oskari.clazz.define(
                 Oskari.clazz.create(
                     'Oskari.userinterface.component.Button'
                 );
-            txt = 'loc.buttons.cancel';
+            var cancelTxt = 'loc.buttons.cancel';
             if (this.loc && 
                 this.loc.buttons && 
                 this.loc.buttons.cancel) {
-                txt = this.loc.buttons.cancel;
+                cancelTxt = this.loc.buttons.cancel;
             }
-            cancelButton.setTitle(txt);
+            cancelButton.setTitle(cancelTxt);
             cancelButton.setHandler(
                 function() {
                     me.instance.sandbox
@@ -315,6 +315,14 @@ Oskari.clazz.define(
                 }
             }
             return deniedLayers;
+        },
+        /**
+         * @method markTouAccepted
+         * Requests that the backend mark the current logged in user as having
+         * accepted the Terms of Use
+         */
+        markTouAccepted : function() {
+            // TODO: implement
         }
     }
 );
