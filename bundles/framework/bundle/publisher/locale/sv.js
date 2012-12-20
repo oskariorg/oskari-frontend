@@ -104,6 +104,11 @@ Oskari.registerLocalization(
                 "buttons": {
                     "continue": "Fortsätt",
                     "cancel": "Tillbaka"
+                },
+                "tou" : {
+                    "notfound" : "Användningsvillkor kan inte hittas",
+                    "reject" : "Avvisa",
+                    "accept" : "Acceptera"
                 }
             }
         }
