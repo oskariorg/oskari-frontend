@@ -63,10 +63,12 @@ function() {
     	// request
     	var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
     	this.requestHandlers = {
-    			updateMapRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.UpdateMapRequestHandler', sandbox, mapModule)
+    			updateMapRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.UpdateMapRequestHandler', sandbox, mapModule),
+    			addControlToMapRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.AddControlToMapRequestHandler', sandbox, mapModule)
     	};
 
         sandbox.addRequestHandler('UpdateMapRequest', this.requestHandlers.updateMapRequest);
+        sandbox.addRequestHandler('AddControlToMapRequest', this.requestHandlers.addControlToMapRequest);
     },
 
     /**
@@ -82,6 +84,7 @@ function() {
 
         // request handler cleanup 
         sandbox.removeRequestHandler('UpdateMapRequest', this.requestHandlers['updateMapRequest']);
+        sandbox.removeRequestHandler('AddControlToMapRequest', this.requestHandlers['addControlToMapRequest']);
 
         var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
 
