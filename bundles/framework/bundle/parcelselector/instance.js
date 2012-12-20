@@ -11,7 +11,7 @@
  * This bundle does not listen for any events.
  * This bundle sends following events:
  * See, {Oskari.mapframework.bundle.parcelselector.event.ParcelSelectedEvent}
- * and {Oskari.mapframework.bundle.parcelselector.event.ParcelSelectedEvent}.
+ * and {Oskari.mapframework.bundle.parcelselector.event.RegisterUnitSelectedEvent}.
  * 
  * See {Oskari.mapframework.bundle.parcelselector.ParcelSelector} for bundle definition.
  */
