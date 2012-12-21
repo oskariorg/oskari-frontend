@@ -1,7 +1,7 @@
 div.layerselection2 .layer.selected {
     border: 1pt solid #c0d0e0;
     margin: 0 5px 5px 0;
-    height: 70px;
+    height: 70px \0/IE9;
 }
 
 div
