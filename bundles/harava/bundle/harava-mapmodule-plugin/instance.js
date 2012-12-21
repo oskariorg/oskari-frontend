@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisplayBundleInstance
+ * @class Oskari.mapframework.bundle.coordinatedisplay.MapModulePluginBundleInstance
  *
  * Registers and starts the
  * Oskari.harava.bundle.haravagetinfo.plugin.HaravaGetInfoPlugin plugin for main map.
