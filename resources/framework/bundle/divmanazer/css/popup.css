@@ -41,6 +41,9 @@ div.divmanazerpopup div.content {
 div.divmanazerpopup div.content ul {
     margin : 10px;
 }
+div.divmanazerpopup div.content textarea {
+    resize : none;
+}
 div.divmanazerpopup div.actions {
     margin : 10px;
     text-align: center;
