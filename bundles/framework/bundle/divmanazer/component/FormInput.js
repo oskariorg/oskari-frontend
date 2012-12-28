@@ -19,10 +19,9 @@ function(name) {
 	label.attr('for', name);
 	
 	var input = this._field.find('input');
-    if ( !("autofocus" in input) ) {
+     if ( !("autofocus" in input) ) {
         input.focus();
     }
-	
 	
 	input.attr('name', name);
     this._name = name;
