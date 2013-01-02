@@ -93,14 +93,14 @@ div.olControlMousePosition {
 
 .olControlOverviewMapExtentRectangle {
     overflow: hidden;
-    background-image: url('/Oskari/resources/openlayers/theme/default/img/blank.gif');
+    background-image: url('img/blank.gif');
     cursor: move;
     border: 2px dotted red;
 }
 .olControlOverviewMapRectReplacement {
     overflow: hidden;
     cursor: move;
-    background-image: url('/Oskari/resources/openlayers/theme/default/img/overview_replacement.gif');
+    background-image: url('img/overview_replacement.gif');
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -140,7 +140,7 @@ div.olControlMousePosition {
 }
 
 .olControlNavigationHistory {
-   background-image: url('/Oskari/resources/openlayers/theme/default/img/navigation_history.png');
+   background-image: url('img/navigation_history.png');
    background-repeat: no-repeat;
    width:  24px;
    height: 24px;
@@ -160,20 +160,20 @@ div.olControlMousePosition {
 }
 
 .olControlNavToolbar .olControlNavigationItemActive { 
-  background-image: url('/Oskari/resources/openlayers/theme/default/img/panning-hand-on.png');
+  background-image: url('img/panning-hand-on.png');
   background-repeat: no-repeat;
 }
 .olControlNavToolbar .olControlNavigationItemInactive { 
-  background-image: url('/Oskari/resources/openlayers/theme/default/img/panning-hand-off.png');
+  background-image: url('img/panning-hand-off.png');
   background-repeat: no-repeat;
 }
 .olControlNavToolbar .olControlZoomBoxItemActive { 
-  background-image: url('/Oskari/resources/openlayers/theme/default/img/drag-rectangle-on.png');
+  background-image: url('img/drag-rectangle-on.png');
   background-color: orange;
   background-repeat: no-repeat;
 }
 .olControlNavToolbar .olControlZoomBoxItemInactive { 
-  background-image: url('/Oskari/resources/openlayers/theme/default/img/drag-rectangle-off.png');
+  background-image: url('img/drag-rectangle-off.png');
   background-repeat: no-repeat;
 }
 .olControlEditingToolbar  {
@@ -183,7 +183,7 @@ div.olControlMousePosition {
     width: 200px;
 }
 .olControlEditingToolbar div { 
-  background-image: url('/Oskari/resources/openlayers/theme/default/img/editing_tool_bar.png');
+  background-image: url('img/editing_tool_bar.png');
   background-repeat: no-repeat;
   float:right;
   width:  24px;
@@ -215,12 +215,12 @@ div.olControlMousePosition {
   background-position: -26px -23px ;                                                                   
 }
 .olControlSaveFeaturesItemActive { 
-    background-image: url('/Oskari/resources/openlayers/theme/default/img/save_features_on.png');
+    background-image: url('img/save_features_on.png');
     background-repeat: no-repeat;
     background-position: 0px 1px;
 }
 .olControlSaveFeaturesItemInactive { 
-    background-image: url('/Oskari/resources/openlayers/theme/default/img/save_features_off.png');
+    background-image: url('img/save_features_off.png');
     background-repeat: no-repeat;
     background-position: 0px 1px;
 }
@@ -248,7 +248,7 @@ div.olControlMousePosition {
 }  
 
 .olControlPanPanel div {
-    background-image: url('/Oskari/resources/openlayers/theme/default/img/pan-panel.png');
+    background-image: url('img/pan-panel.png');
     height: 18px;
     width: 18px;
     cursor: pointer;
@@ -283,7 +283,7 @@ div.olControlMousePosition {
 } 
 
 .olControlZoomPanel div {
-    background-image: url('/Oskari/resources/openlayers/theme/default/img/zoom-panel.png');
+    background-image: url('img/zoom-panel.png');
     position: absolute;
     height: 18px;
     width: 18px;
@@ -309,7 +309,7 @@ div.olControlMousePosition {
 }
 
 .olPopupCloseBox {
-  background: url('/Oskari/resources/openlayers/theme/default/img/close.gif') no-repeat;
+  background: url('img/close.gif') no-repeat;
   cursor: pointer;
 }
 
