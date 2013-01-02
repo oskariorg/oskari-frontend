@@ -9,16 +9,15 @@ div.popupHeader {
 	display:inline-block;
 	width: 390px;  	
 	float: left;
-	height: 40px;
-	
+	height: 40px;	
 }
 
 div.popupHeader div {
 	padding-top: 15px;	
 	padding-left: 20px;
-	vertical-align: top;
-	
+	vertical-align: top;	
 }
+
 div.popupHeaderArrow {
 	width: 0;
 	height: 0;
@@ -33,7 +32,6 @@ div.popupHeaderArrow {
 	margin-top:10px;
 }
 
-
 div.popupContent {
 	clear: both;
 	margin-left: 10px;
@@ -41,7 +39,7 @@ div.popupContent {
 	position:relative;
 	left: 0px;
 	top: 0px;
-	height: 200px;
+	height: 250px;
 	border-radius: 0px 0px 6px 6px;
 	border: 1px solid;
 	border-color:#424343;
@@ -50,19 +48,23 @@ div.popupContent {
 	padding: 20px 20px 20px 25px;
 }
 
+/*Pop-up width reduced for places search */
+div#searchResultPopup_contentDiv div.popupContent {
+	height: 150px;
+}
+
 div.olPopup {
 	margin: 0;
 	padding: 0;
-	background-color: #ffffff;
-		
+	background-color: #ffffff;		
 }
+
 div.olPopupContent {
     overflow: visible;
     padding: 0px;
     margin: 0px;
     left:0px;
-    top:0px;
-    
+    top:0px;    
 }
 
 div.popupContent hr.infoboxLine {
@@ -75,7 +77,6 @@ div.popupContent span.infoboxActionLinks {
 	padding-right: 15px;
 	padding-left: 15px;
 } 
-
 
 .olPopupCloseBox {
 	cursor: pointer;

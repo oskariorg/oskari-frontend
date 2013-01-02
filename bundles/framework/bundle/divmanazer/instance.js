@@ -316,10 +316,10 @@ function() {
 				} else {
 					/* Attempt to fix IE9 vs. draggable flyout width issues */
 					/* this did not work */
-					 if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
+					/* if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
 						flyout.css('width',flyout.width()+"px"); 
 					}
-					
+					*/
 
 				}
 			},
@@ -333,12 +333,12 @@ function() {
 				} else {
 					/* Attempt to fix IE9 vs. draggable flyout width issues */
 					/* this did not work */
-					if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
+					/*if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
 						if(jQuery.browser.msie && jQuery.browser.version[0] === "9") {
 							flyout.css('width',''); 
 						}
 
-					}
+					}*/
 					
 				}
 				me.shuffleZIndices(flyout);
