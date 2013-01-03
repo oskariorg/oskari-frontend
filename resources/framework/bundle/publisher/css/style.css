@@ -60,7 +60,10 @@ div.basic_publisher div.customsize input.error {
     border: 1px solid red;
 }
 div.basic_publisher div.form div.field input, div.field select {
-    width : 100%;
+    width : 80%;
+    background: #FFFFFF\0;
+    opacity: 1\0;
+    font-weight: bold\0;
 }
 
 div.basic_publisher > div.content {
