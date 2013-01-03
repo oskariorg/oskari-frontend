@@ -124,7 +124,8 @@ div.olControlMousePosition {
 
 .olPopupContent {
     padding:5px;
-    overflow: auto;
+    /*overflow: auto;*/
+   height: 300px;
 }    
 .olControlNavToolbar { 
     width:0px;
