@@ -59,7 +59,9 @@ div.basic_publisher div.customsize input {
 div.basic_publisher div.customsize input.error {
     border: 1px solid red;
 }
-
+div.basic_publisher div.form div.field input, div.field select {
+    width : 100%;
+}
 
 div.basic_publisher > div.content {
     overflow: auto;
