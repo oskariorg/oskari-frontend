@@ -11,7 +11,9 @@ div.myplacesform input {
 div.myplacesform textarea, 
 div.myplacesform select {
     width: 80%;
-   background: #FFFFFF\0; /*only IE8*/
+   	background: #F0BA00\0; /*only IE8*/
+  	opacity: 1\0;
+  	font-weight: bold\0;
 }
 /* Smaller fields for category inputs in table */
 div.myplacescategoryform table input {
