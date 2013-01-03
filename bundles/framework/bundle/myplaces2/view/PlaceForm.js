@@ -17,7 +17,7 @@ function(instance) {
     
     var loc = instance.getLocalization('placeform');
     
-    this.template = jQuery('<div class="myplacesform">' +
+    this.template = jQuery('<div class="myplacesform" style= "height: 250px; position: relative; overflow: auto; background-color: white;">' +
             '<div class="field">' + 
                 '<div class="help icon-info" ' + 
                 'title="' + loc.tooltip + '"></div>' + 
@@ -32,7 +32,7 @@ function(instance) {
             '</div>' +
             '<div class="field">' + 
                 '<label for="category">' + loc.category.label + '</label><br clear="all" />' +
-                '<select name="category" style="background-color: #FFFFFF\0;">' +
+                '<select name="category" style="position: relative; top: 50px;">' +
                 '</select>' +
             '</div>' +
         '</div>');
