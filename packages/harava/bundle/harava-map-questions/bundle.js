@@ -25,46 +25,22 @@ function() {
 	"source" : {
 
 		"scripts" : [{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/bundle/harava-map-questions/instance.js"
-		}],
-		/*, 
-        
-        {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/StartGeometrySearchRequest.js"
-        },
-        {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/StartGeometrySearchRequestHandler.js"
-        },
-        {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/StopGeometrySearchRequest.js"
-        },
-        {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/StopGeometrySearchRequestHandler.js"
-        },
-        
-        {
-		    "type" : "text/css",
-		    "src" : "../../../../resources/harava/bundle/harava-search-by-geometry/css/style.css"	  
-		}],
-		
-		"locales" : [{
-			"lang" : "fi",
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/locale/fi.js"
-		}, {
-			"lang" : "sv",
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/locale/sv.js"
-		}, {
-			"lang" : "en",
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/locale/en.js"
-		}]*/
+				"type" : "text/javascript",
+				"src" : "../../../../bundles/harava/bundle/harava-map-questions/instance.js"
+			},
+			{
+	            "type" : "text/javascript",
+	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/ShowQuestionStepRequest.js"
+	        },
+	        {
+	            "type" : "text/javascript",
+	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/ShowQuestionStepRequestHandler.js"
+	        },
+			/* Resources */
+			{
+				"type" : "text/css",
+				"src" : "../../../../resources/harava/bundle/harava-map-questions/css/mapquestions.css"	  
+			}]
 	},
 	"bundle" : {
 		"manifest" : {
