@@ -32,7 +32,8 @@ function(instance) {
             '</div>' +
             '<div class="field">' + 
                 '<label for="category">' + loc.category.label + '</label><br clear="all" />' +
-                
+                '<select name="category" style="background-color: #FFFFFF\0;">' +
+                '</select>' +
             '</div>' +
         '</div>');
     this.templateOption = jQuery('<option></option>');
