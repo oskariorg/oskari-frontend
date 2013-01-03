@@ -32,8 +32,7 @@ function(instance) {
             '</div>' +
             '<div class="field">' + 
                 '<label for="category">' + loc.category.label + '</label><br clear="all" />' +
-                '<select name="category">' +
-                '</select>' +
+                
             '</div>' +
         '</div>');
     this.templateOption = jQuery('<option></option>');
