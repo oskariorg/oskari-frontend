@@ -8,12 +8,12 @@ div.myplacesform div.field {
 div.myplacesform input {
     width: 80%;
 }
-div.myplacesform textarea, 
+div.myplacesform textarea {
+	width: 80%;
+} 
 div.myplacesform select {
     width: 80%;
-   	background: #F0BA00\0; /*only IE8*/
-  	opacity: 1\0;
-  	font-weight: bold\0;
+    background: #000080\0;
 }
 /* Smaller fields for category inputs in table */
 div.myplacescategoryform table input {
