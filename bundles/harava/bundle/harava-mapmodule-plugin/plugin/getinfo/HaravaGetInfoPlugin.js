@@ -354,90 +354,89 @@ function() {
             	{
             		showAll = true;
             	}
+
+            	var data1 = resp.data1;
+            	var data2 = resp.data2;
+            	var data3 = resp.data3;
             	
-            	var infoCol = resp.informationCollections;
-            	var orgz = resp.organizations;
-            	var projz = resp.projects;
             	var html = '';
 
-            	// First get organization spesific data
-            	if(orgz.length>0){
+            	if(data1.length>0){
             		if(showAll){
-            			html += '<table class="org-table harava-gfi-table gfi-full"><tr><td colspan="8" class="harava-gfi-header">'+resp.organizationsLang+'</td></tr>';
-            			html += resp.organizationsHeader;
+            			html += '<table class="harava-gfi-table gfi-full"><tr><td colspan="8" class="harava-gfi-header">'+resp.data1Lang+'</td></tr>';
+            			html += resp.data1Header;
             		}
             		else{
-            			html += '<table class="org-table harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.organizationsLang+'</td></tr>';
+            			html += '<table class="harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.data1Lang+'</td></tr>';
             		}
             	}
-            	$.each(orgz, function(k, org){
+            	$.each(data1, function(k, data){
             		if(!showAll){
-						html += '<tr><td colspan="4" class="harava-gfi-content-mini"><ul><li>'+org.name+'</li></ul></td></tr>';
+						html += '<tr><td colspan="4" class="harava-gfi-content-mini"><ul><li>'+data.name+'</li></ul></td></tr>';
 					} else {
-						html += org.html;
+						html += data.html;
 					}
 					
-					if(typeof Organization !== "undefined") {
-						$.each(org.functions, function(k, func){
+					$.each(data.functions, function(k, func){
+						try{
 							eval(func);
-						});
-					}
+						} catch(er){}
+					});
+					
             	});
-            	if(orgz.length>0){
+            	if(data1.length>0){
             		html += '</table>';
             	}
             	
-            	// Second get project spesific data
-            	if(projz.length>0){
+            	if(data2.length>0){
             		if(showAll){
-            			html += '<table class="proj-table harava-gfi-table gfi-full"><tr><td colspan="7" class="harava-gfi-header">'+resp.projectsLang+'</td></tr>';
-            			html += resp.projectsHeader;
+            			html += '<table class="harava-gfi-table gfi-full"><tr><td colspan="7" class="harava-gfi-header">'+resp.data2Lang+'</td></tr>';
+            			html += resp.data2Header;
             		}
             		else{
-            			html += '<table class="proj-table harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.projectsLang+'</td></tr>';
+            			html += '<table class="harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.data2Lang+'</td></tr>';
             		}
             	}
-            	$.each(projz, function(k, proj){
+            	$.each(data2, function(k, data){
 					if(!showAll){
-						html += '<tr><td colspan="4" class="harava-gfi-content-mini"><ul><li>'+proj.name+'</li></ul></td></tr>';						
+						html += '<tr><td colspan="4" class="harava-gfi-content-mini"><ul><li>'+data.name+'</li></ul></td></tr>';						
 					} else {
-						html +=proj.html;						
+						html +=data.html;						
 					}
 					
-					if(typeof Project !== "undefined") {
-						$.each(proj.functions, function(k, func){
+					$.each(data.functions, function(k, func){
+						try{
 							eval(func);
-						});
-					}
+						} catch(er){}
+					});
 				});
-            	if(projz.length>0){
+            	if(data2.length>0){
             		html += '</table>';
             	}
             	
-            	// Third get information collection spesific data
-            	if(infoCol.length>0){
+            	if(data3.length>0){
             		if(showAll){
-            			html += '<table class="infocol-table harava-gfi-table gfi-full"><tr><td colspan="7" class="harava-gfi-header">'+resp.informationCollectionsLang+'</td></tr>';
-            			html += resp.informationCollectionsHeader;
+            			html += '<table class="harava-gfi-table gfi-full"><tr><td colspan="7" class="harava-gfi-header">'+resp.data3Lang+'</td></tr>';
+            			html += resp.data3Header;
             		}
             		else{
-            			html += '<table class="infocol-table harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.informationCollectionsLang+'</td></tr>';
+            			html += '<table class="harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.data3Lang+'</td></tr>';
             		}
             	}
-				$.each(infoCol, function(k, info){
+				$.each(data3, function(k, data){
 					if(!showAll){
-						html += '<tr><td colspan="4" class="harava-gfi-content-mini"><ul><li>'+info.name+'</li></ul></td></tr>';
+						html += '<tr><td colspan="4" class="harava-gfi-content-mini"><ul><li>'+data.name+'</li></ul></td></tr>';
 					} else {
-						html += info.html;
+						html += data.html;
 					}
 					
-					if(typeof InformationCollection !== "undefined") {
-						$.each(info.functions, function(k, func){
+					$.each(data.functions, function(k, func){
+						try{
 							eval(func);
-						});
-					}
+						} catch(er){}
+					});
 				});
-				if(infoCol.length>0){
+				if(data3.length>0){
             		html += '</table>';
             	}
 				

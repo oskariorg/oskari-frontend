@@ -68,6 +68,14 @@ function() {
         {
             "type" : "text/javascript",
             "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/request/UpdateMapRequestHandler.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/request/AddControlToMapRequest.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/request/AddControlToMapRequestHandler.js"
         }
         ]
     },
