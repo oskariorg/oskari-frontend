@@ -13,7 +13,7 @@ function() {
     /**
      * @method getName
      * Returns event name
-     * @return {String}
+     * @return {String} The event name.
      */
     getName : function() {
         return "Parcel.FinishedDrawingEvent";
