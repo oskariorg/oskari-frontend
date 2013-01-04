@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.view.PlaceForm
  * 
- * Shows a form for my place
+ * Shows a form for my place. For requests for name and description.
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.parcel.view.PlaceForm",
 
@@ -34,7 +34,6 @@ function(instance) {
     getForm : function() {
         var ui = this.template.clone();
         var loc = this.instance.getLocalization('placeform');
-        // TODO: if a place is given for editing -> populate fields here
         if(this.initialValues) {
             ui.find('input[name=placename]').attr('value', this.initialValues.place.name);
             ui.find('textarea[name=placedesc]').append(this.initialValues.place.desc);

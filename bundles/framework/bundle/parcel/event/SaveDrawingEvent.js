@@ -15,7 +15,7 @@ function(feature) {
     /**
      * @method getName
      * Returns event name
-     * @return {String}
+     * @return {String} The event name.
      */
     getName : function() {
         return "Parcel.SaveDrawingEvent";
@@ -23,7 +23,7 @@ function(feature) {
     /**
      * @method getDrawing
      * Returns the drawings feature
-     * @return {OpenLayers.Feature.Vector}
+     * @return {OpenLayers.Feature.Vector} The drawings feature.
      */
     getDrawing : function() {
         return this._drawing;

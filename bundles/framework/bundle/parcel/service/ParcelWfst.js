@@ -1,14 +1,21 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.service.ParcelWfst
  *
- * Transforms OpenLayers geometry to WFS Transactions
+ * Transforms OpenLayers geometry to WFS Transactions.
+ * Also, provides functions to load feature data from the server.
+ *
+ * Notice, uses instance configuration information to get the query URL and WFST transaction URL,
+ * and feature type strings for protocol feature types.
+ *
+ * Notice, if queryUrl and transaction Url differ, WFST uses INSERT, otherwise UPDATE.
+ * Also, FID is parced to be only a number for WFST action.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelWfst',
 
 /**
  * @method create called automatically on construction
  * @static
- * @param {Object} instance
+ * @param {Oskari.mapframework.bundle.parcel.DrawingToolInstance} instance
  */
 function(instance) {
     this.instance = instance;
@@ -50,33 +57,53 @@ function(instance) {
 }, {
 
     /**
-     * @param Requires the downloaded feature as a parameter or undefined if error occurred.
+     * @method loadParcel
+     * Loads feature from the server asynchronously and gets the feature via callback.
+     * @param {String} fid FID for the feature that should be loaded from the server.
+     * @param {Function} cb Callback function. Requires the downloaded feature as a parameter or undefined if error occurred.
      */
     loadParcel : function(fid, cb) {
         this._downloadFeature(fid, this.protocols['parcel'], cb);
     },
     /**
-     * @param cb Requires the downloaded feature as a parameter or undefined if error occurred.
+     * @method loadRegisterUnit
+     * Loads feature from the server asynchronously and gets the feature via callback.
+     * @param {String} fid FID for the feature that should be loaded from the server.
+     * @param {Function} cb Callback function. Requires the downloaded feature as a parameter or undefined if error occurred.
      */
     loadRegisterUnit : function(fid, cb) {
         this._downloadFeature(fid, this.protocols['registerUnit'], cb);
     },
 
     /**
-     * @param cb Requires information about the success as boolean parameter.
+     * @method saveParcel
+     * Saves feature to the server asynchronously and gives the success information via callback.
+     * @param {OpenLayers.Feature.Vector} feature The feature whose data will be saved to the server by using WFST.
+     * @param {String} placeName Name of the place.
+     * @param {String} placeDescription Description of the place.
+     * @param {Fuction} cb Requires information about the success as boolean parameter.
      */
     saveParcel : function(feature, placeName, placeDescription, cb) {
         this._commitFeature(feature, placeName, placeDescription, this.protocols['parcelCommit'], cb);
     },
     /**
-     * @param cb Requires information about the success as boolean parameter.
+     * @method saveRegisterUnit
+     * Saves feature to the server asynchronously and gives the success information via callback.
+     * @param {OpenLayers.Feature.Vector} feature The feature whose data will be saved to the server by using WFST.
+     * @param {String} placeName Name of the place.
+     * @param {String} placeDescription Description of the place.
+     * @param {Fuction} cb Requires information about the success as boolean parameter.
      */
     saveRegisterUnit : function(feature, placeName, placeDescription, cb) {
         this._commitFeature(feature, placeName, placeDescription, this.protocols['registerUnitCommit'], cb);
     },
 
     /**
-     * @param cb Requires the downloaded feature as a parameter or undefined if error occurred.
+     * @method _downloadFeature
+     * @private
+     * Loads feature from the server asynchronously and gets the feature via callback.
+     * @param {String} fid FID for the feature that should be loaded from the server.
+     * @param {Function} cb Callback function. Requires the downloaded feature as a parameter or undefined if error occurred.
      */
     _downloadFeature : function(fid, protocol, cb) {
         var me = this;
@@ -103,7 +130,13 @@ function(instance) {
     },
 
     /**
-     * @param cb Requires information about the success as boolean parameter.
+     * @method _commitFeature
+     * Saves feature to the server asynchronously and gives the success information via callback.
+     * @param {OpenLayers.Feature.Vector} feature The feature whose data will be saved to the server by using WFST.
+     * @param {String} placeName Name of the place.
+     * @param {String} placeDescription Description of the place.
+     * @param {OpenLayers.Protocol.WFS} protocol The protocol that is used for the WFST action.
+     * @param {Fuction} cb Requires information about the success as boolean parameter.
      */
     _commitFeature : function(feature, placeName, placeDescription, protocol, cb) {
         var me = this;
@@ -160,9 +193,11 @@ function(instance) {
             }
         });
     },
+
     /**
+     * @method _parseFidNumber
+     * @private
      * Removes the possible string prefix from the given fid.
-     *
      * @param {String} fid
      * @return {String} Parsed fid. Notice, this will return only positive numbers. "-" is also parsed away.
      */

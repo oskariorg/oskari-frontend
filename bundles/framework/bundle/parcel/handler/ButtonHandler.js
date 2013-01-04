@@ -1,13 +1,18 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.handler.ButtonHandler
  *
- * Handles the buttons for parcel functionality
+ * Handles the button related events and requests for parcel functionality.
+ * These buttons are shown in the toolbar to provide bunlde functionality for the user.
+ *
+ * Notice, uses the instance configuration to check if some of other bundles buttons, that
+ * are irrelevant for this bundle, should be hidden.
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.parcel.handler.ButtonHandler",
 
 /**
  * @method create called automatically on construction
  * @static
+ * @param {Oskari.mapframework.bundle.parcel.DrawingToolInstance} instance
  */
 function(instance) {
     this.instance = instance;
@@ -55,7 +60,7 @@ function(instance) {
     },
     /**
      * @method init
-     * implements Module protocol init method
+     * Implements Module protocol init method.
      */
     init : function() {
         var loc = this.instance.getLocalization('tools');
@@ -75,7 +80,7 @@ function(instance) {
     },
     /**
      * @method start
-     * implements Module protocol start methdod
+     * Implements Module protocol start method.
      */
     start : function() {
         var me = this;
@@ -95,6 +100,7 @@ function(instance) {
 
     /**
      * @method _startNewDrawing
+     * @private
      * Sends a request to plugin with given config to inform that certain tool has been selected.
      * @param config params for StartDrawRequest
      */
@@ -106,7 +112,9 @@ function(instance) {
         this._sendDrawRequest(config);
     },
     /**
-     *
+     * @method _saveDrawing
+     * @private
+     * Starts the save drawing feature flow by sending 'Parcel.SaveDrawingRequest' request.
      */
     _saveDrawing : function() {
         var request = this.instance.sandbox.getRequestBuilder('Parcel.SaveDrawingRequest')();
@@ -114,7 +122,8 @@ function(instance) {
     },
     /**
      * @method _sendDrawRequest
-     * Sends a StartDrawingRequest with given params. Changes the panel controls to match the application state (new/edit)
+     * @private
+     * Sends a StartDrawingRequest with given params.
      * @param config params for StartDrawRequest
      */
     _sendDrawRequest : function(config) {
@@ -126,8 +135,10 @@ function(instance) {
         }
     },
     /**
-     * @method update
-     * implements Module protocol update method
+     * @method _showDrawHelper
+     * @private
+     * Show help popup for the given mode.
+     * @param {String} drawMode Identifies the tool that is used for drawing.
      */
     _showDrawHelper : function(drawMode) {
         var me = this;
@@ -157,8 +168,7 @@ function(instance) {
     },
     /**
      * @method sendStopDrawRequest
-     * Sends a StopDrawingRequest.
-     * Changes the panel controls to match the application state (new/edit) if propagateEvent != true
+     * Sends 'Parcel.StopDrawingRequest' and closes the help dialog if its showing.
      */
     sendStopDrawRequest : function() {
         var me = this;
@@ -170,8 +180,7 @@ function(instance) {
     },
     /**
      * @method sendCancelDrawRequest
-     * Sends a CancelDrawingRequest.
-     * Changes the panel controls to match the application state (new/edit) if propagateEvent != true
+     * Sends 'Parcel.CancelDrawingRequest' and closes the help dialog if its showing.
      */
     sendCancelDrawRequest : function() {
         var me = this;
@@ -182,11 +191,10 @@ function(instance) {
         }
     },
     /**
-     * @method update
-     * implements Module protocol update method
+     * @method stop
+     * Implements Module protocol stop method.
      */
     stop : function() {
-        // Toolbar.RemoveToolButtonRequest
         // remove live bindings
         jQuery('div.parcel div.button').die();
     },
