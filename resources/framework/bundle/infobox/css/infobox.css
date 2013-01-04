@@ -40,6 +40,7 @@ div.popupContent {
 	left: 0px;
 	top: 0px;
 	height: 250px;
+	height: auto\0;
 	border-radius: 0px 0px 6px 6px;
 	border: 1px solid;
 	border-color:#424343;
@@ -61,7 +62,6 @@ div.olPopup {
 
 div.olPopupContent {
     overflow: visible;
-    height: 250px\0;
     padding: 0px;
     margin: 0px;
     left:0px;
