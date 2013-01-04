@@ -56,11 +56,12 @@ div#searchResultPopup_contentDiv div.popupContent {
 div.olPopup {
 	margin: 0;
 	padding: 0;
-	background-color: #ffffff;		
+	background-color: #ffffff;
+	overflow: auto !Important\0/;		
 }
 
 div.olPopupContent {
-    /*overflow: visible;*/
+    overflow: visible;
     padding: 0px;
     margin: 0px;
     left:0px;
