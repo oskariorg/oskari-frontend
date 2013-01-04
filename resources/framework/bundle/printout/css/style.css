@@ -35,12 +35,13 @@ div.basic_printout > div.header div.icon-close {
 }
 div.basic_printout div.form div.field input, div.field select {
 	width: 100%;
-	width: 80%\0;
-	background-color: white\0;
+	width: 80%\0/;
+	background-color: #FFFFFF;
+	border: 1px solid;
 }
 div.basic_printout > div.content {
 	overflow: auto;
-	height: 89%;
+	height: 100%;
 }
 div.basic_printout div.tool {
 	margin: 5px;
