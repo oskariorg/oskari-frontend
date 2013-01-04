@@ -14,6 +14,13 @@ div.publisher div.startview div.icon-info, div.basic_publisher div.icon-info {
 	float : right;
 }
 
+div.publisher div.startview div.content {
+    margin-top: 5px;
+}
+div.publisher div.startview div.tou {
+    margin: 15px 0;
+}
+
 div.publisher div.startview div.layerlist {
 	border : 1px solid;
 	padding : 10px;
