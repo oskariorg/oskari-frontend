@@ -35,7 +35,6 @@ div.basic_printout > div.header div.icon-close {
 }
 div.basic_printout div.form div.field input, div.field select {
 	width: 80%;
-	z-index: 9999;
 	background-color: white;
 	filter:Alpha(opacity=100) !important;
 }
