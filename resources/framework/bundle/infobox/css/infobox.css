@@ -57,7 +57,7 @@ div.olPopup {
 	margin: 0;
 	padding: 0;
 	background-color: #ffffff;
-	overflow: auto !Important\0/;		
+	overflow: auto\0/ !important;		
 }
 
 div.olPopupContent {
