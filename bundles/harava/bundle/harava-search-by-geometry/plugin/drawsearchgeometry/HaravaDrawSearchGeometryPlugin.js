@@ -552,21 +552,7 @@ function(locale) {
     	
     	me._closeGfiInfo();
     	if(feat!=null){
-	    	if(this.currentSearchMode=='point'){
-	    		var lon = feat.geometry.x;
-	    		var lat = feat.geometry.y;
-	    		
-	    		var oMap = this.mapModule.getMap();
-	    		var oLonLat = new OpenLayers.LonLat(lon, lat);
-	    		var oPx = oMap.getViewPortPxFromLonLat(oLonLat);
-	    		
-	    		var x = oPx.x;
-	    		var y = oPx.y;
-	    		Oskari.clazz.globals.sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon,lat,x,y]);
-	        	
-	    	} else {
-	    		me._handleSearchByGeom(feat.geometry.toString());
-	    	}
+    		me._handleSearchByGeom(feat.geometry.toString());	    	
     	}
     	me._searchLayer.removeAllFeatures();
     	me._oldSearchLayer.removeAllFeatures();
