@@ -15,12 +15,23 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
  * @param {String} id
  * 		Unigue ID for this map
  * @param {String} imageUrl
- *      base url for marker etc images 
+ *      base url for marker etc images
+ * @param {Array} map options, example data:
+ *  {
+ *		resolutions : [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
+ *		maxExtent : {
+ *			left : 0,
+ *			bottom : 10000000,
+ *			right : 10000000,
+ *			top : 0
+ *		}
+ *	}
  */
-function(id, imageUrl) {
+function(id, imageUrl, options) {
 
     this._id = id;
     this._imageUrl = imageUrl;
+    this._options = options;    
 
     this._controls = {};
     this._layerPlugins = {};
@@ -191,7 +202,11 @@ function(id, imageUrl) {
         sandbox.printDebug("Initializing map module...#############################################");
 
         this._sandbox = sandbox;
-
+        
+        if(this._options!=null && this._options.resolutions!=null){
+        	this._mapResolutions = this._options.resolutions;
+        }
+        
         // register events & requesthandlers
         // TODO: should these be in start-method?
         for(p in this.eventHandlers ) {
@@ -401,11 +416,18 @@ function(id, imageUrl) {
         // object... so we will move the map to correct location
         // by making a MapMoveRequest in application startup
         var lonlat = new OpenLayers.LonLat(0, 0);
+        
+        var mapExtent = new OpenLayers.Bounds(0, 0, 10000000, 10000000);
+        if(this._options!=null && this._options.maxExtent !=null
+        		&& this._options.maxExtent.left != null && this._options.maxExtent.bottom != null 
+        		&& this._options.maxExtent.right != null && this._options.maxExtent.top != null){
+        	mapExtent = new OpenLayers.Bounds(this._options.maxExtent.left, this._options.maxExtent.bottom, this._options.maxExtent.right, this._options.maxExtent.top);
+        }
 
         this._map = new OpenLayers.Map({
             controls : [],
             units : 'm',
-            maxExtent : new OpenLayers.Bounds(0, 0, 10000000, 10000000),
+            maxExtent : mapExtent,
             resolutions : this._mapResolutions,
             projection : this._projectionCode,
             isBaseLayer : true,
