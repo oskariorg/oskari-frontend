@@ -18,7 +18,18 @@ function(instance) {
     var loc = instance.getLocalization('placeform');
     
     this.template = jQuery('<div class="myplacesform">' +
-            
+            '<div class="field">' + 
+                '<div class="help icon-info" ' + 
+                'title="' + loc.tooltip + '"></div>' + 
+                '<input type="text" name="placename" placeholder="' + loc.placename.placeholder + '"/>' +
+            '</div>' +
+            '<div class="field">' + 
+                '<input type="text" name="placelink" placeholder="' + loc.placelink.placeholder + '"/>' +
+            '</div>' +
+            '<div class="field">' +  
+                '<textarea name="placedesc" placeholder="' + loc.placedesc.placeholder + '">' +
+                '</textarea>' +
+            '</div>' +
             '<div class="field">' + 
                 '<label for="category">' + loc.category.label + '</label><br clear="all" />' +
                 '<select name="category" autofocus>' +
