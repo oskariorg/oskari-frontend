@@ -60,7 +60,7 @@ div.olPopup {
 }
 
 div.olPopupContent {
-    overflow: visible;
+    /*overflow: visible;*/
     padding: 0px;
     margin: 0px;
     left:0px;

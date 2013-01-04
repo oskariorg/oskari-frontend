@@ -34,7 +34,7 @@ div.basic_printout > div.header div.icon-close {
 	float: right;
 }
 div.basic_printout div.form div.field input, div.field select {
-	width: 100%;
+	width: 80%;
 }
 div.basic_printout > div.content {
 	overflow: auto;
