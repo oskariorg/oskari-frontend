@@ -164,7 +164,9 @@ function(instance) {
         		me._layerOrderChanged(item)
         	}
         });
-        listContainer.disableSelection();
+        
+        //this blocks user inputs/selections in FF and Opera
+        /*listContainer.disableSelection();*/
 
         // RIGHTJS sortable event handling
         //TODO: get rid of sortableBinded and UNBIND?
