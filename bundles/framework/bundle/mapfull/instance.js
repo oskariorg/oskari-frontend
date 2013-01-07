@@ -74,7 +74,7 @@ function() {
             adjustMapSize();
         }
         
-		var module = Oskari.clazz.create('Oskari.mapframework.ui.module.common.MapModule', "Main", this.conf.imageLocation);
+		var module = Oskari.clazz.create('Oskari.mapframework.ui.module.common.MapModule', "Main", this.conf.imageLocation, this.conf.mapOptions);
 
 		this.mapmodule = module;
 		var map = this.sandbox.register(module);
@@ -268,7 +268,7 @@ function() {
         }
 
 
-        if(state.east && ignoreLocation == false) {
+        if(state.east && ignoreLocation !== true) {
             this.sandbox.getMap().moveTo( 
                 state.east,
                 state.north,

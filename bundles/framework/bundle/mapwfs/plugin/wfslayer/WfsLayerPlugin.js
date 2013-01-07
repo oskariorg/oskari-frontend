@@ -504,8 +504,9 @@ updateWfsImages : function(creator) {
     // Send out event so components can highlight selected features
     _handleGetFeatureIdsResponse : function(response, layer, keepCollection) {
         var sandbox = this._sandbox;
-        if(response.error == "true") {
+        if(!response || response.error == "true") {
             sandbox.printWarn("Couldn't get feature id for selected map point.");
+            return;
         }
         // TODO: check if we want to do it with eval
         var selectedFeatures = eval("(" + response.selectedFeatures + ")");

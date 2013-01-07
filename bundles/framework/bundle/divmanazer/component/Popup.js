@@ -24,7 +24,9 @@ function() {
     show : function(title, message, buttons) {
     	var me = this;
         this.dialog.find('h3').html(title);
-        this.dialog.find('div.content').html(message);
+        var contentDiv = this.dialog.find('div.content'); 
+        contentDiv.html(message);
+        
         if(buttons && buttons.length > 0) {
         	var actionDiv = this.dialog.find('div.actions');
         	// TODO: save button references and clean up previous buttons
@@ -40,6 +42,13 @@ function() {
         	});
         }
         jQuery('body').append(this.dialog);
+        
+        var contentHeight = contentDiv.height();
+        var reasonableHeight = jQuery(document).height() * 0.6;
+        if(contentHeight > reasonableHeight) {
+            contentDiv.height(reasonableHeight);
+            contentDiv.css('overflow-y', 'auto');
+        }
         // center on screen
         this.dialog.css('margin-left', -(this.dialog.width()/2) + 'px');
         this.dialog.css('margin-top', -(this.dialog.height()/2) + 'px');

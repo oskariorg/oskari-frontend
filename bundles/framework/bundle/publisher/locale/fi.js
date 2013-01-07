@@ -97,13 +97,21 @@ Oskari.registerLocalization(
             },
             "StartView": {
                 "text": "Voit julkaista tässä tekemäsi karttanäkymän osana esim. omaa tai yrityksesi sivustoa.",
+                "touLink": "Näytä karttajulkaisun käyttöehdot",
                 "layerlist_title": "Julkaistavissa olevat karttatasot",
                 "layerlist_empty": "Valitsemiasi karttatasoja ei voida julkaista. Valitut karttatasot -valikosta näet, voiko karttatason julkaista.",
                 "layerlist_denied": "Ei julkaistavissa",
                 "denied_tooltip": "Kartta-aineistojen tuottajat eivät ole antaneet näille aineistoilleen julkaisuoikeutta muissa verkkopalveluissa. Tarkista julkaisuoikeus Valitut karttatasot -valikosta ennen julkaisua.",
                 "buttons": {
                     "continue": "Jatka",
-                    "cancel": "Peruuta"
+                    "continueAndAccept": "Hyväksy ehdot ja jatka",
+                    "cancel": "Peruuta",
+                    "close" : "Sulje"
+                },
+                "tou" : {
+                    "notfound" : "Käyttöehtoja ei löytynyt",
+                    "reject" : "Hylkää",
+                    "accept" : "Hyväksy"
                 }
             }
         }

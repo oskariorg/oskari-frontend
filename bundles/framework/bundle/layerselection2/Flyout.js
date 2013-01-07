@@ -155,17 +155,15 @@ function(instance) {
         }
         
         listContainer.sortable({
-            connectWith: ".selectedLayersList sortable ui-sortable"
-        });
         	/*change: function(event,ui) {
         		var item = ui.item ;
         		me._layerOrderChanged(item)
         	},*/
-        	/*stop: function(event,ui) {
+        	stop: function(event,ui) {
         		var item = ui.item ;
         		me._layerOrderChanged(item)
-        	}*/
-        
+        	}
+        });
         listContainer.disableSelection();
 
         // RIGHTJS sortable event handling
