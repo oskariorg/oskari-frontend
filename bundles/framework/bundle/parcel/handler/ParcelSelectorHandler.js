@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.parcel.handler.ParcelSelectorHandler
  *
- * Handles the buttons for parcel functionality
+ * Handles ParcelSelector events that are used to inform that feature with given fid should be loaded.
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.parcel.handler.ParcelSelectorHandler",
 
@@ -13,13 +13,12 @@ function(instance) {
     this.instance = instance;
     this.ignoreEvents = false;
 }, {
-    __name : 'ParcelSelectorHandler',
     /**
      * @method getName
      * @return {String} the name for the component
      */
     getName : function() {
-        return this.__name;
+        return 'ParcelSelectorHandler';
     },
     /**
      * @method init
@@ -40,8 +39,8 @@ function(instance) {
         }
     },
     /**
-     * @method update
-     * implements Module protocol update method
+     * @method stop
+     * implements Module protocol stop method
      */
     stop : function() {
     },
@@ -84,7 +83,12 @@ function(instance) {
         }
     },
     /**
-     *
+     * @method _loadCallback
+     * @private
+     * Callback function that gets the loaded feature and its feature type.
+     * Calls the {Oskari.mapframework.bundle.parcel.plugin.DrawPlugin} to draw the feature into the UI.
+     * @param {OpenLayers.Feature.Vector} Feature that has been loaded.
+     * @param {String} featureType Feature type of the feature.
      */
     _loadCallback : function(feature, featureType) {
         if (feature) {

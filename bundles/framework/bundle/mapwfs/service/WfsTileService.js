@@ -198,7 +198,7 @@ function(plugin) {
             }
             
             var featureIdList = event.getWfsFeatureIds();
-            if(!featureIdList && featureIdList.length > 0) {
+            if(!featureIdList || featureIdList.length == 0) {
                 // clear out any previous selection if nothing selected
                 if(!event.isKeepSelection()) {
                     this.plugin.removeHighlightOnMapLayer(layer.getId());
@@ -222,7 +222,7 @@ function(plugin) {
                     "&action_route=GET_HIGHLIGHT_WFS_FEATURE_IMAGE";
             var recDraw = function(featureId) {
                 me.plugin.drawImageTile(layer, url + "&wfsFeatureId=" + featureId, 
-                bbox, "HIGHLIGHTED_FEATURE", true);
+                bbox, "HIGHLIGHTED_FEATURE", event.isKeepSelection());
             }
             for(var i = 0 ; i < featureIdList.length; ++i) {
                 recDraw(featureIdList[i]);
@@ -230,7 +230,7 @@ function(plugin) {
             
         } finally {
             /* Request handled */
-            this._WFSFeaturesSelectedEvent = null;
+            //this._WFSFeaturesSelectedEvent = null;
         }
     },
     startPollers : function() {
