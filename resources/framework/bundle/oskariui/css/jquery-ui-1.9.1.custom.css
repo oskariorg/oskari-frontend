@@ -50,6 +50,7 @@
 
 .oskariui .ui-slider-horizontal { height: 14px; }
 .oskariui .ui-slider-horizontal .ui-slider-handle { background-image: url('/Oskari/resources/framework/bundle/oskariui/images/horizontal_handle.png'); background-repeat: no-repeat;}
+
 .oskariui .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }
 .oskariui .ui-slider-horizontal .ui-slider-range-min { left: 0; }
 .oskariui .ui-slider-horizontal .ui-slider-range-max { right: 0; }

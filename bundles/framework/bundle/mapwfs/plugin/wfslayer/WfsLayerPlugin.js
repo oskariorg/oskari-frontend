@@ -381,6 +381,7 @@ updateWfsImages : function(creator) {
         this.tileStrategy.update();
         this._tilesLayer.redraw();
     	this.updateWfsImages(this.getName());
+    	this.service.processHighlightQueue();
     },
     
     

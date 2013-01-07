@@ -97,13 +97,16 @@ Oskari.registerLocalization(
             },
             "StartView": {
                 "text": "Du kan inbädda den kartvy som du definierat här på din egen eller din arbetsgivares webbplats.",
+                "touLink": "Vis användningsvillkor till kartinbäddningen",
                 "layerlist_title": "Kartlager som kan inbäddas",
                 "layerlist_empty": "Kartlagren som du valt kan inte avskiljas. Menyn Valda kartlager visar vilka kartlager kan avskiljas.",
                 "layerlist_denied": "Kan inte avskiljas",
                 "denied_tooltip": "Kartdataproducenterna har inte gett publiceringstillstånd till dessa material i andra webbtjänster. Kontrollera publiceringstillståndet i menyn Valda kartlager innan du avskiljer dem.",
                 "buttons": {
                     "continue": "Fortsätt",
-                    "cancel": "Tillbaka"
+                    "continueAndAccept": "Godkänn användningsvillkor och fortsätt",
+                    "cancel": "Tillbaka",
+                    "close" : "Avbryt"
                 },
                 "tou" : {
                     "notfound" : "Användningsvillkor kan inte hittas",
