@@ -3,7 +3,6 @@ div.layerselection2 .layer.selected {
     margin: 0 5px 5px 0;
     height: 70px\9; /*IE9 */ 
 }
-
 div
 div.layerselection2 .layer.selected.out-of-scale, div.layerselection2 .layer.selected.out-of-content, div.layerselection2 .layer.selected.hidden {
 	color: #909090;

@@ -44,7 +44,7 @@ div.popupContent {
 	border: 1px solid;
 	border-color:#424343;
 	overflow: auto;
-	
+
 	padding: 20px 20px 20px 25px;
 }
 
@@ -56,7 +56,9 @@ div#searchResultPopup_contentDiv div.popupContent {
 div.olPopup {
 	margin: 0;
 	padding: 0;
-	background-color: #ffffff;		
+	background-color: #ffffff;
+	overflow: auto\0/ !important;	
+	height: 400px\0/ !important;	
 }
 
 div.olPopupContent {
