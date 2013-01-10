@@ -62,11 +62,15 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
                 dataType : "json",
                 type : "GET",
                 // noSavedState=true parameter tells we dont want the state saved in session
-                url : me.sandbox.getAjaxUrl() + 'action_route=GetMapConfiguration&noSavedState=true',
+                url : me.sandbox.getAjaxUrl() + 'action_route=GetAppSetup&noSavedState=true',
                 success : function(data) {
-                    me._startupState = data;
-                    me._resetComponentsWithNoStateData(me.useState(data));
-                    me._historyEnabled = true;
+                	if(data && data.configuration) {
+	                    me._startupState = data.configuration;
+	                    me._resetComponentsWithNoStateData(me.useState(data.configuration));
+	                    me._historyEnabled = true;
+                	}
+                	else
+                	{alert('error in getting configuration');}
                 },
                 error : function() {
                     alert('error loading conf');
