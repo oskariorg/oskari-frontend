@@ -18,7 +18,7 @@ function(name) {
 	var label = this._field.find('label');
 	label.attr('for', name);
 	
-	var input = this._field.find('input');
+	var input = this._field.find('input').focus();
 	
 	input.attr('name', name);
     this._name = name;
