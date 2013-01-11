@@ -1407,8 +1407,8 @@ Oskari = (function() {
 		},
 		/**
 		 * @method loadCss
-		 * @param sScriptSrc
-		 * @param oCallback
+		 * @param sScriptSrc contains css style url
+		 * @param oCallback not implemented
 		 */
 		"loadCss" : function(sScriptSrc, oCallback) {
 			this.log("loading CSS " + sScriptSrc);
@@ -1416,13 +1416,34 @@ Oskari = (function() {
 			.getElementsByTagName("head")[0] : document.body;
 			if(!preloaded()) {
 				if(jQuery.browser.msie) {
-					document.createStyleSheet(sScriptSrc);
+					// IE has a limitation of 31 stylesheets.
+					// It can be increased to 31*31 by using import in the stylesheets,
+					// but import should be avoided due to performance issues.
+					// Instead we retrieve the css files with xhr and
+					// concatenates the styles into a single inline style declaration.
+					jQuery.ajax({
+						url: sScriptSrc,
+						dataType:"text"
+					}).done(function ( css ) {
+						var styles = document.getElementById("concatenated");
+						if (styles) {
+							// styles found, append
+							styles.styleSheet.cssText += css;
+						} else {
+							// styles was not found, create new style element
+							var styles = document.createElement('style');
+							h.appendChild(styles);
+							styles.setAttribute('type', 'text/css');
+							styles.styleSheet.cssText = css;
+							styles.id = "concatenated";
+						}
+						return css;
+					});
 				} else {
-					var fn = sScriptSrc;
 					var s = document.createElement("link");
 					s.type = "text/css";
 					s.rel = "stylesheet";
-					s.href = fn;
+					s.href = sScriptSrc;
 					h.appendChild(s);
 				}
 			}
