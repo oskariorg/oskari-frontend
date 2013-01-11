@@ -244,7 +244,7 @@ jQuery(document).ready(function() {
     ajaxUrl += getAdditionalParam('coord');
     ajaxUrl += getAdditionalParam('mapLayers');
     ajaxUrl += getAdditionalParam('oldId');
-    ajaxUrl += getAdditionalParam('viewId');
+    ajaxUrl += "viewId=" + viewId + "&"; //getAdditionalParam('viewId');
     
     ajaxUrl += getAdditionalParam('isCenterMarker');
     ajaxUrl += getAdditionalParam('address')
