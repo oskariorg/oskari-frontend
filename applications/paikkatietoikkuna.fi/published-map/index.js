@@ -254,6 +254,9 @@ jQuery(document).ready(function() {
     ajaxUrl += getAdditionalParam('nationalCadastralReferenceHighlight');
     ajaxUrl += getAdditionalParam('wfsFeature');
     ajaxUrl += getAdditionalParam('wfsHighlightLayer');
+    if(ssl) {
+        ajaxUrl += "ssl=" + ssl + "&";
+    }
         
     Oskari.setLang(language);
 
