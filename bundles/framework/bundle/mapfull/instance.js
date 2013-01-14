@@ -41,6 +41,11 @@ function() {
 	getSandbox : function() {
 		return this.sandbox;
 	},
+
+    init: function() {
+        var me = this;
+        this.mapPublishModeRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapfull.request.MapPublishModeRequestHandler', me)
+    },
 	/**
 	 * @method _createUi
 	 * Creates the map module and rendes it to DOM element that has the id 
@@ -159,6 +164,10 @@ function() {
 		}
 		
         this.setState(this.state, skipLocation);
+
+        // register request handlers
+        sandbox.addRequestHandler('MapFull.MapPublishModeRequest', this.mapPublishModeRequestHandler);
+
 	},
     /**
      * @method _teardownState
