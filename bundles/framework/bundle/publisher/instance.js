@@ -283,11 +283,11 @@ function() {
             this._addLayers();
     	}
     	//mappublishmode should be sent to mapfull
-    	var requestBuilder = sandbox.getRequestBuilder('MapFull.MapPublishModeRequest');
+    	var requestBuilder = me.sandbox.getRequestBuilder('MapFull.MapPublishModeRequest');
 		if(requestBuilder) {
     		// got the builder, request can be sent
     		var request =  requestBuilder(blnEnabled);
-    		sandbox.request(me, request);
+    		me.sandbox.request(me, request);
 		}
 	},
 	/**

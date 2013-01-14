@@ -42,10 +42,6 @@ function() {
 		return this.sandbox;
 	},
 
-    init: function() {
-        var me = this;
-        this.mapPublishModeRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapfull.request.MapPublishModeRequestHandler', me)
-    },
 	/**
 	 * @method _createUi
 	 * Creates the map module and rendes it to DOM element that has the id 
@@ -67,8 +63,10 @@ function() {
         else {
             // react to window resize with timer so app stays responsive
             function adjustMapSize() {
-                jQuery('#' + me.mapDivId).height(jQuery(window).height());
-                jQuery('#contentMap').height(jQuery(window).height());
+                if(!me.isPublished) {
+                    jQuery('#' + me.mapDivId).height(jQuery(window).height());
+                    jQuery('#contentMap').height(jQuery(window).height());
+                }
             };
         
             var resizeTimer;
@@ -165,8 +163,10 @@ function() {
 		
         this.setState(this.state, skipLocation);
 
+        me.mapPublishModeRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapfull.request.MapPublishModeRequestHandler', me);
+
         // register request handlers
-        sandbox.addRequestHandler('MapFull.MapPublishModeRequest', this.mapPublishModeRequestHandler);
+        sandbox.addRequestHandler('MapFull.MapPublishModeRequest', me.mapPublishModeRequestHandler);
 
 	},
     /**
