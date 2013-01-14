@@ -13,9 +13,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
  */
 function(instance, localization) {
     this.instance = instance;
+    this.loc = localization;
     this.template = jQuery('<div class="viewsList volatile"></div>');
     this.templateLink = jQuery('<a href="JavaScript:void(0);"></a>');
-    this.loc = localization;
+    this.templateDesc = jQuery('<div class="oskarifield"><label for="description"></label>' +
+            '<textarea id="view_description" name="description" placeholder="' + this.loc.popup.name_placeholder + '"></textarea></div>')
     this.container = null;
     
     var sandbox = instance.sandbox;
@@ -36,9 +38,9 @@ function(instance, localization) {
             sticky: false,
             prepend: true,
             callback : function() {
-				me._promptForViewName(function(name) {
+				me._promptForView(function(name, description) {
 				    var rbState = sandbox.getRequestBuilder('StateHandler.SaveStateRequest');
-				    sandbox.request(instance, rbState(name));	
+				    sandbox.request(instance, rbState(name, description));	
 				});
             }
         }));
@@ -50,16 +52,16 @@ function(instance, localization) {
     }
 }, {
     /**
-     * @method _promptForViewName
+     * @method _promptForView
      * @private
      */
-    _promptForViewName : function(successCallback,viewName) {
+    _promptForView : function(successCallback,viewName,viewDescription) {
     	var me = this;
     	
     	var form = Oskari.clazz.create('Oskari.userinterface.component.Form');
     	var nameInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput', 'name');
     	//nameInput.setLabel(this.loc.popup.label);
-    	nameInput.setPlaceholder(this.loc.popup.placeholder);
+    	nameInput.setPlaceholder(this.loc.popup.name_placeholder);
     	var title = this.loc.popup.title;
     	if(viewName) {
     		title = this.loc.popup.edit;
@@ -68,7 +70,13 @@ function(instance, localization) {
         nameInput.setRequired(true, me.loc.save.error_noname);
         nameInput.setContentCheck(true, me.loc.save.error_illegalchars);
     	form.addField(nameInput);
+
+        var template = form.getForm();
+        template.append(me.templateDesc.clone());
     	
+        if(viewName)
+            template.find("textarea").val(viewDescription); 
+
     	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
     	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
     	okBtn.setTitle(this.loc.button.save);
@@ -78,14 +86,14 @@ function(instance, localization) {
     	okBtn.setHandler(function() {
             var errors = form.validate();
             if (errors.length == 0) {
-            	successCallback(nameInput.getValue());
+            	successCallback(nameInput.getValue(), template.find("textarea").val());
     			dialog.close();
             } else {
             	form.showErrors();
             }
     	});
     	var cancelBtn = dialog.createCloseButton(this.loc.button.cancel);
-    	dialog.show(title, form.getForm(), [cancelBtn, okBtn]);
+    	dialog.show(title, template, [cancelBtn, okBtn]);
     },
     /**
      * @method getName
@@ -159,8 +167,8 @@ function(instance, localization) {
         var sandbox = this.instance.getSandbox();
         var service = me.instance.getViewService();
         
-        var successCallback = function(newName) {
-            service.renameView(view.id, newName, function(isSuccess) {
+        var successCallback = function(newName, newDescription) {
+            service.updateView(view.id, newName, newDescription, function(isSuccess) {
                 if(isSuccess) {
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     dialog.show(me.loc['popup'].title, me.loc['save'].success);
@@ -173,7 +181,7 @@ function(instance, localization) {
             })
         };
 
-        this._promptForViewName(successCallback, view.name);
+        this._promptForView(successCallback, view.name, view.description);
     },
 
 
@@ -192,6 +200,7 @@ function(instance, localization) {
                 'id': view.id,
                 'state' : view.state,
                 'name' : view.name,
+                'description' : view.description,
                 'isPublic' : isPublic,
                 'edit' : this.loc.edit,
                 'publish' : isPublic ? this.loc.unpublish : this.loc.publish,
@@ -212,7 +221,7 @@ function(instance, localization) {
         var me = this;
         var instance = this.instance;
         var sandbox = instance.getSandbox();
-        var visibleFields = ['name', /*'publish',*/ 'edit', 'delete'];
+        var visibleFields = ['name', 'description', /*'publish',*/ 'edit', 'delete'];
         var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
         grid.setDataModel(model);
         grid.setVisibleFields(visibleFields);

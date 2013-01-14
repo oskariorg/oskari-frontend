@@ -206,6 +206,9 @@ body {
 	display: none;
 }
 
+.oskariform .oskarifield {
+	padding: 10px;
+}
 
 /** media queries */
 

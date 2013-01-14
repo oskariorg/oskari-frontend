@@ -109,6 +109,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
     },
     /**
      * @method saveState
+     * @param {Object} view
      * @param {String} pluginName (optional)
      * 	Calls the saveState method of the given plugin or if not given, calls it
      * for each plugin
@@ -117,15 +118,15 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
      * itself.
      * All actual implementations are done in plugins.
      */
-    saveState : function(viewName, pluginName) {
+    saveState : function(view, pluginName) {
         if(!pluginName) {
             for(var pluginName in this._pluginInstances) {
-                this.saveState(viewName, pluginName);
+                this.saveState(view, pluginName);
             }
             return;
         }
         this.sandbox.printDebug('[' + this.getName() + ']' + ' saving state with ' + pluginName);
-        this._pluginInstances[pluginName].saveState(viewName);
+        this._pluginInstances[pluginName].saveState(view);
     },
     /**
      * @method getCurrentState

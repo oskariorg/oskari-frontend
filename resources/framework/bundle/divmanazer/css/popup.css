@@ -40,7 +40,7 @@ div.divmanazerpopup div.content {
 div.divmanazerpopup div.content ul {
     margin : 10px;
 }
-div.divmanazerpopup div.content textarea {
+div.divmanazerpopup.no_resize div.content textarea {
     resize : none;
 }
 div.divmanazerpopup div.actions {

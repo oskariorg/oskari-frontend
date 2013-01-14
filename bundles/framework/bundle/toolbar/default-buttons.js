@@ -103,6 +103,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 					var pcn = 'Oskari.userinterface.component.Popup';
 					var okcn = 'Oskari.userinterface.component.Button';
 					var dialog = Oskari.clazz.create(pcn);
+					dialog.addClass("no_resize");
 					var okBtn = Oskari.clazz.create(okcn);
 					okBtn.setTitle(loc.link.ok);
 					okBtn.addClass('primary');
