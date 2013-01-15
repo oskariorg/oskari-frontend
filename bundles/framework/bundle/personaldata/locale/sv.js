@@ -50,11 +50,11 @@ Oskari.registerLocalization({
           "delete": " "
         },
         "popup": {
-          "edit": "<Muokkaa näkymän tietoja>",
+          "edit": "Editera vyn",
           "title": "Lagra vy",
           "label": "Vyns namn",
           "name_placeholder": "Namnge vy",
-          "description_placeholder": "<Anna näkymälle kuvaus>",
+          "description_placeholder": "Beskriv vyn",
           "save": "Lagra",
           "cancel": "Tillbaka",
           "error_noname": "Skriv namnet",
