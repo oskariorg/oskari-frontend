@@ -73,6 +73,7 @@ nav .menu .active a {
 
 div.container {
     float: left;
+    width: 700px;
     margin-top: 2em;
     padding: 0.625em;
     box-sizing: border-box;
