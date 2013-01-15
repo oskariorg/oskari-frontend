@@ -120,20 +120,20 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 			});
 		}	
 		
-		if(this.conf.skipViewtoolsPrint !== true)	{
+/*		if(this.conf.skipViewtoolsPrint !== true)	{
 			this.addToolButton('print', 'viewtools', {
-			iconCls : 'tool-print',
-			tooltip : loc.print.tooltip,
-			sticky : false,
-			callback : function() {
-				var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
-				var link = window.location.pathname + '?' + me.getSandbox().generateMapLinkParameters() + 
-				    '&p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive' + 
-				    '&showMarker=false&forceCache=true&mapmode=print&viewId=2';
-				window.open(link, "Print", wopParm);
-			}
-		});
-	}	
-		
+				iconCls : 'tool-print',
+				tooltip : loc.print.tooltip,
+				sticky : false,
+				callback : function() {
+					var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
+					var link = window.location.pathname + '?' + me.getSandbox().generateMapLinkParameters() + 
+					    '&p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive' + 
+					    '&showMarker=false&forceCache=true&mapmode=print&viewId=2';
+					window.open(link, "Print", wopParm);
+				}
+			});
+		}	
+*/		
 	}
 });
