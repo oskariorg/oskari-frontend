@@ -282,13 +282,13 @@ function() {
             map.removeClass('mapPublishMode');
             this._addLayers();
     	}
-    	//mappublishmode should be sent to mapfull
-    	var requestBuilder = me.sandbox.getRequestBuilder('MapFull.MapPublishModeRequest');
-		if(requestBuilder) {
-    		// got the builder, request can be sent
-    		var request =  requestBuilder(blnEnabled);
-    		me.sandbox.request(me, request);
-		}
+        // publishing mode should be sent to mapfull to disable resizing
+        var requestBuilder = me.sandbox.getRequestBuilder('MapFull.MapResizeEnabledRequest');
+       if(requestBuilder) {
+            // got the builder, request can be sent
+            var request =  requestBuilder(!blnEnabled);
+            me.sandbox.request(me, request);
+        }
 	},
 	/**
 	 * @method _addLayers

@@ -64,10 +64,10 @@ function() {
             "src" : "../../../../bundles/framework/bundle/mapfull/enhancement/start-map-with-link-enhancement.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapfull/request/MapPublishModeRequest.js"
+            "src" : "../../../../bundles/framework/bundle/mapfull/request/MapResizeEnabledRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/framework/bundle/mapfull/request/MapPublishModeRequestHandler.js"
+            "src" : "../../../../bundles/framework/bundle/mapfull/request/MapResizeEnabledRequestHandler.js"
         }],
         "resources" : []
     },

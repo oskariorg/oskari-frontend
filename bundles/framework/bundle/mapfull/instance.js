@@ -63,7 +63,8 @@ function() {
         else {
             // react to window resize with timer so app stays responsive
             function adjustMapSize() {
-                if(!me.isPublished) {
+                // do not resize map if resizeEnabled is false
+                if(me.resizeEnabled == null || me.resizeEnabled) {
                     jQuery('#' + me.mapDivId).height(jQuery(window).height());
                     jQuery('#contentMap').height(jQuery(window).height());
                 }
@@ -163,10 +164,11 @@ function() {
 		
         this.setState(this.state, skipLocation);
 
-        me.mapPublishModeRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapfull.request.MapPublishModeRequestHandler', me);
+        // create request handlers
+        me.mapResizeEnabledRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapfull.request.MapResizeEnabledRequestHandler', me);
 
         // register request handlers
-        sandbox.addRequestHandler('MapFull.MapPublishModeRequest', me.mapPublishModeRequestHandler);
+        sandbox.addRequestHandler('MapFull.MapResizeEnabledRequest', me.mapResizeEnabledRequestHandler);
 
 	},
     /**
