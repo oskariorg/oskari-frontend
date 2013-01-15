@@ -1,0 +1,27 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+}
+
+nav {
+	float: left;
+}
+
+nav ul.menu {
+	list-style: none;
+}
+
+nav .menu a {
+	display: block;
+	padding: 0.5em 1em;
+	font-size: 1em;
+	fpmt
+	text-decoration: none;
+}
