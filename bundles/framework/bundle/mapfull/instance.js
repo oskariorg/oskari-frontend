@@ -41,6 +41,7 @@ function() {
 	getSandbox : function() {
 		return this.sandbox;
 	},
+
 	/**
 	 * @method _createUi
 	 * Creates the map module and rendes it to DOM element that has the id 
@@ -62,8 +63,11 @@ function() {
         else {
             // react to window resize with timer so app stays responsive
             function adjustMapSize() {
-                jQuery('#' + me.mapDivId).height(jQuery(window).height());
-                jQuery('#contentMap').height(jQuery(window).height());
+                // do not resize map if resizeEnabled is false
+                if(me.resizeEnabled == null || me.resizeEnabled) {
+                    jQuery('#' + me.mapDivId).height(jQuery(window).height());
+                    jQuery('#contentMap').height(jQuery(window).height());
+                }
             };
         
             var resizeTimer;
@@ -159,6 +163,13 @@ function() {
 		}
 		
         this.setState(this.state, skipLocation);
+
+        // create request handlers
+        me.mapResizeEnabledRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapfull.request.MapResizeEnabledRequestHandler', me);
+
+        // register request handlers
+        sandbox.addRequestHandler('MapFull.MapResizeEnabledRequest', me.mapResizeEnabledRequestHandler);
+
 	},
     /**
      * @method _teardownState
