@@ -100,13 +100,19 @@ function() {
                 this.plugin.update();
                 this.plugins['Oskari.userinterface.Flyout'].layerAdded(layers[i]);
             }
-        } 
+        }
+
+        sandbox.addRequestHandler('ShowFeatureDataRequest', this.requestHandlers.showFeatureHandler);
 	},
 	/**
 	 * @method init
 	 * implements Module protocol init method - does nothing atm
 	 */
 	"init" : function() {
+        var me = this;
+        this.requestHandlers = {
+            showFeatureHandler : Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.request.ShowFeatureDataRequestHandler', me)
+        };
 		return null;
 	},
 	/**

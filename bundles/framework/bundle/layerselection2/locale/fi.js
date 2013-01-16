@@ -14,6 +14,7 @@ Oskari.registerLocalization({
       "out-of-content-area": "Tällä karttatasolla ei ole aineistoa tässä sijainnissa",
       "move-to-content-area": "Siirry kattavuusalueen keskipisteeseen",
       "description": "Kuvaus",
+      "object-data": "Kohdetiedot",
       "rights": {
         "notavailable": "Ei julkaistavissa",
         "guest": "Kirjaudu sisään julkaistaksesi karttatason",

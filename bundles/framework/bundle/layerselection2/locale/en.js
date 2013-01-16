@@ -14,6 +14,7 @@ Oskari.registerLocalization({
       "out-of-content-area": "The map layer contais no data at this location.",
       "move-to-content-area": "Move to the centre of the content area.",
       "description": "Description",
+      "object-data": "Object data",
       "rights": {
         "notavailable": "Publication prohibited.",
         "guest": "Log in to publish this map layer.",
