@@ -28,7 +28,7 @@ Oskari.clazz
         },
         /**
          * @method getId
-         * @return {String} identifier so we can manage the button with subsequent requests
+         * @return {String} identifier so we can manage select correct tab
          */
         getId : function() {
             return this._id;
