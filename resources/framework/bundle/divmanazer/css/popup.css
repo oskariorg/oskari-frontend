@@ -2,6 +2,7 @@ div.divmanazerpopup {
     max-width : 500px;
     min-width : 200px;
     position : fixed;
+    
     top : 50%;
     left : 50%;
     background-color : white;
@@ -36,6 +37,9 @@ div.divmanazerpopup h3 {
 }
 div.divmanazerpopup div.content {
     margin : 10px;
+}
+div.divmanazerpopup div.content textarea {
+	resize: none;
 }
 div.divmanazerpopup div.content ul {
     margin : 10px;
