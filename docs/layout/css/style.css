@@ -24,6 +24,7 @@ aside #logo {
     background-repeat: no-repeat;
     background-position: 15px;
     margin-left: 25px;
+    margin-top: 25px;
     cursor: pointer;
 }
 aside .vertical-text {
@@ -57,16 +58,19 @@ nav ul.menu {
 
 nav .menu a {
     display: block;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
-    padding: 0.3125em 2em;
+    padding: 0.3125em 1em;
     font-size: 1em;
     text-decoration: none;
     cursor: pointer;
     background-color: #eee;
     margin: 0.3125em 0em;
     color: black;
+    width: 180px;
+    overflow: hidden;
 }
-nav .menu .active a {
+nav .menu .active>a {
     background-color: #666;
     color: white;
 }
@@ -77,4 +81,25 @@ div.container {
     margin-top: 2em;
     padding: 0.625em;
     box-sizing: border-box;
+}
+
+li > .submenu-level1>li {
+    display: none;
+}
+li > .submenu-level1 > li > a {
+    padding-left: 2em;
+}
+
+li > .submenu-level2>li {
+    display: none;
+}
+li > .submenu-level2 > li > a {
+    padding-left: 3em;
+}
+
+li.active > .submenu-level1 > li {
+    display: block;
+}
+li.active > .submenu-level2 > li {
+    display: block;
 }
