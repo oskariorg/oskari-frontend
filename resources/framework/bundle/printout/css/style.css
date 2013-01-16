@@ -37,6 +37,7 @@ div.basic_printout div.form div.field input, div.field select {
 	width: 80%;
 	background-color: white;
 	filter:Alpha(opacity=100) !important;
+	font-weight: bolder;
 }
 div.basic_printout > div.content {
 	overflow: auto;
