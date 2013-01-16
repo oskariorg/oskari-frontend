@@ -1,0 +1,16 @@
+{
+  "name": "generator",
+  "version": "0.0.1",
+  "description": "Generator for bundle documentation",
+  "dependencies": {
+    "marked": ">= 0.1.0",
+    "commander": ">= 0.5.2",
+    "markx": "~0.3.0"
+  },
+  "engines": {
+    "node": ">= 0.6.0"
+  },
+  "bin": {
+    "generate": "generate.js"
+  }
+}

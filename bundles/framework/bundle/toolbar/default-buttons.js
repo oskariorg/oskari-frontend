@@ -92,32 +92,36 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 				me.getSandbox().request(me, reqBuilder(rn));
 			}
 		});
-
-		this.addToolButton('link', 'viewtools', {
-			iconCls : 'tool-link',
-			tooltip : loc.link.tooltip,
-			sticky : false,
-			callback : function() {
-				var linkParams = me.getSandbox().generateMapLinkParameters({marker : true});
-				var pcn = 'Oskari.userinterface.component.Popup';
-				var okcn = 'Oskari.userinterface.component.Button';
-				var dialog = Oskari.clazz.create(pcn);
-				var okBtn = Oskari.clazz.create(okcn);
-				okBtn.setTitle(loc.link.ok);
-				okBtn.addClass('primary');
-				okBtn.setHandler(function() {
-					var rn = 'EnableMapKeyboardMovementRequest';
-					dialog.close();
+		
+		if(this.conf.skipViewtoolsLink !== true) {	
+			this.addToolButton('link', 'viewtools', {
+				iconCls : 'tool-link',
+				tooltip : loc.link.tooltip,
+				sticky : false,
+				callback : function() {
+					var linkParams = me.getSandbox().generateMapLinkParameters({marker : true});
+					var pcn = 'Oskari.userinterface.component.Popup';
+					var okcn = 'Oskari.userinterface.component.Button';
+					var dialog = Oskari.clazz.create(pcn);
+					dialog.addClass("no_resize");
+					var okBtn = Oskari.clazz.create(okcn);
+					okBtn.setTitle(loc.link.ok);
+					okBtn.addClass('primary');
+					okBtn.setHandler(function() {
+						var rn = 'EnableMapKeyboardMovementRequest';
+						dialog.close();
+						me.getSandbox().postRequestByName(rn);
+					});
+					var linkContent = '<textarea rows="3" cols="80">' + loc.link.prefixUrl + linkParams + '</textarea>';
+					var rn = 'DisableMapKeyboardMovementRequest';
 					me.getSandbox().postRequestByName(rn);
-				});
-				var linkContent = '<textarea rows="3" cols="80">' + loc.link.prefixUrl + linkParams + '</textarea>';
-				var rn = 'DisableMapKeyboardMovementRequest';
-				me.getSandbox().postRequestByName(rn);
-				dialog.show(loc.link.title, linkContent, [okBtn]);
-			}
-		});
-
-		this.addToolButton('print', 'viewtools', {
+					dialog.show(loc.link.title, linkContent, [okBtn]);
+				}
+			});
+		}	
+		
+		if(this.conf.skipViewtoolsPrint !== true)	{
+			this.addToolButton('print', 'viewtools', {
 			iconCls : 'tool-print',
 			tooltip : loc.print.tooltip,
 			sticky : false,
@@ -129,5 +133,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 				window.open(link, "Print", wopParm);
 			}
 		});
+	}	
+		
 	}
 });

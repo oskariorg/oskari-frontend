@@ -572,11 +572,6 @@ jQuery(document).ready(function() {
     }
     Oskari.setLang(language);
 
-    // if (location.search && location.search.length > 1) {
-    //     ajaxUrl +=
-    //         location.search.substr(1, location.search.length) + '&';
-    // }
-
     Oskari.setLoaderMode('dev');
     Oskari.setPreloaded(false);
 

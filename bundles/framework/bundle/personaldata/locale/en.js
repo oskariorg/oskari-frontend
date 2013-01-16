@@ -50,10 +50,11 @@ Oskari.registerLocalization({
           "delete": " "
         },
         "popup": {
-          "edit": "Change the name of the map view",
+          "edit": "Edit view's information",
           "title": "Save map view",
           "label": "Name of map view:",
-          "placeholder": "Give the map view a name",
+          "name_placeholder": "Give the map view a name",
+          "description_placeholder": "Give the map view a description",
           "save": "Save",
           "cancel": "Cancel",
           "error_noname": "Type the name",

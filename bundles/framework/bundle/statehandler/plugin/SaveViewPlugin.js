@@ -67,11 +67,11 @@ Oskari.clazz
             /**
              * @method saveState
              * Saves current or given application state to server.
-             * @param {String} viewName name for the view
+             * @param {Object} view (name, description)
              * @param {Object} pState view state (optional, uses
              * handler.getCurrentState() if not given)
              */
-            saveState : function(viewName, pState) {
+            saveState : function(view, pState) {
               var state = pState;
               var me = this;
               if (!state) {
@@ -82,12 +82,13 @@ Oskari.clazz
               	currentViewId : me.handler.getCurrentViewId(),
               	viewData : JSON.stringify(state)
               };
-              if (viewName) {
-                data.viewName = viewName;
+              if (view) {
+                data.viewName = view.name;
+                data.viewDescription = view.description;
               }
 
               var builder = me._sandbox.getEventBuilder('StateSavedEvent');
-              var event = builder(viewName, state);
+              var event = builder(data.viewName, state);
               // save to ajaxUrl
               jQuery.ajax(
                 {
@@ -106,7 +107,7 @@ Oskari.clazz
                   },
                   error : function() {
                     // only show error if explicitly calling save
-                    if (viewName) {
+                    if (view) {
                       event.setError(true);
                       me._sandbox.notifyAll(event);
                     }
