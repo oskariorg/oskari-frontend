@@ -66,19 +66,11 @@ function(ajaxUrl) {
 	/**
 	 * @method saveState
 	 * Saves current or given application state to server.
-<<<<<<< HEAD
-	 * @param {Object} view (name, description)
-	 * @param {Object} pState view state (optional, uses
-	 * handler.getCurrentState() if not given)
-	 */
-	saveState : function(view, pState) {
-=======
 	 * @param {String} viewName name for the view
 	 * @param {Object} pState view state (optional, uses
 	 * handler.getCurrentState() if not given)
 	 */
 	saveState : function(viewName, pState) {
->>>>>>> feature/AL-684
 		var state = pState;
 		var me = this;
 		if (!state) {
@@ -89,15 +81,11 @@ function(ajaxUrl) {
 			currentViewId : me.handler.getCurrentViewId(),
 			viewData : JSON.stringify(state)
 		};
-<<<<<<< HEAD
 		if (view) {
 			data.viewName = view.name;
 			data.viewDescription = view.description;
 		}
 
-		var builder = me._sandbox.getEventBuilder('StateSavedEvent');
-		var event = builder(data.viewName, state);
-=======
 		if (viewName) {
 			data.viewName = viewName;
 		}
@@ -105,7 +93,6 @@ function(ajaxUrl) {
 		var builder = me._sandbox.getEventBuilder('StateSavedEvent');
 		var event = builder(viewName, state);
 		
->>>>>>> feature/AL-684
 		//Create Cookie of map state save
 		var cookieviewdata = "mymapview1=" + JSON.stringify(data);
 		// toSource();
@@ -134,11 +121,8 @@ function(ajaxUrl) {
 			},
 			error : function() {
 				// only show error if explicitly calling save
-<<<<<<< HEAD
-				if (view) {
-=======
+
 				if (viewName) {
->>>>>>> feature/AL-684
 					event.setError(true);
 					me._sandbox.notifyAll(event);
 				}
@@ -186,10 +170,8 @@ function(ajaxUrl) {
 			window.onbeforeunload = function() {
 				// save state to session when leaving map window
 				me.saveState();
-<<<<<<< HEAD
-=======
+
 				return null;
->>>>>>> feature/AL-684
 			};
 		});
 	},
