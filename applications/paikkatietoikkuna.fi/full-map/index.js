@@ -571,18 +571,15 @@ jQuery(document).ready(function() {
 	}
 	Oskari.setLang(language);
 
-<<<<<<< HEAD
+
     Oskari.setLoaderMode('dev');
     Oskari.setPreloaded(false);
-=======
+
 	// if (location.search && location.search.length > 1) {
 	//     ajaxUrl +=
 	//         location.search.substr(1, location.search.length) + '&';
 	// }
 
-	Oskari.setLoaderMode('dev');
-	Oskari.setPreloaded(false);
->>>>>>> feature/AL-684
 
 	if (args.oskariLoaderAsync && args.oskariLoaderAsync == 'on') {
 		Oskari.setSupportBundleAsync(true);
