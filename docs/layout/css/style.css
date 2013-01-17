@@ -1,0 +1,105 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: "Trebuchet MS", Helvetica, Arial;
+}
+
+aside {
+    float: left;
+    width: 100px;
+    height: 100%;
+}
+aside #logo {
+    background-image: url('http://www.paikkatietoikkuna.fi/mml-2.0-theme/images/logo.png');
+    float: left;
+    height: 50px;
+    width: 50px;
+    background-repeat: no-repeat;
+    background-position: 15px;
+    margin-left: 25px;
+    margin-top: 25px;
+    cursor: pointer;
+}
+aside .vertical-text {
+    margin-top: 520px;
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+
+    /* also accepts left, right, top, bottom coordinates; not required, but a good idea for styling */
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
+    -ms-transform-origin: 50% 50%;
+    -o-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=1);
+    font-size: 3em;
+    color: #ddd;
+}
+
+nav {
+    float: left;
+    margin: 2em 0.625em;
+}
+
+nav ul.menu {
+    list-style: none;
+}
+
+nav .menu a {
+    display: block;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0.3125em 1em;
+    font-size: 1em;
+    text-decoration: none;
+    cursor: pointer;
+    background-color: #eee;
+    margin: 0.3125em 0em;
+    color: black;
+    width: 180px;
+    overflow: hidden;
+}
+nav .menu .active>a {
+    background-color: #666;
+    color: white;
+}
+
+div.container {
+    float: left;
+    width: 700px;
+    margin-top: 2em;
+    padding: 0.625em;
+    box-sizing: border-box;
+}
+
+li > .submenu-level1>li {
+    display: none;
+}
+li > .submenu-level1 > li > a {
+    padding-left: 2em;
+}
+
+li > .submenu-level2>li {
+    display: none;
+}
+li > .submenu-level2 > li > a {
+    padding-left: 3em;
+}
+
+li.active > .submenu-level1 > li {
+    display: block;
+}
+li.active > .submenu-level2 > li {
+    display: block;
+}

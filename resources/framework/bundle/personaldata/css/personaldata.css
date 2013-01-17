@@ -38,3 +38,8 @@ div.personaldata a.categoryOp {
 div.personaldata a.categoryOp div.icon {
   display: inline-block;
 }
+
+textarea#view_description {
+	resize: none;
+	width: 100%;
+}
