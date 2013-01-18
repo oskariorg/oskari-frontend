@@ -66,32 +66,29 @@ function(ajaxUrl) {
 	/**
 	 * @method saveState
 	 * Saves current or given application state to server.
-	 * @param {String} viewName name for the view
+	 * @param {Object} view (name, description)
 	 * @param {Object} pState view state (optional, uses
 	 * handler.getCurrentState() if not given)
 	 */
-	saveState : function(viewName, pState) {
+	saveState : function(view, pState) {
+
 		var state = pState;
 		var me = this;
 		if (!state) {
 			state = this.handler.getCurrentState();
 		}
-
 		var data = {
 			currentViewId : me.handler.getCurrentViewId(),
 			viewData : JSON.stringify(state)
 		};
+
 		if (view) {
 			data.viewName = view.name;
 			data.viewDescription = view.description;
 		}
 
-		if (viewName) {
-			data.viewName = viewName;
-		}
-
 		var builder = me._sandbox.getEventBuilder('StateSavedEvent');
-		var event = builder(viewName, state);
+		var event = builder(data.viewName, state);
 		
 		//Create Cookie of map state save
 		var cookieviewdata = "mymapview1=" + JSON.stringify(data);
