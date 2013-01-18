@@ -222,7 +222,7 @@ function(plugin) {
                     "&action_route=GET_HIGHLIGHT_WFS_FEATURE_IMAGE";
             var recDraw = function(featureId) {
                 me.plugin.drawImageTile(layer, url + "&wfsFeatureId=" + featureId, 
-                bbox, "HIGHLIGHTED_FEATURE", event.isKeepSelection());
+                bbox, "HIGHLIGHTED_FEATURE", event.isKeepSelection() || featureIdList.length > 1);
             }
             for(var i = 0 ; i < featureIdList.length; ++i) {
                 recDraw(featureIdList[i]);
