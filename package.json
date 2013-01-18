@@ -1,0 +1,21 @@
+{
+    "name" : "OskariTools",
+    "version" : "0.0.1",
+    "description": "Build tools for Oskari applications",
+    "keywords": [ "Oskari"],
+    "main": "grunt.js",
+    "dependencies" : {
+        "uglify-js" : ">=2.2.1",
+        "uglifycss" : ">=0.0.5",
+        "jshint" : ">=0.9.1",
+        "yuidocjs" : ">=0.3.35",
+        "jsdom" : ">=0.3.4",
+        "jasmine-node" : ">=1.0.28",
+        "grunt" : ">=0.3.17",
+        "grunt-cli" : ">=0.1.6",
+        "grunt-contrib-jshint" : ">=0.1.0"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    }
+}

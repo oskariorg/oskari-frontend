@@ -5,4 +5,6 @@ docroot/WEB-INF/classes
 bin/
 dist/
 .idea
+tools/node_modules
+tools/validation
 
