@@ -3,23 +3,29 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
     <title>Oskari</title>
-    <link href="css/style.css" rel="stylesheet">
+    <link href="<%= cssPath %>css/style.css" rel="stylesheet">
 
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('li').click(function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+            var setActive = (function(el) {
+                var currentItem = $("#<%= activeId %>");
+                if(el)
+                    currentItem = el;
                 $('li').removeClass('active');
-                var currentItem = (e.currentTarget.tagName == 'LI') ? $(e.currentTarget) : $(e.currentTarget).parent('li');
                 currentItem.addClass('active');
                 var parent = $(currentItem.parents('li')[0]);
                 while(parent.length > 0) {
                     parent.addClass('active');
                     parent = $(parent.parents('li'));
                 }
+            });
+            setActive();
+
+            $('li').click(function(e){
+                e.stopPropagation();
+                setActive($(e.currentTarget));
             });
         });
     </script>
@@ -31,24 +37,11 @@
     <div class="vertical-text">Oskari&nbsp;-&nbsp;Documentation</div>
 </aside>
 <nav>
-    <ul class="menu">
-        <li class="active"><a href="framework.html">framework</a>
-            <ul class="submenu-level1">
-                <li><a href="mapmodule.html">mapmodule</a>
-                    <ul class="submenu-level2">
-                        <li><a href="geolocation.html">geolocation</a>
-                        </li>
-                        <li><a href="getinfoplugin.html">getinfoplugin</a>
-                        </li>
-                    </ul>
-                </li>
-                <li><a href="coordinatedisplay.html">coordinatedisplay</a>
-            </ul>
-        </li>
+    <ul class="menu"> 
 
-        <li><a href="index.html">index</a>
-        </li>
-    </ul>
+<%- menu %>
+
+    </ul> 
 </nav>
 
 <div class="container">

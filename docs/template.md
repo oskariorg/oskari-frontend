@@ -1,7 +1,13 @@
 # Bundle name
 
-|| Bundle-Identifier || bundle identifier ||
-|| API || link here ||
+<table>
+  <tr>
+    <td>Bundle-Identifier</td><td>bundle identifier</td>
+  </tr>
+  <tr>
+    <td>API</td><td>[link here](<%= apiurl %>link/here)</td>
+  </tr>
+</table>
 
 ## Description
 
@@ -13,15 +19,15 @@
 
 ## Screenshot
 
-''attach screenshot here''
+![screenshot](<%= docsurl %>images/bundle_id.png)
 
 ## Bundle configuration
 
-{{{
+```javascript
 config : {
   test : 1
 }
-}}}
+```
 
 OR
 
@@ -29,11 +35,11 @@ No configuration is required.
 
 ## Bundle state
 
-{{{
+```javascript
 state : {
   test : 2
 }
-}}}
+```
 
 OR
 
@@ -41,8 +47,14 @@ No statehandling has been implemented.
 
 ## Requests the bundle handles
 
-|| '''Request''' || '''How does the bundle react''' ||
-|| tbd || tbd ||
+<table>
+  <tr>
+    <th>Request</th><th>How does the bundle react</th>
+  </tr>
+  <tr>
+    <td>tbd</td><td>tbd</td>
+  </tr>
+</table>
 
 OR
 
@@ -50,36 +62,60 @@ This bundle doesn't handle any requests.
 
 ## Requests the bundle sends out
 
-|| '''Request''' || '''Why/when''' ||
-|| tbd || tbd ||
+<table>
+  <tr>
+    <th>Request</th><th>Why/when</th>
+  </tr>
+  <tr>
+    <td>tbd</td><td>tbd</td>
+  </tr>
+</table>
 
-OR 
+OR
 
 This bundle doesn't send out any requests.
 
 ## Events the bundle listens to
 
-|| '''Event''' || '''How does the bundle react''' ||
-|| tbd || tbd ||
+<table>
+  <tr>
+    <th>Event</th><th>How does the bundle react</th>
+  </tr>
+  <tr>
+    <td>tbd</td><td>tbd</td>
+  </tr>
+</table>
 
-OR 
+OR
 
 This bundle doesn't listen to any events.
 
 ## Events the bundle sends out
 
-|| '''Event''' || '''Why/when''' ||
-|| tbd || tbd ||
+<table>
+  <tr>
+    <th>Event</th><th>Why/when</th>
+  </tr>
+  <tr>
+    <td>tbd</td><td>tbd</td>
+  </tr>
+</table>
 
-OR 
+OR
 
 This bundle doesn't send out any events.
 
 ## Dependencies (e.g. jquery plugins)
 
-|| '''Dependency''' || '''Linked from''' || '''API''' || '''Purpose''' ||
-|| tbd || link here || link here|| tbd ||
+<table>
+  <tr>
+    <th>Dependency</th><th>Linked from</th><th>Purpose</th>
+  </tr>
+  <tr>
+    <td>[Library name](#link)</td><td>src where its linked from</td><td>*why/where we need this dependency*</td>
+  </tr>
+</table>
 
-OR 
+OR
 
 This bundle doesn't have any dependencies.
