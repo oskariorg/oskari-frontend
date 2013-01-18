@@ -1,29 +1,35 @@
 # Portti2 Zoombar
 
-|| Name || Portti2Zoombar ||
-|| ID || portti2zoombar ||
-|| API || [//docs/oskari/api/#!/api/Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar link] ||
-|| Description || The plugin offers the user a zoom control for the map. Gets the initial zoom level from the map it is registered to when started. ||
+<table>
+  <tr>
+    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar)</td>
+  </tr>
+</table>
+
+### Description
+
+The plugin offers the user a zoom control for the map. Gets the initial zoom level from the map it is registered to when started.
 
 ### TODO
 
 * Tooltips
 
 ### Screenshot
-[[Image(zoombar.png)]]
+
+![screenshot](<%= docsurl %>images/zoombar.png)
 
 ### Bundle configuration
 
 No configuration is required, but optionally location can be overridden by giving:
 
-{{{
+```javascript
 {
-location : {
-top : '10px',
-left : '10px'
+  location : {
+    top : '10px',
+    left : '10px'
+  }
 }
-}
-}}}
+```
 
 Bottom and right can also be used.
 
@@ -35,8 +41,6 @@ This plugin doesn't handle any requests.
 
 This plugin doesn't sends any requests.
 
-
-
 ### Events the plugin listens to
 
 || Event || How does the bundle react ||
@@ -46,8 +50,12 @@ This plugin doesn't sends any requests.
 
 This bundle doesn't send any events.
 
-### Dependencies (e.g. jquery plugins) 
+### Dependencies (e.g. jquery plugins)
 
-|| Dependency || Linked from || API || Purpose ||
-|| jQuery || Linked in portal theme || [http://api.jquery.com/] || Used to create the component UI from begin to end ||
-|| RightJS slider || [https://github.com/nls-oskari/oskari/blob/master/libraries/rightjs/javascripts/right/slider.js] || [http://rightjs.org/ui/tooltips/] || RightJS UI component for slider - used to show zoombar || 
+<table>
+  <tr>
+    <th>Dependency</th><th>Linked from</th><th>Purpose</th>
+  </tr>
+  <tr><td> [jQuery](http://api.jquery.com/) </td><td> Version 1.7.1 assumed to be linked </td><td> Used to create the UI</td></tr>
+  <tr><td> [RightJS slider](http://rightjs.org/ui/slider) </td><td> https://github.com/nls-oskari/oskari/blob/master/libraries/rightjs/javascripts/right/slider.js </td><td> RightJS UI component for slider - used to show zoombar </td></tr>
+</table>

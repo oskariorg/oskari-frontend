@@ -1,19 +1,22 @@
 # Get Info Plugin
 
-|| Bundle-Identifier || Found in bunlde mapmodule ||
-|| API || [//docs/oskari/api/#!/api/Oskari.mapframework.mapmodule.GetInfoPlugin link] ||
+<table>
+  <tr>
+    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.mapmodule.GetInfoPlugin)</td>
+  </tr>
+</table>
 
 ## Description
+
 This plugin provides view of the from GetFeatureInfo and similar results what are processed in backend
 
 ## Screenshot
-[[Image(gfi_query.png, nolink)]]
 
+![screenshot](<%= docsurl %>images/gfi_query.png)
 
 ### Bundle configuration
 
-No configuration is required. 
-
+No configuration is required.
 
 ### Requests the plugin handles
 
@@ -25,11 +28,12 @@ This plugin doesn't sends out any requests
 
 ## Events the bundle listens to
 
-|| Event || How does the bundle react ||
-|| EscPressedEvent || Closing GetInfo "popup" from screen. ||
-|| MapClickedEvent || Send ajax request to backend system. ||
-|| AfterMapMoveEvent || Cancel ajax request. ||
-
+<table>
+<tbody><tr><td> Event </td><td> How does the bundle react
+</td></tr><tr><td> EscPressedEvent </td><td> Closing GetInfo "popup" from screen.
+</td></tr><tr><td> MapClickedEvent </td><td> Send ajax request to backend system.
+</td></tr><tr><td> AfterMapMoveEvent </td><td> Cancel ajax request.
+</td></tr></tbody></table>
 
 ### Events the plugin sends out
 
@@ -37,7 +41,9 @@ This bundle doesn't send any events.
 
 ### Dependencies (e.g. jquery plugins)
 
-|| Dependency || Linked from || API || Purpose ||
-|| jQuery || Version 1.7.1 assumed to be linked (on page locally in portal) || http://api.jquery.com/ || Used to create the UI ||
-|| InfoBoxBundle || Oskari's InfoBoxBundle || [http://www.oskari.org/trac/wiki/DocumentationBundleInfobox InfoBoxBundle] || That handles the infobox as an Openlayers popup with customized UI||
-|| Backend functionality || N/A || [wiki:DocumentationBundleMapModulePluginGetInfoPluginBackend Backend API] || Get info is handle in backend ||
+<table>
+<tr><th> Dependency </th><th> Linked from </th><th> Purpose</th></tr>
+<tr><td> [jQuery](http://api.jquery.com/) </td><td> Version 1.7.1 assumed to be linked (on page locally in portal) </td><td> Used to create the UI
+</td></tr><tr><td> [Oskari infobox](<%= docsurl %>framework/infobox.html) </td><td> Oskari's InfoBoxBundle </td><td> That handles the infobox as an Openlayers popup with customized UI
+</td></tr><tr><td> [Backend API](<%= docsurl %>backend/mapmodule/getinfoplugin.html) </td><td> N/A </td><td> Get info is handle in backend
+</td></tr></table>
