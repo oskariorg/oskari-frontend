@@ -193,14 +193,6 @@ function(name,viewClazz) {
     },
     
     /**
-     * @method require
-     */
-    require : function(requirementsConfig,requirements) {
-        require.config(requirementsConfig);
-        require.apply(require,arguments);
-    },
-    
-    /**
      * @method getConfiguration
      */
     getConfiguration : function() {

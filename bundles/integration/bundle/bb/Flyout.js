@@ -42,11 +42,7 @@ function(instance, locale, ui) {
         var ui = me.ui;
         ui.setEl(me.container);
         
-        var requirementsConfig = ui.requirementsConfig; 
-        var requirements = ui.requirements;
-        me.instance.require(requirementsConfig,requirements, function() {
-            ui.render.apply(ui, arguments);
-        });
+        ui.render();
     },
     stopPlugin : function() {
         this.container.empty();
