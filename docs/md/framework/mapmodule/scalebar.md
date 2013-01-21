@@ -6,27 +6,27 @@
   </tr>
 </table>
 
-###Description
+##Description
 
 The plugin adds a scale bar to the map it is registered to.
 
-### Screenshot
+## Screenshot
 
 ![screenshot](<%= docsurl %>images/scalebar.png)
 
-### Bundle configuration
+## Bundle configuration
 
 No configuration is required.
 
-### Requests the plugin handles
+## Requests the plugin handles
 
 This plugin doesn't handle any requests.
 
-### Requests the plugin sends out
+## Requests the plugin sends out
 
 This plugin doesn't sends any requests.
 
-### Events the plugin listens to
+## Events the plugin listens to
 
 <table>
   <tr>
@@ -37,17 +37,19 @@ This plugin doesn't sends any requests.
   </tr>
 </table>
 
-### Events the plugin sends out
+## Events the plugin sends out
 
 This bundle doesn't send any events.
 
-### Dependencies (e.g. jquery plugins)
+## Dependencies
 
 <table>
   <tr>
     <th>Dependency</th><th>Linked from</th><th>Purpose</th>
   </tr>
   <tr>
-    <td>[OpenLayers](http://openlayers.org/)</td><td>not linked, assumes its linked by map</td><td>Uses OpenLayers.Control.ScaleLine to render the scalebar.</td>
+    <td>[OpenLayers](http://openlayers.org/)</td>
+    <td>not linked, assumes its linked by map</td>
+    <td>Uses OpenLayers.Control.ScaleLine to render the scalebar.</td>
   </tr>
 </table>

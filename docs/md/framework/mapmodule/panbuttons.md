@@ -6,43 +6,47 @@
   </tr>
 </table>
 
-### Description
+## Description
 
 The plugin offers the user a move my by pan buttons
 
-### TODO
+## TODO
 
 * image url config (can be used by mapmodule image path [getImageUrl()])
 
-### Screenshot
+## Screenshot
 
 ![screenshot](<%= docsurl %>images/panbuttons.png)
 
-### Bundle configuration
+## Bundle configuration
 
 No configuration is required.
 
-### Requests the plugin handles
+## Requests the plugin handles
 
 This plugin doesn't handle any requests.
 
-### Requests the plugin sends out
+## Requests the plugin sends out
 
 This plugin doesn't sends any requests.
 
+## Events the plugin listens to
 
+This bundle doesn't listen to any events.
 
-### Events the plugin listens to
-
-
-### Events the plugin sends out
+## Events the plugin sends out
 
 This bundle doesn't send any events.
 
-### Dependencies (e.g. jquery plugins)
+## Dependencies
 
 <table>
   <tr>
     <th>Dependency</th><th>Linked from</th><th>Purpose</th>
-  </tr><tr><td> [jQuery](http://api.jquery.com/) </td><td> Version 1.7.1 assumed to be linked </td><td> Used to create the UI
-</td></tr></tbody></table>
+  </tr>
+  <tr>
+    <td> [jQuery](http://api.jquery.com/) </td>
+    <td> Version 1.7.1 assumed to be linked </td>
+    <td> Used to create the UI</td>
+  </tr>
+</table>

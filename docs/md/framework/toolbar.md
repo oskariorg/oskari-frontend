@@ -2,7 +2,7 @@
 
 <table>
   <tr>
-    <td>Bundle-Identifier</td><td>toolbar</td>
+    <td>ID</td><td>toolbar</td>
   </tr>
   <tr>
     <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance)</td>
@@ -30,33 +30,51 @@ No configuration is required.
 
 ```javascript
 state : {
-    selected : {
-        id : '<id for the selected button>',
-        group: '<group for the selected button>'
-    }
+  selected : {
+    id : '<id for the selected button>',
+    group: '<group for the selected button>'
+  }
 }
 ```
 
 ## Requests the bundle handles
 
 <table>
-<tbody><tr><th>Request</th><th>How does the bundle react</th></tr>
-<tr><td> Toolbar.AddToolButtonRequest </td><td> tbd
-</td></tr><tr><td> Toolbar.RemoveToolButtonRequest </td><td> tbd
-</td></tr><tr><td> Toolbar.ToolButtonStateRequest </td><td> tbd
-</td></tr><tr><td> Toolbar.SelectToolButtonRequest </td><td> tbd
-</td></tr></tbody></table>
+  <tr>
+    <th>Request</th><th>How does the bundle react</th>
+  </tr>
+  <tr>
+    <td> Toolbar.AddToolButtonRequest </td><td> tbd</td>
+  </tr>
+  <tr>
+    <td> Toolbar.RemoveToolButtonRequest </td><td> tbd</td>
+  </tr>
+  <tr>
+    <td> Toolbar.ToolButtonStateRequest </td><td> tbd</td>
+  </tr>
+  <tr>
+    <td> Toolbar.SelectToolButtonRequest </td><td> tbd</td>
+  </tr>
+</table>
 
 ## Requests the bundle sends out
 
 Currently default buttons send out requests but these should be defined in bundles that use toolbar.
 
 <table>
-<tbody><tr><th>Request</th><th>Why/when</th></tr>
-<tr><td> ToolSelectionRequest </td><td> tbd
-</td></tr><tr><td> StateHandler.SetStateRequest </td><td> tbd
-</td></tr><tr><td> ClearHistoryRequest </td><td> tbd
-</td></tr></tbody></table>
+  <tr>
+    <th>Request</th><th>Why/when</th>
+  </tr>
+  <tr>
+    <td> ToolSelectionRequest </td><td> tbd</td>
+  </tr>
+  <tr>
+    <td> StateHandler.SetStateRequest </td><td> tbd</td>
+  </tr>
+  <tr>
+    <td> ClearHistoryRequest </td><td> tbd</td>
+  </tr>
+</table>
 
 This bundle doesn't send out any requests.
 
@@ -67,11 +85,15 @@ This bundle doesn't listen to any events.
 ## Events the bundle sends out
 
 <table>
-<tbody><tr><th>Event</th><th>Why/when</th></tr>
-<tr><td> Toolbar.ToolSelectedEvent </td><td> Notifies that a tool has been selected. If bundle has own toolbar buttons, they should listen to this and act if the functionality has been canceled and clean up anything they might have on screen regarding that tool. The event specifies the new tool id/group which has been selected.
-</td></tr></tbody></table>
+  <tr>
+    <th>Event</th><th>Why/when</th>
+  </tr>
+  <tr>
+    <td> Toolbar.ToolSelectedEvent </td><td> Notifies that a tool has been selected. If bundle has own toolbar buttons, they should listen to this and act if the functionality has been canceled and clean up anything they might have on screen regarding that tool. The event specifies the new tool id/group which has been selected.</td>
+  </tr>
+</table>
 
-## Dependencies (e.g. jquery plugins)
+## Dependencies
 
 Depends on an element with id "toolbar" to be present on DOM.
 Print and link buttons require mapfull bundle, Oskari.userinterface.component.Popup and Oskari.userinterface.component.Button from divmanazer bundle.
@@ -80,5 +102,9 @@ Print and link buttons require mapfull bundle, Oskari.userinterface.component.Po
   <tr>
     <th>Dependency</th><th>Linked from</th><th>Purpose</th>
   </tr>
-  <tr><td> [jQuery](http://api.jquery.com/) </td><td> Version 1.7.1 assumed to be linked (on page locally in portal) </td><td> Used to create tool buttons/HTML
-</td></tr></tbody></table>
+  <tr>
+    <td> [jQuery](http://api.jquery.com/) </td>
+    <td> Version 1.7.1 assumed to be linked (on page locally in portal) </td>
+    <td> Used to create tool buttons/HTML</td>
+  </tr>
+</table>

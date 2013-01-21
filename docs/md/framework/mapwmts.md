@@ -1,4 +1,4 @@
-# Bundle name
+# Map WMTS
 
 <table>
   <tr>
@@ -19,7 +19,7 @@
 
 ## Screenshot
 
-![screenshot](<%= docsurl %>images/bundle_id.png)
+''attach screenshot here''
 
 ## Bundle configuration
 

@@ -12,15 +12,15 @@ This plugin provides a maplayer selection "dropdown" on top of the map.
 
 ## Screenshot
 
-### Closed
+## Closed
 
 ![closed](<%= docsurl %>images/layerselection_closed.png)
 
-### Open
+## Open
 
 ![open](<%= docsurl %>images/layerselection_open.png)
 
-### Bundle configuration
+## Bundle configuration
 
 ```javascript
 {
@@ -31,30 +31,38 @@ This plugin provides a maplayer selection "dropdown" on top of the map.
 
 Configuration is not required, but it can be used to set some selected layers as "base layers". Baselayers differ from normal layers that only one base layer is shown at a time.
 
-### Requests the plugin handles
+## Requests the plugin handles
 
 This plugin doesn't handle any requests.
 
-### Requests the plugin sends out
+## Requests the plugin sends out
 
 <table>
   <tr>
     <th>Request</th><th>Why/when</th>
-  </tr><tr><td>MapModulePlugin.MapLayerVisibilityRequest </td><td> Controls map layer selection by hiding map layers and making them visible on the map
-</td></tr></table>
+  </tr>
+  <tr>
+    <td>MapModulePlugin.MapLayerVisibilityRequest </td><td> Controls map layer selection by hiding map layers and making them visible on the map</td>
+  </tr>
+</table>
 
-### Events the plugin listens to
+## Events the plugin listens to
 
 This plugin doesn't listen any events.
 
-### Events the plugin sends out
+## Events the plugin sends out
 
 This bundle doesn't send any events.
 
-### Dependencies (e.g. jquery plugins)
+## Dependencies
 
 <table>
   <tr>
     <th>Dependency</th><th>Linked from</th><th>Purpose</th>
-  </tr><tr><td> [jQuery](http://api.jquery.com/) </td><td> Version 1.7.1 assumed to be linked (on page locally in portal) </td><td> Used to create the UI
-</td></tr></tbody></table>
+  </tr>
+  <tr>
+    <td> [jQuery](http://api.jquery.com/) </td>
+    <td> Version 1.7.1 assumed to be linked (on page locally in portal) </td>
+    <td> Used to create the UI</td>
+  </tr>
+</table>

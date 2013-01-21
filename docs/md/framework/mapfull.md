@@ -2,7 +2,7 @@
 
 <table>
   <tr>
-    <td>Bundle-Identifier</td><td>mapfull</td>
+    <td>ID</td><td>mapfull</td>
   </tr>
   <tr>
     <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.mapfull.MapFullBundleInstance)</td>
@@ -119,7 +119,7 @@ This bundle doesn't listen to any events, but initializes Oskari.mapframework.ui
 
 This bundle doesn't send out any events, but initializes Oskari.mapframework.core.Core, Oskari.mapframework.service.MapLayerService, Oskari.mapframework.ui.module.common.MapModule which send out many events.
 
-## Dependencies (e.g. jquery plugins)
+## Dependencies
 
 <table>
   <tr>
@@ -129,11 +129,6 @@ This bundle doesn't send out any events, but initializes Oskari.mapframework.cor
     <td> [jQuery](http://api.jquery.com/) </td>
     <td> Version 1.7.1 assumed to be linked (on page locally in portal) </td>
     <td> Used to handle map element sizing </td>
-  </tr>
-  <tr>
-    <td> [Oskari mapmodule](<%= docsurl %>framework/mapmodule.html) </td>
-    <td> Expects to be present in application setup </td>
-    <td> To initialize and show the map on UI </td>
   </tr>
   <tr>
     <td> [OpenLayers](http://openlayers.org/) </td>
@@ -151,7 +146,12 @@ This bundle doesn't send out any events, but initializes Oskari.mapframework.cor
     <td> Adds support for WMTS maplayers in maplayer service and map module. </td>
   </tr>
   <tr>
-    <td> [Oskari mapmodule plugin bundles](<%= docsurl %>framework/mapmodule.html) </td>
+    <td> [Oskari mapmodule](<%= docsurl %>framework/mapmodule.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> To initialize and show the map on UI </td>
+  </tr>
+  <tr>
+    <td> [Oskari mapmodule plugins](<%= docsurl %>framework/mapmodule.html) </td>
     <td> Expects to be present in application setup </td>
     <td> Any bundle providing a map plugin referenced in config needs to be loaded before starting this bundle </td>
   </tr>

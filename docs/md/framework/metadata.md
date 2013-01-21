@@ -2,10 +2,10 @@
 
 <table>
   <tr>
-    <td>Bundle-Identifier</td><td>metadata</td>
+    <td>ID</td><td>metadata</td>
   </tr>
   <tr>
-    <td>API</td><td>[link here](<%= apiurl %>link/here)</td>
+    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.metadata.MetadataSearchInstance)</td>
   </tr>
 </table>
 
@@ -52,14 +52,25 @@ This bundle doesn't listen to any events.
 
 This bundle doesn't send out any events.
 
-## Dependencies (e.g. jquery plugins)
+## Dependencies
 
 <table>
   <tr>
     <th>Dependency</th><th>Linked from</th><th>Purpose</th>
   </tr>
-<tr><td> [jQuery](http://api.jquery.com/) </td><td> Version 1.7.1 assumed to be linked (on page locally in portal) </td><td> Used to create the component UI from begin to end
-</td></tr><tr><td> [Oskari mapmodule](<%= docsurl %>framework/mapmodule.html) </td><td> Expects to be present in application setup </td><td> To register plugin to map/gain control to Openlayers map
-</td></tr><tr><td> [OpenLayers](http://openlayers.org/) </td><td> Expects OpenLayers already linked </td><td>
-</td></tr>
+  <tr>
+    <td> [jQuery](http://api.jquery.com/) </td>
+    <td> Version 1.7.1 assumed to be linked (on page locally in portal) </td>
+    <td> Used to create the component UI from begin to end</td>
+  </tr>
+  <tr>
+    <td> [Oskari mapmodule](<%= docsurl %>framework/mapmodule.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> To register plugin to map/gain control to Openlayers map</td>
+  </tr>
+  <tr>
+    <td> [OpenLayers](http://openlayers.org/) </td>
+    <td> Expects OpenLayers already linked </td>
+    <td></td>
+  </tr>
 </table>
