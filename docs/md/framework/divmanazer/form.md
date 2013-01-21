@@ -14,7 +14,7 @@ events like keypresses and focus changes.
 
 ## Usage
 
-### Simple one-field form ===
+### Simple one-field form
 
 ```javascript
 var form = Oskari.clazz.create('Oskari.userinterface.component.Form');
