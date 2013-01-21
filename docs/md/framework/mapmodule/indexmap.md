@@ -12,40 +12,50 @@ This plugin adds an indexmap for the map it is registered to.
 
 ## Screenshot
 
-### Closed
+## Closed
 
 ![closed](<%= docsurl %>images/indexmap_closed.png)
 
-### Open
+## Open
 
 ![open](<%= docsurl %>images/indexmap_open.png)
 
-### Bundle configuration
+## Bundle configuration
 
 No configuration is required.
 
-### Requests the plugin handles
+## Requests the plugin handles
 
 This plugin doesn't handle any requests.
 
-### Requests the plugin sends out
+## Requests the plugin sends out
 
 This plugin doesn't sends any requests.
 
-### Events the plugin listens to
+## Events the plugin listens to
 
 <table>
-<tbody><tr><td> Event </td><td> How does the bundle react
-</td></tr><tr><td> AfterMapMoveEvent </td><td> Updates ui to current map location
-</td></tr></tbody></table>
+  <tr>
+    <td> Event </td><td> How does the bundle react</td>
+  </tr>
+  <tr>
+    <td> AfterMapMoveEvent </td><td> Updates ui to current map location</td>
+  </tr>
+</table>
 
-### Events the plugin sends out
+## Events the plugin sends out
 
 This bundle doesn't send any events.
 
-### Dependencies (e.g. jquery plugins)
+## Dependencies
 
 <table>
-<tbody><tr><td> Dependency </td><td> Linked from </td><td> API </td><td> Purpose
-</td></tr><tr><td> OpenLayers </td><td> not linked, assumes its linked by map </td><td> see mapmodule </td><td> Uses OpenLayers.Control.OverviewMap to render the index map.
-</td></tr></tbody></table>
+  <tr>
+    <td> Dependency </td><td> Linked from </td><td> Purpose</td>
+  </tr>
+  <tr>
+    <td> [OpenLayers](http://openlayers.org/) </td>
+    <td> not linked, assumes its linked by map </td>
+    <td> Uses OpenLayers.Control.OverviewMap to render the index map.</td>
+  </tr>
+</table>

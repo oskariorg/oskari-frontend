@@ -2,7 +2,7 @@
 
 <table>
   <tr>
-    <td>Bundle-Identifier</td><td>infobox</td>
+    <td>ID</td><td>infobox</td>
   </tr>
   <tr>
     <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance)</td>
@@ -39,10 +39,16 @@ state : {
 ## Requests the bundle handles
 
 <table>
-<tbody><tr><th>Request</th><th>How does the bundle react</th></tr>
-<tr><td> InfoBox.ShowInfoBoxRequest </td><td> Infobox is opened on given location and with given content based on request data
-</td></tr><tr><td> InfoBox.HideInfoBoxRequest </td><td> Infobox is removed - single box if id is given or all if not specified
-</td></tr></tbody></table>
+  <tr>
+    <th>Request</th><th>How does the bundle react</th>
+  </tr>
+  <tr>
+    <td> InfoBox.ShowInfoBoxRequest </td><td> Infobox is opened on given location and with given content based on request data</td>
+  </tr>
+  <tr>
+    <td> InfoBox.HideInfoBoxRequest </td><td> Infobox is removed - single box if id is given or all if not specified</td>
+  </tr>
+</table>
 
 ## Requests the bundle sends out
 
@@ -56,10 +62,25 @@ This bundle doesn't listen to any events.
 
 This bundle doesn't send out any events.
 
-## Dependencies (e.g. jquery plugins)
+## Dependencies
 
 <table>
-<tbody><tr><th>Dependency</th><th>Linked from</th><th>Purpose</th></tr>
-  <tr><td> [jQuery](http://api.jquery.com/) </td><td> Version 1.7.1 assumed to be linked (on page locally in portal) </td><td> Used to create the component UI from begin to end </td></tr><tr><td> [Oskari mapmodule](<%= docsurl %>framework/mapmodule.html)</td><td> Expects to be present in application setup </td><td> To register plugin to map/gain control to Openlayers map
-</td></tr><tr><td> [OpenLayers](http://openlayers.org/) </td><td> Expects OpenLayers already linked </td><td> To control map and show an Openlayers popup on it
-</td></tr></tbody></table>
+  <tr>
+    <th>Dependency</th><th>Linked from</th><th>Purpose</th>
+  </tr>
+  <tr>
+    <td> [jQuery](http://api.jquery.com/) </td>
+    <td> Version 1.7.1 assumed to be linked (on page locally in portal) </td>
+    <td> Used to create the component UI from begin to end </td>
+  </tr>
+  <tr>
+    <td> [OpenLayers](http://openlayers.org/) </td>
+    <td> Expects OpenLayers already linked </td>
+    <td> To control map and show an Openlayers popup on it</td>
+  </tr>
+  <tr>
+    <td> [Oskari mapmodule](<%= docsurl %>framework/mapmodule.html)</td>
+    <td> Expects to be present in application setup </td>
+    <td> To register plugin to map/gain control to Openlayers map</td>
+  </tr>
+</table>

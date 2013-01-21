@@ -10,7 +10,7 @@ var program = require("commander"),
 
 /*
  * Configurations
- */ 
+ */
 
 var markdownDirectory = "md";
 var tmpMdDirectory = "tmp";
@@ -73,7 +73,7 @@ var parseFiles = function(files, topicsHtml) {
             setMdVariables(files[file]);
             parseFile(files[file], topic, topicsHtml);
         }
-    }   
+    }
 }
 
 
@@ -85,7 +85,7 @@ var setMdVariables = function(file) {
         }
 
         fs.writeFile(path.join(tmpMdDirectory, file), md, "utf-8", function (err2) {
-            if(err2) { 
+            if(err2) {
                 console.log(err2);
                 console.log("Exiting..");
                 process.exit(-1);
@@ -100,7 +100,7 @@ var parseFile = function(file, topic, topicsHtml) {
     var cwd = process.cwd();
     var output = file.substr(0, file.lastIndexOf(".")) + ".html";
     var pathLength = file.split("\\").length - 1;
-    
+
     // create css path
     var cssPath = "";
     for (var c = 0; c < pathLength; c++) {
@@ -118,14 +118,14 @@ var parseFile = function(file, topic, topicsHtml) {
             "activeId": topic,
         } //data that gets passed into template
     }, function(err, html) {
-        if(err) { 
+        if(err) {
             console.log(err);
             console.log("Exiting..");
             process.exit(-1);
         }
 
         fs.writeFile(path.join(destinationDirectory, output), html, "utf-8", function (err2) {
-            if(err2) { 
+            if(err2) {
                 console.log(err2);
                 console.log("Exiting..");
                 process.exit(-1);
@@ -205,7 +205,7 @@ var run = function() {
                     dirMd = dirMd[filePath[j]];
                     dirHtml = dirHtml[filePath[j]];
                 }
-                
+
                 // add file
                 filename = tmp.slice(-1)[0];
                 dirMd[filename] = res[i];
@@ -213,6 +213,7 @@ var run = function() {
                 // add menu item
                 topic = filename.substr(0, filename.lastIndexOf("."));
                 output = res[i].substr(0, res[i].lastIndexOf(".")) + ".html";
+                output = output.replace(/\\/g, "/");
 
                 dirHtml[topic] = program.docsurl + output;
             }
