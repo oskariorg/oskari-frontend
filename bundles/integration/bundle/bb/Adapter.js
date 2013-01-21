@@ -103,13 +103,13 @@ function(name,viewClazz) {
         me.sandbox = sandbox;
         sandbox.register(this);
 
+        /* stateful */
+        sandbox.registerAsStateful(this.mediator.bundleId, this);
 
         var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
 
         sandbox.request(this, request);
 
-        /* stateful */
-        sandbox.registerAsStateful(this.mediator.bundleId, this);
 
     },
     /**
@@ -198,6 +198,7 @@ function(name,viewClazz) {
     getConfiguration : function() {
         return this.conf;
     }
+    
 }, {
     protocol : ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
 });
