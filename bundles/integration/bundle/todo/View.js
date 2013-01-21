@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
      * defined order.
      */
     "render" : function() {
-
+        var me = this;
         var container = this.getEl();
         container.addClass("todo");
 
@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
         require(requirements, function(ToDoView) {
 
             // Finally, we kick things off by creating the **App**.
-            this.view = new ToDoView({
+            me.view = new ToDoView({
                 el : container
             });
         });
