@@ -8,7 +8,12 @@
  *
  */
 Oskari.clazz.define("Oskari.integration.bundle.bb.BackBoneBundle", function() {
-
+    
+    /**
+     * @property conf
+     * injected configuration for this singleton bundle instance
+     */
+    this.conf = null;
 }, {
     "create" : function() {
 
@@ -66,6 +71,12 @@ Oskari.clazz.define("Oskari.integration.bundle.bb.BackBoneBundle", function() {
                 },
                 "Copyleft" : {
                     "License" : {
+                        "License-Scope" : "implementation",
+                        "License-Name" : "MIT",
+                        "License-Online-Resource" : "https://github.com/documentcloud/backbone/blob/master/LICENSE"
+                    },
+                    "License" : {
+                        "License-Scope" : "package",
                         "License-Name" : "EUPL",
                         "License-Online-Resource" : "http://www.paikkatietoikkuna.fi/license"
                     }

@@ -2,10 +2,11 @@
  * @class Oskari.integration.bundle.bb.View
  * 
  */
-Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instance) {
+Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instance,conf) {
     this.locale = locale;
     this.view = null;
     this.instance = instance;
+    this.conf = conf;
 }, {
     /**
      * @method setEl
@@ -47,6 +48,15 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      */
     "getLocalization" : function() {
         return this.locale;
+    },
+    
+    /**
+     * @method getConfiguration
+     * 
+     * gets configuration for this bundle
+     */
+    "getConfiguration" : function() {
+        return this.conf;  
     },
     
     /**

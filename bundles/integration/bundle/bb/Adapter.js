@@ -141,7 +141,7 @@ function(name,viewClazz) {
         var locFlyout = me.getLocalization('flyout');
         
         var viewCls = this._viewClazz ;        
-        var view = Oskari.clazz.create(viewCls,this.getLocalization('view'),this);
+        var view = Oskari.clazz.create(viewCls,this.getLocalization('view'),this,this.getConfiguration());
         this.view = view;
         
         for(p in view.eventHandlers) {
@@ -198,6 +198,13 @@ function(name,viewClazz) {
     require : function(requirementsConfig,requirements) {
         require.config(requirementsConfig);
         require.apply(require,arguments);
+    },
+    
+    /**
+     * @method getConfiguration
+     */
+    getConfiguration : function() {
+        return this.conf;
     }
 }, {
     protocol : ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']

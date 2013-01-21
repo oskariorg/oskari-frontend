@@ -1,31 +1,31 @@
 /**
  * @class Oskari.integration.bundle.todo.ToDoBundle
- * 
+ *
  * This WILL Contain following items
- * 
- * 1) Backbone View container derived from 
+ *
+ * 1) Backbone View container derived from
  *      Oskari.integration.bundle.bb.View
  * - a reference to implementing file in /bundles...
- *  
- * 2) LOCALISATION file references 
+ *
+ * 2) LOCALISATION file references
  * - references to locale implementation files in bundles/.../locale/*.js
- *  
- * 3) Call to Create the BackboneJS Oskari Adapter with appropriate 
+ *
+ * 3) Call to Create the BackboneJS Oskari Adapter with appropriate
  * parameters: <Bundle-Name>, <View Class Name>
- * 
+ *
  * - <Bundle-Name> will be used as key in localisation files
  * - <Bundle-Name> will be used as key to communicating with Oskari sandbox
- * 
+ *
  * 4) Any reference to CSS files in resources folder
- *      
+ *
  *
  */
 Oskari.clazz.define("Oskari.integration.bundle.todo.ToDoBundle", function() {
 
 }, {
     "create" : function() {
-
-        return Oskari.clazz.create("Oskari.integration.bundle.bb.AdapterBundleInstance", 
+        return Oskari.clazz.create(
+            "Oskari.integration.bundle.bb.AdapterBundleInstance", 
             "todo", 
             "Oskari.integration.bundle.todo.View");
 
@@ -39,7 +39,10 @@ Oskari.clazz.define("Oskari.integration.bundle.todo.ToDoBundle", function() {
     }
 }, {
 
-    "protocol" : ["Oskari.bundle.Bundle", "Oskari.bundle.BundleInstance", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
+    "protocol" : [
+        "Oskari.bundle.Bundle", 
+        "Oskari.bundle.BundleInstance", 
+        "Oskari.mapframework.bundle.extension.ExtensionBundle"],
     "source" : {
         "scripts" : [{
             "type" : "text/javascript",
@@ -72,14 +75,21 @@ Oskari.clazz.define("Oskari.integration.bundle.todo.ToDoBundle", function() {
                 "Name" : "jjk",
                 "Organisation" : "nls.fi",
                 "Temporal" : {
-                    "Start" : "2012",
-                    "End" : "2012"
+                    "Start" : "2013",
+                    "End" : "2013"
                 },
                 "Copyleft" : {
                     "License" : {
+                        "License-Scope" : "implementation",
+                        "License-Name" : "MIT",
+                        "License-Online-Resource" : "https://github.com/documentcloud/backbone/blob/master/LICENSE"
+                    },
+                    "License" : {
+                        "License-Scope" : "package",
                         "License-Name" : "EUPL",
                         "License-Online-Resource" : "http://www.paikkatietoikkuna.fi/license"
                     }
+                    
                 }
             }],
             "Bundle-Version" : "1.0.0",
