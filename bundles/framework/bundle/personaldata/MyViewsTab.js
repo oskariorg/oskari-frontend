@@ -17,7 +17,7 @@ function(instance, localization) {
     this.template = jQuery('<div class="viewsList volatile"></div>');
     this.templateLink = jQuery('<a href="JavaScript:void(0);"></a>');
     this.templateDesc = jQuery('<div class="oskarifield"><label for="description"></label>' +
-            '<textarea id="view_description" name="description" placeholder="' + this.loc.popup.name_placeholder + '"></textarea></div>')
+            '<textarea id="view_description" name="description" placeholder="' + this.loc.popup.description_placeholder + '"></textarea></div>')
     this.container = null;
     
     var sandbox = instance.sandbox;
