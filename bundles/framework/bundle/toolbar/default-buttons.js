@@ -120,7 +120,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 			});
 		}	
 		
-/*		if(this.conf.skipViewtoolsPrint !== true)	{
+		if(this.conf.skipViewtoolsPrint !== true)	{
 			this.addToolButton('print', 'viewtools', {
 				iconCls : 'tool-print',
 				tooltip : loc.print.tooltip,
@@ -134,6 +134,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 				}
 			});
 		}	
-*/		
+		
 	}
 });
