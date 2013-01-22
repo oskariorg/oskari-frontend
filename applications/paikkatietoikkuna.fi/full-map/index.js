@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
                 cb(me.instance);
             }
 
-// TODO - KESKEN
+/*// TODO - KESKEN
             var ugStartup = {
                 title : 'Printout',
                 fi : 'Karttatuloste',
@@ -60,7 +60,8 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
                 },
                 instanceProps : {}
             };
-            // var ugStartup =
+*/ 
+           // var ugStartup =
             //     {
             //         'instanceProps': {},
             //         'title': 'Guided Tour',
@@ -79,8 +80,7 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
             //             'Require-Bundle-Instance': [ ]
             //         }
             //     };
-            Oskari.bundle_facade.playBundle(ugStartup, function() {});
-// /TODO - KESKEN
+            //Oskari.bundle_facade.playBundle(ugStartup, function() {});
 
         });
     },

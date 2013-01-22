@@ -46,6 +46,34 @@ Oskari.registerLocalization(
                 	"tooltip" : "Printout scale matches the scale of the map in browser.",
                 	"zoomlevel": "Zoom level"
                 },
+                "settings": {
+                    "label" : "More settings",
+                    "tooltip" : "Make additional settings like format, title, and scale"
+                },
+                "format": {
+                    "label" : "Format",
+                    "tooltip" : "Select file format"
+                },
+                "formats": {
+                    "png": "PNG image",
+                    "pdf": "PDF document"
+                },
+                "mapTitle": {
+                    "label" : "Add title",
+                    "tooltip" : "add a title for the map"
+                },
+                "mapLogo": {
+                    "label" : "Add the logo of Paikkatietoikkuna",
+                    "tooltip" : "You can hide the logo if necessary"
+                },
+                "mapScale": {
+                    "label" : "Add scale to the map",
+                    "tooltip" : "Add scale to the map"
+                },
+                "mapDate": {
+                    "label" : "Add date",
+                    "tooltip" : "You can add date to the print"
+                },
                 "help": "Help",
                 "error": {
                     "title": "Error",
