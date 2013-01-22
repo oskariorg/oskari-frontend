@@ -1,0 +1,92 @@
+
+.mapshare_tweet {
+	
+	/*height: 330px; 
+	 * 
+	 */
+	width : 500px;
+	
+	
+	color: #202020;
+	
+	
+	
+}
+
+.mapshare_tweet img {
+	width: 256px;
+	height: 177px;
+	margin: 8px;
+	border: 1pt solid #c0d0e0;
+	margin-bottom : 8px;
+	border-bottom: 1px solid #E9E9E9;
+    background: white 0px 20px no-repeat;
+    border: 1px solid #a0a0a0;    
+    color: #666;
+	
+}
+
+.mapshare_tweet span {
+	font: 12px/16px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+	padding-left: 8px;
+}
+
+.mapshare_text {
+	float: left;
+	width: 276px;
+	display: inline;
+	height: 220px;
+	margin: 16px;
+	margin-bottom : 8px;
+	
+	border-bottom: 1px solid #E9E9E9;
+    background: white 0px 20px no-repeat;
+    border: 1px solid #E6E6E6;
+    -moz-box-shadow: 0px 3px 2px #a0a0a0;
+    -webkit-box-shadow: 0px 3px 2px #a0a0a0;
+    box-shadow: 0px 3px 2px #a0a0a0;
+    color: #666;
+}
+
+.mapshare_commentary {
+	display: inline;
+	float: right;
+	width: 276px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+.mapshare_comment {
+	margin-left: 8px;
+	margin-right: 8px;
+	padding: 5px;
+ 	background-color : white;
+    
+    -moz-box-shadow: 0px 3px 2px #a0a0a0;
+    -webkit-box-shadow: 0px 3px 2px #a0a0a0;
+    box-shadow: 0px 3px 2px #a0a0a0;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius : 7px;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    
+}
+
+.mapshare_comment_entrybox {
+	margin-left: 8px;
+	margin-right: 8px;
+	padding: 5px;
+ 	background-color : white;
+    
+    -moz-box-shadow: 0px 3px 2px #a0a0a0;
+    -webkit-box-shadow: 0px 3px 2px #a0a0a0;
+    box-shadow: 0px 3px 2px #a0a0a0;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius : 7px;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    
+}
+
+.mapshare_comment_entrybox input {
+	width: 220px;
+}

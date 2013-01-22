@@ -5,7 +5,9 @@
   "dependencies": {
     "marked": ">= 0.1.0",
     "commander": ">= 0.5.2",
-    "markx": "~0.3.0"
+    "markx": ">= 0.3.0",
+    "wrench": ">= 1.4.4",
+    "ejs": ">= 0.8.3"
   },
   "engines": {
     "node": ">= 0.6.0"

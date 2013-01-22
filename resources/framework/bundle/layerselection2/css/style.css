@@ -76,7 +76,8 @@ div.layerselection2 div.layer-tools div.left-tools div.layer-opacity input.opaci
     width: 25px;
 }
 div.layerselection2 div.layer-tools div.right-tools{
-	float:right; 
+    padding-top: 5px;
+    float:right;
 }
 div.layerselection2 div.layer-tools div.right-tools div {
     padding-right: 5px;

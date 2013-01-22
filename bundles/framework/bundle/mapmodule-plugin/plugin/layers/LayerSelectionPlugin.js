@@ -434,7 +434,6 @@ function(config) {
         var builder = sandbox.getRequestBuilder(reqName)
         var request = builder(values.defaultBaseLayer, 0);
         sandbox.request(this, request);
-        //this.(values.defaultBaseLayer, 0);
     },
     /**
      * @method setupLayers

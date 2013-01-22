@@ -1,34 +1,55 @@
 # Scalebar
 
-|| API || [//docs/oskari/api/#!/api/Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin link]  ||
-|| Description || The plugin adds a scale bar to the map it is registered to. ||
+<table>
+  <tr>
+    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin)</td>
+  </tr>
+</table>
 
-### Screenshot
+##Description
 
-[[Image(scalebar.png)]]
+The plugin adds a scale bar to the map it is registered to.
 
-### Bundle configuration
+## Screenshot
+
+![screenshot](<%= docsurl %>images/scalebar.png)
+
+## Bundle configuration
 
 No configuration is required.
 
-### Requests the plugin handles
+## Requests the plugin handles
 
 This plugin doesn't handle any requests.
 
-### Requests the plugin sends out
+## Requests the plugin sends out
 
 This plugin doesn't sends any requests.
 
-### Events the plugin listens to
+## Events the plugin listens to
 
-|| Event || How does the bundle react ||
-|| AfterMapMoveEvent || Updates ui to current zoom level ||
+<table>
+  <tr>
+    <th>Event</th><th>How does the bundle react</th>
+  </tr>
+  <tr>
+    <td>AfterMapMoveEvent</td><td>Updates ui to current zoom level</td>
+  </tr>
+</table>
 
-### Events the plugin sends out
+## Events the plugin sends out
 
 This bundle doesn't send any events.
 
-### Dependencies (e.g. jquery plugins)
+## Dependencies
 
-|| Dependency || Linked from || API || Purpose ||
-|| OpenLayers || not linked, assumes its linked by map || see mapmodule || Uses OpenLayers.Control.ScaleLine to render the scalebar. || 
+<table>
+  <tr>
+    <th>Dependency</th><th>Linked from</th><th>Purpose</th>
+  </tr>
+  <tr>
+    <td>[OpenLayers](http://openlayers.org/)</td>
+    <td>not linked, assumes its linked by map</td>
+    <td>Uses OpenLayers.Control.ScaleLine to render the scalebar.</td>
+  </tr>
+</table>
