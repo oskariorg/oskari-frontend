@@ -46,6 +46,34 @@ Oskari.registerLocalization(
 	                "tooltip" : "Mittakaavataso vastaa toistaiseksi selaimen näkymän mittakaavaa.",
                 	"zoomlevel": "Mittakaavataso"
                 },
+                "settings": {
+                    "label" : "Lisäasetukset",
+                    "tooltip" : "Valitse tulosteen formaatti, otsikko, mittakaava, päivämäärä "
+                },
+                "format": {
+                    "label" : "Tiedostomuoto",
+                    "tooltip" : "Valitse tulosteen tiedostomuoto"
+                },
+                "formats": {
+                    "png": "PNG kuva",
+                    "pdf": "PDF dokumentti"
+                },
+                "mapTitle": {
+                    "label" : "Kartan otsikko",
+                    "tooltip" : "Nimeä kartta"
+                },
+                "mapLogo": {
+                    "label" : "Näytä paikkatietoikkunan logo",
+                    "tooltip" : "Voit halutessasi piilottaa logon"
+                },
+                "mapScale": {
+                    "label" : "Näytä mittakaava",
+                    "tooltip" : "Voit halutessasi lisätä karttaan mittakaavan"
+                },
+                "mapDate": {
+                    "label" : "Näytä päivämäärä",
+                    "tooltip" : "Voit halutessasi lisätä tulosteeseen päivämäärän"
+                },
                 "help": "Ohje",
                 "error": {
                     "title": "Virhe",

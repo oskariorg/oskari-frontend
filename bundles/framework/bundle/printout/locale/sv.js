@@ -46,6 +46,34 @@ Oskari.registerLocalization(
                 	"tooltip" : "Utskriftens skalnivå motsvarar skalnivån i webbläsaren.",
                 	"zoomlevel": "Skalnivå"
                 },
+                "inställningar": { 
+                    "label" : "Mera inställningar", 
+                    "tooltip" : "Gör flera inställningar såsom format, rubrik, och skala" 
+                }, 
+                "format": { 
+                    "label" : "Format", 
+                    "tooltip" : "Välj fil format" 
+                }, 
+                "formats": { 
+                    "png": "PNG build", 
+                    "pdf": "PDF dokument" 
+                }, 
+                "mapTitle": { 
+                    "label" : "Lägg till rubrik", 
+                    "tooltip" : "Lägg till rubrik för kartan" 
+                }, 
+                "mapLogo": { 
+                    "label" : "Lägg till Paikkatietoikkunas logo", 
+                    "tooltip" : "Det är möjligt att gömma logon ifall det behövs" 
+                }, 
+                "mapScale": { 
+                    "label" : "Lägg till skala till kartan", 
+                    "tooltip" : "Lägg till skala till kartan" 
+                }, 
+                "mapDate": { 
+                    "label" : "Lägg till datum", 
+                    "tooltip" : "Det är möjligt att lägga till datumet till utskriften" 
+                },
                 "help": "Anvisning",
                 "error": {
                     "title": "Fel",

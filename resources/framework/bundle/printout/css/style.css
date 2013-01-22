@@ -1,5 +1,5 @@
 div.notLoggedIn {
-	padding: 10px;
+    padding: 10px;
 }
 div.printout {
 
@@ -8,88 +8,111 @@ div.printout {
  margin-left: 255px;
  }*/
 #contentMap div.basic_printout {
-	background: white;
-	position: absolute;
-	height: 100%;
-	top: 0;
-	left: 40px;
-	/* sidebar has 3, we want to open it on top of this */
-	z-index: 2;
-	width: 255px;
+    background: white;
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 40px;
+    /* sidebar has 3, we want to open it on top of this */
+    z-index: 2;
+    width: 255px;
 }
 #contentMap div.basic_publisher div.content {
-	padding: 10px;
+    padding: 10px;
 }
 div.printout div.startview div.icon-info, div.basic_printout div.icon-info {
-	float: right;
+    float: right;
 }
 div.printout div.startview div.error ul li {
-	color: red;
+    color: red;
 }
 div.basic_printout > div.header {
-	background-color: #FDF8D9;
-	padding: 5px 10px;
+    background-color: #FDF8D9;
+    padding: 5px 10px;
 }
 div.basic_printout > div.header div.icon-close {
-	float: right;
+    float: right;
 }
 div.basic_printout div.form div.field input, div.field select {
-	width: 80%;
-	background-color: white;
-	filter:Alpha(opacity=100) !important;
+    width: 80%;
+    background-color: white;
+    filter:Alpha(opacity=100) !important;
 }
 div.basic_printout > div.content {
-	overflow: auto;
-	height: 89%;
+    overflow: auto;
+    height: 89%;
 }
 div.basic_printout div.tool {
-	margin: 5px;
+    margin: 5px;
 }
-div.basic_printout div.tool input {
-	margin-right: 10px;
+div.basic_printout div.tool input, div.basic_printout div.printout_settings_cont input {
+    margin-right: 10px;
 }
+
+.printout_radiolabel, .printout_checklabel {
+    padding: 3px 6px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -o-border-radius: 2px;
+    -ms-border-radius: 2px;
+    border-radius: 2px;
+}
+.printout_radiolabel:hover, .printout_checklabel:hover {
+    background-color: #eee;
+}
+
+.printout_format_label, .printout_title_label {
+    font-weight: bold;
+    margin: 5px 0;
+}
+.printout_settings_cont {
+    margin: 10px 5px;
+}
+
+
+
 /* Buttons */
 div.basic_printout div.buttons, div.printout div.startview div.buttons {
-	margin: 10px;
-	text-align: center;
+    margin: 10px;
+    text-align: center;
 }
 div.basic_printout div.buttons input, div.printout div.startview div.buttons input {
-	margin-left: 10px;
-	margin-right: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 div.basic_printout div.preview-portrait {
-	margin: 8px;
-	padding: 5px; 
-	width: 200px;
-	height: 290px;
-	background-color: white;
-	border-bottom-color: #C0D0E0;
-	border-bottom-style: solid;
-	border-bottom-width: 1pt;		
-	border-top-color: #C0D0E0;
-	border-top-style: solid;
-	border-top-width: 1pt;
-	box-shadow: 0 0 8px #D0D0D0;
-	cursor: pointer;
+    margin: 8px;
+    padding: 5px; 
+    width: 200px;
+    height: 290px;
+    background-color: white;
+    border-bottom-color: #C0D0E0;
+    border-bottom-style: solid;
+    border-bottom-width: 1pt;       
+    border-top-color: #C0D0E0;
+    border-top-style: solid;
+    border-top-width: 1pt;
+    box-shadow: 0 0 8px #D0D0D0;
+    cursor: pointer;
 }
 
 div.basic_printout div.preview-landscape {
-	margin: 8px;
-	padding: 5px;
-	width: 200px;
-	height: 140px;
-	background-color: white;
-	border-bottom-color: #C0D0E0;
-	border-bottom-style: solid;
-	border-bottom-width: 1pt;		
-	border-top-color: #C0D0E0;
-	border-top-style: solid;
-	border-top-width: 1pt;
-	box-shadow: 0 0 8px #D0D0D0;
-	cursor: pointer;
+    margin: 8px;
+    padding: 5px;
+    width: 200px;
+    height: 140px;
+    background-color: white;
+    border-bottom-color: #C0D0E0;
+    border-bottom-style: solid;
+    border-bottom-width: 1pt;       
+    border-top-color: #C0D0E0;
+    border-top-style: solid;
+    border-top-width: 1pt;
+    box-shadow: 0 0 8px #D0D0D0;
+    cursor: pointer;
 }
 
 div.basic_printout div.location {
-	height: 30px;
+    height: 30px;
 }

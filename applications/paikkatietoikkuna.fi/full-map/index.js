@@ -41,7 +41,27 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
             if(cb) {
                 cb(me.instance);
             }
-            // var ugStartup =
+
+/*// TODO - KESKEN
+            var ugStartup = {
+                title : 'Printout',
+                fi : 'Karttatuloste',
+                sv : 'Kartutskrift',
+                en : 'Map Printout',
+                bundlename : 'printout',
+                bundleinstancename : 'printout',
+                metadata : {
+                    "Import-Bundle" : {
+                        "printout" : {
+                            bundlePath : '/Oskari/packages/framework/bundle/'
+                        }
+                    },
+                    "Require-Bundle-Instance" : []
+                },
+                instanceProps : {}
+            };
+*/ 
+           // var ugStartup =
             //     {
             //         'instanceProps': {},
             //         'title': 'Guided Tour',
@@ -60,7 +80,8 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
             //             'Require-Bundle-Instance': [ ]
             //         }
             //     };
-            // Oskari.bundle_facade.playBundle(ugStartup, function() {});
+            //Oskari.bundle_facade.playBundle(ugStartup, function() {});
+
         });
     },
     /**
