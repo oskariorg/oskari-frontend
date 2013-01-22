@@ -45,15 +45,17 @@ Oskari.registerLocalization({
         "delete": "Poista",
         "grid": {
           "name": "Nimi",
+          "description": "Kuvaus",
           "publish": "Julkaisu",
           "edit": " ",
           "delete": " "
         },
         "popup": {
-          "edit": "Vaihda näkymän nimi",
+          "edit": "Muokkaa näkymän tietoja",
           "title": "Näkymän tallennus",
           "label": "Näkymän nimi:",
-          "placeholder": "Anna näkymälle nimi",
+          "name_placeholder": "Anna näkymälle nimi",
+          "description_placeholder": "Anna näkymälle kuvaus",
           "save": "Tallenna",
           "cancel": "Peruuta",
           "error_noname": "Syötä nimi",

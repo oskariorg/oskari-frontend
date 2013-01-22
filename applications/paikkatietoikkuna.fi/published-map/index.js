@@ -244,7 +244,7 @@ jQuery(document).ready(function() {
     ajaxUrl += getAdditionalParam('coord');
     ajaxUrl += getAdditionalParam('mapLayers');
     ajaxUrl += getAdditionalParam('oldId');
-    ajaxUrl += getAdditionalParam('viewId');
+    ajaxUrl += "viewId=" + viewId + "&"; //getAdditionalParam('viewId');
     
     ajaxUrl += getAdditionalParam('isCenterMarker');
     ajaxUrl += getAdditionalParam('address')
@@ -254,6 +254,9 @@ jQuery(document).ready(function() {
     ajaxUrl += getAdditionalParam('nationalCadastralReferenceHighlight');
     ajaxUrl += getAdditionalParam('wfsFeature');
     ajaxUrl += getAdditionalParam('wfsHighlightLayer');
+    if(ssl) {
+        ajaxUrl += "ssl=" + ssl + "&";
+    }
         
     Oskari.setLang(language);
 

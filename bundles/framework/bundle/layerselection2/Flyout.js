@@ -77,10 +77,11 @@ function(instance) {
             '<div class="layer-visibility">' + '<a href="JavaScript:void(0);">' + loc['hide'] + '</a>' + '&nbsp;' + 
                 '<span class="temphidden" ' + 'style="display: none;">' + loc['hidden'] + '</span>' + '</div>' + 
             '<div class="oskariui layer-opacity">' + '<div class="layout-slider" id="layout-slider">' + '</div> ' + 
-            '<div class="opacity-slider" style="display:inline-block">' + 
+            '<div class="opacity-slider" style="display:inline-block">' +
             '<input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" />%</div>' + 
             '</div>' + '</div>' + '<div class="right-tools">' +
-        '<div class="layer-rights"></div>' + '<div class="layer-description">' + '<div class="icon-info"></div>' + '</div></div>');
+            '<div class="layer-rights"></div>' + '<div class="object-data"></div>' +
+            '<div class="layer-description">' + '<div class="icon-info"></div>' + '</div></div>');
 
         this.templateLayerFooterHidden = jQuery('<p class="layer-msg">' + '<a href="JavaScript:void(0);">' + loc['show'] + '</a> ' + loc['hidden'] + '</p>');
 
@@ -164,7 +165,9 @@ function(instance) {
         		me._layerOrderChanged(item)
         	}
         });
-        listContainer.disableSelection();
+        
+        //this blocks user inputs/selections in FF and Opera
+        /*listContainer.disableSelection();*/
 
         // RIGHTJS sortable event handling
         //TODO: get rid of sortableBinded and UNBIND?
@@ -559,10 +562,38 @@ function(instance) {
             tools.find('div.icon-info').bind('click', function() {
                 var rn = 'catalogue.ShowMetadataRequest';
                 var uuid = layer.getMetadataIdentifier();
+                var additionalUuids = [];
+                var additionalUuidsCheck = {};
+                additionalUuidsCheck[uuid] = true;
+                 
+                var subLayers = layer.getSubLayers(); 
+                if( subLayers && subLayers.length > 0 ) {
+                	for( var s = 0 ; s < subLayers.length;s++) {
+                		var subUuid = subLayers[s].getMetadataIdentifier();
+                		if( subUuid && subUuid != "" && !additionalUuidsCheck[subUuid] ) { 
+                			additionalUuidsCheck[subUuid] = true;
+                			additionalUuids.push({
+                				uuid: subUuid
+                			} );
+                		}
+                	}
+                	
+                }
+                
                 sandbox.postRequestByName(rn, [{
                     uuid : uuid
-                }]);
+                },additionalUuids]);
             });
+        }
+
+        var featureInstance = sandbox.findRegisteredModuleInstance('FeatureData');
+        if (typeof featureInstance !== 'undefined') {
+            if (layer.isLayerOfType('WFS')) {
+                tools.find('div.object-data').html('<a href="JavaScript:void(0);">' + loc['object-data'] + '</a>');
+                tools.find('div.object-data').bind('click', function() {
+                    sandbox.postRequestByName('ShowFeatureDataRequest',[layer.getId()]);
+                });
+            }
         }
 
         // publish permissions

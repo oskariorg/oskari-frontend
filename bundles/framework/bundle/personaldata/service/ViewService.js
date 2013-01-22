@@ -140,26 +140,29 @@ function(viewUrl) {
         });
     },
     /**
-     * @method renameView
+     * @method updateView
      * Makes the actual ajax call to view service implementation
      * @param {Number}
      *            if view id
      * @param {String}
      *            name new name for the view
+     * @param {String}
+     *            description new description for the view
      * @param {Function}
      *            callback callback method called when operation completes. The
      * function will receive boolean value as parameter indicating success(true)
      * or error(false)
      */
-    renameView : function(id, name, callback) {
+    updateView : function(id, name, description, callback) {
         var me = this;
 
         jQuery.ajax({
-            url : me._viewUrl + 'action_route=RenameView',
+            url : me._viewUrl + 'action_route=UpdateView',
             type : 'POST',
             data : {
                 id : id,
-                newName : name
+                newName : name,
+                newDescription : description
             },
             dataType : 'json',
             beforeSend : function(x) {

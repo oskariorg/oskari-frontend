@@ -26,7 +26,7 @@
 }
 
 #OpenLayersZoombar {
-    background-image: url( "../images/zoombar.png" );
+    background-image: url( "/Oskari/resources/framework/bundle/mapcontrols/images/zoombar.png" );
     left: 7px !important;
     top: 30px !important;
     width: 18px !important;
@@ -74,7 +74,7 @@
 }
 
 #zoomLevel_arrow {
-    background-image: url(../images/zoombar_title_left_arrow.png);
+    background-image: url("/Oskari/resources/framework/bundle/mapcontrols/images/zoombar_title_left_arrow.png");
     height: 14px;
     width: 7px;
     position: absolute;
@@ -84,7 +84,7 @@
 #zoomLevel_title {
     font-family: Verdana, Tahoma, Helvetica, Arial;
     font-size: 11px;
-    background-image: url(../images/zoombar_title_center.png);
+    background-image: url("/Oskari/resources/framework/bundle/mapcontrols/images/zoombar_title_center.png");
     white-space: nowrap;
     height: 14px;
     width: 70px;
@@ -100,7 +100,7 @@
 }
 
 #zoomLevel_right {
-    background-image: url(../images/zoombar_right.png);
+    background-image: url("/Oskari/resources/framework/bundle/mapcontrols/images/zoombar_right.png");
     height: 14px;
     width: 1px;
     position: absolute;
@@ -125,48 +125,48 @@
 
 /* map control tools icons */
 .map_control_tool_prev {
-    background-image: url( "../images/takaisin.png" ) !important;
+    background-image: url( "/Oskari/resources/framework/bundle/mapcontrols/images/takaisin.png" ) !important;
 }
 
 .map_control_tool_next {
-    background-image: url( "../images/eteen.png" ) !important;
+    background-image: url( "/Oskari/resources/framework/bundle/mapcontrols/images/eteen.png" ) !important;
 }
 
 .map_control_navigate_tool {
-    background-image: url( "../images/valinta.png" ) !important;}
+    background-image: url( "/Oskari/resources/framework/bundle/mapcontrols/images/valinta.png" ) !important;}
 
 .map_control_zoom_tool {
-    background-image: url( "../images/zoom.png" ) !important;
+    background-image: url( "/Oskari/resources/framework/bundle/mapcontrols/images/zoom.png" ) !important;
 }
 
 .map_control_measure_menu {
-    background-image: url( "../images/mitta_expand.png" ) !important;
+    background-image: url( "/Oskari/resources/framework/bundle/mapcontrols/images/mitta_expand.png" ) !important;
 }
 
 .map_control_measure_area_tool {
-    background-image: url( "../images/mitta_reitti.png" ) !important;
+    background-image: url( "/Oskari/resources/framework/bundle/mapcontrols/images/mitta_reitti.png" ) !important;
 }
 
 .map_control_measure_tool {
-    background-image: url( "../images/mitta.png" ) !important;
+    background-image: url( "/Oskari/resources/framework/bundle/mapcontrols/images/mitta.png" ) !important;
 }
 
 .map_control_map_print_tool {
-    background-image: url( "../images/tulosta.png" ) !important;
+    background-image: url( "/Oskari/resources/framework/bundle/mapcontrols/images/tulosta.png" ) !important;
 }
 
 .map_control_map_link_tool {
-    background-image: url( "../images/tee_linkki.png" ) !important;
+    background-image: url( "/Oskari/resources/framework/bundle/mapcontrols/images/tee_linkki.png" ) !important;
 }
 
 .map_control_full_screen_tool {
     background-position: center;
-    background-image: url( "../images/laajenna.png");
+    background-image: url( "/Oskari/resources/framework/bundle/mapcontrols/images/laajenna.png");
 }
 
 .map_control_full_screen_tool_fs {
     background-position: center;
-    background-image: url( "../images/keita_kasaan.png");
+    background-image: url( "/Oskari/resources/framework/bundle/mapcontrols/images/keita_kasaan.png");
 }
 
 .opacity_25 {

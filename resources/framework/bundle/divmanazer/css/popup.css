@@ -36,10 +36,12 @@ div.divmanazerpopup h3 {
 }
 div.divmanazerpopup div.content {
     margin : 10px;
-    /*overflow: auto;*/
 }
 div.divmanazerpopup div.content ul {
     margin : 10px;
+}
+div.divmanazerpopup.no_resize div.content textarea {
+    resize : none;
 }
 div.divmanazerpopup div.actions {
     margin : 10px;
