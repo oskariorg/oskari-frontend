@@ -8,7 +8,8 @@ Oskari.registerLocalization({
             "title" : "Moi Maailma!"
         },
         "flyout" : {
-            "title" : "Moi Maailma!"
+            "title" : "Moi Maailma!",
+            "message" : "!!!Moi Maailma!!!"
         }
     }
 });

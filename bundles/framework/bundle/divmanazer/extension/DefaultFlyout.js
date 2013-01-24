@@ -92,6 +92,14 @@ function(instance, locale) {
      */
     getState : function() {
         return this.state;
+    },
+    
+    /**
+     * @method getLocalization
+     * @return JSON localisation subset 'flyout'
+     */
+    getLocalization: function() {
+        return this.locale;
     }
     
    

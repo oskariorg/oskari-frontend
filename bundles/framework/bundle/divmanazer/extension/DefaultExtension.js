@@ -12,7 +12,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
  * @param tileClazz {String} an optional class name for
  *
  */
-function(name, tileClazz, flyoutClazz) {
+function(name, flyoutClazz, tileClazz) {
     this.sandbox = null;
     this.plugins = {};
     this._localization = null;

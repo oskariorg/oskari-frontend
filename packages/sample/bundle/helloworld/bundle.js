@@ -13,8 +13,21 @@ function() {
 }, {
     "create" : function() {
         var me = this;
+        
+        /* this would be enough when only flyout will be implemented */
+        /*
+        var inst = Oskari.clazz.create("Oskari.userinterface.extension.DefaultExtension",
+            'helloworld',
+            "Oskari.sample.bundle.helloworld.HelloWorldFlyout"
+            );
+        */
+
+        /* or this if you want to tailor instance also */
         var inst = Oskari.clazz.create("Oskari.sample.bundle.helloworld.HelloWorldBundleInstance",
-            'helloworld');
+            'helloworld',
+            "Oskari.sample.bundle.helloworld.HelloWorldFlyout"
+            );
+
         return inst;
 
     },
@@ -29,6 +42,9 @@ function() {
         "scripts" : [{
             "type" : "text/javascript",
             "src" : "../../../../bundles/sample/bundle/helloworld/instance.js"
+        },{
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/sample/bundle/helloworld/Flyout.js"
         }],
 
         "locales" : [{
