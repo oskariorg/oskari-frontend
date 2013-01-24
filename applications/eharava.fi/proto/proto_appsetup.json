@@ -1,0 +1,140 @@
+{
+    "startupSequence" : [
+        {
+            "title" : "OpenLayers",
+            "fi" : "OpenLayers",
+            "sv" : "?",
+            "en" : "OpenLayers",
+            "bundlename" : "openlayers-default-theme",
+            "bundleinstancename" : "openlayers-default-theme",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "openlayers-single-full" : {
+                        "bundlePath" : "../../../packages/openlayers/bundle/"
+                    },
+                    "openlayers-default-theme" : {
+                        "bundlePath" : "../../../packages/openlayers/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance" : []
+            },
+            "instanceProps" : {}
+        },
+        {
+            "title" : "Map",
+            "fi" : "Map",
+            "sv" : "?",
+            "en" : "Map",
+            "bundlename" : "mapfull",
+            "bundleinstancename" : "mapfull",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "core-base" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    },
+                    "core-map" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    },
+                    "sandbox-base" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    },
+                    "sandbox-map" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    },
+                    "event-base" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    },
+                    "event-map" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    },
+                    "event-map-layer" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    },
+                    "request-base" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    },
+                    "request-map" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    },
+                    "request-map-layer" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    },
+                    "service-base" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    },
+                    "service-map" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    },
+                    "domain" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    },
+                    "mapwmts" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    },
+                    "mapmodule-plugin" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    },
+                    "mapfull" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    },
+                    "harava-mapmodule-plugin" : {
+                        "bundlePath" : "../../../packages/harava/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance" : []
+            },
+            "instanceProps" : {}
+        },
+        {
+            "title" : "Oskari DIV Manazer",
+            "fi" : "Oskari DIV Manazer",
+            "sv" : "?",
+            "en" : "Oskari DIV Manazer",
+            "bundlename" : "divmanazer",
+            "bundleinstancename" : "divmanazer",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "divmanazer" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance" : []
+            },
+            "instanceProps" : {}
+        }, 
+        {
+            "title" : "Harava map module",
+            "fi" : "Harava map module",
+            "sv" : "?",
+            "en" : "Harava map module",
+            "bundlename" : "harava-mapmodule-plugin",
+            "bundleinstancename" : "harava-mapmodule-plugin",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "harava-mapmodule-plugin" : {
+                        "bundlePath" : "../../../packages/harava/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance" : []
+            },
+            "instanceProps" : {}
+        },
+        {
+            "title" : "Harava map questions",
+            "fi" : "Harava map questions",
+            "sv" : "?",
+            "en" : "Harava map questions",
+            "bundlename" : "harava-map-questions",
+            "bundleinstancename" : "harava-map-questions",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "harava-map-questions" : {
+                        "bundlePath" : "../../../packages/harava/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance" : []
+            },
+            "instanceProps" : {}
+        }
+    ]
+}
