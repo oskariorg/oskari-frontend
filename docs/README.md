@@ -16,7 +16,7 @@ Get node from www.nodejs.org
 
 ## Generating .html documentation
 
-> node generate.js --apiurl "<location>" --docsurl "<location>"
+> node generator.js --apiurl "<location>" --docsurl "<location>"
 
 ## Writing documentation
 
