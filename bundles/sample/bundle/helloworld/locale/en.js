@@ -7,7 +7,8 @@ Oskari.registerLocalization({
             "title" : "Hello World!"
         },
         "flyout" : {
-            "title" : "Hello World!"
+            "title" : "Hello World!",
+            "message" : "!!!Hello World!!!!",
         }
     }
 });
