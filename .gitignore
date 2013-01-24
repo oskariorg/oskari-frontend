@@ -7,4 +7,4 @@ dist/
 .idea
 tools/node_modules
 tools/validation
-
+META-INF/
