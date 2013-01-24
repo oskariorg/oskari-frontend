@@ -100,7 +100,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      * helper function to wrap passing requests 
      */
     request: function() {
-        return this.sandbox.requestByName(this.instance,arguments[0],this.slicer.apply(arguments,1));
+        return this.getSandbox().requestByName(this.instance,arguments[0],this.slicer.apply(arguments,1));
     },
     
     /**
