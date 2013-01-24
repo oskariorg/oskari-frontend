@@ -360,7 +360,7 @@ function(config) {
     	
     	var me = this;
     	input.bind('change', function(evt) {
-			me._changedBaseLayer();
+			me._changedBaseLayer();
 		});
 		
         div.find('span').before(input);
@@ -428,6 +428,12 @@ function(config) {
         	var layer = this._sandbox.findMapLayerFromSelectedMapLayers(layerId);
     		this._setLayerVisible(layer, (values.defaultBaseLayer == layerId));
         }
+        // send Request to rearrange layers
+        var sandbox = this._sandbox;
+        var reqName = 'RearrangeSelectedMapLayerRequest';
+        var builder = sandbox.getRequestBuilder(reqName)
+        var request = builder(values.defaultBaseLayer, 0);
+        sandbox.request(this, request);
     },
     /**
      * @method setupLayers

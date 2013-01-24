@@ -1,0 +1,17 @@
+This directory contains a test environment for experimenting with splitting algorithms.
+
+
+References for efficient algorithms
+
+
+Line segment intersections:
+
+De Berg, M., van Kreveld, M., Overmars, M. ja Schwarzkopf, O:
+"Chapter 2: Line segment intersection", Computational Geometry (2nd
+ed.), Springer-Verlag, pp. 19–44, ISBN 978-3-540-65620-3, 2000.
+
+Polygon splitting:
+
+Wu, L., Tian, G. ja Xie, Z.: An algorithm for splitting arbitrary
+polygon, Natural Computation, 2009. ICNC'09. Fifth International
+Conference on Natural Computation, 6, 318–325, 2009.

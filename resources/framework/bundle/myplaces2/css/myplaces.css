@@ -8,7 +8,9 @@ div.myplacesform div.field {
 div.myplacesform input {
     width: 80%;
 }
-div.myplacesform textarea, 
+div.myplacesform textarea {
+	width: 80%;
+} 
 div.myplacesform select {
     width: 80%;
 }

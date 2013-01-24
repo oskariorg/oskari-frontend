@@ -22,7 +22,7 @@ function(sandbox, statehandler) {
 	 * 		request to handle
 	 */
     handleRequest : function(core, request) {
-    	this.statehandler.saveState(request.getViewName());
+    	this.statehandler.saveState({"name": request.getViewName(), "description": request.getViewDescription()});
    }
 }, {
     /**

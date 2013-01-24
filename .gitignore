@@ -4,4 +4,7 @@ liferay-portlet.xml
 docroot/WEB-INF/classes
 bin/
 dist/
+.idea
+tools/node_modules
+tools/validation
 META-INF/

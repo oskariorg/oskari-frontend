@@ -32,7 +32,7 @@ function(instance) {
             '</div>' +
             '<div class="field">' + 
                 '<label for="category">' + loc.category.label + '</label><br clear="all" />' +
-                '<select name="category">' +
+                '<select name="category" autofocus>' +
                 '</select>' +
             '</div>' +
         '</div>');

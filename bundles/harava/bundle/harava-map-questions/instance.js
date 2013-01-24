@@ -334,6 +334,26 @@ function() {
     		module.layer.setVisibility(true);
     		me._currentControls.modify = module.modifyControls.modify;
     		module.modifyControls.modify.activate();
+    		
+    		var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
+        	var olMap = mapModule.getMap();
+        	
+        	var needUpdateMapDomain = false;
+        	
+        	if(module.defaultScale!=null && module.defaultScale!=''){
+        		olMap.zoomToScale(module.defaultScale,false);
+        		needUpdateMapDomain = true;
+        	}
+        	
+        	if(module.centerLon!=null && module.centerLon!='' && module.centerLat!=null && module.centerLat!=''){
+        		var centerPoint = new OpenLayers.LonLat(module.centerLon, module.centerLat);
+        		olMap.panTo(centerPoint);
+        		needUpdateMapDomain = true;
+        	}
+        	
+        	if(needUpdateMapDomain){
+        		Oskari.clazz.globals.sandbox.postRequestByName('UpdateMapRequest');
+        	}
     	}
     	me._currentStep=moduleId;
     },

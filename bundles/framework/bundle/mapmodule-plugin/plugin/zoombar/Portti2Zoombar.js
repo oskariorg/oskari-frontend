@@ -73,11 +73,11 @@ function(config) {
     init : function() {
         var me = this;
         // templates
-        this.__templates['zoombar'] = jQuery('<div class="oskariui mapplugin pzbDiv" title="Koko Suomi">' + 
-            '<div class="pzbDiv-plus"></div>' + 
+        this.__templates['zoombar'] = jQuery('<div class="oskariui mapplugin pzbDiv">' + 
+            '<div class="pzbDiv-plus"  title="Katu"></div>' + 
             '<input type=\'hidden\' />' + 
             '<div class="slider"></div>' + 
-            '<div class="pzbDiv-minus"></div>' + 
+            '<div class="pzbDiv-minus"  title="Koko Maa"></div>' + 
         '</div>');
     },
     /**
