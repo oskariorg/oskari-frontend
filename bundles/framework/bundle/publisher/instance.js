@@ -90,6 +90,13 @@ function() {
         //sandbox.registerAsStateful(this.mediator.bundleId, this);
 		// draw ui
 		me._createUi();
+
+
+        // create request handlers
+        me.publishMapEditorRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler', me);
+
+        // register request handlers
+        sandbox.addRequestHandler('Publisher.PublishMapEditorRequest', me.publishMapEditorRequestHandler);
 	},
 	/**
 	 * @method init
@@ -242,6 +249,8 @@ function() {
 		this.plugins['Oskari.userinterface.Flyout'].createUi();
 		this.plugins['Oskari.userinterface.Tile'].refresh();
 	},
+
+
 	/**
 	 * @method setPublishMode
 	 * Transform the map view to publisher mode if parameter is true and back to normal if false.
@@ -251,7 +260,7 @@ function() {
 	 * @param {Boolean} blnEnabled
 	 * @param {Layer[]} deniedLayers layers that the user can't publish
 	 */
-	setPublishMode : function(blnEnabled, deniedLayers) {
+	setPublishMode : function(blnEnabled, deniedLayers, data) {
 		var me = this;
     	var map = jQuery('#contentMap');
     	var tools = jQuery('#maptools');
@@ -268,7 +277,7 @@ function() {
     		    
             // proceed with publisher view
             this.publisher = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.BasicPublisher', 
-                this, this.getLocalization('BasicView'));
+                this, this.getLocalization('BasicView'), data);
             this.publisher.render(map);
             this.publisher.setEnabled(true);
     	}
@@ -284,7 +293,7 @@ function() {
     	}
         // publishing mode should be sent to mapfull to disable resizing
         var requestBuilder = me.sandbox.getRequestBuilder('MapFull.MapResizeEnabledRequest');
-       if(requestBuilder) {
+       	if(requestBuilder) {
             // got the builder, request can be sent
             var request =  requestBuilder(!blnEnabled);
             me.sandbox.request(me, request);
@@ -321,7 +330,41 @@ function() {
             	sandbox.request(me, removeRequestBuilder(layer.getId()));
 			}
 		}
-	}
+	},
+    /**
+     * @method hasPublishRight
+     * Checks if the layer can be published.
+     * @param
+     * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
+     * layer
+     *      layer to check
+     * @return {Boolean} true if the layer can be published
+     */
+    hasPublishRight : function(layer) {
+        // permission might be "no_publication_permission"
+        // or nothing at all
+        return (layer.getPermission('publish') == 'publication_permission_ok');
+    },
+    /**
+     * @method getLayersWithoutPublishRights
+     * Checks currently selected layers and returns a subset of the list
+     * that has the layers that can't be published. If all selected
+     * layers can be published, returns an empty list.
+     * @return
+     * {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
+     * list of layers that can't be published.
+     */
+    getLayersWithoutPublishRights : function() {
+        var deniedLayers = [];
+        var selectedLayers = this.sandbox.findAllSelectedMapLayers();
+        for (var i = 0; i < selectedLayers.length; ++i) {
+            var layer = selectedLayers[i];
+            if (!this.hasPublishRight(layer)) {
+                deniedLayers.push(layer);
+            }
+        }
+        return deniedLayers;
+    }
 }, {
 	/**
 	 * @property {String[]} protocol

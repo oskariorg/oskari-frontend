@@ -153,7 +153,7 @@ function(viewUrl) {
      * function will receive boolean value as parameter indicating success(true)
      * or error(false)
      */
-    updateView : function(id, name, description, callback) {
+    updateView : function(id, name, description, domain, callback) {
         var me = this;
 
         jQuery.ajax({
@@ -162,6 +162,7 @@ function(viewUrl) {
             data : {
                 id : id,
                 newName : name,
+                newDomain: domain,
                 newDescription : description
             },
             dataType : 'json',

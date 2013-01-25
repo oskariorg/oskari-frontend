@@ -257,7 +257,9 @@ function(config) {
             this.handler = new OpenLayers.Handler.Box(this, {
                 done : function(position) {
                     this.zoomBox(position);
-                    me.getMapModule().notifyMoveEnd();
+                    if(me.getMapModule()) {
+                        me.getMapModule().notifyMoveEnd();
+                    }
                 }
             }, {
                 keyMask : this.keyMask

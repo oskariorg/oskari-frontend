@@ -266,9 +266,7 @@ function() {
             for(var i = 0; i < len; ++i ) {
                 var layer = state.selectedLayers[i];
                 this.sandbox.request(mapmodule.getName(), rbAdd(layer.id, true));
-                if(layer.hidden) {
-                    this.sandbox.request(mapmodule.getName(), visibilityRequestBuilder(layer.id, false));
-                }
+                this.sandbox.request(mapmodule.getName(), visibilityRequestBuilder(layer.id, layer.hidden !== true));
                 if(layer.style) {
                     this.sandbox.request(mapmodule.getName(), styleReqBuilder(layer.id, layer.style));
                 }

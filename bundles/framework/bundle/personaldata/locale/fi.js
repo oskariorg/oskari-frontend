@@ -88,7 +88,8 @@ Oskari.registerLocalization({
       },
       "publishedmaps": {
         "title": "Julkaistut kartat",
-        "edit": "Näytä kartalla",
+        "show" : "Näytä kartalla",
+        "edit" : "Muokkaa",
         "publish": "Julkaise kartta",
         "unpublish": "Peru julkaisu",
         "delete": "Poista",
@@ -96,6 +97,7 @@ Oskari.registerLocalization({
           "name": "Nimi",
           "domain": "Kartan tiedot",
           "publish": "Tila",
+          "show" : " ",
           "edit": " ",
           "delete": " "
         },
@@ -108,7 +110,9 @@ Oskari.registerLocalization({
           "cancel": "Peruuta",
           "error_noname": "Anna kartalle nimi",
           "deletetitle": "Poiston varmistus",
-          "deletemsg": "Haluatko poistaa julkaistun kartan? Tämän jälkeen kartta ei näy sivustollasi."
+          "deletemsg": "Haluatko poistaa julkaistun kartan? Tämän jälkeen kartta ei näy sivustollasi.",
+          "edit_title": "Muokkaa Julkaise Kartta",
+          "editmsg": "Päivittää aiemmin julkaistun kartan tietoja"
         },
         "save": {
           "success": "Kartta tallennettu.",
