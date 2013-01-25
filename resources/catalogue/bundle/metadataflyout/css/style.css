@@ -1,24 +1,22 @@
 .metadataflyout_content {
-	margin: 0; padding: 0;
+	margin: 0;
+	padding: 0;
 	margin-left: 8px;
 	/*border : 1pt solid red;*/
 	/*height : 100%;*/
 	/*width : 90%;*/
-	
-	
+
 }
-
-
-
 .metadataflyout_content_tabs {
-	margin: 0; padding: 0;
-	
+	margin: 0;
+	padding: 0;
 	/*height : 100%;*/
 	/*width : 90%;*/
-	
+
 }
 .metadataflyout_content_tab {
-	margin: 0; padding: 0;
+	margin: 0;
+	padding: 0;
 	/*font-style: italic;*/
 	display: inline-block;
 	margin-left: 4px;
@@ -27,179 +25,130 @@
 	cursor: pointer;
 	/*height : 100%;*/
 	/*width : 90%;*/
-	
-}
 
+}
 /* browseGraphic */
 
 .metadataflyout_content_browseGraphic {
 	margin-left: 8px;
-
-	
 }
-
 .metadataflyout_content_browseGraphic img {
 	margin-bottom: 8px;
 	margin-top: 8px;
 	border: 0;
 	/*box-shadow: 2px 5px 5px rgba(50, 50, 50, 0.4);*/
 }
-
 /* abstract */
 .metadataflyout_content_abstract {
-	margin: 0; padding: 0;
-	
-	
-
+	margin: 0;
+	padding: 0;
 }
-
 .metadataflyout_content_abstract_title {
-	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
-		Helvetica, Arial, sans-serif;
+	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 	text-align: left;
-	
 	display: none;
 	margin-bottom: 8px;
 }
-
 .metadataflyout_content_abstract div  h1 {
-	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
-		Helvetica, Arial, sans-serif;
+	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 	text-align: left;
 	text-transform: uppercase;
 	margin-bottom: 8px;
-	
 }
-
 .metadataflyout_content_abstract div  table {
 	margin-right: 0px;
 	margin-left: 0px;
 }
-
 .metadataflyout_content_abstract div table tr th {
-	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
-		Helvetica, Arial, sans-serif;
+	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 	text-align: left;
 	display: block;
 	text-transform: uppercase;
 	vertical-align: top;
 	vertical-align: top;
 }
-
 .metadataflyout_content_abstract div  table tr td {
-	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
-		Helvetica, Arial, sans-serif;
+	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 	text-align: left;
-		display: block;
+	display: block;
 	margin-top: 4px;
 	margin-left: 24px;
 	margin-bottom: 8px;
-	vertical-align: top;
-	vertical-align: top;
-
-	
+	vertical-align: top;	
+	border: 0;
 }
 
 
 /* jhs */
-}
+
 .metadataflyout_content_jhs {
-	margin: 0; padding: 0;
-	
-	
-
+	margin: 0;
+	padding: 0;
 }
-
 .metadataflyout_content_jhs_title {
-	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
-		Helvetica, Arial, sans-serif;
+	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 	text-align: left;
-	
 	display: none;
 	margin-bottom: 8px;
-
 }
-
 .metadataflyout_content_jhs div  h1 {
-	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
-		Helvetica, Arial, sans-serif;
+	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 	text-align: left;
 	text-transform: uppercase;
 	margin-bottom: 8px;
-	
 }
-
 .metadataflyout_content_jhs div  table {
 	margin-right: 0px;
 	margin-left: 0px;
 }
-
 .metadataflyout_content_jhs table tr th {
-	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
-		Helvetica, Arial, sans-serif;
+	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 	text-align: left;
 	/*text-transform: uppercase;*/
 	display: block;
 	vertical-align: top;
 }
-
 .metadataflyout_content_jhs table tr td {
-	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
-		Helvetica, Arial, sans-serif;
+	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 	text-align: left;
-		display: block;
+	display: block;
 	margin-top: 4px;
 	margin-left: 24px;
 	margin-bottom: 8px;
 	vertical-align: top;
-	
+	border: 0;
 }
-
-
 /* inspire */
 
 .metadataflyout_content_inspire {
-	margin: 0; padding: 0;
-	
-	
-	
+	margin: 0;
+	padding: 0;
 }
-
 .metadataflyout_content_inspire_title {
-	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
-		Helvetica, Arial, sans-serif;
+	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 	text-align: left;
-	
 	display: none;
 	margin-bottom: 8px;
 }
-
 .metadataflyout_content_inspire div   h1 {
-	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
-		Helvetica, Arial, sans-serif;
+	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 	text-align: left;
 	text-transform: uppercase;
 	margin-bottom: 8px;
 }
-
 .metadataflyout_content_inspire div  table {
 	margin-right: 0px;
 	margin-left: 0px;
 }
-
 .metadataflyout_content_inspire div  table tr th {
-	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
-		Helvetica, Arial, sans-serif;
+	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 	text-align: left;
 	display: block;
-	
 	text-transform: uppercase;
 	vertical-align: top;
 }
-
 .metadataflyout_content_inspire div  table tr td {
-	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
-		Helvetica, Arial, sans-serif;
+	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 	text-align: left;
 	display: block;
 	margin-top: 4px;
@@ -207,33 +156,33 @@
 	margin-bottom: 8px;
 	vertical-align: top;
 	/*border: 1pt solid magenta;*/
+	border: 0;
 }
-
-
 .metadataflyout_content_inspire table tr td a {
-	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
-		Helvetica, Arial, sans-serif;
+	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 	color: navy;
 	text-decoration: underline;
 	cursor: pointer;
-	
+
 }
-
-
+.metadataflyout_content_inspire table tr td.MD_DigitalTransferOptions a {
+	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+	color: navy;
+	text-decoration: underline;
+	cursor: pointer;
+	max-width: 320px;
+	display: block;
+	word-wrap: break-word;
+}
 
 /* xml */
 .metadataflyout_content_xml {
-	margin: 0; padding: 0;
-	
-	
-
+	margin: 0;
+	padding: 0;
 }
 .metadataflyout_content_section {
-	font: 13px/ 19px "Open Sans", "Helvetica Neue", "HelveticaNeue",
-		Helvetica, Arial, sans-serif;
+	font: 13px/19px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 	text-align: left;
-		display: block;
+	display: block;
 	margin-bottom: 12px;
-
-	
 }

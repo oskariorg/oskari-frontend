@@ -97,13 +97,21 @@ Oskari.registerLocalization(
             },
             "StartView": {
                 "text": "You can embed the map view you just created on your own or your employer's website.",
+                "touLink": "Show Terms of use for Embedded maps",
                 "layerlist_title": "Embeddable map layers",
                 "layerlist_empty": "The map layers you selected cannot be embedded. The menu Selected map layers shows whether or not a map layer can be embedded.",
                 "layerlist_denied": "Cannot be embedded",
                 "denied_tooltip": "The providers of this map data have not granted permission to publish these materials on other websites. Check rights to publish in the menu Selected map layers before embedding.",
                 "buttons": {
                     "continue": "Continue",
-                    "cancel": "Cancel"
+                    "continueAndAccept": "Accept Terms of use and continue",
+                    "cancel": "Cancel",
+                    "close" : "Close"
+                },
+                "tou" : {
+                    "notfound" : "Can not find Terms of Use",
+                    "reject" : "Reject",
+                    "accept" : "Accept"
                 }
             }
         }

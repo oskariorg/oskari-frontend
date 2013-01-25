@@ -36,13 +36,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata.FeatureDataBundle", 
 	    }, {
 		"type" : "text/javascript",
 		"src" : "../../../../bundles/framework/bundle/featuredata/service/GridJsonService.js"
-            }, {
+        }, {
 		"type" : "text/javascript",
 		"src" : "../../../../bundles/framework/bundle/featuredata/service/GridModelManager.js"
-            }, {
+        }, {
 		"type" : "text/javascript",
 		"src" : "../../../../bundles/framework/bundle/featuredata/domain/WfsGridUpdateParams.js"
-            }, {
+        }, {
+        "type" : "text/javascript",
+        "src" : "../../../../bundles/framework/bundle/featuredata/request/ShowFeatureDataRequest.js"
+        }, {
+        "type" : "text/javascript",
+        "src" : "../../../../bundles/framework/bundle/featuredata/request/ShowFeatureDataRequestHandler.js"
+        }, {
 		
 		"type" : "text/css",
 		"src" : "../../../../resources/framework/bundle/featuredata/css/style.css"

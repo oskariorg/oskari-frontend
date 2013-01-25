@@ -75,6 +75,9 @@
             "core-map":{
                "bundlePath":"../../../packages/framework/bundle/"
             },
+            "oskariui" : {
+              "bundlePath":"../../../packages/framework/bundle/"
+            },
             "request-map":{
                "bundlePath":"../../../packages/framework/bundle/"
             },

@@ -14,6 +14,7 @@ Oskari.registerLocalization({
       "out-of-content-area": "Detta kartlager saknar innehåll vid dessa koordinater.",
       "move-to-content-area": "Gå till täckningsområdets mittpunkt.",
       "description": "Beskrivning",
+      "object-data": "Objektuppgifter",
       "rights": {
         "notavailable": "Får inte publiceras.",
         "guest": "Logga in för att avskilja och inbädda detta kartlager.",

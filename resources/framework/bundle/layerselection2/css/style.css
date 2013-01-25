@@ -1,7 +1,9 @@
 div.layerselection2 .layer.selected {
     border: 1pt solid #c0d0e0;
     margin: 0 5px 5px 0;
+    height: 70px\9; /*IE9 */ 
 }
+div
 div.layerselection2 .layer.selected.out-of-scale, div.layerselection2 .layer.selected.out-of-content, div.layerselection2 .layer.selected.hidden {
 	color: #909090;
 }
@@ -12,12 +14,16 @@ div.layerselection2 .layer.selected div.layer-info {
 }
 
 div.layerselection2 ul.selectedLayersList {
-	/*height: 100%;*/
-    /*overflow: auto;*/
-    list-style: none;
+	height: 100%;
+	width: 100%;
+    overflow: auto;
+    list-style-type: none;
     padding: 0;
+    margin:0;
 }
-
+div.layerselection2 ul.selectedLayersList span {
+	position: absolute; margin-left: -1.3em;
+}
 div.layerselection2 .layer.selected div.layer-info div.layer-title {
     display: inline;
 }
@@ -70,7 +76,8 @@ div.layerselection2 div.layer-tools div.left-tools div.layer-opacity input.opaci
     width: 25px;
 }
 div.layerselection2 div.layer-tools div.right-tools{
-	float:right; 
+    padding-top: 5px;
+    float:right;
 }
 div.layerselection2 div.layer-tools div.right-tools div {
     padding-right: 5px;

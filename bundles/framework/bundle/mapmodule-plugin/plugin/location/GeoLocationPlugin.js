@@ -47,7 +47,7 @@ function() {
     /**
      * @method hasUI
      * @return {Boolean} false
-     * This plugin has an UI so always returns false
+     * This plugin doesn't have an UI so always returns false
      */
     hasUI : function() {
         return false;

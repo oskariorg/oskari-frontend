@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
  * @static
  */
 function(name) {
-    this.template = jQuery('<div class="oskarifield"><label></label><input type="text" /></div>');
+    this.template = jQuery('<div class="oskarifield"><label></label><input type="text" onmouseover="javascript:this.focus();" autofocus/></div>');
     this.templateErrors = jQuery('<div class="error"></div>');
     this.templateTooltip = jQuery('<div class="icon-info"></div>');
     this.templateClearButton = jQuery('<div class="icon-close" style="margin-left: 0px; position: relative; display: inline-block; left: -20px; top: 3px;"></div>');
@@ -18,7 +18,7 @@ function(name) {
 	var label = this._field.find('label');
 	label.attr('for', name);
 	
-	var input = this._field.find('input');
+	var input = this._field.find('input').focus();
 	
 	input.attr('name', name);
     this._name = name;
