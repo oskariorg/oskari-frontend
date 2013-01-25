@@ -114,6 +114,11 @@ This bundle doesn't handle any requests.
     <td> Needed for flyout/tile functionality and accordion/form components</td>
   </tr>
   <tr>
+    <td> [Oskari divmanazer component - UIHelper](<%= docsurl %>framework/divmanazer/uihelper.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> Needed for help functionality for UI elements</td>
+  </tr>
+  <tr>
     <td> [Backend API](<%= docsurl %>backend/mappublisher.html) </td>
     <td> N/A </td>
     <td> Publisher backend functionality</td>
