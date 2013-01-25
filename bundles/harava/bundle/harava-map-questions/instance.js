@@ -480,6 +480,20 @@ function() {
     	}
     },
     /**
+     * @method hideSelectedFeature
+     * Hide selected feature
+     */
+    "hideSelectedFeature" : function () {
+    	var me = this;
+    	var feature = me._lastfeature;
+    	if (feature) {
+    		me._currentControls.modify.selectControl.unselectAll();
+    		if (feature.popup) {
+        		feature.popup.hide();
+        	}
+    	}
+    },
+    /**
      * @method stop
      * BundleInstance protocol method
      */
