@@ -331,6 +331,14 @@ Oskari = (function() {
             }
 
         },
+        _super : function() {
+            var supCat = arguments[0];
+            var supMet = arguments[1];
+            var me = this;
+            return function() {
+                return me['_']._superCategory[supCat][supMet].apply(me, arguments);
+            }
+        },
         /**
          * @method define
          *
@@ -412,7 +420,8 @@ Oskari = (function() {
                 superClazz : null,
                 subClazz : null
             };
-            cd.prototype = {};
+            cd.prototype = {
+            };
             //args[2];
             pdefsp = {
                 _class : cd,
@@ -420,6 +429,9 @@ Oskari = (function() {
                 _category : {},
                 _composition : compo
             };
+            cd.prototype['_'] = pdefsp;
+            cd.prototype['_super'] = this['_super'];
+
             // update prototype
             var catFuncs = args[2];
             var prot = cd.prototype;
@@ -495,13 +507,16 @@ Oskari = (function() {
                     superClazz : null,
                     subClazz : null
                 };
-                cd.prototype = {};
+                cd.prototype = {
+                };
                 pdefsp = {
                     _class : cd,
                     _constructor : args[1],
                     _category : {},
                     _composition : compo
                 };
+                cd.prototype['_'] = pdefsp;
+                cd.prototype['_super'] = this['_super'];
                 this.impl.inheritance[cdef] = compo;
                 pdef[sp] = pdefsp;
 
@@ -756,12 +771,13 @@ Oskari = (function() {
 
         },
         /**
-         * @method printImplementation
+         * @method apropos
          */
-        printImplementation : function() {
+        apropos : function() {
             var pdefsp = this.lookup.apply(this, arguments);
-            if(!pdefsp._composition.subClazz) {
-                return;
+
+            for(p in pdefsp._category[arguments[0]]) {
+                console.log(p);
             }
         },
         slicer : Array.prototype.slice,
@@ -1122,9 +1138,9 @@ Oskari = (function() {
             return ai.printHierarchy.apply(ai, arguments);
 
         },
-        "printImplementation" : function() {
+        "apropos" : function() {
             var ai = this.get.apply(this, arguments);
-            return ai.printImplementation.apply(ai, arguments);
+            return ai.apropos.apply(ai, arguments);
 
         },
         "lookup" : function() {
