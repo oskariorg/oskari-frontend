@@ -69,7 +69,6 @@ function(instance, localization, data) {
         selected : true
     }];
 
-    console.dir(data);
 
     this.sizeOptions = [{
         id : 'small',
@@ -464,6 +463,11 @@ function(instance, localization, data) {
             language : values.language,
             plugins : []
         };
+
+        if (this.data) {
+            selections.id = this.data.id;
+        }
+
         for (var i = 0; i < this.tools.length; ++i) {
             if (this.tools[i].selected) {
             	var tmpTool = {
@@ -552,7 +556,7 @@ function(instance, localization, data) {
             type : 'POST',
             dataType : "json",
             data : {
-            	pubdata : JSON.stringify(selections)
+                pubdata : JSON.stringify(selections)
             },
             beforeSend : function(x) {
                 if (x && x.overrideMimeType) {
