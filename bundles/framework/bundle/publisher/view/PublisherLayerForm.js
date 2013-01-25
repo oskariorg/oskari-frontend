@@ -49,12 +49,10 @@ function(localization, instance) {
 	},
 
     useConfig : function(pConfig) {
-        console.log(pConfig);
         if(pConfig) {
-            console.dir(pConfig);
-
             if( Object.prototype.toString.call( pConfig.baseLayers ) === '[object Array]' &&
                 pConfig.baseLayers.length > 0) {
+
                 this.config.layers.preselect = pConfig.baseLayers;
             }
             else {
@@ -220,12 +218,9 @@ function(localization, instance) {
             };
         };
         var shouldPreselectLayer = function(layerId) {
-            var isFound = jQuery.inArray('' + layerId, me.config.layers.preselect);
-            console.log(layerId + '=' + isFound);
+            var isFound = jQuery.inArray('' + layerId, me.config.layers.preselect);        
             return isFound != -1;
         };
-
-        console.dir(me.config.layers)
         var layers = this._getLayersList();
         for (var i = 0; i < layers.length; ++i) {
         	
