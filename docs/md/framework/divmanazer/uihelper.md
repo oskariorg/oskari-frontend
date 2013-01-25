@@ -5,13 +5,6 @@
 
 Processes given element and binds any element with "helptags" attribute with a popup showing the help article
 
-## Screenshot
-
-![screenshot](<%= docsurl %>images/grid.png)
-
-## Bundle configuration
-
-No configuration is required, but it can be used to set ajax URL. If not set, sandbox.getAjaxUrl() with action_route#GetSearchResult is used instead.
 
 ## Usage
 
