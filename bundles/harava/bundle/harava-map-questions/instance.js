@@ -119,6 +119,38 @@ function() {
 		               			}
 		               		}
     		               	
+
+    		                // Check feature position (if need pan a map at popup show well)
+    		                var pos = new OpenLayers.LonLat(feature.geometry.getCentroid().x, feature.geometry.getCentroid().y);
+    		                
+    		                // Check viewport min lon and max lon
+    		                var left = map.getExtent().left;
+    		                var right = map.getExtent().right;
+    		                
+    		                var top = map.getExtent().top;
+    		                var bottom = map.getExtent().bottom;
+
+		                	var centerlon = pos.lon - ((right - left) * 7 / 16);	                	
+		                	var centerlat = pos.lat + ((top - bottom) * 3 / 8);	 
+		                	
+		                	map.moveTo(new OpenLayers.LonLat(centerlon, centerlat));	 
+		                	
+    		                // If drawn geometry is located in the left quarter of the map. Map is moved to the left
+    		              /*  if (pos.lon < leftquarter) {
+    		                
+    		                	// If drawn geometry is located in the left one-fifth, but not bottom one-six. Move map there.
+    		                	var leftfifth = left + ((right - left) / 5);
+    		                	if (pos.lon < leftfifth) {
+    			                	var top = map.getExtent().top;
+    			                	var bottom = map.getExtent().bottom;    			                	
+    			                	var bottomquarter = bottom + ((top - bottom) / 8);    			                	
+    			                	if (pos.lat > bottomquarter) {
+    			                		centerlat = pos.lat + ((top - bottom) * 3 / 8);
+    			                	}    		                		
+    		                	}
+    			            
+    		                }
+		               		*/
     		                if (feature.attributes.toolHtml) {
     			            	modifyControls = me._modifyControls;
     			                drawControls = me.drawControls;
@@ -141,31 +173,6 @@ function() {
     		                	}
     		                }  
 
-    		                // Check feature position (if need pan a map at popup show well)
-    		                var pos = new OpenLayers.LonLat(feature.geometry.getCentroid().x, feature.geometry.getCentroid().y);
-    		                
-    		                // Check viewport min lon and max lon
-    		                var left = map.getExtent().left;
-    		                var right = map.getExtent().right;
-    		                var leftquarter = left + ((right - left) / 4);
-    		                
-    		                // If drawed geometry is located in the left quarter of the map. Map is moved to the left
-    		                if (pos.lon < leftquarter) {
-    		                	var centerlon = pos.lon + ((right - left) / 4);	                	
-    		                	var centerlat =  map.getCenter().lat;
-    		                
-    		                	// If drawed geometry is located in the left one-fifth, but not bottom one-six. Move map there.
-    		                	var leftfifth = left + ((right - left) / 5);
-    		                	if (pos.lon < leftfifth) {
-    			                	var top = map.getExtent().top;
-    			                	var bottom = map.getExtent().bottom;    			                	
-    			                	var bottomquarter = bottom + ((top - bottom) / 8);    			                	
-    			                	if (pos.lat > bottomquarter) {
-    			                		centerlat = pos.lat + ((top - bottom) * 3 / 8);
-    			                	}    		                		
-    		                	}
-    			            	map.panTo(new OpenLayers.LonLat(centerlon, centerlat));	 
-    		                }
     		                me._lastfeature = feature;		            	
 
     		            },
