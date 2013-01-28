@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.5 release notes
+
+### featuredata bundle
+
+improved scaling for the Object data flyout
+
 ## 1.4 release notes
 
 ### core
