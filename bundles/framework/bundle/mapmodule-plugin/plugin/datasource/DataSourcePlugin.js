@@ -15,6 +15,7 @@ function() {
     this._map = null;
     this.template = null;
     this.element = null;
+    this.sandbox = null;
 }, {
     /** @static @property __name plugin name */
     __name : 'DataSourcePlugin',
@@ -158,8 +159,8 @@ function() {
      * Creates logo and terms of use links on top of map
      */
     _createUI : function() {
-    	
-		var sandbox = this._sandbox;
+    	var me = this;
+		var sandbox = me._sandbox;
         // get div where the map is rendered from openlayers
         var parentContainer = jQuery(this._map.div);
         if(!this.element) {
@@ -171,16 +172,27 @@ function() {
         var pluginLoc = this.getMapModule().getLocalization('plugin', true);
         var myLoc = pluginLoc[this.__name];
         
-        
         var link = this.element.find('a');
         link.append(myLoc["link"]); 
         link.bind('click', function(){
-	    	var me = this;
-            alert('1');
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            dialog.show(me.loc.popup.edit_title, me.loc.popup.editmsg);
-            dialog.close();
-    	    });
+            var okBtn = dialog.createCloseButton(myLoc.button.close);
+
+            var selectedLayers = sandbox.findAllSelectedMapLayers();
+            var content = jQuery('<ul></ul>');
+            for(var i = 0; i < selectedLayers.length; ++i) {
+                var layer = selectedLayers[i];
+                var name = layer.getOrganizationName();
+                if(name) {
+                    var item = jQuery('<li>' + name + '</li>');
+                    content.append(item);
+                }
+            }
+            dialog.show(myLoc.popup.title, content, [okBtn]);
+            dialog.moveTo('div.datascource a', 'top');
+            return false;
+	    });
+
     }
 }, {
     /**

@@ -24,6 +24,16 @@ Oskari.registerLocalization({
         "termsLink": "http://www.paikkatietoikkuna.fi/web/sv/anvandningsvillkor",
         "mapLinkBase": "http://www.paikkatietoikkuna.fi/web/sv/kartfonstret?"
       },
+       "DataSourcePlugin": {
+        "link": "Datakälla",
+        "popup": {
+          "title": "Datakällor",
+          "content": " "
+        },
+        "button": {
+          "close": "Stäng"
+        }
+      },
       "LayerSelectionPlugin": {
         "title": "Kartlager",
         "chooseDefaultBaseLayer": "Välj bottenkarta"

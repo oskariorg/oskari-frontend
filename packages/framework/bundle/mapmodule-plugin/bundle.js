@@ -131,6 +131,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/logo/css/logoplugin.css"
         },
+         /**
+         * Data Source plugin
+         */
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/datasource/DataSourcePlugin.js"
+        },
+        {
+            "type" : "text/css",
+            "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/datasource/css/datasource.css"
+        },
+
         
         // IndexMap
         {
