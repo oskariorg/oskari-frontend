@@ -22,6 +22,7 @@ function(instance) {
     this.modelMngr = null;
     this.selectedTab = null;
     this.active = false;
+    this.mapDivId = "#mapdiv";
 }, {
     /**
      * @method getName
@@ -60,6 +61,9 @@ function(instance) {
         this.service = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.service.GridJsonService', 
             this.instance.sandbox.getAjaxUrl());
         this.modelMngr = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.service.GridModelManager');
+        var mapmodule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
+        var newMapDivId = mapmodule.getMap().div;
+        if (newMapDivId) this.mapDivId = newMapDivId;
     },
     /**
      * @method stopPlugin
@@ -250,10 +254,10 @@ function(instance) {
                 grid.addSelectionListener(function(pGrid, dataId) {
                     me._handleGridSelect(layer, dataId);
                 });
-                
+
                 // set popup handler for inner data
                 var showMore = this.instance.getLocalization('showmore');
-                grid.setAdditionalDataHandler(showMore, 
+                grid.setAdditionalDataHandler(showMore,
                     function(link, content) {
                         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                         var okBtn = dialog.createCloseButton("OK");
@@ -261,7 +265,7 @@ function(instance) {
                         dialog.show(showMore, content, [okBtn]);
                         dialog.moveTo(link, 'bottom');
                 });
-                
+
                 var visibleFields = [];
                 // filter out certain fields
                 for(var i = 0; i < fields.length; ++i) {
@@ -276,6 +280,11 @@ function(instance) {
             panel.grid.setDataModel(model);
             try {
                 panel.grid.renderTo(panel.getContainer());
+                // define flyout size to adjust correctly to arbitrary tables
+                var mapdiv = jQuery(me.mapDivId);
+                var flyout = jQuery('div.oskari-flyoutcontent.featuredata').parent().parent();
+                flyout.find('div.tab-content').css('max-height',(mapdiv.height()/4).toString()+'px');
+                flyout.css('max-width',mapdiv.width().toString()+'px');
             }
             catch(error) {
                 alert(error);
