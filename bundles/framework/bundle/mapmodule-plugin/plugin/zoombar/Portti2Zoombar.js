@@ -166,8 +166,9 @@ function(config) {
         
        
         var plus = me.__elements['zoombarSlider'].find('.pzbDiv-plus');
+       
         plus.bind('click', function(event) {
-            if(me._slider.slider('value') < 12) {
+            if(me._slider.slider('value') < me._map.getNumZoomLevels()) {
                 me.getMapModule().zoomTo(me._slider.slider('value') + 1);
             }
         });
