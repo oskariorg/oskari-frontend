@@ -73,8 +73,8 @@ function() {
         if(conf!=null && conf.modules!=null){
         	me.modules = conf.modules;
         	var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        	var opMap = mapModule.getMap();
-        	var id = opMap.div.id;
+        	var olMap = mapModule.getMap();
+        	var id = olMap.div.id;
         	
         	jQuery('#'+id).append('<div id="harava-map-questions"></div>');
         	
@@ -107,8 +107,7 @@ function() {
     	                	// handle feature selection
     		               	var feature = evt.feature;
     		               	var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-    		            	var opMap = mapModule.getMap();
-    		            	map = opMap;
+    		            	var olMap = mapModule.getMap();
     		            	
     		            	var features = me.getAllModuleFeatures();
 
@@ -124,33 +123,17 @@ function() {
     		                var pos = new OpenLayers.LonLat(feature.geometry.getCentroid().x, feature.geometry.getCentroid().y);
     		                
     		                // Check viewport min lon and max lon
-    		                var left = map.getExtent().left;
-    		                var right = map.getExtent().right;
+    		                var left = olMap.getExtent().left;
+    		                var right = olMap.getExtent().right;
     		                
-    		                var top = map.getExtent().top;
-    		                var bottom = map.getExtent().bottom;
+    		                var top = olMap.getExtent().top;
+    		                var bottom = olMap.getExtent().bottom;
 
 		                	var centerlon = pos.lon - ((right - left) * 7 / 16);	                	
 		                	var centerlat = pos.lat + ((top - bottom) * 3 / 8);	 
 		                	
-		                	map.moveTo(new OpenLayers.LonLat(centerlon, centerlat));	 
+		                	olMap.moveTo(new OpenLayers.LonLat(centerlon, centerlat));	 
 		                	
-    		                // If drawn geometry is located in the left quarter of the map. Map is moved to the left
-    		              /*  if (pos.lon < leftquarter) {
-    		                
-    		                	// If drawn geometry is located in the left one-fifth, but not bottom one-six. Move map there.
-    		                	var leftfifth = left + ((right - left) / 5);
-    		                	if (pos.lon < leftfifth) {
-    			                	var top = map.getExtent().top;
-    			                	var bottom = map.getExtent().bottom;    			                	
-    			                	var bottomquarter = bottom + ((top - bottom) / 8);    			                	
-    			                	if (pos.lat > bottomquarter) {
-    			                		centerlat = pos.lat + ((top - bottom) * 3 / 8);
-    			                	}    		                		
-    		                	}
-    			            
-    		                }
-		               		*/
     		                if (feature.attributes.toolHtml) {
     			            	modifyControls = me._modifyControls;
     			                drawControls = me.drawControls;
@@ -166,7 +149,7 @@ function() {
     				                    me.onPopupClose
     			                	);
     				                feature.popup = popup;
-    				                map.addPopup(feature.popup); 
+    				                olMap.addPopup(feature.popup); 
     		                	}
     		                	else {
     				            	feature.popup.toggle();
@@ -174,7 +157,7 @@ function() {
     		                }  
 
     		                me._lastfeature = feature;		            	
-
+    		                mapModule._updateDomain();
     		            },
     		            'featuremodified':function(evt) {
     		            	// handle feature modification
@@ -205,14 +188,14 @@ function() {
 	            };
 	            
 	            // Add module layer to map
-	            opMap.addLayers([module.layer]);
+	            olMap.addLayers([module.layer]);
 	            
 	            // Add module controls to map
 	            for(var key in module.drawControls) {
-	            	opMap.addControl(module.drawControls[key]);
+	            	olMap.addControl(module.drawControls[key]);
 	            }
 	            for(var key in module.modifyControls) {
-	            	opMap.addControl(module.modifyControls[key]);
+	            	olMap.addControl(module.modifyControls[key]);
 	            }
 	            
 	            // Set module layer not visible
@@ -320,9 +303,9 @@ function() {
     	});
     	
     	var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
-    	var opMap = mapModule.getMap();
+    	var olMap = mapModule.getMap();
     	
-    	var popups = opMap.popups;
+    	var popups = olMap.popups;
 	    for (var i = 0; i < popups.length; i++) {
         	var popup = popups[i];
         	popup.hide();	                	
