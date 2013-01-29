@@ -2,6 +2,23 @@
 
 ## 1.5 release notes
 
+### personal data bundle
+
+user can modify the published/embedded maps from personal data lists.
+
+sends a request to Publisher bundle to enable pulish mode
+
+### Publisher bundle
+
+created request PublishMapEditorRequest to enable the publish mode
+
+
+### mapmodule bundle/Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugin
+
+new bundle 
+
+renders list of data providers for the selected layers
+
 ### featuredata bundle
 
 improved scaling for the Object data flyout
@@ -107,11 +124,6 @@ now provides MapModulePlugin.RemoveMarkerRequest and handler for it
 ### mapmodule bundle/Oskari.mapframework.mapmodule.ControlsPlugin/OpenLayers.Control.PorttiMouse
 
 zooming with double click and mouse wheel now behave identically (behavior configurable)
-
-### mapmodule bundle/Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugin
-new bundle 
-
-renders list of data providers for the selected layers
 
 ### post-processor bundle
 
