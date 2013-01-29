@@ -34,11 +34,16 @@ No configuration is required.
 No statehandling has been implemented.
 
 ## Requests the bundle handles
-
-This bundle doesn't handle any requests.
+<table>
+<tr>
+  <th> Request </th><th> Where/why it's used</th>
+</tr>
+<tr>
+  <td> publisher.PublishMapEditorRequest </td><td>Enables users to modify the publish maps</td>
+</tr>
+</table>
 
 ## Requests the bundle sends out
-
 <table>
 <tr>
   <th> Request </th><th> Where/why it's used</th>

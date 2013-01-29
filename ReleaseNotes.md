@@ -108,6 +108,11 @@ now provides MapModulePlugin.RemoveMarkerRequest and handler for it
 
 zooming with double click and mouse wheel now behave identically (behavior configurable)
 
+### mapmodule bundle/Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugin
+new bundle 
+
+renders list of data providers for the selected layers
+
 ### post-processor bundle
 
 new bundle
