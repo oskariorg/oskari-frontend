@@ -30,6 +30,10 @@ function() {
 			},
 			{
 	            "type" : "text/javascript",
+	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/plugin/questionsmap/HaravaQuestionsMapPlugin.js"
+	        },
+			{
+	            "type" : "text/javascript",
 	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/ShowQuestionStepRequest.js"
 	        },
 	        {
