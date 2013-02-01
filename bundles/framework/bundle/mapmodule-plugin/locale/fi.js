@@ -24,6 +24,16 @@ Oskari.registerLocalization({
         "termsLink": "http://www.paikkatietoikkuna.fi/web/fi/kayttoehdot",
         "mapLinkBase": "http://www.paikkatietoikkuna.fi/web/fi/kartta?"
       },
+      "DataSourcePlugin": {
+        "link": "Aineistolähde",
+        "popup": {
+          "title": "Tietolähteet",
+          "content": " "
+        },
+        "button": {
+          "close": "Sulje"
+        }
+      },
       "LayerSelectionPlugin": {
         "title": "Karttatasot",
         "chooseDefaultBaseLayer": "Valitse karttapohja"

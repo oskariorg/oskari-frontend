@@ -26,7 +26,7 @@ function(sandbox, layersPlugin) {
     handleRequest : function(core, request) {
         var layerId = request.getMapLayerId();
         var layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
-        if(!layer) {
+        if(!layer || layer.isVisible() == request.getVisible()) {
         	return;
         }
         layer.setVisible(request.getVisible());

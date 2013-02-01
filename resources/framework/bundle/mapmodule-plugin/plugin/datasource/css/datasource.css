@@ -1,0 +1,15 @@
+.datascource .link {
+  background-color: none;
+  background-repeat: no-repeat;
+  display:block;
+  font-size: 13px;
+  position: fixed;
+  bottom:15px;
+  right:70px;
+  z-index:100000000 !important;
+  filter: alpha(opacity=80);
+  opacity: 0.8 !important;
+}
+.datascource a, .datascource a:hover, .datascourcea:active, .datascource a:visited {
+    color: blue !important;
+}

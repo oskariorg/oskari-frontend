@@ -380,6 +380,16 @@ function() {
         }
         return selection;
     },
+
+    /**
+     * @method getTable
+     * Returns the grid table.
+     * @return {Object} table for the grid data
+     */
+    getTable : function() {
+      return this.table;
+    },
+
     /**
      * @method _sortBy
      * Sorts the last search result by comparing given attribute on the search objects

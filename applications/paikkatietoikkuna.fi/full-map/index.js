@@ -34,48 +34,69 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
 
 		/* me.applyStyle(appSetup,'ui'); */
 
-		app.setApplicationSetup(appSetup);
-		app.setConfiguration(appConfig);
-		app.startApplication(function(startupInfos) {
-			me.instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
-			if (cb) {
-				cb(me.instance);
-			}
-			// var ugStartup =
-			//     {
-			//         'instanceProps': {},
-			//         'title': 'Guided Tour',
-			//         'bundleinstancename': 'guidedtour',
-			//         'fi': 'guidedtour',
-			//         'sv': 'guidedtour',
-			//         'en': 'guidedtour',
-			//         'bundlename': 'guidedtour',
-			//         'metadata': {
-			//             'Import-Bundle': {
-			//                 'guidedtour': {
-			//                     'bundlePath':
-			// '/Oskari/packages/sample/bundle/'
-			//                 }
-			//             },
-			//             'Require-Bundle-Instance': [ ]
-			//         }
-			//     };
-			// Oskari.bundle_facade.playBundle(ugStartup, function() {});
-		});
-	},
-	/**
-	 * @static
-	 * @property appConfig
-	 */
-	appConfig : {
-		// bundle id
-		'mapfull' : {
-			// properties that will be made available before bundle start()
-			// 'key' : 'value'
-			// can be accessed in mapfull.start() like:
-			// alert('This should return "value" :' + this.key);
-		}
-	},
+        app.setApplicationSetup(appSetup);
+        app.setConfiguration(appConfig);
+        app.startApplication(function(startupInfos) {
+            me.instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
+            if(cb) {
+                cb(me.instance);
+            }
+
+/*// TODO - KESKEN
+            var ugStartup = {
+                title : 'Printout',
+                fi : 'Karttatuloste',
+                sv : 'Kartutskrift',
+                en : 'Map Printout',
+                bundlename : 'printout',
+                bundleinstancename : 'printout',
+                metadata : {
+                    "Import-Bundle" : {
+                        "printout" : {
+                            bundlePath : '/Oskari/packages/framework/bundle/'
+                        }
+                    },
+                    "Require-Bundle-Instance" : []
+                },
+                instanceProps : {}
+            };
+*/ 
+           // var ugStartup =
+            //     {
+            //         'instanceProps': {},
+            //         'title': 'Guided Tour',
+            //         'bundleinstancename': 'guidedtour',
+            //         'fi': 'guidedtour',
+            //         'sv': 'guidedtour',
+            //         'en': 'guidedtour',
+            //         'bundlename': 'guidedtour',
+            //         'metadata': {
+            //             'Import-Bundle': {
+            //                 'guidedtour': {
+            //                     'bundlePath':
+            // '/Oskari/packages/sample/bundle/'
+            //                 }
+            //             },
+            //             'Require-Bundle-Instance': [ ]
+            //         }
+            //     };
+            //Oskari.bundle_facade.playBundle(ugStartup, function() {});
+
+        });
+    },
+    /**
+     * @static
+     * @property appConfig
+     */
+    appConfig : {
+        // bundle id
+        'mapfull' : {
+            // properties that will be made available before bundle start()
+            // 'key' : 'value'
+            // can be accessed in mapfull.start() like:
+            // alert('This should return "value" :' + this.key);
+        }
+    },
 
 	/**
 	 * @static

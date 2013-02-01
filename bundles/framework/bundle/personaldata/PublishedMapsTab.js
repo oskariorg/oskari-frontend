@@ -123,6 +123,17 @@ function(instance, localization) {
         dialog.show(me.loc.popup.deletetitle, me.loc.popup.deletemsg, [cancelBtn, okBtn]);
         dialog.makeModal();
     },
+     /**
+     * @method _showEditNotification
+     * Shows notification about edit publish map data
+     */
+    _showEditNotification : function(view) {
+        var me = this;
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        dialog.show(me.loc.popup.edit_title, me.loc.popup.editmsg);
+        dialog.fadeout();
+    },
+
     /**
      * @method _deleteView
      */
@@ -180,6 +191,7 @@ function(instance, localization) {
                 'name' : view.name,
                 'domain' : view.pubDomain,
                 'isPublic' : isPublic,
+                'show' : this.loc.show,
                 'edit' : this.loc.edit,
                 'publish' : isPublic ? this.loc.unpublish : this.loc.publish,
                 'delete' : this.loc['delete']
@@ -199,10 +211,11 @@ function(instance, localization) {
         var me = this;
         var instance = this.instance;
         var sandbox = instance.getSandbox();
-        var visibleFields = ['name', 'domain', 'publish', 'edit', 'delete'];
+        var visibleFields = ['name', 'domain', 'publish', 'show', 'edit', 'delete'];
         var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
         grid.setDataModel(model);
         grid.setVisibleFields(visibleFields);
+
         // set up the link from name field
         var nameRenderer = function(name, data) {
             var link = me.templateLink.clone();
@@ -216,23 +229,47 @@ function(instance, localization) {
             return link;
         };
         grid.setColumnValueRenderer('name', nameRenderer);
-        // set up the link from edit field
+
+        var setMapState = function(data) {
+            var rb = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
+            if (rb) {
+                var req = rb(data.state);
+                req.setCurrentViewId(data.id);
+                sandbox.request(instance, req);
+            }
+            return false;
+        };
+
+        // set up the link from name field
+        var showRenderer = function(name, data) {
+            var link = me.templateLink.clone();
+            link.append(name);
+            link.bind('click', function() {
+                setMapState(data);
+            });
+            return link;
+        };
+        grid.setColumnValueRenderer('show', showRenderer);
+
+        //sending a request to map publish mode
         var editRenderer = function(name, data) {
             var link = me.templateLink.clone();
             link.append(name);
             link.bind('click', function() {
-                var rb = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
-                if (rb) {
-                    var req = rb(data.state);
-                    req.setCurrentViewId(data.id);
+                setMapState(data);
+                var rb = sandbox.getRequestBuilder('Publisher.PublishMapEditorRequest');
+                if(rb) {
+                    var req = rb(data);
+                    me._showEditNotification(req);
                     sandbox.request(instance, req);
                 }
-                return false;
+                return false; 
             });
             return link;
-        };
+        };        
         grid.setColumnValueRenderer('edit', editRenderer);
-        // set up the link from edit field
+
+        // set up the link from show field
         var deleteRenderer = function(name, data) {
             var link = me.templateLink.clone();
             link.append(name);
@@ -244,10 +281,10 @@ function(instance, localization) {
                 return false;
             });
             return link;
-        };
+        };       
         grid.setColumnValueRenderer('delete', deleteRenderer);
-        
-        // set up the link from edit field
+
+        // set up the link from delete field
         var service = instance.getViewService();
         var publishRenderer = function(name, data) {
             var link = me.templateLink.clone();

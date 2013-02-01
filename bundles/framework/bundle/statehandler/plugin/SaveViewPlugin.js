@@ -119,7 +119,7 @@ function(ajaxUrl) {
 			error : function() {
 				// only show error if explicitly calling save
 
-				if (viewName) {
+				if (data.viewName) {
 					event.setError(true);
 					me._sandbox.notifyAll(event);
 				}

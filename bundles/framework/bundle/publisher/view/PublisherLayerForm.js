@@ -30,7 +30,7 @@ function(localization, instance) {
                 text : this.loc.layerselection.promote,
                 id : [24] // , 203
             }],
-            preselect : 'base_35'
+            preselect : ['base_35']
         }
     };
     this.showLayerSelection = false;
@@ -45,9 +45,24 @@ function(localization, instance) {
 	        this.panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
 	        this.panel.setTitle(this.loc.layers.label);
 		}
-		
-		this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin');
+        this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin');  
 	},
+
+    useConfig : function(pConfig) {
+        if(pConfig) {
+            if( Object.prototype.toString.call( pConfig.baseLayers ) === '[object Array]' &&
+                pConfig.baseLayers.length > 0) {
+
+                this.config.layers.preselect = pConfig.baseLayers;
+            }
+            else {
+                this.config.layers.preselect = [];
+            }
+            this.showLayerSelection = true;
+            this.enablePlugin(true);
+            this._populateMapLayerPanel();
+        }
+    },
     /**
      * @method getPanel
      * Returns the UI panel and populates it with the data that we want to show the user.
@@ -84,6 +99,9 @@ function(localization, instance) {
 	start : function() {
         var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
         mapModule.registerPlugin(this.plugin);
+        if(this.showLayerSelection) {
+            this.enablePlugin(true);
+        }
 	},
     /**
      * @method stop
@@ -160,6 +178,7 @@ function(localization, instance) {
 
         var me = this;
         var contentPanel = this.panel.getContainer();
+        contentPanel.empty();
 
         // tooltip
         var tooltipCont = this.templateHelp.clone();
@@ -198,6 +217,10 @@ function(localization, instance) {
                 }
             };
         };
+        var shouldPreselectLayer = function(layerId) {
+            var isFound = jQuery.inArray('' + layerId, me.config.layers.preselect);        
+            return isFound != -1;
+        };
         var layers = this._getLayersList();
         for (var i = 0; i < layers.length; ++i) {
         	
@@ -207,8 +230,7 @@ function(localization, instance) {
             layerContainer.find('span').append(layer.getName());
             var input = layerContainer.find('input');
             
-            if (this.config.layers.preselect && 
-            	this.config.layers.preselect == layer.getId()) {
+            if (shouldPreselectLayer(layer.getId())) {
                 input.attr('checked', 'checked');
                 layer.selected = true;
                 this.plugin.addBaseLayer(layer);

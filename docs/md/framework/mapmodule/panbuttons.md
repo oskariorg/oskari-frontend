@@ -1,40 +1,52 @@
 # Pan Buttons
 
-|| Name || PanButtons \\ ||
-|| ID || panbuttons ||
-|| API || [//docs/oskari/api/#!/api/Oskari.mapframework.bundle.mapmodule.plugin.PanButtons link] ||
-|| Description || The plugin offers the user a move my by pan buttons\\ ||
+<table>
+  <tr>
+    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.mapmodule.plugin.PanButtons)</td>
+  </tr>
+</table>
 
-### TODO
+## Description
+
+The plugin offers the user a move my by pan buttons
+
+## TODO
 
 * image url config (can be used by mapmodule image path [getImageUrl()])
 
-### Screenshot
+## Screenshot
 
-[[Image(panbuttons.png)]]
+![screenshot](<%= docsurl %>images/panbuttons.png)
 
-### Bundle configuration
+## Bundle configuration
 
 No configuration is required.
 
-### Requests the plugin handles
+## Requests the plugin handles
 
 This plugin doesn't handle any requests.
 
-### Requests the plugin sends out
+## Requests the plugin sends out
 
 This plugin doesn't sends any requests.
 
+## Events the plugin listens to
 
+This bundle doesn't listen to any events.
 
-### Events the plugin listens to
-
-
-### Events the plugin sends out
+## Events the plugin sends out
 
 This bundle doesn't send any events.
 
-### Dependencies (e.g. jquery plugins) 
+## Dependencies
 
-|| Dependency || Linked from || API || Purpose ||
-|| jQuery || Linked in portal theme || [http://api.jquery.com/] || Used to create the component UI from begin to end || 
+<table>
+  <tr>
+    <th>Dependency</th><th>Linked from</th><th>Purpose</th>
+  </tr>
+  <tr>
+    <td> [jQuery](http://api.jquery.com/) </td>
+    <td> Version 1.7.1 assumed to be linked </td>
+    <td> Used to create the UI</td>
+  </tr>
+</table>

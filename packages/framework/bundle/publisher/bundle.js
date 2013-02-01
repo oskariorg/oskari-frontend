@@ -52,6 +52,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundle", func
         }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/publisher/css/style.css"
+        },{
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/publisher/request/PublishMapEditorRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/publisher/request/PublishMapEditorRequestHandler.js"
         }],
 
 		"locales" : [{
