@@ -53,6 +53,54 @@ function() {
 	getSandbox : function() {
 		return this.sandbox;
 	},
+	toggleTools: function(){
+		var me = this;
+		if(me._currentStep!=null){
+    		var module = me.getModuleById(me._currentStep);
+    		if(module!=null){
+				if(jQuery(module.appendTo).prev().hasClass('harava-toolbar-hide')){
+		    		me.hideTools();
+		    	}
+		    	else if(jQuery(module.appendTo).prev().hasClass('harava-toolbar-show')){
+		    		me.showTools();
+		    	}
+    		}
+		}
+	},
+	hideTools: function(){
+		var me = this;
+		if(me._currentStep!=null){
+    		var module = me.getModuleById(me._currentStep);
+    		if(module!=null){
+    			var module = me.getModuleById(me._currentStep);    		
+    			jQuery(module.appendTo).prev().removeClass('harava-toolbar-hide');
+    			jQuery(module.appendTo).prev().addClass('harava-toolbar-show');
+    			
+    			jQuery(module.appendTo).animate({left:'-25%'},'slow');
+    			jQuery(module.appendTo).prev().animate({left:'0'},'slow');
+    		}
+		}
+	},
+	showTools: function(fast){
+		var me = this;
+		if(me._currentStep!=null){
+    		var module = me.getModuleById(me._currentStep);
+    		if(module!=null){
+    			var module = me.getModuleById(me._currentStep);    		
+    			jQuery(module.appendTo).prev().removeClass('harava-toolbar-show');
+    			jQuery(module.appendTo).prev().addClass('harava-toolbar-hide');
+    			
+    			if(fast===true){
+    				jQuery(module.appendTo).animate({left:'0'},'fast');
+    				jQuery(module.appendTo).prev().animate({left:'25%'},'fast');
+    			}
+    			else {
+    				jQuery(module.appendTo).animate({left:'0'},'slow');
+    				jQuery(module.appendTo).prev().animate({left:'25%'},'slow');
+    			}
+    		}
+		}	
+	},
     /**
      * @method start
      * BundleInstance protocol method
@@ -76,8 +124,6 @@ function() {
         	var opMap = mapModule.getMap();
         	var id = opMap.div.id;
         	
-        	jQuery('#'+id).append('<div id="harava-map-questions"></div>');
-        	
         	/* Add all configured Question modules */
         	$.each(me.modules, function(k, module){
         		var html = '';
@@ -85,8 +131,13 @@ function() {
         		if(module.questionTitle!=''){
         			t = '<p>'+module.questionTitle+'</p>';
         		}
+        		jQuery(module.appendTo).before('<div class="harava-map-question-toggle-toolbar harava-toolbar-hide"></div>');
         		jQuery(module.appendTo).append('<div class="harava-map-question-title">'+t+'</div>');
     	        jQuery(module.appendTo).append('<div id="harava-map-questions-content"></div>');
+    	        
+    	        jQuery(module.appendTo).prev().bind('click',function(){
+    	        	me.toggleTools();
+    	        });
     	        
     	        // Create module own OpenLayers layer    	        
     	        module.layer = new OpenLayers.Layer.Vector(me.drawLayerSubfix + module.questionId, {
@@ -124,6 +175,7 @@ function() {
     		                var pos = new OpenLayers.LonLat(feature.geometry.getCentroid().x, feature.geometry.getCentroid().y);
     		                
     		                // Check viewport min lon and max lon
+    		                /*
     		                var left = map.getExtent().left;
     		                var right = map.getExtent().right;
     		                
@@ -134,29 +186,13 @@ function() {
 		                	var centerlat = pos.lat + ((top - bottom) * 3 / 8);	 
 		                	
 		                	map.moveTo(new OpenLayers.LonLat(centerlon, centerlat));	 
-		                	
-    		                // If drawn geometry is located in the left quarter of the map. Map is moved to the left
-    		              /*  if (pos.lon < leftquarter) {
-    		                
-    		                	// If drawn geometry is located in the left one-fifth, but not bottom one-six. Move map there.
-    		                	var leftfifth = left + ((right - left) / 5);
-    		                	if (pos.lon < leftfifth) {
-    			                	var top = map.getExtent().top;
-    			                	var bottom = map.getExtent().bottom;    			                	
-    			                	var bottomquarter = bottom + ((top - bottom) / 8);    			                	
-    			                	if (pos.lat > bottomquarter) {
-    			                		centerlat = pos.lat + ((top - bottom) * 3 / 8);
-    			                	}    		                		
-    		                	}
-    			            
-    		                }
-		               		*/
+		                	*/
     		                if (feature.attributes.toolHtml) {
     			            	modifyControls = me._modifyControls;
     			                drawControls = me.drawControls;
     			                
     		                	if (feature.popup === null) {
-    		                		popup = new OpenLayers.Popup.FramedCloud(
+    		                		var popup = new OpenLayers.Popup.FramedCloud(
     	                				feature.id + ".popup",
     				                    OpenLayers.LonLat.fromString(feature.geometry.getCentroid().toShortString()),
     				                    null,
@@ -165,12 +201,15 @@ function() {
     				                    true,
     				                    me.onPopupClose
     			                	);
+    		                		popup.panMapIfOutOfView = true;
     				                feature.popup = popup;
     				                map.addPopup(feature.popup); 
     		                	}
     		                	else {
     				            	feature.popup.toggle();
     		                	}
+    		                	
+    		                	me.hideTools();
     		                }  
 
     		                me._lastfeature = feature;		            	
@@ -279,6 +318,8 @@ function() {
     "onPopupClose" : function(evt){
     	var sandbox = Oskari.$("sandbox");
     	var me = sandbox.findRegisteredModuleInstance('HaravaMapQuestions');
+    	
+    	me.showTools();
     	if(me._currentControls.modify!=null){
     		me._currentControls.modify.selectControl.unselectAll();
     	}
@@ -335,6 +376,14 @@ function() {
      */
     "showStep" : function(moduleId){
     	var me = this;
+    	
+    	var oldmodule = me.getModuleById(me._currentStep);
+		if(oldmodule!=null){
+			if(jQuery(oldmodule.appendTo).prev().hasClass('harava-toolbar-show')){
+	    		me.showTools();
+	    	}
+		}
+    	
     	me.deActivateAll();
     	var module = me.getModuleById(moduleId);
     	if(module!=null){
@@ -362,7 +411,7 @@ function() {
         		Oskari.clazz.globals.sandbox.postRequestByName('UpdateMapRequest');
         	}
     	}
-    	me._currentStep=moduleId;
+    	me._currentStep=moduleId;    	
     },
     /**
      * @method finishedDrawing
@@ -505,6 +554,7 @@ function() {
         	}
     		feature.destroy();
     	}
+    	me.showTools();
     },
     /**
      * @method hideSelectedFeature
@@ -519,6 +569,8 @@ function() {
         		feature.popup.hide();
         	}
     	}
+    	
+    	me.hideTools();
     },
     /**
      * @method stop
