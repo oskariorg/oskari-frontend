@@ -147,6 +147,7 @@ function() {
     	                strokeColor: "#ff9933",
     	                strokeWidth: 2,
     	                graphicZIndex: 1,
+    	                fillOpacity: 0.5,
     	                cursor: 'pointer'
     	             },
     	            eventListeners : {
