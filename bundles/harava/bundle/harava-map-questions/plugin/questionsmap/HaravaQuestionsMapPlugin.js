@@ -380,7 +380,7 @@ function(config) {
     	
     	if(centerLon!=null && centerLon!='' && centerLat!=null && centerLat!=''){
     		var centerPoint = new OpenLayers.LonLat(centerLon, centerLat);
-    		mapModule.panMapToLanLot(centerPoint);
+    		mapModule.panMapToLonLat(centerPoint);
     	}
     	
     	me._map.updateSize();
