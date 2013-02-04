@@ -488,7 +488,7 @@ function(id, imageUrl, options) {
      * @param {OpenLayers.LonLat} lonlat coordinates to pan the map to
      */
     panMapToLanLot : function(lonlat) {
-        this._map.setCenter(lonlat, this._map.getZoom(), isDragging);
+        this._map.setCenter(lonlat, this._map.getZoom());
         this._updateDomain();
     },
     /**
