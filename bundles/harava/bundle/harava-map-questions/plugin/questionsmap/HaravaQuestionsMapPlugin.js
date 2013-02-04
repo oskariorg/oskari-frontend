@@ -88,6 +88,22 @@ function(config) {
 
     },
     /**
+     * @method getCurrentModuleFeatures
+     * Get current module all features
+     * @returns {Array} features
+     */
+    "getCurrentModuleFeatures" :function(){
+    	var me = this;
+    	var features = [];
+    	if(me._currentStep!=null){
+    		var module = me.getModuleById(me._currentStep);
+    		if(module != null && module.layer!=null){
+        		features = module.layer.features;
+	        }
+    	}
+    	return features;
+    },
+    /**
      * @method getAllModuleFeatures
      * Get all modules all features
      * @returns {Array} features
@@ -111,6 +127,7 @@ function(config) {
      * @param {Object} me
      */
     "onPopupClose" : function(evt, me){
+    	me.showTools();
     	if(me._currentControls!= null && me._currentControls.modify!=null){
     		me._currentControls.modify.selectControl.unselectAll();
     	}
@@ -165,6 +182,7 @@ function(config) {
     	                strokeColor: "#ff9933",
     	                strokeWidth: 2,
     	                graphicZIndex: 1,
+    	                fillOpacity: 0.5,
     	                cursor: 'pointer'
     	             },
     	            eventListeners : {
@@ -188,18 +206,6 @@ function(config) {
 
     		                // Check feature position (if need pan a map at popup show well)
     		                var pos = new OpenLayers.LonLat(feature.geometry.getCentroid().x, feature.geometry.getCentroid().y);
-    		                
-    		                // Check viewport min lon and max lon
-    		                var left = me._map.getExtent().left;
-    		                var right = me._map.getExtent().right;
-    		                
-    		                var top = me._map.getExtent().top;
-    		                var bottom = me._map.getExtent().bottom;
-
-		                	var centerlon = me._map.lon - ((right - left) * 7 / 16);	                	
-		                	var centerlat = me._map.lat + ((top - bottom) * 3 / 8);	 
-		                	
-		                	me._map.moveTo(new OpenLayers.LonLat(centerlon, centerlat));	 
 		                	
     		                if (feature.attributes.toolHtml) {
     			            	modifyControls = me._modifyControls;
@@ -223,6 +229,8 @@ function(config) {
     		                	else {
     				            	feature.popup.toggle();
     		                	}
+    		                	
+    		                	me.hideTools();
     		                }  
 
     		                me._lastfeature = feature;		            	
@@ -361,7 +369,7 @@ function(config) {
      * @param centerLon center lon coordinate
      * @param centerLat center lat coordinate
      */
-    scaleAndCenterMap: function(scale,centerLon,centerLat)
+    "scaleAndCenterMap": function(scale,centerLon,centerLat)
     {
     	var me = this;
     	var mapModule = me.getMapModule();
@@ -543,12 +551,14 @@ function(config) {
         	}
     		feature.destroy();
     	}
+    	me.showTools();
     },
     /**
      * @method hideSelectedFeature
      * Hide selected feature
+     * @param {Boolean} notCloseTools
      */
-    "hideSelectedFeature" : function () {    	
+    "hideSelectedFeature" : function (notCloseTools) {    	
     	var me = this;
     	var feature = me._lastfeature;
     	if (feature) {
@@ -557,7 +567,35 @@ function(config) {
         		feature.popup.hide();
         	}
     	}
-    }
+    	if(notCloseTools==null || notCloseTools==true){
+    		me.hideTools();
+    	}
+    },
+    /**
+	 * @method toggleTools
+	 * Toggle map question tools 
+	 */
+	toggleTools: function(){
+		var me = this;
+		me._sandbox.postRequestByName('ToggleQuestionToolsRequest');
+	},
+	/**
+	 * @method hideTools
+	 * Hide map questions tools
+	 */
+	hideTools: function(){
+		var me = this;
+		me._sandbox.postRequestByName('HideQuestionToolsRequest');
+	},
+	/**
+	 * @method showTools
+	 * Show map question tools
+	 * @param fast need fast drawing
+	 */
+	showTools: function(fast){
+		var me = this;
+		me._sandbox.postRequestByName('ShowQuestionToolsRequest');
+	}
 }, {
     /**
      * @property {Object} protocol

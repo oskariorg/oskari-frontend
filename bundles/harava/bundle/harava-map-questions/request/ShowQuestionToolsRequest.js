@@ -1,17 +1,17 @@
 /**
- * @class Oskari.harava.bundle.mapquestions.request.ShowQuestionStepRequest
- * Requests a show question step
+ * @class Oskari.harava.bundle.mapquestions.request.ShowQuestionToolsRequest
+ * Requests a show question tools
  * 
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ShowQuestionStepRequest', 
+Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ShowQuestionToolsRequest', 
 
-function(moduleId) {
-	this._moduleId = moduleId;
+function(fast) {
+    this._fast = fast;
 }, {
 	/** @static @property __name request name */
-    __name : "ShowQuestionStepRequest",
+    __name : "ShowQuestionToolsRequest",
     /**
      * @method getName
      * @return {String} request name
@@ -20,12 +20,12 @@ function(moduleId) {
         return this.__name;
     },
     /**
-     * @method getModuleId
-     * @return {String} module id
+     * @method getFast
+     * @return {Boolean} show fast
      */
-     getModuleId : function() {
-     	return this._moduleId;
- 	}
+    getFast : function() {
+        return this._fast;
+    }
 }, {
 	/**
      * @property {String[]} protocol array of superclasses as {String}

@@ -40,6 +40,30 @@ function() {
 	            "type" : "text/javascript",
 	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/ShowQuestionStepRequestHandler.js"
 	        },
+	        {
+	            "type" : "text/javascript",
+	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/ShowQuestionToolsRequest.js"
+	        },
+	        {
+	            "type" : "text/javascript",
+	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/ShowQuestionToolsRequestHandler.js"
+	        },
+	        {
+	            "type" : "text/javascript",
+	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/HideQuestionToolsRequest.js"
+	        },
+	        {
+	            "type" : "text/javascript",
+	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/HideQuestionToolsRequestHandler.js"
+	        },
+	        {
+	            "type" : "text/javascript",
+	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/ToggleQuestionToolsRequest.js"
+	        },
+	        {
+	            "type" : "text/javascript",
+	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/ToggleQuestionToolsRequestHandler.js"
+	        },
 			/* Resources */
 			{
 				"type" : "text/css",

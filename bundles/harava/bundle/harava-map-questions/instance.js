@@ -12,6 +12,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
  */
 function() {
 	this.sandbox = null;
+	this.plugin = null;
 	this.started = false;
 	this.requestHandlers = {};
 	this.modules = null;
@@ -48,6 +49,67 @@ function() {
 	getSandbox : function() {
 		return this.sandbox;
 	},
+	/**
+	 * @method toggleTools
+	 * Toggle map question tools 
+	 */
+	toggleTools: function(){
+		var me = this;
+		if(me._currentStep!=null){
+    		var module = me.getModuleById(me._currentStep);
+    		if(module!=null){
+				if(jQuery(module.appendTo).prev().hasClass('harava-toolbar-hide')){
+		    		me.hideTools();
+		    	}
+		    	else if(jQuery(module.appendTo).prev().hasClass('harava-toolbar-show')){
+		    		me.showTools();
+		    	}
+    		}
+		}
+	},
+	/**
+	 * @method hideTools
+	 * Hide map questions tools
+	 */
+	hideTools: function(){
+		var me = this;
+		if(me._currentStep!=null){
+    		var module = me.getModuleById(me._currentStep);
+    		if(module!=null){
+    			var module = me.getModuleById(me._currentStep);    		
+    			jQuery(module.appendTo).prev().removeClass('harava-toolbar-hide');
+    			jQuery(module.appendTo).prev().addClass('harava-toolbar-show');
+    			
+    			jQuery(module.appendTo).animate({left:'-25%'},'slow');
+    			jQuery(module.appendTo).prev().animate({left:'0'},'slow');
+    		}
+		}
+	},
+	/**
+	 * @method showTools
+	 * Show map question tools
+	 * @param fast need fast drawing
+	 */
+	showTools: function(fast){
+		var me = this;
+		if(me._currentStep!=null){
+    		var module = me.getModuleById(me._currentStep);
+    		if(module!=null){
+    			var module = me.getModuleById(me._currentStep);    		
+    			jQuery(module.appendTo).prev().removeClass('harava-toolbar-show');
+    			jQuery(module.appendTo).prev().addClass('harava-toolbar-hide');
+    			
+    			if(fast===true){
+    				jQuery(module.appendTo).animate({left:'0'},'fast');
+    				jQuery(module.appendTo).prev().animate({left:'25%'},'fast');
+    			}
+    			else {
+    				jQuery(module.appendTo).animate({left:'0'},'slow');
+    				jQuery(module.appendTo).prev().animate({left:'25%'},'slow');
+    			}
+    		}
+		}	
+	},
     /**
      * @method start
      * BundleInstance protocol method
@@ -74,14 +136,18 @@ function() {
         	me.modules = conf.modules;
         	var id = me.plugin.getOpenLayersDivId();
         	
-        	jQuery('#'+id).append('<div id="harava-map-questions"></div>');
-        	
         	/* Add all configured Question modules */
         	jQuery.each(me.modules, function(k, module){
         		var t = '';
         		if(module.questionTitle!=''){
         			t = '<p>'+module.questionTitle+'</p>';
         		}
+        		jQuery(module.appendTo).before('<div class="harava-map-question-toggle-toolbar harava-toolbar-hide"></div>');
+        		
+        		jQuery(module.appendTo).prev().bind('click',function(){
+        			me.toggleTools();
+        		});
+        		
         		jQuery(module.appendTo).append('<div class="harava-map-question-title">'+t+'</div>');
     	        jQuery(module.appendTo).append('<div id="harava-map-questions-content"></div>');
     	        
@@ -106,9 +172,15 @@ function() {
     	
     	// request
     	this.requestHandlers = {
-    			showQuestionStepRequest : Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.ShowQuestionStepRequestHandler', sandbox, me)
+    			showQuestionStepRequest : Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.ShowQuestionStepRequestHandler', sandbox, me),
+    			showQuestionToolsRequestHandler : Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.ShowQuestionToolsRequestHandler', sandbox, me),
+    			hideQuestionToolsRequestHandler : Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.HideQuestionToolsRequestHandler', sandbox, me),
+    			toggleQuestionToolsRequestHandler : Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.ToggleQuestionToolsRequestHandler', sandbox, me)
     	};
         me.sandbox.addRequestHandler('ShowQuestionStepRequest', this.requestHandlers.showQuestionStepRequest);
+        me.sandbox.addRequestHandler('ShowQuestionToolsRequest', this.requestHandlers.showQuestionToolsRequestHandler);
+        me.sandbox.addRequestHandler('HideQuestionToolsRequest', this.requestHandlers.hideQuestionToolsRequestHandler);
+        me.sandbox.addRequestHandler('ToggleQuestionToolsRequest', this.requestHandlers.toggleQuestionToolsRequestHandler);
     },
     /**
      * @method getCurrentModuleFeatures
@@ -117,14 +189,30 @@ function() {
      */
     "getCurrentModuleFeatures" :function(){
     	var me = this;
-    	var features = [];
-    	if(me._currentStep!=null){
-    		var module = me.getModuleById(me._currentStep);
-    		if(module != null && module.layer!=null){
-        		features = module.layer.features;
-	        }
-    	}
+    	var features = me.plugin.getCurrentModuleFeatures();
     	return features;
+    },
+    /**
+     * @method getAllModuleFeatures
+     * Get all modules all features
+     * @returns {Array} features
+     */
+    "getAllModuleFeatures": function(){
+    	var me = this;
+    	var features = me.plugin.getAllModuleFeatures();
+    	return features;
+    },
+    /**
+     * @method onPopupClose
+     * Close all popus and unselect all features
+     * @param {OpenLayers.Event} evt
+     */
+    "onPopupClose" : function(evt){
+    	var sandbox = Oskari.$("sandbox");
+    	var me = sandbox.findRegisteredModuleInstance('HaravaMapQuestions');
+    	me.plugin.onPopupClose();
+    	me.showTools();
+    	
     },
     /**
      * @method deActivateAll
@@ -144,9 +232,17 @@ function() {
      */
     "showStep" : function(moduleId){
     	var me = this;
+    	
+    	var oldmodule = me.getModuleById(me._currentStep);
+		if(oldmodule!=null){
+			if(jQuery(oldmodule.appendTo).prev().hasClass('harava-toolbar-show')){
+	    		me.showTools();
+	    	}
+		}
+    	
     	me.deActivateAll();
     	me.plugin.showStep(moduleId);    	
-    	me._currentStep=moduleId;    	
+    	me._currentStep=moduleId;  	
     },
     /**
      * @method activateControl
@@ -225,10 +321,11 @@ function() {
     /**
      * @method hideSelectedFeature
      * Hide selected feature
+     * @param {Boolean} notCloseTools
      */
-    "hideSelectedFeature" : function () {
+    "hideSelectedFeature" : function (notCloseTools) {
     	var me = this;
-    	me.plugin.hideSelectedFeature();
+    	me.plugin.hideSelectedFeature(notCloseTools);
     },
     /**
      * @method stop
@@ -241,7 +338,10 @@ function() {
         }
 
         // request handler cleanup 
-        sandbox.removeRequestHandler('ShowQuestionStepRequest', this.requestHandlers['howQuestionStepRequest']);
+        sandbox.removeRequestHandler('ShowQuestionStepRequest', this.requestHandlers['showQuestionStepRequest']);        
+        sandbox.removeRequestHandler('ShowQuestionToolsRequest', this.requestHandlers['showQuestionToolsRequestHandler']);
+        sandbox.removeRequestHandler('HideQuestionToolsRequest', this.requestHandlers['hideQuestionToolsRequestHandler']);
+        sandbox.removeRequestHandler('ToggleQuestionToolsRequest', this.requestHandlers['toggleQuestionToolsRequestHandler']);        
         
         var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
 
