@@ -94,6 +94,9 @@ function(instance, localization, data) {
     }];
 
     if(data) {
+        if(data.lang) {
+            Oskari.setLang(data.lang);
+        }
         // setup initial size
         var sizeIsSet = false;
         var initWidth = this.data.state.mapfull.config.size.width;

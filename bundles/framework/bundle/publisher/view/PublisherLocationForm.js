@@ -62,7 +62,7 @@ function(localization, publisher) {
 			var value = inputField.getValue();
     		var name = inputField.getName();
     		var errors = [];
-            if (value.startsWith('http') || value.startsWith('www')) {
+            if (value.indexOf('http') === 0 || value.indexOf('www') === 0) {
             	errors.push({
         			"field": name, 
         			"error" :  me.loc['error'].domainStart
