@@ -117,10 +117,10 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
 			metadata : {
 				"Import-Bundle" : {
 					"openlayers-single-full" : {
-						bundlePath : '/Oskari/packages/mapping/bundle/'
+						bundlePath : '/Oskari/packages/openlayers/bundle/'
 					},
 					"openlayers-default-theme" : {
-						bundlePath : '/Oskari/packages/mapping/bundle/'
+						bundlePath : '/Oskari/packages/openlayers/bundle/'
 					}
 				},
 				"Require-Bundle-Instance" : []
