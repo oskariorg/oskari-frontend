@@ -358,8 +358,9 @@ function(instance, localization, backendConfiguration) {
 		img.onload = function() {
 			previewImgDiv.attr('src', url);
 			img.onload = null;
-		}*/
-		img.src = url;
+		}
+		img.src = url;*/
+		previewImgDiv.attr('src', url);
 	},
 
 	showFullScaleMapPreview : function() {
