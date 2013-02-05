@@ -23,6 +23,9 @@ renders list of data providers for the selected layers
 
 improved scaling for the Object data flyout
 
+## infobox bundle
+there is a new configuration possibility: adabtable. If adabtable is set true, infobox will adapt its size according to content
+
 ## 1.4 release notes
 
 ### core
