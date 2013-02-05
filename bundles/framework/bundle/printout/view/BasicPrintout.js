@@ -369,7 +369,7 @@ function(instance, localization, backendConfiguration) {
 		var pageSizeArgs = "&pageSize=" + selections.pageSize;
 		var url = urlBase + maplinkArgs + pageSizeArgs;
 
-		this.openURLinWindow(url);
+		this.openURLinWindow(url, selections);
 
 	},
 	/**
@@ -458,8 +458,9 @@ function(instance, localization, backendConfiguration) {
 		return selections;
 
 	},
-	openURLinWindow : function(infoUrl) {
+	openURLinWindow : function(infoUrl, selections) {
 		var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
+		if(this._isLandscape(selections) )wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=1200," + "height=850";
 		var link = infoUrl;
 		window.open(link, "BasicPrintout", wopParm);
 	},
@@ -497,9 +498,23 @@ function(instance, localization, backendConfiguration) {
 
 		url = url + parameters;
 
-		this.openURLinWindow(url);
+		this.openURLinWindow(url,selections);
 
 		
+	},
+	/**
+	 * @method _isLandscape
+	 * @private
+	 * @param {Object} JSONobject (_gatherSelections)
+	   @return true/false
+	 * return true, if Landscape print orientation
+	 */
+	_isLandscape : function(selections) {
+		
+		if (this.sizeOptionsMap[selections.pageSize].id.indexOf('Land') > -1) {
+			return true;
+		}
+		return false;
 	},
 	/**
 	 * @method _validateNumberRange
