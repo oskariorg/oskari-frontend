@@ -227,9 +227,41 @@ function() {
 		});
 		
 		openlayersMap.addPopup(popup);
+        if(this.adaptable) {
+            jQuery(this._adaptPopupSize($));            
+        }
 		this._panMapToShowPopup(lonlat);
 		
     },
+    setAdaptable: function(isAdaptable) {
+        this.adaptable = isAdaptable;
+    },
+
+    _adaptPopupSize: function($) {
+
+        var viewport = $('.olMapViewport');
+        var popup = $('.olPopup');
+        //popup needs to move 10 pixels to the right so that header arrow can be moved out of container(left).
+        var left = parseFloat(popup.css('left')) + 10;
+
+        //
+        popup.find('.popupHeaderArrow').css({'margin-left': '-10px'});
+        var header = popup.find('.popupHeader').css('width', '100%');
+        var content = popup.find('.popupContent').css({'margin-left': '0', 'padding': '5px 20px 5px 20px'});
+
+        popup.find('.olPopupContent').css({'width': '100%', 'height': '100%'});
+
+        var maxWidth = viewport.width()   * 0.7;
+        var maxHeight = viewport.height() * 0.7;
+        var height = content.find('.contentWrapper').height();
+        height = height > maxHeight ? (maxHeight + 30) +'px' : 'auto';
+        content.css({'height': height});
+
+        popup.css({'height': 'auto', 'width': 'auto', 'min-width': '200px', 'max-width': maxWidth + 'px', 'min-height': '200px','max-height': maxHeight+'px','left': left+'px', 'z-index': '16000'});
+//        popup.css({'height': 'auto', 'width': 'auto', 'min-width': '200px', 'left': left+'px'});
+
+    },
+
     /**
      * @method _panMapToShowPopup
      * @private
@@ -245,8 +277,9 @@ function() {
         // -> move map to make infobox visible on screen
         var panx = 0;
         var pany = 0;
-        var infoboxWidth = 450;
-        var infoboxHeight = 300; 
+        var popup = jQuery('.olPopup');
+        var infoboxWidth = popup.width() + 50;//450;
+        var infoboxHeight = popup.height() + 90; //300; 
         if( pixels.x + infoboxWidth > width) {
             panx = width - (pixels.x + infoboxWidth);
         }

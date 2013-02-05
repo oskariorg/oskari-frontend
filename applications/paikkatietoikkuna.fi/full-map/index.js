@@ -658,6 +658,7 @@ jQuery(document).ready(function() {
 			if (appSetup.startupSequence && appSetup.configuration) {
 				main.appSetup.startupSequence = appSetup.startupSequence;
 				main.appConfig = appSetup.configuration;
+
 				main.start(function(instance) {
 					var sb = instance.getSandbox();
 					gfiParamHandler(sb);
