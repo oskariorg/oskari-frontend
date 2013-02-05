@@ -87,7 +87,9 @@ function(localization, publisher) {
         for (var opt in langOpts) {
         	var option = this.langField.optionTemplate.clone();
         	option.attr('value', opt);
-        	if(opt == Oskari.getLang()) {
+        	// if we get data as param -> use lang from it, otherwise use Oskari.getLang()
+        	if((pData && pData.lang == opt) || 
+        	  (!pData && opt == Oskari.getLang())) {
         	    option.attr('selected','selected');
         	}
         	option.append(langOpts[opt]);

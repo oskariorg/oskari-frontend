@@ -11,8 +11,15 @@ Oskari.registerLocalization(
                 "desc": "Inbädda kartan genom att tillägga HTML-koden nedan på din webbplats.",
                 "urlPrefix": "http://www.paikkatietoikkuna.fi"
             },
+            "edit" : {
+              "popup" : {
+                  "title": "Muokkaa julkaistua karttaa SV",
+                  "msg": "Uppdatera tidigare publicerade kartinformation"
+              } 
+            },
             "BasicView": {
                 "title": "Inbädda kartan",
+                "titleEdit" : "Muokkaa julkaisua SV",
                 "domain": {
                     "title": "Webbsidan där kartan inbäddas",
                     "label": "Webbplatsen där kartan inbäddas",
@@ -63,9 +70,17 @@ Oskari.registerLocalization(
                 },
                 "buttons": {
                     "save": "Lagra",
+                    "saveNew": "Tallenna uusi SV",
                     "ok": "OK",
+                    "replace": "Korvaa SV",
                     "cancel": "Avbryt"
                 },
+                "confirm" : {
+                    "replace" : {
+                        "title" : "Haluatko korvata julkaisun",
+                        "msg" : "Korvaamalla muutokset näkyvät suoraan julkaisemassasi kartassa. Sinun ei tarvitse lisätä koodia verkkosivuillesi uudelleen."
+                    }
+                }, 
                 "layerselection": {
                     "label": "Visa kartlagren i menyn",
                     "info": "Välj bakgrundskartor. Du kan göra förval i förhandsgranskningsvyn.",
