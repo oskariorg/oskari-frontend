@@ -120,7 +120,7 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
 						bundlePath : '/Oskari/packages/openlayers/bundle/'
 					},
 					"openlayers-default-theme" : {
-						bundlePath : '/Oskari/packages/openLayers/bundle/'
+						bundlePath : '/Oskari/packages/openlayers/bundle/'
 					}
 				},
 				"Require-Bundle-Instance" : []
