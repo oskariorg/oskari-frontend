@@ -11,6 +11,12 @@ Oskari.registerLocalization(
                 "desc": "Voit liittää kartan internet-sivustollesi lisäämällä sinne alla olevan HTML-koodin:",
                 "urlPrefix": "http://www.paikkatietoikkuna.fi"
             },
+            "edit" : {
+              "popup" : {
+                  "title": "Muokkaa julkaistua karttaa",
+                  "msg": "Päivittää aiemmin julkaistun kartan tietoja"
+              } 
+            },
             "BasicView": {
                 "title": "Julkaise kartta",
                 "domain": {

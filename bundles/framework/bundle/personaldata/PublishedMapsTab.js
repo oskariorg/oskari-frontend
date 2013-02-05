@@ -156,17 +156,6 @@ function(instance, localization) {
         }
         dialog.makeModal();
     },
-     /**
-     * @method _showEditNotification
-     * Shows notification about edit publish map data
-     * @private
-     */
-    _showEditNotification : function(view) {
-        var me = this;
-        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        dialog.show(me.loc.popup.edit_title, me.loc.popup.editmsg);
-        dialog.fadeout();
-    },
 
     /**
      * @method _deleteView
@@ -266,14 +255,14 @@ function(instance, localization) {
         };
         grid.setColumnValueRenderer('name', nameRenderer);
 
+        var setStateRequestBuilder = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
+        var service = instance.getViewService();
         var setMapState = function(data, forced, confirmCallback) {
-            var service = instance.getViewService();
             // check if the layers are loaded 
             var resp = service.isViewLayersLoaded(data, sandbox);
             if(resp.status || forced === true) {
-                var rb = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
-                if (rb) {
-                    var req = rb(data.state);
+                if (setStateRequestBuilder) {
+                    var req = setStateRequestBuilder(data.state);
                     req.setCurrentViewId(data.id);
                     sandbox.request(instance, req);
                     return true;
@@ -298,11 +287,10 @@ function(instance, localization) {
         };
         grid.setColumnValueRenderer('show', showRenderer);
         
+        var publishMapEditorRequestBuilder = sandbox.getRequestBuilder('Publisher.PublishMapEditorRequest');
         var editRequestSender = function(data) {
-            var rb = sandbox.getRequestBuilder('Publisher.PublishMapEditorRequest');
-            if(rb) {
-                var req = rb(data);
-                me._showEditNotification(req);
+            if(publishMapEditorRequestBuilder) {
+                var req = publishMapEditorRequestBuilder(data);
                 sandbox.request(instance, req);
             }
         }

@@ -11,6 +11,12 @@ Oskari.registerLocalization(
                 "desc": "Inbädda kartan genom att tillägga HTML-koden nedan på din webbplats.",
                 "urlPrefix": "http://www.paikkatietoikkuna.fi"
             },
+            "edit" : {
+              "popup" : {
+                  "title": "Muokkaa julkaistua karttaa SV",
+                  "msg": "Uppdatera tidigare publicerade kartinformation"
+              } 
+            },
             "BasicView": {
                 "title": "Inbädda kartan",
                 "domain": {

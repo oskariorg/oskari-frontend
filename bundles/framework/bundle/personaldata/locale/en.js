@@ -110,8 +110,9 @@ Oskari.registerLocalization({
           "error_noname": "Give the map a name",
           "deletetitle": "Delete map?",
           "deletemsg": "Do you want to delete the embedded map? It will no longer be shown on your website.",
-          "edit_title": "Edit Publish Map",
-          "editmsg": "Update the previously published map information"
+          "showErrorTitle": "Näkymä rikkinäinen en",
+          "showConfirmMissing": "Osa näkymään tallennetuista tasoista on poistunut, haluatko silti avata näkymän? en",
+          "showConfirmNotLoaded": "Kaikki karttatasot eivät ole vielä latautuneet, yritä uudelleen hetken päästä. en"
         },
         "save": {
           "success": "The map has been saved.",

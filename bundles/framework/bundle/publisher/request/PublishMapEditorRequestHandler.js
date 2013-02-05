@@ -22,7 +22,18 @@ function(instance) {
     handleRequest : function(core, request) {
         this.instance.publishId  = request.getEditMap().id;
         this.instance.setPublishMode(true, this.instance.getLayersWithoutPublishRights(), request.getEditMap());
-   }
+   },
+     /**
+     * @method _showEditNotification
+     * Shows notification about edit publish map data
+     * @private
+     */
+    _showEditNotification : function(view) {
+        var loc = this.instance.getLocalization('edit');
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        dialog.show(loc.popup.title, loc.popup.msg);
+        dialog.fadeout();
+    }
 }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}

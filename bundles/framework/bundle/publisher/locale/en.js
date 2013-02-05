@@ -11,6 +11,12 @@ Oskari.registerLocalization(
                 "desc": "Embed the map by adding the HTML code below to your website.",
                 "urlPrefix": "http://www.paikkatietoikkuna.fi"
             },
+            "edit" : {
+              "popup" : {
+                  "title": "Edit embedded map",
+                  "msg": "Update the previously published map information"
+              } 
+            },
             "BasicView": {
                 "title": "Embed map",
                 "domain": {
