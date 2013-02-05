@@ -215,6 +215,7 @@ function(instance, localization) {
                 'state' : view.state,
                 'name' : view.name,
                 'domain' : view.pubDomain,
+                'lang' : view.lang,
                 'isPublic' : isPublic,
                 'show' : this.loc.show,
                 'edit' : this.loc.edit,

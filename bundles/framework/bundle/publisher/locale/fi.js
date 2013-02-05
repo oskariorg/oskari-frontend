@@ -13,12 +13,13 @@ Oskari.registerLocalization(
             },
             "edit" : {
               "popup" : {
-                  "title": "Muokkaa julkaistua karttaa",
-                  "msg": "Päivittää aiemmin julkaistun kartan tietoja"
+                  "title": "Muokataan julkaisua",
+                  "msg": "Päivitetään aiemmin julkaistun kartan tietoja"
               } 
             },
             "BasicView": {
                 "title": "Julkaise kartta",
+                "titleEdit" : "Muokkaa julkaisua",
                 "domain": {
                     "title": "Julkaisupaikka",
                     "label": "Sivusto, jolla kartta julkaistaan",
@@ -69,9 +70,17 @@ Oskari.registerLocalization(
                 },
                 "buttons": {
                     "save": "Tallenna",
+                    "saveNew": "Tallenna uusi",
                     "ok": "OK",
+                    "replace": "Korvaa",
                     "cancel": "Peruuta"
                 },
+                "confirm" : {
+                    "replace" : {
+                        "title" : "Haluatko korvata julkaisun",
+                        "msg" : "Korvaamalla muutokset näkyvät suoraan julkaisemassasi kartassa. Sinun ei tarvitse lisätä koodia verkkosivuillesi uudelleen."
+                    }
+                }, 
                 "layerselection": {
                     "label": "Näytä karttatasot valikossa",
                     "info": "Valitse karttapohjat. Voit tehdä oletusvalinnan esikatselunäkymästä.",

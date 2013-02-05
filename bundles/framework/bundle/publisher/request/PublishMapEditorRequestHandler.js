@@ -22,13 +22,14 @@ function(instance) {
     handleRequest : function(core, request) {
         this.instance.publishId  = request.getEditMap().id;
         this.instance.setPublishMode(true, this.instance.getLayersWithoutPublishRights(), request.getEditMap());
+        this._showEditNotification();
    },
      /**
      * @method _showEditNotification
-     * Shows notification about edit publish map data
+     * Shows notification that the user starts editing an existing published map
      * @private
      */
-    _showEditNotification : function(view) {
+    _showEditNotification : function() {
         var loc = this.instance.getLocalization('edit');
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         dialog.show(loc.popup.title, loc.popup.msg);
