@@ -227,9 +227,14 @@ function() {
 		});
 		
 		openlayersMap.addPopup(popup);
-        jQuery(this._adaptPopupSize($));
+        if(this.adaptable) {
+            jQuery(this._adaptPopupSize($));            
+        }
 		this._panMapToShowPopup(lonlat);
 		
+    },
+    setAdaptable: function(isAdaptable) {
+        this.adaptable = isAdaptable;
     },
 
     _adaptPopupSize: function($) {
@@ -248,8 +253,11 @@ function() {
 
         var maxWidth = viewport.width()   * 0.7;
         var maxHeight = viewport.height() * 0.7;
+        var height = content.find('.contentWrapper').height();
+        height = height > maxHeight ? (maxHeight + 30) +'px' : 'auto';
+        content.css({'height': height});
 
-        popup.css({'height': 'auto', 'width': 'auto', 'min-width': '200px', 'max-width': maxWidth + 'px','max-height': maxHeight+'px','left': left+'px'});
+        popup.css({'height': 'auto', 'width': 'auto', 'min-width': '200px', 'max-width': maxWidth + 'px', 'min-height': '200px','max-height': maxHeight+'px','left': left+'px', 'z-index': '16000'});
 //        popup.css({'height': 'auto', 'width': 'auto', 'min-width': '200px', 'left': left+'px'});
 
     },
@@ -271,7 +279,7 @@ function() {
         var pany = 0;
         var popup = jQuery('.olPopup');
         var infoboxWidth = popup.width() + 50;//450;
-        var infoboxHeight = popup.height(); //300; 
+        var infoboxHeight = popup.height() + 90; //300; 
         if( pixels.x + infoboxWidth > width) {
             panx = width - (pixels.x + infoboxWidth);
         }
