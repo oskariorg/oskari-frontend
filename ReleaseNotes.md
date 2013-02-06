@@ -27,7 +27,7 @@ improved scaling for the Object data flyout
 there is a new configuration possibility: adabtable. If adabtable is set true, infobox will adapt its size according to content
 
 ## printout bundle
-there are additional settings available for printing tool: format, name, logo, scale, date
+A new printout bundle is added. It offers a user interface for the backend component that print out PNGs and PDFs.
 
 
 ## 1.4 release notes
