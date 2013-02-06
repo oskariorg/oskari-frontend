@@ -281,6 +281,7 @@ function(instance, localization) {
             link.bind('click', function() {
                 setMapState(data, false, function() {
                     setMapState(data, true);
+                    return false;
                 });
                 return false; 
             });
