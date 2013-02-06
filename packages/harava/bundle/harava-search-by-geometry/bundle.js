@@ -68,7 +68,8 @@ function() {
 			"lang" : "en",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/locale/en.js"
-		}]
+		}
+		]
 	},
 	"bundle" : {
 		"manifest" : {

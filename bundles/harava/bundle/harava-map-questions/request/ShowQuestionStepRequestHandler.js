@@ -8,15 +8,15 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ShowQuestionStepR
     this.bundle = bundle;
 }, {
 	/**
-	 * @method handleRequest 
-	 * Start geometry search
+	 * @method handleRequest
 	 * @param {Oskari.mapframework.core.Core} core
 	 * 		reference to the application core (reference sandbox core.getSandbox())
 	 * @param {Oskari.harava.bundle.mapquestions.request.ShowQuestionStepRequest} request
 	 * 		request to handle
 	 */
     handleRequest : function(core, request) {
-        var module = request.getModuleId();
+    	var module = request.getModuleId();
+        
         this.sandbox.printDebug("[Oskari.harava.bundle.mapquestions.request.ShowQuestionStepRequest] Activate question module: " + module);
         this.bundle.showStep(module);
     }

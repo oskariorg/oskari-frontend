@@ -89,8 +89,6 @@ function(locale) {
         this._sandbox = sandbox;
         this._sandbox.printDebug("[HaravaDrawSearchGeometryPlugin] init");
         
-        var openlayersMap = this.mapModule.getMap();
-        
     	me._searchLayer = new OpenLayers.Layer.Vector("Harava search geometry layer", {
     		eventListeners : {
                 "featuresadded" : function(layer) {
@@ -103,7 +101,7 @@ function(locale) {
     	me._oldSearchLayer = new OpenLayers.Layer.Vector("Harava old search geometry layer", {
     		styleMap: this.featureStyle
     	});
-    	openlayersMap.addLayers([me._searchLayer,me._oldSearchLayer]);
+    	me._map.addLayers([me._searchLayer,me._oldSearchLayer]);
     	
     	this.searchControls = {
             point: new OpenLayers.Control.DrawFeature(me._searchLayer,
@@ -126,7 +124,6 @@ function(locale) {
     			+ '<div id="searchbygeom-polygon" class="searchbygeom-tool searchbygeom-polygon" title="'+this._locale.tooltips.searchByPolygon+'"></div></div>');    	
     	
     	jQuery('.searchbygeom-tool').live('click', function(){
-    		    		
     		var id = this.id;
     		if(id!='searchbygeom-mapextent'){
     			jQuery('.searchbygeom-tool').removeClass('active');
@@ -138,9 +135,7 @@ function(locale) {
     				me.toggleControl('point');
     				break;
     			case 'searchbygeom-mapextent':
-    				//me.toggleControl('mapextent');
-    				var openlayersMap = me.mapModule.getMap();
-    	        	var mapExtent = openlayersMap.getExtent();
+    	        	var mapExtent = me._map.getExtent();
     	        	var mapExtentPolygon = 'POLYGON(('+mapExtent.left+' ' +mapExtent.top + ','+mapExtent.right+' ' +mapExtent.top + ','+mapExtent.right+' ' +mapExtent.bottom + ','+mapExtent.left+' ' +mapExtent.bottom + ','+mapExtent.left+' ' +mapExtent.top + '))';
     	        	me._handleSearchByGeom(mapExtentPolygon,'mapextent');
     	        	me._closeGfiInfo();
@@ -165,7 +160,7 @@ function(locale) {
     	
     	
     	for(var key in me.searchControls) {
-    		openlayersMap.addControl(me.searchControls[key]);
+    		me._map.addControl(me.searchControls[key]);
         }
     	
     	// Do default tool selection
@@ -207,12 +202,11 @@ function(locale) {
         var ajaxUrl = this._sandbox.getAjaxUrl(); 
        
         var mapVO = me._sandbox.getMap();
-        var openlayersMap = this.mapModule.getMap();
-        var centerLonLat = openlayersMap.getCenter();
-        var centerPx = openlayersMap.getViewPortPxFromLonLat(centerLonLat);
+        var centerLonLat = me._map.getCenter();
+        var centerPx = me._map.getViewPortPxFromLonLat(centerLonLat);
         var bufferPx = 8; // used from line at it buffer is 8px from any direction
         centerPx.x = centerPx.x + bufferPx;
-        var centerLonLat2 = openlayersMap.getLonLatFromViewPortPx(centerPx);
+        var centerLonLat2 = me._map.getLonLatFromViewPortPx(centerPx);
         var buffer = centerLonLat2.lon - centerLonLat.lon;
         jQuery.ajax({
             beforeSend : function(x) {
@@ -249,7 +243,7 @@ function(locale) {
             			data1Html += '<table class="harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.data1Lang+'</td></tr>';
             		}
             	}
-            	$.each(data1, function(k, data){
+            	jQuery.each(data1, function(k, data){
             		if(!showAll){           			
             			data1Html += data.html2;
             			data1Name = data.layerName;
@@ -276,7 +270,7 @@ function(locale) {
             			data2Html += '<table class="harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.data2Lang+'</td></tr>';
             		}
             	}
-            	$.each(data2, function(k, data){            		
+            	jQuery.each(data2, function(k, data){            		
 					if(!showAll){
 						data2Html += data.html2;
 						data2Name = data.layerName;
@@ -303,7 +297,7 @@ function(locale) {
             			data3Html += '<table class="harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.data3Lang+'</td></tr>';
             		}
             	}
-            	$.each(data3, function(k, data){
+            	jQuery.each(data3, function(k, data){
             		if(data3Id==null){
             			data3Id = data.layerId;
         			}
@@ -321,7 +315,7 @@ function(locale) {
             		data3Html += '</table>';
             	}
             	
-            	$.each(funcs, function(k, func){
+            	jQuery.each(funcs, function(k, func){
             		eval(func);
             	});
             	

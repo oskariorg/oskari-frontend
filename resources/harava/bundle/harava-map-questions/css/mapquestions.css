@@ -54,3 +54,24 @@
 .harava-map-question div {
     padding:5px
 }
+
+.harava-map-question-toggle-toolbar{
+    width:30px; 
+    height:30px; 
+    position:relative; 
+    left:25%;    
+    z-index:50;
+    cursor:pointer;
+}
+
+.harava-toolbar-hide {
+	background: url('/Oskari/resources/harava/bundle/harava-map-questions/images/left_arrow.png') no-repeat; 
+	background-position: center center;
+	background-color:#057777; 
+}
+
+.harava-toolbar-show {
+    background: url('/Oskari/resources/harava/bundle/harava-map-questions/images/right_arrow.png') no-repeat;
+    background-position: center center;
+    background-color:#057777;   
+}
