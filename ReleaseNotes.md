@@ -6,16 +6,18 @@
 
 user can modify the published/embedded maps from personal data lists.
 
-sends a request to Publisher bundle to enable pulish mode
+sends a request to Publisher bundle to enable publish mode
 
 ### Publisher bundle
 
-created request PublishMapEditorRequest to enable the publish mode
+created request PublishMapEditorRequest to enable the publish mode. 
+
+publisher can now be prepopulated with existing view data using the PublishMapEditorRequest.
 
 
 ### mapmodule bundle/Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugin
 
-new bundle 
+new plugin for mapmodule 
 
 renders list of data providers for the selected layers
 
