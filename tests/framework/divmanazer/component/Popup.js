@@ -1,3 +1,4 @@
+// Might need refactoring
 describe('Popup component', function() {
   var dialog;
   var titleText = 'title';
@@ -12,27 +13,19 @@ describe('Popup component', function() {
   });
   
   it('should be defined', function(){
-    expect(dialog).toBeDefined();
+    expect(dialog).to.be.ok();
   });
 
   it('should be found in DOM', function(){
     var popup = jQuery('div.divmanazerpopup');
-    expect(popup.length).toEqual(1);
+    expect(popup.length).to.equal(1);
   });
 
   it('should have a title', function() {
     var popup = jQuery('div.divmanazerpopup');
     var title = popup.find('h3').html();
-    expect(title).not.toBeNull();
-    expect(title).toEqual('title'); // dialog.getTitle()
+    expect(title).not.to.be(null);
+    expect(title).to.equal('title'); // dialog.getTitle()
   });
 
-	it('should fail', function() {
-		if (jQuery.browser.msie) {
-			expect(true).toBe(true);
-		} else {
-            console.log('testing...');
-			expect(true).toBe(false);
-		}
-	})
 });

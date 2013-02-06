@@ -112,6 +112,15 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/divmanazer/component/GridModel.js"
         }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultTile.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultFlyout.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultExtension.js"
+        },{
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/divmanazer/css/divman.css"
         }, {

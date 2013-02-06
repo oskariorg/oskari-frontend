@@ -22,6 +22,7 @@ Oskari.registerLocalization({
           "desc": "Beskrivning",
           "createDate": "Skapad",
           "updateDate": "Uppdaterad",
+          "show" : " ",
           "edit": " ",
           "delete": " "
         },
@@ -39,7 +40,8 @@ Oskari.registerLocalization({
       },
       "myviews": {
         "title": "Mina vyer",
-        "edit": "Editera",
+        "show" : "Visa på karta",
+        "edit" : "Editera",
         "publish": "Offentliggör",
         "unpublish": "Gör privat",
         "delete": "Ta bort",
@@ -95,8 +97,9 @@ Oskari.registerLocalization({
           "name": "Namn",
           "domain": "Kartinställnigar",
           "publish": "Status",
-          "edit": "",
-          "delete": ""
+          "show": " ",
+          "edit": " ",
+          "delete": " "
         },
         "popup": {
           "edit": "Byt namn på kartan",
@@ -107,7 +110,10 @@ Oskari.registerLocalization({
           "cancel": "Tillbaka",
           "error_noname": "Namnge kartan",
           "deletetitle": "Vill du ta bort denna karta?",
-          "deletemsg": "Vill du ta bort den inbäddade kartan? Efter detta syns kartan inte längre på din webbplats."
+          "deletemsg": "Vill du ta bort den inbäddade kartan? Efter detta syns kartan inte längre på din webbplats.",
+          "showErrorTitle": "Bristfällig vy",
+          "showConfirmMissing": "En del av de kartlager som har lagrats i vyn är inte tillgängliga, vill du ändå öppna vyn?",
+          "showConfirmNotLoaded": "Alla kartlager har ännu inte laddats ned, försök på nytt om en stund."
         },
         "save": {
           "success": "Kartan har lagrats.",

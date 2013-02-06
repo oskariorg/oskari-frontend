@@ -57,7 +57,7 @@ function(instance, localization) {
             if(!me.hasAcceptedTou) {
                 me._markTouAccepted();
             }
-            var layers = me.getLayersWithoutPublishRights();
+            var layers = me.instance.getLayersWithoutPublishRights();
             me.instance.setPublishMode(true, layers);
         });
         this.buttons['continue'] = continueButton;
@@ -97,7 +97,7 @@ function(instance, localization) {
         var selectedLayers = this.instance.sandbox.findAllSelectedMapLayers();
         for (var i = 0; i < selectedLayers.length; ++i) {
             var layer = selectedLayers[i];
-            if (!this._hasPublishRight(layer)) {
+            if (!this.instance.hasPublishRight(layer)) {
                 deniedLayers.push(layer);
             } else {
                 layers.push(layer);
@@ -168,41 +168,6 @@ function(instance, localization) {
      */
     handleLayerSelectionChanged : function() {
         this._renderLayerLists();
-    },
-    /**
-     * @method _hasPublishRight
-     * Checks if the layer can be published.
-     * @private
-     * @param
-     * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
-     * layer
-     *      layer to check
-     * @return {Boolean} true if the layer can be published
-     */
-    _hasPublishRight : function(layer) {
-        // permission might be "no_publication_permission"
-        // or nothing at all
-        return (layer.getPermission('publish') == 'publication_permission_ok');
-    },
-    /**
-     * @method getLayersWithoutPublishRights
-     * Checks currently selected layers and returns a subset of the list
-     * that has the layers that can't be published. If all selected
-     * layers can be published, returns an empty list.
-     * @return
-     * {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
-     * list of layers that can't be published.
-     */
-    getLayersWithoutPublishRights : function() {
-        var deniedLayers = [];
-        var selectedLayers = this.instance.sandbox.findAllSelectedMapLayers();
-        for (var i = 0; i < selectedLayers.length; ++i) {
-            var layer = selectedLayers[i];
-            if (!this._hasPublishRight(layer)) {
-                deniedLayers.push(layer);
-            }
-        }
-        return deniedLayers;
     },
     /**
      * @method _showTermsOfUse

@@ -65,12 +65,13 @@ div.basic_publisher div.customsize input {
 }
 div.basic_publisher div.customsize input.error {
     border: 1px solid red;
-}
+} 
 div.basic_publisher div.form div.field input, div.field select {
     width : 100%;
     width: 80%\0/;
 	background-color: white\0/;
 	filter:Alpha(opacity=100)\0/ !important;
+    font-weight: bolder;
 }
 
 div.basic_publisher > div.content {
@@ -88,11 +89,10 @@ div.basic_publisher div.tool input {
 
 /* Buttons */
 div.basic_publisher div.buttons, div.publisher div.startview div.buttons {
-	margin : 10px;
-    text-align : center;
+	text-align : center;
+	margin-top : 10px;
 }
 
 div.basic_publisher div.buttons input, div.publisher div.startview div.buttons input {
-    margin-left: 10px;
-    margin-right: 10px;
+    margin: 5px 2px;
 }

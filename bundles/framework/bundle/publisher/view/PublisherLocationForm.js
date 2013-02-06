@@ -44,12 +44,12 @@ function(localization, publisher) {
      * Creates the set of Oskari.userinterface.component.FormInput to be shown on the panel and 
      * sets up validation etc.
      */
-	init : function() {
+	init : function(pData) {
 		var me = this;
 		for(var fkey in this.fields) {
 			var data = this.fields[fkey];
-			var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput', fkey);
-			field.setLabel(data.label);
+            var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput', fkey);
+            field.setLabel(data.label);
 			field.setTooltip(data.tooltip, data.helptags);
 			field.setPlaceholder(data.placeholder);
 			data.field = field;
@@ -57,12 +57,12 @@ function(localization, publisher) {
 		
 		this.fields['domain'].field.setRequired(true, this.loc['error'].domain);
         this.fields['domain'].field.setContentCheck(true, this.loc['error'].domainIllegalCharacters);
+
 		this.fields['domain'].field.setValidator(function(inputField) {
-			
-    		var value = inputField.getValue();
+			var value = inputField.getValue();
     		var name = inputField.getName();
     		var errors = [];
-            if (value.startsWith('http') || value.startsWith('www')) {
+            if (value.indexOf('http') === 0 || value.indexOf('www') === 0) {
             	errors.push({
         			"field": name, 
         			"error" :  me.loc['error'].domainStart
@@ -73,7 +73,13 @@ function(localization, publisher) {
 		});
 		this.fields['name'].field.setRequired(true, this.loc['error'].name);
         this.fields['name'].field.setContentCheck(true, this.loc['error'].nameIllegalCharacters);
-		
+
+        if(pData) {
+            // set initial values
+            this.fields['domain'].field.setValue(pData.domain);
+            this.fields['name'].field.setValue(pData.name);
+        }
+
         // language options are rendered based on localization
     	var langField = this.langField.template.clone();
         var languageSelection = langField.find('select[name=language]');
@@ -81,7 +87,9 @@ function(localization, publisher) {
         for (var opt in langOpts) {
         	var option = this.langField.optionTemplate.clone();
         	option.attr('value', opt);
-        	if(opt == Oskari.getLang()) {
+        	// if we get data as param -> use lang from it, otherwise use Oskari.getLang()
+        	if((pData && pData.lang == opt) || 
+        	  (!pData && opt == Oskari.getLang())) {
         	    option.attr('selected','selected');
         	}
         	option.append(langOpts[opt]);
@@ -105,7 +113,7 @@ function(localization, publisher) {
         var contentPanel = panel.getContainer();
 		for(var fkey in this.fields) {
 			var data = this.fields[fkey];
-			contentPanel.append(data.field.getField());
+            contentPanel.append(data.field.getField());
 	    }
 		contentPanel.append(this.langField.field);
 		return panel;

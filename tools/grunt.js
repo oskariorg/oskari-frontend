@@ -30,6 +30,7 @@ module.exports = function(grunt) {
 //            }
 //        },
         watch: {
+//            files: '<config:lint.files>',
             files: [
                 '../applications/**/*.js',
                 '../bundles/**/*.js',
@@ -39,26 +40,9 @@ module.exports = function(grunt) {
                 '../sources/**/*.js',
                 '../tests/**/*.js'
                 ],
-//            files: '<config:lint.files>',
-            tasks: 'validate compile testacularRun:dev yuidoc'
-            // validate, minifioi, test docs
-        },
-        jshint: {
-            options: {
-                curly: true,
-                eqeqeq: true,
-                immed: true,
-                latedef: true,
-                newcap: true,
-                noarg: true,
-                sub: true,
-                undef: true,
-                boss: true,
-                eqnull: true
-            },
-            globals: {
-                jQuery: true
-            }
+// uncommented as validate causes unnecessary delay
+//            tasks: 'validate compile testacularRun:dev yuidoc'
+            tasks: 'compile testacularRun:dev yuidoc'
         },
         yuidoc: {
             options: {
@@ -104,7 +88,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('compile', 'experimental build', function(appSetupFile, arg) {
         if (!appSetupFile) {
-            appSetupFile = "../applications/sample/mythird/appsetup.json";
+            appSetupFile = "../applications/sample/full/full_appsetup.json";
         }
         var parser = require('./parser.js');
         var actionHandler = require('./action_compile.js');
@@ -123,7 +107,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('validate', 'experimental build', function(appSetupFile, arg) {
         if (!appSetupFile) {
-            appSetupFile = "../applications/sample/mythird/appsetup.json";
+            appSetupFile = "../applications/sample/full/full_appsetup.json";
         }
         var parser = require('./parser.js');
         var actionHandler = require('./action_validate.js');

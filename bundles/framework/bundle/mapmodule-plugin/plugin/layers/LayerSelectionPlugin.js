@@ -360,7 +360,8 @@ function(config) {
     	
     	var me = this;
     	input.bind('change', function(evt) {
-			me._changedBaseLayer();
+			me._changedBaseLayer();
+
 		});
 		
         div.find('span').before(input);

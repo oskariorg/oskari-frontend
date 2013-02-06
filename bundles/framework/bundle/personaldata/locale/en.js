@@ -87,7 +87,8 @@ Oskari.registerLocalization({
       },
       "publishedmaps": {
         "title": "Embedded maps",
-        "edit": "Show on the map",
+        "show" : "Show on the map",
+        "edit" : "Edit",
         "publish": "Publish map",
         "unpublish": "Unpublish map",
         "delete": "Delete",
@@ -95,6 +96,7 @@ Oskari.registerLocalization({
           "name": "Name",
           "domain": "Map settings",
           "publish": "Status",
+          "show" : " ",
           "edit": " ",
           "delete": " "
         },
@@ -107,7 +109,10 @@ Oskari.registerLocalization({
           "cancel": "Cancel",
           "error_noname": "Give the map a name",
           "deletetitle": "Delete map?",
-          "deletemsg": "Do you want to delete the embedded map? It will no longer be shown on your website."
+          "deletemsg": "Do you want to delete the embedded map? It will no longer be shown on your website.",
+          "showErrorTitle": "Incomplete view",
+          "showConfirmMissing": "Some saved map layers are not available, do you still want to open this view?",
+          "showConfirmNotLoaded": "Some map layers have not yet loaded, try again later."
         },
         "save": {
           "success": "The map has been saved.",

@@ -50,6 +50,7 @@ function(instance, localization) {
     /**
      * @method _renderViewsList
      * Refreshes the tab contents
+     * @private
      */
     _renderViewsList : function(views) {
 
@@ -68,6 +69,7 @@ function(instance, localization) {
     /**
      * @method _refreshViewsList
      * Refreshes the tab contents
+     * @private
      */
     _refreshViewsList : function() {
         var me = this;
@@ -106,6 +108,7 @@ function(instance, localization) {
     },
     /**
      * @method _confirmDelete
+     * @private
      */
     _confirmDelete : function(view) {
         var me = this;
@@ -124,7 +127,39 @@ function(instance, localization) {
         dialog.makeModal();
     },
     /**
+     * Shows a confirmation dialog for setting an invalid view
+     * @method _confirmSetState
+     * @param {Function} callback function for ok button
+     * @param {Boolean} blnMissing, true if we have determined that the layer is no longer available,
+     *  false if layer might not be loaded yet.
+     * @private
+     */
+    _confirmSetState : function(cb, blnMissing) {
+        var me = this;
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        okBtn.setTitle(this.loc.button['ok']);
+        okBtn.addClass('primary');
+        
+        okBtn.setHandler(function() {
+            dialog.close();
+            if(cb && blnMissing) {
+                cb();
+            }
+        });
+        var cancelBtn = dialog.createCloseButton(this.loc.button.cancel);
+        if(blnMissing) {
+            dialog.show(me.loc.popup.showErrorTitle, me.loc.popup.showConfirmMissing, [cancelBtn, okBtn]);
+        }
+        else {
+            dialog.show(me.loc.popup.showErrorTitle, me.loc.popup.showConfirmNotLoaded, [cancelBtn]);
+        }
+        dialog.makeModal();
+    },
+
+    /**
      * @method _deleteView
+     * @private
      */
     _deleteView : function(view) {
         var me = this;
@@ -140,6 +175,7 @@ function(instance, localization) {
     },
     /**
      * @method _showErrorMessage
+     * @private
      */
     _showErrorMessage : function(msg) {
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -179,7 +215,9 @@ function(instance, localization) {
                 'state' : view.state,
                 'name' : view.name,
                 'domain' : view.pubDomain,
+                'lang' : view.lang,
                 'isPublic' : isPublic,
+                'show' : this.loc.show,
                 'edit' : this.loc.edit,
                 'publish' : isPublic ? this.loc.unpublish : this.loc.publish,
                 'delete' : this.loc['delete']
@@ -199,10 +237,11 @@ function(instance, localization) {
         var me = this;
         var instance = this.instance;
         var sandbox = instance.getSandbox();
-        var visibleFields = ['name', 'domain', 'publish', 'edit', 'delete'];
+        var visibleFields = ['name', 'domain', 'publish', 'show', 'edit', 'delete'];
         var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
         grid.setDataModel(model);
         grid.setVisibleFields(visibleFields);
+
         // set up the link from name field
         var nameRenderer = function(name, data) {
             var link = me.templateLink.clone();
@@ -216,23 +255,66 @@ function(instance, localization) {
             return link;
         };
         grid.setColumnValueRenderer('name', nameRenderer);
-        // set up the link from edit field
+
+        var setStateRequestBuilder = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
+        var service = instance.getViewService();
+        var setMapState = function(data, forced, confirmCallback) {
+            // check if the layers are loaded 
+            var resp = service.isViewLayersLoaded(data, sandbox);
+            if(resp.status || forced === true) {
+                if (setStateRequestBuilder) {
+                    var req = setStateRequestBuilder(data.state);
+                    req.setCurrentViewId(data.id);
+                    sandbox.request(instance, req);
+                    return true;
+                }               
+                return false; 
+            }
+            me._confirmSetState(confirmCallback, resp.msg == 'missing');
+            return false;
+        };
+
+        // set up the link from name field
+        var showRenderer = function(name, data) {
+            var link = me.templateLink.clone();
+            link.append(name);
+            link.bind('click', function() {
+                setMapState(data, false, function() {
+                    setMapState(data, true);
+                    return false;
+                });
+                return false; 
+            });
+            return link;
+        };
+        grid.setColumnValueRenderer('show', showRenderer);
+        
+        var publishMapEditorRequestBuilder = sandbox.getRequestBuilder('Publisher.PublishMapEditorRequest');
+        var editRequestSender = function(data) {
+            if(publishMapEditorRequestBuilder) {
+                var req = publishMapEditorRequestBuilder(data);
+                sandbox.request(instance, req);
+            }
+        }
+        
+        //sending a request to map publish mode
         var editRenderer = function(name, data) {
             var link = me.templateLink.clone();
             link.append(name);
             link.bind('click', function() {
-                var rb = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
-                if (rb) {
-                    var req = rb(data.state);
-                    req.setCurrentViewId(data.id);
-                    sandbox.request(instance, req);
+                if(setMapState(data, false, function() {
+                    setMapState(data, true);
+                    editRequestSender(data);
+                })) {
+                    editRequestSender(data);
                 }
-                return false;
+                return false; 
             });
             return link;
-        };
+        };        
         grid.setColumnValueRenderer('edit', editRenderer);
-        // set up the link from edit field
+
+        // set up the link from show field
         var deleteRenderer = function(name, data) {
             var link = me.templateLink.clone();
             link.append(name);
@@ -244,10 +326,10 @@ function(instance, localization) {
                 return false;
             });
             return link;
-        };
+        };       
         grid.setColumnValueRenderer('delete', deleteRenderer);
-        
-        // set up the link from edit field
+
+        // set up the link from delete field
         var service = instance.getViewService();
         var publishRenderer = function(name, data) {
             var link = me.templateLink.clone();

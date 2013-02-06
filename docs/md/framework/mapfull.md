@@ -27,6 +27,18 @@ Mapfull using mapmodule-plugin bundle to show map view with some plugins (scaleb
 
 ```javascript
 {
+    "resolutions" : [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25],
+    "maxExtent" : {
+        "left" : -548576.0,
+        "bottom" : 6291456.0,
+        "right" : 1548576.0,
+        "top" :  8388608
+    }
+}
+```
+
+```javascript
+{
   "plugins":[
     {
       "id":"Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin"
@@ -44,6 +56,15 @@ Mapfull using mapmodule-plugin bundle to show map view with some plugins (scaleb
     }
   ],
   "globalMapAjaxUrl":"<url for ajax operations>",
+  "mapOptions": {
+    "resolutions" : [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25],
+    "maxExtent" : {
+      "left" : -548576.0,
+      "bottom" : 6291456.0,
+      "right" : 1548576.0,
+      "top" :  8388608
+    }
+  },
   "user":{
      <logged in users details for Oskari.mapframework.domain.User >
   },
@@ -54,6 +75,7 @@ Mapfull using mapmodule-plugin bundle to show map view with some plugins (scaleb
 * plugins is an array of map module plugins that will be registered and started on map when the bundle is started. If you specify no plugins, you wont see anything on the map. See different plugins documentation to see which ones you should have here.
 * layers is an array of map layer JSON definitions that will be populated to Oskari.mapframework.service.MapLayerService. It can have 0 or more layer definitions but it SHOULD have at least the ones referenced in state.selectedLayers. Otherwise selectedLayers aren't going to be added to map on startup.
 * globalMapAjaxUrl is set to Oskari.mapframework.sandbox.Sandbox and can be asked everywhere with sandbox.getAjaxUrl()
+* mapOptions is passed to mapmodule-plugin constructor
 * user is optional and should have information about the logged in user. It will be set to Oskari.mapframework.sandbox.Sandbox and can be asked everywhere with sandbox.getUser(). The format of the data should in a form accepted by Oskari.mapframework.domain.User constructor.
 
 ## Bundle state

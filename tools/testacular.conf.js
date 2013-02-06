@@ -8,12 +8,15 @@ basePath = '..\..\..\..\..\..\..\..';
 
 // list of files / patterns to load in the browser
 files = [
-  JASMINE,
-  JASMINE_ADAPTER,
+  MOCHA,
+  '../../tests/mocha.opts',
+  MOCHA_ADAPTER,
   '../../bundles/bundle.js',
   '../../libraries/jquery/jquery-1.7.1.min.js',
   '../../dist/oskari.min.js',
   '../../dist/oskari_lang_fi.js',
+  '../../tools/node_modules/expect.js/expect.js',
+  '../../tools/lib/sinon-1.5.2.js',
   '../../tests/**/*.js'
 ];
 
@@ -23,15 +26,27 @@ exclude = [
   
 ];
 
+preprocessors = {
+  '../../bundles/bundle.js': 'coverage',
+  '../../dist/*.js': 'coverage'
+};
 
 // test results reporter to use
 // possible values: 'dots', 'progress', 'junit'
 reporters = ['progress'];
 
+coverageReporter = {
+  type : 'text',
+  dir : '../../tools/coverage/',
+  file : 'coverage.txt'
+}
 
 // web server port
 port = 4040;
 
+proxies = {
+    '/': 'http://localhost:8080/'
+};
 
 // cli runner port
 runnerPort = 9100;
@@ -65,6 +80,7 @@ browsers = ['IE', 'Firefox'];
 // If browser does not capture in given timeout [ms], kill it
 captureTimeout = 120000;
 
+// Note does not work in the master branch at the moment, maybe in canary?
 // How many times browsers retry to launch
 retryLimit = 1;
 

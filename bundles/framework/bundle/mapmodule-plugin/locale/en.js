@@ -24,6 +24,16 @@ Oskari.registerLocalization({
         "termsLink": "http://www.paikkatietoikkuna.fi/web/en/terms-and-conditions",
         "mapLinkBase": "http://www.paikkatietoikkuna.fi/web/en/map-window?"
       },
+       "DataSourcePlugin": {
+        "link": "Data Source",
+        "popup": {
+          "title": "Data Sources",
+          "content": " "
+        },
+        "button": {
+          "close": "Close"
+        }
+      },
       "LayerSelectionPlugin": {
         "title": "Object data",
         "chooseDefaultBaseLayer": "Select background map layer"

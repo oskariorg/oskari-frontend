@@ -90,6 +90,7 @@ function() {
 		var me = this;
 		// register plugin for map (actual popup implementation handling)
 		this.popupPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.infobox.plugin.mapmodule.OpenlayersPopupPlugin');
+		this.popupPlugin.setAdaptable(this.conf.adaptable);
 
 		this.requestHandlers = {
 			showInfoHandler : Oskari.clazz.create('Oskari.mapframework.bundle.infobox.request.ShowInfoBoxRequestHandler', this.popupPlugin),

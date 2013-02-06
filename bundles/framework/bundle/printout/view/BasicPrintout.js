@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
  * @method create called automatically on construction
  * @static
  * @param {Oskari.mapframework.bundle.printout.PrintoutBundleInstance} instance
- * 		reference to component that created this view
+ *      reference to component that created this view
  * @param {Object} localization
  *      localization data in JSON format
  */
@@ -21,12 +21,21 @@ function(instance, localization, backendConfiguration) {
 
 	this.templateButtonsDiv = jQuery('<div class="buttons"></div>');
 	this.templateHelp = jQuery('<div class="help icon-info"></div>');
-	this.templateTool = jQuery('<div class="tool ">' + '<input type="checkbox"/>' + '<span></span></div>');
+	this.templateTool = jQuery('<div class="tool ">' + '<input type="checkbox"/>' + '<label></label></div>');
 	this.templates = {
 		preview : jQuery('<div class="preview"><img /></div>'),
 		location : jQuery('<div class="location"></div>')
 	};
-	this.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
+	this.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<label></label></div>');
+
+	//Settings panel:
+	this.templateFormat = jQuery('<div class="printout_format_cont printout_settings_cont"><div class="printout_format_label"></div></div>');
+	this.templateFormatOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="format" />' + '<label></label></div>');
+
+	this.templateTitle = jQuery('<div class="printout_title_cont printout_settings_cont"><div class="printout_title_label"></div><input class="printout_title_field" type="text"></div>');
+	this.templateLogo = jQuery('<div class="printout_title_cont printout_settings_cont">' + '<input type="checkbox" name="logo" />' + '<label></label></div>');
+	this.templateScale = jQuery('<div class="printout_scale_cont printout_settings_cont">' + '<input type="checkbox" name="scale" />' + '<label></label></div>');
+	this.templateDate = jQuery('<div class="printout_date_cont printout_settings_cont">' + '<input type="checkbox" name="date" />' + '<label></label></div>');
 
 	this.backendConfiguration = backendConfiguration;
 
@@ -46,8 +55,22 @@ function(instance, localization, backendConfiguration) {
 	}];
 
 	this.sizeOptionsMap = {};
-	for(var s = 0; s < this.sizeOptions.length; s++) {
+	for (var s = 0; s < this.sizeOptions.length; s++) {
 		this.sizeOptionsMap[this.sizeOptions[s].id] = this.sizeOptions[s];
+	}
+
+	//format Options
+	this.formatOptions = [{
+		id : 'png',
+		format : 'image/png'
+	}, {
+		id : 'pdf',
+		format : 'application/pdf',
+		selected : true // default option
+	}];
+	this.formatOptionsMap = {};
+	for (var f = 0; f < this.formatOptions.length; f++) {
+		this.formatOptionsMap[this.formatOptions[f].id] = this.formatOptions[f];
 	}
 
 	this.loc = localization;
@@ -79,15 +102,18 @@ function(instance, localization, backendConfiguration) {
 
 		accordion.addPanel(sizePanel);
 
+		var settingsPanel = this._createSettingsPanel();
+		accordion.addPanel(settingsPanel);
+
 		var previewPanel = this._createPreviewPanel();
 		previewPanel.open();
 
 		accordion.addPanel(previewPanel);
 
 		/*var scalePanel = this._createLocationAndScalePanel();
-		scalePanel.open();
+		 scalePanel.open();
 
-		accordion.addPanel(scalePanel);*/
+		 accordion.addPanel(scalePanel);*/
 
 		accordion.insertTo(contentDiv);
 
@@ -112,14 +138,6 @@ function(instance, localization, backendConfiguration) {
 		this.updateMapPreview();
 	},
 	/**
-	 * @method _setSelectedSize
-	 * @private
-	 * Adjusts the map size according to printout selection
-	 */
-	_setSelectedSize : function() {
-		this.refresh();
-	},
-	/**
 	 * @method _createSizePanel
 	 * @private
 	 * Creates the size selection panel for printout
@@ -139,31 +157,139 @@ function(instance, localization, backendConfiguration) {
 			return function() {
 				var size = contentPanel.find('input[name=size]:checked').val();
 				// reset previous setting
-				for(var i = 0; i < me.sizeOptions.length; ++i) {
+				for (var i = 0; i < me.sizeOptions.length; ++i) {
 					me.sizeOptions[i].selected = false;
 				}
 				tool.selected = true;
-				me._setSelectedSize(tool);
+				me.updateMapPreview();
 			};
 		};
-		for(var i = 0; i < this.sizeOptions.length; ++i) {
+		for (var i = 0; i < this.sizeOptions.length; ++i) {
 			var option = this.sizeOptions[i];
 			var toolContainer = this.templateSizeOptionTool.clone();
 			var label = this.loc.sizes[option.id];
-			if(option.width && option.height) {
+			if (option.width && option.height) {
 				label = label + ' (' + option.width + ' x ' + option.height + 'px)';
 			}
-			toolContainer.find('span').append(label);
-			if(option.selected) {
+			toolContainer.find('label').append(label).attr({
+				'for' : option.id,
+				'class' : 'printout_radiolabel'
+			});
+			if (option.selected) {
 				toolContainer.find('input').attr('checked', 'checked');
 			}
 			contentPanel.append(toolContainer);
-			toolContainer.find('input').attr('value', option.id);
+			toolContainer.find('input').attr({
+				'value' : option.id,
+				'name' : 'size',
+				'id' : option.id
+			});
 			toolContainer.find('input').change(closureMagic(option));
 		}
 
 		return panel;
 	},
+
+	/**
+	 * @method _createSettingsPanel
+	 * @private
+	 * Creates a settings panel for printout
+	 * @return {jQuery} Returns the created panel
+	 */
+	_createSettingsPanel : function() {
+		var me = this;
+		var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+		panel.setTitle(this.loc.settings.label);
+		var contentPanel = panel.getContainer();
+		// tooltip
+		var tooltipCont = this.templateHelp.clone();
+		tooltipCont.attr('title', this.loc.settings.tooltip);
+		contentPanel.append(tooltipCont);
+		// content
+		var closureMagic = function(tool) {
+			return function() {
+				var format = contentPanel.find('input[name=format]:checked').val();
+				// reset previous setting
+				for (var i = 0; i < me.formatOptions.length; ++i) {
+					me.formatOptions[i].selected = false;
+				}
+				tool.selected = true;
+				me.updateMapPreview();
+			};
+		};
+
+		var format = this.templateFormat.clone();
+		format.find('.printout_format_label').html(this.loc.format.label);
+		for (var i = 0; i < this.formatOptions.length; ++i) {
+			var option = this.formatOptions[i];
+			var toolContainer = this.templateFormatOptionTool.clone();
+			var label = this.loc.formats[option.id];
+
+			toolContainer.find('label').append(label).attr({
+				'for' : option.id,
+				'class' : 'printout_radiolabel'
+			});
+			if (option.selected) {
+				toolContainer.find('input').attr('checked', 'checked');
+			}
+			format.append(toolContainer);
+			toolContainer.find('input').attr({
+				'value' : option.format,
+				'name' : 'format',
+				'id' : option.id
+			});
+			toolContainer.find('input').change(closureMagic(option));
+		}
+
+		var mapTitle = this.templateTitle.clone();
+		mapTitle.find('.printout_title_label').html(this.loc.mapTitle.label);
+		mapTitle.find('.printout_title_field').attr({
+			'value' : '',
+			'placeholder' : this.loc.mapTitle.label
+		});
+
+		var logo = this.templateLogo.clone();
+		logo.find('.printout_logo_check').attr({});
+		logo.find('input').attr({
+			'id' : 'printout_logo',
+			'checked' : 'checked'
+		});
+		logo.find('label').html(this.loc.mapLogo.label).attr({
+			'for' : 'printout_logo',
+			'class' : 'printout_checklabel'
+		});
+
+		var scale = this.templateScale.clone();
+		scale.find('.printout_scale_check').attr({
+			'id' : 'printout_scale'
+		});
+		scale.find('input').attr({
+			'id' : 'printout_scale',
+			'checked' : 'checked'
+		});
+		scale.find('label').html(this.loc.mapScale.label).attr({
+			'for' : 'printout_scale',
+			'class' : 'printout_checklabel'
+		});
+
+		var date = this.templateLogo.clone();
+		date.find('.printout_date_check').attr({
+			'id' : 'printout_date'
+		});
+		date.find('input').attr({
+			'id' : 'printout_date',
+			'checked' : 'checked'
+		});
+		date.find('label').html(this.loc.mapDate.label).attr({
+			'for' : 'printout_date',
+			'class' : 'printout_checklabel'
+		});
+
+		contentPanel.append(format, mapTitle, logo, scale, date);
+
+		return panel;
+	},
+
 	/**
 	 * @method _createSizePanel
 	 * @private
@@ -228,22 +354,23 @@ function(instance, localization, backendConfiguration) {
 		this.previewContent.addClass(this.sizeOptionsMap[selections.pageSize].classForPreview);
 
 		var previewImgDiv = this.previewContent.find('img');
-		var img = new Image();
+		/*var img = new Image();
 		img.onload = function() {
 			previewImgDiv.attr('src', url);
 			img.onload = null;
 		}
-		img.src = url;
+		img.src = url;*/
+		previewImgDiv.attr('src', url);
 	},
-	showFullScaleMapPreview : function() {
 
+	showFullScaleMapPreview : function() {
 		var selections = this._gatherSelections("image/png");
 		var urlBase = this.backendConfiguration.formatProducers[selections.format];
 		var maplinkArgs = selections.maplinkArgs;
 		var pageSizeArgs = "&pageSize=" + selections.pageSize;
 		var url = urlBase + maplinkArgs + pageSizeArgs;
 
-		this.openURLinWindow(url);
+		this.openURLinWindow(url, selections);
 
 	},
 	/**
@@ -269,7 +396,7 @@ function(instance, localization, backendConfiguration) {
 		saveBtn.addClass('primary');
 		saveBtn.setHandler(function() {
 			var selections = me._gatherSelections();
-			if(selections) {
+			if (selections) {
 				me._printMap(selections);
 			}
 		});
@@ -288,7 +415,7 @@ function(instance, localization, backendConfiguration) {
 		var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 		var okBtn = dialog.createCloseButton(this.loc.buttons.ok);
 		var content = jQuery('<ul></ul>');
-		for(var i = 0; i < errors.length; ++i) {
+		for (var i = 0; i < errors.length; ++i) {
 			var row = jQuery('<li></li>');
 			row.append(errors[i]['error'])
 			content.append(row);
@@ -305,20 +432,26 @@ function(instance, localization, backendConfiguration) {
 		var container = this.mainPanel;
 		var sandbox = this.instance.getSandbox();
 		var errors = [];
-		var values = {};
+
 		var size = container.find('input[name=size]:checked').val();
-
+		var selectedFormat = (format != null) ? format : container.find('input[name=format]:checked').val();
+		var title = container.find('.printout_title_field').val();
+		var showLogo = container.find('#printout_logo').prop('checked');
+		var showScale = container.find('#printout_scale').prop('checked');
+		var showDate = container.find('#printout_date').prop('checked');
 		var maplinkArgs = sandbox.generateMapLinkParameters();
-
 		var selections = {
-			name : values.name,
-			language : values.language,
+			pageTitle : title,
+			language : Oskari.getLang(),
 			pageSize : size,
+			pageLogo : showLogo,
+			pageScale : showScale,
+			pageDate : showDate,
 			maplinkArgs : maplinkArgs,
-			format : format || "application/pdf"
-		};
+			format : selectedFormat || "application/pdf"
+		}
 
-		if(errors.length > 0) {
+		if (errors.length > 0) {
 			// TODO: messages
 			this._showValidationErrorMessage(errors);
 			return;
@@ -326,8 +459,9 @@ function(instance, localization, backendConfiguration) {
 		return selections;
 
 	},
-	openURLinWindow : function(infoUrl) {
+	openURLinWindow : function(infoUrl, selections) {
 		var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
+		if(this._isLandscape(selections) )wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=1200," + "height=850";
 		var link = infoUrl;
 		window.open(link, "BasicPrintout", wopParm);
 	},
@@ -348,35 +482,40 @@ function(instance, localization, backendConfiguration) {
 		};
 		/* Temp begin */
 		var urlBase = this.backendConfiguration.formatProducers[selections.format];
+
 		var maplinkArgs = selections.maplinkArgs;
 		var pageSizeArgs = "&pageSize=" + selections.pageSize;
-		var url = urlBase + maplinkArgs + pageSizeArgs;
+		var pageTitleArgs = "&pageTitle=" + selections.pageTitle;
+		var pageLogoArgs = "&pageLogo=" + selections.pageLogo;
+		var pageScaleArgs = "&pageScale=" + selections.pageScale;
+		var pageDateArgs = "&pageDate=" + selections.pageDate;
+		var format = "&format=" + selections.format;
 
+		// var url = urlBase + maplinkArgs + pageSizeArgs + pageTitleArgs + pageLogoArgs + pageScaleArgs + pageDateArgs ;
+		//this.openURLinWindow(url);
 		/* Temp end */
-		this.openURLinWindow(url);
+		
+		var parameters = maplinkArgs + '&action_route=GetPreview' + pageSizeArgs + pageTitleArgs + pageLogoArgs + pageScaleArgs + pageDateArgs + format;
 
-		// make the ajax call
-		/*jQuery.ajax({
-		 url : url + '&action_route=Printout',
-		 type : 'POST',
-		 dataType : "json",
-		 data : {
-		 pubdata : JSON.stringify(selections)
-		 },
-		 beforeSend : function(x) {
-		 if(x && x.overrideMimeType) {
-		 x.overrideMimeType("application/j-son;charset=UTF-8");
-		 }
-		 },
-		 success : function(response) {
-		 if(response.id > 0) {
+		url = url + parameters;
 
-		 } else {
-		 errorHandler();
-		 }
-		 },
-		 error : errorHandler
-		 });*/
+		this.openURLinWindow(url,selections);
+
+		
+	},
+	/**
+	 * @method _isLandscape
+	 * @private
+	 * @param {Object} JSONobject (_gatherSelections)
+	   @return true/false
+	 * return true, if Landscape print orientation
+	 */
+	_isLandscape : function(selections) {
+		
+		if (this.sizeOptionsMap[selections.pageSize].id.indexOf('Land') > -1) {
+			return true;
+		}
+		return false;
 	},
 	/**
 	 * @method _validateNumberRange
@@ -387,13 +526,13 @@ function(instance, localization, backendConfiguration) {
 	 * Validates number range
 	 */
 	_validateNumberRange : function(value, min, max) {
-		if(isNaN(parseInt(value))) {
+		if (isNaN(parseInt(value))) {
 			return false;
 		}
-		if(!isFinite(value)) {
+		if (!isFinite(value)) {
 			return false;
 		}
-		if(value < min || value > max) {
+		if (value < min || value > max) {
 			return false;
 		}
 		return true;
@@ -407,9 +546,9 @@ function(instance, localization, backendConfiguration) {
 	 */
 	_validateSize : function(width, height) {
 		var custom = null;
-		for(var i = 0; i < this.sizeOptions.length; ++i) {
+		for (var i = 0; i < this.sizeOptions.length; ++i) {
 			var option = this.sizeOptions[i];
-			if(option.id == 'custom') {
+			if (option.id == 'custom') {
 				custom = option;
 				break;
 			}

@@ -13,8 +13,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
  * @param {Object} localization
  *      localization data in JSON format
  */
-function(instance, localization) {
-    var me = this;
+
+
+function(instance, localization, data) {
+
+   this.data = data;
+
+   var me = this;
+
     this.instance = instance;
     this.template = jQuery('<div class="basic_publisher">' + 
     	                   '<div class="header">' + 
@@ -34,7 +40,7 @@ function(instance, localization) {
             'placeholder="' + localization.sizes.width + '"/> x ' + 
             '<input type="text" name="height" placeholder="' + localization.sizes.height + '"/></div>');
 
-    /**
+   /* /**
      * @property tools
      */
     this.tools = [{
@@ -87,6 +93,52 @@ function(instance, localization) {
         maxHeight : 2000
     }];
 
+    if(data) {
+        if(data.lang) {
+            Oskari.setLang(data.lang);
+        }
+        // setup initial size
+        var sizeIsSet = false;
+        var initWidth = this.data.state.mapfull.config.size.width;
+        var initHeight = this.data.state.mapfull.config.size.height;
+        for (var i = 0; i< this.sizeOptions.length; ++i) {
+            var option = this.sizeOptions[i];
+            if(initWidth === option.width && initHeight == option.height) {
+                option.selected = true;
+                sizeIsSet = true;
+            }
+            else {
+                option.selected = false;
+            }
+        }
+        if (!sizeIsSet) {
+            var customSizeOption = this.sizeOptions[this.sizeOptions.length -1];
+            customSizeOption.selected = true;
+            customSizeOption.width = initWidth;
+            customSizeOption.height = initHeight;
+        }
+
+        // setup initial plugins
+        var plugins = this.data.state.mapfull.config.plugins;
+        this.data.hasLayerSelectionPlugin = false;
+        for (var i = 0; i< this.tools.length; ++i) {
+            var option = this.tools[i];
+            for (var j = 0; j< plugins.length; ++j) {
+                var plugin = plugins[j];
+                if(option.id == plugin.id) {
+                    option.selected = true;
+                    break;
+                }
+                else {
+                    option.selected = false;
+                }
+                if(plugin.id == 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin') {
+                    this.data.hasLayerSelectionPlugin = plugin.config;
+                }
+            }
+        }
+    }
+
     this.loc = localization;
     this.accordion = null;
 
@@ -107,7 +159,6 @@ function(instance, localization) {
         var content = this.template.clone();
 
         this.mainPanel = content;
-        content.find('div.header h3').append(this.loc.title);
 
         container.append(content);
         var contentDiv = content.find('div.content');
@@ -117,7 +168,19 @@ function(instance, localization) {
         
         var form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLocationForm',this.loc, this);
         this.locationForm = form;
-        form.init();
+        if(this.data) {
+            content.find('div.header h3').append(this.loc.titleEdit);
+            form.init({
+                "domain": this.data.domain, 
+                "name": this.data.name, 
+                "lang": this.data.lang
+            });
+        }
+        else {
+            content.find('div.header h3').append(this.loc.title);
+            form.init();
+        }
+        
         var panel = form.getPanel();
         panel.open();
         accordion.addPanel(panel);
@@ -127,7 +190,7 @@ function(instance, localization) {
 
         this.maplayerPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLayerForm', this.loc, this.instance);
         this.maplayerPanel.init();
-
+        
         accordion.addPanel(this.maplayerPanel.getPanel());
         accordion.insertTo(contentDiv);
 
@@ -219,16 +282,20 @@ function(instance, localization) {
                 me._setSelectedSize();
             };
         };
+        var initCustomSize = false;
         for (var i = 0; i < this.sizeOptions.length; ++i) {
             var option = this.sizeOptions[i];
             var toolContainer = this.templateSizeOptionTool.clone();
             var label = this.loc.sizes[option.id];
-            if(option.width && option.height) {
+            if(option.width && option.height && "custom" != option.id) {
                 label = label + ' (' + option.width + ' x ' + option.height + 'px)';
             }
             toolContainer.find('span').append(label);
             if (option.selected) {
                 toolContainer.find('input').attr('checked', 'checked');
+                if("custom" == option.id) {
+                    initCustomSize = true;
+                }
             }
             contentPanel.append(toolContainer);
             toolContainer.find('input').attr('value', option.id);
@@ -244,6 +311,12 @@ function(instance, localization) {
         inputs.bind('keyup', function() {
             me._setSelectedSize();
         });
+        if(initCustomSize) {
+            var widthInput = customSizes.find('input[name=width]');
+            widthInput.val(option.width);
+            var heightInput = customSizes.find('input[name=height]');
+            heightInput.val(option.height);
+        }
 
         contentPanel.append(customSizes);
 
@@ -347,20 +420,67 @@ function(instance, localization) {
         });
 		cancelBtn.insertTo(buttonCont);
 		
+		
         var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         saveBtn.setTitle(this.loc.buttons.save);
         saveBtn.addClass('primary');
-        saveBtn.setHandler(function() {
-            var selections = me._gatherSelections();
-            if(selections) {
-            	me._publishMap(selections);
-            }
-        });
-		saveBtn.insertTo(buttonCont);
+		
+        if (this.data) {
+            var save = function() {
+                var selections = me._gatherSelections();
+                if(selections) {
+                    me._publishMap(selections);
+                }
+            };
+            saveBtn.setTitle(this.loc.buttons.saveNew);
+            saveBtn.setHandler(function() {
+                me.data.id = null;
+                delete me.data.id;
+                save();
+            });
+            saveBtn.insertTo(buttonCont);
+
+            var replaceBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            replaceBtn.setTitle(this.loc.buttons.replace);
+            replaceBtn.addClass('primary');
+            replaceBtn.setHandler(function() {
+                me._showReplaceConfirm(save);
+            });
+            replaceBtn.insertTo(buttonCont);
+            
+        }
+        else {
+            saveBtn.setTitle(this.loc.buttons.save);
+            saveBtn.setHandler(function() {
+                var selections = me._gatherSelections();
+                if(selections) {
+                    me._publishMap(selections);
+                }
+            });
+            saveBtn.insertTo(buttonCont);            
+        }
 		
         return buttonCont;
     },
     
+    /**
+     * @method _showReplaceConfirm
+     * @private
+     * Shows a confirm dialog for replacing published map
+     * @param {Function} continueCallback function to call if the user confirms 
+     */
+    _showReplaceConfirm : function(continueCallback) {
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        okBtn.setTitle(this.loc.buttons.replace);
+        okBtn.addClass('primary');
+        okBtn.setHandler(function() {
+            dialog.close();
+            continueCallback();
+        });
+        var cancelBtn = dialog.createCloseButton(this.loc.buttons.cancel);
+        dialog.show(this.loc.confirm.replace.title, this.loc.confirm.replace.msg, [cancelBtn, okBtn]);
+    },
     /**
      * @method _showValidationErrorMessage
      * @private
@@ -398,6 +518,11 @@ function(instance, localization) {
             language : values.language,
             plugins : []
         };
+
+        if (this.data && this.data.id) {
+            selections.id = this.data.id;
+        }
+
         for (var i = 0; i < this.tools.length; ++i) {
             if (this.tools[i].selected) {
             	var tmpTool = {
@@ -486,7 +611,7 @@ function(instance, localization) {
             type : 'POST',
             dataType : "json",
             data : {
-            	pubdata : JSON.stringify(selections)
+                pubdata : JSON.stringify(selections)
             },
             beforeSend : function(x) {
                 if (x && x.overrideMimeType) {
@@ -563,7 +688,12 @@ function(instance, localization) {
                 this.normalMapPlugins.push(plugin);
             }
         }
+
         this.maplayerPanel.start();
+        if(this.data && this.data.hasLayerSelectionPlugin) {
+            // sets up initial data when editing published map
+            this.maplayerPanel.useConfig(this.data.hasLayerSelectionPlugin);
+        }
 
         this._setSelectedSize();
 
@@ -575,7 +705,6 @@ function(instance, localization) {
 
         mapModule.registerPlugin(this.logoPlugin);
         this.logoPlugin.startPlugin(me.instance.sandbox);
-
     },
     /**
      * @method _disablePreview
@@ -677,6 +806,21 @@ function(instance, localization) {
             }
         }
         // stop and start if enabled to change language
+        this._resetLayerSelectionPlugin();
+        
+        // stop and start if enabled to change language
+        this.logoPlugin.stopPlugin(this.instance.sandbox);
+        this.logoPlugin.startPlugin(this.instance.sandbox);
+    },
+    /**
+     * @method _resetLayerSelectionPlugin
+     * Changes system language with Oskari.setLang and stops/starts plugins to make 
+     * them rewrite their UI with the new language.
+     * @param {String} lang language code
+     * @private
+     */
+    _resetLayerSelectionPlugin : function() {
+        // stop and start if enabled to change language
         if(this.maplayerPanel.isEnabled()) {
             var values = this.maplayerPanel.plugin.getBaseLayers();
             
@@ -691,9 +835,5 @@ function(instance, localization) {
             }
             this.maplayerPanel.plugin.selectBaseLayer(selectedBase);
         }
-        
-        // stop and start if enabled to change language
-        this.logoPlugin.stopPlugin(this.instance.sandbox);
-        this.logoPlugin.startPlugin(this.instance.sandbox);
     }
 });
