@@ -77,7 +77,7 @@ Oskari.registerLocalization(
                 },
                 "confirm" : {
                     "replace" : {
-                        "title" : "Haluatko korvata julkaisun",
+                        "title" : "Haluatko korvata julkaisun?",
                         "msg" : "Korvaamalla muutokset näkyvät suoraan julkaisemassasi kartassa. Sinun ei tarvitse lisätä koodia verkkosivuillesi uudelleen."
                     }
                 }, 

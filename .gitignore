@@ -7,4 +7,7 @@ dist/
 .idea
 tools/node_modules
 tools/validation
-
+META-INF/
+docs/node_modules/
+docs/release/
+docs/tmp/

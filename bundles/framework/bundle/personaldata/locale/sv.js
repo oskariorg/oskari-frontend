@@ -111,9 +111,9 @@ Oskari.registerLocalization({
           "error_noname": "Namnge kartan",
           "deletetitle": "Vill du ta bort denna karta?",
           "deletemsg": "Vill du ta bort den inbäddade kartan? Efter detta syns kartan inte längre på din webbplats.",
-          "showErrorTitle": "Näkymä rikkinäinen SV",
-          "showConfirmMissing": "Osa näkymään tallennetuista tasoista on poistunut, haluatko silti avata näkymän? SV",
-          "showConfirmNotLoaded": "Kaikki karttatasot eivät ole vielä latautuneet, yritä uudelleen hetken päästä. SV"
+          "showErrorTitle": "Bristfällig vy",
+          "showConfirmMissing": "En del av de kartlager som har lagrats i vyn är inte tillgängliga, vill du ändå öppna vyn?",
+          "showConfirmNotLoaded": "Alla kartlager har ännu inte laddats ned, försök på nytt om en stund."
         },
         "save": {
           "success": "Kartan har lagrats.",

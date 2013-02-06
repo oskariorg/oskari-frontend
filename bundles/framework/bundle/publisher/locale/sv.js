@@ -13,13 +13,13 @@ Oskari.registerLocalization(
             },
             "edit" : {
               "popup" : {
-                  "title": "Muokkaa julkaistua karttaa SV",
-                  "msg": "Uppdatera tidigare publicerade kartinformation"
+                  "title": "Den inbäddade kartan editeras",
+                  "msg": "Den tidigare inbäddade kartans uppgifter uppdateras"
               } 
             },
             "BasicView": {
                 "title": "Inbädda kartan",
-                "titleEdit" : "Muokkaa julkaisua SV",
+                "titleEdit" : "Editera inbäddad karta",
                 "domain": {
                     "title": "Webbsidan där kartan inbäddas",
                     "label": "Webbplatsen där kartan inbäddas",
@@ -70,15 +70,15 @@ Oskari.registerLocalization(
                 },
                 "buttons": {
                     "save": "Lagra",
-                    "saveNew": "Tallenna uusi SV",
+                    "saveNew": "Lagra ny",
                     "ok": "OK",
-                    "replace": "Korvaa SV",
+                    "replace": "Ersätt",
                     "cancel": "Avbryt"
                 },
                 "confirm" : {
                     "replace" : {
-                        "title" : "Haluatko korvata julkaisun",
-                        "msg" : "Korvaamalla muutokset näkyvät suoraan julkaisemassasi kartassa. Sinun ei tarvitse lisätä koodia verkkosivuillesi uudelleen."
+                        "title" : "Vill du ersätta den inbäddade kartan?",
+                        "msg" : "Om du ersätter kartan syns ändringarna på den inbäddade kartan genast. Du behöver inte lägga in koden på din webbsida på nytt."
                     }
                 }, 
                 "layerselection": {

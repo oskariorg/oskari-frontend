@@ -1,0 +1,192 @@
+{
+    "startupSequence": [{
+        "title": "OpenLayers",
+        "fi": "OpenLayers",
+        "sv": "?",
+        "en": "OpenLayers",
+        "bundlename": "openlayers-default-theme",
+        "bundleinstancename": "openlayers-default-theme",
+        "metadata": {
+            "Import-Bundle": {
+                "openlayers-single-full": {
+                    "bundlePath": "../../../packages/openlayers/bundle/"
+                },
+                "openlayers-default-theme": {
+                    "bundlePath": "../../../packages/openlayers/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {
+            
+        }
+    },
+    {
+        "title": "Map",
+        "fi": "Map",
+        "sv": "?",
+        "en": "Map",
+        "bundlename": "mapfull",
+        "bundleinstancename": "mapfull",
+        "metadata": {
+            "Import-Bundle": {
+                "core-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "core-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "sandbox-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "sandbox-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "event-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "event-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "event-map-layer": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "request-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "request-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "request-map-layer": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "service-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "service-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "domain": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapmodule-plugin": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "metadata": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapwmts": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapfull": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "harava-mapmodule-plugin": {
+                    "bundlePath": "../../../packages/harava/bundle/"
+                },
+                "harava-search-by-geometry": {
+                    "bundlePath": "../../../packages/harava/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {
+            
+        }
+    },
+    {
+        "title": "OskariDIVManazer",
+        "fi": "OskariDIVManazer",
+        "sv": "?",
+        "en": "OskariDIVManazer",
+        "bundlename": "divmanazer",
+        "bundleinstancename": "divmanazer",
+        "metadata": {
+            "Import-Bundle": {
+                "divmanazer": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {
+            
+        }
+    },
+    {
+        "title": "LayerSelection",
+        "en": "LayerSelection",
+        "fi": "LayerSelection",
+        "sv": "LayerSelection",
+        "bundleinstancename": "layerselection2",
+        "bundlename": "layerselection2",
+        "instanceProps": {
+            
+        },
+        "metadata": {
+            "Import-Bundle": {
+                "layerselection2": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    },
+    {
+        "title": "Haravamapmodule",
+        "fi": "Haravamapmodule",
+        "sv": "?",
+        "en": "Haravamapmodule",
+        "bundlename": "harava-mapmodule-plugin",
+        "bundleinstancename": "harava-mapmodule-plugin",
+        "metadata": {
+            "Import-Bundle": {
+                "harava-mapmodule-plugin": {
+                    "bundlePath": "../../../packages/harava/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {
+            
+        }
+    },
+    {
+        "title": "Infobox",
+        "fi": "Infobox",
+        "sv": "?",
+        "en": "Infobox",
+        "bundlename": "harava-infobox",
+        "bundleinstancename": "harava-infobox",
+        "metadata": {
+            "Import-Bundle": {
+                "harava-infobox": {
+                    "bundlePath": "../../../packages/harava/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {
+            
+        }
+    },
+    {
+        "title": "Haravasearchbygeometry",
+        "fi": "Haravasearchbygeometry",
+        "sv": "?",
+        "en": "Haravasearchbygeometry",
+        "bundlename": "harava-search-by-geometry",
+        "bundleinstancename": "harava-search-by-geometry",
+        "metadata": {
+            "Import-Bundle": {
+                "harava-search-by-geometry": {
+                    "bundlePath": "../../../packages/harava/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {
+            
+        }
+    }]
+}
