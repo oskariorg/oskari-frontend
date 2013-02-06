@@ -13,13 +13,13 @@ Oskari.registerLocalization(
             },
             "edit" : {
               "popup" : {
-                  "title": "Edit embedded map",
-                  "msg": "Update the previously published map information"
+                  "title": "Editing embedded map",
+                  "msg": "The map data of a previously embedded map is being updated"
               } 
             },
             "BasicView": {
                 "title": "Embed map",
-                "titleEdit" : "Muokkaa julkaisua EN",
+                "titleEdit" : "Edit embedded map",
                 "domain": {
                     "title": "Webpage where the map will be embedded",
                     "label": "Website where the map will be embedded",
@@ -70,15 +70,15 @@ Oskari.registerLocalization(
                 },
                 "buttons": {
                     "save": "Save",
-                    "saveNew": "Save as new",
+                    "saveNew": "Save new",
                     "ok": "OK",
                     "replace": "Replace",
                     "cancel": "Cancel"
                 },
                 "confirm" : {
                     "replace" : {
-                        "title" : "Haluatko korvata julkaisun",
-                        "msg" : "Korvaamalla muutokset näkyvät suoraan julkaisemassasi kartassa. Sinun ei tarvitse lisätä koodia verkkosivuillesi uudelleen."
+                        "title" : "Do you wish to replace the embedded map?",
+                        "msg" : "Use replace to show changes on the embedded map without delay. It is not necessary to add the html-code to your webpage again."
                     }
                 }, 
                 "layerselection": {

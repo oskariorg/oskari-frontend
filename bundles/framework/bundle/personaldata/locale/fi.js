@@ -111,8 +111,8 @@ Oskari.registerLocalization({
           "error_noname": "Anna kartalle nimi",
           "deletetitle": "Poiston varmistus",
           "deletemsg": "Haluatko poistaa julkaistun kartan? Tämän jälkeen kartta ei näy sivustollasi.",
-          "showErrorTitle": "Näkymä rikkinäinen",
-          "showConfirmMissing": "Osa näkymään tallennetuista tasoista on poistunut, haluatko silti avata näkymän?",
+          "showErrorTitle": "Näkymä puutteellinen",
+          "showConfirmMissing": "Osa näkymään tallennetuista tasoista ei ole käytettävissä, haluatko silti avata näkymän?",
           "showConfirmNotLoaded": "Kaikki karttatasot eivät ole vielä latautuneet, yritä uudelleen hetken päästä."
         },
         "save": {
