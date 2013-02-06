@@ -257,7 +257,7 @@ function() {
         height = height > maxHeight ? (maxHeight + 30) +'px' : 'auto';
         content.css({'height': height});
 
-        popup.css({'height': 'auto', 'width': 'auto', 'min-width': '200px', 'max-width': maxWidth + 'px', 'min-height': '200px','max-height': maxHeight+'px','left': left+'px', 'z-index': '16000'});
+        popup.css({'height': 'auto', 'width': 'auto', 'min-width': '256px', 'max-width': maxWidth + 'px', 'min-height': '200px','max-height': maxHeight+'px','left': left+'px', 'z-index': '16000'});
 //        popup.css({'height': 'auto', 'width': 'auto', 'min-width': '200px', 'left': left+'px'});
 
     },
