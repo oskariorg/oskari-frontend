@@ -15,6 +15,7 @@ files = [
   '../../libraries/jquery/jquery-1.7.1.min.js',
   '../../dist/oskari.min.js',
   '../../dist/oskari_lang_fi.js',
+  '../../dist/oskari_lang_all.js',
   '../../tools/node_modules/expect.js/expect.js',
   '../../tools/lib/sinon-1.5.2.js',
   '../../tests/**/*.js'
