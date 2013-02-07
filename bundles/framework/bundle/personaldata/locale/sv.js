@@ -111,8 +111,9 @@ Oskari.registerLocalization({
           "error_noname": "Namnge kartan",
           "deletetitle": "Vill du ta bort denna karta?",
           "deletemsg": "Vill du ta bort den inbäddade kartan? Efter detta syns kartan inte längre på din webbplats.",
-          "edit_title": "Redigera Publicera karta",
-          "editmsg": "Uppdatera tidigare publicerade kartinformation"
+          "showErrorTitle": "Bristfällig vy",
+          "showConfirmMissing": "En del av de kartlager som har lagrats i vyn är inte tillgängliga, vill du ändå öppna vyn?",
+          "showConfirmNotLoaded": "Alla kartlager har ännu inte laddats ned, försök på nytt om en stund."
         },
         "save": {
           "success": "Kartan har lagrats.",

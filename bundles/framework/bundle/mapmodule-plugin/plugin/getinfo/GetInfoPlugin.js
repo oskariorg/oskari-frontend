@@ -666,7 +666,7 @@ function() {
             var vPres = ''
             switch (vType) {
                 case 'string':
-                    if (value.startsWith('http://')) {
+                    if (value.indexOf('http://') == 0) {
                         valpres = '<a href="' + value + '" target="_blank">' + value + '</a>';
                     } else {
                         valpres = value;

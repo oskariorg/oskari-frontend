@@ -482,7 +482,39 @@ function(id, imageUrl, options) {
         }
         this._updateDomain();
     },
-    
+    /**
+     * @method panMapToLonLat
+     * Pans the map to the given position.
+     * @param {OpenLayers.LonLat} lonlat coordinates to pan the map to
+     * @param {Boolean} suppressEnd true to NOT send an event about the map move 
+     *  (other components wont know that the map has moved, only use when chaining moves and 
+     *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+     */
+    panMapToLonLat : function(lonlat, suppressEnd) {
+        this._map.setCenter(lonlat, this._map.getZoom());
+        this._updateDomain();
+        if(suppressEnd !== true) {
+            this.notifyMoveEnd();
+        }
+    },
+    /**
+     * @method zoomToScale
+     * Pans the map to the given position.
+     * @param {float} scale the new scale
+     * @param {Boolean} closest find the zoom level that most closely fits the specified scale.  
+     *   Note that this may result in a zoom that does not exactly contain the entire extent.  Default is false
+     * @param {Boolean} suppressEnd true to NOT send an event about the map move 
+     *  (other components wont know that the map has moved, only use when chaining moves and 
+     *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+     */
+    zoomToScale : function(scale, closest, suppressEnd) {
+    	var isClosest = (closest === true);
+        this._map.zoomToScale(scale,isClosest);
+        this._updateDomain();
+        if(suppressEnd !== true) {
+            this.notifyMoveEnd();
+        }
+    },
     /**
      * @method centerMap
      * Moves the map to the given position and zoomlevel.

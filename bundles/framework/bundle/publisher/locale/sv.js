@@ -11,8 +11,15 @@ Oskari.registerLocalization(
                 "desc": "Inbädda kartan genom att tillägga HTML-koden nedan på din webbplats.",
                 "urlPrefix": "http://www.paikkatietoikkuna.fi"
             },
+            "edit" : {
+              "popup" : {
+                  "title": "Den inbäddade kartan editeras",
+                  "msg": "Den tidigare inbäddade kartans uppgifter uppdateras"
+              } 
+            },
             "BasicView": {
                 "title": "Inbädda kartan",
+                "titleEdit" : "Editera inbäddad karta",
                 "domain": {
                     "title": "Webbsidan där kartan inbäddas",
                     "label": "Webbplatsen där kartan inbäddas",
@@ -63,9 +70,17 @@ Oskari.registerLocalization(
                 },
                 "buttons": {
                     "save": "Lagra",
+                    "saveNew": "Lagra ny",
                     "ok": "OK",
+                    "replace": "Ersätt",
                     "cancel": "Avbryt"
                 },
+                "confirm" : {
+                    "replace" : {
+                        "title" : "Vill du ersätta den inbäddade kartan?",
+                        "msg" : "Om du ersätter kartan syns ändringarna på den inbäddade kartan genast. Du behöver inte lägga in koden på din webbsida på nytt."
+                    }
+                }, 
                 "layerselection": {
                     "label": "Visa kartlagren i menyn",
                     "info": "Välj bakgrundskartor. Du kan göra förval i förhandsgranskningsvyn.",
