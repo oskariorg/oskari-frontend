@@ -20,6 +20,7 @@
     height: 32px;
     float:left;
     margin: 2px;
+    cursor: pointer;
 }
 
 .searchbygeom-pan{
