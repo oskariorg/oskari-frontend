@@ -68,7 +68,7 @@ function() {
         this.template = jQuery("<div class='datascource'>" +
                 "<div class='link'><a href='JavaScript:void(0);'></a></div>" +
             "</div>");
-        this.templateinfoIcon = jQuery('<div class="icon-info" style="position: relative; bottom: 15px; left: 170px;"></div>');
+        this.templateinfoIcon = jQuery('<div class="icon-info" style="position: relative; bottom: 15px; left: 155px;"></div>');
         this.templategroupTemplate = jQuery('<ul style="padding: 0 12px;"></ul>'); 
         this.templatecontent = jQuery('<div></div>');
         this.templateheading = jQuery('<b></b>');

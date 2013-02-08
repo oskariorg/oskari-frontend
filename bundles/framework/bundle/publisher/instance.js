@@ -250,15 +250,15 @@ function() {
 		this.plugins['Oskari.userinterface.Tile'].refresh();
 	},
 
-
 	/**
 	 * @method setPublishMode
 	 * Transform the map view to publisher mode if parameter is true and back to normal if false.
 	 * Makes note about the map layers that the user cant publish, removes them for publish mode and 
 	 * returns them when exiting the publish mode.
 	 * 
-	 * @param {Boolean} blnEnabled
+	 * @param {Boolean} blnEnabled true to enable, false to disable/return to normal mode
 	 * @param {Layer[]} deniedLayers layers that the user can't publish
+     * @param {Object} data View data that is used to prepopulate publisher (optional)
 	 */
 	setPublishMode : function(blnEnabled, deniedLayers, data) {
 		var me = this;
@@ -302,6 +302,7 @@ function() {
 	/**
 	 * @method _addLayers
 	 * Adds temporarily removed layers to map
+	 * @private
 	 */
 	_addLayers : function() {
 		var me = this;
@@ -318,6 +319,7 @@ function() {
 	/**
 	 * @method _removeLayers
 	 * Removes temporarily layers from map that the user cant publish
+	 * @private
 	 */
 	_removeLayers : function() {
 		var me = this;

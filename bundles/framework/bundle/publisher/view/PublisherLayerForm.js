@@ -48,6 +48,12 @@ function(localization, instance) {
         this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin');  
 	},
 
+    /**
+     * Prepopulates the form/plugin with given data
+     * 
+     * @method useConfig
+     * @param {Object} pConfig data to prepopulate the form and plugin
+     */
     useConfig : function(pConfig) {
         if(pConfig) {
             if( Object.prototype.toString.call( pConfig.baseLayers ) === '[object Array]' &&
@@ -64,8 +70,9 @@ function(localization, instance) {
         }
     },
     /**
-     * @method getPanel
      * Returns the UI panel and populates it with the data that we want to show the user.
+     * 
+     * @method getPanel
      * @return {Oskari.userinterface.component.AccordionPanel}
      */
 	getPanel : function() {
@@ -73,8 +80,9 @@ function(localization, instance) {
 		return this.panel;
 	},
     /**
-     * @method enablePlugin
      * Controls the LayerSelectionPlugin by calling start/stop.
+     * 
+     * @method enablePlugin
      * @param {Boolean} true to start the plugin, false to stop it
      */
 	enablePlugin : function(blnEnabled) {
@@ -85,16 +93,18 @@ function(localization, instance) {
         }
 	},
     /**
-     * @method isEnabled
      * Returns the state of the plugin.
+     * 
+     * @method isEnabled
      * @return {Boolean} true if the plugin is visible on screen.
      */
 	isEnabled : function() {
 	    return this.showLayerSelection; 
 	},
     /**
-     * @method start
      * Registers the plugin to MainMapModule
+     * 
+     * @method start
      */
 	start : function() {
         var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
@@ -104,16 +114,17 @@ function(localization, instance) {
         }
 	},
     /**
-     * @method stop
      * Unregisters the plugin from MainMapModule
+     * 
+     * @method stop
      */
 	stop : function() {
 		this.enablePlugin(false);
         var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
         mapModule.unregisterPlugin(this.plugin);
 	},
+	
     /**
-     * @method getValues
      * Returns the selections the user has done with the layer selection as an object.
      * If the plugin is enabled, the values will contain a property 'layerSelection':
      * {
@@ -128,6 +139,7 @@ function(localization, instance) {
      * Also base layer in published maps mean that it is the bottom layer and only one base layer 
      * is visible at any time.
      * 
+     * @method getValues
      * @return {Object}
      */
 	getValues : function() {
@@ -148,10 +160,11 @@ function(localization, instance) {
 		return values;
     },
     /**
-     * @method validate
      * Returns any errors found in validation (currently doesn't check anything) or an empty
      * array if valid. Error object format is defined in Oskari.userinterface.component.FormInput
      * validate() function.
+     * 
+     * @method validate
      * @return {Object[]}
      */
 	validate : function() {
@@ -159,9 +172,10 @@ function(localization, instance) {
 		return errors;
    },
     /**
+     * Returns the published map layer selection
+     * 
      * @method _getLayersList
      * @private
-     * Returns the published map layer selection
      * @return {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
      */
     _getLayersList : function() {
@@ -170,9 +184,10 @@ function(localization, instance) {
         return selectedLayers;
     },
     /**
+     * Populates the map layers panel in publisher
+     * 
      * @method _populateMapLayerPanel
      * @private
-     * Populates the map layers panel in publisher
      */
     _populateMapLayerPanel : function() {
 
@@ -244,9 +259,10 @@ function(localization, instance) {
         }
     },
     /**
+     * Populates the layer promotion part of the map layers panel in publisher
+     * 
      * @method _populateLayerPromotion
      * @private
-     * Populates the layer promotion part of the map layers panel in publisher
      */
     _populateLayerPromotion : function(contentPanel) {
         var me = this;
@@ -286,9 +302,10 @@ function(localization, instance) {
         }
     },
     /**
-     * @method _getActualPromotionLayers
      * Checks given layer list and returns any layer that is found on the system but not yet selected.
      * The returned list contains the list that we should promote.
+     * 
+     * @method _getActualPromotionLayers
      * @param {String[]} list - list of layer ids that we want to promote
      * @return {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Object[]} filtered list of promoted layers
      * @private
