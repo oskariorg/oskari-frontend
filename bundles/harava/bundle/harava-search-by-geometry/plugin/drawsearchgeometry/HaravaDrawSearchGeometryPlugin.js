@@ -117,6 +117,7 @@ function(locale) {
     	this.searchControls.regularPolygon.handler.setOptions({irregular: true});
     	
     	jQuery('#searchbygeom').append('<div class="search-by-geometry">'
+    			+ '<div id="searchbygeom-pan" class="searchbygeom-tool searchbygeom-pan" title="'+this._locale.tooltips.panMap+'"></div>'
     			+ '<div id="searchbygeom-point" class="searchbygeom-tool searchbygeom-point" title="'+this._locale.tooltips.searchByPoint+'"></div>'
     			//+ '<div id="searchbygeom-line" class="searchbygeom-tool searchbygeom-line" title="'+this._locale.tooltips.searchByLine+'"></div>'
     			+ '<div id="searchbygeom-mapextent" class="searchbygeom-tool searchbygeom-mapextent" title="'+this._locale.tooltips.searchByMapExtent+'"></div>'
@@ -155,6 +156,9 @@ function(locale) {
     			case 'searchbygeom-regular-polygon':
     				me.toggleControl('regularPolygon');
     				break;
+    			case 'searchbygeom-pan':
+    				me.toggleControl('pan');
+    				break;
     		}
     	});
     	
@@ -164,7 +168,7 @@ function(locale) {
         }
     	
     	// Do default tool selection
-    	$('#searchbygeom-point').trigger('click');
+    	$('#searchbygeom-pan').trigger('click');
     },
     /**
      * @method _handleSearchByGeom
