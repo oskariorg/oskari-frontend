@@ -106,8 +106,7 @@ function(instance) {
         
         var sandbox = me.instance.getSandbox();
         
-        // check if the user is logged in
-        // FIXME: always show logged in view 
+        // check if the user is logged in 
         if(!sandbox.getUser().isLoggedIn()) {
             this.view = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.NotLoggedIn', 
                 this.instance, 
