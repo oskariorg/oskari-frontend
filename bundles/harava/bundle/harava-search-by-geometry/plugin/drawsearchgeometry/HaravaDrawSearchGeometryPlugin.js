@@ -77,6 +77,22 @@ function(locale) {
         return true;
     },
     /**
+     * Toggle plugin visibility
+     * @param visible
+     */
+    toggleVisibility: function(visible){
+    	var me = this;
+    	if(visible){
+    		jQuery('#searchbygeom').show();
+    	}
+    	else{
+    		jQuery('#searchbygeom').hide();
+    		jQuery('#searchbygeom-pan').trigger('click');
+    		me.removeAllDrawings();
+    		me._closeGfiInfo();
+    	}
+    },
+    /**
      * @method init
      *
      * Interface method for the module protocol
@@ -168,7 +184,7 @@ function(locale) {
         }
     	
     	// Do default tool selection
-    	$('#searchbygeom-pan').trigger('click');
+    	jQuery('#searchbygeom-pan').trigger('click');
     },
     /**
      * @method _handleSearchByGeom
@@ -581,7 +597,23 @@ function(locale) {
     	var me = this;
     	me._closeGfiInfo();
     	me.removeAllDrawings();
-    	me.toggleControl(searchMode);    	
+    	switch(searchMode){
+			case 'point':
+				jQuery('#searchbygeom-point').trigger('click');
+				break;
+			case 'mapextent':
+				jQuery('#searchbygeom-mapextent').trigger('click');
+				break;
+			case 'polygon':
+				jQuery('#searchbygeom-polygon').trigger('click'); 
+				break;
+			case 'regularPolygon':
+				jQuery('#searchbygeom-regular-polygon').trigger('click');
+				break;
+			case 'pan':
+				jQuery('#searchbygeom-pan').trigger('click');
+				break;
+		}
     },
     /**
      * Enables the given search control

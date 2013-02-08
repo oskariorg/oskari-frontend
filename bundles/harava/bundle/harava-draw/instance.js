@@ -1,10 +1,10 @@
 /**
- * @class Oskari.harava.bundle.haravaSearchByGeometry.SearchByGeometryBundleInstance
+ * @class Oskari.harava.bundle.haravaDraw.DrawBundleInstance
  *
  * Registers and starts the
- * Oskari.harava.bundle.haravaSearchByGeometry.SearchByGeometryBundleInstance plugin for main map.
+ * Oskari.harava.bundle.haravaDraw.DrawBundleInstance plugin for main map.
  */
-Oskari.clazz.define("Oskari.harava.bundle.haravaSearchByGeometry.SearchByGeometryBundleInstance",
+Oskari.clazz.define("Oskari.harava.bundle.haravaDraw.DrawBundleInstance",
 
 /**
  * @method create called automatically on construction
@@ -20,7 +20,7 @@ function() {
 	 * @static
 	 * @property __name
 	 */
-	__name : 'HaravaSearchByGeometry',
+	__name : 'HaravaDraw',
 
 	/**
 	 * @method getName
@@ -81,23 +81,20 @@ function() {
     	var sandbox = Oskari.$("sandbox");
         me.sandbox = sandbox;
         
+        var conf = me.conf;
+        
         sandbox.register(me);
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         var locale = this.getLocalization('display');
-        var searchPlugin = Oskari.clazz.create('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeometryPlugin', locale);
-        mapModule.registerPlugin(searchPlugin);
-        mapModule.startPlugin(searchPlugin);
+        var plugin = Oskari.clazz.create('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawPlugin', locale, conf);
+        mapModule.registerPlugin(plugin);
+        mapModule.startPlugin(plugin);
         
-    	// request    	
+    	// request
     	this.requestHandlers = {
-    			StartGeometrySearchRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.StartGeometrySearchRequestHandler', sandbox, searchPlugin),
-    			StopGeometrySearchRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.StopGeometrySearchRequestHandler', sandbox, searchPlugin),
-    			ToggleVisibilityGeometrySearchRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityGeometrySearchRequestHandler', sandbox, searchPlugin)
-    	};
-    	
-        sandbox.addRequestHandler('StartGeometrySearchRequest', this.requestHandlers.StartGeometrySearchRequest);
-    	sandbox.addRequestHandler('StopGeometrySearchRequest', this.requestHandlers.StopGeometrySearchRequest);
-    	sandbox.addRequestHandler('ToggleVisibilityGeometrySearchRequest', this.requestHandlers.ToggleVisibilityGeometrySearchRequest);
+    			ToggleVisibilityHaravaDrawRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityHaravaDrawRequestHandler', sandbox, plugin)
+    	};    	
+        sandbox.addRequestHandler('ToggleVisibilityHaravaDrawRequest', this.requestHandlers.ToggleVisibilityHaravaDrawRequest);
     },
 
     /**
@@ -112,10 +109,7 @@ function() {
         }
 
         // request handler cleanup 
-        sandbox.removeRequestHandler('StartGeometrySearchRequest', this.requestHandlers['StartGeometrySearchRequest']);
-        sandbox.removeRequestHandler('StopGeometrySearchRequest', this.requestHandlers['StopGeometrySearchRequest']);
-        sandbox.removeRequestHandler('ToggleVisibilityGeometrySearchRequest', this.requestHandlers['ToggleVisibilityGeometrySearchRequest']);
-
+        sandbox.removeRequestHandler('ToggleVisibilityHaravaDrawRequest', this.requestHandlers['ToggleVisibilityHaravaDrawRequest']);
         var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
 
         sandbox.request(this, request);

@@ -1,9 +1,9 @@
 /**
- * @class Oskari.harava.bundle.haravaInfobox.InfoBoxBundle
+ * @class Oskari.harava.bundle.haravaDraw.DrawBundle
  *
  * Definition for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.harava.bundle.haravaSearchByGeometry.SearchByGeometryBundle", 
+Oskari.clazz.define("Oskari.harava.bundle.haravaDraw.DrawBundle", 
 
 function() {
 
@@ -11,7 +11,7 @@ function() {
 	"create" : function() {
 		var me = this;
 		var inst = 
-		  Oskari.clazz.create("Oskari.harava.bundle.haravaSearchByGeometry.SearchByGeometryBundleInstance");
+		  Oskari.clazz.create("Oskari.harava.bundle.haravaDraw.DrawBundleInstance");
 		return inst;
 
 	},
@@ -26,22 +26,23 @@ function() {
 
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/instance.js"
+			"src" : "../../../../bundles/harava/bundle/harava-draw/instance.js"
 		}, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/plugin/drawsearchgeometry/HaravaDrawSearchGeometryPlugin.js"
+            "src" : "../../../../bundles/harava/bundle/harava-draw/plugin/draw/HaravaDrawPlugin.js"
         }, 
         /*
          * Requests and handlers
-         **/
+         */
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/StartGeometrySearchRequest.js"
+            "src" : "../../../../bundles/harava/bundle/harava-draw/request/ToggleVisibilityHaravaDrawRequest.js"
         },
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/StartGeometrySearchRequestHandler.js"
+            "src" : "../../../../bundles/harava/bundle/harava-draw/request/ToggleVisibilityHaravaDrawRequestHandler.js"
         },
+        /*
         {
             "type" : "text/javascript",
             "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/StopGeometrySearchRequest.js"
@@ -50,39 +51,32 @@ function() {
             "type" : "text/javascript",
             "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/StopGeometrySearchRequestHandler.js"
         },
-        {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/ToggleVisibilityGeometrySearchRequest.js"
-        },
-        {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/ToggleVisibilityGeometrySearchRequestHandler.js"
-        },
+                 **/
         /* Resources */
         {
 		    "type" : "text/css",
-		    "src" : "../../../../resources/harava/bundle/harava-search-by-geometry/css/style.css"	  
+		    "src" : "../../../../resources/harava/bundle/harava-draw/css/style.css"	  
 		}],
 		/* Locales */
 		"locales" : [{
 			"lang" : "fi",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/locale/fi.js"
+			"src" : "../../../../bundles/harava/bundle/harava-draw/locale/fi.js"
 		}, {
 			"lang" : "sv",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/locale/sv.js"
+			"src" : "../../../../bundles/harava/bundle/harava-draw/locale/sv.js"
 		}, {
 			"lang" : "en",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/locale/en.js"
+			"src" : "../../../../bundles/harava/bundle/harava-draw/locale/en.js"
 		}
 		]
 	},
 	"bundle" : {
 		"manifest" : {
-			"Bundle-Identifier" : "harava-search-by-geometry",
-			"Bundle-Name" : "harava-search-by-geometry",
+			"Bundle-Identifier" : "harava-draw",
+			"Bundle-Name" : "harava-draw",
 			"Bundle-Author" : [{
 				"Name" : "MK",
 				"Organisation" : "Dimenteq Oy",
@@ -120,5 +114,5 @@ function() {
 
 });
 
-Oskari.bundle_manager.installBundleClass("harava-search-by-geometry", 
-         "Oskari.harava.bundle.haravaSearchByGeometry.SearchByGeometryBundle");
+Oskari.bundle_manager.installBundleClass("harava-draw", 
+         "Oskari.harava.bundle.haravaDraw.DrawBundle");
