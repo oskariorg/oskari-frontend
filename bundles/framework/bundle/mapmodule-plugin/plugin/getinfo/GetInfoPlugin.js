@@ -606,7 +606,7 @@ function() {
             return null;
         }
         
-        var value = jQuery('<div></div>');
+        var response = jQuery('<div></div>');
         var html = '';
         var contentType = ( typeof datum.content);
         var hasHtml = false;
@@ -616,17 +616,18 @@ function() {
         }
         if (datum.presentationType == 'JSON' || (datum.content && datum.content.parsed)) {
             var even = false;
-            var jsonData = datum.content.parsed;
+            var rawJsonData = datum.content.parsed;
             var dataArray = [];
-        	if (Object.prototype.toString.call(jsonData) === '[object Array]') {
-        		dataArray = jsonData;
+        	if (Object.prototype.toString.call(rawJsonData) === '[object Array]') {
+        		dataArray = rawJsonData;
         	}
         	else {
-        		dataArray.push(jsonData);
+        		dataArray.push(rawJsonData);
         	}
         	for(var i=0; i < dataArray.length; ++i) {
+        		var jsonData = dataArray[i];
 	            var table = this.templateTable.clone();
-	            for (attr in jsonData) {
+	            for (var attr in jsonData) {
 	                var value = this._formatJSONValue(jsonData[attr]);
 	                if (!value) {
 	                    continue;
@@ -645,12 +646,12 @@ function() {
 	                valueCell.append(value);
 	                row.append(valueCell);
 	            }
-	            value.append(table);
+	            response.append(table);
         	}
-            return value;
+            return response;
         } else {
-            value.append(datum.content);
-            return value;
+            response.append(datum.content);
+            return response;
         }
         return html;
     },
