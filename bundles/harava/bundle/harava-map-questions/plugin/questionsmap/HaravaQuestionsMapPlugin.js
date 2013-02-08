@@ -634,11 +634,13 @@ function(config) {
 		    	module.layer.setVisibility(true);
 		    	if(me._currentStepAndQuestion != moduleId + '_' +questionId){
 		    		module.drawControls[question.type].activate();
+		    		me._currentStepAndQuestion = moduleId + '_' +questionId;
+		    		me._currentControls.draw = module.drawControls[question.type];
+		    	} else {
+		    		me._currentStepAndQuestion = null;
 		    	}
 	    		module.modifyControls.modify.activate();
 		        me._currentControls.modify = module.modifyControls.modify;
-		        me._currentControls.draw = module.drawControls[question.type];
-		        me._currentStepAndQuestion = moduleId + '_' +questionId;
 		        me._currentQuestion = question;
     		}
     	}
