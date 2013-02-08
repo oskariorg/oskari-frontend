@@ -4,7 +4,15 @@
 
 ### data source plugin
 
-the layers are grouped togther under same data provider headings and metadata links added
+the layers are grouped together under same data provider headings and metadata links added
+
+### featuredata bundle
+
+resizable flyout
+
+### divmanazer bundle
+
+selectable and resizable grid columns
 
 ## 1.5 release notes
 

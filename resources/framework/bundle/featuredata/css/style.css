@@ -32,3 +32,14 @@ div.featuredataplugin {
     border: 1px solid;
     padding: 5px;
 }
+
+div.flyout-resizer {
+    height: 16px;
+    width: 16px;
+    margin: 0;
+    padding: 0;
+    float: right;
+    right: 0;
+    bottom: 16px;
+    cursor: nw-resize;
+}

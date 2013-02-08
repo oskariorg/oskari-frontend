@@ -9,6 +9,7 @@ Oskari.registerLocalization({
     "nodata": "Kartlagren du valt saknar uppgifter om objekt.",
     "featureNameAll": "Datatyp",
     "errorscale": "Uppgifter om objekt kan inte visas på denna skalnivå. Byt skalnivå.",
-    "errordata": "Fel i data från servern. Flytta något på kartan för att uppdatera."
+    "errordata": "Fel i data från servern. Flytta något på kartan för att uppdatera.",
+    "columnSelectorTooltip": "Visa kolumner"
   }
 });
