@@ -96,9 +96,6 @@ function() {
             }
         }
         
-        var dsPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugin');
-        module.registerPlugin(dsPlugin);
-        module.startPlugin(dsPlugin);
 		this.map = map;
 	},
     /**
