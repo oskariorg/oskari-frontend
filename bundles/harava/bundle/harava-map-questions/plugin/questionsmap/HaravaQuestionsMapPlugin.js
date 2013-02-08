@@ -21,6 +21,8 @@ function(config) {
 		draw: null
 	},
 	_currentStep: '',
+	_currentQuestion: '',
+	_currentStepAndQuestion: '',
     /** @static @property __name plugin name */
     __name : 'HaravaQuestionsMapPlugin',
 
@@ -413,29 +415,132 @@ function(config) {
        	}    	
        	
     	var currentFeature = layer.features[layer.features.length - 1];
-
+    	var maxAnswersExceeded = false;
 		if (me._currentPopupHtml) {   
     		currentFeature.attributes = {
-					"toolHtml": me._currentPopupHtml
+					"toolHtml": me._currentPopupHtml,
+					"stepAndQuestionId":me._currentStepAndQuestion
 			};
     		
-    		if (this._toolMaxCount !== null) {
-    	        currentCount = 0;
-
-                for(var i = layer.features.length; i > 0; i--) {
-                	var feature = layer.features[i - 1];
-
-                	if (feature.attributes.toolTip == this._toolTip) {
-                		currentCount += 1;
-
-            	        if (currentCount > this._toolMaxCount) {
-	                		feature.destroy();
-                		}
-                	}
-                }       
-        	}
+    		if (me._currentQuestion.maxAnswers !== null && me._currentQuestion.maxAnswers>0) {
+    			var addedFeatures = 0;
+    	        for(var i=0;i<layer.features.length;i++){
+    	        	var feat = layer.features[i];
+    	        	if(feat.attributes.stepAndQuestionId == me._currentStepAndQuestion){
+    	        		addedFeatures++;
+    	        	}
+    	        }
+    		
+    			if(addedFeatures>this._currentQuestion.maxAnswers){
+    				if(me._conf.maxAnswersExceededMessage!==null){
+    					alert(me._conf.maxAnswersExceededMessage);
+    				}
+    				maxAnswersExceeded = true;
+    				currentFeature.destroy();
+    			}    			
+    		}
     	}
-		me._currentControls.modify.selectControl.select(currentFeature);
+		
+		if(!maxAnswersExceeded){
+			if(this._currentQuestion.type=='point'){
+				if(me._currentQuestion.imageUrl!=null){
+					var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
+					style.graphicWidth = 20;
+					style.graphicHeight = 20;
+					style.graphicXOffset = -10;
+					style.graphicYOffset = -10;
+					style.externalGraphic = me._currentQuestion.imageUrl;
+					style.graphicOpacity = 1;
+				
+					style.cursor = 'pointer';
+					currentFeature.style = style;
+					layer.redraw();
+				}
+			}
+			else if(this._currentQuestion.type=='line'){
+				var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
+				if(me._currentQuestion.color!=null){
+					style.strokeColor=me._currentQuestion.color;
+				} else {
+					style.strokeColor='#000000';
+				}
+				if(me._currentQuestion.opacity!=null){
+					style.strokeOpacity=me._currentQuestion.opacity;
+				} else {
+					style.fillOpacity=1;
+					style.strokeOpacity=1;
+				}
+				style.strokeWidth=2;	             
+				
+				style.cursor = 'pointer';
+				currentFeature.style = style;
+				layer.redraw();
+			}
+			else if(this._currentQuestion.type=='area'){
+				if(me._currentQuestion.color!=null && me._currentQuestion.imageUrl!=null){
+					var sldStyle = '<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>';
+					sldStyle += '<sld:StyledLayerDescriptor version="1.0.0" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld ./Sld/StyledLayerDescriptor.xsd">';
+					sldStyle += '<sld:NamedLayer>';
+					sldStyle += '<sld:Name>Polygon</sld:Name>';
+					sldStyle += '<sld:UserStyle>';
+					sldStyle += '<sld:Name>Polygon</sld:Name>';
+					sldStyle += '<sld:FeatureTypeStyle>';
+					sldStyle += '<sld:FeatureTypeName>Polygon</sld:FeatureTypeName>';
+					sldStyle += '<sld:Rule>';
+					sldStyle += '<sld:Name>Polygon</sld:Name>';
+					sldStyle += '<sld:Title>Polygon</sld:Title>';
+					sldStyle += '<sld:PolygonSymbolizer>';
+					sldStyle += '<sld:Fill>';
+					sldStyle += '<sld:GraphicFill>';
+					sldStyle += '<sld:Graphic>';
+					sldStyle += '<sld:ExternalGraphic>';
+					sldStyle += '<sld:OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="'+me._currentQuestion.imageUrl+'"/>';
+					sldStyle += '<sld:Format>image/png</sld:Format>';
+					sldStyle += '</sld:ExternalGraphic>';
+					sldStyle += '<sld:Size>20</sld:Size>';
+					sldStyle += '</sld:Graphic>';
+					sldStyle += '</sld:GraphicFill>';
+					sldStyle += '</sld:Fill>';
+					sldStyle += '<sld:Stroke>';
+					sldStyle += '<sld:CssParameter name="stroke">'+me._currentQuestion.color+'</sld:CssParameter>';
+					sldStyle += '<sld:CssParameter name="stroke-width">1</sld:CssParameter>';
+					sldStyle += '<sld:CssParameter name="stroke-opacity">1</sld:CssParameter>';
+					sldStyle += '</sld:Stroke>';
+					sldStyle += '</sld:PolygonSymbolizer>';
+					sldStyle += '</sld:Rule>';
+					sldStyle += '</sld:FeatureTypeStyle>';
+					sldStyle += '</sld:UserStyle>';
+					sldStyle += '</sld:NamedLayer>';
+					sldStyle += '</sld:StyledLayerDescriptor>';
+					var format = new OpenLayers.Format.SLD();
+					var obj = format.read(sldStyle);
+					currentFeature.style = obj.namedLayers['Polygon'].userStyles[0];
+					layer.redraw();					
+				} else {
+					var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
+					if(me._currentQuestion.color!=null){
+						style.strokeColor=me._currentQuestion.color;
+						style.fillColor=me._currentQuestion.color;
+					} else {
+						style.strokeColor='#000000';
+						style.fillColor='#000000';
+					}
+					if(me._currentQuestion.opacity!=null){
+						style.fillOpacity=me._currentQuestion.opacity;
+						style.strokeOpacity=1;
+					} else {
+						style.fillOpacity=0.4;
+						style.strokeOpacity=1;
+					}
+					style.strokeWidth=2;	             
+					
+					style.cursor = 'pointer';
+					currentFeature.style = style;
+					layer.redraw();
+				}
+			}
+			me._currentControls.modify.selectControl.select(currentFeature);
+		}
     },
     /**
      * @method showStep
@@ -534,6 +639,7 @@ function(config) {
 		        me._currentControls.modify = module.modifyControls.modify;
 		        me._currentControls.draw = module.drawControls[question.type];
 		        me._currentStepAndQuestion = moduleId + '_' +questionId;
+		        me._currentQuestion = question;
     		}
     	}
     },
