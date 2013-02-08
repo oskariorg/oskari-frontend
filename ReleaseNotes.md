@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.6 release notes
+
+### data source plugin
+
+the layers are grouped togther under same data provider headings and metadata links added
+
 ## 1.5 release notes
 
 ### personal data bundle

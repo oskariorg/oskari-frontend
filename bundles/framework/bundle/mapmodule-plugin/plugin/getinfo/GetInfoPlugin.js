@@ -606,6 +606,7 @@ function() {
             return null;
         }
         
+        var value = jQuery('<div></div>');
         var html = '';
         var contentType = ( typeof datum.content);
         var hasHtml = false;
@@ -614,31 +615,40 @@ function() {
             hasHtml = hasHtml || (datum.content.indexOf('<HTML>') >= 0);
         }
         if (datum.presentationType == 'JSON' || (datum.content && datum.content.parsed)) {
-            var table = this.templateTable.clone();
             var even = false;
             var jsonData = datum.content.parsed;
-            for (attr in jsonData) {
-                var value = this._formatJSONValue(jsonData[attr]);
-                if (!value) {
-                    continue;
-                }
-                var row = this.templateTableRow.clone();
-                table.append(row);
-                if (!even) {
-                    row.css('background-color', '#EEEEEE');
-                }
-                even = !even;
-                
-                var labelCell = this.templateTableCell.clone();
-                labelCell.append(attr);
-                row.append(labelCell);
-                var valueCell = this.templateTableCell.clone();
-                valueCell.append(value);
-                row.append(valueCell);
-            }
-            return table;
+            var dataArray = [];
+        	if (Object.prototype.toString.call(jsonData) === '[object Array]') {
+        		dataArray = jsonData;
+        	}
+        	else {
+        		dataArray.push(jsonData);
+        	}
+        	for(var i=0; i < dataArray.length; ++i) {
+	            var table = this.templateTable.clone();
+	            for (attr in jsonData) {
+	                var value = this._formatJSONValue(jsonData[attr]);
+	                if (!value) {
+	                    continue;
+	                }
+	                var row = this.templateTableRow.clone();
+	                table.append(row);
+	                if (!even) {
+	                    row.css('background-color', '#EEEEEE');
+	                }
+	                even = !even;
+	                
+	                var labelCell = this.templateTableCell.clone();
+	                labelCell.append(attr);
+	                row.append(labelCell);
+	                var valueCell = this.templateTableCell.clone();
+	                valueCell.append(value);
+	                row.append(valueCell);
+	            }
+	            value.append(table);
+        	}
+            return value;
         } else {
-            var value = jQuery('<div></div>');
             value.append(datum.content);
             return value;
         }
