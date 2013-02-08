@@ -354,12 +354,13 @@ function(instance, localization, backendConfiguration) {
 		this.previewContent.addClass(this.sizeOptionsMap[selections.pageSize].classForPreview);
 
 		var previewImgDiv = this.previewContent.find('img');
-		var img = new Image();
+		/*var img = new Image();
 		img.onload = function() {
 			previewImgDiv.attr('src', url);
 			img.onload = null;
 		}
-		img.src = url;
+		img.src = url;*/
+		previewImgDiv.attr('src', url);
 	},
 
 	showFullScaleMapPreview : function() {

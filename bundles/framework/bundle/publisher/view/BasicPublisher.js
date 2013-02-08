@@ -94,6 +94,9 @@ function(instance, localization, data) {
     }];
 
     if(data) {
+        if(data.lang) {
+            Oskari.setLang(data.lang);
+        }
         // setup initial size
         var sizeIsSet = false;
         var initWidth = this.data.state.mapfull.config.size.width;
@@ -156,7 +159,6 @@ function(instance, localization, data) {
         var content = this.template.clone();
 
         this.mainPanel = content;
-        content.find('div.header h3').append(this.loc.title);
 
         container.append(content);
         var contentDiv = content.find('div.content');
@@ -167,9 +169,15 @@ function(instance, localization, data) {
         var form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLocationForm',this.loc, this);
         this.locationForm = form;
         if(this.data) {
-            form.init({"domain": this.data.domain, "name": this.data.name});
+            content.find('div.header h3').append(this.loc.titleEdit);
+            form.init({
+                "domain": this.data.domain, 
+                "name": this.data.name, 
+                "lang": this.data.lang
+            });
         }
         else {
+            content.find('div.header h3').append(this.loc.title);
             form.init();
         }
         
@@ -412,20 +420,67 @@ function(instance, localization, data) {
         });
 		cancelBtn.insertTo(buttonCont);
 		
+		
         var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         saveBtn.setTitle(this.loc.buttons.save);
         saveBtn.addClass('primary');
-        saveBtn.setHandler(function() {
-            var selections = me._gatherSelections();
-            if(selections) {
-            	me._publishMap(selections);
-            }
-        });
-		saveBtn.insertTo(buttonCont);
+		
+        if (this.data) {
+            var save = function() {
+                var selections = me._gatherSelections();
+                if(selections) {
+                    me._publishMap(selections);
+                }
+            };
+            saveBtn.setTitle(this.loc.buttons.saveNew);
+            saveBtn.setHandler(function() {
+                me.data.id = null;
+                delete me.data.id;
+                save();
+            });
+            saveBtn.insertTo(buttonCont);
+
+            var replaceBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            replaceBtn.setTitle(this.loc.buttons.replace);
+            replaceBtn.addClass('primary');
+            replaceBtn.setHandler(function() {
+                me._showReplaceConfirm(save);
+            });
+            replaceBtn.insertTo(buttonCont);
+            
+        }
+        else {
+            saveBtn.setTitle(this.loc.buttons.save);
+            saveBtn.setHandler(function() {
+                var selections = me._gatherSelections();
+                if(selections) {
+                    me._publishMap(selections);
+                }
+            });
+            saveBtn.insertTo(buttonCont);            
+        }
 		
         return buttonCont;
     },
     
+    /**
+     * @method _showReplaceConfirm
+     * @private
+     * Shows a confirm dialog for replacing published map
+     * @param {Function} continueCallback function to call if the user confirms 
+     */
+    _showReplaceConfirm : function(continueCallback) {
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        okBtn.setTitle(this.loc.buttons.replace);
+        okBtn.addClass('primary');
+        okBtn.setHandler(function() {
+            dialog.close();
+            continueCallback();
+        });
+        var cancelBtn = dialog.createCloseButton(this.loc.buttons.cancel);
+        dialog.show(this.loc.confirm.replace.title, this.loc.confirm.replace.msg, [cancelBtn, okBtn]);
+    },
     /**
      * @method _showValidationErrorMessage
      * @private
@@ -464,7 +519,7 @@ function(instance, localization, data) {
             plugins : []
         };
 
-        if (this.data) {
+        if (this.data && this.data.id) {
             selections.id = this.data.id;
         }
 
@@ -650,7 +705,6 @@ function(instance, localization, data) {
 
         mapModule.registerPlugin(this.logoPlugin);
         this.logoPlugin.startPlugin(me.instance.sandbox);
-
     },
     /**
      * @method _disablePreview

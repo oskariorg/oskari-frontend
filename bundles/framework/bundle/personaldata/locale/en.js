@@ -110,8 +110,9 @@ Oskari.registerLocalization({
           "error_noname": "Give the map a name",
           "deletetitle": "Delete map?",
           "deletemsg": "Do you want to delete the embedded map? It will no longer be shown on your website.",
-          "edit_title": "Edit Publish Map",
-          "editmsg": "Update the previously published map information"
+          "showErrorTitle": "Incomplete view",
+          "showConfirmMissing": "Some saved map layers are not available, do you still want to open this view?",
+          "showConfirmNotLoaded": "Some map layers have not yet loaded, try again later."
         },
         "save": {
           "success": "The map has been saved.",

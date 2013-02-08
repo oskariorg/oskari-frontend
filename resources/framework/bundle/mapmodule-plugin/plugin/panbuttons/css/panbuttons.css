@@ -6,7 +6,7 @@
     color : black;
     background : transparent;    
     font-size : 12px;
-    z-index : 64738;
+    z-index : 15000;/*64738;*/
     font-weight:bold;
     /*background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/default.png');*/
     height: 90px;

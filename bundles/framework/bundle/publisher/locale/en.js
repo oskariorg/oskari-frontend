@@ -11,8 +11,15 @@ Oskari.registerLocalization(
                 "desc": "Embed the map by adding the HTML code below to your website.",
                 "urlPrefix": "http://www.paikkatietoikkuna.fi"
             },
+            "edit" : {
+              "popup" : {
+                  "title": "Editing embedded map",
+                  "msg": "The map data of a previously embedded map is being updated"
+              } 
+            },
             "BasicView": {
                 "title": "Embed map",
+                "titleEdit" : "Edit embedded map",
                 "domain": {
                     "title": "Webpage where the map will be embedded",
                     "label": "Website where the map will be embedded",
@@ -63,9 +70,17 @@ Oskari.registerLocalization(
                 },
                 "buttons": {
                     "save": "Save",
+                    "saveNew": "Save new",
                     "ok": "OK",
+                    "replace": "Replace",
                     "cancel": "Cancel"
                 },
+                "confirm" : {
+                    "replace" : {
+                        "title" : "Do you wish to replace the embedded map?",
+                        "msg" : "Use replace to show changes on the embedded map without delay. It is not necessary to add the html-code to your webpage again."
+                    }
+                }, 
                 "layerselection": {
                     "label": "Show map layers in menu",
                     "info": "Select background maps. You can set the default background map in the map preview window.",

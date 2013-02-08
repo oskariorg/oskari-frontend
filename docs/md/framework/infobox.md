@@ -19,7 +19,13 @@ Provides functionality for other bundles to show an infobox on the map. For exam
 
 ## Bundle configuration
 
-No configuration is required.
+No configuration is required, but it can be used to adapt infobox size according to its content. If not set, infobox size will be 300px x 400px.
+
+```javascript
+{
+  "adaptable" : true
+}
+```
 
 ## Bundle state
 

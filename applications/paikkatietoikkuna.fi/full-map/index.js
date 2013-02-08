@@ -127,7 +127,6 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
 			},
 			instanceProps : {}
 		},
-
 		// main app
 		{
 			title : 'Map',
@@ -180,6 +179,9 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
 					"mapmodule-plugin" : {
 						bundlePath : '/Oskari/packages/framework/bundle/'
 					},
+					"oskariui" : {
+						bundlePath : '/Oskari/packages/framework/bundle/'
+					},
 					"mapwfs" : {
 						bundlePath : '/Oskari/packages/framework/bundle/'
 					},
@@ -192,22 +194,6 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
 				},
 				"Require-Bundle-Instance" : []
 
-			},
-			instanceProps : {}
-		}, {
-			title : 'OskariUI',
-			fi : 'OskariUI',
-			sv : 'OskariUI',
-			en : 'OskariUI',
-			bundlename : 'oskariui',
-			bundleinstancename : 'oskariui',
-			metadata : {
-				"Import-Bundle" : {
-					"oskariui" : {
-						bundlePath : '/Oskari/packages/framework/bundle/'
-					}
-				},
-				"Require-Bundle-Instance" : []
 			},
 			instanceProps : {}
 		},
@@ -446,7 +432,7 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
 			'fi' : 'guidedtour',
 			'sv' : 'guidedtour',
 			'en' : 'guidedtour',
-			'bundlename' : 'GuidedTour',
+			'bundlename' : 'guidedtour',
 			'metadata' : {
 				'Import-Bundle' : {
 					'guidedtour' : {
@@ -658,6 +644,7 @@ jQuery(document).ready(function() {
 			if (appSetup.startupSequence && appSetup.configuration) {
 				main.appSetup.startupSequence = appSetup.startupSequence;
 				main.appConfig = appSetup.configuration;
+
 				main.start(function(instance) {
 					var sb = instance.getSandbox();
 					gfiParamHandler(sb);
