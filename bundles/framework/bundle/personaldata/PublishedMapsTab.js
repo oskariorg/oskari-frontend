@@ -19,26 +19,30 @@ function(instance, localization) {
     this.container = null;
 }, {
     /**
+     * Returns module name. Needed because we fake to be module for listening to
+     * events (getName and onEvent methods are needed for this)
+     *
      * @method getName
-     * @return {String} name of the component
-     * (needed because we fake to be module for listening to
-     * events (getName and onEvent methods are needed for this))
+     * @return {String}
      */
     getName : function() {
-        return 'PersonalData.MyViews';
+        return 'PersonalData.PublishedMapsTab';
     },
     /**
+     * Returns tab title
+     *
      * @method getTitle
-     * @return {String} title for tab
+     * @return {String}
      */
     getTitle : function() {
         return this.loc.title;
     },
     /**
-     * @method addTabContent
-     * @param {jQuery} container reference to the content
-     * part of the tab
      * Writes the tab content to the given container
+     *
+     * @method addTabContent
+     * @param {jQuery} container reference to a container 
+     * where the tab should be added
      */
     addTabContent : function(container) {
         var me = this;
@@ -48,8 +52,10 @@ function(instance, localization) {
         me._refreshViewsList();
     },
     /**
+     * Renders given views list. Removes previous listing.
+     *
      * @method _renderViewsList
-     * Refreshes the tab contents
+     * @param {Object[]} views object array as returned by backend service
      * @private
      */
     _renderViewsList : function(views) {
@@ -67,8 +73,10 @@ function(instance, localization) {
     },
 
     /**
+     * Fetches views from backend and renders the response. 
+     * Shows an error message on failure
+     * 
      * @method _refreshViewsList
-     * Refreshes the tab contents
      * @private
      */
     _refreshViewsList : function() {
@@ -83,8 +91,16 @@ function(instance, localization) {
         });
     },
 
-
-    getViewById : function(id) {
+    /**
+     * Finds view object matching given id.
+     * Shows an error message if no matches found.
+     * 
+     * @method _getViewById
+     * @param {Number} id view id
+     * @return {Object} matching view object or undefined if not found
+     * @private
+     */
+    _getViewById : function(id) {
         for (var i = 0; i < this.viewData.length; ++i) {
             // found what we were looking for
             if (this.viewData[i].id == id) {
@@ -95,39 +111,8 @@ function(instance, localization) {
         this._showErrorMessage(me.loc['error'].generic);
     },
     /**
-     * @method bindEvents
-     * Register tab as eventlistener
-     */
-    bindEvents : function() {
-        var instance = this.instance;
-        var sandbox = instance.getSandbox();
-        // faking to be module with getName/onEvent methods
-        for (p in this.eventHandlers) {
-            sandbox.registerForEventByName(this, p);
-        }
-    },
-    /**
-     * @method _confirmDelete
-     * @private
-     */
-    _confirmDelete : function(view) {
-        var me = this;
-        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        okBtn.setTitle(this.loc['delete']);
-        okBtn.addClass('primary');
-        
-        var sandbox = this.instance.sandbox;
-        okBtn.setHandler(function() {
-            me._deleteView(view);
-            dialog.close();
-        });
-        var cancelBtn = dialog.createCloseButton(this.loc.button.cancel);
-        dialog.show(me.loc.popup.deletetitle, me.loc.popup.deletemsg, [cancelBtn, okBtn]);
-        dialog.makeModal();
-    },
-    /**
-     * Shows a confirmation dialog for setting an invalid view
+     * Shows a confirmation dialog for opening a problematic view
+     *
      * @method _confirmSetState
      * @param {Function} callback function for ok button
      * @param {Boolean} blnMissing, true if we have determined that the layer is no longer available,
@@ -158,7 +143,34 @@ function(instance, localization) {
     },
 
     /**
+     * Shows a confirmation dialog on deleting a view
+     * 
+     * @method _confirmDelete
+     * @param {Object} view data object for the view to delete
+     * @private
+     */
+    _confirmDelete : function(view) {
+        var me = this;
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        okBtn.setTitle(this.loc['delete']);
+        okBtn.addClass('primary');
+        
+        var sandbox = this.instance.sandbox;
+        okBtn.setHandler(function() {
+            me._deleteView(view);
+            dialog.close();
+        });
+        var cancelBtn = dialog.createCloseButton(this.loc.button.cancel);
+        dialog.show(me.loc.popup.deletetitle, me.loc.popup.deletemsg, [cancelBtn, okBtn]);
+        dialog.makeModal();
+    },
+    /**
+     * Calls backend to delete the given view. Reloads the view listing on success and
+     * shows an error message on fail
+     * 
      * @method _deleteView
+     * @param {Object} view data object
      * @private
      */
     _deleteView : function(view) {
@@ -174,7 +186,10 @@ function(instance, localization) {
         });
     },
     /**
+     * Shows an error dialog to the user with given message 
+     * 
      * @method _showErrorMessage
+     * @param {String} msg message to show on popup
      * @private
      */
     _showErrorMessage : function(msg) {
@@ -184,22 +199,12 @@ function(instance, localization) {
         button.addClass('primary');
         dialog.show(this.loc['error'].title, msg, [button]);
     },
-    /**
-     * @method unbindEvents
-     * Unregister tab as eventlistener
-     */
-    unbindEvents : function() {
-        var instance = this.instance;
-        var sandbox = instance.getSandbox();
-        // faking to be module with getName/onEvent methods
-        for (p in this.eventHandlers) {
-            sandbox.unregisterForEventByName(this, p);
-        }
-    },
 
     /**
+     * Wraps backends views object data array to Oskari.userinterface.component.GridModel
+     *
      * @method _getGridModel
-     * Wraps views to Oskari.userinterface.component.GridModel
+     * @param {Object[]} views array of view data objects as returned by backend
      * @return {Oskari.userinterface.component.GridModel} 
      * @private
      */
@@ -227,8 +232,9 @@ function(instance, localization) {
         return gridModel;
     },
     /**
-     * @method _getGrid
      * Creates Oskari.userinterface.component.Grid and populates it with given model
+     * 
+     * @method _getGrid
      * @param {Oskari.userinterface.component.GridModel} model to populate the grid with
      * @return {Oskari.userinterface.component.Grid}
      * @private
@@ -259,7 +265,7 @@ function(instance, localization) {
         var setStateRequestBuilder = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
         var service = instance.getViewService();
         var setMapState = function(data, forced, confirmCallback) {
-            // check if the layers are loaded 
+            // error handling: check if the layers referenced in view are loaded 
             var resp = service.isViewLayersLoaded(data, sandbox);
             if(resp.status || forced === true) {
                 if (setStateRequestBuilder) {
@@ -297,7 +303,7 @@ function(instance, localization) {
             }
         }
         
-        //sending a request to map publish mode
+        //sending a request to publisher for editing view
         var editRenderer = function(name, data) {
             var link = me.templateLink.clone();
             link.append(name);
@@ -314,12 +320,12 @@ function(instance, localization) {
         };        
         grid.setColumnValueRenderer('edit', editRenderer);
 
-        // set up the link from show field
+        // set up the link from delete field
         var deleteRenderer = function(name, data) {
             var link = me.templateLink.clone();
             link.append(name);
             link.bind('click', function() {
-                var view = me.getViewById(data.id);
+                var view = me._getViewById(data.id);
                 if(view) {
                     me._confirmDelete(view);
                 }
@@ -329,13 +335,13 @@ function(instance, localization) {
         };       
         grid.setColumnValueRenderer('delete', deleteRenderer);
 
-        // set up the link from delete field
+        // set up the link from publish/unpublish field
         var service = instance.getViewService();
         var publishRenderer = function(name, data) {
             var link = me.templateLink.clone();
             link.html(name);
             link.bind('click', function() {
-                var view = me.getViewById(data.id);
+                var view = me._getViewById(data.id);
                 if(view) {
                     var newState = !view.isPublic;
                     service.makeViewPublic(data.id, newState, function(isSuccess) {
@@ -376,6 +382,32 @@ function(instance, localization) {
         
         
         return grid;
+    },
+
+    /**
+     * Register tab as eventlistener
+     * 
+     * @method bindEvents
+     */
+    bindEvents : function() {
+        var instance = this.instance;
+        var sandbox = instance.getSandbox();
+        // faking to be module with getName/onEvent methods
+        for (var p in this.eventHandlers) {
+            sandbox.registerForEventByName(this, p);
+        }
+    },
+    /**
+     * Unregister tab as eventlistener
+     * @method unbindEvents
+     */
+    unbindEvents : function() {
+        var instance = this.instance;
+        var sandbox = instance.getSandbox();
+        // faking to be module with getName/onEvent methods
+        for (var p in this.eventHandlers) {
+            sandbox.unregisterForEventByName(this, p);
+        }
     },
     /**
      * @property {Object} eventHandlers
