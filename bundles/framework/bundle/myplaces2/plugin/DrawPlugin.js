@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', function() {
+Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', function(graphicFill) {
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
@@ -10,6 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
     this.drawLayer = null;
     this.editMode = false;
     this.currentDrawMode = null;
+    this.graphicFill = graphicFill;
 }, {
     __name : 'MyPlaces.DrawPlugin',
 
@@ -147,6 +148,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
             }
         });
         
+
         this.drawControls = {
             point : new OpenLayers.Control.DrawFeature(me.drawLayer, 
                                                        OpenLayers.Handler.Point),
@@ -162,6 +164,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
                             }
                         })
         };
+
+        if(this.graphicFill != null) {
+            var str = this.graphicFill;
+            var format = new OpenLayers.Format.SLD();
+            var obj = format.read(str);
+            if (obj && obj.namedLayers) {
+                for (var p in obj.namedLayers) {
+                    this.drawLayer.styleMap.styles["default"] = obj.namedLayers[p].userStyles[0];
+                    this.drawLayer.redraw();
+                    break;
+                }
+            }
+        }
         
         // doesn't really need to be in array, but lets keep it for future development
         this.modifyControls = {
