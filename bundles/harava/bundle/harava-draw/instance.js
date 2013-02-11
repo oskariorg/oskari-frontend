@@ -86,9 +86,10 @@ function() {
         sandbox.register(me);
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         var locale = this.getLocalization('display');
-        var plugin = Oskari.clazz.create('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawPlugin', locale, conf);
+        plugin = Oskari.clazz.create('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawPlugin', locale, conf);
         mapModule.registerPlugin(plugin);
         mapModule.startPlugin(plugin);
+        this.plugin = plugin;
         
     	// request
     	this.requestHandlers = {
@@ -102,7 +103,6 @@ function() {
      * BundleInstance protocol method
      */
     stop : function() {
-
     	var sandbox = this.sandbox();
         for(p in this.eventHandlers) {
             sandbox.unregisterFromEventByName(this, p);
@@ -117,6 +117,15 @@ function() {
         //this.sandbox.unregisterStateful(this.mediator.bundleId);
         this.sandbox.unregister(this);
         this.started = false;
+    },
+    /**
+     * Get all geometries
+     * returns all feature geometries on array 
+     */
+    getAllFeatures: function(){
+    	var me = this;
+    	var features = me.plugin.getAllFeatures();
+    	return features;
     },
     /**
 	 * @method init

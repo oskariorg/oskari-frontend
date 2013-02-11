@@ -7,8 +7,9 @@
  */
 Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityHaravaDrawRequest', 
 
-function(visible) {
+function(visible, deleteAll) {
     this._visible = visible;
+    this._deleteAll = deleteAll;
 }, {
 	/** @static @property __name request name */
     __name : "ToggleVisibilityHaravaDrawRequest",
@@ -25,6 +26,13 @@ function(visible) {
      */
     getVisibility : function() {
         return this._visible;
+    },
+    /**
+     * @method getDeleteAll
+     * @return {Boolean} delete all features
+     */
+    getDeleteAll : function() {
+        return this._deleteAll;
     }
 }, {
 	/**

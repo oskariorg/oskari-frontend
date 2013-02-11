@@ -1,20 +1,19 @@
 Oskari.registerLocalization({
 	"lang" : "sv",
-	"key" : "HaravaSearchByGeometry",
+	"key" : "HaravaDraw",
 	"value" : {
 		"title" : "",
 		"desc" : "",
 		"display" : {
 			"tooltips" : {
-				"searchByPoint": "?",
-				"searchByLine": "?",
-				"searchByRegularPolygon": "?",
-				"searchByPolygon": "?",
-				"searchByMapExtent": "?",
-				"searchNotFound": "?",
-				"searchNotFoundOkButton": "?",
-				"panMap": "?"
-			}
+				"drawPoint": "?",
+				"drawLine": "?",
+				"drawPolygon": "?",
+				"deleteSelectedDraw": "?",
+				"selectGeometry" : "?"
+			},
+			"notSelected" : "?",
+			"confirmDelete" : "?"
 		}
 	}
 });

@@ -17,8 +17,9 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityHara
 	 */
     handleRequest : function(core, request) {
         var visibility = request.getVisibility();
+        var deleteAll = request.getDeleteAll();
         this.sandbox.printDebug("[Oskari.harava.bundle.mapmodule.request.ToggleVisibilityHaravaDrawRequest] Toggle visibility: " + visibility);
-        this.plugin.toggleVisibility(visibility);
+        this.plugin.toggleVisibility(visibility, deleteAll);
     }
 }, {
 	/**

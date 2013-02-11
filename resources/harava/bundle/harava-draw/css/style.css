@@ -1,11 +1,11 @@
 @CHARSET "UTF-8";
 
-#harava-add-geometry-tools{
+#harava-add-geometry{
 	position:absolute;
 	top:70px;
 	left:0;
 	width:47px;
-	height:172px;
+	height:210px;
 	background-color:#009999;
 	z-index:2000;
 	-webkit-border-bottom-right-radius: 15px;
@@ -69,4 +69,12 @@
 
 .harava-add-geometry-tool-delete.active{
     background: url('/Oskari/resources/harava/bundle/harava-draw/images/delete_active.png') no-repeat !important;
+}
+
+.harava-add-geometry-tool-select{background: url('/Oskari/resources/harava/bundle/harava-draw/images/select.png') no-repeat;
+    background-position: center center;
+}
+
+.harava-add-geometry-tool-select.active{
+    background: url('/Oskari/resources/harava/bundle/harava-draw/images/select_active.png') no-repeat !important;
 }
