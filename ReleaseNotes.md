@@ -14,6 +14,15 @@ resizable flyout
 
 selectable and resizable grid columns
 
+### meta data bundle
+
+adds selection area tool to toolbar
+included in a new tarkkailija sample project
+
+### toolbar bundle
+
+default buttons are configurable, by setting the false the toolgroup or tool is not added
+
 ## 1.5 release notes
 
 ### personal data bundle

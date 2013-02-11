@@ -24,7 +24,40 @@ The toolbar bundle provides a common interface for other bundles to add and mani
 
 ## Bundle configuration
 
-No configuration is required.
+No configuration is required, but toolgroups and tools can be excluded from being added by default.
+
+In the example below, all tools are excluded from the toolbar.
+
+```javascript
+"conf": {
+  "history": {
+    "reset": false,
+    "history_back": false,
+    "history_forward": false
+  },
+  "basictools": {
+    "zoombox": false,
+    "select": false,
+    "measureline": false,
+    "measurearea": false
+  },
+  "viewtools": {
+    "link": false,
+    "print": false
+  }
+}
+```
+
+The following example also excludes all the tools from the toolbar, by setting all groups to false.
+
+```javascript
+"conf": {
+  "history": false,
+  "basictools": false,
+  "viewtools": false
+}
+```
+
 
 ## Bundle state
 
