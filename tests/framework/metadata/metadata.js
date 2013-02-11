@@ -322,34 +322,27 @@ describe('Test Suite for Metadata', function() {
             done();
         });
 
-        it("should able to draw a rectangle and listen to Metadata.FinishedDrawingEvent", function(done) {
+        it("should be able to draw a rectangle and listen to Metadata.FinishedDrawingEvent", function(done) {
             var sandbox = Oskari.$("sandbox");
             // Spy renderResults and doSearch to verify functions have been called
             var eventListenerSpy = sinon.spy(sandbox, 'notifyAll');
 
-            // select the area by simulating mouse events
-            // but because I have no idea how to do it when it's not supported due to security restrictions
-            // I need to check out a few alternative first, but for now just emulate the function calls instead
-            // But I have no idea how to do that either, so back to square one
-
             // select metadata select area tool
-            jQuery("#toolbar .tool.tool-measure-area").click();
-            // move mouse to 600, 100?
+            jQuery("#toolbar .tool.tool-selection-area").click();
+            var map = sandbox.findRegisteredModuleInstance("MainMapModule").getMap();
             // mouse click
-            console.log('simulating events...?');
-            document.onclick = function(x, y, z) {console.log('document got events:', x, y, z);};
-            simulateEvent(jQuery("#mapdiv")[0], "click", {"pageX":723, "pageY":131, "clientX":723, "clientY":131});
-            // move mouse to 600, 150?
+            simulateMouseClick(map, 200, 50);
+            simulateMouseClick(map, 210, 60);
             // mouse doubleclick
-            console.log('simulating dblclick event...?');
-            simulateEvent(jQuery("#mapdiv")[0], "dblclick", {"pageX":723, "pageY":131, "clientX":723, "clientY":131});
-            console.log('simulated events...?');
+            simulateMouseDblClick(map, 200, 70);
 
-
+            // Verify the Toolbar is selected and that the selected area on the map has 3 components
             var toolSelected = sandbox.notifyAll.getCall(0);
             expect(toolSelected.args[0].getName()).to.equal("Toolbar.ToolSelectedEvent");
-            var mapSelection = sandbox.notifyAll.getCall(1);
+            var mapSelection = sandbox.notifyAll.getCall(4);
             expect(mapSelection.args[0].getName()).to.equal("Metadata.MapSelectionEvent");
+            expect(mapSelection.args[0].getDrawing().components[0].components.length).to.equal(3);
+            done();
         });
     });
 });

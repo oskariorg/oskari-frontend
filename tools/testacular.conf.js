@@ -14,6 +14,7 @@ files = [
   '../../bundles/bundle.js',
   '../../libraries/jquery/jquery-1.7.1.min.js',
   '../../dist/oskari.min.js',
+//  '../../applications/paikkatietoikkuna.fi/full-map/pack.js',
   '../../dist/oskari_lang_fi.js',
   '../../dist/oskari_lang_all.js',
   '../../tools/node_modules/expect.js/expect.js',
@@ -28,8 +29,8 @@ exclude = [
 ];
 
 preprocessors = {
-  '../../bundles/bundle.js': 'coverage',
-  '../../dist/*.js': 'coverage'
+  '../../bundles/bundle.js': 'coverage'
+//  '../../dist/*.js': 'coverage'
 };
 
 // test results reporter to use

@@ -93,9 +93,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlug
             this.listeners[i](geometry);
         }
         // create event
-        console.log('sb', this._sandbox);
         var event = this._sandbox.getEventBuilder('Metadata.MapSelectionEvent')(geometry);
-        console.log('sending event', event);
         this._sandbox.notifyAll(event);
     },
     /**

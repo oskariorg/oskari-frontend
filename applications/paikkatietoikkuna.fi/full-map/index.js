@@ -42,26 +42,6 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
                 cb(me.instance);
             }
 
-            var ugStartup = {
-                title : 'Metadata',
-                fi : 'Metadata',
-                sv : 'Metadata',
-                en : 'Metadata',
-                bundlename : 'metadata',
-                bundleinstancename : 'metadata',
-                metadata : {
-                    "Import-Bundle" : {
-                        "metadata" : {
-                            bundlePath : '/Oskari/packages/framework/bundle/'
-                        }
-                    },
-                    "Require-Bundle-Instance" : []
-                },
-                instanceProps : {}
-            };
-            Oskari.bundle_facade.playBundle(ugStartup, function() {
-            	console.log('bundle started');
-            });
 /*// TODO - KESKEN
             var ugStartup = {
                 title : 'Printout',

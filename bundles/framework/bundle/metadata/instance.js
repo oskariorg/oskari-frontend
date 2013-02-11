@@ -33,10 +33,6 @@ function() {
      * BundleInstance protocol method
      */
     start: function() {
-
-        
-        console.log('starting metadata instance 1');
-
         var me = this;
         var sandbox = Oskari.$('sandbox');
         // register instance to sandbox so that requests can be made
@@ -61,7 +57,6 @@ function() {
         drawPlugin.addListener(function(geometry) {
             me.selectionChanged(geometry);
         });
-        console.log('started metadata instance 2');
     },
 
     /**
@@ -74,7 +69,7 @@ function() {
 
         var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
         sandbox.request(this, reqBuilder('tool-selection-area', 'selectiontools', {
-            iconCls : 'tool-measure-area',
+            iconCls : 'tool-selection-area',
             tooltip: '',
             sticky: true,
             callback : function() {
@@ -155,9 +150,6 @@ function() {
          */
         'Toolbar.ToolSelectedEvent' : function(event) {
             this.drawPlugin.stopDrawing();
-        },
-        'MapClickedEvent' : function(event) {
-            console.log('YES IT WORKS!', event);
         },
         /**
          * @method Metadata.FinishedDrawingEvent
