@@ -1,21 +1,46 @@
 # Release Notes
 
+## 1.6 release notes
+
+### data source plugin
+
+the layers are grouped together under same data provider headings and metadata links added
+
+### featuredata bundle
+
+resizable flyout
+
+### divmanazer bundle
+
+selectable and resizable grid columns
+
+### meta data bundle
+
+adds selection area tool to toolbar
+included in a new tarkkailija sample project
+
+### toolbar bundle
+
+default buttons are configurable, by setting the false the toolgroup or tool is not added
+
 ## 1.5 release notes
 
 ### personal data bundle
 
 user can modify the published/embedded maps from personal data lists.
 
-sends a request to Publisher bundle to enable pulish mode
+sends a request to Publisher bundle to enable publish mode
 
 ### Publisher bundle
 
-created request PublishMapEditorRequest to enable the publish mode
+created request PublishMapEditorRequest to enable the publish mode. 
+
+publisher can now be prepopulated with existing view data using the PublishMapEditorRequest.
 
 
 ### mapmodule bundle/Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugin
 
-new bundle 
+new plugin for mapmodule 
 
 renders list of data providers for the selected layers
 

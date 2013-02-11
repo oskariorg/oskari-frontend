@@ -1,4 +1,26 @@
 Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance', 'default-buttons', {
+    /**
+     * @method _isButtonConfigured
+     * @private
+     * 
+     * @param {String}
+     *            pId identifier so we can manage the button with subsequent requests
+     * @param {String}
+     *            pGroup identifier for organizing buttons
+     *
+     * Checks the configuration if the button should be excluded.
+     * All buttons are included by default
+     */
+    _isButtonConfigured : function(pId, pGroup) {
+    	if (this.conf && (this.conf[pGroup] === false || (this.conf[pGroup] && this.conf[pGroup][pId] === false))) {
+    		// When conf is defined and pGroup or pId false, then exclude the button
+			return false;
+    	} else {
+    		// Without a conf, all buttons are included
+    		return true;
+    	}
+    },
+
 	/**
 	 * @method _addDefaultButtons
 	 * @private
@@ -15,85 +37,98 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 		var gfiReqBuilder = this.getSandbox().getRequestBuilder(gfiRn);
 
 		/* basic tools */
-		this.addToolButton('reset', 'history', {
-			iconCls : 'tool-reset',
-			tooltip : loc.history.reset,
-			sticky : false,
-			callback : function() {
-				// statehandler reset state
-				var rb = me.getSandbox().getRequestBuilder('StateHandler.SetStateRequest');
-				if(rb) {
-					me.getSandbox().request(me, rb());
+		if (this._isButtonConfigured('reset', 'history')) {
+			this.addToolButton('reset', 'history', {
+				iconCls : 'tool-reset',
+				tooltip : loc.history.reset,
+				sticky : false,
+				callback : function() {
+					// statehandler reset state
+					var rb = me.getSandbox().getRequestBuilder('StateHandler.SetStateRequest');
+					if(rb) {
+						me.getSandbox().request(me, rb());
+					}
+					// clear history
+					var req = me.getSandbox().getRequestBuilder('ClearHistoryRequest')();
+					me.getSandbox().request(me, req);
 				}
-				// clear history
-				var req = me.getSandbox().getRequestBuilder('ClearHistoryRequest')();
-				me.getSandbox().request(me, req);
-			}
-		});
-		this.addToolButton('history_back', 'history', {
-			iconCls : 'tool-history-back',
-			tooltip : loc.history.back,
-			sticky : false,
-			callback : function() {
-				me.getSandbox().request(me, reqBuilder('map_control_tool_prev'));
-			}
-		});
-		this.addToolButton('history_forward', 'history', {
-			iconCls : 'tool-history-forward',
-			tooltip : loc.history.next,
-			sticky : false,
-			callback : function() {
-				me.getSandbox().request(me, reqBuilder('map_control_tool_next'));
-			}
-		});
+			});
+		}
+		if (this._isButtonConfigured('history_back', 'history')) {
+			this.addToolButton('history_back', 'history', {
+				iconCls : 'tool-history-back',
+				tooltip : loc.history.back,
+				sticky : false,
+				callback : function() {
+					me.getSandbox().request(me, reqBuilder('map_control_tool_prev'));
+				}
+			});
+		}
+		if (this._isButtonConfigured('history_forward', 'history')) {
+			this.addToolButton('history_forward', 'history', {
+				iconCls : 'tool-history-forward',
+				tooltip : loc.history.next,
+				sticky : false,
+				callback : function() {
+					me.getSandbox().request(me, reqBuilder('map_control_tool_next'));
+				}
+			});
+		}
 
 		/* basic tools */
-		this.addToolButton('zoombox', 'basictools', {
-			iconCls : 'tool-zoombox',
-			tooltip : loc.zoom,
-			sticky : true,
-			callback : function() {
-				var rn = 'map_control_zoom_tool';
-				me.getSandbox().request(me, gfiReqBuilder(false));
-				me.getSandbox().request(me, reqBuilder(rn));
-			}
-		});
-		this.addToolButton('select', 'basictools', {
-			iconCls : 'tool-pan',
-			tooltip : loc.pan,
-			selected : true,
-			sticky : true,
-			callback : function() {
-				var rn = 'map_control_navigate_tool';
-				me.getSandbox().request(me, gfiReqBuilder(true));
-				me.getSandbox().request(me, reqBuilder(rn));
-			}
-		});
+		if (this._isButtonConfigured('zoombox', 'basictools')) {
+			this.addToolButton('zoombox', 'basictools', {
+				iconCls : 'tool-zoombox',
+				tooltip : loc.zoom,
+				sticky : true,
+				callback : function() {
+					var rn = 'map_control_zoom_tool';
+					me.getSandbox().request(me, gfiReqBuilder(false));
+					me.getSandbox().request(me, reqBuilder(rn));
+				}
+			});
+		}
+		if (this._isButtonConfigured('select', 'basictools')) {
+			this.addToolButton('select', 'basictools', {
+				iconCls : 'tool-pan',
+				tooltip : loc.pan,
+				selected : true,
+				sticky : true,
+				callback : function() {
+					var rn = 'map_control_navigate_tool';
+					me.getSandbox().request(me, gfiReqBuilder(true));
+					me.getSandbox().request(me, reqBuilder(rn));
+				}
+			});
+		}
 
 		/* Measurements area */
-		this.addToolButton('measureline', 'basictools', {
-			iconCls : 'tool-measure-line',
-			tooltip : loc.measure.line,
-			sticky : true,
-			callback : function() {
-				var rn = 'map_control_measure_tool';
-				me.getSandbox().request(me, gfiReqBuilder(false));
-				me.getSandbox().request(me, reqBuilder(rn));
-			}
-		});
-
-		this.addToolButton('measurearea', 'basictools', {
-			iconCls : 'tool-measure-area',
-			tooltip : loc.measure.area,
-			sticky : true,
-			callback : function() {
-				var rn = 'map_control_measure_area_tool';
-				me.getSandbox().request(me, gfiReqBuilder(false));
-				me.getSandbox().request(me, reqBuilder(rn));
-			}
-		});
+		if (this._isButtonConfigured('measureline', 'basictools')) {
+			this.addToolButton('measureline', 'basictools', {
+				iconCls : 'tool-measure-line',
+				tooltip : loc.measure.line,
+				sticky : true,
+				callback : function() {
+					var rn = 'map_control_measure_tool';
+					me.getSandbox().request(me, gfiReqBuilder(false));
+					me.getSandbox().request(me, reqBuilder(rn));
+				}
+			});
+		}
+		if (this._isButtonConfigured('measurearea', 'basictools')) {
+			this.addToolButton('measurearea', 'basictools', {
+				iconCls : 'tool-measure-area',
+				tooltip : loc.measure.area,
+				sticky : true,
+				callback : function() {
+					var rn = 'map_control_measure_area_tool';
+					me.getSandbox().request(me, gfiReqBuilder(false));
+					me.getSandbox().request(me, reqBuilder(rn));
+				}
+			});
+		}
 		
-		if(this.conf.skipViewtoolsLink !== true) {	
+		if (this._isButtonConfigured('link', 'viewtools')) {
 			this.addToolButton('link', 'viewtools', {
 				iconCls : 'tool-link',
 				tooltip : loc.link.tooltip,
@@ -118,9 +153,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 					dialog.show(loc.link.title, linkContent, [okBtn]);
 				}
 			});
-		}	
+		}
 		
-		if(this.conf.skipViewtoolsPrint !== true)	{
+		if (this._isButtonConfigured('print', 'viewtools')) {
 			this.addToolButton('print', 'viewtools', {
 				iconCls : 'tool-print',
 				tooltip : loc.print.tooltip,
@@ -133,7 +168,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 					window.open(link, "Print", wopParm);
 				}
 			});
-		}	
+		}
 		
 	}
 });

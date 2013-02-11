@@ -20,7 +20,7 @@ expect.TIMEOUT_INCREMENT = 10;
 * @param {Function} latchFunction
 * @param {String} optional_timeoutMessage
 * @param {Number} optional_timeout
-*/
+**/
 function waitsFor(waitCondition, callback, timeoutMessage, timeout) {
 	if (waitCondition()) {
 		return callback();
@@ -33,6 +33,26 @@ function waitsFor(waitCondition, callback, timeoutMessage, timeout) {
 	}
 };
 if (isCommonJS) exports.waitsFor = waitsFor;
+
+// Dependeny on map-full should be explicit to avoid defects
+// Improve, when there is a real test case that benefits from moving the map to a specific position
+//function moveMapTo(north, east, zoom) {
+//	Oskari.$("sandbox").postRequestByName('MapMoveRequest', [north,east, zoom]);
+//}
+//if (isCommonJS) exports.moveMapTo = moveMapTo;
+
+function simulateMouseClick(map, x, y) {
+	map.events.triggerEvent("mousemove", {xy: new OpenLayers.Pixel(x, y)});
+	map.events.triggerEvent("mousedown", {xy: new OpenLayers.Pixel(x, y)});
+	map.events.triggerEvent("mouseup", {xy: new OpenLayers.Pixel(x, y)});
+}
+if (isCommonJS) exports.simulateMouseClick = simulateMouseClick;
+
+function simulateMouseDblClick(map, x, y) {
+	map.events.triggerEvent("mousemove", {xy: new OpenLayers.Pixel(x, y)});
+	map.events.triggerEvent("dblclick", {xy: new OpenLayers.Pixel(x, y)});
+}
+if (isCommonJS) exports.simulateMouseDblClick = simulateMouseDblClick;
 
 function setupOskari(appSetup, appConf, done) {
 	// Setup lang

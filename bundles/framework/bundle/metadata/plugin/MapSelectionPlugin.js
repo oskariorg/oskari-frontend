@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlug
         // remove possible old drawing
         this.drawLayer.removeAllFeatures();
         // activate requested draw control for new geometry
-        this._toggleControl('box');
+        this._toggleControl('area');
     },
     /**
      * @method stopDrawing
@@ -92,6 +92,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlug
         for(var i = 0; i < this.listeners.length; ++i) {
             this.listeners[i](geometry);
         }
+        // create event
+        var event = this._sandbox.getEventBuilder('Metadata.MapSelectionEvent')(geometry);
+        this._sandbox.notifyAll(event);
     },
     /**
      * @method _toggleControl
@@ -123,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlug
     init : function(sandbox) {
         var me = this;
 
-        this.drawLayer = new OpenLayers.Layer.Vector("MyPlaces Draw Layer", {
+        this.drawLayer = new OpenLayers.Layer.Vector("Metadata Draw Layer", {
             /*style: {
              strokeColor: "#ff00ff",
              strokeWidth: 3,
@@ -139,6 +142,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlug
         });
         
         this.drawControls = {
+            area : new OpenLayers.Control.DrawFeature(me.drawLayer, 
+                                                      OpenLayers.Handler.Polygon),
             box : new OpenLayers.Control.DrawFeature(me.drawLayer, 
                         OpenLayers.Handler.RegularPolygon, {
                             handlerOptions: {
