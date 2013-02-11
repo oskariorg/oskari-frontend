@@ -355,6 +355,27 @@
       "instanceProps":{
 
       },
+      "title":"Metadata",
+      "bundleinstancename":"metadata",
+      "fi":"Metadata",
+      "sv":"Metadata",
+      "en":"Metadata",
+      "bundlename":"metadata",
+      "metadata":{
+         "Import-Bundle":{
+            "metadata":{
+               "bundlePath":"../../../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
       "title":"Featuredata",
       "bundleinstancename":"featuredata",
       "fi":"Kohdetiedot",
