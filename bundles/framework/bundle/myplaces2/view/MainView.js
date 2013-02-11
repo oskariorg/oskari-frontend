@@ -51,6 +51,7 @@ function(instance) {
         
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         
+
         // register plugin for map (drawing for my places)
         var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin');
         mapModule.registerPlugin(drawPlugin);
