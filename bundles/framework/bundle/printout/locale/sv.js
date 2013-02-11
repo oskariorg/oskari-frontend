@@ -46,9 +46,9 @@ Oskari.registerLocalization(
                 	"tooltip" : "Utskriftens skalnivå motsvarar skalnivån i webbläsaren.",
                 	"zoomlevel": "Skalnivå"
                 },
-                "inställningar": { 
-                    "label" : "Mera inställningar", 
-                    "tooltip" : "Gör flera inställningar såsom format, rubrik, och skala" 
+                "settings": { 
+                    "label" : "Övriga inställningar", 
+                    "tooltip" : "Gör övriga inställningar såsom format, rubrik, och skala" 
                 }, 
                 "format": { 
                     "label" : "Format", 
