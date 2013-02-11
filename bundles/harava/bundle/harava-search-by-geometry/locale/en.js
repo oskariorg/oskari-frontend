@@ -1,6 +1,6 @@
 Oskari.registerLocalization({
 	"lang" : "en",
-	"key" : "HaravaDraw",
+	"key" : "HaravaSearchByGeometry",
 	"value" : {
 		"title" : "",
 		"desc" : "",

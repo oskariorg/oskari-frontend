@@ -127,7 +127,7 @@ function(locale) {
             regularPolygon: new OpenLayers.Control.DrawFeature(me._searchLayer,
                                 OpenLayers.Handler.RegularPolygon),
             polygon: new OpenLayers.Control.DrawFeature(me._searchLayer,
-                        OpenLayers.Handler.Polygon),
+                        OpenLayers.Handler.Polygon)
         };
     	
     	this.searchControls.regularPolygon.handler.setOptions({irregular: true});
@@ -499,7 +499,7 @@ function(locale) {
  		var mapScale = me._sandbox.getMap().getScale();
         
         for (var i = 0; i < selected.length; i++) {
-        	var layer = selected[i]
+        	var layer = selected[i];
 
         	if( !layer.isInScale(mapScale) ) {
 				continue;
