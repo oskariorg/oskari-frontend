@@ -455,6 +455,16 @@ function(config) {
 					style.cursor = 'pointer';
 					currentFeature.style = style;
 					layer.redraw();
+				} else {
+					var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
+					style.strokeColor='#000000';
+					style.fillColor='#000000';					
+					style.fillOpacity=0.4;
+					style.strokeOpacity=1;					
+					style.strokeWidth=2;
+					style.cursor = 'pointer';
+					currentFeature.style = style;
+					layer.redraw();
 				}
 			}
 			else if(this._currentQuestion.type=='line'){

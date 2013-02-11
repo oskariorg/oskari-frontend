@@ -154,9 +154,13 @@ function() {
 	            // Create questions
 	            jQuery.each(module.questions, function(k, question){
     	        	var text = question.title;
+    	        	var tooltip = '';
+    	        	if(question.tooltip!=null){
+    	        		tooltip = question.tooltip;
+    	        	}
     	        	var html = '<div class="harava-question"><div class="harava-question-title">'+text+'</div><div id="harava-question-tool_'
     	        		+module.questionId+'_'+question.id +'" class="harava-question-tool harava-question-tool-'+module.questionId
-    	        		+' harava-question-tool-'+question.type+'" qId="1" title="'+text+'"></div></div>';
+    	        		+' harava-question-tool-'+question.type+'" qId="1" title="'+tooltip+'"></div></div>';
     	        	jQuery(module.appendTo).append(html);
     	        	jQuery('#harava-question-tool_'+module.questionId+'_'+question.id).bind('click',
         					function(){
