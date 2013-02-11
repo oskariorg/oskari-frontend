@@ -31,8 +31,9 @@ function(instance, localization) {
     this.hasAcceptedTou = false;
 }, {
     /**
-     * @method render
      * Renders view to given DOM element
+     * 
+     * @method render
      * @param {jQuery} container reference to DOM element this
      * component will be rendered to
      */
@@ -78,11 +79,12 @@ function(instance, localization) {
         this._checkTouAccepted();
     },
     /**
-     * @method _renderLayerLists
-     * @private
      * Checks currently selected layers for publish permissions renders
      * a listing of layers the user can publish and which can't be
      * published.
+     * 
+     * @method _renderLayerLists
+     * @private
      */
     _renderLayerLists : function() {
         // empty any current lists
@@ -142,8 +144,9 @@ function(instance, localization) {
 
     },
     /**
-     * @method _getRenderedLayerList
      * Renders an UI listing for given set of layers.
+     * 
+     * @method _getRenderedLayerList
      * @private
      * @param
      * {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
@@ -163,15 +166,17 @@ function(instance, localization) {
         return layerList;
     },
     /**
-     * @method handleLayerSelectionChanged
      * Clears previous layer listing and renders a new one to the view.
+     * 
+     * @method handleLayerSelectionChanged
      */
     handleLayerSelectionChanged : function() {
         this._renderLayerLists();
     },
     /**
-     * @method _showTermsOfUse
      * Show Terms of Use to the user
+     * 
+     * @method _showTermsOfUse
      * @private
      */
     _showTermsOfUse : function() {
@@ -194,8 +199,9 @@ function(instance, localization) {
         dlg.show(me.termsOfUse.title, me.termsOfUse.body, [closeBtn]);
     },
     /**
-     * @method _checkTouAccepted
      * Checks if the user has accepted terms of use and sets hasAcceptedTou property
+     * 
+     * @method _checkTouAccepted
      * @private
      */
     _checkTouAccepted : function() {
@@ -222,9 +228,10 @@ function(instance, localization) {
         });
     },
     /**
-     * @method _updateContinueButton
      * Updates the text on continue button depending if user has
      * accepted the Terms of Use or not
+     * 
+     * @method _updateContinueButton
      * @private
      */
     _updateContinueButton : function() {
@@ -237,9 +244,10 @@ function(instance, localization) {
         }
     },
     /**
-     * @method markTouAccepted
      * Requests that the backend mark the current logged in user as having
      * accepted the Terms of Use
+     * 
+     * @method markTouAccepted
      * @private
      */
     _markTouAccepted : function() {

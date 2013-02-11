@@ -1,13 +1,13 @@
 /**
  * @class Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler
- * Requesthandler for editing own map in pulish mode
+ * Requesthandler for editing a map view in publish mode
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequestHandler', 
 /**
  * @method create called automatically on construction
  * @static
- * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
- *          reference to application sandbox
+ * @param {Oskari.mapframework.bundle.publisher.PublisherBundleInstance} instance
+ *          reference to publisher instance
  */
 function(instance) {
     this.instance = instance;
@@ -17,6 +17,8 @@ function(instance) {
      * Shows/hides the maplayer specified in the request in OpenLayers implementation.
      * @param {Oskari.mapframework.core.Core} core
      *      reference to the application core (reference sandbox core.getSandbox())
+     *      request to handle
+     * @param {Oskari.mapframework.bundle.publisher.request.PublishMapEditorRequest} request
      *      request to handle
      */
     handleRequest : function(core, request) {
