@@ -1,5 +1,4 @@
 @ECHO OFF
-cls
 ECHO Setting browser locations. Skip if installed at default locations.
 ECHO.
 

@@ -7,8 +7,24 @@ set binpath=%binpath%/tools/node_modules/.bin
 :installpackages
 echo Installing tools
 cd tools
-call npm config set proxy http://wwwp-jkl.nls.fi:800
-call npm config set https-proxy http://wwwp-jkl.nls.fi:800
+
+echo Please input http proxy url
+echo (e.g. http://proxy.example.com:8080) or press ENTER to skip
+set /p TEMPHTTPPROXY=PROXY URL:
+if not defined TEMPHTTPPROXY (goto npminstall)
+call npm config set proxy %TEMPHTTPPROXY%
+
+echo Please input https proxy url
+echo (e.g. https://proxy.example.com:8080) or press ENTER to skip
+set /p TEMPHTTPSPROXY=PROXY URL:
+if not defined TEMPHTTPSPROXY (goto npminstall)
+call npm config set https-proxy %TEMPHTTPSPROXY%
+
+REM clear TEMPHTTP(S)PROXY variables
+set TEMPHTTPPROXY=
+set TEMPHTTPSPROXY=
+
+:npminstall
 call npm install
 cd ..
 goto binexistcheck
