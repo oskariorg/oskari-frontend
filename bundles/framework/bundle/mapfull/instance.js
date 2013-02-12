@@ -53,6 +53,11 @@ function() {
 	 */
 	_createUi : function() {
         var me = this;
+
+        var module = Oskari.clazz.create('Oskari.mapframework.ui.module.common.MapModule', "Main", this.conf.imageLocation, this.conf.mapOptions);
+
+        this.mapmodule = module;
+        var map = this.sandbox.register(module);
         // set map size
         // call portlet with ?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&p_p_mode=view&published=true
         // -> uses published.jsp
@@ -67,6 +72,7 @@ function() {
                 if(me.resizeEnabled == null || me.resizeEnabled) {
                     jQuery('#' + me.mapDivId).height(jQuery(window).height());
                     jQuery('#contentMap').height(jQuery(window).height());
+                    map.updateSize();
                 }
             };
         
@@ -78,10 +84,6 @@ function() {
             adjustMapSize();
         }
         
-		var module = Oskari.clazz.create('Oskari.mapframework.ui.module.common.MapModule', "Main", this.conf.imageLocation, this.conf.mapOptions);
-
-		this.mapmodule = module;
-		var map = this.sandbox.register(module);
 		
         module.start(this.sandbox);
 
