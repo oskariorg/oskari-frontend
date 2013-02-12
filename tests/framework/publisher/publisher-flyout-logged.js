@@ -191,6 +191,7 @@ layerlist_empty
                 var publisherContent = jQuery('div.publisher');
 
                 var error = publisherContent.find(":contains('" + localization.layerlist_empty + "')");
+                // FIXME: 5 because the error is repeated for each test
                 expect(error.length).to.be(5); 
                 done();
             });
