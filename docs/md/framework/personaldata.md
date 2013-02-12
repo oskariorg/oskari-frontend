@@ -1,11 +1,11 @@
-# Bundle name
+# Personal Data
 
 <table>
   <tr>
-    <td>ID</td><td>bundle identifier</td>
+    <td>ID</td><td>personaldata</td>
   </tr>
   <tr>
-    <td>API</td><td>[link here](<%= apiurl %>link/here)</td>
+    <td>API</td><td>[link here](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance)</td>
   </tr>
 </table>
 

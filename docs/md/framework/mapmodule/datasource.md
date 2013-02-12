@@ -2,10 +2,7 @@
 
 <table>
   <tr>
-    <td>ID</td><td>bundle identifier</td>
-  </tr>
-  <tr>
-    <td>API</td><td>[link here](<%= apiurl %>link/here)</td>
+    <td>API</td><td>[link here](<%= apiurl %>/docs/oskari/api/#!/api/Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugin)</td>
   </tr>
 </table>
 
