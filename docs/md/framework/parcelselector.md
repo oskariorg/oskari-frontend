@@ -1,15 +1,21 @@
-# Data Source
+# Bundle name
 
 <table>
   <tr>
-    <td>API</td><td>[link here](<%= apiurl %>/docs/oskari/api/#!/api/Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugin)</td>
+    <td>ID</td><td>parcelselector</td>
+  </tr>
+  <tr>
+    <td>API</td><td>[link here](<%= apiurl %>link/here)</td>
   </tr>
 </table>
 
 ## Description
 
-''Renders a pop-up that contains a list of data providers based on current selected layers.''
+''Describe what the bundle does.''
 
+## TODO
+
+* ''List any planned features''
 
 ## Screenshot
 
@@ -17,17 +23,55 @@
 
 ## Bundle configuration
 
+```javascript
+config : {
+  test : 1
+}
+```
+
+OR
+
 No configuration is required.
 
 ## Bundle state
+
+```javascript
+state : {
+  test : 2
+}
+```
+
+OR
 
 No statehandling has been implemented.
 
 ## Requests the bundle handles
 
+<table>
+  <tr>
+    <th>Request</th><th>How does the bundle react</th>
+  </tr>
+  <tr>
+    <td>tbd</td><td>tbd</td>
+  </tr>
+</table>
+
+OR
+
 This bundle doesn't handle any requests.
 
 ## Requests the bundle sends out
+
+<table>
+  <tr>
+    <th>Request</th><th>Why/when</th>
+  </tr>
+  <tr>
+    <td>tbd</td><td>tbd</td>
+  </tr>
+</table>
+
+OR
 
 This bundle doesn't send out any requests.
 
@@ -38,12 +82,26 @@ This bundle doesn't send out any requests.
     <th>Event</th><th>How does the bundle react</th>
   </tr>
   <tr>
-    <td>ClickEven</td><td>Opens up pop-up</td>
+    <td>tbd</td><td>tbd</td>
   </tr>
 </table>
 
+OR
+
+This bundle doesn't listen to any events.
 
 ## Events the bundle sends out
+
+<table>
+  <tr>
+    <th>Event</th><th>Why/when</th>
+  </tr>
+  <tr>
+    <td>tbd</td><td>tbd</td>
+  </tr>
+</table>
+
+OR
 
 This bundle doesn't send out any events.
 
@@ -58,3 +116,6 @@ This bundle doesn't send out any events.
   </tr>
 </table>
 
+OR
+
+This bundle doesn't have any dependencies.

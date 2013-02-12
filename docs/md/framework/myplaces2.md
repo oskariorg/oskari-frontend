@@ -2,7 +2,7 @@
 
 <table>
   <tr>
-    <td>ID</td><td>bundle identifier</td>
+    <td>ID</td><td>myplaces2</td>
   </tr>
   <tr>
     <td>API</td><td>[link here](<%= apiurl %>/docs/oskari/api/#!/api/Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance)</td>
@@ -11,7 +11,7 @@
 
 ## Description
 
-My places functionality. 
+My places functionality.
 
 External graphic can be activated by changing OpenLayers bundle version to openlayers-graphic-fill and giving new style as additional parameter to the Drawin plugin.
 Adding external graphics in DrawPlugin.js:
@@ -54,7 +54,7 @@ Adding external graphics in DrawPlugin.js:
 
 
         // rewrite creation of drawPlugin in the start-function
-        // register plugin for map (drawing for my places) 
+        // register plugin for map (drawing for my places)
         var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', newStyle);
 ```
 
@@ -65,7 +65,6 @@ Adding external graphics in DrawPlugin.js:
 ## Bundle configuration
 
 No configuration is required
-
 
 ## Bundle state
 
@@ -110,7 +109,6 @@ No statehandling has been implemented.
     <td>MapModulePlugin.GetFeatureInfoActivationRequest</td><td></td>
   </tr>
 </table>
-
 
 ## Events the bundle listens to
 

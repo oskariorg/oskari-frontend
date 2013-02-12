@@ -5,7 +5,7 @@
     <td>ID</td><td>bundle identifier</td>
   </tr>
   <tr>
-    <td>API</td><td>[link here](<%= apiurl %>link/here)</td>
+    <td>API</td><td>[link here](<%= apiurl %>/docs/oskari/api/#!/api/Oskari.mapframework.bundle.MapWmtsBundleInstance)</td>
   </tr>
 </table>
 
@@ -16,10 +16,6 @@
 ## TODO
 
 * ''List any planned features''
-
-## Screenshot
-
-''attach screenshot here''
 
 ## Bundle configuration
 
