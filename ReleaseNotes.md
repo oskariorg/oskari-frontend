@@ -6,6 +6,12 @@
 
 the layers are grouped together under same data provider headings and metadata links added
 
+test suite added for the plugin
+
+### libraries bundle
+
+openlayers updated to 2.12
+
 ### featuredata bundle
 
 resizable flyout
