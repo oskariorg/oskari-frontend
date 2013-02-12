@@ -68,7 +68,7 @@ function() {
         this.template = jQuery("<div class='datascource'>" +
                 "<div class='link'><a href='JavaScript:void(0);'></a></div>" +
             "</div>");
-        this.templateinfoIcon = jQuery('<div class="icon-info" style="position: relative; bottom: 15px; left: 155px;"></div>');
+        this.templateinfoIcon = jQuery('<div class="icon-info"></div>');
         this.templategroupTemplate = jQuery('<ul style="padding: 0 12px;"></ul>'); 
         this.templatecontent = jQuery('<div></div>');
         this.templateheading = jQuery('<b></b>');
@@ -292,7 +292,7 @@ function() {
         var infoIcon = this.templateinfoIcon.clone();
         var layerName = layer.getName();
         if(layerName) {
-            var layerItem = jQuery('<li>' + layerName + '</li>');    
+            var layerItem = jQuery('<br><li>' + layerName + '</li></br>');    
             //metadata link
             var uuid = layer.getMetadataIdentifier();
             if(uuid) {    
