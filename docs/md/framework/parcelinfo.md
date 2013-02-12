@@ -5,7 +5,7 @@
     <td>ID</td><td>parcelinfo</td>
   </tr>
   <tr>
-    <td>API</td><td>[link here](<%= apiurl %>link/here)</td>
+    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.parcelinfo.ParcelInfoInstance)</td>
   </tr>
 </table>
 
