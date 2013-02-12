@@ -1,4 +1,4 @@
-# Bundle name
+# Map Legend
 
 <table>
   <tr>

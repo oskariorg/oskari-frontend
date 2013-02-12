@@ -1,4 +1,4 @@
-# Bundle name
+# State Handler
 
 <table>
   <tr>

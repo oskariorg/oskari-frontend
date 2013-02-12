@@ -1,4 +1,4 @@
-# Bundle name
+# Map WFS
 
 <table>
   <tr>

@@ -1,4 +1,4 @@
-# Bundle name
+# Guided Tour
 
 <table>
   <tr>

@@ -1,4 +1,4 @@
-# Bundle name
+# Parcel Info
 
 <table>
   <tr>

@@ -1,4 +1,4 @@
-# Bundle name
+# User Guide
 
 <table>
   <tr>
