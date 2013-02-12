@@ -72,6 +72,14 @@ function() {
         {
             "type" : "text/javascript",
             "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/request/AddControlToMapRequestHandler.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/request/ZoomToExtentRequest.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/request/ZoomToExtentRequestHandler.js"
         }
         ]
     },
