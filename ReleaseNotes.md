@@ -2,6 +2,10 @@
 
 ## 1.6 release notes
 
+### mapfull bundle
+
+Now calls OpenLayers.updateSize() when it changes the size of div the map is rendered to.
+
 ### data source plugin
 
 the layers are grouped together under same data provider headings and metadata links added
