@@ -5,7 +5,7 @@
     <td>ID</td><td>printout</td>
   </tr>
   <tr>
-    <td>API</td><td>[link here](<%= apiurl %>link/here)</td>
+    <td>API</td><td>[link here](<%= apiurl %>/docs/oskari/api/#!/api/Oskari.mapframework.bundle.printout.PrintoutBundleInstance)</td>
   </tr>
 </table>
 
@@ -40,10 +40,6 @@ No statehandling has been implemented.
   </tr>
 </table>
 
-OR
-
-This bundle doesn't handle any requests.
-
 ## Requests the bundle sends out
 
 <table>
@@ -58,7 +54,6 @@ This bundle doesn't handle any requests.
   </tr>
 </table>
 
-
 ## Events the bundle listens to
 
 <table>
@@ -70,9 +65,7 @@ This bundle doesn't handle any requests.
   </tr>
 </table>
 
-
 ## Events the bundle sends out
-
 
 This bundle doesn't send out any events.
 

@@ -10,7 +10,7 @@ The popup component is defined in divmanazer bundle and provides basic popup fun
 
 ## Screenshot
 
-**attach screenshots here with modal, generic, associated popup**
+![screenshot](<%= docsurl %>images/popup.png)
 
 ## How to use
 

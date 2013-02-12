@@ -1,4 +1,4 @@
-# Map module
+# Map Module
 
 <table>
   <tr>
