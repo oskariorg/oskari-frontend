@@ -42,16 +42,15 @@ function() {
             "type" : "text/javascript",
             "src" : "../../../../bundles/harava/bundle/harava-draw/request/ToggleVisibilityHaravaDrawRequestHandler.js"
         },
-        /*
+        
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/StopGeometrySearchRequest.js"
+            "src" : "../../../../bundles/harava/bundle/harava-draw/request/AddWKTGeometryRequest.js"
         },
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/StopGeometrySearchRequestHandler.js"
+            "src" : "../../../../bundles/harava/bundle/harava-draw/request/AddWKTGeometryRequestHandler.js"
         },
-                 **/
         /* Resources */
         {
 		    "type" : "text/css",

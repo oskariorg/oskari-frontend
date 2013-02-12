@@ -93,9 +93,11 @@ function() {
         
     	// request
     	this.requestHandlers = {
-    			ToggleVisibilityHaravaDrawRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityHaravaDrawRequestHandler', sandbox, plugin)
+    			ToggleVisibilityHaravaDrawRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityHaravaDrawRequestHandler', sandbox, plugin),
+    			AddWKTGeometryRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.AddWKTGeometryRequestHandler', sandbox, plugin),
     	};    	
         sandbox.addRequestHandler('ToggleVisibilityHaravaDrawRequest', this.requestHandlers.ToggleVisibilityHaravaDrawRequest);
+        sandbox.addRequestHandler('AddWKTGeometryRequest', this.requestHandlers.AddWKTGeometryRequest);
     },
 
     /**
@@ -110,6 +112,7 @@ function() {
 
         // request handler cleanup 
         sandbox.removeRequestHandler('ToggleVisibilityHaravaDrawRequest', this.requestHandlers['ToggleVisibilityHaravaDrawRequest']);
+        sandbox.removeRequestHandler('AddWKTGeometryRequest', this.requestHandlers['AddWKTGeometryRequest']);
         var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
 
         sandbox.request(this, request);

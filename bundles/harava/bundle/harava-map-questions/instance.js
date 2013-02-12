@@ -166,7 +166,7 @@ function() {
         					function(){
         						me.activateControl(''+module.questionId+'',''+question.id+'');
 					});
-    	        });  
+    	        });
     	        
         	});
         	

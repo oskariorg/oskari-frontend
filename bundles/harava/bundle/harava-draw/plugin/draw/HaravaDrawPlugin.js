@@ -96,6 +96,26 @@ function(locale, conf) {
 		}
     },
     /**
+     * Add WKT String to map
+     * @param {String} wktString
+     */
+    addWKT: function(wktString, type){
+    	var me = this;
+    	var wkt = new OpenLayers.Format.WKT();
+    	var feature = wkt.read(wktString);
+    	var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);    	
+		style.pointRadius = 8;
+		style.strokeColor='#000000';
+		style.fillColor='#E9DA14';
+		style.fillOpacity=0.6;
+		style.strokeOpacity=1;
+		style.strokeWidth=2;
+		style.cursor = 'pointer';
+		feature.style = style;
+		me._drawLayer.addFeatures([feature]);
+		me._drawLayer.redraw();   	
+    },
+    /**
      * @method init
      *
      * Interface method for the module protocol
