@@ -16,6 +16,8 @@ test suite added for the plugin
 
 openlayers updated to 2.12
 
+geostats library is added to Oskari packaged as a new bundle in libraries package
+
 ### featuredata bundle
 
 resizable flyout
