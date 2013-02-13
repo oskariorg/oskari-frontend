@@ -423,7 +423,7 @@
 	 * openlayers
 	 */
 	var openlayersFiles = metas.meta.source.openlayersFiles;
-	var openlayerspath = libpath + "OpenLayers-2.11/lib/";
+	var openlayerspath = libpath + "OpenLayers-2.12/lib/";
 
 	for ( var n = 0, len = openlayersFiles.length; n < len; n++) {
 		srcs.push( {

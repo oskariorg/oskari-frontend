@@ -7,7 +7,7 @@ var OpenLayers = {
     /**
      * Constant: VERSION_NUMBER
      */
-    VERSION_NUMBER: "Release 2.11",
+    VERSION_NUMBER: "Release 2.12",
     ImgPath : '/Oskari/resources/openlayers/img/',
 
     /**
