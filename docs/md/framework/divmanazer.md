@@ -19,7 +19,7 @@ Document divmanazer basics, JSAPI, deps
 
 ## Screenshot
 
-*image*
+![screenshot](<%= docsurl %>images/divmanazer.png)
 
 ## Bundle configuration
 

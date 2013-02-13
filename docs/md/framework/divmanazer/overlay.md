@@ -8,10 +8,6 @@ The overlay component is defined in divmanazer bundle and provides masking funct
 
 * Loadmask message
 
-## Screenshot
-
-**attach screenshots here with modal dialog**
-
 ## How to use
 
 Masks the body element and resizes the mask if overlayd elements size changes. followResizing() with true parameter uses the browser windows resize event to modify size (doesn't monitor the given elements size change, only window size change).

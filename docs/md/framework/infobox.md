@@ -1,4 +1,4 @@
-# Infobox
+# Info Box
 
 <table>
   <tr>

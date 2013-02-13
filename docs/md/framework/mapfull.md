@@ -1,4 +1,4 @@
-# Map full
+# Map Full
 
 <table>
   <tr>

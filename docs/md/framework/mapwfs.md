@@ -1,11 +1,11 @@
-# Map WMTS
+# Map WFS
 
 <table>
   <tr>
-    <td>ID</td><td>bundle identifier</td>
+    <td>ID</td><td>mapwfs</td>
   </tr>
   <tr>
-    <td>API</td><td>[link here](<%= apiurl %>/docs/oskari/api/#!/api/Oskari.mapframework.bundle.MapWmtsBundleInstance)</td>
+    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.mapwfs.MapWfsBundleInstance)</td>
   </tr>
 </table>
 
@@ -16,6 +16,10 @@
 ## TODO
 
 * ''List any planned features''
+
+## Screenshot
+
+![screenshot](<%= docsurl %>images/bundle_id.png)
 
 ## Bundle configuration
 

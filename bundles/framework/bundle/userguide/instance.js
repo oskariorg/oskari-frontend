@@ -1,11 +1,7 @@
 /**
- * @class Oskari.mapframework.bundle.layerselection2.LayerSelectionBundleInstance
+ * @class Oskari.mapframework.bundle.userguide.UserGuideBundleInstance
  *
- * Main component and starting point for the "selected layers" functionality.
- * Lists all the layers available in Oskari.mapframework.sandbox.Sandbox.findAllSelectedMapLayers()
- * and updates UI if maplayer related events (#eventHandlers) are received.
- *
- * See Oskari.mapframework.bundle.layerselection2.LayerSelectionBundle for bundle definition.
+ * Renders help text.
  *
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundleInstance",
@@ -110,12 +106,12 @@ function() {
         //sandbox.registerAsStateful(this.mediator.bundleId, this);
         // draw ui
         me.createUi();
-        
+
         // get help content
         var helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', sandbox);
         this.helper = helper;
-        
-       
+
+
     },
     /**
      * @method init
@@ -169,7 +165,7 @@ function() {
 
         }
     },
-    
+
     /**
      * @method displayContent
      */
@@ -181,7 +177,7 @@ function() {
     	if( me.isContentLoaded ) {
     		return;
     	}
-    	
+
 	    var helpContentPart = 'help.contentPart';
         if (me.getLocalization('help') &&
             me.getLocalization('help').contentPart) {
@@ -194,11 +190,11 @@ function() {
         }
 
         this.helper.getHelpArticle(
-            tagsTxt, 
+            tagsTxt,
             function(isSuccess, pContent) {
                 var content = pContent;
                 var errorTxt = 'error.generic';
-                if (me.getLocalization('error') && 
+                if (me.getLocalization('error') &&
                     me.getLocalization('error').generic) {
                     errorTxt = me.getLocalization('error').generic;
                 }
@@ -212,7 +208,7 @@ function() {
                 me.isContentLoaded = true;
         });
     },
-    
+
 
     /**
      * @method toggleUserInterface
