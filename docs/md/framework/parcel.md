@@ -11,52 +11,44 @@
 
 ## Description
 
-''Describe what the bundle does.''
-
-## TODO
-
-* ''List any planned features''
+This bundle listens for events that provide feature ID (fid) for parcels or register units and loads the requested feature data. Features are shown on the map. Also, tools are provided to split the feature areas. Provides means to save feature data to server by using WFST. Also, uses ParcelInfo bundle to show area information.
 
 ## Screenshot
 
-![screenshot](<%= docsurl %>images/bundle_id.png)
+![screenshot](<%= docsurl %>images/parcel.png)
 
 ## Bundle configuration
 
+This bundle requires configurations in application config.json.
+For example:
+
 ```javascript
-config : {
-  test : 1
+"parcel": {
+  "conf": {
+    "queryUrl": "https://ws.nls.fi/ktjkii/wfs/wfs",
+    "parcelFeatureType": "PalstanTietoja",
+    "registerUnitFeatureType": "RekisteriyksikonTietoja",
+    "hideSomeToolbarButtons": "hide",
+    "transactionUrl": "",
+    "proxyUrl": "proxy.cgi?url="
+  }
 }
 ```
 
-OR
+Above parameters are for:
 
-No configuration is required.
+* queryUrl - URL that is used for loading feature data
+* parcelFeatureType - feature type that is used when parcels are requested for features
+* registerUnitFeatureType - feature type that is used when register units are requested for features
+* hideSomeToolbarButtons - hide means that hide some buttons of other bundles that may not be usefull for this bundel from toolbar. If this parameter is left out or 'false' it means that show all buttons of other bundles. For more specific implementation, see {Oskari.mapframework.bundle.parcel.handler.ButtonHandler} init -function.
+* transactionUrl - URL that is used for WFST saving. If not defined, queryUrl is used for this.     Notice, if queryUrl and transactionUrl differ WFST uses INSERT, otherwise     UPDATE.
+* proxyUrl - If set, OpenLayers uses this for proxy.
 
 ## Bundle state
-
-```javascript
-state : {
-  test : 2
-}
-```
-
-OR
 
 No statehandling has been implemented.
 
 ## Requests the bundle handles
-
-<table>
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td>tbd</td><td>tbd</td>
-  </tr>
-</table>
-
-OR
 
 This bundle doesn't handle any requests.
 
@@ -67,13 +59,15 @@ This bundle doesn't handle any requests.
     <th>Request</th><th>Why/when</th>
   </tr>
   <tr>
-    <td>tbd</td><td>tbd</td>
+    <td>Toolbar.AddToolButtonRequest</td><td>Adds tool buttons into toolbar for editing and saving.</td>
+  </tr>
+  <tr>
+    <td>Toolbar.RemoveToolButtonRequest</td><td>If configuration has defined that some tool buttons, that are irrelevant for this bundle, should be hidden. Notice, this affects to buttons that other bundles may want to show.</td>
+  </tr>
+  <tr>
+    <td>Toolbar.SelectToolButtonRequest</td><td>Ask toolbar to select specific button.</td>
   </tr>
 </table>
-
-OR
-
-This bundle doesn't send out any requests.
 
 ## Events the bundle listens to
 
@@ -82,13 +76,15 @@ This bundle doesn't send out any requests.
     <th>Event</th><th>How does the bundle react</th>
   </tr>
   <tr>
-    <td>tbd</td><td>tbd</td>
+    <td>ParcelSelector.ParcelSelectedEvent</td><td>Starts loading parcel of the given fid.</td>
+  </tr>
+  <tr>
+    <td>ParcelSelector.RegisterUnitSelectedEvent</td><td>Starts loading register unit of the given fid.</td>
+  </tr>
+  <tr>
+    <td>Toolbar.ToolSelectedEvent</td><td>Selects editing tool or starts saving feature.</td>
   </tr>
 </table>
-
-OR
-
-This bundle doesn't listen to any events.
 
 ## Events the bundle sends out
 
@@ -97,13 +93,14 @@ This bundle doesn't listen to any events.
     <th>Event</th><th>Why/when</th>
   </tr>
   <tr>
-    <td>tbd</td><td>tbd</td>
+    <td>Oskari.mapframework.bundle
+      .parcel.event.ParcelInfoLayerRegisterEvent</td><td>Registers layer for ParcelInfo bundle that shows information about the selected or modified feature of the registered layer.</td>
+  </tr>
+  <tr>
+    <td>Oskari.mapframework.bundle
+      .parcel.event.ParcelInfoLayerUnregisterEvent</td><td>Unregister registered layer from the ParcelInfo bundle.</td>
   </tr>
 </table>
-
-OR
-
-This bundle doesn't send out any events.
 
 ## Dependencies
 
@@ -112,10 +109,18 @@ This bundle doesn't send out any events.
     <th>Dependency</th><th>Linked from</th><th>Purpose</th>
   </tr>
   <tr>
-    <td>[Library name](#link)</td><td>src where its linked from</td><td>*why/where we need this dependency*</td>
+    <td> [jQuery](http://api.jquery.com/) </td>
+    <td> Version 1.7.1 assumed to be linked (on page locally in portal) </td>
+    <td> Used to create UI component</td>
+  </tr>
+  <tr>
+    <td> [OpenLayers](http://openlayers.org/) </td>
+    <td> Expects OpenLayers already linked </td>
+    <td> To control map</td>
+  </tr>
+  <tr>
+    <td> [Oskari mapmodule](<%= docsurl %>framework/mapmodule.html)</td>
+    <td> Expects to be present in application setup </td>
+    <td> To register plugin to map/gain control to Openlayers map</td>
   </tr>
 </table>
-
-OR
-
-This bundle doesn't have any dependencies.
