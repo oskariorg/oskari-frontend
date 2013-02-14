@@ -11,67 +11,25 @@
 
 ## Description
 
-''Describe what the bundle does.''
-
-## TODO
-
-* ''List any planned features''
+This bundle shows the name, area, and length information about the selected feature of registered OpenLayers layers on the map.
 
 ## Screenshot
 
-![screenshot](<%= docsurl %>images/bundle_id.png)
+![screenshot](<%= docsurl %>images/parcelinfo.png)
 
 ## Bundle configuration
-
-```javascript
-config : {
-  test : 1
-}
-```
-
-OR
 
 No configuration is required.
 
 ## Bundle state
 
-```javascript
-state : {
-  test : 2
-}
-```
-
-OR
-
 No statehandling has been implemented.
 
 ## Requests the bundle handles
 
-<table>
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td>tbd</td><td>tbd</td>
-  </tr>
-</table>
-
-OR
-
 This bundle doesn't handle any requests.
 
 ## Requests the bundle sends out
-
-<table>
-  <tr>
-    <th>Request</th><th>Why/when</th>
-  </tr>
-  <tr>
-    <td>tbd</td><td>tbd</td>
-  </tr>
-</table>
-
-OR
 
 This bundle doesn't send out any requests.
 
@@ -82,26 +40,14 @@ This bundle doesn't send out any requests.
     <th>Event</th><th>How does the bundle react</th>
   </tr>
   <tr>
-    <td>tbd</td><td>tbd</td>
+    <td>ParcelInfo.ParcelLayerRegisterEvent</td><td>Starts to listen for OpenLayers featureselected, featureunselected, featuremodified, and vertexmodified events of the registered OpenLayers layer.</td>
+  </tr>
+  <tr>
+    <td>ParcelInfo.ParcelLayerUnregisterEvent</td><td>Unregisteres the given OpenLayers layer from the list of the layers whose information is followed by the bundle.</td>
   </tr>
 </table>
-
-OR
-
-This bundle doesn't listen to any events.
 
 ## Events the bundle sends out
-
-<table>
-  <tr>
-    <th>Event</th><th>Why/when</th>
-  </tr>
-  <tr>
-    <td>tbd</td><td>tbd</td>
-  </tr>
-</table>
-
-OR
 
 This bundle doesn't send out any events.
 
@@ -112,10 +58,8 @@ This bundle doesn't send out any events.
     <th>Dependency</th><th>Linked from</th><th>Purpose</th>
   </tr>
   <tr>
-    <td>[Library name](#link)</td><td>src where its linked from</td><td>*why/where we need this dependency*</td>
+    <td> [jQuery](http://api.jquery.com/) </td>
+    <td> Version 1.7.1 assumed to be linked (on page locally in portal) </td>
+    <td> Used to create UI component</td>
   </tr>
 </table>
-
-OR
-
-This bundle doesn't have any dependencies.

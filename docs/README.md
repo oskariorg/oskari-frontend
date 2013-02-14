@@ -18,6 +18,10 @@ Get node from www.nodejs.org
 
 > node generator.js --apiurl "<location>" --docsurl "<location>"
 
+example
+
+> node generator.js --apiurl "http://www.oskari.org/"
+
 ## Writing documentation
 
 Use template.md found in this (docs) directory
