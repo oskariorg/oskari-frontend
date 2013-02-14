@@ -295,7 +295,7 @@ function(locale, conf) {
 		style.pointRadius = 8;
 		style.strokeColor='#000000';
 		style.fillColor='#E9DA14';
-		style.fillOpacity=0.6;
+		style.fillOpacity=1;
 		style.strokeOpacity=1;
 		style.strokeWidth=2;
 		style.cursor = 'pointer';
