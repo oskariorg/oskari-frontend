@@ -70,13 +70,6 @@ describe('Test Suite for Publisher - Logged in user', function() {
         };
     });
 
-    var teardown = function() {
-        printDebug('teardown');
-        // The Flyout is injected into the DOM and needs to be removed manually as testacular doesn't do that
-        jQuery("body > div").remove();
-    };
-
-
     var startApplication = function(done) {
         printDebug('setup page & oskari app');
         //setup HTML

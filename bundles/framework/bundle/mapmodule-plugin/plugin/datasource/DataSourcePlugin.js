@@ -65,7 +65,7 @@ function() {
      *          reference to application sandbox
      */
     init : function(sandbox) {
-        this.template = jQuery("<div class='datascource'>" +
+        this.template = jQuery("<div class='oskari-datasource'>" +
                 "<div class='link'><a href='JavaScript:void(0);'></a></div>" +
             "</div>");
         this.templateinfoIcon = jQuery('<div class="icon-info"></div>');

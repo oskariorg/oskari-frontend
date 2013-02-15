@@ -377,6 +377,13 @@ function addLayers(module, idList) {
     return sandbox.findAllSelectedMapLayers();
 };
 
+function teardown() {
+    printDebug('teardown');
+    // The Flyout is injected into the DOM and needs to be removed manually as testacular doesn't do that
+    jQuery("body > div").remove();
+};
+
+
 function getDummyUser() {
 	return {
 	    "lastName": "Dummy",

@@ -3,68 +3,77 @@ describe('Test Suite for Publisher - Guest user', function() {
     var appSetup = null,
         appConf = null;
 
-    before(function(done) {
-        if(!appSetup) {
-            
-            appSetup = getStartupSequence([
-                'openlayers-default-theme', 
-                'mapfull', 
-                'divmanazer',
-                {
-                    "instanceProps": {
+    var publisherModule = null,
+        sandbox = null, 
+        flyout = null,
+        localization = null,
+        publisherContent = null;
 
+    before(function() {
+        appSetup = getStartupSequence([
+            'openlayers-default-theme', 
+            'mapfull', 
+            'divmanazer',
+            {
+                "instanceProps": {
+
+                },
+                "title": "Publisher",
+                "bundleinstancename": "publisher",
+                "fi": "Publisher",
+                "sv": "Publisher",
+                "en": "Publisher", 
+                "bundlename": "publisher",
+                "metadata": {
+                    "Import-Bundle": {
+                        "publisher": {
+                            "bundlePath": "packages/framework/bundle/"
+                        }
                     },
-                    "title": "Publisher",
-                    "bundleinstancename": "publisher",
-                    "fi": "Publisher",
-                    "sv": "Publisher",
-                    "en": "Publisher", 
-                    "bundlename": "publisher",
-                    "metadata": {
-                        "Import-Bundle": {
-                            "publisher": {
-                                "bundlePath": "packages/framework/bundle/"
-                            }
-                        },
-                        "Require-Bundle-Instance": [
+                    "Require-Bundle-Instance": [
 
-                        ]
-                    }
+                    ]
                 }
-            ]);
-        
-            var mapfullConf = getConfigForMapfull();
-            appConf = {
-                "mapfull" : mapfullConf
-            }; 
-        }
-        done();
+            }
+        ]);
+    
+        var mapfullConf = getConfigForMapfull();
+        appConf = {
+            "mapfull" : mapfullConf
+        }; 
     });
 
-    beforeEach(function(done) {
+
+    var startApplication = function(done) {
+        printDebug('setup page & oskari app');
+        //setup HTML
         jQuery("body").html(getDefaultHTML()); 
-        setupOskari(appSetup, appConf, done);
-    });
- 
-    afterEach(function() {
-        // The Flyout is injected into the DOM and needs to be removed manually as testacular doesn't do that
-        jQuery("body > div").remove();
-    });
+        // startup Oskari
+        setupOskari(appSetup, appConf, function() {
+            sandbox = Oskari.$("sandbox");
+            publisherModule = sandbox.findRegisteredModuleInstance('Publisher');
+            flyout = publisherModule.plugins['Oskari.userinterface.Flyout']; 
+            localization = publisherModule.getLocalization('StartView');
+            publisherContent = jQuery('div.publisher');
+            done();
+        });
+    };
 
-    describe('Bundle tests', function() {
+    describe('Flyout', function() {
 
-        it('should setup correctly Publisher', function(done) {
-            checkPublisherStartup(done);
+        before(function(done) {
+            printDebug('test 1 - before');
+            startApplication(done);
         });
 
-        it("should show login message to guest users", function(done) {
-            var sandbox = Oskari.$("sandbox"),
-                publisherModule = sandbox.findRegisteredModuleInstance('Publisher'); 
+        after(function() {
+            printDebug('test 1 - after');
+            teardown();
+        });
 
-
-            var notLoggedInView = jQuery('div.publisher').find('div.notLoggedIn');
+        it("should show login message to guest users", function() {
+            var notLoggedInView = publisherContent.find('div.notLoggedIn');
             expect(notLoggedInView.length).to.be(3);
-            done();
         });
     });
 });
