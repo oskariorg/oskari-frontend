@@ -58,6 +58,15 @@ function() {
     	var sandbox = Oskari.$("sandbox");
         me.sandbox = sandbox;
         
+        var conf = me.conf;
+        
+        sandbox.register(me);
+        var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+        plugin = Oskari.clazz.create('Oskari.harava.bundle.mapmodule.plugin.AttributionPlugin', conf);
+        mapModule.registerPlugin(plugin);
+        mapModule.startPlugin(plugin);
+        this.plugin = plugin;
+        
         sandbox.register(me);
     	
     	// request
