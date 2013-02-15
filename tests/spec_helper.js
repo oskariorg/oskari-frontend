@@ -339,6 +339,44 @@ function getConfigForMapfull() {
 	//return _mapfullConfig.clone();
 }
 
+function printDebug(msg) {
+    if(window.console) {
+        console.log(msg);
+    }
+}
+
+function removeLayers(module, idList) { 
+    var sandbox = module.getSandbox();
+    printDebug(sandbox);
+    printDebug(idList);
+    // remove selected layer
+    var rbRemove = sandbox.getRequestBuilder('RemoveMapLayerRequest');
+    if(idList) {
+        for(var i = 0; i < idList.length; ++i) {
+            sandbox.request(module, rbRemove(idList[i]));
+        }
+    }
+    else {
+        var selectedLayers = sandbox.findAllSelectedMapLayers();
+        for(var i = 0; i < selectedLayers.length; ++i) {
+            sandbox.request(module, rbRemove(selectedLayers[i].getId()));
+        }
+    }
+    return sandbox.findAllSelectedMapLayers();
+};
+
+function addLayers(module, idList) {
+    // remove selected layer
+    var sandbox = module.getSandbox();
+    var rbAdd = sandbox.getRequestBuilder('AddMapLayerRequest');
+    if(idList) {
+        for(var i = 0; i < idList.length; ++i) {
+            sandbox.request(module, rbAdd(idList[i], true));
+        }
+    }
+    return sandbox.findAllSelectedMapLayers();
+};
+
 function getDummyUser() {
 	return {
 	    "lastName": "Dummy",
