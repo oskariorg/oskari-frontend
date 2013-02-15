@@ -2,6 +2,10 @@
 
 ## 1.6 release notes
 
+### mapfull bundle
+
+Now calls OpenLayers.updateSize() when it changes the size of div the map is rendered to.
+
 ### data source plugin
 
 the layers are grouped together under same data provider headings and metadata links added
@@ -11,6 +15,8 @@ test suite added for the plugin
 ### libraries bundle
 
 openlayers updated to 2.12
+
+geostats library is added to Oskari packaged as a new bundle in libraries package
 
 ### featuredata bundle
 

@@ -21,7 +21,7 @@ The Bundle provides a grid view for WFS featuredata. It is responsible to gettin
 
 ## Screenshot
 
-*Image*
+![screenshot](<%= docsurl %>images/featuredata.png)
 
 ## Bundle configuration
 

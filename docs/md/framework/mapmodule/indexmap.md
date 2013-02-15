@@ -1,4 +1,4 @@
-# IndexMap
+# Index Map
 
 <table>
   <tr>
