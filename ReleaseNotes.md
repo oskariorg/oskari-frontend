@@ -82,6 +82,10 @@ Adding external graphics for DrawPlugin:
         var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', newStyle);
 ```
 
+### framework.domain
+
+Created AbstractLayer.js that is inherited by all layer implementations. The abstract function implementations will unify layer functionality. The WmtsLayer will also correctly use legends if defined and type 'wmtslayer' will return false when called isLayerOfType. Use 'wmts' instead.
+
 ## 1.5 release notes
 
 ### personal data bundle

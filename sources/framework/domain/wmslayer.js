@@ -10,14 +10,45 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
  * @static
  */
 function() {
+
+    /* Name of wms layer */
+    this._wmsLayerName = null;
+
+    /* Array of wms urls for this layer */
+    this._wmsUrls = [];
+
+    /* Layer Type */
+    this._layerType = "WMS";
 }, {
     /**
-     * @method isLayerOfType
-     * @param {String} flavour layer type to check against. A bit misleading since setType is base/group/normal, this is used to check if the layer is a WMS layer.
-     * @return {Boolean} true if flavour is WMS or wms
+     * @method addWmsUrl
+     * @param {String} wmsUrl
+     * Apppends the url to layer array of wms image urls
      */
-    isLayerOfType : function(flavour) {
-        return flavour === 'WMS' || flavour === 'wms';
+    addWmsUrl : function(wmsUrl) {
+        this._wmsUrls.push(wmsUrl);
+    },
+    /**
+     * @method getWmsUrls
+     * @return {String[]} 
+     * Gets array of layer wms image urls
+     */
+    getWmsUrls : function() {
+        return this._wmsUrls;
+    },
+    /**
+     * @method setWmsName
+     * @param {String} wmsName used to identify service f.ex. in GetFeatureInfo queries.
+     */
+    setWmsName : function(wmsName) {
+        this._wmsName = wmsName;
+    },
+    /**
+     * @method getWmsName
+     * @return {String} wmsName used to identify service f.ex. in GetFeatureInfo queries.
+     */
+    getWmsName : function() {
+        return this._wmsName;
     }
 }, {
     "extend" : ["Oskari.mapframework.domain.AbstractLayer"]
