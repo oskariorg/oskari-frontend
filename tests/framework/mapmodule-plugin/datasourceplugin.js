@@ -3,12 +3,12 @@ describe('Test Suite for Data Source plugin', function() {
         appConf = null; 
  
     var mapModule = null,
-        plugin = null, 
+        plugin = null,
+        pluginDiv = null, 
         localization = null,
         selectedLayers = [];
 
     before(function() {
-        printDebug('setup application config');
         // startup the oskari application with publisher bundle, 2 test layers and signed in user
         appSetup = getStartupSequence([
             'openlayers-default-theme', 
@@ -60,21 +60,50 @@ describe('Test Suite for Data Source plugin', function() {
 			mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
             plugin = mapModule.getPluginInstance('DataSourcePlugin');
             localization = mapModule.getLocalization('plugin')['DataSourcePlugin'];
+            pluginDiv = jQuery('div.oskari-datasource');
             done();
         });
     };
 
+    describe('should have', function() { 
+ 
+        before(function(done) {
+            startApplication(done);
+        });
+
+        after(function() {
+            teardown(); 
+        });
+
+        it("plugin setup correctly", function() {
+            expect(plugin.getName()).to.be('MainMapModuleDataSourcePlugin'); 
+        });
+
+        it("an UI", function() {
+            expect(pluginDiv.length).to.be(1); 
+        });
+
+        it("a link in the UI", function() {
+            var link = pluginDiv.find('a');
+            expect(link.length).to.be(1); 
+        });
+
+        it("a dialog open from the link", function() {
+            var linkSpy = sinon.spy(plugin, '_openDialog');
+            var link = pluginDiv.find('a');
+            link.click();
+            expect(linkSpy.callCount).to.be(1);
+        });
+    });
 
     describe('should display popup', function() { 
 
-        var dialogContent = null,
-            pluginDiv = null;
+        var dialogContent = null;
  
         before(function(done) {
             startApplication(function() {
                 selectedLayers = addLayers(mapModule, [34,35]);
 
-                pluginDiv = jQuery('div.oskari-datasource');
                 var link = pluginDiv.find('a');
                 link.click();
                 dialogContent = jQuery('div.divmanazerpopup');
@@ -113,78 +142,5 @@ describe('Test Suite for Data Source plugin', function() {
             expect(items.length).to.be(1);
         });
         
-    });
- 
-    describe('should have', function() { 
- 
-        var pluginDiv = null;
-
-        before(function(done) {
-            startApplication(function() {
-                pluginDiv = jQuery('div.oskari-datasource');
-                done();
-            });
-        });
-
-        after(function() {
-            teardown(); 
-        });
-
-        it("plugin setup correctly", function() {
-            expect(plugin.getName()).to.be('MainMapModuleDataSourcePlugin'); 
-        });
-
-        it("an UI", function() {
-            expect(pluginDiv.length).to.be(1); 
-        });
-
-        it("a link in the UI", function() {
-            var link = pluginDiv.find('a');
-            expect(link.length).to.be(1); 
-        });
-
-        it("a dialog open from the link", function() {
-            var linkSpy = sinon.spy(plugin, '_openDialog');
-            var link = pluginDiv.find('a');
-            link.click();
-            expect(linkSpy.callCount).to.be(1);
-        });
-    });
-
- 
-    describe('should have 2', function() { 
- 
-        var pluginDiv = null;
-
-        before(function(done) {
-            startApplication(function() {
-                pluginDiv = jQuery('div.oskari-datasource');
-                done();
-            });
-        });
-
-        after(function() {
-            teardown(); 
-        });
-
-        it("plugin setup correctly", function() {
-            expect(plugin.getName()).to.be('MainMapModuleDataSourcePlugin'); 
-        });
-
-        it("an UI", function() {
-            expect(pluginDiv.length).to.be(1); 
-        });
-
-        it("a link in the UI", function() {
-            var link = pluginDiv.find('a');
-            expect(link.length).to.be(1); 
-        });
-
-        it("a dialog open from the link", function() {
-            var linkSpy = sinon.spy(plugin, '_openDialog');
-            var link = pluginDiv.find('a');
-            link.click();
-            expect(linkSpy.callCount).to.be(1);
-        });
     });
 });

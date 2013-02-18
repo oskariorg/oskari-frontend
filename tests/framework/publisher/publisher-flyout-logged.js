@@ -11,7 +11,6 @@ describe('Test Suite for Publisher - Logged in user', function() {
         publisherContent = null;
 
     before(function() {
-        printDebug('setup application config');
         // startup the oskari application with publisher bundle, 2 test layers and signed in user
         appSetup = getStartupSequence([
             'openlayers-default-theme', 

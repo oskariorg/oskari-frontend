@@ -91,18 +91,13 @@ function() {
         // startup plugins
         if(this.conf.plugins) {
             var plugins = this.conf.plugins;
-            /*
-            plugins.push({
-                "id": "Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugin"
-            });
-            *7
             for(var i = 0; i < plugins.length; i++) {
                 plugins[i].instance = Oskari.clazz.create(plugins[i].id, plugins[i].config);
                 module.registerPlugin(plugins[i].instance);
                 module.startPlugin(plugins[i].instance);
             }
         }
-        
+         
 		this.map = map;
 	},
     /**

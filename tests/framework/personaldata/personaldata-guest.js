@@ -6,7 +6,6 @@ describe('Test Suite for PersonalData - Guest user', function() {
         sandbox = null;
 
     before(function() {
-        printDebug('setup application config');
         // startup the oskari application with publisher bundle, 2 test layers and signed in user
         appSetup = getStartupSequence([
             'openlayers-default-theme', 
@@ -32,7 +31,6 @@ describe('Test Suite for PersonalData - Guest user', function() {
     });
 
     var startApplication = function(done) {
-        printDebug('setup page & oskari app');
         //setup HTML
         jQuery("body").html(getDefaultHTML());  
         // startup Oskari
@@ -46,12 +44,10 @@ describe('Test Suite for PersonalData - Guest user', function() {
     describe('should be localized', function() { 
  
         before(function(done) {
-            printDebug('test loc - before');
             startApplication(done);
         });
 
         after(function() {
-            printDebug('test loc - after');
             teardown();
         }); 
 

@@ -51,7 +51,9 @@ function hasSameStructure(first, second, langFirst, langSecond) {
             var key2 = flattenedKeys2[j]; 
             if(key1.key == key2.key) {
                 found = true;
-                if(key1.value.length > 2 && key1.value.indexOf(key2.value) != -1) {
+                var value1 = key1.value;
+                // check that values are not identical if they are over 2 characters
+                if(value1.length > 2 && value1.indexOf(key2.value) != -1) {
                     // same value for both languages
                     printWarning('Same value for ' + key1.key + '::\r\n' +
                         langFirst + '=' + key1.value + '\r\n' +
