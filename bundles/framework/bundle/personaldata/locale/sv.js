@@ -89,7 +89,8 @@ Oskari.registerLocalization({
       },
       "publishedmaps": {
         "title": "Inbäddade",
-        "edit": "Visa på kartan",
+        "show": "Visa på kartan",
+        "edit": "Redigera",
         "publish": "Avskilj karta",
         "unpublish": "Återta avskiljandet",
         "delete": "Ta bort",
