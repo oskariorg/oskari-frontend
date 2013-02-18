@@ -73,11 +73,11 @@ describe('Test Suite for Publisher - Logged in user', function() {
     var startApplication = function(done) {
         printDebug('setup page & oskari app');
         //setup HTML
-        jQuery("body").html(getDefaultHTML()); 
+        jQuery("body").html(getDefaultHTML());  
         // startup Oskari
         setupOskari(appSetup, appConf, function() {
             sandbox = Oskari.$("sandbox");
-            publisherModule = sandbox.findRegisteredModuleInstance('Publisher');
+            publisherModule = sandbox.findRegisteredModuleInstance('Publisher'); 
             flyout = publisherModule.plugins['Oskari.userinterface.Flyout']; 
             localization = publisherModule.getLocalization('StartView');
             flyoutLayerSelectionSpy = sinon.spy(flyout, 'handleLayerSelectionChanged');
@@ -86,6 +86,25 @@ describe('Test Suite for Publisher - Logged in user', function() {
             done();
         });
     };
+
+    describe('should be localized', function() { 
+ 
+        before(function(done) {
+            printDebug('test loc - before');
+            startApplication(done);
+        });
+
+        after(function() {
+            printDebug('test loc - after');
+            teardown();
+        }); 
+
+        it("and localization should have same structures for fi, sv and en", function() {
+            var result = matchLocalization(publisherModule.getName(), ['fi', 'sv', 'en']);
+            expect(result).to.be(true);
+        });
+
+    });
 
     describe('should have flyout', function() { 
  

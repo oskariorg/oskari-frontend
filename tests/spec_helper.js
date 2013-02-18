@@ -347,8 +347,6 @@ function printDebug(msg) {
 
 function removeLayers(module, idList) { 
     var sandbox = module.getSandbox();
-    printDebug(sandbox);
-    printDebug(idList);
     // remove selected layer
     var rbRemove = sandbox.getRequestBuilder('RemoveMapLayerRequest');
     if(idList) {
@@ -356,6 +354,7 @@ function removeLayers(module, idList) {
             sandbox.request(module, rbRemove(idList[i]));
         }
     }
+    // remove all selected layers
     else {
         var selectedLayers = sandbox.findAllSelectedMapLayers();
         for(var i = 0; i < selectedLayers.length; ++i) {
@@ -366,7 +365,7 @@ function removeLayers(module, idList) {
 };
 
 function addLayers(module, idList) {
-    // remove selected layer
+    // add selected layers
     var sandbox = module.getSandbox();
     var rbAdd = sandbox.getRequestBuilder('AddMapLayerRequest');
     if(idList) {

@@ -45,6 +45,7 @@ Oskari.registerLocalization({
         "delete": "Delete",
         "grid": {
           "name": "Name",
+          "description": "Description",
           "publish": "Published",
           "edit": " ",
           "delete": " "
