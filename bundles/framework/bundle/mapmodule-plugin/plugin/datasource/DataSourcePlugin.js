@@ -264,7 +264,7 @@ function() {
         }
 
         dialog.show( this.localization.popup.title, content, [okBtn]);
-        dialog.moveTo('div.datascource a', 'top');
+        dialog.moveTo(this.element.find('a'), 'top');
     },
 
     /**
@@ -292,7 +292,7 @@ function() {
         var infoIcon = this.templateinfoIcon.clone();
         var layerName = layer.getName();
         if(layerName) {
-            var layerItem = jQuery('<br><li>' + layerName + '</li></br>');    
+            var layerItem = jQuery('<li>' + layerName + '</li>');
             //metadata link
             var uuid = layer.getMetadataIdentifier();
             if(uuid) {    

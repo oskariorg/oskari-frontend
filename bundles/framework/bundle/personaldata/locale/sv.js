@@ -22,7 +22,6 @@ Oskari.registerLocalization({
           "desc": "Beskrivning",
           "createDate": "Skapad",
           "updateDate": "Uppdaterad",
-          "show" : " ",
           "edit": " ",
           "delete": " "
         },
@@ -40,7 +39,6 @@ Oskari.registerLocalization({
       },
       "myviews": {
         "title": "Mina vyer",
-        "show" : "Visa på karta",
         "edit" : "Editera",
         "publish": "Offentliggör",
         "unpublish": "Gör privat",

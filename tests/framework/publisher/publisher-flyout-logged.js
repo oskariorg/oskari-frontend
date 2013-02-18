@@ -71,7 +71,6 @@ describe('Test Suite for Publisher - Logged in user', function() {
     });
 
     var startApplication = function(done) {
-        printDebug('setup page & oskari app');
         //setup HTML
         jQuery("body").html(getDefaultHTML());  
         // startup Oskari
@@ -90,12 +89,10 @@ describe('Test Suite for Publisher - Logged in user', function() {
     describe('should be localized', function() { 
  
         before(function(done) {
-            printDebug('test loc - before');
             startApplication(done);
         });
 
         after(function() {
-            printDebug('test loc - after');
             teardown();
         }); 
 
@@ -109,12 +106,10 @@ describe('Test Suite for Publisher - Logged in user', function() {
     describe('should have flyout', function() { 
  
         before(function(done) {
-            printDebug('test 1 - before');
             startApplication(done);
         });
 
         after(function() {
-            printDebug('test 1 - after');
             teardown();
         });
 
@@ -141,7 +136,6 @@ describe('Test Suite for Publisher - Logged in user', function() {
             layerNameList = null;
 
         before(function(done) {
-            printDebug('test 2 - before');
             startApplication(function() {
                 layerlists = publisherContent.find('div.layerlist');
                 publishableLayers = jQuery(layerlists[0]);
@@ -151,7 +145,6 @@ describe('Test Suite for Publisher - Logged in user', function() {
 
         });
         after(function() {
-            printDebug('test 2 - after');
             teardown();
         });
 
@@ -183,7 +176,6 @@ describe('Test Suite for Publisher - Logged in user', function() {
         var layerlists = null;
 
         before(function(done) {
-            printDebug('test 3 - before');
             startApplication(function() {
                 selectedLayers = removeLayers(publisherModule);
                 layerlists = publisherContent.find('div.layerlist');
@@ -192,7 +184,6 @@ describe('Test Suite for Publisher - Logged in user', function() {
 
         });
         after(function() {
-            printDebug('test 3 - after');
             teardown();
         });
 
@@ -219,7 +210,6 @@ describe('Test Suite for Publisher - Logged in user', function() {
         var layerlists = null;
 
         before(function(done) {
-            printDebug('test 4 - before');
             startApplication(function() {
                 removeLayers(publisherModule);
                 selectedLayers = addLayers(publisherModule, [34]);
@@ -230,7 +220,6 @@ describe('Test Suite for Publisher - Logged in user', function() {
 
         });
         after(function() {
-            printDebug('test 4 - after');
             teardown();
         });
 
@@ -263,7 +252,6 @@ describe('Test Suite for Publisher - Logged in user', function() {
 
 
         before(function(done) {
-            printDebug('test 5 - before');
             startApplication(function() {
                 removeLayers(publisherModule);
                 selectedLayers = addLayers(publisherModule, [34, 35]);
@@ -279,7 +267,6 @@ describe('Test Suite for Publisher - Logged in user', function() {
         });
 
         after(function() {
-            printDebug('test 5 - after');
             teardown();
         });
 

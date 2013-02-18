@@ -17,7 +17,7 @@ describe('Test Suite for Publisher - Guest user', function() {
             {
                 "instanceProps": {
 
-                },
+                }, 
                 "title": "Publisher",
                 "bundleinstancename": "publisher",
                 "fi": "Publisher",
@@ -45,7 +45,6 @@ describe('Test Suite for Publisher - Guest user', function() {
 
 
     var startApplication = function(done) {
-        printDebug('setup page & oskari app');
         //setup HTML
         jQuery("body").html(getDefaultHTML()); 
         // startup Oskari
@@ -60,14 +59,12 @@ describe('Test Suite for Publisher - Guest user', function() {
     };
 
     describe('Flyout', function() {
-
-        before(function(done) {
-            printDebug('test 1 - before');
+ 
+        before(function(done) { 
             startApplication(done);
         });
 
         after(function() {
-            printDebug('test 1 - after');
             teardown();
         });
 

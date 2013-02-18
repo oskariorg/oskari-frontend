@@ -89,7 +89,7 @@ var _defaultsStartupSeq = {
         "title": "Oskari DIV Manazer",
         "bundleinstancename": "divmanazer",
         "fi": "Oskari DIV Manazer",
-        "sv": "?",
+        "sv": "Oskari DIV Manazer",
         "en": "Oskari DIV Manazer",
         "bundlename": "divmanazer",
         "metadata": {
@@ -377,9 +377,8 @@ function addLayers(module, idList) {
 };
 
 function teardown() {
-    printDebug('teardown');
-    // The Flyout is injected into the DOM and needs to be removed manually as testacular doesn't do that
-    jQuery("body > div").remove();
+    //  Oskari UI is injected into the DOM and needs to be removed manually as testacular doesn't do that
+    jQuery("body").empty();
 };
 
 

@@ -1,4 +1,11 @@
-
+/**
+ * Tests localization files for a bundle. Uses the first language in parameter languageList as 
+ * reference and checks that other languages have the same structure == same keys.
+ * @method matchLocalization
+ * @param {String} localizationBundleKey the localization key, usually the bundles name using the localization
+ * @param {String[]} languageList list of language codes to test f.ex. ['fi', 'sv', 'en']
+ * @return {Boolean/String} returns true if everything was ok and error message if not
+ */
 function matchLocalization(localizationBundleKey, languageList) {
     printDebug('Testing localizations for bundle:' + localizationBundleKey);
     var defLang = languageList[0];
@@ -15,12 +22,25 @@ function matchLocalization(localizationBundleKey, languageList) {
     }
     return true;
 }
-
+/**
+ * Compares two localization structures and checks if they have similar key-structure.
+ * Prints out warnings to browser window if keys have similar values between languages
+ * @method hasSameStructure
+ * @private
+ * @param {Object} first localization structure for first language
+ * @param {Object} second localization structure for second language
+ * @param {String} langFirst language code first structure
+ * @param {String} langSecond language code second structure
+ * @return {Boolean} returns true if everything was ok
+ */
 function hasSameStructure(first, second, langFirst, langSecond) {
-    var flattenedKeys1 = getFlattenedStructureKeys(first);
-    var flattenedKeys2 = getFlattenedStructureKeys(second);
+    var flattenedKeys1 = getFlattenedStructure(first);
+    var flattenedKeys2 = getFlattenedStructure(second);
     var isDifferent = flattenedKeys1.length != flattenedKeys2.length;
     if(isDifferent) {
+        printWarning('Localization lengths not matching\r\n' +
+            langFirst + '::' + flattenedKeys1.length + '\r\n' +
+            langSecond + '::' + flattenedKeys2.length + '\r\n');
         return false;
     }
     // even if length matches -> could have different keys
@@ -31,9 +51,9 @@ function hasSameStructure(first, second, langFirst, langSecond) {
             var key2 = flattenedKeys2[j]; 
             if(key1.key == key2.key) {
                 found = true;
-                if(key1.value.indexOf(key2.value) != -1) {
+                if(key1.value.length > 2 && key1.value.indexOf(key2.value) != -1) {
                     // same value for both languages
-                    printDebug('Same value for ' + key1.key + '::\r\n' +
+                    printWarning('Same value for ' + key1.key + '::\r\n' +
                         langFirst + '=' + key1.value + '\r\n' +
                         langSecond + '=' + key2.value + '\r\n');
                 }
@@ -41,14 +61,22 @@ function hasSameStructure(first, second, langFirst, langSecond) {
             }
         }
         if(!found) {
-            printDebug('Key not found on all localizations:' + key1.key);
+            printWarning('Key not found on all localizations:' + key1.key);
             return false;
         }
     }
     return true;
 } 
 
-function getFlattenedStructureKeys(struct) {
+/**
+ * Flattens an object structure to a list for easier analysis
+ * @method getFlattenedStructure
+ * @private
+ * @param {Object} struct localization structure
+ * @return {Object[]} returns flattened version of the structure so that keys are concatenated with dots. 
+ *      The objects have properties {key : <concatenated key>, value: <value>}
+ */
+function getFlattenedStructure(struct) {
     var flattenedKeys = [];
     for(var key in struct) {
         var subStruct = struct[key];
@@ -58,7 +86,7 @@ function getFlattenedStructureKeys(struct) {
                 value : subStruct});
         }
         else {
-            var keys = getFlattenedStructureKeys(subStruct);
+            var keys = getFlattenedStructure(subStruct); 
             for(var i = 0; i < keys.length; ++i) {
                 flattenedKeys.push({
                     key : key + '.' + keys[i].key,
@@ -69,4 +97,10 @@ function getFlattenedStructureKeys(struct) {
         }
     }
     return flattenedKeys;
+}
+
+function printWarning(msg) {
+    if(window.console) {
+        console.warn(msg);
+    }
 }
