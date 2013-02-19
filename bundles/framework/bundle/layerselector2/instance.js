@@ -78,7 +78,6 @@ function() {
 		}
 
 		me.started = true;
-
 		var sandbox = Oskari.$("sandbox");
 		me.sandbox = sandbox;
 		

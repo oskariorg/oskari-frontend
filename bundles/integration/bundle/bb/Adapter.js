@@ -143,6 +143,10 @@ function(name,viewClazz) {
         var viewCls = this._viewClazz ;        
         var view = Oskari.clazz.create(viewCls,this.getLocalization('view'),this,this.getConfiguration());
         this.view = view;
+
+        if(view.init != null) {
+            this.view.init();
+        }
         
         for(p in view.eventHandlers) {
             sandbox.registerForEventByName(view, p);

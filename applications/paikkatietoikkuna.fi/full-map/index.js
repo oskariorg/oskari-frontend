@@ -42,6 +42,76 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
                 cb(me.instance);
             }
 
+
+
+/*            var ugBB = {
+                title : 'asdf',
+                fi : 'asdf',
+                sv : 'asdf',
+                en : 'asdf',
+                bundlename : 'bb',
+                bundleinstancename : 'bb',
+                metadata : {
+                    "Import-Bundle" : {
+                        "bb" : {
+                            bundlePath : '/Oskari/packages/integration/bundle/'
+                        }
+                    },
+                    "Require-Bundle-Instance" : []
+                },
+                instanceProps : {}
+            };
+
+			Oskari.bundle_facade.playBundle(ugBB, function() {});
+*/
+/*            var ugTODO = {
+                title : 'ToDo',
+                fi : 'ToDo',
+                sv : 'ToDo',
+                en : 'ToDo',
+                bundlename : 'todo',
+                bundleinstancename : 'todo',
+                metadata : {
+                    "Import-Bundle" : {
+                        "bb" : {
+                            bundlePath : '/Oskari/packages/integration/bundle/'
+                        },
+                        "todo" : {
+                            bundlePath : '/Oskari/packages/integration/bundle/'
+                        }
+                    },
+                    "Require-Bundle-Instance" : []
+                },
+                instanceProps : {}
+            };
+
+			Oskari.bundle_facade.playBundle(ugTODO, function() {});
+*/
+
+            var ugAdminLayerSelector = {
+                title : 'admin-layerselector',
+                fi : 'admin-layerselector',
+                sv : 'admin-layerselector',
+                en : 'admin-layerselector',
+                bundlename : 'admin-layerselector',
+                bundleinstancename : 'admin-layerselector',
+                metadata : {
+                    "Import-Bundle" : {
+                        "bb" : {
+                            bundlePath : '/Oskari/packages/integration/bundle/'
+                        },
+                        "admin-layerselector" : {
+                            bundlePath : '/Oskari/packages/integration/bundle/'
+                        }
+                    },
+                    "Require-Bundle-Instance" : []
+                },
+                instanceProps : {}
+            };
+
+			Oskari.bundle_facade.playBundle(ugAdminLayerSelector, function() {});
+
+
 /*// TODO - KESKEN
             var ugStartup = {
                 title : 'Printout',

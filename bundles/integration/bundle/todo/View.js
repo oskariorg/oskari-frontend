@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
     "requirementsConfig" : {
         "waitSeconds" : 15,
         "paths" : {
-            '_bundle' : '../../../bundles/integration/bundle/todo'
+            '_bundle' : '../../../Oskari/bundles/integration/bundle/todo'
         }
     },
    
