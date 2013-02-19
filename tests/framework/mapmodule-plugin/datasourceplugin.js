@@ -117,7 +117,7 @@ describe('Test Suite for Data Source plugin', function() {
             teardown(); 
         });
 
-        it("with heading", function() {
+        it("with heading", function() { 
             var heading = dialogContent.find("h3:contains('" + localization.popup.title + "')");
             expect(heading.length).to.be(1);
         });
@@ -126,9 +126,9 @@ describe('Test Suite for Data Source plugin', function() {
             expect(selectedLayers.length).to.be(3);
         });
 
-        it("with organization heading matching selected layers listing", function() {
-            
-            var heading = dialogContent.find("b:contains('" + selectedLayers[1].getOrganizationName() + "')");
+        it("with organization heading matching test layer organization", function() {
+            var testLayer34 = sandbox.findMapLayerFromSelectedMapLayers(34);
+            var heading = dialogContent.find("b:contains('" + testLayer34.getOrganizationName() + "')");
             expect(heading.length).to.be(1);
         });
 
