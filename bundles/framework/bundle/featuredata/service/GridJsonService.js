@@ -122,7 +122,7 @@ function(endpointUrl) {
                 flow_pm_bbox_max_x : params.getBbox().right,
                 flow_pm_bbox_max_y : params.getBbox().top,
                 flow_pm_map_width  : params.getMapWidth(),
-                flow_pm_map_heigh : params.getMapHeight(), 
+                flow_pm_map_height : params.getMapHeight(), 
                 flow_pm_map_wfs_query_id : me._generateWfsTableQueryId()
             },
             beforeSend : function(x) {

@@ -481,7 +481,7 @@ updateWfsImages : function(creator) {
                          "&flow_pm_bbox_max_y=" + imageBbox.top + 
                          "&flow_pm_zoom_level=" + map.getZoom() +
                          "&flow_pm_map_width="  + map.getWidth() + 
-                         "&flow_pm_map_heigh=" + map.getHeight() + 
+                         "&flow_pm_map_height=" + map.getHeight() + 
                          "&action_route=GET_HIGHLIGHT_WFS_FEATURE_IMAGE_BY_POINT";
 
         var keepCollection = sandbox.isCtrlKeyDown();
