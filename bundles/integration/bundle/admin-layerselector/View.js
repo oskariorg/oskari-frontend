@@ -79,6 +79,7 @@ debugger;
 
 
     init : function() {
+/*
         var sandbox = this.getSandbox()
         var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
         
@@ -93,6 +94,7 @@ debugger;
             alert(me.getLocalization('errors').loadFailed);
         };
         mapLayerService.loadAllLayersAjax(successCB, failureCB);
+*/        
     },
 
     /**

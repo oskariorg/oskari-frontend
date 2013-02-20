@@ -1804,6 +1804,9 @@ define("text",['module'], function (module) {
     this.changed = {};
     this.attributes = {};
     this._changes = [];
+if(attrs == null)
+    debugger;
+
     if (options && options.collection) this.collection = options.collection;
     if (options && options.parse) attrs = this.parse(attrs);
     if (defaults = _.result(this, 'defaults')) _.defaults(attrs, defaults);
@@ -2107,6 +2110,7 @@ define("text",['module'], function (module) {
         // Check if the attribute has been modified since the last change,
         // and update `this.changed` accordingly. If we're inside of a `change`
         // call, also add a trigger to the list.
+debugger;
         if (current[key] !== val) {
           this.changed[key] = val;
           if (!loud) continue;
