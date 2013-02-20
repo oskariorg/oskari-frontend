@@ -223,9 +223,6 @@ function() {
 		// DisableDevelopmentModeEnhancement
 		if (conf.disableDevelopmentMode == 'true') {
 	        core.disableDebug();
-            // create sniffer with 2 second interval and '/log' -url
-			services.push(Oskari.clazz.create('Oskari.mapframework.service.UsageSnifferService',2, "/log/"));
-			core.enableMapMovementLogging();
 	    }
 		return services;
 	},

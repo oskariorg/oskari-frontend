@@ -9,7 +9,9 @@ basePath = '..\..\..\..\..\..\..\..';
 // list of files / patterns to load in the browser
 files = [
   MOCHA,
-  '../../tests/mocha.opts',
+  '../../tools/node_modules/expect.js/expect.js',
+  '../../tools/lib/sinon-1.5.2.js',
+  '../../tests/*.opts',
   MOCHA_ADAPTER,
   '../../bundles/bundle.js',
   '../../libraries/jquery/jquery-1.7.1.min.js',
@@ -17,8 +19,6 @@ files = [
 //  '../../applications/paikkatietoikkuna.fi/full-map/pack.js',
   '../../dist/oskari_lang_fi.js',
   '../../dist/oskari_lang_all.js',
-  '../../tools/node_modules/expect.js/expect.js',
-  '../../tools/lib/sinon-1.5.2.js',
   '../../tests/**/*.js'
 ];
 
