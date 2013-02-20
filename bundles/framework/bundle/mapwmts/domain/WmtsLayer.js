@@ -77,7 +77,7 @@ function() {
      */
     getWmtsUrls : function() {
         return this._WmtsUrls;
-    },
+    }
 }, {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]
 });
