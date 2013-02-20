@@ -473,14 +473,14 @@ updateWfsImages : function(creator) {
         var map = sandbox.getMap();
         var imageBbox = this._map.getExtent();
         var parameters = "&flow_pm_wfsLayerId=" + layer.getId() + 
-                         "&flow_pm_point_x=" + lonlat.lon + 
-                         "&flow_pm_point_y=" + lonlat.lat + 
+                         "&flow_pm_point_x="    + lonlat.lon + 
+                         "&flow_pm_point_y="    + lonlat.lat + 
                          "&flow_pm_bbox_min_x=" + imageBbox.left + 
                          "&flow_pm_bbox_min_y=" + imageBbox.bottom + 
                          "&flow_pm_bbox_max_x=" + imageBbox.right + 
                          "&flow_pm_bbox_max_y=" + imageBbox.top + 
                          "&flow_pm_zoom_level=" + map.getZoom() +
-                         "&flow_pm_map_width=" + map.getWidth() + 
+                         "&flow_pm_map_width="  + map.getWidth() + 
                          "&flow_pm_map_heigh=" + map.getHeight() + 
                          "&action_route=GET_HIGHLIGHT_WFS_FEATURE_IMAGE_BY_POINT";
 
