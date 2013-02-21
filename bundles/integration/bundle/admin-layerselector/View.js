@@ -119,7 +119,8 @@ debugger;
 
             // Finally, we kick things off by creating the **App**.
             me.view = new LayerSelectorView({
-                el : container
+                el : container,
+                instance : me.instance
             });
         });
     },

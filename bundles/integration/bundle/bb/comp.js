@@ -1804,9 +1804,6 @@ define("text",['module'], function (module) {
     this.changed = {};
     this.attributes = {};
     this._changes = [];
-if(attrs == null)
-    debugger;
-
     if (options && options.collection) this.collection = options.collection;
     if (options && options.parse) attrs = this.parse(attrs);
     if (defaults = _.result(this, 'defaults')) _.defaults(attrs, defaults);

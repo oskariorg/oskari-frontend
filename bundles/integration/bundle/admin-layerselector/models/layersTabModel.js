@@ -1,15 +1,14 @@
 (function() {
-    define(['_bundle/models/layerGroupCollection'], function(LayerGroupCollection) {
+    define(['_bundle/collections/layerGroupCollection'], function(LayerGroupCollection) {
         return Backbone.Model.extend({
             // Ensure that each todo created has `title`.
-            initialize : function(instance, title) {
+            initialize : function() {
                 // if(jQuery.isArray(layerGroups)) {
                 //     this.layerGroups = layerGroups;
                 // }
 
-                this.instance = instance;
-                this.title = title;
-                this.layerGroups = [];
+                this.title = this.attributes.title;
+                this.layerGroups = this.attributes.grouping;
                 //TODO view -> this.layerContainers = {};
                 this.filter = '';
                 //TODO view -> this._createUI();

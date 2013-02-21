@@ -1,4 +1,3 @@
-
 (function() {
     define(['_bundle/models/layerModel'],function(LayerModel) {
         return Backbone.Collection.extend({
@@ -6,7 +5,7 @@
             // Reference to this collection's model.
             model : LayerModel,
 
-            initialize: function(title) {
+            initialize: function(models, title) {
                 this.name = title; 
 //                this.layers = [];
                 this.searchIndex = {};
@@ -61,5 +60,3 @@
         
     });
 }).call(this);
-
-

@@ -31,7 +31,7 @@
                     var groupAttr = layer[groupingMethod]();
                     if (!group || group.getTitle() != groupAttr) {
                         //group = Oskari.clazz.create("Oskari.mapframework.bundle.layerselector2.model.LayerGroup", groupAttr);
-                        group = new LayerGroupCollection(groupAttr);
+                        group = new LayerGroupCollection(null, groupAttr);
                         groupList.push(group);
                     }
                     group.addLayer(layer);

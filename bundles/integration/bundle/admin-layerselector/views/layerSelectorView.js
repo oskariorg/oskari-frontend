@@ -1,8 +1,9 @@
 define([
     "text!_bundle/templates/layerSelectorTemplate.html",
     '_bundle/collections/allLayersCollection',
+    '_bundle/models/layersTabModel',
     '_bundle/views/tabPanelView'], 
-    function(ViewTemplate, LayerCollection, TabPanelView) {
+    function(ViewTemplate, LayerCollection, LayersTabModel, TabPanelView) {
     return Backbone.View.extend({
 
 
@@ -10,8 +11,10 @@ define([
         // collection, when items are added or changed. Kick things off by
         // loading any preexisting todos that might be saved in *localStorage*.
         initialize : function() {
+            this.instance = this.options.instance;
             this.el = this.options.el;
             this.appTemplate = _.template(ViewTemplate);
+//            this.layerTabs = [];
             this.render();
         },
 
@@ -19,16 +22,23 @@ define([
         // of the app doesn't change.
         render : function() {
             this.el.html(this.appTemplate);
-            var tabContent = new TabPanelView(this.collection);
-            jQuery('.admin-layerselectorapp').html(tabContent.el);
+            this._renderLayerGroups();
             
-        }, 
+        },
+        _renderLayerGroups: function(layerGrouping) {
+            var tabContent = new TabPanelView({layerGroupingModel: (layerGrouping != null) ? layerGrouping : null});
+//            this.layerTabs.push(tabContent);
+            jQuery('.admin-layerselectorapp').html(tabContent.el);
+        },
 
         addToCollection: function(models) {
             this.collection = new LayerCollection(models);
-            var inspireGroups = this.collection.getLayerGroups('getInspireName');
-debugger;
-            this.render();
+            inspireGrouping = this.collection.getLayerGroups('getInspireName');
+
+            this._renderLayerGroups(new LayersTabModel({
+                grouping : inspireGrouping, 
+                title: this.instance.getLocalization('filter').inspire
+            }));
         }
 
     });

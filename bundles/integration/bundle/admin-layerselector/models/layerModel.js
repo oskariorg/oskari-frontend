@@ -12,7 +12,7 @@
             // Ensure that each todo created has `title`.
             initialize : function(model) {
                 jQuery.extend(this, model);
-                this.visible = true;
+                //this.visible = true;
             }
         });
     });
