@@ -17,7 +17,7 @@ define(
             console.log('render tab-content');            
 debugger;
 
-/*        this.layerContainers = undefined;
+        this.layerContainers = undefined;
         this.layerContainers = {};
 
         for(var i = 0; i < groups.length; ++i) {
@@ -48,7 +48,7 @@ debugger;
         }
                     
         this.filterLayers(this.filterField.getValue());
-*/
+
 
 
         }
