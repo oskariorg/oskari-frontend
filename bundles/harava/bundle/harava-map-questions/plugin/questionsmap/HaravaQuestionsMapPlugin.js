@@ -6,6 +6,37 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
 /**
  * @method create called automatically on construction
  * @static
+ * @param {Object} config, configuration can be:
+ * Config:
+ * "harava-map-questions": {
+ *	"conf": {
+ *		"maxAnswersExceededMessage": "Max answers exceeded!", // Max answer exceeded message 
+ *		"modules":	// 0 to n question modules 
+ *		[{
+ *			"appendTo": "#step-2>.kartta-tyokalut",	// where question toolbar are appended
+ *			"questionId": "step-2",	// question identifier id
+ *			"questionTitle": "Question 1", // question title
+ *			"questions":	// 0 to n questions 
+ *			[{
+ *				"imageHeight": 48,	// if type point and defined image symbol, you can define (not required, 20 default) image height
+ *				"imageWidth": 48,	// if type point and defined image symbol, you can define (not required, 20 default) image width
+ *				"imageYOffset": -48,	// if type point and defined image symbol, you can define (not required, 20 default) image y offset
+ *				"imageXOffset": -24,	// if type point and defined image symbol, you can define (not required, 20 default) image x offset
+ *				"maxAnswers": 2, 	// max answers, id not defined then there is not max count of answers  
+ *				"imageUrl": "http://cdn1.iconfinder.com/data/icons/Map-Markers-Icons-Demo-PNG/48/Map-Marker-Marker-Outside-Pink.png",	// if type point, you can define image pointer url (not required), if not defined usin default pointer symbol with defined color and opacity (color and opacity are not required)
+ *				"popupHtml": "", // showed popup html when finishing drawing
+ *				"type": "point",	// draw tool type, can be point, line or area
+ *				"id": "question-1", // question identifier
+ *				"title": "Test 1", // Question title
+ *				"color": "#ee00ee", // Drawing color
+ *				"opacity": "0.7", // Drawing fill opacity
+ *				"tooltip": "Test tooltip" // Question tool tooltip
+ *			}
+ *			]
+ *		}]
+ *	}
+ * }
+ *  
  */
 function(config) {
 	this._conf = config;
@@ -92,7 +123,7 @@ function(config) {
     /**
      * @method getCurrentModuleFeatures
      * Get current module all features
-     * @returns {Array} features
+     * @returns {OpenLayers.Feature[]} features
      */
     "getCurrentModuleFeatures" :function(){
     	var me = this;
@@ -108,7 +139,7 @@ function(config) {
     /**
      * @method getAllModuleFeatures
      * Get all modules all features
-     * @returns {Array} features
+     * @returns {OpenLayers.Feature[]} features
      */
     "getAllModuleFeatures": function(){
     	var me = this;
@@ -161,14 +192,12 @@ function(config) {
         this._map = this.getMapModule().getMap();
         this._sandbox.register(this);
         
-        
         var conf = me._conf;
         
         if(conf!=null && conf.modules!=null){
         	me.modules = conf.modules;
         	var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        	var olMap = mapModule.getMap();
-        	var id = olMap.div.id;
+        	var id = me._map.div.id;
         	
         	jQuery('#'+id).append('<div id="harava-map-questions"></div>');
         	
@@ -334,10 +363,6 @@ function(config) {
      */
     setEnabled : function(blnEnabled) {
         this.enabled = (blnEnabled === true);
-        // close existing if disabled
-        if(!this.enabled) {
-            this._closeGfiInfo();
-        }
     },
     /**
      * @property {Object} eventHandlers
@@ -384,8 +409,6 @@ function(config) {
     		var centerPoint = new OpenLayers.LonLat(centerLon, centerLat);
     		mapModule.panMapToLonLat(centerPoint);
     	}
-    	
-    	me._map.updateSize();
     },
     /**
      * @method finishedDrawing
@@ -445,10 +468,32 @@ function(config) {
 			if(this._currentQuestion.type=='point'){
 				if(me._currentQuestion.imageUrl!=null){
 					var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
-					style.graphicWidth = 20;
-					style.graphicHeight = 20;
-					style.graphicXOffset = -10;
-					style.graphicYOffset = -10;
+					
+					// Check at if defined image size
+					if(me._currentQuestion.imageWidth!=null){
+						style.graphicWidth = me._currentQuestion.imageWidth;
+					}else{					
+						style.graphicWidth = 20;
+					}					
+					if(me._currentQuestion.imageHeight!=null){
+						style.graphicHeight = me._currentQuestion.imageHeight;
+					}else{					
+						style.graphicHeight = 20;
+					}
+					
+					// Check at if defined offset
+					if(me._currentQuestion.imageXOffset!=null){
+						style.graphicXOffset = me._currentQuestion.imageXOffset;
+					} else{					
+						style.graphicXOffset = -10;
+					}					
+					if(me._currentQuestion.imageYOffset!=null){
+						style.graphicYOffset = me._currentQuestion.imageYOffset;
+					} else{					
+						style.graphicYOffset = -10;
+					}					
+					
+					
 					style.externalGraphic = me._currentQuestion.imageUrl;
 					style.graphicOpacity = 1;
 				
@@ -457,9 +502,22 @@ function(config) {
 					layer.redraw();
 				} else {
 					var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
-					style.strokeColor='#000000';
-					style.fillColor='#000000';					
-					style.fillOpacity=0.4;
+					
+					if(me._currentQuestion.color!=null){
+						style.strokeColor=me._currentQuestion.color;
+						style.fillColor=me._currentQuestion.color;
+					} 
+					else {					
+						style.strokeColor='#000000';
+						style.fillColor='#000000';		
+					}
+					
+					if(me._currentQuestion.opacity!=null){
+						style.fillOpacity=me._currentQuestion.opacity;
+					} else {
+						style.fillOpacity=0.4;
+					}					
+					
 					style.strokeOpacity=1;					
 					style.strokeWidth=2;
 					style.cursor = 'pointer';
@@ -573,7 +631,7 @@ function(config) {
      * @method getModuleById
      * Get module by id
      * @param {String} moduleId
-     * @returns founded module if exists. If not return null.
+     * @returns {Object} founded module if exists. If not return null.
      */
     "getModuleById" : function(moduleId){
     	var me = this;
@@ -594,6 +652,7 @@ function(config) {
     	me._currentPopupHtml = null;
     	me._currentControls.modify = null;
     	me._currentControls.draw = null;
+    	me._currentStepAndQuestion = null;
     	jQuery.each(me.modules, function(k, module){
     		for(var key in module.drawControls) {
             	module.drawControls[key].deactivate();
@@ -614,8 +673,8 @@ function(config) {
      * @method getQuestionById
      * Get question by id
      * @param {String} questionId
-     * @param {Array} questions
-     * @returns founded question if exists. If not return null.
+     * @param {String[]} questions
+     * @returns {Object} founded question if exists. If not return null.
      */
     "getQuestionById" : function(questionId, questions){
     	var me = this;
@@ -636,7 +695,6 @@ function(config) {
     "activateControl" : function(moduleId, questionId){
     	var me = this;
     	var module = me.getModuleById(moduleId);
-    	me.deActivateAll();
     	if(module!=null){
     		var question = me.getQuestionById(questionId, module.questions);
     		if(question!=null){
