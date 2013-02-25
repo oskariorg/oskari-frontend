@@ -34,11 +34,7 @@ function(plugin) {
     this._doMapLayerReArrange = false;
 
     this.sandbox = plugin._sandbox;
-    //this.endpointUrl = endpointUrl;
     this.endpointUrl = this.sandbox.getAjaxUrl();
-    this.pngUrl = this.endpointUrl.replace('ajax.jsp&', 'png.jsp');
-    this.pngUrl = this.pngUrl.replace('p_p_lifecycle=1', 'p_p_lifecycle=2');
-    this.pngUrl = this.pngUrl.replace('p_p_state=exclusive', 'p_p_state=normal');
 }, {
     __qname : "Oskari.mapframework.bundle.mapwfs.service.WfsTileService",
     getQName : function() {
@@ -218,7 +214,7 @@ function(plugin) {
                     "&flow_pm_bbox_max_x=" + bbox.right + 
                     "&flow_pm_bbox_max_y=" + bbox.top + 
                     "&flow_pm_map_width="  + mapWidth + 
-                    "&flow_pm_map_heigh=" + mapHeight + 
+                    "&flow_pm_map_height=" + mapHeight + 
                     "&action_route=GET_HIGHLIGHT_WFS_FEATURE_IMAGE";
             var recDraw = function(featureId) {
                 me.plugin.drawImageTile(layer, url + "&wfsFeatureId=" + featureId, 
