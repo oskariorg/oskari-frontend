@@ -6,6 +6,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
 /**
  * @method create called automatically on construction
  * @static
+ * @param {Object} locale array
  */
 function(locale) {
     this.mapModule = null;
@@ -35,7 +36,15 @@ function(locale) {
                 strokeOpacity: 0.4,
                 strokeWidth: 3
         })
-    });
+    });    
+    this.templateSearchByGeom = jQuery('<div class="search-by-geometry"></div>');
+    this.templateSearchByGeomPanTool = jQuery('<div id="searchbygeom-pan" class="searchbygeom-tool searchbygeom-pan"></div>');
+    this.templateSearchByGeomPointTool = jQuery('<div id="searchbygeom-point" class="searchbygeom-tool searchbygeom-point"></div>');
+    this.templateSearchByGeomLineTool = jQuery('<div id="searchbygeom-line" class="searchbygeom-tool searchbygeom-line"></div>');
+    this.templateSearchByGeomMapExtentTool = jQuery('<div id="searchbygeom-mapextent" class="searchbygeom-tool searchbygeom-mapextent"></div>');
+    this.templateSearchByGeomRegularPolygonTool = jQuery('<div id="searchbygeom-regular-polygon" class="searchbygeom-tool searchbygeom-regular-polygon"></div>');
+    this.templateSearchByGeomPolygonTool = jQuery('<div id="searchbygeom-polygon" class="searchbygeom-tool searchbygeom-polygon"></div>');
+    this.templateSearchByGeomEmpty = jQuery('<div style="clear:both;"></div>');
 }, {
     /** @static @property __name plugin name */
     __name : 'HaravaDrawSearchGeometryPlugin',
@@ -132,13 +141,29 @@ function(locale) {
     	
     	this.searchControls.regularPolygon.handler.setOptions({irregular: true});
     	
-    	jQuery('#searchbygeom').append('<div class="search-by-geometry">'
-    			+ '<div id="searchbygeom-pan" class="searchbygeom-tool searchbygeom-pan" title="'+this._locale.tooltips.panMap+'"></div>'
-    			+ '<div id="searchbygeom-point" class="searchbygeom-tool searchbygeom-point" title="'+this._locale.tooltips.searchByPoint+'"></div>'
-    			//+ '<div id="searchbygeom-line" class="searchbygeom-tool searchbygeom-line" title="'+this._locale.tooltips.searchByLine+'"></div>'
-    			+ '<div id="searchbygeom-mapextent" class="searchbygeom-tool searchbygeom-mapextent" title="'+this._locale.tooltips.searchByMapExtent+'"></div>'
-    			+ '<div id="searchbygeom-regular-polygon" class="searchbygeom-tool searchbygeom-regular-polygon" title="'+this._locale.tooltips.searchByRegularPolygon+'"></div>'
-    			+ '<div id="searchbygeom-polygon" class="searchbygeom-tool searchbygeom-polygon" title="'+this._locale.tooltips.searchByPolygon+'"></div><div style="clear:both;"></div></div>');    	
+    	var searchContainer = me.templateSearchByGeom.clone();    	
+    	var searchPanContainer = me.templateSearchByGeomPanTool.clone();
+    	searchPanContainer.attr('title',this._locale.tooltips.panMap);    	
+    	var searchPointContainer = me.templateSearchByGeomPointTool.clone();
+    	searchPointContainer.attr('title',this._locale.tooltips.searchByPoint);    	
+    	var searchLineContainer = me.templateSearchByGeomLineTool.clone();
+    	searchLineContainer.attr('title',this._locale.tooltips.searchByLine);    	
+    	var searchMapExtentContainer = me.templateSearchByGeomMapExtentTool.clone();
+    	searchMapExtentContainer.attr('title',this._locale.tooltips.searchByMapExtent);    	
+    	var searchRegularPolygonContainer = me.templateSearchByGeomRegularPolygonTool.clone();
+    	searchRegularPolygonContainer.attr('title',this._locale.tooltips.searchByRegularPolygon);    	
+    	var searchPolygonContainer = me.templateSearchByGeomPolygonTool.clone();
+    	searchPolygonContainer.attr('title',this._locale.tooltips.searchByPolygon);    	
+    	var searchEmptyContainer = me.templateSearchByGeomEmpty.clone();
+    	
+    	jQuery('#searchbygeom').append(searchContainer);
+    	jQuery(searchContainer).append(searchPanContainer);
+    	jQuery(searchContainer).append(searchPointContainer);
+    	//jQuery(searchContainer).append(searchLineContainer);
+    	jQuery(searchContainer).append(searchMapExtentContainer);
+    	jQuery(searchContainer).append(searchRegularPolygonContainer);
+    	jQuery(searchContainer).append(searchPolygonContainer);
+    	jQuery(searchContainer).append(searchEmptyContainer);
     	
     	jQuery('.searchbygeom-tool').live('click', function(){
     		var id = this.id;
@@ -163,9 +188,9 @@ function(locale) {
 			    	},200);
 			    	
     				break;
-    			/*case 'searchbygeom-line':
+    			case 'searchbygeom-line':
     				me.toggleControl('line'); 
-    				break;*/
+    				break;
     			case 'searchbygeom-polygon':
     				me.toggleControl('polygon'); 
     				break;

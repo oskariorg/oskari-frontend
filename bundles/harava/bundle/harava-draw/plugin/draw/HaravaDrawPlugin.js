@@ -6,6 +6,8 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawPlugin',
 /**
  * @method create called automatically on construction
  * @static
+ * @param {Object} locale array
+ * @param {Object} conf array 
  */
 function(locale, conf) {
     this.mapModule = null;
@@ -32,6 +34,15 @@ function(locale, conf) {
                 cursor: 'pointer'
         })
     });
+    
+    this.templateAddGeometryTools = jQuery('<div id="harava-add-geometry-tools"></div>');
+    this.templateAddGeometry = jQuery('<div id="harava-add-geometry"></div>');    
+    this.templateAddPointGeometry = jQuery('<div id="harava-add-geometry-tool-point" class="harava-add-geometry-tool harava-add-geometry-tool-point harava-add-geometry-top-tooltopmargin"></div>');
+    this.templateAddLineGeometry = jQuery('<div id="harava-add-geometry-tool-line" class="harava-add-geometry-tool harava-add-geometry-tool-line"></div>');
+    this.templateAddPolygonGeometry = jQuery('<div id="harava-add-geometry-tool-area" class="harava-add-geometry-tool harava-add-geometry-tool-area"></div>');
+    this.templateSelectGeometry = jQuery('<div id="harava-add-geometry-tool-select" class="harava-add-geometry-tool harava-add-geometry-tool-select"></div>');
+    this.templateDeleteSelectedGeometry = jQuery('<div id="harava-add-geometry-tool-delete" class="harava-add-geometry-tool harava-add-geometry-tool-delete"></div>');
+
 }, {
     /** @static @property __name plugin name */
     __name : 'HaravaDrawPlugin',
@@ -98,6 +109,7 @@ function(locale, conf) {
     /**
      * Add WKT String to map
      * @param {String} wktString
+     * @param {String} type
      */
     addWKT: function(wktString, type){
     	var me = this;
@@ -188,22 +200,28 @@ function(locale, conf) {
         this.modifyControl = new OpenLayers.Control.ModifyFeature(me._drawLayer, {
             autoActivate:true
             });
-    	    	
         
-        var html='<div id="harava-add-geometry-tools"></div>';
-        jQuery('#'+me._map.div.id).append('<div id="harava-add-geometry"></div>');
-        jQuery('#harava-add-geometry').append(html);
-        var tool0 = '<div title="'+me._locale.tooltips.drawPoint+'" id="harava-add-geometry-tool-point" class="harava-add-geometry-tool harava-add-geometry-tool-point harava-add-geometry-top-tooltopmargin"></div>';
-        var tool1 = '<div title="'+me._locale.tooltips.drawLine+'" id="harava-add-geometry-tool-line" class="harava-add-geometry-tool harava-add-geometry-tool-line"></div>';
-        var tool2 = '<div title="'+me._locale.tooltips.drawPolygon+'" id="harava-add-geometry-tool-area" class="harava-add-geometry-tool harava-add-geometry-tool-area"></div>';
-        var tool3 = '<div title="'+me._locale.tooltips.selectGeometry+'" id="harava-add-geometry-tool-select" class="harava-add-geometry-tool harava-add-geometry-tool-select"></div>';
-        var tool4 = '<div title="'+me._locale.tooltips.deleteSelectedDraw+'" id="harava-add-geometry-tool-delete" class="harava-add-geometry-tool harava-add-geometry-tool-delete"></div>';
+        var addGeometryToolsContainer = me.templateAddGeometryTools.clone();
+        var addGeometryContainer = me.templateAddGeometry.clone();
         
-        jQuery('#harava-add-geometry-tools').append(tool0);
-        jQuery('#harava-add-geometry-tools').append(tool1);
-        jQuery('#harava-add-geometry-tools').append(tool2);
-        jQuery('#harava-add-geometry-tools').append(tool3);
-        jQuery('#harava-add-geometry-tools').append(tool4);
+        var addPointGeometryContainer = me.templateAddPointGeometry.clone();
+        addPointGeometryContainer.attr('title',me._locale.tooltips.drawPoint);
+        var addLineGeometryContainer = me.templateAddLineGeometry.clone();
+        addLineGeometryContainer.attr('title',me._locale.tooltips.drawLine);
+        var addPolygonGeometryContainer = me.templateAddPolygonGeometry.clone();
+        addPolygonGeometryContainer.attr('title',me._locale.tooltips.drawPolygon);
+        var selectGeometryContainer = me.templateSelectGeometry.clone();
+        selectGeometryContainer.attr('title',me._locale.tooltips.selectGeometry);
+        var deleteSelectedGeometryContainer = me.templateDeleteSelectedGeometry.clone();
+        deleteSelectedGeometryContainer.attr('title',me._locale.tooltips.deleteSelectedDraw);
+        
+        jQuery('#'+me._map.div.id).append(addGeometryContainer);
+        jQuery(addGeometryContainer).append(addGeometryToolsContainer);                
+        jQuery(addGeometryToolsContainer).append(addPointGeometryContainer);
+        jQuery(addGeometryToolsContainer).append(addLineGeometryContainer);
+        jQuery(addGeometryToolsContainer).append(addPolygonGeometryContainer);
+        jQuery(addGeometryToolsContainer).append(selectGeometryContainer);
+        jQuery(addGeometryToolsContainer).append(deleteSelectedGeometryContainer);
         
         jQuery('.harava-add-geometry-tool').live('click', function(){
         	me._sandbox.postRequestByName('StartGeometrySearchRequest', ['pan']);
@@ -250,7 +268,7 @@ function(locale, conf) {
     },
     /**
      * Get all geometries
-     * returns all feature geometries on array 
+     * @return {OpenLayers.Feature[]} features
      */
     getAllFeatures: function(){
     	var me = this;
@@ -316,11 +334,11 @@ function(locale, conf) {
 		me.modifyControl.deactivate();
     },
     /**
+     * @method toggleControl
      * Enables the given control
      * Disables all the other controls
      * @param mode control to activate (if undefined, disables all
      * controls)
-     * @method
      */
     toggleControl : function(mode) {
     	this.currentMode = mode;

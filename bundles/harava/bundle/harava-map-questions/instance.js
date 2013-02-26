@@ -23,8 +23,7 @@ function() {
 	this.templateQuestionsContent = jQuery('<div id="harava-map-questions-content"></div>');	
 	this.templateQuestion = jQuery('<div class="harava-question"></div>');
 	this.templateQuestionTitle = jQuery('<div class="harava-question-title"></div>');
-	this.templateQuestionTool = jQuery('<div class="harava-question-tool"></div>');
-	
+	this.templateQuestionTool = jQuery('<div class="harava-question-tool"></div>');	
 }, {
 	_currentStep: '',
 	/**
@@ -209,7 +208,7 @@ function() {
     /**
      * @method getCurrentModuleFeatures
      * Get current module all features
-     * @returns {OpenLayers.Feature[]} features
+     * @return {OpenLayers.Feature[]} features
      */
     "getCurrentModuleFeatures" :function(){
     	var me = this;
@@ -219,7 +218,7 @@ function() {
     /**
      * @method getAllModuleFeatures
      * Get all modules all features
-     * @returns {OpenLayers.Feature[]} features
+     * @return {OpenLayers.Feature[]} features
      */
     "getAllModuleFeatures": function(){
     	var me = this;
@@ -298,7 +297,7 @@ function() {
      * @method getModuleById
      * Get module by id
      * @param {String} moduleId
-     * @returns founded module if exists. If not return null.
+     * @return {Object} founded module if exists. If not return null.
      */
     "getModuleById" : function(moduleId){
     	var me = this;
@@ -315,7 +314,7 @@ function() {
      * Get question by id
      * @param {String} questionId
      * @param {String[]} questions
-     * @returns founded question if exists. If not return null.
+     * @return {Object} founded question if exists. If not return null.
      */
     "getQuestionById" : function(questionId, questions){
     	var me = this;

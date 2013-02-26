@@ -7,6 +7,13 @@
  */
 Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.AddWKTGeometryRequest', 
 
+/**
+ * @method create called automatically on construction
+ * @static
+ *
+ * @param {String}
+ *            wktString wkt string
+ */
 function(wktString) {
     this._wktString = wktString;
 }, {

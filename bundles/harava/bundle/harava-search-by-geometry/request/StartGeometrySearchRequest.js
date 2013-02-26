@@ -6,7 +6,11 @@
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.StartGeometrySearchRequest', 
-
+/**
+ * @method create called automatically on construction
+ * @static
+ * @param {String} search mode, supported modes are: point, line, polygon, regularPolygon, mapExtent and pan
+ */
 function(searchMode) {
     // start drawing new
     if (!this._searchModes[searchMode]) {

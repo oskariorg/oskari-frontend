@@ -123,7 +123,7 @@ function() {
     },
     /**
      * Get all geometries
-     * returns all feature geometries on array 
+     * @return {OpenLayers.Feature[]} features
      */
     getAllFeatures: function(){
     	var me = this;

@@ -9,6 +9,10 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.ZoomToExtentRequest'
 /**
  * @method create called automatically on construction
  * @static
+ * @param {Float} minx min x
+ * @param {Float} miny min y
+ * @param {Float} maxx max x
+ * @param {Float} maxy max y
  */
 function(minx,miny,maxx,maxy) {
 	this._creator = null;

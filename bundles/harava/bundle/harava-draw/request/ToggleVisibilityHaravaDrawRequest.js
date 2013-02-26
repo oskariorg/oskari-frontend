@@ -7,6 +7,15 @@
  */
 Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityHaravaDrawRequest', 
 
+/**
+ * @method create called automatically on construction
+ * @static
+ *
+ * @param {Boolean}
+ *            	visible is tool visible
+ * @param {Boolean}
+ * 				deleteAll delete all orher drawings
+ */
 function(visible, deleteAll) {
     this._visible = visible;
     this._deleteAll = deleteAll;

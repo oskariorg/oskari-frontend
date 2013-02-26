@@ -7,6 +7,11 @@
  */
 Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityGeometrySearchRequest', 
 
+/**
+ * @method create called automatically on construction
+ * @static
+ * @param {Boolean} search tool visibility
+ */
 function(visible) {
     this._visible = visible;
 }, {
