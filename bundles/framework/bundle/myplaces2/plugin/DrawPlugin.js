@@ -81,7 +81,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
     
     forceFinishDraw : function() {
     	try {
-    		this.drawControls[this.currentDrawMode].finishSketch();
+            //needed when preparing unfinished objects but causes unwanted features into the layer:
+    		//this.drawControls[this.currentDrawMode].finishSketch();
             this.finishedDrawing(true);
     	}
     	catch(error) {
