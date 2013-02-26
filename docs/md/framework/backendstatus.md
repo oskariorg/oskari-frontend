@@ -11,11 +11,7 @@
 
 ## Description
 
-''Describe what the bundle does.''
-
-## TODO
-
-* ''List any planned features''
+Polls a backend system for map layers monitoring statuses
 
 ## Screenshot
 
