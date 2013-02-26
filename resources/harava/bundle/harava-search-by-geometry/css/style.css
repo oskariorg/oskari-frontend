@@ -20,6 +20,16 @@
     height: 32px;
     float:left;
     margin: 2px;
+    cursor: pointer;
+}
+
+.searchbygeom-pan{
+    background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/pan.png') no-repeat;
+    background-position: center center;
+}
+
+.searchbygeom-pan.active{
+    background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/pan_active.png') no-repeat !important;
 }
 
 .searchbygeom-point{

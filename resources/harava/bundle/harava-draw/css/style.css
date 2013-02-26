@@ -1,0 +1,80 @@
+@CHARSET "UTF-8";
+
+#harava-add-geometry{
+	position:absolute;
+	top:70px;
+	left:0;
+	width:47px;
+	height:210px;
+	background-color:#009999;
+	z-index:2000;
+	-webkit-border-bottom-right-radius: 15px;
+	-moz-border-radius-bottomright: 15px;
+	border-bottom-right-radius: 15px;
+	-webkit-border-top-right-radius: 15px;
+	-moz-border-radius-topright: 15px;
+	border-top-right-radius: 15px;
+}
+
+#searchbygeom {
+    position: absolute;
+    z-index:1000;
+    top: 5px;
+    left:5px;
+}
+
+.harava-add-geometry-tool{
+    cursor: pointer;
+    height: 32px;
+    margin: 5px;
+    width: 32px;
+    background-color:#ff00ff;
+}
+
+.harava-add-geometry-top-tooltopmargin{
+	margin-top: 15px;
+}
+
+.harava-add-geometry-tool-point{
+    background: url('/Oskari/resources/harava/bundle/harava-draw/images/draw_point.png') no-repeat;
+    background-position: center center;
+}
+
+.harava-add-geometry-tool-point.active{
+    background: url('/Oskari/resources/harava/bundle/harava-draw/images/draw_point_active.png') no-repeat !important;
+}
+
+.harava-add-geometry-tool-line{
+    background: url('/Oskari/resources/harava/bundle/harava-draw/images/draw_line.png') no-repeat;
+    background-position: center center;
+}
+
+.harava-add-geometry-tool-line.active{
+    background: url('/Oskari/resources/harava/bundle/harava-draw/images/draw_line_active.png') no-repeat !important;
+}
+
+.harava-add-geometry-tool-area{
+    background: url('/Oskari/resources/harava/bundle/harava-draw/images/draw_area.png') no-repeat;
+    background-position: center center;
+}
+
+.harava-add-geometry-tool-area.active{
+    background: url('/Oskari/resources/harava/bundle/harava-draw/images/draw_area_active.png') no-repeat !important;
+}
+
+.harava-add-geometry-tool-delete{
+    background: url('/Oskari/resources/harava/bundle/harava-draw/images/delete.png') no-repeat;
+    background-position: center center;
+}
+
+.harava-add-geometry-tool-delete.active{
+    background: url('/Oskari/resources/harava/bundle/harava-draw/images/delete_active.png') no-repeat !important;
+}
+
+.harava-add-geometry-tool-select{background: url('/Oskari/resources/harava/bundle/harava-draw/images/select.png') no-repeat;
+    background-position: center center;
+}
+
+.harava-add-geometry-tool-select.active{
+    background: url('/Oskari/resources/harava/bundle/harava-draw/images/select_active.png') no-repeat !important;
+}

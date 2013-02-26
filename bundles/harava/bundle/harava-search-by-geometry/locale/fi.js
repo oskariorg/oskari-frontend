@@ -12,7 +12,8 @@ Oskari.registerLocalization({
 				"searchByPolygon": "Hae piirtämällä monikulmio",
 				"searchByMapExtent": "Hae kartan alueelta",
 				"searchNotFound": "Alueelta ei löytynyt yhtään organisaatiota, hanketta tai tiedonhankintaa.",
-				"searchNotFoundOkButton": "OK"
+				"searchNotFoundOkButton": "OK",
+				"panMap": "Liikuta karttaa"
 			}
 		}
 	}

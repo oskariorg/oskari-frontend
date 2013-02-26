@@ -1,26 +1,35 @@
 /**
- * @class Oskari.harava.bundle.mapquestions.request.ToggleQuestionToolsRequest
- * Requests a hide question tools
+ * @class Oskari.harava.bundle.mapmodule.request.ToggleVisibilityGeometrySearchRequest
+ * Requests a toggle visibility geometry search
  * 
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ToggleQuestionToolsRequest', 
+Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityGeometrySearchRequest', 
 
 /**
  * @method create called automatically on construction
  * @static
+ * @param {Boolean} search tool visibility
  */
-function() {
+function(visible) {
+    this._visible = visible;
 }, {
 	/** @static @property __name request name */
-    __name : "ToggleQuestionToolsRequest",
+    __name : "ToggleVisibilityGeometrySearchRequest",
     /**
      * @method getName
      * @return {String} request name
      */
     getName : function() {
         return this.__name;
+    },
+    /**
+     * @method getVisibility
+     * @return {Boolean} visibility
+     */
+    getVisibility : function() {
+        return this._visible;
     }
 }, {
 	/**

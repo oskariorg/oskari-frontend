@@ -6,6 +6,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
 /**
  * @method create called automatically on construction
  * @static
+ * @param {Object} locale array
  */
 function(locale) {
     this.mapModule = null;
@@ -35,7 +36,15 @@ function(locale) {
                 strokeOpacity: 0.4,
                 strokeWidth: 3
         })
-    });
+    });    
+    this.templateSearchByGeom = jQuery('<div class="search-by-geometry"></div>');
+    this.templateSearchByGeomPanTool = jQuery('<div id="searchbygeom-pan" class="searchbygeom-tool searchbygeom-pan"></div>');
+    this.templateSearchByGeomPointTool = jQuery('<div id="searchbygeom-point" class="searchbygeom-tool searchbygeom-point"></div>');
+    this.templateSearchByGeomLineTool = jQuery('<div id="searchbygeom-line" class="searchbygeom-tool searchbygeom-line"></div>');
+    this.templateSearchByGeomMapExtentTool = jQuery('<div id="searchbygeom-mapextent" class="searchbygeom-tool searchbygeom-mapextent"></div>');
+    this.templateSearchByGeomRegularPolygonTool = jQuery('<div id="searchbygeom-regular-polygon" class="searchbygeom-tool searchbygeom-regular-polygon"></div>');
+    this.templateSearchByGeomPolygonTool = jQuery('<div id="searchbygeom-polygon" class="searchbygeom-tool searchbygeom-polygon"></div>');
+    this.templateSearchByGeomEmpty = jQuery('<div style="clear:both;"></div>');
 }, {
     /** @static @property __name plugin name */
     __name : 'HaravaDrawSearchGeometryPlugin',
@@ -77,6 +86,22 @@ function(locale) {
         return true;
     },
     /**
+     * Toggle plugin visibility
+     * @param visible
+     */
+    toggleVisibility: function(visible){
+    	var me = this;
+    	if(visible){
+    		jQuery('#searchbygeom').show();
+    	}
+    	else{
+    		jQuery('#searchbygeom').hide();
+    		jQuery('#searchbygeom-pan').trigger('click');
+    		me.removeAllDrawings();
+    		me._closeGfiInfo();
+    	}
+    },
+    /**
      * @method init
      *
      * Interface method for the module protocol
@@ -111,17 +136,34 @@ function(locale) {
             regularPolygon: new OpenLayers.Control.DrawFeature(me._searchLayer,
                                 OpenLayers.Handler.RegularPolygon),
             polygon: new OpenLayers.Control.DrawFeature(me._searchLayer,
-                        OpenLayers.Handler.Polygon),
+                        OpenLayers.Handler.Polygon)
         };
     	
     	this.searchControls.regularPolygon.handler.setOptions({irregular: true});
     	
-    	jQuery('#searchbygeom').append('<div class="search-by-geometry">'
-    			+ '<div id="searchbygeom-point" class="searchbygeom-tool searchbygeom-point" title="'+this._locale.tooltips.searchByPoint+'"></div>'
-    			//+ '<div id="searchbygeom-line" class="searchbygeom-tool searchbygeom-line" title="'+this._locale.tooltips.searchByLine+'"></div>'
-    			+ '<div id="searchbygeom-mapextent" class="searchbygeom-tool searchbygeom-mapextent" title="'+this._locale.tooltips.searchByMapExtent+'"></div>'
-    			+ '<div id="searchbygeom-regular-polygon" class="searchbygeom-tool searchbygeom-regular-polygon" title="'+this._locale.tooltips.searchByRegularPolygon+'"></div>'
-    			+ '<div id="searchbygeom-polygon" class="searchbygeom-tool searchbygeom-polygon" title="'+this._locale.tooltips.searchByPolygon+'"></div></div>');    	
+    	var searchContainer = me.templateSearchByGeom.clone();    	
+    	var searchPanContainer = me.templateSearchByGeomPanTool.clone();
+    	searchPanContainer.attr('title',this._locale.tooltips.panMap);    	
+    	var searchPointContainer = me.templateSearchByGeomPointTool.clone();
+    	searchPointContainer.attr('title',this._locale.tooltips.searchByPoint);    	
+    	var searchLineContainer = me.templateSearchByGeomLineTool.clone();
+    	searchLineContainer.attr('title',this._locale.tooltips.searchByLine);    	
+    	var searchMapExtentContainer = me.templateSearchByGeomMapExtentTool.clone();
+    	searchMapExtentContainer.attr('title',this._locale.tooltips.searchByMapExtent);    	
+    	var searchRegularPolygonContainer = me.templateSearchByGeomRegularPolygonTool.clone();
+    	searchRegularPolygonContainer.attr('title',this._locale.tooltips.searchByRegularPolygon);    	
+    	var searchPolygonContainer = me.templateSearchByGeomPolygonTool.clone();
+    	searchPolygonContainer.attr('title',this._locale.tooltips.searchByPolygon);    	
+    	var searchEmptyContainer = me.templateSearchByGeomEmpty.clone();
+    	
+    	jQuery('#searchbygeom').append(searchContainer);
+    	jQuery(searchContainer).append(searchPanContainer);
+    	jQuery(searchContainer).append(searchPointContainer);
+    	//jQuery(searchContainer).append(searchLineContainer);
+    	jQuery(searchContainer).append(searchMapExtentContainer);
+    	jQuery(searchContainer).append(searchRegularPolygonContainer);
+    	jQuery(searchContainer).append(searchPolygonContainer);
+    	jQuery(searchContainer).append(searchEmptyContainer);
     	
     	jQuery('.searchbygeom-tool').live('click', function(){
     		var id = this.id;
@@ -146,14 +188,17 @@ function(locale) {
 			    	},200);
 			    	
     				break;
-    			/*case 'searchbygeom-line':
+    			case 'searchbygeom-line':
     				me.toggleControl('line'); 
-    				break;*/
+    				break;
     			case 'searchbygeom-polygon':
     				me.toggleControl('polygon'); 
     				break;
     			case 'searchbygeom-regular-polygon':
     				me.toggleControl('regularPolygon');
+    				break;
+    			case 'searchbygeom-pan':
+    				me.toggleControl('pan');
     				break;
     		}
     	});
@@ -164,7 +209,7 @@ function(locale) {
         }
     	
     	// Do default tool selection
-    	$('#searchbygeom-point').trigger('click');
+    	jQuery('#searchbygeom-pan').trigger('click');
     },
     /**
      * @method _handleSearchByGeom
@@ -479,7 +524,7 @@ function(locale) {
  		var mapScale = me._sandbox.getMap().getScale();
         
         for (var i = 0; i < selected.length; i++) {
-        	var layer = selected[i]
+        	var layer = selected[i];
 
         	if( !layer.isInScale(mapScale) ) {
 				continue;
@@ -577,7 +622,23 @@ function(locale) {
     	var me = this;
     	me._closeGfiInfo();
     	me.removeAllDrawings();
-    	me.toggleControl(searchMode);    	
+    	switch(searchMode){
+			case 'point':
+				jQuery('#searchbygeom-point').trigger('click');
+				break;
+			case 'mapextent':
+				jQuery('#searchbygeom-mapextent').trigger('click');
+				break;
+			case 'polygon':
+				jQuery('#searchbygeom-polygon').trigger('click'); 
+				break;
+			case 'regularPolygon':
+				jQuery('#searchbygeom-regular-polygon').trigger('click');
+				break;
+			case 'pan':
+				jQuery('#searchbygeom-pan').trigger('click');
+				break;
+		}
     },
     /**
      * Enables the given search control
