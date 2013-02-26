@@ -509,7 +509,7 @@ function() {
             var layerName = layer ? layer.getName() : '';
             var type = datum.type;
 
-            if (type == "WFS_LAYER") {
+            if (type == "wfslayer") {
                 var features = datum.features;
                 if (!(features && features.length)) {
                     continue;
