@@ -5,6 +5,7 @@ docroot/WEB-INF/classes
 bin/
 dist/
 .idea
+.iml
 tools/node_modules
 tools/validation
 META-INF/

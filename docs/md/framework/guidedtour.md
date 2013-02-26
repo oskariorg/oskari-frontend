@@ -11,52 +11,21 @@
 
 ## Description
 
-''Describe what the bundle does.''
-
-## TODO
-
-* ''List any planned features''
+Shows a dialog on startup to instruct user on map functionalities in paikkatietoikkuna.fi
 
 ## Screenshot
 
-![screenshot](<%= docsurl %>images/bundle_id.png)
+![screenshot](<%= docsurl %>images/guidedtour.png)
 
 ## Bundle configuration
-
-```javascript
-config : {
-  test : 1
-}
-```
-
-OR
 
 No configuration is required.
 
 ## Bundle state
 
-```javascript
-state : {
-  test : 2
-}
-```
-
-OR
-
 No statehandling has been implemented.
 
 ## Requests the bundle handles
-
-<table>
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td>tbd</td><td>tbd</td>
-  </tr>
-</table>
-
-OR
 
 This bundle doesn't handle any requests.
 
@@ -67,41 +36,15 @@ This bundle doesn't handle any requests.
     <th>Request</th><th>Why/when</th>
   </tr>
   <tr>
-    <td>tbd</td><td>tbd</td>
+    <td>userinterface.UpdateExtensionRequest</td><td>Opens and closes flyouts when demonstrating functionalities</td>
   </tr>
 </table>
-
-OR
-
-This bundle doesn't send out any requests.
 
 ## Events the bundle listens to
-
-<table>
-  <tr>
-    <th>Event</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td>tbd</td><td>tbd</td>
-  </tr>
-</table>
-
-OR
 
 This bundle doesn't listen to any events.
 
 ## Events the bundle sends out
-
-<table>
-  <tr>
-    <th>Event</th><th>Why/when</th>
-  </tr>
-  <tr>
-    <td>tbd</td><td>tbd</td>
-  </tr>
-</table>
-
-OR
 
 This bundle doesn't send out any events.
 
@@ -112,10 +55,58 @@ This bundle doesn't send out any events.
     <th>Dependency</th><th>Linked from</th><th>Purpose</th>
   </tr>
   <tr>
-    <td>[Library name](#link)</td><td>src where its linked from</td><td>*why/where we need this dependency*</td>
+    <td> [jQuery](http://api.jquery.com/) </td>
+    <td> Linked in portal theme </td>
+    <td> Used to create the component UI from begin to end</td>
+  </tr>
+  <tr>
+    <td> [Oskari divmanazer](<%= docsurl %>framework/divmanazer.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> Needed for flyout/tile functionality</td>
+  </tr>
+  <tr>
+    <td> [Oskari toolbar](<%= docsurl %>framework/toolbar.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> Needed for demonstrating functionality</td>
+  </tr>
+  <tr>
+    <td> [Oskari search](<%= docsurl %>framework/search.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> Needed for demonstrating functionality</td>
+  </tr>
+  <tr>
+    <td> [Oskari layerselector](<%= docsurl %>framework/layerselector.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> Needed for demonstrating functionality</td>
+  </tr>
+  <tr>
+    <td> [Oskari layerselection](<%= docsurl %>framework/layerselection.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> Needed for demonstrating functionality</td>
+  </tr>
+  <tr>
+    <td> [Oskari personaldata](<%= docsurl %>framework/personaldata.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> Needed for demonstrating functionality</td>
+  </tr>
+  <tr>
+    <td> [Oskari publisher](<%= docsurl %>framework/publisher.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> Needed for demonstrating functionality</td>
+  </tr>
+  <tr>
+    <td> [Oskari mapmodule](<%= docsurl %>framework/mapmodule.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> Needed for demonstrating functionality</td>
+  </tr>
+  <tr>
+    <td> [Oskari mapmodule/portti2zoombar](<%= docsurl %>framework/mapmodule/portti2zoombar.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> Needed for demonstrating functionality</td>
+  </tr>
+  <tr>
+    <td> [Oskari mapmodule/panbuttons](<%= docsurl %>framework/mapmodule/panbuttons.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> Needed for demonstrating functionality</td>
   </tr>
 </table>
-
-OR
-
-This bundle doesn't have any dependencies.
