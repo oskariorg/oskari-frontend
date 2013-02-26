@@ -42,7 +42,7 @@ module.exports = function(grunt) {
                 ],
 // uncommented as validate causes unnecessary delay
 //            tasks: 'validate compile testacularRun:dev yuidoc'
-            tasks: 'compile testacularRun:dev yuidoc'
+            tasks: 'compile testacularRun:dev'
         },
         yuidoc: {
             options: {

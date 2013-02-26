@@ -106,6 +106,10 @@ Enabled with config:
 
 Created AbstractLayer.js that is inherited by all layer implementations. The abstract function implementations will unify layer functionality. The WmtsLayer will also correctly use legends if defined and type 'wmtslayer' will return false when called isLayerOfType. Use 'wmts' instead.
 
+### statehandler
+
+Added conf to enable usage logging to the conf url. Replaced UsageSnifferService with _logState in statehandler.
+
 ## 1.5 release notes
 
 ### personal data bundle
