@@ -204,7 +204,16 @@ function() {
     	contentEl.empty();
     	contentEl.append(content);
     },
-    	
+
+     /**
+     * @method getContent
+     * Gets dialog content element
+     * @return {String} dialog content
+     */
+    getContent: function() {
+    	return this.dialog.find('div.content')[0].textContent;
+    },
+
     /**
      * @method makeDraggable
      * Makes dialog draggable with jQuery Event Drag plugin

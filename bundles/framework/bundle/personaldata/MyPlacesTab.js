@@ -204,27 +204,30 @@ function(instance, localization) {
     	dialog.makeModal();
     },
     /**
-     * @method getDrawModeFromGeometry
-     * Returns a matching drawmode string-key for the geometry
-     * @param geometry openlayers geometry from my place model
-     */
+     * @method _getDrawModeFromGeometry
+     * Returns a matching draw mode string-key for the geometry
+     * @param {OpenLayers.Geometry} geometry openlayers geometry from my place model
+     * @return {String} matching draw mode string-key for the geometry
+     * @private
+     * */
     _getDrawModeFromGeometry : function(geometry) {
         var olClass = geometry.CLASS_NAME;
-        if('OpenLayers.Geometry.Point' === olClass) {
+        if (('OpenLayers.Geometry.MultiPoint' === olClass)||('OpenLayers.Geometry.Point' === olClass)) {
         	return 'point';
         } 
-        else if('OpenLayers.Geometry.LineString' === olClass) {
+        else if (('OpenLayers.Geometry.MultiLineString' === olClass)||('OpenLayers.Geometry.LineString' === olClass)) {
         	return 'line';
         }
-        else if('OpenLayers.Geometry.Polygon' === olClass){
+        else if (('OpenLayers.Geometry.MultiPolygon' === olClass)||('OpenLayers.Geometry.Polygon' === olClass)){
         	return 'area';
         }
         return null;
     },
     /**
-     * @method _populatePlaces
+     * @method _createCategoryTab
      * Populates given categorys grid
-     * @param {Number} categoryId id for category to populate
+     * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory} category category to populate
+     * @private
      */
     _createCategoryTab : function(category) {
         var me = this;
