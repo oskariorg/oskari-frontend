@@ -211,6 +211,7 @@ function(instance, localization) {
      * @private
      * */
     _getDrawModeFromGeometry : function(geometry) {
+        if (geometry === null) return null;
         var olClass = geometry.CLASS_NAME;
         if (('OpenLayers.Geometry.MultiPoint' === olClass)||('OpenLayers.Geometry.Point' === olClass)) {
         	return 'point';
