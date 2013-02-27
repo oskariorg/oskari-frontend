@@ -17,7 +17,9 @@
     "yuidocjs": "~0.3.14",
     "grunt-lib-contrib": "~0.3.0",
     "grunt-testacular": "~0.2.2",
-    "expect.js": "~0.2.0"
+    "expect.js": "~0.2.0",
+    "gm": "~1.8.1",
+    "async": "~0.2.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -53,6 +53,14 @@ module.exports = function(grunt) {
                 outdir: '../dist/docs/'
             }
         },
+        sprite: {
+            options : {
+                iconDirectoryPath : "../applications/paikkatietoikkuna.fi/full-map/icons",
+                resultImageName : "../applications/paikkatietoikkuna.fi/full-map/icons/icons.png",
+                resultCSSName : "../applications/paikkatietoikkuna.fi/full-map/css/icons.css",
+                spritePathInCSS : "../icons"
+            }
+        },
         testacularRun: {
             dev: {
                 runnerPort: 9100
