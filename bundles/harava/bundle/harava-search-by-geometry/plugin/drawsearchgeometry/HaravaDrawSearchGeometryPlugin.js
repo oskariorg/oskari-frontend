@@ -610,7 +610,7 @@ function(locale) {
         content.html = data.html;
         var rn = "HaravaInfoBox.ShowInfoBoxRequest";
         var rb = me._sandbox.getRequestBuilder(rn);
-        var r = rb(data.popupid, "Info", [content], data.lonlat, true);
+        var r = rb(data.popupid, "Info", [content], data.lonlat, true,null,null,true);
         me._sandbox.request(me, r);
     },
     /**
