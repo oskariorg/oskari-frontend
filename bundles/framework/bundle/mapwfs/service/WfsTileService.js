@@ -34,7 +34,7 @@ function(plugin) {
     this._doMapLayerReArrange = false;
 
     this.sandbox = plugin._sandbox;
-    this.endpointUrl = this.sandbox.getAjaxUrl();
+    this.pngUrl = this.sandbox.getAjaxUrl();
 }, {
     __qname : "Oskari.mapframework.bundle.mapwfs.service.WfsTileService",
     getQName : function() {
