@@ -246,7 +246,7 @@ function(config) {
         }
 
 
-        var pbimg = '../../../resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/';
+        var pbimg = this.getMapModule().getImageUrl() + '/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/';
         var panbuttonDivImg = pb.find('.panbuttonDivImg');
         // update path from config
         panbuttonDivImg.attr('src', pbimg + "default.png");
