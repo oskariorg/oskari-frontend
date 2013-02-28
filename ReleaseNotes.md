@@ -1,6 +1,129 @@
 # Release Notes
 
+## 1.6 release notes
+
+### mapfull bundle
+
+Now calls OpenLayers.updateSize() when it changes the size of div the map is rendered to.
+
+### data source plugin
+
+the layers are grouped together under same data provider headings and metadata links added
+
+test suite added for the plugin
+
+### libraries
+
+GeoStats library added to Oskari libraries. 
+
+Also added a new bundle package libraries/geostats that can be used as dependency for bundles utilizing the lib
+
+### featuredata bundle
+
+resizable flyout
+
+### divmanazer bundle
+
+selectable and resizable grid columns
+
+### meta data bundle
+
+adds selection area tool to toolbar
+included in a new tarkkailija sample project
+
+### toolbar bundle
+
+default buttons are configurable, by setting the false the toolgroup or tool is not added
+
+### myplaces bundle
+
+External graphic can be activated by changing OpenLayers bundle version to openlayers-graphic-fill (instead of openlayers-single-full) and giving new style as config parameter to the drawin plugin.
+Adding external graphics for DrawPlugin:
+```javascript
+        var newStyle = '<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>\
+        <sld:StyledLayerDescriptor version="1.0.0" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld ./Sld/StyledLayerDescriptor.xsd">\
+            <sld:NamedLayer>\
+                <sld:Name>Polygon</sld:Name>\
+                <sld:UserStyle>\
+                    <sld:Name>Polygon</sld:Name>\
+                    <sld:FeatureTypeStyle>\
+                        <sld:FeatureTypeName>Polygon</sld:FeatureTypeName>\
+                        <sld:Rule>\
+                            <sld:Name>Polygon</sld:Name>\
+                            <sld:Title>Polygon</sld:Title>\
+                            <sld:PolygonSymbolizer>\
+                                <sld:Fill>\
+                                    <sld:GraphicFill>\
+                                        <sld:Graphic>\
+                                            <sld:ExternalGraphic>\
+                                                <sld:OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.paikkatietoikkuna.fi/mml-2.0-theme/images/logo.png"/>\
+                                                <sld:Format>image/jpg</sld:Format>\
+                                                </sld:ExternalGraphic>\
+                                            <sld:Size>20</sld:Size>\
+                                        </sld:Graphic>\
+                                    </sld:GraphicFill>\
+                                </sld:Fill>\
+                                <sld:Stroke>\
+                                    <sld:CssParameter name="stroke">#006666</sld:CssParameter>\
+                                    <sld:CssParameter name="stroke-width">2</sld:CssParameter>\
+                                    <sld:CssParameter name="stroke-opacity">1</sld:CssParameter>\
+                                    <sld:CssParameter name="stroke-dasharray">4 4</sld:CssParameter>\
+                                </sld:Stroke>\
+                            </sld:PolygonSymbolizer>\
+                        </sld:Rule>\
+                    </sld:FeatureTypeStyle>\
+                </sld:UserStyle>\
+            </sld:NamedLayer>\
+        </sld:StyledLayerDescriptor>';
+
+
+        // rewrite creation of drawPlugin in the start-function
+        // register plugin for map (drawing for my places) 
+        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', { graphicFill : newStyle });
+```
+
+Multiple points, lines and polygons are now supported objects in My places. After each drawn feature a new MyPlaces.AddedFeatureEvent event is sent.
+After the drawing is finished by the user, the existing MyPlaces.FinishedDrawingEvent is sent. Enabled with config:
+
+```javascript
+        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', { multipart : true });
+```
+
+My places draw plugin can now be configured to send namespaced events. Plugin name is also prefixed with namespace, map can have multiple drawplugins at the same time.
+Enabled with config:
+
+```javascript
+        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', { id : '<namespace>' });
+
+        ->
+
+    eventHandlers : {
+        '<namespace>.AddedFeatureEvent' : function(event) {}
+```
+
+### framework.domain
+
+Created AbstractLayer.js that is inherited by all layer implementations. The abstract function implementations will unify layer functionality. The WmtsLayer will also correctly use legends if defined and type 'wmtslayer' will return false when called isLayerOfType. Use 'wmts' instead.
+
+### statehandler
+
+Added conf to enable usage logging to the conf url. Replaced UsageSnifferService with _logState in statehandler.
+
+### core/sandbox
+
+service-map package no longer links UsageSnifferService
+
+References to UsageSnifferService removed from core/sandbox.
+
 ## 1.5 release notes
+
+### libraries
+
+Openlayers updated to 2.12
+
+### Openlayers/openlayers-single-full bundle 
+
+Now uses the updated Openlayers version
 
 ### personal data bundle
 

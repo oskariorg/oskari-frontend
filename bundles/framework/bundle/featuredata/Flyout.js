@@ -23,6 +23,13 @@ function(instance) {
     this.selectedTab = null;
     this.active = false;
     this.mapDivId = "#mapdiv";
+    this.templateLink = jQuery('<a href="JavaScript:void(0);"></a>');
+    // Resizability of the flyout
+    this.resizable = true;
+    // Is layout currently resizing?
+    this.resizing = false;
+    // The size of the layout has been changed (needed when changing tabs)
+    this.resized = false;
 }, {
     /**
      * @method getName
@@ -104,6 +111,15 @@ function(instance) {
     setState : function(state) {
         this.state = state;
         console.log("Flyout.setState", this, state);
+    },
+    /**
+     * @method setResizable
+     * @param {Boolean} resizable
+     * 		state of the flyout resizability
+     * Defines if the flyout is resizable
+     */
+    setResizable : function(resizable) {
+        this.resizable = resizable;
     },
     /**
      * @method createUi
@@ -223,6 +239,81 @@ function(instance) {
         this._updateData(this.selectedTab.layer);
     },
     /**
+     * @method _enableResize
+     * Enables the flyout resizing
+     */
+    _enableResize: function() {
+        var me = this;
+
+        var content = jQuery('div.oskari-flyoutcontent.featuredata');
+        var flyout = content.parent().parent();
+        var container = content.parent();
+        var tabsContent = content.find('div.tabsContent');
+        var mouseOffsetX = 0;
+        var mouseOffsetY = 0;
+
+        // Resizer image for lower right corner
+        flyout.find('div.tab-content').css({'padding-top':'1px','padding-right':'1px'});
+        var resizer = jQuery('<div/>');
+        resizer.addClass('flyout-resizer');
+        var resizerHeight = 16;
+        resizer.removeClass('allowHover');
+        resizer.addClass('icon-drag');
+        resizer.bind('dragstart', function(event) { event.preventDefault(); });
+
+        // Start resizing
+        resizer.mousedown(function(e) {
+            if (me.resizing) return;
+            me.resizing = true;
+            mouseOffsetX = e.pageX-flyout[0].offsetWidth-flyout[0].offsetLeft;
+            mouseOffsetY = e.pageY-flyout[0].offsetHeight-flyout[0].offsetTop;
+            // Disable mouse selecting
+            jQuery(document).attr('unselectable', 'on')
+                    .css('user-select', 'none')
+                    .on('selectstart', false);
+        });
+
+        // End resizing
+        jQuery(document).mouseup(function(e){
+            me.resizing = false;
+            me.resized = true;
+        });
+
+        // Resize the featuredata flyout
+        jQuery(document).mousemove(function(e){
+            if (!me.resizing) return;
+
+            var flyOutMinHeight = 100;
+            var bottomPadding = 60;
+            var flyoutPosition = flyout.offset();
+            var containerPosition = container.offset();
+
+            if (e.pageX > flyoutPosition.left) {
+                var newWidth = e.pageX-flyoutPosition.left-mouseOffsetX;
+                flyout.css('max-width',newWidth.toString()+'px');
+                flyout.css('width',newWidth.toString()+'px');
+            }
+            if (e.pageY-flyoutPosition.top > flyOutMinHeight) {
+                var newHeight = e.pageY-flyoutPosition.top-mouseOffsetY;
+                flyout.css('max-height',newHeight.toString()+'px');
+                flyout.css('height',newHeight.toString()+'px');
+
+                var newContainerHeight = e.pageY-containerPosition.top-mouseOffsetY;
+                container.css('max-height',(newContainerHeight-resizerHeight).toString()+'px');
+                container.css('height',(newContainerHeight-resizerHeight).toString()+'px');
+
+                var tabsContent = jQuery('div.oskari-flyoutcontent.featuredata').find('div.tabsContent');
+                var newMaxHeight = e.pageY-tabsContent[0].offsetTop-resizerHeight-bottomPadding;
+                flyout.find('div.tab-content').css('max-height',newMaxHeight.toString()+'px');
+            }
+        });
+
+        // Modify layout for the resizer image
+        flyout.find('div.oskari-flyoutcontent').css('padding-bottom','5px');
+        if (jQuery('div.flyout-resizer').length === 0) flyout.append(resizer);
+    },
+
+    /**
      * @method _prepareData
      * @param {Oskari.mapframework.domain.WfsLayer} layer
      *           WFS layer that was added
@@ -247,7 +338,7 @@ function(instance) {
             model.setIdField('featureId');
             var fields = model.getFields();
             if(!panel.grid) {
-                var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
+                var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid',this.instance.getLocalization('columnSelectorTooltip'));
                 // if multiple featuredatas, we will have a "__featureName" field in "all" model -> rename it for ui
                 grid.setColumnUIName('__featureName', this.instance.getLocalization('featureNameAll'));
                 // set selection handler
@@ -275,20 +366,41 @@ function(instance) {
                     }
                 }
                 grid.setVisibleFields(visibleFields);
+                grid.setColumnSelector(true);
+                grid.setResizableColumns(true);
+
+/*              AL-512 -> AL-793
+                grid.setColumnValueRenderer(visibleFields[0], function(value, rowData){
+                    var link = me.templateLink.clone();
+                    link.append(value);
+                    link.bind('click', function() {
+                        var sandbox = me.instance.getSandbox();
+                        var lon = sandbox.getMap().getX();
+                        var lat = sandbox.getMap().getY();
+                        var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+                        var px = mapModule.getMap().getViewPortPxFromLonLat({
+                            lon : lon,
+                            lat : lat
+                        });
+                        sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
+                    });
+                    return link;
+                });
+*/
                 panel.grid = grid;
             }
             panel.grid.setDataModel(model);
-            try {
-                panel.grid.renderTo(panel.getContainer());
-                // define flyout size to adjust correctly to arbitrary tables
-                var mapdiv = jQuery(me.mapDivId);
-                var flyout = jQuery('div.oskari-flyoutcontent.featuredata').parent().parent();
+            panel.grid.renderTo(panel.getContainer());
+            // define flyout size to adjust correctly to arbitrary tables
+            var mapdiv = jQuery(me.mapDivId);
+            var content = jQuery('div.oskari-flyoutcontent.featuredata');
+            var flyout = content.parent().parent();
+            if (!me.resized) {
+                // Define default size for the object data list
                 flyout.find('div.tab-content').css('max-height',(mapdiv.height()/4).toString()+'px');
                 flyout.css('max-width',mapdiv.width().toString()+'px');
             }
-            catch(error) {
-                alert(error);
-            }
+            if (me.resizable) this._enableResize();
         }
         else {
             // Wrong tab selected -> ignore (shouldn't happen)
@@ -328,7 +440,7 @@ function(instance) {
         var layer = event.getMapLayer();
         var panel = this.layers['' + layer.getId()];
         var featureId = event.getWfsFeatureIds()[0];
-        
+
         panel.grid.select(featureId, event.isKeepSelection());
     },
     /**
@@ -344,6 +456,13 @@ function(instance) {
         }
         this.active = (isEnabled == true);
         var sandbox = this.instance.sandbox;
+
+        // feature info activation disabled if object data grid flyout active and vice versa
+        var gfiReqBuilder = sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+        if(gfiReqBuilder) {
+            sandbox.request(this.instance.getName(), gfiReqBuilder(!this.active));
+        }
+
         // disabled
         if(!this.active) {
             if(this.selectedTab) {

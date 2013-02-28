@@ -104,33 +104,24 @@ function(layer, sandbox, localization) {
         
         var tooltips = this.localization['tooltip'];
         var tools = jQuery(layerDiv).find('div.layer-tools');
-        var icon = tools.find('div.layer-icon'); 
+        var icon = tools.find('div.layer-icon');
+        icon.addClass(layer.getIconClassname());
+
         if(layer.isBaseLayer()) {
-            icon.addClass('layer-base');
             icon.attr('title', tooltips['type-base']);
-        }
-        else if(layer.isLayerOfType('WMS')) {
-            if(layer.isGroupLayer()) {
-                icon.addClass('layer-group');
-            }
-            else {
-                icon.addClass('layer-wms');
-            }
+        } else if(layer.isLayerOfType('WMS')) {
             icon.attr('title', tooltips['type-wms']);
         }
         // FIXME: WMTS is an addition done by an outside bundle so this shouldn't be here
         // but since it would require some refactoring to make this general
         // I'll just leave this like it was on old implementation
         else if(layer.isLayerOfType('WMTS')) {
-            icon.addClass('layer-wmts');
             icon.attr('title', tooltips['type-wms']);
         }
         else if(layer.isLayerOfType('WFS')) {
-            icon.addClass('layer-wfs');
             icon.attr('title', tooltips['type-wfs']);
         }
         else if(layer.isLayerOfType('VECTOR')) {
-            icon.addClass('layer-vector');
             icon.attr('title', tooltips['type-wms']);
         }
         

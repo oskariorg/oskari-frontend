@@ -8,6 +8,7 @@ function CompileAction() {
     this.handle = function(processedAppSetup) {
 
         var compiledDir = './../dist/';
+//        var compiledDir = './../applications/paikkatietoikkuna.fi/full-map/';
         if (!fs.existsSync(compiledDir)) {
             fs.mkdirSync(compiledDir);
         }
@@ -17,6 +18,7 @@ function CompileAction() {
             files = files.concat(array);
         }
         minifier.minifyJS(files, compiledDir + 'oskari.min.js');
+//        minifier.minifyJS(files, compiledDir + 'pack.js');
 
         var langfiles = {};
         for (var j = 0; j < processedAppSetup.length; ++j) {
@@ -37,5 +39,6 @@ function CompileAction() {
             cssfiles = cssfiles.concat(parser.getFilesForComponent(processedAppSetup[j], 'css'));
         }
         minifier.minifyCSS(cssfiles, compiledDir + 'oskari.min.css');
+//        minifier.minifyCSS(cssfiles, compiledDir + 'pack.css');
     }
 }

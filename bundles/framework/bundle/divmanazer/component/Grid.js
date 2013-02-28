@@ -12,17 +12,39 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
  * @method create called automatically on construction
  * @static
  */
-function() {
+function(columnSelectorTooltip) {
     this.model = null;
-    this.template = jQuery('<table><thead><tr></tr></thead><tbody></tbody></table>');
+    var columnSelectorButtonTitle = "";
+    if (typeof columnSelectorTooltip !== "undefined") columnSelectorButtonTitle = columnSelectorTooltip;
+    this.template = jQuery('<table class="oskari-grid"><thead><tr></tr></thead><tbody></tbody></table>');
     this.templateTableHeader = jQuery('<th><a href="JavaScript:void(0);"></a></th>');
     this.templateRow = jQuery('<tr></tr>');
     this.templateCell = jQuery('<td></td>');
     this.templatePopupLink = jQuery('<a href="JavaScript: void(0);"></a>');
+    this.templateColumnSelectorButtonWrapper = jQuery('<div/>', {
+    });
+    this.templateColumnSelectorButton = jQuery('<div/>', {
+        title: columnSelectorButtonTitle
+    });
+    this.templateColumnSelector = jQuery('<div/>', {
+    });
+    this.templateColumnSelectorList = jQuery('<ul/>',{
+    });
+    this.templateColumnSelectorListItem = jQuery('<li>'+
+        '<label for="item">'+
+        '<input type="checkbox"/>'+
+        '<span></span>'+
+        '</label>'+
+        '</li>'
+    );
+
     this.table = null;
     this.fieldNames = [];
     this.selectionListeners = [];
     this.additionalDataHandler = null;
+    this.visibleColumnSelector = null;
+    this.showColumnSelector = false;
+    this.resizableColumns = false;
     
     this.uiNames = {};
     this.valueRenderer = {};
@@ -45,6 +67,23 @@ function() {
      */
     getDataModel : function() {
         return this.model;
+    },
+
+    /**
+     * @method setColumnSelector
+     * Sets the column selector visible or invisible
+     * @param {Boolean} newShowColumnSelector truth value for showing a column selector
+     */
+    setColumnSelector : function(newShowColumnSelector) {
+        this.showColumnSelector = newShowColumnSelector;
+    },
+    /**
+     * @method setResizableColumns
+     * Sets the columns resizable or static
+     * @param {Boolean} newResizableColumns truth value for column resizability
+     */
+    setResizableColumns : function(newResizableColumns) {
+        this.resizableColumns = newResizableColumns;
     },
     /**
      * @method setColumnUIName
@@ -271,19 +310,19 @@ function() {
             for(var f=0; f < fieldNames.length; ++f) {
                 var key = fieldNames[f];
                 var value = data[key];
-                
-                    var cell = this.templateCell.clone();
-                    if(typeof value === 'object') {
-                        cell.append(this._createAdditionalDataField(value));
+
+                var cell = this.templateCell.clone();
+                if(typeof value === 'object') {
+                    cell.append(this._createAdditionalDataField(value));
+                }
+                else {
+                    var renderer = this.valueRenderer[key];
+                    if(renderer) {
+                        value = renderer(value, data);
                     }
-                    else {
-                        var renderer = this.valueRenderer[key];
-                        if(renderer) {
-                            value = renderer(value, data);
-                        } 
-                        cell.append(value);
-                    }
-                    row.append(cell);
+                    cell.append(value);
+                }
+                row.append(cell);
             }
             body.append(row);
         }
@@ -300,14 +339,135 @@ function() {
             jQuery(this).parents('tr').bind('click', rowClicked);
         });
     },
-    
+
+    /**
+     * @method _renderColumnSelector
+     * Renders the column selector for the given table.
+     * @private
+     * @param {jQuery} table reference to the table DOM element
+     * @param {String[]} fieldNames names of the fields to select visible
+     */
+    _renderColumnSelector: function(table, fieldNames) {
+
+        // Utilize the templates
+        this.visibleColumnSelector = this.templateColumnSelectorButtonWrapper.clone();
+        var columnSelectorButton = this.templateColumnSelectorButton.clone();
+        var columnSelector = this.templateColumnSelector.clone();
+        var columnSelectorList = this.templateColumnSelectorList.clone();
+
+        this.visibleColumnSelector.addClass('column-selector-placeholder');
+        columnSelectorButton.addClass('icon-menu');
+        columnSelector.addClass('column-selector');
+
+        this.visibleColumnSelector.append(columnSelectorButton);
+        this.visibleColumnSelector.append(columnSelector);
+
+        var me = this;
+        jQuery('input.column-selector-list-item').remove();
+        // Open or close the checkbox dropdown list
+        columnSelectorButton.click(function() {
+            if (columnSelector.css('visibility') === 'visible') {
+                columnSelector.css('visibility', 'hidden');
+            } else {
+                columnSelector.css('visibility', 'visible');
+            }
+        });
+
+        var fields = this.model.getFields();
+        var visibleField;
+        // Add field names to the list
+        for (var i=0; i<fields.length; i++) {
+            visibleField = false;
+            // Set current checkbox value for the field
+            for (var j=0; j<fieldNames.length; j++) {
+                if (fields[i] === fieldNames[j]) {
+                    visibleField = true;
+                    break;
+                }
+            }
+            var newColumn = this.templateColumnSelectorListItem.clone();
+            newColumn.addClass('column-selector-list-item');
+            var checkboxInput = newColumn.find('input');
+            checkboxInput.attr('checked',visibleField);
+            checkboxInput.addClass('column-selector-list-item');
+            checkboxInput.attr('id',fields[i]);
+            newColumn.find('span').html('&nbsp;'+fields[i]);
+            newColumn.css({'margin':'5px'});
+
+            // Update visible fields after checkbox change
+            checkboxInput.change(function() {
+                var fieldSelectors = jQuery('input.column-selector-list-item');
+                var fields = me.model.getFields();
+                var newFields = [];
+                for (var j=0; j<fields.length; j++) {
+                    for (var k=0; k<fieldSelectors.length; k++) {
+                        if (fields[j] === fieldSelectors[k].id) {
+                            if (fieldSelectors[k].checked) {
+                                newFields.push(fields[j]);
+                            }
+                            break;
+                        }
+                    }
+                }
+                if (newFields.length>0) {
+                    me.setVisibleFields(newFields);
+                }
+                me.renderTo(me.visibleColumnSelector.parent());
+            });
+            columnSelectorList.append(newColumn);
+        }
+        columnSelectorList.css('list-style-type','none');
+        columnSelector.append(columnSelectorList);
+    },
+
+    /**
+     * @method _enableColumnResizer
+     * Enables column resizing functionality
+     */
+    _enableColumnResizer: function() {
+        var pressed = false;
+        var start = undefined;
+        var startX, startWidth;
+
+        var featureTable = jQuery('table.oskari-grid th');
+        featureTable.css('cursor','e-resize');
+
+        // Start resizing
+        featureTable.mousedown(function(e) {
+            start = jQuery(this);
+            pressed = true;
+            startX = e.pageX;
+            startWidth = jQuery(this).width();
+            jQuery(start).addClass("resizing");
+            // Disable mouse selecting
+            jQuery(document).attr('unselectable', 'on')
+                .css('user-select', 'none')
+                .on('selectstart', false);
+        });
+
+        // Resize when mouse moves
+        jQuery(document).mousemove(function(e) {
+            if(pressed) {
+                jQuery(start).width(startWidth+(e.pageX-startX));
+            }
+        });
+
+        // Stop resizing
+        jQuery(document).mouseup(function() {
+            if(pressed) {
+                jQuery(start).removeClass("resizing");
+                pressed = false;
+            }
+        });
+    },
+
     /**
      * @method renderTo
      * Renders the data in #getDataModel() to the given DOM element.
      * @param {jQuery} container reference to DOM element where the grid should be inserted.
      */
     renderTo: function(container) {
-        
+        container.empty();
         var fieldNames = this.fieldNames;
         // if visible fields not given, show all
         if(fieldNames.length == 0) {
@@ -323,8 +483,16 @@ function() {
             this._sortBy(this.lastSort.attr, this.lastSort.descending);
         }
         this._renderBody(table, fieldNames);
+
+        if (this.showColumnSelector) {
+            this._renderColumnSelector(table, fieldNames);
+            container.append(this.visibleColumnSelector);
+        }
+
         container.append(table);
-    },
+
+        if (this.resizableColumns) this._enableColumnResizer();
+   },
     /**
      * @method _dataSelected
      * Notifies all selection listeners about selected data.

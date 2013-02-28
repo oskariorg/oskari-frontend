@@ -22,7 +22,6 @@ Oskari.registerLocalization({
           "desc": "Beskrivning",
           "createDate": "Skapad",
           "updateDate": "Uppdaterad",
-          "show" : " ",
           "edit": " ",
           "delete": " "
         },
@@ -40,13 +39,13 @@ Oskari.registerLocalization({
       },
       "myviews": {
         "title": "Mina vyer",
-        "show" : "Visa på karta",
         "edit" : "Editera",
         "publish": "Offentliggör",
         "unpublish": "Gör privat",
         "delete": "Ta bort",
         "grid": {
           "name": "Namn",
+          "description": "Beskrivning", 
           "publish": "Vyn är offentlig",
           "edit": " ",
           "delete": " "
@@ -89,7 +88,8 @@ Oskari.registerLocalization({
       },
       "publishedmaps": {
         "title": "Inbäddade",
-        "edit": "Visa på kartan",
+        "show": "Visa på kartan",
+        "edit": "Redigera",
         "publish": "Avskilj karta",
         "unpublish": "Återta avskiljandet",
         "delete": "Ta bort",

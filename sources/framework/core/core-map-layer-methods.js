@@ -147,11 +147,6 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-layer-methods', {
         var event = this.getEventBuilder('AfterMapLayerAddEvent')(mapLayer, keepLayersOrder, isBaseMap);
         this.copyObjectCreatorToFrom(event, request);
         this.dispatch(event);
-
-        // Do sniffing
-        var selectedLayerArray = new Array();
-        selectedLayerArray.push(mapLayer);
-        this.doSniffing(selectedLayerArray);
     },
     /**
      * @method _handleRemoveMapLayerRequest

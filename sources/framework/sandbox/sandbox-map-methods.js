@@ -109,19 +109,5 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-methods', {
             link += '&showMarker=false&forceCache=true&noSavedState=true';
         }
         return link;
-    },
-
-    /**
-     * @method doSniffing
-     * Logs map usage for given layers
-     * @param
-     * {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
-     * layersArray (optional - defaults to selected layers)
-     */
-    doSniffing : function(layersArray) {
-        if (!layersArray) {
-            layersArray = this._core.getAllSelectedLayers();
-        }
-        this._core.doSniffing(layersArray);
     }
 });

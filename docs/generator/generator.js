@@ -29,8 +29,8 @@ var apiDefaultUrl = "/Oskari/api/release/";
 
 program
     .usage("[options]")
-    .option("--docsurl [location]", "Place where the docs will be released")
-    .option("--apiurl [location]", "Place for the API documentation")
+    .option("--docsurl [location]", "Place where the docs will be released from the root URL")
+    .option("--apiurl [location]", "Place for the API documentation (the url)")
     .parse(process.argv);
 
 

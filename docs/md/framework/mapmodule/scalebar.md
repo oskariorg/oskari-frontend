@@ -1,4 +1,4 @@
-# Scalebar
+# Scale Bar
 
 <table>
   <tr>

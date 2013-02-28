@@ -198,12 +198,6 @@ function() {
         if(!layer.isLayerOfType('WMS')) {
             return;
         }
-        this._sandbox.printDebug(" [SnappyWMSLayer]  Creating " + 
-                                 layer.getId() + 
-                                 " KEEP ON TOP ? " + 
-                                 keepLayerOnTop + 
-                                 " BASE? " + 
-                                 isBaseMap);
 
         var markerLayer = this._map.getLayersByName("Markers");
         if (markerLayer) {
@@ -231,8 +225,7 @@ function() {
                     .getSubLayers()[i].getMaxScale(), layer
                     .getSubLayers()[i].getMinScale());
 
-                    var WMS = Oskari.$("SnappyWMSLayer");
-                    var openLayer = new WMS('basemap_' + layer.getSubLayers()[i].getId(), 
+                    var openLayer = new OpenLayers.Layer.WMS('basemap_' + layer.getSubLayers()[i].getId(), 
                                             layer.getSubLayers()[i].getWmsUrls(), {
                         layers : layer.getSubLayers()[i].getWmsName(),
                         transparent : true,
@@ -252,8 +245,6 @@ function() {
 
                     this._map.addLayer(openLayer);
 
-                    this._sandbox.printDebug(" [SnappyWMSLayer]  Created SnappyGrid for WMS WITH SUBLAYERS for " + layer.getId());
-
                     if(!keepLayerOnTop) {
                         this._map.setLayerIndex(openLayer, 0);
                     }
@@ -263,8 +254,7 @@ function() {
             } else {
                 var layerScales = this.getMapModule().calculateLayerScales(layer.getMaxScale(), layer.getMinScale());
 
-                var WMS = Oskari.$("SnappyWMSLayer");
-                var openLayer = new WMS('layer_' + layer.getId(), layer.getWmsUrls(), {
+                var openLayer = new OpenLayers.Layer.WMS('layer_' + layer.getId(), layer.getWmsUrls(), {
                     layers : layer.getWmsName(),
                     transparent : true,
                     id : layer.getId(),
@@ -283,8 +273,6 @@ function() {
 
                 this._map.addLayer(openLayer);
 
-                this._sandbox.printDebug(" [SnappyWMSLayer]  Created SnappyGrid for WMS WITH SUBLAYERS for " + layer.getId());
-
                 if(keepLayerOnTop) {
                     this._map.setLayerIndex(openLayer, this._map.layers.length);
                 } else {
@@ -295,8 +283,7 @@ function() {
         } else {
 
             var layerScales = this.getMapModule().calculateLayerScales(layer.getMaxScale(), layer.getMinScale());
-            var WMS = Oskari.$("SnappyWMSLayer");
-            var openLayer = new WMS('layer_' + layer.getId(), layer.getWmsUrls(), {
+            var openLayer = new OpenLayers.Layer.WMS('layer_' + layer.getId(), layer.getWmsUrls(), {
                 layers : layer.getWmsName(),
                 transparent : true,
                 id : layer.getId(),

@@ -321,16 +321,12 @@ function(instance) {
         // setup icon
         var tooltips = this.instance.getLocalization('layer').tooltip;
         var icon = layerDiv.find('div.layer-icon');
+        icon.addClass(layer.getIconClassname());
+
         if (layer.isBaseLayer()) {
-            icon.addClass('layer-base');
             icon.attr('title', tooltips['type-base']);
             // tooltip = mapservice_basemap_image_tooltip
         } else if (layer.isLayerOfType('WMS')) {
-            if (layer.isGroupLayer()) {
-                icon.addClass('layer-group');
-            } else {
-                icon.addClass('layer-wms');
-            }
             icon.attr('title', tooltips['type-wms']);
             // tooltip = mapservice_maplayer_image_tooltip
         }
@@ -341,16 +337,13 @@ function(instance) {
         // this general
         // I'll just leave this like it was on old implementation
         else if (layer.isLayerOfType('WMTS')) {
-            icon.addClass('layer-wmts');
             icon.attr('title', tooltips['type-wms']);
             // icon.attr('title',
             //           'mapservice_maplayer_image_tooltip');
         } else if (layer.isLayerOfType('WFS')) {
-            icon.addClass('layer-wfs');
             icon.attr('title', tooltips['type-wfs']);
             // tooltip = selected_layers_module_wfs_icon_tooltip
         } else if (layer.isLayerOfType('VECTOR')) {
-            icon.addClass('layer-vector');
             icon.attr('title', tooltips['type-wms']);
             // tooltip = mapservice_maplayer_image_tooltip
         }

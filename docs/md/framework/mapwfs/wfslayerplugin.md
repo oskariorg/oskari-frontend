@@ -1,4 +1,4 @@
-# WfsLayerPlugin
+# WFS Layer Plugin
 
 <table>
   <tr>

@@ -1,4 +1,4 @@
-.datascource .link {
+.oskari-datasource .link {
   background-color: none;
   background-repeat: no-repeat;
   display:block;
@@ -10,6 +10,6 @@
   filter: alpha(opacity=80);
   opacity: 0.8 !important;
 }
-.datascource a, .datascource a:hover, .datascourcea:active, .datascource a:visited {
+.oskari-datasource a, .oskari-datasource a:hover, .oskari-datasource:active, .oskari-datasource a:visited {
     color: blue !important;
 }
