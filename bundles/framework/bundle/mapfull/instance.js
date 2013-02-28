@@ -124,7 +124,10 @@ function() {
 		this.core = core;
 		var sandbox = core.getSandbox();
 		this.sandbox = sandbox;
-		
+
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox';
+		Oskari.setSandbox(sandboxName,sandbox);
+
 		// take map div ID from config if available
 		if(conf && conf.mapElement) {
 		    this.mapDivId = conf.mapElement;

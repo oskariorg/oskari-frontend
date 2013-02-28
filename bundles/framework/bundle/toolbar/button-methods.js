@@ -19,7 +19,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             return;
         }
         var me = this;
-        var toolbar = this.getToolbarContainer();
+        var toolbar = this.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig );
         var group = null;
         if(!this.buttons[pGroup]) {
             // create group if not existing
@@ -27,6 +27,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             group = this.templateGroup.clone();
             group.attr('tbgroup', pGroup);
             toolbar.append(group);
+            this.groupsToToolbars[pGroup] = pConfig ? pConfig.toolbarid : null;
         }
         else {
             group = toolbar.find('div.toolrow[tbgroup=' + pGroup +']');
@@ -104,10 +105,10 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             var e = this.sandbox.getEventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
             this.sandbox.notifyAll(e);
             // button stays on (==sticky) -> remove previous "sticky"
-            this._removeToolSelections();
+            this._removeToolSelections(pGroup);
             
             // highlight the button
-            var toolbar = this.getToolbarContainer();
+            var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
             var group = toolbar.find('div.toolrow[tbgroup=' + pGroup +']');
             var button = group.find('div.tool[tool=' + pId +']');
             button.addClass('selected');
@@ -124,8 +125,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      * @private
      * Clears selection from all tools to make room for a new selection
      */
-    _removeToolSelections : function() {
-        var toolbar = this.getToolbarContainer();
+    _removeToolSelections : function(pGroup) {
+        var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
         var tools = toolbar.find('div.tool');
         tools.removeClass('selected');
     },
@@ -145,7 +146,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             return;
         }
         if(this.buttons[pGroup]) {
-            var toolbar = this.getToolbarContainer();
+            var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
             var group = toolbar.find('div.toolrow[tbgroup=' + pGroup +']');
             if(pId) {
                 var button = group.find('div.tool[tool=' + pId +']');
@@ -180,7 +181,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             return;
         }
         if(this.buttons[pGroup]) {
-            var toolbar = this.getToolbarContainer();
+            var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
             var group = toolbar.find('div.toolrow[tbgroup=' + pGroup +']');
             if(pId) {
                 var button = group.find('div.tool[tool=' + pId +']');

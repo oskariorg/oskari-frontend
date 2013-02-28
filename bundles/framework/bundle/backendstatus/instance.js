@@ -112,7 +112,10 @@ function() {
 
 		me._started = true;
 
-		var sandbox = Oskari.$("sandbox");
+		var conf = me.conf ;
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+		var sandbox = Oskari.getSandbox(sandboxName);
+		
 		me._sandbox = sandbox;
 
 		me._mapLayerService = sandbox.getService("Oskari.mapframework.service.MapLayerService");

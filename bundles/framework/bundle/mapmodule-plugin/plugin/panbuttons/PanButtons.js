@@ -69,12 +69,12 @@ function(config) {
      */
     init : function() {
         var me = this;
-
+		var ppid = (new Date()).getTime()+"";
         // templates
         this.__templates['pan'] = jQuery('<div class="panbuttonDiv">' + 
             '<div>' + 
-            '  <img class="panbuttonDivImg" usemap="#panbuttons">' + 
-            '    <map name="panbuttons">' + 
+            '  <img class="panbuttonDivImg" usemap="#panbuttons_'+ppid+'">' + 
+            '    <map name="panbuttons_'+ppid+'">' + 
             // center
             '      <area shape="circle" ' + 'class="panbuttons_center" ' + 'coords="45,45,20" href="#">' +
             // left
@@ -246,7 +246,7 @@ function(config) {
         }
 
 
-        var pbimg = this.getMapModule().getImageUrl() + '/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/';
+        var pbimg = '../../../resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/';
         var panbuttonDivImg = pb.find('.panbuttonDivImg');
         // update path from config
         panbuttonDivImg.attr('src', pbimg + "default.png");

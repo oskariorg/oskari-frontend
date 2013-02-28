@@ -322,7 +322,7 @@ function(name) {
      */
     _bindFocusAndBlur : function() {
         
-        var sandbox = Oskari.$('sandbox');
+        var sandbox = Oskari.getSandbox();
         if(!sandbox) {
             return;
         }

@@ -121,6 +121,12 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultExtension.js"
         },{
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultView.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultLayout.js"
+        },{
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/divmanazer/css/divman.css"
         }, {

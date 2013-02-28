@@ -82,15 +82,22 @@ function() {
 		 */
 		this.compileTemplates();
 
-		this.flyoutContainer = jQuery(document.body);
-		this.tileContainer = jQuery(this.menubarContainerId);
-		this.tileContainer.addClass("oskari-tile-container");
-
 		/*
 		 * setup requests and handlers
 		 */
-		var sandbox = Oskari.$("sandbox");
+		var conf = this.conf ;
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+		var sandbox = Oskari.getSandbox(sandboxName);
+		
 		this.sandbox = sandbox;
+		
+		this.flyoutContainer = jQuery(document.body);
+		
+		var menubarContainerId = ( conf ? conf.menubarContainerId : null ) || this.menubarContainerId;
+		this.tileContainer = jQuery(this.menubarContainerId);
+		this.tileContainer.addClass("oskari-tile-container");
+
+
 
 		this.sandbox.register(this);
 
@@ -161,7 +168,10 @@ function() {
 		"Oskari.userinterface.Tile" : '<div class="oskari-tile oskari-tile-closed">' + '<div class="oskari-tile-title"></div>' + '<div class="oskari-tile-status"></div>' + '</div>',
 
 		/* flyout */
-		"Oskari.userinterface.Flyout" : '<div class="oskari-flyout oskari-closed">' + '<div class="oskari-flyouttoolbar">' + '<div class="oskari-flyoutheading"></div>' + '<div class="oskari-flyout-title">' + '<p></p>' + '</div>' + '<div class="oskari-flyouttools">' + '<div class="oskari-flyouttool-help">' + '</div>' + '<div class="oskari-flyouttool-attach">' + '</div>' + '<div class="oskari-flyouttool-detach">' + '</div>' + '<div class="oskari-flyouttool-minimize">' + '</div>' + '<div class="oskari-flyouttool-restore">' + '</div>' + '<div class="oskari-flyouttool-close icon-close icon-close:hover">' + '</div>' + '</div>' + '</div>' + '<div class="oskari-flyoutcontentcontainer">' + '<div class="oskari-flyoutcontent"></div>' + '</div>' + '</div>'
+		"Oskari.userinterface.Flyout" : '<div class="oskari-flyout oskari-closed">' + '<div class="oskari-flyouttoolbar">' + '<div class="oskari-flyoutheading"></div>' + '<div class="oskari-flyout-title">' + '<p></p>' + '</div>' + '<div class="oskari-flyouttools">' + '<div class="oskari-flyouttool-help">' + '</div>' + '<div class="oskari-flyouttool-attach">' + '</div>' + '<div class="oskari-flyouttool-detach">' + '</div>' + '<div class="oskari-flyouttool-minimize">' + '</div>' + '<div class="oskari-flyouttool-restore">' + '</div>' + '<div class="oskari-flyouttool-close icon-close icon-close:hover">' + '</div>' + '</div>' + '</div>' + '<div class="oskari-flyoutcontentcontainer">' + '<div class="oskari-flyoutcontent"></div>' + '</div>' + '</div>',
+		
+		/* view */
+		"Oskari.userinterface.View" : '<div class="oskari-view"></div>'
 
 	},
 
@@ -185,6 +195,8 @@ function() {
 		flyout.css('top', me.defaults.attach.top);
 
 		me.compiledTemplates['Oskari.userinterface.Flyout'] = flyout;
+		
+		me.compiledTemplates['Oskari.userinterface.View'] = jQuery(this.templates['Oskari.userinterface.View']);
 	},
 	/**
 	 * @method addExtension
@@ -249,6 +261,17 @@ function() {
 
 			this.tileContainer.append(tile);
 		}
+		
+		var viewPlugin = plugins['Oskari.userinterface.View'];
+		var view = null;
+		if(viewPlugin != null) {
+			view = this.createView(extension, viewPlugin, count, extensionInfo);
+			var el = view;
+			viewPlugin.setEl(el.get());
+			viewPlugin.startPlugin();
+
+		}
+
 
 		/*
 		 * store these for further usage
@@ -265,6 +288,12 @@ function() {
 			extensionInfo['plugins']['Oskari.userinterface.Flyout'] = {
 				plugin : flyoutPlugin,
 				el : flyout
+			};
+		}
+		if(viewPlugin) {
+			extensionInfo['plugins']['Oskari.userinterface.View'] = {
+				plugin : viewPlugin,
+				el : view
 			};
 		}
 
@@ -444,6 +473,21 @@ function() {
 		return flyout;
 
 	},
+	
+	/**
+	 * @method createFlyout
+	 *
+	 * creates flyout DIV using the flyout template adds a bunch
+	 * of tools to the DIV toolbar
+	 *
+	 */
+	createView : function(extension, plugin, count, extensionInfo) {
+		var me = this;
+		var view = this.compiledTemplates['Oskari.userinterface.View'].clone(true, true);
+
+		return view;
+
+	},
 	/**
 	 * @method removeExtension TBD
 	 */
@@ -600,6 +644,20 @@ function() {
 			me.applyTransition(tile, state, me.tileTransitions);
 
 		}
+		
+		/* let's transition menu tile if one exists */
+		var viewInfo = extensionInfo['plugins']['Oskari.userinterface.View'];
+		if(viewInfo) {
+			var viewPlugin = viewInfo.plugin;
+			var view = viewInfo.el;
+
+			var ops = me.viewOps;
+			var op = ops[state];
+			if( op) {
+				op.apply(this, [view, viewPlugin, extensionInfo, extensions]);
+			}
+		}
+
 
 		extensionInfo.state = state;
 
@@ -881,6 +939,26 @@ function() {
 			me.applyTransition(flyout, "close", me.flyoutTransitions);
 
 		}
+	},
+	
+	/**
+	 * @static
+	 * @property flyoutOps a set of (jQuery) operations to be
+	 *           performed on flyout to
+	 *           show/hide/minimize/restore/attach/detach
+	 */
+	"viewOps" : {
+		/** @method detach */
+		"view" : function(flyout, flyoutPlugin, extensionInfo, extensions) {
+		
+
+		},
+		/** @method close */
+		"close" : function(flyout, flyoutPlugin, extensionInfo) {
+			
+
+		}
+		
 	},
 
 	/**

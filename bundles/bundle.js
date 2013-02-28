@@ -1180,15 +1180,21 @@ Oskari = (function() {
         /**
          * @method adds a script loading request
          */
-        "add" : function(fn) {
+        "add" : function(fn,pdef) {
             var me = this;
             if(!me.files[fn]) {
                 var def = {
                     src : fn,
-                    state : false
+                    type: ( pdef ? pdef.type : null ) ||"text/javascript",
+                    id: pdef ? pdef.id : null,
+                    state: false
+                    
                 };
                 me.files[fn] = def;
-                me.filesRequested++;
+                
+                if( "text/javascript" === def.type) {
+                	me.filesRequested++;
+                }
                 me.fileList.push(def);
             }
         },
@@ -1232,9 +1238,9 @@ Oskari = (function() {
             };
             var f = false;
             for(var n = 0; n < me.fileList.length; n++) {
-
-                var fn = me.fileList[n].src;
-                var st = me.buildScriptTag(fn, onFileLoaded);
+				var def = me.fileList[n];
+                var fn = def.src;
+                var st = me.buildScriptTag(fn, onFileLoaded,def.type,def.id);
                 if(st) {
                     // If this breaks something, revert to using method 1
                     if(preloaded()) {
@@ -1255,10 +1261,12 @@ Oskari = (function() {
          *
          * builds a script tag to be applied to document head assumes UTF-8
          */
-        "buildScriptTag" : function(filename, callback) {
+        "buildScriptTag" : function(filename, callback,elementtype,elementId) {
             var me = this;
             var script = document.createElement('script');
-            script.type = 'text/javascript';
+            if( elementId )
+            	script.id = elementId;
+            script.type = elementtype;//||'text/javascript';
             script.charset = 'utf-8';
 
             if(preloaded()) {
@@ -1713,7 +1721,19 @@ Oskari = (function() {
 
                         for(var n = 0; n < defs.length; n++) {
                             var def = defs[n];
-                            if(def.type == "text/javascript") {
+                            if(def.type == "text/css") {
+
+                                var fn = def.src;
+                                var fnWithPath = null;
+                                if(fn.indexOf('http') != -1) {
+                                    fnWithPath = fn;
+                                } else {
+                                    fnWithPath = bundlePath + '/' + fn;
+                                }
+
+                                srcFiles.css[fnWithPath] = def;
+
+                            } else if(def.type ) {
                                 srcFiles.count++;
                                 /* var fn = def.src + "?ts=" + instTs; */
                                 var fn = buildPathForLoaderMode(def.src, bundlePath);
@@ -1726,19 +1746,7 @@ Oskari = (function() {
                                 }
 
                                 srcFiles.files[fnWithPath] = def;
-                            } else if(def.type == "text/css") {
-
-                                var fn = def.src;
-                                var fnWithPath = null;
-                                if(fn.indexOf('http') != -1) {
-                                    fnWithPath = fn;
-                                } else {
-                                    fnWithPath = bundlePath + '/' + fn;
-                                }
-
-                                srcFiles.css[fnWithPath] = def;
-
-                            }
+                            }  
 
                         }
                     } else if(p == 'locales') {
@@ -1756,7 +1764,19 @@ Oskari = (function() {
                                 continue;
                             }
 
-                            if(def.type == "text/javascript") {
+                            if(def.type == "text/css") {
+
+                                var fn = def.src;
+                                var fnWithPath = null;
+                                if(fn.indexOf('http') != -1) {
+                                    fnWithPath = fn;
+                                } else {
+                                    fnWithPath = bundlePath + '/' + fn;
+                                }
+
+                                srcFiles.css[fnWithPath] = def;
+
+                            } else if(def.type ) {
                                 srcFiles.count++;
                                 /* var fn = def.src + "?ts=" + instTs; */
                                 var fn = buildPathForLoaderMode(def.src, bundlePath);
@@ -1769,18 +1789,6 @@ Oskari = (function() {
                                 }
 
                                 srcFiles.files[fnWithPath] = def;
-                            } else if(def.type == "text/css") {
-
-                                var fn = def.src;
-                                var fnWithPath = null;
-                                if(fn.indexOf('http') != -1) {
-                                    fnWithPath = fn;
-                                } else {
-                                    fnWithPath = bundlePath + '/' + fn;
-                                }
-
-                                srcFiles.css[fnWithPath] = def;
-
                             }
 
                         }
@@ -1825,11 +1833,11 @@ Oskari = (function() {
                 if(fileCount > 0) {
 
                     var srcsFn = buildPathForPackedMode(bundlePath);
-                    bl.add(srcsFn);
+                    bl.add(srcsFn,"text/javascript");
                     me.log("- added PACKED javascript source " + srcsFn + " for " + bundleImpl);
 
                     var localesFn = buildLocalePathForPackedMode(bundlePath);
-                    bl.add(localesFn);
+                    bl.add(localesFn,"text/javascript");
                     me.log("- added PACKED locale javascript source " + localesFn + " for " + bundleImpl);
                 }
 
@@ -1838,8 +1846,8 @@ Oskari = (function() {
                  */
             } else {
                 for(js in srcFiles.files) {
-                    bl.add(js);
-                    me.log("- added javascript source " + js + " for " + bundleImpl);
+                    bl.add(js,srcFiles.files[js]);
+                    me.log("- added script source " + js + " for " + bundleImpl);
 
                 }
             }
@@ -2474,6 +2482,37 @@ Oskari = (function() {
     var fcd = new bundle_facade(bm);
     var ga = cs.global;
 
+	
+	var bundle_dom_manager = function(dollar) {
+		this.$ = dollar;
+	};
+	bundle_dom_manager.prototype = {
+		getEl: function(selector) {
+			return this.$(selector);
+		},
+		getElForPart : function(part) {
+			throw "N/A";
+		},
+		setElForPart : function(part,el) {
+			throw "N/A";
+		},
+		setElParts : function(partsMap) {
+			throw "N/A";
+		},
+		getElParts : function() {
+			throw "N/A";
+		},
+		setLayout : function(s) {
+			throw "N/A";
+		},
+		getLayout : function() {
+			throw "N/A";
+		}
+	};
+	
+	
+	var domMgr = new bundle_dom_manager(jQuery);
+
     /**
      * @static
      * @property Oskari
@@ -2572,7 +2611,38 @@ Oskari = (function() {
         purge : function() {
             bm.purge();
             cs.purge("Oskari");
+        },
+        
+        /**
+         * @static
+         * @method Oskari.getDomManager
+         */
+        getDomManager : function() {
+        	return domMgr;
+        },
+        /**
+         * @static
+         * @method Oskari.setDomManager
+         */
+        setDomManager : function(dm) {
+        	domMgr = dm; 
+        },
+        
+        /**
+         * @static
+         * @method getSandbox
+         */
+        getSandbox: function(sandboxName)  {
+        	return ga.apply(cs, [sandboxName||'sandbox'])
+        },
+        /**
+         * @static
+         * @method setSandbox
+         */
+        setSandbox: function(sandboxName,sandbox) {
+        	return ga.apply(cs, [sandboxName||'sandbox',sandbox])
         }
+        
     };
 
     /**

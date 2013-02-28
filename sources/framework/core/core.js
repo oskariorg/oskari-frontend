@@ -25,7 +25,11 @@ function() {
 
     // Sandbox that handles communication
     this._sandbox = Oskari.clazz.create('Oskari.mapframework.sandbox.Sandbox', this);
-    Oskari.$("sandbox", this._sandbox);
+    
+    // bw comp support - this should be removed 
+    if( !Oskari.$("sandbox" ) ) {
+    	Oskari.$("sandbox", this._sandbox);
+    }
 
     // array of services available
     this._services = [];
@@ -42,6 +46,16 @@ function() {
 
     this._availableRequestsByName = {};
     this._availableEventsByName = {};
+    
+    /**
+     * @property externalHandlerCls
+     * External Request handlers that bundles have registered are stored here
+     * NOTE: only one request handler can be registered/request
+     * NOTE: was static but moved to instance to enable multi sandbox configurations
+     */
+    this.externalHandlerCls = {
+
+    };
 },
 {
 
@@ -184,15 +198,7 @@ function() {
         return rv;
     },
 
-    /**
-     * @property externalHandlerCls
-     * @static
-     * External Request handlers that bundles have registered are stored here
-     * NOTE: only one request handler can be registered/request
-     */
-    externalHandlerCls : {
-
-    },
+    
 
     /**
      * @method addRequestHandler
