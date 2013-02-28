@@ -332,7 +332,7 @@ function() {
 	 * shows named toolbar
 	 */
 	_showToolbar : function(tbid) {
-		this.toolbars[tbid].slideDown('fast');
+		this.toolbars[tbid].show();
 	},
 	
 	/**

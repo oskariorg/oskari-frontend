@@ -1674,7 +1674,6 @@ Oskari = (function() {
                     me.log("loading previously pending sources for " + bundleImpl + " " + srcState.state + " or what?");
                 } else {
                     throw "INVALID_STATE: at " + bundleImpl;
-                    return;
                 }
             } else {
                 srcState = {
