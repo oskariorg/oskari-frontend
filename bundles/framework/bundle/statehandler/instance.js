@@ -377,7 +377,7 @@ function() {
                }
         }
 
-        if (me.conf.logUrl) {
+        if (me.conf && me.conf.logUrl) {
             me._logState();
         } 
     },

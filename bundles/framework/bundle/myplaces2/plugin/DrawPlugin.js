@@ -225,12 +225,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
      */
     getDrawing : function() {
         if (this.drawLayer.features.length === 0) return null;
+        var featClass = this.drawLayer.features[0].geometry.CLASS_NAME;
+        if ((featClass==="OpenLayers.Geometry.MultiPoint")||
+            (featClass==="OpenLayers.Geometry.MultiLineString")||
+            (featClass==="OpenLayers.Geometry.MultiPolygon")) {
+            return this.drawLayer.features[0].geometry;
+        }
+
         var drawing = null;
         var components = [];
         for (var i=0; i < this.drawLayer.features.length; i++) {
             components.push(this.drawLayer.features[i].geometry);
         }
-        switch (this.drawLayer.features[0].geometry.CLASS_NAME) {
+        switch (featClass) {
             case "OpenLayers.Geometry.Point":
                 drawing = new OpenLayers.Geometry.MultiPoint(components);
                 break;
