@@ -12,11 +12,11 @@ the layers are grouped together under same data provider headings and metadata l
 
 test suite added for the plugin
 
-### libraries bundle
+### libraries
 
-openlayers updated to 2.12
+GeoStats library added to Oskari libraries. 
 
-geostats library is added to Oskari packaged as a new bundle in libraries package
+Also added a new bundle package libraries/geostats that can be used as dependency for bundles utilizing the lib
 
 ### featuredata bundle
 
@@ -101,7 +101,6 @@ Enabled with config:
         '<namespace>.AddedFeatureEvent' : function(event) {}
 ```
 
-
 ### framework.domain
 
 Created AbstractLayer.js that is inherited by all layer implementations. The abstract function implementations will unify layer functionality. The WmtsLayer will also correctly use legends if defined and type 'wmtslayer' will return false when called isLayerOfType. Use 'wmts' instead.
@@ -110,7 +109,21 @@ Created AbstractLayer.js that is inherited by all layer implementations. The abs
 
 Added conf to enable usage logging to the conf url. Replaced UsageSnifferService with _logState in statehandler.
 
+### core/sandbox
+
+service-map package no longer links UsageSnifferService
+
+References to UsageSnifferService removed from core/sandbox.
+
 ## 1.5 release notes
+
+### libraries
+
+Openlayers updated to 2.12
+
+### Openlayers/openlayers-single-full bundle 
+
+Now uses the updated Openlayers version
 
 ### personal data bundle
 

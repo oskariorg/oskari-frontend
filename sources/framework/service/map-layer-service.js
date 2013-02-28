@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
  * @param {String}
  *            mapLayerUrl ajax URL for map layer operations (not used atm)
  * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
- * 			reference to application sandbox
+ *          reference to application sandbox
  */
 function(mapLayerUrl, sandbox) {
 
@@ -22,8 +22,8 @@ function(mapLayerUrl, sandbox) {
     this._sandbox = sandbox;
     this._allLayersAjaxLoaded = false;
     this._loadedLayersList = new Array();
-	// used to detect duplicate ids since looping through the list is slow
-	this._reservedLayerIds = {};
+    // used to detect duplicate ids since looping through the list is slow
+    this._reservedLayerIds = {};
 
     /**
      * @property typeMapping 
@@ -32,8 +32,8 @@ function(mapLayerUrl, sandbox) {
      */
     this.typeMapping = {
         wmslayer : 'Oskari.mapframework.domain.WmsLayer',
-    	// FIXME: WMTS is from a bundle, why is this in here? 
-    	// - probably added here due to some load ordering issue at least in older releases
+        // FIXME: WMTS is from a bundle, why is this in here? 
+        // - probably added here due to some load ordering issue at least in older releases
         wmtslayer : 'Oskari.mapframework.wmts.domain.WmtsLayer',
         wfslayer : 'Oskari.mapframework.domain.WfsLayer',
         vectorlayer : 'Oskari.mapframework.domain.VectorLayer'
@@ -83,8 +83,8 @@ function(mapLayerUrl, sandbox) {
         // throws exception if the id is reserved to existing maplayer
         // we need to check again here
         this.checkForDuplicateId(layerModel.getId(), layerModel.getName());
-		
-		this._reservedLayerIds[layerModel.getId()] = true;
+        
+        this._reservedLayerIds[layerModel.getId()] = true;
         // everything ok, lets add the layer
         this._loadedLayersList.push(layerModel);
 
@@ -117,7 +117,7 @@ function(mapLayerUrl, sandbox) {
             var event = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'remove');
             this._sandbox.notifyAll(event);
         }
-		this._reservedLayerIds[layerId] = false;
+        this._reservedLayerIds[layerId] = false;
         // TODO: notify if layer not found?
     },
     /**
@@ -149,25 +149,25 @@ function(mapLayerUrl, sandbox) {
      * @param {Function} callbackFailure method to be called when something went wrong
      */
     loadAllLayersAjax : function(callbackSuccess, callbackFailure) {
-    	var me = this;
-		jQuery.ajax({
-			type : "GET",
-		    dataType: 'json',
+        var me = this;
+        jQuery.ajax({
+            type : "GET",
+            dataType: 'json',
             beforeSend: function(x) {
               if(x && x.overrideMimeType) {
                x.overrideMimeType("application/j-son;charset=UTF-8");
               }
              },
-			url : this._mapLayerUrl,
-			success : function(pResp) {
-				me._loadAllLayersAjaxCallBack(pResp, callbackSuccess);
-			},
-			error : function(jqXHR, textStatus) {
-				if(callbackFailure && jqXHR.status != 0) {
-					callbackFailure();
-				}
-			}
-		});	
+            url : this._mapLayerUrl,
+            success : function(pResp) {
+                me._loadAllLayersAjaxCallBack(pResp, callbackSuccess);
+            },
+            error : function(jqXHR, textStatus) {
+                if(callbackFailure && jqXHR.status != 0) {
+                    callbackFailure();
+                }
+            }
+        }); 
     },
     /**
      * @method _loadAllLayersAjaxCallBack
@@ -177,21 +177,21 @@ function(mapLayerUrl, sandbox) {
      * @private
      */
     _loadAllLayersAjaxCallBack : function(pResp, callbackSuccess) {
-	    var allLayers = pResp.layers;
+        var allLayers = pResp.layers;
         for(var i = 0; i < allLayers.length; i++) {
-        	
-			var mapLayer = this.createMapLayer(allLayers[i]);
-			if(this._reservedLayerIds[mapLayer.getId()] !== true) {
-            	this.addLayer(mapLayer, true);
-			}
-		}
+            
+            var mapLayer = this.createMapLayer(allLayers[i]);
+            if(this._reservedLayerIds[mapLayer.getId()] !== true) {
+                this.addLayer(mapLayer, true);
+            }
+        }
         // notify components of added layer if not suppressed
         this._allLayersAjaxLoaded = true;
         var event = this._sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
         this._sandbox.notifyAll(event);
-		if(callbackSuccess) {
-			callbackSuccess();
-		}
+        if(callbackSuccess) {
+            callbackSuccess();
+        }
     },
     
     /**
@@ -199,7 +199,7 @@ function(mapLayerUrl, sandbox) {
      * @return {Boolean}
      */
     isAllLayersLoaded : function() {
-    	return this._allLayersAjaxLoaded ;
+        return this._allLayersAjaxLoaded ;
     },
     
     /**
@@ -230,7 +230,7 @@ function(mapLayerUrl, sandbox) {
     },
     /**
      * @method registerLayerModel
-     * 		Register an external layer model type (to be used by extension bundles).
+     *      Register an external layer model type (to be used by extension bundles).
      * Adds a new type to #typeMapping
      * 
      * @param {String} type
@@ -243,7 +243,7 @@ function(mapLayerUrl, sandbox) {
     },
     /**
      * @method unregisterLayerModel
-     * 		Unregister an external layer model type (to be used by well behaving extension bundles).
+     *      Unregister an external layer model type (to be used by well behaving extension bundles).
      * Removes type from #typeMapping
      * 
      * @param {String} type
@@ -255,7 +255,7 @@ function(mapLayerUrl, sandbox) {
 
     /**
      * @method registerLayerModelBuilder
-     * 		Register a handler for an external layer model type (to be used by extension bundles).
+     *      Register a handler for an external layer model type (to be used by extension bundles).
      * Adds a new type to #modelBuilderMapping
      * 
      * @param {String} type
@@ -269,7 +269,7 @@ function(mapLayerUrl, sandbox) {
     },
     /**
      * @method unregisterLayerModel
-     * 		Unregister handler for an external layer model type (to be used by well behaving extension bundles).
+     *      Unregister handler for an external layer model type (to be used by well behaving extension bundles).
      * Removes handler from #modelBuilderMapping
      * 
      * @param {String} type
@@ -337,10 +337,10 @@ function(mapLayerUrl, sandbox) {
         baseLayer.setDataUrl(baseMapJson.dataUrl);
         baseLayer.setMetadataIdentifier(baseMapJson.dataUrl_uuid);
         if( !baseLayer.getMetadataIdentifier() && baseLayer.getDataUrl() ) {
-            	var tempPartsForMetadata = baseLayer.getDataUrl().split("uuid=");
-            	if( tempPartsForMetadata.length == 2 ) {
-            		baseLayer.setMetadataIdentifier(tempPartsForMetadata[1]);
-            	}
+                var tempPartsForMetadata = baseLayer.getDataUrl().split("uuid=");
+                if( tempPartsForMetadata.length == 2 ) {
+                    baseLayer.setMetadataIdentifier(tempPartsForMetadata[1]);
+                }
             }
         
         if(baseMapJson.orgName) {
@@ -362,9 +362,9 @@ function(mapLayerUrl, sandbox) {
         baseLayer.setQueryable(false);
         
         if(baseMapJson.permissions) {
-        	for(var perm in baseMapJson.permissions) {
-        		baseLayer.addPermission(perm, baseMapJson.permissions[perm]);	
-        	}
+            for(var perm in baseMapJson.permissions) {
+                baseLayer.addPermission(perm, baseMapJson.permissions[perm]);   
+            }
         }
 
         for(var i = 0; i < baseMapJson.subLayer.length; i++) {
@@ -438,15 +438,16 @@ function(mapLayerUrl, sandbox) {
             layer.setMaxScale(mapLayerJson.maxScale);
             layer.setMinScale(mapLayerJson.minScale);
             layer.setDescription(mapLayerJson.subtitle);
+            layer.setQueryable(mapLayerJson.isQueryable == true);
             
             // metadata 
             layer.setDataUrl(mapLayerJson.dataUrl);             
             layer.setMetadataIdentifier(mapLayerJson.dataUrl_uuid);
             if( !layer.getMetadataIdentifier() && layer.getDataUrl() ) {
-            	var tempPartsForMetadata = layer.getDataUrl().split("uuid=");
-            	if( tempPartsForMetadata.length == 2 ) {
-            		layer.setMetadataIdentifier(tempPartsForMetadata[1]);
-            	}
+                var tempPartsForMetadata = layer.getDataUrl().split("uuid=");
+                if( tempPartsForMetadata.length == 2 ) {
+                    layer.setMetadataIdentifier(tempPartsForMetadata[1]);
+                }
             }
             
             // backendstatus 
@@ -477,9 +478,9 @@ function(mapLayerUrl, sandbox) {
             
             // permissions
             if(mapLayerJson.permissions) {
-            	for(var perm in mapLayerJson.permissions) {
-            		layer.addPermission(perm, mapLayerJson.permissions[perm]);	
-            	}
+                for(var perm in mapLayerJson.permissions) {
+                    layer.addPermission(perm, mapLayerJson.permissions[perm]);  
+                }
             }
 
             var builder = this.modelBuilderMapping[mapLayerJson.type];
@@ -521,7 +522,7 @@ function(mapLayerUrl, sandbox) {
     },
     /**
      * @method _populateStyles
-	 * 
+     * 
      * Parses styles attribute from JSON and adds them as a 
      * Oskari.mapframework.domain.Style to the layer Object.
      * If no styles attribute is present, adds an empty 
@@ -575,7 +576,6 @@ function(mapLayerUrl, sandbox) {
             layer.selectStyle("");
         }
 
-        layer.setQueryable((jsonLayer.isQueryable == true));
         layer.setLegendImage(jsonLayer.legendImage);
         
         if(jsonLayer.formats && jsonLayer.formats.value) {
@@ -597,11 +597,11 @@ function(mapLayerUrl, sandbox) {
      * @throws Error if layer with the given id was found
      */
     checkForDuplicateId : function(id, name) {
-    	
-		if(this._reservedLayerIds[id] === true) {
-			var foundLayer = this.findMapLayer(id);
+        
+        if(this._reservedLayerIds[id] === true) {
+            var foundLayer = this.findMapLayer(id);
             throw "Trying to add map layer with id '" + id + " (" + name + ")' but that id is already reserved for '" + foundLayer.getName() + "'";
-		}
+        }
     },
     /**
      * @method findMapLayer
@@ -613,7 +613,7 @@ function(mapLayerUrl, sandbox) {
      * @param {Array}
      *            layerList (optional) array of maplayer objects, defaults to all layers
      * @return {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} 
-     * 	layerModel if found matching id or null if not found
+     *  layerModel if found matching id or null if not found
      */
     findMapLayer : function(id, layerList) {
         if(!layerList) {
