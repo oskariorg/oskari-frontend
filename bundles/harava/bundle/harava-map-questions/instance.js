@@ -284,7 +284,6 @@ function() {
     		jQuery('#harava-question-tool_' + moduleId + '_' + questionId).css({
     			"background-color": "transparent"
     		});
-    		me.plugin.deActivateAll();
     	} else {
     		jQuery('#harava-question-tool_' + moduleId + '_' + questionId).addClass('active');
     		jQuery('#harava-question-tool_' + moduleId + '_' + questionId).css({
