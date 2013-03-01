@@ -618,6 +618,11 @@ function(config) {
     "showStep": function(moduleId){
     	var me = this;
     	me.deActivateAll();
+    	
+    	jQuery.each(me.modules, function(k, module){
+    		module.layer.setVisibility(false);
+    	});
+    	
     	var module = me.getModuleById(moduleId);
     	if(module!=null){        
     		module.layer.setVisibility(true);
@@ -653,14 +658,14 @@ function(config) {
     	me._currentControls.modify = null;
     	me._currentControls.draw = null;
     	me._currentStepAndQuestion = null;
+    	
     	jQuery.each(me.modules, function(k, module){
     		for(var key in module.drawControls) {
             	module.drawControls[key].deactivate();
             }
             for(var key in module.modifyControls) {
             	module.modifyControls[key].deactivate();
-            }            
-            module.layer.setVisibility(false);            
+            }
     	});
     	
     	var popups = me._map.popups;
@@ -707,7 +712,6 @@ function(config) {
 		    	} else {
 		    		me._currentStepAndQuestion = null;
 		    	}
-	    		module.modifyControls.modify.activate();
 		        me._currentControls.modify = module.modifyControls.modify;
 		        me._currentQuestion = question;
     		}

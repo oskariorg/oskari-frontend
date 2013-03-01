@@ -26,6 +26,7 @@ function() {
 	this.templateQuestionTool = jQuery('<div class="harava-question-tool"></div>');	
 }, {
 	_currentStep: '',
+	_currentModule: '',
 	/**
 	 * @static
 	 * @property __name
@@ -284,6 +285,9 @@ function() {
     		jQuery('#harava-question-tool_' + moduleId + '_' + questionId).css({
     			"background-color": "transparent"
     		});
+    		
+    		me.plugin.deActivateAll();
+    		
     	} else {
     		jQuery('#harava-question-tool_' + moduleId + '_' + questionId).addClass('active');
     		jQuery('#harava-question-tool_' + moduleId + '_' + questionId).css({
@@ -291,6 +295,8 @@ function() {
     		});
     		me.plugin.activateControl(moduleId, questionId);
     	}
+    	
+    	me._currentModule = moduleId;
     },
     /**
      * @method getModuleById
