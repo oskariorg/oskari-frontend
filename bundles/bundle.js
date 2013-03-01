@@ -2501,7 +2501,10 @@ Oskari = (function() {
 		getElParts : function() {
 			throw "N/A";
 		},
-		setLayout : function(s) {
+		pushLayout : function(s) {
+			throw "N/A";
+		},
+		popLayout : function(s) {
 			throw "N/A";
 		},
 		getLayout : function() {
