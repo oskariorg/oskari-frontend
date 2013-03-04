@@ -1,0 +1,247 @@
+<div class="admin-add-layer">
+    <div class="add-layer-wrapper">
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-type" class="add-layer-label" title="Tason tyyppi: WMS, WFS, WMTS">Tason tyyppi</label>
+            </div>
+            <div class="add-layer-input-area">
+                <div id="add-layer-type" class="add-layer-text">WMS Layer</div>
+                <!--select id="add-layer-type">
+                    <option>WMS Layer</option>
+                    <option>WFS Layer</option>
+                    <option>WMTS Layer</option>
+                </select-->
+            </div>
+        </div>
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-type" class="add-layer-label"  title="WMS-tasomäärittelyjen osoite">WMS osoite</label>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <input type="text" id="add-layer-wms" class="add-layer-input" placeholder="WMS-määrittelyjen osoite" />
+                    <div class="icon-close"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-datauuid" class="add-layer-label" title="Paikkatietohakemiston metatiedon tiedostotunniste, joka yksilöi metatiedon XML kuvailun">Metatiedon tiedosto&shy;tunniste</label>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <input type="text" id="add-layer-datauuid" class="add-layer-input" placeholder="Metadatan tunniste" />
+                    <div class="icon-close"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-inspire-theme" class="add-layer-label"  title="Lisää InspireTheme:n mukaiset aiheet">Lisää aiheet</label>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <ul id="add-layer-inspire-theme">
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-layer-record">
+            <div class="add-layer-grouping" title="Tason nimi">Tason nimi ja lyhyt kuvaus</div>
+
+            <div class="add-layer-label-area">
+                <label for="add-layer-fi-name" class="add-layer-label" title="FI">Suomeksi:</label>
+            </div>
+            <div  class="add-layer-input-area">
+                <div class="input-controls">
+                    <input type="text" id="add-layer-fi-name" class="add-layer-input" placeholder="Turun postinumeroalueet" value="Turun postinumeroalueet" />
+                    <div class="icon-close"></div>
+                </div>
+                <div class="input-controls">
+                    <input type="text" id="add-layer-fi-title" class="add-layer-input" placeholder="Lyhyt kuvaus" value="" />
+                    <div class="icon-close"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-se-name" class="add-layer-label" title="SE">Ruotsiksi:</label>
+            </div>
+            <div  class="add-layer-input-area">
+                <div class="input-controls">
+                    <input type="text" id="add-layer-se-name" class="add-layer-input" placeholder="Åbo postnummerområden" value="Åbo postnummerområden" />
+                    <div class="icon-close"></div>
+                </div>
+                <div class="input-controls">
+                    <input type="text" id="add-layer-se-title" class="add-layer-input" placeholder="Lyhyt kuvaus" value="" />
+                    <div class="icon-close"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-en-name" class="add-layer-label" title="EN">Englanniksi:</label>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <input type="text" id="add-layer-en-name" class="add-layer-input" placeholder="Postal code areas in Turku" value="Postal code areas in Turku" />
+                    <div class="icon-close"></div>
+                </div>
+                <div class="input-controls">
+                    <input type="text" id="add-layer-en-title" class="add-layer-input" placeholder="Short description" value="" />
+                    <div class="icon-close"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="add-layer-record add-layer-separation">
+            <div class="add-layer-label-area">
+                <label for="add-layer-wms-id" class="add-layer-label" title="WMS taso eli uniikki nimi">WMS nimi</label>
+            </div>
+            <div class="add-layer-input-area">
+                <select id="add-layer-wms-id">
+                    <option>11 / Nimi 1</option>
+                    <option>12 / Nimi 2</option>
+                    <option>13 / Nimi 3</option>
+                </select>
+            </div>
+        </div>
+
+
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-wms-url" class="add-layer-label" title="WMS karttatasojen URL-osoitteet pilkulla eroteltuna">WMS karttatasojen osoitteet</label>
+            </div>
+            <div class="add-layer-input-area">
+                <textarea rows="2" cols="40" id="add-layer-wms-id" class="add-layer-input" ></textarea>
+            </div>
+        </div>
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-opacity" class="add-layer-label" title="Tason läpinäkyvyys">Läpinäkyvyys</label>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <!--input type="text" id="add-layer-opacity" class="add-layer-input" placeholder="Tason läpinäkyvyys" />
+                    <div class="icon-close"></div-->
+
+                    <!-- USE THE REAL COMPONENT-->
+                    <div class="left-tools" style="">
+                        <div class="oskariui layer-opacity" style="display: inline-block;background-image: url('/Oskari/resources/framework/bundle/layerselection2/images/opacity_slider.png');background-repeat: no-repeat;background-position-y: 5px;">
+                            <div class="layout-slider ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id="layout-slider" style="width: 140px;display: inline-block;margin-right: 16px;background: none; border: 0;">
+                                <a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 100%;"></a>
+                            </div>
+                            <div class="opacity-slider" style="display:inline-block">
+                                <input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" value="100" style="width: 30px;padding: 2px;">%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-style" class="add-layer-label" title="Tyyli">Tyyli</label>
+            </div>
+            <!--div class="add-layer-input-area">
+                <div class="input-controls">
+                    <textarea rows="2" cols="40" id="add-layer-style" class="add-layer-input" ></textarea>
+                </div>
+            </div-->
+            <div class="add-layer-input-area">
+                <select id="add-layer-style">
+                    <option>getCapability result1</option>
+                    <option>getCapability result1</option>
+                    <option>getCapability result1</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-minscale" class="add-layer-label" title="Tason minimimittakaava">Minimi&shy;mittakaava</label>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <input type="text" id="add-layer-minscale" class="add-layer-input" placeholder="Tason minimimittakaava" value="15000000" />
+                    <div class="icon-close"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-maxscale" class="add-layer-label" title="Tason Maximimittakaava">Maximi&shy;mittakaava</label>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <input type="text" id="add-layer-maxscale" class="add-layer-input" placeholder="Tason maximimittakaava" value="1" />
+                    <div class="icon-close"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-maxscale" class="add-layer-label" title="Legenda-kuvan osoite">Legenda-kuvan osoite</label>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <input type="text" id="add-layer-maxscale" class="add-layer-input" placeholder="Legenda-kuvan osoite" />
+                    <div class="icon-close"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-responsetype" class="add-layer-label" title="Response type of Get Feature Info (GFI)">GFI vastauksen tyyppi</label>
+            </div>
+            <div class="add-layer-input-area">
+                <select id="add-layer-metadataurl">
+                    <option></option>
+                    <option>text/xml</option>
+                    <option>text/html</option>
+                    <option>text/plain</option>
+                    <option>application/vnd.ogc.gml</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-xslt" class="add-layer-label" title="GFI:n tyyli (XSLT)">GFI:n tyyli</label>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <textarea rows="2" cols="40" id="add-layer-xslt" class="add-layer-input" ></textarea>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="add-layer-send">
+            <div class="add-layer-button-area">
+                <div class="input-controls">
+                    <button class="add-layer-btn admin-add-layer-ok" title="Lisää uusi karttataso">OK</button>
+                    <button class="add-layer-btn admin-add-layer-cancel" title="Peruuta">Peruuta</button>
+                </div>
+            </div>
+        </div>
+
+        <br style="clear: both;" />
+    </div>
+</div>

@@ -20,7 +20,12 @@ div.admin-layerselector div.layerGroup div.groupHeader {
 	padding: 8px 10px 8px 12px;
 	font: 14pt Arial,sans-serif;
 }
+
+
 /* layer container */
+div.admin-layerselector div.tab-content div.oskarifield {
+	padding: 10px;
+}
 div.admin-layerselector div.layer {
     padding: 6px 10px 6px 40px;
     background-color : #ffffff;
@@ -87,4 +92,172 @@ div.admin-layerselector div.layer div.backendstatus-ok {
 div.admin-layerselector div.layer div.backendstatus-unknown {
 	height: 20px !important;
 	margin-bottom: 2px;	
+}
+
+
+/*  */
+body {
+    position: relative;
+}
+div.oskariTabs div.tabsHeader ul li.admin-modify-wms {
+    float:right;
+}
+.admin-add-layer-btn, .admin-add-class-btn {
+    float: right;
+}
+.admin-add-layer-btn {
+    margin: 5px 10px;
+}
+button.admin-arrange-layers{
+    background-color: #eee;
+    background-image: url('arrange-icon.png');
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    float: left;
+    margin-left: -30px;
+    width: 20px;
+    height: 20px;
+    border-radius: 2px;
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft. Alpha(Opacity=0)";
+}
+
+.layer {
+    min-height: 20px;
+}
+div.layerselector2 div.layer input {
+    margin-top: 3px;
+}
+div.layerselector2 div.layer .layer-title {
+    margin-top: 4px;
+}
+
+.add-layer-record, .add-layer-send, .add-class-record, .add-class-send {
+    width: 100%;
+    margin-bottom: 5px;
+    overflow: hidden;
+    position: relative;
+}
+.add-layer-separation {
+    margin-top: 15px;
+}
+
+.admin-add-layer {
+    padding: 0px 10px;
+    overflow: hidden;
+    height: 0px;
+    -webkit-transition-duration: 500ms;
+    -webkit-transition-property: height, padding;
+}
+.show-add-layer {
+    padding: 10px 10px;
+    height: 785px;
+    width: 100%;
+    overflow: auto;
+}
+.admin-add-class {
+    padding: 0px 10px;
+    overflow: hidden;
+    height: 0px;
+    -webkit-transition-duration: 500ms;
+    -webkit-transition-property: height;
+}
+.show-add-class {
+    padding: 1s0px 10px;
+    height: 190px;
+}
+
+.add-layer-wrapper, .add-class-wrapper {
+    display: block;
+
+}
+.add-layer-btn {
+    float: left;
+}
+
+.add-layer-grouping, .add-class-grouping {
+    font-weight: bold;
+    font-size: 110%;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+.add-layer-label-area, .add-class-label-area {
+    display: table;
+    float: left;
+}
+.add-layer-label, .add-class-label {
+    font-weight: bold;
+    width: 75px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.add-layer-input-area, .add-layer-button-area, .add-class-input-area, .add-class-button-area {
+    margin-left: 80px;
+}
+.input-controls {
+    position: relative;
+    float: left;
+    margin-right: 5px;
+}
+.icon-close {
+    display: inline-block;
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft. Alpha(Opacity=0)";
+    position: absolute;
+    top: 9px;
+    right: 10px;
+    margin-left: 0px;
+    cursor: pointer;
+}
+.input-controls:hover .icon-close, .layer:hover button.admin-arrange-layers {
+    -webkit-transition-property: opacity;
+    -webkit-transition-duration: 500ms;
+    -moz-transition-property: opacity;
+    -moz-transition-duration: 500ms;
+    -o-transition-property: opacity;
+    -o-transition-duration: 500ms;
+    -ms-transition-property: opacity;
+    -ms-transition-duration: 500ms;
+    transition-property: opacity;
+    transition-duration: 500ms;
+    -ms-filter: "progid:DXImageTransform.Microsoft. Alpha(Opacity=100)";
+    opacity: 1;
+}
+
+div.layerselector2 div.layer .add-layer-input {
+    float:none;
+    width: 150px;
+    height: 16px;
+    margin: 0;
+}
+div.add-layer-text {
+    height: 30px;
+    font-size: 14px;
+}
+div.layerselector2 div.layer #add-layer-inspire-theme {
+	width: 185px;
+	height: 60px;
+	overflow-y: auto;
+	border: solid 1px #b7b7b7;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 1px 1px 2px rgba(0,0,0,.3);
+    -moz-box-shadow: inset 1px 1px 2px rgba(0,0,0,.3);
+    box-shadow: inset 1px 1px 2px rgba(0,0,0,.3);
+}
+
+div.layerselector2 div.layer select{
+    width: 197px;
+    padding: 8px 10px 8px 10px;
+    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+}
+
+div.layerselector2 div.layer textarea.add-layer-input {
+    padding: 10px;
+    width: 197px;
+    height: 48px;
+    border-radius: 4px;
+    box-sizing: border-box;
 }

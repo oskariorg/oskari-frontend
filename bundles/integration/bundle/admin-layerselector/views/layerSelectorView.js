@@ -8,7 +8,9 @@ define([
     return Backbone.View.extend({
 
         events : {
-            "click .admin-layer-tab" : "toggleTab"
+            "click .admin-layer-tab"        : "toggleTab",
+            "click .admin-add-class-btn"    : "toggleAddOrg",
+            "click .admin-add-class-cancel" : "toggleAddOrg"
         },
 
         // At initialization we bind to the relevant events on the `Todos`
@@ -65,7 +67,7 @@ define([
             }), 'organization');
 
             //activate tab
-            jQuery('tabsHeader').find('.inspire').addClass('active');
+            jQuery('.tabsHeader').find('.inspire').parent().addClass('active');
             jQuery('.tab-content.inspire').show();
             jQuery('.tab-content.organization').hide();
         },
@@ -75,8 +77,8 @@ define([
             var target  = jQuery(e.currentTarget);
             var type    = target.attr('data-tab');
 
-            jQuery('tabsHeader').find('.active').removeClass('active');
-            target.addClass('active');
+            jQuery('.tabsHeader').find('.active').removeClass('active');
+            target.parent().addClass('active');
 
             if(type == 'inspire') {
                 jQuery('.tab-content.inspire').show();
@@ -87,7 +89,20 @@ define([
                 jQuery('.tab-content.inspire').hide();                
             }
 
+        }, 
+        toggleAddOrg : function(e) {
+            var elem = jQuery('.admin-add-class');
+            if(elem.hasClass('show-add-class')) {
+                elem.removeClass('show-add-class');
+            } else {
+                elem.addClass('show-add-class');
+            }
+        },
+        removeAddOrg : function(e) {
+            jQuery('.admin-add-class').removeClass('show-add-class');
         }
+
+
 
     });
 });

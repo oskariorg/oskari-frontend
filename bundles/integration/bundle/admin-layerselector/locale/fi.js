@@ -57,6 +57,13 @@ Oskari.registerLocalization({
 				"tooltip" : "",
 				"iconClass" : "backendstatus-ok"
 			}
+		},
+		"admin" : {
+			"addOrganization" 		: "Lisää tiedontuottaja",
+			"addOrganizationDesc"	: "Lisää aihe eli uusi Inspire-teema",
+			"addInspire" 			: "Lisää aihe",
+			"addLayer" 				: "Lisää taso",
+			"addLayerDesc"			: "Lisää taso tähän Inspire-teemana"
 		}
 	}
 });
