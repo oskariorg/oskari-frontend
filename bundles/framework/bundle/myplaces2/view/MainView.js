@@ -45,55 +45,18 @@ function(instance) {
         
         var sandbox = this.instance.sandbox;
         sandbox.register(me);
-        for(p in me.eventHandlers) {
+        for(var p in me.eventHandlers) {
             sandbox.registerForEventByName(me, p);
         }
         
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         
-
-        var newStyle = '<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>\
-        <sld:StyledLayerDescriptor version="1.0.0" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld ./Sld/StyledLayerDescriptor.xsd">\
-            <sld:NamedLayer>\
-                <sld:Name>Polygon</sld:Name>\
-                <sld:UserStyle>\
-                    <sld:Name>Polygon</sld:Name>\
-                    <sld:FeatureTypeStyle>\
-                        <sld:FeatureTypeName>Polygon</sld:FeatureTypeName>\
-                        <sld:Rule>\
-                            <sld:Name>Polygon</sld:Name>\
-                            <sld:Title>Polygon</sld:Title>\
-                            <sld:PolygonSymbolizer>\
-                                <sld:Fill>\
-                                    <sld:GraphicFill>\
-                                        <sld:Graphic>\
-                                            <sld:ExternalGraphic>\
-                                                <sld:OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.paikkatietoikkuna.fi/mml-2.0-theme/images/logo.png"/>\
-                                                <sld:Format>image/jpg</sld:Format>\
-                                                </sld:ExternalGraphic>\
-                                            <sld:Size>20</sld:Size>\
-                                        </sld:Graphic>\
-                                    </sld:GraphicFill>\
-                                </sld:Fill>\
-                                <sld:Stroke>\
-                                    <sld:CssParameter name="stroke">#006666</sld:CssParameter>\
-                                    <sld:CssParameter name="stroke-width">2</sld:CssParameter>\
-                                    <sld:CssParameter name="stroke-opacity">1</sld:CssParameter>\
-                                    <sld:CssParameter name="stroke-dasharray">4 4</sld:CssParameter>\
-                                </sld:Stroke>\
-                            </sld:PolygonSymbolizer>\
-                        </sld:Rule>\
-                    </sld:FeatureTypeStyle>\
-                </sld:UserStyle>\
-            </sld:NamedLayer>\
-        </sld:StyledLayerDescriptor>';
-
-
-        // rewrite creation of drawPlugin in the start-function
-        // register plugin for map (drawing for my places) 
-        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', newStyle);
-//      // register plugin for map (drawing for my places)
-//      var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin');
+        // register plugin for map (drawing for my places)
+        var pluginConfig = {
+            "id" : 'MyPlaces',
+            multipart : true
+        };
+        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', pluginConfig);
         mapModule.registerPlugin(drawPlugin);
         mapModule.startPlugin(drawPlugin);
         this.drawPlugin = drawPlugin;

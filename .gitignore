@@ -5,8 +5,10 @@ docroot/WEB-INF/classes
 bin/
 dist/
 .idea
+*.iml
 tools/node_modules
 tools/validation
+tools/coverage
 META-INF/
 docs/node_modules/
 docs/release/

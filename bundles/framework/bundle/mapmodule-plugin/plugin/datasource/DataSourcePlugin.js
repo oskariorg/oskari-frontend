@@ -65,7 +65,7 @@ function() {
      *          reference to application sandbox
      */
     init : function(sandbox) {
-        this.template = jQuery("<div class='datascource'>" +
+        this.template = jQuery("<div class='oskari-datasource'>" +
                 "<div class='link'><a href='JavaScript:void(0);'></a></div>" +
             "</div>");
         this.templateinfoIcon = jQuery('<div class="icon-info"></div>');
@@ -264,7 +264,7 @@ function() {
         }
 
         dialog.show( this.localization.popup.title, content, [okBtn]);
-        dialog.moveTo('div.datascource a', 'top');
+        dialog.moveTo(this.element.find('a'), 'top');
     },
 
     /**
@@ -292,7 +292,7 @@ function() {
         var infoIcon = this.templateinfoIcon.clone();
         var layerName = layer.getName();
         if(layerName) {
-            var layerItem = jQuery('<br><li>' + layerName + '</li></br>');    
+            var layerItem = jQuery('<li>' + layerName + '</li>');
             //metadata link
             var uuid = layer.getMetadataIdentifier();
             if(uuid) {    

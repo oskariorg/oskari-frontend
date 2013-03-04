@@ -58,9 +58,6 @@ function() {
 
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/service/usage-sniffer-service.js"
-		}, {
-			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/service/map-layer-service.js"
 		}],
 		"resources" : []

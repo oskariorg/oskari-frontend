@@ -805,7 +805,6 @@ function(id, imageUrl, options) {
         this._updateDomain();
         var event = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this._map.getZoom(), false, this._map.getScale());
         sandbox.notifyAll(event);
-        sandbox.doSniffing();
     },
     /**
      * @method _updateDomain

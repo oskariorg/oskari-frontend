@@ -69,12 +69,12 @@ function(config) {
      */
     init : function() {
         var me = this;
-
+		var ppid = (new Date()).getTime()+"";
         // templates
         this.__templates['pan'] = jQuery('<div class="panbuttonDiv">' + 
             '<div>' + 
-            '  <img class="panbuttonDivImg" usemap="#panbuttons">' + 
-            '    <map name="panbuttons">' + 
+            '  <img class="panbuttonDivImg" usemap="#panbuttons_'+ppid+'">' + 
+            '    <map name="panbuttons_'+ppid+'">' + 
             // center
             '      <area shape="circle" ' + 'class="panbuttons_center" ' + 'coords="45,45,20" href="#">' +
             // left

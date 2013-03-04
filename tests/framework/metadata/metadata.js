@@ -1,117 +1,8 @@
 describe('Test Suite for Metadata', function() {
-    var appSetup = {
-        "startupSequence": [{
-            "instanceProps": {
-
-            },
-            "title": "OpenLayers",
-            "bundleinstancename": "openlayers-default-theme",
-            "fi": "OpenLayers",
-            "sv": "?",
-            "en": "OpenLayers",
-            "bundlename": "openlayers-default-theme",
-            "metadata": {
-                "Import-Bundle": {
-                    "openlayers-default-theme": {
-                        "bundlePath": "../../../packages/openlayers/bundle/"
-                    },
-                    "openlayers-single-full": {
-                        "bundlePath": "../../../packages/openlayers/bundle/"
-                    },
-                    "oskariui": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": [
-
-                ]
-            }
-        }, {
-            "instanceProps": {
-
-            },
-            "title": "Map",
-            "bundleinstancename": "mapfull",
-            "fi": "Map",
-            "sv": "?",
-            "en": "Map",
-            "bundlename": "mapfull",
-            "metadata": {
-                "Import-Bundle": {
-                    "service-base": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "event-map-layer": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "request-map-layer": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapmodule-plugin": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "event-base": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "mapfull": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "core-base": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "request-base": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "domain": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "core-map": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "oskariui": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "request-map": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "sandbox-base": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "service-map": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "sandbox-map": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    },
-                    "event-map": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": [
-
-                ]
-            }
-        }, {
-            "instanceProps": {
-
-            },
-            "title": "Oskari DIV Manazer",
-            "bundleinstancename": "divmanazer",
-            "fi": "Oskari DIV Manazer",
-            "sv": "?",
-            "en": "Oskari DIV Manazer",
-            "bundlename": "divmanazer",
-            "metadata": {
-                "Import-Bundle": {
-                    "divmanazer": {
-                        "bundlePath": "packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": [
-
-                ]
-            }
-        }, {
+    var stateHandlerModule = null,
+        sandbox = null,
+        appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull', 'divmanazer',
+        {
             "instanceProps": {
 
             },
@@ -151,157 +42,58 @@ describe('Test Suite for Metadata', function() {
 
                 ]
             }
-        }]
-    };
-    var appConf = {
-        "toolbar": {
-            "state": {
+        }]),
+        mapfullConf = getConfigForMapfull(),
+        appConf = {
+            "toolbar": {
+                "state": {
 
-            },
-            "conf": {
-                "history": false,
-                "basictools": {
-                    "zoombox": false,
-                    "measureline": false,
-                    "measurearea": false
                 },
-                "viewtools": false
-            }
-        },
-        "mapfull": {
-            "state": {
-                "selectedLayers": [{
-                    "id": "base_35"
-                }],
-                "zoom": 1,
-                "east": "517620",
-                "north": "6874042"
+                "conf": {
+                    "history": false,
+                    "basictools": {
+                        "zoombox": false,
+                        "measureline": false,
+                        "measurearea": false
+                    },
+                    "viewtools": false
+                }
             },
-            "conf": {
-                "globalMapAjaxUrl": "/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&",
-                "plugins": [{
-                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin"
-                }, {
-                    "id": "Oskari.mapframework.mapmodule.WmsLayerPlugin"
-                }, {
-                    "id": "Oskari.mapframework.mapmodule.MarkersPlugin"
-                }, {
-                    "id": "Oskari.mapframework.mapmodule.ControlsPlugin"
-                }, {
-                    "id": "Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerPlugin"
-                }, {
-                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin"
-                }, {
-                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"
-                }, {
-                    "id": "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons"
-                }],
-                "layers": [{
-                    "type": "base",
-                    "id": "base_35",
-                    "name": "Taustakartta",
-                    "subLayer": [{
-                        "wmsName": "taustakartta_5k",
-                        "type": "wmslayer",
-                        "id": 184,
-                        "minScale": 5000,
-                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
-                        "maxScale": 1
-                    }, {
-                        "wmsName": "taustakartta_10k",
-                        "type": "wmslayer",
-                        "id": 185,
-                        "minScale": 25001,
-                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
-                        "maxScale": 5001
-                    }, {
-                        "wmsName": "taustakartta_20k",
-                        "type": "wmslayer",
-                        "id": 186,
-                        "minScale": 40001,
-                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
-                        "maxScale": 25000
-                    }, {
-                        "wmsName": "taustakartta_40k",
-                        "type": "wmslayer",
-                        "id": 187,
-                        "minScale": 2,
-                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
-                        "maxScale": 1
-                    }, {
-                        "wmsName": "taustakartta_80k",
-                        "type": "wmslayer",
-                        "id": 188,
-                        "minScale": 56702,
-                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
-                        "maxScale": 40000
-                    }, {
-                        "wmsName": "taustakartta_160k",
-                        "type": "wmslayer",
-                        "id": 189,
-                        "minScale": 141742,
-                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
-                        "maxScale": 56702
-                    }, {
-                        "wmsName": "taustakartta_320k",
-                        "type": "wmslayer",
-                        "id": 190,
-                        "minScale": 283474,
-                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
-                        "maxScale": 141742
-                    }, {
-                        "wmsName": "taustakartta_800k",
-                        "type": "wmslayer",
-                        "id": 191,
-                        "minScale": 566939,
-                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
-                        "maxScale": 283474
-                    }, {
-                        "wmsName": "taustakartta_2m",
-                        "type": "wmslayer",
-                        "id": 192,
-                        "minScale": 1417333,
-                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
-                        "maxScale": 566939
-                    }, {
-                        "wmsName": "taustakartta_4m",
-                        "type": "wmslayer",
-                        "id": 193,
-                        "minScale": 2834657,
-                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
-                        "maxScale": 1417333
-                    }, {
-                        "wmsName": "taustakartta_8m",
-                        "type": "wmslayer",
-                        "id": 194,
-                        "minScale": 15000000,
-                        "wmsUrl": "http://a.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://b.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://c.karttatiili.fi/dataset/taustakarttasarja/service/wms,http://d.karttatiili.fi/dataset/taustakarttasarja/service/wms",
-                        "maxScale": 2834657
-                    }],
-                    "orgName": "Taustakartta",
-                    "inspire": "Taustakartta"
-                }],
-                "imageLocation": "/Oskari/resources",
-                "user": {
-                    "lastName": "",
-                    "nickName": "",
-                    "userUUID": "",
-                    "firstName": "",
-                    "loginName": ""
+            "mapfull": mapfullConf,
+            "statehandler": {
+                "state": {},
+                "conf": {
+                    "enable": true,
+                    "url": "http://localhost:8080/logger/"
                 }
             }
+        };
+
+    function startApplication(done, setup, conf) {
+        if(!setup) {
+            // clone original settings
+            setup = jQuery.extend(true, {}, appSetup);
         }
+        if(!conf) {
+            // clone original settings
+            conf = jQuery.extend(true, {}, appConf);
+        }
+
+        //setup HTML
+        jQuery("body").html(getDefaultHTML());
+        // startup Oskari
+        setupOskari(setup, conf, function() {
+            // Find handles to sandbox and statehandler module
+            sandbox = Oskari.$("sandbox");
+            stateHandlerModule = sandbox.findRegisteredModuleInstance('StateHandler');
+            done();
+        });
     };
 
-    beforeEach(function(done) {
-        jQuery("body").html('<nav id="maptools"><div id="loginbar"></div><div id="menubar"></div><div id="divider"></div><div id="toolbar"></div></nav><div id="contentMap"><div id="mapdiv"></div></div>');
-        setupOskari(appSetup, appConf, done);
-    });
+    beforeEach(startApplication);
 
-    afterEach(function() {
-        // The Flyout is injected into the DOM and needs to be removed manually as testacular doesn't do that
-        jQuery("body > div").remove();
-    });
+    // Clear the DOM as testacular doesn't do it.
+    afterEach(teardown);
 
     describe('Bundle tests', function() {
 

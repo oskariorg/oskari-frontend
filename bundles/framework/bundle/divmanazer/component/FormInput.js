@@ -8,7 +8,9 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
  * @method create called automatically on construction
  * @static
  */
-function(name) {
+function(name,psandbox) {
+	var sandbox = psandbox || Oskari.getSandbox();
+    this.sandbox = sandbox;
     this.template = jQuery('<div class="oskarifield"><label></label><input type="text" autofocus/></div>');
     this.templateErrors = jQuery('<div class="error"></div>');
     this.templateTooltip = jQuery('<div class="icon-info"></div>');
@@ -322,10 +324,12 @@ function(name) {
      */
     _bindFocusAndBlur : function() {
         
-        var sandbox = Oskari.$('sandbox');
-        if(!sandbox) {
-            return;
-        }
+      	var sandbox = this.sandbox;
+      	if( !sandbox ) {
+      		return;
+      	} 
+       	
+      	
         var enabler = sandbox.getRequestBuilder('EnableMapKeyboardMovementRequest');
         var disabler = sandbox.getRequestBuilder('DisableMapKeyboardMovementRequest');
         if(!enabler || !disabler) {

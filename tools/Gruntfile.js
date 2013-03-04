@@ -41,44 +41,51 @@ module.exports = function(grunt) {
                 '../tests/**/*.js'
                 ],
 // uncommented as validate causes unnecessary delay
-//            tasks: 'validate compile testacularRun:dev yuidoc'
-            tasks: 'compile testacularRun:dev yuidoc'
+//            tasks: ['validate', 'compile', 'testacularRun:dev', 'yuidoc']
+            tasks: ['compile', 'testacularRun:dev']
         },
         yuidoc: {
-            options: {
-                paths: [ '../sources/framework',
-                         '../bundles/framework',
-                         '../bundles/sample',
-                         '../bundles/catalogue' ],
-                outdir: '../dist/docs/'
+            compile: {
+                options: {
+                    paths: [ '../sources/framework',
+                             '../bundles/framework',
+                             '../bundles/sample',
+                             '../bundles/catalogue' ],
+                    outdir: '../dist/docs/'
+                }
+            }
+        },
+        sprite: {
+            options : {
+                iconDirectoryPath : "../applications/paikkatietoikkuna.fi/full-map/icons",
+                resultImageName : "../applications/paikkatietoikkuna.fi/full-map/icons/icons.png",
+                resultCSSName : "../applications/paikkatietoikkuna.fi/full-map/css/icons.css",
+                spritePathInCSS : "../icons"
             }
         },
         testacularRun: {
             dev: {
-                runnerPort: 9100
+                options: {
+                    runnerPort: 9100
+                }
             }
         },
-        testacularServer: {
+        testacular: {
             dev: {
-                configFile: 'testacular.conf.js',
                 options: {
+                    configFile: 'testacular.conf.js',
                     keepalive: true
                 }
-            },
-            ci: {
-                configFile: 'testacular.conf.js'
             }
-        },
-        testacularS: {
-            configFile: 'testacular.conf.js'
-        },
-        uglify: {}
+        }
     });
 
 
     // Actually load this plugin's task(s).
     grunt.loadTasks('tasks');
 
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-yuidoc');
     grunt.loadNpmTasks('grunt-testacular');
 
     // Default task.
@@ -90,6 +97,7 @@ module.exports = function(grunt) {
         if (!appSetupFile) {
             appSetupFile = "../applications/sample/full/full_appsetup.json";
         }
+        grunt.log.writeln('Compiling appsetup...');
         var parser = require('./parser.js');
         var actionHandler = require('./action_compile.js');
 
@@ -103,12 +111,14 @@ module.exports = function(grunt) {
         if(unknownfiles.length != 0) {
             console.log('Appsetup referenced types of files that couldn\'t be handled: ' + unknownfiles);
         }
+        grunt.log.writeln('Compile done!');
     });
 
     grunt.registerTask('validate', 'experimental build', function(appSetupFile, arg) {
         if (!appSetupFile) {
             appSetupFile = "../applications/sample/full/full_appsetup.json";
         }
+        grunt.log.writeln('Validating appsetup...');
         var parser = require('./parser.js');
         var actionHandler = require('./action_validate.js');
 
@@ -122,5 +132,6 @@ module.exports = function(grunt) {
         if(unknownfiles.length != 0) {
             console.log('Appsetup referenced types of files that couldn\'t be handled: ' + unknownfiles);
         }
+        grunt.log.writeln('Validation done!');
     });
 };

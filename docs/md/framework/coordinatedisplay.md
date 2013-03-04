@@ -15,7 +15,7 @@ This bundle provides a plugin (Oskari.mapframework.bundle.coordinatedisplay.plug
 
 ## Screenshot
 
-![screenshot](<%= docsurl %>images/coordinate_display.png)
+![screenshot](<%= docsurl %>images/coordinatedisplay.png)
 
 
 ## Bundle configuration

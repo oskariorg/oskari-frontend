@@ -51,7 +51,7 @@ echo Setting grunt to path
 set path=%path%;%binpath%
 echo Starting testacular server and grunt watch
 cd tools
-start grunt.cmd testacularServer:dev
+start grunt.cmd testacular:dev
 grunt.cmd watch
 REM Note that the script will terminate and grunt.cmd will continue execution.
 REM To return the execution to the script. Add "CALL" before crunt.cmd

@@ -98,7 +98,9 @@ function(name,viewClazz) {
      */
     start : function() {
         var me = this;
-        var sandbox = Oskari.$("sandbox");
+        var conf = me.conf ;
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+		var sandbox = Oskari.getSandbox(sandboxName);
 
         me.sandbox = sandbox;
         sandbox.register(this);

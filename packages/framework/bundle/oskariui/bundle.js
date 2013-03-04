@@ -1,42 +1,53 @@
 /**
  * @class Oskari.mapframework.bundle.oskariui.OskariUIBundle
  *
- * Bundle to add Map Layer Legends to application. 
- * 
+ * Applies required jquery-ui-components to app
+ * Adds Dom Manager for managing external DOM references.
+ *
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.oskariui.OskariUIBundle", function() {
-
+	this.conf = {};
 }, {
 	"create" : function() {
+
+
 		return this;
 
 	},
 	"update" : function(manager, bundle, bi, info) {
 
 	},
-	
 	"start" : function() {
-		
+		/* We'll add our own Dom Manager */
+		var partsMap = this.conf.partsMap || {};
+		var domMgr = Oskari.clazz.create('Oskari.framework.bundle.oskariui.DomManager', jQuery, partsMap);
+		Oskari.setDomManager(domMgr);
+
 	},
-	
 	"stop" : function() {
-		
+
 	}
-	
-	
 }, {
 
-	"protocol" : ["Oskari.bundle.Bundle","Oskari.bundle.BundleInstance"],
+	"protocol" : ["Oskari.bundle.Bundle", "Oskari.bundle.BundleInstance"],
 	"source" : {
 
-		"scripts" : [
-		{
+		"scripts" : [{
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/oskariui/jquery-ui-1.9.1.custom.min.js"
 		}, {
 			"type" : "text/css",
 			"src" : "../../../../resources/framework/bundle/oskariui/css/jquery-ui-1.9.1.custom.css"
-		}],
+		}, {
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/oskariui/DomManager.js"
+		}, {
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/oskariui/Layout.js"
+		}/*, {
+			"type" : "text/css",
+			"src" : "../../../../resources/framework/bundle/oskariui/css/layout-grid.css"
+		}*/],
 
 		"locales" : []
 	},

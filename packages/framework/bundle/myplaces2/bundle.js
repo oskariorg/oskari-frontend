@@ -22,6 +22,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
 			"src" : "../../../../bundles/framework/bundle/myplaces2/event/FinishedDrawingEvent.js"
 		}, {
 			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/myplaces2/event/AddedFeatureEvent.js"
+		}, {
+			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/myplaces2/event/MyPlaceHoverEvent.js"
 		}, {
 			"type" : "text/javascript",

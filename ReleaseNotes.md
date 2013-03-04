@@ -2,15 +2,21 @@
 
 ## 1.6 release notes
 
+### mapfull bundle
+
+Now calls OpenLayers.updateSize() when it changes the size of div the map is rendered to.
+
 ### data source plugin
 
 the layers are grouped together under same data provider headings and metadata links added
 
 test suite added for the plugin
 
-### libraries bundle
+### libraries
 
-openlayers updated to 2.12
+GeoStats library added to Oskari libraries. 
+
+Also added a new bundle package libraries/geostats that can be used as dependency for bundles utilizing the lib
 
 ### featuredata bundle
 
@@ -31,7 +37,7 @@ default buttons are configurable, by setting the false the toolgroup or tool is 
 
 ### myplaces bundle
 
-External graphic can be activated by changing OpenLayers bundle version to openlayers-graphic-fill (instead of openlayers-single-full) and giving new style as additional parameter to the drawin plugin.
+External graphic can be activated by changing OpenLayers bundle version to openlayers-graphic-fill (instead of openlayers-single-full) and giving new style as config parameter to the drawin plugin.
 Adding external graphics for DrawPlugin:
 ```javascript
         var newStyle = '<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>\
@@ -73,10 +79,51 @@ Adding external graphics for DrawPlugin:
 
         // rewrite creation of drawPlugin in the start-function
         // register plugin for map (drawing for my places) 
-        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', newStyle);
+        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', { graphicFill : newStyle });
 ```
 
+Multiple points, lines and polygons are now supported objects in My places. After each drawn feature a new MyPlaces.AddedFeatureEvent event is sent.
+After the drawing is finished by the user, the existing MyPlaces.FinishedDrawingEvent is sent. Enabled with config:
+
+```javascript
+        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', { multipart : true });
+```
+
+My places draw plugin can now be configured to send namespaced events. Plugin name is also prefixed with namespace, map can have multiple drawplugins at the same time.
+Enabled with config:
+
+```javascript
+        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', { id : '<namespace>' });
+
+        ->
+
+    eventHandlers : {
+        '<namespace>.AddedFeatureEvent' : function(event) {}
+```
+
+### framework.domain
+
+Created AbstractLayer.js that is inherited by all layer implementations. The abstract function implementations will unify layer functionality. The WmtsLayer will also correctly use legends if defined and type 'wmtslayer' will return false when called isLayerOfType. Use 'wmts' instead.
+
+### statehandler
+
+Added conf to enable usage logging to the conf url. Replaced UsageSnifferService with _logState in statehandler.
+
+### core/sandbox
+
+service-map package no longer links UsageSnifferService
+
+References to UsageSnifferService removed from core/sandbox.
+
 ## 1.5 release notes
+
+### libraries
+
+Openlayers updated to 2.12
+
+### Openlayers/openlayers-single-full bundle 
+
+Now uses the updated Openlayers version
 
 ### personal data bundle
 

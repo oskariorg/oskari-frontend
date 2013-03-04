@@ -1,105 +1,146 @@
 describe('Test Suite for Data Source plugin', function() {
-	var appSetup = {
-		startupSequence: [{
-			title: 'OpenLayers',
-			fi: 'OpenLayers',
-			sv: '?',
-			en: 'OpenLayers',
-			bundlename: 'openlayers-default-theme',
-			bundleinstancename: 'openlayers-default-theme',
-			metadata: {
-				"Import-Bundle": {
-					"openlayers-single-full": {
-						bundlePath: 'Oskari/packages/framework/bundle/'
-					}
-				},
-				"Require-Bundle-Instance": []
-			},
-			instanceProps: {}
-		}, {
-			title: 'Map',
-			fi: 'Map',
-			sv: '?',
-			en: 'Map',
-			bundlename: 'mapfull',
-			bundleinstancename: 'mapfull',
-			metadata: {
-				"Import-Bundle": {
-					"mapmodule-plugin": {
-						bundlePath: 'Oskari/packages/framework/bundle/'
-					}
-				},
-				"Require-Bundle-Instance": []
-			},
-			instanceProps: {}
-		}]
-	};
+    var appSetup = null,
+        appConf = null; 
+ 
+    var mapModule = null,
+        plugin = null,
+        pluginDiv = null, 
+        localization = null,
+        selectedLayers = [];
 
-	var appConf = {
-		"conf": {
-			  "plugins": [{
-                "id": "Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugin"
-            }]
-		}
-	};
+    before(function() {
+        // startup the oskari application with publisher bundle, 2 test layers and signed in user
+        appSetup = getStartupSequence([
+            'openlayers-default-theme', 
+            'mapfull',
+            'divmanazer'
+        ]);
+    
+        var mapfullConf = getConfigForMapfull();
 
-	beforeEach(function(done) {
-		setupOskari(appSetup, appCOnf, done);
-	});
+        mapfullConf.conf.plugins.push({
+            "id": "Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugin"
+        });
+        // add some test layers
+        mapfullConf.conf.layers.push({
+            "type": "wmslayer",
+            "id": "34",
+            "metaType": "test",
+            "orgName" : "Test organization",
+            "dataUrl_uuid" : "testuuid",
+            "name": "Test layer 1",
+            "wmsName": "testlayer",
+            "type": "wmslayer",
+            "wmsUrl": "http://dummyUrl"
+        });
+        mapfullConf.conf.layers.push({
+            "type": "wmslayer",
+            "id": "35", 
+            "metaType": "test",
+            "name": "Test layer 2",
+            "orgName" : "Test organization",
+            "wmsName": "testlayer", 
+            "type": "wmslayer",
+            "permissions" : {
+                "publish" : "publication_permission_ok"
+            },
+            "wmsUrl": "http://dummyUrl"
+        });
+        appConf = { 
+            "mapfull" : mapfullConf
+        };
+    });
+ 
+    var startApplication = function(done) {
+        //setup HTML 
+        jQuery("body").html(getDefaultHTML()); 
+        // startup Oskari
+        setupOskari(appSetup, appConf, function() {
+            sandbox = Oskari.$("sandbox");
+			mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            plugin = mapModule.getPluginInstance('DataSourcePlugin');
+            localization = mapModule.getLocalization('plugin')['DataSourcePlugin'];
+            pluginDiv = jQuery('div.oskari-datasource');
+            done();
+        });
+    };
 
-	afterEach(function() {
-		// The Flyout is injected into the DOM and needs to be removed manually as testacular doesn't do that
-		jQuery("body > div").remove();
-	});
+    describe('should have', function() { 
+ 
+        before(function(done) {
+            startApplication(done);
+        });
 
-	describe('Bundle tests', function() {
+        after(function() {
+            teardown(); 
+        });
 
-		it('should correctly setup the DataSourcePlugin', function(done) {
-			// Find handles to sandbox data source plugin
-			var dsPlugin = Oskari.$("sandbox").findRegisteredModuleInstance("DataSourcePlugin");
-				
-			// Verify handles exist and have the functionality under test
-			expect(sandbox).to.be.ok();
-			expect(dsPlugin).to.be.ok();
-			expect(dsPlugin.plugin.getName()).to.be('DataSourcePlugin');
-			expect(dsPlugin.mapmodule.plugin.openDialog).to.be.ok();
-			expect(dsPlugin.mapmodule.plugin.get_getLayers).to.be.ok();
-			expect(dsPlugin.mapmodule.plugin.get_MetadataInfoCallback).to.be.ok();
-			done();
-		});
+        it("plugin setup correctly", function() {
+            expect(plugin.getName()).to.be('MainMapModuleDataSourcePlugin'); 
+        });
 
-		// testing the pop-up, might need refactoring
-		it('should render the selected layers in the popup', function(done) {
-			var dialog;
-			var titleText = 'title';
-			 
-			beforeEach(function() {
-			    dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-				dialog.show(titleText, 'content');
-			});
+        it("an UI", function() {
+            expect(pluginDiv.length).to.be(1); 
+        });
 
-			afterEach(function() {
-			dialog.close(true);
-			});
+        it("a link in the UI", function() {
+            var link = pluginDiv.find('a');
+            expect(link.length).to.be(1); 
+        });
 
-			it('should be defined', function(){
-				expect(dialog).to.be.ok();
-			});
+        it("a dialog open from the link", function() {
+            var linkSpy = sinon.spy(plugin, '_openDialog');
+            var link = pluginDiv.find('a');
+            link.click();
+            expect(linkSpy.callCount).to.be(1);
+        });
+    });
 
-			it('should be found in DOM', function(){
-				var popup = jQuery('div.divmanazerpopup');
-			    expect(popup.length).to.equal(1);
-			});
+    describe('should display popup', function() { 
 
-			it('should have a title', function() {
-				var popup = jQuery('div.divmanazerpopup');
-				var title = popup.find('h3').html();
-			    	expect(title).not.to.be(null);
-					expect(title).to.equal('title'); // dialog.getTitle()
+        var dialogContent = null;
+ 
+        before(function(done) {
+            startApplication(function() {
+                selectedLayers = addLayers(mapModule, [34,35]);
 
-			// To test if the link to the metadata works
-			jQuery("div.icon-info").click();
-			done();
-		});
-	});
+                var link = pluginDiv.find('a');
+                link.click();
+                dialogContent = jQuery('div.divmanazerpopup');
+ 
+                done();
+            });
+
+        });
+
+        after(function() {
+            teardown(); 
+        });
+
+        it("with heading", function() { 
+            var heading = dialogContent.find("h3:contains('" + localization.popup.title + "')");
+            expect(heading.length).to.be(1);
+        });
+
+        it("with 3 selected layers", function() {
+            expect(selectedLayers.length).to.be(3);
+        });
+
+        it("with organization heading matching test layer organization", function() {
+            var testLayer34 = sandbox.findMapLayerFromSelectedMapLayers(34);
+            var heading = dialogContent.find("b:contains('" + testLayer34.getOrganizationName() + "')");
+            expect(heading.length).to.be(1);
+        });
+
+        it("with 3 layers listed", function() {
+            var items = dialogContent.find("li");
+            expect(items.length).to.be(3);
+        });
+
+        it("with 1 metadata link", function() {
+            var items = dialogContent.find("div.icon-info");
+            expect(items.length).to.be(1);
+        });
+        
+    });
 });

@@ -84,7 +84,10 @@ function() {
 
 		me.started = true;
 
-		var sandbox = Oskari.$("sandbox");
+				var conf = this.conf ;
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+		var sandbox = Oskari.getSandbox(sandboxName);
+
 		me.sandbox = sandbox;
 		this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService', sandbox.getAjaxUrl());
 

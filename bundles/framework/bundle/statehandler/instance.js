@@ -66,7 +66,10 @@ function() {
         }
         me.started = true;
 
-        var sandbox = Oskari.$("sandbox");
+   		var conf = this.conf ;
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+		var sandbox = Oskari.getSandbox(sandboxName);
+
         me.sandbox = sandbox;
         sandbox.register(me);
         for (p in me.eventHandlers) {
@@ -118,7 +121,7 @@ function() {
      */
     "init" : function() {
         var me = this;
-        var sandbox = Oskari.$("sandbox");
+        var sandbox = this.sandbox;
         this.requestHandlers = {
             setStateHandler : Oskari.clazz.create('Oskari.mapframework.bundle.statehandler.request.SetStateRequestHandler', sandbox, this),
             saveStateHandler : Oskari.clazz.create('Oskari.mapframework.bundle.statehandler.request.SaveStateRequestHandler', sandbox, this)
@@ -341,6 +344,21 @@ function() {
     	}
     	return cmpResult;
     },
+
+    /**
+     * @method logState
+     * @private
+     * Sends a GET request to the url in the conf with map parameters
+     */
+    _logState: function() {
+        var me = this,
+            logUrlWithLinkParams = me.conf.logUrl + '?'+ me.sandbox.generateMapLinkParameters();
+
+        jQuery.ajax({
+            type : "GET",
+            url : logUrlWithLinkParams
+        });
+    },
     
     _pushState: function() {
     	var me = this;
@@ -358,6 +376,10 @@ function() {
                   	me._historyNext = [];
                }
         }
+
+        if (me.conf && me.conf.logUrl) {
+            me._logState();
+        } 
     },
        
     historyMoveNext : function() {

@@ -294,6 +294,14 @@
     background-position: -1288px 0px !important;
 }
 
+.layer-stats {
+    width: 16px;
+    height: 16px;
+    background-image: url('/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png') !important;
+    background-repeat: no-repeat !important;
+    background-position: -1288px 0px !important;
+}
+
 .layer-vector {
     width: 16px;
     height: 16px;
