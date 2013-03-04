@@ -28,12 +28,15 @@ define([
         render : function() {
             this.el.html(this.appTemplate);
             this._renderLayerGroups(null, 'inspire');
+
+
         },
         _renderLayerGroups: function(layerGroupingTab, tabType) {
             if(layerGroupingTab != null)  {
                 var tabContent = new TabPanelView({
                     layerGroupingModel: layerGroupingTab,
-                    instance : this.instance
+                    instance : this.instance,
+                    tabId : tabType
                 });
     //            this.layerTabs.push(tabContent);
                 jQuery('.admin-layerselectorapp').find('.tabsContent').append(tabContent.$el);
@@ -60,13 +63,30 @@ define([
                 grouping : this.orgGrouping, 
                 title: this.instance.getLocalization('filter').organization
             }), 'organization');
+
+            //activate tab
+            jQuery('tabsHeader').find('.inspire').addClass('active');
+            jQuery('.tab-content.inspire').show();
+            jQuery('.tab-content.organization').hide();
         },
 
         toggleTab : function(e) {
             e.stopPropagation();
             var target  = jQuery(e.currentTarget);
             var type    = target.attr('data-tab');
-            var asdf = null;
+
+            jQuery('tabsHeader').find('.active').removeClass('active');
+            target.addClass('active');
+
+            if(type == 'inspire') {
+                jQuery('.tab-content.inspire').show();
+                jQuery('.tab-content.organization').hide();                
+            }
+            else if(type == 'organization') {
+                jQuery('.tab-content.organization').show();
+                jQuery('.tab-content.inspire').hide();                
+            }
+
         }
 
     });

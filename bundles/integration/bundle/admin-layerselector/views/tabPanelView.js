@@ -22,7 +22,8 @@ define([
         // Re-rendering the App just means refreshing the statistics -- the rest
         // of the app doesn't change.
         render : function() {
-            console.log('render tab-content');            
+            console.log('render tab-content');
+            this.$el.addClass(this.options.tabId);
 
             if(this.layerGroupingModel != null){
 //                this.layerContainers = undefined;

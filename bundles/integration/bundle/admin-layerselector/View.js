@@ -18,6 +18,9 @@
  */
 Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', function() {
 }, {
+
+    _mapLayerUrl : '/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&action_route=GetMapLayerClasses',
+
     /**
      * @property eventHandlers
      * a set of event handling functions for this view
@@ -79,6 +82,34 @@ debugger;
 
 
     init : function() {
+
+debugger;
+        var me = this;
+        var sandbox = me.getSandbox()
+        var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+
+        jQuery.ajax({
+            type : "GET",
+            dataType: 'json',
+            beforeSend: function(x) {
+              if(x && x.overrideMimeType) {
+               x.overrideMimeType("application/j-son;charset=UTF-8");
+              }
+             },
+            url : 'http://www.paikkatietoikkuna.fi'+me._mapLayerUrl,
+            success : function(pResp) {
+//                me._loadAllLayersAjaxCallBack(pResp, callbackSuccess);
+                me._loadAllLayersAjaxCallBack(pResp, null);
+            },
+            error : function(jqXHR, textStatus) {
+                if(callbackFailure && jqXHR.status != 0) {
+                    callbackFailure();
+                }
+            }
+        }); 
+
+
+
 /*
         var sandbox = this.getSandbox()
         var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
@@ -125,7 +156,41 @@ debugger;
             });
         });
     },
+// copy-paste
+    _loadAllLayersAjaxCallBack : function(pResp, callbackSuccess) {
+        var allLayers = pResp.layers;
+        for(var i = 0; i < allLayers.length; i++) {
+            
+            var mapLayer = this.createMapLayer(allLayers[i]);
+            if(this._reservedLayerIds[mapLayer.getId()] !== true) {
+                this.addLayer(mapLayer, true);
+            }
+        }
+        // notify components of added layer if not suppressed
+        this._allLayersAjaxLoaded = true;
+        var event = this._sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
+        this._sandbox.notifyAll(event);
+        if(callbackSuccess) {
+            callbackSuccess();
+        }
+    },
 
+    addLayer : function(layerModel, suppressEvent) {
+
+        // throws exception if the id is reserved to existing maplayer
+        // we need to check again here
+        this.checkForDuplicateId(layerModel.getId(), layerModel.getName());
+        
+        this._reservedLayerIds[layerModel.getId()] = true;
+        // everything ok, lets add the layer
+        this._loadedLayersList.push(layerModel);
+
+        if(suppressEvent !== true) {
+            // notify components of added layer if not suppressed
+            var event = this._sandbox.getEventBuilder('MapLayerEvent')(layerModel.getId(), 'add');
+            this._sandbox.notifyAll(event);
+        }
+    },
 
 }, {
     "extend" : ["Oskari.integration.bundle.bb.View"]
