@@ -12,6 +12,19 @@ function() {
 
 }, {
 
+	/**
+	 * @method applyLayout
+	 * applies this layout with given DomManager
+	 */
+	applyLayout : function(domManager) {
+
+	},
+	/**
+	 * @method removeLayout
+	 */
+	removeLayout : function(domManager) {
+
+	}
 }, {
 	"protocol" : ["Oskari.dom.Layout"]
 });
