@@ -20,7 +20,9 @@ div.admin-layerselector div.layerGroup div.groupHeader {
 	padding: 8px 10px 8px 12px;
 	font: 14pt Arial,sans-serif;
 }
-
+div.admin-layerselector .oskariTabs {
+  min-width: 480px;
+}
 
 /* layer container */
 div.admin-layerselector div.tab-content div.oskarifield {
@@ -99,16 +101,16 @@ div.admin-layerselector div.layer div.backendstatus-unknown {
 body {
     position: relative;
 }
-div.oskariTabs div.tabsHeader ul li.admin-modify-wms {
+div.admin-layerselector div.oskariTabs div.tabsHeader ul li.admin-modify-wms {
     float:right;
 }
-.admin-add-layer-btn, .admin-add-class-btn {
+div.admin-layerselector .admin-edit-layer-btn, div.admin-layerselector .admin-add-class-btn {
     float: right;
 }
-.admin-add-layer-btn {
+div.admin-layerselector .admin-add-layer-btn {
     margin: 5px 10px;
 }
-button.admin-arrange-layers{
+div.admin-layerselector button.admin-arrange-layers{
     background-color: #eee;
     background-image: url('arrange-icon.png');
     background-position: 50% 50%;
@@ -122,85 +124,85 @@ button.admin-arrange-layers{
     -ms-filter: "progid:DXImageTransform.Microsoft. Alpha(Opacity=0)";
 }
 
-.layer {
+div.admin-layerselector .layer {
     min-height: 20px;
 }
-div.layerselector2 div.layer input {
+div.admin-layerselector div.layer input {
     margin-top: 3px;
 }
-div.layerselector2 div.layer .layer-title {
+div.admin-layerselector div.layer .layer-title {
     margin-top: 4px;
 }
 
-.add-layer-record, .add-layer-send, .add-class-record, .add-class-send {
+div.admin-layerselector .add-layer-record, div.admin-layerselector .add-layer-send, div.admin-layerselector .add-class-record, div.admin-layerselector .add-class-send {
     width: 100%;
     margin-bottom: 5px;
     overflow: hidden;
     position: relative;
 }
-.add-layer-separation {
+div.admin-layerselector .add-layer-separation {
     margin-top: 15px;
 }
 
-.admin-add-layer {
+div.admin-layerselector .admin-add-layer {
     padding: 0px 10px;
     overflow: hidden;
     height: 0px;
     -webkit-transition-duration: 500ms;
     -webkit-transition-property: height, padding;
 }
-.show-add-layer {
+div.admin-layerselector .show-add-layer {
     padding: 10px 10px;
     height: 785px;
     width: 100%;
     overflow: auto;
 }
-.admin-add-class {
+div.admin-layerselector .admin-add-class {
     padding: 0px 10px;
     overflow: hidden;
     height: 0px;
     -webkit-transition-duration: 500ms;
     -webkit-transition-property: height;
 }
-.show-add-class {
+div.admin-layerselector .show-add-class {
     padding: 1s0px 10px;
     height: 190px;
 }
 
-.add-layer-wrapper, .add-class-wrapper {
+div.admin-layerselector .add-layer-wrapper, .add-class-wrapper {
     display: block;
 
 }
-.add-layer-btn {
+div.admin-layerselector .add-layer-btn {
     float: left;
 }
 
-.add-layer-grouping, .add-class-grouping {
+div.admin-layerselector .add-layer-grouping, .add-class-grouping {
     font-weight: bold;
     font-size: 110%;
     margin-top: 20px;
     margin-bottom: 5px;
 }
-.add-layer-label-area, .add-class-label-area {
+div.admin-layerselector .add-layer-label-area, .add-class-label-area {
     display: table;
     float: left;
 }
-.add-layer-label, .add-class-label {
+div.admin-layerselector .add-layer-label, .add-class-label {
     font-weight: bold;
     width: 75px;
     display: table-cell;
     vertical-align: middle;
 }
 
-.add-layer-input-area, .add-layer-button-area, .add-class-input-area, .add-class-button-area {
+div.admin-layerselector .add-layer-input-area, .add-layer-button-area, .add-class-input-area, .add-class-button-area {
     margin-left: 80px;
 }
-.input-controls {
+div.admin-layerselector .input-controls {
     position: relative;
     float: left;
     margin-right: 5px;
 }
-.icon-close {
+div.admin-layerselector .icon-close {
     display: inline-block;
     opacity: 0;
     -ms-filter: "progid:DXImageTransform.Microsoft. Alpha(Opacity=0)";
@@ -210,7 +212,7 @@ div.layerselector2 div.layer .layer-title {
     margin-left: 0px;
     cursor: pointer;
 }
-.input-controls:hover .icon-close, .layer:hover button.admin-arrange-layers {
+div.admin-layerselector .input-controls:hover .icon-close, div.admin-layerselector .layer:hover button.admin-arrange-layers {
     -webkit-transition-property: opacity;
     -webkit-transition-duration: 500ms;
     -moz-transition-property: opacity;
@@ -225,18 +227,18 @@ div.layerselector2 div.layer .layer-title {
     opacity: 1;
 }
 
-div.layerselector2 div.layer .add-layer-input {
+div.admin-layerselector div.layer .add-layer-input {
     float:none;
-    width: 150px;
+    width: 110px;
     height: 16px;
     margin: 0;
 }
-div.add-layer-text {
+div.admin-layerselector div.add-layer-text {
     height: 30px;
     font-size: 14px;
 }
-div.layerselector2 div.layer #add-layer-inspire-theme {
-	width: 185px;
+div.admin-layerselector div.layer #add-layer-inspire-theme {
+	width: 155px;
 	height: 60px;
 	overflow-y: auto;
 	border: solid 1px #b7b7b7;
@@ -246,17 +248,17 @@ div.layerselector2 div.layer #add-layer-inspire-theme {
     box-shadow: inset 1px 1px 2px rgba(0,0,0,.3);
 }
 
-div.layerselector2 div.layer select{
-    width: 197px;
+div.admin-layerselector div.layer select{
+    width: 157px;
     padding: 8px 10px 8px 10px;
     -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
     -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
     box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
 }
 
-div.layerselector2 div.layer textarea.add-layer-input {
+div.admin-layerselector div.layer textarea.add-layer-input {
     padding: 10px;
-    width: 197px;
+    width: 157px;
     height: 48px;
     border-radius: 4px;
     box-sizing: border-box;

@@ -1,11 +1,22 @@
 define([
     'text!_bundle/templates/filterLayersTemplate.html',
+    'text!_bundle/templates/adminAddInspireTemplate.html',
+    'text!_bundle/templates/adminAddOrganizationTemplate.html',    
+    'text!_bundle/templates/adminAddLayerBtnTemplate.html',
     'text!_bundle/templates/tabPanelTemplate.html',
     'text!_bundle/templates/accordionPanelTemplate.html',
     'text!_bundle/templates/layerRowTemplate.html',
     'text!_bundle/templates/adminLayerRowTemplate.html',    
     '_bundle/views/layerView'], 
-    function(FilterLayersTemplate, TabPanelTemplate, AccordionPanelTemplate,LayerRowTemplate, AdminLayerRowTemplate, LayerView) {
+    function(FilterLayersTemplate, 
+        AdminAddInspireTemplate,
+        AdminAddOrganizationTemplate,
+        AdminAddLayerBtnTemplate,
+        TabPanelTemplate, 
+        AccordionPanelTemplate,
+        LayerRowTemplate, 
+        AdminLayerRowTemplate,
+        LayerView) {
     return Backbone.View.extend({
         tagName: 'div',
 
@@ -16,12 +27,15 @@ define([
             "click .layer"              : "toggleLayerSettings"
         },
         initialize : function() {
-            this.layerGroupingModel = this.options.layerGroupingModel;
-            this.filterTemplate = _.template(FilterLayersTemplate);
-            this.tabTemplate = _.template(TabPanelTemplate);
-            this.accordionTemplate = _.template(AccordionPanelTemplate);
-            this.layerTemplate = _.template(LayerRowTemplate);
-            this.adminLayerTemplate = _.template(AdminLayerRowTemplate);
+            this.layerGroupingModel         = this.options.layerGroupingModel;
+            this.addInspireTemplate         = _.template(AdminAddInspireTemplate);
+            this.addOrganizationTemplate    = _.template(AdminAddInspireTemplate);
+            this.addLayerBtnTemplate        = _.template(AdminAddLayerBtnTemplate);
+            this.filterTemplate             = _.template(FilterLayersTemplate);
+            this.tabTemplate                = _.template(TabPanelTemplate);
+            this.accordionTemplate          = _.template(AccordionPanelTemplate);
+            this.layerTemplate              = _.template(LayerRowTemplate);
+            this.adminLayerTemplate         = _.template(AdminLayerRowTemplate);
             this.render();
         },
         // Re-rendering the App just means refreshing the statistics -- the rest
@@ -68,10 +82,13 @@ define([
                         
                         this.layerContainers[layer.getId()] = layerView;
                     }
+                    groupContainer.append(this.addLayerBtnTemplate({instance: this.options.instance}));
+
                     var tab = this.tabTemplate();
                     this.$el.append(jQuery(tab).append(groupPanel));
                 }
                 this.$el.prepend(this.filterTemplate({instance: this.options.instance}));
+                this.$el.find('.oskarifield').append( (this.options.tabId == 'inspire') ? this.addInspireTemplate({instance: this.options.instance}) : this.addOrganizationTemplate({instance: this.options.instance}));
                 
     /*            var selectedLayers = this.options.instance.sandbox.findAllSelectedMapLayers();
                 for(var i = 0; i < selectedLayers.length; ++i) {
@@ -86,7 +103,7 @@ define([
         toggleLayerGroup : function(e) {
             var element = jQuery(e.currentTarget);
             var panel = element.parents('.accordion:first');
-            var headerIcon = panel.find('headerIcon');
+            var headerIcon = panel.find('.headerIcon');
             if(panel.hasClass('open')) {
                 panel.removeClass('open');
                 headerIcon.removeClass('icon-arrow-down');
@@ -100,9 +117,21 @@ define([
             }
         },
         toggleLayerSettings : function(e) {
+            e.stopPropagation();
             var element = jQuery(e.currentTarget);
-            var settings = this.adminLayerTemplate({instance : this.options.instance});
-            element.append(settings);
+            if(!element.find('.admin-add-layer').hasClass('show-add-layer')) {
+                var settings = this.adminLayerTemplate({instance : this.options.instance});
+                element.append(settings);
+                setTimeout(function(){
+                    jQuery('.admin-add-layer').addClass('show-add-layer');
+                }, 30);
+            } else {
+                jQuery('.admin-add-layer').removeClass('show-add-layer');
+                setTimeout(function(){
+                    jQuery('.admin-add-layer').remove();
+                },300);
+
+            }
         } 
 
 

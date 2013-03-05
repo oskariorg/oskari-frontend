@@ -63,7 +63,9 @@ Oskari.registerLocalization({
 			"addOrganizationDesc"	: "Lisää aihe eli uusi Inspire-teema",
 			"addInspire" 			: "Lisää aihe",
 			"addLayer" 				: "Lisää taso",
-			"addLayerDesc"			: "Lisää taso tähän Inspire-teemana"
+			"addLayerDesc"			: "Lisää taso tähän Inspire-teemana",
+			"edit" 					: "Muokkaa", 
+			"editDesc" 				: "Muokkaa nimeä", 
 		}
 	}
 });

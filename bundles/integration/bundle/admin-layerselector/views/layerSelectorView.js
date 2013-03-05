@@ -21,6 +21,7 @@ define([
             this.el = this.options.el;
             this.appTemplate = _.template(ViewTemplate);
             this.tabTitleTemplate = _.template(TabTitleTemplate)
+            this.selectedType = 'organization';
 //            this.layerTabs = [];
             this.render();
         },
@@ -67,9 +68,9 @@ define([
             }), 'organization');
 
             //activate tab
-            jQuery('.tabsHeader').find('.inspire').parent().addClass('active');
-            jQuery('.tab-content.inspire').show();
-            jQuery('.tab-content.organization').hide();
+            jQuery('.tabsHeader').find('.organization').parent().addClass('active');
+            jQuery('.tab-content.inspire').hide();
+            jQuery('.tab-content.organization').show();
         },
 
         toggleTab : function(e) {
@@ -83,10 +84,12 @@ define([
             if(type == 'inspire') {
                 jQuery('.tab-content.inspire').show();
                 jQuery('.tab-content.organization').hide();                
+                this.selectedType = type;
             }
             else if(type == 'organization') {
                 jQuery('.tab-content.organization').show();
                 jQuery('.tab-content.inspire').hide();                
+                this.selectedType = type;
             }
 
         }, 
