@@ -10,17 +10,17 @@
     "grunt": "latest",
     "grunt-cli": "latest",
     "grunt-lib-contrib": "latest",
-    "grunt-contrib-uglify": "latest",
-    "grunt-contrib-jshint": "latest",
+    "grunt-contrib-clean": "latest",
+    "grunt-contrib-copy": "latest",
     "grunt-contrib-watch": "latest",
     "grunt-contrib-yuidoc": "latest",
     "grunt-testacular": "latest",
+    "jshint": "~1.0.0",
     "uglify-js": ">=2.2.1",
     "uglifycss": ">=0.0.5",
     "expect.js": "~0.2.0",
     "gm": "~1.8.1",
-    "async": "~0.2.5",
-    "jshint": "~1.0.0"
+    "async": "~0.2.5"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
