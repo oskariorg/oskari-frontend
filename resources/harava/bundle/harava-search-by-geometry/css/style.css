@@ -49,7 +49,6 @@
     background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/selectMapExtent_active.png') no-repeat !important;
 }
 
-
 .searchbygeom-line{
     background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/selectLine.png') no-repeat;
     background-position: center center;
@@ -72,6 +71,20 @@
 }
 .searchbygeom-polygon.active{
     background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/selectPolygon_active.png') no-repeat !important;
+}
+
+.searchbygeom-searchindicator{
+    background: url("/Oskari/resources/harava/bundle/harava-search-by-geometry/images/ajax-loader.gif") no-repeat scroll center center #1C7372;
+	border: 1px solid #000000;
+	cursor: default;
+	height: 30px;
+	margin: 2px;
+	position: absolute;
+	right: 30px;
+	top: 5px;
+	width: 30px;
+	z-index: 1000;
+	display: none;
 }
 
 .searchbygeom-link{

@@ -45,6 +45,7 @@ function(locale) {
     this.templateSearchByGeomRegularPolygonTool = jQuery('<div id="searchbygeom-regular-polygon" class="searchbygeom-tool searchbygeom-regular-polygon"></div>');
     this.templateSearchByGeomPolygonTool = jQuery('<div id="searchbygeom-polygon" class="searchbygeom-tool searchbygeom-polygon"></div>');
     this.templateSearchByGeomEmpty = jQuery('<div style="clear:both;"></div>');
+    this.templateSearchByGeomSearchIndicator = jQuery('<div id="searchbygeom-searchindicator" class="searchbygeom-searchindicator"></div>');
 }, {
     /** @static @property __name plugin name */
     __name : 'HaravaDrawSearchGeometryPlugin',
@@ -154,6 +155,8 @@ function(locale) {
     	searchRegularPolygonContainer.attr('title',this._locale.tooltips.searchByRegularPolygon);    	
     	var searchPolygonContainer = me.templateSearchByGeomPolygonTool.clone();
     	searchPolygonContainer.attr('title',this._locale.tooltips.searchByPolygon);    	
+    	
+    	var searchIndicator = me.templateSearchByGeomSearchIndicator.clone();
     	var searchEmptyContainer = me.templateSearchByGeomEmpty.clone();
     	
     	jQuery('#searchbygeom').append(searchContainer);
@@ -164,6 +167,8 @@ function(locale) {
     	jQuery(searchContainer).append(searchRegularPolygonContainer);
     	jQuery(searchContainer).append(searchPolygonContainer);
     	jQuery(searchContainer).append(searchEmptyContainer);
+    	jQuery(searchContainer).parent().parent().append(searchIndicator);
+    	
     	
     	jQuery('.searchbygeom-tool').live('click', function(){
     		var id = this.id;
@@ -241,7 +246,7 @@ function(locale) {
         	me._sandbox.printDebug("[GetInfoPlugin] NO layers with featureInfoEnabled, in scale and visible");
         	return;
         }
-        
+        $('#searchbygeom-searchindicator').show();
         me._startAjaxRequest(dteMs);
 		
         var ajaxUrl = this._sandbox.getAjaxUrl(); 
@@ -508,6 +513,7 @@ function(locale) {
     	var me = this;
     	me._pendingAjaxQuery.busy = false;
         me._pendingAjaxQuery.jqhr = null;
+        $('#searchbygeom-searchindicator').hide();
         this._sandbox.printDebug("[HaravaDrawSearchGeometryPlugin] finished jqhr ajax request");
     },
     /**
