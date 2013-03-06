@@ -81,13 +81,13 @@ function() {
 		var me = this;
 		if(me._currentStep!=null){
     		var module = me.getModuleById(me._currentStep);
-    		if(module!=null){
-    			var module = me.getModuleById(me._currentStep);    		
+    		if(module!=null){  		
     			jQuery(module.appendTo).prev().removeClass('harava-toolbar-hide');
     			jQuery(module.appendTo).prev().addClass('harava-toolbar-show');
-    			
-    			jQuery(module.appendTo).animate({left:'-25%'},'slow');
-    			jQuery(module.appendTo).prev().animate({left:'0'},'slow');
+    			try{
+    				jQuery(module.appendTo).animate({left:'-25%'},'slow');
+    				jQuery(module.appendTo).prev().animate({left:'0'},'slow');
+    			} catch(exp){}
     		}
 		}
 	},
@@ -101,20 +101,22 @@ function() {
 		if(me._currentStep!=null){
     		var module = me.getModuleById(me._currentStep);
     		if(module!=null){
-    			var module = me.getModuleById(me._currentStep);    		
     			jQuery(module.appendTo).prev().removeClass('harava-toolbar-show');
     			jQuery(module.appendTo).prev().addClass('harava-toolbar-hide');
-    			
     			if(fast===true){
-    				jQuery(module.appendTo).animate({left:'0'},'fast');
-    				jQuery(module.appendTo).prev().animate({left:'25%'},'fast');
+    				try{
+    					jQuery(module.appendTo).animate({left:'0'},'fast');
+    					jQuery(module.appendTo).prev().animate({left:'25%'},'fast');
+    				} catch(exp){}
     			}
     			else {
-    				jQuery(module.appendTo).animate({left:'0'},'slow');
-    				jQuery(module.appendTo).prev().animate({left:'25%'},'slow');
+    				try{
+    					jQuery(module.appendTo).animate({left:'0'},'slow');
+    					jQuery(module.appendTo).prev().animate({left:'25%'},'slow');
+    				} catch(exp){}
     			}
     		}
-		}	
+		}
 	},
     /**
      * @method start
@@ -236,7 +238,6 @@ function() {
     	var me = sandbox.findRegisteredModuleInstance('HaravaMapQuestions');
     	me.plugin.onPopupClose();
     	me.showTools();
-    	
     },
     /**
      * @method deActivateAll
@@ -256,7 +257,6 @@ function() {
      */
     "showStep" : function(moduleId){
     	var me = this;
-    	
     	var oldmodule = me.getModuleById(me._currentStep);
 		if(oldmodule!=null){
 			if(jQuery(oldmodule.appendTo).prev().hasClass('harava-toolbar-show')){
@@ -266,7 +266,7 @@ function() {
     	
     	me.deActivateAll();
     	me.plugin.showStep(moduleId);    	
-    	me._currentStep=moduleId;  	
+    	me._currentStep=moduleId;
     },
     /**
      * @method activateControl
@@ -275,7 +275,7 @@ function() {
      * @param {String} questionId selected qustion id
      */
     "activateControl" : function(moduleId, questionId){
-    	var me = this;    	
+    	var me = this;
     	var module = me.getModuleById(moduleId);    	
     	var isSelected = jQuery('#harava-question-tool_' + moduleId + '_' + questionId).hasClass('active');    	
     	me.deActivateAll();
