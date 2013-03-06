@@ -28,27 +28,32 @@ div.admin-layerselector .oskariTabs {
 div.admin-layerselector div.tab-content div.oskarifield {
 	padding: 10px;
 }
-div.admin-layerselector div.layer {
+div.admin-layerselector div.layer,
+div.admin-layerselector div.create-layer {
     padding: 6px 10px 6px 40px;
     background-color : #ffffff;
 }
 div.admin-layerselector div.layer.odd {
     background-color : #f3f3f3;
 }
-div.admin-layerselector div.layer input {
+div.admin-layerselector div.layer input,
+div.admin-layerselector div.create-layer input {
     float : left;
     margin-right : 5px;
 }
-div.admin-layerselector div.layer div.layer-tools {
+div.admin-layerselector div.layer div.layer-tools,
+div.admin-layerselector div.create-layer div.layer-tools {
     float : right;
 }
-div.admin-layerselector div.layer div.layer-icon {
+div.admin-layerselector div.layer div.layer-icon,
+div.admin-layerselector div.create-layer div.layer-icon {
     float : left;
 	width : 16px;
 	height : 16px;
 	background-repeat: no-repeat;
 }
-div.admin-layerselector div.layer div.layer-info {
+div.admin-layerselector div.layer div.layer-info,
+div.admin-layerselector div.create-layer div.layer-info {
     width: 16px;
     height: 16px;
 	margin-left : 5px;
@@ -65,7 +70,8 @@ div.admin-layerselector div.tab-content div.oskarifield {
 div.admin-layerselector div.accordion div.accordion_panel div.content {
     padding: 0;
 }
-div.admin-layerselector div.layer div.layer-backendstatus-icon {
+div.admin-layerselector div.layer div.layer-backendstatus-icon,
+div.admin-layerselector div.create-layer div.layer-backendstatus-icon {
     float : left;
 	width : 20px;
 	height: 16px;
@@ -73,25 +79,29 @@ div.admin-layerselector div.layer div.layer-backendstatus-icon {
 	background-repeat: no-repeat;
 }
 
-div.admin-layerselector div.layer div.backendstatus-down {
+div.admin-layerselector div.layer div.backendstatus-down,
+div.admin-layerselector div.create-layer div.backendstatus-down {
 	height: 20px !important;
 	margin-bottom: 2px;	
 	cursor: pointer;
 }
 
-div.admin-layerselector div.layer div.backendstatus-maintenance {
+div.admin-layerselector div.layer div.backendstatus-maintenance,
+div.admin-layerselector div.create-layer div.backendstatus-maintenance {
 	height: 20px !important;
 	margin-bottom: 2px;	
 	cursor: pointer;
 }
 
-div.admin-layerselector div.layer div.backendstatus-ok {
+div.admin-layerselector div.layer div.backendstatus-ok,
+div.admin-layerselector div.create-layer div.backendstatus-ok {
 	height: 20px !important;
 	margin-bottom: 2px;	
 	cursor: pointer;
 }
 
-div.admin-layerselector div.layer div.backendstatus-unknown {
+div.admin-layerselector div.layer div.backendstatus-unknown,
+div.admin-layerselector div.create-layer div.backendstatus-unknown {
 	height: 20px !important;
 	margin-bottom: 2px;	
 }
@@ -104,9 +114,11 @@ body {
 div.admin-layerselector div.oskariTabs div.tabsHeader ul li.admin-modify-wms {
     float:right;
 }
-div.admin-layerselector .admin-edit-layer-btn, div.admin-layerselector .admin-add-class-btn {
+div.admin-layerselector .admin-edit-layer-btn,
+div.admin-layerselector .admin-add-class-btn {
     float: right;
 }
+div.admin-layerselector .admin-edit-layer-btn,
 div.admin-layerselector .admin-add-layer-btn {
     margin: 5px 10px;
 }
@@ -127,14 +139,19 @@ div.admin-layerselector button.admin-arrange-layers{
 div.admin-layerselector .layer {
     min-height: 20px;
 }
-div.admin-layerselector div.layer input {
+div.admin-layerselector div.layer input,
+div.admin-layerselector div.create-layer input {
     margin-top: 3px;
 }
-div.admin-layerselector div.layer .layer-title {
+div.admin-layerselector div.layer .layer-title,
+div.admin-layerselector div.create-layer .layer-title {
     margin-top: 4px;
 }
 
-div.admin-layerselector .add-layer-record, div.admin-layerselector .add-layer-send, div.admin-layerselector .add-class-record, div.admin-layerselector .add-class-send {
+div.admin-layerselector .add-layer-record,
+div.admin-layerselector .add-layer-send,
+div.admin-layerselector .add-class-record,
+div.admin-layerselector .add-class-send {
     width: 100%;
     margin-bottom: 5px;
     overflow: hidden;
@@ -151,8 +168,8 @@ div.admin-layerselector .admin-add-layer {
     -webkit-transition-duration: 500ms;
     -webkit-transition-property: height, padding;
 }
-div.admin-layerselector .show-add-layer {
-    padding: 10px 10px;
+div.admin-layerselector .show-add-layer, div.admin-layerselector .show-edit-layer  {
+    padding: 10px 0px;
     height: 785px;
     width: 100%;
     overflow: auto;
@@ -227,7 +244,8 @@ div.admin-layerselector .input-controls:hover .icon-close, div.admin-layerselect
     opacity: 1;
 }
 
-div.admin-layerselector div.layer .add-layer-input {
+div.admin-layerselector div.layer .add-layer-input,
+div.admin-layerselector div.create-layer .add-layer-input {
     float:none;
     width: 110px;
     height: 16px;
@@ -237,7 +255,8 @@ div.admin-layerselector div.add-layer-text {
     height: 30px;
     font-size: 14px;
 }
-div.admin-layerselector div.layer #add-layer-inspire-theme {
+div.admin-layerselector div.layer #add-layer-inspire-theme,
+div.admin-layerselector div.create-layer #add-layer-inspire-theme {
 	width: 155px;
 	height: 60px;
 	overflow-y: auto;
@@ -248,7 +267,8 @@ div.admin-layerselector div.layer #add-layer-inspire-theme {
     box-shadow: inset 1px 1px 2px rgba(0,0,0,.3);
 }
 
-div.admin-layerselector div.layer select{
+div.admin-layerselector div.layer select,
+div.admin-layerselector div.create-layer select{
     width: 157px;
     padding: 8px 10px 8px 10px;
     -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
@@ -256,7 +276,8 @@ div.admin-layerselector div.layer select{
     box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
 }
 
-div.admin-layerselector div.layer textarea.add-layer-input {
+div.admin-layerselector div.layer textarea.add-layer-input,
+div.admin-layerselector div.create-layer textarea.add-layer-input {
     padding: 10px;
     width: 157px;
     height: 48px;

@@ -68,7 +68,7 @@ define([
             }), 'organization');
 
             //activate tab
-            jQuery('.tabsHeader').find('.organization').parent().addClass('active');
+            jQuery('.admin-layerselectorapp .tabsHeader').find('.organization').parent().addClass('active');
             jQuery('.tab-content.inspire').hide();
             jQuery('.tab-content.organization').show();
         },
@@ -82,13 +82,15 @@ define([
             target.parent().addClass('active');
 
             if(type == 'inspire') {
-                jQuery('.tab-content.inspire').show();
                 jQuery('.tab-content.organization').hide();                
+                jQuery('.tab-content.inspire').show();
+                jQuery('.tab-content.inspire').find('.admin-filter-input').focus();
                 this.selectedType = type;
             }
             else if(type == 'organization') {
-                jQuery('.tab-content.organization').show();
                 jQuery('.tab-content.inspire').hide();                
+                jQuery('.tab-content.organization').show();
+                jQuery('.tab-content.organization').find('.admin-filter-input').focus();
                 this.selectedType = type;
             }
 
@@ -104,8 +106,6 @@ define([
         removeAddOrg : function(e) {
             jQuery('.admin-add-class').removeClass('show-add-class');
         }
-
-
 
     });
 });

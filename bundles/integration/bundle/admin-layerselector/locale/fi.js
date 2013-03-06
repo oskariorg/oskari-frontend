@@ -65,7 +65,9 @@ Oskari.registerLocalization({
 			"addLayer" 				: "Lisää taso",
 			"addLayerDesc"			: "Lisää taso tähän Inspire-teemana",
 			"edit" 					: "Muokkaa", 
-			"editDesc" 				: "Muokkaa nimeä", 
+			"editDesc" 				: "Muokkaa nimeä",
+			"layerType"				: "Tason tyyppi",
+			"wmslayer"				: "WMS Taso",
 		}
 	}
 });

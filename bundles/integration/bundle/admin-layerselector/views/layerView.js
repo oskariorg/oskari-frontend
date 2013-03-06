@@ -1,10 +1,16 @@
 define([
-    "text!_bundle/templates/layerRowTemplate.html"
+    "text!_bundle/templates/layerRowTemplate.html",
+    'text!_bundle/templates/adminLayerRowTemplate.html'
     ], 
-    function(ViewTemplate) {
+    function(ViewTemplate, AdminLayerRowTemplate) {
     return Backbone.View.extend({
         tagName: 'div',
         className: 'layer',
+
+        events: {
+            "click"                     : "toggleLayerSettings",
+            "click .show-edit-layer"    : "clickLayerSettings"
+        },
 
         // At initialization we bind to the relevant events on the `Todos`
         // collection, when items are added or changed. Kick things off by
@@ -13,6 +19,7 @@ define([
             this.instance = this.options.instance;
             this.model = this.options.model;
             this.template = _.template(ViewTemplate);
+            this.adminLayerTemplate         = _.template(AdminLayerRowTemplate);
             this.render();
         },
 
@@ -86,6 +93,27 @@ define([
                     ]);
                 });
             }
+        },
+        toggleLayerSettings : function(e) {
+debugger;
+            e.stopPropagation();
+            var element = jQuery(e.currentTarget);
+            if(!element.find('.admin-add-layer').hasClass('show-edit-layer')) {
+                var settings = this.adminLayerTemplate({model: this.model, instance : this.options.instance});
+                element.append(settings);
+                setTimeout(function(){
+                    jQuery('.admin-add-layer').addClass('show-edit-layer');
+                }, 30);
+            } else {
+                jQuery('.admin-add-layer').removeClass('show-edit-layer');
+                setTimeout(function(){
+                    jQuery('.admin-add-layer').remove();
+                },300);
+
+            }
+        },
+        clickLayerSettings: function(e) {
+            e.stopPropagation();
         }
     });
 });

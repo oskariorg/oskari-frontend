@@ -3,15 +3,18 @@
 
         <div class="add-layer-record">
             <div class="add-layer-label-area">
-                <label for="add-layer-type" class="add-layer-label" title="Tason tyyppi: WMS, WFS, WMTS">Tason tyyppi</label>
+                <label for="add-layer-type" class="add-layer-label" title="Tason tyyppi: WMS, WFS, WMTS"><%= instance.getLocalization('admin').layerType %></label>
             </div>
             <div class="add-layer-input-area">
-                <div id="add-layer-type" class="add-layer-text">WMS Layer</div>
-                <!--select id="add-layer-type">
+                <% if(model != null) { %>
+                <div id="add-layer-type" class="add-layer-text"><%= instance.getLocalization('admin')[model.admin.layerType] %></div>
+                <% } else { %>
+                <select id="add-layer-type">
                     <option>WMS Layer</option>
                     <option>WFS Layer</option>
                     <option>WMTS Layer</option>
-                </select-->
+                </select>
+                <% } %>
             </div>
         </div>
 

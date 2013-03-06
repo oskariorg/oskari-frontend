@@ -24,12 +24,12 @@ define([
 
         events: {
             "click .accordion-header"   : "toggleLayerGroup",
-            "click .layer"              : "toggleLayerSettings"
+            "click .admin-add-layer-btn": "toggleGroupingSettings",
         },
         initialize : function() {
             this.layerGroupingModel         = this.options.layerGroupingModel;
             this.addInspireTemplate         = _.template(AdminAddInspireTemplate);
-            this.addOrganizationTemplate    = _.template(AdminAddInspireTemplate);
+            this.addOrganizationTemplate    = _.template(AdminAddOrganizationTemplate);
             this.addLayerBtnTemplate        = _.template(AdminAddLayerBtnTemplate);
             this.filterTemplate             = _.template(FilterLayersTemplate);
             this.tabTemplate                = _.template(TabPanelTemplate);
@@ -87,8 +87,10 @@ define([
                     var tab = this.tabTemplate();
                     this.$el.append(jQuery(tab).append(groupPanel));
                 }
+
                 this.$el.prepend(this.filterTemplate({instance: this.options.instance}));
                 this.$el.find('.oskarifield').append( (this.options.tabId == 'inspire') ? this.addInspireTemplate({instance: this.options.instance}) : this.addOrganizationTemplate({instance: this.options.instance}));
+
                 
     /*            var selectedLayers = this.options.instance.sandbox.findAllSelectedMapLayers();
                 for(var i = 0; i < selectedLayers.length; ++i) {
@@ -98,6 +100,27 @@ define([
                 this.filterLayers(this.filterField.getValue());
     */
                 this.$el.find('div.content').hide();
+            }
+        },
+        toggleGroupingSettings : function(e) {
+debugger;
+            //add layer
+            e.stopPropagation();
+            var element = jQuery(e.currentTarget);
+            var layer = element.parent();
+
+            if(!element.find('.admin-add-layer').hasClass('show-add-layer')) {
+                var settings = this.adminLayerTemplate({instance : this.options.instance, model : null});
+                layer.append(settings);
+                setTimeout(function(){
+                    jQuery('.admin-add-layer').addClass('show-add-layer');
+                }, 30);
+            } else {
+                jQuery('.admin-add-layer').removeClass('show-add-layer');
+                setTimeout(function(){
+                    jQuery('.admin-add-layer').remove();
+                },300);
+
             }
         },
         toggleLayerGroup : function(e) {
@@ -115,24 +138,12 @@ define([
                 headerIcon.addClass('icon-arrow-down');
                 jQuery(panel).find('div.content').show();
             }
-        },
-        toggleLayerSettings : function(e) {
-            e.stopPropagation();
-            var element = jQuery(e.currentTarget);
-            if(!element.find('.admin-add-layer').hasClass('show-add-layer')) {
-                var settings = this.adminLayerTemplate({instance : this.options.instance});
-                element.append(settings);
-                setTimeout(function(){
-                    jQuery('.admin-add-layer').addClass('show-add-layer');
-                }, 30);
-            } else {
-                jQuery('.admin-add-layer').removeClass('show-add-layer');
-                setTimeout(function(){
-                    jQuery('.admin-add-layer').remove();
-                },300);
+        }
 
-            }
-        } 
+
+
+//        jQuery("#add-layer-inspire-theme").tagit({availableTags: ["Hallinnolliset yksiköt", "Hydrografia", "Kiinteistöt", "Kohteet", "Koordinaattijärjestelmät", "Korkeus", "Liikenneverkot", "Maankäyttö", "Maanpeite","Maaperä","Merialueet", "Metatieto"]});
+
 
 
     });
