@@ -59,29 +59,26 @@ require.config({
 
 /* 1) base functionality with requirejs only */
 
-require(["jquery", "oskari", "domReady!","css"], 
+require(["jquery", "oskari", "domReady!"],
 
-    /**
-     * ... now we have jQuery and Oskari 
-     */
-    function($, oskari) {
+/**
+ * ... now we have jQuery and Oskari
+ */
+function($, oskari) {
 
     /* 2) application setup with requirejs json plugin */
     require({
-        urlArgs : "bust=" + (new Date()).getTime() /* bust Cache */
-    }, [
-        "json!_applications_/sample/require/appsetup.json", 
+        urlArgs : "bust=" + (new Date()).getTime() /* bust Cache for dev */
+    }, ["json!_applications_/sample/require/appsetup.json", 
         "json!_applications_/sample/require/config.json", 
-        "css!_applications_/sample/require/style.css",
-        "css!_applications_/sample/require/icons.css",
-        "css!_applications_/sample/require/layout-grid.css"],
-
+        "css!_applications_/sample/require/style.css", 
+        "css!_applications_/sample/require/icons.css", 
+        "css!_applications_/sample/require/layout-grid.css"
+    ],
     /* ... now we have appSetup, appConfig and DOM */
     function(appSetup, appConfig, doc) {
 
-        /* 3) (modified) Oskari loader is used load the app based on appSetup JSON */
-        /*    - note however that Oskari loader is modded to use requirejs... */
-
+        /* 3) (requirejsified) Oskari loader is used load the app based on appSetup JSON */
         var app = Oskari.app;
         Oskari.setLang('fi');
         app.setApplicationSetup(appSetup);
@@ -89,12 +86,12 @@ require(["jquery", "oskari", "domReady!","css"],
         app.startApplication(function(startupInfos) {
 
             /* 4) a sample additional bundle instance is loaded and instantiated with alternate less verbose require based syntax */
-            /* syntax: <bundle-js-path>#<bundlinstancename> */
-
             require({
-                urlArgs : undefined /* let's not bust cache will bust bundle.js path mangling */
-            }, ["bundle!_packages_/framework/bundle/coordinatedisplay#cdinstance"], function(bi) {
-                console.log("BUNDLEINSTANCE", bi);
+                urlArgs : undefined
+            }, ["bundle!_packages_/framework/bundle/coordinatedisplay#cdinstance"], 
+                function(bi) {
+                    /* now we have the bundle instance */
+                    console.log("BUNDLEINSTANCE", bi);
             });
         });
     })
