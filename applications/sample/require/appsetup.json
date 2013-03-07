@@ -1,0 +1,353 @@
+{ 
+  "startupSequence" : [
+  	  { 
+        "title" : "oskariui",
+        "en" : "oskariui",
+        "fi" : "oskariui",
+        "sv" : "oskariui",
+        "bundleinstancename" : "oskariui",
+        "bundlename" : "oskariui",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "oskariui" : { "bundlePath" : "../../../packages/framework/bundle/" }
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      }, 
+      { 
+        "title" : "OpenLayers",
+        "en" : "OpenLayers",
+        "fi" : "OpenLayers",
+        "sv" : "OpenLayers",
+        "bundleinstancename" : "openlayers-default-theme",
+        "bundlename" : "openlayers-default-theme",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "openlayers-default-theme" : { "bundlePath" : "../../../packages/openlayers/bundle/" },
+                "openlayers-single-full" : { "bundlePath" : "../../../packages/openlayers/bundle/" }
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },
+      
+      { 
+        "title" : "Map",
+        "en" : "Map",
+        "fi" : "Map",
+        "sv" : "Map",
+        "bundleinstancename" : "mapfull",
+        "bundlename" : "mapfull",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                
+                "core-base" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "core-map" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "domain" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "event-base" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "event-map" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "event-map-layer" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "mapfull" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "mapmodule-plugin" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "mapwmts" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "request-base" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "request-map" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "request-map-layer" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "sandbox-base" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "sandbox-map" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "service-base" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "service-map" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "mapwfs" : { "bundlePath" : "../../../packages/framework/bundle/" }
+                
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },            
+      { 
+        "title" : "Oskari DIV Manazer",
+        "en" : "Oskari DIV Manazer",
+        "fi" : "Oskari DIV Manazer",
+        "sv" : "Oskari DIV Manazer",
+        "bundleinstancename" : "divmanazer",
+        "bundlename" : "divmanazer",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "divmanazer" : { "bundlePath" : "../../../packages/framework/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },{ 
+        "title" : "My3rd",
+        "en" : "My3rd",
+        "fi" : "My3rd",
+        "sv" : "My3rd",
+        "bundleinstancename" : "toolbar",
+        "bundlename" : "toolbar",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "toolbar" : { "bundlePath" : "../../../packages/framework/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },
+      { 
+        "title" : "My3rd",
+        "en" : "My3rd",
+        "fi" : "My3rd",
+        "sv" : "My3rd",
+        "bundleinstancename" : "mythirdbundle",
+        "bundlename" : "mythirdbundle",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "mythirdbundle" : { "bundlePath" : "../../../packages/sample/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },{ 
+        "title" : "My4th",
+        "en" : "My4th",
+        "fi" : "My4th",
+        "sv" : "My4th",
+        "bundleinstancename" : "myfourthbundle",
+        "bundlename" : "myfourthbundle",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "myfourthbundle" : { "bundlePath" : "../../../packages/sample/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },{ 
+        "title" : "My4th",
+        "en" : "My4th",
+        "fi" : "My4th",
+        "sv" : "My4th",
+        "bundleinstancename" : "layerselector2",
+        "bundlename" : "layerselector2",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "layerselector2" : { "bundlePath" : "../../../packages/framework/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },{ 
+        "title" : "My4th",
+        "en" : "My4th",
+        "fi" : "My4th",
+        "sv" : "My4th",
+        "bundleinstancename" : "layerselection2",
+        "bundlename" : "layerselection2",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "layerselection2" : { "bundlePath" : "../../../packages/framework/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },{ 
+        "title" : "My4th",
+        "en" : "My4th",
+        "fi" : "My4th",
+        "sv" : "My4th",
+        "bundleinstancename" : "backendstatus",
+        "bundlename" : "backendstatus",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "backendstatus" : { "bundlePath" : "../../../packages/framework/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },{ 
+        "title" : "My4th",
+        "en" : "My4th",
+        "fi" : "My4th",
+        "sv" : "My4th",
+        "bundleinstancename" : "search",
+        "bundlename" : "search",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "search" : { "bundlePath" : "../../../packages/framework/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },{ 
+        "title" : "My4th",
+        "en" : "My4th",
+        "fi" : "My4th",
+        "sv" : "My4th",
+        "bundleinstancename" : "infobox",
+        "bundlename" : "infobox",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "infobox" : { "bundlePath" : "../../../packages/framework/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },{ 
+        "title" : "My4th",
+        "en" : "My4th",
+        "fi" : "My4th",
+        "sv" : "My4th",
+        "bundleinstancename" : "metadataflyout",
+        "bundlename" : "metadataflyout",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "metadataflyout" : { "bundlePath" : "../../../packages/catalogue/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },{ 
+        "title" : "My4th",
+        "en" : "My4th",
+        "fi" : "My4th",
+        "sv" : "My4th",
+        "bundleinstancename" : "printout",
+        "bundlename" : "printout",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "printout" : { "bundlePath" : "../../../packages/framework/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },{ 
+        "title" : "My4th",
+        "en" : "My4th",
+        "fi" : "My4th",
+        "sv" : "My4th",
+        "bundleinstancename" : "d3js",
+        "bundlename" : "d3js",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "d3js" : { "bundlePath" : "../../../packages/visualisation/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },{ 
+        "title" : "My4th",
+        "en" : "My4th",
+        "fi" : "My4th",
+        "sv" : "My4th",
+        "bundleinstancename" : "d3jspoc",
+        "bundlename" : "d3jspoc",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "d3jspoc" : { "bundlePath" : "../../../packages/visualisation/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },{ 
+        "title" : "My4th",
+        "en" : "My4th",
+        "fi" : "My4th",
+        "sv" : "My4th",
+        "bundleinstancename" : "bb",
+        "bundlename" : "bb",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "bb" : { "bundlePath" : "../../../packages/integration/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },{ 
+        "title" : "My4th",
+        "en" : "My4th",
+        "fi" : "My4th",
+        "sv" : "My4th",
+        "bundleinstancename" : "todo",
+        "bundlename" : "todo",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "todo" : { "bundlePath" : "../../../packages/integration/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },{ 
+        "title" : "My4th",
+        "en" : "My4th",
+        "fi" : "My4th",
+        "sv" : "My4th",
+        "bundleinstancename" : "solsol",
+        "bundlename" : "solsol",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "solsol" : { "bundlePath" : "../../../packages/games/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },{ 
+        "title" : "My4th",
+        "en" : "My4th",
+        "fi" : "My4th",
+        "sv" : "My4th",
+        "bundleinstancename" : "helloworld",
+        "bundlename" : "helloworld",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "helloworld" : { "bundlePath" : "../../../packages/sample/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },{ 
+        "title" : "My4th",
+        "en" : "My4th",
+        "fi" : "My4th",
+        "sv" : "My4th",
+        "bundleinstancename" : "slickgrid",
+        "bundlename" : "slickgrid",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "slickgrid" : { "bundlePath" : "../../../packages/visualisation/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      }, {
+        "title" : "My4th",
+        "en" : "My4th",
+        "fi" : "My4th",
+        "sv" : "My4th",
+        "bundleinstancename" : "slickgridpoc",
+        "bundlename" : "slickgridpoc",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "slickgridpoc" : { "bundlePath" : "../../../packages/visualisation/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },      
+      { 
+        "title" : "My4th",
+        "en" : "My4th",
+        "fi" : "My4th",
+        "sv" : "My4th",
+        "bundleinstancename" : "patiopoc",
+        "bundlename" : "patiopoc",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "patiopoc" : { "bundlePath" : "../../../packages/patio/bundle/" },
+                "geostats" : { "bundlePath" : "../../../packages/libraries/bundle/" }
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      }
+  ]
+}

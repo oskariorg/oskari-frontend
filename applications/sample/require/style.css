@@ -1,0 +1,33 @@
+@media screen {
+	body {
+		margin:0;
+		padding:0;
+		height:100%;
+	}
+	#mapdiv {
+		width:100%;
+		height:100%;
+		border:1pt solid navy;
+	}
+	#mapdivB {
+		width:100%;
+		height:100%;
+		border:1pt solid navy;
+	}
+	#maptools {
+		background-color:#333438;
+		height:100%;
+		position:absolute;
+		top:0;
+		width:153px;
+		z-index:2;
+	}
+	#contentMap {
+		height:100%;
+		margin-left:153px;
+	}
+}
+
+@import url("layout-grid.css") screen;
+@import url("icons.css") screen;
+

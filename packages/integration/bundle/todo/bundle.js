@@ -24,10 +24,7 @@ Oskari.clazz.define("Oskari.integration.bundle.todo.ToDoBundle", function() {
 
 }, {
     "create" : function() {
-        return Oskari.clazz.create(
-            "Oskari.integration.bundle.bb.AdapterBundleInstance", 
-            "todo", 
-            "Oskari.integration.bundle.todo.View");
+        return Oskari.clazz.create("Oskari.integration.bundle.bb.AdapterBundleInstance", "todo", "Oskari.integration.bundle.todo.View");
 
     },
     "start" : function() {
@@ -39,11 +36,14 @@ Oskari.clazz.define("Oskari.integration.bundle.todo.ToDoBundle", function() {
     }
 }, {
 
-    "protocol" : [
-        "Oskari.bundle.Bundle", 
-        "Oskari.bundle.BundleInstance", 
-        "Oskari.mapframework.bundle.extension.ExtensionBundle"],
+    "protocol" : ["Oskari.bundle.Bundle", "Oskari.bundle.BundleInstance", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
     "source" : {
+        "requirements" : {
+            "path" : "../../../../bundles/integration/bundle/todo",
+            "config" : {
+            },
+            "require" : ["backbone", "backbone-localstorage"]
+        },
         "scripts" : [{
             "type" : "text/javascript",
             "src" : "../../../../bundles/integration/bundle/todo/View.js"
@@ -89,7 +89,7 @@ Oskari.clazz.define("Oskari.integration.bundle.todo.ToDoBundle", function() {
                         "License-Name" : "EUPL",
                         "License-Online-Resource" : "http://www.paikkatietoikkuna.fi/license"
                     }
-                    
+
                 }
             }],
             "Bundle-Version" : "1.0.0",
