@@ -12,8 +12,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.domain.WfsGridUpdate
  * @param {Oskari.mapframework.domain.WfsLayer} mapLayer
  *            wfs maplayer
  * 
- * @param {OpenLayers.Bounds} bbox
- *            map bounding box
+ * @param {OpenLayers.Geometry} geometry
+ *            map bounding box for selection
  * 
  * @param {Number} mapWidth
  *            width of map
@@ -24,9 +24,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.domain.WfsGridUpdate
  * @param {Function} onReady
  *            function to call when operation is completed
  */
-function(mapLayer, bbox, mapWidth, mapHeight, onReady) {
+function(mapLayer, geometry, mapWidth, mapHeight, onReady) {
 
-    this._bbox = bbox;
+    this._geometry = geometry;
 
     this._mapWidth = mapWidth;
 
@@ -47,14 +47,14 @@ function(mapLayer, bbox, mapWidth, mapHeight, onReady) {
         return this._mapLayer;
     },
     /**
-     * @method getBbox
-     * Map bounding box
+     * @method getGeometry
+     * Map selection for query
      *
-     * @return {OpenLayers.Bounds}
+     * @return {OpenLayers.Geometry}
      *            map bounds
      */
-    getBbox : function() {
-        return this._bbox;
+    getGeometry : function() {
+        return this._geometry;
     },
     /**
      * @method getMapWidth

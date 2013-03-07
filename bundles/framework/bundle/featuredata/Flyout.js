@@ -18,7 +18,6 @@ function(instance) {
     this.layers = {};
 
     this.tabsContainer = null;
-    this.service = null;
     this.modelMngr = null;
     this.selectedTab = null;
     this.active = false;
@@ -65,8 +64,7 @@ function(instance) {
         this.tabsContainer = 
             Oskari.clazz.create('Oskari.userinterface.component.TabContainer',
             this.instance.getLocalization('nodata'));
-        this.service = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.service.GridJsonService', 
-            this.instance.sandbox.getAjaxUrl());
+
         this.modelMngr = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.service.GridModelManager');
         var mapmodule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
         var newMapDivId = mapmodule.getMap().div;
@@ -138,7 +136,7 @@ function(instance) {
         this.tabsContainer.addTabChangeListener(function(previousPanel, selectedPanel) {
             // cancel grid update on panel change
             if(previousPanel) {
-                me.service.cancelWFSGridUpdateForLayer(previousPanel.layer.getId());
+                me.instance.getService().cancelWFSGridUpdateForLayer(previousPanel.layer.getId());
                 // sendout dim request for unselected tab
                 var request = dimReqBuilder(previousPanel.layer.getId());
                 sandbox.request(me.instance.getName(), request);
@@ -179,7 +177,7 @@ function(instance) {
      */ 
     layerRemoved: function(layer) {
         var layerId = '' + layer.getId();
-        this.service.cancelWFSGridUpdateForLayer(layerId);
+        this.instance.getService().cancelWFSGridUpdateForLayer(layerId);
         var panel = this.layers[layerId];
         this.tabsContainer.removePanel(panel);
         // clean up
@@ -196,13 +194,13 @@ function(instance) {
      *           WFS layer that was added
      * Updates data for layer
      */ 
-    _updateData: function(layer) {
+    _updateData: function(layer, selectionGeometry) {
         if(!this.active) {
             // disabled
             return;
         }
         // cancel possible previous update
-        this.service.cancelWFSGridUpdateForLayer(layer.getId());
+        this.instance.getService().cancelWFSGridUpdateForLayer(layer.getId());
         var map = this.instance.sandbox.getMap();
         var panel = this.layers['' + layer.getId()];
         var selection = null;
@@ -217,7 +215,7 @@ function(instance) {
         panel.getContainer().append(this.instance.getLocalization('loading'));
         // in scale, proceed
         var me = this;
-        var bbox = map.getBbox();
+        //var bbox = map.getBbox();
         var mapWidth = map.getWidth();
         var mapHeight = map.getHeight();
         var cb = function(response) {
@@ -230,14 +228,20 @@ function(instance) {
                 }
             }
         }
-        this.service.scheduleWFSGridUpdate(layer, bbox, mapWidth, mapHeight, cb);
+        this.instance.getService().scheduleWFSGridUpdate(layer, selectionGeometry, mapWidth, mapHeight, cb);
     },
-    handleMapMoved : function() {
+    /**
+     * @method updateGrid
+     * @param {Object} user's selection on map
+     * Updates grid for drawn places
+     */
+    updateGrid : function(selection) {
         if(!this.selectedTab) {
             return;
         }
-        this._updateData(this.selectedTab.layer);
-    },
+        selection = JSON.stringify(selection);
+        this._updateData(this.selectedTab.layer, selection);
+    }, 
     /**
      * @method _enableResize
      * Enables the flyout resizing
@@ -449,9 +453,13 @@ function(instance) {
      * True to enable grid functionality
      * False to disable and stop reacting to any map movements etc 
      */
-    setEnabled : function(isEnabled) {
+    setEnabled : function(isEnabled, geometry) {
         if(this.active == isEnabled) {
             // we need to check this since dragging flyout will call this all the time
+            if(geometry) {
+                // update geometry if given
+                this.updateGrid(geometry);
+            }
             return;
         }
         this.active = (isEnabled == true);
@@ -467,7 +475,7 @@ function(instance) {
         if(!this.active) {
             if(this.selectedTab) {
                 // cancel possible previous update
-                this.service.cancelWFSGridUpdateForLayer(this.selectedTab.layer.getId());
+                this.instance.getService().cancelWFSGridUpdateForLayer(this.selectedTab.layer.getId());
                 // dim possible highlighted layer
                 var dimReqBuilder = sandbox.getRequestBuilder('DimMapLayerRequest');
                 var request = dimReqBuilder(this.selectedTab.layer.getId());
@@ -489,7 +497,7 @@ function(instance) {
                 sandbox.request(this.instance.getName(), request);
                 
                 // update data
-                this._updateData(this.selectedTab.layer);
+                this.updateGrid(geometry);
             }
         }
     }
