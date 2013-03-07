@@ -1,23 +1,6 @@
 /**
- * @class Oskari
- *
- * Oskari
- *
- * A set of metdhods to support loosely coupled classes and instances for the
- * mapframework
- *
- * @to-do - class instance checks against class metadata - protocol
- *        implementation validation
- *
- * 2012-11-30 additions
- * - dropped compatibility for pre 2010-04 classes
- * - removed fixed root package requirement 'Oskari.' - implementing namespaces
- * - inheritance with extend() or extend: [] meta
- * - inheritance implemented as a brutal copy down of super clazz methods
- * - super clazz constructors applied behind the scenes in top-down order
- * - this implementation does *not* implement native js  instanceof for class hierarchies
- * - inheritance supports pushing down new method categories applied to super classes
- * - this implementation does not provide super.func() calls - may be added at a later stage
+ * oskari requirejs module 
+ * - same operations as bundles/bundle.js but implemented with requirejs
  *
  */
 var Oskari;
@@ -1822,54 +1805,7 @@ define(['jquery', 'exports', 'css'], function($, exports) {
 
             return b;
         },
-        /**
-         * @method bindImportedPackages
-         *
-         * NYI. Shall bind any imported packages to bundle mediator
-         *
-         */
-        "bindImportedPackages" : function() {
-            // TBD
-        },
-        /**
-         * @method bindImportedNamespaces
-         *
-         * NYI. Shall bind any imported namespaces to bundle mediator
-         */
-        "bindImportedNamespaces" : function() {
-            // TBD
-        },
-        /**
-         * @method bindImportedEvents
-         * @deprecated
-         *
-         * not needed. registrations will be based on actual event handlers.
-         */
-        "bindImportedEvents" : function() {
-
-        },
-        /**
-         * @method bindExportedPackages
-         *
-         * NYI. Shall support publishing a package from bundle
-         */
-        "bindExportedPackages" : function() {
-            // TBD
-        },
-        /**
-         * @method bindExportedNamespaces NYI. Shall support publishing namespaces
-         *         from bundle
-         */
-        "bindExportedNamespaces" : function() {
-            // TBD
-        },
-        /**
-         * @methdod bindExportedRequests
-         * @deprecated
-         */
-        "bindExportedRequests" : function() {
-
-        },
+       
         /**
          * @method update
          * @param bundleid
@@ -1879,14 +1815,7 @@ define(['jquery', 'exports', 'css'], function($, exports) {
          *
          */
         "update" : function(b, bi, info) {
-            // resolves any bundle dependencies
-            // this must be done before any starts
-            // TO-DO
-            // - bind package exports and imports
-            // - bidn event imports and exports
-            // - bind request exports ( and imports)
-            // - bind any Namespaces (== Globals imported )
-            // - fire any pending triggers
+         
 
             var me = this;
             me.log("update called with info " + info);
