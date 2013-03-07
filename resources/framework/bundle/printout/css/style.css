@@ -13,8 +13,7 @@ div.printout {
     height: 100%;
     top: 0;
     left: 40px;
-    /* sidebar has 3, we want to open it on top of this */
-    z-index: 2;
+    z-index: 1500;
     width: 255px;
 }
 #contentMap div.basic_publisher div.content {

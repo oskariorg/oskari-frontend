@@ -1166,6 +1166,15 @@ define(['jquery', 'exports', 'css'], function($, exports) {
      * various javascript loaders (Ext, ...)
      *
      */
+    var blMimeTypeToPlugin = {
+        "text/javascript" : function(fn) {
+            return fn;
+        },
+        "text/css" : function(fn) {
+            return "css!" + fn;
+        }
+    };
+
     var bundle_loader = function(manager, cb) {
         this.loader_identifier = ++bundle_loader_id;
         this.manager = manager;
@@ -1176,6 +1185,7 @@ define(['jquery', 'exports', 'css'], function($, exports) {
         this.files = {};
         this.fileList = [];
         this.metadata = {};
+        this.mimeTypeToPlugin = blMimeTypeToPlugin;
     };
 
     bundle_loader.prototype = {
@@ -1184,10 +1194,11 @@ define(['jquery', 'exports', 'css'], function($, exports) {
          */
         "add" : function(fn, pdef) {
             var me = this;
+            var mimeType = ( pdef ? pdef.type : null ) || "text/javascript";
             if(!me.files[fn]) {
                 var def = {
-                    src : fn,
-                    type : ( pdef ? pdef.type : null ) || "text/javascript",
+                    src : me.mimeTypeToPlugin[mimeType](fn),
+                    type : mimeType,
                     id : pdef ? pdef.id : null,
                     state : false
 
@@ -1206,7 +1217,6 @@ define(['jquery', 'exports', 'css'], function($, exports) {
 
             return (this.filesLoaded / this.filesRequested);
         },
-        
         "config" : function(conf) {
             require.config(conf);
         },
@@ -1231,40 +1241,11 @@ define(['jquery', 'exports', 'css'], function($, exports) {
                 return;
             }
 
-            /* var onFileLoaded = function() {
-             me.filesLoaded++;
-             me.manager.log("Files loaded " + me.filesLoaded + "/" + me.filesRequested);
-
-             if(numFiles == me.filesLoaded) {
-             me.callback();
-             me.manager.notifyLoaderStateChanged(me, true);
-             } else {
-             me.manager.notifyLoaderStateChanged(me, false);
-             }
-             };
-             var f = false;
-             for(var n = 0; n < me.fileList.length; n++) {
-             var def = me.fileList[n];
-             var fn = def.src;
-             var st = me.buildScriptTag(fn, onFileLoaded, def.type, def.id);
-             if(st) {
-             // If this breaks something, revert to using method 1
-             if(preloaded()) {
-             onFileLoaded();
-             } else {
-             fragment.appendChild(st);
-             f = true;
-             }
-             }
-             }
-             if(f) {
-             head.appendChild(fragment);
-             }*/
-
             var reqs = [];
             for(var n = 0; n < me.fileList.length; n++) {
                 var def = me.fileList[n];
                 var fn = def.src;
+
                 reqs.push(fn);
             }
             require(reqs, function() {
@@ -1272,45 +1253,6 @@ define(['jquery', 'exports', 'css'], function($, exports) {
                 me.manager.notifyLoaderStateChanged(me, true)
 
             })
-        },
-        /**
-         * @method buildScriptTag
-         * @private
-         *
-         * builds a script tag to be applied to document head assumes UTF-8
-         */
-        "buildScriptTag" : function(filename, callback, elementtype, elementId) {
-            var me = this;
-            var script = document.createElement('script');
-            if(elementId)
-                script.id = elementId;
-            script.type = elementtype;
-            //||'text/javascript';
-            script.charset = 'utf-8';
-
-            if(preloaded()) {
-                // This should be redundant, see "If this..." in commit() above
-                script.src = '/Oskari/empty.js'
-            } else {
-                script.src = filename;
-            }
-
-            /*
-             * IE has a different way of handling &lt;script&gt; loads, so we //
-             * need to check for it here
-             */
-            if(script.readyState) {
-                script.onreadystatechange = function() {
-                    if(script.readyState == "loaded" || script.readyState == "complete") {
-                        script.onreadystatechange = null;
-                        callback();
-                    }
-                };
-            } else {
-                script.onload = callback;
-            }
-
-            return script;
         }
     };
 
@@ -1671,9 +1613,8 @@ define(['jquery', 'exports', 'css'], function($, exports) {
                 count : 0,
                 loaded : 0,
                 files : {},
-                css : {},
-                config: {},
-                require: []
+                config : {},
+                require : []
             };
             var me = this;
             var callback = function() {
@@ -1698,115 +1639,72 @@ define(['jquery', 'exports', 'css'], function($, exports) {
 
                         for(var n = 0; n < defs.length; n++) {
                             var def = defs[n];
-                            if(def.type == "text/css") {
 
-                                var fn = def.src;
-                                var fnWithPath = null;
-                                if(fn.indexOf('http') != -1) {
-                                    fnWithPath = fn;
-                                } else {
-                                    fnWithPath = bundlePath + '/' + fn;
-                                }
+                            srcFiles.count++;
 
-                                srcFiles.css[fnWithPath] = def;
+                            var fn = buildPathForLoaderMode(def.src, bundlePath);
 
-                            } else if(def.type) {
-                                srcFiles.count++;
-                                /* var fn = def.src + "?ts=" + instTs; */
-                                var fn = buildPathForLoaderMode(def.src, bundlePath);
-
-                                var fnWithPath = null;
-                                if(fn.indexOf('http') != -1) {
-                                    fnWithPath = fn;
-                                } else {
-                                    fnWithPath = bundlePath + '/' + fn;
-                                }
-
-                                srcFiles.files[fnWithPath] = def;
+                            var fnWithPath = null;
+                            if(fn.indexOf('http') != -1) {
+                                fnWithPath = fn;
+                            } else {
+                                fnWithPath = bundlePath + '/' + fn;
                             }
 
+                            srcFiles.files[fnWithPath] = def;
                         }
                     } else if(p == 'locales') {
                         var requiredLocale = blocale.getLang();
                         var defs = srcs[p];
 
-                        /*console.log("locales",defs);*/
                         for(var n = 0; n < defs.length; n++) {
                             var def = defs[n];
 
-                            /*console.log("locale",def,requiredLocale);*/
-
                             if(requiredLocale && def.lang && def.lang != requiredLocale) {
-                                /*console.log("locale",def,def.lang,requiredLocale, "NO MATCH?");*/
                                 continue;
                             }
 
-                            if(def.type == "text/css") {
+                            srcFiles.count++;
+                            var fn = buildPathForLoaderMode(def.src, bundlePath);
 
-                                var fn = def.src;
-                                var fnWithPath = null;
-                                if(fn.indexOf('http') != -1) {
-                                    fnWithPath = fn;
-                                } else {
-                                    fnWithPath = bundlePath + '/' + fn;
-                                }
-
-                                srcFiles.css[fnWithPath] = def;
-
-                            } else if(def.type) {
-                                srcFiles.count++;
-                                /* var fn = def.src + "?ts=" + instTs; */
-                                var fn = buildPathForLoaderMode(def.src, bundlePath);
-
-                                var fnWithPath = null;
-                                if(fn.indexOf('http') != -1) {
-                                    fnWithPath = fn;
-                                } else {
-                                    fnWithPath = bundlePath + '/' + fn;
-                                }
-
-                                srcFiles.files[fnWithPath] = def;
+                            var fnWithPath = null;
+                            if(fn.indexOf('http') != -1) {
+                                fnWithPath = fn;
+                            } else {
+                                fnWithPath = bundlePath + '/' + fn;
                             }
+
+                            srcFiles.files[fnWithPath] = def;
 
                         }
 
                     } else if(p == 'requirements') {
-                         var defs = srcs[p];
-                         var defRequire = defs.require;
-                         
-                         srcFiles.config = defs.config||{};
-                         if( !srcFiles.config.paths )  {
-                             srcFiles.config.paths = {};
-                         }
-                         if( defs.aliases ) {
-                             for( var a in defs.aliases ) {
-                                srcFiles.config.paths[a] = bundlePath + '/' + defs.aliases[a];
-                             }
-                         }
-                                                 
-                         for(var n = 0; n < defRequire.length; n++) {
-                            var def = defRequire[n];
-                            
-                            srcFiles.require.push(def);
-                         }
+                        var defs = srcs[p];
+                        var defRequire = defs.require;
 
-                    } 
+                        srcFiles.config = defs.config || {};
+                        if(!srcFiles.config.paths) {
+                            srcFiles.config.paths = {};
+                        }
+                        if(defs.aliases) {
+                            for(var a in defs.aliases ) {
+                                srcFiles.config.paths[a] = bundlePath + '/' + defs.aliases[a];
+                            }
+                        }
+
+                        for(var n = 0; n < defRequire.length; n++) {
+                            var def = defRequire[n];
+
+                            srcFiles.require.push(def);
+                        }
+
+                    }
                 }
             } else {
                 me.log("NO sources for " + bundleImpl);
 
             }
 
-            var csss = [];
-            for(src in srcFiles.css) {
-                // var def = srcFiles.css[src];
-                var defSrc = src;
-                var fn = buildPathForLoaderMode(defSrc, bundlePath);
-                csss.push("css!" + fn);
-            }
-            require(csss, function() {
-            });
-            
             var bl = new bundle_loader(this, callback);
             bl.metadata['context'] = 'bundleSources';
             bl.metadata['bundleImpl'] = bundleImpl;
@@ -1836,12 +1734,14 @@ define(['jquery', 'exports', 'css'], function($, exports) {
                  * else load any files
                  */
             } else {
+
                 for(js in srcFiles.files) {
                     bl.add(js, srcFiles.files[js]);
                     me.log("- added script source " + js + " for " + bundleImpl);
 
                 }
-                for(var rq = 0 ; rq < srcFiles.require.length ; rq++) {
+
+                for(var rq = 0; rq < srcFiles.require.length; rq++) {
                     bl.add(srcFiles.require[rq], srcFiles.require[rq]);
                     me.log("- added require " + srcFiles.require[rq] + " for " + bundleImpl);
 
@@ -2637,6 +2537,16 @@ define(['jquery', 'exports', 'css'], function($, exports) {
          */
         setSandbox : function(sandboxName, sandbox) {
             return ga.apply(cs, [sandboxName || 'sandbox', sandbox])
+        },
+        
+        /**
+         * @static
+         * @method registerMimeTypeToPlugin
+         * @param mimeType mimetype to be mapped
+         * @param pluginMapFunc requirejs plugin
+         */
+        registerMimeTypeToPlugin : function(mimeType,plugin) {
+            blMimeTypeToPlugin[mimeType] = plugin;
         }
     };
 
