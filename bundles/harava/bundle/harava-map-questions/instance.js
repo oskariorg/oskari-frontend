@@ -81,13 +81,12 @@ function() {
 		var me = this;
 		if(me._currentStep!=null){
     		var module = me.getModuleById(me._currentStep);
+    		var prev = jQuery(module.appendTo).prev();
     		if(module!=null){  		
     			jQuery(module.appendTo).prev().removeClass('harava-toolbar-hide');
     			jQuery(module.appendTo).prev().addClass('harava-toolbar-show');
-    			try{
-    				jQuery(module.appendTo).animate({left:'-25%'},'slow');
-    				jQuery(module.appendTo).prev().animate({left:'0'},'slow');
-    			} catch(exp){}
+    			jQuery(prev).animate({left:'0'}, 'slow');
+    			jQuery(module.appendTo).animate({left:'-25%'},'slow');				
     		}
 		}
 	},
@@ -103,17 +102,15 @@ function() {
     		if(module!=null){
     			jQuery(module.appendTo).prev().removeClass('harava-toolbar-show');
     			jQuery(module.appendTo).prev().addClass('harava-toolbar-hide');
+    			var prev = jQuery(module.appendTo).prev();
     			if(fast===true){
-    				try{
-    					jQuery(module.appendTo).animate({left:'0'},'fast');
-    					jQuery(module.appendTo).prev().animate({left:'25%'},'fast');
-    				} catch(exp){}
+    				jQuery(prev).css('left','25%');
+    				jQuery(module.appendTo).css('left','0');
     			}
     			else {
-    				try{
-    					jQuery(module.appendTo).animate({left:'0'},'slow');
-    					jQuery(module.appendTo).prev().animate({left:'25%'},'slow');
-    				} catch(exp){}
+    				jQuery(prev).animate({left:'25%'}, 'slow');
+					jQuery(module.appendTo).animate({left:'0'},'slow');
+					
     			}
     		}
 		}
@@ -129,7 +126,6 @@ function() {
     	}
     	
     	me.started = true;
-    	
     	var sandbox = Oskari.$("sandbox");
         me.sandbox = sandbox;
         
@@ -260,7 +256,7 @@ function() {
     	var oldmodule = me.getModuleById(me._currentStep);
 		if(oldmodule!=null){
 			if(jQuery(oldmodule.appendTo).prev().hasClass('harava-toolbar-show')){
-	    		me.showTools();
+	    		me.showTools(true);
 	    	}
 		}
     	
