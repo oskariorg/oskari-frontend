@@ -851,5 +851,13 @@
 			"pdt" : "http://127.0.0.1:8080/piirto-pdt-0.0.1-SNAPSHOT/kartta-aineistot/A_PDT/tilaus.json"
 		}
 		}
+	},
+	"jsonform": {
+		"conf": {
+			"name": "jsonform",
+			"sandbox": "sandbox:A",
+			"tileClazz": "Oskari.userinterface.extension.DefaultTile",
+			"flyoutClazz": "Oskari.integration.bundle.jsonform.JsonFormFlyout"
+		}
 	}
 }

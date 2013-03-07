@@ -1,55 +1,86 @@
 /*
- * require/require.html
- * require/require-index.js
- * ...
- * 
- * PoC: requirejs.org based startup for Oskari map application with support for modules
- * loading additional modules with requirejs.
- *
- * Features:
- * - oskari: Implemented a modified Oskari loader that uses require to load any dependencies
- * - oskari: Implemented support to declaring require dependencies in bundle.js
- * - oskari: Implemented requirejs plugin to load and instantiate bundle with require declarations 
-  *
- * Dependencies:
- * - requirejs: require-jquery WITH added jQuery migration file to not modify code for this demo 
- * - requirejs: json plugin used to load appsetup and config json definitions
- * - requirejs: css plugin used to load CSS resources
- *
- * To-DO: 
-  * - evaluate  
- *  
- */
+* require/require.html
+* require/require-index.js
+* ...
+*
+* PoC: requirejs.org based startup for Oskari map application with support for bundles
+* loading additional modules with requirejs.
+*
+* Enabling require to be used with Oskari will make it easier to migrate 3rd party modules to
+* oskari.
+*
+* Features:
+* - oskari: Implemented a modified Oskari loader that uses require to load any dependencies
+* - oskari: Implemented support to declaring require dependencies in bundle.js
+* - oskari: Implemented requirejs plugin to load and instantiate bundle with require declarations
+*
+* Dependencies:
+* - requirejs: require-jquery WITH added jQuery migration file to not modify code for this demo
+* - requirejs: json plugin used to load appsetup and config json definitions
+* - requirejs: css plugin used to load CSS resources
+*
+* To-DO:
+* - evaluate
+*
+*/
+
 /**
- * we must fix some requirejs path shortcuts to 
+ * config:
+ *
+ * we must fix some requirejs path shortcuts to
  *  cope with Oskari directory structure.
- * 
- * 
- * 
+ *
+ *
+ *
  */
 require.config({
+
+    /* the base is set to requirejs lib to help requiring 3rd party libs */
     "baseUrl" : "../../../libraries/requirejs/lib",
-    //urlArgs : "bust=" + (new Date()).getTime(),
-    config : {
-        "oskari" : {
-            "compatibility" : true
-        }
-    },
+
+    /* some path shortcuts to ease declarations */
     paths : {
+        _libraries_ : '../../../libraries',
         _applications_ : '../../../applications',
         _packages_ : '../../../packages'
     }
+
 });
 
 /*
+ * start: as an example we will load in stages
+ *
+ * 1) base functionality with requirejs only
+ * 2) application setup with requirejs json plugin
+ * 3) (modified) Oskari loader is used load the app based on appSetup JSON
+ * 4) a sample additional bundle instance is loaded and instantiated with alternate less verbose require based syntax
  *
  */
-require(["jquery", "oskari", "domReady!"], function($, oskari) {
 
-    require([
+/* 1) base functionality with requirejs only */
+
+require(["jquery", "oskari", "domReady!","css"], 
+
+    /**
+     * ... now we have jQuery and Oskari 
+     */
+    function($, oskari) {
+
+    /* 2) application setup with requirejs json plugin */
+    require({
+        urlArgs : "bust=" + (new Date()).getTime() /* bust Cache */
+    }, [
         "json!_applications_/sample/require/appsetup.json", 
         "json!_applications_/sample/require/config.json", 
-        "css!_applications_/sample/require/style.css"], function(appSetup, appConfig, doc) {
+        "css!_applications_/sample/require/style.css",
+        "css!_applications_/sample/require/icons.css",
+        "css!_applications_/sample/require/layout-grid.css"],
+
+    /* ... now we have appSetup, appConfig and DOM */
+    function(appSetup, appConfig, doc) {
+
+        /* 3) (modified) Oskari loader is used load the app based on appSetup JSON */
+        /*    - note however that Oskari loader is modded to use requirejs... */
 
         var app = Oskari.app;
         Oskari.setLang('fi');
@@ -57,11 +88,13 @@ require(["jquery", "oskari", "domReady!"], function($, oskari) {
         app.setConfiguration(appConfig);
         app.startApplication(function(startupInfos) {
 
-            /* alternate syntax to launch a bundle */
-            /* <bundle-js-path>#<bundlinstancename> */
-            
-            require(["bundle!_packages_/framework/bundle/coordinatedisplay#cdinstance"], function(bi) {
-                console.log("BUNDLEINSTANCE",bi);
+            /* 4) a sample additional bundle instance is loaded and instantiated with alternate less verbose require based syntax */
+            /* syntax: <bundle-js-path>#<bundlinstancename> */
+
+            require({
+                urlArgs : undefined /* let's not bust cache will bust bundle.js path mangling */
+            }, ["bundle!_packages_/framework/bundle/coordinatedisplay#cdinstance"], function(bi) {
+                console.log("BUNDLEINSTANCE", bi);
             });
         });
     })
