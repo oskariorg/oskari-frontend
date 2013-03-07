@@ -1778,8 +1778,11 @@ define(['jquery', 'exports', 'css'], function($, exports) {
                          if( !srcFiles.config.paths )  {
                              srcFiles.config.paths = {};
                          }
-                         srcFiles.config.paths['_bundle'] = bundlePath + '/' + defs.path;
-
+                         if( defs.aliases ) {
+                             for( var a in defs.aliases ) {
+                                srcFiles.config.paths[a] = bundlePath + '/' + defs.aliases[a];
+                             }
+                         }
                                                  
                          for(var n = 0; n < defRequire.length; n++) {
                             var def = defRequire[n];

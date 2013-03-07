@@ -39,7 +39,9 @@ Oskari.clazz.define("Oskari.integration.bundle.todo.ToDoBundle", function() {
     "protocol" : ["Oskari.bundle.Bundle", "Oskari.bundle.BundleInstance", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
     "source" : {
         "requirements" : {
-            "path" : "../../../../bundles/integration/bundle/todo",
+            "aliases":  {
+                "_bundle" : "../../../../bundles/integration/bundle/todo",
+            },
             "config" : {
             },
             "require" : ["backbone", "backbone-localstorage"]

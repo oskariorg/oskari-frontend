@@ -143,7 +143,7 @@ function() {
 		var tbcontainer = this.templateMenutoolbar.clone();
 		this.menutoolbarcontainer.append(tbcontainer);
 		this.toolbars[tbid] = tbcontainer;
-		c = tbcontainer.find(".oskariui-menutoolbarbuttongroup");
+		var c = tbcontainer.find(".oskariui-menutoolbarbuttongroup");
 		this.containers[tbid] = c;
 
 		if(data.title) {
