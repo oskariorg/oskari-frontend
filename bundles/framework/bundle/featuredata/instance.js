@@ -93,6 +93,7 @@ function() {
 		// used to get fullscreen selection even if selection tools are not enabled
 		this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlugin', this);
 
+		//sends request via config to add tool selection button
 		if(this.config && this.config.selectionTools == true) {
 		 	this.popupHandler = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.PopupHandler', this);
 	        var addBtnRequestBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');

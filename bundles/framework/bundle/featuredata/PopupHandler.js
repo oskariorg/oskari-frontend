@@ -27,7 +27,7 @@ function(instance) {
     var selectionPlugin = me.instance.getSelectionPlugin();
 	this.buttons = {
         'point' : {
-            iconCls : 'selection-point',
+            iconCls : 'myplaces-point',
             tooltip : me.localization.tools.point.tooltip,
             sticky : false,
             callback : function() {
