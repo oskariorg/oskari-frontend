@@ -244,7 +244,7 @@ function() {
     /**
      * @method _buildLayerIdList
      * @private
-     * @returns {Array} visible layer ids
+     * @returns {String[]} visible layer ids
      */
     _buildLayerIdList: function()  {
         var me = this;
@@ -507,7 +507,7 @@ function() {
      * @private
      * Shows multiple features in an infobox
      *
-     * @param {Array} data
+     * @param {Object} data
      */
     _showFeatures : function(data) {
         var me = this;

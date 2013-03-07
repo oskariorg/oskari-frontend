@@ -137,7 +137,7 @@ function() {
      */
     popup : function(id, title, contentData, lonlat, hidePrevious, width, height, centerMap) {
     	var me = this;
-    	 
+
     	var arrow = this._arrow.clone();
     	var header = this._header.clone();
     	var headerWrapper = this._headerWrapper.clone();
@@ -229,7 +229,8 @@ function() {
 		    contentData : contentData,
 		    lonlat : lonlat,
 		    popup : popup
-		}
+		}; 
+		
 		jQuery(popup.div).css('overflow','visible');
 		jQuery(popup.groupDiv).css('overflow','visible');
 		// override
@@ -266,12 +267,31 @@ function() {
 		jQuery('div.popupHeader').width(width-arrowWidth);
 		jQuery('div.popupContent').height(height-titleHeight-12);
 		
-		if(centerMap){
+		jQuery(this._adaptPopupSize($,centerMap, lonlat));
+		
+		
+    },
+    _adaptPopupSize: function($,centerMap,lonlat) {
+        var viewport = $('.olMapViewport');
+        var popup = $('.olPopup');
+        var left = parseFloat(popup.css('left')) + 10;
+        popup.find('.popupHeaderArrow').css({'margin-left': '-10px'});
+        var header = popup.find('.popupHeader').css('width', '100%');
+        var content = popup.find('.popupContent').css({'margin-left': '0', 'padding': '5px 20px 5px 20px'});
+        popup.find('.olPopupContent').css({'width': '100%', 'height': '100%'});
+        var maxWidth = viewport.width()   * 0.9;
+        var maxHeight = viewport.height() * 0.7;
+        var height = content.find('.contentWrapper').height();
+        height = height > maxHeight ? (maxHeight + 30) +'px' : 'auto';
+        content.css({'height': height});
+        //alert(height);
+        popup.css({'height': 'auto', 'width': 'auto', 'min-width': '256px', 'max-width': maxWidth + 'px', 'min-height': '200px','max-height': maxHeight+'px','left': left+'px', 'z-index': '16000'});
+        
+        if(centerMap){
 			this._centerMapToSelectedCoordinate(lonlat);
 		} else {
-			this._panMapToShowPopup(lonlat,width,height);
+			this._panMapToShowPopup(lonlat,popup.width(),popup.height());
 		}
-		
     },
     /**
      * @method _centerMapToSelectedCoordinate
@@ -282,6 +302,8 @@ function() {
     _centerMapToSelectedCoordinate: function(lonlat){
         this._map.setCenter(lonlat);
         this.getMapModule()._updateDomain();
+        var popup = $('.olPopup');
+        this._panMapToShowPopup(lonlat, popup.width(), popup.height());
     },
     /**
      * @method _panMapToShowPopup
@@ -302,12 +324,14 @@ function() {
         var pany = 0;
         var popupMarginWidthPx = 15;
         var popupMarginHeightPx = 0;
-        var infoboxWidth = popupWidthPx+popupMarginWidthPx;
+        var infoboxWidth = popupWidthPx+popupMarginWidthPx+20;
         var infoboxHeight = popupHeightPx+popupMarginHeightPx; 
         if( pixels.x + infoboxWidth > width) {
             panx = width - (pixels.x + infoboxWidth);
         }
+
         if( pixels.y + infoboxHeight > height) {
+
             pany = height - (pixels.y + infoboxHeight);
         }
         // check that we are not "over the top"
@@ -316,7 +340,7 @@ function() {
         }
 
         if(panx != 0 || pany != 0) {
-            this.getMapModule().panMapByPixels(-panx, -pany);
+            this.getMapModule().panMapByPixels(-panx, -(2*pany));
         }
         this.getMapModule()._updateDomain();
         

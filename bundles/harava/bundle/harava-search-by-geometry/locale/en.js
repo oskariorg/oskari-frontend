@@ -12,7 +12,8 @@ Oskari.registerLocalization({
 				"searchByPolygon": "Search by drawing a polygon",
 				"searchByMapExtent": "Search by map extent,",
 				"searchNotFound": "?",
-				"searchNotFoundOkButton": "?"
+				"searchNotFoundOkButton": "?",
+				"panMap": "Pan map"
 			}
 		}
 	}

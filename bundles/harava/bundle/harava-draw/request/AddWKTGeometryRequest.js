@@ -1,26 +1,37 @@
 /**
- * @class Oskari.harava.bundle.mapquestions.request.ToggleQuestionToolsRequest
- * Requests a hide question tools
+ * @class Oskari.harava.bundle.mapmodule.request.AddWKTGeometryRequest
+ * Requests to add geometry from wkt string.
  * 
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ToggleQuestionToolsRequest', 
+Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.AddWKTGeometryRequest', 
 
 /**
  * @method create called automatically on construction
  * @static
+ *
+ * @param {String}
+ *            wktString wkt string
  */
-function() {
+function(wktString) {
+    this._wktString = wktString;
 }, {
 	/** @static @property __name request name */
-    __name : "ToggleQuestionToolsRequest",
+    __name : "AddWKTGeometryRequest",
     /**
      * @method getName
      * @return {String} request name
      */
     getName : function() {
         return this.__name;
+    },
+    /**
+     * @method getWKTString
+     * @return {String} wkt string
+     */
+    getWKTString : function() {
+        return this._wktString;
     }
 }, {
 	/**
