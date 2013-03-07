@@ -17,6 +17,7 @@ function() {
 	this.started = false;
 	this.plugins = {};
 	this.localization = null;
+	this.popupHandler = null;
 }, {
 	/**
 	 * @static
@@ -89,6 +90,25 @@ function() {
 			sandbox.registerForEventByName(me, p);
 		}
 
+		// used to get fullscreen selection even if selection tools are not enabled
+		this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlugin', this);
+
+		//sends request via config to add tool selection button
+		if(this.config && this.config.selectionTools == true) {
+		 	this.popupHandler = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.PopupHandler', this);
+	        var addBtnRequestBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+	        var btn = {
+                iconCls : 'tool-link',
+                tooltip : 'Select Tool',
+                sticky : false,
+                callback : function() {
+                    me.popupHandler.showSelectionTools();
+                }
+	        };
+
+	        sandbox.request(this, addBtnRequestBuilder('dialog','selectiontools', btn));      
+        }
+
 		//Let's extend UI
 		var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
 		sandbox.request(this, request);
@@ -116,7 +136,24 @@ function() {
         this.requestHandlers = {
             showFeatureHandler : Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.request.ShowFeatureDataRequestHandler', me)
         };
+        this.service = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.service.GridJsonService', 
+            this.sandbox.getAjaxUrl());
 		return null;
+	},
+	/**
+	 * Returns reference to the grid service
+	 * @method getService
+	 * @return {Oskari.mapframework.bundle.featuredata.service.GridJsonService}
+	 */
+	getService : function() {
+		return this.service;
+	},
+	/**
+	 * @method getSelectionPlugin
+	 * @return {Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlugin}
+	 **/
+	getSelectionPlugin : function() {
+		return this.selectionPlugin;
 	},
 	/**
 	 * @method update
@@ -175,7 +212,7 @@ function() {
          * Update grid data
          */
         'AfterMapMoveEvent' : function(event) {
-            this.plugins['Oskari.userinterface.Flyout'].handleMapMoved();
+            this.plugins['Oskari.userinterface.Flyout'].updateGrid();
         },
         
         /**
@@ -194,14 +231,27 @@ function() {
 
             var me = this;
 
-            if(event.getExtension().getName() != me.getName()) {
-                // wasn't me -> do nothing
+            if(event.getExtension().getName() != me.getName() || this.ignoreFlyoutEvent) {
+                // wasn't me or ignoring -> do nothing
                 return;
             }
 
             var doOpen = event.getViewState() != "close";
-            this.plugins['Oskari.userinterface.Flyout'].setEnabled(doOpen);
+            var geometry = this.getSelectionPlugin().getFullScreenSelection();
+            this.plugins['Oskari.userinterface.Flyout'].setEnabled(doOpen, geometry);
         }
+	},
+
+	/**
+	 * @method showFlyout 
+	 * opens data grid to show feature data
+	 * @param {string} the user's given geometries
+	 **/
+	showFlyout : function(geometry) {
+		this.ignoreFlyoutEvent = true;
+        this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'detach']);
+        this.plugins['Oskari.userinterface.Flyout'].setEnabled(true, geometry);
+		this.ignoreFlyoutEvent = false;
 	},
 
 	/**

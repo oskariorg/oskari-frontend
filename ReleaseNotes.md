@@ -1,5 +1,31 @@
 # Release Notes
 
+## 1.7
+
+### featuredata bundle
+
+The bundle can now be configured to allow user make selections on map to filter grid content
+
+The bundle adds a selection tools button to Toolbar if configured to allow user selections
+
+popuphandler.js added to the bundle which handles the selections tool
+
+new method updateGrid() added to Flyout.js, this method is called when a grid should be updated (if flyout is opened or user filters grid content with map selection)
+
+handleMapMoved() method removed from Flyout.js, use updateGrid() instead
+
+showFlyout() is added to instance.js to open flyout and update grid
+
+Bundle now links Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlugin from under metadata bundle implementation
+
+new method getSelectionPlugin() is added to instance.js which returns Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlugin
+
+getBBox() is replaced with getGeometry() in WfsGridUpdateParams.js
+
+### metadata bundle
+
+getFeaturesAsGeoJSON() and getFullScreenSelection() are added to MapSelectionPlugin.js plugin
+
 ## 1.6 release notes
 
 ### mapfull bundle

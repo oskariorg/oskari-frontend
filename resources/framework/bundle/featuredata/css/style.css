@@ -43,3 +43,11 @@ div.flyout-resizer {
     bottom: 16px;
     cursor: nw-resize;
 }
+
+.link  {
+    padding: 20px 0px 0px 0px;
+    color: rgb(0, 102, 255);
+    font-size: 13px;
+    text-decoration: underline;
+    display: block;
+}
