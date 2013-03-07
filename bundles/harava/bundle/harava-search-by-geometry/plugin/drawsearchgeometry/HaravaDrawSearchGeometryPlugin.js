@@ -286,7 +286,7 @@ function(locale) {
             	
             	if(data1.length>0){
             		if(showAll){
-            			data1Html += '<table class="harava-gfi-table gfi-full"><tr><td colspan="8" class="harava-gfi-header">'+resp.data1Lang+'</td></tr>';
+            			data1Html += '<table class="harava-gfi-table gfi-full"><tr><td colspan="11" class="harava-gfi-header">'+resp.data1Lang+'</td></tr>';
             			data1Html += resp.data1Header;
             		}
             		else{
