@@ -39,6 +39,7 @@ Oskari.registerLocalization({
         "circle": {
           "tooltip": "Add circle"
         }
+      }
     }
   }
 });
