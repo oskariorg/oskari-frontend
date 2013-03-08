@@ -3,15 +3,26 @@
  *
  * Provides functionality to draw a selection box on the map
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlugin', function() {
+Oskari.clazz.define('Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlugin', function(config) {
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
     this._map = null;
     this.drawControls = null;
     this.drawLayer = null;
+    this.editMode = false;
     this.listeners = [];
     this.currentDrawMode = null;
+    this.prefix = "Default.";
+
+    if(config && config.id) {
+        this.prefix = config.id + ".";
+    }
+    // graphicFill, instance
+    if(config && config.graphicFill) {
+        this.graphicFill = config.graphicFill;
+    }
+    this.multipart = (config && config.multipart === true);
 }, {
     __name : 'Metadata.MapSelectionPlugin',
 
@@ -20,7 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlug
      * @return {String} module name
      */
     getName : function() {
-        return this.pluginName;
+         return this.prefix + this.pluginName;
     },
     /**
      * @method getMapModule
@@ -51,13 +62,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlug
     },
     /**
      * @method startDrawing
-     * Clears previous selection and activates the selection tool
+     * Activates the selection tool
+     * @params {String} includes drawMode, geometry and style
      */
-    startDrawing : function() {
-        // remove possible old drawing
-        this.drawLayer.removeAllFeatures();
-        // activate requested draw control for new geometry
-        this._toggleControl('area');
+    startDrawing : function(params) {
+        if(params.isModify) {
+            // preselect it for modification
+            this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
+        }
+        else {
+
+            if(params.geometry) {
+                // sent existing geometry == edit mode
+                this.editMode = true;
+                // add feature to draw layer
+                var features = [new OpenLayers.Feature.Vector(params.geometry)];
+                this.drawLayer.addFeatures(features);
+                // preselect it for modification
+                this.drawControls.modify.selectControl.select(this.drawLayer.features[0]);
+            } else {
+                // otherwise activate requested draw control for new geometry
+                this.editMode = false;
+                this._toggleControl(params.drawMode);
+            }
+        }
     },
     /**
      * @method stopDrawing
@@ -78,34 +106,43 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlug
         var features = [new OpenLayers.Feature.Vector(geometry)];
         this.drawLayer.addFeatures(features);
     },
-    
+    /**
+     * @method forceFinishDraw
+     * Calls _finishDrawing method to stop selection
+     */
+    forceFinishDraw : function() {
+        this._finishedDrawing(true);
+    },  
     /**
      * @method _finishedDrawing
      * Called when drawing is finished.
      * Disables all draw controls and
      * calls all listeners with the drawn the geometry.
+     * @param {Boolean} isForced stops selection when true 
      * @private
      */
-    _finishedDrawing : function() {
-        this._toggleControl();
-        var geometry = this.getDrawing();
-        for(var i = 0; i < this.listeners.length; ++i) {
-            this.listeners[i](geometry);
+    _finishedDrawing : function(isForced) {
+         if(!this.multipart || isForced) {
+            // not a multipart, stop editing
+            this._toggleControl();
         }
-        // create event
-        var event = this._sandbox.getEventBuilder('Metadata.MapSelectionEvent')(geometry);
-        this._sandbox.notifyAll(event);
+        if(!this.editMode) {
+            // programmatically select the drawn feature ("not really supported by openlayers")
+            // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
+            var lastIndex = this.drawLayer.features.length-1;
+            this.drawControls.modify.selectControl.select(this.drawLayer.features[lastIndex]);
+        }
     },
     /**
      * @method _toggleControl
      * Enables the given draw control
      * Disables all the other draw controls
-     * @param drawMode draw control to activate (if undefined, disables all
+     * @param {String} drawMode draw control to activate (if undefined, disables all
      * controls)
+     * @private
      */
     _toggleControl : function(drawMode) {
     	this.currentDrawMode = drawMode;
-    	
         for(var key in this.drawControls) {
             var control = this.drawControls[key];
             if(drawMode == key) {
@@ -126,13 +163,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlug
     init : function(sandbox) {
         var me = this;
 
-        this.drawLayer = new OpenLayers.Layer.Vector("Metadata Draw Layer", {
-            /*style: {
-             strokeColor: "#ff00ff",
-             strokeWidth: 3,
-             fillOpacity: 0,
-             cursor: "pointer"
-             },*/
+        this.drawLayer = new OpenLayers.Layer.Vector(this.prefix + "Metadata Draw Layer", {
+
             eventListeners : {
                 "featuresadded" : function(layer) {
                 	// send an event that the drawing has been completed
@@ -142,28 +174,136 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlug
         });
         
         this.drawControls = {
-            area : new OpenLayers.Control.DrawFeature(me.drawLayer, 
+
+            point: new OpenLayers.Control.DrawFeature(me.drawLayer,
+                        OpenLayers.Handler.Point),
+            line: new OpenLayers.Control.DrawFeature(me.drawLayer,
+                        OpenLayers.Handler.Path),
+            polygon : new OpenLayers.Control.DrawFeature(me.drawLayer, 
                                                       OpenLayers.Handler.Polygon),
-            box : new OpenLayers.Control.DrawFeature(me.drawLayer, 
-                        OpenLayers.Handler.RegularPolygon, {
-                            handlerOptions: {
-                                sides: 4,
-                                irregular: true
-                            }
-                        })
+            square : new OpenLayers.Control.DrawFeature(me.drawLayer, 
+                    OpenLayers.Handler.RegularPolygon, {
+                        handlerOptions: {
+                            sides: 4
+                        }
+            }),
+            circle : new OpenLayers.Control.DrawFeature(me.drawLayer, 
+                    OpenLayers.Handler.RegularPolygon, {
+                        handlerOptions: {
+                            sides: 40
+                        }
+            }),
+            modify : new OpenLayers.Control.ModifyFeature(me.drawLayer)
         };
-        
+
+         if(this.graphicFill != null) {
+            var str = this.graphicFill;
+            var format = new OpenLayers.Format.SLD();
+            var obj = format.read(str);
+            if (obj && obj.namedLayers) {
+                for (var p in obj.namedLayers) {
+                    this.drawLayer.styleMap.styles["default"] = obj.namedLayers[p].userStyles[0];
+                    this.drawLayer.redraw();
+                    break;
+                }
+            }
+        }
+
         this._map.addLayers([me.drawLayer]);
         for(var key in this.drawControls) {
             this._map.addControl(this.drawControls[key]);
         }
+
+        this.geojson_format = new OpenLayers.Format.GeoJSON();
     },
     /**
-     * Returns the drawn geometry from the draw layer
-     * @method
+     * @Return the drawn geometry from the draw layer
+     * @method getDrawing
      */
     getDrawing : function() {
-        return this.drawLayer.features[0].geometry;
+        
+        if (this.drawLayer.features.length === 0) return null;
+        var featClass = this.drawLayer.features[0].geometry.CLASS_NAME;
+        if ((featClass==="OpenLayers.Geometry.MultiPoint")||
+            (featClass==="OpenLayers.Geometry.MultiLineString")||
+            (featClass==="OpenLayers.Geometry.MultiPolygon")) {
+            return this.drawLayer.features[0].geometry;
+        }
+
+        var drawing = null;
+        var components = [];
+        for (var i=0; i < this.drawLayer.features.length; i++) {
+            components.push(this.drawLayer.features[i].geometry);
+        }
+        switch (featClass) {
+            case "OpenLayers.Geometry.Point":
+                drawing = new OpenLayers.Geometry.MultiPoint(components);
+                break;
+            case "OpenLayers.Geometry.LineString":
+                drawing = new OpenLayers.Geometry.MultiLineString(components);
+                break;
+            case "OpenLayers.Geometry.Polygon":
+                drawing = new OpenLayers.Geometry.MultiPolygon(components);
+                break;
+        }
+        return drawing;
+    },
+    /**
+     * @Return {String} the drawn geometry from the draw layer
+     * @method getFeatures
+     */
+    getFeatures : function() {
+        return this.drawLayer.features;
+    },
+    /**
+     * @Return {String} the drawn geometry from the draw layer
+     * @method getFeaturesAsGeoJSON
+     */
+    getFeaturesAsGeoJSON : function() {
+        var selection = this.geojson_format.write(this.getFeatures());
+        var json = JSON.parse(selection);
+        json.crs = this._getSRS();
+        return json;
+    },
+    /**
+     * @Return array of featuers type in JSON format
+     * @method getFullScreenSelection
+     */
+    getFullScreenSelection : function() {
+        // create selection geometry from bbox
+        var bbox = this._sandbox.getMap().getBbox();
+        var geometry = bbox.toGeometry();
+        var selection = this.geojson_format.write(geometry);
+        var json = JSON.parse(selection);
+
+        var geojs = {
+           "type" : "FeatureCollection",
+           "crs" : this._getSRS(),
+           "features" : []
+          };
+          var featureJSON = {
+            "type" : "Feature",
+            "geometry" : json,
+            "properties" : {
+                "geom_type" : "polygon",
+                "buffer_radius" : "0"
+            }                 
+        };
+        geojs.features.push(featureJSON);
+        return geojs;
+    },
+     /**
+     * @Return{String} reference system as defined in GeoJSON format
+     * @method _getSRS
+     */
+    _getSRS : function() {
+        // FIXME: should be gotten from MapModule._projectionCode
+        return  {
+                "type" : "EPSG",
+                "properties" : {
+                    "code" : 3067
+                }
+        };
     },
     /**
      * @method register
