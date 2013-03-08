@@ -244,10 +244,7 @@ function(config) {
     		                // Check feature position (if need pan a map at popup show well)
     		                var pos = new OpenLayers.LonLat(feature.geometry.getCentroid().x, feature.geometry.getCentroid().y);
 		                	
-    		                if (feature.attributes.toolHtml) {
-    			            	modifyControls = me._modifyControls;
-    			                drawControls = me.drawControls;
-    			                
+    		                if (feature.attributes.toolHtml) {    			                
     		                	if (feature.popup === null) {
     		                		popup = new OpenLayers.Popup.FramedCloud(
     	                				feature.id + ".popup",
@@ -727,6 +724,15 @@ function(config) {
     			me._currentPopupHtml = question.popupHtml; 
 		    	module.layer.setVisibility(true);
 		    	if(me._currentStepAndQuestion != moduleId + '_' +questionId){
+
+		    		jQuery.each(me.modules, function(k, module){
+		        		for(var key in module.drawControls) {
+		                	module.drawControls[key].deactivate();
+		                }
+		                for(var key in module.modifyControls) {
+		                	module.modifyControls[key].deactivate();
+		                }
+		        	});
 		    		module.drawControls[question.type].activate();
 		    		me._currentStepAndQuestion = moduleId + '_' +questionId;
 		    		me._currentControls.draw = module.drawControls[question.type];
