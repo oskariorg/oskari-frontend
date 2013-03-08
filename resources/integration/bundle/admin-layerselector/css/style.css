@@ -115,11 +115,10 @@ div.admin-layerselector div.oskariTabs div.tabsHeader ul li.admin-modify-wms {
     float:right;
 }
 div.admin-layerselector .admin-edit-layer-btn,
-div.admin-layerselector .admin-add-class-btn {
-    float: right;
-}
 div.admin-layerselector .admin-edit-layer-btn,
-div.admin-layerselector .admin-add-layer-btn {
+div.admin-layerselector .admin-add-class-btn,
+div.admin-layerselector .admin-edit-class-btn {
+    float: right;
     margin: 5px 10px;
 }
 div.admin-layerselector button.admin-arrange-layers{
@@ -162,11 +161,11 @@ div.admin-layerselector .add-layer-separation {
 }
 
 div.admin-layerselector .admin-add-layer {
-    padding: 0px 10px;
+    padding: 10px 0px;
     overflow: hidden;
     height: 0px;
     -webkit-transition-duration: 500ms;
-    -webkit-transition-property: height, padding;
+    -webkit-transition-property: height;
 }
 div.admin-layerselector .show-add-layer, div.admin-layerselector .show-edit-layer  {
     padding: 10px 0px;

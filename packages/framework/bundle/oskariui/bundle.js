@@ -32,13 +32,23 @@ Oskari.clazz.define("Oskari.mapframework.bundle.oskariui.OskariUIBundle", functi
 	"protocol" : ["Oskari.bundle.Bundle", "Oskari.bundle.BundleInstance"],
 	"source" : {
 
-		"scripts" : [{
+		"scripts" : [
+		// {
+		// 	"type" : "text/javascript",
+		// 	"src" : "../../../../bundles/framework/bundle/oskariui/jquery-ui-1.9.1.custom.min.js"
+		// }, {
+		// 	"type" : "text/css",
+		// 	"src" : "../../../../resources/framework/bundle/oskariui/css/jquery-ui-1.9.1.custom.css"
+		// },
+		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/oskariui/jquery-ui-1.9.1.custom.min.js"
+			"src" : "../../../../bundles/framework/bundle/oskariui/jquery-ui-1.9.2.custom.js"
 		}, {
 			"type" : "text/css",
-			"src" : "../../../../resources/framework/bundle/oskariui/css/jquery-ui-1.9.1.custom.css"
-		}, {
+			"src" : "../../../../resources/framework/bundle/oskariui/css/jquery-ui-1.9.2.custom.css"
+		},
+
+		{
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/oskariui/DomManager.js"
 		}, {

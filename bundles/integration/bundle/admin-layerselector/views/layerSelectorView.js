@@ -10,7 +10,9 @@ define([
         events : {
             "click .admin-layer-tab"        : "toggleTab",
             "click .admin-add-class-btn"    : "toggleAddOrg",
-            "click .admin-add-class-cancel" : "toggleAddOrg"
+            "click .admin-edit-layer-btn"   : "toggleAddOrg", 
+            "click .admin-add-class-cancel" : "toggleAddOrg",
+            "click .admin-edit-class-cancel": "toggleAddOrg"
         },
 
         // At initialization we bind to the relevant events on the `Todos`
@@ -96,7 +98,7 @@ define([
 
         }, 
         toggleAddOrg : function(e) {
-            var elem = jQuery('.admin-add-class');
+            var elem = jQuery(e.currentTarget).parent().find('.admin-add-class');
             if(elem.hasClass('show-add-class')) {
                 elem.removeClass('show-add-class');
             } else {

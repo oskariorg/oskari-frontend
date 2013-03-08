@@ -88,6 +88,13 @@
             },
             getAllLayerGroups : function() {
                 return this.layerGroups;
+            },
+            getGroupTitles: function() {
+                var groupNames = [];
+                for (var i = this.layerGroups.length - 1; i >= 0; i--) {
+                    groupNames.push(this.layerGroups[i].name);
+                };
+                return groupNames;
             }
 
         });

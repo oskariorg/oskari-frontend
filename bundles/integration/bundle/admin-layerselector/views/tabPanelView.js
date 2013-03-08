@@ -1,7 +1,9 @@
 define([
     'text!_bundle/templates/filterLayersTemplate.html',
+    'text!_bundle/templates/adminAddInspireBtnTemplate.html',
     'text!_bundle/templates/adminAddInspireTemplate.html',
-    'text!_bundle/templates/adminAddOrganizationTemplate.html',    
+    'text!_bundle/templates/adminAddOrgBtnTemplate.html',    
+    'text!_bundle/templates/adminAddOrgTemplate.html',    
     'text!_bundle/templates/adminAddLayerBtnTemplate.html',
     'text!_bundle/templates/tabPanelTemplate.html',
     'text!_bundle/templates/accordionPanelTemplate.html',
@@ -9,7 +11,9 @@ define([
     'text!_bundle/templates/adminLayerRowTemplate.html',    
     '_bundle/views/layerView'], 
     function(FilterLayersTemplate, 
+        AdminAddInspireButtonTemplate,
         AdminAddInspireTemplate,
+        AdminAddOrganizationButtonTemplate,
         AdminAddOrganizationTemplate,
         AdminAddLayerBtnTemplate,
         TabPanelTemplate, 
@@ -23,19 +27,26 @@ define([
         className: 'tab-content',
 
         events: {
-            "click .accordion-header"   : "toggleLayerGroup",
-            "click .admin-add-layer-btn": "toggleGroupingSettings",
+            "click .accordion-header"       : "toggleLayerGroup",
+            "click .admin-add-layer-btn"    : "toggleAddLayer",
+            "click .admin-edit-class-btn"   : "toggleGroupingSettings",
+            "click .admin-add-class-ok"     : "addOrganization"
         },
         initialize : function() {
-            this.layerGroupingModel         = this.options.layerGroupingModel;
-            this.addInspireTemplate         = _.template(AdminAddInspireTemplate);
-            this.addOrganizationTemplate    = _.template(AdminAddOrganizationTemplate);
-            this.addLayerBtnTemplate        = _.template(AdminAddLayerBtnTemplate);
-            this.filterTemplate             = _.template(FilterLayersTemplate);
-            this.tabTemplate                = _.template(TabPanelTemplate);
-            this.accordionTemplate          = _.template(AccordionPanelTemplate);
-            this.layerTemplate              = _.template(LayerRowTemplate);
-            this.adminLayerTemplate         = _.template(AdminLayerRowTemplate);
+            this.layerGroupingModel             = this.options.layerGroupingModel;
+
+            this.addInspireButtonTemplate       = _.template(AdminAddInspireButtonTemplate);
+            this.addInspireTemplate             = _.template(AdminAddInspireTemplate);
+            this.addOrganizationButtonTemplate  = _.template(AdminAddOrganizationButtonTemplate);
+            this.addOrganizationTemplate        = _.template(AdminAddOrganizationTemplate);
+            this.addLayerBtnTemplate            = _.template(AdminAddLayerBtnTemplate);
+            this.filterTemplate                 = _.template(FilterLayersTemplate);
+            this.tabTemplate                    = _.template(TabPanelTemplate);
+            this.accordionTemplate              = _.template(AccordionPanelTemplate);
+            this.layerTemplate                  = _.template(LayerRowTemplate);
+            this.adminLayerTemplate             = _.template(AdminLayerRowTemplate);
+
+            this.groupNames = this.layerGroupingModel.getGroupTitles();
             this.render();
         },
         // Re-rendering the App just means refreshing the statistics -- the rest
@@ -65,7 +76,7 @@ define([
                         var layer = group.at(n);
 
 
-                        var layerView = new LayerView({model:layer, instance: this.options.instance});
+                        var layerView = new LayerView({model:layer, instance: this.options.instance, layerGroupingNames: this.layerGroupingNames});
                         //var layerWrapper = //jQuery(this.layerTemplate({title: group.getTitle() + ' (' + layers.length + ')'}));
                         // var layerWrapper = 
                         //     Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.view.Layer',
@@ -85,11 +96,24 @@ define([
                     groupContainer.append(this.addLayerBtnTemplate({instance: this.options.instance}));
 
                     var tab = this.tabTemplate();
+                    groupPanel.find('.accordion-header').append((this.options.tabId == 'inspire') ? 
+                        this.addInspireTemplate({instance: this.options.instance}):
+                        this.addOrganizationTemplate({instance: this.options.instance})
+                        );
                     this.$el.append(jQuery(tab).append(groupPanel));
+
                 }
 
                 this.$el.prepend(this.filterTemplate({instance: this.options.instance}));
-                this.$el.find('.oskarifield').append( (this.options.tabId == 'inspire') ? this.addInspireTemplate({instance: this.options.instance}) : this.addOrganizationTemplate({instance: this.options.instance}));
+                if(this.options.tabId == 'inspire') {
+                    this.$el.find('.oskarifield').append(
+                        this.addInspireButtonTemplate({instance: this.options.instance})).append(
+                        this.addInspireTemplate({instance: this.options.instance}));
+                } else {
+                    this.$el.find('.oskarifield').append(
+                        this.addOrganizationButtonTemplate({instance: this.options.instance})).append(
+                        this.addOrganizationTemplate({instance: this.options.instance}));
+                }
 
                 
     /*            var selectedLayers = this.options.instance.sandbox.findAllSelectedMapLayers();
@@ -99,11 +123,34 @@ define([
                             
                 this.filterLayers(this.filterField.getValue());
     */
+
+
                 this.$el.find('div.content').hide();
             }
         },
         toggleGroupingSettings : function(e) {
-debugger;
+            //add layer
+            e.stopPropagation();
+            var element = jQuery(e.currentTarget);
+            var grouping = element.parent();
+
+            if(!grouping.find('.admin-add-class').hasClass('show-add-class')) {
+                setTimeout(function(){
+                    grouping.find('.admin-add-class').addClass('show-add-class');
+                }, 30);
+            } else {
+                grouping.find('.admin-add-class').removeClass('show-add-class');
+                setTimeout(function(){
+                    grouping.find('.admin-add-class').remove();
+                },300);
+
+            }
+        },
+        hideGroupingSettings : function(e) {
+            jQuery('.admin-add-class').removeClass('show-add-class');
+        },
+
+        toggleAddLayer : function(e) {
             //add layer
             e.stopPropagation();
             var element = jQuery(e.currentTarget);
@@ -138,11 +185,82 @@ debugger;
                 headerIcon.addClass('icon-arrow-down');
                 jQuery(panel).find('div.content').show();
             }
-        }
+        },
+
+        addOrganization: function(e) {
+            var me = this;
+            var element = jQuery(e.currentTarget);
+            var addClass = element.parents('.admin-add-class');
+debugger;
+            var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
+                action_route = "&action_route=SaveOrganization",
+                id = "&layercl_id=",
+                parentId = "&parent_id=",
+                nameFi = "&name_fi=",
+                nameSv = "&name_sv=",
+                nameEn = "&name_en="
+                fi = addClass.find("#add-class-fi-name").val(),
+                sv = addClass.find("#add-class-sv-name").val(),
+                en = addClass.find("#add-class-en-name").val();
+
+
+            jQuery.ajax({
+                type : "GET",
+                dataType: 'json',
+                beforeSend: function(x) {
+                    if(x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                url : baseUrl + action_route+id+parentId+nameFi+fi+nameSv+sv+nameEn+en,
+                success : function(resp) {
+                    alert(resp);
+                },
+                error : function(jqXHR, textStatus) {
+                    if(callbackFailure && jqXHR.status != 0) {
+                        alert(' false ');
+                    }
+                }
+            });
+
+        },
+        //&action_route=DeleteOrganization&layercl_id=46&parent_id=
+        removeOrganization: function(e) {
+            var me = this;
+            var element = jQuery(e.currentTarget);
+            var addClass = element.parents('.admin-add-class');
+debugger;
+            var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
+                action_route = "&action_route=DeleteOrganization",
+                id = "&layercl_id=",
+                parentId = "&parent_id=",
+                idValue = element.attr('data-id'),
+                parentIdValue = element.attr('data-parent-id');
+
+
+            jQuery.ajax({
+                type : "GET",
+                dataType: 'json',
+                beforeSend: function(x) {
+                    if(x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                url : baseUrl + action_route+id+idValue+parentId+parentIdValue,
+                success : function(resp) {
+                    alert(resp);
+                },
+                error : function(jqXHR, textStatus) {
+                    if(callbackFailure && jqXHR.status != 0) {
+                        alert(' false ');
+                    }
+                }
+            });
+
+        },
 
 
 
-//        jQuery("#add-layer-inspire-theme").tagit({availableTags: ["Hallinnolliset yksiköt", "Hydrografia", "Kiinteistöt", "Kohteet", "Koordinaattijärjestelmät", "Korkeus", "Liikenneverkot", "Maankäyttö", "Maanpeite","Maaperä","Merialueet", "Metatieto"]});
 
 
 
