@@ -1,5 +1,15 @@
 # Release Notes
 
+## 1.7 release notes
+
+### mapfull bundle
+
+Configurable SrsName projection to be used, default srsName is "EPSG:3067"
+
+### MapMoveRequest
+
+Added srsName parameter for specifying projection to use if other than default
+
 ## 1.6 release notes
 
 ### mapfull bundle

@@ -30,7 +30,7 @@ module.exports = function(grunt) {
             files: ['../applications/**/*.js', '../bundles/**/*.js', '../libraries/**/*.js', '../packages/**/*.js', '../resources/**/*.js', '../sources/**/*.js', '../tests/**/*.js'],
             // uncommented as validate causes unnecessary delay
             //            tasks: ['validate', 'compile', 'testacularRun:dev', 'yuidoc:dist']
-            tasks: ['compile', 'testacularRun:dev']
+            tasks: ['compileDev', 'testacularRun:dev']
         },
         yuidoc: {
             dist: {
@@ -46,6 +46,12 @@ module.exports = function(grunt) {
                 resultImageName: "../applications/paikkatietoikkuna.fi/full-map/icons/icons.png",
                 resultCSSName: "../applications/paikkatietoikkuna.fi/full-map/css/icons.css",
                 spritePathInCSS: "../icons"
+            }
+        },
+        compileDev: {
+            options: {
+                appSetupFile: "../tests/minifierFullMapAppSetup.json",
+                dest: "../dist/"
             }
         },
         testacularRun: {
@@ -77,7 +83,6 @@ module.exports = function(grunt) {
     grunt.loadTasks('tasks');
 
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
     grunt.loadNpmTasks('grunt-testacular');
@@ -87,10 +92,20 @@ module.exports = function(grunt) {
     //    grunt.registerTask('default', 'testacularServer:dev watch');
     //    grunt.registerTask('default', 'lint test concat min');
 
+    grunt.registerTask('compileDev', 'Developer compile', function() {
+        // set task configs
+        grunt.config.set("compile.dev.options", this.options());
+
+        grunt.task.run('compile');
+    })
+
     grunt.registerTask('release', 'Release build', function(version, configs) {
         var apps = [],
             tasks = [];
-        console.log('register got', version, configs);
+
+        if (!version || !config) {
+            grunt.fail.fatal('Missing parameter\nUsage: grunt release:1.7:"../path/to/minifierAppSetup.json"');
+        }
         // set version in config for grunt templating
         grunt.config.set("version", version + "/");
 

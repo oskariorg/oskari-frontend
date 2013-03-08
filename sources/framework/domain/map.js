@@ -51,6 +51,9 @@ function() {
 
     // @property {Boolean} _isMoving true when map is being dragged 
     this._isMoving = false;
+
+    // @property {String} _projectionCode SRS projection code, defaults to 'EPSG:3067'
+    this._projectionCode = "EPSG:3067";
 }, {
     /**
      * @method moveTo
@@ -283,5 +286,25 @@ function() {
      */
     getMaxExtent : function() {
         return this.maxExtent;
+    },
+    /**
+     * @method setSrsName
+     * SRS projection code in map implementation (openlayers)
+     *
+     * @param {String} projection
+     *            _projectionCode SRS projection code
+     */
+    setSrsName : function(projectionCode) {
+        this._projectionCode = projectionCode;
+    },
+    /**
+     * @method getSrsName
+     * SRS projection code in map implementation (openlayers)
+     *
+     * @return {String} 
+     *            _projectionCode SRS projection code
+     */
+    getSrsName : function() {
+        return this._projectionCode;
     }
 });

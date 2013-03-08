@@ -406,7 +406,7 @@ function(instance, localization) {
         var sandbox = instance.getSandbox();
         // faking to be module with getName/onEvent methods
         for (var p in this.eventHandlers) {
-            sandbox.unregisterForEventByName(this, p);
+            sandbox.unregisterFromEventByName(this, p);
         }
     },
     /**
