@@ -103,7 +103,7 @@ module.exports = function(grunt) {
         var apps = [],
             tasks = [];
 
-        if (!version || !config) {
+        if (!version || !configs) {
             grunt.fail.fatal('Missing parameter\nUsage: grunt release:1.7:"../path/to/minifierAppSetup.json"');
         }
         // set version in config for grunt templating
