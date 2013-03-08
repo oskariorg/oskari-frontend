@@ -175,6 +175,20 @@ function(config) {
 	       		}
         	}
         });
+    	
+    	me.reActivateModify();
+    },
+    /**
+     * @method reActivateModify
+     * Reactivates modify control.
+     */
+    "reActivateModify" :function(){
+    	var me = this;
+    	var module = me.getModuleById(me._currentStep);
+    	if(module!=null){
+    		module.modifyControls.modify.deactivate();
+    		module.modifyControls.modify.activate();
+    	}
     },
     /**
      * @method startPlugin
@@ -207,15 +221,7 @@ function(config) {
         		
     	        // Create module own OpenLayers layer    	        
     	        module.layer = new OpenLayers.Layer.Vector(me.drawLayerSubfix + module.questionId, {
-    	        	style: {                    
-    	            	pointRadius: "6", 
-    	                fillColor: "#ffcc66",
-    	                strokeColor: "#ff9933",
-    	                strokeWidth: 2,
-    	                graphicZIndex: 1,
-    	                fillOpacity: 0.5,
-    	                cursor: 'pointer'
-    	             },
+    	        	
     	            eventListeners : {
     	                "featuresadded" : function(layer) {
     	                	// send an event that the drawing has been completed
@@ -545,7 +551,12 @@ function(config) {
 				layer.redraw();
 			}
 			else if(this._currentQuestion.type=='area'){
-				if(me._currentQuestion.color!=null && me._currentQuestion.imageUrl!=null){
+				if(me._currentQuestion.color!=null && me._currentQuestion.imageUrl!=null && false){
+					
+					var imgSize = '20';
+					if(me._currentQuestion.imageSize!=null){
+						imgSize=me._currentQuestion.imageSize;
+					}
 					var sldStyle = '<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>';
 					sldStyle += '<sld:StyledLayerDescriptor version="1.0.0" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld ./Sld/StyledLayerDescriptor.xsd">';
 					sldStyle += '<sld:NamedLayer>';
@@ -565,7 +576,7 @@ function(config) {
 					sldStyle += '<sld:OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="'+me._currentQuestion.imageUrl+'"/>';
 					sldStyle += '<sld:Format>image/png</sld:Format>';
 					sldStyle += '</sld:ExternalGraphic>';
-					sldStyle += '<sld:Size>20</sld:Size>';
+					sldStyle += '<sld:Size>'+imgSize+'</sld:Size>';
 					sldStyle += '</sld:Graphic>';
 					sldStyle += '</sld:GraphicFill>';
 					sldStyle += '</sld:Fill>';
@@ -580,10 +591,20 @@ function(config) {
 					sldStyle += '</sld:UserStyle>';
 					sldStyle += '</sld:NamedLayer>';
 					sldStyle += '</sld:StyledLayerDescriptor>';
-					var format = new OpenLayers.Format.SLD();
+					
+					
+	
+					format = new OpenLayers.Format.SLD();
 					var obj = format.read(sldStyle);
-					currentFeature.style = obj.namedLayers['Polygon'].userStyles[0];
-					layer.redraw();					
+					if (obj && obj.namedLayers) {
+						for (var p in obj.namedLayers) {
+							layer.styleMap.styles["default"] = obj.namedLayers[p].userStyles[0];
+							alert('lisätty');
+							layer.redraw();
+							break;
+						}
+					}
+					
 				} else {
 					var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
 					if(me._currentQuestion.color!=null){
@@ -750,6 +771,7 @@ function(config) {
     	if(notCloseTools==null || notCloseTools==true){
     		me.hideTools();
     	}
+    	me.reActivateModify();
     },
     /**
 	 * @method toggleTools

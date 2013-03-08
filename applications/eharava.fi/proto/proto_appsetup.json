@@ -5,11 +5,11 @@
             "fi" : "OpenLayers",
             "sv" : "?",
             "en" : "OpenLayers",
-            "bundlename" : "openlayers-default-theme",
-            "bundleinstancename" : "openlayers-default-theme",
+            "bundlename" : "openlayers-graphic-fill",
+            "bundleinstancename" : "openlayers-graphic-fill",
             "metadata" : {
                 "Import-Bundle" : {
-                    "openlayers-single-full" : {
+                    "openlayers-graphic-fill" : {
                         "bundlePath" : "../../../packages/openlayers/bundle/"
                     },
                     "openlayers-default-theme" : {
@@ -101,7 +101,26 @@
                 "Require-Bundle-Instance" : []
             },
             "instanceProps" : {}
-        }, 
+        },
+        {
+            "title": "LayerSelection",
+            "en": "LayerSelection",
+            "fi": "LayerSelection",
+            "sv": "LayerSelection",
+            "bundleinstancename": "layerselection2",
+            "bundlename": "layerselection2",
+            "instanceProps": {
+                
+            },
+            "metadata": {
+                "Import-Bundle": {
+                    "layerselection2": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        },
         {
             "title" : "Harava map module",
             "fi" : "Harava map module",
