@@ -1,5 +1,5 @@
 /**
- * @class Oskari.integration.bundle.bb.BackBoneBundle
+ * @class Oskari.integration.bundle.backbone.BackBoneBundle
  *
  * BackboneBundle provides glue to add BackboneJS (with UnderscoreJS and RequireJS)
  * parts to Oskari framework.
@@ -7,7 +7,7 @@
  *
  *
  */
-Oskari.clazz.define("Oskari.integration.bundle.bb.BackBoneBundle", function() {
+Oskari.clazz.define("Oskari.integration.bundle.backbone.BackBoneBundle", function() {
 
     /**
      * @property conf
@@ -31,33 +31,48 @@ Oskari.clazz.define("Oskari.integration.bundle.bb.BackBoneBundle", function() {
 
     "protocol" : ["Oskari.bundle.Bundle", "Oskari.bundle.BundleInstance", "Oskari.bundle.BundleInstance", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
     "source" : {
+        "requirements" : {
+            "config" : {
+                shim : {
+                    'backbone': {
+                        deps: ['underscore', 'jquery'],
+                        exports: 'Backbone'
+                    },
+                    'underscore': {
+                        exports: '_'
+                    }
+                }
+            },
+            "require" : [
+                "text", 
+                "underscore", 
+                "backbone"
+            ]
+        },
+
         "scripts" : [{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/integration/bundle/bb/comp.js"
+            "src" : "../../../../bundles/integration/bundle/backbone/Flyout.js"
 
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/integration/bundle/bb/Flyout.js"
+            "src" : "../../../../bundles/integration/bundle/backbone/Tile.js"
 
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/integration/bundle/bb/Tile.js"
+            "src" : "../../../../bundles/integration/bundle/backbone/View.js"
 
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/integration/bundle/bb/View.js"
-
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/integration/bundle/bb/Adapter.js"
+            "src" : "../../../../bundles/integration/bundle/backbone/Adapter.js"
 
         }],
         "resources" : []
     },
     "bundle" : {
         "manifest" : {
-            "Bundle-Identifier" : "bb",
-            "Bundle-Name" : "integration.bundle.bb",
+            "Bundle-Identifier" : "backbone",
+            "Bundle-Name" : "integration.bundle.backbone",
             "Bundle-Author" : [{
                 "Name" : "jjk",
                 "Organisation" : "nls.fi",
@@ -85,4 +100,4 @@ Oskari.clazz.define("Oskari.integration.bundle.bb.BackBoneBundle", function() {
     }
 });
 
-Oskari.bundle_manager.installBundleClass("bb", "Oskari.integration.bundle.bb.BackBoneBundle");
+Oskari.bundle_manager.installBundleClass("backbone", "Oskari.integration.bundle.backbone.BackBoneBundle");

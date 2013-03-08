@@ -57,5 +57,5 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
         });
     }
 }, {
-    "extend" : ["Oskari.integration.bundle.bb.View"]
+    "extend" : ["Oskari.integration.bundle.backbone.View"]
 });

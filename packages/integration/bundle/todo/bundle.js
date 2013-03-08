@@ -4,7 +4,7 @@
  * This WILL Contain following items
  *
  * 1) Backbone View container derived from
- *      Oskari.integration.bundle.bb.View
+ *      Oskari.integration.bundle.backbone.View
  * - a reference to implementing file in /bundles...
  *
  * 2) LOCALISATION file references
@@ -24,7 +24,7 @@ Oskari.clazz.define("Oskari.integration.bundle.todo.ToDoBundle", function() {
 
 }, {
     "create" : function() {
-        return Oskari.clazz.create("Oskari.integration.bundle.bb.AdapterBundleInstance", "todo", "Oskari.integration.bundle.todo.View");
+        return Oskari.clazz.create("Oskari.integration.bundle.backbone.AdapterBundleInstance", "todo", "Oskari.integration.bundle.todo.View");
 
     },
     "start" : function() {
