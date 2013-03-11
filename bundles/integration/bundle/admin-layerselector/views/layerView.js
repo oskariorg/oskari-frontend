@@ -101,8 +101,8 @@ debugger;
             if(!element.find('.admin-add-layer').hasClass('show-edit-layer')) {
                 var settings = this.adminLayerTemplate({model: this.model, instance : this.options.instance});
                 element.append(settings);
-                this.$el.find("#add-layer-inspire-theme").tagit({availableTags: ["Hallinnolliset yksiköt", "Hydrografia", "Kiinteistöt", "Kohteet", "Koordinaattijärjestelmät", "Korkeus", "Liikenneverkot", "Maankäyttö", "Maanpeite","Maaperä","Merialueet", "Metatieto"]});
-                
+                //this.$el.find("#add-layer-inspire-theme").tagit({availableTags: ["Hallinnolliset yksiköt", "Hydrografia", "Kiinteistöt", "Kohteet", "Koordinaattijärjestelmät", "Korkeus", "Liikenneverkot", "Maankäyttö", "Maanpeite","Maaperä","Merialueet", "Metatieto"]});
+
 
                 setTimeout(function(){
                     jQuery('.admin-add-layer').addClass('show-edit-layer');

@@ -59,20 +59,26 @@ define([
             this.orgGrouping        = this.collection.getLayerGroups('getOrganizationName');
 
             this.el.html(this.appTemplate);
-            this._renderLayerGroups(new LayersTabModel({
+            this.inspireTabModel = new LayersTabModel({
                 grouping : this.inspireGrouping, 
                 title: this.instance.getLocalization('filter').inspire
-            }), 'inspire');
+            });
+            this._renderLayerGroups(this.inspireTabModel, 'inspire');
 
-            this._renderLayerGroups(new LayersTabModel({
+            this.organizationTabModel = new LayersTabModel({
                 grouping : this.orgGrouping, 
                 title: this.instance.getLocalization('filter').organization
-            }), 'organization');
+            });
+            this._renderLayerGroups(this.organizationTabModel, 'organization');
 
             //activate tab
             jQuery('.admin-layerselectorapp .tabsHeader').find('.organization').parent().addClass('active');
             jQuery('.tab-content.inspire').hide();
             jQuery('.tab-content.organization').show();
+            
+            // Check that data for classes is fetched
+            this.organizationTabModel.getClasses(this.instance.getSandbox().getAjaxUrl());
+
         },
 
         toggleTab : function(e) {
@@ -108,6 +114,8 @@ define([
         removeAddOrg : function(e) {
             jQuery('.admin-add-class').removeClass('show-add-class');
         }
+
+
 
     });
 });

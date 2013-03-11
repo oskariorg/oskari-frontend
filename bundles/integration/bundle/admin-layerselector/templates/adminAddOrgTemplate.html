@@ -42,7 +42,7 @@
             <div class="add-class-button-area">
                 <div class="input-controls">
                     <button class="add-class-btn admin-add-class-ok" title="Lisää uusi karttataso">Tallenna</button>
-                    <button class="add-class-btn admin-add-class-remove" title="Poista karttataso">Poista taso</button>
+                    <button class="add-class-btn admin-remove-class" <% if(data != null && data.id != null) { %> data-id="<%= data.id %>" <% } %> <% if(data != null && data.parentid != null) { %> data-parent-id="<%= data.parentid %>" <% } %> title="Poista karttataso">Poista taso</button>
                     <button class="add-class-btn admin-add-class-cancel" title="Peruuta">Peruuta</button>
                 </div>
             </div>

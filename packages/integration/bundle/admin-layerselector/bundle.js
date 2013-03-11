@@ -64,11 +64,13 @@ Oskari.clazz.define("Oskari.integration.bundle.admin-layerselector.AdminLayerSel
             "lang" : "sv",
             "type" : "text/javascript",
             "src" : "../../../../bundles/integration/bundle/admin-layerselector/locale/sv.js"
-        }, {
+        }
+/*        , {
            // NOTE! EXTERNAL LIBRARY!
             "type" : "text/javascript",
             "src" : "../../../../libraries/jquery/plugins/tagIt/tag-it.js"
-        },
+        }
+        ,
         // css
         {
             "type" : "text/css",
@@ -78,7 +80,7 @@ Oskari.clazz.define("Oskari.integration.bundle.admin-layerselector.AdminLayerSel
             "type": "text/javascript",
             "src" : "https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.12/jquery-ui.min.js"
         }
-
+*/
         ],
         "resources" : []
     },

@@ -107,24 +107,6 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             }
         }); 
 
-
-
-/*
-        var sandbox = this.getSandbox()
-        var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-        
-        sandbox.registerAsStateful(this.instance.mediator.bundleId, this);
-        
-        var successCB = function() {
-            // massive update so just recreate the whole ui
-            //me.plugins['Oskari.userinterface.Flyout'].populateLayers();
-            // added through maplayerevent
-        };
-        var failureCB = function() {
-            alert(me.getLocalization('errors').loadFailed);
-        };
-        mapLayerService.loadAllLayersAjax(successCB, failureCB);
-*/        
     },
 
     /**

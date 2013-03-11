@@ -70,6 +70,12 @@ div.admin-layerselector div.tab-content div.oskarifield {
 div.admin-layerselector div.accordion div.accordion_panel div.content {
     padding: 0;
 }
+div.admin-layerselector div.accordion_panel div.header div.headerText {
+    text-overflow: ellipsis;
+    width: 335px;
+    white-space: nowrap;
+    overflow: hidden;
+}
 div.admin-layerselector div.layer div.layer-backendstatus-icon,
 div.admin-layerselector div.create-layer div.layer-backendstatus-icon {
     float : left;
@@ -167,11 +173,12 @@ div.admin-layerselector .admin-add-layer {
     -webkit-transition-duration: 500ms;
     -webkit-transition-property: height;
 }
-div.admin-layerselector .show-add-layer, div.admin-layerselector .show-edit-layer  {
+div.admin-layerselector .show-add-layer,
+div.admin-layerselector .show-edit-layer  {
     padding: 10px 0px;
-    height: 785px;
+    height: 800px;
     width: 100%;
-    overflow: auto;
+    overflow: hidden;
 }
 div.admin-layerselector .admin-add-class {
     padding: 0px 10px;
@@ -183,6 +190,7 @@ div.admin-layerselector .admin-add-class {
 div.admin-layerselector .show-add-class {
     padding: 1s0px 10px;
     height: 190px;
+    width: 100%;
 }
 
 div.admin-layerselector .add-layer-wrapper, .add-class-wrapper {
@@ -212,12 +220,22 @@ div.admin-layerselector .add-layer-label, .add-class-label {
 
 div.admin-layerselector .add-layer-input-area, .add-layer-button-area, .add-class-input-area, .add-class-button-area {
     margin-left: 80px;
+    min-width: 220px;
+
+}
+div.admin-layerselector .add-class-button-area .input-controls {
+    width: 100%;
 }
 div.admin-layerselector .input-controls {
     position: relative;
     float: left;
     margin-right: 5px;
 }
+div.admin-layerselector .input-controls .admin-add-class-cancel {
+    float: right;
+    margin-right: 20px;
+}
+
 div.admin-layerselector .icon-close {
     display: inline-block;
     opacity: 0;

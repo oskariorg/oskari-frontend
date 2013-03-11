@@ -1,7 +1,7 @@
 (function() {
     define(['_bundle/collections/layerGroupCollection'], function(LayerGroupCollection) {
         return Backbone.Model.extend({
-            // Ensure that each todo created has `title`.
+            layerGroups : null,
             initialize : function() {
                 // if(jQuery.isArray(layerGroups)) {
                 //     this.layerGroups = layerGroups;
@@ -12,11 +12,12 @@
                 //TODO view -> this.layerContainers = {};
                 this.filter = '';
                 //TODO view -> this._createUI();
+                this.on('change:layerGroups', this.notify, this);
             },
 
 
             getTitle : function() {
-                return this.title;
+                return (this.title != null) ? this.title : this.names.fi;
             },
 
             getState : function() {
@@ -95,8 +96,95 @@
                     groupNames.push(this.layerGroups[i].name);
                 };
                 return groupNames;
-            }
+            },
+            getGroupingTitle: function(index, lang) {
+                var group = this.layerGroups[index];
+                if(group.getTitle != null) {
+                    return group.getTitle() + ' (' + group.models.length + ')';
+                } else {
+                    return group.names[lang];
+                }
+            },
 
+
+            getClasses: function(baseUrl) {
+                var me = this,
+                    action_route = "&action_route=GetMapLayerClasses";
+
+                jQuery.ajax({
+                    type : "GET",
+                    dataType: 'json',
+                    beforeSend: function(x) {
+                      if(x && x.overrideMimeType) {
+                       x.overrideMimeType("application/j-son;charset=UTF-8");
+                      }
+                     },
+                    url : baseUrl + action_route,
+                    success : function(pResp) {
+                        me.loadClasses(pResp);
+
+                    },
+                    error : function(jqXHR, textStatus) {
+                        if(jqXHR.status != 0) {
+                            console.log("Error while retrieving classes" + textStatus);
+                        }
+                    }
+                }); 
+            },
+
+            loadClasses: function(classes) {
+                var me = this;
+                var groups = me.layerGroups;
+debugger;
+                //TODO: we need a better data from backend
+                for (var key in classes) {
+                    var obj = classes[key];
+                    delete obj.maplayers;
+                    if(obj.parentid == null) {
+                        var updated = false;
+                        for (var i = groups.length - 1; i >= 0; i--) {
+                            var group = groups[i];
+                            if(group.name == obj.nameFi ||
+                                group.name == obj.nameSv ||
+                                group.name == obj.nameEn ||
+                                group.id === obj.id) {
+
+                                group.names = (group.names != null) ? group.names : {};
+                                group.names.fi = obj.nameFi;
+                                group.names.sv = obj.nameSv;
+                                group.names.en = obj.nameEn;
+                                group.name = group.names[Oskari.getLang()];
+                                group.id = obj.id;
+                                updated = true;
+                                break;
+                            }
+                        };
+                        if(!updated){
+                            var group = {};
+                            group.names = (group.names != null) ? group.names : {};
+                            group.names.fi = obj.nameFi;
+                            group.names.sv = obj.nameSv;
+                            group.names.en = obj.nameEn;
+                            group.id = obj.id;
+                            groups.push(group);
+                        }
+                   }
+                }
+                me.layerGroups = groups;
+                me.trigger('change');
+            },
+            removeClass : function(id) {
+                var groups = this.layerGroups;
+                for (var i = groups.length - 1; i >= 0; i--) {
+                    if(groups[i].id == id){
+                        groups.splice(i, 1);
+                    }
+                }
+            },
+
+            notify: function() {
+                console.log('layerGroups has changed');
+            }
         });
     });
 }).call(this);
