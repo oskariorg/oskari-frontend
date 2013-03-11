@@ -120,7 +120,6 @@ function(endpointUrl) {
                 flow_pm_map_height : params.getMapHeight(),
                 mode: "data_to_table", 
                 geojson : params.getGeometry(),
-                srs : me.sandbox.getMap().getSrsName(),
                 flow_pm_map_wfs_query_id : me._generateWfsTableQueryId()
             },
             beforeSend : function(x) {
