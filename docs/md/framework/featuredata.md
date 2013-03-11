@@ -116,9 +116,4 @@ This bundle doesn't handle any requests.
     <td> Expects to be present in application setup </td>
     <td> To register plugin to toolbar</td>
   </tr>
-  <tr>
-    <td> [Oskari toolbar](<%= docsurl %>framework/metadata.html) </td>
-    <td> Expects to be present in application setup </td>
-    <td> To select features on map</td>
-  </tr>
 </table>

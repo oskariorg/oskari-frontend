@@ -16,15 +16,11 @@ handleMapMoved() method removed from Flyout.js, use updateGrid() instead
 
 showFlyout() is added to instance.js to open flyout and update grid
 
-Bundle now links Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlugin from under metadata bundle implementation
+Bundle now provides a new plugin Oskari.mapframework.bundle.featuredata.plugin.MapSelectionPlugin for drawing selections on map
 
-new method getSelectionPlugin() is added to instance.js which returns Oskari.mapframework.bundle.metadata.plugin.MapSelectionPlugin
+new method getSelectionPlugin() is added to instance.js which returns Oskari.mapframework.bundle.featuredata.plugin.MapSelectionPlugin
 
 getBBox() is replaced with getGeometry() in WfsGridUpdateParams.js
-
-### metadata bundle
-
-getFeaturesAsGeoJSON() and getFullScreenSelection() are added to MapSelectionPlugin.js plugin
 
 ### mapfull bundle
 
