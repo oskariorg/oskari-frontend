@@ -305,6 +305,7 @@ function() {
             north : lon,
             east : lat,
             zoom : map.getZoom(),
+            srs : map.getSrsName(),
             selectedLayers : []
         };
         
