@@ -413,7 +413,8 @@ function() {
                 width : mapVO.getWidth(),
                 height : mapVO.getHeight(),
                 bbox : mapVO.getBbox().toBBOX(),
-                zoom : mapVO.getZoom()
+                zoom : mapVO.getZoom(),
+                srs : mapVO.getSrsName()
             },
             type : 'POST',
             dataType : 'json',
