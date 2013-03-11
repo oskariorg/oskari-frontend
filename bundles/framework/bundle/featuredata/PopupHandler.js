@@ -27,7 +27,7 @@ function(instance) {
     var selectionPlugin = me.instance.getSelectionPlugin();
 	this.buttons = {
         'point' : {
-            iconCls : 'myplaces-point',
+            iconCls : 'selection-point',
             tooltip : me.localization.tools.point.tooltip,
             sticky : false,
             callback : function() {
@@ -35,7 +35,7 @@ function(instance) {
             }
         },
         'line' : {
-            iconCls : 'myplaces-line',
+            iconCls : 'selection-line',
             tooltip : me.localization.tools.line.tooltip,
             sticky : false,
             callback : function() {
@@ -43,7 +43,7 @@ function(instance) {
             }
         },
         'polygon' : {
-            iconCls : 'myplaces-area',
+            iconCls : 'selection-area',
             tooltip : me.localization.tools.polygon.tooltip,
             sticky : false,
             callback : function() {
@@ -51,7 +51,7 @@ function(instance) {
             }
         },
         'square' : {
-            iconCls : 'myplaces-area',
+            iconCls : 'selection-square',
             tooltip : me.localization.tools.square.tooltip,
             sticky : false,
             callback : function() {
@@ -59,7 +59,7 @@ function(instance) {
             }
         },
         'circle' : {
-            iconCls : 'myplaces-area',
+            iconCls : 'selection-circle',
             tooltip : me.localization.tools.circle.tooltip,
             sticky : false,
             callback : function() {
