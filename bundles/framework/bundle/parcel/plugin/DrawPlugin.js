@@ -26,6 +26,10 @@ function(instance) {
     // Created in init.
     this.splitter = null;
     this.splitSelection = false;
+    this.basicStyle = null;
+    this.selectStyle = null;
+    this.selectedFeature = -2;
+
 }, {
     /**
      * @method getName
@@ -68,9 +72,71 @@ function(instance) {
         this.editLayer = new OpenLayers.Layer.Vector("Parcel Edit Layer", {
             eventListeners : {
                 "featuremodified" : function(event) {
-
                     var operatingFeature = this.features[0];
-                    if (operatingFeature.geometry.CLASS_NAME === "OpenLayers.Geometry.LineString") {
+                    if (operatingFeature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiLineString") {
+                        // Käsitellään viivaan lisätty piste
+                        for (var i = 0; i < operatingFeature.geometry.components.length; i++) {
+                            var lineString = operatingFeature.geometry.components[i];
+                            for (var k = 0; k < lineString.components.length; k++) {
+                                var point = lineString.components[k];
+                                var newReferences = [];
+                                if (typeof point.references === "undefined") {
+                                    var prevPoint = lineString.components[k-1];
+                                    var nextPoint = lineString.components[k+1];
+                                    for (var l = 0; l < prevPoint.references.length; l++) {
+                                        var refPoly = prevPoint.references[l];
+                                        var found = false;
+                                        for (var m = 0; m < nextPoint.references.length; m++) {
+                                            if (nextPoint.references[m] === refPoly) {
+                                                found = true;
+                                                break;
+                                            }
+                                        }
+                                        if (!found) continue;
+                                        var polygon = null;
+                                        for (m = 0; m < me.drawLayer.features.length; m++) {
+                                            var feature = me.drawLayer.features[m];
+                                            if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.Polygon") {
+                                                if (feature.geometry.id === refPoly) {
+                                                    polygon = feature.geometry;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                        var points = polygon.components[0].components;
+                                        var polyLength = points.length-1;
+                                        for (m = 0; m < polyLength; m++) {
+                                            var n = (m+1)%polyLength;
+
+                                            if ((points[m] === prevPoint)&&(points[n] === nextPoint)) {
+                                                points.splice(n,0,point);
+                                                newReferences.push(polygon.id);
+                                                break;
+                                            }
+                                            if ((points[n] === prevPoint)&&(points[m] === nextPoint)) {
+                                                points.splice(n,0,point);
+                                                newReferences.push(polygon.id);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    point.references = newReferences;
+                                }
+                            }
+                            // Viivan alku- ja loppupisteet kiinnitettyjä
+                            lineString.components[0].x = lineString.components[0].x0;
+                            lineString.components[0].y = lineString.components[0].y0;
+                            var lastIndex = lineString.components.length-1;
+                            lineString.components[lastIndex].x = lineString.components[lastIndex].x0;
+                            lineString.components[lastIndex].y = lineString.components[lastIndex].y0;
+                            // Päivitetään välipisteet
+                            me.controls.modify.selectFeature(operatingFeature);
+                        }
+
+                        this.refresh();
+                        me.drawLayer.refresh();
+
+/*
                         var markerLayer = this.map.getLayersByName("Parcel Markers Layer")[0];
                         var order = markerLayer.markers[0].firstLine;
                         var mInd = order ? 0 : 1;
@@ -81,6 +147,25 @@ function(instance) {
                         operatingFeature.geometry.components[0].y = markerLayer.markers[mInd].lonlat.lat;
                         operatingFeature.geometry.components[lineRunLength].x = markerLayer.markers[(mInd + 1) % 2].lonlat.lon;
                         operatingFeature.geometry.components[lineRunLength].y = markerLayer.markers[(mInd + 1) % 2].lonlat.lat;
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 
                         var polygon1 = me.drawLayer.features[0];
                         var polygon2 = me.drawLayer.features[1];
@@ -114,8 +199,17 @@ function(instance) {
                         }
                         polygon2.polygonCorners[1] = polygon2.polygonCorners[0] + lineRunLength;
 
+*/
+
+
+
+
+
+
+
+
                         // Redo selection so the info box knows where we're at
-                        me.controls.select.select(me.getDrawing());
+                        // me.controls.select.select(me.getDrawing());
 
                     }
                     this.redraw();
@@ -123,6 +217,14 @@ function(instance) {
                 }
             }
         });
+
+        this.basicStyle = OpenLayers.Util.applyDefaults(this.basicStyle, OpenLayers.Feature.Vector.style['default']);
+        this.basicStyle.fillColor = "#ffff00";
+        this.basicStyle.fillOpacity = 0.4;
+
+        this.selectStyle = OpenLayers.Util.applyDefaults(this.selectStyle, OpenLayers.Feature.Vector.style['default']);
+        this.selectStyle.fillColor = "#ff0000";
+        this.selectStyle.fillOpacity = 0.4;
 
         // This layer will contain markers which show the points where the operation line
         // crosses with the border of the original layer. Those points may be moved to adjust
@@ -155,6 +257,59 @@ function(instance) {
         this._map.setLayerIndex(me.drawLayer, 10);
         this._map.setLayerIndex(me.editLayer, 100);
         this._map.setLayerIndex(me.markerLayer, 1000);
+
+        OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
+            defaultHandlerOptions: {
+                'single': true,
+                'double': false,
+                'pixelTolerance': 0,
+                'stopSingle': false,
+                'stopDouble': false
+            },
+
+            initialize: function(options) {
+                this.handlerOptions = OpenLayers.Util.extend(
+                    {}, this.defaultHandlerOptions
+                );
+                OpenLayers.Control.prototype.initialize.apply(
+                    this, arguments
+                );
+                this.handler = new OpenLayers.Handler.Click(
+                    this, {
+                        'click': this.trigger
+                    }, this.handlerOptions
+                );
+            },
+
+            trigger: function(e) {
+                var lonlat = me._map.getLonLatFromPixel(e.xy);
+                var point = new OpenLayers.Geometry.Point(lonlat.lon,lonlat.lat);
+                var i;
+                var oldSelectedFeature = me.selectedFeature;
+                var features = me.drawLayer.features;
+                for (i=0; i < features.length; i++) {
+                    var geometry = features[i].geometry;
+                    if (geometry.CLASS_NAME=="OpenLayers.Geometry.Polygon") {
+                        if (geometry.containsPoint(point)) {
+                            me.selectedFeature = i;
+                            break;
+                        }
+                    }
+                    if (i === features.length-1) me.selectedFeature = -2;
+                }
+                if (oldSelectedFeature != me.selectedFeature) {
+                    for (i=0; i < features.length; i++) {
+                        me.drawLayer.features[i].style = (i === me.selectedFeature) ? me.selectStyle : me.basicStyle;
+                    }
+                    me.editLayer.redraw();
+                    me.drawLayer.redraw();
+                }
+            }
+        });
+
+        var click = new OpenLayers.Control.Click();
+        this._map.addControl(click);
+        click.activate();
 
         this.requestHandlers = {
             startDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StartDrawingRequestHandler', me),
@@ -430,9 +585,8 @@ function(instance) {
             this.controls.select.select(operatingFeature);
             this.controls.modify.selectFeature(operatingFeature);
             this.controls.modify.activate();
-
-            this.controls.select.select(this.getDrawing());
-
+            this.drawLayer.features[0].style = this.selectStyle;
+            this.selectedFeature = 0;
             // Make sure the marker layer is topmost (previous activations push the vector layer too high)
             var index = Math.max(this._map.Z_INDEX_BASE['Feature'], this.markerLayer.getZIndex()) + 1;
             this.markerLayer.setZIndex(index);

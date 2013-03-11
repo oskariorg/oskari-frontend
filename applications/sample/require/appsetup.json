@@ -253,12 +253,12 @@
         "en" : "My4th",
         "fi" : "My4th",
         "sv" : "My4th",
-        "bundleinstancename" : "bb",
-        "bundlename" : "bb",
+        "bundleinstancename" : "backbone",
+        "bundlename" : "backbone",
         "instanceProps" : {  },
         "metadata" : { 
             "Import-Bundle" : { 
-                "bb" : { "bundlePath" : "../../../packages/integration/bundle/" } 
+                "backbone" : { "bundlePath" : "../../../packages/integration/bundle/" } 
             },
             "Require-Bundle-Instance" : [  ]
         }
