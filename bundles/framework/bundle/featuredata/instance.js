@@ -90,8 +90,12 @@ function() {
             sandbox.registerForEventByName(me, p);
         }
 
-        // used to get fullscreen selection even if selection tools are not enabled
-        this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.plugin.MapSelectionPlugin', this);
+        //Let's extend UI
+        var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+        sandbox.request(this, request);
+
+        // draw ui
+        me.createUi();
 
         //sends request via config to add tool selection button
         if (this.config && this.config.selectionTools == true) {
@@ -108,13 +112,6 @@ function() {
 
             sandbox.request(this, addBtnRequestBuilder('dialog', 'selectiontools', btn));
         }
-
-        //Let's extend UI
-        var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
-        sandbox.request(this, request);
-
-        // draw ui
-        me.createUi();
 
         // check if preselected layers included wfs layers -> act if they are added now 
         var layers = sandbox.findAllSelectedMapLayers();
@@ -317,6 +314,7 @@ function() {
     createUi: function() {
         var me = this;
         this.plugins['Oskari.userinterface.Flyout'].createUi();
+
         var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
         var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin', {
             instance: this
@@ -324,6 +322,15 @@ function() {
         mapModule.registerPlugin(plugin);
         mapModule.startPlugin(plugin);
         this.plugin = plugin;
+
+        // used to get fullscreen selection even if selection tools are not enabled
+        var config = {
+            id : "FeatureData"
+            //,multipart : true
+        };
+        this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.plugin.MapSelectionPlugin', config);
+        mapModule.registerPlugin(this.selectionPlugin);
+        mapModule.startPlugin(this.selectionPlugin);
     }
 }, {
     /**

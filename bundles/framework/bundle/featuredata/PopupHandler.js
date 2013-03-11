@@ -67,11 +67,6 @@ function(instance) {
             }
         }      
     };
-    
-    var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
-    mapModule.registerPlugin(this.instance.getSelectionPlugin());
-    mapModule.startPlugin(this.instance.getSelectionPlugin());
-
 }, {
 	/**
 	 * @method showSelectionTools
