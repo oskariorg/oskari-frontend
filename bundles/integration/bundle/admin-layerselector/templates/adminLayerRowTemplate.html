@@ -3,71 +3,75 @@
 
         <div class="add-layer-record">
             <div class="add-layer-label-area">
-                <label for="add-layer-type" class="add-layer-label" title="Tason tyyppi: WMS, WFS, WMTS"><%= instance.getLocalization('admin').layerType %></label>
+                <label for="add-layer-type" class="add-layer-label" title="<%= instance.getLocalization('admin').layerTypeDesc %>"><%= instance.getLocalization('admin').layerType %></label>
             </div>
             <div class="add-layer-input-area">
                 <% if(model != null) { %>
                 <div id="add-layer-type" class="add-layer-text"><%= instance.getLocalization('admin')[model.admin.layerType] %></div>
-                <% } else { %>
-                <select id="add-layer-type">
-                    <option>WMS Layer</option>
-                    <option>WFS Layer</option>
-                    <option>WMTS Layer</option>
-                </select>
                 <% } %>
             </div>
         </div>
 
         <div class="add-layer-record">
             <div class="add-layer-label-area">
-                <label for="add-layer-type" class="add-layer-label"  title="WMS-tasomäärittelyjen osoite">WMS osoite</label>
+                <label for="add-layer-type" class="add-layer-label"  title="WMS-tasomäärittelyjen osoite">Rajapinnan osoite</label>
             </div>
             <div class="add-layer-input-area">
                 <div class="input-controls">
                     <input type="text" id="add-layer-wms" class="add-layer-input" placeholder="WMS-määrittelyjen osoite" />
                     <div class="icon-close"></div>
-                    <br /><button id="add-layer-wms-button">Hae tiedot</button>
                 </div>
             </div>
         </div>
 
         <div class="add-layer-record">
             <div class="add-layer-label-area">
-                <label for="add-layer-datauuid" class="add-layer-label" title="Paikkatietohakemiston metatiedon tiedostotunniste, joka yksilöi metatiedon XML kuvailun">Metatiedon tiedosto&shy;tunniste</label>
+                <label for="add-layer-type" class="add-layer-label" title="<%= instance.getLocalization('admin').interfaceVersionDesc %>"><%= instance.getLocalization('admin').interfaceVersion %></label>
+            </div>
+            <div class="add-layer-input-area">
+                <select id="add-layer-type">
+                    <option value="<%= instance.getLocalization('admin').wms1_1_1 %>" ><%= instance.getLocalization('admin').wms1_1_1 %></option>
+                    <option value="<%= instance.getLocalization('admin').wms1_3_0 %>"><%= instance.getLocalization('admin').wms1_3_0 %></option>
+                </select>
+                <br /><button id="add-layer-wms-button"><%= instance.getLocalization('admin').getInfo %></button>
+            </div>
+        </div>
+
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-wms-url" class="add-layer-label" title="<%= instance.getLocalization('admin').wmsInterfaceAddressDesc %>"><%= instance.getLocalization('admin').wmsInterfaceAddress %></label>
+            </div>
+            <div class="add-layer-input-area">
+                <textarea rows="2" cols="40" id="add-layer-wms-url" class="add-layer-input" ></textarea>
+            </div>
+        </div>
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-metadataid" class="add-layer-label" title="<%= instance.getLocalization('admin').wmsServiceMetaIdDesc %>"><%= instance.getLocalization('admin').wmsServiceMetaId %></label>
             </div>
             <div class="add-layer-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-layer-datauuid" class="add-layer-input" placeholder="Metadatan tunniste" />
+                    <input type="text" id="add-layer-metadataid" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').wmsServiceMetaIdDesc %>" />
                     <div class="icon-close"></div>
                 </div>
             </div>
         </div>
 
         <div class="add-layer-record">
-            <div class="add-layer-label-area">
-                <label for="add-layer-inspire-theme" class="add-layer-label"  title="Lisää InspireTheme:n mukaiset aiheet">Lisää aiheet</label>
-            </div>
-            <div class="add-layer-input-area">
-                <div class="input-controls">
-                    <ul id="add-layer-inspire-theme">
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="add-layer-record">
-            <div class="add-layer-grouping" title="Tason nimi">Tason nimi ja lyhyt kuvaus</div>
+            <div class="add-layer-grouping" title="<%= instance.getLocalization('admin').layerNameAndDesc %>"><%= instance.getLocalization('admin').layerNameAndDesc %></div>
 
             <div class="add-layer-label-area">
-                <label for="add-layer-fi-name" class="add-layer-label" title="FI">Suomeksi:</label>
+                <label for="add-layer-fi-name" class="add-layer-label" title="<%= instance.getLocalization('admin').finnishTitle %>"><%= instance.getLocalization('admin').finnish %></label>
             </div>
             <div  class="add-layer-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-layer-fi-name" class="add-layer-input" placeholder="Turun postinumeroalueet" value="Turun postinumeroalueet" />
+                    <input type="text" id="add-layer-fi-name" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').finnishPlaceholder %>" <% if(model != null && model.names != null) { %> value="<%= model.names.fi %>" <% } %> />
                     <div class="icon-close"></div>
                 </div>
                 <div class="input-controls">
-                    <input type="text" id="add-layer-fi-title" class="add-layer-input" placeholder="Lyhyt kuvaus" value="" />
+                    <input type="text" id="add-layer-fi-title" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').finnishDescPlaceholder %>" value="" />
                     <div class="icon-close"></div>
                 </div>
             </div>
@@ -75,15 +79,15 @@
 
         <div class="add-layer-record">
             <div class="add-layer-label-area">
-                <label for="add-layer-se-name" class="add-layer-label" title="SE">Ruotsiksi:</label>
+                <label for="add-layer-se-name" class="add-layer-label" title="<%= instance.getLocalization('admin').swedishTitle %>"><%= instance.getLocalization('admin').swedish %></label>
             </div>
             <div  class="add-layer-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-layer-se-name" class="add-layer-input" placeholder="Åbo postnummerområden" value="Åbo postnummerområden" />
+                    <input type="text" id="add-layer-se-name" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').swedishPlaceholder %>" <% if(model != null && model.names != null) { %> value="<%= model.names.sv %>" <% } %> />
                     <div class="icon-close"></div>
                 </div>
                 <div class="input-controls">
-                    <input type="text" id="add-layer-se-title" class="add-layer-input" placeholder="Lyhyt kuvaus" value="" />
+                    <input type="text" id="add-layer-se-title" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').swedishDescPlaceholder %>" value="" />
                     <div class="icon-close"></div>
                 </div>
             </div>
@@ -95,59 +99,73 @@
             </div>
             <div class="add-layer-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-layer-en-name" class="add-layer-input" placeholder="Postal code areas in Turku" value="Postal code areas in Turku" />
+                    <input type="text" id="add-layer-en-name" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').englishPlaceholder %>" <% if(model != null && model.names != null) { %> value="<%= model.names.en %>" <% } %> />
                     <div class="icon-close"></div>
                 </div>
                 <div class="input-controls">
-                    <input type="text" id="add-layer-en-title" class="add-layer-input" placeholder="Short description" value="" />
+                    <input type="text" id="add-layer-en-title" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').englishDescPlaceholder %>" value="" />
                     <div class="icon-close"></div>
                 </div>
             </div>
         </div>
 
 
-        <div class="add-layer-record add-layer-separation">
+
+        <div class="add-layer-record">
             <div class="add-layer-label-area">
-                <label for="add-layer-wms-id" class="add-layer-label" title="WMS taso eli uniikki nimi">WMS nimi</label>
+                <label for="add-layer-datauuid" class="add-layer-label" title="<%= instance.getLocalization('admin').metaInfoIdDesc %>"><%= instance.getLocalization('admin').metaInfoId %></label>
             </div>
             <div class="add-layer-input-area">
-                <select id="add-layer-wms-id">
+                <div class="input-controls">
+                    <input type="text" id="add-layer-datauuid" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').metaInfoIdDesc %>" />
+                    <div class="icon-close"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-layer-record add-layer-separation">
+            <div class="add-layer-label-area">
+                <label for="add-layer-wms-id" class="add-layer-label" title="<%= instance.getLocalization('admin').wmsName %>"><%= instance.getLocalization('admin').wmsName %></label>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                    <input type="text" id="add-layer-wms-id" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').wmsName %>" />
+                    <div class="icon-close"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-layer-record">
+            <div class="add-layer-label-area">
+                <label for="add-layer-inspire-theme" class="add-layer-label"  title="<%= instance.getLocalization('admin').addInspireThemeDesc %>"><%= instance.getLocalization('admin').addInspireTheme %></label>
+            </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                <select id="add-layer-inspire-theme">
                     <option>11 / Nimi 1</option>
                     <option>12 / Nimi 2</option>
                     <option>13 / Nimi 3</option>
                 </select>
+                </div>
             </div>
         </div>
 
 
 
-        <div class="add-layer-record">
-            <div class="add-layer-label-area">
-                <label for="add-layer-wms-url" class="add-layer-label" title="WMS karttatasojen URL-osoitteet pilkulla eroteltuna">WMS karttatasojen osoitteet</label>
-            </div>
-            <div class="add-layer-input-area">
-                <textarea rows="2" cols="40" id="add-layer-wms-id" class="add-layer-input" ></textarea>
-            </div>
-        </div>
+
 
         <div class="add-layer-record">
             <div class="add-layer-label-area">
-                <label for="add-layer-opacity" class="add-layer-label" title="Tason läpinäkyvyys">Läpinäkyvyys</label>
+                <label for="add-layer-opacity" class="add-layer-label" title="<%= instance.getLocalization('admin').opacityDesc %>"><%= instance.getLocalization('admin').opacity %></label>
             </div>
             <div class="add-layer-input-area">
                 <div class="input-controls">
-                    <!--input type="text" id="add-layer-opacity" class="add-layer-input" placeholder="Tason läpinäkyvyys" />
-                    <div class="icon-close"></div-->
-
-                    <!-- USE THE REAL COMPONENT-->
-                    <div class="left-tools" style="">
-                        <div class="oskariui layer-opacity" style="display: inline-block;background-image: url('/Oskari/resources/framework/bundle/layerselection2/images/opacity_slider.png');background-repeat: no-repeat;background-position-y: 5px;">
-                            <div class="layout-slider ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id="layout-slider" style="width: 140px;display: inline-block;margin-right: 16px;background: none; border: 0;">
-                                <a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 100%;"></a>
-                            </div>
-                            <div class="opacity-slider" style="display:inline-block">
-                                <input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" value="100" style="width: 30px;padding: 2px;">%
-                            </div>
+                    <div class="left-tools">
+                        <div class="oskariui admin-opacity-slider layer-opacity">
+                            <div class="layout-slider"></div>
+                        </div>
+                        <div class="opacity-slider" style="display:inline-block">
+                            <input type="text" name="opacity-slider" class="opacity-slider opacity" id="opacity-slider" value="100" style="width: 30px;padding: 2px;">%
                         </div>
                     </div>
                 </div>
@@ -158,7 +176,7 @@
 
         <div class="add-layer-record">
             <div class="add-layer-label-area">
-                <label for="add-layer-style" class="add-layer-label" title="Tyyli">Tyyli</label>
+                <label for="add-layer-style" class="add-layer-label" title="<%= instance.getLocalization('admin').styleDesc %>"><%= instance.getLocalization('admin').style %></label>
             </div>
             <!--div class="add-layer-input-area">
                 <div class="input-controls">
@@ -167,20 +185,17 @@
             </div-->
             <div class="add-layer-input-area">
                 <select id="add-layer-style">
-                    <option>getCapability result1</option>
-                    <option>getCapability result1</option>
-                    <option>getCapability result1</option>
                 </select>
             </div>
         </div>
 
         <div class="add-layer-record">
             <div class="add-layer-label-area">
-                <label for="add-layer-minscale" class="add-layer-label" title="Tason minimimittakaava">Minimi&shy;mittakaava</label>
+                <label for="add-layer-minscale" class="add-layer-label" title="<%= instance.getLocalization('admin').minScaleDesc %>"><%= instance.getLocalization('admin').minScale %></label>
             </div>
             <div class="add-layer-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-layer-minscale" class="add-layer-input" placeholder="Tason minimimittakaava" value="15000000" />
+                    <input type="text" id="add-layer-minscale" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').minScalePlaceholder %>" value="" />
                     <div class="icon-close"></div>
                 </div>
             </div>
@@ -188,11 +203,11 @@
 
         <div class="add-layer-record">
             <div class="add-layer-label-area">
-                <label for="add-layer-maxscale" class="add-layer-label" title="Tason Maximimittakaava">Maximi&shy;mittakaava</label>
+                <label for="add-layer-maxscale" class="add-layer-label" title="<%= instance.getLocalization('admin').minScaleDesc %>"><%= instance.getLocalization('admin').minScale %></label>
             </div>
             <div class="add-layer-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-layer-maxscale" class="add-layer-input" placeholder="Tason maximimittakaava" value="1" />
+                    <input type="text" id="add-layer-maxscale" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').maxScalePlaceholder %>" value="1" />
                     <div class="icon-close"></div>
                 </div>
             </div>
@@ -200,11 +215,11 @@
 
         <div class="add-layer-record">
             <div class="add-layer-label-area">
-                <label for="add-layer-maxscale" class="add-layer-label" title="Legenda-kuvan osoite">Legenda-kuvan osoite</label>
+                <label for="add-layer-legendImage" class="add-layer-label" title="<%= instance.getLocalization('admin').legendaImageDesc %>"><%= instance.getLocalization('admin').legendaImage %></label>
             </div>
             <div class="add-layer-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-layer-maxscale" class="add-layer-input" placeholder="Legenda-kuvan osoite" />
+                    <input type="text" id="add-layer-legendImage" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').legendaImagePlaceholder %>" />
                     <div class="icon-close"></div>
                 </div>
             </div>
@@ -212,22 +227,17 @@
 
         <div class="add-layer-record">
             <div class="add-layer-label-area">
-                <label for="add-layer-responsetype" class="add-layer-label" title="Response type of Get Feature Info (GFI)">GFI vastauksen tyyppi</label>
+                <label for="add-layer-responsetype" class="add-layer-label" title="<%= instance.getLocalization('admin').gfiResponseTypeDesc %>"><%= instance.getLocalization('admin').gfiResponseType %></label>
             </div>
             <div class="add-layer-input-area">
-                <select id="add-layer-metadataurl">
-                    <option></option>
-                    <option>text/xml</option>
-                    <option>text/html</option>
-                    <option>text/plain</option>
-                    <option>application/vnd.ogc.gml</option>
+                <select id="add-layer-responsetype">
                 </select>
             </div>
         </div>
 
         <div class="add-layer-record">
             <div class="add-layer-label-area">
-                <label for="add-layer-xslt" class="add-layer-label" title="GFI:n tyyli (XSLT)">GFI:n tyyli</label>
+                <label for="add-layer-xslt" class="add-layer-label" title="<%= instance.getLocalization('admin').gfiStyleDesc %>"><%= instance.getLocalization('admin').gfiStyle %></label>
             </div>
             <div class="add-layer-input-area">
                 <div class="input-controls">
@@ -240,8 +250,8 @@
         <div class="add-layer-send">
             <div class="add-layer-button-area">
                 <div class="input-controls">
-                    <button class="add-layer-btn admin-add-layer-ok" title="Lisää uusi karttataso">OK</button>
-                    <button class="add-layer-btn admin-add-layer-cancel" title="Peruuta">Peruuta</button>
+                    <button class="add-layer-btn admin-add-layer-ok" title="<%= instance.getLocalization('admin').addNewLayer %>"><%= instance.getLocalization('add') %></button>
+                    <button class="add-layer-btn admin-add-layer-cancel" title="<%= instance.getLocalization('cancel') %>"><%= instance.getLocalization('cancel') %></button>
                 </div>
             </div>
         </div>

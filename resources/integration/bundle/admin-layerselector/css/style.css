@@ -33,6 +33,10 @@ div.admin-layerselector div.create-layer {
     padding: 6px 10px 6px 40px;
     background-color : #ffffff;
 }
+div.admin-layerselector div.create-layer {
+    min-height: 30px;
+}
+
 div.admin-layerselector div.layer.odd {
     background-color : #f3f3f3;
 }
@@ -165,7 +169,9 @@ div.admin-layerselector .add-class-send {
 div.admin-layerselector .add-layer-separation {
     margin-top: 15px;
 }
-
+div.admin-layerselector .admin-add-layer-btn {
+    float: right;
+}
 div.admin-layerselector .admin-add-layer {
     padding: 10px 0px;
     overflow: hidden;
@@ -176,7 +182,7 @@ div.admin-layerselector .admin-add-layer {
 div.admin-layerselector .show-add-layer,
 div.admin-layerselector .show-edit-layer  {
     padding: 10px 0px;
-    height: 800px;
+    height: 840px;
     width: 100%;
     overflow: hidden;
 }
@@ -275,7 +281,6 @@ div.admin-layerselector div.add-layer-text {
 div.admin-layerselector div.layer #add-layer-inspire-theme,
 div.admin-layerselector div.create-layer #add-layer-inspire-theme {
 	width: 155px;
-	height: 60px;
 	overflow-y: auto;
 	border: solid 1px #b7b7b7;
 	border-radius: 4px;
@@ -300,4 +305,16 @@ div.admin-layerselector div.create-layer textarea.add-layer-input {
     height: 48px;
     border-radius: 4px;
     box-sizing: border-box;
+}
+
+div.admin-layerselector .admin-opacity-slider {
+    width: 215px;
+}
+div.admin-layerselector .opacity-slider {
+    float: right;
+}
+div.admin-layerselector .layout-slider {
+    width: 140px;
+    float: left;
+    margin-top: 6px;
 }

@@ -1,14 +1,14 @@
 <div class="admin-add-class">
     <div class="add-class-wrapper">
         <div class="add-class-record">
-            <div class="add-class-grouping" title="Tason nimi">Aiheen nimi</div>
+            <div class="add-class-grouping" title="<%= instance.getLocalization('admin').addInspireNameTitle %>"><%= instance.getLocalization('admin').addInspireName %></div>
 
             <div class="add-class-label-area">
-                <label for="add-class-fi-name" class="add-class-label" title="FI">Suomeksi:</label>
+                <label for="add-class-fi-name" class="add-class-label" title="<%= instance.getLocalization('admin').finnishTitle %>"><%= instance.getLocalization('admin').finnish %></label>
             </div>
             <div  class="add-class-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-class-fi-name" class="add-class-input" placeholder="Aiheen nimi suomeksi" value="Metsäntutkimuslaitos" />
+                    <input type="text" id="add-class-fi-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin').finnishPlaceholder %>" <% if(data != null) { %>value="<%= data.finnishValue %>" <% } %> />
                     <div class="icon-close"></div>
                 </div>
             </div>
@@ -16,11 +16,11 @@
 
         <div class="add-class-record">
             <div class="add-class-label-area">
-                <label for="add-class-se-name" class="add-class-label" title="SE">Ruotsiksi:</label>
+                <label for="add-class-se-name" class="add-class-label" title="<%= instance.getLocalization('admin').swedishTitle %>"><%= instance.getLocalization('admin').swedish %></label>
             </div>
             <div  class="add-class-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-class-se-name" class="add-class-input" placeholder="Aiheen nimi ruotsiksi" value="Skogsforskningsinstitutet" />
+                    <input type="text" id="add-class-se-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin').swedishPlaceholder %>" <% if(data != null) { %> value="<%= data.swedishValue %>"  <% } %> />
                     <div class="icon-close"></div>
                 </div>
             </div>
@@ -28,11 +28,11 @@
 
         <div class="add-class-record">
             <div class="add-class-label-area">
-                <label for="add-class-en-name" class="add-class-label" title="EN">Englanniksi:</label>
+                <label for="add-class-en-name" class="add-class-label" title="<%= instance.getLocalization('admin').englishTitle %>"><%= instance.getLocalization('admin').english %></label>
             </div>
             <div class="add-class-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-class-en-name" class="add-class-input" placeholder="Aiheen nimi englanniksi" value="Finnish Forest Research" />
+                    <input type="text" id="add-class-en-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin').englishPlaceholder %>"  <% if(data != null) { %>value="<%= data.englishValue %>"  <% } %>/>
                     <div class="icon-close"></div>
                 </div>
             </div>
@@ -41,8 +41,10 @@
         <div class="add-class-send">
             <div class="add-class-button-area">
                 <div class="input-controls">
-                    <button class="add-class-btn admin-add-class-ok" title="Lisää uusi karttataso">OK</button>
-                    <button class="add-class-btn admin-add-class-cancel" title="Peruuta">Peruuta</button>
+                    <button class="add-class-btn admin-add-class-ok" title="<%= instance.getLocalization('admin').addNewClass %>"><%= instance.getLocalization('add') %></button>
+                    <button class="add-class-btn admin-remove-class" <% if(data != null && data.id != null) { %> data-id="<%= data.id %>" <% } %> <% if(data != null && data.parentid != null) { %> data-parent-id="<%= data.parentid %>" <% } %> title="<%= instance.getLocalization('delete') %>"><%= instance.getLocalization('delete') %></button>
+
+                    <button class="add-class-btn admin-add-class-cancel" title="<%= instance.getLocalization('cancel') %>"><%= instance.getLocalization('cancel') %></button>
                 </div>
             </div>
         </div>

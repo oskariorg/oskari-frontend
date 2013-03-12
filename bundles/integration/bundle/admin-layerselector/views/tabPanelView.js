@@ -31,7 +31,7 @@ define([
             "click .admin-add-layer-btn"    : "toggleAddLayer",
             "click .admin-edit-class-btn"   : "toggleGroupingSettings",
             "click .admin-add-class-ok"     : "addOrganization",
-            "click .admin-remove-class"     : "removeOrganization",
+            "click .admin-remove-org"       : "removeOrganization",
             "click #add-layer-wms-button"   : "fetchCapabilities"
         },
         initialize : function() {
@@ -48,6 +48,7 @@ define([
             this.accordionTemplate              = _.template(AccordionPanelTemplate);
             this.layerTemplate                  = _.template(LayerRowTemplate);
             this.adminLayerTemplate             = _.template(AdminLayerRowTemplate);
+            _.bindAll(this);
 
             this.groupNames = this.layerGroupingModel.getGroupTitles();
             this.render();
@@ -162,6 +163,7 @@ define([
             if(!layer.find('.admin-add-layer').hasClass('show-add-layer')) {
                 var settings = this.adminLayerTemplate({instance : this.options.instance, model : null});
                 layer.append(settings);
+                layer.find('.layout-slider').slider({min:0, max: 100, value:100});
                 element.html('Peruuta');
                 setTimeout(function(){
                     jQuery('.admin-add-layer').addClass('show-add-layer');
@@ -277,7 +279,7 @@ debugger;
         fetchCapabilities: function(e){
             var me = this;
             var element = jQuery(e.currentTarget);
-            var input = element.parent().find('#add-layer-wms');
+            var input = element.parents('.add-layer-wrapper').find('#add-layer-wms');
             var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
                 route = "action_route=GetWSCapabilities",
                 type = "&wmsurl=";
@@ -293,8 +295,7 @@ debugger;
                 },
                 url : baseUrl + route + type + encodeURI(input.val()),
                 success : function(resp) {
-                    alert(resp);
-                    me._readCapability(resp);
+                    me.addCapabilitySelect(resp, me);
                 },
                 error : function(jqXHR, textStatus) {
                     if(callbackFailure && jqXHR.status != 0) {
@@ -305,20 +306,101 @@ debugger;
 
 
         },
-        _readCapability: function(capability) {
+        addCapabilitySelect: function(capability, me) {
+            me.capabilities = this.getValue(capability);
 
-        }
+            var select = '<select id="admin-select-capability">';
+            var layers = this.getValue(this.capabilities, 'Capability').Layer.Layer;
+            for (var i = layers.length - 1; i >= 0; i--) {
+                select += '<option value="'+i+'">' + layers[i].Title + '</option>';
+            };
+            select += '</select>';
+            jQuery('#admin-select-capability').remove();    
+            jQuery('#add-layer-wms-button').parent().append(select);
+            jQuery('#admin-select-capability').on('change', me.readCapabilities);
+
+        },
+        readCapabilities: function(e){
+debugger;
+            var selected = jQuery('#admin-select-capability').val();
+
+            var capability = this.getValue(this.capabilities, 'Capability');
+            var selectedLayer = capability.Layer.Layer[selected];
+
+            var wmsname = selectedLayer.Name;
+            jQuery('#add-layer-wms-id').val(wmsname);
+
+
+
+            var styles = selectedLayer.Style;
+            if(styles != null) {
+
+                //LegendURL
+                if(styles.LegendURL) {
+                    var legendURL = styles.LegendURL.OnlineResource['xlink:href'];
+                    jQuery('#add-layer-legendImage').val(legendURL);                    
+                }
+
+                //Styles
+                var styleSelect = jQuery('#add-layer-style');
+                if(Object.prototype.toString.call(styles) === '[object Array]') {
+                    var s = [];
+                    for (var i = 0; i < styles.length; i++) {
+                        styleSelect.append('<option>' +styles[i].Title + '</option>');
+                    };
+                } else {
+                    styleSelect.append('<option>' +styles.Title + '</option>');
+                }
+
+            }
+
+            // GFI Type
+            var gfiType = capability.Request.GetFeatureInfo.Format;
+            var gfiTypeSelect = jQuery('#add-layer-responsetype');
+            for (var i = 0; i < gfiType.length; i++) {
+                gfiTypeSelect.append('<option>' + gfiType[i] + '</option>');
+            };
+
+            // WMS Metadata Id
+            var wmsMetadataId = capability['inspire_vs:ExtendedCapabilities']['inspire_common:MetadataUrl']['inspire_common:URL'];
+            wmsMetadataId = wmsMetadataId.substring(wmsMetadataId.indexOf('id=') + 3);
+            if( wmsMetadataId.indexOf('&') >= 0) {
+                wmsMetadataId = wmsMetadataId.substring (0, wmsMetadataId.indexOf('&'));
+            }
+            jQuery('#add-layer-metadataid').val(wmsMetadataId);
+
+
+            //metadata id == uuid
+            //"http://www.paikkatietohakemisto.fi/geonetwork/srv/en/main.home?uuid=a22ec97f-d418-4957-9b9d-e8b4d2ec3eac"
+            var uuid = this.capabilities.Service.OnlineResource['xlink:href'];
+            if(uuid) {
+                var idx = uuid.indexOf('uuid=');
+                uuid = uuid.substring(idx + 5);
+                if( uuid.indexOf('&') >= 0) {
+                    uuid = uuid.substring(0, uuid.indexOf('&'));
+                }
+            }
+            jQuery('#add-layer-datauuid').val(uuid);
+
+
+
+        },
+
+        getValue: function(object, key) {
+            for (var k in object){
+                if(key != null) {
+                    return object[key];
+                } else {
+                    return object[k];
+                }
+            }
+        },
+
 
         updateModel: function(idValue) {
             var me = this;
             me.layerGroupingModel.removeClass(idValue);
         }
-
-
-
-
-
-
 
     });
 });
