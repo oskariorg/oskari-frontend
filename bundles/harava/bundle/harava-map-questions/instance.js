@@ -178,7 +178,9 @@ function() {
     	        	questionToolContainer.addClass('harava-question-tool-'+question.type);
     	        	questionToolContainer.bind('click',
         					function(){
-        						me.activateControl(''+module.questionId+'',''+question.id+'');
+    	        				if(!jQuery(this).hasClass('disabled')){
+    	        					me.activateControl(''+module.questionId+'',''+question.id+'');
+    	        				}
         					}
     	        	);
     	        	questionContainer.append(questionTitleContainer);
@@ -197,12 +199,14 @@ function() {
     			showQuestionStepRequest : Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.ShowQuestionStepRequestHandler', sandbox, me),
     			showQuestionToolsRequestHandler : Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.ShowQuestionToolsRequestHandler', sandbox, me),
     			hideQuestionToolsRequestHandler : Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.HideQuestionToolsRequestHandler', sandbox, me),
-    			toggleQuestionToolsRequestHandler : Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.ToggleQuestionToolsRequestHandler', sandbox, me)
+    			toggleQuestionToolsRequestHandler : Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.ToggleQuestionToolsRequestHandler', sandbox, me),
+    			visibilityQuestionToolsRequestHandler : Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.VisibilityQuestionRequestHandler', sandbox, me),
     	};
         me.sandbox.addRequestHandler('ShowQuestionStepRequest', this.requestHandlers.showQuestionStepRequest);
         me.sandbox.addRequestHandler('ShowQuestionToolsRequest', this.requestHandlers.showQuestionToolsRequestHandler);
         me.sandbox.addRequestHandler('HideQuestionToolsRequest', this.requestHandlers.hideQuestionToolsRequestHandler);
         me.sandbox.addRequestHandler('ToggleQuestionToolsRequest', this.requestHandlers.toggleQuestionToolsRequestHandler);
+        me.sandbox.addRequestHandler('VisibilityQuestionRequest', this.requestHandlers.visibilityQuestionToolsRequestHandler);
     },
     /**
      * @method getCurrentModuleFeatures
@@ -345,6 +349,21 @@ function() {
     	me.plugin.hideSelectedFeature(notCloseTools);
     },
     /**
+     * @method changeToolVisibility
+     * @param {String} moduleId
+     * @param {String} question id
+     * @param {Boolean} enabled
+     */
+    "changeToolVisibility": function(moduleId,questionId,enabled){
+    	if(enabled===true){
+    		jQuery('#harava-question-tool_'+moduleId+'_'+questionId).removeClass('disabled');
+    		jQuery('#harava-question-tool_'+moduleId+'_'+questionId).prev().removeClass('disabled');
+    	} else{
+    		jQuery('#harava-question-tool_'+moduleId+'_'+questionId).addClass('disabled');
+    		jQuery('#harava-question-tool_'+moduleId+'_'+questionId).prev().addClass('disabled');
+    	}
+    },
+    /**
      * @method stop
      * BundleInstance protocol method
      */
@@ -358,7 +377,8 @@ function() {
         sandbox.removeRequestHandler('ShowQuestionStepRequest', this.requestHandlers['showQuestionStepRequest']);        
         sandbox.removeRequestHandler('ShowQuestionToolsRequest', this.requestHandlers['showQuestionToolsRequestHandler']);
         sandbox.removeRequestHandler('HideQuestionToolsRequest', this.requestHandlers['hideQuestionToolsRequestHandler']);
-        sandbox.removeRequestHandler('ToggleQuestionToolsRequest', this.requestHandlers['toggleQuestionToolsRequestHandler']);        
+        sandbox.removeRequestHandler('ToggleQuestionToolsRequest', this.requestHandlers['toggleQuestionToolsRequestHandler']);
+        sandbox.removeRequestHandler('VisibilityQuestionRequest', this.requestHandlers['visibilityQuestionToolsRequestHandler']);
         
         var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
 

@@ -16,27 +16,84 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMap
  *			"appendTo": "#step-2>.kartta-tyokalut",	// where question toolbar are appended
  *			"questionId": "step-2",	// question identifier id
  *			"questionTitle": "Question 1", // question title
- *			"questions":	// 0 to n questions 
- *			[{
- *				"imageHeight": 48,	// if type point and defined image symbol, you can define (not required, 20 default) image height
- *				"imageWidth": 48,	// if type point and defined image symbol, you can define (not required, 20 default) image width
- *				"imageYOffset": -48,	// if type point and defined image symbol, you can define (not required, 20 default) image y offset
- *				"imageXOffset": -24,	// if type point and defined image symbol, you can define (not required, 20 default) image x offset
- *				"maxAnswers": 2, 	// max answers, id not defined then there is not max count of answers  
- *				"imageUrl": "http://cdn1.iconfinder.com/data/icons/Map-Markers-Icons-Demo-PNG/48/Map-Marker-Marker-Outside-Pink.png",	// if type point, you can define image pointer url (not required), if not defined usin default pointer symbol with defined color and opacity (color and opacity are not required)
- *				"popupHtml": "", // showed popup html when finishing drawing
- *				"type": "point",	// draw tool type, can be point, line or area
- *				"id": "question-1", // question identifier
- *				"title": "Test 1", // Question title
- *				"color": "#ee00ee", // Drawing color
- *				"opacity": "0.7", // Drawing fill opacity
- *				"tooltip": "Test tooltip" // Question tool tooltip
- *			}
+ *			"questions":	// 0 to n questions object, 
+ *			[
+ *				<QUESTION MODULE JSON>
  *			]
  *		}]
  *	}
  * }
- *  
+ * 
+ * Replace <QUESTION MODULE JSON> for 0 to n following JSONs:
+ * Point JSON (without external png symbol):
+ * {
+ * 		type: 'point',									// define at tool is point drawing (required)
+ * 		id: 'question-1', 								// question identifier (required)
+ * 		popupHtml: 'Test popup', 						// shows popup html when finishing drawing (not required)
+ *		title: 'Test 1', 								// define question title (not required)
+ * 		maxAnswers: 2, 									// define max answers (not required, if not defined then there is not max count of answers) 
+ *		tooltip: "Test tooltip" 						// define question tool tooltip (not required)
+ * 		color: '#00ff00', 								// define fill color (not required, if not defined using color #000000)
+ * 		strokeColor: '#000000', 						// define stroke color (not required, if not defined using color value)
+ * 		opacity: '0.7', 								// define fill opacity (not required, if not defined using 0.4 value)
+ * 		strokeOpacity: '0.8'							// define stroke opacity (not required, if not defined using 1 value)
+ * } 
+ * 
+ * Point JSON (with external png symbol):
+ * {
+ * 		type: 'point',									// define at tool is point drawing (required)
+ * 		id: 'question-1', 								// question identifier (required)
+ * 		popupHtml: 'Test popup', 						// shows popup html when finishing drawing (not required)
+ *		title: 'Test 1', 								// define question title (not required)
+ * 		maxAnswers: 2, 									// define max answers (not required, if not defined then there is not max count of answers) 
+ *		tooltip: 'Test tooltip', 						// define question tool tooltip (not required)
+ * 		imageUrl: 'http://localhost:8080/marker.png',	// define marker png image (required)
+ * 		imageSize: 48,									// define marker image size (not required, if not defined using 32 value)
+ * 		graphicXOffset: -24,							// define marker image x offset (not required, if not defined using -16 value)
+ * 		graphicYOffset: -48,							// define marker image y offset (not required, if not defined using -16 value)
+ * 		opacity: '0.7' 									// define marker image opacity (not required, if not defined using 1 value)
+ * }
+ * 
+ * Line JSON:
+ * {
+ * 		type: 'line',									// define at tool is line drawing (required)
+ * 		id: 'question-1', 								// question identifier (required)
+ * 		popupHtml: 'Test popup', 						// shows popup html when finishing drawing (not required)
+ *		title: 'Test 1', 								// define question title (not required)
+ * 		maxAnswers: 2, 									// define max answers (not required, if not defined then there is not max count of answers)
+ * 		color: '#00ff00',								// define line color (not required, if not defined using #000000 value)
+ * 		opacity: '0.7', 								// define line opacity (not required, if not defined using 1 value)
+ * 		strokeWidth: 2									// define line stroke width (not required, if not defined using 2 value)
+ * }
+ * 
+ * Area JSON (without graphic fill):
+ * {
+ * 		type: 'area',									// define at tool is area drawing (required)
+ * 		id: 'question-1', 								// question identifier (required)
+ * 		popupHtml: 'Test popup', 						// shows popup html when finishing drawing (not required)
+ *		title: 'Test 1', 								// define question title (not required)
+ * 		maxAnswers: 2, 									// define max answers (not required, if not defined then there is not max count of answers)
+ * 		color: '#00ff00',								// define area fill color (not required, if not defined using #000000 value)
+ * 		strokeColor: '#ff0000',							// define area stroke color (not required, if not defined using color value)
+ * 		opacity: '0.7', 								// define area fill opacity (not required, if not defined using 1 value)
+ * 		strokeOpacity: '0.7',							// define area stroke opacity (not required, if not required using 1 value)
+ * 		strokeWidth: 2									// define area stroke width (not required, if not defined using 2 value)
+ * }
+ * 
+ * Area JSON (with graphic fill):
+ * {
+ * 		type: 'area',									// define at tool is area drawing (required)
+ * 		id: 'question-1', 								// question identifier (required)
+ * 		popupHtml: 'Test popup', 						// shows popup html when finishing drawing (not required)
+ *		title: 'Test 1', 								// define question title (not required)
+ * 		maxAnswers: 2, 									// define max answers (not required, if not defined then there is not max count of answers)
+ * 		imageUrl: 'http://localhost:8080/fill.png',		// define fill png image (required)
+ * 		imageSize: 48,									// define fill image size (not required, if not defined using 32 value) * 
+ * 		color: '#00ff00',								// define stroke color (not required, if not defined using #000000 value)
+ * 		opacity: '0.7', 								// define area fill opacity (not required, if not defined using 1 value)
+ * 		strokeOpacity: '0.7',							// define area stroke opacity (not required, if not required using 1 value)
+ * 		strokeWidth: 2									// define area stroke width (not required, if not defined using 2 value)
+ * } 
  */
 function(config) {
 	this._conf = config;
@@ -216,9 +273,7 @@ function(config) {
         	jQuery('#'+id).append('<div id="harava-map-questions"></div>');
         	
         	/* Add all configured Question modules */
-        	jQuery.each(me.modules, function(k, module){
-        		var t = '';
-        		
+        	jQuery.each(me.modules, function(k, module){        		
     	        // Create module own OpenLayers layer    	        
     	        module.layer = new OpenLayers.Layer.Vector(me.drawLayerSubfix + module.questionId, {
     	        	
@@ -239,8 +294,7 @@ function(config) {
 		               				hiddenfeature.popup.hide();
 		               			}
 		               		}
-    		               	
-
+		               		
     		                // Check feature position (if need pan a map at popup show well)
     		                var pos = new OpenLayers.LonLat(feature.geometry.getCentroid().x, feature.geometry.getCentroid().y);
 		                	
@@ -301,6 +355,31 @@ function(config) {
 	            // Add module layer to map
 	            me._map.addLayers([module.layer]);
 	            
+	            // create SLD's with attribute QUESTION
+	            var sld = me.createSld(module);
+	            var format = new OpenLayers.Format.SLD();
+	            var obj = format.read(sld);
+	            if (obj && obj.namedLayers) {
+	                for (var p in obj.namedLayers) {
+	                	var style = obj.namedLayers[p].userStyles[0];
+	                	
+	                	for(var k=0;k<style.rules.length;k++){
+	                		var rule = style.rules[k];
+	                		for(var s in rule.symbolizer){
+	                			rule.symbolizer[s].cursor = 'pointer';
+	                		}
+	                	}
+	                	
+	                	// set offsets (used only point)
+	                	var finalStyle = me.setExternalGraphicStyles(style,module);
+	                	
+	                	module.layer.styleMap.styles["default"] = finalStyle;	                	
+	                	module.layer.styleMap.styles["select"] = finalStyle;
+	                    break;
+	                }
+	            }
+	            
+	            
 	            // Add module controls to map
 	            for(var key in module.drawControls) {
 	            	me._map.addControl(module.drawControls[key]);
@@ -309,12 +388,294 @@ function(config) {
 	            	me._map.addControl(module.modifyControls[key]);
 	            }
 	            
+	            module.layer.redraw();
+	            
 	            // Set module layer not visible
 	            module.layer.setVisibility(false);
         	});
         	
         }
     },
+    /**
+     * @method setExternalGraphicStyles
+     * Set external graphic styles to points
+     * @param {OpenLayers.Style} style defined style
+     * @param {Object} module module array
+     * @returns {OpenLayers.Style} style
+     */
+    setExternalGraphicStyles: function(style, module){
+    	jQuery.each(module.questions, function(q, question){
+    		if(question.type=='point' && question.imageUrl!=null){
+    			jQuery.each(style.rules, function(r, rule){
+    				if(rule.filter.value==module.questionId+question.id){
+    					var graphicXOffset = -16;
+    					if(question.imageXOffset!=null){
+    						graphicXOffset = question.imageXOffset;
+    					}
+    					var graphicYOffset = -16;
+    					if(question.imageYOffset!=null){
+    						graphicYOffset = question.imageYOffset;
+    					}
+    					var opacity = 1;
+    					if(question.opacity!=null){
+    						opacity=question.opacity;
+    					}
+    					
+    					rule.symbolizer.Point.graphicXOffset=graphicXOffset;
+    					rule.symbolizer.Point.graphicYOffset=graphicYOffset;
+    					rule.symbolizer.Point.graphicOpacity=opacity;
+    				}
+    			});
+    		}
+    	});
+    	return style;
+    },
+    /**
+     * @method createSld
+     * Create layer defined sld style for drawing
+     * @param {Object} module array
+     * @returns {String} generated sld
+     */
+    createSld: function(module){
+    	var sld = '<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>\
+    		<sld:StyledLayerDescriptor version="1.0.0" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld ./Sld/StyledLayerDescriptor.xsd">\
+    			<sld:NamedLayer>\
+				<sld:Name>Polygon</sld:Name>\
+				<sld:UserStyle>\
+					<sld:Name>Polygon</sld:Name>\
+					<sld:FeatureTypeStyle>\
+						<sld:FeatureTypeName>Polygon</sld:FeatureTypeName>';
+			
+    	jQuery.each(module.questions, function(q, question){
+    		/* If point type */
+    		if(question.type=='point'){    			
+    			/* If defined imageUrl */
+    			if(question.imageUrl!=null){
+    				var imgSize = '32';
+					if(question.imageSize!=null){
+						imgSize=question.imageSize;
+					}
+					
+    				sld += '<sld:Rule>';
+	    			sld += '<sld:Name>Polygon</sld:Name>';
+					sld += '<sld:Title>Polygon</sld:Title>';
+					sld += '<ogc:Filter>';
+					sld += '<ogc:PropertyIsEqualTo>';
+					sld += '<ogc:PropertyName>QUESTION</ogc:PropertyName>';
+					sld += '<ogc:Literal>'+module.questionId+question.id+'</ogc:Literal>';
+					sld += '</ogc:PropertyIsEqualTo>';
+					sld += '</ogc:Filter>';
+					sld += '<PointSymbolizer>';
+					sld += '<Graphic>';
+					sld += '<ExternalGraphic>';
+					sld += '<OnlineResource xlink:type="simple" xlink:href="'+question.imageUrl+'" />';
+					sld += '<Format>image/png</Format>';
+					sld += '</ExternalGraphic>';
+					sld += '<sld:Size>'+imgSize+'</sld:Size>';
+					sld += '</Graphic>';
+					sld += '</PointSymbolizer>';
+					sld += '</sld:Rule>';
+    			}
+    			/* Else if not defined imageUrl*/ 
+    			else {
+    				var color = '#000000';
+    				if(question.color!=null){
+						color = question.color;
+					} 
+					
+    				var strokeColor = color;
+    				if(question.strokeColor!=null){
+    					strokeColor = question.strokeColor;
+					} 
+    				var opacity = 0.4;
+					if(question.opacity!=null){
+						opacity=question.opacity;
+					}
+					
+					var strokeOpacity = 1;
+					if(question.strokeOpacity!=null){
+						strokeOpacity = question.strokeOpacity;
+					}
+					
+	    			sld += '<sld:Rule>';
+	    			sld += '<sld:Name>Polygon</sld:Name>';
+					sld += '<sld:Title>Polygon</sld:Title>';
+					sld += '<ogc:Filter>';
+					sld += '<ogc:PropertyIsEqualTo>';
+					sld += '<ogc:PropertyName>QUESTION</ogc:PropertyName>';
+					sld += '<ogc:Literal>'+module.questionId+question.id+'</ogc:Literal>';
+					sld += '</ogc:PropertyIsEqualTo>';
+					sld += '</ogc:Filter>';
+					sld += '<sld:PointSymbolizer>';
+					sld += '<sld:Graphic>';
+					sld += '<sld:Mark>';
+					sld += '<sld:WellKnownName>circle</sld:WellKnownName>';
+					sld += '<sld:Fill>';
+					sld += '<sld:CssParameter name="fill">'+color+'</sld:CssParameter>';
+					sld += '<sld:CssParameter name="fill-opacity">'+opacity+'</sld:CssParameter>';
+					sld += '</sld:Fill>';
+					sld += '<sld:Stroke>';
+					sld += '<sld:CssParameter name="stroke">'+strokeColor+'</sld:CssParameter>';
+					sld += '<sld:CssParameter name="stroke-width">2</sld:CssParameter>';
+					sld += '<sld:CssParameter name="stroke-opacity">1</sld:CssParameter>';
+					sld += '</sld:Stroke>';
+					sld += '</sld:Mark>';
+					sld += '<sld:Size>14</sld:Size>';
+					sld += '</sld:Graphic>';
+					sld += '</sld:PointSymbolizer>';
+					sld += '</sld:Rule>';
+    			}
+    		}
+    		/* If line type */
+    		else if(question.type=='line'){
+    			var color = '#000000';
+				if(question.color!=null){
+					color = question.color;
+				}
+				var opacity =1;
+				if(question.opacity!=null){
+					opacity=question.opacity;
+				}
+				var strokeWidth = 2;
+				if(question.strokeWidth!=null){
+					strokeWidth = question.strokeWidth;
+				}
+				
+				sld += '<sld:Rule>';
+    			sld += '<sld:Name>Polygon</sld:Name>';
+				sld += '<sld:Title>Polygon</sld:Title>';
+				sld += '<ogc:Filter>';
+				sld += '<ogc:PropertyIsEqualTo>';
+				sld += '<ogc:PropertyName>QUESTION</ogc:PropertyName>';
+				sld += '<ogc:Literal>'+module.questionId+question.id+'</ogc:Literal>';
+				sld += '</ogc:PropertyIsEqualTo>';
+				sld += '</ogc:Filter>';
+				sld += '<LineSymbolizer>';
+				sld += '<Stroke>';
+				sld += '<CssParameter name="stroke">'+color+'</CssParameter>';
+				sld += '<CssParameter name="stroke-width">'+strokeWidth+'</CssParameter>';
+				sld += '<CssParameter name="stroke-opacity">'+opacity+'</CssParameter>';
+				sld += '</Stroke>';
+				sld += '</LineSymbolizer>';
+				sld += '</sld:Rule>';
+    			
+    		}
+    		/* If area type */
+    		else if(question.type=='area'){
+    			/* If selected graphic fill */
+    			if(question.imageUrl!=null){
+	    			var imgSize = '32';
+					if(question.imageSize!=null){
+						imgSize=question.imageSize;
+					}
+					var color = '#000000';
+					if(question.color!=null){
+						color = question.color;
+					}
+					
+					var opacity =1;
+					if(question.opacity!=null){
+						opacity=question.opacity;
+					}
+					var strokeWidth = 2;
+					if(question.strokeWidth!=null){
+						strokeWidth = question.strokeWidth;
+					}
+					
+					var strokeOpacity = 1;
+					if(question.strokeOpacity!=null){
+						strokeOpacity = question.strokeOpacity;
+					}
+					
+	    			sld += '<sld:Rule>';
+	    			sld += '<sld:Name>Polygon</sld:Name>';
+	    			sld += '<sld:Title>Polygon</sld:Title>';
+					sld += '<ogc:Filter>';
+					sld += '<ogc:PropertyIsEqualTo>';
+					sld += '<ogc:PropertyName>QUESTION</ogc:PropertyName>';
+					sld += '<ogc:Literal>'+module.questionId+question.id+'</ogc:Literal>';
+					sld += '</ogc:PropertyIsEqualTo>';
+					sld += '</ogc:Filter>';					
+					sld += '<sld:PolygonSymbolizer>';
+					sld += '<sld:Fill>';
+					sld += '<sld:GraphicFill>';
+					sld += '<sld:Graphic>';
+					sld += '<sld:ExternalGraphic>';
+					sld += '<sld:OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="'+question.imageUrl+'"/>';
+					sld += '<sld:Format>image/png</sld:Format>';
+					sld += '</sld:ExternalGraphic>';
+					sld += '<sld:Size>'+imgSize+'</sld:Size>';
+					sld += '</sld:Graphic>';
+					sld += '</sld:GraphicFill>';
+					sld += '<sld:CssParameter name="fill-opacity">'+opacity+'</sld:CssParameter>';
+					sld += '</sld:Fill>';
+					sld += '<sld:Stroke>';
+					sld += '<sld:CssParameter name="stroke">'+color+'</sld:CssParameter>';
+					sld += '<sld:CssParameter name="stroke-width">'+strokeWidth+'</sld:CssParameter>';
+					sld += '<sld:CssParameter name="stroke-opacity">'+strokeOpacity+'</sld:CssParameter>';
+					sld += '</sld:Stroke>';
+					sld += '</sld:PolygonSymbolizer>';
+					sld += '</sld:Rule>';
+	    		}
+    			/* Else no selected graphic fill */ 
+    			else {
+    				var color = '#000000';
+					if(question.color!=null){
+						color = question.color;
+					}
+					
+					var strokeColor = color;
+    				if(question.strokeColor!=null){
+    					strokeColor = question.strokeColor;
+					} 
+    				
+					var opacity =1;
+					if(question.opacity!=null){
+						opacity=question.opacity;
+					}
+					var strokeWidth = 2;
+					if(question.strokeWidth!=null){
+						strokeWidth = question.strokeWidth;
+					}
+					
+					var strokeOpacity = 1;
+					if(question.strokeOpacity!=null){
+						strokeOpacity = question.strokeOpacity;
+					}
+					
+	    			sld += '<sld:Rule>';
+	    			sld += '<sld:Name>Polygon</sld:Name>';
+	    			sld += '<sld:Title>Polygon</sld:Title>';
+					sld += '<ogc:Filter>';
+					sld += '<ogc:PropertyIsEqualTo>';
+					sld += '<ogc:PropertyName>QUESTION</ogc:PropertyName>';
+					sld += '<ogc:Literal>'+module.questionId+question.id+'</ogc:Literal>';
+					sld += '</ogc:PropertyIsEqualTo>';
+					sld += '</ogc:Filter>';					
+					sld += '<sld:PolygonSymbolizer>';
+					sld += '<sld:Fill>';
+					sld += '<sld:CssParameter name="fill">'+color+'</sld:CssParameter>';
+					sld += '<sld:CssParameter name="fill-opacity">'+opacity+'</sld:CssParameter>';
+					sld += '</sld:Fill>';
+					sld += '<sld:Stroke>';
+					sld += '<sld:CssParameter name="stroke">'+strokeColor+'</sld:CssParameter>';
+					sld += '<sld:CssParameter name="stroke-width">'+strokeWidth+'</sld:CssParameter>';
+					sld += '<sld:CssParameter name="stroke-opacity">'+strokeOpacity+'</sld:CssParameter>';
+					sld += '</sld:Stroke>';
+					sld += '</sld:PolygonSymbolizer>';
+					sld += '</sld:Rule>';
+	    			
+	    		}
+    		}
+    	});
+    	
+    	sld+='</sld:FeatureTypeStyle>\
+			</sld:UserStyle>\
+			</sld:NamedLayer>\
+			</sld:StyledLayerDescriptor>';
+    	return sld;
+    },
+    
     /**
      * @method stopPlugin
      *
@@ -468,163 +829,8 @@ function(config) {
     	}
 		
 		if(!maxAnswersExceeded){
-			if(this._currentQuestion.type=='point'){
-				if(me._currentQuestion.imageUrl!=null){
-					var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
-					
-					// Check at if defined image size
-					if(me._currentQuestion.imageWidth!=null){
-						style.graphicWidth = me._currentQuestion.imageWidth;
-					}else{					
-						style.graphicWidth = 20;
-					}					
-					if(me._currentQuestion.imageHeight!=null){
-						style.graphicHeight = me._currentQuestion.imageHeight;
-					}else{					
-						style.graphicHeight = 20;
-					}
-					
-					// Check at if defined offset
-					if(me._currentQuestion.imageXOffset!=null){
-						style.graphicXOffset = me._currentQuestion.imageXOffset;
-					} else{					
-						style.graphicXOffset = -10;
-					}					
-					if(me._currentQuestion.imageYOffset!=null){
-						style.graphicYOffset = me._currentQuestion.imageYOffset;
-					} else{					
-						style.graphicYOffset = -10;
-					}					
-					
-					
-					style.externalGraphic = me._currentQuestion.imageUrl;
-					style.graphicOpacity = 1;
-				
-					style.cursor = 'pointer';
-					currentFeature.style = style;
-					layer.redraw();
-				} else {
-					var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
-					
-					if(me._currentQuestion.color!=null){
-						style.strokeColor=me._currentQuestion.color;
-						style.fillColor=me._currentQuestion.color;
-					} 
-					else {					
-						style.strokeColor='#000000';
-						style.fillColor='#000000';		
-					}
-					
-					if(me._currentQuestion.opacity!=null){
-						style.fillOpacity=me._currentQuestion.opacity;
-					} else {
-						style.fillOpacity=0.4;
-					}					
-					
-					style.strokeOpacity=1;					
-					style.strokeWidth=2;
-					style.cursor = 'pointer';
-					currentFeature.style = style;
-					layer.redraw();
-				}
-			}
-			else if(this._currentQuestion.type=='line'){
-				var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
-				if(me._currentQuestion.color!=null){
-					style.strokeColor=me._currentQuestion.color;
-				} else {
-					style.strokeColor='#000000';
-				}
-				if(me._currentQuestion.opacity!=null){
-					style.strokeOpacity=me._currentQuestion.opacity;
-				} else {
-					style.fillOpacity=1;
-					style.strokeOpacity=1;
-				}
-				style.strokeWidth=2;	             
-				
-				style.cursor = 'pointer';
-				currentFeature.style = style;
-				layer.redraw();
-			}
-			else if(this._currentQuestion.type=='area'){
-				if(me._currentQuestion.color!=null && me._currentQuestion.imageUrl!=null && false){
-					
-					var imgSize = '20';
-					if(me._currentQuestion.imageSize!=null){
-						imgSize=me._currentQuestion.imageSize;
-					}
-					var sldStyle = '<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>';
-					sldStyle += '<sld:StyledLayerDescriptor version="1.0.0" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld ./Sld/StyledLayerDescriptor.xsd">';
-					sldStyle += '<sld:NamedLayer>';
-					sldStyle += '<sld:Name>Polygon</sld:Name>';
-					sldStyle += '<sld:UserStyle>';
-					sldStyle += '<sld:Name>Polygon</sld:Name>';
-					sldStyle += '<sld:FeatureTypeStyle>';
-					sldStyle += '<sld:FeatureTypeName>Polygon</sld:FeatureTypeName>';
-					sldStyle += '<sld:Rule>';
-					sldStyle += '<sld:Name>Polygon</sld:Name>';
-					sldStyle += '<sld:Title>Polygon</sld:Title>';
-					sldStyle += '<sld:PolygonSymbolizer>';
-					sldStyle += '<sld:Fill>';
-					sldStyle += '<sld:GraphicFill>';
-					sldStyle += '<sld:Graphic>';
-					sldStyle += '<sld:ExternalGraphic>';
-					sldStyle += '<sld:OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="'+me._currentQuestion.imageUrl+'"/>';
-					sldStyle += '<sld:Format>image/png</sld:Format>';
-					sldStyle += '</sld:ExternalGraphic>';
-					sldStyle += '<sld:Size>'+imgSize+'</sld:Size>';
-					sldStyle += '</sld:Graphic>';
-					sldStyle += '</sld:GraphicFill>';
-					sldStyle += '</sld:Fill>';
-					sldStyle += '<sld:Stroke>';
-					sldStyle += '<sld:CssParameter name="stroke">'+me._currentQuestion.color+'</sld:CssParameter>';
-					sldStyle += '<sld:CssParameter name="stroke-width">1</sld:CssParameter>';
-					sldStyle += '<sld:CssParameter name="stroke-opacity">1</sld:CssParameter>';
-					sldStyle += '</sld:Stroke>';
-					sldStyle += '</sld:PolygonSymbolizer>';
-					sldStyle += '</sld:Rule>';
-					sldStyle += '</sld:FeatureTypeStyle>';
-					sldStyle += '</sld:UserStyle>';
-					sldStyle += '</sld:NamedLayer>';
-					sldStyle += '</sld:StyledLayerDescriptor>';
-					
-					
-	
-					format = new OpenLayers.Format.SLD();
-					var obj = format.read(sldStyle);
-					if (obj && obj.namedLayers) {
-						for (var p in obj.namedLayers) {
-							layer.styleMap.styles["default"] = obj.namedLayers[p].userStyles[0];
-							alert('lisätty');
-							layer.redraw();
-							break;
-						}
-					}
-					
-				} else {
-					var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);
-					if(me._currentQuestion.color!=null){
-						style.strokeColor=me._currentQuestion.color;
-						style.fillColor=me._currentQuestion.color;
-					} else {
-						style.strokeColor='#000000';
-						style.fillColor='#000000';
-					}
-					if(me._currentQuestion.opacity!=null){
-						style.fillOpacity=me._currentQuestion.opacity;
-						style.strokeOpacity=1;
-					} else {
-						style.fillOpacity=0.4;
-						style.strokeOpacity=1;
-					}
-					style.strokeWidth=2;	             
-					
-					style.cursor = 'pointer';
-					currentFeature.style = style;
-					layer.redraw();
-				}
-			}
+			currentFeature.attributes.QUESTION = me._currentStep + me._currentQuestion.id;
+			layer.redraw();
 			me._currentControls.modify.selectControl.select(currentFeature);
 		}
     },

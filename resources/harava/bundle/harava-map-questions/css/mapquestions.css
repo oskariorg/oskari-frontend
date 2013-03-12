@@ -76,3 +76,9 @@
     background-position: center center;
     background-color:#057777;   
 }
+
+.harava-question-title.disabled, .harava-question-tool.disabled {
+	opacity:0.4;
+    filter:alpha(opacity=40);
+    cursor:default;
+}
