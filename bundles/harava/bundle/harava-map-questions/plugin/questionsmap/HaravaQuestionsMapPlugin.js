@@ -243,6 +243,7 @@ function(config) {
     	var me = this;
     	var module = me.getModuleById(me._currentStep);
     	if(module!=null){
+    		me._currentControls.modify = module.modifyControls.modify;
     		module.modifyControls.modify.deactivate();
     		module.modifyControls.modify.activate();
     	}
@@ -793,17 +794,24 @@ function(config) {
     	if(layer == null){
     		return;
     	}
+    	
+    	var currentFeature = layer.features[layer.features.length - 1];
+    	var isOk = true;
+    	
+    	if(currentFeature.geometry.getCentroid()==null || isNaN(currentFeature.geometry.getCentroid().x) ||  isNaN(currentFeature.geometry.getCentroid().y)){
+   			currentFeature.destroy();
+   			isOk = false;
+    	}
    		
        	for (var i = 0; i < layer.features.length; i++) {
    			var feature = layer.features[i];
    			if (feature.popup) {
    				feature.popup.hide();
    			}
-       	}    	
-       	
-    	var currentFeature = layer.features[layer.features.length - 1];
+       	}
+    	
     	var maxAnswersExceeded = false;
-		if (me._currentPopupHtml) {   
+		if (me._currentPopupHtml && isOk) {   
     		currentFeature.attributes = {
 					"toolHtml": me._currentPopupHtml,
 					"stepAndQuestionId":me._currentStepAndQuestion
@@ -828,7 +836,7 @@ function(config) {
     		}
     	}
 		
-		if(!maxAnswersExceeded){
+		if(!maxAnswersExceeded && isOk){
 			currentFeature.attributes.QUESTION = me._currentStep + me._currentQuestion.id;
 			layer.redraw();
 			me._currentControls.modify.selectControl.select(currentFeature);
@@ -897,6 +905,8 @@ function(config) {
         	var popup = popups[i];
         	popup.hide();	                	
 	    }
+	    
+	    me.reActivateModify();
     },
     /**
      * @method getQuestionById
