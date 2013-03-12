@@ -127,7 +127,10 @@ Oskari.registerLocalization({
 			"english" 				: "Englanniksi:",
 			"englishTitle" 			: "En",
 			"englishPlaceholder" 	: "Nimi englanniksi",
-			"englishDescPlaceholder" : "Kuvaus englanniksi"
+			"englishDescPlaceholder" : "Kuvaus englanniksi",
+
+			"interfaceAddress" 		: "Rajapinnan osoite",
+			"interfaceAddressDesc" 		: "WMS-tasomäärittelyjen osoite"
 		},
 		"cancel" 	: "Peruuta",
 		"add" 		: "Lisää",

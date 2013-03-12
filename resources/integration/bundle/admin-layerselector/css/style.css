@@ -182,7 +182,7 @@ div.admin-layerselector .admin-add-layer {
 div.admin-layerselector .show-add-layer,
 div.admin-layerselector .show-edit-layer  {
     padding: 10px 0px;
-    height: 840px;
+    height: 850px;
     width: 100%;
     overflow: hidden;
 }
@@ -306,9 +306,17 @@ div.admin-layerselector div.create-layer textarea.add-layer-input {
     border-radius: 4px;
     box-sizing: border-box;
 }
-
-div.admin-layerselector .admin-opacity-slider {
+div.admin-layerselector .left-tools .layer-opacity {
+    display: inline-block;
+    background-image: url('/Oskari/resources/framework/bundle/layerselection2/images/opacity_slider.png');
+    background-repeat: no-repeat;
+    background-position-y: 3px;
+}
+div.admin-layerselector .opacity-slider-tool {
     width: 215px;
+}
+div.admin-layerselector .admin-opacity-slider {
+    width: 155px;
 }
 div.admin-layerselector .opacity-slider {
     float: right;

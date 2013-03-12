@@ -128,7 +128,10 @@ Oskari.registerLocalization({
 			"english" 				: "English:",
 			"englishTitle" 			: "En",
 			"englishPlaceholder" 	: "Name in English",
-			"englishDescPlaceholder" : "Description in English"
+			"englishDescPlaceholder" : "Description in English",
+
+			"interfaceAddress" 		: "interface URL",
+			"interfaceAddressDesc" 	: "URL for WMS layer configuration"
 		},
 		"cancel" 	: "Cancel",
 		"add" 		: "Add",

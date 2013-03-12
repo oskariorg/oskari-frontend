@@ -64,10 +64,12 @@ define([
                 title: this.instance.getLocalization('filter').inspire
             });
             this._renderLayerGroups(this.inspireTabModel, 'inspire');
+            var classNames = this.inspireTabModel.getGroupTitles();
 
             this.organizationTabModel = new LayersTabModel({
                 grouping : this.orgGrouping, 
-                title: this.instance.getLocalization('filter').organization
+                title: this.instance.getLocalization('filter').organization,
+                classNames: classNames
             });
             this._renderLayerGroups(this.organizationTabModel, 'organization');
 

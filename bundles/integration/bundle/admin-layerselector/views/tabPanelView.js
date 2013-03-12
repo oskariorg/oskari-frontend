@@ -32,11 +32,13 @@ define([
             "click .admin-edit-class-btn"   : "toggleGroupingSettings",
             "click .admin-add-class-ok"     : "addOrganization",
             "click .admin-remove-org"       : "removeOrganization",
-            "click #add-layer-wms-button"   : "fetchCapabilities"
+            "click #add-layer-wms-button"   : "fetchCapabilities",
+            "click .admin-add-layer-ok"     : "addLayer"
         },
         initialize : function() {
             this.layerGroupingModel             = this.options.layerGroupingModel;
             this.layerGroupingModel.on("change", this.render, this);
+            this.classNames = (this.options.classNames) ? this.options.classNames : this.layerGroupingModel.getGroupTitles();
 
             this.addInspireButtonTemplate       = _.template(AdminAddInspireButtonTemplate);
             this.addInspireTemplate             = _.template(AdminAddInspireTemplate);
@@ -50,7 +52,7 @@ define([
             this.adminLayerTemplate             = _.template(AdminLayerRowTemplate);
             _.bindAll(this);
 
-            this.groupNames = this.layerGroupingModel.getGroupTitles();
+
             this.render();
         },
         // Re-rendering the App just means refreshing the statistics -- the rest
@@ -78,12 +80,11 @@ define([
                             var layer = group.at(n);
 
 
-                            var layerView = new LayerView({model:layer, instance: this.options.instance, layerGroupingNames: this.layerGroupingNames});
-                            //var layerWrapper = //jQuery(this.layerTemplate({title: group.getTitle() + ' (' + layers.length + ')'}));
-                            // var layerWrapper = 
-                            //     Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.view.Layer',
-                            //     layer, this.instance.sandbox, this.instance.getLocalization());
-                            //var layerContainer = layerWrapper.find('.container');
+                            var layerView = new LayerView({
+                                model:layer, 
+                                instance: this.options.instance, 
+                                classNames: this.classNames});
+
                             if(visibleLayerCount%2 == 1) {
                                 layerView.$el.addClass('odd');
                             } else {
@@ -161,9 +162,20 @@ define([
             var layer = element.parent();
 
             if(!layer.find('.admin-add-layer').hasClass('show-add-layer')) {
-                var settings = this.adminLayerTemplate({instance : this.options.instance, model : null});
+                var settings = this.adminLayerTemplate({
+                    instance : this.options.instance, 
+                    model : null, 
+                    classNames: this.classNames
+                });
                 layer.append(settings);
-                layer.find('.layout-slider').slider({min:0, max: 100, value:100});
+                layer.find('.layout-slider').slider({
+                    min:0, 
+                    max: 100, 
+                    value:100, 
+                    slide: function( event, ui ) {
+                        jQuery(ui.handle).parents('.left-tools').find( "#opacity-slider" ).val( ui.value );
+                    }
+                });
                 element.html('Peruuta');
                 setTimeout(function(){
                     jQuery('.admin-add-layer').addClass('show-add-layer');
@@ -362,27 +374,193 @@ debugger;
             };
 
             // WMS Metadata Id
-            var wmsMetadataId = capability['inspire_vs:ExtendedCapabilities']['inspire_common:MetadataUrl']['inspire_common:URL'];
-            wmsMetadataId = wmsMetadataId.substring(wmsMetadataId.indexOf('id=') + 3);
-            if( wmsMetadataId.indexOf('&') >= 0) {
-                wmsMetadataId = wmsMetadataId.substring (0, wmsMetadataId.indexOf('&'));
+            if(capability['inspire_vs:ExtendedCapabilities'] && 
+                capability['inspire_vs:ExtendedCapabilities']['inspire_common:MetadataUrl'] &&
+                capability['inspire_vs:ExtendedCapabilities']['inspire_common:MetadataUrl']['inspire_common:URL'].indexOf != null
+                ) {
+                var wmsMetadataId = capability['inspire_vs:ExtendedCapabilities']['inspire_common:MetadataUrl']['inspire_common:URL'];
+                wmsMetadataId = wmsMetadataId.substring(wmsMetadataId.indexOf('id=') + 3);
+                if( wmsMetadataId.indexOf('&') >= 0) {
+                    wmsMetadataId = wmsMetadataId.substring (0, wmsMetadataId.indexOf('&'));
+                }
+                jQuery('#add-layer-metadataid').val(wmsMetadataId);
             }
-            jQuery('#add-layer-metadataid').val(wmsMetadataId);
-
 
             //metadata id == uuid
             //"http://www.paikkatietohakemisto.fi/geonetwork/srv/en/main.home?uuid=a22ec97f-d418-4957-9b9d-e8b4d2ec3eac"
             var uuid = this.capabilities.Service.OnlineResource['xlink:href'];
             if(uuid) {
                 var idx = uuid.indexOf('uuid=');
-                uuid = uuid.substring(idx + 5);
-                if( uuid.indexOf('&') >= 0) {
-                    uuid = uuid.substring(0, uuid.indexOf('&'));
+                if(idx >= 0) {
+                    uuid = uuid.substring(idx + 5);
+                    if( uuid.indexOf('&') >= 0) {
+                        uuid = uuid.substring(0, uuid.indexOf('&'));
+                    }                    
+                    jQuery('#add-layer-datauuid').val(uuid);
                 }
             }
-            jQuery('#add-layer-datauuid').val(uuid);
+
+        },
+        addLayer: function(e) {
+            var me = this;
+            var element = jQuery(e.currentTarget);
+            var form = element.parents('.admin-add-layer');
+
+            var data = {};
+            data.names = [];
+            data.names.fi       = form.find('#add-layer-fi-name').val(),
+            data.names.sv       = form.find('#add-layer-sv-name').val(),
+            data.names.en       = form.find('#add-layer-en-name').val(),
+            data.desc.fi        = form.find('#add-layer-fi-title').val(),
+            data.desc.sv        = form.find('#add-layer-sv-title').val(),
+            data.desc.en        = form.find('#add-layer-en-title').val(),
+
+            data.wmsName        = form.find('#add-layer-wms-id').val(),
+            data.wmsUrl         = form.find('#add-layer-interface').val(),
+
+            data.opacity        = form.find('#opacity-slider').val(),
+
+            //TODO encode base64!!
+            data.style          = form.find('#add-layer-style').val(),
 
 
+            data.minScale       = form.find('#add-layer-minscale').val(),
+            data.maxScale       = form.find('#add-layer-maxscale').val(),
+
+            //data.descriptionLink = form.find('#add-layer-maxscale').val(),
+
+            data.legendImage    = form.find('#add-layer-maxscale').val(),
+            data.inspireTheme   = form.find('#add-layer-legendImage').val(),
+            data.dataUrl        = form.find('#add-layer-datauuid').val(),
+            //data.metadataUrl    = form.find('#add-layer-maxscale').val(),
+            //TODO data.orderNumber    = form.find('#add-layer-orderNumber').val(),
+            //data.layerType      = form.find('#add-layer-layerType').val(),
+            data.xslt       = form.find('#add-layer-xslt').val(),
+            data.gfiType       = form.find('#add-layer-responsetype').val();
+
+        var url = baseUrl + action_route + 
+            "&nameFi=" + data.names.fi +
+            "&nameSv=" + data.names.sv +
+            "&nameEn=" + data.names.en +
+            "&titleFi=" + data.desc.fi +
+            "&titleSv=" + data.desc.sv +
+            "&titleEn=" + data.desc.en +
+            "&wmsUrl=" + data.wmsName +
+            "&wmsUrl=" + data.wmsUrl +
+            "&opacity=" + data.opacity +
+            "&style=" + data.style +
+            "&minScale=" + data.minScale +
+            "&maxScale=" + data.maxScale +
+            "&legendImage=" + data.legendImage +
+            "&inspireTheme=" + data.inspireTheme +
+            "&dataUrl=" + data.dataUrl +
+//            "&=" + data.metadataUrl +
+            "&xslt=" + data.xslt +
+            "&=gfiType" + data.gfiType;
+
+            jQuery.ajax({
+                type : "GET",
+                dataType: 'json',
+                beforeSend: function(x) {
+                    if(x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                url : baseUrl + route + type + encodeURI(input.val()),
+                success : function(resp) {
+                    me.addCapabilitySelect(resp, me);
+                },
+                error : function(jqXHR, textStatus) {
+                    if(callbackFailure && jqXHR.status != 0) {
+                        alert(' false ');
+                    }
+                }
+            });
+
+
+/*
+        ml.setLayerClassId(new Integer(request.getParameter("lcId")));
+        ml.setNameFi(request.getParameter("nameFi"));
+        ml.setNameSv(request.getParameter("nameSv"));
+        ml.setNameEn(request.getParameter("nameEn"));
+
+        ml.setTitleFi(request.getParameter("titleFi"));
+        ml.setTitleSv(request.getParameter("titleSv"));
+        ml.setTitleEn(request.getParameter("titleEn"));
+
+        ml.setWmsName(request.getParameter("wmsName"));
+        ml.setWmsUrl(request.getParameter("wmsUrl"));
+
+        String opacity = "0";
+        if (request.getParameter("opacity") != null
+                && !"".equals(request.getParameter("opacity"))) {
+            opacity = request.getParameter("opacity");
+        }
+
+        ml.setOpacity(new Integer(opacity));
+
+        String style = "";
+        if (request.getParameter("style") != null
+                && !"".equals(request.getParameter("style"))) {
+            style = request.getParameter("style");
+            style = IOHelper.decode64(style);
+        }
+        ml.setStyle(style);
+        ml.setMinScale(new Double(request.getParameter("minScale")));
+        ml.setMaxScale(new Double(request.getParameter("maxScale")));
+
+        ml.setDescriptionLink(request.getParameter("descriptionLink"));
+        ml.setLegendImage(request.getParameter("legendImage"));
+
+        String inspireThemeId = request.getParameter("inspireTheme");
+        Integer inspireThemeInteger = Integer.valueOf(inspireThemeId);
+        ml.setInspireThemeId(inspireThemeInteger);
+
+        ml.setDataUrl(request.getParameter("dataUrl"));
+        ml.setMetadataUrl(request.getParameter("metadataUrl"));
+        ml.setOrdernumber(new Integer(request.getParameter("orderNumber")));
+
+        ml.setType(request.getParameter("layerType"));
+        ml.setTileMatrixSetId(request.getParameter("tileMatrixSetId"));
+
+        ml.setTileMatrixSetData(request.getParameter("tileMatrixSetData"));
+
+        ml.setWms_dcp_http(request.getParameter("wms_dcp_http"));
+        ml
+                .setWms_parameter_layers(request
+                        .getParameter("wms_parameter_layers"));
+        ml.setResource_url_scheme(request.getParameter("resource_url_scheme"));
+        ml.setResource_url_scheme_pattern(request
+                .getParameter("resource_url_scheme_pattern"));
+        ml.setResource_url_scheme_pattern(request
+                .getParameter("resource_url_client_pattern"));
+
+        if (request.getParameter("resource_daily_max_per_ip") != null) {
+            ml.setResource_daily_max_per_ip(ConversionHelper.getInt(request
+                    .getParameter("resource_daily_max_per_ip"), 0));
+        }
+        String xslt = "";
+        if (request.getParameter("xslt") != null
+                && !"".equals(request.getParameter("xslt"))) {
+            xslt = request.getParameter("xslt");
+            xslt = IOHelper.decode64(xslt);
+        }
+        ml.setXslt(request.getParameter("xslt"));
+        ml.setGfiType(request.getParameter("gfiType"));
+        String sel_style = "";
+        if (request.getParameter("selection_style") != null
+                && !"".equals(request.getParameter("selection_style"))) {
+            sel_style = request.getParameter("selection_style");
+            sel_style = IOHelper.decode64(sel_style);
+        }
+        ml.setSelection_style(sel_style);
+        ml.setVersion(request.getParameter("version"));
+        if (request.getParameter("epsg") != null) {
+            ml.setEpsg(ConversionHelper.getInt(request.getParameter("epsg"),3067));
+        }
+
+
+*/
 
         },
 

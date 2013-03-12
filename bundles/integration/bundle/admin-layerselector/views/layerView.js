@@ -18,6 +18,7 @@ define([
         initialize : function() {
             this.instance = this.options.instance;
             this.model = this.options.model;
+            this.classNames = this.options.classNames;
             this.template = _.template(ViewTemplate);
             this.adminLayerTemplate         = _.template(AdminLayerRowTemplate);
             this.render();
@@ -99,8 +100,16 @@ debugger;
             e.stopPropagation();
             var element = jQuery(e.currentTarget);
             if(!element.find('.admin-add-layer').hasClass('show-edit-layer')) {
-                var settings = this.adminLayerTemplate({model: this.model, instance : this.options.instance});
+                var settings = this.adminLayerTemplate({
+                    model: this.model, 
+                    instance : this.options.instance,
+                    classNames : this.classNames
+                });
                 element.append(settings);
+                element.find('.layout-slider').slider({min:0, max: 100, value:100, slide: function( event, ui ) {
+                    jQuery(ui.handle).parents('.left-tools').find( "#opacity-slider" ).val( ui.value );
+                }});
+
                 //this.$el.find("#add-layer-inspire-theme").tagit({availableTags: ["Hallinnolliset yksiköt", "Hydrografia", "Kiinteistöt", "Kohteet", "Koordinaattijärjestelmät", "Korkeus", "Liikenneverkot", "Maankäyttö", "Maanpeite","Maaperä","Merialueet", "Metatieto"]});
 
 

@@ -135,7 +135,6 @@
             loadClasses: function(classes) {
                 var me = this;
                 var groups = me.layerGroups;
-debugger;
                 //TODO: we need a better data from backend
                 for (var key in classes) {
                     var obj = classes[key];
