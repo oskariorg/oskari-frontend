@@ -30,7 +30,8 @@ define([
             "click .accordion-header"       : "toggleLayerGroup",
             "click .admin-add-layer-btn"    : "toggleAddLayer",
             "click .admin-edit-class-btn"   : "toggleGroupingSettings",
-            "click .admin-add-class-ok"     : "addOrganization",
+            "click .admin-add-class-cancel" : "toggleGroupingSettings",
+            "click .admin-add-class-ok"     : "saveOrganization",
             "click .admin-remove-org"       : "removeOrganization",
             "click #add-layer-wms-button"   : "fetchCapabilities",
             "click .admin-add-layer-ok"     : "addLayer"
@@ -38,7 +39,7 @@ define([
         initialize : function() {
             this.layerGroupingModel             = this.options.layerGroupingModel;
             this.layerGroupingModel.on("change", this.render, this);
-            this.classNames = (this.options.classNames) ? this.options.classNames : this.layerGroupingModel.getGroupTitles();
+            this.classNames = (this.layerGroupingModel.attributes.classNames) ? this.layerGroupingModel.attributes.classNames : this.layerGroupingModel.getGroupTitles();
 
             this.addInspireButtonTemplate       = _.template(AdminAddInspireButtonTemplate);
             this.addInspireTemplate             = _.template(AdminAddInspireTemplate);
@@ -99,7 +100,7 @@ define([
                     }
                     groupContainer.append(this.addLayerBtnTemplate({instance: this.options.instance}));
 
-                    var tab = this.tabTemplate();
+                    var tab = this.tabTemplate({lcId: group.id});
                     groupPanel.find('.accordion-header').append((this.options.tabId == 'inspire') ? 
                         this.addInspireTemplate({data: group, instance: this.options.instance}):
                         this.addOrganizationTemplate({data: group, instance: this.options.instance})
@@ -136,19 +137,19 @@ define([
             //add layer
             e.stopPropagation();
             var element = jQuery(e.currentTarget);
-            var grouping = element.parent();
-            var adminAddClass = grouping.find('.admin-add-class');
-
-            if(!adminAddClass.hasClass('show-add-class')) {
-                adminAddClass.addClass('show-add-class');
-                element.html('Peruuta')
+            var grouping = element.parents('.accordion-header');
+            if(grouping.length == 0) {
+                element.parents('.admin-add-class').removeClass('show-add-class');;
             } else {
-                adminAddClass.removeClass('show-add-class');
-                element.html('Muokkaa')
-                //setTimeout(function(){
-                //    grouping.find('.admin-add-class').remove();
-                //},300);
+                var adminAddClass = grouping.find('.admin-add-class');
 
+                if(!adminAddClass.hasClass('show-add-class')) {
+                    adminAddClass.addClass('show-add-class');
+                    grouping.find('.admin-edit-class-btn').html('Peruuta')
+                } else {
+                    adminAddClass.removeClass('show-add-class');
+                    grouping.find('.admin-edit-class-btn').html('Muokkaa')
+                }
             }
         },
         hideGroupingSettings : function(e) {
@@ -206,7 +207,7 @@ define([
             }
         },
 
-        addOrganization: function(e) {
+        saveOrganization: function(e) {
             var me = this;
             var element = jQuery(e.currentTarget);
             var addClass = element.parents('.admin-add-class');
@@ -214,6 +215,7 @@ debugger;
             var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
                 action_route = "&action_route=SaveOrganization",
                 id = "&layercl_id=",
+                lcId = element.parents('.accordion').attr('lcid'),
                 parentId = "&parent_id=",
                 nameFi = "&name_fi=",
                 nameSv = "&name_sv=",
@@ -222,6 +224,11 @@ debugger;
                 sv = addClass.find("#add-class-sv-name").val(),
                 en = addClass.find("#add-class-en-name").val();
 
+            var url = baseUrl + action_route+id;
+            if(lcId != null) {
+                url += lcId;
+            }
+            url += parentId+nameFi+fi+nameSv+sv+nameEn+en;
 
             jQuery.ajax({
                 type : "GET",
@@ -231,7 +238,7 @@ debugger;
                         x.overrideMimeType("application/j-son;charset=UTF-8");
                     }
                 },
-                url : baseUrl + action_route+id+parentId+nameFi+fi+nameSv+sv+nameEn+en,
+                url : url,
                 success : function(resp) {
                     if(resp === null) {
                         me.layerGroupingModel.getClasses(me.options.instance.getSandbox().getAjaxUrl());
@@ -291,7 +298,7 @@ debugger;
         fetchCapabilities: function(e){
             var me = this;
             var element = jQuery(e.currentTarget);
-            var input = element.parents('.add-layer-wrapper').find('#add-layer-wms');
+            var input = element.parents('.add-layer-wrapper').find('#add-layer-interface');
             var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
                 route = "action_route=GetWSCapabilities",
                 type = "&wmsurl=";
@@ -305,9 +312,9 @@ debugger;
                         x.overrideMimeType("application/j-son;charset=UTF-8");
                     }
                 },
-                url : baseUrl + route + type + encodeURI(input.val()),
+                url : baseUrl + route + type + encodeURIComponent(input.val()),
                 success : function(resp) {
-                    me.addCapabilitySelect(resp, me);
+                    me.addCapabilitySelect(resp, me, element);
                 },
                 error : function(jqXHR, textStatus) {
                     if(callbackFailure && jqXHR.status != 0) {
@@ -318,8 +325,12 @@ debugger;
 
 
         },
-        addCapabilitySelect: function(capability, me) {
+        addCapabilitySelect: function(capability, me, element) {
             me.capabilities = this.getValue(capability);
+            if(me.capabilities.Capability == null) {
+                console.log("Could not find Capability from response");
+                return;
+            }
 
             var select = '<select id="admin-select-capability">';
             var layers = this.getValue(this.capabilities, 'Capability').Layer.Layer;
@@ -327,9 +338,10 @@ debugger;
                 select += '<option value="'+i+'">' + layers[i].Title + '</option>';
             };
             select += '</select>';
-            jQuery('#admin-select-capability').remove();    
-            jQuery('#add-layer-wms-button').parent().append(select);
-            jQuery('#admin-select-capability').on('change', me.readCapabilities);
+
+            element.parent().find('#admin-select-capability').remove();
+            element.parent().append(select);
+            element.parent().find('#admin-select-capability').on('change', me.readCapabilities);
 
         },
         readCapabilities: function(e){
@@ -404,10 +416,15 @@ debugger;
         addLayer: function(e) {
             var me = this;
             var element = jQuery(e.currentTarget);
+            var lcId = element.parents('.accordion').attr('lcid');
             var form = element.parents('.admin-add-layer');
+            var baseUrl =  me.options.instance.getSandbox().getAjaxUrl(),
+                action_route = "action_route=SaveLayer",
+                id = "&layer_id=";
 
             var data = {};
             data.names = [];
+            data.desc = [];
             data.names.fi       = form.find('#add-layer-fi-name').val(),
             data.names.sv       = form.find('#add-layer-sv-name').val(),
             data.names.en       = form.find('#add-layer-en-name').val(),
@@ -429,8 +446,8 @@ debugger;
 
             //data.descriptionLink = form.find('#add-layer-maxscale').val(),
 
-            data.legendImage    = form.find('#add-layer-maxscale').val(),
-            data.inspireTheme   = form.find('#add-layer-legendImage').val(),
+            data.legendImage    = form.find('#add-layer-legendImage').val(),
+            data.inspireTheme   = form.find('#add-layer-inspire-theme').val(),
             data.dataUrl        = form.find('#add-layer-datauuid').val(),
             //data.metadataUrl    = form.find('#add-layer-maxscale').val(),
             //TODO data.orderNumber    = form.find('#add-layer-orderNumber').val(),
@@ -438,8 +455,11 @@ debugger;
             data.xslt       = form.find('#add-layer-xslt').val(),
             data.gfiType       = form.find('#add-layer-responsetype').val();
 
-        var url = baseUrl + action_route + 
-            "&nameFi=" + data.names.fi +
+        var url = baseUrl + action_route + id;
+        if(lcId != null) {
+            url += "&lcId=" + lcId;
+        }
+        url += "&nameFi=" + data.names.fi +
             "&nameSv=" + data.names.sv +
             "&nameEn=" + data.names.en +
             "&titleFi=" + data.desc.fi +
@@ -466,7 +486,7 @@ debugger;
                         x.overrideMimeType("application/j-son;charset=UTF-8");
                     }
                 },
-                url : baseUrl + route + type + encodeURI(input.val()),
+                url : url,
                 success : function(resp) {
                     me.addCapabilitySelect(resp, me);
                 },

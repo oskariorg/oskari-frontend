@@ -77,6 +77,9 @@ Oskari.registerLocalization({
 			"wfslayer"				: "WFS layer",
 			"wmtslayer"				: "WMTS layer",
 			"getInfo" 				: "Get info",
+			"selectClass" 			: "Select class",
+			"selectClassDesc" 		: "Select Inspire theme",
+
 
 			"wmsInterfaceAddress" 	: "WMS interface URL",
 			"wmsInterfaceAddressDesc": "WMS interface URL-addresses separated with commas",
@@ -109,9 +112,9 @@ Oskari.registerLocalization({
 			"maxScale" 				: "Maximum scale",
 			"maxScaleDesc" 			: "Layer's maximum scale",
 			"maxScalePlaceholder" 	: "Layer's maximum scale",
-			"legendaImage" 			: "Legenda image",
-			"legendaImageDesc" 		: "URL for legenda image",
-			"legendaImagePlaceholder" : "URL for legenda image",
+			"legendImage" 			: "Legenda image",
+			"legendImageDesc" 		: "URL for legenda image",
+			"legendImagePlaceholder" : "URL for legenda image",
 			"gfiResponseType" 		: "GFI response type",
 			"gfiResponseTypeDesc" 	: "Response type for Get Feature Info (GFI)",
 			"gfiStyle" 				: "GFI style",

@@ -10,15 +10,15 @@ div.admin-layerselector div.layerGroup.open {
     background-color : #FFFFFF;
 }
 div.admin-layerselector div.layerGroup div.groupIcon {
-	display : inline-block;
+    display : inline-block;
     margin-left: 12px;
     vertical-align: middle;
 }
 div.admin-layerselector div.layerGroup div.groupHeader {
-	display : inline-block;
-	font-weight : bold;
-	padding: 8px 10px 8px 12px;
-	font: 14pt Arial,sans-serif;
+    display : inline-block;
+    font-weight : bold;
+    padding: 8px 10px 8px 12px;
+    font: 14pt Arial,sans-serif;
 }
 div.admin-layerselector .oskariTabs {
   min-width: 480px;
@@ -26,7 +26,7 @@ div.admin-layerselector .oskariTabs {
 
 /* layer container */
 div.admin-layerselector div.tab-content div.oskarifield {
-	padding: 10px;
+    padding: 10px;
 }
 div.admin-layerselector div.layer,
 div.admin-layerselector div.create-layer {
@@ -52,16 +52,16 @@ div.admin-layerselector div.create-layer div.layer-tools {
 div.admin-layerselector div.layer div.layer-icon,
 div.admin-layerselector div.create-layer div.layer-icon {
     float : left;
-	width : 16px;
-	height : 16px;
-	background-repeat: no-repeat;
+    width : 16px;
+    height : 16px;
+    background-repeat: no-repeat;
 }
 div.admin-layerselector div.layer div.layer-info,
 div.admin-layerselector div.create-layer div.layer-info {
     width: 16px;
     height: 16px;
-	margin-left : 5px;
-	float : right;
+    margin-left : 5px;
+    float : right;
 }
 
 div.admin-layerselector div.tab-content {
@@ -83,37 +83,37 @@ div.admin-layerselector div.accordion_panel div.header div.headerText {
 div.admin-layerselector div.layer div.layer-backendstatus-icon,
 div.admin-layerselector div.create-layer div.layer-backendstatus-icon {
     float : left;
-	width : 20px;
-	height: 16px;
-	margin-right: 4px;
-	background-repeat: no-repeat;
+    width : 20px;
+    height: 16px;
+    margin-right: 4px;
+    background-repeat: no-repeat;
 }
 
 div.admin-layerselector div.layer div.backendstatus-down,
 div.admin-layerselector div.create-layer div.backendstatus-down {
-	height: 20px !important;
-	margin-bottom: 2px;	
-	cursor: pointer;
+    height: 20px !important;
+    margin-bottom: 2px; 
+    cursor: pointer;
 }
 
 div.admin-layerselector div.layer div.backendstatus-maintenance,
 div.admin-layerselector div.create-layer div.backendstatus-maintenance {
-	height: 20px !important;
-	margin-bottom: 2px;	
-	cursor: pointer;
+    height: 20px !important;
+    margin-bottom: 2px; 
+    cursor: pointer;
 }
 
 div.admin-layerselector div.layer div.backendstatus-ok,
 div.admin-layerselector div.create-layer div.backendstatus-ok {
-	height: 20px !important;
-	margin-bottom: 2px;	
-	cursor: pointer;
+    height: 20px !important;
+    margin-bottom: 2px; 
+    cursor: pointer;
 }
 
 div.admin-layerselector div.layer div.backendstatus-unknown,
 div.admin-layerselector div.create-layer div.backendstatus-unknown {
-	height: 20px !important;
-	margin-bottom: 2px;	
+    height: 20px !important;
+    margin-bottom: 2px; 
 }
 
 
@@ -237,7 +237,8 @@ div.admin-layerselector .input-controls {
     float: left;
     margin-right: 5px;
 }
-div.admin-layerselector .input-controls .admin-add-class-cancel {
+div.admin-layerselector .input-controls .admin-add-class-cancel,
+div.admin-layerselector .input-controls .admin-add-layer-cancel {
     float: right;
     margin-right: 20px;
 }
@@ -280,11 +281,11 @@ div.admin-layerselector div.add-layer-text {
 }
 div.admin-layerselector div.layer #add-layer-inspire-theme,
 div.admin-layerselector div.create-layer #add-layer-inspire-theme {
-	width: 155px;
-	overflow-y: auto;
-	border: solid 1px #b7b7b7;
-	border-radius: 4px;
-	-webkit-box-shadow: inset 1px 1px 2px rgba(0,0,0,.3);
+    width: 155px;
+    overflow-y: auto;
+    border: solid 1px #b7b7b7;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 1px 1px 2px rgba(0,0,0,.3);
     -moz-box-shadow: inset 1px 1px 2px rgba(0,0,0,.3);
     box-shadow: inset 1px 1px 2px rgba(0,0,0,.3);
 }
@@ -325,4 +326,7 @@ div.admin-layerselector .layout-slider {
     width: 140px;
     float: left;
     margin-top: 6px;
+}
+div.admin-layerselector #admin-select-capability {
+    margin-bottom: 15px;
 }

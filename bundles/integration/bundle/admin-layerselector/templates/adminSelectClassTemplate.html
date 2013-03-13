@@ -1,0 +1,14 @@
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label for="add-layer-inspire-theme" class="add-layer-label"  title="<%= instance.getLocalization('admin').selectClassDesc %>"><%= instance.getLocalization('admin').selectClass %></label>
+    </div>
+            <div class="add-layer-input-area">
+                <div class="input-controls">
+                <select id="add-layer-select-class">
+                    <% for(var i = 0; layers != null && i < layers.length; i++) { %>
+                    <option value="<%= classNames[i].id %>" <% if(model != null && model.admin.inspireTheme == classNames[i].id ) { %>selected<% } %> ><%= classNames[i].name %></option>
+                    <% } %>
+                </select>
+                </div>
+            </div>
+        </div>

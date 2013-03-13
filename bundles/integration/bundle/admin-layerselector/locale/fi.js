@@ -76,12 +76,14 @@ Oskari.registerLocalization({
 			"wfslayer"				: "WFS Taso",
 			"wmtslayer"				: "WMTS Taso",
 			"getInfo" 				: "Hae tiedot",
+			"selectClass" 			: "Valitse aihe",
+			"selectClassDesc" 		: "Valitse aihe",
 
 			"wmsInterfaceAddress" 	: "WMS-rajapinnan osoitteet",
 			"wmsInterfaceAddressDesc": "WMS-rajapinnan URL-osoitteet pilkulla eroteltuna",
 			"wmsServiceMetaId" 		: "WMS metatiedon tunniste",
 			"wmsServiceMetaIdDesc" 	: "WMS-palvelun metatiedon tiedostotunniste",
-			"layerNameAndDesc" 		: "Tason nimi ja lyhyt kuvaus",
+			"layerNameAndDesc" 		: "Tason nimi ja lisätieto",
 
 			"metaInfoIdDesc" 		: "Paikkatietohakemiston metatiedon tiedostotunniste, joka yksilöi metatiedon XML kuvailun",
 			"metaInfoId" 			: "Metatiedon tiedosto&shy;tunniste",
@@ -108,9 +110,9 @@ Oskari.registerLocalization({
 			"maxScale" 				: "Maximi&shy;mittakaava",
 			"maxScaleDesc" 			: "Tason maximimittakaava",
 			"maxScalePlaceholder" 	: "Tason maximimittakaava",
-			"legendaImage" 			: "Legenda-kuvan osoite",
-			"legendaImageDesc" 		: "Legenda-kuvan osoite",
-			"legendaImagePlaceholder" : "Legenda-kuvan osoite",
+			"legendImage" 			: "Legenda-kuvan osoite",
+			"legendImageDesc" 		: "Legenda-kuvan osoite",
+			"legendImagePlaceholder" : "Legenda-kuvan osoite",
 			"gfiResponseType" 		: "GFI vastauksen tyyppi",
 			"gfiResponseTypeDesc" 	: "Vastauksen tyyppi eli Get Feature Info (GFI)",
 			"gfiStyle" 				: "GFI:n tyyli",
@@ -130,10 +132,10 @@ Oskari.registerLocalization({
 			"englishDescPlaceholder" : "Kuvaus englanniksi",
 
 			"interfaceAddress" 		: "Rajapinnan osoite",
-			"interfaceAddressDesc" 		: "WMS-tasomäärittelyjen osoite"
+			"interfaceAddressDesc" 	: "WMS-tasomäärittelyjen osoite"
 		},
 		"cancel" 	: "Peruuta",
-		"add" 		: "Lisää",
+		"add" 		: "Tallenna",
 		"delete" 	: "Poista"
 	}
 });

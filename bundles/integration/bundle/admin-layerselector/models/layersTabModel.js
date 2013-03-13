@@ -92,8 +92,8 @@
             },
             getGroupTitles: function() {
                 var groupNames = [];
-                for (var i = this.layerGroups.length - 1; i >= 0; i--) {
-                    groupNames.push(this.layerGroups[i].name);
+                for (var i = 0; i < this.layerGroups.length; i++) {
+                    groupNames.push({name : this.layerGroups[i].name, id : this.layerGroups[i].id});
                 };
                 return groupNames;
             },

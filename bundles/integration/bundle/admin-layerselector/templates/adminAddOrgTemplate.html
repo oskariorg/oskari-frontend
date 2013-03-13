@@ -8,7 +8,7 @@
             </div>
             <div  class="add-class-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-class-fi-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin').finnishPlaceholder %>"  <% if(data != null) { %>value="<%= data.finnishValue %>"  <% } %> />
+                    <input type="text" id="add-class-fi-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin').finnishPlaceholder %>"  <% if(data != null  && data.names && data.names.fi) { %>value="<%= data.names.fi %>"  <% } %> />
                     <div class="icon-close"></div>
                 </div>
             </div>
@@ -20,7 +20,7 @@
             </div>
             <div  class="add-class-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-class-sv-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin').swedishPlaceholder %>"  <% if(data != null) { %>value="<%= data.finnishValue %>"  <% } %> />
+                    <input type="text" id="add-class-sv-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin').swedishPlaceholder %>"  <% if(data != null && data.names && data.names.sv) { %>value="<%= data.names.sv %>"  <% } %> />
                     <div class="icon-close"></div>
                 </div>
             </div>
@@ -32,7 +32,7 @@
             </div>
             <div class="add-class-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-class-en-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin').englishPlaceholder %>"  <% if(data != null) { %>value="<%= data.englishValue %>"  <% } %> />
+                    <input type="text" id="add-class-en-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin').englishPlaceholder %>"  <% if(data != null && data.names && data.names.en) { %>value="<%= data.names.en %>"  <% } %> />
                     <div class="icon-close"></div>
                 </div>
             </div>

@@ -43,6 +43,8 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             var layers = mapLayerService.getAllLayers();
             if(this.view != null){
                 this.view.addToCollection(layers);
+            } else {
+                this.layers = layers;
             }
         
             // for(var i = 0; i < this.layerTabs.length; ++i) {
@@ -135,6 +137,9 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                 instance : me.instance,
                 locale : me.locale
             });
+            if(me.layers != null) {
+                me.view.addToCollection(me.layers);
+            }
         });
     },
 // copy-paste
