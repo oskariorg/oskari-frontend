@@ -1,5 +1,5 @@
 div.popupHeader {
-    background-color: #A59B78;
+    background-color: #228CA5;
     border-radius: 6px 6px 0 0;
     color: #FFFFFF;
     display: inline-block;
@@ -23,7 +23,7 @@ div.popupHeaderArrow {
 	height: 0;	
 	border-top: 10px solid transparent;
 	border-bottom: 10px solid transparent;
-	border-right:10px solid #A59B78;	
+	border-right:10px solid #228CA5;	
 	display: inline-block;
 	float: left;
 	margin-top:10px;
@@ -40,7 +40,7 @@ div.popupContent {
 	height: 200px;
 	border-radius: 0px 0px 6px 6px;
 	border: 1px solid;
-	border-color:#A59B78;
+	border-color:#228CA5;
 	overflow: auto;	
 	padding: 8px 8px 8px 8px;
 }

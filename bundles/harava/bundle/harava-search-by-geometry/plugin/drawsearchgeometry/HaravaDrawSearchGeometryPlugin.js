@@ -40,12 +40,11 @@ function(locale) {
     this.templateSearchByGeom = jQuery('<div class="search-by-geometry"></div>');
     this.templateSearchByGeomPanTool = jQuery('<div id="searchbygeom-pan" class="searchbygeom-tool searchbygeom-pan"></div>');
     this.templateSearchByGeomPointTool = jQuery('<div id="searchbygeom-point" class="searchbygeom-tool searchbygeom-point"></div>');
-    this.templateSearchByGeomLineTool = jQuery('<div id="searchbygeom-line" class="searchbygeom-tool searchbygeom-line"></div>');
     this.templateSearchByGeomMapExtentTool = jQuery('<div id="searchbygeom-mapextent" class="searchbygeom-tool searchbygeom-mapextent"></div>');
     this.templateSearchByGeomRegularPolygonTool = jQuery('<div id="searchbygeom-regular-polygon" class="searchbygeom-tool searchbygeom-regular-polygon"></div>');
     this.templateSearchByGeomPolygonTool = jQuery('<div id="searchbygeom-polygon" class="searchbygeom-tool searchbygeom-polygon"></div>');
-    this.templateSearchByGeomEmpty = jQuery('<div style="clear:both;"></div>');
     this.templateSearchByGeomSearchIndicator = jQuery('<div id="searchbygeom-searchindicator" class="searchbygeom-searchindicator"></div>');
+    this.templateSearchByGeomEmpty = jQuery('<div style="clear:both;"></div>');
 }, {
     /** @static @property __name plugin name */
     __name : 'HaravaDrawSearchGeometryPlugin',
@@ -146,9 +145,7 @@ function(locale) {
     	var searchPanContainer = me.templateSearchByGeomPanTool.clone();
     	searchPanContainer.attr('title',this._locale.tooltips.panMap);    	
     	var searchPointContainer = me.templateSearchByGeomPointTool.clone();
-    	searchPointContainer.attr('title',this._locale.tooltips.searchByPoint);    	
-    	var searchLineContainer = me.templateSearchByGeomLineTool.clone();
-    	searchLineContainer.attr('title',this._locale.tooltips.searchByLine);    	
+    	searchPointContainer.attr('title',this._locale.tooltips.searchByPoint);    		
     	var searchMapExtentContainer = me.templateSearchByGeomMapExtentTool.clone();
     	searchMapExtentContainer.attr('title',this._locale.tooltips.searchByMapExtent);    	
     	var searchRegularPolygonContainer = me.templateSearchByGeomRegularPolygonTool.clone();
@@ -162,13 +159,11 @@ function(locale) {
     	jQuery('#searchbygeom').append(searchContainer);
     	jQuery(searchContainer).append(searchPanContainer);
     	jQuery(searchContainer).append(searchPointContainer);
-    	//jQuery(searchContainer).append(searchLineContainer);
-    	jQuery(searchContainer).append(searchMapExtentContainer);
-    	jQuery(searchContainer).append(searchRegularPolygonContainer);
+    	jQuery(searchContainer).append(searchMapExtentContainer);    	
     	jQuery(searchContainer).append(searchPolygonContainer);
+    	jQuery(searchContainer).append(searchRegularPolygonContainer);
+    	jQuery(searchContainer).append(searchIndicator);
     	jQuery(searchContainer).append(searchEmptyContainer);
-    	jQuery(searchContainer).parent().parent().append(searchIndicator);
-    	
     	
     	jQuery('.searchbygeom-tool').live('click', function(){
     		var id = this.id;
