@@ -39,7 +39,8 @@ define([
         initialize : function() {
             this.layerGroupingModel             = this.options.layerGroupingModel;
             this.layerGroupingModel.on("change", this.render, this);
-            this.classNames = (this.layerGroupingModel.attributes.classNames) ? this.layerGroupingModel.attributes.classNames : this.layerGroupingModel.getGroupTitles();
+            this.inspireClasses = (this.options.inspire != null) ? 
+                this.options.inspire : this.layerGroupingModel;
 
             this.addInspireButtonTemplate       = _.template(AdminAddInspireButtonTemplate);
             this.addInspireTemplate             = _.template(AdminAddInspireTemplate);
@@ -84,7 +85,8 @@ define([
                             var layerView = new LayerView({
                                 model:layer, 
                                 instance: this.options.instance, 
-                                classNames: this.classNames});
+                                classes: this.inspireClasses
+                            });
 
                             if(visibleLayerCount%2 == 1) {
                                 layerView.$el.addClass('odd');
@@ -113,7 +115,10 @@ define([
                 if(this.options.tabId == 'inspire') {
                     this.$el.find('.oskarifield').append(
                         this.addInspireButtonTemplate({instance: this.options.instance})).append(
-                        this.addInspireTemplate({data: null, instance: this.options.instance}));
+                        this.addInspireTemplate({
+                            data: null, 
+                            instance: this.options.instance
+                        }));
                 } else {
                     this.$el.find('.oskarifield').append(
                         this.addOrganizationButtonTemplate({instance: this.options.instance})).append(
@@ -166,7 +171,7 @@ define([
                 var settings = this.adminLayerTemplate({
                     instance : this.options.instance, 
                     model : null, 
-                    classNames: this.classNames
+                    classNames: this.inspireClasses.getGroupTitles()
                 });
                 layer.append(settings);
                 layer.find('.layout-slider').slider({
@@ -219,7 +224,7 @@ debugger;
                 parentId = "&parent_id=",
                 nameFi = "&name_fi=",
                 nameSv = "&name_sv=",
-                nameEn = "&name_en="
+                nameEn = "&name_en=",
                 fi = addClass.find("#add-class-fi-name").val(),
                 sv = addClass.find("#add-class-sv-name").val(),
                 en = addClass.find("#add-class-en-name").val();

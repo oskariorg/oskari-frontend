@@ -182,7 +182,7 @@ div.admin-layerselector .admin-add-layer {
 div.admin-layerselector .show-add-layer,
 div.admin-layerselector .show-edit-layer  {
     padding: 10px 0px;
-    height: 850px;
+    height: 870px;
     width: 100%;
     overflow: hidden;
 }
@@ -229,6 +229,7 @@ div.admin-layerselector .add-layer-input-area, .add-layer-button-area, .add-clas
     min-width: 220px;
 
 }
+div.admin-layerselector .add-layer-button-area .input-controls,
 div.admin-layerselector .add-class-button-area .input-controls {
     width: 100%;
 }
@@ -305,6 +306,9 @@ div.admin-layerselector div.create-layer textarea.add-layer-input {
     width: 157px;
     height: 48px;
     border-radius: 4px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
     box-sizing: border-box;
 }
 div.admin-layerselector .left-tools .layer-opacity {

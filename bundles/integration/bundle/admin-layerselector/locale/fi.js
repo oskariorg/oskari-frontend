@@ -61,9 +61,9 @@ Oskari.registerLocalization({
 			"addOrganization" 		: "Lisää tiedontuottaja",
 			"addOrganizationDesc"	: "Lisää tiedontuottaja eli uusi orgasaatio",
 			"addInspire" 			: "Lisää aihe",
-			"addInspireDesc" 		: "Lisää aihe eli uusi Inspire-teema",
+			"addInspireDesc" 		: "Lisää aihe eli uusi Inspire&shy;-teema",
 			"addLayer" 				: "Lisää taso",
-			"addLayerDesc"			: "Lisää taso tähän Inspire-teemaan",
+			"addLayerDesc"			: "Lisää taso tähän Inspire&shy;-teemaan",
 			"edit" 					: "Muokkaa", 
 			"editDesc" 				: "Muokkaa nimeä",
 			"layerType"				: "Tason tyyppi",
@@ -79,13 +79,13 @@ Oskari.registerLocalization({
 			"selectClass" 			: "Valitse aihe",
 			"selectClassDesc" 		: "Valitse aihe",
 
-			"wmsInterfaceAddress" 	: "WMS-rajapinnan osoitteet",
-			"wmsInterfaceAddressDesc": "WMS-rajapinnan URL-osoitteet pilkulla eroteltuna",
+			"wmsInterfaceAddress" 	: "WMS&shy;-rajapinnan osoitteet",
+			"wmsInterfaceAddressDesc": "WMS&shy;-rajapinnan URL-osoitteet pilkulla eroteltuna",
 			"wmsServiceMetaId" 		: "WMS metatiedon tunniste",
-			"wmsServiceMetaIdDesc" 	: "WMS-palvelun metatiedon tiedostotunniste",
+			"wmsServiceMetaIdDesc" 	: "WMS&shy;-palvelun metatiedon tiedostotunniste",
 			"layerNameAndDesc" 		: "Tason nimi ja lisätieto",
 
-			"metaInfoIdDesc" 		: "Paikkatietohakemiston metatiedon tiedostotunniste, joka yksilöi metatiedon XML kuvailun",
+			"metaInfoIdDesc" 		: "Paikkatieto&shy;hakemiston metatiedon tiedostotunniste, joka yksilöi metatiedon XML kuvailun",
 			"metaInfoId" 			: "Metatiedon tiedosto&shy;tunniste",
 			"wmsName" 				: "WMS nimi",
 			"wmsNameDesc" 			: "WMS taso eli uniikki nimi",
@@ -110,7 +110,7 @@ Oskari.registerLocalization({
 			"maxScale" 				: "Maximi&shy;mittakaava",
 			"maxScaleDesc" 			: "Tason maximimittakaava",
 			"maxScalePlaceholder" 	: "Tason maximimittakaava",
-			"legendImage" 			: "Legenda-kuvan osoite",
+			"legendImage" 			: "Legenda&shy;-kuvan osoite",
 			"legendImageDesc" 		: "Legenda-kuvan osoite",
 			"legendImagePlaceholder" : "Legenda-kuvan osoite",
 			"gfiResponseType" 		: "GFI vastauksen tyyppi",
@@ -132,7 +132,7 @@ Oskari.registerLocalization({
 			"englishDescPlaceholder" : "Kuvaus englanniksi",
 
 			"interfaceAddress" 		: "Rajapinnan osoite",
-			"interfaceAddressDesc" 	: "WMS-tasomäärittelyjen osoite"
+			"interfaceAddressDesc" 	: "WMS&shy;-tasomäärittelyjen osoite"
 		},
 		"cancel" 	: "Peruuta",
 		"add" 		: "Tallenna",

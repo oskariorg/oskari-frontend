@@ -38,12 +38,20 @@ define([
         },
         _renderLayerGroups: function(layerGroupingTab, tabType) {
             if(layerGroupingTab != null)  {
+
+                //we need a reference to organization side for selecting themes
+                var inspire = null;
+                if(tabType == 'organization') {
+                    inspire = this.inspireTabModel;
+                }
+                //create tab container
                 var tabContent = new TabPanelView({
                     layerGroupingModel: layerGroupingTab,
                     instance : this.instance,
-                    tabId : tabType
+                    tabId : tabType,
+                    inspire : inspire
                 });
-    //            this.layerTabs.push(tabContent);
+                //create headers for tabs
                 jQuery('.admin-layerselectorapp').find('.tabsContent').append(tabContent.$el);
                 jQuery('.admin-layerselectorapp').find('.tabsHeader ul').append(
                     this.tabTitleTemplate({
@@ -63,15 +71,13 @@ define([
                 grouping : this.inspireGrouping, 
                 title: this.instance.getLocalization('filter').inspire
             });
-            this._renderLayerGroups(this.inspireTabModel, 'inspire');
-            var classNames = this.inspireTabModel.getGroupTitles();
+            this._renderLayerGroups(this.inspireTabModel, 'inspire', null);
 
             this.organizationTabModel = new LayersTabModel({
                 grouping : this.orgGrouping, 
-                title: this.instance.getLocalization('filter').organization,
-                classNames: classNames
+                title: this.instance.getLocalization('filter').organization
             });
-            this._renderLayerGroups(this.organizationTabModel, 'organization');
+            this._renderLayerGroups(this.organizationTabModel, 'organization', this.inspireTabModel);
 
             //activate tab
             jQuery('.admin-layerselectorapp .tabsHeader').find('.organization').parent().addClass('active');

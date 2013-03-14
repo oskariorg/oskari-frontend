@@ -16,11 +16,11 @@ define([
         // collection, when items are added or changed. Kick things off by
         // loading any preexisting todos that might be saved in *localStorage*.
         initialize : function() {
-            this.instance = this.options.instance;
-            this.model = this.options.model;
-            this.classNames = this.options.classNames;
-            this.template = _.template(ViewTemplate);
-            this.adminLayerTemplate         = _.template(AdminLayerRowTemplate);
+            this.instance           = this.options.instance;
+            this.model              = this.options.model;
+            this.classNames         = this.options.classes;
+            this.template           = _.template(ViewTemplate);
+            this.adminLayerTemplate = _.template(AdminLayerRowTemplate);
             this.render();
         },
 
@@ -103,7 +103,7 @@ debugger;
                 var settings = this.adminLayerTemplate({
                     model: this.model, 
                     instance : this.options.instance,
-                    classNames : this.classNames
+                    classNames : this.classNames.getGroupTitles()
                 });
                 element.append(settings);
                 element.find('.layout-slider').slider({min:0, max: 100, value:100, slide: function( event, ui ) {
