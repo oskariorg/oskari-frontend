@@ -67,156 +67,91 @@ function(instance) {
                 }
             }
         });
+        this.drawLayer.quantumStep = 5000;
 
         // This layer will contain the geometry that will split the original feature.
         this.editLayer = new OpenLayers.Layer.Vector("Parcel Edit Layer", {
             eventListeners : {
                 "featuremodified" : function(event) {
-                    var operatingFeature = this.features[0];
-                    if (operatingFeature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiLineString") {
-                        // Käsitellään viivaan lisätty piste
-                        for (var i = 0; i < operatingFeature.geometry.components.length; i++) {
-                            var lineString = operatingFeature.geometry.components[i];
-                            for (var k = 0; k < lineString.components.length; k++) {
-                                var point = lineString.components[k];
-                                var newReferences = [];
-                                if (typeof point.references === "undefined") {
-                                    var prevPoint = lineString.components[k-1];
-                                    var nextPoint = lineString.components[k+1];
-                                    for (var l = 0; l < prevPoint.references.length; l++) {
-                                        var refPoly = prevPoint.references[l];
-                                        var found = false;
-                                        for (var m = 0; m < nextPoint.references.length; m++) {
-                                            if (nextPoint.references[m] === refPoly) {
-                                                found = true;
-                                                break;
-                                            }
-                                        }
-                                        if (!found) continue;
-                                        var polygon = null;
-                                        for (m = 0; m < me.drawLayer.features.length; m++) {
-                                            var feature = me.drawLayer.features[m];
-                                            if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.Polygon") {
-                                                if (feature.geometry.id === refPoly) {
-                                                    polygon = feature.geometry;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                        var points = polygon.components[0].components;
-                                        var polyLength = points.length-1;
-                                        for (m = 0; m < polyLength; m++) {
-                                            var n = (m+1)%polyLength;
-
-                                            if ((points[m] === prevPoint)&&(points[n] === nextPoint)) {
-                                                points.splice(n,0,point);
-                                                newReferences.push(polygon.id);
-                                                break;
-                                            }
-                                            if ((points[n] === prevPoint)&&(points[m] === nextPoint)) {
-                                                points.splice(n,0,point);
-                                                newReferences.push(polygon.id);
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    point.references = newReferences;
-                                }
-                            }
-                            // Viivan alku- ja loppupisteet kiinnitettyjä
-                            lineString.components[0].x = lineString.components[0].x0;
-                            lineString.components[0].y = lineString.components[0].y0;
-                            var lastIndex = lineString.components.length-1;
-                            lineString.components[lastIndex].x = lineString.components[lastIndex].x0;
-                            lineString.components[lastIndex].y = lineString.components[lastIndex].y0;
-                            // Päivitetään välipisteet
-                            me.controls.modify.selectFeature(operatingFeature);
-                        }
-
-                        this.refresh();
-                        me.drawLayer.refresh();
-
-/*
-                        var markerLayer = this.map.getLayersByName("Parcel Markers Layer")[0];
-                        var order = markerLayer.markers[0].firstLine;
-                        var mInd = order ? 0 : 1;
-
-                        var lineRunLength = operatingFeature.geometry.components.length - 1;
-
-                        operatingFeature.geometry.components[0].x = markerLayer.markers[mInd].lonlat.lon;
-                        operatingFeature.geometry.components[0].y = markerLayer.markers[mInd].lonlat.lat;
-                        operatingFeature.geometry.components[lineRunLength].x = markerLayer.markers[(mInd + 1) % 2].lonlat.lon;
-                        operatingFeature.geometry.components[lineRunLength].y = markerLayer.markers[(mInd + 1) % 2].lonlat.lat;
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-                        var polygon1 = me.drawLayer.features[0];
-                        var polygon2 = me.drawLayer.features[1];
-                        var ind1 = polygon1.polygonCorners[0];
-                        var ind2 = polygon1.polygonCorners[1];
-                        var diff = ind2 - ind1 - 1;
-                        polygon1.geometry.components[0].components.splice(ind1 + 1, diff);
-                        if (order) {
-                            for (var i = 1; i < lineRunLength; i++) {
-                                polygon1.geometry.components[0].components.splice(ind1 + i, 0, operatingFeature.geometry.components[i]);
-                            }
-                        } else {
-                            for (var i = 1; i < lineRunLength; i++) {
-                                polygon1.geometry.components[0].components.splice(ind1 + i, 0, operatingFeature.geometry.components[lineRunLength - i]);
-                            }
-                        }
-                        polygon1.polygonCorners[1] = polygon1.polygonCorners[0] + lineRunLength;
-
-                        ind1 = polygon2.polygonCorners[0];
-                        ind2 = polygon2.polygonCorners[1];
-                        diff = ind2 - ind1 - 1;
-                        polygon2.geometry.components[0].components.splice(ind1 + 1, diff);
-                        if (order) {
-                            for ( i = 1; i < lineRunLength; i++) {
-                                polygon2.geometry.components[0].components.splice(ind1 + i, 0, operatingFeature.geometry.components[lineRunLength - i]);
-                            }
-                        } else {
-                            for (var i = 1; i < lineRunLength; i++) {
-                                polygon2.geometry.components[0].components.splice(ind1 + i, 0, operatingFeature.geometry.components[i]);
-                            }
-                        }
-                        polygon2.polygonCorners[1] = polygon2.polygonCorners[0] + lineRunLength;
-
-*/
-
-
-
-
-
-
-
-
-                        // Redo selection so the info box knows where we're at
-                        // me.controls.select.select(me.getDrawing());
-
-                    }
-                    this.redraw();
-                    me.drawLayer.redraw();
+                    this.updateLine();
                 }
             }
         });
+
+        this.editLayer.updateLine = function() {
+            var operatingFeature = this.features[0];
+            if (operatingFeature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiLineString") {
+                // Käsitellään viivaan lisätty piste
+                for (var i = 0; i < operatingFeature.geometry.components.length; i++) {
+                    var lineString = operatingFeature.geometry.components[i];
+                    for (var k = 0; k < lineString.components.length; k++) {
+                        var point = lineString.components[k];
+                        var newReferences = [];
+                        if (typeof point.references === "undefined") {
+                            var prevPoint = lineString.components[k-1];
+                            var nextPoint = lineString.components[k+1];
+                            for (var l = 0; l < prevPoint.references.length; l++) {
+                                var refPoly = prevPoint.references[l];
+                                var found = false;
+                                for (var m = 0; m < nextPoint.references.length; m++) {
+                                    if (nextPoint.references[m] === refPoly) {
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                                if (!found) continue;
+                                var polygon = null;
+                                for (m = 0; m < me.drawLayer.features.length; m++) {
+                                    var feature = me.drawLayer.features[m];
+                                    if (feature.geometry.CLASS_NAME === "OpenLayers.Geometry.Polygon") {
+                                        if (feature.geometry.id === refPoly) {
+                                            polygon = feature.geometry;
+                                            break;
+                                        }
+                                    }
+                                }
+                                var points = polygon.components[0].components;
+                                var polyLength = points.length-1;
+                                for (m = 0; m < polyLength; m++) {
+                                    var n = (m+1)%polyLength;
+
+                                    if ((points[m] === prevPoint)&&(points[n] === nextPoint)) {
+                                        points.splice(n,0,point);
+                                        newReferences.push(polygon.id);
+                                        break;
+                                    }
+                                    if ((points[n] === prevPoint)&&(points[m] === nextPoint)) {
+                                        points.splice(n,0,point);
+                                        newReferences.push(polygon.id);
+                                        break;
+                                    }
+                                }
+                            }
+                            point.references = newReferences;
+                        }
+                    }
+                    // Viivan alku- ja loppupisteet kiinnitettyjä
+                    lineString.components[0].x = lineString.components[0].x0;
+                    lineString.components[0].y = lineString.components[0].y0;
+                    var lastIndex = lineString.components.length-1;
+                    lineString.components[lastIndex].x = lineString.components[lastIndex].x0;
+                    lineString.components[lastIndex].y = lineString.components[lastIndex].y0;
+                    // Päivitetään välipisteet
+                    me.controls.modify.selectFeature(operatingFeature);
+                }
+
+                this.refresh();
+                me.drawLayer.refresh();
+
+
+
+                // Redo selection so the info box knows where we're at
+                // me.controls.select.select(me.getDrawing());
+
+            }
+            this.redraw();
+            me.drawLayer.redraw();
+        };
 
         this.basicStyle = OpenLayers.Util.applyDefaults(this.basicStyle, OpenLayers.Feature.Vector.style['default']);
         this.basicStyle.fillColor = "#ffff00";
@@ -261,10 +196,10 @@ function(instance) {
         OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
             defaultHandlerOptions: {
                 'single': true,
-                'double': false,
-                'pixelTolerance': 0,
-                'stopSingle': false,
-                'stopDouble': false
+                'double': true,
+                'pixelTolerance': 10,
+                'stopSingle': true,
+                'stopDouble': true
             },
 
             initialize: function(options) {
