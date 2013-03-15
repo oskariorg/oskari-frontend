@@ -8,6 +8,7 @@
                 // }
 
                 this.title = this.attributes.title;
+                this.type = this.attributes.type;
                 this.layerGroups = this.attributes.grouping;
                 //TODO view -> this.layerContainers = {};
                 this.filter = '';
@@ -93,7 +94,9 @@
             getGroupTitles: function() {
                 var groupNames = [];
                 for (var i = 0; i < this.layerGroups.length; i++) {
-                    groupNames.push({name : this.layerGroups[i].name, id : this.layerGroups[i].id});
+                    if(this.layerGroups[i].id != null) {
+                        groupNames.push({name : this.layerGroups[i].name, id : this.layerGroups[i].id});
+                    }
                 };
                 return groupNames;
             },
@@ -107,9 +110,8 @@
             },
 
 
-            getClasses: function(baseUrl) {
-                var me = this,
-                    action_route = "&action_route=GetMapLayerClasses";
+            getClasses: function(baseUrl, action_route) {
+                var me = this
 
                 jQuery.ajax({
                     type : "GET",
@@ -158,7 +160,7 @@
                                 break;
                             }
                         };
-                        if(!updated){
+                        if(!updated && obj.id != null){
                             var group = {};
                             group.names = (group.names != null) ? group.names : {};
                             group.names.fi = obj.nameFi;

@@ -69,12 +69,14 @@ define([
             this.el.html(this.appTemplate);
             this.inspireTabModel = new LayersTabModel({
                 grouping : this.inspireGrouping, 
+                type: 'inspire',
                 title: this.instance.getLocalization('filter').inspire
             });
             this._renderLayerGroups(this.inspireTabModel, 'inspire', null);
 
             this.organizationTabModel = new LayersTabModel({
                 grouping : this.orgGrouping, 
+                type: 'organization',
                 title: this.instance.getLocalization('filter').organization
             });
             this._renderLayerGroups(this.organizationTabModel, 'organization', this.inspireTabModel);
@@ -85,7 +87,8 @@ define([
             jQuery('.tab-content.organization').show();
             
             // Check that data for classes is fetched
-            this.organizationTabModel.getClasses(this.instance.getSandbox().getAjaxUrl());
+            this.inspireTabModel.getClasses(this.instance.getSandbox().getAjaxUrl(), "action_route=GetInspireThemes");
+            this.organizationTabModel.getClasses(this.instance.getSandbox().getAjaxUrl(),"&action_route=GetMapLayerClasses");
 
         },
 
