@@ -100,7 +100,7 @@ Oskari.registerLocalization({
                         "label" : "Näytä päivämäärä",
                         "tooltip" : "Voit halutessasi lisätä tulosteeseen päivämäärän",
                         "checked" : "checked"
-                    },{
+                    }/*,{
                         "id" : "pageLegend",
                         "label" : "Näytä karttaselitteet",
                         "tooltip" : "Voit halutessasi lisätä tulosteeseen karttaselitteet",
@@ -110,7 +110,7 @@ Oskari.registerLocalization({
                         "label" : "Näytä copyright tieto",
                         "tooltip" : "Voit halutessasi lisätä tulosteeseen copyright tiedon",
                         "checked" : "checked"
-                    }
+                    }*/
                 ]
             },
             "help" : "Ohje",
