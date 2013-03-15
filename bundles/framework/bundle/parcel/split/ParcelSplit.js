@@ -108,12 +108,19 @@ return;
 //           new OpenLayers.Geometry.Point(475000,6690000),
 //           new OpenLayers.Geometry.Point(425000,6690000)
 //       ])]));
+//       var testOper = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([
+//           new OpenLayers.Geometry.Point(390000,6660000),
+//           new OpenLayers.Geometry.Point(450000,6680000),
+//           new OpenLayers.Geometry.Point(510000,6730000),
+//           new OpenLayers.Geometry.Point(460000,6680000),
+//           new OpenLayers.Geometry.Point(520000,6680000)
+//       ]));
        var testOper = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([
-           new OpenLayers.Geometry.Point(390000,6660000),
-           new OpenLayers.Geometry.Point(450000,6680000),
-           new OpenLayers.Geometry.Point(510000,6730000),
-           new OpenLayers.Geometry.Point(460000,6680000),
-           new OpenLayers.Geometry.Point(520000,6680000)
+           new OpenLayers.Geometry.Point(390000,6680000),
+           new OpenLayers.Geometry.Point(510000,6680000),
+           new OpenLayers.Geometry.Point(510000,6660000),
+           new OpenLayers.Geometry.Point(450000,6660000),
+           new OpenLayers.Geometry.Point(450000,6710000)
        ]));
 
 //       this.drawPlugin.drawLayer.removeAllFeatures();
@@ -267,8 +274,8 @@ return;
 
                     }
                 }
-                var p1 = {x: segments.p[0][i][0], y: segments.p[0][i][1]};
-                var p2 = {x: segments.p[1][i][0], y: segments.p[1][i][1]};
+                var p1 = {x: segments.p[0][i].x, y: segments.p[0][i].y};
+                var p2 = {x: segments.p[1][i].x, y: segments.p[1][i].y};
 
                 projPoints.push(this.pointProjection(point,p1,p2));
                 distances.push(this.distance(point,projPoints[i]));
@@ -696,8 +703,20 @@ return;
                                         sharedEdge = false;
                                         for (p = 0; p < olPoint.references.length; p++ ) {
                                             if (olPoint.references[p] !== olSolutionPolygons[n].id) {
-                                                sharedEdge = true;
-                                                break;
+                                                found = false;
+                                                endPoints:
+                                                for (i = 0; i < olEndPoints.length; i++) {
+                                                    for (j = 0; j < 2; j++) {
+                                                        if (olEndPoints[i][j].id === olPoint.id) {
+                                                            found = true;
+                                                            break endPoints;
+                                                        }
+                                                    }
+                                                }
+                                                if (!found) {
+                                                    sharedEdge = true;
+                                                    break;
+                                                }
                                             }
                                         }
                                         if (sharedEdge) {
@@ -710,15 +729,26 @@ return;
                                             olPoint = olPoints[lastIndex];
                                             for (p = 0; p < olPoint.references.length; p++ ) {
                                                 if (olPoint.references[p] !== olSolutionPolygons[n].id) {
-                                                    sharedEdge = true;
-                                                    break;
+                                                    endPoints:
+                                                    for (i = 0; i < olEndPoints.length; i++) {
+                                                        for (j = 0; j < 2; j++) {
+                                                            if (olEndPoints[i][j].id === olPoint.id) {
+                                                                found = true;
+                                                                break endPoints;
+                                                            }
+                                                        }
+                                                    }
+                                                    if (!found) {
+                                                        sharedEdge = true;
+                                                        break;
+                                                    }
                                                 }
                                             }
                                         }
                                         if (!sharedEdge) {
                                             marker.reference.segments.polygons.push(olPolygon.id);
-                                            marker.reference.segments.p[0].push([olPoints[o].x,olPoints[o].y]);
-                                            marker.reference.segments.p[1].push([olPoints[lastIndex].x,olPoints[lastIndex].y]);
+                                            marker.reference.segments.p[0].push(olPoints[o]);
+                                            marker.reference.segments.p[1].push(olPoints[lastIndex]);
                                         }
                                     }
                                 }

@@ -113,8 +113,7 @@ function(instance) {
                                 var points = polygon.components[0].components;
                                 var polyLength = points.length-1;
                                 for (m = 0; m < polyLength; m++) {
-                                    var n = (m+1)%polyLength;
-
+                                    var n = m+1;
                                     if ((points[m] === prevPoint)&&(points[n] === nextPoint)) {
                                         points.splice(n,0,point);
                                         newReferences.push(polygon.id);
