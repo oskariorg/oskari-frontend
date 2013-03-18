@@ -102,7 +102,7 @@ Oskari.registerLocalization({
                     "label" : "Add date",
                     "tooltip" : "You can add date to the printout",
                         "checked" : "checked"
-                }, {
+                }/*, {
                     "id" : "pageLegend",
                     "label" : "Add legend",
                     "tooltip" : "You can add legend to the printout",
@@ -112,7 +112,7 @@ Oskari.registerLocalization({
                     "label" : "Add copyright information",
                     "tooltip" : "You can add copyright to the printout",
                         "checked" : "checked"
-                }]
+                }*/]
             },
             "help" : "Help",
             "error" : {

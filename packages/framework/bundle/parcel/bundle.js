@@ -119,10 +119,20 @@ function() {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/instance.js"
         }, {
-           // NOTE! EXTERNAL LIBRARY!
+           // NOTE! EXTERNAL LIBRARIES!
             "type" : "text/javascript",
             "src" : "../../../../libraries/jscolor/jscolor.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/clipper/clipper.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/jsts/jsts.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/jsts/javascript.util.js"
         },
+
         // css
         {
             "type" : "text/css",
