@@ -44,10 +44,10 @@ module.exports = function(grunt) {
 
         // Catch if required fields are not provided.
         if ( !options.paths ) {
-            grunt.fail.warn('No path(s) provided for YUIDoc to scan.');
+            grunt.fail.warn('No path(s) provided for YUIDoc to scan.', 2);
         }
         if ( !options.outdir ) {
-            grunt.fail.warn('You must specify a directory for YUIDoc output.');
+            grunt.fail.warn('You must specify a directory for YUIDoc output.', 2);
         }
 
         // ensure destination dir is available

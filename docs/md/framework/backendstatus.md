@@ -5,7 +5,7 @@
     <td>ID</td><td>backendstatus</td>
   </tr>
   <tr>
-    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.backendstatus.BackendStatusBundleInstance</td>
+    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.backendstatus.BackendStatusBundleInstance)</td>
   </tr>
 </table>
 

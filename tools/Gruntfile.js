@@ -32,14 +32,6 @@ module.exports = function(grunt) {
             //            tasks: ['validate', 'compile', 'testacularRun:dev', 'yuidoc:dist']
             tasks: ['compileDev', 'testacularRun:dev']
         },
-        yuidoc: {
-            dist: {
-                options: {
-                    paths: ['../sources/framework', '../bundles/framework', '../bundles/sample', '../bundles/catalogue'],
-                    outdir: '../dist/<%= version %>docs/'
-                }
-            }
-        },
         sprite: {
             options: {
                 iconDirectoryPath: "../applications/paikkatietoikkuna.fi/full-map/icons",
@@ -75,6 +67,23 @@ module.exports = function(grunt) {
             },
             build: ["../build"],
             dist: ["../dist"]
+        },
+        yuidoc: {
+            dist: {
+                options: {
+                    paths: ['../sources/framework', '../bundles/framework', '../bundles/sample', '../bundles/catalogue'],
+                    outdir: '../dist/<%= version %>api/'
+                }
+            }
+        },
+        mddocs: {
+            options: {
+                "toolsPath": process.cwd(),
+                "docsPath": "../docs",
+                "docsurl": "/Oskari/docs/release/<%= version %>",
+                "apiurl": "http://oskari.org/",
+                "outdir": "../dist/<%= version %>docs"
+            }
         }
     });
 
@@ -141,5 +150,7 @@ module.exports = function(grunt) {
         grunt.task.run('copy');
         grunt.task.run('compile');
         grunt.task.run('sprite');
+        grunt.task.run('yuidoc');
+        grunt.task.run('mddocs');
     });
 };
