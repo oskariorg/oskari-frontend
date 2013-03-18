@@ -81,7 +81,7 @@ module.exports = function(grunt) {
                 "toolsPath": process.cwd(),
                 "docsPath": "../docs",
                 "docsurl": "/Oskari/docs/release/<%= version %>",
-                "apiurl": "/Oskari/api/release/<%= version %>"
+                "apiurl": "http://oskari.org/"
             }
         }
     });

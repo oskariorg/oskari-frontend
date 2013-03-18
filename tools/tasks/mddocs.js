@@ -22,6 +22,7 @@ module.exports = function(grunt) {
             grunt.fail.warn("Place where the docs will be released from the root URL");
         }
         if(!options.apiurl) {
+            // alternatively use /Oskari/api/release/<%= version %>
             grunt.fail.warn("Place for the API documentation (the url)");
         }
         if(!options.version) {
