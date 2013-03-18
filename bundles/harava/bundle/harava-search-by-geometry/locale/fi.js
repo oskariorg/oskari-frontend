@@ -13,7 +13,8 @@ Oskari.registerLocalization({
 				"searchByMapExtent": "Hae kartan alueelta",
 				"searchNotFound": "Alueelta ei löytynyt yhtään organisaatiota, hanketta tai tiedonhankintaa.",
 				"searchNotFoundOkButton": "OK",
-				"panMap": "Liikuta karttaa"
+				"panMap": "Liikuta karttaa",
+				"homeMap": "Palaa alkutilaan"
 			}
 		}
 	}

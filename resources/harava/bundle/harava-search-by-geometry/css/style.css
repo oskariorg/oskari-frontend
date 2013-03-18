@@ -26,8 +26,12 @@
 
 .searchbygeom-pan{
     background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/hand.png') no-repeat;
+    background-position: center center;    
+}
+
+.searchbygeom-home{
+    background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/home.png') no-repeat;
     background-position: center center;
-    
 }
 
 .searchbygeom-point{

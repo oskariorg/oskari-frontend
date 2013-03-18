@@ -13,7 +13,8 @@ Oskari.registerLocalization({
 				"searchByMapExtent": "Search by map extent,",
 				"searchNotFound": "?",
 				"searchNotFoundOkButton": "?",
-				"panMap": "Pan map"
+				"panMap": "Pan map",
+				"homeMap": "?"
 			}
 		}
 	}

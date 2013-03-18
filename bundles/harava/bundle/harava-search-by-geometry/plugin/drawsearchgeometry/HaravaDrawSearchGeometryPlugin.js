@@ -38,6 +38,7 @@ function(locale) {
         })
     });    
     this.templateSearchByGeom = jQuery('<div class="search-by-geometry"></div>');
+    this.templateSearchByGeomHomeTool = jQuery('<div id="searchbygeom-home" class="searchbygeom-tool searchbygeom-home"></div>');
     this.templateSearchByGeomPanTool = jQuery('<div id="searchbygeom-pan" class="searchbygeom-tool searchbygeom-pan"></div>');
     this.templateSearchByGeomPointTool = jQuery('<div id="searchbygeom-point" class="searchbygeom-tool searchbygeom-point"></div>');
     this.templateSearchByGeomMapExtentTool = jQuery('<div id="searchbygeom-mapextent" class="searchbygeom-tool searchbygeom-mapextent"></div>');
@@ -141,7 +142,9 @@ function(locale) {
     	
     	this.searchControls.regularPolygon.handler.setOptions({irregular: true});
     	
-    	var searchContainer = me.templateSearchByGeom.clone();    	
+    	var searchContainer = me.templateSearchByGeom.clone();
+    	var searchHomeContainer = me.templateSearchByGeomHomeTool.clone();
+    	searchHomeContainer.attr('title',this._locale.tooltips.homeMap);    	
     	var searchPanContainer = me.templateSearchByGeomPanTool.clone();
     	searchPanContainer.attr('title',this._locale.tooltips.panMap);    	
     	var searchPointContainer = me.templateSearchByGeomPointTool.clone();
@@ -156,7 +159,8 @@ function(locale) {
     	var searchIndicator = me.templateSearchByGeomSearchIndicator.clone();
     	var searchEmptyContainer = me.templateSearchByGeomEmpty.clone();
     	
-    	jQuery('#searchbygeom').append(searchContainer);
+    	jQuery('#searchbygeom').append(searchContainer);    	
+    	jQuery(searchContainer).append(searchHomeContainer);
     	jQuery(searchContainer).append(searchPanContainer);
     	jQuery(searchContainer).append(searchPointContainer);
     	jQuery(searchContainer).append(searchMapExtentContainer);    	
@@ -167,7 +171,7 @@ function(locale) {
     	
     	jQuery('.searchbygeom-tool').live('click', function(){
     		var id = this.id;
-    		if(id!='searchbygeom-mapextent'){
+    		if(id!='searchbygeom-mapextent' && id!='searchbygeom-home'){
     			jQuery('.searchbygeom-tool').removeClass('active');
     			jQuery(this).addClass('active');
     		}
@@ -200,6 +204,19 @@ function(locale) {
     			case 'searchbygeom-pan':
     				me.toggleControl('pan');
     				break;
+    			case 'searchbygeom-home':
+    				var mapExtent = me._map.getExtent();
+    	        	var mapExtentPolygon = 'POLYGON(('+mapExtent.left+' ' +mapExtent.top + ','+mapExtent.right+' ' +mapExtent.top + ','+mapExtent.right+' ' +mapExtent.bottom + ','+mapExtent.left+' ' +mapExtent.bottom + ','+mapExtent.left+' ' +mapExtent.top + '))';
+    	        	me._handleSearchByGeom(mapExtentPolygon,'returnToHome');
+    	        	me._closeGfiInfo();
+			    	me.removeAllDrawings();
+			    	jQuery('#searchbygeom-home').addClass('active');
+			    	window.setTimeout(function(){
+			    		jQuery('#searchbygeom-home').removeClass('active');
+			    	},200);
+			    	
+			    	// Do default tool selection
+			    	jQuery('#searchbygeom-pan').trigger('click');
     		}
     	});
     	
@@ -360,10 +377,11 @@ function(locale) {
             		data3Html += '</table>';
             	}
             	
+            	me._finishAjaxRequest();
+            	
             	jQuery.each(funcs, function(k, func){
             		eval(func);
-            	});
-            	
+            	});            	
             	
             	/* Resolve showing order */
             	if(resp.first == 'data3'){
@@ -427,21 +445,22 @@ function(locale) {
 				} else {
 			    	me._closeGfiInfo();
 			    	me.removeAllDrawings();
-			    	
-			    	if(Message!=null && typeof Message.createMessage === "function" 
-			    		&& typeof Message.showMessage === "function" 
-			    			&& typeof Message.closeMessage === "function"){
-			    		Message.createMessage(me._locale.tooltips.searchNotFound,me._locale.tooltips.searchNotFoundOkButton);
-			    		Message.showMessage();
-			    		$("#aMessage").click(function(){
-			    			Message.closeMessage();
-			    			return false;
-			    		});
-			    	} else {
-			    		alert(me._locale.tooltips.searchNotFound);
+			    	if(resp.funcs==null || resp.funcs.length==0 || resp.funcs=='' ){
+				    	if(Message!=null && typeof Message.createMessage === "function" 
+				    		&& typeof Message.showMessage === "function" 
+				    			&& typeof Message.closeMessage === "function"){
+				    		Message.createMessage(me._locale.tooltips.searchNotFound,me._locale.tooltips.searchNotFoundOkButton);
+				    		Message.showMessage();
+				    		$("#aMessage").click(function(){
+				    			Message.closeMessage();
+				    			return false;
+				    		});
+				    	} else {
+				    		alert(me._locale.tooltips.searchNotFound);
+				    	}
 			    	}
 				}
-            	me._finishAjaxRequest();
+            	
             },
             error : function() {
             	me._finishAjaxRequest();
