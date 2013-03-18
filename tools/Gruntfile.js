@@ -75,6 +75,14 @@ module.exports = function(grunt) {
             },
             build: ["../build"],
             dist: ["../dist"]
+        },
+        mddocs: {
+            options: {
+                "toolsPath": process.cwd(),
+                "docsPath": "../docs",
+                "docsurl": "/Oskari/docs/release/<%= version %>",
+                "apiurl": "http://oskari.org/"
+            }
         }
     });
 
@@ -135,11 +143,13 @@ module.exports = function(grunt) {
             grunt.config.set("validate." + appName + ".options", {"appSetupFile": config, "dest": dest});
             grunt.config.set("compile." + appName + ".options", {"appSetupFile": config, "dest": dest});
             grunt.config.set("sprite." + appName + ".options", options);
+            grunt.config.set("mddocs.options.version", version);
         }
 
         grunt.task.run('validate');
         grunt.task.run('copy');
         grunt.task.run('compile');
         grunt.task.run('sprite');
+        grunt.task.run('mddocs');
     });
 };
