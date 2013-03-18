@@ -159,14 +159,14 @@ function(locale) {
     	var searchIndicator = me.templateSearchByGeomSearchIndicator.clone();
     	var searchEmptyContainer = me.templateSearchByGeomEmpty.clone();
     	
-    	jQuery('#searchbygeom').append(searchContainer);    	
+    	jQuery('#searchbygeom').append(searchContainer);
+    	jQuery(searchContainer).append(searchIndicator);
     	jQuery(searchContainer).append(searchHomeContainer);
     	jQuery(searchContainer).append(searchPanContainer);
     	jQuery(searchContainer).append(searchPointContainer);
     	jQuery(searchContainer).append(searchMapExtentContainer);    	
     	jQuery(searchContainer).append(searchPolygonContainer);
-    	jQuery(searchContainer).append(searchRegularPolygonContainer);
-    	jQuery(searchContainer).append(searchIndicator);
+    	jQuery(searchContainer).append(searchRegularPolygonContainer);    	
     	jQuery(searchContainer).append(searchEmptyContainer);
     	
     	jQuery('.searchbygeom-tool').live('click', function(){
@@ -258,7 +258,7 @@ function(locale) {
         	me._sandbox.printDebug("[GetInfoPlugin] NO layers with featureInfoEnabled, in scale and visible");
         	return;
         }
-        $('#searchbygeom-searchindicator').show();
+        $('#searchbygeom-searchindicator').addClass('show');
         me._startAjaxRequest(dteMs);
 		
         var ajaxUrl = this._sandbox.getAjaxUrl(); 
@@ -527,7 +527,7 @@ function(locale) {
     	var me = this;
     	me._pendingAjaxQuery.busy = false;
         me._pendingAjaxQuery.jqhr = null;
-        $('#searchbygeom-searchindicator').hide();
+        $('#searchbygeom-searchindicator').removeClass('show');
         this._sandbox.printDebug("[HaravaDrawSearchGeometryPlugin] finished jqhr ajax request");
     },
     /**

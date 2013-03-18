@@ -4,10 +4,6 @@
     
 }
 
-.search-by-geometry div{
-     background-color: #A7A7A7;
-}
-
 .searchbygeom-tool{
     width: 32px;
     height: 32px;
@@ -15,6 +11,8 @@
     margin: 2px;
     cursor: pointer;
 }
+
+
 
 .searchbygeom-tool.active{
 	background-color: #939393;
@@ -26,43 +24,53 @@
 
 .searchbygeom-pan{
     background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/hand.png') no-repeat;
-    background-position: center center;    
+    background-position: center center;
+    background-color: #A7A7A7;   
 }
 
 .searchbygeom-home{
     background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/home.png') no-repeat;
     background-position: center center;
+    background-color: #A7A7A7;
 }
 
 .searchbygeom-point{
     background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/point.png') no-repeat;
     background-position: center center;
+    background-color: #A7A7A7;
 }
 
 .searchbygeom-mapextent{
     background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/eye.png') no-repeat;
     background-position: center center;
+    background-color: #A7A7A7;
 }
 
 .searchbygeom-regular-polygon{
     background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/square.png') no-repeat;
     background-position: center center;
+    background-color: #A7A7A7;
 }
 
 .searchbygeom-polygon{
     background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/multipolygon.png') no-repeat;
     background-position: center center;
+    background-color: #A7A7A7;
 }
 
 .searchbygeom-searchindicator{
-    background: url("/Oskari/resources/harava/bundle/harava-search-by-geometry/images/ajax-loader.gif") no-repeat;
 	cursor: default;
-	display: none;
-	background-position: center center;	
 	float:left;
     height: 32px;
     margin: 2px;
     width: 32px;
+    background-color: transparent;
+}
+
+.searchbygeom-searchindicator.show{
+    background: url("/Oskari/resources/harava/bundle/harava-search-by-geometry/images/ajax-loader.gif") no-repeat;
+    background-color: #A7A7A7;
+    background-position: center center; 
 }
 
 .searchbygeom-link{
