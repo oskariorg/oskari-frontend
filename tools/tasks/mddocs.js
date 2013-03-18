@@ -13,8 +13,8 @@ module.exports = function(grunt) {
         // Run some sync stuff.
         grunt.log.writeln('Generating md docs...');
 
-        if(version && !options.version) {
-            options.version = version;
+        if(version) {
+            options.outdir = "../dist/docs/" + version + "/docs";
         }
 
         // Catch if required fields are not provided.
@@ -25,8 +25,8 @@ module.exports = function(grunt) {
             // alternatively use /Oskari/api/release/<%= version %>
             grunt.fail.warn("Place for the API documentation (the url)");
         }
-        if(!options.version) {
-            grunt.fail.warn("No version, add version to options");
+        if(!options.outdir) {
+            grunt.fail.warn("You must specify a directory for md docs output.");
         }
 
         var fs = require("fs"),
@@ -47,7 +47,7 @@ module.exports = function(grunt) {
         var layoutFile = "index.html";
         var cssDirectory = "css";
         var imagesDirectory = "images";
-        var destinationDirectory = "../dist/" + options.version + "/docs";
+        var destinationDirectory = options.outdir;
         var cwd = path.join(options.toolsPath, options.docsPath);
 
         /*
@@ -172,6 +172,7 @@ module.exports = function(grunt) {
         };
 
 
+        wrench.mkdirSyncRecursive(destinationDirectory, 0777);
         createDirStructure(destinationDirectory, [cssDirectory, imagesDirectory]);
         copyFiles(path.join(cwd, layoutDirectory, cssDirectory), path.join(destinationDirectory, cssDirectory));
         copyFiles(path.join(cwd, imagesDirectory), path.join(destinationDirectory, imagesDirectory));
