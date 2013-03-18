@@ -20,7 +20,10 @@
     "uglifycss": ">=0.0.5",
     "expect.js": "~0.2.0",
     "gm": "~1.8.1",
-    "async": "~0.2.5"
+    "async": "~0.2.5",
+    "markx": ">= 0.3.0",
+    "wrench": ">= 1.4.4",
+    "ejs": ">= 0.8.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
