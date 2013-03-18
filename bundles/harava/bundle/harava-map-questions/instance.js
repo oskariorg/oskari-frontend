@@ -246,9 +246,7 @@ function() {
     "deActivateAll" : function(){
     	var me = this;
     	jQuery('.harava-question-tool').removeClass('active');
-    	jQuery('.harava-question-tool').css({
-			"background-color": "transparent"
-		});
+    	jQuery('.harava-question-tool').removeClass('selected');
     },
     /**
      * @method showStep
@@ -282,17 +280,13 @@ function() {
     	
     	if(isSelected){
     		jQuery('#harava-question-tool_' + moduleId + '_' + questionId).removeClass('active');
-    		jQuery('#harava-question-tool_' + moduleId + '_' + questionId).css({
-    			"background-color": "transparent"
-    		});
+    		jQuery('#harava-question-tool_' + moduleId + '_' + questionId).css('selected');
     		
     		me.plugin.deActivateAll();
     		
     	} else {
     		jQuery('#harava-question-tool_' + moduleId + '_' + questionId).addClass('active');
-    		jQuery('#harava-question-tool_' + moduleId + '_' + questionId).css({
-    			"background-color": "#A3D4C7"
-    		});
+    		jQuery('#harava-question-tool_' + moduleId + '_' + questionId).addClass('selected');
     		me.plugin.activateControl(moduleId, questionId);
     	}
     	
