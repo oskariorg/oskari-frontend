@@ -114,6 +114,7 @@ function(instance) {
                                 var polyLength = points.length-1;
                                 for (m = 0; m < polyLength; m++) {
                                     var n = m+1;
+
                                     if ((points[m] === prevPoint)&&(points[n] === nextPoint)) {
                                         points.splice(n,0,point);
                                         newReferences.push(polygon.id);
@@ -130,11 +131,15 @@ function(instance) {
                         }
                     }
                     // Viivan alku- ja loppupisteet kiinnitettyjä
-                    lineString.components[0].x = lineString.components[0].x0;
-                    lineString.components[0].y = lineString.components[0].y0;
+                    if (lineString.components[0].references.length === 2) {
+                        lineString.components[0].x = lineString.components[0].x0;
+                        lineString.components[0].y = lineString.components[0].y0;
+                    }
                     var lastIndex = lineString.components.length-1;
-                    lineString.components[lastIndex].x = lineString.components[lastIndex].x0;
-                    lineString.components[lastIndex].y = lineString.components[lastIndex].y0;
+                    if (lineString.components[lastIndex].references.length === 2) {
+                        lineString.components[lastIndex].x = lineString.components[lastIndex].x0;
+                        lineString.components[lastIndex].y = lineString.components[lastIndex].y0;
+                    }
                     // Päivitetään välipisteet
                     me.controls.modify.selectFeature(operatingFeature);
                 }
@@ -191,7 +196,7 @@ function(instance) {
         this._map.setLayerIndex(me.drawLayer, 10);
         this._map.setLayerIndex(me.editLayer, 100);
         this._map.setLayerIndex(me.markerLayer, 1000);
-
+/*
         OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
             defaultHandlerOptions: {
                 'single': true,
@@ -244,7 +249,7 @@ function(instance) {
         var click = new OpenLayers.Control.Click();
         this._map.addControl(click);
         click.activate();
-
+*/
         this.requestHandlers = {
             startDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StartDrawingRequestHandler', me),
             stopDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StopDrawingRequestHandler', me),
@@ -519,8 +524,8 @@ function(instance) {
             this.controls.select.select(operatingFeature);
             this.controls.modify.selectFeature(operatingFeature);
             this.controls.modify.activate();
-            this.drawLayer.features[0].style = this.selectStyle;
-            this.selectedFeature = 0;
+            //this.drawLayer.features[0].style = this.selectStyle;
+            //this.selectedFeature = 0;
             // Make sure the marker layer is topmost (previous activations push the vector layer too high)
             var index = Math.max(this._map.Z_INDEX_BASE['Feature'], this.markerLayer.getZIndex()) + 1;
             this.markerLayer.setZIndex(index);

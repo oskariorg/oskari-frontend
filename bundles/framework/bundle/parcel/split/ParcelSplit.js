@@ -86,7 +86,7 @@ this.test = false;
      */
     init : function() {
 
-return;
+//return;
 //if (this.test) return;
 //this.test = true;
 
@@ -108,21 +108,22 @@ return;
 //           new OpenLayers.Geometry.Point(475000,6690000),
 //           new OpenLayers.Geometry.Point(425000,6690000)
 //       ])]));
-//       var testOper = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([
-//           new OpenLayers.Geometry.Point(390000,6660000),
-//           new OpenLayers.Geometry.Point(450000,6680000),
-//           new OpenLayers.Geometry.Point(510000,6730000),
-//           new OpenLayers.Geometry.Point(460000,6680000),
-//           new OpenLayers.Geometry.Point(520000,6680000)
-//       ]));
        var testOper = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([
+           new OpenLayers.Geometry.Point(390000,6660000),
+           new OpenLayers.Geometry.Point(450000,6680000),
+           new OpenLayers.Geometry.Point(510000,6730000),
+           new OpenLayers.Geometry.Point(460000,6680000),
+           new OpenLayers.Geometry.Point(520000,6680000)
+       ]));
+/*       var testOper = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([
            new OpenLayers.Geometry.Point(390000,6680000),
+           new OpenLayers.Geometry.Point(450000,6690000),
            new OpenLayers.Geometry.Point(510000,6680000),
            new OpenLayers.Geometry.Point(510000,6660000),
            new OpenLayers.Geometry.Point(450000,6660000),
            new OpenLayers.Geometry.Point(450000,6710000)
        ]));
-
+*/
 //       this.drawPlugin.drawLayer.removeAllFeatures();
        this.drawPlugin.drawLayer.addFeatures([testPolygon,testOper]);
        this.drawPlugin.drawLayer.refresh();
@@ -187,7 +188,7 @@ return;
             var f = p0.y*(p1.x-p0.x)-p0.x*(p1.y-p0.y);
             var pq = {x:-(c*e-b*f)/(b*d-a*e), y:(c*d-a*f)/(b*d-a*e)};
 
-            // Tarkistetaan onko segmentin sisällä
+            // Check if inside the segment
             var p0p1 = {x:p1.x-p0.x, y:p1.y-p0.y};
             var pqp1 = {x:p1.x-pq.x, y:p1.y-pq.y};
             var dp = dotProduct(p0p1,pqp1);
@@ -372,6 +373,7 @@ return;
             var olSolutionLineStrings = olNewFeatures[1].geometry.components;
             var olNewPolygons = [];
             var olNewLineStrings = [];
+            var olNewLineStringsTmp = [];
             var olPoint;
             var olPoints = [];
             var olEndPoints = [];
@@ -419,6 +421,8 @@ return;
             var nextIndex;
             var foundIndex;
 
+            var epsilon = 100;
+
             // Scaling factor for integer operations
             var scale = 1;
 
@@ -461,7 +465,7 @@ return;
                         }
                         clipSourcePolygons[i].push(clipHole);
                     }
-                    // Skaalaus kokonaislukuoperaatioita varten
+                    // Scaling for integer operations
                     l = clipSourcePolygons.length-1;
                     clipSourcePolygons[l] = this.scaleup(clipSourcePolygons[l], scale);
                 } else if (olOldFeatures[i].geometry.CLASS_NAME=="OpenLayers.Geometry.LineString") {
@@ -535,16 +539,19 @@ return;
                     logText += " clipSolutionPolygons ";
                     logText += clipSolutionPolygons;
 
-                    // Polygons and lines to OpenLayers format
+                    if (clipSolutionPolygons.length === 0) continue;
+
+                    // Polygons to OpenLayers format
                     polygonIndexes = [];
                     pointIndexes = [];
                     olNewPolygons = [];
+                    sharedEdge = false;
                     for (k=0; k<clipSolutionPolygons.length; k++) {
+                        if (Math.abs(cpr.Area(clipSolutionPolygons[k])) < epsilon) continue;
                         clipValidationTarget.push(clipSolutionPolygons[k]);
                         if (cpr.Area(clipSolutionPolygons[k]) > 0) {
                             clipSolutionPolygon = clipSolutionPolygons[k];
                             olLinearRingPoints = [];
-                            olLineStringPoints = [];
                             for (l=0; l<clipSolutionPolygon.length; l++) {
                                 clipPoint = clipSolutionPolygon[l];
                                 foundIndex = -1;
@@ -556,25 +563,12 @@ return;
                                 }
                                 if (foundIndex >= 0) {
                                     olLinearRingPoints.push(olPoints[foundIndex]);
-                                    if (!sharedEdge) sharedEdge = true;
-                                    if (l === 0) crossRing = true;
-                                    olLineStringPoints.push(olPoints[foundIndex]);
-                                    if ((l === clipSolutionPolygon.length-1) && (crossRing)) {
-                                        for (m=olLineStringPoints.length-1; m>=0; m--) {
-                                            olNewLineStrings[0].components.splice(0,0,olLineStringPoints[m]);
-                                        }
-                                    }
                                 } else {
                                     clipPoints.push(clipPoint);
                                     olPoints.push(new OpenLayers.Geometry.Point(clipPoint.X/scale, clipPoint.Y/scale));
                                     lastIndex = olPoints.length-1;
                                     olPoints[lastIndex].references = [];
                                     olLinearRingPoints.push(olPoints[lastIndex]);
-                                    if (sharedEdge) {
-                                        sharedEdge = false;
-                                        olNewLineStrings.push(new OpenLayers.Geometry.LineString(olLineStringPoints));
-                                        olLineStringPoints = [];
-                                    }
                                 }
                             }
                             olNewPolygons.push(new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(olLinearRingPoints)));
@@ -638,44 +632,84 @@ return;
                     }
                     logText += " olNewPolygons ";
                     logText += olNewPolygons;
-
                     for (k=0; k<olNewPolygons.length; k++) {
                         olSolutionPolygons.push(olNewPolygons[k]);
-                    }
-//debugger;
-                    lineStringLoop:
-                    for (k=0; k<olNewLineStrings.length; k++) {
-                        // Check for duplicates
-                        for (l = 0; l < olSolutionLineStrings.length; l++) {
-                            for (m = 0; m < olNewLineStrings[k].components.length; m++) {
-                                olPoint = olNewLineStrings[k].components[m];
-                                found = false;
-                                for (n = 0; n < olSolutionLineStrings[l].components.length; n++) {
-                                    if (olPoint.id === olSolutionLineStrings[l].components[n].id) {
-                                        found = true;
-                                        break;
-                                    }
-                                }
-                                if (!found) break;
-                            }
-                            if (found) continue lineStringLoop;
-                        }
-                        nextIndex = olEndPoints.length;
-                        lastIndex = olNewLineStrings[k].components.length-1;
-                        olEndPoints[nextIndex] = [olNewLineStrings[k].components[0],olNewLineStrings[k].components[lastIndex]];
-                        // Kiinnitetyt päätepisteet
-                        olEndPoints[nextIndex][0].x0 = olEndPoints[nextIndex][0].x;
-                        olEndPoints[nextIndex][0].y0 = olEndPoints[nextIndex][0].y;
-                        olEndPoints[nextIndex][1].x0 = olEndPoints[nextIndex][1].x;
-                        olEndPoints[nextIndex][1].y0 = olEndPoints[nextIndex][1].y;
-                        olSolutionLineStrings.push(olNewLineStrings[k]);
                     }
                 }
             }
 
+            // Lines to OpenLayers format
+            for (i = 0; i < olSolutionPolygons.length; i++) {
+                olPoints = olSolutionPolygons[i].components[0].components;
+                sharedEdge = (olPoints[0].references.length > 1);
+                crossRing = sharedEdge;
+                olLineStringPoints = [];
+                olNewLineStringsTmp = [];
+                if (sharedEdge) olLineStringPoints.push(olPoints[0]);
+                for (j = 1; j < olPoints.length-1; j++) {
+                    if (!this.equalArrays(olPoints[j].references, olPoints[j-1].references)) {
+                        if (sharedEdge) {
+                            if (olPoints[j].references.length > 2) olLineStringPoints.push(olPoints[j]);
+                            olNewLineStringsTmp.push(new OpenLayers.Geometry.LineString(olLineStringPoints));
+                            olLineStringPoints = [];
+                        }
+                    }
+                    sharedEdge = (olPoints[j].references.length > 1);
+                    if (sharedEdge) olLineStringPoints.push(olPoints[j]);
+                }
+                if (sharedEdge) {
+                    if ((crossRing)&&(olNewLineStringsTmp.length>0)&&(this.equalArrays(olPoints[olPoints.length-2].references, olPoints[0].references))) {
+                        for (j=olLineStringPoints.length-1; j>=0; j--) {
+                            olNewLineStringsTmp[0].components.splice(0,0,olLineStringPoints[j]);
+                        }
+                    } else {
+                        if (olPoints[0].references.length > 2) olLineStringPoints.push(olPoints[0]);
+                        olNewLineStringsTmp.push(new OpenLayers.Geometry.LineString(olLineStringPoints));
+                    }
+                }
+                for (j = 0; j < olNewLineStringsTmp.length; j++) {
+                    olNewLineStrings.push(olNewLineStringsTmp[j]);
+                }
+            }
+
+            lineStringLoop:
+            for (k=0; k<olNewLineStrings.length; k++) {
+                // Check for duplicates
+                for (l = 0; l < olSolutionLineStrings.length; l++) {
+                    for (m = 0; m < olNewLineStrings[k].components.length; m++) {
+                        olPoint = olNewLineStrings[k].components[m];
+                        found = false;
+                        for (n = 0; n < olSolutionLineStrings[l].components.length; n++) {
+                            if (olPoint.id === olSolutionLineStrings[l].components[n].id) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) break;
+                    }
+                    if (found) continue lineStringLoop;
+                }
+                nextIndex = olEndPoints.length;
+                lastIndex = olNewLineStrings[k].components.length-1;
+                olEndPoints[nextIndex] = [olNewLineStrings[k].components[0],olNewLineStrings[k].components[lastIndex]];
+                // Kiinnitetyt p������������tepisteet
+                olEndPoints[nextIndex][0].x0 = olEndPoints[nextIndex][0].x;
+                olEndPoints[nextIndex][0].y0 = olEndPoints[nextIndex][0].y;
+                olEndPoints[nextIndex][1].x0 = olEndPoints[nextIndex][1].x;
+                olEndPoints[nextIndex][1].y0 = olEndPoints[nextIndex][1].y;
+                olSolutionLineStrings.push(olNewLineStrings[k]);
+            }
+
             for (k = 0; k < olSolutionLineStrings.length; k++) {
                 // Markers
+                intersections:
                 for (l = 0; l < 2; l++) {
+                    if (olEndPoints[k][l].references.length !== 2) continue;
+                    // Check for duplicates
+                    for (m = 0; m < this.drawPlugin.markerLayer.markers.length; m++) {
+                        if (this.drawPlugin.markerLayer.markers[m].reference.point.id === olEndPoints[k][l].id) continue intersections;
+                    }
+
                     marker = new OpenLayers.Marker(new OpenLayers.LonLat(olEndPoints[k][l].x,olEndPoints[k][l].y),this.markerIcon.clone());
                     marker.reference = {
                         point : olEndPoints[k][l],
@@ -708,6 +742,8 @@ return;
                                                 for (i = 0; i < olEndPoints.length; i++) {
                                                     for (j = 0; j < 2; j++) {
                                                         if (olEndPoints[i][j].id === olPoint.id) {
+                                                            if (olEndPoints[i][j].references.length !== 2) continue;
+                                                            if ((olSolutionLineStrings[k].components.length === 2)&&(this.equalArrays(olPoints[o].references,olPoint.references))) continue;
                                                             found = true;
                                                             break endPoints;
                                                         }
@@ -733,6 +769,8 @@ return;
                                                     for (i = 0; i < olEndPoints.length; i++) {
                                                         for (j = 0; j < 2; j++) {
                                                             if (olEndPoints[i][j].id === olPoint.id) {
+                                                                if (olEndPoints[i][j].references.length !== 2) continue;
+                                                                if ((olSolutionLineStrings[k].components.length === 2)&&(this.equalArrays(olPoints[o].references,olPoint.references))) continue;
                                                                 found = true;
                                                                 break endPoints;
                                                             }
@@ -756,16 +794,12 @@ return;
                             }
                         }
                     }
-//debugger;
                     marker.events.register("mousedown", marker, this.selectActiveMarker);
                     this.drawPlugin.markerLayer.addMarker(marker);
                 }
             }
-debugger;
 
-
-
-            /* // Checking if everything is fine
+            /* // Checking if everything is correct
             success = false;
             clipValidationSource = [];
             for (i=0; i<clipSourcePolygons.length; i++) {
@@ -795,22 +829,22 @@ debugger;
             return olNewFeatures;
         },
 
-	/*
-	 * @method selectActiveMarker
-	 *
-	 * @param {} evt
-	 */
-	selectActiveMarker : function(evt) {
-	    OpenLayers.Event.stop(evt);
-	    var xy = this.map.events.getMousePosition(evt);
-	    var pixel = new OpenLayers.Pixel(xy.x,xy.y);
-	    var xyLonLat = this.map.getLonLatFromPixel(pixel);
-	    this.map.activeMarker = evt.object;
-	    this.map.activeMarker.markerMouseOffset.lon = xyLonLat.lon-this.map.activeMarker.lonlat.lon;
-	    this.map.activeMarker.markerMouseOffset.lat = xyLonLat.lat-this.map.activeMarker.lonlat.lat;
-	    this.map.events.register("mouseup", this.map, this.map.freezeActiveMarker);
-	    this.map.events.register("mousemove", this.map, this.map.moveActiveMarker);
-	},
+        /*
+         * @method selectActiveMarker
+         *
+         * @param {} evt
+         */
+        selectActiveMarker : function(evt) {
+            OpenLayers.Event.stop(evt);
+            var xy = this.map.events.getMousePosition(evt);
+            var pixel = new OpenLayers.Pixel(xy.x,xy.y);
+            var xyLonLat = this.map.getLonLatFromPixel(pixel);
+            this.map.activeMarker = evt.object;
+            this.map.activeMarker.markerMouseOffset.lon = xyLonLat.lon-this.map.activeMarker.lonlat.lon;
+            this.map.activeMarker.markerMouseOffset.lat = xyLonLat.lat-this.map.activeMarker.lonlat.lat;
+            this.map.events.register("mouseup", this.map, this.map.freezeActiveMarker);
+            this.map.events.register("mousemove", this.map, this.map.moveActiveMarker);
+        },
 
     /*
      * @method checkSelfIntersection
@@ -858,6 +892,37 @@ debugger;
         if (segment1.components[0].equals(segment2.components[1])) return true;
         if (segment1.components[1].equals(segment2.components[0])) return true;
         return (segment1.components[1].equals(segment2.components[1]));
+    },
+
+    /*
+     * @method equalArrays
+     *
+     * @param {}
+     * @param {}
+     */
+    equalArrays: function(array1, array2) {
+       var temp = [];
+       var key;
+       var i;
+       if ( (!array1[0]) || (!array2[0]) ) {
+          return false;
+       }
+       if (array1.length != array2.length) {
+          return false;
+       }
+       for (i=0; i<array1.length; i++) {
+          key = (typeof array1[i]) + "~" + array1[i];
+          if (temp[key]) { temp[key]++; } else { temp[key] = 1; }
+       }
+       for (i=0; i<array2.length; i++) {
+          key = (typeof array2[i]) + "~" + array2[i];
+          if (temp[key]) {
+             if (temp[key] == 0) { return false; } else { temp[key]--; }
+          } else {
+             return false;
+          }
+       }
+       return true;
     }
 
 });
