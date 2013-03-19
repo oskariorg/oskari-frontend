@@ -96,12 +96,7 @@ function() {
                 module.registerPlugin(plugins[i].instance);
                 module.startPlugin(plugins[i].instance);
             }
-        }
-
-        var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin');
-        module.registerPlugin(plugin);
-        module.startPlugin(plugin);
-         
+        }  
 		this.map = map;
 	},
     /**
@@ -153,7 +148,7 @@ function() {
 		enhancements.push(Oskari.clazz.create('Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnhancement'));
         
 		core.init(services, enhancements);
-        
+
         // need to create ui before parsing layers because layerplugins register modelbuilders
         this._createUi();
 
