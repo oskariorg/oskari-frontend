@@ -24,6 +24,8 @@ function(mapLayerUrl, sandbox) {
     this._loadedLayersList = new Array();
     // used to detect duplicate ids since looping through the list is slow
     this._reservedLayerIds = {};
+    // used to keep sticky layer ids
+    this._stickyLayerIds = [];
 
     /**
      * @property typeMapping 
@@ -141,6 +143,27 @@ function(mapLayerUrl, sandbox) {
         }
         // TODO: notify if layer not found?
     },
+     /**
+     * @method makeLayerSticky
+     * Set layer visibility swicth off disable
+     *
+     * @param {String} layerId
+     *            id for the layer to be set
+     * @param {boolean} if true, set layer swicth off disable
+     *            
+     */
+    makeLayerSticky : function(layerId, isSticky) {
+        var layer = this.findMapLayer(layerId);
+        // Get id for postprocess after map layer load
+        this._stickyLayerIds.push(layerId);
+        if(layer) {
+            layer.setSticky(isSticky);
+            // notify components of layer update
+            var event = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'sticky');
+            this._sandbox.notifyAll(event);
+        }
+        // TODO: notify if layer not found?
+    },
     /**
      * @method loadAllLayersAjax
      * Loads layers JSON using the ajax URL given on #create() 
@@ -189,6 +212,7 @@ function(mapLayerUrl, sandbox) {
         this._allLayersAjaxLoaded = true;
         var event = this._sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
         this._sandbox.notifyAll(event);
+        this._resetStickyLayers();
         if(callbackSuccess) {
             callbackSuccess();
         }
@@ -602,6 +626,19 @@ function(mapLayerUrl, sandbox) {
             var foundLayer = this.findMapLayer(id);
             throw "Trying to add map layer with id '" + id + " (" + name + ")' but that id is already reserved for '" + foundLayer.getName() + "'";
         }
+    },
+     /**
+     * @method _resetStickyLayers
+     * Reset sticky layers 
+     *
+   
+     */
+    _resetStickyLayers : function() {
+        
+      	for (var i in this._stickyLayerIds) {
+				var layerId = this._stickyLayerIds[i];
+        	    this.makeLayerSticky(layerId,true);
+			}
     },
     /**
      * @method findMapLayer

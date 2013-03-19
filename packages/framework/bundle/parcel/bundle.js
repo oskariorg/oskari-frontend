@@ -97,6 +97,10 @@ function() {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/service/ParcelWfst.js"
         },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/service/ParcelPlot.js"
+        },
         /* splitter */
         {
             "type" : "text/javascript",
