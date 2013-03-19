@@ -120,7 +120,7 @@ function(instance) {
             callback : function(response) {
                 dialog.close();
                 if (response && response.features && response.features.length > 0) {
-                    cb(response.features[0]);
+                    cb(response.features);
 
                 } else {
                     var locError = me.instance.getLocalization('notification')['error'];

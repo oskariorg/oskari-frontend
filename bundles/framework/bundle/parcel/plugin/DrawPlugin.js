@@ -82,7 +82,7 @@ function(instance) {
         this.editLayer.updateLine = function() {
             var operatingFeature = this.features[0];
             if (operatingFeature.geometry.CLASS_NAME === "OpenLayers.Geometry.MultiLineString") {
-                // Käsitellään viivaan lisätty piste
+                // Handles the point added into the line
                 for (var i = 0; i < operatingFeature.geometry.components.length; i++) {
                     var lineString = operatingFeature.geometry.components[i];
                     for (var k = 0; k < lineString.components.length; k++) {
@@ -130,7 +130,7 @@ function(instance) {
                             point.references = newReferences;
                         }
                     }
-                    // Viivan alku- ja loppupisteet kiinnitettyjä
+                    // Fixed start and end points of the line
                     if (lineString.components[0].references.length === 2) {
                         lineString.components[0].x = lineString.components[0].x0;
                         lineString.components[0].y = lineString.components[0].y0;
@@ -140,7 +140,7 @@ function(instance) {
                         lineString.components[lastIndex].x = lineString.components[lastIndex].x0;
                         lineString.components[lastIndex].y = lineString.components[lastIndex].y0;
                     }
-                    // Päivitetään välipisteet
+                    // Updates middle points
                     me.controls.modify.selectFeature(operatingFeature);
                 }
 
@@ -326,7 +326,7 @@ function(instance) {
      * @param {String} featureType The feature type of the feature. This is required when feature is committed to the server.
      * @method drawFeature
      */
-    drawFeature : function(feature, featureType) {
+    drawFeature : function(features, featureType) {
         this.clear();
 
         this.currentFeatureType = null;
@@ -340,10 +340,13 @@ function(instance) {
         var event = this._sandbox.getEventBuilder('ParcelInfo.ParcelLayerRegisterEvent')(this.getDrawingLayer());
         this._sandbox.notifyAll(event);
 
-        // add feature to draw layer
-        // This feature will be the parcel that may be edited by the tools.
-        var features = [feature];
-        this.drawLayer.addFeatures(features);
+        // Add features to draw layer
+        // These features will be the parcels that may be edited by the tools.
+        var polygons = [];
+        for (var i = 0; i < features.length; i++) {
+            polygons.push(features[i].geometry);
+        }
+        this.drawLayer.addFeatures([new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon(polygons))]);
 
         this.currentFeatureType = featureType;
         // Zoom to the loaded feature.
