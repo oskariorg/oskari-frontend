@@ -94,7 +94,7 @@ this.test = false;
      * 
      * {Oskari.mapframework.bundle.parcel.DrawingToolInstance} instance provides the features that are used for the splitting.
      */
-    split : function() {
+    split : function(trivial) {
     	var me = this;
         if (this.drawPlugin.splitSelection) return;
 
@@ -253,13 +253,31 @@ this.test = false;
             return (new OpenLayers.LonLat(projPoints[minDistInd].x,projPoints[minDistInd].y));
         };
 
-        var featureInd = parcelLayer.features.length-1;
-        if (featureInd < 1) return;
-
         this.drawPlugin.splitSelection = true;
         var baseMultiPolygon = parcelLayer.features[0];
-        this.drawPlugin.backupFeatures = [baseMultiPolygon];
+        if (baseMultiPolygon.geometry.CLASS_NAME !== "OpenLayers.Geometry.MultiPolygon") return;
+        this.drawPlugin.backupFeatures = [baseMultiPolygon.clone()];
+
+        // Trivial split
+        if (trivial) {
+            var polygons = this.drawPlugin.backupFeatures[0].geometry.components;
+            this.drawPlugin.drawLayer.removeAllFeatures();
+            this.drawPlugin.editLayer.removeAllFeatures();
+            for (var i = 0; i < polygons.length; i++) {
+                this.drawPlugin.drawLayer.addFeatures(new OpenLayers.Feature.Vector(this.drawPlugin.backupFeatures[0].geometry.components[i]));
+                this.drawPlugin.drawLayer.features[i].style = this.drawPlugin.basicStyle;
+            }
+            this.drawPlugin.drawLayer.features[0].style = this.drawPlugin.selectStyle;
+            this.selectedFeature = 0;
+            parcelLayer.redraw();
+            editLayer.redraw();
+            return null;
+        }
+
+        var featureInd = parcelLayer.features.length-1;
+        if (featureInd < 1) return;
         var operatingFeature = parcelLayer.features[featureInd];
+
         switch (operatingFeature.geometry.CLASS_NAME) {
             case "OpenLayers.Geometry.Polygon":
                 this.splitHole(baseMultiPolygon,operatingFeature);
@@ -287,37 +305,40 @@ this.test = false;
      * @param {} inPolygon
      */
     splitHole : function(outPolygons,inPolygon) {
-/*        var parcelLayer = this.drawPlugin.drawLayer;
+        var parcelLayer = this.drawPlugin.drawLayer;
         var editLayer = this.drawPlugin.editLayer;
         var polyComponents = outPolygons.geometry.components;
 
         for (var i = 0; i < polyComponents.length; i++) {
             var outPolygon = polyComponents[i];
             var inside = true;
-
             // Is inside?
-            for (var j = 0; j < inPolygon.components.length; j++) {
-                if (outPolygon.containsPoint(inPolygon.components[j])) {
+            for (var j = 0; j < inPolygon.geometry.components[0].components.length; j++) {
+                if (!outPolygon.containsPoint(inPolygon.geometry.components[0].components[j])) {
                     inside = false;
                     break;
                 }
             }
+            if (!inside) continue;
 
             // Validity check
-            if ((outPolygon.geometry.components[0].intersects(inPolygon.geometry.components[0]))
+            if ((outPolygon.components[0].intersects(inPolygon.geometry.components[0]))
             ||(this.checkSelfIntersection(inPolygon.geometry.components[0]))) {
                 parcelLayer.destroyFeatures(inPolygon);
                 continue;
             }
 
-            if (inside) {
-                outPolygon.geometry.addComponent(inPolygon.geometry.components[0]);
-                parcelLayer.destroyFeatures(inPolygon);
-                inPolygon.style = this.drawPlugin.basicStyle;
-                editLayer.addFeatures([inPolygon]);
-                break;
+            outPolygon.addComponent(inPolygon.geometry.components[0]);
+            parcelLayer.removeAllFeatures();
+            for (j = 0; j < polyComponents.length; j++) {
+                var newFeature = new OpenLayers.Feature.Vector(polyComponents[j]);
+                newFeature.style = this.drawPlugin.basicStyle;
+                parcelLayer.addFeatures([newFeature]);
             }
-        }*/
+            inPolygon.style = this.drawPlugin.basicStyle;
+            editLayer.addFeatures([inPolygon]);
+            break;
+        }
     },
 
 
@@ -347,10 +368,10 @@ this.test = false;
          * @param {} line
          * @return {}
          */
-        splitLine : function(polygon,line) {
+        splitLine : function(polygons,line) {
             // OpenLayers variables
             var lineStyle = { strokeColor: '#0000ff', strokeOpacity: 1, strokeWidth: 2};
-            var olOldFeatures = [polygon].concat([line]);
+            var olOldFeatures = polygons.geometry.components.concat(line.geometry);
             var olNewFeatures = [new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon()),
                                  new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiLineString(),null,lineStyle)];
             var olSolutionPolygons = olNewFeatures[0].geometry.components;
@@ -416,15 +437,15 @@ this.test = false;
             var logText = "";
 
             for (i=0; i<olOldFeatures.length; i++) {
-                if (olOldFeatures[i].geometry.CLASS_NAME=="OpenLayers.Geometry.Polygon") {
-                    jstsOldPolygon = jstsParser.read(olOldFeatures[i].geometry);
+                if (olOldFeatures[i].id.indexOf("Polygon") !== -1) {
+                    jstsOldPolygon = jstsParser.read(olOldFeatures[i]);
                     if (!jstsOldPolygon.isValid()) {
                         console.log("Invalid geometry.");
                         return -1+logText;
                     }
                     jstsOldPolygons.push(jstsOldPolygon);
                     clipPolygon = new ClipperLib.Polygon();
-                    olLinearRings = olOldFeatures[i].geometry.components;
+                    olLinearRings = olOldFeatures[i].components;
                     if (olLinearRings[0].getArea() >= 0.0) {
                         olPoints = olLinearRings[0].components;
                     } else {
@@ -453,8 +474,8 @@ this.test = false;
                     // Scaling for integer operations
                     l = clipSourcePolygons.length-1;
                     clipSourcePolygons[l] = this.scaleup(clipSourcePolygons[l], scale);
-                } else if (olOldFeatures[i].geometry.CLASS_NAME=="OpenLayers.Geometry.LineString") {
-                    jstsLine = jstsParser.read(olOldFeatures[i].geometry);
+                } else if (olOldFeatures[i].id.indexOf("OpenLayers.Geometry.LineString") != -1) {
+                    jstsLine = jstsParser.read(olOldFeatures[i]);
                 }
             }
 

@@ -21,24 +21,35 @@ function(instance) {
     this.dialog = null;
     var me = this;
     this.buttons = {
-        'area' : {
-            iconCls : 'parcel-draw-area',
-            tooltip : '',
-            sticky : true,
-            callback : function() {
-                me._startNewDrawing({
-                    drawMode : 'area'
-                });
-            }
-        },
         'line' : {
             iconCls : 'parcel-draw-line',
             tooltip : '',
             sticky : true,
             callback : function() {
+                me.instance.view.drawPlugin.splitSelection = false;
                 me._startNewDrawing({
                     drawMode : 'line'
                 });
+            }
+        },
+        'area' : {
+            iconCls : 'parcel-draw-area',
+            tooltip : '',
+            sticky : true,
+            callback : function() {
+                me.instance.view.drawPlugin.splitSelection = false;
+                me._startNewDrawing({
+                    drawMode : 'area'
+                });
+            }
+        },
+        'selector' : {
+            iconCls : 'parcel-selector',
+            tooltip : '',
+            sticky : true,
+            callback : function() {
+                me.instance.view.drawPlugin.splitSelection = false;
+                me.instance.view.drawPlugin.splitFeature(true);
             }
         },
         'clear' : {
@@ -50,15 +61,15 @@ function(instance) {
                 drawPlugin.clear();
                 drawPlugin.drawLayer.addFeatures(drawPlugin.backupFeatures);
             }
-        }
-/*        'save' : {
+        },
+        'save' : {
             iconCls : 'tool-save-view',
             tooltip : '',
             sticky : true,
             callback : function() {
                 me._saveDrawing();
             }
-        }*/
+        }
     };
 }, {
     /**
@@ -78,15 +89,6 @@ function(instance) {
             var tooltip = loc[tool]['tooltip'];
             this.buttons[tool].tooltip = tooltip;
         }
-
-/*        if (this.instance.conf && this.instance.conf.hideSomeToolbarButtons && (this.instance.conf.hideSomeToolbarButtons === "hide" || this.instance.conf.hideSomeToolbarButtons === "true" )) {
-            // Remove unnecessary toolbar buttons.
-            this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('reset', 'history'));
-            this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('history_back', 'history'));
-            this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('history_forward', 'history'));
-            this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('link', 'viewtools'));
-            this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('print', 'viewtools'));
-        } */
     },
     /**
      * @method start
@@ -116,6 +118,8 @@ function(instance) {
      */
     _startNewDrawing : function(config) {
         // Current limitation: only one dividing action allowed
+        if (this.instance.view.drawPlugin.drawLayer.features[0].geometry.CLASS_NAME !== "OpenLayers.Geometry.MultiPolygon") return;
+
         if (this.instance.view.drawPlugin.editLayer.features.length !== 0) return;
 
         var event = this.instance.sandbox.getEventBuilder('Parcel.ParcelSelectedEvent')();

@@ -550,8 +550,9 @@ function(instance) {
      * and replaces the feature hold by this instance.
      * @method splitFeature
      */
-    splitFeature : function() {
-        var operatingFeature = this.splitter.split();
+    splitFeature : function(trivial) {
+        var trivialSplit = (typeof trivial === "undefined" ? false : trivial);
+        var operatingFeature = this.splitter.split(trivialSplit);
         if (operatingFeature != undefined) {
             this.controls.select.select(operatingFeature);
             this.controls.modify.selectFeature(operatingFeature);
