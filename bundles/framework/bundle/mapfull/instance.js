@@ -117,6 +117,10 @@ function() {
         };
 		var me = this;
 		var conf = me.conf;
+
+        if (me.conf.projectionDefs) {
+            Proj4js.defs = me.conf.projectionDefs;
+        }
 		
 		var userInterfaceLanguage = Oskari.getLang();
 
