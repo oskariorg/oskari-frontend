@@ -30,7 +30,7 @@ function(instance) {
     this.basicStyle = null;
     this.selectStyle = null;
     this.selectedFeature = -2;
-
+	this.selectInfoControl = null;
 }, {
     /**
      * @method getName
@@ -171,9 +171,14 @@ function(instance) {
         // The select control applies to the edit layer and the drawing layer as we will select the polygon to save for visuals
         var selectEditControl = new OpenLayers.Control.SelectFeature([me.editLayer, me.drawLayer]);
         this._map.addControl(selectEditControl);
+        
+        // The select control for infobox
+		this.selectInfoControl = new OpenLayers.Control.SelectFeature(me.drawLayer);
+		this._map.addControl(this.selectInfoControl);
 
         var modifyEditControl = new OpenLayers.Control.ModifyFeature(me.editLayer);
         this._map.addControl(modifyEditControl);
+        
 
         this.controls = {
             select : selectEditControl,
@@ -194,7 +199,7 @@ function(instance) {
         this._map.setLayerIndex(me.drawLayer, 10);
         this._map.setLayerIndex(me.editLayer, 100);
         this._map.setLayerIndex(me.markerLayer, 1000);
-/*
+
         OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
             defaultHandlerOptions: {
                 'single': true,
@@ -229,6 +234,8 @@ function(instance) {
                     if (geometry.CLASS_NAME=="OpenLayers.Geometry.Polygon") {
                         if (geometry.containsPoint(point)) {
                             me.selectedFeature = i;
+                            // Set selected --> updates infobox
+							me.selectInfoControl.select(features[i]);
                             break;
                         }
                     }
@@ -247,7 +254,7 @@ function(instance) {
         var click = new OpenLayers.Control.Click();
         this._map.addControl(click);
         click.activate();
-*/
+
         this.requestHandlers = {
             startDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StartDrawingRequestHandler', me),
             stopDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StopDrawingRequestHandler', me),
@@ -284,7 +291,7 @@ function(instance) {
      */
     stopPlugin : function(sandbox) {
         // Let possible info box know that this layer should not be followed.
-        var event = sandbox.getEventBuilder('ParcelInfo.ParcelLayerUnregisterEvent')(this.getDrawingLayer());
+        var event = sandbox.getEventBuilder('ParcelInfo.ParcelLayerUnregisterEvent')([this.getDrawingLayer(),this.getEditLayer()]);
         sandbox.notifyAll(event);
 
         // Remove request handlers.
@@ -337,7 +344,7 @@ function(instance) {
         // be to set dependency or certain creation order between bundles. But, the dependency is
         // not mandatory to make this bundle work and the order is required only if info should be
         // updated from this bundle.
-        var event = this._sandbox.getEventBuilder('ParcelInfo.ParcelLayerRegisterEvent')(this.getDrawingLayer());
+        var event = this._sandbox.getEventBuilder('ParcelInfo.ParcelLayerRegisterEvent')([this.getDrawingLayer(),this.getEditLayer()]);
         this._sandbox.notifyAll(event);
 
         // Add features to draw layer
@@ -464,6 +471,13 @@ function(instance) {
     getDrawingLayer : function() {
         return this.drawLayer;
     },
+	/**
+	 * @return {OpenLayers.Layer.Vector} Returns the edit vector layer.
+	 * @method getEditLayer
+	 */
+	getEditLayer : function() {
+		return this.editLayer;
+	},
     /**
      * TODO: This method needs to be informed which polygon is to be saved.
      *
@@ -547,8 +561,36 @@ function(instance) {
             // Make sure the marker layer is topmost (previous activations push the vector layer too high)
             var index = Math.max(this._map.Z_INDEX_BASE['Feature'], this.markerLayer.getZIndex()) + 1;
             this.markerLayer.setZIndex(index);
+            this.updateInfobox();
         }
-    }
+    },
+    /**
+	 * Updates feature info in info box.
+	 * If there is not a feature in selected state, then 1st feature in drawLayer is selected and updated
+	 * @method updateInfobox
+	 */
+	updateInfobox : function() {
+
+		if (this.selectedFeature > -1) {
+
+			// Set selected
+			this.selectInfoControl.select(this.drawLayer.features[this.selectedFeature]);
+
+		} else {
+			var features = this.drawLayer.features;
+			if (features) {
+				this.selectedFeature = 0;
+				for ( i = 0; i < features.length; i++) {
+					this.drawLayer.features[i].style = (i === this.selectedFeature) ? this.selectStyle : this.basicStyle;
+				}
+				//me.editLayer.redraw();
+				this.drawLayer.redraw();
+				this.selectInfoControl.select(this.drawLayer.features[this.selectedFeature]);
+			}
+
+		}
+
+	}
 }, {
-    'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+	'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
