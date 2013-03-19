@@ -86,7 +86,7 @@ this.test = false;
      */
     init : function() {
 
-//return;
+return;
 //if (this.test) return;
 //this.test = true;
 
