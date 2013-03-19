@@ -78,14 +78,15 @@ function(config) {
 
         var sandboxName = ( this.config ? this.config.sandbox : null ) || 'sandbox' ;
         var sandbox = Oskari.getSandbox(sandboxName);
-        this.sandbox = sandbox;
         
         // register domain builder
         var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-        mapLayerService.registerLayerModel('statslayer', 'Oskari.mapframework.bundle.mapstats.domain.StatsLayer')
+        if(mapLayerService) {
+            mapLayerService.registerLayerModel('statslayer', 'Oskari.mapframework.bundle.mapstats.domain.StatsLayer')
 
-        var layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelBuilder');
-        mapLayerService.registerLayerModelBuilder('statslayer', layerModelBuilder);
+            var layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelBuilder');
+            mapLayerService.registerLayerModelBuilder('statslayer', layerModelBuilder);
+        }
     },
     /**
      * @method startPlugin

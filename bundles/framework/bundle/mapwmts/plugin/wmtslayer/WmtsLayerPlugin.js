@@ -3,13 +3,14 @@
  *
  */
 Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin', 
-                    function() {
+                    function(config) {
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
     this._map = null;
     this._supportedFormats = {};
     this._wmtsLayerClazz = Oskari.clazz.create("Oskari.openlayers.Patch.layer.WMTS");
+    this.config = config;
 }, {
     __name : 'WmtsLayerPlugin',
 
@@ -33,6 +34,17 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         this.getMapModule().setLayerPlugin('WmtsLayer', null);
     },
     init : function(sandbox) {
+        var sandboxName = ( this.config ? this.config.sandbox : null ) || 'sandbox' ;
+        var sandbox = Oskari.getSandbox(sandboxName);
+        
+        // register domain builder
+        var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        if(mapLayerService) {
+            mapLayerService.registerLayerModel('wmtslayer', 'Oskari.mapframework.wmts.domain.WmtsLayer')
+
+            var layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder');
+            mapLayerService.registerLayerModelBuilder('wmtslayer', layerModelBuilder);
+        }
     },
     startPlugin : function(sandbox) {
         this._sandbox = sandbox;
