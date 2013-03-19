@@ -23,8 +23,9 @@ function(instance) {
     this.markerLayer = null;
     this.currentDrawMode = null;
     this.currentFeatureType = null;
-    // Created in init.
+    // Created in init
     this.splitter = null;
+    this.backupFeatures = [];
     this.splitSelection = false;
     this.basicStyle = null;
     this.selectStyle = null;
@@ -114,7 +115,6 @@ function(instance) {
                                 var polyLength = points.length-1;
                                 for (m = 0; m < polyLength; m++) {
                                     var n = m+1;
-
                                     if ((points[m] === prevPoint)&&(points[n] === nextPoint)) {
                                         points.splice(n,0,point);
                                         newReferences.push(polygon.id);
@@ -146,8 +146,6 @@ function(instance) {
 
                 this.refresh();
                 me.drawLayer.refresh();
-
-
 
                 // Redo selection so the info box knows where we're at
                 // me.controls.select.select(me.getDrawing());
@@ -329,8 +327,8 @@ function(instance) {
      * @method drawFeature
      */
     drawFeature : function(feature, featureType) {
-        // remove possible old drawing
-        this.drawLayer.removeAllFeatures();
+        this.clear();
+
         this.currentFeatureType = null;
 
         // Let possible parcel info bundle know that layer should be followed.
@@ -512,6 +510,23 @@ function(instance) {
      * Does nothing atm.
      */
     unregister : function() {
+    },
+
+    /**
+     * @method clear
+     * Clears all layers.
+     */
+    clear : function() {
+        // remove possible old drawing
+        this.drawLayer.removeAllFeatures();
+        this.editLayer.removeAllFeatures();
+        var startIndex = this.markerLayer.markers.length-1;
+        for (var i = startIndex; i>=0; i--) {
+            this.markerLayer.markers[i].destroy();
+        }
+        this.markerLayer.markers = [];
+        this._map.activeMarker = null;
+        this.splitSelection = false;
     },
     /**
      * Handles the splitting of the parcel feature

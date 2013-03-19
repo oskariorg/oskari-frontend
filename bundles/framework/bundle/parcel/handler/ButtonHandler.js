@@ -46,7 +46,9 @@ function(instance) {
             tooltip : '',
             sticky : true,
             callback : function() {
-                //me._saveDrawing();
+                var drawPlugin = me.instance.view.drawPlugin;
+                drawPlugin.clear();
+                drawPlugin.drawLayer.addFeatures(drawPlugin.backupFeatures);
             }
         }
 /*        'save' : {
@@ -113,6 +115,9 @@ function(instance) {
      * @param config params for StartDrawRequest
      */
     _startNewDrawing : function(config) {
+        // Current limitation: only one dividing action allowed
+        if (this.instance.view.drawPlugin.editLayer.features.length !== 0) return;
+
         var event = this.instance.sandbox.getEventBuilder('Parcel.ParcelSelectedEvent')();
         this.instance.sandbox.notifyAll(event);
 
