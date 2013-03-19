@@ -22,6 +22,7 @@ Initializes Oskari core with Oskari.mapframework.service.MapLayerService, starts
 ![screenshot](<%= docsurl %>images/mapfull.png)
 
 Mapfull using mapmodule-plugin bundle to show map view with some plugins (scalebar, zoombar, wmslayer, panbuttons etc).
+SrsName projection can be configured if defined in Proj4js.defs. SrsName is "EPSG:3067" by default.
 
 ## Bundle configuration
 
@@ -33,7 +34,8 @@ Mapfull using mapmodule-plugin bundle to show map view with some plugins (scaleb
         "bottom" : 6291456.0,
         "right" : 1548576.0,
         "top" :  8388608
-    }
+    },
+    "srsName" : "EPSG:3067"
 }
 ```
 
@@ -63,7 +65,8 @@ Mapfull using mapmodule-plugin bundle to show map view with some plugins (scaleb
       "bottom" : 6291456.0,
       "right" : 1548576.0,
       "top" :  8388608
-    }
+    },
+    "srsName" : "EPSG:3067"
   },
   "user":{
      <logged in users details for Oskari.mapframework.domain.User >

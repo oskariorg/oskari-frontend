@@ -101,14 +101,15 @@ function(instance) {
         var me = this;
 
         var flyout = jQuery(this.container);
-        flyout.empty();
-        
-        var sandbox = me.instance.getSandbox();
         
         this.view = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.StartView', 
                 this.instance, 
                 this.instance.getLocalization('StartView'));
-        
+    },
+    
+    refresh :function() {
+        var flyout = jQuery(this.container);
+        flyout.empty();  
         this.view.render(flyout);
     }
 }, {

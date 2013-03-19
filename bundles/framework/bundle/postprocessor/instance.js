@@ -34,7 +34,10 @@ function() {
      */
     "start" : function() {
         var me = this;
-        var sandbox = Oskari.$("sandbox");
+        		var conf = this.conf ;
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+		var sandbox = Oskari.getSandbox(sandboxName);
+
         this.sandbox = sandbox;
         
         sandbox.register(this);

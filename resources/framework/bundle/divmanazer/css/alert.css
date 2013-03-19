@@ -9,9 +9,9 @@
  */
 
 .oskari-alert {
-  padding: 8px 35px 8px 14px;
-  margin-bottom: 18px;
-  margin-top: 8px;
+  padding-left: 8px;
+  padding-top: 4px;
+  margin: 4px;  
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   background-color: #fcf8e3;
   border: 1px solid #fbeed5;
@@ -19,29 +19,20 @@
   -moz-border-radius: 4px;
   border-radius: 4px;
   color: #c09853;
+  position: relative;
+  height: 24px;
+  
 }
 .oskari-alert-heading {
   color: inherit;
 }
 .oskari-alert-icon-close {
-  position: relative;
-  top: -2px;
-  right: -21px;
-  line-height: 18px;
-  float: right;
-  	display: inline-block;
-	margin-top: -2px;
-	width: 24px;
-	height: 24px;
-	background-image: url('/Oskari/resources/paikkatietoikkuna/Ikonit_16x16/Pixicon16px_0005s_0002_X.png');
-	background-repeat: no-repeat;
-	background-position: center center;
-	background-color: #333438;
-	-webkit-border-radius: 12px;
-	-moz-border-radius: 12px;
-	border-radius: 12px;
-	margin-right: 2px;
-	margin-left: auto;
+  position: absolute;
+  top: 4px;
+  right: 0px;
+  width: 24px;
+  height: 24px;
+	
 }
 .oskari-alert-success {
   background-color: #dff0d8;
@@ -58,15 +49,4 @@
   background-color: #d9edf7;
   border-color: #bce8f1;
   color: #3a87ad;
-}
-.oskari-alert-block {
-  padding-top: 14px;
-  padding-bottom: 14px;
-}
-.oskari-alert-block > p,
-.oskari-alert-block > ul {
-  margin-bottom: 0;
-}
-.oskari-alert-block p + p {
-  margin-top: 5px;
 }

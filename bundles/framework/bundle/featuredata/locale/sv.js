@@ -10,6 +10,36 @@ Oskari.registerLocalization({
     "featureNameAll": "Datatyp",
     "errorscale": "Uppgifter om objekt kan inte visas på denna skalnivå. Byt skalnivå.",
     "errordata": "Fel i data från servern. Flytta något på kartan för att uppdatera.",
-    "columnSelectorTooltip": "Visa kolumner"
+    "columnSelectorTooltip": "Visa kolumner",   
+    "popup": {
+      "title": "Markera objekt på kartan",
+      "instructions": " ",
+      "link" : {
+        "title": "välja mer"
+      },
+      "button": {
+        "cancel": "Avbryt",
+        "show": "Visa",
+        "close": "Stäng",
+        "edit" : "Redigera"
+      },
+      "tools": {
+        "point": {
+          "tooltip": "Lägg punkt"
+        },
+        "line": {
+          "tooltip": "Lägg rad"
+        },
+        "polygon": {
+          "tooltip": "Lägg polygon"
+        },
+        "square": {
+          "tooltip": "Lägg kvadrat"        
+        },
+        "circle": {
+          "tooltip": "Lägg cirkel"
+        }
+      }
+    }
   }
 });

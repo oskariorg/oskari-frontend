@@ -34,19 +34,6 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
     },
 
     /**
-     * @property requirementsConfig
-     *
-     * requirejs requirements config to fix paths
-     *
-     */
-    "requirementsConfig" : {
-        "waitSeconds" : 15,
-        "paths" : {
-            '_bundle' : '../../../bundles/integration/bundle/todo'
-        }
-    },
-   
-    /**
      * @method render
      * This is called when *everything* is ready for Backbone to be started
      * Called with requirements from above as arguments to method in
@@ -58,12 +45,9 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
         container.addClass("todo");
 
         var locale = this.getLocalization();
-        var confRequirementsConfig = 
-            (this.getConfiguration()||{}).requirementsConfig;
-        var requirementsConfig = 
-            confRequirementsConfig||this.requirementsConfig;
+
+        /* _bundle - path conf is set in bundle loader based on bundle.js */
         
-        require.config(requirementsConfig);
         require(["_bundle/views/todoView"], function(ToDoView) {
 
             // Finally, we kick things off by creating the **App**.
@@ -73,5 +57,5 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
         });
     }
 }, {
-    "extend" : ["Oskari.integration.bundle.bb.View"]
+    "extend" : ["Oskari.integration.bundle.backbone.View"]
 });

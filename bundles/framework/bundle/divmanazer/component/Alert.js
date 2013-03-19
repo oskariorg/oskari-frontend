@@ -18,10 +18,10 @@ function() {
 	this.container = null;	
 }, {
 	templates : {
-		"default" : '<div class="oskari-alert"><div class="oskari-alert-icon-close"></div></div>',
-		"success" : '<div class="oskari-alert oskari-alert-success"><div class="oskari-alert-icon-close"></div></div>',
-		"error" : '<div class="oskari-alert oskari-alert-error"><div class="oskari-alert-icon-close"></div></div>',
-		"info" : '<div class="oskari-alert oskari-alert-info"><div class="oskari-alert-icon-close"></div></div>'
+		"default" : '<div class="oskari-alert"><div class="oskari-alert-icon-close"><div class="icon-close"></div></div></div>',
+		"success" : '<div class="oskari-alert oskari-alert-success"><div class="oskari-alert-icon-close"><div class="icon-close"></div></div></div>',
+		"error" : '<div class="oskari-alert oskari-alert-error"><div class="oskari-alert-icon-close"><div class="icon-close"></div></div></div>',
+		"info" : '<div class="oskari-alert oskari-alert-info"><div class="oskari-alert-icon-close"><div class="icon-close"></div></div></div>'
 	},
 	compileTemplates : function() {
 		for(var p in this.templates ) {

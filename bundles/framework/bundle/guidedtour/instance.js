@@ -116,7 +116,9 @@ Oskari.clazz.define(
             if (jQuery.cookie('pti_tour_seen') != '1') {
                 var me = this;
                 // Should this not come as a param?
-                var sandbox = Oskari.$('sandbox');
+                	var conf = me.conf ;
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+		var sandbox = Oskari.getSandbox(sandboxName);
                 this.sandbox = sandbox;
                 this.localization = Oskari.getLocalization(this.getName());
                 // register to sandbox as a module

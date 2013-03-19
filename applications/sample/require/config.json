@@ -1,0 +1,863 @@
+{
+	"cometd": {
+		"conf": {
+			"name": "cometd",
+			"sandbox": "sandbox:A"
+		}
+	},
+	"slickgridpoc": {
+		"conf": {
+			"name": "slickgridpoc",
+			"sandbox": "sandbox:A",
+			"tileClazz": "Oskari.userinterface.extension.DefaultTile",
+			"flyoutClazz": "Oskari.visualisation.bundle.slickgridpoc.SlickGridFlyout"
+		}
+	},
+	"slickgrid": {
+		"conf": {
+			"sandbox": "sandbox:A"
+		}
+	},
+	"mapshare": {
+		"conf": {
+			"sandbox": "sandbox:A",
+			"ajaxBase": "http://viljonkkake01.nls.fi:8182/graphs/agraph/tp/gremlin?script=",
+			"ajaxTemplates": {
+				"promotions": "g.V('name','{0}').next().outE('promotes').filter{it.timestamp%20%3E{1}}.inV",
+				"promotionLinks": "g.v({0}).inE",
+				"published": "g.V('name','{0}').next().outE('published')",
+				"publishedDetails": "g.v({0}",
+				"addMapVertex": "g.addVertex(null,[name:'{0}',type:'maplink',href:'{1}',thumbnail:'{2}'])",
+				"publishMap": "g.addEdge(g.V('name','{0}').next(),g.v({1}),'published',[message:'{2}',type:'maplink',timestamp:new Date().getTime()])",
+				"promoteMap": "g.addEdge(g.V('name','{0}').next(),g.v({1}),'promotes',[message:'{2}',type:'maplink',timestamp:new Date().getTime()])",
+				"userDetails": "g.V('name','{0}')",
+				"addUser": "g.addVertex([name:'{0}'])"
+			},
+			"formatProducers": {
+				"application/pdf": "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.pdf?",
+				"image/png": "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.png?"
+			}
+		}
+	},
+	"helloworld": {
+		"conf": {
+			"name": "helloworld",
+			"sandbox": "sandbox:A"
+		}
+	},
+	"solsol": {
+		"conf": {
+			"sandbox": "sandbox:A"
+		}
+	},
+	"bb": {
+		"conf": {
+			"sandbox": "sandbox:A"
+		}
+	},
+	"todo": {
+		"conf": {
+			"sandbox": "sandbox:A"
+		}
+	},
+	"d3jspoc": {
+		"conf": {
+			"sandbox": "sandbox:A"
+		}
+	},
+	"printout": {
+		"conf": {
+			"sandbox": "sandbox:A",
+			"backendConfiguration" : {
+            "formatProducers" : {
+                "application/pdf" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.pdf?",
+                "image/png" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.png?"
+            }
+        }
+		}
+	},
+	"d3js": {
+		"conf": {
+			"sandbox": "sandbox:A"
+		}
+	},
+	"metadataflyout": {
+		"conf": {
+			"sandbox": "sandbox:A"
+		}
+	},
+	"search": {
+		"conf": {
+			"sandbox": "sandbox:A"
+		}
+	},
+	"backendstatus": {
+		"conf": {
+			"sandbox": "sandbox:A"
+		}
+	},
+	"layerselection2": {
+		"conf": {
+			"sandbox": "sandbox:A"
+		}
+	},
+	"layerselector2": {
+		"conf": {
+			"sandbox": "sandbox:A"
+		}
+	},
+	"mythirdbundle": {
+		"conf": {
+			"sandbox": "sandbox:A"
+		}
+	},
+	"myfourthbundle": {
+		"conf": {
+			"sandbox": "sandbox:A"
+		}
+	},
+	"divmanazer": {
+		"conf": {
+			"sandbox": "sandbox:A"
+		}
+	},
+	"infobox": {
+		"conf": {
+			"sandbox": "sandbox:A"
+		}
+	},
+	"toolbar": {
+		"conf": {
+			"sandbox": "sandbox:A",
+			"defaultToolbarContainer": "#toolbar",
+			"defaultMenuToolbarContainer": "#menutoolbar",
+			"viewtools" : {
+				"print" : false
+			}
+		}
+	},
+	"todo": {
+		"conf": {
+			"sandbox": "sandbox:A",
+			"requirementsConfig": {
+				"waitSeconds": 15,
+				"paths": {
+					"_bundle": "../../../bundles/integration/bundle/todo"
+				}
+			}
+		}
+	},
+	"mapfull": {
+		"state": {
+			"selectedLayers": [
+				{
+					"id": "base_35"
+				}
+			],
+			"zoom": 1,
+			"north": "6874042",
+			"east": "517620"
+		},
+		"conf": {
+			"sandbox": "sandbox:A",
+			"globalMapAjaxUrl": "ajax.json?",
+			"plugins": [
+				{
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin"
+				}, {
+					"id": "Oskari.mapframework.mapmodule.WmsLayerPlugin"
+				}, {
+					"id": "Oskari.mapframework.mapmodule.ControlsPlugin",
+					"config": {
+						"mouse": {
+							"useCenterMapInWheelZoom": false,
+							"useCenterMapInDblClickZoom": false
+						}
+					}
+				}, {
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin"
+				}, {
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons"
+				}, {
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"
+				}
+			],
+			"layers": [
+				{
+					"wmsName": "tilastoalueet:kunnat2013",
+					"type": "wmslayer",
+					"id": 999,
+					"minScale": 1.5E7,
+					"wmsUrl": "http://viljonkkatu01.nls.fi:8280/geoserver/wms?",
+					"maxScale": 1,
+					"name": "Kunnat 2013",
+					"inspire": "Tilastoalueet",
+					"orgName": "Maanmittauslaitos"
+				}, {
+					"styles": {},
+					"type": "base",
+					"orgName": "Taustakartta",
+					"baseLayerId": 35,
+					"formats": {},
+					"isQueryable": false,
+					"id": "base_35",
+					"minScale": 1.5E7,
+					"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+					"name": "Taustakartta",
+					"permissions": {
+						"publish": "no_publication_permission"
+					},
+					"subLayer": [
+						{
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_5k",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 184,
+							"minScale": 5000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 21,
+							"name": "Taustakartta 1:5000",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 1
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_10k",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 185,
+							"minScale": 20000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 22,
+							"name": "Taustakartta 1:10k",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 5001
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_20k",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 186,
+							"minScale": 54000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 23,
+							"name": "Taustakartta 1:20k",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 21000
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_40k",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 187,
+							"minScale": 133000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 24,
+							"name": "Taustakartta 1:40k",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 55000
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_80k",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 188,
+							"minScale": 180000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 25,
+							"name": "Taustakartta 1:80k",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 180000
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_160k",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 189,
+							"minScale": 250000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 26,
+							"name": "Taustakartta 1:160k",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 133000
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_320k",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 190,
+							"minScale": 350000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 27,
+							"name": "Taustakartta 1:320k",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 250000
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_800k",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 191,
+							"minScale": 800000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 28,
+							"name": "Taustakartta 1:800k",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 351000
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_2m",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 192,
+							"minScale": 2000000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 29,
+							"name": "Taustakartta 1:2milj",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 801000
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_4m",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 193,
+							"minScale": 4000000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 30,
+							"name": "Taustakartta 1:4milj",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 2000001
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_8m",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 194,
+							"minScale": 1.5E7,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 31,
+							"name": "Taustakartta 1:8milj",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 4000001
+						}
+					],
+					"inspire": "Taustakartta",
+					"maxScale": 1
+				}
+			]
+		}
+	},
+	"mapfullb": {
+		"state": {
+			"selectedLayers": [
+				{
+					"id": "999"
+				}
+			],
+			"zoom": 1,
+			"north": "6874042",
+			"east": "517620"
+		},
+		"conf": {
+			"sandbox": "sandbox:B",
+			"mapElement": "mapdivB",
+			"globalMapAjaxUrl": "ajax.json?",
+			"plugins": [
+				{
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin"
+				}, {
+					"id": "Oskari.mapframework.mapmodule.WmsLayerPlugin"
+				}, {
+					"id": "Oskari.mapframework.mapmodule.ControlsPlugin",
+					"config": {
+						"mouse": {
+							"useCenterMapInWheelZoom": false,
+							"useCenterMapInDblClickZoom": false
+						}
+					}
+				}, {
+					"id": "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons"
+				}
+			],
+			"layers": [
+				{
+					"wmsName": "tilastoalueet:kunnat2013",
+					"type": "wmslayer",
+					"id": 999,
+					"minScale": 1.5E7,
+					"wmsUrl": "http://viljonkkatu01.nls.fi:8280/geoserver/wms?",
+					"maxScale": 1
+				}, {
+					"styles": {},
+					"type": "base",
+					"orgName": "Taustakartta",
+					"baseLayerId": 35,
+					"formats": {},
+					"isQueryable": false,
+					"id": "base_35",
+					"minScale": 1.5E7,
+					"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+					"name": "Taustakartta",
+					"permissions": {
+						"publish": "no_publication_permission"
+					},
+					"subLayer": [
+						{
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_5k",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 184,
+							"minScale": 5000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 21,
+							"name": "Taustakartta 1:5000",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 1
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_10k",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 185,
+							"minScale": 20000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 22,
+							"name": "Taustakartta 1:10k",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 5001
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_20k",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 186,
+							"minScale": 54000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 23,
+							"name": "Taustakartta 1:20k",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 21000
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_40k",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 187,
+							"minScale": 133000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 24,
+							"name": "Taustakartta 1:40k",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 55000
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_80k",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 188,
+							"minScale": 180000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 25,
+							"name": "Taustakartta 1:80k",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 180000
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_160k",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 189,
+							"minScale": 250000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 26,
+							"name": "Taustakartta 1:160k",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 133000
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_320k",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 190,
+							"minScale": 350000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 27,
+							"name": "Taustakartta 1:320k",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 250000
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_800k",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 191,
+							"minScale": 800000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 28,
+							"name": "Taustakartta 1:800k",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 351000
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_2m",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 192,
+							"minScale": 2000000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 29,
+							"name": "Taustakartta 1:2milj",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 801000
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_4m",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 193,
+							"minScale": 4000000,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 30,
+							"name": "Taustakartta 1:4milj",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 2000001
+						}, {
+							"dataUrl_uuid": "c22da116-5095-4878-bb04-dd7db3a1a341",
+							"wmsName": "taustakartta_8m",
+							"styles": {},
+							"descriptionLink": "",
+							"baseLayerId": 35,
+							"orgName": "Taustakartta",
+							"type": "wmslayer",
+							"legendImage": "",
+							"formats": {},
+							"isQueryable": false,
+							"id": 194,
+							"minScale": 1.5E7,
+							"dataUrl": "/catalogue/ui/metadata.html?uuid=c22da116-5095-4878-bb04-dd7db3a1a341",
+							"style": "",
+							"wmsUrl": "http://kansalaisen.karttatiili.fi/dataset/taustakarttasarja/service/wms",
+							"orderNumber": 31,
+							"name": "Taustakartta 1:8milj",
+							"permissions": {
+								"publish": "no_publication_permission"
+							},
+							"opacity": 100,
+							"inspire": "Opaskartat",
+							"maxScale": 4000001
+						}
+					],
+					"inspire": "Taustakartta",
+					"maxScale": 1
+				}
+			]
+		}
+	},
+	"layerselector2b": {
+		"conf": {
+			"sandbox": "sandbox:B"
+		}
+	},
+	"divmanazerb": {
+		"conf": {
+			"sandbox": "sandbox:B"
+		}
+	},
+	"patiopoc": {
+		"conf": {
+			"name": "patiopoc",
+			"sandbox": "sandbox:A",
+			"tileClazz": "Oskari.userinterface.extension.DefaultTile",
+			"flyoutClazz": null,
+			"viewClazz": "Oskari.patio.bundle.patiopoc.View"
+		}
+	},
+	"oskariui": {
+		"conf": {
+			"partsMap": {
+				"root": "#contentMap",
+				"map": "#mapdiv",
+				"toolbar": "#toolbar",
+				"menubar": "#menubar",
+				"menutoolbar": "#menutoolbar",
+				"left": ".oskariui-left",
+				"right": ".oskariui-right",
+				"center": ".oskariui-center"
+			}
+		}
+	},
+	"pdt": {
+		"conf": {
+			"name" : "pdt",
+			"sandbox": "sandbox:A",
+			"tileClazz": "Oskari.userinterface.extension.DefaultTile",
+			"flyoutClazz": "Oskari.piirto.bundle.pdt.Flyout",
+			"url" : {
+			"dat" : "dat.json",
+			"pdt" : "http://127.0.0.1:8080/piirto-pdt-0.0.1-SNAPSHOT/kartta-aineistot/A_PDT/tilaus.json"
+		}
+		}
+	},
+	"jsonform": {
+		"conf": {
+			"name": "jsonform",
+			"sandbox": "sandbox:A",
+			"tileClazz": "Oskari.userinterface.extension.DefaultTile",
+			"flyoutClazz": "Oskari.integration.bundle.jsonform.JsonFormFlyout"
+		}
+	}
+}

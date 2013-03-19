@@ -34,7 +34,9 @@ function() {
      */
     start: function() {
         var me = this;
-        var sandbox = Oskari.$('sandbox');
+        	var conf = me.conf ;
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+		var sandbox = Oskari.getSandbox(sandboxName);
         // register instance to sandbox so that requests can be made
         sandbox.register(me);
         for(var eventToListen in me.eventHandlers) {

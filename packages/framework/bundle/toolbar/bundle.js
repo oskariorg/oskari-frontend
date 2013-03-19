@@ -51,6 +51,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundle", function
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/toolbar/event/ToolSelectedEvent.js"
         }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/toolbar/request/ToolbarRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/toolbar/request/ToolbarRequestHandler.js"
+        }, {
 			"type" : "text/css",
 			"src" : "../../../../resources/framework/bundle/toolbar/css/toolbar.css"
 		}],

@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin
- * Provides a coordinate display for map
+ * Provides WFS grid link on top of map
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.FeaturedataPlugin',
 /**
@@ -68,7 +68,7 @@ function(config) {
 
         this.__templates['main'] = 
             jQuery('<div class="mapplugin featuredataplugin">' +
-                '<a href="JavaScript: void(0);">Test</a>' +
+                '<a href="JavaScript: void(0);"></a>' +
                '</div>');
     },
     /**
@@ -189,10 +189,6 @@ function(config) {
         else {
             me.__elements['main'].hide();
         }
-        /*
-        var link = me.__elements['main'].find('a');
-        link.html('WFS count: ' + layerCount);
-        */
     },
 
     /**

@@ -51,7 +51,10 @@ function() {
         }
         me.started = true;
 
-        var sandbox = Oskari.$("sandbox");
+   		var conf = this.conf ;
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+		var sandbox = Oskari.getSandbox(sandboxName);
+
         me.sandbox = sandbox;
         sandbox.register(me);
         for(p in me.eventHandlers) {
@@ -179,6 +182,7 @@ function() {
                          "&flow_pm_zoom_level=" + map.getZoom() +
                          "&flow_pm_map_width="  + map.getWidth() + 
                          "&flow_pm_map_height=" + map.getHeight() + 
+                         "&srs=" + map.getSrsName() +
                          "&actionKey=GET_HIGHLIGHT_WFS_FEATURE_IMAGE_BY_POINT";
 
         var keepCollection = sandbox.isCtrlKeyDown();

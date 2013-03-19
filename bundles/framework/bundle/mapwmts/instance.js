@@ -28,7 +28,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.MapWmtsBundleInstance", function
 		if(this.mediator.getState() == "started")
 			return;
 
-		var sandbox = Oskari.$('sandbox');
+			var me = this;
+			var conf = me.conf ;
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+		var sandbox = Oskari.getSandbox(sandboxName);
 		this.sandbox = sandbox;
 
 		/**

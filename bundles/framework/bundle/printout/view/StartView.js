@@ -23,7 +23,18 @@ function(instance, localization) {
     this.loc = localization;
     this.content = undefined;
     this.buttons = {};
+    this.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
 }, {
+    _isTooManyLayers : function() {
+        var layerCount = this.instance.getSandbox().findAllSelectedMapLayers().length;
+        var isMaxLayersExceeded = layerCount > 7;
+        return isMaxLayersExceeded;
+    },
+    _isManyLayers : function() {
+        var layerCount = this.instance.getSandbox().findAllSelectedMapLayers().length;
+        var isManyLayersExceeded = layerCount > 2;
+        return isManyLayersExceeded;
+    },
     /**
      * @method render
      * Renders view to given DOM element
@@ -34,39 +45,45 @@ function(instance, localization) {
         var me = this;
         var content = this.template.clone();
         this.content = content;
-     
-        var txt = this.loc.text;
 
-        content.find('div.content').before(txt);
+        /*content.find('div.content').before(txt);*/
         container.append(content);
 
-        var continueButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        continueButton.addClass('primary');
-        var txt = 'loc.buttons.continue';
-        if (this.loc && this.loc.buttons && this.loc.buttons['continue']) {
-            txt = this.loc.buttons['continue'];
+        this.alert.insertTo(container);
+
+        var isMaxLayersExceeded = this._isTooManyLayers();
+        var isManyLayersExceeded = this._isManyLayers();
+
+        if(isMaxLayersExceeded) {
+            this.alert.setContent(this.loc.info.maxLayers, 'error');
+        } else if(isManyLayersExceeded) {
+            this.alert.setContent(this.loc.info.printoutProcessingTime, 'info');
+        } else {
+            this.alert.setContent(this.loc.text, 'default');
         }
-        continueButton.setTitle(txt);
-        continueButton.setHandler(function() {
-            me.instance.setPublishMode(true);
-        });
-        this.buttons['continue'] = continueButton;
+
+        if(!isMaxLayersExceeded) {
+            var continueButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            continueButton.addClass('primary');
+            continueButton.setTitle(this.loc.buttons['continue']);
+            continueButton.setHandler(function() {
+                me.instance.setPublishMode(true);
+            });
+            this.buttons['continue'] = continueButton;
+            continueButton.insertTo(content.find('div.buttons'));
+        }
 
         var cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        txt = 'loc.buttons.cancel';
-        if (this.loc && this.loc.buttons && this.loc.buttons.cancel) {
-            txt = this.loc.buttons.cancel;
+        if(isMaxLayersExceeded) {
+            cancelButton.addClass('primary');
         }
-        cancelButton.setTitle(txt);
+        cancelButton.setTitle(this.loc.buttons.cancel);
         cancelButton.setHandler(function() {
             me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
         });
         this.buttons['cancel'] = cancelButton;
 
         cancelButton.insertTo(content.find('div.buttons'));
-        continueButton.insertTo(content.find('div.buttons'));
-        
+
     }
-  
-   
 });

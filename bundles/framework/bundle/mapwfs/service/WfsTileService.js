@@ -141,6 +141,7 @@ function(plugin) {
                         "&flow_pm_map_width=" + this._TILE_SIZE_IN_PIXELS + 
                         "&flow_pm_map_height=" + this._TILE_SIZE_IN_PIXELS + 
                         "&flow_pm_zoom_level=" + mapZoom + 
+                        "&srs=" + this.sandbox.getMap().getSrsName() +
                         "&action_route=GET_PNG_MAP";
 
                 var requestedLayerName = "WFS_LAYER_IMAGE_" + 

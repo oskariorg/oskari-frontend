@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.request.common.MapMoveRequest',
  * @param {Boolean} marker
  *            true if map should add a marker to this location (optional, defaults to false)
  */
-function(centerX, centerY, zoom, marker) {
+function(centerX, centerY, zoom, marker, srsName) {
     this._creator = null;
 
     this._centerX = centerX;
@@ -32,6 +32,8 @@ function(centerX, centerY, zoom, marker) {
     this._zoom = zoom;
 
     this._marker = marker;
+
+    this._projectionCode = srsName;
 
 }, {
     /** @static @property {String} __name request name */
@@ -72,6 +74,13 @@ function(centerX, centerY, zoom, marker) {
      */
     getMarker : function() {
         return this._marker;
+    },
+    /**
+     * @method getSrsName
+     * @return {String} _projectionCode SRS projection code, defaults to 'EPSG:3067'
+     */
+    getSrsName : function() {
+        return this._projectionCode;
     }
 }, {
     /**

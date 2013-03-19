@@ -12,14 +12,15 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
  * @param tileClazz {String} an optional class name for
  *
  */
-function(name, flyoutClazz, tileClazz) {
+function(name, flyoutClazz, tileClazz, viewClazz) {
     this.sandbox = null;
     this.plugins = {};
     this._localization = null;
     this.conf = {
         "name" : name,
         "tileClazz" : tileClazz || 'Oskari.userinterface.extension.DefaultTile',
-        "flyoutClazz" : flyoutClazz || 'Oskari.userinterface.extension.DefaultFlyout'
+        "flyoutClazz" : flyoutClazz || 'Oskari.userinterface.extension.DefaultFlyout',
+        "viewClazz" : viewClazz
     };
 }, {
     /**
@@ -78,7 +79,10 @@ function(name, flyoutClazz, tileClazz) {
      */
     start : function() {
         var me = this;
-        var sandbox = Oskari.$("sandbox");
+        var conf = this.conf ;
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+		var sandbox = Oskari.getSandbox(sandboxName);
+
 
         me.sandbox = sandbox;
         sandbox.register(this);
@@ -130,6 +134,12 @@ function(name, flyoutClazz, tileClazz) {
         if(locTile && me.conf.tileClazz) {
             me.plugins['Oskari.userinterface.Tile'] = 
             Oskari.clazz.create(me.conf.tileClazz, me, locTile);
+        }
+        
+        var locView = me.getLocalization('view');
+        if( locView && me.conf.viewClazz) {
+        	me.plugins['Oskari.userinterface.View'] = 
+            	Oskari.clazz.create(me.conf.viewClazz, me, locView);
         }
     },
     /**

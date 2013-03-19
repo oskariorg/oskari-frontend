@@ -70,13 +70,16 @@
         }
     </style>
     <script src="OpenLayers.js"></script>
-    <!--script src="jquery-1.8.2.min.js"></script-->    
+    <script src="javascript.util.js"></script>
+    <script src="jsts.js"></script>
+    <script src="clipper_unminified.js"></script>
+    <!--script src="jquery-1.8.2.min.js"></script-->
     <script type="text/javascript">
         var map, vectors, guides, markers, split, panel, controls, geojson;
         var highlightCtrlPoint, selectCtrlPoint, pointFeatures;
         var highlightCtrlLine, selectCtrlLine;
         var highlightIntsectPoint, selectIntsectPoint, intsectHandler;
-		var EPSILON = 10e-8;
+                var EPSILON = 10e-8;
         var markerSize = new OpenLayers.Size(21,25);
         var markerOffset = new OpenLayers.Pixel(-(markerSize.w/2), -markerSize.h);
         var markerMouseOffset = new OpenLayers.Pixel(0, 0);
@@ -87,28 +90,28 @@
 
         // Debug variables
         var nDebugLyers = 5;
-		var debugVectors = [];
+                var debugVectors = [];
         var debugFeaturecollection = [];
-		for (var i=0; i < nDebugLyers; i++) {
-		  debugFeaturecollection[i] = {
-	          "type": "FeatureCollection", 
-	          "features": [ 
-	            {
-	              "geometry": {
-	                "type": "GeometryCollection", 
-	                "geometries": []
-	              }, 
-	              "type": "Feature", 
-	              "properties": {}
-	            }
-	          ]
-	       }
-	    }
+                for (var i=0; i < nDebugLyers; i++) {
+                  debugFeaturecollection[i] = {
+                  "type": "FeatureCollection",
+                  "features": [
+                    {
+                      "geometry": {
+                        "type": "GeometryCollection",
+                        "geometries": []
+                      },
+                      "type": "Feature",
+                      "properties": {}
+                    }
+                  ]
+               }
+            }
         var styleMap = [];
 
 
         /*
-         * 
+         *
          */
         function init(){
 
@@ -158,8 +161,9 @@
                 fillOpacity:.3
             }, OpenLayers.Feature.Vector.style["default"]));
             split = new OpenLayers.Layer.Vector("Split polygons",{isBaseLayer: true, styleMap: splitStyleMap});
-           
-            var wms = new OpenLayers.Layer.WMS( "OpenLayers WMS", "http://vmap0.tiles.osgeo.org/wms/vmap0?", {layers: 'basic'}); 
+
+            var wms = new OpenLayers.Layer.WMS( "OpenLayers WMS",
+"http://vmap0.tiles.osgeo.org/wms/vmap0?", {layers: 'basic'});
             OpenLayers.Feature.Vector.style['default']['strokeWidth'] = '2';
 
 //            map.addLayers([wms, vectors]);
@@ -169,7 +173,7 @@
             map.setLayerIndex(split, 30);
             map.setLayerIndex(markers, 100);
 
-            map.addControl(new OpenLayers.Control.LayerSwitcher());            
+            map.addControl(new OpenLayers.Control.LayerSwitcher());
             map.addControl(new OpenLayers.Control.MousePosition());
 
 
@@ -208,14 +212,14 @@ OpenLayers.Event.observe(document, "keydown", function(evt) {
 */
 
             geojson = new OpenLayers.Format.GeoJSON();
-            
+
             map.setCenter(new OpenLayers.LonLat(0, 0), 1);
 
-            // Debug variables            
-			styleMap[0] = new OpenLayers.StyleMap(OpenLayers.Util.applyDefaults({
-			    fill: false,
-			    strokeColor: "red"
-			}, OpenLayers.Feature.Vector.style["default"]));
+            // Debug variables
+                        styleMap[0] = new OpenLayers.StyleMap(OpenLayers.Util.applyDefaults({
+                            fill: false,
+                            strokeColor: "red"
+                        }, OpenLayers.Feature.Vector.style["default"]));
 
             styleMap[1] = new OpenLayers.StyleMap(OpenLayers.Util.applyDefaults({
                 fill: false,
@@ -246,7 +250,7 @@ styleMap[0] = new OpenLayers.StyleMap({
             }
         }
     })
-}); 
+});
 
 styleMap[1] = new OpenLayers.StyleMap({
     "default": new OpenLayers.Style(style, {
@@ -256,14 +260,14 @@ styleMap[1] = new OpenLayers.StyleMap({
             }
         }
     })
-}); 
+});
 */
 
-			for (var i=0; i < styleMap.length; i++) {
+                        for (var i=0; i < styleMap.length; i++) {
                 debugVectors[i] = new OpenLayers.Layer.Vector("Debug Vector Layer "+i,{styleMap: styleMap[i]});
                 map.addLayer(debugVectors[i]);
                 map.setLayerIndex(debugVectors[i], 50+i);
-			};
+                        };
 
 
 
@@ -299,12 +303,13 @@ styleMap[1] = new OpenLayers.StyleMap({
                 line: new OpenLayers.Control.DrawFeature(vectors,
                             OpenLayers.Handler.Path),
                 polygon: new OpenLayers.Control.DrawFeature(vectors,
-                              OpenLayers.Handler.Polygon,{'featureAdded': polygonAdded}),
+                              OpenLayers.Handler.Polygon,
+                              {handlerOptions: {holeModifier: "ctrlKey"},'featureAdded': polygonAdded}),
                 hole:  new OpenLayers.Control.DrawFeature(vectors,
                         OpenLayers.Handler.Polygon,{'featureAdded': holeAdded}),
                 modify: new OpenLayers.Control.ModifyFeature(vectors)
             };
-            
+
             for(var key in controls) {
                 map.addControl(controls[key]);
             }
@@ -1515,10 +1520,11 @@ console.log("=====-------");
 
 
         /*
-         * 
+         *
          */
         function serialize() {
             document.getElementById('features').value = geojson.write(vectors.features, true);
+            //document.getElementById('features').value = geojson.write(split.features, true);
         }
 
         /*
@@ -1529,7 +1535,7 @@ console.log("=====-------");
         }
 
         /*
-         * 
+         *
          */
         function deserialize() {
             var element = document.getElementById('text');
@@ -1545,7 +1551,7 @@ console.log("=====-------");
                     } else {
                         bounds.extend(features[i].geometry.getBounds());
                     }
-                    
+
                 }
                 vectors.addFeatures(features);
                 map.zoomToExtent(bounds);
@@ -1557,7 +1563,7 @@ console.log("=====-------");
         }
 
         /*
-         * 
+         *
          */
         function intersect() {
             var features = vectors.features;
@@ -1595,156 +1601,157 @@ console.log("=====-------");
 
 
         /*
-         * 
+         *
          */
-		function swap(array,i,j) {
-			var tmp = array[i];
-			array[i] = array[j];
-			array[j] = tmp;			
-		}
+                function swap(array,i,j) {
+                        var tmp = array[i];
+                        array[i] = array[j];
+                        array[j] = tmp;
+                }
 
 
         /*
-         * 
+         *
          */
-		function getRandomColor() {
-		    var letters = '0123456789ABCDEF'.split('');
-		    var color = '#';
-		    for (var i = 0; i < 6; i++) {
-		        color += letters[Math.round(Math.random() * 15)];
-		    }
-		    return color;
-		};
+                function getRandomColor() {
+                    var letters = '0123456789ABCDEF'.split('');
+                    var color = '#';
+                    for (var i = 0; i < 6; i++) {
+                        color += letters[Math.round(Math.random() * 15)];
+                    }
+                    return color;
+                };
 
 
         /*
-         * 
+         *
          */
-		function partition(array, begin, end, pivot) {
-		 	var piv=array[pivot];
-		 	swap(array,pivot,end-1);
-		 	var store=begin;
-		 	for(var i=begin; i<end-1; i++) {
-				var toSwap = false;
-	            for (var j=0; j<array[i].length; j++) {
-	                if (Math.abs(array[i][j]-piv[j])>EPSILON) {
-	                	if (array[i][j]<=piv[j]) toSwap = true;
-	            	    break;
-	                }
-	            }				
-		 		if (toSwap) {
-		 			swap(array,store,i);
-		 			store = store+1;
-		 		}
-		 	}
-		 	swap(array,end-1,store);		 
-		 	return store;
-		 }
- 
- 
+                function partition(array, begin, end, pivot) {
+                        var piv=array[pivot];
+                        swap(array,pivot,end-1);
+                        var store=begin;
+                        for(var i=begin; i<end-1; i++) {
+                                var toSwap = false;
+                    for (var j=0; j<array[i].length; j++) {
+                        if (Math.abs(array[i][j]-piv[j])>EPSILON) {
+                                if (array[i][j]<=piv[j]) toSwap = true;
+                            break;
+                        }
+                    }
+                                if (toSwap) {
+                                        swap(array,store,i);
+                                        store = store+1;
+                                }
+                        }
+                        swap(array,end-1,store);
+                        return store;
+                 }
+
+
         /*
-         * 
+         *
          */
-		 function qsort(array, begin, end) {
-		 	if(end-1>begin) {
-		 		var pivot=begin+Math.floor(Math.random()*(end-begin));		 
-		 		pivot=partition(array, begin, end, pivot);		 
-		 		qsort(array, begin, pivot);
-		 		qsort(array, pivot+1, end);
-			}
-		}
- 
+                 function qsort(array, begin, end) {
+                        if(end-1>begin) {
+                                var
+pivot=begin+Math.floor(Math.random()*(end-begin));
+                                pivot=partition(array, begin, end, pivot);
+                                qsort(array, begin, pivot);
+                                qsort(array, pivot+1, end);
+                        }
+                }
+
         /*
-         * 
+         *
          */
- 		function sortEdges(edges) {
+                function sortEdges(edges) {
             return qsort(edges, 0, edges.length);
- 		}
+                }
 
         /*
-         * 
+         *
          */
- 		function reviseEdges(edges) {
- 			var revisedEdge = [];
- 			var revise;
+                function reviseEdges(edges) {
+                        var revisedEdge = [];
+                        var revise;
             for (var i=0; i<edges.length; i++) {
                 if (Math.abs(edges[i][0]-edges[i][2])>EPSILON) {
-                	revise = (edges[i][0]>edges[i][2])
+                        revise = (edges[i][0]>edges[i][2])
                 } else {
-                	revise = (edges[i][1]>edges[i][3])                	
+                        revise = (edges[i][1]>edges[i][3])
                 }
                 if (revise) {
-                	revisedEdge = [edges[i][2],edges[i][3],edges[i][0],edges[i][1]];
-                	edges[i] = revisedEdge;
+                        revisedEdge = [edges[i][2],edges[i][3],edges[i][0],edges[i][1]];
+                        edges[i] = revisedEdge;
                 }
             }
- 		}    
-    
-    
-    
-        /*
-         * 
-         */
- 		function createBoundingBox(edges) {
-			var bbox = [];
-            for (var i=0; i<edges.length; i++) {           
-            	bbox[i] = [Number.MAX_VALUE, Number.MAX_VALUE, -Number.MAX_VALUE, -Number.MAX_VALUE];
-	            for (var j=0; j<edges[i].length; j++) {                       	
-	            	for (var k=0; k<2; k++) {
-                        for (var l=0; l<2; l++) {
-                        	var m = 2*k+l;
-                        	var n = 2+l;
-	                        if (edges[i][j][m]<bbox[i][l]) bbox[i][l]=edges[i][j][m];
-                    	    if (edges[i][j][m]>bbox[i][n]) bbox[i][n]=edges[i][j][m];
-                    	}
-                   }
-            	}
-            }
-			return bbox;
- 		}
+                }
+
+
 
         /*
-         * 
+         *
          */
- 		function applyBoundingBox(edges,bbox) {
- 			var newArray = [];
+                function createBoundingBox(edges) {
+                        var bbox = [];
+            for (var i=0; i<edges.length; i++) {
+                bbox[i] = [Number.MAX_VALUE, Number.MAX_VALUE, -Number.MAX_VALUE, -Number.MAX_VALUE];
+                    for (var j=0; j<edges[i].length; j++) {
+                        for (var k=0; k<2; k++) {
+                        for (var l=0; l<2; l++) {
+                                var m = 2*k+l;
+                                var n = 2+l;
+                                if (edges[i][j][m]<bbox[i][l]) bbox[i][l]=edges[i][j][m];
+                            if (edges[i][j][m]>bbox[i][n]) bbox[i][n]=edges[i][j][m];
+                        }
+                   }
+                }
+            }
+                        return bbox;
+                }
+
+        /*
+         *
+         */
+                function applyBoundingBox(edges,bbox) {
+                        var newArray = [];
             for (var i=0; i<bbox.length; i++) {
                 loop_edges:
                 for (var j=0; j<edges.length; j++) {
-            	    for (var k=0; k<2; k++) {
-                        for (var l=0; l<2; l++) {            	    	
-                        	var m = 2*k+l;
+                    for (var k=0; k<2; k++) {
+                        for (var l=0; l<2; l++) {
+                                var m = 2*k+l;
                             if ((edges[j][m]<bbox[i][l])||(edges[j][m]>bbox[i][2+l])) continue loop_edges;
                         }
-            	    }            	
-            	   newArray.push(edges[j]);
-            	}	
+                    }
+                   newArray.push(edges[j]);
+                }
             }
- 			return newArray;
- 		}
+                        return newArray;
+                }
 
         /*
-         * 
+         *
          */
         function applySweepLine(source,target) {
-        	var newArray = [];
-/*        	var j;
+                var newArray = [];
+/*              var j;
             for (var i=0; i<source.length; i++) {
-	            for (var j=0; j<target.length; j++) {
-	                for (var k=0; k<target.length; k++) {
-	                    if (source[i][2*k]>=target[j][0]= {
-	                    	
-	                    }
-	                }
-					
-    	        }
+                    for (var j=0; j<target.length; j++) {
+                        for (var k=0; k<target.length; k++) {
+                            if (source[i][2*k]>=target[j][0]= {
+
+                            }
+                        }
+
+                }
             }
-*/        	return source;
+*/              return source;
         }
 
 
         /*
-         * 
+         *
          */
         function update() {
             var vertices;
@@ -1778,14 +1785,15 @@ console.log("=====-------");
                 pointFeatures = {
                     coordinates: [],
                     featureId: [],
-                    id: []                    
+                    id: []
                 };
                 for(var i=0; i<features.length; i++) {
                     geometry = features[i].geometry;
                     if (geometry.CLASS_NAME=="OpenLayers.Geometry.LineString") {
                         vertices = geometry.getVertices();
                         for (var j=0; j<vertices.length; j++) {
-                            var newPointFeature = new OpenLayers.Feature.Vector(vertices[j].clone()); 
+                            var newPointFeature = new
+OpenLayers.Feature.Vector(vertices[j].clone());
                             pointFeatures.coordinates.push(newPointFeature);
                             pointFeatures.featureId.push(features[i].id);
                             pointFeatures.id.push(vertices[j].id);
@@ -1796,17 +1804,17 @@ console.log("=====-------");
                 highlightCtrlPoint.activate();
                 selectCtrlPoint.activate();
             } else {
-                guides.removeAllFeatures();    
+                guides.removeAllFeatures();
                 highlightCtrlPoint.deactivate();
-                selectCtrlPoint.deactivate(); 
+                selectCtrlPoint.deactivate();
             }
-            
+
             if (document.getElementById("removeLine").checked) {
                 highlightCtrlLine.activate();
-                selectCtrlLine.activate(); 
+                selectCtrlLine.activate();
             } else {
                 highlightCtrlLine.deactivate();
-                selectCtrlLine.deactivate(); 
+                selectCtrlLine.deactivate();
             }
 
             if (document.getElementById("move").checked) {
@@ -1887,7 +1895,7 @@ controls.modify.mode = OpenLayers.Control.ModifyFeature.DRAG;
             var edgeInd = activeMarker.polylineEdge;
 
 /*            var comp = line.geometry.components;
-            // Lisää tarvittaessa uudet välipisteet
+            // Lis���� tarvittaessa uudet v��lipisteet
             for (var i = 1; i < markerInfo.length; i++) {
                 var ind1 = markerInfo[i-1].index;
                 var x1 = markers.markers[ind1].lonlat.lon;
@@ -1903,7 +1911,7 @@ controls.modify.mode = OpenLayers.Control.ModifyFeature.DRAG;
                 markers.markers[i].polylineEdge++;
             }
 */
-            // Siirretään edellisen pisteen sijainti
+            // Siirret����n edellisen pisteen sijainti
 /*            var vertices = line.geometry.getVertices();
             var xm = activeMarker.lonlat.lon;
             var ym = activeMarker.lonlat.lat;
@@ -1940,7 +1948,7 @@ controls.modify.mode = OpenLayers.Control.ModifyFeature.DRAG;
 
             }
 
-//          activeMarker = null; tämä ehkä voisi olla null
+//          activeMarker = null; t��m�� ehk�� voisi olla null
             markers.redraw();
             vectors.redraw();
             split.redraw();
@@ -1990,7 +1998,7 @@ controls.modify.mode = OpenLayers.Control.ModifyFeature.DRAG;
            var f = p0.y*(p1.x-p0.x)-p0.x*(p1.y-p0.y);
            var pq = {x:-(c*e-b*f)/(b*d-a*e), y:(c*d-a*f)/(b*d-a*e)};
 
-           // Tarkistetaan onko segmentin sisällä
+           // Tarkistetaan onko segmentin sis��ll��
            var p0p1 = {x:p1.x-p0.x, y:p1.y-p0.y};
            var pqp1 = {x:p1.x-pq.x, y:p1.y-pq.y};
            var dp = dotProduct(p0p1,pqp1);
@@ -2004,7 +2012,7 @@ controls.modify.mode = OpenLayers.Control.ModifyFeature.DRAG;
            }
 
            return pq;
-       } // BUG: käsittele tapaus nimittäjä==0
+       } // BUG: k��sittele tapaus nimitt��j��==0
 
 
        /**
@@ -2073,22 +2081,23 @@ controls.modify.mode = OpenLayers.Control.ModifyFeature.DRAG;
             return Math.sqrt(Math.pow(x2-x1,2)+Math.pow(y2-y1,2));
         }
         /*
-         * 
+         *
          */
-        function pointSelected(e) {             
+        function pointSelected(e) {
             var guidesFeatures = guides.features;
             guides_loop:
             for(var i=0; i<guidesFeatures.length; i++) {
-                if (guidesFeatures[i].id === e.id) {                    
+                if (guidesFeatures[i].id === e.id) {
                     var geometry = vectors.getFeatureById(pointFeatures.featureId[i]).geometry;
                     var vertices = geometry.getVertices();
                     for(var j=0; j<vertices.length; j++) {
                         if (vertices[j].id === pointFeatures.id[i]) {
-                            if (geometry.removeComponent(vertices[j])) update(); //guides.removeFeatures(guidesFeatures[i]); 
+                            if (geometry.removeComponent(vertices[j])) update();
+//guides.removeFeatures(guidesFeatures[i]);
                             break guides_loop;
-                        }                    
+                        }
                     }
-                }    
+                }
             }
             vectors.redraw();
             guides.redraw();
@@ -2122,7 +2131,7 @@ console.log("Selected");
 
 
         /*
-         * 
+         *
          */
         function lineSelected(e) {
             vectors.removeFeatures(vectors.getFeatureById(e.id));
@@ -2131,7 +2140,7 @@ console.log("Selected");
 
 
         /*
-         * 
+         *
          */
         function toggleControl(element) {
             for(key in controls) {
@@ -2146,37 +2155,38 @@ console.log("Selected");
 
 
         /*
-         * 
+         *
          */
         function det(a,b,c,d) {
-            return a*d-b*c;            
+            return a*d-b*c;
         }
 
         /*
-         * 
+         *
          */
         function isInside(p,edge) {
             var bbox = edge.slice();
             if (bbox[0]>bbox[2]) swap(bbox,0,2);
-            if (bbox[1]>bbox[3]) swap(bbox,1,3);                        
-            return (p[0]>=bbox[0])&&(p[0]<=bbox[2])&&(p[1]>=bbox[1])&&(p[1]<=bbox[3]);            
+            if (bbox[1]>bbox[3]) swap(bbox,1,3);
+            return
+(p[0]>=bbox[0])&&(p[0]<=bbox[2])&&(p[1]>=bbox[1])&&(p[1]<=bbox[3]);
         }
 
 
         /*
-         * 
+         *
          */
         function intersection2(edge1,edge2) {
             var det0 = det(edge1[0]-edge1[2],edge1[1]-edge1[3],edge2[0]-edge2[2],edge2[1]-edge2[3]);
             if (Math.abs(det0)<EPSILON) return null;
-            var det1 = det(edge1[0],edge1[1],edge1[2],edge1[3]); 
+            var det1 = det(edge1[0],edge1[1],edge1[2],edge1[3]);
             var det2 = det(edge2[0],edge2[1],edge2[2],edge2[3]);
             var detx = det(det1,edge1[0]-edge1[2],det2,edge2[0]-edge2[2]);
-            var x = detx/det0; 
+            var x = detx/det0;
             var dety = det(det1,edge1[1]-edge1[3],det2,edge2[1]-edge2[3]);
             var y = dety/det0;
             var p = [x,y];
-            return ((isInside(p,edge1))&&(isInside(p,edge2)))?p:null; 
+            return ((isInside(p,edge1))&&(isInside(p,edge2)))?p:null;
         }
 
 
@@ -2199,7 +2209,7 @@ console.log("Selected");
             if ((Ax === Bx && Ay === By) || (Cx === Dx && Cy === Dy)) return null;
 
 
-            // to-do: tarkista miten käsitellään:
+            // to-do: tarkista miten k��sitell����n:
             //  Fail if the segments share an end-point.
             if ((Ax === Cx && Ay === Cy) || (Bx === Cx && By === Cy)
                     ||  (Ax === Dx && Ay === Dy) || (Bx === Dx && By === Dy)) {
@@ -2261,7 +2271,7 @@ console.log("Selected");
             var inLine
             for (var i=0; i<inVertices.length; i++) {
                 if (!outPolygon.intersects(inVertices[i])) return false;
-// pisteet ovat siis sisällä, mutta tähän vielä varmistus,että reunat eivät leikkaa (koverat tapaukset)
+// pisteet ovat siis sis��ll��, mutta t��h��n viel�� varmistus,ett�� reunat eiv��t leikkaa (koverat tapaukset)
             }
             return true;
         }
@@ -2302,7 +2312,7 @@ console.log("Selected");
             var styles = [];
             var i;
 
-            // kerätään leikkauspisteet, kaksi kappaletta
+            // ker��t����n leikkauspisteet, kaksi kappaletta
 /*            var intersections = [];
             var intersectionsX = [];
             var intersectionsY = [];
@@ -2337,11 +2347,11 @@ console.log("Selected");
                     linearRing = new OpenLayers.Geometry.LinearRing(points);
 
                     polygons.push(new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Polygon([linearRing])));
-                    var n = polygons.length-1; 
+                    var n = polygons.length-1;
                     styles.push(OpenLayers.Util.applyDefaults(styles[n], OpenLayers.Feature.Vector.style['default']));
                     styles[n].fillColor = getRandomColor();
-                    polygons[n].style = styles[n]; 
-                    
+                    polygons[n].style = styles[n];
+
                     point1 = null;
                     points = [];
                 }
@@ -2414,11 +2424,370 @@ console.log("Selected");
             return [polygon1,polygon2];
         }
 
+        function scaleup(poly, scale) {
+            var i, j;
+            if (!scale) scale = 1;
+            for(i = 0; i < poly.length; i++) {
+                for(j = 0; j < poly[i].length; j++) {
+                  poly[i][j].X = Math.floor(poly[i][j].X*scale);
+                  poly[i][j].Y = Math.floor(poly[i][j].Y*scale);
+                }
+            }
+            return poly;
+        }
+
+        function doSplit() {
+
+            // OpenLayers variables
+            var lineStyle = { strokeColor: '#0000ff', strokeOpacity: 1, strokeWidth: 2};
+            var olOldFeatures = vectors.features;
+            var olNewFeatures = [new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon()),
+                                 new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiLineString(),null,lineStyle)];
+            var olSolutionPolygons = olNewFeatures[0].geometry.components;
+            var olSolutionLineStrings = olNewFeatures[1].geometry.components;
+            var olNewPolygons = [];
+            var olNewLineStrings = [];
+            var olPoint, olPoints = [];
+            var olLinearRingPoints = [];
+            var olLinearRings;
+            var olLineStringPoints = [];
+
+            // JSTS variables
+            var jstsParser = new jsts.io.OpenLayersParser();
+            var jstsPoints;
+            var jstsOldPolygon;
+            var jstsOldPolygons = [];
+            var jstsNewPolygons = [];
+            var jstsLine = null;
+
+            // Clipper variables
+            var clipPoint, clipPoints;
+            var clipPolygon, clipHole;
+            var clipValidationTarget = [];
+            var clipValidationSource;
+            var clipValidationResult;
+            var clipSourcePolygons = [];
+            var clipSubjectPolygons = [];
+            var clipTargetPolygons = [];
+            var clipLine = null;
+            var clipSolutionPolygon, clipSolutionPolygons;
+            var clipSolutionHoles;
+            var clipSolutionPolygonArea;
+
+            var cpr;
+            var success;
+            var clipType;
+
+            var union;
+            var polygonizer;
+
+            var area;
+            var polygonIndexes = [];
+            var pointIndexes = [];
+            var cornerIndexes;
+            var sharedEdge = false;
+            var crossRing = false;
+
+            var i, j, k, l, m;
+            var foundIndex;
+
+            // Scaling factor for integer operations
+            var scale = 1000000;
+
+            var logText = "";
+
+            for (i=0; i<olOldFeatures.length; i++) {
+                if (olOldFeatures[i].geometry.CLASS_NAME=="OpenLayers.Geometry.Polygon") {
+                    jstsOldPolygon = jstsParser.read(olOldFeatures[i].geometry);
+                    if (!jstsOldPolygon.isValid()) {
+                        console.log("Invalid geometry.");
+                        return -1+logText;
+                    }
+                    jstsOldPolygons.push(jstsOldPolygon);
+                    clipPolygon = new ClipperLib.Polygon();
+                    olLinearRings = olOldFeatures[i].geometry.components;
+                    if (olLinearRings[0].getArea() >= 0.0) {
+                        olPoints = olLinearRings[0].components;
+                    } else {
+                        olPoints = olLinearRings[0].components.reverse();
+                    }
+                    for (j=0; j<olPoints.length-1; j++) {
+                        clipPoint = new ClipperLib.IntPoint(olPoints[j].x, olPoints[j].y);
+                        clipPolygon.push(clipPoint);
+                    }
+                    l = clipSourcePolygons.length;
+                    clipSourcePolygons[l] = [];
+                    clipSourcePolygons[l].push(clipPolygon);
+                    for (j=1; j<olLinearRings.length; j++) {
+                        clipHole = new ClipperLib.Polygon();
+                        if (olLinearRings[j].getArea() <= 0.0) {
+                            olPoints = olLinearRings[j].components;
+                        } else {
+                            olPoints = olLinearRings[j].components.reverse();
+                        }
+                        for(k=0; k<olPoints.length-1; k++) {
+                            clipPoint = new ClipperLib.IntPoint(olPoints[k].x, olPoints[k].y);
+                            clipHole.push(clipPoint);
+                        }
+                        clipSourcePolygons[i].push(clipHole);
+                    }
+                    // Skaalaus kokonaislukuoperaatioita varten
+                    l = clipSourcePolygons.length-1;
+                    clipSourcePolygons[l] = scaleup(clipSourcePolygons[l], scale);
+                } else if (olOldFeatures[i].geometry.CLASS_NAME=="OpenLayers.Geometry.LineString") {
+                    jstsLine = jstsParser.read(olOldFeatures[i].geometry);
+                }
+            }
+
+            // Debugging info
+            logText += " olOldFeatures ";
+            logText += olOldFeatures;
+            logText += " clipSourcePolygons ";
+            logText += clipSourcePolygons;
+            logText += " jstsOldPolygons ";
+            logText += jstsOldPolygons ;
+            logText += " jstsLine ";
+            logText += jstsLine;
+
+            // Handle cases with no divisions
+            if (jstsLine === null) {
+                split.addFeatures(olOldFeatures);
+                return 0+logText;
+            }
+
+            // Splitting
+            for (i=0; i<jstsOldPolygons.length; i++) {
+                logText += " i ";
+                logText += i.toString()+" / "+jstsOldPolygons.length;
+                if (jstsLine !== null) {
+                    union = jstsOldPolygons[i].getExteriorRing().union(jstsLine);
+                } else {
+                    union = jstsOldPolygons[i];
+                }
+                polygonizer = new jsts.operation.polygonize.Polygonizer();
+                polygonizer.add(union);
+                jstsNewPolygons = polygonizer.getPolygons();
+
+                logText += " jstsNewPolygons ";
+                logText += jstsNewPolygons;
+
+                clipPoints = [];
+                olPoints = [];
+                olNewLineStrings = [];
+                for (j=0; j<jstsNewPolygons.array.length; j++) {
+                    logText += "j";
+                    logText += j+" / "+jstsNewPolygons.array.length;
+
+                    clipTargetPolygons = [];
+                    clipPolygon = new ClipperLib.Polygon();
+                    jstsPoints = jstsNewPolygons.array[j].shell.points;
+                    for(k=0; k<jstsPoints.length-1; k++) {
+                        clipPoint = new ClipperLib.IntPoint(jstsPoints[k].x, jstsPoints[k].y);
+                        clipPolygon.push(clipPoint);
+                    }
+                    clipTargetPolygons.push(clipPolygon);
+                    // Scaling for integer operations
+                    clipTargetPolygons = scaleup(clipTargetPolygons, scale);
+                    cpr = new ClipperLib.Clipper();
+                    cpr.AddPolygons(clipSourcePolygons[i], ClipperLib.PolyType.ptSubject);
+                    cpr.AddPolygons(clipTargetPolygons, ClipperLib.PolyType.ptClip);
+
+                    clipSolutionPolygons = new ClipperLib.Polygons();
+                    clipType = ClipperLib.ClipType.ctIntersection;
+
+                    // Cut intersections
+                    success = cpr.Execute(clipType, clipSolutionPolygons);
+                    if (!success) return -2+logText;
+
+                    logText += " clipSourcePolygons[i] ";
+                    logText += clipSourcePolygons[i];
+                    logText += " clipTargetPolygons ";
+                    logText += clipTargetPolygons;
+                    logText += " clipSolutionPolygons ";
+                    logText += clipSolutionPolygons;
+
+                    // Polygons and lines to OpenLayers format
+                    polygonIndexes = [];
+                    pointIndexes = [];
+                    olNewPolygons = [];
+                    for (k=0; k<clipSolutionPolygons.length; k++) {
+                        clipValidationTarget.push(clipSolutionPolygons[k]);
+                        if (cpr.Area(clipSolutionPolygons[k]) > 0) {
+                            clipSolutionPolygon = clipSolutionPolygons[k];
+                            olLinearRingPoints = [];
+                            olLineStringPoints = [];
+                            for (l=0; l<clipSolutionPolygon.length; l++) {
+                                clipPoint = clipSolutionPolygon[l];
+                                foundIndex = -1;
+                                for (m=0; m<clipPoints.length; m++) {
+                                    if ((clipPoint.X === clipPoints[m].X) && (clipPoint.Y === clipPoints[m].Y)) {
+                                        foundIndex = m;
+                                        break;
+                                    }
+                                }
+                                if (foundIndex >= 0) {
+                                    olLinearRingPoints.push(olPoints[foundIndex]);
+                                    if (!sharedEdge) sharedEdge = true;
+                                    if (l === 0) crossRing = true;
+                                    olLineStringPoints.push(olPoints[foundIndex]);
+                                    if ((l === clipSolutionPolygon.length-1) && (crossRing)) {
+                                        for (m=olLineStringPoints.length-1; m>=0; m--) {
+                                            olNewLineStrings[0].components.splice(0,0,olLineStringPoints[m]);
+                                        }
+                                    }
+                                } else {
+                                    clipPoints.push(clipPoint);
+                                    olPoints.push(new OpenLayers.Geometry.Point(clipPoint.X/scale, clipPoint.Y/scale));
+                                    olLinearRingPoints.push(olPoints[olPoints.length-1]);
+                                    if (sharedEdge) {
+                                        sharedEdge = false;
+                                        olNewLineStrings.push(new OpenLayers.Geometry.LineString(olLineStringPoints));
+                                        olLineStringPoints = [];
+                                    }
+                                }
+                            }
+                            olNewPolygons.push(new OpenLayers.Geometry.Polygon(new OpenLayers.Geometry.LinearRing(olLinearRingPoints)));
+                            polygonIndexes.push(k);
+                        }
+                    }
+
+                    // Debug info
+                    logText += " olPoints ";
+                    logText += olPoints;
+                    logText += " olLinearRingPoints ";
+                    logText += olLinearRingPoints;
+                    logText += " olNewPolygons ";
+                    logText += olNewPolygons;
+
+                    // Holes to OpenLayers format
+                    for (k=0; k<clipSolutionPolygons.length; k++) {
+                        logText += " Holes k ";
+                        logText += k+" / "+clipSolutionPolygons.length;
+
+                        if (cpr.Area(clipSolutionPolygons[k]) < 0.0) {
+                            clipTargetPolygons = [];
+                            clipTargetPolygons.push(clipSolutionPolygons[k]);
+                            for (l=0; l<polygonIndexes.length; l++) {
+
+                                // Check which polygon contains the hole
+                                cpr = new ClipperLib.Clipper();
+                                clipSubjectPolygons = [];
+                                clipSubjectPolygons.push(clipSolutionPolygons[polygonIndexes[l]]);
+                                cpr.AddPolygons(clipSubjectPolygons, ClipperLib.PolyType.ptSubject);
+                                cpr.AddPolygons(clipTargetPolygons, ClipperLib.PolyType.ptClip);
+                                clipSolutionHoles = new ClipperLib.Polygons();
+                                clipType = ClipperLib.ClipType.ctIntersection;
+                                success = cpr.Execute(clipType, clipSolutionHoles);
+                                if (!success) return -3+logText;
+
+                                // Debugging info
+                                logText += " clipSubjectPolygons ";
+                                logText += clipSubjectPolygons;
+                                logText += " clipTargetPolygons ";
+                                logText += clipTargetPolygons;
+                                logText += " clipSolutionHoles ";
+                                logText += clipSolutionHoles;
+
+                                if (clipSolutionHoles.length > 0) {
+                                    clipHole = clipSolutionPolygons[k];
+                                    olPoints = [];
+                                    for (m=0; m<clipHole.length; m++) {
+                                        clipPoint = clipHole[m];
+                                        olPoints.push(new OpenLayers.Geometry.Point(clipPoint.X/scale, clipPoint.Y/scale));
+                                    }
+                                    olNewPolygons[l].components.push(new OpenLayers.Geometry.LinearRing(olPoints));
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    logText += " olNewPolygons ";
+                    logText += olNewPolygons;
+                    for (k=0; k<olNewPolygons.length; k++) {
+                        olSolutionPolygons.push(olNewPolygons[k]);
+                    }
+                    for (k=0; k<olNewLineStrings.length; k++) {
+                        olSolutionLineStrings.push(olNewLineStrings[k]);
+                    }
+                }
+            }
+
+            /* // Checking if everything is fine
+            success = false;
+            clipValidationSource = [];
+            for (i=0; i<clipSourcePolygons.length; i++) {
+                for (j=0; j<clipSourcePolygons[i].length; j++) {
+                     clipValidationSource.push(clipSourcePolygons[i][j]);
+                }
+            }
+
+            for (i=0; i<clipValidationTarget.length; i++) {
+                cpr = new ClipperLib.Clipper();
+                var cl = [];
+                cl.push(clipValidationTarget[i]);
+                cpr.AddPolygons(clipValidationSource, ClipperLib.PolyType.ptSubject);
+                cpr.AddPolygons(cl, ClipperLib.PolyType.ptClip);
+                clipType = ClipperLib.ClipType.ctXor;
+                clipValidationResult = new ClipperLib.Polygons();
+                success = cpr.Execute(clipType, clipValidationResult);
+                clipValidationSource = clipValidationResult;
+            }
+            success = (clipValidationSource.length === 0);
+
+            if (success) {
+                split.addFeatures(olNewFeatures);
+            } else {
+                return -10+logText;
+            } */
+
+            split.addFeatures(olNewFeatures);
+            return 1;
+        }
+
 
         /*
-         * 
+         *
          */
-        function doSplit() {
+        function doSplitTest() {
+            var features = vectors.features;
+            var polygons = [];
+            var linearRings = [];
+            var lines = [];
+            var splitLinearRings = [];
+
+            for(var i=0; i<features.length; i++) {
+                                if (features[i].geometry.CLASS_NAME=="OpenLayers.Geometry.Polygon") {
+                    polygons.push(features[i].geometry);
+                    linearRings.push(features[i].geometry.components[0]);
+                } else if (features[i].geometry.CLASS_NAME=="OpenLayers.Geometry.LineString") {
+                    lines.push(features[i].geometry);
+                }
+            }
+
+
+            var a = linearRings[0].splitWith(lines[0]);
+//debugger;
+
+//            var newLinearString = a[0];
+//            var newPolygon = new OpenLayers.Geometry.Polygon(a[1]);
+
+
+            var newFeatures = [];
+            for(var i=0; i<a.length; i++) {
+                newFeatures.push(new OpenLayers.Feature.Vector(a[i]));
+                split.addFeatures(newFeatures[i]);
+            }
+
+
+        }
+
+
+
+
+        /*
+         *
+         */
+        function doSplitOld() {
             document.getElementById("split_button").disabled = true;
 
             var features = vectors.features;
@@ -2435,88 +2804,91 @@ console.log("Selected");
             var polylineSizes = [];
             var rawData = [];
 
-            // Kerätään data (to-do: iffittely pois)
+            // Ker��t����n data (to-do: iffittely pois)
             for(var i=0; i<features.length; i++) {
-            	geometry = features[i].geometry;
-            	vertices = geometry.getVertices();
-				if (geometry.CLASS_NAME=="OpenLayers.Geometry.Polygon") {
-	            	for (var j=0; j<vertices.length; j++) {
-	            		var j1 = (j+1)%vertices.length;
-						polygonEdges.push([vertices[j].x,vertices[j].y,vertices[j1].x,vertices[j1].y,features[i].id,j]);
-    	        	}
-				} else if (geometry.CLASS_NAME=="OpenLayers.Geometry.LineString") {
+                geometry = features[i].geometry;
+                vertices = geometry.getVertices();
+                                if (geometry.CLASS_NAME=="OpenLayers.Geometry.Polygon") {
+                        for (var j=0; j<vertices.length; j++) {
+                                var j1 = (j+1)%vertices.length;
+                                                polygonEdges.push([vertices[j].x,vertices[j].y,vertices[j1].x,vertices[j1].y,features[i].id,j]);
+                        }
+                                } else if (geometry.CLASS_NAME=="OpenLayers.Geometry.LineString") {
                     polylineSizes.push(vertices.length);
-              	    nLines = nLines+1;
-              	    polylineEdges[nLines-1] = [];
-	            	for (var j=0; j<vertices.length-1; j++) {
+                    nLines = nLines+1;
+                    polylineEdges[nLines-1] = [];
+                        for (var j=0; j<vertices.length-1; j++) {
                         polylineEdges[nLines-1].push([vertices[j].x,vertices[j].y,vertices[j+1].x,vertices[j+1].y,features[i].id,j]);
-    	        	}
-				}
+                        }
+                                }
             }
-            
-/*            // Järjestetään taulukot
-            
+
+/*            // J��rjestet����n taulukot
+
             // Polygons
-			reviseEdges(polygonEdges);
+                        reviseEdges(polygonEdges);
             sortEdges(polygonEdges);
 
             // Sweep line filter
             polygonEdgesSweeped = applySweepLine(polygonEdges,polylineEdges);
 
             // Visualize the sweep line
-            debugVectors[0].removeAllFeatures();            
+            debugVectors[0].removeAllFeatures();
             debugFeaturecollection[0].features[0].geometry.geometries = [];
             for (var i=0; i<polygonEdgesSweeped.length; i++) {
                 debugFeaturecollection[0].features[0].geometry.geometries[i] = {
-                            "type": "LineString", 
-                            "coordinates": 
-                                [[polygonEdgesSweeped[i][0], polygonEdgesSweeped[i][1]], 
+                            "type": "LineString",
+                            "coordinates":
+                                [[polygonEdgesSweeped[i][0],
+polygonEdgesSweeped[i][1]],
                                   [polygonEdgesSweeped[i][2], polygonEdgesSweeped[i][3]]]
                         };
-            }                         
+            }
             debugVectors[0].addFeatures(geojson.read(debugFeaturecollection[0]));
 
             // Polylines
             for (var i=0; i<polylineEdges.length; i++) {
-	//			reviseEdges(polylineEdges[i]);
-//            	sortEdges(polylineEdges[i]);
+        //                      reviseEdges(polylineEdges[i]);
+//              sortEdges(polylineEdges[i]);
             }
 //            boundingBox = createBoundingBox(polylineEdges);
 
             // Visualize the bounding box
-            debugVectors[1].removeAllFeatures();            
+            debugVectors[1].removeAllFeatures();
             debugFeaturecollection[1].features[0].geometry.geometries = [];
             for (var i=0; i<boundingBox.length; i++) {
                 debugFeaturecollection[1].features[0].geometry.geometries[i] = {
-                            "type": "Polygon", 
-                            "coordinates": 
-                                [[[boundingBox[i][0], boundingBox[i][1]], 
-                                  [boundingBox[i][2], boundingBox[i][1]], 
-                                  [boundingBox[i][2], boundingBox[i][3]], 
-                                  [boundingBox[i][0], boundingBox[i][3]], 
+                            "type": "Polygon",
+                            "coordinates":
+                                [[[boundingBox[i][0], boundingBox[i][1]],
+                                  [boundingBox[i][2], boundingBox[i][1]],
+                                  [boundingBox[i][2], boundingBox[i][3]],
+                                  [boundingBox[i][0], boundingBox[i][3]],
                                   [boundingBox[i][0], boundingBox[i][1]]]]
                         };
                 debugVectors[1].addFeatures(geojson.read(debugFeaturecollection[1]));
             }
-           
+
             // Bounding box filter
-            polygonEdgesBounded = applyBoundingBox(polygonEdgesSweeped,boundingBox);                        
+            polygonEdgesBounded =
+applyBoundingBox(polygonEdgesSweeped,boundingBox);
 
 //console.log(polygonEdgesBounded);
             // Visualize the bounding box filtered edges
-            debugVectors[2].removeAllFeatures();            
+            debugVectors[2].removeAllFeatures();
             debugFeaturecollection[2].features[0].geometry.geometries = [];
             for (var i=0; i<polygonEdgesBounded.length; i++) {
                 debugFeaturecollection[2].features[0].geometry.geometries[i] = {
-                            "type": "LineString", 
-                            "coordinates": 
-                                [[polygonEdgesBounded[i][0], polygonEdgesBounded[i][1]], 
+                            "type": "LineString",
+                            "coordinates":
+                                [[polygonEdgesBounded[i][0],
+polygonEdgesBounded[i][1]],
                                   [polygonEdgesBounded[i][2], polygonEdgesBounded[i][3]]]
                         };
-            }                         
+            }
             debugVectors[2].addFeatures(geojson.read(debugFeaturecollection[2]));
 */
-            
+
             // Intersections (naive approach) - working on the better one
             // Only two intersection points are allowed
             var numIntersections = 0;
@@ -2632,7 +3004,7 @@ console.log("Selected");
                 swPoints.push(swPoint);
             }
             //to-do: erikoistapaukset huomioiva algoritmi
-            //tässä nyt workaround ilmeisimpään ongelmaan
+            //t��ss�� nyt workaround ilmeisimp����n ongelmaan
             var xEps = 0.00001;
             var yEps = 0.00001;
             var nInd = polygonEdges.length-1;
@@ -2655,7 +3027,7 @@ console.log("--------");
 
             var rawPoint;
             var rawPoints = [];
-            // Kerätään data (to-do: iffittely pois)
+            // Ker��t����n data (to-do: iffittely pois)
             for(var i=0; i<features.length; i++) {
                 geometry = features[i].geometry;
                 vertices = geometry.getVertices();
@@ -2794,12 +3166,12 @@ console.log(sweep_line.find({edge:1}));
             }
             if (minPolygonEdgeIndex >= 0) markers.markers[minPolygonEdgeIndex].first = true;
 
-            // Lisää tarvittaessa uudet välipisteet
+            // Lis���� tarvittaessa uudet v��lipisteet
 /*            var line;
             for(var i=0; i<features.length; i++) {
                 line = features[i];
-            	geometry = line.geometry;
-				if (geometry.CLASS_NAME !== "OpenLayers.Geometry.LineString") continue;
+                geometry = line.geometry;
+                                if (geometry.CLASS_NAME !== "OpenLayers.Geometry.LineString") continue;
                 vertices = geometry.getVertices();
                 var nNewPoints = 0;
                 for (var j = 0; j < vertices.length-1; j++) {
@@ -2861,27 +3233,27 @@ console.log(markerInfo);
 //                    markers.markers[ind1].dist = distance(markers.markers[ind1].lonlat,vertices[j+nNewPoints]);
                 }
             }
-            //BUG: huolehdi että näitä välipisteitä ei voi poistaa
+            //BUG: huolehdi ett�� n��it�� v��lipisteit�� ei voi poistaa
 */
 
-            // simppeli splittaus tässä vaiheessa
+            // simppeli splittaus t��ss�� vaiheessa
             splitPolygons = generateSplitPolygons(polygonEdges,polylineEdges);
             split.removeAllFeatures();
             if (splitPolygons !== null) split.addFeatures(splitPolygons);
 
-			// Output
-			if (polygonEdges.length>0) output = "Polygon\n";
+                        // Output
+                        if (polygonEdges.length>0) output = "Polygon\n";
             for (var i=0; i<polygonEdges.length; i++) {
-            	output += polygonEdges[i]+"\n";
+                output += polygonEdges[i]+"\n";
             }
             output += "\n";
             for (var i=0; i<polylineEdges.length; i++) {
-				output += "Polyline "+i+"\n";
-		        for (var j=0; j<polylineEdges[i].length; j++) {
-				    output += polylineEdges[i][j]+"\n";
-            	}
-            	output += "\n";
-            }			
+                                output += "Polyline "+i+"\n";
+                        for (var j=0; j<polylineEdges[i].length; j++) {
+                                    output += polylineEdges[i][j]+"\n";
+                }
+                output += "\n";
+            }
             document.getElementById('splits').value = output;
         }
 
@@ -2976,7 +3348,7 @@ console.log(markerInfo);
         </ul>
         <div id="map" class="smallmap"></div>
         <div id="input">
-            <textarea id="text"></textarea> 
+            <textarea id="text"></textarea>
             <input type="button" value="add feature" onclick="deserialize();" />
             <span id="selected"></span>
         </div>

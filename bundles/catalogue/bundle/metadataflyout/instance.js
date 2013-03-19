@@ -86,7 +86,9 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 		this._locale = Oskari.getLocalization(this.getName());
 
 		/* sandbox */
-		var sandbox = Oskari.$("sandbox");
+			var conf = this.conf ;
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+		var sandbox = Oskari.getSandbox(sandboxName);
 
 		this.sandbox = sandbox;
 
