@@ -85,52 +85,6 @@ this.test = false;
      * Initializations to be called after construction.
      */
     init : function() {
-
-return;
-//if (this.test) return;
-//this.test = true;
-
-       // Testing
-
-        // var event = this.drawPlugin._sandbox.getEventBuilder('ParcelInfo.ParcelLayerRegisterEvent')(this.drawPlugin.drawLayer);
-        // this.drawPlugin._sandbox.notifyAll(event);
-
-
-       var testPolygon = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Polygon([new OpenLayers.Geometry.LinearRing([
-           new OpenLayers.Geometry.Point(400000,6670000),
-           new OpenLayers.Geometry.Point(500000,6670000),
-           new OpenLayers.Geometry.Point(500000,6700000),
-           new OpenLayers.Geometry.Point(400000,6700000)
-       ])]));
-//       var testOper = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Polygon([new OpenLayers.Geometry.LinearRing([
-//           new OpenLayers.Geometry.Point(425000,6680000),
-//           new OpenLayers.Geometry.Point(475000,6680000),
-//           new OpenLayers.Geometry.Point(475000,6690000),
-//           new OpenLayers.Geometry.Point(425000,6690000)
-//       ])]));
-       var testOper = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([
-           new OpenLayers.Geometry.Point(390000,6660000),
-           new OpenLayers.Geometry.Point(450000,6680000),
-           new OpenLayers.Geometry.Point(510000,6730000),
-           new OpenLayers.Geometry.Point(460000,6680000),
-           new OpenLayers.Geometry.Point(520000,6680000)
-       ]));
-/*       var testOper = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString([
-           new OpenLayers.Geometry.Point(390000,6680000),
-           new OpenLayers.Geometry.Point(450000,6690000),
-           new OpenLayers.Geometry.Point(510000,6680000),
-           new OpenLayers.Geometry.Point(510000,6660000),
-           new OpenLayers.Geometry.Point(450000,6660000),
-           new OpenLayers.Geometry.Point(450000,6710000)
-       ]));
-*/
-//       this.drawPlugin.drawLayer.removeAllFeatures();
-       this.drawPlugin.drawLayer.addFeatures([testPolygon,testOper]);
-       this.drawPlugin.drawLayer.refresh();
-       this.map.setCenter(new OpenLayers.LonLat(450000,6680000), 3.0);
-//       debugger;
-       // End testing
-
     },
 
     /**
@@ -140,7 +94,7 @@ return;
      * 
      * {Oskari.mapframework.bundle.parcel.DrawingToolInstance} instance provides the features that are used for the splitting.
      */
-    split : function() {
+    split : function(trivial) {
     	var me = this;
         if (this.drawPlugin.splitSelection) return;
 
@@ -299,19 +253,37 @@ return;
             return (new OpenLayers.LonLat(projPoints[minDistInd].x,projPoints[minDistInd].y));
         };
 
+        this.drawPlugin.splitSelection = true;
+        var baseMultiPolygon = parcelLayer.features[0];
+        if (baseMultiPolygon.geometry.CLASS_NAME !== "OpenLayers.Geometry.MultiPolygon") return;
+        this.drawPlugin.backupFeatures = [baseMultiPolygon.clone()];
+
+        // Trivial split
+        if (trivial) {
+            var polygons = this.drawPlugin.backupFeatures[0].geometry.components;
+            this.drawPlugin.drawLayer.removeAllFeatures();
+            this.drawPlugin.editLayer.removeAllFeatures();
+            for (var i = 0; i < polygons.length; i++) {
+                this.drawPlugin.drawLayer.addFeatures(new OpenLayers.Feature.Vector(this.drawPlugin.backupFeatures[0].geometry.components[i]));
+                this.drawPlugin.drawLayer.features[i].style = this.drawPlugin.basicStyle;
+            }
+            this.drawPlugin.drawLayer.features[0].style = this.drawPlugin.selectStyle;
+            this.selectedFeature = 0;
+            parcelLayer.redraw();
+            editLayer.redraw();
+            return null;
+        }
+
         var featureInd = parcelLayer.features.length-1;
         if (featureInd < 1) return;
-
-        this.drawPlugin.splitSelection = true;
-        var basePolygon = parcelLayer.features[0];
-        this.drawPlugin.backupFeatures = [basePolygon];
         var operatingFeature = parcelLayer.features[featureInd];
+
         switch (operatingFeature.geometry.CLASS_NAME) {
             case "OpenLayers.Geometry.Polygon":
-                this.splitHole(basePolygon,operatingFeature);
+                this.splitHole(baseMultiPolygon,operatingFeature);
                 break;
             case "OpenLayers.Geometry.LineString":
-                var newFeatures = this.splitLine(basePolygon,operatingFeature);
+                var newFeatures = this.splitLine(baseMultiPolygon,operatingFeature);
                 this.drawPlugin.drawLayer.removeAllFeatures();
                 for (var i = 0; i < newFeatures[0].geometry.components.length; i++) {
                     this.drawPlugin.drawLayer.addFeatures(new OpenLayers.Feature.Vector(newFeatures[0].geometry.components[i]));
@@ -332,23 +304,41 @@ return;
      * @param {} outPolygon
      * @param {} inPolygon
      */
-    splitHole : function(outPolygon,inPolygon) {
+    splitHole : function(outPolygons,inPolygon) {
         var parcelLayer = this.drawPlugin.drawLayer;
-
-        // Validity check
-        if ((outPolygon.geometry.components[0].intersects(inPolygon.geometry.components[0]))
-        ||(this.checkSelfIntersection(inPolygon.geometry.components[0]))) {
-            parcelLayer.destroyFeatures(inPolygon);
-            return;
-        }
-
         var editLayer = this.drawPlugin.editLayer;
-        outPolygon.geometry.addComponent(inPolygon.geometry.components[0]);
-        parcelLayer.destroyFeatures(inPolygon);
-        inPolygon.style = this.drawPlugin.basicStyle;
+        var polyComponents = outPolygons.geometry.components;
 
-        editLayer.addFeatures([inPolygon]);
-        parcelLayer.addFeatures([inPolygon]);
+        for (var i = 0; i < polyComponents.length; i++) {
+            var outPolygon = polyComponents[i];
+            var inside = true;
+            // Is inside?
+            for (var j = 0; j < inPolygon.geometry.components[0].components.length; j++) {
+                if (!outPolygon.containsPoint(inPolygon.geometry.components[0].components[j])) {
+                    inside = false;
+                    break;
+                }
+            }
+            if (!inside) continue;
+
+            // Validity check
+            if ((outPolygon.components[0].intersects(inPolygon.geometry.components[0]))
+            ||(this.checkSelfIntersection(inPolygon.geometry.components[0]))) {
+                parcelLayer.destroyFeatures(inPolygon);
+                continue;
+            }
+
+            outPolygon.addComponent(inPolygon.geometry.components[0]);
+            parcelLayer.removeAllFeatures();
+            for (j = 0; j < polyComponents.length; j++) {
+                var newFeature = new OpenLayers.Feature.Vector(polyComponents[j]);
+                newFeature.style = this.drawPlugin.basicStyle;
+                parcelLayer.addFeatures([newFeature]);
+            }
+            inPolygon.style = this.drawPlugin.basicStyle;
+            editLayer.addFeatures([inPolygon]);
+            break;
+        }
     },
 
 
@@ -378,10 +368,10 @@ return;
          * @param {} line
          * @return {}
          */
-        splitLine : function(polygon,line) {
+        splitLine : function(polygons,line) {
             // OpenLayers variables
             var lineStyle = { strokeColor: '#0000ff', strokeOpacity: 1, strokeWidth: 2};
-            var olOldFeatures = [polygon].concat([line]);
+            var olOldFeatures = polygons.geometry.components.concat(line.geometry);
             var olNewFeatures = [new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon()),
                                  new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiLineString(),null,lineStyle)];
             var olSolutionPolygons = olNewFeatures[0].geometry.components;
@@ -447,15 +437,15 @@ return;
             var logText = "";
 
             for (i=0; i<olOldFeatures.length; i++) {
-                if (olOldFeatures[i].geometry.CLASS_NAME=="OpenLayers.Geometry.Polygon") {
-                    jstsOldPolygon = jstsParser.read(olOldFeatures[i].geometry);
+                if (olOldFeatures[i].id.indexOf("Polygon") !== -1) {
+                    jstsOldPolygon = jstsParser.read(olOldFeatures[i]);
                     if (!jstsOldPolygon.isValid()) {
                         console.log("Invalid geometry.");
                         return -1+logText;
                     }
                     jstsOldPolygons.push(jstsOldPolygon);
                     clipPolygon = new ClipperLib.Polygon();
-                    olLinearRings = olOldFeatures[i].geometry.components;
+                    olLinearRings = olOldFeatures[i].components;
                     if (olLinearRings[0].getArea() >= 0.0) {
                         olPoints = olLinearRings[0].components;
                     } else {
@@ -484,8 +474,8 @@ return;
                     // Scaling for integer operations
                     l = clipSourcePolygons.length-1;
                     clipSourcePolygons[l] = this.scaleup(clipSourcePolygons[l], scale);
-                } else if (olOldFeatures[i].geometry.CLASS_NAME=="OpenLayers.Geometry.LineString") {
-                    jstsLine = jstsParser.read(olOldFeatures[i].geometry);
+                } else if (olOldFeatures[i].id.indexOf("OpenLayers.Geometry.LineString") != -1) {
+                    jstsLine = jstsParser.read(olOldFeatures[i]);
                 }
             }
 
