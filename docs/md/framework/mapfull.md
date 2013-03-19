@@ -22,17 +22,26 @@ Initializes Oskari core with Oskari.mapframework.service.MapLayerService, starts
 ![screenshot](<%= docsurl %>images/mapfull.png)
 
 Mapfull using mapmodule-plugin bundle to show map view with some plugins (scalebar, zoombar, wmslayer, panbuttons etc).
+SrsName projection can be configured if defined in projectionDefs.
+ProjectionDefs will replace the default projections "EPSG:3067" and "EPSG:4326". SrsName "EPSG:3067" is used by default.
 
 ## Bundle configuration
 
 ```javascript
 {
-    "resolutions" : [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25],
-    "maxExtent" : {
-        "left" : -548576.0,
-        "bottom" : 6291456.0,
-        "right" : 1548576.0,
-        "top" :  8388608
+    "mapOptions" : {
+        "resolutions" : [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25],
+        "maxExtent" : {
+            "left" : -548576.0,
+            "bottom" : 6291456.0,
+            "right" : 1548576.0,
+            "top" :  8388608
+        },
+        "srsName" : "EPSG:3067"
+    },
+    "projectionDefs" : {
+        "EPSG:3067" : "+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs",
+        "EPSG:4326" : "+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
     }
 }
 ```
@@ -63,7 +72,8 @@ Mapfull using mapmodule-plugin bundle to show map view with some plugins (scaleb
       "bottom" : 6291456.0,
       "right" : 1548576.0,
       "top" :  8388608
-    }
+    },
+    "srsName" : "EPSG:3067"
   },
   "user":{
      <logged in users details for Oskari.mapframework.domain.User >

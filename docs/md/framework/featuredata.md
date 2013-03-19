@@ -45,6 +45,9 @@ This bundle doesn't handle any requests.
     <td>userinterface.AddExtensionRequest</td><td> Register as part of the UI in start()-method</td>
   </tr>
   <tr>
+    <td>Toolbar.AddToolButtonRequest</td><td> Requests selection toolbar button</td>
+  </tr>
+  <tr>
     <td> userinterface.RemoveExtensionRequest </td><td> Unregister from the UI in stop()-method</td>
   </tr>
   <tr>
@@ -107,5 +110,10 @@ This bundle doesn't handle any requests.
     <td> [Backend API](<%= docsurl %>backend/featuredata.html) </td>
     <td> N/A </td>
     <td> Feature data provider</td>
+  </tr>
+  <tr>
+    <td> [Oskari toolbar](<%= docsurl %>framework/toolbar.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> To register plugin to toolbar</td>
   </tr>
 </table>

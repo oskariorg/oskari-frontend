@@ -21,7 +21,7 @@ function() {
     this._mapLayersHighlighted = new Array();
 
     // map domain object
-    this._map
+    this._map = null;
 
     // Sandbox that handles communication
     this._sandbox = Oskari.clazz.create('Oskari.mapframework.sandbox.Sandbox', this);

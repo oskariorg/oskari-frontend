@@ -57,7 +57,10 @@ function(layerId, operation) {
         /** @static @property {String} operations.remove layer has been removed
          */
         'remove' : 'remove',
-        /** @static @property {String} operations.update layer has been updated
+        /** @static @property {String} operations.sticky layer switch off state is changed
+         * (e.g. name) */
+        'sticky' : 'sticky',
+         /** @static @property {String} operations.update layer has been updated
          * (e.g. name) */
         'update' : 'update'
     }

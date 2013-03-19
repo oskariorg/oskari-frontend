@@ -5,62 +5,45 @@ module.exports = function(grunt) {
     grunt.initConfig({
         meta: {
             version: '0.1.0',
-            banner: '/*! PROJECT_NAME - v<%= meta.version %> - ' +
-                '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-                '* http://PROJECT_WEBSITE/\n' +
-                '* Copyright (c) <%= grunt.template.today("yyyy") %> ' +
-                'YOUR_NAME; Licensed MIT */'
+            banner: '/*! PROJECT_NAME - v<%= meta.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %>\n' + '* http://PROJECT_WEBSITE/\n' + '* Copyright (c) <%= grunt.template.today("yyyy") %> ' + 'YOUR_NAME; Licensed MIT */'
         },
-//        lint: {
-//            files: ['applications/**/*.js', 'bundles/**/*.js', 'libraries/**/*.js', 'packages/**/*.js', 'resources/**/*.js', 'sources/**/*.js']
-//        },
-//        test: {
-//            files: ['test/**/*.js']
-//        },
-//        concat: {
-//            dist: {
-//                src: ['<banner:meta.banner>', '<file_strip_banner:lib/FILE_NAME.js>'],
-//                dest: 'dist/FILE_NAME.js'
-//            }
-//        },
-//        min: {
-//            dist: {
-//                src: ['<banner:meta.banner>', '<config:concat.dist.dest>'],
-//                dest: 'dist/FILE_NAME.min.js'
-//            }
-//        },
+        //        lint: {
+        //            files: ['applications/**/*.js', 'bundles/**/*.js', 'libraries/**/*.js', 'packages/**/*.js', 'resources/**/*.js', 'sources/**/*.js']
+        //        },
+        //        test: {
+        //            files: ['test/**/*.js']
+        //        },
+        //        concat: {
+        //            dist: {
+        //                src: ['<banner:meta.banner>', '<file_strip_banner:lib/FILE_NAME.js>'],
+        //                dest: 'dist/FILE_NAME.js'
+        //            }
+        //        },
+        //        min: {
+        //            dist: {
+        //                src: ['<banner:meta.banner>', '<config:concat.dist.dest>'],
+        //                dest: 'dist/FILE_NAME.min.js'
+        //            }
+        //        },
         watch: {
-//            files: '<config:lint.files>',
-            files: [
-                '../applications/**/*.js',
-                '../bundles/**/*.js',
-                '../libraries/**/*.js',
-                '../packages/**/*.js',
-                '../resources/**/*.js',
-                '../sources/**/*.js',
-                '../tests/**/*.js'
-                ],
-// uncommented as validate causes unnecessary delay
-//            tasks: ['validate', 'compile', 'testacularRun:dev', 'yuidoc']
-            tasks: ['compile', 'testacularRun:dev']
-        },
-        yuidoc: {
-            compile: {
-                options: {
-                    paths: [ '../sources/framework',
-                             '../bundles/framework',
-                             '../bundles/sample',
-                             '../bundles/catalogue' ],
-                    outdir: '../dist/docs/'
-                }
-            }
+            //            files: '<config:lint.files>',
+            files: ['../applications/**/*.js', '../bundles/**/*.js', '../libraries/**/*.js', '../packages/**/*.js', '../resources/**/*.js', '../sources/**/*.js', '../tests/**/*.js'],
+            // uncommented as validate causes unnecessary delay
+            //            tasks: ['validate', 'compile', 'testacularRun:dev', 'yuidoc:dist']
+            tasks: ['compileDev', 'testacularRun:dev']
         },
         sprite: {
-            options : {
-                iconDirectoryPath : "../applications/paikkatietoikkuna.fi/full-map/icons",
-                resultImageName : "../applications/paikkatietoikkuna.fi/full-map/icons/icons.png",
-                resultCSSName : "../applications/paikkatietoikkuna.fi/full-map/css/icons.css",
-                spritePathInCSS : "../icons"
+            options: {
+                iconDirectoryPath: "../applications/paikkatietoikkuna.fi/full-map/icons",
+                resultImageName: "../applications/paikkatietoikkuna.fi/full-map/icons/icons.png",
+                resultCSSName: "../applications/paikkatietoikkuna.fi/full-map/css/icons.css",
+                spritePathInCSS: "../icons"
+            }
+        },
+        compileDev: {
+            options: {
+                appSetupFile: "../tests/minifierFullMapAppSetup.json",
+                dest: "../dist/"
             }
         },
         testacularRun: {
@@ -77,6 +60,30 @@ module.exports = function(grunt) {
                     keepalive: true
                 }
             }
+        },
+        clean: {
+            options: {
+                force: true
+            },
+            build: ["../build"],
+            dist: ["../dist"]
+        },
+        yuidoc: {
+            dist: {
+                options: {
+                    paths: ['../sources/framework', '../bundles/framework', '../bundles/sample', '../bundles/catalogue'],
+                    outdir: '../dist/<%= version %>api/'
+                }
+            }
+        },
+        mddocs: {
+            options: {
+                "toolsPath": process.cwd(),
+                "docsPath": "../docs",
+                "docsurl": "/Oskari/docs/release/<%= version %>",
+                "apiurl": "http://oskari.org/",
+                "outdir": "../dist/<%= version %>docs"
+            }
         }
     });
 
@@ -85,53 +92,65 @@ module.exports = function(grunt) {
     grunt.loadTasks('tasks');
 
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
     grunt.loadNpmTasks('grunt-testacular');
 
     // Default task.
-//    grunt.registerTask('default', 'watch testacularServer:dev');
-//    grunt.registerTask('default', 'testacularServer:dev watch');
-//    grunt.registerTask('default', 'lint test concat min');
+    //    grunt.registerTask('default', 'watch testacularServer:dev');
+    //    grunt.registerTask('default', 'testacularServer:dev watch');
+    //    grunt.registerTask('default', 'lint test concat min');
 
-    grunt.registerTask('compile', 'experimental build', function(appSetupFile, arg) {
-        if (!appSetupFile) {
-            appSetupFile = "../applications/sample/full/full_appsetup.json";
-        }
-        grunt.log.writeln('Compiling appsetup...');
-        var parser = require('./parser.js');
-        var actionHandler = require('./action_compile.js');
+    grunt.registerTask('compileDev', 'Developer compile', function() {
+        // set task configs
+        grunt.config.set("compile.dev.options", this.options());
 
-        var processedAppSetup = parser.getComponents(appSetupFile);
-        actionHandler.handle(processedAppSetup, arg);
+        grunt.task.run('compile');
+    })
 
-        var unknownfiles = [];
-        for (var j = 0; j < processedAppSetup.length; ++j) {
-            unknownfiles = unknownfiles.concat(parser.getFilesForComponent(processedAppSetup[j], 'unknown'));
-        }
-        if(unknownfiles.length != 0) {
-            console.log('Appsetup referenced types of files that couldn\'t be handled: ' + unknownfiles);
-        }
-        grunt.log.writeln('Compile done!');
-    });
+    grunt.registerTask('release', 'Release build', function(version, configs) {
+        var apps = [],
+            tasks = [];
 
-    grunt.registerTask('validate', 'experimental build', function(appSetupFile, arg) {
-        if (!appSetupFile) {
-            appSetupFile = "../applications/sample/full/full_appsetup.json";
+        if (!version || !configs) {
+            grunt.fail.fatal('Missing parameter\nUsage: grunt release:1.7:"../path/to/minifierAppSetup.json"', 1);
         }
-        grunt.log.writeln('Validating appsetup...');
-        var parser = require('./parser.js');
-        var actionHandler = require('./action_validate.js');
+        // set version in config for grunt templating
+        grunt.config.set("version", version + "/");
 
-        var processedAppSetup = parser.getComponents(appSetupFile);
-        actionHandler.handle(processedAppSetup, arg);
+        // set multi task configs for compile and validate
+        configs = configs.split(',');
+        for(var i = 0, ilen = configs.length; i < ilen; i++) {
+            var config = configs[i],
+                last = (config.lastIndexOf('/')),
+                cwd = config.substring(0, last),
+                appName = config.substring(cwd.lastIndexOf('/') + 1, last),
+                dest = "../dist/<%= version %>" + appName + "/",
+                options = {
+                    iconDirectoryPath: config.substring(0, last) + "/icons",
+                    resultImageName: "../dist/<%= version %>" + appName + "/icons/icons.png",
+                    resultCSSName: "../dist/<%= version %>" + appName + "/css/icons.css",
+                    spritePathInCSS: "../icons"
+                },
+                files = [{
+                    "expand": true,
+                    "cwd": cwd + "/",
+                    "src": ["css/**","*.js"],
+                    "dest": dest
+                }];
 
-        var unknownfiles = [];
-        for (var j = 0; j < processedAppSetup.length; ++j) {
-            unknownfiles = unknownfiles.concat(parser.getFilesForComponent(processedAppSetup[j], 'unknown'));
+            // setting task configs
+            grunt.config.set("copy." + appName + ".files", files);
+            grunt.config.set("validate." + appName + ".options", {"appSetupFile": config, "dest": dest});
+            grunt.config.set("compile." + appName + ".options", {"appSetupFile": config, "dest": dest});
+            grunt.config.set("sprite." + appName + ".options", options);
         }
-        if(unknownfiles.length != 0) {
-            console.log('Appsetup referenced types of files that couldn\'t be handled: ' + unknownfiles);
-        }
-        grunt.log.writeln('Validation done!');
+
+        grunt.task.run('validate');
+        grunt.task.run('copy');
+        grunt.task.run('compile');
+        grunt.task.run('sprite');
+        grunt.task.run('yuidoc');
+        grunt.task.run('mddocs');
     });
 };

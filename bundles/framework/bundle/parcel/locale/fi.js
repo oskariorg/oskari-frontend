@@ -12,10 +12,13 @@ Oskari.registerLocalization({
         "save": "Tallenna muoto"
       },
       "area": {
-        "tooltip": "Lisää reikä",
+        "tooltip": "Jaa alueella",
         "new": "Piirrä reikä kohteeseen. Lisää alueen taitepisteet klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella.",
         "edit": "Muokkaa muotoa raahaamalla reunaviivan taitepisteitä.",
         "save": "Tallenna muoto"
+      },
+      "clear": {
+          "tooltip": "Tyhjennä"
       },
       "save": {
           "tooltip": "Tallenna"

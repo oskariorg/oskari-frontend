@@ -37,7 +37,7 @@ preprocessors = {
 
 // test results reporter to use
 // possible values: 'dots', 'progress', 'junit'
-reporters = ['progress', 'coverage'];
+reporters = ['progress'];
 
 coverageReporter = {
   type : 'html',

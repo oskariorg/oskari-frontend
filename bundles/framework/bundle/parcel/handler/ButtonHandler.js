@@ -41,14 +41,24 @@ function(instance) {
                 });
             }
         },
-        'save' : {
+        'clear' : {
+            iconCls : 'parcel-clear',
+            tooltip : '',
+            sticky : true,
+            callback : function() {
+                var drawPlugin = me.instance.view.drawPlugin;
+                drawPlugin.clear();
+                drawPlugin.drawLayer.addFeatures(drawPlugin.backupFeatures);
+            }
+        }
+/*        'save' : {
             iconCls : 'tool-save-view',
             tooltip : '',
             sticky : true,
             callback : function() {
                 me._saveDrawing();
             }
-        }
+        }*/
     };
 }, {
     /**
@@ -69,14 +79,14 @@ function(instance) {
             this.buttons[tool].tooltip = tooltip;
         }
 
-        if (this.instance.conf && this.instance.conf.hideSomeToolbarButtons && (this.instance.conf.hideSomeToolbarButtons === "hide" || this.instance.conf.hideSomeToolbarButtons === "true" )) {
+/*        if (this.instance.conf && this.instance.conf.hideSomeToolbarButtons && (this.instance.conf.hideSomeToolbarButtons === "hide" || this.instance.conf.hideSomeToolbarButtons === "true" )) {
             // Remove unnecessary toolbar buttons.
             this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('reset', 'history'));
             this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('history_back', 'history'));
             this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('history_forward', 'history'));
             this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('link', 'viewtools'));
             this.instance.getSandbox().request(this.getName(), this.instance.getSandbox().getRequestBuilder('Toolbar.RemoveToolButtonRequest')('print', 'viewtools'));
-        }
+        } */
     },
     /**
      * @method start
@@ -105,6 +115,9 @@ function(instance) {
      * @param config params for StartDrawRequest
      */
     _startNewDrawing : function(config) {
+        // Current limitation: only one dividing action allowed
+        if (this.instance.view.drawPlugin.editLayer.features.length !== 0) return;
+
         var event = this.instance.sandbox.getEventBuilder('Parcel.ParcelSelectedEvent')();
         this.instance.sandbox.notifyAll(event);
 

@@ -58,12 +58,9 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
         container.addClass("todo");
 
         var locale = this.getLocalization();
-        var confRequirementsConfig = 
-            (this.getConfiguration()||{}).requirementsConfig;
-        var requirementsConfig = 
-            confRequirementsConfig||this.requirementsConfig;
+
+        /* _bundle - path conf is set in bundle loader based on bundle.js */
         
-        require.config(requirementsConfig);
         require(["_bundle/views/todoView"], function(ToDoView) {
 
             // Finally, we kick things off by creating the **App**.
@@ -73,5 +70,5 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
         });
     }
 }, {
-    "extend" : ["Oskari.integration.bundle.bb.View"]
+    "extend" : ["Oskari.integration.bundle.backbone.View"]
 });

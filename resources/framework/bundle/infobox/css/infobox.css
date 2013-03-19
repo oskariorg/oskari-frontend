@@ -13,9 +13,16 @@ div.popupHeader {
 }
 
 div.popupHeader div {
-	padding-top: 15px;	
-	padding-left: 20px;
+    
 	vertical-align: top;	
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    position: absolute;
+    top: 12px;
+
 }
 
 div.popupHeaderArrow {
@@ -92,8 +99,6 @@ div.popupContent span.infoboxActionLinks {
     right: 0px;
     position: absolute;
     top: 14px;
-    height: 17px;
-    width: 17px;
 }
 
 

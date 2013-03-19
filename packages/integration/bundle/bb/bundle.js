@@ -1,14 +1,14 @@
 /**
  * @class Oskari.integration.bundle.bb.BackBoneBundle
- * 
+ *
  * BackboneBundle provides glue to add BackboneJS (with UnderscoreJS and RequireJS)
  * parts to Oskari framework.
- 
- * 
+
+ *
  *
  */
 Oskari.clazz.define("Oskari.integration.bundle.bb.BackBoneBundle", function() {
-    
+
     /**
      * @property conf
      * injected configuration for this singleton bundle instance
@@ -29,12 +29,8 @@ Oskari.clazz.define("Oskari.integration.bundle.bb.BackBoneBundle", function() {
     }
 }, {
 
-    "protocol" : ["Oskari.bundle.Bundle", 
-        "Oskari.bundle.BundleInstance", 
-        "Oskari.bundle.BundleInstance", 
-        "Oskari.mapframework.bundle.extension.ExtensionBundle"],        
+    "protocol" : ["Oskari.bundle.Bundle", "Oskari.bundle.BundleInstance", "Oskari.bundle.BundleInstance", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
     "source" : {
-
         "scripts" : [{
             "type" : "text/javascript",
             "src" : "../../../../bundles/integration/bundle/bb/comp.js"

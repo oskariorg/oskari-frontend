@@ -168,7 +168,7 @@ function() {
 			
         	var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         	var layerId = event.getLayerId();
-        	
+
         	if(event.getOperation() === 'update') {
         		var layer = mapLayerService.findMapLayer(layerId);
 				this.plugins['Oskari.userinterface.Flyout'].handleLayerModified(layer);
@@ -181,6 +181,12 @@ function() {
 			}
 			else if(event.getOperation() === 'remove') {
 				this.plugins['Oskari.userinterface.Flyout'].handleLayerRemoved(layerId);
+				// refresh layer count
+				this.plugins['Oskari.userinterface.Tile'].refresh();
+			}
+			else if(event.getOperation() === 'sticky') {
+				var layer = mapLayerService.findMapLayer(layerId);
+				this.plugins['Oskari.userinterface.Flyout'].handleLayerSticky(layer);
 				// refresh layer count
 				this.plugins['Oskari.userinterface.Tile'].refresh();
 			}

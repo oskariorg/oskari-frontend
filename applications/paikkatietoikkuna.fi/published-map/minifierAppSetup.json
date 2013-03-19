@@ -1,0 +1,134 @@
+{
+    "startupSequence": [{
+        "title": "OpenLayers",
+        "fi": "OpenLayers",
+        "sv": "?",
+        "en": "OpenLayers",
+        "bundlename": "openlayers-default-theme",
+        "bundleinstancename": "openlayers-default-theme",
+        "metadata": {
+            "Import-Bundle": {
+                "openlayers-single-full": {
+                    "bundlePath": "../../../packages/openlayers/bundle/"
+                },
+                "openlayers-default-theme": {
+                    "bundlePath": "../../../packages/openlayers/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }, {
+        "title": "OskariUI",
+        "fi": "OskariUI",
+        "sv": "OskariUI",
+        "en": "OskariUI",
+        "bundlename": "oskariui",
+        "bundleinstancename": "oskariui",
+        "metadata": {
+            "Import-Bundle": {
+                "oskariui": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }, {
+        "title": "Map",
+        "fi": "Map",
+        "sv": "?",
+        "en": "Map",
+        "bundlename": "mapfull",
+        "bundleinstancename": "mapfull",
+        "metadata": {
+            "Import-Bundle": {
+                "mapwmts": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapwfs": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "service-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "event-map-layer": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "request-map-layer": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapmodule-plugin": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "event-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapfull": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "core-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "request-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "domain": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "core-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "request-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "sandbox-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "service-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "sandbox-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "event-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }, {
+        "title": "InfoBox",
+        "fi": "infobox",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "infobox",
+        "bundleinstancename": "infobox",
+        "metadata": {
+            "Import-Bundle": {
+                "infobox": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }, {
+        "title": "PostProcessor",
+        "fi": "PostProcessor",
+        "sv": "PostProcessor",
+        "en": "PostProcessor",
+        "bundlename": "postprocessor",
+        "bundleinstancename": "postprocessor",
+        "metadata": {
+            "Import-Bundle": {
+                "postprocessor": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }]
+}

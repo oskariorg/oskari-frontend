@@ -251,7 +251,7 @@ function(instance) {
 	},
     /**
      * @method handleLayerModified
-	 * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer
+	 * @param {Oskari.mapframework.domain.AbstractLayer} layer
      *           layer that was modified
      * let's refresh ui to match current layers
      */
@@ -262,10 +262,23 @@ function(instance) {
             tab.updateLayerContent(layer.getId(), layer);
         }
     },
+  /**
+     * @method handleLayerSticky
+	 * @param {Oskari.mapframework.domain.AbstractLayer} layer
+     *           layer thats switch off diasable/enable is changed
+     * let's refresh ui to match current layers
+     */
+    handleLayerSticky : function(layer) {
+        var me = this;
+        for (var i = 0; i < this.layerTabs.length; ++i) {
+            var tab = this.layerTabs[i];
+            tab.updateLayerContent(layer.getId(), layer);
+       } 
+    },
 
     /**
      * @method handleLayerAdded
-	 * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer
+	 * @param {Oskari.mapframework.domain.AbstractLayer} layer
      *           layer that was added
      * let's refresh ui to match current layers
      */

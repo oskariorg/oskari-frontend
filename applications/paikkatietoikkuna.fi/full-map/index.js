@@ -449,8 +449,8 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
 			},
 			instanceProps : {}
 		}, {
-			title : 'HelpBubble',
-			fi : 'HelpBubble',
+			title : 'UserGuide',
+			fi : 'userguide',
 			sv : '?',
 			en : '?',
 			bundlename : 'userguide',
@@ -483,7 +483,7 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
 		}, {
 			title : 'Places',
 			fi : 'Paikat',
-			sv : 'Platsar',
+			sv : 'Platser',
 			en : 'Places',
 			bundlename : 'myplaces2',
 			bundleinstancename : 'myplaces2',

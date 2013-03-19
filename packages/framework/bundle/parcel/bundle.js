@@ -97,6 +97,10 @@ function() {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/service/ParcelWfst.js"
         },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/parcel/service/ParcelPlot.js"
+        },
         /* splitter */
         {
             "type" : "text/javascript",
@@ -119,10 +123,20 @@ function() {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/instance.js"
         }, {
-           // NOTE! EXTERNAL LIBRARY!
+           // NOTE! EXTERNAL LIBRARIES!
             "type" : "text/javascript",
             "src" : "../../../../libraries/jscolor/jscolor.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/clipper/clipper.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/jsts/jsts.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/jsts/javascript.util.js"
         },
+
         // css
         {
             "type" : "text/css",

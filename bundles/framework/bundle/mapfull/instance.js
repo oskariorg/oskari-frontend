@@ -96,8 +96,7 @@ function() {
                 module.registerPlugin(plugins[i].instance);
                 module.startPlugin(plugins[i].instance);
             }
-        }
-         
+        }  
 		this.map = map;
 	},
     /**
@@ -117,6 +116,10 @@ function() {
         };
 		var me = this;
 		var conf = me.conf;
+
+        if (me.conf.projectionDefs) {
+            Proj4js.defs = me.conf.projectionDefs;
+        }
 		
 		var userInterfaceLanguage = Oskari.getLang();
 
@@ -145,6 +148,10 @@ function() {
 		enhancements.push(Oskari.clazz.create('Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnhancement'));
         
 		core.init(services, enhancements);
+
+        // need to create ui before parsing layers because layerplugins register modelbuilders
+        this._createUi();
+
 		// setup initial maplayers
     	var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 	    var initialLayers = conf.layers;
@@ -154,8 +161,6 @@ function() {
 	            mapLayerService.addLayer(mapLayer, true);
 			}
 	    }
-		  
-        this._createUi();
         
 		sandbox.registerAsStateful(this.mediator.bundleId, this);
 		
@@ -305,6 +310,7 @@ function() {
             north : lon,
             east : lat,
             zoom : map.getZoom(),
+            srs : map.getSrsName(),
             selectedLayers : []
         };
         

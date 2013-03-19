@@ -107,9 +107,11 @@ function(instance) {
      */
     _downloadFeature : function(fid, protocol, cb) {
         var me = this;
-        var filter = new OpenLayers.Filter.FeatureId({
-            fids : [fid]
-        });
+        var filter = new OpenLayers.Filter.Comparison({
+                                        type: OpenLayers.Filter.Comparison.EQUAL_TO,
+                                        property: 'ktjkiiwfs:kiinteistotunnus',
+                                        value: fid
+                                   });
         var loc = this.instance.getLocalization('notification').placeLoading;
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         dialog.show(loc.title, loc.message);

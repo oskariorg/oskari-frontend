@@ -24,7 +24,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
  *			bottom : 10000000,
  *			right : 10000000,
  *			top : 0
- *		}
+ *		},
+        srsName : "EPSG:3067"
  *	}
  */
 function(id, imageUrl, options) {
@@ -202,11 +203,22 @@ function(id, imageUrl, options) {
         sandbox.printDebug("Initializing map module...#############################################");
 
         this._sandbox = sandbox;
-        
-        if(this._options!=null && this._options.resolutions!=null){
-        	this._mapResolutions = this._options.resolutions;
+
+        // setting options
+        if (this._options) {
+            if (this._options.resolutions) {
+                this._mapResolutions = this._options.resolutions;
+            }
+            if(this._options.srsName){
+                this._projectionCode = this._options.srsName;
+                // set srsName to Oskari.mapframework.domain.Map
+                if (this._sandbox) {
+                    this._sandbox.getMap().setSrsName(this._projectionCode);
+                }
+            }
         }
         
+
         // register events & requesthandlers
         // TODO: should these be in start-method?
         for(p in this.eventHandlers ) {

@@ -4,18 +4,11 @@
 
 module.exports = function(grunt) {
 
-    // TODO: ditch this when grunt v0.4 is released
-    grunt.util = grunt.util || grunt.utils;
-
     grunt.registerMultiTask('sprite', 'Generate CSS Sprite', function() {
-
         var done = this.async();
         var starttime = (new Date()).getTime();
 
-        var helpers = require('grunt-lib-contrib').init(grunt);
-        var options = helpers.options(this, {
-            quiet: true
-        });
+        var options = this.data.options;
 
         // Run some sync stuff.
         grunt.log.writeln('Generating CSS Sprite...');
@@ -162,12 +155,19 @@ module.exports = function(grunt) {
                 }
             }
 
-            // resize and remove EXIF profile data
-            sprite.write(resultImageName, function (err) {
-                if (!err) {
-                    writeSpriteCSS(iconImages, next);
+            // create parent folder as there the parent folder should not exist
+            fs.mkdir(resultImageName.substring(0, resultImageName.lastIndexOf("/")), 0755, function (err) {
+                if (!err || (err && err.code === 'EEXIST')){
+                    // write sprite if directory has been created or exists
+                    sprite.write(resultImageName, function (err) {
+                        if (!err) {
+                            writeSpriteCSS(iconImages, next);
+                        } else {
+                            console.log("writeSpriteImage didn't work. Error", err);
+                        }
+                    });
                 } else {
-                    console.log("writeSpriteImage didn't work. Error", err);
+                    console.log("writeSpriteImage create folder didn't work. Error", err);
                 }
             });
         }
