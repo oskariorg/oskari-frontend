@@ -171,13 +171,14 @@ function(instance) {
         // The select control applies to the edit layer and the drawing layer as we will select the polygon to save for visuals
         var selectEditControl = new OpenLayers.Control.SelectFeature([me.editLayer, me.drawLayer]);
         this._map.addControl(selectEditControl);
-
-        var modifyEditControl = new OpenLayers.Control.ModifyFeature(me.editLayer);
-        this._map.addControl(modifyEditControl);
         
         // The select control for infobox
 		this.selectInfoControl = new OpenLayers.Control.SelectFeature(me.drawLayer);
 		this._map.addControl(this.selectInfoControl);
+
+        var modifyEditControl = new OpenLayers.Control.ModifyFeature(me.editLayer);
+        this._map.addControl(modifyEditControl);
+        
 
         this.controls = {
             select : selectEditControl,
@@ -290,7 +291,7 @@ function(instance) {
      */
     stopPlugin : function(sandbox) {
         // Let possible info box know that this layer should not be followed.
-        var event = sandbox.getEventBuilder('ParcelInfo.ParcelLayerUnregisterEvent')(this.getDrawingLayer());
+        var event = sandbox.getEventBuilder('ParcelInfo.ParcelLayerUnregisterEvent')([this.getDrawingLayer(),this.getEditLayer()]);
         sandbox.notifyAll(event);
 
         // Remove request handlers.
@@ -343,7 +344,7 @@ function(instance) {
         // be to set dependency or certain creation order between bundles. But, the dependency is
         // not mandatory to make this bundle work and the order is required only if info should be
         // updated from this bundle.
-        var event = this._sandbox.getEventBuilder('ParcelInfo.ParcelLayerRegisterEvent')(this.getDrawingLayer());
+        var event = this._sandbox.getEventBuilder('ParcelInfo.ParcelLayerRegisterEvent')([this.getDrawingLayer(),this.getEditLayer()]);
         this._sandbox.notifyAll(event);
 
         // add feature to draw layer
@@ -467,6 +468,13 @@ function(instance) {
     getDrawingLayer : function() {
         return this.drawLayer;
     },
+	/**
+	 * @return {OpenLayers.Layer.Vector} Returns the edit vector layer.
+	 * @method getEditLayer
+	 */
+	getEditLayer : function() {
+		return this.editLayer;
+	},
     /**
      * TODO: This method needs to be informed which polygon is to be saved.
      *
@@ -550,6 +558,7 @@ function(instance) {
             // Make sure the marker layer is topmost (previous activations push the vector layer too high)
             var index = Math.max(this._map.Z_INDEX_BASE['Feature'], this.markerLayer.getZIndex()) + 1;
             this.markerLayer.setZIndex(index);
+            this.updateInfobox();
         }
     },
     /**
