@@ -107,9 +107,6 @@ function(instance) {
      */
     _downloadFeature : function(fid, protocol, cb) {
         var me = this;
-    /*    var filter = new OpenLayers.Filter.FeatureId({
-            fids : [fid]
-     });   */
         var filter = new OpenLayers.Filter.Comparison({
                                         type: OpenLayers.Filter.Comparison.EQUAL_TO,
                                         property: 'ktjkiiwfs:kiinteistotunnus',

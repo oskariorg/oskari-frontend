@@ -141,6 +141,7 @@ return;
      * {Oskari.mapframework.bundle.parcel.DrawingToolInstance} instance provides the features that are used for the splitting.
      */
     split : function() {
+    	var me = this;
         if (this.drawPlugin.splitSelection) return;
 
         var parcelLayer = this.drawPlugin.drawLayer;
@@ -150,7 +151,18 @@ return;
             var lonlat = this.getLonLatFromPixel(new OpenLayers.Pixel(evt.xy.x,evt.xy.y))
             lonlat.lon -= this.activeMarker.markerMouseOffset.lon;
             lonlat.lat -= this.activeMarker.markerMouseOffset.lat;
+
             this.activeMarker.lonlat = this.activeMarkerProjection(lonlat);
+            this.activeMarker.reference.point.x = this.activeMarker.lonlat.lon;
+            this.activeMarker.reference.point.x0 = this.activeMarker.lonlat.lon;
+            this.activeMarker.reference.point.y = this.activeMarker.lonlat.lat;
+            this.activeMarker.reference.point.y0 = this.activeMarker.lonlat.lat;
+
+            editLayer.updateLine();
+            editLayer.redraw();
+            parcelLayer.redraw();
+            me.drawPlugin.updateInfobox();
+ 
             this.getLayersByName("Parcel Markers Layer")[0].redraw();
             OpenLayers.Event.stop(evt);
         };
@@ -173,6 +185,7 @@ return;
             editLayer.updateLine();
             editLayer.redraw();
             parcelLayer.redraw();
+            me.drawPlugin.updateInfobox();
         };
 
         this.map.pointProjection = function(q,p0,p1) {
@@ -291,6 +304,7 @@ return;
 
         this.drawPlugin.splitSelection = true;
         var basePolygon = parcelLayer.features[0];
+        this.drawPlugin.backupFeatures = [basePolygon];
         var operatingFeature = parcelLayer.features[featureInd];
         switch (operatingFeature.geometry.CLASS_NAME) {
             case "OpenLayers.Geometry.Polygon":
@@ -334,6 +348,7 @@ return;
         inPolygon.style = this.drawPlugin.basicStyle;
 
         editLayer.addFeatures([inPolygon]);
+        parcelLayer.addFeatures([inPolygon]);
     },
 
 
@@ -376,6 +391,7 @@ return;
             var olNewLineStringsTmp = [];
             var olPoint;
             var olPoints = [];
+            var olHolePoints = [];
             var olEndPoints = [];
             var olLinearRingPoints = [];
             var olLinearRings;
@@ -619,12 +635,12 @@ return;
 
                                 if (clipSolutionHoles.length > 0) {
                                     clipHole = clipSolutionPolygons[k];
-                                    olPoints = [];
+                                    olHolePoints = [];
                                     for (m=0; m<clipHole.length; m++) {
                                         clipPoint = clipHole[m];
-                                        olPoints.push(new OpenLayers.Geometry.Point(clipPoint.X/scale, clipPoint.Y/scale));
+                                        olHolePoints.push(new OpenLayers.Geometry.Point(clipPoint.X/scale, clipPoint.Y/scale));
                                     }
-                                    olNewPolygons[l].components.push(new OpenLayers.Geometry.LinearRing(olPoints));
+                                    olNewPolygons[l].components.push(new OpenLayers.Geometry.LinearRing(olHolePoints));
                                     break;
                                 }
                             }
@@ -692,7 +708,7 @@ return;
                 nextIndex = olEndPoints.length;
                 lastIndex = olNewLineStrings[k].components.length-1;
                 olEndPoints[nextIndex] = [olNewLineStrings[k].components[0],olNewLineStrings[k].components[lastIndex]];
-                // Kiinnitetyt p������������tepisteet
+                // Fixed endpoints
                 olEndPoints[nextIndex][0].x0 = olEndPoints[nextIndex][0].x;
                 olEndPoints[nextIndex][0].y0 = olEndPoints[nextIndex][0].y;
                 olEndPoints[nextIndex][1].x0 = olEndPoints[nextIndex][1].x;

@@ -51,6 +51,9 @@ function(layer, sandbox, localization) {
     	/* set title */
     	var newName = layer.getName();
         this.ui.find('.layer-title').html(newName);
+   
+        /* set sticky */
+        if (layer.isSticky())this.ui.find('input').attr('disabled', 'disabled');
         
         /* set/clear alert if required */
         var prevBackendStatus = this.backendStatus; 

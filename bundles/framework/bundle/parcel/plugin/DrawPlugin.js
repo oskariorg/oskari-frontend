@@ -23,13 +23,14 @@ function(instance) {
     this.markerLayer = null;
     this.currentDrawMode = null;
     this.currentFeatureType = null;
-    // Created in init.
+    // Created in init
     this.splitter = null;
+    this.backupFeatures = [];
     this.splitSelection = false;
     this.basicStyle = null;
     this.selectStyle = null;
     this.selectedFeature = -2;
-
+	this.selectInfoControl = null;
 }, {
     /**
      * @method getName
@@ -114,7 +115,6 @@ function(instance) {
                                 var polyLength = points.length-1;
                                 for (m = 0; m < polyLength; m++) {
                                     var n = m+1;
-
                                     if ((points[m] === prevPoint)&&(points[n] === nextPoint)) {
                                         points.splice(n,0,point);
                                         newReferences.push(polygon.id);
@@ -147,8 +147,6 @@ function(instance) {
                 this.refresh();
                 me.drawLayer.refresh();
 
-
-
                 // Redo selection so the info box knows where we're at
                 // me.controls.select.select(me.getDrawing());
 
@@ -176,6 +174,10 @@ function(instance) {
 
         var modifyEditControl = new OpenLayers.Control.ModifyFeature(me.editLayer);
         this._map.addControl(modifyEditControl);
+        
+        // The select control for infobox
+		this.selectInfoControl = new OpenLayers.Control.SelectFeature(me.drawLayer);
+		this._map.addControl(this.selectInfoControl);
 
         this.controls = {
             select : selectEditControl,
@@ -196,7 +198,7 @@ function(instance) {
         this._map.setLayerIndex(me.drawLayer, 10);
         this._map.setLayerIndex(me.editLayer, 100);
         this._map.setLayerIndex(me.markerLayer, 1000);
-/*
+
         OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
             defaultHandlerOptions: {
                 'single': true,
@@ -231,6 +233,8 @@ function(instance) {
                     if (geometry.CLASS_NAME=="OpenLayers.Geometry.Polygon") {
                         if (geometry.containsPoint(point)) {
                             me.selectedFeature = i;
+                            // Set selected --> updates infobox
+							me.selectInfoControl.select(features[i]);
                             break;
                         }
                     }
@@ -249,7 +253,7 @@ function(instance) {
         var click = new OpenLayers.Control.Click();
         this._map.addControl(click);
         click.activate();
-*/
+
         this.requestHandlers = {
             startDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StartDrawingRequestHandler', me),
             stopDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.parcel.request.StopDrawingRequestHandler', me),
@@ -329,8 +333,8 @@ function(instance) {
      * @method drawFeature
      */
     drawFeature : function(feature, featureType) {
-        // remove possible old drawing
-        this.drawLayer.removeAllFeatures();
+        this.clear();
+
         this.currentFeatureType = null;
 
         // Let possible parcel info bundle know that layer should be followed.
@@ -513,6 +517,23 @@ function(instance) {
      */
     unregister : function() {
     },
+
+    /**
+     * @method clear
+     * Clears all layers.
+     */
+    clear : function() {
+        // remove possible old drawing
+        this.drawLayer.removeAllFeatures();
+        this.editLayer.removeAllFeatures();
+        var startIndex = this.markerLayer.markers.length-1;
+        for (var i = startIndex; i>=0; i--) {
+            this.markerLayer.markers[i].destroy();
+        }
+        this.markerLayer.markers = [];
+        this._map.activeMarker = null;
+        this.splitSelection = false;
+    },
     /**
      * Handles the splitting of the parcel feature
      * and replaces the feature hold by this instance.
@@ -530,7 +551,34 @@ function(instance) {
             var index = Math.max(this._map.Z_INDEX_BASE['Feature'], this.markerLayer.getZIndex()) + 1;
             this.markerLayer.setZIndex(index);
         }
-    }
+    },
+    /**
+	 * Updates feature info in info box.
+	 * If there is not a feature in selected state, then 1st feature in drawLayer is selected and updated
+	 * @method updateInfobox
+	 */
+	updateInfobox : function() {
+
+		if (this.selectedFeature > -1) {
+
+			// Set selected
+			this.selectInfoControl.select(this.drawLayer.features[this.selectedFeature]);
+
+		} else {
+			var features = this.drawLayer.features;
+			if (features) {
+				this.selectedFeature = 0;
+				for ( i = 0; i < features.length; i++) {
+					this.drawLayer.features[i].style = (i === this.selectedFeature) ? this.selectStyle : this.basicStyle;
+				}
+				//me.editLayer.redraw();
+				this.drawLayer.redraw();
+				this.selectInfoControl.select(this.drawLayer.features[this.selectedFeature]);
+			}
+
+		}
+
+	}
 }, {
-    'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+	'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
