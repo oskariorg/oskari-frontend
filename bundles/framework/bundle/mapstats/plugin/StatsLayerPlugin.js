@@ -15,9 +15,16 @@ function(config) {
     this._map = null;
     this._supportedFormats = {};
     this.config = config;
+    this.ajaxUrl = null;
+    if(config && config.ajaxUrl) {
+        this.ajaxUrl = config.ajaxUrl;
+    }
 }, {
     /** @static @property __name plugin name */
     __name : 'StatsLayerPlugin',
+
+    /** @static @property _layerType type of layers this plugin handles */
+    _layerType : 'STATS',
 
     /**
      * @method getName
@@ -76,7 +83,7 @@ function(config) {
      */
     init : function(sandbox) {
 
-        var sandboxName = ( this.config ? this.config.sandbox : null ) || 'sandbox' ;
+        var sandboxName = ( this.config ? this.config.sandbox : null ) || 'sandbox';
         var sandbox = Oskari.getSandbox(sandboxName);
         
         // register domain builder
@@ -102,6 +109,9 @@ function(config) {
         sandbox.register(this);
         for(p in this.eventHandlers) {
             sandbox.registerForEventByName(this, p);
+        }
+        if(!this.ajaxUrl) {
+            this.ajaxUrl = sandbox.getAjaxUrl() + 'action_route=GetStatsTile';
         }
     },
     /**
@@ -180,7 +190,7 @@ function(config) {
             var layer = layers[i];
             var layerId = layer.getId();
 
-            if(!layer.isLayerOfType('WMS')) {
+            if(!layer.isLayerOfType(this._layerType)) {
                 continue;
             }
 
@@ -208,7 +218,7 @@ function(config) {
      */
     _addMapLayerToMap : function(layer, keepLayerOnTop, isBaseMap) {
 
-        if(!layer.isLayerOfType('WMS')) {
+        if(!layer.isLayerOfType(this._layerType)) {
             return;
         }
 
@@ -221,108 +231,33 @@ function(config) {
             }
         }
 
-        if(layer.isGroupLayer() || layer.isBaseLayer() || isBaseMap == true) {
-			if(layer.getSubLayers().length > 0) {
-                /**
-                 * loop all basemap layers and add these on the map
-                 */
-                for(var i = 0; i < layer.getSubLayers().length; i++) {
+        var layerScales = this.getMapModule().calculateLayerScales(layer.getMaxScale(), layer.getMinScale());
+        var openLayer = new OpenLayers.Layer.WMS('layer_' + layer.getId(), this.ajaxUrl, {
+            layers : layer.getWmsName(),
+            transparent : true,
+            layerId : layer.getId(),
+            visId : 1,
+            format : "image/png"
+        }, {
+            layerId : layer.getWmsName(),
+            scales : layerScales,
+            isBaseLayer : false,
+            displayInLayerSwitcher : false,
+            visibility : true,
+            singleTile : true,
+            buffer : 0
+        });
 
-                    var layerUrls = "";
-                    for(var j = 0; j < layer.getSubLayers()[i].getWmsUrls().length; j++) {
-                        layerUrls += layer.getSubLayers()[i]
-                        .getWmsUrls()[j];
-                    }
+        openLayer.opacity = layer.getOpacity() / 100;
 
-                    var layerScales = this.getMapModule().calculateLayerScales(layer
-                    .getSubLayers()[i].getMaxScale(), layer
-                    .getSubLayers()[i].getMinScale());
+        this._map.addLayer(openLayer);
 
-                    var openLayer = new OpenLayers.Layer.WMS('basemap_' + layer.getSubLayers()[i].getId(), 
-                                            layer.getSubLayers()[i].getWmsUrls(), {
-                        layers : layer.getSubLayers()[i].getWmsName(),
-                        transparent : true,
-                        id : layer.getSubLayers()[i].getId(),
-                        styles : layer.getSubLayers()[i].getCurrentStyle().getName(),
-                        format : "image/png"
-                    }, {
-                        layerId : layer.getSubLayers()[i].getWmsName(),
-                        scales : layerScales,
-                        isBaseLayer : false,
-                        displayInLayerSwitcher : true,
-                        visibility : true,
-                        buffer : 0
-                    });
+        this._sandbox.printDebug("#!#! CREATED OPENLAYER.LAYER.WMS for StatsLayer " + layer.getId());
 
-                    openLayer.opacity = layer.getOpacity() / 100;
-
-                    this._map.addLayer(openLayer);
-
-                    if(!keepLayerOnTop) {
-                        this._map.setLayerIndex(openLayer, 0);
-                    }
-
-                }
-
-            } else {
-                var layerScales = this.getMapModule().calculateLayerScales(layer.getMaxScale(), layer.getMinScale());
-
-                var openLayer = new OpenLayers.Layer.WMS('layer_' + layer.getId(), layer.getWmsUrls(), {
-                    layers : layer.getWmsName(),
-                    transparent : true,
-                    id : layer.getId(),
-                    styles : layer.getCurrentStyle().getName(),
-                    format : "image/png"
-                }, {
-                    layerId : layer.getWmsName(),
-                    scales : layerScales,
-                    isBaseLayer : false,
-                    displayInLayerSwitcher : true,
-                    visibility : true,
-                    buffer : 0
-                });
-
-                openLayer.opacity = layer.getOpacity() / 100;
-
-                this._map.addLayer(openLayer);
-
-                if(keepLayerOnTop) {
-                    this._map.setLayerIndex(openLayer, this._map.layers.length);
-                } else {
-                    this._map.setLayerIndex(openLayer, 0);
-                }
-            }
-
+        if(keepLayerOnTop) {
+            this._map.setLayerIndex(openLayer, this._map.layers.length);
         } else {
-
-            var layerScales = this.getMapModule().calculateLayerScales(layer.getMaxScale(), layer.getMinScale());
-            var openLayer = new OpenLayers.Layer.WMS('layer_' + layer.getId(), layer.getWmsUrls(), {
-                layers : layer.getWmsName(),
-                transparent : true,
-                id : layer.getId(),
-                styles : layer.getCurrentStyle().getName(),
-                format : "image/png"
-            }, {
-                layerId : layer.getWmsName(),
-                scales : layerScales,
-                isBaseLayer : false,
-                displayInLayerSwitcher : true,
-                visibility : true,
-                buffer : 0
-            });
-
-            openLayer.opacity = layer.getOpacity() / 100;
-
-            this._map.addLayer(openLayer);
-
-            this._sandbox.printDebug("#!#! CREATED OPENLAYER.LAYER.WMS for " + layer.getId());
-
-            if(keepLayerOnTop) {
-                this._map.setLayerIndex(openLayer, this._map.layers.length);
-            } else {
-                this._map.setLayerIndex(openLayer, 0);
-            }
-
+            this._map.setLayerIndex(openLayer, 0);
         }
         if (markerLayer) {
             for (var mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
@@ -353,30 +288,13 @@ function(config) {
      */
     _removeMapLayerFromMap : function(layer) {
 
-        if(!layer.isLayerOfType('WMS')) {
+        if(!layer.isLayerOfType(this._layerType)) {
             return;
         }
 
-        if(layer.isBaseLayer()||layer.isGroupLayer()) {
-            var baseLayerId = "";
-            if(layer.getSubLayers().length > 0) {
-                for(var i = 0; i < layer.getSubLayers().length; i++) {
-		    var subtmp = layer.getSubLayers()[i];
-                    var remLayer = 
-			this._map.getLayersByName('basemap_' + subtmp.getId());
-		    if (remLayer && remLayer[0] && remLayer[0].destroy) {
-			remLayer[0].destroy();
-		    }
-                }
-            } else {
-                var remLayer = this._map.getLayersByName('layer_' + layer.getId());
-                remLayer[0].destroy();
-            }
-        } else {
-            var remLayer = this._map.getLayersByName('layer_' + layer.getId());
-            /* This should free all memory */
-            remLayer[0].destroy();
-        }
+        var mapLayer = this.getOLMapLayers(layer);
+        /* This should free all memory */
+        mapLayer[0].destroy();
     },
     /**
      * @method getOLMapLayers
@@ -386,26 +304,11 @@ function(config) {
      */
     getOLMapLayers : function(layer) {
 
-        if(!layer.isLayerOfType('WMS')) {
+        if(!layer.isLayerOfType(this._layerType)) {
             return null;
         }
 
-        if(layer.isBaseLayer()||layer.isGroupLayer()) {
-            var baseLayerId = "";
-            if(layer.getSubLayers().length > 0) {
-                var olLayers = [];
-                for(var i = 0; i < layer.getSubLayers().length; i++) {
-                    var tmpLayers = this._map.getLayersByName('basemap_' + layer.getSubLayers()[i].getId());
-                    olLayers.push(tmpLayers[0]);
-                }
-                return olLayers;
-            } else {
-                return this._map.getLayersByName('layer_' + layer.getId());
-            }
-        } else {
-            return this._map.getLayersByName('layer_' + layer.getId());
-        }
-        return null;
+        return this._map.getLayersByName('layer_' + layer.getId());
     },
     /**
      * @method _afterChangeMapLayerOpacityEvent
@@ -417,28 +320,13 @@ function(config) {
     _afterChangeMapLayerOpacityEvent : function(event) {
         var layer = event.getMapLayer();
 
-        if(!layer.isLayerOfType('WMS'))
+        if(!layer.isLayerOfType(this._layerType))
             return;
 
-        if(layer.isBaseLayer() || layer.isGroupLayer()) {
-            if(layer.getSubLayers().length > 0) {
-                for(var bl = 0; bl < layer.getSubLayers().length; bl++) {
-                    var mapLayer = this._map.getLayersByName('basemap_' + layer
-                    .getSubLayers()[bl].getId());
-                    mapLayer[0].setOpacity(layer.getOpacity() / 100);
-                }
-            } else {
-                var mapLayer = this._map.getLayersByName('layer_' + layer.getId());
-                if(mapLayer[0] != null) {
-                    mapLayer[0].setOpacity(layer.getOpacity() / 100);
-                }
-            }
-        } else {
-            this._sandbox.printDebug("Setting Layer Opacity for " + layer.getId() + " to " + layer.getOpacity());
-            var mapLayer = this._map.getLayersByName('layer_' + layer.getId());
-            if(mapLayer[0] != null) {
-                mapLayer[0].setOpacity(layer.getOpacity() / 100);
-            }
+        this._sandbox.printDebug("Setting Layer Opacity for " + layer.getId() + " to " + layer.getOpacity());
+        var mapLayer = this.getOLMapLayers(layer);
+        if(mapLayer[0] != null) {
+            mapLayer[0].setOpacity(layer.getOpacity() / 100);
         }
     },
     /**
@@ -451,13 +339,11 @@ function(config) {
         var layer = event.getMapLayer();
 
         // Change selected layer style to defined style
-        if(!layer.isBaseLayer()) {
-            var styledLayer = this._map.getLayersByName('layer_' + layer.getId());
-            if(styledLayer != null) {
-                styledLayer[0].mergeNewParams({
-                    styles : layer.getCurrentStyle().getName()
-                });
-            }
+        var mapLayer = this.getOLMapLayers(layer);
+        if(mapLayer != null) {
+            mapLayer[0].mergeNewParams({
+                visId : layer.getCurrentStyle().getName()
+            });
         }
     }
 }, {

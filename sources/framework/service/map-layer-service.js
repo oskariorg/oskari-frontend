@@ -34,12 +34,8 @@ function(mapLayerUrl, sandbox) {
      */
     this.typeMapping = {
         wmslayer : 'Oskari.mapframework.domain.WmsLayer',
-        // FIXME: WMTS is from a bundle, why is this in here? 
-        // - probably added here due to some load ordering issue at least in older releases
-        wmtslayer : 'Oskari.mapframework.wmts.domain.WmtsLayer',
         wfslayer : 'Oskari.mapframework.domain.WfsLayer',
         vectorlayer : 'Oskari.mapframework.domain.VectorLayer'
-
     },
 
     /**

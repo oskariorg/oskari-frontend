@@ -11,17 +11,16 @@ Oskari.clazz
 				{
 					/**
 					 * parses any additional fields to model
+					 * @param {Oskari.mapframework.bundle.mapstats.domain.StatsLayer} layer partially populated layer
+					 * @param {Object} mapLayerJson JSON presentation of the layer
+					 * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here
 					 */
 					parseLayerData : function(layer, mapLayerJson,
 							maplayerService) {
+
+        				layer.setWmsName(mapLayerJson.wmsName);
+        				//mapLayerJson.visualizations = [] -> populate styles
 /*
-						layer.setWmtsName(mapLayerJson.wmsName);
-						if (mapLayerJson.wmsUrl) {
-							var wmsUrls = mapLayerJson.wmsUrl.split(",");
-							for ( var i = 0; i < wmsUrls.length; i++) {
-								layer.addWmtsUrl(wmsUrls[i]);
-							}
-						}
 
 						var styleBuilder = Oskari.clazz
 								.builder('Oskari.mapframework.domain.Style');

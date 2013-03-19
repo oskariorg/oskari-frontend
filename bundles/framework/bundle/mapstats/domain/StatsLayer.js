@@ -15,6 +15,20 @@ function() {
     
 }, {
    /* Layer type specific functions */
+    /**
+     * @method setWmsName
+     * @param {String} wmsName used to identify service
+     */
+    setWmsName : function(wmsName) {
+        this._wmsName = wmsName;
+    },
+    /**
+     * @method getWmsName
+     * @return {String} wmsName used to identify service
+     */
+    getWmsName : function() {
+        return this._wmsName;
+    }
 }, {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]
 });
