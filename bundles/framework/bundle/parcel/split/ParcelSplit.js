@@ -86,7 +86,7 @@ this.test = false;
      */
     init : function() {
 
-//return;
+return;
 //if (this.test) return;
 //this.test = true;
 
@@ -141,6 +141,7 @@ this.test = false;
      * {Oskari.mapframework.bundle.parcel.DrawingToolInstance} instance provides the features that are used for the splitting.
      */
     split : function() {
+    	var me = this;
         if (this.drawPlugin.splitSelection) return;
 
         var parcelLayer = this.drawPlugin.drawLayer;
@@ -151,6 +152,16 @@ this.test = false;
             lonlat.lon -= this.activeMarker.markerMouseOffset.lon;
             lonlat.lat -= this.activeMarker.markerMouseOffset.lat;
             this.activeMarker.lonlat = this.activeMarkerProjection(lonlat);
+            this.activeMarker.reference.point.x = this.activeMarker.lonlat.lon;
+            this.activeMarker.reference.point.x0 = this.activeMarker.lonlat.lon;
+            this.activeMarker.reference.point.y = this.activeMarker.lonlat.lat;
+            this.activeMarker.reference.point.y0 = this.activeMarker.lonlat.lat;
+
+            editLayer.updateLine();
+            editLayer.redraw();
+            parcelLayer.redraw();
+            me.drawPlugin.updateInfobox();
+            
             this.getLayersByName("Parcel Markers Layer")[0].redraw();
             OpenLayers.Event.stop(evt);
         };
@@ -173,6 +184,7 @@ this.test = false;
             editLayer.updateLine();
             editLayer.redraw();
             parcelLayer.redraw();
+            me.drawPlugin.updateInfobox();
         };
 
         this.map.pointProjection = function(q,p0,p1) {
@@ -334,6 +346,7 @@ this.test = false;
         inPolygon.style = this.drawPlugin.basicStyle;
 
         editLayer.addFeatures([inPolygon]);
+        parcelLayer.addFeatures([inPolygon]);
     },
 
 
