@@ -2,10 +2,29 @@
 
 ## 1.7
 
+### core/sandbox
+
+Added multimap support. Reference to {Oskari.mapframework.sandbox.Sandbox} should now be fetched through Oskari.getSandbox() method. 
+
+Oskari.$('sandbox') still works but is deprecated. 
+
+For bundles to support multiple maps a configuration option should be added to specify sandbox name:
+
+```javascript
+var conf = this.conf;
+var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+var sandbox = Oskari.getSandbox(sandboxName);
+```
+
 ### featuredata bundle
 
-The bundle can now be configured to allow user make selections on map to filter grid content
+The bundle can now be configured to allow user make selections on map to filter grid content:
 
+```javascript
+{
+    selectionTools : true
+}
+```
 The bundle adds a selection tools button to Toolbar if configured to allow user selections
 
 popuphandler.js added to the bundle which handles the selections tool
@@ -22,13 +41,15 @@ new method getSelectionPlugin() is added to instance.js which returns Oskari.map
 
 getBBox() is replaced with getGeometry() in WfsGridUpdateParams.js
 
-### mapfull bundle
+### mapfull/mapmodule bundle
 
 Configurable SrsName projection to be used, default srsName is "EPSG:3067"
 
 ### MapMoveRequest
 
 Added srsName parameter for specifying projection to use if other than default
+
+MapModule handles projection transforms if projection has been defined in Proj4js.defs.
 
 ## 1.6 release notes
 
