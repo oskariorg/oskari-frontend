@@ -42,8 +42,10 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
             var layers = mapLayerService.getAllLayers();
             if(this.view != null){
+debugger;
                 this.view.addToCollection(layers);
             } else {
+debugger;
                 this.layers = layers;
             }
         
@@ -84,7 +86,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
 
 
     init : function() {
-
+/*
         var me = this;
         var sandbox = me.getSandbox()
         var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
@@ -108,7 +110,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                 }
             }
         }); 
-
+*/
     },
 
     /**

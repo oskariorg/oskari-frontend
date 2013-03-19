@@ -29,10 +29,13 @@ define([
         events: {
             "click .accordion-header"       : "toggleLayerGroup",
             "click .admin-add-layer-btn"    : "toggleAddLayer",
+            "click .admin-add-layer-cancel" : "hideAddLayer",
             "click .admin-edit-class-btn"   : "toggleGroupingSettings",
             "click .admin-add-class-cancel" : "toggleGroupingSettings",
-            "click .admin-add-class-ok"     : "saveOrganization",
+            "click .admin-add-org-ok"       : "saveOrganization",
             "click .admin-remove-org"       : "removeOrganization",
+            "click .admin-add-class-ok"     : "saveClass",
+            "click .admin-remove-class"     : "removeClass",
             "click #add-layer-wms-button"   : "fetchCapabilities",
             "click .admin-add-layer-ok"     : "addLayer"
         },
@@ -84,8 +87,9 @@ define([
 
                             var layerView = new LayerView({
                                 model:layer, 
-                                instance: this.options.instance, 
-                                classes: this.inspireClasses
+                                instance: this.options.instance,
+                                classes: this.inspireClasses,
+                                layerTabModel : this.layerGroupingModel
                             });
 
                             if(visibleLayerCount%2 == 1) {
@@ -184,13 +188,24 @@ define([
                 });
                 element.html('Peruuta');
                 setTimeout(function(){
-                    jQuery('.admin-add-layer').addClass('show-add-layer');
+                    layer.find('.admin-add-layer').addClass('show-add-layer');
                 }, 30);
             } else {
-                jQuery('.admin-add-layer').removeClass('show-add-layer');
+                layer.find('.admin-add-layer').removeClass('show-add-layer');
                 element.html('Lisää taso');
                 setTimeout(function(){
-                    jQuery('.admin-add-layer').remove();
+                    layer.find('.admin-add-layer').remove();
+                },300);
+
+            }
+        },
+        hideAddLayer : function(e) {
+            e.stopPropagation();
+            var element = jQuery(e.currentTarget);
+            if(element.parents('.admin-add-layer').hasClass('show-add-layer')) {
+                element.parents('.admin-add-layer').removeClass('show-add-layer');
+                setTimeout(function(){
+                    element.parents('.admin-add-layer').remove();
                 },300);
 
             }
@@ -214,9 +229,6 @@ define([
 
         saveOrganization: function(e) {
             var me = this;
-            var element = jQuery(e.currentTarget);
-            var addClass = element.parents('.admin-add-class');
-debugger;
             var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
                 action_route = "&action_route=SaveOrganization",
                 id = "&layercl_id=",
@@ -234,6 +246,17 @@ debugger;
                 url += lcId;
             }
             url += parentId+nameFi+fi+nameSv+sv+nameEn+en;
+            me._save(e, url);
+
+        },
+        saveClass: function(e) {
+            //TODO
+            alert('Backend component is not ready yet.');
+        },
+        _save: function(e, url) {
+            var me = this;
+            var element = jQuery(e.currentTarget);
+            var addClass = element.parents('.admin-add-class');
 
             jQuery.ajax({
                 type : "GET",
@@ -259,12 +282,8 @@ debugger;
             });
 
         },
-        //&action_route=DeleteOrganization&layercl_id=46&parent_id=
         removeOrganization: function(e) {
             var me = this;
-            var element = jQuery(e.currentTarget);
-            var addClass = element.parents('.admin-add-class');
-debugger;
             var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
                 action_route = "&action_route=DeleteOrganization",
                 id = "&layercl_id=",
@@ -275,7 +294,17 @@ debugger;
             idValue = (idValue != null) ? idValue : '';
             parentIdValue = (parentIdValue != null) ? parentIdValue : '';
             var url = baseUrl + action_route+id+idValue+parentId+parentIdValue;
-
+            me._remove(e, url);
+        },
+        removeClass: function(e) {
+            //TODO
+            alert('Backend component is not ready yet.');
+        },
+        _remove: function(e, url) {
+            var me = this;
+            var element = jQuery(e.currentTarget);
+            var addClass = element.parents('.admin-add-class');
+debugger;
             jQuery.ajax({
                 type : "GET",
                 dataType: 'json',
@@ -332,7 +361,7 @@ debugger;
         },
         addCapabilitySelect: function(capability, me, element) {
             me.capabilities = this.getValue(capability);
-            if(me.capabilities.Capability == null) {
+            if(me.capabilities == null || me.capabilities.Capability == null) {
                 console.log("Could not find Capability from response");
                 return;
             }
@@ -360,7 +389,6 @@ debugger;
             jQuery('#add-layer-wms-id').val(wmsname);
 
 
-
             var styles = selectedLayer.Style;
             if(styles != null) {
 
@@ -380,7 +408,6 @@ debugger;
                 } else {
                     styleSelect.append('<option>' +styles.Title + '</option>');
                 }
-
             }
 
             // GFI Type
@@ -418,6 +445,41 @@ debugger;
             }
 
         },
+        removeLayer: function(e) {
+            var me = this;
+            var element = jQuery(e.currentTarget);
+            var id = element.parents('.admin-add-layer').attr('data-id');
+            var baseUrl =  me.options.instance.getSandbox().getAjaxUrl(),
+                action_route = "action_route=DeleteLayer",
+                idKey = "&layer_id=";
+
+            var url = baseUrl + action_route + idKey + id;
+            jQuery.ajax({
+                type : "GET",
+                dataType: 'json',
+                beforeSend: function(x) {
+                    if(x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                url : url,
+                success : function(resp) {
+                    if(resp == null) {
+                        //close this
+
+                    } else {
+                        //problem
+                    }
+                },
+                error : function(jqXHR, textStatus) {
+                    if(callbackFailure && jqXHR.status != 0) {
+                        alert(' false ');
+                    }
+                }
+            });
+
+
+        },
         addLayer: function(e) {
             var me = this;
             var element = jQuery(e.currentTarget);
@@ -427,9 +489,19 @@ debugger;
                 action_route = "action_route=SaveLayer",
                 id = "&layer_id=";
 
+
             var data = {};
+
+            var wmsVersion = form.find('#add-layer-type').val();
+            if(wmsVersion.indexOf('WMS') >= 0) {
+                var parts = wmsVersion.split(' ');
+                data.layerType  = 'wmslayer';
+                data.version    = parts[1];
+            }
+
             data.names = [];
             data.desc = [];
+            data.orderNumber    = 1,
             data.names.fi       = form.find('#add-layer-fi-name').val(),
             data.names.sv       = form.find('#add-layer-sv-name').val(),
             data.names.en       = form.find('#add-layer-en-name').val(),
@@ -444,6 +516,7 @@ debugger;
 
             //TODO encode base64!!
             data.style          = form.find('#add-layer-style').val(),
+            data.style           = this.model.encode64(data.style);
 
 
             data.minScale       = form.find('#add-layer-minscale').val(),
@@ -455,9 +528,8 @@ debugger;
             data.inspireTheme   = form.find('#add-layer-inspire-theme').val(),
             data.dataUrl        = form.find('#add-layer-datauuid').val(),
             //data.metadataUrl    = form.find('#add-layer-maxscale').val(),
-            //TODO data.orderNumber    = form.find('#add-layer-orderNumber').val(),
-            //data.layerType      = form.find('#add-layer-layerType').val(),
-            data.xslt       = form.find('#add-layer-xslt').val(),
+            data.xslt           = form.find('#add-layer-xslt').val(),
+            data.xslt           = this.model.encode64(data.xslt);
             data.gfiType       = form.find('#add-layer-responsetype').val();
 
         var url = baseUrl + action_route + id;
@@ -470,12 +542,15 @@ debugger;
             "&titleFi=" + data.desc.fi +
             "&titleSv=" + data.desc.sv +
             "&titleEn=" + data.desc.en +
-            "&wmsUrl=" + data.wmsName +
+            "&wmsName=" + data.wmsName +
             "&wmsUrl=" + data.wmsUrl +
             "&opacity=" + data.opacity +
             "&style=" + data.style +
             "&minScale=" + data.minScale +
             "&maxScale=" + data.maxScale +
+            "&orderNumber=" + data.orderNumber +
+            "&layerType=" + data.layerType +
+            "&version=" + data.version +
             "&legendImage=" + data.legendImage +
             "&inspireTheme=" + data.inspireTheme +
             "&dataUrl=" + data.dataUrl +
@@ -493,11 +568,25 @@ debugger;
                 },
                 url : url,
                 success : function(resp) {
-                    me.addCapabilitySelect(resp, me);
+                    if(resp == null) {
+                        //close this
+                        form.removeClass('show-add-layer');
+                        var createLayer = form.parents('.create-layer');
+                        if(createLayer != null) {
+                            createLayer.find('.admin-add-layer-btn').html('Lisää taso');
+                        }
+                        setTimeout(function(){
+                            form.remove();
+                        },300);
+
+                    } else {
+                        //problem
+                        alert("Saving layer didn't work");
+                    }
                 },
                 error : function(jqXHR, textStatus) {
                     if(callbackFailure && jqXHR.status != 0) {
-                        alert(' false ');
+                        alert("Saving layer didn't work");
                     }
                 }
             });

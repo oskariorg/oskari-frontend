@@ -713,13 +713,13 @@ jQuery(document).ready(function() {
 		success : function(appSetup) {
 			if (appSetup.startupSequence && appSetup.configuration) {
 				main.appSetup.startupSequence = appSetup.startupSequence;
-debugger;
+/*debugger;
 for (var i = 0; i < main.appSetup.startupSequence.length; i++) {
 	if(main.appSetup.startupSequence[i].bundlename == "layerselector2"){
 		main.appSetup.startupSequence.splice(i,1);
 	}
 };
-
+*/
 				main.appConfig = appSetup.configuration;
 
 				main.start(function(instance) {

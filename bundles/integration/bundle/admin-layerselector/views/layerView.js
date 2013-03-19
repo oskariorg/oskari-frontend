@@ -8,8 +8,9 @@ define([
         className: 'layer',
 
         events: {
-            "click"                     : "toggleLayerSettings",
-            "click .show-edit-layer"    : "clickLayerSettings"
+            "click .admin-add-layer-cancel" : "hideLayerSettings",
+            "click"                         : "toggleLayerSettings",
+            "click .show-edit-layer"        : "clickLayerSettings"
         },
 
         // At initialization we bind to the relevant events on the `Todos`
@@ -100,6 +101,11 @@ debugger;
             e.stopPropagation();
             var element = jQuery(e.currentTarget);
             if(!element.find('.admin-add-layer').hasClass('show-edit-layer')) {
+                if(this.model.admin.style_decoded == null && this.model.admin.style != null) {
+                    var styles = [];
+                    styles.push(this.options.layerTabModel.decode64(this.model.admin.style));
+                    this.model.admin.style_decoded = styles;
+                }
                 var settings = this.adminLayerTemplate({
                     model: this.model, 
                     instance : this.options.instance,
@@ -114,12 +120,23 @@ debugger;
 
 
                 setTimeout(function(){
-                    jQuery('.admin-add-layer').addClass('show-edit-layer');
+                    element.find('.admin-add-layer').addClass('show-edit-layer');
                 }, 30);
             } else {
-                jQuery('.admin-add-layer').removeClass('show-edit-layer');
+                element.find('.admin-add-layer').removeClass('show-edit-layer');
                 setTimeout(function(){
-                    jQuery('.admin-add-layer').remove();
+                    element.find('.admin-add-layer').remove();
+                },300);
+
+            }
+        },
+        hideLayerSettings : function(e) {
+            e.stopPropagation();
+            var element = jQuery(e.currentTarget);
+            if(element.parents('.admin-add-layer').hasClass('show-edit-layer')) {
+                element.parents('.admin-add-layer').removeClass('show-edit-layer');
+                setTimeout(function(){
+                    element.parents('.admin-add-layer').remove();
                 },300);
 
             }
