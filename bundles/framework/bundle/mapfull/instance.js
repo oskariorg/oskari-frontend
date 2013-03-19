@@ -217,17 +217,6 @@ function() {
                 conf.globalMapAjaxUrl + 'action_route=GetMapLayers&lang='+Oskari.getLang() , this.core.getSandbox());
         services.push(mapLayerService);
         
-       // TODO: maybe we should set the map state in another bundle so we can setup core/map in mapfull
-       // and add wmts/wfs layer support to map with their own bundles -> then set the initial map state (from a new bundle) 
-       // Setting up WMTS support
-       // We'll register a handler for our type
-        mapLayerService.registerLayerModel('wmtslayer','Oskari.mapframework.wmts.domain.WmtsLayer');
-        
-        var layerModelBuilder = 
-        	Oskari.clazz.create('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder');
-        
-        mapLayerService.registerLayerModelBuilder('wmtslayer',layerModelBuilder);
-        
 		// DisableDevelopmentModeEnhancement
 		if (conf.disableDevelopmentMode == 'true') {
 	        core.disableDebug();
