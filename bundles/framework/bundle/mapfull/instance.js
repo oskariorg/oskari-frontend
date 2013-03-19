@@ -97,6 +97,10 @@ function() {
                 module.startPlugin(plugins[i].instance);
             }
         }
+
+        var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin');
+        module.registerPlugin(plugin);
+        module.startPlugin(plugin);
          
 		this.map = map;
 	},
@@ -149,6 +153,10 @@ function() {
 		enhancements.push(Oskari.clazz.create('Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnhancement'));
         
 		core.init(services, enhancements);
+        
+        // need to create ui before parsing layers because layerplugins register modelbuilders
+        this._createUi();
+
 		// setup initial maplayers
     	var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 	    var initialLayers = conf.layers;
@@ -158,8 +166,6 @@ function() {
 	            mapLayerService.addLayer(mapLayer, true);
 			}
 	    }
-		  
-        this._createUi();
         
 		sandbox.registerAsStateful(this.mediator.bundleId, this);
 		

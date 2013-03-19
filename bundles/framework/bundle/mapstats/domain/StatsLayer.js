@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.domain.StatsLayer
+ * @class Oskari.mapframework.bundle.mapstats.domain.StatsLayer
  *
  * MapLayer of type Stats
  */
-Oskari.clazz.define('Oskari.mapframework.domain.StatsLayer',
+Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayer',
 
 /**
  * @method create called automatically on construction
