@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.8
+
+### mapfull bundle
+
+Configurable projection definitions that allow custom projections. Configured projections replaces the default definitions of "EPSG:3067" and "EPSG:4326".
+
 ## 1.7
 
 ### featuredata bundle
