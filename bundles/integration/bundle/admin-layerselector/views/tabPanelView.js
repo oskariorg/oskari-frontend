@@ -27,6 +27,7 @@ define([
         className: 'tab-content',
 
         events: {
+            "keyup .admin-filter-input"  : "filterLayers",
             "click .accordion-header"       : "toggleLayerGroup",
             "click .admin-add-layer-btn"    : "toggleAddLayer",
             "click .admin-add-layer-cancel" : "hideAddLayer",
@@ -41,7 +42,7 @@ define([
         },
         initialize : function() {
             this.layerGroupingModel             = this.options.layerGroupingModel;
-            this.layerGroupingModel.on("change", this.render, this);
+            this.layerGroupingModel.on("change:layerGroups", this.render, this);
             this.inspireClasses = (this.options.inspire != null) ? 
                 this.options.inspire : this.layerGroupingModel;
 
@@ -142,6 +143,12 @@ define([
                 this.$el.find('div.content').hide();
             }
         },
+        filterLayers: function(e) {
+            e.stopPropagation();
+            var element = jQuery(e.currentTarget);
+debugger;
+            this.layerGroupingModel.getFilteredLayerGroups(element.val());
+        },
         toggleGroupingSettings : function(e) {
             //add layer
             e.stopPropagation();
@@ -228,7 +235,9 @@ define([
         },
 
         saveOrganization: function(e) {
-            var me = this;
+            var me = this,
+                element = jQuery(e.currentTarget),
+                addClass = element.parents('.admin-add-class');
             var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
                 action_route = "&action_route=SaveOrganization",
                 id = "&layercl_id=",
@@ -241,22 +250,26 @@ define([
                 sv = addClass.find("#add-class-sv-name").val(),
                 en = addClass.find("#add-class-en-name").val();
 
-            var url = baseUrl + action_route+id;
+            var url = baseUrl + action_route + id;
             if(lcId != null) {
                 url += lcId;
             }
             url += parentId+nameFi+fi+nameSv+sv+nameEn+en;
-            me._save(e, url);
+            me._save(e, url, function(response){
+                me.layerGroupingModel.getClasses(me.options.instance.getSandbox().getAjaxUrl(),"&action_route=GetMapLayerClasses");
+                element.parents('.show-add-class').removeClass('show-add-class');
+                addClass.find('.admin-edit-class-btn').html('Muokkaa')
+            });
 
         },
         saveClass: function(e) {
             //TODO
             alert('Backend component is not ready yet.');
         },
-        _save: function(e, url) {
-            var me = this;
-            var element = jQuery(e.currentTarget);
-            var addClass = element.parents('.admin-add-class');
+        _save: function(e, url, successCallback) {
+            var me = this,
+                element = jQuery(e.currentTarget),
+                addClass = element.parents('.admin-add-class');
 
             jQuery.ajax({
                 type : "GET",
@@ -268,10 +281,8 @@ define([
                 },
                 url : url,
                 success : function(resp) {
-                    if(resp === null) {
-                        me.layerGroupingModel.getClasses(me.options.instance.getSandbox().getAjaxUrl());
-                        element.parents('.show-add-class').removeClass('show-add-class');
-                        addClass.find('.admin-edit-class-btn').html('Muokkaa')
+                    if(successCallback && resp === null) {
+                        successCallback(resp);
                     }
                 },
                 error : function(jqXHR, textStatus) {
@@ -283,7 +294,9 @@ define([
 
         },
         removeOrganization: function(e) {
-            var me = this;
+            var me = this,
+                element = jQuery(e.currentTarget);
+
             var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
                 action_route = "&action_route=DeleteOrganization",
                 id = "&layercl_id=",
@@ -294,13 +307,16 @@ define([
             idValue = (idValue != null) ? idValue : '';
             parentIdValue = (parentIdValue != null) ? parentIdValue : '';
             var url = baseUrl + action_route+id+idValue+parentId+parentIdValue;
-            me._remove(e, url);
+            me._remove(e, url, function(response) {
+                me.layerGroupingModel.removeClass(idValue);
+                element.parents('.accordion.open').remove();
+            });
         },
         removeClass: function(e) {
             //TODO
             alert('Backend component is not ready yet.');
         },
-        _remove: function(e, url) {
+        _remove: function(e, url, successCallback) {
             var me = this;
             var element = jQuery(e.currentTarget);
             var addClass = element.parents('.admin-add-class');
@@ -315,9 +331,8 @@ debugger;
                 },
                 url : url,
                 success : function(resp) {
-                    if(resp === null) {
-                        me.layerGroupingModel.removeClass(idValue);
-                        element.parents('.accordion.open').remove();
+                    if(successCallback && resp === null) {
+                        successCallback(resp);                        
                     }
                 },
                 error : function(jqXHR, textStatus) {
@@ -514,9 +529,9 @@ debugger;
 
             data.opacity        = form.find('#opacity-slider').val(),
 
-            //TODO encode base64!!
+            //TODO encode base64 in case!!
             data.style          = form.find('#add-layer-style').val(),
-            data.style           = this.model.encode64(data.style);
+            data.style           = me.layerGroupingModel.encode64(data.style);
 
 
             data.minScale       = form.find('#add-layer-minscale').val(),
@@ -529,7 +544,7 @@ debugger;
             data.dataUrl        = form.find('#add-layer-datauuid').val(),
             //data.metadataUrl    = form.find('#add-layer-maxscale').val(),
             data.xslt           = form.find('#add-layer-xslt').val(),
-            data.xslt           = this.model.encode64(data.xslt);
+            data.xslt           = me.layerGroupingModel.encode64(data.xslt);
             data.gfiType       = form.find('#add-layer-responsetype').val();
 
         var url = baseUrl + action_route + id;
@@ -693,6 +708,7 @@ debugger;
             var me = this;
             me.layerGroupingModel.removeClass(idValue);
         }
+
 
     });
 });

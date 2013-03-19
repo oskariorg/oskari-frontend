@@ -14,7 +14,6 @@
                 //TODO view -> this.layerContainers = {};
                 this.filter = '';
                 //TODO view -> this._createUI();
-                this.on('change:layerGroups', this.notify, this);
             },
 
 
@@ -72,19 +71,21 @@
                 var visibleGroupCount = 0;
                 for(var i = 0; i < this.layerGroups.length; ++i) {
                     var group = this.layerGroups[i];
-                    var layers = group.getLayers();
-                    var selectedGroup = group;
-                    selectedGroup.removeLayers();
-                    var visibleLayerCount = 0;
-                    for(var n = 0; n < layers.length; ++n) {
-                        var layer = layers[n];
-                        var layerId = layer.getId();
-                        if(group.matchesKeyword(layerId, keyword)) {
-                            selectedGroup.addLayer(layer);
+                    if(group.getLayers != null) {
+                        var layers = group.getLayers();
+                        var selectedGroup = new LayerGroupCollection(null, group.getTitle());
+                        selectedGroup.removeLayers();
+                        var visibleLayerCount = 0;
+                        for(var n = 0; n < layers.length; ++n) {
+                            var layer = layers[n];
+                            var layerId = layer.getId();
+                            if(group.matchesKeyword(layerId, keyword)) {
+                                selectedGroup.addLayer(layer);
+                            }
                         }
-                    }
-                    if(selectedGroup.getLayers().length > 0) {
-                        selectedGroups.push(selectedGroup);
+                        if(selectedGroup.getLayers().length > 0) {
+                            selectedGroups.push(selectedGroup);
+                        }
                     }
                 }
                 return selectedGroups;
@@ -172,8 +173,9 @@
                         }
                    }
                 }
-                me.layerGroups = groups;
-                me.trigger('change');
+//                me.layerGroups = groups;
+                me.set('layerGroups', groups);
+//                me.trigger('change');
             },
             removeClass : function(id) {
                 var groups = this.layerGroups;
@@ -184,9 +186,6 @@
                 }
             },
 
-            notify: function() {
-                console.log('layerGroups has changed');
-            },
 
             encode64 : function (data) {
                 //http://phpjs.org/functions/base64_encode/

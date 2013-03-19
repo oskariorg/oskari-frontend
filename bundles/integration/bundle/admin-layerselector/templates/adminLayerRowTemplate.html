@@ -178,7 +178,7 @@
             </div>
             <div class="add-layer-input-area">
                 <select id="add-layer-style">
-                     <% for(var i = 0; model.admin.style_decoded != null && i < model.admin.style_decoded.length; i++) { %>
+                     <% for(var i = 0; model != null && model.admin.style_decoded != null && i < model.admin.style_decoded.length; i++) { %>
                     <option value="<%= model.admin.style_decoded[i] %>" ><%= model.admin.style_decoded[i] %></option>
                     <% } %>
                 </select>

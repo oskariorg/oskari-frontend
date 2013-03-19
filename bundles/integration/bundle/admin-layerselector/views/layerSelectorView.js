@@ -12,7 +12,9 @@ define([
             "click .admin-add-class-btn"    : "toggleAddOrg",
             "click .admin-edit-layer-btn"   : "toggleAddOrg", 
             "click .admin-add-class-cancel" : "toggleAddOrg",
-            "click .admin-edit-class-cancel": "toggleAddOrg"
+            "click .admin-edit-class-cancel": "toggleAddOrg",
+            "keydown .admin-layerselectorapp" : "catchInputs",
+            "keyup .admin-layerselectorapp"   : "catchInputs"
         },
 
         // At initialization we bind to the relevant events on the `Todos`
@@ -124,6 +126,9 @@ define([
         },
         removeAddOrg : function(e) {
             jQuery('.admin-add-class').removeClass('show-add-class');
+        },
+        catchInputs : function(e) {
+            e.stopPropagation();
         }
 
 
