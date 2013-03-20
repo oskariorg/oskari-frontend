@@ -278,165 +278,17 @@ function(locale) {
                 }
             },
             success : function(resp) {
-            	var mapWidth = mapVO.getWidth();
-            	var showAll = false;
-            	if(mapWidth>500)
-            	{
-            		showAll = true;
-            	}
-            	
-            	var data1 = resp.data1;
-            	var data2 = resp.data2;
-            	var data3 = resp.data3;
             	var funcs = resp.funcs;
             	
-            	var html = '';
-            	
-            	var data1Name = null;
-            	var data1Id = null;
-            	var data1Html = "";
-            	
-            	if(data1.length>0){
-            		if(showAll){
-            			data1Html += '<table class="harava-gfi-table gfi-full"><tr><td colspan="11" class="harava-gfi-header">'+resp.data1Lang+'</td></tr>';
-            			data1Html += resp.data1Header;
-            		}
-            		else{
-            			data1Html += '<table class="harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.data1Lang+'</td></tr>';
-            		}
-            	}
-            	jQuery.each(data1, function(k, data){
-            		if(!showAll){           			
-            			data1Html += data.html2;
-            			data1Name = data.layerName;
-            			data1Id = data.layerId;
-					} else {
-						data1Html += data.html;
-						data1Name = data.layerName;
-						data1Id = data.layerId;
-					}
-            	});
-            	if(data1.length>0){
-            		data1Html += '</table>';
-            	}
-            	
-            	var data2Name = null;
-            	var data2Id = null;
-            	var data2Html = "";
-            	if(data2.length>0){
-            		if(showAll){
-            			data2Html += '<table class="harava-gfi-table gfi-full"><tr><td colspan="7" class="harava-gfi-header">'+resp.data2Lang+'</td></tr>';
-            			data2Html += resp.data2Header;
-            		}
-            		else{
-            			data2Html += '<table class="harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.data2Lang+'</td></tr>';
-            		}
-            	}
-            	jQuery.each(data2, function(k, data){            		
-					if(!showAll){
-						data2Html += data.html2;
-						data2Name = data.layerName;
-						data2Id = data.layerId;
-					} else {
-						data2Html += data.html;
-						data2Name = data.layerName;
-						data2Id = data.layerId;
-					}
-				});
-            	if(data2.length>0){
-            		data2Html += '</table>';
-            	}
-            	
-            	var data3Name = null;
-            	var data3Id = null;
-            	var data3Html = "";
-            	if(data3.length>0){
-            		if(showAll){
-            			data3Html += '<table class="harava-gfi-table gfi-full"><tr><td colspan="7" class="harava-gfi-header">'+resp.data3Lang+'</td></tr>';
-            			data3Html += resp.data3Header;
-            		}
-            		else{
-            			data3Html += '<table class="harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.data3Lang+'</td></tr>';
-            		}
-            	}
-            	jQuery.each(data3, function(k, data){
-            		if(data3Id==null){
-            			data3Id = data.layerId;
-        			}
-					if(!showAll){
-						data3Html += data.html2;
-						data3Name = data.layerName;
-						data3Id = data.layerId;
-					} else {
-						data3Html += data.html;
-						data3Name = data.layerName;
-						data3Id = data.layerId;
-					}
-				});            	
-            	if(data3.length>0){
-            		data3Html += '</table>';
-            	}
+            	var html = resp.html;
             	
             	me._finishAjaxRequest();
             	
             	jQuery.each(funcs, function(k, func){
             		eval(func);
-            	});            	
+            	});
             	
-            	/* Resolve showing order */
-            	if(resp.first == 'data3'){
-            		if(data3Name!=null && data3Id!=null){
-                		html += data3Html;
-                	}
-            		
-            		if(data1Name!=null && data1Id!=null){
-            			html += data1Html;
-                	}
-                	
-                	if(data2Name!=null && data2Id!=null){
-                		html += data2Html;
-                	}
-            	}
-            	else if(resp.first == 'data2'){
-            		if(data2Name!=null && data2Id!=null){
-            			html += data2Html;
-                	}
-            		
-            		if(data1Name!=null && data1Id!=null){
-            			html += data1Html;
-                	}               	
-                	
-                	if(data3Name!=null && data3Id!=null){
-                		html += data3Html;
-                	}
-            	}
-            	else if(resp.first == 'data1'){
-            		if(data1Name!=null && data1Id!=null){
-            			html += data1Html;
-                	}
-                	
-                	if(data2Name!=null && data2Id!=null){
-                		html += data2Html;
-                	}
-                	
-                	if(data3Name!=null && data3Id!=null){
-                		html += data3Html;
-                	}
-            	} else {
-            		if(data1Name!=null && data1Id!=null){
-            			html += data1Html;
-                	}
-                	
-                	if(data2Name!=null && data2Id!=null){
-                		html += data2Html;
-                	}
-                	
-                	if(data3Name!=null && data3Id!=null){
-                		html += data3Html;
-                	}
-            	}
-            	
-				if(html!=''){
+				if(html!=null && html!=''){
 					var lonlat = new OpenLayers.LonLat(resp.center.lon, resp.center.lat);
 					var parsed = {html: html, title: "Tiedot"};
 					parsed.lonlat = lonlat;
