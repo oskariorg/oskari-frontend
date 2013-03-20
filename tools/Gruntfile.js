@@ -151,6 +151,6 @@ module.exports = function(grunt) {
         grunt.task.run('compile');
         grunt.task.run('sprite');
         grunt.task.run('yuidoc');
-        grunt.task.run('mddocs');
+//        grunt.task.run('mddocs');
     });
 };
