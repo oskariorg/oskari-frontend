@@ -42,32 +42,10 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
             var layers = mapLayerService.getAllLayers();
             if(this.view != null){
-debugger;
                 this.view.addToCollection(layers);
             } else {
-debugger;
                 this.layers = layers;
             }
-        
-            // for(var i = 0; i < this.layerTabs.length; ++i) {
-            //     var tab = this.layerTabs[i];
-            //     // populate tab if it has grouping method
-            //     if(tab.groupingMethod) {
-            //         var layersCopy = layers.slice(0);
-            //         var groups = this._getLayerGroups(layersCopy, tab.groupingMethod);
-            //         tab.showLayerGroups(groups);
-            //     }
-            // }
-
-            // var mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-            // var layerId = event.getLayerId();
-
-            // if(event.getOperation() === 'add') {
-            //     var layer = mapLayerService.findMapLayer(layerId);
-            //     //this.plugins['Oskari.userinterface.Flyout'].handleLayerAdded(layer);
-            //     // refresh layer count
-            //     //this.plugins['Oskari.userinterface.Tile'].refresh();
-            // }
         }
     },
 
@@ -86,6 +64,7 @@ debugger;
 
 
     init : function() {
+        //this.getEl().bind("action", this.handleAction, this);
 /*
         var me = this;
         var sandbox = me.getSandbox()
@@ -123,6 +102,8 @@ debugger;
         var me = this;
         var container = this.getEl();
         container.addClass("admin-layerselector");
+debugger;        
+        container.on("adminAction", {me: this}, me.handleAction);
 
         var locale = this.getLocalization();
         var confRequirementsConfig = 
@@ -183,6 +164,15 @@ debugger;
         sandbox.notifyAll(event);
         if(callbackSuccess) {
             callbackSuccess();
+        }
+    },
+    handleAction: function(e) {
+        e.stopPropagation();
+        var me = e.data.me;
+        if(e.command == "removeLayer") {
+            var sandbox = me.getSandbox()
+            var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            mapLayerService.removeLayer(e.modelId);
         }
     }
 

@@ -176,7 +176,7 @@ div.admin-layerselector .admin-add-layer {
     padding: 10px 0px;
     overflow: hidden;
     height: 0px;
-    -webkit-transition-duration: 500ms;
+    -webkit-transition-duration: 300ms;
     -webkit-transition-property: height;
 }
 div.admin-layerselector .show-add-layer,
@@ -190,7 +190,7 @@ div.admin-layerselector .admin-add-class {
     padding: 0px 10px;
     overflow: hidden;
     height: 0px;
-    -webkit-transition-duration: 500ms;
+    -webkit-transition-duration: 300ms;
     -webkit-transition-property: height;
 }
 div.admin-layerselector .show-add-class {
@@ -254,17 +254,18 @@ div.admin-layerselector .icon-close {
     margin-left: 0px;
     cursor: pointer;
 }
-div.admin-layerselector .input-controls:hover .icon-close, div.admin-layerselector .layer:hover button.admin-arrange-layers {
+div.admin-layerselector .input-controls:hover .icon-close,
+div.admin-layerselector .layer:hover button.admin-arrange-layers {
     -webkit-transition-property: opacity;
-    -webkit-transition-duration: 500ms;
+    -webkit-transition-duration: 300ms;
     -moz-transition-property: opacity;
-    -moz-transition-duration: 500ms;
+    -moz-transition-duration: 300ms;
     -o-transition-property: opacity;
-    -o-transition-duration: 500ms;
+    -o-transition-duration: 300ms;
     -ms-transition-property: opacity;
-    -ms-transition-duration: 500ms;
+    -ms-transition-duration: 300ms;
     transition-property: opacity;
-    transition-duration: 500ms;
+    transition-duration: 300ms;
     -ms-filter: "progid:DXImageTransform.Microsoft. Alpha(Opacity=100)";
     opacity: 1;
 }

@@ -9,6 +9,7 @@ define([
 
         events: {
             "click .admin-add-layer-cancel" : "hideLayerSettings",
+            "click .admin-remove-layer"     : "removeLayer",
             "click"                         : "toggleLayerSettings",
             "click .show-edit-layer"        : "clickLayerSettings"
         },
@@ -141,6 +142,62 @@ debugger;
 
             }
         },
+        // removeLayer : function(e) {
+        //     var me = this;
+        //     //This will be handled by: jQuery(e.currentTarget).parents('.admin-layerselector')
+        //     var element = jQuery(e.currentTarget);
+
+
+        // },
+        removeLayer: function(e) {
+            var me = this;
+            var element = jQuery(e.currentTarget);
+            var addLayerDiv = element.parents('.admin-add-layer');
+            var id = element.parents('.admin-add-layer').attr('data-id');
+            var baseUrl =  me.options.instance.getSandbox().getAjaxUrl(),
+                action_route = "action_route=DeleteLayer",
+                idKey = "&layer_id=";
+
+            var url = baseUrl + action_route + idKey + id;
+            jQuery.ajax({
+                type : "GET",
+                dataType: 'json',
+                beforeSend: function(x) {
+                    if(x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                url : url,
+                success : function(resp) {
+                    if(resp == null) {
+                        //close this
+                        if(addLayerDiv.hasClass('show-edit-layer')) {
+                            addLayerDiv.removeClass('show-edit-layer');
+                            setTimeout(function(){
+                                element.trigger({
+                                    type: "adminAction",
+                                    command: 'removeLayer',
+                                    modelId: me.model.getId()
+                                });
+                                addLayerDiv.remove();
+                            },300);
+
+                        }
+
+                    } else {
+                        //problem
+                    }
+                },
+                error : function(jqXHR, textStatus) {
+                    if(callbackFailure && jqXHR.status != 0) {
+                        alert(' false ');
+                    }
+                }
+            });
+
+
+        },
+
         clickLayerSettings: function(e) {
             e.stopPropagation();
         }

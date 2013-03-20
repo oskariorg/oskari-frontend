@@ -145,10 +145,6 @@ function(name,viewClazz) {
         var viewCls = this._viewClazz ;        
         var view = Oskari.clazz.create(viewCls,this.getLocalization('view'),this,this.getConfiguration());
         this.view = view;
-
-        if(view.init != null) {
-            this.view.init();
-        }
         
         for(p in view.eventHandlers) {
             sandbox.registerForEventByName(view, p);
@@ -156,6 +152,10 @@ function(name,viewClazz) {
 
         me.plugins['Oskari.userinterface.Flyout'] = 
             Oskari.clazz.create('Oskari.integration.bundle.bb.Flyout', me, locFlyout, view);                       
+
+        if(view.init != null) {
+            this.view.init();
+        }
 
         var locTile = me.getLocalization('tile');
 

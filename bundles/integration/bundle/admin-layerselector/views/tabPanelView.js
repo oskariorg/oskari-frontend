@@ -460,41 +460,6 @@ debugger;
             }
 
         },
-        removeLayer: function(e) {
-            var me = this;
-            var element = jQuery(e.currentTarget);
-            var id = element.parents('.admin-add-layer').attr('data-id');
-            var baseUrl =  me.options.instance.getSandbox().getAjaxUrl(),
-                action_route = "action_route=DeleteLayer",
-                idKey = "&layer_id=";
-
-            var url = baseUrl + action_route + idKey + id;
-            jQuery.ajax({
-                type : "GET",
-                dataType: 'json',
-                beforeSend: function(x) {
-                    if(x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
-                    }
-                },
-                url : url,
-                success : function(resp) {
-                    if(resp == null) {
-                        //close this
-
-                    } else {
-                        //problem
-                    }
-                },
-                error : function(jqXHR, textStatus) {
-                    if(callbackFailure && jqXHR.status != 0) {
-                        alert(' false ');
-                    }
-                }
-            });
-
-
-        },
         addLayer: function(e) {
             var me = this;
             var element = jQuery(e.currentTarget);
@@ -583,7 +548,7 @@ debugger;
                 },
                 url : url,
                 success : function(resp) {
-                    if(resp == null) {
+                    if(resp != null && resp.admin != null) {
                         //close this
                         form.removeClass('show-add-layer');
                         var createLayer = form.parents('.create-layer');

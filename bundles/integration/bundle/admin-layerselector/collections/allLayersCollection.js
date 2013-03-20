@@ -52,7 +52,16 @@
                 if (nameA < nameB) {return -1}
                 if (nameA > nameB) {return 1}
                 return 0;
+            },
+            removeLayer: function(id) {
+                for (var i = this.models.length - 1; i >= 0; i--) {
+                    if(this.models[i].id == id ) {
+                        this.models[i].splice(index, 1);
+                        break;
+                    }
+                };
             }
+
 
         });
         

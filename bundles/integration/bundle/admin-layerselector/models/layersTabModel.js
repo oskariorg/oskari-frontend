@@ -74,7 +74,6 @@
                     if(group.getLayers != null) {
                         var layers = group.getLayers();
                         var selectedGroup = new LayerGroupCollection(null, group.getTitle());
-                        selectedGroup.removeLayers();
                         var visibleLayerCount = 0;
                         for(var n = 0; n < layers.length; ++n) {
                             var layer = layers[n];
@@ -186,6 +185,17 @@
                 }
             },
 
+            removeLayer : function(id) {
+                var groups = this.layerGroups;
+                for (var i = groups.length - 1; i >= 0; i--) {
+                    if(groups[i].id === id){
+                        var removed = groups.removeLayer(id);
+                        if(removed) {
+                            break;
+                        }
+                    }
+                }
+            },
 
             encode64 : function (data) {
                 //http://phpjs.org/functions/base64_encode/

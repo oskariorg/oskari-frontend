@@ -34,6 +34,17 @@
                 this.add(layerModel, {silent: true});
                 this.searchIndex[layerModel.getId()] = this._getSearchIndex(layerModel);
             },
+            removeLayer: function(id) {
+                var removed = false;
+                for (var i = this.models.length - 1; i >= 0; i--) {
+                    if(this.models[i].id === id ) {
+                        this.models[i].splice(index, 1);
+                        removed = true;
+                        break;
+                    }
+                };
+                return removed;
+            },
             /**
              * @method getLayers 
              * @return {Layer[]}

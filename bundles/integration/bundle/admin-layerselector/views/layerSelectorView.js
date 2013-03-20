@@ -26,6 +26,7 @@ define([
             this.appTemplate = _.template(ViewTemplate);
             this.tabTitleTemplate = _.template(TabTitleTemplate)
             this.selectedType = 'organization';
+            _.bindAll(this);
 //            this.layerTabs = [];
             this.render();
         },
@@ -130,8 +131,6 @@ define([
         catchInputs : function(e) {
             e.stopPropagation();
         }
-
-
 
     });
 });
