@@ -8,7 +8,7 @@ define([
     'text!_bundle/templates/tabPanelTemplate.html',
     'text!_bundle/templates/accordionPanelTemplate.html',
     'text!_bundle/templates/layerRowTemplate.html',
-    'text!_bundle/templates/adminLayerRowTemplate.html',    
+    '_bundle/views/adminLayerSettingsView',    
     '_bundle/views/layerView'], 
     function(FilterLayersTemplate, 
         AdminAddInspireButtonTemplate,
@@ -19,7 +19,7 @@ define([
         TabPanelTemplate, 
         AccordionPanelTemplate,
         LayerRowTemplate, 
-        AdminLayerRowTemplate,
+        AdminLayerSettingsView,
         LayerView) {
     return Backbone.View.extend({
         tagName: 'div',
@@ -31,14 +31,18 @@ define([
             "click .accordion-header"       : "toggleLayerGroup",
             "click .admin-add-layer-btn"    : "toggleAddLayer",
             "click .admin-add-layer-cancel" : "hideAddLayer",
+ 
             "click .admin-edit-class-btn"   : "toggleGroupingSettings",
+            "click .admin-edit-org-btn"     : "toggleGroupingSettings",
             "click .admin-add-class-cancel" : "toggleGroupingSettings",
+            "click .admin-add-org-cancel"   : "toggleGroupingSettings",
+
             "click .admin-add-org-ok"       : "saveOrganization",
             "click .admin-remove-org"       : "removeOrganization",
             "click .admin-add-class-ok"     : "saveClass",
             "click .admin-remove-class"     : "removeClass",
-            "click #add-layer-wms-button"   : "fetchCapabilities",
-            "click .admin-add-layer-ok"     : "addLayer"
+
+            "click #add-layer-wms-button"   : "fetchCapabilities"
         },
         initialize : function() {
             this.layerGroupingModel             = this.options.layerGroupingModel;
@@ -55,7 +59,6 @@ define([
             this.tabTemplate                    = _.template(TabPanelTemplate);
             this.accordionTemplate              = _.template(AccordionPanelTemplate);
             this.layerTemplate                  = _.template(LayerRowTemplate);
-            this.adminLayerTemplate             = _.template(AdminLayerRowTemplate);
             _.bindAll(this);
 
 
@@ -173,18 +176,26 @@ debugger;
         },
 
         toggleAddLayer : function(e) {
+debugger;
             //add layer
             e.stopPropagation();
             var element = jQuery(e.currentTarget);
             var layer = element.parent();
 
             if(!layer.find('.admin-add-layer').hasClass('show-add-layer')) {
-                var settings = this.adminLayerTemplate({
+/*                var settings = this.adminLayerTemplate({
                     instance : this.options.instance, 
                     model : null, 
                     classNames: this.inspireClasses.getGroupTitles()
                 });
-                layer.append(settings);
+*/
+                var settings = new AdminLayerSettingsView({
+                    model: null,  
+                    instance : this.options.instance, 
+                    classes : this.inspireClasses
+                });
+
+                layer.append(settings.$el);
                 layer.find('.layout-slider').slider({
                     min:0, 
                     max: 100, 
@@ -458,203 +469,6 @@ debugger;
                     jQuery('#add-layer-datauuid').val(uuid);
                 }
             }
-
-        },
-        addLayer: function(e) {
-            var me = this;
-            var element = jQuery(e.currentTarget);
-            var lcId = element.parents('.accordion').attr('lcid');
-            var form = element.parents('.admin-add-layer');
-            var baseUrl =  me.options.instance.getSandbox().getAjaxUrl(),
-                action_route = "action_route=SaveLayer",
-                id = "&layer_id=";
-
-
-            var data = {};
-
-            var wmsVersion = form.find('#add-layer-type').val();
-            if(wmsVersion.indexOf('WMS') >= 0) {
-                var parts = wmsVersion.split(' ');
-                data.layerType  = 'wmslayer';
-                data.version    = parts[1];
-            }
-
-            data.names = [];
-            data.desc = [];
-            data.orderNumber    = 1,
-            data.names.fi       = form.find('#add-layer-fi-name').val(),
-            data.names.sv       = form.find('#add-layer-sv-name').val(),
-            data.names.en       = form.find('#add-layer-en-name').val(),
-            data.desc.fi        = form.find('#add-layer-fi-title').val(),
-            data.desc.sv        = form.find('#add-layer-sv-title').val(),
-            data.desc.en        = form.find('#add-layer-en-title').val(),
-
-            data.wmsName        = form.find('#add-layer-wms-id').val(),
-            data.wmsUrl         = form.find('#add-layer-interface').val(),
-
-            data.opacity        = form.find('#opacity-slider').val(),
-
-            //TODO encode base64 in case!!
-            data.style          = form.find('#add-layer-style').val(),
-            data.style           = me.layerGroupingModel.encode64(data.style);
-
-
-            data.minScale       = form.find('#add-layer-minscale').val(),
-            data.maxScale       = form.find('#add-layer-maxscale').val(),
-
-            //data.descriptionLink = form.find('#add-layer-maxscale').val(),
-
-            data.legendImage    = form.find('#add-layer-legendImage').val(),
-            data.inspireTheme   = form.find('#add-layer-inspire-theme').val(),
-            data.dataUrl        = form.find('#add-layer-datauuid').val(),
-            //data.metadataUrl    = form.find('#add-layer-maxscale').val(),
-            data.xslt           = form.find('#add-layer-xslt').val(),
-            data.xslt           = me.layerGroupingModel.encode64(data.xslt);
-            data.gfiType       = form.find('#add-layer-responsetype').val();
-
-        var url = baseUrl + action_route + id;
-        if(lcId != null) {
-            url += "&lcId=" + lcId;
-        }
-        url += "&nameFi=" + data.names.fi +
-            "&nameSv=" + data.names.sv +
-            "&nameEn=" + data.names.en +
-            "&titleFi=" + data.desc.fi +
-            "&titleSv=" + data.desc.sv +
-            "&titleEn=" + data.desc.en +
-            "&wmsName=" + data.wmsName +
-            "&wmsUrl=" + data.wmsUrl +
-            "&opacity=" + data.opacity +
-            "&style=" + data.style +
-            "&minScale=" + data.minScale +
-            "&maxScale=" + data.maxScale +
-            "&orderNumber=" + data.orderNumber +
-            "&layerType=" + data.layerType +
-            "&version=" + data.version +
-            "&legendImage=" + data.legendImage +
-            "&inspireTheme=" + data.inspireTheme +
-            "&dataUrl=" + data.dataUrl +
-//            "&=" + data.metadataUrl +
-            "&xslt=" + data.xslt +
-            "&=gfiType" + data.gfiType;
-
-            jQuery.ajax({
-                type : "GET",
-                dataType: 'json',
-                beforeSend: function(x) {
-                    if(x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
-                    }
-                },
-                url : url,
-                success : function(resp) {
-                    if(resp != null && resp.admin != null) {
-                        //close this
-                        form.removeClass('show-add-layer');
-                        var createLayer = form.parents('.create-layer');
-                        if(createLayer != null) {
-                            createLayer.find('.admin-add-layer-btn').html('Lisää taso');
-                        }
-                        setTimeout(function(){
-                            form.remove();
-                        },300);
-
-                    } else {
-                        //problem
-                        alert("Saving layer didn't work");
-                    }
-                },
-                error : function(jqXHR, textStatus) {
-                    if(callbackFailure && jqXHR.status != 0) {
-                        alert("Saving layer didn't work");
-                    }
-                }
-            });
-
-
-/*
-        ml.setLayerClassId(new Integer(request.getParameter("lcId")));
-        ml.setNameFi(request.getParameter("nameFi"));
-        ml.setNameSv(request.getParameter("nameSv"));
-        ml.setNameEn(request.getParameter("nameEn"));
-
-        ml.setTitleFi(request.getParameter("titleFi"));
-        ml.setTitleSv(request.getParameter("titleSv"));
-        ml.setTitleEn(request.getParameter("titleEn"));
-
-        ml.setWmsName(request.getParameter("wmsName"));
-        ml.setWmsUrl(request.getParameter("wmsUrl"));
-
-        String opacity = "0";
-        if (request.getParameter("opacity") != null
-                && !"".equals(request.getParameter("opacity"))) {
-            opacity = request.getParameter("opacity");
-        }
-
-        ml.setOpacity(new Integer(opacity));
-
-        String style = "";
-        if (request.getParameter("style") != null
-                && !"".equals(request.getParameter("style"))) {
-            style = request.getParameter("style");
-            style = IOHelper.decode64(style);
-        }
-        ml.setStyle(style);
-        ml.setMinScale(new Double(request.getParameter("minScale")));
-        ml.setMaxScale(new Double(request.getParameter("maxScale")));
-
-        ml.setDescriptionLink(request.getParameter("descriptionLink"));
-        ml.setLegendImage(request.getParameter("legendImage"));
-
-        String inspireThemeId = request.getParameter("inspireTheme");
-        Integer inspireThemeInteger = Integer.valueOf(inspireThemeId);
-        ml.setInspireThemeId(inspireThemeInteger);
-
-        ml.setDataUrl(request.getParameter("dataUrl"));
-        ml.setMetadataUrl(request.getParameter("metadataUrl"));
-        ml.setOrdernumber(new Integer(request.getParameter("orderNumber")));
-
-        ml.setType(request.getParameter("layerType"));
-        ml.setTileMatrixSetId(request.getParameter("tileMatrixSetId"));
-
-        ml.setTileMatrixSetData(request.getParameter("tileMatrixSetData"));
-
-        ml.setWms_dcp_http(request.getParameter("wms_dcp_http"));
-        ml
-                .setWms_parameter_layers(request
-                        .getParameter("wms_parameter_layers"));
-        ml.setResource_url_scheme(request.getParameter("resource_url_scheme"));
-        ml.setResource_url_scheme_pattern(request
-                .getParameter("resource_url_scheme_pattern"));
-        ml.setResource_url_scheme_pattern(request
-                .getParameter("resource_url_client_pattern"));
-
-        if (request.getParameter("resource_daily_max_per_ip") != null) {
-            ml.setResource_daily_max_per_ip(ConversionHelper.getInt(request
-                    .getParameter("resource_daily_max_per_ip"), 0));
-        }
-        String xslt = "";
-        if (request.getParameter("xslt") != null
-                && !"".equals(request.getParameter("xslt"))) {
-            xslt = request.getParameter("xslt");
-            xslt = IOHelper.decode64(xslt);
-        }
-        ml.setXslt(request.getParameter("xslt"));
-        ml.setGfiType(request.getParameter("gfiType"));
-        String sel_style = "";
-        if (request.getParameter("selection_style") != null
-                && !"".equals(request.getParameter("selection_style"))) {
-            sel_style = request.getParameter("selection_style");
-            sel_style = IOHelper.decode64(sel_style);
-        }
-        ml.setSelection_style(sel_style);
-        ml.setVersion(request.getParameter("version"));
-        if (request.getParameter("epsg") != null) {
-            ml.setEpsg(ConversionHelper.getInt(request.getParameter("epsg"),3067));
-        }
-
-
-*/
 
         },
 

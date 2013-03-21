@@ -1,14 +1,16 @@
 define([
     "text!_bundle/templates/layerRowTemplate.html",
-    'text!_bundle/templates/adminLayerRowTemplate.html'
+    "text!_bundle/templates/adminLayerRowTemplate.html",
+    "_bundle/views/adminLayerSettingsView"
     ], 
-    function(ViewTemplate, AdminLayerRowTemplate) {
+    function(ViewTemplate, AdminLayerRowTemplate, AdminLayerSettingsView) {
     return Backbone.View.extend({
         tagName: 'div',
         className: 'layer',
 
         events: {
             "click .admin-add-layer-cancel" : "hideLayerSettings",
+//            "click .admin-add-layer-ok"     : "hideLayerSettings",
             "click .admin-remove-layer"     : "removeLayer",
             "click"                         : "toggleLayerSettings",
             "click .show-edit-layer"        : "clickLayerSettings"
@@ -98,21 +100,23 @@ define([
             }
         },
         toggleLayerSettings : function(e) {
-debugger;
-            e.stopPropagation();
             var element = jQuery(e.currentTarget);
-            if(!element.find('.admin-add-layer').hasClass('show-edit-layer')) {
+
+            if(element.parents('.admin-add-layer').length == 0 && 
+                !element.find('.admin-add-layer').hasClass('show-edit-layer')) {
+            e.stopPropagation();
+
                 if(this.model.admin.style_decoded == null && this.model.admin.style != null) {
                     var styles = [];
                     styles.push(this.options.layerTabModel.decode64(this.model.admin.style));
                     this.model.admin.style_decoded = styles;
                 }
-                var settings = this.adminLayerTemplate({
-                    model: this.model, 
-                    instance : this.options.instance,
-                    classNames : this.classNames.getGroupTitles()
+                var settings = new AdminLayerSettingsView({
+                    model: this.model,  
+                    instance : this.options.instance, 
+                    classes : this.classNames
                 });
-                element.append(settings);
+                element.append(settings.$el);
                 element.find('.layout-slider').slider({min:0, max: 100, value:100, slide: function( event, ui ) {
                     jQuery(ui.handle).parents('.left-tools').find( "#opacity-slider" ).val( ui.value );
                 }});
@@ -186,6 +190,7 @@ debugger;
 
                     } else {
                         //problem
+                        console.log('Removing layer did not work.')
                     }
                 },
                 error : function(jqXHR, textStatus) {
@@ -199,7 +204,11 @@ debugger;
         },
 
         clickLayerSettings: function(e) {
-            e.stopPropagation();
+            if(!jQuery(e.target).hasClass('admin-add-layer-ok')) {
+                e.stopPropagation();
+            } else {
+                this.trigger(e);
+            }
         }
     });
 });

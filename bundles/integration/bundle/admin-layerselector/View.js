@@ -168,6 +168,7 @@ debugger;
     },
     handleAction: function(e) {
         e.stopPropagation();
+debugger;
         var me = e.data.me;
         if(e.command == "removeLayer") {
             var sandbox = me.getSandbox()

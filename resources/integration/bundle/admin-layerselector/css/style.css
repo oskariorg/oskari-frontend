@@ -124,10 +124,12 @@ body {
 div.admin-layerselector div.oskariTabs div.tabsHeader ul li.admin-modify-wms {
     float:right;
 }
-div.admin-layerselector .admin-edit-layer-btn,
+div.admin-layerselector .admin-add-layer-btn,
 div.admin-layerselector .admin-edit-layer-btn,
 div.admin-layerselector .admin-add-class-btn,
-div.admin-layerselector .admin-edit-class-btn {
+div.admin-layerselector .admin-edit-class-btn,
+div.admin-layerselector .admin-add-org-btn,
+div.admin-layerselector .admin-edit-org-btn {
     float: right;
     margin: 5px 10px;
 }
