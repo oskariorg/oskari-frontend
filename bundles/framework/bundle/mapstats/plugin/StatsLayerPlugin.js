@@ -89,7 +89,7 @@ function(config) {
         // register domain builder
         var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
         if(mapLayerService) {
-            mapLayerService.registerLayerModel('statslayer', 'Oskari.mapframework.bundle.mapstats.domain.StatsLayer')
+            mapLayerService.registerLayerModel('statslayer', 'Oskari.mapframework.bundle.mapstats.domain.StatsLayer');
 
             var layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelBuilder');
             mapLayerService.registerLayerModelBuilder('statslayer', layerModelBuilder);

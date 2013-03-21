@@ -2,9 +2,21 @@
 
 ## 1.8
 
+### sandbox/map-layer-service
+
+Removed hardcoded wmtslayer and wfslayer from map-layer-service. LayerPlugins should now handle layer model/builder registration on init function.
+
+### mapwfs
+
+WfsLayerPlugin now registers layer model/builder to map-layer-service on init.
+
 ### mapfull bundle
 
 Configurable projection definitions that allow custom projections. Configured projections replaces the default definitions of "EPSG:3067" and "EPSG:4326".
+
+WMTS specific layer model/builder registration has been removed from mapfull (now registered in mapwmts/plugin/WmtsLayerPlugin.init())
+
+Mapfull now starts map and plugins before starting to parse layers JSON so plugins can register layermodels and builders.
 
 ## 1.7
 
