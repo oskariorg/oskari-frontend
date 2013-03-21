@@ -7,13 +7,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerP
  * @method create called automatically on construction
  * @static
  */
-function() {
+function(config) {
 	this.mapModule = null;
 	this.pluginName = null;
 	this._sandbox = null;
 	this._map = null;
 	this._supportedFormats = {};
 	this.service = null;
+    this.config = config;
 }, {
 	__name : 'WfsLayerPlugin',
 
@@ -27,7 +28,18 @@ function() {
 		this.mapModule = mapModule;
 		this.pluginName = mapModule.getName() + this.__name;
 	},
-	init : function(sandbox) {
+	init : function() {
+        var sandboxName = ( this.config ? this.config.sandbox : null ) || 'sandbox';
+        var sandbox = Oskari.getSandbox(sandboxName);
+        
+        // register domain model
+        var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        if(mapLayerService) {
+            mapLayerService.registerLayerModel('wfslayer', 'Oskari.mapframework.domain.WfsLayer');
+
+            var layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs.domain.WfsLayerModelBuilder', sandbox);
+            mapLayerService.registerLayerModelBuilder('wfslayer', layerModelBuilder);
+        }
 	},
 	register : function() {
 		this.getMapModule().setLayerPlugin('wfslayer', this);
