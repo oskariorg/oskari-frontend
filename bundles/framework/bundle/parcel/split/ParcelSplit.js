@@ -268,7 +268,7 @@ this.test = false;
                 this.drawPlugin.drawLayer.features[i].style = this.drawPlugin.basicStyle;
             }
             this.drawPlugin.drawLayer.features[0].style = this.drawPlugin.selectStyle;
-            this.selectedFeature = 0;
+            this.drawPlugin.selectedFeature = 0;
             parcelLayer.redraw();
             editLayer.redraw();
             return null;
