@@ -91,7 +91,19 @@ function(instance) {
 		this._plotNewBoundary(feature, cb);
 		cb(true);
 	},
-
+	/**
+	 * @method clearParcelMap
+	 * Clear  temp layers of Parcel Map
+	 *
+	 */
+	clearParcelMap : function() {
+		if (this.parcelLayer)
+			this.parcelLayer.removeAllFeatures();
+		if (this.boundaryLayer)
+			this.boundaryLayer.removeAllFeatures();
+		if (this.pointLayer)
+			this.pointLayer.removeAllFeatures();
+	},
 	/**
 	 * @method _plotNewParcel
 	 * Plot features to OL temp layer.
@@ -167,62 +179,70 @@ function(instance) {
 
 		// remove possible old drawing
 		this.boundaryLayer.removeAllFeatures();
+		this.pointLayer.removeAllFeatures();
+
+		//running pno for new boundary points
+		var pno = 1;
 
 		//for ( i = 0; i < drawplug.drawLayer.features.length; i++) {
 		var f = drawplug.editLayer.features[0];
-		// loop segments
-		var nodes = f.geometry.getVertices();
+		// Loop components
+		for (var k = 0; k < f.geometry.components.length; k++) {
+			// loop segments
+			var geometry = f.geometry.components[k];
+			var nodes = geometry.getVertices();
 
-		for (var j = 0; j < nodes.length - 1; j++) {
-			var lon = nodes[j].x;
-			var lat = nodes[j].y;
-			var lon2 = nodes[j + 1].x;
-			var lat2 = nodes[j + 1].y;
+			for (var j = 0; j < nodes.length - 1; j++) {
+				var lon = nodes[j].x;
+				var lat = nodes[j].y;
+				var lon2 = nodes[j + 1].x;
+				var lat2 = nodes[j + 1].y;
 
-			var center_lonlat1 = new OpenLayers.LonLat(lon, lat);
-			var center_px1 = drawplug._map.getPixelFromLonLat(center_lonlat1);
-			var center_lonlat2 = new OpenLayers.LonLat(lon2, lat2);
-			var center_px2 = drawplug._map.getPixelFromLonLat(center_lonlat2);
-			var deltax = (center_px2.x + center_px1.x) / 2. - center_px1.x;
-			var deltay = (center_px2.y + center_px1.y) / 2. - center_px1.y;
-			var points = new Array(new OpenLayers.Geometry.Point(lon, lat), new OpenLayers.Geometry.Point(lon2, lat2));
-			var line = new OpenLayers.Geometry.LineString(points);
-			//line.transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
-			var lineFeature = new OpenLayers.Feature.Vector(line, null, this.boundaryLayer.style);
-			lineFeature.attributes.length = lineFeature.geometry.getLength().toFixed(2);
-			lineFeature.attributes.deltax = deltax;
-			lineFeature.attributes.deltay = -deltay;
-			features.push(lineFeature);
-			var pointFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(lon, lat), null, this.pointLayer.style);
-			pointFeature.attributes.pnro = j + 1;
-			pointfeatures.push(pointFeature);
-			if (j == nodes.length - 2) {
-				var pointFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(lon2, lat2), null, this.pointLayer.style);
-				pointFeature.attributes.pnro = j + 2;
+				var center_lonlat1 = new OpenLayers.LonLat(lon, lat);
+				var center_px1 = drawplug._map.getPixelFromLonLat(center_lonlat1);
+				var center_lonlat2 = new OpenLayers.LonLat(lon2, lat2);
+				var center_px2 = drawplug._map.getPixelFromLonLat(center_lonlat2);
+				var deltax = (center_px2.x + center_px1.x) / 2. - center_px1.x;
+				var deltay = (center_px2.y + center_px1.y) / 2. - center_px1.y;
+				var points = new Array(new OpenLayers.Geometry.Point(lon, lat), new OpenLayers.Geometry.Point(lon2, lat2));
+				var line = new OpenLayers.Geometry.LineString(points);
+				//line.transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
+				var lineFeature = new OpenLayers.Feature.Vector(line, null, this.boundaryLayer.style);
+				lineFeature.attributes.length = lineFeature.geometry.getLength().toFixed(2);
+				lineFeature.attributes.deltax = deltax;
+				lineFeature.attributes.deltay = -deltay;
+				features.push(lineFeature);
+				var pointFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(lon, lat), null, this.pointLayer.style);
+				pointFeature.attributes.pnro = pno++;
 				pointfeatures.push(pointFeature);
+				if (j == nodes.length - 2) {
+					var pointFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(lon2, lat2), null, this.pointLayer.style);
+					pointFeature.attributes.pnro = pno++;
+					pointfeatures.push(pointFeature);
+				}
 			}
-		}
-		// if polygon --> make 1st and last point segemnt
-		if (f.geometry.CLASS_NAME == "OpenLayers.Geometry.Polygon") {
-			var lon = nodes[nodes.length - 1].x;
-			var lat = nodes[nodes.length - 1].y;
-			var lon2 = nodes[0].x;
-			var lat2 = nodes[0].y;
+			// if polygon --> make 1st and last point segemnt
+			if (geometry.CLASS_NAME == "OpenLayers.Geometry.Polygon") {
+				var lon = nodes[nodes.length - 1].x;
+				var lat = nodes[nodes.length - 1].y;
+				var lon2 = nodes[0].x;
+				var lat2 = nodes[0].y;
 
-			var center_lonlat1 = new OpenLayers.LonLat(lon, lat);
-			var center_px1 = drawplug._map.getPixelFromLonLat(center_lonlat1);
-			var center_lonlat2 = new OpenLayers.LonLat(lon2, lat2);
-			var center_px2 = drawplug._map.getPixelFromLonLat(center_lonlat2);
-			var deltax = (center_px2.x + center_px1.x) / 2. - center_px1.x;
-			var deltay = (center_px2.y + center_px1.y) / 2. - center_px1.y;
-			var points = new Array(new OpenLayers.Geometry.Point(lon, lat), new OpenLayers.Geometry.Point(lon2, lat2));
-			var line = new OpenLayers.Geometry.LineString(points);
-			//line.transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
-			var lineFeature = new OpenLayers.Feature.Vector(line, null, this.boundaryLayer.style);
-			lineFeature.attributes.length = lineFeature.geometry.getLength().toFixed(2);
-			lineFeature.attributes.deltax = deltax;
-			lineFeature.attributes.deltay = -deltay;
-			features.push(lineFeature);
+				var center_lonlat1 = new OpenLayers.LonLat(lon, lat);
+				var center_px1 = drawplug._map.getPixelFromLonLat(center_lonlat1);
+				var center_lonlat2 = new OpenLayers.LonLat(lon2, lat2);
+				var center_px2 = drawplug._map.getPixelFromLonLat(center_lonlat2);
+				var deltax = (center_px2.x + center_px1.x) / 2. - center_px1.x;
+				var deltay = (center_px2.y + center_px1.y) / 2. - center_px1.y;
+				var points = new Array(new OpenLayers.Geometry.Point(lon, lat), new OpenLayers.Geometry.Point(lon2, lat2));
+				var line = new OpenLayers.Geometry.LineString(points);
+				//line.transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
+				var lineFeature = new OpenLayers.Feature.Vector(line, null, this.boundaryLayer.style);
+				lineFeature.attributes.length = lineFeature.geometry.getLength().toFixed(2);
+				lineFeature.attributes.deltax = deltax;
+				lineFeature.attributes.deltay = -deltay;
+				features.push(lineFeature);
+			}
 		}
 
 		//}
@@ -238,7 +258,8 @@ function(instance) {
 
 			this.boundaryLayer.addFeatures(features);
 			// Remove orig graphics
-			drawplug.editLayer.removeAllFeatures();
+			drawplug.getEditLayer().removeAllFeatures();
+			drawplug.getMarkerLayer().clearMarkers();
 			this.boundaryLayer.redraw();
 
 		}

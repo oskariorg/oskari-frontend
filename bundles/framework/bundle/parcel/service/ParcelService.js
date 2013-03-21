@@ -98,6 +98,14 @@ function(instance) {
     },
 
     /**
+     * @method clearParcelMap
+     * Remove openlayers graphics of parcel Map
+     */
+    clearParcelMap : function() {
+            this._plot.clearParcelMap();
+        
+    },
+    /**
      * @method saveRegisterUnit
      * Saves feature to the server asynchronously and gives the success information via callback.
      * @param {OpenLayers.Feature.Vector} feature The feature whose data will be saved to the server by using WFST.
