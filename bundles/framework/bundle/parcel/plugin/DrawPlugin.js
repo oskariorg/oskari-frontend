@@ -426,18 +426,15 @@ function(instance) {
 	 * @method saveDrawing
 	 */
 	saveDrawing : function() {
-		// If editLayer is empty, no split has been done
-		if (this.editLayer.features.length > 0) {
-
-			// Select the feature that is going to be saved.
-			// Then, it is shown for the user if user has unselected it before pressing save button.
-			var featureToSave = this.getDrawing();
-
-			this.controls.select.select(featureToSave);
-			this.toggleControl();
-			var event = this._sandbox.getEventBuilder('Parcel.SaveDrawingEvent')(featureToSave);
-			this._sandbox.notifyAll(event);
-		}
+        if (this.selectedFeature > -2) {
+            // Select the feature that is going to be saved.
+            // Then, it is shown for the user if user has unselected it before pressing save button.
+            var featureToSave = this.getDrawing();
+            this.controls.select.select(featureToSave);
+            this.toggleControl();
+            var event = this._sandbox.getEventBuilder('Parcel.SaveDrawingEvent')(featureToSave);
+            this._sandbox.notifyAll(event);
+        }
 	},
 
 	/**
