@@ -72,6 +72,9 @@ function() {
 			"src" : "../../../../sources/framework/domain/style.js"
 		}, {
 			"type" : "text/javascript",
+			"src" : "../../../../sources/framework/domain/tool.js"
+		},{
+			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/domain/user.js"
 		}],
 		"resources" : []
