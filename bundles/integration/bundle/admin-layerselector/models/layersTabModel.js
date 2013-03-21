@@ -174,7 +174,7 @@
                 }
 //                me.layerGroups = groups;
                 me.set('layerGroups', groups);
-//                me.trigger('change');
+                me.trigger('change:layerGroups');
             },
             removeClass : function(id) {
                 var groups = this.layerGroups;

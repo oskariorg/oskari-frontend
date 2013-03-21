@@ -34,8 +34,16 @@ define([
  
             "click .admin-edit-class-btn"   : "toggleGroupingSettings",
             "click .admin-edit-org-btn"     : "toggleGroupingSettings",
+//            "click .admin-add-org-btn"     : "toggleGroupingSettings",
             "click .admin-add-class-cancel" : "toggleGroupingSettings",
             "click .admin-add-org-cancel"   : "toggleGroupingSettings",
+
+            "click .admin-add-org-btn"    : "toggleAddOrg",
+//            "click .admin-add-class-btn"    : "toggleAddOrg",
+//            "click .admin-edit-layer-btn"   : "toggleAddOrg", 
+//            "click .admin-add-class-cancel" : "toggleAddOrg",
+//            "click .admin-edit-class-cancel": "toggleAddOrg",
+
 
             "click .admin-add-org-ok"       : "saveOrganization",
             "click .admin-remove-org"       : "removeOrganization",
@@ -174,6 +182,14 @@ debugger;
         hideGroupingSettings : function(e) {
             jQuery('.admin-add-class').removeClass('show-add-class');
         },
+        toggleAddOrg : function(e) {
+            var elem = jQuery(e.currentTarget).parent().find('.admin-add-class');
+            if(elem.hasClass('show-add-class')) {
+                elem.removeClass('show-add-class');
+            } else {
+                elem.addClass('show-add-class');
+            }
+        },
 
         toggleAddLayer : function(e) {
 debugger;
@@ -269,7 +285,7 @@ debugger;
             me._save(e, url, function(response){
                 me.layerGroupingModel.getClasses(me.options.instance.getSandbox().getAjaxUrl(),"&action_route=GetMapLayerClasses");
                 element.parents('.show-add-class').removeClass('show-add-class');
-                addClass.find('.admin-edit-class-btn').html('Muokkaa')
+                addClass.find('.admin-edit-org-btn').html('Muokkaa')
             });
 
         },

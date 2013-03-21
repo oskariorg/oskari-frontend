@@ -37,15 +37,53 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         },
         'MapLayerEvent' : function(event) {
 
-            var sandbox = this.getSandbox();
-            // populate layer list
-            var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-            var layers = mapLayerService.getAllLayers();
-            if(this.view != null){
-                this.view.addToCollection(layers);
-            } else {
-                this.layers = layers;
+
+            if(event.getOperation() === 'update') {
+
+                var sandbox = this.getSandbox();
+                // populate layer list
+                var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                var layers = mapLayerService.getAllLayers();
+                if(this.view != null){
+                    this.view.addToCollection(layers);
+                } else {
+                    this.layers = layers;
+                }
+
+/*                var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                var layerId = event.getLayerId();
+
+                var layer = mapLayerService.findMapLayer(layerId);
+                this.plugins['Oskari.userinterface.Flyout'].handleLayerModified(layer);
+*/
             }
+            else if(event.getOperation() === 'add') {
+
+                var sandbox = this.getSandbox();
+                // populate layer list
+                var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                var layers = mapLayerService.getAllLayers();
+debugger;
+                if(this.view != null){
+                    this.view.addToCollection(layers);
+                } else {
+                    this.layers = layers;
+                }
+
+            } else {
+
+                var sandbox = this.getSandbox();
+                // populate layer list
+                var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                var layers = mapLayerService.getAllLayers();
+                if(this.view != null){
+                    this.view.addToCollection(layers);
+                } else {
+                    this.layers = layers;
+                }
+            }
+
+
         }
     },
 
@@ -170,10 +208,22 @@ debugger;
         e.stopPropagation();
 debugger;
         var me = e.data.me;
+        var sandbox = me.getSandbox()
+        var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
         if(e.command == "removeLayer") {
-            var sandbox = me.getSandbox()
-            var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
             mapLayerService.removeLayer(e.modelId);
+        } else if(e.command == "addLayer") {
+            e.layerData.name = e.layerData.admin.nameFi;
+            var mapLayer = mapLayerService.createMapLayer(e.layerData);
+            mapLayer.admin = e.layerData.admin;
+            if(mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
+                mapLayerService.addLayer(mapLayer);
+            }
+        } else if(e.command == "editLayer") {
+            e.layerData.name = e.layerData.admin.nameFi;
+//            var mapLayer = mapLayerService.createMapLayer(e.layerData);
+//            mapLayer.admin = e.layerData.admin;
+            mapLayerService.updateLayer(e.layerData.id, e.layerData);
         }
     }
 

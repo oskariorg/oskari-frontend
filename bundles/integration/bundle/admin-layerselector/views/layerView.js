@@ -1,9 +1,8 @@
 define([
     "text!_bundle/templates/layerRowTemplate.html",
-    "text!_bundle/templates/adminLayerRowTemplate.html",
     "_bundle/views/adminLayerSettingsView"
     ], 
-    function(ViewTemplate, AdminLayerRowTemplate, AdminLayerSettingsView) {
+    function(ViewTemplate, AdminLayerSettingsView) {
     return Backbone.View.extend({
         tagName: 'div',
         className: 'layer',
@@ -24,7 +23,6 @@ define([
             this.model              = this.options.model;
             this.classNames         = this.options.classes;
             this.template           = _.template(ViewTemplate);
-            this.adminLayerTemplate = _.template(AdminLayerRowTemplate);
             this.render();
         },
 
