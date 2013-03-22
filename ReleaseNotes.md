@@ -18,6 +18,10 @@ WMTS specific layer model/builder registration has been removed from mapfull (no
 
 Mapfull now starts map and plugins before starting to parse layers JSON so plugins can register layermodels and builders.
 
+### mapmodule-plugin bundle
+
+Configured map controls (zoombox and measure controls) individually. Placed a check point in ToolSelectionHandler if a control tool is enabled then activate it if not ignore the request.  
+
 ## 1.7
 
 ### core/sandbox
