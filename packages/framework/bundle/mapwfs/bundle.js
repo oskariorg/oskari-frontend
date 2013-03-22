@@ -32,6 +32,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs.MapWfsBundle", function()
 			"src" : "../../../../bundles/framework/bundle/mapwfs/domain/WfsLayer.js"
 		}, {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapwfs/domain/WfsLayerModelBuilder.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/mapwfs/domain/QueuedTile.js"
         }, {
             "type" : "text/javascript",
@@ -58,7 +61,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs.MapWfsBundle", function()
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapwfs/instance.js"
 		}],
-		"resources" : []
+        "locales" : [{
+            "lang" : "fi",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapwfs/locale/fi.js"
+        }, {
+            "lang" : "sv",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapwfs/locale/sv.js"
+        }, {
+            "lang" : "en",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapwfs/locale/en.js"
+        }
+       ]
 	},
 	"bundle" : {
 		"manifest" : {

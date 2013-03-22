@@ -34,7 +34,6 @@ function(mapLayerUrl, sandbox) {
      */
     this.typeMapping = {
         wmslayer : 'Oskari.mapframework.domain.WmsLayer',
-        wfslayer : 'Oskari.mapframework.domain.WfsLayer',
         vectorlayer : 'Oskari.mapframework.domain.VectorLayer'
     },
 

@@ -82,6 +82,9 @@ function() {
 	// wellknown text for polygon geometry
 	this._geometryWKT = null;
 
+    // Tools array for layer specific functions 
+	this._tools = [];
+	
 	/* link to metadata service */
 	this._metadataIdentifier = null;
 
@@ -522,6 +525,53 @@ function() {
 	getCurrentStyle : function() {
 		return this._currentStyle;
 	},
+	/**
+	 * @method getTools
+	 * @return {Oskari.mapframework.domain.Tool[]}
+	 * Get layer tools
+	 */
+	getTools : function() {
+		return this._tools;
+	},
+	/**
+	 * @method setTools
+	 * @params {Oskari.mapframework.domain.Tool[]}
+	 * Set layer tools
+	 */
+	setTools : function(tools) {
+		this._tools = tools;
+	},
+	/**
+	 * @method addTool
+	 * @params {Oskari.mapframework.domain.Tool}
+	 * adds layer tool to tools
+	 */
+	addTool : function(tool) {
+		this._tools.push(tool);
+	},
+	
+	/**
+	 * @method getTool
+	 * @return {Oskari.mapframework.domain.Tool}
+	 * adds layer tool to tools
+	 */
+	getTool : function(toolName) {
+		
+		var tool = null;
+		// Layer have tools
+		if (this._tools.length > 0 ) {
+			// 
+			if (toolName !== "") {
+				for (var i = 0; i < this._tools.length; i++) {
+					tool = this._styles[i];
+					if (tool.getName() == toolName) {
+						return tool;
+					}
+				}
+			}
+		}
+		return tool;
+	},  
 	/**
 	 * @method setLegendImage
 	 * @return {String} legendImage URL to a legend image
