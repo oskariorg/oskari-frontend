@@ -116,8 +116,9 @@ define([
                             this.layerContainers[layer.getId()] = layerView;
                         }
                     }
-                    groupContainer.append(this.addLayerBtnTemplate({instance: this.options.instance}));
-
+                     if(this.options.tabId == 'organization') {
+                        groupContainer.append(this.addLayerBtnTemplate({instance: this.options.instance}));
+                    }
                     var tab = this.tabTemplate({lcId: group.id});
                     groupPanel.find('.accordion-header').append((this.options.tabId == 'inspire') ? 
                         this.addInspireTemplate({data: group, instance: this.options.instance}):
@@ -267,7 +268,8 @@ debugger;
                 addClass = element.parents('.admin-add-class');
             var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
                 action_route = "&action_route=SaveOrganization",
-                id = "&layercl_id=",
+                id = "&layerclass_id=",
+                // id = "&layercl_id=", // this param is used in remove 
                 lcId = element.parents('.accordion').attr('lcid'),
                 parentId = "&parent_id=",
                 nameFi = "&name_fi=",
@@ -336,7 +338,7 @@ debugger;
             var url = baseUrl + action_route+id+idValue+parentId+parentIdValue;
             me._remove(e, url, function(response) {
                 me.layerGroupingModel.removeClass(idValue);
-                element.parents('.accordion.open').remove();
+                element.parents('.accordion').remove();
             });
         },
         removeClass: function(e) {

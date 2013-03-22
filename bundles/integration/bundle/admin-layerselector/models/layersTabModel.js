@@ -122,7 +122,7 @@
                        x.overrideMimeType("application/j-son;charset=UTF-8");
                       }
                      },
-                    url : baseUrl + action_route,
+                    url : baseUrl + action_route + "&iefix="+ (new Date()).getTime(),
                     success : function(pResp) {
                         me.loadClasses(pResp);
 

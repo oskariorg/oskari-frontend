@@ -27,6 +27,7 @@ div.admin-layerselector .oskariTabs {
 /* layer container */
 div.admin-layerselector div.tab-content div.oskarifield {
     padding: 10px;
+    min-height: 35px;
 }
 div.admin-layerselector div.layer,
 div.admin-layerselector div.create-layer {
@@ -70,9 +71,12 @@ div.admin-layerselector div.tab-content {
 div.admin-layerselector div.tab-content div.oskarifield {
   padding: 10px;
 }
-
 div.admin-layerselector div.accordion div.accordion_panel div.content {
     padding: 0;
+}
+div.admin-layerselector div.accordion_panel div.header div.headerIcon {
+    float: left;
+    margin-top: 12px;
 }
 div.admin-layerselector div.accordion_panel div.header div.headerText {
     text-overflow: ellipsis;
