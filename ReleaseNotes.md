@@ -6,6 +6,10 @@
 
 Configurable projection definitions that allow custom projections. Configured projections replaces the default definitions of "EPSG:3067" and "EPSG:4326".
 
+### mapmodule-plugin bundle
+
+Configured map controls (zoombox and measure controls) individually. Placed a check point in ToolSelectionHandler if a control tool is enabled then activate it if not ignore the request.  
+
 ## 1.7
 
 ### core/sandbox
