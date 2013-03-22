@@ -571,13 +571,29 @@ function(instance) {
 			});
 		}
 
-		var featureInstance = sandbox.findRegisteredModuleInstance('FeatureData');
-		if ( typeof featureInstance !== 'undefined') {
-			if (layer.isLayerOfType('WFS')) {
-				tools.find('div.object-data').html('<a href="JavaScript:void(0);">' + loc['object-data'] + '</a>');
-				tools.find('div.object-data').bind('click', function() {
-					sandbox.postRequestByName('ShowFeatureDataRequest', [layer.getId()]);
-				});
+		var closureMagic = function(tool) {
+			return function() {
+				tool.getCallback()();
+				return false;
+			};
+		};
+
+		// Footer functions
+		var laytools = layer.getTools();
+		for (var s = 0; s < laytools.length; s++) {
+			var laytool = laytools[s];
+			if (laytool !== null && laytool !== undefined) {
+				// Icon or text link
+				if (laytool.getIconCls() !== null && laytool.getIconCls() !== undefined) {
+					layerDiv.find('div.object-data').addClass(laytool.getIconCls());
+                    var toolContainer = jQuery('<div class="div.object-data '+ laytool.getIconCls()+'" title="'+laytool.getTooltip()+'"></div>'); 
+					tools.find('div.object-data').append(toolContainer);
+					toolContainer.bind('click', closureMagic(laytool));
+				} else {
+					var toolContainer = jQuery('<a href="JavaScript:void(0);">  ' + laytool.getTitle() + ' </a>');
+					tools.find('div.object-data').append(toolContainer);
+					toolContainer.bind('click', closureMagic(laytool));
+				}
 			}
 		}
 
@@ -598,6 +614,7 @@ function(instance) {
 			footer.find('div.layer-rights').attr("title", loc.rights['can_be_published_map_user'].tooltip);
 		}
 	},
+
 	/**
 	 * @method handleLayerSelectionChanged
 	 * @param
@@ -665,7 +682,6 @@ function(instance) {
 		var me = this;
 		var layerDiv = jQuery(this.container).find('li[layer_id=' + layer.getId() + ']');
 		jQuery(layerDiv).find('.layer-title h4').html(layer.getName());
-
 		var footer = layerDiv.find('div.layer-tools');
 		this._updatePublishPermissionText(layer, footer);
 	},

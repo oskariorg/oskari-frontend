@@ -81,6 +81,7 @@ div.layerselection2 div.layer-tools div.right-tools{
 }
 div.layerselection2 div.layer-tools div.right-tools div {
     float:left; 
+    margin-right: 5px;
 }
 
 div.layerselection2 div.layer-tools div.right-tools div.layer-rights {

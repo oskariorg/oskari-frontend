@@ -70,7 +70,7 @@ function() {
      *
      * @return {String} tooltip text
      */
-    get_tooltip : function() {
+    getTooltip : function() {
         return this._tooltip;
     },
     /**

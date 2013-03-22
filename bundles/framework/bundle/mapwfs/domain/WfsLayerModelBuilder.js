@@ -19,7 +19,7 @@ function(sandbox) {
 		var me = this;
 		var locTool = this.localization['object-data'];
 		// add object data tool if we have feature data bundle loaded
-		if(me.sandbox.getRequestBuilder('ShowFeatureDataRequest')) {
+		//if(me.sandbox.getRequestBuilder('ShowFeatureDataRequest')) {
 			var toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
 			var toolObjData = toolBuilder();
 			toolObjData.setName("objectData");
@@ -29,6 +29,6 @@ function(sandbox) {
 				me.sandbox.postRequestByName('ShowFeatureDataRequest',[layer.getId()]);
 			});
 			layer.addTool(toolObjData);
-		}
+		//}
 	}
 });

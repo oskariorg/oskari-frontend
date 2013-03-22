@@ -563,7 +563,7 @@ function() {
 			// 
 			if (toolName !== "") {
 				for (var i = 0; i < this._tools.length; i++) {
-					tool = this._styles[i];
+					tool = this._tools[i];
 					if (tool.getName() == toolName) {
 						return tool;
 					}
