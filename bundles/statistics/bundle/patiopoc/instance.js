@@ -10,7 +10,13 @@ Oskari.clazz.define('Oskari.statistics.bundle.patiopoc.PatioPocBundleInstance',
  * @static constructor function
  */
 function() {
-
+    this.conf =  {
+        "name": "patiopoc",
+        "sandbox": "sandbox",
+        "tileClazz": "Oskari.userinterface.extension.DefaultTile",
+        //"flyoutClazz": null,
+        "viewClazz": "Oskari.statistics.bundle.patiopoc.View"
+    };
 }, {
 	"eventHandlers" : {
 		/**
