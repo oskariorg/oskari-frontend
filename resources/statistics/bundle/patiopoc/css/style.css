@@ -1,0 +1,21 @@
+.patiopoc {
+	min-width: 100%;
+	min-height: 100%;
+	height: 100%;
+}
+.patiopoc_100 {
+	height: 100%;
+}
+.patiopoc .patiopoc-table {
+	min-height: 80%;
+	height: 80%;
+	font: 12px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+}
+.patiopoc .idContainer {
+	margin: 4px;
+	border: 1pt solid #40B0C0;
+	border-radius: 5px;
+	padding: 4px;
+	background-color: #80F0A0;
+	cursor: pointer;
+}
