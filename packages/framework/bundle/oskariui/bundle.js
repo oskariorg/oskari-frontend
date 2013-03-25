@@ -39,6 +39,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.oskariui.OskariUIBundle", functi
 			"type" : "text/css",
 			"src" : "../../../../resources/framework/bundle/oskariui/css/jquery-ui-1.9.1.custom.css"
 		}, {
+			"type" : "text/css",
+			"src" : "../../../../resources/framework/bundle/oskariui/bootstrap-grid.css"
+		},{
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/oskariui/DomManager.js"
 		}, {
