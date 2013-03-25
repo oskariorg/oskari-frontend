@@ -2,8 +2,9 @@
  * @class Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelBuilder
  * JSON-parsing for stats layer
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelBuilder', function() {
+Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelBuilder', function(sandbox) {
 	this.localization = Oskari.getLocalization("MapStats");
+    this.sandbox = sandbox;
 }, {
 	/**
 	 * parses any additional fields to model
@@ -13,8 +14,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
 	 */
 	parseLayerData : function(layer, mapLayerJson, maplayerService) {
 
+        var me = this;
 		layer.setWmsName(mapLayerJson.wmsName);
-
 		// Populate layer tools 
 		var toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
         // Table icon
@@ -25,7 +26,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
 		tool1.setTooltip(locTool.tooltip);
 		tool1.setIconCls("icon-restore");
 		tool1.setCallback(function() {
-			alert('Näytä tiedot taulukossa');
+            me.sandbox.postRequestByName('StatsGrid.StatsGridRequest',[true]);
 		});
 		layer.addTool(tool1);
 		// Diagram icon

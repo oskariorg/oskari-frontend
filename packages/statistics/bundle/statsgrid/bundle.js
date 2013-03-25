@@ -28,26 +28,20 @@ function() {
 			"src" : "../../../../bundles/statistics/bundle/statsgrid/instance.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/statsgrid/View.js"
+			"src" : "../../../../bundles/statistics/bundle/statsgrid/StatsView.js"
 		}, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/GridModeView.js"
+        }, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/statsgrid/ViewSample.js"
+			"src" : "../../../../bundles/statistics/bundle/statsgrid/StatsToolbar.js"
 		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/statsgrid/ViewSampleToolbar.js"
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/request/StatsGridRequest.js"
 		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/statsgrid/ViewSampleTable.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/statsgrid/ViewSampleMapOps.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/statsgrid/ViewSampleMainViewHacks.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/statsgrid/Stats.js"
-		}, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/request/StatsGridRequestHandler.js"
+        }, {
 			"type" : "text/css",
 			"src" : "../../../../resources/statistics/bundle/statsgrid/css/style.css"
 		}],

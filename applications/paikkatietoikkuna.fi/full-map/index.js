@@ -39,7 +39,6 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
             if (cb) {
                 cb(me.instance);
             }
-            /*
             var ugStartup = {
                 'bundleinstancename': 'statsgrid',
                 'bundlename': 'statsgrid',
@@ -52,7 +51,6 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
                 }
             };
             Oskari.bundle_facade.playBundle(ugStartup, function() {});
-            */
         });
     },
     /**

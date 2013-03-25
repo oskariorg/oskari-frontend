@@ -1,20 +1,49 @@
 /**
- * 
+ * @class Oskari.statistics.bundle.statsgrid.StatsToolbar
  */
-Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.View', 'sample-toolbar', {
-
+Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsToolbar', 
+/**
+ * @static constructor function
+ * @param {Object} localization
+ * @param {Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance} instance
+ */
+function(localization, instance) {
+    this.toolbarId = 'statsgrid';
+    this.instance = instance;
+    this.localization = localization;
+    this._createUI();
+}, {
+    show : function(isShown) {
+        var showHide = isShown ? 'show' : 'hide';
+        var sandbox = this.instance.getSandbox();
+        sandbox.requestByName(this.instance, 'Toolbar.ToolbarRequest', [this.toolbarId, showHide]);
+    },
+    destroy : function() {
+        var sandbox = this.instance.getSandbox();
+        sandbox.requestByName(this.instance, 'Toolbar.ToolbarRequest', [this.toolbarId, 'remove']);
+    },
 	/**
-	 * @method createToolbar
-	 * sample toolbar for PoC
+	 * @method _createUI
+	 * sample toolbar for statistics functionality
 	 */
-	createToolbar : function(tbid) {
+	_createUI : function() {
+
+        var view = this.instance.plugins['Oskari.userinterface.View'];
+        var me = this;
+        var sandbox = this.instance.getSandbox();
+        sandbox.requestByName(this.instance, 'Toolbar.ToolbarRequest', [this.toolbarId, 'add', {
+            title : me.localization.title,
+            show : false,
+            closeBoxCallback : function() {
+                view.showMode(false);
+                view.showContent(false);
+            }
+        }]);
+
 		var buttonGroup = 'myplacesx';
-		this.ignoreEvents = false;
-		this.dialog = null;
-		var me = this;
 		var buttons = {
 			'point' : {
-				toolbarid : tbid,
+				toolbarid : me.toolbarId,
 				toolbartitle : 'Tilastonäkymä',
 				iconCls : 'myplaces-draw-point',
 				tooltip : '',
@@ -24,7 +53,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.View', 'sample-toolbar
 				}
 			},
 			'line' : {
-				toolbarid : tbid,
+                toolbarid : me.toolbarId,
 				iconCls : 'myplaces-draw-line',
 				tooltip : '',
 				sticky : true,
@@ -33,7 +62,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.View', 'sample-toolbar
 				}
 			},
 			'area' : {
-				toolbarid : tbid,
+                toolbarid : me.toolbarId,
 				iconCls : 'myplaces-draw-area',
 				tooltip : '',
 				sticky : true,
@@ -42,7 +71,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.View', 'sample-toolbar
 				}
 			},
 			'camera' : {
-				toolbarid : tbid,
+                toolbarid : me.toolbarId,
 				iconCls : 'tool-save-view',
 				tooltip : '',
 				sticky : true,
@@ -58,7 +87,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.View', 'sample-toolbar
 				}
 			},
 			'back' : {
-				toolbarid : tbid,
+                toolbarid : me.toolbarId,
 				iconCls : 'tool-history-back',
 				tooltip : '',
 				sticky : true,
@@ -76,7 +105,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.View', 'sample-toolbar
 				}
 			},
 			'forward' : {
-				toolbarid : tbid,
+                toolbarid : me.toolbarId,
 				toolbartitle : 'Tilastonäkymä',
 				iconCls : 'tool-history-forward',
 				tooltip : '',
@@ -94,7 +123,6 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.View', 'sample-toolbar
 			}
 		};
 
-		var sandbox = this.instance.getSandbox();
 
 		var requester = this.instance;
 		var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');

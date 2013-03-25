@@ -13,9 +13,10 @@ function() {
     this.conf =  {
         "name": "StatsGrid",
         "sandbox": "sandbox",
-        "tileClazz": "Oskari.userinterface.extension.DefaultTile",
-        //"flyoutClazz": null,
-        "viewClazz": "Oskari.statistics.bundle.statsgrid.View"
+        // stats mode can be accessed from stats layers tools
+        // to enable a mode triggering tile, you can uncomment the tileClazz on next line
+        //"tileClazz": "Oskari.userinterface.extension.DefaultTile",
+        "viewClazz": "Oskari.statistics.bundle.statsgrid.StatsView"
     };
 }, {
 	"eventHandlers" : {
@@ -33,8 +34,8 @@ function() {
 
 			var isShown = event.getViewState() != "close";
 
-			view.showContent(isShown);
-
+            view.showMode(isShown, true);
+			view.showContent(isShown, true);
 		}
 	}
 
