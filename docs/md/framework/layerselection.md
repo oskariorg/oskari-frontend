@@ -10,11 +10,15 @@
 </table>
 
 ## Description
-The bundle presents listing for currently selected maplayers. For each maplayer the user can change the opacity, hide/show the maplayer and remove it from map. If a maplayer is not visible in current map scale/location, the user sees a message about it and a link to move the map to location where there is content on the maplayer. If the layer can be published the layer has a text telling the user about it. The user can change the order of maplayers by dragging them into different order. Layer styles can be selected from a dropdown where applicable.
+The bundle presents listing for currently selected maplayers. For each maplayer the user can change the opacity, hide/show the maplayer and remove it from map. 
+If a maplayer is not visible in current map scale/location, the user sees a message about it and a link to move the map to location where there is content on the maplayer. 
+If the layer can be published the layer has a text telling the user about it. The user can change the order of maplayers by dragging them into different order. 
+Layer styles can be selected from a dropdown where applicable.
+Possible layer tools (wfs grid, statslayer mode) are listed in layer containers.
 
 ## TODO
 
-* handles wmts icon eventhough its not a core layer type
+* handles wmts tooltip eventhough its not a core layer type
 
 ## Screenshot
 
@@ -106,19 +110,9 @@ This bundle doesn't send any events.
     <td> Used to create the component UI from begin to end</td>
   </tr>
   <tr>
-    <td> [RightJS slider](http://rightjs.org/ui/slider) </td>
-    <td> https://github.com/nls-oskari/oskari/blob/master/libraries/rightjs/javascripts/right/slider.js </td>
-    <td> RightJS UI component for slider - used for layer opacity control</td>
-  </tr>
-  <tr>
-    <td> [RightJS sortable](http://rightjs.org/ui/sortable) </td>
-    <td> https://github.com/nls-oskari/oskari/blob/master/libraries/rightjs/javascripts/right/sortable.js </td>
-    <td> RightJS UI component for sortable list - used for drag&amp;drop on layer order</td>
-  </tr>
-  <tr>
-    <td> [RightJS tooltips](http://rightjs.org/ui/tooltips/) </td>
-    <td> https://github.com/nls-oskari/oskari/blob/master/libraries/rightjs/javascripts/right/tooltips.js </td>
-    <td> RightJS UI component for showing tooltips - used to show tooltips on layer icons</td>
+    <td> [Oskari oskariui](<%= docsurl %>framework/oskariui.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> Needed for layer ddrag&amp;drop and opacity slider</td>
   </tr>
   <tr>
     <td> [Oskari divmanazer](<%= docsurl %>framework/divmanazer.html) </td>

@@ -582,15 +582,17 @@ function(instance) {
 		var laytools = layer.getTools();
 		for (var s = 0; s < laytools.length; s++) {
 			var laytool = laytools[s];
-			if (laytool !== null && laytool !== undefined) {
+			if (laytool) {
 				// Icon or text link
-				if (laytool.getIconCls() !== null && laytool.getIconCls() !== undefined) {
-					layerDiv.find('div.object-data').addClass(laytool.getIconCls());
-                    var toolContainer = jQuery('<div class="div.object-data '+ laytool.getIconCls()+'" title="'+laytool.getTooltip()+'"></div>'); 
+				if (laytool.getIconCls()) {
+                    var toolContainer = jQuery('<div></div>');  
+                    toolContainer.addClass(laytool.getIconCls());
+                    toolContainer.attr('title', laytool.getTooltip());
 					tools.find('div.object-data').append(toolContainer);
 					toolContainer.bind('click', closureMagic(laytool));
 				} else {
-					var toolContainer = jQuery('<a href="JavaScript:void(0);">  ' + laytool.getTitle() + ' </a>');
+					var toolContainer = jQuery('<a href="JavaScript:void(0);"></a>');
+					toolContainer.append(laytool.getTitle());
 					tools.find('div.object-data').append(toolContainer);
 					toolContainer.bind('click', closureMagic(laytool));
 				}

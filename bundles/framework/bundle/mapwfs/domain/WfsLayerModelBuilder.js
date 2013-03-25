@@ -18,17 +18,17 @@ function(sandbox) {
 	parseLayerData: function(layer, mapLayerJson, maplayerService) {
 		var me = this;
 		var locTool = this.localization['object-data'];
-		// add object data tool if we have feature data bundle loaded
-		//if(me.sandbox.getRequestBuilder('ShowFeatureDataRequest')) {
-			var toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
-			var toolObjData = toolBuilder();
-			toolObjData.setName("objectData");
-			toolObjData.setTitle(locTool);
-			toolObjData.setTooltip(locTool);
-			toolObjData.setCallback(function() {
-				me.sandbox.postRequestByName('ShowFeatureDataRequest',[layer.getId()]);
-			});
-			layer.addTool(toolObjData);
-		//}
+		// add object data tool
+		// TODO: should propably be configurable -> maybe through wfslayerplugin conf
+		// so we can disable if feature data bundle is not loaded
+		var toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
+		var toolObjData = toolBuilder();
+		toolObjData.setName("objectData");
+		toolObjData.setTitle(locTool);
+		toolObjData.setTooltip(locTool);
+		toolObjData.setCallback(function() {
+			me.sandbox.postRequestByName('ShowFeatureDataRequest',[layer.getId()]);
+		});
+		layer.addTool(toolObjData);
 	}
 });

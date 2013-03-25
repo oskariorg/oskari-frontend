@@ -6,9 +6,17 @@
 
 Removed hardcoded wmtslayer and wfslayer from map-layer-service. LayerPlugins should now handle layer model/builder registration on init function.
 
+### mapstats
+StatsLayerPlugin now registers layer model/builder to map-layer-service on init.
+
+StatsLayerPlugin registers  tool links for STATS layer icon callbacks and Statistics mode.
+
+
 ### mapwfs
 
 WfsLayerPlugin now registers layer model/builder to map-layer-service on init.
+
+WfsLayerPlugin registers a tool link for WFS layers to show featuredata grid.
 
 ### mapfull bundle
 
@@ -21,6 +29,10 @@ Mapfull now starts map and plugins before starting to parse layers JSON so plugi
 ### mapmodule-plugin bundle/ControlsPlugin
 
 Map controls are now configurable (zoombox and measure controls) - by setting the control values as false the control is not added. 
+
+### core/sandbox/AbstractLayer
+
+Layers can now have tools linked to them.
 
 ## 1.7
 
