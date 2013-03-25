@@ -286,7 +286,7 @@ function(config) {
         }
         
         // Map movement/keyboard control
-        if(this.conf.zoomBox !== false) {
+        if(this.conf.keyboardControls !== false) {
             this._keyboardControls = new OpenLayers.Control.PorttiKeyboard();
             this._keyboardControls.setup(this.getMapModule());
         }
@@ -304,6 +304,7 @@ function(config) {
             },
             immediate : true
         };
+
         this._measureControls = {};
         if(this.conf.measureControls !== false) {
             this._measureControls = {
@@ -351,8 +352,10 @@ function(config) {
         }
         
         // mouse control
-        this._mouseControls = new OpenLayers.Control.PorttiMouse(this.conf['mouse']);
-        this._mouseControls.setup(this.getMapModule());
+        if(this.conf.mouseControls !== false) {
+            this._mouseControls = new OpenLayers.Control.PorttiMouse(this.conf['mouse']);
+            this._mouseControls.setup(this.getMapModule());    
+        }        
     }
 }, {
     /**

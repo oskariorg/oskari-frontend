@@ -17,8 +17,10 @@ Map controls are configurable - setting the control values as false the control 
 ```javascript
 {
   "conf": {
-    "zoombox" : false,
-    "measureControls" : false
+    "zoomBox" : false,
+    "measureControls" : false,
+    "keyboardControls" : false,
+    "mouseControls" : false
   }
 }
 ```
