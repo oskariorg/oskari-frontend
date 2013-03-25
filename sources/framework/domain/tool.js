@@ -19,7 +19,7 @@ function() {
 
     /**
      * @method setName
-     * Sets name for the style
+     * Sets name for the tool
      *
      * @param {String} name
      *            style name
@@ -29,7 +29,7 @@ function() {
     },
     /**
      * @method getName
-     * Gets name for the style
+     * Gets name for the tool
      *
      * @return {String} style name
      */
@@ -38,19 +38,19 @@ function() {
     },
     /**
      * @method setTitle
-     * Sets title for the style
+     * Sets title for the tool
      *
      * @param {String} title
-     *            style title
+     *            tool title
      */
     setTitle : function(title) {
         this._title = title;
     },
     /**
      * @method getTitle
-     * Gets title for the style
+     * Gets title for the tool
      *
-     * @return {String} style title
+     * @return {String} tool title
      */
     getTitle : function() {
         return this._title;
@@ -75,18 +75,18 @@ function() {
     },
     /**
      * @method setIconCls
-     * Set optional icon css style
+     * Set optional icon name (e.g. icon-close)
      *
-     * @param {String} css style
+     * @param {String} icon name
      */
     setIconCls : function(iconCls) {
         this._iconCls = iconCls;
     },
     /**
      * @method getIconCls
-     * Get optional icon css style
+     * Get optional icon name
      *
-     * @return {String} css style
+     * @return {String} icon name
      */
     getIconCls : function() {
         return this._iconCls;
@@ -95,7 +95,7 @@ function() {
      * @method setCallback
      * Sets callback definition for tool
      *
-     * @param {String} caalback code
+     * @param {function} callback code
      *            
      */
     setCallback : function(callback) {
@@ -105,7 +105,7 @@ function() {
      * @method getCallback
      * Get callback code for tool
      *
-     * @return {String} callback definition
+     * @return {function} callback definition
      */
     getCallback : function() {
         return this._callback;
