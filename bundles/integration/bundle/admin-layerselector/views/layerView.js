@@ -7,6 +7,13 @@ define([
         tagName: 'div',
         className: 'layer',
 
+        /**
+         * This object contains backbone event-handling. 
+         * It binds methods to certain events fired by different elements.
+         * 
+         * @property events
+         * @type {Object}
+         */
         events: {
             "click .admin-add-layer-cancel" : "hideLayerSettings",
 //            "click .admin-add-layer-ok"     : "hideLayerSettings",
@@ -15,9 +22,12 @@ define([
             "click .show-edit-layer"        : "clickLayerSettings"
         },
 
-        // At initialization we bind to the relevant events on the `Todos`
-        // collection, when items are added or changed. Kick things off by
-        // loading any preexisting todos that might be saved in *localStorage*.
+        /**
+         * At initialization we add model for this layerView, add templates
+         * and do other initialization steps.
+         *
+         * @method initialize
+         */
         initialize : function() {
             this.instance           = this.options.instance;
             this.model              = this.options.model;
@@ -26,20 +36,29 @@ define([
             this.render();
         },
 
-        // Re-rendering the App just means refreshing the statistics -- the rest
-        // of the app doesn't change.
+        /**
+         * Renders layerRowTemplate and calls _renderLayertools
+         *
+         * @method render
+         */
         render : function() {
             this.$el.html(this.template({model:this.model}));
             this._renderLayerTools();
 
         },
 
+        /**
+         * Renders tooltip related classes etc. 
+         *
+         * @method _renderLayerTools
+         */
         _renderLayerTools: function() {
             var sandbox = this.instance.sandbox;
             var layer = this.model;
             var tooltips = this.instance.getLocalization('tooltip');
             var tools = this.$el.find('div.layer-tools');
             var icon = this.$el.find('div.layer-icon');
+            //if this is base layer, wms layer, group layer, WMTS, WFS, etc.
             if(layer.isBaseLayer()) {
                 icon.addClass('layer-base');
                 icon.attr('title', tooltips['type-base']);
@@ -97,18 +116,25 @@ define([
                 });
             }
         },
+        /**
+         * Show and hide settings related to this layer 
+         *
+         * @method toggleLayerSettings
+         */
         toggleLayerSettings : function(e) {
             var element = jQuery(e.currentTarget);
-
+            //show layer settings
             if(element.parents('.admin-add-layer').length == 0 && 
                 !element.find('.admin-add-layer').hasClass('show-edit-layer')) {
-            e.stopPropagation();
-
+                
+                e.stopPropagation();
+                // decode styles
                 if(this.model.admin.style_decoded == null && this.model.admin.style != null) {
                     var styles = [];
                     styles.push(this.options.layerTabModel.decode64(this.model.admin.style));
                     this.model.admin.style_decoded = styles;
                 }
+                // create AdminLayerSettingsView
                 var settings = new AdminLayerSettingsView({
                     model: this.model,  
                     instance : this.options.instance, 
@@ -119,13 +145,16 @@ define([
                     jQuery(ui.handle).parents('.left-tools').find( "#opacity-slider" ).val( ui.value );
                 }});
 
+                // TODO when backend works and we have new jQuery UI
                 //this.$el.find("#add-layer-inspire-theme").tagit({availableTags: ["Hallinnolliset yksiköt", "Hydrografia", "Kiinteistöt", "Kohteet", "Koordinaattijärjestelmät", "Korkeus", "Liikenneverkot", "Maankäyttö", "Maanpeite","Maaperä","Merialueet", "Metatieto"]});
 
 
                 setTimeout(function(){
                     element.find('.admin-add-layer').addClass('show-edit-layer');
                 }, 30);
-            } else {
+            }
+            //hide layer settings
+            else {
                 element.find('.admin-add-layer').removeClass('show-edit-layer');
                 setTimeout(function(){
                     element.find('.admin-add-layer').remove();
@@ -133,6 +162,11 @@ define([
 
             }
         },
+        /**
+         * Hide settings related to this layer 
+         *
+         * @method hideLayerSettings
+         */
         hideLayerSettings : function(e) {
             e.stopPropagation();
             var element = jQuery(e.currentTarget);
@@ -144,13 +178,11 @@ define([
 
             }
         },
-        // removeLayer : function(e) {
-        //     var me = this;
-        //     //This will be handled by: jQuery(e.currentTarget).parents('.admin-layerselector')
-        //     var element = jQuery(e.currentTarget);
-
-
-        // },
+        /**
+         * Removes layer 
+         *
+         * @method removeLayer
+         */
         removeLayer: function(e) {
             var me = this;
             var element = jQuery(e.currentTarget);
@@ -160,6 +192,7 @@ define([
                 action_route = "action_route=DeleteLayer",
                 idKey = "&layer_id=";
 
+            // URL for deleting layer from backend
             var url = baseUrl + action_route + idKey + id;
             jQuery.ajax({
                 type : "GET",
@@ -176,6 +209,7 @@ define([
                         if(addLayerDiv.hasClass('show-edit-layer')) {
                             addLayerDiv.removeClass('show-edit-layer');
                             setTimeout(function(){
+                                // trigger removeLayer order to view.js
                                 element.trigger({
                                     type: "adminAction",
                                     command: 'removeLayer',
@@ -183,9 +217,7 @@ define([
                                 });
                                 addLayerDiv.remove();
                             },300);
-
                         }
-
                     } else {
                         //problem
                         console.log('Removing layer did not work.')
@@ -193,14 +225,17 @@ define([
                 },
                 error : function(jqXHR, textStatus) {
                     if(callbackFailure && jqXHR.status != 0) {
-                        alert(' false ');
+                        alert(' Removing layer did not work. ');
                     }
                 }
             });
 
-
         },
-
+        /**
+         * Stops propagation if admin clicks settings view 
+         *
+         * @method removeLayer
+         */
         clickLayerSettings: function(e) {
             if(!jQuery(e.target).hasClass('admin-add-layer-ok')) {
                 e.stopPropagation();

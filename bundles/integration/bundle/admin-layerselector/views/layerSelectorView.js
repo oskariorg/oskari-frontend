@@ -7,19 +7,26 @@ define([
     function(ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPanelView) {
     return Backbone.View.extend({
 
+
+        /**
+         * This object contains backbone event-handling. 
+         * It binds methods to certain events fired by different elements.
+         * 
+         * @property events
+         * @type {Object}
+         */
         events : {
             "click .admin-layer-tab"        : "toggleTab",
-            "click .admin-add-class-btn"    : "toggleAddOrg",
-            "click .admin-edit-layer-btn"   : "toggleAddOrg", 
-            "click .admin-add-class-cancel" : "toggleAddOrg",
-            "click .admin-edit-class-cancel": "toggleAddOrg",
             "keydown .admin-layerselectorapp" : "catchInputs",
             "keyup .admin-layerselectorapp"   : "catchInputs"
         },
 
-        // At initialization we bind to the relevant events on the `Todos`
-        // collection, when items are added or changed. Kick things off by
-        // loading any preexisting todos that might be saved in *localStorage*.
+        /**
+         * At initialization we bind passed container element as a root element
+         * for this view, add templates and other initialization steps.
+         *
+         * @method initialize
+         */
         initialize : function() {
             this.instance = this.options.instance;
             this.el = this.options.el;
@@ -27,22 +34,35 @@ define([
             this.tabTitleTemplate = _.template(TabTitleTemplate)
             this.selectedType = 'organization';
             _.bindAll(this);
-//            this.layerTabs = [];
+            //render this view immediately after initialization.
             this.render();
         },
 
-        // Re-rendering the App just means refreshing the statistics -- the rest
-        // of the app doesn't change.
+        /**
+         * Add HTML templates to this view (appTemplate & tabs)
+         * 
+         * @method render
+         */
         render : function() {
             this.el.html(this.appTemplate);
+            // TODO this is empty rendering for inspire tab - instead, we should render
+            // somekind of notification that we are wating for data.
             this._renderLayerGroups(null, 'inspire');
-
-
         },
+
+        /**
+         * Add HTML templates to this view (appTemplate & tabs)
+         * 
+         * @method render
+         * @param {Object} LayerGroupingTab contains layersTabModel
+         * @param {String} tabType - what kind of tab this is (inspire vs. organization)
+         */
         _renderLayerGroups: function(layerGroupingTab, tabType) {
             if(layerGroupingTab != null)  {
 
-                //we need a reference to organization side for selecting themes
+                // we need a reference to organization side for selecting themes
+                // because adminLayerSettings needs to know about all the themes/classes
+                // defined in inspire tab. This member is set in 'addToCollection'
                 var inspire = null;
                 if(tabType == 'organization') {
                     inspire = this.inspireTabModel;
@@ -64,27 +84,39 @@ define([
             }
         },
 
+        /**
+         * Adds layer models and uses those to create layersTabModels
+         * 
+         * @method addToCollection
+         * @param {Array} models which are created from layers.
+         */
         addToCollection: function(models) {
             this.collection = new LayerCollection(models);
+            // Get models grouped by tab type
             this.inspireGrouping    = this.collection.getLayerGroups('getInspireName');
             this.orgGrouping        = this.collection.getLayerGroups('getOrganizationName');
-
+            // clear everything
             this.el.html(this.appTemplate);
+
+            // create tabModel for inspire classes
             this.inspireTabModel = new LayersTabModel({
                 grouping : this.inspireGrouping, 
                 type: 'inspire',
                 title: this.instance.getLocalization('filter').inspire
             });
+            // render inspire classes
             this._renderLayerGroups(this.inspireTabModel, 'inspire', null);
 
+            // create tabModel for organization
             this.organizationTabModel = new LayersTabModel({
                 grouping : this.orgGrouping, 
                 type: 'organization',
                 title: this.instance.getLocalization('filter').organization
             });
+            // render organizations
             this._renderLayerGroups(this.organizationTabModel, 'organization', this.inspireTabModel);
 
-            //activate tab
+            // activate organization tab
             jQuery('.admin-layerselectorapp .tabsHeader').find('.organization').parent().addClass('active');
             jQuery('.tab-content.inspire').hide();
             jQuery('.tab-content.organization').show();
@@ -95,14 +127,24 @@ define([
 
         },
 
+        /**
+         * Changes tab when user clicks one of them
+         * 
+         * @method toggleTab
+         * @param {Object} e - click event
+         */
         toggleTab : function(e) {
-            e.stopPropagation();
+            // this event does not need to bubble up.
+            e.stopPropagation(); 
             var target  = jQuery(e.currentTarget);
             var type    = target.attr('data-tab');
 
+            // change class 'active' to correct tab
             jQuery('.tabsHeader').find('.active').removeClass('active');
             target.parent().addClass('active');
 
+            // change focus and visibility
+            // TODO: part of this should be done through CSS classes
             if(type == 'inspire') {
                 jQuery('.tab-content.organization').hide();                
                 jQuery('.tab-content.inspire').show();
@@ -117,7 +159,7 @@ define([
             }
 
         }, 
-        toggleAddOrg : function(e) {
+/*        toggleAddOrg : function(e) {
             var elem = jQuery(e.currentTarget).parent().find('.admin-add-class');
             if(elem.hasClass('show-add-class')) {
                 elem.removeClass('show-add-class');
@@ -128,6 +170,14 @@ define([
         removeAddOrg : function(e) {
             jQuery('.admin-add-class').removeClass('show-add-class');
         },
+*/
+
+        /**
+         * Catches all the events that try to bubble outside of this admin tool.
+         * 
+         * @method catchInputs
+         * @param {Object} e - click event
+         */
         catchInputs : function(e) {
             e.stopPropagation();
         }

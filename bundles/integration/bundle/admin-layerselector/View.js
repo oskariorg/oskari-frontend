@@ -37,7 +37,10 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         },
         'MapLayerEvent' : function(event) {
 
-
+            // TODO! currently update, add and initial additions execute
+            // the same code. This needs to be updated when mapLayerService
+            // can handle updates better. 
+            // (updates everything instead of layer.name)
             if(event.getOperation() === 'update') {
 
                 var sandbox = this.getSandbox();
@@ -50,12 +53,6 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                     this.layers = layers;
                 }
 
-/*                var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                var layerId = event.getLayerId();
-
-                var layer = mapLayerService.findMapLayer(layerId);
-                this.plugins['Oskari.userinterface.Flyout'].handleLayerModified(layer);
-*/
             }
             else if(event.getOperation() === 'add') {
 
@@ -63,7 +60,6 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                 // populate layer list
                 var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
                 var layers = mapLayerService.getAllLayers();
-debugger;
                 if(this.view != null){
                     this.view.addToCollection(layers);
                 } else {
@@ -71,7 +67,7 @@ debugger;
                 }
 
             } else {
-
+                // this section is executed when initial addition is made (all layer added)
                 var sandbox = this.getSandbox();
                 // populate layer list
                 var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
@@ -101,33 +97,14 @@ debugger;
     },
 
 
+    /**
+     * @method init
+     * This is called when flyout is ready and something needs to be executed
+     * before Backbone is rendered
+     */
     init : function() {
-        //this.getEl().bind("action", this.handleAction, this);
-/*
-        var me = this;
-        var sandbox = me.getSandbox()
-        var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        // if something needs to be initiated.
 
-        jQuery.ajax({
-            type : "GET",
-            dataType: 'json',
-            beforeSend: function(x) {
-              if(x && x.overrideMimeType) {
-               x.overrideMimeType("application/j-son;charset=UTF-8");
-              }
-             },
-            url : me._mapLayerUrl,
-            success : function(pResp) {
-//                me._loadAllLayersAjaxCallBack(pResp, callbackSuccess);
-                me._loadAllLayersAjaxCallBack(pResp, null, mapLayerService);
-            },
-            error : function(jqXHR, textStatus) {
-                if(callbackFailure && jqXHR.status != 0) {
-                    callbackFailure();
-                }
-            }
-        }); 
-*/
     },
 
     /**
@@ -139,8 +116,10 @@ debugger;
     "render" : function() {
         var me = this;
         var container = this.getEl();
+        // admin-layerselector is rendered under this container
         container.addClass("admin-layerselector");
-debugger;        
+        // backbone will fire adminAction events if they need to be 
+        // passed to other bundles
         container.on("adminAction", {me: this}, me.handleAction);
 
         var locale = this.getLocalization();
@@ -153,38 +132,28 @@ debugger;
         require(["_bundle/views/layerSelectorView"], function(LayerSelectorView) {
 
             // Finally, we kick things off by creating the **App**.
+            // We need to pass container element for the view and
+            // instance. 
             me.view = new LayerSelectorView({
                 el : container,
                 instance : me.instance,
                 locale : me.locale
             });
+            // If call for layers is ready before backbone is created,
+            // we'll instantiate our view with that data 
             if(me.layers != null) {
                 me.view.addToCollection(me.layers);
             }
         });
     },
+
+/*
 // copy-paste
     _loadAllLayersAjaxCallBack : function(pResp, callbackSuccess, mapLayerService) {
         var me = this,
         sandbox = me.getSandbox();
 //        var allLayers = pResp;//pResp.layers;
 debugger;
-/*        var keys = _.keys(pResp);
-        for(var i = 0; i < keys.length; i++){
-            var id = keys[i];
-            var organization = pResp[id];
-            var layerKeys = _.keys(organization.maplayers);
-            for(var j = 0; j < layerKeys.length; j++) {
-                var layer = organization.maplayers[layerKeys[j]];
-
-                var mapLayer = me.createMapLayer(layer);
-                if(mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
-                    mapLayerService.addLayer(mapLayer, true);
-                }
-            }
-        }
-*/
-
 
         var allLayers = pResp.layers;
         for(var i = 0; i < allLayers.length; i++) {
@@ -204,25 +173,34 @@ debugger;
             callbackSuccess();
         }
     },
+*/
+
+    /**
+     * @method handleAction
+     * This is called when backbone fires an event that needs to be passed
+     * to other bundles. Event should contain a member called *command*
+     */
     handleAction: function(e) {
         e.stopPropagation();
-debugger;
         var me = e.data.me;
         var sandbox = me.getSandbox()
         var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        // remove layer from mapLayerService
         if(e.command == "removeLayer") {
             mapLayerService.removeLayer(e.modelId);
-        } else if(e.command == "addLayer") {
+        } 
+        // add layer into mapLayerService
+        else if(e.command == "addLayer") {
             e.layerData.name = e.layerData.admin.nameFi;
             var mapLayer = mapLayerService.createMapLayer(e.layerData);
             mapLayer.admin = e.layerData.admin;
             if(mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
                 mapLayerService.addLayer(mapLayer);
             }
-        } else if(e.command == "editLayer") {
-            e.layerData.name = e.layerData.admin.nameFi;
-//            var mapLayer = mapLayerService.createMapLayer(e.layerData);
-//            mapLayer.admin = e.layerData.admin;
+        }
+        // update layer info
+        else if(e.command == "editLayer") {
+            e.layerData.name = e.layerData.admin.nameFi; //TODO this should be in mapLayerService
             mapLayerService.updateLayer(e.layerData.id, e.layerData);
         }
     }
