@@ -1,5 +1,10 @@
 Oskari.clazz.category('Oskari.statistics.bundle.patiopoc.View', 'sample-table', {
 
+    createSampleTable : function(elTbl) {
+        this.createComplexSlickGrid(elTbl);
+        /*this.createWideTallSlickGrid(elTbl);*/
+
+    },
 	/**
 	 * @method createWideTallSlickGrid
 	 */
@@ -369,10 +374,5 @@ Oskari.clazz.category('Oskari.statistics.bundle.patiopoc.View', 'sample-table', 
 			dataView.collapseGroup(0);
 			dataView.endUpdate();
 		});
-	},
-	createSampleTable : function(elTbl) {
-		this.createComplexSlickGrid(elTbl);
-		/*this.createWideTallSlickGrid(elTbl);*/
-
 	}
 });

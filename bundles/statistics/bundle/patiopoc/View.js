@@ -49,13 +49,13 @@ function() {
 		if(isShown) {
 			/** ENTER The Mode */
 
-			/** set map to stats mode */
+			/** set map to stats mode - map-ops */
 			this._setMapStatsMode();
 
-			/** show our mode view */
+			/** show our mode view - view hacks*/
 			this._attachToMainView(this.getEl());
 
-			/** show some content in our mode view */
+			/** show some content in our mode view - sample */
 			this._setupViewContent(this.getEl());
 
 			/** a hack to notify openlayers of map size change */

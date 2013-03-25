@@ -10,6 +10,9 @@ Oskari.clazz.category('Oskari.statistics.bundle.patiopoc.View', 'view-content-sa
 	_setupViewContent : function(el) {
 		var me = this;
 		el.addClass('container-fluid');
+        el.css('background-color', 'white');
+        el.html('Tähän tulisi taulukko näkymä');
+        /*
 		var elRow = jQuery('<div style="height:100%;"/>');
 		elRow.addClass('row-fluid');
 		el.append(elRow);
@@ -28,5 +31,6 @@ Oskari.clazz.category('Oskari.statistics.bundle.patiopoc.View', 'view-content-sa
 			me.stats.appendTo(elStats);
 			me.createSampleTable(elTbl);
 		}, 0);
+*/
 	}
 });
