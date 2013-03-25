@@ -183,9 +183,13 @@ function(config) {
          */
        'Toolbar.ToolSelectedEvent' : function(event) {
             // changed tool -> cancel any current tool
-            this._zoomBoxTool.deactivate();
-            this._measureControls.line.deactivate();
-            this._measureControls.area.deactivate();
+            if(this.conf.zoomBox !== false) {
+                this._zoomBoxTool.deactivate(); 
+            }
+            if(this.conf.measureControls !== false) {
+                this._measureControls.line.deactivate();
+                this._measureControls.area.deactivate();
+            }
        }
     },
     /**
@@ -282,9 +286,11 @@ function(config) {
         }
         
         // Map movement/keyboard control
-        this._keyboardControls = new OpenLayers.Control.PorttiKeyboard();
-        this._keyboardControls.setup(this.getMapModule());
-        
+        if(this.conf.keyboardControls !== false) {
+            this._keyboardControls = new OpenLayers.Control.PorttiKeyboard();
+            this._keyboardControls.setup(this.getMapModule());
+        }
+ 
         // Measure tools
         var optionsLine = {
             handlerOptions : {
@@ -298,6 +304,8 @@ function(config) {
             },
             immediate : true
         };
+
+        this._measureControls = {};
         if(this.conf.measureControls !== false) {
             this._measureControls = {
                 line : (new OpenLayers.Control.Measure(OpenLayers.Handler.Path, optionsLine)),
@@ -344,8 +352,10 @@ function(config) {
         }
         
         // mouse control
-        this._mouseControls = new OpenLayers.Control.PorttiMouse(this.conf['mouse']);
-        this._mouseControls.setup(this.getMapModule());
+        if(this.conf.mouseControls !== false) {
+            this._mouseControls = new OpenLayers.Control.PorttiMouse(this.conf['mouse']);
+            this._mouseControls.setup(this.getMapModule());    
+        }        
     }
 }, {
     /**
