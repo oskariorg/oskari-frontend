@@ -91,7 +91,7 @@ function(config) {
         if(mapLayerService) {
             mapLayerService.registerLayerModel('statslayer', 'Oskari.mapframework.bundle.mapstats.domain.StatsLayer');
 
-            var layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelBuilder');
+            var layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelBuilder', sandbox);
             mapLayerService.registerLayerModelBuilder('statslayer', layerModelBuilder);
         }
     },
