@@ -1,7 +1,7 @@
 /**
  * 
  */
-Oskari.clazz.category('Oskari.statistics.bundle.patiopoc.View', 'main-view-hacks', {
+Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.View', 'main-view-hacks', {
 
 	/**
 	 * @method attachToMainView

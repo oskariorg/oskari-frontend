@@ -41,11 +41,11 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
             }
             /*
             var ugStartup = {
-                'bundleinstancename': 'patiopoc',
-                'bundlename': 'patiopoc',
+                'bundleinstancename': 'statsgrid',
+                'bundlename': 'statsgrid',
                 'metadata': {
                     'Import-Bundle': {
-                        'patiopoc': {
+                        'statsgrid': {
                             'bundlePath': '/Oskari/packages/statistics/bundle/'
                         }
                     }

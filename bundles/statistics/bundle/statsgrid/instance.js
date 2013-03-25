@@ -1,21 +1,21 @@
 /**
- * @class Oskari.statistics.bundle.patiopoc.PatioPocBundleInstance
+ * @class Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance
  *
  * Sample extension bundle definition which inherits most functionalty
  * from DefaultExtension class.
  *
  */
-Oskari.clazz.define('Oskari.statistics.bundle.patiopoc.PatioPocBundleInstance',
+Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance',
 /**
  * @static constructor function
  */
 function() {
     this.conf =  {
-        "name": "patiopoc",
+        "name": "StatsGrid",
         "sandbox": "sandbox",
         "tileClazz": "Oskari.userinterface.extension.DefaultTile",
         //"flyoutClazz": null,
-        "viewClazz": "Oskari.statistics.bundle.patiopoc.View"
+        "viewClazz": "Oskari.statistics.bundle.statsgrid.View"
     };
 }, {
 	"eventHandlers" : {

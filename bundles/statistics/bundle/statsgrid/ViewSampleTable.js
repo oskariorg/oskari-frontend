@@ -1,4 +1,4 @@
-Oskari.clazz.category('Oskari.statistics.bundle.patiopoc.View', 'sample-table', {
+Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.View', 'sample-table', {
 
     createSampleTable : function(elTbl) {
         this.createComplexSlickGrid(elTbl);

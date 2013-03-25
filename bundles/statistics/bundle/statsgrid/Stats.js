@@ -1,12 +1,12 @@
 /**
- * @class Oskari.statistics.bundle.patiopoc.Stats
+ * @class Oskari.statistics.bundle.statsgrid.Stats
  * 
  * Q&D fixed from a demo
  *
  * todo: remove UI dependencies etc... cleanup
  * Work-in-Progress
  */
-Oskari.clazz.define('Oskari.statistics.bundle.patiopoc.Stats', function(view) {
+Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.Stats', function(view) {
 	this.statArray = [];
 	this.statson = null;
 	this.statId = 127;

@@ -1,11 +1,11 @@
 /**
- * @class Oskari.statistics.bundle.patiopoc.View
+ * @class Oskari.statistics.bundle.statsgrid.View
  *
  * Sample extension bundle definition which inherits most functionalty
  * from DefaultView class.
  *
  */
-Oskari.clazz.define('Oskari.statistics.bundle.patiopoc.View',
+Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.View',
 /**
  * @static constructor function
  */
@@ -21,7 +21,7 @@ function() {
 		var me = this;
 		var sandbox = me.instance.getSandbox();
 
-		var tbid = 'patiopoc';
+		var tbid = 'statsgrid';
 		sandbox.requestByName(me.instance, 'Toolbar.ToolbarRequest', [tbid, 'add', {
 			title : this.getTitle(),
 			show : false,
@@ -32,13 +32,13 @@ function() {
 		me.createToolbar(tbid);
 
 		var el = me.getEl();
-		el.addClass("patiopoc");
+		el.addClass("statsgrid");
 
 	},
 	showContent : function(isShown) {
 		var sandbox = this.instance.getSandbox();
 		
-		var tbid = 'patiopoc';
+		var tbid = 'statsgrid';
 		var showHide = isShown ? 'show' : 'hide';
 		sandbox.requestByName(this.instance, 'Toolbar.ToolbarRequest', [tbid, showHide]);
 
@@ -81,7 +81,7 @@ function() {
 	 */
 	stopPlugin : function() {
 		var sandbox = this.instance.getSandbox();
-		sandbox.requestByName(this.instance, 'Toolbar.ToolbarRequest', ['patiopoc', 'remove']);
+		sandbox.requestByName(this.instance, 'Toolbar.ToolbarRequest', ['statsgrid', 'remove']);
 	}
 }, {
 	"protocol" : ["Oskari.userinterface.View"],

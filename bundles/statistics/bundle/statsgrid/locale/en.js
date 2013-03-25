@@ -1,6 +1,6 @@
 Oskari.registerLocalization({
-    "lang" : "fi",
-    "key" : "patiopoc",
+    "lang" : "en",
+    "key" : "StatsGrid",
     "value" : {
         "title" : "Patio",
         "desc" : "",

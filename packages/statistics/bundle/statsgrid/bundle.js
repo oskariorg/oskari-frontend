@@ -1,9 +1,9 @@
 /**
- * @class Oskari.statistics.bundle.patiopoc.PatioBundle
+ * @class Oskari.statistics.bundle.statsgrid.StatsGridBundle
  *
  * Definitpation for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.statistics.bundle.patiopoc.PatioPocBundle",
+Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.StatsGridBundle",
 /**
  * @method create called automatically on construction
  * @static
@@ -12,8 +12,8 @@ function() {
 
 }, {
 	"create" : function() {
-		return Oskari.clazz.create("Oskari.statistics.bundle.patiopoc.PatioPocBundleInstance",
-			 'patiopoc');
+		return Oskari.clazz.create("Oskari.statistics.bundle.statsgrid.StatsGridBundleInstance",
+			 'statsgrid');
 	},
 	"update" : function(manager, bundle, bi, info) {
 
@@ -25,51 +25,51 @@ function() {
 
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/patiopoc/instance.js"
+			"src" : "../../../../bundles/statistics/bundle/statsgrid/instance.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/patiopoc/View.js"
+			"src" : "../../../../bundles/statistics/bundle/statsgrid/View.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/patiopoc/ViewSample.js"
+			"src" : "../../../../bundles/statistics/bundle/statsgrid/ViewSample.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/patiopoc/ViewSampleToolbar.js"
+			"src" : "../../../../bundles/statistics/bundle/statsgrid/ViewSampleToolbar.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/patiopoc/ViewSampleTable.js"
+			"src" : "../../../../bundles/statistics/bundle/statsgrid/ViewSampleTable.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/patiopoc/ViewSampleMapOps.js"
+			"src" : "../../../../bundles/statistics/bundle/statsgrid/ViewSampleMapOps.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/patiopoc/ViewSampleMainViewHacks.js"
+			"src" : "../../../../bundles/statistics/bundle/statsgrid/ViewSampleMainViewHacks.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/patiopoc/Stats.js"
+			"src" : "../../../../bundles/statistics/bundle/statsgrid/Stats.js"
 		}, {
 			"type" : "text/css",
-			"src" : "../../../../resources/statistics/bundle/patiopoc/css/style.css"
+			"src" : "../../../../resources/statistics/bundle/statsgrid/css/style.css"
 		}],
 
 		"locales" : [{
 			"lang" : "fi",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/patiopoc/locale/fi.js"
+			"src" : "../../../../bundles/statistics/bundle/statsgrid/locale/fi.js"
 		}, {
 			"lang" : "sv",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/patiopoc/locale/sv.js"
+			"src" : "../../../../bundles/statistics/bundle/statsgrid/locale/sv.js"
 		}, {
 			"lang" : "en",
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/patiopoc/locale/en.js"
+			"src" : "../../../../bundles/statistics/bundle/statsgrid/locale/en.js"
 		}]
 	},
 	"bundle" : {
 		"manifest" : {
-			"Bundle-Identifier" : "patiopoc",
-			"Bundle-Name" : "patiopoc",
+			"Bundle-Identifier" : "statsgrid",
+			"Bundle-Name" : "statsgrid",
 			"Bundle-Author" : [{
 				"Name" : "jjk",
 				"Organisatpation" : "nls.fi",
@@ -99,4 +99,4 @@ function() {
 
 });
 
-Oskari.bundle_manager.installBundleClass("patiopoc", "Oskari.statistics.bundle.patiopoc.PatioPocBundle");
+Oskari.bundle_manager.installBundleClass("statsgrid", "Oskari.statistics.bundle.statsgrid.StatsGridBundle");

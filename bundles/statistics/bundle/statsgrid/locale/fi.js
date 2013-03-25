@@ -1,14 +1,14 @@
 Oskari.registerLocalization({
-    "lang" : "sv",
-    "key" : "patiopoc",
+    "lang" : "fi",
+    "key" : "StatsGrid",
     "value" : {
-        "title" : "patiopoc",
+        "title" : "Patio",
         "desc" : "",
         "tile" : {
-            "title" : "patiopoc"
+            "title" : "Patio"
         },
         "view" : {
-            "title" : "patiopoc",
+            "title" : "Patio",
             "message" : "patiopoc"
         }
     }

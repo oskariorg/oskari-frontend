@@ -1,4 +1,4 @@
-Oskari.clazz.category('Oskari.statistics.bundle.patiopoc.View', 'sample-map-ops', {
+Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.View', 'sample-map-ops', {
 
 	
 	/**

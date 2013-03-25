@@ -1,7 +1,7 @@
 /**
  * 
  */
-Oskari.clazz.category('Oskari.statistics.bundle.patiopoc.View', 'sample-toolbar', {
+Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.View', 'sample-toolbar', {
 
 	/**
 	 * @method createToolbar

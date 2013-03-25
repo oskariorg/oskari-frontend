@@ -1,7 +1,7 @@
 /**
  *
  */
-Oskari.clazz.category('Oskari.statistics.bundle.patiopoc.View', 'view-content-sample', {
+Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.View', 'view-content-sample', {
 
 	/**
 	 * @method _setupSampleView
@@ -27,7 +27,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.patiopoc.View', 'view-content-sa
 		elRow.append(elStats);
 
 		window.setTimeout(function() {
-			me.stats = Oskari.clazz.create('Oskari.statistics.bundle.patiopoc.Stats', me);
+			me.stats = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.Stats', me);
 			me.stats.appendTo(elStats);
 			me.createSampleTable(elTbl);
 		}, 0);
