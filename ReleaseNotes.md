@@ -30,6 +30,10 @@ Mapfull now starts map and plugins before starting to parse layers JSON so plugi
 
 Map controls are now configurable (zoombox and measure controls) - by setting the control values as false the control is not added. 
 
+### oskariui
+
+Added Bootstrap grid CSS to Oskari
+
 ### core/sandbox/AbstractLayer
 
 Layers can now have tools linked to them.
