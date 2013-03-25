@@ -6,13 +6,21 @@
 
 Removed hardcoded wmtslayer and wfslayer from map-layer-service. LayerPlugins should now handle layer model/builder registration on init function.
 
-### mapstats
+### core/sandbox/AbstractLayer
+
+Layers can now have tools linked to them.
+
+### mapstats bundle
+
 StatsLayerPlugin now registers layer model/builder to map-layer-service on init.
 
-StatsLayerPlugin registers  tool links for STATS layer icon callbacks and Statistics mode.
+StatsLayerPlugin registers tool links for STATS layer icon callbacks and Statistics mode.
 
+### statistics/statsgrid bundle
 
-### mapwfs
+Initial version for map view mode handling to show statistics grid.
+
+### mapwfs bundle
 
 WfsLayerPlugin now registers layer model/builder to map-layer-service on init.
 
@@ -30,13 +38,10 @@ Mapfull now starts map and plugins before starting to parse layers JSON so plugi
 
 Map controls are now configurable (zoombox and measure controls) - by setting the control values as false the control is not added. 
 
-### oskariui
+### oskariui bundle
 
 Added Bootstrap grid CSS to Oskari
 
-### core/sandbox/AbstractLayer
-
-Layers can now have tools linked to them.
 
 ## 1.7
 
