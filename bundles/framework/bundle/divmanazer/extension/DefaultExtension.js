@@ -88,7 +88,9 @@ function(name, flyoutClazz, tileClazz, viewClazz) {
         sandbox.register(this);
 
         /* stateful */
-        sandbox.registerAsStateful(this.mediator.bundleId, this);
+        if(conf && conf.stateful === true) {
+            sandbox.registerAsStateful(this.mediator.bundleId, this);
+        }
 
         var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
 

@@ -20,7 +20,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
         var components = this.sandbox.getStatefulComponents();
         var loopedComponents = [];
         for(var id in state) {
-            if(components[id]) {
+            if(components[id] && components[id].setState) {
                 // safety check that we have the component in current config
                 components[id].setState(state[id].state);
             }
@@ -141,10 +141,15 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
         var state = {};
     	var components = this.sandbox.getStatefulComponents();
     	for(var id in components) {
-    	    state[id] = {
-    	        // wrap with additional state property so we can use the same json as in startup configuration
-    	        'state' : components[id].getState()
-    	    };
+            if(components[id].getState) {
+                state[id] = {
+                    // wrap with additional state property so we can use the same json as in startup configuration
+                    'state' : components[id].getState()
+                };
+            }
+            else {
+                this.sandbox.printWarn('Stateful component ' + id + ' doesnt have getState()');
+            }
     	}
         return state;
     },

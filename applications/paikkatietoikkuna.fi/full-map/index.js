@@ -39,18 +39,20 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
             if (cb) {
                 cb(me.instance);
             }
+            /*
             var ugStartup = {
-                'bundleinstancename': 'statsgrid',
-                'bundlename': 'statsgrid',
-                'metadata': {
-                    'Import-Bundle': {
-                        'statsgrid': {
-                            'bundlePath': '/Oskari/packages/statistics/bundle/'
+                "bundleinstancename": "statsgrid",
+                "bundlename": "statsgrid",
+                "metadata": {
+                    "Import-Bundle": {
+                        "statsgrid": {
+                            "bundlePath": "/Oskari/packages/statistics/bundle/"
                         }
                     }
                 }
             };
             Oskari.bundle_facade.playBundle(ugStartup, function() {});
+            */
         });
     },
     /**
