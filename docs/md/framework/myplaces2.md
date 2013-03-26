@@ -115,7 +115,18 @@ No statehandling has been implemented.
 This bundle doesn't listen to any events.
 
 ## Events the bundle sends out
-This bundle doesn't send out any events.
+
+<table>
+  <tr>
+    <th> Event </th><th> When it is triggered/what it tells other components</th>
+  </tr>
+  <tr>
+    <td> AddedFeatureEvent </td><td> Sent when a feature has been added</td>
+  </tr>
+  <tr>
+    <td> FinishedDrawingEvent </td><td> Sent when a drawing has been finished</td>
+  </tr>
+</table>
 
 ## Dependencies
 

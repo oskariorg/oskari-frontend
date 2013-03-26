@@ -93,6 +93,12 @@ This bundle doesn't handle any requests.
   <tr>
     <td> WFSFeaturesSelectedEvent </td><td> Sent when a selection is made on the grid to notify other components that a feature has been selected</td>
   </tr>
+  <tr>
+    <td> AddedFeatureEvent </td><td> Sent when a selection feature has been added</td>
+  </tr>
+  <tr>
+    <td> FinishedDrawingEvent </td><td> Sent when a selection has been finished drawing</td>
+  </tr>
 </table>
 
 ## Dependencies

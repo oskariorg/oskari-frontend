@@ -240,7 +240,10 @@ describe.only('Test Suite for Featuredata', function() {
                 return "Test.featuredata";
             }
             self.onEvent = function(event) {
-                if(event.getName() === "AfterMapLayerAddEvent") {
+                if(event.getName() === "AfterMapMoveEvent") {
+                    // add layers
+                    var selectedLayers = addLayers(module, [216]);
+                } else if(event.getName() === "AfterMapLayerAddEvent") {
                     // select metadata select area tool
                     buttonElementArray = jQuery("#toolbar .tool.tool-feature-selection");
                     expect(buttonElementArray.length).to.equal(1);
@@ -257,9 +260,6 @@ describe.only('Test Suite for Featuredata', function() {
                     point = map.getViewPortPxFromLonLat(new OpenLayers.LonLat(385373, 6671499));
                     // mouse doubleclick
                     simulateMouseDblClick(map, point.x, point.y);
-                } else if(event.getName() === "AfterMapMoveEvent") {
-                    // add layers
-                    var selectedLayers = addLayers(module, [216]);
                 } else if(event.getName() === "FeatureData.FinishedDrawingEvent") {
                     buttonElementArray = jQuery(".divmanazerpopup .showSelection");
                     expect(buttonElementArray.length).to.equal(1);
@@ -279,23 +279,22 @@ describe.only('Test Suite for Featuredata', function() {
                         // clean up
                         progressSpy.restore();
                         removeLayers(module);
-                        sandbox.unregisterFromEventByName(self, "FeatureData.FinishedDrawingEvent");
                         sandbox.unregisterFromEventByName(self, "AfterMapMoveEvent");
                         sandbox.unregisterFromEventByName(self, "AfterMapLayerAddEvent");
+                        sandbox.unregisterFromEventByName(self, "FeatureData.FinishedDrawingEvent");
                         done();
                     }, "Waits for feature data flyout to recieve updateData results", 30000);
                 }
             }
-
-            //            removeLayers(module);
-            // listen to FinishedDrawingEvent to trigger verification
-            sandbox.registerForEventByName(self, "FeatureData.FinishedDrawingEvent");
 
             // listen to AfterMapMoveEvent to trigger verification
             sandbox.registerForEventByName(self, "AfterMapMoveEvent");
 
             // listen to AfterMapLayerAddEvent to trigger verification
             sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
+
+            // listen to FinishedDrawingEvent to trigger verification
+            sandbox.registerForEventByName(self, "FeatureData.FinishedDrawingEvent");
 
             // move map with projection coordinates
             sandbox.postRequestByName('MapMoveRequest', [385402, 6671502, 9]);
