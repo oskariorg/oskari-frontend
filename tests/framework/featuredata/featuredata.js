@@ -146,8 +146,15 @@ describe.only('Test Suite for Featuredata', function() {
 
             // Spy GridJsonService._processGridUpdate or Flyout._prepareData to verify functions have been called
             if(development) {
+                var service = module.getService();
                 // in development mode, use stub which is an extension of spy
-                progressSpy = sinon.stub(module.getService(), '_processGridUpdate', function(params) {
+                progressSpy = sinon.stub(service, '_processGridUpdate', function(params) {
+                    var mapLayer = params.getMapLayer();
+                    
+                    // clear timer that called this method
+                    service.pendingOperations[mapLayer.getId()].timer = null;
+                    delete service.pendingOperations[mapLayer.getId()].timer;
+
                     params.getCallback()({
                         headers: {
                             width: 100,
@@ -230,7 +237,7 @@ describe.only('Test Suite for Featuredata', function() {
             // faking to be module with getName/onEvent methods
             var self = this;
             self.getName = function() {
-                return "Test.feaeturedata";
+                return "Test.featuredata";
             }
             self.onEvent = function(event) {
                 if(event.getName() === "AfterMapLayerAddEvent") {
@@ -251,8 +258,6 @@ describe.only('Test Suite for Featuredata', function() {
                     // mouse doubleclick
                     simulateMouseDblClick(map, point.x, point.y);
                 } else if(event.getName() === "AfterMapMoveEvent") {
-                    var x = sandbox.getMap().getX(),
-                        y = sandbox.getMap().getY();
                     // add layers
                     var selectedLayers = addLayers(module, [216]);
                 } else if(event.getName() === "FeatureData.FinishedDrawingEvent") {
