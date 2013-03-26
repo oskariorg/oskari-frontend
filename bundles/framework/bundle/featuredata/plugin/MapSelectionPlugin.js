@@ -132,6 +132,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.plugin.MapSelectionP
             var lastIndex = this.drawLayer.features.length-1;
             this.drawControls.modify.selectControl.select(this.drawLayer.features[lastIndex]);
         }
+
+        var event;
+        if(!this.multipart || isForced) {
+            event = this._sandbox.getEventBuilder(this.prefix + 'FinishedDrawingEvent')(this.getDrawing(), this.editMode);
+            this._sandbox.notifyAll(event);
+        } else {
+            event = this._sandbox.getEventBuilder(this.prefix + 'AddedFeatureEvent')(this.getDrawing(), this.currentDrawMode);
+            this._sandbox.notifyAll(event);
+        }
     },
     /**
      * @method _toggleControl

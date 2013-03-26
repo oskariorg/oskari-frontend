@@ -19,6 +19,7 @@ function() {
     this.localization = null;
     this.popupHandler = null;
     this.selectionPlugin = null;
+    this.geometry = null;
 }, {
     /**
      * @static
@@ -98,11 +99,11 @@ function() {
         me.createUi();
 
         //sends request via config to add tool selection button
-        if (this.conf && this.conf.selectionTools == true) {
+//        if (this.conf && this.conf.selectionTools == true) {
             this.popupHandler = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.PopupHandler', this);
             var addBtnRequestBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
             var btn = {
-                iconCls: 'selection-area',
+                iconCls: 'tool-feature-selection',
                 tooltip: 'Select Tool',
                 sticky: false,
                 callback: function() {
@@ -111,7 +112,7 @@ function() {
             };
 
             sandbox.request(this, addBtnRequestBuilder('dialog', 'selectiontools', btn));
-        }
+//        }
 
         // check if preselected layers included wfs layers -> act if they are added now 
         var layers = sandbox.findAllSelectedMapLayers();
@@ -208,7 +209,10 @@ function() {
          * Update grid data
          */
         'AfterMapMoveEvent': function(event) {
-            this.plugins['Oskari.userinterface.Flyout'].updateGrid();
+            // clear selection and get full screen selection
+            this.setGeometry(null);
+            var geometry = this.getSelectionPlugin().getFullScreenSelection();
+            this.plugins['Oskari.userinterface.Flyout'].updateGrid(geometry);
         },
 
         /**
@@ -224,30 +228,36 @@ function() {
          * Disable grid updates on close, otherwise enable updates
          */
         'userinterface.ExtensionUpdatedEvent': function(event) {
+            var plugin = this.plugins['Oskari.userinterface.Flyout']
 
-            var me = this;
-
-            if (event.getExtension().getName() != me.getName() || this.ignoreFlyoutEvent) {
-                // wasn't me or ignoring -> do nothing
+            // ExtensionUpdateEvents are fired a lot, only let featuredata extension event to be handled when enabled
+            if (event.getExtension().getName() !== this.getName()) {
+                // wasn't me or disabled -> do nothing
                 return;
+            } else if (event.getViewState() === "close") {
+                // clear geometry when closed
+                this.setGeometry(null);
+            } else {
+                // enable and open plugin
+                var geometry = this.geometry;
+                if (!geometry) {
+                    geometry = this.getSelectionPlugin().getFullScreenSelection();
+                } else {
+                    // remove once used
+                    this.setGeometry(null);
+                }
+                plugin.setEnabled(true, geometry);
             }
-
-            var doOpen = event.getViewState() != "close";
-            var geometry = this.getSelectionPlugin().getFullScreenSelection();
-            this.plugins['Oskari.userinterface.Flyout'].setEnabled(doOpen, geometry);
         }
     },
 
     /**
-     * @method showFlyout
-     * opens data grid to show feature data
+     * @method setGeometry
+     * stores selection geometry
      * @param {string} the user's given geometries
      **/
-    showFlyout: function(geometry) {
-        this.ignoreFlyoutEvent = true;
-        this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'detach']);
-        this.plugins['Oskari.userinterface.Flyout'].setEnabled(true, geometry);
-        this.ignoreFlyoutEvent = false;
+    setGeometry: function(geometry) {
+        this.geometry = geometry;
     },
 
     /**
