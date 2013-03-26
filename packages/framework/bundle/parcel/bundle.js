@@ -33,7 +33,6 @@ function() {
         manager.alert("RECEIVED update notification " + info);
 	}
 },
-
 /**
  * metadata
  */
@@ -41,6 +40,17 @@ function() {
     "protocol" : ["Oskari.bundle.Bundle"],
     "source" : {
         "scripts" : [
+        /* libs */
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/clipper/clipper.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/jsts/javascript.util.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/jsts/jsts.js"
+        },
         /* event */
         {
             "type" : "text/javascript",
