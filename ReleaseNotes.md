@@ -8,7 +8,7 @@ Removed hardcoded wmtslayer and wfslayer from map-layer-service. LayerPlugins sh
 
 ### core/sandbox/AbstractLayer
 
-Layers can now have tools linked to them.
+Layers can now have tools linked to them. OpenLayer options and params can be passed as arguments.
 
 ### mapstats bundle
 
@@ -42,6 +42,10 @@ Map controls are now configurable (zoombox and measure controls) - by setting th
 
 Added Bootstrap grid CSS to Oskari
 
+### mapmodule-plugin bundle/WmsLayerPlugin
+
+WmsLayerPlugin passes AbstractLayer options and params to OpenLayers.Layer.WMS
+For example params allows format to be changed to "image/jpg" and options allows singleTile: true to be added
 
 ## 1.7
 

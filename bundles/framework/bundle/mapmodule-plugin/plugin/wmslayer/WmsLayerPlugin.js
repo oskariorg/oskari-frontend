@@ -199,6 +199,7 @@ function() {
             return;
         }
 
+        // remove marker layers
         var markerLayer = this._map.getLayersByName("Markers");
         if (markerLayer) {
             for (var mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
@@ -208,109 +209,64 @@ function() {
             }
         }
 
-        if(layer.isGroupLayer() || layer.isBaseLayer() || isBaseMap == true) {
-			if(layer.getSubLayers().length > 0) {
-                /**
-                 * loop all basemap layers and add these on the map
-                 */
-                for(var i = 0; i < layer.getSubLayers().length; i++) {
+        var layers = [],
+            layerIdPrefix = 'layer_';
+        // insert layer or sublayers into array to handle them identically
+        if((layer.isGroupLayer() || layer.isBaseLayer() || isBaseMap == true) && (layer.getSubLayers().length > 0)) {
+            // replace layers with sublayers
+            layers = layer.getSubLayers();
+            layerIdPrefix = 'basemap_';
+        } else {
+            // add layer into layers
+            layers.push(layer);
+        }
 
-                    var layerUrls = "";
-                    for(var j = 0; j < layer.getSubLayers()[i].getWmsUrls().length; j++) {
-                        layerUrls += layer.getSubLayers()[i]
-                        .getWmsUrls()[j];
-                    }
+        // loop all layers and add these on the map
+        for (var i = 0, ilen = layers.length; i < ilen; i++) {
+            var _layer = layers[i];
+            var layerScales = this.getMapModule().calculateLayerScales(_layer.getMaxScale(), _layer.getMinScale());
 
-                    var layerScales = this.getMapModule().calculateLayerScales(layer
-                    .getSubLayers()[i].getMaxScale(), layer
-                    .getSubLayers()[i].getMinScale());
-
-                    var openLayer = new OpenLayers.Layer.WMS('basemap_' + layer.getSubLayers()[i].getId(), 
-                                            layer.getSubLayers()[i].getWmsUrls(), {
-                        layers : layer.getSubLayers()[i].getWmsName(),
-                        transparent : true,
-                        id : layer.getSubLayers()[i].getId(),
-                        styles : layer.getSubLayers()[i].getCurrentStyle().getName(),
-                        format : "image/png"
-                    }, {
-                        layerId : layer.getSubLayers()[i].getWmsName(),
-                        scales : layerScales,
-                        isBaseLayer : false,
-                        displayInLayerSwitcher : true,
-                        visibility : true,
-                        buffer : 0
-                    });
-
-                    openLayer.opacity = layer.getOpacity() / 100;
-
-                    this._map.addLayer(openLayer);
-
-                    if(!keepLayerOnTop) {
-                        this._map.setLayerIndex(openLayer, 0);
-                    }
-
-                }
-
-            } else {
-                var layerScales = this.getMapModule().calculateLayerScales(layer.getMaxScale(), layer.getMinScale());
-
-                var openLayer = new OpenLayers.Layer.WMS('layer_' + layer.getId(), layer.getWmsUrls(), {
-                    layers : layer.getWmsName(),
+            // default params and options
+            var defaultParams = {
+                    layers : _layer.getWmsName(),
                     transparent : true,
-                    id : layer.getId(),
-                    styles : layer.getCurrentStyle().getName(),
+                    id : _layer.getId(),
+                    styles : _layer.getCurrentStyle().getName(),
                     format : "image/png"
-                }, {
-                    layerId : layer.getWmsName(),
+                },
+                defaultOptions = {
+                    layerId : _layer.getWmsName(),
                     scales : layerScales,
                     isBaseLayer : false,
                     displayInLayerSwitcher : true,
                     visibility : true,
                     buffer : 0
-                });
+                },
+                layerParams = _layer.getParams(),
+                layerOptions = _layer.getOptions();
 
-                openLayer.opacity = layer.getOpacity() / 100;
-
-                this._map.addLayer(openLayer);
-
-                if(keepLayerOnTop) {
-                    this._map.setLayerIndex(openLayer, this._map.layers.length);
-                } else {
-                    this._map.setLayerIndex(openLayer, 0);
-                }
+            // override default params and options from layer
+            for(var key in layerParams) {
+                defaultParams[key] = layerParams[key];
+            }
+            for(var key in layerOptions) {
+                defaultOptions[key] = layerOptions[key];
             }
 
-        } else {
-
-            var layerScales = this.getMapModule().calculateLayerScales(layer.getMaxScale(), layer.getMinScale());
-            var openLayer = new OpenLayers.Layer.WMS('layer_' + layer.getId(), layer.getWmsUrls(), {
-                layers : layer.getWmsName(),
-                transparent : true,
-                id : layer.getId(),
-                styles : layer.getCurrentStyle().getName(),
-                format : "image/png"
-            }, {
-                layerId : layer.getWmsName(),
-                scales : layerScales,
-                isBaseLayer : false,
-                displayInLayerSwitcher : true,
-                visibility : true,
-                buffer : 0
-            });
-
-            openLayer.opacity = layer.getOpacity() / 100;
+            var openLayer = new OpenLayers.Layer.WMS(layerIdPrefix + _layer.getId(), _layer.getWmsUrls(), defaultParams, defaultOptions);
+            openLayer.opacity = _layer.getOpacity() / 100;
 
             this._map.addLayer(openLayer);
-
-            this._sandbox.printDebug("#!#! CREATED OPENLAYER.LAYER.WMS for " + layer.getId());
+            this._sandbox.printDebug("#!#! CREATED OPENLAYER.LAYER.WMS for " + _layer.getId());
 
             if(keepLayerOnTop) {
                 this._map.setLayerIndex(openLayer, this._map.layers.length);
             } else {
                 this._map.setLayerIndex(openLayer, 0);
             }
-
         }
+
+        // add marker layers
         if (markerLayer) {
             for (var mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
                 if (markerLayer[mlIdx]) {

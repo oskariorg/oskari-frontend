@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.AbstractLayer',
  * @static
  */
 
-function() {
+function(params, options) {
 	/* Internal id for this map layer */
 	this._id = null;
 
@@ -26,6 +26,12 @@ function() {
 
 	/* either WMS, WMTS, WFS or VECTOR */
 	this._layerType = "";
+
+	/* optional params */
+	this._params = params || {};
+
+	/* optional options */
+	this._options = options || {};
 
 	/* modules can "tag" the layers with this for easier reference */
 	this._metaType = null;
@@ -716,5 +722,19 @@ function() {
 		} else {
 			return 'layer-' + this.getLayerType();
 		}
+	},
+	/**
+	 * @method getParams
+	 * @return {Object} optional layer parameters for OpenLayers, empty object if no parameters were passed in construction
+	 */
+	getParams : function() {
+		return this._params;
+	},
+	/**
+	 * @method getOptions
+	 * @return {Object} optional layer options for OpenLayers, empty object if no options were passed in construction
+	 */
+	getOptions : function() {
+		return this._options;
 	}
 }); 
