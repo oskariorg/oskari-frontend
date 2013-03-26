@@ -127,6 +127,7 @@ function(instance) {
     
         var templateButtons = me.templateEditButtons.clone();
         var editButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+
         editButton.setTitle(me.localization.button.edit);
         editButton.setHandler(function() {
             editDialog.close();
@@ -153,13 +154,17 @@ function(instance) {
         });
         dialogContent.append(addMoreLink);
 
+        // clear selection in instance
+        me.instance.setGeometry(null);
+
         var showSelectionsBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         showSelectionsBtn.setTitle(me.localization.button.show);
-        showSelectionsBtn.addClass('primary');
+        showSelectionsBtn.addClass('primary showSelection');
         showSelectionsBtn.setHandler(function() {
             var features = me.instance.getSelectionPlugin().getFeaturesAsGeoJSON();
+            me.instance.setGeometry(features);
             me.instance.getSelectionPlugin().stopDrawing();
-            me.instance.showFlyout(features);
+            me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'detach']);
             editDialog.close();             
         });
 

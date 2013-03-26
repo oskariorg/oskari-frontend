@@ -3,6 +3,7 @@
  *
  * Renders the "featuredata" flyout.
  */
+
 Oskari.clazz.define('Oskari.mapframework.bundle.featuredata.Flyout',
 
 /**
@@ -108,7 +109,6 @@ function(instance) {
      */
     setState : function(state) {
         this.state = state;
-        console.log("Flyout.setState", this, state);
     },
     /**
      * @method setResizable
@@ -195,6 +195,7 @@ function(instance) {
      * Updates data for layer
      */ 
     _updateData: function(layer, selectionGeometry) {
+
         if(!this.active) {
             // disabled
             return;

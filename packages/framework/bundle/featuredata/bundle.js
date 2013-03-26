@@ -32,6 +32,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata.FeatureDataBundle", 
             "src": "../../../../bundles/framework/bundle/featuredata/plugin/MapSelectionPlugin.js"
         }, {
             "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/event/FinishedDrawingEvent.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/bundle/featuredata/event/AddedFeatureEvent.js"
+        }, {
+            "type": "text/javascript",
             "src": "../../../../bundles/framework/bundle/featuredata/Flyout.js"
         }, {
             "type": "text/javascript",

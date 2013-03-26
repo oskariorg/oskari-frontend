@@ -50,6 +50,8 @@ if (isCommonJS) exports.simulateMouseClick = simulateMouseClick;
 
 function simulateMouseDblClick(map, x, y) {
 	map.events.triggerEvent("mousemove", {xy: new OpenLayers.Pixel(x, y)});
+    map.events.triggerEvent("mousedown", {xy: new OpenLayers.Pixel(x, y)});
+    map.events.triggerEvent("mouseup", {xy: new OpenLayers.Pixel(x, y)});
 	map.events.triggerEvent("dblclick", {xy: new OpenLayers.Pixel(x, y)});
 }
 if (isCommonJS) exports.simulateMouseDblClick = simulateMouseDblClick;

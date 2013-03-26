@@ -154,9 +154,9 @@ function() {
             this.drawPlugin.stopDrawing();
         },
         /**
-         * @method Metadata.FinishedDrawingEvent
+         * @method Metadata.MapSelectionEvent
          * Requests toolbar to select default tool
-         * @param {Oskari.mapframework.bundle.myplaces2.event.FinishedDrawingEvent} event
+         * @param {Oskari.mapframework.bundle.metadata.event.MapSelectionEvent} event
          */
         'Metadata.MapSelectionEvent' : function(event) {
             // ask toolbar to select default tool
