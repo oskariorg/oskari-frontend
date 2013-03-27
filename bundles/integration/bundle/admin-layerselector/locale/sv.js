@@ -57,21 +57,19 @@ Oskari.registerLocalization({
 				"iconClass" : "backendstatus-ok"
 			}
 		},
-
-
 		"admin" : {
 			"addOrganization" 		: "Tillägg dataproducent",
 			"addOrganizationDesc"	: "Tillägg dataproducent dvs en ny organisation",
 			"addInspire" 			: "Tillägg ämne",
-			"addInspireDesc" 		: "Tillägg ämne dvs nytt Inspire-teema",
+			"addInspireDesc" 		: "Tillägg ämne dvs nytt Inspire&shy;-teema",
 			"addLayer" 				: "Tillägg lager",
-			"addLayerDesc"			: "Tillägg lager till detta Inspire-teema",
+			"addLayerDesc"			: "Tillägg lager till detta Inspire&shy;-teema",
 			"edit" 					: "Editera", 
 			"editDesc" 				: "Editera namn",
 			"layerType"				: "Lagertyp",
 			"layerTypeDesc" 		: "Lagrets typ: WMS, WFS, WMTS",
-			"interfaceVersion"		: "Gränssnittets version",
-			"interfaceVersionDesc" 	: "Gränssnittets version",
+			"interfaceVersion"		: "Gränss&shy;nittets version",
+			"interfaceVersionDesc" 	: "Gränss&shy;nittets version",
 			"wmslayer"				: "WMS Lager",
 			"wms1_1_1"				: "WMS 1.1.1",
 			"wms1_3_0"				: "WMS 1.3.0",
@@ -81,21 +79,21 @@ Oskari.registerLocalization({
 			"selectClass" 			: "Valitse aihe",
 			"selectClassDesc" 		: "Valitse aihe",
 
-			"wmsInterfaceAddress" 	: "WMS-gränssnittets address",
-			"wmsInterfaceAddressDesc": "WMS-gränssnittets URL-address separerat med komma",
+			"wmsInterfaceAddress" 	: "WMS&shy;-gränssnittets address",
+			"wmsInterfaceAddressDesc": "WMS&shy;-gränssnittets URL-address separerat med komma",
 			"wmsServiceMetaId" 		: "WMS metadata tagg",
-			"wmsServiceMetaIdDesc" 	: "WMS-tjänstens metadata filtagg",
+			"wmsServiceMetaIdDesc" 	: "WMS&shy;-tjänstens metadata filtagg",
 			"layerNameAndDesc" 		: "Lagrets namn och kort beskrivning",
 
-			"metaInfoIdDesc" 		: "Geodataregistrets metadata filtagg, som unikt identifierar metadatans XML beskrivning",
+			"metaInfoIdDesc" 		: "Geodata&shy;registrets metadata filtagg, som unikt identifierar metadatans XML beskrivning",
 			"metaInfoId" 			: "Metadatans filtagg",
 			"wmsName" 				: "WMS namn",
 			"wmsNameDesc" 			: "WMS lager dvs unikt namn",
 
 			"addInspireName" 		: "Ämnets namn",
 			"addInspireNameTitle" 	: "Ämnets namn",
-			"addOrganizationName" 	: "Dataproducentens namn",
-			"addOrganizationNameTitle" : "Dataproducentens namn",
+			"addOrganizationName" 	: "Data&shy;producentens namn",
+			"addOrganizationNameTitle" : "Data&shy;producentens namn",
 			"addNewClass" 			: "Tillägg nytt teema",
 			"addNewLayer" 			: "Tillägg nytt kartlager",
 			"addNewOrganization" 	: "Tillägg ny dataproducent",
@@ -107,14 +105,14 @@ Oskari.registerLocalization({
 			"styleDesc" 			: "Stil",
 
 			"minScale" 				: "Minimi&shy;skala",
-			"minScaleDesc" 			: "Lagrets minimiskala",
-			"minScalePlaceholder" 	: "Lagrets minimiskala",
+			"minScaleDesc" 			: "Lagrets minimiskala (1:5669294)",
+			"minScalePlaceholder" 	: "5669294 (1:5669294)Lagrets minimiskala",
 			"maxScale" 				: "Maximi&shy;skala",
-			"maxScaleDesc" 			: "Lagrets maximiskala",
-			"maxScalePlaceholder" 	: "Lagrets maximiskala",
-			"legendaImage" 			: "Förklaringsbildens address",
-			"legendaImageDesc" 		: "Förklaringsbildens address",
-			"legendaImagePlaceholder" : "Förklaringsbildens address",
+			"maxScaleDesc" 			: "Lagrets maximiskala (1:1)",
+			"maxScalePlaceholder" 	: "1 (1:1) Lagrets maximiskala",
+			"legendaImage" 			: "Förklarings&shy;bildens address",
+			"legendaImageDesc" 		: "Förklarings&shy;bildens address",
+			"legendaImagePlaceholder" : "Förklarings&shy;bildens address",
 			"gfiResponseType" 		: "GFI svartyp",
 			"gfiResponseTypeDesc" 	: "Svarets typ dvs Get Feature Info (GFI)",
 			"gfiStyle" 				: "GFI stil",
@@ -133,8 +131,8 @@ Oskari.registerLocalization({
 			"englishPlaceholder" 	: "Name in English",
 			"englishDescPlaceholder" : "Description in English",
 
-			"interfaceAddress" 		: "Rajapinnan osoite",
-			"interfaceAddressDesc" 	: "WMS-tasomäärittelyjen osoite"
+			"interfaceAddress" 		: "Gränssnitten address",
+			"interfaceAddressDesc" 	: "WMS address för lager definitionen"
 
 		},
 		"cancel" 	: "Tillbaka",

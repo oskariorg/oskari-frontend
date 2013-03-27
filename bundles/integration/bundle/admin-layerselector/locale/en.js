@@ -134,7 +134,7 @@ Oskari.registerLocalization({
 			"englishDescPlaceholder" : "Description in English",
 
 			"interfaceAddress" 		: "interface URL",
-			"interfaceAddressDesc" 	: "URL for WMS layer configuration"
+			"interfaceAddressDesc" 	: "URL for WMS layer definitions"
 		},
 		"cancel" 	: "Cancel",
 		"add" 		: "Add",

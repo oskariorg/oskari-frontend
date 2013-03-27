@@ -2,17 +2,10 @@
     define(function() {
         return Backbone.Model.extend({
 
-            // Default attributes
-/*            defaults : function() {
-                return {
-                    title : "Layer"
-                };
-            },
-*/            
             // Ensure that each todo created has `title`.
             initialize : function(model) {
+                // exted given object (layer) with this one
                 jQuery.extend(this, model);
-                //this.visible = true;
             }
         });
     });

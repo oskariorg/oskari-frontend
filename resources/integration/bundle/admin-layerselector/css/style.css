@@ -35,7 +35,7 @@ div.admin-layerselector div.create-layer {
     background-color : #ffffff;
 }
 div.admin-layerselector div.create-layer {
-    min-height: 30px;
+    min-height: 35px;
 }
 
 div.admin-layerselector div.layer.odd {
@@ -184,6 +184,14 @@ div.admin-layerselector .admin-add-layer {
     height: 0px;
     -webkit-transition-duration: 300ms;
     -webkit-transition-property: height;
+    -moz-transition-duration: 300ms;
+    -moz-transition-property: height;
+    -o-transition-duration: 300ms;
+    -o-transition-property: height;
+    -ms-transition-duration: 300ms;
+    -ms-transition-property: height;
+    transition-duration: 300ms;
+    transition-property: height;
 }
 div.admin-layerselector .show-add-layer,
 div.admin-layerselector .show-edit-layer  {
@@ -198,6 +206,14 @@ div.admin-layerselector .admin-add-class {
     height: 0px;
     -webkit-transition-duration: 300ms;
     -webkit-transition-property: height;
+    -moz-transition-duration: 300ms;
+    -moz-transition-property: height;
+    -o-transition-duration: 300ms;
+    -o-transition-property: height;
+    -ms-transition-duration: 300ms;
+    -ms-transition-property: height;
+    transition-duration: 300ms;
+    transition-property: height;
 }
 div.admin-layerselector .show-add-class {
     padding: 1s0px 10px;
@@ -340,4 +356,8 @@ div.admin-layerselector .layout-slider {
 }
 div.admin-layerselector #admin-select-capability {
     margin-bottom: 15px;
+}
+div.admin-layerselector .fetch-wms-button {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }

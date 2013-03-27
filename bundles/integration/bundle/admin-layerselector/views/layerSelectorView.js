@@ -16,7 +16,7 @@ define([
          * @type {Object}
          */
         events : {
-            "click .admin-layer-tab"        : "toggleTab",
+            "click .admin-layer-tab"          : "toggleTab",
             "keydown .admin-layerselectorapp" : "catchInputs",
             "keyup .admin-layerselectorapp"   : "catchInputs"
         },
@@ -122,6 +122,7 @@ define([
             jQuery('.tab-content.organization').show();
             
             // Check that data for classes is fetched
+            // TODO unnecessary
             this.inspireTabModel.getClasses(this.instance.getSandbox().getAjaxUrl(), "action_route=GetInspireThemes");
             this.organizationTabModel.getClasses(this.instance.getSandbox().getAjaxUrl(),"&action_route=GetMapLayerClasses");
 

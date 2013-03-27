@@ -46,16 +46,13 @@ define([
             "click .admin-add-org-cancel"   : "toggleGroupingSettings",
 
             "click .admin-add-org-btn"      : "toggleAddOrg",
-//            "click .admin-add-class-btn"    : "toggleAddOrg",
-//            "click .admin-edit-layer-btn"   : "toggleAddOrg", 
-//            "click .admin-add-class-cancel" : "toggleAddOrg",
-//            "click .admin-edit-class-cancel": "toggleAddOrg",
+            "click .admin-add-class-btn"    : "toggleAddClass",
 
             "click .admin-add-org-ok"       : "saveOrganization",
             "click .admin-remove-org"       : "removeOrganization",
             "click .admin-add-class-ok"     : "saveClass",
-            "click .admin-remove-class"     : "removeClass"
-            //TODO should be moved to adminLayerSettingsView
+            "click .admin-remove-class"     : "removeClass",
+            "click .show-add-class"         : "catchClicks"
         },
 
         /**
@@ -236,6 +233,15 @@ define([
                 elem.addClass('show-add-class');
             }
         },
+        /**
+         * Shows "add class" settings when admin clicks 
+         * add grouping (class)
+         * 
+         * @method toggleAddClass
+         */
+        toggleAddClass : function(e) {
+            alert('Backend component is not ready yet.');
+        },
 
         /**
          * Shows layer settings when admin clicks 
@@ -352,7 +358,7 @@ define([
                 // callback functionality
                 me.layerGroupingModel.getClasses(me.options.instance.getSandbox().getAjaxUrl(),"&action_route=GetMapLayerClasses");
                 element.parents('.show-add-class').removeClass('show-add-class');
-                addClass.find('.admin-edit-org-btn').html(this.options.instance.getLocalization('edit'))
+                addClass.find('.admin-edit-org-btn').html(me.options.instance.getLocalization('edit'))
             });
 
         },
@@ -460,19 +466,15 @@ define([
                     }
                 }
             });
-
         },
 
-
-
         /**
+         * Stops propagation of click events
          * 
-         * 
-         * @method updateModel
+         * @method catchClicks
          */
-        updateModel: function(idValue) {
-            var me = this;
-            me.layerGroupingModel.removeClass(idValue);
+        catchClicks: function(e) {
+            e.stopPropagation();
         }
 
 

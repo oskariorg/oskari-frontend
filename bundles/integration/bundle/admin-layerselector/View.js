@@ -147,33 +147,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         });
     },
 
-/*
-// copy-paste
-    _loadAllLayersAjaxCallBack : function(pResp, callbackSuccess, mapLayerService) {
-        var me = this,
-        sandbox = me.getSandbox();
-//        var allLayers = pResp;//pResp.layers;
-debugger;
 
-        var allLayers = pResp.layers;
-        for(var i = 0; i < allLayers.length; i++) {
-            
-            var mapLayer = mapLayerService.createMapLayer(allLayers[i]);
-            mapLayer.admin = allLayers[i].admin;
-            if(mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
-                mapLayerService.addLayer(mapLayer, true);
-            }
-        }
-
-        // notify components of added layer if not suppressed
-        this._allLayersAjaxLoaded = true;
-        var event = sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
-        sandbox.notifyAll(event);
-        if(callbackSuccess) {
-            callbackSuccess();
-        }
-    },
-*/
 
     /**
      * @method handleAction

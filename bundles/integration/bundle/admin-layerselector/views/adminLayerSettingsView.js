@@ -20,7 +20,8 @@ define([
             "click .admin-add-layer-cancel" : "hideLayerSettings",
             "click .admin-remove-layer"     : "removeLayer",
             "click .show-edit-layer"        : "clickLayerSettings",
-            "click #add-layer-wms-button"   : "fetchCapabilities"
+            "click #add-layer-wms-button"   : "fetchCapabilities",
+            "click .icon-close"             : "clearInput"
         },
 
         /**
@@ -105,6 +106,7 @@ define([
                     element.parents('.admin-add-layer').remove();
                 },300);
 
+                var addLayerBtn = element.parents('.create-layer').children('.admin-add-layer-btn').html(this.options.instance.getLocalization('admin').addLayer);
             }
         },
 
@@ -448,6 +450,14 @@ define([
                 } else {
                     return object[k];
                 }
+            }
+        },
+        clearInput: function(e) {
+            var me = this;
+            var element = jQuery(e.currentTarget);
+            var input = element.parent().children(':input');
+            if(input.length == 1) {
+                input.val('');
             }
         },
 

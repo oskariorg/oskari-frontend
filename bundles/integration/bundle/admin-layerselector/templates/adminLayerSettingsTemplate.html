@@ -190,7 +190,7 @@
             </div>
             <div class="add-layer-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-layer-minscale" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').minScalePlaceholder %>" <% if(model != null && model.admin.minScale) { %>value="<%= model.admin.minScale %>"<% } %> />
+                    <input type="text" id="add-layer-minscale" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').minScalePlaceholder %>" <% if(model != null && model.admin.minScale) { %>value="<%= model.admin.minScale %>"<% } %> required />
                     <div class="icon-close"></div>
                 </div>
             </div>
@@ -202,7 +202,7 @@
             </div>
             <div class="add-layer-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-layer-maxscale" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').maxScalePlaceholder %>" <% if(model != null && model.admin.maxScale) { %>value="<%= model.admin.maxScale %>"<% } %> />
+                    <input type="text" id="add-layer-maxscale" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').maxScalePlaceholder %>" <% if(model != null && model.admin.maxScale) { %>value="<%= model.admin.maxScale %>"<% } %> required />
                     <div class="icon-close"></div>
                 </div>
             </div>

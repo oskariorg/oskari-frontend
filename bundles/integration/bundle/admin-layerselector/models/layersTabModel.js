@@ -3,24 +3,37 @@
         return Backbone.Model.extend({
             layerGroups : null,
 
+            /**
+             * Initialize
+             *
+             * @method initialize
+             */
             initialize : function() {
-                // if(jQuery.isArray(layerGroups)) {
-                //     this.layerGroups = layerGroups;
-                // }
-
                 this.title = this.attributes.title;
                 this.type = this.attributes.type;
                 this.layerGroups = this.attributes.grouping;
-                //TODO view -> this.layerContainers = {};
                 this.filter = '';
-                //TODO view -> this._createUI();
             },
 
 
+            /**
+             * Return the name of this layerTab
+             *
+             * @method getTitle
+             * @return {String} title
+             */
             getTitle : function() {
                 return (this.title != null) ? this.title : this.names.fi;
             },
 
+
+            /**
+             * Return the state of this layer
+             * TODO: not used yet
+             *
+             * @method getState
+             * @return {Object} state (title, filter, groups)
+             */
             getState : function() {
                 var state = {
                     tab : this.getTitle(),
@@ -36,6 +49,13 @@
                 }*/
                 return state;
             },
+            /**
+             * Set the state of this layer
+             * TODO: not used yet
+             *
+             * @method setState
+             * @param {Object} state an object containing info about title, filter, groups
+             */
             setState : function(state) {
                 if(!state) {
                     return;
@@ -51,6 +71,13 @@
             },
 
 
+            /**
+             * Add layer groups
+             * TODO: not used yet
+             *
+             * @method addLayerGroups
+             * @param {Array} groups 
+             */
             addLayerGroups : function(groups) {
                 var me = this;
                 this.layerGroups = groups;                
@@ -89,9 +116,21 @@
                 }
                 return selectedGroups;
             },
+            /**
+             * Return all layer groups
+             *
+             * @method getAllLayerGroups
+             * @return {Array} groups 
+             */
             getAllLayerGroups : function() {
                 return this.layerGroups;
             },
+            /**
+             * return group titles
+             *
+             * @method getGrouptitles
+             * @param {Array} names of all these groups
+             */
             getGroupTitles: function() {
                 var groupNames = [];
                 for (var i = 0; i < this.layerGroups.length; i++) {
@@ -101,6 +140,14 @@
                 };
                 return groupNames;
             },
+            /**
+             * Return grouping title
+             *
+             * @method getGroupingTitle
+             * @param {integer} index 
+             * @param {String} lang 
+             * @return {String} localized name
+             */
             getGroupingTitle: function(index, lang) {
                 var group = this.layerGroups[index];
                 if(group.getTitle != null) {
@@ -110,7 +157,15 @@
                 }
             },
 
-
+            /**
+             * Ajax call to get classes / organizations from backend. 
+             * loadClasses function will be called if call succeeds
+             * TODO: this should not be necessary.
+             *
+             * @method getClasses
+             * @param {String} baseUrl 
+             * @param {String} action_route 
+             */
             getClasses: function(baseUrl, action_route) {
                 var me = this
 
@@ -135,6 +190,12 @@
                 }); 
             },
 
+            /**
+             * Reads given classes and adds data to this model.. 
+             *
+             * @method loadClasses
+             * @param {Array} classes
+             */
             loadClasses: function(classes) {
                 var me = this;
                 var groups = me.layerGroups;
@@ -172,10 +233,17 @@
                         }
                    }
                 }
-//                me.layerGroups = groups;
+                // refresh layerGroups
                 me.set('layerGroups', groups);
+                // trigger change event so that DOM will be re-rendered
                 me.trigger('change:layerGroups');
             },
+            /**
+             * Remove a class with given id
+             * 
+             * @method removeClass
+             * @param {integer} id of class/organization that needs to be removed
+             */
             removeClass : function(id) {
                 var groups = this.layerGroups;
                 for (var i = groups.length - 1; i >= 0; i--) {
@@ -185,6 +253,12 @@
                 }
             },
 
+            /**
+             * Removes a layer with given id
+             * 
+             * @method removeLayer
+             * @param {integer} id 
+             */
             removeLayer : function(id) {
                 var groups = this.layerGroups;
                 for (var i = groups.length - 1; i >= 0; i--) {
@@ -197,6 +271,13 @@
                 }
             },
 
+            /**
+             * Helper function. Encodes data to base64 format
+             * 
+             * @method encode64
+             * @param {Object} data 
+             * @return {String} encoded data
+             */
             encode64 : function (data) {
                 //http://phpjs.org/functions/base64_encode/
                 // http://kevin.vanzonneveld.net
@@ -248,6 +329,13 @@
 
             },
 
+            /**
+             * Helper function. Decodes data from base64 format
+             * 
+             * @method decode64
+             * @param {Object} data (in base64 format) 
+             * @return {String} decoded data
+             */
             decode64 : function(data) {
                 //http://phpjs.org/functions/base64_encode/
                 // http://kevin.vanzonneveld.net
