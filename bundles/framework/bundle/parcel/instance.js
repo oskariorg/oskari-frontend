@@ -144,7 +144,6 @@ function() {
 		var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
 		var me = this;
-
 		if (this.conf && this.conf.proxyUrl) {
 			// Use proxy if requesting features cross-domain.
 			// Also, proxy is required to provide application specific authorization for WFS data.
@@ -152,7 +151,7 @@ function() {
 			OpenLayers.ProxyHost = this.conf.proxyUrl;
 		}
 
-		if(this.conf.stickyLayerIds) {
+		if(this.conf && this.conf.stickyLayerIds) {
 			// Layer switch off disable
 			for (var i in this.conf.stickyLayerIds) {
 				var layerId = this.conf.stickyLayerIds[i];
