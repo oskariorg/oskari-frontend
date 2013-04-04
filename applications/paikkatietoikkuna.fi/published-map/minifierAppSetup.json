@@ -33,6 +33,9 @@
                 "mapwfs": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
+                "mapstats": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
                 "service-base": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
