@@ -8,27 +8,11 @@
         "bundleinstancename": "openlayers-default-theme",
         "metadata": {
             "Import-Bundle": {
-                "openlayers-single-full": {
-                    "bundlePath": "../../../packages/openlayers/bundle/"
-                },
                 "openlayers-default-theme": {
                     "bundlePath": "../../../packages/openlayers/bundle/"
-                }
-            },
-            "Require-Bundle-Instance": []
-        },
-        "instanceProps": {}
-    }, {
-        "title": "OskariUI",
-        "fi": "OskariUI",
-        "sv": "OskariUI",
-        "en": "OskariUI",
-        "bundlename": "oskariui",
-        "bundleinstancename": "oskariui",
-        "metadata": {
-            "Import-Bundle": {
-                "oskariui": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "openlayers-single-full": {
+                    "bundlePath": "../../../packages/openlayers/bundle/"
                 }
             },
             "Require-Bundle-Instance": []
@@ -68,6 +52,9 @@
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
                 "core-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "oskariui": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
                 "request-base": {
