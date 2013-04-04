@@ -10,6 +10,11 @@ Oskari.registerLocalization({
         "view" : {
             "title" : "Patio",
             "message" : "patiopoc"
+        },
+        "gender" : {
+            "male" : "miehet",
+            "female": "naiset",
+            "total": "yhteensä"
         }
     }
 });

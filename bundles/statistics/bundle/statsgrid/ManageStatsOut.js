@@ -1,565 +1,346 @@
 Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipality-table', {
-	/**
-	 * @method createStatsOut
-	 * @param
-	 * {obj}
-	 * container
-	 *           to where slick grid and pull downs will be appended
-	 * Get Sotka data and show it in slcik grid
-	 */
-	createStatsOut : function(container) {
+    /**
+     * @method createStatsOut
+     * @param
+     * {obj}
+     * container
+     *           to where slick grid and pull downs will be appended
+     * Get Sotka data and show it in slcik grid
+     */
+    createStatsOut : function(container) {
 
-		// this.createTestSlickGrid(elTbl);
-		// Add pulldowns for indicator request
-		this.prepareIndicatorParams(container);
-		//this.getSotkaIndicatorData(container,'127','total','2010');
+        // this.createTestSlickGrid(elTbl);
+        // Add pulldowns for indicator request
+        this.prepareIndicatorParams(container);
+        //this.getSotkaIndicatorData(container,'127','total','2010');
 
-	},
-	/**
-	 * @method prepareIndicatorParams
-	 */
-	prepareIndicatorParams : function(container) {
-		
-			// Years
-		var year = jQuery('<li <div class="yearsel">' + '<label for="year">' + 'Vuosi' + '</label>' + '<select name="year"></select></div>' + '</li>');
+    },
+    /**
+     * @method prepareIndicatorParams
+     */
+    prepareIndicatorParams : function(container) {
+        
+        var selectors = jQuery('<div class="selectors-container"></div>');
+        selectors.append(this.getYearSelectorHTML(1990, 2011));
+        selectors.append(this.getGenderSelectorHTML(['male', 'female', 'total']));
+        container.append(selectors);
 
-		var sel = year.find('select');
-		for (var i = 2000; i < 2013; i++) {
-			var opt = jQuery('<option value="' + i.toString() + '">' + i.toString() + '</option>');
-			sel.append(opt);
-		}
+        
+        // Indicators 
+        // success -> createIndicators      
+        this.getSotkaIndicators(container);
+        this.getSotkaRegionData(container);
+    },
 
-		sel.change(function(e) {
-			var val = sel.find('option:selected').val();
+    getYearSelectorHTML: function(startYear, endYear) {
+                // Years
+        var year = jQuery('<li <div class="yearsel">' + '<label for="year">' + 'Vuosi' + '</label>' + '<select name="year" class="year"></select></div>' + '</li>');
 
-		});
+        var sel = year.find('select');
+        for (var i = startYear; i <= endYear; i++) {
+            var opt = jQuery('<option value="' + i + '">' + i + '</option>');
+            sel.append(opt);
+        }
 
-		sel.val('2012');
-		year.show();
+        sel.val(endYear);
+        return year;
+    },
+    getGenderSelectorHTML: function(values) {
+        //Gender
+        var gender = jQuery('<li <div class="gendersel">' + '<label for="gender">' + 'Sukupuoli' + '</label>' + '<select name="gender" class="gender"></select></div>' + '</li>');
 
-		container.append(year);
+        var sel = gender.find('select');
+        for (var i = 0; i < values.length; i++) {
+            var opt = jQuery('<option value="' + values[i] + '">' + this.instance.getLocalization('gender')[values[i]] + '</option>');
+            sel.append(opt);
+        }
+        sel.val(values[values.length - 1]);
+        return gender;
+    },
+    /**
+     *
+     */
+//    getSotkaRegionData : function(container, indicator, genders, years, indicatorMeta) {
+    getSotkaRegionData : function(container) {
+        var me = this;
 
-		//Gender
-		var gender = jQuery('<li <div class="gendersel">' + '<label for="gender">' + 'Sukupuoli' + '</label>' + '<select name="gender"></select></div>' + '</li>');
+        me.fetchData(
+            me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=regions&version=1.1',
+            function(regionData){
+                if (regionData) {
+                    // get the actual data
+                    //me.createMunicipalitySlickGrid(container, indicator, genders, years, indicatorMeta, regionData);
+                    me.createMunicipalitySlickGrid(container, regionData);
+                } else {
+                    alert('error in getting sotka region data');
+                }
+            }, 
+            function(jqXHR, textStatus){
+                alert('error loading sotka region data');
+            }
+        );
+    },
 
-		var selg = gender.find('select');
+    /**
+     * @method createMunicipalitySlickGrid
+     */
+    createMunicipalitySlickGrid : function(container, regiondata) {
+        var grid;
+        var gridContainer = jQuery('<div id="municipalGrid" class="municipal-grid" style="width:100%;height:70%;"></div>');
+        container.find('.municipal-grid').remove();
+        container.append(gridContainer);
+        var columns = [{
+            id : "municipality",
+            name : "Municipality",
+            field : "municipality",
+            sortable : true
+        }];
 
-		var opt = jQuery('<option value="' + 'total' + '">' + 'Kaikki' + '</option>');
-		selg.append(opt);
-		opt = jQuery('<option value="' + 'female' + '">' + 'Naiset' + '</option>');
-		selg.append(opt);
-		opt = jQuery('<option value="' + 'male' + '">' + 'Miehet' + '</option>');
-		selg.append(opt);
+        var options = {
+            enableCellNavigation : true,
+            enableColumnReorder : false,
+            multiColumnSort: true
+        };
+        var data = [];
+        var rowId = 0;
 
-		selg.val('total');
-		gender.show();
+        for (var i = 0; i < regiondata.length; i++) {
+            var indicData = regiondata[i];
 
-		container.append(gender);
+            if (indicData["category"] == 'KUNTA') {
+                data[rowId] = {
+                    id : indicData.id, 
+                    municipality: indicData.title[Oskari.getLang()]
+                }
+                rowId++;
+            }
 
-		
-		// Indicators 
-		
-		this.getSotkaIndicators(container);
+        }
+debugger;
+        var groupItemMetadataProvider = new Slick.Data.GroupItemMetadataProvider();
+        dataView = new Slick.Data.DataView({
+            groupItemMetadataProvider : groupItemMetadataProvider,
+            inlineFilters : true
+        });
+        dataView.onRowsChanged.subscribe(function(e, args) {
+            grid.invalidateRows(args.rows);
+            grid.render();
+        });
+        grid = new Slick.Grid(gridContainer, dataView, columns, options);
 
-		
-		
-	},
-	/**
-	 * Create indicators pull down 
-	 *
-	 * @method createIndicatorsSelect
-	 */
-	createIndicatorsSelect : function(container, data) {
+        var sortcol = "json_number";
+        var sortdir = 1;
+        grid.onSort.subscribe(function(e, args) {
+            var cols = args.sortCols;
+
+            dataView.sort(function (dataRow1, dataRow2) {
+                for (var i = 0, l = cols.length; i < l; i++) {
+                    var field = cols[i].sortCol.field;
+                    var sign = cols[i].sortAsc ? 1 : -1;
+                    var value1 = dataRow1[field], value2 = dataRow2[field];
+                    var result = (value1 == value2 ? 0 : (value1 > value2 ? 1 : -1)) * sign;
+                    if (result != 0) {
+                        return result;
+                    }
+                }
+                return 0;
+            });
+            grid.invalidate();
+            grid.render();
+        });
+        dataView.beginUpdate();
+        dataView.setItems(data);
+        dataView.endUpdate();
+        grid.invalidate();
+        grid.render();
+        this.grid = grid;
+        this.dataView = dataView;
+
+    },
+
+
+
+    /**
+     *  //http://demo.paikkatietoikkuna.fi/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&action_route=GetSotkaData&action=indicators&version=1.1
+     * Get Sotka indicators
+     */
+    getSotkaIndicators : function(container) {
+        var me = this;    
+        var sandbox = me.instance.getSandbox();
+        me.fetchData(
+            sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicators&version=1.1',
+            function(indicatorsdata){
+                if (indicatorsdata) {
+                    //if fetch returned something we create drop down selector
+                    me.createIndicatorsSelect(me.container, indicatorsdata);
+                } else {
+                    alert('error in getting sotka indicators');
+                }
+            }, 
+            function(jqXHR, textStatus){
+                alert('error loading sotka indicators');
+            }
+        );
+    },
+
+    /**
+     * Create indicators pull down 
+     *
+     * @method createIndicatorsSelect
+     */
+    createIndicatorsSelect : function(container, data) {
         var me=this;
-		// Indicators
-		var indi = jQuery('<li <div class="indisel">' + '<label for="indi">' + 'Indicaattorit' + '</label>' + '<select name="indi"></select></div>' + '</li>');
+        // Indicators
+        var indi = jQuery('<li <div class="indisel">' + '<label for="indi">' + 'Indicaattorit' + '</label>' + '<select name="indi"></select></div>' + '</li>');
 
-		var sel = indi.find('select');
-		for (var i = 0; i < data.length; i++) {
-			var indic_data = data[i];
+        var sel = indi.find('select');
+        for (var i = 0; i < data.length; i++) {
+            var indic_data = data[i];
 
-				for (var key in indic_data) {
-					if (key== "id") {
-                        var valu = indic_data[key];
+            for (var key in indic_data) {
+                if (key== "id") {
+                    var valu = indic_data[key];
+                    var title = indic_data["title"];
+                    var opt = jQuery('<option value="' + valu + '">' + title.fi + '</option>');
+                    sel.append(opt);
+                }
+            }
+        }
+    
+        sel.change(function(e) {
+            var indicator = sel.find('option:selected').val();
+            var year = jQuery('.statsgrid').find('.yearsel').find('.year').val();
+            var gender = jQuery('.statsgrid').find('.gendersel').find('.gender').val();
+            me.getSotkaIndicatorData(container,indicator, gender, year);
+        });
+
+        indi.show();
+
+        container.find('.selectors-container').append(indi);
+        sel.find('option[value="127"]').prop('selected', true);//sel.val('127');
+            
+    },
+
+    /**
+     * Get Sotka data for one indicator
+     */
+    getSotkaIndicatorData : function(container, indicator, genders, years) {
+        var me = this;
+//        me.indicator = indicator;
+//        me.genders = genders;
+//        me.years = years;
+
+        me.fetchData(
+            me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + years + '&genders=' + genders,
+            function(data){
+                if (data) {
+                    // get the actual data
+                    debugger;
+                    me.addIndicatorDataToGrid(container, indicator, genders, years, data);
+                    //me.getSotkaRegionData(container, indicator, genders, years, data);
+                } else {
+                    alert('error in getting sotka data');
+                }
+            }, 
+            function(jqXHR, textStatus){
+                alert('error loading sotka indicators');
+            }
+        );
+    },
+
+
+    addIndicatorDataToGrid : function(container, indicator, genders, years, data) {
+        var columns = this.grid.getColumns();
+        columns.push({
+            id : "indicator" + indicator,
+            name : indicator.toString() + '/' + years.toString() + '/' + genders.toString(),
+            field : "indicator" + indicator,
+            sortable : true
+        });
+        this.grid.setColumns(columns);
+
+        var columnData = [];
+        var ii = 0;
+debugger;
+        this.dataView.beginUpdate();
+
+        for (var i = 0; i < data.length; i++) {
+            var indicData = data[i];
+            var regionId = "";
+            var value = "";
+            for (var key in indicData) {
+                if (key == "region") {
+                    regionId = indicData[key];
+                } else if (key == "primary value") {
+                    value = indicData[key];
+                    value = value.replace(',','.');
+                }
+            }
+            if (!!regionId) {
+  //              columnData[ii] = {
+    //                id : regionId
+      //          };
+//                columnData[ii]["indicator" + indicator] = Number(value);
+                var item = this.dataView.getItemById(regionId);
+                if(item){
+                    item["indicator" + indicator] = Number(value);
+                    this.dataView.updateItem(item.id, item);
+
+                } else {
+//                    debugger;
+                }
+                ii++;                
+            }
+        }
+            this.dataView.endUpdate();
+            this.dataView.refresh();
+            this.grid.invalidateAllRows();
+            this.grid.render();
+
+    },
+    /**
+     *Map municipality name in Sotka region data
+     *
+     * @method mapMunicipality
+     */
+    mapMunicipality : function(regiondata, regioncode) {
+
+        for (var i = 0; i < regiondata.length; i++) {
+            var indic_data = regiondata[i];
+            if (indic_data["category"] == 'KUNTA') {
+                for (var key in indic_data) {
+                    var attrName = key;
+                    if (attrName == "id" && regioncode == indic_data[key]) {
                         var title = indic_data["title"];
-						var opt = jQuery('<option value="' + valu + '">' + title.fi + '</option>');
-			            sel.append(opt);
-					}
+                        return title.fi;
+                    }
 
-				}
-			
+                }
+            }
 
-		}
-	
-		sel.change(function(e) {
-			var indicator = sel.find('option:selected').val();
-			me.getSotkaIndicatorData(container,indicator,'total','2010');
-
-		});
-
-		sel.val('127');
-		indi.show();
-
-		container.append(indi);
-		
-	
-	},
-	/**
-	 * @method createMunicipalitySlickGrid
-	 */
-	createMunicipalitySlickGrid : function(container, indicator, genders, years, jsdata, regiondata) {
-		
-		var grid;
-		var gridContainer = jQuery('<div id="municipalGrid" style="width:30%;height:400px;"></div>');  
-		container.append(gridContainer);
-		var columns = [{
-			id : "kunta",
-			name : "Kunta",
-			field : "kunta"
-		}, {
-			id : "indicator1",
-			name : indicator.toString() + '/' + years.toString() + '/' + genders.toString(),
-			field : "indicator1",
-			sortable : true
-		}];
-
-		var options = {
-			enableCellNavigation : true,
-			enableColumnReorder : false
-		};
-
-		var data = [];
-		var ii = 0;
-
-		for (var i = 0; i < jsdata.length; i++) {
-			var indic_data = jsdata[i];
-			var region = "";
-			var valu = "";
-			for (var key in indic_data) {
-				var attrName = key;
-				if (attrName == "region") {
-					region = indic_data[key];
-					region = this.mapMunicipality(regiondata, region);
-				} else if (attrName == "primary value")
-					valu = indic_data[key];
-					valu = valu.replace(',','.');
-
-			}
-			if (!!region) {
-				data[ii] = {
-					id : ii,
-					kunta : region,
-					indicator1 : Number(valu)
-
-				};
-				ii++;
-			}
-		}
-
-		var sortcol = "indicator1";
-		var sortdir = 1;
-
-		function comparer(a, b) {
-			var x = a[sortcol], y = b[sortcol];
-			return (x == y ? 0 : (x > y ? 1 : -1));
-		}
-
-		var groupItemMetadataProvider = new Slick.Data.GroupItemMetadataProvider();
-		dataView = new Slick.Data.DataView({
-			groupItemMetadataProvider : groupItemMetadataProvider,
-			inlineFilters : true
-		});
-		dataView.onRowsChanged.subscribe(function(e, args) {
-			grid.invalidateRows(args.rows);
-			grid.render();
-		});
-		grid = new Slick.Grid(gridContainer, dataView, columns, options);
-
-		var sortcol = "json_number";
-		var sortdir = 1;
-		grid.onSort.subscribe(function(e, args) {
-			sortdir = args.sortAsc ? 1 : -1;
-			sortcol = args.sortCol.field;
-
-			// using native sort with comparer
-			// preferred method but can be very slow in IE with huge datasets
-			dataView.sort(comparer, args.sortAsc);
-		});
-		dataView.beginUpdate();
-		dataView.setItems(data);
-		dataView.endUpdate();
-		grid.invalidate();
-		grid.render();
-		
-
-	},
-	/**
-	 * Get Sotka data for one indicator
-	 */
-	getSotkaIndicatorData : function(container, indicator, genders, years) {
-		var me = this;
-		me.indicator = indicator;
-		me.genders = genders;
-		me.years = years;
-		var sandbox = me.instance.getSandbox();
-		jQuery.ajax({
-			dataType : "json",
-			type : "GET",
-			//&action_route=GetSotkaData&action=data&version=1.0&indicator=127&years=2011&years=2010&genders=female
-			url : sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + years + '&genders=' + genders,
-			success : function(data) {
-				if (data) {
-					me.getSotkaRegionData(container, me.indicator, me.genders, me.years, data);
-				} else {
-					alert('error in getting sotka data');
-				}
-			},
-			error : function() {
-				alert('error loading sotka data');
-
-			},
-			complete : function() {
-
-			}
-		});
-
-	},
-	/**
-	 *
-	 */
-	getSotkaRegionData : function(container, indicator, genders, years, jsdata) {
-		var me = this;
-		me.indicator = indicator;
-		me.genders = genders;
-		me.years = years;
-		me.jsdata
-		var sandbox = me.instance.getSandbox();
-		jQuery.ajax({
-			dataType : "json",
-			type : "GET",
-			//
-			url : sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=regions&version=1.1',
-			success : function(regiondata) {
-				if (regiondata) {
-					me.createMunicipalitySlickGrid(container, me.indicator, me.genders, me.years, jsdata, regiondata);
-				} else {
-					alert('error in getting sotka region data');
-				}
-			},
-			error : function() {
-				alert('error loading sotka region data');
-
-			},
-			complete : function() {
-
-			}
-		});
-
-	},
-	/**
-	 *Map municipality name in Sotka region data
-	 *
-	 * @method mapMunicipality
-	 */
-	mapMunicipality : function(regiondata, regioncode) {
-
-		for (var i = 0; i < regiondata.length; i++) {
-			var indic_data = regiondata[i];
-			if (indic_data["category"] == 'KUNTA') {
-				for (var key in indic_data) {
-					var attrName = key;
-					if (attrName == "id" && regioncode == indic_data[key]) {
-						var title = indic_data["title"];
-						return title.fi;
-					}
-
-				}
-			}
-
-		}
-		return "";
-	},
-	/**
-	 *  //http://demo.paikkatietoikkuna.fi/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&action_route=GetSotkaData&action=indicators&version=1.1
-	 * Get Sotka indicators
-	 */
-	getSotkaIndicators : function(container) {
-		var me = this;
-	
-		var sandbox = me.instance.getSandbox();
-		jQuery.ajax({
-			dataType : "json",
-			type : "GET",
-			//
-			url : sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicators&version=1.1',
-			success : function(indicatorsdata) {
-				if (indicatorsdata) {
-					me.createIndicatorsSelect(me.container, indicatorsdata);
-				} else {
-					alert('error in getting sotka indicators');
-				}
-			},
-			error : function() {
-				alert('error loading sotka indicators');
-
-			},
-			complete : function() {
-
-			}
-		});
-
-	},
-	/**
-	 * @method createComplexSlickGrid
-	 * Sample Table Grid for PoC
-	 */
-	createComplexSlickGrid : function(elTbl) {
-		var dataView;
-		var grid;
-		var data = [];
-		var columns = [{
-			id : "sel",
-			name : "#",
-			field : "num",
-			cssClass : "cell-selection",
-			width : 40,
-			resizable : false,
-			selectable : false,
-			focusable : false
-		}, {
-			id : "title",
-			name : "Title",
-			field : "title",
-			width : 120,
-			minWidth : 120,
-			cssClass : "cell-title",
-			sortable : true,
-			editor : Slick.Editors.Text
-		}, {
-			id : "duration",
-			name : "Duration",
-			field : "duration",
-			sortable : true
-		}, {
-			id : "%",
-			name : "% Complete",
-			field : "percentComplete",
-			width : 80,
-			formatter : Slick.Formatters.PercentCompleteBar,
-			sortable : true,
-			groupTotalsFormatter : avgTotalsFormatter
-		}, {
-			id : "start",
-			name : "Start",
-			field : "start",
-			minWidth : 60,
-			sortable : true
-		}, {
-			id : "finish",
-			name : "Finish",
-			field : "finish",
-			minWidth : 60,
-			sortable : true
-		}, {
-			id : "effort-driven",
-			name : "Effort Driven",
-			width : 80,
-			minWidth : 20,
-			maxWidth : 80,
-			cssClass : "cell-effort-driven",
-			field : "effortDriven",
-			formatter : Slick.Formatters.Checkmark,
-			sortable : true
-		}];
-
-		var options = {
-			enableCellNavigation : true,
-			editable : true
-		};
-
-		var sortcol = "title";
-		var sortdir = 1;
-		var percentCompleteThreshold = 0;
-		var prevPercentCompleteThreshold = 0;
-
-		function avgTotalsFormatter(totals, columnDef) {
-			return "avg: " + Math.round(totals.avg[columnDef.field]) + "%";
-		}
-
-		function myFilter(item, args) {
-			return item["percentComplete"] >= args.percentComplete;
-		}
-
-		function percentCompleteSort(a, b) {
-			return a["percentComplete"] - b["percentComplete"];
-		}
-
-		function comparer(a, b) {
-			var x = a[sortcol], y = b[sortcol];
-			return (x == y ? 0 : (x > y ? 1 : -1));
-		}
-
-		function collapseAllGroups() {
-			dataView.beginUpdate();
-			for (var i = 0; i < dataView.getGroups().length; i++) {
-				dataView.collapseGroup(dataView.getGroups()[i].value);
-			}
-			dataView.endUpdate();
-		}
-
-		function expandAllGroups() {
-			dataView.beginUpdate();
-			for (var i = 0; i < dataView.getGroups().length; i++) {
-				dataView.expandGroup(dataView.getGroups()[i].value);
-			}
-			dataView.endUpdate();
-		}
-
-		function clearGrouping() {
-			dataView.groupBy(null);
-		}
-
-		function groupByDuration() {
-			dataView.groupBy("duration", function(g) {
-				return "Duration:  " + g.value + "  <span style='color:green'>(" + g.count + " items)</span>";
-			}, function(a, b) {
-				return a.value - b.value;
-			});
-			dataView.setAggregators([new Slick.Data.Aggregators.Avg("percentComplete")], false);
-		}
-
-		function groupByDurationOrderByCount() {
-			dataView.groupBy("duration", function(g) {
-				return "Duration:  " + g.value + "  <span style='color:green'>(" + g.count + " items)</span>";
-			}, function(a, b) {
-				return a.count - b.count;
-			});
-			dataView.setAggregators([new Slick.Data.Aggregators.Avg("percentComplete")], false);
-		}
-
-		function groupByDurationOrderByCountGroupCollapsed() {
-			dataView.groupBy("duration", function(g) {
-				return "Duration:  " + g.value + "  <span style='color:green'>(" + g.count + " items)</span>";
-			}, function(a, b) {
-				return a.count - b.count;
-			});
-			dataView.setAggregators([new Slick.Data.Aggregators.Avg("percentComplete")], true);
-		}
-
-		$(function() {
-			// prepare the data
-			for (var i = 0; i < 50000; i++) {
-				var d = (data[i] = {});
-
-				d["id"] = "id_" + i;
-				d["num"] = i;
-				d["title"] = "Task " + i;
-				d["duration"] = Math.round(Math.random() * 14);
-				d["percentComplete"] = Math.round(Math.random() * 100);
-				d["start"] = "01/01/2009";
-				d["finish"] = "01/05/2009";
-				d["effortDriven"] = (i % 5 == 0);
-			}
-
-			var groupItemMetadataProvider = new Slick.Data.GroupItemMetadataProvider();
-			dataView = new Slick.Data.DataView({
-				groupItemMetadataProvider : groupItemMetadataProvider,
-				inlineFilters : true
-			});
-			grid = new Slick.Grid(elTbl, dataView, columns, options);
-
-			// register the group item metadata provider to add expand/collapse group handlers
-			grid.registerPlugin(groupItemMetadataProvider);
-			grid.setSelectionModel(new Slick.CellSelectionModel());
-
-			/*var pager = new Slick.Controls.Pager(dataView, grid, $("#pager"));*/
-			var columnpicker = new Slick.Controls.ColumnPicker(columns, grid, options);
-
-			grid.onSort.subscribe(function(e, args) {
-				sortdir = args.sortAsc ? 1 : -1;
-				sortcol = args.sortCol.field;
-
-				if ($.browser.msie && $.browser.version <= 8) {
-					// using temporary Object.prototype.toString override
-					// more limited and does lexicographic sort only by default, but can be much faster
-
-					var percentCompleteValueFn = function() {
-						var val = this["percentComplete"];
-						if (val < 10) {
-							return "00" + val;
-						} else if (val < 100) {
-							return "0" + val;
-						} else {
-							return val;
-						}
-					};
-					// use numeric sort of % and lexicographic for everything else
-					dataView.fastSort((sortcol == "percentComplete") ? percentCompleteValueFn : sortcol, args.sortAsc);
-				} else {
-					// using native sort with comparer
-					// preferred method but can be very slow in IE with huge datasets
-					dataView.sort(comparer, args.sortAsc);
-				}
-			});
-			// wire up model events to drive the grid
-			dataView.onRowCountChanged.subscribe(function(e, args) {
-				grid.updateRowCount();
-				grid.render();
-			});
-
-			dataView.onRowsChanged.subscribe(function(e, args) {
-				grid.invalidateRows(args.rows);
-				grid.render();
-			});
-			var h_runfilters = null;
-
-			// wire up the slider to apply the filter to the model
-			$("#pcSlider,#pcSlider2").slider({
-				"range" : "min",
-				"slide" : function(event, ui) {
-					Slick.GlobalEditorLock.cancelCurrentEdit();
-
-					if (percentCompleteThreshold != ui.value) {
-						window.clearTimeout(h_runfilters);
-						h_runfilters = window.setTimeout(filterAndUpdate, 10);
-						percentCompleteThreshold = ui.value;
-					}
-				}
-			});
-
-			function filterAndUpdate() {
-				var isNarrowing = percentCompleteThreshold > prevPercentCompleteThreshold;
-				var isExpanding = percentCompleteThreshold < prevPercentCompleteThreshold;
-				var renderedRange = grid.getRenderedRange();
-
-				dataView.setFilterArgs({
-					percentComplete : percentCompleteThreshold
-				});
-				dataView.setRefreshHints({
-					ignoreDiffsBefore : renderedRange.top,
-					ignoreDiffsAfter : renderedRange.bottom + 1,
-					isFilterNarrowing : isNarrowing,
-					isFilterExpanding : isExpanding
-				});
-				dataView.refresh();
-				prevPercentCompleteThreshold = percentCompleteThreshold;
-			}
-
-			// initialize the model after all the events have been hooked up
-			dataView.beginUpdate();
-			dataView.setItems(data);
-			dataView.setFilter(myFilter);
-			dataView.setFilterArgs({
-				percentComplete : percentCompleteThreshold
-			});
-			dataView.groupBy("duration", function(g) {
-				return "Duration:  " + g.value + "  <span style='color:green'>(" + g.count + " items)</span>";
-			}, function(a, b) {
-				return a.value - b.value;
-			});
-			dataView.setAggregators([new Slick.Data.Aggregators.Avg("percentComplete")], false);
-			dataView.collapseGroup(0);
-			dataView.endUpdate();
-		});
-	}
+        }
+        return "";
+    },
+    fetchData: function(url, successCb, errorCb) {
+        jQuery.ajax({
+            type : "GET",
+            dataType: 'json',
+            beforeSend: function(x) {
+              if(x && x.overrideMimeType) {
+               x.overrideMimeType("application/j-son;charset=UTF-8");
+              }
+             },
+            url : url,
+            success : function(pResp) {
+                if(successCb) {
+                    successCb(pResp);
+                }
+            },
+            error : function(jqXHR, textStatus) {
+                if(errorCb && jqXHR.status != 0) {
+                    errorCb(jqXHR, textStatus);
+                }
+            }
+        });
+    }
 });
