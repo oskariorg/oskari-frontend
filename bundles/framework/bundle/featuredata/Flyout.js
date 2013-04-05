@@ -203,6 +203,7 @@ function(instance) {
         // cancel possible previous update
         this.instance.getService().cancelWFSGridUpdateForLayer(layer.getId());
         var map = this.instance.sandbox.getMap();
+debugger;
         var panel = this.layers['' + layer.getId()];
         var selection = null;
         if(panel.grid) {

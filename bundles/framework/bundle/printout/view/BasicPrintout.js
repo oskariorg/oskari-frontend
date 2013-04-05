@@ -345,6 +345,17 @@ function(instance, localization, backendConfiguration) {
     _updateMapPreview : function() {
         var me = this;
         var selections = this._gatherSelections("image/png");
+
+//
+this.backendConfiguration = {
+        "formatProducers" : {
+            "application/pdf" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.pdf?",
+            "image/png" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.png?"
+        }
+};
+//
+
+
         var urlBase = this.backendConfiguration.formatProducers[selections.format];
         var maplinkArgs = selections.maplinkArgs;
         var pageSizeArgs = "&pageSize=" + selections.pageSize;
@@ -353,6 +364,9 @@ function(instance, localization, backendConfiguration) {
 
         this.previewContent.removeClass('preview-portrait');
         this.previewContent.removeClass('preview-landscape');
+
+debugger;
+
         this.previewContent.addClass(this.sizeOptionsMap[selections.pageSize].classForPreview);
 
         var previewImgDiv = this.previewImgDiv, previewSpan = this.previewSpan;
@@ -376,7 +390,7 @@ function(instance, localization, backendConfiguration) {
         var maplinkArgs = selections.maplinkArgs;
         var pageSizeArgs = "&pageSize=" + selections.pageSize;
         var url = urlBase + maplinkArgs + pageSizeArgs;
-
+debugger;
         this.openURLinWindow(url, selections);
 
     },
@@ -402,9 +416,12 @@ function(instance, localization, backendConfiguration) {
         saveBtn.setTitle(this.loc.buttons.save);
         saveBtn.addClass('primary');
         saveBtn.setHandler(function() {
+            var map = me.instance.sandbox.getMap();
+            var features = (typeof map.geojs === "undefined") ? null : map.geojs;
+
             var selections = me._gatherSelections();
             if(selections) {
-                me._printMap(selections);
+                me._printMap(selections,features);
             }
         });
         saveBtn.insertTo(buttonCont);
@@ -446,6 +463,7 @@ function(instance, localization, backendConfiguration) {
         if(this._isLandscape(selections))
             wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=1200," + "height=850";
         var link = infoUrl;
+debugger;
         window.open(link, "BasicPrintout", wopParm);
     },
     /**
@@ -453,8 +471,9 @@ function(instance, localization, backendConfiguration) {
      * @private
      * Sends the gathered map data to the server to save them/publish the map.
      * @param {Object} selections map data as returned by _gatherSelections()
+     * @param {Object} features map data as returned by _gatherFeatures()
      */
-    _printMap : function(selections) {
+    _printMap : function(selections,features) {
         var me = this;
         var sandbox = this.instance.getSandbox();
         var url = sandbox.getAjaxUrl();
