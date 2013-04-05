@@ -370,10 +370,10 @@ this.test = false;
          * @return {}
          */
         splitLine : function(polygons,line) {
-return;
             // OpenLayers variables
             var lineStyle = { strokeColor: '#0000ff', strokeOpacity: 1, strokeWidth: 2};
             var olOldFeatures = polygons.geometry.components.concat(line.geometry);
+return [olOldFeatures];
             var olNewFeatures = [new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon()),
                                  new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiLineString(),null,lineStyle)];
             var olSolutionPolygons = olNewFeatures[0].geometry.components;
