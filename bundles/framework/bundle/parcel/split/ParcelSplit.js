@@ -283,7 +283,9 @@ this.test = false;
                 this.splitHole(baseMultiPolygon,operatingFeature);
                 break;
             case "OpenLayers.Geometry.LineString":
+debugger;
                 var newFeatures = this.splitLine(baseMultiPolygon,operatingFeature);
+if (newFeatures === null) return editLayer.features[0];
                 this.drawPlugin.drawLayer.removeAllFeatures();
                 for (var i = 0; i < newFeatures[0].geometry.components.length; i++) {
                     this.drawPlugin.drawLayer.addFeatures(new OpenLayers.Feature.Vector(newFeatures[0].geometry.components[i]));
@@ -373,7 +375,7 @@ this.test = false;
             // OpenLayers variables
             var lineStyle = { strokeColor: '#0000ff', strokeOpacity: 1, strokeWidth: 2};
             var olOldFeatures = polygons.geometry.components.concat(line.geometry);
-return [olOldFeatures];
+//return null;
             var olNewFeatures = [new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon()),
                                  new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiLineString(),null,lineStyle)];
             var olSolutionPolygons = olNewFeatures[0].geometry.components;
@@ -493,7 +495,8 @@ debugger;
 
             // Handle cases with no divisions
             if (jstsLine === null) {
-                return [olOldFeatures];
+                return null;
+//                return [olOldFeatures];
             }
 
             // Splitting
