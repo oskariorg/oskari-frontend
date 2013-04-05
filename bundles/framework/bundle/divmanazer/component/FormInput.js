@@ -162,6 +162,15 @@ function(name,psandbox) {
             this._field.find('input').attr('disabled', 'disabled');
         }
     },
+
+    /**
+     * @method setRegExp
+     * Sets the regular expression to be used in validation.
+     * @param {RegExp} regex
+    */
+    setRegExp: function(regex) {
+        this._regExp = regex;
+    },
 	
     /**
      * @method setValidator
