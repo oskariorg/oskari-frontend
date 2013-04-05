@@ -438,8 +438,6 @@ if (newFeatures === null) return editLayer.features[0];
             var marker;
 
             var logText = "";
-debugger;
-return null;
 
             for (i=0; i<olOldFeatures.length; i++) {
                 if (olOldFeatures[i].id.indexOf("Polygon") !== -1) {
@@ -483,6 +481,7 @@ return null;
                     jstsLine = jstsParser.read(olOldFeatures[i]);
                 }
             }
+return null;
 
             // Debugging info
             logText += " olOldFeatures ";
