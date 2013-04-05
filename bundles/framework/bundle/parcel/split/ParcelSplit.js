@@ -375,7 +375,6 @@ if (newFeatures === null) return editLayer.features[0];
             // OpenLayers variables
             var lineStyle = { strokeColor: '#0000ff', strokeOpacity: 1, strokeWidth: 2};
             var olOldFeatures = polygons.geometry.components.concat(line.geometry);
-return null;
             var olNewFeatures = [new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiPolygon()),
                                  new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiLineString(),null,lineStyle)];
             var olSolutionPolygons = olNewFeatures[0].geometry.components;
@@ -440,6 +439,8 @@ return null;
 
             var logText = "";
 debugger;
+return null;
+
             for (i=0; i<olOldFeatures.length; i++) {
                 if (olOldFeatures[i].id.indexOf("Polygon") !== -1) {
                     jstsOldPolygon = jstsParser.read(olOldFeatures[i]);
