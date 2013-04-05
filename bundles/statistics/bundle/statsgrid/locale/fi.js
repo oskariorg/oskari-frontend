@@ -19,6 +19,11 @@ Oskari.registerLocalization({
         },
         "addColumn": "Hae data",
         "indicators" : "Indikaattorit",
-        "year": "Vuosi"
+        "year": "Vuosi",
+        "buttons" : {
+            "ok"    : "OK",
+            "cancel": "Peruuta"
+        },
+        "noMatch" : "Indikaattoria ei löytynyt"
     }
 });

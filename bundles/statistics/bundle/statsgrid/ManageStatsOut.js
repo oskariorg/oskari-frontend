@@ -13,6 +13,12 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         // Add pulldowns for indicator request
         this.indicators = [];
         this.prepareIndicatorParams(container);
+        container.on("keyup", function(e) {
+            e.stopPropagation();
+        });
+        container.on("keydown", function(e) {
+            e.stopPropagation();
+        });
         //this.getSotkaIndicatorData(container,'127','total','2010');
 
     },
@@ -162,18 +168,19 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     createIndicatorsSelect : function(container, data) {
         var me=this;
         // Indicators
-        var indi = jQuery('<div class="indicator-cont"><div class="indisel selector-cont"><label for="indi">' +  this.instance.getLocalization('indicators') + '</label><select name="indi"></select></div></div>');
+        var indi = jQuery('<div class="indicator-cont"><div class="indisel selector-cont"><label for="indi">' +  this.instance.getLocalization('indicators') + '</label><select id="indi" name="indi" class="indi"></select></div></div>');
 
         var sel = indi.find('select');
         for (var i = 0; i < data.length; i++) {
             var indic_data = data[i];
 
             for (var key in indic_data) {
-                if (key== "id") {
-                    var valu = indic_data[key];
-                    var title = indic_data["title"];
-                    var opt = jQuery('<option value="' + valu + '">' + title.fi + '</option>');
+                if (key == "id") {
+                    var value = indic_data[key];
+                    var title = indic_data["title"][Oskari.getLang()];
+                    var opt = jQuery('<option value="' + value + '">' + title + '</option>');
                     sel.append(opt);
+                    data[i].titlename = title;
                 }
             }
         }
@@ -186,8 +193,10 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         });
 
         container.find('.selectors-container').append(indi);
-        sel.find('option[value="127"]').prop('selected', true);//sel.val('127');
-            
+        //sel.find('option[value="127"]').prop('selected', true);
+
+        sel.chosen({no_results_text: this.instance.getLocalization('noMatch')});
+
     },
     getSotkaIndicatorMeta : function(container, indicator) {
         var me = this;
@@ -197,6 +206,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             function(indicatorMeta){
                 if (indicatorMeta) {
                     //if fetch returned something we create drop down selector
+                    me.createIndicatorInfoButton(container, indicatorMeta);
                     me.createDemographicsSelects(container, indicatorMeta);
                 } else {
                     alert('error in getting sotka indicator metadata');
@@ -207,6 +217,17 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             }
         );
 
+    },
+    createIndicatorInfoButton : function(container, indicator) {
+        var me = this;
+        var infoIcon = jQuery('<div class="icon-info"></div>');
+        var indicatorCont = container.find('.indicator-cont');
+        indicatorCont.find('.icon-info').remove();
+        indicatorCont.append(infoIcon);
+        infoIcon.click(function(e){
+            var lang = Oskari.getLang();
+            me.instance.showMessage(indicator.title[lang], indicator.description[lang]);
+        });
     },
 
     createDemographicsSelects : function(container, indicator) {
@@ -252,15 +273,14 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             function(data){
                 if (data) {
                     // get the actual data
-                    debugger;
                     me.addIndicatorDataToGrid(container, indicator, genders, years, data);
                     //me.getSotkaRegionData(container, indicator, genders, years, data);
                 } else {
-                    alert('error in getting sotka data');
+                    alert('error in getting sotka indicator data');
                 }
             }, 
             function(jqXHR, textStatus){
-                alert('error loading sotka indicators');
+                alert('error loading sotka indicator data');
             }
         );
     },

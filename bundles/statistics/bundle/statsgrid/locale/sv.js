@@ -20,5 +20,10 @@ Oskari.registerLocalization({
         "addColumn": "Hämta data",
         "indicators" : "Indikator",
         "year": "År"
+        "buttons" : {
+            "ok"    : "OK",
+            "cancel": "Avbryta"
+        },
+        "noMatch" : "Inga matchade indikatorer"
     }
 });

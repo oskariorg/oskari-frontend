@@ -92,6 +92,12 @@ function() {
         }, {
             "src" : "../../../../libraries/slickgrid/controls/slick.columnpicker.js",
             "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/chosen/chosen.jquery.min.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/chosen/chosen.css",
+            "type" : "text/css"
         }],
 		"locales" : [{
 			"lang" : "fi",

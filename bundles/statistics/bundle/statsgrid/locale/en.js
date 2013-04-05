@@ -19,6 +19,10 @@ Oskari.registerLocalization({
         },
         "addColumn": "Get data",
         "indicators" : "Indicators",
-        "year": "Year"
+        "year": "Year",
+        "buttons" : {
+            "ok"    : "OK",
+            "cancel": "Cancel"
+        }
     }
 });

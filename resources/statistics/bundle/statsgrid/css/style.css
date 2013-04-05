@@ -26,6 +26,17 @@
 .statsgrid .indicator-cont {
     height: 100%;
     float: left;
+    position: relative;
+    padding-right: 30px;
+}
+.statsgrid .indicator-cont .icon-info {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    margin: 7px;
+}
+.statsgrid .selector-cont select.indi{
+    width: 300px;
 }
 .statsgrid .parameters-cont {
     height: 100%;
