@@ -504,8 +504,8 @@ if (newFeatures === null) return editLayer.features[0];
                 logText += " i ";
                 logText += i.toString()+" / "+jstsOldPolygons.length;
                 if (jstsLine !== null) {
-return null;
                     union = jstsOldPolygons[i].getExteriorRing().union(jstsLine);
+return null;
                 } else {
                     union = jstsOldPolygons[i];
                 }
