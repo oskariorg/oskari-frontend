@@ -481,7 +481,6 @@ if (newFeatures === null) return editLayer.features[0];
                     jstsLine = jstsParser.read(olOldFeatures[i]);
                 }
             }
-return null;
 
             // Debugging info
             logText += " olOldFeatures ";
@@ -499,11 +498,13 @@ return null;
 //                return [olOldFeatures];
             }
 
+
             // Splitting
             for (i=0; i<jstsOldPolygons.length; i++) {
                 logText += " i ";
                 logText += i.toString()+" / "+jstsOldPolygons.length;
                 if (jstsLine !== null) {
+return null;
                     union = jstsOldPolygons[i].getExteriorRing().union(jstsLine);
                 } else {
                     union = jstsOldPolygons[i];
