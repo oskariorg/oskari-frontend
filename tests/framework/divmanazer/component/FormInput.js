@@ -1,8 +1,8 @@
 describe('FormInput UI component', function() {
-    var formInput;
+    var formInput, testName = 'test_input';
  
     beforeEach(function() {
-        formInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
+        formInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput', testName);
     });
 
     afterEach(function() {
@@ -10,17 +10,18 @@ describe('FormInput UI component', function() {
     });
 
     describe('initialization' , function() {
-        it('should be defined', function(){
+        it('should be defined', function() {
             expect(formInput).to.be.ok();
         });
 
-        it('should be found in DOM', function(){
+        it('should be found in DOM', function() {
             var $oskariField = jQuery('div.oskarifield');
             expect($oskariField.length).to.equal(1);
         });
 
-        it('', function() {
-
+        it('should have a name visible in DOM', function() {
+            var $name = jQuery('div.oskarifield').find('input').attr('name');
+            expect($name).to.be(testName);
         });
     });
 
@@ -35,7 +36,7 @@ describe('FormInput UI component', function() {
         });
 
         it('should validate false', function() {
-            var falseValue = 'lolollol+**++lol',
+            var falseValue = 'lolollol+**}]++lol',
                 isFalse = true;
 
             formInput.setValue(falseValue);
@@ -43,7 +44,7 @@ describe('FormInput UI component', function() {
             expect(isFalse).not.to.be.ok();
         });
 
-        it('should validate ok with a custom regex', function() {
+        it('should validate true with a custom regex', function() {
             var okValue = 'swag123*',
                 isOk = false,
                 regex = /[\w\d\*]*/;
@@ -55,7 +56,7 @@ describe('FormInput UI component', function() {
         });
 
         it('should validate false with a custom regex', function() {
-            var falseValue = 'swag123---*',
+            var falseValue = 'swag123{[-*',
                 isFalse = true,
                 regex = /[\w\d\*]*/;
 
@@ -64,5 +65,20 @@ describe('FormInput UI component', function() {
             isFalse = formInput.checkValue();
             expect(isFalse).not.to.be.ok();
         })
+    });
+
+    describe('key bindings', function() {
+        it('should bind to enter key press', function() {
+            var cb = sinon.spy(),
+                $oskariInputField = jQuery('div.oskarifield').find('input[text]');
+
+            formInput.bindEnterKey(cb);
+            jQuery($oskariInputField).blur(function() {
+                var e = jQuery.Event("keydown");
+                e.which = 13;
+                jQuery($oskariInputField).trigger(e);
+            });
+            expect(cb.callCount).to.be(1);
+        });
     });
 });
