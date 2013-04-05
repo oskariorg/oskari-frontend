@@ -370,6 +370,7 @@ this.test = false;
          * @return {}
          */
         splitLine : function(polygons,line) {
+return;
             // OpenLayers variables
             var lineStyle = { strokeColor: '#0000ff', strokeOpacity: 1, strokeWidth: 2};
             var olOldFeatures = polygons.geometry.components.concat(line.geometry);
