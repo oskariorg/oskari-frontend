@@ -11,6 +11,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
         // this.createTestSlickGrid(elTbl);
         // Add pulldowns for indicator request
+        this.indicators = [];
         this.prepareIndicatorParams(container);
         //this.getSotkaIndicatorData(container,'127','total','2010');
 
@@ -21,41 +22,12 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     prepareIndicatorParams : function(container) {
         
         var selectors = jQuery('<div class="selectors-container"></div>');
-        selectors.append(this.getYearSelectorHTML(1990, 2011));
-        selectors.append(this.getGenderSelectorHTML(['male', 'female', 'total']));
         container.append(selectors);
-
         
         // Indicators 
         // success -> createIndicators      
         this.getSotkaIndicators(container);
         this.getSotkaRegionData(container);
-    },
-
-    getYearSelectorHTML: function(startYear, endYear) {
-                // Years
-        var year = jQuery('<li <div class="yearsel">' + '<label for="year">' + 'Vuosi' + '</label>' + '<select name="year" class="year"></select></div>' + '</li>');
-
-        var sel = year.find('select');
-        for (var i = startYear; i <= endYear; i++) {
-            var opt = jQuery('<option value="' + i + '">' + i + '</option>');
-            sel.append(opt);
-        }
-
-        sel.val(endYear);
-        return year;
-    },
-    getGenderSelectorHTML: function(values) {
-        //Gender
-        var gender = jQuery('<li <div class="gendersel">' + '<label for="gender">' + 'Sukupuoli' + '</label>' + '<select name="gender" class="gender"></select></div>' + '</li>');
-
-        var sel = gender.find('select');
-        for (var i = 0; i < values.length; i++) {
-            var opt = jQuery('<option value="' + values[i] + '">' + this.instance.getLocalization('gender')[values[i]] + '</option>');
-            sel.append(opt);
-        }
-        sel.val(values[values.length - 1]);
-        return gender;
     },
     /**
      *
@@ -86,7 +58,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      */
     createMunicipalitySlickGrid : function(container, regiondata) {
         var grid;
-        var gridContainer = jQuery('<div id="municipalGrid" class="municipal-grid" style="width:100%;height:70%;"></div>');
+        var gridContainer = jQuery('<div id="municipalGrid" class="municipal-grid"></div>');
         container.find('.municipal-grid').remove();
         container.append(gridContainer);
         var columns = [{
@@ -116,7 +88,6 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             }
 
         }
-debugger;
         var groupItemMetadataProvider = new Slick.Data.GroupItemMetadataProvider();
         dataView = new Slick.Data.DataView({
             groupItemMetadataProvider : groupItemMetadataProvider,
@@ -165,14 +136,14 @@ debugger;
      * Get Sotka indicators
      */
     getSotkaIndicators : function(container) {
-        var me = this;    
+        var me = this;
         var sandbox = me.instance.getSandbox();
         me.fetchData(
             sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicators&version=1.1',
             function(indicatorsdata){
                 if (indicatorsdata) {
                     //if fetch returned something we create drop down selector
-                    me.createIndicatorsSelect(me.container, indicatorsdata);
+                    me.createIndicatorsSelect(container, indicatorsdata);
                 } else {
                     alert('error in getting sotka indicators');
                 }
@@ -191,7 +162,7 @@ debugger;
     createIndicatorsSelect : function(container, data) {
         var me=this;
         // Indicators
-        var indi = jQuery('<li <div class="indisel">' + '<label for="indi">' + 'Indicaattorit' + '</label>' + '<select name="indi"></select></div>' + '</li>');
+        var indi = jQuery('<div class="indicator-cont"><div class="indisel selector-cont"><label for="indi">' +  this.instance.getLocalization('indicators') + '</label><select name="indi"></select></div></div>');
 
         var sel = indi.find('select');
         for (var i = 0; i < data.length; i++) {
@@ -209,26 +180,72 @@ debugger;
     
         sel.change(function(e) {
             var indicator = sel.find('option:selected').val();
-            var year = jQuery('.statsgrid').find('.yearsel').find('.year').val();
-            var gender = jQuery('.statsgrid').find('.gendersel').find('.gender').val();
-            me.getSotkaIndicatorData(container,indicator, gender, year);
-        });
+            me.getSotkaIndicatorMeta(container,indicator);
 
-        indi.show();
+
+        });
 
         container.find('.selectors-container').append(indi);
         sel.find('option[value="127"]').prop('selected', true);//sel.val('127');
             
     },
+    getSotkaIndicatorMeta : function(container, indicator) {
+        var me = this;
+        var sandbox = me.instance.getSandbox();
+        me.fetchData(
+            sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
+            function(indicatorMeta){
+                if (indicatorMeta) {
+                    //if fetch returned something we create drop down selector
+                    me.createDemographicsSelects(container, indicatorMeta);
+                } else {
+                    alert('error in getting sotka indicator metadata');
+                }
+            }, 
+            function(jqXHR, textStatus){
+                alert('error loading sotka indicator metadata');
+            }
+        );
+
+    },
+
+    createDemographicsSelects : function(container, indicator) {
+        var me = this;
+        this.indicators.push(indicator);
+
+        var selectors = container.find('.selectors-container');
+        var parameters = jQuery('<div class="parameters-cont"></div>');
+        var fetchButton = jQuery('<button class="fetch-data">'+ this.instance.getLocalization('addColumn') +'</button>')
+
+        if(indicator.range != null) {
+            parameters.append(this.getYearSelectorHTML(indicator.range.start, indicator.range.end));
+        }
+        if(indicator.classifications != null && indicator.classifications.sex != null) {
+            parameters.append(this.getGenderSelectorHTML(indicator.classifications.sex.values));
+        }
+        parameters.append(fetchButton);
+
+        selectors.find('.parameters-cont').remove();
+        selectors.append(parameters);
+
+        //listener
+        fetchButton.click(function(e) {
+            var element = jQuery(e.currentTarget);
+            var year = jQuery('.statsgrid').find('.yearsel').find('.year').val();
+            var gender = jQuery('.statsgrid').find('.gendersel').find('.gender').val();
+            // me.getSotkaIndicatorData(container,indicator, gender, year);
+            me.getSotkaIndicatorData(container, indicator.id, gender, year)
+        });
+
+    },
+
+
 
     /**
      * Get Sotka data for one indicator
      */
     getSotkaIndicatorData : function(container, indicator, genders, years) {
         var me = this;
-//        me.indicator = indicator;
-//        me.genders = genders;
-//        me.years = years;
 
         me.fetchData(
             me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + years + '&genders=' + genders,
@@ -251,17 +268,17 @@ debugger;
 
     addIndicatorDataToGrid : function(container, indicator, genders, years, data) {
         var columns = this.grid.getColumns();
+        var indicatorName = this.indicators[this.indicators.length -1].title[Oskari.getLang()];
         columns.push({
-            id : "indicator" + indicator,
-            name : indicator.toString() + '/' + years.toString() + '/' + genders.toString(),
-            field : "indicator" + indicator,
+            id : "indicator" + indicator+years+genders,
+            name : indicatorName + '/' + years.toString() + '/' + genders.toString(),
+            field : "indicator" + indicator+years+genders,
             sortable : true
         });
         this.grid.setColumns(columns);
 
         var columnData = [];
         var ii = 0;
-debugger;
         this.dataView.beginUpdate();
 
         for (var i = 0; i < data.length; i++) {
@@ -277,17 +294,11 @@ debugger;
                 }
             }
             if (!!regionId) {
-  //              columnData[ii] = {
-    //                id : regionId
-      //          };
-//                columnData[ii]["indicator" + indicator] = Number(value);
                 var item = this.dataView.getItemById(regionId);
                 if(item){
-                    item["indicator" + indicator] = Number(value);
+                    item["indicator" + indicator+years+genders] = Number(value);
                     this.dataView.updateItem(item.id, item);
 
-                } else {
-//                    debugger;
                 }
                 ii++;                
             }
@@ -298,6 +309,34 @@ debugger;
             this.grid.render();
 
     },
+
+    getYearSelectorHTML: function(startYear, endYear) {
+        // Years
+        var year = jQuery('<div class="yearsel selector-cont"><label for="year">'+ this.instance.getLocalization('year') + '</label><select name="year" class="year"></select></div>');
+        var sel = year.find('select');
+
+        for (var i = startYear; i <= endYear; i++) {
+            var opt = jQuery('<option value="' + i + '">' + i + '</option>');
+            sel.append(opt);
+        }
+
+        sel.val(endYear);
+        return year;
+    },
+    getGenderSelectorHTML: function(values) {
+        //Gender
+        var gender = jQuery('<div class="gendersel selector-cont"><label for="gender">' + this.instance.getLocalization('gender') + '</label><select name="gender" class="gender"></select></div>');
+
+        var sel = gender.find('select');
+        for (var i = 0; i < values.length; i++) {
+            var opt = jQuery('<option value="' + values[i] + '">' + this.instance.getLocalization('genders')[values[i]] + '</option>');
+            sel.append(opt);
+        }
+        sel.val(values[values.length - 1]);
+        return gender;
+    },
+
+
     /**
      *Map municipality name in Sotka region data
      *

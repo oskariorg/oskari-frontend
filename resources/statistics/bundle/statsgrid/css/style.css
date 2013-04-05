@@ -1,21 +1,59 @@
 .statsgrid {
-	min-width: 100%;
-	min-height: 100%;
-	height: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    height: 100%;
 }
 .statsgrid_100 {
-	height: 100%;
+    height: 100%;
 }
 .statsgrid .statsgrid-table {
-	min-height: 80%;
-	height: 80%;
-	font: 12px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
+    min-height: 80%;
+    height: 80%;
+    font: 12px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
 }
 .statsgrid .idContainer {
-	margin: 4px;
-	border: 1pt solid #40B0C0;
-	border-radius: 5px;
-	padding: 4px;
-	background-color: #80F0A0;
-	cursor: pointer;
+    margin: 4px;
+    border: 1pt solid #40B0C0;
+    border-radius: 5px;
+    padding: 4px;
+    background-color: #80F0A0;
+    cursor: pointer;
+}
+
+.statsgrid .selectors-container {
+    height: 15.5%;
+}
+.statsgrid .indicator-cont {
+    height: 100%;
+    float: left;
+}
+.statsgrid .parameters-cont {
+    height: 100%;
+    float: left;
+}
+.statsgrid .selector-cont {
+    clear: both;
+}
+.statsgrid .selector-cont label {
+    float: left;
+    width: 80px;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+.statsgrid .selector-cont select{
+    float: right;
+}
+.statsgrid .selector-cont select.parameter {
+    width: 100px;
+}
+.statsgrid .parameters-cont button {
+    float: right;
+    clear: both;
+    margin: 10px 0;
+}
+
+.statsgrid .municipal-grid {
+    width:100%;
+    height:80%;
 }

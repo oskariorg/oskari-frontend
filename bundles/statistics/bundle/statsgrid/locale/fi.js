@@ -11,10 +11,14 @@ Oskari.registerLocalization({
             "title" : "Patio",
             "message" : "patiopoc"
         },
-        "gender" : {
+        "gender": "Sukupuoli",
+        "genders" : {
             "male" : "miehet",
             "female": "naiset",
             "total": "yhteensä"
-        }
+        },
+        "addColumn": "Hae data",
+        "indicators" : "Indikaattorit",
+        "year": "Vuosi"
     }
 });
