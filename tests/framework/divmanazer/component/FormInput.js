@@ -1,12 +1,13 @@
-describe('FormInput UI component', function() {
+describe.only('FormInput UI component', function() {
     var formInput, testName = 'test_input';
  
     beforeEach(function() {
         formInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput', testName);
+        jQuery('body').append(formInput.getField());
     });
 
     afterEach(function() {
-        formInput.setValue('');
+        jQuery('div.oskarifield').remove();
     });
 
     describe('initialization', function() {
@@ -70,15 +71,15 @@ describe('FormInput UI component', function() {
     describe('key bindings', function() {
         it('should bind to enter key press', function() {
             var cb = sinon.spy(),
-                $oskariInputField = jQuery('div.oskarifield').find('input[text]');
+                $oskariInputField = jQuery('div.oskarifield').find('input');
 
             formInput.bindEnterKey(cb);
-            jQuery($oskariInputField).focus(function() {
-                var e = jQuery.Event("keydown");
-                e.which = 13;
-                jQuery($oskariInputField).trigger(e);
-            });
-            expect(cb.callCount).to.be(1);
+
+            $oskariInputField.attr('value', 'foobar');
+            var e = jQuery.Event("keypress", {which: 13});
+            jQuery($oskariInputField).trigger(e);
+            console.log(formInput._isEnterPress(e));
+            expect(cb.called).to.be.ok();
         });
     });
 });
