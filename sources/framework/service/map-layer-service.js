@@ -457,7 +457,7 @@ function(mapLayerUrl, sandbox) {
             layer.setMaxScale(mapLayerJson.maxScale);
             layer.setMinScale(mapLayerJson.minScale);
             layer.setDescription(mapLayerJson.subtitle);
-            layer.setQueryable(mapLayerJson.isQueryable == true);
+            layer.setQueryable(mapLayerJson.isQueryable == "true");
             
             // metadata 
             layer.setDataUrl(mapLayerJson.dataUrl);             
