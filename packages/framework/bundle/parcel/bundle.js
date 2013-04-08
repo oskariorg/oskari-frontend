@@ -40,17 +40,6 @@ function() {
     "protocol" : ["Oskari.bundle.Bundle"],
     "source" : {
         "scripts" : [
-        /* libs *//*
-        {
-            "type" : "text/javascript",
-            "src" : "../../../../libraries/clipper/clipper.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../libraries/jsts/javascript.util.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../libraries/jsts/jsts.js"
-        },*/
         /* event */
         {
             "type" : "text/javascript",
@@ -134,6 +123,8 @@ function() {
             "src" : "../../../../bundles/framework/bundle/parcel/instance.js"
         }, /*{
            // NOTE! EXTERNAL LIBRARIES!
+           // Tällä hetkellä (8.4.2013) nämä kirjastot tarvitaan paikallisessa kehitysympäristössä,
+           // mutta minifioijan bugin vuoksi näitä ei saa olla mukana demo-buildissa.
             "type" : "text/javascript",
             "src" : "../../../../libraries/jscolor/jscolor.js"
         }, {
