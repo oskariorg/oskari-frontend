@@ -283,9 +283,7 @@ this.test = false;
                 this.splitHole(baseMultiPolygon,operatingFeature);
                 break;
             case "OpenLayers.Geometry.LineString":
-debugger;
                 var newFeatures = this.splitLine(baseMultiPolygon,operatingFeature);
-if (newFeatures === null) return editLayer.features[0];
                 this.drawPlugin.drawLayer.removeAllFeatures();
                 for (var i = 0; i < newFeatures[0].geometry.components.length; i++) {
                     this.drawPlugin.drawLayer.addFeatures(new OpenLayers.Feature.Vector(newFeatures[0].geometry.components[i]));
@@ -494,8 +492,7 @@ if (newFeatures === null) return editLayer.features[0];
 
             // Handle cases with no divisions
             if (jstsLine === null) {
-                return null;
-//                return [olOldFeatures];
+                return [olOldFeatures];
             }
 
 
@@ -504,12 +501,7 @@ if (newFeatures === null) return editLayer.features[0];
                 logText += " i ";
                 logText += i.toString()+" / "+jstsOldPolygons.length;
                 if (jstsLine !== null) {
-console.log(i);
-console.log(jstsOldPolygons[i]);
-console.log(jstsOldPolygons);
-console.log(jstsLine);
                     union = jstsOldPolygons[i].getExteriorRing().union(jstsLine);
-return null;
                 } else {
                     union = jstsOldPolygons[i];
                 }
