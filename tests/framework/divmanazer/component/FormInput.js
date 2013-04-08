@@ -9,7 +9,7 @@ describe('FormInput UI component', function() {
         formInput.setValue('');
     });
 
-    describe('initialization' , function() {
+    describe('initialization', function() {
         it('should be defined', function() {
             expect(formInput).to.be.ok();
         });
@@ -27,7 +27,7 @@ describe('FormInput UI component', function() {
 
     describe('validation', function() {
         it('should validate true', function() {
-            var okValue = 'foobar123_-*',
+            var okValue = 'foobar123_-',
                 isOk = false;
 
             formInput.setValue(okValue);
@@ -36,12 +36,12 @@ describe('FormInput UI component', function() {
         });
 
         it('should validate false', function() {
-            var falseValue = 'lolollol+**}]++lol',
+            var falseValue = 'foobar123_-*',
                 isFalse = true;
 
             formInput.setValue(falseValue);
             isFalse = formInput.checkValue();
-            expect(isFalse).not.to.be.ok();
+            expect(isFalse).to.not.be.ok();
         });
 
         it('should validate true with a custom regex', function() {
@@ -63,7 +63,7 @@ describe('FormInput UI component', function() {
             formInput.setRegExp(regex);
             formInput.setValue(falseValue);
             isFalse = formInput.checkValue();
-            expect(isFalse).not.to.be.ok();
+            expect(isFalse).to.not.be.ok();
         })
     });
 
@@ -73,7 +73,7 @@ describe('FormInput UI component', function() {
                 $oskariInputField = jQuery('div.oskarifield').find('input[text]');
 
             formInput.bindEnterKey(cb);
-            jQuery($oskariInputField).blur(function() {
+            jQuery($oskariInputField).focus(function() {
                 var e = jQuery.Event("keydown");
                 e.which = 13;
                 jQuery($oskariInputField).trigger(e);
