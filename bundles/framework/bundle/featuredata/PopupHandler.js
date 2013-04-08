@@ -74,7 +74,11 @@ function(instance) {
 	 */
 	"showSelectionTools" : function() {
         var me = this;
-        var sandbox = me._sandbox;
+
+        // close popup so we can update the selection geometry
+        // this is done so we can optimize grid updates on normal updateExtensionRequests.
+        // if the selection show wouldn't use this request but a custom one, this wouldn't be needed
+        me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'close']);
 
         var closureMagic = function(tool) {
         	return function() {
