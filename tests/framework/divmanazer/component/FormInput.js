@@ -1,4 +1,4 @@
-describe.only('FormInput UI component', function() {
+describe('FormInput UI component', function() {
     var formInput, testName = 'test_input';
  
     beforeEach(function() {
