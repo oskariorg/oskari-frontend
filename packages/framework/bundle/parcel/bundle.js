@@ -40,7 +40,7 @@ function() {
     "protocol" : ["Oskari.bundle.Bundle"],
     "source" : {
         "scripts" : [
-        /* libs */
+        /* libs *//*
         {
             "type" : "text/javascript",
             "src" : "../../../../libraries/clipper/clipper.js"
@@ -50,7 +50,7 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../libraries/jsts/jsts.js"
-        },
+        },*/
         /* event */
         {
             "type" : "text/javascript",
