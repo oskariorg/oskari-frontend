@@ -162,7 +162,7 @@ function(instance) {
         
         var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
         
-        var regex = /[\s\w\d\.\,\?\!\-\*äöåÄÖÅ]*/;
+        var regex = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*\*?$/;
         field.setContentCheck(true, this.instance.getLocalization('contentErrorMsg'), regex);
 
         field.bindChange(function(event) {
