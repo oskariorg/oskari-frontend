@@ -49,7 +49,7 @@ function(drawPlugin) {
     *
     *
     */
-    this.markerIcon = new OpenLayers.Icon('/Oskari/applications/parcel/images/marker.png',this.markerSize,this.markerOffset);
+    this.markerIcon = new OpenLayers.Icon('/Oskari/1.8/parcel/images/marker.png',this.markerSize,this.markerOffset);
 
    /**
     * @property splitPolygons
