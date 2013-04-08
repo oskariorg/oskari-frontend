@@ -495,6 +495,7 @@ this.test = false;
                 return [olOldFeatures];
             }
 
+
             // Splitting
             for (i=0; i<jstsOldPolygons.length; i++) {
                 logText += " i ";
