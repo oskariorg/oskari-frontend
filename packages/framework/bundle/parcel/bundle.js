@@ -132,7 +132,7 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/instance.js"
-        }, {
+        }, /*{
            // NOTE! EXTERNAL LIBRARIES!
             "type" : "text/javascript",
             "src" : "../../../../libraries/jscolor/jscolor.js"
@@ -145,7 +145,7 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../libraries/jsts/javascript.util.js"
-        },
+        },*/
 
         // css
         {
