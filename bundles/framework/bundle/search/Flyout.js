@@ -160,9 +160,11 @@ function(instance) {
         var searchDescription = searchContainer.find('div.searchDescription');
         searchDescription.html(this.instance.getLocalization('searchDescription'));
         
-
         var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
         
+        var regex = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*\*?$/;
+        field.setContentCheck(true, this.instance.getLocalization('contentErrorMsg'), regex);
+
         field.bindChange(function(event) {
             if (me.state === null) {
                 me.state = {};

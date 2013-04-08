@@ -162,6 +162,15 @@ function(name,psandbox) {
             this._field.find('input').attr('disabled', 'disabled');
         }
     },
+
+    /**
+     * @method setRegExp
+     * Sets the regular expression to be used in validation.
+     * @param {RegExp} regex
+    */
+    setRegExp: function(regex) {
+        this._regExp = regex;
+    },
 	
     /**
      * @method setValidator
@@ -352,13 +361,8 @@ function(name,psandbox) {
      *      keypress event object from browser
      */
     _isEnterPress : function(event) {
-        var keycode;
-        if (window.event) {
-            keycode = window.event.keyCode;
-        } else if (event) {
-            keycode = event.which;
-        } 
+        var keycode = event.which;
         // true if <enter>
-        return (event.keyCode == 13);
+        return (keycode == 13);
     }
 });

@@ -4,6 +4,7 @@ Oskari.registerLocalization({
   "value": {
     "title": "Ortnamnssökning",
     "desc": "",
+    "contentErrorMsg": "Sökterm innehåller otillåtna tecken.",
     "searchDescription": "Sök ortnamn, adress eller fastighetsbeteckning.",
     "searchButton": "Sök",
     "searchResultCount": "Sökningen gav ",

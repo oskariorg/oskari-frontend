@@ -35,6 +35,9 @@
 					"mapwfs": {
 						"bundlePath": "../../packages/framework/bundle/"
 					},
+                    "mapstats": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
 					"service-base": {
 						"bundlePath": "../../packages/framework/bundle/"
 					},
@@ -62,16 +65,13 @@
 					"request-base": {
 						"bundlePath": "../../packages/framework/bundle/"
 					},
-					"mapstats": {
-						"bundlePath": "../../packages/framework/bundle/"
-					},
+                    "domain": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
 					"core-map": {
 						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"request-map": {
-						"bundlePath": "../../packages/framework/bundle/"
-					},
-					"domain": {
 						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"sandbox-base": {
