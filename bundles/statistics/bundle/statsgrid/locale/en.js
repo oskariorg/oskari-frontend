@@ -25,17 +25,18 @@ Oskari.registerLocalization({
             "cancel": "Cancel"
         },
         "sotka": {
-            "errorTitle" :              "Fel",
-            "regionDataError":          "Fel att få Sotka regionen data.",
-            "regionDataXHRError":       "Fel vid laddning av Sotka regionen data",
-            "indicatorsDataError":      "Fel att få Sotka indikatorer.",
-            "indicatorsDataXHRError":   "Fel vid laddning av Sotka indikatorer.",
-            "indicatorMetaError" :      "Fel att få Sotka indikator metadata",
-            "indicatorMetaXHRError" :   "Fel vid laddning av Sotka indikator metadata",
-            "indicatorDataError" :      "Fel att få Sotka indikator data",
-            "indicatorDataXHRError" :   "Fel vid laddning av Sotka indikator data",
-            "descriptionTitle" :        "Beskrivning",
-            "sourceTitle" :             "Upphov"
+            "municipality":             "Municipality",
+            "errorTitle" :              "Error",
+            "regionDataError":          "Error in getting sotka region data.",
+            "regionDataXHRError":       "Error loading sotka region data",
+            "indicatorsDataError":      "Error in getting sotka indicators.",
+            "indicatorsDataXHRError":   "Error loading sotka indicators",
+            "indicatorMetaError" :      "Error in getting sotka indicator metadata",
+            "indicatorMetaXHRError" :   "Error loading sotka indicator metadata",
+            "indicatorDataError" :      "Error in getting sotka indicator data",
+            "indicatorDataXHRError" :   "Error loading sotka indicator data",
+            "descriptionTitle" :        "Description",
+            "sourceTitle" :             "Source"
 
         },
         "noMatch" : "No results matched"
