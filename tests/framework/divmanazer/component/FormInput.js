@@ -88,10 +88,19 @@ describe.only('FormInput UI component', function() {
     });
 
     describe('key bindings', function() {
-        it('should bind to enter key press', function() {
-            var cb = sinon.spy(),
-                $oskariInputField = jQuery('div.oskarifield').find('input');
+        var cb, $oskariInputField;
 
+        beforeEach(function() {
+            cb = sinon.spy();
+            $oskariInputField = jQuery('div.oskarifield').find('input');
+        });
+
+        afterEach(function() {
+            cb = null;
+            $oskariInputField = null;
+        });
+
+        it('should bind to enter key press', function() {
             formInput.bindEnterKey(cb);
             expect(cb.callCount).to.be(0);
 
@@ -101,5 +110,25 @@ describe.only('FormInput UI component', function() {
 
             expect(cb.callCount).to.be(1);
         });
+
+        it('should bind to change event', function() {
+            formInput.bindChange(cb, false);
+            expect(cb.callCount).to.be(0);
+
+            var e = jQuery.Event("change");
+            jQuery($oskariInputField).trigger(e);
+
+            expect(cb.callCount).to.be(1);
+        });
+
+        it('should bind to keyup event', function() {
+            formInput.bindChange(cb, true);
+            expect(cb.callCount).to.be(0);
+
+            var e = jQuery.Event("keyup");
+            jQuery($oskariInputField).trigger(e);
+
+            expect(cb.callCount).to.be(1);
+        })
     });
 });
