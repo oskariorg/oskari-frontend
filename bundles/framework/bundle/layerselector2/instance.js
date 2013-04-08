@@ -79,7 +79,10 @@ function() {
 
 		me.started = true;
 
-		var sandbox = Oskari.$("sandbox");
+				var conf = this.conf ;
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+		var sandbox = Oskari.getSandbox(sandboxName);
+
 		me.sandbox = sandbox;
 		
 		sandbox.register(me);
@@ -167,7 +170,7 @@ function() {
 			
         	var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         	var layerId = event.getLayerId();
-        	
+
         	if(event.getOperation() === 'update') {
         		var layer = mapLayerService.findMapLayer(layerId);
 				this.plugins['Oskari.userinterface.Flyout'].handleLayerModified(layer);
@@ -180,6 +183,12 @@ function() {
 			}
 			else if(event.getOperation() === 'remove') {
 				this.plugins['Oskari.userinterface.Flyout'].handleLayerRemoved(layerId);
+				// refresh layer count
+				this.plugins['Oskari.userinterface.Tile'].refresh();
+			}
+			else if(event.getOperation() === 'sticky') {
+				var layer = mapLayerService.findMapLayer(layerId);
+				this.plugins['Oskari.userinterface.Flyout'].handleLayerSticky(layer);
 				// refresh layer count
 				this.plugins['Oskari.userinterface.Tile'].refresh();
 			}

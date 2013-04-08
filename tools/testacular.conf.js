@@ -9,14 +9,18 @@ basePath = '..\..\..\..\..\..\..\..';
 // list of files / patterns to load in the browser
 files = [
   MOCHA,
-  '../../tests/mocha.opts',
-  MOCHA_ADAPTER,
-  '../../bundles/bundle.js',
-  '../../libraries/jquery/jquery-1.7.1.min.js',
-  '../../dist/oskari.min.js',
-  '../../dist/oskari_lang_fi.js',
   '../../tools/node_modules/expect.js/expect.js',
   '../../tools/lib/sinon-1.5.2.js',
+  '../../tests/*.opts',
+  MOCHA_ADAPTER,
+  '../../libraries/jquery/jquery-1.7.1.min.js',
+  '../../bundles/bundle.js',
+  '../../dist/oskari.min.js',
+//  '../../applications/paikkatietoikkuna.fi/full-map/pack.js',
+  '../../dist/oskari_lang_fi.js',
+  '../../dist/oskari_lang_sv.js',
+  '../../dist/oskari_lang_en.js',
+  '../../dist/oskari_lang_all.js',
   '../../tests/**/*.js'
 ];
 
@@ -27,7 +31,7 @@ exclude = [
 ];
 
 preprocessors = {
-  '../../bundles/bundle.js': 'coverage',
+//  '../../bundles/bundle.js': 'coverage'
   '../../dist/*.js': 'coverage'
 };
 
@@ -36,9 +40,8 @@ preprocessors = {
 reporters = ['progress'];
 
 coverageReporter = {
-  type : 'text',
-  dir : '../../tools/coverage/',
-  file : 'coverage.txt'
+  type : 'html',
+  dir : '../../tools/coverage/'
 }
 
 // web server port

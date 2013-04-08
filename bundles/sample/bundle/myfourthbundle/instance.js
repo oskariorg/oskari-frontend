@@ -61,7 +61,9 @@ function() {
         var me = this;
         
         // Should this not come as a param?
-        var sandbox = Oskari.$('sandbox');
+        	var conf = me.conf ;
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+		var sandbox = Oskari.getSandbox(sandboxName);
         this.sandbox = sandbox;
         
         // register to sandbox as a module

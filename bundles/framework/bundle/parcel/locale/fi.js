@@ -6,16 +6,22 @@ Oskari.registerLocalization({
     "desc": "",
     "tools": {
       "line": {
-        "tooltip": "Lisää halkaisija",
+        "tooltip": "Jaa kohde viivalla",
         "new": "Halkaise kohde viivalla. Lisää viivan taitepiste klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella.",
         "edit": "Muokkaa viivaa raahaamalla viivan taitepisteitä.",
         "save": "Tallenna muoto"
       },
       "area": {
-        "tooltip": "Lisää reikä",
+        "tooltip": "Jaa kohde alueella",
         "new": "Piirrä reikä kohteeseen. Lisää alueen taitepisteet klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella.",
         "edit": "Muokkaa muotoa raahaamalla reunaviivan taitepisteitä.",
         "save": "Tallenna muoto"
+      },
+      "selector": {
+          "tooltip": "Jaa kohde valitsemalla kokonainen palsta"
+      },
+      "clear": {
+          "tooltip": "Tyhjennä"
       },
       "save": {
           "tooltip": "Tallenna"

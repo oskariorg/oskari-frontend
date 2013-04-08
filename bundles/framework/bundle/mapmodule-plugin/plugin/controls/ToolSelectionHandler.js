@@ -53,11 +53,11 @@ function(sandbox, controlsPlugin) {
             if (slp) {
                 slp.clearBbox();
             }
-        } else if (toolName == 'map_control_zoom_tool') {
+        } else if (toolName == 'map_control_zoom_tool' && this.controlsPlugin._zoomBoxTool) {
             this.controlsPlugin._zoomBoxTool.activate();
-        } else if (toolName == 'map_control_measure_tool') {
+        } else if (toolName == 'map_control_measure_tool' && this.controlsPlugin._measureControls) {
             this.controlsPlugin._measureControls.line.activate();
-        } else if (toolName == 'map_control_measure_area_tool') {
+        } else if (toolName == 'map_control_measure_area_tool' && this.controlsPlugin._measureControls) {
             this.controlsPlugin._measureControls.area.activate();
         }
     }

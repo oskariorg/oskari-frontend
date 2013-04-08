@@ -86,7 +86,10 @@ Oskari.clazz
 
 	      me.started = true;
 
-	      var sandbox = Oskari.$("sandbox");
+	      		var conf = this.conf ;
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+		var sandbox = Oskari.getSandbox(sandboxName);
+
 	      me.sandbox = sandbox;
 	      
 	      this.localization = Oskari.getLocalization(this.getName());

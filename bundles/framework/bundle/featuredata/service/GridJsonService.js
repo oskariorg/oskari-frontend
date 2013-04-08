@@ -57,17 +57,17 @@ function(endpointUrl) {
     /**
      * @method scheduleWFSGridUpdate
      * @param {Oskari.mapframework.domain.WfsLayer} wfsLayer
-     * @param {OpenLayers.Bounds} bbox bounds for which to get the data 
+     * @param {String} features selected on map 
      * @param {Number} mapWidth width of the map window
      * @param {Number} mapHeight height of the map window
      * @param {Function} onReady callback to call when data has been loaded
      * Schedules an update for the WFS grid data. The update will begin after 
      * #_gridPollingInterval ms.
      */
-    scheduleWFSGridUpdate : function(wfsLayer, bbox, mapWidth, mapHeight, onReady) {
+    scheduleWFSGridUpdate : function(wfsLayer, selectionGeometry, mapWidth, mapHeight, onReady) {
         // remove/abort any earlier operation for the layers
         this.cancelWFSGridUpdateForLayer(wfsLayer.getId());
-        var params = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.domain.WfsGridUpdateParams', wfsLayer, bbox, mapWidth, mapHeight, onReady);
+        var params = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.domain.WfsGridUpdateParams', wfsLayer, selectionGeometry, mapWidth, mapHeight, onReady);
         //this._wfsGridUpdateRequest = Oskari.clazz.create('Oskari.mapframework.domain.WfsGridScheduledRequest', wfsLayer, bbox, mapWidth, mapHeight, onReady);
         
         var me = this;
@@ -110,20 +110,16 @@ function(endpointUrl) {
                 //me.sandbox.printWarn("WFS _processGridUpdate response id not match to latest wfs query id --> Skipping response.");
             }
         };
-        
-        // NOTE:  flow_pm_map_heigh is not an error, server actually uses the typoed version
         var query =  jQuery.ajax({
             dataType : "json",
             type : "POST",
             
             data : {
-                flow_pm_wfsLayerId : mapLayer.getId(),
-                flow_pm_bbox_min_x : params.getBbox().left,
-                flow_pm_bbox_min_y : params.getBbox().bottom,
-                flow_pm_bbox_max_x : params.getBbox().right,
-                flow_pm_bbox_max_y : params.getBbox().top,
-                flow_pm_map_width : params.getMapWidth(),
-                flow_pm_map_heigh : params.getMapHeight(), 
+                layerIds:mapLayer.getId(),
+                flow_pm_map_width  : params.getMapWidth(),
+                flow_pm_map_height : params.getMapHeight(),
+                mode: "data_to_table", 
+                geojson : params.getGeometry(),
                 flow_pm_map_wfs_query_id : me._generateWfsTableQueryId()
             },
             beforeSend : function(x) {
@@ -132,7 +128,7 @@ function(endpointUrl) {
                 }
             },
             
-            url : this.endpointUrl + "action_route=QUERY_FIND_RAW_DATA_TO_TABLE", //url, // "&actionKey=QUERY_FIND_RAW_DATA_TO_TABLE",
+            url : this.endpointUrl + "action_route=GetWfsFeatureData", //url, // "&actionKey=QUERY_FIND_RAW_DATA_TO_TABLE",
             success : onReady
         });
         this.pendingOperations[mapLayer.getId()].query = query;

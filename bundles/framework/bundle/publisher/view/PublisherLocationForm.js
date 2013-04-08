@@ -1,7 +1,8 @@
 /**
  * @class Oskari.mapframework.bundle.publisher.view.PublisherLocationForm
  * 
- * Represents the basic info view for the publisher as an Oskari.userinterface.component.AccordionPanel
+ * Represents the basic info (name, domain, language) view for the publisher 
+ * as an Oskari.userinterface.component.AccordionPanel
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLocationForm',
 
@@ -40,9 +41,11 @@ function(localization, publisher) {
 	}
 }, {
     /**
-     * @method init
      * Creates the set of Oskari.userinterface.component.FormInput to be shown on the panel and 
-     * sets up validation etc.
+     * sets up validation etc. Prepopulates the form fields if pData parameter is given.
+     * 
+     * @method init
+     * @param {Object} pData initial data 
      */
 	init : function(pData) {
 		var me = this;
@@ -84,12 +87,15 @@ function(localization, publisher) {
     	var langField = this.langField.template.clone();
         var languageSelection = langField.find('select[name=language]');
         var langOpts = this.loc.language.options;
+        var selectedLang = Oskari.getLang();
+        if(pData && pData.lang) {
+            // if we get data as param -> use lang from it, otherwise use Oskari.getLang()
+            selectedLang = pData.lang;
+        }
         for (var opt in langOpts) {
         	var option = this.langField.optionTemplate.clone();
         	option.attr('value', opt);
-        	// if we get data as param -> use lang from it, otherwise use Oskari.getLang()
-        	if((pData && pData.lang == opt) || 
-        	  (!pData && opt == Oskari.getLang())) {
+        	if(selectedLang == opt) {
         	    option.attr('selected','selected');
         	}
         	option.append(langOpts[opt]);
@@ -103,8 +109,9 @@ function(localization, publisher) {
         this.langField.field = langField;
 	},
     /**
-     * @method getPanel
      * Returns the UI panel and populates it with the data that we want to show the user.
+     * 
+     * @method getPanel
      * @return {Oskari.userinterface.component.AccordionPanel}
      */
 	getPanel : function() {
@@ -119,7 +126,6 @@ function(localization, publisher) {
 		return panel;
 	},
     /**
-     * @method getValues
      * Returns the selections the user has done with the form inputs.
      * {
      *     domain : <domain field value>,
@@ -127,6 +133,7 @@ function(localization, publisher) {
      *     language : <language user selected>
      * }
      * 
+     * @method getValues
      * @return {Object}
      */
 	getValues : function() {
@@ -139,10 +146,11 @@ function(localization, publisher) {
 		return values;
     },
     /**
-     * @method validate
      * Returns any errors found in validation or an empty
      * array if valid. Error object format is defined in Oskari.userinterface.component.FormInput
      * validate() function.
+     * 
+     * @method validate
      * @return {Object[]}
      */
 	validate : function() {

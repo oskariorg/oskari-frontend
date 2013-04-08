@@ -113,6 +113,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             "src" : "../../../../bundles/framework/bundle/divmanazer/component/GridModel.js"
         }, {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/component/ProgressSpinner.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultTile.js"
         }, {
             "type" : "text/javascript",
@@ -120,7 +123,13 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultExtension.js"
-        },{
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultView.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/extension/DefaultLayout.js"
+        }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/divmanazer/css/divman.css"
         }, {
@@ -154,9 +163,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/divmanazer/css/popover.css"
         }/*, {
-            "type" : "text/javascript",
-            "src" : "../../../../resources/framework/bundle/divmanazer/js/jquery.event.drag-1.5.min.js"
-        }*/]
+         "type" : "text/javascript",
+         "src" : "../../../../resources/framework/bundle/divmanazer/js/jquery.event.drag-1.5.min.js"
+         }*/]
     },
     "bundle" : {
         /**

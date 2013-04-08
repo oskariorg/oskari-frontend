@@ -21,11 +21,15 @@ function() {
     this._mapLayersHighlighted = new Array();
 
     // map domain object
-    this._map
+    this._map = null;
 
     // Sandbox that handles communication
     this._sandbox = Oskari.clazz.create('Oskari.mapframework.sandbox.Sandbox', this);
-    Oskari.$("sandbox", this._sandbox);
+    
+    // bw comp support - this should be removed 
+    if( !Oskari.$("sandbox" ) ) {
+    	Oskari.$("sandbox", this._sandbox);
+    }
 
     // array of services available
     this._services = [];
@@ -34,23 +38,24 @@ function() {
     // Are we currently printing debug (as of 2012-09-24 debug by default false)
     this._debug = false;
 
-    // whether to sniff usage or not
-    this._doSniffing = false;
-
     // is Ctrl key down
     this._ctrlKeyDown = false;
 
     // Allow multiple highlight layers
     this._allowMultipleHighlightLayers = false;
 
-    /*
-     * If published map is started using id in url, it is stored
-     * here. Later it is used in sniffer.
-     */
-    this._mapIdFromUrl;
-
     this._availableRequestsByName = {};
     this._availableEventsByName = {};
+    
+    /**
+     * @property externalHandlerCls
+     * External Request handlers that bundles have registered are stored here
+     * NOTE: only one request handler can be registered/request
+     * NOTE: was static but moved to instance to enable multi sandbox configurations
+     */
+    this.externalHandlerCls = {
+
+    };
 },
 {
 
@@ -83,29 +88,8 @@ function() {
 
         // run all enhancements
         this.enhancements = enhancements;
-        var me = this;
-        me._start();
-    },
-    /**
-     * @method start
-     * Starts the core and runs all registered enhancements. This is called by init.
-     * @private
-     */
-    _start : function() {
-
         this._doEnhancements(this.enhancements);
 
-        // Check for network sniffing
-        if (this._doSniffing) {
-            // Find map id from url and use that later for log requests
-            this._mapIdFromUrl = this.getRequestParameter("id");
-
-            this.printDebug("Application configured for sniffing. Starting sniffer.");
-            var snifferService = this.getService('Oskari.mapframework.service.UsageSnifferService');
-            if (snifferService) {
-                snifferService.startSniffing();
-            }
-        }
         this.printDebug("Modules started. Core ready.");
     },
 
@@ -214,15 +198,7 @@ function() {
         return rv;
     },
 
-    /**
-     * @property externalHandlerCls
-     * @static
-     * External Request handlers that bundles have registered are stored here
-     * NOTE: only one request handler can be registered/request
-     */
-    externalHandlerCls : {
-
-    },
+    
 
     /**
      * @method addRequestHandler
@@ -339,14 +315,6 @@ function() {
      */
     enableDebug : function() {
         this._debug = true;
-    },
-
-    /**
-     * @method enableMapMovementLogging
-     * Enables map movement logging
-     */
-    enableMapMovementLogging : function() {
-        this._doSniffing = true;
     },
 
     /**

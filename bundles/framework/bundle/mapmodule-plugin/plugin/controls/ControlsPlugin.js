@@ -183,9 +183,13 @@ function(config) {
          */
        'Toolbar.ToolSelectedEvent' : function(event) {
             // changed tool -> cancel any current tool
-            this._zoomBoxTool.deactivate();
-            this._measureControls.line.deactivate();
-            this._measureControls.area.deactivate();
+            if(this.conf.zoomBox !== false) {
+                this._zoomBoxTool.deactivate(); 
+            }
+            if(this.conf.measureControls !== false) {
+                this._measureControls.line.deactivate();
+                this._measureControls.area.deactivate();
+            }
        }
     },
     /**
@@ -205,16 +209,20 @@ function(config) {
     _addMapControls : function() {
         var me = this;
 
-        this.getMapModule().addMapControl('zoomBoxTool', this._zoomBoxTool);
-        this._zoomBoxTool.deactivate();
-
+        if(this.conf.zoomBox !== false) {
+            this.getMapModule().addMapControl('zoomBoxTool', this._zoomBoxTool);
+            this._zoomBoxTool.deactivate();
+        }
         this.getMapModule().addMapControl('keyboardControls', this._keyboardControls);
         this.getMapModule().getMapControl('keyboardControls').activate();
 
-        this.getMapModule().addMapControl('measureControls_line', this._measureControls.line);
-        this._measureControls.line.deactivate();
-        this.getMapModule().addMapControl('measureControls_area', this._measureControls.area);
-        this._measureControls.area.deactivate();
+        if(this.conf.measureControls !== false) {
+            this.getMapModule().addMapControl('measureControls_line', this._measureControls.line);
+            this._measureControls.line.deactivate();
+            this.getMapModule().addMapControl('measureControls_area', this._measureControls.area);
+            this._measureControls.area.deactivate();
+        }
+
         this.getMapModule().addMapControl('mouseControls', this._mouseControls);
     },
     /**
@@ -224,16 +232,21 @@ function(config) {
      */
     _removeMapControls : function() {
         
-        this._zoomBoxTool.deactivate();
-        this.getMapModule().removeMapControl('zoomBoxTool', this._zoomBoxTool);
+        if(this.conf.zoomBox !== false) {
+            this._zoomBoxTool.deactivate();
+            this.getMapModule().removeMapControl('zoomBoxTool', this._zoomBoxTool);
+        }
 
         this._keyboardControls.deactivate();
         this.getMapModule().removeMapControl('keyboardControls', this._keyboardControls);
 
-        this._measureControls.line.deactivate();
-        this._measureControls.area.deactivate();
-        this.getMapModule().removeMapControl('measureControls_line', this._measureControls.line);
-        this.getMapModule().removeMapControl('measureControls_area', this._measureControls.area);
+        if(this.conf.measureControls !== false) {
+            this._measureControls.line.deactivate();
+            this._measureControls.area.deactivate();
+            this.getMapModule().removeMapControl('measureControls_line', this._measureControls.line);
+            this.getMapModule().removeMapControl('measureControls_area', this._measureControls.area);
+        }
+
         this._mouseControls.deactivate();
         this.getMapModule().removeMapControl('mouseControls', this._mouseControls);
     },
@@ -252,27 +265,32 @@ function(config) {
             return;
         }
         
-        // zoom tool
-        OpenLayers.Control.ZoomBox.prototype.draw = function() {
-            this.handler = new OpenLayers.Handler.Box(this, {
-                done : function(position) {
-                    this.zoomBox(position);
-                    if(me.getMapModule()) {
-                        me.getMapModule().notifyMoveEnd();
+        if(this.conf.zoomBox !== false) {
+            // zoom tool
+            OpenLayers.Control.ZoomBox.prototype.draw = function() {
+                this.handler = new OpenLayers.Handler.Box(this, {
+                    done : function(position) {
+                        this.zoomBox(position);
+                        if(me.getMapModule()) {
+                            me.getMapModule().notifyMoveEnd();
+                        }
                     }
-                }
-            }, {
-                keyMask : this.keyMask
+                }, {
+                    keyMask : this.keyMask
+                });
+            };
+
+            this._zoomBoxTool = new OpenLayers.Control.ZoomBox({
+                alwaysZoom : true
             });
-        };
-        this._zoomBoxTool = new OpenLayers.Control.ZoomBox({
-            alwaysZoom : true
-        });
+        }
         
         // Map movement/keyboard control
-        this._keyboardControls = new OpenLayers.Control.PorttiKeyboard();
-        this._keyboardControls.setup(this.getMapModule());
-        
+        if(this.conf.keyboardControls !== false) {
+            this._keyboardControls = new OpenLayers.Control.PorttiKeyboard();
+            this._keyboardControls.setup(this.getMapModule());
+        }
+ 
         // Measure tools
         var optionsLine = {
             handlerOptions : {
@@ -287,11 +305,14 @@ function(config) {
             immediate : true
         };
 
-        this._measureControls = {
-            line : (new OpenLayers.Control.Measure(OpenLayers.Handler.Path, optionsLine)),
-            area : (new OpenLayers.Control.Measure(OpenLayers.Handler.Polygon, optionsPolygon))
-        };
-        
+        this._measureControls = {};
+        if(this.conf.measureControls !== false) {
+            this._measureControls = {
+                line : (new OpenLayers.Control.Measure(OpenLayers.Handler.Path, optionsLine)),
+                area : (new OpenLayers.Control.Measure(OpenLayers.Handler.Polygon, optionsPolygon))
+            };
+        }
+
         function measurementsHandler(event, finished) {
             var sandbox = me._sandbox;
             var geometry = event.geometry;
@@ -331,8 +352,10 @@ function(config) {
         }
         
         // mouse control
-        this._mouseControls = new OpenLayers.Control.PorttiMouse(this.conf['mouse']);
-        this._mouseControls.setup(this.getMapModule());
+        if(this.conf.mouseControls !== false) {
+            this._mouseControls = new OpenLayers.Control.PorttiMouse(this.conf['mouse']);
+            this._mouseControls.setup(this.getMapModule());    
+        }        
     }
 }, {
     /**

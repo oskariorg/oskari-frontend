@@ -48,13 +48,7 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Published', function() {
      * @property appConfig
      */
     appConfig : {
-        // bundle id
-        'mapfull' : {
-            // properties that will be made available before bundle start()
-            // 'key' : 'value'
-            // can be accessed in mapfull.start() like: alert('This should return
-            // "value" :' + this.key);
-        }
+      // this will be replaced from GetAppSetup
     },
 
     /**
@@ -62,147 +56,8 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Published', function() {
      * @property appSetup.startupSequence
      */
     appSetup : {
-
-        startupSequence : [
-        // openlayers
-        {
-            // style selection may be done with CSS Links also - just for demo
-            title : 'OpenLayers',
-            fi : 'OpenLayers',
-            sv : '?',
-            en : 'OpenLayers',
-            bundlename : 'openlayers-default-theme',
-            bundleinstancename : 'openlayers-default-theme',
-            metadata : {
-                "Import-Bundle" : {
-                    "openlayers-single-full" : {
-                        bundlePath : '/Oskari/packages/openlayers/bundle/'
-                    },
-                    "openlayers-default-theme" : {
-                        bundlePath : '/Oskari/packages/openlayers/bundle/'
-                    }
-                },
-                "Require-Bundle-Instance" : []
-            },
-            instanceProps : {}
-        },
-        {
-            title : 'OskariUI',
-            fi : 'OskariUI',
-            sv : 'OskariUI',
-            en : 'OskariUI',
-            bundlename : 'oskariui',
-            bundleinstancename : 'oskariui',
-            metadata : {
-                "Import-Bundle" : {
-                    "oskariui" : {
-                        bundlePath : '/Oskari/packages/framework/bundle/'
-                    }
-                },
-                "Require-Bundle-Instance" : []
-            },
-            instanceProps : {}
-        },
-
-        // main app
-        {
-            title : 'Map',
-            fi : 'Map',
-            sv : '?',
-            en : 'Map',
-            bundlename : 'mapfull',
-            bundleinstancename : 'mapfull',
-            metadata : {
-               "Import-Bundle":{
-                  "mapwmts":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  },
-                  "mapwfs":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  },
-                  "service-base":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  },
-                  "event-map-layer":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  },
-                  "request-map-layer":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  },
-                  "mapmodule-plugin":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  },
-                  "event-base":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  },
-                  "mapfull":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  },
-                  "core-base":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  },
-                  "request-base":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  },
-                  "domain":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  },
-                  "core-map":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  },
-                  "request-map":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  },
-                  "sandbox-base":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  },
-                  "service-map":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  },
-                  "sandbox-map":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  },
-                  "event-map":{
-                     "bundlePath":"/Oskari/packages/framework/bundle/"
-                  }
-               },
-               "Require-Bundle-Instance" : []
-
-            },
-            instanceProps : {}
-        }, {
-            title : 'Info Box',
-            fi : 'infobox',
-            sv : '?',
-            en : '?',
-            bundlename : 'infobox',
-            bundleinstancename : 'infobox',
-            metadata : {
-                "Import-Bundle" : {
-                    "infobox" : {
-                        bundlePath : '/Oskari/packages/framework/bundle/'
-                    }
-                },
-                "Require-Bundle-Instance" : []
-            },
-            instanceProps : {}
-        },{
-            title : 'PostProcessor',
-            fi : 'PostProcessor',
-            sv : 'PostProcessor',
-            en : 'PostProcessor',
-            bundlename : 'postprocessor',
-            bundleinstancename : 'postprocessor',
-            metadata : {
-                "Import-Bundle" : {
-                    "postprocessor" : {
-                        bundlePath : '/Oskari/packages/framework/bundle/'
-                    }
-                },
-                "Require-Bundle-Instance" : []
-            },
-            instanceProps : {}
-        }]
+        // this will be replaced from GetAppSetup
+        startupSequence : []
     }
 });
 
@@ -261,7 +116,7 @@ jQuery(document).ready(function() {
     Oskari.setLang(language);
 
     Oskari.setLoaderMode('dev');
-    Oskari.setPreloaded(false);
+    Oskari.setPreloaded(preloaded)
 
     if (args.oskariLoaderAsync && args.oskariLoaderAsync == 'on') {
         Oskari.setSupportBundleAsync(true);

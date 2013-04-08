@@ -7,13 +7,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerP
  * @method create called automatically on construction
  * @static
  */
-function() {
+function(config) {
 	this.mapModule = null;
 	this.pluginName = null;
 	this._sandbox = null;
 	this._map = null;
 	this._supportedFormats = {};
 	this.service = null;
+    this.config = config;
 }, {
 	__name : 'WfsLayerPlugin',
 
@@ -27,7 +28,18 @@ function() {
 		this.mapModule = mapModule;
 		this.pluginName = mapModule.getName() + this.__name;
 	},
-	init : function(sandbox) {
+	init : function() {
+        var sandboxName = ( this.config ? this.config.sandbox : null ) || 'sandbox';
+        var sandbox = Oskari.getSandbox(sandboxName);
+        
+        // register domain model
+        var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        if(mapLayerService) {
+            mapLayerService.registerLayerModel('wfslayer', 'Oskari.mapframework.domain.WfsLayer');
+
+            var layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs.domain.WfsLayerModelBuilder', sandbox);
+            mapLayerService.registerLayerModelBuilder('wfslayer', layerModelBuilder);
+        }
 	},
 	register : function() {
 		this.getMapModule().setLayerPlugin('wfslayer', this);
@@ -473,15 +485,16 @@ updateWfsImages : function(creator) {
         var map = sandbox.getMap();
         var imageBbox = this._map.getExtent();
         var parameters = "&flow_pm_wfsLayerId=" + layer.getId() + 
-                         "&flow_pm_point_x=" + lonlat.lon + 
-                         "&flow_pm_point_y=" + lonlat.lat + 
+                         "&flow_pm_point_x="    + lonlat.lon + 
+                         "&flow_pm_point_y="    + lonlat.lat + 
                          "&flow_pm_bbox_min_x=" + imageBbox.left + 
                          "&flow_pm_bbox_min_y=" + imageBbox.bottom + 
                          "&flow_pm_bbox_max_x=" + imageBbox.right + 
                          "&flow_pm_bbox_max_y=" + imageBbox.top + 
                          "&flow_pm_zoom_level=" + map.getZoom() +
-                         "&flow_pm_map_width=" + map.getWidth() + 
-                         "&flow_pm_map_heigh=" + map.getHeight() + 
+                         "&flow_pm_map_width="  + map.getWidth() + 
+                         "&flow_pm_map_height=" + map.getHeight() + 
+                         "&srs=" + map.getSrsName() +
                          "&action_route=GET_HIGHLIGHT_WFS_FEATURE_IMAGE_BY_POINT";
 
         var keepCollection = sandbox.isCtrlKeyDown();

@@ -79,7 +79,9 @@ function() {
 		me.started = true;
 
 		// Should this not come as a param?
-		var sandbox = Oskari.$('sandbox');
+			var conf = me.conf ;
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+		var sandbox = Oskari.getSandbox(sandboxName);
 		me.setSandbox(sandbox);
 
 		var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');

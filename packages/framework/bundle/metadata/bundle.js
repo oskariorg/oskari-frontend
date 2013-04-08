@@ -48,7 +48,10 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/metadata/plugin/MapSelectionPlugin.js"
-        },// css
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/metadata/event/MapSelectionEvent.js"
+        },
 		{
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/metadata/css/buttons.css"

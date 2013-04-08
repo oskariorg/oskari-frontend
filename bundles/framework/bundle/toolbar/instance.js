@@ -20,6 +20,10 @@ function() {
 	this.selectedButton = null;
 	this.defaultButton = null;
 	this.container = null;
+	this.menutoolbarcontainer = null;
+	this.containers = {};
+	this.toolbars = {};
+	this.groupsToToolbars = {};
 }, {
 	/**
 	 * @static
@@ -66,12 +70,19 @@ function() {
 		}
 		me.started = true;
 		// Should this not come as a param?
-		var sandbox = Oskari.$('sandbox');
+		var conf = me.conf;
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox';
+		var sandbox = Oskari.getSandbox(sandboxName);
 		sandbox.register(me);
 		me.setSandbox(sandbox);
 
-		// TODO: check this with how divmanazer handles things
-		this.container = jQuery('#toolbar');
+		var defaultContainerId = ( conf ? conf.defaultToolbarContainer : null ) || '#toolbar';
+		this.container = jQuery(defaultContainerId);
+		this.containers['default'] = this.container;
+		this.toolbars['default'] = this.container;
+
+		var defaultMenuToolbarContainer = ( conf ? conf.defaultMenuToolbarContainer : null ) || '#menutoolbar';
+		this.menutoolbarcontainer = jQuery(defaultMenuToolbarContainer);
 
 		for(var p in me.eventHandlers) {
 			if(p) {
@@ -82,6 +93,7 @@ function() {
 		sandbox.addRequestHandler('Toolbar.RemoveToolButtonRequest', this.requestHandlers.toolButtonRequestHandler);
 		sandbox.addRequestHandler('Toolbar.ToolButtonStateRequest', this.requestHandlers.toolButtonRequestHandler);
 		sandbox.addRequestHandler('Toolbar.SelectToolButtonRequest', this.requestHandlers.toolButtonRequestHandler);
+		sandbox.addRequestHandler('Toolbar.ToolbarRequest', this.requestHandlers.toolbarRequestHandler);
 
 		/* temporary fix */
 		sandbox.addRequestHandler('ShowMapMeasurementRequest', this.requestHandlers.showMapMeasurementRequestHandler);
@@ -94,26 +106,71 @@ function() {
 		}
 	},
 	/**
+	 * @static
+	 * @property templates
+	 *
+	 *
+	 */
+	templates : {
+		group : '<div class="toolrow"></div>',
+		tool : '<div class="tool"></div>',
+		menutoolbar : '<div class="oskari-closed oskariui-menutoolbar"><div class="oskariui-menutoolbar-modetitle"><div class="oskariui-menutoolbar-title"><p></p></div></div><div class="oskariui-menutoolbar-container"><div class="oskariui-menutoolbarbuttongroup"></div></div><div class="oskariui-menutoolbar-closebox"><div class="icon-close-white"></div></div></div>'
+	},
+
+	/**
 	 * @method init
 	 * implements Module protocol init method - initializes request handlers and templates
 	 */
 	init : function() {
 		var me = this;
 
-		this.templateGroup = jQuery('<div class="toolrow"></div>');
-		this.templateTool = jQuery('<div class="tool"></div>');
+		this.templateGroup = jQuery(this.templates.group);
+		this.templateTool = jQuery(this.templates.tool);
+		this.templateMenutoolbar = jQuery(this.templates.menutoolbar);
 
 		this.requestHandlers = {
 			toolButtonRequestHandler : Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ToolButtonRequestHandler', me),
+			toolbarRequestHandler : Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ToolbarRequestHandler', me),
 			showMapMeasurementRequestHandler : Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ShowMapMeasurementRequestHandler', me)
 		};
+	},
+	/**
+	 * @method createMenuToolbarContainer
+	 *
+	 */
+	createMenuToolbarContainer : function(tbid, pdata) {
+		var data = pdata || {};
+		var tbcontainer = this.templateMenutoolbar.clone();
+		this.menutoolbarcontainer.append(tbcontainer);
+		this.toolbars[tbid] = tbcontainer;
+		var c = tbcontainer.find(".oskariui-menutoolbarbuttongroup");
+		this.containers[tbid] = c;
+
+		if(data.title) {
+			tbcontainer.find(".oskariui-menutoolbar-title p").append(data.title);
+		}
+		if(data.show) {
+			tbcontainer.removeClass('oskari-closed');
+		}
+		if(data.closeBoxCallback) {
+			tbcontainer.find(".oskariui-menutoolbar-closebox div").click(data.closeBoxCallback);
+		}
+
+		return c;
 	},
 	/**
 	 * @method getToolbarContainer
 	 * @return {jQuery} reference to the toolbar container
 	 */
-	getToolbarContainer : function() {
-		return this.container;
+	getToolbarContainer : function(ptbid, data) {
+		var tbid = ptbid || 'default';
+		var c = this.containers[tbid];
+
+		if(c === undefined && this.menutoolbarcontainer) {
+			c = this.createMenuToolbarContainer(tbid, data);
+		}
+
+		return c;
 	},
 	/**
 	 * @method onEvent
@@ -148,7 +205,6 @@ function() {
 			var me = this;
 			var sandbox = this.getSandbox();
 
-
 			/* we'll show prompt if measure tool has been selected */
 			if(!me.measureTools[event.getGroupId()]) {
 				return;
@@ -180,6 +236,7 @@ function() {
 		/* temporary fix */
 		sandbox.removeRequestHandler('ShowMapMeasurementRequest', this.requestHandlers.showMapMeasurementRequestHandler);
 
+		sandbox.removeRequestHandler('Toolbar.ToolbarRequest', this.requestHandlers.toolbarRequestHandler);
 		sandbox.removeRequestHandler('Toolbar.AddToolButtonRequest', this.requestHandlers.toolButtonRequestHandler);
 		sandbox.removeRequestHandler('Toolbar.RemoveToolButtonRequest', this.requestHandlers.toolButtonRequestHandler);
 		sandbox.removeRequestHandler('Toolbar.ToolButtonStateRequest', this.requestHandlers.toolButtonRequestHandler);
@@ -257,6 +314,42 @@ function() {
 		}
 
 		return state;
+	},
+	
+	/**
+	 * @method _removeToolbar
+	 * removes named toolbar
+	 */
+	_removeToolbar : function(tbid) {
+		var tb = this.toolbars[tbid];
+		this.toolbars[tbid] = undefined;
+		tb.remove();
+		delete tb;
+	},
+	
+	/**
+	 * @method _showToolbar
+	 * shows named toolbar
+	 */
+	_showToolbar : function(tbid) {
+		this.toolbars[tbid].show();
+	},
+	
+	/**
+	 * @method _hideToolbar
+	 * 
+	 * hides named toolbar
+	 */
+	_hideToolbar : function(tbid) {
+		this.toolbars[tbid].hide();
+	},
+	
+	/**
+	 * @method _addToolbar
+	 * adds named toolbar
+	 */
+	_addToolbar : function(tbid, data) {
+		this.getToolbarContainer(tbid, data);
 	}
 }, {
 	/**

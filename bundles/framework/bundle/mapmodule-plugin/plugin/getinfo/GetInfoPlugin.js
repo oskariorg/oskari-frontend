@@ -413,7 +413,8 @@ function() {
                 width : mapVO.getWidth(),
                 height : mapVO.getHeight(),
                 bbox : mapVO.getBbox().toBBOX(),
-                zoom : mapVO.getZoom()
+                zoom : mapVO.getZoom(),
+                srs : mapVO.getSrsName()
             },
             type : 'POST',
             dataType : 'json',
@@ -509,7 +510,7 @@ function() {
             var layerName = layer ? layer.getName() : '';
             var type = datum.type;
 
-            if (type == "WFS_LAYER") {
+            if (type == "wfslayer") {
                 var features = datum.features;
                 if (!(features && features.length)) {
                     continue;
@@ -606,6 +607,7 @@ function() {
             return null;
         }
         
+        var response = jQuery('<div></div>');
         var html = '';
         var contentType = ( typeof datum.content);
         var hasHtml = false;
@@ -614,33 +616,43 @@ function() {
             hasHtml = hasHtml || (datum.content.indexOf('<HTML>') >= 0);
         }
         if (datum.presentationType == 'JSON' || (datum.content && datum.content.parsed)) {
-            var table = this.templateTable.clone();
             var even = false;
-            var jsonData = datum.content.parsed;
-            for (attr in jsonData) {
-                var value = this._formatJSONValue(jsonData[attr]);
-                if (!value) {
-                    continue;
-                }
-                var row = this.templateTableRow.clone();
-                table.append(row);
-                if (!even) {
-                    row.css('background-color', '#EEEEEE');
-                }
-                even = !even;
-                
-                var labelCell = this.templateTableCell.clone();
-                labelCell.append(attr);
-                row.append(labelCell);
-                var valueCell = this.templateTableCell.clone();
-                valueCell.append(value);
-                row.append(valueCell);
-            }
-            return table;
+            var rawJsonData = datum.content.parsed;
+            var dataArray = [];
+        	if (Object.prototype.toString.call(rawJsonData) === '[object Array]') {
+        		dataArray = rawJsonData;
+        	}
+        	else {
+        		dataArray.push(rawJsonData);
+        	}
+        	for(var i=0; i < dataArray.length; ++i) {
+        		var jsonData = dataArray[i];
+	            var table = this.templateTable.clone();
+	            for (var attr in jsonData) {
+	                var value = this._formatJSONValue(jsonData[attr]);
+	                if (!value) {
+	                    continue;
+	                }
+	                var row = this.templateTableRow.clone();
+	                table.append(row);
+	                if (!even) {
+	                    row.css('background-color', '#EEEEEE');
+	                }
+	                even = !even;
+	                
+	                var labelCell = this.templateTableCell.clone();
+	                labelCell.append(attr);
+	                row.append(labelCell);
+	                var valueCell = this.templateTableCell.clone();
+	                valueCell.append(value);
+	                row.append(valueCell);
+	            }
+	            response.append(table);
+        	}
+            return response;
         } else {
-            var value = jQuery('<div></div>');
-            value.append(datum.content);
-            return value;
+            response.append(datum.content);
+            return response;
         }
         return html;
     },

@@ -45,7 +45,17 @@ function(instance) {
                     drawMode : 'area'
                 });
             }
-        }
+        }/*,
+        'cut' : {
+            iconCls : 'tool-draw-cut',
+            tooltip : '',
+            sticky : true,
+            callback : function() {
+                me.startNewDrawing({
+                    drawMode : 'cut'
+                });
+            }
+        }*/
     };
     this.templateGuide = jQuery('<div><div class="guide"></div>' +
             '<div class="buttons">' +
@@ -168,17 +178,15 @@ function(instance) {
     	});
         buttons.push(cancelBtn);
         
-        if(drawMode != 'point') {
-	    	var finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-	
-	    	finishBtn.setTitle(locBtns["finish"]);
-	    	finishBtn.addClass('primary');
-	    	finishBtn.setHandler(function() {
-            	me.sendStopDrawRequest();
-	        });
-        	buttons.push(finishBtn);
-	    }
-        
+        var finishBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+
+        finishBtn.setTitle(locBtns["finish"]);
+        finishBtn.addClass('primary');
+        finishBtn.setHandler(function() {
+            me.sendStopDrawRequest();
+        });
+        buttons.push(finishBtn);
+
     	dialog.show(title, message, buttons);
     	dialog.addClass('myplaces2');
     	dialog.moveTo('#toolbar div.toolrow[tbgroup=myplaces]', 'top');
@@ -269,6 +277,24 @@ function(instance) {
 	        if(this.dialog) {
 	            this.dialog.close();
 	        }
+        },
+
+        /**
+         * @method MyPlaces.AddedFeatureEvent
+         * Update the help dialog after a new feature was added
+         * @param {Oskari.mapframework.bundle.myplaces2.event.AddedFeatureEvent} event
+         */
+        'MyPlaces.AddedFeatureEvent' : function(event) {
+            if (typeof  event.getDrawingMode() !== "undefined") {
+                if (event.getDrawingMode() !== null) {
+                    var loc = this.instance.getLocalization('tools');
+                    var areaDialogContent = loc[event.getDrawingMode()]['next'];
+                    if (this.dialog.getContent() !== areaDialogContent) {
+                        this.dialog.setContent(areaDialogContent);
+                        this.dialog.moveTo('#toolbar div.toolrow[tbgroup=myplaces]', 'top');
+                    }
+                }
+            }
         }
     }
 }, {

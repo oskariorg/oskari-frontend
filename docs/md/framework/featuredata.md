@@ -21,7 +21,7 @@ The Bundle provides a grid view for WFS featuredata. It is responsible to gettin
 
 ## Screenshot
 
-*Image*
+![screenshot](<%= docsurl %>images/featuredata.png)
 
 ## Bundle configuration
 
@@ -43,6 +43,9 @@ This bundle doesn't handle any requests.
   </tr>
   <tr>
     <td>userinterface.AddExtensionRequest</td><td> Register as part of the UI in start()-method</td>
+  </tr>
+  <tr>
+    <td>Toolbar.AddToolButtonRequest</td><td> Requests selection toolbar button</td>
   </tr>
   <tr>
     <td> userinterface.RemoveExtensionRequest </td><td> Unregister from the UI in stop()-method</td>
@@ -90,6 +93,12 @@ This bundle doesn't handle any requests.
   <tr>
     <td> WFSFeaturesSelectedEvent </td><td> Sent when a selection is made on the grid to notify other components that a feature has been selected</td>
   </tr>
+  <tr>
+    <td> AddedFeatureEvent </td><td> Sent when a selection feature has been added</td>
+  </tr>
+  <tr>
+    <td> FinishedDrawingEvent </td><td> Sent when a selection has been finished drawing</td>
+  </tr>
 </table>
 
 ## Dependencies
@@ -107,5 +116,10 @@ This bundle doesn't handle any requests.
     <td> [Backend API](<%= docsurl %>backend/featuredata.html) </td>
     <td> N/A </td>
     <td> Feature data provider</td>
+  </tr>
+  <tr>
+    <td> [Oskari toolbar](<%= docsurl %>framework/toolbar.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> To register plugin to toolbar</td>
   </tr>
 </table>

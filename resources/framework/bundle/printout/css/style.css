@@ -13,8 +13,7 @@ div.printout {
     height: 100%;
     top: 0;
     left: 40px;
-    /* sidebar has 3, we want to open it on top of this */
-    z-index: 2;
+    z-index: 1500;
     width: 255px;
 }
 #contentMap div.basic_publisher div.content {
@@ -34,16 +33,9 @@ div.basic_printout > div.header div.icon-close {
     float: right;
 }
 div.basic_printout div.form div.field input, div.field select {
-<<<<<<< HEAD
     width: 80%;
     background-color: white;
     filter:Alpha(opacity=100) !important;
-=======
-	width: 80%;
-	background-color: white;
-	filter:Alpha(opacity=100) !important;
-	font-weight: bolder;
->>>>>>> feature/AL-741
 }
 div.basic_printout > div.content {
     overflow: auto;
@@ -123,3 +115,10 @@ div.basic_printout div.preview-landscape {
 div.basic_printout div.location {
     height: 30px;
 }
+
+div.basic_printout div.previewNotes {
+	margin-left: 8px;
+	margin-right: 8px;
+	margin-bottom: 2px;
+	
+} 

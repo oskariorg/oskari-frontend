@@ -40,17 +40,37 @@ This bundle doesn't handle any requests.
     <th>Request</th><th>Why/when</th>
   </tr>
   <tr>
-    <td>ToolSelectionRequest</td><td>When areaselecting tool is pressed</td>
+    <td>Toolbar.AddToolButtonRequest</td><td>Adds selection area tool to toolbar on startup</td>
+  </tr>
+  <tr>
+    <td>Toolbar.SelectToolButtonRequest</td><td>Selects default tool after Metadata.MapSelectionEvent</td>
   </tr>
 </table>
 
 ## Events the bundle listens to
 
-This bundle doesn't listen to any events.
+<table>
+  <tr>
+    <th>Event</th><th>Why/when</th>
+  </tr>
+  <tr>
+    <td> Toolbar.ToolSelectedEvent </td><td> Removes drawing when a tool is selected</td>
+  </tr>
+  <tr>
+    <td> Metadata.MapSelectionEvent </td><td> Requests toolbar to select default tool</td>
+  </tr>
+</table>
 
 ## Events the bundle sends out
 
-This bundle doesn't send out any events.
+<table>
+  <tr>
+    <th>Event</th><th>Why/when</th>
+  </tr>
+  <tr>
+    <td> Metadata.MapSelectionEvent </td><td> Notifies that an area has been selected. The event includes the selected geometry.</td>
+  </tr>
+</table>
 
 ## Dependencies
 
@@ -72,5 +92,10 @@ This bundle doesn't send out any events.
     <td> [OpenLayers](http://openlayers.org/) </td>
     <td> Expects OpenLayers already linked </td>
     <td></td>
+  </tr>
+  <tr>
+    <td> [Oskari toolbar](<%= docsurl %>framework/toolbar.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> To register plugin to toolbar</td>
   </tr>
 </table>

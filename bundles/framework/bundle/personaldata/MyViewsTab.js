@@ -52,70 +52,30 @@ function(instance, localization) {
     }
 }, {
     /**
-     * @method _promptForView
-     * @private
-     */
-    _promptForView : function(successCallback,viewName,viewDescription) {
-    	var me = this;
-    	
-    	var form = Oskari.clazz.create('Oskari.userinterface.component.Form');
-    	var nameInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput', 'name');
-    	//nameInput.setLabel(this.loc.popup.label);
-    	nameInput.setPlaceholder(this.loc.popup.name_placeholder);
-    	var title = this.loc.popup.title;
-    	if(viewName) {
-    		title = this.loc.popup.edit;
-    		nameInput.setValue(viewName);
-    	}
-        nameInput.setRequired(true, me.loc.save.error_noname);
-        nameInput.setContentCheck(true, me.loc.save.error_illegalchars);
-    	form.addField(nameInput);
-
-        var template = form.getForm();
-        template.append(me.templateDesc.clone());
-    	
-        if(viewName)
-            template.find("textarea").val(viewDescription); 
-
-    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-    	okBtn.setTitle(this.loc.button.save);
-    	okBtn.addClass('primary');
-    	
-    	var sandbox = this.instance.sandbox;
-    	okBtn.setHandler(function() {
-            var errors = form.validate();
-            if (errors.length == 0) {
-            	successCallback(nameInput.getValue(), template.find("textarea").val());
-    			dialog.close();
-            } else {
-            	form.showErrors();
-            }
-    	});
-    	var cancelBtn = dialog.createCloseButton(this.loc.button.cancel);
-    	dialog.show(title, template, [cancelBtn, okBtn]);
-    },
-    /**
+     * Returns module name. Needed because we fake to be module for listening to
+     * events (getName and onEvent methods are needed for this)
+     *
      * @method getName
-     * @return {String} name of the component
-     * (needed because we fake to be module for listening to
-     * events (getName and onEvent methods are needed for this))
+     * @return {String}
      */
     getName : function() {
         return 'PersonalData.MyViews';
     },
     /**
+     * Returns tab title
+     *
      * @method getTitle
-     * @return {String} title for tab
+     * @return {String}
      */
     getTitle : function() {
         return this.loc.title;
     },
     /**
-     * @method addTabContent
-     * @param {jQuery} container reference to the content
-     * part of the tab
      * Writes the tab content to the given container
+     *
+     * @method addTabContent
+     * @param {jQuery} container reference to a container 
+     * where the tab should be added
      */
     addTabContent : function(container) {
         var me = this;
@@ -125,8 +85,11 @@ function(instance, localization) {
         me._refreshViewsList();
     },
     /**
+     * Renders given views list. Removes previous listing.
+     *
      * @method _renderViewsList
-     * Refreshes the tab contents
+     * @param {Object[]} views object array as returned by backend service
+     * @private
      */
     _renderViewsList : function(views) {
 
@@ -144,8 +107,11 @@ function(instance, localization) {
     },
 
     /**
+     * Fetches views from backend and renders the response. 
+     * Shows an error message on failure
+     * 
      * @method _refreshViewsList
-     * Refreshes the tab contents
+     * @private
      */
     _refreshViewsList : function() {
         var me = this;
@@ -160,9 +126,12 @@ function(instance, localization) {
     },
 
     /**
-     * @method editView
+     * Prompts for view name and calls backend 
+     *
+     * @method _editView
+     * @private
      */
-    editView : function(view) {
+    _editView : function(view) {
         var me = this;
         var sandbox = this.instance.getSandbox();
         var service = me.instance.getViewService();
@@ -184,10 +153,63 @@ function(instance, localization) {
         this._promptForView(successCallback, view.name, view.description);
     },
 
+    /**
+     * Prompts the user for view name/description
+     * 
+     * @method _promptForView
+     * @param {Function} successCallback function to call when user has given valid name/description and clicks ok button
+     * @param {String} viewName to prepopulate form (optional)
+     * @param {String} viewDescription to prepopulate form (optional)
+     * @private
+     */
+    _promptForView : function(successCallback,viewName,viewDescription) {
+        var me = this;
+        
+        var form = Oskari.clazz.create('Oskari.userinterface.component.Form');
+        var nameInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput', 'name');
+        nameInput.setPlaceholder(this.loc.popup.name_placeholder);
+        var title = this.loc.popup.title;
+        if(viewName) {
+            title = this.loc.popup.edit;
+            nameInput.setValue(viewName);
+        }
+        nameInput.setRequired(true, me.loc.save.error_noname);
+        nameInput.setContentCheck(true, me.loc.save.error_illegalchars);
+        form.addField(nameInput);
+
+        var template = form.getForm();
+        template.append(me.templateDesc.clone());
+        
+        if(viewDescription) {
+            template.find("textarea").val(viewDescription); 
+        }
+
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        okBtn.setTitle(this.loc.button.save);
+        okBtn.addClass('primary');
+        
+        var sandbox = this.instance.sandbox;
+        okBtn.setHandler(function() {
+            var errors = form.validate();
+            if (errors.length == 0) {
+                successCallback(nameInput.getValue(), template.find("textarea").val());
+                dialog.close();
+            } else {
+                form.showErrors();
+            }
+        });
+        var cancelBtn = dialog.createCloseButton(this.loc.button.cancel);
+        dialog.show(title, template, [cancelBtn, okBtn]);
+    },
 
     /**
+     * Wraps backends views object data array to Oskari.userinterface.component.GridModel
+     *
      * @method _getGridModel
-     * Wraps views to Oskari.userinterface.component.GridModel
+     * @param {Object[]} views array of view data objects as returned by backend
+     * @return {Oskari.userinterface.component.GridModel} 
+     * @private
      */
     _getGridModel : function(views) {
 
@@ -211,8 +233,9 @@ function(instance, localization) {
         return gridModel;
     },
     /**
-     * @method _getGrid
      * Creates Oskari.userinterface.component.Grid and populates it with given model
+     * 
+     * @method _getGrid
      * @param {Oskari.userinterface.component.GridModel} model to populate the grid with
      * @return {Oskari.userinterface.component.Grid}
      * @private
@@ -246,9 +269,9 @@ function(instance, localization) {
             var link = me.templateLink.clone();
             link.append(name);
             link.bind('click', function() {
-                var view = me.getViewById(data.id);
+                var view = me._getViewById(data.id);
                 if(view) {
-                    me.editView(view);
+                    me._editView(view);
                 }
                 return false;
             });
@@ -260,7 +283,7 @@ function(instance, localization) {
             var link = me.templateLink.clone();
             link.append(name);
             link.bind('click', function() {
-                var view = me.getViewById(data.id);
+                var view = me._getViewById(data.id);
                 if(view) {
                     me._confirmDelete(view);
                 }
@@ -277,7 +300,7 @@ function(instance, localization) {
             var link = me.templateLink.clone();
             link.html(name);
             link.bind('click', function() {
-                var view = me.getViewById(data.id);
+                var view = me._getViewById(data.id);
                 if(view) {
                     var newState = !view.isPublic;
                     service.makeViewPublic(data.id, newState, function(isSuccess) {
@@ -318,7 +341,17 @@ function(instance, localization) {
         
         return grid;
     },
-    getViewById : function(id) {
+
+    /**
+     * Finds view object matching given id.
+     * Shows an error message if no matches found.
+     * 
+     * @method _getViewById
+     * @param {Number} id view id
+     * @return {Object} matching view object or undefined if not found
+     * @private
+     */
+    _getViewById : function(id) {
         for (var i = 0; i < this.viewData.length; ++i) {
             // found what we were looking for
             if (this.viewData[i].id == id) {
@@ -329,19 +362,11 @@ function(instance, localization) {
         this._showErrorMessage(me.loc['error'].generic);
     },
     /**
-     * @method bindEvents
-     * Register tab as eventlistener
-     */
-    bindEvents : function() {
-        var instance = this.instance;
-        var sandbox = instance.getSandbox();
-        // faking to be module with getName/onEvent methods
-        for (p in this.eventHandlers) {
-            sandbox.registerForEventByName(this, p);
-        }
-    },
-    /**
+     * Shows a confirmation dialog on deleting a view
+     * 
      * @method _confirmDelete
+     * @param {Object} view data object for the view to delete
+     * @private
      */
     _confirmDelete : function(view) {
     	var me = this;
@@ -360,7 +385,12 @@ function(instance, localization) {
     	dialog.makeModal();
     },
     /**
+     * Calls backend to delete the given view. Reloads the view listing on success and
+     * shows an error message on fail
+     * 
      * @method _deleteView
+     * @param {Object} view data object
+     * @private
      */
     _deleteView : function(view) {
     	var me = this;
@@ -375,7 +405,11 @@ function(instance, localization) {
     	});
     },
     /**
+     * Shows an error dialog to the user with given message 
+     * 
      * @method _showErrorMessage
+     * @param {String} msg message to show on popup
+     * @private
      */
     _showErrorMessage : function(msg) {
 		var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -384,19 +418,31 @@ function(instance, localization) {
 		button.addClass('primary');
     	dialog.show(this.loc['error'].title, msg, [button]);
     },
+
     /**
-     * @method unbindEvents
+     * Register tab as eventlistener
+     * @method bindEvents
+     */
+    bindEvents : function() {
+        var instance = this.instance;
+        var sandbox = instance.getSandbox();
+        // faking to be module with getName/onEvent methods
+        for (var p in this.eventHandlers) {
+            sandbox.registerForEventByName(this, p);
+        }
+    },
+    /**
      * Unregister tab as eventlistener
+     * @method unbindEvents
      */
     unbindEvents : function() {
         var instance = this.instance;
         var sandbox = instance.getSandbox();
         // faking to be module with getName/onEvent methods
-        for (p in this.eventHandlers) {
-            sandbox.unregisterForEventByName(this, p);
+        for (var p in this.eventHandlers) {
+            sandbox.unregisterFromEventByName(this, p);
         }
     },
-
     /**
      * @property {Object} eventHandlers
      * @static

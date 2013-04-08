@@ -86,7 +86,7 @@ function(instance, title, selectedEventName) {
      */
     _startAction : function() {
         var input = this._getFilterField().getValue().trim();
-        if (!input || isNaN(input)) {
+        if (!input) {
             // Show error message about illegal input.
             this.instance.showMessage(this.instance.getLocalization('title'), this.instance.getLocalization('errors').illegalInput);
 

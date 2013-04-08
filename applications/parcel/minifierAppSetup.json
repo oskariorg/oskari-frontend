@@ -1,0 +1,280 @@
+{
+	"startupSequence": [
+		{
+			"instanceProps": {},
+			"title": "OpenLayers",
+			"bundleinstancename": "openlayers-default-theme",
+			"fi": "OpenLayers",
+			"sv": "?",
+			"en": "OpenLayers",
+			"bundlename": "openlayers-default-theme",
+			"metadata": {
+				"Import-Bundle": {
+					"openlayers-default-theme": {
+						"bundlePath": "../../packages/openlayers/bundle/"
+					},
+					"openlayers-single-full": {
+						"bundlePath": "../../packages/openlayers/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}, {
+			"instanceProps": {},
+			"title": "Map",
+			"bundleinstancename": "mapfull",
+			"fi": "Map",
+			"sv": "?",
+			"en": "Map",
+			"bundlename": "mapfull",
+			"metadata": {
+				"Import-Bundle": {
+					"mapwmts": {
+						"bundlePath": "../../packages/framework/bundle/"
+					},
+					"mapwfs": {
+						"bundlePath": "../../packages/framework/bundle/"
+					},
+                    "mapstats": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
+					"service-base": {
+						"bundlePath": "../../packages/framework/bundle/"
+					},
+					"event-map-layer": {
+						"bundlePath": "../../packages/framework/bundle/"
+					},
+					"request-map-layer": {
+						"bundlePath": "../../packages/framework/bundle/"
+					},
+					"mapmodule-plugin": {
+						"bundlePath": "../../packages/framework/bundle/"
+					},
+					"event-base": {
+						"bundlePath": "../../packages/framework/bundle/"
+					},
+					"mapfull": {
+						"bundlePath": "../../packages/framework/bundle/"
+					},
+					"core-base": {
+						"bundlePath": "../../packages/framework/bundle/"
+					},
+					"oskariui": {
+						"bundlePath": "../../packages/framework/bundle/"
+					},
+					"request-base": {
+						"bundlePath": "../../packages/framework/bundle/"
+					},
+                    "domain": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
+					"core-map": {
+						"bundlePath": "../../packages/framework/bundle/"
+					},
+					"request-map": {
+						"bundlePath": "../../packages/framework/bundle/"
+					},
+					"sandbox-base": {
+						"bundlePath": "../../packages/framework/bundle/"
+					},
+					"service-map": {
+						"bundlePath": "../../packages/framework/bundle/"
+					},
+					"sandbox-map": {
+						"bundlePath": "../../packages/framework/bundle/"
+					},
+					"event-map": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}, {
+			"instanceProps": {},
+			"title": "Oskari DIV Manazer",
+			"bundleinstancename": "divmanazer",
+			"fi": "Oskari DIV Manazer",
+			"sv": "?",
+			"en": "Oskari DIV Manazer",
+			"bundlename": "divmanazer",
+			"metadata": {
+				"Import-Bundle": {
+					"divmanazer": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}, {
+			"instanceProps": {},
+			"title": "Info Box",
+			"bundleinstancename": "infobox",
+			"fi": "infobox",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "infobox",
+			"metadata": {
+				"Import-Bundle": {
+					"infobox": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}, {
+			"instanceProps": {},
+			"title": "Toolbar",
+			"bundleinstancename": "toolbar",
+			"fi": "toolbar",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "toolbar",
+			"metadata": {
+				"Import-Bundle": {
+					"toolbar": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}, {
+			"instanceProps": {},
+			"title": "Haku",
+			"bundleinstancename": "search",
+			"fi": "search",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "search",
+			"metadata": {
+				"Import-Bundle": {
+					"search": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}, {
+			"instanceProps": {},
+			"title": "Karttatasot",
+			"bundleinstancename": "layerselector2",
+			"fi": "layerselector",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "layerselector2",
+			"metadata": {
+				"Import-Bundle": {
+					"layerselector2": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}, {
+			"instanceProps": {},
+			"title": "Valitut karttatasot",
+			"bundleinstancename": "layerselection2",
+			"fi": "layerselection",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "layerselection2",
+			"metadata": {
+				"Import-Bundle": {
+					"layerselection2": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}, {
+			"instanceProps": {},
+			"title": "Koordinaattinäyttö",
+			"bundleinstancename": "coordinatedisplay",
+			"fi": "coordinatedisplay",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "coordinatedisplay",
+			"metadata": {
+				"Import-Bundle": {
+					"coordinatedisplay": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}, {
+			"instanceProps": {},
+			"title": "printout",
+			"fi": "printout",
+			"bundleinstancename": "printout",
+			"sv": "printout",
+			"en": "printout",
+			"bundlename": "printout",
+			"metadata": {
+				"Import-Bundle": {
+					"printout": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}, {
+			"title": "Parcel",
+			"fi": "Määräala",
+			"bundleinstancename": "parcel",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "parcel",
+			"metadata": {
+				"Import-Bundle": {
+					"parcel": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"title": "Parcel Selector",
+			"fi": "Määräalan valinta",
+			"bundleinstancename": "parcelselector",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "parcelselector",
+			"metadata": {
+				"Import-Bundle": {
+					"parcelselector": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"title": "Parcel Info",
+			"fi": "Paikan info",
+			"bundleinstancename": "parcelinfo",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "parcelinfo",
+			"metadata": {
+				"Import-Bundle": {
+					"parcelinfo": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"instanceProps": {},
+			"title": "postprocessor",
+			"fi": "postprocessor",
+			"bundleinstancename": "postprocessor",
+			"sv": "postprocessor",
+			"en": "postprocessor",
+			"bundlename": "postprocessor",
+			"metadata": {
+				"Import-Bundle": {
+					"postprocessor": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}
+	]
+}

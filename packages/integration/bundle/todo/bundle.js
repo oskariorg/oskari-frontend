@@ -4,7 +4,7 @@
  * This WILL Contain following items
  *
  * 1) Backbone View container derived from
- *      Oskari.integration.bundle.bb.View
+ *      Oskari.integration.bundle.backbone.View
  * - a reference to implementing file in /bundles...
  *
  * 2) LOCALISATION file references
@@ -24,10 +24,7 @@ Oskari.clazz.define("Oskari.integration.bundle.todo.ToDoBundle", function() {
 
 }, {
     "create" : function() {
-        return Oskari.clazz.create(
-            "Oskari.integration.bundle.bb.AdapterBundleInstance", 
-            "todo", 
-            "Oskari.integration.bundle.todo.View");
+        return Oskari.clazz.create("Oskari.integration.bundle.backbone.AdapterBundleInstance", "todo", "Oskari.integration.bundle.todo.View");
 
     },
     "start" : function() {
@@ -39,11 +36,16 @@ Oskari.clazz.define("Oskari.integration.bundle.todo.ToDoBundle", function() {
     }
 }, {
 
-    "protocol" : [
-        "Oskari.bundle.Bundle", 
-        "Oskari.bundle.BundleInstance", 
-        "Oskari.mapframework.bundle.extension.ExtensionBundle"],
+    "protocol" : ["Oskari.bundle.Bundle", "Oskari.bundle.BundleInstance", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
     "source" : {
+        "requirements" : {
+            "aliases":  {
+                "_bundle" : "../../../../bundles/integration/bundle/todo",
+            },
+            "config" : {
+            },
+            "require" : ["backbone", "backbone-localstorage"]
+        },
         "scripts" : [{
             "type" : "text/javascript",
             "src" : "../../../../bundles/integration/bundle/todo/View.js"
@@ -89,7 +91,7 @@ Oskari.clazz.define("Oskari.integration.bundle.todo.ToDoBundle", function() {
                         "License-Name" : "EUPL",
                         "License-Online-Resource" : "http://www.paikkatietoikkuna.fi/license"
                     }
-                    
+
                 }
             }],
             "Bundle-Version" : "1.0.0",

@@ -3,6 +3,7 @@
  * 
  * Service object that handles transaction related function calls and delegates the
  * WFST actions to {Oskari.mapframework.bundle.parcel.service.ParcelWfst}.
+ * Plot actions to {Oskari.mapframework.bundle.parcel.service.ParcelPlot}.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelService',
 
@@ -14,6 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.parcel.service.ParcelService',
 function(instance) {
     this._instance = instance;
     this._wfst = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelWfst', instance);
+    this._plot = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelPlot', instance);
 }, {
     /**
      * @return {String} Serive class name. 
@@ -90,10 +92,19 @@ function(instance) {
      */
     saveParcel : function(feature, placeName, placeDescription, cb) {
         if (feature) {
+        	this._plot.plotParcel(feature, placeName, placeDescription, cb);
             this._wfst.saveParcel(feature, placeName, placeDescription, cb);
         }
     },
 
+    /**
+     * @method clearParcelMap
+     * Remove openlayers graphics of parcel Map
+     */
+    clearParcelMap : function() {
+            this._plot.clearParcelMap();
+        
+    },
     /**
      * @method saveRegisterUnit
      * Saves feature to the server asynchronously and gives the success information via callback.
@@ -104,6 +115,7 @@ function(instance) {
      */
     saveRegisterUnit : function(feature, placeName, placeDescription, cb) {
         if (feature) {
+        	this._plot.plotParcel(feature, placeName, placeDescription, cb);
             this._wfst.saveRegisterUnit(feature, placeName, placeDescription, cb);
         }
     }

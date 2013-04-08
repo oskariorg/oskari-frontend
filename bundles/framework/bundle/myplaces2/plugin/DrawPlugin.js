@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', function() {
+Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', function(config) {
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
@@ -10,11 +10,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
     this.drawLayer = null;
     this.editMode = false;
     this.currentDrawMode = null;
+    this.prefix = "Default.";
+
+    if(config && config.id) {
+        this.prefix = config.id + ".";
+    }
+    // graphicFill, instance
+    if(config && config.graphicFill) {
+        this.graphicFill = config.graphicFill;
+    }
+    this.multipart = (config && config.multipart === true);
 }, {
-    __name : 'MyPlaces.DrawPlugin',
+    __name : 'DrawPlugin',
 
     getName : function() {
-        return this.pluginName;
+        return this.prefix + this.pluginName;
     },
     getMapModule : function() {
         return this.mapModule;
@@ -71,12 +81,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
     
     forceFinishDraw : function() {
     	try {
-    		this.drawControls[this.currentDrawMode].finishSketch();
+            //needed when preparing unfinished objects but causes unwanted features into the layer:
+    		//this.drawControls[this.currentDrawMode].finishSketch();
+            this.finishedDrawing(true);
     	}
     	catch(error) {
     		// happens when the sketch isn't even started -> reset state
         	this.stopDrawing();
-	        var event = this._sandbox.getEventBuilder('MyPlaces.MyPlaceSelectedEvent')();
+	        var event = this._sandbox.getEventBuilder(this.prefix + 'MyPlaceSelectedEvent')();
 	        this._sandbox.notifyAll(event);
     	}
     },
@@ -87,15 +99,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
      * sends a MyPlaces.FinishedDrawingEvent with the drawn the geometry.
      * @method
      */
-    finishedDrawing : function() {
-        this.toggleControl();
-        if(!this.editMode) {
-	        // programmatically select the drawn feature ("not really supported by openlayers")
-	        // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
-        	this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
+    finishedDrawing : function(isForced) {
+        if(!this.multipart || isForced) {
+            // not a multipart, stop editing
+            this.toggleControl();
         }
-        var event = this._sandbox.getEventBuilder('MyPlaces.FinishedDrawingEvent')(this.getDrawing(), this.editMode);
-        this._sandbox.notifyAll(event);
+
+        if(!this.editMode) {
+            // programmatically select the drawn feature ("not really supported by openlayers")
+            // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
+            var lastIndex = this.drawLayer.features.length-1;
+            this.modifyControls.modify.selectControl.select(this.drawLayer.features[lastIndex]);
+        }
+
+        var event;
+        if(!this.multipart || isForced) {
+            event = this._sandbox.getEventBuilder(this.prefix + 'FinishedDrawingEvent')(this.getDrawing(), this.editMode);
+            this._sandbox.notifyAll(event);
+        } else {
+            event = this._sandbox.getEventBuilder(this.prefix + 'AddedFeatureEvent')(this.getDrawing(), this.currentDrawMode);
+            this._sandbox.notifyAll(event);
+        }
     },
     /**
      * Enables the given draw control
@@ -132,7 +156,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
             getGeometryHandler : Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.request.GetGeometryRequestPluginHandler', sandbox, me)
         };
 
-        this.drawLayer = new OpenLayers.Layer.Vector("MyPlaces Draw Layer", {
+        this.drawLayer = new OpenLayers.Layer.Vector(this.prefix + "DrawLayer", {
             /*style: {
              strokeColor: "#ff00ff",
              strokeWidth: 3,
@@ -148,13 +172,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
         });
         
         this.drawControls = {
-            point : new OpenLayers.Control.DrawFeature(me.drawLayer, 
+            point : new OpenLayers.Control.DrawFeature(me.drawLayer,
                                                        OpenLayers.Handler.Point),
             line : new OpenLayers.Control.DrawFeature(me.drawLayer, 
                                                       OpenLayers.Handler.Path),
-            area : new OpenLayers.Control.DrawFeature(me.drawLayer, 
-                                                      OpenLayers.Handler.Polygon),
-            box : new OpenLayers.Control.DrawFeature(me.drawLayer, 
+            area : new OpenLayers.Control.DrawFeature(me.drawLayer,
+                                                      OpenLayers.Handler.Polygon,
+                                                      {handlerOptions:{holeModifier: "altKey"}}),
+            /*cut : new OpenLayers.Control.DrawFeature(me.drawLayer,
+                                                      OpenLayers.Handler.Polygon,
+                                                      {handlerOptions:{drawingHole: true}}),*/
+            box : new OpenLayers.Control.DrawFeature(me.drawLayer,
                         OpenLayers.Handler.RegularPolygon, {
                             handlerOptions: {
                                 sides: 4,
@@ -162,6 +190,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
                             }
                         })
         };
+
+        if(this.graphicFill != null) {
+            var str = this.graphicFill;
+            var format = new OpenLayers.Format.SLD();
+            var obj = format.read(str);
+            if (obj && obj.namedLayers) {
+                for (var p in obj.namedLayers) {
+                    this.drawLayer.styleMap.styles["default"] = obj.namedLayers[p].userStyles[0];
+                    this.drawLayer.redraw();
+                    break;
+                }
+            }
+        }
         
         // doesn't really need to be in array, but lets keep it for future development
         this.modifyControls = {
@@ -183,7 +224,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
      * @method
      */
     getDrawing : function() {
-        return this.drawLayer.features[0].geometry;
+        if (this.drawLayer.features.length === 0) return null;
+        var featClass = this.drawLayer.features[0].geometry.CLASS_NAME;
+        if ((featClass==="OpenLayers.Geometry.MultiPoint")||
+            (featClass==="OpenLayers.Geometry.MultiLineString")||
+            (featClass==="OpenLayers.Geometry.MultiPolygon")) {
+            return this.drawLayer.features[0].geometry;
+        }
+
+        var drawing = null;
+        var components = [];
+        for (var i=0; i < this.drawLayer.features.length; i++) {
+            components.push(this.drawLayer.features[i].geometry);
+        }
+        switch (featClass) {
+            case "OpenLayers.Geometry.Point":
+                drawing = new OpenLayers.Geometry.MultiPoint(components);
+                break;
+            case "OpenLayers.Geometry.LineString":
+                drawing = new OpenLayers.Geometry.MultiLineString(components);
+                break;
+            case "OpenLayers.Geometry.Polygon":
+                drawing = new OpenLayers.Geometry.MultiPolygon(components);
+                break;
+        }
+        return drawing;
     },
     register : function() {
 
@@ -194,16 +259,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
         this._sandbox = sandbox;
 
         sandbox.register(this);
-        sandbox.addRequestHandler('MyPlaces.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
-        sandbox.addRequestHandler('MyPlaces.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
-        sandbox.addRequestHandler('MyPlaces.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
+        sandbox.addRequestHandler(this.prefix + 'StartDrawingRequest', this.requestHandlers.startDrawingHandler);
+        sandbox.addRequestHandler(this.prefix + 'StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
+        sandbox.addRequestHandler(this.prefix + 'GetGeometryRequest', this.requestHandlers.getGeometryHandler);
 
     },
     stopPlugin : function(sandbox) {
 
-        sandbox.removeRequestHandler('MyPlaces.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
-        sandbox.removeRequestHandler('MyPlaces.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
-        sandbox.removeRequestHandler('MyPlaces.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
+        sandbox.removeRequestHandler(this.prefix + 'StartDrawingRequest', this.requestHandlers.startDrawingHandler);
+        sandbox.removeRequestHandler(this.prefix + 'StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
+        sandbox.removeRequestHandler(this.prefix + 'GetGeometryRequest', this.requestHandlers.getGeometryHandler);
         sandbox.unregister(this);
 
         this._map = null;

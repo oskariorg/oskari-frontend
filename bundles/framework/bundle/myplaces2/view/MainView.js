@@ -45,14 +45,19 @@ function(instance) {
         
         var sandbox = this.instance.sandbox;
         sandbox.register(me);
-        for(p in me.eventHandlers) {
+        for(var p in me.eventHandlers) {
             sandbox.registerForEventByName(me, p);
         }
         
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         
+
         // register plugin for map (drawing for my places)
-        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin');
+        var pluginConfig = {
+            "id" : 'MyPlaces',
+            multipart : true
+        };
+        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', pluginConfig);
         mapModule.registerPlugin(drawPlugin);
         mapModule.startPlugin(drawPlugin);
         this.drawPlugin = drawPlugin;

@@ -53,10 +53,8 @@ function(instance) {
         var parcelTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').parcel, 'ParcelSelector.ParcelSelectedEvent');
         var registerUnitTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').registerUnit, 'ParcelSelector.RegisterUnitSelectedEvent');
 
-        // Let's put registerUnitTab first because at least most of the test cases seem to use it.
-        // So, easier to use because it is shown as a default.
-        this.parcelTabs.push(registerUnitTab);
         this.parcelTabs.push(parcelTab);
+        this.parcelTabs.push(registerUnitTab);
     },
     /**
      * @method stopPlugin

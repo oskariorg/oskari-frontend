@@ -1,6 +1,227 @@
 # Release Notes
 
+## 1.8
+
+### sandbox/map-layer-service
+
+Removed hardcoded wmtslayer and wfslayer from map-layer-service. LayerPlugins should now handle layer model/builder registration on init function.
+
+### core/sandbox/AbstractLayer
+
+Layers can now have tools linked to them. OpenLayer options and params can be passed as arguments.
+
+### mapstats bundle
+
+StatsLayerPlugin now registers layer model/builder to map-layer-service on init.
+
+StatsLayerPlugin registers tool links for STATS layer icon callbacks and Statistics mode.
+
+### statistics/statsgrid bundle
+
+Initial version for map view mode handling to show statistics grid.
+
+### mapwfs bundle
+
+WfsLayerPlugin now registers layer model/builder to map-layer-service on init.
+
+WfsLayerPlugin registers a tool link for WFS layers to show featuredata grid.
+
+### mapfull bundle
+
+Configurable projection definitions that allow custom projections. Configured projections replaces the default definitions of "EPSG:3067" and "EPSG:4326".
+
+WMTS specific layer model/builder registration has been removed from mapfull (now registered in mapwmts/plugin/WmtsLayerPlugin.init())
+
+Mapfull now starts map and plugins before starting to parse layers JSON so plugins can register layermodels and builders.
+
+### mapmodule-plugin bundle/ControlsPlugin
+
+Map controls are now configurable (zoombox and measure controls) - by setting the control values as false the control is not added. 
+
+### oskariui bundle
+
+Added Bootstrap grid CSS to Oskari
+
+### mapmodule-plugin bundle/WmsLayerPlugin
+
+WmsLayerPlugin passes AbstractLayer options and params to OpenLayers.Layer.WMS
+For example params allows format to be changed to "image/jpg" and options allows singleTile: true to be added
+
+## 1.7
+
+### core/sandbox
+
+Added multimap support. Reference to {Oskari.mapframework.sandbox.Sandbox} should now be fetched through Oskari.getSandbox() method. 
+
+Oskari.$('sandbox') still works but is deprecated. 
+
+For bundles to support multiple maps a configuration option should be added to specify sandbox name:
+
+```javascript
+var conf = this.conf;
+var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+var sandbox = Oskari.getSandbox(sandboxName);
+```
+
+### featuredata bundle
+
+The bundle can now be configured to allow user make selections on map to filter grid content:
+
+```javascript
+{
+    selectionTools : true
+}
+```
+The bundle adds a selection tools button to Toolbar if configured to allow user selections
+
+popuphandler.js added to the bundle which handles the selections tool
+
+new method updateGrid() added to Flyout.js, this method is called when a grid should be updated (if flyout is opened or user filters grid content with map selection)
+
+handleMapMoved() method removed from Flyout.js, use updateGrid() instead
+
+showFlyout() is added to instance.js to open flyout and update grid
+
+Bundle now provides a new plugin Oskari.mapframework.bundle.featuredata.plugin.MapSelectionPlugin for drawing selections on map
+
+new method getSelectionPlugin() is added to instance.js which returns Oskari.mapframework.bundle.featuredata.plugin.MapSelectionPlugin
+
+getBBox() is replaced with getGeometry() in WfsGridUpdateParams.js
+
+### mapfull/mapmodule bundle
+
+Configurable SrsName projection to be used, default srsName is "EPSG:3067"
+
+### MapMoveRequest
+
+Added srsName parameter for specifying projection to use if other than default
+
+MapModule handles projection transforms if projection has been defined in Proj4js.defs.
+
+## 1.6 release notes
+
+### mapfull bundle
+
+Now calls OpenLayers.updateSize() when it changes the size of div the map is rendered to.
+
+### data source plugin
+
+the layers are grouped together under same data provider headings and metadata links added
+
+test suite added for the plugin
+
+### libraries
+
+GeoStats library added to Oskari libraries. 
+
+Also added a new bundle package libraries/geostats that can be used as dependency for bundles utilizing the lib
+
+### featuredata bundle
+
+resizable flyout
+
+### divmanazer bundle
+
+selectable and resizable grid columns
+
+### meta data bundle
+
+adds selection area tool to toolbar
+included in a new tarkkailija sample project
+
+### toolbar bundle
+
+default buttons are configurable, by setting the false the toolgroup or tool is not added
+
+### myplaces bundle
+
+External graphic can be activated by changing OpenLayers bundle version to openlayers-graphic-fill (instead of openlayers-single-full) and giving new style as config parameter to the drawin plugin.
+Adding external graphics for DrawPlugin:
+```javascript
+        var newStyle = '<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>\
+        <sld:StyledLayerDescriptor version="1.0.0" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld ./Sld/StyledLayerDescriptor.xsd">\
+            <sld:NamedLayer>\
+                <sld:Name>Polygon</sld:Name>\
+                <sld:UserStyle>\
+                    <sld:Name>Polygon</sld:Name>\
+                    <sld:FeatureTypeStyle>\
+                        <sld:FeatureTypeName>Polygon</sld:FeatureTypeName>\
+                        <sld:Rule>\
+                            <sld:Name>Polygon</sld:Name>\
+                            <sld:Title>Polygon</sld:Title>\
+                            <sld:PolygonSymbolizer>\
+                                <sld:Fill>\
+                                    <sld:GraphicFill>\
+                                        <sld:Graphic>\
+                                            <sld:ExternalGraphic>\
+                                                <sld:OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.paikkatietoikkuna.fi/mml-2.0-theme/images/logo.png"/>\
+                                                <sld:Format>image/jpg</sld:Format>\
+                                                </sld:ExternalGraphic>\
+                                            <sld:Size>20</sld:Size>\
+                                        </sld:Graphic>\
+                                    </sld:GraphicFill>\
+                                </sld:Fill>\
+                                <sld:Stroke>\
+                                    <sld:CssParameter name="stroke">#006666</sld:CssParameter>\
+                                    <sld:CssParameter name="stroke-width">2</sld:CssParameter>\
+                                    <sld:CssParameter name="stroke-opacity">1</sld:CssParameter>\
+                                    <sld:CssParameter name="stroke-dasharray">4 4</sld:CssParameter>\
+                                </sld:Stroke>\
+                            </sld:PolygonSymbolizer>\
+                        </sld:Rule>\
+                    </sld:FeatureTypeStyle>\
+                </sld:UserStyle>\
+            </sld:NamedLayer>\
+        </sld:StyledLayerDescriptor>';
+
+
+        // rewrite creation of drawPlugin in the start-function
+        // register plugin for map (drawing for my places) 
+        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', { graphicFill : newStyle });
+```
+
+Multiple points, lines and polygons are now supported objects in My places. After each drawn feature a new MyPlaces.AddedFeatureEvent event is sent.
+After the drawing is finished by the user, the existing MyPlaces.FinishedDrawingEvent is sent. Enabled with config:
+
+```javascript
+        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', { multipart : true });
+```
+
+My places draw plugin can now be configured to send namespaced events. Plugin name is also prefixed with namespace, map can have multiple drawplugins at the same time.
+Enabled with config:
+
+```javascript
+        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', { id : '<namespace>' });
+
+        ->
+
+    eventHandlers : {
+        '<namespace>.AddedFeatureEvent' : function(event) {}
+```
+
+### framework.domain
+
+Created AbstractLayer.js that is inherited by all layer implementations. The abstract function implementations will unify layer functionality. The WmtsLayer will also correctly use legends if defined and type 'wmtslayer' will return false when called isLayerOfType. Use 'wmts' instead.
+
+### statehandler
+
+Added conf to enable usage logging to the conf url. Replaced UsageSnifferService with _logState in statehandler.
+
+### core/sandbox
+
+service-map package no longer links UsageSnifferService
+
+References to UsageSnifferService removed from core/sandbox.
+
 ## 1.5 release notes
+
+### libraries
+
+Openlayers updated to 2.12
+
+### Openlayers/openlayers-single-full bundle 
+
+Now uses the updated Openlayers version
 
 ### personal data bundle
 

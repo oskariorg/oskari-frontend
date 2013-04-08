@@ -34,11 +34,7 @@ function(plugin) {
     this._doMapLayerReArrange = false;
 
     this.sandbox = plugin._sandbox;
-    //this.endpointUrl = endpointUrl;
-    this.endpointUrl = this.sandbox.getAjaxUrl();
-    this.pngUrl = this.endpointUrl.replace('ajax.jsp&', 'png.jsp');
-    this.pngUrl = this.pngUrl.replace('p_p_lifecycle=1', 'p_p_lifecycle=2');
-    this.pngUrl = this.pngUrl.replace('p_p_state=exclusive', 'p_p_state=normal');
+    this.pngUrl = this.sandbox.getAjaxUrl();
 }, {
     __qname : "Oskari.mapframework.bundle.mapwfs.service.WfsTileService",
     getQName : function() {
@@ -143,8 +139,9 @@ function(plugin) {
                         "&flow_pm_bbox_max_x=" + bbox.bounds.right + 
                         "&flow_pm_bbox_max_y=" + bbox.bounds.top + 
                         "&flow_pm_map_width=" + this._TILE_SIZE_IN_PIXELS + 
-                        "&flow_pm_map_heigh=" + this._TILE_SIZE_IN_PIXELS + 
+                        "&flow_pm_map_height=" + this._TILE_SIZE_IN_PIXELS + 
                         "&flow_pm_zoom_level=" + mapZoom + 
+                        "&srs=" + this.sandbox.getMap().getSrsName() +
                         "&action_route=GET_PNG_MAP";
 
                 var requestedLayerName = "WFS_LAYER_IMAGE_" + 
@@ -217,8 +214,8 @@ function(plugin) {
                     "&flow_pm_bbox_min_y=" + bbox.bottom + 
                     "&flow_pm_bbox_max_x=" + bbox.right + 
                     "&flow_pm_bbox_max_y=" + bbox.top + 
-                    "&flow_pm_map_width=" + mapWidth + 
-                    "&flow_pm_map_heigh=" + mapHeight + 
+                    "&flow_pm_map_width="  + mapWidth + 
+                    "&flow_pm_map_height=" + mapHeight + 
                     "&action_route=GET_HIGHLIGHT_WFS_FEATURE_IMAGE";
             var recDraw = function(featureId) {
                 me.plugin.drawImageTile(layer, url + "&wfsFeatureId=" + featureId, 

@@ -78,7 +78,10 @@ function() {
 
 		me.started = true;
 
-		var sandbox = Oskari.$("sandbox");
+				var conf = this.conf ;
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+		var sandbox = Oskari.getSandbox(sandboxName);
+
 		me.sandbox = sandbox;
 		
 		this.localization = Oskari.getLocalization(this.getName());
@@ -154,13 +157,15 @@ function() {
 		 * @param {Oskari.mapframework.event.common.MapLayerEvent} event
 		 */
 		'MapLayerEvent' : function(event) {
-			
         	var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         	var layerId = event.getLayerId();
-        	
         	if(event.getOperation() === 'update') {
         		var layer = mapLayerService.findMapLayer(layerId);
 				this.plugins['Oskari.userinterface.Flyout'].handleLayerModified(layer);
+			}
+			else if(event.getOperation() === 'sticky') {
+        		var layer = mapLayerService.findMapLayer(layerId);
+				this.plugins['Oskari.userinterface.Flyout'].handleLayerSticky(layer);
 			}
 		},		
 		/**

@@ -107,9 +107,40 @@ function(instance) {
      */
     _downloadFeature : function(fid, protocol, cb) {
         var me = this;
-        var filter = new OpenLayers.Filter.FeatureId({
-            fids : [fid]
-        });
+        var lit;
+
+        // Handle two fid formats: with "0" or "-" symbols
+        if (fid.indexOf("-") === -1) {
+            lit = fid;
+        } else {
+            var i, j;
+            lit = "";
+            var fields = fid.split("-");
+            // Not valid?
+            if (fields.length !== 4) return;
+            for (i = 0; i < 2; i++) {
+                for (j = 0; j < 3-fields[i].length; j++) {
+                    lit = lit.concat("0");
+                }
+                for (j = 0; j < fields[i].length; j++) {
+                    lit = lit.concat(fields[i].charAt(j));
+                }
+            }
+            for (i = 2; i < 4; i++) {
+                for (j = 0; j < 4-fields[i].length; j++) {
+                    lit = lit.concat("0");
+                }
+                for (j = 0; j < fields[i].length; j++) {
+                    lit = lit.concat(fields[i].charAt(j));
+                }
+            }
+        }
+
+        var filter = new OpenLayers.Filter.Comparison({
+                                        type: OpenLayers.Filter.Comparison.EQUAL_TO,
+                                        property: 'ktjkiiwfs:kiinteistotunnus',
+                                        value: lit
+                                   });
         var loc = this.instance.getLocalization('notification').placeLoading;
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         dialog.show(loc.title, loc.message);
@@ -118,7 +149,7 @@ function(instance) {
             callback : function(response) {
                 dialog.close();
                 if (response && response.features && response.features.length > 0) {
-                    cb(response.features[0]);
+                    cb(response.features);
 
                 } else {
                     var locError = me.instance.getLocalization('notification')['error'];

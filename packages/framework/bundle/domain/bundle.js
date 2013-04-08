@@ -55,11 +55,13 @@ function() {
 
 	"protocol" : ["Oskari.bundle.Bundle"],
 	"source" : {
-
 		"scripts" : [{
-			"type" : "text/javascript",
-			"src" : "../../../../sources/framework/domain/wmslayer.js"
-		}, {
+            "type" : "text/javascript",
+            "src" : "../../../../sources/framework/domain/AbstractLayer.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../sources/framework/domain/wmslayer.js"
+        }, {
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/domain/vectorlayer.js"
 		}, {
@@ -69,6 +71,9 @@ function() {
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/domain/style.js"
 		}, {
+			"type" : "text/javascript",
+			"src" : "../../../../sources/framework/domain/tool.js"
+		},{
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/domain/user.js"
 		}],

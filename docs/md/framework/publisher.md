@@ -20,10 +20,10 @@ This Bundle provides functionality to define an embeddable map and save it to se
 ## Screenshot
 
 ### Start publishing
-![start](<%= docsurl %>images/start_map_publish.png)
+![start](<%= docsurl %>images/publisher_start.png)
 
 ### Map publishing
-![map](<%= docsurl %>images/publish_map.png)
+![map](<%= docsurl %>images/publisher_map.png)
 
 ## Bundle configuration
 

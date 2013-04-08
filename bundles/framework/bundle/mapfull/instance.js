@@ -53,6 +53,11 @@ function() {
 	 */
 	_createUi : function() {
         var me = this;
+
+        var module = Oskari.clazz.create('Oskari.mapframework.ui.module.common.MapModule', "Main", this.conf.imageLocation, this.conf.mapOptions);
+
+        this.mapmodule = module;
+        var map = this.sandbox.register(module);
         // set map size
         // call portlet with ?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&p_p_mode=view&published=true
         // -> uses published.jsp
@@ -67,6 +72,7 @@ function() {
                 if(me.resizeEnabled == null || me.resizeEnabled) {
                     jQuery('#' + me.mapDivId).height(jQuery(window).height());
                     jQuery('#contentMap').height(jQuery(window).height());
+                    map.updateSize();
                 }
             };
         
@@ -78,10 +84,6 @@ function() {
             adjustMapSize();
         }
         
-		var module = Oskari.clazz.create('Oskari.mapframework.ui.module.common.MapModule', "Main", this.conf.imageLocation, this.conf.mapOptions);
-
-		this.mapmodule = module;
-		var map = this.sandbox.register(module);
 		
         module.start(this.sandbox);
 
@@ -94,8 +96,7 @@ function() {
                 module.registerPlugin(plugins[i].instance);
                 module.startPlugin(plugins[i].instance);
             }
-        }
-        
+        }  
 		this.map = map;
 	},
     /**
@@ -115,6 +116,10 @@ function() {
         };
 		var me = this;
 		var conf = me.conf;
+
+        if (me.conf.projectionDefs) {
+            Proj4js.defs = me.conf.projectionDefs;
+        }
 		
 		var userInterfaceLanguage = Oskari.getLang();
 
@@ -122,7 +127,10 @@ function() {
 		this.core = core;
 		var sandbox = core.getSandbox();
 		this.sandbox = sandbox;
-		
+
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox';
+		Oskari.setSandbox(sandboxName,sandbox);
+
 		// take map div ID from config if available
 		if(conf && conf.mapElement) {
 		    this.mapDivId = conf.mapElement;
@@ -140,6 +148,10 @@ function() {
 		enhancements.push(Oskari.clazz.create('Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnhancement'));
         
 		core.init(services, enhancements);
+
+        // need to create ui before parsing layers because layerplugins register modelbuilders
+        this._createUi();
+
 		// setup initial maplayers
     	var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 	    var initialLayers = conf.layers;
@@ -149,8 +161,6 @@ function() {
 	            mapLayerService.addLayer(mapLayer, true);
 			}
 	    }
-		  
-        this._createUi();
         
 		sandbox.registerAsStateful(this.mediator.bundleId, this);
 		
@@ -207,23 +217,9 @@ function() {
                 conf.globalMapAjaxUrl + 'action_route=GetMapLayers&lang='+Oskari.getLang() , this.core.getSandbox());
         services.push(mapLayerService);
         
-       // TODO: maybe we should set the map state in another bundle so we can setup core/map in mapfull
-       // and add wmts/wfs layer support to map with their own bundles -> then set the initial map state (from a new bundle) 
-       // Setting up WMTS support
-       // We'll register a handler for our type
-        mapLayerService.registerLayerModel('wmtslayer','Oskari.mapframework.wmts.domain.WmtsLayer');
-        
-        var layerModelBuilder = 
-        	Oskari.clazz.create('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder');
-        
-        mapLayerService.registerLayerModelBuilder('wmtslayer',layerModelBuilder);
-        
 		// DisableDevelopmentModeEnhancement
 		if (conf.disableDevelopmentMode == 'true') {
 	        core.disableDebug();
-            // create sniffer with 2 second interval and '/log' -url
-			services.push(Oskari.clazz.create('Oskari.mapframework.service.UsageSnifferService',2, "/log/"));
-			core.enableMapMovementLogging();
 	    }
 		return services;
 	},
@@ -303,6 +299,7 @@ function() {
             north : lon,
             east : lat,
             zoom : map.getZoom(),
+            srs : map.getSrsName(),
             selectedLayers : []
         };
         

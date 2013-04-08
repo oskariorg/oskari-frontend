@@ -33,6 +33,7 @@ function(config) {
         point : 'point',
         line : 'line',
         area : 'area',
+        cut : 'cut',
         box : 'box'
     },
 
