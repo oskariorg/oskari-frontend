@@ -65,6 +65,25 @@ describe.only('FormInput UI component', function() {
             formInput.setValue(falseValue);
             isFalse = formInput.checkValue();
             expect(isFalse).to.not.be.ok();
+        });
+
+        it('should validate without errors', function() {
+            var okValue = 'foobar123_-',
+                errors;
+
+            formInput.setValue(okValue);
+            errors = formInput.validate();
+            expect(errors.length).to.be(0);
+        });
+
+        it('should have errors on empty input', function() {
+            var errorValue = '',
+                errors;
+
+            formInput.setRequired(true);
+            formInput.setValue(errorValue);
+            errors = formInput.validate();
+            expect(errors.length).to.be(1);
         })
     });
 
@@ -74,12 +93,13 @@ describe.only('FormInput UI component', function() {
                 $oskariInputField = jQuery('div.oskarifield').find('input');
 
             formInput.bindEnterKey(cb);
+            expect(cb.callCount).to.be(0);
 
             $oskariInputField.attr('value', 'foobar');
             var e = jQuery.Event("keypress", {which: 13});
             jQuery($oskariInputField).trigger(e);
-            console.log(formInput._isEnterPress(e));
-            expect(cb.called).to.be.ok();
+
+            expect(cb.callCount).to.be(1);
         });
     });
 });
