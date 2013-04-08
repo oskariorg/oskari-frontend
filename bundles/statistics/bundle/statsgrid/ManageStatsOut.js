@@ -338,20 +338,20 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      * @method getSotkaIndicatorData
      * @param container parent element
      * @param indicator id
-     * @param genders (male / female / total)
+     * @param gender (male / female / total)
      * @param year selected year
      */
-    getSotkaIndicatorData : function(container, indicator, genders, year) {
+    getSotkaIndicatorData : function(container, indicator, gender, year) {
         var me = this;
         // ajax call
         me.fetchData(
             // url
-            me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + years + '&genders=' + genders,
+            me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gender,
             // success callback
             function(data){
                 if (data) {
                     // get the actual data
-                    me.addIndicatorDataToGrid(container, indicator, genders, year, data);
+                    me.addIndicatorDataToGrid(container, indicator, gender, year, data);
                 } else {
                     me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle,
                         me.instance.getLocalization('sotka').indicatorDataError);
