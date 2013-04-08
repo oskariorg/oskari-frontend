@@ -231,12 +231,13 @@ function(config) {
             }
         }
 
+        // TODO: get visId from layer?
         var layerScales = this.getMapModule().calculateLayerScales(layer.getMaxScale(), layer.getMinScale());
         var openLayer = new OpenLayers.Layer.WMS('layer_' + layer.getId(), this.ajaxUrl, {
             layers : layer.getWmsName(),
             transparent : true,
             layerId : layer.getId(),
-            visId : 1,
+            VIS_ID : 1,
             format : "image/png"
         }, {
             layerId : layer.getWmsName(),
@@ -338,11 +339,29 @@ function(config) {
     _afterChangeMapLayerStyleEvent : function(event) {
         var layer = event.getMapLayer();
 
+        /*
+        TileHandler recognizes these parameters:
+        // to get from DB
+        VIS_ID="1" 
+        // to construct from given data (no DB involved)
+        VIS_NAME="ows:Kunnat2013"
+        VIS_ATTR="Kuntakoodi"
+        VIS_CLASSES="020,091|186,086,982|111,139,740"
+        VIS_COLORS="vis=choro:ccffcc|99cc99|669966"
+
+        These should be given in the event to update 
+        */
         // Change selected layer style to defined style
         var mapLayer = this.getOLMapLayers(layer);
         if(mapLayer != null) {
             mapLayer[0].mergeNewParams({
-                visId : layer.getCurrentStyle().getName()
+                // TODO: check if we want to generate SLD from DB with VIS_ID 
+                VIS_ID : layer.getCurrentStyle().getName(),
+                // OR generate from given params (VIS_ID should be -1 or undefined if we go here)
+                VIS_NAME : "ows:Kunnat2013",
+                VIS_ATTR : "Kuntakoodi",
+                VIS_CLASSES : "020,091|186,086,982|111,139,740",
+                VIS_COLORS : "vis=choro:ccffcc|99cc99|669966"
             });
         }
     }
