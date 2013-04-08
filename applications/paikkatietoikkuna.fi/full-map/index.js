@@ -47,6 +47,9 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
                     "Import-Bundle": {
                         "statsgrid": {
                             "bundlePath": "/Oskari/packages/statistics/bundle/"
+                        },
+                        "geostats": {
+                            "bundlePath": "/Oskari/packages/libraries/bundle/"
                         }
                     }
                 }
