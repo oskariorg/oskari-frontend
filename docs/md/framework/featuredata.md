@@ -25,7 +25,15 @@ The Bundle provides a grid view for WFS featuredata. It is responsible to gettin
 
 ## Bundle configuration
 
-No configuration is required.
+No configuration is required, but setting selectionTools to true will add a new button to toolbar that opens a selection tool dialog. 
+
+Using selection tools the user can get wfs grid data from smaller area than whole screen.
+
+```javascript
+{
+  "selectionTools" : true
+}
+```
 
 ## Bundle state
 
