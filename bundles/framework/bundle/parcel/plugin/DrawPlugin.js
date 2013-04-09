@@ -508,6 +508,13 @@ function(instance) {
 		return this.currentFeatureType;
 	},
 	/**
+	 * @method getSandbox
+     * @return {Oskari.mapframework.sandbox.Sandbox}
+	 */
+    getSandbox : function() {
+        return this._sandbox;
+    },
+	/**
 	 * @method start
 	 * called from sandbox
 	 */
