@@ -1,4 +1,4 @@
-describe.only('Test Suite for Featuredata', function() {
+describe('Test Suite for Featuredata', function() {
     var appSetup = null,
         appConf = null,
         module = null,

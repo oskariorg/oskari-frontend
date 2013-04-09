@@ -25,7 +25,7 @@ Oskari.registerLocalization({
       },
       "tools": {
         "point": {
-          "tooltip": "Select point"
+          "tooltip": "Add point"
         },
         "line": {
           "tooltip": "Add line"

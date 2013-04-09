@@ -98,7 +98,7 @@ function(endpointUrl) {
         // Get json for table
         var onReady = function(response) {
             me.cancelWFSGridUpdateForLayer(mapLayer.getId());
-            if(response.error == "true") {
+            if(response.error) {
                 //me.sandbox.printWarn("Error while querying data to table.");
                 return;
             }
