@@ -445,8 +445,18 @@ function(instance) {
         var layer = event.getMapLayer();
         var panel = this.layers['' + layer.getId()];
         var featureId = event.getWfsFeatureIds()[0];
-
-        panel.grid.select(featureId, event.isKeepSelection());
+        if(panel.grid) {
+            // panel might not be available if we got broken data from server on last call
+            panel.grid.select(featureId, event.isKeepSelection());
+        }
+    },
+    /**
+     * @method isEnabled
+     * @return {Boolean} 
+     * True if grid functionality is enabled
+     */
+    isEnabled : function() {
+        return this.active === true;
     },
     /**
      * @method setEnabled
@@ -463,7 +473,7 @@ function(instance) {
             }
             return;
         }
-        this.active = (isEnabled == true);
+        this.active = (isEnabled === true);
         var sandbox = this.instance.sandbox;
 
         // feature info activation disabled if object data grid flyout active and vice versa

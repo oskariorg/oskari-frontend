@@ -25,7 +25,8 @@ Oskari.registerLocalization({
             "cancel": "Peruuta"
         },
         "sotka": {
-            "errorTitle" : "Virhe",
+            "municipality" :            "Kunta",
+            "errorTitle" :              "Virhe",
             "regionDataError":          "Virhe kuntatietojen haussa Sotkanetistä.",
             "regionDataXHRError":       "Kuntatietojen haku: virhe yhteydessä Sotkanettiin.",
             "indicatorsDataError":      "Virhe indikaattorien haussa Sotkanetistä.",

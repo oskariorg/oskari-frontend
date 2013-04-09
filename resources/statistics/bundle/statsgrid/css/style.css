@@ -22,9 +22,9 @@
 
 .statsgrid .selectors-container {
     height: 15.5%;
+    min-height: 115px;
 }
 .statsgrid .indicator-cont {
-    height: 100%;
     float: left;
     position: relative;
     padding-right: 30px;
@@ -40,6 +40,7 @@
 }
 .statsgrid .parameters-cont {
     height: 100%;
+    min-height: 115px;
     float: left;
 }
 .statsgrid .selector-cont {

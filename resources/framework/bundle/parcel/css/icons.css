@@ -1,7 +1,8 @@
+/*
 .parcel-draw-line {
     width: 32px;
     height: 32px;
-    background-image: url('../icons/icons.png') !important;
+    background-image: url('/Oskari/resources/framework/bundle/parcel/icons/icons.png') !important;
     background-repeat: no-repeat !important;
     background-position: -869px 0px !important;
 }
@@ -9,7 +10,7 @@
 .parcel-draw-area {
     width: 32px;
     height: 32px;
-    background-image: url('../icons/icons.png') !important;
+    background-image: url('/Oskari/resources/framework/bundle/parcel/icons/icons.png') !important;
     background-repeat: no-repeat !important;
     background-position: -1029px 0px !important;
 }
@@ -17,7 +18,7 @@
 .parcel-selector {
     width: 32px;
     height: 32px;
-    background-image: url('../icons/icons.png') !important;
+    background-image: url('/Oskari/resources/framework/bundle/parcel/icons/icons.png') !important;
     background-repeat: no-repeat !important;
     background-position: -805px 0px !important;
 }
@@ -25,7 +26,8 @@
 .parcel-clear {
     width: 32px;
     height: 32px;
-    background-image: url('../icons/icons.png') !important;
+    background-image: url('/Oskari/resources/framework/bundle/parcel/icons/icons.png') !important;
     background-repeat: no-repeat !important;
     background-position: -933px 0px !important;
 }
+*/

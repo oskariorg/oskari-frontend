@@ -12,6 +12,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata.FeatureDataBundleIns
  * @method create called automatically on construction
  * @static
  */
+
 function() {
     this.sandbox = null;
     this.started = false;
@@ -99,7 +100,7 @@ function() {
         me.createUi();
 
         //sends request via config to add tool selection button
-//        if (this.conf && this.conf.selectionTools == true) {
+        if (this.conf && this.conf.selectionTools === true) {
             this.popupHandler = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.PopupHandler', this);
             var addBtnRequestBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
             var btn = {
@@ -112,7 +113,7 @@ function() {
             };
 
             sandbox.request(this, addBtnRequestBuilder('dialog', 'selectiontools', btn));
-//        }
+        }
 
         // check if preselected layers included wfs layers -> act if they are added now 
         var layers = sandbox.findAllSelectedMapLayers();
@@ -134,8 +135,7 @@ function() {
         this.requestHandlers = {
             showFeatureHandler: Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.request.ShowFeatureDataRequestHandler', me)
         };
-        this.service = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.service.GridJsonService',
-        this.sandbox.getAjaxUrl());
+        this.service = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.service.GridJsonService', this.sandbox.getAjaxUrl());
         return null;
     },
     /**
@@ -228,17 +228,19 @@ function() {
          * Disable grid updates on close, otherwise enable updates
          */
         'userinterface.ExtensionUpdatedEvent': function(event) {
-            var plugin = this.plugins['Oskari.userinterface.Flyout']
+            var plugin = this.plugins['Oskari.userinterface.Flyout'];
 
             // ExtensionUpdateEvents are fired a lot, only let featuredata extension event to be handled when enabled
             if (event.getExtension().getName() !== this.getName()) {
-                // wasn't me or disabled -> do nothing
+                // wasn't me -> do nothing
                 return;
             } else if (event.getViewState() === "close") {
                 // clear geometry when closed
                 this.setGeometry(null);
-            } else {
-                // enable and open plugin
+                // and disable plugin so we come out of the grid mode
+                plugin.setEnabled(false);
+            } else if(!plugin.isEnabled()){
+                // enable and open plugin if it isn't open already
                 var geometry = this.geometry;
                 if (!geometry) {
                     geometry = this.getSelectionPlugin().getFullScreenSelection();
@@ -335,7 +337,7 @@ function() {
 
         // used to get fullscreen selection even if selection tools are not enabled
         var config = {
-            id : "FeatureData"
+            id: "FeatureData"
             //,multipart : true
         };
         this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.plugin.MapSelectionPlugin', config);
