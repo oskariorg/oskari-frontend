@@ -10,7 +10,7 @@ Oskari.registerLocalization({
         "view" : {
             "title" : "patiopoc",
             "message" : "patiopoc"
-        }
+        },
         "gender": "Kön",
         "genders" : {
             "male" : "män",
@@ -19,7 +19,7 @@ Oskari.registerLocalization({
         },
         "addColumn": "Hämta data",
         "indicators" : "Indikator",
-        "year": "År"
+        "year": "År",
         "buttons" : {
             "ok"    : "OK",
             "cancel": "Avbryta"

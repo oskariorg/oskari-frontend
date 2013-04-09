@@ -10,7 +10,7 @@ Oskari.registerLocalization({
         "view" : {
             "title" : "Patio",
             "message" : "patiopoc"
-        }
+        },
         "gender": "Gender",
         "genders" : {
             "male" : "men",
