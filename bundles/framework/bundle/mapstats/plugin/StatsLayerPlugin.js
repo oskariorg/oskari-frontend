@@ -165,7 +165,10 @@ function(config) {
             this._afterChangeMapLayerOpacityEvent(event);
         },
         'AfterChangeMapLayerStyleEvent' : function(event) {
-            this._afterChangeMapLayerStyleEvent(event);
+            //this._afterChangeMapLayerStyleEvent(event);
+        },
+        'MapStats.StatsVisualizationChangeEvent': function(event) {
+            this._afterStatsVisualizationChangeEvent(event);
         }
     },
 
@@ -363,6 +366,16 @@ function(config) {
                 VIS_CLASSES : "020,091|186,086,982|111,139,740",
                 VIS_COLORS : "vis=choro:ccffcc|99cc99|669966"
             });
+        }
+    },
+
+    _afterStatsVisualizationChangeEvent: function(event) {
+        var layer = event.getLayer();
+        var params = event.getParams();
+
+        var mapLayer = this.getOLMapLayers(layer);
+        if(mapLayer != null) {
+            mapLayer[0].mergeNewParams(params);
         }
     }
 }, {

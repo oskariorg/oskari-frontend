@@ -72,6 +72,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      * @method createMunicipalitySlickGrid
      */
     createMunicipalitySlickGrid : function(container, regiondata) {
+        var me = this;
         var grid;
         var gridContainer = jQuery('<div id="municipalGrid" class="municipal-grid"></div>');
         // clear and append municipal-grid container
@@ -144,6 +145,35 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             grid.invalidate();
             grid.render();
         });
+
+        grid.onHeaderClick.subscribe(function(e, args) {
+            var columnId = args.column.id,
+                geoStatsValues = [],
+                columnData,
+                gstats;
+
+            if(!columnId.match(/^indicator/)) return;
+
+            for(var i = 0; i < grid.getDataLength(); ++i) {
+                var val = Number(grid.getDataItem(i)[columnId]);
+                if(val) geoStatsValues.push(val);
+            }
+            gstats = new geostats(geoStatsValues);
+
+            var sandbox = me.instance.getSandbox();
+            var eventBuilder = sandbox.getEventBuilder('MapStats.StatsVisualizationChangeEvent');
+            if(eventBuilder) {
+                var event = eventBuilder(me._layer, {
+                    VIS_ID: -1,
+                    VIS_NAME: "ows:Kunnat2013",
+                    VIS_ATTR: "Kuntakoodi",
+                    VIS_CLASSES: "020,091|186,086,982|111,139,740",
+                    VIS_COLORS: "vis=choro:ccffcc|99cc99|669966"
+                });
+                sandbox.notifyAll(event);
+            }
+        });
+
         // notify dataview that we are starting to update data
         dataView.beginUpdate();
         // set municipality data
@@ -414,6 +444,13 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                 ii++;                
             }
         }
+        var items = this.dataView.getItems();
+        for (var i = items.length - 1; i >= 0; i--) {
+            var item = items[i];
+            if(item['indicator'+ indicator+year+gender] == null) {
+                item['indicator'+ indicator+year+gender] = -1;
+            }
+        };
         this.dataView.endUpdate();
         this.dataView.refresh();
         this.grid.invalidateAllRows();
