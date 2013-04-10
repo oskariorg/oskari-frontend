@@ -175,9 +175,11 @@ function() {
 
         // create request handlers
         me.mapResizeEnabledRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapfull.request.MapResizeEnabledRequestHandler', me);
+        me.mapWindowFullScreenRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapfull.request.MapWindowFullScreenRequestHandler', me);
 
         // register request handlers
         sandbox.addRequestHandler('MapFull.MapResizeEnabledRequest', me.mapResizeEnabledRequestHandler);
+        sandbox.addRequestHandler('MapFull.MapWindowFullScreenRequest', me.mapWindowFullScreenRequestHandler);
 
 	},
     /**
@@ -323,7 +325,21 @@ function() {
         }
 		
 		return state;
-	}
+	},
+
+    /**
+    * @method _toggleFullScreen
+    * Toggles normal/full screen view of the map window.
+    */
+    _toggleFullScreen: function() {
+        var me = this;
+        var mapmodule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
+        var reqBuilder = me.sandbox.getRequestBuilder('MapFull.MapResizeEnabledRequest');
+
+        me.sandbox.request(mapmodule.getName(), reqBuilder(true));
+
+        jQuery('#contentMap').toggleClass('oskari-map-window-fullscreen');
+    }
 }, {
     /**
      * @property {String[]} protocol
