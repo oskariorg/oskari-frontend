@@ -9,4 +9,5 @@ dist/
 tools/node_modules
 tools/validation
 tools/coverage
+tools/components
 META-INF/
