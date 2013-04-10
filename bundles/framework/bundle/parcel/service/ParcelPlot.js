@@ -224,7 +224,7 @@ function(instance) {
 					}
 				}
 				// if polygon --> make 1st and last point segemnt
-				if (geometry.CLASS_NAME == "OpenLayers.Geometry.Polygon") {
+				if (geometry.CLASS_NAME == "OpenLayers.Geometry.Polygon" || geometry.CLASS_NAME == "OpenLayers.Geometry.LinearRing") {
 					var lon = nodes[nodes.length - 1].x;
 					var lat = nodes[nodes.length - 1].y;
 					var lon2 = nodes[0].x;

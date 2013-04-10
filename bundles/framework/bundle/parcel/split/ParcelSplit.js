@@ -337,6 +337,7 @@ this.test = false;
             }
             inPolygon.style = this.drawPlugin.basicStyle;
             editLayer.addFeatures([inPolygon]);
+            parcelLayer.addFeatures([inPolygon]);
             break;
         }
     },
