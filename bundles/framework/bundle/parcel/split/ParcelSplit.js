@@ -49,7 +49,7 @@ function(drawPlugin) {
     *
     *
     */
-    this.markerIcon = new OpenLayers.Icon('/Oskari/applications/parcel/img/marker.png',this.markerSize,this.markerOffset);
+    this.markerIcon = new OpenLayers.Icon('/Oskari/1.8/parcel/images/marker.png',this.markerSize,this.markerOffset);
 
    /**
     * @property splitPolygons
@@ -494,6 +494,7 @@ this.test = false;
             if (jstsLine === null) {
                 return [olOldFeatures];
             }
+
 
             // Splitting
             for (i=0; i<jstsOldPolygons.length; i++) {
