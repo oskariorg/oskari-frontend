@@ -130,7 +130,6 @@ function() {
 			}
 
 		}
-
 	},
 	/**
 	 * @method update
@@ -1089,16 +1088,16 @@ function() {
 	},
 
 	/**
-	* @method toggleMapWindowFullScreen
+	* @method _toggleMapWindowFullScreen
 	* Sends a request to toggle between the normal and the full screen view
 	* of the map window.
 	*/
-	toggleMapWindowFullScreen: function() {
+	_toggleMapWindowFullScreen: function() {
 		var me = this,
 			reqBuilder = me.sandbox.getRequestBuilder('MapFull.MapWindowFullScreenRequest');
 
 	    if(reqBuilder) {
-	        sandbox.request(mee.getName(), reqBuilder());
+	        me.sandbox.request(me.getName(), reqBuilder());
 	    }
 	},
 
