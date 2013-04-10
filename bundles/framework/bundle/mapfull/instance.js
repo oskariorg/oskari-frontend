@@ -332,13 +332,11 @@ function() {
     * Toggles normal/full screen view of the map window.
     */
     _toggleFullScreen: function() {
-        var me = this;
-        var mapmodule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
-        var reqBuilder = me.sandbox.getRequestBuilder('MapFull.MapResizeEnabledRequest');
-
-        me.sandbox.request(mapmodule.getName(), reqBuilder(true));
+        var me = this,
+            mapmodule = me.mapmodule;
 
         jQuery('#contentMap').toggleClass('oskari-map-window-fullscreen');
+        mapmodule.getMap().updateSize();
     }
 }, {
     /**
