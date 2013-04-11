@@ -21,7 +21,7 @@ function(mapfull) {
      *      request to handle
      */
     handleRequest : function(core, request) {
-        this.mapfull._toggleFullScreen();
+        this.mapfull.toggleFullScreen();
    }
 }, {
     /**
