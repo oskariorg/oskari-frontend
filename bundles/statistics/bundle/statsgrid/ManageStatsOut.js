@@ -29,7 +29,10 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      * @param container element where indicator-selector should be added
      */
     prepareIndicatorParams : function(container) {
-        
+
+		//clear the selectors container        
+        container.find('selectors-container').remove();
+        //add selectors
         var selectors = jQuery('<div class="selectors-container"></div>');
         container.append(selectors);
         
@@ -84,7 +87,11 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             name : this.instance.getLocalization("sotka").municipality,
             field : "municipality",
             sortable : true
-        }];
+        },{
+			id : "code",
+			name : this.instance.getLocalization("sotka").code,
+			field : "code"
+		}];
 
         // options
         var options = {
@@ -102,6 +109,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                 // add new row with id and name of municipality
                 data[rowId] = {
                     id : indicData.id, 
+                    code : indicData.code,
                     municipality: indicData.title[Oskari.getLang()]
                 }
                 rowId++;
@@ -147,49 +155,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         });
 
         grid.onHeaderClick.subscribe(function(e, args) {
-            var columnId = args.column.id,
-                geoStatsValues = [],
-                columnData,
-                gstats;
-
-            if(!columnId.match(/^indicator/)) return;
-
-            for(var i = 0; i < grid.getDataLength(); ++i) {
-                var val = Number(grid.getDataItem(i)[columnId]);
-                if(val) geoStatsValues.push(val);
-            }
-            gstats = new geostats(geoStatsValues);
-
-            var visClasses = "360,175,160,210,435,13,27,26,366,208,196,166,15,272,30,363,346," +
-            "223,130,32,400,139,111,258,325,171,106,103,34,18,101,306,349,375,381,132,319,232," +
-            "340,50,278,19,192,188,379,87,238,220,83,297,209,56,127,440,226,307,148,69,125,417," +
-            "420,356,291,302,48,233,410,157,150,387,116,334,53,449,24,110,54,23,176,174,4,392,181," +
-            "361,144,274,301,399,321,424,342,191,395,300,38,430,405,224,304,93,264,382,214,422,183," +
-            "385,352,318,431,402,299,295,45,266,343,320,273,217,163,143,314,423,12,338,280,370,316," +
-            "115,374,76,108,421,285,358,444,371,436,290,173,324,373,250,330,70,384,78,283,212,11,213," +
-            "80,293,398,348,77,82,303,35,123,68,328,216,268,350,75,64,102,243,383,99,305,331,22,798,354,"+
-            "251,241,451,136,246,376,394,154,854,66,84,310,269,61,427,153,793,29,263,62,432,37,369,403," +
-            "28,260,141,237,178,72,118,252,206,179,9,311,119,296,368,355,43,114,231,138,135,107,5,357," +
-            "156,36,255,200,235,259,59,221,39,262,336,2,195,182,126,57,265,52,359,271,247,795,219,100," +
-            "63,201,197,21,95,131,397,112,145,164,445,186,244,404,207|794,167,257,121,204,73,198,732,113," +
-            "25,288,187,353,242,234,41,282,284,44,452,239,408,33,351,193,49,60,117,414,88,388,312,797,313," +
-            "344,65,425,796,323,97,92,448,248,122,133,393,94,91,317,202,253,55,142,228|294,339,151,347,327," +
-            "406,58,184,74,292,152,161,177|85,261,389,413,378|20,46";
-
-            var statsParams = {
-                VIS_ID: -1,
-                VIS_NAME: "tilastoalueet:kunnat2013",
-                VIS_ATTR: "kuntakoodi",
-                VIS_CLASSES: visClasses,
-                VIS_COLORS: "choro:edf8e9|bae4b3|74c476|31a354|006d2c"
-            };
-
-            var sandbox = me.instance.getSandbox();
-            var eventBuilder = sandbox.getEventBuilder('MapStats.StatsVisualizationChangeEvent');
-            if(eventBuilder) {
-                var event = eventBuilder(me._layer, statsParams);
-                sandbox.notifyAll(event);
-            }
+            me.classifyData(args.column);
         });
 
         // notify dataview that we are starting to update data
@@ -511,6 +477,48 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         sel.val(values[values.length - 1]);
         return gender;
     },
+    	/**
+	 * Classify Sotka indicator data
+	 *
+	 * @param curCol  Selected indicator data column
+	 */
+	classifyData : function(curCol) {
+		//Classify data
+		var me = this;
+		//Selected column
+		var sortcol = curCol;
+		var statArray = [];
+		var munArray = [];
+		var strings = [];
+		var check = false;
+		var limits = [];
+		var i, k;
+		//Check selected column
+		if (sortcol.field == 'municipality')
+			return;
+
+		// Get values of selected column
+		var data = this.dataView.getItems();
+		for ( i = 0; i < data.length; i++) {
+			var row = data[i];
+			statArray.push(row[sortcol.field]);
+			munArray.push(row['code']);
+		}
+		
+		 var sandbox = me.instance.getSandbox();
+            var eventBuilder = sandbox.getEventBuilder('MapStats.SotkadataChangedEvent');
+            if(eventBuilder) {
+                var event = eventBuilder(me._layer, {
+                	CUR_COL: sortcol,
+                    VIS_NAME: "ows:kunnat2013",
+                    VIS_ATTR: "kuntakoodi",
+                    VIS_CODES: munArray,
+                    COL_VALUES: statArray
+                });
+                sandbox.notifyAll(event);
+            }
+
+	},
 
     /**
      * Make the AJAX call. This method helps 
