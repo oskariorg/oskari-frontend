@@ -1,4 +1,4 @@
-describe.only('Test Suite for Mapfull', function() {
+describe('Test Suite for Mapfull', function() {
     var appSetup = null,
         appConf = null,
         module = null,

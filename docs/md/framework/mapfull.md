@@ -115,7 +115,17 @@ ProjectionDefs will replace the default projections "EPSG:3067" and "EPSG:4326".
 
 ## Requests the bundle handles
 
-This bundle doesn't handle any requests, but initializes Oskari.mapframework.core.Core which handles many requests.
+<table>
+  <tr>
+    <th>Request</th><th>How does the bundle react</th>
+  </tr>
+  <tr>
+    <td>MapResizeEnabledRequest</td><td>Enables resizing of the map window.</td>
+  </tr>
+  <tr>
+    <td>MapWindowFullScreenRequest</td><td>Toggles between the normal map view and the full screen view.</td>
+  </tr>
+</table>
 
 ## Requests the bundle sends out
 

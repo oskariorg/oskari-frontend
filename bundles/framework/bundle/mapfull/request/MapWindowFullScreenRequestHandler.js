@@ -14,7 +14,7 @@ function(mapfull) {
 }, {
     /**
      * @method handleRequest 
-     * Shows/hides the maplayer specified in the request in OpenLayers implementation.
+     * Toggles between the normal and the full screen mode of the map window.
      * @param {Oskari.mapframework.core.Core} core
      *      reference to the application core (reference sandbox core.getSandbox())
      * @param {Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequest} request
