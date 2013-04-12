@@ -155,7 +155,9 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         });
 
         grid.onHeaderClick.subscribe(function(e, args) {
+
             me.classifyData(args.column);
+
         });
 
         // notify dataview that we are starting to update data
