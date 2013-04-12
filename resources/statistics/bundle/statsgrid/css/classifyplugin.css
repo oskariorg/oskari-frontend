@@ -1,0 +1,82 @@
+.manageClassificationPlugin {
+	position: absolute;
+	bottom: 50px;
+	right: 10px;
+	z-index: 100000000 !important;
+}
+.manageClassificationPlugin {
+	max-width: 240px;
+	background-color: white !important;
+	color: black !important;
+	float: left;
+	padding: 0px;
+	text-align: left;
+}
+.manageClassificationPlugin div.classheader {
+	color: white;
+	background-color: black !important;
+	padding: 4px;
+}
+.manageClassificationPlugin div.header-icon icon-arrow-white-right {
+	padding: 4px;
+}
+.manageClassificationPlugin div.content {
+	color: black;
+	background-color: white !important;
+}
+.manageClassificationPlugin div.classificationMethod {
+	margin: 4px;
+}
+.manageClassificationPlugin div.content label {
+	float: left;
+	width: 80px;
+	padding: 10px;
+	font-weight: bold;
+	font-size: 1.2em;
+}
+.manageClassificationPlugin div.classCount {
+	float: left;
+	background-color: white !important;
+	padding: 0px;
+	font-weight: bold;
+	font-size: 1.2em;
+	margin: 4px;
+}
+.manageClassificationPlugin .content select {
+	background: -moz-linear-gradient(center top , #FEFEFE, #E3E3E3) repeat scroll 0 0 transparent;
+	border: 1px solid #B7B7B7;
+	border-radius: 4px 4px 4px 4px;
+	color: #878787;
+	font: 12px/100% Arial, sans-serif;
+	padding: 4px;
+	margin: 4px;
+}
+.manageClassificationPlugin .content input {
+	background: -moz-linear-gradient(center top , #FEFEFE, #E3E3E3) repeat scroll 0 0 transparent;
+	border: 1px solid #B7B7B7;
+	border-radius: 4px 4px 4px 4px;
+	color: #878787;
+	font: 12px/100% Arial, sans-serif;
+	padding: 4px;
+	margin: 4px;
+}
+.geostats-legend div {
+    margin-bottom: 5px;
+}
+.geostats-legend-title {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+.geostats-legend-block {
+    border: 1px solid #555555;
+    display: inline-table;
+    float: none;
+    height: 12px;
+    margin: 0 5px 0 0;
+    width: 20px;
+}
+.geostats-legend-counter {
+    color: #666666;
+    font-size: 0.8em;
+    font-style: italic;
+}

@@ -26,6 +26,7 @@ Oskari.registerLocalization({
         },
         "sotka": {
             "municipality":             "Municipality",
+            "code" :                    "Code",
             "errorTitle" :              "Error",
             "regionDataError":          "Error in getting sotka region data.",
             "regionDataXHRError":       "Error loading sotka region data",
@@ -38,6 +39,14 @@ Oskari.registerLocalization({
             "descriptionTitle" :        "Description",
             "sourceTitle" :             "Source"
 
+        },
+            "classify": {
+            "classify":                 "Classify",
+            "classifymethod":           "Method",
+            "classes":                  "Classes",
+            "jenks":                    "Jenks ranges",
+            "quantile" :                "Quantile ranges",
+            "eqinterval" :              "Eqinterval"
         },
         "noMatch" : "No results matched"
 

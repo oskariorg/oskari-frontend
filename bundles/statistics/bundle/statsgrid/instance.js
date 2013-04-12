@@ -19,6 +19,20 @@ function() {
         "viewClazz": "Oskari.statistics.bundle.statsgrid.StatsView"
     };
 }, {
+    "init" : function() {
+    	var me = this;
+        var conf = me.conf ;
+        var locale = me.getLocalization();
+		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+		var sandbox = Oskari.getSandbox(sandboxName);
+        var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+        // register plugin for map 
+        var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', conf ,locale);
+        mapModule.registerPlugin(classifyPlugin);
+        mapModule.startPlugin(classifyPlugin);
+        this.classifyPlugin = classifyPlugin;
+        return null;
+    },
 	"eventHandlers" : {
 		/**
 		 * @method userinterface.ExtensionUpdatedEvent
@@ -54,7 +68,7 @@ function() {
             dialog.close(true);
     	});
     	dialog.show(title, message, [okBtn]);
-    },
+    }
 
 
 }, {

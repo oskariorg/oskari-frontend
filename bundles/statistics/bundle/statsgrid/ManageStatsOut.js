@@ -441,6 +441,8 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         this.dataView.refresh();
         this.grid.invalidateAllRows();
         this.grid.render();
+        // Show classification
+         this.classifyData(columns[columns.length - 1]);
     },
 
     /**

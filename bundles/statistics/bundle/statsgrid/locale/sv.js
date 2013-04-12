@@ -26,6 +26,7 @@ Oskari.registerLocalization({
         },
         "sotka": {
             "municipality" :            "Kommun",
+            "code" :                    "Kod",
             "errorTitle" :              "Fel",
             "regionDataError":          "Fel att få Sotka regionen data.",
             "regionDataXHRError":       "Fel vid laddning av Sotka regionen data",
@@ -38,6 +39,14 @@ Oskari.registerLocalization({
             "descriptionTitle" :        "Beskrivning",
             "sourceTitle" :             "Upphov"
 
+        },
+          "classify": {
+            "classify":                 "Classify",
+            "classifymethod":           "Method",
+            "classes":                  "Classes",
+            "jenks":                    "Jenks ranges",
+            "quantile" :                "Quantile ranges",
+            "eqinterval" :              "Eqinterval"
         },
         "noMatch" : "Inga matchade indikatorer"
     }
