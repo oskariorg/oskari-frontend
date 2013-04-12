@@ -11,16 +11,21 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsView',
  */
 function() {
 }, {
-    showContent: function(isShown) {
-        if(isShown) {
-            this._showContent(this.getEl());
-            this.getLeftColumn().addClass('statsgrid_100');
-            this.getLeftColumn().append(this.getEl());
-        }
-        else {
-            this.getLeftColumn().removeClass('statsgrid_100');
-            this.getEl().remove();
-            this.getEl().empty();
+    showContent: function(isShown, layer) {
+        if(this._layer == null || this._layer.getId() != layer.getId()) {
+            //update layer
+            this._layer = layer;
+
+            if(isShown) {
+                this._showContent(this.getEl());
+                this.getLeftColumn().addClass('statsgrid_100');
+                this.getLeftColumn().append(this.getEl());
+            }
+            else {
+                this.getLeftColumn().removeClass('statsgrid_100');
+                this.getEl().remove();
+                this.getEl().empty();
+            }
         }
     },
     _showContent : function(container) {
