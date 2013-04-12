@@ -1,107 +1,140 @@
 // Might need refactoring
 describe.only('Grid component', function() {
-  var grid, titleText = 'title', user = {}, service={};
- 
-  beforeEach(service.init);
+    var user = {}, service = {}; 
 
+    service.tests = function() {
+        // set environment for each test case
+        service.init();
 
-    describe('initialization', function() {
-        it('should be defined', function() {
-            expect(grid).to.be.ok();
+        describe('initialization', function() {
+            it('should be defined', function() {
+                expect(service.grid).to.be.ok();
+            });
+
+            it('should be found in DOM', function() {
+                service.elementExists(jQuery('.oskari-grid'));
+            });
+
+            it('should have a column selector in DOM', function() {
+                service.elementExists(jQuery('.column-selector'));
+            });
         });
 
-        it('should be found in DOM', function() {
-            service.elementExists(jQuery('.oskari-grid'));
+        describe('menu selector', function() {
+            it('should disappear when clicking icon-menu button', function() {
+                service.shouldBeVisible(jQuery('.column-selector'));
+                user.clickElement(jQuery('.icon-menu'));
+                service.shouldBeHidden(jQuery('.column-selector'));
+            });
+    
+            it('should not disappear when clicking column checkbox', function() {
+                service.shouldBeVisible(jQuery('.column-selector'));
+
+                service.checkboxShouldNotBeChecked(jQuery('.column-selector').find('#column0'));
+                service.checkboxShouldBeChecked(jQuery('.column-selector').find('#column1'));
+                service.shouldContainText(jQuery('.oskari-grid thead tr th a').first(), 'column1')
+                
+                // show first column also
+                user.clickElement(jQuery('.column-selector #column0'));
+
+                service.checkboxShouldBeChecked(jQuery('.column-selector').find('#column0'));
+                service.shouldContainText(jQuery('.oskari-grid thead tr th a').first(), 'column0')
+
+                service.shouldBeVisible(jQuery('.column-selector'));
+            });
         });
-
-        it('should have a column selector in DOM', function() {
-            var $oskariGridSelector = jQuery('.column-selector');
-            expect($oskariGridSelector.length).to.equal(1);
-        });
-    });
-
-    describe('hide and show menu selector', function() {
-        it('should hide column selector when clicking icon-menu button', function() {
-            var $iconMenu = jQuery('.icon-menu');
-            var $oskariGridSelector = jQuery('.column-selector');
-
-            expect($oskariGridSelector.css('visibility')).to.equal('visible');
-            user.clickElement($iconMenu);
-            expect($oskariGridSelector.css('visibility')).to.equal('hidden');
-        });
-
-        it('should not hide column selector when clicking column checkbox', function() {
-            var $iconMenu = jQuery('.icon-menu'),
-                $oskariGridSelector = jQuery('.column-selector'),
-                $oskariGrid = jQuery('.oskari-grid'),
-                $firstColumnName = jQuery($oskariGrid.find('thead tr th a').get(0));
-
-
-            expect($oskariGridSelector.css('visibility')).to.equal('visible');
-            expect($oskariGridSelector.find('#row0').prop('checked')).to.equal(false);
-            expect($oskariGridSelector.find('#row1').prop('checked')).to.equal(true);
-
-
-            expect($firstColumnName.text()).to.equal('row1');
-            
-            user.clickElement($oskariGridSelector.find('#row0'));
-            service.e
-            expect($firstColumnName.text()).to.equal('row0');
-
-
-            expect($oskariGridSelector.css('visibility')).to.equal('hidden');
-        });
-
-    });
+    };
 
 
 
 
-//alustus paskaa
 
-service.init = function() {
-    var me = this;
-    var data = [
-        {'row0': 0, 'row1':1,'row2':2,'row3':3},
-        {'row0': 00, 'row1':11,'row2':22,'row3':33},
-        {'row0': 000, 'row1':111,'row2':222,'row3':333},
-        {'row0': 0000, 'row1':1111,'row2':2222,'row3':3333},
-        {'row0': 00000, 'row1':11111,'row2':22222,'row3':33333}
-    ];
+    //////////////////////////
+    // environment settings //
+    //////////////////////////
 
-    var gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
-    gridModel.addData(data[0]);
-    gridModel.addData(data[1]);
-    gridModel.addData(data[2]);
-    gridModel.addData(data[3]);
-    gridModel.addData(data[4]);
+    service.init = function() {
+        beforeEach(service.before);
+        afterEach(service.after);
+    }
+    // Init - beforeEach
+    service.before = function() {
+        var me = this;
+        var data = [
+            {'column0': 0, 'column1':1,'column2':2,'column3':3},
+            {'column0': 00, 'column1':11,'column2':22,'column3':33},
+            {'column0': 000, 'column1':111,'column2':222,'column3':333},
+            {'column0': 0000, 'column1':1111,'column2':2222,'column3':3333},
+            {'column0': 00000, 'column1':11111,'column2':22222,'column3':33333}
+        ];
 
-    grid = Oskari.clazz.create('Oskari.userinterface.component.Grid', 'Grid test');
+        // variables
+        service.gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
+        service.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid', 'Grid test');
+        service.visibleFields = ['column1','column2','column3'];
 
-    grid.setDataModel(gridModel);    
-    grid.setColumnUIName('__featureName', 'featureNameAll');
+        service.gridModel.addData(data[0]);
+        service.gridModel.addData(data[1]);
+        service.gridModel.addData(data[2]);
+        service.gridModel.addData(data[3]);
+        service.gridModel.addData(data[4]);
 
-    var visibleFields = ['row1','row2','row3'];
-    grid.setVisibleFields(visibleFields);
-    grid.setColumnSelector(true);
-    grid.setResizableColumns(true);
+        service.grid.setDataModel(service.gridModel);    
+        service.grid.setColumnUIName('__featureName', 'featureNameAll');
 
-    grid.renderTo(jQuery('body'));
+        service.grid.setVisibleFields(service.visibleFields);
+        service.grid.setColumnSelector(true);
+        service.grid.setResizableColumns(true);
 
-  });
+        service.grid.renderTo(jQuery('body'));
 
-  afterEach(function() {
+    };
+
+    // clear - afterEach
+    service.after = function() {
         jQuery('body').children().remove();
-    });
+        delete service.gridModel;
+        delete service.grid;
+        delete service.visibleFields;
+    };
 
-  service.elementExists = function($element) {
-    expect($element.length).to.equal(1);
 
-  }
-  
-  user.clickElement = function(element) {
-    expect(element.length).to.equal(1);
-    element.click();
-  }
 
+    ///////////////////////
+    // service functions //
+    ///////////////////////
+
+    service.elementExists = function($element) {
+        expect($element.length).to.equal(1);
+
+    };
+    service.shouldBeVisible = function($element) {
+        expect($element.css('visibility')).to.equal('visible');
+    };
+    service.shouldBeHidden = function($element) {
+        expect($element.css('visibility')).to.equal('hidden');
+    };
+    service.checkboxShouldBeChecked = function($element) {
+        expect($element.prop('checked')).to.equal(true);
+    }
+    service.checkboxShouldNotBeChecked = function($element) {
+        expect($element.prop('checked')).to.equal(false);
+    }
+    service.shouldContainText = function($element, text) {
+        expect($element.text()).to.equal(text);
+    }
+
+
+
+    ////////////////////
+    // user actions   //
+    ////////////////////
+
+    user.clickElement = function(element) {
+        expect(element.length).to.equal(1);
+        element.click();
+    }
+
+    // run tests!
+    service.tests();
 });
