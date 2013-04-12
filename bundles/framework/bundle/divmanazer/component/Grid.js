@@ -31,13 +31,22 @@ function(columnSelectorTooltip) {
     this.templateColumnSelectorList = jQuery('<ul/>',{
     });
     this.templateColumnSelectorListItem = jQuery('<li>'+
+        '<div>'+
+        '<input type="checkbox"/>'+
+        '<label></label>'+
+        '</div>'+
+        '</li>'
+    );
+    this.templateColumnSelectorClose = jQuery('<div class="icon-close close-selector-button"></div>');
+/*
+    this.templateColumnSelectorListItem = jQuery('<li>'+
         '<label for="item">'+
         '<input type="checkbox"/>'+
         '<span></span>'+
         '</label>'+
         '</li>'
     );
-
+*/
     this.table = null;
     this.fieldNames = [];
     this.selectionListeners = [];
@@ -354,6 +363,7 @@ function(columnSelectorTooltip) {
         var columnSelectorButton = this.templateColumnSelectorButton.clone();
         var columnSelector = this.templateColumnSelector.clone();
         var columnSelectorList = this.templateColumnSelectorList.clone();
+        var columnSelectorClose = this.templateColumnSelectorClose.clone();
 
         this.visibleColumnSelector.addClass('column-selector-placeholder');
         columnSelectorButton.addClass('icon-menu');
@@ -372,7 +382,10 @@ function(columnSelectorTooltip) {
                 columnSelector.css('visibility', 'visible');
             }
         });
-
+        columnSelectorClose.click(function(e){
+            e.stopPropagation();
+            columnSelector.css('visibility', 'hidden');
+        });
         var fields = this.model.getFields();
         var visibleField;
         // Add field names to the list
@@ -391,7 +404,9 @@ function(columnSelectorTooltip) {
             checkboxInput.attr('checked',visibleField);
             checkboxInput.addClass('column-selector-list-item');
             checkboxInput.attr('id',fields[i]);
-            newColumn.find('span').html('&nbsp;'+fields[i]);
+            newColumn.find('label')
+                .attr({'for': fields[i], 'class': 'column-label'})
+                .html(fields[i]);
             newColumn.css({'margin':'5px'});
 
             // Update visible fields after checkbox change
@@ -412,12 +427,16 @@ function(columnSelectorTooltip) {
                 if (newFields.length>0) {
                     me.setVisibleFields(newFields);
                 }
-                me.renderTo(me.visibleColumnSelector.parent());
+                me.renderTo(me.visibleColumnSelector.parent(), {columnSelector: 'open'});
             });
             columnSelectorList.append(newColumn);
         }
-        columnSelectorList.css('list-style-type','none');
-        columnSelector.append(columnSelectorList);
+        columnSelectorList.attr('class', 'column-selector-list');
+        columnSelector.append(columnSelectorList, columnSelectorClose);
+        columnSelectorClose.click(function(e){
+            e.stopPropagation();
+            columnSelector.css('visibility', 'hidden');
+        });
     },
 
     /**
@@ -466,7 +485,7 @@ function(columnSelectorTooltip) {
      * Renders the data in #getDataModel() to the given DOM element.
      * @param {jQuery} container reference to DOM element where the grid should be inserted.
      */
-    renderTo: function(container) {
+    renderTo: function(container, state) {
         container.empty();
         var fieldNames = this.fieldNames;
         // if visible fields not given, show all
@@ -487,6 +506,9 @@ function(columnSelectorTooltip) {
         if (this.showColumnSelector) {
             this._renderColumnSelector(table, fieldNames);
             container.append(this.visibleColumnSelector);
+            if(state != null && state.columnSelector == 'open') {
+                this.visibleColumnSelector.find('.column-selector').css('visibility', 'visible');
+            }
         }
 
         container.append(table);
