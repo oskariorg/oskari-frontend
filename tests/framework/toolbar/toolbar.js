@@ -82,8 +82,8 @@ describe.only('Test suite for Toolbar bundle', function() {
             testButtonConf = {
                 iconCls : 'test-button-icon',
                 tooltip : '',
-                sticky : true,
-                callback: function() {}
+                sticky : false,
+                callback: function() {return false;}
             },
             $toolbarContainer;
 
@@ -119,6 +119,24 @@ describe.only('Test suite for Toolbar bundle', function() {
             expect(testToolRow.length).to.equal(1);
             expect(testButton.length).to.equal(1);
             expect(testButton.hasClass('disabled')).to.be(true);
+
+            toolbarModule.removeToolButton(testButtonId, testButtonGroup);
+        });
+
+        it('should respond to callback when clicked', function() {
+            var cbSpy = sinon.spy(testButtonConf.callback);
+            toolbarModule.addToolButton(testButtonId, testButtonGroup, testButtonConf);
+
+            var testButton = $toolbarContainer.find('div.tool[tool="' + testButtonId + '"]');
+            testButton.click();
+
+            waitsFor(function() {
+                return(cbSpy.callCount > 0);
+            }, function() {
+                expect(cbSpy.callCount).to.be(1);
+
+                done();
+            }, "Waits for a button to be clicked", 3000);
 
             toolbarModule.removeToolButton(testButtonId, testButtonGroup);
         });
