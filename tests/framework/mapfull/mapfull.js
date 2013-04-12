@@ -272,29 +272,23 @@ describe.only('Test Suite for Mapfull', function() {
                 return(fullScreenSpy.callCount > 0);
             }, function() {
                 expect(fullScreenSpy.callCount).to.be(1);
-                expect($contentMap.css('position')).to.be('fixed');
-                expect($contentMap.css('margin')).to.be(0);
+                expect($contentMap.hasClass('oskari-map-window-fullscreen')).to.be.ok();
+                mapfull.toggleFullScreen(); // Let's set the map back to normal mode.
 
                 done();
             }, "Waits for full screen request", 30000);
         });
 
         it('should go back to normal mode', function(done) {
-            var origPosition = $contentMap.css('position'),
-                origMargin = $contentMap.css('margin');
-
-            mapfull.toggleFullScreen();
-            //expect($contentMap.css('position')).to.be('fixed');
-            //expect($contentMap.css('margin')).to.be(0);
+            mapfull.toggleFullScreen(); // To full screen mode.
 
             sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
 
             waitsFor(function() {
-                return(fullScreenSpy.callCount > 0);
+                return(fullScreenSpy.callCount > 1);
             }, function() {
-                expect(fullScreenSpy.callCount).to.be(1);
-                expect($contentMap.css('position')).to.be(origPosition);
-                expect($contentMap.css('margin')).to.be(origMargin);
+                expect(fullScreenSpy.callCount).to.be(2);
+                expect($contentMap.hasClass('oskari-map-window-fullscreen')).not.to.be.ok();
 
                 done();
             }, "Waits for full screen request", 30000);
