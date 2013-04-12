@@ -14,6 +14,7 @@ files = [
   '../../tests/*.opts',
   MOCHA_ADAPTER,
   '../../libraries/jquery/jquery-1.7.1.min.js',
+  '../../packages/openlayers/startup.js',
   '../../bundles/bundle.js',
   '../../dist/oskari.min.js',
 //  '../../applications/paikkatietoikkuna.fi/full-map/pack.js',

@@ -7,7 +7,6 @@
  * @return {Boolean/String} returns true if everything was ok and error message if not
  */
 function matchLocalization(localizationBundleKey, languageList) {
-    printDebug('Testing localizations for bundle:' + localizationBundleKey);
     var defLang = languageList[0];
     Oskari.setLang(defLang);
     var defStruct = Oskari.getLocalization(localizationBundleKey);

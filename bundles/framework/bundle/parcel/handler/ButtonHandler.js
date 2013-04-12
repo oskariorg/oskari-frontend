@@ -67,11 +67,7 @@ function(instance) {
             tooltip : '',
             sticky : true,
             callback : function() {
-                me.instance.view.drawPlugin.splitSelection = false;
-                me._startNewDrawing({
-                    drawMode : 'line'
-                });
-//                me._saveDrawing();
+                me._saveDrawing();
             }
         }
     };
