@@ -78,6 +78,11 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         	group.prepend(button); 
         else 
         	group.append(button);
+
+        // sets the button to disabled state if configured so.
+        if(pConfig['disabled']) {
+            this.changeToolButtonState(pId, pGroup, false);
+        }
     },
     /**
      * @method _clickButton
