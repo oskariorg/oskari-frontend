@@ -23,6 +23,7 @@ function() {
      * Configurable through conf.mapElement
      */
 	this.mapDivId = "mapdiv";
+    this.contentMapDivId = 'contentMap';
 }, {
 	/**
 	 * @method getMapModule
@@ -70,7 +71,7 @@ function() {
                 // do not resize map if resizeEnabled is false
                 if(me.resizeEnabled == null || me.resizeEnabled) {
                     jQuery('#' + me.mapDivId).height(jQuery(window).height());
-                    jQuery('#contentMap').height(jQuery(window).height());
+                    jQuery('#' + me.contentMapDivId).height(jQuery(window).height());
                     map.updateSize();
                 }
             };
@@ -138,8 +139,9 @@ function() {
 		Oskari.setSandbox(sandboxName,sandbox);
 
 		// take map div ID from config if available
-		if(conf && conf.mapElement) {
-		    this.mapDivId = conf.mapElement;
+		if(conf) {
+		    if(conf.mapElement) this.mapDivId = conf.mapElement;
+            if(conf.mapContainer) this.contentMapDivId = conf.mapContainer;
 		}
 		
         // Init user
@@ -338,7 +340,7 @@ function() {
     * Toggles normal/full screen view of the map window.
     */
     toggleFullScreen: function() {
-        jQuery('#contentMap').toggleClass('oskari-map-window-fullscreen');
+        jQuery('#' + this.contentMapDivId).toggleClass('oskari-map-window-fullscreen');
         this.mapmodule.getMap().updateSize();
     }
 }, {

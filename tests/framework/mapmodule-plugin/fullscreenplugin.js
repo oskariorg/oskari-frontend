@@ -19,31 +19,6 @@ describe.only('Test Suite for full screen toggle plugin', function() {
         mapfullConf.conf.plugins.push({
             "id": "Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugin"
         });
-        // add some test layers
-        mapfullConf.conf.layers.push({
-            "type": "wmslayer",
-            "id": "34",
-            "metaType": "test",
-            "orgName" : "Test organization",
-            "dataUrl_uuid" : "testuuid",
-            "name": "Test layer 1",
-            "wmsName": "testlayer",
-            "type": "wmslayer",
-            "wmsUrl": "http://dummyUrl"
-        });
-        mapfullConf.conf.layers.push({
-            "type": "wmslayer",
-            "id": "35", 
-            "metaType": "test",
-            "name": "Test layer 2",
-            "orgName" : "Test organization",
-            "wmsName": "testlayer", 
-            "type": "wmslayer",
-            "permissions" : {
-                "publish" : "publication_permission_ok"
-            },
-            "wmsUrl": "http://dummyUrl"
-        });
         appConf = { 
             "mapfull" : mapfullConf
         };
