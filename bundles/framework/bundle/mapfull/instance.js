@@ -23,8 +23,8 @@ function() {
      * Configurable through conf.mapElement
      */
 	this.mapDivId = "mapdiv";
+    this.contentMapDivId = 'contentMap';
 }, {
-
 	/**
 	 * @method getMapModule
 	 * Returns reference to the map module
@@ -71,7 +71,7 @@ function() {
                 // do not resize map if resizeEnabled is false
                 if(me.resizeEnabled == null || me.resizeEnabled) {
                     jQuery('#' + me.mapDivId).height(jQuery(window).height());
-                    jQuery('#contentMap').height(jQuery(window).height());
+                    jQuery('#' + me.contentMapDivId).height(jQuery(window).height());
                     map.updateSize();
                 }
             };
@@ -96,8 +96,15 @@ function() {
                 module.registerPlugin(plugins[i].instance);
                 module.startPlugin(plugins[i].instance);
             }
-        }  
-		this.map = map;
+        }
+        
+        // FOR TESTING PURPOSES ONLY!
+        // Should come from config.
+        //var fullscreenPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugin');
+        //module.registerPlugin(fullscreenPlugin);
+        //module.startPlugin(fullscreenPlugin);  
+		
+        this.map = map;
 	},
     /**
      * @method start
@@ -132,8 +139,9 @@ function() {
 		Oskari.setSandbox(sandboxName,sandbox);
 
 		// take map div ID from config if available
-		if(conf && conf.mapElement) {
-		    this.mapDivId = conf.mapElement;
+		if(conf) {
+		    if(conf.mapElement) this.mapDivId = conf.mapElement;
+            if(conf.mapContainer) this.contentMapDivId = conf.mapContainer;
 		}
 		
         // Init user
@@ -175,9 +183,11 @@ function() {
 
         // create request handlers
         me.mapResizeEnabledRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapfull.request.MapResizeEnabledRequestHandler', me);
+        me.mapWindowFullScreenRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapfull.request.MapWindowFullScreenRequestHandler', me);
 
         // register request handlers
         sandbox.addRequestHandler('MapFull.MapResizeEnabledRequest', me.mapResizeEnabledRequestHandler);
+        sandbox.addRequestHandler('MapFull.MapWindowFullScreenRequest', me.mapWindowFullScreenRequestHandler);
 
 	},
     /**
@@ -323,7 +333,16 @@ function() {
         }
 		
 		return state;
-	}
+	},
+
+    /**
+    * @method toggleFullScreen
+    * Toggles normal/full screen view of the map window.
+    */
+    toggleFullScreen: function() {
+        jQuery('#' + this.contentMapDivId).toggleClass('oskari-map-window-fullscreen');
+        this.mapmodule.getMap().updateSize();
+    }
 }, {
     /**
      * @property {String[]} protocol

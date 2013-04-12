@@ -90,7 +90,7 @@ function() {
 		var sandbox = Oskari.getSandbox(sandboxName);
 		
 		this.sandbox = sandbox;
-		
+
 		this.flyoutContainer = jQuery(document.body);
 		
 		var menubarContainerId = ( conf ? conf.menubarContainerId : null ) || this.menubarContainerId;
@@ -130,7 +130,6 @@ function() {
 			}
 
 		}
-
 	},
 	/**
 	 * @method update
@@ -1087,6 +1086,21 @@ function() {
 
 		}
 	},
+
+	/**
+	* @method _toggleMapWindowFullScreen
+	* Sends a request to toggle between the normal and the full screen view
+	* of the map window.
+	*/
+	_toggleMapWindowFullScreen: function() {
+		var me = this,
+			reqBuilder = me.sandbox.getRequestBuilder('MapFull.MapWindowFullScreenRequest');
+
+	    if(reqBuilder) {
+	        me.sandbox.request(me.getName(), reqBuilder());
+	    }
+	},
+
 	/**
 	 *
 	 * @method shuffleZIndexes
