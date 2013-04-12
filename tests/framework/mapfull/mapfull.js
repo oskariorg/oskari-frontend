@@ -1,4 +1,4 @@
-describe('Test Suite for Mapfull', function() {
+describe.only('Test Suite for Mapfull', function() {
     var appSetup = null,
         appConf = null,
         module = null,
@@ -20,7 +20,7 @@ describe('Test Suite for Mapfull', function() {
             jQuery("body").html(getDefaultHTML());
             // startup Oskari
             setupOskari(appSetup, appConf, function() {
-                sandbox = Oskari.$("sandbox");
+                sandbox = Oskari.getSandbox();
                 module = sandbox.findRegisteredModuleInstance('MainMapModule');
                 done();
             });
@@ -242,5 +242,62 @@ describe('Test Suite for Mapfull', function() {
                 done();
             });
         }); */
+    });
+
+    describe('map full screen mode', function() {
+        var $contentMap, mapfull, fullScreenSpy;
+
+        before(function(done) {
+            startApplication(done);
+        });
+
+        after(function() {
+            teardown();
+        });
+
+        beforeEach(function() {
+            $contentMap = jQuery('#contentMap');
+            mapfull = sandbox.getStatefulComponents()['mapfull'];
+            fullScreenSpy = sinon.spy(mapfull, 'toggleFullScreen');
+        });
+
+        afterEach(function() {
+            fullScreenSpy.restore();
+        })
+
+        it('should enter full screen mode', function(done) {
+            sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
+
+            waitsFor(function() {
+                return(fullScreenSpy.callCount > 0);
+            }, function() {
+                expect(fullScreenSpy.callCount).to.be(1);
+                expect($contentMap.css('position')).to.be('fixed');
+                expect($contentMap.css('margin')).to.be(0);
+
+                done();
+            }, "Waits for full screen request", 30000);
+        });
+
+        it('should go back to normal mode', function(done) {
+            var origPosition = $contentMap.css('position'),
+                origMargin = $contentMap.css('margin');
+
+            mapfull.toggleFullScreen();
+            //expect($contentMap.css('position')).to.be('fixed');
+            //expect($contentMap.css('margin')).to.be(0);
+
+            sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
+
+            waitsFor(function() {
+                return(fullScreenSpy.callCount > 0);
+            }, function() {
+                expect(fullScreenSpy.callCount).to.be(1);
+                expect($contentMap.css('position')).to.be(origPosition);
+                expect($contentMap.css('margin')).to.be(origMargin);
+
+                done();
+            }, "Waits for full screen request", 30000);
+        });
     });
 });

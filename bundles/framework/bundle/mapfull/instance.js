@@ -24,7 +24,6 @@ function() {
      */
 	this.mapDivId = "mapdiv";
 }, {
-
 	/**
 	 * @method getMapModule
 	 * Returns reference to the map module
