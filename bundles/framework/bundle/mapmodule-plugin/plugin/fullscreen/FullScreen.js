@@ -1,8 +1,8 @@
 /**
- * @class Oskari.mapframework.bundle.mapmodule.plugin.FullScreen
+ * @class Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugin
  * Displays a full screen toggle button on the map.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreen',
+Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugin',
 /**
  * @method create called automatically on construction
  * @static
@@ -16,7 +16,7 @@ function() {
     this.__templates = {};
 }, {
     /** @static @property __name plugin name */
-    __name : 'FullScreen',
+    __name : 'FullScreenPlugin',
 
     /**
      * @method getName
