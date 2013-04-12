@@ -51,13 +51,14 @@ module.exports = function(grunt) {
         this.minifyLocalization = function(langfiles, path) {
             for (var id in langfiles) {
                 //console.log('Minifying loc:' + id + '/' + langfiles[id]);
-                this.minifyJS(langfiles[id], path + 'oskari_lang_' + id + '.js');
+                this.minifyJS(langfiles[id], path + 'oskari_lang_' + id + '.js', options.concat);
             }
         }
 
         // internal minify JS function
-        this.minifyJS = function(files, outputFile) {
-            var okFiles = [];
+        this.minifyJS = function(files, outputFile, concat) {
+            var okFiles = [],
+                result = null;
 
             for (var i = 0; i < files.length; ++i) {
                 if (!fs.existsSync(files[i])) {
@@ -67,11 +68,22 @@ module.exports = function(grunt) {
                 okFiles.push(files[i]);
             }
 
-            var result = UglifyJS.minify(okFiles, {
-                //outSourceMap : "out.js.map",
-                warnings : true,
-                compress : true
-            });
+            // minify or concatenate the files
+            if (!concat) {
+                result = UglifyJS.minify(okFiles, {
+                    //outSourceMap : "out.js.map",
+                    warnings : true,
+                    compress : true
+                });
+            } else {
+                // emulate the result uglify creates, but only concatenating
+                result = {"code" : ""};
+                for (var j = 0, jlen = okFiles.length; j < jlen; j +=1) {
+                    result.code += fs.readFileSync(okFiles[j], 'utf8');
+                }
+            }
+
+            // write result to disk
             fs.writeFileSync(outputFile, result.code, 'utf8');
         }
 
@@ -85,7 +97,7 @@ module.exports = function(grunt) {
             var array = parser.getFilesForComponent(processedAppSetup[j], 'javascript');
             files = files.concat(array);
         }
-        this.minifyJS(files, compiledDir + 'oskari.min.js');
+        this.minifyJS(files, compiledDir + 'oskari.min.js', options.concat);
 
         var langfiles = {};
         for (var j = 0; j < processedAppSetup.length; ++j) {
