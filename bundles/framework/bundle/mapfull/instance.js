@@ -97,12 +97,6 @@ function() {
                 module.startPlugin(plugins[i].instance);
             }
         }
-        
-        // FOR TESTING PURPOSES ONLY!
-        // Should come from config.
-        //var fullscreenPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugin');
-        //module.registerPlugin(fullscreenPlugin);
-        //module.startPlugin(fullscreenPlugin);  
 		
         this.map = map;
 	},

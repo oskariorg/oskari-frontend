@@ -1,4 +1,4 @@
-describe.only('Test Suite for full screen toggle plugin', function() {
+describe('Test Suite for full screen toggle plugin', function() {
     var appSetup = null,
         appConf = null; 
  
