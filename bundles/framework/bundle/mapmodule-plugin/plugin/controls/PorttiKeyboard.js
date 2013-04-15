@@ -89,6 +89,10 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
                 // -/_ (some ASCII)
                 this.mapmodule.zoomOut();
                 break;
+            // F key.
+            case 70:
+                this.sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
+                break;
         }
     },
     defaultKeyUp : function(evt) {
