@@ -39,7 +39,7 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
             if (cb) {
                 cb(me.instance);
             }
-            /*
+            
             var ugStartup = {
                 "bundleinstancename": "statsgrid",
                 "bundlename": "statsgrid",
@@ -47,12 +47,15 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
                     "Import-Bundle": {
                         "statsgrid": {
                             "bundlePath": "/Oskari/packages/statistics/bundle/"
+                        },
+                        "geostats": {
+                            "bundlePath": "/Oskari/packages/libraries/bundle/"
                         }
                     }
                 }
             };
             Oskari.bundle_facade.playBundle(ugStartup, function() {});
-            */
+            
         });
     },
     /**
