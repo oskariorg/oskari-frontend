@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
 		tool1.setTooltip(locTool.tooltip);
 		tool1.setIconCls("icon-restore");
 		tool1.setCallback(function() {
-            me.sandbox.postRequestByName('StatsGrid.StatsGridRequest',[true]);
+            me.sandbox.postRequestByName('StatsGrid.StatsGridRequest',[true, layer]);
 		});
 		layer.addTool(tool1);
 		// Diagram icon

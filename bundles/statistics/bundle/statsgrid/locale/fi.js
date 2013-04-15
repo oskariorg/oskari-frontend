@@ -26,6 +26,7 @@ Oskari.registerLocalization({
         },
         "sotka": {
             "municipality" :            "Kunta",
+            "code" :                    "Koodi",
             "errorTitle" :              "Virhe",
             "regionDataError":          "Virhe kuntatietojen haussa Sotkanetistä.",
             "regionDataXHRError":       "Kuntatietojen haku: virhe yhteydessä Sotkanettiin.",
@@ -38,6 +39,14 @@ Oskari.registerLocalization({
             "descriptionTitle" :        "Indikaattorin kuvaus",
             "sourceTitle" :             "Indikaattorin lähde"
 
+        },
+         "classify": {
+            "classify":                 "Luokittelu",
+            "classifymethod":           "Luokittelutapa",
+            "classes":                  "Luokkajako",
+            "jenks":                    "Luonnolliset välit",
+            "quantile" :                "Tasavälit",
+            "eqinterval" :              "Kvantiilit"
         },
         "noMatch" : "Indikaattoria ei löytynyt"
     }
