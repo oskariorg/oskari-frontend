@@ -38,15 +38,6 @@ function(columnSelectorTooltip) {
         '</li>'
     );
     this.templateColumnSelectorClose = jQuery('<div class="icon-close close-selector-button"></div>');
-/*
-    this.templateColumnSelectorListItem = jQuery('<li>'+
-        '<label for="item">'+
-        '<input type="checkbox"/>'+
-        '<span></span>'+
-        '</label>'+
-        '</li>'
-    );
-*/
     this.table = null;
     this.fieldNames = [];
     this.selectionListeners = [];
@@ -484,6 +475,8 @@ function(columnSelectorTooltip) {
      * @method renderTo
      * Renders the data in #getDataModel() to the given DOM element.
      * @param {jQuery} container reference to DOM element where the grid should be inserted.
+     * @param {Object} state tells into what state we are going to render this grid
+     * (e.g. columnSelector: open tells that we want to show columnselector)
      */
     renderTo: function(container, state) {
         container.empty();
