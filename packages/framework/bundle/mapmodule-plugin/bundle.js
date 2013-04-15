@@ -2,18 +2,12 @@
  * @class Oskari.mapframework.bundle.PluginMapModuleBundle
  */
 Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function() {
-	this.singleton = null;
 }, {
 	/*
 	 * implementation for protocol 'Oskari.bundle.Bundle'
 	 */
 	"create" : function() {
-
-		if(!this.singleton) {
-			this.singleton = Oskari.clazz.create("Oskari.mapframework.bundle.PluginMapModuleBundleInstance");
-
-		}
-		return this.singleton;
+		return this;
 	},
 	"update" : function(manager, bundle, bi, info) {
 		manager.alert("RECEIVED update notification " + info);
@@ -275,9 +269,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
 		},{
 		    "type" : "text/css",
 		    "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/css/panbuttons.css"	  
-		},{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/instance.js"
 		},
 		{
             "type" : "text/css",
