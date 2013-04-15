@@ -162,6 +162,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/scalebar/ScaleBarPlugin.js"
         },
+
+        // FullScreen
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/fullscreen/FullScreen.js"
+        },
+        {
+            "type" : "text/css",
+            "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/fullscreen/css/fullscreen.css"
+        },
         
         /**
          * MapLayer selection plugin
