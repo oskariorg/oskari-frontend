@@ -23,8 +23,8 @@ function(layer, params) {
         return "MapStats.SotkadataChangedEvent";
     },
     /**
-    * @method getColumn
-    * Returns the column meta data.
+    * @method getLayer
+    * Returns Oskari layer.
     * @return {Object}
     */
     getLayer: function() {
@@ -32,7 +32,7 @@ function(layer, params) {
     },
     /**
      * @method getParams
-     * Returns the data for to create classifications.
+     * Returns the data for to create teh stats classifications.
      * @return {Object} 
      */
     getParams : function() {
