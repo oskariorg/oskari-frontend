@@ -242,9 +242,7 @@ function(config, locale) {
 		'AfterMapMoveEvent' : function(event) {
 			// setup initial state here since we are using selected layers to create ui
 			// and plugin is started before any layers have been added
-			// Show Classify dialog
-			if (event.getMapLayer()._layerType === "STATS")
-				this._visibilityOn();
+		
 		},
 		/**
 		 * @method SotkadataChangedEvent
@@ -294,7 +292,7 @@ function(config, locale) {
 		var limits = [];
 		var i, k;
 		//Check selected column - only data columns are handled
-		if (sortcol.field == 'municipality')
+		if (sortcol.field == 'municipality' || sortcol.field == 'code')
 			return;
 
 		// Get classification method
