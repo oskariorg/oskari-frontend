@@ -40,6 +40,21 @@ function(instance) {
 	getName : function() {
 		return this.pluginName;
 	},
+
+
+    processFeatures : function() {
+        var me = this;
+        // Make sure that all the component states are in sync, such as dialogs.
+        var event = me._sandbox.getEventBuilder('Parcel.FinishedDrawingEvent')();
+        me._sandbox.notifyAll(event);
+        // Disable all draw controls.
+        // Then, the user needs to reselect what to do next.
+        // At the moment, this creates some consistency in the usability.
+        me.toggleControl();
+        // Because a new feature was added, do splitting.
+        me.splitFeature();
+    },
+
 	/**
 	 * Initializes the plugin:
 	 * - layer that is used for drawing
@@ -55,16 +70,18 @@ function(instance) {
 		this.drawLayer = new OpenLayers.Layer.Vector("Parcel Draw Layer", {
 			eventListeners : {
 				"featuresadded" : function(layer) {
-					// Make sure that all the component states are in sync, such as dialogs.
-					var event = me._sandbox.getEventBuilder('Parcel.FinishedDrawingEvent')();
-					me._sandbox.notifyAll(event);
-					// Disable all draw controls.
-					// Then, the user needs to reselect what to do next.
-					// At the moment, this creates some consistency in the usability.
-					me.toggleControl();
-
-					// Because a new feature was added, do splitting.
-					me.splitFeature();
+                    if (layer.features[0].geometry.CLASS_NAME === "OpenLayers.Geometry.LineString") {
+                        var loc = me.instance.getLocalization('notification').calculating;
+                        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                        dialog.show(loc.title, loc.message);
+                        // The popup dialog doesn't work without short delay
+                        setTimeout(function(){
+                            me.processFeatures();
+                            dialog.close();
+                        },200);
+                    } else {
+                        me.processFeatures()
+                    }
 				}
 			}
 		});
@@ -507,6 +524,13 @@ function(instance) {
 	getFeatureType : function() {
 		return this.currentFeatureType;
 	},
+	/**
+	 * @method getSandbox
+     * @return {Oskari.mapframework.sandbox.Sandbox}
+	 */
+    getSandbox : function() {
+        return this._sandbox;
+    },
 	/**
 	 * @method start
 	 * called from sandbox
