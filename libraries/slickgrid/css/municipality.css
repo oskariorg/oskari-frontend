@@ -17,7 +17,7 @@ ul {
     padding: 0;
 }
 li {
-    background: url("../images/arrow_right_spearmint.png") no-repeat scroll left center transparent;
+    background: url("Oskari/libraries/slickgrid/images/arrow_right_spearmint.png") no-repeat scroll left center transparent;
     list-style: none outside none;
     margin: 0;
     padding: 0 0 0 14px;
@@ -32,7 +32,7 @@ li {
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
     -moz-border-top-colors: none;
-    background: url("../images/header-bg.gif") repeat-x scroll center top transparent;
+    background: url("Oskari/libraries/slickgrid/images/header-bg.gif") repeat-x scroll center top transparent;
     border-color: -moz-use-text-color gray;
     border-image: none;
     border-left: 1px solid gray;
@@ -127,7 +127,7 @@ input.editor-percentcomplete {
     width: 100%;
 }
 .editor-percentcomplete-picker {
-    background: url("../images/pencil.gif") no-repeat scroll center center transparent;
+    background: url("Oskari/libraries/slickgrid/images/pencil.gif") no-repeat scroll center center transparent;
     display: inline-block;
     float: right;
     height: 100%;
@@ -137,7 +137,7 @@ input.editor-percentcomplete {
     z-index: 1000;
 }
 .editor-percentcomplete-helper {
-    background: url("../images/editor-helper-bg.gif") no-repeat scroll left top transparent;
+    background: url("Oskari/libraries/slickgrid/images/editor-helper-bg.gif") no-repeat scroll left top transparent;
     border: 0 solid gray;
     display: none;
     height: 140px;
