@@ -240,7 +240,7 @@ function(config) {
             layers : layer.getWmsName(),
             transparent : true,
             layerId : layer.getId(),
-            VIS_ID : 1,
+            //VIS_ID : 1,
             format : "image/png"
         }, {
             layerId : layer.getWmsName(),

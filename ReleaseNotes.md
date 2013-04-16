@@ -16,6 +16,10 @@ StatsLayerPlugin now registers layer model/builder to map-layer-service on init.
 
 StatsLayerPlugin registers tool links for STATS layer icon callbacks and Statistics mode.
 
+ManageClassificationPlugin  classifies stats data and generates legend (geostats library is in use)
+
+New SotkadataChangedEvent event is used for sending stats data in ManageStatsOut to ManageClassificationPlugin
+
 ### statistics/statsgrid bundle
 
 Initial version for map view mode handling to show statistics grid.
