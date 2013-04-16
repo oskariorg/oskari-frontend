@@ -42,12 +42,7 @@ ProjectionDefs will replace the default projections "EPSG:3067" and "EPSG:4326".
     "projectionDefs" : {
         "EPSG:3067" : "+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs",
         "EPSG:4326" : "+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
-    }
-}
-```
-
-```javascript
-{
+    },
   "plugins":[
     {
       "id":"Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin"
@@ -78,7 +73,9 @@ ProjectionDefs will replace the default projections "EPSG:3067" and "EPSG:4326".
   "user":{
      <logged in users details for Oskari.mapframework.domain.User >
   },
-  "imageLocation":"<base url mapmodulen for images(optional, defaults to  "/Oskari/resources")>"
+  "imageLocation":"<base url mapmodulen for images(optional, defaults to  "/Oskari/resources")>",
+  "mapElement": "<DOM element id for OpenLayers map, defaults to 'mapdiv'>",
+  "mapContainer": "<DOM element id for Oskari map container, defaults to 'contentMap'>""
 }
 ```
 
@@ -115,7 +112,17 @@ ProjectionDefs will replace the default projections "EPSG:3067" and "EPSG:4326".
 
 ## Requests the bundle handles
 
-This bundle doesn't handle any requests, but initializes Oskari.mapframework.core.Core which handles many requests.
+<table>
+  <tr>
+    <th>Request</th><th>How does the bundle react</th>
+  </tr>
+  <tr>
+    <td>MapResizeEnabledRequest</td><td>Enables/disables resizing of the map window when browser window is resized.</td>
+  </tr>
+  <tr>
+    <td>MapWindowFullScreenRequest</td><td>Toggles between the normal map view and the full screen view.</td>
+  </tr>
+</table>
 
 ## Requests the bundle sends out
 

@@ -68,6 +68,15 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/mapfull/request/MapResizeEnabledRequestHandler.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapfull/request/MapWindowFullScreenRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapfull/request/MapWindowFullScreenRequestHandler.js"
+        }, {
+            "type" : "text/css",
+            "src" : "../../../../resources/framework/bundle/mapfull/css/style.css"
         }],
         "resources" : []
     },

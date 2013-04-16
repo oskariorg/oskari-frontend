@@ -100,16 +100,26 @@ describe('Test Suite for Featuredata', function() {
         };
     });
 
-    var startApplication = function(done) {
-            //setup HTML
-            jQuery("body").html(getDefaultHTML());
-            // startup Oskari
-            setupOskari(appSetup, appConf, function() {
-                sandbox = Oskari.$("sandbox");
-                module = sandbox.findRegisteredModuleInstance('FeatureData');
-                done();
-            });
-        };
+    function startApplication(done, setup, conf) {
+        if(!setup) {
+            // clone original settings
+            setup = jQuery.extend(true, {}, appSetup);
+        }
+        if(!conf) {
+            // clone original settings
+            conf = jQuery.extend(true, {}, appConf);
+        }
+
+        //setup HTML
+        jQuery("body").html(getDefaultHTML());
+        // startup Oskari
+        setupOskari(setup, conf, function() {
+            // Find handles to sandbox and statehandler module
+            sandbox = Oskari.$("sandbox");
+            module = sandbox.findRegisteredModuleInstance('FeatureData');
+            done();
+        });
+    };
 
     describe('projections without configuration', function() {
 
