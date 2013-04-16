@@ -38,6 +38,9 @@ Oskari.registerLocalization({
                 },
                 "circle": {
                     "tooltip": "Lägg cirkel"
+                },
+                "select": {
+                  "tooltip": ""
                 }
             }
         }
