@@ -382,6 +382,11 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 		});
 		this.grid.setColumns(columns);
 
+		// add indicator also to the state!		
+		var statedIndicators = (this.instance.state.indicators != null) ? this.instance.state.indicators : [];
+		statedIndicators.push({indicator: indicator, year: year, gender: gender});
+		this.instance.state.indicators = statedIndicators;
+
 		var columnData = [];
 		var ii = 0;
 		this.dataView.beginUpdate();
@@ -476,6 +481,9 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 		//Check that selected column is data value column
 		if (curCol.field == 'municipality')
 			return;
+
+		// Set current column to be stated
+		me.instance.state.currentColumn = curCol;
 
 		// Get values of selected column
 		var data = this.dataView.getItems();

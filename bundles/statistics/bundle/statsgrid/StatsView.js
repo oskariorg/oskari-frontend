@@ -11,8 +11,14 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatsView',
  */
 function() {
 }, {
+    /**
+     * Show content
+     * @method showContent
+     * @param {boolean} isShown true if content should be rendered, false if not
+     * @param {Object} layer which layer should be shown 
+     */
     showContent: function(isShown, layer) {
-        if(this._layer == null || this._layer.getId() != layer.getId()) {
+        if(this._layer == null || (layer != null && this._layer.getId() != layer.getId())) {
             //update layer
             this._layer = layer;
 

@@ -13,11 +13,14 @@ function() {
     this.conf =  {
         "name": "StatsGrid",
         "sandbox": "sandbox",
+        "stateful" : true,
+
         // stats mode can be accessed from stats layers tools
         // to enable a mode triggering tile, you can uncomment the tileClazz on next line
         //"tileClazz": "Oskari.userinterface.extension.DefaultTile",
         "viewClazz": "Oskari.statistics.bundle.statsgrid.StatsView"
     };
+    this.state = {};
 }, {
     "init" : function() {
     	var me = this;
@@ -49,9 +52,28 @@ function() {
 			var isShown = event.getViewState() != "close";
 
             view.showMode(isShown, true);
-			view.showContent(isShown, true);
-		}
+			view.showContent(isShown);
+		},
+        'MapStats.StatsVisualizationChangeEvent' : function(event) {
+            this._afterStatsVisualizationChangeEvent(event);
+        }
 	},
+    /**
+     * @method setState
+     * Sets the map state to one specified in the parameter. State is bundle specific, check the
+     * bundle documentation for details.
+     * @param {Object} state bundle state as JSON
+     * @param {Boolean} ignoreLocation true to NOT set map location based on state
+     */
+    setState : function(state, ignoreLocation) {
+debugger;
+        alert(state.foo);
+    },
+    getState : function() {
+debugger;
+        return this.state;
+    },
+
 	    /**
      * @method showMessage
      * Shows user a message with ok button
@@ -68,9 +90,13 @@ function() {
             dialog.close(true);
     	});
     	dialog.show(title, message, [okBtn]);
+    },
+    _afterStatsVisualizationChangeEvent: function(event) {
+        var layer = event.getLayer();
+        var params = event.getParams();
+debugger;
     }
-
-
 }, {
 	"extend" : ["Oskari.userinterface.extension.DefaultExtension"]
 });
+
