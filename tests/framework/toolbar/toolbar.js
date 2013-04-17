@@ -1,4 +1,4 @@
-describe.only('Test suite for Toolbar bundle', function() {
+describe('Test suite for Toolbar bundle', function() {
     var toolbarModule = null,
         sandbox = null,
         appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull',

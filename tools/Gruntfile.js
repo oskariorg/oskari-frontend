@@ -25,12 +25,25 @@ module.exports = function(grunt) {
         //                dest: 'dist/FILE_NAME.min.js'
         //            }
         //        },
+        compileAppSetupToStartupSequence: {
+            files: ['../tests/minifierFullMapAppSetup.json']
+        },
         watch: {
-            //            files: '<config:lint.files>',
-            files: ['../applications/**/*.js', '../bundles/**/*.js', '../libraries/**/*.js', '../packages/**/*.js', '../resources/**/*.js', '../sources/**/*.js', '../tests/**/*.js'],
-            // uncommented as validate causes unnecessary delay
-            //            tasks: ['validate', 'compile', 'testacularRun:dev', 'yuidoc:dist']
-            tasks: ['compileDev', 'testacularRun:dev']
+            appsetup: {
+                files: '<%= compileAppSetupToStartupSequence.files %>',
+                tasks: ['compileAppSetupToStartupSequence']
+            },
+            src: {
+                //            files: '<config:lint.files>',
+                files: ['../applications/**/*.js', '../bundles/**/*.js', '../libraries/**/*.js', '../packages/**/*.js', '../resources/**/*.js', '../sources/**/*.js'],
+                // uncommented as validate causes unnecessary delay
+                //            tasks: ['validate', 'compile', 'testacularRun:dev', 'yuidoc:dist']
+                tasks: ['compileDev', 'testacularRun:dev']
+            },
+            test: {
+                files: ['../tests/**/*.js'],
+                tasks: ['testacularRun:dev']
+            }
         },
         sprite: {
             options: {
@@ -107,7 +120,48 @@ module.exports = function(grunt) {
         grunt.config.set("compile.dev.options", this.options());
 
         grunt.task.run('compile');
-    })
+    });
+
+    grunt.registerTask('compileAppSetupToStartupSequence', function() {
+        var done = this.async();
+        var starttime = (new Date()).getTime();
+
+        grunt.log.writeln('Running compile AppSetup to startupSequence...');
+
+        console.log('check', grunt.config('watch').appsetup);
+
+        // read files and parse output name
+        var files = grunt.config(this.name).files[0],
+            outputFilename = files.replace(".json", ".opts.js");
+
+        // read file
+        var fs = require('fs'),
+            cfgFile = fs.readFileSync(files, 'utf8');
+
+        // convert to usable format
+        var startupSequence = JSON.parse(cfgFile).startupSequence,
+            definedBundles = {},
+            bundle,
+            result = "var _defaultsStartupSeq = ";
+
+        // loop startup sequence bundles and add to hashmap of defined bundles
+        for(var i = 0, ilen = startupSequence.length; i < ilen; i++) {
+            bundle = startupSequence[i];
+            // Add here code to change bundlePath to "ignored/butRequiredToBeInMinifierFullMapAppSetupInTests/packages/framework/bundle/"
+            // or something similar as the bundlePaths are not used with minifierAppSetup
+            definedBundles[bundle.bundlename] = bundle;
+        }
+
+        // add stringified bundle definitions
+        result +=JSON.stringify(definedBundles);
+
+        // write file to be used in testing as is
+        fs.writeFileSync(outputFilename, result , 'utf8');
+
+        var endtime = (new Date()).getTime();
+        grunt.log.writeln('compileAppSetupToStartupSequence completed in ' + ((endtime - starttime) / 1000) + ' seconds');
+        done();
+    });
 
     grunt.registerTask('release', 'Release build', function(version, configs) {
         var apps = [],
@@ -158,7 +212,7 @@ module.exports = function(grunt) {
         grunt.task.run('compile');
         grunt.task.run('sprite');
         grunt.task.run('yuidoc');
-        //        grunt.task.run('mddocs');
+        //grunt.task.run('mddocs');
     });
 
     grunt.registerTask('packageopenlayer', 'Package openlayers according to packages', function(packages) {
