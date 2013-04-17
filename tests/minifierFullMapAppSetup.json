@@ -416,5 +416,40 @@
 
          ]
       }
+   }, {
+      "title": "Promote",
+      "fi": "promote",
+      "sv": "promote",
+      "en": "promote",
+      "bundlename": "promote",
+      "bundleinstancename": "promote",
+      "metadata": {
+         "Import-Bundle": {
+            "promote": {
+               "bundlePath": "../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance": []
+      }
+   }, {
+      "instanceProps": {
+
+      },
+      "title": "Stats",
+      "bundleinstancename": "mapstats",
+      "fi": "mapstats",
+      "sv": "mapstats",
+      "en": "mapstats",
+      "bundlename": "mapstats",
+      "metadata": {
+         "Import-Bundle": {
+            "mapstats": {
+               "bundlePath": "../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance": [
+
+         ]
+      }
    }]
 }

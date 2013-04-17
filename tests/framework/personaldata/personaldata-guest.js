@@ -11,20 +11,11 @@ describe('Test Suite for PersonalData - Guest user', function() {
             'openlayers-default-theme', 
             'mapfull', 
             'divmanazer',
-            {
-                "bundleinstancename": "personaldata",
-                "bundlename": "personaldata",
-                "metadata": { 
-                    "Import-Bundle": {
-                        "personaldata": {
-                            "bundlePath": "packages/framework/bundle/"
-                        } 
-                    }
-                }
-            }
+            'personaldata'
         ]);
     
         var mapfullConf = getConfigForMapfull();
+        // overwrite test wide appConf
         appConf = { 
             "mapfull" : mapfullConf
         };
