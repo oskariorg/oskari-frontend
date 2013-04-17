@@ -235,7 +235,8 @@ function(config, locale) {
 			//params eg. CUL_COL:"indicator..." , VIS_NAME: "ows:kunnat2013", VIS_ATTR: "kuntakoodi", VIS_CODES: munArray, COL_VALUES: statArray
 			this._params = event.getParams();
 			// Classify data
-			this.classifyData();
+debugger;
+			this.classifyData(event);
 
 		}
 	},
@@ -254,7 +255,7 @@ function(config, locale) {
 	 *
 	 * @param event  Data sent by 'MapStats.SotkadataChangedEvent' (eg. in  ManageStatsOut.js)
 	 */
-	classifyData : function() {
+	classifyData : function(event) {
 		// return, if no old data
 		if (!this._layer)
 			return;
@@ -274,8 +275,14 @@ function(config, locale) {
 
 		// Get classification method
 		var method = jQuery('.manageClassificationPlugin').find('.classificationMethod').find('.method').val();
+		if(event.method_id != null) {
+			method = event.method_id;
+		}		
 		// Get class count
 		var classes = Number(jQuery('.manageClassificationPlugin').find('.classificationMethod').find('.classCount').find('#amount').val());
+		if(event.number_of_classes != null) {
+			classes = event.number_of_classes;
+		}
 
 		var col_data = params.COL_VALUES;
 		var codes = params.VIS_CODES;
@@ -337,6 +344,8 @@ function(config, locale) {
 		var eventBuilder = sandbox.getEventBuilder('MapStats.StatsVisualizationChangeEvent');
 		if (eventBuilder) {
 			var event = eventBuilder(layer, {
+				method_id : method,
+				number_of_classes : classes,
 				VIS_ID : -1,
 				VIS_NAME : params.VIS_NAME,
 				VIS_ATTR : params.VIS_ATTR,
@@ -385,15 +394,20 @@ function(config, locale) {
 		var classify = jQuery('<div class="classificationMethod"><br>' + this._locale.classify.classifymethod + '<br><select class="method"></select><br></div>');
 		var sel = classify.find('select');
 
-		var opt = jQuery('<option value="' + "1" + '">' + this._locale.classify.jenks + '</option>');
-		sel.append(opt);
-		var opt = jQuery('<option value="' + "2" + '">' + this._locale.classify.quantile + '</option>');
-		sel.append(opt);
-		var opt = jQuery('<option value="' + "3" + '">' + this._locale.classify.eqinterval + '</option>');
-		sel.append(opt);
+debugger;
+		var methods = [this._locale.classify.jenks, this._locale.classify.quantile, this._locale.classify.eqinterval];
+		for(var i = 0; i < methods.length; i++) {
+			var opt = jQuery('<option value="' + i + '">' + methods[i] + '</option>');
+			sel.append(opt);				
+		}
+
 		sel.change(function(e) {
 			// Classify current columns, if any
-			me.classifyData();
+debugger;
+			if(e.target.tagName === "SELECT") {
+				e.method_id = e.target.selectedIndex;
+			}
+			me.classifyData(e);
 		});
 		// Content HTML / class count input HTML
 		//var classcnt = jQuery('<div class="classCount">' + this._locale.classify.classes + ' <input type="text" id="spinner" value="6" /></div>');
@@ -406,7 +420,9 @@ function(config, locale) {
 			slide : function(event, ui) {
 				jQuery('#amount').val(ui.value);
 				// Classify again
-				me.classifyData();
+debugger;
+				event.number_of_classes = ui.value;
+				me.classifyData(event);
 			}
 		});
 

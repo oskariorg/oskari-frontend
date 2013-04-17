@@ -483,7 +483,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 			return;
 
 		// Set current column to be stated
-		me.instance.state.currentColumn = curCol;
+		me.instance.state.currentColumn = (curCol != null) ? curCol.id : null;
 
 		// Get values of selected column
 		var data = this.dataView.getItems();
