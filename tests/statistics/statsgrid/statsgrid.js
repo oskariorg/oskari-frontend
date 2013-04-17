@@ -1,7 +1,6 @@
-describe.only('Test Suite for mapstats bundle', function() {
+describe('Test Suite for statistics/statsgrid bundle', function() {
     var appSetup = null,
         appConf = null,
-        statsPlugin = null,
         sandbox = null;
 
     before(function() {
@@ -11,11 +10,7 @@ describe.only('Test Suite for mapstats bundle', function() {
         var mapfullConf = getConfigForMapfull();
         // overwrite test wide appConf
         appConf = {
-            "mapfull": mapfullConf,
-            "mapstats": {
-                "state": {},
-                "conf": {}
-            }
+            "mapfull": mapfullConf
         };
     });
 
@@ -35,7 +30,6 @@ describe.only('Test Suite for mapstats bundle', function() {
         setupOskari(setup, conf, function() {
             // Find handles to sandbox and stats plugin.
             sandbox = Oskari.getSandbox();
-            statsPlugin = sandbox.findRegisteredModuleInstance('MainMapModuleStatsLayerPlugin');
             done();
         });
     };
@@ -48,12 +42,6 @@ describe.only('Test Suite for mapstats bundle', function() {
 
         it('should be defined', function() {
             expect(sandbox).to.be.ok();
-            expect(statsPlugin).to.be.ok();
-            expect(statsPlugin.getName()).to.be('MainMapModuleStatsLayerPlugin');
-        });
-
-        it('should be present in the DOM', function() {
-
         });
     });
 });
