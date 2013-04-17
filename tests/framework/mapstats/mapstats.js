@@ -5,24 +5,7 @@ describe.only('Test Suite for Mapstats', function() {
         sandbox = null;
 
     before(function() {
-        appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull',
-        {
-            "instanceProps": {},
-            "title": "Stats",
-            "bundleinstancename": "mapstats",
-            "fi": "mapstats",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "mapstats",
-            "metadata": {
-                "Import-Bundle": {
-                    "mapstats": {
-                        "bundlePath": "packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }]);
+        appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull', 'mapstats']);
 
         var mapfullConf = getConfigForMapfull();
         appConf = {
