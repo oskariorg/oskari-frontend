@@ -159,6 +159,10 @@
 			"east": "517620"
 		},
 		"conf": {
+			"size": {
+				"width": "100%",
+				"height": "100%"
+			},
 			"sandbox": "sandbox:A",
 			"globalMapAjaxUrl": "ajax.json?",
 			"plugins": [
