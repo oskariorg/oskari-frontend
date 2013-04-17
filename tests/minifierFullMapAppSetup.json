@@ -416,5 +416,20 @@
 
          ]
       }
+   }, {
+      "title": "Promote",
+      "fi": "promote",
+      "sv": "promote",
+      "en": "promote",
+      "bundlename": "promote",
+      "bundleinstancename": "promote",
+      "metadata": {
+         "Import-Bundle": {
+            "promote": {
+               "bundlePath": "../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance": []
+      }
    }]
 }

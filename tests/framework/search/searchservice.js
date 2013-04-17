@@ -1,46 +1,12 @@
 describe('Test Suite for Search bundle, including service and Flyout', function() {
-	var appSetup = {
-		startupSequence: [{
-			title: 'Oskari DIV Manazer',
-			fi: 'Oskari DIV Manazer',
-			sv: '?',
-			en: 'Oskari DIV Manazer',
-			bundlename: 'divmanazer',
-			bundleinstancename: 'divmanazer',
-			metadata: {
-				"Import-Bundle": {
-					"divmanazer": {
-						bundlePath: 'ignored/Oskari/packages/framework/bundle/'
-					}
-				},
-				"Require-Bundle-Instance": []
-			},
-			instanceProps: {}
-		}, {
-			title: 'Haku',
-			fi: 'search',
-			sv: '?',
-			en: '?',
-			bundlename: 'search',
-			bundleinstancename: 'search',
-			metadata: {
-				"Import-Bundle": {
-					"search": {
-						bundlePath: 'ignored/Oskari/packages/framework/bundle/'
-					}
-				},
-				"Require-Bundle-Instance": []
-			},
-			instanceProps: {}
-		}]
-	};
-	var appConf = {
-		"search": {
-			"conf": {
-				"url": "/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&action_route=GetSearchResult"
+	var appSetup = getStartupSequence(['divmanazer', 'search']),
+		appConf = {
+			"search": {
+				"conf": {
+					"url": "/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&action_route=GetSearchResult"
+				}
 			}
-		}
-	};
+		};
 
 	beforeEach(function(done) {
 		setupOskari(appSetup, appConf, done);

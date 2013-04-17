@@ -2,28 +2,7 @@ describe('Test Suite for StateHandler', function() {
 
 	var stateHandlerModule = null,
 		sandbox = null,
-		appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull',
-		{
-			"instanceProps": {
-
-			},
-			"title": "StateHandler",
-			"bundleinstancename": "statehandler",
-			"fi": "jquery",
-			"sv": "?",
-			"en": "?",
-			"bundlename": "statehandler",
-			"metadata": {
-				"Import-Bundle": {
-					"statehandler": {
-						"bundlePath": "packages/framework/bundle/"
-					}
-				},
-				"Require-Bundle-Instance": [
-
-				]
-			}
-		}]),
+		appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull', 'statehandler']),
 		mapfullConf = getConfigForMapfull(),
 		appConf = {
 			"mapfull": mapfullConf,
