@@ -24,7 +24,7 @@ function(instance) {
 	this.templateLink = jQuery("<div class='link'><a href='JavaScript:void(0);'></a></div>" + "</div>");
 
 	var me = this;
-    var selectionPlugin = me.instance.getSelectionPlugin();
+        var selectionPlugin = me.instance.getSelectionPlugin();
 	this.buttons = {
         'point' : {
             iconCls : 'selection-point',
@@ -113,7 +113,8 @@ function(instance) {
 
         dialog.addClass('tools_selection');
         dialog.show(popupLoc, content, [cancelBtn]);
-	},
+        dialog.moveTo('#toolbar div.toolrow[tbgroup=selectiontools]', 'top');
+    },
 
     /**
     * @method _editDialog
@@ -179,6 +180,7 @@ function(instance) {
             me.instance.getSelectionPlugin().stopDrawing();
         });
 
-        editDialog.show(title, dialogContent, [cancelBtn, showSelectionsBtn])
-	}
+        editDialog.show(title, dialogContent, [cancelBtn, showSelectionsBtn]);
+        editDialog.moveTo('#toolbar div.toolrow[tbgroup=selectiontools]', 'top');
+    }
 });

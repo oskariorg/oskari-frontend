@@ -165,7 +165,10 @@ function(config) {
             this._afterChangeMapLayerOpacityEvent(event);
         },
         'AfterChangeMapLayerStyleEvent' : function(event) {
-            this._afterChangeMapLayerStyleEvent(event);
+            //this._afterChangeMapLayerStyleEvent(event);
+        },
+        'MapStats.StatsVisualizationChangeEvent': function(event) {
+            this._afterStatsVisualizationChangeEvent(event);
         }
     },
 
@@ -237,7 +240,7 @@ function(config) {
             layers : layer.getWmsName(),
             transparent : true,
             layerId : layer.getId(),
-            VIS_ID : 1,
+            //VIS_ID : 1,
             format : "image/png"
         }, {
             layerId : layer.getWmsName(),
@@ -361,8 +364,21 @@ function(config) {
                 VIS_NAME : "ows:Kunnat2013",
                 VIS_ATTR : "Kuntakoodi",
                 VIS_CLASSES : "020,091|186,086,982|111,139,740",
-                VIS_COLORS : "vis=choro:ccffcc|99cc99|669966"
+                VIS_COLORS : "choro:ccffcc|99cc99|669966"
             });
+        }
+    },
+
+    _afterStatsVisualizationChangeEvent: function(event) {
+        var layer = event.getLayer();
+        var params = event.getParams();
+
+        // For testing. Otherwise OpenLayers won't update the tiles, since no params have been changed.
+        params.randomNumberForTheLulz = Math.random();
+
+        var mapLayer = this.getOLMapLayers(layer);
+        if(mapLayer != null) {
+            mapLayer[0].mergeNewParams(params);
         }
     }
 }, {
