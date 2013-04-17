@@ -1,15 +1,14 @@
-describe('Test Suite for Mapstats', function() {
+describe.only('Test Suite for Mapstats', function() {
     var appSetup = null,
         appConf = null,
-        mapmodule = null,
+        statsPlugin = null,
         sandbox = null;
 
     before(function() {
-
-        // startup the oskari application with publisher bundle, 2 test layers and signed in user
-        appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull', {
+        appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull',
+        {
             "instanceProps": {},
-            "title": "Mapstats",
+            "title": "Stats",
             "bundleinstancename": "mapstats",
             "fi": "mapstats",
             "sv": "?",
@@ -41,7 +40,7 @@ describe('Test Suite for Mapstats', function() {
         // startup Oskari
         setupOskari(appSetup, appConf, function() {
             sandbox = Oskari.getSandbox();
-            mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            statsPlugin = sandbox.findRegisteredModuleInstance('MainMapModuleStatsLayerPlugin');
             done();
         });
     };
@@ -56,7 +55,7 @@ describe('Test Suite for Mapstats', function() {
         });
 
         it('should be defined', function() {
-
+            expect(statsPlugin).to.be.ok();
         });
 
         it('should be present in the DOM', function() {

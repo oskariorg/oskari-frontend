@@ -1,5 +1,5 @@
 // Might need refactoring
-describe.only('Grid component', function() {
+describe('Grid component', function() {
     var user = {}, service = {}; 
 
     service.tests = function() {
