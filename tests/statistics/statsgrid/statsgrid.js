@@ -1,13 +1,15 @@
-describe('Test Suite for statistics/statsgrid bundle', function() {
+describe.only('Test Suite for statistics/statsgrid bundle', function() {
     var appSetup = null,
         appConf = null,
+        statsModule = null,
         sandbox = null;
 
     before(function() {
 
-        appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull']);
+        appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull', 'statsgrid']);
 
         var mapfullConf = getConfigForMapfull();
+
         // overwrite test wide appConf
         appConf = {
             "mapfull": mapfullConf
@@ -28,8 +30,9 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
         jQuery("body").html(getDefaultHTML());
         // startup Oskari
         setupOskari(setup, conf, function() {
-            // Find handles to sandbox and stats plugin.
+            // Find handles to sandbox and stats bundle.
             sandbox = Oskari.getSandbox();
+            statsModule = sandbox.findRegisteredModuleInstance('StatsGrid');
             done();
         });
     };
@@ -42,6 +45,7 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
 
         it('should be defined', function() {
             expect(sandbox).to.be.ok();
+            expect(statsModule).to.be.ok();
         });
     });
 });

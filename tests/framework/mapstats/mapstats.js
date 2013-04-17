@@ -1,4 +1,4 @@
-describe.only('Test Suite for mapstats bundle', function() {
+describe('Test Suite for mapstats bundle', function() {
     var appSetup = null,
         appConf = null,
         statsPlugin = null,
