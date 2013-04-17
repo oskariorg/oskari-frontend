@@ -58,6 +58,13 @@ The following example also excludes all the tools from the toolbar, by setting a
 }
 ```
 
+A tool button can be configured to be disabled by adding following to the configuration:
+
+```javascript
+"conf": {
+  "disabled": true
+}
+```
 
 ## Bundle state
 
