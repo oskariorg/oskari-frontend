@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.9
+
+### toolbar bundle
+
+Added a way to disable a button by default from configuration.
+
 ## 1.8
 
 ### sandbox/map-layer-service

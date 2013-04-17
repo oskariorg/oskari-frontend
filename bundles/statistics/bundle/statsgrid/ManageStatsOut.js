@@ -342,10 +342,11 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 	 */
 	getSotkaIndicatorData : function(container, indicator, gender, year) {
 		var me = this;
+		var gndrs = gender != null ? gender : 'total';
 		// ajax call
 		me.fetchData(
 		// url
-		me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gender,
+		me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gndrs,
 		// success callback
 		function(data) {
 			if (data) {

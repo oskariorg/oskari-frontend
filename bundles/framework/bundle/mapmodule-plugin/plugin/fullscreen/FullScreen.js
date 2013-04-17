@@ -67,7 +67,7 @@ function() {
         // template
         this.__templates['fullscreen'] = jQuery(
             '<div class="fullscreenDiv">' + 
-                '<img class="fullscreenDivImg" src="' + fsimg + 'full-screen-toggle.png' + '"></img>' +
+                '<img class="fullscreenDivImg" src="' + fsimg + 'hide-navigation.png' + '"></img>' +
             '</div>'
         );
     },
@@ -148,11 +148,18 @@ function() {
     */
     createUI: function() {
         var me = this,
-            fullScreenDiv = this.__templates['fullscreen'].clone();
+            fullScreenDiv = this.__templates['fullscreen'].clone(),
+            fsimg = this.getMapModule().getImageUrl() + '/framework/bundle/mapmodule-plugin/plugin/fullscreen/images/';
 
         fullScreenDiv.find('.fullscreenDivImg').bind('click', function(event) {
             event.preventDefault();
             me._sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
+
+            if(jQuery(this).attr('src').match(/hide-navigation/)) {
+                jQuery(this).attr('src', fsimg + 'show-navigation.png');
+            } else {
+                jQuery(this).attr('src', fsimg + 'hide-navigation.png')
+            }
         });
 
         jQuery(this._map.div).append(fullScreenDiv);
