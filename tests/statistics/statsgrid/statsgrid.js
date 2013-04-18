@@ -4,11 +4,24 @@ describe.only('Test Suite for statistics/statsgrid bundle', function() {
         statsModule = null,
         sandbox = null;
 
+    var testLayerId = 276;
+
     before(function() {
 
-        appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull', 'statsgrid']);
+        appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull', 'divmanazer', 'toolbar', 'statsgrid']);
 
         var mapfullConf = getConfigForMapfull();
+        mapfullConf.conf.layers.push({
+            "id": testLayerId,
+            "type": "statslayer",
+            "wmsName": "ows:kunnat2013",
+            "wmsUrl": "http://nipsuke01.nls.fi:8080/geoserver/ows/wms",
+            "maxScale": 1,
+            "minScale": 10000000,
+            "name": "tilasto testi fi",
+            "inspire": "Aluesuunnittelu ja rajoitukset",
+            "orgName": "Metsäntutkimuslaitos"
+        });
 
         // overwrite test wide appConf
         appConf = {
@@ -38,7 +51,6 @@ describe.only('Test Suite for statistics/statsgrid bundle', function() {
     };
 
     describe('initialization', function() {
-
         before(startApplication);
 
         after(teardown);
@@ -46,6 +58,32 @@ describe.only('Test Suite for statistics/statsgrid bundle', function() {
         it('should be defined', function() {
             expect(sandbox).to.be.ok();
             expect(statsModule).to.be.ok();
+        });
+    });
+
+    describe('mode grid', function() {
+        before(startApplication);
+
+        after(teardown);
+
+        it('should go to mode view', function() {
+            var testLayer = sandbox.findMapLayerFromAllAvailable(testLayerId);
+            var viewPlugin = statsModule.plugins['Oskari.userinterface.View'];
+            var statsSpy = sinon.spy(viewPlugin.showMode);
+
+            expect(testLayer).to.be.ok();
+            expect(viewPlugin).to.be.ok();
+            expect(statsSpy.callCount).to.be(0);
+            
+            sandbox.postRequestByName('StatsGrid.StatsGridRequest', [true, testLayer]);
+
+            waitsFor(function() {
+                return (statsSpy.callCount > 0);
+            }, function() {
+                expect(statsSpy.callCount).to.be(1);
+
+                done();
+            }, "Waits for the stats grid mode request", 9000);
         });
     });
 });

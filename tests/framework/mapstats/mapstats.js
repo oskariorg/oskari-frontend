@@ -51,9 +51,5 @@ describe('Test Suite for mapstats bundle', function() {
             expect(statsPlugin).to.be.ok();
             expect(statsPlugin.getName()).to.be('MainMapModuleStatsLayerPlugin');
         });
-
-        it('should be present in the DOM', function() {
-
-        });
     });
 });
