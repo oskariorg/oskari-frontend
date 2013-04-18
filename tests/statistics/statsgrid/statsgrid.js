@@ -67,20 +67,28 @@ describe.only('Test Suite for statistics/statsgrid bundle', function() {
         after(teardown);
 
         it('should go to mode view', function() {
-            var testLayer = sandbox.findMapLayerFromAllAvailable(testLayerId);
-            var viewPlugin = statsModule.plugins['Oskari.userinterface.View'];
-            var statsSpy = sinon.spy(viewPlugin.showMode);
+            var testLayer = sandbox.findMapLayerFromAllAvailable(testLayerId),
+                viewPlugin = statsModule.plugins['Oskari.userinterface.View'],
+                statsSpy = sinon.spy(viewPlugin.showMode),
+                menuToolbar = jQuery('body').find('div.oskariui-menutoolbar'),
+                statsGridContainer = jQuery('body').find('statsgrid_100');
 
             expect(testLayer).to.be.ok();
             expect(viewPlugin).to.be.ok();
             expect(statsSpy.callCount).to.be(0);
+            expect(menuToolbar.is(':visible')).to.be(false);
+            expect(statsGridContainer.is(':visible')).to.be(false);
             
             sandbox.postRequestByName('StatsGrid.StatsGridRequest', [true, testLayer]);
 
             waitsFor(function() {
                 return (statsSpy.callCount > 0);
             }, function() {
+
                 expect(statsSpy.callCount).to.be(1);
+
+                expect(menuToolbar.is(':visible')).to.be(true);
+                expect(statsGridContainer.is(':visible')).to.be(true);
 
                 done();
             }, "Waits for the stats grid mode request", 9000);
