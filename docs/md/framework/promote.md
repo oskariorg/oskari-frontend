@@ -13,11 +13,30 @@
 
 This Bundle provides functionality to promote sign-in and registration. Bundles that require signed in users benefit from using the promote bundle by the smaller size.
 
-
 ## Bundle configuration
+
+The mininal configuration is __name, title, and desc. The __name value is used to uniquely identify the bundle and the recommendation is to name after the bundle Promote is replacing. The title and desc values should also be identical with the replaced bundle.
 
 ```javascript
 conf = {
+    "__name": "BundleNameToReplace",
+    "title": {
+        "fi": "Otsikko tileen",
+        "en": "Title for Tile"
+    },
+    "desc": {
+        "fi": "Voit käyttää toimintoa kirjauduttuasi palveluun.",
+        "en": "You need to log in before using this functionality."
+    }
+};
+```
+
+Optional configurations are signup, signupUrl, register, registerUrl, and toolbarButtons.
+All added buttons are disabled.
+
+```javascript
+conf = {
+    "__name": "BundleNameToReplace",
     "title": {
         "fi": "Otsikko tileen",
         "en": "Title for Tile"
