@@ -2,7 +2,11 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
     var appSetup = null,
         appConf = null,
         statsModule = null,
-        sandbox = null;
+        sandbox = null,
+        testLayer = null,
+        viewPlugin = null,
+        menuToolbar = null,
+        statsGridContainer = null;
 
     var testLayerId = 276;
 
@@ -46,6 +50,11 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
             // Find handles to sandbox and stats bundle.
             sandbox = Oskari.getSandbox();
             statsModule = sandbox.findRegisteredModuleInstance('StatsGrid');
+            testLayer = sandbox.findMapLayerFromAllAvailable(testLayerId);
+            viewPlugin = statsModule.plugins['Oskari.userinterface.View'];
+            menuToolbar = jQuery('body').find('div.oskariui-menutoolbar');
+            statsGridContainer = jQuery('body').find('statsgrid_100');
+
             done();
         });
     };
@@ -61,17 +70,13 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
         });
     });
 
-    describe('mode grid', function() {
+    describe('from map view', function() {
         before(startApplication);
 
         after(teardown);
 
-        it('should go to mode view', function() {
-            var testLayer = sandbox.findMapLayerFromAllAvailable(testLayerId),
-                viewPlugin = statsModule.plugins['Oskari.userinterface.View'],
-                statsSpy = sinon.spy(viewPlugin.showMode),
-                menuToolbar = jQuery('body').find('div.oskariui-menutoolbar'),
-                statsGridContainer = jQuery('body').find('statsgrid_100');
+        it('should go to the mode view', function() {
+            var statsSpy = sinon.spy(viewPlugin.showMode);
 
             expect(testLayer).to.be.ok();
             expect(viewPlugin).to.be.ok();
@@ -86,10 +91,10 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
             }, function() {
 
                 expect(statsSpy.callCount).to.be(1);
-
                 expect(menuToolbar.is(':visible')).to.be(true);
                 expect(statsGridContainer.is(':visible')).to.be(true);
 
+                statsSpy.restore();
                 done();
             }, "Waits for the stats grid mode request", 9000);
         });
