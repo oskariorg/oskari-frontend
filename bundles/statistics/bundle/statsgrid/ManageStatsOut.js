@@ -342,10 +342,11 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 	 */
 	getSotkaIndicatorData : function(container, indicator, gender, year) {
 		var me = this;
+		var gndrs = gender != null ? gender : 'total';
 		// ajax call
 		me.fetchData(
 		// url
-		me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gender,
+		me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gndrs,
 		// success callback
 		function(data) {
 			if (data) {
@@ -508,6 +509,68 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 		}
 
 	},
+
+
+
+	/**
+	 * Get Sotka data for one indicator
+	 * @method getSotkaIndicatorData
+	 * @param container parent element
+	 * @param indicator id
+	 * @param gender (male / female / total)
+	 * @param year selected year
+	 */
+	getSotkaIndicatorsData : function(indicators, callback) {
+		var me = this, container = this.getEl(), fetchedIndicators = 0;
+
+		for (var i = 0; i < indicators.length; i++) {
+			var indicatorData = indicators[i],
+			indicator = indicatorData.indicator,
+			year = indicatorData.year,
+			gender = indicatorData.gender;
+
+			// ajax call
+			me.fetchData(
+			// url
+			me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gender,
+			// success callback
+			function(data) {
+				fetchedIndicators++;
+				if (data) {
+					//save the data to the right indicator for later use
+					for (var i = 0; i < indicators.length; i++) {
+						var ind = indicators[i];
+						if(ind.indicator === indicator &&
+							ind.year === year &&
+							ind.gender === gender) {
+
+							indicators[i].data = data;
+						}
+					};
+					// when all the indicators have been fetched
+					// add them to the grid
+					if(fetchedIndicators >= indicators.length) {
+						//TODO add these to the grid!!
+						for (var i = 0; i < indicators.length; i++) {
+							var ind = indicators[i];
+							me.addIndicatorDataToGrid(container, ind.indicator, ind.gender, ind.year, ind.data);
+						};
+						callback();
+					}
+				} else {
+					me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorDataError);
+				}
+			},
+			// error callback
+			function(jqXHR, textStatus) {
+				me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorDataXHRError);
+				fetchedIndicators++;
+			});
+		};
+	},
+
+
+
 
 	/**
 	 * Make the AJAX call. This method helps

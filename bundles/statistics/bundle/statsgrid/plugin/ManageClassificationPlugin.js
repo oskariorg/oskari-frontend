@@ -98,7 +98,7 @@ function(config, locale) {
 	 */
 	init : function(sandbox) {
 		// Classify html template
-		this.classify_html = jQuery("<div class='manageClassificationPlugin'>" + '<div class="classheader"><div class="header-icon icon-arrow-white-right"></div></div>' + '<div class="content"></div>' + "</div>");
+		this.classify_temp = jQuery("<div class='manageClassificationPlugin'>" + '<div class="classheader"><div class="header-icon icon-arrow-white-right"></div></div>' + '<div class="content"></div>' + "</div>");
 		// Setup Colors
 		this.setColors();
 	},
@@ -169,6 +169,29 @@ function(config, locale) {
 	 */
 	eventHandlers : {
 		/**
+		 * @method MapLayerEvent
+		 * @param {Oskari.mapframework.event.common.MapLayerEvent} event
+		 *
+		 * Adds the layer to selection
+		 */
+		'MapLayerEvent' : function(event) {
+			// Is stats map layer selected
+			var layers = this._sandbox.findAllSelectedMapLayers();
+
+			for (var n = layers.length - 1; n >= 0; --n) {
+				var layer = layers[n];
+				if (layer._layerType === "STATS" && !layer.isBaseLayer()) {
+					if (layer.isVisible()) {
+						this._visibilityOn();
+					} else {
+						this._visibilityOff();
+					}
+					break;
+				}
+			}
+
+		},
+		/**
 		 * @method AfterMapLayerRemoveEvent
 		 * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent} event
 		 *
@@ -176,8 +199,8 @@ function(config, locale) {
 		 */
 		'AfterMapLayerRemoveEvent' : function(event) {
 			// Hide Classify dialog
-		//	if (event.getMapLayer()._layerType = "STATS")
-			//	this._visibilityOff();
+			if (event.getMapLayer()._layerType === "STATS")
+				this._visibilityOff();
 		},
 		/**
 		 * @method AfterMapLayerAddEvent
@@ -188,8 +211,8 @@ function(config, locale) {
 		'AfterMapLayerAddEvent' : function(event) {
 
 			// Show Classify dialog
-		//	if (event.getMapLayer()._layerType = "STATS")
-			//	this._visibilityOn();
+			if (event.getMapLayer()._layerType === "STATS")
+				this._visibilityOn();
 		},
 
 		/**
@@ -198,15 +221,15 @@ function(config, locale) {
 		 */
 		'MapLayerVisibilityChangedEvent' : function(event) {
 			// Hide Classify dialog
-		/* kesken	if (event.getMapLayer()._layerType = "STATS") {
+			if (event.getMapLayer()._layerType === "STATS") {
 
-				var blnVisible = layer.isVisible();
+				var blnVisible = event.getMapLayer().isVisible();
 				if (blnVisible) {
 					this._visibilityOn();
 				} else {
 					this._visibilityOff();
 				}
-			} */
+			}
 
 		},
 
@@ -219,7 +242,7 @@ function(config, locale) {
 		'AfterMapMoveEvent' : function(event) {
 			// setup initial state here since we are using selected layers to create ui
 			// and plugin is started before any layers have been added
-
+		
 		},
 		/**
 		 * @method SotkadataChangedEvent
@@ -270,18 +293,18 @@ debugger;
 		var limits = [];
 		var i, k;
 		//Check selected column - only data columns are handled
-		if (sortcol.field == 'municipality')
+		if (sortcol.field == 'municipality' || sortcol.field == 'code')
 			return;
 
 		// Get classification method
-		var method = jQuery('.manageClassificationPlugin').find('.classificationMethod').find('.method').val();
-		if(event.method_id != null) {
-			method = event.method_id;
+		var method = this.element.find('.classificationMethod').find('.method').val();
+		if(event.methodId != null) {
+			method = event.methodId;
 		}		
 		// Get class count
-		var classes = Number(jQuery('.manageClassificationPlugin').find('.classificationMethod').find('.classCount').find('#amount').val());
-		if(event.number_of_classes != null) {
-			classes = event.number_of_classes;
+		var classes = Number(this.element.find('.classificationMethod').find('.classCount').find('#amount').val());
+		if(event.numberOfClasses != null) {
+			classes = event.numberOfClasses;
 		}
 
 		var col_data = params.COL_VALUES;
@@ -344,8 +367,8 @@ debugger;
 		var eventBuilder = sandbox.getEventBuilder('MapStats.StatsVisualizationChangeEvent');
 		if (eventBuilder) {
 			var event = eventBuilder(layer, {
-				method_id : method,
-				number_of_classes : classes,
+				methodId : method,
+				numberOfClasses : classes,
 				VIS_ID : -1,
 				VIS_NAME : params.VIS_NAME,
 				VIS_ATTR : params.VIS_ATTR,
@@ -363,7 +386,7 @@ debugger;
 		};
 
 		var colortab = gstats.getHtmlLegend(null, sortcol.name, true, legendRounder);
-		var classify = jQuery('.manageClassificationPlugin').find('.classificationMethod');
+		var classify = this.element.find('.classificationMethod');
 		classify.find('.block').remove();
 		var block = jQuery('<div class="block"></div>');
 		block.append(colortab);
@@ -383,7 +406,7 @@ debugger;
 	_createUI : function() {
 		var me = this;
 		if (!this.element) {
-			this.element = this.classify_html.clone();
+			this.element = this.classify_temp.clone();
 		}
 		// Classify html header
 		var header = this.element.find('div.classheader');
@@ -394,7 +417,6 @@ debugger;
 		var classify = jQuery('<div class="classificationMethod"><br>' + this._locale.classify.classifymethod + '<br><select class="method"></select><br></div>');
 		var sel = classify.find('select');
 
-debugger;
 		var methods = [this._locale.classify.jenks, this._locale.classify.quantile, this._locale.classify.eqinterval];
 		for(var i = 0; i < methods.length; i++) {
 			var opt = jQuery('<option value="' + i + '">' + methods[i] + '</option>');
@@ -402,11 +424,12 @@ debugger;
 		}
 
 		sel.change(function(e) {
-			// Classify current columns, if any
 debugger;
+			// update event with selected method
 			if(e.target.tagName === "SELECT") {
-				e.method_id = e.target.selectedIndex;
+				e.methodId = e.target.selectedIndex;
 			}
+			// Classify current columns, if any
 			me.classifyData(e);
 		});
 		// Content HTML / class count input HTML
@@ -419,9 +442,10 @@ debugger;
 			value : 5,
 			slide : function(event, ui) {
 				jQuery('#amount').val(ui.value);
-				// Classify again
 debugger;
-				event.number_of_classes = ui.value;
+				// update event with correct number of classes
+				event.numberOfClasses = ui.value;
+				// Classify again
 				me.classifyData(event);
 			}
 		});
@@ -452,7 +476,7 @@ debugger;
 		// Hide content
 		this.element.find('div.content').hide();
 		// Hide Classify dialog
-		// Kesken this._visibilityOff();
+		this._visibilityOff();
 
 	},
 	setColors : function() {

@@ -53,6 +53,7 @@ function() {
 
             view.showMode(isShown, true);
 			view.showContent(isShown);
+            this.view = view;
 		},
         'MapStats.StatsVisualizationChangeEvent' : function(event) {
             this._afterStatsVisualizationChangeEvent(event);
@@ -66,12 +67,37 @@ function() {
      * @param {Boolean} ignoreLocation true to NOT set map location based on state
      */
     setState : function(state, ignoreLocation) {
+        var me = this;
 debugger;
-        alert(state.foo);
+        alert(state.currentColumn);
+
+        if(state.indicators.length > 0){
+            //send ajax calls and build the grid
+            this.view.getSotkaIndicatorData(indicators, function(){
+                if(state.currentColumn != null) {
+                    // current column is needed for rendering map
+                    this.view.classifyData(state.currentColumn);
+
+                    var e = document.createEvent("Event");
+                    if(state.methodId != null && state.methodId > 0) {
+                        // which classification method we need to use in classification plugin
+                        e.methodId = state.methodId;
+                    }
+                    if(state.numberOfClasses != null && state.numberOfClasses > 0) {
+                        // how many classes we are going to use when classifying the data
+                        e.numberOfClasses = state.numberOfClasses;
+                    }
+
+                    this.classifyPlugin.classifyData(e);
+                }
+            });
+        }
     },
     getState : function() {
 debugger;
-        return this.state;
+        if(this.sandbox.getUser().isLoggedIn()) {
+            return this.state;
+        }
     },
 
 	    /**
@@ -92,8 +118,10 @@ debugger;
     	dialog.show(title, message, [okBtn]);
     },
     _afterStatsVisualizationChangeEvent: function(event) {
-        var layer = event.getLayer();
         var params = event.getParams();
+        this.state.methodId = params.methodId;
+        this.state.numberOfClasses = params.numberOfClasses;
+
 debugger;
     }
 }, {

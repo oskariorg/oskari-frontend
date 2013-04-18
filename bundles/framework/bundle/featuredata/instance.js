@@ -85,8 +85,6 @@ function() {
 
         me.sandbox = sandbox;
 
-        this.localization = Oskari.getLocalization(this.getName());
-
         sandbox.register(me);
         for (var p in me.eventHandlers) {
             sandbox.registerForEventByName(me, p);
@@ -99,13 +97,15 @@ function() {
         // draw ui
         me.createUi();
 
+        var localization = this.getLocalization('popup');
+
         //sends request via config to add tool selection button
         if (this.conf && this.conf.selectionTools === true) {
             this.popupHandler = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata.PopupHandler', this);
             var addBtnRequestBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
             var btn = {
                 iconCls: 'tool-feature-selection',
-                tooltip: 'Select Tool',
+                tooltip: localization.tools.select.tooltip,
                 sticky: false,
                 callback: function() {
                     me.popupHandler.showSelectionTools();
