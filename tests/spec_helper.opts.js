@@ -117,6 +117,8 @@ var _mapfullConfig = {
             "id": "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"
         }, {
             "id": "Oskari.mapframework.bundle.mapmodule.plugin.PanButtons"
+        }, {
+            "id": "Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin"
         }],
         "layers": [{
             "type": "base",
