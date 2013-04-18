@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance
+ * @class Oskari.digiroad.bundle.myplaces2.MyPlacesBundleInstance
  * 
  * My places functionality
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance",
+Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.MyPlacesBundleInstance",
 
 /**
  * @method create called automatically on construction

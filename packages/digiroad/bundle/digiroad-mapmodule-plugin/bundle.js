@@ -2,22 +2,16 @@
  * @class Oskari.digiroad.bundle.PluginMapModuleBundle
  */
 Oskari.clazz.define("Oskari.digiroad.bundle.PluginMapModuleBundle", function() {
-	this.singleton = null;
 }, {
-	/*
-	 * implementation for protocol 'Oskari.bundle.Bundle'
-	 */
-	"create" : function() {
-
-		if(!this.singleton) {
-			this.singleton = Oskari.clazz.create("Oskari.digiroad.bundle.PluginMapModuleBundleInstance");
-
-		}
-		return this.singleton;
-	},
-	"update" : function(manager, bundle, bi, info) {
-		manager.alert("RECEIVED update notification " + info);
-	}
+    /*
+     * implementation for protocol 'Oskari.bundle.Bundle'
+     */
+    "create" : function() {
+        return this;
+    },
+    "update" : function(manager, bundle, bi, info) {
+        manager.alert("RECEIVED update notification " + info);
+    }
 },
 
 /**
@@ -25,135 +19,152 @@ Oskari.clazz.define("Oskari.digiroad.bundle.PluginMapModuleBundle", function() {
  */
 {
 
-	"protocol" : ["Oskari.bundle.Bundle"],
-	"source" : {
+    "protocol" : ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
+    "source" : {
 
-		"scripts" : [
-		/*
-		 * map-module
-		 */
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/ui/module/map-module.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/Plugin.js"
-		},
-		/**
-		 * controls plugin
-		 */
-		{
+        "scripts" : [
+        /*
+         * map-module
+         */
+        {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/controls/ControlsPlugin.js"
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/ui/module/map-module.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/Plugin.js"
         },
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/controls/PorttiKeyboard.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/controls/PorttiZoomBar.js"
-		},{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/controls/PorttiDragPan.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/controls/PorttiDrag.js"
-		},{
+        /**
+         * controls plugin
+         */
+        {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/controls/PorttiMouse.js"
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/controls/ControlsPlugin.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/controls/PorttiKeyboard.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/controls/PorttiMouse.js"
         },  {
             
             
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/request/DisableMapKeyboardMovementRequest.js"
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/DisableMapKeyboardMovementRequest.js"
         },  {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/request/DisableMapMouseMovementRequest.js"
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/DisableMapMouseMovementRequest.js"
         },  {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/request/EnableMapKeyboardMovementRequest.js"
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/EnableMapKeyboardMovementRequest.js"
         },  {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/request/EnableMapMouseMovementRequest.js"
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/EnableMapMouseMovementRequest.js"
         },  {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/request/MapMovementControlsRequestHandler.js"
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/MapMovementControlsRequestHandler.js"
         },  {
             
             
             "type" : "text/javascript",
-            "src" : "../../../../sources/digiroad/request/common/show-map-measurement-request.js"
+            "src" : "../../../../sources/framework/request/common/show-map-measurement-request.js"
         }, 
-		/**
-		 * GFI
-		 */ 
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/getinfo/GetFeatureInfoHandler.js"
+        /**
+         * GFI
+         */ 
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/getinfo/GetFeatureInfoHandler.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/request/GetFeatureInfoRequest.js"
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/GetFeatureInfoRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/request/GetFeatureInfoActivationRequest.js"
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/GetFeatureInfoActivationRequest.js"
         }, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/getinfo/GetInfoPlugin.js"
-		},
-		/**
-		 * 	sketch layer plugin
-		 */
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/sketchlayer/SketchLayerPlugin.js"
-		},
-		/**
-		 * Markers plugin
-		 */
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/markers/MarkersPlugin.js"
-		},
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/getinfo/GetInfoPlugin.js"
+        }, {
+            "type" : "text/css",
+            "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/getinfo/css/getinfo.css"
+        },
+        /**
+         * Markers plugin
+         */
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/markers/MarkersPlugin.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/RemoveMarkerRequest.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/MarkerRequestHandler.js"
+        },
         /**
          * Search plugin
          */
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/search/SearchPlugin.js"
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/search/SearchPlugin.js"
         },
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/search/service/searchservice.js"
+            "src" : "../../../../bundles/framework/bundle/search/service/searchservice.js"
         }, {
             "type" : "text/css",
-            "src" : "../../../../resources/digiroad/bundle/digiroad-mapmodule-plugin/plugin/search/css/search.css"
+            "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/search/css/search.css"
         },
         /**
          * Logo plugin
          */
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/logo/LogoPlugin.js"
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/logo/LogoPlugin.js"
         },
         {
             "type" : "text/css",
-            "src" : "../../../../resources/digiroad/bundle/digiroad-mapmodule-plugin/plugin/logo/css/logoplugin.css"
+            "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/logo/css/logoplugin.css"
         },
+         /**
+         * Data Source plugin
+         */
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/datasource/DataSourcePlugin.js"
+        },
+        {
+            "type" : "text/css",
+            "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/datasource/css/datasource.css"
+        },
+
         
         // IndexMap
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/indexmap/IndexMapPlugin.js"
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/indexmap/IndexMapPlugin.js"
         },
         {
             "type" : "text/css",
-            "src" : "../../../../resources/digiroad/bundle/digiroad-mapmodule-plugin/plugin/indexmap/css/indexmap.css"
+            "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/indexmap/css/indexmap.css"
         },
         
         // ScaleBar
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/scalebar/ScaleBarPlugin.js"
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/scalebar/ScaleBarPlugin.js"
+        },
+
+        // FullScreen
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/fullscreen/FullScreen.js"
+        },
+        {
+            "type" : "text/css",
+            "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/fullscreen/css/fullscreen.css"
         },
         
         /**
@@ -161,161 +172,165 @@ Oskari.clazz.define("Oskari.digiroad.bundle.PluginMapModuleBundle", function() {
          */
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/layers/LayerSelectionPlugin.js"
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/layers/LayerSelectionPlugin.js"
         },
         {
             "type" : "text/css",
-            "src" : "../../../../resources/digiroad/bundle/digiroad-mapmodule-plugin/plugin/layers/css/layersselection.css"
+            "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/layers/css/layersselection.css"
         },
-		/**
-		 * Layers plugin
-		 */
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/layers/LayersPlugin.js"
-		},
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/request/MapLayerVisibilityRequest.js"
-		},
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/request/MapLayerVisibilityRequestHandler.js"
-		},
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/request/MapMoveByLayerContentRequest.js"
-		},
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/request/MapMoveByLayerContentRequestHandler.js"
-		},
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/event/MapLayerVisibilityChangedEvent.js"
-		},
-		
-		/** Layers backport */
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/wmslayer/WmsLayerPlugin.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/wmslayer/SnappyGrid.js"
-		},
-		/**
-		 * Vector Layer plugin
-		 */
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/vectorlayer/VectorLayerPlugin.js"
-		},
-		/**
-		 * Requests & handlers
-		 */
-		{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/request/ToolSelectionRequest.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/controls/ToolSelectionHandler.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/request/MapLayerUpdateRequest.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/request/MapLayerUpdateRequestHandler.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/request/MapMoveRequestHandler.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/event/MapClickedEvent.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/event/EscPressedEvent.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/event/FeaturesAddedEvent.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/event/FeaturesRemovedEvent.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/request/ClearHistoryRequest.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/controls/ClearHistoryHandler.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/zoombar/Portti2Zoombar.js"
-		}, {
-		    "type" : "text/css",
-		    "src" : "../../../../resources/digiroad/bundle/digiroad-mapmodule-plugin/plugin/portti2zoombar/css/porttizoombar.css"	  
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/panbuttons/PanButtons.js"
-		},{
-		    "type" : "text/css",
-		    "src" : "../../../../resources/digiroad/bundle/digiroad-mapmodule-plugin/plugin/panbuttons/css/panbuttons.css"	  
-		},{
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/instance.js"
-		},
-		{
+        /**
+         * Layers plugin
+         */
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/layers/LayersPlugin.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/MapLayerVisibilityRequest.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/MapLayerVisibilityRequestHandler.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/MapMoveByLayerContentRequest.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/MapMoveByLayerContentRequestHandler.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/event/MapLayerVisibilityChangedEvent.js"
+        },
+        
+        /** Layers backport */
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/wmslayer/WmsLayerPlugin.js"
+        },
+        
+        /**
+         * Vector Layer plugin
+         */
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/plugin/vectorlayer/VectorLayerPlugin.js"
+        },
+        /**
+         * GeoLocation plugin
+         */
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/location/GeoLocationPlugin.js"
+        },
+        
+        /**
+         * Requests & handlers
+         */
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/ToolSelectionRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/controls/ToolSelectionHandler.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/MapLayerUpdateRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/MapLayerUpdateRequestHandler.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/MapMoveRequestHandler.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/event/MapClickedEvent.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/event/EscPressedEvent.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/event/FeaturesAddedEvent.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/event/FeaturesRemovedEvent.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/ClearHistoryRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/controls/ClearHistoryHandler.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/zoombar/Portti2Zoombar.js"
+        }, {
             "type" : "text/css",
-            "src" : "../../../../resources/digiroad/bundle/digiroad-mapmodule-plugin/css/mapmodule.css"
+            "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/css/porttizoombar.css"     
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/panbuttons/PanButtons.js"
+        },{
+            "type" : "text/css",
+            "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/css/panbuttons.css"    
+        },
+        {
+            "type" : "text/css",
+            "src" : "../../../../resources/framework/bundle/mapmodule-plugin/css/mapmodule.css"
         }],
-		"locales" : [{
-			"lang" : "fi",
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/locale/fi.js"
-		}, {
-			"lang" : "sv",
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/locale/sv.js"
-		}, {
-			"lang" : "en",
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-mapmodule-plugin/locale/en.js"
-		}]
-	},
-	"bundle" : {
-		"manifest" : {
-			"Bundle-Identifier" : "digiroad-mapmodule-plugin",
-			"Bundle-Name" : "mapmodule",
-			"Bundle-Tag" : {
-				"mapframework" : true
-			},
+        "locales" : [{
+            // when lang is undefined, loader loads each language file, publisher needs localization for each 
+            //"lang" : "fi",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/locale/fi.js"
+        }, {
+            //"lang" : "sv",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/locale/sv.js"
+        }, {
+            //"lang" : "en",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/locale/en.js"
+        }]
+    },
+    "bundle" : {
+        "manifest" : {
+            "Bundle-Identifier" : "digiroad-mapmodule-plugin",
+            "Bundle-Name" : "digiroad-mapmodule",
+            "Bundle-Tag" : {
+                "mapframework" : true
+            },
 
-			"Bundle-Icon" : {
-				"href" : "icon.png"
-			},
-			"Bundle-Author" : [{
-				"Name" : "jjk",
-				"Organisation" : "nls.fi",
-				"Temporal" : {
-					"Start" : "2009",
-					"End" : "2011"
-				},
-				"Copyleft" : {
-					"License" : {
-						"License-Name" : "EUPL",
-						"License-Online-Resource" : "http://www.paikkatietoikkuna.fi/license"
-					}
-				}
-			}],
-			"Bundle-Name-Locale" : {
-				"fi" : {
-					"Name" : "Kartta",
-					"Title" : "Kartta"
-				},
-				"en" : {}
-			},
-			"Bundle-Version" : "1.0.0",
-			"Import-Namespace" : ["Oskari", "Ext", "OpenLayers"]
-		}
-	}
+            "Bundle-Icon" : {
+                "href" : "icon.png"
+            },
+            "Bundle-Author" : [{
+                "Name" : "jjk",
+                "Organisation" : "nls.fi",
+                "Temporal" : {
+                    "Start" : "2009",
+                    "End" : "2011"
+                },
+                "Copyleft" : {
+                    "License" : {
+                        "License-Name" : "EUPL",
+                        "License-Online-Resource" : "http://www.paikkatietoikkuna.fi/license"
+                    }
+                }
+            }],
+            "Bundle-Name-Locale" : {
+                "fi" : {
+                    "Name" : "Kartta",
+                    "Title" : "Kartta"
+                },
+                "en" : {}
+            },
+            "Bundle-Version" : "1.0.0",
+            "Import-Namespace" : ["Oskari", "Ext", "OpenLayers"]
+        }
+    }
 });
 
 /**

@@ -36,62 +36,59 @@
       "bundlename":"mapfull",
       "metadata":{
          "Import-Bundle":{
-            "mapwmts":{
-               "bundlePath":"../../packages/framework/bundle/"
+            "mapwmts": {
+               "bundlePath": "../../packages/framework/bundle/"
             },
-            "mapwfs":{
-               "bundlePath":"../../packages/framework/bundle/"
+            "mapwfs": {
+               "bundlePath": "../../packages/framework/bundle/"
             },
-            "service-base":{
-               "bundlePath":"../../packages/framework/bundle/"
+            "service-base": {
+               "bundlePath": "../../packages/framework/bundle/"
             },
-            "common":{
-               "bundlePath":"../../packages/framework/bundle/"
+            "event-map-layer": {
+               "bundlePath": "../../packages/framework/bundle/"
             },
-            "event-map-layer":{
-               "bundlePath":"../../packages/framework/bundle/"
+            "request-map-layer": {
+               "bundlePath": "../../packages/framework/bundle/"
             },
-            "runtime":{
-               "bundlePath":"../../packages/framework/bundle/"
+            "digiroad-mapmodule-plugin": {
+               "bundlePath": "../../packages/digiroad/bundle/"
             },
-            "request-map-layer":{
-               "bundlePath":"../../packages/framework/bundle/"
+            "event-base": {
+               "bundlePath": "../../packages/framework/bundle/"
             },
-            "digiroad-mapmodule-plugin":{
-               "bundlePath":"../../packages/digiroad/bundle/"
+            "mapfull": {
+               "bundlePath": "../../packages/framework/bundle/"
             },
-            "event-base":{
-               "bundlePath":"../../packages/framework/bundle/"
+            "core-base": {
+               "bundlePath": "../../packages/framework/bundle/"
             },
-            "mapfull":{
-               "bundlePath":"../../packages/framework/bundle/"
+            "request-base": {
+               "bundlePath": "../../packages/framework/bundle/"
             },
-            "core-base":{
-               "bundlePath":"../../packages/framework/bundle/"
+            "domain": {
+               "bundlePath": "../../packages/framework/bundle/"
             },
-            "request-base":{
-               "bundlePath":"../../packages/framework/bundle/"
+            "core-map": {
+               "bundlePath": "../../packages/framework/bundle/"
             },
-            "domain":{
-               "bundlePath":"../../packages/framework/bundle/"
+            "oskariui": {
+               "bundlePath": "../../packages/framework/bundle/"
             },
-            "core-map":{
-               "bundlePath":"../../packages/framework/bundle/"
+            "request-map": {
+               "bundlePath": "../../packages/framework/bundle/"
             },
-            "request-map":{
-               "bundlePath":"../../packages/framework/bundle/"
+            "sandbox-base": {
+               "bundlePath": "../../packages/framework/bundle/"
             },
-            "sandbox-base":{
-               "bundlePath":"../../packages/framework/bundle/"
+            "service-map": {
+               "bundlePath": "../../packages/framework/bundle/"
             },
-            "service-map":{
-               "bundlePath":"../../packages/framework/bundle/"
+            "sandbox-map": {
+               "bundlePath": "../../packages/framework/bundle/"
             },
-            "sandbox-map":{
-               "bundlePath":"../../packages/framework/bundle/"
-            },
-            "event-map":{
-               "bundlePath":"../../packages/framework/bundle/"
+            "event-map": {
+               "bundlePath": "../../packages/framework/bundle/"
             }
          },
          "Require-Bundle-Instance":[
@@ -233,11 +230,11 @@
       "fi": "featureselector",
       "sv": "?",
       "en": "?",
-      "bundlename": "featureselector",
-      "bundleinstancename": "featureselector",
+      "bundlename": "digiroad-featureselector",
+      "bundleinstancename": "digiroad-featureselector",
       "metadata": {
         "Import-Bundle": {
-            "featureselector": {
+            "digiroad-featureselector": {
                 "bundlePath": "../../packages/digiroad/bundle/"
             }
         },
@@ -249,14 +246,14 @@
 
       },
       "title":"Omat tiedot",
-      "bundleinstancename":"personaldata",
+      "bundleinstancename":"digiroad-personaldata",
       "fi":"personaldata",
       "sv":"?",
       "en":"?",
-      "bundlename":"personaldata",
+      "bundlename":"digiroad-personaldata",
       "metadata":{
          "Import-Bundle":{
-            "personaldata":{
+            "digiroad-personaldata":{
                "bundlePath":"../../packages/digiroad/bundle/"
             }
          },
@@ -269,7 +266,7 @@
       "instanceProps":{
 
       },
-      "title":"Koordinaattin�ytt�",
+      "title":"Koordinaattinäyttö",
       "bundleinstancename":"coordinatedisplay",
       "fi":"coordinatedisplay",
       "sv":"?",
@@ -333,14 +330,14 @@
 
       },
       "title":"My places",
-      "bundleinstancename":"myplaces2",
+      "bundleinstancename":"digiroad-myplaces2",
       "fi":"Kohteet",
       "sv":"Platsar",
       "en":"Places",
-      "bundlename":"myplaces2",
+      "bundlename":"digiroad-myplaces2",
       "metadata":{
          "Import-Bundle":{
-            "myplaces2":{
+            "digiroad-myplaces2":{
                "bundlePath":"../../packages/digiroad/bundle/"
             }
          },

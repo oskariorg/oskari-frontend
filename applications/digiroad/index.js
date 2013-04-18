@@ -56,7 +56,8 @@ jQuery(document).ready(function() {
       var app = Oskari.app;
       app.setApplicationSetup(appSetup);
       app.setConfiguration(appConfig);
-      app.startApplication(function(startupInfos) {});
+      app.startApplication(function(startupInfos) {
+      });
     }
   };
   downloadAppSetup(startApplication);

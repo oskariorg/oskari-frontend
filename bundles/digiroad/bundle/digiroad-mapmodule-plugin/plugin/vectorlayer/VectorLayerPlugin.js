@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.mapmodule.VectorLayerPlugin
+ * @class Oskari.digiroad.mapmodule.VectorLayerPlugin
  */
 Oskari.clazz
 		.define(
-				'Oskari.mapframework.mapmodule.VectorLayerPlugin',
+				'Oskari.digiroad.mapmodule.VectorLayerPlugin',
 				function() {
 					this.mapModule = null;
 					this.pluginName = null;

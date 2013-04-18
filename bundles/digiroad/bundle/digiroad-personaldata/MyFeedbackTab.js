@@ -51,7 +51,10 @@ function(instance, localization) {
     eventHandlers : {
         'FeedbackLoadedEvent': function(event) {
             var feedback = event.getFeatures();
-            this.initialFeedbackLoad(feedback);
+
+            if(feedback && feedback.length) {
+                this.initialFeedbackLoad(feedback);
+            }
         }
     },
 

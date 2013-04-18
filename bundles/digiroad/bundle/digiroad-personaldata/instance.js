@@ -1,11 +1,11 @@
 /**
- * @class Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance
+ * @class Oskari.digiroad.bundle.personaldata.PersonalDataBundleInstance
  *
  * Main component and starting point for the personal data functionality.
  * 
- * See Oskari.mapframework.bundle.personaldata.PersonalDataBundle for bundle definition. 
+ * See Oskari.digiroad.bundle.personaldata.PersonalDataBundle for bundle definition. 
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance", 
+Oskari.clazz.define("Oskari.digiroad.bundle.personaldata.PersonalDataBundleInstance", 
 
 /**
  * @method create called automatically on construction
