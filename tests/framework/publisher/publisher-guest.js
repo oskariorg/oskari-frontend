@@ -11,31 +11,11 @@ describe('Test Suite for Publisher - Guest user', function() {
 
     before(function() {
         appSetup = getStartupSequence([
-            'openlayers-default-theme', 
-            'mapfull', 
-            'divmanazer',
-            {
-                "instanceProps": {
-
-                }, 
-                "title": "Publisher",
-                "bundleinstancename": "publisher",
-                "fi": "Publisher",
-                "sv": "Publisher",
-                "en": "Publisher", 
-                "bundlename": "publisher",
-                "metadata": {
-                    "Import-Bundle": {
-                        "publisher": {
-                            "bundlePath": "packages/framework/bundle/"
-                        }
-                    },
-                    "Require-Bundle-Instance": [
-
-                    ]
-                }
-            }
-        ]);
+                'openlayers-default-theme', 
+                'mapfull', 
+                'divmanazer',
+                'publisher'
+            ]);
     
         var mapfullConf = getConfigForMapfull();
         appConf = {

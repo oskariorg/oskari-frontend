@@ -5,48 +5,13 @@ describe('Test Suite for Metadata', function() {
         sandbox = null;
 
     before(function() {
-        appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull', 'divmanazer',
-        {
-            "instanceProps": {
-
-            },
-            "title": "Toolbar",
-            "bundleinstancename": "toolbar",
-            "fi": "toolbar",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "toolbar",
-            "metadata": {
-                "Import-Bundle": {
-                    "toolbar": {
-                        "bundlePath": "packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": [
-
-                ]
-            }
-        }, {
-            "instanceProps": {
-
-            },
-            "title": "Metadata",
-            "bundleinstancename": "metadata",
-            "fi": "Metadata",
-            "sv": "Metadata",
-            "en": "Metadata",
-            "bundlename": "metadata",
-            "metadata": {
-                "Import-Bundle": {
-                    "metadata": {
-                        "bundlePath": "packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": [
-
-                ]
-            }
-        }]),
+        appSetup = getStartupSequence([
+                'openlayers-default-theme', 
+                'mapfull', 
+                'divmanazer',
+                'toolbar',
+                'metadata'
+            ]),
         mapfullConf = getConfigForMapfull(),
         appConf = {
             "toolbar": {

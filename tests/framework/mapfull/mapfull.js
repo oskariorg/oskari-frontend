@@ -7,7 +7,10 @@ describe('Test Suite for Mapfull', function() {
     before(function() {
 
         // startup the oskari application with publisher bundle, 2 test layers and signed in user
-        appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull']);
+        appSetup = getStartupSequence([
+                'openlayers-default-theme',
+                'mapfull'
+            ]);
 
         var mapfullConf = getConfigForMapfull();
         appConf = {
