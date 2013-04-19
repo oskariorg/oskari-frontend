@@ -300,10 +300,13 @@ function(config, locale) {
 		// Get class count
 		var classes = Number(this.element.find('.classificationMethod').find('.classCount').find('#amount').val());
 
-		var col_data = params.COL_VALUES;
+		var gcol_data = params.COL_VALUES;
+		gcol_data = gcol_data.slice(0);
 		var codes = params.VIS_CODES;
 		// Limits
-		var gstats = new geostats(params.COL_VALUES);
+		var gstats = new geostats(gcol_data);
+		
+		var col_data = params.COL_VALUES;
 
 		if (method == 1)
 			limits = gstats.getJenks(classes);
@@ -410,9 +413,9 @@ function(config, locale) {
 
 		var opt = jQuery('<option value="' + "1" + '">' + this._locale.classify.jenks + '</option>');
 		sel.append(opt);
-		var opt = jQuery('<option value="' + "2" + '">' + this._locale.classify.quantile + '</option>');
+		var opt = jQuery('<option value="' + "2" + '">' + this._locale.classify.eqinterval + '</option>');
 		sel.append(opt);
-		var opt = jQuery('<option value="' + "3" + '">' + this._locale.classify.eqinterval + '</option>');
+		var opt = jQuery('<option value="' + "3" + '">' + this._locale.classify.quantile + '</option>');
 		sel.append(opt);
 		sel.change(function(e) {
 			// Classify current columns, if any

@@ -6,48 +6,13 @@ describe('Test Suite for Featuredata', function() {
 
     before(function() {
 
-        appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull', 'divmanazer',
-        {
-            "instanceProps": {
-
-            },
-            "title": "Toolbar",
-            "bundleinstancename": "toolbar",
-            "fi": "toolbar",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "toolbar",
-            "metadata": {
-                "Import-Bundle": {
-                    "toolbar": {
-                        "bundlePath": "packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": [
-
-                ]
-            }
-        }, {
-            "instanceProps": {
-
-            },
-            "title": "Featuredata",
-            "bundleinstancename": "featuredata",
-            "fi": "Kohdetiedot",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "featuredata",
-            "metadata": {
-                "Import-Bundle": {
-                    "featuredata": {
-                        "bundlePath": "packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": [
-
-                ]
-            }
-        }]);
+        appSetup = getStartupSequence([
+                'openlayers-default-theme',
+                'mapfull',
+                'divmanazer',
+                'toolbar',
+                'featuredata'
+            ]);
 
         var mapfullConf = getConfigForMapfull();
         // from GetMapLayers, check the JSON response in Firebug to select layer
