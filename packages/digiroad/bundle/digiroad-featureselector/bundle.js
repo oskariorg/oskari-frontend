@@ -51,15 +51,96 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/digiroad/bundle/digiroad-featureselector/Tile.js"
-        }, {
+        },
+
+        // Events
+        {
             "type" : "text/javascript",
             "src" : "../../../../bundles/digiroad/bundle/digiroad-featureselector/event/FeaturesEditedEvent.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/digiroad/bundle/digiroad-featureselector/event/FeatureHighlightEvent.js"
         }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/digiroad/bundle/digiroad-featureselector/event/FeaturesAddedEvent.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/digiroad/bundle/digiroad-featureselector/event/FeaturesRemovedEvent.js"
+        },
+
+        // Models
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/digiroad/bundle/digiroad-featureselector/domain/VectorLayer.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../../bundles/digiroad/bundle/digiroad-featureselector/domain/VectorLayerModelBuilder.js"
+        },
+
+        // Plugins
+        {
+            "type": "text/javascript",
+            "src": "../../../../bundles/digiroad/bundle/digiroad-featureselector/plugin/VectorLayerPlugin.js"
+        },
+
+        // CSS
+        {
             "type" : "text/css",
             "src" : "../../../../resources/digiroad/bundle/digiroad-featureselector/css/style.css"
+        },
+
+        // SlickGrid
+        {
+            "type" : "text/css",
+            "src" : "../../../../libraries/slickgrid/css/slick.grid.css"
+        },{
+            "type" : "text/css",
+            "src" : "../../../../libraries/slickgrid/css/municipality.css"
+        }, {
+            "type" : "text/css",
+            "src" : "../../../../libraries/slickgrid/css/slick-default-theme.css"
+        }, {
+            "src" : "../../../../libraries/jquery/jquery.event.drag-2.0.min.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/slick.core.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/slick.formatters.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/slick.editors.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.cellrangedecorator.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.cellrangeselector.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.cellselectionmodel.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/slick.grid.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/slick.groupitemmetadataprovider.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/slick.dataview.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/controls/slick.pager.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/controls/slick.columnpicker.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/chosen/chosen.jquery.min.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/chosen/chosen.css",
+            "type" : "text/css"
         }],
         "locales" : [{
             "lang" : "fi",

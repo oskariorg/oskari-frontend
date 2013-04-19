@@ -118,14 +118,15 @@ function() {
      * BundleInstance protocol method
      */
     start : function() {
-        var me = this;
-        // Should this not come as a param?
-        var sandbox = Oskari.$('sandbox');
-        this.sandbox = sandbox;
+        var me = this,
+            sandbox = Oskari.getSandbox();
 
+        this.sandbox = sandbox;
         this._localization = Oskari.getLocalization(this.getName());
-        
         this.queryUrl = this.conf.queryUrl;
+
+        // list of layers that should get added when the bundle starts.
+        this.targetLayers = this.conf.targetLayers;
         
         // register to sandbox as a module
         sandbox.register(me);
@@ -136,8 +137,7 @@ function() {
             }
         }
 
-        this.vectorLayerPlugin = sandbox.findRegisteredModuleInstance("MainMapModuleVectorLayerPlugin");
-
+        this.vectorLayerPlugin = sandbox.findRegisteredModuleInstance("MainMapModuleDigiroadVectorLayerPlugin");
         this.mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
         //Let's extend UI with Flyout and Tile
@@ -179,60 +179,133 @@ function() {
      */
     eventHandlers : {
         'FeaturesAddedEvent': function(event) {
-            var layerName = event.getLayerName().replace(/_vector$/, ""); // layerName is eg. 'nopeusrajoitus_vector'
-            var features = event.getFeatures();
-            
-            if(layerName === "liikenne_elementti") {
-                return;
-            }
-            
-            for(var i = 0; i < features.length; ++i) {
-                this.features[features[i].data.OID_TUNNUS] = features[i];
-            }
-            this.plugins['Oskari.userinterface.Flyout'].appendFeatures(layerName, features);
+            this.afterFeaturesAddedEvent(event);
         },
         'FeaturesRemovedEvent': function(event) {
-            var layerName = event.getLayerName().replace(/_vector$/, "");
-            var features = event.getFeatures();
-            
-            if(layerName === "liikenne_elementti") {
-                return;
-            }
-            
-            if(features) {
-	            for(var i = 0; i < features.length; ++i) {
-	                delete this.features[features[i].data.OID_TUNNUS];
-	            }
-            }
-            this.plugins['Oskari.userinterface.Flyout'].removeFeatures(layerName, features);
+            this.afterFeaturesRemovedEvent(event);
         },
         'AfterMapLayerAddEvent': function(event) {
-            var layer = event.getMapLayer();
-            
-            if(this._layerIsLivi(layer)) {
-                var styleName = layer.getStyles()[0].getName(), // eg. 'nopeusrajoitus'
-                    layerWmsName = this._wmsNamesToLayerNames[layer.getWmsName().split(':')[1]],
-                    featureType = layer.getWmsName().split(':')[1];
-
-                if(styleName) {
-                    this._addVectorLayer(featureType, styleName);
-                    this.plugins['Oskari.userinterface.Flyout'].addGrid(layerWmsName, styleName);
-                }
-            }
+            this.afterMapLayerAddEvent(event);
         },
         'AfterMapLayerRemoveEvent': function(event) {
-            var layer = event.getMapLayer();
-            
-            if(this._layerIsLivi(layer)) {
-                var styleName = layer.getStyles()[0].getName();
+            this.afterMapLayerRemoveEvent(event);
+        }
+    },
 
-                if(styleName) {
-                    this._removeVectorLayer(styleName);
-                    this.plugins['Oskari.userinterface.Flyout'].removeFeatures(styleName);
-                    this.plugins['Oskari.userinterface.Flyout'].removeGrid(styleName);
-                }
+    afterFeaturesAddedEvent: function(event) {
+        var layerName = event.getLayerName().replace(/_vector$/, ""); // layerName is eg. 'nopeusrajoitus_vector'
+        var features = event.getFeatures();
+        var objectId = this.conf.objectIds[layerName];
+        
+        for(var i = 0; i < features.length; ++i) {
+            this.features[features[i].data[objectId]] = features[i];
+        }
+        this.plugins['Oskari.userinterface.Flyout'].appendFeatures(layerName, features);
+    },
+
+    afterFeaturesRemovedEvent: function(event) {
+        var layerName = event.getLayerName().replace(/_vector$/, "");
+        var features = event.getFeatures();
+        var objectId = this.conf.objectIds[layerName];
+        
+        if(features) {
+            for(var i = 0; i < features.length; ++i) {
+                delete this.features[features[i].data[objectId]];
             }
         }
+        this.plugins['Oskari.userinterface.Flyout'].removeFeatures(layerName, features);
+    },
+
+    afterMapLayerAddEvent: function(event) {
+        var layer = event.getMapLayer(),
+            layerId = layer.getId();
+
+        if (this._layerInTargetLayers(layer)) {
+            this._addVectorLayer(layerId);
+            this.plugins['Oskari.userinterface.Flyout'].addGrid(layerId);
+        }
+    },
+
+    afterMapLayerRemoveEvent: function(event) {
+        var layer = event.getMapLayer(),
+            layerId = layer.getId();
+        
+        if(this._layerInTargetLayers(layer)) {
+            this._removeVectorLayer(layerId);
+            this.plugins['Oskari.userinterface.Flyout'].removeFeatures(layerId);
+            this.plugins['Oskari.userinterface.Flyout'].removeGrid(layerId);
+        }
+    },
+
+    /**
+     * @method _addVectorLayer
+     * Adds the vector layer of the same feature type to the map when user has
+     * selected one of the data type layers from the layer selection.
+     * @param {String} layerId 'LIIKENNE_ELEMENTTI' or 'SEGMENTTI'
+     */
+    _addVectorLayer: function(layerId) {
+        var layerJson = this._baseJson(layerId),
+            vectorLayer = this.mapLayerService.createMapLayer(layerJson);
+
+        this.vectorLayerPlugin.addMapLayerToMap(vectorLayer, true, false);
+        this.mapLayerService.addLayer(vectorLayer, true);
+    },
+
+    /**
+     * @method _removeVectorLayer
+     * Removes the vector layer when the user removes a layer from the map.
+     * @param {String} layerName e.g. 'nopeusrajoitus'
+     */
+    _removeVectorLayer: function(layerId) {
+        var vectorLayer = this.mapLayerService.findMapLayer(layerId + '_vector');
+        this.vectorLayerPlugin.removeMapLayerFromMap(vectorLayer);
+        this.mapLayerService.removeLayer(layerName+'_vector', true);
+    },
+
+    /**
+     * @method _baseJson
+     * @param {String} name e.g. 'nopeusrajoitus'
+     */
+    _baseJson: function(name) {
+        return {
+            "id": name+'_vector',
+            "type": "dr-vectorlayer",
+            "opacity": 100,
+            "name": name+'_vector',
+            "minScale": 25001,
+            "maxScale": 1,
+            "inspire": "Vektoritasot",
+            "orgName": "Liikenne-elementit",
+            "protocolType": "WFS",
+            "protocolOpts": {
+                "url": this.queryUrl,
+                "srsName": "EPSG:3067",
+                "version": "1.1.0",
+                "featureType": "LIIKENNE_ELEMENTTI",
+                "featureNS": "http://digiroad.karttakeskus.fi/LiVi",
+                "featurePrefix": "LiVi",
+                "geometryName": "GEOMETRY",
+                "outputFormat": "json"
+            }
+        }
+    },
+
+    /**
+    * @method _layerInTargetLayers
+    * @return {Boolean} true if layer's id is defined in conf.targetLayers,
+    * false otherwise.
+    */
+    _layerInTargetLayers: function(layer) {
+        if (!layer.isLayerOfType('WMS')) {
+            return false;
+        }
+
+        for (var i = 0; i < this.targetLayers.length; ++i) {
+            if (layer.getId() === this.targetLayers[i].id) {
+                return true;
+            }
+        }
+        return false;
     },
 
     /**
@@ -270,217 +343,6 @@ function() {
      */
     _createUI : function() {
         this.plugins['Oskari.userinterface.Flyout'].createUI();
-    },
-
-    /**
-     * @method _addVectorLayer
-     * Adds the vector layer of the same feature type to the map when user has
-     * selected one of the data type layers from the layer selection.
-     * @param {String} featureType 'LIIKENNE_ELEMENTTI' or 'SEGMENTTI'
-     * @param {String} layerName e.g. 'nopeusrajoitus'
-     */
-    _addVectorLayer: function(featureType, layerName) {
-        var layerJson = this._baseJson(featureType, layerName),
-            vectorLayer = this.mapLayerService.createMapLayer(layerJson),
-            filter = this._getFilterFor(layerName),
-            municipalityFilter = new OpenLayers.Filter.Comparison({
-                type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                property: "TIEE_KUNTA",
-                value: kuntayllapito.user.kuntaKoodi
-            });
-        
-        // The user is a basic user if he has a 'kuntaKoodi' parameter greater than 0.
-        // In case he doesn't we're assuming he's an admin.
-        // OBS! This is just a quick fix to Get It Work™, should most definitely implement better.
-        if(kuntayllapito.user.kuntaKoodi > 0) {
-	        if(filter) {
-	            filter = new OpenLayers.Filter.Logical({
-	                type: OpenLayers.Filter.Logical.AND,
-	                filters: [filter, municipalityFilter]
-	            });
-	        } else {
-	            filter = municipalityFilter;
-	        }
-        }
-        
-        this.vectorLayerPlugin.addMapLayerToMap(vectorLayer, true, false, filter);
-        this.mapLayerService.addLayer(vectorLayer, true);
-    },
-
-    /**
-     * @method _removeVectorLayer
-     * Removes the vector layer when the user removes a layer from the map.
-     * @param {String} layerName e.g. 'nopeusrajoitus'
-     */
-    _removeVectorLayer: function(layerName) {
-        var vectorLayer = this.mapLayerService.findMapLayer(layerName + '_vector');
-        this.vectorLayerPlugin.removeMapLayerFromMap(vectorLayer);
-        this.mapLayerService.removeLayer(layerName+'_vector', true);
-    },
-
-    /**
-     * @method _baseJson
-     * @param {String} type 'LIIKENNE_ELEMENTTI' or 'SEGMENTTI'
-     * @param {String} name e.g. 'nopeusrajoitus'
-     */
-    _baseJson: function(type, name) {
-        return {
-            "id": name+'_vector',
-            "type": "vectorlayer",
-            "opacity": 100,
-            "name": name+'_vector',
-            "minScale": 25001,
-            "maxScale": 1,
-            "inspire": "Vektoritasot",
-            "orgName": "Liikenne-elementit",
-            "protocolType": "WFS",
-            "protocolOpts": {
-                "url": this.queryUrl,
-                "srsName": "EPSG:3067",
-                "version": "1.1.0",
-                "featureType": type,
-                "featureNS": "http://digiroad.karttakeskus.fi/LiVi",
-                "featurePrefix": "LiVi",
-                "geometryName": "GEOMETRY",
-                "outputFormat": "json"
-            },
-            "styleOpts": {
-                "defaultStrokeColor": "#22FF22",
-                "selectStrokeColor": "#00FF00"
-            }
-        }
-    },
-    
-    /**
-     * @method _layerIsLivi
-     * @param {Object} layer
-     * @return {Boolean}
-     */
-    _layerIsLivi: function(layer) {
-        return layer.isLayerOfType('WMS') && (
-            layer.getWmsName() === "LiVi:LIIKENNE_ELEMENTTI" ||
-            layer.getWmsName() === "LiVi:SEGMENTTI" ||
-            layer.getWmsName() === "LiVi:PALVELU" ||
-            layer.getWmsName() === "LiVi:KAANTYMISMAARAYS" ||
-            layer.getWmsName() === "LiVi:PYSAKKI"
-        );
-    },
-
-    /**
-     * @property _wmsNamesToLayerNames
-     */
-    _wmsNamesToLayerNames: {
-        "LIIKENNE_ELEMENTTI": "element",
-        "SEGMENTTI": "segment",
-        "PALVELU": "service"
-    },
-
-    /**
-     * @method _getFilterFor
-     * Returns an OpenLayers filter for given data type.
-     * @param {String} layerName e.g. 'nopeusrajoitus'.
-     */
-    _getFilterFor: function(layerName) {
-    	var layerNames = {
-            paikannusnimistopiste: {
-                property: "TYYPPI",
-                value: 1
-            },
-            tunneli: {
-                property: "TYYPPI",
-                value: 6
-            },
-            ajoneuvo_sallittu: {
-                property: "DYN_TYYPPI",
-                value: 1
-            },
-            avattava_puomi: {
-                property: "DYN_TYYPPI",
-                value: 3
-            },
-            kelirikko: {
-                property: "DYN_TYYPPI",
-                value: 6
-            },
-            tien_leveys: {
-                property: "DYN_TYYPPI",
-                value: 8
-            },
-            nopeusrajoitus: {
-                property: "DYN_TYYPPI",
-                value: 11
-            },
-            suljettu_yhteys: {
-                property: "DYN_TYYPPI",
-                value: 16
-            },
-            ass_korkeus: {
-                property: "DYN_TYYPPI",
-                value: 18
-            },
-            ass_pituus: {
-                property: "DYN_TYYPPI",
-                value: 19
-            },
-            ass_yhdistelma_massa: {
-                property: "DYN_TYYPPI",
-                value: 20
-            },
-            ass_akselimassa: {
-                property: "DYN_TYYPPI",
-                value: 21
-            },
-            ass_massa: {
-                property: "DYN_TYYPPI",
-                value: 22
-            },
-            ass_leveys: {
-                property: "DYN_TYYPPI",
-                value: 23
-            },
-            ass_telimassa: {
-                property: "DYN_TYYPPI",
-                value: 24
-            },
-            rautatien_tasoristeys: {
-                property: "DYN_TYYPPI",
-                value: 25
-            },
-            paallystetty_tie: {
-                property: "DYN_TYYPPI",
-                value: 26
-            },
-            valaistu_tie: {
-                property: "DYN_TYYPPI",
-                value: 27
-            },
-            ajoneuvo_kielletty: {
-                property: "DYN_TYYPPI",
-                value: 29
-            },
-            taajama: {
-                property: "DYN_TYYPPI",
-                value: 30
-            },
-            talvinopeusrajoitus: {
-                property: "DYN_TYYPPI",
-                value: 31
-            },
-            liikennemaara: {
-                property: "DYN_TYYPPI",
-                value: 33
-            }
-        };
-
-        if(layerNames[layerName]) {
-            return new OpenLayers.Filter.Comparison({
-                type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                property: layerNames[layerName].property,
-                value: layerNames[layerName].value
-            });
-        } else {
-            return null;
-        }
     }
 },
 {

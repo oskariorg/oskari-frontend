@@ -119,7 +119,8 @@ function(instance) {
     appendFeatures: function(layerName, features) {
         var f, feature, grid = this.grids[layerName], gridData = this.gridDataArrays[layerName];
 
-        // The class .oskari-closed has a css attribute 'display: none;'
+        // WARN! Hack alert!
+        // The css class .oskari-closed has a css attribute 'display: none;'
         // which doesn't play well with SlickGrid data rendering, so we're
         // setting it to use 'visibility: hidden;' instead when the features
         // are being rendered to the grid.
@@ -163,7 +164,7 @@ function(instance) {
             grid.setData(gridData);
         } else {
         	for(var i = 0; i < features.length; ++i) {
-        		oid = features[i].data.OID_TUNNUS;
+        		oid = features[i].data[this.instance.conf.objectIds[layerName]];
         		row_index = this._findGridRowIndexByOid(gridData, oid);
         		if(row_index !== null) {
                    gridData.splice(row_index, 1);
@@ -178,30 +179,28 @@ function(instance) {
     /**
      * @method addGrid
      * Adds the grid to the view when the user adds the corresponding layer to the map.
-     * @param {String} layerType 'element' or 'segment'
      * @param {String} layerName e.g. 'nopeusrajoitus' or 'vaylatyyppi'
      */
-    addGrid: function(layerType, layerName) {
+    addGrid: function(layerName) {
         if(!layerName) {
             return null;
         }
 
         var domContainer = jQuery('<div id="'+layerName+'_grid"></div>'),
-            headerTemplate = this._gridHeaders(layerName),
             gridData = this.gridDataArrays[layerName] = [],
-            gridHeadersBase = this.gridColumnArrays[layerName] = headerTemplate["columns"],
+            gridHeadersBase = this.gridColumnArrays[layerName] = this._gridHeaders(layerName),
             grid = null,
             cel = jQuery(this.container),
-            h2 = headerTemplate["h2"],
+            h2 = layerName,
             objectId = [{
                 "id": "object_id",
-                "name": this.loc['objectId'],
-                "field": "OID_TUNNUS"
+                "name": "Tunnus",
+                "field": this.instance.conf.objectIds[layerName]
             }];
         
         var gridHeaders = objectId.concat(gridHeadersBase);
 
-        grid = this._createGrid(layerName, layerType, domContainer, gridData, gridHeaders);
+        grid = this._createGrid(layerName, domContainer, gridData, gridHeaders);
         cel.append(jQuery('<h2 id="'+layerName+'">'+h2+'</h2>'));
         cel.append(domContainer);
         grid.init();
@@ -214,7 +213,7 @@ function(instance) {
      * @param {String} layerName e.g. 'nopeusrajoitus'
      */
     removeGrid: function(layerName) {
-        if(layerName === null || layerName === undefined || layerName === "") {
+        if(!layerName) {
             return null;
         }
 
@@ -228,12 +227,13 @@ function(instance) {
     /**
      * @method _findGridRowIndexByOid
      * @param {Object[]} grid_data the data array from which we perform the lookup
-     * @param {String} oid the OID_TUNNUS property (object id) of a feature.
+     * @param {String} oid the object id property of a feature.
      * @return {Integer} the index of the searched feature, or null if not found.
      */
     _findGridRowIndexByOid: function(grid_data, oid) {
     	for(var i = 0; i < grid_data.length; ++i) {
-    		if(grid_data[i].OID_TUNNUS === oid) {
+            var elem_oid = grid_data[i][this.instance.conf.objectIds[layerName]];
+    		if(elem_oid === oid) {
     			return i;
     		}
     	}
@@ -243,13 +243,12 @@ function(instance) {
     /**
      * @method _createGrid
      * @param {String} layerName e.g. 'nopeusrajoitus'
-     * @param {String} layerType either 'element' or 'segment'
      * @param {Object} insertTo a jQuery DOM object where the grid is about to be inserted to
      * @param {Object[]} dataArray array of objects of grid data
      * @param {Object[]} columnArray array of objects representing the grid columns
      * @return {Object} grid Returns a new SlickGrid grid
      */
-    _createGrid: function(layerName, layerType, insertTo, dataArray, columnArray) {
+    _createGrid: function(layerName, insertTo, dataArray, columnArray) {
         var me = this,
             sandbox = me.instance.sandbox,
             grid,
@@ -265,7 +264,6 @@ function(instance) {
 
         var commitEditedFeaturesCallback = function(response) {
             var errors = me.instance.getLocalization("errors")['dataSendFailed'];
-            var success = me.instance.getLocalization("success");
             if(!response) {
                 alert(errors);
             } else {
@@ -279,19 +277,9 @@ function(instance) {
         var onMouseFunction = function(e, highlightType) {
             var row = grid.getCellFromEvent(e).row,
                 cell = grid.getCellFromEvent(e).cell,
-                oid = dataArray[row].OID_TUNNUS,
+                oid = dataArray[row][this.instance.conf.objectIds[layerName]],
                 feature = me.instance.features[oid],
                 columnId = grid.getColumns()[cell].id;
-
-            if(layerName === "kaantymismaarays") {
-                if(columnId === 'firstElementId') {
-                    feature = feature.attributes.firstElement;
-                } else if(columnId === 'lastElementId') {
-                    feature = feature.attributes.lastElement;
-                } else {
-                	return;
-                }
-            }
             
             var eventBuilder = sandbox.getEventBuilder("FeatureHighlightEvent");
             if(eventBuilder) {
@@ -300,15 +288,6 @@ function(instance) {
             }
         };
 
-        grid.onBeforeEditCell.subscribe(function(e, args) {
-            if(args.item && args.item['VAYLATYYPP'] === 1) {
-                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                var loc = me.instance.getLocalization('notification').uneditable;
-                dialog.show(loc.title, loc.message);
-                dialog.fadeout();
-                return false;
-            }
-        });
         grid.onCellChange.subscribe(function(e, args) {
             var service = sandbox.getService("Oskari.mapframework.bundle.myplaces2.service.MyPlacesService");
             service.saveEditedFeature(layerType, layerName, args.item, commitEditedFeaturesCallback);
@@ -329,14 +308,14 @@ function(instance) {
      * @return {Object} header
      */
     _gridHeaders: function(layerName) {
-        var header = this.loc[layerName];
+        var header = this.instance.conf.headers[layerName];
 
         if(!header) {
             return null;
         }
 
-        for(var i = 0; i < header.columns.length; ++i) {
-            var col = header.columns[i];
+        for(var i = 0; i < header.length; ++i) {
+            var col = header[i];
             
             switch(col.editor) {
 	            case "integer":
@@ -349,11 +328,11 @@ function(instance) {
 	            	col.editor = Slick.Editors.Text;
 	            	break;
 	        }
-            var formatter = this._getFormatterForHeader(col.id);
+            /*var formatter = this._getFormatterForHeader(col.id);
             if(formatter) {
                 col.formatter = formatter['formatter'];
                 col.options = formatter['options'];
-            }
+            }*/
         }
 
         return header;

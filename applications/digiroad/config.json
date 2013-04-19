@@ -43,6 +43,7 @@
          "north":"6874042"
       },
       "conf":{
+         "globalMapAjaxUrl": "/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2",
          "plugins":[
             {
                "id":"Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin"
@@ -60,7 +61,13 @@
                "id":"Oskari.mapframework.mapmodule.GetInfoPlugin"
             },
             {
-               "id": "Oskari.digiroad.mapmodule.VectorLayerPlugin"
+               "id": "Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPlugin"
+            },
+            {
+               "id":"Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerPlugin"
+            },
+            {
+               "id":"Oskari.mapframework.bundle.mapstats.plugin.StatsLayerPlugin"
             },
             {
                "id":"Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin"
@@ -76,6 +83,32 @@
             }
          ],
          "layers":[
+            {
+                "type": "wmslayer",
+                "id": "liikenne_elementti",
+                "wmsName": "LiVi:LIIKENNE_ELEMENTTI",
+                "name": "Liikenne-elementti",
+                "inspire": "Liikenne-elementit",
+                "orgName": "Liikenne-elementit",
+                "minScale": 15000000,
+                "maxScale": 1,
+                "wmsUrl": "http://digiroad.karttakeskus.fi/dgeoserver/wms"
+            },
+            {
+                "type": "wmslayer",
+                "id": "vaylatyyppi",
+                "wmsName": "LiVi:LIIKENNE_ELEMENTTI",
+                "name": "Väylätyyppi",
+                "inspire": "Liikenne-elementit",
+                "orgName": "Liikenne-elementit",
+                "minScale": 15000000,
+                "maxScale": 1,
+                "wmsUrl": "http://digiroad.karttakeskus.fi/dgeoserver/wms",
+                "styles": [
+                  {"title": "Väylätyyppi", "name": "vaylatyyppi"}
+                ],
+                "style": "vaylatyyppi"
+            },
             {
                "type":"base",
                "id":"base_35",
@@ -232,10 +265,21 @@
 
       },
       "conf": {
-        "queryUrl": "/delegate/proxy/wfs",
+        "queryUrl": "http://digiroad.karttakeskus.fi/delegate/proxy/wfs",
         "targetLayers": [
-            "vaylatyyppi"
-        ]
+            {"id": "vaylatyyppi"}
+        ],
+        "objectIds": {
+            "vaylatyyppi": "OID_TUNNUS"
+        },
+        "headers": {
+            "vaylatyyppi": [
+                {"id": "vaylatyyppi", "name": "Väylätyyppi", "field": "VAYLATYYPP", "editor": "select"},
+                {"id": "toiminnallinen_luokka", "name": "Toiminnallinen luokka", "field": "TOIMINNALL", "editor": "select"},
+                {"id": "nimi1_fi", "name": "Nimi (suomi)", "field": "NIMI1_SU", "editor": "text"},
+                {"id": "nimi1_sv", "name": "Nimi (ruotsi)", "field": "NIMI1_RU", "editor": "text"}
+            ]
+        }
       }
    },
    "featuredata":{

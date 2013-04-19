@@ -51,8 +51,8 @@
             "request-map-layer": {
                "bundlePath": "../../packages/framework/bundle/"
             },
-            "digiroad-mapmodule-plugin": {
-               "bundlePath": "../../packages/digiroad/bundle/"
+            "mapmodule-plugin": {
+               "bundlePath": "../../packages/framework/bundle/"
             },
             "event-base": {
                "bundlePath": "../../packages/framework/bundle/"
@@ -89,6 +89,12 @@
             },
             "event-map": {
                "bundlePath": "../../packages/framework/bundle/"
+            },
+            "mapstats": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "digiroad-featureselector": {
+               "bundlePath": "../../packages/digiroad/bundle/"
             }
          },
          "Require-Bundle-Instance":[
