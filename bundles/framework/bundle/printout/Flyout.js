@@ -101,8 +101,8 @@ function(instance) {
         var me = this;
 
         var flyout = jQuery(this.container);
-        
-        this.view = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.StartView', 
+
+        this.view = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.StartView',
                 this.instance, 
                 this.instance.getLocalization('StartView'));
     },

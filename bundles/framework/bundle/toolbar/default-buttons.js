@@ -12,6 +12,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      * All buttons are included by default
      */
     _isButtonConfigured : function(pId, pGroup) {
+this.conf.viewtools = { print : false };
     	if (this.conf && (this.conf[pGroup] === false || (this.conf[pGroup] && this.conf[pGroup][pId] === false))) {
     		// When conf is defined and pGroup or pId false, then exclude the button
 			return false;

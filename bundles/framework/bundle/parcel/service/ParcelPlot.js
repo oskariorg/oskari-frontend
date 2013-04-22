@@ -32,7 +32,7 @@ function(instance) {
 			fontColor : "black",
 			fontSize : "18px",
 			fontFamily : "Courier New, monospace",
-			fontWeight : "bold",
+			fontWeight : "bold"
 		}
 	});
 
@@ -90,7 +90,72 @@ function(instance) {
 		this._plotNewParcel(feature, placeName, placeDescription, cb);
 		this._plotNewBoundary(feature, cb);
 		cb(true);
+        this._createGeoJSON();
+        $('.tool-print').trigger('click');
 	},
+
+	/**
+	 * @method plotParcel
+	 * Create and save GeoJSON from parcel plot
+     */
+    _createGeoJSON : function() {
+
+        var geojson_format = new OpenLayers.Format.GeoJSON();
+        var geojs = {
+            "name" : "Parcel Print",
+            "type" : "FeatureCollection",
+            "crs" :  {
+                "type" : "EPSG",
+                "properties" : {
+                    "code" : 3067
+                }
+            },
+            "features" : []
+        };
+
+        var parcel = geojson_format.write(this.parcelLayer.features);
+        var jsonParcel = JSON.parse(parcel);
+        var featureJSONParcel = {
+            "type" : "Feature",
+            "geometry" : jsonParcel,
+            "properties" : {
+                "geom_type" : "polygon",
+                "buffer_radius" : "0"
+            }
+        };
+        geojs.features.push(featureJSONParcel);
+
+        var boundary = geojson_format.write(this.parcelLayer.features);
+        var jsonBoundary = JSON.parse(parcel);
+        var featureJSONBoundary = {
+            "type" : "Feature",
+            "geometry" : jsonParcel,
+            "properties" : {
+                "geom_type" : "line",
+                "buffer_radius" : "0"
+            }
+        };
+        geojs.features.push(featureJSONBoundary);
+
+        var point = geojson_format.write(this.parcelLayer.features);
+        var jsonPoint = JSON.parse(parcel);
+        var featureJSONPoint = {
+            "type" : "Feature",
+            "geometry" : jsonParcel,
+            "properties" : {
+                "geom_type" : "point",
+                "buffer_radius" : "0"
+            }
+        };
+        geojs.features.push(featureJSONPoint);
+
+        var drawPlugin = this.instance.getDrawPlugin();
+        var printMap = drawPlugin.getSandbox().getMap();
+        printMap.GeoJSON = geojs;
+
+debugger;
+    },
+
 	/**
 	 * @method clearParcelMap
 	 * Clear  temp layers of Parcel Map
