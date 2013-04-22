@@ -164,7 +164,7 @@ function(instance) {
             grid.setData(gridData);
         } else {
         	for(var i = 0; i < features.length; ++i) {
-        		oid = features[i].data[this.instance.conf.objectIds[layerName]];
+        		oid = features[i].data[this.instance.targetLayers[layerName].objectId];
         		row_index = this._findGridRowIndexByOid(gridData, oid);
         		if(row_index !== null) {
                    gridData.splice(row_index, 1);
@@ -195,7 +195,7 @@ function(instance) {
             objectId = [{
                 "id": "object_id",
                 "name": "Tunnus",
-                "field": this.instance.conf.objectIds[layerName]
+                "field": this.instance.targetLayers[layerName].objectId
             }];
         
         var gridHeaders = objectId.concat(gridHeadersBase);
@@ -232,7 +232,7 @@ function(instance) {
      */
     _findGridRowIndexByOid: function(grid_data, oid) {
     	for(var i = 0; i < grid_data.length; ++i) {
-            var elem_oid = grid_data[i][this.instance.conf.objectIds[layerName]];
+            var elem_oid = grid_data[i][this.instance.targetLayers[layerName].objectId];
     		if(elem_oid === oid) {
     			return i;
     		}
@@ -277,7 +277,7 @@ function(instance) {
         var onMouseFunction = function(e, highlightType) {
             var row = grid.getCellFromEvent(e).row,
                 cell = grid.getCellFromEvent(e).cell,
-                oid = dataArray[row][this.instance.conf.objectIds[layerName]],
+                oid = dataArray[row][this.instance.targetLayers[layerName].objectId],
                 feature = me.instance.features[oid],
                 columnId = grid.getColumns()[cell].id;
             
@@ -308,7 +308,7 @@ function(instance) {
      * @return {Object} header
      */
     _gridHeaders: function(layerName) {
-        var header = this.instance.conf.headers[layerName];
+        var header = this.instance.targetLayers[layerName].headers;
 
         if(!header) {
             return null;

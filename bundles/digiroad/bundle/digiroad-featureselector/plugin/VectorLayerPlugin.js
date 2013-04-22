@@ -276,11 +276,9 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
     },
 
     createProtocol: function(layer) {
-        var protocol = null;
-        if(layer.getProtocolType() == "WFS") {
-            var protocol_opts = layer.getProtocolOpts();
-            protocol = new OpenLayers.Protocol.WFS(protocol_opts);
-        }
+        var pType = layer.getProtocolType();
+        var protocol_opts = layer.getProtocolOpts();
+        var protocol = new OpenLayers.Protocol[pType](protocol_opts);
         return protocol;
     },
 
@@ -307,39 +305,31 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
             }
         });
         
-        if(layer.getId() === "liikenne_elementti_vector") {
-            control.multiple = true;
-        }
-        
-        if(layer.getId() === 'kaantymismaarays_vector') {
-            this._registerEventsForKaantymismaarays(control, layer, openLayer, protocol);
-        } else {
-            control.events.register("beforefeatureselected", this, function(e) {
-                if(this._map.getZoom() < 8) {
-                    return false;
-                }
-            });
-            control.events.register("featureselected", this, function(e) {
-                openLayer.addFeatures([e.feature]);
+        control.events.register("beforefeatureselected", this, function(e) {
+            if(this._map.getZoom() < 8) {
+                return false;
+            }
+        });
+        control.events.register("featureselected", this, function(e) {
+            openLayer.addFeatures([e.feature]);
 
-                var sandbox = this._sandbox;
-                var eventBuilder = sandbox.getEventBuilder("FeaturesAddedEvent");
-                if(eventBuilder) {
-                    var event = eventBuilder(layer.getId(), [e.feature]);
-                    sandbox.notifyAll(event);
-                }
-            });
-            control.events.register("featureunselected", this, function(e) {
-                openLayer.removeFeatures([e.feature]);
+            var sandbox = this._sandbox;
+            var eventBuilder = sandbox.getEventBuilder("FeaturesAddedEvent");
+            if(eventBuilder) {
+                var event = eventBuilder(layer.getId(), [e.feature]);
+                sandbox.notifyAll(event);
+            }
+        });
+        control.events.register("featureunselected", this, function(e) {
+            openLayer.removeFeatures([e.feature]);
 
-                var sandbox = this._sandbox;
-                var eventBuilder = sandbox.getEventBuilder("FeaturesRemovedEvent");
-                if(eventBuilder) {
-                    var event = eventBuilder(layer.getId(), [e.feature]);
-                    sandbox.notifyAll(event);
-                }
-            });
-        }
+            var sandbox = this._sandbox;
+            var eventBuilder = sandbox.getEventBuilder("FeaturesRemovedEvent");
+            if(eventBuilder) {
+                var event = eventBuilder(layer.getId(), [e.feature]);
+                sandbox.notifyAll(event);
+            }
+        });
         
         this._map.addControl(control);
         control.activate();

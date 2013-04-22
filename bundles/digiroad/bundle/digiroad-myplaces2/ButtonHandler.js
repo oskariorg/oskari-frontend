@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.ButtonHandler
+ * @class Oskari.digiroad.bundle.myplaces2.ButtonHandler
  * 
  * Handles the buttons for myplaces functionality
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
+Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.ButtonHandler",
 
 /**
  * @method create called automatically on construction

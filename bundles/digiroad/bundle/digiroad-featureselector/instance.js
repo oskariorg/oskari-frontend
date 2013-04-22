@@ -17,6 +17,8 @@ function() {
     this.features = {};
     this.vectorLayerPlugin = null;
     this.mapLayerService = null;
+
+    this._layerPostFix = '_vector';
 }, {
     /**
      * @static
@@ -195,7 +197,7 @@ function() {
     afterFeaturesAddedEvent: function(event) {
         var layerName = event.getLayerName().replace(/_vector$/, ""); // layerName is eg. 'nopeusrajoitus_vector'
         var features = event.getFeatures();
-        var objectId = this.conf.objectIds[layerName];
+        var objectId = this.targetLayers[layerName].objectId;
         
         for(var i = 0; i < features.length; ++i) {
             this.features[features[i].data[objectId]] = features[i];
@@ -206,7 +208,7 @@ function() {
     afterFeaturesRemovedEvent: function(event) {
         var layerName = event.getLayerName().replace(/_vector$/, "");
         var features = event.getFeatures();
-        var objectId = this.conf.objectIds[layerName];
+        var objectId = this.targetLayers[layerName].objectId;
         
         if(features) {
             for(var i = 0; i < features.length; ++i) {
@@ -221,7 +223,7 @@ function() {
             layerId = layer.getId();
 
         if (this._layerInTargetLayers(layer)) {
-            this._addVectorLayer(layerId);
+            this._addVectorLayer(layer);
             this.plugins['Oskari.userinterface.Flyout'].addGrid(layerId);
         }
     },
@@ -243,8 +245,8 @@ function() {
      * selected one of the data type layers from the layer selection.
      * @param {String} layerId 'LIIKENNE_ELEMENTTI' or 'SEGMENTTI'
      */
-    _addVectorLayer: function(layerId) {
-        var layerJson = this._baseJson(layerId),
+    _addVectorLayer: function(layer) {
+        var layerJson = this._baseJson(layer),
             vectorLayer = this.mapLayerService.createMapLayer(layerJson);
 
         this.vectorLayerPlugin.addMapLayerToMap(vectorLayer, true, false);
@@ -254,40 +256,44 @@ function() {
     /**
      * @method _removeVectorLayer
      * Removes the vector layer when the user removes a layer from the map.
-     * @param {String} layerName e.g. 'nopeusrajoitus'
+     * @param {String} layerId e.g. 'nopeusrajoitus'
      */
     _removeVectorLayer: function(layerId) {
-        var vectorLayer = this.mapLayerService.findMapLayer(layerId + '_vector');
+        var vectorLayer = this.mapLayerService.findMapLayer(layerId + this._layerPostFix);
         this.vectorLayerPlugin.removeMapLayerFromMap(vectorLayer);
-        this.mapLayerService.removeLayer(layerName+'_vector', true);
+        this.mapLayerService.removeLayer(layerId+this._layerPostFix, true);
     },
 
     /**
      * @method _baseJson
-     * @param {String} name e.g. 'nopeusrajoitus'
+     * @param {String} layer
+     * @return {Object} json for mapLayerService to build a vectorlayer.
      */
-    _baseJson: function(name) {
+    _baseJson: function(layer) {
+        var layerConf = this.targetLayers[layer.getId()];
+        var geomName = layerConf.geometryName || 'the_geom';
+        var protocolType = layerConf.protocolType || 'WFS';
+        var protocolOpts = layerConf.protocolOpts || {
+            "url": this.queryUrl,
+            "srsName": this.sandbox.getMap().getSrsName(),
+            "version": "1.1.0",
+            "featureType": layer.getWmsName(),
+            "geometryName": geomName,
+            "outputFormat": "json"
+        };
+
         return {
-            "id": name+'_vector',
+            "id": layer.getId() + this._layerPostFix,
             "type": "dr-vectorlayer",
             "opacity": 100,
-            "name": name+'_vector',
+            "name": layer.getName() + this._layerPostFix,
             "minScale": 25001,
             "maxScale": 1,
-            "inspire": "Vektoritasot",
-            "orgName": "Liikenne-elementit",
-            "protocolType": "WFS",
-            "protocolOpts": {
-                "url": this.queryUrl,
-                "srsName": "EPSG:3067",
-                "version": "1.1.0",
-                "featureType": "LIIKENNE_ELEMENTTI",
-                "featureNS": "http://digiroad.karttakeskus.fi/LiVi",
-                "featurePrefix": "LiVi",
-                "geometryName": "GEOMETRY",
-                "outputFormat": "json"
-            }
-        }
+            "inspire": layer.getInspireName(),
+            "orgName": layer.getOrganizationName(),
+            "protocolType": protocolType,
+            "protocolOpts": protocolOpts
+        };
     },
 
     /**
@@ -300,10 +306,8 @@ function() {
             return false;
         }
 
-        for (var i = 0; i < this.targetLayers.length; ++i) {
-            if (layer.getId() === this.targetLayers[i].id) {
-                return true;
-            }
+        if(this.targetLayers[layer.getId()]) {
+            return true;
         }
         return false;
     },

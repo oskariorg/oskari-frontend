@@ -1,8 +1,8 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
+ * @class Oskari.digiroad.bundle.myplaces2.service.MyPlacesService
  * 
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService', 
+Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.service.MyPlacesService', 
 
 /**
  * @method create called automatically on construction
@@ -19,15 +19,15 @@ function(url, uuid, sandbox, defaultName) {
     this._categoryList = [];
     this._placesList = [];
 
-    this.wfstStore = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore', url, uuid);
+    this.wfstStore = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.service.MyPlacesWFSTStore', url, uuid);
     this._sandbox = sandbox;
 }, {
-    __qname : "Oskari.mapframework.bundle.myplaces2.service.MyPlacesService",
+    __qname : "Oskari.digiroad.bundle.myplaces2.service.MyPlacesService",
     getQName : function() {
         return this.__qname;
     },
 
-    __name : "MyPlacesService",
+    __name : "DigiroadMyPlacesService",
     getName : function() {
         return this.__name;
     },

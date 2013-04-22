@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore
+ * @class Oskari.digiroad.bundle.myplaces2.service.MyPlacesWFSTStore
  *
  * Transforms Ext Model & OpenLayers geometry to WFS Transactions
  *
@@ -12,14 +12,14 @@
  * service = Oskari.bundle_manager.instances[12].impl.myPlacesService; // TEMP
  *
  * storE =
- * Oskari.clazz.create('Oskari.mapframework.service.MyPlacesWFSTStore','http://tiuhti.nls.fi/geoserver/wfs','1234');
+ * Oskari.clazz.create('Oskari.digiroad.service.MyPlacesWFSTStore','http://tiuhti.nls.fi/geoserver/wfs','1234');
  * storE.connect(); storE.getCategories(service); storE.getMyPlaces(service);
  *
  *
  * @TODO DELETE
  *
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore', 
+Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.service.MyPlacesWFSTStore', 
 
 /**
  * @method create called automatically on construction
@@ -179,7 +179,7 @@ function(url, uuid) {
             var featAtts = f.attributes;
 
             var id = this._parseNumericId(f.fid);
-            var place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlace');
+            var place = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.model.MyPlace');
             place.setId(id);
             place.setDynType(featAtts['DYN_TYYPPI']);
             place.setDynValue(featAtts['DYN_ARVO']);

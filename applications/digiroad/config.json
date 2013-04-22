@@ -266,19 +266,17 @@
       },
       "conf": {
         "queryUrl": "http://digiroad.karttakeskus.fi/delegate/proxy/wfs",
-        "targetLayers": [
-            {"id": "vaylatyyppi"}
-        ],
-        "objectIds": {
-            "vaylatyyppi": "OID_TUNNUS"
-        },
-        "headers": {
-            "vaylatyyppi": [
-                {"id": "vaylatyyppi", "name": "Väylätyyppi", "field": "VAYLATYYPP", "editor": "select"},
-                {"id": "toiminnallinen_luokka", "name": "Toiminnallinen luokka", "field": "TOIMINNALL", "editor": "select"},
-                {"id": "nimi1_fi", "name": "Nimi (suomi)", "field": "NIMI1_SU", "editor": "text"},
-                {"id": "nimi1_sv", "name": "Nimi (ruotsi)", "field": "NIMI1_RU", "editor": "text"}
-            ]
+        "targetLayers": {
+            "vaylatyyppi": {
+                "objectId": "OID_TUNNUS",
+                "geometryName": "GEOMETRY",
+                "headers": [
+                    {"id": "vaylatyyppi", "name": "Väylätyyppi", "field": "VAYLATYYPP", "editor": "select"},
+                    {"id": "toiminnallinen_luokka", "name": "Toiminnallinen luokka", "field": "TOIMINNALL", "editor": "select"},
+                    {"id": "nimi1_fi", "name": "Nimi (suomi)", "field": "NIMI1_SU", "editor": "text"},
+                    {"id": "nimi1_sv", "name": "Nimi (ruotsi)", "field": "NIMI1_RU", "editor": "text"}
+                ]
+            }
         }
       }
    },

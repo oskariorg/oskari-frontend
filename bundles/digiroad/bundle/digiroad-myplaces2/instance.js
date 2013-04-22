@@ -18,7 +18,7 @@ function() {
     this.idPrefix = 'myplaces';
     this.queryUrl = undefined;
 }, {
-    __name : 'MyPlaces2',
+    __name : 'DigiroadMyPlaces2',
     /**
      * @method getName
      * @return {String} the name for the component 
@@ -137,7 +137,7 @@ function() {
         sandbox.printDebug("Initializing my places module...");
         
         // handles toolbar buttons related to my places 
-        this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.ButtonHandler", this);
+        this.buttons = Oskari.clazz.create("Oskari.digiroad.bundle.myplaces2.ButtonHandler", this);
         this.buttons.start();
         
         var user = sandbox.getUser();
@@ -151,7 +151,7 @@ function() {
         //'/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&myplaces=WFS';
         // this.conf.queryUrl; 
         // back end communication
-        this.myPlacesService = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService', 
+        this.myPlacesService = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.service.MyPlacesService', 
             actionUrl, user.getUuid(), sandbox);
         // register service so personal data can access it
         this.sandbox.registerService(this.myPlacesService);
@@ -159,10 +159,10 @@ function() {
         this.myPlacesService.init();
         
         // handles my places insert form etc
-        this.view = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.view.MainView", this);
+        this.view = Oskari.clazz.create("Oskari.digiroad.bundle.myplaces2.view.MainView", this);
         this.view.start();
         
-        this.editRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler', sandbox, me);
+        this.editRequestHandler = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.request.EditRequestHandler', sandbox, me);
         sandbox.addRequestHandler('MyPlaces.EditPlaceRequest', this.editRequestHandler);
     },
     /**
