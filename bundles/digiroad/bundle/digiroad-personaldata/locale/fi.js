@@ -1,6 +1,6 @@
 Oskari.registerLocalization({
   "lang": "fi",
-  "key": "PersonalData",
+  "key": "DigiroadPersonalData",
   "value": {
     "title": "Omat tiedot",
     "desc": "Omat tiedot",

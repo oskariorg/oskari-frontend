@@ -1,6 +1,6 @@
 Oskari.registerLocalization({
   "lang": "fi",
-  "key": "MyPlaces2",
+  "key": "DigiroadMyPlaces2",
   "value": {
     "title": "Kohteet",
     "desc": "",

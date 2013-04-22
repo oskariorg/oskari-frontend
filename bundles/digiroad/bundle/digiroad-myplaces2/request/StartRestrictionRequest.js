@@ -1,9 +1,9 @@
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.StartRestrictionRequest', 
+Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.request.StartRestrictionRequest', 
 
 function(config) {
 
 }, {
-    __name : "MyPlaces.StartRestrictionRequest",
+    __name : "DigiroadMyPlaces.StartRestrictionRequest",
     getName : function() {
         return this.__name;
     }

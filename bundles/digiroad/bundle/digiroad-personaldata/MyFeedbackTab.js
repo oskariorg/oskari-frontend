@@ -1,8 +1,8 @@
 /**
- * @class Oskari.mapframework.bundle.personaldata.MyFeedbackTab
+ * @class Oskari.digiroad.bundle.personaldata.MyFeedbackTab
  * Renders the "personal data" myplaces tab.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyFeedbackTab',
+Oskari.clazz.define('Oskari.digiroad.bundle.personaldata.MyFeedbackTab',
 
 /**
  * @method create called automatically on construction
@@ -28,7 +28,7 @@ function(instance, localization) {
      * events (getName and onEvent methods are needed for this))
      */
     getName : function() {
-        return 'PersonalData.MyFeedback';
+        return 'DigiroadPersonalData.MyFeedback';
     },
 
     getTitle : function() {

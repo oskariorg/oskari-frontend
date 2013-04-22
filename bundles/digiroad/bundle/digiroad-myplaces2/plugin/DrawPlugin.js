@@ -1,7 +1,7 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin
+ * @class Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', function() {
+Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', function(url) {
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
@@ -12,8 +12,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
     this.snappingLayerStrategy = null;
     this.editMode = false;
     this.currentDrawMode = null;
+    this.queryUrl = url;
 }, {
-    __name : 'MyPlaces.DrawPlugin',
+    __name : 'DigiroadMyPlaces.DrawPlugin',
 
     getName : function() {
         return this.pluginName;
@@ -162,7 +163,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
 	        // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
         	this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
         }
-        var event = this._sandbox.getEventBuilder('MyPlaces.FinishedDrawingEvent')(this.getDrawing(), this.editMode);
+        var event = this._sandbox.getEventBuilder('DigiroadMyPlaces.FinishedDrawingEvent')(this.getDrawing(), this.editMode);
         this._sandbox.notifyAll(event);
     },
     /**
@@ -195,13 +196,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
     init : function(sandbox) {
         var me = this;
         this.requestHandlers = {
-            startDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.request.StartDrawingRequestPluginHandler', sandbox, me),
-            stopDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.request.StopDrawingRequestPluginHandler', sandbox, me),
-            getGeometryHandler : Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.request.GetGeometryRequestPluginHandler', sandbox, me)
+            startDrawingHandler : Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.request.StartDrawingRequestPluginHandler', sandbox, me),
+            stopDrawingHandler : Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.request.StopDrawingRequestPluginHandler', sandbox, me),
+            getGeometryHandler : Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.request.GetGeometryRequestPluginHandler', sandbox, me)
         };
 
         // the URL should not be hard coded here but meh I'm lazy.
-        this.snappingGridLayer = this.createSnappingGridLayer("/delegate/proxy/wfs");
+        this.snappingGridLayer = this.createSnappingGridLayer(this.queryUrl);
         
         this.drawLayer = new OpenLayers.Layer.Vector("MyPlaces Draw Layer", {
             /*style: {
@@ -273,16 +274,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
         this._sandbox = sandbox;
 
         sandbox.register(this);
-        sandbox.addRequestHandler('MyPlaces.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
-        sandbox.addRequestHandler('MyPlaces.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
-        sandbox.addRequestHandler('MyPlaces.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
+        sandbox.addRequestHandler('DigiroadMyPlaces.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
+        sandbox.addRequestHandler('DigiroadMyPlaces.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
+        sandbox.addRequestHandler('DigiroadMyPlaces.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
 
     },
     stopPlugin : function(sandbox) {
 
-        sandbox.removeRequestHandler('MyPlaces.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
-        sandbox.removeRequestHandler('MyPlaces.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
-        sandbox.removeRequestHandler('MyPlaces.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
+        sandbox.removeRequestHandler('DigiroadMyPlaces.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
+        sandbox.removeRequestHandler('DigiroadMyPlaces.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
+        sandbox.removeRequestHandler('DigiroadMyPlaces.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
         sandbox.unregister(this);
 
         this._map = null;

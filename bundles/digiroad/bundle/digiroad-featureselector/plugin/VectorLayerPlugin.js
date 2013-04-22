@@ -314,7 +314,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
             openLayer.addFeatures([e.feature]);
 
             var sandbox = this._sandbox;
-            var eventBuilder = sandbox.getEventBuilder("FeaturesAddedEvent");
+            var eventBuilder = sandbox.getEventBuilder("FeatureSelector.FeaturesAddedEvent");
             if(eventBuilder) {
                 var event = eventBuilder(layer.getId(), [e.feature]);
                 sandbox.notifyAll(event);
@@ -324,7 +324,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
             openLayer.removeFeatures([e.feature]);
 
             var sandbox = this._sandbox;
-            var eventBuilder = sandbox.getEventBuilder("FeaturesRemovedEvent");
+            var eventBuilder = sandbox.getEventBuilder("FeatureSelector.FeaturesRemovedEvent");
             if(eventBuilder) {
                 var event = eventBuilder(layer.getId(), [e.feature]);
                 sandbox.notifyAll(event);

@@ -1,12 +1,12 @@
 /**
- * @class Oskari.mapframework.myplaces.event.NewRestrictionsLoadedEvent
+ * @class Oskari.digiroad.myplaces.event.NewRestrictionsLoadedEvent
  */
 Oskari.clazz.define(
-    'Oskari.mapframework.myplaces.event.NewRestrictionsLoadedEvent',
+    'Oskari.digiroad.myplaces.event.NewRestrictionsLoadedEvent',
     function(features) {
         this._features = features;
     }, {
-        __name : "NewRestrictionsLoadedEvent",
+        __name : "DigiroadMyPlaces.NewRestrictionsLoadedEvent",
         getName : function() {
             return this.__name;
         },

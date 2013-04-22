@@ -180,10 +180,10 @@ function() {
      * events bundle is listening and how bundle reacts to them
      */
     eventHandlers : {
-        'FeaturesAddedEvent': function(event) {
+        'FeatureSelector.FeaturesAddedEvent': function(event) {
             this.afterFeaturesAddedEvent(event);
         },
-        'FeaturesRemovedEvent': function(event) {
+        'FeatureSelector.FeaturesRemovedEvent': function(event) {
             this.afterFeaturesRemovedEvent(event);
         },
         'AfterMapLayerAddEvent': function(event) {

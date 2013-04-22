@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.view.PlaceForm
+ * @class Oskari.digiroad.bundle.myplaces2.view.PlaceForm
  * 
  * Shows a form for my place
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
+Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.view.PlaceForm",
 
 /**
  * @method create called automatically on construction

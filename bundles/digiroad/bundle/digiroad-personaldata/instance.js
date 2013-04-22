@@ -23,7 +23,7 @@ function() {
 	 * @static
 	 * @property __name
 	 */
-	__name : 'PersonalData',
+	__name : 'DigiroadPersonalData',
 	/**
 	 * @method getName
 	 * @return {String} the name for the component 
@@ -86,7 +86,7 @@ function() {
 
 		var sandbox = Oskari.$("sandbox");
 		me.sandbox = sandbox;
-		this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService', sandbox.getAjaxUrl());
+		this.viewService = Oskari.clazz.create('Oskari.digiroad.bundle.personaldata.service.ViewService', sandbox.getAjaxUrl());
 
 		sandbox.register(me);
 		for(p in me.eventHandlers) {
@@ -161,8 +161,8 @@ function() {
 	 * Oskari.mapframework.bundle.personaldata.Tile
 	 */
 	startExtension : function() {
-		this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.Flyout', this);
-		this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.Tile', this);
+		this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.digiroad.bundle.personaldata.Flyout', this);
+		this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.digiroad.bundle.personaldata.Tile', this);
 	},
 	/**
 	 * @method stopExtension

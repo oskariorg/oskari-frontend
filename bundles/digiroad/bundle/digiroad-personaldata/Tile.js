@@ -1,8 +1,8 @@
 /**
- * @class Oskari.mapframework.bundle.personaldata.Tile
+ * @class Oskari.digiroad.bundle.personaldata.Tile
  * Renders the "personal data" tile.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Tile',
+Oskari.clazz.define('Oskari.digiroad.bundle.personaldata.Tile',
 
 /**
  * @method create called automatically on construction
@@ -20,7 +20,7 @@ function(instance) {
 	 * @return {String} the name for the component 
 	 */
 	getName : function() {
-		return 'Oskari.mapframework.bundle.personaldata.Tile';
+		return 'Oskari.digiroad.bundle.personaldata.Tile';
 	},
 	/**
 	 * @method setEl

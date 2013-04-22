@@ -1,12 +1,12 @@
 /**
- * @class Oskari.mapframework.myplaces.event.FeedbackLoadedEvent
+ * @class Oskari.digiroad.myplaces.event.FeedbackLoadedEvent
  */
 Oskari.clazz.define(
-    'Oskari.mapframework.myplaces.event.FeedbackLoadedEvent',
+    'Oskari.digiroad.myplaces.event.FeedbackLoadedEvent',
     function(features) {
         this._features = features;
     }, {
-        __name : "FeedbackLoadedEvent",
+        __name : "DigiroadMyPlaces.FeedbackLoadedEvent",
         getName : function() {
             return this.__name;
         },

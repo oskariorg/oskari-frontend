@@ -50,12 +50,12 @@ function(url, uuid, sandbox, defaultName) {
         };
 
         var initialLoadCallBackEditedFeatures = function(features) {
-            var event = me._sandbox.getEventBuilder('MyPlaces.EditedFeaturesLoadedEvent')(features);
+            var event = me._sandbox.getEventBuilder('DigiroadMyPlaces.EditedFeaturesLoadedEvent')(features);
             me._sandbox.notifyAll(event);
         };
         
         var initialLoadCallBackFeedback = function(feedbackFeatures) {
-            var event = me._sandbox.getEventBuilder('FeedbackLoadedEvent')(feedbackFeatures);
+            var event = me._sandbox.getEventBuilder('DigiroadMyPlaces.FeedbackLoadedEvent')(feedbackFeatures);
             me._sandbox.notifyAll(event);
         };
     
@@ -121,7 +121,7 @@ function(url, uuid, sandbox, defaultName) {
     },
     /** Internal usage */
     _notifyDataChanged : function() {
-        var event = this._sandbox.getEventBuilder('MyPlaces.MyPlacesChangedEvent')();
+        var event = this._sandbox.getEventBuilder('DigiroadMyPlaces.MyPlacesChangedEvent')();
         this._sandbox.notifyAll(event);
     },
 
@@ -262,7 +262,7 @@ function(url, uuid, sandbox, defaultName) {
     getAllFeedback: function() {
         var me = this;
         var callback = function(feedback) {
-            var event = me._sandbox.getEventBuilder('FeedbackLoadedEvent')(feedback);
+            var event = me._sandbox.getEventBuilder('DigiroadMyPlaces.FeedbackLoadedEvent')(feedback);
             me._sandbox.notifyAll(event);
         };
         me.wfstStore.getFeedbackFeatures(callback);
@@ -304,7 +304,7 @@ function(url, uuid, sandbox, defaultName) {
     getAllEditedFeatures: function() {
         var me = this;
         var callback = function(features) {
-            var event = me._sandbox.getEventBuilder('MyPlaces.EditedFeaturesLoadedEvent')(features);
+            var event = me._sandbox.getEventBuilder('DigiroadMyPlaces.EditedFeaturesLoadedEvent')(features);
             me._sandbox.notifyAll(event);
         };
         me.wfstStore.getEditedFeatures(callback);
@@ -364,7 +364,7 @@ function(url, uuid, sandbox, defaultName) {
     getAllNewRestrictions: function() {
         var me = this;
         var callback = function(features) {
-            var event = me._sandbox.getEventBuilder('NewRestrictionsLoadedEvent')(features);
+            var event = me._sandbox.getEventBuilder('DigiroadMyPlaces.NewRestrictionsLoadedEvent')(features);
             me._sandbox.notifyAll(event);
         };
         me.wfstStore.getNewRestrictions(callback);

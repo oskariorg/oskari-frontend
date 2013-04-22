@@ -163,7 +163,7 @@ function() {
         this.view.start();
         
         this.editRequestHandler = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.request.EditRequestHandler', sandbox, me);
-        sandbox.addRequestHandler('MyPlaces.EditPlaceRequest', this.editRequestHandler);
+        sandbox.addRequestHandler('DigiroadMyPlaces.EditPlaceRequest', this.editRequestHandler);
     },
     /**
      * @method stop

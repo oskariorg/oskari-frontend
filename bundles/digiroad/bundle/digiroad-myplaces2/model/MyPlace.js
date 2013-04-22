@@ -1,5 +1,5 @@
 
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.model.MyPlace', 
+Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.model.MyPlace', 
 
 /**
  * @method create called automatically on construction

@@ -1,8 +1,8 @@
 /**
- * @class Oskari.mapframework.bundle.personaldata.MyEditedFeaturesTab
+ * @class Oskari.digiroad.bundle.personaldata.MyEditedFeaturesTab
  * Renders the "personal data" myplaces tab.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyEditedFeaturesTab',
+Oskari.clazz.define('Oskari.digiroad.bundle.personaldata.MyEditedFeaturesTab',
 
 /**
  * @method create called automatically on construction
@@ -28,7 +28,7 @@ function(instance, localization) {
      * events (getName and onEvent methods are needed for this))
      */
     getName : function() {
-        return 'PersonalData.MyEditedFeatures';
+        return 'DigiroadPersonalData.MyEditedFeatures';
     },
     getTitle : function() {
         return this.loc.title;
@@ -132,7 +132,7 @@ function(instance, localization) {
 
         okBtn.setHandler(function() {
             dialog.close();
-            var service = sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
+            var service = sandbox.getService('Oskari.digiroad.bundle.myplaces2.service.MyPlacesService');
             var callback = function(isSuccess) {
                 /* let's refresh map also if there */
                 var layerId = "muokatut_kohteet"; 
@@ -315,7 +315,7 @@ function(instance, localization) {
      * @return {Object} a Data object for the Oskari grid.
      */
     _getDataFieldsFor: function(feature) {
-        var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService'),
+        var service = this.instance.sandbox.getService('Oskari.digiroad.bundle.myplaces2.service.MyPlacesService'),
             dataType = feature.attributes['TIETOLAJI'],
             data = {},
             specificDataFields = this.dataTypeLoc[dataType].columns;

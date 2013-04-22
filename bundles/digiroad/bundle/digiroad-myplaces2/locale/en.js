@@ -1,6 +1,6 @@
 Oskari.registerLocalization({
   "lang": "en",
-  "key": "MyPlaces2",
+  "key": "DigiroadMyPlaces2",
   "value": {
     "title": "Places",
     "desc": "",

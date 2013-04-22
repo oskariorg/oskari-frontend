@@ -1,11 +1,11 @@
 Oskari.clazz
         .define(
-                'Oskari.mapframework.bundle.myplaces2.request.GetGeometryRequest',
+                'Oskari.digiroad.bundle.myplaces2.request.GetGeometryRequest',
                 function(callbackMethod) {
                     this._creator = null;
                     this._callbackMethod = callbackMethod;
                 }, {
-                    __name : "MyPlaces.GetGeometryRequest",
+                    __name : "DigiroadMyPlaces.GetGeometryRequest",
                     getName : function() {
                         return this.__name;
                     },

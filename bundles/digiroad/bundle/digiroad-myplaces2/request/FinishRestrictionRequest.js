@@ -1,12 +1,12 @@
 Oskari.clazz.define(
-    'Oskari.mapframework.myplaces.request.FinishRestrictionRequest',
+    'Oskari.digiroad.myplaces.request.FinishRestrictionRequest',
     function(isCancel, data, callback) {
         this._creator = null;
         this._isCancel = isCancel;
         this._data = data;
         this._callback = callback;
     }, {
-        __name : "MyPlaces.FinishRestrictionRequest",
+        __name : "DigiroadMyPlaces.FinishRestrictionRequest",
         getName : function() {
             return this.__name;
         },

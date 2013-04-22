@@ -1,7 +1,7 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.plugin.TurningRestrictionsPlugin
+ * @class Oskari.digiroad.bundle.myplaces2.plugin.TurningRestrictionsPlugin
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.TurningRestrictionsPlugin', function(url) {
+Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.TurningRestrictionsPlugin', function(url) {
 	this.url = url;
     this.mapModule = null;
     this.pluginName = null;
@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.TurningRestrict
     this.features = [];
     this.layerId = "liikenne_elementti";
 }, {
-    __name: 'MyPlaces.TurningRestrictionsPlugin',
+    __name: 'DigiroadMyPlaces.TurningRestrictionsPlugin',
 
     getName: function() {
         return this.pluginName;
@@ -33,8 +33,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.TurningRestrict
     init: function(sandbox) {
         var me = this;
         this.requestHandlers = {
-            startRestrictionHandler: Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.request.StartRestrictionRequestPluginHandler', sandbox, me),
-            finishRestrictionHandler: Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.request.FinishRestrictionRequestPluginHandler', sandbox, me)
+            startRestrictionHandler: Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.request.StartRestrictionRequestPluginHandler', sandbox, me),
+            finishRestrictionHandler: Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.request.FinishRestrictionRequestPluginHandler', sandbox, me)
         };
     },
 
@@ -149,18 +149,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.TurningRestrict
 
     startPlugin: function(sandbox) {
         this._sandbox = sandbox;
-        this._myPlacesService = sandbox.getService("Oskari.mapframework.bundle.myplaces2.service.MyPlacesService");
-        this._vectorLayerPlugin = sandbox.findRegisteredModuleInstance("MainMapModuleVectorLayerPlugin");
+        this._myPlacesService = sandbox.getService("Oskari.digiroad.bundle.myplaces2.service.MyPlacesService");
+        this._vectorLayerPlugin = sandbox.findRegisteredModuleInstance("MainMapModuleDigiroadVectorLayerPlugin");
         this._mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
         sandbox.register(this);
-        sandbox.addRequestHandler('MyPlaces.StartRestrictionRequest', this.requestHandlers.startRestrictionHandler);
-        sandbox.addRequestHandler('MyPlaces.FinishRestrictionRequest', this.requestHandlers.finishRestrictionHandler);
+        sandbox.addRequestHandler('DigiroadMyPlaces.StartRestrictionRequest', this.requestHandlers.startRestrictionHandler);
+        sandbox.addRequestHandler('DigiroadMyPlaces.FinishRestrictionRequest', this.requestHandlers.finishRestrictionHandler);
     },
 
     stopPlugin: function(sandbox) {
-        sandbox.removeRequestHandler('MyPlaces.StartRestrictionRequest', this.requestHandlers.startRestrictionHandler);
-        sandbox.removeRequestHandler('MyPlaces.FinishRestrictionRequest', this.requestHandlers.finishRestrictionHandler);
+        sandbox.removeRequestHandler('DigiroadMyPlaces.StartRestrictionRequest', this.requestHandlers.startRestrictionHandler);
+        sandbox.removeRequestHandler('DigiroadMyPlaces.FinishRestrictionRequest', this.requestHandlers.finishRestrictionHandler);
         sandbox.unregister(this);
 
         this._map = null;
@@ -179,5 +179,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.TurningRestrict
      */
     stop: function(sandbox) {}
 }, {
-    'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+    'protocol' : [
+        "Oskari.mapframework.module.Module",
+        "Oskari.mapframework.ui.module.common.mapmodule.Plugin"
+    ]
 });

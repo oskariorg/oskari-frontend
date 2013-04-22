@@ -1,8 +1,8 @@
 /**
- * @class Oskari.mapframework.bundle.personaldata.MyPlacesTab
+ * @class Oskari.digiroad.bundle.personaldata.MyPlacesTab
  * Renders the "personal data" myplaces tab.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyPlacesTab',
+Oskari.clazz.define('Oskari.digiroad.bundle.personaldata.MyPlacesTab',
 
 /**
  * @method create called automatically on construction
@@ -29,7 +29,7 @@ function(instance, localization) {
      * events (getName and onEvent methods are needed for this))
      */
     getName : function() {
-        return 'PersonalData.MyPlaces';
+        return 'DigiroadPersonalData.MyPlaces';
     },
     getTitle : function() {
         return this.loc.title;
@@ -52,7 +52,7 @@ function(instance, localization) {
          * Updates the category tabs and grids inside them with current data 
          */
         'MyPlaces.MyPlacesChangedEvent' : function(event) {
-            var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
+            var service = this.instance.sandbox.getService('Oskari.digiroad.bundle.myplaces2.service.MyPlacesService');
             var places = service.getAllMyPlaces();
             var me = this;
             

@@ -1,10 +1,10 @@
 /**
- * @class Oskari.mapframework.bundle.personaldata.service.ViewService
+ * @class Oskari.digiroad.bundle.personaldata.service.ViewService
  *
  * Requests for a search to be made with the given query and provides
  * callbacks
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService',
+Oskari.clazz.define('Oskari.digiroad.bundle.personaldata.service.ViewService',
 
 /**
  * @method create called automatically on construction
@@ -17,7 +17,7 @@ function(viewUrl) {
     this._viewUrl = viewUrl;
 }, {
     /** @static @property __qname fully qualified name for service */
-    __qname : "Oskari.mapframework.bundle.personaldata.service.ViewService",
+    __qname : "Oskari.digiroad.bundle.personaldata.service.ViewService",
     /**
      * @method getQName
      * @return {String} fully qualified name for service
@@ -26,7 +26,7 @@ function(viewUrl) {
         return this.__qname;
     },
     /** @static @property __name service name */
-    __name : "ViewService",
+    __name : "DigiroadViewService",
     /**
      * @method getName
      * @return {String} service name

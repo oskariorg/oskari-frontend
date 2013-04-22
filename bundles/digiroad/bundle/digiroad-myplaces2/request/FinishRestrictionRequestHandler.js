@@ -1,5 +1,5 @@
 Oskari.clazz.define(
-    'Oskari.mapframework.bundle.myplaces2.request.FinishRestrictionRequestPluginHandler',
+    'Oskari.digiroad.bundle.myplaces2.request.FinishRestrictionRequestPluginHandler',
     function(sandbox, restrictionPlugin) {
         this.sandbox = sandbox;
         this.restrictionPlugin = restrictionPlugin;

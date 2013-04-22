@@ -124,7 +124,7 @@ function(instance) {
 
         this._showRestrictionHelper();
 
-        var requestBuilder = this.instance.sandbox.getRequestBuilder('MyPlaces.StartRestrictionRequest');
+        var requestBuilder = this.instance.sandbox.getRequestBuilder('DigiroadMyPlaces.StartRestrictionRequest');
         if(requestBuilder) {
             var request = requestBuilder();
             this.instance.sandbox.request(me, request);
@@ -140,7 +140,7 @@ function(instance) {
      */
     sendFinishRestrictionRequest: function(isCancel, data, callback) {
         var me = this;
-        var request = this.instance.sandbox.getRequestBuilder('MyPlaces.FinishRestrictionRequest')(isCancel, data, callback);
+        var request = this.instance.sandbox.getRequestBuilder('DigiroadMyPlaces.FinishRestrictionRequest')(isCancel, data, callback);
         this.instance.sandbox.request(this, request);
         if(this.dialog) {
             this.dialog.close();
@@ -239,7 +239,7 @@ function(instance) {
      */
     startNewDrawing : function(config) {
         // notify components to reset any saved "selected place" data
-        var event = this.instance.sandbox.getEventBuilder('MyPlaces.MyPlaceSelectedEvent')();
+        var event = this.instance.sandbox.getEventBuilder('DigiroadMyPlaces.MyPlaceSelectedEvent')();
         this.instance.sandbox.notifyAll(event);
 
         // notify plugin to start drawing new geometry
@@ -253,7 +253,7 @@ function(instance) {
      */
     sendDrawRequest : function(config) {
         var me = this;
-        var startRequest = this.instance.sandbox.getRequestBuilder('MyPlaces.StartDrawingRequest')(config);
+        var startRequest = this.instance.sandbox.getRequestBuilder('DigiroadMyPlaces.StartDrawingRequest')(config);
         this.instance.sandbox.request(this, startRequest);
 
         if(!config.geometry) {
@@ -310,7 +310,7 @@ function(instance) {
      */
     sendStopDrawRequest : function(isCancel) {
         var me = this;
-        var request = this.instance.sandbox.getRequestBuilder('MyPlaces.StopDrawingRequest')(isCancel);
+        var request = this.instance.sandbox.getRequestBuilder('DigiroadMyPlaces.StopDrawingRequest')(isCancel);
         this.instance.sandbox.request(this, request);
         if(this.dialog) {
             this.dialog.close();

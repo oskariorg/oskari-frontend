@@ -1,7 +1,7 @@
 /**
- * @class Oskari.mapframework.bundle.personaldata.Flyout
+ * @class Oskari.digiroad.bundle.personaldata.Flyout
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
+Oskari.clazz.define('Oskari.digiroad.bundle.personaldata.Flyout',
 
 /**
  * @method create called automatically on construction
@@ -25,7 +25,7 @@ function(instance) {
 	 * @return {String} the name for the component 
 	 */
     getName : function() {
-        return 'Oskari.mapframework.bundle.personaldata.Flyout';
+        return 'Oskari.digiroad.bundle.personaldata.Flyout';
     },
 	/**
 	 * @method setEl
@@ -54,9 +54,9 @@ function(instance) {
         
         var tabsLocalization = this.instance.getLocalization('tabs');
 		this.tabsData = {
-			"myPlaces" : Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyPlacesTab', this.instance, tabsLocalization.myplaces),
-			"myEditedFeatures" : Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyEditedFeaturesTab', this.instance, tabsLocalization.editedfeatures),
-			"myFeedback" : Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyFeedbackTab', this.instance, tabsLocalization.feedback)
+			"myPlaces" : Oskari.clazz.create('Oskari.digiroad.bundle.personaldata.MyPlacesTab', this.instance, tabsLocalization.myplaces),
+			"myEditedFeatures" : Oskari.clazz.create('Oskari.digiroad.bundle.personaldata.MyEditedFeaturesTab', this.instance, tabsLocalization.editedfeatures),
+			"myFeedback" : Oskari.clazz.create('Oskari.digiroad.bundle.personaldata.MyFeedbackTab', this.instance, tabsLocalization.feedback)
 		};
     },
 	/**

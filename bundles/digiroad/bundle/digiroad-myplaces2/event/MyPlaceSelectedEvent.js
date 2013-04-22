@@ -1,11 +1,11 @@
 Oskari.clazz.define(
-        'Oskari.mapframework.myplaces.event.MyPlaceSelectedEvent',
+        'Oskari.digiroad.myplaces.event.MyPlaceSelectedEvent',
         function(pMyPlace, dblClick) {
             this._creator = null;
             this._myPlace = pMyPlace;
             this._dblClick = dblClick;
         }, {
-            __name : "MyPlaces.MyPlaceSelectedEvent",
+            __name : "DigiroadMyPlaces.MyPlaceSelectedEvent",
             getName : function() {
                 return this.__name;
             },

@@ -1,11 +1,11 @@
 Oskari.clazz
         .define(
-                'Oskari.mapframework.myplaces.request.StopDrawingRequest',
+                'Oskari.digiroad.myplaces.request.StopDrawingRequest',
                 function(isCancel) {
                     this._creator = null;
                 	this._isCancel = (isCancel == true);
                 }, {
-                    __name : "MyPlaces.StopDrawingRequest",
+                    __name : "DigiroadMyPlaces.StopDrawingRequest",
                     getName : function() {
                         return this.__name;
                     },

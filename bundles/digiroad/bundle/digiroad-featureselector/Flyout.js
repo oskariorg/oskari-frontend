@@ -143,7 +143,7 @@ function(instance) {
 
         grid.updateRowCount();
         grid.render();
-        
+
         // Features rendered to the grid, safe to go back to 'display: none;'
         if(flyoutContainer.hasClass('featureselector-closed')) {
             flyoutContainer.removeClass('featureselector-closed').addClass('oskari-closed');
@@ -277,7 +277,7 @@ function(instance) {
         var onMouseFunction = function(e, highlightType) {
             var row = grid.getCellFromEvent(e).row,
                 cell = grid.getCellFromEvent(e).cell,
-                oid = dataArray[row][this.instance.targetLayers[layerName].objectId],
+                oid = dataArray[row][me.instance.targetLayers[layerName].objectId],
                 feature = me.instance.features[oid],
                 columnId = grid.getColumns()[cell].id;
             
@@ -288,8 +288,13 @@ function(instance) {
             }
         };
 
+        grid.onBeforeEditCell.subscribe(function(e, args) {
+            if(!sandbox.getUser().isLoggedIn()) {
+                return false;
+            }
+        });
         grid.onCellChange.subscribe(function(e, args) {
-            var service = sandbox.getService("Oskari.mapframework.bundle.myplaces2.service.MyPlacesService");
+            var service = sandbox.getService("Oskari.digiroad.bundle.myplaces2.service.MyPlacesService");
             service.saveEditedFeature(layerType, layerName, args.item, commitEditedFeaturesCallback);
         });
         grid.onMouseEnter.subscribe(function(e) {

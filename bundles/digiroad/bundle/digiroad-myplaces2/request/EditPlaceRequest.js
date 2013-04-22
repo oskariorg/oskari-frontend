@@ -5,7 +5,7 @@
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditPlaceRequest', 
+Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.request.EditPlaceRequest', 
 
 /**
  * @method create called automatically on construction
@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditPlaceReque
 function(placeId) {
     this._placeId = placeId;
 }, {
-    __name : "MyPlaces.EditPlaceRequest",
+    __name : "DigiroadMyPlaces.EditPlaceRequest",
     /**
      * @method getName
      * @return {String} request name

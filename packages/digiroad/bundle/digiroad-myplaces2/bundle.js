@@ -22,9 +22,6 @@ Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.MyPlacesBundle", function(
 			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/event/FinishedDrawingEvent.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/event/MyPlaceHoverEvent.js"
-		}, {
-			"type" : "text/javascript",
 			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/event/MyPlacesChangedEvent.js"
 		}, {
 			"type" : "text/javascript",
@@ -43,17 +40,11 @@ Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.MyPlacesBundle", function(
 		{
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/model/MyPlace.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/model/MyPlacesCategory.js"
 		},
 		/* plugin */
 		{
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/plugin/DrawPlugin.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/plugin/HoverPlugin.js"
 		}, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/plugin/TurningRestrictionsPlugin.js"
@@ -80,15 +71,6 @@ Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.MyPlacesBundle", function(
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/request/EditPlaceRequest.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/request/EditCategoryRequest.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/request/DeleteCategoryRequest.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/request/PublishCategoryRequest.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/request/EditRequestHandler.js"
@@ -122,16 +104,10 @@ Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.MyPlacesBundle", function(
             "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/view/PlaceForm.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/view/CategoryForm.js"
-        }, {
-            "type" : "text/javascript",
             "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/view/FeedbackForm.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/ButtonHandler.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/CategoryHandler.js"
         }, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/digiroad/bundle/digiroad-myplaces2/instance.js"

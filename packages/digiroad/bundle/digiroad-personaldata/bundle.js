@@ -35,18 +35,9 @@ Oskari.clazz.define("Oskari.digiroad.bundle.personaldata.PersonalDataBundle", fu
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/digiroad/bundle/digiroad-personaldata/MyPlacesTab.js"
 		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-personaldata/MyViewsTab.js"
-		}, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/digiroad/bundle/digiroad-personaldata/service/ViewService.js"
         }, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-personaldata/PublishedMapsTab.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/digiroad/bundle/digiroad-personaldata/AccountTab.js"
-		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/digiroad/bundle/digiroad-personaldata/MyEditedFeaturesTab.js"
 		}, {

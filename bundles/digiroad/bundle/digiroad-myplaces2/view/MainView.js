@@ -1,10 +1,10 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance
+ * @class Oskari.digiroad.bundle.myplaces2.MyPlacesBundleInstance
  * 
  * Registers and starts the 
  * Oskari.mapframework.bundle.myplaces2.plugin.CoordinatesPlugin plugin for main map.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
+Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.view.MainView",
 
 /**
  * @method create called automatically on construction
@@ -15,7 +15,7 @@ function(instance) {
     this.popupId = 'myplacesForm';
     this.form = undefined;
 }, {
-    __name : 'MyPlacesMainView',
+    __name : 'DigiroadMyPlacesMainView',
     /**
      * @method getName
      * @return {String} the name for the component 
@@ -52,12 +52,12 @@ function(instance) {
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         
         // register plugin for map (drawing for my places)
-        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin');
+        var drawPlugin = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', this.instance.queryUrl);
         mapModule.registerPlugin(drawPlugin);
         mapModule.startPlugin(drawPlugin);
         this.drawPlugin = drawPlugin;
         
-        var restrictionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.TurningRestrictionsPlugin', this.instance.queryUrl);
+        var restrictionPlugin = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.plugin.TurningRestrictionsPlugin', this.instance.queryUrl);
         mapModule.registerPlugin(restrictionPlugin);
         mapModule.startPlugin(restrictionPlugin);
         this.restrictionPlugin = restrictionPlugin;
@@ -114,7 +114,7 @@ function(instance) {
          * @method MyPlaces.FinishedDrawingEvent
          * @param {Oskari.mapframework.bundle.myplaces2.event.FinishedDrawingEvent} event
          */
-        'MyPlaces.FinishedDrawingEvent' : function(event) {
+        'DigiroadMyPlaces.FinishedDrawingEvent' : function(event) {
             this._handleFinishedDrawingEvent(event);
         }
     },
@@ -127,7 +127,6 @@ function(instance) {
     _handleFinishedDrawingEvent : function(event) {
         var center = event.getDrawing().getCentroid();
         var drawMode = this._getDrawModeFromGeometry(event.getDrawing());
-        console.log("_handleFinishedDrawingEvent: "+drawMode);
         var lonlat = {
             lon : center.x,
             lat : center.y
@@ -151,9 +150,9 @@ function(instance) {
             drawMode = me._getDrawModeFromGeometry(place.getGeometry());
         }
         if(drawMode === "line") {
-            this.form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.PlaceForm', this.instance);
+            this.form = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.view.PlaceForm', this.instance);
         } else if(drawMode === "area" || drawMode === "point") {
-            this.form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.FeedbackForm', this.instance);
+            this.form = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.view.FeedbackForm', this.instance);
         }
         if(place) {
             var param = {
@@ -292,7 +291,7 @@ function(instance) {
     		me.instance.showMessage(loc.title, loc.savePlace);
             return;
         }
-        var place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlace');
+        var place = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.model.MyPlace');
         if(values.id) {
             place = this.instance.getService().findMyPlace(values.id);
         }
