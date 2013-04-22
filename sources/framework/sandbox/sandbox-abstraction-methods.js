@@ -62,5 +62,23 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'abstraction-method
         else {
             failure();
         }
-    }
+    },
+	
+	/**
+	 * @method getDefer
+	 * Abstraction method for getting a defer object from Q 
+	 * or undefined Q is not available.
+	 * @return {Object} Q defer or jQuery deferred
+	 */
+	getDefer : function() {
+		// Use Q if available
+		if (window.Q && window.Q.defer) {
+			return window.Q.defer();
+		} /*else if (window.jQuery && window.jQuery.Deferred){
+			// Use jQuery as a second choice
+			return window.jQuery.Deferred();
+		} */else {
+			return undefined;
+		}
+	}
 });
