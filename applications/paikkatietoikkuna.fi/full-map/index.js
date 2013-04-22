@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
                 cb(me.instance);
             }
             
-            var ugStartup = {
+/*            var ugStartup = {
                 "bundleinstancename": "statsgrid",
                 "bundlename": "statsgrid",
                 "metadata": {
@@ -55,8 +55,9 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
                 }
             };
             Oskari.bundle_facade.playBundle(ugStartup, function() {});
-            
+*/            
         });
+
     },
     /**
      * @static

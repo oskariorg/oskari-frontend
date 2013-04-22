@@ -31,6 +31,7 @@ function() {
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         // register plugin for map 
         var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', conf ,locale);
+debugger;
         mapModule.registerPlugin(classifyPlugin);
         mapModule.startPlugin(classifyPlugin);
         this.classifyPlugin = classifyPlugin;
@@ -53,7 +54,6 @@ function() {
 
             view.showMode(isShown, true);
 			view.showContent(isShown);
-            this.view = view;
 		},
         'MapStats.StatsVisualizationChangeEvent' : function(event) {
             this._afterStatsVisualizationChangeEvent(event);
@@ -67,29 +67,36 @@ function() {
      * @param {Boolean} ignoreLocation true to NOT set map location based on state
      */
     setState : function(state, ignoreLocation) {
-        var me = this;
+        var me = this, view = this.plugins['Oskari.userinterface.View'];
 debugger;
         alert(state.currentColumn);
 
         if(state.indicators.length > 0){
+
             //send ajax calls and build the grid
-            this.view.getSotkaIndicatorData(indicators, function(){
-                if(state.currentColumn != null) {
-                    // current column is needed for rendering map
-                    this.view.classifyData(state.currentColumn);
+            view.getSotkaIndicatorsMeta(state.indicators, function(){
 
-                    var e = document.createEvent("Event");
-                    if(state.methodId != null && state.methodId > 0) {
-                        // which classification method we need to use in classification plugin
-                        e.methodId = state.methodId;
-                    }
-                    if(state.numberOfClasses != null && state.numberOfClasses > 0) {
-                        // how many classes we are going to use when classifying the data
-                        e.numberOfClasses = state.numberOfClasses;
-                    }
+                //send ajax calls and build the grid
+                view.getSotkaIndicatorsData(state.indicators, function(){
 
-                    this.classifyPlugin.classifyData(e);
-                }
+                    if(state.currentColumn != null) {
+                        // current column is needed for rendering map
+                        view.classifyData(state.currentColumn);
+
+                        var e = document.createEvent("Event");
+                        if(state.methodId != null && state.methodId > 0) {
+                            // which classification method we need to use in classification plugin
+                            e.methodId = state.methodId;
+                        }
+                        if(state.numberOfClasses != null && state.numberOfClasses > 0) {
+                            // how many classes we are going to use when classifying the data
+                            e.numberOfClasses = state.numberOfClasses;
+                        }
+
+                        me.classifyPlugin.classifyData(e);
+                    }
+                });
+
             });
         }
     },
