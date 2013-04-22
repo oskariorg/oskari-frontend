@@ -14,6 +14,10 @@ function(config) {
     this._sandbox = null;
     this._map = null;
     this._supportedFormats = {};
+    this._statsDrawLayer = null;
+    this._highlightCtrl = null;
+    this._getFeatureControlHover = null;
+    this._getFeatureControlSelect = null;
     this.config = config;
     this.ajaxUrl = null;
     if(config && config.ajaxUrl) {
@@ -221,6 +225,8 @@ function(config) {
      */
     _addMapLayerToMap : function(layer, keepLayerOnTop, isBaseMap) {
 
+        var me = this;
+
         if(!layer.isLayerOfType(this._layerType)) {
             return;
         }
@@ -234,16 +240,12 @@ function(config) {
             }
         }
 
-        // TODO: get visId from layer?
         var layerScales = this.getMapModule().calculateLayerScales(layer.getMaxScale(), layer.getMinScale());
-        var openLayer = new OpenLayers.Layer.WMS('layer_' + layer.getId(), this.ajaxUrl, {
+        var openLayer = new OpenLayers.Layer.WMS('layer_' + layer.getId(), this.ajaxUrl+"&LAYERID="+layer.getId(), {
             layers : layer.getWmsName(),
             transparent : true,
-            layerId : layer.getId(),
-            //VIS_ID : 1,
             format : "image/png"
         }, {
-            layerId : layer.getWmsName(),
             scales : layerScales,
             isBaseLayer : false,
             displayInLayerSwitcher : false,
@@ -251,6 +253,136 @@ function(config) {
             singleTile : true,
             buffer : 0
         });
+
+        // Select control
+        this._statsDrawLayer = new OpenLayers.Layer.Vector("Stats Draw Layer", {
+            styleMap: new OpenLayers.StyleMap({
+                "default": new OpenLayers.Style({
+                    fillOpacity: 0.0,
+                    strokeOpacity: 0.0
+                }),
+                "temporary": new OpenLayers.Style({
+                    strokeColor: "#ff6666",
+                    strokeOpacity: 1.0,
+                    strokeWidth: 3,
+                    fillColor: "#ff0000",
+                    fillOpacity: 0.0,
+		    		graphicZIndex: 2,
+                    cursor: "pointer"
+                }),
+                "select": new OpenLayers.Style({
+                })
+            })
+        });
+        this._map.addLayers([this._statsDrawLayer]);
+
+        // Hover control
+        this._highlightCtrl = new OpenLayers.Control.SelectFeature(this._statsDrawLayer, {
+            hover: true,
+            highlightOnly: true,
+            renderIntent: "temporary"
+        });
+        this._map.addControl(this._highlightCtrl);
+        this._highlightCtrl.activate();
+
+        var queryableMapLayers = [openLayer];
+        this._getFeatureControlHover = new OpenLayers.Control.WMSGetFeatureInfo({
+            drillDown: false,
+            hover: true,
+            handlerOptions: {
+                "hover": {delay: 0},
+                "stopSingle": false
+            },
+            infoFormat: "application/vnd.ogc.gml",
+            layers: queryableMapLayers,
+            eventListeners: {
+                getfeatureinfo: function (event) {
+                    var drawLayer = me._map.getLayersByName("Stats Draw Layer")[0];
+                    if (typeof drawLayer === "undefined") return;
+                    if (event.features.length === 0) {
+                        for (var i = 0; i < drawLayer.features.length; i++) {
+                            if (!drawLayer.features[i].selected) drawLayer.removeFeatures([drawLayer.features[i]]);
+                        }
+                        return;
+                    }
+                    var found = false;
+                    var attrText = "kuntakoodi";
+                    for (var i = 0; i < drawLayer.features.length; i++) {
+                        if (drawLayer.features[i].attributes[attrText] === event.features[0].attributes[attrText]) {
+                            found = true;
+                        } else if (!drawLayer.features[i].selected){
+                            drawLayer.removeFeatures([drawLayer.features[i]]);
+                        }
+                    }
+                    if (!found) {
+                        drawLayer.addFeatures([event.features[0]]);
+                        me._highlightCtrl.highlight(event.features[0]);
+                    }
+                    drawLayer.redraw();
+                },
+                beforegetfeatureinfo: function(event) {
+                },
+                nogetfeatureinfo: function(event) {
+                }
+            }
+        });
+        // Add the control to the map
+        this._map.addControl(this._getFeatureControlHover);
+        this._getFeatureControlHover.activate();
+
+        // Select control
+        this._getFeatureControlSelect = new OpenLayers.Control.WMSGetFeatureInfo({
+            drillDown: true,
+            hover: false,
+            handlerOptions: {
+                "click": {delay: 0},
+                "pixelTolerance": 5
+            },
+            infoFormat: "application/vnd.ogc.gml",
+            layers: queryableMapLayers,
+            eventListeners: {
+                getfeatureinfo: function(event) {
+                    if (event.features.length === 0) return;
+                    var newFeature = event.features[0];
+                    var drawLayer = me._map.getLayersByName("Stats Draw Layer")[0];
+                    if (typeof drawLayer === "undefined") return;
+                    var foundInd = -1;
+                    var attrText = "kuntakoodi";
+                    for (var i = 0; i < drawLayer.features.length; i++) {
+                        if (drawLayer.features[i].attributes[attrText] === event.features[0].attributes[attrText]) {
+                            foundInd = i;
+                            break;
+                        }
+                    }
+        		    var featureStyle = OpenLayers.Util.applyDefaults(featureStyle, OpenLayers.Feature.Vector.style['default']);
+		            featureStyle.fillColor = "#ff0000";
+    				featureStyle.strokeColor = "#ff3333";
+	    			featureStyle.strokeWidth = 3;
+	    			featureStyle.fillOpacity = 0.2;
+                    if (foundInd >= 0) {
+                        drawLayer.features[i].selected = !drawLayer.features[i].selected;
+                        if (drawLayer.features[i].selected) {
+                            drawLayer.features[i].style = featureStyle;
+                        } else {
+                            drawLayer.features[i].style = null;
+                            me._highlightCtrl.highlight(drawLayer.features[i]);
+                        }
+                    } else {
+                        drawLayer.addFeatures([newFeature]);
+                        newFeature.selected = true;
+                        newFeature.style = featureStyle;
+                    }
+                    drawLayer.redraw();
+                },
+                beforegetfeatureinfo: function(event) {
+                },
+                nogetfeatureinfo: function(event) {
+                }
+            }
+        });
+        // Add the control to the map
+        this._map.addControl(this._getFeatureControlSelect);
+        this._getFeatureControlSelect.activate();
 
         openLayer.opacity = layer.getOpacity() / 100;
 
@@ -280,9 +412,18 @@ function(config) {
      *            event
      */
     _afterMapLayerRemoveEvent : function(event) {
+        if(!layer.isLayerOfType(this._layerType)) {
+            return;
+        }
         var layer = event.getMapLayer();
-
         this._removeMapLayerFromMap(layer);
+        this._highlightCtrl.deactivate();
+        this._getFeatureControlHover.deactivate();
+        this._getFeatureControlSelect.deactivate();
+        this._map.removeControl(this._highlightCtrl);
+        this._map.removeControl(this._getFeatureControlHover);
+        this._map.removeControl(this._getFeatureControlSelect);
+        this._map.removeLayer(this._statsDrawLayer);
     },
     /**
      * @method _afterMapLayerRemoveEvent

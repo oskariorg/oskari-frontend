@@ -8,7 +8,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapstats.MapStatsBundle", functi
 	 */
 	"create" : function() {
 
-		return Oskari.clazz.create("Oskari.mapframework.bundle.mapstats.MapStatsBundleInstance");
+		return null;
 	},
 	"update" : function(manager, bundle, bi, info) {
 		manager.alert("RECEIVED update notification " + info);
@@ -32,9 +32,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapstats.MapStatsBundle", functi
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapstats/domain/StatsLayerModelBuilder.js"
-		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/mapstats/instance.js"
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapstats/event/StatsVisualizationChangeEvent.js"
