@@ -107,12 +107,12 @@ function(instance) {
         templateDescription.html(this.instance.getLocalization('desc'));
 
         // only fill in the values when configuration is given
-        if (me.instance.conf) {
+        if (me.instance.conf.signup) {
             var templateSignup = templateContainer.find('a.promoteSignup');
             templateSignup.attr("href", this.instance.getLocalization('signupUrl'));
             templateSignup.append(this.instance.getLocalization('signup'));
-
-
+        }
+        if (me.instance.conf.register) {
             var templateRegister = templateContainer.find('a.promoteRegister');
             templateRegister.attr("href", this.instance.getLocalization('registerUrl'));
             templateRegister.append(this.instance.getLocalization('register'));

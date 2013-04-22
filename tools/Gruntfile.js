@@ -187,12 +187,31 @@ module.exports = function(grunt) {
                     resultCSSName: "../dist/<%= version %>" + appName + "/css/icons.css",
                     spritePathInCSS: "../icons"
                 },
-                files = [{
+                files = [],
+                copyFiles = {
                     "expand": true,
                     "cwd": cwd + "/",
                     "src": ["css/**", "images/**", "*.js"],
                     "dest": dest
-                }];
+                };
+
+            // subsets have underscore (_) in appName, which means we need to
+            // get the parent resources first and then replace with subset specific stuff
+            var parentAppName = appName.substring(0, appName.indexOf('_'));
+            if (appName !== parentAppName) {
+                // copy files from parent folder to be replaced by child
+                files.push({
+                    "expand": true,
+                    "cwd": cwd.replace(appName, parentAppName) + "/",
+                    "src": ["css/**", "images/**", "*.js"],
+                    "dest": dest
+                });
+                // modify css-sprite to use parent icons instead
+                options.iconDirectoryPath = options.iconDirectoryPath.replace(appName, parentAppName);
+            }
+
+            // add files to be copied
+            files.push(copyFiles);
 
             // setting task configs
             grunt.config.set("copy." + appName + ".files", files);

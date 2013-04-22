@@ -32,7 +32,7 @@ function() {
      * @return {String} the name for the component
      */
     "getName": function() {
-        return this.__name;
+        return this.conf.__name;
     },
     /**
      * @method setSandbox
@@ -67,7 +67,7 @@ function() {
             return this.conf[key][this.userInterfaceLanguage];
         }
         if(!this._localization) {
-            this._localization = Oskari.getLocalization(this.getName());
+            this._localization = Oskari.getLocalization(this.__name);
         }
         if(key && this._localization[key]) {
             return this._localization[key];

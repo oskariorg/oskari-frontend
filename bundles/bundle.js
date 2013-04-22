@@ -1870,14 +1870,14 @@ Oskari = (function() {
             me.update(b, bi, info);
 
             // bundles
-            for(bid in me.bundles) {
+            for(var bid in me.bundles) {
                 var o = me.bundles[bid];
                 /* if (o != b) { */
                 o.update(me, b, bi, info);
                 // }
             }
             // and instances
-            for(i in me.instances) {
+            for(var i in me.instances) {
                 var o = me.instances[i];
                 if(!o)
                     continue;

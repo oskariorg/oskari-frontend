@@ -90,6 +90,9 @@
             },
             "event-map": {
                "bundlePath": "../packages/framework/bundle/"
+            },
+            "mapstats": {
+               "bundlePath": "../packages/framework/bundle/"
             }
          },
          "Require-Bundle-Instance": [
@@ -430,6 +433,19 @@
             }
          },
          "Require-Bundle-Instance": []
+      }
+   }, {
+      "bundleinstancename": "statsgrid",
+      "bundlename": "statsgrid",
+      "metadata": {
+         "Import-Bundle": {
+            "statsgrid": {
+               "bundlePath": "../packages/statistics/bundle/"
+            },
+            "geostats": {
+               "bundlePath": "../packages/libraries/bundle/"
+            }
+         }
       }
    }]
 }
