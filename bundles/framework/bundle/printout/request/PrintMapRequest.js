@@ -10,7 +10,6 @@ Oskari.clazz
                         return this.__name;
                     },
                     getSelections : function() {
-debugger;
                         return this._selections;
                     }
                 },

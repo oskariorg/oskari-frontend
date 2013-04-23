@@ -153,7 +153,6 @@ function(instance) {
         var printMap = drawPlugin.getSandbox().getMap();
         printMap.GeoJSON = geojs;
 
-debugger;
     },
 
 	/**

@@ -364,9 +364,6 @@ this.backendConfiguration = {
 
         this.previewContent.removeClass('preview-portrait');
         this.previewContent.removeClass('preview-landscape');
-
-debugger;
-
         this.previewContent.addClass(this.sizeOptionsMap[selections.pageSize].classForPreview);
 
         var previewImgDiv = this.previewImgDiv, previewSpan = this.previewSpan;
@@ -390,7 +387,6 @@ debugger;
         var maplinkArgs = selections.maplinkArgs;
         var pageSizeArgs = "&pageSize=" + selections.pageSize;
         var url = urlBase + maplinkArgs + pageSizeArgs;
-debugger;
         this.openURLinWindow(url, selections);
 
     },
@@ -463,7 +459,6 @@ debugger;
         if(this._isLandscape(selections))
             wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=1200," + "height=850";
         var link = infoUrl;
-debugger;
         window.open(link, "BasicPrintout", wopParm);
     },
     /**
