@@ -258,7 +258,6 @@ function(config, locale) {
 			//params eg. CUL_COL:"indicator..." , VIS_NAME: "ows:kunnat2013", VIS_ATTR: "kuntakoodi", VIS_CODES: munArray, COL_VALUES: statArray
 			this._params = event.getParams();
 			// Classify data
-debugger;
 			this.classifyData(event);
 
 		}
@@ -312,12 +311,12 @@ debugger;
 		// Limits
 		var gstats = new geostats(params.COL_VALUES);
 
-		if (method == 1)
+		if (method == 0)
 			limits = gstats.getJenks(classes);
+		if (method == 1)
+			limits = gstats.getEqInterval(classes);
 		if (method == 2)
 			limits = gstats.getQuantile(classes);
-		if (method == 3)
-			limits = gstats.getEqInterval(classes);
 
 		// Put municipality codes  in range limits
 		for ( i = 0; i < classes; i++)
@@ -424,7 +423,6 @@ debugger;
 		}
 
 		sel.change(function(e) {
-debugger;
 			// update event with selected method
 			if(e.target.tagName === "SELECT") {
 				e.methodId = e.target.selectedIndex;
@@ -442,7 +440,6 @@ debugger;
 			value : 5,
 			slide : function(event, ui) {
 				jQuery('#amount').val(ui.value);
-debugger;
 				// update event with correct number of classes
 				event.numberOfClasses = ui.value;
 				// Classify again

@@ -92,7 +92,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         // options
         var options = {
             enableCellNavigation : true,
-            enableColumnReorder : false,
+            enableColumnReorder : true,
             multiColumnSort : true
         };
         var data = [];
@@ -372,9 +372,8 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      * @param year selected year
      * @param data related to the indicator
      */
-    addIndicatorDataToGrid : function(container, indicator, gender, year, data, meta) {
+    addIndicatorDataToGrid : function(container, indicator, gender, year, data, meta, silent) {
         var columns = this.grid.getColumns();
-debugger;
         var indicatorName = meta.title[Oskari.getLang()];
         columns.push({
             id : "indicator" + indicator + year + gender,
@@ -428,8 +427,11 @@ debugger;
         this.dataView.refresh();
         this.grid.invalidateAllRows();
         this.grid.render();
-        // Show classification
-        this.classifyData(columns[columns.length - 1]);
+
+        if(silent != true) {
+            // Show classification
+            this.classifyData(columns[columns.length - 1]);
+        }
     },
 
     /**
@@ -474,6 +476,7 @@ debugger;
      * @param curCol  Selected indicator data column
      */
     classifyData : function(curCol) {
+
         //Classify data
         var me = this;
         var statArray = [];
@@ -523,7 +526,6 @@ debugger;
     getSotkaIndicatorsMeta : function(indicators, callback) {
         var me = this, container = this.getEl(), fetchedIndicators = 0;
         me.indicators = [];
-debugger;
 
         for (var i = 0; i < indicators.length; i++) {
             var indicatorData = indicators[i],
@@ -576,7 +578,6 @@ debugger;
     getSotkaIndicatorsData : function(indicators, callback) {
         var me = this, container = this.getEl(), fetchedIndicators = 0;
 
-debugger;
         for (var i = 0; i < indicators.length; i++) {
             var indicatorData = indicators[i],
             indicator = indicatorData.indicator,
@@ -627,6 +628,23 @@ debugger;
         };
     },
 
+    clearDataFromGrid : function(container) {
+        var columns = this.grid.getColumns();
+        var newColumnDef    =   [];
+        
+        var j = 0;
+        for(var i = 0; i < columns.length; i++){
+            var columnId = columns[i].id;
+            if((columnId == 'id' || columnId == 'municipality' || columnId == 'code')) {
+                newColumnDef[j] = columns[i];
+                j++;
+            }
+        }
+        this.grid.setColumns(newColumnDef);
+        this.grid.render();
+        this.dataView.refresh();
+
+    },
 
 
 

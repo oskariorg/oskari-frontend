@@ -31,7 +31,6 @@ function() {
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         // register plugin for map 
         var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', conf ,locale);
-debugger;
         mapModule.registerPlugin(classifyPlugin);
         mapModule.startPlugin(classifyPlugin);
         this.classifyPlugin = classifyPlugin;
@@ -68,8 +67,8 @@ debugger;
      */
     setState : function(state, ignoreLocation) {
         var me = this, view = this.plugins['Oskari.userinterface.View'];
-debugger;
-        alert(state.currentColumn);
+
+        view.clearDataFromGrid();
 
         if(state.indicators.length > 0){
 
@@ -92,7 +91,6 @@ debugger;
                             // how many classes we are going to use when classifying the data
                             e.numberOfClasses = state.numberOfClasses;
                         }
-
                         me.classifyPlugin.classifyData(e);
                     }
                 });
@@ -101,7 +99,6 @@ debugger;
         }
     },
     getState : function() {
-debugger;
         if(this.sandbox.getUser().isLoggedIn()) {
             return this.state;
         }
@@ -128,8 +125,6 @@ debugger;
         var params = event.getParams();
         this.state.methodId = params.methodId;
         this.state.numberOfClasses = params.numberOfClasses;
-
-debugger;
     }
 }, {
 	"extend" : ["Oskari.userinterface.extension.DefaultExtension"]
