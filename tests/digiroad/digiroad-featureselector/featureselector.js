@@ -127,7 +127,7 @@ describe.only('Test Suite for digiroad/featureselector bundle', function() {
                 sandbox.postRequestByName('AddMapLayerRequest', [testLayerId, true]);
                 setTimeout(function() {
                     done();
-                }, 2000);
+                }, 1000);
             });
         });
         

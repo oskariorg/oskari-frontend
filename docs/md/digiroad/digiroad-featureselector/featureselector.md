@@ -11,7 +11,9 @@
 
 ## Description
 
-''Describe what the bundle does.''
+Bundle adds a grid to display features fetched via WFS or some other protocol supported by OpenLayers. Users can then view the features and edit them.
+
+Features get added to the grid when the user clicks on the map. Alt key can be used to draw a rectangle which selects all features intersecting with the box and control key can be used to select multiple features and toggling selected features.
 
 ## TODO
 
@@ -19,13 +21,13 @@
 
 ## Screenshot
 
-![screenshot](<%= docsurl %>images/bundle_id.png)
+![screenshot](<%= docsurl %>images/digiroad-featureselector.png)
 
 ## Bundle configuration
 
 ```javascript
 "conf": {
-  "queryUrl": "<url for WFS service (this is needed by DigiroadVectorLayerPlugin)>",
+  "queryUrl": "<url for WFS/other feature service (this is needed by DigiroadVectorLayerPlugin)>",
   "targetLayers": {
       "<layer id of a WMS layer>": {
           "objectId": "<the id field of the features>",
@@ -37,25 +39,13 @@
               "editor": "<'integer', 'text' or 'select' (optional, if not specified, the data field is not editable)>"
           }],
           "protocolType": "<the type of the protocol used to fetch the features (optional, defaults to 'WFS')>",
-          "protocolOpts": "<options for the protocol (optional, by default uses what it can get from the layer, like featureType)>"
+          "protocolOpts": "<options for the protocol (optional, by default uses what it can get from the WMS layer, like featureType)>"
       }
   }
 }
 ```
 
-OR
-
-No configuration is required.
-
 ## Bundle state
-
-```javascript
-state : {
-  test : 2
-}
-```
-
-OR
 
 No statehandling has been implemented.
 
@@ -96,22 +86,18 @@ This bundle doesn't send out any requests.
     <th>Event</th><th>How does the bundle react</th>
   </tr>
   <tr>
-    <td>FeatureSelector.FeaturesAddedEvent</td><td>tbd</td>
+    <td>AfterMapLayerAddEvent</td><td>If the layer is a WMS layer and it has been defined in config (targetLayers), it creates a grid to the flyout and a vector layer and adds it to the map.</td>
   </tr>
   <tr>
-    <td>FeatureSelector.FeaturesRemovedEvent</td><td>tbd</td>
+    <td>AfterMapLayerRemoveEvent</td><td>Removes all the features bound to the layer and removes the grid from the flyout.</td>
   </tr>
   <tr>
-    <td>AfterMapLayerAddEvent</td><td>tbd</td>
+    <td>FeatureSelector.FeaturesAddedEvent</td><td>Adds the features sent by the event to the grid and binds a hover event to them.</td>
   </tr>
   <tr>
-    <td>AfterMapLayerRemoveEvent</td><td>tbd</td>
+    <td>FeatureSelector.FeaturesRemovedEvent</td><td>Removes the features sent by the event from the grid.</td>
   </tr>
 </table>
-
-OR
-
-This bundle doesn't listen to any events.
 
 ## Events the bundle sends out
 
@@ -120,13 +106,15 @@ This bundle doesn't listen to any events.
     <th>Event</th><th>Why/when</th>
   </tr>
   <tr>
-    <td>tbd</td><td>tbd</td>
+    <td>FeatureSelector.FeaturesAddedEvent</td><td>DigiroadVectorLayerPlugin sends this event when the user clicks on the map to select features.</td>
+  </tr>
+  <tr>
+    <td>FeatureSelector.FeaturesRemovedEvent</td><td>DigiroadVectorLayerPlugin sends this event when the user clicks on an empty spot on the map or uses the control key on a feature which has been selected already (toggle).</td>
+  </tr>
+  <tr>
+    <td>FeatureHighlightEvent</td><td>Upon moving the mouse cursor over a feature in the grid this event gets sent. It has a type which can be either 'highlight' or 'unHighlight'.</td>
   </tr>
 </table>
-
-OR
-
-This bundle doesn't send out any events.
 
 ## Dependencies
 
@@ -135,10 +123,33 @@ This bundle doesn't send out any events.
     <th>Dependency</th><th>Linked from</th><th>Purpose</th>
   </tr>
   <tr>
-    <td>[Library name](#link)</td><td>src where its linked from</td><td>*why/where we need this dependency*</td>
+    <td> [jQuery](http://api.jquery.com/) </td>
+    <td> Version 1.7.1 assumed to be linked (on page locally in portal) </td>
+    <td> Used to handle map element sizing </td>
+  </tr>
+  <tr>
+    <td> [OpenLayers](http://openlayers.org/) </td>
+    <td> Expects OpenLayers already linked </td>
+    <td> Not used directly but a MapModule dependency </td>
+  </tr>
+  <tr>
+    <td> [SlickGrid](https://github.com/mleibman/SlickGrid) </td>
+    <td> Assumed to be linked </td>
+    <td> Uses SlickGrid for rendering the features. </td>
+  </tr>
+  <tr>
+    <td> [Oskari divmanazer](<%= docsurl %>framework/divmanazer.html) </td>
+    <td> DivManazerBundle </td>
+    <td> Provides flyout/tile functionality</td>
+  </tr>
+  <tr>
+    <td> [Oskari mapmodule](<%= docsurl %>framework/mapmodule.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> To initialize and show the map on UI </td>
+  </tr>
+  <tr>
+    <td> [Oskari mapmodule plugins](<%= docsurl %>framework/mapmodule.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> Any bundle providing a map plugin referenced in config needs to be loaded before starting this bundle </td>
   </tr>
 </table>
-
-OR
-
-This bundle doesn't have any dependencies.
