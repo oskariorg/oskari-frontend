@@ -101,7 +101,7 @@
                 "name": "Väylätyyppi",
                 "inspire": "Liikenne-elementit",
                 "orgName": "Liikenne-elementit",
-                "minScale": 15000000,
+                "minScale": 25001,
                 "maxScale": 1,
                 "wmsUrl": "http://digiroad.karttakeskus.fi/dgeoserver/wms",
                 "styles": [

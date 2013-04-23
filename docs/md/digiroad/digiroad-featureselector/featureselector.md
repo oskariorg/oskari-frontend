@@ -51,31 +51,9 @@ No statehandling has been implemented.
 
 ## Requests the bundle handles
 
-<table>
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td>tbd</td><td>tbd</td>
-  </tr>
-</table>
-
-OR
-
 This bundle doesn't handle any requests.
 
 ## Requests the bundle sends out
-
-<table>
-  <tr>
-    <th>Request</th><th>Why/when</th>
-  </tr>
-  <tr>
-    <td>tbd</td><td>tbd</td>
-  </tr>
-</table>
-
-OR
 
 This bundle doesn't send out any requests.
 

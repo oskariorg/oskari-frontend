@@ -306,7 +306,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
         });
         
         control.events.register("beforefeatureselected", this, function(e) {
-            if(this._map.getZoom() < 8) {
+            if(!layer.isInScale()) {
                 return false;
             }
         });

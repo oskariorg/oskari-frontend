@@ -25,6 +25,7 @@ Oskari.clazz.define(
         /**
         * @method getFeature
         * @return {Object} the edited feature from the grid.
+        * Note that this is just a plain JavaScript object, not an OpenLayers.Feature
         */
         getFeature : function() {
             return this._feature;
