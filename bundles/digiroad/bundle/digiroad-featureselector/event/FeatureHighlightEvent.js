@@ -10,7 +10,7 @@ Oskari.clazz.define(
         this._highlightType = highlighType;
     },
     {
-        __name : "FeatureHighlightEvent",
+        __name : "FeatureSelector.FeatureHighlightEvent",
         getName : function() {
             return this.__name;
         },

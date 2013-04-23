@@ -106,7 +106,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
         'FeaturesAvailableEvent' : function(event) {
             this.handleFeaturesAvailableEvent(event);
         },
-        'FeatureHighlightEvent': function(event) {
+        'FeatureSelector.FeatureHighlightEvent': function(event) {
             var type = event.getHighlightType(),
                 feature = event.getFeature(),
                 layerName = event.getLayerName();
@@ -334,136 +334,6 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
         this._map.addControl(control);
         control.activate();
         return control;
-    },
-    
-    _registerEventsForKaantymismaarays: function(control, layer, openLayer, protocol) {
-        var me = this;
-        control.single = false;
-
-        control.events.register("beforefeaturesselected", this, function(e) {
-            var features = e.features,
-                filters = [],
-                filter;
-
-            // For each feature we need to get the 'KAANTMAAR_'
-            // property and create a filter based on it.
-            // This is because we're not adding the features
-            // the user just clicked over on, but rather requesting
-            // every element there is for that 'kaantymismaarays'. 
-            for(var i = 0; i < features.length; ++i) {
-                var kmaar_code = features[i].attributes['KAANTMAAR_'];
-                var kmaarFilter = new OpenLayers.Filter.Comparison({
-                    type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                    property: "KAANTMAAR_",
-                    value: kmaar_code
-                });
-                filters.push(kmaarFilter);
-            }
-            if(filters.length > 1) {
-                filter = new OpenLayers.Filter.Logical({
-                    type: OpenLayers.Filter.Logical.OR,
-                    filters: filters
-                });
-            } else {
-                filter = filters[0];
-            }
-            
-            // The user is a basic user if he has a 'kuntaKoodi' parameter greater than 0.
-            // In case he doesn't we're assuming he's an admin.
-            // OBS! This is just a quick fix to Get It Work™, should most definitely implement better.
-            if(kuntayllapito.user.kuntaKoodi > 0) {
-                filter = new OpenLayers.Filter.Logical({
-                    type: OpenLayers.Filter.Logical.AND,
-                    filters: [
-                        filter,
-                        new OpenLayers.Filter.Comparison({
-                            type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                            property: "TIEE_KUNTA",
-                            value: kuntayllapito.user.kuntaKoodi
-                        })
-                    ]
-                });
-            }
-            
-            protocol.read({
-                filter: filter,
-                callback: function(resp) {
-                    var features = resp.features;
-                    me._handleGetKaantymismaarays(features, layer, openLayer);
-                }
-            });
-            return false;
-        });
-        // Clicking out removes all the features.
-        control.events.register("clickout", this, function(e) {
-            var sandbox = me._sandbox;
-            var eventBuilder = sandbox.getEventBuilder("FeaturesRemovedEvent");
-            if(eventBuilder) {
-                var event = eventBuilder(layer.getId());
-                sandbox.notifyAll(event);
-            }
-            openLayer.removeAllFeatures();
-        })
-    },
-
-    _handleGetKaantymismaarays: function(features, layer, openLayer) {
-        if(!features) {
-            return;
-        }
-        var featCollection = {},
-            notifyFeatures = [],
-            featAtts,
-            feat;
-
-        // Grouping the features based on the kaantymismaarays object id
-        // and deducing whether the element is the first or the last one
-        // (or the middle one, but apparently that is not used atm).
-        for(var i = 0; i < features.length; ++i) {
-            var f = features[i];
-            var f_kaantm = featCollection[f.attributes['KAANTMAAR_']];
-            if(!f_kaantm) {
-                f_kaantm = featCollection[f.attributes['KAANTMAAR_']] = {};
-            }
-            switch(f.attributes['ELEM_JAR_1']) {
-                case 1:
-                    f_kaantm.firstElem = f;
-                    break;
-                case 2:
-                    f_kaantm.middleElem = f;
-                    break;
-                case 3:
-                    f_kaantm.lastElem = f;
-                    break;
-            }
-        }
-
-        // Creating the features we're sending with the 'FeaturesAddedEvent'.
-        // This is mainly for the 'FeatureSelector' bundle.
-        for(var kFeature in featCollection) {
-            var f = featCollection[kFeature];
-            featAtts = {
-                "firstElementId": f.firstElem.attributes['ELEMENT_OB'],
-                "lastElementId": f.lastElem.attributes['ELEMENT_OB'],
-                "firstElement": f.firstElem,
-                "lastElement": f.lastElem,
-                "TYYPPI": f.firstElem.attributes['TYYPPI'],
-                "OID_TUNNUS": f.firstElem.attributes['OID_TUNNUS'],
-                "GUID": f.firstElem.attributes['ELEMENT_OB'].toString() + f.lastElem.attributes['ELEMENT_OB'].toString()
-            }
-            feat = new OpenLayers.Feature.Vector(null, featAtts);
-            notifyFeatures.push(feat);
-        }
-
-        var sandbox = this._sandbox;
-        var eventBuilder = sandbox.getEventBuilder("FeaturesAddedEvent");
-        if(eventBuilder) {
-            var event = eventBuilder(layer.getId(), notifyFeatures);
-            sandbox.notifyAll(event);
-        }
-        
-        // Lastly we're adding the real features to the map
-        // (that is, those which have a geometry property).
-        openLayer.addFeatures(features);
     },
 
     /***********************************************************

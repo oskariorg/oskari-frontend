@@ -282,7 +282,7 @@ function(instance) {
                 feature = me.instance.features[oid],
                 columnId = grid.getColumns()[cell].id;
             
-            var eventBuilder = sandbox.getEventBuilder("FeatureHighlightEvent");
+            var eventBuilder = sandbox.getEventBuilder("FeatureSelector.FeatureHighlightEvent");
             if(eventBuilder) {
                 var event = eventBuilder(layerName, feature, highlightType);
                 sandbox.notifyAll(event);

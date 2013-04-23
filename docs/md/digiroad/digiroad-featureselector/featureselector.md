@@ -15,6 +15,8 @@ Bundle adds a grid to display features fetched via WFS or some other protocol su
 
 Features get added to the grid when the user clicks on the map. Alt key can be used to draw a rectangle which selects all features intersecting with the box and control key can be used to select multiple features and toggling selected features.
 
+The bundle includes its own version of VectorLayerPlugin, which adds two OpenLayers controls to the map: SelectFeature and GetFeature. SelectFeature control is responsible for highlighting features on the map whereas GetFeature control fetches the features from the backend. It is currently tested only with GeoServer and WFS protocol. If requesting features via WFS the usual Cross-Origin policy of browser applies, so a proxy might be necessary.
+
 ## TODO
 
 * State handling
@@ -90,7 +92,7 @@ This bundle doesn't send out any requests.
     <td>FeatureSelector.FeaturesRemovedEvent</td><td>DigiroadVectorLayerPlugin sends this event when the user clicks on an empty spot on the map or uses the control key on a feature which has been selected already (toggle).</td>
   </tr>
   <tr>
-    <td>FeatureHighlightEvent</td><td>Upon moving the mouse cursor over a feature in the grid this event gets sent. It has a type which can be either 'highlight' or 'unHighlight'.</td>
+    <td>FeatureSelector.FeatureHighlightEvent</td><td>Upon moving the mouse cursor over a feature in the grid this event gets sent. It has a type which can be either 'highlight' or 'unHighlight'.</td>
   </tr>
   <tr>
     <td>FeatureSelector.FeatureEditedEvent</td><td>Triggered when the user double clicks a cell in the grid, enter a new value and presses enter.</td>

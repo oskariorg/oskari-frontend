@@ -332,7 +332,7 @@ function(instance) {
             feature = me.features[oid],
             layerName = "liikenne_elementti";
 
-        var eventBuilder = this.instance.sandbox.getEventBuilder("FeatureHighlightEvent");
+        var eventBuilder = this.instance.sandbox.getEventBuilder("FeatureSelector.FeatureHighlightEvent");
         if(eventBuilder) {
             element.hover(function() {
                 var event = eventBuilder(layerName, feature, 'highlight');
@@ -414,7 +414,7 @@ function(instance) {
          * Adds the feature id to the UI and binds a hover event to it.
          * @param {Oskari.mapframework.mapmodule-plugin.event.FeaturesAddedEvent} event
          */
-        'FeaturesAddedEvent': function(event) {
+        'FeatureSelector.FeaturesAddedEvent': function(event) {
             var layerName = event.getLayerName().replace(/_vector$/, "");
             var features = event.getFeatures();
 
@@ -445,7 +445,7 @@ function(instance) {
          * Removes the feature id from the UI and unbinds the hover event attached to it.
          * @param {Oskari.mapframework.mapmodule-plugin.event.FeaturesAddedEvent} event
          */
-        'FeaturesRemovedEvent': function(event) {
+        'FeatureSelector.FeaturesRemovedEvent': function(event) {
             var layerName = event.getLayerName().replace(/_vector$/, "");
             var features = event.getFeatures();
 
