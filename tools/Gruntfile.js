@@ -197,8 +197,9 @@ module.exports = function(grunt) {
 
             // subsets have underscore (_) in appName, which means we need to
             // get the parent resources first and then replace with subset specific stuff
-            var parentAppName = appName.substring(0, appName.indexOf('_'));
-            if (appName !== parentAppName) {
+            var appNameSeparatorIndex = appName.indexOf('_');
+            if (appNameSeparatorIndex > 0) {
+                var parentAppName = appName.substring(0, appNameSeparatorIndex);
                 // copy files from parent folder to be replaced by child
                 files.push({
                     "expand": true,

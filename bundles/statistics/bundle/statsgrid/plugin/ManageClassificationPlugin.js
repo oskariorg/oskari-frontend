@@ -321,7 +321,7 @@ function(config, locale) {
 		for ( k = 0; k < col_data.length; k++) {
 
 			for ( i = 0; i < strings.length; i++) {
-				if (parseFloat(col_data[k]) >= limits[i] && parseFloat(col_data[k]) < limits[i + 1]) {
+				if (parseFloat(col_data[k]) >= limits[i] && parseFloat(col_data[k]) <= limits[i + 1]) {
 					strings[i].push(codes[k]);
 					check = true;
 					break;
