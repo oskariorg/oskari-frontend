@@ -447,5 +447,23 @@
             }
          }
       }
+   }, {
+      "instanceProps": {
+
+      },
+      "title": "Valitut kohteet",
+      "fi": "featureselector",
+      "sv": "?",
+      "en": "?",
+      "bundlename": "digiroad-featureselector",
+      "bundleinstancename": "digiroad-featureselector",
+      "metadata": {
+        "Import-Bundle": {
+            "digiroad-featureselector": {
+                "bundlePath": "../packages/digiroad/bundle/"
+            }
+        },
+        "Require-Bundle-Instance" : []
+      }
    }]
 }
