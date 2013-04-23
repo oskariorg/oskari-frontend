@@ -1,7 +1,7 @@
 /**
  * @class Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin
  */
-Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', function(url) {
+Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', function(url, snappingLayerConf) {
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
@@ -13,6 +13,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
     this.editMode = false;
     this.currentDrawMode = null;
     this.queryUrl = url;
+    this.snappingLayerConf = snappingLayerConf;
 }, {
     __name : 'DigiroadMyPlaces.DrawPlugin',
 
@@ -32,7 +33,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
      * @method createSnappingGridLayer
      * Creates the layer which is used as a 'grid' to the user drawing a geometry.
      */
-    createSnappingGridLayer: function(protocolUrl) {
+    createSnappingGridLayer: function(protocolUrl, conf) {
         var layer, protocol, styleMap;
 
         this.snappingLayerStrategy = new OpenLayers.Strategy.BBOX({
@@ -40,27 +41,13 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
         	autoActivate: false
         });
 
-        protocol = new OpenLayers.Protocol.WFS({
-            url: protocolUrl,
-            srsName: "EPSG:3067",
-            version: "1.1.0",
-            featureType: "LIIKENNE_ELEMENTTI",
-            featureNS: "http://digiroad.karttakeskus.fi/LiVi",
-            featurePrefix: "LiVi",
-            geometryName: "GEOMETRY",
-            outputFormat: "json"
-        });
+        protocol = new OpenLayers.Protocol[conf.protocol](conf.opts);
 
         styleMap = new OpenLayers.StyleMap({'strokeOpacity': 0.0});
 
         layer = new OpenLayers.Layer.Vector("snappingGridLayer", {
             protocol: protocol,
             strategies: [this.snappingLayerStrategy],
-            filter: new OpenLayers.Filter.Comparison({
-                type : OpenLayers.Filter.Comparison.EQUAL_TO,
-                property : "TIEE_KUNTA",
-                value : kuntayllapito.user.kuntaKoodi
-            }),
             styleMap: styleMap,
             minScale: 25001,
             maxScale: 1
@@ -144,7 +131,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
     	catch(error) {
     		// happens when the sketch isn't even started -> reset state
         	this.stopDrawing();
-	        var event = this._sandbox.getEventBuilder('MyPlaces.MyPlaceSelectedEvent')();
+	        var event = this._sandbox.getEventBuilder('DigiroadMyPlaces.MyPlaceSelectedEvent')();
 	        this._sandbox.notifyAll(event);
     	}
     },
@@ -201,8 +188,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', functi
             getGeometryHandler : Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.request.GetGeometryRequestPluginHandler', sandbox, me)
         };
 
-        // the URL should not be hard coded here but meh I'm lazy.
-        this.snappingGridLayer = this.createSnappingGridLayer(this.queryUrl);
+        this.snappingGridLayer = this.createSnappingGridLayer(this.queryUrl, this.snappingLayerConf);
         
         this.drawLayer = new OpenLayers.Layer.Vector("MyPlaces Draw Layer", {
             /*style: {

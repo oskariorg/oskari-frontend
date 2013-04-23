@@ -52,7 +52,7 @@ function(instance) {
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         
         // register plugin for map (drawing for my places)
-        var drawPlugin = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', this.instance.queryUrl);
+        var drawPlugin = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.plugin.DrawPlugin', this.instance.queryUrl, this.instance.snappingLayerConf);
         mapModule.registerPlugin(drawPlugin);
         mapModule.startPlugin(drawPlugin);
         this.drawPlugin = drawPlugin;

@@ -17,7 +17,7 @@ Features get added to the grid when the user clicks on the map. Alt key can be u
 
 ## TODO
 
-* ''List any planned features''
+* State handling
 
 ## Screenshot
 
@@ -86,10 +86,10 @@ This bundle doesn't send out any requests.
     <th>Event</th><th>How does the bundle react</th>
   </tr>
   <tr>
-    <td>AfterMapLayerAddEvent</td><td>If the layer is a WMS layer and it has been defined in config (targetLayers), it creates a grid to the flyout and a vector layer and adds it to the map.</td>
+    <td>AfterMapLayerAddEvent</td><td>If the layer is a WMS layer and it has been defined in config (in targetLayers), it creates a grid to the flyout. It also creates a vector layer (for adding features on the layer) and adds it to the map.</td>
   </tr>
   <tr>
-    <td>AfterMapLayerRemoveEvent</td><td>Removes all the features bound to the layer and removes the grid from the flyout.</td>
+    <td>AfterMapLayerRemoveEvent</td><td>Removes all the features bound to the layer and removes the grid from the flyout. Also destroys the created vector layer.</td>
   </tr>
   <tr>
     <td>FeatureSelector.FeaturesAddedEvent</td><td>Adds the features sent by the event to the grid and binds a hover event to them.</td>
@@ -113,6 +113,9 @@ This bundle doesn't send out any requests.
   </tr>
   <tr>
     <td>FeatureHighlightEvent</td><td>Upon moving the mouse cursor over a feature in the grid this event gets sent. It has a type which can be either 'highlight' or 'unHighlight'.</td>
+  </tr>
+  <tr>
+    <td>FeatureSelector.FeatureEditedEvent</td><td>Triggered when the user double clicks a cell in the grid, enter a new value and presses enter.</td>
   </tr>
 </table>
 

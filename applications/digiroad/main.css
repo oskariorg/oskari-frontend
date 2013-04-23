@@ -19,6 +19,12 @@ body {
   width: 100%;
 }
 
+#digiroad_logo {
+    height: 51px;
+    width: 153px;
+    background: url('images/digiroad_sivupalkki.jpg');
+}
+
 #maptools {
   background-color: #333438;
   height: 100%;
@@ -31,12 +37,6 @@ body {
 #contentMap {
   height: 100%;
   margin-left: 153px;
-}
-
-#digiroad_logo {
-    height: 51px;
-    width: 153px;
-    background: url('../images/digiroad_sivupalkki.jpg');
 }
 
 #loginbar {

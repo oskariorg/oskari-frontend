@@ -56,7 +56,7 @@ function() {
         // Events
         {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/digiroad/bundle/digiroad-featureselector/event/FeaturesEditedEvent.js"
+            "src" : "../../../../bundles/digiroad/bundle/digiroad-featureselector/event/FeatureEditedEvent.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/digiroad/bundle/digiroad-featureselector/event/FeatureHighlightEvent.js"

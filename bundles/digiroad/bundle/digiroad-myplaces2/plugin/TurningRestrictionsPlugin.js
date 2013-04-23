@@ -93,19 +93,9 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.TurningRestrictions
 
     _addVectorLayer: function(url, featureType, layerName) {
         var layerJson = this._baseJson(url, featureType, layerName),
-            vectorLayer = this._mapLayerService.createMapLayer(layerJson),
-            keepFeatures = true,
-            filter = null;
-        
-        if(kuntayllapito.user.kuntaKoodi > 0) {
-            filter = new OpenLayers.Filter.Comparison({
-                type: OpenLayers.Filter.Comparison.EQUAL_TO,
-                property: "TIEE_KUNTA",
-                value: kuntayllapito.user.kuntaKoodi
-            });
-        }
+            vectorLayer = this._mapLayerService.createMapLayer(layerJson);
 
-        this._vectorLayerPlugin.addMapLayerToMap(vectorLayer, true, false, filter);
+        this._vectorLayerPlugin.addMapLayerToMap(vectorLayer, true, false);
         this._mapLayerService.addLayer(vectorLayer, true);
     },
 
@@ -118,7 +108,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.TurningRestrictions
     _baseJson: function(url, type, name) {
         return {
             "id": name+'_vector',
-            "type": "vectorlayer",
+            "type": "dr-vectorlayer",
             "opacity": 100,
             "name": name+'_vector',
             "minScale": 25001,
@@ -135,10 +125,6 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.TurningRestrictions
                 "featurePrefix": "LiVi",
                 "geometryName": "GEOMETRY",
                 "outputFormat": "json"
-            },
-            "styleOpts": {
-                "defaultStrokeColor": "#22FF22",
-                "selectStrokeColor": "#00FF00"
             }
         }
     },

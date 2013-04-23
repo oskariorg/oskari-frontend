@@ -165,7 +165,7 @@ function(instance) {
         } else {
         	for(var i = 0; i < features.length; ++i) {
         		oid = features[i].data[this.instance.targetLayers[layerName].objectId];
-        		row_index = this._findGridRowIndexByOid(gridData, oid);
+        		row_index = this._findGridRowIndexByOid(layerName, gridData, oid);
         		if(row_index !== null) {
                    gridData.splice(row_index, 1);
                 }
@@ -186,7 +186,7 @@ function(instance) {
             return null;
         }
 
-        var domContainer = jQuery('<div id="'+layerName+'_grid"></div>'),
+        var domContainer = jQuery('<div id="'+layerName+'_grid" class="featureselector-featuregrid"></div>'),
             gridData = this.gridDataArrays[layerName] = [],
             gridHeadersBase = this.gridColumnArrays[layerName] = this._gridHeaders(layerName),
             grid = null,
@@ -226,11 +226,12 @@ function(instance) {
 
     /**
      * @method _findGridRowIndexByOid
+     * @param {String} layerName to find the correct layer from targetLayers.
      * @param {Object[]} grid_data the data array from which we perform the lookup
      * @param {String} oid the object id property of a feature.
      * @return {Integer} the index of the searched feature, or null if not found.
      */
-    _findGridRowIndexByOid: function(grid_data, oid) {
+    _findGridRowIndexByOid: function(layerName, grid_data, oid) {
     	for(var i = 0; i < grid_data.length; ++i) {
             var elem_oid = grid_data[i][this.instance.targetLayers[layerName].objectId];
     		if(elem_oid === oid) {
@@ -294,8 +295,9 @@ function(instance) {
             }
         });
         grid.onCellChange.subscribe(function(e, args) {
-            var service = sandbox.getService("Oskari.digiroad.bundle.myplaces2.service.MyPlacesService");
-            service.saveEditedFeature(layerType, layerName, args.item, commitEditedFeaturesCallback);
+            var eventBuilder = sandbox.getEventBuilder('FeatureSelector.FeatureEditedEvent');
+            var event = eventBuilder(layerName, args.item, commitEditedFeaturesCallback);
+            sandbox.notifyAll(event);
         });
         grid.onMouseEnter.subscribe(function(e) {
             onMouseFunction(e, "highlight");

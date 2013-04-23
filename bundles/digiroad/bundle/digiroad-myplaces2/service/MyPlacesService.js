@@ -312,12 +312,11 @@ function(url, uuid, sandbox, defaultName) {
 
     /**
      * @method saveEditedFeature
-     * @param {String} layerType 'element' or 'segment'
      * @param {String} layerName e.g. 'nopeusrajoitus
      * @param {Object} feature an OpenLayers feature object
      * @param {Function} callback eventually gets called
      */
-    saveEditedFeature: function(layerType, layerName, feature, callback) {
+    saveEditedFeature: function(layerName, feature, callback) {
     	var me = this;
     	var callbackWrapper = function(success) {
     		if(success) {
@@ -328,11 +327,7 @@ function(url, uuid, sandbox, defaultName) {
     		}
     	};
     	
-        if(layerType === "element") {
-            this.wfstStore.commitEditedElements(feature, layerName, callbackWrapper);
-        } else if(layerType === "segment") {
-            this.wfstStore.commitEditedSegments(feature, layerName, callbackWrapper);
-        }
+        this.wfstStore.commitEditedFeatures('edited_elements', feature, layerName, callbackWrapper);
     },
     
     /**

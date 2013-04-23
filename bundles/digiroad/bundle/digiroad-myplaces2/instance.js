@@ -144,7 +144,16 @@ function() {
         if(!user.isLoggedIn()) {
             // guest users don't need anything else
             return;
-        }       
+        }
+
+        // register to listening events
+        for (var p in me.eventHandlers) {
+            if (p) {
+                sandbox.registerForEventByName(me, p);
+            }
+        }
+
+        this.snappingLayerConf = this.conf.snappingLayer;
         
         var actionUrl = this.conf.queryUrl;
         this.queryUrl = actionUrl;
@@ -171,8 +180,37 @@ function() {
      */
     stop : function() {
         this.sandbox = null;
-    }
+    },
+
+    /**
+     * @method onEvent
+     * Module protocol method/Event dispatch
+     */
+    onEvent : function(event) {
+        var me = this;
+        var handler = me.eventHandlers[event.getName()];
+        if (!handler) {
+            return;
+        }
+
+        return handler.apply(this, [event]);
+    },
     
+    /**
+     * @static
+     * @property eventHandlers
+     * Best practices: defining which 
+     * events bundle is listening and how bundle reacts to them
+     */
+    eventHandlers : {
+        'FeatureSelector.FeatureEditedEvent': function(event) {
+            var layerName = event.getLayerName(),
+                feature = event.getFeature(),
+                callback = event.getCallback();
+
+            this.myPlacesService.saveEditedFeature(layerName, feature, callback);
+        }
+    }
 }, {
     /**
      * @property {String[]} protocol

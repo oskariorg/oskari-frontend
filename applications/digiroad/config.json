@@ -107,7 +107,8 @@
                 "styles": [
                   {"title": "Väylätyyppi", "name": "vaylatyyppi"}
                 ],
-                "style": "vaylatyyppi"
+                "style": "vaylatyyppi",
+                "legendImage": "http://digiroad.karttakeskus.fi/dgeoserver/wms?REQUEST=GetLegendGraphic&VERSION=1.0.0&FORMAT=image/png&WIDTH=20&HEIGHT=20&LAYER=LiVi:LIIKENNE_ELEMENTTI&STYLE=vaylatyyppi"
             },
             {
                "type":"base",
@@ -257,7 +258,19 @@
       },
       "conf": {
         "queryUrl": "http://digiroad.karttakeskus.fi/delegate/proxy/wfs",
-        "wmsUrl": "http://digiroad.karttakeskus.fi/dgeoserver/wms"
+        "wmsUrl": "http://digiroad.karttakeskus.fi/dgeoserver/wms",
+        "snappingLayer": {
+            "protocol": "WFS",
+            "opts": {
+                "srsName": "EPSG:3067",
+                "version": "1.1.0",
+                "featureType": "LIIKENNE_ELEMENTTI",
+                "featureNS": "http://digiroad.karttakeskus.fi/LiVi",
+                "featurePrefix": "LiVi",
+                "geometryName": "GEOMETRY",
+                "outputFormat": "json"
+            }
+        }
       }
     },
    "digiroad-featureselector": {

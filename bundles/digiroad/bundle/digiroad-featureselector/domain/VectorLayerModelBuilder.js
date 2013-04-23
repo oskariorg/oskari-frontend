@@ -14,5 +14,6 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.domain.VectorLayerMo
     parseLayerData : function(layer, mapLayerJson) {
         layer.setProtocolType(mapLayerJson.protocolType);
         layer.setProtocolOpts(mapLayerJson.protocolOpts);
+        layer.setStrategyTypes(mapLayerJson.strategyTypes);
     }
 });
