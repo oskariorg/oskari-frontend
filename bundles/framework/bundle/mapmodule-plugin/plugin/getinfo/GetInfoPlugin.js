@@ -84,13 +84,13 @@ function() {
         this._sandbox.printDebug("[GetInfoPlugin] init");
         this.getGFIHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.getinfo.GetFeatureInfoHandler', me);
         
-        this.templateTable = jQuery('<table></table>');
-        this.templateTableRow = jQuery('<tr style="padding: 5px;"></tr>');
-        this.templateTableCell = jQuery('<td style="padding: 2px"></td>');
+        this.templateTable = jQuery('<table class="getinforesult_table"></table>');
+        this.templateTableRow = jQuery('<tr></tr>');
+        this.templateTableCell = jQuery('<td></td>');
         
-        this.templateHeader = jQuery('<div style="border:1pt solid navy;background-color: #424343;margin-top: 14px; margin-bottom: 10px;height:15px;">' + 
-                '<div class="icon-bubble-left" style="height:15px;display:inline;float:left;"></div>');
-        this.templateHeaderTitle = jQuery('<div style="color:white;float:left;display:inline;margin-left:8px;"></div>');
+        this.templateHeader = jQuery('<div class="getinforesult_header">' + 
+                '<div class="icon-bubble-left"></div>');
+        this.templateHeaderTitle = jQuery('<div class="getinforesult_header_title"></div>');
     },
     /**
      * @method register
@@ -636,7 +636,7 @@ function() {
 	                var row = this.templateTableRow.clone();
 	                table.append(row);
 	                if (!even) {
-	                    row.css('background-color', '#EEEEEE');
+						row.addClass("odd");
 	                }
 	                even = !even;
 	                
@@ -666,12 +666,13 @@ function() {
      * @return {String} formatted HMTL
      */
     _json2html : function(node, layerName) {
+		// TODO use template elements
         var me = this;
         if (node == null) {
             return '';
         }
         var even = true;
-        var html = '<table>';
+        var html = '<table class="getinforesult_table">';
         for (var key in node) {
             var value = node[key];
             var vType = ( typeof value).toLowerCase();
@@ -703,14 +704,14 @@ function() {
                     valpres = '';
             }
             even = !even;
-            html += '<tr style="padding: 5px;';
+            html += '<tr';
             if (even) {
-                html += '">';
+                html += '>';
             } else {
-                html += ' background-color: #EEEEEE;">';
+                html += ' class="odd">';
             }
-            html += '' + '<td style="padding: 2px;">' + key + '</td>';
-            html += '' + '<td style="padding: 2px;">' + valpres + '</td>';
+            html += '' + '<td>' + key + '</td>';
+            html += '' + '<td>' + valpres + '</td>';
             html += '</tr>';
         }
         html += '</table>';

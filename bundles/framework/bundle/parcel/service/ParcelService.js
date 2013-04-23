@@ -93,7 +93,7 @@ function(instance) {
     saveParcel : function(feature, placeName, placeDescription, cb) {
         if (feature) {
         	this._plot.plotParcel(feature, placeName, placeDescription, cb);
-            this._wfst.saveParcel(feature, placeName, placeDescription, cb);
+           // later maybe  this._wfst.saveParcel(feature, placeName, placeDescription, cb);
         }
     },
 
@@ -116,7 +116,7 @@ function(instance) {
     saveRegisterUnit : function(feature, placeName, placeDescription, cb) {
         if (feature) {
         	this._plot.plotParcel(feature, placeName, placeDescription, cb);
-            this._wfst.saveRegisterUnit(feature, placeName, placeDescription, cb);
+           // later maybe this._wfst.saveRegisterUnit(feature, placeName, placeDescription, cb);
         }
     }
 }, {

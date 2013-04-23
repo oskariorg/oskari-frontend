@@ -249,15 +249,17 @@ function(config) {
         var pbimg = this.getMapModule().getImageUrl() + '/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/';
         var panbuttonDivImg = pb.find('.panbuttonDivImg');
         // update path from config
-        panbuttonDivImg.attr('src', pbimg + "default.png");
+        panbuttonDivImg.attr('src', pbimg + "empty.png");
         
         var center = pb.find('.panbuttons_center');
 
         center.bind('mouseover', function(event) {
-            panbuttonDivImg.attr('src', pbimg + 'root.png');
+            //panbuttonDivImg.attr('src', pbimg + 'root.png');
+			panbuttonDivImg.addClass("root");
         });
         center.bind('mouseout', function(event) {
-            panbuttonDivImg.attr('src', pbimg + 'default.png');
+            //panbuttonDivImg.attr('src', pbimg + 'default.png');
+			panbuttonDivImg.removeClass("root");
         });
         center.bind('click', function(event) {
             var rn = 'StateHandler.SetStateRequest';
@@ -271,10 +273,12 @@ function(config) {
 
         var left = pb.find('.panbuttons_left');
         left.bind('mouseover', function(event) {
-            panbuttonDivImg.attr('src', pbimg + 'left.png');
+            //panbuttonDivImg.attr('src', pbimg + 'left.png');
+			panbuttonDivImg.addClass("left");
         });
         left.bind('mouseout', function(event) {
-            panbuttonDivImg.attr('src', pbimg + 'default.png');
+            //panbuttonDivImg.attr('src', pbimg + 'default.png');
+			panbuttonDivImg.removeClass("left");
         });
         left.bind('click', function(event) {
             me.getMapModule().panMapByPixels(-100, 0, true);
@@ -282,10 +286,12 @@ function(config) {
 
         var right = pb.find('.panbuttons_right');
         right.bind('mouseover', function(event) {
-            panbuttonDivImg.attr('src', pbimg + 'right.png');
+            //panbuttonDivImg.attr('src', pbimg + 'right.png');
+			panbuttonDivImg.addClass("right");
         });
         right.bind('mouseout', function(event) {
-            panbuttonDivImg.attr('src', pbimg + 'default.png');
+            //panbuttonDivImg.attr('src', pbimg + 'default.png');
+			panbuttonDivImg.removeClass("right");
         });
         right.bind('click', function(event) {
             me.getMapModule().panMapByPixels(100, 0, true);
@@ -293,10 +299,12 @@ function(config) {
 
         var top = pb.find('.panbuttons_up');
         top.bind('mouseover', function(event) {
-            panbuttonDivImg.attr('src', pbimg + 'up.png');
+            //panbuttonDivImg.attr('src', pbimg + 'up.png');
+			panbuttonDivImg.addClass("up");
         });
         top.bind('mouseout', function(event) {
-            panbuttonDivImg.attr('src', pbimg + 'default.png');
+            //panbuttonDivImg.attr('src', pbimg + 'default.png');
+			panbuttonDivImg.removeClass("up");
         });
         top.bind('click', function(event) {
             me.getMapModule().panMapByPixels(0, -100, true);
@@ -304,10 +312,12 @@ function(config) {
 
         var bottom = pb.find('.panbuttons_down');
         bottom.bind('mouseover', function(event) {
-            panbuttonDivImg.attr('src', pbimg + 'down.png');
+            //panbuttonDivImg.attr('src', pbimg + 'down.png');
+			panbuttonDivImg.addClass("down");
         });
         bottom.bind('mouseout', function(event) {
-            panbuttonDivImg.attr('src', pbimg + 'default.png');
+            //panbuttonDivImg.attr('src', pbimg + 'default.png');
+			panbuttonDivImg.removeClass("down");
         });
         bottom.bind('click', function(event) {
             me.getMapModule().panMapByPixels(0, 100, true);

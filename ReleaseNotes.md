@@ -2,9 +2,17 @@
 
 ## 1.9
 
+### framework bundle
+
+Printout/BasicPrintout: geojson extension added for background print service 
+
 ### toolbar bundle
 
 Added a way to disable a button by default from configuration.
+
+### promote bundle
+
+Promote login and registering by replacing the real bundle for guest users. Configurable tile, flyout and toolbar buttons.
 
 ## 1.8
 

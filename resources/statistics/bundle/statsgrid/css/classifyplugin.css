@@ -74,7 +74,7 @@
     border-top-left-radius: 4px;
 }
 .manageClassificationPlugin .ui-widget-content {
-    background: url("../images/ui-bg_flat_75_ffffff_40x100.png") repeat-x scroll 50% 50% #FFFFFF;
+    background: #AAAAAA repeat-x scroll 50% 50% #FFFFFF;
     border: 1px solid #AAAAAA;
     color: #222222;
 }
@@ -91,7 +91,7 @@
     width: 200px;
 }
 .manageClassificationPlugin   .ui-state-default, .manageClassificationPlugin .ui-widget-content .ui-state-default, .manageClassificationPlugin .ui-widget-header .ui-state-default {
-    background: url("../images/ui-bg_glass_75_e6e6e6_1x400.png") repeat-x scroll 50% 50% #E6E6E6;
+    background: #222222 repeat-x scroll 50% 50% #E6E6E6;
     border: 1px solid #D3D3D3;
     color: #555555;
     font-weight: normal;

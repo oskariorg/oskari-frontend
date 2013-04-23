@@ -2,7 +2,8 @@
  * @class Oskari.mapframework.bundle.parcel.service.ParcelPlot
  *
  * Plot extra graphics for parcel map (area, Id, new and old boundary monuments).
- *
+ * Prepares extra OL-layers data into geojson object for printout (_map.geoJSON)
+ * This is part of parcel application
  *
 
  */
@@ -20,18 +21,19 @@ function(instance) {
 	this.pointLayer = null;
 	this._map = null;
 
+	// Default style for new parcel polygons in parcel application (parcel view)
 	var smPolygon = new OpenLayers.StyleMap({
 		'default' : {
 			strokeColor : "#00FF00",
 			strokeOpacity : 1,
 			strokeWidth : 0,
-			fillColor : "red",
+			fillColor : "#FF0000",
 			fillOpacity : 0.2,
 			labelAlign : "bm",
 			label : "${nimi}\n${area} ha",
-			fontColor : "black",
-			fontSize : "18px",
-			fontFamily : "Courier New, monospace",
+			fontColor : "#000000",
+			fontSize : "22px",
+			fontFamily : "Arial",
 			fontWeight : "bold",
 		}
 	});
@@ -40,13 +42,14 @@ function(instance) {
 		styleMap : smPolygon
 	});
 
+	// Default style for new boundaries in parcel application (parcel view)
 	var smLine = new OpenLayers.StyleMap({
 		'default' : {
-			strokeColor : "red",
+			strokeColor : "#FF0000",
 			strokeOpacity : 1,
 			strokeWidth : 2,
 			strokeDashstyle : "dash",
-			fillColor : "red",
+			fillColor : "#FF0000",
 			fillOpacity : 1.0,
 			label : "- ${length} -",
 			labelAlign : "cm",
@@ -59,18 +62,21 @@ function(instance) {
 		styleMap : smLine
 	});
 
+	// Default style for new boundary points in parcel application (parcel view)
 	var smPoint = new OpenLayers.StyleMap({
 		'default' : {
-			strokeColor : "red",
+			strokeColor : "#FF0000",
 			strokeOpacity : 1,
 			strokeWidth : 1,
-			fillColor : "red",
+			fillColor : "#FF0000",
 			fillOpacity : 0.5,
 			pointRadius : 6,
 			label : "${pnro}",
 			graphicName : "triangle",
 			labelXOffset : 10,
-			labelYOffset : 10
+			labelYOffset : 10,
+			fontFamily : "Arial",
+			fontSize : "12px"
 		}
 	});
 	this.pointLayer = new OpenLayers.Layer.Vector("NewPoints", {
@@ -81,7 +87,7 @@ function(instance) {
 	/**
 	 * @method plotParcel
 	 * Plot feature to temp layer
-	 * @param {OpenLayers.Feature.Vector} feature The feature whose data will be saved to the server by using WFST.
+	 * @param {OpenLayers.Feature.Vector} feature (new boundaries, which are added in parcel application)
 	 * @param {String} placeName Name of the place.
 	 * @param {String} placeDescription Description of the place.
 	 * @param {Function} cb Requires information about the success as boolean parameter.
@@ -90,7 +96,13 @@ function(instance) {
 		this._plotNewParcel(feature, placeName, placeDescription, cb);
 		this._plotNewBoundary(feature, cb);
 		cb(true);
+		// Create geojson graphics for print
+		this._createGeoJSON();
+		// Trigger plot dialog
+		this.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'attach', 'Printout'])
+		// $('.tool-print').trigger('click');
 	},
+
 	/**
 	 * @method clearParcelMap
 	 * Clear  temp layers of Parcel Map
@@ -110,7 +122,7 @@ function(instance) {
 	 * @param {OpenLayers.Feature.Vector} feature to be plotted as  new Parcel.
 	 * @param {String} placeName Name of the place.
 	 * @param {String} placeDescription Description of the place.
-	 * @param {Fuction} cb Requires information about the success as boolean parameter.
+	 * @param {Function} cb Requires information about the success as boolean parameter.
 	 */
 	_plotNewParcel : function(featurein, placeName, placeDescription, cb) {
 		var me = this;
@@ -131,9 +143,9 @@ function(instance) {
 		if (feature) {
 			// Plot extra graphics for Parcel map
 			var drawplug = this.instance.getDrawPlugin();
-			if (drawplug._map.getLayerIndex(this.parcelLayer) == -1) {
-				drawplug._map.addLayer(this.parcelLayer);
-				drawplug._map.setLayerIndex(this.parcelLayer, 1001);
+			if (drawplug.getMap().getLayerIndex(this.parcelLayer) == -1) {
+				drawplug.getMap().addLayer(this.parcelLayer);
+				drawplug.getMap().setLayerIndex(this.parcelLayer, 1001);
 			}
 
 			// remove possible old drawing
@@ -160,7 +172,7 @@ function(instance) {
 	 * @method _plotNewBoundary
 	 * Plot features to OL temp layer.
 	 * @param {OpenLayers.Feature.Vector} feature to be plotted as  new Parcel.
-	 * @param {Fuction} cb Requires information about the success as boolean parameter.
+	 * @param {Function} cb Requires information about the success as boolean parameter.
 	 */
 	_plotNewBoundary : function(feature, cb) {
 		var me = this;
@@ -168,13 +180,13 @@ function(instance) {
 		var pointfeatures = [];
 		// Get new boundaries
 		var drawplug = this.instance.getDrawPlugin();
-		if (drawplug._map.getLayerIndex(this.boundaryLayer) == -1) {
-			drawplug._map.addLayer(this.boundaryLayer);
-			drawplug._map.setLayerIndex(this.boundaryLayer, 1002);
+		if (drawplug.getMap().getLayerIndex(this.boundaryLayer) == -1) {
+			drawplug.getMap().addLayer(this.boundaryLayer);
+			drawplug.getMap().setLayerIndex(this.boundaryLayer, 1002);
 		}
-		if (drawplug._map.getLayerIndex(this.pointLayer == -1)) {
-			drawplug._map.addLayer(this.pointLayer);
-			drawplug._map.setLayerIndex(this.pointLayer, 1003);
+		if (drawplug.getMap().getLayerIndex(this.pointLayer == -1)) {
+			drawplug.getMap().addLayer(this.pointLayer);
+			drawplug.getMap().setLayerIndex(this.pointLayer, 1003);
 		}
 
 		// remove possible old drawing
@@ -214,6 +226,7 @@ function(instance) {
 					lineFeature.attributes.deltax = deltax;
 					lineFeature.attributes.deltay = -deltay;
 					features.push(lineFeature);
+					// Point features
 					var pointFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.Point(lon, lat), null, this.pointLayer.style);
 					pointFeature.attributes.pnro = pno++;
 					pointfeatures.push(pointFeature);
@@ -238,7 +251,7 @@ function(instance) {
 					var deltay = (center_px2.y + center_px1.y) / 2. - center_px1.y;
 					var points = new Array(new OpenLayers.Geometry.Point(lon, lat), new OpenLayers.Geometry.Point(lon2, lat2));
 					var line = new OpenLayers.Geometry.LineString(points);
-					//line.transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection("EPSG:900913"));
+					
 					var lineFeature = new OpenLayers.Feature.Vector(line, null, this.boundaryLayer.style);
 					lineFeature.attributes.length = lineFeature.geometry.getLength().toFixed(2);
 					lineFeature.attributes.deltax = deltax;
@@ -265,5 +278,136 @@ function(instance) {
 		// Remove orig graphics
 		drawplug.getEditLayer().removeAllFeatures();
 		drawplug.getMarkerLayer().clearMarkers();
+	},
+	/**
+	 /**
+	 * @method _createGeoJSON
+	 * Create GeoJSON graphics + styles for backend print task
+	 *
+	 * Sample json for geojson=... param in GetPreview action route
+	 * {
+	 "type" : "geojson",
+	 "name" : "Määräalat",
+	 "id" : "NewParcel",
+	 "data" : {
+	 "type" : "FeatureCollection",
+	 "features" : []
+	 },
+	 "styles" : [{
+	 "title" : "Standard",
+	 "name" : "style-id-200",
+	 "styleMap" : {
+	 "default" : {
+	 "strokeColor" : "#00FF00",
+	 "strokeOpacity" : 1,
+	 ...
+	 }
+	 },
+	 "styledLayerDescriptor" : "<valinnainen-XML-SLD-KUVAILU>"
+	 }]
+	 }, {
+	 "type" : "geojson",
+	 "name" : "Määräalat",
+	 "id" : "NewBoundary",
+	 "data" : {
+	 */
+	_createGeoJSON : function() {
+
+		var geojson_format = new OpenLayers.Format.GeoJSON();
+		// GeoJson collection
+		var geojsCollection = [];
+		// New Parcel graphics
+		var parcel = JSON.parse(geojson_format.write(this.parcelLayer.features));
+		var geojs = {
+			"type" : "geojson",
+			"name" : this.parcelLayer.name,
+			"id" : this.parcelLayer.name,
+			"data" : {
+				"type" : "FeatureCollection",
+				"features" : parcel.features
+			},
+			"styles" : []
+		};
+
+		geojs.styles.push(this._getDefaultStyle(this.parcelLayer.styleMap));
+		geojsCollection.push(geojs);
+
+		// New boundary graphics
+		var boundary = JSON.parse(geojson_format.write(this.boundaryLayer.features));
+		var geojs = {
+			"type" : "geojson",
+			"name" : this.boundaryLayer.name,
+			"id" : this.boundaryLayer.name,
+			"data" : {
+				"type" : "FeatureCollection",
+				"features" : boundary.features
+			},
+			"styles" : []
+		};
+
+		geojs.styles.push(this._getDefaultStyle(this.boundaryLayer.styleMap));
+		geojsCollection.push(geojs);
+
+		// New boundary points graphics
+		var point = JSON.parse(geojson_format.write(this.pointLayer.features));
+		var geojs = {
+			"type" : "geojson",
+			"name" : this.pointLayer.name,
+			"id" : this.pointLayer.name,
+			"data" : {
+				"type" : "FeatureCollection",
+				"features" : point["features"]
+			},
+			"styles" : []
+		};
+		geojs.styles.push(this._getDefaultStyle(this.pointLayer.styleMap));
+		geojsCollection.push(geojs);
+
+		//Set Geojs for printout
+		this.instance.sandbox.getMap().GeoJSON = geojsCollection;
+
+	},
+	/**
+	 * @method _getDefaultStyle
+	 * Oskari openlayers style to basic printout format
+	 * @param {OpenLayers.Feature.Vector.styleMap} feature to be plotted as  new Parcel.
+	 * @return {object}  print style
+	 */
+	_getDefaultStyle : function(styleMap) {
+		var style = styleMap.styles["default"].defaultStyle;
+		var id = styleMap.styles["default"].id;
+		var printStyle = {
+			"title" : "Standard",
+			"name" : id,
+			"styleMap" : {
+				"default" : {}
+			}
+
+		};
+		printStyle.styleMap["default"] = this._cleanStyle(style, ['labelXOffset', 'labelYOffset']);
+		return printStyle;
+	},
+	/**
+	 * @method _cleanStyle
+	 * remove given parameters out of style
+	 * certain attributes are not supported in backend geotools printing
+	 * @param {Object} JSON style attributes
+	 * @param {Array} style attributes for to remove.
+	 * @return {object}  cleaned  style
+	 */
+	_cleanStyle : function(stylein, attrs_to_remove) {
+		// Loop style attributes
+		var style = jQuery.extend(true, {}, stylein);
+		for (var i = 0; i < attrs_to_remove.length; i++) {
+			var key = attrs_to_remove[i];
+			if (style[key]) {
+				if (style[key].toString().indexOf("${delta") > -1) {
+					delete style[key];
+				}
+			}
+
+		}
+
+		return style;
 	}
 });

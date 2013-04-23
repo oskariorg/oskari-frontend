@@ -45,7 +45,6 @@ function(instance, localization) {
         var me = this;
         var content = this.template.clone();
         this.content = content;
-
         /*content.find('div.content').before(txt);*/
         container.append(content);
 

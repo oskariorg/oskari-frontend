@@ -306,17 +306,20 @@ function(config, locale) {
 			classes = event.numberOfClasses;
 		}
 
-		var col_data = params.COL_VALUES;
+		var gcol_data = params.COL_VALUES;
+		gcol_data = gcol_data.slice(0);
 		var codes = params.VIS_CODES;
 		// Limits
-		var gstats = new geostats(params.COL_VALUES);
+		var gstats = new geostats(gcol_data);
+		
+		var col_data = params.COL_VALUES;
 
-		if (method == 0)
-			limits = gstats.getJenks(classes);
 		if (method == 1)
-			limits = gstats.getEqInterval(classes);
+			limits = gstats.getJenks(classes);
 		if (method == 2)
 			limits = gstats.getQuantile(classes);
+		if (method == 3)
+			limits = gstats.getEqInterval(classes);
 
 		// Put municipality codes  in range limits
 		for ( i = 0; i < classes; i++)
@@ -324,7 +327,7 @@ function(config, locale) {
 		for ( k = 0; k < col_data.length; k++) {
 
 			for ( i = 0; i < strings.length; i++) {
-				if (parseFloat(col_data[k]) >= limits[i] && parseFloat(col_data[k]) < limits[i + 1]) {
+				if (parseFloat(col_data[k]) >= limits[i] && parseFloat(col_data[k]) <= limits[i + 1]) {
 					strings[i].push(codes[k]);
 					check = true;
 					break;
@@ -417,7 +420,7 @@ function(config, locale) {
 		var sel = classify.find('select');
 
 		var methods = [this._locale.classify.jenks, this._locale.classify.quantile, this._locale.classify.eqinterval];
-		for(var i = 0; i < methods.length; i++) {
+		for(var i = 1; i <= methods.length; i++) {
 			var opt = jQuery('<option value="' + i + '">' + methods[i] + '</option>');
 			sel.append(opt);				
 		}

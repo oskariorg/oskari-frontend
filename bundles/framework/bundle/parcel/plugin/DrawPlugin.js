@@ -40,7 +40,9 @@ function(instance) {
 	getName : function() {
 		return this.pluginName;
 	},
-
+    getMap : function() {
+		return this._map;
+	},
 
     processFeatures : function() {
         var me = this;
