@@ -121,7 +121,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.TurningRestrictions
                 "srsName": "EPSG:3067",
                 "version": "1.1.0",
                 "featureType": type,
-                "featureNS": "http://digiroad.karttakeskus.fi/LiVi",
+                "featureNS": "http://localhost/LiVi",
                 "featurePrefix": "LiVi",
                 "geometryName": "GEOMETRY",
                 "outputFormat": "json"

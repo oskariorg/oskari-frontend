@@ -45,7 +45,7 @@ function(url, uuid) {
             srsName : 'EPSG:3067',
             geometryName : 'GEOMETRY',
             featureType : "SEGMENTIT_UUDET",
-            featureNS: "http://digiroad.karttakeskus.fi/LiVi",
+            featureNS: "http://localhost/LiVi",
             featurePrefix: "LiVi",
             outputFormat: "json",
             url : url
@@ -55,7 +55,7 @@ function(url, uuid) {
             srsName : 'EPSG:3067',
             geometryName : 'GEOMETRY',
             featureType : "LIIKENNE_ELEMENTTI_MUUTOS",
-            featureNS: "http://digiroad.karttakeskus.fi/LiVi",
+            featureNS: "http://localhost/LiVi",
             featurePrefix: "LiVi",
             outputFormat: "json",
             url : url
@@ -65,7 +65,7 @@ function(url, uuid) {
             srsName : 'EPSG:3067',
             geometryName : 'GEOMETRY',
             featureType : "SEGMENTTI_MUUTOS",
-            featureNS: "http://digiroad.karttakeskus.fi/LiVi",
+            featureNS: "http://localhost/LiVi",
             featurePrefix: "LiVi",
             outputFormat: "json",
             url : url
@@ -75,7 +75,7 @@ function(url, uuid) {
             srsName : 'EPSG:3067',
             geometryName : 'GEOMETRY',
             featureType : "PALAUTE",
-            featureNS: "http://digiroad.karttakeskus.fi/LiVi",
+            featureNS: "http://localhost/LiVi",
             featurePrefix: "LiVi",
             outputFormat: "json",
             url : url
@@ -85,7 +85,7 @@ function(url, uuid) {
             srsName: 'EPSG:3067',
             geometryName: 'GEOMETRY',
             featureType: "KAANTYMISMAARAYS_UUDET",
-            featureNS: 'http://digiroad.karttakeskus.fi/LiVi',
+            featureNS: 'http://localhost/LiVi',
             featurePrefix: 'LiVi',
             outputFormat: 'json',
             url: url

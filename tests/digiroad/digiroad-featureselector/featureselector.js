@@ -25,7 +25,7 @@ describe.only('Test Suite for digiroad/featureselector bundle', function() {
             "orgName": "Liikenne-elementit",
             "minScale": 15000000,
             "maxScale": 1,
-            "wmsUrl": "http://digiroad.karttakeskus.fi/dgeoserver/wms",
+            "wmsUrl": "http://localhost/dgeoserver/wms",
             "styles": [
               {"title": "Väylätyyppi", "name": "vaylatyyppi"}
             ],
@@ -41,7 +41,7 @@ describe.only('Test Suite for digiroad/featureselector bundle', function() {
             "digiroad-featureselector": {
                 "state": {},
                 "conf": {
-                    "queryUrl": "http://digiroad.karttakeskus.fi/delegate/proxy/wfs",
+                    "queryUrl": "http://localhost/delegate/proxy/wfs",
                     "targetLayers": {
                         "vaylatyyppi": {
                             "objectId": "OID_TUNNUS",
