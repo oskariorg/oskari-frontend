@@ -1,4 +1,4 @@
-describe.only('Test Suite for digiroad/featureselector bundle', function() {
+describe('Test Suite for digiroad/featureselector bundle', function() {
     var appSetup = null,
         appConf = null,
         sandbox = null,
