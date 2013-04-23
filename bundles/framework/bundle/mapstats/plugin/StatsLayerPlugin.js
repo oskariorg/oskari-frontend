@@ -412,10 +412,10 @@ function(config) {
      *            event
      */
     _afterMapLayerRemoveEvent : function(event) {
+        var layer = event.getMapLayer();
         if(!layer.isLayerOfType(this._layerType)) {
             return;
         }
-        var layer = event.getMapLayer();
         this._removeMapLayerFromMap(layer);
         this._highlightCtrl.deactivate();
         this._getFeatureControlHover.deactivate();
