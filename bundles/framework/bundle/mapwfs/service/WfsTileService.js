@@ -155,7 +155,7 @@ function(plugin) {
 
                 /* delete empty array */
                 if(requestArray.length === 0) {
-                    delete requestArray;
+                    delete this._wfsMapUpdateRequests[id];
                     this.sandbox.printDebug("[WfsTileService.processMapQueue]" + 
                                           " deleting empty requestArray");
                 }
