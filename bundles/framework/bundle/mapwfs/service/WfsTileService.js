@@ -65,7 +65,7 @@ function(plugin) {
         var oldArray = this._wfsMapUpdateRequests[id];
         if(oldArray !== null) {
             this._wfsMapUpdateRequests[id] = null;
-            delete oldArray;
+            delete this._wfsMapUpdateRequests[id];
         }
         this._wfsMapUpdateRequests[id] = [];
 
