@@ -51,9 +51,8 @@ function(plugin) {
     removeWFsLayerRequests : function(wfsLayer) {
         var id = wfsLayer.getId();
         if(this._wfsMapUpdateRequests[id] !== null) {
-            var td = this._wfsMapUpdateRequests[id];
             this._wfsMapUpdateRequests[id] = null;
-            delete td;
+            delete this._wfsMapUpdateRequests[id];
         }
     },
     removeWFSMapHighlightRequest : function() {
