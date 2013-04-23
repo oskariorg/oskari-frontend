@@ -18,50 +18,50 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
  *      formState for ui state reload
  */
 function(instance, localization, backendConfiguration) {
-    var me = this;
-    this.isEnabled = false;
-    this.instance = instance;
-    this.loc = localization;
-    this.backendConfiguration = backendConfiguration;
+	var me = this;
+	this.isEnabled = false;
+	this.instance = instance;
+	this.loc = localization;
+	this.backendConfiguration = backendConfiguration;
 
-    /* templates */
-    this.template = {};
-    for(p in this.__templates ) {
-        this.template[p] = jQuery(this.__templates[p]);
-    }
+	/* templates */
+	this.template = {};
+	for (p in this.__templates ) {
+		this.template[p] = jQuery(this.__templates[p]);
+	}
 
-    /* page sizes listed in localisations */
-    this.sizeOptions = this.loc.size.options;
+	/* page sizes listed in localisations */
+	this.sizeOptions = this.loc.size.options;
 
-    this.sizeOptionsMap = {};
-    for(var s = 0; s < this.sizeOptions.length; s++) {
-        this.sizeOptionsMap[this.sizeOptions[s].id] = this.sizeOptions[s];
-    }
+	this.sizeOptionsMap = {};
+	for (var s = 0; s < this.sizeOptions.length; s++) {
+		this.sizeOptionsMap[this.sizeOptions[s].id] = this.sizeOptions[s];
+	}
 
-    /* format options listed in localisations */
-    this.formatOptions = this.loc.format.options;
-    this.formatOptionsMap = {};
-    for(var f = 0; f < this.formatOptions.length; f++) {
-        this.formatOptionsMap[this.formatOptions[f].id] = this.formatOptions[f];
-    }
+	/* format options listed in localisations */
+	this.formatOptions = this.loc.format.options;
+	this.formatOptionsMap = {};
+	for (var f = 0; f < this.formatOptions.length; f++) {
+		this.formatOptionsMap[this.formatOptions[f].id] = this.formatOptions[f];
+	}
 
-    /* content options listed in localisations */
-    this.contentOptions = this.loc.content.options;
-    this.contentOptionsMap = {};
-    for(var f = 0; f < this.contentOptions.length; f++) {
-        this.contentOptionsMap[this.contentOptions[f].id] = this.contentOptions[f];
-    }
+	/* content options listed in localisations */
+	this.contentOptions = this.loc.content.options;
+	this.contentOptionsMap = {};
+	for (var f = 0; f < this.contentOptions.length; f++) {
+		this.contentOptionsMap[this.contentOptions[f].id] = this.contentOptions[f];
+	}
 
-    this.accordion = null;
-    this.mainPanel = null;
+	this.accordion = null;
+	this.mainPanel = null;
 
-    this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-    this.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
+	this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+	this.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
 
-    this.previewContent = null;
-    this.previewImgDiv = null;
+	this.previewContent = null;
+	this.previewImgDiv = null;
 
-    this.contentOptionDivs = {};
+	this.contentOptionDivs = {};
 
 }, {
     __templates : {
@@ -492,6 +492,22 @@ this.backendConfiguration = {
         var parameters = maplinkArgs + '&action_route=GetPreview' + pageSizeArgs + pageTitleArgs + 
         contentOptionArgs + formatArgs;
         url = url + parameters;
+        
+        var printMap = this.instance.getSandbox().getMap();
+		if (printMap.GeoJSON) {
+			// Geojson POST request test
+			 /* var data = {
+			 geojson : jQuery.base64.encode(this._getGeoJson(printMap))
+			 }
+			 this._printMapByPost(url, data);
+
+			 } else {  */
+			url = url + "&geojson=" + jQuery.base64.encode(this._getGeoJson(printMap));
+		 }
+
+		this.instance.getSandbox().printDebug("PRINT URL " + url);
+
+		this.openURLinWindow(url, selections);
 
         this.instance.getSandbox().printDebug("PRINT URL " + url);
 
@@ -512,6 +528,62 @@ this.backendConfiguration = {
         }
         return false;
     },
+	/**
+	 * @method _getGeoJson
+	 * Get auxiliary graphics in geojson format + styles
+	 * @private
+	 * @
+	 * @return String  (Json stringify)
+	 * return null, if no geojson graphics
+	 */
+	_getGeoJson : function(printMap) {
+
+		if (printMap.GeoJSON) {
+			var sgeojs = JSON.stringify(printMap.GeoJSON);
+			sgeojs.replace('\"', '"');
+			return sgeojs;
+		}
+		return null;
+	},
+	/**
+	 * @method _printMapbyPost
+	 *  Get png/pdf print data by post request and opens it to the new window
+	 * @param {String} url  url string
+	 * @param {Object} data  geojson data + styles for extra graphics to plot
+	 * @private
+	 * @
+	 */
+	_printMapByPost : function(url, data) {
+
+		var me = this;
+
+		// Fetch print file
+		jQuery.ajax({
+			//dataType : "json",
+			type : "POST",
+			beforeSend : function(x) {
+				if (x && x.overrideMimeType) {
+					x.overrideMimeType("application/j-son;charset=UTF-8");
+				}
+			},
+			url : url,
+			data : data,
+			success : function(png_pdf_data) {
+				var selections = me._gatherSelections();
+				var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
+				if (me._isLandscape(selections))
+					wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=1200," + "height=850";
+
+				window.open("data:application/pdf," + encodeURIComponent(png_pdf_data), "BasicPrintout", wopParm);
+			},
+			error : function() {
+				// Show error
+
+				//me.instance.showMessage('title','error' );
+				alert('Sorry - some troubles to create a plot')
+			}
+		});
+	},
     /**
      * @method destroy
      * Destroyes/removes this view from the screen.

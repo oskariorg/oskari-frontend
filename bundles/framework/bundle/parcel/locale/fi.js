@@ -24,13 +24,13 @@ Oskari.registerLocalization({
           "tooltip": "Tyhjennä"
       },
       "save": {
-          "tooltip": "Tallenna"
+          "tooltip": "Tee piirros ja tulosta"
       }
     },
     "buttons": {
       "ok": "OK",
       "cancel": "Peruuta",
-      "save": "Tallenna",
+      "save": "Tulosta",
       "movePlaces": "Siirrä kohteet ja poista"
     },
     "placeform": {
