@@ -1,0 +1,377 @@
+{ 
+  "startupSequence" : [
+   {
+      "instanceProps":{
+
+      },
+      "title":"OpenLayers",
+      "bundleinstancename":"openlayers-default-theme",
+      "fi":"OpenLayers",
+      "sv":"?",
+      "en":"OpenLayers",
+      "bundlename":"openlayers-default-theme",
+      "metadata":{
+         "Import-Bundle":{
+            "openlayers-default-theme":{
+               "bundlePath":"../../packages/openlayers/bundle/"
+            },
+            "openlayers-single-full":{
+               "bundlePath":"../../packages/openlayers/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Map",
+      "bundleinstancename":"mapfull",
+      "fi":"Map",
+      "sv":"?",
+      "en":"Map",
+      "bundlename":"mapfull",
+      "metadata":{
+         "Import-Bundle":{
+            "mapwmts": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "mapwfs": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "service-base": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "event-map-layer": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "request-map-layer": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "mapmodule-plugin": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "event-base": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "mapfull": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "core-base": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "request-base": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "domain": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "core-map": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "oskariui": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "request-map": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "sandbox-base": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "service-map": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "sandbox-map": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "event-map": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "mapstats": {
+               "bundlePath": "../../packages/framework/bundle/"
+            },
+            "digiroad-featureselector": {
+               "bundlePath": "../../packages/digiroad/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Oskari DIV Manazer",
+      "bundleinstancename":"divmanazer",
+      "fi":"Oskari DIV Manazer",
+      "sv":"?",
+      "en":"Oskari DIV Manazer",
+      "bundlename":"divmanazer",
+      "metadata":{
+         "Import-Bundle":{
+            "divmanazer":{
+               "bundlePath":"../../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Toolbar",
+      "bundleinstancename":"toolbar",
+      "fi":"toolbar",
+      "sv":"?",
+      "en":"?",
+      "bundlename":"toolbar",
+      "metadata":{
+         "Import-Bundle":{
+            "toolbar":{
+               "bundlePath":"../../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"StateHandler",
+      "bundleinstancename":"statehandler",
+      "fi":"jquery",
+      "sv":"?",
+      "en":"?",
+      "bundlename":"statehandler",
+      "metadata":{
+         "Import-Bundle":{
+            "statehandler":{
+               "bundlePath":"../../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Info Box",
+      "bundleinstancename":"infobox",
+      "fi":"infobox",
+      "sv":"?",
+      "en":"?",
+      "bundlename":"infobox",
+      "metadata":{
+         "Import-Bundle":{
+            "infobox":{
+               "bundlePath":"../../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Karttatasot",
+      "bundleinstancename":"layerselector2",
+      "fi":"layerselector",
+      "sv":"?",
+      "en":"?",
+      "bundlename":"layerselector2",
+      "metadata":{
+         "Import-Bundle":{
+            "layerselector2":{
+               "bundlePath":"../../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Valitut karttatasot",
+      "bundleinstancename":"layerselection2",
+      "fi":"layerselection",
+      "sv":"?",
+      "en":"?",
+      "bundlename":"layerselection2",
+      "metadata":{
+         "Import-Bundle":{
+            "layerselection2":{
+               "bundlePath":"../../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps": {
+
+      },
+      "title": "Valitut kohteet",
+      "fi": "featureselector",
+      "sv": "?",
+      "en": "?",
+      "bundlename": "digiroad-featureselector",
+      "bundleinstancename": "digiroad-featureselector",
+      "metadata": {
+        "Import-Bundle": {
+            "digiroad-featureselector": {
+                "bundlePath": "../../packages/digiroad/bundle/"
+            }
+        },
+        "Require-Bundle-Instance" : []
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Omat tiedot",
+      "bundleinstancename":"digiroad-personaldata",
+      "fi":"personaldata",
+      "sv":"?",
+      "en":"?",
+      "bundlename":"digiroad-personaldata",
+      "metadata":{
+         "Import-Bundle":{
+            "digiroad-personaldata":{
+               "bundlePath":"../../packages/digiroad/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Koordinaattinäyttö",
+      "bundleinstancename":"coordinatedisplay",
+      "fi":"coordinatedisplay",
+      "sv":"?",
+      "en":"?",
+      "bundlename":"coordinatedisplay",
+      "metadata":{
+         "Import-Bundle":{
+            "coordinatedisplay":{
+               "bundlePath":"../../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Featuredata",
+      "bundleinstancename":"featuredata",
+      "fi":"Kohdetiedot",
+      "sv":"?",
+      "en":"?",
+      "bundlename":"featuredata",
+      "metadata":{
+         "Import-Bundle":{
+            "featuredata":{
+               "bundlePath":"../../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"SearchBundle",
+      "bundleinstancename":"search",
+      "fi":"jquery",
+      "sv":"?",
+      "en":"?",
+      "bundlename":"search",
+      "metadata":{
+         "Import-Bundle":{
+            "search":{
+               "bundlePath":"../../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"My places",
+      "bundleinstancename":"digiroad-myplaces2",
+      "fi":"Kohteet",
+      "sv":"Platsar",
+      "en":"Places",
+      "bundlename":"digiroad-myplaces2",
+      "metadata":{
+         "Import-Bundle":{
+            "digiroad-myplaces2":{
+               "bundlePath":"../../packages/digiroad/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   },
+   {
+      "instanceProps":{
+
+      },
+      "title":"Map legend",
+      "bundleinstancename":"maplegend",
+      "fi":"Karttaselitteet",
+      "sv":"F�rklaringar",
+      "en":"Legends",
+      "bundlename":"maplegend",
+      "metadata":{
+         "Import-Bundle":{
+            "maplegend":{
+               "bundlePath":"../../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance":[
+
+         ]
+      }
+   }
+]
+}

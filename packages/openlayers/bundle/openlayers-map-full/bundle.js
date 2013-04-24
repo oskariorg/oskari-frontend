@@ -370,16 +370,15 @@
 										"End" : "2011"
 									},
 									"Copyleft" : {
-										"License" : {
+										"License" : [{
 											"Part" : "OpenLayers",
 											"License-Name" : "BSD",
 											"License-Online-Resource" : "http://svn.openlayers.org/trunk/openlayers/license.txt"
-										},
-										"License" : {
+										}, {
 											"Part" : "Proj4JS",
 											"License-Name" : "LGPL/BSD",
 											"License-Online-Resource" : ""
-										}
+										}]
 									}
 								} ],
 								"Bundle-Name-Locale" : {

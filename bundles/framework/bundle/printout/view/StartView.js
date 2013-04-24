@@ -45,9 +45,6 @@ function(instance, localization) {
         var me = this;
         var content = this.template.clone();
         this.content = content;
-var a = this.instance.getSandbox();
-var b = a.getMap();
-debugger;
         /*content.find('div.content').before(txt);*/
         container.append(content);
 

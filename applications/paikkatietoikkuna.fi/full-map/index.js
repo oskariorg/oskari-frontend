@@ -86,7 +86,7 @@ jQuery(document).ready(function() {
           if (cb) {
               cb(instance);
           }
-            
+            /*
           var ugStartup = {
               "bundleinstancename": "statsgrid",
               "bundlename": "statsgrid",
@@ -102,6 +102,7 @@ jQuery(document).ready(function() {
               }
           };
           Oskari.bundle_facade.playBundle(ugStartup, function() {});
+          */
         });
     }
 

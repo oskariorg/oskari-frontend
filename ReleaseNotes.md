@@ -2,6 +2,10 @@
 
 ## 1.9
 
+### framework bundle
+
+Printout/BasicPrintout: geojson extension added for background print service 
+
 ### toolbar bundle
 
 Added a way to disable a button by default from configuration.
