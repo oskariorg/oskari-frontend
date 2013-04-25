@@ -5,7 +5,7 @@
   regexp: false, rhino: true, safe: false, strict: false, sub: false,
   undef: true, white: false, widget: false, windows: false */
 /*global jQuery: false, window: false */
-"use strict";
+//"use strict";
 
 /*
  * Original code (c) 2010 Nick Galbreath

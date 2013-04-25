@@ -106,10 +106,10 @@ Oskari.clazz
 							 * hack
 							 */
 							var mapLayerJson = {
-								name : mapLayerId,
-								minScale : 10000000,
-								maxScale : 1,
-								opacity : 100,
+//								name : mapLayerId,
+//								minScale : 10000000,
+//								maxScale : 1,
+//								opacity : 100,
 								wmtsName : mapLayerId,
 								descriptionLink : "",
 								orgName : "WMTS",

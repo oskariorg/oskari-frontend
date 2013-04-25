@@ -33,7 +33,7 @@ function(instance) {
 			label : "${nimi}\n${area} ha",
 			fontColor : "#000000",
 			fontSize : "22px",
-			fontFamily : "Arial",
+			fontFamily : "SansSerif",
 			fontWeight : "bold",
 		}
 	});

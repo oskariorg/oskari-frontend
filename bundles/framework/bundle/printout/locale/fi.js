@@ -48,7 +48,7 @@ Oskari.registerLocalization({
                 "tooltip" : "Suuremman esikatselukuvan saat kuvaa napauttamalla.",
                 "pending" : "Esikatselukuva päivitetään hetken kuluttua",
                 "notes" : {
-                    "extent" : "Esikatselun avullla voit hahmottaa tulosteen kattavuuden",
+                    "extent" : "Esikatselun avulla voit hahmottaa tulosteen kattavuuden",
                     "restriction" : "Esikatselussa ei näytetä kaikkia karttatasoja"
                 }
             },

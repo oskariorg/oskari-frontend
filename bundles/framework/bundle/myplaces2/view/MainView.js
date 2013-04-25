@@ -51,7 +51,6 @@ function(instance) {
         
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         
-
         // register plugin for map (drawing for my places)
         var pluginConfig = {
             "id" : 'MyPlaces',

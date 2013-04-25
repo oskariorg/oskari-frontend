@@ -98,7 +98,11 @@ function(config, locale) {
 	 */
 	init : function(sandbox) {
 		// Classify html template
-		this.classify_temp = jQuery("<div class='manageClassificationPlugin'>" + '<div class="classheader"><div class="header-icon icon-arrow-white-right"></div></div>' + '<div class="content"></div>' + "</div>");
+		this.classify_temp = jQuery(
+				"<div class='manageClassificationPlugin'>" + 
+					'<div class="classheader"><div class="header-icon icon-arrow-white-right"></div></div>' + 
+				'<div class="content"></div>' + "</div>"
+			);
 		// Setup Colors
 		this.setColors();
 	},
@@ -435,6 +439,7 @@ function(config, locale) {
 		});
 		// Content HTML / class count input HTML
 		//var classcnt = jQuery('<div class="classCount">' + this._locale.classify.classes + ' <input type="text" id="spinner" value="6" /></div>');
+		// TODO #amount is too generic, we might get collisions
 		var classcnt = jQuery('<div class="classCount">' + this._locale.classify.classes + ' <input type="text" id="amount" readonly="readonly" value="5" /><div id="slider-range-max"></div>');
 		var slider = classcnt.find('#slider-range-max').slider({
 			range : "min",
@@ -454,7 +459,7 @@ function(config, locale) {
 		content.append(classify);
 		// Toggle content HTML
 		header.click(function() {
-			jQuery('div.content').animate({
+			content.animate({
 				height : 'toggle'
 			}, 500);
 
@@ -474,7 +479,7 @@ function(config, locale) {
 		}
 
 		// Hide content
-		this.element.find('div.content').hide();
+		content.hide();
 		// Hide Classify dialog
 		this._visibilityOff();
 
