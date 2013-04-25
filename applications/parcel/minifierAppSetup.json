@@ -2,25 +2,6 @@
 	"startupSequence": [
 		{
 			"instanceProps": {},
-			"title": "OpenLayers",
-			"bundleinstancename": "openlayers-default-theme",
-			"fi": "OpenLayers",
-			"sv": "?",
-			"en": "OpenLayers",
-			"bundlename": "openlayers-default-theme",
-			"metadata": {
-				"Import-Bundle": {
-					"openlayers-default-theme": {
-						"bundlePath": "../../../packages/openlayers/bundle/"
-					},
-					"openlayers-single-full": {
-						"bundlePath": "../../../packages/openlayers/bundle/"
-					}
-				},
-				"Require-Bundle-Instance": []
-			}
-		}, {
-			"instanceProps": {},
 			"title": "Map",
 			"bundleinstancename": "mapfull",
 			"fi": "Map",
