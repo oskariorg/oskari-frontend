@@ -30,6 +30,8 @@ function(config, locale) {
 	this.curCol = null;
 	this._layer = null;
 	this._params = null;
+	this.minClassNum = 3;
+	this.maxClassNum = 9;
 
 }, {
 	/** @static @property __name module name */
@@ -318,6 +320,13 @@ function(config, locale) {
 			limits = gstats.getQuantile(classes);
 		if (method == 3)
 			limits = gstats.getEqInterval(classes);
+		if (method == 4) {
+			limits = this.setManualBreaks(gstats);
+			if(!limits) {
+				return;
+			}
+			classes = limits.length - 1;
+		}
 
 		// Put municipality codes  in range limits
 		for ( i = 0; i < classes; i++)
@@ -421,9 +430,18 @@ function(config, locale) {
 		sel.append(opt);
 		var opt = jQuery('<option value="' + "3" + '">' + this._locale.classify.quantile + '</option>');
 		sel.append(opt);
+		var opt = jQuery('<option value="' + "4" + '">' + this._locale.classify.manual + '</option>');
+		sel.append(opt);
 		sel.change(function(e) {
-			// Classify current columns, if any
-			me.classifyData();
+			if (jQuery(this).val() == 4) {
+				jQuery('.classCount').hide();
+				jQuery('.manualBreaks').show();
+			} else {
+				jQuery('.manualBreaks').hide();
+				jQuery('.classCount').show();
+				// Classify current columns, if any
+				me.classifyData();
+			}
 		});
 		// Content HTML / class count input HTML
 		//var classcnt = jQuery('<div class="classCount">' + this._locale.classify.classes + ' <input type="text" id="spinner" value="6" /></div>');
@@ -431,8 +449,8 @@ function(config, locale) {
 		var classcnt = jQuery('<div class="classCount">' + this._locale.classify.classes + ' <input type="text" id="amount" readonly="readonly" value="5" /><div id="slider-range-max"></div>');
 		var slider = classcnt.find('#slider-range-max').slider({
 			range : "min",
-			min : 3,
-			max : 9,
+			min : me.minClassNum,
+			max : me.maxClassNum,
 			value : 5,
 			slide : function(event, ui) {
 				jQuery('#amount').val(ui.value);
@@ -441,7 +459,25 @@ function(config, locale) {
 			}
 		});
 
+		// HTML for the manual classification method.
+		var manualcls = jQuery(
+			'<div class="manualBreaks">' +
+			'<input type="text" name="breaksInput" placeholder="' + this._locale.classify.manualPlaceholder + '"></input>' +
+			'</div>'
+		);
+		manualcls.find('input').keypress(function(evt) {
+			if (evt.which == 13) {
+				me.classifyData();
+			}
+		}).focus(function() {
+			me._sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
+		}).blur(function() {
+			me._sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+		});
+		manualcls.hide();
+
 		classify.append(classcnt);
+		classify.append(manualcls);
 		content.append(classify);
 		// Toggle content HTML
 		header.click(function() {
@@ -470,6 +506,56 @@ function(config, locale) {
 		this._visibilityOff();
 
 	},
+
+	/**
+	* @method setManualBreaks
+	* Gets the user fed list of numbers and does some range and value checking to them
+	* before setting the bounds for geostats.
+	* @param {Object} gstats the geostats object
+	* @return {Array[Number]} returns an array of the limits
+	*/
+	setManualBreaks: function(gstats) {
+		var me = this,
+			limits = [],
+			manBreaks = this.element.find('.classificationMethod').
+				find('.manualBreaks').find('input[name=breaksInput]').val().split(','),
+			dialog,
+			msg;
+
+		// Verify that the number of given values is within range and display an error dialog if not.
+		if (manBreaks.length-1 < this.minClassNum || manBreaks.length-1 > this.maxClassNum) {
+			dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+	        msg = this._locale.classify.manualRangeError
+	        	.replace(/\{min\}/, this.minClassNum+1).replace(/\{max\}/, this.maxClassNum+1);
+	        dialog.show(null, msg);
+	        dialog.fadeout();
+	        return null;
+	    }
+
+		// Convert the given values to numbers
+		// and set the geostats ranges to use them.
+		jQuery.each(manBreaks, function(i, elem) {
+			var rangeVal = Number(elem);
+
+			// Display an error dialog if a value is not a number.
+			if(isNaN(rangeVal)) {
+				dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+		        msg = me._locale.classify.nanError;
+		        dialog.show(null, msg);
+		        dialog.fadeout();
+		        return null;
+			}
+
+			limits.push(rangeVal);
+		});
+
+		// Set bounds and ranges for geostats so it can draw the html legend.
+		gstats.bounds = limits;
+		gstats.setRanges();
+
+		return limits;
+	},
+
 	setColors : function() {
 		var colorsjson = [["ffeda0,feb24c,f03b20", "ffffb2,fecc5c,fd8d3c,e31a1c", "ffffb2,fecc5c,fd8d3c,f03b20,bd0026", "ffffb2,fed976,feb24c,fd8d3c,f03b20,bd0026", "ffffb2,fed976,feb24c,fd8d3c,fc4e2a,e31a1c,b10026", "ffffcc,ffeda0,fed976,feb24c,fd8d3c,fc4e2a,e31a1c,b10026", "ffffcc,ffeda0,fed976,feb24c,fd8d3c,fc4e2a,e31a1c,bd0026,800026"], ["deebf7,9ecae1,3182bd", "eff3ff,bdd7e7,6baed6,2171b5", "eff3ff,bdd7e7,6baed6,3182bd,08519c", "eff3ff,c6dbef,9ecae1,6baed6,3182bd,08519c", "eff3ff,c6dbef,9ecae1,6baed6,4292c6,2171b5,084594", "f7fbff,deebf7,c6dbef,9ecae1,6baed6,4292c6,2171b5,084594", "f7fbff,deebf7,c6dbef,9ecae1,6baed6,4292c6,2171b5,08519c,08306b"], ["e5f5f9,99d8c9,2ca25f", "edf8fb,b2e2e2,66c2a4,238b45", "edf8fb,b2e2e2,66c2a4,2ca25f,006d2c", "edf8fb,ccece6,99d8c9,66c2a4,2ca25f,006d2c", "edf8fb,ccece6,99d8c9,66c2a4,41ae76,238b45,005824", "f7fcfd,e5f5f9,ccece6,99d8c9,66c2a4,41ae76,238b45,005824", "f7fcfd,e5f5f9,ccece6,99d8c9,66c2a4,41ae76,238b45,006d2c,00441b"], ["e0ecf4,9ebcda,8856a7", "edf8fb,b3cde3,8c96c6,88419d", "edf8fb,b3cde3,8c96c6,8856a7,810f7c", "edf8fb,bfd3e6,9ebcda,8c96c6,8856a7,810f7c", "edf8fb,bfd3e6,9ebcda,8c96c6,8c6bb1,88419d,6e016b", "f7fcfd,e0ecf4,bfd3e6,9ebcda,8c96c6,8c6bb1,88419d,6e016b", "f7fcfd,e0ecf4,bfd3e6,9ebcda,8c96c6,8c6bb1,88419d,810f7c,4d004b"], ["e0f3db,a8ddb5,43a2ca", "f0f9e8,bae4bc,7bccc4,2b8cbe", "f0f9e8,bae4bc,7bccc4,43a2ca,0868ac", "f0f9e8,ccebc5,a8ddb5,7bccc4,43a2ca,0868ac", "f0f9e8,ccebc5,a8ddb5,7bccc4,4eb3d3,2b8cbe,08589e", "f7fcf0,e0f3db,ccebc5,a8ddb5,7bccc4,4eb3d3,2b8cbe,08589e", "f7fcf0,e0f3db,ccebc5,a8ddb5,7bccc4,4eb3d3,2b8cbe,0868ac,084081"], ["e5f5e0,a1d99b,31a354", "edf8e9,bae4b3,74c476,238b45", "edf8e9,bae4b3,74c476,31a354,006d2c", "edf8e9,c7e9c0,a1d99b,74c476,31a354,006d2c", "edf8e9,c7e9c0,a1d99b,74c476,41ab5d,238b45,005a32", "f7fcf5,e5f5e0,c7e9c0,a1d99b,74c476,41ab5d,238b45,005a32", "f7fcf5,e5f5e0,c7e9c0,a1d99b,74c476,41ab5d,238b45,006d2c,00441b"], ["f0f0f0,bdbdbd,636363", "f7f7f7,cccccc,969696,525252", "f7f7f7,cccccc,969696,636363,252525", "f7f7f7,d9d9d9,bdbdbd,969696,636363,252525", "f7f7f7,d9d9d9,bdbdbd,969696,737373,525252,252525", "ffffff,f0f0f0,d9d9d9,bdbdbd,969696,737373,525252,252525", "ffffff,f0f0f0,d9d9d9,bdbdbd,969696,737373,525252,252525,000000"], ["fee6ce,fdae6b,e6550d", "feedde,fdbe85,fd8d3c,d94701", "feedde,fdbe85,fd8d3c,e6550d,a63603", "feedde,fdd0a2,fdae6b,fd8d3c,e6550d,a63603", "feedde,fdd0a2,fdae6b,fd8d3c,f16913,d94801,8c2d04", "fff5eb,fee6ce,fdd0a2,fdae6b,fd8d3c,f16913,d94801,8c2d04", "fff5eb,fee6ce,fdd0a2,fdae6b,fd8d3c,f16913,d94801,a63603,7f2704"], ["fee8c8,fdbb84,e34a33", "fef0d9,fdcc8a,fc8d59,d7301f", "fef0d9,fdcc8a,fc8d59,e34a33,b30000", "fef0d9,fdd49e,fdbb84,fc8d59,e34a33,b30000", "fef0d9,fdd49e,fdbb84,fc8d59,ef6548,d7301f,990000", "fff7ec,fee8c8,fdd49e,fdbb84,fc8d59,ef6548,d7301f,990000", "fff7ec,fee8c8,fdd49e,fdbb84,fc8d59,ef6548,d7301f,b30000,7f0000"], ["ece7f2,a6bddb,2b8cbe", "f1eef6,bdc9e1,74a9cf,0570b0", "f1eef6,bdc9e1,74a9cf,2b8cbe,045a8d", "f1eef6,d0d1e6,a6bddb,74a9cf,2b8cbe,045a8d", "f1eef6,d0d1e6,a6bddb,74a9cf,3690c0,0570b0,034e7b", "fff7fb,ece7f2,d0d1e6,a6bddb,74a9cf,3690c0,0570b0,034e7b", "fff7fb,ece7f2,d0d1e6,a6bddb,74a9cf,3690c0,0570b0,045a8d,023858"], ["ece2f0,a6bddb,1c9099", "f6eff7,bdc9e1,67a9cf,02818a", "f6eff7,bdc9e1,67a9cf,1c9099,016c59", "f6eff7,d0d1e6,a6bddb,67a9cf,1c9099,016c59", "f6eff7,d0d1e6,a6bddb,67a9cf,3690c0,02818a,016450", "fff7fb,ece2f0,d0d1e6,a6bddb,67a9cf,3690c0,02818a,016450", "fff7fb,ece2f0,d0d1e6,a6bddb,67a9cf,3690c0,02818a,016c59,014636"], ["e7e1ef,c994c7,dd1c77", "f1eef6,d7b5d8,df65b0,ce1256", "f1eef6,d7b5d8,df65b0,dd1c77,980043", "f1eef6,d4b9da,c994c7,df65b0,dd1c77,980043", "f1eef6,d4b9da,c994c7,df65b0,e7298a,ce1256,91003f", "f7f4f9,e7e1ef,d4b9da,c994c7,df65b0,e7298a,ce1256,91003f", "f7f4f9,e7e1ef,d4b9da,c994c7,df65b0,e7298a,ce1256,980043,67001f"], ["efedf5,bcbddc,756bb1", "f2f0f7,cbc9e2,9e9ac8,6a51a3", "f2f0f7,cbc9e2,9e9ac8,756bb1,54278f", "f2f0f7,dadaeb,bcbddc,9e9ac8,756bb1,54278f", "f2f0f7,dadaeb,bcbddc,9e9ac8,807dba,6a51a3,4a1486", "fcfbfd,efedf5,dadaeb,bcbddc,9e9ac8,807dba,6a51a3,4a1486", "fcfbfd,efedf5,dadaeb,bcbddc,9e9ac8,807dba,6a51a3,54278f,3f007d"], ["fde0dd,fa9fb5,c51b8a", "feebe2,fbb4b9,f768a1,ae017e", "feebe2,fbb4b9,f768a1,c51b8a,7a0177", "feebe2,fcc5c0,fa9fb5,f768a1,c51b8a,7a0177", "feebe2,fcc5c0,fa9fb5,f768a1,dd3497,ae017e,7a0177", "fff7f3,fde0dd,fcc5c0,fa9fb5,f768a1,dd3497,ae017e,7a0177", "fff7f3,fde0dd,fcc5c0,fa9fb5,f768a1,dd3497,ae017e,7a0177,49006a"], ["fee0d2,fc9272,de2d26", "fee5d9,fcae91,fb6a4a,cb181d", "fee5d9,fcae91,fb6a4a,de2d26,a50f15", "fee5d9,fcbba1,fc9272,fb6a4a,de2d26,a50f15", "fee5d9,fcbba1,fc9272,fb6a4a,ef3b2c,cb181d,99000d", "fff5f0,fee0d2,fcbba1,fc9272,fb6a4a,ef3b2c,cb181d,99000d", "fff5f0,fee0d2,fcbba1,fc9272,fb6a4a,ef3b2c,cb181d,a50f15,67000d"], ["f7fcb9,addd8e,31a354", "ffffcc,c2e699,78c679,238443", "ffffcc,c2e699,78c679,31a354,006837", "ffffcc,d9f0a3,addd8e,78c679,31a354,006837", "ffffcc,d9f0a3,addd8e,78c679,41ab5d,238443,005a32", "ffffe5,f7fcb9,d9f0a3,addd8e,78c679,41ab5d,238443,005a32", "ffffe5,f7fcb9,d9f0a3,addd8e,78c679,41ab5d,238443,006837,004529"], ["edf8b1,7fcdbb,2c7fb8", "ffffcc,a1dab4,41b6c4,225ea8", "ffffcc,a1dab4,41b6c4,2c7fb8,253494", "ffffcc,c7e9b4,7fcdbb,41b6c4,2c7fb8,253494", "ffffcc,c7e9b4,7fcdbb,41b6c4,1d91c0,225ea8,0c2c84", "ffffd9,edf8b1,c7e9b4,7fcdbb,41b6c4,1d91c0,225ea8,0c2c84", "ffffd9,edf8b1,c7e9b4,7fcdbb,41b6c4,1d91c0,225ea8,253494,081d58"], ["fff7bc,fec44f,d95f0e", "ffffd4,fed98e,fe9929,cc4c02", "ffffd4,fed98e,fe9929,d95f0e,993404", "ffffd4,fee391,fec44f,fe9929,d95f0e,993404", "ffffd4,fee391,fec44f,fe9929,ec7014,cc4c02,8c2d04", "ffffe5,fff7bc,fee391,fec44f,fe9929,ec7014,cc4c02,8c2d04", "ffffe5,fff7bc,fee391,fec44f,fe9929,ec7014,cc4c02,993404,662506"]];
 		this.colorsets = colorsjson;

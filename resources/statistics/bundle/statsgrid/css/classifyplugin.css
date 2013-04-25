@@ -124,4 +124,14 @@
     color: #666666;
     font-size: 0.8em;
     font-style: italic;
-   }
+}
+
+.manageClassificationPlugin div.manualBreaks {
+    width: 200px;
+    padding: 10px;
+}
+
+.manageClassificationPlugin div.manualBreaks input[type="text"] {
+    width: 100%;
+    border: 1px solid #888;
+}

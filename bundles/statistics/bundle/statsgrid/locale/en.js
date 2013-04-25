@@ -40,13 +40,17 @@ Oskari.registerLocalization({
             "sourceTitle" :             "Source"
 
         },
-            "classify": {
+        "classify": {
             "classify":                 "Classify",
             "classifymethod":           "Method",
             "classes":                  "Classes",
             "jenks":                    "Jenks ranges",
             "quantile" :                "Quantile ranges",
-            "eqinterval" :              "Eqinterval"
+            "eqinterval" :              "Eqinterval",
+            "manual":                   "Manual breaks",
+            "manualPlaceholder":        "Input numbers separated with a comma.",
+            "manualRangeError":         "There should be at least {min} and at most {max} numbers!",
+            "nanError":                 "A value was not a number!"
         },
         "noMatch" : "No results matched"
 
