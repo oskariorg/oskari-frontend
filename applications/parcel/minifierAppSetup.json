@@ -2,6 +2,25 @@
 	"startupSequence": [
 		{
 			"instanceProps": {},
+			"title": "OpenLayers",
+			"bundleinstancename": "openlayers-default-theme",
+			"fi": "OpenLayers",
+			"sv": "?",
+			"en": "OpenLayers",
+			"bundlename": "openlayers-default-theme",
+			"metadata": {
+				"Import-Bundle": {
+					"openlayers-default-theme": {
+						"bundlePath": "../../packages/openlayers/bundle/"
+					},
+					"openlayers-single-full": {
+						"bundlePath": "../../packages/openlayers/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}, {
+			"instanceProps": {},
 			"title": "Map",
 			"bundleinstancename": "mapfull",
 			"fi": "Map",
@@ -11,61 +30,61 @@
 			"metadata": {
 				"Import-Bundle": {
 					"mapwmts": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"mapwfs": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"mapstats": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"service-base": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"event-map-layer": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"request-map-layer": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"mapmodule-plugin": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"event-base": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"mapfull": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"core-base": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"oskariui": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"request-base": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"domain": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"core-map": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"request-map": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"sandbox-base": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"service-map": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"sandbox-map": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					},
 					"event-map": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -81,7 +100,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"divmanazer": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -97,7 +116,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"toolbar": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -113,7 +132,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"statehandler": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -129,7 +148,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"infobox": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -145,7 +164,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"search": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -161,7 +180,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"layerselector2": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -177,7 +196,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"layerselection2": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -193,7 +212,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"personaldata": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -209,7 +228,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"publisher": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -225,7 +244,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"coordinatedisplay": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -241,7 +260,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"maplegend": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -257,7 +276,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"userguide": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -273,7 +292,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"metadataflyout": {
-						"bundlePath": "../../../packages/catalogue/bundle/"
+						"bundlePath": "../../packages/catalogue/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -289,7 +308,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"featuredata": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -305,7 +324,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"myplaces2": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -321,7 +340,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"guidedtour": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -337,7 +356,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"backendstatus": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -352,7 +371,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"printout": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -368,7 +387,7 @@
 			"metadata": {
 				"Import-Bundle": {
 					"postprocessor": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../packages/framework/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
@@ -380,10 +399,10 @@
 			"metadata": {
 				"Import-Bundle": {
 					"statsgrid": {
-						"bundlePath": "../../../packages/statistics/bundle/"
+						"bundlePath": "../../packages/statistics/bundle/"
 					},
 					"geostats": {
-						"bundlePath": "../../../packages/libraries/bundle/"
+						"bundlePath": "../../packages/libraries/bundle/"
 					}
 				}
 			}
