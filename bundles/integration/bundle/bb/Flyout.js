@@ -24,6 +24,7 @@ function(instance, locale, ui) {
     /* @property container the DIV element */
     this.container = null;
     this.ui = ui;
+    this.state = null;
 
 }, {
     getName : function() {
@@ -59,6 +60,7 @@ function(instance, locale, ui) {
     getState : function() {
         return this.state;
     },
+
     render : function() {
         this.ui.render();
     }

@@ -34,6 +34,19 @@ Oskari.clazz.define('Oskari.integration.bundle.todo.View', function() {
     },
 
     /**
+     * @property requirementsConfig
+     *
+     * requirejs requirements config to fix paths
+     *
+     */
+    "requirementsConfig" : {
+        "waitSeconds" : 15,
+        "paths" : {
+            '_bundle' : '../../../Oskari/bundles/integration/bundle/todo'
+        }
+    },
+   
+    /**
      * @method render
      * This is called when *everything* is ready for Backbone to be started
      * Called with requirements from above as arguments to method in
