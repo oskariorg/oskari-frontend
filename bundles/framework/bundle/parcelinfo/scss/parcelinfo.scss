@@ -1,0 +1,36 @@
+.piMain {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    display: block;
+    color: #3C3C3C;
+    background: white;
+    font-size: 12px;
+    z-index: 64738;
+    border: 1px solid #c4c4c4;
+    padding : 5px 10px 5px 10px;
+    width: auto;
+}
+
+.piHeaderLabel {
+    text-align: center;
+    font-weight: bold;
+}
+
+.piLabel {
+    font-weight: bold;
+    text-align: left;
+}
+
+.piLabelValue {
+    text-align: left;
+}
+
+.piValue {
+    text-align: right;
+}
+
+.piUnit {
+    text-align: left;
+    padding-left: 4px;
+}

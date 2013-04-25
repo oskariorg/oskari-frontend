@@ -48,6 +48,10 @@ Oskari.registerLocalization({
         "title": "Kohdetta ladataan",
         "message": ""
       },
+      "calculating": {
+        "title": "Lasketaan jakoa",
+        "message": ""
+      },
       "placeAdding": {
         "title": "Kohdetta tallennetaan",
         "message": ""

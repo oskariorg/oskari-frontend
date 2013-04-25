@@ -1,0 +1,62 @@
+
+th.asc {
+    background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/asc_arrow.png');
+    background-repeat:no-repeat;
+    background-position:center center;
+}
+
+th.desc {
+    background-image: url('/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png');
+    background-repeat:no-repeat;
+    background-position:center center;
+}
+
+div.column-selector-placeholder {
+    border-style: none;
+    float: left;
+    opacity: 1.0;
+    margin: 0;
+    padding: 0;
+    right: 0;
+    width: 25px;
+    height: 7px;
+    max-width: 25px;
+    max-height: 7px;
+}
+
+div.icon-menu {
+    position: absolute;
+    opacity: 1.0;
+    margin: 0;
+    cursor: pointer;
+    padding: 0;
+    width: 25px;
+    height: 8px;
+    max-width: 25px;
+    max-height: 7px;
+}
+
+div.column-selector {
+    position: absolute;
+    visibility: hidden;
+    background-color: white;
+    margin-top: 7px;
+    margin-right: 50px;
+    padding: 0;
+    border: 1px solid;
+    z-index: 10001;
+}
+div.column-selector div.close-selector-button {
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+div.column-selector ul.column-selector-list {
+    list-style-type: none;
+    padding-right: 30px;
+}
+div.column-selector label.column-label {
+    padding-left: 5px;
+}
