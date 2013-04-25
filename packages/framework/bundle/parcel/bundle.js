@@ -121,7 +121,7 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/instance.js"
-        }, {
+        }, /*{
            // NOTE! EXTERNAL LIBRARIES!
            // Tällä hetkellä (8.4.2013) nämä kirjastot tarvitaan paikallisessa kehitysympäristössä,
            // mutta minifioijan bugin vuoksi näitä ei saa olla mukana demo-buildissa.
@@ -136,7 +136,7 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../libraries/jsts/javascript.util.js"
-        },
+        }, */
 
         // css
         {
