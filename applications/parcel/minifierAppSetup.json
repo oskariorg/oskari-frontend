@@ -406,6 +406,20 @@
 					}
 				}
 			}
+		},{
+			"title": "Parcel",
+			"fi": "Määräala",
+			"bundleinstancename": "parcel",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "parcel",
+			"metadata": {
+				"Import-Bundle": {
+					"parcel": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				}
+			}
 		}
     ]
 }
