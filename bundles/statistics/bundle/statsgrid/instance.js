@@ -67,7 +67,6 @@ function() {
      */
     setState : function(state, ignoreLocation) {
         var me = this, view = this.plugins['Oskari.userinterface.View'];
-debugger;
 
         view.clearDataFromGrid();
 
@@ -97,7 +96,6 @@ debugger;
                                 slider.parent().find('#amount').val(state.numberOfClasses);
                             }
                         }
-debugger;
                         // current column is needed for rendering map
                         var columns = view.grid.getColumns();
                         for (var i = 0; i < columns.length; i++) {
@@ -115,7 +113,6 @@ debugger;
     },
     getState : function() {
         if(this.sandbox.getUser().isLoggedIn()) {
-debugger;
             return this.state;
         }
     },
