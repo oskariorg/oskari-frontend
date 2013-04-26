@@ -86,23 +86,6 @@ jQuery(document).ready(function() {
           if (cb) {
               cb(instance);
           }
-            /*
-          var ugStartup = {
-              "bundleinstancename": "statsgrid",
-              "bundlename": "statsgrid",
-              "metadata": {
-                  "Import-Bundle": {
-                      "statsgrid": {
-                          "bundlePath": "/Oskari/packages/statistics/bundle/"
-                      },
-                      "geostats": {
-                          "bundlePath": "/Oskari/packages/libraries/bundle/"
-                      }
-                  }
-              }
-          };
-          Oskari.bundle_facade.playBundle(ugStartup, function() {});
-          */
         });
     }
 
