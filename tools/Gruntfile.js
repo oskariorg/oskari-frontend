@@ -128,8 +128,6 @@ module.exports = function(grunt) {
 
         grunt.log.writeln('Running compile AppSetup to startupSequence...');
 
-        console.log('check', grunt.config('watch').appsetup);
-
         // read files and parse output name
         var files = grunt.config(this.name).files[0],
             outputFilename = files.replace(".json", ".opts.js");
@@ -214,6 +212,22 @@ module.exports = function(grunt) {
             // add files to be copied
             files.push(copyFiles);
 
+            // add mddocs to dist
+            files.push({
+                "expand": true,
+                "cwd": "../docs/",
+                "src": ["images/**", "layout/**"],
+                "dest": grunt.config.get("mddocs.options.outdir")
+            });
+
+            // add resources to dist
+            files.push({
+                "expand": true,
+                "cwd": "../",
+                "src": ["resources/**", "libraries/**"],
+                "dest": "../dist/"
+            });
+
             // setting task configs
             grunt.config.set("copy." + appName + ".files", files);
             grunt.config.set("validate." + appName + ".options", {
@@ -232,7 +246,7 @@ module.exports = function(grunt) {
         grunt.task.run('compile');
         grunt.task.run('sprite');
         grunt.task.run('yuidoc');
-        //grunt.task.run('mddocs');
+        grunt.task.run('mddocs');
     });
 
     grunt.registerTask('packageopenlayer', 'Package openlayers according to packages', function(packages) {
