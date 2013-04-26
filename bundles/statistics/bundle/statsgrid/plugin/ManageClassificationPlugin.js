@@ -301,14 +301,8 @@ function(config, locale) {
 
 		// Get classification method
 		var method = this.element.find('.classificationMethod').find('.method').val();
-		if(event.methodId != null) {
-			method = event.methodId;
-		}		
 		// Get class count
 		var classes = Number(this.element.find('.classificationMethod').find('.classCount').find('#amount').val());
-		if(event.numberOfClasses != null) {
-			classes = event.numberOfClasses;
-		}
 
 		var gcol_data = params.COL_VALUES;
 		gcol_data = gcol_data.slice(0);
@@ -319,7 +313,7 @@ function(config, locale) {
 		var col_data = params.COL_VALUES;
 
 		if (method == 1)
-			limits = gstats.getJenks(classes);
+			limits = gstats.getJenks(classes);			
 		if (method == 2)
 			limits = gstats.getQuantile(classes);
 		if (method == 3)
@@ -373,7 +367,9 @@ function(config, locale) {
 		var eventBuilder = sandbox.getEventBuilder('MapStats.StatsVisualizationChangeEvent');
 		if (eventBuilder) {
 			var event = eventBuilder(layer, {
+				//instance.js - state handling: method
 				methodId : method,
+				//instance.js - state handling: number of classes
 				numberOfClasses : classes,
 				VIS_ID : -1,
 				VIS_NAME : params.VIS_NAME,
@@ -424,16 +420,12 @@ function(config, locale) {
 		var sel = classify.find('select');
 
 		var methods = [this._locale.classify.jenks, this._locale.classify.quantile, this._locale.classify.eqinterval];
-		for(var i = 1; i <= methods.length; i++) {
-			var opt = jQuery('<option value="' + i + '">' + methods[i] + '</option>');
+		for(var i = 0; i < methods.length; i++) {
+			var opt = jQuery('<option value="' + (i+1) + '">' + methods[i] + '</option>');
 			sel.append(opt);				
 		}
 
 		sel.change(function(e) {
-			// update event with selected method
-			if(e.target.tagName === "SELECT") {
-				e.methodId = e.target.selectedIndex;
-			}
 			// Classify current columns, if any
 			me.classifyData(e);
 		});
@@ -448,12 +440,11 @@ function(config, locale) {
 			value : 5,
 			slide : function(event, ui) {
 				jQuery('#amount').val(ui.value);
-				// update event with correct number of classes
-				event.numberOfClasses = ui.value;
 				// Classify again
 				me.classifyData(event);
 			}
 		});
+		this.rangeSlider = slider;
 
 		classify.append(classcnt);
 		content.append(classify);

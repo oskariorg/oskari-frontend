@@ -67,8 +67,14 @@ function() {
      */
     setState : function(state, ignoreLocation) {
         var me = this, view = this.plugins['Oskari.userinterface.View'];
+debugger;
 
         view.clearDataFromGrid();
+
+        if(this.state != null && this.state.indicators != null && this.state.indicators.length > 0) {
+            this.state.indicators = [];
+        }
+
 
         if(state.indicators.length > 0){
 
@@ -79,19 +85,28 @@ function() {
                 view.getSotkaIndicatorsData(state.indicators, function(){
 
                     if(state.currentColumn != null) {
-                        // current column is needed for rendering map
-                        view.classifyData(state.currentColumn);
 
-                        var e = document.createEvent("Event");
                         if(state.methodId != null && state.methodId > 0) {
-                            // which classification method we need to use in classification plugin
-                            e.methodId = state.methodId;
+                            var select = me.classifyPlugin.element.find('.classificationMethod').find('.method');
+                            select.val(state.methodId);
                         }
                         if(state.numberOfClasses != null && state.numberOfClasses > 0) {
-                            // how many classes we are going to use when classifying the data
-                            e.numberOfClasses = state.numberOfClasses;
+                            var slider = me.classifyPlugin.rangeSlider;
+                            if(slider != null) {
+                                slider.slider("value", state.numberOfClasses);
+                                slider.parent().find('#amount').val(state.numberOfClasses);
+                            }
                         }
-                        me.classifyPlugin.classifyData(e);
+debugger;
+                        // current column is needed for rendering map
+                        var columns = view.grid.getColumns();
+                        for (var i = 0; i < columns.length; i++) {
+                            var column = columns[i];
+                            if (column.id == state.currentColumn) {
+                                view.classifyData(column);
+                            }
+                        };
+//                        me.classifyPlugin.classifyData(e);
                     }
                 });
 
@@ -100,6 +115,7 @@ function() {
     },
     getState : function() {
         if(this.sandbox.getUser().isLoggedIn()) {
+debugger;
             return this.state;
         }
     },

@@ -125,6 +125,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             grid.render();
         });
         // Grid
+        console.log('it works so far');
         grid = new Slick.Grid(gridContainer, dataView, columns, options);
 
         var sortcol = "json_number";
@@ -169,7 +170,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         // remember the grid object.
         this.grid = grid;
         this.dataView = dataView;
-
+        console.log('did it break before this?');
     },
 
     /**
@@ -383,7 +384,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         });
         this.grid.setColumns(columns);
 
-        // add indicator also to the state!     
+        // add indicator also to the state!
         var statedIndicators = (this.instance.state.indicators != null) ? this.instance.state.indicators : [];
         statedIndicators.push({indicator: indicator, year: year, gender: gender});
         this.instance.state.indicators = statedIndicators;
@@ -516,12 +517,10 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
 
     /**
-     * Get Sotka data for one indicator
-     * @method getSotkaIndicatorData
-     * @param container parent element
-     * @param indicator id
-     * @param gender (male / female / total)
-     * @param year selected year
+     * Get Sotka metadata for given indicators
+     * @method getSotkaIndicatorsMeta
+     * @param indicators for which we fetch data
+     * @param callback what to do after we have fetched metadata for all the indicators
      */
     getSotkaIndicatorsMeta : function(indicators, callback) {
         var me = this, container = this.getEl(), fetchedIndicators = 0;
@@ -537,6 +536,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                 me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
                 // success callback
                 function(data) {
+                    //keep track of returned ajax calls
                     fetchedIndicators++;
 
                     if (data) {
@@ -547,20 +547,19 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                         };
 
                         // when all the indicators have been fetched
-                        // add them to the grid
+                        // fire callback
                         if(fetchedIndicators >= indicators.length) {
                             callback();
                         }
 
                     } else {
-                        me.indicators[i] = {};
                         me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorDataError);
                     }
                 },
                 // error callback
                 function(jqXHR, textStatus) {
-                    me.indicators[i] = {};
                     me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorDataXHRError);
+                    //keep track of returned ajax calls
                     fetchedIndicators++;
                 }
             );
@@ -568,21 +567,19 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     },
 
     /**
-     * Get Sotka data for one indicator
-     * @method getSotkaIndicatorData
-     * @param container parent element
-     * @param indicator id
-     * @param gender (male / female / total)
-     * @param year selected year
+     * Get Sotka data for given indicators
+     * @method getSotkaIndicatorsData
+     * @param indicators for which we fetch data
+     * @param callback what to do after we have fetched data for all the indicators
      */
     getSotkaIndicatorsData : function(indicators, callback) {
         var me = this, container = this.getEl(), fetchedIndicators = 0;
 
         for (var i = 0; i < indicators.length; i++) {
             var indicatorData = indicators[i],
-            indicator = indicatorData.indicator,
-            year = indicatorData.year,
-            gender = indicatorData.gender != null ? indicatorData.gender: 'total';
+                indicator = indicatorData.indicator,
+                year = indicatorData.year,
+                gender = indicatorData.gender != null ? indicatorData.gender: 'total';
 
             // ajax call
             me.fetchData(
@@ -604,13 +601,13 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                             }
                         };
                         // when all the indicators have been fetched
-                        // add them to the grid
+                        // add them to the grid and fire callback
                         if(fetchedIndicators >= indicators.length) {
                             //TODO add these to the grid!!
                             for (var j = 0; j < indicators.length; j++) {
                                 var ind = indicators[j];
                                 if(ind) {
-                                    me.addIndicatorDataToGrid(container, ind.indicator, ind.gender, ind.year, ind.data, me.indicators[j]);
+                                    me.addIndicatorDataToGrid(container, ind.indicator, ind.gender, ind.year, ind.data, me.indicators[j], true);
                                 }
                             };
                             callback();
@@ -627,8 +624,11 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             );
         };
     },
-
-    clearDataFromGrid : function(container) {
+    /**
+     * Removes all indicator data from the grid
+     * @method clearDataFromGrid
+     */
+    clearDataFromGrid : function() {
         var columns = this.grid.getColumns();
         var newColumnDef    =   [];
         
