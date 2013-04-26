@@ -106,7 +106,7 @@ function(name,viewClazz) {
         sandbox.register(this);
 
         /* stateful */
-        sandbox.registerAsStateful(this.mediator.bundleId, this);
+//        sandbox.registerAsStateful(this.mediator.bundleId, this);
 
         var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
 
@@ -128,7 +128,7 @@ function(name,viewClazz) {
         var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
         sandbox.request(this, request);
 
-        sandbox.unregisterStateful(this.mediator.bundleId);
+//        sandbox.unregisterStateful(this.mediator.bundleId);
         sandbox.unregister(this);
         this.sandbox = null;
         this.started = false;
@@ -152,6 +152,10 @@ function(name,viewClazz) {
 
         me.plugins['Oskari.userinterface.Flyout'] = 
             Oskari.clazz.create('Oskari.integration.bundle.bb.Flyout', me, locFlyout, view);                       
+
+        if(view.init != null) {
+            this.view.init();
+        }
 
         var locTile = me.getLocalization('tile');
 
@@ -199,8 +203,22 @@ function(name,viewClazz) {
      */
     getConfiguration : function() {
         return this.conf;
-    }
+    },
+
+    /**
+     * @method setState
+     * @param {Object} state bundle state as JSON
+     */
+    setState : function(state) {
+    },
     
+    /*
+     * @method getState
+     * @return {Object} bundle state as JSON
+     */
+    getState : function() {
+    }
+
 }, {
     protocol : ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
 });

@@ -1,0 +1,51 @@
+<div class="admin-add-class">
+    <div class="add-class-wrapper">
+        <div class="add-class-record">
+            <div class="add-class-grouping" title="<%= instance.getLocalization('admin').addOrganizationNameTitle %>"><%= instance.getLocalization('admin').addOrganizationName %></div>
+
+            <div class="add-class-label-area">
+                <label for="add-class-fi-name" class="add-class-label" title="<%= instance.getLocalization('admin').finnishTitle %>"><%= instance.getLocalization('admin').finnish %></label>
+            </div>
+            <div  class="add-class-input-area">
+                <div class="input-controls">
+                    <input type="text" id="add-class-fi-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin').finnishPlaceholder %>"  <% if(data != null  && data.names && data.names.fi) { %>value="<%= data.names.fi %>"  <% } %> />
+                    <div class="icon-close"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-class-record">
+            <div class="add-class-label-area">
+                <label for="add-class-sv-name" class="add-class-label" title="<%= instance.getLocalization('admin').swedishTitle %>"><%= instance.getLocalization('admin').swedish %></label>
+            </div>
+            <div  class="add-class-input-area">
+                <div class="input-controls">
+                    <input type="text" id="add-class-sv-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin').swedishPlaceholder %>"  <% if(data != null && data.names && data.names.sv) { %>value="<%= data.names.sv %>"  <% } %> />
+                    <div class="icon-close"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-class-record">
+            <div class="add-class-label-area">
+                <label for="add-class-en-name" class="add-class-label" title="<%= instance.getLocalization('admin').englishTitle %>"><%= instance.getLocalization('admin').english %></label>
+            </div>
+            <div class="add-class-input-area">
+                <div class="input-controls">
+                    <input type="text" id="add-class-en-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin').englishPlaceholder %>"  <% if(data != null && data.names && data.names.en) { %>value="<%= data.names.en %>"  <% } %> />
+                    <div class="icon-close"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="add-class-send">
+            <div class="add-class-button-area">
+                <div class="input-controls">
+                    <button class="add-class-btn admin-add-org-ok" title="<%= instance.getLocalization('admin').addNewOrganization %>"><%= instance.getLocalization('add') %></button>
+                    <button class="add-class-btn admin-remove-org" <% if(data != null && data.id != null) { %> data-id="<%= data.id %>" <% } %> <% if(data != null && data.parentid != null) { %> data-parent-id="<%= data.parentid %>" <% } %> title="<%= instance.getLocalization('delete') %>"><%= instance.getLocalization('delete') %></button>
+                    <button class="add-class-btn admin-add-org-cancel" title="<%= instance.getLocalization('cancel') %>"><%= instance.getLocalization('cancel') %></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

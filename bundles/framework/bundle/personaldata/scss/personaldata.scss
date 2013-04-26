@@ -1,0 +1,45 @@
+/* account tab */
+div.tab-content div.account div.dataField {
+	padding : 10px;
+}
+div.tab-content div.account div.dataField div.label {
+	float: left;
+	width : 40%;
+}
+
+/* My Views tab*/
+div.view {
+	padding: 5px;
+}
+div.view.odd {
+    background-color : #f3f3f3;
+}
+div.view div.name {
+	display: inline-block;
+}
+div.view div.tools {
+	float: right;
+}
+
+div.view div.tools div {
+	display: inline-block;
+	margin-right : 5px;
+}
+
+div.personaldata td div.icon {
+    display: inline-block;
+    vertical-align: top;
+}
+
+div.personaldata a.categoryOp {
+    margin : 5px;
+}
+
+div.personaldata a.categoryOp div.icon {
+  display: inline-block;
+}
+
+textarea#view_description {
+	resize: none;
+	width: 100%;
+}

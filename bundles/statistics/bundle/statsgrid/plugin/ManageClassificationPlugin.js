@@ -265,7 +265,7 @@ function(config, locale) {
 			//params eg. CUL_COL:"indicator..." , VIS_NAME: "ows:kunnat2013", VIS_ATTR: "kuntakoodi", VIS_CODES: munArray, COL_VALUES: statArray
 			this._params = event.getParams();
 			// Classify data
-			this.classifyData();
+			this.classifyData(event);
 
 		}
 	},
@@ -284,7 +284,7 @@ function(config, locale) {
 	 *
 	 * @param event  Data sent by 'MapStats.SotkadataChangedEvent' (eg. in  ManageStatsOut.js)
 	 */
-	classifyData : function() {
+	classifyData : function(event) {
 		// return, if no old data
 		var me = this;
 		if (!me._layer)
@@ -317,7 +317,7 @@ function(config, locale) {
 		var col_data = params.COL_VALUES;
 
 		if (method == 1)
-			limits = gstats.getJenks(classes);
+			limits = gstats.getJenks(classes);			
 		if (method == 2)
 			limits = gstats.getQuantile(classes);
 		if (method == 3)
@@ -370,6 +370,10 @@ function(config, locale) {
 		var eventBuilder = sandbox.getEventBuilder('MapStats.StatsVisualizationChangeEvent');
 		if (eventBuilder) {
 			var event = eventBuilder(layer, {
+				//instance.js - state handling: method
+				methodId : method,
+				//instance.js - state handling: number of classes
+				numberOfClasses : classes,
 				VIS_ID : -1,
 				VIS_NAME : params.VIS_NAME,
 				VIS_ATTR : params.VIS_ATTR,
@@ -418,15 +422,15 @@ function(config, locale) {
 		var classify = jQuery('<div class="classificationMethod"><br>' + this._locale.classify.classifymethod + '<br><select class="method"></select><br></div>');
 		var sel = classify.find('select');
 
-		var opt = jQuery('<option value="' + "1" + '">' + this._locale.classify.jenks + '</option>');
-		sel.append(opt);
-		var opt = jQuery('<option value="' + "2" + '">' + this._locale.classify.eqinterval + '</option>');
-		sel.append(opt);
-		var opt = jQuery('<option value="' + "3" + '">' + this._locale.classify.quantile + '</option>');
-		sel.append(opt);
+		var methods = [this._locale.classify.jenks, this._locale.classify.quantile, this._locale.classify.eqinterval];
+		for(var i = 0; i < methods.length; i++) {
+			var opt = jQuery('<option value="' + (i+1) + '">' + methods[i] + '</option>');
+			sel.append(opt);				
+		}
+
 		sel.change(function(e) {
 			// Classify current columns, if any
-			me.classifyData();
+			me.classifyData(e);
 		});
 		// Content HTML / class count input HTML
 		//var classcnt = jQuery('<div class="classCount">' + this._locale.classify.classes + ' <input type="text" id="spinner" value="6" /></div>');
@@ -444,9 +448,10 @@ function(config, locale) {
 			slide : function(event, ui) {
 				jQuery('#amount_class').val(ui.value);
 				// Classify again
-				me.classifyData();
+				me.classifyData(event);
 			}
 		});
+		this.rangeSlider = slider;
 
 		classify.append(classcnt);
 		content.append(classify);

@@ -199,6 +199,9 @@ function(mapLayerUrl, sandbox) {
         for(var i = 0; i < allLayers.length; i++) {
             
             var mapLayer = this.createMapLayer(allLayers[i]);
+            if(allLayers[i].admin != null) {
+                mapLayer.admin = allLayers[i].admin;                
+            }
             if(this._reservedLayerIds[mapLayer.getId()] !== true) {
                 this.addLayer(mapLayer, true);
             }
