@@ -434,6 +434,20 @@
 					}
 				}
 			}
+		}, {
+			"title": "Parcel Info",
+			"fi": "Paikan info",
+			"bundleinstancename": "parcelinfo",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "parcelinfo",
+			"metadata": {
+				"Import-Bundle": {
+					"parcelinfo": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				}
+            }
 		}
 	]
 }
