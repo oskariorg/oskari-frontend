@@ -446,7 +446,7 @@ function(config, locale) {
 			max : 9,
 			value : 5,
 			slide : function(event, ui) {
-				jQuery('#amount_class').val(ui.value);
+				jQuery('input#amount_class').val(ui.value);
 				// Classify again
 				me.classifyData(event);
 			}
@@ -854,17 +854,17 @@ function(config, locale) {
 
 	    var table = me._createColorTable();
 		
-        // Slider limit fix according to color theme
+        // Slider limit fix according to color theme color range nums
         var rows = 5;
 		var cl_min = 3;
 		var cl_max = 9;
 		// Use 3rd color value set in the grid
 		if (me.currentColorSet == 'div') {
 			rows = this.colorsets_div.length;
-			
+			cl_max = 11;
 		} else if (me.currentColorSet == 'qual') {
 			rows = me.colorsets_qual.length;
-			
+			cl_max = 8;
 		} else {
 			rows = me.colorsets_seq.length;
 			
@@ -890,7 +890,7 @@ function(config, locale) {
 			max : cl_max,
 			value : curcla,
 			slide : function(event, ui) {
-				jQuery('#amount_class').val(ui.value);
+				jQuery('input#amount_class').val(ui.value);
 				// Classify again
 				me.classifyData();
 			}
