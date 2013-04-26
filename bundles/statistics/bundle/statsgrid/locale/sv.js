@@ -48,6 +48,16 @@ Oskari.registerLocalization({
             "quantile" :                "Quantile ranges",
             "eqinterval" :              "Eqinterval"
         },
+        "colorset" : {
+			"themeselection" : "Väriteeman valinta",
+			"setselection" : "Värisetin valinta",
+			"sequential" : "Kvantitatiivinen",
+			"qualitative" : "Kvalitatiivinen",
+			"divergent" : "Jakautuva",
+			"info2" : "Värivalinta - valitse osoittimella väriskaalasta värijakso",
+			"cancel" : "Poistu"
+			
+		},
         "noMatch" : "Inga matchade indikatorer"
     }
 });

@@ -48,6 +48,16 @@ Oskari.registerLocalization({
             "quantile" :                "Quantile ranges",
             "eqinterval" :              "Eqinterval"
         },
+        "colorset" : {
+			"themeselection" : "Color theme selection",
+			"setselection" : "Color set selection",
+			"sequential" : "Sequential",
+			"qualitative" : "qualitative",
+			"divergent" : "Divergent",
+			"info2" : "Color range selection - ",
+			"cancel" : "Poistu"
+			
+		},
         "noMatch" : "No results matched"
 
     }

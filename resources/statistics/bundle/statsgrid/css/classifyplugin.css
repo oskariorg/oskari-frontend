@@ -52,7 +52,7 @@
 	background-image: none;
 	color: #f6931f; 
 	font-weight: bold;
-	width: 40px;
+	width: 96px;
 	border: 0; 
 	color: #f6931f; 
 	font-weight: bold;		
@@ -125,3 +125,16 @@
     font-size: 0.8em;
     font-style: italic;
    }
+table.colo_table1 td.selected {
+	background-color: #AAAAAA;
+}
+table.colo_table1 td.hover {
+	background-color: #D4A017;
+}
+
+table.colo_table1 td div {
+	display : inline-block; 
+	height: 20px;
+	width : 5px;
+	/* background-color: #D4A017; */
+}
