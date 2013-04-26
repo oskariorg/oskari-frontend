@@ -406,6 +406,34 @@
 					}
 				}
 			}
+		},{
+			"title": "Parcel",
+			"fi": "Määräala",
+			"bundleinstancename": "parcel",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "parcel",
+			"metadata": {
+				"Import-Bundle": {
+					"parcel": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"title": "Parcel Selector",
+			"fi": "Määräalan valinta",
+			"bundleinstancename": "parcelselector",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "parcelselector",
+			"metadata": {
+				"Import-Bundle": {
+					"parcelselector": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				}
+			}
 		}
 	]
 }
