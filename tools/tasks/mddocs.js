@@ -99,25 +99,6 @@ module.exports = function(grunt) {
             });
         };
 
-        /**
-         * Copy all files of sourceDir to destinationDir
-         */
-
-        function copyFiles(sourceDir, destinationDir) {
-            var files = fs.readdirSync(sourceDir);
-
-            files.forEach(function(f) {
-                var fname = path.join(sourceDir, f);
-                var dname = path.join(destinationDir, f);
-
-                if(!fs.existsSync(dname)) { /// TODO: if newer file -> replaces
-                    var stream = fs.createReadStream(fname);
-                    stream.pipe(fs.createWriteStream(dname));
-                    stream.resume();
-                }
-            });
-        };
-
         function generateHtml(mdFilePaths, topicsHtml, callback) {
             var file,
                 files = [];
@@ -173,10 +154,6 @@ module.exports = function(grunt) {
 
 
         wrench.mkdirSyncRecursive(destinationDirectory, 0777);
-        createDirStructure(destinationDirectory, [cssDirectory, imagesDirectory]);
-        copyFiles(path.join(cwd, layoutDirectory, cssDirectory), path.join(destinationDirectory, cssDirectory));
-        copyFiles(path.join(cwd, imagesDirectory), path.join(destinationDirectory, imagesDirectory));
-
         var res = wrench.readdirSyncRecursive(path.join(cwd, markdownDirectory)); // get the md's
 
         // create folderTrees
@@ -200,7 +177,14 @@ module.exports = function(grunt) {
                     stat = fs.statSync(path.join(cwd, markdownDirectory, res[i]));
                 } catch(err) {}
                 if(stat && !stat.isDirectory()) {
-                    tmp = res[i].split("\\"); // TODO: this is only for windows?
+                    if (res[i].indexOf("/") > 0) {
+                        // not windows
+                        tmp = res[i].split("/");
+                    } else if (res[i].indexOf("\\") > 0) {
+                        tmp = res[i].split("\\"); // NOTE: this only works for windows!
+                    } else {
+                        tmp = [res[i]];
+                    }
                     /// Create folder structure if missing
                     filePath = tmp.slice(0, -1);
                     folder = "";
