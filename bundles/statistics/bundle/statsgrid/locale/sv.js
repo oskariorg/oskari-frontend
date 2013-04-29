@@ -46,9 +46,14 @@ Oskari.registerLocalization({
             "classes":                  "Classes",
             "jenks":                    "Jenks ranges",
             "quantile" :                "Quantile ranges",
-            "eqinterval" :              "Eqinterval"
+            "eqinterval" :              "Eqinterval",
+            "manual":                   "Manual breaks",
+            "manualPlaceholder":        "Input numbers separated with a comma.",
+            "manualRangeError":         "There should be at least {min} and at most {max} numbers!",
+            "nanError":                 "A value was not a number!"
         },
         "colorset" : {
+            "button": "Färger",
 			"themeselection" : "Väriteeman valinta",
 			"setselection" : "Värisetin valinta",
 			"sequential" : "Kvantitatiivinen",

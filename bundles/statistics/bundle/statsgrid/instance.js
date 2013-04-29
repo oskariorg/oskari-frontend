@@ -88,6 +88,13 @@ function() {
                         if(state.methodId != null && state.methodId > 0) {
                             var select = me.classifyPlugin.element.find('.classificationMethod').find('.method');
                             select.val(state.methodId);
+                            // The manual breaks method:
+                            if(state.methodId == 4 && state.manualBreaksInput) {
+                                var manualInput = me.classifyPlugin.element.find('.manualBreaks').find('input[name=breaksInput]');
+                                manualInput.val(state.manualBreaksInput);
+                                me.classifyPlugin.element.find('.classCount').hide();
+                                me.classifyPlugin.element.find('.manualBreaks').show();
+                            }
                         }
                         if(state.numberOfClasses != null && state.numberOfClasses > 0) {
                             var slider = me.classifyPlugin.rangeSlider;
@@ -138,6 +145,7 @@ function() {
         var params = event.getParams();
         this.state.methodId = params.methodId;
         this.state.numberOfClasses = params.numberOfClasses;
+        this.state.manualBreaksInput = params.manualBreaksInput;
     }
 }, {
 	"extend" : ["Oskari.userinterface.extension.DefaultExtension"]

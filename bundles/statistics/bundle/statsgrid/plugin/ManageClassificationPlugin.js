@@ -34,6 +34,8 @@ function(config, locale) {
 	this.curCol = null;
 	this._layer = null;
 	this._params = null;
+	this.minClassNum = 2;
+	this.maxClassNum = 9;
 
 }, {
 	/** @static @property __name module name */
@@ -322,6 +324,13 @@ function(config, locale) {
 			limits = gstats.getQuantile(classes);
 		if (method == 3)
 			limits = gstats.getEqInterval(classes);
+		if (method == 4) {
+			limits = this.setManualBreaks(gstats);
+			if(!limits) {
+				return;
+			}
+			classes = limits.length - 1;
+		}
 
 		// Put municipality codes  in range limits
 		for ( i = 0; i < classes; i++)
@@ -365,6 +374,7 @@ function(config, locale) {
 			colorArr[i] = '#' + colorArr[i];
 		gstats.setColors(colorArr);
 
+		var manualBreaksInput = this.element.find('.manualBreaks').find('input[name=breaksInput]').val()
 		var colors = colors.replace(/,/g, '|');
 		var sandbox = me._sandbox;
 		var eventBuilder = sandbox.getEventBuilder('MapStats.StatsVisualizationChangeEvent');
@@ -374,6 +384,8 @@ function(config, locale) {
 				methodId : method,
 				//instance.js - state handling: number of classes
 				numberOfClasses : classes,
+				//instance.js - state handling: input string of manual classification method
+				manualBreaksInput : manualBreaksInput.toString(),
 				VIS_ID : -1,
 				VIS_NAME : params.VIS_NAME,
 				VIS_ATTR : params.VIS_ATTR,
@@ -422,28 +434,32 @@ function(config, locale) {
 		var classify = jQuery('<div class="classificationMethod"><br>' + this._locale.classify.classifymethod + '<br><select class="method"></select><br></div>');
 		var sel = classify.find('select');
 
-		var methods = [this._locale.classify.jenks, this._locale.classify.quantile, this._locale.classify.eqinterval];
+		var methods = [this._locale.classify.jenks, this._locale.classify.quantile, this._locale.classify.eqinterval, this._locale.classify.manual];
 		for(var i = 0; i < methods.length; i++) {
 			var opt = jQuery('<option value="' + (i+1) + '">' + methods[i] + '</option>');
 			sel.append(opt);				
 		}
 
 		sel.change(function(e) {
-			// Classify current columns, if any
-			me.classifyData(e);
+			if (jQuery(this).val() == 4) {
+				jQuery('.classCount').hide();
+				jQuery('.manualBreaks').show();
+			} else {
+				jQuery('.manualBreaks').hide();
+				jQuery('.classCount').show();
+				// Classify current columns, if any
+				me.classifyData();
+			}
 		});
 		// Content HTML / class count input HTML
 		//var classcnt = jQuery('<div class="classCount">' + this._locale.classify.classes + ' <input type="text" id="spinner" value="6" /></div>');
 
-		var classcnt = jQuery('<div class="classCount">' + this._locale.classify.classes + ' <input type="text" id="amount_class" readonly="readonly" value="5" /><input type="button" value="Värit"  /><div id="slider-range-max"></div>');
-		// to search button
-		classcnt.find('input[type=button]').click(function(event) {
-			me._createColorDialog();
-		});
+		var classcnt = jQuery('<div class="classCount">' + this._locale.classify.classes + ' <input type="text" id="amount_class" readonly="readonly" value="5" /><div id="slider-range-max"></div>');
+		
 		var slider = classcnt.find('#slider-range-max').slider({
 			range : "min",
-			min : 2,
-			max : 9,
+			min : me.minClassNum,
+			max : me.maxClassNum,
 			value : 5,
 			slide : function(event, ui) {
 				jQuery('input#amount_class').val(ui.value);
@@ -453,7 +469,34 @@ function(config, locale) {
 		});
 		this.rangeSlider = slider;
 
+		// HTML for the manual classification method.
+		var manualcls = jQuery(
+			'<div class="manualBreaks">' +
+			'<input type="text" name="breaksInput" placeholder="' + this._locale.classify.manualPlaceholder + '"></input>' +
+			'</div>'
+		);
+		manualcls.find('input[type=button]').click(function(event) {
+			me._createColorDialog();
+		});
+		manualcls.find('input[name=breaksInput]').keypress(function(evt) {
+			if (evt.which == 13) {
+				me.classifyData();
+			}
+		}).focus(function() {
+			me._sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
+		}).blur(function() {
+			me._sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+		});
+		manualcls.hide();
+
+		var colorsButton = jQuery('<input type="button" value="' + me._locale.colorset.button + '" />');
+		colorsButton.click(function(event) {
+			me._createColorDialog();
+		});
+		
 		classify.append(classcnt);
+		classify.append(manualcls);
+		classify.append(colorsButton);
 		content.append(classify);
 		// Toggle content HTML
 		header.click(function() {
@@ -482,6 +525,56 @@ function(config, locale) {
 		this._visibilityOff();
 
 	},
+
+	/**
+	* @method setManualBreaks
+	* Gets the user fed list of numbers and does some range and value checking to them
+	* before setting the bounds for geostats.
+	* @param {Object} gstats the geostats object
+	* @return {Array[Number]} returns a limits array for setting the data.
+	*/
+	setManualBreaks: function(gstats) {
+		var me = this,
+			limits = [],
+			manBreaks = this.element.find('.classificationMethod').
+				find('.manualBreaks').find('input[name=breaksInput]').val().split(','),
+			dialog,
+			msg;
+
+		// Verify that the number of given values is within range and display an error dialog if not.
+		if (manBreaks.length-1 < this.minClassNum || manBreaks.length-1 > this.maxClassNum) {
+			dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+	        msg = this._locale.classify.manualRangeError
+	        	.replace(/\{min\}/, this.minClassNum+1).replace(/\{max\}/, this.maxClassNum+1);
+	        dialog.show(null, msg);
+	        dialog.fadeout();
+	        return null;
+	    }
+
+		// Convert the given values to numbers
+		// and set the geostats ranges to use them.
+		jQuery.each(manBreaks, function(i, elem) {
+			var rangeVal = Number(elem);
+
+			// Display an error dialog if a value is not a number.
+			if(isNaN(rangeVal)) {
+				dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+		        msg = me._locale.classify.nanError;
+		        dialog.show(null, msg);
+		        dialog.fadeout();
+		        return null;
+			}
+
+			limits.push(rangeVal);
+		});
+
+		// Set bounds and ranges for geostats so it can draw the html legend.
+		gstats.bounds = limits;
+		gstats.setRanges();
+
+		return limits;
+	},
+
 	/**
 	 * @method  _setColors
 	 * Set color themes for coloring maps
