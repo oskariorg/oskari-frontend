@@ -1,4 +1,4 @@
-describe.only('Test Suite for statistics/statsgrid manage classification plugin', function() {
+describe('Test Suite for statistics/statsgrid manage classification plugin', function() {
     var appSetup = null,
         appConf = null,
         statsModule = null,
