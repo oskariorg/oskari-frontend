@@ -28,6 +28,20 @@ function() {
      */
     getWmsName : function() {
         return this._wmsName;
+    },
+      /**
+     * @method setFilterPropertyName
+     * @param {String} filterPropertyName is the key field name to map layer features 
+     */
+    setFilterPropertyName : function(filterPropertyName) {
+        this._filterPropertyName = filterPropertyName;
+    },
+    /**
+     * @method getFilterPropertyName
+     * @return {String} filterPropertyName is the key field name to map layer features 
+     */
+    getFilterPropertyName : function() {
+        return this._filterPropertyName;
     }
 }, {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]

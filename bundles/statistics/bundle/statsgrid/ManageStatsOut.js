@@ -505,8 +505,8 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         if (eventBuilder) {
             var event = eventBuilder(me._layer, {
                 CUR_COL : curCol,
-                VIS_NAME : "ows:kunnat2013",  // TODO: how to get geoserver layer name
-                VIS_ATTR : "kuntakoodi",   // TODO:  how to get geoserver layer/table column name
+                VIS_NAME : me._layer.getWmsName(), //"ows:kunnat2013",  
+                VIS_ATTR : me._layer.getFilterPropertyName(), //"kuntakoodi",
                 VIS_CODES : munArray,
                 COL_VALUES : statArray
             });
