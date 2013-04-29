@@ -38,7 +38,9 @@ function() {
         var mapModule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule');
         var map = mapModule.getMap();
 
-
+        /** Set zoom to min **/
+        mapModule.zoomTo(0);
+        
         if (isShown) {
             /** ENTER The Mode */
 
@@ -56,7 +58,8 @@ function() {
 
             /** a hack to notify openlayers of map size change */
             map.updateSize();
-
+       
+           
         } else {
             /** EXIT The Mode */
 
@@ -79,6 +82,8 @@ function() {
 
             /** a hack to notify openlayers of map size change */
             map.updateSize();
+       
+            
 
         }
 
