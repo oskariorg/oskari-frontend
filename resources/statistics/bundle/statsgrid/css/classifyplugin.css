@@ -57,8 +57,13 @@
 	color: #f6931f; 
 	font-weight: bold;		
 }
+
+.manageClassificationPlugin input[type="button"] {
+    margin: 5px 0;
+}
+
 .geostats-legend div {
-    margin-bottom: 5px;
+    margin: 5px 0;
 }
 
 .manageClassificationPlugin .ui-corner-all,.manageClassificationPlugin .ui-corner-bottom,.manageClassificationPlugin .ui-corner-right,.manageClassificationPlugin .ui-corner-br {
@@ -124,7 +129,19 @@
     color: #666666;
     font-size: 0.8em;
     font-style: italic;
-   }
+}
+
+.manageClassificationPlugin div.manualBreaks {
+    width: 200px;
+    padding: 10px;
+}
+
+.manageClassificationPlugin div.manualBreaks input[type="text"] {
+    width: 100%;
+    border: 1px solid #888;
+    font-weight: normal;
+}
+
 table.colo_table1 td.selected {
 	background-color: #AAAAAA;
 }

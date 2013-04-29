@@ -39,7 +39,7 @@ function(localization, instance) {
                 view.showContent(false);
             }
         }]);
-
+/*
 		var buttonGroup = 'myplacesx';
 		var buttons = {
 			'point' : {
@@ -92,7 +92,7 @@ function(localization, instance) {
 				tooltip : '',
 				sticky : true,
 				callback : function() {
-					/*var elCenter = jQuery('.oskariui-center');
+					var elCenter = jQuery('.oskariui-center');
 					 var elRight = jQuery('.oskariui-right');
 
 					 elCenter.removeClass('span6');
@@ -100,7 +100,7 @@ function(localization, instance) {
 					 elCenter.addClass('span5');
 					 elRight.removeClass('span6');
 					 elRight.removeClass('span5');
-					 elRight.addClass('span7');*/
+					 elRight.addClass('span7');
 
 				}
 			},
@@ -111,14 +111,14 @@ function(localization, instance) {
 				tooltip : '',
 				sticky : true,
 				callback : function() {
-					/*var elCenter = jQuery('.oskariui-center');
+					var elCenter = jQuery('.oskariui-center');
 					 var elRight = jQuery('.oskariui-right');
 					 elCenter.removeClass('span6');
 					 elCenter.removeClass('span5');
 					 elCenter.addClass('span7');
 					 elRight.removeClass('span6');
 					 elRight.removeClass('span7');
-					 elRight.addClass('span5');*/
+					 elRight.addClass('span5');
 				}
 			}
 		};
@@ -130,6 +130,6 @@ function(localization, instance) {
 		for(var tool in buttons ) {
 			sandbox.request(requester, reqBuilder(tool, buttonGroup, buttons[tool]));
 		}
-
+*/
 	}
 });

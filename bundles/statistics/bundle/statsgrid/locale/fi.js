@@ -38,7 +38,6 @@ Oskari.registerLocalization({
 			"indicatorDataXHRError" : "Indikaattorin data: virhe yhteydessä Sotkanettiin.",
 			"descriptionTitle" : "Indikaattorin kuvaus",
 			"sourceTitle" : "Indikaattorin lähde"
-
 		},
 		"classify" : {
 			"classify" : "Luokittelu",
@@ -46,9 +45,14 @@ Oskari.registerLocalization({
 			"classes" : "Luokkajako",
 			"jenks" : "Luonnolliset välit",
 			"quantile" : "Tasavälit",
-			"eqinterval" : "Kvantiilit"
+			"eqinterval" : "Kvantiilit",
+			"manual": "Luokittelu käsin",
+            "manualPlaceholder": "Syötä lukuja pilkulla erotettuna.",
+            "manualRangeError": "Lukuja tulee olla vähintään {min} ja enintään {max}!",
+            "nanError": "Syöttämäsi arvo ei ole luku!"
 		},
 		"colorset" : {
+			"button": "Värit",
 			"themeselection" : "Väriteeman valinta",
 			"setselection" : "Värisetin valinta",
 			"sequential" : "Kvantitatiivinen",
