@@ -52,6 +52,16 @@ Oskari.registerLocalization({
             "manualRangeError":         "There should be at least {min} and at most {max} numbers!",
             "nanError":                 "A value was not a number!"
         },
+        "colorset" : {
+			"themeselection" : "Color theme selection",
+			"setselection" : "Color set selection",
+			"sequential" : "Sequential",
+			"qualitative" : "qualitative",
+			"divergent" : "Divergent",
+			"info2" : "Color range selection - ",
+			"cancel" : "Poistu"
+			
+		},
         "noMatch" : "No results matched"
 
     }

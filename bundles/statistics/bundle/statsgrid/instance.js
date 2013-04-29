@@ -13,11 +13,14 @@ function() {
     this.conf =  {
         "name": "StatsGrid",
         "sandbox": "sandbox",
+        "stateful" : true,
+
         // stats mode can be accessed from stats layers tools
         // to enable a mode triggering tile, you can uncomment the tileClazz on next line
         //"tileClazz": "Oskari.userinterface.extension.DefaultTile",
         "viewClazz": "Oskari.statistics.bundle.statsgrid.StatsView"
     };
+    this.state = {};
 }, {
     "init" : function() {
     	var me = this;
@@ -49,9 +52,71 @@ function() {
 			var isShown = event.getViewState() != "close";
 
             view.showMode(isShown, true);
-			view.showContent(isShown, true);
-		}
+			view.showContent(isShown);
+		},
+        'MapStats.StatsVisualizationChangeEvent' : function(event) {
+            this._afterStatsVisualizationChangeEvent(event);
+        }
 	},
+    /**
+     * @method setState
+     * Sets the map state to one specified in the parameter. State is bundle specific, check the
+     * bundle documentation for details.
+     * @param {Object} state bundle state as JSON
+     * @param {Boolean} ignoreLocation true to NOT set map location based on state
+     */
+    setState : function(state, ignoreLocation) {
+        var me = this, view = this.plugins['Oskari.userinterface.View'];
+
+        view.clearDataFromGrid();
+
+        if(this.state != null && this.state.indicators != null && this.state.indicators.length > 0) {
+            this.state.indicators = [];
+        }
+
+
+        if(state.indicators.length > 0){
+
+            //send ajax calls and build the grid
+            view.getSotkaIndicatorsMeta(state.indicators, function(){
+
+                //send ajax calls and build the grid
+                view.getSotkaIndicatorsData(state.indicators, function(){
+
+                    if(state.currentColumn != null) {
+
+                        if(state.methodId != null && state.methodId > 0) {
+                            var select = me.classifyPlugin.element.find('.classificationMethod').find('.method');
+                            select.val(state.methodId);
+                        }
+                        if(state.numberOfClasses != null && state.numberOfClasses > 0) {
+                            var slider = me.classifyPlugin.rangeSlider;
+                            if(slider != null) {
+                                slider.slider("value", state.numberOfClasses);
+                                slider.parent().find('#amount').val(state.numberOfClasses);
+                            }
+                        }
+                        // current column is needed for rendering map
+                        var columns = view.grid.getColumns();
+                        for (var i = 0; i < columns.length; i++) {
+                            var column = columns[i];
+                            if (column.id == state.currentColumn) {
+                                view.classifyData(column);
+                            }
+                        };
+//                        me.classifyPlugin.classifyData(e);
+                    }
+                });
+
+            });
+        }
+    },
+    getState : function() {
+        if(this.sandbox.getUser().isLoggedIn()) {
+            return this.state;
+        }
+    },
+
 	    /**
      * @method showMessage
      * Shows user a message with ok button
@@ -68,9 +133,13 @@ function() {
             dialog.close(true);
     	});
     	dialog.show(title, message, [okBtn]);
+    },
+    _afterStatsVisualizationChangeEvent: function(event) {
+        var params = event.getParams();
+        this.state.methodId = params.methodId;
+        this.state.numberOfClasses = params.numberOfClasses;
     }
-
-
 }, {
 	"extend" : ["Oskari.userinterface.extension.DefaultExtension"]
 });
+

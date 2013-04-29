@@ -52,6 +52,16 @@ Oskari.registerLocalization({
             "manualRangeError":         "There should be at least {min} and at most {max} numbers!",
             "nanError":                 "A value was not a number!"
         },
+        "colorset" : {
+			"themeselection" : "Väriteeman valinta",
+			"setselection" : "Värisetin valinta",
+			"sequential" : "Kvantitatiivinen",
+			"qualitative" : "Kvalitatiivinen",
+			"divergent" : "Jakautuva",
+			"info2" : "Värivalinta - valitse osoittimella väriskaalasta värijakso",
+			"cancel" : "Poistu"
+			
+		},
         "noMatch" : "Inga matchade indikatorer"
     }
 });

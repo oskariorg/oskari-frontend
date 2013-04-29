@@ -1,0 +1,50 @@
+.cbDiv {
+    position : absolute;
+    top : 360px;
+    right : 30px;
+    display : block;
+    color : #3C3C3C;
+    background : white;    
+    font-size : 12px;
+    z-index : 15000;/*64738;*/
+    border: 1px solid #c4c4c4;
+    width: 120px;
+}
+.cbSelection {
+    color : white;
+    background : #3C3C3C;
+    padding : 10px;
+}
+
+.cbSpansWrapper {
+    width : 100%;
+    padding : 5px 10px 5px 10px;
+}
+
+.cbRow {
+/*    width : 100%; */
+}
+
+.cbArrowDown {
+    float : right;
+    width : 0;
+    height : 0;
+    border-left : 8px solid transparent;
+    border-right : 8px solid transparent;
+    border-top : 8px solid #707070;
+    margin-top : 4px;
+}
+
+.cbLabel {
+/*    width : 20%; */
+    text-align : left;
+    float:left
+}
+
+.cbValue {
+/*    width : 80%; */
+    text-align : right;
+    float:right;
+    padding-right: 20px;
+    padding-bottom: 5px;
+}
