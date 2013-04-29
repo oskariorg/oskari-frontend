@@ -104,7 +104,7 @@ function() {
                                 view.classifyData(column);
                             }
                         };
-//                        me.classifyPlugin.classifyData(e);
+
                     }
                 });
 
