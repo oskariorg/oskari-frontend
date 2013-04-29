@@ -374,6 +374,7 @@ function(config, locale) {
 			colorArr[i] = '#' + colorArr[i];
 		gstats.setColors(colorArr);
 
+		var manualBreaksInput = this.element.find('.manualBreaks').find('input[name=breaksInput]').val()
 		var colors = colors.replace(/,/g, '|');
 		var sandbox = me._sandbox;
 		var eventBuilder = sandbox.getEventBuilder('MapStats.StatsVisualizationChangeEvent');
@@ -383,6 +384,8 @@ function(config, locale) {
 				methodId : method,
 				//instance.js - state handling: number of classes
 				numberOfClasses : classes,
+				//instance.js - state handling: input string of manual classification method
+				manualBreaksInput : manualBreaksInput,
 				VIS_ID : -1,
 				VIS_NAME : params.VIS_NAME,
 				VIS_ATTR : params.VIS_ATTR,
@@ -472,10 +475,14 @@ function(config, locale) {
 		// HTML for the manual classification method.
 		var manualcls = jQuery(
 			'<div class="manualBreaks">' +
+			'<input type="button" value="Värit" />' +
 			'<input type="text" name="breaksInput" placeholder="' + this._locale.classify.manualPlaceholder + '"></input>' +
 			'</div>'
 		);
-		manualcls.find('input').keypress(function(evt) {
+		manualcls.find('input[type=button]').click(function(event) {
+			me._createColorDialog();
+		});
+		manualcls.find('input[name=breaksInput]').keypress(function(evt) {
 			if (evt.which == 13) {
 				me.classifyData();
 			}

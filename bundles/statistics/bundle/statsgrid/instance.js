@@ -88,6 +88,11 @@ function() {
                         if(state.methodId != null && state.methodId > 0) {
                             var select = me.classifyPlugin.element.find('.classificationMethod').find('.method');
                             select.val(state.methodId);
+                            // The manual breaks method:
+                            if(state.methodId == 4 && state.manualBreaksInput) {
+                                var manualInput = me.classifyPlugin.element.find('.manualBreaks').find('input[name=breaksInput]');
+                                manualInput.val(state.manualBreaksInput);
+                            }
                         }
                         if(state.numberOfClasses != null && state.numberOfClasses > 0) {
                             var slider = me.classifyPlugin.rangeSlider;
