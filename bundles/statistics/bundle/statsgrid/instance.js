@@ -93,7 +93,7 @@ function() {
                             var slider = me.classifyPlugin.rangeSlider;
                             if(slider != null) {
                                 slider.slider("value", state.numberOfClasses);
-                                slider.parent().find('#amount').val(state.numberOfClasses);
+                                slider.parent().find('input#amount_class').val(state.numberOfClasses);
                             }
                         }
                         // current column is needed for rendering map
