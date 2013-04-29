@@ -52,6 +52,7 @@ Oskari.registerLocalization({
             "nanError": "Syöttämäsi arvo ei ole luku!"
 		},
 		"colorset" : {
+			"button": "Värit",
 			"themeselection" : "Väriteeman valinta",
 			"setselection" : "Värisetin valinta",
 			"sequential" : "Kvantitatiivinen",

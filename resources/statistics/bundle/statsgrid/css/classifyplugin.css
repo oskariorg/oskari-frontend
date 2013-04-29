@@ -57,8 +57,13 @@
 	color: #f6931f; 
 	font-weight: bold;		
 }
+
+.manageClassificationPlugin input[type="button"] {
+    margin: 5px 0;
+}
+
 .geostats-legend div {
-    margin-bottom: 5px;
+    margin: 5px 0;
 }
 
 .manageClassificationPlugin .ui-corner-all,.manageClassificationPlugin .ui-corner-bottom,.manageClassificationPlugin .ui-corner-right,.manageClassificationPlugin .ui-corner-br {

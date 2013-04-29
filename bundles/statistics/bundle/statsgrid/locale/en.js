@@ -53,6 +53,7 @@ Oskari.registerLocalization({
             "nanError":                 "A value was not a number!"
         },
         "colorset" : {
+            "button": "Colors",
 			"themeselection" : "Color theme selection",
 			"setselection" : "Color set selection",
 			"sequential" : "Sequential",

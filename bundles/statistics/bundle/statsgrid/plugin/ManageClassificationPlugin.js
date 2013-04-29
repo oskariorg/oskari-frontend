@@ -385,7 +385,7 @@ function(config, locale) {
 				//instance.js - state handling: number of classes
 				numberOfClasses : classes,
 				//instance.js - state handling: input string of manual classification method
-				manualBreaksInput : manualBreaksInput,
+				manualBreaksInput : manualBreaksInput.toString(),
 				VIS_ID : -1,
 				VIS_NAME : params.VIS_NAME,
 				VIS_ATTR : params.VIS_ATTR,
@@ -454,11 +454,8 @@ function(config, locale) {
 		// Content HTML / class count input HTML
 		//var classcnt = jQuery('<div class="classCount">' + this._locale.classify.classes + ' <input type="text" id="spinner" value="6" /></div>');
 
-		var classcnt = jQuery('<div class="classCount">' + this._locale.classify.classes + ' <input type="text" id="amount_class" readonly="readonly" value="5" /><input type="button" value="Värit"  /><div id="slider-range-max"></div>');
-		// to search button
-		classcnt.find('input[type=button]').click(function(event) {
-			me._createColorDialog();
-		});
+		var classcnt = jQuery('<div class="classCount">' + this._locale.classify.classes + ' <input type="text" id="amount_class" readonly="readonly" value="5" /><div id="slider-range-max"></div>');
+		
 		var slider = classcnt.find('#slider-range-max').slider({
 			range : "min",
 			min : me.minClassNum,
@@ -475,7 +472,6 @@ function(config, locale) {
 		// HTML for the manual classification method.
 		var manualcls = jQuery(
 			'<div class="manualBreaks">' +
-			'<input type="button" value="Värit" />' +
 			'<input type="text" name="breaksInput" placeholder="' + this._locale.classify.manualPlaceholder + '"></input>' +
 			'</div>'
 		);
@@ -493,8 +489,14 @@ function(config, locale) {
 		});
 		manualcls.hide();
 
+		var colorsButton = jQuery('<input type="button" value="' + me._locale.colorset.button + '" />');
+		colorsButton.click(function(event) {
+			me._createColorDialog();
+		});
+		
 		classify.append(classcnt);
 		classify.append(manualcls);
+		classify.append(colorsButton);
 		content.append(classify);
 		// Toggle content HTML
 		header.click(function() {
