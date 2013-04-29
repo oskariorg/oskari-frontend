@@ -134,4 +134,5 @@
 .manageClassificationPlugin div.manualBreaks input[type="text"] {
     width: 100%;
     border: 1px solid #888;
+    font-weight: normal;
 }

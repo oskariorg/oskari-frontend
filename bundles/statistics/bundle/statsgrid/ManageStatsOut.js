@@ -207,7 +207,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 	createIndicatorsSelect : function(container, data) {
 		var me = this;
 		// Indicators' select container etc.
-		var indi = jQuery('<div class="indicator-cont"><div class="indisel selector-cont"><label for="indi">' + this.instance.getLocalization('indicators') + '</label><select id="indi" name="indi" class="indi"></select></div></div>');
+		var indi = jQuery('<div class="indicator-cont"><div class="indisel selector-cont"><label for="indi">' + this.instance.getLocalization('indicators') + '</label><select id="indi" name="indi" class="indi"><option value="" selected="selected"></option></select></div></div>');
 
 		var sel = indi.find('select');
 		for (var i = 0; i < data.length; i++) {

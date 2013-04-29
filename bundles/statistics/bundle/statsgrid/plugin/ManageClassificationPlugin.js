@@ -512,7 +512,7 @@ function(config, locale) {
 	* Gets the user fed list of numbers and does some range and value checking to them
 	* before setting the bounds for geostats.
 	* @param {Object} gstats the geostats object
-	* @return {Array[Number]} returns an array of the limits
+	* @return {Array[Number]} returns a limits array for setting the data.
 	*/
 	setManualBreaks: function(gstats) {
 		var me = this,
