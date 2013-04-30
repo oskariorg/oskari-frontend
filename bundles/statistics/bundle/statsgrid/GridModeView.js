@@ -59,7 +59,6 @@ function() {
             /** a hack to notify openlayers of map size change */
             map.updateSize();
        
-           
         } else {
             /** EXIT The Mode */
 
