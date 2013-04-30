@@ -170,7 +170,16 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         // remember the grid object.
         this.grid = grid;
         this.dataView = dataView;
-        console.log('did it break before this?');
+
+        var resizeGridTimer;
+        jQuery(window).resize(function () {
+            clearTimeout(resizeGridTimer);
+            resizeGridTimer = setTimeout(function() {
+                var gridDiv = jQuery("#municipalGrid");
+                gridDiv.height(gridDiv.parent().height() - gridDiv.parent().find('.selectors-container').outerHeight());
+                grid.resizeCanvas();                    
+            }, 100);
+        });
     },
 
     /**
