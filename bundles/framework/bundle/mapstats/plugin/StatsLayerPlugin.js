@@ -513,13 +513,16 @@ function(config) {
     _afterStatsVisualizationChangeEvent: function(event) {
         var layer = event.getLayer();
         var params = event.getParams();
-
-        // For testing. Otherwise OpenLayers won't update the tiles, since no params have been changed.
-        params.randomNumberForTheLulz = Math.random();
-
         var mapLayer = this.getOLMapLayers(layer);
+        
         if(mapLayer != null) {
-            mapLayer[0].mergeNewParams(params);
+            mapLayer[0].mergeNewParams({
+                VIS_ID: params.VIS_ID,
+                VIS_NAME: params.VIS_NAME,
+                VIS_ATTR: params.VIS_ATTR,
+                VIS_CLASSES: params.VIS_CLASSES,
+                VIS_COLORS: params.VIS_COLORS
+            });
         }
     }
 }, {

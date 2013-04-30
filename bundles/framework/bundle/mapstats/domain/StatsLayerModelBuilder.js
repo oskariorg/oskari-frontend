@@ -16,6 +16,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
 
         var me = this;
 		layer.setWmsName(mapLayerJson.wmsName);
+		//  Default field name  for to link map features in stats visualization
+		if(mapLayerJson.visualizations) layer.setFilterPropertyName(mapLayerJson.visualizations[0].filterproperty);
 		// Populate layer tools 
 		var toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
         // Table icon

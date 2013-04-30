@@ -29,6 +29,7 @@ function() {
 		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
 		var sandbox = Oskari.getSandbox(sandboxName);
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+
         // register plugin for map 
         var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', conf ,locale);
         mapModule.registerPlugin(classifyPlugin);
@@ -88,12 +89,19 @@ function() {
                         if(state.methodId != null && state.methodId > 0) {
                             var select = me.classifyPlugin.element.find('.classificationMethod').find('.method');
                             select.val(state.methodId);
+                            // The manual breaks method:
+                            if(state.methodId == 4 && state.manualBreaksInput) {
+                                var manualInput = me.classifyPlugin.element.find('.manualBreaks').find('input[name=breaksInput]');
+                                manualInput.val(state.manualBreaksInput);
+                                me.classifyPlugin.element.find('.classCount').hide();
+                                me.classifyPlugin.element.find('.manualBreaks').show();
+                            }
                         }
                         if(state.numberOfClasses != null && state.numberOfClasses > 0) {
                             var slider = me.classifyPlugin.rangeSlider;
                             if(slider != null) {
                                 slider.slider("value", state.numberOfClasses);
-                                slider.parent().find('#amount').val(state.numberOfClasses);
+                                slider.parent().find('input#amount_class').val(state.numberOfClasses);
                             }
                         }
                         // current column is needed for rendering map
@@ -104,7 +112,7 @@ function() {
                                 view.classifyData(column);
                             }
                         };
-//                        me.classifyPlugin.classifyData(e);
+
                     }
                 });
 
@@ -138,6 +146,7 @@ function() {
         var params = event.getParams();
         this.state.methodId = params.methodId;
         this.state.numberOfClasses = params.numberOfClasses;
+        this.state.manualBreaksInput = params.manualBreaksInput;
     }
 }, {
 	"extend" : ["Oskari.userinterface.extension.DefaultExtension"]

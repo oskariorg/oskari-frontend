@@ -18,6 +18,7 @@ Oskari.registerLocalization({
             "total": "totalt"
         },
         "addColumn": "Hämta data",
+        "removeColumn" : "Radera",
         "indicators" : "Indikator",
         "year": "År",
         "buttons" : {
@@ -46,8 +47,23 @@ Oskari.registerLocalization({
             "classes":                  "Classes",
             "jenks":                    "Jenks ranges",
             "quantile" :                "Quantile ranges",
-            "eqinterval" :              "Eqinterval"
+            "eqinterval" :              "Eqinterval",
+            "manual":                   "Manual breaks",
+            "manualPlaceholder":        "Input numbers separated with a comma.",
+            "manualRangeError":         "There should be at least {min} and at most {max} numbers!",
+            "nanError":                 "A value was not a number!"
         },
+        "colorset" : {
+            "button": "Färger",
+			"themeselection" : "Väriteeman valinta",
+			"setselection" : "Värisetin valinta",
+			"sequential" : "Kvantitatiivinen",
+			"qualitative" : "Kvalitatiivinen",
+			"divergent" : "Jakautuva",
+			"info2" : "Värivalinta - valitse osoittimella väriskaalasta värijakso",
+			"cancel" : "Poistu"
+			
+		},
         "noMatch" : "Inga matchade indikatorer"
     }
 });

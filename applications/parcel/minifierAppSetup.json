@@ -420,6 +420,34 @@
 					}
 				}
 			}
+		},{
+			"title": "Parcel Selector",
+			"fi": "Määräalan valinta",
+			"bundleinstancename": "parcelselector",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "parcelselector",
+			"metadata": {
+				"Import-Bundle": {
+					"parcelselector": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				}
+			}
+		}, {
+			"title": "Parcel Info",
+			"fi": "Paikan info",
+			"bundleinstancename": "parcelinfo",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "parcelinfo",
+			"metadata": {
+				"Import-Bundle": {
+					"parcelinfo": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				}
+            }
 		}
     ]
 }

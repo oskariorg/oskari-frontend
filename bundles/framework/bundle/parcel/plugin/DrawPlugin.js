@@ -75,7 +75,7 @@ function(instance) {
                     if (layer.features[0].geometry.CLASS_NAME === "OpenLayers.Geometry.LineString") {
                         var loc = me.instance.getLocalization('notification').calculating;
                         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        dialog.show("", loc.title);
+                        dialog.show(loc.title, "");
                         // The popup dialog doesn't work without short delay
                         setTimeout(function(){
                             me.processFeatures();
