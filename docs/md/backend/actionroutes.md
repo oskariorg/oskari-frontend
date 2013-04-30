@@ -36,8 +36,8 @@ QUERY_FIND_RAW_DATA_TO_TABLE
 GET_HIGHLIGHT_WFS_FEATURE_IMAGE_BY_POINT
 
 ## Data
-GetFeatureInfoWMS
-[GetSearchResult](<%= docsurl %>backend/actionroutes/getsearchresult.md)
+[GetFeatureInfoWMS](<%= docsurl %>backend/actionroutes/getfeatureinfowms.html)
+[GetSearchResult](<%= docsurl %>backend/actionroutes/getsearchresult.html)
 GetFeatureDataXML
 GetSotkaData
 GetInspireThemes
