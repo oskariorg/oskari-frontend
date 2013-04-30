@@ -295,6 +295,7 @@ function() {
                 isBaseLayer : false,
                 displayInLayerSwitcher : true,
                 visibility : true,
+                singleTile: true,
                 buffer : 0
             });
 

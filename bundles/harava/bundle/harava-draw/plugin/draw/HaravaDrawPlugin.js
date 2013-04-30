@@ -90,6 +90,9 @@ function(locale, conf) {
      */
     toggleVisibility: function(visible, removeAllFeatures){
     	var me = this;
+    	
+    	jQuery('.harava-add-geometry-tool').removeClass('disabled');
+    	
     	if(visible==true){
     		jQuery('#harava-add-geometry').show();
     		me._sandbox.postRequestByName('StartGeometrySearchRequest', ['pan']);
@@ -108,13 +111,13 @@ function(locale, conf) {
     },
     /**
      * Add WKT String to map
-     * @param {String} wktString
+     * @param {Object} wkt
      * @param {String} type
      */
-    addWKT: function(wktString, type){
+    addWKT: function(wktObject, type){
     	var me = this;
-    	var wkt = new OpenLayers.Format.WKT();
-    	var feature = wkt.read(wktString);
+    	
+    	
     	var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);    	
 		style.pointRadius = 8;
 		style.strokeColor='#000000';
@@ -122,10 +125,33 @@ function(locale, conf) {
 		style.fillOpacity=0.6;
 		style.strokeOpacity=1;
 		style.strokeWidth=2;
-		style.cursor = 'pointer';
-		feature.style = style;
-		me._drawLayer.addFeatures([feature]);
-		me._drawLayer.redraw();   	
+		style.cursor = 'pointer';    	
+    	
+    	// check wkt type
+    	if(typeof wktObject === "string"){
+    		var wkt = new OpenLayers.Format.WKT();
+    		var feature = wkt.read(wktObject);
+    		feature.style = style;
+    		me._drawLayer.addFeatures([feature]);
+    		me._drawLayer.redraw(); 
+    	} else {
+    		window.setTimeout(function(){
+    			var wkt = new OpenLayers.Format.WKT();
+        		var feature = wkt.read(wktObject.geom);
+        		feature.attributes = wktObject.attributes;
+        		feature.style = style;
+        		me._drawLayer.addFeatures([feature]);
+        		me._drawLayer.redraw();
+    			
+    		},200);
+    		
+    		
+    		 
+    	}
+    	
+    	
+    	
+		  	
     },
     /**
      * @method init
@@ -142,7 +168,7 @@ function(locale, conf) {
 
     	me._drawLayer = new OpenLayers.Layer.Vector("Harava geometry layer", {
     		eventListeners : {
-                "featuresadded" : function(layer) {
+                "featuresadded" : function(layer) {                	
                 	// send an event that the drawing has been completed
                     me.finishedDrawing();
                 },
@@ -162,6 +188,9 @@ function(locale, conf) {
 	        		me._drawLayer.redraw();
 	               	
 	                me._lastfeature = feature;
+	                
+	                var lonlat = new OpenLayers.LonLat(feature.geometry.getCentroid().x, feature.geometry.getCentroid().y);
+	                me.showPopup(lonlat, feature);
 	            },
 	            'featureunselected':function(evt){
 	            	var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);    	
@@ -173,13 +202,25 @@ function(locale, conf) {
 	        		style.strokeWidth=2;
 	        		style.cursor = 'pointer';
 	        		me._lastfeature.style = style;
-	        		me._lastfeature = null;
+	        		
+	        		if(me._conf.popupHtml!=null && jQuery('#kana').is(':visible')){
+		        		me._lastfeature.attributes.name = jQuery('#harava-draw-popup-name').val();
+		        		me._lastfeature.attributes.desc = jQuery('#harava-draw-popup-desc').val();
+		        		me._lastfeature.attributes.value = jQuery('#harava-draw-popup-value').val();
+		        		me._lastfeature.attributes.date = jQuery('#harava-draw-popup-date').val();
+		        		me._lastfeature.attributes.additionalData = jQuery('#harava-draw-popup-additional-data').val();
+	        		}
 	        		me._drawLayer.redraw();
+	        		me._lastfeature = null;
+	        		
+	        		me.hidePopup();
 	            },
 	            'featuremodified':function(evt) {
 	            	// handle feature modification
 	            	var feature = evt.feature;
 	            	me._lastfeature = feature;
+	            	var lonlat = new OpenLayers.LonLat(feature.geometry.getCentroid().x, feature.geometry.getCentroid().y);
+	                me.showPopup(lonlat, feature);
 	            }
             },
             styleMap: this.featureStyle
@@ -224,8 +265,14 @@ function(locale, conf) {
         jQuery(addGeometryToolsContainer).append(deleteSelectedGeometryContainer);
         
         jQuery('.harava-add-geometry-tool').live('click', function(){
-        	me._sandbox.postRequestByName('StartGeometrySearchRequest', ['pan']);
     		var id = this.id;
+        	
+        	if(jQuery(this).hasClass('disabled') || (id=='harava-add-geometry-tool-delete' && me._lastfeature==null && me._conf.popupHtml!=null)){
+        		return false;
+        	}
+        	
+        	me._sandbox.postRequestByName('StartGeometrySearchRequest', ['pan']);
+        	
     		
     		if(id!='harava-add-geometry-tool-delete'){
     			jQuery('.harava-add-geometry-tool').removeClass('active');
@@ -246,6 +293,7 @@ function(locale, conf) {
 					me.toggleControl('modify');
 					break;
 				case 'harava-add-geometry-tool-delete':
+		    		jQuery('.harava-add-geometry-tool').removeClass('disabled');
 					me.deleteSelectedFeature();
 					jQuery('#harava-add-geometry-tool-delete').addClass('active');
 			    	window.setTimeout(function(){
@@ -279,7 +327,15 @@ function(locale, conf) {
     		var geom = feature.geometry;
     		if(geom!=null && typeof geom.toString == 'function'){
     			var geomString = geom.toString();
-    			features.push(geomString);
+    			
+    			if(me._conf.popupHtml!=null){
+    				features.push({
+    					geom:geomString,
+    					attributes: feature.attributes
+					});
+    			} else {
+    				features.push(geomString);
+    			}
     		}
     	});
     	
@@ -307,19 +363,123 @@ function(locale, conf) {
      */
     finishedDrawing : function(){
     	var me = this;
+    	
     	me.modifyControl.selectControl.unselectAll();
     	var currentFeature = me._drawLayer.features[me._drawLayer.features.length - 1];
+    	
     	var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);    	
 		style.pointRadius = 8;
 		style.strokeColor='#000000';
 		style.fillColor='#E9DA14';
-		style.fillOpacity=1;
+		style.fillOpacity=0.6;
 		style.strokeOpacity=1;
 		style.strokeWidth=2;
 		style.cursor = 'pointer';
 		currentFeature.style = style;
+		var lonlat = new OpenLayers.LonLat(currentFeature.geometry.getCentroid().x, currentFeature.geometry.getCentroid().y);
+		
+		me.showPopup(lonlat,currentFeature);
+		
 		me._drawLayer.redraw();
     },
+    /**
+     * @method hidePopup
+     * @private
+     * Closes the popup
+     */
+    hidePopup : function() {
+    	var me = this;
+    	if(me._conf.popupHtml!=null){
+	        var rn = "HaravaInfoBox.HideInfoBoxRequest";
+	        var rb = this._sandbox.getRequestBuilder(rn);
+	        var r = rb(this.infoboxId);
+	        this._sandbox.request(this, r);
+    	}
+    },
+    /**
+     * @method showPopup
+     * @private
+     * Shows the popup
+     * @param {OpenLayers.LonLat} lonlat
+     * @param {OpenLayers.Feature} feature
+     */
+    showPopup: function(lonlat, feature){
+    	var me = this;
+    	
+    	if(me._conf.popupHtml!=null){
+    		var oldMode = me.currentMode;
+    		me.toggleControl(null);
+    		
+    		jQuery('.harava-add-geometry-tool').addClass('disabled');
+    		jQuery('.harava-add-geometry-tool-delete').removeClass('disabled');
+    		
+    		if(feature.popupHtml==null){
+    			feature.popupHtml = me._conf.popupHtml;
+    		}
+    		
+	        var content = {};
+	        content.html = feature.popupHtml;
+	        var rn = "HaravaInfoBox.ShowInfoBoxRequest";
+	        var rb = me._sandbox.getRequestBuilder(rn);
+	        var r = rb('kana', "Info", [content], lonlat, true,null,null,true);
+	        me._sandbox.request(me, r);
+	        
+	        jQuery('.olPopupCloseBox').hide();
+	        
+	        jQuery('#kana').unbind('click');
+	        jQuery('#kana').bind('click',function(){return false;});        
+	        
+	        if(feature.attributes.name!=null){
+	        	jQuery('#harava-draw-popup-name').val(feature.attributes.name);
+	        }
+	        if(feature.attributes.desc!=null){
+	        	jQuery('#harava-draw-popup-desc').val(feature.attributes.desc);
+	        }
+	        if(feature.attributes.value!=null){
+	        	jQuery('#harava-draw-popup-value').val(feature.attributes.value);
+	        }
+	        if(feature.attributes.date!=null){
+	        	jQuery('#harava-draw-popup-date').val(feature.attributes.date);
+	        }
+	        if(feature.attributes.additionalData!=null){
+	        	jQuery('#harava-draw-popup-additional-data').val(feature.attributes.additionalData);
+	        }
+	        	        
+	        jQuery('#harava-draw-popup-save').unbind('click');
+	        jQuery('#harava-draw-popup-save').bind('click',function(){
+	        	if(me._conf.popupCheckFunc!=null){
+	        		var func = me._conf.popupCheckFunc;
+	        		var ret = eval(func)();
+	        		if(ret==false){
+	        			return false;
+	        		}
+	        	}
+	        	
+	        	feature.attributes.name = jQuery('#harava-draw-popup-name').val();
+	        	feature.attributes.desc = jQuery('#harava-draw-popup-desc').val();
+	        	feature.attributes.value = jQuery('#harava-draw-popup-value').val();
+	        	feature.attributes.date = jQuery('#harava-draw-popup-date').val();
+	        	feature.attributes.additionalData = jQuery('#harava-draw-popup-additional-data').val();
+	        	me.toggleControl(oldMode);
+	        	jQuery('.harava-add-geometry-tool').removeClass('disabled');
+	        	
+        		me.hidePopup();	        	
+	        });
+	        
+	        
+	        jQuery('#harava-draw-popup-cancel').unbind('click');
+	        jQuery('#harava-draw-popup-cancel').bind('click',function(){
+	        	var currentFeature = null;
+	        	if(me._drawLayer!=null && me._drawLayer.features.length>0){
+		        	currentFeature = me._drawLayer.features[me._drawLayer.features.length-1];
+	    			currentFeature.destroy();
+		    		me.hidePopup();
+		    		me.toggleControl(oldMode);
+	        	}
+	        });
+    	}
+    },
+    
     /**
      * @method deActivateAll
      * Deactivate all module controls and tools

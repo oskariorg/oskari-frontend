@@ -254,7 +254,7 @@ function() {
  		var mapScale = me._sandbox.getMap().getScale();
         
         for (var i = 0; i < selected.length; i++) {
-        	var layer = selected[i]
+        	var layer = selected[i];
 
         	if( !layer.isInScale(mapScale) ) {
 				continue;
@@ -278,6 +278,40 @@ function() {
         }
         
         return layerIds;
+    },
+    /**
+     * @method _getFilters
+     * @private
+     * @returns {Object[]} visible layer cql filters
+     */
+    _getFilters: function(){
+    	var me = this;
+    	var filtters = '[';
+    	var visibleLayers = me._buildLayerIdList();
+    	
+    	if(visibleLayers!= null && visibleLayers!=''){
+    		var layers = visibleLayers.split(',');
+	    	for(var i=0;i<layers.length;i++){
+	    		var layerId = layers[i];    		
+	    		
+	    		var olLayers = me.mapModule.getOLMapLayers(layerId);
+	    		if(olLayers!=null && olLayers.length>0){
+		    		for(var j=0;j<olLayers.length;j++){
+		    			var olLayer = olLayers[j];
+		    			
+		    			var cqlFil = olLayer.params.CQL_FILTER;
+		    			if(cqlFil!=null && cqlFil!=''){
+		    				filtters+='{"layerId":"'+layerId+'",'+'"cql":"'+cqlFil+'"}';
+		    				if(j<olLayers.length-1){
+		    					filtters+=',';
+		    				}
+		    			}
+					}
+	    		}    		
+	    	}
+    	}
+    	filtters += ']';
+    	return filtters;
     },
     /**
      * @method _notifyAjaxFailure
@@ -311,7 +345,7 @@ function() {
 	 */            
     handleGetInfo : function(lonlat, x, y) {
         var me = this;
-
+        
         var dte = new Date();
         var dteMs = dte.getTime();
         
@@ -325,123 +359,43 @@ function() {
         
         var layerIds = me._buildLayerIdList();
         
+        
+        
         /* let's not start anything we cant' resolve */
         if( !layerIds  ) {
         	me._sandbox.printDebug("[GetInfoPlugin] NO layers with featureInfoEnabled, in scale and visible");
         	return;
         }
         
+        var filtters = me._getFilters();
+        
         me._startAjaxRequest(dteMs);
-		
+        
         var ajaxUrl = this._sandbox.getAjaxUrl(); 
-
+        
         var lon = lonlat.lon;
         var lat = lonlat.lat;
         
         var mapVO = me._sandbox.getMap();
-       
+        
         jQuery.ajax({
             beforeSend : function(x) {
             	me._pendingAjaxQuery.jqhr = x;
                 if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                    x.overrideMimeType("application/json;charset=UTF-8");
                 }
             },
             success : function(resp) {
-            	var mapWidth = mapVO.getWidth();
-            	var showAll = false;
-            	if(mapWidth>500)
-            	{
-            		showAll = true;
-            	}
+            	me._closeGfiInfo();
+            	var html = resp.html;
+            	var title = resp.title;
 
-            	var data1 = resp.data1;
-            	var data2 = resp.data2;
-            	var data3 = resp.data3;
-            	
-            	var html = '';
-
-            	if(data1.length>0){
-            		if(showAll){
-            			html += '<table class="harava-gfi-table gfi-full"><tr><td colspan="8" class="harava-gfi-header">'+resp.data1Lang+'</td></tr>';
-            			html += resp.data1Header;
-            		}
-            		else{
-            			html += '<table class="harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.data1Lang+'</td></tr>';
-            		}
-            	}
-            	$.each(data1, function(k, data){
-            		if(!showAll){
-						html += '<tr><td colspan="4" class="harava-gfi-content-mini"><ul><li>'+data.name+'</li></ul></td></tr>';
-					} else {
-						html += data.html;
-					}
-					
-					$.each(data.functions, function(k, func){
-						try{
-							eval(func);
-						} catch(er){}
-					});
-					
-            	});
-            	if(data1.length>0){
-            		html += '</table>';
-            	}
-            	
-            	if(data2.length>0){
-            		if(showAll){
-            			html += '<table class="harava-gfi-table gfi-full"><tr><td colspan="7" class="harava-gfi-header">'+resp.data2Lang+'</td></tr>';
-            			html += resp.data2Header;
-            		}
-            		else{
-            			html += '<table class="harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.data2Lang+'</td></tr>';
-            		}
-            	}
-            	$.each(data2, function(k, data){
-					if(!showAll){
-						html += '<tr><td colspan="4" class="harava-gfi-content-mini"><ul><li>'+data.name+'</li></ul></td></tr>';						
-					} else {
-						html +=data.html;						
-					}
-					
-					$.each(data.functions, function(k, func){
-						try{
-							eval(func);
-						} catch(er){}
-					});
-				});
-            	if(data2.length>0){
-            		html += '</table>';
-            	}
-            	
-            	if(data3.length>0){
-            		if(showAll){
-            			html += '<table class="harava-gfi-table gfi-full"><tr><td colspan="7" class="harava-gfi-header">'+resp.data3Lang+'</td></tr>';
-            			html += resp.data3Header;
-            		}
-            		else{
-            			html += '<table class="harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.data3Lang+'</td></tr>';
-            		}
-            	}
-				$.each(data3, function(k, data){
-					if(!showAll){
-						html += '<tr><td colspan="4" class="harava-gfi-content-mini"><ul><li>'+data.name+'</li></ul></td></tr>';
-					} else {
-						html += data.html;
-					}
-					
-					$.each(data.functions, function(k, func){
-						try{
-							eval(func);
-						} catch(er){}
-					});
-				});
-				if(data3.length>0){
-            		html += '</table>';
+            	if(title==null){
+            		title = '';
             	}
 				
-				if(html!=''){
-					var parsed = {html: html, title: "Tiedot"};
+				if(html!=null && html!=''){
+					var parsed = {html: html, title: title};
 					parsed.lonlat = lonlat;
 					parsed.popupid = me.infoboxId; 
 					me._showFeatures(parsed);
@@ -461,6 +415,7 @@ function() {
             data : {
                 layerIds : layerIds,
                 projection : me.mapModule.getProjection(),
+                filtters: filtters,
                 x : x,
                 y : y,
                 lon : lon,

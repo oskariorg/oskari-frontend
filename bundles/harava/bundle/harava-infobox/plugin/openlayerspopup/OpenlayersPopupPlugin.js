@@ -284,7 +284,6 @@ function() {
         var height = content.find('.contentWrapper').height();
         height = height > maxHeight ? (maxHeight + 30) +'px' : 'auto';
         content.css({'height': height});
-        //alert(height);
         popup.css({'height': 'auto', 'width': 'auto', 'min-width': '256px', 'max-width': maxWidth + 'px', 'min-height': '200px','max-height': maxHeight+'px','left': left+'px', 'z-index': '16000'});
         
         if(centerMap){
