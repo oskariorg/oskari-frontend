@@ -29,6 +29,7 @@ function() {
 		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
 		var sandbox = Oskari.getSandbox(sandboxName);
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+
         // register plugin for map 
         var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', conf ,locale);
         mapModule.registerPlugin(classifyPlugin);
