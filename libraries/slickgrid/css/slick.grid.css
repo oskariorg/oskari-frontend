@@ -29,7 +29,7 @@ classes should alter those!
   padding: 4px;
   border-right: 1px solid silver;
   border-left: 0px;
-  border-top: 0px;
+/* Oskari change,  border-top: 0px; */
   border-bottom: 0px;
   float: left;
 }
@@ -39,7 +39,8 @@ classes should alter those!
 }
 
 .slick-header-column-sorted {
-  font-style: italic;
+  background-color: #FEDA00;
+/* Oskari change,  font-style: italic;*/
 }
 
 .slick-sort-indicator {
@@ -50,11 +51,11 @@ classes should alter those!
 }
 
 .slick-sort-indicator-desc {
-  background: url(Oskari/libraries/slickgrid/css/images/sort-desc.gif);
+  background: url(/Oskari/libraries/slickgrid/css/images/sort-desc.gif);
 }
 
 .slick-sort-indicator-asc {
-  background: url(Oskari/libraries/slickgrid/css/images/sort-asc.gif);
+  background: url(/Oskari/libraries/slickgrid/css/images/sort-asc.gif);
 }
 
 .slick-resizable-handle {
@@ -157,7 +158,7 @@ classes should alter those!
 }
 
 .slicktick {
-    background-image: url('Oskari/libraries/slickgrid/css/images/tick.png');
+    background-image: url('/Oskari/libraries/slickgrid/css/images/tick.png');
     background-repeat: no-repeat;
     height: 16px;
     width: 16px;

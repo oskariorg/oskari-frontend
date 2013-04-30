@@ -18,6 +18,7 @@ Oskari.registerLocalization({
             "total": "totalt"
         },
         "addColumn": "Hämta data",
+        "removeColumn" : "Radera",
         "indicators" : "Indikator",
         "year": "År",
         "buttons" : {

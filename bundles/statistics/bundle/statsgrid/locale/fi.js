@@ -18,6 +18,7 @@ Oskari.registerLocalization({
 			"total" : "yhteensä"
 		},
 		"addColumn" : "Hae data",
+		"removeColumn" : "Poista",
 		"indicators" : "Indikaattorit",
 		"year" : "Vuosi",
 		"buttons" : {

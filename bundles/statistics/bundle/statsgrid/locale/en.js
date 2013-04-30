@@ -18,6 +18,7 @@ Oskari.registerLocalization({
             "total": "total"
         },
         "addColumn": "Get data",
+        "removeColumn" : "Remove",
         "indicators" : "Indicators",
         "year": "Year",
         "buttons" : {
