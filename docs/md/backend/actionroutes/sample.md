@@ -1,6 +1,5 @@
 # Action route name
-
-Description here. What need does the action route fulfill? GET or POST?
+Description here. What need does the action route fulfill? Is it GET or POST?
 
 ## Parameters
 <table>
@@ -14,7 +13,7 @@ Description here. What need does the action route fulfill? GET or POST?
     <td>param</td>
     <td>String</td>
     <td>Sample parameter</td>
-    <td>true</td>
+    <td>**true**</td>
   </tr>
 </table>
 
@@ -39,6 +38,9 @@ What's the HTTP status code and does it have an error message or does it return 
 
 ## Examples
 
-### Example query
+### Example query for Paikkatietoikkuna
+With (POST|GET) params:
+
+Response:
 
 ### Example curl request
