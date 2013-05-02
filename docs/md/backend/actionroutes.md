@@ -43,7 +43,6 @@ GET_HIGHLIGHT_WFS_FEATURE_IMAGE_BY_POINT
 HasAcceptedPublishedTermsOfUse
 AcceptPublishedTermsOfUse
 GetWfsFeatureData
-GetProxyRequest
 
 ## My places
 GetPublishedMyPlaceLayers
@@ -63,3 +62,4 @@ GetSotkaRegion
     - SaveMapState
     - GetUserData
     - PublishMigration
+    - GetProxyRequest
