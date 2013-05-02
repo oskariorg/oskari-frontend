@@ -130,10 +130,9 @@ function(instance,locale, data) {
 		el.fadeIn('slow');
 		
 		
-		console.log("PUSHCONTENT",value,me.container,el);
+//		console.log("PUSHCONTENT",value,me.container,el);
 		
 		/* entrybox */
-		;
 				var txt = jQuery(me.templates.commentEntryBox);
 				var s = txt.find('span');
 				s.append(''+value.message);
@@ -141,7 +140,7 @@ function(instance,locale, data) {
 	},
 	amendContent: function(data,value,context) {
 		var me = this;
-		console.log("AMEND",data,value,context);
+//		console.log("AMEND",data,value,context);
 		
 		
 		if( context == 'promotionLinks') {

@@ -5,6 +5,7 @@ Oskari.registerLocalization({
         "title" : "Print Map view",
         "flyouttitle" : "Print Map view",
         "desc" : "",
+        "btnTooltip" : "Print",
         "BasicView" : {
             "title" : "Print Map view",
             "name" : {

@@ -5,6 +5,7 @@ Oskari.registerLocalization({
         "title" : "Tulosta näkymä",
         "flyouttitle" : "Siirry tulostamaan",
         "desc" : "",
+        "btnTooltip" : "Tulosta",
         "BasicView" : {
             "title" : "Tulosta näkymä",
             "name" : {

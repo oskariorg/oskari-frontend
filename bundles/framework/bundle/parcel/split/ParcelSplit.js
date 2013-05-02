@@ -439,7 +439,7 @@ function(drawPlugin) {
                 if (olOldFeatures[i].id.indexOf("Polygon") !== -1) {
                     jstsOldPolygon = jstsParser.read(olOldFeatures[i]);
                     if (!jstsOldPolygon.isValid()) {
-                        console.log("Invalid geometry.");
+                        //console.log("Invalid geometry.");
                         return -1+logText;
                     }
                     jstsOldPolygons.push(jstsOldPolygon);

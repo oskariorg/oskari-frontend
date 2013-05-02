@@ -220,7 +220,7 @@ define([
                         }
                     } else {
                         //problem
-                        console.log('Removing layer did not work.')
+//                        console.log('Removing layer did not work.')
                     }
                 },
                 error : function(jqXHR, textStatus) {

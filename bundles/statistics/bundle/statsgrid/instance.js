@@ -68,6 +68,9 @@ function() {
      */
     setState : function(state, ignoreLocation) {
         var me = this, view = this.plugins['Oskari.userinterface.View'];
+        if(!view.grid) {
+            return;
+        }
 
         view.clearDataFromGrid();
 

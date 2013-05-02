@@ -155,7 +155,7 @@ define([
 
                     } else {
                         //problem
-                        console.log('Removing layer did not work.')
+                        //console.log('Removing layer did not work.')
                     }
                 },
                 error : function(jqXHR, textStatus) {
@@ -347,7 +347,7 @@ define([
             // if returned data does not contain capability section '
             // there is nothing to be added
             if(me.capabilities == null || me.capabilities.Capability == null) {
-                console.log("Could not find Capability from response");
+//                console.log("Could not find Capability from response");
                 return;
             }
 
