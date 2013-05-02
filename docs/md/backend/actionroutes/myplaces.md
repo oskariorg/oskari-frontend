@@ -22,8 +22,6 @@ Proxies the request to GeoServer and returns all the myplaces for the user in GM
 ### Success
 wfs:FeatureCollection in GML.
 
-### Error
-
 ## Examples
 
 ### Example query for Paikkatietoikkuna

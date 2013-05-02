@@ -51,7 +51,7 @@ FreeFindFromMyPlaceLayers
 [MyPlaces](<%= docsurl %>backend/actionroutes/myplaces.html)
 
 ## SOTKA
-GetSotkaRegion
+[GetSotkaRegion](<%= docsurl %>backend/actionroutes/getsotkaregion.html)
 
 * added by MapFull as this is liferay specific
     - GetArticlesByTag
