@@ -1,5 +1,16 @@
 # Action routes
 
+* Added by MapFull as this is liferay specific
+    - GetArticlesByTag
+
+* Not used anymore
+    - GetFeatureDataXML
+    - GetInspireThemes
+    - SaveMapState
+    - GetUserData
+    - PublishMigration
+    - GetProxyRequest
+
 ## View
 GetAppSetup
 AddView
@@ -28,7 +39,7 @@ GetStatsTile
 ## NEW WFS
 GetWFSLayerConfiguration
 
-## WFS
+## WFS (soon to be deprecated)
 GET_PNG_MAP
 GET_HIGHLIGHT_WFS_FEATURE_IMAGE
 GET_XML_DATA
@@ -40,9 +51,9 @@ GET_HIGHLIGHT_WFS_FEATURE_IMAGE_BY_POINT
 [GetSearchResult](<%= docsurl %>backend/actionroutes/getsearchresult.html)
 [GetSotkaData](<%= docsurl %>backend/actionroutes/getsotkadata.html)
 [GetPreview](<%= docsurl %>backend/actionroutes/getpreview.html)
-HasAcceptedPublishedTermsOfUse
+[HasAcceptedPublishedTermsOfUse](<%= docsurl %>backend/actionroutes/hasacceptedpublishedtermsofuse.html)
 AcceptPublishedTermsOfUse
-GetWfsFeatureData (deprecated)
+GetWfsFeatureData (soon to be deprecated)
 
 ## My places
 [GetPublishedMyPlaceLayers](<%= docsurl %>backend/actionroutes/getpublishedmyplacelayers.html)
@@ -52,14 +63,3 @@ FreeFindFromMyPlaceLayers
 
 ## SOTKA
 [GetSotkaRegion](<%= docsurl %>backend/actionroutes/getsotkaregion.html)
-
-* added by MapFull as this is liferay specific
-    - GetArticlesByTag
-
-* Not used anymore
-    - GetFeatureDataXML
-    - GetInspireThemes
-    - SaveMapState
-    - GetUserData
-    - PublishMigration
-    - GetProxyRequest
