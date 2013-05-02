@@ -60,3 +60,5 @@ Response:
 ```
 
 ### Example curl request
+
+curl --data "p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&action_route=GetBackendStatus&Subset=AllKnown" http://www.paikkatietoikkuna.fi/web/fi/kartta
