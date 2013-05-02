@@ -70,8 +70,15 @@ function() {
             function adjustMapSize() {
                 // do not resize map if resizeEnabled is false
                 if(me.resizeEnabled == null || me.resizeEnabled) {
-                    jQuery('#' + me.mapDivId).height(jQuery(window).height());
-                    jQuery('#' + me.contentMapDivId).height(jQuery(window).height());
+                    var contentMap  = jQuery('#' + me.contentMapDivId);
+                    var mapDiv      = jQuery('#' + me.mapDivId);
+
+                    mapDiv.height(jQuery(window).height());                        
+                    contentMap.height(jQuery(window).height());
+
+                    if(contentMap.find('.oskariui-menutoolbar').length > 0) {
+                        mapDiv.height(jQuery(window).height() - contentMap.find('.oskariui-menutoolbar').height());
+                    }
                     map.updateSize();
                 }
             };

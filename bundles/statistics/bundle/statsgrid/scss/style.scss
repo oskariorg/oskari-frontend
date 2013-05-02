@@ -1,3 +1,26 @@
+#contentMap.statsgrid-contentMap {
+    position: relative;
+}
+.oskariui-mode-content {
+    height: 100%;
+    background-color:white;
+}
+.oskariui-mode-content.statsgrid-mode {
+    overflow: hidden;
+    height: auto;
+    width: 100%;
+    position: absolute;
+    top: 40px;
+    bottom: 0;
+}
+.oskariui-left {
+    float: left;
+}
+
+.oskariui-center {
+    float: left;
+}
+
 .statsgrid {
     min-width: 100%;
     min-height: 100%;
@@ -21,8 +44,8 @@
 }
 
 .statsgrid .selectors-container {
-    height: 15.5%;
-    min-height: 115px;
+    height: 20%;
+    min-height: 157px;
     padding-top: 10px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -45,7 +68,6 @@
     width: 300px;
 }
 .statsgrid .parameters-cont {
-    height: 100%;
     min-height: 115px;
     float: left;
 }
@@ -68,7 +90,7 @@
 .statsgrid .parameters-cont button {
     float: right;
     clear: both;
-    margin: 10px 0;
+    margin: 8px 0 10px 0;
 }
 
 .statsgrid .municipal-grid {
