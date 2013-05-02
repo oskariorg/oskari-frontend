@@ -48,7 +48,7 @@ GetWfsFeatureData (deprecated)
 [GetPublishedMyPlaceLayers](<%= docsurl %>backend/actionroutes/getpublishedmyplacelayers.html)
 PublishMyPlaceLayer
 FreeFindFromMyPlaceLayers
-MyPlaces
+[MyPlaces](<%= docsurl %>backend/actionroutes/myplaces.html)
 
 ## SOTKA
 GetSotkaRegion

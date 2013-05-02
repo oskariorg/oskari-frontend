@@ -1,5 +1,5 @@
 # GetPublishedMyPlaceLayers
-Description here. What need does the action route fulfill? Is it GET or POST?
+
 
 ## Parameters
 This action route doesn't need any parameters.

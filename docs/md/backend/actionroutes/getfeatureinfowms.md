@@ -1,4 +1,4 @@
-# GetFeatureInfoWMS (INCOMPLETE)
+# GetFeatureInfoWMS (POST) (INCOMPLETE)
 Description here. What need does the action route fulfill? Is it GET or POST?
 
 ## Parameters
@@ -85,7 +85,7 @@ Description here. What need does the action route fulfill? Is it GET or POST?
 ## Response
 
 ### Success
-If layer is a WMS layer:
+For a myplaces layer:
 ```javascript
 {
   "layerCount": "<total number of layers>",
@@ -126,7 +126,46 @@ What's the HTTP status code and does it have an error message or does it return 
 ## Examples
 
 ### Example query for Paikkatietoikkuna
+`http://www.paikkatietoikkuna.fi/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&action_route=GetFeatureInfoWMS`
+
+With POST params:
+```javascript
+  "layerIds": "myplaces_6066",
+  "projection": "EPSG:3067",
+  "x": 785,
+  "y": 313,
+  "lon": 381630.02310593,
+  "lat": 6672749.2979804,
+  "width": 1608,
+  "height": 603,
+  "bbox": "373780.023106,6669849.29798,389860.023106,6675879.29798",
+  "zoom": 7,
+  "srs": "EPSG:3067"
+```
 
 Response:
-
-### Example curl request
+```json
+{
+  "layerCount":1,
+  "data":[
+    {
+      "content":{
+        "parsed":{
+          "layer":"Oma karttataso",
+          "places":[
+            {
+              "description":"bar",
+              "link":"",
+              "name":"foo"
+            }
+          ],
+          "publisher":""
+        }
+      },
+      "presentationType":"JSON",
+      "type":"wmslayer",
+      "layerId":"myplaces_6066"
+    }
+  ]
+}
+```
