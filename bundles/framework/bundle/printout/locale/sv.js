@@ -5,6 +5,7 @@ Oskari.registerLocalization({
         "title" : "Skriv ut kartvyn",
         "flyouttitle" : "Skriv ut kartvyn",
         "desc" : "",
+        "btnTooltip" : "Skriv ut",
         "BasicView" : {
             "title" : "Skriv ut kartvyn",
             "name" : {
