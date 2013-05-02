@@ -7,7 +7,7 @@ DeleteView
 UpdateView
 GetViews
 AdjustViewAccess
-Publish
+[Publish](<%= docsurl %>backend/actionroutes/publish.html)
 GetThematicMap
 
 ## Layers
@@ -38,10 +38,8 @@ GET_HIGHLIGHT_WFS_FEATURE_IMAGE_BY_POINT
 ## Data
 [GetFeatureInfoWMS](<%= docsurl %>backend/actionroutes/getfeatureinfowms.html)
 [GetSearchResult](<%= docsurl %>backend/actionroutes/getsearchresult.html)
-GetFeatureDataXML
-GetSotkaData
-GetInspireThemes
-GetPreview
+[GetSotkaData](<%= docsurl %>backend/actionroutes/getsotkadata.html)
+[GetPreview](<%= docsurl %>backend/actionroutes/getpreview.html)
 HasAcceptedPublishedTermsOfUse
 AcceptPublishedTermsOfUse
 GetWfsFeatureData
@@ -60,6 +58,8 @@ GetSotkaRegion
     - GetArticlesByTag
 
 * Not used anymore
+    - GetFeatureDataXML
+    - GetInspireThemes
     - SaveMapState
     - GetUserData
     - PublishMigration
