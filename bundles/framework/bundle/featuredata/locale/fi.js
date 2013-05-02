@@ -38,6 +38,9 @@ Oskari.registerLocalization({
         },
         "circle": {
           "tooltip": "Lisää ympyrä"
+        },
+        "select": {
+          "tooltip": "Valitse kohteita"
         }
       }
     }

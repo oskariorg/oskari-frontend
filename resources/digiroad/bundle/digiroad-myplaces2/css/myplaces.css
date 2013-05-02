@@ -1,0 +1,38 @@
+div.myplacesform div.help {
+    float : right;
+}
+/* Wide fields for place inputs  */
+div.myplacesform div.field {
+    padding-bottom: 10px;
+}
+div.myplacesform input {
+    width: 80%;
+}
+div.myplacesform textarea, 
+div.myplacesform select {
+    width: 80%;
+}
+/* Smaller fields for category inputs in table */
+div.myplacescategoryform table input {
+    width: 50px;
+}
+div.myplacescategoryform input.oskaricolor {
+    height : 20px;
+    width : 50px;
+    border : 1px solid;
+    padding : 3px;
+    border-radius: 5px;
+    font-size : 0;
+}
+
+div.myplaces2 div.buttons div.button {
+    margin : 10px;
+    padding : 10px;
+    border : 1px solid;
+    border-radius : 5px;
+    box-shadow: 5px 5px 5px #888;
+}
+
+.divmanazerpopup.myplaces2 {
+    max-width: 260px;
+}    

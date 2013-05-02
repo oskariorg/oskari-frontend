@@ -74,10 +74,16 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         });
 
 		/* add first or last to group (default last)*/        
-        if( pConfig['prepend'])
-        	group.prepend(button); 
-        else 
-        	group.append(button);
+        if( pConfig['prepend']) {
+            group.prepend(button); 
+        } else {
+            group.append(button);
+        }
+
+        // if button states to be disabled, disable button
+        if(pConfig['disabled'] === true) {
+            button.addClass('disabled');
+        }
     },
     /**
      * @method _clickButton

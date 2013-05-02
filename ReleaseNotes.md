@@ -1,5 +1,19 @@
 # Release Notes
 
+## 1.9
+
+### framework bundle
+
+Printout/BasicPrintout: geojson extension added for background print service 
+
+### toolbar bundle
+
+Added a way to disable a button by default from configuration.
+
+### promote bundle
+
+Promote login and registering by replacing the real bundle for guest users. Configurable tile, flyout and toolbar buttons.
+
 ## 1.8
 
 ### sandbox/map-layer-service
@@ -15,6 +29,10 @@ Layers can now have tools linked to them. OpenLayer options and params can be pa
 StatsLayerPlugin now registers layer model/builder to map-layer-service on init.
 
 StatsLayerPlugin registers tool links for STATS layer icon callbacks and Statistics mode.
+
+ManageClassificationPlugin  classifies stats data and generates legend (geostats library is in use)
+
+New SotkadataChangedEvent event is used for sending stats data in ManageStatsOut to ManageClassificationPlugin
 
 ### statistics/statsgrid bundle
 

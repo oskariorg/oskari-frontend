@@ -24,7 +24,7 @@ function(view) {
     handleRequest : function(core, request) {
         if (request.getName() == 'StatsGrid.StatsGridRequest') {
             this.view.showMode(request.isEnabled());
-            this.view.showContent(request.isEnabled());
+            this.view.showContent(request.isEnabled(), request.getLayer());
         } 
     }
 }, {

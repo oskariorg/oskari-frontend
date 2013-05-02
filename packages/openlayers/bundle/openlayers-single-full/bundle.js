@@ -41,7 +41,7 @@
         },*/
         {
           "type" : "text/javascript",
-          "src" : "../../../../libraries/OpenLayers/OpenLayers-2.12.js"
+          "src" : "../../../../libraries/OpenLayers/OpenLayers-2.12-patched.js"
         }
       ]
     },
@@ -57,16 +57,15 @@
             "End" : "2011"
           },
           "Copyleft" : {
-            "License" : {
-              "Part" : "OpenLayers",
-              "License-Name" : "BSD",
-              "License-Online-Resource" : "http://svn.openlayers.org/trunk/openlayers/license.txt"
-            },
-            "License" : {
-              "Part" : "Proj4JS",
-              "License-Name" : "LGPL/BSD",
-              "License-Online-Resource" : ""
-            }
+              "License" : [{
+                "Part" : "OpenLayers",
+                "License-Name" : "BSD",
+                "License-Online-Resource" : "http://svn.openlayers.org/trunk/openlayers/license.txt"
+              }, {
+                "Part" : "Proj4JS",
+                "License-Name" : "LGPL/BSD",
+                "License-Online-Resource" : ""
+              }]
           }
         }],
         "Bundle-Name-Locale" : {

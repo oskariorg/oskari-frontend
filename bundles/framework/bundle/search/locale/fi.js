@@ -4,6 +4,7 @@ Oskari.registerLocalization({
   "value": {
     "title": "Paikkahaku",
     "desc": "",
+    "contentErrorMsg": "Hakusanassa on kiellettyjä merkkejä.",
     "searchDescription": "Hae paikannimeä, osoitetta tai kiinteistötunnusta.",
     "searchButton": "Hae",
     "searchResultCount": "Hakusi palautti ",

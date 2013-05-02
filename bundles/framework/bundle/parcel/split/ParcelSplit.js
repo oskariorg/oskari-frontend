@@ -49,7 +49,7 @@ function(drawPlugin) {
     *
     *
     */
-    this.markerIcon = new OpenLayers.Icon('/Oskari/applications/parcel/img/marker.png',this.markerSize,this.markerOffset);
+    this.markerIcon = new OpenLayers.Icon('/Oskari/1.8/parcel/images/marker.png',this.markerSize,this.markerOffset);
 
    /**
     * @property splitPolygons
@@ -71,8 +71,6 @@ function(drawPlugin) {
     *
     */
     this.map.activeMarker = null;
-
-this.test = false;
 
 }, {
 
@@ -441,7 +439,7 @@ this.test = false;
                 if (olOldFeatures[i].id.indexOf("Polygon") !== -1) {
                     jstsOldPolygon = jstsParser.read(olOldFeatures[i]);
                     if (!jstsOldPolygon.isValid()) {
-                        console.log("Invalid geometry.");
+                        //console.log("Invalid geometry.");
                         return -1+logText;
                     }
                     jstsOldPolygons.push(jstsOldPolygon);
@@ -475,7 +473,7 @@ this.test = false;
                     // Scaling for integer operations
                     l = clipSourcePolygons.length-1;
                     clipSourcePolygons[l] = this.scaleup(clipSourcePolygons[l], scale);
-                } else if (olOldFeatures[i].id.indexOf("OpenLayers.Geometry.LineString") != -1) {
+                } else if (olOldFeatures[i].id.indexOf("OpenLayers.Geometry.LineString") !== -1) {
                     jstsLine = jstsParser.read(olOldFeatures[i]);
                 }
             }

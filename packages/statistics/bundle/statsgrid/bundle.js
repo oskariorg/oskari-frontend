@@ -36,6 +36,15 @@ function() {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/statistics/bundle/statsgrid/StatsToolbar.js"
 		}, {
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/statistics/bundle/statsgrid/ManageStatsOut.js"
+		},{
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/plugin/ManageClassificationPlugin.js"
+		},{
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/event/SotkadataChangedEvent.js"
+		},{
             "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/bundle/statsgrid/request/StatsGridRequest.js"
 		}, {
@@ -44,8 +53,61 @@ function() {
         }, {
 			"type" : "text/css",
 			"src" : "../../../../resources/statistics/bundle/statsgrid/css/style.css"
-		}],
-
+		},{
+			"type" : "text/css",
+			"src" : "../../../../resources/statistics/bundle/statsgrid/css/classifyplugin.css"
+		},{
+            "type" : "text/css",
+            "src" : "../../../../libraries/slickgrid/css/slick.grid.css"
+        },{
+			"type" : "text/css",
+			"src" : "../../../../libraries/slickgrid/css/municipality.css"
+		}, {
+            "type" : "text/css",
+            "src" : "../../../../libraries/slickgrid/css/slick-default-theme.css"
+        },{
+            "src" : "../../../../libraries/jquery/jquery.event.drag-2.0.min.js",
+            "type" : "text/javascript"
+        },{
+            "src" : "../../../../libraries/slickgrid/slick.core.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/slick.formatters.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/slick.editors.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.cellrangedecorator.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.cellrangeselector.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.cellselectionmodel.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/slick.grid.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/slick.groupitemmetadataprovider.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/slick.dataview.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/controls/slick.pager.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/controls/slick.columnpicker.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/chosen/chosen.jquery.min.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/chosen/chosen.css",
+            "type" : "text/css"
+        }],
 		"locales" : [{
 			"lang" : "fi",
 			"type" : "text/javascript",

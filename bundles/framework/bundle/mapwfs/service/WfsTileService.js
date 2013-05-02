@@ -51,9 +51,8 @@ function(plugin) {
     removeWFsLayerRequests : function(wfsLayer) {
         var id = wfsLayer.getId();
         if(this._wfsMapUpdateRequests[id] !== null) {
-            var td = this._wfsMapUpdateRequests[id];
             this._wfsMapUpdateRequests[id] = null;
-            delete td;
+            delete this._wfsMapUpdateRequests[id];
         }
     },
     removeWFSMapHighlightRequest : function() {
@@ -65,7 +64,7 @@ function(plugin) {
         var oldArray = this._wfsMapUpdateRequests[id];
         if(oldArray !== null) {
             this._wfsMapUpdateRequests[id] = null;
-            delete oldArray;
+            delete this._wfsMapUpdateRequests[id];
         }
         this._wfsMapUpdateRequests[id] = [];
 
@@ -156,7 +155,7 @@ function(plugin) {
 
                 /* delete empty array */
                 if(requestArray.length === 0) {
-                    delete requestArray;
+                    delete this._wfsMapUpdateRequests[id];
                     this.sandbox.printDebug("[WfsTileService.processMapQueue]" + 
                                           " deleting empty requestArray");
                 }

@@ -1,4 +1,4 @@
-describe.only('Test Suite for Featuredata', function() {
+describe('Test Suite for Featuredata', function() {
     var appSetup = null,
         appConf = null,
         module = null,
@@ -6,48 +6,13 @@ describe.only('Test Suite for Featuredata', function() {
 
     before(function() {
 
-        appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull', 'divmanazer',
-        {
-            "instanceProps": {
-
-            },
-            "title": "Toolbar",
-            "bundleinstancename": "toolbar",
-            "fi": "toolbar",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "toolbar",
-            "metadata": {
-                "Import-Bundle": {
-                    "toolbar": {
-                        "bundlePath": "packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": [
-
-                ]
-            }
-        }, {
-            "instanceProps": {
-
-            },
-            "title": "Featuredata",
-            "bundleinstancename": "featuredata",
-            "fi": "Kohdetiedot",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "featuredata",
-            "metadata": {
-                "Import-Bundle": {
-                    "featuredata": {
-                        "bundlePath": "packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": [
-
-                ]
-            }
-        }]);
+        appSetup = getStartupSequence([
+                'openlayers-default-theme',
+                'mapfull',
+                'divmanazer',
+                'toolbar',
+                'featuredata'
+            ]);
 
         var mapfullConf = getConfigForMapfull();
         // from GetMapLayers, check the JSON response in Firebug to select layer
@@ -100,16 +65,26 @@ describe.only('Test Suite for Featuredata', function() {
         };
     });
 
-    var startApplication = function(done) {
-            //setup HTML
-            jQuery("body").html(getDefaultHTML());
-            // startup Oskari
-            setupOskari(appSetup, appConf, function() {
-                sandbox = Oskari.$("sandbox");
-                module = sandbox.findRegisteredModuleInstance('FeatureData');
-                done();
-            });
-        };
+    function startApplication(done, setup, conf) {
+        if(!setup) {
+            // clone original settings
+            setup = jQuery.extend(true, {}, appSetup);
+        }
+        if(!conf) {
+            // clone original settings
+            conf = jQuery.extend(true, {}, appConf);
+        }
+
+        //setup HTML
+        jQuery("body").html(getDefaultHTML());
+        // startup Oskari
+        setupOskari(setup, conf, function() {
+            // Find handles to sandbox and statehandler module
+            sandbox = Oskari.$("sandbox");
+            module = sandbox.findRegisteredModuleInstance('FeatureData');
+            done();
+        });
+    };
 
     describe('projections without configuration', function() {
 

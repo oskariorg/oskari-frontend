@@ -15,7 +15,7 @@ function() {
 
     "eventHandlers" : {
         "AfterMapMoveEvent" : function() {
-            console.log("AfterMapMoveEvent");
+//            console.log("AfterMapMoveEvent");
         }
     }
 

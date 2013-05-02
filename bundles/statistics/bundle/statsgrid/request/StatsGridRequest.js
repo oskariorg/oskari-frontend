@@ -13,8 +13,9 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.request.StatsGridRequest
  * @param {Boolean}
  *            blnEnable true to enable, false to disable
  */
-function(blnEnable) {
+function(blnEnable, layer) {
     this._enable = (blnEnable === true);
+    this._layer = layer;
 }, {
     /** @static @property __name request name */
     __name : "StatsGrid.StatsGridRequest",
@@ -24,6 +25,13 @@ function(blnEnable) {
      */
     getName : function() {
         return this.__name;
+    },
+    /**
+     * @method getLayer
+     * @return {Object} request layer
+     */
+    getLayer : function() {
+        return this._layer;
     },
     /**
      * @method isEnabled

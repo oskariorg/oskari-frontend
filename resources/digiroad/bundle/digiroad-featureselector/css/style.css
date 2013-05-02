@@ -1,0 +1,27 @@
+/*
+All the styles of the FeatureSelector bundle go here
+*/
+
+.featureselector-featuregrid {
+    width: 100%;
+    height: auto;
+    min-height: 100%;
+}
+
+.featureselector-featuregrid .slick-row:hover {
+    background: #ddd;
+}
+
+.featureselector-featuregrid input.editor-text {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    margin: 0;
+    background: transparent;
+    outline: 0;
+    padding: 0;
+}
+
+.featureselector-closed {
+	visibility: hidden;
+}

@@ -157,7 +157,6 @@ function() {
      * if not.
      */
     onEvent : function(event) {
-
         var handler = this.eventHandlers[event.getName()];
         if (!handler)
             return;
@@ -360,69 +359,69 @@ function() {
         });
     },
     
-    _pushState: function() {
-    	var me = this;
-    	if (me._historyEnabled ) {
-			   var history = me._historyPrevious;
-               
-               var state = this._getMapState();
-                  
-               var prevState = history.length == 0 ? null : history[history.length-1];
-               var cmpResult = me._compareState( prevState, state, true );
-               if( cmpResult.result ) {
-                  	me.sandbox.printDebug("[StateHandler] PUSHING state");
-                  	state.rule = cmpResult.rule;
-                  	me._historyPrevious.push(state);
-                  	me._historyNext = [];
-               }
-        }
+	_pushState: function() {
+		var me = this;
+		if (me._historyEnabled ) {
+			var history = me._historyPrevious;
 
-        if (me.conf && me.conf.logUrl) {
-            me._logState();
-        } 
-    },
+			var state = this._getMapState();
+
+			var prevState = history.length == 0 ? null : history[history.length-1];
+			var cmpResult = me._compareState( prevState, state, true );
+			if( cmpResult.result ) {
+				me.sandbox.printDebug("[StateHandler] PUSHING state");
+				state.rule = cmpResult.rule;
+				me._historyPrevious.push(state);
+				me._historyNext = [];
+				
+				if (me.conf && me.conf.logUrl) {
+					me._logState();
+				} 
+			}
+		}
+	},
        
-    historyMoveNext : function() {
-    	 var sandbox = this.getSandbox();
-        if (this._historyNext.length > 0) {
-            var state = this._historyNext.pop();
-            this._historyPrevious.push(state);
+	historyMoveNext : function() {
+		var sandbox = this.getSandbox();
+		if (this._historyNext.length > 0) {
+			var state = this._historyNext.pop();
+			this._historyPrevious.push(state);
 
-           	var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            this._historyEnabled = false;                
-            
+			var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
+			this._historyEnabled = false;                
+
 			var currentState = this._getMapState();
-            this._setMapState(mapmodule,state,currentState);
-            this._historyEnabled = true;
-        }
-    },
+			this._setMapState(mapmodule,state,currentState);
+			this._historyEnabled = true;
+		}
+	},
     
-    historyMovePrevious : function() {
-    	 var sandbox = this.getSandbox();
-    	 switch(this._historyPrevious.length) {
-    	 case 0:
-    	  	/* hard reset */
-        	/*this.resetState();*/
-    		break;
-    	 case 1:
-    	 	/* soft reset (retains the future) */
-    	 	var nextHistory = this._historyNext;
-        	this.resetState();
-        	this._historyNext = nextHistory; 
-        	break;    	
-         default:
-         	/* pops current state */
-        	var cstate = this._historyPrevious.pop(); /* currentstate */
-        	this._historyNext.push(cstate);
-        	var state = this._historyPrevious[this._historyPrevious.length-1];            
-            var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            var currentState = this._getMapState();
-            this._historyEnabled = false;
-            this._setMapState(mapmodule,state,currentState);
-            this._historyEnabled = true;            
-            break;
-        }
-    },
+	historyMovePrevious : function() {
+		var sandbox = this.getSandbox();
+		switch(this._historyPrevious.length) {
+			case 0:
+				/* hard reset */
+				/*this.resetState();*/
+				break;
+			case 1:
+				/* soft reset (retains the future) */
+				var nextHistory = this._historyNext;
+				this.resetState();
+				this._historyNext = nextHistory; 
+				break;    	
+			default:
+				/* pops current state */
+				var cstate = this._historyPrevious.pop(); /* currentstate */
+				this._historyNext.push(cstate);
+				var state = this._historyPrevious[this._historyPrevious.length-1];            
+				var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
+				var currentState = this._getMapState();
+				this._historyEnabled = false;
+				this._setMapState(mapmodule,state,currentState);
+				this._historyEnabled = true;            
+				break;
+		}
+	},
     
     /**
 	 * @method getMapState

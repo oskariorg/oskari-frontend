@@ -201,6 +201,13 @@ function(instance, localization) {
         });
         var cancelBtn = dialog.createCloseButton(this.loc.button.cancel);
         dialog.show(title, template, [cancelBtn, okBtn]);
+        // we dont want key events to bubble up...
+        dialog.dialog.on("keyup", function(e) {
+            e.stopPropagation();
+        });
+        dialog.dialog.on("keydown", function(e) {
+            e.stopPropagation();
+        });
     },
 
     /**

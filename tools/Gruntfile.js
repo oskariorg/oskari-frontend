@@ -25,12 +25,25 @@ module.exports = function(grunt) {
         //                dest: 'dist/FILE_NAME.min.js'
         //            }
         //        },
+        compileAppSetupToStartupSequence: {
+            files: ['../tests/minifierFullMapAppSetup.json']
+        },
         watch: {
-            //            files: '<config:lint.files>',
-            files: ['../applications/**/*.js', '../bundles/**/*.js', '../libraries/**/*.js', '../packages/**/*.js', '../resources/**/*.js', '../sources/**/*.js', '../tests/**/*.js'],
-            // uncommented as validate causes unnecessary delay
-            //            tasks: ['validate', 'compile', 'testacularRun:dev', 'yuidoc:dist']
-            tasks: ['compileDev', 'testacularRun:dev']
+            appsetup: {
+                files: '<%= compileAppSetupToStartupSequence.files %>',
+                tasks: ['compileAppSetupToStartupSequence']
+            },
+            src: {
+                //            files: '<config:lint.files>',
+                files: ['../applications/**/*.js', '../bundles/**/*.js', '../libraries/**/*.js', '../packages/**/*.js', '../resources/**/*.js', '../sources/**/*.js'],
+                // uncommented as validate causes unnecessary delay
+                //            tasks: ['validate', 'compile', 'testacularRun:dev', 'yuidoc:dist']
+                tasks: ['compileDev', 'testacularRun:dev']
+            },
+            test: {
+                files: ['../tests/**/*.js'],
+                tasks: ['testacularRun:dev']
+            }
         },
         sprite: {
             options: {
@@ -43,7 +56,8 @@ module.exports = function(grunt) {
         compileDev: {
             options: {
                 appSetupFile: "../tests/minifierFullMapAppSetup.json",
-                dest: "../dist/"
+                dest: "../dist/",
+                concat: true
             }
         },
         testacularRun: {
@@ -95,24 +109,63 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
     grunt.loadNpmTasks('grunt-testacular');
+    grunt.loadNpmTasks('grunt-contrib-concat');
 
     // Default task.
     //    grunt.registerTask('default', 'watch testacularServer:dev');
     //    grunt.registerTask('default', 'testacularServer:dev watch');
     //    grunt.registerTask('default', 'lint test concat min');
-
     grunt.registerTask('compileDev', 'Developer compile', function() {
         // set task configs
         grunt.config.set("compile.dev.options", this.options());
 
         grunt.task.run('compile');
-    })
+    });
+
+    grunt.registerTask('compileAppSetupToStartupSequence', function() {
+        var done = this.async();
+        var starttime = (new Date()).getTime();
+
+        grunt.log.writeln('Running compile AppSetup to startupSequence...');
+
+        // read files and parse output name
+        var files = grunt.config(this.name).files[0],
+            outputFilename = files.replace(".json", ".opts.js");
+
+        // read file
+        var fs = require('fs'),
+            cfgFile = fs.readFileSync(files, 'utf8');
+
+        // convert to usable format
+        var startupSequence = JSON.parse(cfgFile).startupSequence,
+            definedBundles = {},
+            bundle,
+            result = "var _defaultsStartupSeq = ";
+
+        // loop startup sequence bundles and add to hashmap of defined bundles
+        for(var i = 0, ilen = startupSequence.length; i < ilen; i++) {
+            bundle = startupSequence[i];
+            // Add here code to change bundlePath to "ignored/butRequiredToBeInMinifierFullMapAppSetupInTests/packages/framework/bundle/"
+            // or something similar as the bundlePaths are not used with minifierAppSetup
+            definedBundles[bundle.bundlename] = bundle;
+        }
+
+        // add stringified bundle definitions
+        result +=JSON.stringify(definedBundles);
+
+        // write file to be used in testing as is
+        fs.writeFileSync(outputFilename, result , 'utf8');
+
+        var endtime = (new Date()).getTime();
+        grunt.log.writeln('compileAppSetupToStartupSequence completed in ' + ((endtime - starttime) / 1000) + ' seconds');
+        done();
+    });
 
     grunt.registerTask('release', 'Release build', function(version, configs) {
         var apps = [],
             tasks = [];
 
-        if (!version || !configs) {
+        if(!version || !configs) {
             grunt.fail.fatal('Missing parameter\nUsage: grunt release:1.7:"../path/to/minifierAppSetup.json"', 1);
         }
         // set version in config for grunt templating
@@ -132,17 +185,59 @@ module.exports = function(grunt) {
                     resultCSSName: "../dist/<%= version %>" + appName + "/css/icons.css",
                     spritePathInCSS: "../icons"
                 },
-                files = [{
+                files = [],
+                copyFiles = {
                     "expand": true,
                     "cwd": cwd + "/",
-                    "src": ["css/**","images/**","*.js"],
+                    "src": ["css/**", "images/**", "*.js"],
                     "dest": dest
-                }];
+                };
+
+            // subsets have underscore (_) in appName, which means we need to
+            // get the parent resources first and then replace with subset specific stuff
+            var appNameSeparatorIndex = appName.indexOf('_');
+            if (appNameSeparatorIndex > 0) {
+                var parentAppName = appName.substring(0, appNameSeparatorIndex);
+                // copy files from parent folder to be replaced by child
+                files.push({
+                    "expand": true,
+                    "cwd": cwd.replace(appName, parentAppName) + "/",
+                    "src": ["css/**", "images/**", "*.js"],
+                    "dest": dest
+                });
+                // modify css-sprite to use parent icons instead
+                options.iconDirectoryPath = options.iconDirectoryPath.replace(appName, parentAppName);
+            }
+
+            // add files to be copied
+            files.push(copyFiles);
+
+            // add mddocs to dist
+            files.push({
+                "expand": true,
+                "cwd": "../docs/",
+                "src": ["images/**", "layout/**"],
+                "dest": grunt.config.get("mddocs.options.outdir")
+            });
+
+            // add resources to dist
+            files.push({
+                "expand": true,
+                "cwd": "../",
+                "src": ["resources/**", "libraries/**"],
+                "dest": "../dist/"
+            });
 
             // setting task configs
             grunt.config.set("copy." + appName + ".files", files);
-            grunt.config.set("validate." + appName + ".options", {"appSetupFile": config, "dest": dest});
-            grunt.config.set("compile." + appName + ".options", {"appSetupFile": config, "dest": dest});
+            grunt.config.set("validate." + appName + ".options", {
+                "appSetupFile": config,
+                "dest": dest
+            });
+            grunt.config.set("compile." + appName + ".options", {
+                "appSetupFile": config,
+                "dest": dest
+            });
             grunt.config.set("sprite." + appName + ".options", options);
         }
 
@@ -151,6 +246,111 @@ module.exports = function(grunt) {
         grunt.task.run('compile');
         grunt.task.run('sprite');
         grunt.task.run('yuidoc');
-//        grunt.task.run('mddocs');
+        grunt.task.run('mddocs');
+    });
+
+    grunt.registerTask('packageopenlayer', 'Package openlayers according to packages', function(packages) {
+        if(!packages) {
+            grunt.fail.fatal('Missing parameter\nUsage: grunt packageopenlayer:"../path/to/profile.cfg"', 1);
+        }
+
+        console.log('Running openlayers packager...');
+        var fs = require('fs'),
+            path = require('path'),
+            wrench = require('wrench'),
+            sourceDirectory = path.join(process.cwd(), "/components/openlayers/lib/"),
+            outputFilenamePrefix = "OpenLayers.",
+            outputFilenamePostfix = ".min.js"
+            cfg = null,
+            i = null,
+            ilen = null,
+            j = null,
+            jlen = null,
+            k = null,
+            klen = null,
+            cfgs = [],
+            files = null,
+            file = null,
+            linegroup = null,
+            profile = null,
+            dist = null,
+            FIRST = "[first]",
+            LAST = "[last]",
+            INCLUDE = "[include]",
+            EXCLUDE = "[exclude]";
+
+        // transform comma separeted configs string to array
+        packages = packages.split(',');
+
+        // read cfg files
+        for(i = 0, ilen = packages.length; i < ilen; i += 1) {
+            cfgFile = fs.readFileSync(packages[i], 'utf8').split("\r\n");
+            profile = packages[i];
+            profile = profile.substring(profile.lastIndexOf("/") + 1, profile.indexOf('.cfg'));
+            var line, cfg = {};
+            for(j = 0, jlen = cfgFile.length; j < jlen; j += 1) {
+                line = cfgFile[j];
+
+                // skip empty lines and lines that start with #
+                if((line.length > 0) && (line[0] !== "#")) {
+                    if (line === FIRST) {
+                        linegroup = "forceFirst";
+                    } else if (line === LAST) {
+                        linegroup = "forceLast";
+                    } else if (line === INCLUDE) {
+                        linegroup = "include";
+                    } else if (line === EXCLUDE) {
+                        linegroup = "exclude";
+                    } else {
+                        // add array if not defined
+                        if (!cfg[linegroup]) {
+                            cfg[linegroup] = [];
+                        }
+                        // add line as absolute path to array
+                        line = path.join(sourceDirectory, line);
+                        cfg[linegroup].push(line);
+                    }
+                }
+            }
+            // assuming exclude can only occur when there is no include, or if there is, we overwrite it
+            if (cfg.exclude) {
+                var exclude = cfg.exclude;
+                var include = null;
+                cfg.include = [];
+
+                // read all files in source folder
+                files = wrench.readdirSyncRecursive(sourceDirectory);
+
+                // loop files to exclude the ones that are not supposed to be included
+                for(j = 0, jlen = files.length; j < jlen; j += 1) {
+                    file = path.join(sourceDirectory, files[j]);
+                    include = true;
+                    for(k = 0, klen = exclude.length; k < klen; k += 1) {
+                        // check the excluded path is not include
+                        // exclude all non-js files such as folder as well
+                        if (file.indexOf(exclude[k]) === 0) {
+                            include = false;
+                        } else if (file.indexOf('.js') === -1) {
+                            include = false;
+                        }
+                    }
+                    if (include) {
+                        cfg.include.push(file);
+                    }
+                }
+            }
+
+            // clean up the profile name a bit
+            if (profile.indexOf("openlayers-" === 0)) {
+                profile = profile.substring("openlayers-".length);
+            }
+
+            // set configuration to concat
+            grunt.config.set("concat." + profile + ".src", cfg.include);
+            grunt.config.set("concat." + profile + ".dest", "../libraries/OpenLayers/OpenLayers." + profile + ".js");
+        }
+
+        // concatenate the files
+        grunt.task.run('concat');
     });
 };

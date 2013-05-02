@@ -11,82 +11,39 @@
 
 ## Description
 
-''Describe what the bundle does.''
+Adds support for statistics layers. The StatsLayerPlugin needs to be registered for the map in order to visualize statistics.
+
 
 ## TODO
 
-* ''List any planned features''
+* ''Remove hard-coded properties, e.g. kuntakoodi.''
 
 ## Screenshot
 
-![screenshot](<%= docsurl %>images/bundle_id.png)
+![screenshot](<%= docsurl %>images/mapstats.png)
 
 ## Bundle configuration
 
 ```javascript
 config : {
-  test : 1
+  ajaxUrl : [url]
 }
 ```
-
-OR
-
-No configuration is required.
+* ajaxUrl defaults to sandbox.getAjaxUrl() + 'action_route=GetStatsTile'.
 
 ## Bundle state
-
-```javascript
-state : {
-  test : 2
-}
-```
-
-OR
 
 No statehandling has been implemented.
 
 ## Requests the bundle handles
 
-<table>
-  <tr>
-    <th>Request</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td>tbd</td><td>tbd</td>
-  </tr>
-</table>
-
-OR
-
 This bundle doesn't handle any requests.
 
 ## Requests the bundle sends out
 
-<table>
-  <tr>
-    <th>Request</th><th>Why/when</th>
-  </tr>
-  <tr>
-    <td>tbd</td><td>tbd</td>
-  </tr>
-</table>
-
-OR
-
 This bundle doesn't send out any requests.
 
 ## Events the bundle listens to
-
-<table>
-  <tr>
-    <th>Event</th><th>How does the bundle react</th>
-  </tr>
-  <tr>
-    <td>tbd</td><td>tbd</td>
-  </tr>
-</table>
-
-OR
 
 This bundle doesn't listen to any events.
 
@@ -94,16 +51,9 @@ This bundle doesn't listen to any events.
 
 <table>
   <tr>
-    <th>Event</th><th>Why/when</th>
-  </tr>
-  <tr>
-    <td>tbd</td><td>tbd</td>
+    <th>StatsVisualizationChangeEvent</th><th>Sent when a statistics visualization has been changed</th>
   </tr>
 </table>
-
-OR
-
-This bundle doesn't send out any events.
 
 ## Dependencies
 
@@ -112,10 +62,13 @@ This bundle doesn't send out any events.
     <th>Dependency</th><th>Linked from</th><th>Purpose</th>
   </tr>
   <tr>
-    <td>[Library name](#link)</td><td>src where its linked from</td><td>*why/where we need this dependency*</td>
+    <td> [OpenLayers](http://openlayers.org/) </td>
+    <td> Expects OpenLayers already to be linked </td>
+    <td> To modify map</td>
+  </tr>
+  <tr>
+    <td> [Oskari mapmodule](<%= docsurl %>framework/mapmodule.html)</td>
+    <td> Expects to be present in application setup </td>
+    <td> To gain control to OpenLayers map</td>
   </tr>
 </table>
-
-OR
-
-This bundle doesn't have any dependencies.

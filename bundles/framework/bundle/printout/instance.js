@@ -109,7 +109,7 @@ function() {
         var btns = {
             'print' : {
                 iconCls : 'tool-print',
-                tooltip : '',
+                tooltip : this.localization.btnTooltip,
                 sticky : true,
                 callback : function() {
                     me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'attach']);

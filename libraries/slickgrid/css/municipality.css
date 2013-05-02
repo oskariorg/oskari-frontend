@@ -1,0 +1,190 @@
+@import "slick-default-theme.css";
+.statsgrid  {
+    font-family: arial;
+    font-size: 8pt;
+}
+body {
+    background: none repeat scroll 0 0 beige;
+    padding: 0;
+}
+h2 {
+    border-bottom: 1px dotted gray;
+    font-size: 10pt;
+}
+ul {
+    cursor: default;
+    margin-left: 0;
+    padding: 0;
+}
+li {
+    background: url("Oskari/libraries/slickgrid/images/arrow_right_spearmint.png") no-repeat scroll left center transparent;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0 0 0 14px;
+}
+#municipalGrid {
+    background: none repeat scroll 0 0 white;
+    border: 1px solid gray;
+    outline: 0 none;
+}
+.slick-header {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: url("Oskari/libraries/slickgrid/images/header-bg.gif") repeat-x scroll center top transparent;
+    border-color: -moz-use-text-color gray;
+    border-image: none;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+    border-style: none solid;
+    border-width: 0 1px;
+    color: black;
+    height: 24px;
+    line-height: 24px;
+}
+.grid-header label {
+    display: inline-block;
+    font-weight: bold;
+    margin: auto auto auto 6px;
+}
+.grid-header .ui-icon {
+    background-color: transparent;
+    border-color: transparent;
+    margin: 4px 4px auto 6px;
+}
+.grid-header .ui-icon.ui-state-hover {
+    background-color: white;
+}
+.grid-header #txtSearch {
+    border: 1px solid silver;
+    margin: 0 4px;
+    padding: 2px;
+}
+.options-panel {
+    background: none repeat scroll 0 0 #F0F0F0;
+    border: 1px solid silver;
+    left: 650px;
+    margin-bottom: 20px;
+    padding: 4px;
+    position: absolute;
+    top: 0;
+    width: 320px;
+}
+.slick-cell.task-name {
+    font-weight: bold;
+    text-align: right;
+}
+.slick-cell.task-percent {
+    text-align: right;
+}
+.slick-cell.cell-move-handle {
+    background: none repeat scroll 0 0 #EFEFEF;
+    border-right: medium solid gray;
+    cursor: move;
+    font-weight: bold;
+    text-align: right;
+}
+.cell-move-handle:hover {
+    background: none repeat scroll 0 0 #B6B9BD;
+}
+.slick-row.selected .cell-move-handle {
+    background: none repeat scroll 0 0 #D5DC8D;
+}
+.slick-row .cell-actions {
+    text-align: left;
+}
+.slick-row.complete {
+    background-color: #DDFFDD;
+    color: #555555;
+}
+.percent-complete-bar {
+    display: inline-block;
+    height: 6px;
+}
+input.editor-text {
+    background: none repeat scroll 0 0 transparent;
+    border: 0 none;
+    height: 100%;
+    margin: 0;
+    outline: 0 none;
+    padding: 0;
+    width: 100%;
+}
+.ui-datepicker-trigger {
+    margin-top: 2px;
+    padding: 0;
+    vertical-align: top;
+}
+input.editor-percentcomplete {
+    background: none repeat scroll 0 0 transparent;
+    border: 0 none;
+    float: left;
+    height: 100%;
+    margin: 0;
+    outline: 0 none;
+    padding: 0;
+    width: 100%;
+}
+.editor-percentcomplete-picker {
+    background: url("Oskari/libraries/slickgrid/images/pencil.gif") no-repeat scroll center center transparent;
+    display: inline-block;
+    float: right;
+    height: 100%;
+    overflow: visible;
+    position: relative;
+    width: 16px;
+    z-index: 1000;
+}
+.editor-percentcomplete-helper {
+    background: url("Oskari/libraries/slickgrid/images/editor-helper-bg.gif") no-repeat scroll left top transparent;
+    border: 0 solid gray;
+    display: none;
+    height: 140px;
+    left: -9px;
+    overflow: visible;
+    padding-left: 9px;
+    position: absolute;
+    top: -2px;
+    width: 120px;
+}
+.editor-percentcomplete-wrapper {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 beige;
+    border-color: gray gray gray -moz-use-text-color;
+    border-image: none;
+    border-style: solid solid solid none;
+    border-width: 1px 1px 1px 0;
+    height: 98px;
+    padding: 20px 8px;
+    width: 100%;
+}
+.editor-percentcomplete-buttons {
+    float: right;
+}
+.editor-percentcomplete-buttons button {
+    width: 80px;
+}
+.editor-percentcomplete-slider {
+    float: left;
+}
+.editor-percentcomplete-picker:hover .editor-percentcomplete-helper {
+    display: block;
+}
+.editor-percentcomplete-helper:hover {
+    display: block;
+}
+select.editor-yesno {
+    margin: 0;
+    vertical-align: middle;
+    width: 100%;
+}
+input.editor-checkbox {
+    border: 0 none;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}

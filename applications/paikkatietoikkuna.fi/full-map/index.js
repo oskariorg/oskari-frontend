@@ -1,88 +1,7 @@
 /**
- * @class Oskari.paikkatietoikkuna.Main
- *
- * Launcher class for a paikkatietoikkuna.fi map window
- */
-Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
-
-    this.args = null;
-    this.styleBndl = null;
-}, {
-
-    /**
-     * @method processArgs
-     *
-     * applies page args to this instance
-     */
-    processArgs: function(args) {
-        this.args = args;
-        this.styleBndl = args.style;
-    },
-    /**
-     * @method start
-     *
-     * starts the application with bundle definitions declared
-     * in property appSetup.startupSequence
-     */
-    start: function(cb) {
-
-        var me = this;
-
-        var appSetup = this.appSetup;
-        var appConfig = this.appConfig;
-        var app = Oskari.app;
-
-        app.setApplicationSetup(appSetup);
-        app.setConfiguration(appConfig);
-        app.startApplication(function(startupInfos) {
-            me.instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
-            if (cb) {
-                cb(me.instance);
-            }
-            /*
-            var ugStartup = {
-                "bundleinstancename": "statsgrid",
-                "bundlename": "statsgrid",
-                "metadata": {
-                    "Import-Bundle": {
-                        "statsgrid": {
-                            "bundlePath": "/Oskari/packages/statistics/bundle/"
-                        }
-                    }
-                }
-            };
-            Oskari.bundle_facade.playBundle(ugStartup, function() {});
-            */
-        });
-    },
-    /**
-     * @static
-     * @property appConfig
-     */
-    appConfig: {
-        // this will be replaced from GetAppSetup
-    },
-
-    /**
-     * @static
-     * @property appSetup.startupSequence
-     */
-    appSetup: {
-
-        // this will be replaced from GetAppSetup
-        startupSequence: []
-    }
-});
-
-/**
  * Start when dom ready
  */
 jQuery(document).ready(function() {
-    var args = {
-        oskariLoaderMode: 'dev',
-        style: 'style1'
-    };
-
     if (!ajaxUrl) {
         alert('Ajax URL not set - cannot proceed');
         return;
@@ -102,7 +21,6 @@ jQuery(document).ready(function() {
 
     // returns empty string if parameter doesn't exist
     // otherwise returns '<param>=<param value>&'
-
     function getAdditionalParam(param) {
         var value = getURLParameter(param);
         if (value) {
@@ -111,13 +29,11 @@ jQuery(document).ready(function() {
         return '';
     }
 
-    var args = {
-        oskariLoaderMode: 'yui',
-        style: 'style1'
-    };
-    if (!ajaxUrl) {
-        alert('Ajax URL not set - cannot proceed');
-        return;
+    // remove host part from url
+    if (ajaxUrl.indexOf('http') == 0) {
+        var hostIdx = ajaxUrl.indexOf('://') + 3;
+        var pathIdx = ajaxUrl.indexOf('/', hostIdx);
+        ajaxUrl = ajaxUrl.substring(pathIdx);
     }
 
     // populate url with possible control parameters
@@ -136,34 +52,17 @@ jQuery(document).ready(function() {
     ajaxUrl += getAdditionalParam('wfsFeature');
     ajaxUrl += getAdditionalParam('wfsHighlightLayer');
 
+
     if (!language) {
         // default to finnish
         language = 'fi';
     }
     Oskari.setLang(language);
 
-
     Oskari.setLoaderMode('dev');
     Oskari.setPreloaded(preloaded);
 
-    // if (location.search && location.search.length > 1) {
-    //     ajaxUrl +=
-    //         location.search.substr(1, location.search.length) + '&';
-    // }
-
-
-    if (args.oskariLoaderAsync && args.oskariLoaderAsync == 'on') {
-        Oskari.setSupportBundleAsync(true);
-    }
-    var main = Oskari.clazz.create('Oskari.paikkatietoikkuna.Main');
-    main.processArgs(args);
-
-    if (ajaxUrl.indexOf('http') == 0) {
-        var hostIdx = ajaxUrl.indexOf('://') + 3;
-        var pathIdx = ajaxUrl.indexOf('/', hostIdx);
-        ajaxUrl = ajaxUrl.substring(pathIdx);
-    }
-    var gfiParamHandler = function(sandbox) {
+    function gfiParamHandler(sandbox) {
         if (getURLParameter('showGetFeatureInfo') != 'true') {
             return;
         }
@@ -176,14 +75,29 @@ jQuery(document).ready(function() {
         });
         sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
     }
+
+    function start(appSetup, appConfig, cb) {
+        var app = Oskari.app;
+
+        app.setApplicationSetup(appSetup);
+        app.setConfiguration(appConfig);
+        app.startApplication(function(startupInfos) {
+          var instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
+          if (cb) {
+              cb(instance);
+          }
+        });
+    }
+
+    // TODO: handle cookie data in backend
     // === Look for old mapfull state - cookie set in SaveViewPlugin.js   ===
     var cookiename = "mymapview1";
     var cookieviewdata = "";
     if (document.cookie.length > 0) {
-        cookieStart = document.cookie.indexOf(cookiename + "=");
+        var cookieStart = document.cookie.indexOf(cookiename + "=");
         if (cookieStart != -1) {
             cookieStart += cookiename.length + 1;
-            cookieEnd = document.cookie.indexOf(";", cookieStart);
+            var cookieEnd = document.cookie.indexOf(";", cookieStart);
             if (cookieEnd == -1) {
                 cookieEnd = document.cookie.length;
             }
@@ -200,16 +114,16 @@ jQuery(document).ready(function() {
         beforeSend: function(x) {
             if (x && x.overrideMimeType) {
                 x.overrideMimeType("application/j-son;charset=UTF-8");
-                80
             }
         },
         url: ajaxUrl + 'action_route=GetAppSetup',
         data: data,
-        success: function(appSetup) {
-            if (appSetup.startupSequence && appSetup.configuration) {
-                main.appSetup.startupSequence = appSetup.startupSequence;
-                main.appConfig = appSetup.configuration;
-                main.start(function(instance) {
+        success: function(app) {
+            if (app.startupSequence && app.configuration) {
+              var appSetup = {
+                "startupSequence": app.startupSequence
+              };
+              start(appSetup, app.configuration, function(instance) {
                     var sb = instance.getSandbox();
                     gfiParamHandler(sb);
                 });

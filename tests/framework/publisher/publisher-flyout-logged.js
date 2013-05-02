@@ -13,31 +13,11 @@ describe('Test Suite for Publisher - Logged in user', function() {
     before(function() {
         // startup the oskari application with publisher bundle, 2 test layers and signed in user
         appSetup = getStartupSequence([
-            'openlayers-default-theme', 
-            'mapfull', 
-            'divmanazer',
-            {
-                "instanceProps": {
-
-                },
-                "title": "Publisher",
-                "bundleinstancename": "publisher",
-                "fi": "Publisher",
-                "sv": "Publisher",
-                "en": "Publisher", 
-                "bundlename": "publisher",
-                "metadata": { 
-                    "Import-Bundle": {
-                        "publisher": {
-                            "bundlePath": "packages/framework/bundle/"
-                        }
-                    },
-                    "Require-Bundle-Instance": [
-
-                    ]
-                }
-            }
-        ]);
+                'openlayers-default-theme', 
+                'mapfull', 
+                'divmanazer',
+                'publisher'
+            ]);
     
         var mapfullConf = getConfigForMapfull();
         // fake signed in user

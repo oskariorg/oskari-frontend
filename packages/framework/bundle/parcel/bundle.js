@@ -40,17 +40,6 @@ function() {
     "protocol" : ["Oskari.bundle.Bundle"],
     "source" : {
         "scripts" : [
-        /* libs *//*
-        {
-            "type" : "text/javascript",
-            "src" : "../../../../libraries/clipper/clipper.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../libraries/jsts/javascript.util.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../libraries/jsts/jsts.js"
-        },*/
         /* event */
         {
             "type" : "text/javascript",
@@ -132,28 +121,11 @@ function() {
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/parcel/instance.js"
-        }, {
-           // NOTE! EXTERNAL LIBRARIES!
-            "type" : "text/javascript",
-            "src" : "../../../../libraries/jscolor/jscolor.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../libraries/clipper/clipper.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../libraries/jsts/jsts.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../libraries/jsts/javascript.util.js"
         },
-
         // css
         {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/parcel/css/style.css"
-        }, {
-            "type" : "text/css",
-            "src" : "../../../../resources/framework/bundle/parcel/css/icons.css"
         }],
         "locales" : [{
             "lang" : "fi",
