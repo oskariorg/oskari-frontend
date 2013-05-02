@@ -42,10 +42,10 @@ GET_HIGHLIGHT_WFS_FEATURE_IMAGE_BY_POINT
 [GetPreview](<%= docsurl %>backend/actionroutes/getpreview.html)
 HasAcceptedPublishedTermsOfUse
 AcceptPublishedTermsOfUse
-GetWfsFeatureData
+GetWfsFeatureData (deprecated)
 
 ## My places
-GetPublishedMyPlaceLayers
+[GetPublishedMyPlaceLayers](<%= docsurl %>backend/actionroutes/getpublishedmyplacelayers.html)
 PublishMyPlaceLayer
 FreeFindFromMyPlaceLayers
 MyPlaces
