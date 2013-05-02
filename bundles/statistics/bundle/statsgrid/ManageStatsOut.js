@@ -245,7 +245,8 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
         // we use chosen to create autocomplete version of indicator select element.
         sel.chosen({
-            no_results_text : this.instance.getLocalization('noMatch')
+            no_results_text : this.instance.getLocalization('noMatch'),
+            placeholder_text : this.instance.getLocalization('noMatch')
         });
 
     },

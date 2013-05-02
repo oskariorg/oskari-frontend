@@ -64,7 +64,8 @@ Oskari.registerLocalization({
 			"cancel" : "Poistu"
 			
 		},
-        "noMatch" : "No results matched"
+        "noMatch" : "No results matched",
+        "selectIndicator": "Select an indicator"
 
     }
 });

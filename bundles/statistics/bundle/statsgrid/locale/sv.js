@@ -64,6 +64,8 @@ Oskari.registerLocalization({
 			"cancel" : "Poistu"
 			
 		},
-        "noMatch" : "Inga matchade indikatorer"
+        "noMatch" : "Inga matchade indikatorer",
+        "selectIndicator": "Välja en indikator"
+
     }
 });
