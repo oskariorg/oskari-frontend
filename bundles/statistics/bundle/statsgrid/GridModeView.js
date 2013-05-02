@@ -24,9 +24,6 @@ function() {
             title: me.getTitle()
         }, this.instance);
 
-//TODO: TOOLBAR -> mapdiv height - toolbar height
-
-
 
         this.requestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.StatsGridRequestHandler', me);
         sandbox.addRequestHandler('StatsGrid.StatsGridRequest', this.requestHandler);
@@ -53,12 +50,14 @@ function() {
 
             jQuery('#contentMap').addClass('statsgrid-contentMap');
             jQuery('.oskariui-mode-content').addClass('statsgrid-mode');
+            // TODO we are going to create a handle for grid vs. map separator
             var leftWidth = 57;
 
             /** show our mode view - view hacks */
             var elCenter = this.getCenterColumn();
             elCenter.removeClass('span12');
             elCenter.width((100 - 57) + '%');//.addClass('span5');
+            // remove toolbar's height
             jQuery('#mapdiv').height(jQuery(window).height() - jQuery('#contentMap').find('.oskariui-menutoolbar').height());
             //window resize is handled in mapfull - instance.js
 
@@ -79,13 +78,13 @@ function() {
             jQuery('.oskariui-mode-content').removeClass('statsgrid-mode');
             
             var elCenter = jQuery('.oskariui-center');
-            //elCenter.removeClass('span5');
-            //elCenter.addClass('span12');
+            // remove width from center-div
             elCenter.width('').addClass('span12');
             jQuery('#mapdiv').height(jQuery(window).height());
 
             var elLeft = jQuery('.oskariui-left');
             elLeft.addClass('oskari-closed');
+            // remove width from left-div
             elLeft.width('');//removeClass('span7');
 
             if(!blnFromExtensionEvent) {

@@ -168,6 +168,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         this.grid = grid;
         this.dataView = dataView;
 
+        //window resize!
         var resizeGridTimer;
         jQuery(window).resize(function () {
             clearTimeout(resizeGridTimer);
