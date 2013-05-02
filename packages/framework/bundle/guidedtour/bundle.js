@@ -8,7 +8,7 @@ Oskari.clazz.define(
     /**
      * @method create called automatically on construction
      * @static
-     */ 
+     */
     function() {
     }, {
         "create" : function() {
@@ -23,7 +23,7 @@ Oskari.clazz.define(
     }, {
 
         "protocol" : [
-            "Oskari.bundle.Bundle", 
+            "Oskari.bundle.Bundle",
             "Oskari.mapframework.bundle.extension.ExtensionBundle"
         ],
         "source" : {
@@ -34,7 +34,7 @@ Oskari.clazz.define(
                     "src" : "../../../../bundles/framework/bundle/guidedtour/instance.js"
                 }, {
                     "type" : "text/javascript",
-                    "src" : "../../../../resources/framework/bundle/guidedtour/js/jquery.cookie.js"
+                    "src" : "../../../../libraries/jquery/plugins/jquery.cookie.js"
                 }, {
                     "type" : "text/css",
                     "src" : "../../../../resources/framework/bundle/guidedtour/css/style.css"
@@ -99,6 +99,6 @@ Oskari.clazz.define(
     });
 
 Oskari.bundle_manager.installBundleClass(
-    "guidedtour", 
+    "guidedtour",
     "Oskari.framework.bundle.guidedtour.GuidedTourBundle"
 );
