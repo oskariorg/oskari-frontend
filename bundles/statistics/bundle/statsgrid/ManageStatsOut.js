@@ -167,6 +167,17 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         // remember the grid object.
         this.grid = grid;
         this.dataView = dataView;
+
+        //window resize!
+        var resizeGridTimer;
+        jQuery(window).resize(function () {
+            clearTimeout(resizeGridTimer);
+            resizeGridTimer = setTimeout(function() {
+                var gridDiv = jQuery("#municipalGrid");
+                gridDiv.height(gridDiv.parent().height() - gridDiv.parent().find('.selectors-container').outerHeight());
+                grid.resizeCanvas();                    
+            }, 100);
+        });
     },
 
     /**
@@ -234,7 +245,8 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
         // we use chosen to create autocomplete version of indicator select element.
         sel.chosen({
-            no_results_text : this.instance.getLocalization('noMatch')
+            no_results_text : this.instance.getLocalization('noMatch'),
+            placeholder_text : this.instance.getLocalization('noMatch')
         });
 
     },

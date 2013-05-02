@@ -23,6 +23,7 @@ function() {
             this._layer = layer;
 
             if(isShown) {
+                this.toolbar.changeName(this._layer.getName());   
                 this._showContent(this.getEl());
                 this.getLeftColumn().addClass('statsgrid_100');
                 this.getLeftColumn().append(this.getEl());

@@ -158,6 +158,12 @@ function() {
 
 		return c;
 	},
+	changeMenuToolbarTitle : function(title) {
+		if(title) {
+			this.menutoolbarcontainer.find(".oskariui-menutoolbar-title p").html(title);
+		}
+	},
+
 	/**
 	 * @method getToolbarContainer
 	 * @return {jQuery} reference to the toolbar container

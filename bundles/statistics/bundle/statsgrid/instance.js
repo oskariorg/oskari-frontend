@@ -112,10 +112,8 @@ function() {
                                 view.classifyData(column);
                             }
                         };
-
                     }
                 });
-
             });
         }
     },

@@ -63,6 +63,7 @@ Oskari.registerLocalization({
 			"cancel" : "Poistu"
 			
 		},
-		"noMatch" : "Indikaattoria ei löytynyt"
+		"noMatch" : "Indikaattoria ei löytynyt",
+		"selectIndicator": "Valitse indikaattori"
 	}
 });

@@ -22,6 +22,10 @@ function(localization, instance) {
         var sandbox = this.instance.getSandbox();
         sandbox.requestByName(this.instance, 'Toolbar.ToolbarRequest', [this.toolbarId, 'remove']);
     },
+    changeName: function(title) {
+        var sandbox = this.instance.getSandbox();
+        sandbox.requestByName(this.instance, 'Toolbar.ToolbarRequest', [this.toolbarId, 'changeName', title]);
+    },
 	/**
 	 * @method _createUI
 	 * sample toolbar for statistics functionality
