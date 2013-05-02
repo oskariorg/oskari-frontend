@@ -253,9 +253,16 @@ function() {
 
         var maxWidth = viewport.width()   * 0.7;
         var maxHeight = viewport.height() * 0.7;
-        var height = content.find('.contentWrapper').height();
-        height = height > maxHeight ? (maxHeight + 30) +'px' : 'auto';
-        content.css({'height': height});
+        var wrapper = content.find('.contentWrapper');
+        if(jQuery.browser.msie) {
+            // allow scrolls to appear in IE, but not in any other browser
+            // instead add some padding to the wrapper to make it look better
+            wrapper.css({'padding-bottom' : '5px'});
+        } else {
+            var height = wrapper.height();
+                height = height > maxHeight ? (maxHeight + 30) +'px' : 'auto';
+                content.css({'height': height});
+        }
 
         popup.css({'height': 'auto', 'width': 'auto', 'min-width': '256px', 'max-width': maxWidth + 'px', 'min-height': '200px','max-height': maxHeight+'px','left': left+'px', 'z-index': '16000'});
 //        popup.css({'height': 'auto', 'width': 'auto', 'min-width': '200px', 'left': left+'px'});
