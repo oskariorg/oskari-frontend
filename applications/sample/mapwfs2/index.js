@@ -46,7 +46,9 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
 
         var appConfig = this.appConfig;
         appConfig["mapfull"]["conf"]["plugins"][5]["id"] = "Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin";
+        appConfig["mapfull"]["conf"]["plugins"][4]["config"] = { infoBox: false };
 
+        console.log(appConfig);
         var app = Oskari.app;
 
         app.setApplicationSetup(appSetup);

@@ -212,10 +212,13 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
     },
 
     setFilter : function(geojson) {
-        console.log(geojson);
+        filter = {
+            geojson: geojson
+        };
+
         if(this.cometd != null) {
             this.cometd.publish('/service/wfs/setFilter', {
-                "filter" : geojson
+                "filter" : filter
             });
         }
     },

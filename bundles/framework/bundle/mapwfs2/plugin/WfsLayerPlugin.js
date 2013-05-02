@@ -108,13 +108,11 @@ function(config) {
             var bbox = this.getSandbox().getMap().getExtent();
             var zoom = this.getSandbox().getMap().getZoom();
 
-            /// TODO: clean in all places where features list can update (setFilter - doesn't throw event yet)
+            /// clean features lists
             var layers = this.getSandbox().findAllSelectedMapLayers(); // get array of AbstractLayer (WFS|WMS..)
             for (var i = 0; i < layers.length; ++i) {
                 if (layers[i].isLayerOfType('WFS')) {
                     layers[i].setActiveFeatures([]);
-                    console.log("cleared");
-                    console.log(layers[i]);
                 }
             }
 
@@ -217,7 +215,14 @@ function(config) {
          * @method WFSSetFilter
          */
         'WFSSetFilter' : function(event) {
-            console.log("set filter");
+            /// clean features lists
+            var layers = this.getSandbox().findAllSelectedMapLayers(); // get array of AbstractLayer (WFS|WMS..)
+            for (var i = 0; i < layers.length; ++i) {
+                if (layers[i].isLayerOfType('WFS')) {
+                    layers[i].setActiveFeatures([]);
+                }
+            }
+
             this.getIO().setFilter(event.getGeoJson());
         },
 
