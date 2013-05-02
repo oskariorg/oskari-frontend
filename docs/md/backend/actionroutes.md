@@ -12,7 +12,7 @@
     - GetProxyRequest
 
 ## View
-GetAppSetup
+[GetAppSetup](<%= docsurl %>backend/actionroutes/getappsetup.html)
 AddView
 DeleteView
 UpdateView
