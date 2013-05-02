@@ -86,7 +86,6 @@ function(instance) {
 	 */
 	setState : function(state) {
 		this.state = state;
-		console.log("Flyout.setState", this, state);
 	},
 	
 	/**

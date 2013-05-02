@@ -125,7 +125,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             grid.render();
         });
         // Grid
-        console.log('it works so far');
+//        console.log('it works so far');
         grid = new Slick.Grid(gridContainer, dataView, columns, options);
 
         var sortcol = "json_number";
@@ -170,7 +170,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         // remember the grid object.
         this.grid = grid;
         this.dataView = dataView;
-        console.log('did it break before this?');
+//        console.log('did it break before this?');
     },
 
     /**
@@ -629,6 +629,9 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      * @method clearDataFromGrid
      */
     clearDataFromGrid : function() {
+        if(!this.grid) {
+            return;
+        }
         var columns = this.grid.getColumns();
         var newColumnDef    =   [];
         

@@ -82,7 +82,6 @@ function(instance) {
      * Interface method implementation, does nothing atm
      */
     setState : function(state) {
-        console.log("Tile.setState", this, state);
     },
     notifyUser : function() {
         var me = this;
