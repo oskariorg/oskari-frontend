@@ -43,6 +43,10 @@ module.exports = function(grunt) {
             test: {
                 files: ['../tests/**/*.js'],
                 tasks: ['testacularRun:dev']
+            },
+            sass: {
+                files: ['../bundles/**/*.scss'],
+                tasks: ['sass']
             }
         },
         sprite: {
@@ -98,6 +102,20 @@ module.exports = function(grunt) {
                 "apiurl": "http://oskari.org/",
                 "outdir": "../dist/<%= version %>docs"
             }
+        },
+        sass: {
+            dist: {
+				files: [
+                    {
+                        expand: true,
+                        cwd: '../bundles/',
+                        src: ['**/*.scss'],
+                        dest: '../resources/',
+                        rename: function(dest,src) {return dest+src.replace("/scss/","/css/")},
+                        ext: '.css'
+				    }
+                ]
+            }
         }
     });
 
@@ -110,6 +128,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
     grunt.loadNpmTasks('grunt-testacular');
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-sass');
 
     // Default task.
     //    grunt.registerTask('default', 'watch testacularServer:dev');
@@ -241,6 +260,9 @@ module.exports = function(grunt) {
             grunt.config.set("sprite." + appName + ".options", options);
         }
 
+        // scss to css conversion
+        grunt.task.run('sass');
+
         grunt.task.run('validate');
         grunt.task.run('copy');
         grunt.task.run('compile');
@@ -260,8 +282,9 @@ module.exports = function(grunt) {
             wrench = require('wrench'),
             sourceDirectory = path.join(process.cwd(), "/components/openlayers/lib/"),
             outputFilenamePrefix = "OpenLayers.",
-            outputFilenamePostfix = ".min.js"
+            outputFilenamePostfix = ".min.js",
             cfg = null,
+            cfgFile = null,
             i = null,
             ilen = null,
             j = null,

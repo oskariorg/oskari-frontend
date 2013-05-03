@@ -1,32 +1,29 @@
 .tool-pan {
-    background-attachment: scroll;
-    background-clip: border-box;
-    background-color: #000000;
-    background-image: url("/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png");
-    background-origin: padding-box;
-    background-position: -736px 0;
-    background-repeat: repeat;
-    background-size: auto auto;
-    height: 32px;
-    width: 32px;
-    float:left;
-}
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-color: #000000;
+  background-image: url("/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png");
+  background-origin: padding-box;
+  background-position: -736px 0;
+  background-repeat: repeat;
+  background-size: auto auto;
+  height: 32px;
+  width: 32px;
+  float: left; }
 
 #toolbar div.toolrow div.tool {
-    cursor: pointer;
-    display: inline-block;
-}
+  cursor: pointer;
+  display: inline-block; }
 
 .tool-selection-area {
-    background-attachment: scroll;
-    background-clip: border-box;
-    background-color: #333438;
-    background-image: url("/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png");
-    background-origin: padding-box;
-    background-position: -672px 0;
-    background-repeat: repeat;
-    background-size: auto auto;
-    height: 32px;
-    width: 32px;
-    float:right;
-}
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-color: #333438;
+  background-image: url("/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icons.png");
+  background-origin: padding-box;
+  background-position: -672px 0;
+  background-repeat: repeat;
+  background-size: auto auto;
+  height: 32px;
+  width: 32px;
+  float: right; }

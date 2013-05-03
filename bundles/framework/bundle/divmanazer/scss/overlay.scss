@@ -5,6 +5,6 @@ div.oskarioverlay {
 }
 .transparent {
 	zoom: 1;
-	filter: alpha(opacity=50);
+	filter: unquote("alpha(opacity=50)");  /* unquote for libsass bug */
 	opacity: 0.5;
 }
