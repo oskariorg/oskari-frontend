@@ -11,11 +11,11 @@ AdjustViewAccess
 GetThematicMap
 
 ## Layers
-GetMapLayers
-GetBackendStatus
-GetAdminMapLayers
-GetWSCapabilities
-GetMapLayerClasses
+[GetMapLayers](<%= docsurl %>backend/actionroutes/getMapLayers.html)
+[GetBackendStatus](<%= docsurl %>backend/actionroutes/getBackendStatus.html)
+[GetAdminMapLayers](<%= docsurl %>backend/actionroutes/getAdminMapLayers.html)
+[GetWSCapabilities](<%= docsurl %>backend/actionroutes/getWSCapabilities.html)
+[GetMapLayerClasses](<%= docsurl %>backend/actionroutes/getMapLayerClasses.html)
 GetWmsServices
 SaveLayer
 SaveOrganization
