@@ -13,10 +13,10 @@
 
 ## View
 [GetAppSetup](<%= docsurl %>backend/actionroutes/getappsetup.html)
-AddView
+[AddView](<%= docsurl %>backend/actionroutes/addview.html)
 DeleteView
 UpdateView
-GetViews
+[GetViews](<%= docsurl %>backend/actionroutes/getviews.html)
 AdjustViewAccess
 [Publish](<%= docsurl %>backend/actionroutes/publish.html)
 GetThematicMap
