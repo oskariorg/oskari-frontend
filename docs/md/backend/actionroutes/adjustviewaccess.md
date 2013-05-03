@@ -41,12 +41,3 @@ Handles publishing of the view.
   "error" : "message"
 }
 ```
-
-## Examples
-
-### Example query for Paikkatietoikkuna
-With (POST|GET) params:
-
-Response:
-
-### Example curl request

@@ -46,17 +46,23 @@ This action route is responsible for saving a map view.
 ### Success
 ```javascript
 {
-  "response": "here",
-  "and": "here"
+  "id": "<id of the new view>",
+  "oldId": -1,
+  "height": "?",
+  "pubDomain": "<publication domain>",
+  "description": "<description of the new view>",
+  "width": "?",
+  "name": "<name of the new view>",
+  "states": "<array of states>",
+  "uuid": "<user id>",
+  "lang": "<language>"
 }
 ```
 
 ### Error
-What's the HTTP status code and does it have an error message or does it return null?
-
 ```javascript
 {
-  "error" : "here"
+  "error" : "message"
 }
 ```
 
