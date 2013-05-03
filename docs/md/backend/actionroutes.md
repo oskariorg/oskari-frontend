@@ -51,7 +51,7 @@ GET_HIGHLIGHT_WFS_FEATURE_IMAGE_BY_POINT
 [GetSotkaData](<%= docsurl %>backend/actionroutes/getsotkadata.html)
 [GetPreview](<%= docsurl %>backend/actionroutes/getpreview.html)
 [HasAcceptedPublishedTermsOfUse](<%= docsurl %>backend/actionroutes/hasacceptedpublishedtermsofuse.html)
-AcceptPublishedTermsOfUse
+[AcceptPublishedTermsOfUse](<%= docsurl %>backend/actionroutes/acceptpublishedtermsofuse.html)
 GetWfsFeatureData (soon to be deprecated)
 
 ## My places
