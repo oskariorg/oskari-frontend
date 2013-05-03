@@ -1,10 +1,11 @@
 div.oskarioverlay {
-    position : absolute;
-    background-color : black;
-    z-index: 8000;
+  position: absolute;
+  background-color: black;
+  z-index: 8000;
 }
+
 .transparent {
-	zoom: 1;
-	filter: alpha(opacity=50);
-	opacity: 0.5;
-}
+  zoom: 1;
+  filter: alpha(opacity=50);
+  /* unquote for libsass bug */
+  opacity: 0.5; }

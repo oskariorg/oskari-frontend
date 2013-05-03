@@ -1,99 +1,94 @@
 #contentMap.statsgrid-contentMap {
-    position: relative;
-}
+  position: relative; }
+
 .oskariui-mode-content {
-    height: 100%;
-    background-color:white;
-}
+  height: 100%;
+  background-color: white; }
+
 .oskariui-mode-content.statsgrid-mode {
-    overflow: hidden;
-    height: auto;
-    width: 100%;
-    position: absolute;
-    top: 40px;
-    bottom: 0;
-}
+  overflow: hidden;
+  height: auto;
+  width: 100%;
+  position: absolute;
+  top: 40px;
+  bottom: 0; }
+
 .oskariui-left {
-    float: left;
-}
+  float: left; }
 
 .oskariui-center {
-    float: left;
-}
+  float: left; }
 
 .statsgrid {
-    min-width: 100%;
-    min-height: 100%;
-    height: 100%;
-}
+  min-width: 100%;
+  min-height: 100%;
+  height: 100%; }
+
 .statsgrid_100 {
-    height: 100%;
-}
+  height: 100%; }
+
 .statsgrid .statsgrid-table {
-    min-height: 80%;
-    height: 80%;
-    font: 12px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif;
-}
+  min-height: 80%;
+  height: 80%;
+  font: 12px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif; }
+
 .statsgrid .idContainer {
-    margin: 4px;
-    border: 1pt solid #40B0C0;
-    border-radius: 5px;
-    padding: 4px;
-    background-color: #80F0A0;
-    cursor: pointer;
-}
+  margin: 4px;
+  border: 1pt solid #40B0C0;
+  border-radius: 5px;
+  padding: 4px;
+  background-color: #80F0A0;
+  cursor: pointer; }
 
 .statsgrid .selectors-container {
-    height: 20%;
-    min-height: 157px;
-    padding-top: 10px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -ie-box-sizing: border-box;
-    -o-box-sizing: border-box;
-    box-sizing: border-box;
-}
+  height: 20%;
+  min-height: 157px;
+  padding-top: 10px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ie-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box; }
+
 .statsgrid .indicator-cont {
-    float: left;
-    position: relative;
-    padding-right: 30px;
-}
+  float: left;
+  position: relative;
+  padding-right: 30px; }
+
 .statsgrid .indicator-cont .icon-info {
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    margin: 7px;
-}
-.statsgrid .selector-cont select.indi{
-    width: 300px;
-}
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  margin: 7px; }
+
+.statsgrid .selector-cont select.indi {
+  width: 300px; }
+
 .statsgrid .parameters-cont {
-    min-height: 115px;
-    float: left;
-}
+  min-height: 115px;
+  float: left; }
+
 .statsgrid .selector-cont {
-    clear: both;
-}
+  clear: both; }
+
 .statsgrid .selector-cont label {
-    float: left;
-    width: 80px;
-    padding: 10px;
-    font-weight: bold;
-    font-size: 1.2em;
-}
-.statsgrid .selector-cont select{
-    float: right;
-}
+  float: left;
+  width: 80px;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 1.2em; }
+
+.statsgrid .selector-cont select {
+  float: right; }
+
 .statsgrid .selector-cont select.parameter {
-    width: 100px;
-}
+  width: 100px; }
+
 .statsgrid .parameters-cont button {
-    float: right;
-    clear: both;
-    margin: 8px 0 10px 0;
-}
+  float: right;
+  clear: both;
+  margin: 8px 0 10px 0; }
 
 .statsgrid .municipal-grid {
-    width:100%;
-    height:80%;
-}
+  width: 100%;
+  height: 80%; }
