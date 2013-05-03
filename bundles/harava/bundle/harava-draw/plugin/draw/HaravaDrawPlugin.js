@@ -143,14 +143,8 @@ function(locale, conf) {
         		me._drawLayer.addFeatures([feature]);
         		me._drawLayer.redraw();
     			
-    		},200);
-    		
-    		
-    		 
+    		},200); 
     	}
-    	
-    	
-    	
 		  	
     },
     /**
@@ -256,7 +250,7 @@ function(locale, conf) {
         var deleteSelectedGeometryContainer = me.templateDeleteSelectedGeometry.clone();
         deleteSelectedGeometryContainer.attr('title',me._locale.tooltips.deleteSelectedDraw);
         
-        jQuery('#'+me._map.div.id).append(addGeometryContainer);
+        jQuery('#harava-geom-tools').append(addGeometryContainer);
         jQuery(addGeometryContainer).append(addGeometryToolsContainer);                
         jQuery(addGeometryToolsContainer).append(addPointGeometryContainer);
         jQuery(addGeometryToolsContainer).append(addLineGeometryContainer);

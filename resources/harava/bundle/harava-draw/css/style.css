@@ -1,18 +1,10 @@
 @CHARSET "UTF-8";
 
-#harava-add-geometry{
-	position:absolute;
-	top:70px;
-	left:0;
-	width:47px;
-	height:210px;	
-	z-index:2000;	
-}
-
 .harava-add-geometry-tool{
     cursor: pointer;
+    float: left;
     height: 32px;
-    margin: 5px;
+    margin: 2px;
     width: 32px;
 }
 
@@ -27,10 +19,6 @@
 
 #harava-add-geometry-tools div:hover{
     background-color: #939393;
-}
-
-.harava-add-geometry-top-tooltopmargin{
-	margin-top: 15px;
 }
 
 .harava-add-geometry-tool-point{

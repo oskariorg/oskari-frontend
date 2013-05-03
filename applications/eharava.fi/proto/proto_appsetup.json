@@ -138,6 +138,23 @@
             },
             "instanceProps" : {}
         },
+		{ 
+			"title" : "Info box", 
+			"fi" : "Info box", 
+			"sv" : "?", 
+			"en" : "Info box", 
+			"bundlename" : "harava-infobox", 
+			"bundleinstancename" : "harava-infobox", 
+			"metadata" : { 
+				"Import-Bundle" : { 
+					"harava-infobox" : { 
+						"bundlePath" : "../../../packages/harava/bundle/" 
+					} 
+				}, 
+				"Require-Bundle-Instance" : [] 
+			}, 
+			"instanceProps" : {} 
+		},
         {
             "title" : "Harava map questions",
             "fi" : "Harava map questions",

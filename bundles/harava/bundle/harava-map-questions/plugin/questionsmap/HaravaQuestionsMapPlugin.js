@@ -934,6 +934,7 @@ function(config) {
     "activateControl" : function(moduleId, questionId){
     	var me = this;
     	var module = me.getModuleById(moduleId);
+    	
     	if(module!=null){
     		var question = me.getQuestionById(questionId, module.questions);
     		if(question!=null){
@@ -957,6 +958,9 @@ function(config) {
 		    	}
 		        me._currentControls.modify = module.modifyControls.modify;
 		        me._currentQuestion = question;
+		        
+		        // activate all modify controls
+		        me.reActivateModify();
     		}
     	}
     },
