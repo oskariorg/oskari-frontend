@@ -1,8 +1,24 @@
 # GetPublishedMyPlaceLayers
-
+Responsible for getting a list of published myplaces layers.
 
 ## Parameters
-This action route doesn't need any parameters.
+
+At the moment omitting the param returns all published myplaces layers whilst by giving it a value returns an empty list.
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Type</th>
+    <th>Description</th>
+    <th>Required?</th>
+  </tr>
+  <tr>
+    <td>USERS</td>
+    <td>String</td>
+    <td>List of users whose published layers are wanted</td>
+    <td>false</td>
+  </tr>
+</table>
 
 ## Response
 

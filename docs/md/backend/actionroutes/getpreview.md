@@ -28,6 +28,12 @@ Map preview for the printout bundle
     <td>**true**</td>
   </tr>
   <tr>
+    <td>geojson</td>
+    <td>JSON</td>
+    <td>Geometries in GeoJSON format</td>
+    <td>false</td>
+  </tr>
+  <tr>
     <td>format</td>
     <td>String</td>
     <td>Accepts `application/pdf` (which it defaults to) and `image/png`</td>
