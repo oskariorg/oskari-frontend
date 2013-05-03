@@ -1,5 +1,5 @@
 # GetSearchResult (POST)
-The action route is responsible for handling the location search query based on the search key the user submitted and the language which is used.
+The action route is responsible for handling the location search query based on the search key the user submitted and the language used.
 
 ## Parameters
 <table>

@@ -65,4 +65,6 @@ Returns the map view defined in params in the format also defined in params.
 ### Example query for Paikkatietoikkuna
 `http://www.paikkatietoikkuna.fi/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&zoomLevel=9&coord=384582_6671743&mapLayers=base_35+100+&showMarker=false&forceCache=true&noSavedState=true&action_route=GetPreview&pageSize=A4&pageTitle=&pageLogo=true&pageScale=true&pageDate=true&format=application/pdf`
 
-### Example curl request
+---
+Frontista lähtee parametreja (esim. pageSize ja pageTitle) joita GetPreviewHandler-luokka ei huomioi.
+---

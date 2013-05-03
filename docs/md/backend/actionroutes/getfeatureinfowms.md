@@ -1,5 +1,5 @@
 # GetFeatureInfoWMS (POST) (INCOMPLETE)
-Description here. What need does the action route fulfill? Is it GET or POST?
+DESCRIPTION MISSING
 
 ## Parameters
 <table>
