@@ -68,9 +68,9 @@ div.basic_publisher div.customsize input.error {
 } 
 div.basic_publisher div.form div.field input, div.field select {
     width : 100%;
-    width: 80%\0/;
-	background-color: white\0/;
-	filter:Alpha(opacity=100)\0/ !important;
+    width: unquote("80%\0/"); /* unquote for libsass bug */
+	background-color: unquote("white\0/"); /* unquote for libsass */
+	filter:unquote("Alpha(opacity=100)\0/") !important;
     font-weight: bolder;
 }
 

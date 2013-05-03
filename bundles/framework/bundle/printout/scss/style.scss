@@ -35,7 +35,7 @@ div.basic_printout > div.header div.icon-close {
 div.basic_printout div.form div.field input, div.field select {
     width: 80%;
     background-color: white;
-    filter:Alpha(opacity=100) !important;
+    filter:unquote("Alpha(opacity=100)") !important; /* unquote for libsass bug */
 }
 div.basic_printout > div.content {
     overflow: auto;

@@ -7,7 +7,7 @@
   bottom:0px;
   left:0px;
   z-index:100000000 !important;
-  filter: alpha(opacity=80);
+  filter: unquote("alpha(opacity=80)"); /* unquote for libsass bug */
   opacity: 0.8 !important;
 }
 .logoplugin .icon {

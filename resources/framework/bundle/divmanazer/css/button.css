@@ -1,7 +1,6 @@
 div.oskaributton {
-    display: inline-block;
-    margin: 5px;
-}
+  display: inline-block;
+  margin: 5px; }
+
 div.oskaributton.primary input {
-    color: #3CA9FC;
-}
+  color: #3CA9FC; }
