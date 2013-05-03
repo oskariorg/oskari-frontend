@@ -14,12 +14,11 @@
 ## View
 [GetAppSetup](<%= docsurl %>backend/actionroutes/getappsetup.html)
 [AddView](<%= docsurl %>backend/actionroutes/addview.html)
-DeleteView
-UpdateView
+[DeleteView](<%= docsurl %>backend/actionroutes/deleteview.html)
+[UpdateView](<%= docsurl %>backend/actionroutes/updateview.html)
 [GetViews](<%= docsurl %>backend/actionroutes/getviews.html)
-AdjustViewAccess
+[AdjustViewAccess](<%= docsurl %>backend/actionroutes/adjustviewaccess.html)
 [Publish](<%= docsurl %>backend/actionroutes/publish.html)
-GetThematicMap
 
 ## Layers
 GetMapLayers

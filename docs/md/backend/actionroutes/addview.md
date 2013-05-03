@@ -141,5 +141,3 @@ Response:
   "lang": "fi"
 }
 ```
-
-### Example curl request
