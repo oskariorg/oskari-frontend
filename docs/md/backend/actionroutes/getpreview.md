@@ -28,6 +28,12 @@ Map preview for the printout bundle
     <td>**true**</td>
   </tr>
   <tr>
+    <td>geojson</td>
+    <td>JSON</td>
+    <td>Geometries in GeoJSON format</td>
+    <td>false</td>
+  </tr>
+  <tr>
     <td>format</td>
     <td>String</td>
     <td>Accepts `application/pdf` (which it defaults to) and `image/png`</td>
@@ -59,6 +65,6 @@ Returns the map view defined in params in the format also defined in params.
 ### Example query for Paikkatietoikkuna
 `http://www.paikkatietoikkuna.fi/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&zoomLevel=9&coord=384582_6671743&mapLayers=base_35+100+&showMarker=false&forceCache=true&noSavedState=true&action_route=GetPreview&pageSize=A4&pageTitle=&pageLogo=true&pageScale=true&pageDate=true&format=application/pdf`
 
-Response:
-
-### Example curl request
+---
+Frontista lähtee parametreja (esim. pageSize ja pageTitle) joita GetPreviewHandler-luokka ei huomioi.
+---

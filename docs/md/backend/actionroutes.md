@@ -1,14 +1,24 @@
 # Action routes
 
+* Added by MapFull as this is liferay specific
+    - GetArticlesByTag
+
+* Not used anymore
+    - GetFeatureDataXML
+    - GetInspireThemes
+    - SaveMapState
+    - GetUserData
+    - PublishMigration
+    - GetProxyRequest
+
 ## View
-GetAppSetup
-AddView
-DeleteView
-UpdateView
-GetViews
-AdjustViewAccess
+[GetAppSetup](<%= docsurl %>backend/actionroutes/getappsetup.html)
+[AddView](<%= docsurl %>backend/actionroutes/addview.html)
+[DeleteView](<%= docsurl %>backend/actionroutes/deleteview.html)
+[UpdateView](<%= docsurl %>backend/actionroutes/updateview.html)
+[GetViews](<%= docsurl %>backend/actionroutes/getviews.html)
+[AdjustViewAccess](<%= docsurl %>backend/actionroutes/adjustviewaccess.html)
 [Publish](<%= docsurl %>backend/actionroutes/publish.html)
-GetThematicMap
 
 ## Layers
 [GetMapLayers](<%= docsurl %>backend/actionroutes/getMapLayers.html)
@@ -28,7 +38,7 @@ GetStatsTile
 ## NEW WFS
 GetWFSLayerConfiguration
 
-## WFS
+## WFS (soon to be deprecated)
 GET_PNG_MAP
 GET_HIGHLIGHT_WFS_FEATURE_IMAGE
 GET_XML_DATA
@@ -40,26 +50,15 @@ GET_HIGHLIGHT_WFS_FEATURE_IMAGE_BY_POINT
 [GetSearchResult](<%= docsurl %>backend/actionroutes/getsearchresult.html)
 [GetSotkaData](<%= docsurl %>backend/actionroutes/getsotkadata.html)
 [GetPreview](<%= docsurl %>backend/actionroutes/getpreview.html)
-HasAcceptedPublishedTermsOfUse
-AcceptPublishedTermsOfUse
-GetWfsFeatureData
-GetProxyRequest
+[HasAcceptedPublishedTermsOfUse](<%= docsurl %>backend/actionroutes/hasacceptedpublishedtermsofuse.html)
+[AcceptPublishedTermsOfUse](<%= docsurl %>backend/actionroutes/acceptpublishedtermsofuse.html)
+GetWfsFeatureData (soon to be deprecated)
 
 ## My places
-GetPublishedMyPlaceLayers
-PublishMyPlaceLayer
-FreeFindFromMyPlaceLayers
-MyPlaces
+[GetPublishedMyPlaceLayers](<%= docsurl %>backend/actionroutes/getpublishedmyplacelayers.html)
+[PublishMyPlaceLayer](<%= docsurl %>backend/actionroutes/publishmyplacelayer.html)
+[FreeFindFromMyPlaceLayers](<%= docsurl %>backend/actionroutes/freefindfrommyplacelayers.html)
+[MyPlaces](<%= docsurl %>backend/actionroutes/myplaces.html)
 
 ## SOTKA
-GetSotkaRegion
-
-* added by MapFull as this is liferay specific
-    - GetArticlesByTag
-
-* Not used anymore
-    - GetFeatureDataXML
-    - GetInspireThemes
-    - SaveMapState
-    - GetUserData
-    - PublishMigration
+[GetSotkaRegion](<%= docsurl %>backend/actionroutes/getsotkaregion.html)
