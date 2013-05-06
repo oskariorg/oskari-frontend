@@ -1,13 +1,11 @@
 .fullscreenDiv {
-    position : absolute;
-    top : 10px;
-    left : 10px;
-    display : block;
-    color : black;
-    background : transparent;    
-    z-index : 15000;
-}
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: block;
+  color: black;
+  background: transparent;
+  z-index: 15000; }
 
 .fullscreenDiv .fullscreenDivImg {
-    cursor: pointer;
-}
+  cursor: pointer; }

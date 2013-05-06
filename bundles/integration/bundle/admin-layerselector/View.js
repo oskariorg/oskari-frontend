@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
      */
     "eventHandlers" : {
         "MapLayerVisibilityChangedEvent" : function(event) {
-            console.log("YEP", event);
+            
         },
         "AfterMapMoveEvent" : function(event) {
 

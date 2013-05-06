@@ -1,0 +1,406 @@
+{
+    "startupSequence": [{
+        "instanceProps": {},
+        "title": "OpenLayers",
+        "bundleinstancename": "openlayers-default-theme",
+        "fi": "OpenLayers",
+        "sv": "?",
+        "en": "OpenLayers",
+        "bundlename": "openlayers-default-theme",
+        "metadata": {
+            "Import-Bundle": {
+                "openlayers-default-theme": {
+                    "bundlePath": "../../../packages/openlayers/bundle/"
+                },
+                "openlayers-single-full": {
+                    "bundlePath": "../../../packages/openlayers/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Map",
+        "bundleinstancename": "mapfull",
+        "fi": "Map",
+        "sv": "?",
+        "en": "Map",
+        "bundlename": "mapfull",
+        "metadata": {
+            "Import-Bundle": {
+                "mapwmts": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapwfs": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapstats": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "service-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "event-map-layer": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "request-map-layer": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapmodule-plugin": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "event-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "mapfull": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "core-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "oskariui": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "request-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "domain": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "core-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "request-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "sandbox-base": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "service-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "sandbox-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
+                "event-map": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Oskari DIV Manazer",
+        "bundleinstancename": "divmanazer",
+        "fi": "Oskari DIV Manazer",
+        "sv": "?",
+        "en": "Oskari DIV Manazer",
+        "bundlename": "divmanazer",
+        "metadata": {
+            "Import-Bundle": {
+                "divmanazer": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Toolbar",
+        "bundleinstancename": "toolbar",
+        "fi": "toolbar",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "toolbar",
+        "metadata": {
+            "Import-Bundle": {
+                "toolbar": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "StateHandler",
+        "bundleinstancename": "statehandler",
+        "fi": "jquery",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "statehandler",
+        "metadata": {
+            "Import-Bundle": {
+                "statehandler": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Info Box",
+        "bundleinstancename": "infobox",
+        "fi": "infobox",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "infobox",
+        "metadata": {
+            "Import-Bundle": {
+                "infobox": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Haku",
+        "bundleinstancename": "search",
+        "fi": "search",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "search",
+        "metadata": {
+            "Import-Bundle": {
+                "search": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Karttatasot",
+        "bundleinstancename": "layerselector2",
+        "fi": "layerselector",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "layerselector2",
+        "metadata": {
+            "Import-Bundle": {
+                "layerselector2": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Valitut karttatasot",
+        "bundleinstancename": "layerselection2",
+        "fi": "layerselection",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "layerselection2",
+        "metadata": {
+            "Import-Bundle": {
+                "layerselection2": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Omat tiedot",
+        "bundleinstancename": "personaldata",
+        "fi": "personaldata",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "personaldata",
+        "metadata": {
+            "Import-Bundle": {
+                "personaldata": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Karttajulkaisu",
+        "bundleinstancename": "publisher",
+        "fi": "jquery",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "publisher",
+        "metadata": {
+            "Import-Bundle": {
+                "publisher": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Koordinaattinäyttö",
+        "bundleinstancename": "coordinatedisplay",
+        "fi": "coordinatedisplay",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "coordinatedisplay",
+        "metadata": {
+            "Import-Bundle": {
+                "coordinatedisplay": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "maplegend",
+        "fi": "maplegend",
+        "bundleinstancename": "maplegend",
+        "sv": "maplegend",
+        "en": "maplegend",
+        "bundlename": "maplegend",
+        "metadata": {
+            "Import-Bundle": {
+                "maplegend": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "UserGuide",
+        "bundleinstancename": "userguide",
+        "fi": "userguide",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "userguide",
+        "metadata": {
+            "Import-Bundle": {
+                "userguide": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Metadata Flyout",
+        "bundleinstancename": "metadataflyout",
+        "fi": "metadataflyout",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "metadataflyout",
+        "metadata": {
+            "Import-Bundle": {
+                "metadataflyout": {
+                    "bundlePath": "../../../packages/catalogue/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Featuredata",
+        "bundleinstancename": "featuredata",
+        "fi": "Kohdetiedot",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "featuredata",
+        "metadata": {
+            "Import-Bundle": {
+                "featuredata": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Places",
+        "bundleinstancename": "myplaces2",
+        "fi": "Paikat",
+        "sv": "Platser",
+        "en": "Places",
+        "bundlename": "myplaces2",
+        "metadata": {
+            "Import-Bundle": {
+                "myplaces2": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "guidedtour",
+        "fi": "guidedtour",
+        "bundleinstancename": "guidedtour",
+        "sv": "guidedtour",
+        "en": "guidedtour",
+        "bundlename": "guidedtour",
+        "metadata": {
+            "Import-Bundle": {
+                "guidedtour": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "backendstatus",
+        "fi": "backendstatus",
+        "bundleinstancename": "backendstatus",
+        "sv": "backendstatus",
+        "en": "backendstatus",
+        "bundlename": "backendstatus",
+        "metadata": {
+            "Import-Bundle": {
+                "backendstatus": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "title": "Printout",
+        "fi": "Karttatuloste",
+        "sv": "Kartutskrift",
+        "en": "Map Printout",
+        "bundlename": "printout",
+        "bundleinstancename": "printout",
+        "metadata": {
+            "Import-Bundle": {
+                "printout": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }, {
+        "title": "PostProcessor",
+        "fi": "PostProcessor",
+        "sv": "PostProcessor",
+        "en": "PostProcessor",
+        "bundlename": "postprocessor",
+        "bundleinstancename": "postprocessor",
+        "metadata": {
+            "Import-Bundle": {
+                "postprocessor": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    }, {
+        "bundleinstancename": "statsgrid",
+        "bundlename": "statsgrid",
+        "metadata": {
+            "Import-Bundle": {
+                "statsgrid": {
+                    "bundlePath": "../../../packages/statistics/bundle/"
+                }
+            }
+        }
+    }]
+}

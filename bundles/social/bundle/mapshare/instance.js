@@ -152,7 +152,7 @@ function() {
         
         "promotions" : function(response) {
             var me = this;
-            console.log("PROMOTIONS", response);
+//            console.log("PROMOTIONS", response);
             var newContent = [];
 
             jQuery.each(response.results, function(index, value) {
@@ -165,7 +165,7 @@ function() {
         },
         "promotionLinks" : function(response) {
             var me = this;
-            console.log("PROMOTION LINKS", response);
+//            console.log("PROMOTION LINKS", response);
 
             jQuery.each(response.results, function(index, value) {
                 me._data.promotionLinks[value._id] = value;
@@ -254,7 +254,7 @@ function() {
                 url : uriPublished,
                 dataType : 'json',
                 success : function(data, textStatus) {
-                    console.log(data);
+//                    console.log(data);
                 },
                 error : function(jqXHR, textStatus, errorThrown) {
 
@@ -266,7 +266,7 @@ function() {
                 url : uriPromoted,
                 dataType : 'json',
                 success : function(data, textStatus) {
-                    console.log(data);
+//                    console.log(data);
 
                 },
                 error : function(jqXHR, textStatus, errorThrown) {
@@ -295,7 +295,7 @@ function() {
                 url : uriAddUser,
                 dataType : 'json',
                 success : function(data, textStatus) {
-                    console.log("ADDED USER " + userName);
+//                    console.log("ADDED USER " + userName);
                 },
                 error : function(jqXHR, textStatus, errorThrown) {
 
@@ -372,7 +372,7 @@ function() {
             var now = new Date().getTime();
             ref = 0;
 
-            console.log(ref);
+//            console.log(ref);
             me._data.refTime = ref;
         } else {
             ref = me._data.refTime;

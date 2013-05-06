@@ -819,6 +819,9 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      * @method clearDataFromGrid
      */
     clearDataFromGrid : function() {
+        if(!this.grid) {
+            return;
+        }
         var columns = this.grid.getColumns();
         var newColumnDef    =   [];
         

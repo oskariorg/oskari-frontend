@@ -184,7 +184,7 @@
                     },
                     error : function(jqXHR, textStatus) {
                         if(jqXHR.status != 0) {
-                            console.log("Error while retrieving classes" + textStatus);
+//                            console.log("Error while retrieving classes" + textStatus);
                         }
                     }
                 }); 

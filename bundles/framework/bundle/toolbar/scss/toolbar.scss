@@ -20,7 +20,7 @@
 #toolbar div.toolrow div.tool.disabled, div.tool.disabled {
     cursor: default;
     opacity:0.25;
-    filter:alpha(opacity=25); /* For IE8 and earlier */
+    filter:unquote("alpha(opacity=25)"); /* For IE8 and earlier, unquote for libsass bug */
 }
 
 .divmanazerpopup.oskari-measurement {
@@ -50,7 +50,7 @@
 .oskariui-menutoolbar div.toolrow div.tool.disabled, div.tool.disabled {
     cursor: default;
     opacity:0.25;
-    filter:alpha(opacity=25); /* For IE8 and earlier */
+    filter:unquote("alpha(opacity=25)"); /* For IE8 and earlier, unquote for libsass bug */
 }
 .oskariui-menutoolbar-container {
 	display: inline-block;
