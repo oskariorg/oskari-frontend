@@ -35,22 +35,21 @@
 ```
 
 ### Error
-Returns HTTP code 200 or 500 with an error message as a JSON in response body.
+Returns HTTP code 500 with an error message as a JSON in response body.
 
-Incorrect WMS URL (200):
+Key not found (200): null
+
+Incorrect WMS URL (500):
 ```javascript
 {
   "EXCEPTION":"INCORRECT URL"
 }
 ```
 
-Key not found (200): null
-
 Could not request WMS GetCapabilities (500):
 ```javascript
 {
   "EXCEPTION": "Couldn't request WS CetGapabilities"
-
 }
 ```
 

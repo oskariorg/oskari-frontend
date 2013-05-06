@@ -27,7 +27,7 @@
 [GetWSCapabilities](<%= docsurl %>backend/actionroutes/getWSCapabilities.html)
 [GetMapLayerClasses](<%= docsurl %>backend/actionroutes/getMapLayerClasses.html)
 GetWmsServices
-SaveLayer
+[SaveLayer](<%= docsurl %>backend/actionroutes/saveLayer.html)
 SaveOrganization
 DeleteLayer
 DeleteOrganization
