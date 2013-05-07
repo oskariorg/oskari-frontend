@@ -94,7 +94,8 @@
        * add row to portti_permissions table
        (e.q. add "5";"PUBLISH")
 
-
+       * execute tips&tricks 1
+       
 ## D. Map layers
 
 ### 1. Add new layer
@@ -105,6 +106,8 @@
        e.g.
        3;"Maaperäkartta 1:20 000 / 1:50 000";"Jordartskarta 1:20 000 / 1:50 000";"Superficial deposits map 1:20 000 / 1:50 000";"3";"http://geomaps2.gtk.fi/ArcGIS/services/GTKWMS/MapServer/WMSServer";75;"''";100000;10000;"http://www.paikkatietoikkuna.fi/web/guest/maaperakartta-1/20000";"http://geomaps2.gtk.fi/GTKWMS/wms/maaperakartta20k.png";11;"0f3f054f-ad70-4cf1-a1d1-93589261bd04";"''";2;"wmslayer";"";"";"";"";"";"";"";"";"";;"";"";"''";"''";"''";"";"1.3.0";3067;"{ fi:{name:"Maaperäkartta 1:20 000 / 1:50 000",subtitle:""},sv:{name:"Jordartskarta 1:20 000 / 1:50 000",subtitle:""},en:{name:"Superficial deposits map 1:20 000 / 1:50 000",subtitle:""}}"
 
+       * execute tips&tricks 1
+       
 ## E. Database
 
 ### 1. Bundle tables
