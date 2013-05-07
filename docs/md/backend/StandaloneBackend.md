@@ -66,7 +66,7 @@
 ### 3. Start  (build all)
        * cd .. work/oskari-backend/external-libs
 	   * run all commands in mvn-install.txt
-	   * cs ..
+	   * cd ..
        * mvn -f servlet-map-pom.xml install
        [Build actions:]
        - creates Oskaridb HSQL database, if not created
