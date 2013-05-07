@@ -28,15 +28,15 @@
 [GetMapLayerClasses](<%= docsurl %>backend/actionroutes/getMapLayerClasses.html)
 GetWmsServices
 [SaveLayer](<%= docsurl %>backend/actionroutes/saveLayer.html)
-SaveOrganization
-DeleteLayer
-DeleteOrganization
-GetLayerIds
-GetStatsLayerSLD
-GetStatsTile
+[SaveOrganization](<%= docsurl %>backend/actionroutes/saveOrganization.html)
+[DeleteLayer](<%= docsurl %>backend/actionroutes/deleteLayer.html)
+[DeleteOrganization](<%= docsurl %>backend/actionroutes/deleteOrganization.html)
+[GetLayerIds](<%= docsurl %>backend/actionroutes/getLayerIds.html)
+[GetStatsLayerSLD](<%= docsurl %>backend/actionroutes/getStatsLayerSLD.html)
+[GetStatsTile](<%= docsurl %>backend/actionroutes/getStatsTile.html)
 
 ## NEW WFS
-GetWFSLayerConfiguration
+GetWFSLayerConfiguration (soon to be deprecated)
 
 ## WFS (soon to be deprecated)
 GET_PNG_MAP
