@@ -17,6 +17,8 @@ function(config) {
     this._map = null;
     this._supportedFormats = {};
     this.config = config;
+
+    this._mapClickData = { comet: false, ajax: false, wfs: [] };
 }, {
     __name : 'WfsLayerPlugin',
 
@@ -94,6 +96,9 @@ function(config) {
     getIO: function() {
         return this._io;
     },
+    getmapClickData: function() {
+        return this._mapClickData;
+    },
     /**
      * @static
      * @property eventHandlers
@@ -103,18 +108,15 @@ function(config) {
          * @method AfterMapMoveEvent
          */
         "AfterMapMoveEvent" : function(event) {
-            //console.log(event, this); // DEBUG
             var srs = this.getSandbox().getMap().getSrsName();
             var bbox = this.getSandbox().getMap().getExtent();
             var zoom = this.getSandbox().getMap().getZoom();
 
-            /// TODO: clean in all places where features list can update (setFilter - doesn't throw event yet)
+            /// clean features lists
             var layers = this.getSandbox().findAllSelectedMapLayers(); // get array of AbstractLayer (WFS|WMS..)
             for (var i = 0; i < layers.length; ++i) {
                 if (layers[i].isLayerOfType('WFS')) {
                     layers[i].setActiveFeatures([]);
-                    console.log("cleared");
-                    console.log(layers[i]);
                 }
             }
 
@@ -130,7 +132,6 @@ function(config) {
          * @method AfterMapLayerAddEvent
          */
         'AfterMapLayerAddEvent' : function(event) {
-            //console.log(event, this); // DEBUG
             // TODO: add style info when ready [check if coming for WFS]
             if(event.getMapLayer().isLayerOfType("WFS")) {
                 var styleName = "default";
@@ -151,7 +152,6 @@ function(config) {
          * @method AfterMapLayerRemoveEvent
          */
         'AfterMapLayerRemoveEvent' : function(event) {
-            //console.log(event, this); // DEBUG
             var layer = event.getMapLayer();
             if(layer.isLayerOfType("WFS")) {
                 this.getIO().removeMapLayer(layer.getId());
@@ -176,20 +176,45 @@ function(config) {
             if(this.getSandbox().getMap().isMoving()) {
                 return;
             }
-            //console.log(event, this); // DEBUG
+
             var lonlat = event.getLonLat();
             var keepPrevious = this.getSandbox().isCtrlKeyDown();
             this.getIO().setMapClick(lonlat.lon, lonlat.lat, keepPrevious);
         },
 
         /**
+         * @method GetInfoResultEvent
+         */
+        'GetInfoResultEvent' : function(event) {
+            //console.log(event, this); // DEBUG
+
+            // TODO: remove this and do changes @ backend when ready (don't get WFS..)
+            /*
+            var data = event.getData();
+            for (var i = 0; i < data.fragments.length; ++i) {
+                if(data.fragments[i].type == "wfslayer") {
+                    data.fragments.splice(i, 1);
+                }
+            }
+            */
+
+            this._mapClickData.ajax = true;
+            this._mapClickData.data = event.getData();
+            if(this._mapClickData.comet) {
+                //console.log("show info - cometd was before");
+                this.showInfoBox();
+            }
+
+        },
+
+        /**
          * @method AfterChangeMapLayerStyleEvent
          */
-        'AfterChangeMapLayerStyleEvent' : function(event) {
+        'AfterChangeMapLayerStyleEvent' : function(event) { // TODO: check out where thrown that doesn't block WFS layers..
             if(event.getMapLayer().isLayerOfType("WFS")) {
                 this.getIO().setMapLayerStyle(
                     event.getMapLayer().getId(),
-                    event.getMapLayer().getCurrentStyle().getName() // TODO: make sure if changed or coming from the event itself
+                    event.getMapLayer().getCurrentStyle().getName() // TODO: @BACKEND make sure if changed or coming from the event itself
                 );
             }
         },
@@ -217,7 +242,14 @@ function(config) {
          * @method WFSSetFilter
          */
         'WFSSetFilter' : function(event) {
-            console.log("set filter");
+            /// clean features lists
+            var layers = this.getSandbox().findAllSelectedMapLayers(); // get array of AbstractLayer (WFS|WMS..)
+            for (var i = 0; i < layers.length; ++i) {
+                if (layers[i].isLayerOfType('WFS')) {
+                    layers[i].setActiveFeatures([]);
+                }
+            }
+
             this.getIO().setFilter(event.getGeoJson());
         },
 
@@ -237,6 +269,51 @@ function(config) {
 
     onEvent : function(event) {
         return this.eventHandlers[event.getName()].apply(this, [ event ]);
+    },
+
+    // format new wfs data to html..
+    showInfoBox : function() {
+        //console.log(this._mapClickData);
+        var wfs = this._mapClickData.wfs;
+        var data = this._mapClickData.data;
+
+        // MOVE THIS TO _createInfoBoxContent eg..
+        this.templateHeader = jQuery('<div class="getinforesult_header">' +
+                '<div class="icon-bubble-left"></div>');
+        this.templateHeaderTitle = jQuery('<div class="getinforesult_header_title"></div>');
+        var content = {};
+        var wrapper = jQuery('<div></div>');
+        content.html = '';
+        content.actions = {};
+        for (var di = 0; di < data.fragments.length; di++) {
+            var fragment = data.fragments[di]
+            var fragmentTitle = fragment.layerName;
+            var fragmentMarkup = fragment.markup;
+
+            var contentWrapper = jQuery('<div></div>');
+
+            var headerWrapper = this.templateHeader.clone();
+            var titleWrapper = this.templateHeaderTitle.clone();
+            titleWrapper.append(fragmentTitle);
+            headerWrapper.append(titleWrapper);
+            contentWrapper.append(headerWrapper);
+
+
+            if (fragmentMarkup) {
+                contentWrapper.append(fragmentMarkup);
+            }
+            wrapper.append(contentWrapper);
+        }
+        content.html = wrapper;
+
+        var request = this.getSandbox().getRequestBuilder("InfoBox.ShowInfoBoxRequest")(
+            data.popupid,
+            data.title,
+            [content],
+            data.lonlat,
+            true
+        );
+        this.getSandbox().request(this, request);
     },
 
     // mapModulePlugin calls this when inits (maybe?)
@@ -306,7 +383,7 @@ function(config) {
      *           true to not delete existing tile
      */
     drawImageTile : function(layer, imageUrl, imageBbox, layerPostFix, keepPrevious) {
-        console.log(layer, imageUrl, imageBbox, layerPostFix, keepPrevious); // TODO: remove
+        //console.log(layer, imageUrl, imageBbox, layerPostFix, keepPrevious); // TODO: remove
         var layerName = "wfs_layer_" + layer.getId() + "_" + layerPostFix;
         var boundsObj = new OpenLayers.Bounds(imageBbox);
 
@@ -517,83 +594,6 @@ updateWfsImages : function(creator) {
     },
     getTileQueue: function() {
         return this.tileQueue;
-    },
-    /***********************************************************
-     * WFS FeatureInfo request
-     *
-     * @param {Object}
-     *            e
-     */
-    _getFeatureIds : function(lonlat, mouseX, mouseY) {
-        var me = this;
-        var sandbox = this._sandbox;
-        var allHighlightedLayers = sandbox.findAllHighlightedLayers();
-        // Safety check
-        // This case highlighted layer is the first one as there should not be more than one selected
-        if(allHighlightedLayers.length == 0 || !allHighlightedLayers[0] || !allHighlightedLayers[0].isLayerOfType('WFS')) {
-            // nothing to do, not wfs or nothing highlighted
-            return;
-        }
-        if(allHighlightedLayers.length != 1) {
-           sandbox.printDebug("Trying to highlight WFS feature but there is either too many or none selected WFS layers. Size: " + allHighlightedLayers.length);
-            return;
-        }
-
-        var layer = allHighlightedLayers[0];
-        // Safety check at layer is in scale
-        if(!layer.isInScale()) {
-            sandbox.printDebug('Trying to hightlight WFS feature from wfs layer that is not in scale!');
-            return;
-        }
-
-        var map = sandbox.getMap();
-        var imageBbox = this._map.getExtent();
-        var parameters = "&flow_pm_wfsLayerId=" + layer.getId() +
-                         "&flow_pm_point_x="    + lonlat.lon +
-                         "&flow_pm_point_y="    + lonlat.lat +
-                         "&flow_pm_bbox_min_x=" + imageBbox.left +
-                         "&flow_pm_bbox_min_y=" + imageBbox.bottom +
-                         "&flow_pm_bbox_max_x=" + imageBbox.right +
-                         "&flow_pm_bbox_max_y=" + imageBbox.top +
-                         "&flow_pm_zoom_level=" + map.getZoom() +
-                         "&flow_pm_map_width="  + map.getWidth() +
-                         "&flow_pm_map_height=" + map.getHeight() +
-                         "&srs=" + map.getSrsName() +
-                         "&action_route=GET_HIGHLIGHT_WFS_FEATURE_IMAGE_BY_POINT";
-
-        var keepCollection = sandbox.isCtrlKeyDown();
-
-        jQuery.ajax({
-            dataType : "json",
-            type : "POST",
-            beforeSend: function(x) {
-                if(x && x.overrideMimeType) {
-                x.overrideMimeType("application/j-son;charset=UTF-8");
-                }
-            },
-            url : sandbox.getAjaxUrl() + parameters,
-            data : parameters,
-            success : function(response) {
-                me._handleGetFeatureIdsResponse(response, layer, keepCollection);
-            }
-        });
-    },
-    // Send out event so components can highlight selected features
-    _handleGetFeatureIdsResponse : function(response, layer, keepCollection) {
-        var sandbox = this._sandbox;
-        if(!response || response.error == "true") {
-            sandbox.printWarn("Couldn't get feature id for selected map point.");
-            return;
-        }
-        // TODO: check if we want to do it with eval
-        var selectedFeatures = eval("(" + response.selectedFeatures + ")");
-        var featureIds = [];
-        if(selectedFeatures != null && selectedFeatures.id != null) {
-            featureIds.push(selectedFeatures.id);
-        }
-        var builder = sandbox.getEventBuilder('WFSFeaturesSelectedEvent');
-        var event = builder(featureIds, layer, keepCollection);
-        sandbox.notifyAll(event);
     }
 }, {
     'protocol' : [ "Oskari.mapframework.module.Module",

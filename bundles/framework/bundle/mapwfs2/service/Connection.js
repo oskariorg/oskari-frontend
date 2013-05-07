@@ -92,8 +92,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Connection', fun
 
         cometd.addListener('/meta/handshake', _metaHandshake);
         cometd.addListener('/meta/connect', _metaConnect);
-        //cometd.addListener('/service/**', getData); // TODO: remove debug
-        //cometd.addListener('/meta/**', getData); // TODO: remove debug
+        cometd.addListener('/service/**', getData); // TODO: remove debug
+        cometd.addListener('/meta/**', getData); // TODO: remove debug
         cometd.handshake();
 
     })(jQuery);
