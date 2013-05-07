@@ -12,11 +12,11 @@
 
 1. Install Cygwin
 2. Install Maven
-3. Install Oskari frontend
+3. Install Oskari frontend (git clone ssh://git@haisulike01.nls.fi/Oskari)
 
 ### 2. Installation
        * Go to path (e.g. ../oskari-backend )
-       * git clone ...
+       * git clone ssh://git@haisulike01.nls.fi/servlet-map
        Installed items:
        ================
        - servlet software
