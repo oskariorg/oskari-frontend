@@ -10,7 +10,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.GetInfoResultEve
  */
 function(data, content) {
     this._data = data;
-    this._content = content;
 }, {
     /** @static @property __name event name */
     __name : "GetInfoResultEvent",
@@ -20,21 +19,14 @@ function(data, content) {
      */
     getName : function() {
         return this.__name;
-    }
+    },
 
     /**
      * @method getData
      */
     getData : function() {
         return this._data;
-    },
-
-    /**
-     * @method getContent
-     */
-    getContent : function() {
-        return this._content;
-    },
+    }
 }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}

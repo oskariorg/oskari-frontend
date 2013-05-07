@@ -532,7 +532,8 @@ function(config) {
                         coll.push({
                             markup : pretty,
                             layerId : layerId,
-                            layerName : layerName
+                            layerName : layerName,
+                            type : type
                         });
                     }
                 }
@@ -542,7 +543,8 @@ function(config) {
                     coll.push({
                         markup : pretty,
                         layerId : layerId,
-                        layerName : layerName
+                        layerName : layerName,
+                        type : type
                     });
                 }
             }
@@ -731,7 +733,6 @@ function(config) {
      * @param {Array} data
      */
     _showFeatures : function(data) {
-
         var me = this;
         var content = {};
         var wrapper = jQuery('<div></div>');
@@ -768,7 +769,7 @@ function(config) {
             me._sandbox.request(me, r);
         }
 
-        var event = me._sandbox.getEventBuilder("GetInfoResultEvent")(data, content);
+        var event = me._sandbox.getEventBuilder("GetInfoResultEvent")(data);
         me._sandbox.notifyAll(event);
     }
 }, {
