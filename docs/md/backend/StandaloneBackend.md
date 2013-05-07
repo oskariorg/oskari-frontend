@@ -18,33 +18,33 @@
     - create jetty-env.xml (location doesn't matter)
 	
         <pre>
-        <Configure class="org.mortbay.jetty.webapp.WebAppContext">
+        &lt;Configure class="org.mortbay.jetty.webapp.WebAppContext"&gt;
             ...
-            <New id="oskaridb2" class="org.mortbay.jetty.plus.naming.Resource">
-                <Arg>jdbc/OskariPool</Arg>
-                <Arg>
-                    <New class="org.apache.commons.dbcp.BasicDataSource">
-                        <Set name="driverClassName">org.hsqldb.jdbcDriver</Set>
-                        <Set name="url">jdbc:hsqldb:file:data/oskaridb</Set>
-                    </New>
-                </Arg>
-            </New>
+            &lt;New id="oskaridb2" class="org.mortbay.jetty.plus.naming.Resource"&gt;
+                &lt;Arg&gt;jdbc/OskariPool&lt;/Arg&gt;
+                &lt;Arg&gt;
+                    &lt;New class="org.apache.commons.dbcp.BasicDataSource"&gt;
+                        &lt;Set name="driverClassName"&gt;org.hsqldb.jdbcDriver&lt;/Set&gt;
+                        &lt;Set name="url"&gt;jdbc:hsqldb:file:data/oskaridb&lt;/Set&gt;
+                    &lt;/New&gt;
+                &lt;/Arg&gt;
+            &lt;/New&gt;
             ...
-        </Configure>
+        &lt;/Configure&gt;
         </pre>
 4. Install Maven
 	- set up reference to jetty-env.xml in maven's settings, e.g.
 	
         <pre>
         ...
-        <pluginGroups>
-            <pluginGroup>org.mortbay.jetty</pluginGroup>
-        </pluginGroups>
+        &lt;pluginGroups&gt;
+            &lt;pluginGroup&gt;org.mortbay.jetty&lt;/pluginGroup&gt;
+        &lt;/pluginGroups&gt;
         ...
-        <profiles>
-            <profile>
-                <properties>
-                    <jetty.env.conf>C:\jetty-env.xml</jetty.env.conf>
+        &lt;profiles&gt;
+            &lt;profile&gt;
+                &lt;properties&gt;
+                    &lt;jetty.env.conf&gt;C:\jetty-env.xml&lt;/jetty.env.conf&gt;
                     ...
         </pre>
 
