@@ -45,7 +45,7 @@ The action route is responsible for handling the location search query based on 
 ```
 
 ### Error
-Returns HTTP code 200 with an error message as a string in response body.
+Returns HTTP code 500 with an error message as a string in response body.
 Will return an error if the `searchKey` param is empty, if it contains the `*` character and is under 4 characters long or if it contains more than one `*` characters.
 
 ## Examples

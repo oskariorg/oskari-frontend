@@ -1,5 +1,5 @@
 # SaveLayer (POST | GET)
-Save layer - If there is layer id provided this means update, otherwise it's insert.
+Save layer - If there is layer id provided this means update, otherwise it's insert. User needs to be logged in and have admin rights.
 
 ## Parameters
 <table>

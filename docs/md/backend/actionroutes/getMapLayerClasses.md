@@ -37,7 +37,7 @@ Returns layers grouped by organizations
         "wms_parameter_layers": "",
         "wmsName": "Opaskartta_kaupunginosat",
         "titleSv": "",
-        "inspireTheme": 2,
+        "inspireTheme": <inspire_theme_id>,
         "tileMatrixSetId": "",
         "legendImage": "",
         "style": "",

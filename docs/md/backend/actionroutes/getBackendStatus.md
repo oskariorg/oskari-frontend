@@ -35,7 +35,7 @@ Returns the backend status of different services (Subset=AllKnown) or just those
 ```
 
 ### Error
-Returns HTTP code 200 with an error message as a string in response body.
+Returns HTTP code 500 with an error message as a string in response body.
 
 
 ## Examples
