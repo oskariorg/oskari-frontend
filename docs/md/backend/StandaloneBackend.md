@@ -122,7 +122,7 @@
        * portti_layerclass (map service owners for grouping map layers )
        * portti_capabilities_cache (prefetched wms capabilities requests )
        
- ## E. Tips and Tricks
+## E. Tips and Tricks
  
        1. Recreate database --> delete files under /oskari-backend/data  and rebuild all ( mvn -f servlet-map-pom.xml clean install)
        
