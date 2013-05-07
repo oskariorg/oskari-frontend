@@ -17,6 +17,7 @@
 3. Install Jetty
     - create jetty-env.xml (location doesn't matter)
 	
+        <pre>
         <Configure class="org.mortbay.jetty.webapp.WebAppContext">
             ...
             <New id="oskaridb2" class="org.mortbay.jetty.plus.naming.Resource">
@@ -30,9 +31,11 @@
             </New>
             ...
         </Configure>
+        </pre>
 4. Install Maven
 	- set up reference to jetty-env.xml in maven's settings, e.g.
 	
+        <pre>
         ...
         <pluginGroups>
             <pluginGroup>org.mortbay.jetty</pluginGroup>
@@ -43,6 +46,7 @@
                 <properties>
                     <jetty.env.conf>C:\jetty-env.xml</jetty.env.conf>
                     ...
+        </pre>
 
 ### 2. Oskari installation
        * Install Oskari frontend 
