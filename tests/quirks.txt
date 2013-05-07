@@ -1,0 +1,1 @@
+In IE when clicking select boxes, it checks it but does not fire the change event as most other browsers.

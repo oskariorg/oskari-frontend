@@ -367,7 +367,7 @@ function(columnSelectorTooltip) {
         jQuery('input.column-selector-list-item').remove();
         // Open or close the checkbox dropdown list
         columnSelectorButton.click(function() {
-            if (columnSelector.css('visibility') === 'visible') {
+            if (columnSelector.css('visibility') !== 'hidden') {
                 columnSelector.css('visibility', 'hidden');
             } else {
                 columnSelector.css('visibility', 'visible');

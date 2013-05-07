@@ -8,7 +8,6 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      * Get Sotka data and show it in slcik grid
      */
     createStatsOut : function(container) {
-
         // indicators (meta data)
         this.indicators = [];
         // indicator params are select-elements

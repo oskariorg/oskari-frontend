@@ -174,7 +174,7 @@ function(instance) {
 		var footer = this._createLayerFooter(layer, layerDiv);
 
 		if (!layer.isVisible()) {
-			toolsDiv.addClass('hidden');
+			toolsDiv.addClass('hidden-layer');
 			footer.css("display", "none");
 			toolsDiv.append(this._createLayerFooterHidden(layer));
 		} else if (!isInScale) {
@@ -377,7 +377,7 @@ function(instance) {
 		var footer = layerDiv.find('div.layer-tools');
 		footer.empty();
 
-		layerDiv.removeClass('hidden');
+		layerDiv.removeClass('hidden-layer');
 		layerDiv.removeClass('out-of-scale');
 		layerDiv.removeClass('out-of-content');
 
