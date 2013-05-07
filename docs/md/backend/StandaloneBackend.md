@@ -3,7 +3,7 @@
 ## A. Overview
 
     This package serves a standalone platform for to use and apply Oskari frontend/backend software.
-    Standalone package uses HSQL databse for backend application data and Jetty servlet for web services.
+    Standalone package uses HSQL database for backend application data and Jetty servlet for web services.
     
     Remark: WFS-layers are not yet supported in this package
     
@@ -14,8 +14,35 @@
 
 1. Install Cygwin (windows)
 2. Install git
-3. Install Maven
-
+3. Install Jetty
+    - create jetty-env.xml (location doesn't matter)
+	
+        <Configure class="org.mortbay.jetty.webapp.WebAppContext">
+            ...
+            <New id="oskaridb2" class="org.mortbay.jetty.plus.naming.Resource">
+                <Arg>jdbc/OskariPool</Arg>
+                <Arg>
+                    <New class="org.apache.commons.dbcp.BasicDataSource">
+                        <Set name="driverClassName">org.hsqldb.jdbcDriver</Set>
+                        <Set name="url">jdbc:hsqldb:file:data/oskaridb</Set>
+                    </New>
+                </Arg>
+            </New>
+            ...
+        </Configure>
+4. Install Maven
+	- set up reference to jetty-env.xml in maven's settings, e.g.
+	
+        ...
+        <pluginGroups>
+            <pluginGroup>org.mortbay.jetty</pluginGroup>
+        </pluginGroups>
+        ...
+        <profiles>
+            <profile>
+                <properties>
+                    <jetty.env.conf>C:\jetty-env.xml</jetty.env.conf>
+                    ...
 
 ### 2. Oskari installation
        * Install Oskari frontend 
@@ -34,7 +61,9 @@
        - etc
         
 ### 3. Start  (build all)
-       * cd .. work/oskari-backend
+       * cd .. work/oskari-backend/external-libs
+	   * run all commands in mvn-install.txt
+	   * cs ..
        * mvn -f servlet-map-pom.xml install
        Build actions:
        ==============
@@ -42,7 +71,7 @@
        - inserts minimal data to the database tables for to use Oskari
        - starts Jetty and servlet
        - Webapp directory = ..\work\oskari-backend\servlet-map\src\main\webapp
-       - jetty-env.xml = ..\work\oskari\servers\development\jetty-env.xml
+       - jetty-env.xml = whatever it's set to in maven
        
        
        * Start Oskari  ( http://localhost:2373 )
