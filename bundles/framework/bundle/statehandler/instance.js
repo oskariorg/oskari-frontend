@@ -25,7 +25,12 @@ function() {
 
 	// TODO: default view from conf?
     this._defaultViewId = 1;
-    this._currentViewId = this._defaultViewId;
+
+    if (typeof window.viewId !== "undefined") {
+        this._currentViewId = window.viewId;
+    } else {
+        this._currentViewId = this._defaultViewId;
+    }
 }, {
     /**
      * @static
