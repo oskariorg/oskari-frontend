@@ -122,3 +122,26 @@
   color: #666666;
   font-size: 0.8em;
   font-style: italic; }
+  
+ table.colo_table1 td.selected {
+    background-color: #AAAAAA;
+}
+table.colo_table1 td.hover {
+    background-color: #D4A017;
+}
+table.colo_table1 div {
+    display: inline-block;
+    height: 15px;
+    width: 5px;
+}
+/* HOVER colortable details */
+.manageClassificationPlugin div#pop-up_06052013 {
+  display:none;
+  position:absolute;
+  width:100px;
+  padding:0px;
+  background:#E6E6E6;
+  color:#000000;
+  border:1px solid #1a1a1a;
+  font-size:90%;
+}
