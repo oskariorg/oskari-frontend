@@ -55,8 +55,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Mediator', funct
         var zoom = this.plugin.getSandbox().getMap().getZoom();
         var mapScales = this.plugin.mapModule.getMapScales();
 
-        console.log(mapScales);
-
         cometd.publish('/service/wfs/init', {
             "session" : session.session,
             "browser" : session.browser,
@@ -164,12 +162,11 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
     }
 });
 
-// TODO: edit session to hold something else than 'Temp' or fix the session storing!
 Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'setters', {
     addMapLayer : function(id, style) {
         if(this.cometd != null) {
             this.cometd.publish('/service/wfs/addMapLayer', {
-                "id" : id,
+                "layerId" : id,
                 "styleName" : style
             });
         }
@@ -178,7 +175,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
     removeMapLayer : function(id) {
         if(this.cometd != null) {
             this.cometd.publish('/service/wfs/removeMapLayer', {
-                "id" : id
+                "layerId" : id
             });
         }
     },
@@ -186,7 +183,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
     highlightMapLayerFeatures: function(id, featureIds, keepPrevious) {
         if(this.cometd != null) {
             this.cometd.publish('/service/wfs/highlightFeatures', {
-                "id" : id,
+                "layerId" : id,
                 "featureIds": featureIds,
                 "keepPrevious": keepPrevious
             });
@@ -216,7 +213,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
     setMapLayerStyle : function(id, style) {
         if(this.cometd != null) {
             this.cometd.publish('/service/wfs/setMapLayerStyle', {
-                "id" : id,
+                "layerId" : id,
                 "styleName" : style
             });
         }
@@ -247,7 +244,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
     setMapLayerVisibility : function(id, visible) {
         if(this.cometd != null) {
             this.cometd.publish('/service/wfs/setMapLayerVisibility', {
-                "id" : id,
+                "layerId" : id,
                 "visible" : visible
             });
         }
