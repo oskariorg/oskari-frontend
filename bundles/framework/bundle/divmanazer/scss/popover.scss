@@ -15,11 +15,11 @@
   padding: 5px;
   font-size: 11px;
   opacity: 0;
-  filter: alpha(opacity=0);
+  filter: unquote("alpha(opacity=0)"); /* unquote for libsass bug */
 }
 .oskari-tooltip.in {
   opacity: 0.8;
-  filter: alpha(opacity=80);
+  filter: unquote("alpha(opacity=80)"); /* unquote for libsass bug */
 }
 .oskari-tooltip.top {
   margin-top: -2px;

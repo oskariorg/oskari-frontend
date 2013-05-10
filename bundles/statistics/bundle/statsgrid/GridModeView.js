@@ -51,12 +51,12 @@ function() {
             jQuery('#contentMap').addClass('statsgrid-contentMap');
             jQuery('.oskariui-mode-content').addClass('statsgrid-mode');
             // TODO we are going to create a handle for grid vs. map separator
-            var leftWidth = 57;
+            var leftWidth = 40;
 
             /** show our mode view - view hacks */
             var elCenter = this.getCenterColumn();
             elCenter.removeClass('span12');
-            elCenter.width((100 - 57) + '%');//.addClass('span5');
+            elCenter.width((100 - leftWidth) + '%');//.addClass('span5');
             // remove toolbar's height
             jQuery('#mapdiv').height(jQuery(window).height() - jQuery('#contentMap').find('.oskariui-menutoolbar').height());
             //window resize is handled in mapfull - instance.js
@@ -94,8 +94,8 @@ function() {
 
             /** a hack to notify openlayers of map size change */
             map.updateSize();
-       
-            
+
+
 
         }
 

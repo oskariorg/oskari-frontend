@@ -1,5 +1,5 @@
 // Might need refactoring
-describe.skip('Grid component', function() {
+describe('Grid component', function() {
     var user = {}, service = {}; 
 
     service.tests = function() {
@@ -21,13 +21,14 @@ describe.skip('Grid component', function() {
         });
 
         describe('menu selector', function() {
-            it('should disappear when clicking icon-menu button', function() {
-                service.shouldBeVisible(jQuery('.column-selector'));
-                user.clickElement(jQuery('.icon-menu'));
+            it('should appear when clicking icon-menu button', function() {
                 service.shouldBeHidden(jQuery('.column-selector'));
+                user.clickElement(jQuery('.icon-menu'));
+                service.shouldBeVisible(jQuery('.column-selector'));
             });
     
-            it('should not disappear when clicking column checkbox', function() {
+            it('should stay visible when clicking column checkbox', function() {
+                user.clickElement(jQuery('.icon-menu'));
                 service.shouldBeVisible(jQuery('.column-selector'));
 
                 service.checkboxShouldNotBeChecked(jQuery('.column-selector').find('#column0'));
@@ -132,7 +133,9 @@ describe.skip('Grid component', function() {
 
     user.clickElement = function(element) {
         expect(element.length).to.equal(1);
-        element.click();
+        // click to select and fire change so that IE also get's the changed values
+        // most browsers fire the change event after click by default
+        element.click().change();
     }
 
     // run tests!
