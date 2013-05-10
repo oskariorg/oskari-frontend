@@ -128,6 +128,8 @@ function(config, locale) {
             sandbox.registerForEventByName(this, p);
         }
 
+        this.statsService = sandbox.getService('Oskari.statistics.bundle.statsgrid.StatisticsService');
+
         this._createUI();
     },
     /**
@@ -376,24 +378,21 @@ function(config, locale) {
 
         var manualBreaksInput = this.element.find('.manualBreaks').find('input[name=breaksInput]').val()
         var colors = colors.replace(/,/g, '|');
-        var sandbox = me._sandbox;
-        var eventBuilder = sandbox.getEventBuilder('MapStats.StatsVisualizationChangeEvent');
-        if (eventBuilder) {
-            var event = eventBuilder(layer, {
-                //instance.js - state handling: method
-                methodId : method,
-                //instance.js - state handling: number of classes
-                numberOfClasses : classes,
-                //instance.js - state handling: input string of manual classification method
-                manualBreaksInput : manualBreaksInput.toString(),
-                VIS_ID : -1,
-                VIS_NAME : params.VIS_NAME,
-                VIS_ATTR : params.VIS_ATTR,
-                VIS_CLASSES : classString,
-                VIS_COLORS : "choro:" + colors
-            });
-            sandbox.notifyAll(event);
-        }
+
+
+        this.statsService.sendVisualizationData(layer, {
+            //instance.js - state handling: method
+            methodId : method,
+            //instance.js - state handling: number of classes
+            numberOfClasses : classes,
+            //instance.js - state handling: input string of manual classification method
+            manualBreaksInput : manualBreaksInput.toString(),
+            VIS_ID : -1,
+            VIS_NAME : params.VIS_NAME,
+            VIS_ATTR : params.VIS_ATTR,
+            VIS_CLASSES : classString,
+            VIS_COLORS : "choro:" + colors
+        });
 
         var legendRounder = function(i) {
             if (i % 1 === 0)
