@@ -57,7 +57,6 @@ function() {
 			}
 
 			var isShown = event.getViewState() != "close";
-
             view.showMode(isShown, true);
 			view.showContent(isShown);
 		},

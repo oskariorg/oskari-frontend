@@ -4,8 +4,8 @@ Oskari.registerLocalization({
 	"value" : {
 		"tools" : {
 			"table_icon" : {
-				"tooltip" : "Näytä tiedot taulukossa",
-				"title" : "Taulukko"
+				"tooltip" : "Siirry tilastomoodiin",
+				"title" : "Tilastomoodi"
 
 			},
 			"diagram_icon" : {

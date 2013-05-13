@@ -22,18 +22,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
 		var toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
         // Table icon
 		var tool1 = toolBuilder();
-		var locTool = this.localization.tools.table_icon;
+		var locTool = me.localization.tools.table_icon;
 		tool1.setName("table_icon");
 		tool1.setTitle(locTool.title);
 		tool1.setTooltip(locTool.tooltip);
-		tool1.setIconCls("icon-restore");
+		//tool1.setIconCls("icon-restore");
 		tool1.setCallback(function() {
             me.sandbox.postRequestByName('StatsGrid.StatsGridRequest',[true, layer]);
 		});
 		layer.addTool(tool1);
+		// TODO remove diagram icon
 		// Diagram icon
+		/*
 		var tool2 = toolBuilder();
-		var locTool = this.localization.tools.diagram_icon;
+		var locTool = me.localization.tools.diagram_icon;
 		tool2.setName("diagram_icon");
 		tool2.setTitle(locTool.title);
 		tool2.setTooltip(locTool.tooltip);
@@ -41,8 +43,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
 		tool2.setCallback(function() {
 			alert('Näytä tiedot diagrammissa');
 		});
-		// Statistics mode
 		layer.addTool(tool2);
+		*/
+		// TODO remove statistics link
+		// Statistics mode
+		/*
 		var tool3 = toolBuilder();
 		var locTool = this.localization.tools.statistics;
 		tool3.setName("statistics");
@@ -52,7 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
 			alert('Kirjaudu palveluun ja siirry tilastomoodiin');
 		});
 		layer.addTool(tool3);
-
+		*/
 		//mapLayerJson.visualizations = [] -> populate styles
 		/*
 

@@ -4,8 +4,8 @@ Oskari.registerLocalization({
 	"value" : {
 		"tools" : {
 			"table_icon" : {
-				"tooltip" : "Öpna statistik tabell ",
-				"title" : "Tabell"
+				"tooltip" : "Gå till statistik",
+				"title" : "Statistik"
 
 			},
 			"diagram_icon" : {
