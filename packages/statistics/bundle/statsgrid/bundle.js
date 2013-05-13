@@ -51,6 +51,9 @@ function() {
             "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/bundle/statsgrid/request/StatsGridRequestHandler.js"
         }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/service/StatisticsService.js"
+        }, {
 			"type" : "text/css",
 			"src" : "../../../../resources/statistics/bundle/statsgrid/css/style.css"
 		},{
