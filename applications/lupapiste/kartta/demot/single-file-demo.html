@@ -1,0 +1,67 @@
+<html>
+<head>
+<title>lupapiste single file js</title>
+<!-- ############# css ################# -->
+
+<link rel="stylesheet" type="text/css" href="../../css/icons.css" />
+<link rel="stylesheet" type="text/css" href="../../build/oskarimap.css" />
+<style type="text/css">
+@media screen {
+  body {
+    margin : 0;
+    padding: 0;
+  }
+  #mapdiv {
+  }
+  #contentMap {
+    float:left;
+  }
+  
+
+  #eventMessages {
+  	float: left;
+  }
+  #formi {
+  	float: left;
+  }
+}
+</style>
+<!-- ############# /css ################# -->
+
+<!-- ############# Javascript ################# -->
+<script type="text/javascript" 
+	src="http://code.jquery.com/jquery-1.7.2.min.js">
+</script>
+
+<script type="text/javascript" src="../hub.js">
+</script>
+
+<!--  OSKARI -->
+<script type="text/javascript" src="../../build/oskarimap.js"></script>
+
+<!-- index.js -->
+<script type="text/javascript" src="single-file-demo.js"></script>
+<!-- ############# /Javascript ################# -->
+</head>
+<body>
+
+<div id="contentMap">
+<div id="mapdiv"> </div>
+</div>
+
+
+<div id="eventMessages"> </div>
+<div id="formi">
+<input type="text" id="inputx" value="517620" />
+<input type="text" id="inputy" value="6874042"/>
+<div>
+<input type="button" id="button1" value="Lisaa markkeri"/>
+<input type="button" id="button2" value="Lisaa markkereita"/>
+<input type="button" id="piirra" value="osoita piste"/>
+Tyhjenn&auml; ennen lis&auml;yst&auml;: <input type="checkbox" id="checkbox1" /><br/>
+<input type="button" id="tyhjenna" value="poista pisteet"/>
+</div>
+</div>
+
+</body>
+</html>

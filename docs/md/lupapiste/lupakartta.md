@@ -1,3 +1,30 @@
+# Lupakartta
+
+<table>
+  <tr>
+    <td>ID</td><td>lupakartta</td>
+  </tr>
+  <tr>
+    <td>API</td><td>[link here](<%= apiurl %>docs/oskari/api/#!/api/Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance)</td>
+  </tr>
+</table>
+
+## Description
+
+Lupakartta adds Marker handling. Lupakartta also utilizes dot selection and printing. The JavaScript documentation is largely missing, which can be expected from fully integrated bundles into Oskari.
+
+Note! Lupakartta requires hub.js to be globally defined.
+Also make sure libraries/OpenLayers/OpenLayers_Control_TileStitchPrinter.js is available.
+
+* State handling
+
+No state.
+
+## Developer setup
+
+Replacing index.js with the following code will load up the lupapiste bundle and adds the example UI as a layer on top of the Oskari UI. This is not intended for production use. In production it is recommended to add hub.js directly into the html file. The bundle definition and configuration is recommended to be added on the server side to appSetup and appConfig.
+
+```javascript
 /**
  * Start when dom ready
  */
@@ -255,3 +282,119 @@ jQuery(document).ready(function() {
         }
     });
 });
+```
+
+## Screenshot
+
+No screenshot.
+
+## Bundle configuration
+
+```javascript
+"conf": {
+    "ajaxurl": "/oskari/integraatio/Kunta.asmx/Hae",
+    "printUrl": "/print",
+    "zoomMinBbox": 1000
+}
+```
+
+## Bundle state
+
+No statehandling has been implemented.
+
+## Requests the bundle handles
+
+<table>
+  <tr>
+    <th>Request</th><th>How does the bundle react</th>
+  </tr>
+  <tr>
+    <td>lupakartta.AddMarkerRequest</td><td>Adds a marker on the map</td>
+  </tr>
+  <tr>
+    <td>lupakartta.ClearMapRequest</td><td>Clears the map</td>
+  </tr>
+</table>
+
+## Requests the bundle sends out
+
+<table>
+  <tr>
+    <th>Request</th><th>Why/when</th>
+  </tr>
+  <tr>
+    <td>MyPlaces.StartDrawingRequest</td><td></td>
+  </tr>
+  <tr>
+    <td>MyPlaces.StopDrawingRequest</td><td></td>
+  </tr>
+  <tr>
+    <td>MyPlaces.GetGeometryRequest</td><td></td>
+  </tr>
+  <tr>
+    <td>MapMoveRequest</td><td></td>
+  </tr>
+  <tr>
+    <td>DisableMapKeyboardMovementRequest</td><td></td>
+  </tr>
+</table>
+
+
+## Events the bundle listens to
+
+<table>
+  <tr>
+    <th>Event</th><th>How does the bundle react</th>
+  </tr>
+  <tr>
+    <td>MyPlaces.FinishedDrawingEvent</td><td>Handles drawing and once done, sends the municipality data to the server.</td>
+  </tr>
+</table>
+
+## Events the bundle sends out
+
+<table>
+  <tr>
+    <th>Event</th><th>Why/when</th>
+  </tr>
+  <tr>
+    <td>FeatureSelector.FeaturesAddedEvent</td><td>DigiroadVectorLayerPlugin sends this event when the user clicks on the map to select features.</td>
+  </tr>
+  <tr>
+    <td>FeatureSelector.FeaturesRemovedEvent</td><td>DigiroadVectorLayerPlugin sends this event when the user clicks on an empty spot on the map or uses the control key on a feature which has been selected already (toggle).</td>
+  </tr>
+  <tr>
+    <td>FeatureSelector.FeatureHighlightEvent</td><td>Upon moving the mouse cursor over a feature in the grid this event gets sent. It has a type which can be either 'highlight' or 'unHighlight'.</td>
+  </tr>
+  <tr>
+    <td>FeatureSelector.FeatureEditedEvent</td><td>Triggered when the user double clicks a cell in the grid, enter a new value and presses enter.</td>
+  </tr>
+</table>
+
+## Dependencies
+
+<table>
+  <tr>
+    <th>Dependency</th><th>Linked from</th><th>Purpose</th>
+  </tr>
+  <tr>
+    <td> [jQuery](http://api.jquery.com/) </td>
+    <td> Version 1.7.1 assumed to be linked (on page locally in portal) </td>
+    <td> Used to handle map element sizing </td>
+  </tr>
+  <tr>
+    <td> [OpenLayers](http://openlayers.org/) </td>
+    <td> Expects OpenLayers already linked </td>
+    <td> Not used directly but a MapModule dependency </td>
+  </tr>
+  <tr>
+    <td> [Oskari mapmodule](<%= docsurl %>framework/mapmodule.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> To initialize and show the map on UI </td>
+  </tr>
+  <tr>
+    <td> [Oskari mapmodule plugins](<%= docsurl %>framework/mapmodule.html) </td>
+    <td> Expects to be present in application setup </td>
+    <td> Any bundle providing a map plugin referenced in config needs to be loaded before starting this bundle </td>
+  </tr>
+</table>

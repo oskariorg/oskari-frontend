@@ -1,0 +1,68 @@
+{ 
+  "startupSequence" : [ 
+      { 
+        "title" : "OpenLayers",
+        "en" : "OpenLayers",
+        "fi" : "OpenLayers",
+        "sv" : "OpenLayers",
+        "bundleinstancename" : "openlayers-default-theme",
+        "bundlename" : "openlayers-default-theme",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "openlayers-default-theme" : { "bundlePath" : "../../../packages/openlayers/bundle/" },
+                "openlayers-single-full" : { "bundlePath" : "../../../packages/openlayers/bundle/" }
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },
+      { 
+        "title" : "Map",
+        "en" : "Map",
+        "fi" : "Map",
+        "sv" : "Map",
+        "bundleinstancename" : "mapfull",
+        "bundlename" : "mapfull",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "common" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "core-base" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "core-map" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "domain" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "event-base" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "event-map" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "event-map-layer" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "mapfull" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "mapmodule-plugin" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "mapwmts" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "request-base" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "request-map" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "request-map-layer" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "runtime" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "sandbox-base" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "sandbox-map" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "service-base" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "service-map" : { "bundlePath" : "../../../packages/framework/bundle/" },
+                "myplaces2" : { "bundlePath" : "../../../packages/framework/bundle/" }
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      },
+      { 
+        "title" : "lupapiste",
+        "en" : "lupapiste",
+        "fi" : "lupapiste",
+        "sv" : "lupapiste",
+        "bundleinstancename" : "lupakartta",
+        "bundlename" : "lupakartta",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "lupakartta" : { "bundlePath" : "../../../packages/lupapiste/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
+      }
+  ]
+}
