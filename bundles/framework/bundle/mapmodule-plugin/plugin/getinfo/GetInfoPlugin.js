@@ -31,6 +31,17 @@ function(config) {
         timestamp : null
     };
 }, {
+	
+	templates : {
+        table : jQuery('<table class="getinforesult_table"></table>'),
+        tableRow : jQuery('<tr></tr>'),
+        tableCell : jQuery('<td></td>'),
+
+        header : jQuery('<div class="getinforesult_header">' +
+                '<div class="icon-bubble-left"></div>'),
+        headerTitle : jQuery('<div class="getinforesult_header_title"></div>')
+	},
+
     /** @static @property __name plugin name */
     __name : 'GetInfoPlugin',
 
@@ -81,17 +92,9 @@ function(config) {
     init : function(sandbox) {
         var me = this;
 
-        this._sandbox = sandbox;
-        this._sandbox.printDebug("[GetInfoPlugin] init");
-        this.getGFIHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.getinfo.GetFeatureInfoHandler', me);
-
-        this.templateTable = jQuery('<table class="getinforesult_table"></table>');
-        this.templateTableRow = jQuery('<tr></tr>');
-        this.templateTableCell = jQuery('<td></td>');
-
-        this.templateHeader = jQuery('<div class="getinforesult_header">' +
-                '<div class="icon-bubble-left"></div>');
-        this.templateHeaderTitle = jQuery('<div class="getinforesult_header_title"></div>');
+        me._sandbox = sandbox;
+        me._sandbox.printDebug("[GetInfoPlugin] init");
+        me.getGFIHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.getinfo.GetFeatureInfoHandler', me);
     },
     /**
      * @method register
@@ -609,6 +612,8 @@ function(config) {
         if (!datum.presentationType) {
             return null;
         }
+		
+		var me = this;
 
         var response = jQuery('<div></div>');
         var html = '';
@@ -630,23 +635,23 @@ function(config) {
         	}
         	for(var i=0; i < dataArray.length; ++i) {
         		var jsonData = dataArray[i];
-	            var table = this.templateTable.clone();
+	            var table = me.templates.table.clone();
 	            for (var attr in jsonData) {
-	                var value = this._formatJSONValue(jsonData[attr]);
+	                var value = me._formatJSONValue(jsonData[attr]);
 	                if (!value) {
 	                    continue;
 	                }
-	                var row = this.templateTableRow.clone();
+	                var row = me.templates.tableRow.clone();
 	                table.append(row);
 	                if (!even) {
 						row.addClass("odd");
 	                }
 	                even = !even;
 
-	                var labelCell = this.templateTableCell.clone();
+	                var labelCell = me.templates.tableCell.clone();
 	                labelCell.append(attr);
 	                row.append(labelCell);
-	                var valueCell = this.templateTableCell.clone();
+	                var valueCell = me.templates.tableCell.clone();
 	                valueCell.append(value);
 	                row.append(valueCell);
 	            }
@@ -745,9 +750,10 @@ function(config) {
 
             var contentWrapper = jQuery('<div></div>');
 
-            var headerWrapper = this.templateHeader.clone();
-            var titleWrapper = this.templateHeaderTitle.clone();
+            var headerWrapper = me.templates.header.clone();
+            var titleWrapper = me.templates.headerTitle.clone();
             titleWrapper.append(fragmentTitle);
+			titleWrapper.attr('title', fragmentTitle);
             headerWrapper.append(titleWrapper);
             contentWrapper.append(headerWrapper);
 
