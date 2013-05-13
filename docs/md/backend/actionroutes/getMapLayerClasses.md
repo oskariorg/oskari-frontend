@@ -9,12 +9,6 @@ Returns layers grouped by organizations
     <th>Description</th>
     <th>Required?</th>
   </tr>
-  <tr>
-    <td>param</td>
-    <td>String</td>
-    <td>Sample parameter</td>
-    <td>**true**</td>
-  </tr>
 </table>
 
 ## Response

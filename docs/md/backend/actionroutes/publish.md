@@ -18,6 +18,7 @@ Logged in users can publish their own maps, which this action route handles.
 </table>
 
 `pubdata` parameter:
+<br/>
 ```javascript
 {
   "domain" : "some.domain", // Domain where map is to be published
