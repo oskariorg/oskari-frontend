@@ -89,7 +89,9 @@ function() {
 
             if(!blnFromExtensionEvent) {
                 // reset tile state if not triggered by tile click
-                sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.instance, 'close']);
+                // postRequestbyName is banned! sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.instance, 'close']);
+                var request = sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(this.instance, 'close', this.instance.getName());
+                sandbox.request(this.instance.getName(), request);
             }
 
             /** a hack to notify openlayers of map size change */
