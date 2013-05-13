@@ -109,7 +109,7 @@ function() {
                             for (var i = 0; i < columns.length; i++) {
                                 var column = columns[i];
                                 if (column.id == state.currentColumn) {
-                                    view.classifyData(column);
+                                    view.sendStatsData(column);
                                 }
                             };
                         }
