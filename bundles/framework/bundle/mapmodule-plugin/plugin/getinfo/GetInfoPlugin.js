@@ -33,13 +33,13 @@ function(config) {
 }, {
 	
 	templates : {
-        table = jQuery('<table class="getinforesult_table"></table>');
-        tableRow = jQuery('<tr></tr>');
-        tableCell = jQuery('<td></td>');
+        table : jQuery('<table class="getinforesult_table"></table>');
+        tableRow : jQuery('<tr></tr>');
+        tableCell : jQuery('<td></td>');
 
-        header = jQuery('<div class="getinforesult_header">' +
+        header : jQuery('<div class="getinforesult_header">' +
                 '<div class="icon-bubble-left"></div>');
-        headerTitle = jQuery('<div class="getinforesult_header_title"></div>');
+        headerTitle : jQuery('<div class="getinforesult_header_title"></div>');
 	},
 
     /** @static @property __name plugin name */
