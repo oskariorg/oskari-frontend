@@ -47,8 +47,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/controls/PorttiMouse.js"
         },  {
-            
-            
+
+
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/DisableMapKeyboardMovementRequest.js"
         },  {
@@ -64,14 +64,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/MapMovementControlsRequestHandler.js"
         },  {
-            
-            
+
+
             "type" : "text/javascript",
             "src" : "../../../../sources/framework/request/common/show-map-measurement-request.js"
-        }, 
+        },
 		/**
 		 * GFI
-		 */ 
+		 */
 		{
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/getinfo/GetFeatureInfoHandler.js"
@@ -140,7 +140,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
             "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/datasource/css/datasource.css"
         },
 
-        
+
         // IndexMap
         {
             "type" : "text/javascript",
@@ -150,7 +150,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/indexmap/css/indexmap.css"
         },
-        
+
         // ScaleBar
         {
             "type" : "text/javascript",
@@ -166,7 +166,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/fullscreen/css/fullscreen.css"
         },
-        
+
         /**
          * MapLayer selection plugin
          */
@@ -205,13 +205,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/event/MapLayerVisibilityChangedEvent.js"
 		},
-		
+
 		/** Layers backport */
 		{
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/wmslayer/WmsLayerPlugin.js"
 		},
-		
+
 		/**
 		 * Vector Layer plugin
 		 */
@@ -226,7 +226,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/location/GeoLocationPlugin.js"
         },
-		
+
 		/**
 		 * Requests & handlers
 		 */
@@ -252,6 +252,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/event/EscPressedEvent.js"
 		}, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapmodule-plugin/event/GetInfoResultEvent.js"
+        }, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/request/ClearHistoryRequest.js"
 		}, {
@@ -262,20 +265,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/zoombar/Portti2Zoombar.js"
 		}, {
 		    "type" : "text/css",
-		    "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/css/porttizoombar.css"	  
+		    "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/css/porttizoombar.css"
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/panbuttons/PanButtons.js"
 		},{
 		    "type" : "text/css",
-		    "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/css/panbuttons.css"	  
+		    "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/css/panbuttons.css"
 		},
 		{
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/mapmodule-plugin/css/mapmodule.css"
         }],
 		"locales" : [{
-		    // when lang is undefined, loader loads each language file, publisher needs localization for each 
+		    // when lang is undefined, loader loads each language file, publisher needs localization for each
 			//"lang" : "fi",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/locale/fi.js"

@@ -70,11 +70,10 @@ describe('Test Suite for full screen toggle plugin', function() {
         });
 
 
-        it('should send a MapWindowFullScreenRequest', function() {
+        it('should send a MapWindowFullScreenRequest', function(done) {
             var img = pluginDiv.find('img.fullscreenDivImg'),
                 mapfull = sandbox.getStatefulComponents()['mapfull'],
-                reqHandler = mapfull.mapWindowFullScreenRequestHandler.handleRequest,
-                requestSpy = sinon.spy(reqHandler);
+                requestSpy = sinon.spy(mapfull.mapWindowFullScreenRequestHandler, 'handleRequest');
 
             img.click();
 

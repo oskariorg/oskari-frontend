@@ -139,7 +139,7 @@ function(instance) {
             }
             me.selectedTab = selectedPanel;
             if(selectedPanel) {
-                me._updateData(selectedPanel.layer);
+                me.updateData(selectedPanel.layer);
                 // sendout highlight request for selected tab
                 if(me.active) {
                     var request = hlReqBuilder(selectedPanel.layer.getId());
@@ -190,7 +190,7 @@ function(instance) {
      *           WFS layer that was added
      * Updates data for layer
      */
-    _updateData: function(layer) {
+    updateData: function(layer) {
         if(!this.active) {
             // disabled
             return;
@@ -209,8 +209,6 @@ function(instance) {
         panel.getContainer().append(this.instance.getLocalization('loading'));
 
         // in scale, proceed
-        console.log("updating data");
-        console.log(layer);
         this._prepareData(layer);
 
         if(selection) {
@@ -231,7 +229,7 @@ function(instance) {
         if(!this.selectedTab) {
             return;
         }
-        this._updateData(this.selectedTab.layer);
+        this.updateData(this.selectedTab.layer);
     },
 
     /**

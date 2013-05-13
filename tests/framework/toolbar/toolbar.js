@@ -123,20 +123,16 @@ describe('Test suite for Toolbar bundle', function() {
             toolbarModule.removeToolButton(testButtonId, testButtonGroup);
         });
 
+        // FIXME figure out a way to spy on the callback function
         it('should respond to callback when clicked', function() {
-            var cbSpy = sinon.spy(testButtonConf.callback);
+            var cbSpy = sinon.spy(testButtonConf, 'callback');
             toolbarModule.addToolButton(testButtonId, testButtonGroup, testButtonConf);
 
             var testButton = $toolbarContainer.find('div.tool[tool="' + testButtonId + '"]');
             testButton.click();
 
-            waitsFor(function() {
-                return(cbSpy.callCount > 0);
-            }, function() {
-                expect(cbSpy.callCount).to.be(1);
-
-                done();
-            }, "Waits for a button to be clicked", 3000);
+            expect(cbSpy.callCount).to.be(1);
+            cbSpy.restore();
 
             toolbarModule.removeToolButton(testButtonId, testButtonGroup);
         });

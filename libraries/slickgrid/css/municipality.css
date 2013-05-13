@@ -3,20 +3,12 @@
     font-family: arial;
     font-size: 8pt;
 }
-body {
-    background: none repeat scroll 0 0 beige;
-    padding: 0;
-}
-h2 {
-    border-bottom: 1px dotted gray;
-    font-size: 10pt;
-}
-ul {
+.statsgrid ul {
     cursor: default;
     margin-left: 0;
     padding: 0;
 }
-li {
+.statsgrid li {
     background: url("/Oskari/libraries/slickgrid/images/arrow_right_spearmint.png") no-repeat scroll left center transparent;
     list-style: none outside none;
     margin: 0;
@@ -98,7 +90,7 @@ li {
     display: inline-block;
     height: 6px;
 }
-input.editor-text {
+.statsgrid input.editor-text {
     background: none repeat scroll 0 0 transparent;
     border: 0 none;
     height: 100%;
@@ -112,7 +104,7 @@ input.editor-text {
     padding: 0;
     vertical-align: top;
 }
-input.editor-percentcomplete {
+.statsgrid input.editor-percentcomplete {
     background: none repeat scroll 0 0 transparent;
     border: 0 none;
     float: left;
@@ -173,12 +165,12 @@ input.editor-percentcomplete {
 .editor-percentcomplete-helper:hover {
     display: block;
 }
-select.editor-yesno {
+.statsgrid select.editor-yesno {
     margin: 0;
     vertical-align: middle;
     width: 100%;
 }
-input.editor-checkbox {
+.statsgrid input.editor-checkbox {
     border: 0 none;
     height: 100%;
     margin: 0;
