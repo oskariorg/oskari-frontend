@@ -172,15 +172,15 @@
 		}, {
 			"instanceProps": {},
 			"title": "Karttatasot",
-			"bundleinstancename": "admin-layersel",
+			"bundleinstancename": "admin-layerselector",
 			"fi": "admin layerselector",
 			"sv": "?",
 			"en": "?",
-			"bundlename": "admin-layersel",
+			"bundlename": "admin-layerselector",
 			"metadata": {
 				"Import-Bundle": {
 					"admin-layersel": {
-						"bundlePath": "../../../packages/framework/bundle/"
+						"bundlePath": "../../../packages/integration/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []

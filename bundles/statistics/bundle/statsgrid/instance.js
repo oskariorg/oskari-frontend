@@ -30,6 +30,12 @@ function() {
 		var sandbox = Oskari.getSandbox(sandboxName);
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
+        // create the StatisticsService for handling ajax calls
+        // and common functionality.
+        var statsService = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.StatisticsService', me);
+        sandbox.registerService(statsService);
+        this.statsService = statsService;
+
         // register plugin for map 
         var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', conf ,locale);
         mapModule.registerPlugin(classifyPlugin);
@@ -68,6 +74,60 @@ function() {
      */
     setState : function(state, ignoreLocation) {
         var me = this, view = this.plugins['Oskari.userinterface.View'];
+        var layer = this.sandbox.findMapLayerFromAllAvailable(state.layerId);
+        var contentLoadedCallback = function() {
+            if(state.indicators.length > 0){
+
+                //send ajax calls and build the grid
+                view.getSotkaIndicatorsMeta(state.indicators, function(){
+
+                    //send ajax calls and build the grid
+                    view.getSotkaIndicatorsData(state.indicators, function(){
+
+                        if(state.currentColumn != null) {
+
+                            if(state.methodId != null && state.methodId > 0) {
+                                var select = me.classifyPlugin.element.find('.classificationMethod').find('.method');
+                                select.val(state.methodId);
+                                // The manual breaks method:
+                                if(state.methodId == 4 && state.manualBreaksInput) {
+                                    var manualInput = me.classifyPlugin.element.find('.manualBreaks').find('input[name=breaksInput]');
+                                    manualInput.val(state.manualBreaksInput);
+                                    me.classifyPlugin.element.find('.classCount').hide();
+                                    me.classifyPlugin.element.find('.manualBreaks').show();
+                                }
+                            }
+                            if(state.numberOfClasses != null && state.numberOfClasses > 0) {
+                                var slider = me.classifyPlugin.rangeSlider;
+                                if(slider != null) {
+                                    slider.slider("value", state.numberOfClasses);
+                                    slider.parent().find('input#amount_class').val(state.numberOfClasses);
+                                }
+                            }
+                            // current column is needed for rendering map
+                            var columns = view.grid.getColumns();
+                            for (var i = 0; i < columns.length; i++) {
+                                var column = columns[i];
+                                if (column.id == state.currentColumn) {
+                                    view.sendStatsData(column);
+                                }
+                            };
+                        }
+                    });
+                });
+            }
+        };
+
+        // Load the mode and show content if not loaded already.
+        if (!view.isVisible) {
+            view.showMode(true);
+            view.showContent(true, layer, contentLoadedCallback);
+        }
+        // Otherwise just set the state.
+        else {
+            contentLoadedCallback();
+        }
+
         if(!view.grid) {
             return;
         }
@@ -76,48 +136,6 @@ function() {
 
         if(this.state != null && this.state.indicators != null && this.state.indicators.length > 0) {
             this.state.indicators = [];
-        }
-
-
-        if(state.indicators.length > 0){
-
-            //send ajax calls and build the grid
-            view.getSotkaIndicatorsMeta(state.indicators, function(){
-
-                //send ajax calls and build the grid
-                view.getSotkaIndicatorsData(state.indicators, function(){
-
-                    if(state.currentColumn != null) {
-
-                        if(state.methodId != null && state.methodId > 0) {
-                            var select = me.classifyPlugin.element.find('.classificationMethod').find('.method');
-                            select.val(state.methodId);
-                            // The manual breaks method:
-                            if(state.methodId == 4 && state.manualBreaksInput) {
-                                var manualInput = me.classifyPlugin.element.find('.manualBreaks').find('input[name=breaksInput]');
-                                manualInput.val(state.manualBreaksInput);
-                                me.classifyPlugin.element.find('.classCount').hide();
-                                me.classifyPlugin.element.find('.manualBreaks').show();
-                            }
-                        }
-                        if(state.numberOfClasses != null && state.numberOfClasses > 0) {
-                            var slider = me.classifyPlugin.rangeSlider;
-                            if(slider != null) {
-                                slider.slider("value", state.numberOfClasses);
-                                slider.parent().find('input#amount_class').val(state.numberOfClasses);
-                            }
-                        }
-                        // current column is needed for rendering map
-                        var columns = view.grid.getColumns();
-                        for (var i = 0; i < columns.length; i++) {
-                            var column = columns[i];
-                            if (column.id == state.currentColumn) {
-                                view.classifyData(column);
-                            }
-                        };
-                    }
-                });
-            });
         }
     },
     getState : function() {

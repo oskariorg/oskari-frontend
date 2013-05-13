@@ -20,7 +20,7 @@ function(layer, params) {
      * @return {String} The event name.
      */
     getName : function() {
-        return "MapStats.SotkadataChangedEvent";
+        return "StatsGrid.SotkadataChangedEvent";
     },
     /**
     * @method getLayer
