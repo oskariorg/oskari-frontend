@@ -169,3 +169,7 @@ Response:
   ]
 }
 ```
+## TODO
+* This is overloaded action route - instead of fetching WMS (as name suggests) it fetches also old WFS and MyPlaces info.
+* this seems to have dublicate sets of parameters(?)
+  - x,y,width, height vs. lon, lat, bbox
