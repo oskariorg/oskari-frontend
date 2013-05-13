@@ -304,7 +304,9 @@ function() {
 
         if(blnEnabled == true) {
 
-            me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
+            //me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
+            var request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
+            me.sandbox.request(me.getName(), request);
 
             // proceed with printout view
             if(!this.printout) {
