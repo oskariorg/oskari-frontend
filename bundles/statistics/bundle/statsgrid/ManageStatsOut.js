@@ -688,7 +688,8 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         var data = this.dataView.getItems();
         for ( i = 0; i < data.length; i++) {
             var row = data[i];
-            if(!isNaN(row[curCol.field])) {
+            // Exclude null values
+            if (!isNaN(row[curCol.field])) {
                 statArray.push(row[curCol.field]);
                 // Municipality codes (kuntakoodit)
                 munArray.push(row['code']);
