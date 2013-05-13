@@ -208,9 +208,8 @@ function() {
          */
         'WFSPropertiesEvent': function(event) {
             // update grid information [don't update the grid if not active]
-            // information already in layer
             var layer = event.getLayer();
-
+            this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
         },
 
         /**
@@ -219,8 +218,8 @@ function() {
          */
         'WFSFeatureEvent': function(event) {
             // update grid information [don't update the grid if not active]
-            // information already in layer
             var layer = event.getLayer();
+            this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
         },
 
         /**
