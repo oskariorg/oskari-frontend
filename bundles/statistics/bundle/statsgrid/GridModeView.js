@@ -39,12 +39,14 @@ function() {
         var mapModule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule');
         var map = mapModule.getMap();
 
-        /** Set zoom to min **/
-        mapModule.zoomTo(0);
+     
         
         if (isShown) {
             /** ENTER The Mode */
 
+            /** Set zoom to min **/
+             mapModule.zoomTo(0);
+        
             /** set map to stats mode - map-ops -> statslayer tools should propably tell us where to zoom */
 //            this._setMapStatsMode();
 

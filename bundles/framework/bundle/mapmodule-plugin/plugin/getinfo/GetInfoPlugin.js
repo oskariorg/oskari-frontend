@@ -17,7 +17,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
  * @method create called automatically on construction
  * @static
  */
-function() {
+function(config) {
+    this.config = config;
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
@@ -83,12 +84,12 @@ function() {
         this._sandbox = sandbox;
         this._sandbox.printDebug("[GetInfoPlugin] init");
         this.getGFIHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.getinfo.GetFeatureInfoHandler', me);
-        
+
         this.templateTable = jQuery('<table class="getinforesult_table"></table>');
         this.templateTableRow = jQuery('<tr></tr>');
         this.templateTableCell = jQuery('<td></td>');
-        
-        this.templateHeader = jQuery('<div class="getinforesult_header">' + 
+
+        this.templateHeader = jQuery('<div class="getinforesult_header">' +
                 '<div class="icon-bubble-left"></div>');
         this.templateHeaderTitle = jQuery('<div class="getinforesult_header_title"></div>');
     },
@@ -531,7 +532,8 @@ function() {
                         coll.push({
                             markup : pretty,
                             layerId : layerId,
-                            layerName : layerName
+                            layerName : layerName,
+                            type : type
                         });
                     }
                 }
@@ -541,7 +543,8 @@ function() {
                     coll.push({
                         markup : pretty,
                         layerId : layerId,
-                        layerName : layerName
+                        layerName : layerName,
+                        type : type
                     });
                 }
             }
@@ -606,7 +609,7 @@ function() {
         if (!datum.presentationType) {
             return null;
         }
-        
+
         var response = jQuery('<div></div>');
         var html = '';
         var contentType = ( typeof datum.content);
@@ -639,7 +642,7 @@ function() {
 						row.addClass("odd");
 	                }
 	                even = !even;
-	                
+
 	                var labelCell = this.templateTableCell.clone();
 	                labelCell.append(attr);
 	                row.append(labelCell);
@@ -722,15 +725,14 @@ function() {
      * @method _showFeatures
      * Shows multiple features in an infobox.
      * Parameter data is in format:
-     * 
-     *  { fragments: coll, title: title } 
+     *
+     *  { fragments: coll, title: title }
      * fragments is an array of JSON { markup: '<html-markup>', layerName:
      * 'nameforlayer', layerId: idforlayer }
-     * 
+     *
      * @param {Array} data
      */
     _showFeatures : function(data) {
-
         var me = this;
         var content = {};
         var wrapper = jQuery('<div></div>');
@@ -742,13 +744,13 @@ function() {
             var fragmentMarkup = fragment.markup;
 
             var contentWrapper = jQuery('<div></div>');
-            
+
             var headerWrapper = this.templateHeader.clone();
             var titleWrapper = this.templateHeaderTitle.clone();
-            titleWrapper.append(fragmentTitle); 
+            titleWrapper.append(fragmentTitle);
             headerWrapper.append(titleWrapper);
             contentWrapper.append(headerWrapper);
-            
+
 
             if (fragmentMarkup) {
                 contentWrapper.append(fragmentMarkup);
@@ -761,10 +763,14 @@ function() {
         var myLoc = pluginLoc[this.__name];
         data.title = myLoc.title;
 
-        var rn = "InfoBox.ShowInfoBoxRequest";
-        var rb = me._sandbox.getRequestBuilder(rn);
-        var r = rb(data.popupid, data.title, [content], data.lonlat, true);
-        me._sandbox.request(me, r);
+        if(!this.config || this.config.infoBox) {
+            var rb = me._sandbox.getRequestBuilder("InfoBox.ShowInfoBoxRequest");
+            var r = rb(data.popupid, data.title, [content], data.lonlat, true);
+            me._sandbox.request(me, r);
+        }
+
+        var event = me._sandbox.getEventBuilder("GetInfoResultEvent")(data);
+        me._sandbox.notifyAll(event);
     }
 }, {
     /**
