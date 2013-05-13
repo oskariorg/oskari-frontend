@@ -1,6 +1,8 @@
 /**
  * @class Oskari.statistics.bundle.statsgrid.StatisticsService
- * 
+ * Methods for sending out events to display data in the grid
+ * and to create a visualization of the data on the map.
+ * Has a method for sending the requests to backend as well.
  */
 Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.StatisticsService', 
 
@@ -19,7 +21,7 @@ function(instance) {
     getQName : function() {
         return this.__qname;
     },
-    
+
     getName: function() {
         return this.__name;
     },
@@ -40,7 +42,7 @@ function(instance) {
      */
     sendStatsData: function(layer, data) {
         var me = this;
-        var eventBuilder = me.sandbox.getEventBuilder('MapStats.SotkadataChangedEvent');
+        var eventBuilder = me.sandbox.getEventBuilder('StatsGrid.SotkadataChangedEvent');
         if (eventBuilder) {
             var event = eventBuilder(layer, data);
             me.sandbox.notifyAll(event);
@@ -49,7 +51,7 @@ function(instance) {
 
     /**
      * @method sendVisualizationData
-     * Sends an event with params to build the visualization.
+     * Sends an event with params to build the visualization from.
      * @param {Object} layer Oskari layer which the visualization should be applied to
      * @param {Object} data The data for creating the visualization
      */

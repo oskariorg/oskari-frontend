@@ -1,3 +1,8 @@
+/**
+ * ManageStatsOut
+ * Creates the indicator selection ui and the actual grid where the stats data will be displayed.
+ * Handles sending the data out to create a visualization which then can be displayed on the map.
+ */
 Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipality-table', {
     /**
      * @method createStatsOut
@@ -58,9 +63,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                 me.createMunicipalitySlickGrid(container, regionData);
 
                 // Data loaded and grid created, now it's time to call the function provided, if any.
-                if (callback) {
-                    callback();
-                }
+                callback && callback();
             } else {
                 me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').regionDataError);
             }
@@ -157,7 +160,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         });
 
         grid.onHeaderClick.subscribe(function(e, args) {
-            me.classifyData(args.column);
+            me.sendStatsData(args.column);
         });
 
         // notify dataview that we are starting to update data
@@ -189,6 +192,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     /**
      * Fetch all Sotka indicators
      *
+     * @method getSotkaIndicators
      * @param container element
      */
     getSotkaIndicators : function(container) {
@@ -259,6 +263,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
     /**
      * Get Sotka indicator meta data
+     *
      * @method getSotkaIndicatorMeta
      * @param container parent element.
      * @param indicator id
@@ -368,7 +373,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                 gender = jQuery('.statsgrid').find('.gendersel').find('.gender').val();
             gender = gender != null ? gender: 'total';
             var columnId = me._getIndicatorColumnId(indicator.id, gender, year);
-        	me.removeIndicatorDataToGrid(indicator.id, gender, year);
+        	me.removeIndicatorDataFromGrid(indicator.id, gender, year);
         });
     },
 
@@ -418,6 +423,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
     /**
      * Get Sotka data for one indicator
+     *
      * @method getSotkaIndicatorData
      * @param container parent element
      * @param indicator id
@@ -531,7 +537,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
         if(silent != true) {
             // Show classification
-            this.classifyData(columns[columns.length - 1]);
+            this.sendStatsData(columns[columns.length - 1]);
         }
 
         this.updateDemographicsButtons(indicator, gender, year);
@@ -540,13 +546,12 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     /**
      * Remove indicator data to the grid.
      *
-     * @method removeIndicatorDataToGrid
-     * @param columnId unique column id
+     * @method removeIndicatorDataFromGrid
      * @param indicator id
      * @param gender (male / female / total)
      * @param year selected year
      */
-    removeIndicatorDataToGrid : function(indicator, gender, year) {
+    removeIndicatorDataFromGrid : function(indicator, gender, year) {
         var columnId = this._getIndicatorColumnId(indicator, gender, year),
             columns = this.grid.getColumns(),
             allOtherColumns = [],
@@ -597,6 +602,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     /**
      * Create HTML for year selector
      *
+     * @method getYearSelectorHTML
      * @param startYear
      * @param endYear
      */
@@ -620,6 +626,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     /**
      * Create HTML for gender selector
      *
+     * @method getGenderSelectorHTML
      * @param values for select element
      */
     getGenderSelectorHTML : function(values) {
@@ -639,11 +646,13 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         return gender;
     },
     /**
-     * Classify Sotka indicator data
-     *
+     * Sends the selected column's data from the grid
+     * in order to create the visualization.
+     * 
+     * @method sendStatsData
      * @param curCol  Selected indicator data column
      */
-    classifyData : function(curCol) {
+    sendStatsData : function(curCol) {
 
         //Classify data
         var me = this;
@@ -678,6 +687,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             munArray.push(row['code']);
         }
 
+        // send the data trough the stats service.
         me.instance.statsService.sendStatsData(me._layer, {
             CUR_COL : curCol,
             VIS_NAME : me._layer.getWmsName(), //"ows:kunnat2013",  
@@ -692,6 +702,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
     /**
      * Set layer visibility
+     *
      * @method _setLayerVisibility
      * @param visibility for hiding by passing false, and revealing by passing true
      */
@@ -710,6 +721,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
     /**
      * Get Sotka metadata for given indicators
+     *
      * @method getSotkaIndicatorsMeta
      * @param indicators for which we fetch data
      * @param callback what to do after we have fetched metadata for all the indicators
@@ -760,6 +772,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
     /**
      * Get Sotka data for given indicators
+     *
      * @method getSotkaIndicatorsData
      * @param indicators for which we fetch data
      * @param callback what to do after we have fetched data for all the indicators
@@ -818,6 +831,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     },
     /**
      * Removes all indicator data from the grid
+     *
      * @method clearDataFromGrid
      */
     clearDataFromGrid : function() {

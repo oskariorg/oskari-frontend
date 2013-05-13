@@ -118,7 +118,7 @@ function() {
             }
         };
 
-        // Load the mode if not loaded already.
+        // Load the mode and show content if not loaded already.
         if (!view.isVisible) {
             view.showMode(true);
             view.showContent(true, layer, contentLoadedCallback);

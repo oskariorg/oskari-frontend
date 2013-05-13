@@ -261,7 +261,7 @@ function(config, locale) {
          *
          * Creates classification of stats column data and shows it on geostats legend html
          */
-        'MapStats.SotkadataChangedEvent' : function(event) {
+        'StatsGrid.SotkadataChangedEvent' : function(event) {
             // Create a new classification for thematic data, if selected
             // thematic data column is changed in (ManageStatsOut)-grid
             // stats Oskari layer, which send the event
@@ -284,8 +284,9 @@ function(config, locale) {
         return this.eventHandlers[event.getName()].apply(this, [event]);
     },
     /**
+     * @method classifyData
      * Classify Sotka indicator column data
-     *
+     * Parses the data from the grid for geostats and backend so that it can be shown on the map.
      * @param event  Data sent by 'MapStats.SotkadataChangedEvent' (eg. in  ManageStatsOut.js)
      */
     classifyData : function(event) {
@@ -379,7 +380,7 @@ function(config, locale) {
         var manualBreaksInput = this.element.find('.manualBreaks').find('input[name=breaksInput]').val()
         var colors = colors.replace(/,/g, '|');
 
-
+        // Send the data out for visualization.
         this.statsService.sendVisualizationData(layer, {
             //instance.js - state handling: method
             methodId : method,
