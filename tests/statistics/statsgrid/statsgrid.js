@@ -29,7 +29,17 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
 
         // overwrite test wide appConf
         appConf = {
-            "mapfull": mapfullConf
+            "mapfull": mapfullConf,
+            "toolbar": {
+                "state": {
+
+                },
+                "conf": {
+                    "history": false,
+                    "basictools": false,
+                    "viewtools": false
+                }
+            },
         };
     });
 
@@ -67,12 +77,19 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
         });
     });
 
-    describe('from map view', function() {
-        before(startApplication);
+    describe('grid mode', function() {
+        before(function(done) {
+            startApplication(function() {
+                sandbox.postRequestByName('AddMapLayerRequest', [testLayerId, true]);
+                setTimeout(function() {
+                    done();
+                }, 1000);
+            });
+        });
 
         after(teardown);
 
-        it('should go to the mode view', function(done) {
+        it('should go to the mode view from the map view', function(done) {
             // TODO: change spy to stub so that we test the interface and not the server
             var fetchCallbackGridSpy = sinon.spy(viewPlugin, 'createMunicipalitySlickGrid'),
                 fetchCallbackIndicatorSpy = sinon.spy(viewPlugin, 'createIndicatorsSelect');
@@ -101,6 +118,44 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
                 fetchCallbackIndicatorSpy.restore();
                 done();
             }, "Waits for the stats grid mode request", 45000);
+        });
+
+        it('should exclude null values from the sent data', function(done) {
+            var statsView = statsModule.plugins['Oskari.userinterface.View'];
+
+            // faking to be module with getName/onEvent methods
+            var self = this;
+            self.getName = function() {
+                return "Test.StatsGrid";
+            }
+            self.onEvent = function(event) {
+                var hasNaNs = false;
+                var params = event.getParams();
+                var colValues = params.COL_VALUES;
+
+                for (var i = 0; i < colValues.length; ++i) {
+                    if(isNaN(colValues[i])) {
+                        hasNaNs = true;
+                    }
+                }
+
+                expect(hasNaNs).to.be(false);
+
+                // cleanup
+                sandbox.unregisterFromEventByName(self, 'StatsGrid.SotkadataChangedEvent');
+                done();
+            }
+
+            // listen to StatsGrid.SotkadataChangedEvent to trigger verification
+            sandbox.registerForEventByName(self, 'StatsGrid.SotkadataChangedEvent');
+
+            // Required by statsView#addIndicatorDataToGrid
+            statsView.indicators.push({
+                'title': {
+                    'fi': "Test indicator meta"
+                }
+            });
+            statsView.getSotkaIndicatorData(statsView.getEl(), 4, 'total', 2011);
         });
     });
 

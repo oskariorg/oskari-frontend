@@ -38,6 +38,16 @@ describe('Test Suite for digiroad/featureselector bundle', function() {
         // overwrite test wide appConf
         appConf = {
             "mapfull": mapfullConf,
+            "toolbar": {
+                "state": {
+
+                },
+                "conf": {
+                    "history": false,
+                    "basictools": false,
+                    "viewtools": false
+                }
+            },
             "digiroad-featureselector": {
                 "state": {},
                 "conf": {
