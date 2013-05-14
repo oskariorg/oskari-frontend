@@ -22,6 +22,7 @@ function() {
         if(this._layer == null || (layer != null && this._layer.getId() != layer.getId())) {
             //update layer
             this._layer = layer;
+            this.instance.gridPlugin.setLayer(layer);
             this.instance.state.layerId = this._layer.getId();
 
             this.isVisible = isShown == true;
@@ -40,11 +41,11 @@ function() {
         }
     },
     _showContent : function(container, callback) {
-            var me=this;
-         // var gridContainer = jQuery('<div id="municipalGrid" style="width:30%;height:400px;"></div>');    
-		  me.createStatsOut(container, callback);
+        var me = this;
+        // var gridContainer = jQuery('<div id="municipalGrid" style="width:30%;height:400px;"></div>');    
+		me.instance.gridPlugin.createStatsOut(container, callback);
 		// container.append(gridContainer);
-       // container.append('Tähän tulisi taulukko näkymä');
+        // container.append('Tähän tulisi taulukko näkymä');
     }
 }, {
     "protocol": ["Oskari.userinterface.View"],

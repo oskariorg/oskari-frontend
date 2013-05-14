@@ -36,7 +36,16 @@ function() {
         sandbox.registerService(statsService);
         this.statsService = statsService;
 
-        // register plugin for map 
+        // Register grid plugin for map.
+        var gridConf = {
+            'state': me.getState()
+        }
+        var gridPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin', gridConf, locale);
+        mapModule.registerPlugin(gridPlugin);
+        mapModule.startPlugin(gridPlugin);
+        this.gridPlugin = gridPlugin;
+
+        // Register classification plugin for map.
         var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', conf ,locale);
         mapModule.registerPlugin(classifyPlugin);
         mapModule.startPlugin(classifyPlugin);
@@ -78,10 +87,10 @@ function() {
             if(state.indicators.length > 0){
 
                 //send ajax calls and build the grid
-                view.getSotkaIndicatorsMeta(state.indicators, function(){
+                me.gridPlugin.getSotkaIndicatorsMeta(state.indicators, function(){
 
                     //send ajax calls and build the grid
-                    view.getSotkaIndicatorsData(state.indicators, function(){
+                    me.gridPlugin.getSotkaIndicatorsData(state.indicators, function(){
 
                         if(state.currentColumn != null) {
 
