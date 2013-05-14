@@ -41,14 +41,14 @@ DESCRIPTION MISSING
   <tr>
     <td>lon</td>
     <td>Float</td>
-    <td></td>
+    <td>Longitude</td>
     <td>false</td>
     <td>**true**</td>
   </tr>
   <tr>
     <td>lat</td>
     <td>Float</td>
-    <td></td>
+    <td>Latitude</td>
     <td>false</td>
     <td>**true**</td>
   </tr>
@@ -169,3 +169,7 @@ Response:
   ]
 }
 ```
+## TODO
+* This is overloaded action route - instead of fetching WMS (as name suggests) it fetches also old WFS and MyPlaces info.
+* this seems to have dublicate sets of parameters(?)
+  - x,y,width, height vs. lon, lat, bbox

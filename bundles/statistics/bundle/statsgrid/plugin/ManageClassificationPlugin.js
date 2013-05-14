@@ -128,6 +128,8 @@ function(config, locale) {
             sandbox.registerForEventByName(this, p);
         }
 
+        this.statsService = sandbox.getService('Oskari.statistics.bundle.statsgrid.StatisticsService');
+
         this._createUI();
     },
     /**
@@ -259,7 +261,7 @@ function(config, locale) {
          *
          * Creates classification of stats column data and shows it on geostats legend html
          */
-        'MapStats.SotkadataChangedEvent' : function(event) {
+        'StatsGrid.SotkadataChangedEvent' : function(event) {
             // Create a new classification for thematic data, if selected
             // thematic data column is changed in (ManageStatsOut)-grid
             // stats Oskari layer, which send the event
@@ -282,8 +284,9 @@ function(config, locale) {
         return this.eventHandlers[event.getName()].apply(this, [event]);
     },
     /**
+     * @method classifyData
      * Classify Sotka indicator column data
-     *
+     * Parses the data from the grid for geostats and backend so that it can be shown on the map.
      * @param event  Data sent by 'MapStats.SotkadataChangedEvent' (eg. in  ManageStatsOut.js)
      */
     classifyData : function(event) {
@@ -376,24 +379,21 @@ function(config, locale) {
 
         var manualBreaksInput = this.element.find('.manualBreaks').find('input[name=breaksInput]').val()
         var colors = colors.replace(/,/g, '|');
-        var sandbox = me._sandbox;
-        var eventBuilder = sandbox.getEventBuilder('MapStats.StatsVisualizationChangeEvent');
-        if (eventBuilder) {
-            var event = eventBuilder(layer, {
-                //instance.js - state handling: method
-                methodId : method,
-                //instance.js - state handling: number of classes
-                numberOfClasses : classes,
-                //instance.js - state handling: input string of manual classification method
-                manualBreaksInput : manualBreaksInput.toString(),
-                VIS_ID : -1,
-                VIS_NAME : params.VIS_NAME,
-                VIS_ATTR : params.VIS_ATTR,
-                VIS_CLASSES : classString,
-                VIS_COLORS : "choro:" + colors
-            });
-            sandbox.notifyAll(event);
-        }
+
+        // Send the data out for visualization.
+        this.statsService.sendVisualizationData(layer, {
+            //instance.js - state handling: method
+            methodId : method,
+            //instance.js - state handling: number of classes
+            numberOfClasses : classes,
+            //instance.js - state handling: input string of manual classification method
+            manualBreaksInput : manualBreaksInput.toString(),
+            VIS_ID : -1,
+            VIS_NAME : params.VIS_NAME,
+            VIS_ATTR : params.VIS_ATTR,
+            VIS_CLASSES : classString,
+            VIS_COLORS : "choro:" + colors
+        });
 
         var legendRounder = function(i) {
             if (i % 1 === 0)

@@ -1,18 +1,21 @@
+/**
+ * ManageStatsOut
+ * Creates the indicator selection ui and the actual grid where the stats data will be displayed.
+ * Handles sending the data out to create a visualization which then can be displayed on the map.
+ */
 Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipality-table', {
     /**
      * @method createStatsOut
-     * @param
-     * {obj}
-     * container
-     *           to where slick grid and pull downs will be appended
-     * Get Sotka data and show it in slcik grid
+     * Get Sotka data and show it in SlickGrid
+     * @param {Object} container to where slick grid and pull downs will be appended
+     * @param {Function} callback function which gets called after the content has finished loading
      */
-    createStatsOut : function(container) {
+    createStatsOut : function(container, callback) {
         // indicators (meta data)
         this.indicators = [];
         // indicator params are select-elements
         // (indicator drop down select and year & gender selects)
-        this.prepareIndicatorParams(container);
+        this.prepareIndicatorParams(container, callback);
 
         // stop events so that they don't affect other parts of the site (i.e. map)
         container.on("keyup", function(e) {
@@ -26,8 +29,9 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     /**
      * @method prepareIndicatorParams
      * @param container element where indicator-selector should be added
+     * @param {Function} callback function which gets called after the content has finished loading
      */
-    prepareIndicatorParams : function(container) {
+    prepareIndicatorParams : function(container, callback) {
 
         //clear the selectors container
         container.find('selectors-container').remove();
@@ -39,22 +43,27 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         // success -> createIndicators
         this.getSotkaIndicators(container);
         // Regions: success createMunicipalityGrid
-        this.getSotkaRegionData(container);
+        this.getSotkaRegionData(container, callback);
     },
     /**
      * Fetch region data - we need to know all the regions / municipalities
      * @method getSotkaRegionData
+     * @param container element where indicator-selector should be added
+     * @param {Function} callback function which gets called after the content has finished loading
      */
-    getSotkaRegionData : function(container) {
+    getSotkaRegionData : function(container, callback) {
         var me = this;
         // call ajax function (params: url, successFallback, errorCallback)
-        me.fetchData(me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=regions&version=1.1',
+        me.instance.statsService.fetchStatsData(me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=regions&version=1.1',
         // success callback
         function(regionData) {
             if (regionData) {
                 // get the actual data
                 //me.createMunicipalitySlickGrid(container, indicator, genders, years, indicatorMeta, regionData);
                 me.createMunicipalitySlickGrid(container, regionData);
+
+                // Data loaded and grid created, now it's time to call the function provided, if any.
+                callback && callback();
             } else {
                 me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').regionDataError);
             }
@@ -68,6 +77,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     /**
      * Create initial grid using just one column: municipality
      * @method createMunicipalitySlickGrid
+     * @param container element where indicator-selector should be added
      */
     createMunicipalitySlickGrid : function(container, regiondata) {
         var me = this;
@@ -138,6 +148,12 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                     var field = cols[i].sortCol.field;
                     var sign = cols[i].sortAsc ? 1 : -1;
                     var value1 = dataRow1[field], value2 = dataRow2[field];
+                    if(isNaN(Number(value1))) {
+                        return 1;
+                    }
+                    if(isNaN(Number(value2))) {
+                        return -1;
+                    }
                     var result = (value1 == value2 ? 0 : (value1 > value2 ? 1 : -1)) * sign;
                     if (result != 0) {
                         return result;
@@ -150,7 +166,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         });
 
         grid.onHeaderClick.subscribe(function(e, args) {
-            me.classifyData(args.column);
+            me.sendStatsData(args.column);
         });
 
         // notify dataview that we are starting to update data
@@ -182,13 +198,14 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     /**
      * Fetch all Sotka indicators
      *
+     * @method getSotkaIndicators
      * @param container element
      */
     getSotkaIndicators : function(container) {
         var me = this;
         var sandbox = me.instance.getSandbox();
         // make the AJAX call
-        me.fetchData(sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicators&version=1.1',
+        me.instance.statsService.fetchStatsData(sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicators&version=1.1',
         //success callback
         function(indicatorsdata) {
             if (indicatorsdata) {
@@ -252,6 +269,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
     /**
      * Get Sotka indicator meta data
+     *
      * @method getSotkaIndicatorMeta
      * @param container parent element.
      * @param indicator id
@@ -260,7 +278,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         var me = this;
         var sandbox = me.instance.getSandbox();
         // fetch meta data for given indicator
-        me.fetchData(sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
+        me.instance.statsService.fetchStatsData(sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
         // success callback
         function(indicatorMeta) {
             if (indicatorMeta) {
@@ -361,7 +379,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                 gender = jQuery('.statsgrid').find('.gendersel').find('.gender').val();
             gender = gender != null ? gender: 'total';
             var columnId = me._getIndicatorColumnId(indicator.id, gender, year);
-        	me.removeIndicatorDataToGrid(indicator.id, gender, year);
+        	me.removeIndicatorDataFromGrid(indicator.id, gender, year);
         });
     },
 
@@ -411,6 +429,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
     /**
      * Get Sotka data for one indicator
+     *
      * @method getSotkaIndicatorData
      * @param container parent element
      * @param indicator id
@@ -421,7 +440,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         var me = this;
         var gndrs = gender != null ? gender : 'total';
         // ajax call
-        me.fetchData(
+        me.instance.statsService.fetchStatsData(
             // url
             me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gndrs,
             // success callback
@@ -514,7 +533,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         for (var i = items.length - 1; i >= 0; i--) {
             var item = items[i];
             if (item[columnId] == null) {
-                item[columnId] = -1;
+                item[columnId] = NaN;
             }
         };
         this.dataView.endUpdate();
@@ -524,7 +543,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
         if(silent != true) {
             // Show classification
-            this.classifyData(columns[columns.length - 1]);
+            this.sendStatsData(columns[columns.length - 1]);
         }
 
         this.updateDemographicsButtons(indicator, gender, year);
@@ -533,13 +552,12 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     /**
      * Remove indicator data to the grid.
      *
-     * @method removeIndicatorDataToGrid
-     * @param columnId unique column id
+     * @method removeIndicatorDataFromGrid
      * @param indicator id
      * @param gender (male / female / total)
      * @param year selected year
      */
-    removeIndicatorDataToGrid : function(indicator, gender, year) {
+    removeIndicatorDataFromGrid : function(indicator, gender, year) {
         var columnId = this._getIndicatorColumnId(indicator, gender, year),
             columns = this.grid.getColumns(),
             allOtherColumns = [],
@@ -590,6 +608,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     /**
      * Create HTML for year selector
      *
+     * @method getYearSelectorHTML
      * @param startYear
      * @param endYear
      */
@@ -613,6 +632,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     /**
      * Create HTML for gender selector
      *
+     * @method getGenderSelectorHTML
      * @param values for select element
      */
     getGenderSelectorHTML : function(values) {
@@ -632,11 +652,13 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         return gender;
     },
     /**
-     * Classify Sotka indicator data
-     *
+     * Sends the selected column's data from the grid
+     * in order to create the visualization.
+     * 
+     * @method sendStatsData
      * @param curCol  Selected indicator data column
      */
-    classifyData : function(curCol) {
+    sendStatsData : function(curCol) {
 
         //Classify data
         var me = this;
@@ -666,23 +688,22 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         var data = this.dataView.getItems();
         for ( i = 0; i < data.length; i++) {
             var row = data[i];
-            statArray.push(row[curCol.field]);
-            // Municipality codes (kuntakoodit)
-            munArray.push(row['code']);
+            // Exclude null values
+            if (!isNaN(row[curCol.field])) {
+                statArray.push(row[curCol.field]);
+                // Municipality codes (kuntakoodit)
+                munArray.push(row['code']);
+            }
         }
 
-        var sandbox = me.instance.getSandbox();
-        var eventBuilder = sandbox.getEventBuilder('MapStats.SotkadataChangedEvent');
-        if (eventBuilder) {
-            var event = eventBuilder(me._layer, {
-                CUR_COL : curCol,
-                VIS_NAME : me._layer.getWmsName(), //"ows:kunnat2013",  
-                VIS_ATTR : me._layer.getFilterPropertyName(), //"kuntakoodi",
-                VIS_CODES : munArray,
-                COL_VALUES : statArray
-            });
-            sandbox.notifyAll(event);
-        }
+        // send the data trough the stats service.
+        me.instance.statsService.sendStatsData(me._layer, {
+            CUR_COL : curCol,
+            VIS_NAME : me._layer.getWmsName(), //"ows:kunnat2013",  
+            VIS_ATTR : me._layer.getFilterPropertyName(), //"kuntakoodi",
+            VIS_CODES : munArray,
+            COL_VALUES : statArray
+        });
 
         // show the layer, if it happens to be invisible
         this._setLayerVisibility(true);
@@ -690,6 +711,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
     /**
      * Set layer visibility
+     *
      * @method _setLayerVisibility
      * @param visibility for hiding by passing false, and revealing by passing true
      */
@@ -708,6 +730,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
     /**
      * Get Sotka metadata for given indicators
+     *
      * @method getSotkaIndicatorsMeta
      * @param indicators for which we fetch data
      * @param callback what to do after we have fetched metadata for all the indicators
@@ -721,7 +744,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             indicator = indicatorData.indicator;
 
             // ajax call
-            me.fetchData(
+            me.instance.statsService.fetchStatsData(
                 // url
                 me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
                 // success callback
@@ -758,6 +781,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
     /**
      * Get Sotka data for given indicators
+     *
      * @method getSotkaIndicatorsData
      * @param indicators for which we fetch data
      * @param callback what to do after we have fetched data for all the indicators
@@ -772,7 +796,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                 gender = indicatorData.gender != null ? indicatorData.gender: 'total';
 
             // ajax call
-            me.fetchData(
+            me.instance.statsService.fetchStatsData(
                 // url
                 me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gender,
                 // success callback
@@ -816,6 +840,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     },
     /**
      * Removes all indicator data from the grid
+     *
      * @method clearDataFromGrid
      */
     clearDataFromGrid : function() {
@@ -837,38 +862,5 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         this.grid.render();
         this.dataView.refresh();
         this.instance.state.indicators = [];
-    },
-
-
-
-    /**
-     * Make the AJAX call. This method helps
-     * if we need to do someting for all the calls to backend.
-     *
-     * param url to correct action route
-     * param successCb (success callback)
-     * param errorCb (error callback)
-     */
-    fetchData : function(url, successCb, errorCb) {
-        jQuery.ajax({
-            type : "GET",
-            dataType : 'json',
-            beforeSend : function(x) {
-                if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
-                }
-            },
-            url : url,
-            success : function(pResp) {
-                if (successCb) {
-                    successCb(pResp);
-                }
-            },
-            error : function(jqXHR, textStatus) {
-                if (errorCb && jqXHR.status != 0) {
-                    errorCb(jqXHR, textStatus);
-                }
-            }
-        });
     }
 });

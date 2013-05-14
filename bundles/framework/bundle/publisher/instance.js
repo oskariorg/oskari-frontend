@@ -276,7 +276,11 @@ function() {
 			
     		map.addClass('mapPublishMode');
     		// close all flyouts - TODO: how about popups/gfi?
-            me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
+
+			//postRequestByName brakes mode change functionality! me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
+        	var request = this.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
+         	this.sandbox.request(me.getName(), request);
+
     		    
             // proceed with publisher view
             this.publisher = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.BasicPublisher', 
