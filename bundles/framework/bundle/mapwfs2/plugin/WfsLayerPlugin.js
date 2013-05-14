@@ -554,20 +554,6 @@ function(config) {
             this._map.setLayerIndex(wfsMapImageLayer, layerIndex);
         }
 
-        /// NO IDEA WHAT THIS DOES, regex doesn't hit any wfs layer?
-        var wfsReqExp2 = new RegExp(
-                'wfs_layer_' + layer.getId() + '_WFS_LAYER_IMAGE*', 'i');
-        var lastWfsLayer = this._map.getLayersByName(wfsReqExp2);
-        if (lastWfsLayer.length > 0) {
-            var lastWfsLayerIndex = this._map
-                    .getLayerIndex(lastWfsLayer[lastWfsLayer.length - 1]);
-
-            var changeLayer2 = this._map.getLayersByName(layerName);
-            if (changeLayer2.length > 0) {
-                this._map.setLayerIndex(changeLayer2[0], lastWfsLayerIndex);
-            }
-        }
-
     },
 
     updateWfsImages : function(creator) {
