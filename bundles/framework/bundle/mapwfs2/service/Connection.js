@@ -1,7 +1,14 @@
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.service.Connection
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Connection', function(mediator) {
+Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Connection',
+/**
+ * @method create called automatically on construction
+ * @static
+
+ * @param {Object} mediator
+ */
+function(mediator) {
     (function($) {
         cookieName = 'JSESSIONID';
         var cookieValue = $.cookie(cookieName);

@@ -20,6 +20,7 @@ function() {
 
     /**
      * @method getFields
+     * @return {String[]} fields
      */
     getFields : function() {
         return this._fields;
@@ -27,6 +28,7 @@ function() {
 
     /**
      * @method setFields
+     * @param {String[]} fields
      */
     setFields : function(fields) {
         this._fields = fields;
@@ -34,6 +36,7 @@ function() {
 
     /**
      * @method getLocales
+     * @return {String[]} locales
      */
     getLocales : function() {
         return this._locales;
@@ -41,6 +44,7 @@ function() {
 
     /**
      * @method setLocales
+     * @param {String[]} locales
      */
     setLocales : function(locales) {
         this._locales = locales;
@@ -48,6 +52,7 @@ function() {
 
     /**
      * @method getActiveFeatures
+     * @return {Object[]} features
      */
     getActiveFeatures : function() {
         return this._activeFeatures;
@@ -55,6 +60,7 @@ function() {
 
     /**
      * @method setActiveFeature
+     * @param {Object} feature
      */
     setActiveFeature : function(feature) {
         this._activeFeatures.push(feature);
@@ -62,6 +68,7 @@ function() {
 
     /**
      * @method setActiveFeatures
+     * @param {Object[]} features
      */
     setActiveFeatures : function(features) {
         this._activeFeatures = features;

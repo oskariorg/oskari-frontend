@@ -2,10 +2,11 @@
  * @class Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
-
 /**
  * @method create called automatically on construction
  * @static
+
+ * @param {Object} config
  */
 function(config) {
     this._io = null;
@@ -22,16 +23,36 @@ function(config) {
 }, {
     __name : 'WfsLayerPlugin',
 
+    /**
+     * @method getName
+     * @return {String} the name for the component
+     */
     getName : function() {
         return this.pluginName;
     },
+
+    /**
+     * @method getMapModule
+     * @return {Object} map module
+     */
     getMapModule : function() {
         return this.mapModule;
     },
+
+    /**
+     * @method setMapModule
+     * @param {Object} map module
+     */
     setMapModule : function(mapModule) {
         this.mapModule = mapModule;
         this.pluginName = mapModule.getName() + this.__name;
     },
+
+    /**
+     * @method init
+     *
+     * Initiliazes the connection to the CometD servlet and registers the domain model
+     */
     init : function() {
         var sandboxName = ( this.config ? this.config.sandbox : null ) || 'sandbox';
         var sandbox = Oskari.getSandbox(sandboxName);
@@ -50,12 +71,30 @@ function(config) {
             mapLayerService.registerLayerModelBuilder('wfslayer', layerModelBuilder);
         }
     },
+
+    /**
+     * @method register
+     *
+     * Registers plugin into mapModule
+     */
     register : function() {
         this.getMapModule().setLayerPlugin('wfslayer', this);
     },
+
+    /**
+     * @method unregister
+     *
+     * Removes registration of the plugin from mapModule
+     */
     unregister : function() {
         this.getMapModule().setLayerPlugin('wfslayer', null);
     },
+
+    /**
+     * @method startPlugin
+     *
+     * Creates grid and registers event handlers
+     */
     startPlugin : function(sandbox) {
         this._map = this.getMapModule().getMap();
 
@@ -66,6 +105,12 @@ function(config) {
             sandbox.registerForEventByName(this, p);
         }
     },
+
+    /**
+     * @method stopPlugin
+     *
+     * Removes event handlers from register
+     */
     stopPlugin : function(sandbox) {
         for (p in this.eventHandlers) {
             sandbox.unregisterFromEventByName(this, p);
@@ -75,11 +120,13 @@ function(config) {
 
         this._map = null;
     },
+
     /*
      * @method start called from sandbox
      */
     start : function(sandbox) {
     },
+
     /**
      * @method stop called from sandbox
      *
@@ -87,18 +134,38 @@ function(config) {
     stop : function(sandbox) {
     },
 
+    /**
+     * @method getSandbox
+     * @return {Object} sandbox
+     */
     getSandbox: function() {
         return this._sandbox;
     },
+
+    /**
+     * @method getConnection
+     * @return {Object} connection
+     */
     getConnection : function() {
         return this._connection;
     },
+
+    /**
+     * @method getIO
+     * @return {Object} io
+     */
     getIO: function() {
         return this._io;
     },
+
+    /**
+     * @method getmapClickData
+     * @return {Object} map click data
+     */
     getmapClickData: function() {
         return this._mapClickData;
     },
+
     /**
      * @static
      * @property eventHandlers
@@ -106,6 +173,7 @@ function(config) {
     eventHandlers : {
         /**
          * @method AfterMapMoveEvent
+         * @param {Object} event
          */
         "AfterMapMoveEvent" : function(event) {
             var srs = this.getSandbox().getMap().getSrsName();
@@ -130,6 +198,7 @@ function(config) {
 
         /**
          * @method AfterMapLayerAddEvent
+         * @param {Object} event
          */
         'AfterMapLayerAddEvent' : function(event) {
             // TODO: add style info when ready [check if coming for WFS]
@@ -150,6 +219,7 @@ function(config) {
 
         /**
          * @method AfterMapLayerRemoveEvent
+         * @param {Object} event
          */
         'AfterMapLayerRemoveEvent' : function(event) {
             var layer = event.getMapLayer();
@@ -161,6 +231,7 @@ function(config) {
 
         /**
          * @method WFSFeaturesSelectedEvent
+         * @param {Object} event
          */
         'WFSFeaturesSelectedEvent' : function(event) {
             if(event.getMapLayer().isLayerOfType("WFS")) {
@@ -170,6 +241,7 @@ function(config) {
 
         /**
          * @method MapClickedEvent
+         * @param {Object} event
          */
         'MapClickedEvent' : function(event) {
             // don't process while moving
@@ -184,6 +256,7 @@ function(config) {
 
         /**
          * @method GetInfoResultEvent
+         * @param {Object} event
          */
         'GetInfoResultEvent' : function(event) {
             //console.log(event, this); // DEBUG
@@ -209,6 +282,7 @@ function(config) {
 
         /**
          * @method AfterChangeMapLayerStyleEvent
+         * @param {Object} event
          */
         'AfterChangeMapLayerStyleEvent' : function(event) { // TODO: check out where thrown that doesn't block WFS layers..
             if(event.getMapLayer().isLayerOfType("WFS")) {
@@ -221,6 +295,7 @@ function(config) {
 
         /**
          * @method MapLayerVisibilityChangedEvent
+         * @param {Object} event
          */
         'MapLayerVisibilityChangedEvent' : function(event) {
             if(event.getMapLayer().isLayerOfType("WFS")) {
@@ -233,6 +308,7 @@ function(config) {
 
         /**
          * @method AfterChangeMapLayerOpacityEvent
+         * @param {Object} event
          */
         'AfterChangeMapLayerOpacityEvent' : function(event) {
             this.afterChangeMapLayerOpacityEvent(event);
@@ -240,6 +316,7 @@ function(config) {
 
         /**
          * @method WFSSetFilter
+         * @param {Object} event
          */
         'WFSSetFilter' : function(event) {
             /// clean features lists
@@ -255,6 +332,7 @@ function(config) {
 
         /**
          * @method WFSImageEvent
+         * @param {Object} event
          */
         'WFSImageEvent' : function(event) {
             this.drawImageTile(
@@ -267,11 +345,20 @@ function(config) {
         }
     },
 
+    /**
+     * @method onEvent
+     * @param {Object} event
+     * @return {Function} event handler
+     */
     onEvent : function(event) {
         return this.eventHandlers[event.getName()].apply(this, [ event ]);
     },
 
-    // format new wfs data to html..
+    /**
+     * @method showInfoBox
+     *
+     * Wraps data to html and makes ShowInfoBoxRequest
+     */
     showInfoBox : function() {
         //console.log(this._mapClickData);
         var wfs = this._mapClickData.wfs;
@@ -316,7 +403,9 @@ function(config) {
         this.getSandbox().request(this, request);
     },
 
-    // mapModulePlugin calls this when inits (maybe?)
+    /**
+     * @method preselectLayers
+     */
     preselectLayers : function(layers) {
         var sandbox = this._sandbox;
 
@@ -332,6 +421,10 @@ function(config) {
         }
     },
 
+    /**
+     * @method afterChangeMapLayerOpacityEvent
+     * @param {Object} event
+     */
     afterChangeMapLayerOpacityEvent : function(event) {
         var layer = event.getMapLayer();
 
@@ -345,6 +438,10 @@ function(config) {
         }
     },
 
+    /**
+     * @method removeMapLayerFromMap
+     * @param {Object} layer
+     */
     removeMapLayerFromMap : function(layer) {
         var removeLayers = this.getOLMapLayers(layer);
         for ( var i = 0; i < removeLayers.length; i++) {
@@ -352,8 +449,11 @@ function(config) {
         }
     },
 
+    /**
+     * @method getOLMapLayers
+     * @param {Object} layer
+     */
     getOLMapLayers : function(layer) {
-
         if (layer && !layer.isLayerOfType('WFS')) {
             return;
         }
@@ -454,64 +554,17 @@ function(config) {
             this._map.setLayerIndex(wfsMapImageLayer, layerIndex);
         }
 
+    },
 
-//////////// HERE WITH SAMI ///////////////
-
-        var wfsReqExp2 = new RegExp(
-                'wfs_layer_' + layer.getId() + '_WFS_LAYER_IMAGE*', 'i');
-        var lastWfsLayer = this._map.getLayersByName(wfsReqExp2);
-        if (lastWfsLayer.length > 0) {
-            var lastWfsLayerIndex = this._map
-                    .getLayerIndex(lastWfsLayer[lastWfsLayer.length - 1]);
-
-            var changeLayer2 = this._map.getLayersByName(layerName);
-            if (changeLayer2.length > 0) {
-                this._map.setLayerIndex(changeLayer2[0], lastWfsLayerIndex);
+    updateWfsImages : function(creator) {
+        var layers = Oskari.$().sandbox.findAllSelectedMapLayers();
+        // request updates for map tiles
+        for ( var i = 0; i < layers.length; i++) {
+            if(layers[i].isInScale() && layers[i].isLayerOfType('WFS')) {
+                this.doWfsLayerRelatedQueries(layers[i]);
             }
         }
-
     },
-    /***************************************************************************
-     * Handle AfterHighlightWFSFeatureRowEvent
-     *
-     * @param {Object}
-     *            event
-     */
-    handleAfterHighlightWFSFeatureRowEvent : function(event) {
-        var selectedFeatureIds = event.getWfsFeatureIds();
-        if (selectedFeatureIds.length == 0 && !event.isKeepSelection()) {
-            var layer = event.getMapLayer();
-            this.removeHighlightOnMapLayer(layer.getId());
-        }
-},
-/* ******************************************************************************
- * Handle AfterRemoveHighlightMapLayerEvent
- *
- * @param {Object}
- *            event
- */
-
-removeHighlightOnMapLayer : function(layerId) {
-    var prefix = '';
-    if(layerId) {
-        prefix = 'wfs_layer_' + layerId;
-    }
-    var wfsReqExp = new RegExp(prefix + '_HIGHLIGHTED_FEATURE*', 'i');
-    var layers = this._map.getLayersByName(wfsReqExp);
-    for ( var i = 0; i < layers.length; i++) {
-        layers[i].destroy();
-    }
-},
-
-updateWfsImages : function(creator) {
-    var layers = Oskari.$().sandbox.findAllSelectedMapLayers();
-    // request updates for map tiles
-    for ( var i = 0; i < layers.length; i++) {
-        if(layers[i].isInScale() && layers[i].isLayerOfType('WFS')) {
-            this.doWfsLayerRelatedQueries(layers[i]);
-        }
-    }
-},
 
     /**
      * Generates all WFS related queries
@@ -531,12 +584,16 @@ updateWfsImages : function(creator) {
         var mapHeight = map.getHeight();
     },
 
+    /**
+     * @method afterAfterMapMoveEvent
+     *
+     * Helper for AfterMapMoveEvent
+     */
     afterAfterMapMoveEvent : function() {
         this.tileStrategy.update();
         this._tilesLayer.redraw();
         this.updateWfsImages(this.getName());
     },
-
 
 // from tilesgridplugin
 

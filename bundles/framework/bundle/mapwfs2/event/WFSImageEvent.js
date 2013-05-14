@@ -1,15 +1,16 @@
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.event.WFSImageEvent
- *
- * Used to indicate tha a WFS Feature has been selected and components should highlight it in UI
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSImageEvent',
 /**
  * @method create called automatically on construction
  * @static
  *
- * <GIEV MIEH! PARAMS>
- *
+ * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
+ * @param {String} url
+ * @param {Number[]} bbox
+ * @param {String} post fix
+ * @param {Boolean} keep previous
  */
 function(layer, imageUrl, bbox, layerPostFix, keepPrevious) {
     this._layer = layer;
@@ -31,6 +32,7 @@ function(layer, imageUrl, bbox, layerPostFix, keepPrevious) {
 
     /**
      * @method getLayer
+     * @return {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      */
     getLayer : function() {
         return this._layer;
@@ -38,6 +40,7 @@ function(layer, imageUrl, bbox, layerPostFix, keepPrevious) {
 
     /**
      * @method getImageUrl
+     * @return {String} url
      */
     getImageUrl : function() {
         return this._imageUrl;
@@ -45,6 +48,7 @@ function(layer, imageUrl, bbox, layerPostFix, keepPrevious) {
 
     /**
      * @method getBBOX
+     * @return {Number[]} bbox
      */
     getBBOX : function() {
         return this._bbox;
@@ -52,6 +56,7 @@ function(layer, imageUrl, bbox, layerPostFix, keepPrevious) {
 
     /**
      * @method getLayerPostFix
+     * @return {String} post fix
      */
     getLayerPostFix : function() {
         return this._layerPostFix;
@@ -59,6 +64,7 @@ function(layer, imageUrl, bbox, layerPostFix, keepPrevious) {
 
     /**
      * @method isKeepPrevious
+     * @return {Boolean} keep previous
      */
     isKeepPrevious : function() {
         return this._keepPrevious;
