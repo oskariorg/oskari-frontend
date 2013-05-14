@@ -148,10 +148,10 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                     var field = cols[i].sortCol.field;
                     var sign = cols[i].sortAsc ? 1 : -1;
                     var value1 = dataRow1[field], value2 = dataRow2[field];
-                    if(isNaN(Number(value1))) {
+                    if(value1 == null) {
                         return 1;
                     }
-                    if(isNaN(Number(value2))) {
+                    if(value2 == null) {
                         return -1;
                     }
                     var result = (value1 == value2 ? 0 : (value1 > value2 ? 1 : -1)) * sign;
@@ -533,7 +533,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         for (var i = items.length - 1; i >= 0; i--) {
             var item = items[i];
             if (item[columnId] == null) {
-                item[columnId] = NaN;
+                item[columnId] = null;
             }
         };
         this.dataView.endUpdate();
@@ -689,7 +689,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         for ( i = 0; i < data.length; i++) {
             var row = data[i];
             // Exclude null values
-            if (!isNaN(row[curCol.field])) {
+            if (row[curCol.field]) {
                 statArray.push(row[curCol.field]);
                 // Municipality codes (kuntakoodit)
                 munArray.push(row['code']);
