@@ -1,5 +1,5 @@
 .logoplugin {
-  background-color: white;
+  background-color: #FFF;
   background-repeat: no-repeat;
   display: block;
   position: absolute;
@@ -9,17 +9,18 @@
   filter: alpha(opacity=80);
   /* unquote for libsass bug */
   opacity: 0.8 !important; }
+  .logoplugin a, .logoplugin a:hover, .logoplugin a:active, .logoplugin a:visited {
+    color: #333333 !important; }
+  .logoplugin .icon {
+    background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/logo/images/logo_pieni.png');
+    display: inline-block;
+    height: 25px;
+    width: 25px;
+    vertical-align: bottom; }
+  .logoplugin .terms {
+    display: inline-block;
+    margin: 5px; }
 
-.logoplugin .icon {
-  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/logo/images/logo_pieni.png');
-  display: inline-block;
-  height: 25px;
-  width: 25px;
-  vertical-align: bottom; }
-
-.logoplugin .terms {
-  display: inline-block;
-  margin: 5px; }
-
-.logoplugin a, .logoplugin a:hover, .logoplugin a:active, .logoplugin a:visited {
-  color: #333333 !important; }
+/* Force measurement bar up a notch so it isn't occluded by the logo */
+#mapdiv .olControlScaleLine {
+  bottom: 30px; }
