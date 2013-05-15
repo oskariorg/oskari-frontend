@@ -1,9 +1,6 @@
 /**
  * @class Oskari.statistics.bundle.statsgrid.PublishedGridBundleInstance
  *
- * Sample extension bundle definition which inherits most functionalty
- * from DefaultExtension class.
- *
  */
 Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.PublishedGridBundleInstance',
 /**
@@ -11,28 +8,45 @@ Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.PublishedGridBundleInsta
  */
 function() {
     this.conf =  {
-        "name": "PublishedGrid",
         "sandbox": "sandbox",
-        "stateful": false,
         "gridShown": true // show the grid on startup, defaults to true
     };
     this.state = {};
 }, {
+    __name: 'PublishedGrid',
+
+    getName: function() {
+        return this.__name;
+    },
+
     init: function() {
+        return null;
+    },
+
+    update: function() {},
+
+    stop: function() {},
+
+    start: function() {
         var me = this;
         var conf = me.conf;
         var locale = me.getLocalization();
+        var showGrid = me.conf ? me.conf.gridShown : true;
         var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
         var sandbox = Oskari.getSandbox(sandboxName);
         this.sandbox = sandbox;
+        sandbox.register(this);
+
+        // Find the map module.
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         this.mapModule = mapModule;
 
         // TODO: where to get the grid container from?
-        var container = jQuery('<div class="statsgrid"></div>');
+        var container = jQuery('<div class="publishedgrid"></div>');
         this.container = container;
 
         // Create the StatisticsService for handling ajax calls and common functionality.
+        // Used in both plugins below.
         var statsService = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.StatisticsService', me);
         sandbox.registerService(statsService);
         this.statsService = statsService;
@@ -55,7 +69,7 @@ function() {
         // Fetch the state of the statsgrid bundle and create the UI based on it.
         // TODO: get the saved state from the published map.
         var statsGrid = this.sandbox.getStatefulComponents()['statsgrid'];
-        if(statsGrid && statsGrid.state) {
+        if(statsGrid && statsGrid.state && showGrid) {
             me.createUI(statsGrid.state);
         }
     },
@@ -68,10 +82,27 @@ function() {
      */
     createUI: function(state, ignoreLocation) {
         var me = this,
-            view = me.gridView,
-            showGrid = me.conf ? me.conf.gridShown : true;
-        var layer = me.sandbox.findMapLayerFromAllAvailable(state.layerId);
+            view = me.gridPlugin,
+            layer = me.sandbox.findMapLayerFromAllAvailable(state.layerId),
+            elCenter = jQuery('.oskariui-center'), // the map column
+            elLeft = jQuery('.oskariui-left'); // the grid column
 
+        view.setLayer(layer);
+        
+        // How wide the grid should be, in percentages.
+        // Probably needs to be defined somewhere else.
+        var leftWidth = 40; // %
+        elCenter.removeClass('span12');
+        elCenter.width((100 - leftWidth) + '%');
+        elLeft.removeClass('oskari-closed');
+        elLeft.width(leftWidth + '%');
+        elLeft.append(me.container);
+
+        // A hack to notify openlayers of map size change.
+        var map = me.mapModule.getMap();
+        map.updateSize();
+
+        // Load the indicator data specified in statsgrid's state.
         var gridLoadedCallback = function() {
             if (state.indicators.length > 0) {
 
@@ -116,37 +147,7 @@ function() {
         };
 
         // Initialize the grid
-        if (showGrid) {
-            me.createGrid(me.container, gridLoadedCallback);
-        }
-    },
-
-    /**
-     * @method createGrid
-     * @param {Object} container
-     * @param {Function} callback
-     */
-    createGrid: function(container, callback) {
-        var me = this;
-        // call ajax function (params: url, successFallback, errorCallback)
-        me.statsService.fetchStatsData(me.sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=regions&version=1.1',
-        // success callback
-        function(regionData) {
-            if (regionData) {
-                me.gridView.createMunicipalitySlickGrid(container, regionData);
-
-                // Data loaded and grid created, now it's time to call the function provided, if any.
-                callback && callback();
-            } else {
-                // TODO
-                // Handle no data
-            }
-        },
-        // error callback
-        function(jqXHR, textStatus) {
-            // TODO
-            // Error handling
-        });
+        view.createStatsOut(me.container, gridLoadedCallback);
     }
 }, {
     "protocol" : ["Oskari.bundle.BundleInstance"]

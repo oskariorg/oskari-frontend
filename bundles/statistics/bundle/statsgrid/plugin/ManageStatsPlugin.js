@@ -6,8 +6,8 @@
 Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
 /**
  * @method create called automatically on construction
- * @params config   reserved for future
- * @params locale   localization strings
+ * @params {Object} config   'published' => {Boolean}, 'state' => {Object}
+ * @params {Object} locale   localization strings
  *
  * @static
  */
@@ -310,10 +310,10 @@ function(config, locale) {
                     var field = cols[i].sortCol.field;
                     var sign = cols[i].sortAsc ? 1 : -1;
                     var value1 = dataRow1[field], value2 = dataRow2[field];
-                    if(isNaN(Number(value1))) {
+                    if(value1 == null) {
                         return 1;
                     }
-                    if(isNaN(Number(value2))) {
+                    if(value2 == null) {
                         return -1;
                     }
                     var result = (value1 == value2 ? 0 : (value1 > value2 ? 1 : -1)) * sign;
@@ -328,6 +328,10 @@ function(config, locale) {
         });
 
         grid.onHeaderClick.subscribe(function(e, args) {
+            // Don't do anything in case the clicked column is the one in the state.
+            if (args.column.id === me.conf.state.currentColumn) {
+                return false;
+            }
             me.sendStatsData(args.column);
         });
 
@@ -695,7 +699,7 @@ function(config, locale) {
         for (var i = items.length - 1; i >= 0; i--) {
             var item = items[i];
             if (item[columnId] == null) {
-                item[columnId] = NaN;
+                item[columnId] = null;
             }
         };
         this.dataView.endUpdate();
@@ -821,6 +825,11 @@ function(config, locale) {
      * @param curCol  Selected indicator data column
      */
     sendStatsData : function(curCol) {
+        if (curCol == null || curCol.field == 'municipality') {
+            // Not a valid current column nor a data value column
+            return;
+        }
+
         //Classify data
         var me = this;
         var statArray = [];
@@ -828,36 +837,22 @@ function(config, locale) {
         var check = false;
         var i, k;
 
-        if (curCol == null) {
-            // Not a valid current column
-            return;
-        }
-
-        //Check that selected column is data value column
-        if (curCol.field == 'municipality')
-            return;
-
-        //Check that selected column is not already selected
-        if (curCol.id === me.conf.state.currentColumn) {
-            return;
-        } else {
-            // Set current column to be stated
-            me.conf.state.currentColumn = curCol.id;
-        }
+        // Set current column to be stated
+        me.conf.state.currentColumn = curCol.id;
 
         // Get values of selected column
         var data = this.dataView.getItems();
         for ( i = 0; i < data.length; i++) {
             var row = data[i];
             // Exclude null values
-            if (!isNaN(row[curCol.field])) {
+            if (row[curCol.field]) {
                 statArray.push(row[curCol.field]);
                 // Municipality codes (kuntakoodit)
                 munArray.push(row['code']);
             }
         }
 
-        // send the data trough the stats service.
+        // Send the data trough the stats service.
         me.statsService.sendStatsData(me._layer, {
             CUR_COL : curCol,
             VIS_NAME : me._layer.getWmsName(), //"ows:kunnat2013",  
@@ -866,7 +861,7 @@ function(config, locale) {
             COL_VALUES : statArray
         });
 
-        // show the layer, if it happens to be invisible
+        // Show the layer, if it happens to be invisible
         this._setLayerVisibility(true);
     },
 
@@ -896,8 +891,8 @@ function(config, locale) {
      * @param indicators for which we fetch data
      * @param callback what to do after we have fetched metadata for all the indicators
      */
-    getSotkaIndicatorsMeta : function(indicators, callback) {
-        var me = this, container = this.getEl(), fetchedIndicators = 0;
+    getSotkaIndicatorsMeta : function(container, indicators, callback) {
+        var me = this, fetchedIndicators = 0;
         me.indicators = [];
 
         for (var i = 0; i < indicators.length; i++) {
@@ -947,8 +942,8 @@ function(config, locale) {
      * @param indicators for which we fetch data
      * @param callback what to do after we have fetched data for all the indicators
      */
-    getSotkaIndicatorsData : function(indicators, callback) {
-        var me = this, container = this.getEl(), fetchedIndicators = 0;
+    getSotkaIndicatorsData : function(container, indicators, callback) {
+        var me = this, fetchedIndicators = 0;
 
         for (var i = 0; i < indicators.length; i++) {
             var indicatorData = indicators[i],

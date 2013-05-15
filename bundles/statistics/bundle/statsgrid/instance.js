@@ -36,7 +36,9 @@ function() {
         sandbox.registerService(statsService);
         this.statsService = statsService;
 
-        // Register grid plugin for map.
+        // Register stats plugin for map which creates
+        // - the indicator selection UI (unless 'published' param in the conf is false)
+        // - the grid.
         var gridConf = {
             'state': me.getState()
         }
@@ -81,16 +83,22 @@ function() {
      * @param {Boolean} ignoreLocation true to NOT set map location based on state
      */
     setState : function(state, ignoreLocation) {
-        var me = this, view = this.plugins['Oskari.userinterface.View'];
+        var me = this,
+            view = this.plugins['Oskari.userinterface.View'],
+            container = view.getEl();
         var layer = this.sandbox.findMapLayerFromAllAvailable(state.layerId);
         var contentLoadedCallback = function() {
+            // First, let's clear out the old data from the grid.
+            me.gridPlugin.clearDataFromGrid();
+
+            console.log(state);
             if(state.indicators.length > 0){
 
                 //send ajax calls and build the grid
-                me.gridPlugin.getSotkaIndicatorsMeta(state.indicators, function(){
+                me.gridPlugin.getSotkaIndicatorsMeta(container, state.indicators, function(){
 
                     //send ajax calls and build the grid
-                    me.gridPlugin.getSotkaIndicatorsData(state.indicators, function(){
+                    me.gridPlugin.getSotkaIndicatorsData(container, state.indicators, function(){
 
                         if(state.currentColumn != null) {
 
@@ -113,11 +121,11 @@ function() {
                                 }
                             }
                             // current column is needed for rendering map
-                            var columns = view.grid.getColumns();
+                            var columns = me.gridPlugin.grid.getColumns();
                             for (var i = 0; i < columns.length; i++) {
                                 var column = columns[i];
                                 if (column.id == state.currentColumn) {
-                                    view.sendStatsData(column);
+                                    me.gridPlugin.sendStatsData(column);
                                 }
                             };
                         }
@@ -135,12 +143,6 @@ function() {
         else {
             contentLoadedCallback();
         }
-
-        if(!view.grid) {
-            return;
-        }
-
-        view.clearDataFromGrid();
 
         if(this.state != null && this.state.indicators != null && this.state.indicators.length > 0) {
             this.state.indicators = [];
