@@ -296,15 +296,16 @@ function() {
 	    		
 	    		var olLayers = me.mapModule.getOLMapLayers(layerId);
 	    		if(olLayers!=null && olLayers.length>0){
+	    			
 		    		for(var j=0;j<olLayers.length;j++){
 		    			var olLayer = olLayers[j];
 		    			
 		    			var cqlFil = olLayer.params.CQL_FILTER;
 		    			if(cqlFil!=null && cqlFil!=''){
-		    				filtters+='{"layerId":"'+layerId+'",'+'"cql":"'+cqlFil+'"}';
-		    				if(j<olLayers.length-1){
+		    				if(filtters != '['){
 		    					filtters+=',';
 		    				}
+		    				filtters+='{"layerId":"'+layerId+'",'+'"cql":"'+cqlFil+'"}';
 		    			}
 					}
 	    		}    		
