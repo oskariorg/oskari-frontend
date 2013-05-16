@@ -87,7 +87,7 @@
 	 * Install this bundle by instantating the Bundle Class
 	 * 
 	 */
-	Oskari.bundle_manager.installBundleClass("openlayers-single-full",
-			"Oskari.openlayers.bundle.openlayers-single-full.OpenLayersBundle");
+	Oskari.bundle_manager.installBundleClass("openlayers-published-map",
+			"Oskari.openlayers.bundle.openlayers-published-map.OpenLayersBundle");
 
 })();
