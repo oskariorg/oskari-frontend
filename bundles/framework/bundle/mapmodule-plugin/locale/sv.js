@@ -49,7 +49,12 @@ Oskari.registerLocalization({
         "column_type": "Typ"
       },
       "GetInfoPlugin": {
-        "title": "Objektuppgifter"
+        "title": "Objektuppgifter",
+		"layer": "Lagret",
+		"places": "Object",
+		"description": "Beskrivning",
+		"link": "URL-address",
+		"name": "Namn"
       }
     }
   }
