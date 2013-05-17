@@ -17,8 +17,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
  * @method create called automatically on construction
  * @static
  */
-function(config) {
+function(config, locale) {
     this.config = config;
+	this._locale = locale;
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
@@ -120,16 +121,16 @@ function(config) {
     startPlugin : function(sandbox) {
         var me = this;
         if (sandbox && sandbox.register) {
-            this._sandbox = sandbox;
+            me._sandbox = sandbox;
         }
-        this._map = this.getMapModule().getMap();
+        me._map = me.getMapModule().getMap();
 
-        this._sandbox.register(this);
-        for (p in this.eventHandlers ) {
-            this._sandbox.registerForEventByName(this, p);
+        me._sandbox.register(me);
+        for (p in me.eventHandlers ) {
+            me._sandbox.registerForEventByName(me, p);
         }
-        this._sandbox.addRequestHandler('MapModulePlugin.GetFeatureInfoRequest', this.getGFIHandler);
-        this._sandbox.addRequestHandler('MapModulePlugin.GetFeatureInfoActivationRequest', this.getGFIHandler);
+        me._sandbox.addRequestHandler('MapModulePlugin.GetFeatureInfoRequest', me.getGFIHandler);
+        me._sandbox.addRequestHandler('MapModulePlugin.GetFeatureInfoActivationRequest', me.getGFIHandler);
     },
     /**
      * @method stopPlugin
@@ -144,15 +145,15 @@ function(config) {
         me._closeGfiInfo();
 
         if (sandbox && sandbox.register) {
-            this._sandbox = sandbox;
+            me._sandbox = sandbox;
         }
 
-        for (p in this.eventHandlers ) {
-            this._sandbox.unregisterFromEventByName(this, p);
+        for (p in me.eventHandlers ) {
+            me._sandbox.unregisterFromEventByName(me, p);
         }
-        this._sandbox.unregister(this);
-        this._map = null;
-        this._sandbox = null;
+        me._sandbox.unregister(me);
+        me._map = null;
+        me._sandbox = null;
     },
     /**
      * @method start
@@ -582,7 +583,12 @@ function(config) {
                     if (!innerValue) {
                         continue;
                     }
-                    value.append(objAttr);
+					// Get localized attribute name
+					// TODO this should only apply to omat tasot?
+					var pluginLoc = this.getMapModule().getLocalization('plugin', true);
+					var myLoc = pluginLoc[this.__name];
+					var localizedAttr = myLoc[objAttr];
+                    value.append(localizedAttr ? localizedAttr : objAttr);
                     value.append(": ");
                     value.append(innerValue);
                     value.append('<br/>');
@@ -649,7 +655,13 @@ function(config) {
 	                even = !even;
 
 	                var labelCell = me.templates.tableCell.clone();
-	                labelCell.append(attr);
+					// Get localized name for attribute
+					// TODO this should only apply to omat tasot?
+					var pluginLoc = this.getMapModule().getLocalization('plugin', true);
+					var myLoc = pluginLoc[this.__name];
+					var localizedAttr = myLoc[attr];
+					console.dir(pluginLoc);
+	                labelCell.append(localizedAttr ? localizedAttr : attr);
 	                row.append(labelCell);
 	                var valueCell = me.templates.tableCell.clone();
 	                valueCell.append(value);

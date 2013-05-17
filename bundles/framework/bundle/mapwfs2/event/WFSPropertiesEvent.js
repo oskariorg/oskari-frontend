@@ -1,15 +1,14 @@
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.event.WFSPropertiesEvent
- *
- * <GIEV MIEH! COMMENTS>
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSPropertiesEvent',
 /**
  * @method create called automatically on construction
  * @static
  *
- * <GIEV MIEH! PARAMS>
- *
+ * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
+ * @param {String[]} locales
+ * @param {String[]} fields
  */
 function(layer, locales, fields) {
     this._layer = layer;
@@ -18,6 +17,7 @@ function(layer, locales, fields) {
 }, {
     /** @static @property __name event name */
     __name : "WFSPropertiesEvent",
+
     /**
      * @method getName
      * @return {String} event name
@@ -28,6 +28,7 @@ function(layer, locales, fields) {
 
     /**
      * @method getLayer
+     * @return {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      */
     getLayer : function() {
         return this._layer;
@@ -35,6 +36,7 @@ function(layer, locales, fields) {
 
     /**
      * @method getLocales
+     * @return {String[]} locales
      */
     getLocales : function() {
         return this._locales;
@@ -42,6 +44,7 @@ function(layer, locales, fields) {
 
     /**
      * @method getFields
+     * @return {String[]} fields
      */
     getFields : function() {
         return this._fields;

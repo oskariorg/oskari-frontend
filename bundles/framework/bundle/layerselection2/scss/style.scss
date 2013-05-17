@@ -1,89 +1,103 @@
-div.layerselection2 .layer.selected {
-    border: 1pt solid #c0d0e0;
-    margin: 0 5px 5px 0;
-    height: unquote("70px\9"); /*IE9 */ 
-}
-div
-div.layerselection2 .layer.selected.out-of-scale, div.layerselection2 .layer.selected.out-of-content, div.layerselection2 .layer.selected.hidden {
-	color: #909090;
-}
+div.layerselection2 { 
+	.layer.selected {
+		border: 1pt solid #c0d0e0;
+		margin: 0 5px 5px 0;
+		height: unquote("70px\9"); /*IE9 */ 
 
-div.layerselection2 .layer.selected div.layer-info {
-    background-color : #FFFFFF;
-    padding: 5px;
-}
+		&.out-of-scale, &.out-of-content, &.hidden {
+			color: #909090;
+		}
 
-div.layerselection2 ul.selectedLayersList {
-	height: 100%;
-	width: 100%;
-    overflow: auto;
-    list-style-type: none;
-    padding: 0;
-    margin:0;
-}
-div.layerselection2 ul.selectedLayersList span {
-	position: absolute; margin-left: -1.3em;
-}
-div.layerselection2 .layer.selected div.layer-info div.layer-title {
-    display: inline;
-}
-div.layerselection2 .layer.selected div.layer-info div.layer-title h4 {
-	font: 14pt Arial,sans-serif;
-	padding: 0;
-}
-div.layerselection2 .layer.selected div.layer-info div.layer-tool-remove {
-    float : right;
-}
-div.layerselection2 .layer.selected div.layer-info div.layer-icon {
-    float: left;
-    height: 20px;
-    margin-top: 5px;
-    margin-left: 20px;
-    margin-right: 20px;
-    width: 16px;
-	background-repeat: no-repeat;
-}
-div.layerselection2 .layer.selected div.stylesel label {
-    padding: 7px;
-}
+		div.layer-info {
+			background-color: #FFF;
+			padding: 5px;
 
-div.layerselection2 .layer.selected div.layer-tools {
-    background-color : #f3f3f3;
-    padding: 7px;
-}
+			div.layer-icon {
+				float: left;
+				height: 20px;
+				margin-top: 5px;
+				margin-left: 20px;
+				margin-right: 20px;
+				width: 16px;
+				background-repeat: no-repeat;
+			}
+			
+			div.layer-title {
+				display: inline;
 
-div.layerselection2 div.layer-tools div.layout-slider {
-	width: 140px;
-    display: inline-block;
-    margin-right: 16px;
-}
-div.layerselection2 div.layer-tools div.left-tools {
-    display: inline-block;
-}
-div.layerselection2 div.layer-tools div.left-tools div.layer-visibility {
-    padding-right: 5px;
-    display: inline-block;
-}
-div.layerselection2 div.layer-tools div.left-tools div.layer-opacity {
-    display: inline-block;
-    background-image: url('/Oskari/resources/framework/bundle/layerselection2/images/opacity_slider.png');
-    background-repeat: no-repeat;    
-    
+				h4 {
+					font: 14pt Arial,sans-serif;
+					padding: 0;
+				}
+			}
 
-}
-div.layerselection2 div.layer-tools div.left-tools div.layer-opacity input.opacity {
-    padding: 1px;
-    width: 25px;
-}
-div.layerselection2 div.layer-tools div.right-tools{
-    padding-top: 5px;
-    float:right;
-}
-div.layerselection2 div.layer-tools div.right-tools div {
-    float:left; 
-    margin-right: 5px;
-}
+			div.layer-tool-remove {
+				float: right;
+			}
+		}
 
-div.layerselection2 div.layer-tools div.right-tools div.layer-rights {
-	padding-top: 2px;
+		div.layer-tools {
+			background-color: #f3f3f3;
+			padding: 7px;
+
+			div.layout-slider {
+				width: 140px;
+				display: inline-block;
+				margin-right: 16px;
+			}
+
+			div.left-tools {
+				display: inline-block;
+
+				div.layer-visibility {
+					padding-right: 5px;
+					display: inline-block;
+				}
+
+				div.layer-opacity {
+					display: inline-block;
+					background-image: url('/Oskari/resources/framework/bundle/layerselection2/images/opacity_slider.png');
+					background-repeat: no-repeat;    
+
+					input.opacity {
+						padding: 1px;
+						width: 25px;
+					}
+				}
+			}
+
+			div.right-tools{
+				padding-top: 5px;
+				float: right;
+
+				div {
+					float: left;
+					margin-right: 5px;
+					
+					&.layer-rights, &.object-data {
+						padding-top: 2px;
+					}
+				}
+			}
+		}
+		
+		div.stylesel label {
+			padding: 7px;
+		}
+
+	}
+	
+	ul.selectedLayersList {
+		height: 100%;
+		width: 100%;
+		overflow: auto;
+		list-style-type: none;
+		padding: 0;
+		margin: 0;
+
+		span {
+			position: absolute;
+			margin-left: -1.3em;
+		}
+	}
 }

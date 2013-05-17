@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.event.WFSFeaturesSelectedEvent
  *
- * Used to indicate tha a WFS Feature has been selected and components should highlight it in UI
+ * Used to indicate that a WFS Feature has been selected and components should highlight it in UI
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSFeaturesSelectedEvent',
 /**
@@ -60,5 +60,3 @@ function(wfsFeatureIds, mapLayer, keepSelection) {
      */
     'protocol' : ['Oskari.mapframework.event.Event']
 });
-
-/* Inheritance */

@@ -16,7 +16,7 @@ This plugin provides view of the from GetFeatureInfo and similar results what ar
 
 ## Bundle configuration
 
-No configuration is required.
+Handling infoBox in the plugin is made configurable. Makes it possible to request infoBox with additional information later on.
 
 ## Requests the plugin handles
 
@@ -45,7 +45,14 @@ This plugin doesn't sends out any requests
 
 ## Events the plugin sends out
 
-This bundle doesn't send any events.
+<table>
+  <tr>
+    <th>Event</th><th>Why/when</th>
+  </tr>
+  <tr>
+    <td>GetInfoResultEvent</td><td> Result of ajax request formatted send as an event so that infobox handling can be done elsewhere </td>
+  </tr>
+</table>
 
 ## Dependencies
 

@@ -13,9 +13,15 @@ function() {
     this.pluginName = null;
     this._sandbox = null;
     this._map = null;
-    this.template = null;
     this.element = null;
 }, {
+
+	templates : {
+		main : jQuery("<div class='logoplugin'><div class='icon'></div>" +
+                "<div class='terms'><a href='JavaScript:void(0);'></a></div>" +
+            "</div>")
+	},
+
     /** @static @property __name plugin name */
     __name : 'LogoPlugin',
 
@@ -59,9 +65,7 @@ function() {
      * 			reference to application sandbox
      */
     init : function(sandbox) {
-        this.template = jQuery("<div class='logoplugin'><div class='icon'></div>" +
-                "<div class='terms'><a href='JavaScript:void(0);'></a></div>" +
-            "</div>");
+		console.log("init");
     },
     /**
      * @method register
@@ -85,14 +89,16 @@ function() {
      * 			reference to application sandbox
      */
     startPlugin : function(sandbox) {
-        this._sandbox = sandbox;
-        this._map = this.getMapModule().getMap();
+		console.log("Starting plugin");
+		var me = this;
+        me._sandbox = sandbox;
+        me._map = me.getMapModule().getMap();
 
-        sandbox.register(this);
-        for(p in this.eventHandlers ) {
-            sandbox.registerForEventByName(this, p);
+        sandbox.register(me);
+        for(p in me.eventHandlers ) {
+            sandbox.registerForEventByName(me, p);
         }
-        this._createUI();
+        me._createUI();
     },
     /**
      * @method stopPlugin
@@ -103,20 +109,22 @@ function() {
      * 			reference to application sandbox
      */
     stopPlugin : function(sandbox) {
+	
+		var me = this;
 
-        for(p in this.eventHandlers ) {
-            sandbox.unregisterFromEventByName(this, p);
+        for(p in me.eventHandlers ) {
+            sandbox.unregisterFromEventByName(me, p);
         }
 
-        sandbox.unregister(this);
-        this._map = null;
-        this._sandbox = null;
+        sandbox.unregister(me);
+        me._map = null;
+        me._sandbox = null;
         
         // TODO: check if added?
         // unbind change listener and remove ui
-        this.element.find('a').unbind('click');
-        this.element.remove();
-        this.element = undefined;
+        me.element.find('a').unbind('click');
+        me.element.remove();
+        me.element = undefined;
     },
     /**
      * @method start
@@ -158,20 +166,24 @@ function() {
      * Creates logo and terms of use links on top of map
      */
     _createUI : function() {
+	
+		console.log("Creating logo UI");
     	
-		var sandbox = this._sandbox;
+		var me = this;
+		
+		var sandbox = me._sandbox;
         // get div where the map is rendered from openlayers
-        var parentContainer = jQuery(this._map.div);
-        if(!this.element) {
-            this.element = this.template.clone();
+        var parentContainer = jQuery(me._map.div);
+        if(!me.element) {
+            me.element = me.templates.main.clone();
         }
         		
-        parentContainer.append(this.element);
+        parentContainer.append(me.element);
         
-        var pluginLoc = this.getMapModule().getLocalization('plugin', true);
-        var myLoc = pluginLoc[this.__name];
+        var pluginLoc = me.getMapModule().getLocalization('plugin', true);
+        var myLoc = pluginLoc[me.__name];
         
-        var link = this.element.find('div.icon');
+        var link = me.element.find('div.icon');
         link.bind('click', function(){
 			var linkParams = sandbox.generateMapLinkParameters();
 	    	var url = myLoc.mapLinkBase + sandbox.generateMapLinkParameters();
@@ -179,7 +191,7 @@ function() {
             return false;
 	    });
         
-        var link = this.element.find('a');
+        var link = me.element.find('a');
         link.append(myLoc["terms"]); // 
         link.bind('click', function(){
 	    	var url = myLoc["termsLink"]

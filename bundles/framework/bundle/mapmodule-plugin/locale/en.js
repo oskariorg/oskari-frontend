@@ -49,7 +49,12 @@ Oskari.registerLocalization({
         "column_type": "Type"
       },
       "GetInfoPlugin": {
-        "title": "Map layers"
+        "title": "Map layers",
+		"layer": "Layer",
+		"places": "Places",
+		"description": "Description",
+		"link": "URL-address",
+		"name": "Name"
       }
     }
   }

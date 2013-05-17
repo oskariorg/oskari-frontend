@@ -13,7 +13,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.domain.QueuedTile",
 /**
  * @method create called automatically on construction
  * @static
- * @param options ???
+ * @param options
  */
 function(options) {
     for(p in options )
