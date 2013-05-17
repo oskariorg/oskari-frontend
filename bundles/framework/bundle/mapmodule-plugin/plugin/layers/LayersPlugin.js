@@ -276,6 +276,8 @@ function() {
         var layers = this._sandbox.findAllSelectedMapLayers();
         for(var i = 0; i < layers.length; ++i) {
             var layer = layers[i];
+            
+            
             if(!layer.isVisible()) {
                 // don't go further if not visible
                 continue;
@@ -337,7 +339,7 @@ function() {
      */
     notifyLayerVisibilityChanged : function(layer) {
         var scaleOk = layer.isVisible();
-        var geometryMatch = layer.isVisible();
+        var geometryMatch = layer.isVisible();
         // if layer is visible check actual values
         if(layer.isVisible()) {
             scaleOk = this._isInScale(layer);
@@ -348,18 +350,18 @@ function() {
         // change in UI also)
         // this is for optimization purposes
         var map = this.getMap();
-        if(scaleOk && geometryMatch && layer.isVisible()) {
+
+        var mapLayers = this.getMapModule().getOLMapLayers(layer.getId());
+        var mapLayer = mapLayers.length ? mapLayers[0] : null;
+            
+        if(scaleOk && geometryMatch && layer.isVisible()) {
             // show non-baselayer if in scale, in geometry and layer visible
-            var mapLayers = map.getLayersByName('layer_' + layer.getId());
-            var mapLayer = mapLayers.length ? mapLayers[0] : null;
             if(mapLayer && !mapLayer.getVisibility()) {
                 mapLayer.setVisibility(true);
                 mapLayer.display(true);
             }
         } else {
             // otherwise hide non-baselayer
-            var mapLayers = map.getLayersByName('layer_' + layer.getId());
-            var mapLayer = mapLayers.length ? mapLayers[0]: null;
             if(mapLayer && mapLayer.getVisibility()) {
                 mapLayer.setVisibility(false);
                 mapLayer.display(false);
