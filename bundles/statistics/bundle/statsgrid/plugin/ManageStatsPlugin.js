@@ -1,9 +1,174 @@
 /**
- * ManageStatsOut
+ * @class Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin
  * Creates the indicator selection ui and the actual grid where the stats data will be displayed.
  * Handles sending the data out to create a visualization which then can be displayed on the map.
  */
-Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipality-table', {
+Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
+/**
+ * @method create called automatically on construction
+ * @params {Object} config   'published' => {Boolean}, 'state' => {Object}
+ * @params {Object} locale   localization strings
+ *
+ * @static
+ */
+function(config, locale) {
+    this.mapModule = null;
+    this.pluginName = null;
+    this._sandbox = null;
+    this._map = null;
+    this._layer = null;
+    this._state = null;
+    this.element = undefined;
+    this.statsService = null;
+    // indicators (meta data)
+    this.indicators = [];
+
+    this.conf = config || {};
+    this._locale = locale || {};
+}, {
+    /** 
+     * @property __name module name
+     * @static 
+     */
+    __name: 'ManageStatsPlugin',
+
+    /**
+     * @method getName
+     * @return {String} plugin name
+     */
+    getName : function() {
+        return this.pluginName;
+    },
+
+    /**
+     * @method getMapModule
+     * Returns reference to map module this plugin is registered to
+     * @return {Oskari.mapframework.ui.module.common.MapModule}
+     */
+    getMapModule : function() {
+        return this.mapModule;
+    },
+
+    /**
+     * @method setMapModule
+     * Sets reference to reference to map module
+     * @param {Oskari.mapframework.ui.module.common.MapModule} mapModule 
+     */
+    setMapModule : function(mapModule) {
+        this.mapModule = mapModule;
+        if (mapModule) {
+            this.pluginName = mapModule.getName() + this.__name;
+        }
+    },
+
+    /**
+     * @method register
+     * Interface method for the module protocol
+     */
+    register : function() {
+    },
+
+    /**
+     * @method unregister
+     * Interface method for the module protocol
+     */
+    unregister : function() {
+    },
+
+    /**
+     * @method init
+     * Interface method for the module protocol. Initializes the request
+     * handlers/templates.
+     *
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     *          reference to application sandbox
+     */
+    init : function(sandbox) {
+    },
+
+    /**
+     * @method startPlugin
+     *
+     * Interface method for the plugin protocol. Should registers requesthandlers and
+     * eventlisteners.
+     *
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     *          reference to application sandbox
+     */
+    startPlugin : function(sandbox) {
+        this._sandbox = sandbox;
+        this._map = this.getMapModule().getMap();
+        sandbox.register(this);
+        for (p in this.eventHandlers) {
+            sandbox.registerForEventByName(this, p);
+        }
+
+        this.statsService = sandbox.getService('Oskari.statistics.bundle.statsgrid.StatisticsService');
+        this._published = this.conf.published || false;
+        // Hack so that we don't need to check every occasion whether the state exists.
+        this._state = this.conf.state || {};
+    },
+
+    /**
+     * @method stopPlugin
+     *
+     * Interface method for the plugin protocol. Should unregisters requesthandlers and
+     * eventlisteners.
+     *
+     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+     *          reference to application sandbox
+     */
+    stopPlugin : function(sandbox) {
+        for (p in this.eventHandlers) {
+            sandbox.unregisterFromEventByName(this, p);
+        }
+
+        sandbox.unregister(this);
+
+        // remove ui
+        if (this.element) {
+            this.element.remove();
+            this.element = undefined;
+            delete this.element;
+        }
+    },
+
+    /**
+     * @property {Object} eventHandlers
+     * @static
+     */
+    eventHandlers : {},
+
+    /**
+     * @method onEvent
+     * @param {Oskari.mapframework.event.Event} event a Oskari event object
+     * Event is handled forwarded to correct #eventHandlers if found or discarded
+     * if not.
+     */
+    onEvent : function(event) {
+        return this.eventHandlers[event.getName()].apply(this, [event]);
+    },
+
+    /**
+     * @method getLayer
+     * @return {Object} layer
+     */
+    getLayer : function(layer) {
+        return this._layer;
+    },
+
+    /**
+     * @method setLayer
+     * @param {Object} layer
+     */
+    setLayer : function(layer) {
+        this._layer = layer;
+    },
+
+    setState: function(state) {
+        this._state = state;
+    },
+
     /**
      * @method createStatsOut
      * Get Sotka data and show it in SlickGrid
@@ -11,10 +176,6 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      * @param {Function} callback function which gets called after the content has finished loading
      */
     createStatsOut : function(container, callback) {
-        // indicators (meta data)
-        this.indicators = [];
-
-        this.statsService = this.instance.statsService;
         // indicator params are select-elements
         // (indicator drop down select and year & gender selects)
         this.prepareIndicatorParams(container, callback);
@@ -34,16 +195,18 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      * @param {Function} callback function which gets called after the content has finished loading
      */
     prepareIndicatorParams : function(container, callback) {
+        // Do not load the indicators for a published map.
+        if (!this._published) {
+            //clear the selectors container
+            container.find('selectors-container').remove();
+            //add selectors
+            var selectors = jQuery('<div class="selectors-container"></div>');
+            container.append(selectors);
 
-        //clear the selectors container
-        container.find('selectors-container').remove();
-        //add selectors
-        var selectors = jQuery('<div class="selectors-container"></div>');
-        container.append(selectors);
-
-        // Indicators
-        // success -> createIndicators
-        this.getSotkaIndicators(container);
+            // Indicators
+            // success -> createIndicators
+            this.getSotkaIndicators(container);
+        }
         // Regions: success createMunicipalityGrid
         this.getSotkaRegionData(container, callback);
     },
@@ -56,7 +219,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     getSotkaRegionData : function(container, callback) {
         var me = this;
         // call ajax function (params: url, successFallback, errorCallback)
-        me.statsService.fetchStatsData(me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=regions&version=1.1',
+        me.statsService.fetchStatsData(me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=regions&version=1.1',
         // success callback
         function(regionData) {
             if (regionData) {
@@ -65,14 +228,15 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                 me.createMunicipalitySlickGrid(container, regionData);
 
                 // Data loaded and grid created, now it's time to call the function provided, if any.
-                callback && callback();
+                //callback && callback();
+                me.loadStateIndicators(container, me._state);
             } else {
-                me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').regionDataError);
+                me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].regionDataError);
             }
         },
         // error callback
         function(jqXHR, textStatus) {
-            me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').regionDataXHRError);
+            me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].regionDataXHRError);
         });
     },
 
@@ -91,12 +255,12 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         // add one column
         var columns = [{
             id : "municipality",
-            name : this.instance.getLocalization("sotka").municipality,
+            name : this._locale['sotka'].municipality,
             field : "municipality",
             sortable : true
         }, {
             id : "code",
-            name : this.instance.getLocalization("sotka").code,
+            name : this._locale['sotka'].code,
             field : "code"
         }];
 
@@ -168,6 +332,10 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         });
 
         grid.onHeaderClick.subscribe(function(e, args) {
+            // Don't do anything in case the clicked column is the one in the state.
+            if (args.column.id === me.conf.state.currentColumn) {
+                return false;
+            }
             me.sendStatsData(args.column);
         });
 
@@ -205,7 +373,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      */
     getSotkaIndicators : function(container) {
         var me = this;
-        var sandbox = me.instance.getSandbox();
+        var sandbox = me._sandbox;
         // make the AJAX call
         me.statsService.fetchStatsData(sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicators&version=1.1',
         //success callback
@@ -214,12 +382,12 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                 //if fetch returned something we create drop down selector
                 me.createIndicatorsSelect(container, indicatorsdata);
             } else {
-                me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorsDataError);
+                me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].indicatorsDataError);
             }
         },
         // error callback
         function(jqXHR, textStatus) {
-            me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorsDataXHRError);
+            me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].indicatorsDataXHRError);
         });
     },
 
@@ -233,7 +401,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     createIndicatorsSelect : function(container, data) {
         var me = this;
         // Indicators' select container etc.
-        var indi = jQuery('<div class="indicator-cont"><div class="indisel selector-cont"><label for="indi">' + this.instance.getLocalization('indicators') + '</label><select id="indi" name="indi" class="indi"><option value="" selected="selected"></option></select></div></div>');
+        var indi = jQuery('<div class="indicator-cont"><div class="indisel selector-cont"><label for="indi">' + this._locale['indicators'] + '</label><select id="indi" name="indi" class="indi"><option value="" selected="selected"></option></select></div></div>');
 
         var sel = indi.find('select');
         for (var i = 0; i < data.length; i++) {
@@ -263,8 +431,8 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
         // we use chosen to create autocomplete version of indicator select element.
         sel.chosen({
-            no_results_text : this.instance.getLocalization('noMatch'),
-            placeholder_text : this.instance.getLocalization('noMatch')
+            no_results_text : this._locale['noMatch'],
+            placeholder_text : this._locale['noMatch']
         });
 
     },
@@ -278,7 +446,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      */
     getSotkaIndicatorMeta : function(container, indicator) {
         var me = this;
-        var sandbox = me.instance.getSandbox();
+        var sandbox = me._sandbox;
         // fetch meta data for given indicator
         me.statsService.fetchStatsData(sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
         // success callback
@@ -288,12 +456,12 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                 me.createIndicatorInfoButton(container, indicatorMeta);
                 me.createDemographicsSelects(container, indicatorMeta);
             } else {
-                me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorMetaError);
+                me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].indicatorMetaError);
             }
         },
         // error callback
         function(jqXHR, textStatus) {
-            me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorMetaXHRError);
+            me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].indicatorMetaXHRError);
         });
 
     },
@@ -315,8 +483,8 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         // show meta data
         infoIcon.click(function(e) {
             var lang = Oskari.getLang();
-            var desc = '<h4 class="indicator-msg-popup">' + me.instance.getLocalization('sotka').descriptionTitle + '</h4><p>' + indicator.description[lang] + '</p><br/><h4 class="indicator-msg-popup">' + me.instance.getLocalization('sotka').sourceTitle + '</h4><p>' + indicator.organization.title[lang] + '</p>';
-            me.instance.showMessage(indicator.title[lang], desc);
+            var desc = '<h4 class="indicator-msg-popup">' + me._locale['sotka'].descriptionTitle + '</h4><p>' + indicator.description[lang] + '</p><br/><h4 class="indicator-msg-popup">' + me._locale['sotka'].sourceTitle + '</h4><p>' + indicator.organization.title[lang] + '</p>';
+            me.showMessage(indicator.title[lang], desc);
         });
     },
 
@@ -355,8 +523,8 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         var columnId = me._getIndicatorColumnId(indicator.id, gender, year);
         var includedInGrid = this.isIndicatorInGrid(columnId);
 
-        var fetchButton = jQuery('<button class="fetch-data' + (includedInGrid ? ' hidden' : '') + '">' + this.instance.getLocalization('addColumn') + '</button>');
-        var removeButton = jQuery('<button class="remove-data' + (includedInGrid ? '' : ' hidden') + '">' + this.instance.getLocalization('removeColumn') + '</button>');
+        var fetchButton = jQuery('<button class="fetch-data' + (includedInGrid ? ' hidden' : '') + '">' + this._locale['addColumn'] + '</button>');
+        var removeButton = jQuery('<button class="remove-data' + (includedInGrid ? '' : ' hidden') + '">' + this._locale['removeColumn'] + '</button>');
 
         parameters.append(fetchButton);
         parameters.append(removeButton);
@@ -381,7 +549,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                 gender = jQuery('.statsgrid').find('.gendersel').find('.gender').val();
             gender = gender != null ? gender: 'total';
             var columnId = me._getIndicatorColumnId(indicator.id, gender, year);
-        	me.removeIndicatorDataFromGrid(indicator.id, gender, year);
+            me.removeIndicatorDataFromGrid(indicator.id, gender, year);
         });
     },
 
@@ -444,19 +612,19 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         // ajax call
         me.statsService.fetchStatsData(
             // url
-            me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gndrs,
+            me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gndrs,
             // success callback
             function(data) {
                 if (data) {
                     // get the actual data
                     me.addIndicatorDataToGrid(container, indicator, gndrs, year, data, me.indicators[me.indicators.length -1]);
                 } else {
-                    me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorDataError);
+                    me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].indicatorDataError);
                 }
             },
             // error callback
             function(jqXHR, textStatus) {
-                me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorDataXHRError);
+                me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].indicatorDataXHRError);
             });
     },
 
@@ -498,10 +666,10 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         this.grid.setColumns(columns);
 
         // add indicator also to the state!
-        if (this.instance.state.indicators == null) {
-            this.instance.state.indicators = [];
+        if (this.conf.state.indicators == null) {
+            this.conf.state.indicators = [];
         }
-        this.instance.state.indicators.push({indicator: indicator, year: year, gender: gender});
+        this.conf.state.indicators.push({indicator: indicator, year: year, gender: gender});
 
         var columnData = [];
         var ii = 0;
@@ -586,13 +754,13 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         }
 
         // remove indicator also from to the state!
-        if (this.instance.state.indicators) {
-            for (i = 0, ilen = this.instance.state.indicators.length; i < ilen; i++) {
-                var statedIndicator = this.instance.state.indicators[i];
+        if (this.conf.state.indicators) {
+            for (i = 0, ilen = this.conf.state.indicators.length; i < ilen; i++) {
+                var statedIndicator = this.conf.state.indicators[i];
                 if ((indicator === statedIndicator.indicator) &&
                     (year === statedIndicator.year) &&
                     (gender === statedIndicator.gender)) {
-                    this.instance.state.indicators.splice(i, 1);
+                    this.conf.state.indicators.splice(i, 1);
                     break;
                 }
             }
@@ -600,10 +768,10 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
         this.updateDemographicsButtons(indicator, gender, year);
 
-        if (columnId === this.instance.state.currentColumn) {
+        if (columnId === this.conf.state.currentColumn) {
             // hide the layer, as we just removed the "selected"
             this._setLayerVisibility(false);
-            this.instance.state.currentColumn = null;
+            this.conf.state.currentColumn = null;
         }
     },
 
@@ -617,7 +785,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     getYearSelectorHTML : function(startYear, endYear) {
         var me = this;
         // Years
-        var year = jQuery('<div class="yearsel selector-cont"><label for="year">' + this.instance.getLocalization('year') + '</label><select name="year" class="year"></select></div>');
+        var year = jQuery('<div class="yearsel selector-cont"><label for="year">' + this._locale['year'] + '</label><select name="year" class="year"></select></div>');
         var sel = year.find('select');
 
         for (var i = startYear; i <= endYear; i++) {
@@ -640,11 +808,11 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     getGenderSelectorHTML : function(values) {
         var me = this;
         //Gender
-        var gender = jQuery('<div class="gendersel selector-cont"><label for="gender">' + this.instance.getLocalization('gender') + '</label><select name="gender" class="gender"></select></div>');
+        var gender = jQuery('<div class="gendersel selector-cont"><label for="gender">' + this._locale['gender'] + '</label><select name="gender" class="gender"></select></div>');
 
         var sel = gender.find('select');
         for (var i = 0; i < values.length; i++) {
-            var opt = jQuery('<option value="' + values[i] + '">' + this.instance.getLocalization('genders')[values[i]] + '</option>');
+            var opt = jQuery('<option value="' + values[i] + '">' + this._locale['genders'][values[i]] + '</option>');
             sel.append(opt);
         }
         sel.val(values[values.length - 1]);
@@ -661,6 +829,10 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      * @param curCol  Selected indicator data column
      */
     sendStatsData : function(curCol) {
+        if (curCol == null || curCol.field == 'municipality') {
+            // Not a valid current column nor a data value column
+            return;
+        }
 
         //Classify data
         var me = this;
@@ -669,22 +841,8 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         var check = false;
         var i, k;
 
-        if (curCol == null) {
-        	// Not a valid current column
-        	return;
-        }
-
-        //Check that selected column is data value column
-        if (curCol.field == 'municipality')
-            return;
-
-		//Check that selected column is not already selected
-		if (curCol.id === me.instance.state.currentColumn) {
-			return;
-		} else {
-	        // Set current column to be stated
-	        me.instance.state.currentColumn = curCol.id;
-		}
+        // Set current column to be stated
+        me.conf.state.currentColumn = curCol.id;
 
         // Get values of selected column
         var data = this.dataView.getItems();
@@ -698,7 +856,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             }
         }
 
-        // send the data trough the stats service.
+        // Send the data trough the stats service.
         me.statsService.sendStatsData(me._layer, {
             CUR_COL : curCol,
             VIS_NAME : me._layer.getWmsName(), //"ows:kunnat2013",  
@@ -707,7 +865,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             COL_VALUES : statArray
         });
 
-        // show the layer, if it happens to be invisible
+        // Show the layer, if it happens to be invisible
         this._setLayerVisibility(true);
     },
 
@@ -720,11 +878,11 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     _setLayerVisibility: function(visibility) {
         // show the layer, if not visible
         if (this._layer._visible !== visibility) {
-            var sandbox = this.instance.getSandbox();
+            var sandbox = this._sandbox;
             var visibilityRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
             if (visibilityRequestBuilder) {
                 var request = visibilityRequestBuilder(this._layer.getId(), visibility);
-                sandbox.request(this.instance, request);
+                sandbox.request(this, request);
             }
         }
     },
@@ -737,8 +895,8 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      * @param indicators for which we fetch data
      * @param callback what to do after we have fetched metadata for all the indicators
      */
-    getSotkaIndicatorsMeta : function(indicators, callback) {
-        var me = this, container = this.getEl(), fetchedIndicators = 0;
+    getSotkaIndicatorsMeta : function(container, indicators, callback) {
+        var me = this, fetchedIndicators = 0;
         me.indicators = [];
 
         for (var i = 0; i < indicators.length; i++) {
@@ -748,7 +906,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             // ajax call
             me.statsService.fetchStatsData(
                 // url
-                me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
+                me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
                 // success callback
                 function(data) {
                     //keep track of returned ajax calls
@@ -768,12 +926,12 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                         }
 
                     } else {
-                        me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorDataError);
+                        me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].indicatorDataError);
                     }
                 },
                 // error callback
                 function(jqXHR, textStatus) {
-                    me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorDataXHRError);
+                    me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].indicatorDataXHRError);
                     //keep track of returned ajax calls
                     fetchedIndicators++;
                 }
@@ -788,8 +946,8 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      * @param indicators for which we fetch data
      * @param callback what to do after we have fetched data for all the indicators
      */
-    getSotkaIndicatorsData : function(indicators, callback) {
-        var me = this, container = this.getEl(), fetchedIndicators = 0;
+    getSotkaIndicatorsData : function(container, indicators, callback) {
+        var me = this, fetchedIndicators = 0;
 
         for (var i = 0; i < indicators.length; i++) {
             var indicatorData = indicators[i],
@@ -800,7 +958,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             // ajax call
             me.statsService.fetchStatsData(
                 // url
-                me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gender,
+                me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gender,
                 // success callback
                 function(data) {
                     fetchedIndicators++;
@@ -829,12 +987,12 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                             callback();
                         }
                     } else {
-                        me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorDataError);
+                        me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].indicatorDataError);
                     }
                 },
                 // error callback
                 function(jqXHR, textStatus) {
-                    me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorDataXHRError);
+                    me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].indicatorDataXHRError);
                     fetchedIndicators++;
                 }
             );
@@ -863,6 +1021,84 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         this.grid.setColumns(newColumnDef);
         this.grid.render();
         this.dataView.refresh();
-        this.instance.state.indicators = [];
+        this.conf.state.indicators = [];
+    },
+
+    /**
+     * @method showMessage
+     * Shows user a message with ok button
+     * @param {String} title popup title
+     * @param {String} message popup message
+     */
+    showMessage : function(title, message) {
+        // Oskari components aren't available in a published map.
+        if (!this._published) {
+            var loc = this._locale;
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            okBtn.setTitle(loc.buttons.ok);
+            okBtn.addClass('primary');
+            okBtn.setHandler(function() {
+                dialog.close(true);
+            });
+            dialog.show(title, message, [okBtn]);
+        }
+    },
+
+    /**
+     * @method loadStateIndicators
+     */
+    loadStateIndicators: function(container, state) {
+        console.log(state);
+        var me = this;
+        var classifyPlugin = this._sandbox.findRegisteredModuleInstance('MainMapModuleManageClassificationPlugin');
+        // First, let's clear out the old data from the grid.
+        me.clearDataFromGrid();
+        if(state.indicators.length > 0){
+            //send ajax calls and build the grid
+            me.getSotkaIndicatorsMeta(container, state.indicators, function(){
+                //send ajax calls and build the grid
+                me.getSotkaIndicatorsData(container, state.indicators, function(){
+
+                    if(state.currentColumn != null) {
+
+                        if(classifyPlugin) {
+                            if(state.methodId != null && state.methodId > 0) {
+                                var select = classifyPlugin.element.find('.classificationMethod').find('.method');
+                                select.val(state.methodId);
+                                // The manual breaks method:
+                                if(state.methodId == 4 && state.manualBreaksInput) {
+                                    var manualInput = classifyPlugin.element.find('.manualBreaks').find('input[name=breaksInput]');
+                                    manualInput.val(state.manualBreaksInput);
+                                    me.classifyPlugin.element.find('.classCount').hide();
+                                    me.classifyPlugin.element.find('.manualBreaks').show();
+                                }
+                            }
+                            if(state.numberOfClasses != null && state.numberOfClasses > 0) {
+                                var slider = classifyPlugin.rangeSlider;
+                                if(slider != null) {
+                                    slider.slider("value", state.numberOfClasses);
+                                    slider.parent().find('input#amount_class').val(state.numberOfClasses);
+                                }
+                            }
+                        }
+                        // current column is needed for rendering map
+                        var columns = me.grid.getColumns();
+                        for (var i = 0; i < columns.length; i++) {
+                            var column = columns[i];
+                            if (column.id == state.currentColumn) {
+                                me.sendStatsData(column);
+                            }
+                        };
+                    }
+                });
+            });
+        }
     }
+}, {
+    /**
+     * @property {String[]} protocol array of superclasses as {String}
+     * @static
+     */
+    'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });

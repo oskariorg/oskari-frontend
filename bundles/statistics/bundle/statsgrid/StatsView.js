@@ -19,32 +19,15 @@ function() {
      * @param {Function} callback function which gets called after the content has finished loading
      */
     showContent: function(isShown, layer, callback) {
-        if(this._layer == null || (layer != null && this._layer.getId() != layer.getId())) {
-            //update layer
-            this._layer = layer;
-            this.instance.state.layerId = this._layer.getId();
-
-            this.isVisible = isShown == true;
-
-            if(isShown) {
-                this.toolbar.changeName(this._layer.getName());   
-                this._showContent(this.getEl(), callback);
-                this.getLeftColumn().addClass('statsgrid_100');
-                this.getLeftColumn().append(this.getEl());
-            }
-            else {
-                this.getLeftColumn().removeClass('statsgrid_100');
-                this.getEl().remove();
-                this.getEl().empty();
-            }
+        if(isShown) {
+            this.getLeftColumn().addClass('statsgrid_100');
+            this.getLeftColumn().append(this.getEl());
         }
-    },
-    _showContent : function(container, callback) {
-        var me=this;
-        // var gridContainer = jQuery('<div id="municipalGrid" style="width:30%;height:400px;"></div>');    
-        me.createStatsOut(container, callback);
-        // container.append(gridContainer);
-        // container.append('Tähän tulisi taulukko näkymä');
+        else {
+            this.getLeftColumn().removeClass('statsgrid_100');
+            this.getEl().empty();
+            this.getEl().remove();
+        }
     }
 }, {
     "protocol": ["Oskari.userinterface.View"],

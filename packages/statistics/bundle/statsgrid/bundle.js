@@ -43,6 +43,9 @@ function() {
             "src" : "../../../../bundles/statistics/bundle/statsgrid/plugin/ManageClassificationPlugin.js"
 		},{
             "type" : "text/javascript",
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/plugin/ManageStatsPlugin.js"
+        },{
+            "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/bundle/statsgrid/event/SotkadataChangedEvent.js"
 		},{
             "type" : "text/javascript",

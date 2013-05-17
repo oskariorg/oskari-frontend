@@ -36,7 +36,18 @@ function() {
         sandbox.registerService(statsService);
         this.statsService = statsService;
 
-        // register plugin for map 
+        // Register stats plugin for map which creates
+        // - the indicator selection UI (unless 'published' param in the conf is false)
+        // - the grid.
+        var gridConf = {
+            'state': me.getState()
+        }
+        var gridPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin', gridConf, locale);
+        mapModule.registerPlugin(gridPlugin);
+        mapModule.startPlugin(gridPlugin);
+        this.gridPlugin = gridPlugin;
+
+        // Register classification plugin for map.
         var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', conf ,locale);
         mapModule.registerPlugin(classifyPlugin);
         mapModule.startPlugin(classifyPlugin);
@@ -57,8 +68,7 @@ function() {
 			}
 
 			var isShown = event.getViewState() != "close";
-            view.showMode(isShown, true);
-			view.showContent(isShown);
+            view.prepareMode(isShown, null, true);
 		},
         'MapStats.StatsVisualizationChangeEvent' : function(event) {
             this._afterStatsVisualizationChangeEvent(event);
@@ -72,66 +82,24 @@ function() {
      * @param {Boolean} ignoreLocation true to NOT set map location based on state
      */
     setState : function(state, ignoreLocation) {
-        var me = this, view = this.plugins['Oskari.userinterface.View'];
+        var me = this,
+            view = this.plugins['Oskari.userinterface.View'],
+            container = view.getEl();
         var layer = this.sandbox.findMapLayerFromAllAvailable(state.layerId);
-        var contentLoadedCallback = function() {
-            if(state.indicators.length > 0){
 
-                //send ajax calls and build the grid
-                view.getSotkaIndicatorsMeta(state.indicators, function(){
-
-                    //send ajax calls and build the grid
-                    view.getSotkaIndicatorsData(state.indicators, function(){
-
-                        if(state.currentColumn != null) {
-
-                            if(state.methodId != null && state.methodId > 0) {
-                                var select = me.classifyPlugin.element.find('.classificationMethod').find('.method');
-                                select.val(state.methodId);
-                                // The manual breaks method:
-                                if(state.methodId == 4 && state.manualBreaksInput) {
-                                    var manualInput = me.classifyPlugin.element.find('.manualBreaks').find('input[name=breaksInput]');
-                                    manualInput.val(state.manualBreaksInput);
-                                    me.classifyPlugin.element.find('.classCount').hide();
-                                    me.classifyPlugin.element.find('.manualBreaks').show();
-                                }
-                            }
-                            if(state.numberOfClasses != null && state.numberOfClasses > 0) {
-                                var slider = me.classifyPlugin.rangeSlider;
-                                if(slider != null) {
-                                    slider.slider("value", state.numberOfClasses);
-                                    slider.parent().find('input#amount_class').val(state.numberOfClasses);
-                                }
-                            }
-                            // current column is needed for rendering map
-                            var columns = view.grid.getColumns();
-                            for (var i = 0; i < columns.length; i++) {
-                                var column = columns[i];
-                                if (column.id == state.currentColumn) {
-                                    view.sendStatsData(column);
-                                }
-                            };
-                        }
-                    });
-                });
-            }
-        };
+        // We need to notify the grid of the current state so it can load the right indicators.
+        me.gridPlugin.setState(state);
 
         // Load the mode and show content if not loaded already.
         if (!view.isVisible) {
-            view.showMode(true);
-            view.showContent(true, layer, contentLoadedCallback);
+            view.prepareMode(true, layer);
+            //view.showMode(true);
+            //view.showContent(true, layer);
         }
         // Otherwise just set the state.
         else {
-            contentLoadedCallback();
+            me.gridPlugin.loadStateIndicators(container, state);
         }
-
-        if(!view.grid) {
-            return;
-        }
-
-        view.clearDataFromGrid();
 
         if(this.state != null && this.state.indicators != null && this.state.indicators.length > 0) {
             this.state.indicators = [];
