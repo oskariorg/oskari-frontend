@@ -11,7 +11,7 @@
                 "openlayers-default-theme": {
                     "bundlePath": "../../../packages/openlayers/bundle/"
                 },
-                "openlayers-single-full": {
+                "openlayers-published-map": {
                     "bundlePath": "../../../packages/openlayers/bundle/"
                 }
             },

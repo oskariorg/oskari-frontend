@@ -123,7 +123,17 @@ function(config) {
         },
         'WFSFeaturesSelectedEvent' : function(event) {
             this.service.scheduleWFSMapHighlightUpdate(event);
-        } 
+        },
+        /**
+         * @method MapModulePlugin_MapLayerVisibilityRequest
+         * refreshes WFS-layer grid based on visibility
+         */
+        'MapLayerVisibilityChangedEvent' : function(event) {
+            if (event.getMapLayer().isVisible()) {
+                this.afterAfterMapMoveEvent();
+            }
+        }
+      
 	},
 
 	onEvent : function(event) {
@@ -248,7 +258,7 @@ function(config) {
 	 */
 	drawImageTile : function(layer, imageUrl, imageBbox, layerPostFix, keepPrevious) {
 		var layerName = "wfs_layer_" + layer.getId() + "_" + layerPostFix;
-		var boundsObj = null;
+        var boundsObj = null;
 		if (imageBbox.bounds && imageBbox.bounds.left && imageBbox.bounds.right
 				&& imageBbox.bounds.top && imageBbox.bounds.bottom) {
 			boundsObj = new OpenLayers.Bounds(imageBbox.bounds.left,
@@ -262,8 +272,6 @@ function(config) {
 
 		/** Safety checks */
 		if (!(imageUrl && layer && boundsObj)) {
-			// alert("no bounds");
-			// console.dir(event);
 			return;
 		}
 
@@ -364,7 +372,7 @@ updateWfsImages : function(creator) {
 	var layers = Oskari.$().sandbox.findAllSelectedMapLayers();
 	// request updates for map tiles
 	for ( var i = 0; i < layers.length; i++) {
-        if(layers[i].isInScale() && layers[i].isLayerOfType('WFS')) {
+        if(layers[i].isInScale() && layers[i].isVisible() && layers[i].isLayerOfType('WFS')) {
             this.doWfsLayerRelatedQueries(layers[i]);
         }
 	}

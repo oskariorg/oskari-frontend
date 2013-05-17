@@ -230,8 +230,10 @@ function(config, locale) {
                 //me.createMunicipalitySlickGrid(container, indicator, genders, years, indicatorMeta, regionData);
                 me.createMunicipalitySlickGrid(container, regionData);
 
-                // Data loaded and grid created, now it's time to load the indicators from the state.
-                me.loadStateIndicators(container, me._state);
+                // Data loaded and grid created, now it's time to load the indicators from the state if any.
+                if (me._state) {
+                    me.loadStateIndicators(container, me._state);
+                }
             } else {
                 me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].regionDataError);
             }
@@ -1050,13 +1052,12 @@ function(config, locale) {
      * @method loadStateIndicators
      */
     loadStateIndicators: function(container, state) {
-        console.log(state);
         var me = this;
         var classifyPlugin = this._sandbox.findRegisteredModuleInstance('MainMapModuleManageClassificationPlugin');
         // First, let's clear out the old data from the grid.
         me.clearDataFromGrid();
 
-        if(state.indicators.length > 0){
+        if(state.indicators && state.indicators.length > 0){
             //send ajax calls and build the grid
             me.getSotkaIndicatorsMeta(container, state.indicators, function(){
                 //send ajax calls and build the grid
