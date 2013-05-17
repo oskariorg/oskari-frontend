@@ -40,8 +40,6 @@ function(localization, instance) {
             show : false,
             closeBoxCallback : function() {
                 view.prepareMode(false);
-                //view.showMode(false);
-                //view.showContent(false);
             }
         }]);
 /*

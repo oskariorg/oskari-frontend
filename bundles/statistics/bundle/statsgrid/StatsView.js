@@ -14,11 +14,9 @@ function() {
     /**
      * Show content
      * @method showContent
-     * @param {boolean} isShown true if content should be rendered, false if not
-     * @param {Object} layer which layer should be shown
-     * @param {Function} callback function which gets called after the content has finished loading
+     * @param {Boolean} isShown true if content should be rendered, false if not
      */
-    showContent: function(isShown, layer, callback) {
+    showContent: function(isShown) {
         if(isShown) {
             this.getLeftColumn().addClass('statsgrid_100');
             this.getLeftColumn().append(this.getEl());

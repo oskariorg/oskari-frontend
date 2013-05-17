@@ -36,8 +36,8 @@ function() {
         sandbox.registerService(statsService);
         this.statsService = statsService;
 
-        // Register stats plugin for map which creates
-        // - the indicator selection UI (unless 'published' param in the conf is false)
+        // Register stats plugin for the map which creates
+        // - the indicator selection UI (unless 'published' param in the conf is true)
         // - the grid.
         var gridConf = {
             'state': me.getState()
@@ -93,10 +93,8 @@ function() {
         // Load the mode and show content if not loaded already.
         if (!view.isVisible) {
             view.prepareMode(true, layer);
-            //view.showMode(true);
-            //view.showContent(true, layer);
         }
-        // Otherwise just set the state.
+        // Otherwise just load the indicators in the state.
         else {
             me.gridPlugin.loadStateIndicators(container, state);
         }
