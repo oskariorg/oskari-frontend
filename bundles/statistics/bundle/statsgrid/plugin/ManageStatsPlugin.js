@@ -6,7 +6,12 @@
 Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
 /**
  * @method create called automatically on construction
- * @params {Object} config   'published' => {Boolean}, 'state' => {Object}
+ * @params {Object} config
+ *  {
+ *   'published': {Boolean}, // optional, defaults to false
+ *   'state':     {Object},  // optional, defaults to an empty object
+ *   'layer':     {Object}   // optional, can be set later with #setLayer
+ *  }
  * @params {Object} locale   localization strings
  *
  * @static
@@ -104,9 +109,10 @@ function(config, locale) {
         }
 
         this.statsService = sandbox.getService('Oskari.statistics.bundle.statsgrid.StatisticsService');
-        this._published = this.conf.published || false;
+        this._published = ( this.conf.published || false );
         // Hack so that we don't need to check every occasion whether the state exists.
-        this._state = this.conf.state || {};
+        this._state = ( this.conf.state || {} );
+        this._layer = ( this.conf.layer || null );
     },
 
     /**
@@ -173,12 +179,11 @@ function(config, locale) {
      * @method createStatsOut
      * Get Sotka data and show it in SlickGrid
      * @param {Object} container to where slick grid and pull downs will be appended
-     * @param {Function} callback function which gets called after the content has finished loading
      */
-    createStatsOut : function(container, callback) {
+    createStatsOut : function(container) {
         // indicator params are select-elements
         // (indicator drop down select and year & gender selects)
-        this.prepareIndicatorParams(container, callback);
+        this.prepareIndicatorParams(container);
 
         // stop events so that they don't affect other parts of the site (i.e. map)
         container.on("keyup", function(e) {
@@ -191,10 +196,9 @@ function(config, locale) {
     },
     /**
      * @method prepareIndicatorParams
-     * @param container element where indicator-selector should be added
-     * @param {Function} callback function which gets called after the content has finished loading
+     * @param {Object} container element where indicator-selector should be added
      */
-    prepareIndicatorParams : function(container, callback) {
+    prepareIndicatorParams : function(container) {
         // Do not load the indicators for a published map.
         if (!this._published) {
             //clear the selectors container
@@ -208,15 +212,14 @@ function(config, locale) {
             this.getSotkaIndicators(container);
         }
         // Regions: success createMunicipalityGrid
-        this.getSotkaRegionData(container, callback);
+        this.getSotkaRegionData(container);
     },
     /**
      * Fetch region data - we need to know all the regions / municipalities
      * @method getSotkaRegionData
-     * @param container element where indicator-selector should be added
-     * @param {Function} callback function which gets called after the content has finished loading
+     * @param {Object} container element where indicator-selector should be added
      */
-    getSotkaRegionData : function(container, callback) {
+    getSotkaRegionData : function(container) {
         var me = this;
         // call ajax function (params: url, successFallback, errorCallback)
         me.statsService.fetchStatsData(me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=regions&version=1.1',
@@ -227,8 +230,7 @@ function(config, locale) {
                 //me.createMunicipalitySlickGrid(container, indicator, genders, years, indicatorMeta, regionData);
                 me.createMunicipalitySlickGrid(container, regionData);
 
-                // Data loaded and grid created, now it's time to call the function provided, if any.
-                //callback && callback();
+                // Data loaded and grid created, now it's time to load the indicators from the state.
                 me.loadStateIndicators(container, me._state);
             } else {
                 me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].regionDataError);
@@ -243,7 +245,7 @@ function(config, locale) {
     /**
      * Create initial grid using just one column: municipality
      * @method createMunicipalitySlickGrid
-     * @param container element where indicator-selector should be added
+     * @param {Object} container element where indicator-selector should be added
      */
     createMunicipalitySlickGrid : function(container, regiondata) {
         var me = this;
@@ -1021,7 +1023,6 @@ function(config, locale) {
         this.grid.setColumns(newColumnDef);
         this.grid.render();
         this.dataView.refresh();
-        this.conf.state.indicators = [];
     },
 
     /**
@@ -1054,6 +1055,7 @@ function(config, locale) {
         var classifyPlugin = this._sandbox.findRegisteredModuleInstance('MainMapModuleManageClassificationPlugin');
         // First, let's clear out the old data from the grid.
         me.clearDataFromGrid();
+
         if(state.indicators.length > 0){
             //send ajax calls and build the grid
             me.getSotkaIndicatorsMeta(container, state.indicators, function(){
