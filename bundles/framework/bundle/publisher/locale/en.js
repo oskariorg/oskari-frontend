@@ -55,6 +55,11 @@ Oskari.registerLocalization(
                     "SearchPlugin": "Address and place name search",
                     "GetInfoPlugin": "Query tool for place data"
                 },
+                "data": {
+                    "label": "Statistics",
+                    "tooltip": "Show the data related to map.",
+                    "grid" : "Show statistic grid"
+                },
                 "layers": {
                     "label": "Map layers",
                     "defaultLayer": "(Default layer)",

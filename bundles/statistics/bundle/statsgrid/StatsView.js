@@ -40,11 +40,11 @@ function() {
         }
     },
     _showContent : function(container, callback) {
-            var me=this;
-         // var gridContainer = jQuery('<div id="municipalGrid" style="width:30%;height:400px;"></div>');    
-		  me.createStatsOut(container, callback);
-		// container.append(gridContainer);
-       // container.append('Tähän tulisi taulukko näkymä');
+        var me=this;
+        // var gridContainer = jQuery('<div id="municipalGrid" style="width:30%;height:400px;"></div>');    
+        me.createStatsOut(container, callback);
+        // container.append(gridContainer);
+        // container.append('Tähän tulisi taulukko näkymä');
     }
 }, {
     "protocol": ["Oskari.userinterface.View"],

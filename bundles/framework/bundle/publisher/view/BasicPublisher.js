@@ -35,6 +35,7 @@ function(instance, localization, data) {
     this.templateButtonsDiv = jQuery('<div class="buttons"></div>');
     this.templateHelp = jQuery('<div class="help icon-info"></div>');
     this.templateTool = jQuery('<div class="tool ">' + '<input type="checkbox"/>' + '<span></span></div>');
+    this.templateData = jQuery('<div class="data ">' + '<input type="checkbox"/>' + '<label></label></div>');
     this.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
     this.templateCustomSize = jQuery('<div class="customsize">' + '<input type="text" name="width" ' + 
             'placeholder="' + localization.sizes.width + '"/> x ' + 
@@ -92,6 +93,9 @@ function(instance, localization, data) {
         maxWidth : 4000,
         maxHeight : 2000
     }];
+
+    this.grid = {};
+    this.grid.selected = false;
 
     if(data) {
         if(data.lang) {
@@ -185,6 +189,24 @@ function(instance, localization, data) {
         panel.open();
         accordion.addPanel(panel);
         
+
+        // add grid checkbox
+        var sandbox = this.instance.getSandbox();
+        var selectedLayers = sandbox.findAllSelectedMapLayers();
+        var showStats = false;
+        for (var i = 0; i < selectedLayers.length; i++) {
+            var layer = selectedLayers[i];
+            if(layer.getLayerType() === "stats") {
+                showStats = true;
+            }
+        };
+        if(showStats) {
+            var dataPanel = this._createDataPanel();
+            dataPanel.open();
+            accordion.addPanel(dataPanel);
+        }
+
+
         accordion.addPanel(this._createSizePanel());
         accordion.addPanel(this._createToolsPanel());
 
@@ -234,6 +256,7 @@ function(instance, localization, data) {
                     var width = widthInput.val();
                     if (this._validateNumberRange(width, option.minWidth, option.maxWidth)) {
                         mapElement.width(width);
+                        me.adjustDataContainer();
                     } else {
                         widthInput.addClass('error');
                     }
@@ -247,6 +270,7 @@ function(instance, localization, data) {
                 } else {
                     mapElement.width(option.width);
                     mapElement.height(option.height);
+                    me.adjustDataContainer();
                 }
                 break;
             }
@@ -363,6 +387,76 @@ function(instance, localization, data) {
 
         return panel;
     },
+    _createDataPanel : function() {
+        var me = this;
+        var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+        panel.setTitle(this.loc.data.label);
+        var contentPanel = panel.getContainer();
+        // tooltip
+        var tooltipCont = this.templateHelp.clone();
+        tooltipCont.attr('title', this.loc.data.tooltip);
+        contentPanel.append(tooltipCont);
+
+        var dataContainer = this.templateData.clone();
+        dataContainer.find('input').attr('id', 'show-grid-checkbox').change(function() {
+            var checkbox = jQuery(this);
+            var isChecked = checkbox.is(':checked');
+            me.isDataVisible = isChecked;
+            me.adjustDataContainer();
+        });
+        dataContainer.find('label').attr('for', 'show-grid-checkbox').append(this.loc.data.grid);
+
+        if (this.grid.selected) {
+            dataContainer.find('input').attr('checked', 'checked');
+        }
+        contentPanel.append(dataContainer);
+
+        return panel;
+    },
+    adjustDataContainer: function() {
+        var content         = jQuery('#contentMap'),
+            contentWidth    = content.width(),
+            marginWidth     =  content.css('margin-left').split('px')[0];
+        var maxContentWidth = jQuery(window).width() - marginWidth - 40;
+
+        var mapWidth    = jQuery('#mapdiv').width(),
+            mapHeight   = jQuery('#mapdiv').height();
+        var gridHeight  = mapHeight, 
+            gridWidth   = maxContentWidth - mapWidth;
+        var elLeft      = jQuery('.oskariui-left');
+        var elCenter    = jQuery('.oskariui-center');
+
+        if(this.isDataVisible) {
+            elLeft.removeClass('oskari-closed');
+            if(gridWidth < 400) {
+                var diff = 400 - gridWidth;
+                gridWidth = 400;
+                contentWidth += diff;
+                jQuery('#contentMap').width(contentWidth);
+            } else {
+                jQuery('#contentMap').width(maxContentWidth);
+            }
+            gridWidth = gridWidth+'px';
+            gridHeight = gridHeight +'px';
+            mapWidth = mapWidth+'px';
+        } else {
+            elLeft.addClass('oskari-closed');
+
+            gridWidth = '0px';
+            gridHeight = '0px';
+            contentWidth = '100%';
+            jQuery('#contentMap').width('');
+        }
+        elLeft.css({'width': gridWidth, 'height': gridHeight, 'float': 'left'}).addClass('published-grid-left');
+        elCenter.css({'width': mapWidth, 'float': 'left'}).addClass('published-grid-center');
+    },
+    getDataContainer: function() {
+        return jQuery('.oskariui-left');
+    },
+    addDataGrid: function(grid){
+        this.getDataContainer.html(grid);
+    },
+
     /**
      * @method handleMapMoved
      * Does nothing currently.
