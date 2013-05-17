@@ -6,7 +6,12 @@
 Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
 /**
  * @method create called automatically on construction
- * @params {Object} config   'published' => {Boolean}, 'state' => {Object}
+ * @params {Object} config
+ *  {
+ *   'published': {Boolean}, // optional, defaults to false
+ *   'state':     {Object},  // optional, defaults to an empty object
+ *   'layer':     {Object}   // optional, can be set later with #setLayer
+ *  }
  * @params {Object} locale   localization strings
  *
  * @static
@@ -104,9 +109,10 @@ function(config, locale) {
         }
 
         this.statsService = sandbox.getService('Oskari.statistics.bundle.statsgrid.StatisticsService');
-        this._published = this.conf.published || false;
+        this._published = ( this.conf.published || false );
         // Hack so that we don't need to check every occasion whether the state exists.
-        this._state = this.conf.state || {};
+        this._state = ( this.conf.state || {} );
+        this._layer = ( this.conf.layer || null );
     },
 
     /**
@@ -1052,7 +1058,7 @@ function(config, locale) {
         var classifyPlugin = this._sandbox.findRegisteredModuleInstance('MainMapModuleManageClassificationPlugin');
         // First, let's clear out the old data from the grid.
         me.clearDataFromGrid();
-        
+
         if(state.indicators.length > 0){
             //send ajax calls and build the grid
             me.getSotkaIndicatorsMeta(container, state.indicators, function(){
