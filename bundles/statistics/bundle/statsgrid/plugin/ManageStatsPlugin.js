@@ -17,6 +17,7 @@ function(config, locale) {
     this._sandbox = null;
     this._map = null;
     this._layer = null;
+    this._state = null;
     this.element = undefined;
     this.statsService = null;
     // indicators (meta data)
@@ -105,9 +106,7 @@ function(config, locale) {
         this.statsService = sandbox.getService('Oskari.statistics.bundle.statsgrid.StatisticsService');
         this._published = this.conf.published || false;
         // Hack so that we don't need to check every occasion whether the state exists.
-        if (!this.conf.state) {
-            this.conf.state = {};
-        }
+        this._state = this.conf.state || {};
     },
 
     /**
@@ -164,6 +163,10 @@ function(config, locale) {
      */
     setLayer : function(layer) {
         this._layer = layer;
+    },
+
+    setState: function(state) {
+        this._state = state;
     },
 
     /**
@@ -225,7 +228,8 @@ function(config, locale) {
                 me.createMunicipalitySlickGrid(container, regionData);
 
                 // Data loaded and grid created, now it's time to call the function provided, if any.
-                callback && callback();
+                //callback && callback();
+                me.loadStateIndicators(container, me._state);
             } else {
                 me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].regionDataError);
             }
@@ -1040,6 +1044,57 @@ function(config, locale) {
             dialog.show(title, message, [okBtn]);
         }
     },
+
+    /**
+     * @method loadStateIndicators
+     */
+    loadStateIndicators: function(container, state) {
+        console.log(state);
+        var me = this;
+        var classifyPlugin = this._sandbox.findRegisteredModuleInstance('MainMapModuleManageClassificationPlugin');
+        // First, let's clear out the old data from the grid.
+        me.clearDataFromGrid();
+        if(state.indicators.length > 0){
+            //send ajax calls and build the grid
+            me.getSotkaIndicatorsMeta(container, state.indicators, function(){
+                //send ajax calls and build the grid
+                me.getSotkaIndicatorsData(container, state.indicators, function(){
+
+                    if(state.currentColumn != null) {
+
+                        if(classifyPlugin) {
+                            if(state.methodId != null && state.methodId > 0) {
+                                var select = classifyPlugin.element.find('.classificationMethod').find('.method');
+                                select.val(state.methodId);
+                                // The manual breaks method:
+                                if(state.methodId == 4 && state.manualBreaksInput) {
+                                    var manualInput = classifyPlugin.element.find('.manualBreaks').find('input[name=breaksInput]');
+                                    manualInput.val(state.manualBreaksInput);
+                                    me.classifyPlugin.element.find('.classCount').hide();
+                                    me.classifyPlugin.element.find('.manualBreaks').show();
+                                }
+                            }
+                            if(state.numberOfClasses != null && state.numberOfClasses > 0) {
+                                var slider = classifyPlugin.rangeSlider;
+                                if(slider != null) {
+                                    slider.slider("value", state.numberOfClasses);
+                                    slider.parent().find('input#amount_class').val(state.numberOfClasses);
+                                }
+                            }
+                        }
+                        // current column is needed for rendering map
+                        var columns = me.grid.getColumns();
+                        for (var i = 0; i < columns.length; i++) {
+                            var column = columns[i];
+                            if (column.id == state.currentColumn) {
+                                me.sendStatsData(column);
+                            }
+                        };
+                    }
+                });
+            });
+        }
+    }
 }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}

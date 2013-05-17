@@ -32,6 +32,38 @@ function() {
         el.addClass("statsgrid");
 
     },
+
+    /**
+     * Updates the layer, enters/exits the mode and creates the UI
+     * to display the indicators selection and the grid.
+     *
+     * @method prepareMode
+     * @param {Boolean} isShown True to enter the mode, false to exit the mode
+     * @param {Object} layer The layer visualizations should be applied to
+     * @param {Boolean} blnFromExtensionEvent
+     */
+    prepareMode: function(isShown, layer, blnFromExtensionEvent) {
+        this.isVisible = (isShown == true);
+
+        if(this._layer == null || (layer != null && this._layer.getId() != layer.getId())) {
+            // Update layer.
+            this._layer = layer;
+            this.instance.gridPlugin.setLayer(layer);
+            this.instance.state.layerId = this._layer.getId();
+            this.toolbar.changeName(this._layer.getName());
+        }
+
+        // Enter/exit the mode.
+        this.showMode(isShown, blnFromExtensionEvent);
+        // Show/hide the content.
+        this.showContent(isShown);
+
+        if (isShown) {
+            // Create the indicators selection and the grid.
+            this.instance.gridPlugin.createStatsOut(this.getEl());
+        }
+    },
+
     showMode: function(isShown, blnFromExtensionEvent) {
         var sandbox = this.instance.getSandbox();
         this.toolbar.show(isShown);

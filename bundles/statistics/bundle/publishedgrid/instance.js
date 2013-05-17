@@ -1,15 +1,14 @@
 /**
- * @class Oskari.statistics.bundle.statsgrid.PublishedGridBundleInstance
+ * @class Oskari.statistics.bundle.publishedgrid.PublishedGridBundleInstance
  *
  */
-Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.PublishedGridBundleInstance',
+Oskari.clazz.define('Oskari.statistics.bundle.publishedgrid.PublishedGridBundleInstance',
 /**
  * @static constructor function
  */
 function() {
     this.conf =  {
-        "sandbox": "sandbox",
-        "gridShown": true // show the grid on startup, defaults to true
+        "sandbox": "sandbox"
     };
     this.state = {};
 }, {
@@ -28,10 +27,12 @@ function() {
     stop: function() {},
 
     start: function() {
+        console.log('PublishedGrid bundle started.');
         var me = this;
+        me.gridVisible = null;
         var conf = me.conf;
-        var locale = me.getLocalization();
-        var showGrid = me.conf ? me.conf.gridShown : true;
+        var locale = Oskari.getLocalization('StatsGrid'); // Let's use statsgrid's locale files.
+        var showGrid = me.conf ? me.conf.gridShown : true; // Show the grid on startup, defaults to true.
         var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
         var sandbox = Oskari.getSandbox(sandboxName);
         this.sandbox = sandbox;
@@ -41,7 +42,7 @@ function() {
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         this.mapModule = mapModule;
 
-        // TODO: where to get the grid container from?
+        // The container where the grid will be rendered to.
         var container = jQuery('<div class="publishedgrid"></div>');
         this.container = container;
 
@@ -51,7 +52,7 @@ function() {
         sandbox.registerService(statsService);
         this.statsService = statsService;
 
-        // Register grid plugin for map.
+        // Register grid plugin to the map.
         var gridConf = {
             'published': true
         };
@@ -60,7 +61,7 @@ function() {
         mapModule.startPlugin(gridPlugin);
         this.gridPlugin = gridPlugin;
 
-        // Register classify plugin for map.
+        // Register classification plugin to the map.
         var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', conf ,locale);
         mapModule.registerPlugin(classifyPlugin);
         mapModule.startPlugin(classifyPlugin);
@@ -78,38 +79,36 @@ function() {
      * @method createUI
      * Creates the UI based on the given state (what indicators to use and so on).
      * @param {Object} state statgrid's bundle state as JSON
-     * @param {Boolean} ignoreLocation true to NOT set map location based on state
      */
-    createUI: function(state, ignoreLocation) {
+    createUI: function(state) {
         var me = this,
             view = me.gridPlugin,
-            layer = me.sandbox.findMapLayerFromAllAvailable(state.layerId),
-            elCenter = jQuery('.oskariui-center'), // the map column
-            elLeft = jQuery('.oskariui-left'); // the grid column
+            layer = me.sandbox.findMapLayerFromAllAvailable(state.layerId);
 
+        // Layer not available - nothing to do here.
+        if (!layer) {
+            return;
+        }
+
+        // We need to notify the grid plugin of the used layer.
         view.setLayer(layer);
         
-        // How wide the grid should be, in percentages.
-        // Probably needs to be defined somewhere else.
-        var leftWidth = 40; // %
-        elCenter.removeClass('span12');
-        elCenter.width((100 - leftWidth) + '%');
-        elLeft.removeClass('oskari-closed');
-        elLeft.width(leftWidth + '%');
-        elLeft.append(me.container);
+        // Makes some room in the DOM for the grid.
+        me._toggleGrid(true);
 
-        // A hack to notify openlayers of map size change.
-        var map = me.mapModule.getMap();
-        map.updateSize();
+        // Create the show/hide toggle button for the grid.
+        me._createShowHideButton(me.container);
 
         // Load the indicator data specified in statsgrid's state.
         var gridLoadedCallback = function() {
+            // First, let's clear out the old data from the grid.
+            view.clearDataFromGrid();
+
             if (state.indicators.length > 0) {
 
-                //send ajax calls and build the grid
+                // Send ajax calls to get the indicators
                 view.getSotkaIndicatorsMeta(state.indicators, function(){
 
-                    //send ajax calls and build the grid
                     view.getSotkaIndicatorsData(state.indicators, function(){
 
                         if(state.currentColumn != null) {
@@ -132,7 +131,7 @@ function() {
                                     slider.parent().find('input#amount_class').val(state.numberOfClasses);
                                 }
                             }
-                            // current column is needed for rendering map
+                            // Current column is needed for rendering map
                             var columns = view.grid.getColumns();
                             for (var i = 0; i < columns.length; i++) {
                                 var column = columns[i];
@@ -148,8 +147,65 @@ function() {
 
         // Initialize the grid
         view.createStatsOut(me.container, gridLoadedCallback);
+    },
+
+    /**
+     * @method _toggleGrid
+     * @param {Boolean} show Shows the grid when true, hides it when false
+     */
+    _toggleGrid: function(show) {
+        var me = this,
+            elCenter = jQuery('.oskariui-center'), // the map column
+            elLeft = jQuery('.oskariui-left'), // the grid column
+            gridWidth = 40; // How wide the grid should be, in percentages.
+
+        if (show) {
+            elCenter.removeClass('span12');
+            elCenter.width((100 - gridWidth) + '%');
+            elLeft.removeClass('oskari-closed');
+            elLeft.width(gridWidth + '%');
+            elLeft.append(me.container);
+        } else {
+            elCenter.width('').addClass('span12');
+            elLeft.addClass('oskari-closed');
+            elLeft.width('');
+            elLeft.remove(me.container);
+        }
+
+        me.gridVisible = show;
+
+        // A hack to notify openlayers of map size change.
+        var map = me.mapModule.getMap();
+        map.updateSize();
+    },
+
+    /**
+     * Creates a button to show/hide the grid.
+     *
+     * @method _createShowHideButton
+     * @param {Object} element The container where the button should be appended to.
+     */
+    _createShowHideButton: function(element) {
+        var me = this;
+        var imgSrc = me.mapModule.getImageUrl() +
+            '/framework/bundle/mapmodule-plugin/plugin/fullscreen/images/';
+        var button = jQuery(
+            '<div class="publishedgridToggle">' +
+                '<img></img>' +
+            '</div>'
+        );
+        button.find('img').attr('src', imgSrc + 'show-navigation.png');
+        button.click(function(event) {
+            event.preventDefault();
+            if (me.gridVisible) {
+                jQuery(this).find('img').attr('src', imgSrc + 'hide-navigation.png');
+            } else {
+                jQuery(this).find('img').attr('src', imgSrc + 'show-navigation.png');
+            }
+            me._toggleGrid(!me.gridVisible);
+        })
+        element.append(button);
     }
 }, {
-    "protocol" : ["Oskari.bundle.BundleInstance"]
+    "protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module']
 });
-

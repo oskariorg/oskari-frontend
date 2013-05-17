@@ -1,9 +1,9 @@
 /**
- * @class Oskari.statistics.bundle.statsgrid.PublishedGridBundle
+ * @class Oskari.statistics.bundle.publishedgrid.PublishedGridBundle
  *
  * Definitpation for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.statistics.bundle.statsgrid.PublishedGridBundle",
+Oskari.clazz.define("Oskari.statistics.bundle.publishedgrid.PublishedGridBundle",
 /**
  * @method create called automatically on construction
  * @static
@@ -12,8 +12,7 @@ function() {
 
 }, {
     "create" : function() {
-        return Oskari.clazz.create("Oskari.statistics.bundle.statsgrid.PublishedGridBundleInstance",
-             'publishedgrid');
+        return Oskari.clazz.create("Oskari.statistics.bundle.publishedgrid.PublishedGridBundleInstance");
     },
     "update" : function(manager, bundle, bi, info) {
 
@@ -28,50 +27,32 @@ function() {
             "src" : "../../../../bundles/statistics/bundle/publishedgrid/instance.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/bundle/statsgrid/StatsView.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/bundle/statsgrid/GridModeView.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/bundle/statsgrid/StatsToolbar.js"
-        }, {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/bundle/statsgrid/ManageStatsOut.js"
-        },{
-            "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/bundle/statsgrid/plugin/ManageClassificationPlugin.js"
-        },{
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/bundle/statsgrid/event/SotkadataChangedEvent.js"
-        },{
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/bundle/statsgrid/request/StatsGridRequest.js"
         }, {
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/bundle/statsgrid/request/StatsGridRequestHandler.js"
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/plugin/ManageStatsPlugin.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/bundle/statsgrid/service/StatisticsService.js"
         }, {
             "type" : "text/css",
             "src" : "../../../../resources/statistics/bundle/statsgrid/css/style.css"
-        },{
+        }, {
             "type" : "text/css",
             "src" : "../../../../resources/statistics/bundle/statsgrid/css/classifyplugin.css"
-        },{
+        }, {
             "type" : "text/css",
             "src" : "../../../../libraries/slickgrid/css/slick.grid.css"
-        },{
+        }, {
             "type" : "text/css",
             "src" : "../../../../libraries/slickgrid/css/municipality.css"
         }, {
             "type" : "text/css",
             "src" : "../../../../libraries/slickgrid/css/slick-default-theme.css"
-        },{
+        }, {
             "src" : "../../../../libraries/jquery/jquery.event.drag-2.0.min.js",
             "type" : "text/javascript"
-        },{
+        }, {
             "src" : "../../../../libraries/slickgrid/slick.core.js",
             "type" : "text/javascript"
         }, {
@@ -114,15 +95,15 @@ function() {
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/bundle/publishedgrid/locale/fi.js"
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/locale/fi.js"
         }, {
             "lang" : "sv",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/bundle/publishedgrid/locale/sv.js"
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/locale/sv.js"
         }, {
             "lang" : "en",
             "type" : "text/javascript",
-            "src" : "../../../../bundles/statistics/bundle/publishedgrid/locale/en.js"
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/locale/en.js"
         }]
     },
     "bundle" : {
@@ -158,4 +139,4 @@ function() {
 
 });
 
-Oskari.bundle_manager.installBundleClass("publishedgrid", "Oskari.statistics.bundle.statsgrid.PublishedGridBundleInstance");
+Oskari.bundle_manager.installBundleClass("publishedgrid", "Oskari.statistics.bundle.publishedgrid.PublishedGridBundleInstance");

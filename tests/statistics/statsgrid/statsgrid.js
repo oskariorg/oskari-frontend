@@ -1,4 +1,4 @@
-describe('Test Suite for statistics/statsgrid bundle', function() {
+describe.only('Test Suite for statistics/statsgrid bundle', function() {
     var appSetup = null,
         appConf = null,
         statsModule = null,
@@ -61,7 +61,7 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
             sandbox = Oskari.getSandbox(),
             statsModule = sandbox.findRegisteredModuleInstance('StatsGrid'),
             testLayer = sandbox.findMapLayerFromAllAvailable(testLayerId),
-            viewPlugin = statsModule.plugins['Oskari.userinterface.View'];
+            viewPlugin = statsModule.gridPlugin;
             done();
         });
     };
@@ -121,6 +121,7 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
         });
 
         it('should exclude null values from the sent data', function(done) {
+            var gridPlugin = statsModule.gridPlugin;
             var statsView = statsModule.plugins['Oskari.userinterface.View'];
 
             // faking to be module with getName/onEvent methods
@@ -149,13 +150,13 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
             // listen to StatsGrid.SotkadataChangedEvent to trigger verification
             sandbox.registerForEventByName(self, 'StatsGrid.SotkadataChangedEvent');
 
-            // Required by statsView#addIndicatorDataToGrid
-            statsView.indicators.push({
+            // Required by gridPlugin#addIndicatorDataToGrid
+            gridPlugin.indicators.push({
                 'title': {
                     'fi': "Test indicator meta"
                 }
             });
-            statsView.getSotkaIndicatorData(statsView.getEl(), 4, 'total', 2011);
+            gridPlugin.getSotkaIndicatorData(statsView.getEl(), 4, 'total', 2011);
         });
     });
 
