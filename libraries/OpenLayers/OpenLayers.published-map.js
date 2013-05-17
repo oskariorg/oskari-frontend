@@ -30719,6 +30719,2136 @@ OpenLayers.Format.WKT = OpenLayers.Class(OpenLayers.Format, {
  * full text of the license. */
 
 /**
+ * @requires OpenLayers/Events.js
+ */
+
+/**
+ * TODO: deprecate me
+ * Use OpenLayers.Request.proxy instead.
+ */
+OpenLayers.ProxyHost = "";
+
+/**
+ * Namespace: OpenLayers.Request
+ * The OpenLayers.Request namespace contains convenience methods for working
+ *     with XMLHttpRequests.  These methods work with a cross-browser
+ *     W3C compliant <OpenLayers.Request.XMLHttpRequest> class.
+ */
+OpenLayers.Request = {
+    
+    /**
+     * Constant: DEFAULT_CONFIG
+     * {Object} Default configuration for all requests.
+     */
+    DEFAULT_CONFIG: {
+        method: "GET",
+        url: window.location.href,
+        async: true,
+        user: undefined,
+        password: undefined,
+        params: null,
+        proxy: OpenLayers.ProxyHost,
+        headers: {},
+        data: null,
+        callback: function() {},
+        success: null,
+        failure: null,
+        scope: null
+    },
+    
+    /**
+     * Constant: URL_SPLIT_REGEX
+     */
+    URL_SPLIT_REGEX: /([^:]*:)\/\/([^:]*:?[^@]*@)?([^:\/\?]*):?([^\/\?]*)/,
+    
+    /**
+     * APIProperty: events
+     * {<OpenLayers.Events>} An events object that handles all 
+     *     events on the {<OpenLayers.Request>} object.
+     *
+     * All event listeners will receive an event object with three properties:
+     * request - {<OpenLayers.Request.XMLHttpRequest>} The request object.
+     * config - {Object} The config object sent to the specific request method.
+     * requestUrl - {String} The request url.
+     * 
+     * Supported event types:
+     * complete - Triggered when we have a response from the request, if a
+     *     listener returns false, no further response processing will take
+     *     place.
+     * success - Triggered when the HTTP response has a success code (200-299).
+     * failure - Triggered when the HTTP response does not have a success code.
+     */
+    events: new OpenLayers.Events(this),
+    
+    /**
+     * Method: makeSameOrigin
+     * Using the specified proxy, returns a same origin url of the provided url.
+     *
+     * Parameters:
+     * url - {String} An arbitrary url
+     * proxy {String|Function} The proxy to use to make the provided url a
+     *     same origin url.
+     *
+     * Returns
+     * {String} the same origin url. If no proxy is provided, the returned url
+     *     will be the same as the provided url.
+     */
+    makeSameOrigin: function(url, proxy) {
+        var sameOrigin = url.indexOf("http") !== 0;
+        var urlParts = !sameOrigin && url.match(this.URL_SPLIT_REGEX);
+        if (urlParts) {
+            var location = window.location;
+            sameOrigin =
+                urlParts[1] == location.protocol &&
+                urlParts[3] == location.hostname;
+            var uPort = urlParts[4], lPort = location.port;
+            if (uPort != 80 && uPort != "" || lPort != "80" && lPort != "") {
+                sameOrigin = sameOrigin && uPort == lPort;
+            }
+        }
+        if (!sameOrigin) {
+            if (proxy) {
+                if (typeof proxy == "function") {
+                    url = proxy(url);
+                } else {
+                    url = proxy + encodeURIComponent(url);
+                }
+            } else {
+                OpenLayers.Console.warn(
+                    OpenLayers.i18n("proxyNeeded"), {url: url});
+            }
+        }
+        return url;
+    },
+
+    /**
+     * APIMethod: issue
+     * Create a new XMLHttpRequest object, open it, set any headers, bind
+     *     a callback to done state, and send any data.  It is recommended that
+     *     you use one <GET>, <POST>, <PUT>, <DELETE>, <OPTIONS>, or <HEAD>.
+     *     This method is only documented to provide detail on the configuration
+     *     options available to all request methods.
+     *
+     * Parameters:
+     * config - {Object} Object containing properties for configuring the
+     *     request.  Allowed configuration properties are described below.
+     *     This object is modified and should not be reused.
+     *
+     * Allowed config properties:
+     * method - {String} One of GET, POST, PUT, DELETE, HEAD, or
+     *     OPTIONS.  Default is GET.
+     * url - {String} URL for the request.
+     * async - {Boolean} Open an asynchronous request.  Default is true.
+     * user - {String} User for relevant authentication scheme.  Set
+     *     to null to clear current user.
+     * password - {String} Password for relevant authentication scheme.
+     *     Set to null to clear current password.
+     * proxy - {String} Optional proxy.  Defaults to
+     *     <OpenLayers.ProxyHost>.
+     * params - {Object} Any key:value pairs to be appended to the
+     *     url as a query string.  Assumes url doesn't already include a query
+     *     string or hash.  Typically, this is only appropriate for <GET>
+     *     requests where the query string will be appended to the url.
+     *     Parameter values that are arrays will be
+     *     concatenated with a comma (note that this goes against form-encoding)
+     *     as is done with <OpenLayers.Util.getParameterString>.
+     * headers - {Object} Object with header:value pairs to be set on
+     *     the request.
+     * data - {String | Document} Optional data to send with the request.
+     *     Typically, this is only used with <POST> and <PUT> requests.
+     *     Make sure to provide the appropriate "Content-Type" header for your
+     *     data.  For <POST> and <PUT> requests, the content type defaults to
+     *     "application-xml".  If your data is a different content type, or
+     *     if you are using a different HTTP method, set the "Content-Type"
+     *     header to match your data type.
+     * callback - {Function} Function to call when request is done.
+     *     To determine if the request failed, check request.status (200
+     *     indicates success).
+     * success - {Function} Optional function to call if request status is in
+     *     the 200s.  This will be called in addition to callback above and
+     *     would typically only be used as an alternative.
+     * failure - {Function} Optional function to call if request status is not
+     *     in the 200s.  This will be called in addition to callback above and
+     *     would typically only be used as an alternative.
+     * scope - {Object} If callback is a public method on some object,
+     *     set the scope to that object.
+     *
+     * Returns:
+     * {XMLHttpRequest} Request object.  To abort the request before a response
+     *     is received, call abort() on the request object.
+     */
+    issue: function(config) {        
+        // apply default config - proxy host may have changed
+        var defaultConfig = OpenLayers.Util.extend(
+            this.DEFAULT_CONFIG,
+            {proxy: OpenLayers.ProxyHost}
+        );
+        config = OpenLayers.Util.applyDefaults(config, defaultConfig);
+        
+        // Always set the "X-Requested-With" header to signal that this request
+        // was issued through the XHR-object. Since header keys are case 
+        // insensitive and we want to allow overriding of the "X-Requested-With"
+        // header through the user we cannot use applyDefaults, but have to 
+        // check manually whether we were called with a "X-Requested-With"
+        // header.
+        var customRequestedWithHeader = false,
+            headerKey;
+        for(headerKey in config.headers) {
+            if (config.headers.hasOwnProperty( headerKey )) {
+                if (headerKey.toLowerCase() === 'x-requested-with') {
+                    customRequestedWithHeader = true;
+                }
+            }
+        }
+        if (customRequestedWithHeader === false) {
+            // we did not have a custom "X-Requested-With" header
+            config.headers['X-Requested-With'] = 'XMLHttpRequest';
+        }
+
+        // create request, open, and set headers
+        var request = new OpenLayers.Request.XMLHttpRequest();
+        var url = OpenLayers.Util.urlAppend(config.url, 
+            OpenLayers.Util.getParameterString(config.params || {}));
+        url = OpenLayers.Request.makeSameOrigin(url, config.proxy);
+        request.open(
+            config.method, url, config.async, config.user, config.password
+        );
+        for(var header in config.headers) {
+            request.setRequestHeader(header, config.headers[header]);
+        }
+
+        var events = this.events;
+
+        // we want to execute runCallbacks with "this" as the
+        // execution scope
+        var self = this;
+        
+        request.onreadystatechange = function() {
+            if(request.readyState == OpenLayers.Request.XMLHttpRequest.DONE) {
+                var proceed = events.triggerEvent(
+                    "complete",
+                    {request: request, config: config, requestUrl: url}
+                );
+                if(proceed !== false) {
+                    self.runCallbacks(
+                        {request: request, config: config, requestUrl: url}
+                    );
+                }
+            }
+        };
+        
+        // send request (optionally with data) and return
+        // call in a timeout for asynchronous requests so the return is
+        // available before readyState == 4 for cached docs
+        if(config.async === false) {
+            request.send(config.data);
+        } else {
+            window.setTimeout(function(){
+                if (request.readyState !== 0) { // W3C: 0-UNSENT
+                    request.send(config.data);
+                }
+            }, 0);
+        }
+        return request;
+    },
+    
+    /**
+     * Method: runCallbacks
+     * Calls the complete, success and failure callbacks. Application
+     *    can listen to the "complete" event, have the listener 
+     *    display a confirm window and always return false, and
+     *    execute OpenLayers.Request.runCallbacks if the user
+     *    hits "yes" in the confirm window.
+     *
+     * Parameters:
+     * options - {Object} Hash containing request, config and requestUrl keys
+     */
+    runCallbacks: function(options) {
+        var request = options.request;
+        var config = options.config;
+        
+        // bind callbacks to readyState 4 (done)
+        var complete = (config.scope) ?
+            OpenLayers.Function.bind(config.callback, config.scope) :
+            config.callback;
+        
+        // optional success callback
+        var success;
+        if(config.success) {
+            success = (config.scope) ?
+                OpenLayers.Function.bind(config.success, config.scope) :
+                config.success;
+        }
+
+        // optional failure callback
+        var failure;
+        if(config.failure) {
+            failure = (config.scope) ?
+                OpenLayers.Function.bind(config.failure, config.scope) :
+                config.failure;
+        }
+
+        if (OpenLayers.Util.createUrlObject(config.url).protocol == "file:" &&
+                                                        request.responseText) {
+            request.status = 200;
+        }
+        complete(request);
+
+        if (!request.status || (request.status >= 200 && request.status < 300)) {
+            this.events.triggerEvent("success", options);
+            if(success) {
+                success(request);
+            }
+        }
+        if(request.status && (request.status < 200 || request.status >= 300)) {                    
+            this.events.triggerEvent("failure", options);
+            if(failure) {
+                failure(request);
+            }
+        }
+    },
+    
+    /**
+     * APIMethod: GET
+     * Send an HTTP GET request.  Additional configuration properties are
+     *     documented in the <issue> method, with the method property set
+     *     to GET.
+     *
+     * Parameters:
+     * config - {Object} Object with properties for configuring the request.
+     *     See the <issue> method for documentation of allowed properties.
+     *     This object is modified and should not be reused.
+     * 
+     * Returns:
+     * {XMLHttpRequest} Request object.
+     */
+    GET: function(config) {
+        config = OpenLayers.Util.extend(config, {method: "GET"});
+        return OpenLayers.Request.issue(config);
+    },
+    
+    /**
+     * APIMethod: POST
+     * Send a POST request.  Additional configuration properties are
+     *     documented in the <issue> method, with the method property set
+     *     to POST and "Content-Type" header set to "application/xml".
+     *
+     * Parameters:
+     * config - {Object} Object with properties for configuring the request.
+     *     See the <issue> method for documentation of allowed properties.  The
+     *     default "Content-Type" header will be set to "application-xml" if
+     *     none is provided.  This object is modified and should not be reused.
+     * 
+     * Returns:
+     * {XMLHttpRequest} Request object.
+     */
+    POST: function(config) {
+        config = OpenLayers.Util.extend(config, {method: "POST"});
+        // set content type to application/xml if it isn't already set
+        config.headers = config.headers ? config.headers : {};
+        if(!("CONTENT-TYPE" in OpenLayers.Util.upperCaseObject(config.headers))) {
+            config.headers["Content-Type"] = "application/xml";
+        }
+        return OpenLayers.Request.issue(config);
+    },
+    
+    /**
+     * APIMethod: PUT
+     * Send an HTTP PUT request.  Additional configuration properties are
+     *     documented in the <issue> method, with the method property set
+     *     to PUT and "Content-Type" header set to "application/xml".
+     *
+     * Parameters:
+     * config - {Object} Object with properties for configuring the request.
+     *     See the <issue> method for documentation of allowed properties.  The
+     *     default "Content-Type" header will be set to "application-xml" if
+     *     none is provided.  This object is modified and should not be reused.
+     * 
+     * Returns:
+     * {XMLHttpRequest} Request object.
+     */
+    PUT: function(config) {
+        config = OpenLayers.Util.extend(config, {method: "PUT"});
+        // set content type to application/xml if it isn't already set
+        config.headers = config.headers ? config.headers : {};
+        if(!("CONTENT-TYPE" in OpenLayers.Util.upperCaseObject(config.headers))) {
+            config.headers["Content-Type"] = "application/xml";
+        }
+        return OpenLayers.Request.issue(config);
+    },
+    
+    /**
+     * APIMethod: DELETE
+     * Send an HTTP DELETE request.  Additional configuration properties are
+     *     documented in the <issue> method, with the method property set
+     *     to DELETE.
+     *
+     * Parameters:
+     * config - {Object} Object with properties for configuring the request.
+     *     See the <issue> method for documentation of allowed properties.
+     *     This object is modified and should not be reused.
+     * 
+     * Returns:
+     * {XMLHttpRequest} Request object.
+     */
+    DELETE: function(config) {
+        config = OpenLayers.Util.extend(config, {method: "DELETE"});
+        return OpenLayers.Request.issue(config);
+    },
+  
+    /**
+     * APIMethod: HEAD
+     * Send an HTTP HEAD request.  Additional configuration properties are
+     *     documented in the <issue> method, with the method property set
+     *     to HEAD.
+     *
+     * Parameters:
+     * config - {Object} Object with properties for configuring the request.
+     *     See the <issue> method for documentation of allowed properties.
+     *     This object is modified and should not be reused.
+     * 
+     * Returns:
+     * {XMLHttpRequest} Request object.
+     */
+    HEAD: function(config) {
+        config = OpenLayers.Util.extend(config, {method: "HEAD"});
+        return OpenLayers.Request.issue(config);
+    },
+    
+    /**
+     * APIMethod: OPTIONS
+     * Send an HTTP OPTIONS request.  Additional configuration properties are
+     *     documented in the <issue> method, with the method property set
+     *     to OPTIONS.
+     *
+     * Parameters:
+     * config - {Object} Object with properties for configuring the request.
+     *     See the <issue> method for documentation of allowed properties.
+     *     This object is modified and should not be reused.
+     * 
+     * Returns:
+     * {XMLHttpRequest} Request object.
+     */
+    OPTIONS: function(config) {
+        config = OpenLayers.Util.extend(config, {method: "OPTIONS"});
+        return OpenLayers.Request.issue(config);
+    }
+
+};
+
+/* Copyright (c) 2006-2012 by OpenLayers Contributors (see authors.txt for 
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
+ * @requires OpenLayers/Format.js
+ */
+
+/**
+ * Class: OpenLayers.Format.XML
+ * Read and write XML.  For cross-browser XML generation, use methods on an
+ *     instance of the XML format class instead of on <code>document<end>.
+ *     The DOM creation and traversing methods exposed here all mimic the
+ *     W3C XML DOM methods.  Create a new parser with the
+ *     <OpenLayers.Format.XML> constructor.
+ *
+ * Inherits from:
+ *  - <OpenLayers.Format>
+ */
+OpenLayers.Format.XML = OpenLayers.Class(OpenLayers.Format, {
+    
+    /**
+     * Property: namespaces
+     * {Object} Mapping of namespace aliases to namespace URIs.  Properties
+     *     of this object should not be set individually.  Read-only.  All
+     *     XML subclasses should have their own namespaces object.  Use
+     *     <setNamespace> to add or set a namespace alias after construction.
+     */
+    namespaces: null,
+    
+    /**
+     * Property: namespaceAlias
+     * {Object} Mapping of namespace URI to namespace alias.  This object
+     *     is read-only.  Use <setNamespace> to add or set a namespace alias.
+     */
+    namespaceAlias: null,
+    
+    /**
+     * Property: defaultPrefix
+     * {String} The default namespace alias for creating element nodes.
+     */
+    defaultPrefix: null,
+    
+    /**
+     * Property: readers
+     * Contains public functions, grouped by namespace prefix, that will
+     *     be applied when a namespaced node is found matching the function
+     *     name.  The function will be applied in the scope of this parser
+     *     with two arguments: the node being read and a context object passed
+     *     from the parent.
+     */
+    readers: {},
+    
+    /**
+     * Property: writers
+     * As a compliment to the <readers> property, this structure contains public
+     *     writing functions grouped by namespace alias and named like the
+     *     node names they produce.
+     */
+    writers: {},
+
+    /**
+     * Property: xmldom
+     * {XMLDom} If this browser uses ActiveX, this will be set to a XMLDOM
+     *     object.  It is not intended to be a browser sniffing property.
+     *     Instead, the xmldom property is used instead of <code>document<end>
+     *     where namespaced node creation methods are not supported. In all
+     *     other browsers, this remains null.
+     */
+    xmldom: null,
+
+    /**
+     * Constructor: OpenLayers.Format.XML
+     * Construct an XML parser.  The parser is used to read and write XML.
+     *     Reading XML from a string returns a DOM element.  Writing XML from
+     *     a DOM element returns a string.
+     *
+     * Parameters:
+     * options - {Object} Optional object whose properties will be set on
+     *     the object.
+     */
+    initialize: function(options) {
+        if(window.ActiveXObject) {
+            this.xmldom = new ActiveXObject("Microsoft.XMLDOM");
+        }
+        OpenLayers.Format.prototype.initialize.apply(this, [options]);
+        // clone the namespace object and set all namespace aliases
+        this.namespaces = OpenLayers.Util.extend({}, this.namespaces);
+        this.namespaceAlias = {};
+        for(var alias in this.namespaces) {
+            this.namespaceAlias[this.namespaces[alias]] = alias;
+        }
+    },
+    
+    /**
+     * APIMethod: destroy
+     * Clean up.
+     */
+    destroy: function() {
+        this.xmldom = null;
+        OpenLayers.Format.prototype.destroy.apply(this, arguments);
+    },
+    
+    /**
+     * Method: setNamespace
+     * Set a namespace alias and URI for the format.
+     *
+     * Parameters:
+     * alias - {String} The namespace alias (prefix).
+     * uri - {String} The namespace URI.
+     */
+    setNamespace: function(alias, uri) {
+        this.namespaces[alias] = uri;
+        this.namespaceAlias[uri] = alias;
+    },
+
+    /**
+     * APIMethod: read
+     * Deserialize a XML string and return a DOM node.
+     *
+     * Parameters:
+     * text - {String} A XML string
+     
+     * Returns:
+     * {DOMElement} A DOM node
+     */
+    read: function(text) {
+        var index = text.indexOf('<');
+        if(index > 0) {
+            text = text.substring(index);
+        }
+        var node = OpenLayers.Util.Try(
+            OpenLayers.Function.bind((
+                function() {
+                    var xmldom;
+                    /**
+                     * Since we want to be able to call this method on the prototype
+                     * itself, this.xmldom may not exist even if in IE.
+                     */
+                    if(window.ActiveXObject && !this.xmldom) {
+                        xmldom = new ActiveXObject("Microsoft.XMLDOM");
+                    } else {
+                        xmldom = this.xmldom;
+                        
+                    }
+                    xmldom.loadXML(text);
+                    return xmldom;
+                }
+            ), this),
+            function() {
+                return new DOMParser().parseFromString(text, 'text/xml');
+            },
+            function() {
+                var req = new XMLHttpRequest();
+                req.open("GET", "data:" + "text/xml" +
+                         ";charset=utf-8," + encodeURIComponent(text), false);
+                if(req.overrideMimeType) {
+                    req.overrideMimeType("text/xml");
+                }
+                req.send(null);
+                return req.responseXML;
+            }
+        );
+
+        if(this.keepData) {
+            this.data = node;
+        }
+
+        return node;
+    },
+
+    /**
+     * APIMethod: write
+     * Serialize a DOM node into a XML string.
+     * 
+     * Parameters:
+     * node - {DOMElement} A DOM node.
+     *
+     * Returns:
+     * {String} The XML string representation of the input node.
+     */
+    write: function(node) {
+        var data;
+        if(this.xmldom) {
+            data = node.xml;
+        } else {
+            var serializer = new XMLSerializer();
+            if (node.nodeType == 1) {
+                // Add nodes to a document before serializing. Everything else
+                // is serialized as is. This may need more work. See #1218 .
+                var doc = document.implementation.createDocument("", "", null);
+                if (doc.importNode) {
+                    node = doc.importNode(node, true);
+                }
+                doc.appendChild(node);
+                data = serializer.serializeToString(doc);
+            } else {
+                data = serializer.serializeToString(node);
+            }
+        }
+        return data;
+    },
+
+    /**
+     * APIMethod: createElementNS
+     * Create a new element with namespace.  This node can be appended to
+     *     another node with the standard node.appendChild method.  For
+     *     cross-browser support, this method must be used instead of
+     *     document.createElementNS.
+     *
+     * Parameters:
+     * uri - {String} Namespace URI for the element.
+     * name - {String} The qualified name of the element (prefix:localname).
+     * 
+     * Returns:
+     * {Element} A DOM element with namespace.
+     */
+    createElementNS: function(uri, name) {
+        var element;
+        if(this.xmldom) {
+            if(typeof uri == "string") {
+                element = this.xmldom.createNode(1, name, uri);
+            } else {
+                element = this.xmldom.createNode(1, name, "");
+            }
+        } else {
+            element = document.createElementNS(uri, name);
+        }
+        return element;
+    },
+
+    /**
+     * APIMethod: createTextNode
+     * Create a text node.  This node can be appended to another node with
+     *     the standard node.appendChild method.  For cross-browser support,
+     *     this method must be used instead of document.createTextNode.
+     * 
+     * Parameters:
+     * text - {String} The text of the node.
+     * 
+     * Returns: 
+     * {DOMElement} A DOM text node.
+     */
+    createTextNode: function(text) {
+        var node;
+        if (typeof text !== "string") {
+            text = String(text);
+        }
+        if(this.xmldom) {
+            node = this.xmldom.createTextNode(text);
+        } else {
+            node = document.createTextNode(text);
+        }
+        return node;
+    },
+
+    /**
+     * APIMethod: getElementsByTagNameNS
+     * Get a list of elements on a node given the namespace URI and local name.
+     *     To return all nodes in a given namespace, use '*' for the name
+     *     argument.  To return all nodes of a given (local) name, regardless
+     *     of namespace, use '*' for the uri argument.
+     * 
+     * Parameters:
+     * node - {Element} Node on which to search for other nodes.
+     * uri - {String} Namespace URI.
+     * name - {String} Local name of the tag (without the prefix).
+     * 
+     * Returns:
+     * {NodeList} A node list or array of elements.
+     */
+    getElementsByTagNameNS: function(node, uri, name) {
+        var elements = [];
+        if(node.getElementsByTagNameNS) {
+            elements = node.getElementsByTagNameNS(uri, name);
+        } else {
+            // brute force method
+            var allNodes = node.getElementsByTagName("*");
+            var potentialNode, fullName;
+            for(var i=0, len=allNodes.length; i<len; ++i) {
+                potentialNode = allNodes[i];
+                fullName = (potentialNode.prefix) ?
+                           (potentialNode.prefix + ":" + name) : name;
+                if((name == "*") || (fullName == potentialNode.nodeName)) {
+                    if((uri == "*") || (uri == potentialNode.namespaceURI)) {
+                        elements.push(potentialNode);
+                    }
+                }
+            }
+        }
+        return elements;
+    },
+
+    /**
+     * APIMethod: getAttributeNodeNS
+     * Get an attribute node given the namespace URI and local name.
+     * 
+     * Parameters:
+     * node - {Element} Node on which to search for attribute nodes.
+     * uri - {String} Namespace URI.
+     * name - {String} Local name of the attribute (without the prefix).
+     * 
+     * Returns:
+     * {DOMElement} An attribute node or null if none found.
+     */
+    getAttributeNodeNS: function(node, uri, name) {
+        var attributeNode = null;
+        if(node.getAttributeNodeNS) {
+            attributeNode = node.getAttributeNodeNS(uri, name);
+        } else {
+            var attributes = node.attributes;
+            var potentialNode, fullName;
+            for(var i=0, len=attributes.length; i<len; ++i) {
+                potentialNode = attributes[i];
+                if(potentialNode.namespaceURI == uri) {
+                    fullName = (potentialNode.prefix) ?
+                               (potentialNode.prefix + ":" + name) : name;
+                    if(fullName == potentialNode.nodeName) {
+                        attributeNode = potentialNode;
+                        break;
+                    }
+                }
+            }
+        }
+        return attributeNode;
+    },
+
+    /**
+     * APIMethod: getAttributeNS
+     * Get an attribute value given the namespace URI and local name.
+     * 
+     * Parameters:
+     * node - {Element} Node on which to search for an attribute.
+     * uri - {String} Namespace URI.
+     * name - {String} Local name of the attribute (without the prefix).
+     * 
+     * Returns:
+     * {String} An attribute value or and empty string if none found.
+     */
+    getAttributeNS: function(node, uri, name) {
+        var attributeValue = "";
+        if(node.getAttributeNS) {
+            attributeValue = node.getAttributeNS(uri, name) || "";
+        } else {
+            var attributeNode = this.getAttributeNodeNS(node, uri, name);
+            if(attributeNode) {
+                attributeValue = attributeNode.nodeValue;
+            }
+        }
+        return attributeValue;
+    },
+    
+    /**
+     * APIMethod: getChildValue
+     * Get the textual value of the node if it exists, or return an
+     *     optional default string.  Returns an empty string if no first child
+     *     exists and no default value is supplied.
+     *
+     * Parameters:
+     * node - {DOMElement} The element used to look for a first child value.
+     * def - {String} Optional string to return in the event that no
+     *     first child value exists.
+     *
+     * Returns:
+     * {String} The value of the first child of the given node.
+     */
+    getChildValue: function(node, def) {
+        var value = def || "";
+        if(node) {
+            for(var child=node.firstChild; child; child=child.nextSibling) {
+                switch(child.nodeType) {
+                    case 3: // text node
+                    case 4: // cdata section
+                        value += child.nodeValue;
+                }
+            }
+        }
+        return value;
+    },
+
+    /**
+     * APIMethod: isSimpleContent
+     * Test if the given node has only simple content (i.e. no child element
+     *     nodes).
+     *
+     * Parameters:
+     * node - {DOMElement} An element node.
+     *
+     * Returns:
+     * {Boolean} The node has no child element nodes (nodes of type 1). 
+     */
+    isSimpleContent: function(node) {
+        var simple = true;
+        for(var child=node.firstChild; child; child=child.nextSibling) {
+            if(child.nodeType === 1) {
+                simple = false;
+                break;
+            }
+        }
+        return simple;
+    },
+    
+    /**
+     * APIMethod: contentType
+     * Determine the content type for a given node.
+     *
+     * Parameters:
+     * node - {DOMElement}
+     *
+     * Returns:
+     * {Integer} One of OpenLayers.Format.XML.CONTENT_TYPE.{EMPTY,SIMPLE,COMPLEX,MIXED}
+     *     if the node has no, simple, complex, or mixed content.
+     */
+    contentType: function(node) {
+        var simple = false,
+            complex = false;
+            
+        var type = OpenLayers.Format.XML.CONTENT_TYPE.EMPTY;
+
+        for(var child=node.firstChild; child; child=child.nextSibling) {
+            switch(child.nodeType) {
+                case 1: // element
+                    complex = true;
+                    break;
+                case 8: // comment
+                    break;
+                default:
+                    simple = true;
+            }
+            if(complex && simple) {
+                break;
+            }
+        }
+        
+        if(complex && simple) {
+            type = OpenLayers.Format.XML.CONTENT_TYPE.MIXED;
+        } else if(complex) {
+            return OpenLayers.Format.XML.CONTENT_TYPE.COMPLEX;
+        } else if(simple) {
+            return OpenLayers.Format.XML.CONTENT_TYPE.SIMPLE;
+        }
+        return type;
+    },
+
+    /**
+     * APIMethod: hasAttributeNS
+     * Determine whether a node has a particular attribute matching the given
+     *     name and namespace.
+     * 
+     * Parameters:
+     * node - {Element} Node on which to search for an attribute.
+     * uri - {String} Namespace URI.
+     * name - {String} Local name of the attribute (without the prefix).
+     * 
+     * Returns:
+     * {Boolean} The node has an attribute matching the name and namespace.
+     */
+    hasAttributeNS: function(node, uri, name) {
+        var found = false;
+        if(node.hasAttributeNS) {
+            found = node.hasAttributeNS(uri, name);
+        } else {
+            found = !!this.getAttributeNodeNS(node, uri, name);
+        }
+        return found;
+    },
+    
+    /**
+     * APIMethod: setAttributeNS
+     * Adds a new attribute or changes the value of an attribute with the given
+     *     namespace and name.
+     *
+     * Parameters:
+     * node - {Element} Element node on which to set the attribute.
+     * uri - {String} Namespace URI for the attribute.
+     * name - {String} Qualified name (prefix:localname) for the attribute.
+     * value - {String} Attribute value.
+     */
+    setAttributeNS: function(node, uri, name, value) {
+        if(node.setAttributeNS) {
+            node.setAttributeNS(uri, name, value);
+        } else {
+            if(this.xmldom) {
+                if(uri) {
+                    var attribute = node.ownerDocument.createNode(
+                        2, name, uri
+                    );
+                    attribute.nodeValue = value;
+                    node.setAttributeNode(attribute);
+                } else {
+                    node.setAttribute(name, value);
+                }
+            } else {
+                throw "setAttributeNS not implemented";
+            }
+        }
+    },
+
+    /**
+     * Method: createElementNSPlus
+     * Shorthand for creating namespaced elements with optional attributes and
+     *     child text nodes.
+     *
+     * Parameters:
+     * name - {String} The qualified node name.
+     * options - {Object} Optional object for node configuration.
+     *
+     * Valid options:
+     * uri - {String} Optional namespace uri for the element - supply a prefix
+     *     instead if the namespace uri is a property of the format's namespace
+     *     object.
+     * attributes - {Object} Optional attributes to be set using the
+     *     <setAttributes> method.
+     * value - {String} Optional text to be appended as a text node.
+     *
+     * Returns:
+     * {Element} An element node.
+     */
+    createElementNSPlus: function(name, options) {
+        options = options || {};
+        // order of prefix preference
+        // 1. in the uri option
+        // 2. in the prefix option
+        // 3. in the qualified name
+        // 4. from the defaultPrefix
+        var uri = options.uri || this.namespaces[options.prefix];
+        if(!uri) {
+            var loc = name.indexOf(":");
+            uri = this.namespaces[name.substring(0, loc)];
+        }
+        if(!uri) {
+            uri = this.namespaces[this.defaultPrefix];
+        }
+        var node = this.createElementNS(uri, name);
+        if(options.attributes) {
+            this.setAttributes(node, options.attributes);
+        }
+        var value = options.value;
+        if(value != null) {
+            node.appendChild(this.createTextNode(value));
+        }
+        return node;
+    },
+    
+    /**
+     * Method: setAttributes
+     * Set multiple attributes given key value pairs from an object.
+     *
+     * Parameters:
+     * node - {Element} An element node.
+     * obj - {Object || Array} An object whose properties represent attribute
+     *     names and values represent attribute values.  If an attribute name
+     *     is a qualified name ("prefix:local"), the prefix will be looked up
+     *     in the parsers {namespaces} object.  If the prefix is found,
+     *     setAttributeNS will be used instead of setAttribute.
+     */
+    setAttributes: function(node, obj) {
+        var value, uri;
+        for(var name in obj) {
+            if(obj[name] != null && obj[name].toString) {
+                value = obj[name].toString();
+                // check for qualified attribute name ("prefix:local")
+                uri = this.namespaces[name.substring(0, name.indexOf(":"))] || null;
+                this.setAttributeNS(node, uri, name, value);
+            }
+        }
+    },
+
+    /**
+     * Method: readNode
+     * Shorthand for applying one of the named readers given the node
+     *     namespace and local name.  Readers take two args (node, obj) and
+     *     generally extend or modify the second.
+     *
+     * Parameters:
+     * node - {DOMElement} The node to be read (required).
+     * obj - {Object} The object to be modified (optional).
+     *
+     * Returns:
+     * {Object} The input object, modified (or a new one if none was provided).
+     */
+    readNode: function(node, obj) {
+        if(!obj) {
+            obj = {};
+        }
+        var group = this.readers[node.namespaceURI ? this.namespaceAlias[node.namespaceURI]: this.defaultPrefix];
+        if(group) {
+            var local = node.localName || node.nodeName.split(":").pop();
+            var reader = group[local] || group["*"];
+            if(reader) {
+                reader.apply(this, [node, obj]);
+            }
+        }
+        return obj;
+    },
+
+    /**
+     * Method: readChildNodes
+     * Shorthand for applying the named readers to all children of a node.
+     *     For each child of type 1 (element), <readSelf> is called.
+     *
+     * Parameters:
+     * node - {DOMElement} The node to be read (required).
+     * obj - {Object} The object to be modified (optional).
+     *
+     * Returns:
+     * {Object} The input object, modified.
+     */
+    readChildNodes: function(node, obj) {
+        if(!obj) {
+            obj = {};
+        }
+        var children = node.childNodes;
+        var child;
+        for(var i=0, len=children.length; i<len; ++i) {
+            child = children[i];
+            if(child.nodeType == 1) {
+                this.readNode(child, obj);
+            }
+        }
+        return obj;
+    },
+
+    /**
+     * Method: writeNode
+     * Shorthand for applying one of the named writers and appending the
+     *     results to a node.  If a qualified name is not provided for the
+     *     second argument (and a local name is used instead), the namespace
+     *     of the parent node will be assumed.
+     *
+     * Parameters:
+     * name - {String} The name of a node to generate.  If a qualified name
+     *     (e.g. "pre:Name") is used, the namespace prefix is assumed to be
+     *     in the <writers> group.  If a local name is used (e.g. "Name") then
+     *     the namespace of the parent is assumed.  If a local name is used
+     *     and no parent is supplied, then the default namespace is assumed.
+     * obj - {Object} Structure containing data for the writer.
+     * parent - {DOMElement} Result will be appended to this node.  If no parent
+     *     is supplied, the node will not be appended to anything.
+     *
+     * Returns:
+     * {DOMElement} The child node.
+     */
+    writeNode: function(name, obj, parent) {
+        var prefix, local;
+        var split = name.indexOf(":");
+        if(split > 0) {
+            prefix = name.substring(0, split);
+            local = name.substring(split + 1);
+        } else {
+            if(parent) {
+                prefix = this.namespaceAlias[parent.namespaceURI];
+            } else {
+                prefix = this.defaultPrefix;
+            }
+            local = name;
+        }
+        var child = this.writers[prefix][local].apply(this, [obj]);
+        if(parent) {
+            parent.appendChild(child);
+        }
+        return child;
+    },
+
+    /**
+     * APIMethod: getChildEl
+     * Get the first child element.  Optionally only return the first child
+     *     if it matches the given name and namespace URI.
+     *
+     * Parameters:
+     * node - {DOMElement} The parent node.
+     * name - {String} Optional node name (local) to search for.
+     * uri - {String} Optional namespace URI to search for.
+     *
+     * Returns:
+     * {DOMElement} The first child.  Returns null if no element is found, if
+     *     something significant besides an element is found, or if the element
+     *     found does not match the optional name and uri.
+     */
+    getChildEl: function(node, name, uri) {
+        return node && this.getThisOrNextEl(node.firstChild, name, uri);
+    },
+    
+    /**
+     * APIMethod: getNextEl
+     * Get the next sibling element.  Optionally get the first sibling only
+     *     if it matches the given local name and namespace URI.
+     *
+     * Parameters:
+     * node - {DOMElement} The node.
+     * name - {String} Optional local name of the sibling to search for.
+     * uri - {String} Optional namespace URI of the sibling to search for.
+     *
+     * Returns:
+     * {DOMElement} The next sibling element.  Returns null if no element is
+     *     found, something significant besides an element is found, or the
+     *     found element does not match the optional name and uri.
+     */
+    getNextEl: function(node, name, uri) {
+        return node && this.getThisOrNextEl(node.nextSibling, name, uri);
+    },
+    
+    /**
+     * Method: getThisOrNextEl
+     * Return this node or the next element node.  Optionally get the first
+     *     sibling with the given local name or namespace URI.
+     *
+     * Parameters:
+     * node - {DOMElement} The node.
+     * name - {String} Optional local name of the sibling to search for.
+     * uri - {String} Optional namespace URI of the sibling to search for.
+     *
+     * Returns:
+     * {DOMElement} The next sibling element.  Returns null if no element is
+     *     found, something significant besides an element is found, or the
+     *     found element does not match the query.
+     */
+    getThisOrNextEl: function(node, name, uri) {
+        outer: for(var sibling=node; sibling; sibling=sibling.nextSibling) {
+            switch(sibling.nodeType) {
+                case 1: // Element
+                    if((!name || name === (sibling.localName || sibling.nodeName.split(":").pop())) &&
+                       (!uri || uri === sibling.namespaceURI)) {
+                        // matches
+                        break outer;
+                    }
+                    sibling = null;
+                    break outer;
+                case 3: // Text
+                    if(/^\s*$/.test(sibling.nodeValue)) {
+                        break;
+                    }
+                case 4: // CDATA
+                case 6: // ENTITY_NODE
+                case 12: // NOTATION_NODE
+                case 10: // DOCUMENT_TYPE_NODE
+                case 11: // DOCUMENT_FRAGMENT_NODE
+                    sibling = null;
+                    break outer;
+            } // ignore comments and processing instructions
+        }
+        return sibling || null;
+    },
+    
+    /**
+     * APIMethod: lookupNamespaceURI
+     * Takes a prefix and returns the namespace URI associated with it on the given
+     *     node if found (and null if not). Supplying null for the prefix will
+     *     return the default namespace.
+     *
+     * For browsers that support it, this calls the native lookupNamesapceURI
+     *     function.  In other browsers, this is an implementation of
+     *     http://www.w3.org/TR/DOM-Level-3-Core/core.html#Node3-lookupNamespaceURI.
+     *
+     * For browsers that don't support the attribute.ownerElement property, this
+     *     method cannot be called on attribute nodes.
+     *     
+     * Parameters:
+     * node - {DOMElement} The node from which to start looking.
+     * prefix - {String} The prefix to lookup or null to lookup the default namespace.
+     * 
+     * Returns:
+     * {String} The namespace URI for the given prefix.  Returns null if the prefix
+     *     cannot be found or the node is the wrong type.
+     */
+    lookupNamespaceURI: function(node, prefix) {
+        var uri = null;
+        if(node) {
+            if(node.lookupNamespaceURI) {
+                uri = node.lookupNamespaceURI(prefix);
+            } else {
+                outer: switch(node.nodeType) {
+                    case 1: // ELEMENT_NODE
+                        if(node.namespaceURI !== null && node.prefix === prefix) {
+                            uri = node.namespaceURI;
+                            break outer;
+                        }
+                        var len = node.attributes.length;
+                        if(len) {
+                            var attr;
+                            for(var i=0; i<len; ++i) {
+                                attr = node.attributes[i];
+                                if(attr.prefix === "xmlns" && attr.name === "xmlns:" + prefix) {
+                                    uri = attr.value || null;
+                                    break outer;
+                                } else if(attr.name === "xmlns" && prefix === null) {
+                                    uri = attr.value || null;
+                                    break outer;
+                                }
+                            }
+                        }
+                        uri = this.lookupNamespaceURI(node.parentNode, prefix);
+                        break outer;
+                    case 2: // ATTRIBUTE_NODE
+                        uri = this.lookupNamespaceURI(node.ownerElement, prefix);
+                        break outer;
+                    case 9: // DOCUMENT_NODE
+                        uri = this.lookupNamespaceURI(node.documentElement, prefix);
+                        break outer;
+                    case 6: // ENTITY_NODE
+                    case 12: // NOTATION_NODE
+                    case 10: // DOCUMENT_TYPE_NODE
+                    case 11: // DOCUMENT_FRAGMENT_NODE
+                        break outer;
+                    default: 
+                        // TEXT_NODE (3), CDATA_SECTION_NODE (4), ENTITY_REFERENCE_NODE (5),
+                        // PROCESSING_INSTRUCTION_NODE (7), COMMENT_NODE (8)
+                        uri =  this.lookupNamespaceURI(node.parentNode, prefix);
+                        break outer;
+                }
+            }
+        }
+        return uri;
+    },
+    
+    /**
+     * Method: getXMLDoc
+     * Get an XML document for nodes that are not supported in HTML (e.g.
+     * createCDATASection). On IE, this will either return an existing or
+     * create a new <xmldom> on the instance. On other browsers, this will
+     * either return an existing or create a new shared document (see
+     * <OpenLayers.Format.XML.document>).
+     *
+     * Returns:
+     * {XMLDocument}
+     */
+    getXMLDoc: function() {
+        if (!OpenLayers.Format.XML.document && !this.xmldom) {
+            if (document.implementation && document.implementation.createDocument) {
+                OpenLayers.Format.XML.document =
+                    document.implementation.createDocument("", "", null);
+            } else if (!this.xmldom && window.ActiveXObject) {
+                this.xmldom = new ActiveXObject("Microsoft.XMLDOM");
+            }
+        }
+        return OpenLayers.Format.XML.document || this.xmldom;
+    },
+
+    CLASS_NAME: "OpenLayers.Format.XML" 
+
+});     
+
+OpenLayers.Format.XML.CONTENT_TYPE = {EMPTY: 0, SIMPLE: 1, COMPLEX: 2, MIXED: 3};
+
+/**
+ * APIFunction: OpenLayers.Format.XML.lookupNamespaceURI
+ * Takes a prefix and returns the namespace URI associated with it on the given
+ *     node if found (and null if not). Supplying null for the prefix will
+ *     return the default namespace.
+ *
+ * For browsers that support it, this calls the native lookupNamesapceURI
+ *     function.  In other browsers, this is an implementation of
+ *     http://www.w3.org/TR/DOM-Level-3-Core/core.html#Node3-lookupNamespaceURI.
+ *
+ * For browsers that don't support the attribute.ownerElement property, this
+ *     method cannot be called on attribute nodes.
+ *     
+ * Parameters:
+ * node - {DOMElement} The node from which to start looking.
+ * prefix - {String} The prefix to lookup or null to lookup the default namespace.
+ * 
+ * Returns:
+ * {String} The namespace URI for the given prefix.  Returns null if the prefix
+ *     cannot be found or the node is the wrong type.
+ */
+OpenLayers.Format.XML.lookupNamespaceURI = OpenLayers.Function.bind(
+    OpenLayers.Format.XML.prototype.lookupNamespaceURI,
+    OpenLayers.Format.XML.prototype
+);
+
+/**
+ * Property: OpenLayers.Format.XML.document
+ * {XMLDocument} XML document to reuse for creating non-HTML compliant nodes,
+ * like document.createCDATASection.
+ */
+OpenLayers.Format.XML.document = null;
+
+/* Copyright (c) 2006-2012 by OpenLayers Contributors (see authors.txt for 
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
+ * @requires OpenLayers/Format/XML.js
+ */
+
+/**
+ * Class: OpenLayers.Format.WMSGetFeatureInfo
+ * Class to read GetFeatureInfo responses from Web Mapping Services
+ *
+ * Inherits from:
+ *  - <OpenLayers.Format.XML>
+ */
+OpenLayers.Format.WMSGetFeatureInfo = OpenLayers.Class(OpenLayers.Format.XML, {
+
+    /**
+     * APIProperty: layerIdentifier
+     * {String} All xml nodes containing this search criteria will populate an
+     *     internal array of layer nodes.
+     */ 
+    layerIdentifier: '_layer',
+
+    /**
+     * APIProperty: featureIdentifier
+     * {String} All xml nodes containing this search criteria will populate an 
+     *     internal array of feature nodes for each layer node found.
+     */
+    featureIdentifier: '_feature',
+
+    /**
+     * Property: regExes
+     * Compiled regular expressions for manipulating strings.
+     */
+    regExes: {
+        trimSpace: (/^\s*|\s*$/g),
+        removeSpace: (/\s*/g),
+        splitSpace: (/\s+/),
+        trimComma: (/\s*,\s*/g)
+    },
+
+    /**
+     * Property: gmlFormat
+     * {<OpenLayers.Format.GML>} internal GML format for parsing geometries
+     *     in msGMLOutput
+     */
+    gmlFormat: null,
+
+    /**
+     * Constructor: OpenLayers.Format.WMSGetFeatureInfo
+     * Create a new parser for WMS GetFeatureInfo responses
+     *
+     * Parameters:
+     * options - {Object} An optional object whose properties will be set on
+     *     this instance.
+     */
+
+    /**
+     * APIMethod: read
+     * Read WMS GetFeatureInfo data from a string, and return an array of features
+     *
+     * Parameters:
+     * data - {String} or {DOMElement} data to read/parse.
+     *
+     * Returns:
+     * {Array(<OpenLayers.Feature.Vector>)} An array of features.
+     */
+    read: function(data) {
+        var result;
+        if(typeof data == "string") {
+            data = OpenLayers.Format.XML.prototype.read.apply(this, [data]);
+        }
+        var root = data.documentElement;
+        if(root) {
+            var scope = this;
+            var read = this["read_" + root.nodeName];
+            if(read) {
+                result = read.call(this, root);
+            } else {
+                // fall-back to GML since this is a common output format for WMS
+                // GetFeatureInfo responses
+                result = new OpenLayers.Format.GML((this.options ? this.options : {})).read(data);
+            }
+        } else {
+            result = data;
+        }
+        return result;
+    },
+    
+    
+    /**
+     * Method: read_msGMLOutput
+     * Parse msGMLOutput nodes.
+     *
+     * Parameters:
+     * data - {DOMElement}
+     *
+     * Returns:
+     * {Array}
+     */
+    read_msGMLOutput: function(data) {
+        var response = [];
+        var layerNodes = this.getSiblingNodesByTagCriteria(data,
+            this.layerIdentifier);
+        if (layerNodes) {
+            for (var i=0, len=layerNodes.length; i<len; ++i) {
+                var node = layerNodes[i];
+                var layerName = node.nodeName;
+                if (node.prefix) {
+                    layerName = layerName.split(':')[1];
+                }
+                var layerName = layerName.replace(this.layerIdentifier, '');
+                var featureNodes = this.getSiblingNodesByTagCriteria(node, 
+                    this.featureIdentifier);
+                if (featureNodes) {
+                    for (var j = 0; j < featureNodes.length; j++) {
+                        var featureNode = featureNodes[j];
+                        var geomInfo = this.parseGeometry(featureNode);
+                        var attributes = this.parseAttributes(featureNode);
+                        var feature = new OpenLayers.Feature.Vector(geomInfo.geometry, 
+                            attributes, null);
+                        feature.bounds = geomInfo.bounds;
+                        feature.type = layerName;
+                        response.push(feature);
+                    }
+                }
+            }
+        }
+        return response;
+    },
+    
+    /**
+     * Method: read_FeatureInfoResponse
+     * Parse FeatureInfoResponse nodes.
+     *
+     * Parameters:
+     * data - {DOMElement}
+     *
+     * Returns:
+     * {Array}
+     */
+    read_FeatureInfoResponse: function(data) {
+        var response = [];
+        var featureNodes = this.getElementsByTagNameNS(data, '*',
+            'FIELDS');
+
+        for(var i=0, len=featureNodes.length;i<len;i++) {
+            var featureNode = featureNodes[i];
+            var geom = null;
+
+            // attributes can be actual attributes on the FIELDS tag, 
+            // or FIELD children
+            var attributes = {};
+            var j;
+            var jlen = featureNode.attributes.length;
+            if (jlen > 0) {
+                for(j=0; j<jlen; j++) {
+                    var attribute = featureNode.attributes[j];
+                    attributes[attribute.nodeName] = attribute.nodeValue;
+                }
+            } else {
+                var nodes = featureNode.childNodes;
+                for (j=0, jlen=nodes.length; j<jlen; ++j) {
+                    var node = nodes[j];
+                    if (node.nodeType != 3) {
+                        attributes[node.getAttribute("name")] = 
+                            node.getAttribute("value");
+                    }
+                }
+            }
+
+            response.push(
+                new OpenLayers.Feature.Vector(geom, attributes, null)
+            );
+        }
+        return response;
+    },
+
+    /**
+     * Method: getSiblingNodesByTagCriteria
+     * Recursively searches passed xml node and all it's descendant levels for 
+     *     nodes whose tagName contains the passed search string. This returns an 
+     *     array of all sibling nodes which match the criteria from the highest 
+     *     hierarchial level from which a match is found.
+     * 
+     * Parameters:
+     * node - {DOMElement} An xml node
+     * criteria - {String} Search string which will match some part of a tagName 
+     *                                       
+     * Returns:
+     * Array({DOMElement}) An array of sibling xml nodes
+     */                
+    getSiblingNodesByTagCriteria: function(node, criteria){
+        var nodes = [];
+        var children, tagName, n, matchNodes, child;
+        if (node && node.hasChildNodes()) {
+            children = node.childNodes;
+            n = children.length;
+
+            for(var k=0; k<n; k++){
+                child = children[k];
+                while (child && child.nodeType != 1) {
+                    child = child.nextSibling;
+                    k++;
+                }
+                tagName = (child ? child.nodeName : '');
+                if (tagName.length > 0 && tagName.indexOf(criteria) > -1) {
+                    nodes.push(child);
+                } else {
+                    matchNodes = this.getSiblingNodesByTagCriteria(
+                        child, criteria);
+
+                    if(matchNodes.length > 0){
+                        (nodes.length == 0) ? 
+                            nodes = matchNodes : nodes.push(matchNodes);
+                    }
+                }
+            }
+
+        }
+        return nodes;
+    },
+
+    /**
+     * Method: parseAttributes
+     *
+     * Parameters:
+     * node - {<DOMElement>}
+     *
+     * Returns:
+     * {Object} An attributes object.
+     * 
+     * Notes:
+     * Assumes that attributes are direct child xml nodes of the passed node
+     * and contain only a single text node. 
+     */    
+    parseAttributes: function(node){
+        var attributes = {};
+        if (node.nodeType == 1) {
+            var children = node.childNodes;
+            var n = children.length;
+            for (var i = 0; i < n; ++i) {
+                var child = children[i];
+                if (child.nodeType == 1) {
+                    var grandchildren = child.childNodes;
+                    var name = (child.prefix) ?
+                        child.nodeName.split(":")[1] : child.nodeName;
+                    if (grandchildren.length == 0) {
+                        attributes[name] = null;
+                    } else if (grandchildren.length == 1) {
+                        var grandchild = grandchildren[0];
+                        if (grandchild.nodeType == 3 ||
+                            grandchild.nodeType == 4) {
+                            var value = grandchild.nodeValue.replace(
+                                this.regExes.trimSpace, "");
+                            attributes[name] = value;
+                        }
+                    }
+                }
+            }
+        }
+        return attributes;
+    },
+
+    /**
+     * Method: parseGeometry
+     * Parse the geometry and the feature bounds out of the node using 
+     *     Format.GML
+     *
+     * Parameters:
+     * node - {<DOMElement>}
+     *
+     * Returns:
+     * {Object} An object containing the geometry and the feature bounds
+    */
+    parseGeometry: function(node) {
+        // we need to use the old Format.GML parser since we do not know the 
+        // geometry name
+        if (!this.gmlFormat) {
+            this.gmlFormat = new OpenLayers.Format.GML();
+        }
+        var feature = this.gmlFormat.parseFeature(node);
+        var geometry, bounds = null;
+        if (feature) {
+            geometry = feature.geometry && feature.geometry.clone();
+            bounds = feature.bounds && feature.bounds.clone();
+            feature.destroy();
+        }
+        return {geometry: geometry, bounds: bounds};
+    },
+
+    CLASS_NAME: "OpenLayers.Format.WMSGetFeatureInfo"
+    
+});
+
+/* Copyright (c) 2006-2012 by OpenLayers Contributors (see authors.txt for 
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+
+/**
+ * @requires OpenLayers/Control.js
+ * @requires OpenLayers/Handler/Click.js
+ * @requires OpenLayers/Handler/Hover.js
+ * @requires OpenLayers/Request.js
+ * @requires OpenLayers/Format/WMSGetFeatureInfo.js
+ */
+
+/**
+ * Class: OpenLayers.Control.WMSGetFeatureInfo
+ * The WMSGetFeatureInfo control uses a WMS query to get information about a point on the map.  The
+ * information may be in a display-friendly format such as HTML, or a machine-friendly format such 
+ * as GML, depending on the server's capabilities and the client's configuration.  This control 
+ * handles click or hover events, attempts to parse the results using an OpenLayers.Format, and 
+ * fires a 'getfeatureinfo' event with the click position, the raw body of the response, and an 
+ * array of features if it successfully read the response.
+ *
+ * Inherits from:
+ *  - <OpenLayers.Control>
+ */
+OpenLayers.Control.WMSGetFeatureInfo = OpenLayers.Class(OpenLayers.Control, {
+
+   /**
+     * APIProperty: hover
+     * {Boolean} Send GetFeatureInfo requests when mouse stops moving.
+     *     Default is false.
+     */
+    hover: false,
+
+    /**
+     * APIProperty: drillDown
+     * {Boolean} Drill down over all WMS layers in the map. When
+     *     using drillDown mode, hover is not possible, and an infoFormat that
+     *     returns parseable features is required. Default is false.
+     */
+    drillDown: false,
+
+    /**
+     * APIProperty: maxFeatures
+     * {Integer} Maximum number of features to return from a WMS query. This
+     *     sets the feature_count parameter on WMS GetFeatureInfo
+     *     requests.
+     */
+    maxFeatures: 10,
+
+    /** APIProperty: clickCallback
+     *  {String} The click callback to register in the
+     *      {<OpenLayers.Handler.Click>} object created when the hover
+     *      option is set to false. Default is "click".
+     */
+    clickCallback: "click",
+    
+    /** APIProperty: output
+     *  {String} Either "features" or "object". When triggering a 
+     *      getfeatureinfo request should we pass on an array of features
+     *      or an object with with a "features" property and other properties
+     *      (such as the url of the WMS). Default is "features".
+     */
+    output: "features",
+    
+    /**
+     * Property: layers
+     * {Array(<OpenLayers.Layer.WMS>)} The layers to query for feature info.
+     *     If omitted, all map WMS layers with a url that matches this <url> or
+     *     <layerUrls> will be considered.
+     */
+    layers: null,
+
+    /**
+     * Property: queryVisible
+     * {Boolean} If true, filter out hidden layers when searching the map for
+     *     layers to query.  Default is false.
+     */
+    queryVisible: false,
+
+    /**
+     * Property: url
+     * {String} The URL of the WMS service to use.  If not provided, the url
+     *     of the first eligible layer will be used.
+     */
+    url: null,
+    
+    /**
+     * Property: layerUrls
+     * {Array(String)} Optional list of urls for layers that should be queried.
+     *     This can be used when the layer url differs from the url used for
+     *     making GetFeatureInfo requests (in the case of a layer using cached
+     *     tiles).
+     */
+    layerUrls: null,
+
+    /**
+     * Property: infoFormat
+     * {String} The mimetype to request from the server. If you are using 
+     * drillDown mode and have multiple servers that do not share a common 
+     * infoFormat, you can override the control's infoFormat by providing an 
+     * INFO_FORMAT parameter in your <OpenLayers.Layer.WMS> instance(s).
+     */
+    infoFormat: 'text/html',
+    
+    /**
+     * Property: vendorParams
+     * {Object} Additional parameters that will be added to the request, for
+     * WMS implementations that support them. This could e.g. look like
+     * (start code)
+     * {
+     *     radius: 5
+     * }
+     * (end)
+     */
+    vendorParams: {},
+    
+    /**
+     * Property: format
+     * {<OpenLayers.Format>} A format for parsing GetFeatureInfo responses.
+     *     Default is <OpenLayers.Format.WMSGetFeatureInfo>.
+     */
+    format: null,
+    
+    /**
+     * Property: formatOptions
+     * {Object} Optional properties to set on the format (if one is not provided
+     *     in the <format> property.
+     */
+    formatOptions: null,
+
+    /**
+     * APIProperty: handlerOptions
+     * {Object} Additional options for the handlers used by this control, e.g.
+     * (start code)
+     * {
+     *     "click": {delay: 100},
+     *     "hover": {delay: 300}
+     * }
+     * (end)
+     */
+    handlerOptions: null,
+    
+    /**
+     * Property: handler
+     * {Object} Reference to the <OpenLayers.Handler> for this control
+     */
+    handler: null,
+    
+    /**
+     * Property: hoverRequest
+     * {<OpenLayers.Request>} contains the currently running hover request
+     *     (if any).
+     */
+    hoverRequest: null,
+    
+    /** 
+     * APIProperty: events
+     * {<OpenLayers.Events>} Events instance for listeners and triggering
+     *     control specific events.
+     *
+     * Register a listener for a particular event with the following syntax:
+     * (code)
+     * control.events.register(type, obj, listener);
+     * (end)
+     *
+     * Supported event types (in addition to those from <OpenLayers.Control.events>):
+     * beforegetfeatureinfo - Triggered before the request is sent.
+     *      The event object has an *xy* property with the position of the 
+     *      mouse click or hover event that triggers the request.
+     * nogetfeatureinfo - no queryable layers were found.
+     * getfeatureinfo - Triggered when a GetFeatureInfo response is received.
+     *      The event object has a *text* property with the body of the
+     *      response (String), a *features* property with an array of the
+     *      parsed features, an *xy* property with the position of the mouse
+     *      click or hover event that triggered the request, and a *request*
+     *      property with the request itself. If drillDown is set to true and
+     *      multiple requests were issued to collect feature info from all
+     *      layers, *text* and *request* will only contain the response body
+     *      and request object of the last request.
+     */
+
+    /**
+     * Constructor: <OpenLayers.Control.WMSGetFeatureInfo>
+     *
+     * Parameters:
+     * options - {Object} 
+     */
+    initialize: function(options) {
+        options = options || {};
+        options.handlerOptions = options.handlerOptions || {};
+
+        OpenLayers.Control.prototype.initialize.apply(this, [options]);
+        
+        if(!this.format) {
+            this.format = new OpenLayers.Format.WMSGetFeatureInfo(
+                options.formatOptions
+            );
+        }
+        
+        if(this.drillDown === true) {
+            this.hover = false;
+        }
+
+        if(this.hover) {
+            this.handler = new OpenLayers.Handler.Hover(
+                   this, {
+                       'move': this.cancelHover,
+                       'pause': this.getInfoForHover
+                   },
+                   OpenLayers.Util.extend(this.handlerOptions.hover || {}, {
+                       'delay': 250
+                   }));
+        } else {
+            var callbacks = {};
+            callbacks[this.clickCallback] = this.getInfoForClick;
+            this.handler = new OpenLayers.Handler.Click(
+                this, callbacks, this.handlerOptions.click || {});
+        }
+    },
+
+    /**
+     * Method: getInfoForClick 
+     * Called on click
+     *
+     * Parameters:
+     * evt - {<OpenLayers.Event>} 
+     */
+    getInfoForClick: function(evt) {
+        this.events.triggerEvent("beforegetfeatureinfo", {xy: evt.xy});
+        // Set the cursor to "wait" to tell the user we're working on their
+        // click.
+        OpenLayers.Element.addClass(this.map.viewPortDiv, "olCursorWait");
+        this.request(evt.xy, {});
+    },
+   
+    /**
+     * Method: getInfoForHover
+     * Pause callback for the hover handler
+     *
+     * Parameters:
+     * evt - {Object}
+     */
+    getInfoForHover: function(evt) {
+        this.events.triggerEvent("beforegetfeatureinfo", {xy: evt.xy});
+        this.request(evt.xy, {hover: true});
+    },
+
+    /**
+     * Method: cancelHover
+     * Cancel callback for the hover handler
+     */
+    cancelHover: function() {
+        if (this.hoverRequest) {
+            this.hoverRequest.abort();
+            this.hoverRequest = null;
+        }
+    },
+
+    /**
+     * Method: findLayers
+     * Internal method to get the layers, independent of whether we are
+     *     inspecting the map or using a client-provided array
+     */
+    findLayers: function() {
+
+        var candidates = this.layers || this.map.layers;
+        var layers = [];
+        var layer, url;
+        for(var i = candidates.length - 1; i >= 0; --i) {
+            layer = candidates[i];
+            if(layer instanceof OpenLayers.Layer.WMS &&
+               (!this.queryVisible || layer.getVisibility())) {
+                url = OpenLayers.Util.isArray(layer.url) ? layer.url[0] : layer.url;
+                // if the control was not configured with a url, set it
+                // to the first layer url
+                if(this.drillDown === false && !this.url) {
+                    this.url = url;
+                }
+                if(this.drillDown === true || this.urlMatches(url)) {
+                    layers.push(layer);
+                }
+            }
+        }
+        return layers;
+    },
+    
+    /**
+     * Method: urlMatches
+     * Test to see if the provided url matches either the control <url> or one
+     *     of the <layerUrls>.
+     *
+     * Parameters:
+     * url - {String} The url to test.
+     *
+     * Returns:
+     * {Boolean} The provided url matches the control <url> or one of the
+     *     <layerUrls>.
+     */
+    urlMatches: function(url) {
+        var matches = OpenLayers.Util.isEquivalentUrl(this.url, url);
+        if(!matches && this.layerUrls) {
+            for(var i=0, len=this.layerUrls.length; i<len; ++i) {
+                if(OpenLayers.Util.isEquivalentUrl(this.layerUrls[i], url)) {
+                    matches = true;
+                    break;
+                }
+            }
+        }
+        return matches;
+    },
+
+    /**
+     * Method: buildWMSOptions
+     * Build an object with the relevant WMS options for the GetFeatureInfo request
+     *
+     * Parameters:
+     * url - {String} The url to be used for sending the request
+     * layers - {Array(<OpenLayers.Layer.WMS)} An array of layers
+     * clickPosition - {<OpenLayers.Pixel>} The position on the map where the mouse
+     *     event occurred.
+     * format - {String} The format from the corresponding GetMap request
+     */
+    buildWMSOptions: function(url, layers, clickPosition, format) {
+        var layerNames = [], styleNames = [];
+        for (var i = 0, len = layers.length; i < len; i++) {
+            if (layers[i].params.LAYERS != null) {
+                layerNames = layerNames.concat(layers[i].params.LAYERS);
+                styleNames = styleNames.concat(this.getStyleNames(layers[i]));
+            }
+        }
+        var firstLayer = layers[0];
+        // use the firstLayer's projection if it matches the map projection -
+        // this assumes that all layers will be available in this projection
+        var projection = this.map.getProjection();
+        var layerProj = firstLayer.projection;
+        if (layerProj && layerProj.equals(this.map.getProjectionObject())) {
+            projection = layerProj.getCode();
+        }
+        var params = OpenLayers.Util.extend({
+            service: "WMS",
+            version: firstLayer.params.VERSION,
+            request: "GetFeatureInfo",
+            exceptions: firstLayer.params.EXCEPTIONS,
+            bbox: this.map.getExtent().toBBOX(null,
+                firstLayer.reverseAxisOrder()),
+            feature_count: this.maxFeatures,
+            height: this.map.getSize().h,
+            width: this.map.getSize().w,
+            format: format,
+            info_format: firstLayer.params.INFO_FORMAT || this.infoFormat
+        }, (parseFloat(firstLayer.params.VERSION) >= 1.3) ?
+            {
+                crs: projection,
+                i: parseInt(clickPosition.x),
+                j: parseInt(clickPosition.y)
+            } :
+            {
+                srs: projection,
+                x: parseInt(clickPosition.x),
+                y: parseInt(clickPosition.y)
+            }
+        );
+        if (layerNames.length != 0) {
+            params = OpenLayers.Util.extend({
+                layers: layerNames,
+                query_layers: layerNames,
+                styles: styleNames
+            }, params);
+        }
+        OpenLayers.Util.applyDefaults(params, this.vendorParams);
+        return {
+            url: url,
+            params: OpenLayers.Util.upperCaseObject(params),
+            callback: function(request) {
+                this.handleResponse(clickPosition, request, url);
+            },
+            scope: this
+        };
+    },
+
+    /**
+     * Method: getStyleNames
+     * Gets the STYLES parameter for the layer. Make sure the STYLES parameter
+     * matches the LAYERS parameter
+     * 
+     * Parameters:
+     * layer - {<OpenLayers.Layer.WMS>}
+     *
+     * Returns:
+     * {Array(String)} The STYLES parameter
+     */
+    getStyleNames: function(layer) {
+        // in the event of a WMS layer bundling multiple layers but not
+        // specifying styles,we need the same number of commas to specify
+        // the default style for each of the layers.  We can't just leave it
+        // blank as we may be including other layers that do specify styles.
+        var styleNames;
+        if (layer.params.STYLES) {
+            styleNames = layer.params.STYLES;
+        } else {
+            if (OpenLayers.Util.isArray(layer.params.LAYERS)) {
+                styleNames = new Array(layer.params.LAYERS.length);
+            } else { // Assume it's a String
+                styleNames = layer.params.LAYERS.replace(/[^,]/g, "");
+            }
+        }
+        return styleNames;
+    },
+
+    /**
+     * Method: request
+     * Sends a GetFeatureInfo request to the WMS
+     * 
+     * Parameters:
+     * clickPosition - {<OpenLayers.Pixel>} The position on the map where the
+     *     mouse event occurred.
+     * options - {Object} additional options for this method.
+     * 
+     * Valid options:
+     * - *hover* {Boolean} true if we do the request for the hover handler
+     */
+    request: function(clickPosition, options) {
+        var layers = this.findLayers();
+        if(layers.length == 0) {
+            this.events.triggerEvent("nogetfeatureinfo");
+            // Reset the cursor.
+            OpenLayers.Element.removeClass(this.map.viewPortDiv, "olCursorWait");
+            return;
+        }
+        
+        options = options || {};
+        if(this.drillDown === false) {
+            var wmsOptions = this.buildWMSOptions(this.url, layers,
+                clickPosition, layers[0].params.FORMAT); 
+            var request = OpenLayers.Request.GET(wmsOptions);
+    
+            if (options.hover === true) {
+                this.hoverRequest = request;
+            }
+        } else {
+            this._requestCount = 0;
+            this._numRequests = 0;
+            this.features = [];
+            // group according to service url to combine requests
+            var services = {}, url;
+            for(var i=0, len=layers.length; i<len; i++) {
+                var layer = layers[i];
+                var service, found = false;
+                url = OpenLayers.Util.isArray(layer.url) ? layer.url[0] : layer.url;
+                if(url in services) {
+                    services[url].push(layer);
+                } else {
+                    this._numRequests++;
+                    services[url] = [layer];
+                }
+            }
+            var layers;
+            for (var url in services) {
+                layers = services[url];
+                var wmsOptions = this.buildWMSOptions(url, layers, 
+                    clickPosition, layers[0].params.FORMAT);
+                OpenLayers.Request.GET(wmsOptions); 
+            }
+        }
+    },
+
+    /**
+     * Method: triggerGetFeatureInfo
+     * Trigger the getfeatureinfo event when all is done
+     *
+     * Parameters:
+     * request - {XMLHttpRequest} The request object
+     * xy - {<OpenLayers.Pixel>} The position on the map where the
+     *     mouse event occurred.
+     * features - {Array(<OpenLayers.Feature.Vector>)} or
+     *     {Array({Object}) when output is "object". The object has a url and a
+     *     features property which contains an array of features.
+     */
+    triggerGetFeatureInfo: function(request, xy, features) {
+        this.events.triggerEvent("getfeatureinfo", {
+            text: request.responseText,
+            features: features,
+            request: request,
+            xy: xy
+        });
+
+        // Reset the cursor.
+        OpenLayers.Element.removeClass(this.map.viewPortDiv, "olCursorWait");
+    },
+    
+    /**
+     * Method: handleResponse
+     * Handler for the GetFeatureInfo response.
+     * 
+     * Parameters:
+     * xy - {<OpenLayers.Pixel>} The position on the map where the
+     *     mouse event occurred.
+     * request - {XMLHttpRequest} The request object.
+     * url - {String} The url which was used for this request.
+     */
+    handleResponse: function(xy, request, url) {
+        
+        var doc = request.responseXML;
+        if(!doc || !doc.documentElement) {
+            doc = request.responseText;
+        }
+        var features = this.format.read(doc);
+        if (this.drillDown === false) {
+            this.triggerGetFeatureInfo(request, xy, features);
+        } else {
+            this._requestCount++;
+            if (this.output === "object") {
+                this._features = (this._features || []).concat(
+                    {url: url, features: features}
+                );
+            } else {
+            this._features = (this._features || []).concat(features);
+            }
+            if (this._requestCount === this._numRequests) {
+                this.triggerGetFeatureInfo(request, xy, this._features.concat()); 
+                delete this._features;
+                delete this._requestCount;
+                delete this._numRequests;
+            }
+        }
+    },
+
+    CLASS_NAME: "OpenLayers.Control.WMSGetFeatureInfo"
+});
+
+/* Copyright (c) 2006-2012 by OpenLayers Contributors (see authors.txt for 
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
  * @requires OpenLayers/BaseTypes.js
  * @requires OpenLayers/Console.js
  */
