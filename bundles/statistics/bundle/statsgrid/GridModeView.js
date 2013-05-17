@@ -74,6 +74,7 @@ function() {
      * @param {Boolean} blnFromExtensionEvent
      */
     showMode: function(isShown, blnFromExtensionEvent) {
+        var me = this;
         var sandbox = this.instance.getSandbox();
         this.toolbar.show(isShown);
 
@@ -94,14 +95,23 @@ function() {
             /** show our mode view - view hacks */
             var elCenter = this.getCenterColumn();
             elCenter.removeClass('span12');
-            elCenter.width((100 - leftWidth) + '%');//.addClass('span5');
+            elCenter.width((100 - leftWidth) + '%');
             // remove toolbar's height
             jQuery('#mapdiv').height(jQuery(window).height() - jQuery('#contentMap').find('.oskariui-menutoolbar').height());
             //window resize is handled in mapfull - instance.js
 
             var elLeft = this.getLeftColumn();
             elLeft.removeClass('oskari-closed');
-            elLeft.width(leftWidth + '%');//.addClass('span7');
+            elLeft.width(leftWidth + '%');
+            elLeft.resizable({
+                minWidth: 450,
+                handles: "e",
+                resize: function(event, ui) {
+                    elCenter.width( jQuery('.row-fluid').width() - ui.size.width );
+                    map.updateSize();
+                    me.instance.gridPlugin.grid.resizeCanvas();
+                }
+            });
 
             /** a hack to notify openlayers of map size change */
             map.updateSize();
