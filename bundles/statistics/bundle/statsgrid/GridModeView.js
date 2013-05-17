@@ -45,10 +45,12 @@ function() {
     prepareMode: function(isShown, layer, blnFromExtensionEvent) {
         this.isVisible = (isShown == true);
 
-        if(this._layer == null || (layer != null && this._layer.getId() != layer.getId())) {
-            // Update layer.
+        // Update the layer if current layer is null or if the layer have changed.
+        if (this._layer == null || (layer != null && this._layer.getId() != layer.getId())) {
             this._layer = layer;
+            // Notify the grid plugin of the changed layer.
             this.instance.gridPlugin.setLayer(layer);
+            // Save the changed layer to the state.
             this.instance.state.layerId = this._layer.getId();
             this.toolbar.changeName(this._layer.getName());
         }
@@ -64,23 +66,25 @@ function() {
         }
     },
 
+    /**
+     * Sets the DOM to the mode and updates the map size.
+     *
+     * @method showMode
+     * @param {Boolean} isShown Entering/exiting the mode.
+     * @param {Boolean} blnFromExtensionEvent
+     */
     showMode: function(isShown, blnFromExtensionEvent) {
         var sandbox = this.instance.getSandbox();
         this.toolbar.show(isShown);
 
         var mapModule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule');
         var map = mapModule.getMap();
-
-     
         
         if (isShown) {
             /** ENTER The Mode */
 
             /** Set zoom to min **/
              mapModule.zoomTo(0);
-        
-            /** set map to stats mode - map-ops -> statslayer tools should propably tell us where to zoom */
-//            this._setMapStatsMode();
 
             jQuery('#contentMap').addClass('statsgrid-contentMap');
             jQuery('.oskariui-mode-content').addClass('statsgrid-mode');
@@ -105,9 +109,6 @@ function() {
         } else {
             /** EXIT The Mode */
 
-            /** set map to stats mode */
-//            this._setMapNormalMode();
-
             jQuery('#contentMap').removeClass('statsgrid-contentMap');
             jQuery('.oskariui-mode-content').removeClass('statsgrid-mode');
             
@@ -130,11 +131,7 @@ function() {
 
             /** a hack to notify openlayers of map size change */
             map.updateSize();
-
-
-
         }
-
     },
     getLeftColumn : function() {
         return jQuery('.oskariui-left');

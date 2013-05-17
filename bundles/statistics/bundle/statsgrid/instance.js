@@ -108,24 +108,7 @@ function() {
             return this.state;
         }
     },
-
-	    /**
-     * @method showMessage
-     * Shows user a message with ok button
-     * @param {String} title popup title
-     * @param {String} message popup message
-     */
-    showMessage : function(title, message) {
-        var loc = this.getLocalization();
-    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-    	okBtn.setTitle(loc.buttons.ok);
-    	okBtn.addClass('primary');
-    	okBtn.setHandler(function() {
-            dialog.close(true);
-    	});
-    	dialog.show(title, message, [okBtn]);
-    },
+    
     _afterStatsVisualizationChangeEvent: function(event) {
         var params = event.getParams();
         this.state.methodId = params.methodId;

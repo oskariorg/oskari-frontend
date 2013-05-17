@@ -179,12 +179,11 @@ function(config, locale) {
      * @method createStatsOut
      * Get Sotka data and show it in SlickGrid
      * @param {Object} container to where slick grid and pull downs will be appended
-     * @param {Function} callback function which gets called after the content has finished loading
      */
-    createStatsOut : function(container, callback) {
+    createStatsOut : function(container) {
         // indicator params are select-elements
         // (indicator drop down select and year & gender selects)
-        this.prepareIndicatorParams(container, callback);
+        this.prepareIndicatorParams(container);
 
         // stop events so that they don't affect other parts of the site (i.e. map)
         container.on("keyup", function(e) {
@@ -197,10 +196,9 @@ function(config, locale) {
     },
     /**
      * @method prepareIndicatorParams
-     * @param container element where indicator-selector should be added
-     * @param {Function} callback function which gets called after the content has finished loading
+     * @param {Object} container element where indicator-selector should be added
      */
-    prepareIndicatorParams : function(container, callback) {
+    prepareIndicatorParams : function(container) {
         // Do not load the indicators for a published map.
         if (!this._published) {
             //clear the selectors container
@@ -214,15 +212,14 @@ function(config, locale) {
             this.getSotkaIndicators(container);
         }
         // Regions: success createMunicipalityGrid
-        this.getSotkaRegionData(container, callback);
+        this.getSotkaRegionData(container);
     },
     /**
      * Fetch region data - we need to know all the regions / municipalities
      * @method getSotkaRegionData
-     * @param container element where indicator-selector should be added
-     * @param {Function} callback function which gets called after the content has finished loading
+     * @param {Object} container element where indicator-selector should be added
      */
-    getSotkaRegionData : function(container, callback) {
+    getSotkaRegionData : function(container) {
         var me = this;
         // call ajax function (params: url, successFallback, errorCallback)
         me.statsService.fetchStatsData(me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=regions&version=1.1',
@@ -248,7 +245,7 @@ function(config, locale) {
     /**
      * Create initial grid using just one column: municipality
      * @method createMunicipalitySlickGrid
-     * @param container element where indicator-selector should be added
+     * @param {Object} container element where indicator-selector should be added
      */
     createMunicipalitySlickGrid : function(container, regiondata) {
         var me = this;
