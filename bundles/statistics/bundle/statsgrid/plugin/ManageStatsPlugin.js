@@ -101,7 +101,6 @@ function(config, locale) {
      *          reference to application sandbox
      */
     startPlugin : function(sandbox) {
-        debugger;
         this._sandbox = sandbox;
         this._map = this.getMapModule().getMap();
         sandbox.register(this);
@@ -111,7 +110,6 @@ function(config, locale) {
 
         this.statsService = sandbox.getService('Oskari.statistics.bundle.statsgrid.StatisticsService');
         this._published = ( this.conf.published || false );
-        // Hack so that we don't need to check every occasion whether the state exists.
         this._state = ( this.conf.state || {} );
         this._layer = ( this.conf.layer || null );
     },

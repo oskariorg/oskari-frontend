@@ -110,10 +110,7 @@ function() {
                 minWidth: 450,
                 handles: "e",
                 resize: function(event, ui) {
-                    // FIXME: somehow it doesn't seem to be setting the size correctly.
-                    // Resizing to the left makes the map disappear, whilst doing so to
-                    // the right works as it should.
-                    elCenter.width( jQuery('.row-fluid').width() - ui.size.width );
+                    elCenter.width( jQuery('.row-fluid').width() - elLeft.width() );
                     map.updateSize();
                     me.instance.gridPlugin.grid.resizeCanvas();
                 }

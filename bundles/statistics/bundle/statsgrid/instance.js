@@ -99,9 +99,9 @@ function() {
             me.gridPlugin.loadStateIndicators(container, state);
         }
 
-        if(this.state != null && this.state.indicators != null && this.state.indicators.length > 0) {
-            this.state.indicators = [];
-        }
+        //if(this.state != null && this.state.indicators != null && this.state.indicators.length > 0) {
+        //    this.state.indicators = [];
+        //}
     },
     getState : function() {
         if(this.sandbox.getUser().isLoggedIn()) {
