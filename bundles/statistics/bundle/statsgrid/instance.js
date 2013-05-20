@@ -51,8 +51,6 @@ function() {
         sandbox.registerService(statsService);
         this.statsService = statsService;
 
-        this.setState(this.state);
-        
         // Register stats plugin for map which creates
         // - the indicator selection UI (unless 'published' param in the conf is false)
         // - the grid.
@@ -70,6 +68,7 @@ function() {
         mapModule.startPlugin(classifyPlugin);
         this.classifyPlugin = classifyPlugin;
 
+        this.setState(this.state);
     },    
 	"eventHandlers" : {
 		/**
@@ -98,10 +97,15 @@ function() {
      * @param {Boolean} ignoreLocation true to NOT set map location based on state
      */
     setState : function(state, ignoreLocation) {
+        console.log("statsgrid state: ", state);
         var me = this,
             view = this.plugins['Oskari.userinterface.View'],
             container = view.getEl();
         var layer = this.sandbox.findMapLayerFromAllAvailable(state.layerId);
+
+        if(!layer) {
+            return;
+        }
 
         // We need to notify the grid of the current state so it can load the right indicators.
         me.gridPlugin.setState(state);

@@ -356,16 +356,28 @@ function(config, locale) {
         this.grid = grid;
         this.dataView = dataView;
 
+        me._setGridHeight();
+
         //window resize!
         var resizeGridTimer;
         jQuery(window).resize(function () {
             clearTimeout(resizeGridTimer);
             resizeGridTimer = setTimeout(function() {
-                var gridDiv = jQuery("#municipalGrid");
-                gridDiv.height(gridDiv.parent().height() - gridDiv.parent().find('.selectors-container').outerHeight());
-                grid.resizeCanvas();                    
+                me._setGridHeight();                   
             }, 100);
         });
+    },
+
+    /**
+     * Sets the height of the grid container and handles resizing of the SlickGrid.
+     * 
+     * @method _setGridHeight
+     * @private
+     */
+    _setGridHeight: function() {
+        var gridDiv = jQuery("#municipalGrid");
+        gridDiv.height(gridDiv.parent().height() - gridDiv.parent().find('.selectors-container').outerHeight());
+        this.grid.resizeCanvas();
     },
 
     /**
@@ -661,7 +673,7 @@ function(config, locale) {
      * @param data related to the indicator
      */
     addIndicatorDataToGrid : function(container, indicatorId, gender, year, data, meta, silent) {
-        var columnId = this._getIndicatorColumnId(indicator, gender, year);
+        var columnId = this._getIndicatorColumnId(indicatorId, gender, year);
         var columns = this.grid.getColumns();
         var indicatorName = meta.title[Oskari.getLang()];
         columns.push({
