@@ -67,6 +67,7 @@ describe.only('Test Suite for statistics/statsgrid statistics service', function
                 done();
             };
 
+            // Clear out other event listeners.
             sandbox._listeners = {};
             sandbox.registerForEventByName(self, 'StatsGrid.SotkadataChangedEvent');
             service.sendStatsData();
@@ -87,6 +88,7 @@ describe.only('Test Suite for statistics/statsgrid statistics service', function
                 done();
             };
 
+            // Clear out other event listeners.
             sandbox._listeners = {};
             sandbox.registerForEventByName(self, 'MapStats.StatsVisualizationChangeEvent');
             service.sendVisualizationData();

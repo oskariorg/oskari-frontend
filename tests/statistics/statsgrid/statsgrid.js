@@ -147,6 +147,8 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
                 done();
             }
 
+            // Clear out other event listeners.
+            sandbox._listeners = {};
             // listen to StatsGrid.SotkadataChangedEvent to trigger verification
             sandbox.registerForEventByName(self, 'StatsGrid.SotkadataChangedEvent');
 

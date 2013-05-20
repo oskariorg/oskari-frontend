@@ -103,6 +103,7 @@ function() {
             //window resize is handled in mapfull - instance.js
 
             var elLeft = this.getLeftColumn();
+            elLeft.empty();
             elLeft.removeClass('oskari-closed');
             elLeft.width(leftWidth + '%');
             elLeft.resizable({

@@ -52,7 +52,7 @@ function() {
         this.statsService = statsService;
 
         // Register stats plugin for map which creates
-        // - the indicator selection UI (unless 'published' param in the conf is false)
+        // - the indicator selection UI (unless 'published' param in the conf is true)
         // - the grid.
         var gridConf = {
             'state': me.getState()
