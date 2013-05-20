@@ -307,8 +307,12 @@ debugger;
         } else {
             //this._destroyGrid()?
             jQuery('#contentMap').width('');
-            jQuery('.oskariui-left').css({'width': '', 'height': '100%', 'float': ''}).removeClass('published-grid-left');
+            jQuery('.oskariui-left')
+                .css({'width': '', 'height': '100%', 'float': ''})
+                .removeClass('published-grid-left')
+                .empty();
             jQuery('.oskariui-center').css({'width': '100%', 'float': ''}).removeClass('published-grid-center');
+
 
             Oskari.setLang(this.oskariLang);
             if(this.publisher) {

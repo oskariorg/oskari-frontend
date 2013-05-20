@@ -1003,35 +1003,6 @@ debugger;
 
         }
     },
-    /**
-     * @method _toggleGrid
-     * @param {Boolean} show Shows the grid when true, hides it when false
-     */
-    _toggleGrid: function(show) {
-        var me = this,
-            elCenter = jQuery('.oskariui-center'), // the map column
-            elLeft = jQuery('.oskariui-left'), // the grid column
-            gridWidth = 40; // How wide the grid should be, in percentages.
-
-        if (show) {
-            elCenter.removeClass('span12');
-            elCenter.width((100 - gridWidth) + '%');
-            elLeft.removeClass('oskari-closed');
-            elLeft.width(gridWidth + '%');
-            elLeft.append(me.container);
-        } else {
-            elCenter.width('').addClass('span12');
-            elLeft.addClass('oskari-closed');
-            elLeft.width('');
-            elLeft.remove(me.container);
-        }
-
-        me.gridVisible = show;
-
-        // A hack to notify openlayers of map size change.
-        var map = me.mapModule.getMap();
-        map.updateSize();
-    },
 
     /**
      * Creates a button to show/hide the grid.
@@ -1041,6 +1012,7 @@ debugger;
      */
     _createShowHideButton: function(element) {
         var me = this;
+        
         var imgSrc = me.mapModule.getImageUrl() +
             '/framework/bundle/mapmodule-plugin/plugin/fullscreen/images/';
         var button = jQuery(
@@ -1060,6 +1032,8 @@ debugger;
             }
             me.adjustDataContainer();
         })
+        
+        jQuery('.publishedgridToggle').remove();
         element.append(button);
     }
 });

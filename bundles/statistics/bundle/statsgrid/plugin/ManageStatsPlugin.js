@@ -677,7 +677,7 @@ function(config, locale) {
         var columns = this.grid.getColumns();
         var indicatorName = meta.title[Oskari.getLang()];
 
-        var columnId = "indicator" + indicator + year + gender;
+        var columnId = "indicator" + indicatorId + year + gender;
         if(this.isIndicatorInGrid(columnId)) {
             return false;
         }
