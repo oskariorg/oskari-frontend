@@ -12,10 +12,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSImageEvent',
  * @param {String} post fix
  * @param {Boolean} keep previous
  */
-function(layer, imageUrl, bbox, layerPostFix, keepPrevious) {
+function(layer, imageUrl, bbox, size, layerPostFix, keepPrevious) {
     this._layer = layer;
     this._imageUrl = imageUrl;
     this._bbox = bbox;
+    this._size = size;
     this._layerPostFix = layerPostFix;
     this._keepPrevious = keepPrevious;
 }, {
@@ -52,6 +53,14 @@ function(layer, imageUrl, bbox, layerPostFix, keepPrevious) {
      */
     getBBOX : function() {
         return this._bbox;
+    },
+
+    /**
+     * @method getSize
+     * @return {Object} size
+     */
+    getSize : function() {
+        return this._size;
     },
 
     /**

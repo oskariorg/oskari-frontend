@@ -37,6 +37,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
 
         }, {
 
+            getGrid : function() {
+                return this.grid;
+            },
+
             setLayer : function(layer) {
                 this.layer = layer;
             },
