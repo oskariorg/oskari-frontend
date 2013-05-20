@@ -20,14 +20,29 @@ function() {
         //"tileClazz": "Oskari.userinterface.extension.DefaultTile",
         "viewClazz": "Oskari.statistics.bundle.statsgrid.StatsView"
     };
-    this.state = {};
+    this.state = {
+        indicators : [],
+        layerId : null
+    };
 }, {
-    "init" : function() {
-    	var me = this;
-        var conf = me.conf ;
+    "start" : function() {
+        var me = this;
+        var conf = this.conf ;
+        var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+        var sandbox = Oskari.getSandbox(sandboxName);
+
+        me.sandbox = sandbox;
+        sandbox.register(this);
+
+        /* stateful */
+        if(conf && conf.stateful === true) {
+            sandbox.registerAsStateful(this.mediator.bundleId, this);
+        }
+
+        var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+        sandbox.request(this, request);
+
         var locale = me.getLocalization();
-		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
-		var sandbox = Oskari.getSandbox(sandboxName);
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
         // create the StatisticsService for handling ajax calls
@@ -36,8 +51,10 @@ function() {
         sandbox.registerService(statsService);
         this.statsService = statsService;
 
-        // Register stats plugin for the map which creates
-        // - the indicator selection UI (unless 'published' param in the conf is true)
+        this.setState(this.state);
+        
+        // Register stats plugin for map which creates
+        // - the indicator selection UI (unless 'published' param in the conf is false)
         // - the grid.
         var gridConf = {
             'state': me.getState()
@@ -52,14 +69,13 @@ function() {
         mapModule.registerPlugin(classifyPlugin);
         mapModule.startPlugin(classifyPlugin);
         this.classifyPlugin = classifyPlugin;
-        return null;
-    },
+
+    },    
 	"eventHandlers" : {
 		/**
 		 * @method userinterface.ExtensionUpdatedEvent
 		 */
 		'userinterface.ExtensionUpdatedEvent' : function(event) {
-
 			var me = this, view = this.plugins['Oskari.userinterface.View'];
 
 			if(event.getExtension().getName() != me.getName()) {
@@ -104,11 +120,58 @@ function() {
         //}
     },
     getState : function() {
-        if(this.sandbox.getUser().isLoggedIn()) {
-            return this.state;
-        }
+        return this.state;
     },
-    
+
+    /**
+     * Get state parameters.
+     * Returns string with statsgrid state. State value keys are before the '-' separator and
+     * the indiators are after the '-' separator. The indicators are further separated by ',' and 
+     * both state values and indicator values are separated by '+'.
+     *
+     * @method getStateParameters
+     * @return {String} statsgrid state
+     */
+    getStateParameters : function() {
+        var i = null,
+            ilen = null,
+            ilast = null,
+            statsgridState = "statsgrid=",
+            valueSeparator = "+",
+            indicatorSeparator = ",",
+            stateValues = null,
+            indicatorValues = null,
+            state = this.state,
+            keys = ['layerId', 'currentColumn', 'methodId', 'numberOfClasses', 'manualBreaksInput'],
+            indicators = state.indicators;
+
+        // Note! keys needs to be handled in the backend as well. Therefore the key order is important as well as actual values.
+        // 'manualBreaksInput' can be an empty string and must be last.
+        for (i = 0, ilen = keys.length, ilast = ilen - 1; i < ilen; i++) {
+            value = state[keys[i]];
+            if (value == null) {
+                // skip undefined and null
+            } else {
+                stateValues += value;
+            }
+            if (i != ilast) {
+                stateValues += valueSeparator;
+            }
+        }
+
+        // handle indicators separately
+        for (i = 0, ilen = indicators.length, ilast = ilen - 1; i < ilen; i++) {
+            indicatorValues += indicators[i].indicator;
+            indicatorValues += valueSeparator;
+            indicatorValues += indicators[i].year;
+            indicatorValues += valueSeparator;
+            indicatorValues += indicators[i].gender;
+            if (i != ilast) {
+                indicatorValues += indicatorSeparator;
+            }
+        }
+        return statsgridState + stateValues + "-" + indicatorValues;
+    },
     _afterStatsVisualizationChangeEvent: function(event) {
         var params = event.getParams();
         this.state.methodId = params.methodId;

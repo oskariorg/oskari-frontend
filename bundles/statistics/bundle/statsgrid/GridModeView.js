@@ -30,7 +30,6 @@ function() {
 
         var el = me.getEl();
         el.addClass("statsgrid");
-
     },
 
     /**
