@@ -85,8 +85,9 @@ function() {
      * 			reference to application sandbox
      */
     startPlugin : function(sandbox) {
-        this._sandbox = sandbox;
-        this._map = this.getMapModule().getMap();
+		var me = this;
+        me._sandbox = sandbox;
+        me._map = me.getMapModule().getMap();
 
         sandbox.register(this);
         for(p in this.eventHandlers ) {
@@ -158,8 +159,9 @@ function() {
      * Creates logo and terms of use links on top of map
      */
     _createUI : function() {
-    	
-		var sandbox = this._sandbox;
+		var me = this;
+		var sandbox = me._sandbox;
+
         // get div where the map is rendered from openlayers
         var parentContainer = jQuery(this._map.div);
         if(!this.element) {
@@ -174,7 +176,7 @@ function() {
         var link = this.element.find('div.icon');
         link.bind('click', function(){
 			var linkParams = sandbox.generateMapLinkParameters();
-	    	var url = myLoc.mapLinkBase + sandbox.generateMapLinkParameters();
+	    	var url = myLoc.mapLinkBase + linkParams;
 	    	window.open(url, '_blank');
             return false;
 	    });

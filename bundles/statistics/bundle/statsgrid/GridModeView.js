@@ -30,7 +30,6 @@ function() {
 
         var el = me.getEl();
         el.addClass("statsgrid");
-
     },
     showMode: function(isShown, blnFromExtensionEvent) {
         var sandbox = this.instance.getSandbox();
@@ -98,8 +97,6 @@ function() {
 
             /** a hack to notify openlayers of map size change */
             map.updateSize();
-
-
 
         }
 

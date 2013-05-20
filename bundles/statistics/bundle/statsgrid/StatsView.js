@@ -20,6 +20,7 @@ function() {
      */
     showContent: function(isShown, layer, callback) {
         if(this._layer == null || (layer != null && this._layer.getId() != layer.getId())) {
+            console.log('layer is', layer);
             //update layer
             this._layer = layer;
             this.instance.gridPlugin.setLayer(layer);
