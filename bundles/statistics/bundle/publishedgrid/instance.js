@@ -187,24 +187,47 @@ function() {
      */
     _createShowHideButton: function(element) {
         var me = this;
-        var imgSrc = me.mapModule.getImageUrl() +
-            '/framework/bundle/mapmodule-plugin/plugin/fullscreen/images/';
         var button = jQuery(
-            '<div class="publishedgridToggle">' +
-                '<img></img>' +
-            '</div>'
+            '<div class="publishedgridToggle"></div>'
         );
-        button.find('img').attr('src', imgSrc + 'show-navigation.png');
         button.click(function(event) {
             event.preventDefault();
+            
             if (me.gridVisible) {
-                jQuery(this).find('img').attr('src', imgSrc + 'hide-navigation.png');
+                me.gridVisible = false;
+                jQuery(element).hide("slide", {
+                    complete: function() {}
+                });
+                jQuery(this).removeClass('hidePublishedGrid').addClass('showPublishedGrid');
             } else {
-                jQuery(this).find('img').attr('src', imgSrc + 'show-navigation.png');
+                me.gridVisible = true;
+                jQuery(element).show("slide", {
+                    complete: function() {}
+                });
+                jQuery(this).removeClass('showPublishedGrid').addClass('hidePublishedGrid');
             }
-            me._toggleGrid(!me.gridVisible);
-        })
+        });
         element.append(button);
+
+        /**
+        .hidePublishedGrid {
+            background: url(hide-navigation.png);
+            width: 32px;
+            height: 32px;
+            position: absolute;
+            top: 5px;
+            right: 0;
+        }
+
+        .showPublishedGrid {
+            background: url(show-navigation.png);
+            width: 32px;
+            height: 32px;
+            position: absolute;
+            top: 5px;
+            right: -32px;
+        }
+        */
     }
 }, {
     "protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module']

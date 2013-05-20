@@ -110,7 +110,6 @@ function(config, locale) {
 
         this.statsService = sandbox.getService('Oskari.statistics.bundle.statsgrid.StatisticsService');
         this._published = ( this.conf.published || false );
-        // Hack so that we don't need to check every occasion whether the state exists.
         this._state = ( this.conf.state || {} );
         this._layer = ( this.conf.layer || null );
     },
@@ -337,7 +336,7 @@ function(config, locale) {
 
         grid.onHeaderClick.subscribe(function(e, args) {
             // Don't do anything in case the clicked column is the one in the state.
-            if (args.column.id === me.conf.state.currentColumn) {
+            if (args.column.id === me._state.currentColumn) {
                 return false;
             }
             me.sendStatsData(args.column);
@@ -357,16 +356,28 @@ function(config, locale) {
         this.grid = grid;
         this.dataView = dataView;
 
+        me._setGridHeight();
+
         //window resize!
         var resizeGridTimer;
         jQuery(window).resize(function () {
             clearTimeout(resizeGridTimer);
             resizeGridTimer = setTimeout(function() {
-                var gridDiv = jQuery("#municipalGrid");
-                gridDiv.height(gridDiv.parent().height() - gridDiv.parent().find('.selectors-container').outerHeight());
-                grid.resizeCanvas();                    
+                me._setGridHeight();                   
             }, 100);
         });
+    },
+
+    /**
+     * Sets the height of the grid container and handles resizing of the SlickGrid.
+     * 
+     * @method _setGridHeight
+     * @private
+     */
+    _setGridHeight: function() {
+        var gridDiv = jQuery("#municipalGrid");
+        gridDiv.height(gridDiv.parent().height() - gridDiv.parent().find('.selectors-container').outerHeight());
+        this.grid.resizeCanvas();
     },
 
     /**
@@ -564,13 +575,13 @@ function(config, locale) {
      * @param container parent element
      * @param indicator meta data
      */
-    updateDemographicsButtons : function(indicator, gender, year) {
-        indicator = indicator ? indicator : jQuery('.statsgrid').find('.indisel ').find('option:selected').val();
+    updateDemographicsButtons : function(indicatorId, gender, year) {
+        indicatorId = indicatorId ? indicatorId : jQuery('.statsgrid').find('.indisel ').find('option:selected').val();
         gender = gender ? gender : jQuery('.statsgrid').find('.gendersel').find('.gender').val();
         gender = gender != null ? gender: 'total';
         year = year ? year : jQuery('.statsgrid').find('.yearsel').find('.year').val();
 
-        var columnId = "indicator" + indicator + year + gender,
+        var columnId = "indicator" + indicatorId + year + gender,
             includedInGrid = this.isIndicatorInGrid(columnId);
 
         // toggle fetch and remove buttons so that only one is visible and can only be selected once
@@ -606,28 +617,27 @@ function(config, locale) {
      *
      * @method getSotkaIndicatorData
      * @param container parent element
-     * @param indicator id
+     * @param indicatorId id
      * @param gender (male / female / total)
      * @param year selected year
      */
-    getSotkaIndicatorData : function(container, indicator, gender, year) {
+    getSotkaIndicatorData : function(container, indicatorId, gender, year) {
         var me = this;
         var gndrs = gender != null ? gender : 'total';
         // ajax call
         me.statsService.fetchStatsData(
             // url
-            me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gndrs,
+            me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicatorId + '&years=' + year + '&genders=' + gndrs,
             // success callback
             function(data) {
                 if (data) {
-                    // add indicator also to the state!
-                    if (me.conf.state.indicators == null) {
-                        me.conf.state.indicators = [];
+                    // Add indicator to the state.
+                    if (me._state.indicators == null) {
+                        me._state.indicators = [];
                     }
-                    me.conf.state.indicators.push({indicator: indicator, year: year, gender: gender});
-
-                    // get the actual data
-                    me.addIndicatorDataToGrid(container, indicator, gndrs, year, data, me.indicators[me.indicators.length -1]);
+                    me._state.indicators.push({indicator: indicatorId, year: year, gender: gndrs});
+                    // Show the data in the grid.
+                    me.addIndicatorDataToGrid(container, indicatorId, gndrs, year, data, me.indicators[me.indicators.length -1]);
                 } else {
                     me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].indicatorDataError);
                 }
@@ -642,13 +652,13 @@ function(config, locale) {
      * Get indicator column id.
      *
      * @method _getIndicatorColumnId
-     * @param indicator id
+     * @param indicatorId id
      * @param gender (male/female/total)
      * @param year selected year
      * @return columnId unique column id
      */
-    _getIndicatorColumnId : function(indicator, gender, year) {
-        var columnId = "indicator" + indicator + year + gender;
+    _getIndicatorColumnId : function(indicatorId, gender, year) {
+        var columnId = "indicator" + indicatorId + year + gender;
         return columnId;
     },
 
@@ -657,13 +667,13 @@ function(config, locale) {
      *
      * @method addIndicatorDataToGrid
      * @param container parent element
-     * @param indicator id
+     * @param indicatorId id
      * @param gender (male/female/total)
      * @param year selected year
      * @param data related to the indicator
      */
-    addIndicatorDataToGrid : function(container, indicator, gender, year, data, meta, silent) {
-        var columnId = this._getIndicatorColumnId(indicator, gender, year);        
+    addIndicatorDataToGrid : function(container, indicatorId, gender, year, data, meta, silent) {
+        var columnId = this._getIndicatorColumnId(indicatorId, gender, year);
         var columns = this.grid.getColumns();
         var indicatorName = meta.title[Oskari.getLang()];
 
@@ -681,7 +691,6 @@ function(config, locale) {
             sortable : true
         });
         this.grid.setColumns(columns);
-
 
         var columnData = [];
         var ii = 0;
@@ -728,19 +737,19 @@ function(config, locale) {
             this.sendStatsData(columns[columns.length - 1]);
         }
 
-        this.updateDemographicsButtons(indicator, gender, year);
+        this.updateDemographicsButtons(indicatorId, gender, year);
     },
 
     /**
      * Remove indicator data to the grid.
      *
      * @method removeIndicatorDataFromGrid
-     * @param indicator id
+     * @param indicatorId id
      * @param gender (male / female / total)
      * @param year selected year
      */
-    removeIndicatorDataFromGrid : function(indicator, gender, year) {
-        var columnId = this._getIndicatorColumnId(indicator, gender, year),
+    removeIndicatorDataFromGrid : function(indicatorId, gender, year) {
+        var columnId = this._getIndicatorColumnId(indicatorId, gender, year),
             columns = this.grid.getColumns(),
             allOtherColumns = [],
             found = false,
@@ -766,24 +775,24 @@ function(config, locale) {
         }
 
         // remove indicator also from to the state!
-        if (this.conf.state.indicators) {
-            for (i = 0, ilen = this.conf.state.indicators.length; i < ilen; i++) {
-                var statedIndicator = this.conf.state.indicators[i];
+        if (this._state.indicators) {
+            for (i = 0, ilen = this._state.indicators.length; i < ilen; i++) {
+                var statedIndicator = this._state.indicators[i];
                 if ((indicator === statedIndicator.indicator) &&
                     (year === statedIndicator.year) &&
                     (gender === statedIndicator.gender)) {
-                    this.conf.state.indicators.splice(i, 1);
+                    this._state.indicators.splice(i, 1);
                     break;
                 }
             }
         }
 
-        this.updateDemographicsButtons(indicator, gender, year);
+        this.updateDemographicsButtons(indicatorId, gender, year);
 
-        if (columnId === this.conf.state.currentColumn) {
+        if (columnId === this._state.currentColumn) {
             // hide the layer, as we just removed the "selected"
             this._setLayerVisibility(false);
-            this.conf.state.currentColumn = null;
+            this._state.currentColumn = null;
         }
     },
 
@@ -854,7 +863,7 @@ function(config, locale) {
         var i, k;
 
         // Set current column to be stated
-        me.conf.state.currentColumn = curCol.id;
+        me._state.currentColumn = curCol.id;
 
         // Get values of selected column
         var data = this.dataView.getItems();

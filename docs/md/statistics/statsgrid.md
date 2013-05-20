@@ -80,7 +80,10 @@ This bundle doesn't send out any requests.
     <th>Event</th><th>How does the bundle react</th>
   </tr>
   <tr>
-    <td>tbd</td><td>tbd</td>
+    <td>userinterface.ExtensionUpdatedEvent</td><td>tbd</td>
+  </tr>
+  <tr>
+    <td>MapStats.StatsVisualizationChangeEvent</td><td>tbd</td>
   </tr>
 </table>
 

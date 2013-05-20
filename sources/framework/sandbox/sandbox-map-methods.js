@@ -62,52 +62,30 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-methods', {
      * @return {String}
      */
     generateMapLinkParameters : function(options) {
-        var mapFullComponent = this.getStatefulComponents()['mapfull'];
-        if (!mapFullComponent) {
-            return;
-        }
-        var state = mapFullComponent.getState();
-        var link = 'zoomLevel=' + state['zoom'] + '&coord=' + state['east'] + '_' + state['north'] + '&mapLayers=';
+        // get stateful component parameters
+        // Note! These parameters must be passed to the server in index.js to be used
+        var components = this.getStatefulComponents(),
+            iterator = null,
+            component = null,
+            optionsLinkParameterArray = [],
+            componentLinkParameterArray = [];
+        for (iterator in components) {
+            component = components[iterator];
 
-        var layers = '';
+            // Make sure the function exists and is a function
+            if (component.getStateParameters && typeof component.getStateParameters === "function") {
+                componentLinkParameterArray.push(component.getStateParameters());
+            }
+        }
 
-        for (var i = 0; i < state['selectedLayers'].length; i++) {
-            if (!state['selectedLayers'][i].hidden) {
-                if (layers != '') {
-                    layers += ',';
-                }
-                layers += state['selectedLayers'][i].id + '+' + state['selectedLayers'][i].opacity
-                if (state['selectedLayers'][i].style) {
-                    layers += '+' + state['selectedLayers'][i].style;
-                } else {
-                    layers += '+';
-                }
-            }
+        // use given options or empty object to have the strings only once
+        options = options || {"showMarker": false, "forceCache": false, "noSavedState": false};
+
+        for (iterator in options) {
+            optionsLinkParameterArray.push(iterator + '=' + (options[iterator] !== false));
         }
-        link += layers;
-        if(options) {
-            if(options.marker == true) {
-                link += '&showMarker=true';
-            }
-            else {
-                link += '&showMarker=false';
-            }
-            if(options.forceCache == false) {
-                link += '&forceCache=false';
-            }
-            else {
-                link += '&forceCache=true';
-            }
-            if(options.noSavedState == false) {
-                link += '&noSavedState=false';
-            }
-            else {
-                link += '&noSavedState=true';
-            }
-        }
-        else {
-            link += '&showMarker=false&forceCache=true&noSavedState=true';
-        }
-        return link;
+
+        // Use array join to make sure the values are always separated with '&', but not the first or last
+        return componentLinkParameterArray.concat(optionsLinkParameterArray).join('&') || null;
     }
 });
