@@ -43,26 +43,29 @@ function() {
      * @param {Boolean} blnFromExtensionEvent
      */
     prepareMode: function(isShown, layer, blnFromExtensionEvent) {
-        this.isVisible = (isShown == true);
+        // Do not enter the mode if it's already on.
+        if (!this.isVisible || !isShown) {
+            this.isVisible = (isShown == true);
 
-        // Update the layer if current layer is null or if the layer have changed.
-        if (this._layer == null || (layer != null && this._layer.getId() != layer.getId())) {
-            this._layer = layer;
-            // Notify the grid plugin of the changed layer.
-            this.instance.gridPlugin.setLayer(layer);
-            // Save the changed layer to the state.
-            this.instance.state.layerId = this._layer.getId();
-            this.toolbar.changeName(this._layer.getName());
-        }
+            // Update the layer if current layer is null or if the layer has changed.
+            if (this._layer == null || (layer != null && this._layer.getId() != layer.getId())) {
+                this._layer = layer;
+                // Notify the grid plugin of the changed layer.
+                this.instance.gridPlugin.setLayer(layer);
+                // Save the changed layer to the state.
+                this.instance.state.layerId = this._layer.getId();
+                this.toolbar.changeName(this._layer.getName());
+            }
 
-        // Enter/exit the mode.
-        this.showMode(isShown, blnFromExtensionEvent);
-        // Show/hide the content.
-        this.showContent(isShown);
+            // Enter/exit the mode.
+            this.showMode(isShown, blnFromExtensionEvent);
+            // Show/hide the content.
+            this.showContent(isShown);
 
-        if (isShown) {
-            // Create the indicators selection and the grid.
-            this.instance.gridPlugin.createStatsOut(this.getEl());
+            if (isShown) {
+                // Create the indicators selection and the grid.
+                this.instance.gridPlugin.createStatsOut(this.getEl());
+            }
         }
     },
 
@@ -107,6 +110,9 @@ function() {
                 minWidth: 450,
                 handles: "e",
                 resize: function(event, ui) {
+                    // FIXME: somehow it doesn't seem to be setting the size correctly.
+                    // Resizing to the left makes the map disappear, whilst doing so to
+                    // the right works as it should.
                     elCenter.width( jQuery('.row-fluid').width() - ui.size.width );
                     map.updateSize();
                     me.instance.gridPlugin.grid.resizeCanvas();

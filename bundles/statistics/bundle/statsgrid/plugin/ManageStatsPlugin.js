@@ -101,6 +101,7 @@ function(config, locale) {
      *          reference to application sandbox
      */
     startPlugin : function(sandbox) {
+        debugger;
         this._sandbox = sandbox;
         this._map = this.getMapModule().getMap();
         sandbox.register(this);
@@ -337,7 +338,7 @@ function(config, locale) {
 
         grid.onHeaderClick.subscribe(function(e, args) {
             // Don't do anything in case the clicked column is the one in the state.
-            if (args.column.id === me.conf.state.currentColumn) {
+            if (args.column.id === me._state.currentColumn) {
                 return false;
             }
             me.sendStatsData(args.column);
@@ -620,7 +621,12 @@ function(config, locale) {
             // success callback
             function(data) {
                 if (data) {
-                    // get the actual data
+                    // Add indicator to the state.
+                    if (me._state.indicators == null) {
+                        me._state.indicators = [];
+                    }
+                    me._state.indicators.push({indicator: indicator, year: year, gender: gndrs});
+                    // Show the data in the grid.
                     me.addIndicatorDataToGrid(container, indicator, gndrs, year, data, me.indicators[me.indicators.length -1]);
                 } else {
                     me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].indicatorDataError);
@@ -668,12 +674,6 @@ function(config, locale) {
             sortable : true
         });
         this.grid.setColumns(columns);
-
-        // add indicator also to the state!
-        if (this.conf.state.indicators == null) {
-            this.conf.state.indicators = [];
-        }
-        this.conf.state.indicators.push({indicator: indicator, year: year, gender: gender});
 
         var columnData = [];
         var ii = 0;
@@ -758,13 +758,13 @@ function(config, locale) {
         }
 
         // remove indicator also from to the state!
-        if (this.conf.state.indicators) {
-            for (i = 0, ilen = this.conf.state.indicators.length; i < ilen; i++) {
-                var statedIndicator = this.conf.state.indicators[i];
+        if (this._state.indicators) {
+            for (i = 0, ilen = this._state.indicators.length; i < ilen; i++) {
+                var statedIndicator = this._state.indicators[i];
                 if ((indicator === statedIndicator.indicator) &&
                     (year === statedIndicator.year) &&
                     (gender === statedIndicator.gender)) {
-                    this.conf.state.indicators.splice(i, 1);
+                    this._state.indicators.splice(i, 1);
                     break;
                 }
             }
@@ -772,10 +772,10 @@ function(config, locale) {
 
         this.updateDemographicsButtons(indicator, gender, year);
 
-        if (columnId === this.conf.state.currentColumn) {
+        if (columnId === this._state.currentColumn) {
             // hide the layer, as we just removed the "selected"
             this._setLayerVisibility(false);
-            this.conf.state.currentColumn = null;
+            this._state.currentColumn = null;
         }
     },
 
@@ -846,7 +846,7 @@ function(config, locale) {
         var i, k;
 
         // Set current column to be stated
-        me.conf.state.currentColumn = curCol.id;
+        me._state.currentColumn = curCol.id;
 
         // Get values of selected column
         var data = this.dataView.getItems();
