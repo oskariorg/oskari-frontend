@@ -49,7 +49,12 @@ Oskari.registerLocalization({
         "column_type": "Tyyppi"
       },
       "GetInfoPlugin": {
-        "title": "Kohdetiedot"
+        "title": "Kohdetiedot",
+		"layer": "Taso",
+		"places": "Kohteet",
+		"description": "Kuvaus",
+		"link": "URL-osoite",
+		"name": "Nimi"
       }
     }
   }

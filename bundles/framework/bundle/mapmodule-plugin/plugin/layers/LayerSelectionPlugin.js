@@ -249,7 +249,7 @@ function(config) {
      * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer} layer layer to add
      */
     addLayer : function(layer) {
-    	var me = this;
+        var me = this;
         var content = this.element.find('div.content');
         var layersDiv = content.find('div.layers');
     	
