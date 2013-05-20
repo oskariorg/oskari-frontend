@@ -18,6 +18,8 @@ function(config) {
     this._map = null;
     this._supportedFormats = {};
     this.config = config;
+    this.grid = null;
+    this.tileSize = null;
 
     this._mapClickData = { comet: false, ajax: false, wfs: [] };
 }, {
@@ -58,9 +60,15 @@ function(config) {
         var sandbox = Oskari.getSandbox(sandboxName);
         this._sandbox = sandbox;
 
+        // TODO: add to config
+        var CometdConfiguration = {
+            contextPath : '/transport-0.0.1',
+            port : ':6060'
+        };
+
         // service init
-        this._io = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.service.Mediator', this);
-        this._connection = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.service.Connection',this._io);
+        this._io = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.service.Mediator', CometdConfiguration, this);
+        this._connection = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.service.Connection', CometdConfiguration, this._io);
 
         // register domain model
         var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
@@ -188,12 +196,15 @@ function(config) {
                 }
             }
 
-            // TODO: grid
-            this.getIO().setLocation(srs, [bbox.left,bbox.bottom,bbox.right,bbox.top], zoom);
+            var grid = this.getGrid();
+            if(grid != null) {
+                console.log(grid);
+                this.getIO().setLocation(srs, [bbox.left,bbox.bottom,bbox.right,bbox.top], zoom, grid);
+                this._tilesLayer.redraw();
+            }
 
             var creator = this.getSandbox().getObjectCreator(event);
             this._sandbox.printDebug("[WfsLayerPlugin] got AfterMapMoveEvent from " + creator);
-            this.afterAfterMapMoveEvent();
         },
 
         /**
@@ -213,8 +224,6 @@ function(config) {
                     styleName
                 );
             }
-
-            this.afterAfterMapMoveEvent();
         },
 
         /**
@@ -339,6 +348,7 @@ function(config) {
                 event.getLayer(),
                 event.getImageUrl(),
                 event.getBBOX(),
+                event.getSize(),
                 event.getLayerPostFix(),
                 event.isKeepPrevious()
             );
@@ -477,12 +487,13 @@ function(config) {
      *           url that will be used to download the tile image
      * @param {OpenLayers.Bounds} imageBbox
      *           bounds for the tile
+     * @param {Object} imageSize
      * @param {String} layerPostFix
      *           postfix so we can identify the tile as highlight/normal
      * @param {Boolean} keepPrevious
      *           true to not delete existing tile
      */
-    drawImageTile : function(layer, imageUrl, imageBbox, layerPostFix, keepPrevious) {
+    drawImageTile : function(layer, imageUrl, imageBbox, imageSize, layerPostFix, keepPrevious) {
         //console.log(layer, imageUrl, imageBbox, layerPostFix, keepPrevious); // TODO: remove
         var layerName = "wfs_layer_" + layer.getId() + "_" + layerPostFix;
         var boundsObj = new OpenLayers.Bounds(imageBbox);
@@ -501,6 +512,7 @@ function(config) {
 
         /** remove old wfs layers from map */
         if(!keepPrevious) {
+            console.log("remove earlier image");
             // TODO: make remove layer methods better so we can use them here
             var removeLayers = this._map.getLayersByName(layerName);
             for ( var i = 0; i < removeLayers.length; i++) {
@@ -509,12 +521,9 @@ function(config) {
             }
         }
 
-        var mapWidth =  this._sandbox.getMap().getWidth();
-        var mapHeight =  this._sandbox.getMap().getHeight();
-        var ols = new OpenLayers.Size(mapWidth, mapHeight);
+        var ols = new OpenLayers.Size(imageSize.width, imageSize.height);
 
-        // could be optimized by moving to addLayer (or would it work? - just update params here if works.. TEST)
-        //var ols = new OpenLayers.Size(256, 256);
+        // TODO: could be optimized by moving to addLayer (or would it work? - just update params here if works.. TEST)
         var wfsMapImageLayer = new OpenLayers.Layer.Image(
             layerName,
             imageUrl,
@@ -538,10 +547,9 @@ function(config) {
         wfsMapImageLayer.redraw(true); // also for draw
         // end add
 
-        var opLayersLength = this._map.layers.length;
-
         // MAKE A NEW PLUGIN THAT HANDLES "Markers" layer -> GO TO TOP
         /**
+        var opLayersLength = this._map.layers.length;
         var changeLayer = this._map.getLayersByName('Markers');
         if (changeLayer.length > 0) {
             this._map.setLayerIndex(changeLayer[0], opLayersLength);
@@ -554,14 +562,15 @@ function(config) {
             this._map.setLayerIndex(wfsMapImageLayer, layerIndex);
         }
 
-    },
+        // highlight picture on top of normal layer images
+        if(layerPostFix == "normal") {
+            var highlightLayerExp = new RegExp("wfs_layer_" + layer.getId() + "_highlight");
+            var highlightLayer = this._map.getLayersByName(highlightLayerExp);
+            var normalLayer = this._map.getLayersByName(layerName);
 
-    updateWfsImages : function(creator) {
-        var layers = Oskari.$().sandbox.findAllSelectedMapLayers();
-        // request updates for map tiles
-        for ( var i = 0; i < layers.length; i++) {
-            if(layers[i].isInScale() && layers[i].isLayerOfType('WFS')) {
-                this.doWfsLayerRelatedQueries(layers[i]);
+            if (normalLayer.length > 0 && highlightLayer.length > 0) {
+                var normalLayerIndex = this._map.getLayerIndex(normalLayer[normalLayer.length - 1]);
+                this._map.setLayerIndex(highlightLayer[0], normalLayerIndex+1);
             }
         }
     },
@@ -582,17 +591,6 @@ function(config) {
 
         var mapWidth = map.getWidth();
         var mapHeight = map.getHeight();
-    },
-
-    /**
-     * @method afterAfterMapMoveEvent
-     *
-     * Helper for AfterMapMoveEvent
-     */
-    afterAfterMapMoveEvent : function() {
-        this.tileStrategy.update();
-        this._tilesLayer.redraw();
-        this.updateWfsImages(this.getName());
     },
 
 // from tilesgridplugin
@@ -647,11 +645,64 @@ function(config) {
                 });
         this._map.addLayer(this._tilesLayer);
         this._tilesLayer.setOpacity(0.3);
-
     },
-    getTileQueue: function() {
-        return this.tileQueue;
+
+    getTileSize : function() {
+        var OLGrid = this.tileStrategy.getGrid().grid;
+        this.tileSize = null;
+
+        if (OLGrid) {
+            this.tileSize = {};
+            this.tileSize.width = OLGrid[0][0].size.w;
+            this.tileSize.height = OLGrid[0][0].size.h;
+        }
+
+        return this.tileSize;
+    },
+
+    getGrid : function() {
+        this.grid = null;
+
+        // get grid information out of tileStrategy
+        this.tileStrategy.update();
+        var OLGrid = this.tileStrategy.getGrid().grid;
+
+        if (OLGrid) {
+            this.grid = { rows: OLGrid.length, columns: OLGrid[0].length, bounds: [] };
+            for(var iRow=0, len = OLGrid.length; iRow < len; iRow++) {
+                var row = OLGrid[iRow];
+                //this.grid[iRow] = [];
+                for(var iCol=0, clen = row.length; iCol < clen; iCol++) {
+                    var tile = row[iCol];
+
+                    // if failed grid
+                    if(typeof tile.bounds.left == "undefined" ||
+                        typeof tile.bounds.bottom == "undefined" ||
+                        typeof tile.bounds.right == "undefined" ||
+                        typeof tile.bounds.top == "undefined") {
+                        return null;
+                    }
+
+                    // left, bottom, right, top
+                    var bounds = [];
+                    bounds[0] = tile.bounds.left;
+                    bounds[1] = tile.bounds.bottom;
+                    bounds[2] = tile.bounds.right;
+                    bounds[3] = tile.bounds.top;
+                    this.grid.bounds.push(bounds);
+                    /*
+                    this.grid[iRow][iCol] = [];
+                    this.grid[iRow][iCol][0] = tile.bounds.left;
+                    this.grid[iRow][iCol][1] = tile.bounds.bottom;
+                    this.grid[iRow][iCol][2] = tile.bounds.right;
+                    this.grid[iRow][iCol][3] = tile.bounds.top;
+                    */
+                }
+            }
+        }
+        return this.grid;
     }
+
 }, {
     'protocol' : [ "Oskari.mapframework.module.Module",
             "Oskari.mapframework.ui.module.common.mapmodule.Plugin" ]
