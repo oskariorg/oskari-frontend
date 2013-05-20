@@ -67,9 +67,6 @@ function() {
      */
     "start" : function() {
         var me = this;
-        me.templates = {
-            "publishedGridTemplate": '<div class="publishedgrid"></div>'
-        }
 
         if(me.started)
             return;
@@ -83,7 +80,7 @@ function() {
         me.sandbox = sandbox;
         
         this.localization = Oskari.getLocalization(this.getName());
-        
+debugger;
         sandbox.register(me);
         for(p in me.eventHandlers) {
             sandbox.registerForEventByName(me, p);
@@ -304,10 +301,11 @@ function() {
             this.publisher = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.BasicPublisher', 
                 this, this.getLocalization('BasicView'), data);
             this.publisher.render(map);
-            this._initGrid(statsLayer);
             this.publisher.setEnabled(true);
+            this.publisher.initGrid(statsLayer);
         
         } else {
+            //this._destroyGrid()?
             jQuery('#contentMap').width('');
             jQuery('.oskariui-left').css({'width': '', 'height': '100%', 'float': ''}).removeClass('published-grid-left');
             jQuery('.oskariui-center').css({'width': '100%', 'float': ''}).removeClass('published-grid-center');
@@ -396,68 +394,7 @@ function() {
             }
         }
         return deniedLayers;
-    },
-
-    _initGrid: function(layer) {
-debugger;
-        console.log('Publish: datagrid started.');
-        var me = this;
-        var conf = me.conf;
-        var locale = Oskari.getLocalization('StatsGrid'); // Let's use statsgrid's locale files.
-        var showGrid = true;//me.conf ? me.conf.gridShown : true; // Show the grid on startup, defaults to true.
-        var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
-        var sandbox = Oskari.getSandbox(sandboxName);
-        me.sandbox = sandbox;
-        sandbox.register(me);
-
-        // Find the map module.
-        var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        me.mapModule = mapModule;
-
-        // The container where the grid will be rendered to.
-        var container = jQuery(me.templates.publishedGridTemplate);
-        me.statsContainer = container;
-
-        // Create the StatisticsService for handling ajax calls and common functionality.
-        // Used in both plugins below.
-        var statsService = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.StatisticsService', me);
-        sandbox.registerService(statsService);
-        me.statsService = statsService;
-
-        // Fetch the state of the statsgrid bundle and create the UI based on it.
-        // TODO: get the saved state from the published map.
-        var statsGrid = me.sandbox.getStatefulComponents()['statsgrid'];
-        if(statsGrid && statsGrid.state && showGrid) {
-            //me.createUI(statsGrid.state);
-            //me.publisher.
-
-            // Register grid plugin to the map.
-            var gridConf = {
-                'published': true,
-                layer: layer,
-                state: statsGrid.state
-            };
-            var gridPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin', gridConf, locale);
-            mapModule.registerPlugin(gridPlugin);
-            mapModule.startPlugin(gridPlugin);
-            me.gridPlugin = gridPlugin;
-
-            // Register classification plugin to the map.
-            var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', conf ,locale);
-            mapModule.registerPlugin(classifyPlugin);
-            mapModule.startPlugin(classifyPlugin);
-            me.classifyPlugin = classifyPlugin;
-
-            // Initialize the grid
-            me.gridPlugin.createStatsOut(me.statsContainer, gridLoadedCallback);
-
-            var elLeft = me.publisher.getDataContainer();
-            elLeft.append(me.statsContainer);
-
-        }
-
     }
-
 }, {
     /**
      * @property {String[]} protocol

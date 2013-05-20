@@ -620,6 +620,12 @@ function(config, locale) {
             // success callback
             function(data) {
                 if (data) {
+                    // add indicator also to the state!
+                    if (me.conf.state.indicators == null) {
+                        me.conf.state.indicators = [];
+                    }
+                    me.conf.state.indicators.push({indicator: indicator, year: year, gender: gender});
+
                     // get the actual data
                     me.addIndicatorDataToGrid(container, indicator, gndrs, year, data, me.indicators[me.indicators.length -1]);
                 } else {
@@ -660,6 +666,13 @@ function(config, locale) {
         var columnId = this._getIndicatorColumnId(indicator, gender, year);        
         var columns = this.grid.getColumns();
         var indicatorName = meta.title[Oskari.getLang()];
+
+        var columnId = "indicator" + indicator + year + gender;
+        if(this.isIndicatorInGrid(columnId)) {
+            return false;
+        }
+
+
         columns.push({
             id : columnId,
             name : indicatorName + '/' + year + '/' + gender,
@@ -669,11 +682,6 @@ function(config, locale) {
         });
         this.grid.setColumns(columns);
 
-        // add indicator also to the state!
-        if (this.conf.state.indicators == null) {
-            this.conf.state.indicators = [];
-        }
-        this.conf.state.indicators.push({indicator: indicator, year: year, gender: gender});
 
         var columnData = [];
         var ii = 0;
@@ -982,6 +990,7 @@ function(config, locale) {
                         // add them to the grid and fire callback
                         if(fetchedIndicators >= indicators.length) {
                             //TODO add these to the grid!!
+debugger;
                             for (var j = 0; j < indicators.length; j++) {
                                 var ind = indicators[j];
                                 if(ind) {
