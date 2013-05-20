@@ -1,16 +1,32 @@
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.service.Mediator
+ *
+ * Handles Connection's IO
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Mediator', function(plugin) {
+Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Mediator',
+/**
+ * @method create called automatically on construction
+ * @static
+
+ * @param {Object} plugin
+ */
+function(plugin) {
     this.plugin = plugin;
     this.layerProperties = {};
 }, {
+
+    /**
+     * @method setConnection
+     * @param {Object} cometd
+     */
     setConnection : function(cometd) {
         this.cometd = cometd;
     },
 
     /**
+     * @method subscribe
      *
+     * Subscribes client channels
      */
     subscribe : function() {
         var cometd = this.cometd;
@@ -35,8 +51,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Mediator', funct
             cometd.subscribe(c, channels[c]);
         }
     },
-    /*
+
+    /**
+     * @method startup
+     * @param {Object} session
      *
+     * Sends init information to the backend
      */
     startup : function(session) {
         var me = this;
@@ -75,6 +95,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Mediator', funct
 });
 
 Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'getters', {
+    /**
+     * @method getWFSProperties
+     * @param {Object} data
+     *
+     * Creates WFSPropertiesEvent
+     */
     getWFSProperties : function(data) {
         //console.log("properties", data.data);
 
@@ -86,6 +112,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         this.plugin.getSandbox().notifyAll(event);
     },
 
+    /**
+     * @method getWFSFeature
+     * @param {Object} data
+     *
+     * Creates WFSFeatureEvent
+     */
     getWFSFeature : function(data) {
         //console.log("feature", data.data);
 
@@ -99,7 +131,13 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         this.plugin.getSandbox().notifyAll(event);
     },
 
-    // collects every layer's responses - one layer's features per response
+    /**
+     * @method getWFSMapClick
+     * @param {Object} data
+     *
+     * Collects every layer's responses - one layer's features per response and calls plugin's showInfoBox
+     * Creates WFSFeaturesSelectedEvent
+     */
     getWFSMapClick : function(data) {
         //console.log("mapClick", data.data);
 
@@ -131,7 +169,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         this.plugin.getSandbox().notifyAll(event);
     },
 
-    // layerId, srs, [left bottom right top], zoom, data/url
+    /**
+     * @method getWFSImage
+     * @param {Object} data
+     *
+     * Creates WFSImageEvent
+     */
     getWFSImage : function(data) {
         // request returns url for ie - others base64
         //console.log("images", data.data);
@@ -163,6 +206,13 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
 });
 
 Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'setters', {
+    /**
+     * @method addMapLayer
+     * @param {Number} id
+     * @param {String} style
+     *
+     * sends message to /service/wfs/addMapLayer
+     */
     addMapLayer : function(id, style) {
         if(this.cometd != null) {
             this.cometd.publish('/service/wfs/addMapLayer', {
@@ -172,6 +222,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
         }
     },
 
+    /**
+     * @method removeMapLayer
+     * @param {Number} id
+     *
+     * sends message to /service/wfs/removeMapLayer
+     */
     removeMapLayer : function(id) {
         if(this.cometd != null) {
             this.cometd.publish('/service/wfs/removeMapLayer', {
@@ -180,6 +236,14 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
         }
     },
 
+    /**
+     * @method highlightMapLayerFeatures
+     * @param {Number} id
+     * @param {String[]} featureIds
+     * @param {Boolean} keepPrevious
+     *
+     * sends message to /service/wfs/highlightFeatures
+     */
     highlightMapLayerFeatures: function(id, featureIds, keepPrevious) {
         if(this.cometd != null) {
             this.cometd.publish('/service/wfs/highlightFeatures', {
@@ -190,7 +254,14 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
         }
     },
 
-    // srs, [left bottom right top], zoom
+    /**
+     * @method highlightMapLayerFeatures
+     * @param {String} srs
+     * @param {Number[]} bbox
+     * @param {Number} zoom
+     *
+     * sends message to /service/wfs/setLocation
+     */
     setLocation : function(srs, bbox, zoom) {
         if(this.cometd != null) {
             this.cometd.publish('/service/wfs/setLocation', {
@@ -201,6 +272,13 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
         }
     },
 
+    /**
+     * @method setMapSize
+     * @param {Number} width
+     * @param {Number} height
+     *
+     * sends message to /service/wfs/setMapSize
+     */
     setMapSize : function(width, height) {
         if(this.cometd != null) {
             this.cometd.publish('/service/wfs/setMapSize', {
@@ -210,6 +288,13 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
         }
     },
 
+    /**
+     * @method setMapSize
+     * @param {Number} id
+     * @param {String} style
+     *
+     * sends message to /service/wfs/setMapLayerStyle
+     */
     setMapLayerStyle : function(id, style) {
         if(this.cometd != null) {
             this.cometd.publish('/service/wfs/setMapLayerStyle', {
@@ -219,6 +304,14 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
         }
     },
 
+    /**
+     * @method setMapClick
+     * @param {Number} longitude
+     * @param {Number} latitude
+     * @param {Boolean} keepPrevious
+     *
+     * sends message to /service/wfs/setMapClick
+     */
     setMapClick : function(longitude, latitude, keepPrevious) {
         if(this.cometd != null) {
             this.cometd.publish('/service/wfs/setMapClick', {
@@ -229,6 +322,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
         }
     },
 
+    /**
+     * @method setFilter
+     * @param {Object} geojson
+     *
+     * sends message to /service/wfs/setFilter
+     */
     setFilter : function(geojson) {
         filter = {
             geojson: geojson
@@ -241,6 +340,13 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
         }
     },
 
+    /**
+     * @method setMapLayerVisibility
+     * @param {Number} id
+     * @param {Boolean} visible
+     *
+     * sends message to /service/wfs/setMapLayerVisibility
+     */
     setMapLayerVisibility : function(id, visible) {
         if(this.cometd != null) {
             this.cometd.publish('/service/wfs/setMapLayerVisibility', {

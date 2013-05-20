@@ -14,39 +14,18 @@ function() {
     /**
      * Show content
      * @method showContent
-     * @param {boolean} isShown true if content should be rendered, false if not
-     * @param {Object} layer which layer should be shown
-     * @param {Function} callback function which gets called after the content has finished loading
+     * @param {Boolean} isShown true if content should be rendered, false if not
      */
-    showContent: function(isShown, layer, callback) {
-        if(this._layer == null || (layer != null && this._layer.getId() != layer.getId())) {
-            console.log('layer is', layer);
-            //update layer
-            this._layer = layer;
-            this.instance.gridPlugin.setLayer(layer);
-            this.instance.state.layerId = this._layer.getId();
-
-            this.isVisible = isShown == true;
-
-            if(isShown) {
-                this.toolbar.changeName(this._layer.getName());   
-                this._showContent(this.getEl(), callback);
-                this.getLeftColumn().addClass('statsgrid_100');
-                this.getLeftColumn().append(this.getEl());
-            }
-            else {
-                this.getLeftColumn().removeClass('statsgrid_100');
-                this.getEl().remove();
-                this.getEl().empty();
-            }
+    showContent: function(isShown) {
+        if(isShown) {
+            this.getLeftColumn().addClass('statsgrid_100');
+            this.getLeftColumn().append(this.getEl());
         }
-    },
-    _showContent : function(container, callback) {
-        var me = this;
-        // var gridContainer = jQuery('<div id="municipalGrid" style="width:30%;height:400px;"></div>');    
-		me.instance.gridPlugin.createStatsOut(container, callback);
-		// container.append(gridContainer);
-        // container.append('Tähän tulisi taulukko näkymä');
+        else {
+            this.getLeftColumn().removeClass('statsgrid_100');
+            this.getEl().empty();
+            this.getEl().remove();
+        }
     }
 }, {
     "protocol": ["Oskari.userinterface.View"],

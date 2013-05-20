@@ -39,8 +39,7 @@ function(localization, instance) {
             title : me.localization.title,
             show : false,
             closeBoxCallback : function() {
-                view.showMode(false);
-                view.showContent(false);
+                view.prepareMode(false);
             }
         }]);
 	}

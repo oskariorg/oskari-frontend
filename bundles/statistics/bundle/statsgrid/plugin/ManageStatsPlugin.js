@@ -6,7 +6,12 @@
 Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin',
 /**
  * @method create called automatically on construction
- * @params {Object} config   'published' => {Boolean}, 'state' => {Object}
+ * @params {Object} config
+ *  {
+ *   'published': {Boolean}, // optional, defaults to false
+ *   'state':     {Object},  // optional, defaults to an empty object
+ *   'layer':     {Object}   // optional, can be set later with #setLayer
+ *  }
  * @params {Object} locale   localization strings
  *
  * @static
@@ -17,6 +22,7 @@ function(config, locale) {
     this._sandbox = null;
     this._map = null;
     this._layer = null;
+    this._state = null;
     this.element = undefined;
     this.statsService = null;
     // indicators (meta data)
@@ -95,6 +101,7 @@ function(config, locale) {
      *          reference to application sandbox
      */
     startPlugin : function(sandbox) {
+        debugger;
         this._sandbox = sandbox;
         this._map = this.getMapModule().getMap();
         sandbox.register(this);
@@ -103,11 +110,10 @@ function(config, locale) {
         }
 
         this.statsService = sandbox.getService('Oskari.statistics.bundle.statsgrid.StatisticsService');
-        this._published = this.conf.published || false;
+        this._published = ( this.conf.published || false );
         // Hack so that we don't need to check every occasion whether the state exists.
-        if (!this.conf.state) {
-            this.conf.state = {};
-        }
+        this._state = ( this.conf.state || {} );
+        this._layer = ( this.conf.layer || null );
     },
 
     /**
@@ -166,16 +172,19 @@ function(config, locale) {
         this._layer = layer;
     },
 
+    setState: function(state) {
+        this._state = state;
+    },
+
     /**
      * @method createStatsOut
      * Get Sotka data and show it in SlickGrid
      * @param {Object} container to where slick grid and pull downs will be appended
-     * @param {Function} callback function which gets called after the content has finished loading
      */
-    createStatsOut : function(container, callback) {
+    createStatsOut : function(container) {
         // indicator params are select-elements
         // (indicator drop down select and year & gender selects)
-        this.prepareIndicatorParams(container, callback);
+        this.prepareIndicatorParams(container);
 
         // stop events so that they don't affect other parts of the site (i.e. map)
         container.on("keyup", function(e) {
@@ -188,10 +197,9 @@ function(config, locale) {
     },
     /**
      * @method prepareIndicatorParams
-     * @param container element where indicator-selector should be added
-     * @param {Function} callback function which gets called after the content has finished loading
+     * @param {Object} container element where indicator-selector should be added
      */
-    prepareIndicatorParams : function(container, callback) {
+    prepareIndicatorParams : function(container) {
         // Do not load the indicators for a published map.
         if (!this._published) {
             //clear the selectors container
@@ -205,15 +213,14 @@ function(config, locale) {
             this.getSotkaIndicators(container);
         }
         // Regions: success createMunicipalityGrid
-        this.getSotkaRegionData(container, callback);
+        this.getSotkaRegionData(container);
     },
     /**
      * Fetch region data - we need to know all the regions / municipalities
      * @method getSotkaRegionData
-     * @param container element where indicator-selector should be added
-     * @param {Function} callback function which gets called after the content has finished loading
+     * @param {Object} container element where indicator-selector should be added
      */
-    getSotkaRegionData : function(container, callback) {
+    getSotkaRegionData : function(container) {
         var me = this;
         // call ajax function (params: url, successFallback, errorCallback)
         me.statsService.fetchStatsData(me._sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=regions&version=1.1',
@@ -224,8 +231,10 @@ function(config, locale) {
                 //me.createMunicipalitySlickGrid(container, indicator, genders, years, indicatorMeta, regionData);
                 me.createMunicipalitySlickGrid(container, regionData);
 
-                // Data loaded and grid created, now it's time to call the function provided, if any.
-                callback && callback();
+                // Data loaded and grid created, now it's time to load the indicators from the state if any.
+                if (me._state) {
+                    me.loadStateIndicators(container, me._state);
+                }
             } else {
                 me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].regionDataError);
             }
@@ -239,7 +248,7 @@ function(config, locale) {
     /**
      * Create initial grid using just one column: municipality
      * @method createMunicipalitySlickGrid
-     * @param container element where indicator-selector should be added
+     * @param {Object} container element where indicator-selector should be added
      */
     createMunicipalitySlickGrid : function(container, regiondata) {
         var me = this;
@@ -329,7 +338,7 @@ function(config, locale) {
 
         grid.onHeaderClick.subscribe(function(e, args) {
             // Don't do anything in case the clicked column is the one in the state.
-            if (args.column.id === me.conf.state.currentColumn) {
+            if (args.column.id === me._state.currentColumn) {
                 return false;
             }
             me.sendStatsData(args.column);
@@ -612,7 +621,12 @@ function(config, locale) {
             // success callback
             function(data) {
                 if (data) {
-                    // get the actual data
+                    // Add indicator to the state.
+                    if (me._state.indicators == null) {
+                        me._state.indicators = [];
+                    }
+                    me._state.indicators.push({indicator: indicator, year: year, gender: gndrs});
+                    // Show the data in the grid.
                     me.addIndicatorDataToGrid(container, indicator, gndrs, year, data, me.indicators[me.indicators.length -1]);
                 } else {
                     me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].indicatorDataError);
@@ -660,12 +674,6 @@ function(config, locale) {
             sortable : true
         });
         this.grid.setColumns(columns);
-
-        // add indicator also to the state!
-        if (this.conf.state.indicators == null) {
-            this.conf.state.indicators = [];
-        }
-        this.conf.state.indicators.push({indicator: indicator, year: year, gender: gender});
 
         var columnData = [];
         var ii = 0;
@@ -750,13 +758,13 @@ function(config, locale) {
         }
 
         // remove indicator also from to the state!
-        if (this.conf.state.indicators) {
-            for (i = 0, ilen = this.conf.state.indicators.length; i < ilen; i++) {
-                var statedIndicator = this.conf.state.indicators[i];
+        if (this._state.indicators) {
+            for (i = 0, ilen = this._state.indicators.length; i < ilen; i++) {
+                var statedIndicator = this._state.indicators[i];
                 if ((indicator === statedIndicator.indicator) &&
                     (year === statedIndicator.year) &&
                     (gender === statedIndicator.gender)) {
-                    this.conf.state.indicators.splice(i, 1);
+                    this._state.indicators.splice(i, 1);
                     break;
                 }
             }
@@ -764,10 +772,10 @@ function(config, locale) {
 
         this.updateDemographicsButtons(indicator, gender, year);
 
-        if (columnId === this.conf.state.currentColumn) {
+        if (columnId === this._state.currentColumn) {
             // hide the layer, as we just removed the "selected"
             this._setLayerVisibility(false);
-            this.conf.state.currentColumn = null;
+            this._state.currentColumn = null;
         }
     },
 
@@ -838,7 +846,7 @@ function(config, locale) {
         var i, k;
 
         // Set current column to be stated
-        me.conf.state.currentColumn = curCol.id;
+        me._state.currentColumn = curCol.id;
 
         // Get values of selected column
         var data = this.dataView.getItems();
@@ -1017,7 +1025,6 @@ function(config, locale) {
         this.grid.setColumns(newColumnDef);
         this.grid.render();
         this.dataView.refresh();
-        this.conf.state.indicators = [];
     },
 
     /**
@@ -1040,6 +1047,57 @@ function(config, locale) {
             dialog.show(title, message, [okBtn]);
         }
     },
+
+    /**
+     * @method loadStateIndicators
+     */
+    loadStateIndicators: function(container, state) {
+        var me = this;
+        var classifyPlugin = this._sandbox.findRegisteredModuleInstance('MainMapModuleManageClassificationPlugin');
+        // First, let's clear out the old data from the grid.
+        me.clearDataFromGrid();
+
+        if(state.indicators && state.indicators.length > 0){
+            //send ajax calls and build the grid
+            me.getSotkaIndicatorsMeta(container, state.indicators, function(){
+                //send ajax calls and build the grid
+                me.getSotkaIndicatorsData(container, state.indicators, function(){
+
+                    if(state.currentColumn != null) {
+
+                        if(classifyPlugin) {
+                            if(state.methodId != null && state.methodId > 0) {
+                                var select = classifyPlugin.element.find('.classificationMethod').find('.method');
+                                select.val(state.methodId);
+                                // The manual breaks method:
+                                if(state.methodId == 4 && state.manualBreaksInput) {
+                                    var manualInput = classifyPlugin.element.find('.manualBreaks').find('input[name=breaksInput]');
+                                    manualInput.val(state.manualBreaksInput);
+                                    me.classifyPlugin.element.find('.classCount').hide();
+                                    me.classifyPlugin.element.find('.manualBreaks').show();
+                                }
+                            }
+                            if(state.numberOfClasses != null && state.numberOfClasses > 0) {
+                                var slider = classifyPlugin.rangeSlider;
+                                if(slider != null) {
+                                    slider.slider("value", state.numberOfClasses);
+                                    slider.parent().find('input#amount_class').val(state.numberOfClasses);
+                                }
+                            }
+                        }
+                        // current column is needed for rendering map
+                        var columns = me.grid.getColumns();
+                        for (var i = 0; i < columns.length; i++) {
+                            var column = columns[i];
+                            if (column.id == state.currentColumn) {
+                                me.sendStatsData(column);
+                            }
+                        };
+                    }
+                });
+            });
+        }
+    }
 }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}

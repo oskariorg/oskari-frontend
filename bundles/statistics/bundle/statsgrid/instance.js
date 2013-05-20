@@ -84,8 +84,7 @@ function() {
 			}
 
 			var isShown = event.getViewState() != "close";
-            view.showMode(isShown, true);
-			view.showContent(isShown);
+            view.prepareMode(isShown, null, true);
 		},
         'MapStats.StatsVisualizationChangeEvent' : function(event) {
             this._afterStatsVisualizationChangeEvent(event);
@@ -103,62 +102,17 @@ function() {
             view = this.plugins['Oskari.userinterface.View'],
             container = view.getEl();
         var layer = this.sandbox.findMapLayerFromAllAvailable(state.layerId);
-        var contentLoadedCallback = function() {
-            // First, let's clear out the old data from the grid.
-            me.gridPlugin.clearDataFromGrid();
 
-            console.log('contentLoadedCallback', state);
-            if(state && state.indicators && state.indicators.length > 0){
-
-                //send ajax calls and build the grid
-                me.gridPlugin.getSotkaIndicatorsMeta(container, state.indicators, function(){
-
-                    //send ajax calls and build the grid
-                    me.gridPlugin.getSotkaIndicatorsData(container, state.indicators, function(){
-
-                        if(state.currentColumn != null) {
-
-                            if(state.methodId != null && state.methodId > 0) {
-                                var select = me.classifyPlugin.element.find('.classificationMethod').find('.method');
-                                select.val(state.methodId);
-                                // The manual breaks method:
-                                if(state.methodId == 4 && state.manualBreaksInput) {
-                                    var manualInput = me.classifyPlugin.element.find('.manualBreaks').find('input[name=breaksInput]');
-                                    manualInput.val(state.manualBreaksInput);
-                                    me.classifyPlugin.element.find('.classCount').hide();
-                                    me.classifyPlugin.element.find('.manualBreaks').show();
-                                }
-                            }
-                            if(state.numberOfClasses != null && state.numberOfClasses > 0) {
-                                var slider = me.classifyPlugin.rangeSlider;
-                                if(slider != null) {
-                                    slider.slider("value", state.numberOfClasses);
-                                    slider.parent().find('input#amount_class').val(state.numberOfClasses);
-                                }
-                            }
-                            // current column is needed for rendering map
-                            var columns = me.gridPlugin.grid.getColumns();
-                            for (var i = 0; i < columns.length; i++) {
-                                var column = columns[i];
-                                if (column.id == state.currentColumn) {
-                                    me.gridPlugin.sendStatsData(column);
-                                }
-                            };
-                        }
-                    });
-                });
-            }
-        };
+        // We need to notify the grid of the current state so it can load the right indicators.
+        me.gridPlugin.setState(state);
 
         // Load the mode and show content if not loaded already.
         if (!view.isVisible) {
-            view.showMode(true);
-            console.log('here', state);
-            view.showContent(true, layer, contentLoadedCallback);
+            view.prepareMode(true, layer);
         }
-        // Otherwise just set the state.
+        // Otherwise just load the indicators in the state.
         else {
-            contentLoadedCallback();
+            me.gridPlugin.loadStateIndicators(container, state);
         }
 
         if(this.state != null && this.state.indicators != null && this.state.indicators.length > 0) {
@@ -217,24 +171,6 @@ function() {
             }
         }
         return statsgridState + stateValues + "-" + indicatorValues;
-    },
-
-    /**
-     * @method showMessage
-     * Shows user a message with ok button
-     * @param {String} title popup title
-     * @param {String} message popup message
-     */
-    showMessage : function(title, message) {
-        var loc = this.getLocalization();
-    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-    	okBtn.setTitle(loc.buttons.ok);
-    	okBtn.addClass('primary');
-    	okBtn.setHandler(function() {
-            dialog.close(true);
-    	});
-    	dialog.show(title, message, [okBtn]);
     },
     _afterStatsVisualizationChangeEvent: function(event) {
         var params = event.getParams();

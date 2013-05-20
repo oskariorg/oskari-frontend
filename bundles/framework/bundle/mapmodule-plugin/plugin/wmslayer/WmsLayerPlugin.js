@@ -167,10 +167,11 @@ function() {
             var layer = layers[i];
             var layerId = layer.getId();
 
+            
             if(!layer.isLayerOfType('WMS')) {
                 continue;
             }
-
+            
             sandbox.printDebug("preselecting " + layerId);
             this._addMapLayerToMap(layer, true, layer.isBaseLayer());
         }

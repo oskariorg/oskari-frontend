@@ -20,7 +20,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
 		if(mapLayerJson.visualizations) layer.setFilterPropertyName(mapLayerJson.visualizations[0].filterproperty);
 		// Populate layer tools 
 		var toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
-        // Table icon
+		
+        // Statistics
 		var tool1 = toolBuilder();
 		var locTool = me.localization.tools.table_icon;
 		tool1.setName("table_icon");
@@ -31,7 +32,41 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
             me.sandbox.postRequestByName('StatsGrid.StatsGridRequest',[true, layer]);
 		});
 		layer.addTool(tool1);
-		// TODO remove diagram icon
+		
+		// Info
+        if(layer.getMetadataIdentifier()) {
+			var tool2 = toolBuilder();
+			tool2.setName("info_icon");
+			tool2.setIconCls("icon-info");
+			tool2.setCallback(function() {
+				// TODO make this work with statslayer...
+				var rn = 'catalogue.ShowMetadataRequest';
+				var uuid = layer.getMetadataIdentifier();
+				var additionalUuids = [];
+                var additionalUuidsCheck = {};
+                additionalUuidsCheck[uuid] = true; 
+                var subLayers = layer.getSubLayers(); 
+                if ( subLayers && subLayers.length > 0 ) {
+                	for ( var s = 0 ; s < subLayers.length;s++) {
+                		var subUuid = subLayers[s].getMetadataIdentifier();
+                		if( subUuid && subUuid != "" && !additionalUuidsCheck[subUuid] ) { 
+                			additionalUuidsCheck[subUuid] = true;
+                			additionalUuids.push({
+                				uuid: subUuid
+                			});
+                			 
+                		}
+                	}
+                	
+                }
+                                
+				me.sandbox.postRequestByName(rn, [
+				  { uuid : uuid }, additionalUuids
+				]);
+			});
+        }
+		layer.addTool(tool2);
+		
 		// Diagram icon
 		/*
 		var tool2 = toolBuilder();
@@ -45,7 +80,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
 		});
 		layer.addTool(tool2);
 		*/
-		// TODO remove statistics link
+
 		// Statistics mode
 		/*
 		var tool3 = toolBuilder();
