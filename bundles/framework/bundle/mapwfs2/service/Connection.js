@@ -78,6 +78,7 @@ function(config, mediator) {
                     mediator.subscribe();
 
                     mediator.startup({
+                        "clientId" : handshake.clientId,
                         "session" : cookieValue,
                         "browser" : $.browser.name,
                         "browserVersion" : $.browser.versionNum

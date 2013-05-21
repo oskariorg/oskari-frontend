@@ -512,7 +512,7 @@ function(config) {
 
         /** remove old wfs layers from map */
         if(!keepPrevious) {
-            console.log("remove earlier image");
+            console.log("remove earlier layer");
             // TODO: make remove layer methods better so we can use them here
             var removeLayers = this._map.getLayersByName(layerName);
             for ( var i = 0; i < removeLayers.length; i++) {
@@ -541,11 +541,9 @@ function(config) {
         );
 
         wfsMapImageLayer.opacity = layer.getOpacity() / 100;
-
         this._map.addLayer(wfsMapImageLayer);
         wfsMapImageLayer.setVisibility(true);
         wfsMapImageLayer.redraw(true); // also for draw
-        // end add
 
         // MAKE A NEW PLUGIN THAT HANDLES "Markers" layer -> GO TO TOP
         /**

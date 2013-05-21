@@ -17,6 +17,7 @@ function(config, plugin) {
     this.rootURL = location.protocol + "//" +
             location.hostname + this.config.port  +
             this.config.contextPath;
+    this.session = null;
 }, {
 
     /**
@@ -190,13 +191,14 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      */
     getWFSImage : function(data) {
         // request returns url for ie - others base64
-        console.log("images", data.data);
+        //console.log("images", data.data);
 
         var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
         var imageUrl = "";
         try {
             if(typeof data.data.url != "undefined") {
-                imageUrl = rootURL + data.data.url;
+                imageUrl = this.rootURL + data.data.url + "&client=" + this.session.clientId;
+                //console.log(imageUrl);
             } else {
                 imageUrl = 'data:image/png;base64,' + data.data.data;
             }
