@@ -28,18 +28,11 @@ function() {
 
     start: function() {
         var me = this;
-        me.state = {
-            currentColumn: "indicator62011total",
-            indicators: [{
-                gender: "total",
-                indicator: 6,
-                year: "2011"
-            }],
-            layerId: 276,
-            manualBreaksInput: "",
-            methodId: "1",
-            numberOfClasses: 5
-        };
+
+        // Do not start if we can't get the state.
+        if (!me.state) {
+            return;
+        }
 
         me.gridVisible = null;
         var conf = me.conf;
@@ -67,10 +60,8 @@ function() {
         sandbox.registerService(statsService);
         this.statsService = statsService;
 
-        var statsState = me.state;
-
         // Get the stats layer.
-        var statsLayer = me.sandbox.findMapLayerFromAllAvailable(statsState.layerId);
+        var statsLayer = me.sandbox.findMapLayerFromAllAvailable(me.state.layerId);
         if (!statsLayer) {
             return;
         }
@@ -78,7 +69,7 @@ function() {
         // Register grid plugin to the map.
         var gridConf = {
             'published': true,
-            'state': statsState,
+            'state': me.state,
             'layer': statsLayer
         };
         var gridPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin', gridConf, locale);
@@ -143,40 +134,7 @@ function() {
         // A hack to notify openlayers of map size change.
         var map = me.mapModule.getMap();
         map.updateSize();
-    },    
-    /**
-     * Creates a button to show/hide the grid.
-     *
-     * @method _createShowHideButton
-     * @param {Object} element The container where the button should be appended to.
-     */
-/*    _createShowHideButton: function(element) {
-        var me = this;
-        
-        var imgSrc = me.mapModule.getImageUrl() +
-            '/framework/bundle/mapmodule-plugin/plugin/fullscreen/images/';
-        var button = jQuery(
-            '<div class="publishedgridToggle">' +
-                '<img></img>' +
-            '</div>'
-        );
-        button.find('img').attr('src', imgSrc + 'show-navigation.png');
-        button.click(function(event) {
-            event.preventDefault();
-            if (!me.isDataVisible) {
-                me.isDataVisible = true; 
-                jQuery(this).find('img').attr('src', imgSrc + 'hide-navigation.png');
-            } else {
-                me.isDataVisible = false; 
-                jQuery(this).find('img').attr('src', imgSrc + 'show-navigation.png');
-            }
-            me.adjustDataContainer();
-        })
-
-        jQuery('.publishedgridToggle').remove();
-        element.append(button);
-    }
-*/
+    },
 
     /**
      * Creates a button to show/hide the grid.
