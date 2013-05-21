@@ -27,7 +27,6 @@ function() {
     stop: function() {},
 
     start: function() {
-        console.log('PublishedGrid bundle started.');
         var me = this;
         me.state = {
             currentColumn: "indicator62011total",
@@ -48,7 +47,7 @@ function() {
         // They are linked from the bundle.js file.
         var locale = Oskari.getLocalization('StatsGrid');
         // Show the grid on startup, defaults to true.
-        var showGrid = ( me.conf ? me.conf.gridShown : null) || true;
+        var showGrid = ( (conf && conf.gridShown !== undefined) ? conf.gridShown : true);
         var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
         var sandbox = Oskari.getSandbox(sandboxName);
         this.sandbox = sandbox;
@@ -75,6 +74,9 @@ function() {
 
         // Get the stats layer.
         var statsLayer = me.sandbox.findMapLayerFromAllAvailable(statsState.layerId);
+        if (!statsLayer) {
+            return;
+        }
 
         // Register grid plugin to the map.
         var gridConf = {
@@ -180,31 +182,43 @@ function() {
 */
 
     /**
-     * REFACTOR!
      * Creates a button to show/hide the grid.
      *
      * @method _createShowHideButton
-     * @param {Object} element The container where the button should be appended to.
+     * @param {Object} elementToHide The element the button should hide.
      */
-    _createShowHideButton: function(element) {
+    _createShowHideButton: function(elementToHide) {
         var me = this;
+        var buttonContainer = jQuery(me.mapModule.getMap().div);
         var button = jQuery(
-            '<div class="publishedgridToggle"></div>'
+            '<div id="publishedgridToggle" class="hidePublishedGrid"></div>'
         );
+
         button.click(function(event) {
             event.preventDefault();
             
             if (me.gridVisible) {
                 me.gridVisible = false;
-                jQuery(element).hide("slide");
+                jQuery(elementToHide).hide({
+                    duration: 50,
+                    complete: function() {
+                        me._adjustDataContainer();
+                    }
+                });
                 jQuery(this).removeClass('hidePublishedGrid').addClass('showPublishedGrid');
             } else {
                 me.gridVisible = true;
-                jQuery(element).show("slide");
+                jQuery(elementToHide).show({
+                    duration: 50,
+                    complete: function() {
+                        me._adjustDataContainer();
+                    }
+                });
                 jQuery(this).removeClass('showPublishedGrid').addClass('hidePublishedGrid');
             }
         });
-        element.append(button);
+        
+        buttonContainer.append(button);
     },
     _adjustDataContainer: function() {
         var content         = jQuery('#contentMap'),
