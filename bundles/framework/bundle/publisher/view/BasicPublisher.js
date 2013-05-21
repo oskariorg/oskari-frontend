@@ -193,7 +193,7 @@ function(instance, localization, data) {
         panel.open();
         accordion.addPanel(panel);
         
-
+debugger;
         // add grid checkbox
         var sandbox = this.instance.getSandbox();
         var selectedLayers = sandbox.findAllSelectedMapLayers();
@@ -686,6 +686,14 @@ function(instance, localization, data) {
 			selections.defaultBase = layerValues.defaultBase;
 			selections.baseLayers = layerValues.baseLayers;
         }
+        // if data grid is enabled
+        if(this.isDataVisible) {
+debugger;
+            selections.plugins.push({"id": "Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin"});
+            selections.plugins.push({"id": "Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin"});            
+            var statsGrid = this.sandbox.getStatefulComponents()['statsgrid'];
+            selections.gridState = statsGrid.state;
+        }
         
         var mapFullState = sandbox.getStatefulComponents()['mapfull'].getState();
         selections.mapstate = mapFullState;
@@ -953,6 +961,7 @@ function(instance, localization, data) {
     },
 
     initGrid: function(layer) {
+
         console.log('Publish: datagrid started.');
         var me = this;
         var conf = me.conf;
@@ -1032,7 +1041,7 @@ debugger;
             }
             me.adjustDataContainer();
         })
-        
+
         jQuery('.publishedgridToggle').remove();
         element.append(button);
     }

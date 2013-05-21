@@ -778,7 +778,7 @@ function(config, locale) {
         if (this._state.indicators) {
             for (i = 0, ilen = this._state.indicators.length; i < ilen; i++) {
                 var statedIndicator = this._state.indicators[i];
-                if ((indicator === statedIndicator.indicator) &&
+                if ((indicatorId === statedIndicator.indicator) &&
                     (year === statedIndicator.year) &&
                     (gender === statedIndicator.gender)) {
                     this._state.indicators.splice(i, 1);

@@ -80,7 +80,6 @@ function() {
         me.sandbox = sandbox;
         
         this.localization = Oskari.getLocalization(this.getName());
-debugger;
         sandbox.register(me);
         for(p in me.eventHandlers) {
             sandbox.registerForEventByName(me, p);
@@ -267,6 +266,7 @@ debugger;
         var me = this;
         var map = jQuery('#contentMap');
         var tools = jQuery('#maptools');
+debugger;
 
 
         // check if statsgrid mode is on

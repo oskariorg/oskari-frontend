@@ -116,7 +116,7 @@ function() {
         }
         // Otherwise just load the indicators in the state.
         else {
-            me.gridPlugin.loadStateIndicators(container, state);
+            me.gridPlugin.loadStateIndicators(state, container);
         }
 
     },

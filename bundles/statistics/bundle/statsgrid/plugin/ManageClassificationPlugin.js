@@ -22,7 +22,7 @@ function(config, locale) {
     this._map = null;
     this.element = undefined;
     this.conf = config;
-    this._locale = locale;
+    this._locale = (locale != null) ? locale : Oskari.getLocalization("StatsGrid");
     this.initialSetup = true;
     this.colorsets_div = null;
     this.colorsets_seq = null;
@@ -421,6 +421,7 @@ function(config, locale) {
      * @private
      */
     _createUI : function() {
+debugger;
         var me = this;
         if (!this.element) {
             this.element = this.classify_temp.clone();

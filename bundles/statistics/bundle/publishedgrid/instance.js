@@ -28,7 +28,21 @@ function() {
 
     start: function() {
         console.log('PublishedGrid bundle started.');
+debugger;
         var me = this;
+        me.state = {
+            currentColumn: "indicator62011total",
+            indicators: [{
+                gender: "total",
+                indicator: 6,
+                year: "2011"
+            }],
+            layerId: 276,
+            manualBreaksInput: "",
+            methodId: "1",
+            numberOfClasses: 5
+        };
+
         me.gridVisible = null;
         var conf = me.conf;
         var locale = Oskari.getLocalization('StatsGrid'); // Let's use statsgrid's locale files.
