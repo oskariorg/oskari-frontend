@@ -34,19 +34,6 @@ function() {
             return;
         }
 
-        me.state = {
-            currentColumn: "indicator62011total",
-            indicators: [{
-                gender: "total",
-                indicator: 6,
-                year: "2011"
-            }],
-            layerId: 276,
-            manualBreaksInput: "",
-            methodId: "1",
-            numberOfClasses: 5
-        };
-
         me.gridVisible = null;
         var conf = me.conf;
         // Let's use statsgrid's locale files.
@@ -72,8 +59,6 @@ function() {
         var statsService = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.StatisticsService', me);
         sandbox.registerService(statsService);
         this.statsService = statsService;
-
-        var statsState = me.state;
 
         // Get the stats layer.
         var statsLayer = me.sandbox.findMapLayerFromAllAvailable(me.state.layerId);
