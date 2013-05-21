@@ -95,7 +95,7 @@ debugger;
         this.classifyPlugin = classifyPlugin;
 
         if(showGrid) {
-            me.createUI(statsState);
+            me.createUI();
         }
     },
 
@@ -114,6 +114,7 @@ debugger;
 
         // Initialize the grid
         me.gridPlugin.createStatsOut(me.container);
+        me._adjustDataContainer();
     },
 
     /**
@@ -131,7 +132,7 @@ debugger;
             elCenter.width((100 - gridWidth) + '%');
             elLeft.removeClass('oskari-closed');
             elLeft.width(gridWidth + '%');
-            elLeft.append(me.container);
+            elLeft.html(me.container);
         } else {
             elCenter.width('').addClass('span12');
             elLeft.addClass('oskari-closed');
@@ -196,24 +197,69 @@ debugger;
             
             if (me.gridVisible) {
                 me.gridVisible = false;
-                jQuery(element).hide("slide", {
-                    complete: function() {
-                        // Fix the map div width etc.
-                    }
-                });
+                jQuery(element).hide("slide");
                 jQuery(this).removeClass('hidePublishedGrid').addClass('showPublishedGrid');
             } else {
                 me.gridVisible = true;
-                jQuery(element).show("slide", {
-                    complete: function() {
-                        // Fix the map div width etc.
-                    }
-                });
+                jQuery(element).show("slide");
                 jQuery(this).removeClass('showPublishedGrid').addClass('hidePublishedGrid');
             }
         });
         element.append(button);
+    },
+    _adjustDataContainer: function() {
+        var content         = jQuery('#contentMap'),
+            contentWidth    = content.width(),
+            marginWidth     =  content.css('margin-left').split('px')[0];
+        var maxContentWidth = jQuery(window).width() - marginWidth;
+
+        var mapWidth    = jQuery('#mapdiv').width(),
+            mapHeight   = jQuery('#mapdiv').height();
+        var gridHeight  = mapHeight, 
+            gridWidth   = maxContentWidth - mapWidth;
+        var elLeft      = jQuery('.oskariui-left');
+        var elCenter    = jQuery('.oskariui-center');
+
+        // how many columns * 80px
+        var gWidth = this._calculateGridWidth();
+        gridWidth = gWidth || gridWidth;
+
+        if(this.gridVisible) {
+            elLeft.removeClass('oskari-closed');
+            if(gridWidth < 160) {
+                var diff = 160 - gridWidth;
+                gridWidth = 160;
+                contentWidth += diff;
+                jQuery('#contentMap').width(contentWidth);
+            } else {
+                jQuery('#contentMap').width(maxContentWidth);
+            }
+            gridWidth = (gridWidth+20)+'px';
+            gridHeight = gridHeight +'px';
+            mapWidth = mapWidth+'px';
+        } else {
+            elLeft.addClass('oskari-closed');
+
+            gridWidth = '0px';
+            gridHeight = '0px';
+            contentWidth = '100%';
+            jQuery('#contentMap').width('');
+        }
+        elLeft.css({'width': gridWidth, 'height': gridHeight, 'float': 'left'}).addClass('published-grid-left');
+        elCenter.css({'width': mapWidth, 'float': 'left'}).addClass('published-grid-center');
+        this.container.height(mapHeight);
+
+    },
+    _calculateGridWidth: function() {
+        if(this.state && this.state.indicators != null) {
+            //indicators + municipality (name & code)
+            var columns = this.state.indicators.length + 2;
+            //slickgrid column width is 80 by default
+            return columns * 80;
+        }
+        return null;
     }
+
 }, {
     "protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module']
 });

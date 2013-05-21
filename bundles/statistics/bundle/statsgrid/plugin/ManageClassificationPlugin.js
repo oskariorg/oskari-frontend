@@ -127,7 +127,7 @@ function(config, locale) {
         for (p in this.eventHandlers) {
             sandbox.registerForEventByName(this, p);
         }
-
+debugger;
         this.statsService = sandbox.getService('Oskari.statistics.bundle.statsgrid.StatisticsService');
 
         this._createUI();
