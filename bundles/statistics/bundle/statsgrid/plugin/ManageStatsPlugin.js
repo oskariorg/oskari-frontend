@@ -1089,7 +1089,6 @@ function(config, locale) {
                 me.getSotkaIndicatorsData(container, state.indicators, function(){
 
                     if(state.currentColumn != null) {
-
                         if(classifyPlugin) {
                             if(state.methodId != null && state.methodId > 0) {
                                 var select = classifyPlugin.element.find('.classificationMethod').find('.method');
@@ -1116,6 +1115,7 @@ function(config, locale) {
                             var column = columns[i];
                             if (column.id == state.currentColumn) {
                                 me.sendStatsData(column);
+                                me.grid.setSortColumn(state.currentColumn,true);
                             }
                         };
                     }
