@@ -300,7 +300,9 @@ function() {
                 this, this.getLocalization('BasicView'), data);
             this.publisher.render(map);
             this.publisher.setEnabled(true);
-            this.publisher.initGrid(statsLayer);
+            if (statsLayer) {
+                this.publisher.initGrid(statsLayer);
+            }
         
         } else {
             //this._destroyGrid()?
