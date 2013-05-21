@@ -49,7 +49,7 @@ debugger;
         // They are linked from the bundle.js file.
         var locale = Oskari.getLocalization('StatsGrid');
         // Show the grid on startup, defaults to true.
-        var showGrid = me.conf ? me.conf.gridShown : true;
+        var showGrid = ( me.conf ? me.conf.gridShown : null) || true;
         var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
         var sandbox = Oskari.getSandbox(sandboxName);
         this.sandbox = sandbox;
