@@ -67,9 +67,6 @@ function() {
         sandbox.registerService(statsService);
         this.statsService = statsService;
 
-        // Fetch the state of the statsgrid bundle and create the UI based on it.
-        // TODO: get the saved state from the published map.
-        var statsGrid = this.sandbox.getStatefulComponents()['statsgrid'];
         var statsState = me.state;
 
         // Get the stats layer.
