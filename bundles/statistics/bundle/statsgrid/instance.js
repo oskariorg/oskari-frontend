@@ -50,7 +50,7 @@ function() {
         var statsService = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.StatisticsService', me);
         sandbox.registerService(statsService);
         this.statsService = statsService;
-        
+
         // Register stats plugin for map which creates
         // - the indicator selection UI (unless 'published' param in the conf is true)
         // - the grid.
@@ -118,10 +118,6 @@ function() {
         else {
             me.gridPlugin.loadStateIndicators(container, state);
         }
-
-        //if(this.state != null && this.state.indicators != null && this.state.indicators.length > 0) {
-        //    this.state.indicators = [];
-        //}
     },
     getState : function() {
         return this.state;
