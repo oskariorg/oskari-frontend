@@ -72,7 +72,7 @@ debugger;
         // Fetch the state of the statsgrid bundle and create the UI based on it.
         // TODO: get the saved state from the published map.
         var statsGrid = this.sandbox.getStatefulComponents()['statsgrid'];
-        var statsState = ( statsGrid ? statsGrid.getState() : null ) || {};
+        var statsState = me.state;
 
         // Get the stats layer.
         var statsLayer = me.sandbox.findMapLayerFromAllAvailable(statsState.layerId);
@@ -144,7 +144,40 @@ debugger;
         // A hack to notify openlayers of map size change.
         var map = me.mapModule.getMap();
         map.updateSize();
-    },
+    },    
+    /**
+     * Creates a button to show/hide the grid.
+     *
+     * @method _createShowHideButton
+     * @param {Object} element The container where the button should be appended to.
+     */
+/*    _createShowHideButton: function(element) {
+        var me = this;
+        
+        var imgSrc = me.mapModule.getImageUrl() +
+            '/framework/bundle/mapmodule-plugin/plugin/fullscreen/images/';
+        var button = jQuery(
+            '<div class="publishedgridToggle">' +
+                '<img></img>' +
+            '</div>'
+        );
+        button.find('img').attr('src', imgSrc + 'show-navigation.png');
+        button.click(function(event) {
+            event.preventDefault();
+            if (!me.isDataVisible) {
+                me.isDataVisible = true; 
+                jQuery(this).find('img').attr('src', imgSrc + 'hide-navigation.png');
+            } else {
+                me.isDataVisible = false; 
+                jQuery(this).find('img').attr('src', imgSrc + 'show-navigation.png');
+            }
+            me.adjustDataContainer();
+        })
+
+        jQuery('.publishedgridToggle').remove();
+        element.append(button);
+    }
+*/
 
     /**
      * REFACTOR!

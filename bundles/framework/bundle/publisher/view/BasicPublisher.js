@@ -689,8 +689,6 @@ debugger;
         // if data grid is enabled
         if(this.isDataVisible) {
 debugger;
-            selections.plugins.push({"id": "Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin"});
-            selections.plugins.push({"id": "Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin"});            
             var statsGrid = this.sandbox.getStatefulComponents()['statsgrid'];
             selections.gridState = statsGrid.state;
         }
