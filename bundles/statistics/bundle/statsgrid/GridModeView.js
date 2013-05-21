@@ -134,6 +134,7 @@ function() {
             elLeft.addClass('oskari-closed');
             // remove width from left-div
             elLeft.width('');//removeClass('span7');
+            elLeft.empty();
 
             if(!blnFromExtensionEvent) {
                 // reset tile state if not triggered by tile click
