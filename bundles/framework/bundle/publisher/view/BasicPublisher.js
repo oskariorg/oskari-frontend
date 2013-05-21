@@ -193,7 +193,6 @@ function(instance, localization, data) {
         panel.open();
         accordion.addPanel(panel);
         
-debugger;
         // add grid checkbox
         var sandbox = this.instance.getSandbox();
         var selectedLayers = sandbox.findAllSelectedMapLayers();
@@ -688,7 +687,6 @@ debugger;
         }
         // if data grid is enabled
         if(this.isDataVisible) {
-debugger;
             var statsGrid = this.sandbox.getStatefulComponents()['statsgrid'];
             selections.gridState = statsGrid.state;
         }

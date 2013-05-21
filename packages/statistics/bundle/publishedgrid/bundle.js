@@ -41,6 +41,9 @@ function() {
             "type" : "text/css",
             "src" : "../../../../resources/statistics/bundle/statsgrid/css/classifyplugin.css"
         }, {
+            "src" : "../../../../resources/statistics/bundle/publishedgrid/css/publishedgrid.css",
+            "type" : "text/css"
+        }, {
             "type" : "text/css",
             "src" : "../../../../libraries/slickgrid/css/slick.grid.css"
         }, {

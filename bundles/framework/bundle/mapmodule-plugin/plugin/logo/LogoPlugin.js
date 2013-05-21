@@ -122,9 +122,11 @@ function() {
         
         // TODO: check if added?
         // unbind change listener and remove ui
-        me.element.find('a').unbind('click');
-        me.element.remove();
-        me.element = undefined;
+        if (me.element) {
+            me.element.find('a').unbind('click');
+            me.element.remove();
+            me.element = undefined;
+        }
     },
     /**
      * @method start
