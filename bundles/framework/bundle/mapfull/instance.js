@@ -259,7 +259,7 @@ function() {
      * @param {Boolean} ignoreLocation true to NOT set map location based on state
      */
     setState : function(state, ignoreLocation) {
-        console.log('state is', state);
+        //console.log('state is', state);
         var mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
         this._teardownState(mapmodule);
         

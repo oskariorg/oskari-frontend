@@ -968,7 +968,7 @@ function(config, locale) {
      * @param callback what to do after we have fetched data for all the indicators
      */
     getSotkaIndicatorsData : function(container, indicators, callback) {
-        var me = this, fetchedIndicators = 0;
+        var me = this, fetchedIndicators = 0, indicatorsData = {};
 
         for (var i = 0; i < indicators.length; i++) {
             var indicatorData = indicators[i],
@@ -992,7 +992,8 @@ function(config, locale) {
                                 ind.year == data[0].year &&
                                 ind.gender == data[0].gender) {
 
-                                ind.data = data;
+                                var indicatorColumnId = me._getIndicatorColumnId(ind.indicator, ind.gender, ind.year);
+                                indicatorsData[indicatorColumnId] = data;
                             }
                         };
                         // when all the indicators have been fetched
@@ -1003,7 +1004,9 @@ debugger;
                             for (var j = 0; j < indicators.length; j++) {
                                 var ind = indicators[j];
                                 if(ind) {
-                                    me.addIndicatorDataToGrid(container, ind.indicator, ind.gender, ind.year, ind.data, me.indicators[j], true);
+                                    var indicatorColumnId = me._getIndicatorColumnId(ind.indicator, ind.gender, ind.year);
+                                    var indData = indicatorsData[indicatorColumnId];
+                                    me.addIndicatorDataToGrid(container, ind.indicator, ind.gender, ind.year, indData, me.indicators[j], true);
                                 }
                             };
                             callback();

@@ -52,7 +52,7 @@ function() {
         this.statsService = statsService;
 
         // Register stats plugin for map which creates
-        // - the indicator selection UI (unless 'published' param in the conf is false)
+        // - the indicator selection UI (unless 'published' param in the conf is true)
         // - the grid.
         var gridConf = {
             'state': me.getState()
@@ -118,7 +118,6 @@ function() {
         else {
             me.gridPlugin.loadStateIndicators(state, container);
         }
-
     },
     getState : function() {
         return this.state;
@@ -144,7 +143,7 @@ function() {
             indicatorValues = null,
             state = this.state,
             keys = ['layerId', 'currentColumn', 'methodId', 'numberOfClasses', 'manualBreaksInput'],
-            indicators = state.indicators;
+            indicators = state.indicators || [];
 
         // Note! keys needs to be handled in the backend as well. Therefore the key order is important as well as actual values.
         // 'manualBreaksInput' can be an empty string and must be last.
