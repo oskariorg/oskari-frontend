@@ -429,6 +429,9 @@ function(instance, localization, data) {
         return panel;
     },
     adjustDataContainer: function() {
+        if (!this.statsContainer) {
+            return;
+        }
         var me = this;
         var content         = jQuery('#contentMap'),
             contentWidth    = content.width(),
