@@ -266,8 +266,6 @@ function() {
         var me = this;
         var map = jQuery('#contentMap');
         var tools = jQuery('#maptools');
-debugger;
-
 
         // check if statsgrid mode is on
         // -> disable statsgrid mode

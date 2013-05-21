@@ -127,7 +127,6 @@ function(config, locale) {
         for (p in this.eventHandlers) {
             sandbox.registerForEventByName(this, p);
         }
-debugger;
         this.statsService = sandbox.getService('Oskari.statistics.bundle.statsgrid.StatisticsService');
 
         this._createUI();
@@ -421,7 +420,6 @@ debugger;
      * @private
      */
     _createUI : function() {
-debugger;
         var me = this;
         if (!this.element) {
             this.element = this.classify_temp.clone();

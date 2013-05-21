@@ -28,7 +28,6 @@ function() {
 
     start: function() {
         console.log('PublishedGrid bundle started.');
-debugger;
         var me = this;
         me.state = {
             currentColumn: "indicator62011total",
@@ -215,35 +214,28 @@ debugger;
 
         var mapWidth    = jQuery('#mapdiv').width(),
             mapHeight   = jQuery('#mapdiv').height();
-        var gridHeight  = mapHeight, 
-            gridWidth   = maxContentWidth - mapWidth;
+
+        // how many columns * 80px
+        var gridWidth   = this._calculateGridWidth();//maxContentWidth - mapWidth;
+        var gridHeight  = mapHeight; 
+        
         var elLeft      = jQuery('.oskariui-left');
         var elCenter    = jQuery('.oskariui-center');
 
-        // how many columns * 80px
-        var gWidth = this._calculateGridWidth();
-        gridWidth = gWidth || gridWidth;
-
         if(this.gridVisible) {
             elLeft.removeClass('oskari-closed');
-            if(gridWidth < 160) {
-                var diff = 160 - gridWidth;
-                gridWidth = 160;
-                contentWidth += diff;
-                jQuery('#contentMap').width(contentWidth);
-            } else {
-                jQuery('#contentMap').width(maxContentWidth);
-            }
+            jQuery('#contentMap').width(gridWidth + mapWidth + 20);
+
             gridWidth = (gridWidth+20)+'px';
             gridHeight = gridHeight +'px';
             mapWidth = mapWidth+'px';
         } else {
             elLeft.addClass('oskari-closed');
+            jQuery('#contentMap').width('');
 
             gridWidth = '0px';
             gridHeight = '0px';
             contentWidth = '100%';
-            jQuery('#contentMap').width('');
         }
         elLeft.css({'width': gridWidth, 'height': gridHeight, 'float': 'left'}).addClass('published-grid-left');
         elCenter.css({'width': mapWidth, 'float': 'left'}).addClass('published-grid-center');
@@ -257,7 +249,7 @@ debugger;
             //slickgrid column width is 80 by default
             return columns * 80;
         }
-        return null;
+        return 160;
     }
 
 }, {

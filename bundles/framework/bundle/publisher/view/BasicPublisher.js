@@ -193,7 +193,6 @@ function(instance, localization, data) {
         panel.open();
         accordion.addPanel(panel);
         
-debugger;
         // add grid checkbox
         var sandbox = this.instance.getSandbox();
         var selectedLayers = sandbox.findAllSelectedMapLayers();
@@ -433,6 +432,7 @@ debugger;
         return panel;
     },
     adjustDataContainer: function() {
+        var me = this;
         var content         = jQuery('#contentMap'),
             contentWidth    = content.width(),
             marginWidth     =  content.css('margin-left').split('px')[0];
@@ -440,37 +440,51 @@ debugger;
 
         var mapWidth    = jQuery('#mapdiv').width(),
             mapHeight   = jQuery('#mapdiv').height();
-        var gridHeight  = mapHeight, 
-            gridWidth   = maxContentWidth - mapWidth;
+
+        // how many columns * 80px
+        var gridWidth   = this._calculateGridWidth();//maxContentWidth - mapWidth;
+        var gridHeight  = mapHeight; 
+
         var elLeft      = jQuery('.oskariui-left');
         var elCenter    = jQuery('.oskariui-center');
 
         if(this.isDataVisible) {
             elLeft.removeClass('oskari-closed');
-            if(gridWidth < 400) {
-                var diff = 400 - gridWidth;
-                gridWidth = 400;
-                contentWidth += diff;
-                jQuery('#contentMap').width(contentWidth);
-            } else {
-                jQuery('#contentMap').width(maxContentWidth);
-            }
-            gridWidth = gridWidth+'px';
+            jQuery('#contentMap').width(gridWidth + mapWidth + 20);
+
+            gridWidth = (gridWidth+20)+'px';
             gridHeight = gridHeight +'px';
             mapWidth = mapWidth+'px';
         } else {
             elLeft.addClass('oskari-closed');
+            jQuery('#contentMap').width('');
 
             gridWidth = '0px';
             gridHeight = '0px';
             contentWidth = '100%';
-            jQuery('#contentMap').width('');
         }
         elLeft.css({'width': gridWidth, 'height': gridHeight, 'float': 'left'}).addClass('published-grid-left');
         elCenter.css({'width': mapWidth, 'float': 'left'}).addClass('published-grid-center');
         this.statsContainer.height(mapHeight);
 
     },
+    _calculateGridWidth: function() {
+        var me = this;
+        var sandbox = Oskari.getSandbox('sandbox');
+        // get state of statsgrid
+        var statsGrid = sandbox.getStatefulComponents()['statsgrid'];
+        if(statsGrid &&
+            statsGrid.state &&
+            statsGrid.state.indicators != null) {
+            
+            //indicators + municipality (name & code)
+            var columns = statsGrid.state.indicators.length + 2;
+            //slickgrid column width is 80 by default
+            return columns * 80;
+        }
+        return 160;
+    },
+
     getDataContainer: function() {
         return jQuery('.oskariui-left');
     },
@@ -688,7 +702,7 @@ debugger;
         }
         // if data grid is enabled
         if(this.isDataVisible) {
-debugger;
+            // get state of statsgrid
             var statsGrid = this.sandbox.getStatefulComponents()['statsgrid'];
             selections.gridState = statsGrid.state;
         }
@@ -965,7 +979,7 @@ debugger;
         var conf = me.conf;
         var locale = Oskari.getLocalization('StatsGrid'); // Let's use statsgrid's locale files.
         var showGrid = true;//me.conf ? me.conf.gridShown : true; // Show the grid on startup, defaults to true.
-        var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+        var sandboxName = 'sandbox' ;
         var sandbox = Oskari.getSandbox(sandboxName);
         me.sandbox = sandbox;
         sandbox.register(me.instance);
@@ -980,7 +994,6 @@ debugger;
         // Fetch the state of the statsgrid bundle and create the UI based on it.
         // TODO: get the saved state from the published map.
         var statsGrid = me.sandbox.getStatefulComponents()['statsgrid'];
-debugger;
         if(statsGrid && statsGrid.state && showGrid) {
             //me.createUI(statsGrid.state);
             //me.publisher.

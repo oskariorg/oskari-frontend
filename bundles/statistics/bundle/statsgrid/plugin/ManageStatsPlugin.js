@@ -1000,7 +1000,6 @@ function(config, locale) {
                         // add them to the grid and fire callback
                         if(fetchedIndicators >= indicators.length) {
                             //TODO add these to the grid!!
-debugger;
                             for (var j = 0; j < indicators.length; j++) {
                                 var ind = indicators[j];
                                 if(ind) {
