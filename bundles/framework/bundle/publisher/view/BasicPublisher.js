@@ -215,9 +215,6 @@ function(instance, localization, data) {
             var dataPanel = this._createDataPanel();
             dataPanel.open();
             accordion.addPanel(dataPanel);
-
-            // Create the show/hide toggle button for the grid.
-            me._createShowHideButton(jQuery('.oskariui-center'));
         }
 
 
@@ -467,6 +464,9 @@ function(instance, localization, data) {
         elCenter.css({'width': mapWidth, 'float': 'left'}).addClass('published-grid-center');
         this.statsContainer.height(mapHeight);
 
+        if(this.gridPlugin){
+            this.gridPlugin.setGridHeight();
+        }
     },
     _calculateGridWidth: function() {
         var me = this;
@@ -1022,38 +1022,5 @@ function(instance, localization, data) {
             me.gridPlugin.createStatsOut(me.statsContainer);
 
         }
-    },
-
-    /**
-     * Creates a button to show/hide the grid.
-     *
-     * @method _createShowHideButton
-     * @param {Object} element The container where the button should be appended to.
-     */
-    _createShowHideButton: function(element) {
-        var me = this;
-        
-        var imgSrc = me.mapModule.getImageUrl() +
-            '/framework/bundle/mapmodule-plugin/plugin/fullscreen/images/';
-        var button = jQuery(
-            '<div class="publishedgridToggle">' +
-                '<img></img>' +
-            '</div>'
-        );
-        button.find('img').attr('src', imgSrc + 'show-navigation.png');
-        button.click(function(event) {
-            event.preventDefault();
-            if (!me.isDataVisible) {
-                me.isDataVisible = true; 
-                jQuery(this).find('img').attr('src', imgSrc + 'hide-navigation.png');
-            } else {
-                me.isDataVisible = false; 
-                jQuery(this).find('img').attr('src', imgSrc + 'show-navigation.png');
-            }
-            me.adjustDataContainer();
-        })
-
-        jQuery('.publishedgridToggle').remove();
-        element.append(button);
     }
 });

@@ -356,14 +356,14 @@ function(config, locale) {
         this.grid = grid;
         this.dataView = dataView;
 
-        me._setGridHeight();
+        me.setGridHeight();
 
         //window resize!
         var resizeGridTimer;
         jQuery(window).resize(function () {
             clearTimeout(resizeGridTimer);
             resizeGridTimer = setTimeout(function() {
-                me._setGridHeight();                   
+                me.setGridHeight();                   
             }, 100);
         });
     },
@@ -371,12 +371,17 @@ function(config, locale) {
     /**
      * Sets the height of the grid container and handles resizing of the SlickGrid.
      * 
-     * @method _setGridHeight
-     * @private
+     * @method setGridHeight
      */
-    _setGridHeight: function() {
+    setGridHeight: function() {
         var gridDiv = jQuery("#municipalGrid");
-        gridDiv.height(gridDiv.parent().height() - gridDiv.parent().find('.selectors-container').outerHeight());
+        var parent = gridDiv.parent();
+        var selectorsCont = parent.find('.selectors-container');
+        var selectorsHeight = 0;
+        if(selectorsCont.length > 0){
+            selectorsHeight = selectorsCont.outerHeight();
+        }
+        gridDiv.height(parent.height() - selectorsHeight);
         this.grid.resizeCanvas();
     },
 
