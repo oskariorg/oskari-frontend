@@ -50,7 +50,7 @@ function() {
         var statsService = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.StatisticsService', me);
         sandbox.registerService(statsService);
         this.statsService = statsService;
-
+        
         // Register stats plugin for map which creates
         // - the indicator selection UI (unless 'published' param in the conf is true)
         // - the grid.
@@ -147,7 +147,7 @@ function() {
             indicatorValues = null,
             state = this.state,
             keys = ['layerId', 'currentColumn', 'methodId', 'numberOfClasses', 'manualBreaksInput'],
-            indicators = state.indicators;
+            indicators = state.indicators || [];
 
         // Note! keys needs to be handled in the backend as well. Therefore the key order is important as well as actual values.
         // 'manualBreaksInput' can be an empty string and must be last.
