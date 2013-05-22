@@ -192,6 +192,9 @@ function() {
         var elCenter    = jQuery('.oskariui-center');
 
         if(this.gridVisible) {
+            if(gridWidth > 400) {
+                gridWidth = 400;
+            }
             elLeft.removeClass('oskari-closed');
             jQuery('#contentMap').width(gridWidth + mapWidth + 20);
 
