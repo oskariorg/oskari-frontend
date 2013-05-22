@@ -55,6 +55,11 @@ Oskari.registerLocalization(
                     "SearchPlugin": "Osoite- ja paikannimihaku",
                     "GetInfoPlugin": "Kohdetietojen kyselytyökalu"
                 },
+                "data": {
+                    "label": "Tilastot",
+                    "tooltip": "Näytä karttaan liittyvä taulukko.",
+                    "grid" : "Näytä tilastotaulukko"
+                },
                 "layers": {
                     "label": "Karttatasot",
                     "defaultLayer": "(Oletusvalinta)",

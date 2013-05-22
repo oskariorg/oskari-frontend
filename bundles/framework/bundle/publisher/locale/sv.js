@@ -55,6 +55,11 @@ Oskari.registerLocalization(
                     "SearchPlugin": "Adress- och ortnamnssökning",
                     "GetInfoPlugin": "Verktyg för förfrågan som gäller uppgifter om objektet"
                 },
+                "data": {
+                    "label": "Satistik",
+                    "tooltip": "Show the data related to map.",
+                    "grid" : "Visa statistik bord"
+                },
                 "layers": {
                     "label": "Kartlager",
                     "defaultLayer": "(Förvald kartlager)",
