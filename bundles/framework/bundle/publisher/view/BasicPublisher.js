@@ -32,9 +32,14 @@ function(instance, localization, data) {
     	'</div>' +
     '</div>');
 
+    me.templates = {
+        "publishedGridTemplate": '<div class="publishedgrid"></div>'
+    }
+
     this.templateButtonsDiv = jQuery('<div class="buttons"></div>');
     this.templateHelp = jQuery('<div class="help icon-info"></div>');
     this.templateTool = jQuery('<div class="tool ">' + '<input type="checkbox"/>' + '<span></span></div>');
+    this.templateData = jQuery('<div class="data ">' + '<input type="checkbox"/>' + '<label></label></div>');
     this.templateSizeOptionTool = jQuery('<div class="tool ">' + '<input type="radio" name="size" />' + '<span></span></div>');
     this.templateCustomSize = jQuery('<div class="customsize">' + '<input type="text" name="width" ' + 
             'placeholder="' + localization.sizes.width + '"/> x ' + 
@@ -92,6 +97,9 @@ function(instance, localization, data) {
         maxWidth : 4000,
         maxHeight : 2000
     }];
+
+    this.grid = {};
+    this.grid.selected = true;
 
     if(data) {
         if(data.lang) {
@@ -185,6 +193,31 @@ function(instance, localization, data) {
         panel.open();
         accordion.addPanel(panel);
         
+        // add grid checkbox
+        var sandbox = this.instance.getSandbox();
+        var selectedLayers = sandbox.findAllSelectedMapLayers();
+        var showStats = false;
+        for (var i = 0; i < selectedLayers.length; i++) {
+            var layer = selectedLayers[i];
+            if(layer.getLayerType() === "stats") {
+                showStats = true;
+            }
+        };
+        if(showStats) {
+            // Find the map module.
+            var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            me.mapModule = mapModule;
+
+            // The container where the grid will be rendered to.
+            var container = jQuery(me.templates.publishedGridTemplate);
+            me.statsContainer = container;
+
+            var dataPanel = this._createDataPanel();
+            dataPanel.open();
+            accordion.addPanel(dataPanel);
+        }
+
+
         accordion.addPanel(this._createSizePanel());
         accordion.addPanel(this._createToolsPanel());
 
@@ -193,6 +226,7 @@ function(instance, localization, data) {
         
         accordion.addPanel(this.maplayerPanel.getPanel());
         accordion.insertTo(contentDiv);
+
 
         // buttons
         // close
@@ -212,6 +246,7 @@ function(instance, localization, data) {
         // bind help tags
         var helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', this.instance.sandbox);
         helper.processHelpLinks(this.loc.help, content, this.loc.error.title, this.loc.error.nohelp);
+
     },
     /**
      * @method _setSelectedSize
@@ -234,6 +269,7 @@ function(instance, localization, data) {
                     var width = widthInput.val();
                     if (this._validateNumberRange(width, option.minWidth, option.maxWidth)) {
                         mapElement.width(width);
+                        me.adjustDataContainer();
                     } else {
                         widthInput.addClass('error');
                     }
@@ -247,6 +283,7 @@ function(instance, localization, data) {
                 } else {
                     mapElement.width(option.width);
                     mapElement.height(option.height);
+                    me.adjustDataContainer();
                 }
                 break;
             }
@@ -363,6 +400,104 @@ function(instance, localization, data) {
 
         return panel;
     },
+    _createDataPanel : function() {
+        var me = this;
+        var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+        panel.setTitle(this.loc.data.label);
+        var contentPanel = panel.getContainer();
+        // tooltip
+        var tooltipCont = this.templateHelp.clone();
+        tooltipCont.attr('title', this.loc.data.tooltip);
+        contentPanel.append(tooltipCont);
+
+        var dataContainer = this.templateData.clone();
+        dataContainer.find('input').attr('id', 'show-grid-checkbox').change(function() {
+            var checkbox = jQuery(this);
+            var isChecked = checkbox.is(':checked');
+            me.isDataVisible = isChecked;
+            me.adjustDataContainer();
+        });
+        dataContainer.find('label').attr('for', 'show-grid-checkbox').append(this.loc.data.grid);
+
+        if (this.grid.selected) {
+            dataContainer.find('input').attr('checked', 'checked');
+            me.isDataVisible = this.grid.selected;
+            me.adjustDataContainer();
+        }
+        contentPanel.append(dataContainer);
+
+        return panel;
+    },
+    adjustDataContainer: function() {
+        if (!this.statsContainer) {
+            return;
+        }
+        var me = this;
+        var content         = jQuery('#contentMap'),
+            contentWidth    = content.width(),
+            marginWidth     =  content.css('margin-left').split('px')[0];
+        var maxContentWidth = jQuery(window).width() - marginWidth - 40;
+
+        var mapWidth    = jQuery('#mapdiv').width(),
+            mapHeight   = jQuery('#mapdiv').height();
+
+        // how many columns * 80px
+        var gridWidth   = this._calculateGridWidth();//maxContentWidth - mapWidth;
+        var gridHeight  = mapHeight; 
+
+        var elLeft      = jQuery('.oskariui-left');
+        var elCenter    = jQuery('.oskariui-center');
+
+        if(this.isDataVisible) {
+            if(gridWidth > 400) {
+                gridWidth = 400;
+            }
+            elLeft.removeClass('oskari-closed');
+            jQuery('#contentMap').width(gridWidth + mapWidth + 20);
+
+            gridWidth = (gridWidth+20)+'px';
+            gridHeight = gridHeight +'px';
+            mapWidth = mapWidth+'px';
+        } else {
+            elLeft.addClass('oskari-closed');
+            jQuery('#contentMap').width('');
+
+            gridWidth = '0px';
+            gridHeight = '0px';
+            contentWidth = '100%';
+        }
+        elLeft.css({'width': gridWidth, 'height': gridHeight, 'float': 'left'}).addClass('published-grid-left');
+        elCenter.css({'width': mapWidth, 'float': 'left'}).addClass('published-grid-center');
+        this.statsContainer.height(mapHeight);
+
+        if(this.gridPlugin){
+            this.gridPlugin.setGridHeight();
+        }
+    },
+    _calculateGridWidth: function() {
+        var me = this;
+        var sandbox = Oskari.getSandbox('sandbox');
+        // get state of statsgrid
+        var statsGrid = sandbox.getStatefulComponents()['statsgrid'];
+        if(statsGrid &&
+            statsGrid.state &&
+            statsGrid.state.indicators != null) {
+            
+            //indicators + municipality (name & code)
+            var columns = statsGrid.state.indicators.length + 2;
+            //slickgrid column width is 80 by default
+            return columns * 80;
+        }
+        return 160;
+    },
+
+    getDataContainer: function() {
+        return jQuery('.oskariui-left');
+    },
+    addDataGrid: function(grid){
+        this.getDataContainer.html(grid);
+    },
+
     /**
      * @method handleMapMoved
      * Does nothing currently.
@@ -570,6 +705,12 @@ function(instance, localization, data) {
             selections.plugins.push(layerValues.layerSelection);
 			selections.defaultBase = layerValues.defaultBase;
 			selections.baseLayers = layerValues.baseLayers;
+        }
+        // if data grid is enabled
+        if(this.isDataVisible) {
+            // get state of statsgrid
+            var statsGrid = this.sandbox.getStatefulComponents()['statsgrid'];
+            selections.gridState = statsGrid.state;
         }
         
         var mapFullState = sandbox.getStatefulComponents()['mapfull'].getState();
@@ -834,6 +975,58 @@ function(instance, localization, data) {
                 this.maplayerPanel.plugin.addBaseLayer(layer);
             }
             this.maplayerPanel.plugin.selectBaseLayer(selectedBase);
+        }
+    },
+
+    initGrid: function(layer) {
+
+        console.log('Publish: datagrid started.');
+        var me = this;
+        var conf = me.conf;
+        var locale = Oskari.getLocalization('StatsGrid'); // Let's use statsgrid's locale files.
+        var showGrid = true;//me.conf ? me.conf.gridShown : true; // Show the grid on startup, defaults to true.
+        var sandboxName = 'sandbox' ;
+        var sandbox = Oskari.getSandbox(sandboxName);
+        me.sandbox = sandbox;
+        sandbox.register(me.instance);
+
+
+        // Create the StatisticsService for handling ajax calls and common functionality.
+        // Used in both plugins below.
+        var statsService = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.StatisticsService', me);
+        sandbox.registerService(statsService);
+        me.statsService = statsService;
+
+        // Fetch the state of the statsgrid bundle and create the UI based on it.
+        // TODO: get the saved state from the published map.
+        var statsGrid = me.sandbox.getStatefulComponents()['statsgrid'];
+        if(statsGrid && statsGrid.state && showGrid) {
+            //me.createUI(statsGrid.state);
+            //me.publisher.
+
+            // Register grid plugin to the map.
+            var gridConf = {
+                'published': true,
+                'layer': layer,
+                'state': statsGrid.state
+            };
+            var gridPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin', gridConf, locale);
+            me.mapModule.registerPlugin(gridPlugin);
+            me.mapModule.startPlugin(gridPlugin);
+            me.gridPlugin = gridPlugin;
+
+            // Register classification plugin to the map.
+            var classifyPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin', conf ,locale);
+            me.mapModule.registerPlugin(classifyPlugin);
+            me.mapModule.startPlugin(classifyPlugin);
+            me.classifyPlugin = classifyPlugin;
+
+            var elLeft = me.getDataContainer();
+            elLeft.html(me.statsContainer);
+
+            // Initialize the grid
+            me.gridPlugin.createStatsOut(me.statsContainer);
+
         }
     }
 });

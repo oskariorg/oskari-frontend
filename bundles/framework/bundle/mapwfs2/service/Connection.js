@@ -5,18 +5,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Connection',
 /**
  * @method create called automatically on construction
  * @static
-
+ *
+ * @param {Object} config
  * @param {Object} mediator
  */
-function(mediator) {
+function(config, mediator) {
     (function($) {
         cookieName = 'JSESSIONID';
         var cookieValue = $.cookie(cookieName);
 
-        var config = {
-            contextPath : '/transport-0.0.1',
-            port : ':6060'
-        };
         var cometURL = location.protocol + "//" +
             location.hostname + config.port  +
             config.contextPath + "/cometd";
@@ -81,6 +78,7 @@ function(mediator) {
                     mediator.subscribe();
 
                     mediator.startup({
+                        "clientId" : handshake.clientId,
                         "session" : cookieValue,
                         "browser" : $.browser.name,
                         "browserVersion" : $.browser.versionNum

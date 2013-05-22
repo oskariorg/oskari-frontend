@@ -181,6 +181,9 @@
 				"Import-Bundle": {
 					"admin-layerselector": {
 						"bundlePath": "../../../packages/integration/bundle/"
+					},
+					"bb": {
+						"bundlePath": "../../../packages/integration/bundle/"
 					}
 				},
 				"Require-Bundle-Instance": []
