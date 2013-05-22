@@ -14,8 +14,9 @@ function(config, plugin) {
     this.config = config;
     this.plugin = plugin;
     this.layerProperties = {};
+    // TODO: make more general - may be in another server than the service...
     this.rootURL = location.protocol + "//" +
-            location.hostname + this.config.port  +
+            location.hostname + ":" +  this.config.port  +
             this.config.contextPath;
     this.session = null;
 }, {
@@ -198,7 +199,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         try {
             if(typeof data.data.url != "undefined") {
                 imageUrl = this.rootURL + data.data.url + "&client=" + this.session.clientId;
-                //console.log(imageUrl);
+                console.log(imageUrl);
             } else {
                 imageUrl = 'data:image/png;base64,' + data.data.data;
             }
