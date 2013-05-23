@@ -101,13 +101,15 @@ function() {
         // draw ui
         me.createUi();
 
+        var localization = this.getLocalization('popup');
+
         //sends request via config to add tool selection button
-//        if (this.conf && this.conf.selectionTools == true) {
+        if (this.conf && this.conf.selectionTools === true) {
             this.popupHandler = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.PopupHandler', this);
             var addBtnRequestBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
             var btn = {
                 iconCls: 'tool-feature-selection',
-                tooltip: 'Select Tool',
+                tooltip: localization.tools.select.tooltip,
                 sticky: false,
                 callback: function() {
                     me.popupHandler.showSelectionTools();
@@ -115,7 +117,7 @@ function() {
             };
 
             sandbox.request(this, addBtnRequestBuilder('dialog', 'selectiontools', btn));
-//        }
+        }
 
         // check if preselected layers included wfs layers -> act if they are added now
         var layers = sandbox.findAllSelectedMapLayers();

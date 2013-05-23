@@ -48,6 +48,9 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
         appConfig["mapfull"]["conf"]["plugins"][5]["id"] = "Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin";
         appConfig["mapfull"]["conf"]["plugins"][5]["config"] = { contextPath : '/transport-0.0.1', port : '6060' }; // breaks if
         appConfig["mapfull"]["conf"]["plugins"][4]["config"] = { infoBox: false };
+
+        appConfig["featuredata2"] = {conf: { selectionTools: true }};
+
         var app = Oskari.app;
 
         app.setApplicationSetup(appSetup);
