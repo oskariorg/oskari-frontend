@@ -331,7 +331,7 @@ function(config) {
                 event.stopPropagation();
             }
         });
-        me.mapModule.getMapLayersContainerDiv().appendChild(pb[0]);		    },
+        me.mapModule.getMapLayersContainerDiv().appendChild(pb[0]);
     },
 
     /**
