@@ -182,7 +182,7 @@ function(config,locale) {
         el.mousedown(function(event) {
             event.stopPropagation();
         });        
-        parentContainer.append(el);
+        parentContainer.appendChild(el[0]);
         this.update();
         el.show();
     },
