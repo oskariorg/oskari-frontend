@@ -980,7 +980,6 @@ function(instance, localization, data) {
 
     initGrid: function(layer) {
 
-        console.log('Publish: datagrid started.');
         var me = this;
         var conf = me.conf;
         var locale = Oskari.getLocalization('StatsGrid'); // Let's use statsgrid's locale files.

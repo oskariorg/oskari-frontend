@@ -94,12 +94,12 @@ function(config, mediator) {
         // error handling
         function getError(data)
         {
-            console.log("error,", data.data);
+//            console.log("error,", data.data);
         }
 
         // debug
         function getData(data) {
-            console.log("getData:", data);
+//            console.log("getData:", data);
         }
 
 }, {
