@@ -71,7 +71,7 @@ function(config) {
         var me = this;
 		var ppid = (new Date()).getTime()+"";
         // templates
-        this.__templates['pan'] = jQuery('<div class="panbuttonDiv">' + 
+        this.__templates['pan'] = jQuery('<div class="mapplugin panbuttonDiv">' + 
             '<div>' + 
             '  <img class="panbuttonDivImg" usemap="#panbuttons_'+ppid+'">' + 
             '    <map name="panbuttons_'+ppid+'">' + 
@@ -322,7 +322,16 @@ function(config) {
         bottom.bind('click', function(event) {
             me.getMapModule().panMapByPixels(0, 100, true);
         });
-        jQuery(me.__parent).append(pb);
+        pb.mousedown(function(event) {
+            var radius = Math.round(0.5*panbuttonDivImg[0].width);
+            var pbOffset = panbuttonDivImg.offset();
+            var centerX = pbOffset.left+radius;
+            var centerY = pbOffset.top+radius;
+            if (Math.sqrt(Math.pow(centerX-event.pageX,2)+Math.pow(centerY-event.pageY,2)) < radius) {
+                event.stopPropagation();
+            }
+        });
+        me.mapModule.getMapLayersContainerDiv().appendChild(pb[0]);		    },
     },
 
     /**

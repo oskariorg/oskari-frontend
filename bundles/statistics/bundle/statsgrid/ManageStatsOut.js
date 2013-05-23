@@ -487,7 +487,6 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     addIndicatorDataToGrid : function(container, indicatorId, gender, year, data, meta, silent) {
         var columnId = this._getIndicatorColumnId(indicatorId, gender, year);        
         var columns = this.grid.getColumns();
-        debugger;
         var indicatorName = meta.title[Oskari.getLang()];
         columns.push({
             "id" : columnId,
