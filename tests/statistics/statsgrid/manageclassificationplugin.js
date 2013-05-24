@@ -50,6 +50,7 @@ describe('Test Suite for statistics/statsgrid manage classification plugin', fun
 
         it('should be defined', function() {
             expect(plugin).to.be.ok();
+            expect(plugin.statsService).to.be.ok();
         });
 
         it('should set manual breaks', function() {
