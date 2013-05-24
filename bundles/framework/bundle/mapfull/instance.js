@@ -76,8 +76,9 @@ function() {
                     mapDiv.height(jQuery(window).height());                        
                     contentMap.height(jQuery(window).height());
 
-                    if(contentMap.find('.oskariui-menutoolbar').length > 0) {
-                        mapDiv.height(jQuery(window).height() - contentMap.find('.oskariui-menutoolbar').height());
+                    var toolbar = contentMap.find('.oskariui-menutoolbar');
+                    if(toolbar.length > 0 && toolbar.is(":visible")) {
+                        mapDiv.height(jQuery(window).height() - toolbar.height());
                     }
                     map.updateSize();
                 }
