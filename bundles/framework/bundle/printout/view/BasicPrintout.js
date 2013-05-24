@@ -71,13 +71,12 @@ function(instance, localization, backendConfiguration) {
         "tool" : '<div class="tool ">' + '<input type="checkbox"/>' + '<label></label></div>',
         "buttons" : '<div class="buttons"></div>',
         "help" : '<div class="help icon-info"></div>',
-        "main" : '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '</div>',
+        "main" : '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/></form>' + '</div>',
         "format" : '<div class="printout_format_cont printout_settings_cont"><div class="printout_format_label"></div></div>',
         "formatOptionTool" : '<div class="tool ">' + '<input type="radio" name="format" />' + '<label></label></div>',
         "title" : '<div class="printout_title_cont printout_settings_cont"><div class="printout_title_label"></div><input class="printout_title_field" type="text"></div>',
         "option" : '<div class="printout_option_cont printout_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>',
-        "sizeOptionTool" : '<div class="tool ">' + '<input type="radio" name="size" />' + '<label></label></div>',
-        "formPost" : '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/></form>'
+        "sizeOptionTool" : '<div class="tool ">' + '<input type="radio" name="size" />' + '<label></label></div>'
     },
     /**
      * @method render
@@ -474,14 +473,10 @@ function(instance, localization, backendConfiguration) {
         if (this._isLandscape(selections))
             wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=1200," + "height=850";
         var link = printUrl;
-        var printForm = this.template.formPost.clone();
-        printForm.attr('action', link);
-        printForm.find('input[name=geojson]').val(jQuery.base64.encode(this._getGeoJson(printMap)));
-        // Remove old form
-        me.mainPanel.find('#oskari_print_formID').remove();
-        me.mainPanel.append(printForm);
+        me.mainPanel.find('#oskari_print_formID').attr('action', link);
+        me.mainPanel.find('input[name=geojson]').val(jQuery.base64.encode(this._getGeoJson(printMap)));
         window.open('about:blank','map_popup_111', wopParm);
-        me.mainPanel.find('#oskari_print_formID:first').submit();
+        me.mainPanel.find('#oskari_print_formID').submit();
 
     },
     /**
