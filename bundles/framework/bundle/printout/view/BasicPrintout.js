@@ -18,50 +18,50 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
  *      formState for ui state reload
  */
 function(instance, localization, backendConfiguration) {
-	var me = this;
-	this.isEnabled = false;
-	this.instance = instance;
-	this.loc = localization;
-	this.backendConfiguration = backendConfiguration;
+    var me = this;
+    this.isEnabled = false;
+    this.instance = instance;
+    this.loc = localization;
+    this.backendConfiguration = backendConfiguration;
 
-	/* templates */
-	this.template = {};
-	for (p in this.__templates ) {
-		this.template[p] = jQuery(this.__templates[p]);
-	}
+    /* templates */
+    this.template = {};
+    for (p in this.__templates ) {
+        this.template[p] = jQuery(this.__templates[p]);
+    }
 
-	/* page sizes listed in localisations */
-	this.sizeOptions = this.loc.size.options;
+    /* page sizes listed in localisations */
+    this.sizeOptions = this.loc.size.options;
 
-	this.sizeOptionsMap = {};
-	for (var s = 0; s < this.sizeOptions.length; s++) {
-		this.sizeOptionsMap[this.sizeOptions[s].id] = this.sizeOptions[s];
-	}
+    this.sizeOptionsMap = {};
+    for (var s = 0; s < this.sizeOptions.length; s++) {
+        this.sizeOptionsMap[this.sizeOptions[s].id] = this.sizeOptions[s];
+    }
 
-	/* format options listed in localisations */
-	this.formatOptions = this.loc.format.options;
-	this.formatOptionsMap = {};
-	for (var f = 0; f < this.formatOptions.length; f++) {
-		this.formatOptionsMap[this.formatOptions[f].id] = this.formatOptions[f];
-	}
+    /* format options listed in localisations */
+    this.formatOptions = this.loc.format.options;
+    this.formatOptionsMap = {};
+    for (var f = 0; f < this.formatOptions.length; f++) {
+        this.formatOptionsMap[this.formatOptions[f].id] = this.formatOptions[f];
+    }
 
-	/* content options listed in localisations */
-	this.contentOptions = this.loc.content.options;
-	this.contentOptionsMap = {};
-	for (var f = 0; f < this.contentOptions.length; f++) {
-		this.contentOptionsMap[this.contentOptions[f].id] = this.contentOptions[f];
-	}
+    /* content options listed in localisations */
+    this.contentOptions = this.loc.content.options;
+    this.contentOptionsMap = {};
+    for (var f = 0; f < this.contentOptions.length; f++) {
+        this.contentOptionsMap[this.contentOptions[f].id] = this.contentOptions[f];
+    }
 
-	this.accordion = null;
-	this.mainPanel = null;
+    this.accordion = null;
+    this.mainPanel = null;
 
-	this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-	this.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
+    this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+    this.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
 
-	this.previewContent = null;
-	this.previewImgDiv = null;
+    this.previewContent = null;
+    this.previewImgDiv = null;
 
-	this.contentOptionDivs = {};
+    this.contentOptionDivs = {};
 
 }, {
     __templates : {
@@ -76,8 +76,8 @@ function(instance, localization, backendConfiguration) {
         "formatOptionTool" : '<div class="tool ">' + '<input type="radio" name="format" />' + '<label></label></div>',
         "title" : '<div class="printout_title_cont printout_settings_cont"><div class="printout_title_label"></div><input class="printout_title_field" type="text"></div>',
         "option" : '<div class="printout_option_cont printout_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>',
-        "sizeOptionTool" : '<div class="tool ">' + '<input type="radio" name="size" />' + '<label></label></div>'
-
+        "sizeOptionTool" : '<div class="tool ">' + '<input type="radio" name="size" />' + '<label></label></div>',
+        "formPost" : '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/></form>'
     },
     /**
      * @method render
@@ -159,7 +159,7 @@ function(instance, localization, backendConfiguration) {
             return function() {
                 var size = contentPanel.find('input[name=size]:checked').val();
                 // reset previous setting
-                for(var i = 0; i < me.sizeOptions.length; ++i) {
+                for (var i = 0; i < me.sizeOptions.length; ++i) {
                     me.sizeOptions[i].selected = false;
                 }
                 tool.selected = true;
@@ -167,18 +167,18 @@ function(instance, localization, backendConfiguration) {
                 me._updateMapPreview();
             };
         };
-        for(var i = 0; i < this.sizeOptions.length; ++i) {
+        for (var i = 0; i < this.sizeOptions.length; ++i) {
             var option = this.sizeOptions[i];
             var toolContainer = this.template.sizeOptionTool.clone();
             var label = option.label;
-            if(option.width && option.height) {
+            if (option.width && option.height) {
                 label = label + ' (' + option.width + ' x ' + option.height + 'px)';
             }
             toolContainer.find('label').append(label).attr({
                 'for' : option.id,
                 'class' : 'printout_radiolabel'
             });
-            if(option.selected) {
+            if (option.selected) {
                 toolContainer.find('input').attr('checked', 'checked');
             }
             contentPanel.append(toolContainer);
@@ -212,7 +212,7 @@ function(instance, localization, backendConfiguration) {
             return function() {
                 var format = contentPanel.find('input[name=format]:checked').val();
                 // reset previous setting
-                for(var i = 0; i < me.formatOptions.length; ++i) {
+                for (var i = 0; i < me.formatOptions.length; ++i) {
                     me.formatOptions[i].selected = false;
                 }
                 tool.selected = true;
@@ -222,7 +222,7 @@ function(instance, localization, backendConfiguration) {
         /* format options from localisations files */
         var format = this.template.format.clone();
         format.find('.printout_format_label').html(this.loc.format.label);
-        for(var i = 0; i < this.formatOptions.length; ++i) {
+        for (var i = 0; i < this.formatOptions.length; ++i) {
             var option = this.formatOptions[i];
             var toolContainer = this.template.formatOptionTool.clone();
             var label = option.label;
@@ -231,7 +231,7 @@ function(instance, localization, backendConfiguration) {
                 'for' : option.id,
                 'class' : 'printout_radiolabel'
             });
-            if(option.selected) {
+            if (option.selected) {
                 toolContainer.find('input').attr('checked', 'checked');
             }
             format.append(toolContainer);
@@ -254,7 +254,7 @@ function(instance, localization, backendConfiguration) {
         contentPanel.append(mapTitle);
 
         /* CONTENT options from localisations files */
-        for(var f = 0; f < this.contentOptions.length; f++) {
+        for (var f = 0; f < this.contentOptions.length; f++) {
             var dat = this.contentOptions[f];
 
             var opt = this.template.option.clone();
@@ -306,7 +306,7 @@ function(instance, localization, backendConfiguration) {
         this.previewImgDiv = previewImgDiv;
         this.previewSpan = previewSpan;
 
-        for(var p in this.loc.preview.notes ) {
+        for (var p in this.loc.preview.notes ) {
             var previewNotes = this.template.previewNotes.clone();
             previewNotes.find('span').text(this.loc.preview.notes[p]);
             contentPanel.append(previewNotes);
@@ -346,15 +346,14 @@ function(instance, localization, backendConfiguration) {
         var me = this;
         var selections = this._gatherSelections("image/png");
 
-//
-this.backendConfiguration = {
-        "formatProducers" : {
-            "application/pdf" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.pdf?",
-            "image/png" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.png?"
-        }
-};
-//
-
+        //
+        this.backendConfiguration = {
+            "formatProducers" : {
+                "application/pdf" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.pdf?",
+                "image/png" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.png?"
+            }
+        };
+        //
 
         var urlBase = this.backendConfiguration.formatProducers[selections.format];
         var maplinkArgs = selections.maplinkArgs;
@@ -413,11 +412,11 @@ this.backendConfiguration = {
         saveBtn.addClass('primary');
         saveBtn.setHandler(function() {
             var map = me.instance.sandbox.getMap();
-            var features = (typeof map.geojs === "undefined") ? null : map.geojs;
+            var features = ( typeof map.geojs === "undefined") ? null : map.geojs;
 
             var selections = me._gatherSelections();
-            if(selections) {
-                me._printMap(selections,features);
+            if (selections) {
+                me._printMap(selections, features);
             }
         });
         saveBtn.insertTo(buttonCont);
@@ -447,7 +446,7 @@ this.backendConfiguration = {
             format : selectedFormat || "application/pdf"
         };
 
-        for(var p in this.contentOptionsMap ) {
+        for (var p in this.contentOptionsMap ) {
             selections[p] = this.contentOptionDivs[p].find('input').prop('checked');
         }
 
@@ -456,10 +455,34 @@ this.backendConfiguration = {
     },
     openURLinWindow : function(infoUrl, selections) {
         var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
-        if(this._isLandscape(selections))
+        if (this._isLandscape(selections))
             wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=1200," + "height=850";
         var link = infoUrl;
         window.open(link, "BasicPrintout", wopParm);
+    },
+     /**
+     * @method openPostURLinWindow
+     * @private
+     * Sends the gathered map data to the server to save them/publish the map. 
+     * @param {Object} printMap oskari map
+     * @param {Object} printUrl Url to print service action route GetPreview
+     * @param {Object} selections map data as returned by _gatherSelections()
+     */
+    openPostURLinWindow : function(printMap, printUrl, selections) {
+        var me = this;
+        var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
+        if (this._isLandscape(selections))
+            wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=1200," + "height=850";
+        var link = printUrl;
+        var printForm = this.template.formPost.clone();
+        printForm.attr('action', link);
+        printForm.find('input[name=geojson]').val(jQuery.base64.encode(this._getGeoJson(printMap)));
+        // Remove old form
+        me.mainPanel.find('#oskari_print_formID').remove();
+        me.mainPanel.append(printForm);
+        window.open('about:blank','map_popup_111', wopParm);
+        me.mainPanel.find('#oskari_print_formID:first').submit();
+
     },
     /**
      * @method _printMap
@@ -468,7 +491,7 @@ this.backendConfiguration = {
      * @param {Object} selections map data as returned by _gatherSelections()
      * @param {Object} features map data as returned by _gatherFeatures()
      */
-    _printMap : function(selections,features) {
+    _printMap : function(selections, features) {
         var me = this;
         var sandbox = this.instance.getSandbox();
         var url = sandbox.getAjaxUrl();
@@ -480,8 +503,8 @@ this.backendConfiguration = {
         var pageTitleArgs = "&pageTitle=" + selections.pageTitle;
 
         var contentOptions = [];
-        for(var p in this.contentOptionsMap ) {
-            if(selections[p]) {
+        for (var p in this.contentOptionsMap ) {
+            if (selections[p]) {
                 contentOptions.push("&" + p + "=true");
             }
 
@@ -489,29 +512,24 @@ this.backendConfiguration = {
         var contentOptionArgs = contentOptions.join('');
         var formatArgs = "&format=" + selections.format;
 
-        var parameters = maplinkArgs + '&action_route=GetPreview' + pageSizeArgs + pageTitleArgs + 
-        contentOptionArgs + formatArgs;
+        var parameters = maplinkArgs + '&action_route=GetPreview' + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs;
         url = url + parameters;
-        
+
         var printMap = this.instance.getSandbox().getMap();
-		if (printMap.GeoJSON) {
-			// Geojson POST request test
-			 /* var data = {
-			 geojson : jQuery.base64.encode(this._getGeoJson(printMap))
-			 }
-			 this._printMapByPost(url, data);
 
-			 } else {  */
-			url = url + "&geojson=" + jQuery.base64.encode(this._getGeoJson(printMap));
-		 }
+        if (printMap.GeoJSON) {
 
-		this.instance.getSandbox().printDebug("PRINT URL " + url);
+            this.instance.getSandbox().printDebug("PRINT POST URL " + url);
 
-		this.openURLinWindow(url, selections);
+            this.openPostURLinWindow(printMap, url, selections);
 
-        this.instance.getSandbox().printDebug("PRINT URL " + url);
+        } else {
 
-        this.openURLinWindow(url, selections);
+            this.instance.getSandbox().printDebug("PRINT URL " + url);
+
+            this.openURLinWindow(url, selections);
+
+        }
 
     },
     /**
@@ -523,67 +541,28 @@ this.backendConfiguration = {
      */
     _isLandscape : function(selections) {
 
-        if(this.sizeOptionsMap[selections.pageSize].id.indexOf('Land') > -1) {
+        if (this.sizeOptionsMap[selections.pageSize].id.indexOf('Land') > -1) {
             return true;
         }
         return false;
     },
-	/**
-	 * @method _getGeoJson
-	 * Get auxiliary graphics in geojson format + styles
-	 * @private
-	 * @
-	 * @return String  (Json stringify)
-	 * return null, if no geojson graphics
-	 */
-	_getGeoJson : function(printMap) {
+    /**
+     * @method _getGeoJson
+     * Get auxiliary graphics in geojson format + styles
+     * @private
+     * @
+     * @return String  (Json stringify)
+     * return null, if no geojson graphics
+     */
+    _getGeoJson : function(printMap) {
 
-		if (printMap.GeoJSON) {
-			var sgeojs = JSON.stringify(printMap.GeoJSON);
-			sgeojs.replace('\"', '"');
-			return sgeojs;
-		}
-		return null;
-	},
-	/**
-	 * @method _printMapbyPost
-	 *  Get png/pdf print data by post request and opens it to the new window
-	 * @param {String} url  url string
-	 * @param {Object} data  geojson data + styles for extra graphics to plot
-	 * @private
-	 * @
-	 */
-	_printMapByPost : function(url, data) {
-
-		var me = this;
-
-		// Fetch print file
-		jQuery.ajax({
-			//dataType : "json",
-			type : "POST",
-			beforeSend : function(x) {
-				if (x && x.overrideMimeType) {
-					x.overrideMimeType("application/j-son;charset=UTF-8");
-				}
-			},
-			url : url,
-			data : data,
-			success : function(png_pdf_data) {
-				var selections = me._gatherSelections();
-				var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
-				if (me._isLandscape(selections))
-					wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=1200," + "height=850";
-
-				window.open("data:application/pdf," + encodeURIComponent(png_pdf_data), "BasicPrintout", wopParm);
-			},
-			error : function() {
-				// Show error
-
-				//me.instance.showMessage('title','error' );
-				alert('Sorry - some troubles to create a plot')
-			}
-		});
-	},
+        if (printMap.GeoJSON) {
+            var sgeojs = JSON.stringify(printMap.GeoJSON);
+            sgeojs.replace('\"', '"');
+            return sgeojs;
+        }
+        return null;
+    },
     /**
      * @method destroy
      * Destroyes/removes this view from the screen.
@@ -604,7 +583,7 @@ this.backendConfiguration = {
         return this.isEnabled;
     },
     refresh : function(isUpdate) {
-        if(isUpdate) {
+        if (isUpdate) {
             this._updateMapPreview();
         } else {
             this._cleanMapPreview();
