@@ -46,7 +46,11 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
 
         var appConfig = this.appConfig;
         appConfig["mapfull"]["conf"]["plugins"][5]["id"] = "Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin";
+        appConfig["mapfull"]["conf"]["plugins"][5]["config"] = { contextPath : '/transport-0.0.1', port : '6060' }; // breaks if
         appConfig["mapfull"]["conf"]["plugins"][4]["config"] = { infoBox: false };
+
+        appConfig["featuredata2"] = {conf: { selectionTools: true }};
+
         var app = Oskari.app;
 
         app.setApplicationSetup(appSetup);
@@ -192,24 +196,6 @@ jQuery(document).ready(function() {
         });
         sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
     }
-    // === Look for old mapfull state - cookie set in SaveViewPlugin.js   ===
-    var cookiename = "mymapview1";
-    var cookieviewdata = "";
-    if (document.cookie.length > 0) {
-        cookieStart = document.cookie.indexOf(cookiename + "=");
-        if (cookieStart != -1) {
-            cookieStart += cookiename.length + 1;
-            cookieEnd = document.cookie.indexOf(";", cookieStart);
-            if (cookieEnd == -1) {
-                cookieEnd = document.cookie.length;
-            }
-            cookieviewdata = document.cookie.substring(cookieStart, cookieEnd);
-
-        }
-    }
-    var data = {
-        viewData: cookieviewdata
-    };
     jQuery.ajax({
         type: 'POST',
         dataType: 'json',
@@ -220,7 +206,6 @@ jQuery(document).ready(function() {
             }
         },
         url: ajaxUrl + 'action_route=GetAppSetup',
-        data: data,
         success: function(appSetup) {
             if (appSetup.startupSequence && appSetup.configuration) {
                 main.appSetup.startupSequence = appSetup.startupSequence;

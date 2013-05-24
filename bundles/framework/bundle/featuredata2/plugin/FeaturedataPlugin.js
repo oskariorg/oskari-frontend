@@ -153,7 +153,7 @@ function(config) {
         var me = this;
 
         // get div where the map is rendered from openlayers
-        var parentContainer = jQuery(this._map.div);
+        var parentContainer = me.mapModule.getMapLayersContainerDiv();
 
         if(!me.__elements['main']) {
             me.__elements['main'] = me.__templates['main'].clone();
@@ -164,7 +164,10 @@ function(config) {
             me.instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'detach']);
             return false;
         });
-        parentContainer.append(me.__elements['main']);
+        me.__elements['main'].mousedown(function(event) {
+            event.stopPropagation();
+        });
+        parentContainer.appendChild(me.__elements['main'][0]);        
         this.update();
     },
 

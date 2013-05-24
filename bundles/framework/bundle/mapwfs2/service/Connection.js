@@ -10,15 +10,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Connection',
  * @param {Object} mediator
  */
 function(config, mediator) {
-    (function($) {
-        cookieName = 'JSESSIONID';
-        var cookieValue = $.cookie(cookieName);
+        var cookieName = 'JSESSIONID';
+        var cookieValue = jQuery.cookie(cookieName);
 
         var cometURL = location.protocol + "//" +
-            location.hostname + config.port  +
+            location.hostname + ":" + config.port  +
             config.contextPath + "/cometd";
 
-        var cometd = $.cometd;
+        var cometd = jQuery.cometd;
 
         cometd.configure({
             url : cometURL
@@ -33,17 +32,17 @@ function(config, mediator) {
 
         // get browser information
         function getBrowser() {
-            if($.browser.msie)
-                $.browser.name = "msie";
-            else if($.browser.chrome)
-                $.browser.name = "chrome"
-            else if($.browser.mozilla)
-                $.browser.name = "mozilla"
-            else if($.browser.safari)
-                $.browser.name = "safari"
+            if(jQuery.browser.msie)
+                jQuery.browser.name = "msie";
+            else if(jQuery.browser.chrome)
+                jQuery.browser.name = "chrome"
+            else if(jQuery.browser.mozilla)
+                jQuery.browser.name = "mozilla"
+            else if(jQuery.browser.safari)
+                jQuery.browser.name = "safari"
             else
-                $.browser.name = "unknown"
-            $.browser.versionNum = parseInt($.browser.version, 10)
+                jQuery.browser.name = "unknown"
+            jQuery.browser.versionNum = parseInt(jQuery.browser.version, 10)
         }
         getBrowser();
 
@@ -80,15 +79,15 @@ function(config, mediator) {
                     mediator.startup({
                         "clientId" : handshake.clientId,
                         "session" : cookieValue,
-                        "browser" : $.browser.name,
-                        "browserVersion" : $.browser.versionNum
+                        "browser" : jQuery.browser.name,
+                        "browserVersion" : jQuery.browser.versionNum
                     });
                 });
             }
         }
 
         // Disconnect when the page unloads
-        $(window).unload(function() {
+        jQuery(window).unload(function() {
             cometd.disconnect(true);
         });
 
@@ -102,8 +101,6 @@ function(config, mediator) {
         function getData(data) {
             console.log("getData:", data);
         }
-
-    })(jQuery);
 
 }, {
 

@@ -12,7 +12,7 @@ Oskari.registerLocalization({
     "errordata": "Palvelimelta saatu tieto oli virheellistä. Siirrä hieman karttaa päivittääksesi tiedot.",
     "columnSelectorTooltip": "Näytä sarakkeet",
     "popup": {
-      "title": "Valitse Kohteita kartalta",
+      "title": "Valitse kohteita kartalta",
       "instructions": " ",
       "link" : {
         "title": "Lisää valinta"
@@ -21,23 +21,26 @@ Oskari.registerLocalization({
         "cancel": "Peruuta",
         "show": "Näytä kohteet",
         "close": "Sulje",
-        "edit" : "Muokka"
+        "edit" : "Muokkaa"
       },
       "tools": {
         "point": {
-          "tooltip": "Lisää Pistee"
+          "tooltip": "Lisää piste"
         },
         "line": {
-          "tooltip": "Lisää Viiva"
+          "tooltip": "Lisää viiva"
         },
         "polygon": {
-        "tooltip": "Lisää polygoni"
+        "tooltip": "Lisää alue"
         },
         "square": {
-          "tooltip": "Lisää suorakulmion"
+          "tooltip": "Lisää suorakulmio"
         },
         "circle": {
           "tooltip": "Lisää ympyrä"
+        },
+        "select": {
+          "tooltip": "Valitse kohteita"
         }
       }
     }

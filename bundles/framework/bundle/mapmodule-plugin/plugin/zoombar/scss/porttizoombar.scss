@@ -1,7 +1,9 @@
-div.pzbDiv {
+div.pzbDiv.mapplugin {
+    position : fixed;
     top : 140px;
     right : 64px;
     background : transparent;
+    z-index: 15000;
 
 	div.pzbDiv-plus {
 		width : 18px;
