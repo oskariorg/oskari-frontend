@@ -38,6 +38,9 @@
 					"mapstats": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					},
+					"mapanalysis": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    },
 					"service-base": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					},
@@ -425,6 +428,23 @@
 				},
 				"Require-Bundle-Instance": []
 			}
-		}
+		},
+		  {
+            "title": "Analyse",
+            "fi": "Analyysi",
+            "sv": "Analys",
+            "en": "Analyse",
+            "bundlename": "analyse",
+            "bundleinstancename": "analyse",
+            "metadata": {
+                "Import-Bundle": {
+                    "postprocessor": {
+                        "bundlePath": "../../../packages/analysis/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            },
+            "instanceProps": {}
+        }
 	]
 }
