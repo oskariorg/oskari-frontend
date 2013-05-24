@@ -36,51 +36,40 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
 
         },
         'MapLayerEvent' : function(event) {
-
-            // TODO! currently update, add and initial additions execute
-            // the same code. This needs to be updated when mapLayerService
-            // can handle updates better. 
-            // (updates everything instead of layer.name)
-            if(event.getOperation() === 'update') {
-
-                var sandbox = this.getSandbox();
-                // populate layer list
-                var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                var layers = mapLayerService.getAllLayers();
-                if(this.view != null){
-                    this.view.addToCollection(layers);
-                } else {
-                    this.layers = layers;
-                }
-
+            // trigger after interval since events are being spammed by backendstatus
+            // this way browser doesnt crash
+            var interval = 500;
+            var me = this;
+            if(this._previousLayerUpdateTimer) {
+                clearTimeout(this._previousLayerUpdateTimer);
+                this._previousLayerUpdateTimer = null;
             }
-            else if(event.getOperation() === 'add') {
-
-                var sandbox = this.getSandbox();
-                // populate layer list
-                var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                var layers = mapLayerService.getAllLayers();
-                if(this.view != null){
-                    this.view.addToCollection(layers);
-                } else {
-                    this.layers = layers;
-                }
-
-            } else {
-                // this section is executed when initial addition is made (all layer added)
-                var sandbox = this.getSandbox();
-                // populate layer list
-                var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-                var layers = mapLayerService.getAllLayers();
-                if(this.view != null){
-                    this.view.addToCollection(layers);
-                } else {
-                    this.layers = layers;
-                }
-            }
-
-
+            this._previousLayerUpdateTimer = setTimeout(function() {
+                me._layerUpdateHandler();
+            }, interval);
         }
+    },
+    _layerUpdateHandler : function() {
+        // TODO! currently update, add and initial additions execute
+        // the same code. This needs to be updated when mapLayerService
+        // can handle updates better. 
+        // (updates everything instead of layer.name)
+        var sandbox = this.getSandbox();
+        // populate layer list
+        var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        var layers = mapLayerService.getAllLayers();
+        if(this.view != null){
+            this.view.addToCollection(layers);
+        } else {
+            this.layers = layers;
+        }
+        /*
+        // TODO: handle based on operation
+        if(event.getOperation() === 'update') {
+        }
+        else if(event.getOperation() === 'add') {
+        }
+        */
     },
 
     /**
