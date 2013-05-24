@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         },
         'MapLayerEvent' : function(event) {
             // trigger after interval since events are being spammed by backendstatus
-            // this way browser doesnt crash
+            // this way browser doesn't crash
             var interval = 500;
             var me = this;
             if(this._previousLayerUpdateTimer) {
@@ -49,6 +49,11 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             }, interval);
         }
     },
+    /**
+     * @method _layerUpdateHandler
+     * @private
+     * Updates layers listing after layers has been changed/MapLayerEvent has been received.
+     */
     _layerUpdateHandler : function() {
         // TODO! currently update, add and initial additions execute
         // the same code. This needs to be updated when mapLayerService
