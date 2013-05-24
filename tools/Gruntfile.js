@@ -243,7 +243,7 @@ module.exports = function(grunt) {
             files.push({
                 "expand": true,
                 "cwd": "../",
-                "src": ["resources/**", "libraries/**"],
+                "src": ["resources/**", "libraries/**", "bundles/**"],
                 "dest": "../dist/"
             });
 
