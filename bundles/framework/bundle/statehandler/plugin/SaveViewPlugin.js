@@ -71,7 +71,6 @@ function(ajaxUrl) {
 	 * handler.getCurrentState() if not given)
 	 */
 	saveState : function(view, pState) {
-		console.log('saveState');
 
 		var state = pState;
 		var me = this;

@@ -123,9 +123,10 @@ define([
             
             // Check that data for classes is fetched
             // TODO unnecessary
-            this.inspireTabModel.getClasses(this.instance.getSandbox().getAjaxUrl(), "action_route=GetInspireThemes");
-            this.organizationTabModel.getClasses(this.instance.getSandbox().getAjaxUrl(),"&action_route=GetMapLayerClasses");
-
+            // commented out for now - backendstatus spams maplayerupdate events which triggers these all the time and crashed the browser
+            // FIXME: remove if not really necessary of fix some other way if they are
+            //this.inspireTabModel.getClasses(this.instance.getSandbox().getAjaxUrl(), "action_route=GetInspireThemes");
+            //this.organizationTabModel.getClasses(this.instance.getSandbox().getAjaxUrl(),"&action_route=GetMapLayerClasses");
         },
 
         /**
