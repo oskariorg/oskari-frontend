@@ -91,6 +91,7 @@ function(config, plugin) {
 
         cometd.publish('/service/wfs/init', {
             "session" : session.session,
+            "language": Oskari.getLang(),
             "browser" : session.browser,
             "browserVersion" : session.browserVersion,
             "location": {
