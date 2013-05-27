@@ -231,7 +231,7 @@ function(config, locale) {
 
                 // Data loaded and grid created, now it's time to load the indicators from the state if any.
                 if (me._state) {
-                    me.loadStateIndicators(container, me._state);
+                    me.loadStateIndicators(me._state, container);
                 }
             } else {
                 me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].regionDataError);
