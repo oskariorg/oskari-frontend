@@ -46,33 +46,44 @@ function(url, uuid, sandbox, defaultName, pInstance) {
         this.wfstStore.connect();
         var loadedCategories = false;
         var loadedPlaces = false;
+
+        // function to 
+        var allLoaded = function() {
+            // when both places and categories have been loaded, notify that the data has changed
+            if (loadedPlaces && loadedCategories) {
+                me._notifyDataChanged();
+            }
+        }
+
         var initialLoadCallBackCategories = function(categories) {
             if(categories) {
-            	for(var i = 0; i < categories.length; ++i) {
-            		me._addCategory(categories[i]);
-            	}
-                //me._categoryList = categories;
+                for(var i = 0; i < categories.length; ++i) {
+                    me._addCategory(categories[i]);
+                }
             }
-            loadedCategories = true;
-    
+
+            var categoriesLoaded = function() {
+                loadedCategories = true;
+                allLoaded();
+            }
+
             if (!me.getDefaultCategory()) {
                 // user doesn't have default category, propably a new user
                 // create a default category
-                me._createDefaultCategory();
-            } else if (loadedPlaces) {
-                me._notifyDataChanged();
+                me._createDefaultCategory(categoriesLoaded);
+            } else {
+                categoriesLoaded();
             }
         };
-    
+
+
         var initialLoadCallBackPlaces = function(places) {
             if(places) {
                 me._placesList = places;
             }
+
             loadedPlaces = true;
-            
-            if (loadedCategories) {
-                me._notifyDataChanged();
-            }
+            allLoaded();
         };
     
         this.wfstStore.getCategories(initialLoadCallBackCategories);
@@ -82,8 +93,9 @@ function(url, uuid, sandbox, defaultName, pInstance) {
      * @method _createDefaultCategory
      * @private
      * Creates a default category for the user
+     * @param callback function
      */
-    _createDefaultCategory : function() {
+    _createDefaultCategory : function(callback) {
     	var me = this;
         var defaultCategory = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory');
         defaultCategory.setName(me.defaultCategoryName);
@@ -109,7 +121,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
                 me._instance.forceDisable();
                  
             } else {
-                me._notifyDataChanged();
+                callback();
             }
         };
         
@@ -347,6 +359,8 @@ function(url, uuid, sandbox, defaultName, pInstance) {
                     category.setAreaLineWidth(categoryModel.getAreaLineWidth());
                     category.setAreaLineColor(categoryModel.getAreaLineColor());
                     category.setAreaFillColor(categoryModel.getAreaFillColor());
+
+                    category.setDefault(categoryModel.isDefault());
                 } else {
                     // couldn't load it -> failed to save it
                     success = false;

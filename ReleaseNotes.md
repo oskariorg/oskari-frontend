@@ -14,6 +14,10 @@ Added a way to disable a button by default from configuration.
 
 Promote login and registering by replacing the real bundle for guest users. Configurable tile, flyout and toolbar buttons.
 
+### myplaces bundle
+
+Fixed isDefault parameter to be included with the category when saving.
+
 ## 1.8
 
 ### sandbox/map-layer-service
