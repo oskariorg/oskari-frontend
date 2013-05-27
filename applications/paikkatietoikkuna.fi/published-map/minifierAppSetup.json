@@ -120,5 +120,25 @@
             "Require-Bundle-Instance": []
         },
         "instanceProps": {}
+    },
+    {
+        "title": "Published Grid",
+        "bundleinstancename": "publishedgrid",
+        "fi": "publishedgrid",
+        "sv": "publishedgrid",
+        "en": "publishedgrid",
+        "bundlename": "publishedgrid",
+        "metadata": {
+            "Import-Bundle": {
+                "publishedgrid": {
+                    "bundlePath": "../../../packages/statistics/bundle/"
+                },
+                "geostats": {
+                    "bundlePath": "../../../packages/libraries/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": [ ]
+        },
+        "instanceProps": {}
     }]
 }
