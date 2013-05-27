@@ -171,7 +171,11 @@ describe('Test Suite for statistics/statsgrid manage stats plugin', function() {
 
         // Something's wrong with chosen.
         // It gives an error: "Cannot set property 'disabled' of undefined"
-        it.skip('should create the indicators selection ui', function() {
+        // UPDATE:
+        // Fixed /Oskari/libraries/chosen/chosen.jquery.js:374
+        // --- this.container = $('#' + this.container_id);
+        // +++ this.container = container_div;
+        it('should create the indicators selection ui', function() {
             var selContainer = jQuery('<div class="selectors-container"></div>');
             gridContainer.append(selContainer);
             var indicData = [
@@ -463,7 +467,7 @@ describe('Test Suite for statistics/statsgrid manage stats plugin', function() {
             addIndicatorStub.restore();
         });
 
-        it.skip('should load indicators from a given state', function() {
+        it('should load indicators from a given state', function() {
             var testIndicators = [
                 {'id': 1},
                 {'id': 2}
@@ -475,11 +479,22 @@ describe('Test Suite for statistics/statsgrid manage stats plugin', function() {
                 'methodId': 1,
                 'numberOfClasses': 5
             };
+            var getMetaStub = sinon.stub(plugin, 'getSotkaIndicatorsMeta', function(cont, indicators, cb) {
+                cb();
+            });
+            var getDataStub = sinon.stub(plugin, 'getSotkaIndicatorsData', function(cont, indicators, cb) {
+                cb();
+            });
             // call tested function
-
+            plugin.loadStateIndicators(gridContainer, testState);
             // asserts
-
+            expect(getMetaStub.callCount).to.be(1);
+            expect(getMetaStub.calledWith(gridContainer, testState.indicators)).to.be.ok();
+            expect(getDataStub.callCount).to.be(1);
+            expect(getDataStub.calledWith(gridContainer, testState.indicators)).to.be.ok();
             // cleanup
+            getMetaStub.restore();
+            getDataStub.restore();
         });
     });
 });

@@ -725,7 +725,7 @@ function(config, locale) {
                 ii++;
             }
         }
-        
+
         this.dataView.endUpdate();
         this.dataView.refresh();
         this.grid.invalidateAllRows();
@@ -1091,8 +1091,8 @@ function(config, locale) {
                                 if(state.methodId == 4 && state.manualBreaksInput) {
                                     var manualInput = classifyPlugin.element.find('.manualBreaks').find('input[name=breaksInput]');
                                     manualInput.val(state.manualBreaksInput);
-                                    me.classifyPlugin.element.find('.classCount').hide();
-                                    me.classifyPlugin.element.find('.manualBreaks').show();
+                                    classifyPlugin.element.find('.classCount').hide();
+                                    classifyPlugin.element.find('.manualBreaks').show();
                                 }
                             }
                             if(state.numberOfClasses != null && state.numberOfClasses > 0) {

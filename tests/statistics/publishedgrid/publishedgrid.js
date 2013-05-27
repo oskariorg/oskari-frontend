@@ -1,13 +1,27 @@
-describe('Test Suite for statistics/publishedgrid bundle', function() {
+describe.only('Test Suite for statistics/publishedgrid bundle', function() {
     var appSetup = null,
         appConf = null,
         publishedGrid = null,
-        sandbox = null;
+        sandbox = null,
+        gridConf = {
+            "state": {
+                "layerId": 276,
+                "indicators": [{
+                    "indicator": 4,
+                    "gender": "total",
+                    "year": 2011
+                }],
+                "methodId": 3,
+                "currentColumn": "indicator42011total"
+            },
+            "conf": {
+                "gridShown": true
+            }
+        };
 
     var testLayerId = 276;
 
     before(function() {
-
         appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull', 'publishedgrid']);
 
         var mapfullConf = getConfigForMapfull();
@@ -26,15 +40,7 @@ describe('Test Suite for statistics/publishedgrid bundle', function() {
         // overwrite test wide appConf
         appConf = {
             "mapfull": mapfullConf,
-            "publishedgrid": {
-                "state": {
-                    "layerId": testLayerId,
-                    "indicators": []
-                },
-                "conf": {
-                    "gridShown": true
-                }
-            }
+            "publishedgrid": gridConf
         };
     });
 
@@ -52,8 +58,9 @@ describe('Test Suite for statistics/publishedgrid bundle', function() {
         // startup Oskari
         setupOskari(setup, conf, function() {
             // Find handles to sandbox and publishedgrid bundle.
-            //sandbox = Oskari.getSandbox();
-            //publishedGrid = sandbox.findRegisteredModuleInstance('PublishedGrid');
+            sandbox = Oskari.getSandbox();
+            publishedGrid = sandbox.findRegisteredModuleInstance('PublishedGrid');
+            sandbox._listeners = {};
             done();
         });
     };
@@ -66,6 +73,33 @@ describe('Test Suite for statistics/publishedgrid bundle', function() {
         it('should have publishedgrid bundle defined', function() {
             expect(sandbox).to.be.ok();
             expect(publishedGrid).to.be.ok();
+            expect(publishedGrid.gridPlugin).to.be.ok();
+            expect(publishedGrid.classifyPlugin).to.be.ok();
+        });
+
+        it('should have the grid in the DOM', function() {
+            var gridContainer = jQuery('.oskariui-left').find('.publishedgrid');
+            expect(gridContainer.length).to.be(1);
+        });
+
+        it('should hide the grid when the button is clicked', function(done) {
+            var gridContainer = jQuery('.oskariui-left').find('.publishedgrid');
+            var hideButton = jQuery('#publishedgridToggle');
+            expect(hideButton.length).to.be(1); // Doesn't seem to find this
+            // The grid should be visible at first...
+            expect(gridContainer.is(':hidden')).to.be(false);
+            hideButton.click();
+            // Timeouts used because hide/show are animated (duration 50 ms).
+            setTimeout(function() {
+                // ...then hidden...
+                expect(gridContainer.is(':hidden')).to.be(true);
+                hideButton.click();
+                setTimeout(function() {
+                    // ...and then visible again!
+                    expect(gridContainer.is(':hidden')).to.be(false);
+                    done();
+                }, 200);
+            }, 100);
         });
     });
 });
