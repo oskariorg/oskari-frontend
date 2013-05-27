@@ -1076,7 +1076,7 @@ function(config, locale) {
     /**
      * @method loadStateIndicators
      */
-    loadStateIndicators: function(container, state) {
+    loadStateIndicators: function(state, container) {
         var me = this;
         var classifyPlugin = this._sandbox.findRegisteredModuleInstance('MainMapModuleManageClassificationPlugin');
         // First, let's clear out the old data from the grid.
