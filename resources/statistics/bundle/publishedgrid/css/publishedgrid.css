@@ -8,9 +8,9 @@
 }
 
 #publishedgridToggle.hidePublishedGrid {
-    background: url(../../../../../resources/framework/bundle/mapmodule-plugin/plugin/fullscreen/images/hide-navigation.png);
+    background: url(/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/fullscreen/images/hide-navigation.png);
 }
 
 #publishedgridToggle.showPublishedGrid {
-    background: url(../../../../../resources/framework/bundle/mapmodule-plugin/plugin/fullscreen/images/show-navigation.png);
+    background: url(/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/fullscreen/images/show-navigation.png);
 }
