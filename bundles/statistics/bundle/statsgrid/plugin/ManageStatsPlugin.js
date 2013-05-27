@@ -725,13 +725,7 @@ function(config, locale) {
                 ii++;
             }
         }
-        var items = this.dataView.getItems();
-        for (var i = items.length - 1; i >= 0; i--) {
-            var item = items[i];
-            if (item[columnId] == null) {
-                item[columnId] = null;
-            }
-        };
+        
         this.dataView.endUpdate();
         this.dataView.refresh();
         this.grid.invalidateAllRows();
