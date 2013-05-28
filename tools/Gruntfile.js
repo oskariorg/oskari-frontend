@@ -45,8 +45,8 @@ module.exports = function(grunt) {
                 tasks: ['testacularRun:dev']
             },
             sass: {
-                files: ['../bundles/**/*.scss'],
-                tasks: ['sass']
+                files: ['../bundles/**/*.scss', '../applications/**/*.scss'],
+                tasks: ['compileAppCSS']
             }
         },
         sprite: {
@@ -104,19 +104,11 @@ module.exports = function(grunt) {
             }
         },
         sass: {
-            dist: {
-				files: [
-                    {
-                        expand: true,
-                        cwd: '../bundles/',
-                        src: ['**/*.scss'],
-                        dest: '../resources/',
-                        rename: function(dest,src) {return dest+src.replace("/scss/","/css/")},
-                        ext: '.css'
-				    }
-                ]
-            }
-        }
+
+        },
+		compileAppCSS: {
+			"appPath": "../applications/paikkatietoikkuna.fi/full-map"
+		}
     });
 
 
@@ -261,7 +253,7 @@ module.exports = function(grunt) {
         }
 
         // scss to css conversion
-        grunt.task.run('sass');
+        grunt.task.run('compileAppCSS');
 
         grunt.task.run('validate');
         grunt.task.run('copy');
@@ -376,4 +368,80 @@ module.exports = function(grunt) {
         // concatenate the files
         grunt.task.run('concat');
     });
+	
+	grunt.registerTask("compileAppCSS", "Build css for application", function(appPath) {
+		var varsDirectory = appPath || grunt.config('compileAppCSS').appPath,
+			appName = varsDirectory.substring(varsDirectory.lastIndexOf("/") + 1, varsDirectory.length);
+			varsFileExists = true,
+			invalidPaths = [],
+			fs = require('fs');
+        if(!varsDirectory) {
+            grunt.fail.fatal('Missing parameter\nUsage: grunt sass-build-application:"../path/to/application"', 1);
+        }
+		
+		// find valid applicationVariables.scss path
+		if (!fs.existsSync(varsDirectory + "/_applicationVariables.scss")) {
+			if (varsDirectory.indexOf("_") > 0) {
+				// get parent application path
+				varsDirectory = varsDirectory.substring(0, varsDirectory.lastIndexOf("_"));
+				if (!fs.existsSync(varsDirectory + "/_applicationVariables.scss")) {
+					invalidPaths.push(varsDirectory);
+					varsFileExists = false;
+				}
+			} else {
+				invalidPaths.push(varsDirectory);
+				varsFileExists = false;
+			}
+			if (!varsFileExists) {
+				grunt.fail.fatal("applicationVariables.scss not found, looked in:\n" + invalidPaths, 1);
+			}
+		}
+		
+		// get application variables and scss files
+		var vars = fs.readFileSync(varsDirectory + "/_applicationVariables.scss"),
+			scssFiles = fs.readdirSync(varsDirectory + "/scss/");
+
+		// compile to css
+		for (var scssFile in scssFiles) {
+			var scss = vars + "\n" + fs.readFileSync(scssFile), 
+				cssFile = scssFile.replace("/scss/", "/css/").replace(".scss", ".css");
+			fs.writeFile(cssFile, scss, function(error) {
+				if (error) {
+					grunt.fail.fatal(error);
+				}
+			});
+		}
+
+		grunt.config.set(
+			'sass.' + appName + '.files',
+			[{
+				"expand": true,
+				"cwd": varsDirectory + "/scss/",
+				"src": ['*.scss'],
+				"dest": varsDirectory + '/css/',
+				"ext": '.css'
+			}]
+			
+		);	
+
+		// build bundle css files
+		
+		// hackhack, copy applicationVariables to a 'static' location
+		fs.createReadStream(varsDirectory + '/_applicationVariables.scss').pipe(fs.createWriteStream('../applications/_applicationVariables.scss'));
+		
+		grunt.config.set(
+			'sass.' + appName + "-bundles" + '.files',
+			[{
+				"expand": true,
+				"cwd": "../bundles/",
+				"src": "**/*.scss",
+				"dest": '../resources/',
+				"rename": function(dest,src) {return dest+src.replace("/scss/","/css/")},
+				"ext": '.css'
+			}]
+		);
+		
+		grunt.task.run('sass');
+	});
+	
 };
