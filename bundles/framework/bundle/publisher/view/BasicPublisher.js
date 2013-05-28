@@ -55,6 +55,15 @@ function(instance, localization, data) {
         id : 'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
         selected : false
     }, {
+        id : 'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
+        selected : false,
+        config : {
+            location: {
+                top : '10px',
+                left : '10px'
+            }
+        }
+    }, {
         id : 'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
         selected : true,
         config : {
@@ -536,6 +545,8 @@ function(instance, localization, data) {
             	tool.plugin.stopPlugin(this.instance.sandbox);
            } 
         }
+
+        this._adjustMapNavigationLocation(tool, enabled);
     },
     /**
      * @method _getButtons
@@ -730,6 +741,62 @@ function(instance, localization, data) {
         return selections;
 
     },
+
+    /**
+     * Adjust the location of the zoombar in case the panbuttons tool is selected.
+     *
+     * @method _adjustMapNavigationLocation
+     * @private
+     * @param {Object} tool
+     * @param {Boolean} enabled
+     */
+    _adjustMapNavigationLocation: function(tool, enabled) {
+        var zoomBar, panButtons, zoombarLocation;
+        var locationBoth = {
+            top: '110px',
+            left: '45px'
+        };
+        var locationOne = {
+            top: '10px',
+            left: '10px'
+        };
+        // Find the zoombar and panbuttons tools.
+        for (var i = 0; i < this.tools.length; ++i) {
+            if (this.tools[i].id === 'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar') {
+                zoomBar = this.tools[i];
+            }
+            if (this.tools[i].id === 'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons') {
+                panButtons = this.tools[i];
+            }
+        }
+        
+        // Zoombar added
+        if (tool.id === zoomBar.id) {
+            if (panButtons._isPluginStarted) {
+                // Panbuttons visible
+                zoombarLocation = locationBoth;
+            } else {
+                zoombarLocation = locationOne;
+            }
+        }
+        // Panbuttons added
+        else if (tool.id === panButtons.id) {
+            if (enabled) {
+                zoombarLocation = locationBoth;
+            } else {
+                zoombarLocation = locationOne;
+            }
+        }
+        else {
+            return;
+        }
+
+        if (zoomBar._isPluginStarted) {
+            zoomBar.config.location = zoombarLocation;
+            zoomBar.plugin.setZoombarLocation(zoombarLocation);
+        }
+    },
+
     /**
      * @method _publishMap
      * @private

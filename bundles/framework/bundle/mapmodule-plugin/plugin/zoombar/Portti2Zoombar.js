@@ -183,23 +183,7 @@ function(config) {
         });
         // override default location if configured
         if(this._conf && this._conf.location) {
-            // clear possible opposite position with 'auto' and set the one in config
-            if(this._conf.location.top) {
-                me.__elements['zoombarSlider'].css('bottom', 'auto');
-                me.__elements['zoombarSlider'].css('top', this._conf.location.top);
-            }
-            if(this._conf.location.left) {
-                me.__elements['zoombarSlider'].css('right', 'auto');
-                me.__elements['zoombarSlider'].css('left', this._conf.location.left);
-            }
-            if(this._conf.location.right) {
-                me.__elements['zoombarSlider'].css('left', 'auto');
-                me.__elements['zoombarSlider'].css('right', this._conf.location.right);
-            }
-            if(this._conf.location.bottom) {
-                me.__elements['zoombarSlider'].css('top', 'auto');
-                me.__elements['zoombarSlider'].css('bottom', this._conf.location.bottom);
-            }
+            me.setZoombarLocation(this._conf.location, me.__elements['zoombarSlider']);
         }
     },
     /**
@@ -218,6 +202,37 @@ function(config) {
             this._suppressEvents = false;
         }
     },
+
+    /**
+     * Sets the location of the zoombar.
+     *
+     * @method setZoombarLocation
+     * @param {Object} location The new location
+     * @param {Object} zoombarContainer The element where the zoombar is contained in
+     */
+    setZoombarLocation: function(location, zoombarContainer) {
+        if (!zoombarContainer) {
+            zoombarContainer = this.__elements['zoombarSlider'];
+        }
+        // clear possible opposite position with 'auto'
+        if(location.top) {
+            zoombarContainer.css('bottom', 'auto');
+            zoombarContainer.css('top', location.top);
+        }
+        if(location.left) {
+            zoombarContainer.css('right', 'auto');
+            zoombarContainer.css('left', location.left);
+        }
+        if(location.right) {
+            zoombarContainer.css('left', 'auto');
+            zoombarContainer.css('right', location.right);
+        }
+        if(location.bottom) {
+            zoombarContainer.css('top', 'auto');
+            zoombarContainer.css('bottom', location.bottom);
+        }
+    },
+
     /**
      * @property {Object} eventHandlers
      * @static
