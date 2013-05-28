@@ -1,5 +1,13 @@
 # Release Notes
 
+## 1.10
+
+### framworks/bunlde/publisher
+if there is statslayer to be published, div.oskariui-left will be reserved for showing data/grid.
+
+### statistics/bundle/publishedgrid
+This is created for published maps so that it shows also grid if there is one.
+
 ## 1.9
 
 ### framework bundle
