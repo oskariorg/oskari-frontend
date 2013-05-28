@@ -101,5 +101,12 @@ describe.only('Test Suite for statistics/publishedgrid bundle', function() {
                 }, 200);
             }, 100);
         });
+
+        it('should have indicators in the grid', function() {
+            var grid = publishedGrid.gridPlugin.grid;
+            var columns = grid.getColumns();
+            // The two municipality columns (name + code) and the one in the state.
+            expect(columns.length).to.be(3);
+        });
     });
 });
