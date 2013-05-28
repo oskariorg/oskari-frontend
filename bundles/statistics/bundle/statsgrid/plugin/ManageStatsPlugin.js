@@ -442,6 +442,8 @@ function(config, locale) {
         // if the value changes, fetch indicator meta data
         sel.change(function(e) {
             var indicator = sel.find('option:selected').val();
+            me.deleteIndicatorInfoButton(container);
+            me.deleteDemographicsSelect(container);
             me.getSotkaIndicatorMeta(container, indicator);
         });
 
@@ -508,6 +510,10 @@ function(config, locale) {
         });
     },
 
+    deleteIndicatorInfoButton: function(container) {
+        container.find('.indicator-cont').find('.icon-info').remove();
+    },
+
     /**
      * Create drop down selects for demographics (year & gender)
      *
@@ -571,6 +577,10 @@ function(config, locale) {
             var columnId = me._getIndicatorColumnId(indicator.id, gender, year);
             me.removeIndicatorDataFromGrid(indicator.id, gender, year);
         });
+    },
+
+    deleteDemographicsSelect: function(container) {
+        container.find('.parameters-cont').remove();
     },
 
     /**
