@@ -68,7 +68,7 @@ function(config,locale) {
     init : function(sandbox) {
 
         this.__templates['latlondiv'] = 
-            jQuery('<div class="cbDiv">' +
+            jQuery('<div class="mapplugin cbDiv">' +
                    ' <div class="cbSpansWrapper">' + 
                    ' <div class="cbRow">' + 
                '  <div class="cbCrsLabel"></div>' +
@@ -167,7 +167,7 @@ function(config,locale) {
         var sandbox = this._sandbox;
         var me = this;
         // get div where the map is rendered from openlayers
-        var parentContainer = jQuery(this._map.div);
+        var parentContainer = me.mapModule.getMapLayersContainerDiv();
 		var el = me._elements['display'];
         if(!me._elements['display']) {
             el = me._elements['display'] = me.__templates['latlondiv'].clone();
@@ -179,8 +179,10 @@ function(config,locale) {
         el.find('.cbCrsLabel').html(crsText);
         el.find('.cbLabelN').html(me._locale['compass']['N']);
         el.find('.cbLabelE').html(me._locale['compass']['E']);
-        
-        parentContainer.append(el);
+        el.mousedown(function(event) {
+            event.stopPropagation();
+        });        
+        parentContainer.appendChild(el[0]);
         this.update();
         el.show();
     },

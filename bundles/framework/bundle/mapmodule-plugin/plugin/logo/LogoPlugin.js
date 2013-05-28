@@ -65,7 +65,6 @@ function() {
      * 			reference to application sandbox
      */
     init : function(sandbox) {
-		console.log("init");
     },
     /**
      * @method register
@@ -89,7 +88,6 @@ function() {
      * 			reference to application sandbox
      */
     startPlugin : function(sandbox) {
-		console.log("Starting plugin");
 		var me = this;
         me._sandbox = sandbox;
         me._map = me.getMapModule().getMap();
@@ -122,9 +120,11 @@ function() {
         
         // TODO: check if added?
         // unbind change listener and remove ui
-        me.element.find('a').unbind('click');
-        me.element.remove();
-        me.element = undefined;
+        if (me.element) {
+            me.element.find('a').unbind('click');
+            me.element.remove();
+            me.element = undefined;
+        }
     },
     /**
      * @method start
@@ -166,12 +166,9 @@ function() {
      * Creates logo and terms of use links on top of map
      */
     _createUI : function() {
-	
-		console.log("Creating logo UI");
-    	
 		var me = this;
-		
 		var sandbox = me._sandbox;
+
         // get div where the map is rendered from openlayers
         var parentContainer = jQuery(me._map.div);
         if(!me.element) {
@@ -186,7 +183,7 @@ function() {
         var link = me.element.find('div.icon');
         link.bind('click', function(){
 			var linkParams = sandbox.generateMapLinkParameters();
-	    	var url = myLoc.mapLinkBase + sandbox.generateMapLinkParameters();
+	    	var url = myLoc.mapLinkBase + linkParams;
 	    	window.open(url, '_blank');
             return false;
 	    });

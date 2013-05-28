@@ -20,7 +20,8 @@
   max-height: 535px;
   overflow: auto; }
 
-div.featuredataplugin {
+div.featuredataplugin.mapplugin {
+  position: fixed;
   top: 450px;
   right: 30px;
   display: block;
@@ -29,7 +30,9 @@ div.featuredataplugin {
   font-size: 12px;
   font-weight: bold;
   border: 1px solid;
-  padding: 5px; }
+  padding: 5px;
+  z-index: 15000;
+ }
 
 div.flyout-resizer {
   height: 16px;

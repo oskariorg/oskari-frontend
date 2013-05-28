@@ -18,7 +18,6 @@ function(config) {
     this._map = null;
     this._supportedFormats = {};
     this.config = config;
-    this.grid = null;
     this.tileSize = null;
 
     this._mapClickData = { comet: false, ajax: false, wfs: [] };
@@ -60,15 +59,9 @@ function(config) {
         var sandbox = Oskari.getSandbox(sandboxName);
         this._sandbox = sandbox;
 
-        // TODO: add to config
-        var CometdConfiguration = {
-            contextPath : '/transport-0.0.1',
-            port : ':6060'
-        };
-
         // service init
-        this._io = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.service.Mediator', CometdConfiguration, this);
-        this._connection = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.service.Connection', CometdConfiguration, this._io);
+        this._io = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.service.Mediator', this.config, this);
+        this._connection = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.service.Connection', this.config, this._io);
 
         // register domain model
         var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
@@ -198,7 +191,6 @@ function(config) {
 
             var grid = this.getGrid();
             if(grid != null) {
-                console.log(grid);
                 this.getIO().setLocation(srs, [bbox.left,bbox.bottom,bbox.right,bbox.top], zoom, grid);
                 this._tilesLayer.redraw();
             }
@@ -512,7 +504,6 @@ function(config) {
 
         /** remove old wfs layers from map */
         if(!keepPrevious) {
-            console.log("remove earlier layer");
             // TODO: make remove layer methods better so we can use them here
             var removeLayers = this._map.getLayersByName(layerName);
             for ( var i = 0; i < removeLayers.length; i++) {
@@ -659,17 +650,16 @@ function(config) {
     },
 
     getGrid : function() {
-        this.grid = null;
+        var grid = null;
 
         // get grid information out of tileStrategy
         this.tileStrategy.update();
         var OLGrid = this.tileStrategy.getGrid().grid;
 
         if (OLGrid) {
-            this.grid = { rows: OLGrid.length, columns: OLGrid[0].length, bounds: [] };
+            grid = { rows: OLGrid.length, columns: OLGrid[0].length, bounds: [] };
             for(var iRow=0, len = OLGrid.length; iRow < len; iRow++) {
                 var row = OLGrid[iRow];
-                //this.grid[iRow] = [];
                 for(var iCol=0, clen = row.length; iCol < clen; iCol++) {
                     var tile = row[iCol];
 
@@ -687,18 +677,11 @@ function(config) {
                     bounds[1] = tile.bounds.bottom;
                     bounds[2] = tile.bounds.right;
                     bounds[3] = tile.bounds.top;
-                    this.grid.bounds.push(bounds);
-                    /*
-                    this.grid[iRow][iCol] = [];
-                    this.grid[iRow][iCol][0] = tile.bounds.left;
-                    this.grid[iRow][iCol][1] = tile.bounds.bottom;
-                    this.grid[iRow][iCol][2] = tile.bounds.right;
-                    this.grid[iRow][iCol][3] = tile.bounds.top;
-                    */
+                    grid.bounds.push(bounds);
                 }
             }
         }
-        return this.grid;
+        return grid;
     }
 
 }, {

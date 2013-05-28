@@ -138,6 +138,7 @@ var _mapfullConfig = {
             "id": "base_35"
         }],
         "zoom": 1,
+        "srs":"EPSG:3067",
         "east": "517620",
         "north": "6874042"
     },

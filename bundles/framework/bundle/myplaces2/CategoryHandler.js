@@ -275,6 +275,7 @@ function(instance) {
         var values = {
             name : category.getName(),
             id : category.getId(),
+            _isDefault : category.isDefault(),
             dot : {
                 size : category.getDotSize(),
                 color : category.getDotColor()
@@ -439,6 +440,8 @@ function(instance) {
         category.setAreaLineWidth(values.area.size);
         category.setAreaLineColor(values.area.lineColor);
         category.setAreaFillColor(values.area.fillColor);
+
+        category.setDefault(values._isDefault);
         return category;
     },
     saveCategory : function(category) {

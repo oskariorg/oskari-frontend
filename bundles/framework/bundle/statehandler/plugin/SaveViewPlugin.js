@@ -162,7 +162,6 @@ function(ajaxUrl) {
 			window.onbeforeunload = function() {
 				// save state to session when leaving map window
 				me.saveState();
-				
 			};
 		});
 	},

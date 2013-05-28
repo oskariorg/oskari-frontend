@@ -76,8 +76,9 @@ function() {
                     mapDiv.height(jQuery(window).height());                        
                     contentMap.height(jQuery(window).height());
 
-                    if(contentMap.find('.oskariui-menutoolbar').length > 0) {
-                        mapDiv.height(jQuery(window).height() - contentMap.find('.oskariui-menutoolbar').height());
+                    var toolbar = contentMap.find('.oskariui-menutoolbar');
+                    if(toolbar.length > 0 && toolbar.is(":visible")) {
+                        mapDiv.height(jQuery(window).height() - toolbar.height());
                     }
                     map.updateSize();
                 }
@@ -259,6 +260,7 @@ function() {
      * @param {Boolean} ignoreLocation true to NOT set map location based on state
      */
     setState : function(state, ignoreLocation) {
+        //console.log('state is', state);
         var mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
         this._teardownState(mapmodule);
         
@@ -335,6 +337,39 @@ function() {
 		
 		return state;
 	},
+    /**
+     * Get state parameters.
+     * Returns string with layer, opacity and style as layer values.
+     *
+     * @method getStateParameters
+     * @return {String} layers separated with ',' and layer values separated with '+'
+     */
+    getStateParameters : function() {
+      var state = this.getState();
+      var link = 'zoomLevel=' + state.zoom + '&coord=' + state.east + '_' + state.north + '&mapLayers=';
+
+      var selectedLayers = state.selectedLayers,
+        layers = '',
+        layer = null,
+        i = 0,
+        ilen = 0;
+
+      for (i = 0, ilen = selectedLayers.length; i < ilen; i++) {
+          layer = selectedLayers[i];
+          if (!layer.hidden) {
+              if (layers != '') {
+                  layers += ',';
+              }
+              layers += layer.id + '+' + layer.opacity;
+              if (layer.style) {
+                  layers += '+' + layer.style;
+              } else {
+                  layers += '+';
+              }
+          }
+      }
+      return link + layers;
+    },
 
     /**
     * @method toggleFullScreen

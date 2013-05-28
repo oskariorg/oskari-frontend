@@ -1,5 +1,5 @@
-.cbDiv {
-  position: absolute;
+.cbDiv.mapplugin {
+  position: fixed;
   top: 360px;
   right: 20px;
   display: block;

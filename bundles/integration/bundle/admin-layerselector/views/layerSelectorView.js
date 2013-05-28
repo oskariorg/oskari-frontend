@@ -122,10 +122,9 @@ define([
             jQuery('.tab-content.organization').show();
             
             // Check that data for classes is fetched
-            // TODO unnecessary
+            // FIXME we shouldn't need to do this everytime, just once?
             this.inspireTabModel.getClasses(this.instance.getSandbox().getAjaxUrl(), "action_route=GetInspireThemes");
             this.organizationTabModel.getClasses(this.instance.getSandbox().getAjaxUrl(),"&action_route=GetMapLayerClasses");
-
         },
 
         /**

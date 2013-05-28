@@ -402,6 +402,27 @@ function(id, imageUrl, options) {
     getMap : function() {
         return this._map;
     },
+
+
+    /**
+     * @method getMapViewPortDiv
+     * Returns a reference to the map viewport div for setting correct z-ordering of divs
+     * @return {HTMLDivElement}
+     */
+    getMapViewPortDiv : function() {
+        return this._map.viewPortDiv;
+    },
+
+    /**
+     * @method getMapLayersContainerDiv
+     * Returns a reference to the div containing the map layers for setting correct z-ordering of divs
+     * @return {HTMLDivElement}
+     */
+    getMapLayersContainerDiv : function() {
+        return this._map.layerContainerDiv;
+    },
+
+
     /**
      * @method transformCoordinates
      * Transforms coordinates from given projection to the maps projectino.

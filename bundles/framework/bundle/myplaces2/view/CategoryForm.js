@@ -39,6 +39,7 @@ function(instance) {
         areaFillColor : 'ffdc00'
     };
     this.categoryId = undefined;
+    this._isDefault = undefined;
     this.initialValues = undefined;
 }, {
     /**
@@ -100,6 +101,8 @@ function(instance) {
             if(this.categoryId) {
                 values.id = this.categoryId;
             }
+            values._isDefault = this._isDefault || false;
+            
             var dotSize = onScreenForm.find('input[name=dotSize]').val();
             var dotColor = onScreenForm.find('input[name=dotColor]').val();
             values.dot = {
@@ -130,6 +133,7 @@ function(instance) {
      */
     setValues : function(data) {
         this.categoryId = data.id;
+        this._isDefault = data._isDefault;
         // infobox will make us lose our reference so search 
         // from document using the form-class
         var onScreenForm = this._getOnScreenForm();

@@ -13,6 +13,8 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     createStatsOut : function(container, callback) {
         // indicators (meta data)
         this.indicators = [];
+
+        this.statsService = this.instance.statsService;
         // indicator params are select-elements
         // (indicator drop down select and year & gender selects)
         this.prepareIndicatorParams(container, callback);
@@ -54,7 +56,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     getSotkaRegionData : function(container, callback) {
         var me = this;
         // call ajax function (params: url, successFallback, errorCallback)
-        me.instance.statsService.fetchStatsData(me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=regions&version=1.1',
+        me.statsService.fetchStatsData(me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=regions&version=1.1',
         // success callback
         function(regionData) {
             if (regionData) {
@@ -205,7 +207,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         var me = this;
         var sandbox = me.instance.getSandbox();
         // make the AJAX call
-        me.instance.statsService.fetchStatsData(sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicators&version=1.1',
+        me.statsService.fetchStatsData(sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicators&version=1.1',
         //success callback
         function(indicatorsdata) {
             if (indicatorsdata) {
@@ -278,7 +280,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         var me = this;
         var sandbox = me.instance.getSandbox();
         // fetch meta data for given indicator
-        me.instance.statsService.fetchStatsData(sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
+        me.statsService.fetchStatsData(sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
         // success callback
         function(indicatorMeta) {
             if (indicatorMeta) {
@@ -390,13 +392,13 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      * @param container parent element
      * @param indicator meta data
      */
-    updateDemographicsButtons : function(indicator, gender, year) {
-        indicator = indicator ? indicator : jQuery('.statsgrid').find('.indisel ').find('option:selected').val();
+    updateDemographicsButtons : function(indicatorId, gender, year) {
+        indicatorId = indicatorId ? indicatorId : jQuery('.statsgrid').find('.indisel ').find('option:selected').val();
         gender = gender ? gender : jQuery('.statsgrid').find('.gendersel').find('.gender').val();
         gender = gender != null ? gender: 'total';
         year = year ? year : jQuery('.statsgrid').find('.yearsel').find('.year').val();
 
-        var columnId = "indicator" + indicator + year + gender,
+        var columnId = "indicator" + indicatorId + year + gender,
             includedInGrid = this.isIndicatorInGrid(columnId);
 
         // toggle fetch and remove buttons so that only one is visible and can only be selected once
@@ -436,18 +438,18 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      * @param gender (male / female / total)
      * @param year selected year
      */
-    getSotkaIndicatorData : function(container, indicator, gender, year) {
+    getSotkaIndicatorData : function(container, indicatorId, gender, year) {
         var me = this;
         var gndrs = gender != null ? gender : 'total';
         // ajax call
-        me.instance.statsService.fetchStatsData(
+        me.statsService.fetchStatsData(
             // url
-            me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gndrs,
+            me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicatorId + '&years=' + year + '&genders=' + gndrs,
             // success callback
             function(data) {
                 if (data) {
                     // get the actual data
-                    me.addIndicatorDataToGrid(container, indicator, gndrs, year, data, me.indicators[me.indicators.length -1]);
+                    me.addIndicatorDataToGrid(container, indicatorId, gndrs, year, data, me.indicators[me.indicators.length -1]);
                 } else {
                     me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorDataError);
                 }
@@ -467,8 +469,8 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      * @param year selected year
      * @return columnId unique column id
      */
-    _getIndicatorColumnId : function(indicator, gender, year) {
-        var columnId = "indicator" + indicator + year + gender;
+    _getIndicatorColumnId : function(indicatorId, gender, year) {
+        var columnId = "indicator" + indicatorId + year + gender;
         return columnId;
     },
 
@@ -482,16 +484,16 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      * @param year selected year
      * @param data related to the indicator
      */
-    addIndicatorDataToGrid : function(container, indicator, gender, year, data, meta, silent) {
-        var columnId = this._getIndicatorColumnId(indicator, gender, year);        
+    addIndicatorDataToGrid : function(container, indicatorId, gender, year, data, meta, silent) {
+        var columnId = this._getIndicatorColumnId(indicatorId, gender, year);        
         var columns = this.grid.getColumns();
         var indicatorName = meta.title[Oskari.getLang()];
         columns.push({
-            id : columnId,
-            name : indicatorName + '/' + year + '/' + gender,
-            field : columnId,
-            toolTip : indicatorName + '/' + year + '/' + gender,
-            sortable : true
+            "id" : columnId,
+            "name" : indicatorName + '/' + year + '/' + gender,
+            "field" : columnId,
+            "toolTip" : indicatorName + '/' + year + '/' + gender,
+            "sortable" : true
         });
         this.grid.setColumns(columns);
 
@@ -499,7 +501,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         if (this.instance.state.indicators == null) {
             this.instance.state.indicators = [];
         }
-        this.instance.state.indicators.push({indicator: indicator, year: year, gender: gender});
+        this.instance.state.indicators.push({"indicator": indicatorId, "year": year, "gender": gender});
 
         var columnData = [];
         var ii = 0;
@@ -546,7 +548,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             this.sendStatsData(columns[columns.length - 1]);
         }
 
-        this.updateDemographicsButtons(indicator, gender, year);
+        this.updateDemographicsButtons(indicatorId, gender, year);
     },
 
     /**
@@ -557,8 +559,8 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      * @param gender (male / female / total)
      * @param year selected year
      */
-    removeIndicatorDataFromGrid : function(indicator, gender, year) {
-        var columnId = this._getIndicatorColumnId(indicator, gender, year),
+    removeIndicatorDataToGrid : function(indicatorId, gender, year) {
+        var columnId = this._getIndicatorColumnId(indicatorId, gender, year),
             columns = this.grid.getColumns(),
             allOtherColumns = [],
             found = false,
@@ -587,7 +589,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         if (this.instance.state.indicators) {
             for (i = 0, ilen = this.instance.state.indicators.length; i < ilen; i++) {
                 var statedIndicator = this.instance.state.indicators[i];
-                if ((indicator === statedIndicator.indicator) &&
+                if ((indicatorId === statedIndicator.indicator) &&
                     (year === statedIndicator.year) &&
                     (gender === statedIndicator.gender)) {
                     this.instance.state.indicators.splice(i, 1);
@@ -596,7 +598,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             }
         }
 
-        this.updateDemographicsButtons(indicator, gender, year);
+        this.updateDemographicsButtons(indicatorId, gender, year);
 
         if (columnId === this.instance.state.currentColumn) {
             // hide the layer, as we just removed the "selected"
@@ -697,7 +699,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         }
 
         // send the data trough the stats service.
-        me.instance.statsService.sendStatsData(me._layer, {
+        me.statsService.sendStatsData(me._layer, {
             CUR_COL : curCol,
             VIS_NAME : me._layer.getWmsName(), //"ows:kunnat2013",  
             VIS_ATTR : me._layer.getFilterPropertyName(), //"kuntakoodi",
@@ -744,7 +746,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             indicator = indicatorData.indicator;
 
             // ajax call
-            me.instance.statsService.fetchStatsData(
+            me.statsService.fetchStatsData(
                 // url
                 me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
                 // success callback
@@ -796,7 +798,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                 gender = indicatorData.gender != null ? indicatorData.gender: 'total';
 
             // ajax call
-            me.instance.statsService.fetchStatsData(
+            me.statsService.fetchStatsData(
                 // url
                 me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gender,
                 // success callback

@@ -42,81 +42,115 @@ Client sends the starting state to the server when the /meta/handshake is trigge
 ##### Parameters
 
 <table>
-  <tr>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>session</td>
-    <td>String</td>
-    <td>Liferay portlet's JSESSIONID</td>
-  </tr>
-  <tr>
-    <td>browser</td>
-    <td>String</td>
-    <td>Client's browser name</td>
-  </tr>
-  <tr>
-    <td>browserVersion</td>
-    <td>long</td>
-    <td>Client's browser version number</td>
-  </tr>
-  <tr>
-    <td>location.srs</td>
-    <td>String</td>
-    <td>Spatial reference system eg. EPSG:3067</td>
-  </tr>
-  <tr>
-    <td>location.bbox</td>
-    <td>ArrayList&lt;Double&gt;</td>
-    <td>Bounding box values in order: left, bottom, right, top</td>
-  </tr>
-  <tr>
-    <td>location.zoom</td>
-    <td>long</td>
-    <td>zoom level</td>
-  </tr>
-  <tr>
-    <td>mapSize.width</td>
-    <td>int</td>
-    <td>map width in pixels</td>
-  </tr>
-  <tr>
-    <td>mapSize.height</td>
-    <td>int</td>
-    <td>map height in pixels</td>
-  </tr>
-  <tr>
-    <td>mapScales</td>
-    <td>ArrayList&lt;Double&gt;</td>
-    <td>map scales list which indexes are zoom levels</td>
-  </tr>
-  <tr>
-    <td>layers</td>
-    <td>Object</td>
-    <td>keys are maplayer_ids (long) and values include definition of style</td>
-  </tr>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>session</td>
+		<td>String</td>
+		<td>Liferay portlet's JSESSIONID</td>
+	</tr>
+	<tr>
+		<td>browser</td>
+		<td>String</td>
+		<td>Client's browser name</td>
+	</tr>
+	<tr>
+		<td>browserVersion</td>
+		<td>long</td>
+		<td>Client's browser version number</td>
+	</tr>
+	<tr>
+		<td>location.srs</td>
+		<td>String</td>
+		<td>Spatial reference system eg. EPSG:3067</td>
+	</tr>
+	<tr>
+		<td>location.bbox</td>
+		<td>ArrayList&lt;Double&gt;</td>
+		<td>Bounding box values in order: left, bottom, right, top</td>
+	</tr>
+	<tr>
+		<td>location.zoom</td>
+		<td>long</td>
+		<td>zoom level</td>
+	</tr>
+	<tr>
+		<td>grid.rows</td>
+		<td>int</td>
+		<td>row count of bounds</td>
+	</tr>
+	<tr>
+		<td>grid.columns</td>
+		<td>int</td>
+		<td>column count of bounds</td>
+	</tr>
+	<tr>
+		<td>grid.bounds</td>
+		<td>ArrayList&lt;ArrayList&lt;Double&gt;&gt;</td>
+		<td>bounds of the tiles</td>
+	</tr>
+	<tr>
+		<td>tileSize.width</td>
+		<td>int</td>
+		<td>tile width in pixels</td>
+	</tr>
+	<tr>
+		<td>tileSize.height</td>
+		<td>int</td>
+		<td>tile height in pixels</td>
+	</tr>
+	<tr>
+		<td>mapSize.width</td>
+		<td>int</td>
+		<td>map width in pixels</td>
+	</tr>
+	<tr>
+		<td>mapSize.height</td>
+		<td>int</td>
+		<td>map height in pixels</td>
+	</tr>
+	<tr>
+		<td>mapScales</td>
+		<td>ArrayList&lt;Double&gt;</td>
+		<td>map scales list which indexes are zoom levels</td>
+	</tr>
+	<tr>
+		<td>layers</td>
+		<td>Object</td>
+		<td>keys are maplayer_ids (long) and values include definition of style</td>
+	</tr>
 </table>
 
 ##### Example
 
 ```javascript
 {
-    "session" : "87D1AB34CEEFEA59F00D6918406C79EA",
-    "browser" : "safari",
-    "browserVersion" : 537,
-    "location": {
-        "srs": "EPSG:3067",
-        "bbox": [385800, 6690267, 397380, 6697397],
-        "zoom": 8
-    },
-    "mapSize": {
-        "width": 1767,
-        "height": 995
-    },
-    "mapScales": [5669294.4, 2834647.2, 1417323.6, 566929.44, 283464.72, 141732.36, 56692.944, 28346.472, 11338.5888, 5669.2944, 2834.6472, 1417.3236, 708.6618],
-    "layers": { 216: { "styleName": "default" } }
+		"session" : "87D1AB34CEEFEA59F00D6918406C79EA",
+		"browser" : "safari",
+		"browserVersion" : 537,
+		"location": {
+				"srs": "EPSG:3067",
+				"bbox": [385800, 6690267, 397380, 6697397],
+				"zoom": 8
+		},
+		"grid": {
+				"rows": 5,
+				"columns": 8,
+				"bounds": [[345600,6694400,358400,6707200]..]
+		},
+		"tileSize": {
+				"width": 256,
+				"height": 256
+		},
+		"mapSize": {
+				"width": 1767,
+				"height": 995
+		},
+		"mapScales": [5669294.4, 2834647.2, 1417323.6, 566929.44, 283464.72, 141732.36, 56692.944, 28346.472, 11338.5888, 5669.2944, 2834.6472, 1417.3236, 708.6618],
+		"layers": { 216: { "styleName": "default" } }
 }
 ```
 
@@ -133,29 +167,29 @@ Client sends the starting state to the server when the /meta/handshake is trigge
 ##### Parameters
 
 <table>
-  <tr>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>layerId</td>
-    <td>long</td>
-    <td>maplayer_id</td>
-  </tr>
-  <tr>
-    <td>styleName</td>
-    <td>String</td>
-    <td>loaded style for the given WFS layer</td>
-  </tr>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>layerId</td>
+		<td>long</td>
+		<td>maplayer_id</td>
+	</tr>
+	<tr>
+		<td>styleName</td>
+		<td>String</td>
+		<td>loaded style for the given WFS layer</td>
+	</tr>
 </table>
 
 ##### Example
 
 ```javascript
 {
-    "layerId": 216,
-    "styleName": "default"
+		"layerId": 216,
+		"styleName": "default"
 }
 ```
 
@@ -172,23 +206,23 @@ Client sends the starting state to the server when the /meta/handshake is trigge
 ##### Parameters
 
 <table>
-  <tr>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>layerId</td>
-    <td>long</td>
-    <td>maplayer_id</td>
-  </tr>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>layerId</td>
+		<td>long</td>
+		<td>maplayer_id</td>
+	</tr>
 </table>
 
 ##### Example
 
 ```javascript
 {
-    "layerId": 216
+		"layerId": 216
 }
 ```
 
@@ -202,35 +236,55 @@ Doesn't return anything
 ##### Parameters
 
 <table>
-  <tr>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>srs</td>
-    <td>String</td>
-    <td>Spatial reference system eg. EPSG:3067</td>
-  </tr>
-  <tr>
-    <td>bbox</td>
-    <td>ArrayList&lt;Double&gt;</td>
-    <td>Bounding box values in order: left, bottom, right, top</td>
-  </tr>
-  <tr>
-    <td>zoom</td>
-    <td>long</td>
-    <td>zoom level</td>
-  </tr>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>srs</td>
+		<td>String</td>
+		<td>Spatial reference system eg. EPSG:3067</td>
+	</tr>
+	<tr>
+		<td>bbox</td>
+		<td>ArrayList&lt;Double&gt;</td>
+		<td>Bounding box values in order: left, bottom, right, top</td>
+	</tr>
+	<tr>
+		<td>zoom</td>
+		<td>long</td>
+		<td>zoom level</td>
+	</tr>
+	<tr>
+		<td>grid.rows</td>
+		<td>int</td>
+		<td>row count of bounds</td>
+	</tr>
+	<tr>
+		<td>grid.columns</td>
+		<td>int</td>
+		<td>column count of bounds</td>
+	</tr>
+	<tr>
+		<td>grid.bounds</td>
+		<td>ArrayList&lt;ArrayList&lt;Double&gt;&gt;</td>
+		<td>bounds of the tiles</td>
+	</tr>
 </table>
 
 ##### Example
 
 ```javascript
 {
-    "srs": "EPSG:3067",
-    "bbox": [385800, 6690267, 397380, 6697397],
-    "zoom": 8
+		"srs": "EPSG:3067",
+		"bbox": [385800, 6690267, 397380, 6697397],
+		"zoom": 8,
+		"grid": {
+				"rows": 5,
+				"columns": 8,
+				"bounds": [[345600,6694400,358400,6707200]..]
+		}
 }
 ```
 
@@ -247,29 +301,49 @@ Doesn't return anything
 ##### Parameters
 
 <table>
-  <tr>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>width</td>
-    <td>int</td>
-    <td>map width in pixels</td>
-  </tr>
-  <tr>
-    <td>height</td>
-    <td>int</td>
-    <td>map height in pixels</td>
-  </tr>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>width</td>
+		<td>int</td>
+		<td>map width in pixels</td>
+	</tr>
+	<tr>
+		<td>height</td>
+		<td>int</td>
+		<td>map height in pixels</td>
+	</tr>
+	<tr>
+		<td>grid.rows</td>
+		<td>int</td>
+		<td>row count of bounds</td>
+	</tr>
+	<tr>
+		<td>grid.columns</td>
+		<td>int</td>
+		<td>column count of bounds</td>
+	</tr>
+	<tr>
+		<td>grid.bounds</td>
+		<td>ArrayList&lt;ArrayList&lt;Double&gt;&gt;</td>
+		<td>bounds of the tiles</td>
+	</tr>
 </table>
 
 ##### Example
 
 ```javascript
 {
-    "width": 1767,
-    "height": 995
+		"width": 1767,
+		"height": 995,
+		"grid": {
+				"rows": 5,
+				"columns": 8,
+				"bounds": [[345600,6694400,358400,6707200]..]
+		}
 }
 ```
 
@@ -288,29 +362,29 @@ Only sends if the current map size gets bigger
 ##### Parameters
 
 <table>
-  <tr>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>layerId</td>
-    <td>long</td>
-    <td>maplayer_id</td>
-  </tr>
-  <tr>
-    <td>styleName</td>
-    <td>String</td>
-    <td>loaded style for the given WFS layer</td>
-  </tr>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>layerId</td>
+		<td>long</td>
+		<td>maplayer_id</td>
+	</tr>
+	<tr>
+		<td>styleName</td>
+		<td>String</td>
+		<td>loaded style for the given WFS layer</td>
+	</tr>
 </table>
 
 ##### Example
 
 ```javascript
 {
-    "layerId": 216,
-    "styleName": "default"
+		"layerId": 216,
+		"styleName": "default"
 }
 ```
 
@@ -327,35 +401,35 @@ Only sends if the current map size gets bigger
 ##### Parameters
 
 <table>
-  <tr>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>longitude</td>
-    <td>double</td>
-    <td>389800</td>
-  </tr>
-  <tr>
-    <td>latitude</td>
-    <td>double</td>
-    <td>6693387</td>
-  </tr>
-  <tr>
-    <td>keepPrevious</td>
-    <td>boolean</td>
-    <td>if keeps the previous selections</td>
-  </tr>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>longitude</td>
+		<td>double</td>
+		<td>389800</td>
+	</tr>
+	<tr>
+		<td>latitude</td>
+		<td>double</td>
+		<td>6693387</td>
+	</tr>
+	<tr>
+		<td>keepPrevious</td>
+		<td>boolean</td>
+		<td>if keeps the previous selections</td>
+	</tr>
 </table>
 
 ##### Example
 
 ```javascript
 {
-    "longitude" : 389800,
-    "latitude" : 6693387,
-    "keepPrevious": false
+		"longitude" : 389800,
+		"latitude" : 6693387,
+		"keepPrevious": false
 }
 ```
 
@@ -373,23 +447,23 @@ Doesn't send images
 ##### Parameters
 
 <table>
-  <tr>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>filter.geojson</td>
-    <td>GeoJSON</td>
-    <td>http://www.geojson.org/geojson-spec.html</td>
-  </tr>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>filter.geojson</td>
+		<td>GeoJSON</td>
+		<td>http://www.geojson.org/geojson-spec.html</td>
+	</tr>
 </table>
 
 ##### Example
 
 ```javascript
 {
-    "filter" : { "geojson": {..} }
+		"filter" : { "geojson": {..} }
 }
 ```
 
@@ -407,29 +481,29 @@ Doesn't send images
 ##### Parameters
 
 <table>
-  <tr>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>layerId</td>
-    <td>long</td>
-    <td>maplayer_id</td>
-  </tr>
-  <tr>
-    <td>visible</td>
-    <td>boolean</td>
-    <td>if layer is visible</td>
-  </tr>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>layerId</td>
+		<td>long</td>
+		<td>maplayer_id</td>
+	</tr>
+	<tr>
+		<td>visible</td>
+		<td>boolean</td>
+		<td>if layer is visible</td>
+	</tr>
 </table>
 
 ##### Example
 
 ```javascript
 {
-    "layerId" : 216,
-    "visible" : true
+		"layerId" : 216,
+		"visible" : true
 }
 ```
 
@@ -448,35 +522,35 @@ Sends updated features and image if the layer's visibility has changed to true
 ##### Parameters
 
 <table>
-  <tr>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>layerId</td>
-    <td>long</td>
-    <td>maplayer_id</td>
-  </tr>
-  <tr>
-    <td>featureIds</td>
-    <td>ArrayList&lt;String&gt;</td>
-    <td>selected feature ids of the given WFS layer</td>
-  </tr>
-  <tr>
-    <td>keepPrevious</td>
-    <td>boolean</td>
-    <td>if keeps the previous selections</td>
-  </tr>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>layerId</td>
+		<td>long</td>
+		<td>maplayer_id</td>
+	</tr>
+	<tr>
+		<td>featureIds</td>
+		<td>ArrayList&lt;String&gt;</td>
+		<td>selected feature ids of the given WFS layer</td>
+	</tr>
+	<tr>
+		<td>keepPrevious</td>
+		<td>boolean</td>
+		<td>if keeps the previous selections</td>
+	</tr>
 </table>
 
 ##### Example
 
 ```javascript
 {
-    "layerId" : 216,
-    "featureIds": ["toimipaikat.6398"],
-    "keepPrevious": false
+		"layerId" : 216,
+		"featureIds": ["toimipaikat.6398"],
+		"keepPrevious": false
 }
 ```
 
@@ -503,51 +577,61 @@ Client channels are used to send information from the server to the client. Most
 ##### Parameters
 
 <table>
-  <tr>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>layerId</td>
-    <td>long</td>
-    <td>maplayer_id</td>
-  </tr>
-  <tr>
-    <td>srs</td>
-    <td>String</td>
-    <td>Spatial reference system eg. EPSG:3067</td>
-  </tr>
-  <tr>
-    <td>bbox</td>
-    <td>ArrayList&lt;Double&gt;</td>
-    <td>Bounding box values in order: left, bottom, right, top</td>
-  </tr>
-  <tr>
-    <td>zoom</td>
-    <td>long</td>
-    <td>zoom level</td>
-  </tr>
-  <tr>
-    <td>type</td>
-    <td>String</td>
-    <td>"normal" or "highlight"</td>
-  </tr>
-  <tr>
-    <td>keepPrevious</td>
-    <td>boolean</td>
-    <td>if keeps the previous image</td>
-  </tr>
-  <tr>
-    <td>data</td>
-    <td>String</td>
-    <td>base64 data of the image</td>
-  </tr>
-  <tr>
-    <td>url</td>
-    <td>String</td>
-    <td>resource url of the image</td>
-  </tr>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>layerId</td>
+		<td>long</td>
+		<td>maplayer_id</td>
+	</tr>
+	<tr>
+		<td>srs</td>
+		<td>String</td>
+		<td>Spatial reference system eg. EPSG:3067</td>
+	</tr>
+	<tr>
+		<td>bbox</td>
+		<td>ArrayList&lt;Double&gt;</td>
+		<td>Bounding box values in order: left, bottom, right, top</td>
+	</tr>
+	<tr>
+		<td>zoom</td>
+		<td>long</td>
+		<td>zoom level</td>
+	</tr>
+	<tr>
+		<td>type</td>
+		<td>String</td>
+		<td>"normal" or "highlight"</td>
+	</tr>
+	<tr>
+		<td>keepPrevious</td>
+		<td>boolean</td>
+		<td>if keeps the previous image</td>
+	</tr>
+	<tr>
+		<td>width</td>
+		<td>int</td>
+		<td>image width in pixels</td>
+	</tr>
+	<tr>
+		<td>height</td>
+		<td>int</td>
+		<td>image height in pixels</td>
+	</tr>
+	<tr>
+		<td>data</td>
+		<td>String</td>
+		<td>base64 data of the image</td>
+	</tr>
+	<tr>
+		<td>url</td>
+		<td>String</td>
+		<td>resource url of the image</td>
+	</tr>
 </table>
 
 ##### Examples
@@ -556,13 +640,15 @@ Client channels are used to send information from the server to the client. Most
 
 ```javascript
 {
-    "layerId": 216,
-    "srs": "EPSG:3067",
-    "bbox": [385800, 6690267, 397380, 6697397],
-    "zoom": 7,
-    "type": "normal",
-    "keepPrevious": false,
-    "data": <base64Data>
+		"layerId": 216,
+		"srs": "EPSG:3067",
+		"bbox": [385800, 6690267, 397380, 6697397],
+		"zoom": 7,
+		"type": "normal",
+		"keepPrevious": false,
+		"width": 1767,
+		"height": 995,
+		"data": <base64Data>
 }
 ```
 
@@ -570,13 +656,15 @@ Client channels are used to send information from the server to the client. Most
 
 ```javascript
 {
-    "layerId": 216,
-    "srs": "EPSG:3067",
-    "bbox": [385800, 6690267, 397380, 6697397],
-    "zoom": 7,
-    "type": "normal",
-    "keepPrevious": false,
-    "url": <resourceURL>
+		"layerId": 216,
+		"srs": "EPSG:3067",
+		"bbox": [385800, 6690267, 397380, 6697397],
+		"zoom": 7,
+		"type": "normal",
+		"keepPrevious": false,
+		"width": 1767,
+		"height": 995,
+		"url": <resourceURL>
 }
 ```
 
@@ -585,35 +673,35 @@ Client channels are used to send information from the server to the client. Most
 ##### Parameters
 
 <table>
-  <tr>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>layerId</td>
-    <td>long</td>
-    <td>maplayer_id</td>
-  </tr>
-  <tr>
-    <td>fields</td>
-    <td>ArrayList&lt;String&gt;</td>
-    <td>feature property names of the given WFS layer</td>
-  </tr>
-  <tr>
-    <td>locales</td>
-    <td>ArrayList&lt;String&gt;</td>
-    <td>feature property localizations of the given WFS layer</td>
-  </tr>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>layerId</td>
+		<td>long</td>
+		<td>maplayer_id</td>
+	</tr>
+	<tr>
+		<td>fields</td>
+		<td>ArrayList&lt;String&gt;</td>
+		<td>feature property names of the given WFS layer</td>
+	</tr>
+	<tr>
+		<td>locales</td>
+		<td>ArrayList&lt;String&gt;</td>
+		<td>feature property localizations of the given WFS layer</td>
+	</tr>
 </table>
 
 ##### Examples
 
 ```javascript
 {
-    "layerId" : 216,
-    "fields": ["__fid",  "metaDataProperty",  "description",  "name",  "boundedBy",  "location",  "tmp_id",  "fi_nimi",  "fi_osoite",  "kto_tarkennus",  "postinumero",  "kuntakoodi",  "fi_url_1",  "fi_url_2",  "fi_url_3",  "fi_sposti_1",  "fi_sposti_2",  "fi_puh_1",  "fi_puh_2",  "fi_puh_3",  "fi_aoa_poik",  "fi_est",  "fi_palvelu_t",  "palveluluokka_2",  "org_id",  "se_nimi",  "se_osoite",  "se_url_1",  "se_url_2",  "se_url_3",  "se_sposti_1",  "se_sposti_2",  "se_puh_1",  "se_puh_2",  "se_puh_3",  "se_aoa_poik",  "se_est",  "se_palvelu_t",  "en_nimi",  "en_url_1",  "en_url_2",  "en_url_3",  "en_sposti_1",  "en_sposti_2",  "en_puh_1",  "en_puh_2",  "en_puh_3",  "en_aoa_poik",  "en_est",  "en_palvelu_t",  "x",  "y",  "the_geom",  "alku",  "en_osoite"],
-    "locales": null
+		"layerId" : 216,
+		"fields": ["__fid",  "metaDataProperty",  "description",  "name",  "boundedBy",  "location",  "tmp_id",  "fi_nimi",  "fi_osoite",  "kto_tarkennus",  "postinumero",  "kuntakoodi",  "fi_url_1",  "fi_url_2",  "fi_url_3",  "fi_sposti_1",  "fi_sposti_2",  "fi_puh_1",  "fi_puh_2",  "fi_puh_3",  "fi_aoa_poik",  "fi_est",  "fi_palvelu_t",  "palveluluokka_2",  "org_id",  "se_nimi",  "se_osoite",  "se_url_1",  "se_url_2",  "se_url_3",  "se_sposti_1",  "se_sposti_2",  "se_puh_1",  "se_puh_2",  "se_puh_3",  "se_aoa_poik",  "se_est",  "se_palvelu_t",  "en_nimi",  "en_url_1",  "en_url_2",  "en_url_3",  "en_sposti_1",  "en_sposti_2",  "en_puh_1",  "en_puh_2",  "en_puh_3",  "en_aoa_poik",  "en_est",  "en_palvelu_t",  "x",  "y",  "the_geom",  "alku",  "en_osoite"],
+		"locales": null
 }
 ```
 
@@ -623,21 +711,21 @@ Client channels are used to send information from the server to the client. Most
 ##### Parameters
 
 <table>
-  <tr>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>layerId</td>
-    <td>long</td>
-    <td>maplayer_id</td>
-  </tr>
-  <tr>
-    <td>feature</td>
-    <td>ArrayList&lt;Object&gt;</td>
-    <td>feature values of the given WFS layer</td>
-  </tr>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>layerId</td>
+		<td>long</td>
+		<td>maplayer_id</td>
+	</tr>
+	<tr>
+		<td>feature</td>
+		<td>ArrayList&lt;Object&gt;</td>
+		<td>feature values of the given WFS layer</td>
+	</tr>
 </table>
 
 ##### Examples
@@ -646,8 +734,8 @@ Client channels are used to send information from the server to the client. Most
 
 ```javascript
 {
-    "layerId" : 216,
-    "feature": ["toimipaikat.6398",  null,  null,  null,  null,  null,  6398,  "Yhteispalvelu Vantaa - Korso",  "Urpiaisentie 14",  "",  "01450",  "092",  "www.yhteispalvelu.fi",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  518,  811,  "Yhteispalvelu Vantaa - Korso",  "Urpiaisentie 14",  "www.yhteispalvelu.fi",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "Yhteispalvelu Vantaa - Korso",  "www.yhteispalvelu.fi",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  393893,  6692163,  "POINT (393893 6692163)",  "2013-01-04 10:01:52.202",  "Urpiaisentie 14"]
+		"layerId" : 216,
+		"feature": ["toimipaikat.6398",  null,  null,  null,  null,  null,  6398,  "Yhteispalvelu Vantaa - Korso",  "Urpiaisentie 14",  "",  "01450",  "092",  "www.yhteispalvelu.fi",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  518,  811,  "Yhteispalvelu Vantaa - Korso",  "Urpiaisentie 14",  "www.yhteispalvelu.fi",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "Yhteispalvelu Vantaa - Korso",  "www.yhteispalvelu.fi",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  393893,  6692163,  "POINT (393893 6692163)",  "2013-01-04 10:01:52.202",  "Urpiaisentie 14"]
 }
 ```
 
@@ -655,8 +743,8 @@ Client channels are used to send information from the server to the client. Most
 
 ```javascript
 {
-    "layerId" : 216,
-    "feature": "empty"
+		"layerId" : 216,
+		"feature": "empty"
 }
 ```
 
@@ -664,8 +752,8 @@ Client channels are used to send information from the server to the client. Most
 
 ```javascript
 {
-    "layerId" : 216,
-    "feature": "max"
+		"layerId" : 216,
+		"feature": "max"
 }
 ```
 
@@ -674,26 +762,26 @@ Client channels are used to send information from the server to the client. Most
 ##### Parameters
 
 <table>
-  <tr>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>layerId</td>
-    <td>long</td>
-    <td>maplayer_id</td>
-  </tr>
-  <tr>
-    <td>features</td>
-    <td>ArrayList&lt;ArrayList&lt;Object&gt;&gt;</td>
-    <td>selected features of the given WFS layer</td>
-  </tr>
-  <tr>
-    <td>keepPrevious</td>
-    <td>boolean</td>
-    <td>if keeps the previous selections</td>
-  </tr>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>layerId</td>
+		<td>long</td>
+		<td>maplayer_id</td>
+	</tr>
+	<tr>
+		<td>features</td>
+		<td>ArrayList&lt;ArrayList&lt;Object&gt;&gt;</td>
+		<td>selected features of the given WFS layer</td>
+	</tr>
+	<tr>
+		<td>keepPrevious</td>
+		<td>boolean</td>
+		<td>if keeps the previous selections</td>
+	</tr>
 </table>
 
 ##### Examples
@@ -702,12 +790,12 @@ Client channels are used to send information from the server to the client. Most
 
 ```javascript
 {
-    "layerId" : 216,
-    "features": [
-        ["toimipaikat.6398",  null,  null,  null,  null,  null,  6398,  "Yhteispalvelu Vantaa - Korso",  "Urpiaisentie 14",  "",  "01450",  "092",  "www.yhteispalvelu.fi",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  518,  811,  "Yhteispalvelu Vantaa - Korso",  "Urpiaisentie 14",  "www.yhteispalvelu.fi",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "Yhteispalvelu Vantaa - Korso",  "www.yhteispalvelu.fi",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  393893,  6692163,  "POINT (393893 6692163)",  "2013-01-04 10:01:52.202",  "Urpiaisentie 14"],
-        ["toimipaikat.14631",  null,  null,  null,  null,  null,  14631,  "Kela, Vantaa / Korson yhteispalvelu",  "Urpiaisentie 14",  "",  "01450",  "092",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  503,  802,  "Kela, Vantaa / Korson yhteispalvelu",  "Urpiaisentie 14",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "Kela, Vantaa / Korson yhteispalvelu",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  393893,  6692163,  "POINT (393893 6692163)",  "2012-11-15 10:57:39.382",  "Urpiaisentie 14"]
-    ],
-    "keepPrevious": false
+		"layerId" : 216,
+		"features": [
+				["toimipaikat.6398",  null,  null,  null,  null,  null,  6398,  "Yhteispalvelu Vantaa - Korso",  "Urpiaisentie 14",  "",  "01450",  "092",  "www.yhteispalvelu.fi",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  518,  811,  "Yhteispalvelu Vantaa - Korso",  "Urpiaisentie 14",  "www.yhteispalvelu.fi",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "Yhteispalvelu Vantaa - Korso",  "www.yhteispalvelu.fi",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  393893,  6692163,  "POINT (393893 6692163)",  "2013-01-04 10:01:52.202",  "Urpiaisentie 14"],
+				["toimipaikat.14631",  null,  null,  null,  null,  null,  14631,  "Kela, Vantaa / Korson yhteispalvelu",  "Urpiaisentie 14",  "",  "01450",  "092",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  503,  802,  "Kela, Vantaa / Korson yhteispalvelu",  "Urpiaisentie 14",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "Kela, Vantaa / Korson yhteispalvelu",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  393893,  6692163,  "POINT (393893 6692163)",  "2012-11-15 10:57:39.382",  "Urpiaisentie 14"]
+		],
+		"keepPrevious": false
 }
 ```
 
@@ -715,8 +803,8 @@ Client channels are used to send information from the server to the client. Most
 
 ```javascript
 {
-    "layerId" : 216,
-    "features": "empty",
+		"layerId" : 216,
+		"features": "empty",
 }
 ```
 
@@ -726,35 +814,35 @@ Client channels are used to send information from the server to the client. Most
 ##### Parameters
 
 <table>
-  <tr>
-    <th>Name</th>
-    <th>Type</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>layerId</td>
-    <td>long</td>
-    <td>maplayer_id</td>
-  </tr>
-  <tr>
-    <td>once</td>
-    <td>boolean</td>
-    <td>if should react only once</td>
-  </tr>
-  <tr>
-    <td>message</td>
-    <td>String</td>
-    <td>key for error message (should be localized in frontend)</td>
-  </tr>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>layerId</td>
+		<td>long</td>
+		<td>maplayer_id</td>
+	</tr>
+	<tr>
+		<td>once</td>
+		<td>boolean</td>
+		<td>if should react only once</td>
+	</tr>
+	<tr>
+		<td>message</td>
+		<td>String</td>
+		<td>key for error message (should be localized in frontend)</td>
+	</tr>
 </table>
 
 ##### Example
 
 ```javascript
 {
-    "layerId" : 216,
-    "once": true,
-    "message": "wfs_no_permissions"
+		"layerId" : 216,
+		"once": true,
+		"message": "wfs_no_permissions"
 }
 ```
 
@@ -941,10 +1029,18 @@ Caching is done with redis on backend. Basic key-value storage is used in most o
 
 * data is copied from cache only once in init (time taking operation)
 
-### WFS Tiles [TODO]
+### WFS Tiles
 
-* key: WFSImage_#{layerId}_#{srs}_#{bbox}_#{zoom}
+* key: WFSImage_#{layerId}_#{srs}_#{bbox[0]}:#{bbox[1]}:#{bbox[2]}:#{bbox[3]}_#{zoom}
 * unique part contains map layer id and location information
-* expires ?
+* expires in one week
 
 * data is saved if the tile isn't colliding boundary
+
+### WFS Temp Tiles
+
+* key: WFSImage_#{layerId}_#{srs}_#{bbox[0]}:#{bbox[1]}:#{bbox[2]}:#{bbox[3]}_#{zoom}_temp
+* unique part contains map layer id and location information
+* expires in one week
+
+* data is saved if the tile is colliding boundary or map image (because of IE)

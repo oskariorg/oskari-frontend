@@ -1,5 +1,16 @@
 # Release Notes
 
+## 1.10
+
+### framworks/bunlde/publisher
+if there is statslayer to be published, div.oskariui-left will be reserved for showing data/grid.
+
+### statistics/bundle/publishedgrid
+This is created for published maps so that it shows also grid if there is one.
+
+### statistics/bundle/statsgrid
+Indicators which do not have data for all municipalities now show the missing values as blanks in the grid and on the map. This doesn't affect sorting, the blank values are always in the bottom when sorted.
+
 ## 1.9
 
 ### framework bundle
@@ -13,6 +24,10 @@ Added a way to disable a button by default from configuration.
 ### promote bundle
 
 Promote login and registering by replacing the real bundle for guest users. Configurable tile, flyout and toolbar buttons.
+
+### myplaces bundle
+
+Fixed isDefault parameter to be included with the category when saving.
 
 ## 1.8
 

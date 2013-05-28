@@ -22,7 +22,7 @@ function(config, locale) {
     this._map = null;
     this.element = undefined;
     this.conf = config;
-    this._locale = locale;
+    this._locale = (locale != null) ? locale : Oskari.getLocalization("StatsGrid");
     this.initialSetup = true;
     this.colorsets_div = null;
     this.colorsets_seq = null;
@@ -127,7 +127,6 @@ function(config, locale) {
         for (p in this.eventHandlers) {
             sandbox.registerForEventByName(this, p);
         }
-
         this.statsService = sandbox.getService('Oskari.statistics.bundle.statsgrid.StatisticsService');
 
         this._createUI();
