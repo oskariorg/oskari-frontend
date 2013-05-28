@@ -231,7 +231,7 @@ function(config, locale) {
 
                 // Data loaded and grid created, now it's time to load the indicators from the state if any.
                 if (me._state) {
-                    me.loadStateIndicators(container, me._state);
+                    me.loadStateIndicators(me._state, container);
                 }
             } else {
                 me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].regionDataError);
@@ -1076,7 +1076,7 @@ function(config, locale) {
     /**
      * @method loadStateIndicators
      */
-    loadStateIndicators: function(container, state) {
+    loadStateIndicators: function(state, container) {
         var me = this;
         var classifyPlugin = this._sandbox.findRegisteredModuleInstance('MainMapModuleManageClassificationPlugin');
         // First, let's clear out the old data from the grid.

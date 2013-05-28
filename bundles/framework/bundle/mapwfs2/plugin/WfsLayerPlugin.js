@@ -191,7 +191,6 @@ function(config) {
 
             var grid = this.getGrid();
             if(grid != null) {
-                console.log(grid);
                 this.getIO().setLocation(srs, [bbox.left,bbox.bottom,bbox.right,bbox.top], zoom, grid);
                 this._tilesLayer.redraw();
             }
@@ -505,7 +504,6 @@ function(config) {
 
         /** remove old wfs layers from map */
         if(!keepPrevious) {
-            console.log("remove earlier layer");
             // TODO: make remove layer methods better so we can use them here
             var removeLayers = this._map.getLayersByName(layerName);
             for ( var i = 0; i < removeLayers.length; i++) {

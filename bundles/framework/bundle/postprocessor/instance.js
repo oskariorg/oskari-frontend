@@ -76,6 +76,7 @@ function() {
             // create dummy layer since the real one might not be available and we only need it for id
             var dummyLayer = Oskari.clazz.create('Oskari.mapframework.domain.WfsLayer');
             dummyLayer.setId(layerId);
+            dummyLayer.setOpacity(100);
             var event = builder(featureIdList, dummyLayer);
             this.sandbox.notifyAll(event);
         }

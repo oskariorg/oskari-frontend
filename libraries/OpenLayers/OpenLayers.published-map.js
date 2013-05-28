@@ -5751,6 +5751,881 @@ OpenLayers.Events.buttonclick = OpenLayers.Class({
  * full text of the license. */
 
 /**
+ * @requires OpenLayers/Events.js
+ */
+
+/**
+ * TODO: deprecate me
+ * Use OpenLayers.Request.proxy instead.
+ */
+OpenLayers.ProxyHost = "";
+
+/**
+ * Namespace: OpenLayers.Request
+ * The OpenLayers.Request namespace contains convenience methods for working
+ *     with XMLHttpRequests.  These methods work with a cross-browser
+ *     W3C compliant <OpenLayers.Request.XMLHttpRequest> class.
+ */
+OpenLayers.Request = {
+    
+    /**
+     * Constant: DEFAULT_CONFIG
+     * {Object} Default configuration for all requests.
+     */
+    DEFAULT_CONFIG: {
+        method: "GET",
+        url: window.location.href,
+        async: true,
+        user: undefined,
+        password: undefined,
+        params: null,
+        proxy: OpenLayers.ProxyHost,
+        headers: {},
+        data: null,
+        callback: function() {},
+        success: null,
+        failure: null,
+        scope: null
+    },
+    
+    /**
+     * Constant: URL_SPLIT_REGEX
+     */
+    URL_SPLIT_REGEX: /([^:]*:)\/\/([^:]*:?[^@]*@)?([^:\/\?]*):?([^\/\?]*)/,
+    
+    /**
+     * APIProperty: events
+     * {<OpenLayers.Events>} An events object that handles all 
+     *     events on the {<OpenLayers.Request>} object.
+     *
+     * All event listeners will receive an event object with three properties:
+     * request - {<OpenLayers.Request.XMLHttpRequest>} The request object.
+     * config - {Object} The config object sent to the specific request method.
+     * requestUrl - {String} The request url.
+     * 
+     * Supported event types:
+     * complete - Triggered when we have a response from the request, if a
+     *     listener returns false, no further response processing will take
+     *     place.
+     * success - Triggered when the HTTP response has a success code (200-299).
+     * failure - Triggered when the HTTP response does not have a success code.
+     */
+    events: new OpenLayers.Events(this),
+    
+    /**
+     * Method: makeSameOrigin
+     * Using the specified proxy, returns a same origin url of the provided url.
+     *
+     * Parameters:
+     * url - {String} An arbitrary url
+     * proxy {String|Function} The proxy to use to make the provided url a
+     *     same origin url.
+     *
+     * Returns
+     * {String} the same origin url. If no proxy is provided, the returned url
+     *     will be the same as the provided url.
+     */
+    makeSameOrigin: function(url, proxy) {
+        var sameOrigin = url.indexOf("http") !== 0;
+        var urlParts = !sameOrigin && url.match(this.URL_SPLIT_REGEX);
+        if (urlParts) {
+            var location = window.location;
+            sameOrigin =
+                urlParts[1] == location.protocol &&
+                urlParts[3] == location.hostname;
+            var uPort = urlParts[4], lPort = location.port;
+            if (uPort != 80 && uPort != "" || lPort != "80" && lPort != "") {
+                sameOrigin = sameOrigin && uPort == lPort;
+            }
+        }
+        if (!sameOrigin) {
+            if (proxy) {
+                if (typeof proxy == "function") {
+                    url = proxy(url);
+                } else {
+                    url = proxy + encodeURIComponent(url);
+                }
+            } else {
+                OpenLayers.Console.warn(
+                    OpenLayers.i18n("proxyNeeded"), {url: url});
+            }
+        }
+        return url;
+    },
+
+    /**
+     * APIMethod: issue
+     * Create a new XMLHttpRequest object, open it, set any headers, bind
+     *     a callback to done state, and send any data.  It is recommended that
+     *     you use one <GET>, <POST>, <PUT>, <DELETE>, <OPTIONS>, or <HEAD>.
+     *     This method is only documented to provide detail on the configuration
+     *     options available to all request methods.
+     *
+     * Parameters:
+     * config - {Object} Object containing properties for configuring the
+     *     request.  Allowed configuration properties are described below.
+     *     This object is modified and should not be reused.
+     *
+     * Allowed config properties:
+     * method - {String} One of GET, POST, PUT, DELETE, HEAD, or
+     *     OPTIONS.  Default is GET.
+     * url - {String} URL for the request.
+     * async - {Boolean} Open an asynchronous request.  Default is true.
+     * user - {String} User for relevant authentication scheme.  Set
+     *     to null to clear current user.
+     * password - {String} Password for relevant authentication scheme.
+     *     Set to null to clear current password.
+     * proxy - {String} Optional proxy.  Defaults to
+     *     <OpenLayers.ProxyHost>.
+     * params - {Object} Any key:value pairs to be appended to the
+     *     url as a query string.  Assumes url doesn't already include a query
+     *     string or hash.  Typically, this is only appropriate for <GET>
+     *     requests where the query string will be appended to the url.
+     *     Parameter values that are arrays will be
+     *     concatenated with a comma (note that this goes against form-encoding)
+     *     as is done with <OpenLayers.Util.getParameterString>.
+     * headers - {Object} Object with header:value pairs to be set on
+     *     the request.
+     * data - {String | Document} Optional data to send with the request.
+     *     Typically, this is only used with <POST> and <PUT> requests.
+     *     Make sure to provide the appropriate "Content-Type" header for your
+     *     data.  For <POST> and <PUT> requests, the content type defaults to
+     *     "application-xml".  If your data is a different content type, or
+     *     if you are using a different HTTP method, set the "Content-Type"
+     *     header to match your data type.
+     * callback - {Function} Function to call when request is done.
+     *     To determine if the request failed, check request.status (200
+     *     indicates success).
+     * success - {Function} Optional function to call if request status is in
+     *     the 200s.  This will be called in addition to callback above and
+     *     would typically only be used as an alternative.
+     * failure - {Function} Optional function to call if request status is not
+     *     in the 200s.  This will be called in addition to callback above and
+     *     would typically only be used as an alternative.
+     * scope - {Object} If callback is a public method on some object,
+     *     set the scope to that object.
+     *
+     * Returns:
+     * {XMLHttpRequest} Request object.  To abort the request before a response
+     *     is received, call abort() on the request object.
+     */
+    issue: function(config) {        
+        // apply default config - proxy host may have changed
+        var defaultConfig = OpenLayers.Util.extend(
+            this.DEFAULT_CONFIG,
+            {proxy: OpenLayers.ProxyHost}
+        );
+        config = OpenLayers.Util.applyDefaults(config, defaultConfig);
+        
+        // Always set the "X-Requested-With" header to signal that this request
+        // was issued through the XHR-object. Since header keys are case 
+        // insensitive and we want to allow overriding of the "X-Requested-With"
+        // header through the user we cannot use applyDefaults, but have to 
+        // check manually whether we were called with a "X-Requested-With"
+        // header.
+        var customRequestedWithHeader = false,
+            headerKey;
+        for(headerKey in config.headers) {
+            if (config.headers.hasOwnProperty( headerKey )) {
+                if (headerKey.toLowerCase() === 'x-requested-with') {
+                    customRequestedWithHeader = true;
+                }
+            }
+        }
+        if (customRequestedWithHeader === false) {
+            // we did not have a custom "X-Requested-With" header
+            config.headers['X-Requested-With'] = 'XMLHttpRequest';
+        }
+
+        // create request, open, and set headers
+        var request = new OpenLayers.Request.XMLHttpRequest();
+        var url = OpenLayers.Util.urlAppend(config.url, 
+            OpenLayers.Util.getParameterString(config.params || {}));
+        url = OpenLayers.Request.makeSameOrigin(url, config.proxy);
+        request.open(
+            config.method, url, config.async, config.user, config.password
+        );
+        for(var header in config.headers) {
+            request.setRequestHeader(header, config.headers[header]);
+        }
+
+        var events = this.events;
+
+        // we want to execute runCallbacks with "this" as the
+        // execution scope
+        var self = this;
+        
+        request.onreadystatechange = function() {
+            if(request.readyState == OpenLayers.Request.XMLHttpRequest.DONE) {
+                var proceed = events.triggerEvent(
+                    "complete",
+                    {request: request, config: config, requestUrl: url}
+                );
+                if(proceed !== false) {
+                    self.runCallbacks(
+                        {request: request, config: config, requestUrl: url}
+                    );
+                }
+            }
+        };
+        
+        // send request (optionally with data) and return
+        // call in a timeout for asynchronous requests so the return is
+        // available before readyState == 4 for cached docs
+        if(config.async === false) {
+            request.send(config.data);
+        } else {
+            window.setTimeout(function(){
+                if (request.readyState !== 0) { // W3C: 0-UNSENT
+                    request.send(config.data);
+                }
+            }, 0);
+        }
+        return request;
+    },
+    
+    /**
+     * Method: runCallbacks
+     * Calls the complete, success and failure callbacks. Application
+     *    can listen to the "complete" event, have the listener 
+     *    display a confirm window and always return false, and
+     *    execute OpenLayers.Request.runCallbacks if the user
+     *    hits "yes" in the confirm window.
+     *
+     * Parameters:
+     * options - {Object} Hash containing request, config and requestUrl keys
+     */
+    runCallbacks: function(options) {
+        var request = options.request;
+        var config = options.config;
+        
+        // bind callbacks to readyState 4 (done)
+        var complete = (config.scope) ?
+            OpenLayers.Function.bind(config.callback, config.scope) :
+            config.callback;
+        
+        // optional success callback
+        var success;
+        if(config.success) {
+            success = (config.scope) ?
+                OpenLayers.Function.bind(config.success, config.scope) :
+                config.success;
+        }
+
+        // optional failure callback
+        var failure;
+        if(config.failure) {
+            failure = (config.scope) ?
+                OpenLayers.Function.bind(config.failure, config.scope) :
+                config.failure;
+        }
+
+        if (OpenLayers.Util.createUrlObject(config.url).protocol == "file:" &&
+                                                        request.responseText) {
+            request.status = 200;
+        }
+        complete(request);
+
+        if (!request.status || (request.status >= 200 && request.status < 300)) {
+            this.events.triggerEvent("success", options);
+            if(success) {
+                success(request);
+            }
+        }
+        if(request.status && (request.status < 200 || request.status >= 300)) {                    
+            this.events.triggerEvent("failure", options);
+            if(failure) {
+                failure(request);
+            }
+        }
+    },
+    
+    /**
+     * APIMethod: GET
+     * Send an HTTP GET request.  Additional configuration properties are
+     *     documented in the <issue> method, with the method property set
+     *     to GET.
+     *
+     * Parameters:
+     * config - {Object} Object with properties for configuring the request.
+     *     See the <issue> method for documentation of allowed properties.
+     *     This object is modified and should not be reused.
+     * 
+     * Returns:
+     * {XMLHttpRequest} Request object.
+     */
+    GET: function(config) {
+        config = OpenLayers.Util.extend(config, {method: "GET"});
+        return OpenLayers.Request.issue(config);
+    },
+    
+    /**
+     * APIMethod: POST
+     * Send a POST request.  Additional configuration properties are
+     *     documented in the <issue> method, with the method property set
+     *     to POST and "Content-Type" header set to "application/xml".
+     *
+     * Parameters:
+     * config - {Object} Object with properties for configuring the request.
+     *     See the <issue> method for documentation of allowed properties.  The
+     *     default "Content-Type" header will be set to "application-xml" if
+     *     none is provided.  This object is modified and should not be reused.
+     * 
+     * Returns:
+     * {XMLHttpRequest} Request object.
+     */
+    POST: function(config) {
+        config = OpenLayers.Util.extend(config, {method: "POST"});
+        // set content type to application/xml if it isn't already set
+        config.headers = config.headers ? config.headers : {};
+        if(!("CONTENT-TYPE" in OpenLayers.Util.upperCaseObject(config.headers))) {
+            config.headers["Content-Type"] = "application/xml";
+        }
+        return OpenLayers.Request.issue(config);
+    },
+    
+    /**
+     * APIMethod: PUT
+     * Send an HTTP PUT request.  Additional configuration properties are
+     *     documented in the <issue> method, with the method property set
+     *     to PUT and "Content-Type" header set to "application/xml".
+     *
+     * Parameters:
+     * config - {Object} Object with properties for configuring the request.
+     *     See the <issue> method for documentation of allowed properties.  The
+     *     default "Content-Type" header will be set to "application-xml" if
+     *     none is provided.  This object is modified and should not be reused.
+     * 
+     * Returns:
+     * {XMLHttpRequest} Request object.
+     */
+    PUT: function(config) {
+        config = OpenLayers.Util.extend(config, {method: "PUT"});
+        // set content type to application/xml if it isn't already set
+        config.headers = config.headers ? config.headers : {};
+        if(!("CONTENT-TYPE" in OpenLayers.Util.upperCaseObject(config.headers))) {
+            config.headers["Content-Type"] = "application/xml";
+        }
+        return OpenLayers.Request.issue(config);
+    },
+    
+    /**
+     * APIMethod: DELETE
+     * Send an HTTP DELETE request.  Additional configuration properties are
+     *     documented in the <issue> method, with the method property set
+     *     to DELETE.
+     *
+     * Parameters:
+     * config - {Object} Object with properties for configuring the request.
+     *     See the <issue> method for documentation of allowed properties.
+     *     This object is modified and should not be reused.
+     * 
+     * Returns:
+     * {XMLHttpRequest} Request object.
+     */
+    DELETE: function(config) {
+        config = OpenLayers.Util.extend(config, {method: "DELETE"});
+        return OpenLayers.Request.issue(config);
+    },
+  
+    /**
+     * APIMethod: HEAD
+     * Send an HTTP HEAD request.  Additional configuration properties are
+     *     documented in the <issue> method, with the method property set
+     *     to HEAD.
+     *
+     * Parameters:
+     * config - {Object} Object with properties for configuring the request.
+     *     See the <issue> method for documentation of allowed properties.
+     *     This object is modified and should not be reused.
+     * 
+     * Returns:
+     * {XMLHttpRequest} Request object.
+     */
+    HEAD: function(config) {
+        config = OpenLayers.Util.extend(config, {method: "HEAD"});
+        return OpenLayers.Request.issue(config);
+    },
+    
+    /**
+     * APIMethod: OPTIONS
+     * Send an HTTP OPTIONS request.  Additional configuration properties are
+     *     documented in the <issue> method, with the method property set
+     *     to OPTIONS.
+     *
+     * Parameters:
+     * config - {Object} Object with properties for configuring the request.
+     *     See the <issue> method for documentation of allowed properties.
+     *     This object is modified and should not be reused.
+     * 
+     * Returns:
+     * {XMLHttpRequest} Request object.
+     */
+    OPTIONS: function(config) {
+        config = OpenLayers.Util.extend(config, {method: "OPTIONS"});
+        return OpenLayers.Request.issue(config);
+    }
+
+};
+
+// XMLHttpRequest.js Copyright (C) 2010 Sergey Ilinsky (http://www.ilinsky.com)
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+/**
+ * @requires OpenLayers/Request.js
+ */
+
+(function () {
+
+    // Save reference to earlier defined object implementation (if any)
+    var oXMLHttpRequest    = window.XMLHttpRequest;
+
+    // Define on browser type
+    var bGecko    = !!window.controllers,
+        bIE        = window.document.all && !window.opera,
+        bIE7    = bIE && window.navigator.userAgent.match(/MSIE 7.0/);
+
+    // Enables "XMLHttpRequest()" call next to "new XMLHttpReques()"
+    function fXMLHttpRequest() {
+        this._object    = oXMLHttpRequest && !bIE7 ? new oXMLHttpRequest : new window.ActiveXObject("Microsoft.XMLHTTP");
+        this._listeners    = [];
+    };
+
+    // Constructor
+    function cXMLHttpRequest() {
+        return new fXMLHttpRequest;
+    };
+    cXMLHttpRequest.prototype    = fXMLHttpRequest.prototype;
+
+    // BUGFIX: Firefox with Firebug installed would break pages if not executed
+    if (bGecko && oXMLHttpRequest.wrapped)
+        cXMLHttpRequest.wrapped    = oXMLHttpRequest.wrapped;
+
+    // Constants
+    cXMLHttpRequest.UNSENT                = 0;
+    cXMLHttpRequest.OPENED                = 1;
+    cXMLHttpRequest.HEADERS_RECEIVED    = 2;
+    cXMLHttpRequest.LOADING                = 3;
+    cXMLHttpRequest.DONE                = 4;
+
+    // Public Properties
+    cXMLHttpRequest.prototype.readyState    = cXMLHttpRequest.UNSENT;
+    cXMLHttpRequest.prototype.responseText    = '';
+    cXMLHttpRequest.prototype.responseXML    = null;
+    cXMLHttpRequest.prototype.status        = 0;
+    cXMLHttpRequest.prototype.statusText    = '';
+
+    // Priority proposal
+    cXMLHttpRequest.prototype.priority        = "NORMAL";
+
+    // Instance-level Events Handlers
+    cXMLHttpRequest.prototype.onreadystatechange    = null;
+
+    // Class-level Events Handlers
+    cXMLHttpRequest.onreadystatechange    = null;
+    cXMLHttpRequest.onopen                = null;
+    cXMLHttpRequest.onsend                = null;
+    cXMLHttpRequest.onabort                = null;
+
+    // Public Methods
+    cXMLHttpRequest.prototype.open    = function(sMethod, sUrl, bAsync, sUser, sPassword) {
+        // Delete headers, required when object is reused
+        delete this._headers;
+
+        // When bAsync parameter value is omitted, use true as default
+        if (arguments.length < 3)
+            bAsync    = true;
+
+        // Save async parameter for fixing Gecko bug with missing readystatechange in synchronous requests
+        this._async        = bAsync;
+
+        // Set the onreadystatechange handler
+        var oRequest    = this,
+            nState        = this.readyState,
+            fOnUnload;
+
+        // BUGFIX: IE - memory leak on page unload (inter-page leak)
+        if (bIE && bAsync) {
+            fOnUnload = function() {
+                if (nState != cXMLHttpRequest.DONE) {
+                    fCleanTransport(oRequest);
+                    // Safe to abort here since onreadystatechange handler removed
+                    oRequest.abort();
+                }
+            };
+            window.attachEvent("onunload", fOnUnload);
+        }
+
+        // Add method sniffer
+        if (cXMLHttpRequest.onopen)
+            cXMLHttpRequest.onopen.apply(this, arguments);
+
+        if (arguments.length > 4)
+            this._object.open(sMethod, sUrl, bAsync, sUser, sPassword);
+        else
+        if (arguments.length > 3)
+            this._object.open(sMethod, sUrl, bAsync, sUser);
+        else
+            this._object.open(sMethod, sUrl, bAsync);
+
+        this.readyState    = cXMLHttpRequest.OPENED;
+        fReadyStateChange(this);
+
+        this._object.onreadystatechange    = function() {
+            if (bGecko && !bAsync)
+                return;
+
+            // Synchronize state
+            oRequest.readyState        = oRequest._object.readyState;
+
+            //
+            fSynchronizeValues(oRequest);
+
+            // BUGFIX: Firefox fires unnecessary DONE when aborting
+            if (oRequest._aborted) {
+                // Reset readyState to UNSENT
+                oRequest.readyState    = cXMLHttpRequest.UNSENT;
+
+                // Return now
+                return;
+            }
+
+            if (oRequest.readyState == cXMLHttpRequest.DONE) {
+                // Free up queue
+                delete oRequest._data;
+/*                if (bAsync)
+                    fQueue_remove(oRequest);*/
+                //
+                fCleanTransport(oRequest);
+// Uncomment this block if you need a fix for IE cache
+/*
+                // BUGFIX: IE - cache issue
+                if (!oRequest._object.getResponseHeader("Date")) {
+                    // Save object to cache
+                    oRequest._cached    = oRequest._object;
+
+                    // Instantiate a new transport object
+                    cXMLHttpRequest.call(oRequest);
+
+                    // Re-send request
+                    if (sUser) {
+                         if (sPassword)
+                            oRequest._object.open(sMethod, sUrl, bAsync, sUser, sPassword);
+                        else
+                            oRequest._object.open(sMethod, sUrl, bAsync, sUser);
+                    }
+                    else
+                        oRequest._object.open(sMethod, sUrl, bAsync);
+                    oRequest._object.setRequestHeader("If-Modified-Since", oRequest._cached.getResponseHeader("Last-Modified") || new window.Date(0));
+                    // Copy headers set
+                    if (oRequest._headers)
+                        for (var sHeader in oRequest._headers)
+                            if (typeof oRequest._headers[sHeader] == "string")    // Some frameworks prototype objects with functions
+                                oRequest._object.setRequestHeader(sHeader, oRequest._headers[sHeader]);
+
+                    oRequest._object.onreadystatechange    = function() {
+                        // Synchronize state
+                        oRequest.readyState        = oRequest._object.readyState;
+
+                        if (oRequest._aborted) {
+                            //
+                            oRequest.readyState    = cXMLHttpRequest.UNSENT;
+
+                            // Return
+                            return;
+                        }
+
+                        if (oRequest.readyState == cXMLHttpRequest.DONE) {
+                            // Clean Object
+                            fCleanTransport(oRequest);
+
+                            // get cached request
+                            if (oRequest.status == 304)
+                                oRequest._object    = oRequest._cached;
+
+                            //
+                            delete oRequest._cached;
+
+                            //
+                            fSynchronizeValues(oRequest);
+
+                            //
+                            fReadyStateChange(oRequest);
+
+                            // BUGFIX: IE - memory leak in interrupted
+                            if (bIE && bAsync)
+                                window.detachEvent("onunload", fOnUnload);
+                        }
+                    };
+                    oRequest._object.send(null);
+
+                    // Return now - wait until re-sent request is finished
+                    return;
+                };
+*/
+                // BUGFIX: IE - memory leak in interrupted
+                if (bIE && bAsync)
+                    window.detachEvent("onunload", fOnUnload);
+            }
+
+            // BUGFIX: Some browsers (Internet Explorer, Gecko) fire OPEN readystate twice
+            if (nState != oRequest.readyState)
+                fReadyStateChange(oRequest);
+
+            nState    = oRequest.readyState;
+        }
+    };
+    function fXMLHttpRequest_send(oRequest) {
+        oRequest._object.send(oRequest._data);
+
+        // BUGFIX: Gecko - missing readystatechange calls in synchronous requests
+        if (bGecko && !oRequest._async) {
+            oRequest.readyState    = cXMLHttpRequest.OPENED;
+
+            // Synchronize state
+            fSynchronizeValues(oRequest);
+
+            // Simulate missing states
+            while (oRequest.readyState < cXMLHttpRequest.DONE) {
+                oRequest.readyState++;
+                fReadyStateChange(oRequest);
+                // Check if we are aborted
+                if (oRequest._aborted)
+                    return;
+            }
+        }
+    };
+    cXMLHttpRequest.prototype.send    = function(vData) {
+        // Add method sniffer
+        if (cXMLHttpRequest.onsend)
+            cXMLHttpRequest.onsend.apply(this, arguments);
+
+        if (!arguments.length)
+            vData    = null;
+
+        // BUGFIX: Safari - fails sending documents created/modified dynamically, so an explicit serialization required
+        // BUGFIX: IE - rewrites any custom mime-type to "text/xml" in case an XMLNode is sent
+        // BUGFIX: Gecko - fails sending Element (this is up to the implementation either to standard)
+        if (vData && vData.nodeType) {
+            vData    = window.XMLSerializer ? new window.XMLSerializer().serializeToString(vData) : vData.xml;
+            if (!this._headers["Content-Type"])
+                this._object.setRequestHeader("Content-Type", "application/xml");
+        }
+
+        this._data    = vData;
+/*
+        // Add to queue
+        if (this._async)
+            fQueue_add(this);
+        else*/
+            fXMLHttpRequest_send(this);
+    };
+    cXMLHttpRequest.prototype.abort    = function() {
+        // Add method sniffer
+        if (cXMLHttpRequest.onabort)
+            cXMLHttpRequest.onabort.apply(this, arguments);
+
+        // BUGFIX: Gecko - unnecessary DONE when aborting
+        if (this.readyState > cXMLHttpRequest.UNSENT)
+            this._aborted    = true;
+
+        this._object.abort();
+
+        // BUGFIX: IE - memory leak
+        fCleanTransport(this);
+
+        this.readyState    = cXMLHttpRequest.UNSENT;
+
+        delete this._data;
+/*        if (this._async)
+            fQueue_remove(this);*/
+    };
+    cXMLHttpRequest.prototype.getAllResponseHeaders    = function() {
+        return this._object.getAllResponseHeaders();
+    };
+    cXMLHttpRequest.prototype.getResponseHeader    = function(sName) {
+        return this._object.getResponseHeader(sName);
+    };
+    cXMLHttpRequest.prototype.setRequestHeader    = function(sName, sValue) {
+        // BUGFIX: IE - cache issue
+        if (!this._headers)
+            this._headers    = {};
+        this._headers[sName]    = sValue;
+
+        return this._object.setRequestHeader(sName, sValue);
+    };
+
+    // EventTarget interface implementation
+    cXMLHttpRequest.prototype.addEventListener    = function(sName, fHandler, bUseCapture) {
+        for (var nIndex = 0, oListener; oListener = this._listeners[nIndex]; nIndex++)
+            if (oListener[0] == sName && oListener[1] == fHandler && oListener[2] == bUseCapture)
+                return;
+        // Add listener
+        this._listeners.push([sName, fHandler, bUseCapture]);
+    };
+
+    cXMLHttpRequest.prototype.removeEventListener    = function(sName, fHandler, bUseCapture) {
+        for (var nIndex = 0, oListener; oListener = this._listeners[nIndex]; nIndex++)
+            if (oListener[0] == sName && oListener[1] == fHandler && oListener[2] == bUseCapture)
+                break;
+        // Remove listener
+        if (oListener)
+            this._listeners.splice(nIndex, 1);
+    };
+
+    cXMLHttpRequest.prototype.dispatchEvent    = function(oEvent) {
+        var oEventPseudo    = {
+            'type':            oEvent.type,
+            'target':        this,
+            'currentTarget':this,
+            'eventPhase':    2,
+            'bubbles':        oEvent.bubbles,
+            'cancelable':    oEvent.cancelable,
+            'timeStamp':    oEvent.timeStamp,
+            'stopPropagation':    function() {},    // There is no flow
+            'preventDefault':    function() {},    // There is no default action
+            'initEvent':        function() {}    // Original event object should be initialized
+        };
+
+        // Execute onreadystatechange
+        if (oEventPseudo.type == "readystatechange" && this.onreadystatechange)
+            (this.onreadystatechange.handleEvent || this.onreadystatechange).apply(this, [oEventPseudo]);
+
+        // Execute listeners
+        for (var nIndex = 0, oListener; oListener = this._listeners[nIndex]; nIndex++)
+            if (oListener[0] == oEventPseudo.type && !oListener[2])
+                (oListener[1].handleEvent || oListener[1]).apply(this, [oEventPseudo]);
+    };
+
+    //
+    cXMLHttpRequest.prototype.toString    = function() {
+        return '[' + "object" + ' ' + "XMLHttpRequest" + ']';
+    };
+
+    cXMLHttpRequest.toString    = function() {
+        return '[' + "XMLHttpRequest" + ']';
+    };
+
+    // Helper function
+    function fReadyStateChange(oRequest) {
+        // Sniffing code
+        if (cXMLHttpRequest.onreadystatechange)
+            cXMLHttpRequest.onreadystatechange.apply(oRequest);
+
+        // Fake event
+        oRequest.dispatchEvent({
+            'type':            "readystatechange",
+            'bubbles':        false,
+            'cancelable':    false,
+            'timeStamp':    new Date + 0
+        });
+    };
+
+    function fGetDocument(oRequest) {
+        var oDocument    = oRequest.responseXML,
+            sResponse    = oRequest.responseText;
+        // Try parsing responseText
+        if (bIE && sResponse && oDocument && !oDocument.documentElement && oRequest.getResponseHeader("Content-Type").match(/[^\/]+\/[^\+]+\+xml/)) {
+            oDocument    = new window.ActiveXObject("Microsoft.XMLDOM");
+            oDocument.async                = false;
+            oDocument.validateOnParse    = false;
+            oDocument.loadXML(sResponse);
+        }
+        // Check if there is no error in document
+        if (oDocument)
+            if ((bIE && oDocument.parseError != 0) || !oDocument.documentElement || (oDocument.documentElement && oDocument.documentElement.tagName == "parsererror"))
+                return null;
+        return oDocument;
+    };
+
+    function fSynchronizeValues(oRequest) {
+        try {    oRequest.responseText    = oRequest._object.responseText;    } catch (e) {}
+        try {    oRequest.responseXML    = fGetDocument(oRequest._object);    } catch (e) {}
+        try {    oRequest.status            = oRequest._object.status;            } catch (e) {}
+        try {    oRequest.statusText        = oRequest._object.statusText;        } catch (e) {}
+    };
+
+    function fCleanTransport(oRequest) {
+        // BUGFIX: IE - memory leak (on-page leak)
+        oRequest._object.onreadystatechange    = new window.Function;
+    };
+/*
+    // Queue manager
+    var oQueuePending    = {"CRITICAL":[],"HIGH":[],"NORMAL":[],"LOW":[],"LOWEST":[]},
+        aQueueRunning    = [];
+    function fQueue_add(oRequest) {
+        oQueuePending[oRequest.priority in oQueuePending ? oRequest.priority : "NORMAL"].push(oRequest);
+        //
+        setTimeout(fQueue_process);
+    };
+
+    function fQueue_remove(oRequest) {
+        for (var nIndex = 0, bFound    = false; nIndex < aQueueRunning.length; nIndex++)
+            if (bFound)
+                aQueueRunning[nIndex - 1]    = aQueueRunning[nIndex];
+            else
+            if (aQueueRunning[nIndex] == oRequest)
+                bFound    = true;
+        if (bFound)
+            aQueueRunning.length--;
+        //
+        setTimeout(fQueue_process);
+    };
+
+    function fQueue_process() {
+        if (aQueueRunning.length < 6) {
+            for (var sPriority in oQueuePending) {
+                if (oQueuePending[sPriority].length) {
+                    var oRequest    = oQueuePending[sPriority][0];
+                    oQueuePending[sPriority]    = oQueuePending[sPriority].slice(1);
+                    //
+                    aQueueRunning.push(oRequest);
+                    // Send request
+                    fXMLHttpRequest_send(oRequest);
+                    break;
+                }
+            }
+        }
+    };
+*/
+    // Internet Explorer 5.0 (missing apply)
+    if (!window.Function.prototype.apply) {
+        window.Function.prototype.apply    = function(oRequest, oArguments) {
+            if (!oArguments)
+                oArguments    = [];
+            oRequest.__func    = this;
+            oRequest.__func(oArguments[0], oArguments[1], oArguments[2], oArguments[3], oArguments[4]);
+            delete oRequest.__func;
+        };
+    };
+
+    // Register new object with window
+    /**
+     * Class: OpenLayers.Request.XMLHttpRequest
+     * Standard-compliant (W3C) cross-browser implementation of the
+     *     XMLHttpRequest object.  From
+     *     http://code.google.com/p/xmlhttprequest/.
+     */
+    OpenLayers.Request.XMLHttpRequest = cXMLHttpRequest;
+})();
+
+/* Copyright (c) 2006-2012 by OpenLayers Contributors (see authors.txt for 
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
  * @requires OpenLayers/BaseTypes/Class.js
  * @requires OpenLayers/Util.js
  */
@@ -19064,6 +19939,642 @@ OpenLayers.Control.Button = OpenLayers.Class(OpenLayers.Control, {
  * See license.txt in the OpenLayers distribution or repository for the
  * full text of the license. */
 
+
+/**
+ * @requires OpenLayers/Control.js
+ * @requires OpenLayers/Feature/Vector.js
+ * @requires OpenLayers/Handler/Feature.js
+ * @requires OpenLayers/Layer/Vector/RootContainer.js
+ */
+
+/**
+ * Class: OpenLayers.Control.SelectFeature
+ * The SelectFeature control selects vector features from a given layer on 
+ * click or hover. 
+ *
+ * Inherits from:
+ *  - <OpenLayers.Control>
+ */
+OpenLayers.Control.SelectFeature = OpenLayers.Class(OpenLayers.Control, {
+
+    /** 
+     * APIProperty: events
+     * {<OpenLayers.Events>} Events instance for listeners and triggering
+     *     control specific events.
+     *
+     * Register a listener for a particular event with the following syntax:
+     * (code)
+     * control.events.register(type, obj, listener);
+     * (end)
+     *
+     * Supported event types (in addition to those from <OpenLayers.Control.events>):
+     * beforefeaturehighlighted - Triggered before a feature is highlighted
+     * featurehighlighted - Triggered when a feature is highlighted
+     * featureunhighlighted - Triggered when a feature is unhighlighted
+     * boxselectionstart - Triggered before box selection starts
+     * boxselectionend - Triggered after box selection ends
+     */
+    
+    /**
+     * Property: multipleKey
+     * {String} An event modifier ('altKey' or 'shiftKey') that temporarily sets
+     *     the <multiple> property to true.  Default is null.
+     */
+    multipleKey: null,
+    
+    /**
+     * Property: toggleKey
+     * {String} An event modifier ('altKey' or 'shiftKey') that temporarily sets
+     *     the <toggle> property to true.  Default is null.
+     */
+    toggleKey: null,
+    
+    /**
+     * APIProperty: multiple
+     * {Boolean} Allow selection of multiple geometries.  Default is false.
+     */
+    multiple: false, 
+
+    /**
+     * APIProperty: clickout
+     * {Boolean} Unselect features when clicking outside any feature.
+     *     Default is true.
+     */
+    clickout: true,
+
+    /**
+     * APIProperty: toggle
+     * {Boolean} Unselect a selected feature on click.  Default is false.  Only
+     *     has meaning if hover is false.
+     */
+    toggle: false,
+
+    /**
+     * APIProperty: hover
+     * {Boolean} Select on mouse over and deselect on mouse out.  If true, this
+     * ignores clicks and only listens to mouse moves.
+     */
+    hover: false,
+
+    /**
+     * APIProperty: highlightOnly
+     * {Boolean} If true do not actually select features (that is place them in 
+     * the layer's selected features array), just highlight them. This property
+     * has no effect if hover is false. Defaults to false.
+     */
+    highlightOnly: false,
+    
+    /**
+     * APIProperty: box
+     * {Boolean} Allow feature selection by drawing a box.
+     */
+    box: false,
+    
+    /**
+     * Property: onBeforeSelect 
+     * {Function} Optional function to be called before a feature is selected.
+     *     The function should expect to be called with a feature.
+     */
+    onBeforeSelect: function() {},
+    
+    /**
+     * APIProperty: onSelect 
+     * {Function} Optional function to be called when a feature is selected.
+     *     The function should expect to be called with a feature.
+     */
+    onSelect: function() {},
+
+    /**
+     * APIProperty: onUnselect
+     * {Function} Optional function to be called when a feature is unselected.
+     *     The function should expect to be called with a feature.
+     */
+    onUnselect: function() {},
+    
+    /**
+     * Property: scope
+     * {Object} The scope to use with the onBeforeSelect, onSelect, onUnselect
+     *     callbacks. If null the scope will be this control.
+     */
+    scope: null,
+
+    /**
+     * APIProperty: geometryTypes
+     * {Array(String)} To restrict selecting to a limited set of geometry types,
+     *     send a list of strings corresponding to the geometry class names.
+     */
+    geometryTypes: null,
+
+    /**
+     * Property: layer
+     * {<OpenLayers.Layer.Vector>} The vector layer with a common renderer
+     * root for all layers this control is configured with (if an array of
+     * layers was passed to the constructor), or the vector layer the control
+     * was configured with (if a single layer was passed to the constructor).
+     */
+    layer: null,
+    
+    /**
+     * Property: layers
+     * {Array(<OpenLayers.Layer.Vector>)} The layers this control will work on,
+     * or null if the control was configured with a single layer
+     */
+    layers: null,
+    
+    /**
+     * APIProperty: callbacks
+     * {Object} The functions that are sent to the handlers.feature for callback
+     */
+    callbacks: null,
+    
+    /**
+     * APIProperty: selectStyle 
+     * {Object} Hash of styles
+     */
+    selectStyle: null,
+    
+    /**
+     * Property: renderIntent
+     * {String} key used to retrieve the select style from the layer's
+     * style map.
+     */
+    renderIntent: "select",
+
+    /**
+     * Property: handlers
+     * {Object} Object with references to multiple <OpenLayers.Handler>
+     *     instances.
+     */
+    handlers: null,
+
+    /**
+     * Constructor: OpenLayers.Control.SelectFeature
+     * Create a new control for selecting features.
+     *
+     * Parameters:
+     * layers - {<OpenLayers.Layer.Vector>}, or an array of vector layers. The
+     *     layer(s) this control will select features from.
+     * options - {Object} 
+     */
+    initialize: function(layers, options) {
+        OpenLayers.Control.prototype.initialize.apply(this, [options]);
+        
+        if(this.scope === null) {
+            this.scope = this;
+        }
+        this.initLayer(layers);
+        var callbacks = {
+            click: this.clickFeature,
+            clickout: this.clickoutFeature
+        };
+        if (this.hover) {
+            callbacks.over = this.overFeature;
+            callbacks.out = this.outFeature;
+        }
+             
+        this.callbacks = OpenLayers.Util.extend(callbacks, this.callbacks);
+        this.handlers = {
+            feature: new OpenLayers.Handler.Feature(
+                this, this.layer, this.callbacks,
+                {geometryTypes: this.geometryTypes}
+            )
+        };
+
+        if (this.box) {
+            this.handlers.box = new OpenLayers.Handler.Box(
+                this, {done: this.selectBox},
+                {boxDivClassName: "olHandlerBoxSelectFeature"}
+            ); 
+        }
+    },
+
+    /**
+     * Method: initLayer
+     * Assign the layer property. If layers is an array, we need to use
+     *     a RootContainer.
+     *
+     * Parameters:
+     * layers - {<OpenLayers.Layer.Vector>}, or an array of vector layers.
+     */
+    initLayer: function(layers) {
+        if(OpenLayers.Util.isArray(layers)) {
+            this.layers = layers;
+            this.layer = new OpenLayers.Layer.Vector.RootContainer(
+                this.id + "_container", {
+                    layers: layers
+                }
+            );
+        } else {
+            this.layer = layers;
+        }
+    },
+    
+    /**
+     * Method: destroy
+     */
+    destroy: function() {
+        if(this.active && this.layers) {
+            this.map.removeLayer(this.layer);
+        }
+        OpenLayers.Control.prototype.destroy.apply(this, arguments);
+        if(this.layers) {
+            this.layer.destroy();
+        }
+    },
+
+    /**
+     * Method: activate
+     * Activates the control.
+     * 
+     * Returns:
+     * {Boolean} The control was effectively activated.
+     */
+    activate: function () {
+        if (!this.active) {
+            if(this.layers) {
+                this.map.addLayer(this.layer);
+            }
+            this.handlers.feature.activate();
+            if(this.box && this.handlers.box) {
+                this.handlers.box.activate();
+            }
+        }
+        return OpenLayers.Control.prototype.activate.apply(
+            this, arguments
+        );
+    },
+
+    /**
+     * Method: deactivate
+     * Deactivates the control.
+     * 
+     * Returns:
+     * {Boolean} The control was effectively deactivated.
+     */
+    deactivate: function () {
+        if (this.active) {
+            this.handlers.feature.deactivate();
+            if(this.handlers.box) {
+                this.handlers.box.deactivate();
+            }
+            if(this.layers) {
+                this.map.removeLayer(this.layer);
+            }
+        }
+        return OpenLayers.Control.prototype.deactivate.apply(
+            this, arguments
+        );
+    },
+
+    /**
+     * Method: unselectAll
+     * Unselect all selected features.  To unselect all except for a single
+     *     feature, set the options.except property to the feature.
+     *
+     * Parameters:
+     * options - {Object} Optional configuration object.
+     */
+    unselectAll: function(options) {
+        // we'll want an option to supress notification here
+        var layers = this.layers || [this.layer];
+        var layer, feature;
+        for(var l=0; l<layers.length; ++l) {
+            layer = layers[l];
+            for(var i=layer.selectedFeatures.length-1; i>=0; --i) {
+                feature = layer.selectedFeatures[i];
+                if(!options || options.except != feature) {
+                    this.unselect(feature);
+                }
+            }
+        }
+    },
+
+    /**
+     * Method: clickFeature
+     * Called on click in a feature
+     * Only responds if this.hover is false.
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>} 
+     */
+    clickFeature: function(feature) {
+        if(!this.hover) {
+            var selected = (OpenLayers.Util.indexOf(
+                feature.layer.selectedFeatures, feature) > -1);
+            if(selected) {
+                if(this.toggleSelect()) {
+                    this.unselect(feature);
+                } else if(!this.multipleSelect()) {
+                    this.unselectAll({except: feature});
+                }
+            } else {
+                if(!this.multipleSelect()) {
+                    this.unselectAll({except: feature});
+                }
+                this.select(feature);
+            }
+        }
+    },
+
+    /**
+     * Method: multipleSelect
+     * Allow for multiple selected features based on <multiple> property and
+     *     <multipleKey> event modifier.
+     *
+     * Returns:
+     * {Boolean} Allow for multiple selected features.
+     */
+    multipleSelect: function() {
+        return this.multiple || (this.handlers.feature.evt &&
+                                 this.handlers.feature.evt[this.multipleKey]);
+    },
+    
+    /**
+     * Method: toggleSelect
+     * Event should toggle the selected state of a feature based on <toggle>
+     *     property and <toggleKey> event modifier.
+     *
+     * Returns:
+     * {Boolean} Toggle the selected state of a feature.
+     */
+    toggleSelect: function() {
+        return this.toggle || (this.handlers.feature.evt &&
+                               this.handlers.feature.evt[this.toggleKey]);
+    },
+
+    /**
+     * Method: clickoutFeature
+     * Called on click outside a previously clicked (selected) feature.
+     * Only responds if this.hover is false.
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Vector.Feature>} 
+     */
+    clickoutFeature: function(feature) {
+        if(!this.hover && this.clickout) {
+            this.unselectAll();
+        }
+    },
+
+    /**
+     * Method: overFeature
+     * Called on over a feature.
+     * Only responds if this.hover is true.
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>} 
+     */
+    overFeature: function(feature) {
+        var layer = feature.layer;
+        if(this.hover) {
+            if(this.highlightOnly) {
+                this.highlight(feature);
+            } else if(OpenLayers.Util.indexOf(
+                layer.selectedFeatures, feature) == -1) {
+                this.select(feature);
+            }
+        }
+    },
+
+    /**
+     * Method: outFeature
+     * Called on out of a selected feature.
+     * Only responds if this.hover is true.
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>} 
+     */
+    outFeature: function(feature) {
+        if(this.hover) {
+            if(this.highlightOnly) {
+                // we do nothing if we're not the last highlighter of the
+                // feature
+                if(feature._lastHighlighter == this.id) {
+                    // if another select control had highlighted the feature before
+                    // we did it ourself then we use that control to highlight the
+                    // feature as it was before we highlighted it, else we just
+                    // unhighlight it
+                    if(feature._prevHighlighter &&
+                       feature._prevHighlighter != this.id) {
+                        delete feature._lastHighlighter;
+                        var control = this.map.getControl(
+                            feature._prevHighlighter);
+                        if(control) {
+                            control.highlight(feature);
+                        }
+                    } else {
+                        this.unhighlight(feature);
+                    }
+                }
+            } else {
+                this.unselect(feature);
+            }
+        }
+    },
+
+    /**
+     * Method: highlight
+     * Redraw feature with the select style.
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>} 
+     */
+    highlight: function(feature) {
+        var layer = feature.layer;
+        var cont = this.events.triggerEvent("beforefeaturehighlighted", {
+            feature : feature
+        });
+        if(cont !== false) {
+            feature._prevHighlighter = feature._lastHighlighter;
+            feature._lastHighlighter = this.id;
+            var style = this.selectStyle || this.renderIntent;
+            layer.drawFeature(feature, style);
+            this.events.triggerEvent("featurehighlighted", {feature : feature});
+        }
+    },
+
+    /**
+     * Method: unhighlight
+     * Redraw feature with the "default" style
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>} 
+     */
+    unhighlight: function(feature) {
+        var layer = feature.layer;
+        // three cases:
+        // 1. there's no other highlighter, in that case _prev is undefined,
+        //    and we just need to undef _last
+        // 2. another control highlighted the feature after we did it, in
+        //    that case _last references this other control, and we just
+        //    need to undef _prev
+        // 3. another control highlighted the feature before we did it, in
+        //    that case _prev references this other control, and we need to
+        //    set _last to _prev and undef _prev
+        if(feature._prevHighlighter == undefined) {
+            delete feature._lastHighlighter;
+        } else if(feature._prevHighlighter == this.id) {
+            delete feature._prevHighlighter;
+        } else {
+            feature._lastHighlighter = feature._prevHighlighter;
+            delete feature._prevHighlighter;
+        }
+        layer.drawFeature(feature, feature.style || feature.layer.style ||
+            "default");
+        this.events.triggerEvent("featureunhighlighted", {feature : feature});
+    },
+    
+    /**
+     * Method: select
+     * Add feature to the layer's selectedFeature array, render the feature as
+     * selected, and call the onSelect function.
+     * 
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>} 
+     */
+    select: function(feature) {
+        var cont = this.onBeforeSelect.call(this.scope, feature);
+        var layer = feature.layer;
+        if(cont !== false) {
+            cont = layer.events.triggerEvent("beforefeatureselected", {
+                feature: feature
+            });
+            if(cont !== false) {
+                layer.selectedFeatures.push(feature);
+                this.highlight(feature);
+                // if the feature handler isn't involved in the feature
+                // selection (because the box handler is used or the
+                // feature is selected programatically) we fake the
+                // feature handler to allow unselecting on click
+                if(!this.handlers.feature.lastFeature) {
+                    this.handlers.feature.lastFeature = layer.selectedFeatures[0];
+                }
+                layer.events.triggerEvent("featureselected", {feature: feature});
+                this.onSelect.call(this.scope, feature);
+            }
+        }
+    },
+
+    /**
+     * Method: unselect
+     * Remove feature from the layer's selectedFeature array, render the feature as
+     * normal, and call the onUnselect function.
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>}
+     */
+    unselect: function(feature) {
+        var layer = feature.layer;
+        // Store feature style for restoration later
+        this.unhighlight(feature);
+        OpenLayers.Util.removeItem(layer.selectedFeatures, feature);
+        layer.events.triggerEvent("featureunselected", {feature: feature});
+        this.onUnselect.call(this.scope, feature);
+    },
+    
+    /**
+     * Method: selectBox
+     * Callback from the handlers.box set up when <box> selection is true
+     *     on.
+     *
+     * Parameters:
+     * position - {<OpenLayers.Bounds> || <OpenLayers.Pixel> }  
+     */
+    selectBox: function(position) {
+        if (position instanceof OpenLayers.Bounds) {
+            var minXY = this.map.getLonLatFromPixel({
+                x: position.left,
+                y: position.bottom
+            });
+            var maxXY = this.map.getLonLatFromPixel({
+                x: position.right,
+                y: position.top
+            });
+            var bounds = new OpenLayers.Bounds(
+                minXY.lon, minXY.lat, maxXY.lon, maxXY.lat
+            );
+            
+            // if multiple is false, first deselect currently selected features
+            if (!this.multipleSelect()) {
+                this.unselectAll();
+            }
+            
+            // because we're using a box, we consider we want multiple selection
+            var prevMultiple = this.multiple;
+            this.multiple = true;
+            var layers = this.layers || [this.layer];
+            this.events.triggerEvent("boxselectionstart", {layers: layers}); 
+            var layer;
+            for(var l=0; l<layers.length; ++l) {
+                layer = layers[l];
+                for(var i=0, len = layer.features.length; i<len; ++i) {
+                    var feature = layer.features[i];
+                    // check if the feature is displayed
+                    if (!feature.getVisibility()) {
+                        continue;
+                    }
+
+                    if (this.geometryTypes == null || OpenLayers.Util.indexOf(
+                            this.geometryTypes, feature.geometry.CLASS_NAME) > -1) {
+                        if (bounds.toGeometry().intersects(feature.geometry)) {
+                            if (OpenLayers.Util.indexOf(layer.selectedFeatures, feature) == -1) {
+                                this.select(feature);
+                            }
+                        }
+                    }
+                }
+            }
+            this.multiple = prevMultiple;
+            this.events.triggerEvent("boxselectionend", {layers: layers}); 
+        }
+    },
+
+    /** 
+     * Method: setMap
+     * Set the map property for the control. 
+     * 
+     * Parameters:
+     * map - {<OpenLayers.Map>} 
+     */
+    setMap: function(map) {
+        this.handlers.feature.setMap(map);
+        if (this.box) {
+            this.handlers.box.setMap(map);
+        }
+        OpenLayers.Control.prototype.setMap.apply(this, arguments);
+    },
+    
+    /**
+     * APIMethod: setLayer
+     * Attach a new layer to the control, overriding any existing layers.
+     *
+     * Parameters:
+     * layers - Array of {<OpenLayers.Layer.Vector>} or a single
+     *     {<OpenLayers.Layer.Vector>}
+     */
+    setLayer: function(layers) {
+        var isActive = this.active;
+        this.unselectAll();
+        this.deactivate();
+        if(this.layers) {
+            this.layer.destroy();
+            this.layers = null;
+        }
+        this.initLayer(layers);
+        this.handlers.feature.layer = this.layer;
+        if (isActive) {
+            this.activate();
+        }
+    },
+    
+    CLASS_NAME: "OpenLayers.Control.SelectFeature"
+});
+
+/* Copyright (c) 2006-2012 by OpenLayers Contributors (see authors.txt for 
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
 /**
  * @requires OpenLayers/Control.js
  * @requires OpenLayers/Control/Button.js
@@ -30719,429 +32230,6 @@ OpenLayers.Format.WKT = OpenLayers.Class(OpenLayers.Format, {
  * full text of the license. */
 
 /**
- * @requires OpenLayers/Events.js
- */
-
-/**
- * TODO: deprecate me
- * Use OpenLayers.Request.proxy instead.
- */
-OpenLayers.ProxyHost = "";
-
-/**
- * Namespace: OpenLayers.Request
- * The OpenLayers.Request namespace contains convenience methods for working
- *     with XMLHttpRequests.  These methods work with a cross-browser
- *     W3C compliant <OpenLayers.Request.XMLHttpRequest> class.
- */
-OpenLayers.Request = {
-    
-    /**
-     * Constant: DEFAULT_CONFIG
-     * {Object} Default configuration for all requests.
-     */
-    DEFAULT_CONFIG: {
-        method: "GET",
-        url: window.location.href,
-        async: true,
-        user: undefined,
-        password: undefined,
-        params: null,
-        proxy: OpenLayers.ProxyHost,
-        headers: {},
-        data: null,
-        callback: function() {},
-        success: null,
-        failure: null,
-        scope: null
-    },
-    
-    /**
-     * Constant: URL_SPLIT_REGEX
-     */
-    URL_SPLIT_REGEX: /([^:]*:)\/\/([^:]*:?[^@]*@)?([^:\/\?]*):?([^\/\?]*)/,
-    
-    /**
-     * APIProperty: events
-     * {<OpenLayers.Events>} An events object that handles all 
-     *     events on the {<OpenLayers.Request>} object.
-     *
-     * All event listeners will receive an event object with three properties:
-     * request - {<OpenLayers.Request.XMLHttpRequest>} The request object.
-     * config - {Object} The config object sent to the specific request method.
-     * requestUrl - {String} The request url.
-     * 
-     * Supported event types:
-     * complete - Triggered when we have a response from the request, if a
-     *     listener returns false, no further response processing will take
-     *     place.
-     * success - Triggered when the HTTP response has a success code (200-299).
-     * failure - Triggered when the HTTP response does not have a success code.
-     */
-    events: new OpenLayers.Events(this),
-    
-    /**
-     * Method: makeSameOrigin
-     * Using the specified proxy, returns a same origin url of the provided url.
-     *
-     * Parameters:
-     * url - {String} An arbitrary url
-     * proxy {String|Function} The proxy to use to make the provided url a
-     *     same origin url.
-     *
-     * Returns
-     * {String} the same origin url. If no proxy is provided, the returned url
-     *     will be the same as the provided url.
-     */
-    makeSameOrigin: function(url, proxy) {
-        var sameOrigin = url.indexOf("http") !== 0;
-        var urlParts = !sameOrigin && url.match(this.URL_SPLIT_REGEX);
-        if (urlParts) {
-            var location = window.location;
-            sameOrigin =
-                urlParts[1] == location.protocol &&
-                urlParts[3] == location.hostname;
-            var uPort = urlParts[4], lPort = location.port;
-            if (uPort != 80 && uPort != "" || lPort != "80" && lPort != "") {
-                sameOrigin = sameOrigin && uPort == lPort;
-            }
-        }
-        if (!sameOrigin) {
-            if (proxy) {
-                if (typeof proxy == "function") {
-                    url = proxy(url);
-                } else {
-                    url = proxy + encodeURIComponent(url);
-                }
-            } else {
-                OpenLayers.Console.warn(
-                    OpenLayers.i18n("proxyNeeded"), {url: url});
-            }
-        }
-        return url;
-    },
-
-    /**
-     * APIMethod: issue
-     * Create a new XMLHttpRequest object, open it, set any headers, bind
-     *     a callback to done state, and send any data.  It is recommended that
-     *     you use one <GET>, <POST>, <PUT>, <DELETE>, <OPTIONS>, or <HEAD>.
-     *     This method is only documented to provide detail on the configuration
-     *     options available to all request methods.
-     *
-     * Parameters:
-     * config - {Object} Object containing properties for configuring the
-     *     request.  Allowed configuration properties are described below.
-     *     This object is modified and should not be reused.
-     *
-     * Allowed config properties:
-     * method - {String} One of GET, POST, PUT, DELETE, HEAD, or
-     *     OPTIONS.  Default is GET.
-     * url - {String} URL for the request.
-     * async - {Boolean} Open an asynchronous request.  Default is true.
-     * user - {String} User for relevant authentication scheme.  Set
-     *     to null to clear current user.
-     * password - {String} Password for relevant authentication scheme.
-     *     Set to null to clear current password.
-     * proxy - {String} Optional proxy.  Defaults to
-     *     <OpenLayers.ProxyHost>.
-     * params - {Object} Any key:value pairs to be appended to the
-     *     url as a query string.  Assumes url doesn't already include a query
-     *     string or hash.  Typically, this is only appropriate for <GET>
-     *     requests where the query string will be appended to the url.
-     *     Parameter values that are arrays will be
-     *     concatenated with a comma (note that this goes against form-encoding)
-     *     as is done with <OpenLayers.Util.getParameterString>.
-     * headers - {Object} Object with header:value pairs to be set on
-     *     the request.
-     * data - {String | Document} Optional data to send with the request.
-     *     Typically, this is only used with <POST> and <PUT> requests.
-     *     Make sure to provide the appropriate "Content-Type" header for your
-     *     data.  For <POST> and <PUT> requests, the content type defaults to
-     *     "application-xml".  If your data is a different content type, or
-     *     if you are using a different HTTP method, set the "Content-Type"
-     *     header to match your data type.
-     * callback - {Function} Function to call when request is done.
-     *     To determine if the request failed, check request.status (200
-     *     indicates success).
-     * success - {Function} Optional function to call if request status is in
-     *     the 200s.  This will be called in addition to callback above and
-     *     would typically only be used as an alternative.
-     * failure - {Function} Optional function to call if request status is not
-     *     in the 200s.  This will be called in addition to callback above and
-     *     would typically only be used as an alternative.
-     * scope - {Object} If callback is a public method on some object,
-     *     set the scope to that object.
-     *
-     * Returns:
-     * {XMLHttpRequest} Request object.  To abort the request before a response
-     *     is received, call abort() on the request object.
-     */
-    issue: function(config) {        
-        // apply default config - proxy host may have changed
-        var defaultConfig = OpenLayers.Util.extend(
-            this.DEFAULT_CONFIG,
-            {proxy: OpenLayers.ProxyHost}
-        );
-        config = OpenLayers.Util.applyDefaults(config, defaultConfig);
-        
-        // Always set the "X-Requested-With" header to signal that this request
-        // was issued through the XHR-object. Since header keys are case 
-        // insensitive and we want to allow overriding of the "X-Requested-With"
-        // header through the user we cannot use applyDefaults, but have to 
-        // check manually whether we were called with a "X-Requested-With"
-        // header.
-        var customRequestedWithHeader = false,
-            headerKey;
-        for(headerKey in config.headers) {
-            if (config.headers.hasOwnProperty( headerKey )) {
-                if (headerKey.toLowerCase() === 'x-requested-with') {
-                    customRequestedWithHeader = true;
-                }
-            }
-        }
-        if (customRequestedWithHeader === false) {
-            // we did not have a custom "X-Requested-With" header
-            config.headers['X-Requested-With'] = 'XMLHttpRequest';
-        }
-
-        // create request, open, and set headers
-        var request = new OpenLayers.Request.XMLHttpRequest();
-        var url = OpenLayers.Util.urlAppend(config.url, 
-            OpenLayers.Util.getParameterString(config.params || {}));
-        url = OpenLayers.Request.makeSameOrigin(url, config.proxy);
-        request.open(
-            config.method, url, config.async, config.user, config.password
-        );
-        for(var header in config.headers) {
-            request.setRequestHeader(header, config.headers[header]);
-        }
-
-        var events = this.events;
-
-        // we want to execute runCallbacks with "this" as the
-        // execution scope
-        var self = this;
-        
-        request.onreadystatechange = function() {
-            if(request.readyState == OpenLayers.Request.XMLHttpRequest.DONE) {
-                var proceed = events.triggerEvent(
-                    "complete",
-                    {request: request, config: config, requestUrl: url}
-                );
-                if(proceed !== false) {
-                    self.runCallbacks(
-                        {request: request, config: config, requestUrl: url}
-                    );
-                }
-            }
-        };
-        
-        // send request (optionally with data) and return
-        // call in a timeout for asynchronous requests so the return is
-        // available before readyState == 4 for cached docs
-        if(config.async === false) {
-            request.send(config.data);
-        } else {
-            window.setTimeout(function(){
-                if (request.readyState !== 0) { // W3C: 0-UNSENT
-                    request.send(config.data);
-                }
-            }, 0);
-        }
-        return request;
-    },
-    
-    /**
-     * Method: runCallbacks
-     * Calls the complete, success and failure callbacks. Application
-     *    can listen to the "complete" event, have the listener 
-     *    display a confirm window and always return false, and
-     *    execute OpenLayers.Request.runCallbacks if the user
-     *    hits "yes" in the confirm window.
-     *
-     * Parameters:
-     * options - {Object} Hash containing request, config and requestUrl keys
-     */
-    runCallbacks: function(options) {
-        var request = options.request;
-        var config = options.config;
-        
-        // bind callbacks to readyState 4 (done)
-        var complete = (config.scope) ?
-            OpenLayers.Function.bind(config.callback, config.scope) :
-            config.callback;
-        
-        // optional success callback
-        var success;
-        if(config.success) {
-            success = (config.scope) ?
-                OpenLayers.Function.bind(config.success, config.scope) :
-                config.success;
-        }
-
-        // optional failure callback
-        var failure;
-        if(config.failure) {
-            failure = (config.scope) ?
-                OpenLayers.Function.bind(config.failure, config.scope) :
-                config.failure;
-        }
-
-        if (OpenLayers.Util.createUrlObject(config.url).protocol == "file:" &&
-                                                        request.responseText) {
-            request.status = 200;
-        }
-        complete(request);
-
-        if (!request.status || (request.status >= 200 && request.status < 300)) {
-            this.events.triggerEvent("success", options);
-            if(success) {
-                success(request);
-            }
-        }
-        if(request.status && (request.status < 200 || request.status >= 300)) {                    
-            this.events.triggerEvent("failure", options);
-            if(failure) {
-                failure(request);
-            }
-        }
-    },
-    
-    /**
-     * APIMethod: GET
-     * Send an HTTP GET request.  Additional configuration properties are
-     *     documented in the <issue> method, with the method property set
-     *     to GET.
-     *
-     * Parameters:
-     * config - {Object} Object with properties for configuring the request.
-     *     See the <issue> method for documentation of allowed properties.
-     *     This object is modified and should not be reused.
-     * 
-     * Returns:
-     * {XMLHttpRequest} Request object.
-     */
-    GET: function(config) {
-        config = OpenLayers.Util.extend(config, {method: "GET"});
-        return OpenLayers.Request.issue(config);
-    },
-    
-    /**
-     * APIMethod: POST
-     * Send a POST request.  Additional configuration properties are
-     *     documented in the <issue> method, with the method property set
-     *     to POST and "Content-Type" header set to "application/xml".
-     *
-     * Parameters:
-     * config - {Object} Object with properties for configuring the request.
-     *     See the <issue> method for documentation of allowed properties.  The
-     *     default "Content-Type" header will be set to "application-xml" if
-     *     none is provided.  This object is modified and should not be reused.
-     * 
-     * Returns:
-     * {XMLHttpRequest} Request object.
-     */
-    POST: function(config) {
-        config = OpenLayers.Util.extend(config, {method: "POST"});
-        // set content type to application/xml if it isn't already set
-        config.headers = config.headers ? config.headers : {};
-        if(!("CONTENT-TYPE" in OpenLayers.Util.upperCaseObject(config.headers))) {
-            config.headers["Content-Type"] = "application/xml";
-        }
-        return OpenLayers.Request.issue(config);
-    },
-    
-    /**
-     * APIMethod: PUT
-     * Send an HTTP PUT request.  Additional configuration properties are
-     *     documented in the <issue> method, with the method property set
-     *     to PUT and "Content-Type" header set to "application/xml".
-     *
-     * Parameters:
-     * config - {Object} Object with properties for configuring the request.
-     *     See the <issue> method for documentation of allowed properties.  The
-     *     default "Content-Type" header will be set to "application-xml" if
-     *     none is provided.  This object is modified and should not be reused.
-     * 
-     * Returns:
-     * {XMLHttpRequest} Request object.
-     */
-    PUT: function(config) {
-        config = OpenLayers.Util.extend(config, {method: "PUT"});
-        // set content type to application/xml if it isn't already set
-        config.headers = config.headers ? config.headers : {};
-        if(!("CONTENT-TYPE" in OpenLayers.Util.upperCaseObject(config.headers))) {
-            config.headers["Content-Type"] = "application/xml";
-        }
-        return OpenLayers.Request.issue(config);
-    },
-    
-    /**
-     * APIMethod: DELETE
-     * Send an HTTP DELETE request.  Additional configuration properties are
-     *     documented in the <issue> method, with the method property set
-     *     to DELETE.
-     *
-     * Parameters:
-     * config - {Object} Object with properties for configuring the request.
-     *     See the <issue> method for documentation of allowed properties.
-     *     This object is modified and should not be reused.
-     * 
-     * Returns:
-     * {XMLHttpRequest} Request object.
-     */
-    DELETE: function(config) {
-        config = OpenLayers.Util.extend(config, {method: "DELETE"});
-        return OpenLayers.Request.issue(config);
-    },
-  
-    /**
-     * APIMethod: HEAD
-     * Send an HTTP HEAD request.  Additional configuration properties are
-     *     documented in the <issue> method, with the method property set
-     *     to HEAD.
-     *
-     * Parameters:
-     * config - {Object} Object with properties for configuring the request.
-     *     See the <issue> method for documentation of allowed properties.
-     *     This object is modified and should not be reused.
-     * 
-     * Returns:
-     * {XMLHttpRequest} Request object.
-     */
-    HEAD: function(config) {
-        config = OpenLayers.Util.extend(config, {method: "HEAD"});
-        return OpenLayers.Request.issue(config);
-    },
-    
-    /**
-     * APIMethod: OPTIONS
-     * Send an HTTP OPTIONS request.  Additional configuration properties are
-     *     documented in the <issue> method, with the method property set
-     *     to OPTIONS.
-     *
-     * Parameters:
-     * config - {Object} Object with properties for configuring the request.
-     *     See the <issue> method for documentation of allowed properties.
-     *     This object is modified and should not be reused.
-     * 
-     * Returns:
-     * {XMLHttpRequest} Request object.
-     */
-    OPTIONS: function(config) {
-        config = OpenLayers.Util.extend(config, {method: "OPTIONS"});
-        return OpenLayers.Request.issue(config);
-    }
-
-};
-
-/* Copyright (c) 2006-2012 by OpenLayers Contributors (see authors.txt for 
- * full list of contributors). Published under the 2-clause BSD license.
- * See license.txt in the OpenLayers distribution or repository for the
- * full text of the license. */
-
-/**
  * @requires OpenLayers/Format.js
  */
 
@@ -32013,6 +33101,930 @@ OpenLayers.Format.XML.lookupNamespaceURI = OpenLayers.Function.bind(
  * like document.createCDATASection.
  */
 OpenLayers.Format.XML.document = null;
+
+/* Copyright (c) 2006-2012 by OpenLayers Contributors (see authors.txt for 
+ * full list of contributors). Published under the 2-clause BSD license.
+ * See license.txt in the OpenLayers distribution or repository for the
+ * full text of the license. */
+
+/**
+ * @requires OpenLayers/Format/XML.js
+ * @requires OpenLayers/Feature/Vector.js
+ * @requires OpenLayers/Geometry/Point.js
+ * @requires OpenLayers/Geometry/MultiPoint.js
+ * @requires OpenLayers/Geometry/LineString.js
+ * @requires OpenLayers/Geometry/MultiLineString.js
+ * @requires OpenLayers/Geometry/Polygon.js
+ * @requires OpenLayers/Geometry/MultiPolygon.js
+ */
+
+/**
+ * Class: OpenLayers.Format.GML
+ * Read/Wite GML. Create a new instance with the <OpenLayers.Format.GML>
+ *     constructor.  Supports the GML simple features profile.
+ * 
+ * Inherits from:
+ *  - <OpenLayers.Format.XML>
+ */
+OpenLayers.Format.GML = OpenLayers.Class(OpenLayers.Format.XML, {
+    
+    /**
+     * APIProperty: featureNS
+     * {String} Namespace used for feature attributes.  Default is
+     *     "http://mapserver.gis.umn.edu/mapserver".
+     */
+    featureNS: "http://mapserver.gis.umn.edu/mapserver",
+    
+    /**
+     * APIProperty: featurePrefix
+     * {String} Namespace alias (or prefix) for feature nodes.  Default is
+     *     "feature".
+     */
+    featurePrefix: "feature",
+    
+    /**
+     * APIProperty: featureName
+     * {String} Element name for features. Default is "featureMember".
+     */
+    featureName: "featureMember", 
+    
+    /**
+     * APIProperty: layerName
+     * {String} Name of data layer. Default is "features".
+     */
+    layerName: "features",
+    
+    /**
+     * APIProperty: geometryName
+     * {String} Name of geometry element.  Defaults to "geometry".
+     */
+    geometryName: "geometry",
+    
+    /** 
+     * APIProperty: collectionName
+     * {String} Name of featureCollection element.
+     */
+    collectionName: "FeatureCollection",
+    
+    /**
+     * APIProperty: gmlns
+     * {String} GML Namespace.
+     */
+    gmlns: "http://www.opengis.net/gml",
+
+    /**
+     * APIProperty: extractAttributes
+     * {Boolean} Extract attributes from GML.
+     */
+    extractAttributes: true,
+    
+    /**
+     * APIProperty: xy
+     * {Boolean} Order of the GML coordinate true:(x,y) or false:(y,x)
+     * Changing is not recommended, a new Format should be instantiated.
+     */ 
+    xy: true,
+    
+    /**
+     * Constructor: OpenLayers.Format.GML
+     * Create a new parser for GML.
+     *
+     * Parameters:
+     * options - {Object} An optional object whose properties will be set on
+     *     this instance.
+     */
+    initialize: function(options) {
+        // compile regular expressions once instead of every time they are used
+        this.regExes = {
+            trimSpace: (/^\s*|\s*$/g),
+            removeSpace: (/\s*/g),
+            splitSpace: (/\s+/),
+            trimComma: (/\s*,\s*/g)
+        };
+        OpenLayers.Format.XML.prototype.initialize.apply(this, [options]);
+    },
+
+    /**
+     * APIMethod: read
+     * Read data from a string, and return a list of features. 
+     * 
+     * Parameters:
+     * data - {String} or {DOMElement} data to read/parse.
+     *
+     * Returns:
+     * {Array(<OpenLayers.Feature.Vector>)} An array of features.
+     */
+    read: function(data) {
+        if(typeof data == "string") { 
+            data = OpenLayers.Format.XML.prototype.read.apply(this, [data]);
+        }
+        var featureNodes = this.getElementsByTagNameNS(data.documentElement,
+                                                       this.gmlns,
+                                                       this.featureName);
+        var features = [];
+        for(var i=0; i<featureNodes.length; i++) {
+            var feature = this.parseFeature(featureNodes[i]);
+            if(feature) {
+                features.push(feature);
+            }
+        }
+        return features;
+    },
+    
+    /**
+     * Method: parseFeature
+     * This function is the core of the GML parsing code in OpenLayers.
+     *    It creates the geometries that are then attached to the returned
+     *    feature, and calls parseAttributes() to get attribute data out.
+     *    
+     * Parameters:
+     * node - {DOMElement} A GML feature node. 
+     */
+    parseFeature: function(node) {
+        // only accept one geometry per feature - look for highest "order"
+        var order = ["MultiPolygon", "Polygon",
+                     "MultiLineString", "LineString",
+                     "MultiPoint", "Point", "Envelope"];
+        // FIXME: In case we parse a feature with no geometry, but boundedBy an Envelope,
+        // this code creates a geometry derived from the Envelope. This is not correct.
+        var type, nodeList, geometry, parser;
+        for(var i=0; i<order.length; ++i) {
+            type = order[i];
+            nodeList = this.getElementsByTagNameNS(node, this.gmlns, type);
+            if(nodeList.length > 0) {
+                // only deal with first geometry of this type
+                parser = this.parseGeometry[type.toLowerCase()];
+                if(parser) {
+                    geometry = parser.apply(this, [nodeList[0]]);
+                    if (this.internalProjection && this.externalProjection) {
+                        geometry.transform(this.externalProjection, 
+                                           this.internalProjection); 
+                    }                       
+                } else {
+                    throw new TypeError("Unsupported geometry type: " + type);
+                }
+                // stop looking for different geometry types
+                break;
+            }
+        }
+
+        var bounds;
+        var boxNodes = this.getElementsByTagNameNS(node, this.gmlns, "Box");
+        for(i=0; i<boxNodes.length; ++i) {
+            var boxNode = boxNodes[i];
+            var box = this.parseGeometry["box"].apply(this, [boxNode]);
+            var parentNode = boxNode.parentNode;
+            var parentName = parentNode.localName ||
+                             parentNode.nodeName.split(":").pop();
+            if(parentName === "boundedBy") {
+                bounds = box;
+            } else {
+                geometry = box.toGeometry();
+            }
+        }
+        
+        // construct feature (optionally with attributes)
+        var attributes;
+        if(this.extractAttributes) {
+            attributes = this.parseAttributes(node);
+        }
+        var feature = new OpenLayers.Feature.Vector(geometry, attributes);
+        feature.bounds = bounds;
+        
+        feature.gml = {
+            featureType: node.firstChild.nodeName.split(":")[1],
+            featureNS: node.firstChild.namespaceURI,
+            featureNSPrefix: node.firstChild.prefix
+        };
+                
+        // assign fid - this can come from a "fid" or "id" attribute
+        var childNode = node.firstChild;
+        var fid;
+        while(childNode) {
+            if(childNode.nodeType == 1) {
+                fid = childNode.getAttribute("fid") ||
+                      childNode.getAttribute("id");
+                if(fid) {
+                    break;
+                }
+            }
+            childNode = childNode.nextSibling;
+        }
+        feature.fid = fid;
+        return feature;
+    },
+    
+    /**
+     * Property: parseGeometry
+     * Properties of this object are the functions that parse geometries based
+     *     on their type.
+     */
+    parseGeometry: {
+        
+        /**
+         * Method: parseGeometry.point
+         * Given a GML node representing a point geometry, create an OpenLayers
+         *     point geometry.
+         *
+         * Parameters:
+         * node - {DOMElement} A GML node.
+         *
+         * Returns:
+         * {<OpenLayers.Geometry.Point>} A point geometry.
+         */
+        point: function(node) {
+            /**
+             * Three coordinate variations to consider:
+             * 1) <gml:pos>x y z</gml:pos>
+             * 2) <gml:coordinates>x, y, z</gml:coordinates>
+             * 3) <gml:coord><gml:X>x</gml:X><gml:Y>y</gml:Y></gml:coord>
+             */
+            var nodeList, coordString;
+            var coords = [];
+
+            // look for <gml:pos>
+            var nodeList = this.getElementsByTagNameNS(node, this.gmlns, "pos");
+            if(nodeList.length > 0) {
+                coordString = nodeList[0].firstChild.nodeValue;
+                coordString = coordString.replace(this.regExes.trimSpace, "");
+                coords = coordString.split(this.regExes.splitSpace);
+            }
+
+            // look for <gml:coordinates>
+            if(coords.length == 0) {
+                nodeList = this.getElementsByTagNameNS(node, this.gmlns,
+                                                       "coordinates");
+                if(nodeList.length > 0) {
+                    coordString = nodeList[0].firstChild.nodeValue;
+                    coordString = coordString.replace(this.regExes.removeSpace,
+                                                      "");
+                    coords = coordString.split(",");
+                }
+            }
+
+            // look for <gml:coord>
+            if(coords.length == 0) {
+                nodeList = this.getElementsByTagNameNS(node, this.gmlns,
+                                                       "coord");
+                if(nodeList.length > 0) {
+                    var xList = this.getElementsByTagNameNS(nodeList[0],
+                                                            this.gmlns, "X");
+                    var yList = this.getElementsByTagNameNS(nodeList[0],
+                                                            this.gmlns, "Y");
+                    if(xList.length > 0 && yList.length > 0) {
+                        coords = [xList[0].firstChild.nodeValue,
+                                  yList[0].firstChild.nodeValue];
+                    }
+                }
+            }
+                
+            // preserve third dimension
+            if(coords.length == 2) {
+                coords[2] = null;
+            }
+            
+            if (this.xy) {
+                return new OpenLayers.Geometry.Point(coords[0], coords[1],
+                                                 coords[2]);
+            }
+            else{
+                return new OpenLayers.Geometry.Point(coords[1], coords[0],
+                                                 coords[2]);
+            }
+        },
+        
+        /**
+         * Method: parseGeometry.multipoint
+         * Given a GML node representing a multipoint geometry, create an
+         *     OpenLayers multipoint geometry.
+         *
+         * Parameters:
+         * node - {DOMElement} A GML node.
+         *
+         * Returns:
+         * {<OpenLayers.Geometry.MultiPoint>} A multipoint geometry.
+         */
+        multipoint: function(node) {
+            var nodeList = this.getElementsByTagNameNS(node, this.gmlns,
+                                                       "Point");
+            var components = [];
+            if(nodeList.length > 0) {
+                var point;
+                for(var i=0; i<nodeList.length; ++i) {
+                    point = this.parseGeometry.point.apply(this, [nodeList[i]]);
+                    if(point) {
+                        components.push(point);
+                    }
+                }
+            }
+            return new OpenLayers.Geometry.MultiPoint(components);
+        },
+        
+        /**
+         * Method: parseGeometry.linestring
+         * Given a GML node representing a linestring geometry, create an
+         *     OpenLayers linestring geometry.
+         *
+         * Parameters:
+         * node - {DOMElement} A GML node.
+         *
+         * Returns:
+         * {<OpenLayers.Geometry.LineString>} A linestring geometry.
+         */
+        linestring: function(node, ring) {
+            /**
+             * Two coordinate variations to consider:
+             * 1) <gml:posList dimension="d">x0 y0 z0 x1 y1 z1</gml:posList>
+             * 2) <gml:coordinates>x0, y0, z0 x1, y1, z1</gml:coordinates>
+             */
+            var nodeList, coordString;
+            var coords = [];
+            var points = [];
+
+            // look for <gml:posList>
+            nodeList = this.getElementsByTagNameNS(node, this.gmlns, "posList");
+            if(nodeList.length > 0) {
+                coordString = this.getChildValue(nodeList[0]);
+                coordString = coordString.replace(this.regExes.trimSpace, "");
+                coords = coordString.split(this.regExes.splitSpace);
+                var dim = parseInt(nodeList[0].getAttribute("dimension"));
+                var j, x, y, z;
+                for(var i=0; i<coords.length/dim; ++i) {
+                    j = i * dim;
+                    x = coords[j];
+                    y = coords[j+1];
+                    z = (dim == 2) ? null : coords[j+2];
+                    if (this.xy) {
+                        points.push(new OpenLayers.Geometry.Point(x, y, z));
+                    } else {
+                        points.push(new OpenLayers.Geometry.Point(y, x, z));
+                    }
+                }
+            }
+
+            // look for <gml:coordinates>
+            if(coords.length == 0) {
+                nodeList = this.getElementsByTagNameNS(node, this.gmlns,
+                                                       "coordinates");
+                if(nodeList.length > 0) {
+                    coordString = this.getChildValue(nodeList[0]);
+                    coordString = coordString.replace(this.regExes.trimSpace,
+                                                      "");
+                    coordString = coordString.replace(this.regExes.trimComma,
+                                                      ",");
+                    var pointList = coordString.split(this.regExes.splitSpace);
+                    for(var i=0; i<pointList.length; ++i) {
+                        coords = pointList[i].split(",");
+                        if(coords.length == 2) {
+                            coords[2] = null;
+                        }
+                        if (this.xy) {
+                            points.push(new OpenLayers.Geometry.Point(coords[0],
+                                                                  coords[1],
+                                                                  coords[2]));
+                        } else {
+                            points.push(new OpenLayers.Geometry.Point(coords[1],
+                                                                  coords[0],
+                                                                  coords[2]));
+                        }
+                    }
+                }
+            }
+
+            var line = null;
+            if(points.length != 0) {
+                if(ring) {
+                    line = new OpenLayers.Geometry.LinearRing(points);
+                } else {
+                    line = new OpenLayers.Geometry.LineString(points);
+                }
+            }
+            return line;
+        },
+        
+        /**
+         * Method: parseGeometry.multilinestring
+         * Given a GML node representing a multilinestring geometry, create an
+         *     OpenLayers multilinestring geometry.
+         *
+         * Parameters:
+         * node - {DOMElement} A GML node.
+         *
+         * Returns:
+         * {<OpenLayers.Geometry.MultiLineString>} A multilinestring geometry.
+         */
+        multilinestring: function(node) {
+            var nodeList = this.getElementsByTagNameNS(node, this.gmlns,
+                                                       "LineString");
+            var components = [];
+            if(nodeList.length > 0) {
+                var line;
+                for(var i=0; i<nodeList.length; ++i) {
+                    line = this.parseGeometry.linestring.apply(this,
+                                                               [nodeList[i]]);
+                    if(line) {
+                        components.push(line);
+                    }
+                }
+            }
+            return new OpenLayers.Geometry.MultiLineString(components);
+        },
+        
+        /**
+         * Method: parseGeometry.polygon
+         * Given a GML node representing a polygon geometry, create an
+         *     OpenLayers polygon geometry.
+         *
+         * Parameters:
+         * node - {DOMElement} A GML node.
+         *
+         * Returns:
+         * {<OpenLayers.Geometry.Polygon>} A polygon geometry.
+         */
+        polygon: function(node) {
+            var nodeList = this.getElementsByTagNameNS(node, this.gmlns,
+                                                       "LinearRing");
+            var components = [];
+            if(nodeList.length > 0) {
+                // this assumes exterior ring first, inner rings after
+                var ring;
+                for(var i=0; i<nodeList.length; ++i) {
+                    ring = this.parseGeometry.linestring.apply(this,
+                                                        [nodeList[i], true]);
+                    if(ring) {
+                        components.push(ring);
+                    }
+                }
+            }
+            return new OpenLayers.Geometry.Polygon(components);
+        },
+        
+        /**
+         * Method: parseGeometry.multipolygon
+         * Given a GML node representing a multipolygon geometry, create an
+         *     OpenLayers multipolygon geometry.
+         *
+         * Parameters:
+         * node - {DOMElement} A GML node.
+         *
+         * Returns:
+         * {<OpenLayers.Geometry.MultiPolygon>} A multipolygon geometry.
+         */
+        multipolygon: function(node) {
+            var nodeList = this.getElementsByTagNameNS(node, this.gmlns,
+                                                       "Polygon");
+            var components = [];
+            if(nodeList.length > 0) {
+                var polygon;
+                for(var i=0; i<nodeList.length; ++i) {
+                    polygon = this.parseGeometry.polygon.apply(this,
+                                                               [nodeList[i]]);
+                    if(polygon) {
+                        components.push(polygon);
+                    }
+                }
+            }
+            return new OpenLayers.Geometry.MultiPolygon(components);
+        },
+        
+        envelope: function(node) {
+            var components = [];
+            var coordString;
+            var envelope;
+            
+            var lpoint = this.getElementsByTagNameNS(node, this.gmlns, "lowerCorner");
+            if (lpoint.length > 0) {
+                var coords = [];
+                
+                if(lpoint.length > 0) {
+                    coordString = lpoint[0].firstChild.nodeValue;
+                    coordString = coordString.replace(this.regExes.trimSpace, "");
+                    coords = coordString.split(this.regExes.splitSpace);
+                }
+                
+                if(coords.length == 2) {
+                    coords[2] = null;
+                }
+                if (this.xy) {
+                    var lowerPoint = new OpenLayers.Geometry.Point(coords[0], coords[1],coords[2]);
+                } else {
+                    var lowerPoint = new OpenLayers.Geometry.Point(coords[1], coords[0],coords[2]);
+                }
+            }
+            
+            var upoint = this.getElementsByTagNameNS(node, this.gmlns, "upperCorner");
+            if (upoint.length > 0) {
+                var coords = [];
+                
+                if(upoint.length > 0) {
+                    coordString = upoint[0].firstChild.nodeValue;
+                    coordString = coordString.replace(this.regExes.trimSpace, "");
+                    coords = coordString.split(this.regExes.splitSpace);
+                }
+                
+                if(coords.length == 2) {
+                    coords[2] = null;
+                }
+                if (this.xy) {
+                    var upperPoint = new OpenLayers.Geometry.Point(coords[0], coords[1],coords[2]);
+                } else {
+                    var upperPoint = new OpenLayers.Geometry.Point(coords[1], coords[0],coords[2]);
+                }
+            }
+            
+            if (lowerPoint && upperPoint) {
+                components.push(new OpenLayers.Geometry.Point(lowerPoint.x, lowerPoint.y));
+                components.push(new OpenLayers.Geometry.Point(upperPoint.x, lowerPoint.y));
+                components.push(new OpenLayers.Geometry.Point(upperPoint.x, upperPoint.y));
+                components.push(new OpenLayers.Geometry.Point(lowerPoint.x, upperPoint.y));
+                components.push(new OpenLayers.Geometry.Point(lowerPoint.x, lowerPoint.y));
+                
+                var ring = new OpenLayers.Geometry.LinearRing(components);
+                envelope = new OpenLayers.Geometry.Polygon([ring]);
+            }
+            return envelope; 
+        },
+
+        /**
+         * Method: parseGeometry.box
+         * Given a GML node representing a box geometry, create an
+         *     OpenLayers.Bounds.
+         *
+         * Parameters:
+         * node - {DOMElement} A GML node.
+         *
+         * Returns:
+         * {<OpenLayers.Bounds>} A bounds representing the box.
+         */
+        box: function(node) {
+            var nodeList = this.getElementsByTagNameNS(node, this.gmlns,
+                                                   "coordinates");
+            var coordString;
+            var coords, beginPoint = null, endPoint = null;
+            if (nodeList.length > 0) {
+                coordString = nodeList[0].firstChild.nodeValue;
+                coords = coordString.split(" ");
+                if (coords.length == 2) {
+                    beginPoint = coords[0].split(",");
+                    endPoint = coords[1].split(",");
+                }
+            }
+            if (beginPoint !== null && endPoint !== null) {
+                return new OpenLayers.Bounds(parseFloat(beginPoint[0]),
+                    parseFloat(beginPoint[1]),
+                    parseFloat(endPoint[0]),
+                    parseFloat(endPoint[1]) );
+            }
+        }
+        
+    },
+    
+    /**
+     * Method: parseAttributes
+     *
+     * Parameters:
+     * node - {DOMElement}
+     *
+     * Returns:
+     * {Object} An attributes object.
+     */
+    parseAttributes: function(node) {
+        var attributes = {};
+        // assume attributes are children of the first type 1 child
+        var childNode = node.firstChild;
+        var children, i, child, grandchildren, grandchild, name, value;
+        while(childNode) {
+            if(childNode.nodeType == 1) {
+                // attributes are type 1 children with one type 3 child
+                children = childNode.childNodes;
+                for(i=0; i<children.length; ++i) {
+                    child = children[i];
+                    if(child.nodeType == 1) {
+                        grandchildren = child.childNodes;
+                        if(grandchildren.length == 1) {
+                            grandchild = grandchildren[0];
+                            if(grandchild.nodeType == 3 ||
+                               grandchild.nodeType == 4) {
+                                name = (child.prefix) ?
+                                        child.nodeName.split(":")[1] :
+                                        child.nodeName;
+                                value = grandchild.nodeValue.replace(
+                                                this.regExes.trimSpace, "");
+                                attributes[name] = value;
+                            }
+                        } else {
+                            // If child has no childNodes (grandchildren),
+                            // set an attribute with null value.
+                            // e.g. <prefix:fieldname/> becomes
+                            // {fieldname: null}
+                            attributes[child.nodeName.split(":").pop()] = null;
+                        }
+                    }
+                }
+                break;
+            }
+            childNode = childNode.nextSibling;
+        }
+        return attributes;
+    },
+    
+    /**
+     * APIMethod: write
+     * Generate a GML document string given a list of features. 
+     * 
+     * Parameters:
+     * features - {Array(<OpenLayers.Feature.Vector>)} List of features to
+     *     serialize into a string.
+     *
+     * Returns:
+     * {String} A string representing the GML document.
+     */
+    write: function(features) {
+        if(!(OpenLayers.Util.isArray(features))) {
+            features = [features];
+        }
+        var gml = this.createElementNS("http://www.opengis.net/wfs",
+                                       "wfs:" + this.collectionName);
+        for(var i=0; i<features.length; i++) {
+            gml.appendChild(this.createFeatureXML(features[i]));
+        }
+        return OpenLayers.Format.XML.prototype.write.apply(this, [gml]);
+    },
+
+    /** 
+     * Method: createFeatureXML
+     * Accept an OpenLayers.Feature.Vector, and build a GML node for it.
+     *
+     * Parameters:
+     * feature - {<OpenLayers.Feature.Vector>} The feature to be built as GML.
+     *
+     * Returns:
+     * {DOMElement} A node reprensting the feature in GML.
+     */
+    createFeatureXML: function(feature) {
+        var geometry = feature.geometry;
+        var geometryNode = this.buildGeometryNode(geometry);
+        var geomContainer = this.createElementNS(this.featureNS,
+                                                 this.featurePrefix + ":" +
+                                                 this.geometryName);
+        geomContainer.appendChild(geometryNode);
+        var featureNode = this.createElementNS(this.gmlns,
+                                               "gml:" + this.featureName);
+        var featureContainer = this.createElementNS(this.featureNS,
+                                                    this.featurePrefix + ":" +
+                                                    this.layerName);
+        var fid = feature.fid || feature.id;
+        featureContainer.setAttribute("fid", fid);
+        featureContainer.appendChild(geomContainer);
+        for(var attr in feature.attributes) {
+            var attrText = this.createTextNode(feature.attributes[attr]); 
+            var nodename = attr.substring(attr.lastIndexOf(":") + 1);
+            var attrContainer = this.createElementNS(this.featureNS,
+                                                     this.featurePrefix + ":" +
+                                                     nodename);
+            attrContainer.appendChild(attrText);
+            featureContainer.appendChild(attrContainer);
+        }    
+        featureNode.appendChild(featureContainer);
+        return featureNode;
+    },
+    
+    /**
+     * APIMethod: buildGeometryNode
+     */
+    buildGeometryNode: function(geometry) {
+        if (this.externalProjection && this.internalProjection) {
+            geometry = geometry.clone();
+            geometry.transform(this.internalProjection, 
+                               this.externalProjection);
+        }    
+        var className = geometry.CLASS_NAME;
+        var type = className.substring(className.lastIndexOf(".") + 1);
+        var builder = this.buildGeometry[type.toLowerCase()];
+        return builder.apply(this, [geometry]);
+    },
+
+    /**
+     * Property: buildGeometry
+     * Object containing methods to do the actual geometry node building
+     *     based on geometry type.
+     */
+    buildGeometry: {
+        // TBD retrieve the srs from layer
+        // srsName is non-standard, so not including it until it's right.
+        // gml.setAttribute("srsName",
+        //                  "http://www.opengis.net/gml/srs/epsg.xml#4326");
+
+        /**
+         * Method: buildGeometry.point
+         * Given an OpenLayers point geometry, create a GML point.
+         *
+         * Parameters:
+         * geometry - {<OpenLayers.Geometry.Point>} A point geometry.
+         *
+         * Returns:
+         * {DOMElement} A GML point node.
+         */
+        point: function(geometry) {
+            var gml = this.createElementNS(this.gmlns, "gml:Point");
+            gml.appendChild(this.buildCoordinatesNode(geometry));
+            return gml;
+        },
+        
+        /**
+         * Method: buildGeometry.multipoint
+         * Given an OpenLayers multipoint geometry, create a GML multipoint.
+         *
+         * Parameters:
+         * geometry - {<OpenLayers.Geometry.MultiPoint>} A multipoint geometry.
+         *
+         * Returns:
+         * {DOMElement} A GML multipoint node.
+         */
+        multipoint: function(geometry) {
+            var gml = this.createElementNS(this.gmlns, "gml:MultiPoint");
+            var points = geometry.components;
+            var pointMember, pointGeom;
+            for(var i=0; i<points.length; i++) { 
+                pointMember = this.createElementNS(this.gmlns,
+                                                   "gml:pointMember");
+                pointGeom = this.buildGeometry.point.apply(this,
+                                                               [points[i]]);
+                pointMember.appendChild(pointGeom);
+                gml.appendChild(pointMember);
+            }
+            return gml;            
+        },
+        
+        /**
+         * Method: buildGeometry.linestring
+         * Given an OpenLayers linestring geometry, create a GML linestring.
+         *
+         * Parameters:
+         * geometry - {<OpenLayers.Geometry.LineString>} A linestring geometry.
+         *
+         * Returns:
+         * {DOMElement} A GML linestring node.
+         */
+        linestring: function(geometry) {
+            var gml = this.createElementNS(this.gmlns, "gml:LineString");
+            gml.appendChild(this.buildCoordinatesNode(geometry));
+            return gml;
+        },
+        
+        /**
+         * Method: buildGeometry.multilinestring
+         * Given an OpenLayers multilinestring geometry, create a GML
+         *     multilinestring.
+         *
+         * Parameters:
+         * geometry - {<OpenLayers.Geometry.MultiLineString>} A multilinestring
+         *     geometry.
+         *
+         * Returns:
+         * {DOMElement} A GML multilinestring node.
+         */
+        multilinestring: function(geometry) {
+            var gml = this.createElementNS(this.gmlns, "gml:MultiLineString");
+            var lines = geometry.components;
+            var lineMember, lineGeom;
+            for(var i=0; i<lines.length; ++i) {
+                lineMember = this.createElementNS(this.gmlns,
+                                                  "gml:lineStringMember");
+                lineGeom = this.buildGeometry.linestring.apply(this,
+                                                                   [lines[i]]);
+                lineMember.appendChild(lineGeom);
+                gml.appendChild(lineMember);
+            }
+            return gml;
+        },
+        
+        /**
+         * Method: buildGeometry.linearring
+         * Given an OpenLayers linearring geometry, create a GML linearring.
+         *
+         * Parameters:
+         * geometry - {<OpenLayers.Geometry.LinearRing>} A linearring geometry.
+         *
+         * Returns:
+         * {DOMElement} A GML linearring node.
+         */
+        linearring: function(geometry) {
+            var gml = this.createElementNS(this.gmlns, "gml:LinearRing");
+            gml.appendChild(this.buildCoordinatesNode(geometry));
+            return gml;
+        },
+        
+        /**
+         * Method: buildGeometry.polygon
+         * Given an OpenLayers polygon geometry, create a GML polygon.
+         *
+         * Parameters:
+         * geometry - {<OpenLayers.Geometry.Polygon>} A polygon geometry.
+         *
+         * Returns:
+         * {DOMElement} A GML polygon node.
+         */
+        polygon: function(geometry) {
+            var gml = this.createElementNS(this.gmlns, "gml:Polygon");
+            var rings = geometry.components;
+            var ringMember, ringGeom, type;
+            for(var i=0; i<rings.length; ++i) {
+                type = (i==0) ? "outerBoundaryIs" : "innerBoundaryIs";
+                ringMember = this.createElementNS(this.gmlns,
+                                                  "gml:" + type);
+                ringGeom = this.buildGeometry.linearring.apply(this,
+                                                                   [rings[i]]);
+                ringMember.appendChild(ringGeom);
+                gml.appendChild(ringMember);
+            }
+            return gml;
+        },
+        
+        /**
+         * Method: buildGeometry.multipolygon
+         * Given an OpenLayers multipolygon geometry, create a GML multipolygon.
+         *
+         * Parameters:
+         * geometry - {<OpenLayers.Geometry.MultiPolygon>} A multipolygon
+         *     geometry.
+         *
+         * Returns:
+         * {DOMElement} A GML multipolygon node.
+         */
+        multipolygon: function(geometry) {
+            var gml = this.createElementNS(this.gmlns, "gml:MultiPolygon");
+            var polys = geometry.components;
+            var polyMember, polyGeom;
+            for(var i=0; i<polys.length; ++i) {
+                polyMember = this.createElementNS(this.gmlns,
+                                                  "gml:polygonMember");
+                polyGeom = this.buildGeometry.polygon.apply(this,
+                                                                [polys[i]]);
+                polyMember.appendChild(polyGeom);
+                gml.appendChild(polyMember);
+            }
+            return gml;
+
+        },
+ 
+        /**
+         * Method: buildGeometry.bounds
+         * Given an OpenLayers bounds, create a GML box.
+         *
+         * Parameters:
+         * bounds - {<OpenLayers.Geometry.Bounds>} A bounds object.
+         *
+         * Returns:
+         * {DOMElement} A GML box node.
+         */
+        bounds: function(bounds) {
+            var gml = this.createElementNS(this.gmlns, "gml:Box");
+            gml.appendChild(this.buildCoordinatesNode(bounds));
+            return gml;
+        }
+    },
+
+    /**
+     * Method: buildCoordinates
+     * builds the coordinates XmlNode
+     * (code)
+     * <gml:coordinates decimal="." cs="," ts=" ">...</gml:coordinates>
+     * (end)
+     *
+     * Parameters: 
+     * geometry - {<OpenLayers.Geometry>} 
+     *
+     * Returns:
+     * {XmlNode} created xmlNode
+     */
+    buildCoordinatesNode: function(geometry) {
+        var coordinatesNode = this.createElementNS(this.gmlns,
+                                                   "gml:coordinates");
+        coordinatesNode.setAttribute("decimal", ".");
+        coordinatesNode.setAttribute("cs", ",");
+        coordinatesNode.setAttribute("ts", " ");
+
+        var parts = [];
+
+        if(geometry instanceof OpenLayers.Bounds){
+            parts.push(geometry.left + "," + geometry.bottom);
+            parts.push(geometry.right + "," + geometry.top);
+        } else {
+            var points = (geometry.components) ? geometry.components : [geometry];
+            for(var i=0; i<points.length; i++) {
+                parts.push(points[i].x + "," + points[i].y);                
+            }            
+        }
+
+        var txtNode = this.createTextNode(parts.join(" "));
+        coordinatesNode.appendChild(txtNode);
+        
+        return coordinatesNode;
+    },
+
+    CLASS_NAME: "OpenLayers.Format.GML" 
+});
 
 /* Copyright (c) 2006-2012 by OpenLayers Contributors (see authors.txt for 
  * full list of contributors). Published under the 2-clause BSD license.
