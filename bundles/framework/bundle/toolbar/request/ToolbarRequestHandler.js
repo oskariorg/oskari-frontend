@@ -38,6 +38,9 @@ function(toolbar) {
         else if(request.getOp() == 'remove') {
             this._toolbar._removeToolbar(request.getId());
         }
+        else if(request.getOp() == 'changeName') {
+            this._toolbar.changeMenuToolbarTitle(request.getData());
+        }
 
     },
     _handleAdd : function(sandbox, request) {

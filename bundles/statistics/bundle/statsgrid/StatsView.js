@@ -14,32 +14,18 @@ function() {
     /**
      * Show content
      * @method showContent
-     * @param {boolean} isShown true if content should be rendered, false if not
-     * @param {Object} layer which layer should be shown 
+     * @param {Boolean} isShown true if content should be rendered, false if not
      */
-    showContent: function(isShown, layer) {
-        if(this._layer == null || (layer != null && this._layer.getId() != layer.getId())) {
-            //update layer
-            this._layer = layer;
-
-            if(isShown) {
-                this._showContent(this.getEl());
-                this.getLeftColumn().addClass('statsgrid_100');
-                this.getLeftColumn().append(this.getEl());
-            }
-            else {
-                this.getLeftColumn().removeClass('statsgrid_100');
-                this.getEl().remove();
-                this.getEl().empty();
-            }
+    showContent: function(isShown) {
+        if(isShown) {
+            this.getLeftColumn().addClass('statsgrid_100');
+            this.getLeftColumn().append(this.getEl());
         }
-    },
-    _showContent : function(container) {
-            var me=this;
-         // var gridContainer = jQuery('<div id="municipalGrid" style="width:30%;height:400px;"></div>');    
-		  me.createStatsOut(container);
-		// container.append(gridContainer);
-       // container.append('Tähän tulisi taulukko näkymä');
+        else {
+            this.getLeftColumn().removeClass('statsgrid_100');
+            this.getEl().empty();
+            this.getEl().remove();
+        }
     }
 }, {
     "protocol": ["Oskari.userinterface.View"],

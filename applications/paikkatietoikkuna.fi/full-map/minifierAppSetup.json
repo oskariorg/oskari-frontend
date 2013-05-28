@@ -13,7 +13,7 @@
 					"openlayers-default-theme": {
 						"bundlePath": "../../../packages/openlayers/bundle/"
 					},
-					"openlayers-single-full": {
+					"openlayers-full-map": {
 						"bundlePath": "../../../packages/openlayers/bundle/"
 					}
 				},
@@ -405,6 +405,25 @@
 						"bundlePath": "../../../packages/libraries/bundle/"
 					}
 				}
+			}
+		}, {
+			"instanceProps": {},
+			"title": "Karttatasot",
+			"bundleinstancename": "admin-layerselector",
+			"fi": "admin layerselector",
+			"sv": "admin layerselector",
+			"en": "admin layerselector",
+			"bundlename": "admin-layerselector",
+			"metadata": {
+				"Import-Bundle": {
+					"admin-layerselector": {
+						"bundlePath": "../../../packages/integration/bundle/"
+					},
+					"bb": {
+						"bundlePath": "../../../packages/integration/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
 			}
 		}
 	]

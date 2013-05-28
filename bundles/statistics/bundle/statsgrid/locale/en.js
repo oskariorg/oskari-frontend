@@ -18,6 +18,7 @@ Oskari.registerLocalization({
             "total": "total"
         },
         "addColumn": "Get data",
+        "removeColumn" : "Remove",
         "indicators" : "Indicators",
         "year": "Year",
         "buttons" : {
@@ -40,15 +41,20 @@ Oskari.registerLocalization({
             "sourceTitle" :             "Source"
 
         },
-            "classify": {
+        "classify": {
             "classify":                 "Classify",
             "classifymethod":           "Method",
             "classes":                  "Classes",
             "jenks":                    "Jenks ranges",
             "quantile" :                "Quantile ranges",
-            "eqinterval" :              "Eqinterval"
+            "eqinterval" :              "Eqinterval",
+            "manual":                   "Manual breaks",
+            "manualPlaceholder":        "Input numbers separated with a comma.",
+            "manualRangeError":         "There should be at least {min} and at most {max} numbers!",
+            "nanError":                 "A value was not a number!"
         },
         "colorset" : {
+            "button": "Colors",
 			"themeselection" : "Color theme selection",
 			"setselection" : "Color set selection",
 			"sequential" : "Sequential",
@@ -58,7 +64,8 @@ Oskari.registerLocalization({
 			"cancel" : "Poistu"
 			
 		},
-        "noMatch" : "No results matched"
+        "noMatch" : "No results matched",
+        "selectIndicator": "Select an indicator"
 
     }
 });

@@ -20,9 +20,10 @@ function(localization, instance) {
 	this.instance = instance;
 	this.panel = null;
 	this.plugin = null;
+    this.isDataVisible = false;
 	
     this.templateHelp = jQuery('<div class="help icon-info"></div>');
-    this.templateTool = jQuery('<div class="tool"><input type="checkbox"/><span></span></div>');
+    this.templateTool = jQuery('<div class="tool"><input type="checkbox"/><label></label></div>');
 	
     this.config = {
         layers : {
@@ -171,6 +172,7 @@ function(localization, instance) {
 		var errors = [];
 		return errors;
    },
+
     /**
      * Returns the published map layer selection
      * 
@@ -202,13 +204,13 @@ function(localization, instance) {
 
         // tool selection
         var toolContainer = this.templateTool.clone();
-        toolContainer.find('span').append(this.loc.layerselection.label);
+        toolContainer.find('label').attr('for', 'show-map-layers-checkbox').append(this.loc.layerselection.label);
         if (this.showLayerSelection) {
             toolContainer.find('input').attr('checked', 'checked');
         }
         contentPanel.append(toolContainer);
         contentPanel.append(this.loc.layerselection.info);
-        toolContainer.find('input').change(function() {
+        toolContainer.find('input').attr('id', 'show-map-layers-checkbox').change(function() {
             var checkbox = jQuery(this);
             var isChecked = checkbox.is(':checked');
             me.showLayerSelection = isChecked;
@@ -242,8 +244,9 @@ function(localization, instance) {
             var layer = layers[i];
             var layerContainer = this.templateTool.clone();
             layerContainer.attr('data-id', layer.getId());
-            layerContainer.find('span').append(layer.getName());
+            layerContainer.find('label').attr('for', 'checkbox'+layer.getId()).append(layer.getName());
             var input = layerContainer.find('input');
+            input.attr('id', 'checkbox'+layer.getId());
             
             if (shouldPreselectLayer(layer.getId())) {
                 input.attr('checked', 'checked');
@@ -293,8 +296,9 @@ function(localization, instance) {
             		var layer = promoLayerList[j];
                 	var layerContainer = this.templateTool.clone();
 		            layerContainer.attr('data-id', layer.getId());
-		            layerContainer.find('span').append(layer.getName());
+		            layerContainer.find('label').attr('for', 'checkbox'+layer.getId()).append(layer.getName());
 		            var input = layerContainer.find('input');
+                    input.attr('id', 'checkbox'+layer.getId())
         			input.change(closureMagic(layer));
                 	contentPanel.append(layerContainer);
                 }

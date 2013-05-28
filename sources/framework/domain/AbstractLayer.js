@@ -46,7 +46,7 @@ function(params, options) {
 	this._visible = null;
 
 	/* opacity from 0 to 100 */
-	this._opacity = null;
+	this._opacity = 100;
 
 	/* visible layer switch off enable/disable */
 	this._isSticky = null;

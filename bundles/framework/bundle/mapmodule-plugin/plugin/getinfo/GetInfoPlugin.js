@@ -17,7 +17,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.GetInfoPlugin',
  * @method create called automatically on construction
  * @static
  */
-function() {
+function(config, locale) {
+    this.config = config;
+	this._locale = locale;
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
@@ -30,6 +32,17 @@ function() {
         timestamp : null
     };
 }, {
+	
+	templates : {
+        table : jQuery('<table class="getinforesult_table"></table>'),
+        tableRow : jQuery('<tr></tr>'),
+        tableCell : jQuery('<td></td>'),
+
+        header : jQuery('<div class="getinforesult_header">' +
+                '<div class="icon-bubble-left"></div>'),
+        headerTitle : jQuery('<div class="getinforesult_header_title"></div>')
+	},
+
     /** @static @property __name plugin name */
     __name : 'GetInfoPlugin',
 
@@ -80,17 +93,9 @@ function() {
     init : function(sandbox) {
         var me = this;
 
-        this._sandbox = sandbox;
-        this._sandbox.printDebug("[GetInfoPlugin] init");
-        this.getGFIHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.getinfo.GetFeatureInfoHandler', me);
-        
-        this.templateTable = jQuery('<table class="getinforesult_table"></table>');
-        this.templateTableRow = jQuery('<tr></tr>');
-        this.templateTableCell = jQuery('<td></td>');
-        
-        this.templateHeader = jQuery('<div class="getinforesult_header">' + 
-                '<div class="icon-bubble-left"></div>');
-        this.templateHeaderTitle = jQuery('<div class="getinforesult_header_title"></div>');
+        me._sandbox = sandbox;
+        me._sandbox.printDebug("[GetInfoPlugin] init");
+        me.getGFIHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.getinfo.GetFeatureInfoHandler', me);
     },
     /**
      * @method register
@@ -116,16 +121,16 @@ function() {
     startPlugin : function(sandbox) {
         var me = this;
         if (sandbox && sandbox.register) {
-            this._sandbox = sandbox;
+            me._sandbox = sandbox;
         }
-        this._map = this.getMapModule().getMap();
+        me._map = me.getMapModule().getMap();
 
-        this._sandbox.register(this);
-        for (p in this.eventHandlers ) {
-            this._sandbox.registerForEventByName(this, p);
+        me._sandbox.register(me);
+        for (p in me.eventHandlers ) {
+            me._sandbox.registerForEventByName(me, p);
         }
-        this._sandbox.addRequestHandler('MapModulePlugin.GetFeatureInfoRequest', this.getGFIHandler);
-        this._sandbox.addRequestHandler('MapModulePlugin.GetFeatureInfoActivationRequest', this.getGFIHandler);
+        me._sandbox.addRequestHandler('MapModulePlugin.GetFeatureInfoRequest', me.getGFIHandler);
+        me._sandbox.addRequestHandler('MapModulePlugin.GetFeatureInfoActivationRequest', me.getGFIHandler);
     },
     /**
      * @method stopPlugin
@@ -140,15 +145,15 @@ function() {
         me._closeGfiInfo();
 
         if (sandbox && sandbox.register) {
-            this._sandbox = sandbox;
+            me._sandbox = sandbox;
         }
 
-        for (p in this.eventHandlers ) {
-            this._sandbox.unregisterFromEventByName(this, p);
+        for (p in me.eventHandlers ) {
+            me._sandbox.unregisterFromEventByName(me, p);
         }
-        this._sandbox.unregister(this);
-        this._map = null;
-        this._sandbox = null;
+        me._sandbox.unregister(me);
+        me._map = null;
+        me._sandbox = null;
     },
     /**
      * @method start
@@ -531,7 +536,8 @@ function() {
                         coll.push({
                             markup : pretty,
                             layerId : layerId,
-                            layerName : layerName
+                            layerName : layerName,
+                            type : type
                         });
                     }
                 }
@@ -541,7 +547,8 @@ function() {
                     coll.push({
                         markup : pretty,
                         layerId : layerId,
-                        layerName : layerName
+                        layerName : layerName,
+                        type : type
                     });
                 }
             }
@@ -576,7 +583,12 @@ function() {
                     if (!innerValue) {
                         continue;
                     }
-                    value.append(objAttr);
+					// Get localized attribute name
+					// TODO this should only apply to omat tasot?
+					var pluginLoc = this.getMapModule().getLocalization('plugin', true);
+					var myLoc = pluginLoc[this.__name];
+					var localizedAttr = myLoc[objAttr];
+                    value.append(localizedAttr ? localizedAttr : objAttr);
                     value.append(": ");
                     value.append(innerValue);
                     value.append('<br/>');
@@ -606,7 +618,9 @@ function() {
         if (!datum.presentationType) {
             return null;
         }
-        
+		
+		var me = this;
+
         var response = jQuery('<div></div>');
         var html = '';
         var contentType = ( typeof datum.content);
@@ -627,23 +641,28 @@ function() {
         	}
         	for(var i=0; i < dataArray.length; ++i) {
         		var jsonData = dataArray[i];
-	            var table = this.templateTable.clone();
+	            var table = me.templates.table.clone();
 	            for (var attr in jsonData) {
-	                var value = this._formatJSONValue(jsonData[attr]);
+	                var value = me._formatJSONValue(jsonData[attr]);
 	                if (!value) {
 	                    continue;
 	                }
-	                var row = this.templateTableRow.clone();
+	                var row = me.templates.tableRow.clone();
 	                table.append(row);
 	                if (!even) {
 						row.addClass("odd");
 	                }
 	                even = !even;
-	                
-	                var labelCell = this.templateTableCell.clone();
-	                labelCell.append(attr);
+
+	                var labelCell = me.templates.tableCell.clone();
+					// Get localized name for attribute
+					// TODO this should only apply to omat tasot?
+					var pluginLoc = this.getMapModule().getLocalization('plugin', true);
+					var myLoc = pluginLoc[this.__name];
+					var localizedAttr = myLoc[attr];
+	                labelCell.append(localizedAttr ? localizedAttr : attr);
 	                row.append(labelCell);
-	                var valueCell = this.templateTableCell.clone();
+	                var valueCell = me.templates.tableCell.clone();
 	                valueCell.append(value);
 	                row.append(valueCell);
 	            }
@@ -722,15 +741,14 @@ function() {
      * @method _showFeatures
      * Shows multiple features in an infobox.
      * Parameter data is in format:
-     * 
-     *  { fragments: coll, title: title } 
+     *
+     *  { fragments: coll, title: title }
      * fragments is an array of JSON { markup: '<html-markup>', layerName:
      * 'nameforlayer', layerId: idforlayer }
-     * 
+     *
      * @param {Array} data
      */
     _showFeatures : function(data) {
-
         var me = this;
         var content = {};
         var wrapper = jQuery('<div></div>');
@@ -742,13 +760,14 @@ function() {
             var fragmentMarkup = fragment.markup;
 
             var contentWrapper = jQuery('<div></div>');
-            
-            var headerWrapper = this.templateHeader.clone();
-            var titleWrapper = this.templateHeaderTitle.clone();
-            titleWrapper.append(fragmentTitle); 
+
+            var headerWrapper = me.templates.header.clone();
+            var titleWrapper = me.templates.headerTitle.clone();
+            titleWrapper.append(fragmentTitle);
+			titleWrapper.attr('title', fragmentTitle);
             headerWrapper.append(titleWrapper);
             contentWrapper.append(headerWrapper);
-            
+
 
             if (fragmentMarkup) {
                 contentWrapper.append(fragmentMarkup);
@@ -761,10 +780,14 @@ function() {
         var myLoc = pluginLoc[this.__name];
         data.title = myLoc.title;
 
-        var rn = "InfoBox.ShowInfoBoxRequest";
-        var rb = me._sandbox.getRequestBuilder(rn);
-        var r = rb(data.popupid, data.title, [content], data.lonlat, true);
-        me._sandbox.request(me, r);
+        if(!this.config || this.config.infoBox) {
+            var rb = me._sandbox.getRequestBuilder("InfoBox.ShowInfoBoxRequest");
+            var r = rb(data.popupid, data.title, [content], data.lonlat, true);
+            me._sandbox.request(me, r);
+        }
+
+        var event = me._sandbox.getEventBuilder("GetInfoResultEvent")(data);
+        me._sandbox.notifyAll(event);
     }
 }, {
     /**

@@ -89,17 +89,12 @@ function(ajaxUrl) {
 
 		var builder = me._sandbox.getEventBuilder('StateSavedEvent');
 		var event = builder(data.viewName, state);
-		
+
 		//Create Cookie of map state save
-		var cookieviewdata = "mymapview1=" + JSON.stringify(data);
-		// toSource();
+        jQuery.cookie.json = true;
 		var expiredays = 7;
-		if (expiredays) {
-			var exdate = new Date();
-			exdate.setDate(exdate.getDate() + expiredays);
-			cookieviewdata += ";expires=" + exdate.toGMTString();
-		}
-		document.cookie = cookieviewdata;
+
+		jQuery.cookie("oskaristate", data, {expires: expiredays});
 
 		// save to ajaxUrl
 		jQuery.ajax({
@@ -167,7 +162,6 @@ function(ajaxUrl) {
 			window.onbeforeunload = function() {
 				// save state to session when leaving map window
 				me.saveState();
-				
 			};
 		});
 	},

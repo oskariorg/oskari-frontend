@@ -13,7 +13,7 @@
 					"openlayers-default-theme": {
 						"bundlePath": "../../../packages/openlayers/bundle/"
 					},
-					"openlayers-single-full": {
+					"openlayers-full-map": {
 						"bundlePath": "../../../packages/openlayers/bundle/"
 					}
 				},
@@ -219,22 +219,6 @@
 			}
 		}, {
 			"instanceProps": {},
-			"title": "Karttajulkaisu",
-			"bundleinstancename": "publisher",
-			"fi": "jquery",
-			"sv": "?",
-			"en": "?",
-			"bundlename": "promote",
-			"metadata": {
-				"Import-Bundle": {
-					"promote": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					}
-				},
-				"Require-Bundle-Instance": []
-			}
-		}, {
-			"instanceProps": {},
 			"title": "Koordinaattin�ytt�",
 			"bundleinstancename": "coordinatedisplay",
 			"fi": "coordinatedisplay",
@@ -308,22 +292,6 @@
 			"metadata": {
 				"Import-Bundle": {
 					"featuredata": {
-						"bundlePath": "../../../packages/framework/bundle/"
-					}
-				},
-				"Require-Bundle-Instance": []
-			}
-		}, {
-			"instanceProps": {},
-			"title": "Places",
-			"bundleinstancename": "myplaces2",
-			"fi": "Paikat",
-			"sv": "Platser",
-			"en": "Places",
-			"bundlename": "promote",
-			"metadata": {
-				"Import-Bundle": {
-					"promote": {
 						"bundlePath": "../../../packages/framework/bundle/"
 					}
 				},

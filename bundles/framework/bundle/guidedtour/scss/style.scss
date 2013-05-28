@@ -53,14 +53,14 @@ div.divmanazerpopup.guidedtour.bluetitle h3 span {
     background: #3996ed;
     background: -webkit-gradient(linear, left top, left bottom, from(#3a97ee), to(#217ad4));
     background: -moz-linear-gradient(top,  #3a97ee,  #217ad4);
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#3a97ee', endColorstr='#217ad4');
+    filter: unquote("progid:DXImageTransform.Microsoft.gradient(startColorstr='#3a97ee', endColorstr='#217ad4')"); /* unquote for libsass bug */
 }
 .divmanazerpopup.guidedtour .actions input:hover {
     text-decoration: none;
     color: #fff;
     background: -webkit-gradient(linear, left top, left bottom, from(#3a97ee), to(#217ad4));
     background: -moz-linear-gradient(top,  #59abf8,  #2b8df0);
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#3a97ee', endColorstr='#217ad4');
+    filter: unquote("progid:DXImageTransform.Microsoft.gradient(startColorstr='#3a97ee', endColorstr='#217ad4')"); /* unquote for libsass bug */
 }
 .divmanazerpopup.guidedtour .actions input:active {
     position: relative;
@@ -69,7 +69,7 @@ div.divmanazerpopup.guidedtour.bluetitle h3 span {
     text-shadow: none;
     background: -webkit-gradient(linear, left top, left bottom, from(#217ad4), to(#3a97ee));
     background: -moz-linear-gradient(top,  #217ad4,  #3a97ee);
-    filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#217ad4', endColorstr='#3a97ee');
+    filter: unquote("progid:DXImageTransform.Microsoft.gradient(startColorstr='#217ad4', endColorstr='#3a97ee')"); /* unquote for libsass bug */
 }
 
 .divmanazerpopup.guidedtour.arrow:after, .divmanazerpopup.guidedtour.arrow:before {

@@ -3,21 +3,13 @@
     font-family: arial;
     font-size: 8pt;
 }
-body {
-    background: none repeat scroll 0 0 beige;
-    padding: 0;
-}
-h2 {
-    border-bottom: 1px dotted gray;
-    font-size: 10pt;
-}
-ul {
+.statsgrid ul {
     cursor: default;
     margin-left: 0;
     padding: 0;
 }
-li {
-    background: url("Oskari/libraries/slickgrid/images/arrow_right_spearmint.png") no-repeat scroll left center transparent;
+.statsgrid li {
+    background: url("/Oskari/libraries/slickgrid/images/arrow_right_spearmint.png") no-repeat scroll left center transparent;
     list-style: none outside none;
     margin: 0;
     padding: 0 0 0 14px;
@@ -32,16 +24,12 @@ li {
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
     -moz-border-top-colors: none;
-    background: url("Oskari/libraries/slickgrid/images/header-bg.gif") repeat-x scroll center top transparent;
+    background-color: #fafafa;
     border-color: -moz-use-text-color gray;
     border-image: none;
-    border-left: 1px solid gray;
-    border-right: 1px solid gray;
-    border-style: none solid;
-    border-width: 0 1px;
     color: black;
-    height: 24px;
     line-height: 24px;
+    font-weight: bold;
 }
 .grid-header label {
     display: inline-block;
@@ -102,7 +90,7 @@ li {
     display: inline-block;
     height: 6px;
 }
-input.editor-text {
+.statsgrid input.editor-text {
     background: none repeat scroll 0 0 transparent;
     border: 0 none;
     height: 100%;
@@ -116,7 +104,7 @@ input.editor-text {
     padding: 0;
     vertical-align: top;
 }
-input.editor-percentcomplete {
+.statsgrid input.editor-percentcomplete {
     background: none repeat scroll 0 0 transparent;
     border: 0 none;
     float: left;
@@ -127,7 +115,7 @@ input.editor-percentcomplete {
     width: 100%;
 }
 .editor-percentcomplete-picker {
-    background: url("Oskari/libraries/slickgrid/images/pencil.gif") no-repeat scroll center center transparent;
+    background: url("/Oskari/libraries/slickgrid/images/pencil.gif") no-repeat scroll center center transparent;
     display: inline-block;
     float: right;
     height: 100%;
@@ -137,7 +125,7 @@ input.editor-percentcomplete {
     z-index: 1000;
 }
 .editor-percentcomplete-helper {
-    background: url("Oskari/libraries/slickgrid/images/editor-helper-bg.gif") no-repeat scroll left top transparent;
+    background: url("/Oskari/libraries/slickgrid/images/editor-helper-bg.gif") no-repeat scroll left top transparent;
     border: 0 solid gray;
     display: none;
     height: 140px;
@@ -177,14 +165,22 @@ input.editor-percentcomplete {
 .editor-percentcomplete-helper:hover {
     display: block;
 }
-select.editor-yesno {
+.statsgrid select.editor-yesno {
     margin: 0;
     vertical-align: middle;
     width: 100%;
 }
-input.editor-checkbox {
+.statsgrid input.editor-checkbox {
     border: 0 none;
     height: 100%;
     margin: 0;
     padding: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.statsgrid .slick-viewport {
+    background: url('/Oskari/libraries/slickgrid/css/smoothness/images/ui-bg_custom_oskari_zebra_1x50.png') repeat repeat;
 }

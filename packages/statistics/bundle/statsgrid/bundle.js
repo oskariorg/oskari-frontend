@@ -43,6 +43,9 @@ function() {
             "src" : "../../../../bundles/statistics/bundle/statsgrid/plugin/ManageClassificationPlugin.js"
 		},{
             "type" : "text/javascript",
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/plugin/ManageStatsPlugin.js"
+        },{
+            "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/bundle/statsgrid/event/SotkadataChangedEvent.js"
 		},{
             "type" : "text/javascript",
@@ -50,6 +53,9 @@ function() {
 		}, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/bundle/statsgrid/request/StatsGridRequestHandler.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/service/StatisticsService.js"
         }, {
 			"type" : "text/css",
 			"src" : "../../../../resources/statistics/bundle/statsgrid/css/style.css"
@@ -102,7 +108,7 @@ function() {
             "src" : "../../../../libraries/slickgrid/controls/slick.columnpicker.js",
             "type" : "text/javascript"
         }, {
-            "src" : "../../../../libraries/chosen/chosen.jquery.min.js",
+            "src" : "../../../../libraries/chosen/chosen.jquery.js",
             "type" : "text/javascript"
         }, {
             "src" : "../../../../libraries/chosen/chosen.css",

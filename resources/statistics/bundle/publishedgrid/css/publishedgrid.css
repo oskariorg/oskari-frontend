@@ -1,0 +1,16 @@
+#publishedgridToggle {
+    width: 26px;
+    height: 27px;
+    position: absolute;
+    top: 0;
+    left: 40px;
+    z-index: 1000;
+}
+
+#publishedgridToggle.hidePublishedGrid {
+    background: url(/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/fullscreen/images/hide-navigation.png);
+}
+
+#publishedgridToggle.showPublishedGrid {
+    background: url(/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/fullscreen/images/show-navigation.png);
+}

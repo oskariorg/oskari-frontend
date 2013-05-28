@@ -38,6 +38,16 @@ describe('Test Suite for digiroad/featureselector bundle', function() {
         // overwrite test wide appConf
         appConf = {
             "mapfull": mapfullConf,
+            "toolbar": {
+                "state": {
+
+                },
+                "conf": {
+                    "history": false,
+                    "basictools": false,
+                    "viewtools": false
+                }
+            },
             "digiroad-featureselector": {
                 "state": {},
                 "conf": {
@@ -197,6 +207,7 @@ describe('Test Suite for digiroad/featureselector bundle', function() {
 
         // Couldn't get it to send a 'onCellChange' event to which the grid responds to
         // by sendind a 'FeatureSelector.FeatureEditedEvent'.
+        // FIXME
         it.skip('should send an event after editing a feature', function(done) {
             gridElement = jQuery('body').find('#' + testLayerId + '_grid');
             gridRow = jQuery(gridElement).find('.slick-row');

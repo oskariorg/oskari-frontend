@@ -1,46 +1,38 @@
-.panbuttonDiv {
-    position : absolute;
-    top : 10px;
-    right : 36px;
-    display : block;
-    color : black;
-    background : transparent;    
-    font-size : 12px;
-    z-index : 15000;/*64738;*/
-    font-weight:bold;
-    /*background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/default.png');*/
-    height: 90px;
-    width: 90px;
-}
+.panbuttonDiv.mapplugin {
+  position: fixed;
+  top: 45px;
+  right: 36px;
+  display: block;
+  color: black;
+  background: transparent;
+  font-size: 12px;
+  z-index: 15000;
+  /*64738;*/
+  font-weight: bold;
+  /*background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/default.png');*/
+  height: 90px;
+  width: 90px; }
 
 .panbuttonDivImg {
-	background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/sprite.png');
-}
+  background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/sprite.png'); }
 
 .panbuttonDivImg.root {
-	background-position: 0px -90px;
-}
+  background-position: 0px -90px; }
 
 .panbuttonDivImg.left {
-	background-position: 0px -180px;
-}
+  background-position: 0px -180px; }
 
 .panbuttonDivImg.right {
-	background-position: 0px -270px;
-}
+  background-position: 0px -270px; }
 
 .panbuttonDivImg.up {
-	background-position: 0px -360px;
-}
+  background-position: 0px -360px; }
 
 .panbuttonDivImg.down {
-	background-position: 0px -450px;
-}
+  background-position: 0px -450px; }
 
 .panbutton_left {
-	float:left;
-}
+  float: left; }
 
 .panbutton_right {
-	float:right;
-}
+  float: right; }

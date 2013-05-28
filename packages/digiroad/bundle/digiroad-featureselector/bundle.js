@@ -136,7 +136,7 @@ function() {
             "src" : "../../../../libraries/slickgrid/controls/slick.columnpicker.js",
             "type" : "text/javascript"
         }, {
-            "src" : "../../../../libraries/chosen/chosen.jquery.min.js",
+            "src" : "../../../../libraries/chosen/chosen.jquery.js",
             "type" : "text/javascript"
         }, {
             "src" : "../../../../libraries/chosen/chosen.css",

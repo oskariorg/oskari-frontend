@@ -1,98 +1,85 @@
-
 div.notLoggedIn {
-	padding: 10px;
-}
+  padding: 10px; }
 
-div.publisher {
-    
-}
 
 #contentMap.mapPublishMode {
-    margin-left: 255px;
-}
+  margin-left: 255px; }
+
 div.publisher div.startview div.icon-info, div.basic_publisher div.icon-info {
-	float : right;
-}
+  float: right; }
 
 div.publisher div.startview div.content {
-    margin-top: 5px;
-}
+  margin-top: 5px; }
+
 div.publisher div.startview div.tou {
-    margin: 15px 0;
-}
+  margin: 15px 0; }
 
 div.publisher div.startview div.layerlist {
-	border : 1px solid;
-	padding : 10px;
-}
+  border: 1px solid;
+  padding: 10px; }
+
 div.publisher div.startview div.layerlist h4 {
-	font-size : 14px;
-	line-height: 15px;
-    padding-bottom: 5px;
-}
+  font-size: 14px;
+  line-height: 15px;
+  padding-bottom: 5px; }
+
 div.publisher div.startview ul {
-    list-style: disc inside none;
-    padding : 5px;
-}
+  list-style: disc inside none;
+  padding: 5px; }
+
 div.publisher div.startview div.error ul li {
-	color : red;
-}
+  color: red; }
 
 #contentMap div.basic_publisher {
-	background : white;
-	position : absolute;
-    height: 100%;
-    top : 0;
-    left : 40px;
-    /* sidebar has 3, we want to open it on top of this */
-    z-index : 2;
-    width : 255px;
-}
+  background: white;
+  position: absolute;
+  height: 100%;
+  top: 0;
+  left: 40px;
+  /* sidebar has 3, we want to open it on top of this */
+  z-index: 2;
+  width: 255px; }
+
 #contentMap div.basic_publisher div.content {
-    padding : 10px;
-}
+  padding: 10px; }
 
 div.basic_publisher > div.header {
-    background-color: #FDF8D9;
-    padding: 5px 10px;
-}
+  background-color: #FDF8D9;
+  padding: 5px 10px; }
+
 div.basic_publisher > div.header div.icon-close {
-    float: right;
-}
+  float: right; }
 
 div.basic_publisher div.customsize input {
-    width: 40px;
-}
+  width: 40px; }
+
 div.basic_publisher div.customsize input.error {
-    border: 1px solid red;
-} 
+  border: 1px solid red; }
+
 div.basic_publisher div.form div.field input, div.field select {
-    width : 100%;
-    width: 80%\0/;
-	background-color: white\0/;
-	filter:Alpha(opacity=100)\0/ !important;
-    font-weight: bolder;
-}
+  width: 100%;
+  width: 80%0/;
+  /* unquote for libsass bug */
+  background-color: white0/;
+  /* unquote for libsass */
+  filter: Alpha(opacity=100)0/ !important;
+  font-weight: bolder; }
 
 div.basic_publisher > div.content {
-    overflow: auto;
-	height: 89%;
-}
+  overflow: auto;
+  height: 89%; }
 
 div.basic_publisher div.tool {
-	margin: 5px;
-}
+  margin: 5px; }
 
-div.basic_publisher div.tool input {
-    margin-right: 10px;
-}
+div.basic_publisher div.tool input,
+div.basic_publisher div.data input {
+  margin-right: 10px; }
 
 /* Buttons */
 div.basic_publisher div.buttons, div.publisher div.startview div.buttons {
-	text-align : center;
-	margin-top : 10px;
-}
+  text-align: center;
+  margin-top: 10px; }
 
 div.basic_publisher div.buttons input, div.publisher div.startview div.buttons input {
-    margin: 5px 2px;
-}
+  margin: 5px 2px; }

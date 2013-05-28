@@ -1,19 +1,23 @@
+/**
+ * ManageStatsOut
+ * Creates the indicator selection ui and the actual grid where the stats data will be displayed.
+ * Handles sending the data out to create a visualization which then can be displayed on the map.
+ */
 Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipality-table', {
     /**
      * @method createStatsOut
-     * @param
-     * {obj}
-     * container
-     *           to where slick grid and pull downs will be appended
-     * Get Sotka data and show it in slcik grid
+     * Get Sotka data and show it in SlickGrid
+     * @param {Object} container to where slick grid and pull downs will be appended
+     * @param {Function} callback function which gets called after the content has finished loading
      */
-    createStatsOut : function(container) {
-
+    createStatsOut : function(container, callback) {
         // indicators (meta data)
         this.indicators = [];
+
+        this.statsService = this.instance.statsService;
         // indicator params are select-elements
         // (indicator drop down select and year & gender selects)
-        this.prepareIndicatorParams(container);
+        this.prepareIndicatorParams(container, callback);
 
         // stop events so that they don't affect other parts of the site (i.e. map)
         container.on("keyup", function(e) {
@@ -27,8 +31,9 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     /**
      * @method prepareIndicatorParams
      * @param container element where indicator-selector should be added
+     * @param {Function} callback function which gets called after the content has finished loading
      */
-    prepareIndicatorParams : function(container) {
+    prepareIndicatorParams : function(container, callback) {
 
         //clear the selectors container
         container.find('selectors-container').remove();
@@ -40,22 +45,27 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         // success -> createIndicators
         this.getSotkaIndicators(container);
         // Regions: success createMunicipalityGrid
-        this.getSotkaRegionData(container);
+        this.getSotkaRegionData(container, callback);
     },
     /**
      * Fetch region data - we need to know all the regions / municipalities
      * @method getSotkaRegionData
+     * @param container element where indicator-selector should be added
+     * @param {Function} callback function which gets called after the content has finished loading
      */
-    getSotkaRegionData : function(container) {
+    getSotkaRegionData : function(container, callback) {
         var me = this;
         // call ajax function (params: url, successFallback, errorCallback)
-        me.fetchData(me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=regions&version=1.1',
+        me.statsService.fetchStatsData(me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=regions&version=1.1',
         // success callback
         function(regionData) {
             if (regionData) {
                 // get the actual data
                 //me.createMunicipalitySlickGrid(container, indicator, genders, years, indicatorMeta, regionData);
                 me.createMunicipalitySlickGrid(container, regionData);
+
+                // Data loaded and grid created, now it's time to call the function provided, if any.
+                callback && callback();
             } else {
                 me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').regionDataError);
             }
@@ -69,6 +79,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     /**
      * Create initial grid using just one column: municipality
      * @method createMunicipalitySlickGrid
+     * @param container element where indicator-selector should be added
      */
     createMunicipalitySlickGrid : function(container, regiondata) {
         var me = this;
@@ -125,7 +136,6 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             grid.render();
         });
         // Grid
-//        console.log('it works so far');
         grid = new Slick.Grid(gridContainer, dataView, columns, options);
 
         var sortcol = "json_number";
@@ -140,6 +150,12 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                     var field = cols[i].sortCol.field;
                     var sign = cols[i].sortAsc ? 1 : -1;
                     var value1 = dataRow1[field], value2 = dataRow2[field];
+                    if(value1 == null) {
+                        return 1;
+                    }
+                    if(value2 == null) {
+                        return -1;
+                    }
                     var result = (value1 == value2 ? 0 : (value1 > value2 ? 1 : -1)) * sign;
                     if (result != 0) {
                         return result;
@@ -152,9 +168,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         });
 
         grid.onHeaderClick.subscribe(function(e, args) {
-
-            me.classifyData(args.column);
-
+            me.sendStatsData(args.column);
         });
 
         // notify dataview that we are starting to update data
@@ -170,19 +184,30 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         // remember the grid object.
         this.grid = grid;
         this.dataView = dataView;
-//        console.log('did it break before this?');
+
+        //window resize!
+        var resizeGridTimer;
+        jQuery(window).resize(function () {
+            clearTimeout(resizeGridTimer);
+            resizeGridTimer = setTimeout(function() {
+                var gridDiv = jQuery("#municipalGrid");
+                gridDiv.height(gridDiv.parent().height() - gridDiv.parent().find('.selectors-container').outerHeight());
+                grid.resizeCanvas();                    
+            }, 100);
+        });
     },
 
     /**
      * Fetch all Sotka indicators
      *
+     * @method getSotkaIndicators
      * @param container element
      */
     getSotkaIndicators : function(container) {
         var me = this;
         var sandbox = me.instance.getSandbox();
         // make the AJAX call
-        me.fetchData(sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicators&version=1.1',
+        me.statsService.fetchStatsData(sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicators&version=1.1',
         //success callback
         function(indicatorsdata) {
             if (indicatorsdata) {
@@ -208,7 +233,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     createIndicatorsSelect : function(container, data) {
         var me = this;
         // Indicators' select container etc.
-        var indi = jQuery('<div class="indicator-cont"><div class="indisel selector-cont"><label for="indi">' + this.instance.getLocalization('indicators') + '</label><select id="indi" name="indi" class="indi"></select></div></div>');
+        var indi = jQuery('<div class="indicator-cont"><div class="indisel selector-cont"><label for="indi">' + this.instance.getLocalization('indicators') + '</label><select id="indi" name="indi" class="indi"><option value="" selected="selected"></option></select></div></div>');
 
         var sel = indi.find('select');
         for (var i = 0; i < data.length; i++) {
@@ -238,13 +263,15 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
         // we use chosen to create autocomplete version of indicator select element.
         sel.chosen({
-            no_results_text : this.instance.getLocalization('noMatch')
+            no_results_text : this.instance.getLocalization('noMatch'),
+            placeholder_text : this.instance.getLocalization('noMatch')
         });
 
     },
 
     /**
      * Get Sotka indicator meta data
+     *
      * @method getSotkaIndicatorMeta
      * @param container parent element.
      * @param indicator id
@@ -253,7 +280,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         var me = this;
         var sandbox = me.instance.getSandbox();
         // fetch meta data for given indicator
-        me.fetchData(sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
+        me.statsService.fetchStatsData(sandbox.getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
         // success callback
         function(indicatorMeta) {
             if (indicatorMeta) {
@@ -307,17 +334,32 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         var selectors = container.find('.selectors-container');
         // year & gender are in a different container than indicator select
         var parameters = jQuery('<div class="parameters-cont"></div>');
-        var fetchButton = jQuery('<button class="fetch-data">' + this.instance.getLocalization('addColumn') + '</button>')
+        var year = null,
+            gender = null;
 
         // if there is a range we can create year select
         if (indicator.range != null) {
             parameters.append(this.getYearSelectorHTML(indicator.range.start, indicator.range.end));
+            // by default the last value is selected in getYearSelectorHTML
+            year = indicator.range.end;
         }
         // if there is a classification.sex we can create gender select
         if (indicator.classifications != null && indicator.classifications.sex != null) {
             parameters.append(this.getGenderSelectorHTML(indicator.classifications.sex.values));
+            // by default the last value is selected in getGenderSelectorHTML
+            gender = indicator.classifications.sex.values[indicator.classifications.sex.values.length - 1];
         }
+        gender = gender != null ? gender: 'total';
+
+        // by default the last year and gender is selected
+        var columnId = me._getIndicatorColumnId(indicator.id, gender, year);
+        var includedInGrid = this.isIndicatorInGrid(columnId);
+
+        var fetchButton = jQuery('<button class="fetch-data' + (includedInGrid ? ' hidden' : '') + '">' + this.instance.getLocalization('addColumn') + '</button>');
+        var removeButton = jQuery('<button class="remove-data' + (includedInGrid ? '' : ' hidden') + '">' + this.instance.getLocalization('removeColumn') + '</button>');
+
         parameters.append(fetchButton);
+        parameters.append(removeButton);
 
         selectors.find('.parameters-cont').remove();
         selectors.append(parameters);
@@ -327,40 +369,109 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             var element = jQuery(e.currentTarget);
             var year = jQuery('.statsgrid').find('.yearsel').find('.year').val();
             var gender = jQuery('.statsgrid').find('.gendersel').find('.gender').val();
+            gender = gender != null ? gender: 'total';
             // me.getSotkaIndicatorData(container,indicator, gender, year);
-            me.getSotkaIndicatorData(container, indicator.id, gender, year)
+            var columnId = me._getIndicatorColumnId(indicator.id, gender, year);
+            me.getSotkaIndicatorData(container, indicator.id, gender, year);
         });
 
+        // click listener
+        removeButton.click(function(e) {
+            var year = jQuery('.statsgrid').find('.yearsel').find('.year').val(),
+                gender = jQuery('.statsgrid').find('.gendersel').find('.gender').val();
+            gender = gender != null ? gender: 'total';
+            var columnId = me._getIndicatorColumnId(indicator.id, gender, year);
+        	me.removeIndicatorDataFromGrid(indicator.id, gender, year);
+        });
+    },
+
+    /**
+     * Update Demographics buttons
+     *
+     * @method updateDemographicsSelects
+     * @param container parent element
+     * @param indicator meta data
+     */
+    updateDemographicsButtons : function(indicatorId, gender, year) {
+        indicatorId = indicatorId ? indicatorId : jQuery('.statsgrid').find('.indisel ').find('option:selected').val();
+        gender = gender ? gender : jQuery('.statsgrid').find('.gendersel').find('.gender').val();
+        gender = gender != null ? gender: 'total';
+        year = year ? year : jQuery('.statsgrid').find('.yearsel').find('.year').val();
+
+        var columnId = "indicator" + indicatorId + year + gender,
+            includedInGrid = this.isIndicatorInGrid(columnId);
+
+        // toggle fetch and remove buttons so that only one is visible and can only be selected once
+        if (includedInGrid) {
+            jQuery('.statsgrid').find('.fetch-data').addClass("hidden");
+            jQuery('.statsgrid').find('.remove-data').removeClass("hidden");
+        } else {
+            jQuery('.statsgrid').find('.fetch-data').removeClass("hidden");
+            jQuery('.statsgrid').find('.remove-data').addClass("hidden");
+        }
+    },
+
+    /**
+     * Checks if the given indicator id data is in the grid.
+     *
+     * @method isIndicatorInGrid
+     * @param columnId unique column id
+     */
+    isIndicatorInGrid : function (columnId) {
+        var columns = this.grid.getColumns();
+        var found = false;
+        
+        for(var i = 0, ilen = columns.length; i < ilen; i++){
+            if (columnId === columns[i].id) {
+                return true;
+            }
+        }
+        return false;
     },
 
     /**
      * Get Sotka data for one indicator
+     *
      * @method getSotkaIndicatorData
      * @param container parent element
      * @param indicator id
      * @param gender (male / female / total)
      * @param year selected year
      */
-    getSotkaIndicatorData : function(container, indicator, gender, year) {
+    getSotkaIndicatorData : function(container, indicatorId, gender, year) {
         var me = this;
         var gndrs = gender != null ? gender : 'total';
         // ajax call
-        me.fetchData(
-        // url
-        me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gndrs,
-        // success callback
-        function(data) {
-            if (data) {
-                // get the actual data
-                me.addIndicatorDataToGrid(container, indicator, gndrs, year, data, me.indicators[me.indicators.length -1]);
-            } else {
-                me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorDataError);
-            }
-        },
-        // error callback
-        function(jqXHR, textStatus) {
-            me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorDataXHRError);
-        });
+        me.statsService.fetchStatsData(
+            // url
+            me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicatorId + '&years=' + year + '&genders=' + gndrs,
+            // success callback
+            function(data) {
+                if (data) {
+                    // get the actual data
+                    me.addIndicatorDataToGrid(container, indicatorId, gndrs, year, data, me.indicators[me.indicators.length -1]);
+                } else {
+                    me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorDataError);
+                }
+            },
+            // error callback
+            function(jqXHR, textStatus) {
+                me.instance.showMessage(me.instance.getLocalization('sotka').errorTitle, me.instance.getLocalization('sotka').indicatorDataXHRError);
+            });
+    },
+
+    /**
+     * Get indicator column id.
+     *
+     * @method _getIndicatorColumnId
+     * @param indicator id
+     * @param gender (male/female/total)
+     * @param year selected year
+     * @return columnId unique column id
+     */
+    _getIndicatorColumnId : function(indicatorId, gender, year) {
+        var columnId = "indicator" + indicatorId + year + gender;
+        return columnId;
     },
 
     /**
@@ -373,21 +484,24 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
      * @param year selected year
      * @param data related to the indicator
      */
-    addIndicatorDataToGrid : function(container, indicator, gender, year, data, meta, silent) {
+    addIndicatorDataToGrid : function(container, indicatorId, gender, year, data, meta, silent) {
+        var columnId = this._getIndicatorColumnId(indicatorId, gender, year);        
         var columns = this.grid.getColumns();
         var indicatorName = meta.title[Oskari.getLang()];
         columns.push({
-            id : "indicator" + indicator + year + gender,
-            name : indicatorName + '/' + year + '/' + gender,
-            field : "indicator" + indicator + year + gender,
-            sortable : true
+            "id" : columnId,
+            "name" : indicatorName + '/' + year + '/' + gender,
+            "field" : columnId,
+            "toolTip" : indicatorName + '/' + year + '/' + gender,
+            "sortable" : true
         });
         this.grid.setColumns(columns);
 
         // add indicator also to the state!
-        var statedIndicators = (this.instance.state.indicators != null) ? this.instance.state.indicators : [];
-        statedIndicators.push({indicator: indicator, year: year, gender: gender});
-        this.instance.state.indicators = statedIndicators;
+        if (this.instance.state.indicators == null) {
+            this.instance.state.indicators = [];
+        }
+        this.instance.state.indicators.push({"indicator": indicatorId, "year": year, "gender": gender});
 
         var columnData = [];
         var ii = 0;
@@ -411,7 +525,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                 var item = this.dataView.getItemById(regionId);
                 if (item) {
                     // update row
-                    item["indicator" + indicator + year + gender] = Number(value);
+                    item[columnId] = Number(value);
                     this.dataView.updateItem(item.id, item);
                 }
                 ii++;
@@ -420,8 +534,8 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         var items = this.dataView.getItems();
         for (var i = items.length - 1; i >= 0; i--) {
             var item = items[i];
-            if (item['indicator' + indicator + year + gender] == null) {
-                item['indicator' + indicator + year + gender] = -1;
+            if (item[columnId] == null) {
+                item[columnId] = null;
             }
         };
         this.dataView.endUpdate();
@@ -431,17 +545,77 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
         if(silent != true) {
             // Show classification
-            this.classifyData(columns[columns.length - 1]);
+            this.sendStatsData(columns[columns.length - 1]);
+        }
+
+        this.updateDemographicsButtons(indicatorId, gender, year);
+    },
+
+    /**
+     * Remove indicator data to the grid.
+     *
+     * @method removeIndicatorDataFromGrid
+     * @param indicator id
+     * @param gender (male / female / total)
+     * @param year selected year
+     */
+    removeIndicatorDataToGrid : function(indicatorId, gender, year) {
+        var columnId = this._getIndicatorColumnId(indicatorId, gender, year),
+            columns = this.grid.getColumns(),
+            allOtherColumns = [],
+            found = false,
+            i = 0,
+            ilen = 0,
+            j = 0;
+        
+        for(i = 0, ilen = columns.length, j = 0; i < ilen; i++){
+            if (columnId === columns[i].id) {
+                // Skip the column that is to be deleted
+                found = true;
+            } else {
+                allOtherColumns[j] = columns[i];
+                j++;
+            }
+        }
+
+        // replace the columns with the columns without the column that was found
+        if (found) {
+            this.grid.setColumns(allOtherColumns);
+            this.grid.render();
+            this.dataView.refresh();
+        }
+
+        // remove indicator also from to the state!
+        if (this.instance.state.indicators) {
+            for (i = 0, ilen = this.instance.state.indicators.length; i < ilen; i++) {
+                var statedIndicator = this.instance.state.indicators[i];
+                if ((indicatorId === statedIndicator.indicator) &&
+                    (year === statedIndicator.year) &&
+                    (gender === statedIndicator.gender)) {
+                    this.instance.state.indicators.splice(i, 1);
+                    break;
+                }
+            }
+        }
+
+        this.updateDemographicsButtons(indicatorId, gender, year);
+
+        if (columnId === this.instance.state.currentColumn) {
+            // hide the layer, as we just removed the "selected"
+            this._setLayerVisibility(false);
+            this.instance.state.currentColumn = null;
         }
     },
 
     /**
      * Create HTML for year selector
      *
+     * @method getYearSelectorHTML
      * @param startYear
      * @param endYear
      */
     getYearSelectorHTML : function(startYear, endYear) {
+        var me = this;
         // Years
         var year = jQuery('<div class="yearsel selector-cont"><label for="year">' + this.instance.getLocalization('year') + '</label><select name="year" class="year"></select></div>');
         var sel = year.find('select');
@@ -452,14 +626,19 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         }
 
         sel.val(endYear);
+        sel.change(function(e) {
+            me.updateDemographicsButtons(null, null, e.target.value);
+        });
         return year;
     },
     /**
      * Create HTML for gender selector
      *
+     * @method getGenderSelectorHTML
      * @param values for select element
      */
     getGenderSelectorHTML : function(values) {
+        var me = this;
         //Gender
         var gender = jQuery('<div class="gendersel selector-cont"><label for="gender">' + this.instance.getLocalization('gender') + '</label><select name="gender" class="gender"></select></div>');
 
@@ -469,14 +648,19 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             sel.append(opt);
         }
         sel.val(values[values.length - 1]);
+        sel.change(function(e) {
+            me.updateDemographicsButtons(null, e.target.value, null);
+        });
         return gender;
     },
     /**
-     * Classify Sotka indicator data
-     *
+     * Sends the selected column's data from the grid
+     * in order to create the visualization.
+     * 
+     * @method sendStatsData
      * @param curCol  Selected indicator data column
      */
-    classifyData : function(curCol) {
+    sendStatsData : function(curCol) {
 
         //Classify data
         var me = this;
@@ -484,40 +668,71 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         var munArray = [];
         var check = false;
         var i, k;
+
+        if (curCol == null) {
+        	// Not a valid current column
+        	return;
+        }
+
         //Check that selected column is data value column
         if (curCol.field == 'municipality')
             return;
 
-        // Set current column to be stated
-        me.instance.state.currentColumn = (curCol != null) ? curCol.id : null;
+		//Check that selected column is not already selected
+		if (curCol.id === me.instance.state.currentColumn) {
+			return;
+		} else {
+	        // Set current column to be stated
+	        me.instance.state.currentColumn = curCol.id;
+		}
 
         // Get values of selected column
         var data = this.dataView.getItems();
         for ( i = 0; i < data.length; i++) {
             var row = data[i];
-            statArray.push(row[curCol.field]);
-            // Municipality codes (kuntakoodit)
-            munArray.push(row['code']);
+            // Exclude null values
+            if (row[curCol.field]) {
+                statArray.push(row[curCol.field]);
+                // Municipality codes (kuntakoodit)
+                munArray.push(row['code']);
+            }
         }
 
-        var sandbox = me.instance.getSandbox();
-        var eventBuilder = sandbox.getEventBuilder('MapStats.SotkadataChangedEvent');
-        if (eventBuilder) {
-            var event = eventBuilder(me._layer, {
-                CUR_COL : curCol,
-                VIS_NAME : "ows:kunnat2013",  // TODO: how to get geoserver layer name
-                VIS_ATTR : "kuntakoodi",   // TODO:  how to get geoserver layer/table column name
-                VIS_CODES : munArray,
-                COL_VALUES : statArray
-            });
-            sandbox.notifyAll(event);
-        }
+        // send the data trough the stats service.
+        me.statsService.sendStatsData(me._layer, {
+            CUR_COL : curCol,
+            VIS_NAME : me._layer.getWmsName(), //"ows:kunnat2013",  
+            VIS_ATTR : me._layer.getFilterPropertyName(), //"kuntakoodi",
+            VIS_CODES : munArray,
+            COL_VALUES : statArray
+        });
 
+        // show the layer, if it happens to be invisible
+        this._setLayerVisibility(true);
+    },
+
+    /**
+     * Set layer visibility
+     *
+     * @method _setLayerVisibility
+     * @param visibility for hiding by passing false, and revealing by passing true
+     */
+    _setLayerVisibility: function(visibility) {
+        // show the layer, if not visible
+        if (this._layer._visible !== visibility) {
+            var sandbox = this.instance.getSandbox();
+            var visibilityRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
+            if (visibilityRequestBuilder) {
+                var request = visibilityRequestBuilder(this._layer.getId(), visibility);
+                sandbox.request(this.instance, request);
+            }
+        }
     },
 
 
     /**
      * Get Sotka metadata for given indicators
+     *
      * @method getSotkaIndicatorsMeta
      * @param indicators for which we fetch data
      * @param callback what to do after we have fetched metadata for all the indicators
@@ -531,7 +746,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
             indicator = indicatorData.indicator;
 
             // ajax call
-            me.fetchData(
+            me.statsService.fetchStatsData(
                 // url
                 me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=indicator_metadata&indicator=' + indicator + '&version=1.1',
                 // success callback
@@ -568,6 +783,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
 
     /**
      * Get Sotka data for given indicators
+     *
      * @method getSotkaIndicatorsData
      * @param indicators for which we fetch data
      * @param callback what to do after we have fetched data for all the indicators
@@ -582,7 +798,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
                 gender = indicatorData.gender != null ? indicatorData.gender: 'total';
 
             // ajax call
-            me.fetchData(
+            me.statsService.fetchStatsData(
                 // url
                 me.instance.getSandbox().getAjaxUrl() + 'action_route=GetSotkaData&action=data&version=1.0&indicator=' + indicator + '&years=' + year + '&genders=' + gender,
                 // success callback
@@ -626,6 +842,7 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
     },
     /**
      * Removes all indicator data from the grid
+     *
      * @method clearDataFromGrid
      */
     clearDataFromGrid : function() {
@@ -646,39 +863,6 @@ Oskari.clazz.category('Oskari.statistics.bundle.statsgrid.StatsView', 'municipal
         this.grid.setColumns(newColumnDef);
         this.grid.render();
         this.dataView.refresh();
-
-    },
-
-
-
-    /**
-     * Make the AJAX call. This method helps
-     * if we need to do someting for all the calls to backend.
-     *
-     * param url to correct action route
-     * param successCb (success callback)
-     * param errorCb (error callback)
-     */
-    fetchData : function(url, successCb, errorCb) {
-        jQuery.ajax({
-            type : "GET",
-            dataType : 'json',
-            beforeSend : function(x) {
-                if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
-                }
-            },
-            url : url,
-            success : function(pResp) {
-                if (successCb) {
-                    successCb(pResp);
-                }
-            },
-            error : function(jqXHR, textStatus) {
-                if (errorCb && jqXHR.status != 0) {
-                    errorCb(jqXHR, textStatus);
-                }
-            }
-        });
+        this.instance.state.indicators = [];
     }
 });

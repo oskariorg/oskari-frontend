@@ -29,7 +29,17 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
 
         // overwrite test wide appConf
         appConf = {
-            "mapfull": mapfullConf
+            "mapfull": mapfullConf,
+            "toolbar": {
+                "state": {
+
+                },
+                "conf": {
+                    "history": false,
+                    "basictools": false,
+                    "viewtools": false
+                }
+            },
         };
     });
 
@@ -48,13 +58,10 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
         // startup Oskari
         setupOskari(setup, conf, function() {
             // Find handles to sandbox and stats bundle.
-            sandbox = Oskari.getSandbox();
-            statsModule = sandbox.findRegisteredModuleInstance('StatsGrid');
-            testLayer = sandbox.findMapLayerFromAllAvailable(testLayerId);
-            viewPlugin = statsModule.plugins['Oskari.userinterface.View'];
-            menuToolbar = jQuery('body').find('div.oskariui-menutoolbar');
-            statsGridContainer = jQuery('body').find('statsgrid_100');
-
+            sandbox = Oskari.getSandbox(),
+            statsModule = sandbox.findRegisteredModuleInstance('StatsGrid'),
+            testLayer = sandbox.findMapLayerFromAllAvailable(testLayerId),
+            viewPlugin = statsModule.gridPlugin;
             done();
         });
     };
@@ -70,33 +77,94 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
         });
     });
 
-    describe('from map view', function() {
-        before(startApplication);
+    describe('grid mode', function() {
+        before(function(done) {
+            startApplication(function() {
+                sandbox.postRequestByName('AddMapLayerRequest', [testLayerId, true]);
+                setTimeout(function() {
+                    done();
+                }, 1000);
+            });
+        });
 
         after(teardown);
 
-        it('should go to the mode view', function() {
-            var statsSpy = sinon.spy(viewPlugin.showMode);
+        it('should go to the mode view from the map view', function(done) {
+            // TODO: change spy to stub so that we test the interface and not the server
+            var fetchCallbackGridSpy = sinon.spy(viewPlugin, 'createMunicipalitySlickGrid'),
+                fetchCallbackIndicatorSpy = sinon.spy(viewPlugin, 'createIndicatorsSelect');
 
             expect(testLayer).to.be.ok();
             expect(viewPlugin).to.be.ok();
-            expect(statsSpy.callCount).to.be(0);
-            expect(menuToolbar.is(':visible')).to.be(false);
-            expect(statsGridContainer.is(':visible')).to.be(false);
-            
+            expect(fetchCallbackGridSpy.callCount).to.be(0);
+            expect(fetchCallbackIndicatorSpy.callCount).to.be(0);
+
             sandbox.postRequestByName('StatsGrid.StatsGridRequest', [true, testLayer]);
+            var i = 0;
 
             waitsFor(function() {
-                return (statsSpy.callCount > 0);
+                return ((fetchCallbackGridSpy.callCount > 0) &&
+                        (fetchCallbackIndicatorSpy.callCount > 0));
             }, function() {
+                menuToolbar = jQuery('body').find('div.oskariui-menutoolbar'),
+                statsGridContainer = jQuery('body').find('.statsgrid_100');
 
-                expect(statsSpy.callCount).to.be(1);
+                expect(fetchCallbackGridSpy.callCount).to.be(1);
+                expect(fetchCallbackIndicatorSpy.callCount).to.be(1);
                 expect(menuToolbar.is(':visible')).to.be(true);
                 expect(statsGridContainer.is(':visible')).to.be(true);
 
-                statsSpy.restore();
+                fetchCallbackGridSpy.restore();
+                fetchCallbackIndicatorSpy.restore();
                 done();
-            }, "Waits for the stats grid mode request", 9000);
+            }, "Waits for the stats grid mode request", 45000);
+        });
+
+        it('should exclude null values from the sent data', function(done) {
+            var gridPlugin = statsModule.gridPlugin;
+            var statsView = statsModule.plugins['Oskari.userinterface.View'];
+
+            // faking to be module with getName/onEvent methods
+            var self = this;
+            self.getName = function() {
+                return "Test.StatsGrid";
+            }
+            self.onEvent = function(event) {
+                var hasNaNs = false;
+                var params = event.getParams();
+                var colValues = params.COL_VALUES;
+
+                for (var i = 0; i < colValues.length; ++i) {
+                    if(isNaN(colValues[i])) {
+                        hasNaNs = true;
+                    }
+                }
+
+                expect(hasNaNs).to.be(false);
+
+                // cleanup
+                sandbox.unregisterFromEventByName(self, 'StatsGrid.SotkadataChangedEvent');
+                done();
+            }
+
+            // Clear out other event listeners.
+            sandbox._listeners = {};
+            // listen to StatsGrid.SotkadataChangedEvent to trigger verification
+            sandbox.registerForEventByName(self, 'StatsGrid.SotkadataChangedEvent');
+
+            // Required by gridPlugin#addIndicatorDataToGrid
+            gridPlugin.indicators.push({
+                'title': {
+                    'fi': "Test indicator meta"
+                }
+            });
+            gridPlugin.getSotkaIndicatorData(statsView.getEl(), 4, 'total', 2011);
         });
     });
+
+// TODO write test to:
+// open up statsgrid, then select an indicator
+// add another indicator
+// and change indicator order by clicking header
+// remove indicator to verify delete works
 });

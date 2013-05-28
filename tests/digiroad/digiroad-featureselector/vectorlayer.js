@@ -22,6 +22,16 @@ describe('Test Suite for digiroad/featureselector/vectorlayer model', function()
         // overwrite test wide appConf
         appConf = {
             "mapfull": mapfullConf,
+            "toolbar": {
+                "state": {
+
+                },
+                "conf": {
+                    "history": false,
+                    "basictools": false,
+                    "viewtools": false
+                }
+            },
             "digiroad-featureselector": {
                 "conf": {
                     "queryUrl": "http://localhost"

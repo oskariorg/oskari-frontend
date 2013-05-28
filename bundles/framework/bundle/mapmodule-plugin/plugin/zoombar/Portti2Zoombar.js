@@ -149,7 +149,10 @@ function(config) {
         me.__elements['zoombarSlider'].find('input').attr('id', inputId);
         sliderEl.attr('id', sliderId);
         
-        jQuery(me.__parent).append(me.__elements['zoombarSlider']);
+        me.__elements['zoombarSlider'].mousedown(function(event) {
+            event.stopPropagation();
+        });
+        me.mapModule.getMapLayersContainerDiv().appendChild(me.__elements['zoombarSlider'][0]);
 
        	var sliderEl = me.__elements['zoombarSlider'].find('div.slider');
        	sliderEl.css("height",(this._map.getNumZoomLevels()*11)+"px")
