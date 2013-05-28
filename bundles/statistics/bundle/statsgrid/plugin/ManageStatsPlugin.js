@@ -271,7 +271,9 @@ function(config, locale) {
         var options = {
             enableCellNavigation : true,
             enableColumnReorder : true,
-            multiColumnSort : true
+            multiColumnSort : true,
+            showHeaderRow: true,
+            headerRowHeight: 30
         };
         var data = [];
         var rowId = 0;
@@ -302,6 +304,16 @@ function(config, locale) {
             grid.invalidateRows(args.rows);
             grid.render();
         });
+
+
+dataView.setGrouping({
+    formatter: function (g) {
+        return "<span style='color:green'>Kunnat (" + g.count + ")</span>";
+    },
+    aggregateCollapsed: false
+});
+
+
         // Grid
         grid = new Slick.Grid(gridContainer, dataView, columns, options);
 
@@ -341,6 +353,15 @@ function(config, locale) {
             }
             me.sendStatsData(args.column);
         });
+debugger;
+grid.onHeaderRowCellRendered.subscribe(function(e, args) {
+    jQuery(args.node).empty();
+    jQuery('<span class="statsgrid-grid-subheader">')
+       .text('asdf')
+       .appendTo(args.node);
+});
+
+
 
         // notify dataview that we are starting to update data
         dataView.beginUpdate();
@@ -693,7 +714,35 @@ function(config, locale) {
             name : indicatorName + '/' + year + '/' + gender,
             field : columnId,
             toolTip : indicatorName + '/' + year + '/' + gender,
-            sortable : true
+            sortable : true,
+groupTotalsFormatter: function(totals, columnDef) {
+    var text = "";
+    var prepareFloat = function(value) {
+        return Math.round(parseFloat(value)*100)/100;
+    };
+    var val = totals.avg && totals.avg[columnDef.field];
+    if (val != null) text+= "Avg: " + prepareFloat(val)+", ";
+
+    val = totals.std && totals.std[columnDef.field];
+    if (val != null) text+= "Std: " + prepareFloat(val)+", ";
+
+    val = totals.mdn && totals.mdn[columnDef.field];
+    if (val != null) text+= "Median: " + prepareFloat(val)+", ";
+
+    val = totals.mde && totals.mde[columnDef.field];
+    if (val != null) text+= "Mode: " + prepareFloat(val)+", ";
+
+    val = totals.sum && totals.sum[columnDef.field];
+    if (val != null) text+= "Sum: " + prepareFloat(val)+", ";
+
+    val = totals.max && totals.max[columnDef.field];
+    if (val != null) text+= "Max: " + prepareFloat(val)+", ";
+
+    val = totals.min && totals.min[columnDef.field];
+    if (val != null) text+= "Min: " + prepareFloat(val);
+
+    return text;
+}
         });
         this.grid.setColumns(columns);
 
@@ -732,6 +781,30 @@ function(config, locale) {
                 item[columnId] = null;
             }
         };
+
+var aggregators = [];
+
+for (var i = 0; i < columns.length; i++) {
+    var id = columns[i].id;
+    aggregators.push(new Slick.Data.Aggregators.Avg(id));
+    aggregators.push(new Slick.Data.Aggregators.Std(id));
+    aggregators.push(new Slick.Data.Aggregators.Mdn(id));
+    aggregators.push(new Slick.Data.Aggregators.Mde(id));
+    aggregators.push(new Slick.Data.Aggregators.Sum(id));
+    aggregators.push(new Slick.Data.Aggregators.Max(id));
+    aggregators.push(new Slick.Data.Aggregators.Min(id));
+}
+this.dataView.setAggregators(aggregators,true);
+/*this.dataView.setGrouping({
+    formatter: function (g) {
+        return "<span style='color:green'>N = " + g.count + "</span>";
+    },
+    aggregateCollapsed: false,
+    aggregators: aggregators
+});
+*/
+
+
         this.dataView.endUpdate();
         this.dataView.refresh();
         this.grid.invalidateAllRows();
