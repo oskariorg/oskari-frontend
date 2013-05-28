@@ -8,6 +8,9 @@ if there is statslayer to be published, div.oskariui-left will be reserved for s
 ### statistics/bundle/publishedgrid
 This is created for published maps so that it shows also grid if there is one.
 
+### statistics/bundle/statsgrid
+Indicators which do not have data for all municipalities now show the missing values as blanks in the grid and on the map. This doesn't affect sorting, the blank values are always in the bottom when sorted.
+
 ## 1.9
 
 ### framework bundle
