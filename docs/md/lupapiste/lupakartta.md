@@ -16,6 +16,8 @@ Lupakartta adds Marker handling. Lupakartta also utilizes dot selection and prin
 Note! Lupakartta requires hub.js to be globally defined.
 Also make sure libraries/OpenLayers/OpenLayers_Control_TileStitchPrinter.js is available.
 
+Unfortunately the MyPlaces bundle event handling has changed and is incompatible with this bundle.
+
 * State handling
 
 No state.
