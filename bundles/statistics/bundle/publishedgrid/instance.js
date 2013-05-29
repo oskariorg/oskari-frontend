@@ -104,6 +104,7 @@ function() {
         // Initialize the grid
         me.gridPlugin.createStatsOut(me.container);
         me._adjustDataContainer();
+        me._adjustMapPluginLocations();
     },
 
     /**
@@ -222,6 +223,16 @@ function() {
             return columns * 80;
         }
         return 160;
+    },
+
+    _adjustMapPluginLocations: function() {
+        var zoomBar = jQuery('.mapplugin.pzbDiv');
+        var panButtons = jQuery('.mapplugin.panbuttonDiv');
+        var zoomBarTop;
+
+        if (zoomBar && zoomBar.length && !panButtons.length) {
+            zoomBar.css('top', '35px');
+        }
     }
 
 }, {
