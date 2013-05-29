@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.11
+
+### usagetracker bundle
+
+Configurable event-based usage tracker. New bundle based on statehandler.
+
 ## 1.9
 
 ### framework bundle

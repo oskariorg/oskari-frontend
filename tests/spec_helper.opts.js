@@ -16,13 +16,14 @@ expect.Assertion.prototype.fail = function(msg) {
 var isCommonJS = typeof window == "undefined" && typeof exports == "object";
 expect.TIMEOUT_INCREMENT = 10;
 
+/* disabled until min.css is available again
 // add css
 var s = document.createElement("link");
 s.type = "text/css";
 s.rel = "stylesheet";
 s.href = "/Oskari/dist/oskari.min.css";
 document.getElementsByTagName("head")[0].appendChild(s);
-
+*/
 
 /**
  * From Jasmine https://github.com/pivotal/jasmine/blob/master/src/core/base.js

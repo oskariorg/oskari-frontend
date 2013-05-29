@@ -1,8 +1,6 @@
 {
    "startupSequence": [{
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "OpenLayers",
       "bundleinstancename": "openlayers-default-theme",
       "fi": "OpenLayers",
@@ -21,14 +19,10 @@
                "bundlePath": "../packages/framework/bundle/"
             }
          },
-         "Require-Bundle-Instance": [
-
-         ]
+         "Require-Bundle-Instance": []
       }
    }, {
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "Map",
       "bundleinstancename": "mapfull",
       "fi": "Map",
@@ -95,14 +89,10 @@
                "bundlePath": "../packages/framework/bundle/"
             }
          },
-         "Require-Bundle-Instance": [
-
-         ]
+         "Require-Bundle-Instance": []
       }
    }, {
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "Oskari DIV Manazer",
       "bundleinstancename": "divmanazer",
       "fi": "Oskari DIV Manazer",
@@ -115,14 +105,10 @@
                "bundlePath": "../packages/framework/bundle/"
             }
          },
-         "Require-Bundle-Instance": [
-
-         ]
+         "Require-Bundle-Instance": []
       }
    }, {
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "Toolbar",
       "bundleinstancename": "toolbar",
       "fi": "toolbar",
@@ -135,14 +121,10 @@
                "bundlePath": "../packages/framework/bundle/"
             }
          },
-         "Require-Bundle-Instance": [
-
-         ]
+         "Require-Bundle-Instance": []
       }
    }, {
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "StateHandler",
       "bundleinstancename": "statehandler",
       "fi": "jquery",
@@ -155,14 +137,10 @@
                "bundlePath": "../packages/framework/bundle/"
             }
          },
-         "Require-Bundle-Instance": [
-
-         ]
+         "Require-Bundle-Instance": []
       }
    }, {
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "Info Box",
       "bundleinstancename": "infobox",
       "fi": "infobox",
@@ -175,14 +153,10 @@
                "bundlePath": "../packages/framework/bundle/"
             }
          },
-         "Require-Bundle-Instance": [
-
-         ]
+         "Require-Bundle-Instance": []
       }
    }, {
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "Haku",
       "bundleinstancename": "search",
       "fi": "search",
@@ -195,14 +169,10 @@
                "bundlePath": "../packages/framework/bundle/"
             }
          },
-         "Require-Bundle-Instance": [
-
-         ]
+         "Require-Bundle-Instance": []
       }
    }, {
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "Karttatasot",
       "bundleinstancename": "layerselector2",
       "fi": "layerselector",
@@ -215,14 +185,10 @@
                "bundlePath": "../packages/framework/bundle/"
             }
          },
-         "Require-Bundle-Instance": [
-
-         ]
+         "Require-Bundle-Instance": []
       }
    }, {
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "Valitut karttatasot",
       "bundleinstancename": "layerselection2",
       "fi": "layerselection",
@@ -235,14 +201,10 @@
                "bundlePath": "../packages/framework/bundle/"
             }
          },
-         "Require-Bundle-Instance": [
-
-         ]
+         "Require-Bundle-Instance": []
       }
    }, {
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "Omat tiedot",
       "bundleinstancename": "personaldata",
       "fi": "personaldata",
@@ -255,14 +217,10 @@
                "bundlePath": "../packages/framework/bundle/"
             }
          },
-         "Require-Bundle-Instance": [
-
-         ]
+         "Require-Bundle-Instance": []
       }
    }, {
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "Karttajulkaisu",
       "bundleinstancename": "publisher",
       "fi": "jquery",
@@ -275,14 +233,10 @@
                "bundlePath": "../packages/framework/bundle/"
             }
          },
-         "Require-Bundle-Instance": [
-
-         ]
+         "Require-Bundle-Instance": []
       }
    }, {
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "Koordinaattin�ytt�",
       "bundleinstancename": "coordinatedisplay",
       "fi": "coordinatedisplay",
@@ -295,14 +249,10 @@
                "bundlePath": "../packages/framework/bundle/"
             }
          },
-         "Require-Bundle-Instance": [
-
-         ]
+         "Require-Bundle-Instance": []
       }
    }, {
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "UserGuide",
       "bundleinstancename": "userguide",
       "fi": "userguide",
@@ -315,14 +265,10 @@
                "bundlePath": "../packages/framework/bundle/"
             }
          },
-         "Require-Bundle-Instance": [
-
-         ]
+         "Require-Bundle-Instance": []
       }
    }, {
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "Metadata Flyout",
       "bundleinstancename": "metadataflyout",
       "fi": "metadataflyout",
@@ -335,14 +281,10 @@
                "bundlePath": "../packages/catalogue/bundle/"
             }
          },
-         "Require-Bundle-Instance": [
-
-         ]
+         "Require-Bundle-Instance": []
       }
    }, {
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "Metadata",
       "bundleinstancename": "metadata",
       "fi": "Metadata",
@@ -355,14 +297,10 @@
                "bundlePath": "../packages/framework/bundle/"
             }
          },
-         "Require-Bundle-Instance": [
-
-         ]
+         "Require-Bundle-Instance": []
       }
    }, {
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "Featuredata",
       "bundleinstancename": "featuredata",
       "fi": "Kohdetiedot",
@@ -375,14 +313,10 @@
                "bundlePath": "../packages/framework/bundle/"
             }
          },
-         "Require-Bundle-Instance": [
-
-         ]
+         "Require-Bundle-Instance": []
       }
    }, {
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "My places",
       "bundleinstancename": "myplaces2",
       "fi": "Kohteet",
@@ -395,14 +329,10 @@
                "bundlePath": "../packages/framework/bundle/"
             }
          },
-         "Require-Bundle-Instance": [
-
-         ]
+         "Require-Bundle-Instance": []
       }
    }, {
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "Guided Tour",
       "bundleinstancename": "guidedtour",
       "fi": "Guided Tour",
@@ -415,9 +345,7 @@
                "bundlePath": "../packages/framework/bundle/"
             }
          },
-         "Require-Bundle-Instance": [
-
-         ]
+         "Require-Bundle-Instance": []
       }
    }, {
       "title": "Promote",
@@ -448,9 +376,7 @@
          }
       }
    }, {
-      "instanceProps": {
-
-      },
+      "instanceProps": {},
       "title": "Valitut kohteet",
       "fi": "featureselector",
       "sv": "?",
@@ -458,12 +384,30 @@
       "bundlename": "digiroad-featureselector",
       "bundleinstancename": "digiroad-featureselector",
       "metadata": {
-        "Import-Bundle": {
+         "Import-Bundle": {
             "digiroad-featureselector": {
-                "bundlePath": "../packages/digiroad/bundle/"
+               "bundlePath": "../packages/digiroad/bundle/"
             }
-        },
-        "Require-Bundle-Instance" : []
+         },
+         "Require-Bundle-Instance": []
+      }
+   }, {
+      "instanceProps": {},
+      "title": "UsageTracker",
+      "bundleinstancename": "usagetracker",
+      "fi": "Käyttöseuranta",
+      "sv": "Användings uppföljning",
+      "en": "Usage tracking",
+      "bundlename": "usagetracker",
+      "metadata": {
+         "Import-Bundle": {
+            "usagetracker": {
+               "bundlePath": "../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance": [
+
+         ]
       }
    }]
 }
