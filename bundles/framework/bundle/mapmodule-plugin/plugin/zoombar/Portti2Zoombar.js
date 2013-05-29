@@ -152,7 +152,7 @@ function(config) {
         me.__elements['zoombarSlider'].mousedown(function(event) {
             event.stopPropagation();
         });
-        //me.mapModule.getMapLayersContainerDiv().appendChild(me.__elements['zoombarSlider'][0]);
+        
         jQuery(me.__parent).append(me.__elements['zoombarSlider']);
 
        	var sliderEl = me.__elements['zoombarSlider'].find('div.slider');

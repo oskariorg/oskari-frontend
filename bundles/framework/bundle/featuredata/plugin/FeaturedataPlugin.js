@@ -151,7 +151,7 @@ function(config) {
         var sandbox = this._sandbox;
         var me = this;
         // get div where the map is rendered from openlayers
-        var parentContainer = me.mapModule.getMapLayersContainerDiv();
+        var parentContainer = jQuery(this._map.div);
         
         if(!me.__elements['main']) {
             me.__elements['main'] = me.__templates['main'].clone();
@@ -165,7 +165,7 @@ function(config) {
         me.__elements['main'].mousedown(function(event) {
             event.stopPropagation();
         });
-        parentContainer.appendChild(me.__elements['main'][0]);
+        parentContainer.append(me.__elements['main']);
         this.update();
     },
     /**

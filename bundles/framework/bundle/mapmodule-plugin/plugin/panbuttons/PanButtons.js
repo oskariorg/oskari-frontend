@@ -225,6 +225,8 @@ function(config) {
 
         var pb = me.__elements['panbuttons'];
 
+        jQuery(me.__parent).append(pb);
+
         // override default location if configured
         if (me.__conf && me.__conf.location) {
             if (me.__conf.location.top) {
@@ -331,8 +333,6 @@ function(config) {
                 event.stopPropagation();
             }
         });
-        jQuery(this._map.div).append(pb);
-        //me.mapModule.getMapLayersContainerDiv().appendChild(pb[0]);
     },
 
     /**
