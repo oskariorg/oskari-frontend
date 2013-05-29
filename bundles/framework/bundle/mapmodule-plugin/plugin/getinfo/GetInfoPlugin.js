@@ -660,7 +660,6 @@ function(config, locale) {
 					var pluginLoc = this.getMapModule().getLocalization('plugin', true);
 					var myLoc = pluginLoc[this.__name];
 					var localizedAttr = myLoc[attr];
-					console.dir(pluginLoc);
 	                labelCell.append(localizedAttr ? localizedAttr : attr);
 	                row.append(labelCell);
 	                var valueCell = me.templates.tableCell.clone();
