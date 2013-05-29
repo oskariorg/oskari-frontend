@@ -46,6 +46,8 @@ function() {
         this.sandbox = sandbox;
         sandbox.register(this);
 
+        sandbox.registerAsStateful(this.mediator.bundleId, this);
+
         // Find the map module.
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         this.mapModule = mapModule;
@@ -86,6 +88,16 @@ function() {
         if(showGrid) {
             me.createUI();
         }
+    },
+
+    setState: function(state) {
+        if (state) {
+            this.gridPlugin.loadStateIndicators(state, this.container);
+        }
+    },
+
+    getState: function() {
+        return this.state;
     },
 
     /**

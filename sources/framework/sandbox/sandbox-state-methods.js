@@ -46,9 +46,32 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'state-methods',
 
     /**
      * @method resetState
-     * Resets the state to the initial state.
+     * Resets the application state to the initial state provided by GetAppSetup action route.
      */
     resetState: function() {
+        var initialConf = Oskari.app.getConfiguration(), // conf got loaded when application started
+            statefuls = this.getStatefulComponents(),
+            initialState,
+            bundle;
 
+        // Let's loop trough all the stateful bundles.
+        for (var b in statefuls) {
+            bundle = statefuls[b];
+            // initialConf has all the states gotten from GetAppSetup.
+            initialState = initialConf[b].state;
+
+            // Double check that the bundle really is stateful
+            if (bundle.setState) {
+                // If it has a default state that's not empty
+                if (!jQuery.isEmptyObject(initialState)) {
+                    // reset to the default state
+                    bundle.setState(initialState);
+                }
+                // otherwise just set an empty state.
+                else {
+                    bundle.setState();
+                }
+            }
+        }
     }
 });

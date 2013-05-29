@@ -270,6 +270,8 @@ function(config) {
             var rb = sb.getRequestBuilder(rn);
             if (rb) {
                 sb.request(me, rb());
+            } else {
+                sb.resetState();
             }
         });
 
