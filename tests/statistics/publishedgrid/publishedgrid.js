@@ -102,11 +102,16 @@ describe.only('Test Suite for statistics/publishedgrid bundle', function() {
             }, 100);
         });
 
+        // For one reason or another, this test seems to ask for user credentials
         it('should have indicators in the grid', function() {
-            var grid = publishedGrid.gridPlugin.grid;
-            var columns = grid.getColumns();
-            // The two municipality columns (name + code) and the one in the state.
-            expect(columns.length).to.be(3);
+            var grid = publishedGrid.gridPlugin.grid,
+                columns;
+
+            setTimeout(function() {
+                columns = grid.getColumns();
+                // The two municipality columns (name + code) and the one in the state.
+                expect(columns.length).to.be(3);
+            }, 2000);
         });
     });
 });
