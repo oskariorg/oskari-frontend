@@ -1,0 +1,21 @@
+@media screen {
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    #mapdiv {
+        width: 100%;
+    }
+    #maptools {
+        background-color: #333438;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        width: 153px;
+        z-index: 2;
+    }
+    #contentMap {
+        height: 100%;
+        margin-left: 153px;
+    }
+}
