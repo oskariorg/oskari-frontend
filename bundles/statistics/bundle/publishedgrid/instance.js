@@ -46,6 +46,8 @@ function() {
         this.sandbox = sandbox;
         sandbox.register(this);
 
+        sandbox.registerAsStateful(this.mediator.bundleId, this);
+
         // Find the map module.
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         this.mapModule = mapModule;
@@ -88,6 +90,16 @@ function() {
         }
     },
 
+    setState: function(state) {
+        if (state) {
+            this.gridPlugin.loadStateIndicators(state, this.container);
+        }
+    },
+
+    getState: function() {
+        return this.state;
+    },
+
     /**
      * @method createUI
      * Creates the UI based on the given state (what indicators to use and so on).
@@ -104,6 +116,7 @@ function() {
         // Initialize the grid
         me.gridPlugin.createStatsOut(me.container);
         me._adjustDataContainer();
+        me._adjustMapPluginLocations();
     },
 
     /**
@@ -222,6 +235,16 @@ function() {
             return columns * 80;
         }
         return 160;
+    },
+
+    _adjustMapPluginLocations: function() {
+        var zoomBar = jQuery('.mapplugin.pzbDiv');
+        var panButtons = jQuery('.mapplugin.panbuttonDiv');
+        var zoomBarTop;
+
+        if (zoomBar && zoomBar.length && !panButtons.length) {
+            zoomBar.css('top', '35px');
+        }
     }
 
 }, {
