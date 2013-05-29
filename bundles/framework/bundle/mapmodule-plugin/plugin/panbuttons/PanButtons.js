@@ -331,7 +331,8 @@ function(config) {
                 event.stopPropagation();
             }
         });
-        me.mapModule.getMapLayersContainerDiv().appendChild(pb[0]);
+        jQuery(this._map.div).append(pb);
+        //me.mapModule.getMapLayersContainerDiv().appendChild(pb[0]);
     },
 
     /**
