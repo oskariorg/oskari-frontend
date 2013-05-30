@@ -54,7 +54,10 @@
 .statsgrid-csv-button {
   position: absolute;
   right: 5px;
-  bottom: 5px;"
+  bottom: 5px;
+}
+.statsgrid-variable:after {
+  content: "<br>";
 }
 .statsgrid .indicator-cont {
   float: left;

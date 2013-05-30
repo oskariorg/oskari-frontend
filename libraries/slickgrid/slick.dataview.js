@@ -840,11 +840,11 @@
         onRowsChanged.notify({rows: diff}, null, self);
       }
 
-    // TODO
-    if(self.totalsCallback) {
-      var g = $.extend(true, {}, groups);
-      self.totalsCallback(g);
-    }
+      // Cloning values to the callback function.
+      if(self.totalsCallback) {
+        var g = $.extend(true, {}, groups);
+        self.totalsCallback(g);
+      }
 
     }
 

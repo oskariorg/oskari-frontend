@@ -56,6 +56,10 @@
   right: 5px;
   bottom: 5px;
 }
+.statsgrid-variable {
+  float: left;
+  clear: both;
+}
 
 .statsgrid .indicator-cont {
   float: left;

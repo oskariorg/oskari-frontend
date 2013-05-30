@@ -43,7 +43,7 @@ function(config, locale) {
     this._locale = locale || {};
     this.templates = {
         'csvButton'         : '<button class="statsgrid-csv-button">csv</button>',
-        'statsgridTotalsVar': '<span></span><br />',
+        'statsgridTotalsVar': '<span class="statsgrid-variable"></span>',
         'subHeader'         : '<span class="statsgrid-grid-subheader"></span>'
     }
 }, {
@@ -222,17 +222,17 @@ function(config, locale) {
             var selectors = jQuery('<div class="selectors-container"></div>');
             container.append(selectors);
 
-var me = this;
-var csvLink = jQuery(me.templates.csvButton);
-//container.find('selectors-container')
-selectors.append(csvLink);
-csvLink.click(function() {
-//var json3 = { "d": "[{\"Id\":1,\"UserName\":\"Sam Smith\"},{\"Id\":2,\"UserName\":\"Fred Frankly\"},{\"Id\":1,\"UserName\":\"Zachary Zupers\"}]" }
-    if(me.dataView){
-        var items = me.dataView.getItems();
-        me.downloadJSON2CSV(items);
-    }
-});
+            //Adding csv button
+            var me = this;
+            var csvLink = jQuery(me.templates.csvButton);
+            //container.find('selectors-container')
+            selectors.append(csvLink);
+            csvLink.click(function() {
+                if(me.dataView){
+                    var items = me.dataView.getItems();
+                    me.downloadJSON2CSV(items);
+                }
+            });
 
             // Indicators
             // success -> createIndicators
@@ -338,11 +338,12 @@ csvLink.click(function() {
         dataView.setGrouping({
             getter : "municipalities",
             formatter: function (g) {
-                return "<span style='color:green'>Kunnat (" + g.count + ")</span>";
+                return "<span style='color:green'>" +me._locale['municipality']+" (" + g.count + ")</span>";
             },
             aggregateCollapsed: false
         });
 
+debugger;
 
         // Grid
         grid = new Slick.Grid(gridContainer, dataView, columns, options);
@@ -388,10 +389,8 @@ csvLink.click(function() {
         // add placeholder
         grid.onHeaderRowCellRendered.subscribe(function(e, args) {
             jQuery(args.node).empty();
-            var value = '';
-                jQuery('<span class="statsgrid-grid-subheader">')
-                   .text(value)
-                   .appendTo(args.node);
+            jQuery(me.templates.subHeader)
+                .appendTo(args.node);
         });
 
         // notify dataview that we are starting to update data
@@ -829,6 +828,7 @@ csvLink.click(function() {
             aggregators.push(new Slick.Data.Aggregators.Min(id));
         }
         me.dataView.setAggregators(aggregators,true);
+
         // Add callback function for totals / statistics
         me.dataView.setTotalsCallback(function(groups) {
             me._updateTotals(groups);
@@ -1280,7 +1280,7 @@ csvLink.click(function() {
 
             } else if(columnId == 'municipality') {
                 var totalsItem = jQuery(this.templates.statsgridTotalsVar);
-                totalsItem.addClass('statsgrid-totals-label').text(this._locale['statistic'][type]) //append('<span class="statsgrid-'+type+'">'+value[columnId][type]+'</span><br />')
+                totalsItem.addClass('statsgrid-totals-label').text(this._locale['statistic'][type])
                 break;
             }
         }
