@@ -1072,7 +1072,7 @@
     }
   }
 
-function MdeAggregator(field) {
+  function MdeAggregator(field) {
     this.field_ = field;
 
     this.init = function () {
@@ -1100,9 +1100,13 @@ function MdeAggregator(field) {
       }
       var maxCountI = 0;
       for (var i = 0; i < this.pairs_.length; i++) {
-        if (this.pairs_[i].count > this.pairs_[maxCountI].count) maxCountI = i;
+        if ((this.pairs_[i].count > this.pairs_[maxCountI].count) || ((this.pairs_[i].count === this.pairs_[maxCountI].count) && (this.pairs_[i].value < this.pairs_[maxCountI].value))) {
+          maxCountI = i;
+        }
       }
-      groupTotals.mde[this.field_] = this.pairs_[maxCountI].value;
+      if (typeof this.pairs_[maxCountI] !== "undefined") {
+        groupTotals.mde[this.field_] = this.pairs_[maxCountI].value;
+      }
     };
   }
 
@@ -1178,3 +1182,4 @@ function MdeAggregator(field) {
   // TODO:  merge common aggregators in one to prevent needles iterating
 
 })(jQuery);
+
