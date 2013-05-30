@@ -65,7 +65,6 @@ function() {
      * 			reference to application sandbox
      */
     init : function(sandbox) {
-		console.log("init");
     },
     /**
      * @method register
@@ -89,7 +88,6 @@ function() {
      * 			reference to application sandbox
      */
     startPlugin : function(sandbox) {
-		console.log("Starting plugin");
 		var me = this;
         me._sandbox = sandbox;
         me._map = me.getMapModule().getMap();
@@ -168,8 +166,6 @@ function() {
      * Creates logo and terms of use links on top of map
      */
     _createUI : function() {
-		console.log("Creating logo UI");
-    	
 		var me = this;
 		var sandbox = me._sandbox;
 

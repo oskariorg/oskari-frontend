@@ -71,7 +71,6 @@ function(ajaxUrl) {
 	 * handler.getCurrentState() if not given)
 	 */
 	saveState : function(view, pState) {
-		console.log('saveState');
 
 		var state = pState;
 		var me = this;
@@ -96,7 +95,6 @@ function(ajaxUrl) {
 		var expiredays = 7;
 
 		jQuery.cookie("oskaristate", data, {expires: expiredays});
-		console.log('saved!');
 
 		// save to ajaxUrl
 		jQuery.ajax({
@@ -164,7 +162,6 @@ function(ajaxUrl) {
 			window.onbeforeunload = function() {
 				// save state to session when leaving map window
 				me.saveState();
-				console.log('saving state...');
 			};
 		});
 	},

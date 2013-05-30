@@ -11,7 +11,7 @@
                 "openlayers-default-theme": {
                     "bundlePath": "../../../packages/openlayers/bundle/"
                 },
-                "openlayers-published-map": {
+                "openlayers-full-map": {
                     "bundlePath": "../../../packages/openlayers/bundle/"
                 }
             },
@@ -118,6 +118,26 @@
                 }
             },
             "Require-Bundle-Instance": []
+        },
+        "instanceProps": {}
+    },
+    {
+        "title": "Published Grid",
+        "bundleinstancename": "publishedgrid",
+        "fi": "publishedgrid",
+        "sv": "publishedgrid",
+        "en": "publishedgrid",
+        "bundlename": "publishedgrid",
+        "metadata": {
+            "Import-Bundle": {
+                "publishedgrid": {
+                    "bundlePath": "../../../packages/statistics/bundle/"
+                },
+                "geostats": {
+                    "bundlePath": "../../../packages/libraries/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": [ ]
         },
         "instanceProps": {}
     }]

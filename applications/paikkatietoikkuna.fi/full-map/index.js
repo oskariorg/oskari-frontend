@@ -78,15 +78,16 @@ jQuery(document).ready(function() {
     }
 
     function start(appSetup, appConfig, cb) {
+
         var app = Oskari.app;
 
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
         app.startApplication(function(startupInfos) {
-          var instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
-          if (cb) {
-              cb(instance);
-          }
+            var instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
+            if (cb) {
+                cb(instance);
+            }
         });
     }
 

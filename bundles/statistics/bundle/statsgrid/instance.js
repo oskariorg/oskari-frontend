@@ -106,7 +106,6 @@ function() {
      * @param {Boolean} ignoreLocation true to NOT set map location based on state
      */
     setState : function(state, ignoreLocation) {
-        console.log("statsgrid state: ", state);
         var me = this,
             view = this.plugins['Oskari.userinterface.View'],
             container = view.getEl();

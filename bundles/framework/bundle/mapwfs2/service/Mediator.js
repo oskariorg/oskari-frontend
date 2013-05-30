@@ -200,7 +200,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         try {
             if(typeof data.data.url != "undefined") {
                 imageUrl = this.rootURL + data.data.url + "&client=" + this.session.clientId;
-                console.log(imageUrl);
+//                console.log(imageUrl);
             } else {
                 imageUrl = 'data:image/png;base64,' + data.data.data;
             }

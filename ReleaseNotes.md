@@ -1,10 +1,37 @@
 # Release Notes
 
+## 1.11
+
+### core/sandbox
+
+Created a new category for state methods, called sandbox-state-methods. Added a function `resetState` which sets the application state to initial state which was provided by the GetAppSetup action route at  application startup.
+
+### usagetracker bundle
+
+Configurable event-based usage tracker. New bundle based on statehandler.
+
+## 1.10.1
+
+### applications/paikkatietoikkuna.fi/published-map
+
+minifierAppsetup.json fixed to use openlayers-full-map instead of openlayers-published-map since it was missing some OpenLayers components for indexMap.
+
+## 1.10
+
+### framework/publisher bundle
+if there is statslayer to be published, div.oskariui-left will be reserved for showing data/grid.
+
+### statistics/publishedgrid bundle
+This is created for published maps so that it shows also grid if there is one.
+
+### statistics/statsgrid bundle
+Indicators which do not have data for all municipalities now show the missing values as blanks in the grid and on the map. This doesn't affect sorting, the blank values are always in the bottom when sorted.
+
 ## 1.9
 
-### framework bundle
+### printout bundle
 
-Printout/BasicPrintout: geojson extension added for background print service 
+geojson extension added for background print service 
 
 ### toolbar bundle
 
