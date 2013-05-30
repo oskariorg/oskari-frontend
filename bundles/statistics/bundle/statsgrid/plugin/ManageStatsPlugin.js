@@ -28,7 +28,18 @@ function(config, locale) {
     // indicators (meta data)
     this.indicators = [];
 
-    this.conf = config || {};
+//    this.conf = config || {};
+    defaults = {"statistics" : [
+        {"id" : "avg", "visible": true},
+        {"id" : "max", "visible": true},
+        {"id" : "min", "visible": true},
+        {"id" : "mde", "visible": true},
+        {"id" : "mdn", "visible": true},
+        {"id" : "std", "visible": true},
+        {"id" : "sum", "visible": true}
+        ]
+    };
+    this.conf = jQuery.extend(true, defaults, config);
     this._locale = locale || {};
 }, {
     /** 
@@ -273,7 +284,7 @@ function(config, locale) {
             enableColumnReorder : true,
             multiColumnSort : true,
             showHeaderRow: true,
-            headerRowHeight: 30
+            headerRowHeight: 90
         };
         var data = [];
         var rowId = 0;
@@ -305,13 +316,14 @@ function(config, locale) {
             grid.render();
         });
 
-
-dataView.setGrouping({
-    formatter: function (g) {
-        return "<span style='color:green'>Kunnat (" + g.count + ")</span>";
-    },
-    aggregateCollapsed: false
-});
+        // To use aggrefators we need to define a group
+        dataView.setGrouping({
+            getter : "municipalities",
+            formatter: function (g) {
+                return "<span style='color:green'>Kunnat (" + g.count + ")</span>";
+            },
+            aggregateCollapsed: false
+        });
 
 
         // Grid
@@ -353,15 +365,16 @@ dataView.setGrouping({
             }
             me.sendStatsData(args.column);
         });
-debugger;
-grid.onHeaderRowCellRendered.subscribe(function(e, args) {
-    jQuery(args.node).empty();
-    jQuery('<span class="statsgrid-grid-subheader">')
-       .text('asdf')
-       .appendTo(args.node);
-});
 
-
+        // when headerRow cells are rendered
+        // add placeholder
+        grid.onHeaderRowCellRendered.subscribe(function(e, args) {
+            jQuery(args.node).empty();
+            var value = '';
+                jQuery('<span class="statsgrid-grid-subheader">')
+                   .text(value)
+                   .appendTo(args.node);
+        });
 
         // notify dataview that we are starting to update data
         dataView.beginUpdate();
@@ -699,22 +712,24 @@ grid.onHeaderRowCellRendered.subscribe(function(e, args) {
      * @param data related to the indicator
      */
     addIndicatorDataToGrid : function(container, indicatorId, gender, year, data, meta, silent) {
-        var columnId = this._getIndicatorColumnId(indicatorId, gender, year);
-        var columns = this.grid.getColumns();
+        var me = this;
+        var columnId = me._getIndicatorColumnId(indicatorId, gender, year);
+        var columns = me.grid.getColumns();
         var indicatorName = meta.title[Oskari.getLang()];
 
         var columnId = "indicator" + indicatorId + year + gender;
-        if(this.isIndicatorInGrid(columnId)) {
+        if(me.isIndicatorInGrid(columnId)) {
             return false;
         }
 
-
+        var name = indicatorName + '/' + year + '/' + gender;
         columns.push({
             id : columnId,
-            name : indicatorName + '/' + year + '/' + gender,
+            name : name,
             field : columnId,
-            toolTip : indicatorName + '/' + year + '/' + gender,
+            toolTip : name,
             sortable : true,
+
 groupTotalsFormatter: function(totals, columnDef) {
     var text = "";
     var prepareFloat = function(value) {
@@ -744,11 +759,11 @@ groupTotalsFormatter: function(totals, columnDef) {
     return text;
 }
         });
-        this.grid.setColumns(columns);
+        me.grid.setColumns(columns);
 
         var columnData = [];
         var ii = 0;
-        this.dataView.beginUpdate();
+        me.dataView.beginUpdate();
 
         // loop through data and get the values
         for (var i = 0; i < data.length; i++) {
@@ -765,16 +780,16 @@ groupTotalsFormatter: function(totals, columnDef) {
             }
             if (!!regionId) {
                 // find region
-                var item = this.dataView.getItemById(regionId);
+                var item = me.dataView.getItemById(regionId);
                 if (item) {
                     // update row
                     item[columnId] = Number(value);
-                    this.dataView.updateItem(item.id, item);
+                    me.dataView.updateItem(item.id, item);
                 }
                 ii++;
             }
         }
-        var items = this.dataView.getItems();
+        var items = me.dataView.getItems();
         for (var i = items.length - 1; i >= 0; i--) {
             var item = items[i];
             if (item[columnId] == null) {
@@ -782,40 +797,38 @@ groupTotalsFormatter: function(totals, columnDef) {
             }
         };
 
-var aggregators = [];
+        // create all the aggregators we need
+        var aggregators = [];
 
-for (var i = 0; i < columns.length; i++) {
-    var id = columns[i].id;
-    aggregators.push(new Slick.Data.Aggregators.Avg(id));
-    aggregators.push(new Slick.Data.Aggregators.Std(id));
-    aggregators.push(new Slick.Data.Aggregators.Mdn(id));
-    aggregators.push(new Slick.Data.Aggregators.Mde(id));
-    aggregators.push(new Slick.Data.Aggregators.Sum(id));
-    aggregators.push(new Slick.Data.Aggregators.Max(id));
-    aggregators.push(new Slick.Data.Aggregators.Min(id));
-}
-this.dataView.setAggregators(aggregators,true);
-/*this.dataView.setGrouping({
-    formatter: function (g) {
-        return "<span style='color:green'>N = " + g.count + "</span>";
-    },
-    aggregateCollapsed: false,
-    aggregators: aggregators
-});
-*/
+        for (var i = 0; i < columns.length; i++) {
+            var id = columns[i].id;
+            aggregators.push(new Slick.Data.Aggregators.Avg(id));
+            aggregators.push(new Slick.Data.Aggregators.Std(id));
+            aggregators.push(new Slick.Data.Aggregators.Mdn(id));
+            aggregators.push(new Slick.Data.Aggregators.Mde(id));
+            aggregators.push(new Slick.Data.Aggregators.Sum(id));
+            aggregators.push(new Slick.Data.Aggregators.Max(id));
+            aggregators.push(new Slick.Data.Aggregators.Min(id));
+        }
+        me.dataView.setAggregators(aggregators,true);
+        // Add callback function for totals / statistics
+        me.dataView.setTotalsCallback(function(groups) {
+            me._updateTotals(groups);
+        });
 
 
-        this.dataView.endUpdate();
-        this.dataView.refresh();
-        this.grid.invalidateAllRows();
-        this.grid.render();
+
+        me.dataView.endUpdate();
+        me.dataView.refresh();
+        me.grid.invalidateAllRows();
+        me.grid.render();
 
         if(silent != true) {
             // Show classification
-            this.sendStatsData(columns[columns.length - 1]);
+            me.sendStatsData(columns[columns.length - 1]);
         }
 
-        this.updateDemographicsButtons(indicatorId, gender, year);
+        me.updateDemographicsButtons(indicatorId, gender, year);
     },
 
     /**
@@ -1195,7 +1208,63 @@ this.dataView.setAggregators(aggregators,true);
                 });
             });
         }
+    },
+    /**
+     * Loop through first group (municipalities) and 
+     * @private _updateTotals
+     */
+    _updateTotals: function(groups) {
+        if(groups){
+            var columns = this.grid.getColumns();
+
+            // loop through columns
+            for (var i = 0; i < columns.length; i++) {
+                var column = columns[i];
+                var gridTotals = groups[0].totals;
+                var sub = jQuery('<span class="statsgrid-grid-subheader"></span>');
+
+                var variableCount = 0;
+                // loop through statistical variables
+                for (var j = 0; j < this.conf.statistics.length; j++) {
+                    var statistic = this.conf.statistics[j];
+                    if(statistic.visible){
+                        sub.append(this._getStatistic(gridTotals, column.id, statistic.id));
+                        variableCount++;
+                    }
+                };
+
+                var opts = this.grid.getOptions();
+                // TODO: 12 = font-size, 7 = padding...
+                opts.headerRowHeight = variableCount * 12 + 7;
+                this.grid.setOptions(opts);
+
+                var columnDiv = jQuery(this.grid.getHeaderRowColumn(column.id)).empty();
+                sub.appendTo(columnDiv);
+            };
+        }
+    },
+    _getStatistic: function(gridTotals, columnId, type) {
+        var value = {};
+        var totalsItem = null;
+        var result = gridTotals[type];
+        //loop through different indicator columns
+        for(indicatorId in result) {
+            if(!value[indicatorId]) {
+                value[indicatorId] = {};
+            }
+            if(indicatorId.indexOf('indicator') >= 0 && indicatorId == columnId) {
+                value[indicatorId][type] = result[indicatorId];
+                var totalsItem = jQuery('<span class="statsgrid-'+type+'">'+value[columnId][type]+'</span><br />');
+                break;
+
+            } else if(columnId == 'municipality') {
+                var totalsItem = jQuery('<span class="statsgrid-totals-label">'+type+'</span><br />');
+                break;
+            }
+        }
+        return totalsItem;
     }
+
 }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}

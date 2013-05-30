@@ -839,6 +839,17 @@
       if (diff.length > 0) {
         onRowsChanged.notify({rows: diff}, null, self);
       }
+
+    // TODO
+    if(self.totalsCallback) {
+      var g = $.extend(true, {}, groups);
+      self.totalsCallback(g);
+    }
+
+    }
+
+    function setTotalsCallback(totalsCallback) {
+      self.totalsCallback = totalsCallback;
     }
 
     function syncGridSelection(grid, preserveHidden) {
@@ -949,6 +960,7 @@
       "deleteItem": deleteItem,
       "syncGridSelection": syncGridSelection,
       "syncGridCellCssStyles": syncGridCellCssStyles,
+      "setTotalsCallback" : setTotalsCallback,
 
       // data provider methods
       "getLength": getLength,
