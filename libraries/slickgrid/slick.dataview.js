@@ -1072,7 +1072,7 @@
     }
   }
 
-  function MdeAggregator(field) {
+function MdeAggregator(field) {
     this.field_ = field;
 
     this.init = function () {
@@ -1081,14 +1081,16 @@
 
     this.accumulate = function (item) {
       var val = item[this.field_];
+      var found = false;
       if (val != null && val !== "" && val !== NaN) {
         for (var i = 0; i < this.pairs_.length; i++) {
           if (this.pairs_[i].value == val) {
             this.pairs_[i].count++;
-            return;
+            found = true;
+            break;
           }
         }
-        this.pairs_.push({value: val, count: 1});
+        if (!found) this.pairs_.push({value: val, count: 1});
       }
     };
 
@@ -1113,14 +1115,16 @@
 
     this.accumulate = function (item) {
       var val = item[this.field_];
+      var spliced = false;
       if (val != null && val !== "" && val !== NaN) {
         for (var i = 0; i < this.sorted_.length; i++) {
           if (val < this.sorted_[i]) {
             this.sorted_.splice(i,0,val);
-            return;
+            spliced = true;
+            break;
           }
         }
-        this.sorted_.push(val);
+        if (!spliced) this.sorted_.push(val);
       }
     };
 
