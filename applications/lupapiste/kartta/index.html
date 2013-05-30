@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>lupapiste demo</title>
+<!-- ############# css ################# -->
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js">
+</script>
+
+<link rel="stylesheet" type="text/css" href="../css/icons.css" />
+<style type="text/css">
+@media screen {
+  body {
+    margin : 0;
+    padding: 0;
+  }
+  #mapdiv {
+  }
+  #contentMap {
+    float:left;
+  }
+  
+
+  #eventMessages {
+  	float: left;
+  }
+  #formi {
+  	float: left;
+  }
+}
+</style>
+<!-- ############# /css ################# -->
+</head>
+<body>
+
+<div id="contentMap">
+<div id="mapdiv"> </div>
+</div>
+
+
+<div id="eventMessages"> </div>
+<div id="formi">
+<input type="text" id="inputx" value="517620" />
+<input type="text" id="inputy" value="6874042"/>
+<div>
+<input type="button" id="button1" value="Lisaa markkeri"/>
+<input type="button" id="button2" value="Lisaa markkereita"/>
+<input type="button" id="piirra" value="osoita piste"/>
+Tyhjenn&auml; ennen lis&auml;yst&auml;: <input type="checkbox" id="checkbox1" /><br/>
+<input type="button" id="tyhjenna" value="poista pisteet"/>
+</div>
+</div>
+
+<!-- ############# Javascript ################# -->
+
+<!--  OSKARI -->
+<script type="text/javascript"
+	src="../../../bundles/bundle.js">
+</script>
+	
+<!--  OPENLAYERS -->
+<script type="text/javascript" 
+	src="../../../packages/openlayers/startup.js">
+</script>
+
+<!--  LOG4JS -->
+<script type="text/javascript" 
+	src="../../../libraries/log4js/log4js.js">
+</script>
+
+<!--  RIGHTJS (flyout)-->
+<script type="text/javascript" 
+	src="../../../libraries/rightjs/javascripts/right.js">
+</script>
+<script type="text/javascript" 
+	src="../../../libraries/rightjs/javascripts/right/slider.js">
+</script>
+
+<script type="text/javascript" src="hub.js">
+</script>
+
+<script type="text/javascript" src="index.js">
+</script>
+
+<!-- ############# /Javascript ################# -->
+</body>
+</html>

@@ -3,14 +3,14 @@
     height: 27px;
     position: absolute;
     top: 0;
-    left: 40px;
-    z-index: 1000;
+    left: 0;
+    z-index: 20000;
 }
 
 #publishedgridToggle.hidePublishedGrid {
-    background: url(../../../../../resources/framework/bundle/mapmodule-plugin/plugin/fullscreen/images/hide-navigation.png);
+    background: url(/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/fullscreen/images/hide-navigation.png);
 }
 
 #publishedgridToggle.showPublishedGrid {
-    background: url(../../../../../resources/framework/bundle/mapmodule-plugin/plugin/fullscreen/images/show-navigation.png);
+    background: url(/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/fullscreen/images/show-navigation.png);
 }

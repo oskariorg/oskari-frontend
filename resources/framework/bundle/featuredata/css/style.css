@@ -21,7 +21,6 @@
   overflow: auto; }
 
 div.featuredataplugin.mapplugin {
-  position: fixed;
   top: 450px;
   right: 30px;
   display: block;

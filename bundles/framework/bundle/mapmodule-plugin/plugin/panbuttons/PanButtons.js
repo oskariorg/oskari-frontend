@@ -225,6 +225,8 @@ function(config) {
 
         var pb = me.__elements['panbuttons'];
 
+        jQuery(me.__parent).append(pb);
+
         // override default location if configured
         if (me.__conf && me.__conf.location) {
             if (me.__conf.location.top) {
@@ -268,6 +270,8 @@ function(config) {
             var rb = sb.getRequestBuilder(rn);
             if (rb) {
                 sb.request(me, rb());
+            } else {
+                sb.resetState();
             }
         });
 
@@ -331,7 +335,6 @@ function(config) {
                 event.stopPropagation();
             }
         });
-        me.mapModule.getMapLayersContainerDiv().appendChild(pb[0]);
     },
 
     /**

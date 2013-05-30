@@ -231,7 +231,7 @@ function(config, locale) {
 
                 // Data loaded and grid created, now it's time to load the indicators from the state if any.
                 if (me._state) {
-                    me.loadStateIndicators(container, me._state);
+                    me.loadStateIndicators(me._state, container);
                 }
             } else {
                 me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].regionDataError);
@@ -442,6 +442,8 @@ function(config, locale) {
         // if the value changes, fetch indicator meta data
         sel.change(function(e) {
             var indicator = sel.find('option:selected').val();
+            me.deleteIndicatorInfoButton(container);
+            me.deleteDemographicsSelect(container);
             me.getSotkaIndicatorMeta(container, indicator);
         });
 
@@ -508,6 +510,10 @@ function(config, locale) {
         });
     },
 
+    deleteIndicatorInfoButton: function(container) {
+        container.find('.indicator-cont').find('.icon-info').remove();
+    },
+
     /**
      * Create drop down selects for demographics (year & gender)
      *
@@ -571,6 +577,10 @@ function(config, locale) {
             var columnId = me._getIndicatorColumnId(indicator.id, gender, year);
             me.removeIndicatorDataFromGrid(indicator.id, gender, year);
         });
+    },
+
+    deleteDemographicsSelect: function(container) {
+        container.find('.parameters-cont').remove();
     },
 
     /**
@@ -725,13 +735,7 @@ function(config, locale) {
                 ii++;
             }
         }
-        var items = this.dataView.getItems();
-        for (var i = items.length - 1; i >= 0; i--) {
-            var item = items[i];
-            if (item[columnId] == null) {
-                item[columnId] = null;
-            }
-        };
+
         this.dataView.endUpdate();
         this.dataView.refresh();
         this.grid.invalidateAllRows();
@@ -1076,7 +1080,7 @@ function(config, locale) {
     /**
      * @method loadStateIndicators
      */
-    loadStateIndicators: function(container, state) {
+    loadStateIndicators: function(state, container) {
         var me = this;
         var classifyPlugin = this._sandbox.findRegisteredModuleInstance('MainMapModuleManageClassificationPlugin');
         // First, let's clear out the old data from the grid.
@@ -1097,8 +1101,8 @@ function(config, locale) {
                                 if(state.methodId == 4 && state.manualBreaksInput) {
                                     var manualInput = classifyPlugin.element.find('.manualBreaks').find('input[name=breaksInput]');
                                     manualInput.val(state.manualBreaksInput);
-                                    me.classifyPlugin.element.find('.classCount').hide();
-                                    me.classifyPlugin.element.find('.manualBreaks').show();
+                                    classifyPlugin.element.find('.classCount').hide();
+                                    classifyPlugin.element.find('.manualBreaks').show();
                                 }
                             }
                             if(state.numberOfClasses != null && state.numberOfClasses > 0) {
