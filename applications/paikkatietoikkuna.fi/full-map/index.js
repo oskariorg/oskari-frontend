@@ -78,126 +78,8 @@ jQuery(document).ready(function() {
     }
 
     function start(appSetup, appConfig, cb) {
-        var url = "/Oskari/applications/lupapiste/kartta/hub.js";
-        jQuery.getScript(url, function() {
-            console.log('loaded hub.script');
-            hub.subscribe("map-initialized", function(e) {
-                jQuery("#eventMessages").html("map-initilized<br/>" + jQuery("#eventMessages").html())
-            });
-            hub.subscribe("inforequest-map-click", function(e) {
-                jQuery("#eventMessages").html("inforequest-map-click (" + e.data.kunta.kuntanimi_fi + " " + e.data.kunta.kuntanumero + "," + e.data.location.x + "," + e.data.location.y + ")<br/>" + jQuery("#eventMessages").html())
-            });
-        });
-
-        // add html 
-        jQuery("body").prepend('<div style="position: absolute;z-index: 1000;"><div id="eventMessages"> </div><div id="formi"><input type="text" id="inputx" value="517620" /><input type="text" id="inputy" value="6874042"/><div><input type="button" id="button1" value="Lisaa markkeri"/><input type="button" id="button2" value="Lisaa markkereita"/><input type="button" id="piirra" value="osoita piste"/>Tyhjenn&auml; ennen lis&auml;yst&auml;: <input type="checkbox" id="checkbox1" /><br/><input type="button" id="tyhjenna" value="poista pisteet"/></div></div></div>');
-
-        //event demot
-        jQuery("#button1").click(function() {
-            //jQuery("#eventMessages").trigger("center",[parseInt(jQuery("#inputx").val(),10), parseInt(jQuery("#inputy").val(),10)]);
-            hub.send("documents-map", {
-                clear : jQuery("#checkbox1").is(":checked"),
-                data : [{
-                    id : new Date().getTime(),
-                    location : {
-                        x : parseInt(jQuery("#inputx").val(), 10),
-                        y : parseInt(jQuery("#inputy").val(), 10)
-                    },
-                    events : {
-                        click : function(e) {
-                            jQuery("#eventMessages").html("click<br/>" + jQuery("#eventMessages").html())
-                        }
-                    }
-                }]
-            });
-            return false;
-        });
-        jQuery("#button2").click(function() {
-            //jQuery("#eventMessages").trigger("center",[parseInt(jQuery("#inputx").val(),10), parseInt(jQuery("#inputy").val(),10)]);
-            hub.send("documents-map", {
-                clear : jQuery("#checkbox1").is(":checked"),
-                data : [{
-                    id : "11",
-                    location : {
-                        x : parseInt(jQuery("#inputx").val(), 10),
-                        y : parseInt(jQuery("#inputy").val(), 10)
-                    },
-                    events : {
-                        click : function(e) {
-                            jQuery("#eventMessages").html("click11<br/>" + jQuery("#eventMessages").html())
-                        }
-                    }
-                }, {
-                    id : "22",
-                    location : {
-                        x : parseInt(jQuery("#inputx").val(), 10) - 1000 + Math.random() * 2000,
-                        y : parseInt(jQuery("#inputy").val(), 10) - 1000 + Math.random() * 2000
-                    },
-                    events : {
-                        click : function(e) {
-                            jQuery("#eventMessages").html("click22<br/>" + jQuery("#eventMessages").html())
-                        }
-                    }
-                }, {
-                    id : "33",
-                    location : {
-                        x : parseInt(jQuery("#inputx").val(), 10) - 1000 + Math.random() * 2000,
-                        y : parseInt(jQuery("#inputy").val(), 10) - 1000 + Math.random() * 2000
-                    },
-                    events : {
-                        click : function(e) {
-                            jQuery("#eventMessages").html("click33<br/>" + jQuery("#eventMessages").html())
-                        }
-                    }
-                }, {
-                    id : "44",
-                    location : {
-                        x : parseInt(jQuery("#inputx").val(), 10) - 1000 + Math.random() * 2000,
-                        y : parseInt(jQuery("#inputy").val(), 10) - 1000 + Math.random() * 2000
-                    },
-                    events : {
-                        click : function(e) {
-                            jQuery("#eventMessages").html("click44<br/>" + jQuery("#eventMessages").html())
-                        }
-                    }
-                }, {
-                    id : "55",
-                    location : {
-                        x : parseInt(jQuery("#inputx").val(), 10) - 1000 + Math.random() * 2000,
-                        y : parseInt(jQuery("#inputy").val(), 10) - 1000 + Math.random() * 2000
-                    },
-                    events : {
-                        click : function(e) {
-                            jQuery("#eventMessages").html("click55<br/>" + jQuery("#eventMessages").html())
-                        }
-                    }
-                }]
-            });
-            return false;
-        });
-        jQuery("#piirra").click(function() {
-            //jQuery("#eventMessages").trigger("piirra");
-            hub.send("inforequest-map-start", {
-                drawMode : 'point',
-                clear : jQuery("#checkbox1").is(":checked")
-            });
-            return false;
-        });
-        jQuery("#tyhjenna").click(function() {
-            //jQuery("#eventMessages").trigger("tyhjenna");
-            hub.send("map-clear-request");
-            return false;
-        });
 
         var app = Oskari.app;
-
-        appConfig.lupakartta = {
-            "conf": {
-                "ajaxurl": "/oskari/integraatio/Kunta.asmx/Hae",
-                "printUrl": "/print",
-                "zoomMinBbox": 1000
-            }
-        };
 
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
@@ -206,24 +88,6 @@ jQuery(document).ready(function() {
             if (cb) {
                 cb(instance);
             }
-
-            var ugStartup = { 
-                "title" : "lupapiste",
-                "en" : "lupapiste",
-                "fi" : "lupapiste",
-                "sv" : "lupapiste",
-                "bundleinstancename" : "lupakartta",
-                "bundlename" : "lupakartta",
-                "instanceProps" : {  },
-                "metadata" : { 
-                    "Import-Bundle" : { 
-                        "lupakartta" : { "bundlePath" : "/Oskari/packages/lupapiste/bundle/" } 
-                    },
-                    "Require-Bundle-Instance" : [  ]
-                }
-            };
-
-            Oskari.bundle_facade.playBundle(ugStartup, function() {});
         });
     }
 
