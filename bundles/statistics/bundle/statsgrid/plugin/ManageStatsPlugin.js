@@ -343,8 +343,6 @@ function(config, locale) {
             aggregateCollapsed: false
         });
 
-debugger;
-
         // Grid
         grid = new Slick.Grid(gridContainer, dataView, columns, options);
 
