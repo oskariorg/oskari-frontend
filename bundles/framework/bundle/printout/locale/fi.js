@@ -114,6 +114,43 @@ Oskari.registerLocalization({
                     }*/
                 ]
             },
+            "legend" : {
+                "label" : "Legenda",
+                "tooltip" : "Valitse legendan paikka - ei piirretä, jos paikkaa ei ole valittuna",
+                "options" : [{
+                        "id" : "oskari_legend_NO",
+                        "loca" : "NO",
+                        "label" : "Ei legendaa ",
+                        "tooltip" : "Ei piirretä legendaa",
+                        "selected" : true
+                       
+                    },{
+                        "id" : "oskari_legend_LL",
+                        "loca" : "LL",
+                        "label" : "Vasen alanurkka ",
+                        "tooltip" : "Sovitus vasempaan alanurkkaan"
+                       
+                    },{
+                        "id" : "oskari_legend_LU",
+                         "loca" : "LU",
+                        "label" : "Vasen ylänurkka ",
+                        "tooltip" : "Sovitus vasempaan ylänurkkaan"
+                       
+                    },{
+                        "id" : "oskari_legend_RU",
+                         "loca" : "RU",
+                        "label" : "Oikea ylänurkka ",
+                        "tooltip" : "Sovitus oikeaan ylänurkkaan"
+                       
+                    },{
+                        "id" : "oskari_legend_RL",
+                         "loca" : "RL",
+                        "label" : "Oikea alanurkka ",
+                        "tooltip" : "Sovitus oikeaan alanurkkaan"
+                       
+                    }
+                ]
+            },
             "help" : "Ohje",
             "error" : {
                 "title" : "Virhe",

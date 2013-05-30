@@ -52,6 +52,13 @@ function(instance, localization, backendConfiguration) {
         this.contentOptionsMap[this.contentOptions[f].id] = this.contentOptions[f];
     }
 
+    /* legend options listed in localisations */
+    this.legendOptions = this.loc.legend.options;
+    this.legendOptionsMap = {};
+    for (var f = 0; f < this.legendOptions.length; f++) {
+        this.legendOptionsMap[this.legendOptions[f].id] = this.legendOptions[f];
+    }
+
     this.accordion = null;
     this.mainPanel = null;
 
@@ -74,6 +81,8 @@ function(instance, localization, backendConfiguration) {
         "main" : '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/></form>' + '</div>',
         "format" : '<div class="printout_format_cont printout_settings_cont"><div class="printout_format_label"></div></div>',
         "formatOptionTool" : '<div class="tool ">' + '<input type="radio" name="format" />' + '<label></label></div>',
+        "legend" : '<div class="printout_legend_cont printout_settings_cont"><div class="printout_legend_label"></div></div>',
+        "legendOptionTool" : '<div class="tool ">' + '<input type="radio" name="legend" />' + '<label></label></div>',
         "title" : '<div class="printout_title_cont printout_settings_cont"><div class="printout_title_label"></div><input class="printout_title_field" type="text"></div>',
         "option" : '<div class="printout_option_cont printout_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>',
         "sizeOptionTool" : '<div class="tool ">' + '<input type="radio" name="size" />' + '<label></label></div>'
@@ -118,6 +127,9 @@ function(instance, localization, backendConfiguration) {
          accordion.addPanel(scalePanel);*/
 
         accordion.insertTo(contentDiv);
+
+        // Legend setup visible only if statslayer is visible
+        this._setLegendVisibility();
 
         // buttons
         // close
@@ -164,6 +176,8 @@ function(instance, localization, backendConfiguration) {
                 tool.selected = true;
                 me._cleanMapPreview();
                 me._updateMapPreview();
+                // Update legend
+                me._createLegend();
             };
         };
         for (var i = 0; i < this.sizeOptions.length; ++i) {
@@ -253,6 +267,7 @@ function(instance, localization, backendConfiguration) {
         contentPanel.append(mapTitle);
 
         /* CONTENT options from localisations files */
+
         for (var f = 0; f < this.contentOptions.length; f++) {
             var dat = this.contentOptions[f];
 
@@ -269,6 +284,48 @@ function(instance, localization, backendConfiguration) {
             contentPanel.append(opt);
 
         }
+
+        // Lengend options
+        var closureMagic2 = function(tool) {
+            return function() {
+                var legend = contentPanel.find('input[name=legend]:checked').val();
+                // reset previous setting
+                for (var i = 0; i < me.legendOptions.length; ++i) {
+                    me.legendOptions[i].selected = false;
+                }
+                tool.selected = true;
+
+            };
+        };
+
+        var legend = this.template.legend.clone();
+        legend.find('.printout_legend_label').html(this.loc.legend.label);
+        for (var i = 0; i < this.legendOptions.length; ++i) {
+            var option = this.legendOptions[i];
+            var toolContainer = this.template.legendOptionTool.clone();
+            var label = option.label;
+
+            toolContainer.find('label').append(label).attr({
+                'for' : option.id,
+                'class' : 'printout_radiolabel'
+
+            });
+            if (option.selected) {
+                toolContainer.find('input').attr('checked', 'checked');
+            }
+            legend.append(toolContainer);
+            toolContainer.find('input').attr({
+                'value' : option.loca,
+                'name' : 'location',
+                'id' : option.id
+            });
+            toolContainer.find('input').change(closureMagic2(option));
+            toolContainer.find('input[name="location"]').click(function() {
+                // Legend stuff
+                me._createLegend();
+            });
+        }
+        contentPanel.append(legend);
 
         return panel;
     },
@@ -459,10 +516,10 @@ function(instance, localization, backendConfiguration) {
         var link = infoUrl;
         window.open(link, "BasicPrintout", wopParm);
     },
-     /**
+    /**
      * @method openPostURLinWindow
      * @private
-     * Sends the gathered map data to the server to save them/publish the map. 
+     * Sends the gathered map data to the server to save them/publish the map.
      * @param {Object} printMap oskari map
      * @param {Object} printUrl Url to print service action route GetPreview
      * @param {Object} selections map data as returned by _gatherSelections()
@@ -475,7 +532,7 @@ function(instance, localization, backendConfiguration) {
         var link = printUrl;
         me.mainPanel.find('#oskari_print_formID').attr('action', link);
         me.mainPanel.find('input[name=geojson]').val(jQuery.base64.encode(this._getGeoJson(printMap)));
-        window.open('about:blank','map_popup_111', wopParm);
+        window.open('about:blank', 'map_popup_111', wopParm);
         me.mainPanel.find('#oskari_print_formID').submit();
 
     },
@@ -559,6 +616,148 @@ function(instance, localization, backendConfiguration) {
         return null;
     },
     /**
+     * @method _setLegendVisibility
+     * Legend parameters UI visible on/off
+     *
+     * @private
+     *
+     */
+    _setLegendVisibility : function() {
+        var container = this.mainPanel;
+
+        if (this._hasStatsLayers())
+            container.find('.printout_legend_cont').show();
+        else
+            container.find('.printout_legend_cont').hide();
+    },
+    /**
+     * @method _hasStatsLayers
+     * Check if stats layers are selected
+     *
+     * @private
+     * @return{boolean} true; statslayers exists
+     *
+     */
+    _hasStatsLayers : function() {
+        var layers = this.instance.getSandbox().findAllSelectedMapLayers();
+
+        // request updates for map tiles
+        for (var i = 0; i < layers.length; i++) {
+            if (layers[i].isLayerOfType('STATS')) {
+                if (layers[i].isVisible())
+                    return true;
+
+            }
+        }
+        return false;
+    },
+    /**
+     * @method _createLegend
+     * Creates geojson legend for print service
+     * Only for statslayer and statsgrid legend
+     * @private
+     * @
+     *
+     */
+    _createLegend : function() {
+        var me = this;
+        // only if any statslayer visible 
+        me._setLegendVisibility();
+        if(!me._hasStatsLayers()) return;
+        
+        // Is geostat legend available
+        // get div where the map is rendered from openlayers
+        var map = this.instance.sandbox.getMap();
+        var container = this.mainPanel;
+        var parentContainer = jQuery('#contentMap');
+        // Get legend position
+        var legend_pos = container.find('input[name=location]:checked').val();
+        if (legend_pos == 'NO') {
+            // remove old, if any
+            if (me.instance.getSandbox().getMap().GeoJSON)
+                me.instance.getSandbox().getMap().GeoJSON = null;
+            me.instance.legendPlugin.clearLegendLayers();
+        } else {
+            var legend = parentContainer.find('div.geostats-legend');
+            if (legend.length > 0) {
+
+                this._printMapInfo(legend, function(data) {
+
+                    var title = legend.find('.geostats-legend-title').html();
+                    // ranges
+                    var ranges = [];
+                    // loop divs
+                    legend.find('div').each(function() {
+                        var myclass = jQuery(this).attr('class');
+                        if (myclass == undefined) {
+                            var legend_row = {
+                                "boxcolor" : jQuery(this).find('.geostats-legend-block').attr('style'),
+                                "range" : jQuery(this).text()
+                            }
+                            ranges.push(legend_row);
+                        }
+                    });
+
+                    var legendgjs = me.instance.legendPlugin.plotLegend(title, ranges, data, legend_pos);
+                    me.instance.getSandbox().getMap().GeoJSON = legendgjs;
+                })
+            }
+        }
+
+    },
+    /**
+     * @method _printMapInfo
+     *  Get print info data
+     * @param {String} url  print url string
+     * @private
+     * @
+     */
+    _printMapInfo : function(legend, callback) {
+
+        var me = this;
+        var selections = me._gatherSelections();
+        var sandbox = this.instance.getSandbox();
+        var url = sandbox.getAjaxUrl();
+
+        var urlBase = this.backendConfiguration.formatProducers[selections.format];
+
+        var maplinkArgs = selections.maplinkArgs;
+        var pageSizeArgs = "&pageSize=" + selections.pageSize;
+        var pageTitleArgs = "&pageTitle=" + selections.pageTitle;
+
+        var contentOptions = [];
+        for (var p in this.contentOptionsMap ) {
+            if (selections[p]) {
+                contentOptions.push("&" + p + "=true");
+            }
+
+        }
+        var contentOptionArgs = contentOptions.join('');
+        var formatArgs = "&format=" + selections.format;
+
+        var parameters = maplinkArgs + '&action_route=GetProxyRequest&url_id=1' + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs;
+        url = url + parameters;
+
+        // ajax call
+        me.instance.printService.fetchPrintMapData(
+        // url
+        url,
+        // success callback
+        function(data) {
+            if (data) {
+
+                callback(data);
+            } else {
+                alert('Error to fetch print info: ');
+            }
+        },
+        // error callback
+        function(jqXHR, textStatus) {
+            alert('Error to fetch print info: ');
+
+        });
+    },
+    /**
      * @method destroy
      * Destroyes/removes this view from the screen.
      */
@@ -583,6 +782,8 @@ function(instance, localization, backendConfiguration) {
         } else {
             this._cleanMapPreview();
         }
+        // Update legend
+        this._createLegend();
     },
     getState : function() {
         return this._gatherSelections();
