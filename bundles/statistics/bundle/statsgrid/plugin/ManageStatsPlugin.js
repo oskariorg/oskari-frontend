@@ -302,7 +302,7 @@ function(config, locale) {
             enableColumnReorder : true,
             multiColumnSort : true,
             showHeaderRow: true,
-            headerRowHeight: 90
+            headerRowHeight: 97
         };
         var data = [];
         var rowId = 0;
@@ -1106,7 +1106,7 @@ function(config, locale) {
                         // when all the indicators have been fetched
                         // add them to the grid and fire callback
                         if(fetchedIndicators >= indicators.length) {
-                            //TODO add these to the grid!!
+                            //add these to the grid!!
                             for (var j = 0; j < indicators.length; j++) {
                                 var ind = indicators[j];
                                 if(ind) {
@@ -1249,12 +1249,16 @@ function(config, locale) {
                     }
                 };
 
+                var columnDiv = jQuery(this.grid.getHeaderRowColumn(column.id)).empty();
+
                 var opts = this.grid.getOptions();
                 // TODO: 12 = font-size, 7 = padding...
-                opts.headerRowHeight = variableCount * 12 + 7;
+                var fontSize = columnDiv.css('line-height');
+                fontSize = (fontSize) ? fontSize.split('px')[0] : 12;
+debugger;
+                opts.headerRowHeight = variableCount * fontSize + 7;
                 this.grid.setOptions(opts);
 
-                var columnDiv = jQuery(this.grid.getHeaderRowColumn(column.id)).empty();
                 sub.appendTo(columnDiv);
             };
         }
