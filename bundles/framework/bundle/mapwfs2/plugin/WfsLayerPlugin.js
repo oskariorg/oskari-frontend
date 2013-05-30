@@ -275,7 +275,7 @@ function(config) {
             this._mapClickData.ajax = true;
             this._mapClickData.data = event.getData();
             if(this._mapClickData.comet) {
-                //console.log("show info - cometd was before");
+                console.log("show info - cometd was before");
                 this.showInfoBox();
             }
 
