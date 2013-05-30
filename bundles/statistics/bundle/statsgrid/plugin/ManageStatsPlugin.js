@@ -740,34 +740,24 @@ function(config, locale) {
             toolTip : name,
             sortable : true,
 
-groupTotalsFormatter: function(totals, columnDef) {
-    var text = "";
-    var prepareFloat = function(value) {
-        return Math.round(parseFloat(value)*100)/100;
-    };
-    var val = totals.avg && totals.avg[columnDef.field];
-    if (val != null) text+= "Avg: " + prepareFloat(val)+", ";
+            groupTotalsFormatter: function(totals, columnDef) {
+                var text = "";
+                var prepareFloat = function(value) {
+                    return Math.round(parseFloat(value)*100)/100;
+                };
 
-    val = totals.std && totals.std[columnDef.field];
-    if (val != null) text+= "Std: " + prepareFloat(val)+", ";
+                var stats = me.conf.statistics;
+                for (var i = 0; i < stats.length; i++) {
+                    var statistic = stats[i];
 
-    val = totals.mdn && totals.mdn[columnDef.field];
-    if (val != null) text+= "Median: " + prepareFloat(val)+", ";
-
-    val = totals.mde && totals.mde[columnDef.field];
-    if (val != null) text+= "Mode: " + prepareFloat(val)+", ";
-
-    val = totals.sum && totals.sum[columnDef.field];
-    if (val != null) text+= "Sum: " + prepareFloat(val)+", ";
-
-    val = totals.max && totals.max[columnDef.field];
-    if (val != null) text+= "Max: " + prepareFloat(val)+", ";
-
-    val = totals.min && totals.min[columnDef.field];
-    if (val != null) text+= "Min: " + prepareFloat(val);
-
-    return text;
-}
+                    var val = totals[statistic.id] && totals[statistic.id][columnDef.field];
+                    if (val != null) {
+                        text += me._locale['statistic'][statistic.id] + ": " + prepareFloat(val);
+                        if(i < stats.length) text += ", ";
+                    }
+                }
+                return text;
+            }
         });
         me.grid.setColumns(columns);
 
@@ -1268,7 +1258,7 @@ groupTotalsFormatter: function(totals, columnDef) {
                 break;
 
             } else if(columnId == 'municipality') {
-                var totalsItem = jQuery('<span class="statsgrid-totals-label">'+type+'</span><br />');
+                var totalsItem = jQuery('<span class="statsgrid-totals-label">'+this._locale['statistic'][type]+'</span><br />');
                 break;
             }
         }

@@ -63,6 +63,15 @@ Oskari.registerLocalization({
 			"cancel" : "Poistu"
 			
 		},
+		"statistic" : {
+			"avg" : "Keskiarvo",
+			"max" : "Suurin arvo",
+			"mde" : "Moodi",
+			"mdn" : "Mediaani",
+			"min" : "Pienin arvo",
+			"std" : "Keskihajonta",
+			"sum" : "Yhteensä"
+		},
 		"noMatch" : "Indikaattoria ei löytynyt",
 		"selectIndicator": "Valitse indikaattori"
 	}
