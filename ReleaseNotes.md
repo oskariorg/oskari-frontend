@@ -2,6 +2,10 @@
 
 ## 1.11
 
+### core/sandbox
+
+Created a new category for state methods, called sandbox-state-methods. Added a function `resetState` which sets the application state to initial state which was provided by the GetAppSetup action route at  application startup.
+
 ### usagetracker bundle
 
 Configurable event-based usage tracker. New bundle based on statehandler.

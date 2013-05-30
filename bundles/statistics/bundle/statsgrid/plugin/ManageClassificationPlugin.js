@@ -376,11 +376,10 @@ function(config, locale) {
             colorArr[i] = '#' + colorArr[i];
         gstats.setColors(colorArr);
 
-        var manualBreaksInput = this.element.find('.manualBreaks').find('input[name=breaksInput]').val()
+        var manualBreaksInput = this.element.find('.manualBreaks').find('input[name=breaksInput]').val();
         var colors = colors.replace(/,/g, '|');
 
-        // Send the data out for visualization.
-        this.statsService.sendVisualizationData(layer, {
+        var returnObject = {
             //instance.js - state handling: method
             methodId : method,
             //instance.js - state handling: number of classes
@@ -392,7 +391,9 @@ function(config, locale) {
             VIS_ATTR : params.VIS_ATTR,
             VIS_CLASSES : classString,
             VIS_COLORS : "choro:" + colors
-        });
+        };
+        // Send the data out for visualization.
+        this.statsService.sendVisualizationData(layer, returnObject);
 
         var legendRounder = function(i) {
             if (i % 1 === 0)

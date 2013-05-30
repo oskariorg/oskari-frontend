@@ -167,7 +167,7 @@ function(config,locale) {
         var sandbox = this._sandbox;
         var me = this;
         // get div where the map is rendered from openlayers
-        var parentContainer = me.mapModule.getMapLayersContainerDiv();
+        var parentContainer = jQuery(this._map.div);
 		var el = me._elements['display'];
         if(!me._elements['display']) {
             el = me._elements['display'] = me.__templates['latlondiv'].clone();
@@ -182,7 +182,7 @@ function(config,locale) {
         el.mousedown(function(event) {
             event.stopPropagation();
         });        
-        parentContainer.appendChild(el[0]);
+        parentContainer.append(el);
         this.update();
         el.show();
     },
