@@ -262,19 +262,19 @@ function(config) {
         'GetInfoResultEvent' : function(event) {
             //console.log(event, this); // DEBUG
 
-            // TODO: remove this and do changes @ backend when ready (don't get WFS..)
-            /*
-            var data = event.getData();
-            for (var i = 0; i < data.fragments.length; ++i) {
-                if(data.fragments[i].type == "wfslayer") {
-                    data.fragments.splice(i, 1);
+            /// check if any selected layer is WFS
+            var isWFSOpen = false;
+            var layers = this.getSandbox().findAllSelectedMapLayers();
+            for (var i = 0; i < layers.length; ++i) {
+                if (layers[i].isLayerOfType('WFS')) {
+                    isWFSOpen = true;
+                    break;
                 }
             }
-            */
 
             this._mapClickData.ajax = true;
             this._mapClickData.data = event.getData();
-            if(this._mapClickData.comet) {
+            if(!isWFSOpen || this._mapClickData.comet) {
                 //console.log("show info - cometd was before");
                 this.showInfoBox();
             }
@@ -362,9 +362,21 @@ function(config) {
      * Wraps data to html and makes ShowInfoBoxRequest
      */
     showInfoBox : function() {
-        //console.log(this._mapClickData);
-        var wfs = this._mapClickData.wfs;
+        if(this._mapClickData.data == undefined) { // error
+            return;
+        }
+
         var data = this._mapClickData.data;
+        var wfs = this._mapClickData.wfs;
+        var wfsFeatures = this.formatWFSFeaturesForInfoBox(wfs);
+
+        data.fragments = data.fragments.concat(wfsFeatures);
+
+        // empty result
+        if(data.fragments.length == 0) {
+            this._mapClickData = { comet: false, ajax: false, wfs: [] };
+            return;
+        }
 
         // MOVE THIS TO _createInfoBoxContent eg..
         this.templateHeader = jQuery('<div class="getinforesult_header">' +
@@ -395,6 +407,7 @@ function(config) {
         }
         content.html = wrapper;
 
+        // show info box
         var request = this.getSandbox().getRequestBuilder("InfoBox.ShowInfoBoxRequest")(
             data.popupid,
             data.title,
@@ -403,6 +416,139 @@ function(config) {
             true
         );
         this.getSandbox().request(this, request);
+
+        // clear the data
+        this._mapClickData = { comet: false, ajax: false, wfs: [] };
+    },
+
+
+    /**
+     * @method formatWFSFeaturesForInfoBox
+     */
+    formatWFSFeaturesForInfoBox  : function(wfsLayers) {
+        var result = [];
+        var type = "wfslayer";
+
+        var layerId;
+        var layer;
+        var layerName;
+        var markup;
+
+        for(var x = 0; x < wfsLayers.length; x++) {
+            if(wfsLayers[x].features == "empty") {
+                break;
+            }
+            // define layer specific information
+            layerId = wfsLayers[x].layerId;
+            layer = this._sandbox.findMapLayerFromSelectedMapLayers(layerId);
+            if(layer == null) {
+                //console.log("layer is null with layerId:", layerId);
+                continue;
+            }
+            layerName = layer ? layer.getName() : '';
+
+            var features = [];
+            var feature;
+            var values;
+            var fields = layer.getFields();
+
+            // replace fields with locales
+            var locales = layer.getLocales();
+            if(locales != null) {
+                for(var l = 0; l < fields.length; l++) {
+                    if(locales.length >= l) {
+                        fields[l] = locales[l];
+                    }
+                }
+            }
+
+            // key:value
+            for(var i = 0; i < wfsLayers[x].features.length; i++) {
+                feature = {};
+                values = wfsLayers[x].features[i];
+                for(var j = 0; j < fields.length; j++) {
+                    if(values[j] == null || values[j] == "") {
+                        feature[fields[j]] = "";
+                    } else {
+                        feature[fields[j]] = values[j];
+                    }
+                }
+                features.push(feature);
+            }
+
+            for(var k = 0; k < features.length; k++) {
+                markup = this._json2html(features[k]);
+
+                result.push({
+                    markup : markup,
+                    layerId : layerId,
+                    layerName : layerName,
+                    type : type
+                });
+            }
+        }
+
+        return result;
+    },
+
+    /**
+     * @method _json2html
+     * @private
+     * Parses and formats a WFS layers JSON GFI response
+     * @param {Object} node response data to format
+     * @return {String} formatted HMTL
+     */
+    _json2html : function(node) {
+        // TODO use template elements
+        var me = this;
+        if (node == null) {
+            return '';
+        }
+        var even = true;
+        var html = '<table class="getinforesult_table">';
+        for (var key in node) {
+            var value = node[key];
+            var vType = ( typeof value).toLowerCase();
+            var vPres = ''
+            switch (vType) {
+                case 'string':
+                    if (value.indexOf('http://') == 0) {
+                        valpres = '<a href="' + value + '" target="_blank">' + value + '</a>';
+                    } else {
+                        valpres = value;
+                    }
+                    break;
+                case 'undefined':
+                    valpres = 'n/a';
+                    break;
+                case 'boolean':
+                    valpres = ( value ? 'true' : 'false');
+                    break;
+                case 'number':
+                    valpres = '' + value + '';
+                    break;
+                case 'function':
+                    valpres = '?';
+                    break;
+                case 'object':
+                    valpres = this._json2html(value);
+                    break;
+                default:
+                    valpres = '';
+            }
+            even = !even;
+            html += '<tr';
+            if (even) {
+                html += '>';
+            } else {
+                html += ' class="odd">';
+            }
+            html += '' + '<td>' + key + '</td>';
+            html += '' + '<td>' + valpres + '</td>';
+            html += '</tr>';
+        }
+        html += '</table>';
+        return html;
     },
 
     /**

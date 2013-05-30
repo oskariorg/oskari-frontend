@@ -139,12 +139,14 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         //console.log("feature", data.data);
 
         var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
-        layer.setActiveFeature(data.data.feature);
+        if(data.data.feature != "empty") {
+            layer.setActiveFeature(data.data.feature);
+        }
 
-        var event = this.plugin.getSandbox().getEventBuilder("WFSFeatureEvent")(
-            layer,
-            data.data.feature
-        );
+            var event = this.plugin.getSandbox().getEventBuilder("WFSFeatureEvent")(
+                layer,
+                data.data.feature
+            );
         this.plugin.getSandbox().notifyAll(event);
     },
 
@@ -159,8 +161,10 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         //console.log("mapClick", data.data);
 
         var featureIds = [];
-        for (var i = 0; i < data.data.features.length; ++i) {
-            featureIds.push(data.data.features[i][0]);
+        if(data.data.features != "empty") {
+            for (var i = 0; i < data.data.features.length; ++i) {
+                featureIds.push(data.data.features[i][0]);
+            }
         }
         var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
         var keepPrevious = data.data.keepPrevious;
@@ -172,6 +176,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                 wfsLayerCount++;
             }
         }
+
         this.plugin.getmapClickData().wfs.push(data.data);
         if(wfsLayerCount == this.plugin.getmapClickData().wfs.length) {
             this.plugin.getmapClickData().comet = true;
@@ -198,11 +203,10 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
         var imageUrl = "";
         try {
-            if(typeof data.data.url != "undefined") {
-                imageUrl = this.rootURL + data.data.url + "&client=" + this.session.clientId;
-//                console.log(imageUrl);
-            } else {
+            if(typeof data.data.data != "undefined") {
                 imageUrl = 'data:image/png;base64,' + data.data.data;
+            } else {
+                imageUrl = this.rootURL + data.data.url + "&client=" + this.session.clientId;
             }
         } catch(error) {
             this.plugin.getSandbox().printDebug(error);
