@@ -41,6 +41,7 @@
   cursor: pointer; }
 
 .statsgrid .selectors-container {
+  position: relative;
   height: 20%;
   min-height: 157px;
   padding-top: 10px;
@@ -49,6 +50,12 @@
   -ie-box-sizing: border-box;
   -o-box-sizing: border-box;
   box-sizing: border-box; }
+
+.statsgrid-csv-button {
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+}
 
 .statsgrid .indicator-cont {
   float: left;

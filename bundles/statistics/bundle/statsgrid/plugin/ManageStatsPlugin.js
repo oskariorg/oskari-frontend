@@ -41,6 +41,11 @@ function(config, locale) {
     };
     this.conf = jQuery.extend(true, defaults, config);
     this._locale = locale || {};
+    this.templates = {
+        'csvButton'         : '<button class="statsgrid-csv-button">csv</button>',
+        'statsgridTotalsVar': '<span></span><br />',
+        'subHeader'         : '<span class="statsgrid-grid-subheader"></span>'
+    }
 }, {
     /** 
      * @property __name module name
@@ -217,9 +222,22 @@ function(config, locale) {
             var selectors = jQuery('<div class="selectors-container"></div>');
             container.append(selectors);
 
+var me = this;
+var csvLink = jQuery(me.templates.csvButton);
+//container.find('selectors-container')
+selectors.append(csvLink);
+csvLink.click(function() {
+//var json3 = { "d": "[{\"Id\":1,\"UserName\":\"Sam Smith\"},{\"Id\":2,\"UserName\":\"Fred Frankly\"},{\"Id\":1,\"UserName\":\"Zachary Zupers\"}]" }
+    if(me.dataView){
+        var items = me.dataView.getItems();
+        me.downloadJSON2CSV(items);
+    }
+});
+
             // Indicators
             // success -> createIndicators
             this.getSotkaIndicators(container);
+
         }
         // Regions: success createMunicipalityGrid
         this.getSotkaRegionData(container);
@@ -391,6 +409,7 @@ function(config, locale) {
         this.dataView = dataView;
 
         me.setGridHeight();
+
 
         //window resize!
         var resizeGridTimer;
@@ -1221,7 +1240,7 @@ function(config, locale) {
             for (var i = 0; i < columns.length; i++) {
                 var column = columns[i];
                 var gridTotals = groups[0].totals;
-                var sub = jQuery('<span class="statsgrid-grid-subheader"></span>');
+                var sub = jQuery(this.templates.subHeader);
 
                 var variableCount = 0;
                 // loop through statistical variables
@@ -1254,15 +1273,45 @@ function(config, locale) {
             }
             if(indicatorId.indexOf('indicator') >= 0 && indicatorId == columnId) {
                 value[indicatorId][type] = result[indicatorId];
-                var totalsItem = jQuery('<span class="statsgrid-'+type+'">'+value[columnId][type]+'</span><br />');
+                var totalsItem = jQuery(this.templates.statsgridTotalsVar);
+                totalsItem.addClass('statsgrid-'+type).text(value[columnId][type]) //append('<span class="statsgrid-'+type+'">'+value[columnId][type]+'</span><br />')
                 break;
 
             } else if(columnId == 'municipality') {
-                var totalsItem = jQuery('<span class="statsgrid-totals-label">'+this._locale['statistic'][type]+'</span><br />');
+                var totalsItem = jQuery(this.templates.statsgridTotalsVar);
+                totalsItem.addClass('statsgrid-totals-label').text(this._locale['statistic'][type]) //append('<span class="statsgrid-'+type+'">'+value[columnId][type]+'</span><br />')
                 break;
             }
         }
         return totalsItem;
+    },
+    /**
+     * Simple objectArray to csv 
+     * http://stackoverflow.com/questions/4130849/convert-json-format-to-csv-format-for-ms-excel
+     * 
+     */
+    downloadJSON2CSV : function(objArray) {
+        var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+
+        var str = '';
+
+        for (var i = 0; i < array.length; i++) {
+            var line = '';
+
+            for (var index in array[i]) {
+                line += array[i][index] + ',';
+            }
+
+            // Here is an example where you would wrap the values in double quotes
+            // for (var index in array[i]) {
+            //    line += '"' + array[i][index] + '",';
+            // }
+
+            line.slice(0,line.Length-1); 
+
+            str += line + '\r\n';
+        }
+        window.open( "data:text/csv;charset=utf-8," + escape(str))
     }
 
 }, {
