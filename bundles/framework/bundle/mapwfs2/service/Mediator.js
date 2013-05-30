@@ -176,11 +176,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                 wfsLayerCount++;
             }
         }
+
         this.plugin.getmapClickData().wfs.push(data.data);
         if(wfsLayerCount == this.plugin.getmapClickData().wfs.length) {
             this.plugin.getmapClickData().comet = true;
             if(this.plugin.getmapClickData().ajax) {
-                console.log("show info - ajax was before");
+                //console.log("show info - ajax was before");
                 this.plugin.showInfoBox();
             }
         }
