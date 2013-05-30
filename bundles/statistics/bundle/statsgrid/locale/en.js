@@ -64,6 +64,16 @@ Oskari.registerLocalization({
 			"cancel" : "Poistu"
 			
 		},
+        "statistic" : {
+            "avg" : "Average",
+            "max" : "Maximum value",
+            "mde" : "Mode",
+            "mdn" : "Median",
+            "min" : "Minimum value",
+            "std" : "Standard deviation",
+            "sum" : "Sum"
+        },
+        "municipality" : "Municipality",
         "noMatch" : "No results matched",
         "selectIndicator": "Select an indicator"
 

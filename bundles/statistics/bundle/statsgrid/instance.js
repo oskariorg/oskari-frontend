@@ -55,7 +55,16 @@ function() {
         // - the indicator selection UI (unless 'published' param in the conf is true)
         // - the grid.
         var gridConf = {
-            'state': me.getState()
+            'state': me.getState(),
+            "statistics" : [
+                {"id" : "avg", "visible": true},
+                {"id" : "max", "visible": true},
+                {"id" : "min", "visible": true},
+                {"id" : "mde", "visible": true},
+                {"id" : "mdn", "visible": true},
+                {"id" : "std", "visible": true},
+                {"id" : "sum", "visible": true}
+            ]
         }
         var gridPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin', gridConf, locale);
         mapModule.registerPlugin(gridPlugin);

@@ -28,8 +28,24 @@ function(config, locale) {
     // indicators (meta data)
     this.indicators = [];
 
-    this.conf = config || {};
+//    this.conf = config || {};
+    defaults = {"statistics" : [
+        {"id" : "avg", "visible": true},
+        {"id" : "max", "visible": true},
+        {"id" : "min", "visible": true},
+        {"id" : "mde", "visible": true},
+        {"id" : "mdn", "visible": true},
+        {"id" : "std", "visible": true},
+        {"id" : "sum", "visible": true}
+        ]
+    };
+    this.conf = jQuery.extend(true, defaults, config);
     this._locale = locale || {};
+    this.templates = {
+        'csvButton'         : '<button class="statsgrid-csv-button">csv</button>',
+        'statsgridTotalsVar': '<span class="statsgrid-variable"></span>',
+        'subHeader'         : '<span class="statsgrid-grid-subheader"></span>'
+    }
 }, {
     /** 
      * @property __name module name
@@ -206,9 +222,22 @@ function(config, locale) {
             var selectors = jQuery('<div class="selectors-container"></div>');
             container.append(selectors);
 
+            //Adding csv button
+            var me = this;
+            var csvLink = jQuery(me.templates.csvButton);
+            //container.find('selectors-container')
+            selectors.append(csvLink);
+            csvLink.click(function() {
+                if(me.dataView){
+                    var items = me.dataView.getItems();
+                    me.downloadJSON2CSV(items);
+                }
+            });
+
             // Indicators
             // success -> createIndicators
             this.getSotkaIndicators(container);
+
         }
         // Regions: success createMunicipalityGrid
         this.getSotkaRegionData(container);
@@ -271,7 +300,9 @@ function(config, locale) {
         var options = {
             enableCellNavigation : true,
             enableColumnReorder : true,
-            multiColumnSort : true
+            multiColumnSort : true,
+            showHeaderRow: true,
+            headerRowHeight: 90
         };
         var data = [];
         var rowId = 0;
@@ -302,6 +333,18 @@ function(config, locale) {
             grid.invalidateRows(args.rows);
             grid.render();
         });
+
+        // To use aggrefators we need to define a group
+        dataView.setGrouping({
+            getter : "municipalities",
+            formatter: function (g) {
+                return "<span style='color:green'>" +me._locale['municipality']+" (" + g.count + ")</span>";
+            },
+            aggregateCollapsed: false
+        });
+
+debugger;
+
         // Grid
         grid = new Slick.Grid(gridContainer, dataView, columns, options);
 
@@ -342,6 +385,14 @@ function(config, locale) {
             me.sendStatsData(args.column);
         });
 
+        // when headerRow cells are rendered
+        // add placeholder
+        grid.onHeaderRowCellRendered.subscribe(function(e, args) {
+            jQuery(args.node).empty();
+            jQuery(me.templates.subHeader)
+                .appendTo(args.node);
+        });
+
         // notify dataview that we are starting to update data
         dataView.beginUpdate();
         // set municipality data
@@ -357,6 +408,7 @@ function(config, locale) {
         this.dataView = dataView;
 
         me.setGridHeight();
+
 
         //window resize!
         var resizeGridTimer;
@@ -688,28 +740,47 @@ function(config, locale) {
      * @param data related to the indicator
      */
     addIndicatorDataToGrid : function(container, indicatorId, gender, year, data, meta, silent) {
-        var columnId = this._getIndicatorColumnId(indicatorId, gender, year);
-        var columns = this.grid.getColumns();
+        var me = this;
+        var columnId = me._getIndicatorColumnId(indicatorId, gender, year);
+        var columns = me.grid.getColumns();
         var indicatorName = meta.title[Oskari.getLang()];
 
         var columnId = "indicator" + indicatorId + year + gender;
-        if(this.isIndicatorInGrid(columnId)) {
+        if(me.isIndicatorInGrid(columnId)) {
             return false;
         }
 
-
+        var name = indicatorName + '/' + year + '/' + gender;
         columns.push({
             id : columnId,
-            name : indicatorName + '/' + year + '/' + gender,
+            name : name,
             field : columnId,
-            toolTip : indicatorName + '/' + year + '/' + gender,
-            sortable : true
+            toolTip : name,
+            sortable : true,
+
+            groupTotalsFormatter: function(totals, columnDef) {
+                var text = "";
+                var prepareFloat = function(value) {
+                    return Math.round(parseFloat(value)*100)/100;
+                };
+
+                //var stats = me.conf.statistics;
+                //for (var i = 0; i < stats.length; i++) {
+                //    var statistic = stats[i];
+                    var val = totals.avg && totals.avg[columnDef.field];
+                    if (val != null) {
+                        text += prepareFloat(val) + ' (' + me._locale['statistic'].avg + ')';
+                //        if(i < stats.length) text += ", ";
+                    }
+                //}
+                return text;
+            }
         });
-        this.grid.setColumns(columns);
+        me.grid.setColumns(columns);
 
         var columnData = [];
         var ii = 0;
-        this.dataView.beginUpdate();
+        me.dataView.beginUpdate();
 
         // loop through data and get the values
         for (var i = 0; i < data.length; i++) {
@@ -726,27 +797,56 @@ function(config, locale) {
             }
             if (!!regionId) {
                 // find region
-                var item = this.dataView.getItemById(regionId);
+                var item = me.dataView.getItemById(regionId);
                 if (item) {
                     // update row
                     item[columnId] = Number(value);
-                    this.dataView.updateItem(item.id, item);
+                    me.dataView.updateItem(item.id, item);
                 }
                 ii++;
             }
         }
+        var items = me.dataView.getItems();
+        for (var i = items.length - 1; i >= 0; i--) {
+            var item = items[i];
+            if (item[columnId] == null) {
+                item[columnId] = null;
+            }
+        };
 
-        this.dataView.endUpdate();
-        this.dataView.refresh();
-        this.grid.invalidateAllRows();
-        this.grid.render();
+        // create all the aggregators we need
+        var aggregators = [];
+
+        for (var i = 0; i < columns.length; i++) {
+            var id = columns[i].id;
+            aggregators.push(new Slick.Data.Aggregators.Avg(id));
+            aggregators.push(new Slick.Data.Aggregators.Std(id));
+            aggregators.push(new Slick.Data.Aggregators.Mdn(id));
+            aggregators.push(new Slick.Data.Aggregators.Mde(id));
+            aggregators.push(new Slick.Data.Aggregators.Sum(id));
+            aggregators.push(new Slick.Data.Aggregators.Max(id));
+            aggregators.push(new Slick.Data.Aggregators.Min(id));
+        }
+        me.dataView.setAggregators(aggregators,true);
+
+        // Add callback function for totals / statistics
+        me.dataView.setTotalsCallback(function(groups) {
+            me._updateTotals(groups);
+        });
+
+
+
+        me.dataView.endUpdate();
+        me.dataView.refresh();
+        me.grid.invalidateAllRows();
+        me.grid.render();
 
         if(silent != true) {
             // Show classification
-            this.sendStatsData(columns[columns.length - 1]);
+            me.sendStatsData(columns[columns.length - 1]);
         }
 
-        this.updateDemographicsButtons(indicatorId, gender, year);
+        me.updateDemographicsButtons(indicatorId, gender, year);
     },
 
     /**
@@ -1126,7 +1226,98 @@ function(config, locale) {
                 });
             });
         }
+    },
+    /**
+     * Loop through first group (municipalities) and 
+     * @private _updateTotals
+     */
+    _updateTotals: function(groups) {
+        if(groups){
+            var columns = this.grid.getColumns();
+
+            // loop through columns
+            for (var i = 0; i < columns.length; i++) {
+                var column = columns[i];
+                var gridTotals = groups[0].totals;
+                var sub = jQuery(this.templates.subHeader);
+
+                var variableCount = 0;
+                // loop through statistical variables
+                for (var j = 0; j < this.conf.statistics.length; j++) {
+                    var statistic = this.conf.statistics[j];
+                    if(statistic.visible){
+                        sub.append(this._getStatistic(gridTotals, column.id, statistic.id));
+                        variableCount++;
+                    }
+                };
+
+                var opts = this.grid.getOptions();
+                // TODO: 12 = font-size, 7 = padding...
+                opts.headerRowHeight = variableCount * 12 + 7;
+                this.grid.setOptions(opts);
+
+                var columnDiv = jQuery(this.grid.getHeaderRowColumn(column.id)).empty();
+                sub.appendTo(columnDiv);
+            };
+        }
+    },
+    _getStatistic: function(gridTotals, columnId, type) {
+        var value = {};
+        var totalsItem = null;
+        var result = gridTotals[type];
+        //loop through different indicator columns
+        for(indicatorId in result) {
+            if(!value[indicatorId]) {
+                value[indicatorId] = {};
+            }
+            if(indicatorId.indexOf('indicator') >= 0 && indicatorId == columnId) {
+                value[indicatorId][type] = result[indicatorId];
+                var totalsItem = jQuery(this.templates.statsgridTotalsVar);
+                var val = value[columnId][type];
+                if(!this._isInt(val)) val = val.toFixed(2);
+                totalsItem.addClass('statsgrid-'+type).text(val);
+                break;
+
+            } else if(columnId == 'municipality') {
+                var totalsItem = jQuery(this.templates.statsgridTotalsVar);
+                totalsItem.addClass('statsgrid-totals-label').text(this._locale['statistic'][type])
+                break;
+            }
+        }
+        return totalsItem;
+    },
+    _isInt: function(n) {
+        return n % 1 === 0;
+    },
+    /**
+     * Simple objectArray to csv 
+     * http://stackoverflow.com/questions/4130849/convert-json-format-to-csv-format-for-ms-excel
+     * 
+     */
+    downloadJSON2CSV : function(objArray) {
+        var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+
+        var str = '';
+
+        for (var i = 0; i < array.length; i++) {
+            var line = '';
+
+            for (var index in array[i]) {
+                line += array[i][index] + ',';
+            }
+
+            // Here is an example where you would wrap the values in double quotes
+            // for (var index in array[i]) {
+            //    line += '"' + array[i][index] + '",';
+            // }
+
+            line.slice(0,line.Length-1); 
+
+            str += line + '\r\n';
+        }
+        window.open( "data:text/csv;charset=utf-8," + escape(str))
     }
+
 }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
