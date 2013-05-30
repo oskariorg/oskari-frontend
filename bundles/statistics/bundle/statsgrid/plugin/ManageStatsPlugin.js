@@ -765,16 +765,15 @@ csvLink.click(function() {
                     return Math.round(parseFloat(value)*100)/100;
                 };
 
-                var stats = me.conf.statistics;
-                for (var i = 0; i < stats.length; i++) {
-                    var statistic = stats[i];
-
-                    var val = totals[statistic.id] && totals[statistic.id][columnDef.field];
+                //var stats = me.conf.statistics;
+                //for (var i = 0; i < stats.length; i++) {
+                //    var statistic = stats[i];
+                    var val = totals.avg && totals.avg[columnDef.field];
                     if (val != null) {
-                        text += me._locale['statistic'][statistic.id] + ": " + prepareFloat(val);
-                        if(i < stats.length) text += ", ";
+                        text += prepareFloat(val) + ' (' + me._locale['statistic'].avg + ')';
+                //        if(i < stats.length) text += ", ";
                     }
-                }
+                //}
                 return text;
             }
         });
@@ -1274,7 +1273,9 @@ csvLink.click(function() {
             if(indicatorId.indexOf('indicator') >= 0 && indicatorId == columnId) {
                 value[indicatorId][type] = result[indicatorId];
                 var totalsItem = jQuery(this.templates.statsgridTotalsVar);
-                totalsItem.addClass('statsgrid-'+type).text(value[columnId][type]) //append('<span class="statsgrid-'+type+'">'+value[columnId][type]+'</span><br />')
+                var val = value[columnId][type];
+                if(!this._isInt(val)) val = val.toFixed(2);
+                totalsItem.addClass('statsgrid-'+type).text(val);
                 break;
 
             } else if(columnId == 'municipality') {
@@ -1284,6 +1285,9 @@ csvLink.click(function() {
             }
         }
         return totalsItem;
+    },
+    _isInt: function(n) {
+        return n % 1 === 0;
     },
     /**
      * Simple objectArray to csv 
