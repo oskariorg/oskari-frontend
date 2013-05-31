@@ -10,6 +10,10 @@ Created a new category for state methods, called sandbox-state-methods. Added a 
 
 Configurable event-based usage tracker. New bundle based on statehandler.
 
+### printout bundle
+
+A new event `Printout.PrintableContentEvent` which can be used to send additional data to the printout bundle. Event accepts layer (Oskari layer), tile data (an array of {bbox: [l,b,r,t], url: 'image url'} objects) and GeoJSON as arguments.
+
 ## 1.10.1
 
 ### applications/paikkatietoikkuna.fi/published-map

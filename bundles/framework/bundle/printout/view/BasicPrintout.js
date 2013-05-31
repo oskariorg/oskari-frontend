@@ -71,7 +71,7 @@ function(instance, localization, backendConfiguration) {
         "tool" : '<div class="tool ">' + '<input type="checkbox"/>' + '<label></label></div>',
         "buttons" : '<div class="buttons"></div>',
         "help" : '<div class="help icon-info"></div>',
-        "main" : '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/></form>' + '</div>',
+        "main" : '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/><input name="tiles" type="hidden" value="" id="oskari_tiles"/></form>' + '</div>',
         "format" : '<div class="printout_format_cont printout_settings_cont"><div class="printout_format_label"></div></div>',
         "formatOptionTool" : '<div class="tool ">' + '<input type="radio" name="format" />' + '<label></label></div>',
         "title" : '<div class="printout_title_cont printout_settings_cont"><div class="printout_title_label"></div><input class="printout_title_field" type="text"></div>',
@@ -463,22 +463,30 @@ function(instance, localization, backendConfiguration) {
      * @method openPostURLinWindow
      * @private
      * Sends the gathered map data to the server to save them/publish the map. 
-     * @param {Object} printMap oskari map
+     * @param {String} geoJson Stringified GeoJSON
+     * @param {String} tileData Stringified tile data
      * @param {Object} printUrl Url to print service action route GetPreview
      * @param {Object} selections map data as returned by _gatherSelections()
      */
-    openPostURLinWindow : function(printMap, printUrl, selections) {
+    openPostURLinWindow: function(geoJson, tileData, printUrl, selections) {
         var me = this;
         var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
         if (this._isLandscape(selections))
             wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=1200," + "height=850";
         var link = printUrl;
         me.mainPanel.find('#oskari_print_formID').attr('action', link);
-        me.mainPanel.find('input[name=geojson]').val(jQuery.base64.encode(this._getGeoJson(printMap)));
+
+        if (geoJson) {
+            me.mainPanel.find('input[name=geojson]').val(jQuery.base64.encode(geoJson));
+        }
+        if (tileData) {
+            me.mainPanel.find('input[name=tiles]').val(tiledata);
+        }
+
         window.open('about:blank','map_popup_111', wopParm);
         me.mainPanel.find('#oskari_print_formID').submit();
-
     },
+
     /**
      * @method _printMap
      * @private
@@ -510,22 +518,19 @@ function(instance, localization, backendConfiguration) {
         var parameters = maplinkArgs + '&action_route=GetPreview' + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs;
         url = url + parameters;
 
-        var printMap = this.instance.getSandbox().getMap();
-
-        if (printMap.GeoJSON) {
+        // We need to use the POST method if there's GeoJSON or tile data.
+        if (this.instance.geoJson || !jQuery.isEmptyObject(this.instance.tileData)) {
+            var stringifiedJson = this._getGeoJson(this.instance.geoJson);
+            var stringifiedTileData = this._getTileData(this.instance.tileData);
 
             this.instance.getSandbox().printDebug("PRINT POST URL " + url);
-
-            this.openPostURLinWindow(printMap, url, selections);
-
-        } else {
-
-            this.instance.getSandbox().printDebug("PRINT URL " + url);
-
-            this.openURLinWindow(url, selections);
-
+            this.openPostURLinWindow(stringifiedJson, stringifiedTileData, url, selections);
         }
-
+        // Otherwise GET is satisfiable.
+        else {
+            this.instance.getSandbox().printDebug("PRINT URL " + url);
+            this.openURLinWindow(url, selections);
+        }
     },
     /**
      * @method _isLandscape
@@ -541,23 +546,53 @@ function(instance, localization, backendConfiguration) {
         }
         return false;
     },
-    /**
-     * @method _getGeoJson
-     * Get auxiliary graphics in geojson format + styles
-     * @private
-     * @
-     * @return String  (Json stringify)
-     * return null, if no geojson graphics
-     */
-    _getGeoJson : function(printMap) {
 
-        if (printMap.GeoJSON) {
-            var sgeojs = JSON.stringify(printMap.GeoJSON);
-            sgeojs.replace('\"', '"');
-            return sgeojs;
+    /**
+     * Get auxiliary graphics in geojson format + styles
+     *
+     * @method _stringifyGeoJson
+     * @private
+     * @param {JSON} geoJson
+     * @return {String/null} Stringified JSON or null if param is empty.
+     */
+    _stringifyGeoJson: function(geoJson) {
+        if (geoJson) {
+            return JSON.stringify(geoJson).replace('\"', '"');
+        } else {
+            return null;
         }
-        return null;
     },
+
+    /**
+     * Flattens and stringifies tile data for each layer.
+     *
+     * @method _stringifyTileData
+     * @private
+     * @param {Object[Array[Object]]} tileData
+     *      Object of arrays each containing objects with keys 'bbox' and 'url', eg.
+     *      {
+     *         'layer1': [ {bbox: '...', url: '...'}, ... ], 
+     *         'layer2': [ {bbox: '...', url: '...'}, ... ],
+     *      }
+     * @return {String/null} Stringified data object or null if tileData object is empty.
+     */
+    _stringifyTileData: function(tileData) {
+        if (!jQuery.isEmptyObject(tileData)) {
+            var dataArr = [], returnArr;
+
+            for (var key in tileData) {
+                dataArr.push(tileData[key]);
+            }
+            // dataArr is now an array like this:
+            // [ [{}, ...], [{}, ...], ... ]
+            returnArr = [].concat.apply([], dataArr);
+
+            return JSON.stringify(returnArr);
+        } else {
+            return null;
+        }
+    },
+
     /**
      * @method destroy
      * Destroyes/removes this view from the screen.

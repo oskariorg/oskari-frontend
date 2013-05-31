@@ -7,8 +7,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintableContentE
 /**
  * @method create called automatically on construction
  * @static
- * @param {Object} layer an Oskari layer for visualizing the stats.
- * @param {Object} data Data should be a collection of BBOX-ImageURL infos
+ * @param {Object} layer
+ *          an Oskari layer for visualizing the stats.
+ * @param {Array[Object]} tileData
+ *          Should be an array of BBOX-ImageURL infos (layer param required with this):
+ *          [ { bbox: [<left>, <bottom>, <right>, <top>], url: "<image url>" }, ... ]
+ * @param {Object} geojsonData
  */
 function(layer, tileData, geojsonData) {
     this._layer = layer;
@@ -21,42 +25,46 @@ function(layer, tileData, geojsonData) {
      * @return {String} The event name.
      */
     getName : function() {
-        return "Printout.PrintableContent";
+        return "Printout.PrintableContentEvent";
     },
     /**
-    * @method getLayer
     * Returns the layer the new style should be applied to.
+    *
+    * @method getLayer
     * @return {Object}
     */
     getLayer: function() {
         return this._layer;
     },
    /**
+    * Sets the layer the new style should be applied to.
+    *
     * @method setLayer
-    * Returns the layer the new style should be applied to.
     * @param {Object} layer
     */
     setLayer: function(layer) {
         this._layer = layer;
     },
     /**
-     * @method getData
      * Returns the bbox-imageUrl array used to generate output
-     * @return {Object} 
+     *
+     * @method getData
+     * @return {Array[Object]} 
      */
     getTileData : function() {
         return this._tileData;
     },
     /**
      * @method setData
-     * @param {Object} data [{ bbox: [l,b,r,t], url: "" }, ... ]
+     * @param {Array[Object]} data [{ bbox: [l,b,r,t], url: "" }, ... ]
      */
     setTileData : function(data) {
        this._tileData = data;
     },
  /**
-     * @method getGeoJsonData
      * Returns the geojson data used to generate output
+     *
+     * @method getGeoJsonData
      * @return {Object} 
      */
     getGeoJsonData : function() {

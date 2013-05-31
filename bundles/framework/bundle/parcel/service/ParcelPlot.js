@@ -363,9 +363,13 @@ function(instance) {
 		geojs.styles.push(this._getDefaultStyle(this.pointLayer.styleMap));
 		geojsCollection.push(geojs);
 
-		//Set Geojs for printout
-		this.instance.sandbox.getMap().GeoJSON = geojsCollection;
-
+		// Send the GeoJSON to printout bundle.
+		var eventBuilder = this.instance.sandbox.getEventBuilder('Printout.PrintableContentEvent');
+		if (eventBuilder) {
+			// Send no layer or tile data, just the GeoJSON.
+			var event = eventBuilder(null, null, geojsCollection);
+			this.instance.sandbox.notifyAll(event);
+		}
 	},
 	/**
 	 * @method _getDefaultStyle

@@ -25,6 +25,9 @@ function() {
     this.printoutHandler = undefined;
     this.isMapStateChanged = true;
     this.state = undefined;
+    this.geoJson = undefined;
+    // Additional data for each printable layer
+    this.tileData = undefined;
 
     /* default configuration */
     this.conf = {
@@ -129,6 +132,8 @@ function() {
         me._createUi();
         
         sandbox.registerAsStateful(this.mediator.bundleId, this);
+
+        this.tileData = {};
     },
     /**
      * @method init
@@ -210,6 +215,31 @@ function() {
 
             me.displayContent(isOpen);
 
+        },
+
+        /**
+         * Bundles interested to get printed send their data via this event.
+         * The event listener saves the GeoJSON (if given) for use in printing
+         * and the tile data (if given) for a given layer.
+         *
+         * @method Printout.PrintableContentEvent
+         * @param {Object} event
+         */
+        'Printout.PrintableContentEvent': function(event) {
+            var layer = event.getLayer(),
+                layerId = ( (layer && layer.getId) ? layer.getId() : null ),
+                tileData = event.getTileData(),
+                geoJson = event.getGeoJsonData();
+
+            // Save the GeoJSON for later use if provided.
+            if (geoJson) {
+                this.geoJson = geoJson;
+            }
+            // Save the tile data per layer for later use.
+            if (tileData && layerId) {
+                this.tileData[layerId] = tileData;
+            }
+            window.statsPrintEvent = {tileData: tileData, layer: layer};
         }
     },
     /**
@@ -222,6 +252,9 @@ function() {
             this.printout.destroy();
             this.printout = undefined;
         }
+
+        this.geoJson = null;
+        this.tileData = null;
         
         var sandbox = this.sandbox();
         for(p in this.eventHandlers) {
