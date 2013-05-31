@@ -168,6 +168,10 @@ function(mapLayerUrl, sandbox) {
      */
     loadAllLayersAjax : function(callbackSuccess, callbackFailure) {
         var me = this;
+        // Used to bypass browsers' cache especially in IE, which seems to cause
+        // problems with displaying publishing permissions in some situations.
+        var timeStamp = new Date().getTime();
+
         jQuery.ajax({
             type : "GET",
             dataType: 'json',
@@ -176,7 +180,7 @@ function(mapLayerUrl, sandbox) {
                x.overrideMimeType("application/j-son;charset=UTF-8");
               }
              },
-            url : this._mapLayerUrl,
+            url : this._mapLayerUrl + '&timestamp=' + timeStamp + '&',
             success : function(pResp) {
                 me._loadAllLayersAjaxCallBack(pResp, callbackSuccess);
             },
