@@ -294,9 +294,11 @@ function(config, locale) {
      * @return {Boolean} true if layer's type is ignored
      */
     _isIgnoredLayerType : function(layer) {
-        for(var i = 0; i < this.config.ignoredLayerTypes.length; i++) {
-            if (layer.isLayerOfType(this.config.ignoredLayerTypes[i])) {
-                return true;
+        if(this.config != null && this.config.ignoredLayerTypes) {
+            for(var i = 0; i < this.config.ignoredLayerTypes.length; i++) {
+                if (layer.isLayerOfType(this.config.ignoredLayerTypes[i])) {
+                    return true;
+                }
             }
         }
         return false;
