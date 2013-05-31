@@ -1255,7 +1255,6 @@ function(config, locale) {
                 // TODO: 12 = font-size, 7 = padding...
                 var fontSize = columnDiv.css('line-height');
                 fontSize = (fontSize) ? fontSize.split('px')[0] : 12;
-debugger;
                 opts.headerRowHeight = variableCount * fontSize + 7;
                 this.grid.setOptions(opts);
 
