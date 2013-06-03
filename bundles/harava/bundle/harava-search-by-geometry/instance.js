@@ -92,10 +92,12 @@ function() {
     	this.requestHandlers = {
     			StartGeometrySearchRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.StartGeometrySearchRequestHandler', sandbox, searchPlugin),
     			StopGeometrySearchRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.StopGeometrySearchRequestHandler', sandbox, searchPlugin),
+    			ToggleVisibilityGeometrySearchRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityGeometrySearchRequestHandler', sandbox, searchPlugin)
     	};
     	
         sandbox.addRequestHandler('StartGeometrySearchRequest', this.requestHandlers.StartGeometrySearchRequest);
     	sandbox.addRequestHandler('StopGeometrySearchRequest', this.requestHandlers.StopGeometrySearchRequest);
+    	sandbox.addRequestHandler('ToggleVisibilityGeometrySearchRequest', this.requestHandlers.ToggleVisibilityGeometrySearchRequest);
     },
 
     /**
@@ -110,8 +112,9 @@ function() {
         }
 
         // request handler cleanup 
-        sandbox.removeRequestHandler('StartGeometrySearchRequest', this.requestHandlers['updateMapRequest']);
-        sandbox.removeRequestHandler('StopGeometrySearchRequest', this.requestHandlers['updateMapRequest']);
+        sandbox.removeRequestHandler('StartGeometrySearchRequest', this.requestHandlers['StartGeometrySearchRequest']);
+        sandbox.removeRequestHandler('StopGeometrySearchRequest', this.requestHandlers['StopGeometrySearchRequest']);
+        sandbox.removeRequestHandler('ToggleVisibilityGeometrySearchRequest', this.requestHandlers['ToggleVisibilityGeometrySearchRequest']);
 
         var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
 
