@@ -365,6 +365,7 @@ function(url, uuid) {
             place.setName(featAtts['name']);
             place.setDescription(featAtts['place_desc']);
             place.setLink(featAtts['link']);
+            place.setImageLink(featAtts['image_link']);
             place.setCategoryID(featAtts['category_id']);
             place.setCreateDate(featAtts['created']);
             place.setUpdateDate(featAtts['updated']);

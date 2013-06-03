@@ -150,6 +150,7 @@ function(instance) {
                     id: place.getId(),
                     name : place.getName(),
                     link : place.getLink(),
+                    imageLink : place.getImageLink(),
                     desc : place.getDescription(),
                     category : place.getCategoryID()
                 }
