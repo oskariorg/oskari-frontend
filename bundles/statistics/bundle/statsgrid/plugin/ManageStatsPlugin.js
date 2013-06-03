@@ -44,7 +44,8 @@ function(config, locale) {
     this.templates = {
         'csvButton'         : '<button class="statsgrid-csv-button">csv</button>',
         'statsgridTotalsVar': '<span class="statsgrid-variable"></span>',
-        'subHeader'         : '<span class="statsgrid-grid-subheader"></span>'
+        'subHeader'         : '<span class="statsgrid-grid-subheader"></span>',
+        'gridHeaderMenu'    : '<li><input type="checkbox" /><label></label></li>'
     }
 }, {
     /** 
@@ -351,8 +352,10 @@ function(config, locale) {
         // when user sorts this grid according to selected column
         // we need to provide sort-function
         grid.onSort.subscribe(function(e, args) {
-            var cols = args.sortCols;
+            var target = jQuery(e.target);
+            if(target.hasClass('slick-header-menubutton')) return;
 
+            var cols = args.sortCols;
             dataView.sort(function(dataRow1, dataRow2) {
                 for (var i = 0, l = cols.length; i < l; i++) {
                     var field = cols[i].sortCol.field;
@@ -391,6 +394,12 @@ function(config, locale) {
                 .appendTo(args.node);
         });
 
+        grid.onColumnsReordered.subscribe(function(e, args){
+            me.dataView.refresh();
+        })
+
+        me._initHeaderPlugin(columns, grid);
+
         // notify dataview that we are starting to update data
         dataView.beginUpdate();
         // set municipality data
@@ -402,8 +411,8 @@ function(config, locale) {
         // render the grid
         grid.render();
         // remember the grid object.
-        this.grid = grid;
-        this.dataView = dataView;
+        me.grid = grid;
+        me.dataView = dataView;
 
         me.setGridHeight();
 
@@ -830,6 +839,7 @@ function(config, locale) {
         // Add callback function for totals / statistics
         me.dataView.setTotalsCallback(function(groups) {
             me._updateTotals(groups);
+//            me.grid.setColumns(me.grid.getColumns());
         });
 
 
@@ -1226,7 +1236,7 @@ function(config, locale) {
         }
     },
     /**
-     * Loop through first group (municipalities) and 
+     * Loop through first group (municipalities) and create header row for
      * @private _updateTotals
      */
     _updateTotals: function(groups) {
@@ -1259,9 +1269,14 @@ function(config, locale) {
                 this.grid.setOptions(opts);
 
                 sub.appendTo(columnDiv);
+
             };
         }
     },
+    /**
+     * A method to get statistical variables 
+     * @private _getStatistic
+     */
     _getStatistic: function(gridTotals, columnId, type) {
         var value = {};
         var totalsItem = null;
@@ -1287,9 +1302,77 @@ function(config, locale) {
         }
         return totalsItem;
     },
+    /**
+     * A method to check if int is int instead of float
+     * @private _isInt 
+     */
     _isInt: function(n) {
         return n % 1 === 0;
     },
+
+    /**
+     * A method to initialize header plugin
+     * @private _initHeaderPlugin
+     */
+    _initHeaderPlugin: function(columns, grid) {
+        var me = this;
+        // lets create an empty container for menu items
+        columns[0].header = {
+          menu: {
+            items: []
+          }
+        };
+
+        // new header menu plugin
+        var headerMenuPlugin = new Slick.Plugins.HeaderMenu2({});
+        // lets create a menu when user clicks the button.
+        headerMenuPlugin.onBeforeMenuShow.subscribe(function(e, args) {
+          var menu = args.menu;
+          menu.items = [];
+          for (var i = 0; i < me.conf.statistics.length; i++) {
+              var statistic = me.conf.statistics[i];
+              var elems = jQuery(me.templates.gridHeaderMenu);
+
+              // create input element with localization
+              var input = elems.find('input').attr({'id': 'statistics_'+statistic.id});
+              // if variable is visible => check the checkbox
+              if(statistic.visible) input.attr({'checked':'checked'});
+              // create label with localization
+              elems.find('label').attr('for','statistics_'+statistic.id).text(me._locale['statistic'][statistic.id]);
+              // add item to menu
+              menu.items.push({
+                element : elems,
+                command: statistic.id
+              })
+          };
+
+        });
+        // when command is given shos statistical variable as a new "row" in subheader
+        headerMenuPlugin.onCommand.subscribe(function(e, args) {
+            for (var i = 0; i < me.conf.statistics.length; i++) {
+                var statistic = me.conf.statistics[i]
+                if(statistic.id == args.command) {
+                    statistic.visible = !statistic.visible;
+                    break;
+                }
+            }
+
+            //FIXME 
+            //TODO we need to create grouping for statistical variables 
+            // instead of using subheader!
+
+            //reduce the number of variables
+            me.dataView.refresh();
+            // setColumns fires slickgrid resizing (cssrules etc.) => variables disappear
+            me.grid.setColumns(me.grid.getColumns());
+            // this prints variables again.
+            me.dataView.refresh();
+        });
+
+        grid.registerPlugin(headerMenuPlugin);
+
+    },
+
     /**
      * Simple objectArray to csv 
      * http://stackoverflow.com/questions/4130849/convert-json-format-to-csv-format-for-ms-excel

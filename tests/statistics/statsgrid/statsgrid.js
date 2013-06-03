@@ -1,4 +1,4 @@
-describe('Test Suite for statistics/statsgrid bundle', function() {
+describe.only('Test Suite for statistics/statsgrid bundle', function() {
     var appSetup = null,
         appConf = null,
         statsModule = null,

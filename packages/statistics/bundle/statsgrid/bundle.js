@@ -93,6 +93,12 @@ function() {
             "src" : "../../../../libraries/slickgrid/plugins/slick.cellselectionmodel.js",
             "type" : "text/javascript"
         }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.headermenu2.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.headermenu2.css",
+            "type" : "text/css"
+        }, {
             "src" : "../../../../libraries/slickgrid/slick.grid.js",
             "type" : "text/javascript"
         }, {

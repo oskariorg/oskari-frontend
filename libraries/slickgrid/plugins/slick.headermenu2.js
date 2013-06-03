@@ -3,13 +3,15 @@
   $.extend(true, window, {
     "Slick": {
       "Plugins": {
-        "HeaderMenu": HeaderMenu
+        "HeaderMenu2": HeaderMenu2
       }
     }
   });
 
 
   /***
+   * This is an alternative version of headermenu plugin. Headermenu2
+   * 
    * A plugin to add drop-down menus to column headers.
    *
    * USAGE:
@@ -77,7 +79,7 @@
    * @class Slick.Plugins.HeaderButtons
    * @constructor
    */
-  function HeaderMenu(options) {
+  function HeaderMenu2(options) {
     var _grid;
     var _self = this;
     var _handler = new Slick.EventHandler();
@@ -100,7 +102,7 @@
       _grid.setColumns(_grid.getColumns());
 
       // Hide the menu on outside click.
-      $(document.body).bind("mousedown", handleBodyMouseDown);
+//      $(document.body).bind("mousedown", handleBodyMouseDown);
     }
 
 
@@ -169,6 +171,12 @@
       var menu = $menuButton.data("menu");
       var columnDef = $menuButton.data("column");
 
+      // Changes to showing menu (vs. headerMenu):
+      // showMenu is more like a toggle (it hides the popup if clicked again)
+      if ($activeHeaderColumn != null && $activeHeaderColumn.hasClass("slick-header-column-active")) {
+        hideMenu();
+        return;
+      }
       // Let the user modify the menu or cancel altogether,
       // or provide alternative menu implementation.
       if (_self.onBeforeMenuShow.notify({
@@ -191,41 +199,25 @@
       for (var i = 0; i < menu.items.length; i++) {
         var item = menu.items[i];
 
+        //Changes to menu printing (vs. headerMenu):
+        // we'll add item.element (pure html string) to the menuitem-div
+        // instead of click, we are listening 'change' event
         var $li = $("<div class='slick-header-menuitem'></div>")
           .data("command", item.command || '')
           .data("column", columnDef)
-          .data("item", item)
-          .bind("click", handleMenuItemClick)
+          .bind("change", handleMenuItemClick)
           .appendTo($menu);
-
-        if (item.disabled) {
-          $li.addClass("slick-header-menuitem-disabled");
-        }
 
         if (item.tooltip) {
           $li.attr("title", item.tooltip);
         }
 
-        var $icon = $("<div class='slick-header-menuicon'></div>")
-          .appendTo($li);
-
-        if (item.iconCssClass) {
-          $icon.addClass(item.iconCssClass);
-        }
-
-        if (item.iconImage) {
-          $icon.css("background-image", "url(" + item.iconImage + ")");
-        }
-
-        $("<span class='slick-header-menucontent'></span>")
-          .text(item.title)
-          .appendTo($li);
+        $(item.element).appendTo($li);
       }
-
 
       // Position the menu.
       $menu
-        .css("top", $(this).offset().top + $(this).height())
+        .css("top", $(this).offset().top + $(this).height() + 7)
         .css("left", $(this).offset().left);
 
 
@@ -239,20 +231,12 @@
     function handleMenuItemClick(e) {
       var command = $(this).data("command");
       var columnDef = $(this).data("column");
-      var item = $(this).data("item");
-
-      if (item.disabled) {
-        return;
-      }
-
-      hideMenu();
 
       if (command != null && command != '') {
         _self.onCommand.notify({
             "grid": _grid,
             "column": columnDef,
-            "command": command,
-            "item": item
+            "command": command
           }, e, _self);
       }
 
