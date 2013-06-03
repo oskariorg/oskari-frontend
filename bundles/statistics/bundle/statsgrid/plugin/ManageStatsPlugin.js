@@ -515,7 +515,9 @@ function(config, locale) {
             no_results_text : this._locale['noMatch'],
             placeholder_text : this._locale['noMatch']
         });
-
+        // this gives indicators more space to show title on dropdown
+        jQuery('.chzn-drop').css('width','298px');
+        jQuery('.chzn-search input').css('width','263px');
     },
 
     /**
