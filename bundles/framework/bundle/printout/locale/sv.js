@@ -113,6 +113,43 @@ Oskari.registerLocalization({
                         "checked" : "checked"
                 }*/]
             },
+             "legend" : {
+                "label" : "Legend",
+                "tooltip" : "Väljä legend position",
+                "options" : [{
+                        "id" : "oskari_legend_NO",
+                        "loca" : "NO",
+                        "label" : "Ingen legend ",
+                        "tooltip" : "Ingen legend print",
+                        "selected" : true
+                       
+                    },{
+                        "id" : "oskari_legend_LL",
+                        "loca" : "LL",
+                        "label" : "Vänster nere hörn ",
+                        "tooltip" : "Legend position i vänster nere hörn"
+                       
+                    },{
+                        "id" : "oskari_legend_LU",
+                         "loca" : "LU",
+                        "label" : "Vänster uppe hörn ",
+                        "tooltip" : "Legend position i vänster uppe hörn"
+                       
+                    },{
+                        "id" : "oskari_legend_RU",
+                         "loca" : "RU",
+                        "label" : "Höger uppe hörn ",
+                        "tooltip" : "Legend position i höger uppe hörn"
+                       
+                    },{
+                        "id" : "oskari_legend_RL",
+                         "loca" : "RL",
+                        "label" : "Höger nere hörn ",
+                        "tooltip" : "Legend position i höger nere hörn"
+                       
+                    }
+                ]
+            },
             "help" : "Anvisning",
             "error" : {
                 "title" : "Fel",

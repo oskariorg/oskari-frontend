@@ -648,6 +648,7 @@ Client channels are used to send information from the server to the client. Most
 		"keepPrevious": false,
 		"width": 1767,
 		"height": 995,
+		"url": <resourceURL>,
 		"data": <base64Data>
 }
 ```

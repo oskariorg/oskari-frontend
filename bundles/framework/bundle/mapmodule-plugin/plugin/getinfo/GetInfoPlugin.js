@@ -32,7 +32,7 @@ function(config, locale) {
         timestamp : null
     };
 }, {
-	
+
 	templates : {
         table : jQuery('<table class="getinforesult_table"></table>'),
         tableRow : jQuery('<tr></tr>'),
@@ -257,6 +257,10 @@ function(config, locale) {
         for (var i = 0; i < selected.length; i++) {
             var layer = selected[i]
 
+            if (me._isIgnoredLayerType(layer)) {
+                continue;
+            }
+
             if (!layer.getQueryable || !layer.getQueryable()) {
                 continue;
             }
@@ -282,6 +286,23 @@ function(config, locale) {
         return layerIds;
     },
 
+    /**
+     * @method _isIgnoredLayerType
+     * @private
+     * Checks if layer's type is ignored
+     * @param {Oskari.mapframework.domain.AbstractLayer} layer
+     * @return {Boolean} true if layer's type is ignored
+     */
+    _isIgnoredLayerType : function(layer) {
+        if(this.config != null && this.config.ignoredLayerTypes) {
+            for(var i = 0; i < this.config.ignoredLayerTypes.length; i++) {
+                if (layer.isLayerOfType(this.config.ignoredLayerTypes[i])) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    },
     /**
      * @method _startAjaxRequest
      * @private
@@ -358,6 +379,13 @@ function(config, locale) {
 
         // let's not start anything we cant' resolve
         if (!layerIds) {
+            var data = { fragments: [], lonlat: lonlat, popupid: this.infoboxId, title: ""};
+            var pluginLoc = this.getMapModule().getLocalization('plugin', true);
+            var myLoc = pluginLoc[this.__name];
+            data.title = myLoc.title;
+            var event = me._sandbox.getEventBuilder("GetInfoResultEvent")(data);
+            me._sandbox.notifyAll(event);
+
             me._sandbox.printDebug("[GetInfoPlugin] NO layers with featureInfoEnabled, in scale and visible");
             return;
         }
@@ -618,7 +646,7 @@ function(config, locale) {
         if (!datum.presentationType) {
             return null;
         }
-		
+
 		var me = this;
 
         var response = jQuery('<div></div>');
@@ -711,7 +739,7 @@ function(config, locale) {
                     valpres = ( value ? 'true' : 'false');
                     break;
                 case 'number':
-                    valpres = '' + number + '';
+                    valpres = '' + value + '';
                     break;
                 case 'function':
                     valpres = '?';

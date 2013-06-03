@@ -28,6 +28,8 @@ function() {
     this.geoJson = undefined;
     // Additional data for each printable layer
     this.tileData = undefined;
+    this.printService = undefined;
+    this.legendPlugin = undefined;
 
     /* default configuration */
     this.conf = {
@@ -70,10 +72,10 @@ function() {
      * 		structure and if parameter key is given
      */
     getLocalization : function(key) {
-        if(!this._localization) {
+        if (!this._localization) {
             this._localization = Oskari.getLocalization(this.getName());
         }
-        if(key) {
+        if (key) {
             return this._localization[key];
         }
         return this._localization;
@@ -85,7 +87,7 @@ function() {
     "start" : function() {
         var me = this;
 
-        if(me.started)
+        if (me.started)
             return;
 
         me.started = true;
@@ -98,7 +100,7 @@ function() {
         this.localization = Oskari.getLocalization(this.getName());
 
         sandbox.register(me);
-        for(p in me.eventHandlers) {
+        for (p in me.eventHandlers) {
             sandbox.registerForEventByName(me, p);
         }
 
@@ -119,18 +121,32 @@ function() {
                 }
             }
         };
-        for(var tool in btns) {
+        for (var tool in btns) {
             sandbox.request(this, addBtnRequestBuilder(tool, this.buttonGroup, btns[tool]));
         }
+
+        // create the PrintService for handling ajax calls
+        // and common functionality.
+        var printService = Oskari.clazz.create('Oskari.mapframework.bundle.printout.service.PrintService', me);
+        sandbox.registerService(printService);
+        this.printService = printService;
+
+        var locale = me.getLocalization();
+        var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+        var pluginConfig = {};
+        var legendPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.printout.plugin.LegendPlugin', me, pluginConfig, locale);
+        mapModule.registerPlugin(legendPlugin);
+        mapModule.startPlugin(legendPlugin);
+        this.legendPlugin = legendPlugin;
 
         //Let's extend UI
         var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
         sandbox.request(this, request);
 
         //sandbox.registerAsStateful(this.mediator.bundleId, this);
-        // draw ui        
+        // draw ui
         me._createUi();
-        
+
         sandbox.registerAsStateful(this.mediator.bundleId, this);
 
         this.tileData = {};
@@ -156,7 +172,7 @@ function() {
      */
     onEvent : function(event) {
         var handler = this.eventHandlers[event.getName()];
-        if(!handler) {
+        if (!handler) {
             return;
         }
         return handler.apply(this, [event]);
@@ -168,7 +184,7 @@ function() {
     eventHandlers : {
         'MapLayerVisibilityChangedEvent' : function(event) {
             /* we might get 9 of these if 9 layers would have been selected */
-            if(this.printout && this.printout.isEnabled && this.isMapStateChanged) {
+            if (this.printout && this.printout.isEnabled && this.isMapStateChanged) {
                 this.isMapStateChanged = false;
                 this.getSandbox().printDebug("PRINTOUT REFRESH");
                 this.printout.refresh(true);
@@ -176,26 +192,26 @@ function() {
         },
         'AfterMapMoveEvent' : function(event) {
             this.isMapStateChanged = true;
-            if(this.printout && this.printout.isEnabled ) {
+            if (this.printout && this.printout.isEnabled) {
                 this.printout.refresh(false);
             }
             this.isMapStateChanged = true;
         },
         'AfterMapLayerAddEvent' : function(event) {
             this.isMapStateChanged = true;
-            if(this.printout && this.printout.isEnabled ) {
+            if (this.printout && this.printout.isEnabled) {
                 this.printout.refresh(false);
             }
         },
         'AfterMapLayerRemoveEvent' : function(event) {
             this.isMapStateChanged = true;
-            if(this.printout && this.printout.isEnabled ) {
+            if (this.printout && this.printout.isEnabled) {
                 this.printout.refresh(false);
             }
         },
         'AfterChangeMapLayerStyleEvent' : function(event) {
             this.isMapStateChanged = true;
-            if(this.printout && this.printout.isEnabled ) {
+            if (this.printout && this.printout.isEnabled) {
                 this.printout.refresh(false);
             }
         },
@@ -206,7 +222,7 @@ function() {
 
             var me = this;
 
-            if(event.getExtension().getName() != me.getName()) {
+            if (event.getExtension().getName() != me.getName()) {
                 // not me -> do nothing
                 return;
             }
@@ -251,8 +267,8 @@ function() {
      * Implements BundleInstance protocol stop method
      */
     "stop" : function() {
-        
-        if( this.printout ) {
+
+        if (this.printout) {
             this.printout.destroy();
             this.printout = undefined;
         }
@@ -261,7 +277,7 @@ function() {
         this.tileData = null;
         
         var sandbox = this.sandbox();
-        for(p in this.eventHandlers) {
+        for (p in this.eventHandlers) {
             sandbox.unregisterFromEventByName(this, p);
         }
 
@@ -339,19 +355,18 @@ function() {
         var map = jQuery('#contentMap');
         var tools = jQuery('#maptools');
 
-        if(blnEnabled == true) {
+        if (blnEnabled == true) {
 
             //me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
             var request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
             me.sandbox.request(me.getName(), request);
 
             // proceed with printout view
-            if(!this.printout) {
-                this.printout = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.BasicPrintout', 
-                    this, this.getLocalization('BasicView'), this.conf.backendConfiguration);
+            if (!this.printout) {
+                this.printout = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.BasicPrintout', this, this.getLocalization('BasicView'), this.conf.backendConfiguration);
                 this.printout.render(map);
             }
-            if( this.state && this.state.form ) {
+            if (this.state && this.state.form) {
                 this.printout.setState(this.state.form);
             }
             this.printout.show();
@@ -359,19 +374,23 @@ function() {
             this.printout.refresh(false);
             this.printout.refresh(true);
         } else {
-            if(this.printout) {
+            if (this.printout) {
                 this.printout.setEnabled(false);
                 this.printout.hide();
-                
+                // clean legend
+                if (this.printout) {
+                    this.legendPlugin.clearLegendLayers();
+                }
+
             }
         }
     },
     displayContent : function(isOpen) {
-        if(isOpen) {
+        if (isOpen) {
             this.plugins['Oskari.userinterface.Flyout'].refresh();
         }
     },
-    
+
     /**
      * @method setState
      * Sets the bundle state
@@ -379,29 +398,28 @@ function() {
      * @param {Object} state bundle state as JSON
      */
     setState : function(state) {
-        this.state = state;        
+        this.state = state;
     },
     /**
      * @method getState
      * Returns bundle state as JSON. State is bundle specific, check the
      * bundle documentation for details.
-     * @return {Object} 
+     * @return {Object}
      */
     getState : function() {
-        var state = this.state||{};
-        
-        if( this.printout ) {
+        var state = this.state || {};
+
+        if (this.printout) {
             var formState = this.printout.getState();
             state.form = formState;
         }
-        
+
         return state;
     }
-    
 }, {
     /**
      * @property {String[]} protocol
      * @static
      */
-    "protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension','Oskari.userinterface.Stateful']
+    "protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension', 'Oskari.userinterface.Stateful']
 });
