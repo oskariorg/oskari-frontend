@@ -840,6 +840,14 @@ function(id, imageUrl, options) {
         sandbox.notifyAll(event);
     },
     /**
+     * @method updateSize
+     * Notifies OpenLayers that the map size has changed and updates the size in sandbox map domain object.
+     */
+    updateSize : function() {
+        this.getMap().updateSize();
+        this._updateDomain();
+    },
+    /**
      * @method _updateDomain
      * @private
      * Updates the sandbox map domain object with the current map properties.

@@ -298,8 +298,7 @@ function(instance, localization, data) {
             }
         }
         // notify openlayers that size has changed
-        mapModule.getMap().updateSize();
-        this._updateDomain();
+        mapModule.updateSize();
     },
     /**
      * @method _createSizePanel
@@ -941,8 +940,7 @@ function(instance, localization, data) {
         mapElement.height(jQuery(window).height());
         
         // notify openlayers that size has changed
-        mapModule.getMap().updateSize();
-        this._updateDomain();
+        mapModule.updateSize();
 
         // resume normal plugins
         for (var i = 0; i < this.normalMapPlugins.length; ++i) {
@@ -955,25 +953,6 @@ function(instance, localization, data) {
 
         mapModule.unregisterPlugin(this.logoPlugin);
         this.logoPlugin.stopPlugin(me.instance.sandbox);
-    },
-    /**
-     * @method _updateDomain
-     * @private
-     * Updates the map domain object so GFI and other functionalities depending on it works
-     * even after size changes.
-     */
-    _updateDomain : function() {
-        
-        var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
-        
-        var mapVO = this.instance.sandbox.getMap();
-        mapVO.setExtent(mapModule.getMap().getExtent());
-        mapVO.setMaxExtent(mapModule.getMap().getMaxExtent());
-        mapVO.setBbox(mapModule.getMap().calculateBounds());
-        
-        var mapElement = jQuery(mapModule.getMap().div);
-        mapVO.setWidth(mapElement.width());
-        mapVO.setHeight(mapElement.height());
     },
     /**
      * @method setEnabled
