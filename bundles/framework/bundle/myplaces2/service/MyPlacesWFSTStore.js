@@ -431,6 +431,7 @@ function(url, uuid) {
                 'name' : m.getName(),
                 'place_desc' : m.getDescription(),
                 'link' : m.getLink(),
+                'image_link': m.getImageLink(),
                 'category_id' : m.getCategoryID(),
                 'uuid' : uuid
             };
