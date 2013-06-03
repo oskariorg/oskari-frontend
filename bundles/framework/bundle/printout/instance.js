@@ -25,6 +25,9 @@ function() {
     this.printoutHandler = undefined;
     this.isMapStateChanged = true;
     this.state = undefined;
+    this.geoJson = undefined;
+    // Additional data for each printable layer
+    this.tileData = undefined;
     this.printService = undefined;
     this.legendPlugin = undefined;
 
@@ -145,6 +148,8 @@ function() {
         me._createUi();
 
         sandbox.registerAsStateful(this.mediator.bundleId, this);
+
+        this.tileData = {};
     },
     /**
      * @method init
@@ -226,6 +231,35 @@ function() {
 
             me.displayContent(isOpen);
 
+        },
+
+        /**
+         * Bundles interested to get printed send their data via this event.
+         * The event listener saves the GeoJSON (if given) for use in printing
+         * and the tile data (if given) for a given layer.
+         *
+         * @method Printout.PrintableContentEvent
+         * @param {Object} event
+         */
+        'Printout.PrintableContentEvent': function(event) {
+            var contentId = event.getContentId(),
+                layer = event.getLayer(),
+                layerId = ( (layer && layer.getId) ? layer.getId() : null ),
+                tileData = event.getTileData(),
+                geoJson = event.getGeoJsonData();
+
+            // Save the GeoJSON for later use if provided.
+            // TODO:
+            // Save the GeoJSON for each contentId separately.
+            // view/BasicPrintOut.js should be changed as well
+            // to parse the geoJson for the backend.
+            if (geoJson) {
+                this.geoJson = geoJson;
+            }
+            // Save the tile data per layer for later use.
+            if (tileData && layerId) {
+                this.tileData[layerId] = tileData;
+            }
         }
     },
     /**
@@ -239,6 +273,9 @@ function() {
             this.printout = undefined;
         }
 
+        this.geoJson = null;
+        this.tileData = null;
+        
         var sandbox = this.sandbox();
         for (p in this.eventHandlers) {
             sandbox.unregisterFromEventByName(this, p);
