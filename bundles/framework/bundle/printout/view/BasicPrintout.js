@@ -484,6 +484,7 @@ function(instance, localization, backendConfiguration) {
         }
 
         window.open('about:blank','map_popup_111', wopParm);
+        debugger;
         me.mainPanel.find('#oskari_print_formID').submit();
     },
 
@@ -520,8 +521,8 @@ function(instance, localization, backendConfiguration) {
 
         // We need to use the POST method if there's GeoJSON or tile data.
         if (this.instance.geoJson || !jQuery.isEmptyObject(this.instance.tileData)) {
-            var stringifiedJson = this._getGeoJson(this.instance.geoJson);
-            var stringifiedTileData = this._getTileData(this.instance.tileData);
+            var stringifiedJson = this._stringifyGeoJson(this.instance.geoJson);
+            var stringifiedTileData = this._stringifyTileData(this.instance.tileData);
 
             this.instance.getSandbox().printDebug("PRINT POST URL " + url);
             this.openPostURLinWindow(stringifiedJson, stringifiedTileData, url, selections);
@@ -556,6 +557,8 @@ function(instance, localization, backendConfiguration) {
      * @return {String/null} Stringified JSON or null if param is empty.
      */
     _stringifyGeoJson: function(geoJson) {
+        var returnJson;
+
         if (geoJson) {
             return JSON.stringify(geoJson).replace('\"', '"');
         } else {

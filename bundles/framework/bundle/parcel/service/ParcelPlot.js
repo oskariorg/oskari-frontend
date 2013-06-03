@@ -367,7 +367,7 @@ function(instance) {
 		var eventBuilder = this.instance.sandbox.getEventBuilder('Printout.PrintableContentEvent');
 		if (eventBuilder) {
 			// Send no layer or tile data, just the GeoJSON.
-			var event = eventBuilder(null, null, geojsCollection);
+			var event = eventBuilder(this.instance.getName(), null, null, geojsCollection);
 			this.instance.sandbox.notifyAll(event);
 		}
 	},

@@ -217,7 +217,7 @@ function() {
             retainEvent = false;
             eventBuilder = this.sandbox.getEventBuilder('Printout.PrintableContentEvent');
             if (eventBuilder) {
-                this.printEvent = eventBuilder(layer, data);
+                this.printEvent = eventBuilder(this.getName(), layer, data);
             }
         }
 

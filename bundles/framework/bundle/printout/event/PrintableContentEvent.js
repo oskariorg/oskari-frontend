@@ -14,7 +14,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintableContentE
  *          [ { bbox: [<left>, <bottom>, <right>, <top>], url: "<image url>" }, ... ]
  * @param {Object} geojsonData
  */
-function(layer, tileData, geojsonData) {
+function(contentId, layer, tileData, geojsonData) {
+    this._contentId = contentId;
     this._layer = layer;
     this._tileData = tileData;
     this._geojsonData = geojsonData;
@@ -26,6 +27,10 @@ function(layer, tileData, geojsonData) {
      */
     getName : function() {
         return "Printout.PrintableContentEvent";
+    },
+
+    getContentId: function() {
+        return this._contentId;
     },
     /**
     * Returns the layer the new style should be applied to.

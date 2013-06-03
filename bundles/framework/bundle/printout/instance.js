@@ -226,12 +226,17 @@ function() {
          * @param {Object} event
          */
         'Printout.PrintableContentEvent': function(event) {
-            var layer = event.getLayer(),
+            var contentId = event.getContentId(),
+                layer = event.getLayer(),
                 layerId = ( (layer && layer.getId) ? layer.getId() : null ),
                 tileData = event.getTileData(),
                 geoJson = event.getGeoJsonData();
 
             // Save the GeoJSON for later use if provided.
+            // TODO:
+            // Save the GeoJSON for each contentId separately.
+            // view/BasicPrintOut.js should be changed as well
+            // to parse the geoJson for the backend.
             if (geoJson) {
                 this.geoJson = geoJson;
             }
@@ -239,7 +244,6 @@ function() {
             if (tileData && layerId) {
                 this.tileData[layerId] = tileData;
             }
-            window.statsPrintEvent = {tileData: tileData, layer: layer};
         }
     },
     /**
