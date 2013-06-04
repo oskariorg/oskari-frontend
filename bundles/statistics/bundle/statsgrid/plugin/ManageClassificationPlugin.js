@@ -367,7 +367,10 @@ function(config, locale) {
         var classString = tmpArr.join("|");
 
         var colors = me._getColors(this.currentColorSet, me.colorsetIndex, classes - 2);
-
+        // If true, reverses the color "array"
+        if (me.colorsFlipped) {
+            colors = colors.split(',').reverse().join(',');
+        }
         var colorArr = colors.split(",");
 
         /*document.getElementById("mover").style.backgroundColor = currentColor;*/
@@ -386,6 +389,12 @@ function(config, locale) {
             numberOfClasses : classes,
             //instance.js - state handling: input string of manual classification method
             manualBreaksInput : manualBreaksInput.toString(),
+            //instance.js - state handling: input object for colors
+            colors: {
+                set: me.currentColorSet,
+                index: me.colorsetIndex,
+                flipped: me.colorsFlipped
+            },
             VIS_ID : -1,
             VIS_NAME : params.VIS_NAME,
             VIS_ATTR : params.VIS_ATTR,
@@ -490,9 +499,15 @@ function(config, locale) {
             me._createColorDialog();
         });
 
+        var flipColorsButton = jQuery('<input type="button" value="' + me._locale.colorset.flipButton + '" />');
+        flipColorsButton.click(function(e) {
+            me._flipCurrentColors();
+        });
+
         classify.append(classcnt);
         classify.append(manualcls);
         classify.append(colorsButton);
+        classify.append(flipColorsButton);
         content.append(classify);
         // Toggle content HTML
         header.click(function() {
@@ -1019,6 +1034,17 @@ function(config, locale) {
         // Set background color for selected colors
         me._hiliSelectedColors();
 
+    },
+
+    /**
+     * Classifies data with colors flipped.
+     *
+     * @method _flipCurrentColors
+     * @private
+     */
+    _flipCurrentColors: function() {
+        this.colorsFlipped = this.colorsFlipped ? false : true;
+        this.classifyData();
     }
 }, {
     /**

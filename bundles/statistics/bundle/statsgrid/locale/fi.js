@@ -54,6 +54,7 @@ Oskari.registerLocalization({
 		},
 		"colorset" : {
 			"button": "Värit",
+			"flipButton": "Käännä värit",
 			"themeselection" : "Väriteeman valinta",
 			"setselection" : "Värisetin valinta",
 			"sequential" : "Kvantitatiivinen",
