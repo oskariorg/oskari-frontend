@@ -20,6 +20,7 @@ function(config) {
     this.config = config;
     this.tileSize = null;
     this.zoomLevel = null;
+    this.tileData = {};
 
     this._mapClickData = { comet: false, ajax: false, wfs: [] };
 }, {
@@ -263,6 +264,8 @@ function(config) {
          * @param {Object} event
          */
         'MapClickedEvent' : function(event) {
+            console.log(event);
+
             // don't process while moving
             if(this.getSandbox().getMap().isMoving()) {
                 return;
@@ -863,6 +866,28 @@ function(config) {
             }
         }
         return grid;
+    },
+
+    /*
+     * @method getTileData
+     */
+    getTileData : function() {
+        return this.tileData;
+    },
+
+    /*
+     * @method setTile
+     *
+     * @param {Oskari.mapframework.domain.WfsLayer} layer
+     *           WFS layer that we want to update
+     * @param {OpenLayers.Bounds} bbox
+     * @param imageUrl
+     */
+    setTile : function(layer, bbox, imageUrl) {
+        if(typeof this.tileData[layer.getId()] == "undefined") {
+            this.tileData[layer.getId()] = [];
+        }
+        this.tileData[layer.getId()].push({"bbox": bbox, "url": imageUrl});
     }
 
 }, {

@@ -22,6 +22,14 @@ function(config, plugin) {
 }, {
 
     /**
+     * @method getConnection
+     * @return {Object} cometd
+     */
+    getConnection : function() {
+        return this.cometd;
+    },
+
+    /**
      * @method setConnection
      * @param {Object} cometd
      */
@@ -261,7 +269,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         var layerPostFix = data.data.type; // "highlight" | "normal"
         var keepPrevious = data.data.keepPrevious; // true | false
         var size = { width: data.data.width, height: data.data.height };
-        // send as an event forward to WFSPlugin
+
+        // send as an event forward to WFSPlugin (draws)
         var event = this.plugin.getSandbox().getEventBuilder("WFSImageEvent")(
             layer,
             imageUrl,
@@ -271,6 +280,18 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             keepPrevious
         );
         this.plugin.getSandbox().notifyAll(event);
+
+        // TODO [AL-1253]: check if Janne wants to have highlight images (full map images - tileSize == mapSize)
+        // TODO: check how tileSize is taken care of @ print service
+        // send the most recent tileData as an event to printout - links work only if session open to the transport
+        if(layerPostFix == "normal") {
+            this.plugin.setTile(layer, data.data.bbox, this.rootURL + data.data.url + "&client=" + this.session.clientId);
+            var printoutEvent = this.plugin.getSandbox().getEventBuilder('Printout.PrintableContentEvent');
+            if (printoutEvent) {
+                var event = printoutEvent(this.plugin.getName(), layer, this.plugin.getTileData(), null);
+                this.instance.sandbox.notifyAll(event);
+            }
+        }
     }
 });
 

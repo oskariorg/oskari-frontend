@@ -24,7 +24,7 @@ function() {
      * @static
      * @property __name
      */
-    __name: 'FeatureData',
+    __name: 'FeatureData2',
 
     /**
      * @method getName
