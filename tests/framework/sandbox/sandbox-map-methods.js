@@ -1,4 +1,4 @@
-describe.only('Test Suite for sandbox', function() {
+describe('Test Suite for sandbox', function() {
 	var appSetup = null,
 		appConf = null,
 		sandbox = null,
