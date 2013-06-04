@@ -839,6 +839,9 @@ function(instance, localization, data) {
     	var me = this;
         var sandbox = this.instance.getSandbox();
         var url = sandbox.getAjaxUrl();
+        var totalWidth = ( me.isDataVisible ?
+            (selections.size.width + me._calculateGridWidth()) :
+            selections.size.width );
 		var errorHandler = function() {
 	    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 	    	var okBtn = dialog.createCloseButton(me.loc.buttons.ok);
@@ -860,10 +863,6 @@ function(instance, localization, data) {
             },
             success : function(response) {
             	if(response.id > 0) {
-                    var totalWidth = ( me.isDataVisible ?
-                        (selections.size.width + me._calculateGridWidth()) :
-                        selections.size.width );
-
 			        var event = sandbox.getEventBuilder('Publisher.MapPublishedEvent')(response.id,
 			        	totalWidth, selections.size.height, selections.language);
 			        sandbox.notifyAll(event);
