@@ -80,7 +80,8 @@ function() {
                     if(toolbar.length > 0 && toolbar.is(":visible")) {
                         mapDiv.height(jQuery(window).height() - toolbar.height());
                     }
-                    map.updateSize();
+                    // notify openlayers that size has changed
+                    module.updateSize();
                 }
             };
         
