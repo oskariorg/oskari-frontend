@@ -154,6 +154,11 @@ function() {
      * @return {String} statsgrid state
      */
     getStateParameters : function() {
+        // If the state is null or an empty object, nothing to do here!
+        if (!this.state || jQuery.isEmptyObject(this.state)) {
+            return null;
+        }
+
         var i = null,
             ilen = null,
             ilast = null,
@@ -191,7 +196,12 @@ function() {
                 indicatorValues += indicatorSeparator;
             }
         }
-        return statsgridState + stateValues + "-" + indicatorValues;
+
+        if (stateValues && indicatorValues) {
+            return statsgridState + stateValues + "-" + indicatorValues;
+        } else {
+            return null;
+        }
     },
 
     /**
