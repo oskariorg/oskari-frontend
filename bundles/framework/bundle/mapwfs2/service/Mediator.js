@@ -48,6 +48,9 @@ function(config, plugin) {
             '/wfs/mapClick' : function() {
                 me.getWFSMapClick.apply(me, arguments);
             },
+            '/wfs/filter' : function() {
+                me.getWFSFilter.apply(me, arguments);
+            },
             '/wfs/image' : function() {
                 me.getWFSImage.apply(me, arguments);
             }
@@ -143,10 +146,10 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             layer.setActiveFeature(data.data.feature);
         }
 
-            var event = this.plugin.getSandbox().getEventBuilder("WFSFeatureEvent")(
-                layer,
-                data.data.feature
-            );
+        var event = this.plugin.getSandbox().getEventBuilder("WFSFeatureEvent")(
+            layer,
+            data.data.feature
+        );
         this.plugin.getSandbox().notifyAll(event);
     },
 
@@ -160,17 +163,30 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
     getWFSMapClick : function(data) {
         //console.log("mapClick", data.data);
 
+        var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
+        var keepPrevious = data.data.keepPrevious;
         var featureIds = [];
+
         if(data.data.features != "empty") {
+            layer.setSelectedFeatures([]); // empty selected
             for (var i = 0; i < data.data.features.length; ++i) {
                 featureIds.push(data.data.features[i][0]);
             }
         }
-        var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
-        var keepPrevious = data.data.keepPrevious;
+
+        if(keepPrevious) {
+            layer.setClickedFeatureIds(layer.getClickedFeatureIds().concat(featureIds));
+        } else {
+            layer.setClickedFeatureIds(featureIds);
+        }
+
+        // remove highlight image
+        if(!keepPrevious && featureIds.length == 0) {
+            this.plugin.removeHighlightImage(layer);
+        }
 
         var layers = this.plugin.getSandbox().findAllSelectedMapLayers();
-        wfsLayerCount = 0;
+        var wfsLayerCount = 0;
         for (var i = 0; i < layers.length; ++i) {
             if (layers[i].isLayerOfType('WFS')) {
                 wfsLayerCount++;
@@ -187,6 +203,37 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         }
 
         var event = this.plugin.getSandbox().getEventBuilder("WFSFeaturesSelectedEvent")(featureIds, layer, keepPrevious);
+        this.plugin.getSandbox().notifyAll(event);
+    },
+
+
+    /**
+     * @method getWFSFilter
+     * @param {Object} data
+     *
+     * Handles one layer's features per response
+     * Creates WFSFeaturesSelectedEvent
+     */
+    getWFSFilter : function(data) {
+        //console.log("filter", data.data);
+
+        var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
+        var featureIds = [];
+
+        if(data.data.features != "empty") {
+            layer.setClickedFeatureIds([]);
+            for (var i = 0; i < data.data.features.length; ++i) {
+                featureIds.push(data.data.features[i][0]);
+            }
+        }
+
+        if(data.data.features != "empty") {
+            layer.setSelectedFeatures(data.data.features);
+        } else {
+            layer.setSelectedFeatures([]);
+        }
+
+        var event = this.plugin.getSandbox().getEventBuilder("WFSFeaturesSelectedEvent")(featureIds, layer, false);
         this.plugin.getSandbox().notifyAll(event);
     },
 

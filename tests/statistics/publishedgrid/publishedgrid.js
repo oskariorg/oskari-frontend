@@ -1,4 +1,4 @@
-describe.only('Test Suite for statistics/publishedgrid bundle', function() {
+describe('Test Suite for statistics/publishedgrid bundle', function() {
     var appSetup = null,
         appConf = null,
         publishedGrid = null,

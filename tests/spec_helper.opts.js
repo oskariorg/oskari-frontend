@@ -133,6 +133,16 @@ function setupOskari(appSetup, appConf, done) {
     });
 };
 
+function deletePluginsFromConfig(appConf, id) {
+    var plugins = appConf["mapfull"]["conf"]["plugins"];
+    for (var i = 0; i < plugins.length; ++i) {
+        if(plugins[i]["id"] == id) {
+            delete plugins[i];
+            break;
+        }
+    }
+};
+
 var _mapfullConfig = {
     "state": {
         "selectedLayers": [{
