@@ -12,9 +12,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
 function() {
     /* Layer Type */
     this._layerType = "WFS";
-    this._fields = [];
-    this._locales = [];
-    this._activeFeatures = [];
+    this._fields = []; // property names
+    this._locales = []; // property name locales
+    this._activeFeatures = []; // features on screen
+    this._selectedFeatures = []; // filtered features
+    this._clickedFeatureIds = []; // clicked feature ids
 }, {
    /* Layer type specific functions */
 
@@ -72,6 +74,54 @@ function() {
      */
     setActiveFeatures : function(features) {
         this._activeFeatures = features;
+    },
+
+    /**
+     * @method getSelectedFeatures
+     * @return {Object[]} features
+     */
+    getSelectedFeatures : function() {
+        return this._selectedFeatures;
+    },
+
+    /**
+     * @method setSelectedFeature
+     * @param {Object} feature
+     */
+    setSelectedFeature : function(feature) {
+        this._selectedFeatures.push(feature);
+    },
+
+    /**
+     * @method setSelectedFeatures
+     * @param {Object[]} features
+     */
+    setSelectedFeatures : function(features) {
+        this._selectedFeatures = features;
+    },
+
+    /**
+     * @method getClickedFeatureIds
+     * @return {String[]} featureIds
+     */
+    getClickedFeatureIds : function() {
+        return this._clickedFeatureIds;
+    },
+
+    /**
+     * @method setClickedFeatureId
+     * @param {String} id
+     */
+    setClickedFeatureId : function(id) {
+        this._clickedFeatureIds.push(id);
+    },
+
+    /**
+     * @method setClickedFeatureIds
+     * @param {String[]} features
+     */
+    setClickedFeatureIds : function(ids) {
+        this._clickedFeatureIds = ids;
     }
 }, {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]

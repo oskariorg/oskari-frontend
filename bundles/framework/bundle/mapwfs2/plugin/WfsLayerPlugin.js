@@ -19,6 +19,7 @@ function(config) {
     this._supportedFormats = {};
     this.config = config;
     this.tileSize = null;
+    this.zoomLevel = null;
 
     this._mapClickData = { comet: false, ajax: false, wfs: [] };
 }, {
@@ -181,6 +182,7 @@ function(config) {
             var bbox = this.getSandbox().getMap().getExtent();
             var zoom = this.getSandbox().getMap().getZoom();
 
+
             /// clean features lists
             var layers = this.getSandbox().findAllSelectedMapLayers(); // get array of AbstractLayer (WFS|WMS..)
             for (var i = 0; i < layers.length; ++i) {
@@ -189,10 +191,26 @@ function(config) {
                 }
             }
 
+            // update location
             var grid = this.getGrid();
             if(grid != null) {
                 this.getIO().setLocation(srs, [bbox.left,bbox.bottom,bbox.right,bbox.top], zoom, grid);
                 this._tilesLayer.redraw();
+            }
+
+            // update zoomLevel and highlight pictures
+            if(this.zoomLevel != zoom) {
+                this.zoomLevel = zoom;
+                for (var j = 0; j < layers.length; ++j) {
+                    if (layers[j].isLayerOfType('WFS')) {
+                        // get all feature ids
+                        var fids = layers[j].getClickedFeatureIds().slice(0);
+                        for(var k = 0; k < layers[j].getSelectedFeatures().length; ++k) {
+                            fids.push(layers[j].getSelectedFeatures()[k][0]);
+                        }
+                        this.getIO().highlightMapLayerFeatures(layers[j].getId(), fids, false);
+                    }
+                }
             }
 
             var creator = this.getSandbox().getObjectCreator(event);
@@ -278,7 +296,6 @@ function(config) {
                 //console.log("show info - cometd was before");
                 this.showInfoBox();
             }
-
         },
 
         /**
@@ -320,11 +337,11 @@ function(config) {
          * @param {Object} event
          */
         'WFSSetFilter' : function(event) {
-            /// clean features lists
+            /// clean selected features lists
             var layers = this.getSandbox().findAllSelectedMapLayers(); // get array of AbstractLayer (WFS|WMS..)
             for (var i = 0; i < layers.length; ++i) {
                 if (layers[i].isLayerOfType('WFS')) {
-                    layers[i].setActiveFeatures([]);
+                    layers[i].setSelectedFeatures([]);
                 }
             }
 
@@ -450,7 +467,7 @@ function(config) {
             var features = [];
             var feature;
             var values;
-            var fields = layer.getFields();
+            var fields = layer.getFields().slice(0);
 
             // replace fields with locales
             var locales = layer.getLocales();
@@ -707,6 +724,24 @@ function(config) {
                 var normalLayerIndex = this._map.getLayerIndex(normalLayer[normalLayer.length - 1]);
                 this._map.setLayerIndex(highlightLayer[0], normalLayerIndex+1);
             }
+        }
+    },
+
+    /**
+     * @method removeHighlightImage
+     *
+     * Removes a tile from the Openlayers map
+     *
+     * @param {Oskari.mapframework.domain.WfsLayer} layer
+     *           WFS layer that we want to update
+     */
+    removeHighlightImage : function(layer) {
+        var layerName = "wfs_layer_" + layer.getId() + "_highlight";
+
+        var removeLayers = this._map.getLayersByName(layerName);
+        for ( var i = 0; i < removeLayers.length; i++) {
+            layerIndex = this._map.getLayerIndex(removeLayers[i]);
+            removeLayers[i].destroy();
         }
     },
 
