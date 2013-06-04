@@ -18,6 +18,10 @@ A new event `Printout.PrintableContentEvent` which can be used to send additiona
 
 Mapmodule now has a method to notify openlayers and internal datamodels that map size has changed: updateSize(). Mapfull and publisher changed to use it instead of handling it on their own.
 
+### mapmodule plugins zoombar, panbuttons and bundles coordinatedisplay and feature
+
+Reverted plugins placement change from 1.10 so these are no longer placed inside openlayers container div with fixed position
+
 ## 1.10.1
 
 ### applications/paikkatietoikkuna.fi/published-map
@@ -34,6 +38,10 @@ This is created for published maps so that it shows also grid if there is one.
 
 ### statistics/statsgrid bundle
 Indicators which do not have data for all municipalities now show the missing values as blanks in the grid and on the map. This doesn't affect sorting, the blank values are always in the bottom when sorted.
+
+### mapmodule plugins zoombar, panbuttons and bundles coordinatedisplay and feature
+
+Plugins are now placed inside openlayers container div so that infobox is placed above them
 
 ## 1.9
 

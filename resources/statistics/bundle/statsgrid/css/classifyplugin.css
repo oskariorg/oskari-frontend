@@ -57,6 +57,9 @@
 	color:#f6931f;
 	font-weight:bold;
 }
+.manageClassificationPlugin input[type="button"] {
+	margin: 0.5em;
+}
 .geostats-legend div {
 	margin-bottom:5px;
 }

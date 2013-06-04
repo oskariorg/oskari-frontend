@@ -1204,6 +1204,11 @@ function(config, locale) {
 
                     if(state.currentColumn != null) {
                         if(classifyPlugin) {
+                            if (state.colors) {
+                                classifyPlugin.currentColorSet = state.colors.set;
+                                classifyPlugin.colorsetIndex = state.colors.index;
+                                classifyPlugin.colorsFlipped = state.colors.flipped;
+                            }
                             if(state.methodId != null && state.methodId > 0) {
                                 var select = classifyPlugin.element.find('.classificationMethod').find('.method');
                                 select.val(state.methodId);

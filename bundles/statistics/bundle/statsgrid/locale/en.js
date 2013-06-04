@@ -55,6 +55,7 @@ Oskari.registerLocalization({
         },
         "colorset" : {
             "button": "Colors",
+            "flipButton": "Flip colors",
 			"themeselection" : "Color theme selection",
 			"setselection" : "Color set selection",
 			"sequential" : "Sequential",

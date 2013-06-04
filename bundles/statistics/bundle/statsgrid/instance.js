@@ -258,6 +258,7 @@ function() {
         this.state.methodId = params.methodId;
         this.state.numberOfClasses = params.numberOfClasses;
         this.state.manualBreaksInput = params.manualBreaksInput;
+        this.state.colors = params.colors;
         // Send data to printout bundle
         this._createPrintParams(layer);
     }
