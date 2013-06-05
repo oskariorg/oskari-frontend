@@ -83,11 +83,10 @@ jQuery(document).ready(function() {
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
         app.startApplication(function(startupInfos) {
-          var instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
-          if (cb) {
-              cb(instance);
-          }
-
+            var instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
+            if (cb) {
+                cb(instance);
+            }
         });
 
     }
