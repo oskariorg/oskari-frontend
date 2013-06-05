@@ -101,21 +101,23 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-layer-methods', {
      * @private
      */
     _handleAddMapLayerRequest : function(request) {
+		var me = this;
 
         var id = request.getMapLayerId();
+		// TODO we need to pass this as false from layerselector...
         var keepLayersOrder = request.getKeepLayersOrder();
         var isBaseMap = request.isBasemap();
 
-        this.printDebug("Trying to add map layer with id '" + id + "' AS " + ( isBaseMap ? " BASE " : " NORMAL " ));
-        if (this.isLayerAlreadySelected(id)) {
-            this.printDebug("Attempt to select already selected layer '" + id + "'");
+        me.printDebug("Trying to add map layer with id '" + id + "' AS " + ( isBaseMap ? " BASE " : " NORMAL " ));
+        if (me.isLayerAlreadySelected(id)) {
+            me.printDebug("Attempt to select already selected layer '" + id + "'");
             return;
         }
 
-        var mapLayer = this.findMapLayerFromAllAvailable(id);
+        var mapLayer = me.findMapLayerFromAllAvailable(id);
         if (!mapLayer) {
             // not found, ignore
-            this.printDebug("Attempt to select layer that is not available '" + id + "'");
+            me.printDebug("Attempt to select layer that is not available '" + id + "'");
             return;
         }
 
@@ -125,28 +127,36 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-layer-methods', {
 
         // if we need keep layers order, i.e. when map is accessed by link
         if (keepLayersOrder != null && keepLayersOrder) {
-            this._selectedLayers.push(mapLayer);
+            me._selectedLayers.push(mapLayer);
         }
         // else we not need keep layers order (basemaps come
         // first in array, other maps come last)
+		// TODO seems like isBaseLayer doesn't work?
+		// TODO insert new baselayer _after_ old baselayers (from the bottom up)
         else {
             if (mapLayer.isBaseLayer() || isBaseMap == true) {
-                var oldSelectedLayers = this._selectedLayers;
+                var oldSelectedLayers = me._selectedLayers;
                 var newSelectedLayers = new Array();
-                newSelectedLayers.push(mapLayer);
+				var newLayerInserted = false;
+                //newSelectedLayers.push(mapLayer);
                 for (var i = 0; i < oldSelectedLayers.length; i++) {
+					if (!newLayerInserted && !oldSelectedLayers[i].isBaseLayer()) {
+						newSelectedLayers.push(mapLayer);
+						newLayerInserted = true;
+					}
                     newSelectedLayers.push(oldSelectedLayers[i]);
                 }
-                delete this._selectedLayers;
-                this._selectedLayers = newSelectedLayers;
+				
+                delete me._selectedLayers;
+                me._selectedLayers = newSelectedLayers;
             } else {
-                this._selectedLayers.push(mapLayer);
+                me._selectedLayers.push(mapLayer);
             }
         }
 
-        var event = this.getEventBuilder('AfterMapLayerAddEvent')(mapLayer, keepLayersOrder, isBaseMap);
-        this.copyObjectCreatorToFrom(event, request);
-        this.dispatch(event);
+        var event = me.getEventBuilder('AfterMapLayerAddEvent')(mapLayer, keepLayersOrder, isBaseMap);
+        me.copyObjectCreatorToFrom(event, request);
+        me.dispatch(event);
     },
     /**
      * @method _handleRemoveMapLayerRequest
@@ -157,33 +167,34 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-layer-methods', {
      * @private
      */
     _handleRemoveMapLayerRequest : function(request) {
+		var me = this;
         var id = request.getMapLayerId();
-        this.printDebug("Trying to remove map layer with id '" + id + "'");
-        if (!this.isLayerAlreadySelected(id)) {
-            this.printDebug("Attempt to remove layer '" + id + "' that is not selected.");
+        me.printDebug("Trying to remove map layer with id '" + id + "'");
+        if (!me.isLayerAlreadySelected(id)) {
+            me.printDebug("Attempt to remove layer '" + id + "' that is not selected.");
             return;
         }
 
-        var mapLayer = this.findMapLayerFromAllAvailable(id);
+        var mapLayer = me.findMapLayerFromAllAvailable(id);
         var index = -1;
-        for (var n = 0; n < this._selectedLayers.length; n++) {
-            if (this._selectedLayers[n] === mapLayer) {
+        for (var n = 0; n < me._selectedLayers.length; n++) {
+            if (me._selectedLayers[n] === mapLayer) {
                 index = n;
                 break;
             }
         }
-        this._selectedLayers.splice(index, 1);
+        me._selectedLayers.splice(index, 1);
 
-        if (this.isMapLayerAlreadyHighlighted(id)) {
+        if (me.isMapLayerAlreadyHighlighted(id)) {
             // remove it from highlighted list
-            this.printDebug("Maplayer is also highlighted, removing it from highlight list.");
-            this._handleDimMapLayerRequest(id);
+            me.printDebug("Maplayer is also highlighted, removing it from highlight list.");
+            me._handleDimMapLayerRequest(id);
         }
 
         // finally notify sandbox
-        var event = this.getEventBuilder('AfterMapLayerRemoveEvent')(mapLayer);
-        this.copyObjectCreatorToFrom(event, request);
-        this.dispatch(event);
+        var event = me.getEventBuilder('AfterMapLayerRemoveEvent')(mapLayer);
+        me.copyObjectCreatorToFrom(event, request);
+        me.dispatch(event);
     },
     
     
