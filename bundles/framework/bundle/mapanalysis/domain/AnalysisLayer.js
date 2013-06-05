@@ -17,27 +17,6 @@ function() {
 	/* Layer type specific functions */
 
     /**
-     * @method setName
-     * Sets name for the tool
-     *
-     * @param {String} name
-     *            style name
-     */
-    setName : function(name) {
-        this._name = name
-    },
-
-    /**
-     * @method getName
-     * Gets name for the tool
-     *
-     * @return {String} style name
-     */
-    getName : function() {
-        return this._name;
-    },
-
-    /**
      * @method setFields
      * Sets fields for the analysis
      *

@@ -199,10 +199,6 @@ function(mapLayerUrl, sandbox) {
      * @private
      */
     _loadAllLayersAjaxCallBack : function(pResp, callbackSuccess) {
-//FIXME
-var testAnalysisLayer = {"id":"1,2,3,4,5","dataUrl_uuid":"12345678-1234-1234-1234-123456789012","minScale":28347,"name":"test_demo_joka_ei_varmasti_ole_kovakoodattu_tai_","opacity":0,"subtitle":"","geom":"POLYGON ((51857.07713547576 6617351.7548736315, 199877.68017894187 7795699.643159997, 674163.7062640898 7782724.689402027, 759905.4332841737 6599589.557011408, 51857.07713547576 6617351.7548736315))","maxScale":1,"inspire":"","orgName":"","type":"analysislayer","fields":["nimi","osoite"]};
-pResp.layers.push(testAnalysisLayer);
-
         var allLayers = pResp.layers;
         for(var i = 0; i < allLayers.length; i++) {
             
