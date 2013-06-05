@@ -513,7 +513,7 @@ function(config, locale) {
         // we use chosen to create autocomplete version of indicator select element.
         sel.chosen({
             no_results_text : this._locale['noMatch'],
-            placeholder_text : this._locale['noMatch']
+            placeholder_text : this._locale['selectIndicator']
         });
         // this gives indicators more space to show title on dropdown
         jQuery('.chzn-drop').css('width','298px');
