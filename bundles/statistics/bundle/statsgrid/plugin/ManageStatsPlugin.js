@@ -776,12 +776,24 @@ function(config, locale) {
                 //var stats = me.conf.statistics;
                 //for (var i = 0; i < stats.length; i++) {
                 //    var statistic = stats[i];
-                    var val = totals.avg && totals.avg[columnDef.field];
-                    if (val != null) {
-                        text += prepareFloat(val) + ' (' + me._locale['statistic'].avg + ')';
+//                    var val = totals.avg && totals.avg[columnDef.field];
+//                    if (val != null) {
+//                        text += prepareFloat(val) + ' (' + me._locale['statistic'].avg + ')';
                 //        if(i < stats.length) text += ", ";
-                    }
+//                    }
                 //}
+        var valueCount = 0;
+        var items = me.dataView.getItems();
+        for (var i = items.length - 1; i >= 0; i--) {
+            var item = items[i];
+            if (item[columnDef.field] != null) {
+                valueCount++;
+            }
+        };
+        text = valueCount + ' ' + me._locale['values'];
+
+
+
                 return text;
             }
         });
