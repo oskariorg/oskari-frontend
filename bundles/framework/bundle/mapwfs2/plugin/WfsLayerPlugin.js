@@ -264,7 +264,7 @@ function(config) {
          * @param {Object} event
          */
         'MapClickedEvent' : function(event) {
-            console.log(event);
+            //console.log(event);
 
             // don't process while moving
             if(this.getSandbox().getMap().isMoving()) {
