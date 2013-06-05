@@ -87,7 +87,9 @@ jQuery(document).ready(function() {
           if (cb) {
               cb(instance);
           }
+
         });
+
     }
 
     // TODO: handle cookie data in backend
@@ -109,6 +111,11 @@ jQuery(document).ready(function() {
     var data = {
         viewData: cookieviewdata
     };
+
+
+
+
+
     jQuery.ajax({
         type: 'POST',
         dataType: 'json',

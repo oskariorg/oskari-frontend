@@ -14,8 +14,28 @@ function() {
     this._layerType = "ANALYSIS";
     
 }, {
-   /* Layer type specific functions */
-  
+	/* Layer type specific functions */
+
+    /**
+     * @method setFields
+     * Sets fields for the analysis
+     *
+     * @param {String} fields
+     */
+ 	setFields : function(fields) {
+ 		this._fields = fields;
+	},
+
+    /**
+     * @method getFields
+     * Gets name for the tool
+     *
+     * @return {objArray} fields
+     */
+ 	getFields : function() {
+ 		return this._fields;
+	}
+
 }, {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]
 });
