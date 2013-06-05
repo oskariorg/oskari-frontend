@@ -15,6 +15,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
 	parseLayerData : function(layer, mapLayerJson, maplayerService) {
 
         var me = this;
-		
+
+		if(mapLayerJson.fields){
+			layer.setFields(mapLayerJson.fields);
+		}
+		if(mapLayerJson.name){
+			layer.setName(mapLayerJson.name);	
+		}
+
 	}
 });
