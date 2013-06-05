@@ -409,7 +409,7 @@ function(instance, localization) {
     _colorSelector : function(coldiv) {
         var me = this;
         // Use myplace style setup
-        me.categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.CategoryForm', me.instance);
+        me.categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.mapanalysis.view.CategoryForm', me.instance);
         // hide myplace layer name input
         var myform = me.categoryForm.getForm();
         myform.find('div.field:first').hide();
@@ -553,8 +553,7 @@ function(instance, localization) {
             opt.append(icons);
             contentPanel.after(opt);
 
-        }
-       
+        }       
     },
     /**
      * @method _addExtraParameters

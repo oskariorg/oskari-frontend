@@ -165,7 +165,7 @@ function(layer, sandbox, localization) {
             var checkbox = jQuery(this);
             var request = null;
             if(checkbox.is(':checked')) {
-                sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), true]);
+                sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), false, layer.isBaseLayer()]);
             }
             else {
                 sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
