@@ -451,6 +451,7 @@ function(instance, localization, data) {
             var isChecked = checkbox.is(':checked');
             me.isDataVisible = isChecked;
             me.adjustDataContainer();
+            // Update the size labels
             me._setSizeLabels();
         });
         dataContainer.find('label').attr('for', 'show-grid-checkbox').append(this.loc.data.grid);
@@ -839,6 +840,7 @@ function(instance, localization, data) {
     	var me = this;
         var sandbox = this.instance.getSandbox();
         var url = sandbox.getAjaxUrl();
+        // Total width for map and grid. Used to calculate the iframe size.
         var totalWidth = ( me.isDataVisible ?
             (selections.size.width + me._calculateGridWidth()) :
             selections.size.width );
