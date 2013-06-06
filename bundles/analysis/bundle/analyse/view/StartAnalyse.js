@@ -843,7 +843,8 @@ function(instance, localization) {
             name: title,
             method: methodName,
             fields: fields,
-            layerId: layer.getId()
+            layerId: layer.getId(),
+            layerType: layer.getLayerType()
         });
 
         // Styles
@@ -1049,8 +1050,21 @@ function(instance, localization) {
         var selections = me._gatherSelections();
 
         //Check parameters
-        if (me._checkSelections(selections))
-            alert('Continue --> Parameters: ' + JSON.stringify(selections));
+        if (me._checkSelections(selections)) {
+            var analyseParam = JSON.stringify(selections);
+            console.log(analyseParam);
+            //alert('Continue --> Parameters: ' + JSON.stringify(selections));
+            me.instance.analyseService.sendAnalyseData({'analyse': analyseParam},
+                // Success callback
+                function(response) {
+                    alert(response);
+                },
+                // Error callback
+                function(jqXHR, textStatus, errorThrown) {
+                    alert("Error: " + JSON.parse(jqXHR.responseText).error);
+                }
+            );
+        }
 
     },
 

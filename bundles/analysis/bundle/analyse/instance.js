@@ -23,6 +23,7 @@ function() {
     this.ignoreEvents = false;
     this.dialog = undefined;
     this.analyseHandler = undefined;
+    this.analyseService = undefined;
     this.isMapStateChanged = true;
     this.state = undefined;
     this.conf =  {};
@@ -94,6 +95,8 @@ function() {
         this.analyseHandler = Oskari.clazz.create('Oskari.analysis.bundle.analyse.request.AnalyseRequestHandler', me);       
         sandbox.addRequestHandler('analyse.AnalyseRequest', this.analyseHandler);
     
+        this.analyseService = Oskari.clazz.create('Oskari.analysis.bundle.analyse.service.AnalyseService', me);
+        sandbox.registerService(this.analyseService);
 
         //Let's extend UI
         var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
