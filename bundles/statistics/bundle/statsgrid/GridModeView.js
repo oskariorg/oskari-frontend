@@ -47,7 +47,8 @@ function() {
             this.isVisible = (isShown == true);
 
             // Update the layer if current layer is null or if the layer has changed.
-            if (this._layer == null || (layer != null && this._layer.getId() != layer.getId())) {
+            if ((layer != null && this._layer == null ) || 
+                (layer != null && this._layer.getId() != layer.getId())) {
                 this._layer = layer;
                 // Notify the grid plugin of the changed layer.
                 this.instance.gridPlugin.setLayer(layer);

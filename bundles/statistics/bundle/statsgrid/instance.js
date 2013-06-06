@@ -106,7 +106,7 @@ function() {
          */
         'AfterMapMoveEvent': function(event) {
             var view = this.plugins['Oskari.userinterface.View'];
-            if (view._layer) {
+            if (view.isVisible && view._layer) {
                 this._createPrintParams(view._layer);
             }
         },
