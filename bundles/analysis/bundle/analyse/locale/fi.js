@@ -110,10 +110,14 @@ Oskari.registerLocalization({
             "help" : "Ohje",
             "error" : {
                 "title" : "Virhe",
-                "size" : "Virhe vyöhykkeen koossa",
+                "invalidSetup": "Virheellisiä parametrejä",
+                "noParameters": "Ei parametrejä",
+                "noLayer": "Ei valittua tasoa",
+                "invalidMethod": "Tuntematon menetelmä: ",
+                "bufferSize" : "Virhe vyöhykkeen koossa",
+                "illegalCharacters" : "ei kirjaimia - käytä numeroita",
                 "nohelp" : "Ohjetta ei löytynyt",
-                "saveFailed" : "Analyysin tallennus epäonnistui. Yritä myöhemmin uudelleen.",
-                "IllegalCharacters" : "ei kirjaimia - käytä numeroita"
+                "saveFailed" : "Analyysin tallennus epäonnistui. Yritä myöhemmin uudelleen."
             }
         },
         "StartView" : {
