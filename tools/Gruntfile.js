@@ -114,7 +114,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
     grunt.loadNpmTasks('grunt-testacular');
     grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-sass');
+    //grunt.loadNpmTasks('grunt-sass');
 
     // Default task.
     //    grunt.registerTask('default', 'watch testacularServer:dev');
@@ -366,14 +366,14 @@ module.exports = function(grunt) {
         // concatenate the files
         grunt.task.run('concat');
     });
-	
+
 	grunt.registerTask("watchSCSS", "Watch task for SCSS files", function() {
 		grunt.config.set("compileAppCSS.watchCSS.options", {
 			"appSetupFile": '../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json'
 		});
 		grunt.task.run("compileAppCSS");
 	})
-	
+
 	// TODO compile bundle css only for bundles that the application uses
 	grunt.registerMultiTask("compileAppCSS", "Build css for application", function() {
 		var varsDirectory = this.data.options.appSetupFile,
@@ -381,17 +381,17 @@ module.exports = function(grunt) {
 			varsFileExists = true,
 			invalidPaths = [],
 			fs = require('fs');
-			
+
 		if(!varsDirectory) {
 			grunt.fail.fatal('Missing parameter\nUsage: grunt sass-build-application:"../path/to/application"', 1);
 		}
-		
-		
+
+
 		// strip file part so we get the application path
 		varsDirectory = varsDirectory.substring(0, varsDirectory.lastIndexOf("/"));
 		grunt.log.writeln("Compiling app CSS with appPath " + varsDirectory);
-		
-		
+
+
 		// find valid applicationVariables.scss path
 		grunt.log.writeln("Finding valid applicationVariables.scss path");
 		if (!fs.existsSync(varsDirectory + "/_applicationVariables.scss")) {
@@ -410,8 +410,8 @@ module.exports = function(grunt) {
 				grunt.fail.fatal("applicationVariables.scss not found, looked in:\n" + invalidPaths, 1);
 			}
 		}
-		
-		
+
+
 		// get application scss files
 		grunt.log.writeln("Getting application SCSS files");
 		var vars = fs.readFileSync(varsDirectory + "/_applicationVariables.scss"),
@@ -428,14 +428,14 @@ module.exports = function(grunt) {
 				"dest": varsDirectory + '/css/',
 				"ext": '.css'
 			}]
-			
-		);	
+
+		);
 
 		// build bundle css files
 		// hackhack, copy applicationVariables to a 'static' location
 		// TODO change to copy
 		fs.createReadStream(varsDirectory + '/_applicationVariables.scss').pipe(fs.createWriteStream('../applications/_applicationVariables.scss'));
-		
+
 		grunt.config.set(
 			'sass.' + appName + "-bundles" + '.files',
 			[{
@@ -448,8 +448,8 @@ module.exports = function(grunt) {
 			}]
 		);
 		grunt.task.run('sass');
-		
-		
+
+
 		if (this.data && this.data.options) {
 			grunt.log.writeln("Minifying...");
 			grunt.config.set("minifyAppCSS." + appName + ".options", {
@@ -463,19 +463,19 @@ module.exports = function(grunt) {
 			}
 			grunt.fail.fatal("Couldn't find options.");
 		}
-		
+
 	});
-	
+
 	grunt.registerMultiTask("minifyAppCSS", "Concatenate and minify application css", function() {
 		grunt.log.writeln("Concatenating and minifying css");
-		
+
 		var cssPacker = require('uglifycss'),
 			parser = require('./parser.js'),
 			cssfiles = [],
 			options = this.data.json.options,
 			processedAppSetup = parser.getComponents(options.appSetupFile);
-			
-			
+
+
         // internal minify CSS function
         this.minifyCSS = function(files, outputFile) {
 
@@ -483,14 +483,14 @@ module.exports = function(grunt) {
 			// read files to value
             for (var i = 0; i < files.length; ++i) {
                 if (!fs.existsSync(files[i])) {
-                    grunt.fail.fatal('Couldnt locate ' + files[i]); 
+                    grunt.fail.fatal('Couldnt locate ' + files[i]);
                 }
                 var content = fs.readFileSync(files[i], 'utf8');
                 value = value + '\n' + content;
             }
 			// minify value
             var packed = cssPacker.processString(value);
-			
+
 			// write value to outputfile
             fs.writeFile(outputFile, packed, function(err) {
                 if (err) {
@@ -498,12 +498,12 @@ module.exports = function(grunt) {
                 }
             });
         }
-		
+
 		// gather css files from bundles' minifierAppSetups
 		for (var i = 0; i < processedAppSetup.length; ++i) {
 			cssfiles = cssfiles.concat(parser.getFilesForComponent(processedAppSetup[i], 'css'));
 		}
 		this.minifyCSS(cssfiles, options.dest + 'oskari.min.css');
 	});
-	
+
 };
