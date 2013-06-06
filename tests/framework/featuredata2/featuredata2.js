@@ -1,4 +1,4 @@
-describe.only('Test Suite for Featuredata2', function() {
+describe('Test Suite for Featuredata2', function() {
     var module = null,
         sandbox = null,
         appSetup = getStartupSequence(
