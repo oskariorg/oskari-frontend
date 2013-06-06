@@ -78,8 +78,15 @@ jQuery(document).ready(function() {
     }
 
     function start(appSetup, appConfig, cb) {
-
         var app = Oskari.app;
+
+        // Analyse bundle
+        appConfig.mapfull.conf.plugins.push({
+            "id" : "Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayerPlugin"
+        });
+        appSetup.startupSequence[1].metadata["Import-Bundle"]["mapanalysis"] = {
+            bundlePath : '/Oskari/packages/framework/bundle/'
+        };
 
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
@@ -88,8 +95,30 @@ jQuery(document).ready(function() {
             if (cb) {
                 cb(instance);
             }
+             var ugStartup = {
+                title : 'Analyse',
+                fi : 'Analyysi',
+                sv : 'Analys',
+                en : 'Analyse',
+                bundlename : 'analyse',
+                bundleinstancename : 'analyse',
+                metadata : {
+                    "Import-Bundle" : {
+                        "analyse" : {
+                            bundlePath : '/Oskari/packages/analysis/bundle/'
+                        }
+                    },
+                    "Require-Bundle-Instance" : []
+                },
+                instanceProps : {}
+            };
+
+            Oskari.bundle_facade.playBundle(ugStartup, function() {
+            });
         });
+
     }
+
 
     jQuery.ajax({
         type: 'POST',

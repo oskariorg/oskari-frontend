@@ -386,9 +386,7 @@ function(instance) {
                 grid.setAdditionalDataHandler(showMore,
                     function(link, content) {
                         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        var okBtn = dialog.createCloseButton("OK");
-                        okBtn.addClass('primary');
-                        dialog.show(showMore, content, [okBtn]);
+                        dialog.show(showMore, content);
                         dialog.moveTo(link, 'bottom');
                 });
 

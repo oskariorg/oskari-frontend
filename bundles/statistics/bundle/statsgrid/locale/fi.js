@@ -73,6 +73,7 @@ Oskari.registerLocalization({
 			"std" : "Keskihajonta",
 			"sum" : "Yhteensä"
 		},
+		"values" : "arvoa",
 		"municipality" : "Kunta",
 		"noMatch" : "Indikaattoria ei löytynyt",
 		"selectIndicator": "Valitse indikaattori"

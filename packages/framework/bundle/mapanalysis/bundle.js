@@ -35,6 +35,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapanalysis.MapAnalysisBundle", 
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapanalysis/event/AnalysisVisualizationChangeEvent.js"
+		}, {
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/mapanalysis/view/Categoryform.js"
+        }, {
+           // NOTE! EXTERNAL LIBRARY!
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/jscolor/jscolor.js"
 		}],
 		 "locales" : [{
             "lang" : "fi",

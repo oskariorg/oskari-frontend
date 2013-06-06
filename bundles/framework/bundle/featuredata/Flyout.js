@@ -62,7 +62,7 @@ function(instance) {
      * that will be used to create the UI
      */
     startPlugin : function() {
-        this.tabsContainer = 
+        this.tabsContainer =
             Oskari.clazz.create('Oskari.userinterface.component.TabContainer',
             this.instance.getLocalization('nodata'));
 
@@ -127,7 +127,7 @@ function(instance) {
         var me = this;
         var flyout = jQuery(this.container);
         flyout.empty();
-        
+
         var sandbox = this.instance.sandbox;
         var dimReqBuilder = sandbox.getRequestBuilder('DimMapLayerRequest');
         var hlReqBuilder = sandbox.getRequestBuilder('HighlightMapLayerRequest');
@@ -153,13 +153,13 @@ function(instance) {
         });
         this.tabsContainer.insertTo(flyout);
     },
-    
+
     /**
      * @method layerAdded
      * @param {Oskari.mapframework.domain.WfsLayer} layer
      *           WFS layer that was added
      * Adds a tab for the layer
-     */ 
+     */
     layerAdded: function(layer) {
         var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
         panel.setTitle(layer.getName());
@@ -168,13 +168,13 @@ function(instance) {
         this.layers['' + layer.getId()] = panel;
         this.tabsContainer.addPanel(panel);
     },
-    
+
     /**
      * @method layerRemoved
      * @param {Oskari.mapframework.domain.WfsLayer} layer
      *           WFS layer that was removed
      * Removes the tab for the layer
-     */ 
+     */
     layerRemoved: function(layer) {
         var layerId = '' + layer.getId();
         this.instance.getService().cancelWFSGridUpdateForLayer(layerId);
@@ -193,7 +193,7 @@ function(instance) {
      * @param {Oskari.mapframework.domain.WfsLayer} layer
      *           WFS layer that was added
      * Updates data for layer
-     */ 
+     */
     _updateData: function(layer, selectionGeometry) {
 
         if(!this.active) {
@@ -242,7 +242,7 @@ function(instance) {
         }
         selection = JSON.stringify(selection);
         this._updateData(this.selectedTab.layer, selection);
-    }, 
+    },
     /**
      * @method _enableResize
      * Enables the flyout resizing
@@ -325,7 +325,7 @@ function(instance) {
      * @param {Object} data
      *           WFS data JSON
      * Updates data for layer
-     */ 
+     */
     _prepareData: function(layer, data) {
         var me = this;
         var panel = this.layers['' + layer.getId()];
@@ -336,7 +336,7 @@ function(instance) {
             if(!models) {
                 // invalid data
                 panel.getContainer().append(this.instance.getLocalization('errordata'));
-                return; 
+                return;
             }
             // only rendering "all" compilation for now
             var model = models['all'];
@@ -356,9 +356,7 @@ function(instance) {
                 grid.setAdditionalDataHandler(showMore,
                     function(link, content) {
                         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        var okBtn = dialog.createCloseButton("OK");
-                        okBtn.addClass('primary');
-                        dialog.show(showMore, content, [okBtn]);
+                        dialog.show(showMore, content);
                         dialog.moveTo(link, 'bottom');
                 });
 
@@ -435,10 +433,10 @@ function(instance) {
     /**
      * @method featureSelected
      * @param {Oskari.mapframework.bundle.mapwfs.event.WFSFeaturesSelectedEvent} event
-     * Handles changes on the UI when a feature has been selected (highlights grid row) 
+     * Handles changes on the UI when a feature has been selected (highlights grid row)
      */
     featureSelected : function(event) {
-        
+
         if(!this.active) {
             return;
         }
@@ -452,7 +450,7 @@ function(instance) {
     },
     /**
      * @method isEnabled
-     * @return {Boolean} 
+     * @return {Boolean}
      * True if grid functionality is enabled
      */
     isEnabled : function() {
@@ -462,7 +460,7 @@ function(instance) {
      * @method setEnabled
      * @param {Boolean} isEnabled
      * True to enable grid functionality
-     * False to disable and stop reacting to any map movements etc 
+     * False to disable and stop reacting to any map movements etc
      */
     setEnabled : function(isEnabled, geometry) {
         if(this.active == isEnabled) {
@@ -506,7 +504,7 @@ function(instance) {
                 var hlReqBuilder = sandbox.getRequestBuilder('HighlightMapLayerRequest');
                 var request = hlReqBuilder(this.selectedTab.layer.getId());
                 sandbox.request(this.instance.getName(), request);
-                
+
                 // update data
                 this.updateGrid(geometry);
             }

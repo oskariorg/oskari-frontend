@@ -106,8 +106,17 @@ function() {
          */
         'AfterMapMoveEvent': function(event) {
             var view = this.plugins['Oskari.userinterface.View'];
-            if (view._layer) {
+            if (view.isVisible && view._layer) {
                 this._createPrintParams(view._layer);
+            }
+        },
+        'AfterMapLayerRemoveEvent': function(event) {
+            var layer = event.getMapLayer(),
+                layerId = layer.getId(),
+                view = this.plugins['Oskari.userinterface.View'];
+
+            if (layerId === view._layer.getId()) {
+                view.prepareMode(false);
             }
         }
 	},

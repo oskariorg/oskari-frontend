@@ -1,5 +1,5 @@
 // requires jetty + redis open with wfs2
-describe('Test Suite for mapwfs2', function() {
+describe.only('Test Suite for mapwfs2', function() {
     var module = null,
         sandbox = null,
         appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull']),
@@ -12,6 +12,8 @@ describe('Test Suite for mapwfs2', function() {
                 }
             }
         };
+
+    var ONLINE_TESTS = false; // if testing the connection
 
     function startApplication(done, setup, conf) {
         if(!setup) {
@@ -77,13 +79,41 @@ describe('Test Suite for mapwfs2', function() {
         after(teardown);
 
         it('should be defined', function() {
-            expect(module.getConnection()).to.be.ok();
-            expect(module.getIO()).to.be.ok();
-            expect(module.getIO().getConnection()).to.be.ok();
+            var connection = module.getConnection();
+            var mediator = module.getIO();
+
+            expect(connection).to.be.ok();
+            expect(mediator).to.be.ok();
+
+            // needs transport service ONLINE
+            if(ONLINE_TESTS) {
+                expect(mediator.getConnection()).to.be.ok();
+            }
         });
     });
 
+    describe('grid', function() {
+        before(startApplication);
+        after(teardown);
 
+        it('should be defined', function() {
+            // not always ready
+            if(!module.tileStrategy.getGrid().grid) {
+                module.createTilesGrid();
+            }
+            var grid = module.getGrid();
 
+            expect(grid).to.be.ok();
+        });
+
+        it('should have tileSize', function() {
+            module.getGrid(); // init grid
+            var tileSize = module.getTileSize();
+
+            expect(tileSize).to.be.ok();
+            expect(tileSize.widh).tto.equal(256);
+            expect(tileSize.height).to.equal(256);
+        });
+    });
 
 });
