@@ -96,7 +96,7 @@ function(instance, localization) {
         "title_columns" : '<div class="analyse_title_columns analyse_output_cont"><div class="columns_title_label"></div></div>',
         "title_extra" : '<div class="analyse_title_extra analyse_output_cont"><div class="extra_title_label"></div></div>',
         "icon_colors" : '<div class="icon-menu"></div>',
-        "option" : '<div class="analyse_option_cont analyse_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>',
+        "option" : '<div class="analyse_option_cont analyse_settings_cont">' + '<input type="radio" name="selectedlayer" />' + '<label></label></div>',
         "methodOptionTool" : '<div class="tool ">' + '<input type="radio" name="method" />' + '<label></label></div>'
 
     },
@@ -826,59 +826,87 @@ function(instance, localization) {
         var container = this.mainPanel;
         var sandbox = this.instance.getSandbox();
 
+        // Get the name of the method
         var selectedMethod = container.find('input[name=method]:checked').val();
+        var methodName = selectedMethod && selectedMethod.replace(this.id_prefix, '');
+
+        // Get the feature fields
+        // TODO: in case of 'select', parse given array.
         var selectedColumnmode = container.find('input[name=params]:checked').val();
+        var fields = selectedColumnmode && selectedColumnmode.replace(this.id_prefix, '');
+
         var title = container.find('.settings_name_field').val();
+        var layer = this._getSelectedMapLayer();
 
-        var selections = {};
-        if (selectedMethod == this.id_prefix+'buffer') {
-            var size = container.find('.settings_buffer_field').val();
-            selections = {
-                analyseName : title,
-                method : selectedMethod,
-                buffer_size : size,
-                column_mode : selectedColumnmode,
-                columns : {}
+        // Get method specific selections
+        var selections = this._getMethodSelections(layer, {
+            name: title,
+            method: methodName,
+            fields: fields,
+            layerId: layer.getId()
+        });
 
-            };
-        } else if (selectedMethod == this.id_prefix+'aggregate') {
-            var selectedAggre = container.find('input[name=aggre]:checked').val();
-            selections = {
-                analyseName : title,
-                method : selectedMethod,
-                aggre_function : selectedAggre,
-                column_mode : selectedColumnmode,
-                columns : {}
-
-            };
-        } else if (selectedMethod == this.id_prefix+'union') {
-            selections = {
-                analyseName : title,
-                method : selectedMethod,
-                column_mode : selectedColumnmode,
-                columns : {}
-
-            };
-        } else if (selectedMethod == this.id_prefix+'intersect') {
-            var sectingLayer = container.find('input[name=intersect]:checked').val();
-            var spatialOperator = container.find('input[name=spatial]:checked').val();
-            selections = {
-                analyseName : title,
-                method : selectedMethod,
-                intersector : sectingLayer,
-                spatial_operator : spatialOperator,
-                column_mode : selectedColumnmode,
-                columns : {}
-
-            };
-        }
         // Styles
-        selections["styles"] = this.getStyleValues();
-        // Checked data layers
-        selections["layers"] = this._selectedLayers();
+        selections["style"] = this.getStyleValues();
 
         return selections;
+    },
 
+    /**
+     * Adds method specific parameters to selections
+     *
+     * @method _getMethodSelections
+     * @private
+     * @param {Object} layer an Oskari layer
+     * @param {Object} defaultSelections the defaults, such as name etc.
+     * @return {Object} selections for a given method
+     */
+    _getMethodSelections: function(layer, defaultSelections) {
+        var container = this.mainPanel;
+        var methodName = defaultSelections.method;
+
+        // buffer
+        var bufferSize = container.find('.settings_buffer_field').val();
+        // aggregate
+        var aggregateFunction = container.find('input[name=aggre]:checked').val();
+        aggregateFunction = aggregateFunction && aggregateFunction.replace(this.id_prefix, '');
+        // union
+        var unionLayerId = 'other_layer_id'; // TODO: get this from selection
+        // intersect
+        var intersectLayerId = container.find('input[name=intersect]:checked').val();
+        intersectLayerId = intersectLayerId && intersectLayerId.replace((this.id_prefix + 'layer_'), '');
+        var spatialOperator = container.find('input[name=spatial]:checked').val();
+        spatialOperator = spatialOperator && spatialOperator.replace(this.id_prefix, '');
+
+        var methodSelections = {
+            'buffer': {
+                methodParams: {
+                    distance: bufferSize
+                },
+                opacity: layer.getOpacity()
+            },
+            'aggregate': {
+                methodParams: {
+                    'function': aggregateFunction // TODO: param name?
+                }
+            },
+            'union': {
+                methodParams: {
+                    layerId: unionLayerId
+                }
+            },
+            'intersect': {
+                methodParams: {
+                    layerId: intersectLayerId,
+                    operator: spatialOperator // TODO: param name?
+                }
+            }
+        };
+
+        for (var s in methodSelections[methodName]) {
+            defaultSelections[s] = methodSelections[methodName][s];
+        }
+        return defaultSelections;
     },
 
     /**
@@ -888,49 +916,77 @@ function(instance, localization) {
      * @return {boolean}
      */
     _checkSelections : function(selections) {
-
         var error = "Invalid parameter setup: ";
         var check = true;
+
         if (!selections) {
-            alert(error + 'No parameters');
+            this._notifyValidationError(error + 'No parameters');
+            return false;
+        }
+        if (!selections.layerId) {
+            this._notifyValidationError(error + 'No layer selected');
             return false;
         }
         var selectedMethod = selections.method;
-        if (selectedMethod == this.id_prefix+'buffer') {
-            if (selections.buffer_size == '') {
-                alert(error + 'invalid buffer size');
-                return false;
-            } else if (isNaN(selections.buffer_size)) {
-                alert(error + 'Use number for buffer size');
-                return false;
-            } else if (Number(selections.buffer_size) > -1 && Number(selections.buffer_size) < 1) {
-                alert(error + 'invalid buffer size, must be greater than 1 m');
-                return false;
-            }
 
-        } else if (selectedMethod == this.id_prefix+'aggregate') {
+        // Check the buffer size
+        if (selectedMethod == 'buffer') {
+            var bufferSize = selections.methodParams.distance;
 
-        } else if (selectedMethod == this.id_prefix+'union') {
-
-        } else if (selectedMethod == this.id_prefix+'intersect') {
-
-            if (!selections.intersector) {
-                alert(error + 'Intersecting layer is not selected');
+            if (bufferSize == '') {
+                this._notifyValidationError(error + 'invalid buffer size');
                 return false;
-            } else if (selections.layers.length == 1 && selections.intersector == selections.layers[0].id) {
-                alert(error + 'No intersections to itself');
+            } else if (isNaN(bufferSize)) {
+                this._notifyValidationError(error + 'Use number for buffer size');
+                return false;
+            } else if (Number(bufferSize) > -1 && Number(bufferSize) < 1) {
+                this._notifyValidationError(error + 'invalid buffer size, must be greater than 1 m');
                 return false;
             }
 
         }
+        // Check aggregate validations
+        else if (selectedMethod == 'aggregate') {
+            if (!selections.methodParams['function']) {
+                this._notifyValidationError(error + 'Aggregate function not selected');
+                return false;
+            }
+        }
+        // Check union validations
+        else if (selectedMethod == 'union') {
 
-        if (selections.layers.length < 1) {
-            alert(error + 'Too few layers in selection');
-            return false;
+            if (!selections.methodParams.layerId) {
+                this._notifyValidationError(error + 'Union layer is not selected');
+                return false;
+            } else if (selections.layerId == selections.methodParams.layerId) {
+                this._notifyValidationError(error + 'No unions to itself');
+                return false;
+            }
+        }
+        // Check if there's a layer to intersect with and it's not the same as source layer.
+        else if (selectedMethod == 'intersect') {
+
+            if (!selections.methodParams.layerId) {
+                this._notifyValidationError(error + 'Intersecting layer is not selected');
+                return false;
+            } else if (selections.layerId == selections.methodParams.layerId) {
+                this._notifyValidationError(error + 'No intersections to itself');
+                return false;
+            }
         }
 
         return true;
-
+    },
+    /**
+     * Notifies the user of a validation error.
+     *
+     * @method _notifyValidationError
+     * @return {Boolean} always returns false atm.
+     */
+    _notifyValidationError: function(msg) {
+        // TODO: better notification than alert perhaps?
+        alert(msg);
+        return false;
     },
     /**
      * @method _analyseMap
@@ -1014,6 +1070,23 @@ function(instance, localization) {
             alert('TODO: request to filter actions - layer: ' + layer_id);
         });
     },
+
+    /**
+     * Returns the Oskari layer object for currently selected layer
+     *
+     * @method _getSelectedMapLayer
+     * @private
+     * @return {Object/null} an Oskari layer or null if no layer selected
+     */
+    _getSelectedMapLayer: function() {
+        var selectedLayer = this._selectedLayers();
+        selectedLayer = selectedLayer && selectedLayer[0];
+        selectedLayer = selectedLayer && selectedLayer.id;
+        selectedLayer = selectedLayer && selectedLayer.replace((this.id_prefix + 'layer_'), '');
+
+        return this.instance.getSandbox().findMapLayerFromSelectedMapLayers(selectedLayer);
+    },
+
     /**
      * @method destroy
      * Destroyes/removes this view from the screen.
