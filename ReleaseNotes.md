@@ -22,6 +22,12 @@ Mapmodule now has a method to notify openlayers and internal datamodels that map
 
 Reverted plugins placement change from 1.10 so these are no longer placed inside openlayers container div with fixed position
 
+### statsgrid bundle
+municipalities are now grouped and there are statistical variables added to the header row. CSV download button created in the frontend.
+
+### mapanalysis bundle
+dataparser for analysislayer
+
 ## 1.10.1
 
 ### applications/paikkatietoikkuna.fi/published-map
