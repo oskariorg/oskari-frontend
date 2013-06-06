@@ -910,72 +910,119 @@ function(instance, localization) {
     },
 
     /**
+     * Validates analyse selection parameters
+     *
      * @method _checkSelections
      * @private
-     * Check analyse selection parameters and returns true, if OK
-     * @return {boolean}
+     * @param {Object} selections Selections to validate
+     * @return {Boolean} returns true if no validation errors, false otherwise
      */
     _checkSelections : function(selections) {
         var error = "Invalid parameter setup: ";
-        var check = true;
+        var noErrors = true;
 
         if (!selections) {
             this._notifyValidationError(error + 'No parameters');
-            return false;
+            noErrors = false;
         }
         if (!selections.layerId) {
             this._notifyValidationError(error + 'No layer selected');
-            return false;
+            noErrors = false;
         }
         var selectedMethod = selections.method;
-
-        // Check the buffer size
-        if (selectedMethod == 'buffer') {
-            var bufferSize = selections.methodParams.distance;
-
-            if (bufferSize == '') {
-                this._notifyValidationError(error + 'invalid buffer size');
-                return false;
-            } else if (isNaN(bufferSize)) {
-                this._notifyValidationError(error + 'Use number for buffer size');
-                return false;
-            } else if (Number(bufferSize) > -1 && Number(bufferSize) < 1) {
-                this._notifyValidationError(error + 'invalid buffer size, must be greater than 1 m');
-                return false;
-            }
-
-        }
-        // Check aggregate validations
-        else if (selectedMethod == 'aggregate') {
-            if (!selections.methodParams['function']) {
-                this._notifyValidationError(error + 'Aggregate function not selected');
-                return false;
-            }
-        }
-        // Check union validations
-        else if (selectedMethod == 'union') {
-
-            if (!selections.methodParams.layerId) {
-                this._notifyValidationError(error + 'Union layer is not selected');
-                return false;
-            } else if (selections.layerId == selections.methodParams.layerId) {
-                this._notifyValidationError(error + 'No unions to itself');
-                return false;
-            }
-        }
-        // Check if there's a layer to intersect with and it's not the same as source layer.
-        else if (selectedMethod == 'intersect') {
-
-            if (!selections.methodParams.layerId) {
-                this._notifyValidationError(error + 'Intersecting layer is not selected');
-                return false;
-            } else if (selections.layerId == selections.methodParams.layerId) {
-                this._notifyValidationError(error + 'No intersections to itself');
-                return false;
-            }
+        // Find the right method validator
+        var methodValidator = this['_validate_method_' + selectedMethod];
+        if (methodValidator) {
+            // and call for it if found
+            noErrors = methodValidator.call(this, selections, error);    
+        } else {
+            // otherwise notify user of unknown method.
+            this._notifyValidationError(error + 'Unknown method ' + selectedMethod);
+            noErrors = false;
         }
 
-        return true;
+        return noErrors;
+    },
+    /**
+     * Validates selections for analysis method buffer
+     *
+     * @method _validate_method_buffer
+     * @private
+     * @param {Object} selections Selections for output JSON
+     * @param {String} errorMsg Base error message to display to the user
+     */
+    _validate_method_buffer: function(selections, errorMsg) {
+        var bufferSize = selections.methodParams.distance,
+            noErrors = true;
+
+        if (bufferSize == '') {
+            this._notifyValidationError(errorMsg + 'invalid buffer size');
+            noErrors = false;
+        } else if (isNaN(bufferSize)) {
+            this._notifyValidationError(errorMsg + 'Use number for buffer size');
+            noErrors = false;
+        } else if (Number(bufferSize) > -1 && Number(bufferSize) < 1) {
+            this._notifyValidationError(errorMsg + 'invalid buffer size, must be greater than 1 m');
+            noErrors = false;
+        }
+        return noErrors;
+    },
+    /**
+     * Validates selections for analysis method aggregate
+     *
+     * @method _validate_method_aggregate
+     * @private
+     * @param {Object} selections Selections for output JSON
+     * @param {String} errorMsg Base error message to display to the user
+     */
+    _validate_method_aggregate: function(selections, errorMsg) {
+        var noErrors = true;
+
+        if (!selections.methodParams['function']) {
+            this._notifyValidationError(errorMsg + 'Aggregate function not selected');
+            noErrors = false;
+        }
+        return noErrors;
+    },
+    /**
+     * Validates selections for analysis method union
+     *
+     * @method _validate_method_union
+     * @private
+     * @param {Object} selections Selections for output JSON
+     * @param {String} errorMsg Base error message to display to the user
+     */
+    _validate_method_union: function(selections, errorMsg) {
+        var noErrors = true;
+
+        if (!selections.methodParams.layerId) {
+            this._notifyValidationError(errorMsg + 'Union layer is not selected');
+            noErrors = false;
+        } else if (selections.layerId == selections.methodParams.layerId) {
+            this._notifyValidationError(errorMsg + 'No unions to itself');
+            noErrors = false;
+        }
+        return noErrors;
+    },
+    /**
+     * Validates selections for analysis method intersect
+     *
+     * @method _validate_method_intersect
+     * @private
+     * @param {Object} selections Selections for output JSON
+     * @param {String} errorMsg Base error message to display to the user
+     */
+    _validate_method_intersect: function(selections, errorMsg) {
+        var noErrors = true;
+
+        if (!selections.methodParams.layerId) {
+            this._notifyValidationError(errorMsg + 'Intersecting layer is not selected');
+            noErrors = false;
+        } else if (selections.layerId == selections.methodParams.layerId) {
+            this._notifyValidationError(errorMsg + 'No intersections to itself');
+            noErrors = false;
+        }
+        return noErrors;
     },
     /**
      * Notifies the user of a validation error.
