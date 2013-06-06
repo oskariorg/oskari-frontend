@@ -98,6 +98,8 @@ function() {
         this.analyseService = Oskari.clazz.create('Oskari.analysis.bundle.analyse.service.AnalyseService', me);
         sandbox.registerService(this.analyseService);
 
+        this.mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+
         //Let's extend UI
         var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
         sandbox.request(this, request);
@@ -147,32 +149,47 @@ function() {
             if (this.analyse && this.analyse.isEnabled && this.isMapStateChanged) {
                 this.isMapStateChanged = false;
                 this.getSandbox().printDebug("ANALYSE REFRESH");
-                this.analyse.refresh(true);
+                this.analyse.refreshAnalyseData(true);
             }
         },
         'AfterMapMoveEvent' : function(event) {
             this.isMapStateChanged = true;
             if (this.analyse && this.analyse.isEnabled) {
-                this.analyse.refresh(false);
+                this.analyse.refreshAnalyseData(false);
             }
             this.isMapStateChanged = true;
         },
         'AfterMapLayerAddEvent' : function(event) {
             this.isMapStateChanged = true;
             if (this.analyse && this.analyse.isEnabled) {
-                this.analyse.refresh(false);
+                this.analyse.refreshAnalyseData(false);
             }
         },
         'AfterMapLayerRemoveEvent' : function(event) {
             this.isMapStateChanged = true;
             if (this.analyse && this.analyse.isEnabled) {
-                this.analyse.refresh(false);
+                this.analyse.refreshAnalyseData(false);
             }
         },
         'AfterChangeMapLayerStyleEvent' : function(event) {
             this.isMapStateChanged = true;
             if (this.analyse && this.analyse.isEnabled) {
-                this.analyse.refresh(false);
+                this.analyse.refreshAnalyseData(false);
+            }
+        },
+        /**
+         * @method MapLayerEvent
+         * @param {Oskari.mapframework.event.common.MapLayerEvent} event
+         */
+        'MapLayerEvent' : function(event) {
+            var layerId = event.getLayerId();
+            // Let's show the user a dialog when the new analysislayer gets added to the map.
+            if (event.getOperation() === 'add') {
+                var layer = this.mapLayerService.findMapLayer(layerId);
+                if (layer && layer.isLayerOfType('ANALYSIS')) {
+                    this.showMessage('Taso "' + layer.getName() + '" lisätty!',
+                        'Löydät tason Aineisto-paneelista.');
+                }
             }
         },
         /**
@@ -339,7 +356,19 @@ function() {
         }
 
         return state;
-    }
+    },
+
+    /**
+     * @method showMessage
+     * Shows user a message with ok button
+     * @param {String} title popup title
+     * @param {String} message popup message
+     */
+    showMessage : function(title, message) {
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        dialog.show(title, message);
+        dialog.fadeout(5000);
+    },
 }, {
     /**
      * @property {String[]} protocol

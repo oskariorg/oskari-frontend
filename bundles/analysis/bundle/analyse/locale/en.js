@@ -22,7 +22,7 @@ Oskari.registerLocalization({
                     "selected" : true
                 }, {
                     "id" : "oskari_analyse_aggregate",
-                    "label" : "Aggregate"",
+                    "label" : "Aggregate",
                     "classForPreview" : "aggregate"
                 }, {
                     "id" : "oskari_analyse_union",
@@ -112,10 +112,10 @@ Oskari.registerLocalization({
             "help" : "Help",
             "error" : {
                 "title" : "Error",
-                "size" : "Error in buffer size",
+                "bufferSize" : "Error in buffer size",
                 "nohelp" : "No quide found",
                 "saveFailed" : "Storinig analysis failde. Try once more later.",
-                "IllegalCharacters" : "No alfabets - use digits"
+                "illegalCharacters" : "No alfabets - use digits"
             }
         },
         "StartView" : {

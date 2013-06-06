@@ -34,7 +34,6 @@ function(instance) {
 
     /**
      * Sends the data to backend for analysis.
-     * Currently just uses the ajax method from sandbox.
      *
      * @method sendAnalyseData
      * @param {Object} data the data to send
@@ -43,7 +42,19 @@ function(instance) {
      */
     sendAnalyseData: function(data, success, failure) {
         var url = this.sandbox.getAjaxUrl() + 'action_route=CreateAnalysisLayer';
-        this.sandbox.ajax(url, success, failure, data);
+        jQuery.ajax({
+            type : 'POST',
+            dataType: 'json',
+            url : url,
+            beforeSend : function(x) {
+                if (x && x.overrideMimeType) {
+                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                }
+            },
+            data : {'analyse': data},
+            success : success,
+            error : failure
+        });
     }
 
 }, {

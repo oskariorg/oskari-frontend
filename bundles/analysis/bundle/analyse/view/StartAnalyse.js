@@ -512,7 +512,7 @@ function(instance, localization) {
         var ii = 0;
         // request updates for map tiles
         for (var i = 0; i < layers.length; i++) {
-            if (layers[i].isLayerOfType('WFS')) {
+            if (layers[i].isLayerOfType('WFS') || layers[i].isLayerOfType('ANALYSIS')) {
                 var option = {
                     id : me.id_prefix+'layer_'+layers[i].getId(),
                     label : layers[i].getName()
@@ -911,132 +911,6 @@ function(instance, localization) {
     },
 
     /**
-     * Validates analyse selection parameters
-     *
-     * @method _checkSelections
-     * @private
-     * @param {Object} selections Selections to validate
-     * @return {Boolean} returns true if no validation errors, false otherwise
-     */
-    _checkSelections : function(selections) {
-        var error = "Invalid parameter setup: ";
-        var noErrors = true;
-
-        if (!selections) {
-            this._notifyValidationError(error + 'No parameters');
-            noErrors = false;
-        }
-        if (!selections.layerId) {
-            this._notifyValidationError(error + 'No layer selected');
-            noErrors = false;
-        }
-        var selectedMethod = selections.method;
-        // Find the right method validator
-        var methodValidator = this['_validate_method_' + selectedMethod];
-        if (methodValidator) {
-            // and call for it if found
-            noErrors = methodValidator.call(this, selections, error);    
-        } else {
-            // otherwise notify user of unknown method.
-            this._notifyValidationError(error + 'Unknown method ' + selectedMethod);
-            noErrors = false;
-        }
-
-        return noErrors;
-    },
-    /**
-     * Validates selections for analysis method buffer
-     *
-     * @method _validate_method_buffer
-     * @private
-     * @param {Object} selections Selections for output JSON
-     * @param {String} errorMsg Base error message to display to the user
-     */
-    _validate_method_buffer: function(selections, errorMsg) {
-        var bufferSize = selections.methodParams.distance,
-            noErrors = true;
-
-        if (bufferSize == '') {
-            this._notifyValidationError(errorMsg + 'invalid buffer size');
-            noErrors = false;
-        } else if (isNaN(bufferSize)) {
-            this._notifyValidationError(errorMsg + 'Use number for buffer size');
-            noErrors = false;
-        } else if (Number(bufferSize) > -1 && Number(bufferSize) < 1) {
-            this._notifyValidationError(errorMsg + 'invalid buffer size, must be greater than 1 m');
-            noErrors = false;
-        }
-        return noErrors;
-    },
-    /**
-     * Validates selections for analysis method aggregate
-     *
-     * @method _validate_method_aggregate
-     * @private
-     * @param {Object} selections Selections for output JSON
-     * @param {String} errorMsg Base error message to display to the user
-     */
-    _validate_method_aggregate: function(selections, errorMsg) {
-        var noErrors = true;
-
-        if (!selections.methodParams['function']) {
-            this._notifyValidationError(errorMsg + 'Aggregate function not selected');
-            noErrors = false;
-        }
-        return noErrors;
-    },
-    /**
-     * Validates selections for analysis method union
-     *
-     * @method _validate_method_union
-     * @private
-     * @param {Object} selections Selections for output JSON
-     * @param {String} errorMsg Base error message to display to the user
-     */
-    _validate_method_union: function(selections, errorMsg) {
-        var noErrors = true;
-
-        if (!selections.methodParams.layerId) {
-            this._notifyValidationError(errorMsg + 'Union layer is not selected');
-            noErrors = false;
-        } else if (selections.layerId == selections.methodParams.layerId) {
-            this._notifyValidationError(errorMsg + 'No unions to itself');
-            noErrors = false;
-        }
-        return noErrors;
-    },
-    /**
-     * Validates selections for analysis method intersect
-     *
-     * @method _validate_method_intersect
-     * @private
-     * @param {Object} selections Selections for output JSON
-     * @param {String} errorMsg Base error message to display to the user
-     */
-    _validate_method_intersect: function(selections, errorMsg) {
-        var noErrors = true;
-
-        if (!selections.methodParams.layerId) {
-            this._notifyValidationError(errorMsg + 'Intersecting layer is not selected');
-            noErrors = false;
-        } else if (selections.layerId == selections.methodParams.layerId) {
-            this._notifyValidationError(errorMsg + 'No intersections to itself');
-            noErrors = false;
-        }
-        return noErrors;
-    },
-    /**
-     * Notifies the user of a validation error.
-     *
-     * @method _notifyValidationError
-     * @return {Boolean} always returns false atm.
-     */
-    _notifyValidationError: function(msg) {
-        // TODO: better notification than alert perhaps?
-        alert(msg);
-        return false;
-    },
-    /**
      * @method _analyseMap
      * @private
      * Check parameters and execute analyse.
@@ -1046,26 +920,59 @@ function(instance, localization) {
         var me = this;
         var sandbox = this.instance.getSandbox();
         var url = sandbox.getAjaxUrl();
-
         var selections = me._gatherSelections();
 
-        //Check parameters
+        // Check that parameters are a-okay
         if (me._checkSelections(selections)) {
-            var analyseParam = JSON.stringify(selections);
-            console.log(analyseParam);
-            //alert('Continue --> Parameters: ' + JSON.stringify(selections));
-            me.instance.analyseService.sendAnalyseData({'analyse': analyseParam},
+            // Send the data for analysis to the backend
+            me.instance.analyseService.sendAnalyseData(JSON.stringify(selections),
                 // Success callback
                 function(response) {
-                    alert(response);
+                    if (response) {
+                        me._handleAnalyseMapResponse(response);
+                    }
                 },
                 // Error callback
                 function(jqXHR, textStatus, errorThrown) {
-                    alert("Error: " + JSON.parse(jqXHR.responseText).error);
+                    me.instance.showMessage(me.loc.error.title, me.loc.error.saveFailed);
                 }
             );
         }
 
+    },
+
+    /**
+     * Creates the map layer from the JSON given as a param
+     * and adds it to the map and subsequently to be used in further analysis.
+     *
+     * @method _handleAnalyseMapResponse
+     * @private
+     * @param {JSON} analyseJson Layer JSON returned by server.
+     */
+    _handleAnalyseMapResponse: function(analyseJson) {
+        // TODO: some error checking
+        var mapLayerService,
+            mapLayer,
+            requestBuilder,
+            request;
+        
+        mapLayerService = this.instance.mapLayerService;
+        // Prefix the id to avoid collisions
+        // FIXME: temporary, server should respond with an actual
+        // id so that further analysis with this layer is possible.
+        analyseJson.id = this.id_prefix + analyseJson.id;
+        // Create the layer model
+        mapLayer = mapLayerService.createMapLayer(analyseJson);
+        // Add the layer to the map layer service
+        mapLayerService.addLayer(mapLayer);
+
+        // Request the layer to be added to the map.
+        // instance.js handles things from here on.
+        requestBuilder = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest');
+        if (requestBuilder) {
+            request = requestBuilder(mapLayer.getId());
+            this.instance.sandbox.request(this.instance, request);
+        }
     },
 
     /**
@@ -1089,6 +996,7 @@ function(instance, localization) {
      * @param {int} layer_id  layer id for to retreave layer object
      */
     _infoRequest : function(tools, layer_id) {
+        layer_id = layer_id.replace(this.id_prefix + 'layer_', '');
         var layer = this.instance.getSandbox().findMapLayerFromSelectedMapLayers(layer_id);
         var me = this;
         tools.find('div.layer-info').bind('click', function() {
