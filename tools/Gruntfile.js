@@ -254,6 +254,12 @@ module.exports = function(grunt) {
         }
 
         // scss to css conversion
+        // FIXME: removed so we can run release on Jenkins
+        /*
+        // ERROR was:
+        [4mRunning "sass:minifierAppSetup" (sass) task
+        [31mFatal error: Error writing packed CSS: Error: ENOENT, open '../dist/1.10/full-map/oskari.min.css'
+        */
         //grunt.task.run('compileAppCSS');
 
         grunt.task.run('validate');
