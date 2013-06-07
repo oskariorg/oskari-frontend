@@ -19,6 +19,7 @@ function(locale, conf) {
     this.controls = null;
     this.modifyControl = null;
     this.currentMode = null;
+    this.modeBeforeDelete = null;
     this._locale = locale;
     this._drawLayer = null;
     this._lastfeature = null;
@@ -290,7 +291,7 @@ function(locale, conf) {
 					break;
 				case 'harava-add-geometry-tool-delete':
 		    		jQuery('.harava-add-geometry-tool').removeClass('disabled');
-					me.deleteSelectedFeature();
+					me.deleteSelectedFeature(me.modeBeforeDelete);
 					jQuery('#harava-add-geometry-tool-delete').addClass('active');
 			    	window.setTimeout(function(){
 			    		jQuery('#harava-add-geometry-tool-delete').removeClass('active');
@@ -339,15 +340,16 @@ function(locale, conf) {
     },
     /**
      * Delete selected feature
+     * @param {String} oldMode old selected tool
      */
-    deleteSelectedFeature: function(){
+    deleteSelectedFeature: function(oldMode){
     	var me = this;
     	if(me._lastfeature!=null){
     		var answer = confirm(me._locale.confirmDelete);
     		if(answer){
     			me.modifyControl.unselectFeature(me._lastfeature);
     			me._lastfeature.destroy();
-    			me.toggleControl(me.currentMode);
+    			me.toggleControl(oldMode);
     			me.modifyControl.deactivate();
     			me.modifyControl.activate();
     			me._drawLayer.redraw();
@@ -508,8 +510,13 @@ function(locale, conf) {
      * controls)
      */
     toggleControl : function(mode) {
-    	this.currentMode = mode;
     	var me = this;
+    	if(mode!=null){
+    		me.modeBeforeDelete = mode;
+    	}
+    	me.currentMode = mode;
+    	
+    	
     	if(me.modifyControl!=null){
     		me.modifyControl.deactivate();
     	}
