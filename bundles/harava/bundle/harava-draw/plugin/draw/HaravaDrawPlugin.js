@@ -22,6 +22,7 @@ function(locale, conf) {
     this._locale = locale;
     this._drawLayer = null;
     this._lastfeature = null;
+    this._suppressFeatureAdd = false;
     this.featureStyle = new OpenLayers.StyleMap({
         "default": new OpenLayers.Style(
             {
@@ -117,7 +118,6 @@ function(locale, conf) {
     addWKT: function(wktObject, type){
     	var me = this;
     	
-    	
     	var style = OpenLayers.Util.applyDefaults(style, OpenLayers.Feature.Vector.style['default']);    	
 		style.pointRadius = 8;
 		style.strokeColor='#000000';
@@ -129,6 +129,7 @@ function(locale, conf) {
     	
     	// check wkt type
     	if(typeof wktObject === "string"){
+    		me._suppressFeatureAdd = true;
     		var wkt = new OpenLayers.Format.WKT();
     		var feature = wkt.read(wktObject);
     		feature.style = style;
@@ -136,14 +137,14 @@ function(locale, conf) {
     		me._drawLayer.redraw(); 
     	} else {
     		window.setTimeout(function(){
+    			me._suppressFeatureAdd = true;
     			var wkt = new OpenLayers.Format.WKT();
         		var feature = wkt.read(wktObject.geom);
         		feature.attributes = wktObject.attributes;
         		feature.style = style;
         		me._drawLayer.addFeatures([feature]);
-        		me._drawLayer.redraw();
-    			
-    		},200); 
+        		me._drawLayer.redraw();    			
+    		},500); 
     	}
 		  	
     },
@@ -164,7 +165,7 @@ function(locale, conf) {
     		eventListeners : {
                 "featuresadded" : function(layer) {                	
                 	// send an event that the drawing has been completed
-                    me.finishedDrawing();
+                    me.finishedDrawing(me._suppressFeatureAdd);
                 },
                 'featureselected':function(evt){
                 	// handle feature selection
@@ -272,8 +273,9 @@ function(locale, conf) {
     			jQuery('.harava-add-geometry-tool').removeClass('active');
     			jQuery(this).addClass('active');
     		}
-    		
+    		    		
     		switch(id){
+    		
 				case 'harava-add-geometry-tool-point':
 					me.toggleControl('point');
 					break;
@@ -343,8 +345,11 @@ function(locale, conf) {
     	if(me._lastfeature!=null){
     		var answer = confirm(me._locale.confirmDelete);
     		if(answer){
+    			me.modifyControl.unselectFeature(me._lastfeature);
     			me._lastfeature.destroy();
     			me.toggleControl(me.currentMode);
+    			me.modifyControl.deactivate();
+    			me.modifyControl.activate();
     			me._drawLayer.redraw();
     		}
     	} else {
@@ -354,8 +359,9 @@ function(locale, conf) {
     /**
      * @method finishedDrawing
      * Finish drawing
+     * @param {Boolean} suppressEnd true to NOT not show popup
      */
-    finishedDrawing : function(){
+    finishedDrawing : function(suppressEnd){
     	var me = this;
     	
     	me.modifyControl.selectControl.unselectAll();
@@ -370,9 +376,13 @@ function(locale, conf) {
 		style.strokeWidth=2;
 		style.cursor = 'pointer';
 		currentFeature.style = style;
-		var lonlat = new OpenLayers.LonLat(currentFeature.geometry.getCentroid().x, currentFeature.geometry.getCentroid().y);
 		
-		me.showPopup(lonlat,currentFeature);
+		if(suppressEnd !== true) {
+			var lonlat = new OpenLayers.LonLat(currentFeature.geometry.getCentroid().x, currentFeature.geometry.getCentroid().y);		
+			me.showPopup(lonlat,currentFeature);
+		}
+		
+		me._suppressFeatureAdd = false;
 		
 		me._drawLayer.redraw();
     },
@@ -464,9 +474,12 @@ function(locale, conf) {
 	        jQuery('#harava-draw-popup-cancel').unbind('click');
 	        jQuery('#harava-draw-popup-cancel').bind('click',function(){
 	        	var currentFeature = null;
+	        	jQuery('.harava-add-geometry-tool').removeClass('disabled');
 	        	if(me._drawLayer!=null && me._drawLayer.features.length>0){
-		        	currentFeature = me._drawLayer.features[me._drawLayer.features.length-1];
-	    			currentFeature.destroy();
+	        		if(oldMode!='modify'){
+	        			currentFeature = me._drawLayer.features[me._drawLayer.features.length-1];
+	        			currentFeature.destroy();
+	        		}
 		    		me.hidePopup();
 		    		me.toggleControl(oldMode);
 	        	}
