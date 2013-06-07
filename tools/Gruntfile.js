@@ -46,9 +46,10 @@ module.exports = function(grunt) {
             },
             sass: {
                 files: ['../bundles/**/*.scss', '../applications/**/*.scss'],
-                tasks: ['compileAppCSS']
+                tasks: ['watchSCSS']
             }
         },
+		sass: {},
         sprite: {
             options: {
                 iconDirectoryPath: "../applications/paikkatietoikkuna.fi/full-map/icons",
@@ -114,7 +115,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
     grunt.loadNpmTasks('grunt-testacular');
     grunt.loadNpmTasks('grunt-contrib-concat');
-    //grunt.loadNpmTasks('grunt-sass');
+    grunt.loadNpmTasks('grunt-sass');
 
     // Default task.
     //    grunt.registerTask('default', 'watch testacularServer:dev');
@@ -472,9 +473,11 @@ module.exports = function(grunt) {
 		var cssPacker = require('uglifycss'),
 			parser = require('./parser.js'),
 			cssfiles = [],
-			options = this.data.json.options,
-			processedAppSetup = parser.getComponents(options.appSetupFile);
-
+			options = this.data.json.options;
+			
+		grunt.log.writeln("Getting processedAppStup with " + options.appSetupFile);
+		var processedAppSetup = parser.getComponents(options.appSetupFile);
+		grunt.log.writeln("Variables set");
 
         // internal minify CSS function
         this.minifyCSS = function(files, outputFile) {
@@ -483,8 +486,11 @@ module.exports = function(grunt) {
 			// read files to value
             for (var i = 0; i < files.length; ++i) {
                 if (!fs.existsSync(files[i])) {
-                    grunt.fail.fatal('Couldnt locate ' + files[i]);
+                    grunt.fail.fatal("Couldn't locate " + files[i]);
                 }
+				else {
+					console.log("Found file: " + files[i]);
+				}
                 var content = fs.readFileSync(files[i], 'utf8');
                 value = value + '\n' + content;
             }
