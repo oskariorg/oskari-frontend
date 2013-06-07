@@ -170,7 +170,7 @@ function() {
      *            true if marker is shown on map
      */
     setMarkerVisible : function(markerVisible) {
-        this._markerVisible = markerVisible;
+        this._markerVisible = (markerVisible === true || markerVisible === 'true');
     },
     /**
      * @method isMarkerVisible
@@ -180,7 +180,7 @@ function() {
      *            true if marker is shown on map
      */
     isMarkerVisible : function() {
-        if(this._markerVisible == true) {
+        if(this._markerVisible === true) {
             return true;
         }
         return false;
