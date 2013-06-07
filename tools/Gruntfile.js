@@ -43,12 +43,11 @@ module.exports = function(grunt) {
             test: {
                 files: ['../tests/**/*.js'],
                 tasks: ['testacularRun:dev']
+            },
+            sass: {
+                files: ['../bundles/**/*.scss', '../applications/**/*.scss'],
+                tasks: ['watchSCSS']
             }
-           // ,
-           // sass: {
-           //     files: ['../bundles/**/*.scss', '../applications/**/*.scss'],
-           //     tasks: ['watchSCSS']
-           // }
         },
 		sass: {},
         sprite: {
@@ -116,7 +115,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
     grunt.loadNpmTasks('grunt-testacular');
     grunt.loadNpmTasks('grunt-contrib-concat');
-    //grunt.loadNpmTasks('grunt-sass');
+    grunt.loadNpmTasks('grunt-sass');
 
     // Default task.
     //    grunt.registerTask('default', 'watch testacularServer:dev');
@@ -245,17 +244,17 @@ module.exports = function(grunt) {
                 "appSetupFile": config,
                 "dest": dest
             });
-            /**
+            
 			grunt.config.set("compileAppCSS." + appName + ".options", {
                 "appSetupFile": config,
                 "dest": dest
             });
-*/
+
             grunt.config.set("sprite." + appName + ".options", options);
         }
 
         // scss to css conversion
-        grunt.task.run('compileAppCSS');
+        //grunt.task.run('compileAppCSS');
 
         grunt.task.run('validate');
         grunt.task.run('copy');
