@@ -263,7 +263,7 @@ function(locale, conf) {
         jQuery('.harava-add-geometry-tool').live('click', function(){
     		var id = this.id;
         	
-        	if(jQuery(this).hasClass('disabled') || (id=='harava-add-geometry-tool-delete' && me._lastfeature==null && me._conf.popupHtml!=null)){
+        	if(jQuery(this).hasClass('disabled')){
         		return false;
         	}
         	
@@ -344,11 +344,13 @@ function(locale, conf) {
      */
     deleteSelectedFeature: function(oldMode){
     	var me = this;
+    	
     	if(me._lastfeature!=null){
     		var answer = confirm(me._locale.confirmDelete);
-    		if(answer){
-    			me.modifyControl.unselectFeature(me._lastfeature);
+    		if(answer){    			
     			me._lastfeature.destroy();
+    			me.modifyControl.selectControl.unselectAll();
+    			me._lastfeature = null;
     			me.toggleControl(oldMode);
     			me.modifyControl.deactivate();
     			me.modifyControl.activate();
