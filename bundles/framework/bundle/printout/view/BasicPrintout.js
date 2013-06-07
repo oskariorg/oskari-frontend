@@ -537,7 +537,7 @@ function(instance, localization, backendConfiguration) {
             me.mainPanel.find('input[name=geojson]').val(jQuery.base64.encode(geoJson));
         }
         if (tileData) {
-            me.mainPanel.find('input[name=tiles]').val(tiledata);
+            me.mainPanel.find('input[name=tiles]').val(tileData);
         }
 
         window.open('about:blank','map_popup_111', wopParm);
@@ -734,7 +734,7 @@ function(instance, localization, backendConfiguration) {
                     });
 
                     var legendgjs = me.instance.legendPlugin.plotLegend(title, ranges, data, legend_pos);
-                    me.instance.getSandbox().getMap().GeoJSON = legendgjs;
+                    me.instance.geoJson = legendgjs;
                 })
             }
         }
