@@ -116,4 +116,211 @@ describe.only('Test Suite for mapwfs2', function() {
         });
     });
 
+    //
+    // EVENT TESTS (mediator set stubs - no connection)
+    //
+
+    describe('layer adding', function() {
+        before(startApplication);
+        after(teardown);
+
+        it('should be activated', function() {
+            var mediator = module.getIO();
+
+            var doSpy = sinon.stub(mediator.service, 'addMapLayer', function(id, style) {
+                mediator.getWFSProperties(propertiesData);
+                mediator.getWFSFeature(featureData);
+                mediator.getWFSFeature(featureData2);
+                mediator.getWFSImage(imageData);
+                mediator.getWFSImage(imageData2);
+            });
+
+            var selectedLayers = addLayers(module, [216]); // sets "AfterMapLayerAddEvent"
+
+            waitsFor(function() {
+                return (doSpy.callCount > 0);
+            }, function() {
+
+                // TODO: test what we want .. or continue building ..
+
+                doSpy.restore();
+                done();
+            }, 'Waiting for adding a map layer', 5000);
+
+        });
+    });
+
+    describe('highlighting features', function() {
+        before(startApplication);
+        after(teardown);
+
+        it('should be activated', function() {
+            var mediator = module.getIO();
+
+            var doSpy = sinon.stub(mediator.service, 'highlightMapLayerFeatures', function(id, featureIds, keepPrevious) {
+                mediator.getWFSImage(highlightImage);
+            });
+
+
+            var event = sandbox.getEventBuilder("WFSFeaturesSelectedEvent")("params"); // TODO: params
+            sandbox.notifyAll(event);
+
+            waitsFor(function() {
+                return (doSpy.callCount > 0);
+            }, function() {
+
+                // TODO: test what we want .. or continue building ..
+
+                doSpy.restore();
+                done();
+            }, 'Waiting for highlight', 5000);
+
+
+        });
+    });
+
+    describe('moving map / setting location', function() {
+        before(startApplication);
+        after(teardown);
+
+        it('should be activated', function() {
+            var mediator = module.getIO();
+
+            var doSpy = sinon.stub(mediator.service, 'setLocation', function(srs, bbox, zoom, grid) {
+                mediator.getWFSProperties(propertiesData);
+                mediator.getWFSFeature(featureData);
+                mediator.getWFSFeature(featureData2);
+                mediator.getWFSImage(imageData);
+                mediator.getWFSImage(imageData2);
+            });
+
+            // move map "AfterMapMoveEvent"
+            sandbox.postRequestByName('MapMoveRequest', [385402, 6671502, 9]);
+
+            waitsFor(function() {
+                return (doSpy.callCount > 0);
+            }, function() {
+
+                // TODO: test what we want .. or continue building ..
+
+                doSpy.restore();
+                done();
+            }, 'Waiting for map move', 5000);
+
+
+        });
+    });
+
+
+    describe('setting map size', function() {
+        before(startApplication);
+        after(teardown);
+
+        it('should be activated', function() {
+            var mediator = module.getIO();
+
+            var doSpy = sinon.stub(mediator.service, 'setMapSize', function(width, height, grid) {
+                mediator.getWFSProperties(propertiesData);
+                mediator.getWFSFeature(featureData);
+                mediator.getWFSFeature(featureData2);
+                mediator.getWFSImage(imageData);
+                mediator.getWFSImage(imageData2);
+            });
+
+            // TODO - no caller - make an event!
+
+            waitsFor(function() {
+                return (doSpy.callCount > 0);
+            }, function() {
+
+                // TODO: test what we want .. or continue building ..
+
+                doSpy.restore();
+                done();
+            }, 'Waiting for highlighting', 5000);
+
+        });
+    });
+
+    describe('selecting feature', function() {
+        before(startApplication);
+        after(teardown);
+
+        it('should be activated', function() {
+            var mediator = module.getIO();
+
+            var doSpy = sinon.stub(mediator.service, 'setMapLayerStyle', function(id, style) {
+                mediator.getWFSImage(imageData);
+                mediator.getWFSImage(imageData2);
+            });
+
+            // TODO - no caller - make an event!
+
+            waitsFor(function() {
+                return (doSpy.callCount > 0);
+            }, function() {
+
+                // TODO: test what we want .. or continue building ..
+
+                doSpy.restore();
+                done();
+            }, 'Waiting for highlighting', 5000);
+
+        });
+    });
+
+    describe('selecting feature', function() {
+        before(startApplication);
+        after(teardown);
+
+        it('should be activated', function() {
+            var mediator = module.getIO();
+
+            var doSpy = sinon.stub(mediator.service, 'setMapClick', function(longitude, latitude, keepPrevious) {
+                mediator.getWFSMapClick(mapClickData);
+            });
+
+            // "MapClickedEvent"
+            // TODO: addLayer, click to some feature
+            point = map.getViewPortPxFromLonLat(new OpenLayers.LonLat(385491, 6671600));
+            simulateMouseClick(map, point.x, point.y);
+
+            waitsFor(function() {
+                return (doSpy.callCount > 0);
+            }, function() {
+
+                // TODO: test what we want .. or continue building ..
+
+                doSpy.restore();
+                done();
+            }, 'Waiting for highlighting', 5000);
+
+        });
+    });
+
+    describe('setting filter', function() {
+        before(startApplication);
+        after(teardown);
+
+        it('should be activated', function() {
+            var mediator = module.getIO();
+
+            var doSpy = sinon.stub(mediator.service, 'setFilter', function(geojson) {
+                mediator.getWFSFilter(filterData);
+            });
+        });
+    });
+
+    describe('setting visibility', function() {
+        before(startApplication);
+        after(teardown);
+
+        it('should be activated', function() {
+            var mediator = module.getIO();
+
+            var doSpy = sinon.stub(mediator.service, 'setMapLayerVisibility', function(id, visible) {
+                mediator.getWFSFilter(filterData);
+            });
+        });
+    });
 });
