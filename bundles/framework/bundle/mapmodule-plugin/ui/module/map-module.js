@@ -237,11 +237,13 @@ function(id, imageUrl, options) {
         this._createMap();
         // changed to resolutions based map zoom levels
         // -> calculate scales array for backward compatibility
+        var debugScales = [];
         for(var i = 0; i < this._mapResolutions.length; ++i) {
             var calculatedScale = OpenLayers.Util.getScaleFromResolution(this._mapResolutions[i], 'm');
-            calculatedScale = calculatedScale * 10000;
+            // rounding off the resolution to scale calculation
+            calculatedScale = calculatedScale * 100000000;
             calculatedScale = Math.round(calculatedScale);
-            calculatedScale = calculatedScale / 10000;
+            calculatedScale = calculatedScale / 100000000;
             this._mapScales.push(calculatedScale);
         }
 

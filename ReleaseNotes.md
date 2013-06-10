@@ -6,6 +6,8 @@
 
 Created a new category for state methods, called sandbox-state-methods. Added a function `resetState` which sets the application state to initial state which was provided by the GetAppSetup action route at  application startup.
 
+domain/map no longer rounds coordinates with Math.floor()
+
 ### usagetracker bundle
 
 Configurable event-based usage tracker. New bundle based on statehandler.
@@ -16,17 +18,29 @@ A new event `Printout.PrintableContentEvent` which can be used to send additiona
 
 ### mapmodule-plugin/mapfull/publisher bundles
 
-Mapmodule now has a method to notify openlayers and internal datamodels that map size has changed: updateSize(). Mapfull and publisher changed to use it instead of handling it on their own.
+Mapmodule now has a method to notify openlayers and internal datamodels that map size has changed: updateSize(). Mapfull and publisher changed to use it instead of handling it on their own. This ensures the map domain in sandbox is up-to-date and functionalities depending on it (like GFI) work correctly.
+
+MapClickEvent now rounds clicked pixel coordinates so even if browser zoom is used, it returns integer values for pixels.
 
 ### mapmodule plugins zoombar, panbuttons and bundles coordinatedisplay and feature
 
 Reverted plugins placement change from 1.10 so these are no longer placed inside openlayers container div with fixed position
 
 ### statsgrid bundle
-municipalities are now grouped and there are statistical variables added to the header row. CSV download button created in the frontend.
+
+Municipalities are now grouped and there are statistical variables added to the header row. CSV download button created in the frontend.
+
+### mapstats bundle
+
+LayerPlugin now disables hover/highlight functionality if a StatsLayer is not added/visible on the map
 
 ### mapanalysis bundle
-dataparser for analysislayer
+
+Refined ModelBuilder for analysislayer
+
+### publisher bundle
+
+Panbuttons is now an optional tool for publisher
 
 ## 1.10.1
 
