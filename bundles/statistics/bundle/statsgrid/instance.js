@@ -111,13 +111,7 @@ function() {
             }
         },
         'AfterMapLayerRemoveEvent': function(event) {
-            var layer = event.getMapLayer(),
-                layerId = layer.getId(),
-                view = this.plugins['Oskari.userinterface.View'];
-
-            if (layerId === view._layer.getId()) {
-                view.prepareMode(false);
-            }
+            this._afterMapLayerRemoveEvent(event);
         }
 	},
     /**
@@ -270,6 +264,24 @@ function() {
         this.state.colors = params.colors;
         // Send data to printout bundle
         this._createPrintParams(layer);
+    },
+
+    /**
+     * Exits the stats mode after the stats layer gets removed.
+     *
+     * @method _afterMapLayerRemoveEvent
+     * @private
+     * @param {Object} event
+     */
+    _afterMapLayerRemoveEvent: function(event) {
+        var layer = event.getMapLayer(),
+            layerId = layer.getId(),
+            view = this.plugins['Oskari.userinterface.View'];
+
+        // Exit the mode
+        if (view._layer && (layerId === view._layer.getId())) {
+            view.prepareMode(false);
+        }
     }
 }, {
 	"extend" : ["Oskari.userinterface.extension.DefaultExtension"]
