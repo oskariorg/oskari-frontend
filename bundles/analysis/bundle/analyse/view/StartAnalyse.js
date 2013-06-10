@@ -96,7 +96,7 @@ function(instance, localization) {
         "title_columns" : '<div class="analyse_title_columns analyse_output_cont"><div class="columns_title_label"></div></div>',
         "title_extra" : '<div class="analyse_title_extra analyse_output_cont"><div class="extra_title_label"></div></div>',
         "icon_colors" : '<div class="icon-menu"></div>',
-        "option" : '<div class="analyse_option_cont analyse_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>',
+        "option" : '<div class="analyse_option_cont analyse_settings_cont">' + '<input type="radio" name="selectedlayer" />' + '<label></label></div>',
         "methodOptionTool" : '<div class="tool ">' + '<input type="radio" name="method" />' + '<label></label></div>'
 
     },
@@ -512,7 +512,7 @@ function(instance, localization) {
         var ii = 0;
         // request updates for map tiles
         for (var i = 0; i < layers.length; i++) {
-            if (layers[i].isLayerOfType('WFS')) {
+            if (layers[i].isLayerOfType('WFS') || layers[i].isLayerOfType('ANALYSIS')) {
                 var option = {
                     id : me.id_prefix+'layer_'+layers[i].getId(),
                     label : layers[i].getName()
@@ -825,112 +825,90 @@ function(instance, localization) {
         var container = this.mainPanel;
         var sandbox = this.instance.getSandbox();
 
+        // Get the name of the method
         var selectedMethod = container.find('input[name=method]:checked').val();
+        var methodName = selectedMethod && selectedMethod.replace(this.id_prefix, '');
+
+        // Get the feature fields
+        // TODO: in case of 'select', parse given array.
         var selectedColumnmode = container.find('input[name=params]:checked').val();
+        var fields = selectedColumnmode && selectedColumnmode.replace(this.id_prefix, '');
+
         var title = container.find('.settings_name_field').val();
+        var layer = this._getSelectedMapLayer();
 
-        var selections = {};
-        if (selectedMethod == this.id_prefix+'buffer') {
-            var size = container.find('.settings_buffer_field').val();
-            selections = {
-                analyseName : title,
-                method : selectedMethod,
-                buffer_size : size,
-                column_mode : selectedColumnmode,
-                columns : {}
+        // Get method specific selections
+        var selections = this._getMethodSelections(layer, {
+            name: title,
+            method: methodName,
+            fields: fields,
+            layerId: layer.getId(),
+            layerType: layer.getLayerType()
+        });
 
-            };
-        } else if (selectedMethod == this.id_prefix+'aggregate') {
-            var selectedAggre = container.find('input[name=aggre]:checked').val();
-            selections = {
-                analyseName : title,
-                method : selectedMethod,
-                aggre_function : selectedAggre,
-                column_mode : selectedColumnmode,
-                columns : {}
-
-            };
-        } else if (selectedMethod == this.id_prefix+'union') {
-            selections = {
-                analyseName : title,
-                method : selectedMethod,
-                column_mode : selectedColumnmode,
-                columns : {}
-
-            };
-        } else if (selectedMethod == this.id_prefix+'intersect') {
-            var sectingLayer = container.find('input[name=intersect]:checked').val();
-            var spatialOperator = container.find('input[name=spatial]:checked').val();
-            selections = {
-                analyseName : title,
-                method : selectedMethod,
-                intersector : sectingLayer,
-                spatial_operator : spatialOperator,
-                column_mode : selectedColumnmode,
-                columns : {}
-
-            };
-        }
         // Styles
-        selections["styles"] = this.getStyleValues();
-        // Checked data layers
-        selections["layers"] = this._selectedLayers();
+        selections["style"] = this.getStyleValues();
 
         return selections;
-
     },
 
     /**
-     * @method _checkSelections
+     * Adds method specific parameters to selections
+     *
+     * @method _getMethodSelections
      * @private
-     * Check analyse selection parameters and returns true, if OK
-     * @return {boolean}
+     * @param {Object} layer an Oskari layer
+     * @param {Object} defaultSelections the defaults, such as name etc.
+     * @return {Object} selections for a given method
      */
-    _checkSelections : function(selections) {
+    _getMethodSelections: function(layer, defaultSelections) {
+        var container = this.mainPanel;
+        var methodName = defaultSelections.method;
 
-        var error = "Invalid parameter setup: ";
-        var check = true;
-        if (!selections) {
-            alert(error + 'No parameters');
-            return false;
-        }
-        var selectedMethod = selections.method;
-        if (selectedMethod == this.id_prefix+'buffer') {
-            if (selections.buffer_size == '') {
-                alert(error + 'invalid buffer size');
-                return false;
-            } else if (isNaN(selections.buffer_size)) {
-                alert(error + 'Use number for buffer size');
-                return false;
-            } else if (Number(selections.buffer_size) > -1 && Number(selections.buffer_size) < 1) {
-                alert(error + 'invalid buffer size, must be greater than 1 m');
-                return false;
+        // buffer
+        var bufferSize = container.find('.settings_buffer_field').val();
+        // aggregate
+        var aggregateFunction = container.find('input[name=aggre]:checked').val();
+        aggregateFunction = aggregateFunction && aggregateFunction.replace(this.id_prefix, '');
+        // union
+        var unionLayerId = 'other_layer_id'; // TODO: get this from selection
+        // intersect
+        var intersectLayerId = container.find('input[name=intersect]:checked').val();
+        intersectLayerId = intersectLayerId && intersectLayerId.replace((this.id_prefix + 'layer_'), '');
+        var spatialOperator = container.find('input[name=spatial]:checked').val();
+        spatialOperator = spatialOperator && spatialOperator.replace(this.id_prefix, '');
+
+        var methodSelections = {
+            'buffer': {
+                methodParams: {
+                    distance: bufferSize
+                },
+                opacity: layer.getOpacity()
+            },
+            'aggregate': {
+                methodParams: {
+                    'function': aggregateFunction // TODO: param name?
+                }
+            },
+            'union': {
+                methodParams: {
+                    layerId: unionLayerId
+                }
+            },
+            'intersect': {
+                methodParams: {
+                    layerId: intersectLayerId,
+                    operator: spatialOperator // TODO: param name?
+                }
             }
+        };
 
-        } else if (selectedMethod == this.id_prefix+'aggregate') {
-
-        } else if (selectedMethod == this.id_prefix+'union') {
-
-        } else if (selectedMethod == this.id_prefix+'intersect') {
-
-            if (!selections.intersector) {
-                alert(error + 'Intersecting layer is not selected');
-                return false;
-            } else if (selections.layers.length == 1 && selections.intersector == selections.layers[0].id) {
-                alert(error + 'No intersections to itself');
-                return false;
-            }
-
+        for (var s in methodSelections[methodName]) {
+            defaultSelections[s] = methodSelections[methodName][s];
         }
-
-        if (selections.layers.length < 1) {
-            alert(error + 'Too few layers in selection');
-            return false;
-        }
-
-        return true;
-
+        return defaultSelections;
     },
+
     /**
      * @method _analyseMap
      * @private
@@ -941,13 +919,59 @@ function(instance, localization) {
         var me = this;
         var sandbox = this.instance.getSandbox();
         var url = sandbox.getAjaxUrl();
-
         var selections = me._gatherSelections();
 
-        //Check parameters
-        if (me._checkSelections(selections))
-            alert('Continue --> Parameters: ' + JSON.stringify(selections));
+        // Check that parameters are a-okay
+        if (me._checkSelections(selections)) {
+            // Send the data for analysis to the backend
+            me.instance.analyseService.sendAnalyseData(JSON.stringify(selections),
+                // Success callback
+                function(response) {
+                    if (response) {
+                        me._handleAnalyseMapResponse(response);
+                    }
+                },
+                // Error callback
+                function(jqXHR, textStatus, errorThrown) {
+                    me.instance.showMessage(me.loc.error.title, me.loc.error.saveFailed);
+                }
+            );
+        }
 
+    },
+
+    /**
+     * Creates the map layer from the JSON given as a param
+     * and adds it to the map and subsequently to be used in further analysis.
+     *
+     * @method _handleAnalyseMapResponse
+     * @private
+     * @param {JSON} analyseJson Layer JSON returned by server.
+     */
+    _handleAnalyseMapResponse: function(analyseJson) {
+        // TODO: some error checking
+        var mapLayerService,
+            mapLayer,
+            requestBuilder,
+            request;
+        
+        mapLayerService = this.instance.mapLayerService;
+        // Prefix the id to avoid collisions
+        // FIXME: temporary, server should respond with an actual
+        // id so that further analysis with this layer is possible.
+        analyseJson.id = this.id_prefix + analyseJson.id;
+        // Create the layer model
+        mapLayer = mapLayerService.createMapLayer(analyseJson);
+        // Add the layer to the map layer service
+        mapLayerService.addLayer(mapLayer);
+
+        // Request the layer to be added to the map.
+        // instance.js handles things from here on.
+        requestBuilder = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest');
+        if (requestBuilder) {
+            request = requestBuilder(mapLayer.getId());
+            this.instance.sandbox.request(this.instance, request);
+        }
     },
 
     /**
@@ -971,6 +995,7 @@ function(instance, localization) {
      * @param {int} layer_id  layer id for to retreave layer object
      */
     _infoRequest : function(tools, layer_id) {
+        layer_id = layer_id.replace(this.id_prefix + 'layer_', '');
         var layer = this.instance.getSandbox().findMapLayerFromSelectedMapLayers(layer_id);
         var me = this;
         tools.find('div.layer-info').bind('click', function() {
@@ -1013,6 +1038,23 @@ function(instance, localization) {
             alert('TODO: request to filter actions - layer: ' + layer_id);
         });
     },
+
+    /**
+     * Returns the Oskari layer object for currently selected layer
+     *
+     * @method _getSelectedMapLayer
+     * @private
+     * @return {Object/null} an Oskari layer or null if no layer selected
+     */
+    _getSelectedMapLayer: function() {
+        var selectedLayer = this._selectedLayers();
+        selectedLayer = selectedLayer && selectedLayer[0];
+        selectedLayer = selectedLayer && selectedLayer.id;
+        selectedLayer = selectedLayer && selectedLayer.replace((this.id_prefix + 'layer_'), '');
+
+        return this.instance.getSandbox().findMapLayerFromSelectedMapLayers(selectedLayer);
+    },
+
     /**
      * @method destroy
      * Destroyes/removes this view from the screen.

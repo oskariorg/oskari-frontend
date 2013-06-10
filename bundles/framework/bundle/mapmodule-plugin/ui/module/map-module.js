@@ -876,8 +876,10 @@ function(id, imageUrl, options) {
         mapVO.setMaxExtent(this._map.getMaxExtent());
 
         mapVO.setBbox(this._map.calculateBounds());
+        
         // TODO: not sure if this is supposed to work like this
-        mapVO.setMarkerVisible(this._hasMarkers());
+        // this resets the marker set by url control parameter so dont do it
+        //mapVO.setMarkerVisible(this._hasMarkers());
     },
     /**
      * @method getMapScales

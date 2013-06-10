@@ -46,9 +46,10 @@ module.exports = function(grunt) {
             },
             sass: {
                 files: ['../bundles/**/*.scss', '../applications/**/*.scss'],
-                tasks: ['compileAppCSS']
+                tasks: ['watchSCSS']
             }
         },
+		sass: {},
         sprite: {
             options: {
                 iconDirectoryPath: "../applications/paikkatietoikkuna.fi/full-map/icons",
@@ -114,7 +115,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
     grunt.loadNpmTasks('grunt-testacular');
     grunt.loadNpmTasks('grunt-contrib-concat');
-    //grunt.loadNpmTasks('grunt-sass');
+    grunt.loadNpmTasks('grunt-sass');
 
     // Default task.
     //    grunt.registerTask('default', 'watch testacularServer:dev');
@@ -243,14 +244,22 @@ module.exports = function(grunt) {
                 "appSetupFile": config,
                 "dest": dest
             });
+            
 			grunt.config.set("compileAppCSS." + appName + ".options", {
                 "appSetupFile": config,
                 "dest": dest
             });
+
             grunt.config.set("sprite." + appName + ".options", options);
         }
 
         // scss to css conversion
+        // FIXME: removed so we can run release on Jenkins
+        /*
+        // ERROR was:
+        [4mRunning "sass:minifierAppSetup" (sass) task
+        [31mFatal error: Error writing packed CSS: Error: ENOENT, open '../dist/1.10/full-map/oskari.min.css'
+        */
         grunt.task.run('compileAppCSS');
 
         grunt.task.run('validate');
@@ -470,34 +479,58 @@ module.exports = function(grunt) {
 		grunt.log.writeln("Concatenating and minifying css");
 
 		var cssPacker = require('uglifycss'),
-			parser = require('./parser.js'),
-			cssfiles = [],
-			options = this.data.json.options,
-			processedAppSetup = parser.getComponents(options.appSetupFile);
+		parser = require('./parser.js'),
+		cssfiles = [],
+		options = this.data.json.options;
 
+		grunt.log.writeln("Getting processedAppStup with " + options.appSetupFile);
+		var processedAppSetup = parser.getComponents(options.appSetupFile);
+		grunt.log.writeln("Variables set");
 
-        // internal minify CSS function
-        this.minifyCSS = function(files, outputFile) {
+		// internal minify CSS function
+		this.minifyCSS = function(files, outputFile) {
 
-            var value = '';
+			var value = '';
 			// read files to value
-            for (var i = 0; i < files.length; ++i) {
-                if (!fs.existsSync(files[i])) {
-                    grunt.fail.fatal('Couldnt locate ' + files[i]);
-                }
-                var content = fs.readFileSync(files[i], 'utf8');
-                value = value + '\n' + content;
-            }
+			for (var i = 0; i < files.length; ++i) {
+				if (!fs.existsSync(files[i])) {
+					grunt.fail.fatal("Couldn't locate " + files[i]);
+				}
+				else {
+					console.log("Found file: " + files[i]);
+				}
+				var content = fs.readFileSync(files[i], 'utf8');
+				value = value + '\n' + content;
+			}
 			// minify value
-            var packed = cssPacker.processString(value);
+			var packed = cssPacker.processString(value);
 
 			// write value to outputfile
-            fs.writeFile(outputFile, packed, function(err) {
-                if (err) {
-                    grunt.fail.fatal('Error writing packed CSS: ' + err);
-                }
-            });
-        }
+			// first check that the directory exists...
+			// get directory
+			var fileDir = outputFile.substring(0, outputFile.lastIndexOf('/')).split("/");
+			console.log(fileDir);
+			var createPath = "";
+			for (var i = 0; i < fileDir.length; i++) {
+				if (createPath.length) {
+					createPath += "/";
+				}
+				createPath += fileDir[i];
+				console.log("Trying to create path " + createPath);
+				fs.mkdir(createPath, function(err){
+					if(!err || (err && err.code === 'EEXIST')){
+						//do something with contents
+					} else {
+						grunt.fail.fatal("Couldn't create directory " + createPath, err);
+					}
+				});
+			}
+			fs.writeFile(outputFile, packed, function(err) {
+				if (err) {
+					grunt.fail.fatal('Error writing packed CSS: ' + err);
+				}
+			});
+		}
 
 		// gather css files from bundles' minifierAppSetups
 		for (var i = 0; i < processedAppSetup.length; ++i) {

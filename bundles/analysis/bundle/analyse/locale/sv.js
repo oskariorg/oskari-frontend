@@ -111,10 +111,10 @@ Oskari.registerLocalization({
             "help" : "Anvisning",
             "error" : {
                 "title" : "Fel",
-                "size" : "Fel i zon storlek",
+                "bufferSize" : "Fel i zon storlek",
                 "nohelp" : "ingen anvisning",
                 "saveFailed" : "Fel i analys lagring. Försök senare igen.",
-                "IllegalCharacters" : "ingen bokstaver - använda sifror"
+                "illegalCharacters" : "ingen bokstaver - använda sifror"
             }
 
         },
