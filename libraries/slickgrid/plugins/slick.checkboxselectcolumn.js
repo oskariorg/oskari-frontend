@@ -82,6 +82,9 @@
         }
 
         toggleRowSelection(args.row);
+
+_self.onSelectRowClicked.notify(args, e, _self);
+
         e.stopPropagation();
         e.stopImmediatePropagation();
       }
@@ -146,6 +149,8 @@
     $.extend(this, {
       "init": init,
       "destroy": destroy,
+
+      "onSelectRowClicked": new Slick.Event(),
 
       "getColumnDefinition": getColumnDefinition
     });

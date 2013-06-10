@@ -285,8 +285,17 @@ function(config, locale) {
         // clear and append municipal-grid container
         container.find('.municipal-grid').remove();
         container.append(gridContainer);
-        // add one column
-        var columns = [{
+        // add initial columns
+
+
+var checkboxSelector = new Slick.CheckboxSelectColumn({
+    cssClass: "slick-cell-checkboxsel"
+});
+//columns.push(checkboxSelector.getColumnDefinition());
+
+
+        var columns = [checkboxSelector.getColumnDefinition(),
+        {
             id : "municipality",
             name : this._locale['sotka'].municipality,
             field : "municipality",
@@ -296,7 +305,6 @@ function(config, locale) {
             name : this._locale['sotka'].code,
             field : "code"
         }];
-
         // options
         var options = {
             enableCellNavigation : true,
@@ -316,7 +324,8 @@ function(config, locale) {
                 data[rowId] = {
                     id : indicData.id,
                     code : indicData.code,
-                    municipality : indicData.title[Oskari.getLang()]
+                    municipality : indicData.title[Oskari.getLang()],
+                    sel : true
                 }
                 rowId++;
             }
@@ -335,14 +344,15 @@ function(config, locale) {
             grid.render();
         });
 
-        // To use aggrefators we need to define a group
+        // To use aggregators we need to define a group
         dataView.setGrouping({
-            getter : "municipalities",
+            getter : "sel",
             formatter: function (g) {
                 return "<span style='color:green'>" +me._locale['municipality']+" (" + g.count + ")</span>";
             },
             aggregateCollapsed: false
         });
+
 
         // Grid
         grid = new Slick.Grid(gridContainer, dataView, columns, options);
@@ -397,6 +407,15 @@ function(config, locale) {
         grid.onColumnsReordered.subscribe(function(e, args){
             me.dataView.refresh();
         })
+
+grid.setSelectionModel(new Slick.RowSelectionModel({selectActiveRow: false}));
+grid.registerPlugin(checkboxSelector);
+checkboxSelector.onSelectRowClicked.subscribe(function(e, args){
+//    var rowargs.row
+//    args.grid.getData().refresh();
+debugger;
+
+});
 
         me._initHeaderPlugin(columns, grid);
 
@@ -970,7 +989,8 @@ function(config, locale) {
      * @param curCol  Selected indicator data column
      */
     sendStatsData : function(curCol) {
-        if (curCol == null || curCol.field == 'municipality') {
+//        if (curCol == null || curCol.field == 'municipality' || curCol.field == '_checkbox_selector') {
+        if (curCol == null || curCol.field.indexOf('indicator') < 0) {
             // Not a valid current column nor a data value column
             return;
         }
@@ -1157,7 +1177,7 @@ function(config, locale) {
         var j = 0;
         for(var i = 0; i < columns.length; i++){
             var columnId = columns[i].id;
-            if((columnId == 'id' || columnId == 'municipality' || columnId == 'code')) {
+            if((columnId == 'id' || columnId == 'municipality' || columnId == 'code' || columnId == '_checkbox_selector')) {
                 newColumnDef[j] = columns[i];
                 j++;
             }
@@ -1325,10 +1345,15 @@ function(config, locale) {
     _initHeaderPlugin: function(columns, grid) {
         var me = this;
         // lets create an empty container for menu items
-        columns[0].header = {
-          menu: {
-            items: []
-          }
+        for (var i = 0; i < columns.length; i++) {
+            var column = columns[i];
+            if(column.id == 'municipality') {
+                column.header = {
+                  menu: {
+                    items: []
+                  }
+                };
+            }
         };
 
         // new header menu plugin
