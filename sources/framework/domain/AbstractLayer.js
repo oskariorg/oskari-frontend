@@ -474,17 +474,18 @@ function(params, options) {
 	 * If style is not found, assigns an empty #Oskari.mapframework.domain.Style to #getCurrentStyle
 	 */
 	selectStyle : function(styleName) {
+		var me = this;
 		var style = null;
 		// Layer have styles
-		if (this._styles.length > 0) {
+		if (me._styles.length > 0) {
 			// There is default style defined
 			if (styleName !== "") {
-				for (var i = 0; i < this._styles.length; i++) {
-					style = this._styles[i];
+				for (var i = 0; i < me._styles.length; i++) {
+					style = me._styles[i];
 					if (style.getName() == styleName) {
-						this._currentStyle = style;
+						me._currentStyle = style;
 						if (style.getLegend() != "") {
-							this._legendImage = style.getLegend();
+							me._legendImage = style.getLegend();
 						}
 						return;
 					}
@@ -498,8 +499,8 @@ function(params, options) {
 				// founded style to default
 				// Because of layer style error this if clause
 				// must compare at there is more than one style.
-				if (this._styles.length > 1) {
-					this._currentStyle = this._styles[0];
+				if (me._styles.length > 1) {
+					me._currentStyle = me._styles[0];
 				}
 				// Layer have not styles, add empty style to
 				// default
@@ -508,7 +509,7 @@ function(params, options) {
 					style.setName("");
 					style.setTitle("");
 					style.setLegend("");
-					this._currentStyle = style;
+					me._currentStyle = style;
 				}
 
 				return;
@@ -520,7 +521,7 @@ function(params, options) {
 			style.setName("");
 			style.setTitle("");
 			style.setLegend("");
-			this._currentStyle = style;
+			me._currentStyle = style;
 			return;
 		}
 	},
@@ -673,6 +674,7 @@ function(params, options) {
 	 * @return {Boolean} true if this is a base layer (=has sublayers)
 	 */
 	isBaseLayer : function() {
+		// TODO check if this really works
 		return this._type === "BASE_LAYER";
 	},
 	/**

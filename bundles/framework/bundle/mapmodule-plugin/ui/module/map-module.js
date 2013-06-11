@@ -239,9 +239,10 @@ function(id, imageUrl, options) {
         // -> calculate scales array for backward compatibility
         for(var i = 0; i < this._mapResolutions.length; ++i) {
             var calculatedScale = OpenLayers.Util.getScaleFromResolution(this._mapResolutions[i], 'm');
-            calculatedScale = calculatedScale * 10000;
+            // rounding off the resolution to scale calculation
+            calculatedScale = calculatedScale * 100000000;
             calculatedScale = Math.round(calculatedScale);
-            calculatedScale = calculatedScale / 10000;
+            calculatedScale = calculatedScale / 100000000;
             this._mapScales.push(calculatedScale);
         }
 
@@ -840,6 +841,14 @@ function(id, imageUrl, options) {
         sandbox.notifyAll(event);
     },
     /**
+     * @method updateSize
+     * Notifies OpenLayers that the map size has changed and updates the size in sandbox map domain object.
+     */
+    updateSize : function() {
+        this.getMap().updateSize();
+        this._updateDomain();
+    },
+    /**
      * @method _updateDomain
      * @private
      * Updates the sandbox map domain object with the current map properties.
@@ -868,8 +877,10 @@ function(id, imageUrl, options) {
         mapVO.setMaxExtent(this._map.getMaxExtent());
 
         mapVO.setBbox(this._map.calculateBounds());
+        
         // TODO: not sure if this is supposed to work like this
-        mapVO.setMarkerVisible(this._hasMarkers());
+        // this resets the marker set by url control parameter so dont do it
+        //mapVO.setMarkerVisible(this._hasMarkers());
     },
     /**
      * @method getMapScales

@@ -160,6 +160,31 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
             });
             gridPlugin.getSotkaIndicatorData(statsView.getEl(), 4, 'total', 2011);
         });
+
+        it('should send parameters to printout bundle', function(done) {
+            var self = this;
+
+            self.getName = function() {
+                return "Test.StatsGrid._createPrintParams";
+            };
+            self.onEvent = function(event) {
+                var eventLayer = event.getLayer();
+                var eventData = event.getTileData();
+
+                expect(eventLayer).to.be.ok();
+                expect(eventData.length).to.be(1);
+                expect(eventData[0].bbox).to.be.ok();
+                expect(eventData[0].url).to.be.ok();
+
+                sandbox.unregisterFromEventByName(self, 'Printout.PrintableContentEvent');
+                done();
+            };
+
+            sandbox._listeners = {};
+            sandbox.registerForEventByName(self, 'Printout.PrintableContentEvent');
+
+            statsModule._createPrintParams(testLayer);
+        });
     });
 
 // TODO write test to:

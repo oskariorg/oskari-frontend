@@ -16,7 +16,7 @@ This plugin provides view of the from GetFeatureInfo and similar results what ar
 
 ## Bundle configuration
 
-Handling infoBox in the plugin is made configurable. Makes it possible to request infoBox with additional information later on.
+Handling infoBox and ignoredLayerTypes in the plugin are made configurable. infoBox variable makes it possible to request infoBox with additional information later on. ignoredLayerTypes is an array of layer types that are ignored in the requests. This functionality is made because of new mapwfs2 which controls WFS's GFI data.
 
 ## Requests the plugin handles
 

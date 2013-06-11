@@ -37,21 +37,12 @@ jQuery(document).ready(function() {
     }
 
     // populate url with possible control parameters
-    ajaxUrl += getAdditionalParam('zoomLevel');
-    ajaxUrl += getAdditionalParam('coord');
-    ajaxUrl += getAdditionalParam('mapLayers');
-    ajaxUrl += getAdditionalParam('oldId');
-    ajaxUrl += getAdditionalParam('viewId');
-
-    ajaxUrl += getAdditionalParam('isCenterMarker');
-    ajaxUrl += getAdditionalParam('address')
-    ajaxUrl += getAdditionalParam('showGetFeatureInfo');
-    ajaxUrl += getAdditionalParam('nationalCadastralReference');
-
-    ajaxUrl += getAdditionalParam('nationalCadastralReferenceHighlight');
-    ajaxUrl += getAdditionalParam('wfsFeature');
-    ajaxUrl += getAdditionalParam('wfsHighlightLayer');
-
+    var getAppSetupParams = {};
+    if(typeof window.controlParams === 'object') {
+        for(var key in window.controlParams) {
+            getAppSetupParams[key] = window.controlParams[key];
+        }
+    }
 
     if (!language) {
         // default to finnish
@@ -82,32 +73,14 @@ jQuery(document).ready(function() {
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
         app.startApplication(function(startupInfos) {
-          var instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
-          if (cb) {
-              cb(instance);
-          }
-        });
-    }
-
-    // TODO: handle cookie data in backend
-    // === Look for old mapfull state - cookie set in SaveViewPlugin.js   ===
-    var cookiename = "mymapview1";
-    var cookieviewdata = "";
-    if (document.cookie.length > 0) {
-        var cookieStart = document.cookie.indexOf(cookiename + "=");
-        if (cookieStart != -1) {
-            cookieStart += cookiename.length + 1;
-            var cookieEnd = document.cookie.indexOf(";", cookieStart);
-            if (cookieEnd == -1) {
-                cookieEnd = document.cookie.length;
+            var instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
+            if (cb) {
+                cb(instance);
             }
-            cookieviewdata = document.cookie.substring(cookieStart, cookieEnd);
+        });
 
-        }
     }
-    var data = {
-        viewData: cookieviewdata
-    };
+
     jQuery.ajax({
         type: 'POST',
         dataType: 'json',
@@ -117,7 +90,7 @@ jQuery(document).ready(function() {
             }
         },
         url: ajaxUrl + 'action_route=GetAppSetup',
-        data: data,
+        data: getAppSetupParams,
         success: function(app) {
             if (app.startupSequence && app.configuration) {
               var appSetup = {

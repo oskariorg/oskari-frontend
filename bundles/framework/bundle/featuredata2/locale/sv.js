@@ -1,6 +1,6 @@
 Oskari.registerLocalization({
     "lang": "sv",
-    "key": "FeatureData",
+    "key": "FeatureData2",
     "value": {
         "title": "Objektuppgifter",
         "desc": "",

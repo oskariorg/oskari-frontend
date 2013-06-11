@@ -1,10 +1,77 @@
 # Release Notes
 
+## 1.11
+
+### core/sandbox
+
+Created a new category for state methods, called sandbox-state-methods. Added a function `resetState` which sets the application state to initial state which was provided by the GetAppSetup action route at  application startup.
+
+domain/map no longer rounds coordinates with Math.floor()
+
+### usagetracker bundle
+
+Configurable event-based usage tracker. New bundle based on statehandler.
+
+### printout bundle
+
+A new event `Printout.PrintableContentEvent` which can be used to send additional data to the printout bundle. Event accepts contentId (to identify each GeoJSON chunk), layer (Oskari layer), tile data (an array of {bbox: [l,b,r,t], url: 'image url'} objects) and GeoJSON as arguments.
+
+### mapmodule-plugin/mapfull/publisher bundles
+
+Mapmodule now has a method to notify openlayers and internal datamodels that map size has changed: updateSize(). Mapfull and publisher changed to use it instead of handling it on their own. This ensures the map domain in sandbox is up-to-date and functionalities depending on it (like GFI) work correctly.
+
+MapClickEvent now rounds clicked pixel coordinates so even if browser zoom is used, it returns integer values for pixels.
+
+### mapmodule plugins zoombar, panbuttons and bundles coordinatedisplay and feature
+
+Reverted plugins placement change from 1.10 so these are no longer placed inside openlayers container div with fixed position
+
+### mapmodule plugin/wmslayerplugin
+
+If min and max scale are not defined, scales are not specified for layer. There is a bug on scale handling when resolution is "low enough". This can be used as a workaround for the time being.
+
+### statsgrid bundle
+
+Municipalities are now grouped and there are statistical variables added to the header row. CSV download button created in the frontend.
+
+### mapstats bundle
+
+LayerPlugin now disables hover/highlight functionality if a StatsLayer is not added/visible on the map
+
+### mapanalysis bundle
+
+Refined ModelBuilder for analysislayer
+
+### publisher bundle
+
+Panbuttons is now an optional tool for publisher
+
+## 1.10.1
+
+### applications/paikkatietoikkuna.fi/published-map
+
+minifierAppsetup.json fixed to use openlayers-full-map instead of openlayers-published-map since it was missing some OpenLayers components for indexMap.
+
+## 1.10
+
+### framework/publisher bundle
+if there is statslayer to be published, div.oskariui-left will be reserved for showing data/grid.
+
+### statistics/publishedgrid bundle
+This is created for published maps so that it shows also grid if there is one.
+
+### statistics/statsgrid bundle
+Indicators which do not have data for all municipalities now show the missing values as blanks in the grid and on the map. This doesn't affect sorting, the blank values are always in the bottom when sorted.
+
+### mapmodule plugins zoombar, panbuttons and bundles coordinatedisplay and feature
+
+Plugins are now placed inside openlayers container div so that infobox is placed above them
+
 ## 1.9
 
-### framework bundle
+### printout bundle
 
-Printout/BasicPrintout: geojson extension added for background print service 
+geojson extension added for background print service 
 
 ### toolbar bundle
 
@@ -13,6 +80,10 @@ Added a way to disable a button by default from configuration.
 ### promote bundle
 
 Promote login and registering by replacing the real bundle for guest users. Configurable tile, flyout and toolbar buttons.
+
+### myplaces bundle
+
+Fixed isDefault parameter to be included with the category when saving.
 
 ## 1.8
 

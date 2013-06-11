@@ -44,6 +44,7 @@ function() {
 
         var locale = me.getLocalization();
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+        this.mapModule = mapModule;
 
         // create the StatisticsService for handling ajax calls
         // and common functionality.
@@ -55,7 +56,16 @@ function() {
         // - the indicator selection UI (unless 'published' param in the conf is true)
         // - the grid.
         var gridConf = {
-            'state': me.getState()
+            'state': me.getState(),
+            "statistics" : [
+                {"id" : "avg", "visible": true},
+                {"id" : "max", "visible": true},
+                {"id" : "min", "visible": true},
+                {"id" : "mde", "visible": true},
+                {"id" : "mdn", "visible": true},
+                {"id" : "std", "visible": true},
+                {"id" : "sum", "visible": true}
+            ]
         }
         var gridPlugin = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.plugin.ManageStatsPlugin', gridConf, locale);
         mapModule.registerPlugin(gridPlugin);
@@ -85,8 +95,29 @@ function() {
 			var isShown = event.getViewState() != "close";
             view.prepareMode(isShown, null, true);
 		},
+        /**
+         * @method MapStats.StatsVisualizationChangeEvent
+         */
         'MapStats.StatsVisualizationChangeEvent' : function(event) {
             this._afterStatsVisualizationChangeEvent(event);
+        },
+        /**
+         * @method AfterMapMoveEvent
+         */
+        'AfterMapMoveEvent': function(event) {
+            var view = this.plugins['Oskari.userinterface.View'];
+            if (view.isVisible && view._layer) {
+                this._createPrintParams(view._layer);
+            }
+        },
+        'AfterMapLayerRemoveEvent': function(event) {
+            var layer = event.getMapLayer(),
+                layerId = layer.getId(),
+                view = this.plugins['Oskari.userinterface.View'];
+
+            if (view._layer && layerId === view._layer.getId()) {
+                view.prepareMode(false);
+            }
         }
 	},
     /**
@@ -132,6 +163,11 @@ function() {
      * @return {String} statsgrid state
      */
     getStateParameters : function() {
+        // If the state is null or an empty object, nothing to do here!
+        if (!this.state || jQuery.isEmptyObject(this.state)) {
+            return null;
+        }
+
         var i = null,
             ilen = null,
             ilast = null,
@@ -169,13 +205,71 @@ function() {
                 indicatorValues += indicatorSeparator;
             }
         }
-        return statsgridState + stateValues + "-" + indicatorValues;
+
+        if (stateValues && indicatorValues) {
+            return statsgridState + stateValues + "-" + indicatorValues;
+        } else {
+            return null;
+        }
     },
+
+    /**
+     * Creates parameters for printout bundle and sends an event to it.
+     * Params include the BBOX and the image url of the layer with current
+     * visualization parameters.
+     *
+     * @method _createPrintParams
+     * @private
+     * @param {Object} layer
+     */
+    _createPrintParams: function(layer) {
+        var oLayer = this.mapModule.getOLMapLayers(layer.getId())[0],
+            data = [{
+                // The max extent of the layer
+                bbox: oLayer.maxExtent.toArray(),
+                // URL of the image with current viewport
+                // bounds and all the original parameters
+                url: oLayer.getURL(oLayer.getExtent())
+            }],
+            retainEvent,
+            eventBuilder;
+
+        // If the event is already defined, just update the data.
+        if (this.printEvent) {
+            retainEvent = true;
+            this.printEvent.setLayer(layer);
+            this.printEvent.setTileData(data);
+        }
+        // Otherwise create the event with the data.
+        else {
+            retainEvent = false;
+            eventBuilder = this.sandbox.getEventBuilder('Printout.PrintableContentEvent');
+            if (eventBuilder) {
+                this.printEvent = eventBuilder(this.getName(), layer, data);
+            }
+        }
+
+        this.sandbox.notifyAll(this.printEvent, retainEvent);
+    },
+
+    /**
+     * Saves params to the state and sends them to the print service as well.
+     *
+     * @method _afterStatsVisualizationChangeEvent
+     * @private
+     * @param {Object} event
+     */
     _afterStatsVisualizationChangeEvent: function(event) {
-        var params = event.getParams();
+        var params = event.getParams(),
+            layer = event.getLayer();
+
+        // Saving state
         this.state.methodId = params.methodId;
         this.state.numberOfClasses = params.numberOfClasses;
         this.state.manualBreaksInput = params.manualBreaksInput;
+        this.state.colors = params.colors;
+        // Send data to printout bundle
+        this._createPrintParams(layer);
     }
 }, {
 	"extend" : ["Oskari.userinterface.extension.DefaultExtension"]

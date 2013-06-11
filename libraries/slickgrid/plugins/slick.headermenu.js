@@ -83,7 +83,7 @@
     var _handler = new Slick.EventHandler();
     var _defaults = {
       buttonCssClass: null,
-      buttonImage: "../images/down.gif"
+      buttonImage: "/Oskari/libraries/slickgrid/images/down.gif"
     };
     var $menu;
     var $activeHeaderColumn;

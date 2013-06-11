@@ -54,6 +54,7 @@ Oskari.registerLocalization({
 		},
 		"colorset" : {
 			"button": "Värit",
+			"flipButton": "Käännä värit",
 			"themeselection" : "Väriteeman valinta",
 			"setselection" : "Värisetin valinta",
 			"sequential" : "Kvantitatiivinen",
@@ -63,6 +64,17 @@ Oskari.registerLocalization({
 			"cancel" : "Poistu"
 			
 		},
+		"statistic" : {
+			"avg" : "Keskiarvo",
+			"max" : "Suurin arvo",
+			"mde" : "Moodi",
+			"mdn" : "Mediaani",
+			"min" : "Pienin arvo",
+			"std" : "Keskihajonta",
+			"sum" : "Yhteensä"
+		},
+		"values" : "arvoa",
+		"municipality" : "Kunta",
 		"noMatch" : "Indikaattoria ei löytynyt",
 		"selectIndicator": "Valitse indikaattori"
 	}

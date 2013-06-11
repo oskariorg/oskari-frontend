@@ -126,7 +126,8 @@ function() {
         {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/parcel/css/style.css"
-        }],
+        }
+        ],
         "locales" : [{
             "lang" : "fi",
             "type" : "text/javascript",

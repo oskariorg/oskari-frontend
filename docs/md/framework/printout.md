@@ -54,6 +54,19 @@ No statehandling has been implemented.
   </tr>
 </table>
 
+### PrintService
+
+<table>
+  <tr>
+    <th>Request</th><th>Why/when</th>
+  </tr>
+  <tr>
+    <td>Ajax</td>
+    <td>Ajax requests to backend e.g. action_route = GetProxyRequest</td>
+  </tr>
+ 
+</table>
+
 ## Events the bundle listens to
 
 <table>
@@ -68,6 +81,13 @@ No statehandling has been implemented.
 ## Events the bundle sends out
 
 This bundle doesn't send out any events.
+
+## Plugins
+
+### LegendPlugin
+
+This plugin handles legend plot to OL map and to final print
+
 
 ## Dependencies
 

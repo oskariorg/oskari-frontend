@@ -18,50 +18,57 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
  *      formState for ui state reload
  */
 function(instance, localization, backendConfiguration) {
-	var me = this;
-	this.isEnabled = false;
-	this.instance = instance;
-	this.loc = localization;
-	this.backendConfiguration = backendConfiguration;
+    var me = this;
+    this.isEnabled = false;
+    this.instance = instance;
+    this.loc = localization;
+    this.backendConfiguration = backendConfiguration;
 
-	/* templates */
-	this.template = {};
-	for (p in this.__templates ) {
-		this.template[p] = jQuery(this.__templates[p]);
-	}
+    /* templates */
+    this.template = {};
+    for (p in this.__templates ) {
+        this.template[p] = jQuery(this.__templates[p]);
+    }
 
-	/* page sizes listed in localisations */
-	this.sizeOptions = this.loc.size.options;
+    /* page sizes listed in localisations */
+    this.sizeOptions = this.loc.size.options;
 
-	this.sizeOptionsMap = {};
-	for (var s = 0; s < this.sizeOptions.length; s++) {
-		this.sizeOptionsMap[this.sizeOptions[s].id] = this.sizeOptions[s];
-	}
+    this.sizeOptionsMap = {};
+    for (var s = 0; s < this.sizeOptions.length; s++) {
+        this.sizeOptionsMap[this.sizeOptions[s].id] = this.sizeOptions[s];
+    }
 
-	/* format options listed in localisations */
-	this.formatOptions = this.loc.format.options;
-	this.formatOptionsMap = {};
-	for (var f = 0; f < this.formatOptions.length; f++) {
-		this.formatOptionsMap[this.formatOptions[f].id] = this.formatOptions[f];
-	}
+    /* format options listed in localisations */
+    this.formatOptions = this.loc.format.options;
+    this.formatOptionsMap = {};
+    for (var f = 0; f < this.formatOptions.length; f++) {
+        this.formatOptionsMap[this.formatOptions[f].id] = this.formatOptions[f];
+    }
 
-	/* content options listed in localisations */
-	this.contentOptions = this.loc.content.options;
-	this.contentOptionsMap = {};
-	for (var f = 0; f < this.contentOptions.length; f++) {
-		this.contentOptionsMap[this.contentOptions[f].id] = this.contentOptions[f];
-	}
+    /* content options listed in localisations */
+    this.contentOptions = this.loc.content.options;
+    this.contentOptionsMap = {};
+    for (var f = 0; f < this.contentOptions.length; f++) {
+        this.contentOptionsMap[this.contentOptions[f].id] = this.contentOptions[f];
+    }
 
-	this.accordion = null;
-	this.mainPanel = null;
+    /* legend options listed in localisations */
+    this.legendOptions = this.loc.legend.options;
+    this.legendOptionsMap = {};
+    for (var f = 0; f < this.legendOptions.length; f++) {
+        this.legendOptionsMap[this.legendOptions[f].id] = this.legendOptions[f];
+    }
 
-	this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-	this.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
+    this.accordion = null;
+    this.mainPanel = null;
 
-	this.previewContent = null;
-	this.previewImgDiv = null;
+    this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+    this.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
 
-	this.contentOptionDivs = {};
+    this.previewContent = null;
+    this.previewImgDiv = null;
+
+    this.contentOptionDivs = {};
 
 }, {
     __templates : {
@@ -71,13 +78,14 @@ function(instance, localization, backendConfiguration) {
         "tool" : '<div class="tool ">' + '<input type="checkbox"/>' + '<label></label></div>',
         "buttons" : '<div class="buttons"></div>',
         "help" : '<div class="help icon-info"></div>',
-        "main" : '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '</div>',
+        "main" : '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/><input name="tiles" type="hidden" value="" id="oskari_tiles"/></form>' + '</div>',
         "format" : '<div class="printout_format_cont printout_settings_cont"><div class="printout_format_label"></div></div>',
         "formatOptionTool" : '<div class="tool ">' + '<input type="radio" name="format" />' + '<label></label></div>',
+        "legend" : '<div class="printout_legend_cont printout_settings_cont"><div class="printout_legend_label"></div></div>',
+        "legendOptionTool" : '<div class="tool ">' + '<input type="radio" name="legend" />' + '<label></label></div>',
         "title" : '<div class="printout_title_cont printout_settings_cont"><div class="printout_title_label"></div><input class="printout_title_field" type="text"></div>',
         "option" : '<div class="printout_option_cont printout_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>',
         "sizeOptionTool" : '<div class="tool ">' + '<input type="radio" name="size" />' + '<label></label></div>'
-
     },
     /**
      * @method render
@@ -120,6 +128,9 @@ function(instance, localization, backendConfiguration) {
 
         accordion.insertTo(contentDiv);
 
+        // Legend setup visible only if statslayer is visible
+        this._setLegendVisibility();
+
         // buttons
         // close
         container.find('div.header div.icon-close').bind('click', function() {
@@ -159,26 +170,28 @@ function(instance, localization, backendConfiguration) {
             return function() {
                 var size = contentPanel.find('input[name=size]:checked').val();
                 // reset previous setting
-                for(var i = 0; i < me.sizeOptions.length; ++i) {
+                for (var i = 0; i < me.sizeOptions.length; ++i) {
                     me.sizeOptions[i].selected = false;
                 }
                 tool.selected = true;
                 me._cleanMapPreview();
                 me._updateMapPreview();
+                // Update legend
+                me._createLegend();
             };
         };
-        for(var i = 0; i < this.sizeOptions.length; ++i) {
+        for (var i = 0; i < this.sizeOptions.length; ++i) {
             var option = this.sizeOptions[i];
             var toolContainer = this.template.sizeOptionTool.clone();
             var label = option.label;
-            if(option.width && option.height) {
+            if (option.width && option.height) {
                 label = label + ' (' + option.width + ' x ' + option.height + 'px)';
             }
             toolContainer.find('label').append(label).attr({
                 'for' : option.id,
                 'class' : 'printout_radiolabel'
             });
-            if(option.selected) {
+            if (option.selected) {
                 toolContainer.find('input').attr('checked', 'checked');
             }
             contentPanel.append(toolContainer);
@@ -212,7 +225,7 @@ function(instance, localization, backendConfiguration) {
             return function() {
                 var format = contentPanel.find('input[name=format]:checked').val();
                 // reset previous setting
-                for(var i = 0; i < me.formatOptions.length; ++i) {
+                for (var i = 0; i < me.formatOptions.length; ++i) {
                     me.formatOptions[i].selected = false;
                 }
                 tool.selected = true;
@@ -222,7 +235,7 @@ function(instance, localization, backendConfiguration) {
         /* format options from localisations files */
         var format = this.template.format.clone();
         format.find('.printout_format_label').html(this.loc.format.label);
-        for(var i = 0; i < this.formatOptions.length; ++i) {
+        for (var i = 0; i < this.formatOptions.length; ++i) {
             var option = this.formatOptions[i];
             var toolContainer = this.template.formatOptionTool.clone();
             var label = option.label;
@@ -231,7 +244,7 @@ function(instance, localization, backendConfiguration) {
                 'for' : option.id,
                 'class' : 'printout_radiolabel'
             });
-            if(option.selected) {
+            if (option.selected) {
                 toolContainer.find('input').attr('checked', 'checked');
             }
             format.append(toolContainer);
@@ -254,7 +267,8 @@ function(instance, localization, backendConfiguration) {
         contentPanel.append(mapTitle);
 
         /* CONTENT options from localisations files */
-        for(var f = 0; f < this.contentOptions.length; f++) {
+
+        for (var f = 0; f < this.contentOptions.length; f++) {
             var dat = this.contentOptions[f];
 
             var opt = this.template.option.clone();
@@ -270,6 +284,48 @@ function(instance, localization, backendConfiguration) {
             contentPanel.append(opt);
 
         }
+
+        // Lengend options
+        var closureMagic2 = function(tool) {
+            return function() {
+                var legend = contentPanel.find('input[name=legend]:checked').val();
+                // reset previous setting
+                for (var i = 0; i < me.legendOptions.length; ++i) {
+                    me.legendOptions[i].selected = false;
+                }
+                tool.selected = true;
+
+            };
+        };
+
+        var legend = this.template.legend.clone();
+        legend.find('.printout_legend_label').html(this.loc.legend.label);
+        for (var i = 0; i < this.legendOptions.length; ++i) {
+            var option = this.legendOptions[i];
+            var toolContainer = this.template.legendOptionTool.clone();
+            var label = option.label;
+
+            toolContainer.find('label').append(label).attr({
+                'for' : option.id,
+                'class' : 'printout_radiolabel'
+
+            });
+            if (option.selected) {
+                toolContainer.find('input').attr('checked', 'checked');
+            }
+            legend.append(toolContainer);
+            toolContainer.find('input').attr({
+                'value' : option.loca,
+                'name' : 'location',
+                'id' : option.id
+            });
+            toolContainer.find('input').change(closureMagic2(option));
+            toolContainer.find('input[name="location"]').click(function() {
+                // Legend stuff
+                me._createLegend();
+            });
+        }
+        contentPanel.append(legend);
 
         return panel;
     },
@@ -306,7 +362,7 @@ function(instance, localization, backendConfiguration) {
         this.previewImgDiv = previewImgDiv;
         this.previewSpan = previewSpan;
 
-        for(var p in this.loc.preview.notes ) {
+        for (var p in this.loc.preview.notes ) {
             var previewNotes = this.template.previewNotes.clone();
             previewNotes.find('span').text(this.loc.preview.notes[p]);
             contentPanel.append(previewNotes);
@@ -346,15 +402,14 @@ function(instance, localization, backendConfiguration) {
         var me = this;
         var selections = this._gatherSelections("image/png");
 
-//
-this.backendConfiguration = {
-        "formatProducers" : {
-            "application/pdf" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.pdf?",
-            "image/png" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.png?"
-        }
-};
-//
-
+        //
+        this.backendConfiguration = {
+            "formatProducers" : {
+                "application/pdf" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.pdf?",
+                "image/png" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.png?"
+            }
+        };
+        //
 
         var urlBase = this.backendConfiguration.formatProducers[selections.format];
         var maplinkArgs = selections.maplinkArgs;
@@ -413,11 +468,11 @@ this.backendConfiguration = {
         saveBtn.addClass('primary');
         saveBtn.setHandler(function() {
             var map = me.instance.sandbox.getMap();
-            var features = (typeof map.geojs === "undefined") ? null : map.geojs;
+            var features = ( typeof map.geojs === "undefined") ? null : map.geojs;
 
             var selections = me._gatherSelections();
-            if(selections) {
-                me._printMap(selections,features);
+            if (selections) {
+                me._printMap(selections, features);
             }
         });
         saveBtn.insertTo(buttonCont);
@@ -447,7 +502,7 @@ this.backendConfiguration = {
             format : selectedFormat || "application/pdf"
         };
 
-        for(var p in this.contentOptionsMap ) {
+        for (var p in this.contentOptionsMap ) {
             selections[p] = this.contentOptionDivs[p].find('input').prop('checked');
         }
 
@@ -456,11 +511,39 @@ this.backendConfiguration = {
     },
     openURLinWindow : function(infoUrl, selections) {
         var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
-        if(this._isLandscape(selections))
+        if (this._isLandscape(selections))
             wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=1200," + "height=850";
         var link = infoUrl;
         window.open(link, "BasicPrintout", wopParm);
     },
+    /**
+     * @method openPostURLinWindow
+     * @private
+     * Sends the gathered map data to the server to save them/publish the map. 
+     * @param {String} geoJson Stringified GeoJSON
+     * @param {String} tileData Stringified tile data
+     * @param {Object} printUrl Url to print service action route GetPreview
+     * @param {Object} selections map data as returned by _gatherSelections()
+     */
+    openPostURLinWindow: function(geoJson, tileData, printUrl, selections) {
+        var me = this;
+        var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
+        if (this._isLandscape(selections))
+            wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=1200," + "height=850";
+        var link = printUrl;
+        me.mainPanel.find('#oskari_print_formID').attr('action', link);
+
+        if (geoJson) {
+            me.mainPanel.find('input[name=geojson]').val(jQuery.base64.encode(geoJson));
+        }
+        if (tileData) {
+            me.mainPanel.find('input[name=tiles]').val(tiledata);
+        }
+
+        window.open('about:blank','map_popup_111', wopParm);
+        me.mainPanel.find('#oskari_print_formID').submit();
+    },
+
     /**
      * @method _printMap
      * @private
@@ -468,7 +551,7 @@ this.backendConfiguration = {
      * @param {Object} selections map data as returned by _gatherSelections()
      * @param {Object} features map data as returned by _gatherFeatures()
      */
-    _printMap : function(selections,features) {
+    _printMap : function(selections, features) {
         var me = this;
         var sandbox = this.instance.getSandbox();
         var url = sandbox.getAjaxUrl();
@@ -480,8 +563,8 @@ this.backendConfiguration = {
         var pageTitleArgs = "&pageTitle=" + selections.pageTitle;
 
         var contentOptions = [];
-        for(var p in this.contentOptionsMap ) {
-            if(selections[p]) {
+        for (var p in this.contentOptionsMap ) {
+            if (selections[p]) {
                 contentOptions.push("&" + p + "=true");
             }
 
@@ -489,30 +572,22 @@ this.backendConfiguration = {
         var contentOptionArgs = contentOptions.join('');
         var formatArgs = "&format=" + selections.format;
 
-        var parameters = maplinkArgs + '&action_route=GetPreview' + pageSizeArgs + pageTitleArgs + 
-        contentOptionArgs + formatArgs;
+        var parameters = maplinkArgs + '&action_route=GetPreview' + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs;
         url = url + parameters;
-        
-        var printMap = this.instance.getSandbox().getMap();
-		if (printMap.GeoJSON) {
-			// Geojson POST request test
-			 /* var data = {
-			 geojson : jQuery.base64.encode(this._getGeoJson(printMap))
-			 }
-			 this._printMapByPost(url, data);
 
-			 } else {  */
-			url = url + "&geojson=" + jQuery.base64.encode(this._getGeoJson(printMap));
-		 }
+        // We need to use the POST method if there's GeoJSON or tile data.
+        if (this.instance.geoJson || !jQuery.isEmptyObject(this.instance.tileData)) {
+            var stringifiedJson = this._stringifyGeoJson(this.instance.geoJson);
+            var stringifiedTileData = this._stringifyTileData(this.instance.tileData);
 
-		this.instance.getSandbox().printDebug("PRINT URL " + url);
-
-		this.openURLinWindow(url, selections);
-
-        this.instance.getSandbox().printDebug("PRINT URL " + url);
-
-        this.openURLinWindow(url, selections);
-
+            this.instance.getSandbox().printDebug("PRINT POST URL " + url);
+            this.openPostURLinWindow(stringifiedJson, stringifiedTileData, url, selections);
+        }
+        // Otherwise GET is satisfiable.
+        else {
+            this.instance.getSandbox().printDebug("PRINT URL " + url);
+            this.openURLinWindow(url, selections);
+        }
     },
     /**
      * @method _isLandscape
@@ -523,67 +598,200 @@ this.backendConfiguration = {
      */
     _isLandscape : function(selections) {
 
-        if(this.sizeOptionsMap[selections.pageSize].id.indexOf('Land') > -1) {
+        if (this.sizeOptionsMap[selections.pageSize].id.indexOf('Land') > -1) {
             return true;
         }
         return false;
     },
-	/**
-	 * @method _getGeoJson
-	 * Get auxiliary graphics in geojson format + styles
-	 * @private
-	 * @
-	 * @return String  (Json stringify)
-	 * return null, if no geojson graphics
-	 */
-	_getGeoJson : function(printMap) {
 
-		if (printMap.GeoJSON) {
-			var sgeojs = JSON.stringify(printMap.GeoJSON);
-			sgeojs.replace('\"', '"');
-			return sgeojs;
-		}
-		return null;
-	},
-	/**
-	 * @method _printMapbyPost
-	 *  Get png/pdf print data by post request and opens it to the new window
-	 * @param {String} url  url string
-	 * @param {Object} data  geojson data + styles for extra graphics to plot
-	 * @private
-	 * @
-	 */
-	_printMapByPost : function(url, data) {
+    /**
+     * Get auxiliary graphics in geojson format + styles
+     *
+     * @method _stringifyGeoJson
+     * @private
+     * @param {JSON} geoJson
+     * @return {String/null} Stringified JSON or null if param is empty.
+     */
+    _stringifyGeoJson: function(geoJson) {
+        if (geoJson) {
+            return JSON.stringify(geoJson).replace('\"', '"');
+        } else {
+            return null;
+        }
+    },
 
-		var me = this;
+    /**
+     * Flattens and stringifies tile data for each layer.
+     *
+     * @method _stringifyTileData
+     * @private
+     * @param {Object[Array[Object]]} tileData
+     *      Object of arrays each containing objects with keys 'bbox' and 'url', eg.
+     *      {
+     *         'layer1': [ {bbox: '...', url: '...'}, ... ], 
+     *         'layer2': [ {bbox: '...', url: '...'}, ... ],
+     *      }
+     * @return {String/null} Stringified data object or null if tileData object is empty.
+     */
+    _stringifyTileData: function(tileData) {
+        if (!jQuery.isEmptyObject(tileData)) {
+            var dataArr = [], returnArr;
 
-		// Fetch print file
-		jQuery.ajax({
-			//dataType : "json",
-			type : "POST",
-			beforeSend : function(x) {
-				if (x && x.overrideMimeType) {
-					x.overrideMimeType("application/j-son;charset=UTF-8");
-				}
-			},
-			url : url,
-			data : data,
-			success : function(png_pdf_data) {
-				var selections = me._gatherSelections();
-				var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200";
-				if (me._isLandscape(selections))
-					wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=1200," + "height=850";
+            for (var key in tileData) {
+                dataArr.push(tileData[key]);
+            }
+            // dataArr is now an array like this:
+            // [ [{}, ...], [{}, ...], ... ]
+            returnArr = [].concat.apply([], dataArr);
 
-				window.open("data:application/pdf," + encodeURIComponent(png_pdf_data), "BasicPrintout", wopParm);
-			},
-			error : function() {
-				// Show error
+            return JSON.stringify(returnArr);
+        } else {
+            return null;
+        }
+    },
 
-				//me.instance.showMessage('title','error' );
-				alert('Sorry - some troubles to create a plot')
-			}
-		});
-	},
+    /**
+     * @method _setLegendVisibility
+     * Legend parameters UI visible on/off
+     *
+     * @private
+     *
+     */
+    _setLegendVisibility : function() {
+        var container = this.mainPanel;
+
+        if (this._hasStatsLayers())
+            container.find('.printout_legend_cont').show();
+        else
+            container.find('.printout_legend_cont').hide();
+    },
+    /**
+     * @method _hasStatsLayers
+     * Check if stats layers are selected
+     *
+     * @private
+     * @return{boolean} true; statslayers exists
+     *
+     */
+    _hasStatsLayers : function() {
+        var layers = this.instance.getSandbox().findAllSelectedMapLayers();
+
+        // request updates for map tiles
+        for (var i = 0; i < layers.length; i++) {
+            if (layers[i].isLayerOfType('STATS')) {
+                if (layers[i].isVisible())
+                    return true;
+
+            }
+        }
+        return false;
+    },
+    /**
+     * @method _createLegend
+     * Creates geojson legend for print service
+     * Only for statslayer and statsgrid legend
+     * @private
+     * @
+     *
+     */
+    _createLegend : function() {
+        var me = this;
+        // only if any statslayer visible 
+        me._setLegendVisibility();
+        if(!me._hasStatsLayers()) return;
+        
+        // Is geostat legend available
+        // get div where the map is rendered from openlayers
+        var map = this.instance.sandbox.getMap();
+        var container = this.mainPanel;
+        var parentContainer = jQuery('#contentMap');
+        // Get legend position
+        var legend_pos = container.find('input[name=location]:checked').val();
+        if (legend_pos == 'NO') {
+            // remove old, if any
+            if (me.instance.getSandbox().getMap().GeoJSON)
+                me.instance.getSandbox().getMap().GeoJSON = null;
+            me.instance.legendPlugin.clearLegendLayers();
+        } else {
+            var legend = parentContainer.find('div.geostats-legend');
+            if (legend.length > 0) {
+
+                this._printMapInfo(legend, function(data) {
+
+                    var title = legend.find('.geostats-legend-title').html();
+                    // ranges
+                    var ranges = [];
+                    // loop divs
+                    legend.find('div').each(function() {
+                        var myclass = jQuery(this).attr('class');
+                        if (myclass == undefined) {
+                            var legend_row = {
+                                "boxcolor" : jQuery(this).find('.geostats-legend-block').attr('style'),
+                                "range" : jQuery(this).text()
+                            }
+                            ranges.push(legend_row);
+                        }
+                    });
+
+                    var legendgjs = me.instance.legendPlugin.plotLegend(title, ranges, data, legend_pos);
+                    me.instance.getSandbox().getMap().GeoJSON = legendgjs;
+                })
+            }
+        }
+
+    },
+    /**
+     * @method _printMapInfo
+     *  Get print info data
+     * @param {String} url  print url string
+     * @private
+     * @
+     */
+    _printMapInfo : function(legend, callback) {
+
+        var me = this;
+        var selections = me._gatherSelections();
+        var sandbox = this.instance.getSandbox();
+        var url = sandbox.getAjaxUrl();
+
+        var urlBase = this.backendConfiguration.formatProducers[selections.format];
+
+        var maplinkArgs = selections.maplinkArgs;
+        var pageSizeArgs = "&pageSize=" + selections.pageSize;
+        var pageTitleArgs = "&pageTitle=" + selections.pageTitle;
+
+        var contentOptions = [];
+        for (var p in this.contentOptionsMap ) {
+            if (selections[p]) {
+                contentOptions.push("&" + p + "=true");
+            }
+
+        }
+        var contentOptionArgs = contentOptions.join('');
+        var formatArgs = "&format=" + selections.format;
+
+        var parameters = maplinkArgs + '&action_route=GetProxyRequest&url_id=1' + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs;
+        url = url + parameters;
+
+        // ajax call
+        me.instance.printService.fetchPrintMapData(
+        // url
+        url,
+        // success callback
+        function(data) {
+            if (data) {
+
+                callback(data);
+            } else {
+                alert('Error to fetch print info: ');
+            }
+        },
+        // error callback
+        function(jqXHR, textStatus) {
+            alert('Error to fetch print info: ');
+
+        });
+    },
     /**
      * @method destroy
      * Destroyes/removes this view from the screen.
@@ -604,11 +812,13 @@ this.backendConfiguration = {
         return this.isEnabled;
     },
     refresh : function(isUpdate) {
-        if(isUpdate) {
+        if (isUpdate) {
             this._updateMapPreview();
         } else {
             this._cleanMapPreview();
         }
+        // Update legend
+        this._createLegend();
     },
     getState : function() {
         return this._gatherSelections();

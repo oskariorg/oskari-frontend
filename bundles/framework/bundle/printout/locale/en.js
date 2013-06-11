@@ -115,6 +115,43 @@ Oskari.registerLocalization({
                         "checked" : "checked"
                 }*/]
             },
+                "legend" : {
+                "label" : "Legend",
+                "tooltip" : "Select legend position",
+                "options" : [{
+                        "id" : "oskari_legend_NO",
+                        "loca" : "NO",
+                        "label" : "No legend ",
+                        "tooltip" : "No legend plot",
+                        "selected" : true
+                       
+                    },{
+                        "id" : "oskari_legend_LL",
+                        "loca" : "LL",
+                        "label" : "Left lower corner ",
+                        "tooltip" : "Legend position in left lower corner of print area"
+                       
+                    },{
+                        "id" : "oskari_legend_LU",
+                         "loca" : "LU",
+                        "label" : "Left upper corner ",
+                        "tooltip" : "Legend position in left upper corner of print area"
+                       
+                    },{
+                        "id" : "oskari_legend_RU",
+                         "loca" : "RU",
+                        "label" : "Right upper corner ",
+                        "tooltip" : "Legend position in right upper corner of print area"
+                       
+                    },{
+                        "id" : "oskari_legend_RL",
+                         "loca" : "RL",
+                        "label" : "Right lower corner ",
+                        "tooltip" : "Legend position in right lower corner of print area"
+                       
+                    }
+                ]
+            },
             "help" : "Help",
             "error" : {
                 "title" : "Error",

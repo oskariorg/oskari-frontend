@@ -3,8 +3,8 @@
     height: 27px;
     position: absolute;
     top: 0;
-    left: 40px;
-    z-index: 1000;
+    left: 0;
+    z-index: 20000;
 }
 
 #publishedgridToggle.hidePublishedGrid {

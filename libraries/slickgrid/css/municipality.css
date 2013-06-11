@@ -18,6 +18,10 @@
     background: none repeat scroll 0 0 white;
     border: 1px solid gray;
     outline: 0 none;
+    -moz-box-sizing: border-box;
+    -ie-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
 }
 .slick-header {
     -moz-border-bottom-colors: none;

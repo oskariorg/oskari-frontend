@@ -22,30 +22,10 @@ module.exports = function(grunt) {
 
         var fs = require('fs'),
             UglifyJS = require('uglify-js'),
-            cssPacker = require('uglifycss'),
             parser = require('../parser.js'),
             processedAppSetup = parser.getComponents(options.appSetupFile);
 
-        // internal minify CSS function
-        this.minifyCSS = function(files, outputFile) {
-
-            var value = '';
-            for (var i = 0; i < files.length; ++i) {
-                if (!fs.existsSync(files[i])) {
-                    var msg = 'Couldnt locate ' + files[i]; 
-                    throw msg;
-                }
-                var content = fs.readFileSync(files[i], 'utf8');
-                value = value + '\n' + content;
-            }
-            var packed = cssPacker.processString(value);
-
-            fs.writeFile(outputFile, packed, function(err) {
-                if (err) {
-                    log('Error writing packed CSS: ' + err);
-                }
-            });
-        }
+        grunt.log.writeln('Parsed appSetup:' + options.appSetupFile);
 
         // internal minify i18n files function
         this.minifyLocalization = function(langfiles, path) {
@@ -58,6 +38,7 @@ module.exports = function(grunt) {
         // internal minify JS function
         this.minifyJS = function(files, outputFile, concat) {
             var okFiles = [],
+                fileMap = {},
                 result = null;
 
             for (var i = 0; i < files.length; ++i) {
@@ -65,7 +46,13 @@ module.exports = function(grunt) {
                     var msg = 'Couldnt locate ' + files[i]; 
                     throw msg;
                 }
-                okFiles.push(files[i]);
+                // do not put duplicates on compiled code
+                if(!fileMap[files[i]]) {
+                    fileMap[files[i]] = true;
+                    okFiles.push(files[i]);
+                } else {
+                    grunt.log.writeln('File already added:' + files[i]);
+                }
             }
 
             // minify or concatenate the files
@@ -112,12 +99,6 @@ module.exports = function(grunt) {
             }
         }
         this.minifyLocalization(langfiles, compiledDir);
-
-        var cssfiles = [];
-        for (var j = 0; j < processedAppSetup.length; ++j) {
-            cssfiles = cssfiles.concat(parser.getFilesForComponent(processedAppSetup[j], 'css'));
-        }
-        this.minifyCSS(cssfiles, compiledDir + 'oskari.min.css');
 
         var unknownfiles = [];
         for(var j = 0; j < processedAppSetup.length; ++j) {

@@ -62,6 +62,9 @@ function() {
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../sources/framework/sandbox/sandbox-key-listener-methods.js"
+		}, {
+			"type" : "text/javascript",
+			"src" : "../../../../sources/framework/sandbox/sandbox-state-methods.js"
 		}],
 		"resources" : []
 	},

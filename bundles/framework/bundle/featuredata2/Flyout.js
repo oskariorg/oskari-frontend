@@ -192,9 +192,9 @@ function(instance) {
      */
     updateData: function(layer) {
         if(!this.active) {
-            // disabled
             return;
         }
+
         var map = this.instance.sandbox.getMap();
         var panel = this.layers['' + layer.getId()];
         var selection = null;
@@ -211,11 +211,23 @@ function(instance) {
         // in scale, proceed
         this._prepareData(layer);
 
-        if(selection) {
+        if(selection && selection.length > 0 && typeof selection[0].featureId != "undefined") {
             for(var i = 0; i < selection.length; ++i) {
-                //me._handleGridSelect(selection[i].featureId, true);
-                // ^ highlight on map, not fully working
                 panel.grid.select(selection[i].featureId, true);
+            }
+        }
+
+        // mapClick
+        if(panel.grid && layer.getClickedFeatureIds().length > 0) {
+            for(var j = 0; j < layer.getClickedFeatureIds().length; ++j) {
+                panel.grid.select(layer.getClickedFeatureIds()[j], true);
+            }
+        }
+
+        // filter
+        if(panel.grid && layer.getSelectedFeatures().length > 0) {
+            for(var k = 0; k < layer.getSelectedFeatures().length; ++k) {
+                panel.grid.select(layer.getSelectedFeatures()[k][0], true);
             }
         }
     },
@@ -344,21 +356,13 @@ function(instance) {
             var featureData;
             var values;
             var fields = layer.getFields();
-            for(var i = 0; i < layer.getActiveFeatures().length; i++) {
-                featureData = {};
-                values = layer.getActiveFeatures()[i];
-                for(var j = 0; j < fields.length; j++) {
-                    if(values[j] == null || values[j] == "") {
-                        featureData[fields[j]] = "";
-                    } else {
-                        featureData[fields[j]] = values[j];
-                        // remove from empty fields
-                        remove_item(hiddenFields, fields[j]);
-                    }
-                }
-                model.addData(featureData);
-            }
-            var fields = model.getFields();
+            var features = layer.getActiveFeatures();
+            var selectedFeatures = layer.getSelectedFeatures().slice(0); // filter
+
+            this._addFeatureValues(model, fields, hiddenFields, features, selectedFeatures);
+            this._addFeatureValues(model, fields, hiddenFields, selectedFeatures, null);
+
+            fields = model.getFields();
             hiddenFields.push("__fid");
 
             if(!panel.grid) {
@@ -382,9 +386,7 @@ function(instance) {
                 grid.setAdditionalDataHandler(showMore,
                     function(link, content) {
                         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        var okBtn = dialog.createCloseButton("OK");
-                        okBtn.addClass('primary');
-                        dialog.show(showMore, content, [okBtn]);
+                        dialog.show(showMore, content);
                         dialog.moveTo(link, 'bottom');
                 });
 
@@ -429,6 +431,43 @@ function(instance) {
         }
     },
 
+
+    /**
+     * @method _addFeatureValues
+     * @private
+     * @param {Oskari.userinterface.component.GridModel} grid
+     * @param {Object[]} features
+     *
+     * Adds features to the model data
+     */
+    _addFeatureValues : function(model, fields, hiddenFields, features, selectedFeatures) {
+        for(var i = 0; i < features.length; i++) {
+            featureData = {};
+            values = features[i];
+
+            // remove from selected if in feature list
+            if(selectedFeatures != null && selectedFeatures.length > 0) {
+                for(var k = 0; k < selectedFeatures.length; k++) {
+                    if(values[0] == selectedFeatures[k][0]) { // fid match
+                        selectedFeatures.splice(k, 1);
+                    }
+                }
+            }
+
+            for(var j = 0; j < fields.length; j++) {
+                if(values[j] == null || values[j] == "") {
+                    featureData[fields[j]] = "";
+                } else {
+                    featureData[fields[j]] = values[j];
+                    // remove from empty fields
+                    remove_item(hiddenFields, fields[j]);
+                }
+            }
+            model.addData(featureData);
+        }
+    },
+
+
     /**
      * @method _handleGridSelect
      * @private
@@ -460,11 +499,22 @@ function(instance) {
         if(!this.active) {
             return;
         }
+
         var layer = event.getMapLayer();
         var panel = this.layers['' + layer.getId()];
-        var featureId = event.getWfsFeatureIds()[0];
 
-        panel.grid.select(featureId, event.isKeepSelection());
+
+        var fids = event.getWfsFeatureIds();
+        if(fids != null && fids.length > 0) {
+            panel.grid.select(fids[0], event.isKeepSelection());
+            if(fids.length > 1) {
+                for (var i = 1; i < fids.length; ++i) {
+                    panel.grid.select(fids[i], true);
+                }
+            }
+        } else {
+            panel.grid.removeSelections();
+        }
     },
 
     /**

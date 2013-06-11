@@ -55,6 +55,7 @@ Oskari.registerLocalization({
         },
         "colorset" : {
             "button": "Colors",
+            "flipButton": "Flip colors",
 			"themeselection" : "Color theme selection",
 			"setselection" : "Color set selection",
 			"sequential" : "Sequential",
@@ -64,6 +65,17 @@ Oskari.registerLocalization({
 			"cancel" : "Poistu"
 			
 		},
+        "statistic" : {
+            "avg" : "Average",
+            "max" : "Maximum value",
+            "mde" : "Mode",
+            "mdn" : "Median",
+            "min" : "Minimum value",
+            "std" : "Standard deviation",
+            "sum" : "Sum"
+        },
+        "values" : "values",
+        "municipality" : "Municipality",
         "noMatch" : "No results matched",
         "selectIndicator": "Select an indicator"
 

@@ -16,6 +16,7 @@ function(config) {
     this._supportedFormats = {};
     this._statsDrawLayer = null;
     this._highlightCtrl = null;
+    this._navCtrl = null;
     this._getFeatureControlHover = null;
     this._getFeatureControlSelect = null;
     this.config = config;
@@ -165,6 +166,9 @@ function(config) {
         'AfterMapLayerRemoveEvent' : function(event) {
             this._afterMapLayerRemoveEvent(event);
         },
+        'MapLayerVisibilityChangedEvent' : function(event) {
+            this._mapLayerVisibilityChangedEvent(event);
+        },
         'AfterChangeMapLayerOpacityEvent' : function(event) {
             this._afterChangeMapLayerOpacityEvent(event);
         },
@@ -275,7 +279,9 @@ function(config) {
             })
         });
         this._map.addLayers([this._statsDrawLayer]);
-
+        this._statsDrawLayer.events.register("moveend", this._statsDrawLayer, function() {
+            me.mapModule.notifyMoveEnd();
+        });
         // Hover control
         this._highlightCtrl = new OpenLayers.Control.SelectFeature(this._statsDrawLayer, {
             hover: true,
@@ -285,6 +291,9 @@ function(config) {
         this._map.addControl(this._highlightCtrl);
         this._highlightCtrl.activate();
 
+        // Navigation also for hovered and selected areas
+        this._navCtrl = new OpenLayers.Control.Navigation();
+        this._map.addControl(this._navCtrl);
         var queryableMapLayers = [openLayer];
         this._getFeatureControlHover = new OpenLayers.Control.WMSGetFeatureInfo({
             drillDown: false,
@@ -421,10 +430,31 @@ function(config) {
         this._getFeatureControlHover.deactivate();
         this._getFeatureControlSelect.deactivate();
         this._map.removeControl(this._highlightCtrl);
+        this._map.removeControl(this._navCtrl);
         this._map.removeControl(this._getFeatureControlHover);
         this._map.removeControl(this._getFeatureControlSelect);
         this._map.removeLayer(this._statsDrawLayer);
     },
+
+    /**
+     * @method _mapLayerVisibilityChangedEvent
+     * Handle MapLayerVisibilityChangedEvent
+     * @private
+     * @param {Oskari.mapframework.event.common.MapLayerVisibilityChangedEvent}
+     */
+    _mapLayerVisibilityChangedEvent : function(event) {
+        var mapLayer = event.getMapLayer();
+        if (mapLayer._layerType !== "STATS") return;
+        this._statsDrawLayer.setVisibility(mapLayer.isVisible());
+        if (mapLayer.isVisible()) {
+            this._getFeatureControlHover.activate();
+            this._getFeatureControlSelect.activate();
+        } else {
+            this._getFeatureControlHover.deactivate();
+            this._getFeatureControlSelect.deactivate();
+        }
+    },
+
     /**
      * @method _afterMapLayerRemoveEvent
      * Removes the layer from the map
