@@ -134,7 +134,8 @@ describe('Test Suite for UsageTracker', function() {
 				done();
 			});
 
-	        var event = sandbox.getEventBuilder('MapLayerVisibilityChangedEvent')(null, false, false);
+			var layer = sandbox.findMapLayerFromAllAvailable('base_35'),
+				event = sandbox.getEventBuilder('MapLayerVisibilityChangedEvent')(layer, false, false);
 	        sandbox.notifyAll(event);
 		});
 
