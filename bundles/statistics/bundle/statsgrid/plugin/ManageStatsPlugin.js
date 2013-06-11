@@ -39,7 +39,7 @@ function(config, locale) {
         {"id" : "sum", "visible": true}
         ]
     };
-    this.conf = jQuery.extend(true, defaults, config);
+    this.conf = jQuery.extend(true, config, defaults);
     this._locale = locale || {};
     this.templates = {
         'csvButton'         : '<button class="statsgrid-csv-button">csv</button>',

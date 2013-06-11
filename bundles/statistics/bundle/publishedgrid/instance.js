@@ -86,6 +86,10 @@ function() {
         this.classifyPlugin = classifyPlugin;
 
         if(showGrid) {
+            var statsLayerPlugin = sandbox.findRegisteredModuleInstance('MainMapModuleStatsLayerPlugin');
+            if (statsLayerPlugin) {
+                statsLayerPlugin._modeVisible = true;
+            }
             me.createUI();
         }
     },
