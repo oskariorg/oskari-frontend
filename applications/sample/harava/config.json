@@ -1,0 +1,107 @@
+{
+   "mapfull":{
+      "state":{
+         "selectedLayers":[{
+			"id": "base_system_176"
+		}],
+		"zoom": 10,
+		"north": 42.849083,
+		"east": -2.675686
+      },
+      "conf":{
+		"projectionDefs": {
+			"EPSG:3067": "+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs",
+			"EPSG:4326": "+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs",
+			"EPSG:4258": "+proj=longlat +ellps=GRS80 +no_defs"
+		},
+        "plugins":[
+            {
+               "id":"Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin"
+            },
+            {
+               "id":"Oskari.mapframework.mapmodule.WmsLayerPlugin"
+            },
+            {
+               "id":"Oskari.mapframework.mapmodule.ControlsPlugin"
+            },
+            {
+               "id":"Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin"
+            },
+            {
+               "id":"Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"
+            }
+        ],
+		"layers" : [
+		{
+			"mapDataname": "Vitoria Orto",
+			"wmsName": "0",
+			"type": "base",
+			"orgName": "Dimenteq Oy",
+			"params" : {
+				"format": "image/jpeg"
+			},
+			"options" : {
+				"noMagic" : true
+			},
+			"id": "base_system_176",
+			"name": "Vitoria Orto",
+			"subLayer": [{
+				"mapDataname": "Vitoria Orto",
+				"wmsName": "0",
+				"styles": {
+					
+				},
+				"baseLayerId": "base_system_176",
+				"type": "wmslayer",
+				"params" : {
+					"format": "image/jpeg"
+				},
+				"options" : {
+					"noMagic" : true
+				},
+				"orgName": "Dimenteq Oy",
+				"attId": "176",
+				"orgId": 0,
+				"id": "system_layer_176_0",
+				"dataUrl": "",
+				"wmsUrl": "http://www.vitoria-gasteiz.org/arcgis/services/internet/ortofoto20114258/MapServer/WMSServer",
+				"name": "Vitoria Orto_0",
+				"opacity": 0,
+				"permissions": {
+					
+				},
+				"inspire": "Dimenteq Oy",
+				"gaType": ""
+			}],
+			"inspire": "0",
+			"gaType": ""
+		}],
+		"mapOptions": {
+			"scaleDecimals": 10,
+			"srsName": "EPSG:4258",
+			"maxExtent": {
+				"bottom": 35.444641113281,
+				"left": -9.4180297851572,
+				"right": 1.8704223632804,
+				"top": 43.135070800781
+			},
+			"resolutions": [0.703125,
+			0.3515625,
+			0.17578125,
+			0.087890625,
+			0.0439453125,
+			0.02197265625,
+			0.010986328125,
+			0.0054931640625,
+			0.00274658203125,
+			0.001373291015625,
+			6.866455078125E-4,
+			3.4332275390625E-4,
+			1.71661376953125E-4,
+			8.58306884765625E-5,
+			4.291534423828125E-5,
+			2.1457672119140625E-5]
+		}
+      }
+   }
+}

@@ -26,6 +26,10 @@ MapClickEvent now rounds clicked pixel coordinates so even if browser zoom is us
 
 Reverted plugins placement change from 1.10 so these are no longer placed inside openlayers container div with fixed position
 
+### mapmodule plugin/wmslayerplugin
+
+If min and max scale are not defined, scales are not specified for layer. There is a bug on scale handling when resolution is "low enough". This can be used as a workaround for the time being.
+
 ### statsgrid bundle
 
 Municipalities are now grouped and there are statistical variables added to the header row. CSV download button created in the frontend.
