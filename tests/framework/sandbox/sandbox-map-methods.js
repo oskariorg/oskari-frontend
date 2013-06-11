@@ -83,7 +83,8 @@ describe('Test Suite for sandbox', function() {
 			expect(viewPlugin).to.be.ok();
 		});
 
-		it("should include indicators in map link parameters when there are selected indicators", function(done) {
+		// TODO: add statsgrid column and then verify amount
+		it.skip("should include indicators in map link parameters when there are selected indicators", function(done) {
 			var fetchCallbackGridSpy = sinon.spy(viewPlugin, 'createMunicipalitySlickGrid'),
 				fetchCallbackIndicatorSpy = sinon.spy(viewPlugin, 'createIndicatorsSelect');
 

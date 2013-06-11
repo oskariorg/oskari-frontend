@@ -107,11 +107,15 @@ describe('Test Suite for mapwfs2', function() {
         });
 
         it('should have tileSize', function() {
+            // not always ready
+            if(!module.tileStrategy.getGrid().grid) {
+                module.createTilesGrid();
+            }
             module.getGrid(); // init grid
             var tileSize = module.getTileSize();
 
             expect(tileSize).to.be.ok();
-            expect(tileSize.widht).to.equal(256);
+            expect(tileSize.width).to.equal(256);
             expect(tileSize.height).to.equal(256);
         });
     });
