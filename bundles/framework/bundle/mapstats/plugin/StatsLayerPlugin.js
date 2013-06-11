@@ -27,6 +27,7 @@ function(config) {
     }
     if (config && config.published) {
         // A sort of a hack to enable the controls in a published map.
+        // At the moment there's no such option in the conf, but there might be.
         this._modeVisible = config.published;
     }
 }, {
@@ -400,6 +401,10 @@ function(config) {
     				featureStyle.strokeColor = "#ff3333";
 	    			featureStyle.strokeWidth = 3;
 	    			featureStyle.fillOpacity = 0.2;
+
+                    var eventBuilder = me._sandbox.getEventBuilder('MapStats.FeatureHighlightedEvent');
+                    var event;
+
                     if (foundInd >= 0) {
                         drawLayer.features[i].selected = !drawLayer.features[i].selected;
                         if (drawLayer.features[i].selected) {
@@ -408,12 +413,22 @@ function(config) {
                             drawLayer.features[i].style = null;
                             me._highlightCtrl.highlight(drawLayer.features[i]);
                         }
+                        if (eventBuilder) {
+                            event = eventBuilder(drawLayer.features[i], drawLayer.features[i].selected);
+                        }
                     } else {
                         drawLayer.addFeatures([newFeature]);
                         newFeature.selected = true;
                         newFeature.style = featureStyle;
+                        if (eventBuilder) {
+                            event = eventBuilder(newFeature, newFeature.selected);
+                        }
                     }
                     drawLayer.redraw();
+
+                    if (event) {
+                        me._sandbox.notifyAll(event);
+                    }
                 },
                 beforegetfeatureinfo: function(event) {
                 },

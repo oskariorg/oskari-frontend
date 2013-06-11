@@ -88,6 +88,7 @@ function() {
         if(showGrid) {
             var statsLayerPlugin = sandbox.findRegisteredModuleInstance('MainMapModuleStatsLayerPlugin');
             if (statsLayerPlugin) {
+                // A sort of a hack to enable the hover and select controls in a published map.
                 statsLayerPlugin._modeVisible = true;
             }
             me.createUI();

@@ -112,6 +112,9 @@ function() {
         },
         'AfterMapLayerRemoveEvent': function(event) {
             this._afterMapLayerRemoveEvent(event);
+        },
+        'MapStats.FeatureHighlightedEvent': function(event) {
+            console.log(event);
         }
 	},
     /**

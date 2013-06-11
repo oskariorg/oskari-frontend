@@ -159,7 +159,16 @@ function(config, locale) {
      * @property {Object} eventHandlers
      * @static
      */
-    eventHandlers : {},
+    eventHandlers : {
+        'MapStats.FeatureHighlightedEvent': function(event) {
+            var featureAtts = event.getFeature().attributes;
+            var code = featureAtts.kuntakoodi;
+            var idx = this.getIdxByCode(code);
+            if (this.grid && idx) {
+                this.grid.scrollRowIntoView(idx);
+            }
+        }
+    },
 
     /**
      * @method onEvent
@@ -442,6 +451,31 @@ function(config, locale) {
         }
         gridDiv.height(parent.height() - selectorsHeight);
         this.grid.resizeCanvas();
+    },
+
+    /**
+     * Returns the index of the item with the code
+     *
+     * @method getIdxByCode
+     * @param {String} code
+     */
+    getIdxByCode: function(code) {
+        var items = this.dataView ? this.dataView.getItems() : [],
+            returnItem = null,
+            i;
+
+        for (i = 0; i < items.length; ++i) {
+            if (items[i].code == code) {
+                returnItem = items[i];
+                break;
+            }
+        }
+        if (returnItem) {
+            console.log(returnItem);
+            return this.dataView.getIdxById(returnItem.id);
+        } else {
+            return null;
+        }
     },
 
     /**
