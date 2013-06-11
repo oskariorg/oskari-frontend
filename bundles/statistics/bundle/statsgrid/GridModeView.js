@@ -66,6 +66,11 @@ function() {
                 // Create the indicators selection and the grid.
                 this.instance.gridPlugin.createStatsOut(this.getEl());
             }
+
+            // Notify other components of the mode change.
+            var eventBuilder = this.instance.getSandbox().getEventBuilder('StatsGrid.ModeChangedEvent');
+            var event = eventBuilder(this.isVisible);
+            this.instance.getSandbox().notifyAll(event);
         }
     },
 

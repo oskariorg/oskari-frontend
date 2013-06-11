@@ -49,6 +49,9 @@ function() {
             "src" : "../../../../bundles/statistics/bundle/statsgrid/event/SotkadataChangedEvent.js"
 		},{
             "type" : "text/javascript",
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/event/ModeChangedEvent.js"
+        },{
+            "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/bundle/statsgrid/request/StatsGridRequest.js"
 		}, {
             "type" : "text/javascript",

@@ -19,10 +19,15 @@ function(config) {
     this._navCtrl = null;
     this._getFeatureControlHover = null;
     this._getFeatureControlSelect = null;
+    this._modeVisible = false;
     this.config = config;
     this.ajaxUrl = null;
     if(config && config.ajaxUrl) {
         this.ajaxUrl = config.ajaxUrl;
+    }
+    if (config && config.published) {
+        // A sort of a hack to enable the controls in a published map.
+        this._modeVisible = config.published;
     }
 }, {
     /** @static @property __name plugin name */
@@ -177,6 +182,9 @@ function(config) {
         },
         'MapStats.StatsVisualizationChangeEvent': function(event) {
             this._afterStatsVisualizationChangeEvent(event);
+        },
+        'StatsGrid.ModeChangedEvent': function(event) {
+            this._afterModeChangedEvent(event);
         }
     },
 
@@ -210,6 +218,27 @@ function(config) {
         }
 
     },
+
+    /**
+     * Activates the hover and select controls.
+     *
+     * @method activateControls
+     */
+    activateControls: function() {
+        this._getFeatureControlHover.activate();
+        this._getFeatureControlSelect.activate();
+    },
+
+    /**
+     * Deactivates the hover and select controls.
+     *
+     * @method deactivateControls
+     */
+    deactivateControls: function() {
+        this._getFeatureControlHover.deactivate();
+        this._getFeatureControlSelect.deactivate();
+    },
+
     /**
      * Handle _afterMapLayerAddEvent
      * @private 
@@ -337,7 +366,10 @@ function(config) {
         });
         // Add the control to the map
         this._map.addControl(this._getFeatureControlHover);
-        this._getFeatureControlHover.activate();
+        // Activate only is mode is on.
+        if (this._modeVisible) {
+            this._getFeatureControlHover.activate();
+        }
 
         // Select control
         this._getFeatureControlSelect = new OpenLayers.Control.WMSGetFeatureInfo({
@@ -391,7 +423,10 @@ function(config) {
         });
         // Add the control to the map
         this._map.addControl(this._getFeatureControlSelect);
-        this._getFeatureControlSelect.activate();
+        // Activate only is mode is on.
+        if (this._modeVisible) {
+            this._getFeatureControlSelect.activate();
+        }
 
         openLayer.opacity = layer.getOpacity() / 100;
 
@@ -409,6 +444,27 @@ function(config) {
                 if (markerLayer[mlIdx]) {
                     this._map.addLayer(markerLayer[mlIdx]);
                 }
+            }
+        }
+    },
+
+    /**
+     * Activates/deactivates the controls after the mode has changed.
+     *
+     * @method _afterModeChangedEvent
+     * @private
+     * @param {Oskari.statistics.bundle.statsgrid.event.ModeChangedEvent} event
+     */
+    _afterModeChangedEvent: function(event) {
+        this._modeVisible = event.isModeVisible();
+        var drawLayer = this._map.getLayersByName("Stats Draw Layer")[0];
+
+        if (this._modeVisible) {
+            this.activateControls();
+        } else {
+            this.deactivateControls();
+            if (drawLayer) {
+                drawLayer.removeAllFeatures();
             }
         }
     },
@@ -446,12 +502,16 @@ function(config) {
         var mapLayer = event.getMapLayer();
         if (mapLayer._layerType !== "STATS") return;
         this._statsDrawLayer.setVisibility(mapLayer.isVisible());
-        if (mapLayer.isVisible()) {
-            this._getFeatureControlHover.activate();
-            this._getFeatureControlSelect.activate();
-        } else {
-            this._getFeatureControlHover.deactivate();
-            this._getFeatureControlSelect.deactivate();
+
+        // Do nothing if not in statistics mode.
+        if (this._modeVisible) {
+            if (mapLayer.isVisible()) {
+                this._getFeatureControlHover.activate();
+                this._getFeatureControlSelect.activate();
+            } else {
+                this._getFeatureControlHover.deactivate();
+                this._getFeatureControlSelect.deactivate();
+            }
         }
     },
 
