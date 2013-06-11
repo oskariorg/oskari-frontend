@@ -139,10 +139,16 @@ module.exports = function(grunt) {
     //    grunt.registerTask('default', 'testacularServer:dev watch');
     //    grunt.registerTask('default', 'lint test concat min');
     grunt.registerTask('compileDev', 'Developer compile', function() {
+        var options = this.options();
         // set task configs
-        grunt.config.set("compile.dev.options", this.options());
-
+        grunt.config.set("compile.dev.options", options);
         grunt.task.run('compile');
+
+        grunt.config.set("compileAppCSS.dev.options", {
+            "appSetupFile": '../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json',
+            "dest": options.dest
+        });
+        grunt.task.run("compileAppCSS");
     });
 
     grunt.registerTask('compileAppSetupToStartupSequence', function() {
