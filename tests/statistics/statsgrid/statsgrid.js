@@ -98,7 +98,6 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
         after(teardown);
 
         it('should go to the mode view from the map view', function(done) {
-            // TODO: change spy to stub so that we test the interface and not the server
             var fetchCallbackGridSpy = sinon.spy(viewPlugin, 'createMunicipalitySlickGrid'),
                 fetchCallbackIndicatorSpy = sinon.spy(viewPlugin, 'createIndicatorsSelect');
 
@@ -168,6 +167,7 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
                     'fi': "Test indicator meta"
                 }
             });
+            // TODO: create a stub so that we test the interface and not the server
             gridPlugin.getSotkaIndicatorData(statsView.getEl(), 4, 'total', 2011);
         });
 

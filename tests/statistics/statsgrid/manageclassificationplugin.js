@@ -84,6 +84,9 @@ describe('Test Suite for statistics/statsgrid manage classification plugin', fun
 
             plugin._layer = testLayer;
             plugin._params = testParams;
+            plugin.currentColorSet = 'seq';
+            plugin.colorsetIndex = 0;
+            plugin.colorsFlipped = false;
 
             // call tested function
             plugin.classifyData();
@@ -93,6 +96,11 @@ describe('Test Suite for statistics/statsgrid manage classification plugin', fun
                 methodId: '2',
                 numberOfClasses: 5,
                 manualBreaksInput: '',
+                colors: {
+                    set: 'seq',
+                    index: 0,
+                    flipped: false
+                },
                 VIS_ID: -1,
                 VIS_NAME: testParams.VIS_NAME,
                 VIS_ATTR: testParams.VIS_ATTR,
