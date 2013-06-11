@@ -1,5 +1,5 @@
 // requires jetty + redis open with wfs2
-describe.skip('Test Suite for mapwfs2', function() {
+describe('Test Suite for mapwfs2', function() {
     var module = null,
         sandbox = null,
         appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull']),
@@ -111,7 +111,7 @@ describe.skip('Test Suite for mapwfs2', function() {
             var tileSize = module.getTileSize();
 
             expect(tileSize).to.be.ok();
-            expect(tileSize.widh).tto.equal(256);
+            expect(tileSize.widht).to.equal(256);
             expect(tileSize.height).to.equal(256);
         });
     });
