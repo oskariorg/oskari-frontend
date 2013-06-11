@@ -125,36 +125,30 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-layer-methods', {
             mapLayer.setType("BASE_LAYER");
         }
 
+		var newLayerIndex = -1;
+		
         // if we need keep layers order, i.e. when map is accessed by link
         if (keepLayersOrder != null && keepLayersOrder) {
-            me._selectedLayers.push(mapLayer);
-        }
-        // else we not need keep layers order (basemaps come
-        // first in array, other maps come last)
-		// TODO seems like isBaseLayer doesn't work?
-		// TODO insert new baselayer _after_ old baselayers (from the bottom up)
-        else {
+            this._selectedLayers.push(mapLayer);
+        } else {
             if (mapLayer.isBaseLayer() || isBaseMap == true) {
-                var oldSelectedLayers = me._selectedLayers;
-                var newSelectedLayers = new Array();
-				var newLayerInserted = false;
-                //newSelectedLayers.push(mapLayer);
-                for (var i = 0; i < oldSelectedLayers.length; i++) {
-					if (!newLayerInserted && !oldSelectedLayers[i].isBaseLayer()) {
-						newSelectedLayers.push(mapLayer);
-						newLayerInserted = true;
-					}
-                    newSelectedLayers.push(oldSelectedLayers[i]);
-                }
-				
-                delete me._selectedLayers;
-                me._selectedLayers = newSelectedLayers;
+				var newSelectedLayers = [];
+				newSelectedLayers.push(mapLayer);
+				for (var i = 0; i < this._selectedLayers.length; i++) {
+					newSelectedLayers.push(this._selectedLayers[i]);
+				}
+				delete this._selectedLayers;
+				this._selectedLayers = newSelectedLayers;
             } else {
-                me._selectedLayers.push(mapLayer);
+                this._selectedLayers.push(mapLayer);
             }
         }
-
-        var event = me.getEventBuilder('AfterMapLayerAddEvent')(mapLayer, keepLayersOrder, isBaseMap);
+		var event;
+		if (mapLayer.isBaseLayer() || isBaseMap) {
+			event = me.getEventBuilder('AfterMapLayerAddEvent')(mapLayer, keepLayersOrder, isBaseMap);
+		} else {
+			event = me.getEventBuilder('AfterMapLayerAddEvent')(mapLayer, true, isBaseMap);
+		}
         me.copyObjectCreatorToFrom(event, request);
         me.dispatch(event);
     },

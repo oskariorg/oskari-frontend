@@ -115,7 +115,7 @@ function() {
                 layerId = layer.getId(),
                 view = this.plugins['Oskari.userinterface.View'];
 
-            if (layerId === view._layer.getId()) {
+            if (view._layer && layerId === view._layer.getId()) {
                 view.prepareMode(false);
             }
         }
