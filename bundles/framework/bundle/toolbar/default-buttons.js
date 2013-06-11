@@ -134,7 +134,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 				tooltip : loc.link.tooltip,
 				sticky : false,
 				callback : function() {
-					var linkParams = me.getSandbox().generateMapLinkParameters({marker : true});
+					var linkParams = me.getSandbox().generateMapLinkParameters({showMarker : true});
 					var pcn = 'Oskari.userinterface.component.Popup';
 					var okcn = 'Oskari.userinterface.component.Button';
 					var dialog = Oskari.clazz.create(pcn);

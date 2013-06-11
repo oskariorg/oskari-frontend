@@ -237,7 +237,7 @@ function() {
                 defaultOptions = {
                     layerId : _layer.getWmsName(),
                     isBaseLayer : false,
-                    displayInLayerSwitcher : true,
+                    displayInLayerSwitcher : false,
                     visibility : true,
                     buffer : 0
                 },
