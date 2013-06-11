@@ -36,9 +36,6 @@ function() {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/statistics/bundle/statsgrid/StatsToolbar.js"
 		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/statsgrid/ManageStatsOut.js"
-		},{
             "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/bundle/statsgrid/plugin/ManageClassificationPlugin.js"
 		},{
