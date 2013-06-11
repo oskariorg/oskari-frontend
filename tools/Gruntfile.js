@@ -111,7 +111,7 @@ module.exports = function(grunt) {
                 src: ['node_modules/grunt-karma/node_modules/karma/lib/server.js'],
                 actions: [
                     {
-                        name: 'removeFlashSocket',
+                        name: 'removeFlashSocketAsItDoesNotWorkInIE',
                         search: "'websocket', 'flashsocket', 'xhr-polling', 'jsonp-polling'",
                         replace: "'websocket', 'xhr-polling', 'jsonp-polling'"
                     }
