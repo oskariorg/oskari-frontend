@@ -225,7 +225,6 @@ function() {
         // loop all layers and add these on the map
         for (var i = 0, ilen = layers.length; i < ilen; i++) {
             var _layer = layers[i];
-            var layerScales = this.getMapModule().calculateLayerScales(_layer.getMaxScale(), _layer.getMinScale());
 
             // default params and options
             var defaultParams = {
@@ -237,7 +236,6 @@ function() {
                 },
                 defaultOptions = {
                     layerId : _layer.getWmsName(),
-                    scales : layerScales,
                     isBaseLayer : false,
                     displayInLayerSwitcher : true,
                     visibility : true,
@@ -245,7 +243,10 @@ function() {
                 },
                 layerParams = _layer.getParams(),
                 layerOptions = _layer.getOptions();
-
+            if(_layer.getMaxScale() || _layer.getMinScale()) {
+                var layerScales = this.getMapModule().calculateLayerScales(_layer.getMaxScale(), _layer.getMinScale());
+                defaultOptions.scales = layerScales;
+            }
             // override default params and options from layer
             for(var key in layerParams) {
                 defaultParams[key] = layerParams[key];
