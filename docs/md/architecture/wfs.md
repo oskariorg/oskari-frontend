@@ -393,7 +393,6 @@ Only sends if the current map size gets bigger
 * TODO: send only new image
 
 - /wfs/image
-- /wfs/properties
 - /wfs/feature
 - /error
 
