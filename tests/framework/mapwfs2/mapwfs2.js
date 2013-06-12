@@ -1,5 +1,5 @@
 // requires jetty + redis open with wfs2
-describe.only('Test Suite for mapwfs2', function() {
+describe('Test Suite for mapwfs2', function() {
     var module = null,
         sandbox = null,
         appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull']),
@@ -107,11 +107,15 @@ describe.only('Test Suite for mapwfs2', function() {
         });
 
         it('should have tileSize', function() {
+            // not always ready
+            if(!module.tileStrategy.getGrid().grid) {
+                module.createTilesGrid();
+            }
             module.getGrid(); // init grid
             var tileSize = module.getTileSize();
 
             expect(tileSize).to.be.ok();
-            expect(tileSize.widh).tto.equal(256);
+            expect(tileSize.width).to.equal(256);
             expect(tileSize.height).to.equal(256);
         });
     });

@@ -14,7 +14,7 @@ function(config, mediator) {
         var cookieValue = jQuery.cookie(cookieName);
 
         var cometURL = location.protocol + "//" +
-            location.hostname + ":" + config.port  +
+            config.hostname + ":" + config.port  +
             config.contextPath + "/cometd";
 
         var cometd = jQuery.cometd;

@@ -438,7 +438,6 @@ function(mapLayerUrl, sandbox) {
                 throw "Unknown layer type '" + mapLayerJson.type + "'";
             }
             layer = Oskari.clazz.create(this.typeMapping[mapLayerJson.type], mapLayerJson.params, mapLayerJson.options);
-
             //these may be implemented as jsonHandler
             if(mapLayerJson.type == 'wmslayer') {
                 this._populateWmsMapLayerAdditionalData(layer, mapLayerJson);

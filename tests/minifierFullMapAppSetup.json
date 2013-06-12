@@ -442,5 +442,21 @@
             }
          }
       }
+   }, {
+      "title": "Printout",
+      "fi": "Karttatuloste",
+      "sv": "Kartutskrift",
+      "en": "Map Printout",
+      "bundlename": "printout",
+      "bundleinstancename": "printout",
+      "metadata": {
+         "Import-Bundle": {
+            "printout": {
+               "bundlePath": "../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance": []
+      },
+      "instanceProps": {}
    }]
 }

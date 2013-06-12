@@ -25,6 +25,8 @@ module.exports = function(grunt) {
             parser = require('../parser.js'),
             processedAppSetup = parser.getComponents(options.appSetupFile);
 
+        grunt.log.writeln('Parsed appSetup:' + options.appSetupFile);
+
         // internal minify i18n files function
         this.minifyLocalization = function(langfiles, path) {
             for (var id in langfiles) {
@@ -36,6 +38,7 @@ module.exports = function(grunt) {
         // internal minify JS function
         this.minifyJS = function(files, outputFile, concat) {
             var okFiles = [],
+                fileMap = {},
                 result = null;
 
             for (var i = 0; i < files.length; ++i) {
@@ -43,7 +46,13 @@ module.exports = function(grunt) {
                     var msg = 'Couldnt locate ' + files[i]; 
                     throw msg;
                 }
-                okFiles.push(files[i]);
+                // do not put duplicates on compiled code
+                if(!fileMap[files[i]]) {
+                    fileMap[files[i]] = true;
+                    okFiles.push(files[i]);
+                } else {
+                    grunt.log.writeln('File already added:' + files[i]);
+                }
             }
 
             // minify or concatenate the files
