@@ -180,7 +180,7 @@ describe.only('Test Suite for mapwfs2', function() {
             var tileSize = module.getTileSize();
 
             expect(tileSize).to.be.ok();
-            expect(tileSize.width).tto.equal(256);
+            expect(tileSize.width).to.equal(256);
             expect(tileSize.height).to.equal(256);
         });
     });
@@ -199,15 +199,11 @@ describe.only('Test Suite for mapwfs2', function() {
             var mediator = module.getIO();
 
             // stub the connection io
-            var doSpy = sinon.stub(mediator.service, 'addMapLayer', function(id, style) {
+            var doSpy = sinon.stub(mediator, 'addMapLayer', function(id, style) {
                 mediator.getWFSProperties(propertiesData);
                 mediator.getWFSFeature(featureData);
                 mediator.getWFSImage(imageData);
             });
-
-            sandbox.registerForEventByName(self, "WFSPropertiesEvent");
-            sandbox.registerForEventByName(self, "WFSFeatureEvent");
-            sandbox.registerForEventByName(self, "WFSImageEvent");
 
             var selectedLayers = addLayers(module, [216]); // sets "AfterMapLayerAddEvent"
 
@@ -233,6 +229,10 @@ describe.only('Test Suite for mapwfs2', function() {
                 }
             }
 
+            sandbox.registerForEventByName(self, "WFSPropertiesEvent");
+            sandbox.registerForEventByName(self, "WFSFeatureEvent");
+            sandbox.registerForEventByName(self, "WFSImageEvent");
+
             // finish
             if(properties && feature && image) {
                 done();
@@ -257,10 +257,11 @@ describe.only('Test Suite for mapwfs2', function() {
 
             var mediator = module.getIO();
 
-            var doSpy = sinon.stub(mediator.service, 'highlightMapLayerFeatures', function(id, featureIds, keepPrevious) {
+            var doSpy = sinon.stub(mediator, 'highlightMapLayerFeatures', function(id, featureIds, keepPrevious) {
                 mediator.getWFSImage(highlightImage);
             });
 
+            var self = this;
             sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
             sandbox.registerForEventByName(self, "AfterMapMoveEvent");
             sandbox.registerForEventByName(self, "WFSImageEvent");
@@ -270,7 +271,6 @@ describe.only('Test Suite for mapwfs2', function() {
             // expect these events
             var image = false;
 
-            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -309,12 +309,13 @@ describe.only('Test Suite for mapwfs2', function() {
 
             var mediator = module.getIO();
 
-            var doSpy = sinon.stub(mediator.service, 'setLocation', function(srs, bbox, zoom, grid) {
+            var doSpy = sinon.stub(mediator, 'setLocation', function(srs, bbox, zoom, grid) {
                 mediator.getWFSProperties(propertiesData);
                 mediator.getWFSFeature(featureData);
                 mediator.getWFSImage(imageData);
             });
 
+            var self = this;
             sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
             sandbox.registerForEventByName(self, "WFSPropertiesEvent");
             sandbox.registerForEventByName(self, "WFSFeatureEvent");
@@ -328,7 +329,6 @@ describe.only('Test Suite for mapwfs2', function() {
             var feature = false;
             var image = false;
 
-            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -362,7 +362,8 @@ describe.only('Test Suite for mapwfs2', function() {
         });
     });
 
-
+// UNCOMMENT WHEN THESE FUNCTIONALITIES ARE IMPLEMENTED
+/*
     describe('setting map size', function() {
         before(startApplication);
         after(teardown);
@@ -372,12 +373,13 @@ describe.only('Test Suite for mapwfs2', function() {
 
             var mediator = module.getIO();
 
-            var doSpy = sinon.stub(mediator.service, 'setMapSize', function(width, height, grid) {
+            var doSpy = sinon.stub(mediator, 'setMapSize', function(width, height, grid) {
                 mediator.getWFSProperties(propertiesData);
                 mediator.getWFSFeature(featureData);
                 mediator.getWFSImage(imageData);
             });
 
+            var self = this;
             sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
             sandbox.registerForEventByName(self, "WFSPropertiesEvent");
             sandbox.registerForEventByName(self, "WFSFeatureEvent");
@@ -390,7 +392,6 @@ describe.only('Test Suite for mapwfs2', function() {
             var feature = false;
             var image = false;
 
-            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -433,10 +434,11 @@ describe.only('Test Suite for mapwfs2', function() {
 
             var mediator = module.getIO();
 
-            var doSpy = sinon.stub(mediator.service, 'setMapLayerStyle', function(id, style) {
+            var doSpy = sinon.stub(mediator, 'setMapLayerStyle', function(id, style) {
                 mediator.getWFSImage(imageData);
             });
 
+            var self = this;
             sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
             sandbox.registerForEventByName(self, "WFSImageEvent");
 
@@ -445,7 +447,6 @@ describe.only('Test Suite for mapwfs2', function() {
             // expect these events
             var image = false;
 
-            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -468,7 +469,7 @@ describe.only('Test Suite for mapwfs2', function() {
             }, 'Waiting for style change', 5000);
         });
     });
-
+*/
     describe('selecting feature', function() {
         before(startApplication);
         after(teardown);
@@ -478,10 +479,11 @@ describe.only('Test Suite for mapwfs2', function() {
 
             var mediator = module.getIO();
 
-            var doSpy = sinon.stub(mediator.service, 'setMapClick', function(longitude, latitude, keepPrevious) {
+            var doSpy = sinon.stub(mediator, 'setMapClick', function(longitude, latitude, keepPrevious) {
                 mediator.getWFSMapClick(mapClickData);
             });
 
+            var self = this;
             sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
             sandbox.registerForEventByName(self, "WFSFeaturesSelectedEvent");
 
@@ -490,7 +492,6 @@ describe.only('Test Suite for mapwfs2', function() {
             // expect these events
             var selected = false;
 
-            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -530,10 +531,11 @@ describe.only('Test Suite for mapwfs2', function() {
 
             var mediator = module.getIO();
 
-            var doSpy = sinon.stub(mediator.service, 'setFilter', function(geojson) {
+            var doSpy = sinon.stub(mediator, 'setFilter', function(geojson) {
                 mediator.getWFSFilter(filterData);
             });
 
+            var self = this;
             sandbox.registerForEventByName(self, "AfterMapMoveEvent");
             sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
             sandbox.registerForEventByName(self, "WFSFeaturesSelectedEvent");
@@ -541,7 +543,6 @@ describe.only('Test Suite for mapwfs2', function() {
 
             var selectedLayers = null;
 
-            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -605,7 +606,7 @@ describe.only('Test Suite for mapwfs2', function() {
 
             var mediator = module.getIO();
 
-            var doSpy = sinon.stub(mediator.service, 'setMapLayerVisibility', function(id, visible) {
+            var doSpy = sinon.stub(mediator, 'setMapLayerVisibility', function(id, visible) {
                 if(visible == true) {
                     mediator.getWFSProperties(propertiesData);
                     mediator.getWFSFeature(featureData);
@@ -613,6 +614,7 @@ describe.only('Test Suite for mapwfs2', function() {
                 }
             });
 
+            var self = this;
             sandbox.registerForEventByName(self, "WFSPropertiesEvent");
             sandbox.registerForEventByName(self, "WFSFeatureEvent");
             sandbox.registerForEventByName(self, "WFSImageEvent");
@@ -624,7 +626,6 @@ describe.only('Test Suite for mapwfs2', function() {
             var feature = false;
             var image = false;
 
-            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
