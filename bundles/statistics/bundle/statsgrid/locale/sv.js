@@ -75,7 +75,8 @@ Oskari.registerLocalization({
             "sum" : "Summa"
         },
         "values" : "värden",
-        "municipality" : "Kommun",
+        "municipality" : "Kommuner",
+        "not_included" : "Inte inlcuded kommuner",
         "noMatch" : "Inga matchade indikatorer",
         "selectIndicator": "Välja en indikator"
 
