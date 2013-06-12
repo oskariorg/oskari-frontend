@@ -1415,27 +1415,29 @@ for (var key in groups) {
                     command: statistic.id
                 });
             };
-
-            var columns = args.grid.getColumns();
-            var selectRowsChecked = false;
-            for (var i = 0; i < columns.length; i++) {
-                var column = columns[i];
-                if(column.field == "sel") {
-                    selectRowsChecked = true;
-                }
-            }
-            var showRows = jQuery(me.templates.gridHeaderMenu).addClass('statsgrid-show-row-selects');
-                // create input element with localization
-            var input = showRows.find('input').attr({'id': 'statsgrid-show-row-selects'});
-            if(selectRowsChecked) {
-                input.attr('checked', 'checked');
-            }
-            // create label with localization
-            showRows.find('label').attr('for', 'statsgrid-show-row-selects').text(me._locale['selectRows']);
-            menu.items.push({
-                element : showRows,
-                command: 'selectRows'
-            });
+// check if select rows checkbox should be checked
+// we need to do something with current state of MVC which is non-existent
+var columns = args.grid.getColumns();
+var selectRowsChecked = false;
+for (var i = 0; i < columns.length; i++) {
+    var column = columns[i];
+    if(column.field == "sel") {
+        selectRowsChecked = true;
+    }
+}
+// create checkbox for selecting rows toggle
+var showRows = jQuery(me.templates.gridHeaderMenu).addClass('statsgrid-show-row-selects');
+    // create input element with localization
+var input = showRows.find('input').attr({'id': 'statsgrid-show-row-selects'});
+if(selectRowsChecked) {
+    input.attr('checked', 'checked');
+}
+// create label with localization
+showRows.find('label').attr('for', 'statsgrid-show-row-selects').text(me._locale['selectRows']);
+menu.items.push({
+    element : showRows,
+    command: 'selectRows'
+});
 
         });
         // when command is given shos statistical variable as a new "row" in subheader
