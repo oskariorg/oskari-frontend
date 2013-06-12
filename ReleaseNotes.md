@@ -1,5 +1,15 @@
 # Release Notes
 
+## 1.12
+
+### mapmodule plugin
+
+mapOptions configuration can now be used to set units for OpenLayers.Map (defaults to 'm' as before).
+
+### mapmodule plugin/wmslayerplugin
+
+Scale limitations now use map resolutions internally to minimize risk of scale/resolution transformation errors.
+
 ## 1.11
 
 ### core/sandbox

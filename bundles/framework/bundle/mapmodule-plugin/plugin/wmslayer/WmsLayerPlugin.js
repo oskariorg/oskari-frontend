@@ -244,8 +244,9 @@ function() {
                 layerParams = _layer.getParams(),
                 layerOptions = _layer.getOptions();
             if(_layer.getMaxScale() || _layer.getMinScale()) {
-                var layerScales = this.getMapModule().calculateLayerScales(_layer.getMaxScale(), _layer.getMinScale());
-                defaultOptions.scales = layerScales;
+                // use resolutions instead of scales to minimize chance of transformation errors
+                var layerResolutions = this.getMapModule().calculateLayerResolutions(_layer.getMaxScale(), _layer.getMinScale());
+                defaultOptions.resolutions = layerResolutions;
             }
             // override default params and options from layer
             for(var key in layerParams) {
