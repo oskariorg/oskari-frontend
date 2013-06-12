@@ -1401,7 +1401,7 @@ for (var key in groups) {
             menu.items = [];
             for (var i = 0; i < me.conf.statistics.length; i++) {
                 var statistic = me.conf.statistics[i];
-                var elems = jQuery(me.templates.gridHeaderMenu);
+                var elems = jQuery(me.templates.gridHeaderMenu).addClass('statsgrid-show-total-selects');
 
                 // create input element with localization
                 var input = elems.find('input').attr({'id': 'statistics_'+statistic.id});
@@ -1424,8 +1424,16 @@ for (var key in groups) {
                     selectRowsChecked = true;
                 }
             }
+            var showRows = jQuery(me.templates.gridHeaderMenu).addClass('statsgrid-show-row-selects');
+                // create input element with localization
+            var input = showRows.find('input').attr({'id': 'statsgrid-show-row-selects'});
+            if(selectRowsChecked) {
+                input.attr('checked', 'checked');
+            }
+            // create label with localization
+            showRows.find('label').attr('for', 'statsgrid-show-row-selects').text(me._locale['selectRows']);
             menu.items.push({
-                element : '<li class="statsgrid-show-row-selects" style="border-top: solid 1px black; padding-top: 5px;"><input id="statsgrid-show-row-selects" type="checkbox" '+ (selectRowsChecked ? '   checked="checked" ' : '') +'/><label for="statsgrid-show-row-selects">select rows</label></li>',
+                element : showRows,
                 command: 'selectRows'
             });
 
