@@ -9,10 +9,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.event.FeatureHighlighte
  * @static
  * @param {Object} feature
  * @param {Boolean} highlighted
+ * @param {String} highlightType
  */
-function(feature, highlighted) {
+function(feature, highlighted, highlightType) {
     this._feature = feature;
     this._highlighted = highlighted;
+    this._highlightType = highlightType;
 }, {
     /**
      * @method getName
@@ -40,6 +42,16 @@ function(feature, highlighted) {
      */
     isHighlighted: function() {
         return this._highlighted;
+    },
+
+    /**
+     * Returns the type of user interaction, that is either 'hover' or 'click'
+     *
+     * @method getHighlightType
+     * @return {String}
+     */
+    getHighlighType: function() {
+        return this._highlightType
     }
 }, {
     'protocol' : ['Oskari.mapframework.event.Event']

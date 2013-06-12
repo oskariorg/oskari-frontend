@@ -38,6 +38,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapstats.MapStatsBundle", functi
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapstats/event/FeatureHighlightedEvent.js"
+		}, {
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/mapstats/event/HoverTooltipContentEvent.js"
 		}],
 		 "locales" : [{
             "lang" : "fi",

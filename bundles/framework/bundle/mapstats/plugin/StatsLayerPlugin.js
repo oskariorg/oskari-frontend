@@ -186,6 +186,9 @@ function(config) {
         },
         'StatsGrid.ModeChangedEvent': function(event) {
             this._afterModeChangedEvent(event);
+        },
+        'MapStats.HoverTooltipContentEvent': function(event) {
+            this._afterHoverTooltipContentEvent(event);
         }
     },
 
@@ -258,8 +261,9 @@ function(config) {
      * @param {Boolean} isBaseMap
      */
     _addMapLayerToMap : function(layer, keepLayerOnTop, isBaseMap) {
-
         var me = this;
+        var eventBuilder = me._sandbox.getEventBuilder('MapStats.FeatureHighlightedEvent');
+        var highlightEvent;
 
         if(!layer.isLayerOfType(this._layerType)) {
             return;
@@ -342,6 +346,7 @@ function(config) {
                         for (var i = 0; i < drawLayer.features.length; i++) {
                             if (!drawLayer.features[i].selected) drawLayer.removeFeatures([drawLayer.features[i]]);
                         }
+                        me._removePopup();
                         return;
                     }
                     var found = false;
@@ -353,9 +358,12 @@ function(config) {
                             drawLayer.removeFeatures([drawLayer.features[i]]);
                         }
                     }
+                    me._removePopup();
                     if (!found) {
                         drawLayer.addFeatures([event.features[0]]);
                         me._highlightCtrl.highlight(event.features[0]);
+
+                        me._addPopup(event);
                     }
                     drawLayer.redraw();
                 },
@@ -402,9 +410,6 @@ function(config) {
 	    			featureStyle.strokeWidth = 3;
 	    			featureStyle.fillOpacity = 0.2;
 
-                    var eventBuilder = me._sandbox.getEventBuilder('MapStats.FeatureHighlightedEvent');
-                    var event;
-
                     if (foundInd >= 0) {
                         drawLayer.features[i].selected = !drawLayer.features[i].selected;
                         if (drawLayer.features[i].selected) {
@@ -414,20 +419,20 @@ function(config) {
                             me._highlightCtrl.highlight(drawLayer.features[i]);
                         }
                         if (eventBuilder) {
-                            event = eventBuilder(drawLayer.features[i], drawLayer.features[i].selected);
+                            highlightEvent = eventBuilder(drawLayer.features[i], drawLayer.features[i].selected, 'click');
                         }
                     } else {
                         drawLayer.addFeatures([newFeature]);
                         newFeature.selected = true;
                         newFeature.style = featureStyle;
                         if (eventBuilder) {
-                            event = eventBuilder(newFeature, newFeature.selected);
+                            highlightEvent = eventBuilder(newFeature, newFeature.selected, 'click');
                         }
                     }
                     drawLayer.redraw();
 
-                    if (event) {
-                        me._sandbox.notifyAll(event);
+                    if (highlightEvent) {
+                        me._sandbox.notifyAll(highlightEvent);
                     }
                 },
                 beforegetfeatureinfo: function(event) {
@@ -560,6 +565,61 @@ function(config) {
 
         return this._map.getLayersByName('layer_' + layer.getId());
     },
+
+    /**
+     * Removes popup from the map.
+     *
+     * @method _removePopup
+     * @private
+     * @param {OpenLayers.Popup} popup Optional, uses this._popup if not provided
+     */
+    _removePopup: function(popup) {
+        popup = popup || this._popup;
+        if (popup) {
+            this._map.removePopup(popup);
+        }
+    },
+
+    /**
+     * Adds a popup to the map and sends a request to get content for it
+     * from the statsgrid bundle.
+     *
+     * @method _addPopup
+     * @private
+     * @param {OpenLayers.Event} event event with xy and feature information
+     */
+    _addPopup: function(event) {
+        var content = event.features[0].attributes['kuntanimi'];
+        this._popup = new OpenLayers.Popup(null,
+            this._map.getLonLatFromPixel(new OpenLayers.Pixel(event.xy.x, event.xy.y)),
+            new OpenLayers.Size(100, 100),
+            content
+        );
+        this._popup.autoSize = true;
+        this._popup.opacity = 0.8;
+        this._map.addPopup(this._popup);
+
+        var reqBuilder = this._sandbox.getRequestBuilder('StatsGrid.TooltipContentRequest');
+        if (reqBuilder) {
+            var request = reqBuilder(event.features[0]);
+            this._sandbox.request(this, request);
+        }
+    },
+
+    /**
+     * Sets content for this._popup, if found.
+     *
+     * @method _afterHoverTooltipContentEvent
+     * @private
+     * @param {Oskari.mapframework.bundle.mapstats.event.HoverTooltipContentEvent} event
+     */
+    _afterHoverTooltipContentEvent: function(event) {
+        var content = event.getContent();
+        if (this._popup) {
+            this._popup.setContentHTML(content);
+        }
+    },
+
     /**
      * @method _afterChangeMapLayerOpacityEvent
      * Handle AfterChangeMapLayerOpacityEvent

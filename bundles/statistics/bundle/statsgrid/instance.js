@@ -42,6 +42,9 @@ function() {
         var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
         sandbox.request(this, request);
 
+        var tooltipRequestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.TooltipContentRequestHandler', this);
+        sandbox.addRequestHandler('StatsGrid.TooltipContentRequest', tooltipRequestHandler);
+
         var locale = me.getLocalization();
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         this.mapModule = mapModule;
@@ -112,9 +115,6 @@ function() {
         },
         'AfterMapLayerRemoveEvent': function(event) {
             this._afterMapLayerRemoveEvent(event);
-        },
-        'MapStats.FeatureHighlightedEvent': function(event) {
-            console.log(event);
         }
 	},
     /**
