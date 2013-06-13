@@ -1,5 +1,10 @@
 # Release Notes
 
+## 1.12
+
+### ManageStatsPlugin
+There is now a possibility to uncheck some of the municipalities. This affects to the statistical variables. This feature can be swithced on from header row drop down list
+
 ## 1.11
 
 ### core/sandbox

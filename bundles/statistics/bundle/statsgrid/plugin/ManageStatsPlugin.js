@@ -288,11 +288,11 @@ function(config, locale) {
         container.append(gridContainer);
         // add initial columns
 
-//This modified plugin adds checkboxes to grid
-var checkboxSelector = new Slick.CheckboxSelectColumn2({
-    cssClass: "slick-cell-checkboxsel"
-});
-this.checkboxSelector = checkboxSelector;
+        //This modified plugin adds checkboxes to grid
+        var checkboxSelector = new Slick.CheckboxSelectColumn2({
+            cssClass: "slick-cell-checkboxsel"
+        });
+        this.checkboxSelector = checkboxSelector;
 
 
         var columns = [{
@@ -347,23 +347,23 @@ this.checkboxSelector = checkboxSelector;
         // To use aggregators we need to define a group
         dataView.setGrouping({
             getter : "sel",
-comparer: function (a, b) {
-    //checkbox columns values are 'checked' and 'empty'
-    if(a.groupingKey == 'checked' && a.groupingKey == b.groupingKey){
-        return 0;
-    } else if(a.groupingKey < b.groupingKey) {
-        // 'empty' is the first group
-        return 1;
-    } else {
-        return -1;
-    }
-},
+            comparer: function (a, b) {
+                //checkbox columns values are 'checked' and 'empty'
+                if(a.groupingKey == 'checked' && a.groupingKey == b.groupingKey){
+                    return 0;
+                } else if(a.groupingKey < b.groupingKey) {
+                    // 'empty' is the first group
+                    return 1;
+                } else {
+                    return -1;
+                }
+            },
             formatter: function (g) {
-//a hack to name the groups
-var text = (g.groupingKey == "checked" ? 
-    me._locale['municipality'] : 
-    me._locale['not_included']) + " (" + g.count + ")";
-return "<span style='color:green'>" + text + "</span>";
+                //a hack to name the groups
+                var text = (g.groupingKey == "checked" ? 
+                    me._locale['municipality'] : 
+                    me._locale['not_included']) + " (" + g.count + ")";
+                return "<span style='color:green'>" + text + "</span>";
             },
             aggregateCollapsed: false
         });
@@ -422,34 +422,36 @@ return "<span style='color:green'>" + text + "</span>";
             me.dataView.refresh();
         })
 
-// register checboxSelector plugin
-grid.registerPlugin(checkboxSelector);
-// register groupItemMetadataProvider plugin (if not registered group toggles won't work)
-grid.registerPlugin(groupItemMetadataProvider);
-// Our new event to subscripe - this is called when checkbox is clicked
-checkboxSelector.onSelectRowClicked.subscribe(function(e, args){
-    var data = args.grid.getData();
-    var item = data.getItem(args.row);
-    //update item values (groupingkey is created from these)
-    item.sel = jQuery(e.target).is(':checked') ? 'checked' : 'empty';
-    data.updateItem(item.id, item);
+        // register checboxSelector plugin
+        grid.registerPlugin(checkboxSelector);
+        // register groupItemMetadataProvider plugin (if not registered group toggles won't work)
+        grid.registerPlugin(groupItemMetadataProvider);
+        // Our new event to subscripe - this is called when checkbox is clicked
+        checkboxSelector.onSelectRowClicked.subscribe(function(e, args){
+            var data = args.grid.getData();
+            var item = data.getItem(args.row);
+            var groupsBeforeUpdate = data.getGroups().length;
 
-    // collapse group empty if it is created for the first time
-    groups = data.getGroups();
-    if(groups.length > 1) {
-        for (var i = 0; i < groups.length; i++) {
-            var group = groups[i];
-            if(group.groupingKey == 'empty' && group.count < 2) {
-                data.collapseGroup('empty');
+            //update item values (groupingkey is created from these)
+            item.sel = jQuery(e.target).is(':checked') ? 'checked' : 'empty';
+            data.updateItem(item.id, item);
+
+            // collapse group empty if it is created for the first time
+            groups = data.getGroups();
+            if(groups.length > 1) {
+                for (var i = 0; i < groups.length; i++) {
+                    var group = groups[i];
+                    if(group.groupingKey == 'empty' && group.count < 2 && groupsBeforeUpdate == 1) {
+                        data.collapseGroup('empty');
+                    }
+                };
             }
-        };
-    }
 
-    // resize grid (content/rows does not show extra rows otherwise. i.e. group headers & footers)
-    args.grid.setColumns(args.grid.getColumns());
-    data.refresh();
+            // resize grid (content/rows does not show extra rows otherwise. i.e. group headers & footers)
+            args.grid.setColumns(args.grid.getColumns());
+            data.refresh();
 
-});
+        });
 
         me._initHeaderPlugin(columns, grid);
 
@@ -821,16 +823,16 @@ checkboxSelector.onSelectRowClicked.subscribe(function(e, args){
 
             groupTotalsFormatter: function(totals, columnDef) {
                 var text = "";
-// create grouping footer texts. => how many values there is in different colums
-valueCount = 0;
-var rows = totals.group.rows;
-for (var i = 0; i < rows.length; i++) {
-    var row = rows[i];
-    if (row[columnDef.field] != null) {
-        valueCount++;
-    };
-};
-text = valueCount + ' ' + me._locale['values'];
+                // create grouping footer texts. => how many values there is in different colums
+                valueCount = 0;
+                var rows = totals.group.rows;
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+                    if (row[columnDef.field] != null) {
+                        valueCount++;
+                    };
+                };
+                text = valueCount + ' ' + me._locale['values'];
                 return text;
             }
         });
@@ -1302,14 +1304,15 @@ text = valueCount + ' ' + me._locale['values'];
             // loop through columns
             for (var i = 0; i < columns.length; i++) {
                 var column = columns[i];
-// group totals (statistical variables) should be calculated only for the checked/selected items
-var group = groups[0];
-for (var key in groups) {
-    g = groups[key];
-    if(g.groupingKey == "checked"){
-        group = g;
-    }
-};
+
+                // group totals (statistical variables) should be calculated only for the checked/selected items
+                var group = groups[0];
+                for (var key in groups) {
+                    g = groups[key];
+                    if(g.groupingKey == "checked"){
+                        group = g;
+                    }
+                };
 
                 var gridTotals = group.totals;
                 var sub = jQuery(this.templates.subHeader);
@@ -1415,29 +1418,30 @@ for (var key in groups) {
                     command: statistic.id
                 });
             };
-// check if select rows checkbox should be checked
-// we need to do something with current state of MVC which is non-existent
-var columns = args.grid.getColumns();
-var selectRowsChecked = false;
-for (var i = 0; i < columns.length; i++) {
-    var column = columns[i];
-    if(column.field == "sel") {
-        selectRowsChecked = true;
-    }
-}
-// create checkbox for selecting rows toggle
-var showRows = jQuery(me.templates.gridHeaderMenu).addClass('statsgrid-show-row-selects');
-    // create input element with localization
-var input = showRows.find('input').attr({'id': 'statsgrid-show-row-selects'});
-if(selectRowsChecked) {
-    input.attr('checked', 'checked');
-}
-// create label with localization
-showRows.find('label').attr('for', 'statsgrid-show-row-selects').text(me._locale['selectRows']);
-menu.items.push({
-    element : showRows,
-    command: 'selectRows'
-});
+
+            // check if select rows checkbox should be checked
+            // we need to do something with current state of MVC which is non-existent
+            var columns = args.grid.getColumns();
+            var selectRowsChecked = false;
+            for (var i = 0; i < columns.length; i++) {
+                var column = columns[i];
+                if(column.field == "sel") {
+                    selectRowsChecked = true;
+                }
+            }
+            // create checkbox for selecting rows toggle
+            var showRows = jQuery(me.templates.gridHeaderMenu).addClass('statsgrid-show-row-selects');
+                // create input element with localization
+            var input = showRows.find('input').attr({'id': 'statsgrid-show-row-selects'});
+            if(selectRowsChecked) {
+                input.attr('checked', 'checked');
+            }
+            // create label with localization
+            showRows.find('label').attr('for', 'statsgrid-show-row-selects').text(me._locale['selectRows']);
+            menu.items.push({
+                element : showRows,
+                command: 'selectRows'
+            });
 
         });
         // when command is given shos statistical variable as a new "row" in subheader

@@ -56,29 +56,29 @@
           return;
         }
 
-_self.onSelectRowClicked.notify(args, e, _self);
+        _self.onSelectRowClicked.notify(args, e, _self);
 
-// handle headerRowCheckbox
-var dataView = _grid.getData(),
-    groups = dataView.getGroups(),
-    length = dataView.getItems().length,
-    isAllChecked = false;
-for(var key in groups) {
-  var group = groups[key];
-  if(group.count == length && $(e.target).is(":checked")){
-    _grid.updateColumnHeader(_options.columnId, "<input type='checkbox' checked='checked'>", _options.toolTip);
-    isAllChecked = true;
-    break;
-  }
-}
-if(!isAllChecked) {
-  _grid.updateColumnHeader(_options.columnId, "<input type='checkbox'>", _options.toolTip);
-}
-//update data
-_grid.getData().refresh();
-//render all the rows (and checkboxes) again
-_grid.invalidateAllRows();
-_grid.render();
+        // handle headerRowCheckbox
+        var dataView = _grid.getData(),
+            groups = dataView.getGroups(),
+            length = dataView.getItems().length,
+            isAllChecked = false;
+        for(var key in groups) {
+          var group = groups[key];
+          if(group.count == length && $(e.target).is(":checked")){
+            _grid.updateColumnHeader(_options.columnId, "<input type='checkbox' checked='checked'>", _options.toolTip);
+            isAllChecked = true;
+            break;
+          }
+        }
+        if(!isAllChecked) {
+          _grid.updateColumnHeader(_options.columnId, "<input type='checkbox'>", _options.toolTip);
+        }
+        //update data
+        _grid.getData().refresh();
+        //render all the rows (and checkboxes) again
+        _grid.invalidateAllRows();
+        _grid.render();
 
         e.stopPropagation();
         e.stopImmediatePropagation();
@@ -106,12 +106,13 @@ _grid.render();
             item.sel = 'empty';
           }
         }
-//update data
-_grid.getData().setItems(items);
-_grid.getData().refresh();
-//render all the rows (and checkboxes) again
-_grid.invalidateAllRows();
-_grid.render();
+        //update data
+        _grid.getData().setItems(items);
+        _grid.getData().refresh();
+        //render all the rows (and checkboxes) again
+        _grid.invalidateAllRows();
+        _grid.render();
+
         e.stopPropagation();
         e.stopImmediatePropagation();
       }
@@ -133,7 +134,7 @@ _grid.render();
 
     function checkboxSelectionFormatter(row, cell, value, columnDef, dataContext) {
       if (dataContext) {
-return dataContext.sel == 'checked'
+        return dataContext.sel == 'checked'
             ? "<input type='checkbox' checked='checked'>"
             : "<input type='checkbox'>";
       }
