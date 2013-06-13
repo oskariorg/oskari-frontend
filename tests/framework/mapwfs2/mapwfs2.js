@@ -1,8 +1,16 @@
 // requires jetty + redis open with wfs2
-describe.only('Test Suite for mapwfs2', function() {
+describe('Test Suite for mapwfs2', function() {
     var module = null,
+        connection = null,
+        mediator = null,
         sandbox = null,
-        appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull']),
+        appSetup = getStartupSequence([
+            'openlayers-default-theme',
+            'mapfull',
+            'divmanazer',
+            'toolbar',
+            'featuredata2'
+        ]),
         mapfullConf = getConfigForMapfull(),
         appConf = {
             "mapfull": mapfullConf,
@@ -105,6 +113,37 @@ describe.only('Test Suite for mapwfs2', function() {
             }
         );
 
+        // make layer 216 available
+        conf["mapfull"]["conf"]["layers"].push({
+            "wmsName": "palvelupisteiden_kyselypalvelu",
+            "type": "wfslayer",
+            "baseLayerId": 27,
+            "legendImage": "",
+            "formats": {},
+            "id": 216,
+            "style": "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<StyledLayerDescriptor version=\"1.0.0\" xmlns=\"http://www.opengis.net/sld\" xmlns:ogc=\"http://www.opengis.net/ogc\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd\">\n\t<NamedLayer>\n\t\t<Name>Palvelupisteet</Name>\n\t\t<UserStyle>\n\t\t\t<Title>Palvelupisteiden tyyli</Title>\n\t\t\t<Abstract/>\n\t\t\t<FeatureTypeStyle>\n\t\t\t\t<Rule>\n\t\t\t\t\t<Title>Piste</Title>\n\t\t\t\t\t<PointSymbolizer>\n\t\t\t\t\t\t<Graphic>\n\t\t\t\t\t\t\t<Mark>\n\t\t\t\t\t\t\t\t<WellKnownName>circle</WellKnownName>\n\t\t\t\t\t\t\t\t<Fill>\n\t\t\t\t\t\t\t\t\t<CssParameter name=\"fill\">#FFFFFF</CssParameter>\n\t\t\t\t\t\t\t\t</Fill>\n\t\t\t\t\t\t\t\t<Stroke>\n\t\t\t\t\t\t\t\t\t<CssParameter name=\"stroke\">#000000</CssParameter>\n\t\t\t\t\t\t\t\t\t<CssParameter name=\"stroke-width\">2</CssParameter>\n\t\t\t\t\t\t\t\t</Stroke>\n\t\t\t\t\t\t\t</Mark>\n\t\t\t\t\t\t\t<Size>12</Size>\n\t\t\t\t\t\t</Graphic>\n\t\t\t\t\t</PointSymbolizer>\n\t\t\t\t</Rule>\n\t\t\t</FeatureTypeStyle>\n\t\t</UserStyle>\n\t</NamedLayer>\n</StyledLayerDescriptor>",
+            "dataUrl": "",
+            "created": "Wed Jan 18 14:11:29 EET 2012",
+            "updated": "Mon Mar 05 12:20:59 EET 2012",
+            "name": "Palvelupisteiden kyselypalvelu",
+            "opacity": 100,
+            "permissions": {
+                "publish": "no_publication_permission"
+            },
+            "maxScale": 1,
+            "inspire": "Yleishyödylliset ja muut julkiset palvelut",
+            "dataUrl_uuid": "",
+            "descriptionLink": "",
+            "styles": {},
+            "orgName": "Valtiokonttori",
+            "isQueryable": false,
+            "minScale": 50000,
+            "wmsUrl": "wms",
+            "admin": {},
+            "orderNumber": 2,
+            "subtitle": ""
+        });
+
         //setup HTML
         jQuery("body").html(getDefaultHTML());
 
@@ -113,6 +152,14 @@ describe.only('Test Suite for mapwfs2', function() {
             // Find handles to sandbox and statehandler id
             sandbox = Oskari.$("sandbox");
             module = sandbox.findRegisteredModuleInstance('MainMapModuleWfsLayerPlugin');
+            connection = module.getConnection();
+            mediator = module.getIO();
+            mediator.session = {
+                "clientId" : "testId",
+                "session" : "test_session",
+                "browser" : jQuery.browser.name,
+                "browserVersion" : jQuery.browser.versionNum
+            }
             done();
         });
     };
@@ -143,9 +190,6 @@ describe.only('Test Suite for mapwfs2', function() {
         after(teardown);
 
         it('should be defined', function() {
-            var connection = module.getConnection();
-            var mediator = module.getIO();
-
             expect(connection).to.be.ok();
             expect(mediator).to.be.ok();
 
@@ -194,9 +238,7 @@ describe.only('Test Suite for mapwfs2', function() {
         after(teardown);
 
         it('should be activated', function(done) {
-            this.timeout(10000);
-
-            var mediator = module.getIO();
+            this.timeout(20000);
 
             // stub the connection io
             var doSpy = sinon.stub(mediator, 'addMapLayer', function(id, style) {
@@ -204,8 +246,6 @@ describe.only('Test Suite for mapwfs2', function() {
                 mediator.getWFSFeature(featureData);
                 mediator.getWFSImage(imageData);
             });
-
-            var selectedLayers = addLayers(module, [216]); // sets "AfterMapLayerAddEvent"
 
             // expect these events
             var properties = false;
@@ -233,10 +273,7 @@ describe.only('Test Suite for mapwfs2', function() {
             sandbox.registerForEventByName(self, "WFSFeatureEvent");
             sandbox.registerForEventByName(self, "WFSImageEvent");
 
-            // finish
-            if(properties && feature && image) {
-                done();
-            }
+            var selectedLayers = addLayers(module, [216]); // sets "AfterMapLayerAddEvent"
 
             // check called once
             waitsFor(function() {
@@ -244,7 +281,15 @@ describe.only('Test Suite for mapwfs2', function() {
             }, function() {
                 expect(doSpy.callCount).to.be(1);
                 doSpy.restore();
+                done();
             }, 'Waiting for adding a map layer', 5000);
+
+            // finish
+            waitsFor(function() {
+                return (properties && feature && image);
+            }, function() {
+                done();
+            }, 'Waiting for responses', 10000);
         });
     });
 
@@ -253,24 +298,17 @@ describe.only('Test Suite for mapwfs2', function() {
         after(teardown);
 
         it('should be activated', function(done) {
-            this.timeout(10000);
-
-            var mediator = module.getIO();
+            this.timeout(20000);
 
             var doSpy = sinon.stub(mediator, 'highlightMapLayerFeatures', function(id, featureIds, keepPrevious) {
                 mediator.getWFSImage(highlightImage);
             });
 
-            var self = this;
-            sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
-            sandbox.registerForEventByName(self, "AfterMapMoveEvent");
-            sandbox.registerForEventByName(self, "WFSImageEvent");
-
-            var selectedLayers = null;
-
             // expect these events
             var image = false;
 
+            var selectedLayers = null;
+            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -278,7 +316,8 @@ describe.only('Test Suite for mapwfs2', function() {
                 if(event.getName() === "AfterMapMoveEvent") {
                     selectedLayers = addLayers(module, [216]);
                 } else if(event.getName() === "AfterMapLayerAddEvent") { // wait that the layer has been added
-                    var event = sandbox.getEventBuilder("WFSFeaturesSelectedEvent")("params"); // TODO: params
+                    var layer = sandbox.findMapLayerFromSelectedMapLayers(216);
+                    var event = sandbox.getEventBuilder("WFSFeaturesSelectedEvent")(["toimipaikat.4535"], layer, false);
                     sandbox.notifyAll(event);
                 } else if(event.getName() === "WFSImageEvent") {
                     image = true;
@@ -287,6 +326,13 @@ describe.only('Test Suite for mapwfs2', function() {
                 }
             }
 
+            sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
+            sandbox.registerForEventByName(self, "AfterMapMoveEvent");
+            sandbox.registerForEventByName(self, "WFSImageEvent");
+
+            // move map with projection coordinates
+            sandbox.postRequestByName('MapMoveRequest', [385402, 6671502, 9]);
+
             // check called once
             waitsFor(function() {
                 return (doSpy.callCount > 0);
@@ -294,9 +340,6 @@ describe.only('Test Suite for mapwfs2', function() {
                 expect(doSpy.callCount).to.be(1);
                 doSpy.restore();
             }, 'Waiting for highlight', 5000);
-
-            // move map with projection coordinates
-            sandbox.postRequestByName('MapMoveRequest', [385402, 6671502, 9]);
         });
     });
 
@@ -305,9 +348,7 @@ describe.only('Test Suite for mapwfs2', function() {
         after(teardown);
 
         it('should be activated', function(done) {
-            this.timeout(10000);
-
-            var mediator = module.getIO();
+            this.timeout(20000);
 
             var doSpy = sinon.stub(mediator, 'setLocation', function(srs, bbox, zoom, grid) {
                 mediator.getWFSProperties(propertiesData);
@@ -315,20 +356,12 @@ describe.only('Test Suite for mapwfs2', function() {
                 mediator.getWFSImage(imageData);
             });
 
-            var self = this;
-            sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
-            sandbox.registerForEventByName(self, "WFSPropertiesEvent");
-            sandbox.registerForEventByName(self, "WFSFeatureEvent");
-            sandbox.registerForEventByName(self, "WFSImageEvent");
-
-            // move map "AfterMapMoveEvent"
-            var selectedLayers = addLayers(module, [216]); // adds layer
-
             // expect these events
             var properties = false;
             var feature = false;
             var image = false;
 
+            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -347,10 +380,13 @@ describe.only('Test Suite for mapwfs2', function() {
                 }
             }
 
-            // finish
-            if(properties && feature && image) {
-                done();
-            }
+            sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
+            sandbox.registerForEventByName(self, "WFSPropertiesEvent");
+            sandbox.registerForEventByName(self, "WFSFeatureEvent");
+            sandbox.registerForEventByName(self, "WFSImageEvent");
+
+            // move map "AfterMapMoveEvent"
+            var selectedLayers = addLayers(module, [216]); // adds layer
 
             // check called once
             waitsFor(function() {
@@ -359,19 +395,23 @@ describe.only('Test Suite for mapwfs2', function() {
                 expect(doSpy.callCount).to.be(1);
                 doSpy.restore();
             }, 'Waiting for map move', 5000);
+
+            // finish
+            waitsFor(function() {
+                return (properties && feature && image);
+            }, function() {
+                done();
+            }, 'Waiting for responses', 10000);
         });
     });
 
-// UNCOMMENT WHEN THESE FUNCTIONALITIES ARE IMPLEMENTED
-/*
-    describe('setting map size', function() {
+    // TODO: make the feature :)
+    describe.skip('setting map size', function() {
         before(startApplication);
         after(teardown);
 
         it('should be activated', function(done) {
-            this.timeout(10000);
-
-            var mediator = module.getIO();
+            this.timeout(20000);
 
             var doSpy = sinon.stub(mediator, 'setMapSize', function(width, height, grid) {
                 mediator.getWFSProperties(propertiesData);
@@ -379,19 +419,12 @@ describe.only('Test Suite for mapwfs2', function() {
                 mediator.getWFSImage(imageData);
             });
 
-            var self = this;
-            sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
-            sandbox.registerForEventByName(self, "WFSPropertiesEvent");
-            sandbox.registerForEventByName(self, "WFSFeatureEvent");
-            sandbox.registerForEventByName(self, "WFSImageEvent");
-
-            var selectedLayers = addLayers(module, [216]); // adds layer
-
             // expect these events
             var properties = false;
             var feature = false;
             var image = false;
 
+            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -410,10 +443,12 @@ describe.only('Test Suite for mapwfs2', function() {
                 }
             }
 
-            // finish
-            if(properties && feature && image) {
-                done();
-            }
+            sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
+            sandbox.registerForEventByName(self, "WFSPropertiesEvent");
+            sandbox.registerForEventByName(self, "WFSFeatureEvent");
+            sandbox.registerForEventByName(self, "WFSImageEvent");
+
+            var selectedLayers = addLayers(module, [216]); // adds layer
 
             // check called once
             waitsFor(function() {
@@ -422,31 +457,32 @@ describe.only('Test Suite for mapwfs2', function() {
                 expect(doSpy.callCount).to.be(1);
                 doSpy.restore();
             }, 'Waiting for map size change', 5000);
+
+            // finish
+            waitsFor(function() {
+                return (properties && feature && image);
+            }, function() {
+                done();
+            }, 'Waiting for responses', 10000);
         });
     });
 
-    describe('changing style', function() {
+    // TODO: make the feature :)
+    describe.skip('changing style', function() {
         before(startApplication);
         after(teardown);
 
         it('should be activated', function(done) {
-            this.timeout(10000);
-
-            var mediator = module.getIO();
+            this.timeout(20000);
 
             var doSpy = sinon.stub(mediator, 'setMapLayerStyle', function(id, style) {
                 mediator.getWFSImage(imageData);
             });
 
-            var self = this;
-            sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
-            sandbox.registerForEventByName(self, "WFSImageEvent");
-
-            var selectedLayers = addLayers(module, [216]); // adds layer
-
             // expect these events
             var image = false;
 
+            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -460,6 +496,11 @@ describe.only('Test Suite for mapwfs2', function() {
                 }
             }
 
+            sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
+            sandbox.registerForEventByName(self, "WFSImageEvent");
+
+            var selectedLayers = addLayers(module, [216]); // adds layer
+
             // check called once
             waitsFor(function() {
                 return (doSpy.callCount > 0);
@@ -469,29 +510,24 @@ describe.only('Test Suite for mapwfs2', function() {
             }, 'Waiting for style change', 5000);
         });
     });
-*/
+
     describe('selecting feature', function() {
         before(startApplication);
         after(teardown);
 
         it('should be activated', function(done) {
-            this.timeout(10000);
-
-            var mediator = module.getIO();
+            this.timeout(20000);
 
             var doSpy = sinon.stub(mediator, 'setMapClick', function(longitude, latitude, keepPrevious) {
                 mediator.getWFSMapClick(mapClickData);
             });
-
-            var self = this;
-            sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
-            sandbox.registerForEventByName(self, "WFSFeaturesSelectedEvent");
 
             var selectedLayers = null;
 
             // expect these events
             var selected = false;
 
+            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -501,13 +537,22 @@ describe.only('Test Suite for mapwfs2', function() {
                 } else if(event.getName() === "AfterMapLayerAddEvent") { // wait that the layer has been added
                     var map = sandbox.findRegisteredModuleInstance("MainMapModule").getMap();
                     var point = map.getViewPortPxFromLonLat(new OpenLayers.LonLat(385373, 6671561));
-                    simulateMouseClick(map, point.x, point.y); // "MapClickedEvent"
+                    var evt = sandbox.getEventBuilder('MapClickedEvent')(point, point.x, point.y);
+                    sandbox.notifyAll(evt);
                 } else if(event.getName() === "WFSFeaturesSelectedEvent") {
                     selected = true;
                     expect(selected).to.be(true);
                     done();
                 }
             }
+
+            sandbox.registerForEventByName(self, "AfterMapMoveEvent");
+            sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
+            sandbox.registerForEventByName(self, "WFSFeaturesSelectedEvent");
+            sandbox.registerForEventByName(self, "MapClickedEvent");
+
+            // move map with projection coordinates
+            sandbox.postRequestByName('MapMoveRequest', [385402, 6671502, 9]);
 
             // check called once
             waitsFor(function() {
@@ -516,9 +561,6 @@ describe.only('Test Suite for mapwfs2', function() {
                 expect(doSpy.callCount).to.be(1);
                 doSpy.restore();
             }, 'Waiting for map click', 5000);
-
-            // move map with projection coordinates
-            sandbox.postRequestByName('MapMoveRequest', [385402, 6671502, 9]);
         });
     });
 
@@ -529,20 +571,13 @@ describe.only('Test Suite for mapwfs2', function() {
         it('should be activated', function(done) {
             this.timeout(10000);
 
-            var mediator = module.getIO();
-
             var doSpy = sinon.stub(mediator, 'setFilter', function(geojson) {
                 mediator.getWFSFilter(filterData);
             });
 
-            var self = this;
-            sandbox.registerForEventByName(self, "AfterMapMoveEvent");
-            sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
-            sandbox.registerForEventByName(self, "WFSFeaturesSelectedEvent");
-            sandbox.registerForEventByName(self, "FeatureData.FinishedDrawingEvent");
-
             var selectedLayers = null;
 
+            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -583,6 +618,14 @@ describe.only('Test Suite for mapwfs2', function() {
                 }
             }
 
+            sandbox.registerForEventByName(self, "AfterMapMoveEvent");
+            sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
+            sandbox.registerForEventByName(self, "WFSFeaturesSelectedEvent");
+            sandbox.registerForEventByName(self, "FeatureData.FinishedDrawingEvent");
+
+            // move map with projection coordinates
+            sandbox.postRequestByName('MapMoveRequest', [385402, 6671502, 9]);
+
             // check called once
             waitsFor(function() {
                 return (doSpy.callCount > 0);
@@ -591,9 +634,6 @@ describe.only('Test Suite for mapwfs2', function() {
                 doSpy.restore();
                 done();
             }, 'Waiting for filter', 5000);
-
-            // move map with projection coordinates
-            sandbox.postRequestByName('MapMoveRequest', [385402, 6671502, 9]);
         });
     });
 
@@ -604,8 +644,6 @@ describe.only('Test Suite for mapwfs2', function() {
         it('should be activated', function(done) {
             this.timeout(10000);
 
-            var mediator = module.getIO();
-
             var doSpy = sinon.stub(mediator, 'setMapLayerVisibility', function(id, visible) {
                 if(visible == true) {
                     mediator.getWFSProperties(propertiesData);
@@ -614,18 +652,12 @@ describe.only('Test Suite for mapwfs2', function() {
                 }
             });
 
-            var self = this;
-            sandbox.registerForEventByName(self, "WFSPropertiesEvent");
-            sandbox.registerForEventByName(self, "WFSFeatureEvent");
-            sandbox.registerForEventByName(self, "WFSImageEvent");
-
-            var selectedLayers = addLayers(module, [216]); // adds layer
-
             // expect these events
             var properties = false;
             var feature = false;
             var image = false;
 
+            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -645,10 +677,11 @@ describe.only('Test Suite for mapwfs2', function() {
                 }
             }
 
-            // finish
-            if(properties && feature && image) {
-                done();
-            }
+            sandbox.registerForEventByName(self, "WFSPropertiesEvent");
+            sandbox.registerForEventByName(self, "WFSFeatureEvent");
+            sandbox.registerForEventByName(self, "WFSImageEvent");
+
+            var selectedLayers = addLayers(module, [216]); // adds layer
 
             // check called once
             waitsFor(function() {
@@ -657,6 +690,13 @@ describe.only('Test Suite for mapwfs2', function() {
                 expect(doSpy.callCount).to.be(2);
                 doSpy.restore();
             }, 'Waiting for visibility change', 5000);
+
+            // finish
+            waitsFor(function() {
+                return (properties && feature && image);
+            }, function() {
+                done();
+            }, 'Waiting for responses', 10000);
         });
     });
 });
