@@ -913,9 +913,7 @@
       grid.onCellCssStylesChanged.subscribe(function(e, args) {
         if (inHandler) { return; }
         if (key != args.key) { return; }
-        if (args.hash) {
-          storeCellCssStyles(args.hash);
-        }
+        storeCellCssStyles(args.hash);
       });
 
       this.onRowsChanged.subscribe(update);

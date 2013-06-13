@@ -160,7 +160,11 @@ function(config, locale) {
      * @property {Object} eventHandlers
      * @static
      */
-    eventHandlers : {},
+    eventHandlers : {
+        'MapStats.FeatureHighlightedEvent': function(event) {
+            this._featureHighlightedEvent(event);
+        }
+    },
 
     /**
      * @method onEvent
@@ -496,6 +500,48 @@ function(config, locale) {
         }
         gridDiv.height(parent.height() - selectorsHeight);
         this.grid.resizeCanvas();
+    },
+
+    /**
+     * Returns the index of the item with the code provided.
+     *
+     * @method getIdxByCode
+     * @param {String} code
+     */
+    getIdxByCode: function(code) {
+        var items = this.dataView ? this.dataView.getItems() : [],
+            returnItem = null,
+            i;
+
+        for (i = 0; i < items.length; ++i) {
+            if (items[i].code === code) {
+                returnItem = items[i];
+                break;
+            }
+        }
+        if (returnItem) {
+            return this.dataView.getRowById(returnItem.id);
+        } else {
+            return null;
+        }
+    },
+
+    getItemByCode: function(code) {
+        var items = this.dataView ? this.dataView.getItems() : [],
+            returnItem = null,
+            i;
+
+        for (i = 0; i < items.length; ++i) {
+            if (items[i].code === code) {
+                returnItem = items[i];
+                break;
+            }
+        }
+        if (returnItem) {
+            return this.dataView.getItemById(returnItem.id);
+        } else {
+            return null;
+        }
     },
 
     /**
@@ -1516,6 +1562,57 @@ function(config, locale) {
             str += line + '\r\n';
         }
         window.open( "data:text/csv;charset=utf-8," + escape(str))
+    },
+
+    /**
+     * Highlights a municipality given by the event and scrolls to it in the grid
+     *
+     * @method _featureHighlightedEvent
+     * @private
+     * @param {Oskari.mapframework.bundle.mapstats.event.FeatureHighlightedEvent} event
+     */
+    _featureHighlightedEvent: function(event) {
+        var featureAtts = event.getFeature().attributes,
+            isHighlighted = event.isHighlighted(),
+            idx = this.getIdxByCode(featureAtts.kuntakoodi),
+            cssKey = 'highlight-row-' + featureAtts.kuntakoodi,
+            cssHash = {};
+
+        if (this.grid && idx) {
+            if (isHighlighted) {               
+                this.grid.scrollRowToTop(idx);
+                cssHash[idx] = {'municipality': 'statsgrid-highlight-row'};
+                this.grid.addCellCssStyles(cssKey, cssHash);
+                this.dataView.syncGridCellCssStyles(this.grid, cssKey);
+            } else {
+                this.grid.removeCellCssStyles(cssKey);
+                this.dataView.syncGridCellCssStyles(this.grid, cssKey);
+            }
+            // This needs to be called or otherwise sorting etc breaks the highlighting.
+            //this.grid.invalidate();
+            //this.dataView.syncGridCellCssStyles(this.grid, cssKey);
+            //this.grid.render();
+        }
+    },
+
+    /**
+     * Sends an event with HTML for tooltips as data.
+     *
+     * @method sendTooltipData
+     * @param {OpenLayers.Feature} feature
+     */
+    sendTooltipData: function(feature) {
+        var featAtts = feature.attributes;
+        var eventBuilder = this._sandbox.getEventBuilder('MapStats.HoverTooltipContentEvent');
+        var currColumn = this._state.currentColumn;
+        var item = this.getItemByCode(featAtts.kuntakoodi);
+        var content = '<p>' + item.municipality;
+        content += ((currColumn && item[currColumn]) ? '<br />' + item[currColumn] + '</p>' : '</p>');
+
+        if (eventBuilder) {
+            var event = eventBuilder(content);
+            this._sandbox.notifyAll(event);
+        }
     }
 
 }, {

@@ -10,8 +10,19 @@ mapOptions configuration can now be used to set units for OpenLayers.Map (defaul
 
 Scale limitations now use map resolutions internally to minimize risk of scale/resolution transformation errors.
 
-### ManageStatsPlugin
+### statsgrid bundle
+
+Highlight/select controls are now disabled when not in the stats mode.
+
+Clicking on an area on the map highlights the corresponding row in the grid and scrolls to display it as the topmost row.
+
+### statsgrid/ManageStatsPlugin
+
 There is now a possibility to uncheck some of the municipalities. This affects to the statistical variables. This feature can be swithced on from header row drop down list
+
+### mapstats bundle
+
+Hovering over an area on the map sends a request to get tooltip info which is then shown over the area.
 
 ## 1.11
 
