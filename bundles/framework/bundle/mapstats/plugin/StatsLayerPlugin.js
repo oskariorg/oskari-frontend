@@ -486,6 +486,7 @@ function(config) {
             if (drawLayer) {
                 drawLayer.removeAllFeatures();
             }
+            this._removePopup();
         }
     },
     
@@ -590,7 +591,7 @@ function(config) {
      */
     _addPopup: function(event) {
         var content = event.features[0].attributes['kuntanimi'];
-        this._popup = new OpenLayers.Popup(null,
+        this._popup = new OpenLayers.Popup('mapstatsHover',
             this._map.getLonLatFromPixel(new OpenLayers.Pixel(event.xy.x, event.xy.y)),
             new OpenLayers.Size(100, 100),
             content
