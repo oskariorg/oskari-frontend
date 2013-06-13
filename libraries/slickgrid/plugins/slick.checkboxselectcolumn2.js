@@ -2,7 +2,7 @@
   // register namespace
   $.extend(true, window, {
     "Slick": {
-      "CheckboxSelectColumn": CheckboxSelectColumn
+      "CheckboxSelectColumn2": CheckboxSelectColumn
     }
   });
 
@@ -24,7 +24,6 @@
     function init(grid) {
       _grid = grid;
       _handler
-        .subscribe(_grid.onSelectedRowsChanged, handleSelectedRowsChanged)
         .subscribe(_grid.onClick, handleClick)
         .subscribe(_grid.onHeaderClick, handleHeaderClick)
         .subscribe(_grid.onKeyDown, handleKeyDown);
@@ -32,30 +31,6 @@
 
     function destroy() {
       _handler.unsubscribeAll();
-    }
-
-    function handleSelectedRowsChanged(e, args) {
-      var selectedRows = _grid.getSelectedRows();
-      var lookup = {}, row, i;
-      for (i = 0; i < selectedRows.length; i++) {
-        row = selectedRows[i];
-        lookup[row] = true;
-        if (lookup[row] !== _selectedRowsLookup[row]) {
-          _grid.invalidateRow(row);
-          delete _selectedRowsLookup[row];
-        }
-      }
-      for (i in _selectedRowsLookup) {
-        _grid.invalidateRow(i);
-      }
-      _selectedRowsLookup = lookup;
-      _grid.render();
-
-      if (selectedRows.length && selectedRows.length == _grid.getDataLength()) {
-        _grid.updateColumnHeader(_options.columnId, "<input type='checkbox' checked='checked'>", _options.toolTip);
-      } else {
-        _grid.updateColumnHeader(_options.columnId, "<input type='checkbox'>", _options.toolTip);
-      }
     }
 
     function handleKeyDown(e, args) {
@@ -81,20 +56,32 @@
           return;
         }
 
-        toggleRowSelection(args.row);
+        _self.onSelectRowClicked.notify(args, e, _self);
+
+        // handle headerRowCheckbox
+        var dataView = _grid.getData(),
+            groups = dataView.getGroups(),
+            length = dataView.getItems().length,
+            isAllChecked = false;
+        for(var key in groups) {
+          var group = groups[key];
+          if(group.count == length && $(e.target).is(":checked")){
+            _grid.updateColumnHeader(_options.columnId, "<input type='checkbox' checked='checked'>", _options.toolTip);
+            isAllChecked = true;
+            break;
+          }
+        }
+        if(!isAllChecked) {
+          _grid.updateColumnHeader(_options.columnId, "<input type='checkbox'>", _options.toolTip);
+        }
+        //update data
+        _grid.getData().refresh();
+        //render all the rows (and checkboxes) again
+        _grid.invalidateAllRows();
+        _grid.render();
 
         e.stopPropagation();
         e.stopImmediatePropagation();
-      }
-    }
-
-    function toggleRowSelection(row) {
-      if (_selectedRowsLookup[row]) {
-        _grid.setSelectedRows($.grep(_grid.getSelectedRows(), function (n) {
-          return n != row
-        }));
-      } else {
-        _grid.setSelectedRows(_grid.getSelectedRows().concat(row));
       }
     }
 
@@ -107,15 +94,25 @@
           return;
         }
 
+        var items = _grid.getData().getItems();
         if ($(e.target).is(":checked")) {
-          var rows = [];
-          for (var i = 0; i < _grid.getDataLength(); i++) {
-            rows.push(i);
+          for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            item.sel = 'checked';
           }
-          _grid.setSelectedRows(rows);
         } else {
-          _grid.setSelectedRows([]);
+          for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            item.sel = 'empty';
+          }
         }
+        //update data
+        _grid.getData().setItems(items);
+        _grid.getData().refresh();
+        //render all the rows (and checkboxes) again
+        _grid.invalidateAllRows();
+        _grid.render();
+
         e.stopPropagation();
         e.stopImmediatePropagation();
       }
@@ -137,7 +134,7 @@
 
     function checkboxSelectionFormatter(row, cell, value, columnDef, dataContext) {
       if (dataContext) {
-        return _selectedRowsLookup[row]
+        return dataContext.sel == 'checked'
             ? "<input type='checkbox' checked='checked'>"
             : "<input type='checkbox'>";
       }
@@ -147,6 +144,8 @@
     $.extend(this, {
       "init": init,
       "destroy": destroy,
+
+      "onSelectRowClicked": new Slick.Event(),
 
       "getColumnDefinition": getColumnDefinition
     });

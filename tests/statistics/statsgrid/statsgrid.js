@@ -198,6 +198,43 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
             statsModule._createPrintParams(testLayer);
         });
 
+        it('should add checkbox column when statsgrid-show-row-selects checkbox is clicked', function(done) {
+            var fetchCallbackGridSpy = sinon.spy(viewPlugin, 'createMunicipalitySlickGrid'),
+                fetchCallbackIndicatorSpy = sinon.spy(viewPlugin, 'createIndicatorsSelect');
+
+            sandbox.postRequestByName('StatsGrid.StatsGridRequest', [true, testLayer]);
+            var i = 0;
+
+            waitsFor(function() {
+                return ((fetchCallbackGridSpy.callCount > 0) &&
+                        (fetchCallbackIndicatorSpy.callCount > 0));
+            }, function() {
+                menuToolbar = jQuery('body').find('div.oskariui-menutoolbar'),
+                statsGridContainer = jQuery('body').find('.statsgrid_100');
+
+                expect(statsGridContainer.is(':visible')).to.be(true);
+
+                //open drop down for statistical variable selector
+                jQuery('.slick-header-menubutton').click();
+                expect(jQuery('.slick-header-menu').css('visibility')).to.be('visible');
+
+                //open row selector checbox column
+                jQuery('.statsgrid-show-row-selects').find('input').click();
+                expect(jQuery('.slick-cell-checkboxsel').length).to.be.greaterThan(0);
+
+                //uncheck one of the municipalities and check if the name of the first group changes
+                expect(jQuery('.slick-group-title:first').text()).to.contain('Kunnat');
+                jQuery('.slick-cell-checkboxsel > input').first().prop('checked', false).click();
+                expect(jQuery('.slick-group-title:first').text()).to.contain('Poistettu');
+
+                fetchCallbackGridSpy.restore();
+                fetchCallbackIndicatorSpy.restore();
+                done();
+            }, "Waits for the stats grid mode request", 45000);
+        });
+
+
+
         // OBS! This should be the last test case since we're removing the layer.
         it('should exit the mode when a statistics layer gets removed', function(done) {
             var statsView = statsModule.plugins['Oskari.userinterface.View'];
@@ -219,6 +256,7 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
                 done();
             }, 1000);
         });
+
     });
 
 // TODO write test to:
