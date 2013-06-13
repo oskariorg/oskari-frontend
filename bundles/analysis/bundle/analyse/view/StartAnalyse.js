@@ -965,6 +965,8 @@ function(instance, localization) {
         // Add the layer to the map layer service
         mapLayerService.addLayer(mapLayer);
 
+        console.log(mapLayer);
+
         // Request the layer to be added to the map.
         // instance.js handles things from here on.
         requestBuilder = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest');
