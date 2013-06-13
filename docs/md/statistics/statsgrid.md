@@ -54,7 +54,12 @@ state : {
     <th>Request</th><th>How does the bundle react</th>
   </tr>
   <tr>
-    <td>StatsGrid.StatsGridRequest</td><td>Enables/disables the statistics mode depending on the params.</td>
+    <td>StatsGrid.StatsGridRequest</td>
+    <td>Enables/disables the statistics mode depending on the params.</td>
+  </tr>
+  <tr>
+    <td>StatsGrid.TooltipContentRequest</td>
+    <td>Sends tooltip info for currently hovered municipality.</td>
   </tr>
 </table>
 
@@ -94,6 +99,14 @@ state : {
     <td>MapStats.StatsVisualizationChangeEvent</td>
     <td>Saves params from the event to the bundle state.</td>
   </tr>
+  <tr>
+    <td>AfterMapMoveEvent</td>
+    <td>Updates parameters for the printout bundle.</td>
+  </tr>
+  <tr>
+    <td>AfterMapLayerRemoveEvent</td>
+    <td>Exits the statistics mode.</td>
+  </tr>
 </table>
 
 ### ManageClassificationsPlugin
@@ -124,6 +137,18 @@ state : {
   </tr>
 </table>
 
+### ManageStatsPlugin
+
+<table>
+  <tr>
+    <th>Event</th><th>How does the bundle react</th>
+  </tr>
+  <tr>
+    <td>MapStats.FeatureHighlightedEvent</td>
+    <td>Highlights the given feature in the grid.</td>
+  </tr>
+</table>
+
 ## Events the bundle sends out
 
 ### StatisticsService
@@ -139,6 +164,18 @@ state : {
   <tr>
     <td>MapStats.StatsVisualizationChangeEvent</td>
     <td>After the data has been classified so it can be visualized on the map</td>
+  </tr>
+</table>
+
+### ManageStatsPlugin
+
+<table>
+  <tr>
+    <th>Event</th><th>Why/when</th>
+  </tr>
+  <tr>
+    <td>MapStats.HoverTooltipContentEvent</td>
+    <td>When the TooltipContentRequest is handled to send the tooltip info to the mapstats bundle.</td>
   </tr>
 </table>
 
