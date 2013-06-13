@@ -632,7 +632,6 @@ function(instance) {
 	 * to the UI.
 	 */
 	handleLayerSelectionChanged : function(layer, isSelected, keepLayersOrder) {
-		console.log("handleLayerSelectionChanged: " + keepLayersOrder);
 		// add layer
 		if (isSelected == true) {
 			var me = this;
