@@ -27,5 +27,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
 		if (mapLayerJson.wpsUrl) {
 			layer.setWpsUrl(mapLayerJson.wpsUrl);
 		}
+		if (mapLayerJson.wpsLayerId) {
+			layer.setWpsLayerId(mapLayerJson.wpsLayerId);
+		}
 	}
 });
