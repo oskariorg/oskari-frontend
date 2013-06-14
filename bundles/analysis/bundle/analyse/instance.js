@@ -182,15 +182,7 @@ function() {
          * @param {Oskari.mapframework.event.common.MapLayerEvent} event
          */
         'MapLayerEvent' : function(event) {
-            var layerId = event.getLayerId();
-            // Let's show the user a dialog when the new analysislayer gets added to the map.
-            if (event.getOperation() === 'add') {
-                var layer = this.mapLayerService.findMapLayer(layerId);
-                if (layer && layer.isLayerOfType('ANALYSIS')) {
-                    this.showMessage('Taso "' + layer.getName() + '" lisätty!',
-                        'Löydät tason Aineisto-paneelista.');
-                }
-            }
+            this._afterMapLayerEvent(event);
         },
         /**
          * @method userinterface.ExtensionUpdatedEvent
@@ -369,6 +361,21 @@ function() {
         dialog.show(title, message);
         dialog.fadeout(5000);
     },
+
+    _afterMapLayerEvent: function(event) {
+        var layerId = event.getLayerId();
+        var loc = this.getLocalization('AnalyseView');
+        // Let's show the user a dialog when the new analysislayer gets added to the map.
+        if (event.getOperation() === 'add') {
+            var layer = this.mapLayerService.findMapLayer(layerId);
+            if (layer && layer.isLayerOfType('ANALYSIS')) {
+                this.showMessage(
+                    loc.success.layerAdded.title.replace(/\{layer\}/, layer.getName()),
+                    loc.success.layerAdded.message
+                );
+            }
+        }
+    }
 }, {
     /**
      * @property {String[]} protocol
