@@ -286,13 +286,26 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('packageopenlayer', 'Package openlayers according to packages', function(packages) {
+        var fs = require('fs');
+
         if(!packages) {
-            grunt.fail.fatal('Missing parameter\nUsage: grunt packageopenlayer:"../path/to/profile.cfg"', 1);
+            grunt.log.writeln("No cfg packages given, reading all cfg files in current directory.");
+            packages = [];
+            var files = fs.readdirSync(process.cwd()),
+                file = "";
+            for(var i in files) {
+                file = files[i];
+                if (file.indexOf('.cfg') != -1) {
+                    packages.push(file);
+                }
+            }
+        } else {
+            // transform comma separeted configs string to array
+            packages = packages.split(',');
         }
 
         console.log('Running openlayers packager...');
-        var fs = require('fs'),
-            path = require('path'),
+        var path = require('path'),
             wrench = require('wrench'),
             sourceDirectory = path.join(process.cwd(), "/components/openlayers/lib/"),
             outputFilenamePrefix = "OpenLayers.",
@@ -315,9 +328,6 @@ module.exports = function(grunt) {
             LAST = "[last]",
             INCLUDE = "[include]",
             EXCLUDE = "[exclude]";
-
-        // transform comma separeted configs string to array
-        packages = packages.split(',');
 
         // read cfg files
         for(i = 0, ilen = packages.length; i < ilen; i += 1) {
