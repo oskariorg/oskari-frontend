@@ -1498,7 +1498,7 @@ function(config, locale) {
                     statistic.visible = !statistic.visible;
                     break;
                 } else if(args.command == 'selectRows') {
-                    console.log('show row selector');
+                    // console.log('show row selector');
                     var columns = args.grid.getColumns();
                     var newColumns = [];
                     var shouldAddSell = true;
