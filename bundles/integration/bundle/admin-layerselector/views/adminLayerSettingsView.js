@@ -371,11 +371,34 @@ define([
          * 
          * @method readCapabilities
          */
-        readCapabilities: function(e){
+        readCapabilities: function(e) {
+            var me = this;
             var selected = jQuery('#admin-select-capability').val();
             var capability = this.getValue(this.capabilities, 'Capability');
             var selectedLayer = capability.Layer.Layer[selected];
 
+            if (selectedLayer.Layer) {
+                // If the selected layer has sub-layers
+                // create a dropdown to show them.
+
+                // This might be more elegant as its own template
+                var subLayerSelect = '<select id="admin-select-sublayer">';
+                var subLayers = selectedLayer.Layer;
+                for (var i = subLayers.length - 1; i >= 0; i--) {
+                    subLayerSelect += '<option value="'+i+'">' + subLayers[i].Title + '</option>';
+                };
+                subLayerSelect += '</select>';
+                jQuery('#admin-select-sublayer').remove();
+                jQuery(subLayerSelect).insertAfter('#admin-select-capability');
+                jQuery('#admin-select-sublayer').on('change', function() {
+                    var value = jQuery(this).val();
+                    me.updateLayerValues(subLayers[value], capability);
+                });
+            } else {
+                me.updateLayerValues(selectedLayer, capability);
+            }
+
+/*
             // wmsname
             var wmsname = selectedLayer.Name;
             jQuery('#add-layer-wms-id').val(wmsname);
@@ -435,8 +458,73 @@ define([
                     jQuery('#add-layer-datauuid').val(uuid);
                 }
             }
+*/
 
         },
+
+        updateLayerValues: function(selectedLayer, capability) {
+            console.log(selectedLayer);
+            // wmsname
+            var wmsname = selectedLayer.Name;
+            jQuery('#add-layer-wms-id').val(wmsname);
+
+
+            var styles = selectedLayer.Style;
+            if(styles != null) {
+
+                //LegendURL
+                if(styles.LegendURL) {
+                    var legendURL = styles.LegendURL.OnlineResource['xlink:href'];
+                    jQuery('#add-layer-legendImage').val(legendURL);                    
+                }
+
+                //Styles
+                var styleSelect = jQuery('#add-layer-style');
+                if(Object.prototype.toString.call(styles) === '[object Array]') {
+                    var s = [];
+                    for (var i = 0; i < styles.length; i++) {
+                        styleSelect.append('<option>' +styles[i].Title + '</option>');
+                    };
+                } else {
+                    styleSelect.append('<option>' +styles.Title + '</option>');
+                }
+            }
+
+            // GFI Type
+            var gfiType = capability.Request.GetFeatureInfo.Format;
+            var gfiTypeSelect = jQuery('#add-layer-responsetype');
+            for (var i = 0; i < gfiType.length; i++) {
+                gfiTypeSelect.append('<option>' + gfiType[i] + '</option>');
+            };
+
+            // WMS Metadata Id
+            if(capability['inspire_vs:ExtendedCapabilities'] && 
+                capability['inspire_vs:ExtendedCapabilities']['inspire_common:MetadataUrl'] &&
+                capability['inspire_vs:ExtendedCapabilities']['inspire_common:MetadataUrl']['inspire_common:URL'].indexOf != null
+                ) {
+                var wmsMetadataId = capability['inspire_vs:ExtendedCapabilities']['inspire_common:MetadataUrl']['inspire_common:URL'];
+                wmsMetadataId = wmsMetadataId.substring(wmsMetadataId.indexOf('id=') + 3);
+                if( wmsMetadataId.indexOf('&') >= 0) {
+                    wmsMetadataId = wmsMetadataId.substring (0, wmsMetadataId.indexOf('&'));
+                }
+                jQuery('#add-layer-metadataid').val(wmsMetadataId);
+            }
+
+            //metadata id == uuid
+            //"http://www.paikkatietohakemisto.fi/geonetwork/srv/en/main.home?uuid=a22ec97f-d418-4957-9b9d-e8b4d2ec3eac"
+            var uuid = this.capabilities.Service.OnlineResource['xlink:href'];
+            if(uuid) {
+                var idx = uuid.indexOf('uuid=');
+                if(idx >= 0) {
+                    uuid = uuid.substring(idx + 5);
+                    if( uuid.indexOf('&') >= 0) {
+                        uuid = uuid.substring(0, uuid.indexOf('&'));
+                    }                    
+                    jQuery('#add-layer-datauuid').val(uuid);
+                }
+            }
+        },
+
         /**
          * Helper function. This returns inner value 
          * first one or the one which matches with given key
