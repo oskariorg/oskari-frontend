@@ -949,7 +949,7 @@ function(instance, localization) {
      * @param {JSON} analyseJson Layer JSON returned by server.
      */
     _handleAnalyseMapResponse: function(analyseJson) {
-        // TODO: some error checking
+        // TODO: some error checking perhaps?
         var mapLayerService,
             mapLayer,
             requestBuilder,
@@ -962,10 +962,11 @@ function(instance, localization) {
         analyseJson.id = this.id_prefix + analyseJson.id;
         // Create the layer model
         mapLayer = mapLayerService.createMapLayer(analyseJson);
+        mapLayer.setWpsUrl('/karttatiili/wpshandler?');
+        mapLayer.setWpsName('ows:analysis_data');
+        console.log(mapLayer);
         // Add the layer to the map layer service
         mapLayerService.addLayer(mapLayer);
-
-        console.log(mapLayer);
 
         // Request the layer to be added to the map.
         // instance.js handles things from here on.

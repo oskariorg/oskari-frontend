@@ -232,7 +232,7 @@ function(config) {
         }
 
         var openLayerId = 'layer_' + layer.getId();
-        var imgUrl = layer.getWpsUrl() + '&wpsLayerId=' + layer.getWpsLayerId();
+        var imgUrl = layer.getWpsUrl() + 'wpsLayerId=' + layer.getWpsLayerId();
         var layerScales = this.getMapModule()
             .calculateLayerScales(layer.getMaxScale(), layer.getMinScale());
 
