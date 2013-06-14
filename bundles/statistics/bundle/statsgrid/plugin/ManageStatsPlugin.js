@@ -1582,16 +1582,13 @@ function(config, locale) {
             if (isHighlighted) {               
                 this.grid.scrollRowToTop(idx);
                 cssHash[idx] = {'municipality': 'statsgrid-highlight-row'};
+                this.grid.removeCellCssStyles(cssKey);
                 this.grid.addCellCssStyles(cssKey, cssHash);
                 this.dataView.syncGridCellCssStyles(this.grid, cssKey);
             } else {
                 this.grid.removeCellCssStyles(cssKey);
                 this.dataView.syncGridCellCssStyles(this.grid, cssKey);
             }
-            // This needs to be called or otherwise sorting etc breaks the highlighting.
-            //this.grid.invalidate();
-            //this.dataView.syncGridCellCssStyles(this.grid, cssKey);
-            //this.grid.render();
         }
     },
 
