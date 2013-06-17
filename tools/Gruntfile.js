@@ -547,7 +547,7 @@ module.exports = function(grunt) {
 			}
 			cssfiles = cssfiles.concat(pasFiles);
 		}
-		grunt.log.writeln("Unminified CSS:\n" + cssfiles);
+		grunt.log.writeln("Writing CSS:\n" + cssfiles + "\nto: " + options.dest + 'oskari.min.css');
 		this.minifyCSS(cssfiles, options.dest + 'oskari.min.css');
 	});
 };
