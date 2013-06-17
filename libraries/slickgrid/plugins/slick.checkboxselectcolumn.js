@@ -82,6 +82,7 @@
         }
 
         toggleRowSelection(args.row);
+
         e.stopPropagation();
         e.stopImmediatePropagation();
       }

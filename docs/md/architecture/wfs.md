@@ -390,8 +390,9 @@ Only sends if the current map size gets bigger
 
 ##### Response channels
 
+* TODO: send only new image
+
 - /wfs/image
-- /wfs/properties
 - /wfs/feature
 - /error
 
@@ -437,8 +438,7 @@ Only sends if the current map size gets bigger
 
 Doesn't send images
 
-- /wfs/properties
-- /wfs/feature
+- /wfs/mapClick
 - /error
 
 
@@ -471,8 +471,7 @@ Doesn't send images
 
 Doesn't send images
 
-- /wfs/properties
-- /wfs/feature
+- /wfs/filter
 - /error
 
 
@@ -570,6 +569,7 @@ Client channels are used to send information from the server to the client. Most
 2. /wfs/properties
 3. /wfs/feature
 4. /wfs/mapClick
+4. /wfs/filter
 5. /error
 
 #### /wfs/image
@@ -758,6 +758,7 @@ Client channels are used to send information from the server to the client. Most
 }
 ```
 
+
 #### /wfs/mapClick
 
 ##### Parameters
@@ -797,6 +798,53 @@ Client channels are used to send information from the server to the client. Most
 				["toimipaikat.14631",  null,  null,  null,  null,  null,  14631,  "Kela, Vantaa / Korson yhteispalvelu",  "Urpiaisentie 14",  "",  "01450",  "092",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  503,  802,  "Kela, Vantaa / Korson yhteispalvelu",  "Urpiaisentie 14",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "Kela, Vantaa / Korson yhteispalvelu",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  393893,  6692163,  "POINT (393893 6692163)",  "2012-11-15 10:57:39.382",  "Urpiaisentie 14"]
 		],
 		"keepPrevious": false
+}
+```
+
+###### empty send
+
+```javascript
+{
+		"layerId" : 216,
+		"features": "empty",
+}
+```
+
+
+
+#### /wfs/filter
+
+##### Parameters
+
+<table>
+	<tr>
+		<th>Name</th>
+		<th>Type</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>layerId</td>
+		<td>long</td>
+		<td>maplayer_id</td>
+	</tr>
+	<tr>
+		<td>features</td>
+		<td>ArrayList&lt;ArrayList&lt;Object&gt;&gt;</td>
+		<td>selected features of the given WFS layer</td>
+	</tr>
+</table>
+
+##### Examples
+
+###### normal send
+
+```javascript
+{
+		"layerId" : 216,
+		"features": [
+				["toimipaikat.6398",  null,  null,  null,  null,  null,  6398,  "Yhteispalvelu Vantaa - Korso",  "Urpiaisentie 14",  "",  "01450",  "092",  "www.yhteispalvelu.fi",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  518,  811,  "Yhteispalvelu Vantaa - Korso",  "Urpiaisentie 14",  "www.yhteispalvelu.fi",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "Yhteispalvelu Vantaa - Korso",  "www.yhteispalvelu.fi",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  393893,  6692163,  "POINT (393893 6692163)",  "2013-01-04 10:01:52.202",  "Urpiaisentie 14"],
+				["toimipaikat.14631",  null,  null,  null,  null,  null,  14631,  "Kela, Vantaa / Korson yhteispalvelu",  "Urpiaisentie 14",  "",  "01450",  "092",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  503,  802,  "Kela, Vantaa / Korson yhteispalvelu",  "Urpiaisentie 14",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "Kela, Vantaa / Korson yhteispalvelu",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  "",  393893,  6692163,  "POINT (393893 6692163)",  "2012-11-15 10:57:39.382",  "Urpiaisentie 14"]
+		]
 }
 ```
 
@@ -931,8 +979,6 @@ Oskari.$("sandbox").popUpSeqDiagram();
 
 Function listening to AfterMapMoveEvent calls for Mediator's setLocation(). Backend gets a message and updates every WFS layer that is in the user's session and answers with updated properties, features and images. Upcoming sends trigger WFSPropertiesEvents, WFSFeatureEvents and WFSImageEvents. Updates the properties and features for object data and draws new tiles.
 
-* TODO: grid update
-
 ### Resizing map - xxEvent ?!?!?!??!
 
 Function listening to xxEvent calls for Mediator's setMapSize(). Backend gets a message and saves new map size in user's session. Every WFS layer in user's session are updated if the map's height or width has grown bigger. The update process is same than for moving map.
@@ -968,8 +1014,7 @@ Possible to keep the previous selection by holding CTRL.
 
 Function listening to AfterChangeMapLayerStyleEvent calls for Mediator's setMapLayerStyle(). Backend gets a message and draws the features with new SLD and sends images to the client. Upcoming sends trigger WFSImageEvents. Images with new style replace old WFS layer's tile images.
 
-* TODO: Event throw (no way to select a style for a WFS layer yet)
-* TODO: test
+* TODO: Event throw (not implemented yet for WFS)
 
 ### Changing a WFS layer's visibility - MapLayerVisibilityChangedEvent
 
@@ -981,9 +1026,7 @@ Function listening to MapLayerVisibilityChangedEvent updates Openlayer's layer o
 
 ### Finishing selection tool - WFSSetFilter
 
-Function listening to WFSSetFilter calls for Mediator's setFilter(). Backend gets a message and collects features of the given location for active layer. Upcoming sends trigger WFSPropertiesEvent, WFSFeatureEvents. Opens object data flyout containing filtered features.
-
-* TODO: implement so that works like WFSFeaturesSelectedEvent (this filter style should work too?)
+Function listening to WFSSetFilter calls for Mediator's setFilter(). Backend gets a message and collects features of the given location for active layer. Upcoming sends trigger WFSPropertiesEvent, WFSFeatureEvents. Opens object data flyout highlighting filtered features.
 
 
 ## Cache

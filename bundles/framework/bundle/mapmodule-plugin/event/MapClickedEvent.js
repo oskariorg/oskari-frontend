@@ -13,8 +13,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent'
  */
 function(lonlat, mouseX, mouseY) {
     this._lonlat = lonlat;
-    this._mouseX = mouseX;
-    this._mouseY = mouseY;
+    this._mouseX = Math.floor(mouseX);
+    this._mouseY = Math.floor(mouseY);
 }, {
     /** @static @property __name event name */
     __name : "MapClickedEvent",

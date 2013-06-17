@@ -74,9 +74,11 @@ Oskari.registerLocalization({
             "std" : "Standard deviation",
             "sum" : "Sum"
         },
-        "values" : "values",
-        "municipality" : "Municipality",
-        "noMatch" : "No results matched",
+        "values"        : "values",
+        "municipality"  : "Municipalities",
+        "selectRows"    : "Select rows",
+        "not_included"  : "Not included municipalities",
+        "noMatch"       : "No results matched",
         "selectIndicator": "Select an indicator"
 
     }

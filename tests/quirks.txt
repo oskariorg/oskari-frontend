@@ -1,1 +1,3 @@
 In IE when clicking select boxes, it checks it but does not fire the change event as most other browsers.
+
+Socket.io transport method flashsocket does not work and therefore we use grunt regexp to remove the alternative as it cannot be configured at this point. Making a fork just to remove an option, is not worth the hassle.

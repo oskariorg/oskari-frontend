@@ -654,7 +654,11 @@ function(instance) {
 
 			if (previousLayers.length > 0) {
 				// without first(), adds before each layer
-				previousLayers.first().before(layerContainer);
+				if (layer.isBaseLayer() && keepLayersOrder != true) {
+					previousLayers.last().after(layerContainer);
+				} else {
+					previousLayers.first().before(layerContainer);
+				}
 			} else {
 				listContainer.append(layerContainer);
 			}

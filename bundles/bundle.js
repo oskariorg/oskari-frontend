@@ -719,9 +719,10 @@ Oskari = (function() {
                 }
                 clazzHierarchy.push(spr);
             }
-
             for(var s = clazzHierarchy.length - 1; s >= 0; s--) {
-                console.log("                 ".substring(0, clazzHierarchy.length - s) + "|_ " + clazzHierarchy[s]._composition.clazzName);
+				if (console && console.log) {
+					console.log("                 ".substring(0, clazzHierarchy.length - s) + "|_ " + clazzHierarchy[s]._composition.clazzName);
+				}
             }
         },
         /**
@@ -766,7 +767,9 @@ Oskari = (function() {
             }
 
             for(var s = 0; s < clazzHierarchy.length; s++) {
-                console.log(clazzHierarchy[s]);
+				if (console && console.log) {
+					console.log(clazzHierarchy[s]);
+				}
             }
 
         },
@@ -777,7 +780,9 @@ Oskari = (function() {
             var pdefsp = this.lookup.apply(this, arguments);
 
             for(p in pdefsp._category[arguments[0]]) {
-                console.log(p);
+				if (console && console.log) {
+					console.log(p);
+				}
             }
         },
         slicer : Array.prototype.slice,

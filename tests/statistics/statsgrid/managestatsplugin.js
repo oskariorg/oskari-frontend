@@ -138,7 +138,7 @@ describe('Test Suite for statistics/statsgrid manage stats plugin', function() {
             expect(gridStub.callCount).to.be(1);
             expect(gridStub.calledWith(gridContainer, testData)).to.be(true);
             expect(stateStub.callCount).to.be(1);
-            expect(stateStub.calledWith(gridContainer, testState)).to.be(true);
+            expect(stateStub.calledWith(testState, gridContainer)).to.be(true);
             // cleanup
             statsServiceStub.restore();
             gridStub.restore();
@@ -486,7 +486,7 @@ describe('Test Suite for statistics/statsgrid manage stats plugin', function() {
                 cb();
             });
             // call tested function
-            plugin.loadStateIndicators(gridContainer, testState);
+            plugin.loadStateIndicators(testState, gridContainer);
             // asserts
             expect(getMetaStub.callCount).to.be(1);
             expect(getMetaStub.calledWith(gridContainer, testState.indicators)).to.be.ok();
@@ -496,5 +496,19 @@ describe('Test Suite for statistics/statsgrid manage stats plugin', function() {
             getMetaStub.restore();
             getDataStub.restore();
         });
+
+        // // TODO: Onko näistä unit-testeistä mitään hyötyä? regressiotestejä please!
+        // it.only('should add checkbox column when statsgrid-show-row-selects checkbox is clicked', function() {
+
+        //     //open drop down for statistical variable selector
+        //     jQuery('.slick-header-menubutton').click();
+        //     expect(jQuery('.slick-header-menu').css('visibility')).to.be('visible');
+
+        //     //open row selector checbox column
+        //     jQuery('.statsgrid-show-row-selects').click();
+        //     expect(jQuery('.slick-cell-checkboxsel').length).to.be.greaterThan(0);
+
+        // });
+
     });
 });

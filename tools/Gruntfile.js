@@ -38,18 +38,17 @@ module.exports = function(grunt) {
                 files: ['../applications/**/*.js', '../bundles/**/*.js', '../libraries/**/*.js', '../packages/**/*.js', '../resources/**/*.js', '../sources/**/*.js'],
                 // uncommented as validate causes unnecessary delay
                 //            tasks: ['validate', 'compile', 'testacularRun:dev', 'yuidoc:dist']
-                tasks: ['compileDev', 'testacularRun:dev']
+                tasks: ['compileDev', 'karma:dev:run']
             },
             test: {
                 files: ['../tests/**/*.js'],
-                tasks: ['testacularRun:dev']
+                tasks: ['karma:dev:run']
             },
             sass: {
                 files: ['../bundles/**/*.scss', '../applications/**/*.scss'],
-                tasks: ['watchSCSS']
+                tasks: ['compileAppCSS']
             }
         },
-		sass: {},
         sprite: {
             options: {
                 iconDirectoryPath: "../applications/paikkatietoikkuna.fi/full-map/icons",
@@ -65,19 +64,22 @@ module.exports = function(grunt) {
                 concat: true
             }
         },
-        testacularRun: {
+        karma: {
+            options: {
+                configFile: 'karma.conf.js',
+            },
             dev: {
-                options: {
-                    runnerPort: 9100
-                }
-            }
-        },
-        testacular: {
-            dev: {
-                options: {
-                    configFile: 'testacular.conf.js',
-                    keepalive: true
-                }
+                background: true
+            },
+            coverage: {
+                preprocessors : {
+                    '../dist/*.js': 'coverage'
+                },
+                coverageReporter : {
+                    type : 'html',
+                    dir : 'coverage/'
+                },
+                reporters : ['dots', 'coverage']
             }
         },
         clean: {
@@ -99,9 +101,21 @@ module.exports = function(grunt) {
             options: {
                 "toolsPath": process.cwd(),
                 "docsPath": "../docs",
-                "docsurl": "/Oskari/docs/release/<%= version %>",
+                "docsurl": "/Oskari/<%= version %>/docs",
                 "apiurl": "http://oskari.org/",
                 "outdir": "../dist/<%= version %>docs"
+            }
+        },
+        "regex-replace": {
+            karma: {
+                src: ['node_modules/grunt-karma/node_modules/karma/lib/server.js'],
+                actions: [
+                    {
+                        name: 'removeFlashSocketAsItDoesNotWorkInIE',
+                        search: "'websocket', 'flashsocket', 'xhr-polling', 'jsonp-polling'",
+                        replace: "'websocket', 'xhr-polling', 'jsonp-polling'"
+                    }
+                ]
             }
         }
     });
@@ -113,19 +127,28 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
-    grunt.loadNpmTasks('grunt-testacular');
+    grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-sass');
+    grunt.loadNpmTasks('grunt-regex-replace');
 
+    // Default task(s).
+    grunt.registerTask('default', ['regex-replace', 'karma:dev', 'compileAppSetupToStartupSequence', 'compileDev', 'karma:dev:run', 'watch']);
     // Default task.
     //    grunt.registerTask('default', 'watch testacularServer:dev');
     //    grunt.registerTask('default', 'testacularServer:dev watch');
     //    grunt.registerTask('default', 'lint test concat min');
     grunt.registerTask('compileDev', 'Developer compile', function() {
+        var options = this.options();
         // set task configs
-        grunt.config.set("compile.dev.options", this.options());
-
+        grunt.config.set("compile.dev.options", options);
         grunt.task.run('compile');
+
+        grunt.config.set("compileAppCSS.dev.options", {
+            "appSetupFile": '../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json',
+            "dest": options.dest
+        });
+        grunt.task.run("compileAppCSS");
     });
 
     grunt.registerTask('compileAppSetupToStartupSequence', function() {
@@ -244,23 +267,15 @@ module.exports = function(grunt) {
                 "appSetupFile": config,
                 "dest": dest
             });
-            
 			grunt.config.set("compileAppCSS." + appName + ".options", {
                 "appSetupFile": config,
                 "dest": dest
             });
-
             grunt.config.set("sprite." + appName + ".options", options);
         }
 
         // scss to css conversion
-        // FIXME: removed so we can run release on Jenkins
-        /*
-        // ERROR was:
-        [4mRunning "sass:minifierAppSetup" (sass) task
-        [31mFatal error: Error writing packed CSS: Error: ENOENT, open '../dist/1.10/full-map/oskari.min.css'
-        */
-        //grunt.task.run('compileAppCSS');
+        grunt.task.run('compileAppCSS');
 
         grunt.task.run('validate');
         grunt.task.run('copy');
@@ -271,13 +286,26 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('packageopenlayer', 'Package openlayers according to packages', function(packages) {
+        var fs = require('fs');
+
         if(!packages) {
-            grunt.fail.fatal('Missing parameter\nUsage: grunt packageopenlayer:"../path/to/profile.cfg"', 1);
+            grunt.log.writeln("No cfg packages given, reading all cfg files in current directory.");
+            packages = [];
+            var files = fs.readdirSync(process.cwd()),
+                file = "";
+            for(var i in files) {
+                file = files[i];
+                if (file.indexOf('.cfg') != -1) {
+                    packages.push(file);
+                }
+            }
+        } else {
+            // transform comma separeted configs string to array
+            packages = packages.split(',');
         }
 
         console.log('Running openlayers packager...');
-        var fs = require('fs'),
-            path = require('path'),
+        var path = require('path'),
             wrench = require('wrench'),
             sourceDirectory = path.join(process.cwd(), "/components/openlayers/lib/"),
             outputFilenamePrefix = "OpenLayers.",
@@ -300,9 +328,6 @@ module.exports = function(grunt) {
             LAST = "[last]",
             INCLUDE = "[include]",
             EXCLUDE = "[exclude]";
-
-        // transform comma separeted configs string to array
-        packages = packages.split(',');
 
         // read cfg files
         for(i = 0, ilen = packages.length; i < ilen; i += 1) {
@@ -481,11 +506,9 @@ module.exports = function(grunt) {
 		var cssPacker = require('uglifycss'),
 			parser = require('./parser.js'),
 			cssfiles = [],
-			options = this.data.json.options;
-			
-		grunt.log.writeln("Getting processedAppStup with " + options.appSetupFile);
-		var processedAppSetup = parser.getComponents(options.appSetupFile);
-		grunt.log.writeln("Variables set");
+			options = this.data.json.options,
+			processedAppSetup = parser.getComponents(options.appSetupFile);
+
 
         // internal minify CSS function
         this.minifyCSS = function(files, outputFile) {
@@ -494,11 +517,8 @@ module.exports = function(grunt) {
 			// read files to value
             for (var i = 0; i < files.length; ++i) {
                 if (!fs.existsSync(files[i])) {
-                    grunt.fail.fatal("Couldn't locate " + files[i]);
+                    grunt.fail.fatal('Couldnt locate ' + files[i]);
                 }
-				else {
-					console.log("Found file: " + files[i]);
-				}
                 var content = fs.readFileSync(files[i], 'utf8');
                 value = value + '\n' + content;
             }
@@ -507,7 +527,8 @@ module.exports = function(grunt) {
 
 			// write value to outputfile
             fs.writeFile(outputFile, packed, function(err) {
-                if (err) {
+                // ENOENT means the file did not exist, which is ok. Let's just create it.
+                if (err && err.code !== "ENOENT") {
                     grunt.fail.fatal('Error writing packed CSS: ' + err);
                 }
             });
@@ -519,5 +540,4 @@ module.exports = function(grunt) {
 		}
 		this.minifyCSS(cssfiles, options.dest + 'oskari.min.css');
 	});
-
 };

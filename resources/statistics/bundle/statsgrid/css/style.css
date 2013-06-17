@@ -106,6 +106,14 @@
 .statsgrid-totals-label {
   font-weight: bold;
 }
+.statsgrid-show-total-selects label,
+.statsgrid-show-row-selects label {
+  margin-left: 5px;
+}
+.statsgrid-show-row-selects {
+  border-top: solid 1px black;
+  padding-top: 5px;
+}
 
 /**
  * Style the drop-down menu here since the plugin stylesheet mostly contains structural CSS.
@@ -143,6 +151,10 @@
 .icon-help {
   background-image: url(/Oskari/libraries/slickgrid/images/help.png);
 }
+
 .grid-canvas .slick-group-toggle {
   display: none;
+}
+.statsgrid-highlight-row {
+  background-color: yellow;
 }

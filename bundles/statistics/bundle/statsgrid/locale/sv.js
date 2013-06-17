@@ -74,9 +74,11 @@ Oskari.registerLocalization({
             "std" : "Standardavvikelse",
             "sum" : "Summa"
         },
-        "values" : "värden",
-        "municipality" : "Kommun",
-        "noMatch" : "Inga matchade indikatorer",
+        "values"        : "värden",
+        "municipality"  : "Kommuner",
+        "selectRows"    : "Markera rader",
+        "not_included"  : "Inte inlcuded kommuner",
+        "noMatch"       : "Inga matchade indikatorer",
         "selectIndicator": "Välja en indikator"
 
     }

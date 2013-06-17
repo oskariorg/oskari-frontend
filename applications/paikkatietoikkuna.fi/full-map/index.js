@@ -35,24 +35,14 @@ jQuery(document).ready(function() {
         var pathIdx = ajaxUrl.indexOf('/', hostIdx);
         ajaxUrl = ajaxUrl.substring(pathIdx);
     }
-
+    
     // populate url with possible control parameters
-    ajaxUrl += getAdditionalParam('zoomLevel');
-    ajaxUrl += getAdditionalParam('coord');
-    ajaxUrl += getAdditionalParam('mapLayers');
-    ajaxUrl += getAdditionalParam('statsgrid');
-    ajaxUrl += getAdditionalParam('oldId');
-    ajaxUrl += getAdditionalParam('viewId');
-
-    ajaxUrl += getAdditionalParam('isCenterMarker');
-    ajaxUrl += getAdditionalParam('address')
-    ajaxUrl += getAdditionalParam('showGetFeatureInfo');
-    ajaxUrl += getAdditionalParam('nationalCadastralReference');
-
-    ajaxUrl += getAdditionalParam('nationalCadastralReferenceHighlight');
-    ajaxUrl += getAdditionalParam('wfsFeature');
-    ajaxUrl += getAdditionalParam('wfsHighlightLayer');
-
+    var getAppSetupParams = {};
+    if(typeof window.controlParams == 'object') {
+        for(var key in controlParams) {
+            getAppSetupParams[key] = controlParams[key];
+        }
+    }
 
     if (!language) {
         // default to finnish
@@ -128,6 +118,7 @@ jQuery(document).ready(function() {
                 x.overrideMimeType("application/j-son;charset=UTF-8");
             }
         },
+        data : getAppSetupParams,
         url: ajaxUrl + 'action_route=GetAppSetup',
         success: function(app) {
             if (app.startupSequence && app.configuration) {

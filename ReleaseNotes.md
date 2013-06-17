@@ -1,10 +1,36 @@
 # Release Notes
 
+## 1.12
+
+### mapmodule plugin
+
+mapOptions configuration can now be used to set units for OpenLayers.Map (defaults to 'm' as before).
+
+### mapmodule plugin/wmslayerplugin
+
+Scale limitations now use map resolutions internally to minimize risk of scale/resolution transformation errors.
+
+### statsgrid bundle
+
+Highlight/select controls are now disabled when not in the stats mode.
+
+Clicking on an area on the map highlights the corresponding row in the grid and scrolls to display it as the topmost row.
+
+### statsgrid/ManageStatsPlugin
+
+There is now a possibility to uncheck some of the municipalities. This affects to the statistical variables. This feature can be swithced on from header row drop down list
+
+### mapstats bundle
+
+Hovering over an area on the map sends a request to get tooltip info which is then shown over the area.
+
 ## 1.11
 
 ### core/sandbox
 
 Created a new category for state methods, called sandbox-state-methods. Added a function `resetState` which sets the application state to initial state which was provided by the GetAppSetup action route at  application startup.
+
+domain/map no longer rounds coordinates with Math.floor()
 
 ### usagetracker bundle
 
@@ -18,17 +44,33 @@ Legend plot for statslayer in printout
 
 ### mapmodule-plugin/mapfull/publisher bundles
 
-Mapmodule now has a method to notify openlayers and internal datamodels that map size has changed: updateSize(). Mapfull and publisher changed to use it instead of handling it on their own.
+Mapmodule now has a method to notify openlayers and internal datamodels that map size has changed: updateSize(). Mapfull and publisher changed to use it instead of handling it on their own. This ensures the map domain in sandbox is up-to-date and functionalities depending on it (like GFI) work correctly.
+
+MapClickEvent now rounds clicked pixel coordinates so even if browser zoom is used, it returns integer values for pixels.
 
 ### mapmodule plugins zoombar, panbuttons and bundles coordinatedisplay and feature
 
 Reverted plugins placement change from 1.10 so these are no longer placed inside openlayers container div with fixed position
 
+### mapmodule plugin/wmslayerplugin
+
+If min and max scale are not defined, scales are not specified for layer. There is a bug on scale handling when resolution is "low enough". This can be used as a workaround for the time being.
+
 ### statsgrid bundle
-municipalities are now grouped and there are statistical variables added to the header row. CSV download button created in the frontend.
+
+Municipalities are now grouped and there are statistical variables added to the header row. CSV download button created in the frontend.
+
+### mapstats bundle
+
+LayerPlugin now disables hover/highlight functionality if a StatsLayer is not added/visible on the map
 
 ### mapanalysis bundle
-dataparser for analysislayer
+
+Refined ModelBuilder for analysislayer
+
+### publisher bundle
+
+Panbuttons is now an optional tool for publisher
 
 ## 1.10.1
 

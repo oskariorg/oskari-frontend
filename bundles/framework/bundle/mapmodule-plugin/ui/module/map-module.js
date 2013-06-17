@@ -19,34 +19,42 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
  * @param {Array} map options, example data:
  *  {
  *		resolutions : [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
+ *      units : "m",
  *		maxExtent : {
  *			left : 0,
  *			bottom : 10000000,
  *			right : 10000000,
  *			top : 0
  *		},
-        srsName : "EPSG:3067"
+ *      srsName : "EPSG:3067"
  *	}
  */
 function(id, imageUrl, options) {
 
     this._id = id;
     this._imageUrl = imageUrl;
-    this._options = options;
+
+    this._options = {
+        resolutions : [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
+        srsName : 'EPSG:3067',
+        units : 'm'
+    };
+    // override defaults
+    if(options) {
+        for(var key in options) {
+            this._options[key] = options[key];
+        }
+    }
 
     this._controls = {};
     this._layerPlugins = {};
 
-    /** @static @property {String} _projectionCode SRS projection code, defaults
-     * to 'EPSG:3067' */
-    this._projectionCode = 'EPSG:3067';
     this._supportedFormats = {};
 
     this._map = null;
 
     // _mapScales are calculated based on resolutions on init
     this._mapScales = [];
-    this._mapResolutions = [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25];
 
     this._sandbox = null;
     this._stealth = false;
@@ -204,18 +212,9 @@ function(id, imageUrl, options) {
 
         this._sandbox = sandbox;
 
-        // setting options
-        if (this._options) {
-            if (this._options.resolutions) {
-                this._mapResolutions = this._options.resolutions;
-            }
-            if(this._options.srsName){
-                this._projectionCode = this._options.srsName;
-                // set srsName to Oskari.mapframework.domain.Map
-                if (this._sandbox) {
-                    this._sandbox.getMap().setSrsName(this._projectionCode);
-                }
-            }
+        if (this._sandbox) {
+            // set srsName to Oskari.mapframework.domain.Map
+            this._sandbox.getMap().setSrsName(this._options.srsName);
         }
 
 
@@ -237,14 +236,15 @@ function(id, imageUrl, options) {
         this._createMap();
         // changed to resolutions based map zoom levels
         // -> calculate scales array for backward compatibility
-        for(var i = 0; i < this._mapResolutions.length; ++i) {
-            var calculatedScale = OpenLayers.Util.getScaleFromResolution(this._mapResolutions[i], 'm');
-            calculatedScale = calculatedScale * 10000;
+        for(var i = 0; i < this._options.resolutions.length; ++i) {
+
+            var calculatedScale = OpenLayers.Util.getScaleFromResolution(this._options.resolutions[i], this._map.units);
+            // rounding off the resolution to scale calculation
+            calculatedScale = calculatedScale * 100000000;
             calculatedScale = Math.round(calculatedScale);
-            calculatedScale = calculatedScale / 10000;
+            calculatedScale = calculatedScale / 100000000;
             this._mapScales.push(calculatedScale);
         }
-
         this._createBaseLayer();
 
         this.addMapControl('navigationHistoryTool', this._navigationHistoryTool);
@@ -459,10 +459,10 @@ function(id, imageUrl, options) {
 
         this._map = new OpenLayers.Map({
             controls : [],
-            units : 'm',
+            units : this._options.units, //'m',
             maxExtent : mapExtent,
-            resolutions : this._mapResolutions,
-            projection : this._projectionCode,
+            resolutions : this._options.resolutions,
+            projection : this._options.srsName,
             isBaseLayer : true,
             center : lonlat,
             theme : null,
@@ -478,7 +478,7 @@ function(id, imageUrl, options) {
      * @return {String}
      */
     getProjection : function() {
-        return this._projectionCode;
+        return this._options.srsName;
     },
     /**
      * @method createBaseLayer
@@ -876,8 +876,10 @@ function(id, imageUrl, options) {
         mapVO.setMaxExtent(this._map.getMaxExtent());
 
         mapVO.setBbox(this._map.calculateBounds());
+        
         // TODO: not sure if this is supposed to work like this
-        mapVO.setMarkerVisible(this._hasMarkers());
+        // this resets the marker set by url control parameter so dont do it
+        //mapVO.setMarkerVisible(this._hasMarkers());
     },
     /**
      * @method getMapScales
@@ -905,7 +907,26 @@ function(id, imageUrl, options) {
         return layerScales;
     },
     /**
-     * @method calculateLayerScales
+     * @method calculateLayerResolutions
+     * Calculate a subset of maps resolutions array that matches the given boundaries.
+     * If boundaries are not defined, returns all possible resolutions.
+     * @param {Number} maxScale maximum scale boundary (optional)
+     * @param {Number} minScale minimum scale boundary (optional)
+     * @return {Number[]} calculated resolutions that are within given bounds
+     */
+    calculateLayerResolutions : function(maxScale, minScale) {
+        var layerResolutions = [];
+        for(var i = 0; i < this._mapScales.length; i++) {
+            if((!minScale || minScale >= this._mapScales[i]) &&
+               (!maxScale || maxScale <= this._mapScales[i])) {
+                    // resolutions are in the same order as scales so just use them
+                    layerResolutions.push(this._options.resolutions[i]);
+               }
+        }
+        return layerResolutions;
+    },
+    /**
+     * @method getClosestZoomLevel
      * Calculate closest zoom level given the given boundaries.
      * If map is zoomed too close -> returns the closest zoom level level possible within given bounds
      * If map is zoomed too far out -> returns the furthest zoom level possible within given bounds

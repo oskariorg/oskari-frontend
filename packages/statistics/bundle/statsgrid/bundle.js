@@ -36,9 +36,6 @@ function() {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/statistics/bundle/statsgrid/StatsToolbar.js"
 		}, {
-			"type" : "text/javascript",
-			"src" : "../../../../bundles/statistics/bundle/statsgrid/ManageStatsOut.js"
-		},{
             "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/bundle/statsgrid/plugin/ManageClassificationPlugin.js"
 		},{
@@ -49,10 +46,19 @@ function() {
             "src" : "../../../../bundles/statistics/bundle/statsgrid/event/SotkadataChangedEvent.js"
 		},{
             "type" : "text/javascript",
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/event/ModeChangedEvent.js"
+        },{
+            "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/bundle/statsgrid/request/StatsGridRequest.js"
 		}, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/bundle/statsgrid/request/StatsGridRequestHandler.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/request/TooltipContentRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/request/TooltipContentRequestHandler.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/bundle/statsgrid/service/StatisticsService.js"
@@ -98,6 +104,12 @@ function() {
         }, {
             "src" : "../../../../libraries/slickgrid/plugins/slick.headermenu2.css",
             "type" : "text/css"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.rowselectionmodel.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.checkboxselectcolumn2.js",
+            "type" : "text/javascript"
         }, {
             "src" : "../../../../libraries/slickgrid/slick.grid.js",
             "type" : "text/javascript"

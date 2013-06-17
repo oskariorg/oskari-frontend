@@ -37,6 +37,7 @@ ProjectionDefs will replace the default projections "EPSG:3067" and "EPSG:4326".
             "right" : 1548576.0,
             "top" :  8388608
         },
+        "units" : "m",
         "srsName" : "EPSG:3067"
     },
     "projectionDefs" : {
@@ -60,16 +61,6 @@ ProjectionDefs will replace the default projections "EPSG:3067" and "EPSG:4326".
     }
   ],
   "globalMapAjaxUrl":"<url for ajax operations>",
-  "mapOptions": {
-    "resolutions" : [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25],
-    "maxExtent" : {
-      "left" : -548576.0,
-      "bottom" : 6291456.0,
-      "right" : 1548576.0,
-      "top" :  8388608
-    },
-    "srsName" : "EPSG:3067"
-  },
   "user":{
      <logged in users details for Oskari.mapframework.domain.User >
   },
