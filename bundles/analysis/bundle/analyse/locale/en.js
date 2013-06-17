@@ -110,6 +110,12 @@ Oskari.registerLocalization({
                 "cancel" : "Cancel"
             },
             "help" : "Help",
+            "success": {
+                "layerAdded": {
+                    "title": "Layer {layer} added",
+                    "message": "You'll find the layer in the Data panel"
+                }
+            },
             "error" : {
                 "title" : "Error",
                 "bufferSize" : "Error in buffer size",

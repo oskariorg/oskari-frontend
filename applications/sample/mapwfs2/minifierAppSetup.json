@@ -12,7 +12,7 @@
                 "openlayers-default-theme": {
                     "bundlePath": "../../../packages/openlayers/bundle/"
                 },
-                "openlayers-single-full": {
+                "openlayers-full-map": {
                     "bundlePath": "../../../packages/openlayers/bundle/"
                 }
             },
@@ -31,7 +31,7 @@
                 "mapwmts": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
-                "mapwfs": {
+                "mapwfs2": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
                 "mapstats": {
@@ -299,14 +299,14 @@
     }, {
         "instanceProps": {},
         "title": "Featuredata",
-        "bundleinstancename": "featuredata",
+        "bundleinstancename": "featuredata2",
         "fi": "Kohdetiedot",
         "sv": "?",
         "en": "?",
-        "bundlename": "featuredata",
+        "bundlename": "featuredata2",
         "metadata": {
             "Import-Bundle": {
-                "featuredata": {
+                "featuredata2": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 }
             },
