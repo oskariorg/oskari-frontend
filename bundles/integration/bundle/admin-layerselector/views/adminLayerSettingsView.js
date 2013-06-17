@@ -206,12 +206,12 @@ define([
             data.desc.en        = form.find('#add-layer-en-title').val(),
 
             data.wmsName        = form.find('#add-layer-wms-id').val(),
-            data.wmsUrl         = form.find('#add-layer-interface').val(),
+            data.wmsUrl         = form.find('#add-layer-wms-url').val(),
 
             data.opacity        = form.find('#opacity-slider').val(),
 
             data.style          = form.find('#add-layer-style').val(),
-            data.style           = me.classes.encode64(data.style);//me.layerGroupingModel.encode64(data.style);
+            data.style          = me.classes.encode64(data.style);//me.layerGroupingModel.encode64(data.style);
 
             data.minScale       = form.find('#add-layer-minscale').val(),
             data.maxScale       = form.find('#add-layer-maxscale').val(),
@@ -223,7 +223,7 @@ define([
             //data.metadataUrl    = form.find('#add-layer-?').val(),
             data.xslt           = form.find('#add-layer-xslt').val(),
             data.xslt           = me.classes.encode64(data.xslt);//me.layerGroupingModel.encode64(data.xslt);
-            data.gfiType       = form.find('#add-layer-responsetype').val();
+            data.gfiType        = form.find('#add-layer-responsetype').val();
 
             // id of layer class
             var url = baseUrl + action_route + id + idValue;

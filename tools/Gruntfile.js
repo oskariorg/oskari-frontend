@@ -442,17 +442,21 @@ module.exports = function(grunt) {
 			}
 			if (!varsFileExists) {
 				grunt.fail.fatal("applicationVariables.scss not found, looked in:\n" + invalidPaths, 1);
+			} else {
+				grunt.log.writeln("Found valid applicationVariables.scss path:\n" + varsDirectory);
 			}
 		}
 
 
 		// get application scss files
+		/*
 		grunt.log.writeln("Getting application SCSS files");
 		var vars = fs.readFileSync(varsDirectory + "/_applicationVariables.scss"),
 			scssFiles = fs.readdirSync(varsDirectory + "/scss/");
+		*/
 
 		// compile to css
-		grunt.log.writeln("Compiling app SCSS to CSS");
+		grunt.log.writeln("Compiling app SCSS to CSS, using " + varsDirectory + "/scss/ as SCSS folder.");
 		grunt.config.set(
 			'sass.' + appName + '.files',
 			[{
@@ -535,9 +539,15 @@ module.exports = function(grunt) {
         }
 
 		// gather css files from bundles' minifierAppSetups
+		grunt.log.writeln("Getting files from processedAppSetups");
 		for (var i = 0; i < processedAppSetup.length; ++i) {
-			cssfiles = cssfiles.concat(parser.getFilesForComponent(processedAppSetup[i], 'css'));
+			var pasFiles = parser.getFilesForComponent(processedAppSetup[i], 'css');
+			for (var j = 0; j < pasFiles.length; j++) {
+				grunt.log.writeln("Found file " + pasFiles[j]);
+			}
+			cssfiles = cssfiles.concat(pasFiles);
 		}
+		grunt.log.writeln("Unminified CSS:\n" + cssfiles);
 		this.minifyCSS(cssfiles, options.dest + 'oskari.min.css');
 	});
 };

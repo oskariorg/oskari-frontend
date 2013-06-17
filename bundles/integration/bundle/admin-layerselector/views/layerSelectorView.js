@@ -123,6 +123,7 @@ define([
             
             // Check that data for classes is fetched
             // FIXME we shouldn't need to do this everytime, just once?
+			//console.log("Getting inspire themes and map layer classes");
             this.inspireTabModel.getClasses(this.instance.getSandbox().getAjaxUrl(), "action_route=GetInspireThemes");
             this.organizationTabModel.getClasses(this.instance.getSandbox().getAjaxUrl(),"&action_route=GetMapLayerClasses");
         },

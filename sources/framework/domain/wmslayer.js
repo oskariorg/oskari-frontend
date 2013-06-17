@@ -28,6 +28,14 @@ function() {
     addWmsUrl : function(wmsUrl) {
         this._wmsUrls.push(wmsUrl);
     },
+	/**
+     * @method setWmsUrl
+     * @param {String} wmsUrl
+     * Sets the url to layer array of wms image urls
+     */
+    setWmsUrl : function(wmsUrl) {
+        this._wmsUrls = [wmsUrl];
+    },
     /**
      * @method getWmsUrls
      * @return {String[]} 
