@@ -220,10 +220,12 @@ define([
             data.legendImage    = form.find('#add-layer-legendImage').val(),
             data.inspireTheme   = form.find('#add-layer-inspire-theme').val(),
             data.dataUrl        = form.find('#add-layer-datauuid').val(),
-            //data.metadataUrl    = form.find('#add-layer-?').val(),
+            data.metadataUrl = form.find('#add-layer-metadataid').val();
             data.xslt           = form.find('#add-layer-xslt').val(),
             data.xslt           = me.classes.encode64(data.xslt);//me.layerGroupingModel.encode64(data.xslt);
             data.gfiType        = form.find('#add-layer-responsetype').val();
+			
+			
 
             // id of layer class
             var url = baseUrl + action_route + id + idValue;
@@ -248,9 +250,9 @@ define([
                 "&legendImage=" + data.legendImage +
                 "&inspireTheme=" + data.inspireTheme +
                 "&dataUrl=" + data.dataUrl +
-    //            "&=" + data.metadataUrl +
                 "&xslt=" + data.xslt +
-                "&gfiType=" + data.gfiType;
+                "&gfiType=" + data.gfiType +
+				"&metadataUrl=" + data.metadataUrl;
 
             jQuery.ajax({
                 type : "GET",

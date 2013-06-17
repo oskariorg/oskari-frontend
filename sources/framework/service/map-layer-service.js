@@ -171,10 +171,11 @@ function(mapLayerUrl, sandbox) {
 				// layer.set();
 			}
 			*/
-
+			/*
 			if (newLayerConf.style) {
 				layer.setStyle(newLayerConf.style);
 			}
+			*/
 
 			/*
 			if (newLayerConf.styles) {
