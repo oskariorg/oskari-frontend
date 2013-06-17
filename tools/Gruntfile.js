@@ -519,6 +519,7 @@ module.exports = function(grunt) {
 
             var value = '';
 			// read files to value
+			grunt.log.writeln("Concatenating and minifying " + files.length + " files");
             for (var i = 0; i < files.length; ++i) {
                 if (!fs.existsSync(files[i])) {
                     grunt.fail.fatal('Couldnt locate ' + files[i]);
@@ -528,6 +529,7 @@ module.exports = function(grunt) {
             }
 			// minify value
             var packed = cssPacker.processString(value);
+			grunt.log.writeln("Packed CSS:\n\n" + packed + "\n\nwriting to " + outputFile);
 
 			// write value to outputfile
             fs.writeFile(outputFile, packed, function(err) {
@@ -536,19 +538,14 @@ module.exports = function(grunt) {
                     grunt.fail.fatal('Error writing packed CSS: ' + err);
                 }
             });
-        }
+        };
 
 		// gather css files from bundles' minifierAppSetups
 		grunt.log.writeln("Getting files from processedAppSetups");
 		for (var i = 0; i < processedAppSetup.length; ++i) {
 			var pasFiles = parser.getFilesForComponent(processedAppSetup[i], 'css');
-			grunt.log.writeln("Found " + pasFiles.length + " files");
-			for (var j = 0; j < pasFiles.length; j++) {
-				grunt.log.writeln("Found file " + pasFiles[j]);
-			}
 			cssfiles = cssfiles.concat(pasFiles);
 		}
-		grunt.log.writeln("Writing CSS:\n" + cssfiles + "\nto: " + options.dest + 'oskari.min.css');
 		this.minifyCSS(cssfiles, options.dest + 'oskari.min.css');
 	});
 };
