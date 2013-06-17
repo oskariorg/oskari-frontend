@@ -542,6 +542,7 @@ module.exports = function(grunt) {
 		grunt.log.writeln("Getting files from processedAppSetups");
 		for (var i = 0; i < processedAppSetup.length; ++i) {
 			var pasFiles = parser.getFilesForComponent(processedAppSetup[i], 'css');
+			grunt.log.writeln("Found " + pasFiles.length + " files");
 			for (var j = 0; j < pasFiles.length; j++) {
 				grunt.log.writeln("Found file " + pasFiles[j]);
 			}
