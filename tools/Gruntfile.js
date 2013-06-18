@@ -274,12 +274,10 @@ module.exports = function(grunt) {
             grunt.config.set("sprite." + appName + ".options", options);
         }
 
-        // scss to css conversion
-        grunt.task.run('compileAppCSS');
-
         grunt.task.run('validate');
         grunt.task.run('copy');
         grunt.task.run('compile');
+        grunt.task.run('compileAppCSS');
         grunt.task.run('sprite');
         grunt.task.run('yuidoc');
         grunt.task.run('mddocs');
@@ -442,17 +440,21 @@ module.exports = function(grunt) {
 			}
 			if (!varsFileExists) {
 				grunt.fail.fatal("applicationVariables.scss not found, looked in:\n" + invalidPaths, 1);
+			} else {
+				grunt.log.writeln("Found valid applicationVariables.scss path:\n" + varsDirectory);
 			}
 		}
 
 
 		// get application scss files
+		/*
 		grunt.log.writeln("Getting application SCSS files");
 		var vars = fs.readFileSync(varsDirectory + "/_applicationVariables.scss"),
 			scssFiles = fs.readdirSync(varsDirectory + "/scss/");
+		*/
 
 		// compile to css
-		grunt.log.writeln("Compiling app SCSS to CSS");
+		grunt.log.writeln("Compiling app SCSS to CSS, using " + varsDirectory + "/scss/ as SCSS folder.");
 		grunt.config.set(
 			'sass.' + appName + '.files',
 			[{
@@ -515,6 +517,7 @@ module.exports = function(grunt) {
 
             var value = '';
 			// read files to value
+			grunt.log.writeln("Concatenating and minifying " + files.length + " files");
             for (var i = 0; i < files.length; ++i) {
                 if (!fs.existsSync(files[i])) {
                     grunt.fail.fatal('Couldnt locate ' + files[i]);
@@ -524,6 +527,7 @@ module.exports = function(grunt) {
             }
 			// minify value
             var packed = cssPacker.processString(value);
+			grunt.log.writeln("Packed CSS:\n\n" + packed + "\n\nwriting to " + outputFile);
 
 			// write value to outputfile
             fs.writeFile(outputFile, packed, function(err) {
@@ -532,11 +536,13 @@ module.exports = function(grunt) {
                     grunt.fail.fatal('Error writing packed CSS: ' + err);
                 }
             });
-        }
+        };
 
 		// gather css files from bundles' minifierAppSetups
+		grunt.log.writeln("Getting files from processedAppSetups");
 		for (var i = 0; i < processedAppSetup.length; ++i) {
-			cssfiles = cssfiles.concat(parser.getFilesForComponent(processedAppSetup[i], 'css'));
+			var pasFiles = parser.getFilesForComponent(processedAppSetup[i], 'css');
+			cssfiles = cssfiles.concat(pasFiles);
 		}
 		this.minifyCSS(cssfiles, options.dest + 'oskari.min.css');
 	});
