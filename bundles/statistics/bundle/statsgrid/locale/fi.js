@@ -50,7 +50,9 @@ Oskari.registerLocalization({
 			"manual": "Luokittelu käsin",
             "manualPlaceholder": "Syötä lukuja pilkulla erotettuna.",
             "manualRangeError": "Lukuja tulee olla vähintään {min} ja enintään {max}!",
-            "nanError": "Syöttämäsi arvo ei ole luku!"
+            "nanError": "Syöttämäsi arvo ei ole luku!",
+			"infoTitle":                "Luokittelu käsin",
+			"info":                     "Voit syöttää oman luokittelun pilkuilla erotettuna. Desimaalierottimena toimii piste. Syötä ensin alaraja, sitten luokkarajat ja lopuksi yläraja. Esimerkiksi syöttämällä \"0, 10.5, 24, 30.2, 57, 73.1\" saat viisi luokkaa, jonka ylä- ja alarajat ovat 0 ja 73,1 ja luokkarajat väliin jäävät arvot. Rajojen ulkopuolelle jäävät arvot jätetään huomiotta."
 		},
 		"colorset" : {
 			"button": "Värit",
