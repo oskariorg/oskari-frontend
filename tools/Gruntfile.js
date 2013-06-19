@@ -511,6 +511,7 @@ module.exports = function(grunt) {
 	});
 
 	grunt.registerMultiTask("minifyAppCSS", "Concatenate and minify application css", function() {
+        var done = this.async();
 		grunt.log.writeln("Concatenating and minifying css");
 
 		var cssPacker = require('uglifycss'),
@@ -543,6 +544,7 @@ module.exports = function(grunt) {
                 if (err && err.code !== "ENOENT") {
                     grunt.fail.fatal('Error writing packed CSS: ' + err);
                 }
+                done();
             });
         };
 
