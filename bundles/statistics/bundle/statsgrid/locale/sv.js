@@ -42,29 +42,29 @@ Oskari.registerLocalization({
 
         },
           "classify": {
-            "classify":                 "Classify",
-            "classifymethod":           "Method",
-            "classes":                  "Classes",
-            "jenks":                    "Jenks ranges",
-            "quantile" :                "Quantile ranges",
-            "eqinterval" :              "Eqinterval",
-            "manual":                   "Manual breaks",
-            "manualPlaceholder":        "Input numbers separated with a comma.",
-            "manualRangeError":         "There should be at least {min} and at most {max} numbers!",
-            "nanError":                 "A value was not a number!",
-			"infoTitle":                "Manual breaks",
-			"info":                     "Input manual breaks separated with a comma. Period works as a decimal separator. First enter the lower bound, then the class bounds and finally the upper bound. E.g. by entering \"0, 10.5, 24, 30.2, 57, 73.1\" you'll get five classes with lower and upper bounds set to 0 and 73,1 and class bounds between those. Values left outside the bounds will be excluded."
+            "classify":                 "Klassificera",
+            "classifymethod":           "Metod",
+            "classes":                  "Klasser",
+            "jenks":                    "Jenks intervall",
+            "quantile" :                "Quantile intervall",
+            "eqinterval" :              "Eqintervall",
+            "manual":                   "Manuell klassificering",
+            "manualPlaceholder":        "Ange siffrorna, separerade med kommatecken.",
+            "manualRangeError":         "Det bör vara minst {min} och högst {max} siffror!",
+            "nanError":                 "Ett värde var inte ett nummer!",
+			"infoTitle":                "Manuell klassificering",
+			"info":                     "Ange siffrorna separerade med kommatecken. Punkt fungerar som ett decimaltecken. Först in den nedre gränsen, då gränserna klass och slutligen den övre gränsen. T.ex. genom att skriva \"0, 10,5, 24, 30,2, 57, 73,1\" du får fem klasser med nedre och övre gränsen satt till 0 och 73,1 och klass gränser mellan dem. Värden kvar utanför gränserna kommer att uteslutas."
         },
         "colorset" : {
             "button": "Färger",
             "flipButton": "Vända färger",
-			"themeselection" : "Väriteeman valinta",
-			"setselection" : "Värisetin valinta",
-			"sequential" : "Kvantitatiivinen",
-			"qualitative" : "Kvalitatiivinen",
-			"divergent" : "Jakautuva",
-			"info2" : "Värivalinta - valitse osoittimella väriskaalasta värijakso",
-			"cancel" : "Poistu"
+			"themeselection" : "Välj färgtema",
+			"setselection" : "Välj färgset",
+			"sequential" : "Kvantitiv",
+			"qualitative" : "Kvalitativ",
+			"divergent" : "Divergent",
+			"info2" : "Vända färger - använd muspekaren för att välja en färg från sekvensen färgskalan",
+			"cancel" : "Avsluta"
 			
 		},
         "statistic" : {
