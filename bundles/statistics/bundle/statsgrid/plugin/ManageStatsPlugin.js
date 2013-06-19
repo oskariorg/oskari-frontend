@@ -46,7 +46,8 @@ function(config, locale) {
         'statsgridTotalsVar': '<span class="statsgrid-variable"></span>',
         'subHeader'         : '<span class="statsgrid-grid-subheader"></span>',
         'gridHeaderMenu'    : '<li><input type="checkbox" /><label></label></li>',
-        'groupingHeader'    : "<span style='color:green'></span>"
+        'groupingHeader'    : '<span style="color:green"></span>',
+        'toolbarButton'     : '<button class="statsgrid-select-municipalities"></button>'
     }
 }, {
     /** 
@@ -130,6 +131,7 @@ function(config, locale) {
         this._published = ( this.conf.published || false );
         this._state = ( this.conf.state || {} );
         this._layer = ( this.conf.layer || null );
+        this.selectMunicipalitiesMode = false;
     },
 
     /**
@@ -162,7 +164,11 @@ function(config, locale) {
      */
     eventHandlers : {
         'MapStats.FeatureHighlightedEvent': function(event) {
-            this._featureHighlightedEvent(event);
+            if(this.selectMunicipalitiesMode) {
+                this._featureSelectedEvent(event);
+            } else {
+                this._featureHighlightedEvent(event);
+            }
         }
     },
 
@@ -450,6 +456,9 @@ function(config, locale) {
                     }
                 };
             }
+//we need adjust slider if there is only few items checked
+this._adjustClassificationSlider();
+
 
             // resize grid (content/rows does not show extra rows otherwise. i.e. group headers & footers)
             args.grid.setColumns(args.grid.getColumns());
@@ -520,7 +529,12 @@ function(config, locale) {
             }
         }
         if (returnItem) {
-            return this.dataView.getRowById(returnItem.id);
+            var row = this.dataView.getRowById(returnItem.id);
+            if(row){
+                return row;
+            } else {
+                return -1;
+            }
         } else {
             return null;
         }
@@ -1087,7 +1101,7 @@ function(config, locale) {
         for ( i = 0; i < data.length; i++) {
             var row = data[i];
             // Exclude null values
-            if (row[curCol.field]) {
+            if (row.sel == "checked" && row[curCol.field]) {
                 statArray.push(row[curCol.field]);
                 // Municipality codes (kuntakoodit)
                 munArray.push(row['code']);
@@ -1578,12 +1592,14 @@ function(config, locale) {
             cssKey = 'highlight-row-' + featureAtts.kuntakoodi,
             cssHash = {};
 
-        if (this.grid && idx) {
-            if (isHighlighted) {               
-                this.grid.scrollRowToTop(idx);
-                cssHash[idx] = {'municipality': 'statsgrid-highlight-row'};
-                this.grid.addCellCssStyles(cssKey, cssHash);
-                this.dataView.syncGridCellCssStyles(this.grid, cssKey);
+if (this.grid && idx && this.getItemsByGroupingKey('checked').length > 0) {
+            if (isHighlighted) {
+if(idx != -1) {
+    this.grid.scrollRowToTop(idx);
+    cssHash[idx] = {'municipality': 'statsgrid-highlight-row'};
+    this.grid.addCellCssStyles(cssKey, cssHash);
+    this.dataView.syncGridCellCssStyles(this.grid, cssKey);
+}
             } else {
                 this.grid.removeCellCssStyles(cssKey);
                 this.dataView.syncGridCellCssStyles(this.grid, cssKey);
@@ -1594,6 +1610,110 @@ function(config, locale) {
             //this.grid.render();
         }
     },
+
+_featureSelectedEvent: function(event) {
+    var featureAtts = event.getFeature().attributes,
+        isHighlighted = event.isHighlighted(),
+        item = this.getItemByCode(featureAtts.kuntakoodi);
+
+    if (this.grid && item) {
+        if (isHighlighted) {               
+            item.sel = 'checked';
+            var data = this.grid.getData();
+            data.updateItem(item.id, item);
+
+        } else {
+            item.sel = 'empty';
+            var data = this.grid.getData();
+            data.updateItem(item.id, item);            
+        }
+
+        var checked = this.getItemsByGroupingKey('checked').length;
+
+        var slider = this._adjustClassificationSlider();
+        var selectedVal = slider.slider('option','value');
+        var sliderEnabled = !slider.slider( "option", "disabled");
+
+        // sendstats
+        var curColId = this._state.currentColumn;
+        var columns = this.grid.getColumns();
+        for (var i = 0; i < columns.length; i++) {
+            var column = columns[i];
+            if(column.id === curColId && sliderEnabled &&
+                (   (selectedVal <  checked && isHighlighted) ||
+                    (selectedVal <= checked && !isHighlighted))) {
+                this.sendStatsData(column);
+                break;
+            }
+        };
+    }
+},
+_adjustClassificationSlider: function() {
+    var checkedItems = this.getItemsByGroupingKey('checked').length;
+
+    // classifyPlugin can't slide more than there are municipalities
+    var classifyPlugin = this._sandbox.findRegisteredModuleInstance('MainMapModuleManageClassificationPlugin');
+    var slider = jQuery('#slider-range-max');
+    var selectedVal = slider.slider('option','value');
+
+    var max = checkedItems < classifyPlugin.maxClassNum ? checkedItems : classifyPlugin.maxClassNum;
+    max--;
+    selectedVal = checkedItems > selectedVal ? selectedVal > 2 ? selectedVal : 2 : checkedItems - 1;
+
+    slider.slider({
+        max : max,
+        value: selectedVal
+    });
+    //
+    if(max < 3) {
+        slider.slider( "option", "disabled", true );
+    } else {
+        slider.slider( "option", "disabled", false );        
+    }
+    jQuery('input#amount_class').val(selectedVal);
+    return slider;
+},
+getItemsByGroupingKey : function(sel) {
+    var items = this.grid.getData().getItems();
+    var itemsByGrouping = [];
+    for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        if(item.sel === sel) {
+            itemsByGrouping.push(sel);
+        }
+    }
+    return itemsByGrouping;
+},
+_showSelectedAreas : function(idArray) {
+    var data = this.grid.getData();
+    for (var i = 0; i < idArray.length; i++) {
+        var id = idArray[i];
+        var item = data.getItemById(id);
+        item.sel = 'checked';
+        data.updateItem(id, item);
+    };
+    data.refresh();
+},
+
+unselectAllAreas : function() {
+    var _grid = this.grid;
+    var _data = _grid.getData();
+    var items = _grid.getData().getItems();
+    for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        item.sel = 'empty';
+    }
+
+    _data.collapseGroup('empty');
+
+    //update data
+    _data.setItems(items);
+    _data.refresh();
+    //render all the rows (and checkboxes) again
+    _grid.invalidateAllRows();
+    _grid.render();
+
+},
 
     /**
      * Sends an event with HTML for tooltips as data.
@@ -1607,12 +1727,19 @@ function(config, locale) {
         var currColumn = this._state.currentColumn;
         var item = this.getItemByCode(featAtts.kuntakoodi);
         var content = '<p>' + item.municipality;
-        content += ((currColumn && item[currColumn]) ? '<br />' + item[currColumn] + '</p>' : '</p>');
+        content += ((currColumn && item[currColumn]) ? '<br />' + item[currColumn] : ''); 
+content += ((this.getItemsByGroupingKey('checked').length < 4) ? '<br />' + this._locale['select4Municipalities'] : '');
+        content += '</p>';
 
         if (eventBuilder) {
             var event = eventBuilder(content);
             this._sandbox.notifyAll(event);
         }
+    },
+
+    toggleSelectMunicipalitiesMode : function() {
+        this.selectMunicipalitiesMode = !this.selectMunicipalitiesMode;
+        return this.selectMunicipalitiesMode;
     }
 
 }, {

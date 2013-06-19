@@ -187,6 +187,10 @@ function(config) {
         'StatsGrid.ModeChangedEvent': function(event) {
             this._afterModeChangedEvent(event);
         },
+        'StatsGrid.ClearHilightsEvent': function(event) {
+            this._clearHilights(event);
+        },
+        //_clearHilights
         'MapStats.HoverTooltipContentEvent': function(event) {
             this._afterHoverTooltipContentEvent(event);
         }
@@ -488,6 +492,13 @@ function(config) {
             }
             this._removePopup();
         }
+    },
+    _clearHilights: function(event) {
+        var drawLayer = this._map.getLayersByName("Stats Draw Layer")[0];
+        if (drawLayer) {
+            drawLayer.removeAllFeatures();
+        }
+        this._removePopup();
     },
     
     /**

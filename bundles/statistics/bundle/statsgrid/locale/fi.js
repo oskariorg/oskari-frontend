@@ -77,6 +77,7 @@ Oskari.registerLocalization({
 		"municipality" 	: "Kunnat",
 		"not_included" 	: "Poistettu laskuista",
 		"selectRows" 	: "Valitse rivit",
+		"select4Municipalities" : "Valitse ainakin 4 kuntaa",
 		"noMatch" 		: "Indikaattoria ei löytynyt",
 		"selectIndicator": "Valitse indikaattori"
 	}

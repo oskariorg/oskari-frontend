@@ -124,6 +124,22 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 group : pGroup
             };
         }
+
+if(btn.toggleSelection) {
+    // highlight the button
+    var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
+    var group = toolbar.find('div.toolrow[tbgroup=' + pGroup +']');
+    var button = group.find('div.tool[tool=' + pId +']');
+
+    if(button.hasClass('selected')) {
+       button.removeClass('selected');
+
+    } else {
+        button.addClass('selected');                
+    }
+}
+
+
         btn.callback();
     },
     /**
