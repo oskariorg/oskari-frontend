@@ -165,6 +165,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             if(mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
                 mapLayerService.addLayer(mapLayer);
             }
+            console.log(mapLayer);
         }
         // update layer info
         else if(e.command == "editLayer") {

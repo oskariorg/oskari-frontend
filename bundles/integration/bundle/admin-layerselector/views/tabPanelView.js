@@ -376,7 +376,7 @@ define([
          * 
          * @method _save
          */
-         _save: function(e, url, successCallback) {
+        _save: function(e, url, successCallback) {
             var me = this,
                 element = jQuery(e.currentTarget),
                 addClass = element.parents('.admin-add-class');

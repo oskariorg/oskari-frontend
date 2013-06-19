@@ -1,7 +1,15 @@
 define([
-    'text!_bundle/templates/adminLayerSettingsTemplate.html'
+    'text!_bundle/templates/adminTypeSelectTemplate.html',
+    'text!_bundle/templates/adminLayerSettingsTemplate.html',
+    'text!_bundle/templates/adminGroupSettingsTemplate.html',
+    'text!_bundle/templates/group/subLayerTemplate.html'
     ], 
-    function(LayerSettingsTemplate) {
+    function(
+        TypeSelectTemplate,
+        LayerSettingsTemplate,
+        GroupSettingsTemplate,
+        SubLayerTemplate
+        ) {
     return Backbone.View.extend({
 //<div class="admin-add-layer" data-id="<% if(model != null && model.getId()) { %><%= model.getId() %><% } %>">
 
@@ -21,7 +29,9 @@ define([
             "click .admin-remove-layer"     : "removeLayer",
             "click .show-edit-layer"        : "clickLayerSettings",
             "click #add-layer-wms-button"   : "fetchCapabilities",
-            "click .icon-close"             : "clearInput"
+            "click .icon-close"             : "clearInput",
+            "change #add-layer-type"        : "createLayerSelect",
+            "click .admin-add-group-ok"     : "saveGroup"
         },
 
         /**
@@ -34,7 +44,10 @@ define([
             this.instance           = this.options.instance;
             this.model              = this.options.model;
             this.classes            = this.options.classes;
-            this.template           = _.template(LayerSettingsTemplate);
+            this.typeSelectTemplate     = _.template(TypeSelectTemplate);
+            this.layerTemplate      = _.template(LayerSettingsTemplate);
+            this.groupTemplate      = _.template(GroupSettingsTemplate);
+            this.subLayerTemplate   = _.template(SubLayerTemplate);
             _.bindAll(this);
             this.render();
         },
@@ -49,8 +62,52 @@ define([
             if(this.model != null && this.model.getId()) { 
                 this.$el.attr('data-id', this.model.getId());
             }
-            // add html template
-            this.$el.html(this.template({
+
+            // if editing an existing layer
+            if (this.model) {
+                console.log(this.model);
+                if (this.model.isBaseLayer()) {
+                    this.createGroupForm('baseName');
+                } else if (this.model.isGroupLayer()) {
+                    this.createGroupForm('groupName');
+                } else {
+                    this.createLayerForm();
+                }
+            }
+            // otherwise create a new layer
+            else {
+                // add html template
+                this.$el.html(this.typeSelectTemplate({
+                    model: this.model, 
+                    instance : this.options.instance,
+                    classNames : this.classes.getGroupTitles()
+                }));
+            }
+        },
+
+        /**
+         * Creates the selection to create either base, group or normal layer.
+         *
+         * @method createLayerSelect
+         */
+        createLayerSelect: function(e) {
+            jQuery('.add-layer-wrapper').remove();
+            jQuery('.admin-add-group').remove();
+
+            // Create a normal layer
+            if (e.currentTarget.value === 'wmslayer') {
+                this.createLayerForm(e);
+            }
+            // Create a base or a group layer
+            else if (e.currentTarget.value === 'base' || e.currentTarget.value === 'groupMap') {
+                var groupTitle = (e.currentTarget.value === 'base' ? 'baseName' : 'groupName');
+
+                this.createGroupForm(groupTitle, e);
+            }
+        },
+
+        createLayerForm: function(e) {
+            this.$el.append(this.layerTemplate({
                 model: this.model, 
                 instance : this.options.instance,
                 classNames : this.classes.getGroupTitles()
@@ -66,13 +123,6 @@ define([
                     styles.push(this.options.layerTabModel.decode64(this.model.admin.style));
                     this.model.admin.style_decoded = styles;
                 }
-                // add template
-                var settings = this.template({
-                    model: this.model, 
-                    instance : this.options.instance,
-                    classNames : this.classes.getGroupTitles()
-                });
-                this.$el.html(settings);
 
                 // add opacity
                 var opacity = 100;
@@ -88,6 +138,18 @@ define([
                     }
                 });
             }
+        },
+
+        createGroupForm: function(groupTitle, e) {
+            var subLayers = ( this.model ? this.model.getSubLayers() : [] );
+
+            this.$el.append(this.groupTemplate({
+                model: this.model, 
+                instance : this.options.instance,
+                groupTitle : groupTitle,
+                subLayers : subLayers,
+                subLayerTemplate : this.subLayerTemplate
+            }));
         },
 
         /**
@@ -159,7 +221,7 @@ define([
                     }
                 },
                 error : function(jqXHR, textStatus) {
-                    if(callbackFailure && jqXHR.status != 0) {
+                    if(jqXHR.status != 0) {
                         alert(' Removing layer did not work. ');
                     }
                 }
@@ -187,34 +249,41 @@ define([
             var data = {};
 
             // add layer type and version
-            var wmsVersion = form.find('#add-layer-type').val();
-            wmsVersion = (wmsVersion != "") ? wmsVersion : form.find('#add-layer-type > option').first().val();
+            var wmsVersion = form.find('#add-layer-interface-version').val();
+            wmsVersion = (wmsVersion != "") ? wmsVersion : form.find('#add-layer-interface-version > option').first().val();
             if(wmsVersion.indexOf('WMS') >= 0) {
                 var parts = wmsVersion.split(' ');
-                data.layerType  = 'wmslayer';
                 data.version    = parts[1];
             }
 
-            data.names = [];
-            data.desc = [];
+            // base and group are always of type wmslayer
+            data.layerType = 'wmslayer';
+
+            data.names = {};
+            data.title = {};
             data.orderNumber    = 1,
+            data.layer_id       = idValue;
             data.names.fi       = form.find('#add-layer-fi-name').val(),
             data.names.sv       = form.find('#add-layer-sv-name').val(),
             data.names.en       = form.find('#add-layer-en-name').val(),
-            data.desc.fi        = form.find('#add-layer-fi-title').val(),
-            data.desc.sv        = form.find('#add-layer-sv-title').val(),
-            data.desc.en        = form.find('#add-layer-en-title').val(),
+            data.title.fi        = form.find('#add-layer-fi-title').val(),
+            data.title.sv        = form.find('#add-layer-sv-title').val(),
+            data.title.en        = form.find('#add-layer-en-title').val(),
 
+            // type can be either wmslayer, base or groupMap
+            data.type           = form.find('#add-layer-type').val(),
             data.wmsName        = form.find('#add-layer-wms-id').val(),
-            data.wmsUrl         = form.find('#add-layer-interface').val(),
+            data.wmsUrl         = form.find('#add-layer-wms-url').val(),
 
             data.opacity        = form.find('#opacity-slider').val(),
 
             data.style          = form.find('#add-layer-style').val(),
-            data.style           = me.classes.encode64(data.style);//me.layerGroupingModel.encode64(data.style);
+            data.style          = me.classes.encode64(data.style);//me.layerGroupingModel.encode64(data.style);
 
             data.minScale       = form.find('#add-layer-minscale').val(),
             data.maxScale       = form.find('#add-layer-maxscale').val(),
+            data.epsg        = form.find('#add-layer-srsname').val(),
+            data.epsg        = Number(data.epsg.replace('EPSG:', '')),
 
             //data.descriptionLink = form.find('#add-layer-').val(),
             data.legendImage    = form.find('#add-layer-legendImage').val(),
@@ -223,9 +292,12 @@ define([
             //data.metadataUrl    = form.find('#add-layer-?').val(),
             data.xslt           = form.find('#add-layer-xslt').val(),
             data.xslt           = me.classes.encode64(data.xslt);//me.layerGroupingModel.encode64(data.xslt);
-            data.gfiType       = form.find('#add-layer-responsetype').val();
+            data.gfiType        = form.find('#add-layer-responsetype').val();
 
-            // id of layer class
+            // Layer class id aka. orgName id
+            data.lcId           = lcId;
+
+            // The old way
             var url = baseUrl + action_route + id + idValue;
             if(lcId != null) {
                 url += "&lcId=" + lcId;
@@ -233,28 +305,37 @@ define([
             url += "&nameFi=" + data.names.fi +
                 "&nameSv=" + data.names.sv +
                 "&nameEn=" + data.names.en +
-                "&titleFi=" + data.desc.fi +
-                "&titleSv=" + data.desc.sv +
-                "&titleEn=" + data.desc.en +
+                "&titleFi=" + data.title.fi +
+                "&titleSv=" + data.title.sv +
+                "&titleEn=" + data.title.en +
+                "&type=" + data.type +
                 "&wmsName=" + data.wmsName +
-                "&wmsUrl=" + data.wmsUrl +
+                "&wmsUrl=" + encodeURIComponent(data.wmsUrl) +
                 "&opacity=" + data.opacity +
                 "&style=" + data.style +
                 "&minScale=" + data.minScale +
                 "&maxScale=" + data.maxScale +
+                "&epsg=" + data.epsg +
                 "&orderNumber=" + data.orderNumber +
                 "&layerType=" + data.layerType +
                 "&version=" + data.version +
-                "&legendImage=" + data.legendImage +
+                "&legendImage=" + encodeURIComponent(data.legendImage) +
                 "&inspireTheme=" + data.inspireTheme +
                 "&dataUrl=" + data.dataUrl +
-    //            "&=" + data.metadataUrl +
+                //"&=" + data.metadataUrl +
                 "&xslt=" + data.xslt +
                 "&gfiType=" + data.gfiType;
+
+            // New way
+            /*
+            var url = baseUrl + action_route;
+            var postData = JSON.stringify(data);
+            */
 
             jQuery.ajax({
                 type : "GET",
                 dataType: 'json',
+                //data: {'layer': postData}, // New way
                 beforeSend: function(x) {
                     if(x && x.overrideMimeType) {
                         x.overrideMimeType("application/j-son;charset=UTF-8");
@@ -296,12 +377,50 @@ define([
                     }
                 },
                 error : function(jqXHR, textStatus) {
-                    if(callbackFailure && jqXHR.status != 0) {
+                    if(jqXHR.status != 0) {
                         alert("Saving layer didn't work");
                     }
                 }
             });
         },
+
+        /**
+         * Save group or base layers
+         * 
+         * @method saveGroup
+         */
+        saveGroup: function(e) {
+            var me = this,
+                element = jQuery(e.currentTarget),
+                addClass = element.parents('.admin-add-group');
+
+            // url for backend action_route
+            var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
+                action_route = "&action_route=SaveOrganization",
+                layerType = element.parents('.admin-add-layer').find('#add-layer-type').val(),
+                parentId = element.parents('.accordion').attr('lcid');
+
+            var params = "&parent_id=" + parentId +
+                "&name_fi=" + addClass.find("#add-group-fi-name").val() +
+                "&name_sv=" + addClass.find("#add-group-sv-name").val() +
+                "&name_en=" + addClass.find("#add-group-en-name").val() +
+                "&sub_maplayers_selectable=" + true;
+
+            if (layerType === 'groupMap') {
+                params += "&group_map=" + true;
+            }
+
+            var url = baseUrl + action_route + params;
+            // make AJAX call
+            me._save(e, url, function(response){
+                // callback functionality
+                me.layerGroupingModel.getClasses(me.options.instance.getSandbox().getAjaxUrl(),"&action_route=GetMapLayerClasses");
+                element.parents('.show-add-class').removeClass('show-add-class');
+                addClass.find('.admin-edit-org-btn').html(me.options.instance.getLocalization('edit'))
+            });
+
+        },
+
         /**
          * Fetch capabilities. AJAX call to get capabilities for given capability url
          * 
@@ -329,7 +448,7 @@ define([
                     me.addCapabilitySelect(resp, me, element);
                 },
                 error : function(jqXHR, textStatus) {
-                    if(callbackFailure && jqXHR.status != 0) {
+                    if(jqXHR.status != 0) {
                         alert(' false ');
                     }
                 }
@@ -344,15 +463,15 @@ define([
          */
         addCapabilitySelect: function(capability, me, element) {
             me.capabilities = this.getValue(capability);
-            // if returned data does not contain capability section '
+            // if returned data does not contain capability section
             // there is nothing to be added
             if(me.capabilities == null || me.capabilities.Capability == null) {
-//                console.log("Could not find Capability from response");
                 return;
             }
 
             // This might be more elegant as its own template
             var select = '<select id="admin-select-capability">';
+            select += '<option value="" selected="selected">Valitse ylätaso</option>';
             var layers = this.getValue(this.capabilities, 'Capability').Layer.Layer;
             for (var i = layers.length - 1; i >= 0; i--) {
                 select += '<option value="'+i+'">' + layers[i].Title + '</option>';
@@ -374,15 +493,21 @@ define([
         readCapabilities: function(e) {
             var me = this;
             var selected = jQuery('#admin-select-capability').val();
+            // If no value (eg. the placeholder option was selected) remove the
+            // sublayer select and return.
+            if (!selected) {
+                jQuery('#admin-select-sublayer').remove();
+                return;
+            }
             var capability = this.getValue(this.capabilities, 'Capability');
             var selectedLayer = capability.Layer.Layer[selected];
 
             if (selectedLayer.Layer) {
-                // If the selected layer has sub-layers
-                // create a dropdown to show them.
+                // If the selected layer has sub-layers create a dropdown to show them.
 
                 // This might be more elegant as its own template
                 var subLayerSelect = '<select id="admin-select-sublayer">';
+                subLayerSelect += '<option value="" selected="selected">Valitse alataso</option>';
                 var subLayers = selectedLayer.Layer;
                 for (var i = subLayers.length - 1; i >= 0; i--) {
                     subLayerSelect += '<option value="'+i+'">' + subLayers[i].Title + '</option>';
@@ -392,78 +517,27 @@ define([
                 jQuery(subLayerSelect).insertAfter('#admin-select-capability');
                 jQuery('#admin-select-sublayer').on('change', function() {
                     var value = jQuery(this).val();
-                    me.updateLayerValues(subLayers[value], capability);
+                    if (value) {
+                        me.updateLayerValues(subLayers[value], capability);
+                    }
                 });
-            } else {
-                me.updateLayerValues(selectedLayer, capability);
             }
 
-/*
-            // wmsname
-            var wmsname = selectedLayer.Name;
-            jQuery('#add-layer-wms-id').val(wmsname);
-
-
-            var styles = selectedLayer.Style;
-            if(styles != null) {
-
-                //LegendURL
-                if(styles.LegendURL) {
-                    var legendURL = styles.LegendURL.OnlineResource['xlink:href'];
-                    jQuery('#add-layer-legendImage').val(legendURL);                    
-                }
-
-                //Styles
-                var styleSelect = jQuery('#add-layer-style');
-                if(Object.prototype.toString.call(styles) === '[object Array]') {
-                    var s = [];
-                    for (var i = 0; i < styles.length; i++) {
-                        styleSelect.append('<option>' +styles[i].Title + '</option>');
-                    };
-                } else {
-                    styleSelect.append('<option>' +styles.Title + '</option>');
-                }
-            }
-
-            // GFI Type
-            var gfiType = capability.Request.GetFeatureInfo.Format;
-            var gfiTypeSelect = jQuery('#add-layer-responsetype');
-            for (var i = 0; i < gfiType.length; i++) {
-                gfiTypeSelect.append('<option>' + gfiType[i] + '</option>');
-            };
-
-            // WMS Metadata Id
-            if(capability['inspire_vs:ExtendedCapabilities'] && 
-                capability['inspire_vs:ExtendedCapabilities']['inspire_common:MetadataUrl'] &&
-                capability['inspire_vs:ExtendedCapabilities']['inspire_common:MetadataUrl']['inspire_common:URL'].indexOf != null
-                ) {
-                var wmsMetadataId = capability['inspire_vs:ExtendedCapabilities']['inspire_common:MetadataUrl']['inspire_common:URL'];
-                wmsMetadataId = wmsMetadataId.substring(wmsMetadataId.indexOf('id=') + 3);
-                if( wmsMetadataId.indexOf('&') >= 0) {
-                    wmsMetadataId = wmsMetadataId.substring (0, wmsMetadataId.indexOf('&'));
-                }
-                jQuery('#add-layer-metadataid').val(wmsMetadataId);
-            }
-
-            //metadata id == uuid
-            //"http://www.paikkatietohakemisto.fi/geonetwork/srv/en/main.home?uuid=a22ec97f-d418-4957-9b9d-e8b4d2ec3eac"
-            var uuid = this.capabilities.Service.OnlineResource['xlink:href'];
-            if(uuid) {
-                var idx = uuid.indexOf('uuid=');
-                if(idx >= 0) {
-                    uuid = uuid.substring(idx + 5);
-                    if( uuid.indexOf('&') >= 0) {
-                        uuid = uuid.substring(0, uuid.indexOf('&'));
-                    }                    
-                    jQuery('#add-layer-datauuid').val(uuid);
-                }
-            }
-*/
-
+            // update values for the parent layer.
+            me.updateLayerValues(selectedLayer, capability);
         },
 
+        /**
+         * Updates the values of the create layer form
+         *
+         * @method updateLayerValues
+         * @param {Object} selectedLayer
+         * @param {Object} capability
+         */
         updateLayerValues: function(selectedLayer, capability) {
-            console.log(selectedLayer);
+            // Clear out the old values
+            this.clearAllFields();
+
             // wmsname
             var wmsname = selectedLayer.Name;
             jQuery('#add-layer-wms-id').val(wmsname);
@@ -490,6 +564,20 @@ define([
                 }
             }
 
+            // Scale denominators
+            var minScale = selectedLayer.MinScaleDenominator,
+                maxScale = selectedLayer.MaxScaleDenominator;
+            if (maxScale && minScale) {
+                jQuery('#add-layer-minscale').val(minScale);
+                jQuery('#add-layer-maxscale').val(maxScale);
+            }
+
+            // SRS name
+            var srsName = selectedLayer.CRS;
+            if (srsName) {
+                jQuery('#add-layer-srsname').val(srsName);
+            }
+
             // GFI Type
             var gfiType = capability.Request.GetFeatureInfo.Format;
             var gfiTypeSelect = jQuery('#add-layer-responsetype');
@@ -508,6 +596,13 @@ define([
                     wmsMetadataId = wmsMetadataId.substring (0, wmsMetadataId.indexOf('&'));
                 }
                 jQuery('#add-layer-metadataid').val(wmsMetadataId);
+            }
+
+            // WMS url
+            var getMapRequest = capability.Request.GetMap;
+            if (getMapRequest) {
+                var wmsUrl = getMapRequest.DCPType.HTTP.Get.OnlineResource['xlink:href'];
+                jQuery('#add-layer-wms-url').val(wmsUrl);
             }
 
             //metadata id == uuid
@@ -547,6 +642,23 @@ define([
             if(input.length == 1) {
                 input.val('');
             }
+        },
+
+        /**
+         * Clears all the fields of the create layer form.
+         *
+         * @method clearAllFields
+         */
+        clearAllFields: function() {
+            var form = jQuery('.create-layer');
+            // Clear all the inputs and textareas.
+            form.find('input').val('');
+            form.find('textarea').val('');
+            // Empty the GFI response type select
+            jQuery('#add-layer-responsetype').empty();
+            // Empty the layer style select
+            jQuery('#add-layer-style').empty();
+
         },
 
         /**
