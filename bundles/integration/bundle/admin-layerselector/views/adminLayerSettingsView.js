@@ -44,7 +44,7 @@ define([
             this.instance           = this.options.instance;
             this.model              = this.options.model;
             this.classes            = this.options.classes;
-            this.typeSelectTemplate     = _.template(TypeSelectTemplate);
+            this.typeSelectTemplate = _.template(TypeSelectTemplate);
             this.layerTemplate      = _.template(LayerSettingsTemplate);
             this.groupTemplate      = _.template(GroupSettingsTemplate);
             this.subLayerTemplate   = _.template(SubLayerTemplate);
@@ -401,22 +401,39 @@ define([
                 parentId = element.parents('.accordion').attr('lcid');
 
             var params = "&parent_id=" + parentId +
-                "&name_fi=" + addClass.find("#add-group-fi-name").val() +
-                "&name_sv=" + addClass.find("#add-group-sv-name").val() +
-                "&name_en=" + addClass.find("#add-group-en-name").val() +
-                "&sub_maplayers_selectable=" + true;
+                "&sub_name_fi=" + addClass.find("#add-group-fi-name").val() +
+                "&sub_name_sv=" + addClass.find("#add-group-sv-name").val() +
+                "&sub_name_en=" + addClass.find("#add-group-en-name").val();
 
             if (layerType === 'groupMap') {
                 params += "&group_map=" + true;
             }
 
             var url = baseUrl + action_route + params;
+            console.log(url);
             // make AJAX call
+            /*
             me._save(e, url, function(response){
                 // callback functionality
                 me.layerGroupingModel.getClasses(me.options.instance.getSandbox().getAjaxUrl(),"&action_route=GetMapLayerClasses");
                 element.parents('.show-add-class').removeClass('show-add-class');
                 addClass.find('.admin-edit-org-btn').html(me.options.instance.getLocalization('edit'))
+            }); */
+            jQuery.ajax({
+                type : "GET",
+                dataType: 'json',
+                beforeSend: function(x) {
+                    if(x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                url : url,
+                success : function(resp) {
+                    
+                },
+                error : function(jqXHR, textStatus) {
+                    alert(' false ');
+                }
             });
 
         },
