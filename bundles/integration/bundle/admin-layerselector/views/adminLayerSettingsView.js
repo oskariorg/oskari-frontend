@@ -425,7 +425,7 @@ define([
                 if( wmsMetadataId.indexOf('&') >= 0) {
                     wmsMetadataId = wmsMetadataId.substring (0, wmsMetadataId.indexOf('&'));
                 }
-                jQuery('#add-layer-metadataid').val(wmsMetadataId);
+                jQuery('#add-layer-metadataid').val(wmsMetadataId.trim());
             }
 
             //metadata id == uuid
