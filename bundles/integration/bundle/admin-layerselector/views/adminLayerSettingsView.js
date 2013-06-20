@@ -187,13 +187,16 @@ define([
             var data = {};
 
             // add layer type and version
-            var wmsVersion = form.find('#add-layer-type').val();
-            wmsVersion = (wmsVersion != "") ? wmsVersion : form.find('#add-layer-type > option').first().val();
+            var wmsVersion = form.find('#add-layer-wms-type').val();
+            console.log("wmsVersion: " + wmsVersion);
+            wmsVersion = (wmsVersion != "") ? wmsVersion : form.find('#add-layer-wms-type > option').first().val();
+            console.log("wmsVersion: " + wmsVersion);
             if(wmsVersion.indexOf('WMS') >= 0) {
                 var parts = wmsVersion.split(' ');
                 data.layerType  = 'wmslayer';
                 data.version    = parts[1];
             }
+            console.log("data.version: " + data.version);
 
             data.names = [];
             data.desc = [];
