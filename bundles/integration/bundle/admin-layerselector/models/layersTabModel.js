@@ -271,6 +271,8 @@
                 }
             },
 
+            // TODO move encode and decode to model prototype so they're accessible to all models
+
             /**
              * Helper function. Encodes data to base64 format
              * 

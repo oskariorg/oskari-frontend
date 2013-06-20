@@ -242,7 +242,7 @@
             </div>
             <div class="add-layer-input-area">
                 <div class="input-controls">
-                    <textarea rows="2" cols="40" id="add-layer-xslt" class="add-layer-input" ><% if(model != null && model.admin.xslt) { %>This needs base64 decoder...<% } %></textarea>
+                    <textarea rows="2" cols="40" id="add-layer-xslt" class="add-layer-input" ><% if(model != null && model.admin.xslt_decoded) { %><%= model.admin.xslt_decoded %><% } %></textarea>
                 </div>
             </div>
         </div>

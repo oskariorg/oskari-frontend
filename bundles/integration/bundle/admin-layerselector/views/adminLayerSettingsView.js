@@ -58,12 +58,16 @@ define([
             // if settings are hidden, we need to populate template and
             // add it to the DOM
             if(!this.$el.hasClass('show-edit-layer')) {
+                // decode xslt
+                if(this.model != null && this.model.admin.xslt && !this.model.admin.xslt_decoded) {
+                    this.model.admin.xslt_decoded = this.classes.decode64(this.model.admin.xslt);
+                }
                 if(this.model != null && 
                     this.model.admin.style_decoded == null && 
                     this.model.admin.style != null) {
 
                     var styles = [];
-                    styles.push(this.options.layerTabModel.decode64(this.model.admin.style));
+                    styles.push(this.classes.decode64(this.model.admin.style));
                     this.model.admin.style_decoded = styles;
                 }
                 // add template
@@ -188,15 +192,12 @@ define([
 
             // add layer type and version
             var wmsVersion = form.find('#add-layer-wms-type').val();
-            console.log("wmsVersion: " + wmsVersion);
             wmsVersion = (wmsVersion != "") ? wmsVersion : form.find('#add-layer-wms-type > option').first().val();
-            console.log("wmsVersion: " + wmsVersion);
             if(wmsVersion.indexOf('WMS') >= 0) {
                 var parts = wmsVersion.split(' ');
                 data.layerType  = 'wmslayer';
                 data.version    = parts[1];
             }
-            console.log("data.version: " + data.version);
 
             data.names = [];
             data.desc = [];
