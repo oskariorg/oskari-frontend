@@ -71,13 +71,14 @@ jQuery(document).ready(function() {
         var app = Oskari.app;
 
         // Analyse bundle
+        /*
         appConfig.mapfull.conf.plugins.push({
             "id" : "Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayerPlugin"
         });
         appSetup.startupSequence[1].metadata["Import-Bundle"]["mapanalysis"] = {
             bundlePath : '/Oskari/packages/framework/bundle/'
         };
-
+*/
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
         app.startApplication(function(startupInfos) {
@@ -85,6 +86,7 @@ jQuery(document).ready(function() {
             if (cb) {
                 cb(instance);
             }
+            /*
              var ugStartup = {
                 title : 'Analyse',
                 fi : 'Analyysi',
@@ -105,6 +107,7 @@ jQuery(document).ready(function() {
 
             Oskari.bundle_facade.playBundle(ugStartup, function() {
             });
+*/
         });
 
     }
