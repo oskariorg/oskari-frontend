@@ -225,9 +225,9 @@
                 <label for="add-layer-responsetype" class="add-layer-label" title="<%= instance.getLocalization('admin').gfiResponseTypeDesc %>"><%= instance.getLocalization('admin').gfiResponseType %></label>
             </div>
             <div class="add-layer-input-area">
-                <% if(model != null && model.admin.gfiResponseType) { %>
+                <% if(model != null && model.admin.gfiType) { %>
                 <div class="input-controls">
-                    <div id="add-layer-responsetype"><%= model.admin.gfiResponseType %></div>
+                    <div id="add-layer-responsetype"><%= model.admin.gfiType %></div>
                 </div>
                 <% } else { %>
                 <select id="add-layer-responsetype">
