@@ -78,6 +78,8 @@ define([
                 });
                 this.$el.html(settings);
 
+                //console.log(this.classes.getGroupTitles());
+
                 // add opacity
                 var opacity = 100;
                 if(this.model != null && this.model.admin.opacity != null) {

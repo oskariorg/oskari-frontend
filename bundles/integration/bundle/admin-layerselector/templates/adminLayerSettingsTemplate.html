@@ -141,6 +141,7 @@
             <div class="add-layer-input-area">
                 <div class="input-controls">
                 <select id="add-layer-inspire-theme">
+                   
                     <% for(var i = 0; classNames != null && i < classNames.length; i++) { %>
                     <option value="<%= classNames[i].id %>" <% if(model != null && model.admin.inspireTheme == classNames[i].id ) { %>selected<% } %> ><%= classNames[i].name %></option>
                     <% } %>
