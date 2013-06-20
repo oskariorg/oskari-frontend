@@ -58,12 +58,16 @@ define([
             // if settings are hidden, we need to populate template and
             // add it to the DOM
             if(!this.$el.hasClass('show-edit-layer')) {
+                // decode xslt
+                if(this.model != null && this.model.admin.xslt && !this.model.admin.xslt_decoded) {
+                    this.model.admin.xslt_decoded = this.classes.decode64(this.model.admin.xslt);
+                }
                 if(this.model != null && 
                     this.model.admin.style_decoded == null && 
                     this.model.admin.style != null) {
 
                     var styles = [];
-                    styles.push(this.options.layerTabModel.decode64(this.model.admin.style));
+                    styles.push(this.classes.decode64(this.model.admin.style));
                     this.model.admin.style_decoded = styles;
                 }
                 // add template
@@ -187,8 +191,8 @@ define([
             var data = {};
 
             // add layer type and version
-            var wmsVersion = form.find('#add-layer-type').val();
-            wmsVersion = (wmsVersion != "") ? wmsVersion : form.find('#add-layer-type > option').first().val();
+            var wmsVersion = form.find('#add-layer-wms-type').val();
+            wmsVersion = (wmsVersion != "") ? wmsVersion : form.find('#add-layer-wms-type > option').first().val();
             if(wmsVersion.indexOf('WMS') >= 0) {
                 var parts = wmsVersion.split(' ');
                 data.layerType  = 'wmslayer';
@@ -206,12 +210,12 @@ define([
             data.desc.en        = form.find('#add-layer-en-title').val(),
 
             data.wmsName        = form.find('#add-layer-wms-id').val(),
-            data.wmsUrl         = form.find('#add-layer-interface').val(),
+            data.wmsUrl         = form.find('#add-layer-wms-url').val(),
 
             data.opacity        = form.find('#opacity-slider').val(),
 
             data.style          = form.find('#add-layer-style').val(),
-            data.style           = me.classes.encode64(data.style);//me.layerGroupingModel.encode64(data.style);
+            data.style          = me.classes.encode64(data.style);//me.layerGroupingModel.encode64(data.style);
 
             data.minScale       = form.find('#add-layer-minscale').val(),
             data.maxScale       = form.find('#add-layer-maxscale').val(),
@@ -220,10 +224,12 @@ define([
             data.legendImage    = form.find('#add-layer-legendImage').val(),
             data.inspireTheme   = form.find('#add-layer-inspire-theme').val(),
             data.dataUrl        = form.find('#add-layer-datauuid').val(),
-            //data.metadataUrl    = form.find('#add-layer-?').val(),
+            data.metadataUrl = form.find('#add-layer-metadataid').val();
             data.xslt           = form.find('#add-layer-xslt').val(),
             data.xslt           = me.classes.encode64(data.xslt);//me.layerGroupingModel.encode64(data.xslt);
-            data.gfiType       = form.find('#add-layer-responsetype').val();
+            data.gfiType        = form.find('#add-layer-responsetype').val();
+			
+			
 
             // id of layer class
             var url = baseUrl + action_route + id + idValue;
@@ -248,9 +254,9 @@ define([
                 "&legendImage=" + data.legendImage +
                 "&inspireTheme=" + data.inspireTheme +
                 "&dataUrl=" + data.dataUrl +
-    //            "&=" + data.metadataUrl +
                 "&xslt=" + data.xslt +
-                "&gfiType=" + data.gfiType;
+                "&gfiType=" + data.gfiType +
+				"&metadataUrl=" + data.metadataUrl;
 
             jQuery.ajax({
                 type : "GET",

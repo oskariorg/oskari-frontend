@@ -40,6 +40,8 @@ Configurable event-based usage tracker. New bundle based on statehandler.
 
 A new event `Printout.PrintableContentEvent` which can be used to send additional data to the printout bundle. Event accepts contentId (to identify each GeoJSON chunk), layer (Oskari layer), tile data (an array of {bbox: [l,b,r,t], url: 'image url'} objects) and GeoJSON as arguments.
 
+Legend plot for statslayer in printout
+
 ### mapmodule-plugin/mapfull/publisher bundles
 
 Mapmodule now has a method to notify openlayers and internal datamodels that map size has changed: updateSize(). Mapfull and publisher changed to use it instead of handling it on their own. This ensures the map domain in sandbox is up-to-date and functionalities depending on it (like GFI) work correctly.

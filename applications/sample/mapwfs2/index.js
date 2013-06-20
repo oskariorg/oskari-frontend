@@ -28,29 +28,8 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
 
         var me = this;
 
-
-        // TODO: remove featuredata and add featuredata2
         var appSetup = this.appSetup;
-
-        delete appSetup.startupSequence[1]["metadata"]["Import-Bundle"]["mapwfs"];
-        appSetup.startupSequence[1]["metadata"]["Import-Bundle"]["mapwfs2"] = {
-            bundlePath: "/Oskari/packages/framework/bundle/"
-        };
-
-        appSetup.startupSequence[15]["bundleinstancename"] = "featuredata2";
-        appSetup.startupSequence[15]["bundlename"] = "featuredata2";
-        delete appSetup.startupSequence[15]["metadata"]["Import-Bundle"]["featuredata"];
-        appSetup.startupSequence[15]["metadata"]["Import-Bundle"]["featuredata2"] = {
-            "bundlePath": "../../../packages/framework/bundle/"
-        };
-
         var appConfig = this.appConfig;
-        appConfig["mapfull"]["conf"]["plugins"][5]["id"] = "Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin";
-        appConfig["mapfull"]["conf"]["plugins"][5]["config"] = { contextPath : "/transport-0.0.1", hostname: "solmudmzke.nls.fi", port : "8888" };
-        appConfig["mapfull"]["conf"]["plugins"][4]["config"] = { ignoredLayerTypes: ["WFS"], infoBox: false };
-
-        appConfig["featuredata2"] = {conf: { selectionTools: true }};
-
         var app = Oskari.app;
 
         app.setApplicationSetup(appSetup);
@@ -60,19 +39,6 @@ Oskari.clazz.define('Oskari.paikkatietoikkuna.Main', function() {
             if (cb) {
                 cb(me.instance);
             }
-            var ugStartup = {
-                "bundleinstancename": "mapwfs2",
-                "bundlename": "mapwfs2",
-                "metadata": {
-                    "Import-Bundle": {
-                        "mapwfs2": {
-                            "bundlePath": "/Oskari/packages/framework/bundle/"
-                        }
-                    }
-                }
-            };
-            //Oskari.bundle_facade.playBundle(ugStartup, function() {});
-
         });
     },
     /**
