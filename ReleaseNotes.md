@@ -16,13 +16,19 @@ Highlight/select controls are now disabled when not in the stats mode.
 
 Clicking on an area on the map highlights the corresponding row in the grid and scrolls to display it as the topmost row.
 
+Generic improvements on statistic mode handling
+
 ### statsgrid/ManageStatsPlugin
 
-There is now a possibility to uncheck some of the municipalities. This affects to the statistical variables. This feature can be swithced on from header row drop down list
+There is now a possibility to uncheck some of the municipalities. This affects to the statistical variables. This feature can be switched on from header row drop down list
 
 ### mapstats bundle
 
 Hovering over an area on the map sends a request to get tooltip info which is then shown over the area.
+
+### printout bundle
+
+Improvements for statistics legend handling
 
 ## 1.11
 
