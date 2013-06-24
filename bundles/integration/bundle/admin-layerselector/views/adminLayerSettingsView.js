@@ -58,12 +58,16 @@ define([
             // if settings are hidden, we need to populate template and
             // add it to the DOM
             if(!this.$el.hasClass('show-edit-layer')) {
+                // decode xslt
+                if(this.model != null && this.model.admin.xslt && !this.model.admin.xslt_decoded) {
+                    this.model.admin.xslt_decoded = this.classes.decode64(this.model.admin.xslt);
+                }
                 if(this.model != null && 
                     this.model.admin.style_decoded == null && 
                     this.model.admin.style != null) {
 
                     var styles = [];
-                    styles.push(this.options.layerTabModel.decode64(this.model.admin.style));
+                    styles.push(this.classes.decode64(this.model.admin.style));
                     this.model.admin.style_decoded = styles;
                 }
                 // add template
@@ -73,6 +77,8 @@ define([
                     classNames : this.classes.getGroupTitles()
                 });
                 this.$el.html(settings);
+
+                //console.log(this.classes.getGroupTitles());
 
                 // add opacity
                 var opacity = 100;
@@ -187,8 +193,8 @@ define([
             var data = {};
 
             // add layer type and version
-            var wmsVersion = form.find('#add-layer-type').val();
-            wmsVersion = (wmsVersion != "") ? wmsVersion : form.find('#add-layer-type > option').first().val();
+            var wmsVersion = form.find('#add-layer-wms-type').val();
+            wmsVersion = (wmsVersion != "") ? wmsVersion : form.find('#add-layer-wms-type > option').first().val();
             if(wmsVersion.indexOf('WMS') >= 0) {
                 var parts = wmsVersion.split(' ');
                 data.layerType  = 'wmslayer';
@@ -220,7 +226,7 @@ define([
             data.legendImage    = form.find('#add-layer-legendImage').val(),
             data.inspireTheme   = form.find('#add-layer-inspire-theme').val(),
             data.dataUrl        = form.find('#add-layer-datauuid').val(),
-            data.metadataUrl = form.find('#add-layer-metadataid').val();
+            data.metadataUrl    = form.find('#add-layer-metadataid').val();
             data.xslt           = form.find('#add-layer-xslt').val(),
             data.xslt           = me.classes.encode64(data.xslt);//me.layerGroupingModel.encode64(data.xslt);
             data.gfiType        = form.find('#add-layer-responsetype').val();
@@ -421,7 +427,7 @@ define([
                 if( wmsMetadataId.indexOf('&') >= 0) {
                     wmsMetadataId = wmsMetadataId.substring (0, wmsMetadataId.indexOf('&'));
                 }
-                jQuery('#add-layer-metadataid').val(wmsMetadataId);
+                jQuery('#add-layer-metadataid').val(wmsMetadataId.trim());
             }
 
             //metadata id == uuid

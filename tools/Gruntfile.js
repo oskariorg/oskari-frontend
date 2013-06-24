@@ -45,8 +45,8 @@ module.exports = function(grunt) {
                 tasks: ['karma:dev:run']
             },
             sass: {
-                files: ['../bundles/**/*.scss', '../applications/**/*.scss'],
-                tasks: ['compileAppCSS']
+                files: ['../bundles/**/scss/*.scss', '../applications/**/scss/*.scss'],
+                tasks: ['compileDev']
             }
         },
         sprite: {
@@ -466,24 +466,17 @@ module.exports = function(grunt) {
 			}]
 
 		);
+		
+		grunt.task.run('sass');
 
 		// build bundle css files
 		// hackhack, copy applicationVariables to a 'static' location
 		// TODO change to copy
 		fs.createReadStream(varsDirectory + '/_applicationVariables.scss').pipe(fs.createWriteStream('../applications/_applicationVariables.scss'));
 
-		grunt.config.set(
-			'sass.' + appName + "-bundles" + '.files',
-			[{
-				"expand": true,
-				"cwd": "../bundles/",
-				"src": "**/*.scss",
-				"dest": '../resources/',
-				"rename": function(dest,src) {return dest+src.replace("/scss/","/css/")},
-				"ext": '.css'
-			}]
-		);
-		grunt.task.run('sass');
+		grunt.log.writeln("Compiling bundle CSS");
+		
+		grunt.task.run('compileBundleCSS');
 
 
 		if (this.data && this.data.options) {
@@ -501,8 +494,24 @@ module.exports = function(grunt) {
 		}
 
 	});
+	
+	grunt.registerTask("compileBundleCSS", "Compile bundle SASS to CSS", function(){
+		grunt.config.set(
+			'sass.' + "test" + "-bundles" + '.files',
+			[{
+				"expand": true,
+				"cwd": "../bundles/",
+				"src": "**/*.scss",
+				"dest": '../resources/',
+				"rename": function(dest,src) {return dest+src.replace("/scss/","/css/")},
+				"ext": '.css'
+			}]
+		);
+		grunt.task.run('sass');
+	});
 
 	grunt.registerMultiTask("minifyAppCSS", "Concatenate and minify application css", function() {
+        var done = this.async();
 		grunt.log.writeln("Concatenating and minifying css");
 
 		var cssPacker = require('uglifycss'),
@@ -527,7 +536,7 @@ module.exports = function(grunt) {
             }
 			// minify value
             var packed = cssPacker.processString(value);
-			grunt.log.writeln("Packed CSS:\n\n" + packed + "\n\nwriting to " + outputFile);
+			grunt.log.writeln("Writing packed CSS to " + outputFile);
 
 			// write value to outputfile
             fs.writeFile(outputFile, packed, function(err) {
@@ -535,6 +544,7 @@ module.exports = function(grunt) {
                 if (err && err.code !== "ENOENT") {
                     grunt.fail.fatal('Error writing packed CSS: ' + err);
                 }
+                done();
             });
         };
 
