@@ -23,8 +23,24 @@ function(config) {
     this.tileData = {};
 
     this._mapClickData = { comet: false, ajax: false, wfs: [] };
+
+    /* templates */
+    this.template = {};
+    for (p in this.__templates ) {
+        this.template[p] = jQuery(this.__templates[p]);
+    }
 }, {
     __name : 'WfsLayerPlugin',
+
+    __templates : {
+        "getinfo_result_header" : '<div class="getinforesult_header"><div class="icon-bubble-left"></div>',
+        "getinfo_result_header_title" : '<div class="getinforesult_header_title"></div>',
+        "wrapper" : '<div></div>',
+        "getinfo_result_table" : '<table class="getinforesult_table"></table>',
+        "link_outside" : '<a target="_blank"></a>',
+        "tableRow" : '<tr></tr>',
+        "tableCell" : '<td></td>'
+    },
 
     /**
      * @method getName
@@ -215,7 +231,7 @@ function(config) {
             }
 
             var creator = this.getSandbox().getObjectCreator(event);
-            this._sandbox.printDebug("[WfsLayerPlugin] got AfterMapMoveEvent from " + creator);
+            this.getSandbox().printDebug("[WfsLayerPlugin] got AfterMapMoveEvent from " + creator);
         },
 
         /**
@@ -264,8 +280,6 @@ function(config) {
          * @param {Object} event
          */
         'MapClickedEvent' : function(event) {
-            //console.log(event);
-
             // don't process while moving
             if(this.getSandbox().getMap().isMoving()) {
                 return;
@@ -281,8 +295,6 @@ function(config) {
          * @param {Object} event
          */
         'GetInfoResultEvent' : function(event) {
-            //console.log(event, this); // DEBUG
-
             /// check if any selected layer is WFS
             var isWFSOpen = false;
             var layers = this.getSandbox().findAllSelectedMapLayers();
@@ -296,7 +308,6 @@ function(config) {
             this._mapClickData.ajax = true;
             this._mapClickData.data = event.getData();
             if(!isWFSOpen || this._mapClickData.comet) {
-                //console.log("show info - cometd was before");
                 this.showInfoBox();
             }
         },
@@ -341,7 +352,7 @@ function(config) {
          */
         'WFSSetFilter' : function(event) {
             /// clean selected features lists
-            var layers = this.getSandbox().findAllSelectedMapLayers(); // get array of AbstractLayer (WFS|WMS..)
+            var layers = this.getSandbox().findAllSelectedMapLayers();
             for (var i = 0; i < layers.length; ++i) {
                 if (layers[i].isLayerOfType('WFS')) {
                     layers[i].setSelectedFeatures([]);
@@ -398,12 +409,9 @@ function(config) {
             return;
         }
 
-        // MOVE THIS TO _createInfoBoxContent eg..
-        this.templateHeader = jQuery('<div class="getinforesult_header">' +
-                '<div class="icon-bubble-left"></div>');
-        this.templateHeaderTitle = jQuery('<div class="getinforesult_header_title"></div>');
         var content = {};
-        var wrapper = jQuery('<div></div>');
+        var wrapper = this.template.wrapper.clone();
+
         content.html = '';
         content.actions = {};
         for (var di = 0; di < data.fragments.length; di++) {
@@ -411,10 +419,11 @@ function(config) {
             var fragmentTitle = fragment.layerName;
             var fragmentMarkup = fragment.markup;
 
-            var contentWrapper = jQuery('<div></div>');
+            var contentWrapper = this.template.wrapper.clone();
 
-            var headerWrapper = this.templateHeader.clone();
-            var titleWrapper = this.templateHeaderTitle.clone();
+            var headerWrapper = this.template.getinfo_result_header.clone();
+            var titleWrapper = this.template.getinfo_result_header_title.clone();
+
             titleWrapper.append(fragmentTitle);
             headerWrapper.append(titleWrapper);
             contentWrapper.append(headerWrapper);
@@ -460,9 +469,8 @@ function(config) {
             }
             // define layer specific information
             layerId = wfsLayers[x].layerId;
-            layer = this._sandbox.findMapLayerFromSelectedMapLayers(layerId);
+            layer = this.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
             if(layer == null) {
-                //console.log("layer is null with layerId:", layerId);
                 continue;
             }
             layerName = layer ? layer.getName() : '';
@@ -519,21 +527,25 @@ function(config) {
      * @return {String} formatted HMTL
      */
     _json2html : function(node) {
-        // TODO use template elements
-        var me = this;
         if (node == null) {
             return '';
         }
         var even = true;
-        var html = '<table class="getinforesult_table">';
+
+        var html = this.template.getinfo_result_table.clone();
+        var row = null;
+        var keyColumn = null;
+        var valColumn = null;
         for (var key in node) {
             var value = node[key];
-            var vType = ( typeof value).toLowerCase();
+            var vType = (typeof value).toLowerCase();
             var vPres = ''
             switch (vType) {
                 case 'string':
                     if (value.indexOf('http://') == 0) {
-                        valpres = '<a href="' + value + '" target="_blank">' + value + '</a>';
+                        valpres = this.template.link_outside.clone();
+                        valpres.attr('href', value);
+                        valpres.append(value);
                     } else {
                         valpres = value;
                     }
@@ -557,17 +569,22 @@ function(config) {
                     valpres = '';
             }
             even = !even;
-            html += '<tr';
-            if (even) {
-                html += '>';
-            } else {
-                html += ' class="odd">';
+
+            row = this.template.tableRow.clone();
+            if(!even) {
+                row.addClass("odd");
             }
-            html += '' + '<td>' + key + '</td>';
-            html += '' + '<td>' + valpres + '</td>';
-            html += '</tr>';
+
+            keyColumn = this.template.tableCell.clone();
+            keyColumn.append(key);
+            row.append(keyColumn);
+
+            valColumn = this.template.tableCell.clone();
+            valColumn.append(valpres);
+            row.append(valColumn);
+
+            html.append(row);
         }
-        html += '</table>';
         return html;
     },
 
@@ -575,8 +592,6 @@ function(config) {
      * @method preselectLayers
      */
     preselectLayers : function(layers) {
-        var sandbox = this._sandbox;
-
         for ( var i = 0; i < layers.length; i++) {
             var layer = layers[i];
             var layerId = layer.getId();
@@ -585,7 +600,7 @@ function(config) {
                 continue;
             }
 
-            sandbox.printDebug("[WfsLayerPlugin] preselecting " + layerId);
+            this.getSandbox().printDebug("[WfsLayerPlugin] preselecting " + layerId);
         }
     },
 
@@ -702,16 +717,6 @@ function(config) {
         wfsMapImageLayer.setVisibility(true);
         wfsMapImageLayer.redraw(true); // also for draw
 
-        // MAKE A NEW PLUGIN THAT HANDLES "Markers" layer -> GO TO TOP
-        /**
-        var opLayersLength = this._map.layers.length;
-        var changeLayer = this._map.getLayersByName('Markers');
-        if (changeLayer.length > 0) {
-            this._map.setLayerIndex(changeLayer[0], opLayersLength);
-            opLayersLength--;
-        }
-        **/
-
         // if removed set to same index [but if wfsMapImageLayer created in add (sets just in draw - not needed then here)]
         if (layerIndex !== null && wfsMapImageLayer !== null) {
             this._map.setLayerIndex(wfsMapImageLayer, layerIndex);
@@ -748,24 +753,6 @@ function(config) {
         }
     },
 
-    /**
-     * Generates all WFS related queries
-     *
-     * @param {Object}
-     *            mapLayer
-     */
-    doWfsLayerRelatedQueries : function(mapLayer) {
-
-        if(!mapLayer.isInScale()) {
-            return;
-        }
-        var map = this._sandbox.getMap();
-        var bbox = map.getBbox();
-
-        var mapWidth = map.getWidth();
-        var mapHeight = map.getHeight();
-    },
-
 // from tilesgridplugin
 
     /**
@@ -776,13 +763,7 @@ function(config) {
      *
      */
     createTilesGrid: function() {
-        var me = this;
-        var sandbox = me._sandbox;
-
-        var tileQueue =
-            Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.domain.TileQueue");
-
-        //sandbox.getMap().setTileQueue(tileQueue);
+        var tileQueue = Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.domain.TileQueue");
 
         var strategy = Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrategy",{
                 tileQueue: tileQueue
