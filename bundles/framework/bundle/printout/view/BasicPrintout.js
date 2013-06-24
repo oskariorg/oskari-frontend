@@ -535,7 +535,9 @@ function(instance, localization, backendConfiguration) {
         me.mainPanel.find('#oskari_print_formID').attr('action', link);
 
         if (geoJson) {
-            me.mainPanel.find('input[name=geojson]').val(jQuery.base64.encode(geoJson));
+            // UTF-8 Base64 encoding
+            var textu8= unescape( encodeURIComponent( geoJson ));      
+            me.mainPanel.find('input[name=geojson]').val(jQuery.base64.encode(textu8));
         }
         if (tileData) {
             me.mainPanel.find('input[name=tiles]').val(tileData);

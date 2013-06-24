@@ -241,8 +241,8 @@ function(instance, conf, locale) {
             var titletemp = "";
             for (var i = 0; i < titlesplit.length; i++) {
 
-                if (titletemp.length + titlesplit[i].length < this.conf.general.charsInrow + 1) {
-                    titletemp = titletemp + " " + titlesplit[i];
+                if ((titletemp.length + titlesplit[i].length + 1) < this.conf.general.charsInrow) {
+                    titletemp = titletemp + titlesplit[i] + " ";
                 } else {
                     titles.push(titletemp);
                     titletemp = titlesplit[i];
