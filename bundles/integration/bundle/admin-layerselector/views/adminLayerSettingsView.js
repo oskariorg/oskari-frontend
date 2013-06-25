@@ -26,7 +26,7 @@ define([
         events: {
             "click .admin-add-layer-ok"         : "addLayer",
             "click .admin-add-sublayer-ok"      : "addLayer",
-            "click .admin-add-layer-cancel"     : "hideLayerSettings",
+            "click .admin-add-layer-cancel"     : "hideSubLayerSettings",
             "click .admin-add-sublayer-cancel"  : "hideLayerSettings",
             "click .admin-remove-layer"         : "removeLayer",
             "click .admin-remove-sublayer"      : "removeLayer",
@@ -185,6 +185,20 @@ define([
 
                 var addLayerBtn = element.parents('.create-layer').children('.admin-add-layer-btn').html(this.options.instance.getLocalization('admin').addLayer);
             }
+        },
+
+        /**
+         * Hide sublayer settings
+         *
+         * @method hideSubLayerSettings
+         */
+        hideSubLayerSettings : function(e) {
+            e.stopPropagation();
+            var element = jQuery(e.currentTarget);
+            element.parents('add-sublayer-wrapper').first().removeClass('show-edit-sublayer');
+            setTimeout(function() {
+                element.parents('add-sublayer-wrapper').first().find('.admin-add-layer').remove();
+            }, 300);
         },
 
         /**

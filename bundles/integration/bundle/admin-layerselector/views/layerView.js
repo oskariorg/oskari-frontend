@@ -18,8 +18,6 @@ define([
          */
         events: {
             "click .admin-add-layer-cancel" : "hideLayerSettings",
-//            "click .admin-add-layer-ok"     : "hideLayerSettings",
-            "click .admin-remove-layer"     : "removeLayer",
             "click"                         : "toggleLayerSettings",
             "click .show-edit-layer"        : "clickLayerSettings",
             "click .sublayer-name"          : "toggleSubLayerSettings",
@@ -238,59 +236,7 @@ define([
 
             }
         },
-        /**
-         * Removes layer 
-         *
-         * @method removeLayer
-         */
-        removeLayer: function(e) {
-            var me = this;
-            var element = jQuery(e.currentTarget);
-            var addLayerDiv = element.parents('.admin-add-layer');
-            var id = element.parents('.admin-add-layer').attr('data-id');
-            var baseUrl =  me.options.instance.getSandbox().getAjaxUrl(),
-                action_route = "action_route=DeleteLayer",
-                idKey = "&layer_id=";
-
-            // URL for deleting layer from backend
-            var url = baseUrl + action_route + idKey + id;
-            jQuery.ajax({
-                type : "GET",
-                dataType: 'json',
-                beforeSend: function(x) {
-                    if(x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
-                    }
-                },
-                url : url,
-                success : function(resp) {
-                    if(resp == null) {
-                        //close this
-                        if(addLayerDiv.hasClass('show-edit-layer')) {
-                            addLayerDiv.removeClass('show-edit-layer');
-                            setTimeout(function(){
-                                // trigger removeLayer order to view.js
-                                element.trigger({
-                                    type: "adminAction",
-                                    command: 'removeLayer',
-                                    modelId: me.model.getId()
-                                });
-                                addLayerDiv.remove();
-                            },300);
-                        }
-                    } else {
-                        //problem
-//                        console.log('Removing layer did not work.')
-                    }
-                },
-                error : function(jqXHR, textStatus) {
-                    if(jqXHR.status != 0) {
-                        alert(' Removing layer did not work. ');
-                    }
-                }
-            });
-
-        },
+        
         /**
          * Stops propagation if admin clicks settings view 
          *
