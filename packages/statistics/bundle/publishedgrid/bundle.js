@@ -38,6 +38,12 @@ function() {
             "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/bundle/statsgrid/service/StatisticsService.js"
         }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/request/TooltipContentRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/request/TooltipContentRequestHandler.js"
+        }, {
             "type" : "text/css",
             "src" : "../../../../resources/statistics/bundle/statsgrid/css/style.css"
         }, {
@@ -82,6 +88,12 @@ function() {
         }, {
             "src" : "../../../../libraries/slickgrid/plugins/slick.headermenu2.css",
             "type" : "text/css"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.rowselectionmodel.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.checkboxselectcolumn2.js",
+            "type" : "text/javascript"
         }, {
             "src" : "../../../../libraries/slickgrid/slick.grid.js",
             "type" : "text/javascript"

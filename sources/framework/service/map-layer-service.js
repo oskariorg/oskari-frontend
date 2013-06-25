@@ -128,10 +128,86 @@ function(mapLayerUrl, sandbox) {
      *            json conf for the layer. NOTE! Only updates name for now
      */
     updateLayer : function(layerId, newLayerConf) {
+		//console.log("MapLayerService: updateLayer");
         var layer = this.findMapLayer(layerId);
         if(layer) {
-            layer.setName(newLayerConf.name);
+			//console.log("New layer config:");
+			//console.log(newLayerConf);
 
+			if (newLayerConf.dataUrl) {
+				layer.setDataUrl(newLayerConf.dataUrl);
+			}
+
+			/*
+			if (newLayerConf.formats) {
+				//layer.set();
+			}
+			*/
+
+			/*
+			if (newLayerConf.isQueryable) {
+				// layer.set();
+			}
+			*/
+
+			if (newLayerConf.legendImage) {
+				layer.setLegendImage(newLayerConf.legendImage);
+			}
+
+			if (newLayerConf.minScale) {
+				layer.setMinScale(newLayerConf.minScale);
+			}
+
+			if (newLayerConf.maxScale) {
+				layer.setMaxSclae(newLayerConf.maxScale);
+			}
+
+			if (newLayerConf.name) {
+				layer.setName(newLayerConf.name);
+			}
+
+			/*
+			if (newLayerConf.orgName) {
+				// layer.set();
+			}
+			*/
+			/*
+			if (newLayerConf.style) {
+				layer.setStyle(newLayerConf.style);
+			}
+			*/
+
+			/*
+			if (newLayerConf.styles) {
+				// layer.set();
+			}
+			*/
+
+			if (newLayerConf.type) {
+				layer.setType(newLayerConf.type);
+			}
+
+			/*
+			if (newLayerConf.updated) {
+				// layer.set();
+			}
+			*/
+
+			if (newLayerConf.wmsName) {
+				layer.setWmsName(newLayerConf.wmsName);
+			}
+
+			if (newLayerConf.wmsUrl) {
+				layer.setWmsUrl(newLayerConf.wmsUrl);
+			}
+
+			for (var i in newLayerConf.admin) {
+				if (newLayerConf.admin[i]) {
+					layer.admin[i] = newLayerConf.admin[i];
+				}
+			}
+			
+			//console.log(layer);
             // notify components of layer update
             var event = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'update');
             this._sandbox.notifyAll(event);
@@ -167,6 +243,7 @@ function(mapLayerUrl, sandbox) {
      * @param {Function} callbackFailure method to be called when something went wrong
      */
     loadAllLayersAjax : function(callbackSuccess, callbackFailure) {
+		//console.log("loadAllLayersAjax");
         var me = this;
         // Used to bypass browsers' cache especially in IE, which seems to cause
         // problems with displaying publishing permissions in some situations.
@@ -208,7 +285,9 @@ function(mapLayerUrl, sandbox) {
             }
             if(this._reservedLayerIds[mapLayer.getId()] !== true) {
                 this.addLayer(mapLayer, true);
-            }
+            } else {
+				//console.log("Reserved layer ID (" + mapLayer.getId() + ") , won't add");
+			}
         }
         // notify components of added layer if not suppressed
         this._allLayersAjaxLoaded = true;

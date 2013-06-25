@@ -16,12 +16,26 @@ Provides abstraction for map implementation (Openlayers) and provides a plugin m
 ## TODO
 
 - Configurable zoomlevels
-- Configurable coordinate system/projection code
-
 
 ## Bundle configuration
 
-No configuration is required.
+No configuration is required and it is not handled like normal bundles. 
+
+Configuration can be given when constructing the mapmodule through constructor call. Usually its passed through the mapfull bundle configuration:
+
+```javascript
+{
+    "resolutions" : [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25],
+    "maxExtent" : {
+        "left" : -548576.0,
+        "bottom" : 6291456.0,
+        "right" : 1548576.0,
+        "top" :  8388608
+    },
+    "units" : "m",
+    "srsName" : "EPSG:3067"
+}
+```
 
 ## Bundle state
 

@@ -38,18 +38,17 @@ module.exports = function(grunt) {
                 files: ['../applications/**/*.js', '../bundles/**/*.js', '../libraries/**/*.js', '../packages/**/*.js', '../resources/**/*.js', '../sources/**/*.js'],
                 // uncommented as validate causes unnecessary delay
                 //            tasks: ['validate', 'compile', 'testacularRun:dev', 'yuidoc:dist']
-                tasks: ['compileDev', 'testacularRun:dev']
+                tasks: ['compileDev', 'karma:dev:run']
             },
             test: {
                 files: ['../tests/**/*.js'],
-                tasks: ['testacularRun:dev']
+                tasks: ['karma:dev:run']
             },
             sass: {
-                files: ['../bundles/**/*.scss', '../applications/**/*.scss'],
-                tasks: ['watchSCSS']
+                files: ['../bundles/**/scss/*.scss', '../applications/**/scss/*.scss'],
+                tasks: ['compileDev']
             }
         },
-		sass: {},
         sprite: {
             options: {
                 iconDirectoryPath: "../applications/paikkatietoikkuna.fi/full-map/icons",
@@ -65,19 +64,22 @@ module.exports = function(grunt) {
                 concat: true
             }
         },
-        testacularRun: {
+        karma: {
+            options: {
+                configFile: 'karma.conf.js',
+            },
             dev: {
-                options: {
-                    runnerPort: 9100
-                }
-            }
-        },
-        testacular: {
-            dev: {
-                options: {
-                    configFile: 'testacular.conf.js',
-                    keepalive: true
-                }
+                background: true
+            },
+            coverage: {
+                preprocessors : {
+                    '../dist/*.js': 'coverage'
+                },
+                coverageReporter : {
+                    type : 'html',
+                    dir : 'coverage/'
+                },
+                reporters : ['dots', 'coverage']
             }
         },
         clean: {
@@ -99,9 +101,21 @@ module.exports = function(grunt) {
             options: {
                 "toolsPath": process.cwd(),
                 "docsPath": "../docs",
-                "docsurl": "/Oskari/docs/release/<%= version %>",
+                "docsurl": "/Oskari/<%= version %>/docs",
                 "apiurl": "http://oskari.org/",
                 "outdir": "../dist/<%= version %>docs"
+            }
+        },
+        "regex-replace": {
+            karma: {
+                src: ['node_modules/grunt-karma/node_modules/karma/lib/server.js'],
+                actions: [
+                    {
+                        name: 'removeFlashSocketAsItDoesNotWorkInIE',
+                        search: "'websocket', 'flashsocket', 'xhr-polling', 'jsonp-polling'",
+                        replace: "'websocket', 'xhr-polling', 'jsonp-polling'"
+                    }
+                ]
             }
         }
     });
@@ -113,19 +127,28 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-yuidoc');
-    grunt.loadNpmTasks('grunt-testacular');
+    grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-sass');
+    grunt.loadNpmTasks('grunt-regex-replace');
 
+    // Default task(s).
+    grunt.registerTask('default', ['regex-replace', 'karma:dev', 'compileAppSetupToStartupSequence', 'compileDev', 'karma:dev:run', 'watch']);
     // Default task.
     //    grunt.registerTask('default', 'watch testacularServer:dev');
     //    grunt.registerTask('default', 'testacularServer:dev watch');
     //    grunt.registerTask('default', 'lint test concat min');
     grunt.registerTask('compileDev', 'Developer compile', function() {
+        var options = this.options();
         // set task configs
-        grunt.config.set("compile.dev.options", this.options());
-
+        grunt.config.set("compile.dev.options", options);
         grunt.task.run('compile');
+
+        grunt.config.set("compileAppCSS.dev.options", {
+            "appSetupFile": '../applications/paikkatietoikkuna.fi/full-map/minifierAppSetup.json',
+            "dest": options.dest
+        });
+        grunt.task.run("compileAppCSS");
     });
 
     grunt.registerTask('compileAppSetupToStartupSequence', function() {
@@ -244,34 +267,43 @@ module.exports = function(grunt) {
                 "appSetupFile": config,
                 "dest": dest
             });
-            
 			grunt.config.set("compileAppCSS." + appName + ".options", {
                 "appSetupFile": config,
                 "dest": dest
             });
-
             grunt.config.set("sprite." + appName + ".options", options);
         }
-
-        // scss to css conversion
-        grunt.task.run('compileAppCSS');
 
         grunt.task.run('validate');
         grunt.task.run('copy');
         grunt.task.run('compile');
+        grunt.task.run('compileAppCSS');
         grunt.task.run('sprite');
         grunt.task.run('yuidoc');
         grunt.task.run('mddocs');
     });
 
     grunt.registerTask('packageopenlayer', 'Package openlayers according to packages', function(packages) {
+        var fs = require('fs');
+
         if(!packages) {
-            grunt.fail.fatal('Missing parameter\nUsage: grunt packageopenlayer:"../path/to/profile.cfg"', 1);
+            grunt.log.writeln("No cfg packages given, reading all cfg files in current directory.");
+            packages = [];
+            var files = fs.readdirSync(process.cwd()),
+                file = "";
+            for(var i in files) {
+                file = files[i];
+                if (file.indexOf('.cfg') != -1) {
+                    packages.push(file);
+                }
+            }
+        } else {
+            // transform comma separeted configs string to array
+            packages = packages.split(',');
         }
 
         console.log('Running openlayers packager...');
-        var fs = require('fs'),
-            path = require('path'),
+        var path = require('path'),
             wrench = require('wrench'),
             sourceDirectory = path.join(process.cwd(), "/components/openlayers/lib/"),
             outputFilenamePrefix = "OpenLayers.",
@@ -294,9 +326,6 @@ module.exports = function(grunt) {
             LAST = "[last]",
             INCLUDE = "[include]",
             EXCLUDE = "[exclude]";
-
-        // transform comma separeted configs string to array
-        packages = packages.split(',');
 
         // read cfg files
         for(i = 0, ilen = packages.length; i < ilen; i += 1) {
@@ -411,17 +440,21 @@ module.exports = function(grunt) {
 			}
 			if (!varsFileExists) {
 				grunt.fail.fatal("applicationVariables.scss not found, looked in:\n" + invalidPaths, 1);
+			} else {
+				grunt.log.writeln("Found valid applicationVariables.scss path:\n" + varsDirectory);
 			}
 		}
 
 
 		// get application scss files
+		/*
 		grunt.log.writeln("Getting application SCSS files");
 		var vars = fs.readFileSync(varsDirectory + "/_applicationVariables.scss"),
 			scssFiles = fs.readdirSync(varsDirectory + "/scss/");
+		*/
 
 		// compile to css
-		grunt.log.writeln("Compiling app SCSS to CSS");
+		grunt.log.writeln("Compiling app SCSS to CSS, using " + varsDirectory + "/scss/ as SCSS folder.");
 		grunt.config.set(
 			'sass.' + appName + '.files',
 			[{
@@ -433,24 +466,17 @@ module.exports = function(grunt) {
 			}]
 
 		);
+		
+		grunt.task.run('sass');
 
 		// build bundle css files
 		// hackhack, copy applicationVariables to a 'static' location
 		// TODO change to copy
 		fs.createReadStream(varsDirectory + '/_applicationVariables.scss').pipe(fs.createWriteStream('../applications/_applicationVariables.scss'));
 
-		grunt.config.set(
-			'sass.' + appName + "-bundles" + '.files',
-			[{
-				"expand": true,
-				"cwd": "../bundles/",
-				"src": "**/*.scss",
-				"dest": '../resources/',
-				"rename": function(dest,src) {return dest+src.replace("/scss/","/css/")},
-				"ext": '.css'
-			}]
-		);
-		grunt.task.run('sass');
+		grunt.log.writeln("Compiling bundle CSS");
+		
+		grunt.task.run('compileBundleCSS');
 
 
 		if (this.data && this.data.options) {
@@ -468,69 +494,66 @@ module.exports = function(grunt) {
 		}
 
 	});
+	
+	grunt.registerTask("compileBundleCSS", "Compile bundle SASS to CSS", function(){
+		grunt.config.set(
+			'sass.' + "test" + "-bundles" + '.files',
+			[{
+				"expand": true,
+				"cwd": "../bundles/",
+				"src": "**/*.scss",
+				"dest": '../resources/',
+				"rename": function(dest,src) {return dest+src.replace("/scss/","/css/")},
+				"ext": '.css'
+			}]
+		);
+		grunt.task.run('sass');
+	});
 
 	grunt.registerMultiTask("minifyAppCSS", "Concatenate and minify application css", function() {
+        var done = this.async();
 		grunt.log.writeln("Concatenating and minifying css");
 
 		var cssPacker = require('uglifycss'),
-		parser = require('./parser.js'),
-		cssfiles = [],
-		options = this.data.json.options;
+			parser = require('./parser.js'),
+			cssfiles = [],
+			options = this.data.json.options,
+			processedAppSetup = parser.getComponents(options.appSetupFile);
 
-		grunt.log.writeln("Getting processedAppStup with " + options.appSetupFile);
-		var processedAppSetup = parser.getComponents(options.appSetupFile);
-		grunt.log.writeln("Variables set");
 
-		// internal minify CSS function
-		this.minifyCSS = function(files, outputFile) {
+        // internal minify CSS function
+        this.minifyCSS = function(files, outputFile) {
 
-			var value = '';
+            var value = '';
 			// read files to value
-			for (var i = 0; i < files.length; ++i) {
-				if (!fs.existsSync(files[i])) {
-					grunt.fail.fatal("Couldn't locate " + files[i]);
-				}
-				else {
-					console.log("Found file: " + files[i]);
-				}
-				var content = fs.readFileSync(files[i], 'utf8');
-				value = value + '\n' + content;
-			}
+			grunt.log.writeln("Concatenating and minifying " + files.length + " files");
+            for (var i = 0; i < files.length; ++i) {
+                if (!fs.existsSync(files[i])) {
+                    grunt.fail.fatal('Couldnt locate ' + files[i]);
+                }
+                var content = fs.readFileSync(files[i], 'utf8');
+                value = value + '\n' + content;
+            }
 			// minify value
-			var packed = cssPacker.processString(value);
+            var packed = cssPacker.processString(value);
+			grunt.log.writeln("Writing packed CSS to " + outputFile);
 
 			// write value to outputfile
-			// first check that the directory exists...
-			// get directory
-			var fileDir = outputFile.substring(0, outputFile.lastIndexOf('/')).split("/");
-			console.log(fileDir);
-			var createPath = "";
-			for (var i = 0; i < fileDir.length; i++) {
-				if (createPath.length) {
-					createPath += "/";
-				}
-				createPath += fileDir[i];
-				console.log("Trying to create path " + createPath);
-				fs.mkdir(createPath, function(err){
-					if(!err || (err && err.code === 'EEXIST')){
-						//do something with contents
-					} else {
-						grunt.fail.fatal("Couldn't create directory " + createPath, err);
-					}
-				});
-			}
-			fs.writeFile(outputFile, packed, function(err) {
-				if (err) {
-					grunt.fail.fatal('Error writing packed CSS: ' + err);
-				}
-			});
-		}
+            fs.writeFile(outputFile, packed, function(err) {
+                // ENOENT means the file did not exist, which is ok. Let's just create it.
+                if (err && err.code !== "ENOENT") {
+                    grunt.fail.fatal('Error writing packed CSS: ' + err);
+                }
+                done();
+            });
+        };
 
 		// gather css files from bundles' minifierAppSetups
+		grunt.log.writeln("Getting files from processedAppSetups");
 		for (var i = 0; i < processedAppSetup.length; ++i) {
-			cssfiles = cssfiles.concat(parser.getFilesForComponent(processedAppSetup[i], 'css'));
+			var pasFiles = parser.getFilesForComponent(processedAppSetup[i], 'css');
+			cssfiles = cssfiles.concat(pasFiles);
 		}
 		this.minifyCSS(cssfiles, options.dest + 'oskari.min.css');
 	});
-
 };

@@ -345,10 +345,11 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
     },
 
     /**
-     * @method highlightMapLayerFeatures
+     * @method setLocation
      * @param {String} srs
      * @param {Number[]} bbox
      * @param {Number} zoom
+     * @param {Object} grid
      *
      * sends message to /service/wfs/setLocation
      */
@@ -367,6 +368,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
      * @method setMapSize
      * @param {Number} width
      * @param {Number} height
+     * @param {Object} grid
      *
      * sends message to /service/wfs/setMapSize
      */
@@ -381,7 +383,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
     },
 
     /**
-     * @method setMapSize
+     * @method setMapLayerStyle
      * @param {Number} id
      * @param {String} style
      *

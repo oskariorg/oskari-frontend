@@ -42,27 +42,29 @@ Oskari.registerLocalization({
 
         },
           "classify": {
-            "classify":                 "Classify",
-            "classifymethod":           "Method",
-            "classes":                  "Classes",
-            "jenks":                    "Jenks ranges",
-            "quantile" :                "Quantile ranges",
-            "eqinterval" :              "Eqinterval",
-            "manual":                   "Manual breaks",
-            "manualPlaceholder":        "Input numbers separated with a comma.",
-            "manualRangeError":         "There should be at least {min} and at most {max} numbers!",
-            "nanError":                 "A value was not a number!"
+            "classify":                 "Klassificera",
+            "classifymethod":           "Metod",
+            "classes":                  "Klasser",
+            "jenks":                    "Jenks intervall",
+            "quantile" :                "Quantile intervall",
+            "eqinterval" :              "Eqintervall",
+            "manual":                   "Manuell klassificering",
+            "manualPlaceholder":        "Ange siffrorna, separerade med kommatecken.",
+            "manualRangeError":         "Det bör vara minst {min} och högst {max} siffror!",
+            "nanError":                 "Ett värde var inte ett nummer!",
+			"infoTitle":                "Manuell klassificering",
+			"info":                     "Ange siffrorna separerade med kommatecken. Punkt fungerar som ett decimaltecken. Först in den nedre gränsen, då gränserna klass och slutligen den övre gränsen. T.ex. genom att skriva \"0, 10,5, 24, 30,2, 57, 73,1\" du får fem klasser med nedre och övre gränsen satt till 0 och 73,1 och klass gränser mellan dem. Värden kvar utanför gränserna kommer att uteslutas."
         },
         "colorset" : {
             "button": "Färger",
             "flipButton": "Vända färger",
-			"themeselection" : "Väriteeman valinta",
-			"setselection" : "Värisetin valinta",
-			"sequential" : "Kvantitatiivinen",
-			"qualitative" : "Kvalitatiivinen",
-			"divergent" : "Jakautuva",
-			"info2" : "Värivalinta - valitse osoittimella väriskaalasta värijakso",
-			"cancel" : "Poistu"
+			"themeselection" : "Välj färgtema",
+			"setselection" : "Välj färgset",
+			"sequential" : "Kvantitiv",
+			"qualitative" : "Kvalitativ",
+			"divergent" : "Divergent",
+			"info2" : "Vända färger - använd muspekaren för att välja en färg från sekvensen färgskalan",
+			"cancel" : "Avsluta"
 			
 		},
         "statistic" : {
@@ -74,9 +76,11 @@ Oskari.registerLocalization({
             "std" : "Standardavvikelse",
             "sum" : "Summa"
         },
-        "values" : "värden",
-        "municipality" : "Kommun",
-        "noMatch" : "Inga matchade indikatorer",
+        "values"        : "värden",
+        "municipality"  : "Kommuner",
+        "selectRows"    : "Markera rader",
+        "not_included"  : "Inte inlcuded kommuner",
+        "noMatch"       : "Inga matchade indikatorer",
         "selectIndicator": "Välja en indikator"
 
     }

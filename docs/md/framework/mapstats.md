@@ -41,17 +41,40 @@ This bundle doesn't handle any requests.
 
 ## Requests the bundle sends out
 
-This bundle doesn't send out any requests.
+### StatsLayerPlugin
+
+<table>
+  <tr>
+    <th>StatsGrid.TooltipContentRequest</th>
+    <th>Requests to get content for the hover tooltip.</th>
+  </tr>
+</table>
 
 ## Events the bundle listens to
 
-This bundle doesn't listen to any events.
+### StatsLayerPlugin
+
+<table>
+  <tr>
+    <th>MapStats.HoverTooltipContentEvent</th>
+    <th>Sets the content of the hover tooltip</th>
+  </tr>
+</table>
 
 ## Events the bundle sends out
 
 <table>
   <tr>
     <th>StatsVisualizationChangeEvent</th><th>Sent when a statistics visualization has been changed</th>
+  </tr>
+</table>
+
+### StatsLayerPlugin
+
+<table>
+  <tr>
+    <th>MapStats.FeatureHighlightedEvent</th>
+    <th>Sent when an are (municipality) is clicked on the map.</th>
   </tr>
 </table>
 
