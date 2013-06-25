@@ -623,22 +623,21 @@ function(mapLayerUrl, sandbox) {
         }
         // default to enabled, only check if it is disabled
         layer.setFeatureInfoEnabled(jsonLayer.gfi !== 'disabled');
-        return this._populateStyles(layer, jsonLayer);
+        return this.populateStyles(layer, jsonLayer);
     },
     /**
-     * @method _populateStyles
+     * @method populateStyles
      * 
      * Parses styles attribute from JSON and adds them as a 
      * Oskari.mapframework.domain.Style to the layer Object.
      * If no styles attribute is present, adds an empty 
      * dummy style and sets that as current style.
      * 
-     * @private 
      * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layerModel
      * @param {Object} jsonLayer JSON presentation for the maplayer
      * @return {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} returns the same layer object with populated styles for convenience
      */
-    _populateStyles : function(layer, jsonLayer) {
+    populateStyles : function(layer, jsonLayer) {
 
         var styleBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Style');
 

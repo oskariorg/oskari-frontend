@@ -31,8 +31,6 @@ function(config) {
         "main" : '<div class="mapplugin featuredataplugin"><a href="javascript:void(0);"></a></div>'
     },
 
-
-
     /**
      * @method getName
      * @return {String} plugin name

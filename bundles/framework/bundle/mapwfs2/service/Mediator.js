@@ -83,7 +83,7 @@ function(config, plugin) {
         var initLayers = {};
         for (var i = 0; i < layers.length; ++i) {
             if (layers[i].isLayerOfType('WFS')) {
-                initLayers[layers[i].getId() + ""] = { styleName: "default" };
+                initLayers[layers[i].getId() + ""] = { styleName: layers[i].getCurrentStyle().getName() };
             }
         }
 
@@ -360,12 +360,11 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
      *
      * sends message to /service/wfs/setMapSize
      */
-    setMapSize : function(width, height, grid) {
+    setMapSize : function(width, height) {
         if(this.cometd != null) {
             this.cometd.publish('/service/wfs/setMapSize', {
                 "width" : width,
-                "height" : height,
-                "grid" : grid
+                "height" : height
             });
         }
     },

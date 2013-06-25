@@ -241,9 +241,12 @@ function(config) {
         'AfterMapLayerAddEvent' : function(event) {
             // TODO: add style info when ready [check if coming for WFS]
             if(event.getMapLayer().isLayerOfType("WFS")) {
-                var styleName = "default";
+                var styleName = null;
                 if(event.getMapLayer().getCurrentStyle()) {
-                    styleName = event.getMapLayer().getCurrentStyle();
+                    styleName = event.getMapLayer().getCurrentStyle().getName();
+                }
+                if(styleName == null || styleName == "") {
+                    styleName = "default";
                 }
 
                 this.getIO().addMapLayer(
@@ -344,6 +347,25 @@ function(config) {
          */
         'AfterChangeMapLayerOpacityEvent' : function(event) {
             this.afterChangeMapLayerOpacityEvent(event);
+        },
+
+
+        /**
+         * @method MapSizeChangedEvent
+         * @param {Object} event
+         */
+        'MapSizeChangedEvent' : function(event) {
+            this.getIO().setMapSize(event.getWidth(), event.getHeight());
+
+            // update tiles
+            var srs = this.getSandbox().getMap().getSrsName();
+            var bbox = this.getSandbox().getMap().getExtent();
+            var zoom = this.getSandbox().getMap().getZoom();
+            var grid = this.getGrid();
+            if(grid != null) {
+                this.getIO().setLocation(srs, [bbox.left,bbox.bottom,bbox.right,bbox.top], zoom, grid);
+                this._tilesLayer.redraw();
+            }
         },
 
         /**
@@ -667,7 +689,6 @@ function(config) {
      *           true to not delete existing tile
      */
     drawImageTile : function(layer, imageUrl, imageBbox, imageSize, layerPostFix, keepPrevious) {
-        //console.log(layer, imageUrl, imageBbox, layerPostFix, keepPrevious); // TODO: remove
         var layerName = "wfs_layer_" + layer.getId() + "_" + layerPostFix;
         var boundsObj = new OpenLayers.Bounds(imageBbox);
 
