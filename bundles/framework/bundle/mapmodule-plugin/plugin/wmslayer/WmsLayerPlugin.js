@@ -394,15 +394,17 @@ function() {
      *            event
      */
     _afterChangeMapLayerStyleEvent : function(event) {
-        var layer = event.getMapLayer();
+        if(event.getMapLayer().isLayerOfType("WMS")) {
+            var layer = event.getMapLayer();
 
-        // Change selected layer style to defined style
-        if(!layer.isBaseLayer()) {
-            var styledLayer = this._map.getLayersByName('layer_' + layer.getId());
-            if(styledLayer != null) {
-                styledLayer[0].mergeNewParams({
-                    styles : layer.getCurrentStyle().getName()
-                });
+            // Change selected layer style to defined style
+            if(!layer.isBaseLayer()) {
+                var styledLayer = this._map.getLayersByName('layer_' + layer.getId());
+                if(styledLayer != null) {
+                    styledLayer[0].mergeNewParams({
+                        styles : layer.getCurrentStyle().getName()
+                    });
+                }
             }
         }
     }

@@ -846,6 +846,13 @@ function(id, imageUrl, options) {
     updateSize : function() {
         this.getMap().updateSize();
         this._updateDomain();
+
+
+        var sandbox = this._sandbox;
+        var mapVO = sandbox.getMap();
+        // send as an event forward to WFSPlugin (draws)
+        var event = sandbox.getEventBuilder("MapSizeChangedEvent")(mapVO.getWidth(), mapVO.getHeight());
+        sandbox.notifyAll(event);
     },
     /**
      * @method _updateDomain
