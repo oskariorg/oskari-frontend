@@ -132,14 +132,14 @@
              * @param {Array} names of all these groups
              */
             getGroupTitles: function() {
-                console.log(this.layerGroups);
+//                console.log(this.layerGroups);
                 var groupNames = [];
                 for (var i = 0; i < this.layerGroups.length; i++) {
                     if(this.layerGroups[i].id != null) {
                         var name = this.layerGroups[i].name;
                         if (!name) {
                             name = this.layerGroups[i].names[Oskari.getLang()];
-                            console.log(name);
+//                            console.log(name);
                         }
                         groupNames.push({name : name, id : this.layerGroups[i].id});
                     }

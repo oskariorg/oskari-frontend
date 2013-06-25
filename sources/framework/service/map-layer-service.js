@@ -472,13 +472,14 @@ function(mapLayerUrl, sandbox) {
             }
         }
 
-        for(var i = 0; i < baseMapJson.subLayer.length; i++) {
-            // Notice that we are adding layers to baselayers sublayers array
-            var subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
-            
-            baseLayer.getSubLayers().push(subLayer);
+        if (baseMapJson.subLayer) {
+            for(var i = 0; i < baseMapJson.subLayer.length; i++) {
+                // Notice that we are adding layers to baselayers sublayers array
+                var subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
+                
+                baseLayer.getSubLayers().push(subLayer);
+            }
         }
-        
         // Opacity
         if(baseMapJson.opacity != null) {
             baseLayer.setOpacity(baseMapJson.opacity);
