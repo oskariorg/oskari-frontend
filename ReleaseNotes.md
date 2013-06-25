@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.13
+
+### mapmodule plugin
+
+A new MapSizeChangedEvent is sent when map size is changed (event is sent on mapmodule.updateSize() function call which should always be called if the map size is changed programmatically)
+
 ## 1.12
 
 ### mapmodule plugin
