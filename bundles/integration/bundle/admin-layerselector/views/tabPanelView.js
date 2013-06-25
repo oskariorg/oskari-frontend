@@ -18,7 +18,7 @@ define([
         AdminAddLayerBtnTemplate,
         TabPanelTemplate, 
         AccordionPanelTemplate,
-        LayerRowTemplate, 
+        LayerRowTemplate,
         AdminLayerSettingsView,
         LayerView) {
 
@@ -39,7 +39,7 @@ define([
             "click .accordion-header"       : "toggleLayerGroup",
             "click .admin-add-layer-btn"    : "toggleAddLayer",
             "click .admin-add-layer-cancel" : "hideAddLayer",
- 
+
             "click .admin-edit-class-btn"   : "toggleGroupingSettings",
             "click .admin-edit-org-btn"     : "toggleGroupingSettings",
             "click .admin-add-class-cancel" : "toggleGroupingSettings",
@@ -396,7 +396,7 @@ define([
                     }
                 },
                 error : function(jqXHR, textStatus) {
-                    if(callbackFailure && jqXHR.status != 0) {
+                    if(jqXHR.status != 0) {
                         alert(' false ');
                     }
                 }
@@ -461,7 +461,7 @@ define([
                     }
                 },
                 error : function(jqXHR, textStatus) {
-                    if(callbackFailure && jqXHR.status != 0) {
+                    if(jqXHR.status != 0) {
                         alert(' false ');
                     }
                 }

@@ -182,7 +182,7 @@ div.admin-layerselector .admin-add-layer-btn {
 div.admin-layerselector .admin-add-layer {
     padding: 10px 0px;
     overflow: hidden;
-    height: 0px;
+    height: auto;
     -webkit-transition-duration: 300ms;
     -webkit-transition-property: height;
     -moz-transition-duration: 300ms;

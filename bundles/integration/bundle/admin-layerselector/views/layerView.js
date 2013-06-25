@@ -1,8 +1,10 @@
 define([
     "text!_bundle/templates/layerRowTemplate.html",
-    "_bundle/views/adminLayerSettingsView"
+    "_bundle/views/adminLayerSettingsView",
+    "text!_bundle/templates/group/subLayerTemplate.html",
+    'text!_bundle/templates/adminGroupSettingsTemplate.html',
     ], 
-    function(ViewTemplate, AdminLayerSettingsView) {
+    function(ViewTemplate, AdminLayerSettingsView, SubLayerTemplate, AdminGroupSettingsTemplate) {
     return Backbone.View.extend({
         tagName: 'div',
         className: 'layer',
@@ -19,7 +21,9 @@ define([
 //            "click .admin-add-layer-ok"     : "hideLayerSettings",
             "click .admin-remove-layer"     : "removeLayer",
             "click"                         : "toggleLayerSettings",
-            "click .show-edit-layer"        : "clickLayerSettings"
+            "click .show-edit-layer"        : "clickLayerSettings",
+            "click .sublayer-name"          : "toggleSubLayerSettings",
+            "click .admin-add-sublayer"     : "toggleSubLayerSettings"
         },
 
         /**
@@ -33,6 +37,7 @@ define([
             this.model              = this.options.model;
             this.classNames         = this.options.classes;
             this.template           = _.template(ViewTemplate);
+            this.subLayerTemplate   = _.template(SubLayerTemplate);
             this.render();
         },
 
@@ -129,7 +134,7 @@ define([
                 
                 e.stopPropagation();
                 // decode styles
-                if(this.model.admin.style_decoded == null && this.model.admin.style != null) {
+                if(this.model.admin && this.model.admin.style_decoded == null && this.model.admin.style != null) {
                     var styles = [];
                     styles.push(this.options.layerTabModel.decode64(this.model.admin.style));
                     this.model.admin.style_decoded = styles;
@@ -138,7 +143,8 @@ define([
                 var settings = new AdminLayerSettingsView({
                     model: this.model,  
                     instance : this.options.instance, 
-                    classes : this.classNames
+                    classes : this.classNames,
+                    layerTabModel : this.options.layerTabModel
                 });
                 element.append(settings.$el);
                 element.find('.layout-slider').slider({min:0, max: 100, value:100, slide: function( event, ui ) {
@@ -162,6 +168,60 @@ define([
 
             }
         },
+
+        toggleSubLayerSettings: function(e) {
+            var element = jQuery(e.currentTarget).parents('.add-sublayer-wrapper');
+            //show layer settings
+            if (!element.hasClass('show-edit-sublayer')) {
+                e.stopPropagation();
+
+                var subLayerId = element.attr('sublayer-id');
+                var subLayer = this._getSubLayerById(subLayerId);
+                // decode styles
+                if(subLayer && subLayer.admin && subLayer.admin.style_decoded == null
+                    && subLayer.admin.style != null) {
+                    var styles = [];
+                    styles.push(this.options.layerTabModel.decode64(subLayer.admin.style));
+                    subLayer.admin.style_decoded = styles;
+                }
+
+                // Get the parent layer id
+                if (this.model && (typeof this.model.getId() === 'string')) {
+                    // eg. 'base_36' -> 36
+                    var baseLayerId = Number(this.model.getId().replace('base_', ''));
+                }
+
+                // create AdminLayerSettingsView
+                var settings = new AdminLayerSettingsView({
+                    model: subLayer,  
+                    instance : this.options.instance, 
+                    classes : this.classNames,
+                    layerTabModel : this.options.layerTabModel,
+                    baseLayerId : baseLayerId
+                });
+                element.append(settings.$el);
+                element.find('.layout-slider').slider({min:0, max: 100, value:100, slide: function( event, ui ) {
+                    jQuery(ui.handle).parents('.left-tools').find( "#opacity-slider" ).val( ui.value );
+                }});
+
+                // TODO when backend works and we have new jQuery UI
+                //this.$el.find("#add-layer-inspire-theme").tagit({availableTags: ["Hallinnolliset yksiköt", "Hydrografia", "Kiinteistöt", "Kohteet", "Koordinaattijärjestelmät", "Korkeus", "Liikenneverkot", "Maankäyttö", "Maanpeite","Maaperä","Merialueet", "Metatieto"]});
+
+
+                setTimeout(function(){
+                    element.addClass('show-edit-sublayer');
+                }, 30);
+            }
+            //hide layer settings
+            else {
+                element.removeClass('show-edit-sublayer');
+                setTimeout(function(){
+                    element.find('.admin-add-layer').remove();
+                },300);
+
+            }
+        },
+
         /**
          * Hide settings related to this layer 
          *
@@ -224,7 +284,7 @@ define([
                     }
                 },
                 error : function(jqXHR, textStatus) {
-                    if(callbackFailure && jqXHR.status != 0) {
+                    if(jqXHR.status != 0) {
                         alert(' Removing layer did not work. ');
                     }
                 }
@@ -242,6 +302,11 @@ define([
             } else {
                 this.trigger(e);
             }
+        },
+
+        _getSubLayerById: function(subLayerId) {
+            var mapLayerService = this.instance.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            return mapLayerService.findMapLayer(Number(subLayerId));
         }
     });
 });

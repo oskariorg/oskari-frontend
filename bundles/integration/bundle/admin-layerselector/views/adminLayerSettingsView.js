@@ -24,14 +24,19 @@ define([
          * @type {Object}
          */
         events: {
-            "click .admin-add-layer-ok"     : "addLayer",
-            "click .admin-add-layer-cancel" : "hideLayerSettings",
-            "click .admin-remove-layer"     : "removeLayer",
-            "click .show-edit-layer"        : "clickLayerSettings",
-            "click #add-layer-wms-button"   : "fetchCapabilities",
-            "click .icon-close"             : "clearInput",
-            "change #add-layer-type"        : "createLayerSelect",
-            "click .admin-add-group-ok"     : "saveGroup"
+            "click .admin-add-layer-ok"         : "addLayer",
+            "click .admin-add-sublayer-ok"      : "addLayer",
+            "click .admin-add-layer-cancel"     : "hideLayerSettings",
+            "click .admin-add-sublayer-cancel"  : "hideLayerSettings",
+            "click .admin-remove-layer"         : "removeLayer",
+            "click .admin-remove-sublayer"      : "removeLayer",
+            "click .show-edit-layer"            : "clickLayerSettings",
+            "click #add-layer-wms-button"       : "fetchCapabilities",
+            "click .icon-close"                 : "clearInput",
+            "change #add-layer-type"            : "createLayerSelect",
+            "click .admin-add-group-ok"         : "saveGroup",
+            "click .admin-add-group-cancel"     : "hideLayerSettings",
+            "click .admin-remove-group"         : "removeGroup"
         },
 
         /**
@@ -59,13 +64,22 @@ define([
          */
         render : function() {
             // set id for this layer
-            if(this.model != null && this.model.getId()) { 
+            if (this.model != null && this.model.getId()) { 
                 this.$el.attr('data-id', this.model.getId());
             }
 
+            // When creating a new sublayer, its type is 'wmslayer'
+            // so no need to show the type select form.
+            if (this.options.baseLayerId) {
+                this.createLayerForm();
+                return;
+            }
             // if editing an existing layer
             if (this.model) {
-                console.log(this.model);
+                if (!this.model.admin) {
+                    this.model.admin = {};
+                }
+
                 if (this.model.isBaseLayer()) {
                     this.createGroupForm('baseName');
                 } else if (this.model.isGroupLayer()) {
@@ -108,9 +122,10 @@ define([
 
         createLayerForm: function(e) {
             this.$el.append(this.layerTemplate({
-                model: this.model, 
+                model: this.model,
                 instance : this.options.instance,
-                classNames : this.classes.getGroupTitles()
+                classNames : this.classes.getGroupTitles(),
+                isSubLayer : this.options.baseLayerId
             }));
             // if settings are hidden, we need to populate template and
             // add it to the DOM
@@ -188,6 +203,9 @@ define([
 
             // create url for action_route
             var url = baseUrl + action_route + idKey + id;
+
+            console.log(url);
+
             jQuery.ajax({
                 type : "GET",
                 dataType: 'json',
@@ -226,8 +244,6 @@ define([
                     }
                 }
             });
-
-
         },
         /**
          * Add layer
@@ -235,11 +251,18 @@ define([
          * @method addLayer
          */
         addLayer: function(e) {
+            e.stopPropagation();
+
             var me = this;
             var element = jQuery(e.currentTarget),
                 accordion = element.parents('.accordion'),
                 lcId = accordion.attr('lcid'),
                 form = element.parents('.admin-add-layer');
+
+            // If this is a sublayer the layer class id should be of its base layer's
+            if (this.options.baseLayerId) {
+                lcId = this.options.baseLayerId;
+            }
 
             var baseUrl =  me.instance.getSandbox().getAjaxUrl(),
                 action_route = "action_route=SaveLayer",
@@ -282,8 +305,8 @@ define([
 
             data.minScale       = form.find('#add-layer-minscale').val(),
             data.maxScale       = form.find('#add-layer-maxscale').val(),
-            data.epsg        = form.find('#add-layer-srsname').val(),
-            data.epsg        = Number(data.epsg.replace('EPSG:', '')),
+            data.epsg           = form.find('#add-layer-srsname').val(),
+            data.epsg           = Number(data.epsg.replace('EPSG:', '')),
 
             //data.descriptionLink = form.find('#add-layer-').val(),
             data.legendImage    = form.find('#add-layer-legendImage').val(),
@@ -331,6 +354,8 @@ define([
             var url = baseUrl + action_route;
             var postData = JSON.stringify(data);
             */
+
+            console.log(data);
 
             jQuery.ajax({
                 type : "GET",
@@ -392,7 +417,8 @@ define([
         saveGroup: function(e) {
             var me = this,
                 element = jQuery(e.currentTarget),
-                addClass = element.parents('.admin-add-group');
+                addClass = element.parents('.admin-add-group'),
+                accordion = element.parents('.accordion');
 
             // url for backend action_route
             var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
@@ -412,13 +438,6 @@ define([
             var url = baseUrl + action_route + params;
             console.log(url);
             // make AJAX call
-            /*
-            me._save(e, url, function(response){
-                // callback functionality
-                me.layerGroupingModel.getClasses(me.options.instance.getSandbox().getAjaxUrl(),"&action_route=GetMapLayerClasses");
-                element.parents('.show-add-class').removeClass('show-add-class');
-                addClass.find('.admin-edit-org-btn').html(me.options.instance.getLocalization('edit'))
-            }); */
             jQuery.ajax({
                 type : "GET",
                 dataType: 'json',
@@ -429,12 +448,21 @@ define([
                 },
                 url : url,
                 success : function(resp) {
-                    
+                    // Load the map layers again, since we want the newly created
+                    // group/base layer to show as a map layer, not as a layer class.
+                    accordion.trigger({
+                        type: "adminAction",
+                        command: 'addGroup'
+                    })
                 },
                 error : function(jqXHR, textStatus) {
                     alert(' false ');
                 }
             });
+
+        },
+
+        removeGroup: function(e) {
 
         },
 
@@ -582,8 +610,8 @@ define([
             }
 
             // Scale denominators
-            var minScale = selectedLayer.MinScaleDenominator,
-                maxScale = selectedLayer.MaxScaleDenominator;
+            var minScale = selectedLayer.MaxScaleDenominator,
+                maxScale = selectedLayer.MinScaleDenominator;
             if (maxScale && minScale) {
                 jQuery('#add-layer-minscale').val(minScale);
                 jQuery('#add-layer-maxscale').val(maxScale);

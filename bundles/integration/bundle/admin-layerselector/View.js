@@ -165,12 +165,16 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             if(mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
                 mapLayerService.addLayer(mapLayer);
             }
-            console.log(mapLayer);
         }
         // update layer info
         else if(e.command == "editLayer") {
             e.layerData.name = e.layerData.admin.nameFi; //TODO this should be in mapLayerService
             mapLayerService.updateLayer(e.layerData.id, e.layerData);
+        }
+        // load the map layers again
+        else if(e.command == "addGroup") {
+            // TODO: some callback perhaps?
+            mapLayerService.loadAllLayersAjax();
         }
     }
 
