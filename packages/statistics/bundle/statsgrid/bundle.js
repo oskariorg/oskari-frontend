@@ -52,6 +52,9 @@ function() {
             "src" : "../../../../bundles/statistics/bundle/statsgrid/event/ClearHilightsEvent.js"
         },{
             "type" : "text/javascript",
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/event/SelectHilightsModeEvent.js"
+        },{
+            "type" : "text/javascript",
             "src" : "../../../../bundles/statistics/bundle/statsgrid/request/StatsGridRequest.js"
 		}, {
             "type" : "text/javascript",

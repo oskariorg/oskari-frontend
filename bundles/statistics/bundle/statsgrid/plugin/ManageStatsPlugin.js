@@ -27,7 +27,7 @@ function(config, locale) {
     this.statsService = null;
     // indicators (meta data)
     this.indicators = [];
-
+    this.selectedMunicipalities = {};
 //    this.conf = config || {};
     defaults = {"statistics" : [
         {"id" : "avg", "visible": true},
@@ -304,8 +304,9 @@ function(config, locale) {
         });
         this.checkboxSelector = checkboxSelector;
 
-
-        var columns = [{
+        // initial columns
+        var columns = [me.checkboxSelector.getColumnDefinition(),
+        {
             id : "municipality",
             name : this._locale['sotka'].municipality,
             field : "municipality",
@@ -456,8 +457,13 @@ function(config, locale) {
                     }
                 };
             }
-//we need adjust slider if there is only few items checked
-this._adjustClassificationSlider();
+            // sendstats
+            var column = me._getColumnById(me._state.currentColumn);
+            me.sendStatsData(column);
+            /* 
+            //TODO find a way to tell openlayers that some area should be hilighted without clicking them
+                me.selectedMunicipalities[column.code] = (item.sel == "checked");
+            */
 
 
             // resize grid (content/rows does not show extra rows otherwise. i.e. group headers & footers)
@@ -465,6 +471,16 @@ this._adjustClassificationSlider();
             data.refresh();
 
         });
+
+        //if header checkbox is clicked, update map
+        checkboxSelector.onSelectHeaderRowClicked.subscribe(function(e, args){
+
+            // sendstats
+            var column = me._getColumnById(me._state.currentColumn);
+            me.sendStatsData(column);
+
+        });
+
 
         me._initHeaderPlugin(columns, grid);
 
@@ -952,7 +968,6 @@ this._adjustClassificationSlider();
         // Add callback function for totals / statistics
         me.dataView.setTotalsCallback(function(groups) {
             me._updateTotals(groups);
-//            me.grid.setColumns(me.grid.getColumns());
         });
 
 
@@ -968,6 +983,8 @@ this._adjustClassificationSlider();
         }
 
         me.updateDemographicsButtons(indicatorId, gender, year);
+        me.grid.setSortColumn(me._state.currentColumn, true);   
+
     },
 
     /**
@@ -1080,7 +1097,6 @@ this._adjustClassificationSlider();
      * @param curCol  Selected indicator data column
      */
     sendStatsData : function(curCol) {
-//        if (curCol == null || curCol.field == 'municipality' || curCol.field == '_checkbox_selector') {
         if (curCol == null || curCol.field.indexOf('indicator') < 0) {
             // Not a valid current column nor a data value column
             return;
@@ -1110,6 +1126,7 @@ this._adjustClassificationSlider();
 
         // Send the data trough the stats service.
         me.statsService.sendStatsData(me._layer, {
+            CHECKED_COUNT : this.getItemsByGroupingKey('checked').length, // how many municipalities there is checked
             CUR_COL : curCol,
             VIS_NAME : me._layer.getWmsName(), //"ows:kunnat2013",  
             VIS_ATTR : me._layer.getFilterPropertyName(), //"kuntakoodi",
@@ -1340,15 +1357,12 @@ this._adjustClassificationSlider();
                                 }
                             }
                         }
+
                         // current column is needed for rendering map
-                        var columns = me.grid.getColumns();
-                        for (var i = 0; i < columns.length; i++) {
-                            var column = columns[i];
-                            if (column.id == state.currentColumn) {
-                                me.sendStatsData(column);
-                                me.grid.setSortColumn(state.currentColumn,true);
-                            }
-                        };
+                        // sendstats
+                        var column = me._getColumnById(state.currentColumn);
+                        me.sendStatsData(column);
+                        me.grid.setSortColumn(state.currentColumn,true);   
                     }
                 });
             });
@@ -1491,7 +1505,7 @@ this._adjustClassificationSlider();
             }
             // create checkbox for selecting rows toggle
             var showRows = jQuery(me.templates.gridHeaderMenu).addClass('statsgrid-show-row-selects');
-                // create input element with localization
+            // create input element with localization
             var input = showRows.find('input').attr({'id': 'statsgrid-show-row-selects'});
             if(selectRowsChecked) {
                 input.attr('checked', 'checked');
@@ -1512,20 +1526,19 @@ this._adjustClassificationSlider();
                     statistic.visible = !statistic.visible;
                     break;
                 } else if(args.command == 'selectRows') {
-                    console.log('show row selector');
                     var columns = args.grid.getColumns();
                     var newColumns = [];
-                    var shouldAddSell = true;
+                    var shouldAddSel = true;
                     for (var i = 0; i < columns.length; i++) {
                         var column = columns[i];
                         if(column.field != "sel") {
                             newColumns.push(column);
                         }
                         if(column.field == "sel" && !jQuery(e.target).is(":checked")) {
-                            shouldAddSell = false;
+                            shouldAddSel = false;
                         }
                     }
-                    if (shouldAddSell) {
+                    if (shouldAddSel) {
                         newColumns.unshift(me.checkboxSelector.getColumnDefinition());
                     }
                     args.grid.setColumns(newColumns);
@@ -1591,129 +1604,145 @@ this._adjustClassificationSlider();
             idx = this.getIdxByCode(featureAtts.kuntakoodi),
             cssKey = 'highlight-row-' + featureAtts.kuntakoodi,
             cssHash = {};
+        // if we have grid and idx => remembe selected area
+        if(this.grid && idx) {
+            // if we there are no checked areas => do nothing
+            if(this.getItemsByGroupingKey('checked').length > 0) {
+                this.selectedMunicipalities[featureAtts.kuntakoodi] = isHighlighted;
 
-if (this.grid && idx && this.getItemsByGroupingKey('checked').length > 0) {
-            if (isHighlighted) {
-if(idx != -1) {
-    this.grid.scrollRowToTop(idx);
-    cssHash[idx] = {'municipality': 'statsgrid-highlight-row'};
-    this.grid.addCellCssStyles(cssKey, cssHash);
-    this.dataView.syncGridCellCssStyles(this.grid, cssKey);
-}
-            } else {
-                this.grid.removeCellCssStyles(cssKey);
-                this.dataView.syncGridCellCssStyles(this.grid, cssKey);
+                if (isHighlighted) {
+                    //if a row is found => hilight it
+                    if(idx != -1) {
+                        this.grid.scrollRowToTop(idx);
+                        cssHash[idx] = {'municipality': 'statsgrid-highlight-row'};
+                        this.grid.addCellCssStyles(cssKey, cssHash);
+                        this.dataView.syncGridCellCssStyles(this.grid, cssKey);
+                    }
+                } else {
+                    this.grid.removeCellCssStyles(cssKey);
+                    this.dataView.syncGridCellCssStyles(this.grid, cssKey);
+                }
             }
-            // This needs to be called or otherwise sorting etc breaks the highlighting.
-            //this.grid.invalidate();
-            //this.dataView.syncGridCellCssStyles(this.grid, cssKey);
-            //this.grid.render();
         }
     },
 
-_featureSelectedEvent: function(event) {
-    var featureAtts = event.getFeature().attributes,
-        isHighlighted = event.isHighlighted(),
-        item = this.getItemByCode(featureAtts.kuntakoodi);
+    /**
+     * Highlights a municipality given by the event and shows only hilighted municipalities in the grid
+     *
+     * @method _featureSelectedEvent
+     * @private
+     * @param {Oskari.mapframework.bundle.mapstats.event.FeatureHighlightedEvent} event
+     */
+    _featureSelectedEvent: function(event) {
+        var featureAtts = event.getFeature().attributes,
+            isHighlighted = event.isHighlighted(),
+            item = this.getItemByCode(featureAtts.kuntakoodi);
 
-    if (this.grid && item) {
-        if (isHighlighted) {               
-            item.sel = 'checked';
-            var data = this.grid.getData();
-            data.updateItem(item.id, item);
-
-        } else {
-            item.sel = 'empty';
+        if (this.grid && item) {
+            //if area is hilighted => remember it and change grid item to 'checked' state
+            this.selectedMunicipalities[featureAtts.kuntakoodi] = isHighlighted;
+            if (isHighlighted) {               
+                item.sel = 'checked';
+            } else {
+                item.sel = 'empty';
+            }
             var data = this.grid.getData();
             data.updateItem(item.id, item);            
+
+            // sendstats ...update map
+            var column = this._getColumnById(this._state.currentColumn);
+            this.sendStatsData(column);
+        }
+    },
+
+    /**
+     * Get items by GroupingKey
+     *
+     * @method getItemsByGroupingKey
+     * @param grouping key (e.g. 'checked', 'empty')
+     */
+    getItemsByGroupingKey : function(sel) {
+        var items = this.grid.getData().getItems();
+        var itemsByGrouping = [];
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            if(item.sel === sel) {
+                itemsByGrouping.push(sel);
+            }
+        }
+        return itemsByGrouping;
+    },
+
+    /**
+     * Show only selected areas
+     *
+     * @method _showSelectedAreas
+     * @private
+     * @param array of ids
+     */
+    _showSelectedAreas : function(idArray) {
+        var data = this.grid.getData();
+        for (var i = 0; i < idArray.length; i++) {
+            var id = idArray[i];
+            var item = data.getItemById(id);
+            item.sel = 'checked';
+            data.updateItem(id, item);
+        };
+        data.refresh();
+    },
+
+    /**
+     * Unselect all areas
+     *
+     * @method unselectAllAreas
+     * @param leave hilighted areas to be selected in the grid
+     */
+    unselectAllAreas : function(leaveHilighted) {
+        var _grid = this.grid;
+        var _data = _grid.getData();
+        var items = _grid.getData().getItems();
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            if(leaveHilighted && this.selectedMunicipalities[item.code]){
+                item.sel = 'checked';
+            } else {
+                item.sel = 'empty';
+            }
         }
 
-        var checked = this.getItemsByGroupingKey('checked').length;
-
-        var slider = this._adjustClassificationSlider();
-        var selectedVal = slider.slider('option','value');
-        var sliderEnabled = !slider.slider( "option", "disabled");
+        _data.collapseGroup('empty');
 
         // sendstats
-        var curColId = this._state.currentColumn;
+        var column = this._getColumnById(this._state.currentColumn);
+        this.sendStatsData(column);
+
+
+        //update data
+        _data.setItems(items);
+        _data.refresh();
+        //render all the rows (and checkboxes) again
+        _grid.invalidateAllRows();
+        _grid.render();
+    },
+
+    /**
+     * Get column by id
+     *
+     * @method _getColumnById
+     * @private
+     * @param column id
+     */
+    _getColumnById : function(columnId){
+        // sendstats
         var columns = this.grid.getColumns();
         for (var i = 0; i < columns.length; i++) {
             var column = columns[i];
-            if(column.id === curColId && sliderEnabled &&
-                (   (selectedVal <  checked && isHighlighted) ||
-                    (selectedVal <= checked && !isHighlighted))) {
-                this.sendStatsData(column);
-                break;
+            if(column.id === columnId) {
+                return column;
             }
         };
-    }
-},
-_adjustClassificationSlider: function() {
-    var checkedItems = this.getItemsByGroupingKey('checked').length;
-
-    // classifyPlugin can't slide more than there are municipalities
-    var classifyPlugin = this._sandbox.findRegisteredModuleInstance('MainMapModuleManageClassificationPlugin');
-    var slider = jQuery('#slider-range-max');
-    var selectedVal = slider.slider('option','value');
-
-    var max = checkedItems < classifyPlugin.maxClassNum ? checkedItems : classifyPlugin.maxClassNum;
-    max--;
-    selectedVal = checkedItems > selectedVal ? selectedVal > 2 ? selectedVal : 2 : checkedItems - 1;
-
-    slider.slider({
-        max : max,
-        value: selectedVal
-    });
-    //
-    if(max < 3) {
-        slider.slider( "option", "disabled", true );
-    } else {
-        slider.slider( "option", "disabled", false );        
-    }
-    jQuery('input#amount_class').val(selectedVal);
-    return slider;
-},
-getItemsByGroupingKey : function(sel) {
-    var items = this.grid.getData().getItems();
-    var itemsByGrouping = [];
-    for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        if(item.sel === sel) {
-            itemsByGrouping.push(sel);
-        }
-    }
-    return itemsByGrouping;
-},
-_showSelectedAreas : function(idArray) {
-    var data = this.grid.getData();
-    for (var i = 0; i < idArray.length; i++) {
-        var id = idArray[i];
-        var item = data.getItemById(id);
-        item.sel = 'checked';
-        data.updateItem(id, item);
-    };
-    data.refresh();
-},
-
-unselectAllAreas : function() {
-    var _grid = this.grid;
-    var _data = _grid.getData();
-    var items = _grid.getData().getItems();
-    for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        item.sel = 'empty';
-    }
-
-    _data.collapseGroup('empty');
-
-    //update data
-    _data.setItems(items);
-    _data.refresh();
-    //render all the rows (and checkboxes) again
-    _grid.invalidateAllRows();
-    _grid.render();
-
-},
+        return null;
+    },
 
     /**
      * Sends an event with HTML for tooltips as data.
@@ -1728,7 +1757,6 @@ unselectAllAreas : function() {
         var item = this.getItemByCode(featAtts.kuntakoodi);
         var content = '<p>' + item.municipality;
         content += ((currColumn && item[currColumn]) ? '<br />' + item[currColumn] : ''); 
-content += ((this.getItemsByGroupingKey('checked').length < 4) ? '<br />' + this._locale['select4Municipalities'] : '');
         content += '</p>';
 
         if (eventBuilder) {
@@ -1737,6 +1765,12 @@ content += ((this.getItemsByGroupingKey('checked').length < 4) ? '<br />' + this
         }
     },
 
+    /**
+     * Toggle select municipalities mode
+     *
+     * @method toggleSelectMunicipalitiesMode
+     * @return true if mode is on
+     */
     toggleSelectMunicipalitiesMode : function() {
         this.selectMunicipalitiesMode = !this.selectMunicipalitiesMode;
         return this.selectMunicipalitiesMode;

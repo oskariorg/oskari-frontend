@@ -187,6 +187,9 @@ function(config) {
         'StatsGrid.ModeChangedEvent': function(event) {
             this._afterModeChangedEvent(event);
         },
+        'StatsGrid.SelectHilightsModeEvent': function(event) {
+            this._hilightFeatures(event);
+        },
         'StatsGrid.ClearHilightsEvent': function(event) {
             this._clearHilights(event);
         },
@@ -493,14 +496,64 @@ function(config) {
             this._removePopup();
         }
     },
+    /**
+     * Clear hilighted features
+     *
+     * @method _clearHilights
+     * @private
+     * @param {Oskari.statistics.bundle.statsgrid.event.ClearHilightsEvent} event
+     */
     _clearHilights: function(event) {
         var drawLayer = this._map.getLayersByName("Stats Draw Layer")[0];
         if (drawLayer) {
-            drawLayer.removeAllFeatures();
+            for (var i = 0; i < drawLayer.features.length; i++) {
+                //clear style
+                drawLayer.features[i].style = null;
+                // notify highlight control
+                this._highlightCtrl.highlight(drawLayer.features[i]);
+            }
         }
+        drawLayer.redraw();
+        //remove popup also
         this._removePopup();
     },
-    
+
+    /**
+     * Hilight features
+     *
+     * @method _hilightFeatures
+     * @private
+     * @param {Oskari.statistics.bundle.statsgrid.event.SelectHilightsModeEvent} event
+     */
+    _hilightFeatures: function(event) {
+        // which municipalities should be hilighted
+        var codes = event.getCodes();
+        var drawLayer = this._map.getLayersByName("Stats Draw Layer")[0];
+
+        //drawLayer can not be undefined
+        if (typeof drawLayer === "undefined") return;
+        var attrText = "kuntakoodi";
+
+        //add hilight feature style
+        var featureStyle = OpenLayers.Util.applyDefaults(featureStyle, OpenLayers.Feature.Vector.style['default']);
+        featureStyle.fillColor = "#ff0000";
+        featureStyle.strokeColor = "#ff3333";
+        featureStyle.strokeWidth = 3;
+        featureStyle.fillOpacity = 0.2;
+
+        // loop through codes and features to find out if feature should be hilighted
+        for (var key in codes) {
+            for (var i = 0; i < drawLayer.features.length; i++) {
+                if (drawLayer.features[i].attributes[attrText] === key && codes[key]) {
+                    drawLayer.features[i].style = featureStyle;
+                    this._highlightCtrl.highlight(drawLayer.features[i]);
+                    break;
+                }
+            }
+        }
+        drawLayer.redraw();
+    },
+
     /**
      * @method _afterMapLayerRemoveEvent
      * Handle AfterMapLayerRemoveEvent

@@ -36,6 +36,12 @@ function(config, locale) {
     this._params = null;
     this.minClassNum = 2;
     this.maxClassNum = 9;
+    this.isSelectHilightedMode = false;
+
+    this.templates = {
+        'block' : '<div class="block"></div>',
+        'classificationGuide' : '<p class="classification-guide"></p>'
+    }
 
 }, {
     /** @static @property __name module name */
@@ -254,6 +260,12 @@ function(config, locale) {
             // and plugin is started before any layers have been added
 
         },
+        'StatsGrid.SelectHilightsModeEvent': function(event) {
+            this.isSelectHilightedMode = true;
+        },
+        'StatsGrid.ClearHilightsEvent': function(event) {
+            this.isSelectHilightedMode = false;
+        },
         /**
          * @method SotkadataChangedEvent
          * @param {MapStats.SotkadataChangedEvent} event
@@ -303,9 +315,27 @@ function(config, locale) {
         var check = false;
         var limits = [];
         var i, k;
+
         //Check selected column - only data columns are handled
-        if (sortcol.field == 'municipality' || sortcol.field == 'code')
+        if (sortcol.field.indexOf('indicator') < 0)
             return;
+
+        var slider = me._adjustClassificationSlider(params.CHECKED_COUNT);
+        var sliderDisabled = slider.slider( "option", "disabled");
+
+        // if slider is disabled don't show classification but help / guide
+        // that you should select more municipalities
+        if(sliderDisabled) {
+            var classify = me.element.find('.classificationMethod');
+            classify.find('.block').remove();
+            var block = jQuery(me.templates.block);
+            block.append(jQuery(me.templates.classificationGuide).text(this._locale['select4Municipalities']));
+            classify.append(block);
+
+            // Show legend in content
+            this.element.find('div.content').show();
+            return;
+        }
 
         // Get classification method
         var method = me.element.find('.classificationMethod').find('.method').val();
@@ -415,6 +445,7 @@ function(config, locale) {
         var classify = me.element.find('.classificationMethod');
         classify.find('.block').remove();
         var block = jQuery('<div class="block"></div>');
+
         block.append(colortab);
         classify.append(block);
 
@@ -472,6 +503,7 @@ function(config, locale) {
             value : 5,
             slide : function(event, ui) {
                 jQuery('input#amount_class').val(ui.value);
+                jQuery(this).slider('option','value', ui.value);
                 // Classify again
                 me.classifyData(event);
             }
@@ -1024,6 +1056,7 @@ function(config, locale) {
             value : curcla,
             slide : function(event, ui) {
                 jQuery('input#amount_class').val(ui.value);
+                jQuery(this).slider('option','value', ui.value);
                 // Classify again
                 me.classifyData();
             }
@@ -1045,7 +1078,39 @@ function(config, locale) {
     _flipCurrentColors: function() {
         this.colorsFlipped = this.colorsFlipped ? false : true;
         this.classifyData();
+    },
+
+    /**
+     * Classification slider should only work if some rules apply
+     *
+     * @method _adjustClassificationSlider
+     * @private
+     * @param checkedItemsCount tells if there are enough items selected
+     */
+    _adjustClassificationSlider: function(checkedItemsCount) {
+
+        // classifyPlugin can't slide more than there are municipalities
+        var slider = jQuery('#slider-range-max');
+        var selectedVal = slider.slider('option','value');
+
+        var max = checkedItemsCount < this.maxClassNum ? checkedItemsCount > 2 ? checkedItemsCount : 3 : this.maxClassNum;
+        max--;
+        selectedVal = max > selectedVal ? selectedVal > 2 ? selectedVal : 2 : max;
+
+        slider.slider('option','min', 2);
+        slider.slider('option','max', max);
+        slider.slider('option','value', selectedVal);
+
+        //
+        if(max < 3) {
+            slider.slider( "option", "disabled", true );
+        } else {
+            slider.slider( "option", "disabled", false );
+        }
+        jQuery('input#amount_class').val(selectedVal);
+        return slider;
     }
+
 }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
