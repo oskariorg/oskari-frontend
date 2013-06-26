@@ -104,13 +104,21 @@ Oskari.registerLocalization({
                 "colorset_tooltip" : "Modify colors",
                 "tooltip" : "Setup colors for analysis layout"
             },
-
-
             "buttons" : {
                 "save" : "Save",
                 "analyse" : "Analyse",
                 "data" : "Add data",
                 "cancel" : "Cancel"
+            },
+            "filter": {
+                "title": "Filter",
+                "description": "Filter for layer ",
+                "refreshButton": "Refresh filter",
+                "bbox": {
+                    "title": "Map window filter",
+                    "on": "In use",
+                    "off": "Not in use"
+                }
             },
             "help" : "Help",
             "error" : {

@@ -104,12 +104,21 @@ Oskari.registerLocalization({
                 "colorset_tooltip" : "Ändra färg inställning",
                 "tooltip" : "Passa färg för analys layout"
             },
-
             "buttons" : {
                 "save" : "Lagra",
                 "analyse" : "Fortsätta analys",
                 "data" : "Öka data",
                 "cancel" : "Avbryta"
+            },
+            "filter": {
+                "title": "Suodatin",
+                "description": "Suodatin tasolle ",
+                "refreshButton": "Päivitä suodatin",
+                "bbox": {
+                    "title": "Ikkunarajaus",
+                    "on": "Käytössä",
+                    "off": "Pois käytöstä"
+                }
             },
             "help" : "Anvisning",
             "success": {

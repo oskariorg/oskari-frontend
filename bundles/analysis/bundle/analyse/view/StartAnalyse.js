@@ -79,6 +79,9 @@ function(instance, localization) {
     this.paramsOptionDivs = {};
     this.aggreOptionDivs = {};
 
+    this._filterDialogContent = null;
+    this._filterJson = null;
+
 }, {
     __templates : {
         "content" : '<div class="layer_data"></div>',
@@ -100,8 +103,10 @@ function(instance, localization) {
         "title_extra" : '<div class="analyse_title_extra analyse_output_cont"><div class="extra_title_label"></div></div>',
         "icon_colors" : '<div class="icon-menu"></div>',
         "option" : '<div class="analyse_option_cont analyse_settings_cont">' + '<input type="radio" name="selectedlayer" />' + '<label></label></div>',
-        "methodOptionTool" : '<div class="tool ">' + '<input type="radio" name="method" />' + '<label></label></div>'
-
+        "methodOptionTool" : '<div class="tool ">' + '<input type="radio" name="method" />' + '<label></label></div>',
+        "filterContent" : '<div class="analyse-filter-popup-content"><div class="filter-title"></div></div>',
+        "filterContentBBOX" : '<div class="analyse-filter-popup-bbox"><div class="bbox-title"></div></div>',
+        "filterContentBBOXRadio" : '<input type="radio" name="filter-bbox" />'
     },
     /**
      * @method render
@@ -1044,11 +1049,16 @@ function(instance, localization) {
         var sandbox = this.instance.getSandbox();
         var url = sandbox.getAjaxUrl();
         var selections = me._gatherSelections();
+        var data = {};
+        data.analyse = JSON.stringify(selections);
+        if (this._filterJson) {
+            data.filter = JSON.stringify(this._filterJson);
+        }
 
         // Check that parameters are a-okay
         if (me._checkSelections(selections)) {
             // Send the data for analysis to the backend
-            me.instance.analyseService.sendAnalyseData(JSON.stringify(selections),
+            me.instance.analyseService.sendAnalyseData(data,
                 // Success callback
                 function(response) {
                     if (response) {
@@ -1061,7 +1071,6 @@ function(instance, localization) {
                 }
             );
         }
-
     },
 
     /**
@@ -1149,20 +1158,6 @@ function(instance, localization) {
             me.instance.getSandbox().postRequestByName(rn, [{
                 uuid : uuid
             }, additionalUuids]);
-        });
-    },
-    /**
-     * @method _filterRequest
-     * @private
-     * Request through sandbox for to open metadata info
-     * @param {jQuery} tools  table div where filter icon is located
-     * @param {int} layer_id  layer id for to retreave layer object
-     */
-    _filterRequest : function(tools, layer_id) {
-        tools.find('div.filter').bind('click', function() {
-            // Check params
-
-            alert('TODO: request to filter actions - layer: ' + layer_id);
         });
     },
 

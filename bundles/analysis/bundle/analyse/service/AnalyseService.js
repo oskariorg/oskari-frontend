@@ -51,7 +51,7 @@ function(instance) {
                     x.overrideMimeType("application/j-son;charset=UTF-8");
                 }
             },
-            data : {'analyse': data},
+            data : data,
             success : success,
             error : failure
         });

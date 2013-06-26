@@ -110,6 +110,16 @@ Oskari.registerLocalization({
                 "data" : "Päivitä tietoaineisto",
                 "cancel" : "Poistu"
             },
+            "filter": {
+                "title": "Suodatin",
+                "description": "Suodatin tasolle ",
+                "refreshButton": "Päivitä suodatin",
+                "bbox": {
+                    "title": "Ikkunarajaus",
+                    "on": "Käytössä",
+                    "off": "Pois käytöstä"
+                }
+            },
             "help" : "Ohje",
             "success": {
                 "layerAdded": {
