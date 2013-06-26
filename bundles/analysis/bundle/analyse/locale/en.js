@@ -69,6 +69,9 @@ Oskari.registerLocalization({
              "intersect" : {
                 "label" : "Intersecting layer"
             },
+            "union" : {
+                "label" : "Second layer for union input"
+            },
             "spatial" : {
                 "label" : "Spatial operator",
                 "options" : [{

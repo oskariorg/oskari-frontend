@@ -69,6 +69,9 @@ Oskari.registerLocalization({
             "intersect" : {
                 "label" : "Valittu leikkaava taso"
             },
+            "union" : {
+                "label" : "Valittu yhdistettävä taso"
+            },
             "spatial" : {
                 "label" : "Valittu spatial operaattori",
                 "options" : [{

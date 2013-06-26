@@ -69,6 +69,9 @@ Oskari.registerLocalization({
             "intersect" : {
                 "label" : "Intersect lag"
             },
+             "union" : {
+                "label" : "Andra lag för union input"
+            },
             "spatial" : {
                 "label" : "Spatial operator",
                 "options" : [{

@@ -59,9 +59,11 @@ function(instance, localization) {
     // content options listed in localisations
     this.contentOptionsMap = {};
     this.intersectOptionsMap = {};
+    this.unionOptionsMap = {};
 
     this.contentOptions = {};
     this.intersectOptions = {};
+    this.unionOptions = {};
 
     this.accordion = null;
     this.mainPanel = null;
@@ -90,6 +92,7 @@ function(instance, localization) {
         "aggreOptionTool" : '<div class="tool ">' + '<input type="radio" name="aggre" />' + '<label></label></div>',
         "spatialOptionTool" : '<div class="tool ">' + '<input type="radio" name="spatial" />' + '<label></label></div>',
         "intersectOptionTool" : '<div class="tool ">' + '<input type="radio" name="intersect" />' + '<label></label></div>',
+        "unionOptionTool" : '<div class="tool ">' + '<input type="radio" name="union" />' + '<label></label></div>',
         "title" : '<div class="analyse_title_cont analyse_settings_cont"><div class="settings_buffer_label"></div><input class="settings_buffer_field" type="text"></div>',
         "title_name" : '<div class="analyse_title_name analyse_settings_cont"><div class="settings_name_label"></div><input class="settings_name_field" type="text"></div>',
         "title_color" : '<div class="analyse_title_colcont analyse_output_cont"><div class="output_color_label"></div></div>',
@@ -584,6 +587,10 @@ function(instance, localization) {
             // intersecting layer selection
             me._intersectExtra(extra);
 
+        }else if (method == this.id_prefix+"union") {
+            // union input 2 layer selection
+            me._unionExtra(extra);
+
         }
     },
     /**
@@ -750,6 +757,119 @@ function(instance, localization) {
 
     },
     /**
+     * @method _unionExtra
+     * @private
+     * Add extra parameters for params UI according to method union
+     * @param {jQuery} contentPanel  div to append extra params
+     */
+    _unionExtra : function(contentPanel) {
+        var me = this;
+
+        // Set radiobuttons for selecting union layer
+        var options = [];
+        // Checked data layers
+        if (me.contentOptionDivs) {
+            for (var p in me.contentOptionsMap ) {
+                if (me.contentOptionDivs[p] != undefined) {
+                    // true or false var test = me.contentOptionDivs[p].find('input').prop('checked');
+                    var option = {
+                        id : me.contentOptionsMap[p].id,
+                        label : me.contentOptionsMap[p].label
+                    };
+                    options.push(option);
+                }
+            }
+        }
+
+        me.unionOptions = options;
+        me.unionOptionsMap = {};
+
+        for (var f = 0; f < me.unionOptions.length; f++) {
+            me.unionOptionsMap[me.unionOptions[f].id] = me.unionOptions[f];
+        }
+        // title
+        var title = me.template.title_extra.clone();
+        title.find('.extra_title_label').html(me.loc.union.label);
+        contentPanel.append(title);
+
+        var closureMagic = function(tool) {
+            return function() {
+                var size = contentPanel.find('input[name=aggre]:checked').val();
+                // reset previous setting
+                for (var i = 0; i < me.unionOptions.length; ++i) {
+                    me.unionOptions[i].selected = false;
+                }
+                tool.selected = true;
+
+            };
+        };
+
+        for (var i = 0; i < me.unionOptions.length; ++i) {
+            var option = me.unionOptions[i];
+            var toolContainer = me.template.unionOptionTool.clone();
+            var label = option.label;
+            if (option.width && option.height) {
+                label = label + ' (' + option.width + ' x ' + option.height + 'px)';
+            }
+            toolContainer.find('label').append(label).attr({
+                'for' : option.id,
+                'class' : 'params_radiolabel'
+            });
+            if (option.selected) {
+                toolContainer.find('input').attr('checked', 'checked');
+            }
+            contentPanel.append(toolContainer);
+            toolContainer.find('input').attr({
+                'value' : option.id,
+                'name' : 'union',
+                'id' : option.id
+            });
+            toolContainer.find('input').change(closureMagic(option));
+        }
+
+        //title spatial operator
+        var titlespa = this.template.title_extra.clone();
+        titlespa.find('.extra_title_label').html(this.loc.spatial.label);
+        contentPanel.append(titlespa);
+
+        var closureMagic = function(tool) {
+            return function() {
+                var size = contentPanel.find('input[name=spatial]:checked').val();
+                // reset previous setting
+                for (var i = 0; i < me.spatialOptions.length; ++i) {
+                    me.spatialOptions[i].selected = false;
+                }
+                tool.selected = true;
+
+            };
+        };
+
+        // spatial operators
+        for (var i = 0; i < this.spatialOptions.length; ++i) {
+            var option = this.spatialOptions[i];
+            var toolContainer = this.template.spatialOptionTool.clone();
+            var label = option.label;
+            if (option.width && option.height) {
+                label = label + ' (' + option.width + ' x ' + option.height + 'px)';
+            }
+            toolContainer.find('label').append(label).attr({
+                'for' : option.id,
+                'class' : 'params_radiolabel'
+            });
+            if (option.selected) {
+                toolContainer.find('input').attr('checked', 'checked');
+            }
+            contentPanel.append(toolContainer);
+            toolContainer.find('input').attr({
+                'value' : option.id,
+                'name' : 'spatial',
+                'id' : option.id
+            });
+            toolContainer.find('input').change(closureMagic(option));
+        }
+
+    },
+    /**
      * @method _modifyExtraParameters
      * @private
      * modify parameters data UI according to method
@@ -848,7 +968,10 @@ function(instance, localization) {
 
         // Styles
         selections["style"] = this.getStyleValues();
-
+        // Bbox
+        selections["bbox"] = this.instance.getSandbox().getMap().getBbox();
+        
+        
         return selections;
     },
 
@@ -871,7 +994,8 @@ function(instance, localization) {
         var aggregateFunction = container.find('input[name=aggre]:checked').val();
         aggregateFunction = aggregateFunction && aggregateFunction.replace(this.id_prefix, '');
         // union
-        var unionLayerId = 'other_layer_id'; // TODO: get this from selection
+        var unionLayerId = container.find('input[name=union]:checked').val();
+        unionLayerId = unionLayerId && unionLayerId.replace((this.id_prefix + 'layer_'), '');
         // intersect
         var intersectLayerId = container.find('input[name=intersect]:checked').val();
         intersectLayerId = intersectLayerId && intersectLayerId.replace((this.id_prefix + 'layer_'), '');
