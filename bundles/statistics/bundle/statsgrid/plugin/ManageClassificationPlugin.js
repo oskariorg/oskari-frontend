@@ -9,8 +9,8 @@
 Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin',
 /**
  * @method create called automatically on construction
- * @params config   reserved for future
- * @params locale   localization strings
+ * @params config reserved for future
+ * @params locale localization strings
  *
  *
  * @static
@@ -511,7 +511,11 @@ function(config, locale) {
         this.rangeSlider = slider;
 
         // HTML for the manual classification method.
-        var manualcls = jQuery('<div class="manualBreaks">' + '<input type="text" name="breaksInput" placeholder="' + this._locale.classify.manualPlaceholder + '"></input>' + '</div>');
+        var manualcls = jQuery(
+			'<div class="manualBreaks">' +
+				'<input type="text" name="breaksInput" placeholder="' + this._locale.classify.manualPlaceholder + '"></input>' +
+				'<div class="icon-info"></div>' +
+			'</div>');
         manualcls.find('input[type=button]').click(function(event) {
             me._createColorDialog();
         });
@@ -524,6 +528,12 @@ function(config, locale) {
         }).blur(function() {
             me._sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
         });
+		manualcls.find('.icon-info').click(function(event){
+			// open helpityhelp...
+            var desc =
+				'<p>' + me._locale.classify.info + '</p>';
+            me.showMessage(me._locale.classify.infoTitle, desc);
+		});
         manualcls.hide();
 
         var colorsButton = jQuery('<input type="button" value="' + me._locale.colorset.button + '" />');
@@ -567,6 +577,27 @@ function(config, locale) {
         // Hide Classify dialog
         this._visibilityOff();
 
+    },
+	
+	/**
+     * @method showMessage
+     * Shows user a message with ok button
+     * @param {String} title popup title
+     * @param {String} message popup message
+     */
+    showMessage : function(title, message) {
+        // Oskari components aren't available in a published map.
+        if (!this._published) {
+            var loc = this._locale;
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            okBtn.setTitle(loc.buttons.ok);
+            okBtn.addClass('primary');
+            okBtn.setHandler(function() {
+                dialog.close(true);
+            });
+            dialog.show(title, message, [okBtn]);
+        }
     },
 
     /**

@@ -365,11 +365,12 @@ function(config) {
                             drawLayer.removeFeatures([drawLayer.features[i]]);
                         }
                     }
-                    me._removePopup();
+                    
                     if (!found) {
                         drawLayer.addFeatures([event.features[0]]);
                         me._highlightCtrl.highlight(event.features[0]);
 
+                        me._removePopup();
                         me._addPopup(event);
                     }
                     drawLayer.redraw();
@@ -656,7 +657,7 @@ function(config) {
     _addPopup: function(event) {
         var content = event.features[0].attributes['kuntanimi'];
         this._popup = new OpenLayers.Popup('mapstatsHover',
-            this._map.getLonLatFromPixel(new OpenLayers.Pixel(event.xy.x, event.xy.y)),
+            this._map.getLonLatFromPixel(new OpenLayers.Pixel(event.xy.x + 5, event.xy.y + 5)),
             new OpenLayers.Size(100, 100),
             content
         );

@@ -14,15 +14,6 @@ function(instance) {
 	this.instance = instance;
 	this.localization = instance.getLocalization('popup');
 
-	this.templateContent = jQuery('<div></div>');
-	this.templateEditDialogContent = jQuery('<div></div>');
-
-	this.templateEditButtons = jQuery('<div></div>');
-	this.templateToolsButton = jQuery('<div style= "display: inline-block; border: 1px solid;"></div>');
-
-	this.templateInstructions = jQuery("<div class='instructions' style= 'padding: 20px 0px 0px 0px;'></div>");
-	this.templateLink = jQuery("<div class='link'><a href='JavaScript:void(0);'></a></div>" + "</div>");
-
 	var me = this;
     var selectionPlugin = me.instance.getSelectionPlugin();
 	this.buttons = {
@@ -67,7 +58,21 @@ function(instance) {
             }
         }
     };
+
+    /* templates */
+    this.template = {};
+    for (p in this.__templates ) {
+        this.template[p] = jQuery(this.__templates[p]);
+    }
 }, {
+
+    __templates : {
+        "wrapper" : '<div></div>',
+        "toolsButton" : '<div style= "display: inline-block; border: 1px solid;"></div>', 
+        "instructions" : '<div class="instructions" style="padding: 20px 0px 0px 0px;"></div>',
+        "link" : '<div class="link"><a href="javascript:void(0);"></a></div></div>' 
+    },
+
 	/**
 	 * @method showSelectionTools
 	 * Handles tool button click -> opens selection tool dialog
@@ -93,10 +98,10 @@ function(instance) {
         //Main dialog
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         var popupLoc = this.localization.title;
-        var content = this.templateContent.clone();
+        var content = me.template.wrapper.clone();
 
         for(var buttonName in this.buttons) {
-        	var btnContainer = this.templateToolsButton.clone();
+        	var btnContainer = me.template.toolsButton.clone();
         	var button = this.buttons[buttonName];
         	btnContainer.attr("title", button.tooltip);
         	btnContainer.addClass(button.iconCls);
@@ -104,7 +109,7 @@ function(instance) {
         	content.append(btnContainer);
         }
 
-        var instructions = this.templateInstructions.clone();
+        var instructions = me.template.instructions.clone();
         instructions.append(this.localization.instructions);
         content.append(instructions);
 
@@ -128,9 +133,9 @@ function(instance) {
 		var editDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         var title = me.localization.title;
 
-        var dialogContent = me.templateEditDialogContent.clone();
+        var dialogContent = me.template.wrapper.clone();
 
-        var templateButtons = me.templateEditButtons.clone();
+        var templateButtons = me.template.wrapper.clone();
         var editButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
         editButton.setTitle(me.localization.button.edit);
@@ -151,7 +156,7 @@ function(instance) {
         });
         dialogContent.append(templateButtons);
 
-        var addMoreLink = me.templateLink.clone();
+        var addMoreLink = me.template.link.clone();
         addMoreLink.append(me.localization.link.title);
         addMoreLink.bind('click', function() {
             editDialog.close();

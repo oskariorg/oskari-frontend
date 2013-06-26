@@ -1,5 +1,5 @@
 Oskari.registerLocalization({
-    "lang" : "fi",
+    "lang" : "en",
     "key" : "Analyse",
     "value" : {
         "title" : "Analysis",
@@ -55,19 +55,22 @@ Oskari.registerLocalization({
                 }  ]
             },
              "buffer_size" : {
-                "label" : "Buffer size (m)",
+                "label" : "Buffer size (meters)",
                 "tooltip" : "Enter buffer size"
             },
              "analyse_name" : {
-                "label" : "Name of Analyse",
-                "tooltip" : "Enter analyse name"
+                "label" : "Name of analysis",
+                "tooltip" : "Enter analysis name"
             },
              "settings" : {
                 "label" : "Parameters",
-                "tooltip" : "Enter parameters for analyse"
+                "tooltip" : "Enter parameters for analysis"
             },
              "intersect" : {
                 "label" : "Intersecting layer"
+            },
+            "union" : {
+                "label" : "Second layer for union input"
             },
             "spatial" : {
                 "label" : "Spatial operator",
@@ -92,14 +95,14 @@ Oskari.registerLocalization({
                     "label" : "None"
                 }, {
                     "id" : "oskari_analyse_select",
-                    "label" : "Use list"
+                    "label" : "Choose.."
                 }]
             },
                "output" : {
                 "label" : "Layout",
                 "color_label" : "Select colors:",
                 "colorset_tooltip" : "Modify colors",
-                "tooltip" : "Setup colors for analyse layout"
+                "tooltip" : "Setup colors for analysis layout"
             },
 
 
@@ -112,10 +115,14 @@ Oskari.registerLocalization({
             "help" : "Help",
             "error" : {
                 "title" : "Error",
+                "invalidSetup": "Invalid parameters",
+                "noParameters": "No parameters set",
+                "noLayer": "No layer / features selected",
+                "invalidMethod": "Unknown method: ",
                 "bufferSize" : "Error in buffer size",
-                "nohelp" : "No quide found",
-                "saveFailed" : "Storinig analysis failde. Try once more later.",
                 "illegalCharacters" : "No alfabets - use digits"
+                "nohelp" : "No guide found",
+                "saveFailed" : "Storing analysis failed. Try again a little later."
             }
         },
         "StartView" : {

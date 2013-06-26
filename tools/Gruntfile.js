@@ -45,8 +45,8 @@ module.exports = function(grunt) {
                 tasks: ['karma:dev:run']
             },
             sass: {
-                files: ['../bundles/**/*.scss', '../applications/**/*.scss'],
-                tasks: ['compileAppCSS']
+                files: ['../bundles/**/scss/*.scss', '../applications/**/scss/*.scss'],
+                tasks: ['compileDev']
             }
         },
         sprite: {
@@ -274,25 +274,36 @@ module.exports = function(grunt) {
             grunt.config.set("sprite." + appName + ".options", options);
         }
 
-        // scss to css conversion
-        grunt.task.run('compileAppCSS');
-
         grunt.task.run('validate');
         grunt.task.run('copy');
         grunt.task.run('compile');
+        grunt.task.run('compileAppCSS');
         grunt.task.run('sprite');
         grunt.task.run('yuidoc');
         grunt.task.run('mddocs');
     });
 
     grunt.registerTask('packageopenlayer', 'Package openlayers according to packages', function(packages) {
+        var fs = require('fs');
+
         if(!packages) {
-            grunt.fail.fatal('Missing parameter\nUsage: grunt packageopenlayer:"../path/to/profile.cfg"', 1);
+            grunt.log.writeln("No cfg packages given, reading all cfg files in current directory.");
+            packages = [];
+            var files = fs.readdirSync(process.cwd()),
+                file = "";
+            for(var i in files) {
+                file = files[i];
+                if (file.indexOf('.cfg') != -1) {
+                    packages.push(file);
+                }
+            }
+        } else {
+            // transform comma separeted configs string to array
+            packages = packages.split(',');
         }
 
         console.log('Running openlayers packager...');
-        var fs = require('fs'),
-            path = require('path'),
+        var path = require('path'),
             wrench = require('wrench'),
             sourceDirectory = path.join(process.cwd(), "/components/openlayers/lib/"),
             outputFilenamePrefix = "OpenLayers.",
@@ -315,9 +326,6 @@ module.exports = function(grunt) {
             LAST = "[last]",
             INCLUDE = "[include]",
             EXCLUDE = "[exclude]";
-
-        // transform comma separeted configs string to array
-        packages = packages.split(',');
 
         // read cfg files
         for(i = 0, ilen = packages.length; i < ilen; i += 1) {
@@ -432,17 +440,21 @@ module.exports = function(grunt) {
 			}
 			if (!varsFileExists) {
 				grunt.fail.fatal("applicationVariables.scss not found, looked in:\n" + invalidPaths, 1);
+			} else {
+				grunt.log.writeln("Found valid applicationVariables.scss path:\n" + varsDirectory);
 			}
 		}
 
 
 		// get application scss files
+		/*
 		grunt.log.writeln("Getting application SCSS files");
 		var vars = fs.readFileSync(varsDirectory + "/_applicationVariables.scss"),
 			scssFiles = fs.readdirSync(varsDirectory + "/scss/");
+		*/
 
 		// compile to css
-		grunt.log.writeln("Compiling app SCSS to CSS");
+		grunt.log.writeln("Compiling app SCSS to CSS, using " + varsDirectory + "/scss/ as SCSS folder.");
 		grunt.config.set(
 			'sass.' + appName + '.files',
 			[{
@@ -454,24 +466,17 @@ module.exports = function(grunt) {
 			}]
 
 		);
+		
+		grunt.task.run('sass');
 
 		// build bundle css files
 		// hackhack, copy applicationVariables to a 'static' location
 		// TODO change to copy
 		fs.createReadStream(varsDirectory + '/_applicationVariables.scss').pipe(fs.createWriteStream('../applications/_applicationVariables.scss'));
 
-		grunt.config.set(
-			'sass.' + appName + "-bundles" + '.files',
-			[{
-				"expand": true,
-				"cwd": "../bundles/",
-				"src": "**/*.scss",
-				"dest": '../resources/',
-				"rename": function(dest,src) {return dest+src.replace("/scss/","/css/")},
-				"ext": '.css'
-			}]
-		);
-		grunt.task.run('sass');
+		grunt.log.writeln("Compiling bundle CSS");
+		
+		grunt.task.run('compileBundleCSS');
 
 
 		if (this.data && this.data.options) {
@@ -489,8 +494,24 @@ module.exports = function(grunt) {
 		}
 
 	});
+	
+	grunt.registerTask("compileBundleCSS", "Compile bundle SASS to CSS", function(){
+		grunt.config.set(
+			'sass.' + "test" + "-bundles" + '.files',
+			[{
+				"expand": true,
+				"cwd": "../bundles/",
+				"src": "**/*.scss",
+				"dest": '../resources/',
+				"rename": function(dest,src) {return dest+src.replace("/scss/","/css/")},
+				"ext": '.css'
+			}]
+		);
+		grunt.task.run('sass');
+	});
 
 	grunt.registerMultiTask("minifyAppCSS", "Concatenate and minify application css", function() {
+        var done = this.async();
 		grunt.log.writeln("Concatenating and minifying css");
 
 		var cssPacker = require('uglifycss'),
@@ -505,6 +526,7 @@ module.exports = function(grunt) {
 
             var value = '';
 			// read files to value
+			grunt.log.writeln("Concatenating and minifying " + files.length + " files");
             for (var i = 0; i < files.length; ++i) {
                 if (!fs.existsSync(files[i])) {
                     grunt.fail.fatal('Couldnt locate ' + files[i]);
@@ -514,6 +536,7 @@ module.exports = function(grunt) {
             }
 			// minify value
             var packed = cssPacker.processString(value);
+			grunt.log.writeln("Writing packed CSS to " + outputFile);
 
 			// write value to outputfile
             fs.writeFile(outputFile, packed, function(err) {
@@ -521,12 +544,15 @@ module.exports = function(grunt) {
                 if (err && err.code !== "ENOENT") {
                     grunt.fail.fatal('Error writing packed CSS: ' + err);
                 }
+                done();
             });
-        }
+        };
 
 		// gather css files from bundles' minifierAppSetups
+		grunt.log.writeln("Getting files from processedAppSetups");
 		for (var i = 0; i < processedAppSetup.length; ++i) {
-			cssfiles = cssfiles.concat(parser.getFilesForComponent(processedAppSetup[i], 'css'));
+			var pasFiles = parser.getFilesForComponent(processedAppSetup[i], 'css');
+			cssfiles = cssfiles.concat(pasFiles);
 		}
 		this.minifyCSS(cssfiles, options.dest + 'oskari.min.css');
 	});

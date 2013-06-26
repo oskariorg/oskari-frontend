@@ -69,6 +69,9 @@ Oskari.registerLocalization({
             "intersect" : {
                 "label" : "Intersect lag"
             },
+             "union" : {
+                "label" : "Andra lag för union input"
+            },
             "spatial" : {
                 "label" : "Spatial operator",
                 "options" : [{
@@ -109,6 +112,12 @@ Oskari.registerLocalization({
                 "cancel" : "Avbryta"
             },
             "help" : "Anvisning",
+            "success": {
+                "layerAdded": {
+                    "title": "Karttataso {layer} lisätty",
+                    "message": "Löydät tason Aineisto-paneelista"
+                }
+            },
             "error" : {
                 "title" : "Fel",
                 "bufferSize" : "Fel i zon storlek",

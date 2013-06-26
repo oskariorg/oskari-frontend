@@ -16,11 +16,15 @@ function(instance, conf, locale) {
     this.mapModule = null;
     this.pluginName = null;
     this.conf = conf;
+    if(!this.conf) {
+        this.conf = {};
+    }
     this.locale = locale;
     this.headerLayer = null;
     this.printAreaLayer = null;
     this.boxesLayer = null;
     this._map = null;
+    
 }, {
     __name : "LegendPlugin",
     __qname : "Oskari.mapframework.bundle.printout.plugin.LegendPlugin",
@@ -102,19 +106,7 @@ function(instance, conf, locale) {
     init : function() {
         // Default style for print area layer
         var smPrintArea = new OpenLayers.StyleMap({
-            'default' : {
-                strokeColor : "#00FF00",
-                strokeOpacity : 1,
-                strokeWidth : 1,
-                fillColor : "#FFFFFF",
-                fillOpacity : 0.2,
-                //labelAlign : "l",
-                //label : "${name}",
-                fontColor : "#000000",
-                fontSize : "12px",
-                fontFamily : "SansSerif",
-                fontWeight : "bold"
-            }
+            'default' : this.conf.printAreaDefault
         });
 
         this.printAreaLayer = new OpenLayers.Layer.Vector("PrintArea", {
@@ -123,19 +115,7 @@ function(instance, conf, locale) {
 
         // Default style for legend box and legend title layer
         var smHeader = new OpenLayers.StyleMap({
-            'default' : {
-                strokeColor : "#00FF00",
-                strokeOpacity : 1,
-                strokeWidth : 0,
-                fillColor : "#FFFFFF",
-                fillOpacity : 0.7,
-                labelAlign : "l",
-                label : "${name}",
-                fontColor : "#000000",
-                fontSize : "12px",
-                fontFamily : "SansSerif",
-                fontWeight : "bold"
-            }
+            'default' : this.conf.legendBoxDefault
         });
 
         this.headerLayer = new OpenLayers.Layer.Vector("LegendHeader", {
@@ -143,19 +123,7 @@ function(instance, conf, locale) {
         });
         // Default style for legend boxes layer
         var smBoxes = new OpenLayers.StyleMap({
-            'default' : {
-                strokeColor : "#000000",
-                strokeOpacity : 1,
-                strokeWidth : 1,
-                fillColor : "${color}",
-                fillOpacity : 1.0,
-                label : "${name}",
-                labelAlign : "l",
-                labelXOffset : 0,
-                labelYOffset : 5,
-                fontFamily : "Arial",
-                fontSize : "10px"
-            }
+            'default' : this.conf.colorBoxDefault
         });
 
         this.boxesLayer = new OpenLayers.Layer.Vector("LegendBoxes", {
@@ -196,25 +164,24 @@ function(instance, conf, locale) {
         var map = this.getMapModule().getMap();
         if (map.getLayerIndex(this.printAreaLayer) == -1) {
             map.addLayer(this.printAreaLayer);
-            map.setLayerIndex(this.printAreaLayer, 1004);
+            map.setLayerIndex(this.printAreaLayer, 10004);
         } else {
-            map.raiseLayer(this.printAreaLayer, 100);
+            map.raiseLayer(this.printAreaLayer, 101);
         }
 
         if (map.getLayerIndex(this.headerLayer) == -1) {
             map.addLayer(this.headerLayer);
-            map.setLayerIndex(this.headerLayer, 1005);
+            map.setLayerIndex(this.headerLayer, 10005);
         } else {
-            map.raiseLayer(this.headerLayer, 100);
+            map.raiseLayer(this.headerLayer, 102);
         }
 
         if (map.getLayerIndex(this.boxesLayer == -1)) {
             map.addLayer(this.boxesLayer);
-            map.setLayerIndex(this.boxesLayer, 1006);
+            map.setLayerIndex(this.boxesLayer, 10006);
         } else {
-            map.raiseLayer(this.boxesLayer, 100);
+            map.raiseLayer(this.boxesLayer, 103);
         }
-        
 
         // remove old, if any
         this.clearLegendLayers();
@@ -270,20 +237,38 @@ function(instance, conf, locale) {
         var width = Number(coords[1][0]) - Number(coords[0][0]);
         var height = Number(coords[2][1]) - Number(coords[1][1]);
 
-        // Pixel scale  TODO: check title text for to  multirow
-        var pix2m = width / pixel_width;
+        // Split long title row - max lenght is this.conf.general.charsInrow
+        var titles = [];
+        if (title.length > this.conf.general.charsInrow) {
+            var titlesplit = title.split(" ");
+            var titletemp = "";
+            for (var i = 0; i < titlesplit.length; i++) {
+
+                if ((titletemp.length + titlesplit[i].length + 1) < this.conf.general.charsInrow) {
+                    titletemp = titletemp + titlesplit[i] + " ";
+                } else {
+                    titles.push(titletemp);
+                    titletemp = titlesplit[i];
+                }
+
+            }
+            if(titletemp.length > 0) titles.push(titletemp);
+        } else {
+            titles.push(title);
+        }
 
         // Use longer side
         var lside = width;
         if (height > width)
             lside = height;
 
-        // legend height in meters
-        var l_height = 0.25 * lside;
-        // Legend width in meters
-        var l_width = 0.25 * lside;
 
-        var box_size = l_height / (ranges.length + 1);
+        // legend height in meters based on # of color box rows and map area size
+        var l_height = this.conf.general.legendRowHeight * lside * (ranges.length + titles.length + 1);
+        // Legend width in meters
+        var l_width = this.conf.general.legendWidth * lside;
+
+        var box_size = l_height / (ranges.length + titles.length + 1);
 
         var lcoord = [];
         // Legend LL
@@ -320,7 +305,8 @@ function(instance, conf, locale) {
             "print_area" : acoord,
             "bbox" : lcoord,
             "rangebox_size" : box_size,
-            "properties" : properties
+            "properties" : properties,
+            "titles" : titles
         }
 
         return legend_box;
@@ -374,17 +360,20 @@ function(instance, conf, locale) {
         var feature_bbox = new OpenLayers.Feature.Vector(polygon, attributes);
         me.headerLayer.addFeatures([feature_bbox]);
 
-        //Title
-        var point = coords[0].clone();
-        var label_point = new OpenLayers.Geometry.Point(point.x + (0.1 * legend_geom.rangebox_size), point.y - (legend_geom.rangebox_size) / 2.0);
+        //Title - add title rows
+        var titles = legend_geom.titles;
+        for (var i = 0; i < titles.length; i++) {
+            var point = coords[0].clone();
+            var label_point = new OpenLayers.Geometry.Point(point.x + (0.2 * legend_geom.rangebox_size), point.y - ((i*legend_geom.rangebox_size)+(legend_geom.rangebox_size / 2.0)));
 
-        // create some attributes for the feature
-        var pattributes = {
-            "name" : title
-        };
+            // create some attributes for the feature
+            var pattributes = {
+                "name" : titles[i]
+            };
 
-        var feature_label = new OpenLayers.Feature.Vector(label_point, pattributes);
-        me.headerLayer.addFeatures([feature_label]);
+            var feature_label = new OpenLayers.Feature.Vector(label_point, pattributes);
+            me.headerLayer.addFeatures([feature_label]);
+        }
         me.headerLayer.redraw();
 
     },
@@ -401,13 +390,14 @@ function(instance, conf, locale) {
         var myempty = '\0';
 
         var coords = legend_geom.bbox;
+        var titles = legend_geom.titles;
         var box_size = legend_geom.rangebox_size;
-        var box_insize = 0.9 * legend_geom.rangebox_size;
+        var box_insize = 0.8 * legend_geom.rangebox_size;
         var point = coords[0].clone();
 
         // Loop ranges
-        var x_LU = point.x + (0.1 * box_size);
-        var y_LU = point.y - box_insize;
+        var x_LU = point.x + (0.2 * box_size);
+        var y_LU = point.y - (box_size * titles.length);
         // this is for header label space
 
         for (var i = 0; i < ranges.length; i++) {

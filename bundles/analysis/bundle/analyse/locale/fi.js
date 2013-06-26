@@ -69,6 +69,9 @@ Oskari.registerLocalization({
             "intersect" : {
                 "label" : "Valittu leikkaava taso"
             },
+            "union" : {
+                "label" : "Valittu yhdistettävä taso"
+            },
             "spatial" : {
                 "label" : "Valittu spatial operaattori",
                 "options" : [{
@@ -108,6 +111,12 @@ Oskari.registerLocalization({
                 "cancel" : "Poistu"
             },
             "help" : "Ohje",
+            "success": {
+                "layerAdded": {
+                    "title": "Karttataso {layer} lisätty",
+                    "message": "Löydät tason Aineisto-paneelista"
+                }
+            },
             "error" : {
                 "title" : "Virhe",
                 "invalidSetup": "Virheellisiä parametrejä",

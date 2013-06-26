@@ -54,12 +54,12 @@
 .statsgrid-csv-button {
   position: absolute;
   left: 10px;
-  bottom: 10px;
-}
+  bottom: 10px; }
+
 .statsgrid-variable {
   float: left;
-  clear: both;
-}
+  clear: both; }
+
 .statsgrid .indicator-cont {
   float: left;
   position: relative;
@@ -104,21 +104,18 @@
   height: 80%; }
 
 .statsgrid-totals-label {
-  font-weight: bold;
-}
-.statsgrid-show-total-selects label,
-.statsgrid-show-row-selects label {
-  margin-left: 5px;
-}
+  font-weight: bold; }
+
+.statsgrid-show-total-selects label, .statsgrid-show-row-selects label {
+  margin-left: 5px; }
+
 .statsgrid-show-row-selects {
   border-top: solid 1px black;
-  padding-top: 5px;
-}
+  padding-top: 5px; }
 
 /**
  * Style the drop-down menu here since the plugin stylesheet mostly contains structural CSS.
  */
-
 .slick-header-menu {
   border: 1px solid #999;
   background: #fcfcfc;
@@ -129,29 +126,26 @@
   -ms-box-shadow: 2px 2px 2px silver;
   box-shadow: 2px 2px 2px silver;
   min-width: 100px;
-  z-index: 20;
-}
+  z-index: 20; }
 
 .slick-header-menuitem {
   padding: 2px 4px;
   border: 1px solid transparent;
-  border-radius: 3px;
-}
+  border-radius: 3px; }
 
 .slick-header-menuitem:hover {
   border-color: silver;
-  background: white;
-}
+  background: white; }
 
 .slick-header-menuitem-disabled {
   border-color: transparent !important;
-  background: inherit !important;
-}
+  background: inherit !important; }
 
 .icon-help {
-  background-image: url(/Oskari/libraries/slickgrid/images/help.png);
-}
+  background-image: url(/Oskari/libraries/slickgrid/images/help.png); }
+
+.grid-canvas .slick-group-toggle {
+  display: none; }
 
 .statsgrid-highlight-row {
-  background-color: yellow;
-}
+  background-color: yellow; }

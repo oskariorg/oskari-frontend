@@ -30,8 +30,7 @@ div.featuredataplugin.mapplugin {
   font-weight: bold;
   border: 1px solid;
   padding: 5px;
-  z-index: 15000;
- }
+  z-index: 15000; }
 
 div.flyout-resizer {
   height: 16px;
