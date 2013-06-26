@@ -37,6 +37,9 @@
                 "mapstats": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
+                "mapanalysis": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                },
                 "service-base": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
@@ -399,6 +402,18 @@
             "Import-Bundle": {
                 "statsgrid": {
                     "bundlePath": "../../../packages/statistics/bundle/"
+                }
+            }
+        }
+    },
+      {
+        "title": "Analyse",
+        "bundlename": "analyse",
+        "bundleinstancename": "analyse",
+        "metadata": {
+            "Import-Bundle": {
+                "analyse": {
+                    "bundlePath": "../../../packages/analysis/bundle/"
                 }
             }
         }

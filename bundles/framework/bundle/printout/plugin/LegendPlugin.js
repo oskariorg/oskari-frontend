@@ -16,6 +16,9 @@ function(instance, conf, locale) {
     this.mapModule = null;
     this.pluginName = null;
     this.conf = conf;
+    if(!this.conf) {
+        this.conf = {};
+    }
     this.locale = locale;
     this.headerLayer = null;
     this.printAreaLayer = null;

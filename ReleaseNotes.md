@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.13
+
+### mapmodule plugin
+
+A new MapSizeChangedEvent is sent when map size is changed (event is sent on mapmodule.updateSize() function call which should always be called if the map size is changed programmatically)
+
 ## 1.12
 
 ### mapmodule plugin
@@ -16,13 +22,19 @@ Highlight/select controls are now disabled when not in the stats mode.
 
 Clicking on an area on the map highlights the corresponding row in the grid and scrolls to display it as the topmost row.
 
+Generic improvements on statistic mode handling
+
 ### statsgrid/ManageStatsPlugin
 
-There is now a possibility to uncheck some of the municipalities. This affects to the statistical variables. This feature can be swithced on from header row drop down list
+There is now a possibility to uncheck some of the municipalities. This affects to the statistical variables. This feature can be switched on from header row drop down list
 
 ### mapstats bundle
 
 Hovering over an area on the map sends a request to get tooltip info which is then shown over the area.
+
+### printout bundle
+
+Improvements for statistics legend handling
 
 ## 1.11
 
