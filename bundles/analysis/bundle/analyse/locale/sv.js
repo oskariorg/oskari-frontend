@@ -111,13 +111,16 @@ Oskari.registerLocalization({
                 "cancel" : "Avbryta"
             },
             "filter": {
-                "title": "Suodatin",
+                "title": "Suodatus",
                 "description": "Suodatin tasolle ",
                 "refreshButton": "Päivitä suodatin",
                 "bbox": {
                     "title": "Ikkunarajaus",
                     "on": "Käytössä",
                     "off": "Pois käytöstä"
+                },
+                "values": {
+                    "title": "Suodatin"
                 }
             },
             "help" : "Anvisning",

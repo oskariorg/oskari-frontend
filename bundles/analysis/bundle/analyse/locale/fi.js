@@ -111,13 +111,22 @@ Oskari.registerLocalization({
                 "cancel" : "Poistu"
             },
             "filter": {
-                "title": "Suodatin",
+                "title": "Suodatus",
                 "description": "Suodatin tasolle ",
                 "refreshButton": "Päivitä suodatin",
                 "bbox": {
                     "title": "Ikkunarajaus",
                     "on": "Käytössä",
                     "off": "Pois käytöstä"
+                },
+                "values": {
+                    "title": "Suodatin",
+                    "placeholders": {
+                        "attribute": "Attribuutti",
+                        "boolean": "Looginen operaattori",
+                        "operator": "Operaattori",
+                        "attribute-value": "Arvo"
+                    }
                 }
             },
             "help" : "Ohje",

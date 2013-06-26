@@ -12,15 +12,28 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             '</div>',
         "filterContentBBOX" : '<div class="analyse-filter analyse-filter-popup-bbox">' +
                 '<div class="bbox-title"></div>' +
-                '<div class="bbox-radio bbox-on">' +
-                    '<input id="analyse-filter-bbox-on" type="radio" name="filter-bbox" value="true" />' +
-                    '<label for="analyse-filter-bbox-on"></label>' +
+                '<div class="bbox-radio">' +
+                    '<div class="bbox-on">' +
+                        '<input id="analyse-filter-bbox-on" type="radio" name="filter-bbox" value="true" />' +
+                        '<label for="analyse-filter-bbox-on"></label>' +
+                    '</div>' +
+                    '<div class="bbox-off">' +
+                        '<input id="analyse-filter-bbox-off" type="radio" name="filter-bbox" value="false" />' +
+                        '<label for="analyse-filter-bbox-off"></label>' +
+                    '</div>' +
                 '</div>' +
-                '<div class="bbox-radio bbox-off">' +
-                    '<input id="analyse-filter-bbox-off" type="radio" name="filter-bbox" value="false" />' +
-                    '<label for="analyse-filter-bbox-off"></label>' +
-                '</div>' +
-            '</div>'
+            '</div>',
+        "filterContentValues": '<div class="analyse-filter analyse-filter-popup-values">' +
+                '<div class="values-title"></div>' +
+            '</div>',
+        "filterContentOption": '<div class="filter-option">' +
+                '<select class="attribute"></select>' +
+                '<select class="operator"></select>' +
+                '<input name="attribute-value" type="text"></input>' +
+                '<div class="add-filter-option">+</div>' +
+            '</div>',
+        "filterBooleanOption": '<select class="boolean"></select>',
+        "option": '<option></option>'
     },
 
     /**
@@ -73,9 +86,11 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
     _createFilterDialog: function(layer_id) {
         var me = this,
             popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-            closeButton = popup.createCloseButton(this.loc.buttons.cancel);
+            closeButton = popup.createCloseButton(this.loc.buttons.cancel),
+            // Update the filter values
             updateButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-            popupContent = this._getFilterDialogContent(layer_id);
+            popupContent = this._getFilterDialogContent(layer_id),
+            popupTitle = this.loc.filter.description + layer_id;
 
         updateButton.setTitle(this.loc.filter.refreshButton);
         updateButton.addClass('primary');
@@ -85,7 +100,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             me.setFilterJson(filterJson);
         });
 
-        popup.show(this.loc.filter.title, popupContent, [closeButton, updateButton]);
+        popup.show(popupTitle, popupContent, [closeButton, updateButton]);
         popup.makeModal();
     },
 
@@ -98,17 +113,104 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         }
 
         var content = jQuery(this.__filterTemplates['filterContent']);
-        content.find('div.filter-title').html('<h4>' + this.loc.filter.description + layer_id + '</h4>');
 
+        // The BBOX filter selection
         var bboxSelection = jQuery(this.__filterTemplates['filterContentBBOX']);
         bboxSelection.find('div.bbox-title').html('<h4>' + this.loc.filter.bbox.title + '</h4>');
         bboxSelection.find('div.bbox-on').find('label').html(this.loc.filter.bbox.on);
         bboxSelection.find('div.bbox-off').find('label').html(this.loc.filter.bbox.off);
         content.append(bboxSelection);
 
-        this._filterDialogContent = content;
+        // Filter values selection
+        var valuesSelection = jQuery(this.__filterTemplates['filterContentValues']);
+        valuesSelection.find('div.values-title').html('<h4>' + this.loc.filter.values.title + '</h4>');
 
+        // Add a filter
+        var filterOption = this._addAttributeFilter();
+        valuesSelection.append(filterOption);
+
+        content.append(valuesSelection);
+
+        this._filterDialogContent = content;
         return content;
+    },
+
+    /**
+     * Adds an attribute based filter selection to the UI.
+     *
+     * @method _addAttributeFilter
+     * @private
+     */
+    _addAttributeFilter: function() {
+        var me = this;
+
+        var filterOption = jQuery(this.__filterTemplates['filterContentOption']);
+
+        var attrSelect = filterOption.find('select.attribute');
+        var attrPlaceHolder = this.loc.filter.values.placeholders.attribute;
+        this._appendOptionValues(attrSelect, attrPlaceHolder);
+
+        var opSelect = filterOption.find('select.operator');
+        var opPlaceHolder = this.loc.filter.values.placeholders.operator;
+        this._appendOptionValues(opSelect, opPlaceHolder);
+
+        filterOption.find('input[name=attribute-value]').
+            attr('placeholder', this.loc.filter.values.placeholders['attribute-value']);
+
+        filterOption.find('div.add-filter-option').on('click', function(e) {
+            var elem = jQuery(this);
+            me._changeAttributeFilter(elem);
+        })
+
+        return filterOption;
+    },
+
+    /**
+     * Removes the plus button and creates a new attribute filter,
+     * combining it with the previous one with a logical operator.
+     *
+     * @method _changeAttributeFilter
+     * @private
+     */
+    _changeAttributeFilter: function(element) {
+        var boolOption = jQuery(this.__filterTemplates['filterBooleanOption']);
+        var boolPlaceHolder = this.loc.filter.values.placeholders.boolean;
+        this._appendOptionValues(boolOption, boolPlaceHolder);
+
+        var parent = element.parent();
+        parent.append(boolOption);
+
+        var filterList = element.parents('div.analyse-filter-popup-values');
+        var newFilter = this._addAttributeFilter();
+        filterList.append(newFilter);
+        
+        element.remove();
+    },
+
+    /**
+     * Appends option values to the given select element.
+     *
+     * @method _appendOptionValues
+     * @private
+     * @param {jQuery object} select the select element where the options are to be applied
+     * @param {String} placeHolder the first dummy option with no value
+     * @param {Array[Object]} values the values that are to be applied to the select.
+     *          Should have 'id' and 'name' keys (optional).
+     */
+    _appendOptionValues: function(select, placeHolder, values) {
+        // Append the first, empty value to work as a placeholder
+        var option = jQuery(this.__filterTemplates['option']);
+        option.attr('value', '');
+        option.html(placeHolder);
+        select.append(option);
+
+        // Iterate the list of given values
+        for (var i = 0; values && i < values.length; ++i) {
+            option = jQuery(this.__filterTemplates['option']);
+            option.attr('value', values[i].val);
+            option.html(values[i].name);
+            select.append(option);
+        }
     },
 
     /**
