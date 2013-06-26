@@ -226,7 +226,7 @@ function(instance) {
     _layerListComparator : function(a, b, groupingMethod) {
         var nameA = a[groupingMethod]().toLowerCase();
         var nameB = b[groupingMethod]().toLowerCase();
-        if(nameA == nameB) {
+        if(nameA == nameB && (a.getName() && b.getName())) {
             nameA = a.getName().toLowerCase();
             nameB = b.getName().toLowerCase();          
         }

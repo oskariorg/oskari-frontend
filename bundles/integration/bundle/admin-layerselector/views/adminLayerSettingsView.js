@@ -432,6 +432,7 @@ define([
             var me = this,
                 element = jQuery(e.currentTarget),
                 addClass = element.parents('.admin-add-group'),
+                layerClass = element.parents('.admin-add-layer').attr('data-id'),
                 accordion = element.parents('.accordion');
 
             // url for backend action_route
@@ -447,6 +448,10 @@ define([
 
             if (layerType === 'groupMap') {
                 params += "&group_map=" + true;
+            }
+
+            if (layerClass) {
+                params += "&layerclass_id=" + layerClass.replace('base_', '');
             }
 
             var url = baseUrl + action_route + params;
@@ -473,11 +478,41 @@ define([
                     alert(' false ');
                 }
             });
-
         },
 
         removeGroup: function(e) {
+            var me = this,
+                element = jQuery(e.currentTarget),
+                editForm = element.parents('.admin-add-layer').attr('data-id'),
+                accordion = element.parents('.accordion');
 
+            // url for backend action_route
+            var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
+                action_route = "&action_route=DeleteOrganization",
+                layerClassId = editForm.replace('base_', ''),
+                params = "&layercl_id=" + layerClassId;
+
+            var url = baseUrl + action_route + params;
+            // make AJAX call
+            jQuery.ajax({
+                type : "GET",
+                dataType: 'json',
+                beforeSend: function(x) {
+                    if(x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
+                url : url,
+                success : function(resp) {
+                    accordion.trigger({
+                        type: "adminAction",
+                        command: 'deleteGroup'
+                    })
+                },
+                error : function(jqXHR, textStatus) {
+                    alert(' false ');
+                }
+            });
         },
 
         /**

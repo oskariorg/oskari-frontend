@@ -172,7 +172,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             mapLayerService.updateLayer(e.layerData.id, e.layerData);
         }
         // load the map layers again
-        else if(e.command == "addGroup") {
+        else if(e.command == "addGroup" || e.command === "deleteGroup") {
             // TODO: some callback perhaps?
             mapLayerService.loadAllLayersAjax();
         }
