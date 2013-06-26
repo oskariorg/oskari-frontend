@@ -31,16 +31,23 @@ function(config, locale) {
         jqhr : null,
         timestamp : null
     };
+
+    /* templates */
+    this.template = {};
+    for (p in this.__templates ) {
+        this.template[p] = jQuery(this.__templates[p]);
+    }
 }, {
 
-	templates : {
-        table : jQuery('<table class="getinforesult_table"></table>'),
-        tableRow : jQuery('<tr></tr>'),
-        tableCell : jQuery('<td></td>'),
-
-        header : jQuery('<div class="getinforesult_header">' +
-                '<div class="icon-bubble-left"></div>'),
-        headerTitle : jQuery('<div class="getinforesult_header_title"></div>')
+	__templates : {
+        "wrapper" : '<div></div>',
+        "getinfo_result_table" : '<table class="getinforesult_table"></table>',
+        "link_outside" : '<a target="_blank"></a>',
+        "tableRow" : '<tr></tr>',
+        "tableCell" : '<td></td>',
+        "span" : '<span></span>',
+        "header" : '<div class="getinforesult_header"><div class="icon-bubble-left"></div>',
+        "headerTitle" : '<div class="getinforesult_header_title"></div>'
 	},
 
     /** @static @property __name plugin name */
@@ -257,6 +264,7 @@ function(config, locale) {
         for (var i = 0; i < selected.length; i++) {
             var layer = selected[i]
 
+            // skips wfs from the ajax call
             if (me._isIgnoredLayerType(layer)) {
                 continue;
             }
@@ -460,10 +468,8 @@ function(config, locale) {
      * Closes the infobox with GFI data
      */
     _closeGfiInfo : function() {
-        var rn = "InfoBox.HideInfoBoxRequest";
-        var rb = this._sandbox.getRequestBuilder(rn);
-        var r = rb(this.infoboxId);
-        this._sandbox.request(this, r);
+        var request = this._sandbox.getRequestBuilder("InfoBox.HideInfoBoxRequest")(this.infoboxId);
+        this._sandbox.request(this, request);
     },
     /**
      * @method _showGfiInfo
@@ -473,12 +479,8 @@ function(config, locale) {
      * @param {OpenLayers.LonLat} lonlat location for the GFI data
      */
     _showGfiInfo : function(content, lonlat) {
-        var me = this;
-        // send out the request
-        var rn = "InfoBox.ShowInfoBoxRequest";
-        var rb = this._sandbox.getRequestBuilder(rn);
-        var r = rb("getinforesult", "GetInfo Result", content, lonlat, true);
-        this._sandbox.request(me, r);
+        var request = this._sandbox.getRequestBuilder("InfoBox.ShowInfoBoxRequest")("getinforesult", "GetInfo Result", content, lonlat, true);
+        this._sandbox.request(this, request);
     },
     /**
      * @method _formatResponseForInfobox
@@ -599,7 +601,7 @@ function(config, locale) {
         if (!pValue) {
             return;
         }
-        var value = jQuery('<span></span>');
+        var value = this.template.span.clone();
         // if value is an array -> format it first
         // TODO: maybe some nicer formatting?
         if (Object.prototype.toString.call(pValue) === '[object Array]') {
@@ -625,7 +627,7 @@ function(config, locale) {
         }
         else if (pValue.indexOf && pValue.indexOf('://') > 0 && pValue.indexOf('://') < 7) {
             var label = value;
-            var link = jQuery('<a target="_blank"></a>');
+            var link = this.template.link_outside.clone();
             link.attr('href', pValue);
             link.append(pValue);
             value.append(link);
@@ -649,7 +651,7 @@ function(config, locale) {
 
 		var me = this;
 
-        var response = jQuery('<div></div>');
+        var response = me.template.wrapper.clone();
         var html = '';
         var contentType = ( typeof datum.content);
         var hasHtml = false;
@@ -669,20 +671,20 @@ function(config, locale) {
         	}
         	for(var i=0; i < dataArray.length; ++i) {
         		var jsonData = dataArray[i];
-	            var table = me.templates.table.clone();
+	            var table = me.template.getinfo_result_table.clone();
 	            for (var attr in jsonData) {
 	                var value = me._formatJSONValue(jsonData[attr]);
 	                if (!value) {
 	                    continue;
 	                }
-	                var row = me.templates.tableRow.clone();
+	                var row = me.template.tableRow.clone();
 	                table.append(row);
 	                if (!even) {
 						row.addClass("odd");
 	                }
 	                even = !even;
 
-	                var labelCell = me.templates.tableCell.clone();
+	                var labelCell = me.template.tableCell.clone();
 					// Get localized name for attribute
 					// TODO this should only apply to omat tasot?
 					var pluginLoc = this.getMapModule().getLocalization('plugin', true);
@@ -690,7 +692,7 @@ function(config, locale) {
 					var localizedAttr = myLoc[attr];
 	                labelCell.append(localizedAttr ? localizedAttr : attr);
 	                row.append(labelCell);
-	                var valueCell = me.templates.tableCell.clone();
+	                var valueCell = me.template.tableCell.clone();
 	                valueCell.append(value);
 	                row.append(valueCell);
 	            }
@@ -712,22 +714,26 @@ function(config, locale) {
      * @param {String} layerName name of the layer for this data
      * @return {String} formatted HMTL
      */
-    _json2html : function(node, layerName) {
-		// TODO use template elements
-        var me = this;
+    _json2html : function(node) {
         if (node == null) {
             return '';
         }
         var even = true;
-        var html = '<table class="getinforesult_table">';
+
+        var html = this.template.getinfo_result_table.clone();
+        var row = null;
+        var keyColumn = null;
+        var valColumn = null;
         for (var key in node) {
             var value = node[key];
-            var vType = ( typeof value).toLowerCase();
+            var vType = (typeof value).toLowerCase();
             var vPres = ''
             switch (vType) {
                 case 'string':
                     if (value.indexOf('http://') == 0) {
-                        valpres = '<a href="' + value + '" target="_blank">' + value + '</a>';
+                        valpres = this.template.link_outside.clone();
+                        valpres.attr('href', value);
+                        valpres.append(value);
                     } else {
                         valpres = value;
                     }
@@ -751,17 +757,22 @@ function(config, locale) {
                     valpres = '';
             }
             even = !even;
-            html += '<tr';
-            if (even) {
-                html += '>';
-            } else {
-                html += ' class="odd">';
+
+            row = this.template.tableRow.clone();
+            if(!even) {
+                row.addClass("odd");
             }
-            html += '' + '<td>' + key + '</td>';
-            html += '' + '<td>' + valpres + '</td>';
-            html += '</tr>';
+
+            keyColumn = this.template.tableCell.clone();
+            keyColumn.append(key);
+            row.append(keyColumn);
+
+            valColumn = this.template.tableCell.clone();
+            valColumn.append(valpres);
+            row.append(valColumn);
+
+            html.append(row);
         }
-        html += '</table>';
         return html;
     },
 
@@ -779,7 +790,7 @@ function(config, locale) {
     _showFeatures : function(data) {
         var me = this;
         var content = {};
-        var wrapper = jQuery('<div></div>');
+        var wrapper = me.template.wrapper.clone();
         content.html = '';
         content.actions = {};
         for (var di = 0; di < data.fragments.length; di++) {
@@ -787,10 +798,10 @@ function(config, locale) {
             var fragmentTitle = fragment.layerName;
             var fragmentMarkup = fragment.markup;
 
-            var contentWrapper = jQuery('<div></div>');
+            var contentWrapper = me.template.wrapper.clone();
 
-            var headerWrapper = me.templates.header.clone();
-            var titleWrapper = me.templates.headerTitle.clone();
+            var headerWrapper = me.template.header.clone();
+            var titleWrapper = me.template.headerTitle.clone();
             titleWrapper.append(fragmentTitle);
 			titleWrapper.attr('title', fragmentTitle);
             headerWrapper.append(titleWrapper);
@@ -809,9 +820,8 @@ function(config, locale) {
         data.title = myLoc.title;
 
         if(!this.config || this.config.infoBox) {
-            var rb = me._sandbox.getRequestBuilder("InfoBox.ShowInfoBoxRequest");
-            var r = rb(data.popupid, data.title, [content], data.lonlat, true);
-            me._sandbox.request(me, r);
+            var request = me._sandbox.getRequestBuilder("InfoBox.ShowInfoBoxRequest")(data.popupid, data.title, [content], data.lonlat, true);
+            me._sandbox.request(me, request);
         }
 
         var event = me._sandbox.getEventBuilder("GetInfoResultEvent")(data);

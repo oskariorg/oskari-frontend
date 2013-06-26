@@ -108,6 +108,12 @@ Oskari.registerLocalization({
                 "cancel" : "Poistu"
             },
             "help" : "Ohje",
+            "success": {
+                "layerAdded": {
+                    "title": "Karttataso {layer} lisätty",
+                    "message": "Löydät tason Aineisto-paneelista"
+                }
+            },
             "error" : {
                 "title" : "Virhe",
                 "invalidSetup": "Virheellisiä parametrejä",

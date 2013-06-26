@@ -20,8 +20,8 @@
                 <input type="text" id="add-layer-interface" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').interfaceAddress %>" <% if(model != null && model.admin.wmsUrl) { %>value="<%= model.admin.wmsUrl %>"<% } %> />
                 <div class="icon-close"></div>
             </div>
+            <br /><button id="add-layer-wms-button" class="fetch-wms-button"><%= instance.getLocalization('admin').getInfo %></button><br/>
         </div>
-        <br /><button id="add-layer-wms-button" class="fetch-wms-button"><%= instance.getLocalization('admin').getInfo %></button><br/>
     </div>
 
     <div class="add-layer-record">
@@ -115,7 +115,7 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <input type="text" id="add-layer-datauuid" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').metaInfoIdDesc %>" <% if(model != null && model.admin.metadataUrl != null) { %> value="<%= model.admin.metadataUrl %>" <% } %> />
+                <input type="text" id="add-layer-datauuid" class="add-layer-input" placeholder="<%= instance.getLocalization('admin').metaInfoIdDesc %>" <% if(model != null && model.admin.dataUrl != null) { %> value="<%= model.admin.dataUrl %>" <% } %> />
                 <div class="icon-close"></div>
             </div>
         </div>
@@ -236,9 +236,9 @@
             <label for="add-layer-responsetype" class="add-layer-label" title="<%= instance.getLocalization('admin').gfiResponseTypeDesc %>"><%= instance.getLocalization('admin').gfiResponseType %></label>
         </div>
         <div class="add-layer-input-area">
-            <% if(model != null && model.admin.gfiResponseType) { %>
+            <% if(model != null && model.admin.gfiType) { %>
             <div class="input-controls">
-                <div id="add-layer-responsetype"><%= model.admin.gfiResponseType %></div>
+                <div id="add-layer-responsetype"><%= model.admin.gfiType %></div>
             </div>
             <% } else { %>
             <select id="add-layer-responsetype">
@@ -253,7 +253,7 @@
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <textarea rows="2" cols="40" id="add-layer-xslt" class="add-layer-input" ><% if(model != null && model.admin.xslt) { %>This needs base64 decoder...<% } %></textarea>
+                <textarea rows="2" cols="40" id="add-layer-xslt" class="add-layer-input" ><% if(model != null && model.admin.xslt_decoded) { %><%= model.admin.xslt_decoded %><% } %></textarea>
             </div>
         </div>
     </div>

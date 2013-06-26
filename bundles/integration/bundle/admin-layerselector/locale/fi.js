@@ -58,6 +58,9 @@ Oskari.registerLocalization({
 			}
 		},
 		"admin" : {
+			"selectLayer" 			: "Valitse ylätaso",
+			"selectSubLayer"		: "Valitse alataso",
+
 			"addOrganization" 		: "Lisää tiedontuottaja",
 			"addOrganizationDesc"	: "Lisää tiedontuottaja eli uusi orgasaatio",
 			"addInspire" 			: "Lisää aihe",

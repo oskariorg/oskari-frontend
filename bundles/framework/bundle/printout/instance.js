@@ -32,14 +32,16 @@ function() {
     this.legendPlugin = undefined;
 
     /* default configuration */
-    this.conf = {
+     this.conf = {
         "backendConfiguration" : {
             "formatProducers" : {
                 "application/pdf" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.pdf?",
                 "image/png" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.png?"
             }
+
         }
-    };
+    }; 
+
 
 }, {
     /**
@@ -94,7 +96,6 @@ function() {
         var conf = this.conf;
         var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox';
         var sandbox = Oskari.getSandbox(sandboxName);
-
         me.sandbox = sandbox;
 
         this.localization = Oskari.getLocalization(this.getName());
@@ -133,7 +134,7 @@ function() {
 
         var locale = me.getLocalization();
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        var pluginConfig = {};
+        var pluginConfig = this.conf.legend;
         var legendPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.printout.plugin.LegendPlugin', me, pluginConfig, locale);
         mapModule.registerPlugin(legendPlugin);
         mapModule.startPlugin(legendPlugin);
@@ -241,12 +242,8 @@ function() {
          * @method Printout.PrintableContentEvent
          * @param {Object} event
          */
-        'Printout.PrintableContentEvent': function(event) {
-            var contentId = event.getContentId(),
-                layer = event.getLayer(),
-                layerId = ( (layer && layer.getId) ? layer.getId() : null ),
-                tileData = event.getTileData(),
-                geoJson = event.getGeoJsonData();
+        'Printout.PrintableContentEvent' : function(event) {
+            var contentId = event.getContentId(), layer = event.getLayer(), layerId = ((layer && layer.getId) ? layer.getId() : null ), tileData = event.getTileData(), geoJson = event.getGeoJsonData();
 
             // Save the GeoJSON for later use if provided.
             // TODO:
@@ -275,7 +272,7 @@ function() {
 
         this.geoJson = null;
         this.tileData = null;
-        
+
         var sandbox = this.sandbox();
         for (p in this.eventHandlers) {
             sandbox.unregisterFromEventByName(this, p);

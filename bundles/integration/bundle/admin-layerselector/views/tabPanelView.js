@@ -330,6 +330,7 @@ define([
          * @method saveOrganization
          */
         saveOrganization: function(e) {
+			//console.log("saveOrganisation");
             var me = this,
                 element = jQuery(e.currentTarget),
                 addClass = element.parents('.admin-add-class');
@@ -355,6 +356,7 @@ define([
             url += parentId+nameFi+fi+nameSv+sv+nameEn+en;
             // make AJAX call
             me._save(e, url, function(response){
+				//console.log("Save...");
                 // callback functionality
                 me.layerGroupingModel.getClasses(me.options.instance.getSandbox().getAjaxUrl(),"&action_route=GetMapLayerClasses");
                 element.parents('.show-add-class').removeClass('show-add-class');

@@ -130,14 +130,20 @@ define([
             // if settings are hidden, we need to populate template and
             // add it to the DOM
             if(!this.$el.hasClass('show-edit-layer')) {
+                // decode xslt
+                if(this.model != null && this.model.admin.xslt && !this.model.admin.xslt_decoded) {
+                    this.model.admin.xslt_decoded = this.classes.decode64(this.model.admin.xslt);
+                }
                 if(this.model != null && 
                     this.model.admin.style_decoded == null && 
                     this.model.admin.style != null) {
 
                     var styles = [];
-                    styles.push(this.options.layerTabModel.decode64(this.model.admin.style));
+                    styles.push(this.classes.decode64(this.model.admin.style));
                     this.model.admin.style_decoded = styles;
                 }
+
+                //console.log(this.classes.getGroupTitles());
 
                 // add opacity
                 var opacity = 100;
@@ -218,8 +224,6 @@ define([
             // create url for action_route
             var url = baseUrl + action_route + idKey + id;
 
-            console.log(url);
-
             jQuery.ajax({
                 type : "GET",
                 dataType: 'json',
@@ -288,6 +292,7 @@ define([
             // add layer type and version
             var wmsVersion = form.find('#add-layer-interface-version').val();
             wmsVersion = (wmsVersion != "") ? wmsVersion : form.find('#add-layer-interface-version > option').first().val();
+
             if(wmsVersion.indexOf('WMS') >= 0) {
                 var parts = wmsVersion.split(' ');
                 data.version    = parts[1];
@@ -326,7 +331,7 @@ define([
             data.legendImage    = form.find('#add-layer-legendImage').val(),
             data.inspireTheme   = form.find('#add-layer-inspire-theme').val(),
             data.dataUrl        = form.find('#add-layer-datauuid').val(),
-            //data.metadataUrl    = form.find('#add-layer-?').val(),
+            data.metadataUrl    = form.find('#add-layer-metadataid').val();
             data.xslt           = form.find('#add-layer-xslt').val(),
             data.xslt           = me.classes.encode64(data.xslt);//me.layerGroupingModel.encode64(data.xslt);
             data.gfiType        = form.find('#add-layer-responsetype').val();
@@ -359,9 +364,9 @@ define([
                 "&legendImage=" + encodeURIComponent(data.legendImage) +
                 "&inspireTheme=" + data.inspireTheme +
                 "&dataUrl=" + data.dataUrl +
-                //"&=" + data.metadataUrl +
                 "&xslt=" + data.xslt +
-                "&gfiType=" + data.gfiType;
+                "&gfiType=" + data.gfiType +
+				"&metadataUrl=" + data.metadataUrl;
 
             // New way
             /*
@@ -565,7 +570,7 @@ define([
 
             // This might be more elegant as its own template
             var select = '<select id="admin-select-capability">';
-            select += '<option value="" selected="selected">Valitse ylätaso</option>';
+            select += '<option value="" selected="selected">' + this.options.instance.getLocalization('admin').selectLayer + '</option>';
             var layers = this.getValue(this.capabilities, 'Capability').Layer.Layer;
             for (var i = layers.length - 1; i >= 0; i--) {
                 select += '<option value="'+i+'">' + layers[i].Title + '</option>';
@@ -601,7 +606,7 @@ define([
 
                 // This might be more elegant as its own template
                 var subLayerSelect = '<select id="admin-select-sublayer">';
-                subLayerSelect += '<option value="" selected="selected">Valitse alataso</option>';
+                subLayerSelect += '<option value="" selected="selected">' + this.options.instance.getLocalization('admin').selectSubLayer + '</option>';
                 var subLayers = selectedLayer.Layer;
                 for (var i = subLayers.length - 1; i >= 0; i--) {
                     subLayerSelect += '<option value="'+i+'">' + subLayers[i].Title + '</option>';
@@ -689,7 +694,7 @@ define([
                 if( wmsMetadataId.indexOf('&') >= 0) {
                     wmsMetadataId = wmsMetadataId.substring (0, wmsMetadataId.indexOf('&'));
                 }
-                jQuery('#add-layer-metadataid').val(wmsMetadataId);
+                jQuery('#add-layer-metadataid').val(wmsMetadataId.trim());
             }
 
             // WMS url

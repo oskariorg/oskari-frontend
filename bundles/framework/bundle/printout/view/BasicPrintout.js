@@ -23,6 +23,7 @@ function(instance, localization, backendConfiguration) {
     this.instance = instance;
     this.loc = localization;
     this.backendConfiguration = backendConfiguration;
+    this.legendInProcess = false;
 
     /* templates */
     this.template = {};
@@ -534,10 +535,12 @@ function(instance, localization, backendConfiguration) {
         me.mainPanel.find('#oskari_print_formID').attr('action', link);
 
         if (geoJson) {
-            me.mainPanel.find('input[name=geojson]').val(jQuery.base64.encode(geoJson));
+            // UTF-8 Base64 encoding
+            var textu8= unescape( encodeURIComponent( geoJson ));      
+            me.mainPanel.find('input[name=geojson]').val(jQuery.base64.encode(textu8));
         }
         if (tileData) {
-            me.mainPanel.find('input[name=tiles]').val(tiledata);
+            me.mainPanel.find('input[name=tiles]').val(tileData);
         }
 
         window.open('about:blank','map_popup_111', wopParm);
@@ -699,7 +702,7 @@ function(instance, localization, backendConfiguration) {
         // only if any statslayer visible 
         me._setLegendVisibility();
         if(!me._hasStatsLayers()) return;
-        
+       
         // Is geostat legend available
         // get div where the map is rendered from openlayers
         var map = this.instance.sandbox.getMap();
@@ -715,7 +718,8 @@ function(instance, localization, backendConfiguration) {
         } else {
             var legend = parentContainer.find('div.geostats-legend');
             if (legend.length > 0) {
-
+                if(me.legendInProcess) return;
+                me.legendInProcess=true;
                 this._printMapInfo(legend, function(data) {
 
                     var title = legend.find('.geostats-legend-title').html();
@@ -734,7 +738,8 @@ function(instance, localization, backendConfiguration) {
                     });
 
                     var legendgjs = me.instance.legendPlugin.plotLegend(title, ranges, data, legend_pos);
-                    me.instance.getSandbox().getMap().GeoJSON = legendgjs;
+                    me.instance.geoJson = legendgjs;
+                    me.legendInProcess=false;
                 })
             }
         }

@@ -949,7 +949,7 @@ function(instance, localization) {
      * @param {JSON} analyseJson Layer JSON returned by server.
      */
     _handleAnalyseMapResponse: function(analyseJson) {
-        // TODO: some error checking
+        // TODO: some error checking perhaps?
         var mapLayerService,
             mapLayer,
             requestBuilder,
@@ -959,9 +959,12 @@ function(instance, localization) {
         // Prefix the id to avoid collisions
         // FIXME: temporary, server should respond with an actual
         // id so that further analysis with this layer is possible.
-        analyseJson.id = this.id_prefix + analyseJson.id;
+        analyseJson.id = this.id_prefix + analyseJson.id + '_' + analyseJson.wpsLayerId;
         // Create the layer model
         mapLayer = mapLayerService.createMapLayer(analyseJson);
+        // TODO: get these two parameters from somewhere else, where?
+        mapLayer.setWpsUrl('/karttatiili/wpshandler?');
+        mapLayer.setWpsName('ows:analysis_data');
         // Add the layer to the map layer service
         mapLayerService.addLayer(mapLayer);
 

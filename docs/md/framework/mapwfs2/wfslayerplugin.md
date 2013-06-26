@@ -67,6 +67,9 @@ This plugin doesn't handle any requests.
     <td> AfterChangeMapLayerOpacityEvent </td><td> Update OpenLayer's layer opacity. </td>
   </tr>
   <tr>
+    <td> MapSizeChangedEvent </td><td> Notifies updated map size to the backend.  </td>
+  </tr>
+  <tr>
     <td> WFSSetFilter </td><td> Send geojson filter. </td>
   </tr>
   <tr>
