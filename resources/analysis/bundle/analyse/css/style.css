@@ -92,6 +92,7 @@ table.layer-icons {
   margin: 0 0 2px;
   width: 30%; }
 
+/* Analyse filter CSS */
 div.analyse-filter-popup-content {
   padding: 8px;
 }
@@ -114,5 +115,36 @@ div.analyse-filter-popup-content div.analyse-filter:last-child {
 
 div.analyse-filter-popup-content div.bbox-title,
 div.analyse-filter-popup-content div.bbox-radio {
-  display: inline;
+  display: inline-block;
+}
+
+div.analyse-filter-popup-content div.bbox-title {
+  float: left;
+}
+
+div.analyse-filter-popup-content div.bbox-radio {
+  margin-left: 25px;
+}
+
+div.analyse-filter-popup-content div.bbox-radio div.bbox-on,
+div.analyse-filter-popup-content div.bbox-radio div.bbox-off {
+ margin-top: 5px; 
+}
+
+div.analyse-filter-popup-content div.filter-option {
+  padding-bottom: 10px;
+}
+div.analyse-filter-popup-content div.filter-option select.operator,
+div.analyse-filter-popup-content div.filter-option select.boolean,
+div.analyse-filter-popup-content div.filter-option div.add-filter-option {
+  width: 60px;
+}
+div.analyse-filter-popup-content div.filter-option div.add-filter-option {
+  display: inline-block;
+}
+div.analyse-filter-popup-content div.filter-option input[name="attribute-value"] {
+  width: 120px;
+}
+div.analyse-filter-popup-content div.filter-option select.attribute {
+  width: 150px;
 }

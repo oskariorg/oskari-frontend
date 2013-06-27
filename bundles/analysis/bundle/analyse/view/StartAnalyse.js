@@ -79,8 +79,8 @@ function(instance, localization) {
     this.paramsOptionDivs = {};
     this.aggreOptionDivs = {};
 
-    this._filterDialogContent = null;
-    this._filterJson = null;
+    this._filterDialogContents = {};
+    this._filterJsons = {};
 
 }, {
     __templates : {
@@ -974,8 +974,7 @@ function(instance, localization) {
         // Styles
         selections["style"] = this.getStyleValues();
         // Bbox
-        selections["bbox"] = this.instance.getSandbox().getMap().getBbox();
-        
+        //selections["bbox"] = this.instance.getSandbox().getMap().getBbox();
         
         return selections;
     },
@@ -1051,10 +1050,13 @@ function(instance, localization) {
         var selections = me._gatherSelections();
         var data = {};
         data.analyse = JSON.stringify(selections);
-        if (this._filterJson) {
-            data.filter = JSON.stringify(this._filterJson);
-        }
 
+        var layerId = selections.layerId;
+        if (this._filterJsons[layerId]) {
+            data.filter = JSON.stringify(this._filterJsons[layerId]);
+        }
+        console.log(data);
+        /*
         // Check that parameters are a-okay
         if (me._checkSelections(selections)) {
             // Send the data for analysis to the backend
@@ -1070,7 +1072,7 @@ function(instance, localization) {
                     me.instance.showMessage(me.loc.error.title, me.loc.error.saveFailed);
                 }
             );
-        }
+        }*/
     },
 
     /**
