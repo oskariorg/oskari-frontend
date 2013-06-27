@@ -43,13 +43,13 @@ Oskari.registerLocalization({
                     "selected" : true
                 }, {
                     "id" : "oskari_analyse_Count",
-                    "label" : "Lkm"
+                    "label" : "Lukumäärä"
                 }, {
                     "id" : "oskari_analyse_Min",
                     "label" : "Minimi"
                 }, {
                     "id" : "oskari_analyse_Max",
-                    "label" : "Maximi"
+                    "label" : "Maksimi"
                 }, {
                     "id" : "oskari_analyse_Average",
                     "label" : "Keskiarvo"

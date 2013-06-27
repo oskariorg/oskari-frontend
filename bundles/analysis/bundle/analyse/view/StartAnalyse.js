@@ -272,7 +272,7 @@ function(instance, localization) {
         // Changing part of parameters ( depends on method)
         var extra = this.template.paramsOptionExtra.clone();
         contentPanel.append(extra);
-        me._addExtraParameters(contentPanel, me.id_prefix+"buffer");
+        me._addExtraParameters(contentPanel, me.id_prefix + "buffer");
         // buffer is default method
 
         var columnsTitle = this.template.title_columns.clone();
@@ -517,7 +517,7 @@ function(instance, localization) {
         for (var i = 0; i < layers.length; i++) {
             if (layers[i].isLayerOfType('WFS') || layers[i].isLayerOfType('ANALYSIS')) {
                 var option = {
-                    id : me.id_prefix+'layer_'+layers[i].getId(),
+                    id : me.id_prefix + 'layer_' + layers[i].getId(),
                     label : layers[i].getName()
                 };
                 ii++;
@@ -556,7 +556,7 @@ function(instance, localization) {
             opt.append(icons);
             contentPanel.after(opt);
 
-        }       
+        }
     },
     /**
      * @method _addExtraParameters
@@ -567,7 +567,7 @@ function(instance, localization) {
     _addExtraParameters : function(contentPanel, method) {
         var me = this;
         var extra = contentPanel.find('.extra_params')
-        if (method == this.id_prefix+"buffer") {
+        if (method == this.id_prefix + "buffer") {
             var bufferTitle = me.template.title.clone();
             bufferTitle.find('.settings_buffer_label').html(me.loc.buffer_size.label);
             bufferTitle.find('.settings_buffer_field').attr({
@@ -576,18 +576,17 @@ function(instance, localization) {
             });
 
             extra.append(bufferTitle);
- 
 
-        } else if (method == this.id_prefix+"aggregate") {
+        } else if (method == this.id_prefix + "aggregate") {
             // sum, count, min, max, med
 
             me._aggregateExtra(extra);
 
-        } else if (method == this.id_prefix+"intersect") {
+        } else if (method == this.id_prefix + "intersect") {
             // intersecting layer selection
             me._intersectExtra(extra);
 
-        }else if (method == this.id_prefix+"union") {
+        } else if (method == this.id_prefix + "union") {
             // union input 2 layer selection
             me._unionExtra(extra);
 
@@ -959,19 +958,18 @@ function(instance, localization) {
 
         // Get method specific selections
         var selections = this._getMethodSelections(layer, {
-            name: title,
-            method: methodName,
-            fields: fields,
-            layerId: layer.getId(),
-            layerType: layer.getLayerType()
+            name : title,
+            method : methodName,
+            fields : fields,
+            layerId : layer.getId(),
+            layerType : layer.getLayerType()
         });
 
         // Styles
         selections["style"] = this.getStyleValues();
         // Bbox
         selections["bbox"] = this.instance.getSandbox().getMap().getBbox();
-        
-        
+
         return selections;
     },
 
@@ -984,7 +982,7 @@ function(instance, localization) {
      * @param {Object} defaultSelections the defaults, such as name etc.
      * @return {Object} selections for a given method
      */
-    _getMethodSelections: function(layer, defaultSelections) {
+    _getMethodSelections : function(layer, defaultSelections) {
         var container = this.mainPanel;
         var methodName = defaultSelections.method;
 
@@ -1003,26 +1001,26 @@ function(instance, localization) {
         spatialOperator = spatialOperator && spatialOperator.replace(this.id_prefix, '');
 
         var methodSelections = {
-            'buffer': {
-                methodParams: {
-                    distance: bufferSize
+            'buffer' : {
+                methodParams : {
+                    distance : bufferSize
                 },
-                opacity: layer.getOpacity()
+                opacity : layer.getOpacity()
             },
-            'aggregate': {
-                methodParams: {
-                    'function': aggregateFunction // TODO: param name?
+            'aggregate' : {
+                methodParams : {
+                    'function' : aggregateFunction // TODO: param name?
                 }
             },
-            'union': {
-                methodParams: {
-                    layerId: unionLayerId
+            'union' : {
+                methodParams : {
+                    layerId : unionLayerId
                 }
             },
-            'intersect': {
-                methodParams: {
-                    layerId: intersectLayerId,
-                    operator: spatialOperator // TODO: param name?
+            'intersect' : {
+                methodParams : {
+                    layerId : intersectLayerId,
+                    operator : spatialOperator // TODO: param name?
                 }
             }
         };
@@ -1049,17 +1047,16 @@ function(instance, localization) {
         if (me._checkSelections(selections)) {
             // Send the data for analysis to the backend
             me.instance.analyseService.sendAnalyseData(JSON.stringify(selections),
-                // Success callback
-                function(response) {
-                    if (response) {
-                        me._handleAnalyseMapResponse(response);
-                    }
-                },
-                // Error callback
-                function(jqXHR, textStatus, errorThrown) {
-                    me.instance.showMessage(me.loc.error.title, me.loc.error.saveFailed);
+            // Success callback
+            function(response) {
+                if (response) {
+                    me._handleAnalyseMapResponse(response);
                 }
-            );
+            },
+            // Error callback
+            function(jqXHR, textStatus, errorThrown) {
+                me.instance.showMessage(me.loc.error.title, me.loc.error.saveFailed);
+            });
         }
 
     },
@@ -1072,32 +1069,34 @@ function(instance, localization) {
      * @private
      * @param {JSON} analyseJson Layer JSON returned by server.
      */
-    _handleAnalyseMapResponse: function(analyseJson) {
+    _handleAnalyseMapResponse : function(analyseJson) {
         // TODO: some error checking perhaps?
-        var mapLayerService,
-            mapLayer,
-            requestBuilder,
-            request;
-        
-        mapLayerService = this.instance.mapLayerService;
-        // Prefix the id to avoid collisions
-        // FIXME: temporary, server should respond with an actual
-        // id so that further analysis with this layer is possible.
-        analyseJson.id = this.id_prefix + analyseJson.id + '_' + analyseJson.wpsLayerId;
-        // Create the layer model
-        mapLayer = mapLayerService.createMapLayer(analyseJson);
-        // TODO: get these two parameters from somewhere else, where?
-        mapLayer.setWpsUrl('/karttatiili/wpshandler?');
-        mapLayer.setWpsName('ows:analysis_data');
-        // Add the layer to the map layer service
-        mapLayerService.addLayer(mapLayer);
+        var mapLayerService, mapLayer, requestBuilder, request;
 
-        // Request the layer to be added to the map.
-        // instance.js handles things from here on.
-        requestBuilder = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest');
-        if (requestBuilder) {
-            request = requestBuilder(mapLayer.getId());
-            this.instance.sandbox.request(this.instance, request);
+        // TODO: Handle WPS results when no FeatureCollection eg. aggregate
+        if (analyseJson.wpsLayerId == "-1") {
+            this.instance.showMessage("Tulokset", analyseJson.result);
+        } else {
+            mapLayerService = this.instance.mapLayerService;
+            // Prefix the id to avoid collisions
+            // FIXME: temporary, server should respond with an actual
+            // id so that further analysis with this layer is possible.
+            analyseJson.id = this.id_prefix + analyseJson.id + '_' + analyseJson.wpsLayerId;
+            // Create the layer model
+            mapLayer = mapLayerService.createMapLayer(analyseJson);
+            // TODO: get these two parameters from somewhere else, where?
+            mapLayer.setWpsUrl('/karttatiili/wpshandler?');
+            mapLayer.setWpsName('ows:analysis_data');
+            // Add the layer to the map layer service
+            mapLayerService.addLayer(mapLayer);
+
+            // Request the layer to be added to the map.
+            // instance.js handles things from here on.
+            requestBuilder = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest');
+            if (requestBuilder) {
+                request = requestBuilder(mapLayer.getId());
+                this.instance.sandbox.request(this.instance, request);
+            }
         }
     },
 
@@ -1173,7 +1172,7 @@ function(instance, localization) {
      * @private
      * @return {Object/null} an Oskari layer or null if no layer selected
      */
-    _getSelectedMapLayer: function() {
+    _getSelectedMapLayer : function() {
         var selectedLayer = this._selectedLayers();
         selectedLayer = selectedLayer && selectedLayer[0];
         selectedLayer = selectedLayer && selectedLayer.id;
