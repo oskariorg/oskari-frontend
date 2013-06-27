@@ -210,6 +210,10 @@ function() {
         }
     },
 
+    getView : function() {
+        return this.plugins['Oskari.userinterface.View'];
+    },
+
     /**
      * Creates parameters for printout bundle and sends an event to it.
      * Params include the BBOX and the image url of the layer with current

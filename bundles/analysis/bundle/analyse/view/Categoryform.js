@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.mapanalysis.view.CategoryForm
+ * @class Oskari.analysis.bundle.analyse.view.CategoryForm
  * 
  * Shows a form for a mapanalysis category
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.mapanalysis.view.CategoryForm",
+Oskari.clazz.define("Oskari.analysis.bundle.analyse.view.CategoryForm",
 
 /**
  * @method create called automatically on construction
