@@ -35,23 +35,29 @@ Oskari.registerLocalization({
                 }]
             },
             "aggregate" : {
-                "label" : "Valittu aggrekointifunktio",
+                "label" : "Aggregointifunktio",
                 "options" : [{
-                    "id" : "oskari_analyse_sum",
+                    "id" : "oskari_analyse_Sum",
                     "label" : "Summa",
                     "selected" : true
                 }, {
-                    "id" : "oskari_analyse_count",
+                    "id" : "oskari_analyse_Count",
                     "label" : "Lkm"
                 }, {
-                    "id" : "oskari_analyse_min",
+                    "id" : "oskari_analyse_Min",
                     "label" : "Minimi"
                 }, {
-                    "id" : "oskari_analyse_max",
+                    "id" : "oskari_analyse_Max",
                     "label" : "Maximi"
                 }, {
-                    "id" : "oskari_analyse_med",
+                    "id" : "oskari_analyse_Average",
                     "label" : "Keskiarvo"
+                }, {
+                    "id" : "oskari_analyse_StdDev",
+                    "label" : "Keskihajonta"
+                },{
+                    "id" : "oskari_analyse_Median",
+                    "label" : "Mediaani"
                 }]
             },
             "buffer_size" : {
@@ -111,18 +117,18 @@ Oskari.registerLocalization({
                 "cancel" : "Poistu"
             },
             "help" : "Ohje",
-            "success": {
-                "layerAdded": {
-                    "title": "Karttataso {layer} lisätty",
-                    "message": "Löydät tason Aineisto-paneelista"
+            "success" : {
+                "layerAdded" : {
+                    "title" : "Karttataso {layer} lisätty",
+                    "message" : "Löydät tason Aineisto-paneelista"
                 }
             },
             "error" : {
                 "title" : "Virhe",
-                "invalidSetup": "Virheellisiä parametrejä",
-                "noParameters": "Ei parametrejä",
-                "noLayer": "Ei valittua tasoa",
-                "invalidMethod": "Tuntematon menetelmä: ",
+                "invalidSetup" : "Virheellisiä parametrejä",
+                "noParameters" : "Ei parametrejä",
+                "noLayer" : "Ei valittua tasoa",
+                "invalidMethod" : "Tuntematon menetelmä: ",
                 "bufferSize" : "Virhe vyöhykkeen koossa",
                 "illegalCharacters" : "ei kirjaimia - käytä numeroita",
                 "nohelp" : "Ohjetta ei löytynyt",

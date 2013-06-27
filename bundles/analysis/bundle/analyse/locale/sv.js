@@ -37,22 +37,28 @@ Oskari.registerLocalization({
              "aggregate" : {
                  "label" : "Aggregate funktion",
                 "options" : [{
-                    "id" : "oskari_analyse_sum",
+                    "id" : "oskari_analyse_Sum",
                     "label" : "Summa",
                     "selected" : true
                 }, {
-                    "id" : "oskari_analyse_count",
+                    "id" : "oskari_analyse_Count",
                     "label" : "Antal"
                 }, {
-                    "id" : "oskari_analyse_min",
+                    "id" : "oskari_analyse_Min",
                     "label" : "Minimum"
                 },{
-                    "id" : "oskari_analyse_max",
+                    "id" : "oskari_analyse_Max",
                     "label" : "Maximum"
                 },{
-                    "id" : "oskari_analyse_med",
+                    "id" : "oskari_analyse_Average",
                     "label" : "Medeltal"
-                }  ]
+                },{
+                    "id" : "oskari_analyse_StdDev",
+                    "label" : "Medel spridning"
+                },{
+                    "id" : "oskari_analyse_Median",
+                    "label" : "Mediaan"
+                }]
             },
             "buffer_size" : {
                 "label" : "Zon storlek (m)",
