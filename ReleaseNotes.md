@@ -6,6 +6,11 @@
 
 A new MapSizeChangedEvent is sent when map size is changed (event is sent on mapmodule.updateSize() function call which should always be called if the map size is changed programmatically)
 
+### statsgrid bundle
+
+There is now a mode for selecting municipalities from the map instead of the grid. Checkboxes are visible by default.
+
+
 ## 1.12
 
 ### mapmodule plugin
