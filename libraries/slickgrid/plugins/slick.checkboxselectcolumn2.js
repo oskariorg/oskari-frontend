@@ -106,6 +106,9 @@
             item.sel = 'empty';
           }
         }
+        // header click event
+        _self.onSelectHeaderRowClicked.notify(args, e, _self);
+
         //update data
         _grid.getData().setItems(items);
         _grid.getData().refresh();
@@ -146,6 +149,7 @@
       "destroy": destroy,
 
       "onSelectRowClicked": new Slick.Event(),
+      "onSelectHeaderRowClicked": new Slick.Event(),
 
       "getColumnDefinition": getColumnDefinition
     });

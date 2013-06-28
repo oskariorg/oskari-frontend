@@ -214,6 +214,10 @@ function() {
     	return this.dialog.find('div.content')[0].textContent;
     },
 
+    getJqueryContent: function() {
+        return this.dialog.find('div.content');
+    },
+
     /**
      * @method makeDraggable
      * Makes dialog draggable with jQuery Event Drag plugin

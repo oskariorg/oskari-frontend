@@ -79,7 +79,7 @@ function(ajaxUrl) {
 		}
 		var data = {
 			currentViewId : me.handler.getCurrentViewId(),
-			viewData : JSON.stringify(state)
+			viewData : state
 		};
 
 		if (view) {
