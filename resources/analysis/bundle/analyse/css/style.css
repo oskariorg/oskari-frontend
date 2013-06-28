@@ -135,12 +135,15 @@ div.analyse-filter-popup-content div.filter-option {
   padding-bottom: 10px;
 }
 div.analyse-filter-popup-content div.filter-option select.operator,
-div.analyse-filter-popup-content div.filter-option select.boolean,
-div.analyse-filter-popup-content div.filter-option div.add-filter-option {
+div.analyse-filter-popup-content div.filter-option select.boolean {
   width: 60px;
 }
-div.analyse-filter-popup-content div.filter-option div.add-filter-option {
+div.analyse-filter-popup-content div.filter-option div.add-filter-option,
+div.analyse-filter-popup-content div.filter-option div.remove-filter-option {
   display: inline-block;
+  font-size: 200%;
+  font-weight: bold;
+  cursor: pointer;
 }
 div.analyse-filter-popup-content div.filter-option input[name="attribute-value"] {
   width: 120px;

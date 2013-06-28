@@ -75,11 +75,13 @@ Oskari.registerLocalization({
 			"std" : "Keskihajonta",
 			"sum" : "Yhteensä"
 		},
-		"values" 		:   "arvoa",
-		"municipality" 	:   "Kunnat",
-		"not_included" 	:   "Poistettu laskuista",
-		"selectRows" 	:   "Valitse rivit",
-		"noMatch" 		:   "Indikaattoria ei löytynyt",
-		"selectIndicator" : "Valitse indikaattori"
+		"values" 		: "arvoa",
+		"municipality" 	: "Kunnat",
+		"not_included" 	: "Poistettu laskuista",
+		"selectRows" 	: "Valitse rivit",
+		"select4Municipalities" : "Valitse ainakin 4 kuntaa",
+		"showSelected"  : "Näytä vain valitut alueet taulukossa",
+		"noMatch" 		: "Indikaattoria ei löytynyt",
+		"selectIndicator": "Valitse indikaattori"
 	}
 });

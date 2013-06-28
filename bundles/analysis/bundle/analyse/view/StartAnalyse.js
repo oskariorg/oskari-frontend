@@ -79,7 +79,6 @@ function(instance, localization) {
     this.paramsOptionDivs = {};
     this.aggreOptionDivs = {};
 
-    this._filterDialogContents = {};
     this._filterJsons = {};
 
 }, {
@@ -417,7 +416,7 @@ function(instance, localization) {
     _colorSelector : function(coldiv) {
         var me = this;
         // Use myplace style setup
-        me.categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.mapanalysis.view.CategoryForm', me.instance);
+        me.categoryForm = Oskari.clazz.create('Oskari.analysis.bundle.analyse.view.CategoryForm', me.instance);
         // hide myplace layer name input
         var myform = me.categoryForm.getForm();
         myform.find('div.field:first').hide();
@@ -1056,7 +1055,7 @@ function(instance, localization) {
             data.filter = JSON.stringify(this._filterJsons[layerId]);
         }
         console.log(data);
-        /*
+
         // Check that parameters are a-okay
         if (me._checkSelections(selections)) {
             // Send the data for analysis to the backend
@@ -1072,7 +1071,7 @@ function(instance, localization) {
                     me.instance.showMessage(me.loc.error.title, me.loc.error.saveFailed);
                 }
             );
-        }*/
+        }
     },
 
     /**

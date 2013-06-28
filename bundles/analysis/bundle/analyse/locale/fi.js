@@ -1,73 +1,75 @@
 Oskari.registerLocalization({
-    "lang" : "fi",
-    "key" : "Analyse",
-    "value" : {
-        "title" : "Analyysi",
-        "flyouttitle" : "Analyysi",
-        "desc" : "",
-        "btnTooltip" : "Analyysi",
-        "AnalyseView" : {
-            "title" : "Analyysi",
-            "content" : {
-                "label" : "Aineisto",
-                "tooltip" : "Lisää tietoaineisto painamalla [lisää tietoaineisto] painiketta"
+    "lang": "fi",
+    "key": "Analyse",
+    "value": {
+        "title": "Analyysi",
+        "flyouttitle": "Analyysi",
+        "desc": "",
+        "btnTooltip": "Analyysi",
+        "AnalyseView": {
+            "title": "Analyysi",
+            "content": {
+                "label": "Aineisto",
+                "tooltip": "Lisää tietoaineisto painamalla [lisää tietoaineisto] painiketta"
             },
-            "method" : {
-                "label" : "Menetelmä",
-                "tooltip" : "Vyöhyke-menetelmä: Lisää valittujen kohteiden ympärille vyöhykkeet ja käyttää näitä vyöhyke-geometrioita (buffer) analyysissä -+- Koostetyökalu: Laskee kohteen ominaisuuksille aggregointiominaisuuksia esim. summat -+- Unioni: kohteiden yhdistäminen taulukosta valitsemalla tai yhteisten ominaisuustietoarvojen perusteella -+- Leikkaus: Valitaan uudet kohteet leikkaamalla leikkaavan tason kohteilla leikattavaa tasoa",
-                "options" : [{
-                    "id" : "oskari_analyse_buffer",
-                    "label" : "Vyöhyke",
-                    "classForMethod" : "buffer",
-                    "selected" : true
-                }, {
-                    "id" : "oskari_analyse_aggregate",
-                    "label" : "Koostetyökalu",
-                    "classForPreview" : "aggregate"
-                }, {
-                    "id" : "oskari_analyse_union",
-                    "label" : "Unioni",
-                    "classForPreview" : "union"
-                }, {
-                    "id" : "oskari_analyse_intersect",
-                    "label" : "Leikkaus",
-                    "classForPreview" : "intersect"
-                }]
+            "method": {
+                "label": "Menetelmä",
+                "tooltip": "Vyöhyke-menetelmä: Lisää valittujen kohteiden ympärille vyöhykkeet ja käyttää näitä vyöhyke-geometrioita (buffer) analyysissä -+- Koostetyökalu: Laskee kohteen ominaisuuksille aggregointiominaisuuksia esim. summat -+- Unioni: kohteiden yhdistäminen taulukosta valitsemalla tai yhteisten ominaisuustietoarvojen perusteella -+- Leikkaus: Valitaan uudet kohteet leikkaamalla leikkaavan tason kohteilla leikattavaa tasoa",
+                "options": [{
+                        "id": "oskari_analyse_buffer",
+                        "label": "Vyöhyke",
+                        "classForMethod": "buffer",
+                        "selected": true
+                    }, {
+                        "id": "oskari_analyse_aggregate",
+                        "label": "Koostetyökalu",
+                        "classForPreview": "aggregate"
+                    }, {
+                        "id": "oskari_analyse_union",
+                        "label": "Unioni",
+                        "classForPreview": "union"
+                    }, {
+                        "id": "oskari_analyse_intersect",
+                        "label": "Leikkaus",
+                        "classForPreview": "intersect"
+                    }
+                ]
             },
-            "aggregate" : {
-                "label" : "Valittu aggrekointifunktio",
-                "options" : [{
-                    "id" : "oskari_analyse_sum",
-                    "label" : "Summa",
-                    "selected" : true
-                }, {
-                    "id" : "oskari_analyse_count",
-                    "label" : "Lkm"
-                }, {
-                    "id" : "oskari_analyse_min",
-                    "label" : "Minimi"
-                }, {
-                    "id" : "oskari_analyse_max",
-                    "label" : "Maximi"
-                }, {
-                    "id" : "oskari_analyse_med",
-                    "label" : "Keskiarvo"
-                }]
+            "aggregate": {
+                "label": "Valittu aggrekointifunktio",
+                "options": [{
+                        "id": "oskari_analyse_sum",
+                        "label": "Summa",
+                        "selected": true
+                    }, {
+                        "id": "oskari_analyse_count",
+                        "label": "Lkm"
+                    }, {
+                        "id": "oskari_analyse_min",
+                        "label": "Minimi"
+                    }, {
+                        "id": "oskari_analyse_max",
+                        "label": "Maximi"
+                    }, {
+                        "id": "oskari_analyse_med",
+                        "label": "Keskiarvo"
+                    }
+                ]
             },
-            "buffer_size" : {
-                "label" : "Vyöhykkeen koko (m)",
-                "tooltip" : "Anna vyöhykkeen koko"
+            "buffer_size": {
+                "label": "Vyöhykkeen koko (m)",
+                "tooltip": "Anna vyöhykkeen koko"
             },
-            "analyse_name" : {
-                "label" : "Analyysin nimi",
-                "tooltip" : "Anna analyysin nimi"
+            "analyse_name": {
+                "label": "Analyysin nimi",
+                "tooltip": "Anna analyysin nimi"
             },
-            "settings" : {
-                "label" : "Parametrit",
-                "tooltip" : "Anna parametrit analyysia varten. Parametrit riippuvat valitusta suodattimesta ja menetelmästä"
+            "settings": {
+                "label": "Parametrit",
+                "tooltip": "Anna parametrit analyysia varten. Parametrit riippuvat valitusta suodattimesta ja menetelmästä"
             },
-            "intersect" : {
-                "label" : "Valittu leikkaava taso"
+            "intersect": {
+                "label": "Valittu leikkaava taso"
             },
             "union" : {
                 "label" : "Valittu yhdistettävä taso"
@@ -108,7 +110,8 @@ Oskari.registerLocalization({
                 "save" : "Tallenna",
                 "analyse" : "Jatka analyysia",
                 "data" : "Päivitä tietoaineisto",
-                "cancel" : "Poistu"
+                "cancel" : "Poistu",
+                "ok": "OK"
             },
             "filter": {
                 "title": "Suodatus",
@@ -127,6 +130,13 @@ Oskari.registerLocalization({
                         "operator": "Operaattori",
                         "attribute-value": "Arvo"
                     }
+                },
+                "validation": {
+                    "title": "Seuraavat virheet estivät suodattimen päivityksen:",
+                    "attribute_missing": "Attribuutti puuttuu",
+                    "operator_missing": "Operaattori puuttuu",
+                    "value_missing": "Arvo puuttuu",
+                    "boolean_operator_missing": "Looginen operaattori puuttuu"
                 }
             },
             "help" : "Ohje",
@@ -136,56 +146,56 @@ Oskari.registerLocalization({
                     "message": "Löydät tason Aineisto-paneelista"
                 }
             },
-            "error" : {
-                "title" : "Virhe",
+            "error": {
+                "title": "Virhe",
                 "invalidSetup": "Virheellisiä parametrejä",
                 "noParameters": "Ei parametrejä",
                 "noLayer": "Ei valittua tasoa",
                 "invalidMethod": "Tuntematon menetelmä: ",
-                "bufferSize" : "Virhe vyöhykkeen koossa",
-                "illegalCharacters" : "ei kirjaimia - käytä numeroita",
-                "nohelp" : "Ohjetta ei löytynyt",
-                "saveFailed" : "Analyysin tallennus epäonnistui. Yritä myöhemmin uudelleen."
+                "bufferSize": "Virhe vyöhykkeen koossa",
+                "illegalCharacters": "ei kirjaimia - käytä numeroita",
+                "nohelp": "Ohjetta ei löytynyt",
+                "saveFailed": "Analyysin tallennus epäonnistui. Yritä myöhemmin uudelleen."
             }
         },
-        "StartView" : {
-            "text" : "Voit analysoida valitsemiasi tietotuotteita ja paikkatietoja saatavilla olevilla analyysimenetelmillä ja tallentaa analyysin tulokset myöhempää käyttöä varten",
-            "infoseen" : {
-                "label" : "Älä näytä tätä viestiä uudelleen"
+        "StartView": {
+            "text": "Voit analysoida valitsemiasi tietotuotteita ja paikkatietoja saatavilla olevilla analyysimenetelmillä ja tallentaa analyysin tulokset myöhempää käyttöä varten",
+            "infoseen": {
+                "label": "Älä näytä tätä viestiä uudelleen"
             },
-            "buttons" : {
-                "continue" : "Aloita analyysi",
-                "cancel" : "Poistu"
+            "buttons": {
+                "continue": "Aloita analyysi",
+                "cancel": "Poistu"
             }
         },
-        "categoryform" : {
-            "name" : {
-                "label" : "Nimi",
-                "placeholder" : "Anna tasolle nimi"
+        "categoryform": {
+            "name": {
+                "label": "Nimi",
+                "placeholder": "Anna tasolle nimi"
             },
-            "drawing" : {
-                "label" : "  ",
-                "point" : {
-                    "label" : "Piste",
-                    "color" : "Väri",
-                    "size" : "Koko"
+            "drawing": {
+                "label": "  ",
+                "point": {
+                    "label": "Piste",
+                    "color": "Väri",
+                    "size": "Koko"
                 },
-                "line" : {
-                    "label" : "Viiva",
-                    "color" : "Väri",
-                    "size" : "Paksuus"
+                "line": {
+                    "label": "Viiva",
+                    "color": "Väri",
+                    "size": "Paksuus"
                 },
-                "area" : {
-                    "label" : "Alue",
-                    "fillcolor" : "Täyttöväri",
-                    "linecolor" : "Viivan väri",
-                    "size" : "Viivan paksuus"
+                "area": {
+                    "label": "Alue",
+                    "fillcolor": "Täyttöväri",
+                    "linecolor": "Viivan väri",
+                    "size": "Viivan paksuus"
                 }
             },
-            "edit" : {
-                "title" : "Muokkaa karttatasoa",
-                "save" : "Tallenna",
-                "cancel" : "Peruuta"
+            "edit": {
+                "title": "Muokkaa karttatasoa",
+                "save": "Tallenna",
+                "cancel": "Peruuta"
             }
         }
 

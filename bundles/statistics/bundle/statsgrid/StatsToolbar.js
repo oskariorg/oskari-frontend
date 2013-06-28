@@ -42,5 +42,50 @@ function(localization, instance) {
                 view.prepareMode(false);
             }
         }]);
+
+        var buttonGroup = 'statsgrid-tools';
+        var buttons = {
+            'selectAreas' : {
+                toolbarid : me.toolbarId,
+                iconCls : 'selection-square',
+                tooltip : this.instance._localization['showSelected'], 
+                sticky : false,
+                toggleSelection : true,
+                callback : function() {
+
+                    var statsgrid = view.instance.gridPlugin;
+                    var mode = statsgrid.toggleSelectMunicipalitiesMode();
+                    // if mode is on, unselect all unhilighted areas and notify other plugins
+                    if(mode) {
+                        // unselect all areas except hilighted
+                        statsgrid.unselectAllAreas(true);
+
+                        // tell statsLayerPlugin to hilight all areas which are selected by clicking
+                        var eventBuilder = me.instance.getSandbox().getEventBuilder('StatsGrid.SelectHilightsModeEvent');
+                        if (eventBuilder) {
+                            var event = eventBuilder(statsgrid.selectedMunicipalities);
+                            me.instance.getSandbox().notifyAll(event);
+                        }
+                    //otherwise, clear hilights
+                    } else {
+                        statsgrid.grid.scrollRowToTop(0);
+                        var eventBuilder = me.instance.getSandbox().getEventBuilder('StatsGrid.ClearHilightsEvent');
+                        if (eventBuilder) {
+                            var event = eventBuilder(me.isVisible);
+                            me.instance.getSandbox().notifyAll(event);
+                        }
+                    }
+                }
+            }
+        };
+
+        var requester = this.instance;
+        var reqBuilder = sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest');
+
+        for(var tool in buttons ) {
+            sandbox.request(requester, reqBuilder(tool, buttonGroup, buttons[tool]));
+        }
+
+
 	}
 });
