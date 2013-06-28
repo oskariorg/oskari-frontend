@@ -775,7 +775,7 @@ function(instance, localization, backendConfiguration) {
         var contentOptionArgs = contentOptions.join('');
         var formatArgs = "&format=" + selections.format;
 
-        var parameters = maplinkArgs + '&action_route=GetProxyRequest&url_id=1' + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs;
+        var parameters = maplinkArgs + '&action_route=GetProxyRequest&serviceId=print' + pageSizeArgs + pageTitleArgs + contentOptionArgs + formatArgs;
         url = url + parameters;
 
         // ajax call
