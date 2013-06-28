@@ -116,7 +116,10 @@ Oskari.registerLocalization({
             "filter": {
                 "title": "Filtering",
                 "description": "Filter for layer ",
+                "clearButton": "Clear filter",
                 "refreshButton": "Refresh filter",
+                "addFilter": "Add a new filter",
+                "removeFilter": "Remove filter",
                 "bbox": {
                     "title": "Map window filter",
                     "on": "In use",

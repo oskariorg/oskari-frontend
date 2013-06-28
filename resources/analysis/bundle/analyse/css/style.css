@@ -138,8 +138,11 @@ div.analyse-filter-popup-content div.filter-option select.operator,
 div.analyse-filter-popup-content div.filter-option select.boolean {
   width: 60px;
 }
-div.analyse-filter-popup-content div.filter-option div.add-filter-option,
-div.analyse-filter-popup-content div.filter-option div.remove-filter-option {
+div.analyse-filter-popup-content div.filter-option div.manage-filter-option {
+  display: inline-block;
+}
+div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.add-filter-option,
+div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.remove-filter-option {
   display: inline-block;
   font-size: 200%;
   font-weight: bold;

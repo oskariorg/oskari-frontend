@@ -552,6 +552,7 @@ function(instance, localization) {
             me.contentOptionDivs[dat.id] = opt;
             // Icons
             var icons = me.template.icons_layer.clone();
+            icons.addClass(dat.id);
             //cb info
             me._infoRequest(icons, dat.id);
             //cb filter
@@ -1063,6 +1064,7 @@ function(instance, localization) {
                 // Success callback
                 function(response) {
                     if (response) {
+                        console.log(response)
                         me._handleAnalyseMapResponse(response);
                     }
                 },

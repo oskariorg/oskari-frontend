@@ -30,10 +30,11 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 '<select class="attribute"></select>' +
                 '<select class="operator"></select>' +
                 '<input name="attribute-value" type="text"></input>' +
-                '<div class="add-filter-option">+</div>' +
             '</div>',
-        "addFilterOption": '<div class="add-filter-option">+</div>',
-        "removeFilterOption": '<div class="remove-filter-option">-</div>',
+        "manageFilterOption": '<div class="manage-filter-option">' +
+                '<div class="add-filter-option">+</div>' +
+                '<div class="remove-filter-option">-</div>' +
+            '</div>',
         "filterBooleanOption": '<select class="boolean"></select>',
         "option": '<option></option>'
     },
@@ -75,15 +76,15 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
      *
      * @method _filterRequest
      * @private
-     * @param {jQuery} tools  table div where filter icon is located
-     * @param {String} layer_id  layer id for to retrieve layer object,
-     *              prefixed with 'oskari_analyse_layer_'.
+     * @param {jQuery} tools table div where filter icon is located
+     * @param {String} analyse_layer_id  layer id for to retrieve layer object,
+     *                 prefixed with 'oskari_analyse_layer_'.
      */
     _filterRequest : function(tools, analyse_layer_id) {
-        var me = this;
-        // From 'oskari_analyse_layer_{id}' to '{id}'
-        var layer_id = analyse_layer_id.replace((this.id_prefix + 'layer_'), '');
-        layer = this.instance.mapLayerService.findMapLayer(layer_id);
+        var me = this,
+            // From 'oskari_analyse_layer_{id}' to '{id}'
+            layer_id = analyse_layer_id.replace((this.id_prefix + 'layer_'), ''),
+            layer = this.instance.mapLayerService.findMapLayer(layer_id);
 
         // <remove this>
         tools.find('div.filter').css({
@@ -99,7 +100,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
     },
 
     /**
-     * Creates the filter options dialog to show to the user.
+     * Creates the filter options dialog and displays it to the user.
      *
      * @method _createFilterDialog
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
@@ -108,39 +109,54 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         var me = this,
             popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
             closeButton = popup.createCloseButton(this.loc.buttons.cancel),
-            // Update the filter values
+            // Clears the filter values
+            clearButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+            // Updates the filter values
             updateButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
             popupContent = this._getFilterDialogContent(layer),
-            popupTitle = this.loc.filter.description + layer.getName();
+            popupTitle = this.loc.filter.description + layer.getName(),
+            filterJson, filterErrors, prevJson;
+
+        clearButton.setTitle(this.loc.filter.clearButton);
+        clearButton.setHandler(function() {
+            // Sets the dialog content to its original state
+            popup.setContent(me._getFilterDialogContent(layer));
+            // Removes the filter for the layer
+            me.removeFilterJson(layer.getId());
+        });
 
         updateButton.setTitle(this.loc.filter.refreshButton);
         updateButton.addClass('primary');
         updateButton.setHandler(function() {
-            var filterJson = me._getFilterValues(popup.getJqueryContent());
-            var filterErrors = me._validateFilterValues(filterJson);
+            // Get the filter values from the dialog
+            filterJson = me._getFilterValues(popup.getJqueryContent());
+            // Validate the values for errors
+            filterErrors = me._validateFilterValues(filterJson);
             if (filterErrors) {
                 // If there were validation errors, notify the user of them
                 // and prevent refreshing the filter values.
                 me._displayValidationErrors(filterErrors);
             } else {
-                // Else, set the filter JSON for the layer.
-                console.log(filterJson, layer.getId());
+                // Else, set the filter JSON for the layer
+                // and close the dialog
                 me.setFilterJson(layer.getId(), filterJson);
                 popup.close();
             }
         });
 
         // If there's already filter values for current layer, populate the dialog with them.
-        var prevJson = this.getFilterJson(layer.getId());
+        prevJson = this.getFilterJson(layer.getId());
         if (prevJson && !jQuery.isEmptyObject(prevJson)) {
             this._fillDialogContent(popupContent, prevJson, layer);
         }
 
-        popup.show(popupTitle, popupContent, [closeButton, updateButton]);
+        popup.show(popupTitle, popupContent, [closeButton, clearButton, updateButton]);
         popup.makeModal();
     },
 
     /**
+     * Creates the content for the filter dialog popup.
+     *
      * @method _getFilterDialogContent
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      */
@@ -158,7 +174,6 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
         // Filter values selection
         valuesSelection.find('div.values-title').html('<h4>' + this.loc.filter.values.title + '</h4>');
-
         // Add a filter
         filterOption = this._addAttributeFilter(layer);
         valuesSelection.append(filterOption);
@@ -169,20 +184,21 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
     },
 
     /**
-     * Fills the dialog given with values given.
+     * Fills the dialog with filter values.
      *
      * @method _fillDialogContent
+     * @private
      * @param {jQuery object} dialog
      * @param {Object} values
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      */
     _fillDialogContent: function(dialog, values, layer) {
-        // **************************************
-        // TODO: CLEAN-UP THIS HORRIBLE MESS!!!11
-        // **************************************
+        var bboxDiv = dialog.find('div.bbox-radio'),
+            filterDiv = dialog.find('div.filter-option'),
+            filter,
+            i;
 
         // Set the BBOX value
-        var bboxDiv = dialog.find('div.bbox-radio');
         if (values.bbox && !jQuery.isEmptyObject(values.bbox)) {
             // BBOX enabled
             bboxDiv.find('div.bbox-off').find('input[name=filter-bbox]').removeAttr('checked');
@@ -193,28 +209,25 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             bboxDiv.find('div.bbox-on').find('input[name=filter-bbox]').removeAttr('checked');
         }
 
-        // TODO: create the filter selections for all the filters found.
         if (values.filters && values.filters.length) {
             // Fill the values of the first filter already visible in the DOM.
-            var filter = values.filters[0];
-            var filterDiv = dialog.find('div.filter-option');
+            filter = values.filters[0];
             this._fillFilterOptionsDiv(filterDiv, filter);
 
-            for (var i = 1; values.filters && i < values.filters.length; ++i) {
-                var filter = values.filters[i];
+            // Create the rest of the filters and fill the values.
+            for (i = 1; values.filters && i < values.filters.length; ++i) {
+                filter = values.filters[i];
 
                 // The boolean operator selection
                 if (filter.boolean) {
                     var lastFilter = dialog.find('div.filter-option').last();
-                    var boolOption = jQuery(this.__filterTemplates['filterBooleanOption']);
-                    var boolPlaceHolder = this.loc.filter.values.placeholders.boolean;
-                    this._appendOptionValues(boolOption, boolPlaceHolder, [
-                        'AND', 'OR', 'NOT'
-                    ]);
-                    jQuery(boolOption).filter(function () {
+                    var boolSelect = this._createBooleanSelect();
+
+                    jQuery(boolSelect.find('option')).filter(function () {
                         return (jQuery(this).val() == filter.boolean); 
-                    }).prop('selected', true);
-                    lastFilter.find('div.add-filter-option').replaceWith(boolOption);
+                    }).prop('selected', 'selected');
+
+                    lastFilter.find('div.manage-filter-option').replaceWith(boolSelect);
                 }
                 // A normal filter
                 else {                
@@ -226,16 +239,24 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         }
     },
 
+    /**
+     * Fills the filter options div with given filter values.
+     *
+     * @method _fillFilterOptionsDiv
+     * @private
+     * @param {jQuery object} div the filter options div
+     * @param {Object} analyseFilter
+     */
     _fillFilterOptionsDiv: function(div, analyseFilter) {
         // Set the right attribute as selected
         jQuery(div.find('select.attribute option')).filter(function () {
             return (jQuery(this).val() == analyseFilter.attribute); 
-        }).prop('selected', true);
+        }).prop('selected', 'selected');
 
         // Set the right operator as selected
         jQuery(div.find('select.operator option')).filter(function () {
             return (jQuery(this).val() == analyseFilter.operator); 
-        }).prop('selected', true);
+        }).prop('selected', 'selected');
 
         // Set the value of the value field ;)
         div.find('input[name=attribute-value]').val(analyseFilter.value);
@@ -245,8 +266,8 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
      * Adds an attribute based filter selection to the UI.
      *
      * @method _addAttributeFilter
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      * @private
+     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      */
     _addAttributeFilter: function(layer) {
         var me = this,
@@ -254,25 +275,46 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             attrSelect = filterOption.find('select.attribute'),
             attrPlaceHolder = this.loc.filter.values.placeholders.attribute,
             opSelect = filterOption.find('select.operator'),
-            opPlaceHolder = this.loc.filter.values.placeholders.operator;
+            opPlaceHolder = this.loc.filter.values.placeholders.operator,
+            layerAttributes = me._getLayerAttributes(layer);
 
         // Appends values to the attribute select.
-        // TODO: get the list of layer attributes.
-        var layerAttributes = me._getLayerAttributes(layer);
         this._appendOptionValues(attrSelect, attrPlaceHolder, layerAttributes);
         // Appends values to the operator select.
         this._appendOptionValues(opSelect, opPlaceHolder, [
-            '=', '~=', '!=', '>', '<', '=>', '<='
+            '=', '~=', '≠', '>', '<', '≥', '≤'
         ]);
 
         // Placeholder to the attribute value input.
         filterOption.find('input[name=attribute-value]').
             attr('placeholder', this.loc.filter.values.placeholders['attribute-value']);
 
-        // Bind a click event to the 'add a new filter' button.
-        this._bindAddNewFilter(filterOption.find('div.add-filter-option'), layer);
+        // Add the buttons to remove this filter and to add a new filter.
+        filterOption.append(this._addManageFilterOption(layer));
 
         return filterOption;
+    },
+
+    /**
+     * Adds a new filter option and binds actions to its 'add new filter' and
+     * 'remove filter' buttons.
+     *
+     * @method _addManageFilterOption
+     * @return {jQuery object}
+     */
+    _addManageFilterOption: function(layer) {
+        var manageFilterOption = jQuery(this.__filterTemplates['manageFilterOption']),
+            addTitle = this.loc.filter.addFilter,
+            removeTitle = this.loc.filter.removeFilter;
+
+        manageFilterOption.find('div.add-filter-option').attr('title', addTitle);
+        manageFilterOption.find('div.remove-filter-option').attr('title', removeTitle);
+        // Bind a click event to the 'add a new filter' button.
+        this._bindAddNewFilter(manageFilterOption.find('div.add-filter-option'), layer);
+        // Bind a click event to the 'remove filter' button.
+        this._bindRemoveFilter(manageFilterOption.find('div.remove-filter-option'), layer);
+
+        return manageFilterOption;
     },
 
     /**
@@ -285,51 +327,88 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
     _bindAddNewFilter: function(element, layer) {
         var me = this;
         element.on('click', function(e) {
-            var elem = jQuery(this);
-            me._changeAttributeFilter(elem, layer);
+            me._changeAttributeFilter(jQuery(this), layer);
         });
     },
 
     /**
-     * Removes the plus button and creates a new attribute filter,
-     * combining it with the previous one with a logical operator.
+     * Binds a click event to remove a filter.
      *
-     * @method _changeAttributeFilter
-     * @param {Jquery object} element the element that was clicked.
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
+     * @method _bindRemoveFilter
      * @private
      */
-    _changeAttributeFilter: function(element, layer) {
+    _bindRemoveFilter: function(element, layer) {
         var me = this;
-        // Create a boolean operator selection that glues the filters together.
-        var boolOption = jQuery(this.__filterTemplates['filterBooleanOption']);
-        var boolPlaceHolder = this.loc.filter.values.placeholders.boolean;
+        element.on('click', function(e) {
+            me._removeFilter(jQuery(this), layer);
+        });
+    },
+
+    /**
+     * Removes the 'add new filter' and 'remove filter' buttons
+     * and creates a new attribute filter combining it with
+     * the previous one with a logical operator.
+     *
+     * @method _changeAttributeFilter
+     * @private
+     * @param {Jquery object} element the 'add new filter' button element
+     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
+     */
+    _changeAttributeFilter: function(element, layer) {
+        var me = this,
+            parent = element.parents('div.filter-option'),
+            filterList = element.parents('div.analyse-filter-popup-values'),
+            // Create another filter selection
+            newFilter = this._addAttributeFilter(layer),
+            // Create a boolean operator selection that glues the filters together
+            boolSelect = this._createBooleanSelect();
+
+        // Remove the add and remove filter buttons.
+        parent.find('div.manage-filter-option').remove();
+        // Append the boolean selection to the DOM.
+        parent.append(boolSelect);
+        // Add the new filter selection to the DOM.
+        filterList.append(newFilter);
+    },
+
+    /**
+     * Removes the filter selection associated with the element given as a param
+     *
+     * @method _removeFilter
+     * @private
+     * @param {jQuery object} element the 'remove filter' button element
+     */
+    _removeFilter: function(element, layer) {
+        var parent = element.parents('div.filter-option'),
+            // Previous filter selection element
+            prevSibling = parent.prev('div.filter-option'),
+            manageFilterOption = this._addManageFilterOption(layer);
+
+        // Replace the boolean operator select with the 
+        prevSibling.find('select.boolean').replaceWith(manageFilterOption);
+        // Unless this is the last filter option, remove it.
+        if (prevSibling && prevSibling.length) {
+            parent.remove();
+        }
+    },
+
+    /**
+     * Creates a boolean operator selection.
+     *
+     * @method _createBooleanSelect
+     * @private
+     * @return {jQuery object}
+     */
+    _createBooleanSelect: function() {
+        var boolOption = jQuery(this.__filterTemplates['filterBooleanOption']),
+            boolPlaceHolder = this.loc.filter.values.placeholders.boolean;
+
+        // Put the default boolean values to the select.
         this._appendOptionValues(boolOption, boolPlaceHolder, [
             'AND', 'OR', 'NOT'
         ]);
 
-        // Append the boolean selection to the DOM.
-        var parent = element.parent();
-        parent.append(boolOption);
-
-        // Create another filter selection and add it to the DOM.
-        var newFilter = this._addAttributeFilter(layer);        
-        var filterList = element.parents('div.analyse-filter-popup-values');
-        filterList.append(newFilter);
-        // Add a remove button and bind the remove event to it.
-        var removeFilterOption = jQuery(this.__filterTemplates['removeFilterOption']);
-        removeFilterOption.on('click', function() {
-            // Replace the boolean select with an add new filter button
-            // and bind the click event to it.
-            var addFilterOption = jQuery(me.__filterTemplates['addFilterOption']);
-            newFilter.prev().find('select.boolean').replaceWith(addFilterOption);
-            me._bindAddNewFilter(addFilterOption, layer);
-            newFilter.remove();
-        });
-        newFilter.append(removeFilterOption);
-        
-        // Remove the plus link.
-        element.remove();
+        return boolOption;
     },
 
     /**
@@ -343,16 +422,17 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
      *          Should have 'id' and 'name' keys if an array of objects (optional).
      */
     _appendOptionValues: function(select, placeHolder, values) {
+        var option = jQuery(this.__filterTemplates['option']),
+            i;
         // Append the first, empty value to work as a placeholder
         if (placeHolder) {
-            var option = jQuery(this.__filterTemplates['option']);
             option.attr('value', '');
             option.html(placeHolder);
             select.append(option);
         }
 
         // Iterate the list of given values
-        for (var i = 0; values && i < values.length; ++i) {
+        for (i = 0; values && i < values.length; ++i) {
             option = jQuery(this.__filterTemplates['option']);
             // Array of strings.
             if (typeof values[i] === 'string') {
@@ -370,44 +450,56 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
     /**
      * Retrieves the filter values from the popup content.
+     * Returns an object with 0..2 keys:
+     *   - 'bbox' {Object} the current map window bbox
+     *   - 'filters' {Array[Object]} where even valued items
+     *     are the actual filter objects, with keys:
+     *     'attribute', 'operator' and 'value'
+     *     and odd valued items are the logical operators
+     *     combining the filters with only one key: 'boolean'
+     *     Because of this filters.length is always
+     *     (at least it should be) odd valued.
      *
      * @method _getFilterValues
+     * @private
      * @param {Object} popupContent the content of the popup.
+     * @return {Object}
      */
     _getFilterValues: function(popupContent) {
-        var filterValues = {};
+        var filterValues = {},
+            bboxValue, domFilters, domFilter, filter, boolOperator, emptyFilter, i;
 
         // Get the map window bbox if chosen.
-        var bboxValue = jQuery(popupContent).find('input[name=filter-bbox]:checked').val();
+        bboxValue = jQuery(popupContent).find('input[name=filter-bbox]:checked').val();
         if ("true" === bboxValue) {
             filterValues.bbox = this.instance.getSandbox().getMap().getBbox();
         }
 
         // Get the actual filters.
-        var domFilters = jQuery(popupContent).find('div.filter-option');
+        domFilters = jQuery(popupContent).find('div.filter-option');
         if (domFilters && domFilters.length) {
             filterValues.filters = [];
 
-            for (var i = 0; i < domFilters.length; ++i) {
-                var domFilter = jQuery(domFilters[i]);
+            for (i = 0; i < domFilters.length; ++i) {
+                domFilter = jQuery(domFilters[i]);
 
-                var filter = {};
+                filter = {};
                 filter.attribute = domFilter.find('select.attribute').val();
                 filter.operator = domFilter.find('select.operator').val();
                 filter.value = domFilter.find('input[name=attribute-value]').val();
                 filterValues.filters.push(filter);
 
-                var boolOperator = domFilter.find('select.boolean').val();
+                boolOperator = domFilter.find('select.boolean').val();
                 if (boolOperator) {
                     filterValues.filters.push({'boolean': boolOperator});
                 }
             }
         }
 
-        // Special case when the one filter which is alway in the DOM is empty
-        // --> the user didn't want a filter.
-        // This is quite an ugly hack.
-        var emptyFilter = filterValues.filters[0];
+        // Special case when the one filter which is always in the DOM is empty
+        // --> the user didn't want a filter but just the bbox perhaps.
+        // NOTE! This is quite an ugly hack, used so that we don't send empty filters to backend.
+        emptyFilter = filterValues.filters[0];
         if (domFilters.length === 1 &&
             (!emptyFilter.attribute && !emptyFilter.operator && !emptyFilter.value)) {
             delete filterValues.filters;
@@ -428,9 +520,10 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         // Make copies of fields and locales
         var fields = layer.getFields() ? layer.getFields().slice(0) : [],
             locales = layer.getLocales() ? layer.getLocales().slice(0) : [],
-            attributes = [];
+            attributes = [],
+            i;
 
-        for (var i = 0; i < fields.length; ++i) {
+        for (i = 0; i < fields.length; ++i) {
             attributes.push({
                 id: fields[i],
                 name: (locales[i] || fields[i])
@@ -446,19 +539,21 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
      * - operator not empty
      * - value not empty
      * - if more than one filter, booleans not empty
+     *   and that every other value is a boolean, every other a filter.
      *
      * @method _validateFilterValues
      * @private
      * @param {Object} filterValues
-     * @return {Object/Boolean} return an error object if there were validation errors,
-     *                          false otherwise.
+     * @return {Object/Boolean} return an error object if there were
+     *                          validation errors, false otherwise.
      */
     _validateFilterValues: function(filterValues) {
-        var errors = [];
+        var errors = [],
+            filters = ( filterValues ? filterValues.filters : null ),
+            filter, i;
 
-        var filters = ( filterValues ? filterValues.filters : null );
-        for (var i = 0; filters && i < filters.length; ++i) {
-            var filter = filters[i];
+        for (i = 0; filters && i < filters.length; ++i) {
+            filter = filters[i];
             // These are the filter objects
             if (i % 2 === 0) {
                 if (filter.boolean)    errors.push('boolean_operator_missing');
@@ -490,9 +585,10 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
             closeButton = popup.createCloseButton(this.loc.buttons.ok),
             popupTitle = this.loc.error.title,
-            popupContent = '<h4>' + loc.title + '</h4>';
+            popupContent = '<h4>' + loc.title + '</h4>',
+            i;
 
-        for (var i = 0; i < errors.length; ++i) {
+        for (i = 0; i < errors.length; ++i) {
             popupContent += '<p>' + loc[errors[i]] + '</p>';
         }
 
