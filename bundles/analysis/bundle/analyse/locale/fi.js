@@ -35,26 +35,31 @@ Oskari.registerLocalization({
                     }
                 ]
             },
-            "aggregate": {
-                "label": "Valittu aggrekointifunktio",
-                "options": [{
-                        "id": "oskari_analyse_sum",
-                        "label": "Summa",
-                        "selected": true
-                    }, {
-                        "id": "oskari_analyse_count",
-                        "label": "Lkm"
-                    }, {
-                        "id": "oskari_analyse_min",
-                        "label": "Minimi"
-                    }, {
-                        "id": "oskari_analyse_max",
-                        "label": "Maximi"
-                    }, {
-                        "id": "oskari_analyse_med",
-                        "label": "Keskiarvo"
-                    }
-                ]
+          "aggregate" : {
+                "label" : "Aggregointifunktio",
+                "options" : [{
+                    "id" : "oskari_analyse_Sum",
+                    "label" : "Summa",
+                    "selected" : true
+                }, {
+                    "id" : "oskari_analyse_Count",
+                    "label" : "Lukumäärä"
+                }, {
+                    "id" : "oskari_analyse_Min",
+                    "label" : "Minimi"
+                }, {
+                    "id" : "oskari_analyse_Max",
+                    "label" : "Maksimi"
+                }, {
+                    "id" : "oskari_analyse_Average",
+                    "label" : "Keskiarvo"
+                }, {
+                    "id" : "oskari_analyse_StdDev",
+                    "label" : "Keskihajonta"
+                },{
+                    "id" : "oskari_analyse_Median",
+                    "label" : "Mediaani"
+                }]
             },
             "buffer_size": {
                 "label": "Vyöhykkeen koko (m)",

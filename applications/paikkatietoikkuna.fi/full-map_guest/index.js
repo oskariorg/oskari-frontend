@@ -35,12 +35,12 @@ jQuery(document).ready(function() {
         var pathIdx = ajaxUrl.indexOf('/', hostIdx);
         ajaxUrl = ajaxUrl.substring(pathIdx);
     }
-
+    
     // populate url with possible control parameters
     var getAppSetupParams = {};
-    if(typeof window.controlParams === 'object') {
-        for(var key in window.controlParams) {
-            getAppSetupParams[key] = window.controlParams[key];
+    if(typeof window.controlParams == 'object') {
+        for(var key in controlParams) {
+            getAppSetupParams[key] = controlParams[key];
         }
     }
 
@@ -81,6 +81,7 @@ jQuery(document).ready(function() {
 
     }
 
+
     jQuery.ajax({
         type: 'POST',
         dataType: 'json',
@@ -89,8 +90,8 @@ jQuery(document).ready(function() {
                 x.overrideMimeType("application/j-son;charset=UTF-8");
             }
         },
+        data : getAppSetupParams,
         url: ajaxUrl + 'action_route=GetAppSetup',
-        data: getAppSetupParams,
         success: function(app) {
             if (app.startupSequence && app.configuration) {
               var appSetup = {

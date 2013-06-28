@@ -35,26 +35,31 @@ Oskari.registerLocalization({
                     }
                 ]
             },
-            "aggregate": {
-                "label": "Aggregate funktion",
-                "options": [{
-                        "id": "oskari_analyse_sum",
-                        "label": "Summa",
-                        "selected": true
-                    }, {
-                        "id": "oskari_analyse_count",
-                        "label": "Antal"
-                    }, {
-                        "id": "oskari_analyse_min",
-                        "label": "Minimum"
-                    }, {
-                        "id": "oskari_analyse_max",
-                        "label": "Maximum"
-                    }, {
-                        "id": "oskari_analyse_med",
-                        "label": "Medeltal"
-                    }
-                ]
+             "aggregate" : {
+                 "label" : "Aggregate funktion",
+                "options" : [{
+                    "id" : "oskari_analyse_Sum",
+                    "label" : "Summa",
+                    "selected" : true
+                }, {
+                    "id" : "oskari_analyse_Count",
+                    "label" : "Antal"
+                }, {
+                    "id" : "oskari_analyse_Min",
+                    "label" : "Minimum"
+                },{
+                    "id" : "oskari_analyse_Max",
+                    "label" : "Maximum"
+                },{
+                    "id" : "oskari_analyse_Average",
+                    "label" : "Medeltal"
+                },{
+                    "id" : "oskari_analyse_StdDev",
+                    "label" : "Medel spridning"
+                },{
+                    "id" : "oskari_analyse_Median",
+                    "label" : "Mediaan"
+                }]
             },
             "buffer_size": {
                 "label": "Zon storlek (m)",

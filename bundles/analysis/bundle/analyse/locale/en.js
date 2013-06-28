@@ -12,6 +12,7 @@ Oskari.registerLocalization({
                 "label": "Data",
                 "tooltip": "Add analyse data - push [Add data] button"
             },
+
             "method": {
                 "label": "Method",
                 "tooltip": "Select first data and after that the method",
@@ -35,26 +36,31 @@ Oskari.registerLocalization({
                     }
                 ]
             },
-            "aggregate": {
-                "label": "Aggregate function",
-                "options": [{
-                        "id": "oskari_analyse_sum",
-                        "label": "Sum",
-                        "selected": true
-                    }, {
-                        "id": "oskari_analyse_count",
-                        "label": "Count"
-                    }, {
-                        "id": "oskari_analyse_min",
-                        "label": "Minimum"
-                    }, {
-                        "id": "oskari_analyse_max",
-                        "label": "Maximum"
-                    }, {
-                        "id": "oskari_analyse_med",
-                        "label": "Average"
-                    }
-                ]
+            "aggregate" : {
+                "label" : "Aggregate function",
+                "options" : [{
+                    "id" : "oskari_analyse_Sum",
+                    "label" : "Sum",
+                    "selected" : true
+                }, {
+                    "id" : "oskari_analyse_Count",
+                    "label" : "Count"
+                }, {
+                    "id" : "oskari_analyse_Min",
+                    "label" : "Minimum"
+                },{
+                    "id" : "oskari_analyse_Max",
+                    "label" : "Maximum"
+                },{
+                    "id" : "oskari_analyse_Average",
+                    "label" : "Average"
+                },{
+                    "id" : "oskari_analyse_StdDev",
+                    "label" : "Standard deviation"
+                },{
+                    "id" : "oskari_analyse_Median",
+                    "label" : "Median"
+                }]  
             },
             "buffer_size": {
                 "label": "Buffer size (meters)",
@@ -155,10 +161,10 @@ Oskari.registerLocalization({
                 "noParameters": "No parameters set",
                 "noLayer": "No layer / features selected",
                 "invalidMethod": "Unknown method: ",
-                "bufferSize": "Error in buffer size",
-                "illegalCharacters": "No alfabets - use digits",
-                "nohelp": "No guide found",
-                "saveFailed": "Storing analysis failed. Try again a little later."
+                "bufferSize" : "Error in buffer size",
+                "illegalCharacters" : "No alfabets - use digits",
+                "nohelp" : "No guide found",
+                "saveFailed" : "Storing analysis failed. Try again a little later."
             }
         },
         "StartView": {
