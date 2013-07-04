@@ -20,6 +20,13 @@ function(config, plugin) {
             this.config.contextPath;
     this.session = null;
 }, {
+    /**
+     * @method getPlugin
+     * @return {Object} plugin
+     */
+    getPlugin : function() {
+        return this.plugin;
+    },
 
     /**
      * @method getConnection

@@ -21,6 +21,12 @@ This action route returns all the maplayers which are accessible by the current 
     <td>Localization. If no lang parameter is given, backend will default to Finnish.</td>
     <td>**false**</td>
   </tr>
+  <tr>
+    <td>showEmpty</td>
+    <td>Boolean</td>
+    <td>If parameter is given and it is true, backend will response also empty "folders".</td>
+    <td>**false**</td>
+  </tr>
 </table>
 
 ## Response
