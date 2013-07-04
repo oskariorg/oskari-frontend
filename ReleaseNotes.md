@@ -8,7 +8,7 @@ A new MapSizeChangedEvent is sent when map size is changed (event is sent on map
 
 ### statsgrid bundle
 
-There is now a mode for selecting municipalities from the map instead of the grid. Checkboxes are visible by default.
+There is now a mode for selecting municipalities from the map instead of the grid. Checkboxes are visible by default. Columns can be filtered now by clicking filter link in drop down menu (funnel icon in the header).
 
 
 ## 1.12

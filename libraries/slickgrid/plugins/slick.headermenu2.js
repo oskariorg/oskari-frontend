@@ -142,10 +142,15 @@
         }
 
         if (column.header.icon) {
-          $el.addClass('icon-funnel');
+          $el.append($("<div></div>").addClass('icon-funnel'));
           //$el.css("background-image", "url(" + column.header.icon + ")");
         } else if (options.buttonImage) {
-          $el.css("background-image", "url(" + options.buttonImage + ")");
+          $el.append($("<div></div>").css({
+            "background-image": "url(" + options.buttonImage + ")",
+            "width"           : "16px",
+            "height"          : "16px",
+            "background-position": "center"
+          }));
         }
 
         if (menu.tooltip) {

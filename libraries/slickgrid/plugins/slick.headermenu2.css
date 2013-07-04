@@ -3,16 +3,14 @@
   position: absolute;
   right: 3px;
   bottom: 3px;
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-position: left center;
+  width: 16px;
+  height: 16px;
+  padding: 2px;
   cursor: pointer;
   display: inline-block;
   background-color: #ddd;
   border: 1px solid #a5a5a5;
   border-radius: 15px;
-  background-position: center;
 }
 
 .slick-header-column:hover > .slick-header-menubutton,
