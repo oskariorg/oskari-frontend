@@ -11,11 +11,38 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.CategoryForm",
  */
 function(instance) {
     this.instance = instance;
+    this.pointRenderForm = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.view.PointForm",this.instance);
+    this.lineRenderForm = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.view.LineForm",this.instance);
+    this.areaRenderForm = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.view.AreaForm",this.instance);
     // problems in demo with autodetect
     jscolor.dir = '/Oskari/libraries/jscolor/';
     
     var loc = instance.getLocalization('categoryform');
     
+    this.renderButtons = {
+        'point' : {
+            iconCls : 'icon-point',
+            tooltip : loc.rendering.point.tooltip,
+            sticky : false,
+            callback : function() {
+            }
+        },
+        'line' : {
+            iconCls : 'icon-line',
+            tooltip : loc.rendering.point.tooltip, //todo
+            sticky : false,
+            callback : function() {
+            }
+        },
+        'area' : {
+            iconCls : 'icon-area',
+            tooltip : loc.rendering.point.tooltip, //todo
+            sticky : false,
+            callback : function() {
+            }
+        }
+    };
+
     this.template = jQuery('<div class="myplacescategoryform">' +
             '<div class="field">' +   
                 '<label for="categoryname">' + loc.name.label + '</label><br clear="all" />' +
@@ -23,7 +50,7 @@ function(instance) {
             '</div>' +
             '<div class="field drawing">' + 
                 '<label>' + loc.drawing.label + '</label><br clear="all" />' +
-                '<ul>Tähän tulis kolme linkkiä, joista voi valita värejä yms.</ul>' +
+                '<div class="rendering"></div>'+
             '</div>' +
             '<div class="field visibleFields">' +
                 '<label>' + loc.visibleFields.label + '</label><br clear="all" />' +
@@ -35,6 +62,7 @@ function(instance) {
     this.templateTableRow = jQuery('<tr></tr>');
     this.templateTableCell = jQuery('<td></td>');
     this.templateTextInput = jQuery('<input type="text"/>');
+    this.templateRenderButton = jQuery('<div class="renderButton" style= "display: inline-block; border: 1px solid;"></div>');
     this.defaults = {
         dotSize : 4,
         dotColor : 'cc9900',
@@ -58,7 +86,18 @@ function(instance) {
         //this._populatePointTool(table);
         //this._populateLineTool(table);
         //this._populateAreaTool(table);
-        
+
+        // populate the rendering fields
+        var content = ui.find('div.rendering');
+        for(var buttonName in this.renderButtons) {
+            var btnContainer = this.templateRenderButton.clone();
+            var button = this.renderButtons[buttonName];
+            btnContainer.attr("title", "");
+        	btnContainer.addClass(button.iconCls);
+            content.append(btnContainer);
+        }
+        this._bindRenderButtons();
+
         if(this.initialValues) {
             ui.find('input[name=categoryname]').attr('value', this.initialValues.name);
             ui.find('input[name=dotSize]').attr('value', this.initialValues.dot.size);
@@ -69,7 +108,7 @@ function(instance) {
             //.fromString(this.initialValues.dot.color)
             //.attr('value', this.initialValues.dot.color);
             ui.find('input[name=lineSize]').attr('value', this.initialValues.line.size);
-            
+
             var lineColor = ui.find('input[name=lineColor]');
             lineColor.attr('value', this.initialValues.line.color);
             new jscolor.color(lineColor[0]);
@@ -116,13 +155,13 @@ function(instance) {
             values.dot = {
                 size : dotSize,
                 color : dotColor
-            }
+            };
             var lineSize = onScreenForm.find('input[name=lineSize]').val();
             var lineColor = onScreenForm.find('input[name=lineColor]').val();
             values.line = {
                 size : lineSize,
                 color : lineColor
-            }
+            };
             var areaLineSize = onScreenForm.find('input[name=areaLineSize]').val();
             var areaLineColor = onScreenForm.find('input[name=areaLineColor]').val();
             var areaFillColor = onScreenForm.find('input[name=areaFillColor]').val();
@@ -130,7 +169,7 @@ function(instance) {
                 size : areaLineSize,
                 lineColor : areaLineColor,
                 fillColor : areaFillColor
-            }
+            };
 
             // Get the names of the fields the user has checked.
             values.visibleFields = [];
@@ -138,6 +177,11 @@ function(instance) {
                 values.visibleFields.push(this.name);
             });
         }
+
+// todo
+//        var pointValues = this.pointRenderForm.getValues(); JNE
+
+
         return values;
     },
     /**
@@ -196,12 +240,12 @@ function(instance) {
         var toolRow = this.templateTableRow.clone();
         // empty cell
         toolRow.append(this.templateTableCell.clone());
-        
+
         var pointColorpicker = this.templateTableCell.clone();
         pointColorpicker.append(
             this._createInput('dotColor', this.defaults.dotColor, 'oskaricolor'));
         toolRow.append(pointColorpicker);
-        
+
         var size = this.templateTableCell.clone();
         size.append(this._createInput('dotSize', this.defaults.dotSize));
         toolRow.append(size);
@@ -273,6 +317,28 @@ function(instance) {
         table.append(labelRow);
         table.append(toolRow);
     },
+
+    /**
+     * @method _bindRenderButtons
+     * Binds listeners for render buttons.
+     * NOTE! THIS IS A WORKAROUND since infobox uses OpenLayers popup which accepts
+     * only HTML -> any bindings will be lost
+     * @private
+     */
+    _bindRenderButtons : function() {
+        var me = this;
+        var onScreenForm = this._getOnScreenForm();
+        onScreenForm.find('div.renderButton'+".icon-point").live('click', function() {
+            me.pointRenderForm.showForm(this);
+        });
+        onScreenForm.find('div.renderButton'+".icon-line").live('click', function() {
+            me.lineRenderForm.showForm(this);
+        });
+        onScreenForm.find('div.renderButton'+".icon-area").live('click', function() {
+            me.areaRenderForm.showForm(this);
+        });
+    },
+
     /**
      * @method _getOnScreenForm
      * Returns reference to the on screen version shown by OpenLayers 

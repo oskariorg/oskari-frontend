@@ -72,6 +72,13 @@ Oskari.registerLocalization({
       "imagelink": {
         "placeholder": "Image URL",
         "previewLabel": "Image preview"
+        "new": "New layer..."
+      },
+      "rendering": {
+        "label": "Object rendering",
+        "point": {
+          "tooltip": "Point"
+        }
       }
     },
     "categoryform": {

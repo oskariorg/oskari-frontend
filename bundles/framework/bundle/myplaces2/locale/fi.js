@@ -71,7 +71,14 @@ Oskari.registerLocalization({
       },
       "imagelink": {
         "placeholder": "Kuva-URL",
-        "previewLabel": "Valokuvan esikatselu"
+        "previewLabel": "Valokuvan esikatselu",
+        "new": "Uusi taso"
+      },
+      "rendering": {
+        "label": "Tason kohteiden esitystavat",
+        "point": {
+          "tooltip": "Piste"
+        }
       }
     },
     "categoryform": {
@@ -106,6 +113,98 @@ Oskari.registerLocalization({
       },
       "edit": {
         "title": "Muokkaa karttatasoa",
+        "save": "Tallenna",
+        "cancel": "Peruuta"
+      },
+      "rendering": {
+        "label": "Tason kohteiden esitystavat",
+        "point": {
+          "tooltip": "Piste"
+        }
+      }
+    },
+    "pointform": {
+      "title": "Pistekohteen esitystapa",
+      "tooltip": "",
+      "symbol": {
+        "label": "Pistekohteen kuvake"
+      },
+      "size": {
+        "label": "Koko"
+      },
+      "color": {
+        "label": "Väri",
+        "labelOr": "tai",
+        "labelCustom": "Oma RGB-väri (0-255)"
+      },
+      "preview": {
+        "label": "Esikatselu"
+      },
+      "buttons": {
+        "save": "Tallenna",
+        "cancel": "Peruuta"
+      }
+    },
+    "lineform": {
+      "title": "Viivan esitystapa",
+      "tooltip": "",
+      "style": {
+        "label": "Viivan tyyli"
+      },
+      "cap": {
+        "label": "Viivan päädyt"
+      },
+      "corner": {
+        "label": "Kulmat"
+      },
+      "width": {
+        "label": "Leveys"
+      },
+      "color": {
+        "label": "Väri",
+        "labelOr": "tai",
+        "labelCustom": "Oma RGB-väri (0-255)"
+      },
+      "preview": {
+        "label": "Esikatselu"
+      },
+      "buttons": {
+        "save": "Tallenna",
+        "cancel": "Peruuta"
+      }
+    },
+    "areaform": {
+      "title": "Alueen esitystapa",
+      "tooltip": "",
+      "linestyle": {
+        "label": "Alueen viivan tyyli"
+      },
+      "linecap": {
+        "label": "Viivan päädyt"
+      },
+      "linecorner": {
+        "label": "Kulmat"
+      },
+      "linewidth": {
+        "label": "Leveys"
+      },
+      "linecolor": {
+        "label": "Viivan väri",
+        "labelOr": "tai",
+        "labelCustom": "Oma RGB-väri (0-255)"
+      },
+      "color": {
+        "label": "Alueen täyttöväri",
+        "labelOr": "tai",
+        "labelCustom": "Oma RGB-väri (0-255)"
+      },
+      "fill": {
+        "label": "Alueen täyttökuvio"
+      },
+      "preview": {
+        "label": "Esikatselu"
+      },
+      "buttons": {
         "save": "Tallenna",
         "cancel": "Peruuta"
       }

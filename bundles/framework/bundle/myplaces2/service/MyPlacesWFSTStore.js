@@ -112,11 +112,15 @@ function(url, uuid) {
             category.setId(id);
             category.setDefault("true" === featAtts['default']);
             category.setName(featAtts['category_name']);
+            category.setLineWidth(featAtts['stroke_style']);
+            category.setLineWidth(featAtts['stroke_cap']);
+            category.setLineWidth(featAtts['stroke_corner']);
             category.setLineWidth(featAtts['stroke_width']);
             category.setLineColor(this._formatColorFromServer(featAtts['stroke_color']));
             category.setAreaLineWidth(featAtts['border_width']);
             category.setAreaLineColor(this._formatColorFromServer(featAtts['border_color']));
             category.setAreaFillColor(this._formatColorFromServer(featAtts['fill_color']));
+            category.setDotShape(featAtts['shape']);
             category.setDotColor(this._formatColorFromServer(featAtts['dot_color']));
             category.setDotSize(featAtts['dot_size']);
             category.setUUID(uuid);
@@ -181,8 +185,10 @@ function(url, uuid) {
                 'border_width' : m.getAreaLineWidth(),
                 'border_color' : this._prefixColorForServer(m.getAreaLineColor()),
                 'fill_color' : this._prefixColorForServer(m.getAreaFillColor()),
+                'shape' : m.getDotShape(),
                 'dot_color' : this._prefixColorForServer(m.getDotColor()),
                 'dot_size' : m.getDotSize(),
+                'dot_shape' : m.getDotShape(),
                 'uuid' : uuid
             };
             var feat = new OpenLayers.Feature.Vector(null, featAtts);

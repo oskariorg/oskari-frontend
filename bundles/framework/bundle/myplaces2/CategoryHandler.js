@@ -434,6 +434,7 @@ function(instance) {
         
         category.setDotSize(values.dot.size);
         category.setDotColor(values.dot.color);
+        category.setDotShape(values.dot.shape);
         
         category.setLineWidth(values.line.size);
         category.setLineColor(values.line.color);

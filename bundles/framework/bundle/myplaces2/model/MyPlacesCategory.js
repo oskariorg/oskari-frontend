@@ -12,13 +12,16 @@ function() {
     this.name = undefined;
     this._isDefault = false;
     this._isPublic = false;
+    this.style = 0;
+    this.cap = 0;
+    this.corner = 0;
     this.lineWidth = 1;
-    this.lineColor = '993300';
+    this.lineColor = '0000ff';
     this.areaLineWidth = 1;
     this.areaLineColor = '993300';
     this.areaFillColor = '993300';
-    this.dotSize = 4;
-    this.dotColor = '993300';
+    this.dotSize = 3;
+    this.dotColor = '000000';
     this.uuid = undefined;
 }, {
     /**
@@ -76,6 +79,48 @@ function() {
      */
     isPublic : function() {
         return (this._isPublic == true);
+    },
+    /**
+     * @method setLineStyle
+     * @param {Number} value
+     */
+    setLineStyle : function(value) {
+        this.lineStyle = value;
+    },
+    /**
+     * @method getLineStyle
+     * @return {Number}
+     */
+    getLineStyle : function() {
+        return this.lineStyle;
+    },
+    /**
+     * @method setLineCap
+     * @param {Number} value
+     */
+    setLineCap : function(value) {
+        this.lineCap = value;
+    },
+    /**
+     * @method getLineCap
+     * @return {Number}
+     */
+    getLineCap : function() {
+        return this.lineCap;
+    },
+    /**
+     * @method setLineCorner
+     * @param {Number} value
+     */
+    setLineCorner : function(value) {
+        this.lineCorner = value;
+    },
+    /**
+     * @method getLineCorner
+     * @return {Number}
+     */
+    getLineCorner : function() {
+        return this.lineCorner;
     },
     /**
      * @method setLineWidth
@@ -149,6 +194,20 @@ function() {
      */
     getAreaFillColor : function() {
         return this.areaFillColor;
+    },
+    /**
+     * @method setDotShape
+     * @param {Number} value
+     */
+    setDotShape : function(value) {
+        this.dotShape = value;
+    },
+    /**
+     * @method getDotShape
+     * @return {Number}
+     */
+    getDotShape : function() {
+        return this.dotShape;
     },
     /**
      * @method setDotSize
