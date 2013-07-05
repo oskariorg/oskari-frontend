@@ -242,15 +242,17 @@ function(config, locale) {
 
             //Adding csv button
             var me = this;
-            var csvLink = jQuery(me.templates.csvButton);
-            //container.find('selectors-container')
-            selectors.append(csvLink);
-            csvLink.click(function() {
-                if(me.dataView){
-                    var items = me.dataView.getItems();
-                    me.downloadJSON2CSV(items);
-                }
-            });
+            if(me.conf.csvDownload) {
+                var csvLink = jQuery(me.templates.csvButton);
+                //container.find('selectors-container')
+                selectors.append(csvLink);
+                csvLink.click(function() {
+                    if(me.dataView){
+                        var items = me.dataView.getItems();
+                        me.downloadJSON2CSV(items);
+                    }
+                });                
+            }
 
             // Indicators
             // success -> createIndicators
@@ -902,13 +904,13 @@ function(config, locale) {
             field : columnId,
             toolTip : name,
             sortable : true,
-header : {
-      menu: {
-        items: [{element: jQuery(me.templates.filterLink).text(me._locale.filter), command: 'filter', actionType: 'link'}]
-      },
-      icon: '/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icon-funnel.png'
+            header : {
+                  menu: {
+                    items: [{element: jQuery(me.templates.filterLink).text(me._locale.filter), command: 'filter', actionType: 'link'}]
+                  },
+                  icon: 'icon-funnel'
 
-},
+            },
             groupTotalsFormatter: function(totals, columnDef) {
                 var text = "";
                 // create grouping footer texts. => how many values there is in different colums
@@ -1122,6 +1124,7 @@ header : {
         var check = false;
         var i, k;
 
+        var municipalities = me._state.municipalities = [];
         // Set current column to be stated
         me._state.currentColumn = curCol.id;
 
@@ -1130,10 +1133,13 @@ header : {
         for ( i = 0; i < data.length; i++) {
             var row = data[i];
             // Exclude null values
-            if (row.sel == "checked" && row[curCol.field]) {
-                statArray.push(row[curCol.field]);
-                // Municipality codes (kuntakoodit)
-                munArray.push(row['code']);
+            if (row.sel == "checked"){
+                municipalities.push(row.id);
+                if(row[curCol.field]) {
+                    statArray.push(row[curCol.field]);
+                    // Municipality codes (kuntakoodit)
+                    munArray.push(row['code']);
+                }
             }
         }
 
@@ -1374,6 +1380,10 @@ header : {
                                     slider.parent().find('input#amount_class').val(state.numberOfClasses);
                                 }
                             }
+                        }
+
+                        if(state.municipalities) {
+                            me._showSelectedAreas(state.municipalities);
                         }
 
                         // current column is needed for rendering map
@@ -1699,38 +1709,42 @@ header : {
             var item = items[i];
             
             if(item.sel == 'checked'){
+                if (item[column.id] == null) {
+                    item.sel = 'empty'
+                } else { 
 
-                switch(method) {
-                    case '>':
-                        if(!(item[column.id] > inputArray[0])) {
-                            item.sel = 'empty';
-                        }
-                        break;
-                    case '>=':
-                        if(!(item[column.id] >= inputArray[0])) {
-                            item.sel = 'empty';
-                        }
-                        break;
-                    case '=':
-                       if(!(item[column.id] == inputArray[0])) {
-                            item.sel = 'empty';
-                        }
-                        break;
-                    case '<=':
-                       if(!(item[column.id] <= inputArray[0])) {
-                            item.sel = 'empty';
-                        }
-                        break;
-                    case '<':
-                       if(!(item[column.id] < inputArray[0])) {
-                            item.sel = 'empty';
-                        }
-                        break;
-                    case '...':
-                       if(!(inputArray[0] < item[column.id] && item[column.id] < inputArray[1])) {
-                            item.sel = 'empty';
-                        }
-                        break;
+                    switch(method) {
+                        case '>':
+                            if(!(item[column.id] > inputArray[0])) {
+                                item.sel = 'empty';
+                            }
+                            break;
+                        case '>=':
+                            if(!(item[column.id] >= inputArray[0])) {
+                                item.sel = 'empty';
+                            }
+                            break;
+                        case '=':
+                           if(!(item[column.id] == inputArray[0])) {
+                                item.sel = 'empty';
+                            }
+                            break;
+                        case '<=':
+                           if(!(item[column.id] <= inputArray[0])) {
+                                item.sel = 'empty';
+                            }
+                            break;
+                        case '<':
+                           if(!(item[column.id] < inputArray[0])) {
+                                item.sel = 'empty';
+                            }
+                            break;
+                        case '...':
+                           if(!(inputArray[0] < item[column.id] && item[column.id] < inputArray[1])) {
+                                item.sel = 'empty';
+                            }
+                            break;
+                    }
                 }
                 data.updateItem(item.id, item);
             }
@@ -1863,12 +1877,28 @@ header : {
      */
     _showSelectedAreas : function(idArray) {
         var data = this.grid.getData();
+        var items = data.getItems();
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            item.sel = 'empty';
+            for (var j = 0; j < idArray.length; j++) {
+                var id = idArray[j];
+                if(item.id == id) {
+                    item.sel = 'checked';
+                }
+
+            }
+            data.updateItem(item.id, item);
+        };
+/*
         for (var i = 0; i < idArray.length; i++) {
             var id = idArray[i];
             var item = data.getItemById(id);
             item.sel = 'checked';
             data.updateItem(id, item);
         };
+*/
+        data.collapseGroup('empty');
         data.refresh();
     },
 

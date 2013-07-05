@@ -142,8 +142,7 @@
         }
 
         if (column.header.icon) {
-          $el.append($("<div></div>").addClass('icon-funnel'));
-          //$el.css("background-image", "url(" + column.header.icon + ")");
+          $el.append($("<div></div>").addClass(column.header.icon));
         } else if (options.buttonImage) {
           $el.append($("<div></div>").css({
             "background-image": "url(" + options.buttonImage + ")",
