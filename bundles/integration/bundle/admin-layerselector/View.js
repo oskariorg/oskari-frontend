@@ -19,9 +19,6 @@
 Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', function() {
 }, {
 
-//    _mapLayerUrl : '/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&action_route=GetMapLayerClasses',
-    _mapLayerUrl : '/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&action_route=GetAdminMapLayers',
-
     /**
      * @property eventHandlers
      * a set of event handling functions for this view
@@ -55,6 +52,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
      * Updates layers listing after layers has been changed/MapLayerEvent has been received.
      */
     _layerUpdateHandler : function() {
+		//console.log("admin-layerselector/View.js:_layerUpdateHandler");
         // TODO! currently update, add and initial additions execute
         // the same code. This needs to be updated when mapLayerService
         // can handle updates better. 
@@ -68,7 +66,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         } else {
             this.layers = layers;
         }
-        /*
+        /* TODO use this to _update_ the updated layer?
         // TODO: handle based on operation
         if(event.getOperation() === 'update') {
         }
@@ -168,6 +166,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         }
         // update layer info
         else if(e.command == "editLayer") {
+			//console.log("Editing layer");
             e.layerData.name = e.layerData.admin.nameFi; //TODO this should be in mapLayerService
             mapLayerService.updateLayer(e.layerData.id, e.layerData);
         }

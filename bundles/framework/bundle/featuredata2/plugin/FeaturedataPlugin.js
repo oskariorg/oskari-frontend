@@ -16,14 +16,20 @@ function(config) {
     this._map = null;
     this._conf = config;
     this.__elements = {};
-    this.__templates = {};
-    this.__templates['main'] = jQuery('<div class="mapplugin featuredataplugin">' +
-        '<a href="JavaScript: void(0);"></a>' +
-        '</div>');
     this.instance = config.instance;
+
+    /* templates */
+    this.template = {};
+    for (p in this.__templates ) {
+        this.template[p] = jQuery(this.__templates[p]);
+    }
 }, {
     /** @static @property __name plugin name */
     __name : 'FeaturedataPlugin',
+
+    __templates : {
+        "main" : '<div class="mapplugin featuredataplugin"><a href="javascript:void(0);"></a></div>'
+    },
 
     /**
      * @method getName
@@ -156,7 +162,7 @@ function(config) {
         var parentContainer = jQuery(this._map.div);
 
         if(!me.__elements['main']) {
-            me.__elements['main'] = me.__templates['main'].clone();
+            me.__elements['main'] = me.template.main.clone();
         }
         var link = me.__elements['main'].find('a');
         link.html(this.instance.getLocalization('title'));

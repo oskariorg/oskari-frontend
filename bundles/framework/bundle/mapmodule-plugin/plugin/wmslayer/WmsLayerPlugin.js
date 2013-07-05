@@ -225,7 +225,6 @@ function() {
         // loop all layers and add these on the map
         for (var i = 0, ilen = layers.length; i < ilen; i++) {
             var _layer = layers[i];
-            var layerScales = this.getMapModule().calculateLayerScales(_layer.getMaxScale(), _layer.getMinScale());
 
             // default params and options
             var defaultParams = {
@@ -237,15 +236,18 @@ function() {
                 },
                 defaultOptions = {
                     layerId : _layer.getWmsName(),
-                    scales : layerScales,
                     isBaseLayer : false,
-                    displayInLayerSwitcher : true,
+                    displayInLayerSwitcher : false,
                     visibility : true,
                     buffer : 0
                 },
                 layerParams = _layer.getParams(),
                 layerOptions = _layer.getOptions();
-
+            if(_layer.getMaxScale() || _layer.getMinScale()) {
+                // use resolutions instead of scales to minimize chance of transformation errors
+                var layerResolutions = this.getMapModule().calculateLayerResolutions(_layer.getMaxScale(), _layer.getMinScale());
+                defaultOptions.resolutions = layerResolutions;
+            }
             // override default params and options from layer
             for(var key in layerParams) {
                 defaultParams[key] = layerParams[key];
@@ -392,15 +394,17 @@ function() {
      *            event
      */
     _afterChangeMapLayerStyleEvent : function(event) {
-        var layer = event.getMapLayer();
+        if(event.getMapLayer().isLayerOfType("WMS")) {
+            var layer = event.getMapLayer();
 
-        // Change selected layer style to defined style
-        if(!layer.isBaseLayer()) {
-            var styledLayer = this._map.getLayersByName('layer_' + layer.getId());
-            if(styledLayer != null) {
-                styledLayer[0].mergeNewParams({
-                    styles : layer.getCurrentStyle().getName()
-                });
+            // Change selected layer style to defined style
+            if(!layer.isBaseLayer()) {
+                var styledLayer = this._map.getLayersByName('layer_' + layer.getId());
+                if(styledLayer != null) {
+                    styledLayer[0].mergeNewParams({
+                        styles : layer.getCurrentStyle().getName()
+                    });
+                }
             }
         }
     }

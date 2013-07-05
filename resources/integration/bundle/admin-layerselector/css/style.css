@@ -196,7 +196,7 @@ div.admin-layerselector .admin-add-layer {
 div.admin-layerselector .show-add-layer,
 div.admin-layerselector .show-edit-layer  {
     padding: 10px 0px;
-    height: 870px;
+    height: auto;
     width: 100%;
     overflow: hidden;
 }

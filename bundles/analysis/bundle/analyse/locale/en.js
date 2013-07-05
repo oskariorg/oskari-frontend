@@ -1,73 +1,84 @@
 Oskari.registerLocalization({
-    "lang" : "fi",
-    "key" : "Analyse",
-    "value" : {
-        "title" : "Analysis",
-        "flyouttitle" : "Analysis",
-        "desc" : "",
-        "btnTooltip" : "Analysis",
-        "AnalyseView" : {
-            "title" : "Analysis",
-               "content" : {
-                "label" : "Data",
-                "tooltip" : "Add analyse data - push [Add data] button"          
+    "lang": "en",
+    "key": "Analyse",
+    "value": {
+        "title": "Analysis",
+        "flyouttitle": "Analysis",
+        "desc": "",
+        "btnTooltip": "Analysis",
+        "AnalyseView": {
+            "title": "Analysis",
+            "content": {
+                "label": "Data",
+                "tooltip": "Add analyse data - push [Add data] button"
             },
-            "method" : {
-                "label" : "Method",
-                "tooltip" : "Select first data and after that the method",
-                "options" : [{
-                    "id" : "oskari_analyse_buffer",
-                    "label" : "Buffer",
-                    "classForMethod" : "buffer",
-                    "selected" : true
-                }, {
-                    "id" : "oskari_analyse_aggregate",
-                    "label" : "Aggregate"",
-                    "classForPreview" : "aggregate"
-                }, {
-                    "id" : "oskari_analyse_union",
-                    "label" : "Union",
-                    "classForPreview" : "union"
-                },{
-                    "id" : "oskari_analyse_intersect",
-                    "label" : "Intersect",
-                    "classForPreview" : "intersect"
-                } ]
+
+            "method": {
+                "label": "Method",
+                "tooltip": "Select first data and after that the method",
+                "options": [{
+                        "id": "oskari_analyse_buffer",
+                        "label": "Buffer",
+                        "classForMethod": "buffer",
+                        "selected": true
+                    }, {
+                        "id": "oskari_analyse_aggregate",
+                        "label": "Aggregate",
+                        "classForPreview": "aggregate"
+                    }, {
+                        "id": "oskari_analyse_union",
+                        "label": "Union",
+                        "classForPreview": "union"
+                    }, {
+                        "id": "oskari_analyse_intersect",
+                        "label": "Intersect",
+                        "classForPreview": "intersect"
+                    }
+                ]
             },
             "aggregate" : {
                 "label" : "Aggregate function",
                 "options" : [{
-                    "id" : "oskari_analyse_sum",
+                    "id" : "oskari_analyse_Sum",
                     "label" : "Sum",
                     "selected" : true
                 }, {
-                    "id" : "oskari_analyse_count",
+                    "id" : "oskari_analyse_Count",
                     "label" : "Count"
                 }, {
-                    "id" : "oskari_analyse_min",
+                    "id" : "oskari_analyse_Min",
                     "label" : "Minimum"
                 },{
-                    "id" : "oskari_analyse_max",
+                    "id" : "oskari_analyse_Max",
                     "label" : "Maximum"
                 },{
-                    "id" : "oskari_analyse_med",
+                    "id" : "oskari_analyse_Average",
                     "label" : "Average"
-                }  ]
+                },{
+                    "id" : "oskari_analyse_StdDev",
+                    "label" : "Standard deviation"
+                },{
+                    "id" : "oskari_analyse_Median",
+                    "label" : "Median"
+                }]  
             },
-             "buffer_size" : {
-                "label" : "Buffer size (m)",
-                "tooltip" : "Enter buffer size"
+            "buffer_size": {
+                "label": "Buffer size (meters)",
+                "tooltip": "Enter buffer size"
             },
-             "analyse_name" : {
-                "label" : "Name of Analyse",
-                "tooltip" : "Enter analyse name"
+            "analyse_name": {
+                "label": "Name of analysis",
+                "tooltip": "Enter analysis name"
             },
-             "settings" : {
-                "label" : "Parameters",
-                "tooltip" : "Enter parameters for analyse"
+            "settings": {
+                "label": "Parameters",
+                "tooltip": "Enter parameters for analysis"
             },
-             "intersect" : {
-                "label" : "Intersecting layer"
+            "intersect": {
+                "label": "Intersecting layer"
+            },
+            "union" : {
+                "label" : "Second layer for union input"
             },
             "spatial" : {
                 "label" : "Spatial operator",
@@ -92,71 +103,109 @@ Oskari.registerLocalization({
                     "label" : "None"
                 }, {
                     "id" : "oskari_analyse_select",
-                    "label" : "Use list"
+                    "label" : "Choose.."
                 }]
             },
-               "output" : {
+            "output" : {
                 "label" : "Layout",
                 "color_label" : "Select colors:",
                 "colorset_tooltip" : "Modify colors",
-                "tooltip" : "Setup colors for analyse layout"
+                "tooltip" : "Setup colors for analysis layout"
             },
-
-
             "buttons" : {
                 "save" : "Save",
                 "analyse" : "Analyse",
                 "data" : "Add data",
-                "cancel" : "Cancel"
+                "cancel" : "Cancel",
+                "ok": "OK"
+            },
+            "filter": {
+                "title": "Filtering",
+                "description": "Filter for layer ",
+                "clearButton": "Clear filter",
+                "refreshButton": "Refresh filter",
+                "addFilter": "Add a new filter",
+                "removeFilter": "Remove filter",
+                "bbox": {
+                    "title": "Map window filter",
+                    "on": "In use",
+                    "off": "Not in use"
+                },
+                "values": {
+                    "title": "Filter",
+                    "placeholders": {
+                        "attribute": "Attribute",
+                        "boolean": "Logical operator",
+                        "operator": "Oprator",
+                        "attribute-value": "Value"
+                    }
+                },
+                "validation": {
+                    "title": "Following errors prevented refreshing the filter:",
+                    "attribute_missing": "Attribute missing",
+                    "operator_missing": "Operator missing",
+                    "value_missing": "Value missing",
+                    "boolean_operator_missing": "Logical operator missing"
+                }
             },
             "help" : "Help",
-            "error" : {
-                "title" : "Error",
-                "size" : "Error in buffer size",
-                "nohelp" : "No quide found",
-                "saveFailed" : "Storinig analysis failde. Try once more later.",
-                "IllegalCharacters" : "No alfabets - use digits"
-            }
-        },
-        "StartView" : {
-            "text" : "Select analysis layers and analyse data. Save the results after analysis",
-             "infoseen" : {
-                "label" : "Don't show this again"
+            "success": {
+                "layerAdded": {
+                    "title": "Map layer {layer} added",
+                    "message": "Löydät tason Aineisto-paneelista - EN"
+                }
             },
-            "buttons" : {
-                "continue" : "Start analyse",
-                "cancel" : "Cancel"
+            "error": {
+                "title": "Error",
+                "invalidSetup": "Invalid parameters",
+                "noParameters": "No parameters set",
+                "noLayer": "No layer / features selected",
+                "invalidMethod": "Unknown method: ",
+                "bufferSize" : "Error in buffer size",
+                "illegalCharacters" : "No alfabets - use digits",
+                "nohelp" : "No guide found",
+                "saveFailed" : "Storing analysis failed. Try again a little later."
             }
         },
-         "categoryform": {
-      "name": {
-        "label": "Name",
-        "placeholder": "Give the map layer a name"
-      },
-      "drawing": {
-        "label": "  ",
-        "point": {
-          "label": "Point",
-          "color": "Colour",
-          "size": "Size"
+        "StartView": {
+            "text": "Select analysis layers and analyse data. Save the results after analysis",
+            "infoseen": {
+                "label": "Don't show this again"
+            },
+            "buttons": {
+                "continue": "Start analyse",
+                "cancel": "Cancel"
+            }
         },
-        "line": {
-          "label": "Line",
-          "color": "Colour",
-          "size": "Thickness"
-        },
-        "area": {
-          "label": "Area",
-          "fillcolor": "Fill-in colour",
-          "linecolor": "Line colour",
-          "size": "Line thickness"
+        "categoryform": {
+            "name": {
+                "label": "Name",
+                "placeholder": "Give the map layer a name"
+            },
+            "drawing": {
+                "label": "  ",
+                "point": {
+                    "label": "Point",
+                    "color": "Colour",
+                    "size": "Size"
+                },
+                "line": {
+                    "label": "Line",
+                    "color": "Colour",
+                    "size": "Thickness"
+                },
+                "area": {
+                    "label": "Area",
+                    "fillcolor": "Fill-in colour",
+                    "linecolor": "Line colour",
+                    "size": "Line thickness"
+                }
+            },
+            "edit": {
+                "title": "Edit map layer",
+                "save": "Save",
+                "cancel": "Back"
+            }
         }
-      },
-      "edit": {
-        "title": "Edit map layer",
-        "save": "Save",
-        "cancel": "Back"
-      }
-    }
     }
 });

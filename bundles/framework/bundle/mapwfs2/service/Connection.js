@@ -14,7 +14,7 @@ function(config, mediator) {
         var cookieValue = jQuery.cookie(cookieName);
 
         var cometURL = location.protocol + "//" +
-            location.hostname + ":" + config.port  +
+            config.hostname + ":" + config.port  +
             config.contextPath + "/cometd";
 
         var cometd = jQuery.cometd;
@@ -53,7 +53,6 @@ function(config, mediator) {
             if(cometd.isDisconnected()) {
                 _connected = false;
                 mediator.setConnection(null);
-                //console.log("CometD Connection Closed");
                 return;
             }
 
@@ -61,10 +60,10 @@ function(config, mediator) {
             _connected = message.successful === true;
             if(!wasConnected && _connected) {
                 mediator.setConnection(cometd);
-                //console.log("CometD Connection Established");
+                mediator.getPlugin().clearConnectionErrorTriggers(); // clear errors
             } else if(wasConnected && !_connected) {
                 mediator.setConnection(null);
-                //console.log("CometD Connection Broken");
+                mediator.getPlugin().showErrorPopup("connection_broken", null, true);
             }
         }
 
@@ -83,6 +82,8 @@ function(config, mediator) {
                         "browserVersion" : jQuery.browser.versionNum
                     });
                 });
+            } else {
+                mediator.getPlugin().showErrorPopup("connection_not_available", null, true);
             }
         }
 
@@ -94,14 +95,18 @@ function(config, mediator) {
         // error handling
         function getError(data)
         {
-//            console.log("error,", data.data);
+            console.log(data);
+            var message = data.data.message;
+            var layer = mediator.getPlugin().getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
+            var once = data.data.once;
+            mediator.getPlugin().showErrorPopup(message, layer, once);
         }
-
+/*
         // debug
         function getData(data) {
-//            console.log("getData:", data);
+            console.log("getData:", data);
         }
-
+*/
 }, {
 
 });

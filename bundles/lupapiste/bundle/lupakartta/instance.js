@@ -32,8 +32,6 @@ function() {
 		//  **************************************
 		var me = this;
 	    
-		console.log('lipapiste started');
-		
 		// Should this not come as a param?
 		var sandbox = Oskari.$('sandbox');
 		this.sandbox = sandbox;

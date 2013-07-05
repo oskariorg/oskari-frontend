@@ -37,6 +37,9 @@
             "mapwfs": {
                "bundlePath": "../packages/framework/bundle/"
             },
+            "mapwfs2": {
+               "bundlePath": "../packages/framework/bundle/"
+            },
             "service-base": {
                "bundlePath": "../packages/framework/bundle/"
             },
@@ -317,6 +320,22 @@
       }
    }, {
       "instanceProps": {},
+      "title": "Featuredata2",
+      "bundleinstancename": "featuredata2",
+      "fi": "Kohdetiedot",
+      "sv": "?",
+      "en": "?",
+      "bundlename": "featuredata2",
+      "metadata": {
+         "Import-Bundle": {
+            "featuredata2": {
+               "bundlePath": "../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance": []
+      }
+   }, {
+      "instanceProps": {},
       "title": "My places",
       "bundleinstancename": "myplaces2",
       "fi": "Kohteet",
@@ -423,5 +442,21 @@
             }
          }
       }
+   }, {
+      "title": "Printout",
+      "fi": "Karttatuloste",
+      "sv": "Kartutskrift",
+      "en": "Map Printout",
+      "bundlename": "printout",
+      "bundleinstancename": "printout",
+      "metadata": {
+         "Import-Bundle": {
+            "printout": {
+               "bundlePath": "../packages/framework/bundle/"
+            }
+         },
+         "Require-Bundle-Instance": []
+      },
+      "instanceProps": {}
    }]
 }

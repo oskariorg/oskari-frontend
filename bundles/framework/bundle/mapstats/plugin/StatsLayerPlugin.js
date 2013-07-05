@@ -19,10 +19,16 @@ function(config) {
     this._navCtrl = null;
     this._getFeatureControlHover = null;
     this._getFeatureControlSelect = null;
+    this._modeVisible = false;
     this.config = config;
     this.ajaxUrl = null;
     if(config && config.ajaxUrl) {
         this.ajaxUrl = config.ajaxUrl;
+    }
+    if (config && config.published) {
+        // A sort of a hack to enable the controls in a published map.
+        // At the moment there's no such option in the conf, but there might be.
+        this._modeVisible = config.published;
     }
 }, {
     /** @static @property __name plugin name */
@@ -177,6 +183,19 @@ function(config) {
         },
         'MapStats.StatsVisualizationChangeEvent': function(event) {
             this._afterStatsVisualizationChangeEvent(event);
+        },
+        'StatsGrid.ModeChangedEvent': function(event) {
+            this._afterModeChangedEvent(event);
+        },
+        'StatsGrid.SelectHilightsModeEvent': function(event) {
+            this._hilightFeatures(event);
+        },
+        'StatsGrid.ClearHilightsEvent': function(event) {
+            this._clearHilights(event);
+        },
+        //_clearHilights
+        'MapStats.HoverTooltipContentEvent': function(event) {
+            this._afterHoverTooltipContentEvent(event);
         }
     },
 
@@ -210,6 +229,27 @@ function(config) {
         }
 
     },
+
+    /**
+     * Activates the hover and select controls.
+     *
+     * @method activateControls
+     */
+    activateControls: function() {
+        this._getFeatureControlHover.activate();
+        this._getFeatureControlSelect.activate();
+    },
+
+    /**
+     * Deactivates the hover and select controls.
+     *
+     * @method deactivateControls
+     */
+    deactivateControls: function() {
+        this._getFeatureControlHover.deactivate();
+        this._getFeatureControlSelect.deactivate();
+    },
+
     /**
      * Handle _afterMapLayerAddEvent
      * @private 
@@ -228,8 +268,9 @@ function(config) {
      * @param {Boolean} isBaseMap
      */
     _addMapLayerToMap : function(layer, keepLayerOnTop, isBaseMap) {
-
         var me = this;
+        var eventBuilder = me._sandbox.getEventBuilder('MapStats.FeatureHighlightedEvent');
+        var highlightEvent;
 
         if(!layer.isLayerOfType(this._layerType)) {
             return;
@@ -312,6 +353,7 @@ function(config) {
                         for (var i = 0; i < drawLayer.features.length; i++) {
                             if (!drawLayer.features[i].selected) drawLayer.removeFeatures([drawLayer.features[i]]);
                         }
+                        me._removePopup();
                         return;
                     }
                     var found = false;
@@ -323,9 +365,13 @@ function(config) {
                             drawLayer.removeFeatures([drawLayer.features[i]]);
                         }
                     }
+                    
                     if (!found) {
                         drawLayer.addFeatures([event.features[0]]);
                         me._highlightCtrl.highlight(event.features[0]);
+
+                        me._removePopup();
+                        me._addPopup(event);
                     }
                     drawLayer.redraw();
                 },
@@ -337,7 +383,10 @@ function(config) {
         });
         // Add the control to the map
         this._map.addControl(this._getFeatureControlHover);
-        this._getFeatureControlHover.activate();
+        // Activate only is mode is on.
+        if (this._modeVisible) {
+            this._getFeatureControlHover.activate();
+        }
 
         // Select control
         this._getFeatureControlSelect = new OpenLayers.Control.WMSGetFeatureInfo({
@@ -368,6 +417,7 @@ function(config) {
     				featureStyle.strokeColor = "#ff3333";
 	    			featureStyle.strokeWidth = 3;
 	    			featureStyle.fillOpacity = 0.2;
+
                     if (foundInd >= 0) {
                         drawLayer.features[i].selected = !drawLayer.features[i].selected;
                         if (drawLayer.features[i].selected) {
@@ -376,12 +426,22 @@ function(config) {
                             drawLayer.features[i].style = null;
                             me._highlightCtrl.highlight(drawLayer.features[i]);
                         }
+                        if (eventBuilder) {
+                            highlightEvent = eventBuilder(drawLayer.features[i], drawLayer.features[i].selected, 'click');
+                        }
                     } else {
                         drawLayer.addFeatures([newFeature]);
                         newFeature.selected = true;
                         newFeature.style = featureStyle;
+                        if (eventBuilder) {
+                            highlightEvent = eventBuilder(newFeature, newFeature.selected, 'click');
+                        }
                     }
                     drawLayer.redraw();
+
+                    if (highlightEvent) {
+                        me._sandbox.notifyAll(highlightEvent);
+                    }
                 },
                 beforegetfeatureinfo: function(event) {
                 },
@@ -391,7 +451,10 @@ function(config) {
         });
         // Add the control to the map
         this._map.addControl(this._getFeatureControlSelect);
-        this._getFeatureControlSelect.activate();
+        // Activate only is mode is on.
+        if (this._modeVisible) {
+            this._getFeatureControlSelect.activate();
+        }
 
         openLayer.opacity = layer.getOpacity() / 100;
 
@@ -412,7 +475,86 @@ function(config) {
             }
         }
     },
-    
+
+    /**
+     * Activates/deactivates the controls after the mode has changed.
+     *
+     * @method _afterModeChangedEvent
+     * @private
+     * @param {Oskari.statistics.bundle.statsgrid.event.ModeChangedEvent} event
+     */
+    _afterModeChangedEvent: function(event) {
+        this._modeVisible = event.isModeVisible();
+        var drawLayer = this._map.getLayersByName("Stats Draw Layer")[0];
+
+        if (this._modeVisible) {
+            this.activateControls();
+        } else {
+            this.deactivateControls();
+            if (drawLayer) {
+                drawLayer.removeAllFeatures();
+            }
+            this._removePopup();
+        }
+    },
+    /**
+     * Clear hilighted features
+     *
+     * @method _clearHilights
+     * @private
+     * @param {Oskari.statistics.bundle.statsgrid.event.ClearHilightsEvent} event
+     */
+    _clearHilights: function(event) {
+        var drawLayer = this._map.getLayersByName("Stats Draw Layer")[0];
+        if (drawLayer) {
+            for (var i = 0; i < drawLayer.features.length; i++) {
+                //clear style
+                drawLayer.features[i].style = null;
+                // notify highlight control
+                this._highlightCtrl.highlight(drawLayer.features[i]);
+            }
+        }
+        drawLayer.redraw();
+        //remove popup also
+        this._removePopup();
+    },
+
+    /**
+     * Hilight features
+     *
+     * @method _hilightFeatures
+     * @private
+     * @param {Oskari.statistics.bundle.statsgrid.event.SelectHilightsModeEvent} event
+     */
+    _hilightFeatures: function(event) {
+        // which municipalities should be hilighted
+        var codes = event.getCodes();
+        var drawLayer = this._map.getLayersByName("Stats Draw Layer")[0];
+
+        //drawLayer can not be undefined
+        if (typeof drawLayer === "undefined") return;
+        var attrText = "kuntakoodi";
+
+        //add hilight feature style
+        var featureStyle = OpenLayers.Util.applyDefaults(featureStyle, OpenLayers.Feature.Vector.style['default']);
+        featureStyle.fillColor = "#ff0000";
+        featureStyle.strokeColor = "#ff3333";
+        featureStyle.strokeWidth = 3;
+        featureStyle.fillOpacity = 0.2;
+
+        // loop through codes and features to find out if feature should be hilighted
+        for (var key in codes) {
+            for (var i = 0; i < drawLayer.features.length; i++) {
+                if (drawLayer.features[i].attributes[attrText] === key && codes[key]) {
+                    drawLayer.features[i].style = featureStyle;
+                    this._highlightCtrl.highlight(drawLayer.features[i]);
+                    break;
+                }
+            }
+        }
+        drawLayer.redraw();
+    },
+
     /**
      * @method _afterMapLayerRemoveEvent
      * Handle AfterMapLayerRemoveEvent
@@ -446,12 +588,16 @@ function(config) {
         var mapLayer = event.getMapLayer();
         if (mapLayer._layerType !== "STATS") return;
         this._statsDrawLayer.setVisibility(mapLayer.isVisible());
-        if (mapLayer.isVisible()) {
-            this._getFeatureControlHover.activate();
-            this._getFeatureControlSelect.activate();
-        } else {
-            this._getFeatureControlHover.deactivate();
-            this._getFeatureControlSelect.deactivate();
+
+        // Do nothing if not in statistics mode.
+        if (this._modeVisible) {
+            if (mapLayer.isVisible()) {
+                this._getFeatureControlHover.activate();
+                this._getFeatureControlSelect.activate();
+            } else {
+                this._getFeatureControlHover.deactivate();
+                this._getFeatureControlSelect.deactivate();
+            }
         }
     },
 
@@ -485,6 +631,61 @@ function(config) {
 
         return this._map.getLayersByName('layer_' + layer.getId());
     },
+
+    /**
+     * Removes popup from the map.
+     *
+     * @method _removePopup
+     * @private
+     * @param {OpenLayers.Popup} popup Optional, uses this._popup if not provided
+     */
+    _removePopup: function(popup) {
+        popup = popup || this._popup;
+        if (popup) {
+            this._map.removePopup(popup);
+        }
+    },
+
+    /**
+     * Adds a popup to the map and sends a request to get content for it
+     * from the statsgrid bundle.
+     *
+     * @method _addPopup
+     * @private
+     * @param {OpenLayers.Event} event event with xy and feature information
+     */
+    _addPopup: function(event) {
+        var content = event.features[0].attributes['kuntanimi'];
+        this._popup = new OpenLayers.Popup('mapstatsHover',
+            this._map.getLonLatFromPixel(new OpenLayers.Pixel(event.xy.x + 5, event.xy.y + 5)),
+            new OpenLayers.Size(100, 100),
+            content
+        );
+        this._popup.autoSize = true;
+        this._popup.opacity = 0.8;
+        this._map.addPopup(this._popup);
+
+        var reqBuilder = this._sandbox.getRequestBuilder('StatsGrid.TooltipContentRequest');
+        if (reqBuilder) {
+            var request = reqBuilder(event.features[0]);
+            this._sandbox.request(this, request);
+        }
+    },
+
+    /**
+     * Sets content for this._popup, if found.
+     *
+     * @method _afterHoverTooltipContentEvent
+     * @private
+     * @param {Oskari.mapframework.bundle.mapstats.event.HoverTooltipContentEvent} event
+     */
+    _afterHoverTooltipContentEvent: function(event) {
+        var content = event.getContent();
+        if (this._popup) {
+            this._popup.setContentHTML(content);
+        }
+    },
+
     /**
      * @method _afterChangeMapLayerOpacityEvent
      * Handle AfterChangeMapLayerOpacityEvent

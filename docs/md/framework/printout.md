@@ -23,7 +23,15 @@ Manages settings panel when user has entered to the print mode.
 
 ## Bundle configuration
 
-No configuration is required.
+Configuration is available for print preview service urls and legend styling parameters
+(portti_bundle_config_printout_update.sql)
+
+            "legend" : {
+                "general" : {
+                    "legendWidth" : 0.27,     (Legend size is 0.27 * Map longer edge)
+                    "legendRowHeight" : 0.02, (Legend row height is 0.02 * Map longer edge)
+                    "charsInrow" : 32         (Max length of title row without line break)
+                    ...
 
 ## Bundle state
 

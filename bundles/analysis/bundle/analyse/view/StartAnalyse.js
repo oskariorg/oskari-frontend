@@ -59,9 +59,11 @@ function(instance, localization) {
     // content options listed in localisations
     this.contentOptionsMap = {};
     this.intersectOptionsMap = {};
+    this.unionOptionsMap = {};
 
     this.contentOptions = {};
     this.intersectOptions = {};
+    this.unionOptions = {};
 
     this.accordion = null;
     this.mainPanel = null;
@@ -77,6 +79,8 @@ function(instance, localization) {
     this.paramsOptionDivs = {};
     this.aggreOptionDivs = {};
 
+    this._filterJsons = {};
+
 }, {
     __templates : {
         "content" : '<div class="layer_data"></div>',
@@ -90,13 +94,14 @@ function(instance, localization) {
         "aggreOptionTool" : '<div class="tool ">' + '<input type="radio" name="aggre" />' + '<label></label></div>',
         "spatialOptionTool" : '<div class="tool ">' + '<input type="radio" name="spatial" />' + '<label></label></div>',
         "intersectOptionTool" : '<div class="tool ">' + '<input type="radio" name="intersect" />' + '<label></label></div>',
+        "unionOptionTool" : '<div class="tool ">' + '<input type="radio" name="union" />' + '<label></label></div>',
         "title" : '<div class="analyse_title_cont analyse_settings_cont"><div class="settings_buffer_label"></div><input class="settings_buffer_field" type="text"></div>',
         "title_name" : '<div class="analyse_title_name analyse_settings_cont"><div class="settings_name_label"></div><input class="settings_name_field" type="text"></div>',
         "title_color" : '<div class="analyse_title_colcont analyse_output_cont"><div class="output_color_label"></div></div>',
         "title_columns" : '<div class="analyse_title_columns analyse_output_cont"><div class="columns_title_label"></div></div>',
         "title_extra" : '<div class="analyse_title_extra analyse_output_cont"><div class="extra_title_label"></div></div>',
         "icon_colors" : '<div class="icon-menu"></div>',
-        "option" : '<div class="analyse_option_cont analyse_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>',
+        "option" : '<div class="analyse_option_cont analyse_settings_cont">' + '<input type="radio" name="selectedlayer" />' + '<label></label></div>',
         "methodOptionTool" : '<div class="tool ">' + '<input type="radio" name="method" />' + '<label></label></div>'
 
     },
@@ -269,7 +274,7 @@ function(instance, localization) {
         // Changing part of parameters ( depends on method)
         var extra = this.template.paramsOptionExtra.clone();
         contentPanel.append(extra);
-        me._addExtraParameters(contentPanel, me.id_prefix+"buffer");
+        me._addExtraParameters(contentPanel, me.id_prefix + "buffer");
         // buffer is default method
 
         var columnsTitle = this.template.title_columns.clone();
@@ -409,7 +414,7 @@ function(instance, localization) {
     _colorSelector : function(coldiv) {
         var me = this;
         // Use myplace style setup
-        me.categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.CategoryForm', me.instance);
+        me.categoryForm = Oskari.clazz.create('Oskari.analysis.bundle.analyse.view.CategoryForm', me.instance);
         // hide myplace layer name input
         var myform = me.categoryForm.getForm();
         myform.find('div.field:first').hide();
@@ -512,9 +517,9 @@ function(instance, localization) {
         var ii = 0;
         // request updates for map tiles
         for (var i = 0; i < layers.length; i++) {
-            if (layers[i].isLayerOfType('WFS')) {
+            if (layers[i].isLayerOfType('WFS') || layers[i].isLayerOfType('ANALYSIS')) {
                 var option = {
-                    id : me.id_prefix+'layer_'+layers[i].getId(),
+                    id : me.id_prefix + 'layer_' + layers[i].getId(),
                     label : layers[i].getName()
                 };
                 ii++;
@@ -554,7 +559,6 @@ function(instance, localization) {
             contentPanel.after(opt);
 
         }
-       
     },
     /**
      * @method _addExtraParameters
@@ -565,7 +569,7 @@ function(instance, localization) {
     _addExtraParameters : function(contentPanel, method) {
         var me = this;
         var extra = contentPanel.find('.extra_params')
-        if (method == this.id_prefix+"buffer") {
+        if (method == this.id_prefix + "buffer") {
             var bufferTitle = me.template.title.clone();
             bufferTitle.find('.settings_buffer_label').html(me.loc.buffer_size.label);
             bufferTitle.find('.settings_buffer_field').attr({
@@ -574,16 +578,19 @@ function(instance, localization) {
             });
 
             extra.append(bufferTitle);
- 
 
-        } else if (method == this.id_prefix+"aggregate") {
+        } else if (method == this.id_prefix + "aggregate") {
             // sum, count, min, max, med
 
             me._aggregateExtra(extra);
 
-        } else if (method == this.id_prefix+"intersect") {
+        } else if (method == this.id_prefix + "intersect") {
             // intersecting layer selection
             me._intersectExtra(extra);
+
+        } else if (method == this.id_prefix + "union") {
+            // union input 2 layer selection
+            me._unionExtra(extra);
 
         }
     },
@@ -751,6 +758,119 @@ function(instance, localization) {
 
     },
     /**
+     * @method _unionExtra
+     * @private
+     * Add extra parameters for params UI according to method union
+     * @param {jQuery} contentPanel  div to append extra params
+     */
+    _unionExtra : function(contentPanel) {
+        var me = this;
+
+        // Set radiobuttons for selecting union layer
+        var options = [];
+        // Checked data layers
+        if (me.contentOptionDivs) {
+            for (var p in me.contentOptionsMap ) {
+                if (me.contentOptionDivs[p] != undefined) {
+                    // true or false var test = me.contentOptionDivs[p].find('input').prop('checked');
+                    var option = {
+                        id : me.contentOptionsMap[p].id,
+                        label : me.contentOptionsMap[p].label
+                    };
+                    options.push(option);
+                }
+            }
+        }
+
+        me.unionOptions = options;
+        me.unionOptionsMap = {};
+
+        for (var f = 0; f < me.unionOptions.length; f++) {
+            me.unionOptionsMap[me.unionOptions[f].id] = me.unionOptions[f];
+        }
+        // title
+        var title = me.template.title_extra.clone();
+        title.find('.extra_title_label').html(me.loc.union.label);
+        contentPanel.append(title);
+
+        var closureMagic = function(tool) {
+            return function() {
+                var size = contentPanel.find('input[name=aggre]:checked').val();
+                // reset previous setting
+                for (var i = 0; i < me.unionOptions.length; ++i) {
+                    me.unionOptions[i].selected = false;
+                }
+                tool.selected = true;
+
+            };
+        };
+
+        for (var i = 0; i < me.unionOptions.length; ++i) {
+            var option = me.unionOptions[i];
+            var toolContainer = me.template.unionOptionTool.clone();
+            var label = option.label;
+            if (option.width && option.height) {
+                label = label + ' (' + option.width + ' x ' + option.height + 'px)';
+            }
+            toolContainer.find('label').append(label).attr({
+                'for' : option.id,
+                'class' : 'params_radiolabel'
+            });
+            if (option.selected) {
+                toolContainer.find('input').attr('checked', 'checked');
+            }
+            contentPanel.append(toolContainer);
+            toolContainer.find('input').attr({
+                'value' : option.id,
+                'name' : 'union',
+                'id' : option.id
+            });
+            toolContainer.find('input').change(closureMagic(option));
+        }
+
+        //title spatial operator
+        var titlespa = this.template.title_extra.clone();
+        titlespa.find('.extra_title_label').html(this.loc.spatial.label);
+        contentPanel.append(titlespa);
+
+        var closureMagic = function(tool) {
+            return function() {
+                var size = contentPanel.find('input[name=spatial]:checked').val();
+                // reset previous setting
+                for (var i = 0; i < me.spatialOptions.length; ++i) {
+                    me.spatialOptions[i].selected = false;
+                }
+                tool.selected = true;
+
+            };
+        };
+
+        // spatial operators
+        for (var i = 0; i < this.spatialOptions.length; ++i) {
+            var option = this.spatialOptions[i];
+            var toolContainer = this.template.spatialOptionTool.clone();
+            var label = option.label;
+            if (option.width && option.height) {
+                label = label + ' (' + option.width + ' x ' + option.height + 'px)';
+            }
+            toolContainer.find('label').append(label).attr({
+                'for' : option.id,
+                'class' : 'params_radiolabel'
+            });
+            if (option.selected) {
+                toolContainer.find('input').attr('checked', 'checked');
+            }
+            contentPanel.append(toolContainer);
+            toolContainer.find('input').attr({
+                'value' : option.id,
+                'name' : 'spatial',
+                'id' : option.id
+            });
+            toolContainer.find('input').change(closureMagic(option));
+        }
+
+    },
+    /**
      * @method _modifyExtraParameters
      * @private
      * modify parameters data UI according to method
@@ -826,112 +946,93 @@ function(instance, localization) {
         var container = this.mainPanel;
         var sandbox = this.instance.getSandbox();
 
+        // Get the name of the method
         var selectedMethod = container.find('input[name=method]:checked').val();
+        var methodName = selectedMethod && selectedMethod.replace(this.id_prefix, '');
+
+        // Get the feature fields
+        // TODO: in case of 'select', parse given array.
         var selectedColumnmode = container.find('input[name=params]:checked').val();
+        var fields = selectedColumnmode && selectedColumnmode.replace(this.id_prefix, '');
+
         var title = container.find('.settings_name_field').val();
+        var layer = this._getSelectedMapLayer();
 
-        var selections = {};
-        if (selectedMethod == this.id_prefix+'buffer') {
-            var size = container.find('.settings_buffer_field').val();
-            selections = {
-                analyseName : title,
-                method : selectedMethod,
-                buffer_size : size,
-                column_mode : selectedColumnmode,
-                columns : {}
+        // Get method specific selections
+        var selections = this._getMethodSelections(layer, {
+            name : title,
+            method : methodName,
+            fields : fields,
+            layerId : layer.getId(),
+            layerType : layer.getLayerType()
+        });
 
-            };
-        } else if (selectedMethod == this.id_prefix+'aggregate') {
-            var selectedAggre = container.find('input[name=aggre]:checked').val();
-            selections = {
-                analyseName : title,
-                method : selectedMethod,
-                aggre_function : selectedAggre,
-                column_mode : selectedColumnmode,
-                columns : {}
-
-            };
-        } else if (selectedMethod == this.id_prefix+'union') {
-            selections = {
-                analyseName : title,
-                method : selectedMethod,
-                column_mode : selectedColumnmode,
-                columns : {}
-
-            };
-        } else if (selectedMethod == this.id_prefix+'intersect') {
-            var sectingLayer = container.find('input[name=intersect]:checked').val();
-            var spatialOperator = container.find('input[name=spatial]:checked').val();
-            selections = {
-                analyseName : title,
-                method : selectedMethod,
-                intersector : sectingLayer,
-                spatial_operator : spatialOperator,
-                column_mode : selectedColumnmode,
-                columns : {}
-
-            };
-        }
         // Styles
-        selections["styles"] = this.getStyleValues();
-        // Checked data layers
-        selections["layers"] = this._selectedLayers();
+        selections["style"] = this.getStyleValues();
+        // Bbox
+        selections["bbox"] = this.instance.getSandbox().getMap().getBbox();
 
         return selections;
-
     },
 
     /**
-     * @method _checkSelections
+     * Adds method specific parameters to selections
+     *
+     * @method _getMethodSelections
      * @private
-     * Check analyse selection parameters and returns true, if OK
-     * @return {boolean}
+     * @param {Object} layer an Oskari layer
+     * @param {Object} defaultSelections the defaults, such as name etc.
+     * @return {Object} selections for a given method
      */
-    _checkSelections : function(selections) {
+    _getMethodSelections : function(layer, defaultSelections) {
+        var container = this.mainPanel;
+        var methodName = defaultSelections.method;
 
-        var error = "Invalid parameter setup: ";
-        var check = true;
-        if (!selections) {
-            alert(error + 'No parameters');
-            return false;
-        }
-        var selectedMethod = selections.method;
-        if (selectedMethod == this.id_prefix+'buffer') {
-            if (selections.buffer_size == '') {
-                alert(error + 'invalid buffer size');
-                return false;
-            } else if (isNaN(selections.buffer_size)) {
-                alert(error + 'Use number for buffer size');
-                return false;
-            } else if (Number(selections.buffer_size) > -1 && Number(selections.buffer_size) < 1) {
-                alert(error + 'invalid buffer size, must be greater than 1 m');
-                return false;
+        // buffer
+        var bufferSize = container.find('.settings_buffer_field').val();
+        // aggregate
+        var aggregateFunction = container.find('input[name=aggre]:checked').val();
+        aggregateFunction = aggregateFunction && aggregateFunction.replace(this.id_prefix, '');
+        // union
+        var unionLayerId = container.find('input[name=union]:checked').val();
+        unionLayerId = unionLayerId && unionLayerId.replace((this.id_prefix + 'layer_'), '');
+        // intersect
+        var intersectLayerId = container.find('input[name=intersect]:checked').val();
+        intersectLayerId = intersectLayerId && intersectLayerId.replace((this.id_prefix + 'layer_'), '');
+        var spatialOperator = container.find('input[name=spatial]:checked').val();
+        spatialOperator = spatialOperator && spatialOperator.replace(this.id_prefix, '');
+
+        var methodSelections = {
+            'buffer' : {
+                methodParams : {
+                    distance : bufferSize
+                },
+                opacity : layer.getOpacity()
+            },
+            'aggregate' : {
+                methodParams : {
+                    'function' : aggregateFunction // TODO: param name?
+                }
+            },
+            'union' : {
+                methodParams : {
+                    layerId : unionLayerId
+                }
+            },
+            'intersect' : {
+                methodParams : {
+                    layerId : intersectLayerId,
+                    operator : spatialOperator // TODO: param name?
+                }
             }
+        };
 
-        } else if (selectedMethod == this.id_prefix+'aggregate') {
-
-        } else if (selectedMethod == this.id_prefix+'union') {
-
-        } else if (selectedMethod == this.id_prefix+'intersect') {
-
-            if (!selections.intersector) {
-                alert(error + 'Intersecting layer is not selected');
-                return false;
-            } else if (selections.layers.length == 1 && selections.intersector == selections.layers[0].id) {
-                alert(error + 'No intersections to itself');
-                return false;
-            }
-
+        for (var s in methodSelections[methodName]) {
+            defaultSelections[s] = methodSelections[methodName][s];
         }
-
-        if (selections.layers.length < 1) {
-            alert(error + 'Too few layers in selection');
-            return false;
-        }
-
-        return true;
-
+        return defaultSelections;
     },
+
     /**
      * @method _analyseMap
      * @private
@@ -942,13 +1043,73 @@ function(instance, localization) {
         var me = this;
         var sandbox = this.instance.getSandbox();
         var url = sandbox.getAjaxUrl();
-
         var selections = me._gatherSelections();
+        var data = {};
+        data.analyse = JSON.stringify(selections);
 
-        //Check parameters
-        if (me._checkSelections(selections))
-            alert('Continue --> Parameters: ' + JSON.stringify(selections));
+        var layerId = selections.layerId;
+        if (this.getFilterJson(layerId)) {
+            data.filter = JSON.stringify(this.getFilterJson(layerId));
+        }
+        console.log(data);
 
+        // Check that parameters are a-okay
+        if (me._checkSelections(selections)) {
+            // Send the data for analysis to the backend
+            me.instance.analyseService.sendAnalyseData(data,
+            // Success callback
+            function(response) {
+                if (response) {
+                    console.log(response);
+                    me._handleAnalyseMapResponse(response);
+                }
+            },
+            // Error callback
+            function(jqXHR, textStatus, errorThrown) {
+                me.instance.showMessage(me.loc.error.title, me.loc.error.saveFailed);
+            });
+        }
+
+    },
+
+    /**
+     * Creates the map layer from the JSON given as a param
+     * and adds it to the map and subsequently to be used in further analysis.
+     *
+     * @method _handleAnalyseMapResponse
+     * @private
+     * @param {JSON} analyseJson Layer JSON returned by server.
+     */
+    _handleAnalyseMapResponse : function(analyseJson) {
+        // TODO: some error checking perhaps?
+        var mapLayerService, mapLayer, requestBuilder, request;
+
+        // TODO: Handle WPS results when no FeatureCollection eg. aggregate
+        if (analyseJson.wpsLayerId == "-1") {
+            this.instance.showMessage("Tulokset", analyseJson.result);
+        } else {
+
+            mapLayerService = this.instance.mapLayerService;
+            // Prefix the id to avoid collisions
+            // FIXME: temporary, server should respond with an actual
+            // id so that further analysis with this layer is possible.
+            analyseJson.id = this.id_prefix + analyseJson.id + '_' + analyseJson.wpsLayerId;
+            // Create the layer model
+            mapLayer = mapLayerService.createMapLayer(analyseJson);
+            // TODO: get these two parameters from somewhere else, where?
+            mapLayer.setWpsUrl('/karttatiili/wpshandler?');
+            mapLayer.setWpsName('ows:analysis_data');
+            // Add the layer to the map layer service
+            mapLayerService.addLayer(mapLayer);
+
+            // Request the layer to be added to the map.
+            // instance.js handles things from here on.
+            requestBuilder = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest');
+            if (requestBuilder) {
+                request = requestBuilder(mapLayer.getId());
+                this.instance.sandbox.request(this.instance, request);
+            }
+        }
     },
 
     /**
@@ -972,6 +1133,7 @@ function(instance, localization) {
      * @param {int} layer_id  layer id for to retreave layer object
      */
     _infoRequest : function(tools, layer_id) {
+        layer_id = layer_id.replace(this.id_prefix + 'layer_', '');
         var layer = this.instance.getSandbox().findMapLayerFromSelectedMapLayers(layer_id);
         var me = this;
         tools.find('div.layer-info').bind('click', function() {
@@ -1000,20 +1162,23 @@ function(instance, localization) {
             }, additionalUuids]);
         });
     },
-    /**
-     * @method _filterRequest
-     * @private
-     * Request through sandbox for to open metadata info
-     * @param {jQuery} tools  table div where filter icon is located
-     * @param {int} layer_id  layer id for to retreave layer object
-     */
-    _filterRequest : function(tools, layer_id) {
-        tools.find('div.filter').bind('click', function() {
-            // Check params
 
-            alert('TODO: request to filter actions - layer: ' + layer_id);
-        });
+    /**
+     * Returns the Oskari layer object for currently selected layer
+     *
+     * @method _getSelectedMapLayer
+     * @private
+     * @return {Object/null} an Oskari layer or null if no layer selected
+     */
+    _getSelectedMapLayer : function() {
+        var selectedLayer = this._selectedLayers();
+        selectedLayer = selectedLayer && selectedLayer[0];
+        selectedLayer = selectedLayer && selectedLayer.id;
+        selectedLayer = selectedLayer && selectedLayer.replace((this.id_prefix + 'layer_'), '');
+
+        return this.instance.getSandbox().findMapLayerFromSelectedMapLayers(selectedLayer);
     },
+
     /**
      * @method destroy
      * Destroyes/removes this view from the screen.

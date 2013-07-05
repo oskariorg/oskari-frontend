@@ -438,13 +438,11 @@
             "bundleinstancename": "analyse",
             "metadata": {
                 "Import-Bundle": {
-                    "postprocessor": {
+                    "analyse": {
                         "bundlePath": "../../../packages/analysis/bundle/"
                     }
-                },
-                "Require-Bundle-Instance": []
-            },
-            "instanceProps": {}
+                }
+            }
         }
 	]
 }

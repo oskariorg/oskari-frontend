@@ -464,7 +464,6 @@
       var r;
       var level = parentGroup ? parentGroup.level + 1 : 0;
       var gi = groupingInfos[level];
-
       for (var i = 0, l = gi.predefinedValues.length; i < l; i++) {
         val = gi.predefinedValues[i];
         group = groupsByVal[val];
@@ -914,9 +913,7 @@
       grid.onCellCssStylesChanged.subscribe(function(e, args) {
         if (inHandler) { return; }
         if (key != args.key) { return; }
-        if (args.hash) {
-          storeCellCssStyles(args.hash);
-        }
+        storeCellCssStyles(args.hash);
       });
 
       this.onRowsChanged.subscribe(update);

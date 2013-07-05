@@ -16,14 +16,12 @@ expect.Assertion.prototype.fail = function(msg) {
 var isCommonJS = typeof window == "undefined" && typeof exports == "object";
 expect.TIMEOUT_INCREMENT = 10;
 
-/* disabled until min.css is available again
 // add css
 var s = document.createElement("link");
 s.type = "text/css";
 s.rel = "stylesheet";
 s.href = "/Oskari/dist/oskari.min.css";
 document.getElementsByTagName("head")[0].appendChild(s);
-*/
 
 /**
  * From Jasmine https://github.com/pivotal/jasmine/blob/master/src/core/base.js
@@ -131,6 +129,16 @@ function setupOskari(appSetup, appConf, done) {
     app.startApplication(function() {
         done();
     });
+};
+
+function deletePluginsFromConfig(appConf, id) {
+    var plugins = appConf["mapfull"]["conf"]["plugins"];
+    for (var i = 0; i < plugins.length; ++i) {
+        if(plugins[i]["id"] == id) {
+            plugins.splice(i, 1);
+            break;
+        }
+    }
 };
 
 var _mapfullConfig = {

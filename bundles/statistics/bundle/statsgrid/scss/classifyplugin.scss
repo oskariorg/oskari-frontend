@@ -1,147 +1,213 @@
 .manageClassificationPlugin {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  z-index: 100000000 !important; }
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	z-index: 100000000 !important;
+	max-width: 240px;
+	background-color: white !important;
+	color: black !important;
+	float: left;
+	padding: 0px;
+	text-align: left;
+	font: 12px/100% Arial, sans-serif;
+	
+	.content select {
+		/* TODO moz-only? */
+		background: -moz-linear-gradient(center top, #fefefe, #e3e3e3) repeat scroll 0 0 transparent;
+		border: 1px solid #B7B7B7;
+		border-radius: 4px;
+		color: #878787;
+		padding: 0px;
+		margin: 4px;
+	}
 
-.manageClassificationPlugin {
-  max-width: 240px;
-  background-color: white !important;
-  color: black !important;
-  float: left;
-  padding: 0px;
-  text-align: left;
-  font: 12px/100% Arial, sans-serif; }
+	div#pop-up_06052013 {
+		/* HOVER colortable details */
+		display: none;
+		position: absolute;
+		width: 100px;
+		padding: 0px;
+		background: #E6E6E6;
+		color: #000;
+		border: 1px solid #1a1a1a;
+		font-size: 90%;
+	}
+	
+	div.classCount {
+		float: left;
+		background-color: white !important;
+		padding: 0px;
+		margin: 2px;
+	}
+	
+	div.classheader {
+		color: white;
+		background-color: black !important;
+		padding: 4px;
+	}
+	
+	div.classificationMethod {
+		margin: 4px;
+	}
+	
+	div.content {
+		color: black;
+		background-color: white !important;
 
-.manageClassificationPlugin div.classheader {
-  color: white;
-  background-color: black !important;
-  padding: 4px; }
+		label {
+			float: left;
+			width: 80px;
+			padding: 10px;
+			font-weight: bold;
+		}
+	}
+	
+	div.header-icon icon-arrow-white-right {
+		padding: 4px;
+	}
+	
+	input[type="button"] {
+		margin: 0.5em;
+	}
 
-.manageClassificationPlugin div.header-icon icon-arrow-white-right {
-  padding: 4px; }
+	input[type="text"] {
+		background-image: none;
+		color: #f6931f;
+		font-weight: bold;
+		width: 40px;
+		border: 0;
+		color: #f6931f;
+		font-weight: bold;
+	}
+	
+	.manualBreaks {
+	
+		input[type="text"] {
+			width: 180px;
+			float: left;
+		}
+		
+		.icon-info {
+			float: left;
+			margin-top: 6px;
+		}
+		
+	}
+	
+	.ui-corner-all,
+	.ui-corner-bottom,
+	.ui-corner-right,
+	.ui-corner-br {
+		border-bottom-right-radius: 4px;
+	}
 
-.manageClassificationPlugin div.content {
-  color: black;
-  background-color: white !important; }
+	.ui-corner-all,
+	.ui-corner-bottom,
+	.ui-corner-left,
+	.ui-corner-bl {
+		border-bottom-left-radius: 4px;
+	}
 
-.manageClassificationPlugin div.classificationMethod {
-  margin: 4px; }
+	.ui-corner-all,
+	.ui-corner-top,
+	.ui-corner-right,
+	.ui-corner-tr {
+		border-top-right-radius: 4px;
+	}
 
-.manageClassificationPlugin div.content label {
-  float: left;
-  width: 80px;
-  padding: 10px;
-  font-weight: bold; }
+	.ui-corner-all,
+	.ui-corner-top,
+	.ui-corner-left,
+	.ui-corner-tl {
+		border-top-left-radius: 4px;
+	}
 
-.manageClassificationPlugin div.classCount {
-  float: left;
-  background-color: white !important;
-  padding: 0px;
-  margin: 2px; }
+	.ui-slider {
+		position: relative;
+		text-align: left;
+		width: 200px;
+		
+		.ui-slider-handle {
+			cursor: default;
+			width: 1.2em;
+			height: 1.2em;
+			position: absolute;
+			z-index: 2;
+		}
+	}
 
-.manageClassificationPlugin .content select {
-  background: -moz-linear-gradient(center top, #fefefe, #e3e3e3) repeat scroll 0 0 transparent;
-  border: 1px solid #B7B7B7;
-  border-radius: 4px 4px 4px 4px;
-  color: #878787;
-  padding: 0px;
-  margin: 4px; }
+	.ui-slider-horizontal {
+		height: 0.8em;
+		
+		.ui-slider-handle {
+			margin-left: -0.6em;
+			top: -0.3em;
+		}
+	}
 
-.manageClassificationPlugin input[type="text"] {
-  background-image: none;
-  color: #f6931f;
-  font-weight: bold;
-  width: 40px;
-  border: 0;
-  color: #f6931f;
-  font-weight: bold; }
+	.ui-state-default,
+	.ui-widget-content .ui-state-default,
+	.ui-widget-header .ui-state-default {
+		background: #222 repeat-x scroll 50% 50% #E6E6E6;
+		border: 1px solid #D3D3D3;
+		color: #555;
+		font-weight: normal;
+	}
+
+	.ui-widget {
+		font-family: Verdana, Arial, sans-serif;
+		font-size: 1.1em;
+	}
+
+	.ui-widget-content {
+		background: #AAA repeat-x scroll 50% 50% #FFF;
+		border: 1px solid #AAA;
+		color: #222;
+	}
+}
+
+/* TODO should these be under .manageClassificationPlugin? */
 
 .geostats-legend div {
-  margin-bottom: 5px; }
-
-.manageClassificationPlugin .ui-corner-all, .manageClassificationPlugin .ui-corner-bottom, .manageClassificationPlugin .ui-corner-right, .manageClassificationPlugin .ui-corner-br {
-  border-bottom-right-radius: 4px; }
-
-.manageClassificationPlugin .ui-corner-all, .manageClassificationPlugin .ui-corner-bottom, .manageClassificationPlugin .ui-corner-left, .manageClassificationPlugin .ui-corner-bl {
-  border-bottom-left-radius: 4px; }
-
-.manageClassificationPlugin .ui-corner-all, .manageClassificationPlugin .ui-corner-top, .manageClassificationPlugin .ui-corner-right, .manageClassificationPlugin .ui-corner-tr {
-  border-top-right-radius: 4px; }
-
-.manageClassificationPlugin .ui-corner-all, .manageClassificationPlugin .ui-corner-top, .manageClassificationPlugin .ui-corner-left, .manageClassificationPlugin .ui-corner-tl {
-  border-top-left-radius: 4px; }
-
-.manageClassificationPlugin .ui-widget-content {
-  background: #AAAAAA repeat-x scroll 50% 50% #FFFFFF;
-  border: 1px solid #AAAAAA;
-  color: #222222; }
-
-.manageClassificationPlugin .ui-widget {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 1.1em; }
-
-.manageClassificationPlugin .ui-slider-horizontal {
-  height: 0.8em; }
-
-.manageClassificationPlugin .ui-slider {
-  position: relative;
-  text-align: left;
-  width: 200px; }
-
-.manageClassificationPlugin .ui-state-default, .manageClassificationPlugin .ui-widget-content .ui-state-default, .manageClassificationPlugin .ui-widget-header .ui-state-default {
-  background: #222222 repeat-x scroll 50% 50% #E6E6E6;
-  border: 1px solid #D3D3D3;
-  color: #555555;
-  font-weight: normal; }
-
-.manageClassificationPlugin .ui-slider-horizontal .ui-slider-handle {
-  margin-left: -0.6em;
-  top: -0.3em; }
-
-.manageClassificationPlugin .ui-slider .ui-slider-handle {
-  cursor: default;
-  height: 1.2em;
-  position: absolute;
-  width: 1.2em;
-  z-index: 2; }
-
-.geostats-legend-title {
-  font-weight: bold;
-  margin-bottom: 4px; }
+	margin-bottom: 5px;
+}
 
 .geostats-legend-block {
-  border: 1px solid #555555;
-  display: inline-table;
-  float: none;
-  height: 12px;
-  margin: 0 5px 0 0;
-  width: 20px; }
+	border: 1px solid #555;
+	display: inline-table;
+	float: none;
+	height: 12px;
+	margin: 0 5px 0 0;
+	width: 20px;
+}
 
 .geostats-legend-counter {
-  color: #666666;
-  font-size: 0.8em;
-  font-style: italic; }
-  
- table.colo_table1 td.selected {
-    background-color: #AAAAAA;
+	color: #666;
+	font-size: 0.8em;
+	font-style: italic;
 }
-table.colo_table1 td.hover {
-    background-color: #D4A017;
+
+.geostats-legend-title {
+	font-weight: bold;
+	margin-bottom: 4px;
 }
-table.colo_table1 div {
-    display: inline-block;
-    height: 15px;
-    width: 5px;
+
+table.colo_table1 {
+
+	td.selected {
+		background-color: #AAA;
+	}
+
+	td.hover {
+		background-color: #D4A017;
+	}
+
+	div {
+		display: inline-block;
+		height: 15px;
+		width: 5px;
+	}
 }
-/* HOVER colortable details */
-.manageClassificationPlugin div#pop-up_06052013 {
-  display:none;
-  position:absolute;
-  width:100px;
-  padding:0px;
-  background:#E6E6E6;
-  color:#000000;
-  border:1px solid #1a1a1a;
-  font-size:90%;
+.manageClassificationPlugin .classification-guide {
+  padding-left: 5px;
 }

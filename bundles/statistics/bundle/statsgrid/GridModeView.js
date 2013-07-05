@@ -47,7 +47,8 @@ function() {
             this.isVisible = (isShown == true);
 
             // Update the layer if current layer is null or if the layer has changed.
-            if (this._layer == null || (layer != null && this._layer.getId() != layer.getId())) {
+            if ((layer != null && this._layer == null ) || 
+                (layer != null && this._layer.getId() != layer.getId())) {
                 this._layer = layer;
                 // Notify the grid plugin of the changed layer.
                 this.instance.gridPlugin.setLayer(layer);
@@ -64,6 +65,13 @@ function() {
             if (isShown) {
                 // Create the indicators selection and the grid.
                 this.instance.gridPlugin.createStatsOut(this.getEl());
+            }
+
+            // Notify other components of the mode change.
+            var eventBuilder = this.instance.getSandbox().getEventBuilder('StatsGrid.ModeChangedEvent');
+            if (eventBuilder) {
+                var event = eventBuilder(this.isVisible);
+                this.instance.getSandbox().notifyAll(event);
             }
         }
     },

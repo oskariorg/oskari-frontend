@@ -32,6 +32,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-methods', {
         var mapDomain = this._core.getMap();
         var zoom = mapDomain.getZoom();
         var marker = mapDomain.isMarkerVisible();
+        
         if (blnInitialMove === true && zoom == 12) {
             // workaround, openlayers needs to be nudged a bit to actually draw
             // the map images if we enter at zoomlevel 12

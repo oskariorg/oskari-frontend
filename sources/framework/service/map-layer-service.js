@@ -128,10 +128,86 @@ function(mapLayerUrl, sandbox) {
      *            json conf for the layer. NOTE! Only updates name for now
      */
     updateLayer : function(layerId, newLayerConf) {
+		//console.log("MapLayerService: updateLayer");
         var layer = this.findMapLayer(layerId);
         if(layer) {
-            layer.setName(newLayerConf.name);
+			//console.log("New layer config:");
+			//console.log(newLayerConf);
 
+			if (newLayerConf.dataUrl) {
+				layer.setDataUrl(newLayerConf.dataUrl);
+			}
+
+			/*
+			if (newLayerConf.formats) {
+				//layer.set();
+			}
+			*/
+
+			/*
+			if (newLayerConf.isQueryable) {
+				// layer.set();
+			}
+			*/
+
+			if (newLayerConf.legendImage) {
+				layer.setLegendImage(newLayerConf.legendImage);
+			}
+
+			if (newLayerConf.minScale) {
+				layer.setMinScale(newLayerConf.minScale);
+			}
+
+			if (newLayerConf.maxScale) {
+				layer.setMaxSclae(newLayerConf.maxScale);
+			}
+
+			if (newLayerConf.name) {
+				layer.setName(newLayerConf.name);
+			}
+
+			/*
+			if (newLayerConf.orgName) {
+				// layer.set();
+			}
+			*/
+			/*
+			if (newLayerConf.style) {
+				layer.setStyle(newLayerConf.style);
+			}
+			*/
+
+			/*
+			if (newLayerConf.styles) {
+				// layer.set();
+			}
+			*/
+
+			if (newLayerConf.type) {
+				layer.setType(newLayerConf.type);
+			}
+
+			/*
+			if (newLayerConf.updated) {
+				// layer.set();
+			}
+			*/
+
+			if (newLayerConf.wmsName) {
+				layer.setWmsName(newLayerConf.wmsName);
+			}
+
+			if (newLayerConf.wmsUrl) {
+				layer.setWmsUrl(newLayerConf.wmsUrl);
+			}
+
+			for (var i in newLayerConf.admin) {
+				if (newLayerConf.admin[i]) {
+					layer.admin[i] = newLayerConf.admin[i];
+				}
+			}
+			
+			//console.log(layer);
             // notify components of layer update
             var event = this._sandbox.getEventBuilder('MapLayerEvent')(layer.getId(), 'update');
             this._sandbox.notifyAll(event);
@@ -167,6 +243,7 @@ function(mapLayerUrl, sandbox) {
      * @param {Function} callbackFailure method to be called when something went wrong
      */
     loadAllLayersAjax : function(callbackSuccess, callbackFailure) {
+		//console.log("loadAllLayersAjax");
         var me = this;
         // Used to bypass browsers' cache especially in IE, which seems to cause
         // problems with displaying publishing permissions in some situations.
@@ -208,7 +285,9 @@ function(mapLayerUrl, sandbox) {
             }
             if(this._reservedLayerIds[mapLayer.getId()] !== true) {
                 this.addLayer(mapLayer, true);
-            }
+            } else {
+				//console.log("Reserved layer ID (" + mapLayer.getId() + ") , won't add");
+			}
         }
         // notify components of added layer if not suppressed
         this._allLayersAjaxLoaded = true;
@@ -393,13 +472,14 @@ function(mapLayerUrl, sandbox) {
             }
         }
 
-        for(var i = 0; i < baseMapJson.subLayer.length; i++) {
-            // Notice that we are adding layers to baselayers sublayers array
-            var subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
-            
-            baseLayer.getSubLayers().push(subLayer);
+        if (baseMapJson.subLayer) {
+            for(var i = 0; i < baseMapJson.subLayer.length; i++) {
+                // Notice that we are adding layers to baselayers sublayers array
+                var subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
+                
+                baseLayer.getSubLayers().push(subLayer);
+            }
         }
-        
         // Opacity
         if(baseMapJson.opacity != null) {
             baseLayer.setOpacity(baseMapJson.opacity);
@@ -438,7 +518,6 @@ function(mapLayerUrl, sandbox) {
                 throw "Unknown layer type '" + mapLayerJson.type + "'";
             }
             layer = Oskari.clazz.create(this.typeMapping[mapLayerJson.type], mapLayerJson.params, mapLayerJson.options);
-
             //these may be implemented as jsonHandler
             if(mapLayerJson.type == 'wmslayer') {
                 this._populateWmsMapLayerAdditionalData(layer, mapLayerJson);
@@ -545,22 +624,21 @@ function(mapLayerUrl, sandbox) {
         }
         // default to enabled, only check if it is disabled
         layer.setFeatureInfoEnabled(jsonLayer.gfi !== 'disabled');
-        return this._populateStyles(layer, jsonLayer);
+        return this.populateStyles(layer, jsonLayer);
     },
     /**
-     * @method _populateStyles
+     * @method populateStyles
      * 
      * Parses styles attribute from JSON and adds them as a 
      * Oskari.mapframework.domain.Style to the layer Object.
      * If no styles attribute is present, adds an empty 
      * dummy style and sets that as current style.
      * 
-     * @private 
      * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layerModel
      * @param {Object} jsonLayer JSON presentation for the maplayer
      * @return {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} returns the same layer object with populated styles for convenience
      */
-    _populateStyles : function(layer, jsonLayer) {
+    populateStyles : function(layer, jsonLayer) {
 
         var styleBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Style');
 

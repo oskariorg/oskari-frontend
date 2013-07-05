@@ -13,8 +13,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
 	 * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here
 	 */
 	parseLayerData : function(layer, mapLayerJson, maplayerService) {
-
         var me = this;
-		
+
+		if(mapLayerJson.fields){
+			layer.setFields(mapLayerJson.fields);
+		}
+		if(mapLayerJson.name){
+			layer.setName(mapLayerJson.name);	
+		}
+		if (mapLayerJson.wpsName) {
+			layer.setWpsName(mapLayerJson.wpsName);
+		}
+		if (mapLayerJson.wpsUrl) {
+			layer.setWpsUrl(mapLayerJson.wpsUrl);
+		}
+		if (mapLayerJson.wpsLayerId) {
+			layer.setWpsLayerId(mapLayerJson.wpsLayerId);
+		}
 	}
 });

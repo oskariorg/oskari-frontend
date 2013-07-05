@@ -1,10 +1,10 @@
 /**
  * @class Oskari.userinterface.component.Grid
- * 
+ *
  * Renders given data model as a grid/table. Provides sorting funtionality.
  * If table data is structured to have "inner tables" -> #setAdditionalDataHandler
  * method can be used to set a callback which will show the additional data externally
- * to keep the table clean. 
+ * to keep the table clean.
  */
 Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
@@ -45,16 +45,16 @@ function(columnSelectorTooltip) {
     this.visibleColumnSelector = null;
     this.showColumnSelector = false;
     this.resizableColumns = false;
-    
+
     this.uiNames = {};
     this.valueRenderer = {};
-    
+
     // last sort parameters are saved so we can change sort direction if the same column is sorted again
     this.lastSort = null;
 }, {
     /**
      * @method setDataModel
-     * Sets the data model the grid uses for rendering 
+     * Sets the data model the grid uses for rendering
      * @param {Oskari.userinterface.component.GridModel} pData
      */
     setDataModel : function(pData) {
@@ -62,7 +62,7 @@ function(columnSelectorTooltip) {
     },
     /**
      * @method getDataModel
-     * Returns the data model the grid uses for rendering 
+     * Returns the data model the grid uses for rendering
      * @return {Oskari.userinterface.component.GridModel}
      */
     getDataModel : function() {
@@ -87,8 +87,8 @@ function(columnSelectorTooltip) {
     },
     /**
      * @method setColumnUIName
-     * Sets an UI text for a given field. 
-     * The grid shows the UI name instead of the datas field name 
+     * Sets an UI text for a given field.
+     * The grid shows the UI name instead of the datas field name
      * @param {String} fieldName field name we want to replace in UI
      * @param {String} uiName field name we want to use instead in UI
      */
@@ -102,7 +102,7 @@ function(columnSelectorTooltip) {
      * function({String} value, {Object} rowData) {
      *     return value;
      * }
-     * RowData parameter includes the object being rendered including 
+     * RowData parameter includes the object being rendered including
      * the value so renderer has access to id and such
      * @param {String} fieldName field name we want to process before showing in ui
      * @param {String} renderer function that will process the value
@@ -112,7 +112,7 @@ function(columnSelectorTooltip) {
     },
     /**
      * @method setVisibleFields
-     * If not given renders all data fields 
+     * If not given renders all data fields
      * @param {String[]} pFieldNames fieldnames that should be rendered from data
      */
     setVisibleFields : function(pFieldNames) {
@@ -141,10 +141,10 @@ function(columnSelectorTooltip) {
             handler : handler
         };
     },
-    
+
     /**
      * @method _createAdditionalDataField
-     * Renders the given data using #_renderAdditionalData() and wraps it with a linked callback if 
+     * Renders the given data using #_renderAdditionalData() and wraps it with a linked callback if
      * #setAdditionalDataHandler() has been used.
      * @private
      * @param {Object[]} data data to be rendered
@@ -164,9 +164,9 @@ function(columnSelectorTooltip) {
                 return false;
             });
             return link;
-        } 
+        }
         return content;
-        
+
     },
     /**
      * @method _renderAdditionalData
@@ -196,7 +196,7 @@ function(columnSelectorTooltip) {
             var fieldCell = this.templateCell.clone();
             fieldCell.append(field);
             row.append(fieldCell);
-            
+
             //row.append('<td>' + field + '</td>');
             var valueCell = this.templateCell.clone();
             try {
@@ -214,7 +214,7 @@ function(columnSelectorTooltip) {
                 }
                 row.append(valueCell);
             } catch(ignored) {}
-            
+
             body.append(row);
         }
         return table;
@@ -231,7 +231,7 @@ function(columnSelectorTooltip) {
         // print header
         var headerContainer = table.find('thead tr');
         var bodyContainer = table.find('tbody');
-        
+
         // header reference needs some closure magic to work here
         var headerClosureMagic = function(scopedValue) {
             return function() {
@@ -247,10 +247,10 @@ function(columnSelectorTooltip) {
                 if(me.lastSort && me.lastSort.attr == scopedValue) {
                     descending = !me.lastSort.descending;
                 }
-                
+
                 // sort the results
                 me._sortBy(scopedValue, descending);
-                // populate table content 
+                // populate table content
                 me._renderBody(table, fieldNames);
                 // apply visual changes
                 headerContainer.find('th').removeClass('asc');
@@ -276,7 +276,7 @@ function(columnSelectorTooltip) {
             var uiName = this.uiNames[fieldName];
             if(!uiName) {
                 uiName = fieldName;
-            } 
+            }
             link.append(uiName);
             if(me.lastSort && fieldName == me.lastSort.attr) {
                 if(me.lastSort.descending) {
@@ -305,7 +305,7 @@ function(columnSelectorTooltip) {
         for(var i=0; i < dataArray.length; ++i) {
             var row = this.templateRow.clone();
             var data =  dataArray[i];
-            
+
             row.attr('data-id', data[this.model.getIdField()]);
             for(var f=0; f < fieldNames.length; ++f) {
                 var key = fieldNames[f];
@@ -485,11 +485,11 @@ function(columnSelectorTooltip) {
         if(fieldNames.length == 0) {
             fieldNames = this.model.getFields();
         }
-        
+
         var table = this.template.clone();
         this.table = table;
         this._renderHeader(table, fieldNames);
-        
+
         if(this.lastSort) {
             // sort with last know sort when updating data
             this._sortBy(this.lastSort.attr, this.lastSort.descending);
@@ -519,14 +519,14 @@ function(columnSelectorTooltip) {
             this.selectionListeners[i](this, dataId);
         }
     },
-    
+
     /**
      * @method select
      * Tries to find an object from #getDataModel() using the the id given as parameter "value".
-     * Oskari.mapframework.bundle.featuredata.domain.GridModel.getIdField() is used to determine 
-     * the field which value is compared against. 
-     * If found, selects the corresponding row in the grid. 
-     * @param {String} value id for the data to be selected 
+     * Oskari.mapframework.bundle.featuredata.domain.GridModel.getIdField() is used to determine
+     * the field which value is compared against.
+     * If found, selects the corresponding row in the grid.
+     * @param {String} value id for the data to be selected
      * @param {Boolean} keepPrevious true to keep previous selection, false to clear before selecting
      */
     select : function(value, keepPrevious) {
@@ -546,6 +546,15 @@ function(columnSelectorTooltip) {
         }
         jQuery(rows[index]).addClass('selected');
     },
+
+    /**
+     * @method removeSelections
+     */
+    removeSelections : function() {
+        var rows = this.table.find('tbody tr');
+        rows.removeClass('selected');
+    },
+
     /**
      * @method getSelection
      * Returns current selection visible on grid.
@@ -593,9 +602,9 @@ function(columnSelectorTooltip) {
       dataArray.sort(function(a,b) {
             return me._sortComparator(a,b,pAttribute, pDescending);
       });
-        
+
     },
-    
+
     /**
      * @method _sortComparator
      * Compares the given attribute on given objects for sorting search result objects.
@@ -606,8 +615,8 @@ function(columnSelectorTooltip) {
      * @param {Boolean} pDescending true if sort direction is descending
      */
     _sortComparator : function(a, b, pAttribute, pDescending) {
-        
-        if(typeof a[pAttribute] === 'object' || 
+
+        if(typeof a[pAttribute] === 'object' ||
            typeof b[pAttribute] === 'object') {
            // not sorting objects
             return 0;
@@ -627,9 +636,9 @@ function(columnSelectorTooltip) {
         else if(nameB.toLowerCase) {
             nameB = nameB.toLowerCase();
         }
-        
+
         var value = 0;
-        
+
         if (nameA < nameB) {
             value = -1;
         }

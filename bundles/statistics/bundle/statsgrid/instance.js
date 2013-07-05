@@ -42,6 +42,9 @@ function() {
         var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
         sandbox.request(this, request);
 
+        var tooltipRequestHandler = Oskari.clazz.create('Oskari.statistics.bundle.statsgrid.request.TooltipContentRequestHandler', this);
+        sandbox.addRequestHandler('StatsGrid.TooltipContentRequest', tooltipRequestHandler);
+
         var locale = me.getLocalization();
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         this.mapModule = mapModule;
@@ -106,9 +109,12 @@ function() {
          */
         'AfterMapMoveEvent': function(event) {
             var view = this.plugins['Oskari.userinterface.View'];
-            if (view._layer) {
+            if (view.isVisible && view._layer) {
                 this._createPrintParams(view._layer);
             }
+        },
+        'AfterMapLayerRemoveEvent': function(event) {
+            this._afterMapLayerRemoveEvent(event);
         }
 	},
     /**
@@ -154,6 +160,11 @@ function() {
      * @return {String} statsgrid state
      */
     getStateParameters : function() {
+        // If the state is null or an empty object, nothing to do here!
+        if (!this.state || jQuery.isEmptyObject(this.state)) {
+            return null;
+        }
+
         var i = null,
             ilen = null,
             ilast = null,
@@ -191,7 +202,16 @@ function() {
                 indicatorValues += indicatorSeparator;
             }
         }
-        return statsgridState + stateValues + "-" + indicatorValues;
+
+        if (stateValues && indicatorValues) {
+            return statsgridState + stateValues + "-" + indicatorValues;
+        } else {
+            return null;
+        }
+    },
+
+    getView : function() {
+        return this.plugins['Oskari.userinterface.View'];
     },
 
     /**
@@ -248,8 +268,27 @@ function() {
         this.state.methodId = params.methodId;
         this.state.numberOfClasses = params.numberOfClasses;
         this.state.manualBreaksInput = params.manualBreaksInput;
+        this.state.colors = params.colors;
         // Send data to printout bundle
         this._createPrintParams(layer);
+    },
+
+    /**
+     * Exits the stats mode after the stats layer gets removed.
+     *
+     * @method _afterMapLayerRemoveEvent
+     * @private
+     * @param {Object} event
+     */
+    _afterMapLayerRemoveEvent: function(event) {
+        var layer = event.getMapLayer(),
+            layerId = layer.getId(),
+            view = this.plugins['Oskari.userinterface.View'];
+
+        // Exit the mode
+        if (view._layer && (layerId === view._layer.getId())) {
+            view.prepareMode(false);
+        }
     }
 }, {
 	"extend" : ["Oskari.userinterface.extension.DefaultExtension"]

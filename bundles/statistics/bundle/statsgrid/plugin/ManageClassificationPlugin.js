@@ -9,8 +9,8 @@
 Oskari.clazz.define('Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin',
 /**
  * @method create called automatically on construction
- * @params config   reserved for future
- * @params locale   localization strings
+ * @params config reserved for future
+ * @params locale localization strings
  *
  *
  * @static
@@ -36,6 +36,12 @@ function(config, locale) {
     this._params = null;
     this.minClassNum = 2;
     this.maxClassNum = 9;
+    this.isSelectHilightedMode = false;
+
+    this.templates = {
+        'block' : '<div class="block"></div>',
+        'classificationGuide' : '<p class="classification-guide"></p>'
+    }
 
 }, {
     /** @static @property __name module name */
@@ -254,6 +260,12 @@ function(config, locale) {
             // and plugin is started before any layers have been added
 
         },
+        'StatsGrid.SelectHilightsModeEvent': function(event) {
+            this.isSelectHilightedMode = true;
+        },
+        'StatsGrid.ClearHilightsEvent': function(event) {
+            this.isSelectHilightedMode = false;
+        },
         /**
          * @method SotkadataChangedEvent
          * @param {MapStats.SotkadataChangedEvent} event
@@ -303,9 +315,27 @@ function(config, locale) {
         var check = false;
         var limits = [];
         var i, k;
+
         //Check selected column - only data columns are handled
-        if (sortcol.field == 'municipality' || sortcol.field == 'code')
+        if (sortcol.field.indexOf('indicator') < 0)
             return;
+
+        var slider = me._adjustClassificationSlider(params.CHECKED_COUNT);
+        var sliderDisabled = slider.slider( "option", "disabled");
+
+        // if slider is disabled don't show classification but help / guide
+        // that you should select more municipalities
+        if(sliderDisabled) {
+            var classify = me.element.find('.classificationMethod');
+            classify.find('.block').remove();
+            var block = jQuery(me.templates.block);
+            block.append(jQuery(me.templates.classificationGuide).text(this._locale['select4Municipalities']));
+            classify.append(block);
+
+            // Show legend in content
+            this.element.find('div.content').show();
+            return;
+        }
 
         // Get classification method
         var method = me.element.find('.classificationMethod').find('.method').val();
@@ -367,7 +397,10 @@ function(config, locale) {
         var classString = tmpArr.join("|");
 
         var colors = me._getColors(this.currentColorSet, me.colorsetIndex, classes - 2);
-
+        // If true, reverses the color "array"
+        if (me.colorsFlipped) {
+            colors = colors.split(',').reverse().join(',');
+        }
         var colorArr = colors.split(",");
 
         /*document.getElementById("mover").style.backgroundColor = currentColor;*/
@@ -386,6 +419,12 @@ function(config, locale) {
             numberOfClasses : classes,
             //instance.js - state handling: input string of manual classification method
             manualBreaksInput : manualBreaksInput.toString(),
+            //instance.js - state handling: input object for colors
+            colors: {
+                set: me.currentColorSet,
+                index: me.colorsetIndex,
+                flipped: me.colorsFlipped
+            },
             VIS_ID : -1,
             VIS_NAME : params.VIS_NAME,
             VIS_ATTR : params.VIS_ATTR,
@@ -406,6 +445,7 @@ function(config, locale) {
         var classify = me.element.find('.classificationMethod');
         classify.find('.block').remove();
         var block = jQuery('<div class="block"></div>');
+
         block.append(colortab);
         classify.append(block);
 
@@ -463,6 +503,7 @@ function(config, locale) {
             value : 5,
             slide : function(event, ui) {
                 jQuery('input#amount_class').val(ui.value);
+                jQuery(this).slider('option','value', ui.value);
                 // Classify again
                 me.classifyData(event);
             }
@@ -470,7 +511,11 @@ function(config, locale) {
         this.rangeSlider = slider;
 
         // HTML for the manual classification method.
-        var manualcls = jQuery('<div class="manualBreaks">' + '<input type="text" name="breaksInput" placeholder="' + this._locale.classify.manualPlaceholder + '"></input>' + '</div>');
+        var manualcls = jQuery(
+			'<div class="manualBreaks">' +
+				'<input type="text" name="breaksInput" placeholder="' + this._locale.classify.manualPlaceholder + '"></input>' +
+				'<div class="icon-info"></div>' +
+			'</div>');
         manualcls.find('input[type=button]').click(function(event) {
             me._createColorDialog();
         });
@@ -483,6 +528,12 @@ function(config, locale) {
         }).blur(function() {
             me._sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
         });
+		manualcls.find('.icon-info').click(function(event){
+			// open helpityhelp...
+            var desc =
+				'<p>' + me._locale.classify.info + '</p>';
+            me.showMessage(me._locale.classify.infoTitle, desc);
+		});
         manualcls.hide();
 
         var colorsButton = jQuery('<input type="button" value="' + me._locale.colorset.button + '" />');
@@ -490,9 +541,15 @@ function(config, locale) {
             me._createColorDialog();
         });
 
+        var flipColorsButton = jQuery('<input type="button" value="' + me._locale.colorset.flipButton + '" />');
+        flipColorsButton.click(function(e) {
+            me._flipCurrentColors();
+        });
+
         classify.append(classcnt);
         classify.append(manualcls);
         classify.append(colorsButton);
+        classify.append(flipColorsButton);
         content.append(classify);
         // Toggle content HTML
         header.click(function() {
@@ -520,6 +577,27 @@ function(config, locale) {
         // Hide Classify dialog
         this._visibilityOff();
 
+    },
+	
+	/**
+     * @method showMessage
+     * Shows user a message with ok button
+     * @param {String} title popup title
+     * @param {String} message popup message
+     */
+    showMessage : function(title, message) {
+        // Oskari components aren't available in a published map.
+        if (!this._published) {
+            var loc = this._locale;
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            okBtn.setTitle(loc.buttons.ok);
+            okBtn.addClass('primary');
+            okBtn.setHandler(function() {
+                dialog.close(true);
+            });
+            dialog.show(title, message, [okBtn]);
+        }
     },
 
     /**
@@ -1009,6 +1087,7 @@ function(config, locale) {
             value : curcla,
             slide : function(event, ui) {
                 jQuery('input#amount_class').val(ui.value);
+                jQuery(this).slider('option','value', ui.value);
                 // Classify again
                 me.classifyData();
             }
@@ -1019,7 +1098,50 @@ function(config, locale) {
         // Set background color for selected colors
         me._hiliSelectedColors();
 
+    },
+
+    /**
+     * Classifies data with colors flipped.
+     *
+     * @method _flipCurrentColors
+     * @private
+     */
+    _flipCurrentColors: function() {
+        this.colorsFlipped = this.colorsFlipped ? false : true;
+        this.classifyData();
+    },
+
+    /**
+     * Classification slider should only work if some rules apply
+     *
+     * @method _adjustClassificationSlider
+     * @private
+     * @param checkedItemsCount tells if there are enough items selected
+     */
+    _adjustClassificationSlider: function(checkedItemsCount) {
+
+        // classifyPlugin can't slide more than there are municipalities
+        var slider = jQuery('#slider-range-max');
+        var selectedVal = slider.slider('option','value');
+
+        var max = checkedItemsCount < this.maxClassNum ? checkedItemsCount > 2 ? checkedItemsCount : 3 : this.maxClassNum;
+        max--;
+        selectedVal = max > selectedVal ? selectedVal > 2 ? selectedVal : 2 : max;
+
+        slider.slider('option','min', 2);
+        slider.slider('option','max', max);
+        slider.slider('option','value', selectedVal);
+
+        //
+        if(max < 3) {
+            slider.slider( "option", "disabled", true );
+        } else {
+            slider.slider( "option", "disabled", false );
+        }
+        jQuery('input#amount_class').val(selectedVal);
+        return slider;
     }
+
 }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}

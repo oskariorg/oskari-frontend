@@ -211,20 +211,63 @@ function(config) {
     /**
      * @method _addMapLayerToMap
      * @private
-     * Adds a single WFS layer to this map
-     * @param {Oskari.mapframework.domain.WfsLayer} layer
+     * Adds a single Analysis layer to this map
+     * @param {Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer} layer
      * @param {Boolean} keepLayerOnTop
      * @param {Boolean} isBaseMap
      */
     _addMapLayerToMap : function(layer, keepLayerOnTop, isBaseMap) {
-
-        var me = this;
-
         if(!layer.isLayerOfType(this._layerType)) {
             return;
         }
 
-  
+        var me = this;
+        var markerLayer = this._map.getLayersByName("Markers");
+        if (markerLayer) {
+            for (var mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
+                if (markerLayer[mlIdx]) {
+                    this._map.removeLayer(markerLayer[mlIdx], false);
+                }
+            }
+        }
+
+        var openLayerId = 'layer_' + layer.getId();
+        var imgUrl = layer.getWpsUrl() + 'wpsLayerId=' + layer.getWpsLayerId();
+        var layerScales = this.getMapModule()
+            .calculateLayerScales(layer.getMaxScale(), layer.getMinScale());
+
+        var openLayer = new OpenLayers.Layer.WMS(openLayerId, imgUrl, {
+            layers : layer.getWpsName(),
+            transparent : true,
+            format : "image/png"
+        }, {
+            scales : layerScales,
+            isBaseLayer : false,
+            displayInLayerSwitcher : false,
+            visibility : true,
+            singleTile : true,
+            buffer : 0
+        });
+        
+
+        openLayer.opacity = layer.getOpacity() / 100;
+
+        this._map.addLayer(openLayer);
+
+        this._sandbox.printDebug("#!#! CREATED OPENLAYER.LAYER.WMS for AnalysisLayer " + layer.getId());
+
+        if(keepLayerOnTop) {
+            this._map.setLayerIndex(openLayer, this._map.layers.length);
+        } else {
+            this._map.setLayerIndex(openLayer, 0);
+        }
+        if (markerLayer) {
+            for (var mlIdx = 0; mlIdx < markerLayer.length; mlIdx++) {
+                if (markerLayer[mlIdx]) {
+                    this._map.addLayer(markerLayer[mlIdx]);
+                }
+            }
+        }  
     },
     
     /**

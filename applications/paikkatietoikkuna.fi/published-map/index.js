@@ -30,22 +30,14 @@ jQuery(document).ready(function() {
     }
 
     // populate url with possible control parameters
-    ajaxUrl += getAdditionalParam('zoomLevel');
-    ajaxUrl += getAdditionalParam('coord');
-    ajaxUrl += getAdditionalParam('mapLayers');
-    ajaxUrl += getAdditionalParam('oldId');
-    ajaxUrl += "viewId=" + viewId + "&"; //getAdditionalParam('viewId');
-    
-    ajaxUrl += getAdditionalParam('isCenterMarker');
-    ajaxUrl += getAdditionalParam('address')
-    ajaxUrl += getAdditionalParam('showGetFeatureInfo');
-    ajaxUrl += getAdditionalParam('nationalCadastralReference');
-    
-    ajaxUrl += getAdditionalParam('nationalCadastralReferenceHighlight');
-    ajaxUrl += getAdditionalParam('wfsFeature');
-    ajaxUrl += getAdditionalParam('wfsHighlightLayer');
     if(ssl) {
         ajaxUrl += "ssl=" + ssl + "&";
+    }
+    var getAppSetupParams = {};
+    if(typeof window.controlParams == 'object') {
+        for(var key in controlParams) {
+            getAppSetupParams[key] = controlParams[key];
+        }
     }
         
     if(!language) {
@@ -89,6 +81,7 @@ jQuery(document).ready(function() {
                 x.overrideMimeType("application/j-son;charset=UTF-8");
             }
         },
+        data : getAppSetupParams,
         url : ajaxUrl + 'action_route=GetAppSetup&noSavedState=true',
         success : function(app) {
             if (app.startupSequence && app.configuration) {

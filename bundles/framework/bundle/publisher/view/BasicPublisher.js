@@ -298,8 +298,7 @@ function(instance, localization, data) {
             }
         }
         // notify openlayers that size has changed
-        mapModule.getMap().updateSize();
-        this._updateDomain();
+        mapModule.updateSize();
     },
     /**
      * @method _createSizePanel
@@ -334,9 +333,9 @@ function(instance, localization, data) {
             var toolContainer = this.templateSizeOptionTool.clone();
             var label = this.loc.sizes[option.id];
             if(option.width && option.height && "custom" != option.id) {
-                label = label + ' (' + option.width + ' x ' + option.height + 'px)';
+                label = me._getSizeLabel(label, option);
             }
-            toolContainer.find('span').append(label);
+            toolContainer.find('span').addClass('sizeoption_' + option.id).append(label);
             if (option.selected) {
                 toolContainer.find('input').attr('checked', 'checked');
                 if("custom" == option.id) {
@@ -367,6 +366,33 @@ function(instance, localization, data) {
         contentPanel.append(customSizes);
 
         return panel;
+    },
+    /**
+     * Gets the label text for a size option. It changes based on grid visibility.
+     *
+     * @method _getSizeLabel
+     * @private
+     */
+    _getSizeLabel: function(label, option) {
+        var gridWidth = ( this.isDataVisible ? this._calculateGridWidth() : 0 );
+        return (label + ' (' + (option.width + gridWidth) + ' x ' + option.height + 'px)');
+    },
+    /**
+     * Sets the size label in size accordion panel in UI.
+     *
+     * @method _setSizeLabels
+     * @private
+     */
+    _setSizeLabels: function() {
+        for (var i = 0; i < this.sizeOptions.length; ++i) {
+            var option = this.sizeOptions[i];
+            var span = jQuery('span.sizeoption_' + option.id);
+            var label = this.loc.sizes[option.id];
+            if(option.width && option.height && "custom" != option.id) {
+                label = this._getSizeLabel(label, option);
+            }
+            span.text(label);
+        }
     },
     /**
      * @method _createToolsPanel
@@ -425,6 +451,8 @@ function(instance, localization, data) {
             var isChecked = checkbox.is(':checked');
             me.isDataVisible = isChecked;
             me.adjustDataContainer();
+            // Update the size labels
+            me._setSizeLabels();
         });
         dataContainer.find('label').attr('for', 'show-grid-checkbox').append(this.loc.data.grid);
 
@@ -462,9 +490,9 @@ function(instance, localization, data) {
                 gridWidth = 400;
             }
             elLeft.removeClass('oskari-closed');
-            jQuery('#contentMap').width(gridWidth + mapWidth + 20);
+            jQuery('#contentMap').width(gridWidth + mapWidth);
 
-            gridWidth = (gridWidth+20)+'px';
+            gridWidth = gridWidth+'px';
             gridHeight = gridHeight +'px';
             mapWidth = mapWidth+'px';
         } else {
@@ -484,8 +512,9 @@ function(instance, localization, data) {
         }
     },
     _calculateGridWidth: function() {
-        var me = this;
-        var sandbox = Oskari.getSandbox('sandbox');
+        var me = this,
+            sandbox = Oskari.getSandbox('sandbox'),
+            width;
         // get state of statsgrid
         var statsGrid = sandbox.getStatefulComponents()['statsgrid'];
         if(statsGrid &&
@@ -495,9 +524,12 @@ function(instance, localization, data) {
             //indicators + municipality (name & code)
             var columns = statsGrid.state.indicators.length + 2;
             //slickgrid column width is 80 by default
-            return columns * 80;
+            width = columns * 80;
+        } else {
+            width = 160;
         }
-        return 160;
+        // Width + scroll bar width.
+        return (width + 20);
     },
 
     getDataContainer: function() {
@@ -658,6 +690,7 @@ function(instance, localization, data) {
         var errors = this.locationForm.validate();
         var values = this.locationForm.getValues();
         var size = container.find('input[name=size]:checked').val();
+        var gridWidth = this._calculateGridWidth();
         var selections = {
             domain : values.domain,
             name : values.name,
@@ -807,6 +840,10 @@ function(instance, localization, data) {
     	var me = this;
         var sandbox = this.instance.getSandbox();
         var url = sandbox.getAjaxUrl();
+        // Total width for map and grid. Used to calculate the iframe size.
+        var totalWidth = ( me.isDataVisible ?
+            (selections.size.width + me._calculateGridWidth()) :
+            selections.size.width );
 		var errorHandler = function() {
 	    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 	    	var okBtn = dialog.createCloseButton(me.loc.buttons.ok);
@@ -829,7 +866,7 @@ function(instance, localization, data) {
             success : function(response) {
             	if(response.id > 0) {
 			        var event = sandbox.getEventBuilder('Publisher.MapPublishedEvent')(response.id,
-			        	selections.size.width, selections.size.height, selections.language);
+			        	totalWidth, selections.size.height, selections.language);
 			        sandbox.notifyAll(event);
             	}
             	else {
@@ -941,8 +978,7 @@ function(instance, localization, data) {
         mapElement.height(jQuery(window).height());
         
         // notify openlayers that size has changed
-        mapModule.getMap().updateSize();
-        this._updateDomain();
+        mapModule.updateSize();
 
         // resume normal plugins
         for (var i = 0; i < this.normalMapPlugins.length; ++i) {
@@ -955,25 +991,6 @@ function(instance, localization, data) {
 
         mapModule.unregisterPlugin(this.logoPlugin);
         this.logoPlugin.stopPlugin(me.instance.sandbox);
-    },
-    /**
-     * @method _updateDomain
-     * @private
-     * Updates the map domain object so GFI and other functionalities depending on it works
-     * even after size changes.
-     */
-    _updateDomain : function() {
-        
-        var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
-        
-        var mapVO = this.instance.sandbox.getMap();
-        mapVO.setExtent(mapModule.getMap().getExtent());
-        mapVO.setMaxExtent(mapModule.getMap().getMaxExtent());
-        mapVO.setBbox(mapModule.getMap().calculateBounds());
-        
-        var mapElement = jQuery(mapModule.getMap().div);
-        mapVO.setWidth(mapElement.width());
-        mapVO.setHeight(mapElement.height());
     },
     /**
      * @method setEnabled

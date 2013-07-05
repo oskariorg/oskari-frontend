@@ -15,9 +15,14 @@ Bundle fetches data from the SotkaNET statistics and indicator bank (www.sotkane
 
 The grid and the classifier are initialized as plugins so they can be used individually as well. They both use the StatisticsService to send events and make the actual AJAX calls to fetch the data.
 
+Grid section: selected municipalities will be visualized on the map.
+Map section: selected municipalities are hilighted in the grid.
+Select hilighted mode: selected municipalities (map) are also selected in the grid.
+
 ## TODO
 
-* Summary statistics (as of May 20th. About to be implemented in the next sprint)
+* remove hilighted borders when going away from select hilighted mode
+* selected grid items should be sent somehow to statsplugin.
 
 ## Screenshot
 
@@ -54,7 +59,12 @@ state : {
     <th>Request</th><th>How does the bundle react</th>
   </tr>
   <tr>
-    <td>StatsGrid.StatsGridRequest</td><td>Enables/disables the statistics mode depending on the params.</td>
+    <td>StatsGrid.StatsGridRequest</td>
+    <td>Enables/disables the statistics mode depending on the params.</td>
+  </tr>
+  <tr>
+    <td>StatsGrid.TooltipContentRequest</td>
+    <td>Sends tooltip info for currently hovered municipality.</td>
   </tr>
 </table>
 
@@ -94,6 +104,14 @@ state : {
     <td>MapStats.StatsVisualizationChangeEvent</td>
     <td>Saves params from the event to the bundle state.</td>
   </tr>
+  <tr>
+    <td>AfterMapMoveEvent</td>
+    <td>Updates parameters for the printout bundle.</td>
+  </tr>
+  <tr>
+    <td>AfterMapLayerRemoveEvent</td>
+    <td>Exits the statistics mode.</td>
+  </tr>
 </table>
 
 ### ManageClassificationsPlugin
@@ -122,6 +140,26 @@ state : {
     <td>StatsGrid.SotkadataChangedEvent</td>
     <td>Classifies the data and sends an event to visualize it on the map</td>
   </tr>
+  <tr>
+    <td>StatsGrid.SelectHilightsModeEvent</td>
+    <td>Activates mode (isSelectHilightedMode)</td>
+  </tr>
+  <tr>
+    <td>StatsGrid.ClearHilightsEvent</td>
+    <td>Deactivates mode (isSelectHilightedMode)</td>
+  </tr>
+</table>
+
+### ManageStatsPlugin
+
+<table>
+  <tr>
+    <th>Event</th><th>How does the bundle react</th>
+  </tr>
+  <tr>
+    <td>MapStats.FeatureHighlightedEvent</td>
+    <td>Highlights the given feature in the grid.</td>
+  </tr>
 </table>
 
 ## Events the bundle sends out
@@ -141,6 +179,32 @@ state : {
     <td>After the data has been classified so it can be visualized on the map</td>
   </tr>
 </table>
+
+### ManageStatsPlugin
+
+<table>
+  <tr>
+    <th>Event</th><th>Why/when</th>
+  </tr>
+  <tr>
+    <td>MapStats.HoverTooltipContentEvent</td>
+    <td>When the TooltipContentRequest is handled to send the tooltip info to the mapstats bundle.</td>
+  </tr>
+</table>
+
+### StatsToolbar
+
+<table>
+  <tr>
+    <td>StatsGrid.SelectHilightsModeEvent</td>
+    <td>Activates mode (isSelectHilightedMode)</td>
+  </tr>
+  <tr>
+    <td>StatsGrid.ClearHilightsEvent</td>
+    <td>Deactivates mode (isSelectHilightedMode)</td>
+  </tr>
+</table>
+
 
 ## Dependencies
 

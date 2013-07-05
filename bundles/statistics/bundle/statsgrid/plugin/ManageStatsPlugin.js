@@ -27,7 +27,7 @@ function(config, locale) {
     this.statsService = null;
     // indicators (meta data)
     this.indicators = [];
-
+    this.selectedMunicipalities = {};
 //    this.conf = config || {};
     defaults = {"statistics" : [
         {"id" : "avg", "visible": true},
@@ -39,12 +39,21 @@ function(config, locale) {
         {"id" : "sum", "visible": true}
         ]
     };
-    this.conf = jQuery.extend(true, defaults, config);
+    this.conf = jQuery.extend(true, config, defaults);
     this._locale = locale || {};
     this.templates = {
         'csvButton'         : '<button class="statsgrid-csv-button">csv</button>',
         'statsgridTotalsVar': '<span class="statsgrid-variable"></span>',
-        'subHeader'         : '<span class="statsgrid-grid-subheader"></span>'
+        'subHeader'         : '<span class="statsgrid-grid-subheader"></span>',
+        'gridHeaderMenu'    : '<li><input type="checkbox" /><label></label></li>',
+        'groupingHeader'    : '<span style="color:green"></span>',
+        'toolbarButton'     : '<button class="statsgrid-select-municipalities"></button>',
+        'filterPopup'       : '<div class="indicator-filter-popup"><p class="filter-desc"></p><div class="filter-container"></div></div>',
+        'filterRow'         : '<div class="filter-row"><div class="filter-label"></div><div class="filter-value"></div></div>',
+        'filterSelect'      : '<div><select class="filter-select"></select><div class="filter-inputs-container"></div></div>',
+        'filterOption'      : '<option></option>',
+        'filterInputs'      : '<input type="text" class="filter-input filter-input1" /><span class="filter-between" style="display:none;">-</span><input type="text" class="filter-input filter-input2" style="display:none;" />',
+        'filterLink'        : '<a href="javascript:void(0);"></a>'
     }
 }, {
     /** 
@@ -128,6 +137,7 @@ function(config, locale) {
         this._published = ( this.conf.published || false );
         this._state = ( this.conf.state || {} );
         this._layer = ( this.conf.layer || null );
+        this.selectMunicipalitiesMode = false;
     },
 
     /**
@@ -158,7 +168,15 @@ function(config, locale) {
      * @property {Object} eventHandlers
      * @static
      */
-    eventHandlers : {},
+    eventHandlers : {
+        'MapStats.FeatureHighlightedEvent': function(event) {
+            if(this.selectMunicipalitiesMode) {
+                this._featureSelectedEvent(event);
+            } else {
+                this._featureHighlightedEvent(event);
+            }
+        }
+    },
 
     /**
      * @method onEvent
@@ -284,8 +302,17 @@ function(config, locale) {
         // clear and append municipal-grid container
         container.find('.municipal-grid').remove();
         container.append(gridContainer);
-        // add one column
-        var columns = [{
+        // add initial columns
+
+        //This modified plugin adds checkboxes to grid
+        var checkboxSelector = new Slick.CheckboxSelectColumn2({
+            cssClass: "slick-cell-checkboxsel"
+        });
+        this.checkboxSelector = checkboxSelector;
+
+        // initial columns
+        var columns = [me.checkboxSelector.getColumnDefinition(),
+        {
             id : "municipality",
             name : this._locale['sotka'].municipality,
             field : "municipality",
@@ -295,7 +322,6 @@ function(config, locale) {
             name : this._locale['sotka'].code,
             field : "code"
         }];
-
         // options
         var options = {
             enableCellNavigation : true,
@@ -315,7 +341,8 @@ function(config, locale) {
                 data[rowId] = {
                     id : indicData.id,
                     code : indicData.code,
-                    municipality : indicData.title[Oskari.getLang()]
+                    municipality : indicData.title[Oskari.getLang()],
+                    sel : 'checked'
                 }
                 rowId++;
             }
@@ -334,11 +361,26 @@ function(config, locale) {
             grid.render();
         });
 
-        // To use aggrefators we need to define a group
+        // To use aggregators we need to define a group
         dataView.setGrouping({
-            getter : "municipalities",
+            getter : "sel",
+            comparer: function (a, b) {
+                //checkbox columns values are 'checked' and 'empty'
+                if(a.groupingKey == 'checked' && a.groupingKey == b.groupingKey){
+                    return 0;
+                } else if(a.groupingKey < b.groupingKey) {
+                    // 'empty' is the first group
+                    return 1;
+                } else {
+                    return -1;
+                }
+            },
             formatter: function (g) {
-                return "<span style='color:green'>" +me._locale['municipality']+" (" + g.count + ")</span>";
+                //a hack to name the groups
+                var text = (g.groupingKey == "checked" ? 
+                    me._locale['municipality'] : 
+                    me._locale['not_included']) + " (" + g.count + ")";
+                return "<span style='color:green'>" + text + "</span>";
             },
             aggregateCollapsed: false
         });
@@ -351,8 +393,10 @@ function(config, locale) {
         // when user sorts this grid according to selected column
         // we need to provide sort-function
         grid.onSort.subscribe(function(e, args) {
-            var cols = args.sortCols;
+            var target = jQuery(e.target);
+            if(target.hasClass('slick-header-menubutton')) return;
 
+            var cols = args.sortCols;
             dataView.sort(function(dataRow1, dataRow2) {
                 for (var i = 0, l = cols.length; i < l; i++) {
                     var field = cols[i].sortCol.field;
@@ -391,6 +435,61 @@ function(config, locale) {
                 .appendTo(args.node);
         });
 
+        grid.onColumnsReordered.subscribe(function(e, args){
+            me.dataView.refresh();
+        })
+
+        // register checboxSelector plugin
+        grid.registerPlugin(checkboxSelector);
+        // register groupItemMetadataProvider plugin (if not registered group toggles won't work)
+        grid.registerPlugin(groupItemMetadataProvider);
+        // Our new event to subscripe - this is called when checkbox is clicked
+        checkboxSelector.onSelectRowClicked.subscribe(function(e, args){
+            var data = args.grid.getData();
+            var item = data.getItem(args.row);
+            var groupsBeforeUpdate = data.getGroups().length;
+
+            //update item values (groupingkey is created from these)
+            item.sel = jQuery(e.target).is(':checked') ? 'checked' : 'empty';
+            data.updateItem(item.id, item);
+
+            // collapse group empty if it is created for the first time
+            groups = data.getGroups();
+            if(groups.length > 1) {
+                for (var i = 0; i < groups.length; i++) {
+                    var group = groups[i];
+                    if(group.groupingKey == 'empty' && group.count < 2 && groupsBeforeUpdate == 1) {
+                        data.collapseGroup('empty');
+                    }
+                };
+            }
+            // sendstats
+            var column = me._getColumnById(me._state.currentColumn);
+            me.sendStatsData(column);
+            /* 
+            //TODO find a way to tell openlayers that some area should be hilighted without clicking them
+                me.selectedMunicipalities[column.code] = (item.sel == "checked");
+            */
+
+
+            // resize grid (content/rows does not show extra rows otherwise. i.e. group headers & footers)
+            args.grid.setColumns(args.grid.getColumns());
+            data.refresh();
+
+        });
+
+        //if header checkbox is clicked, update map
+        checkboxSelector.onSelectHeaderRowClicked.subscribe(function(e, args){
+
+            // sendstats
+            var column = me._getColumnById(me._state.currentColumn);
+            me.sendStatsData(column);
+
+        });
+
+
+        me._initHeaderPlugin(columns, grid);
+
         // notify dataview that we are starting to update data
         dataView.beginUpdate();
         // set municipality data
@@ -402,11 +501,10 @@ function(config, locale) {
         // render the grid
         grid.render();
         // remember the grid object.
-        this.grid = grid;
-        this.dataView = dataView;
+        me.grid = grid;
+        me.dataView = dataView;
 
         me.setGridHeight();
-
 
         //window resize!
         var resizeGridTimer;
@@ -433,6 +531,53 @@ function(config, locale) {
         }
         gridDiv.height(parent.height() - selectorsHeight);
         this.grid.resizeCanvas();
+    },
+
+    /**
+     * Returns the index of the item with the code provided.
+     *
+     * @method getIdxByCode
+     * @param {String} code
+     */
+    getIdxByCode: function(code) {
+        var items = this.dataView ? this.dataView.getItems() : [],
+            returnItem = null,
+            i;
+
+        for (i = 0; i < items.length; ++i) {
+            if (items[i].code === code) {
+                returnItem = items[i];
+                break;
+            }
+        }
+        if (returnItem) {
+            var row = this.dataView.getRowById(returnItem.id);
+            if(row){
+                return row;
+            } else {
+                return -1;
+            }
+        } else {
+            return null;
+        }
+    },
+
+    getItemByCode: function(code) {
+        var items = this.dataView ? this.dataView.getItems() : [],
+            returnItem = null,
+            i;
+
+        for (i = 0; i < items.length; ++i) {
+            if (items[i].code === code) {
+                returnItem = items[i];
+                break;
+            }
+        }
+        if (returnItem) {
+            return this.dataView.getItemById(returnItem.id);
+        } else {
+            return null;
+        }
     },
 
     /**
@@ -504,9 +649,11 @@ function(config, locale) {
         // we use chosen to create autocomplete version of indicator select element.
         sel.chosen({
             no_results_text : this._locale['noMatch'],
-            placeholder_text : this._locale['noMatch']
+            placeholder_text : this._locale['selectIndicator']
         });
-
+        // this gives indicators more space to show title on dropdown
+        jQuery('.chzn-drop').css('width','298px');
+        jQuery('.chzn-search input').css('width','263px');
     },
 
     /**
@@ -755,25 +902,29 @@ function(config, locale) {
             field : columnId,
             toolTip : name,
             sortable : true,
+header : {
+      menu: {
+        items: [{element: jQuery(me.templates.filterLink).text(me._locale.filter), command: 'filter', actionType: 'link'}]
+      },
+      icon: '/Oskari/applications/paikkatietoikkuna.fi/full-map/icons/icon-funnel.png'
 
+},
             groupTotalsFormatter: function(totals, columnDef) {
                 var text = "";
-                var prepareFloat = function(value) {
-                    return Math.round(parseFloat(value)*100)/100;
+                // create grouping footer texts. => how many values there is in different colums
+                valueCount = 0;
+                var rows = totals.group.rows;
+                for (var i = 0; i < rows.length; i++) {
+                    var row = rows[i];
+                    if (row[columnDef.field] != null) {
+                        valueCount++;
+                    };
                 };
-
-                //var stats = me.conf.statistics;
-                //for (var i = 0; i < stats.length; i++) {
-                //    var statistic = stats[i];
-                    var val = totals.avg && totals.avg[columnDef.field];
-                    if (val != null) {
-                        text += prepareFloat(val) + ' (' + me._locale['statistic'].avg + ')';
-                //        if(i < stats.length) text += ", ";
-                    }
-                //}
+                text = valueCount + ' ' + me._locale['values'];
                 return text;
             }
         });
+
         me.grid.setColumns(columns);
 
         var columnData = [];
@@ -845,6 +996,8 @@ function(config, locale) {
         }
 
         me.updateDemographicsButtons(indicatorId, gender, year);
+        me.grid.setSortColumn(me._state.currentColumn, true);   
+
     },
 
     /**
@@ -957,7 +1110,7 @@ function(config, locale) {
      * @param curCol  Selected indicator data column
      */
     sendStatsData : function(curCol) {
-        if (curCol == null || curCol.field == 'municipality') {
+        if (curCol == null || curCol.field.indexOf('indicator') < 0) {
             // Not a valid current column nor a data value column
             return;
         }
@@ -977,7 +1130,7 @@ function(config, locale) {
         for ( i = 0; i < data.length; i++) {
             var row = data[i];
             // Exclude null values
-            if (row[curCol.field]) {
+            if (row.sel == "checked" && row[curCol.field]) {
                 statArray.push(row[curCol.field]);
                 // Municipality codes (kuntakoodit)
                 munArray.push(row['code']);
@@ -986,6 +1139,7 @@ function(config, locale) {
 
         // Send the data trough the stats service.
         me.statsService.sendStatsData(me._layer, {
+            CHECKED_COUNT : this.getItemsByGroupingKey('checked').length, // how many municipalities there is checked
             CUR_COL : curCol,
             VIS_NAME : me._layer.getWmsName(), //"ows:kunnat2013",  
             VIS_ATTR : me._layer.getFilterPropertyName(), //"kuntakoodi",
@@ -1144,7 +1298,7 @@ function(config, locale) {
         var j = 0;
         for(var i = 0; i < columns.length; i++){
             var columnId = columns[i].id;
-            if((columnId == 'id' || columnId == 'municipality' || columnId == 'code')) {
+            if((columnId == 'id' || columnId == 'municipality' || columnId == 'code' || columnId == '_checkbox_selector')) {
                 newColumnDef[j] = columns[i];
                 j++;
             }
@@ -1160,20 +1314,25 @@ function(config, locale) {
      * @param {String} title popup title
      * @param {String} message popup message
      */
-    showMessage : function(title, message) {
+    showMessage : function(title, message, buttons) {
         // Oskari components aren't available in a published map.
         if (!this._published) {
             var loc = this._locale;
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            okBtn.setTitle(loc.buttons.ok);
-            okBtn.addClass('primary');
-            okBtn.setHandler(function() {
-                dialog.close(true);
-            });
-            dialog.show(title, message, [okBtn]);
+            if(buttons) {
+                dialog.show(title, message, buttons);
+            } else {
+                var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                okBtn.setTitle(loc.buttons.ok);
+                okBtn.addClass('primary');
+                okBtn.setHandler(function() {
+                    dialog.close(true);
+                });
+                dialog.show(title, message, [okBtn]);                
+            }
         }
     },
+
 
     /**
      * @method loadStateIndicators
@@ -1192,6 +1351,11 @@ function(config, locale) {
 
                     if(state.currentColumn != null) {
                         if(classifyPlugin) {
+                            if (state.colors) {
+                                classifyPlugin.currentColorSet = state.colors.set;
+                                classifyPlugin.colorsetIndex = state.colors.index;
+                                classifyPlugin.colorsFlipped = state.colors.flipped;
+                            }
                             if(state.methodId != null && state.methodId > 0) {
                                 var select = classifyPlugin.element.find('.classificationMethod').find('.method');
                                 select.val(state.methodId);
@@ -1211,32 +1375,38 @@ function(config, locale) {
                                 }
                             }
                         }
+
                         // current column is needed for rendering map
-                        var columns = me.grid.getColumns();
-                        for (var i = 0; i < columns.length; i++) {
-                            var column = columns[i];
-                            if (column.id == state.currentColumn) {
-                                me.sendStatsData(column);
-                                me.grid.setSortColumn(state.currentColumn,true);
-                            }
-                        };
+                        // sendstats
+                        var column = me._getColumnById(state.currentColumn);
+                        me.sendStatsData(column);
+                        me.grid.setSortColumn(state.currentColumn,true);   
                     }
                 });
             });
         }
     },
     /**
-     * Loop through first group (municipalities) and 
+     * Loop through first group (municipalities) and create header row for
      * @private _updateTotals
      */
     _updateTotals: function(groups) {
         if(groups){
             var columns = this.grid.getColumns();
-
             // loop through columns
             for (var i = 0; i < columns.length; i++) {
                 var column = columns[i];
-                var gridTotals = groups[0].totals;
+
+                // group totals (statistical variables) should be calculated only for the checked/selected items
+                var group = groups[0];
+                for (var key in groups) {
+                    g = groups[key];
+                    if(g.groupingKey == "checked"){
+                        group = g;
+                    }
+                };
+
+                var gridTotals = group.totals;
                 var sub = jQuery(this.templates.subHeader);
 
                 var variableCount = 0;
@@ -1259,9 +1429,14 @@ function(config, locale) {
                 this.grid.setOptions(opts);
 
                 sub.appendTo(columnDiv);
+
             };
         }
     },
+    /**
+     * A method to get statistical variables 
+     * @private _getStatistic
+     */
     _getStatistic: function(gridTotals, columnId, type) {
         var value = {};
         var totalsItem = null;
@@ -1287,9 +1462,287 @@ function(config, locale) {
         }
         return totalsItem;
     },
+    /**
+     * A method to check if int is int instead of float
+     * @private _isInt 
+     */
     _isInt: function(n) {
         return n % 1 === 0;
     },
+
+    /**
+     * A method to initialize header plugin
+     * @private _initHeaderPlugin
+     */
+    _initHeaderPlugin: function(columns, grid) {
+        var me = this;
+        // lets create an empty container for menu items
+        for (var i = 0; i < columns.length; i++) {
+            var column = columns[i];
+            if(column.id == 'municipality') {
+                column.header = {
+                  menu: {
+                    items: []
+                  }
+                };
+            }
+        };
+
+        // new header menu plugin
+        var headerMenuPlugin = new Slick.Plugins.HeaderMenu2({});
+        // lets create a menu when user clicks the button.
+        headerMenuPlugin.onBeforeMenuShow.subscribe(function(e, args) {
+            var menu = args.menu;
+            if(args.column.id == 'municipality') {
+                menu.items = [];
+                for (var i = 0; i < me.conf.statistics.length; i++) {
+                    var statistic = me.conf.statistics[i];
+                    var elems = jQuery(me.templates.gridHeaderMenu).addClass('statsgrid-show-total-selects');
+
+                    // create input element with localization
+                    var input = elems.find('input').attr({'id': 'statistics_'+statistic.id});
+                    // if variable is visible => check the checkbox
+                    if(statistic.visible) input.attr({'checked':'checked'});
+                    // create label with localization
+                    elems.find('label').attr('for','statistics_'+statistic.id).text(me._locale['statistic'][statistic.id]);
+                    // add item to menu
+                    menu.items.push({
+                        element : elems,
+                        command: statistic.id
+                    });
+                };
+
+                // check if select rows checkbox should be checked
+                // we need to do something with current state of MVC which is non-existent
+                var columns = args.grid.getColumns();
+                var selectRowsChecked = false;
+                for (var i = 0; i < columns.length; i++) {
+                    var column = columns[i];
+                    if(column.field == "sel") {
+                        selectRowsChecked = true;
+                    }
+                }
+                // create checkbox for selecting rows toggle
+                var showRows = jQuery(me.templates.gridHeaderMenu).addClass('statsgrid-show-row-selects');
+                // create input element with localization
+                var input = showRows.find('input').attr({'id': 'statsgrid-show-row-selects'});
+                if(selectRowsChecked) {
+                    input.attr('checked', 'checked');
+                }
+                // create label with localization
+                showRows.find('label').attr('for', 'statsgrid-show-row-selects').text(me._locale['selectRows']);
+                menu.items.push({
+                    element : showRows,
+                    command: 'selectRows'
+                });                
+            }
+
+        });
+        // when command is given shos statistical variable as a new "row" in subheader
+        headerMenuPlugin.onCommand.subscribe(function(e, args) {
+            if(args.command == 'selectRows') {
+                var columns = args.grid.getColumns();
+                var newColumns = [];
+                var shouldAddSel = true;
+                for (var i = 0; i < columns.length; i++) {
+                    var column = columns[i];
+                    if(column.field != "sel") {
+                        newColumns.push(column);
+                    }
+                    if(column.field == "sel" && !jQuery(e.target).is(":checked")) {
+                        shouldAddSel = false;
+                    }
+                }
+                if (shouldAddSel) {
+                    newColumns.unshift(me.checkboxSelector.getColumnDefinition());
+                }
+
+                args.grid.setColumns(newColumns);
+
+            } else if(args.command == 'filter') {
+                me._createFilterPopup(args.column, this);
+            } else {
+
+                for (var i = 0; i < me.conf.statistics.length; i++) {
+                    var statistic = me.conf.statistics[i]
+                    if(statistic.id == args.command) {
+                        statistic.visible = !statistic.visible;
+                        break;
+                    }
+                }
+
+                //FIXME 
+                //TODO we need to create grouping for statistical variables 
+                // instead of using subheader!
+
+                //reduce the number of variables
+                me.dataView.refresh();
+                // setColumns fires slickgrid resizing (cssrules etc.) 
+                // => variables disappear
+                me.grid.setColumns(me.grid.getColumns());
+                // this prints variables again.
+                me.dataView.refresh();
+            }
+        });
+        grid.registerPlugin(headerMenuPlugin);
+    },
+    /**
+     * Creates filter popup
+     * @private _createFilterPopup
+     */
+    _createFilterPopup : function(column, headerMenuPlugin) {
+        var me = this;
+        var popup = jQuery(me.templates.filterPopup);
+        popup.find('.filter-desc').text(me._locale['indicatorFilterDesc']);
+
+        //labels for condition
+        var labels = jQuery(me.templates.filterRow);
+        labels.find('.filter-label').text(me._locale['filterIndicator']);
+        labels.find('.filter-value').text(column.name);
+        popup.find('.filter-container').append(labels);
+
+        // condition (dropdown list of different types of filters + value)
+        var condition   = jQuery(me.templates.filterRow);
+        condition.find('.filter-label').text(me._locale['filterCondition']);
+        var selectCont  = jQuery(me.templates.filterSelect);
+        var select      = selectCont.find('.filter-select');
+        select.append(jQuery(me.templates.filterOption).val('')
+            .text(me._locale['filterSelectCondition']));
+        select.append(jQuery(me.templates.filterOption).val('>')
+            .text(me._locale['filterGT']));
+        select.append(jQuery(me.templates.filterOption).val('>=')
+            .text(me._locale['filterGTOE']));
+        select.append(jQuery(me.templates.filterOption).val('=')
+            .text(me._locale['filterE']));
+        select.append(jQuery(me.templates.filterOption).val('<=')
+            .text(me._locale['filterLTOE']));
+        select.append(jQuery(me.templates.filterOption).val('<')
+            .text(me._locale['filterLT']));
+        select.append(jQuery(me.templates.filterOption).val('...')
+            .text(me._locale['filterBetween']));
+        condition.find('.filter-value').append(selectCont);
+
+        // changing condition should show more input options
+        select.change(function(e) {
+            var element = jQuery(e.target);
+            var selected = element.val();
+            var filterValue = element.parents('.filter-value');
+            if(selected == '...') {
+                filterValue.find('.filter-between').css('display', 'block');
+                filterValue.find('.filter-input2').css('display', 'block');
+            } else {
+                filterValue.find('.filter-input2').css('display', 'none');
+                filterValue.find('.filter-between').css('display', 'none');
+            }
+        });
+
+        popup.find('.filter-container').append(condition);
+        var filterInputs = jQuery(me.templates.filterInputs);
+        popup.find('.filter-inputs-container').append(filterInputs);
+
+        // dialog with cancel and filter buttons
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+
+        // cancel
+        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        cancelBtn.setTitle(me._locale['buttons'].cancel);
+        cancelBtn.setHandler(function() {
+            popup.off();
+            headerMenuPlugin.hide();
+            dialog.close(true);
+        });
+
+        // filter
+        var filterBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        filterBtn.setTitle(me._locale['buttons'].filter);
+        filterBtn.addClass('primary');
+        filterBtn.setHandler(function(e) {
+            var inputArray = [];
+            var divmanazerpopup = jQuery(e.target)
+                .parents('.divmanazerpopup');
+
+            var input1 = divmanazerpopup.find('.filter-input1');
+            inputArray.push(input1.val());
+
+            if(select.val() == '...') {
+                var input2 = divmanazerpopup.find('.filter-input2');
+                inputArray.push(input2.val());
+            }
+
+            me.filterColumn(column, select.val(), inputArray);
+
+            popup.off();
+            headerMenuPlugin.hide();
+            dialog.close(true);
+        });
+
+        // show the dialog
+        dialog.show(me._locale['filterTitle'], popup, [cancelBtn, filterBtn]);
+        // keydown
+        popup.on('keydown', function(e) {
+            e.stopPropagation();
+        });
+
+    },
+
+    /**
+     * Filters municipalities according to method and constraints (i.e. inputArray)
+     * @param column Apply this filter to column
+     * @method of filtering
+     * @inputArray constraints
+     */
+
+    filterColumn : function(column, method, inputArray) {
+        var data = this.grid.getData(); 
+        var items = data.getItems();
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            
+            if(item.sel == 'checked'){
+
+                switch(method) {
+                    case '>':
+                        if(!(item[column.id] > inputArray[0])) {
+                            item.sel = 'empty';
+                        }
+                        break;
+                    case '>=':
+                        if(!(item[column.id] >= inputArray[0])) {
+                            item.sel = 'empty';
+                        }
+                        break;
+                    case '=':
+                       if(!(item[column.id] == inputArray[0])) {
+                            item.sel = 'empty';
+                        }
+                        break;
+                    case '<=':
+                       if(!(item[column.id] <= inputArray[0])) {
+                            item.sel = 'empty';
+                        }
+                        break;
+                    case '<':
+                       if(!(item[column.id] < inputArray[0])) {
+                            item.sel = 'empty';
+                        }
+                        break;
+                    case '...':
+                       if(!(inputArray[0] < item[column.id] && item[column.id] < inputArray[1])) {
+                            item.sel = 'empty';
+                        }
+                        break;
+                }
+                data.updateItem(item.id, item);
+            }
+
+        };
+        this.dataView.refresh();
+        data.collapseGroup('empty');
+        // sendstats ...update map
+        this.sendStatsData(column);
+
+    },
+
     /**
      * Simple objectArray to csv 
      * http://stackoverflow.com/questions/4130849/convert-json-format-to-csv-format-for-ms-excel
@@ -1317,6 +1770,191 @@ function(config, locale) {
             str += line + '\r\n';
         }
         window.open( "data:text/csv;charset=utf-8," + escape(str))
+    },
+
+    /**
+     * Highlights a municipality given by the event and scrolls to it in the grid
+     *
+     * @method _featureHighlightedEvent
+     * @private
+     * @param {Oskari.mapframework.bundle.mapstats.event.FeatureHighlightedEvent} event
+     */
+    _featureHighlightedEvent: function(event) {
+        var featureAtts = event.getFeature().attributes,
+            isHighlighted = event.isHighlighted(),
+            idx = this.getIdxByCode(featureAtts.kuntakoodi),
+            cssKey = 'highlight-row-' + featureAtts.kuntakoodi,
+            cssHash = {};
+        // if we have grid and idx => remembe selected area
+        if(this.grid && idx) {
+            // if we there are no checked areas => do nothing
+            if(this.getItemsByGroupingKey('checked').length > 0) {
+                this.selectedMunicipalities[featureAtts.kuntakoodi] = isHighlighted;
+
+                if (isHighlighted) {
+                    //if a row is found => hilight it
+                    if(idx != -1) {
+                        this.grid.scrollRowToTop(idx);
+                        cssHash[idx] = {'municipality': 'statsgrid-highlight-row'};
+                        this.grid.addCellCssStyles(cssKey, cssHash);
+                        this.dataView.syncGridCellCssStyles(this.grid, cssKey);
+                    }
+                } else {
+                    this.grid.removeCellCssStyles(cssKey);
+                    this.dataView.syncGridCellCssStyles(this.grid, cssKey);
+                }
+            }
+        }
+    },
+
+    /**
+     * Highlights a municipality given by the event and shows only hilighted municipalities in the grid
+     *
+     * @method _featureSelectedEvent
+     * @private
+     * @param {Oskari.mapframework.bundle.mapstats.event.FeatureHighlightedEvent} event
+     */
+    _featureSelectedEvent: function(event) {
+        var featureAtts = event.getFeature().attributes,
+            isHighlighted = event.isHighlighted(),
+            item = this.getItemByCode(featureAtts.kuntakoodi);
+
+        if (this.grid && item) {
+            //if area is hilighted => remember it and change grid item to 'checked' state
+            this.selectedMunicipalities[featureAtts.kuntakoodi] = isHighlighted;
+            if (isHighlighted) {               
+                item.sel = 'checked';
+            } else {
+                item.sel = 'empty';
+            }
+            var data = this.grid.getData();
+            data.updateItem(item.id, item);
+
+            // sendstats ...update map
+            var column = this._getColumnById(this._state.currentColumn);
+            this.sendStatsData(column);
+        }
+    },
+
+    /**
+     * Get items by GroupingKey
+     *
+     * @method getItemsByGroupingKey
+     * @param grouping key (e.g. 'checked', 'empty')
+     */
+    getItemsByGroupingKey : function(sel) {
+        var items = this.grid.getData().getItems();
+        var itemsByGrouping = [];
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            if(item.sel === sel) {
+                itemsByGrouping.push(sel);
+            }
+        }
+        return itemsByGrouping;
+    },
+
+    /**
+     * Show only selected areas
+     *
+     * @method _showSelectedAreas
+     * @private
+     * @param array of ids
+     */
+    _showSelectedAreas : function(idArray) {
+        var data = this.grid.getData();
+        for (var i = 0; i < idArray.length; i++) {
+            var id = idArray[i];
+            var item = data.getItemById(id);
+            item.sel = 'checked';
+            data.updateItem(id, item);
+        };
+        data.refresh();
+    },
+
+    /**
+     * Unselect all areas
+     *
+     * @method unselectAllAreas
+     * @param leave hilighted areas to be selected in the grid
+     */
+    unselectAllAreas : function(leaveHilighted) {
+        var _grid = this.grid;
+        var _data = _grid.getData();
+        var items = _grid.getData().getItems();
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            if(leaveHilighted && this.selectedMunicipalities[item.code]){
+                item.sel = 'checked';
+            } else {
+                item.sel = 'empty';
+            }
+        }
+
+        _data.collapseGroup('empty');
+
+        // sendstats
+        var column = this._getColumnById(this._state.currentColumn);
+        this.sendStatsData(column);
+
+
+        //update data
+        _data.setItems(items);
+        _data.refresh();
+        //render all the rows (and checkboxes) again
+        _grid.invalidateAllRows();
+        _grid.render();
+    },
+
+    /**
+     * Get column by id
+     *
+     * @method _getColumnById
+     * @private
+     * @param column id
+     */
+    _getColumnById : function(columnId){
+        // sendstats
+        var columns = this.grid.getColumns();
+        for (var i = 0; i < columns.length; i++) {
+            var column = columns[i];
+            if(column.id === columnId) {
+                return column;
+            }
+        };
+        return null;
+    },
+
+    /**
+     * Sends an event with HTML for tooltips as data.
+     *
+     * @method sendTooltipData
+     * @param {OpenLayers.Feature} feature
+     */
+    sendTooltipData: function(feature) {
+        var featAtts = feature.attributes;
+        var eventBuilder = this._sandbox.getEventBuilder('MapStats.HoverTooltipContentEvent');
+        var currColumn = this._state.currentColumn;
+        var item = this.getItemByCode(featAtts.kuntakoodi);
+        var content = '<p>' + item.municipality;
+        content += ((currColumn && item[currColumn]) ? '<br />' + item[currColumn] : ''); 
+        content += '</p>';
+
+        if (eventBuilder) {
+            var event = eventBuilder(content);
+            this._sandbox.notifyAll(event);
+        }
+    },
+
+    /**
+     * Toggle select municipalities mode
+     *
+     * @method toggleSelectMunicipalitiesMode
+     * @return true if mode is on
+     */
+    toggleSelectMunicipalitiesMode : function() {
+        this.selectMunicipalitiesMode = !this.selectMunicipalitiesMode;
+        return this.selectMunicipalitiesMode;
     }
 
 }, {
