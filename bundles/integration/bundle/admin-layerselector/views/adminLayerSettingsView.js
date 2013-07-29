@@ -231,8 +231,7 @@ define([
             data.xslt           = me.classes.encode64(data.xslt);//me.layerGroupingModel.encode64(data.xslt);
             data.gfiType        = form.find('#add-layer-responsetype').val();
 			
-			
-
+            
             // id of layer class
             var url = baseUrl + action_route + id + idValue;
             if(lcId != null) {
@@ -383,6 +382,9 @@ define([
             var selected = jQuery('#admin-select-capability').val();
             var capability = this.getValue(this.capabilities, 'Capability');
             var selectedLayer = capability.Layer.Layer[selected];
+
+            //title
+            jQuery('#add-layer-fi-name').val(selectedLayer.Title);
 
             // wmsname
             var wmsname = selectedLayer.Name;

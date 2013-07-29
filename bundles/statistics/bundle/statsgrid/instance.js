@@ -60,6 +60,7 @@ function() {
         // - the grid.
         var gridConf = {
             'state': me.getState(),
+            //'csvDownload' : true,
             "statistics" : [
                 {"id" : "avg", "visible": true},
                 {"id" : "max", "visible": true},
