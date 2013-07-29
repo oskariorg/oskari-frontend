@@ -551,6 +551,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
                     myplace.setName(myplaceModel.getName());
                     myplace.setDescription(myplaceModel.getDescription());
                     myplace.setLink(myplaceModel.getLink());
+                    myplace.setImageLink(myplaceModel.getImageLink());
                     myplace.setCategoryID(myplaceModel.getCategoryID());
                     myplace.setGeometry(myplaceModel.getGeometry());
                     myplace.setUpdateDate(list[0].getUpdateDate());
