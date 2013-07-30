@@ -86,7 +86,7 @@ jQuery(document).ready(function() {
         type: 'POST',
         dataType: 'json',
         data : getAppSetupParams,
-        url: ajaxUrl + 'action_route=GetAppSetup',
+        url: ajaxUrl + 'action_route=GetAppSetup&viewId=1084',
         success: function(app) {
             if (app.startupSequence && app.configuration) {
               var appSetup = {

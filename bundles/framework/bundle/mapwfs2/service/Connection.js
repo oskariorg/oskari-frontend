@@ -101,6 +101,7 @@ function(config, mediator) {
             var once = data.data.once;
             mediator.getPlugin().showErrorPopup(message, layer, once);
         }
+
 /*
         // debug
         function getData(data) {
