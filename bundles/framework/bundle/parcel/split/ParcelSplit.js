@@ -426,7 +426,7 @@ function(drawPlugin) {
             var nextIndex;
             var foundIndex;
 
-            var epsilon = 100;
+            var epsilon = 0.1;
 
             // Scaling factor for integer operations
             var scale = 1;
