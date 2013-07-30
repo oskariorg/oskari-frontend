@@ -23,7 +23,13 @@ function(instance) {
             '</div>' +
             '<div class="field drawing">' + 
                 '<label>' + loc.drawing.label + '</label><br clear="all" />' +
-                '<table></table>' +
+                '<ul>Tähän tulis kolme linkkiä, joista voi valita värejä yms.</ul>' +
+            '</div>' +
+            '<div class="field visibleFields">' +
+                '<label>' + loc.visibleFields.label + '</label><br clear="all" />' +
+                '<input type="checkbox" name="placename" checked="checked" />' + loc.visibleFields.placename + '<br/>' +
+                '<input type="checkbox" name="placedesc" checked="checked" />' + loc.visibleFields.placedesc + '<br/>' +
+                '<input type="checkbox" name="image" checked="checked" />' + loc.visibleFields.image + '<br/>' +
             '</div>' +
         '</div>');
     this.templateTableRow = jQuery('<tr></tr>');
@@ -49,9 +55,9 @@ function(instance) {
     getForm : function() {
         var ui = this.template.clone();
         var table = ui.find('div.drawing table');
-        this._populatePointTool(table);
-        this._populateLineTool(table);
-        this._populateAreaTool(table);
+        //this._populatePointTool(table);
+        //this._populateLineTool(table);
+        //this._populateAreaTool(table);
         
         if(this.initialValues) {
             ui.find('input[name=categoryname]').attr('value', this.initialValues.name);
@@ -80,6 +86,8 @@ function(instance) {
             areaFillColor.attr('value', this.initialValues.area.fillColor);
             new jscolor.color(areaFillColor[0]);
             //ui.find('input[name=areaFillColor]').attr('value', this.initialValues.area.fillColor);
+
+            this._checkVisibleFields(this.initialValues.visibleFields);
         }
         return ui;
     },
@@ -123,6 +131,12 @@ function(instance) {
                 lineColor : areaLineColor,
                 fillColor : areaFillColor
             }
+
+            // Get the names of the fields the user has checked.
+            values.visibleFields = [];
+            onScreenForm.find('div.visibleFields').find('input[type=checkbox]:checked').each(function() {
+                values.visibleFields.push(this.name);
+            });
         }
         return values;
     },
@@ -149,6 +163,8 @@ function(instance) {
             onScreenForm.find('input[name=areaLineSize]').val(data.area.size);
             onScreenForm.find('input[name=areaLineColor]').val(data.area.lineColor);
             onScreenForm.find('input[name=areaFillColor]').val(data.area.fillColor);
+
+            this._checkVisibleFields(data.visibleFields);
         }
         
         this.initialValues = data;
@@ -264,6 +280,26 @@ function(instance) {
      */
     _getOnScreenForm : function() {
         return jQuery('div.myplacescategoryform');
+    },
+
+    /**
+     * Unchecks all the check boxes and checks those which are in the visibleFields array.
+     *
+     * @method _checkVisibleFields
+     * @param {Array[String]} visibleFields
+     */
+    _checkVisibleFields: function(visibleFields) {
+        if (!visibleFields || !visibleFields.length) {
+            return;
+        }
+        var ui = this._getOnScreenForm();
+        // Let's uncheck all checkboxes
+        ui.find('div.visibleFields').find('input[type=checkbox]').removeAttr('checked');
+        // And check those which are in the initial values.
+        for (var i = 0; i < visibleFields.length; ++i) {
+            var checkbox = ui.find('div.visibleFields').find('input[name=' + visibleFields[i] + ']');
+            jQuery(checkbox).attr('checked', true);
+        }
     },
     /**
      * @method destroy

@@ -49,7 +49,7 @@ function(drawPlugin) {
     *
     *
     */
-    this.markerIcon = new OpenLayers.Icon('/Oskari/1.8/parcel/images/marker.png',this.markerSize,this.markerOffset);
+    this.markerIcon = new OpenLayers.Icon('/Oskari/resources/parcel/images/marker.png',this.markerSize,this.markerOffset);
 
    /**
     * @property splitPolygons
@@ -426,7 +426,7 @@ function(drawPlugin) {
             var nextIndex;
             var foundIndex;
 
-            var epsilon = 100;
+            var epsilon = 0.1;
 
             // Scaling factor for integer operations
             var scale = 1;
