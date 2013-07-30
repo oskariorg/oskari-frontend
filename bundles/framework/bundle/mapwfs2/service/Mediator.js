@@ -87,7 +87,7 @@ function(config, plugin) {
      */
     startup : function(session) {
         var me = this;
-        if(session) {
+        if(session) { // use objects session if not defined as parameter
             this.session = session;
         }
         var cometd = this.cometd;
@@ -297,12 +297,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
     /**
      * @method resetWFS
      * @param {Object} data
-     *
-     * Handles one layer's features per response
-     * Creates WFSFeaturesSelectedEvent
      */
     resetWFS : function(data) {
-        console.log(data);
         this.startup(null);
     }
 

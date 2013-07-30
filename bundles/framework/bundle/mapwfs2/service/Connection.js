@@ -95,7 +95,6 @@ function(config, mediator) {
         // error handling
         function getError(data)
         {
-            console.log(data);
             var message = data.data.message;
             var layer = mediator.getPlugin().getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
             var once = data.data.once;
