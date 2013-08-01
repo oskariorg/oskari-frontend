@@ -518,8 +518,8 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
      */
     _getLayerAttributes: function(layer) {
         // Make copies of fields and locales
-        var fields = layer.getFields() ? layer.getFields().slice(0) : [],
-            locales = layer.getLocales() ? layer.getLocales().slice(0) : [],
+        var fields = (layer.getFields && layer.getFields()) ? layer.getFields().slice(0) : [],
+            locales = (layer.getLocales && layer.getLocales()) ? layer.getLocales().slice(0) : [],
             attributes = [],
             i;
 
