@@ -368,6 +368,16 @@ function(drawPlugin) {
          * @return {}
          */
         splitLine : function(polygons,line) {
+            // Transform and scale coordinates
+            var origin = new OpenLayers.Geometry.Point(0.0, 0.0);
+            var reference = [polygons.geometry.components[0].components[0].components[0].x,
+                             polygons.geometry.components[0].components[0].components[0].y];
+            var scaleFactor = 10000.0;
+            polygons.geometry.move(-reference[0],-reference[1]);
+            polygons.geometry.resize(scaleFactor,origin);
+            line.geometry.move(-reference[0],-reference[1]);
+            line.geometry.resize(scaleFactor,origin);
+
             // OpenLayers variables
             var lineStyle = { strokeColor: '#0000ff', strokeOpacity: 1, strokeWidth: 2};
             var olOldFeatures = polygons.geometry.components.concat(line.geometry);
@@ -426,13 +436,11 @@ function(drawPlugin) {
             var nextIndex;
             var foundIndex;
 
-            var epsilon = 0.1;
+            var epsilon = 1.0e6; // about 10 cm x 10 cm
 
             // Scaling factor for integer operations
             var scale = 1;
-
             var marker;
-
             var logText = "";
 
             for (i=0; i<olOldFeatures.length; i++) {
@@ -493,7 +501,6 @@ function(drawPlugin) {
                 return [olOldFeatures];
             }
 
-
             // Splitting
             for (i=0; i<jstsOldPolygons.length; i++) {
                 logText += " i ";
@@ -549,11 +556,12 @@ function(drawPlugin) {
 
                     // Polygons to OpenLayers format
                     polygonIndexes = [];
-                    pointIndexes = [];
                     olNewPolygons = [];
                     sharedEdge = false;
                     for (k=0; k<clipSolutionPolygons.length; k++) {
+                        // Jsts occasionally returns "empty" polygons
                         if (Math.abs(cpr.Area(clipSolutionPolygons[k])) < epsilon) continue;
+
                         clipValidationTarget.push(clipSolutionPolygons[k]);
                         if (cpr.Area(clipSolutionPolygons[k]) > 0) {
                             clipSolutionPolygon = clipSolutionPolygons[k];
@@ -641,6 +649,18 @@ function(drawPlugin) {
                     for (k=0; k<olNewPolygons.length; k++) {
                         olSolutionPolygons.push(olNewPolygons[k]);
                     }
+                }
+            }
+
+            // Inverse transform and scale
+            olPoints = olNewFeatures[0].geometry.getVertices();
+            pointIndexes = [];
+            for (i=0; i<olPoints.length; i++) {
+                if (pointIndexes.indexOf(olPoints[i].id) < 0) {
+                    // olPoint not handled yet
+                    olPoints[i].x = olPoints[i].x/scaleFactor+reference[0];
+                    olPoints[i].y = olPoints[i].y/scaleFactor+reference[1];
+                    pointIndexes.push(olPoints[i].id);
                 }
             }
 
@@ -832,6 +852,7 @@ function(drawPlugin) {
             } else {
                 return -10+logText;
             } */
+
             return olNewFeatures;
         },
 
