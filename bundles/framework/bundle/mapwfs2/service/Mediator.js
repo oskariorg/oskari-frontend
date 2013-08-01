@@ -68,6 +68,9 @@ function(config, plugin) {
             },
             '/wfs/image' : function() {
                 me.getWFSImage.apply(me, arguments);
+            },
+            '/wfs/reset' : function() {
+                me.resetWFS.apply(me, arguments);
             }
         };
 
@@ -84,7 +87,9 @@ function(config, plugin) {
      */
     startup : function(session) {
         var me = this;
-        this.session = session;
+        if(session) { // use objects session if not defined as parameter
+            this.session = session;
+        }
         var cometd = this.cometd;
         var layers = this.plugin.getSandbox().findAllSelectedMapLayers(); // get array of AbstractLayer (WFS|WMS..)
         var initLayers = {};
@@ -108,10 +113,10 @@ function(config, plugin) {
         }
 
         cometd.publish('/service/wfs/init', {
-            "session" : session.session,
+            "session" : this.session.session,
             "language": Oskari.getLang(),
-            "browser" : session.browser,
-            "browserVersion" : session.browserVersion,
+            "browser" : this.session.browser,
+            "browserVersion" : this.session.browserVersion,
             "location": {
                 "srs": srs,
                 "bbox": [bbox.left,bbox.bottom,bbox.right,bbox.top],
@@ -287,7 +292,16 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                 this.instance.sandbox.notifyAll(event);
             }
         }
+    },
+
+    /**
+     * @method resetWFS
+     * @param {Object} data
+     */
+    resetWFS : function(data) {
+        this.startup(null);
     }
+
 });
 
 Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'setters', {

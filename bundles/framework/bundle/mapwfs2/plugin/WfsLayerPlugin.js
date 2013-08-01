@@ -942,9 +942,6 @@ function(config) {
      * @param imageUrl
      */
     showErrorPopup : function(message, layer, once) {
-        console.log(message);
-        console.log(this.errorTriggers);
-
         if(once == true) {
             if(this.errorTriggers[message]) {
                 if(this.errorTriggers[message].count >= this.errorTriggers[message].limit) {
