@@ -89,6 +89,7 @@ describe.only("Test Suite for analyse bundle's filter methods" , function() {
             expect(jQuery('.analyse-filter-popup-content').length).to.be(1);
             expect(filterDialogSpy.callCount).to.be(1);
             expect(filterDialogSpy.calledWith(testLayer)).to.be.ok();
+            filterDialogSpy.restore();
         });
 
         it('should add more/remove filter options when appropriate buttons get clicked', function() {
@@ -112,25 +113,33 @@ describe.only("Test Suite for analyse bundle's filter methods" , function() {
     });
 
     describe('filter values', function() {
-        it('should return filter values from the ui', function() {
+        it('should be returned from the ui', function() {
+            var getFilterValuesSpy = sinon.spy(analyseView, '_getFilterValues');
             var filterOption = jQuery('div.filter-option'),
                 testFilterValues = {
                     filters: [
                         {attribute: 'foo', operator: '=', value: 'bar'}
                     ]
                 },
-                attribute, operator, value, filterValues;
+                filterValues;
 
             // Fill in the filter values.
             filterOption.find('select.attribute').val(testFilterValues.filters[0].attribute);
             filterOption.find('select.operator').val(testFilterValues.filters[0].operator);
             filterOption.find('input[name=attribute-value]').val(testFilterValues.filters[0].value);
             // Update the filter.
-            debugger;
             jQuery('.analyse-update-filter').click();
 
-            filterValues = analyseView.getFilterJson(testLayerId);
-            expect(filterValues).to.be(testFilterValues);
+            waitsFor(function() {
+                return (getFilterValuesSpy.callCount > 0);
+            }, function() {
+                expect(getFilterValuesSpy.callCount).to.be(1);
+                filterValues = analyseView.getFilterJson(testLayerId);
+                expect(filterValues).to.be(testFilterValues);
+                getFilterValuesSpy.restore();
+
+                done();
+            }, "Waits for the analyse filters to update", 5000);
         });
     });
 
@@ -149,15 +158,38 @@ describe.only("Test Suite for analyse bundle's filter methods" , function() {
         });
 
         it('should fail', function() {
-            var testFilterValues = {
-                filters: [
+            var testFilters = [
                     {attribute: 'foo', operator: '=', value: null},
                     {'boolean': 'AND'},
-                    {attribute: 'volume', operator: '=', value: 11}
-                ]
-            };
+                    {attribute: 'volume', operator: '=', value: 11},
+                    {attribute: 'foo', operator: null, value: 'bar'},
+                    {attribute: null, operator: '=', value: 'bar'}
+                ],
+                testFilterValues = {},
+                errors;
 
-            var errors = analyseView._validateFilterValues(testFilterValues);
+            testFilterValues.filters = testFilters.slice(0, 3);
+            errors = analyseView._validateFilterValues(testFilterValues);
+            expect(errors.length).to.be.greaterThan(0);
+
+            // Should fail with a boolean operator and not another filter
+            testFilterValues.filters = testFilters.slice(0, 2);
+            errors = analyseView._validateFilterValues(testFilterValues);
+            expect(errors.length).to.be.greaterThan(0);
+
+            // Should fail with null value
+            testFilterValues.filters = testFilters.slice(0, 1);
+            errors = analyseView._validateFilterValues(testFilterValues);
+            expect(errors.length).to.be.greaterThan(0);
+
+            // Should fail with null operator
+            testFilterValues.filters = testFilters.slice(3, 4);
+            errors = analyseView._validateFilterValues(testFilterValues);
+            expect(errors.length).to.be.greaterThan(0);
+
+            // Should fail with null attribute
+            testFilterValues.filters = testFilters.slice(4);
+            errors = analyseView._validateFilterValues(testFilterValues);
             expect(errors.length).to.be.greaterThan(0);
         });
     });
