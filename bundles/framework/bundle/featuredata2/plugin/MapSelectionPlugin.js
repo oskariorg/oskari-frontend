@@ -70,21 +70,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.MapSelection
             // preselect it for modification
             this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
         }
-        else {
-
-            if(params.geometry) {
-                // sent existing geometry == edit mode
-                this.editMode = true;
-                // add feature to draw layer
-                var features = [new OpenLayers.Feature.Vector(params.geometry)];
-                this.drawLayer.addFeatures(features);
-                // preselect it for modification
-                this.drawControls.modify.selectControl.select(this.drawLayer.features[0]);
-            } else {
-                // otherwise activate requested draw control for new geometry
-                this.editMode = false;
-                this._toggleControl(params.drawMode);
-            }
+        else if(params.geometry) {
+            // sent existing geometry == edit mode
+            this.editMode = true;
+            // add feature to draw layer
+            var features = [new OpenLayers.Feature.Vector(params.geometry)];
+            this.drawLayer.addFeatures(features);
+            // preselect it for modification
+            this.drawControls.modify.selectControl.select(this.drawLayer.features[0]);
+        } else {
+            // otherwise activate requested draw control for new geometry
+            this.editMode = false;
+            this._toggleControl(params.drawMode);
         }
     },
     /**
@@ -340,7 +337,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.MapSelection
      * implements MapModule.Plugin protocol stopPlugin method
      */
     stopPlugin : function(sandbox) {
-
         sandbox.unregister(this);
         this._map = null;
         this._sandbox = null;

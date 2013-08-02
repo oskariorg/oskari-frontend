@@ -135,6 +135,8 @@ function(config, plugin) {
     }
 });
 
+// receive from backend
+
 Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'getters', {
     /**
      * @method getWFSProperties
@@ -304,6 +306,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
     }
 
 });
+
+// send to backend
 
 Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'setters', {
     /**
