@@ -70,7 +70,6 @@ function(config, mediator) {
         var wasConnected = this._connected;
         this._connected = message.successful === true;
         if(!wasConnected && this._connected) {
-            console.log("connected");
             this.mediator.setConnection(this.cometd);
             this.mediator.getPlugin().clearConnectionErrorTriggers(); // clear errors
         } else if(wasConnected && !this._connected) {
@@ -85,7 +84,6 @@ function(config, mediator) {
             var self = this;
             this.mediator.setConnection(self.cometd);
             this.cometd.batch(function() {
-                console.log("handshake");
                 self._errorSub = self.cometd.subscribe('/error', self.getError);
                 self.mediator.subscribe();
                 self.mediator.startup({
@@ -106,10 +104,12 @@ function(config, mediator) {
         var layer = mediator.getPlugin().getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
         var once = data.data.once;
         this.mediator.getPlugin().showErrorPopup(message, layer, once);
-    },
+    }//,
 
     // debug
+    /*
     getData : function(data) {
         console.log("getData:", data);
     }
+    */
 });
