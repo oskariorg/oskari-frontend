@@ -114,8 +114,8 @@ describe.only("Test Suite for analyse bundle's filter methods" , function() {
 
     describe('filter values', function() {
         it('should be returned from the ui', function() {
-            var getFilterValuesSpy = sinon.spy(analyseView, '_getFilterValues');
-            var filterOption = jQuery('div.filter-option'),
+            var getFilterValuesSpy = sinon.spy(analyseView, '_getFilterValues'),
+                filterOption = jQuery('div.filter-option'),
                 testFilterValues = {
                     filters: [
                         {attribute: 'foo', operator: '=', value: 'bar'}
@@ -145,15 +145,22 @@ describe.only("Test Suite for analyse bundle's filter methods" , function() {
 
     describe('validation', function() {
         it('should pass', function() {
-            var testFilterValues = {
-                filters: [
+            var testFilters = [
                     {attribute: 'foo', operator: '=', value: 'bar'},
                     {'boolean': 'AND'},
                     {attribute: 'volume', operator: '=', value: 11}
-                ]
-            };
+                ],
+                testFilterValues = {},
+                errors;
 
-            var errors = analyseView._validateFilterValues(testFilterValues);
+            // Should pass with two filters combined by a boolean operator
+            testFilterValues.filters = testFilters.slice(0);
+            errors = analyseView._validateFilterValues(testFilterValues);
+            expect(errors).to.be(false);
+
+            // Should pass with one filter
+            testFilterValues.filters = testFilters.slice(0, 1);
+            errors = analyseView._validateFilterValues(testFilterValues);
             expect(errors).to.be(false);
         });
 
