@@ -38,7 +38,7 @@ function(instance) {
                 '<img src=""></img>' +
             '</div>' +
             '<div class="field" id="newLayerForm">' + 
-                '<label for="category">' + '<a href="#" class="newLayerLink">' + loc.category.new + '</a>' + loc.category.choose + '</label><br clear="all" />' +
+                '<label for="category">' + '<a href="#" class="newLayerLink">' + loc.category.newLayer + '</a>' + loc.category.choose + '</label><br clear="all" />' +
                 '<select name="category" autofocus>' +
                 '</select>' +
             '</div>' +

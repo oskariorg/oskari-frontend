@@ -66,7 +66,7 @@ Oskari.registerLocalization({
       },
       "category": {
         "label": "Karttataso",
-        "new": "Luo uusi karttataso",
+        "newLayer": "Luo uusi karttataso",
         "choose": " tai valitse olemassa olevista tasoista:"
       },
       "imagelink": {
