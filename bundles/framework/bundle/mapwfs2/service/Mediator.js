@@ -7,7 +7,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Mediator',
 /**
  * @method create called automatically on construction
  * @static
-
+ *
+ * @param {Object} config
  * @param {Object} plugin
  */
 function(config, plugin) {
@@ -51,26 +52,26 @@ function(config, plugin) {
      */
     subscribe : function() {
         var cometd = this.cometd;
-        var me = this;
+        var self = this;
 
         var channels = {
             '/wfs/properties' : function() {
-                me.getWFSProperties.apply(me, arguments);
+                self.getWFSProperties.apply(self, arguments);
             },
             '/wfs/feature' : function() {
-                me.getWFSFeature.apply(me, arguments);
+                self.getWFSFeature.apply(self, arguments);
             },
             '/wfs/mapClick' : function() {
-                me.getWFSMapClick.apply(me, arguments);
+                self.getWFSMapClick.apply(self, arguments);
             },
             '/wfs/filter' : function() {
-                me.getWFSFilter.apply(me, arguments);
+                self.getWFSFilter.apply(self, arguments);
             },
             '/wfs/image' : function() {
-                me.getWFSImage.apply(me, arguments);
+                self.getWFSImage.apply(self, arguments);
             },
             '/wfs/reset' : function() {
-                me.resetWFS.apply(me, arguments);
+                self.resetWFS.apply(self, arguments);
             }
         };
 
@@ -86,7 +87,7 @@ function(config, plugin) {
      * Sends init information to the backend
      */
     startup : function(session) {
-        var me = this;
+        var self = this;
         if(session) { // use objects session if not defined as parameter
             this.session = session;
         }
@@ -125,8 +126,8 @@ function(config, plugin) {
             "grid": grid,
             "tileSize": tileSize,
             "mapSize": {
-                "width": me.plugin.getSandbox().getMap().getWidth(),
-                "height": me.plugin.getSandbox().getMap().getHeight()
+                "width": self.plugin.getSandbox().getMap().getWidth(),
+                "height": self.plugin.getSandbox().getMap().getHeight()
             },
             "mapScales": mapScales,
             "layers": initLayers
@@ -281,7 +282,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         );
         this.plugin.getSandbox().notifyAll(event);
 
-        // TODO [AL-1253]: check if Janne wants to have highlight images (full map images - tileSize == mapSize)
+        // TODO [AL-1253]: check if wanted to have highlight images (full map images - tileSize == mapSize)
         // TODO: check how tileSize is taken care of @ print service
         // send the most recent tileData as an event to printout - links work only if session open to the transport
         if(layerPostFix == "normal") {
@@ -289,7 +290,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             var printoutEvent = this.plugin.getSandbox().getEventBuilder('Printout.PrintableContentEvent');
             if (printoutEvent) {
                 var event = printoutEvent(this.plugin.getName(), layer, this.plugin.getTileData(), null);
-                this.instance.sandbox.notifyAll(event);
+                this.plugin.getSandbox().notifyAll(event);
             }
         }
     },

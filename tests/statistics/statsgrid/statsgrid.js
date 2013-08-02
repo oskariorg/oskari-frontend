@@ -85,7 +85,7 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
         });
     });
 
-    describe.only('grid mode', function() {
+    describe('grid mode', function() {
         before(function(done) {
             startApplication(function() {
                 sandbox.postRequestByName('AddMapLayerRequest', [testLayerId, true]);
