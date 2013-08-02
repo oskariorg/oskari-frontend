@@ -1,4 +1,4 @@
-describe.only("Test Suite for analyse bundle's filter methods" , function() {
+describe("Test Suite for analyse bundle's filter methods" , function() {
     var appSetup = null,
         appConf = null,
         sandbox = null,
