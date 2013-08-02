@@ -117,7 +117,10 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             popupTitle = this.loc.filter.description + layer.getName(),
             filterJson, filterErrors, prevJson;
 
+        closeButton.addClass('analyse-close-filter');
+
         clearButton.setTitle(this.loc.filter.clearButton);
+        clearButton.addClass('analyse-clear-filter');
         clearButton.setHandler(function() {
             // Sets the dialog content to its original state
             popup.setContent(me._getFilterDialogContent(layer));
@@ -127,6 +130,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
         updateButton.setTitle(this.loc.filter.refreshButton);
         updateButton.addClass('primary');
+        updateButton.addClass('analyse-update-filter');
         updateButton.setHandler(function() {
             // Get the filter values from the dialog
             filterJson = me._getFilterValues(popup.getJqueryContent());
@@ -518,8 +522,8 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
      */
     _getLayerAttributes: function(layer) {
         // Make copies of fields and locales
-        var fields = layer.getFields() ? layer.getFields().slice(0) : [],
-            locales = layer.getLocales() ? layer.getLocales().slice(0) : [],
+        var fields = (layer.getFields && layer.getFields()) ? layer.getFields().slice(0) : [],
+            locales = (layer.getLocales && layer.getLocales()) ? layer.getLocales().slice(0) : [],
             attributes = [],
             i;
 

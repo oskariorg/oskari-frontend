@@ -90,6 +90,9 @@
             },
             "mapstats": {
                "bundlePath": "../packages/framework/bundle/"
+            },
+            "mapanalysis": {
+               "bundlePath": "../packages/framework/bundle/"
             }
          },
          "Require-Bundle-Instance": []
@@ -458,5 +461,21 @@
          "Require-Bundle-Instance": []
       },
       "instanceProps": {}
+   }, {
+       "title" : "Analyse",
+       "fi" : "Analyysi",
+       "sv" : "Analys",
+       "en" : "Analyse",
+       "bundlename" : "analyse",
+       "bundleinstancename" : "analyse",
+       "metadata" : {
+           "Import-Bundle" : {
+               "analyse" : {
+                   "bundlePath" : "../packages/analysis/bundle/"
+               }
+           },
+           "Require-Bundle-Instance" : []
+       },
+       "instanceProps" : {}
    }]
 }

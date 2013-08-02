@@ -1051,7 +1051,6 @@ function(instance, localization) {
         if (this.getFilterJson(layerId)) {
             data.filter = JSON.stringify(this.getFilterJson(layerId));
         }
-        console.log(data);
 
         // Check that parameters are a-okay
         if (me._checkSelections(selections)) {
