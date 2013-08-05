@@ -35,6 +35,8 @@ jQuery(document).ready(function() {
         var pathIdx = ajaxUrl.indexOf('/', hostIdx);
         ajaxUrl = ajaxUrl.substring(pathIdx);
     }
+
+    
     
     // populate url with possible control parameters
     var getAppSetupParams = {};
@@ -122,7 +124,7 @@ jQuery(document).ready(function() {
             }
         },
         data : getAppSetupParams,
-        url: ajaxUrl + 'action_route=GetAppSetup',
+        url: ajaxUrl + 'viewId=' +viewId +'&action_route=GetAppSetup',
         success: function(app) {
             if (app.startupSequence && app.configuration) {
               var appSetup = {
