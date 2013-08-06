@@ -126,7 +126,6 @@ define([
          */
         toggleLayerSettings : function(e) {
             var element = jQuery(e.currentTarget);
-            console.log(this.model);
             //show layer settings
             if(element.parents('.admin-add-layer').length == 0 && 
                 !element.find('.admin-add-layer').hasClass('show-edit-layer')) {

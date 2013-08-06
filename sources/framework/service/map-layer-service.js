@@ -477,9 +477,9 @@ function(mapLayerUrl, sandbox) {
                 // Notice that we are adding layers to baselayers sublayers array
                 var subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
 
-                if (baseMapJson.subLayer[i].admin) {
-                    subLayer.admin = baseMapJson.subLayer[i].admin;
-                }
+                //if (baseMapJson.subLayer[i].admin) {
+                    subLayer.admin = baseMapJson.subLayer[i].admin || {};
+                //}
                 
                 baseLayer.getSubLayers().push(subLayer);
             }
