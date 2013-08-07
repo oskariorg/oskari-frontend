@@ -10,7 +10,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PointForm",
  * @static
  */
 function(instance) {
-debugger;
     this.instance = instance;
     this.loc = instance.getLocalization('pointform');
     this.defaultValues = {
@@ -357,7 +356,6 @@ debugger;
             me._updatePreview();
         });
 
-
         if (this._supportsSVG()) this._updatePreview(dialogContent);
 
         var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -509,7 +507,7 @@ debugger;
         }
         return {
           color: this.values.color,
-          size: 10*this.values.size,
+          size: this.values.size,
           shape: newShape
 //          shape: this.symbolButtons[this.values.shape].iconId
         };

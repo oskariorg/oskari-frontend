@@ -384,9 +384,10 @@ function(instance) {
                 break;
             }
         }
+
         return {
           color: this.values.color,
-          size: 10*this.values.size,
+          width: this.values.size,
           shape: newShape
 //          shape: this.symbolButtons[this.values.shape].iconId
         };

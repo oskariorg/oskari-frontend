@@ -175,17 +175,22 @@ function(url, uuid) {
             var m = list[l];
             var m_id = m.getId();
 
-            // TODO: add area line width and area line color after support on server
             // TODO: also prefix colors with # so server doesn't need to (handle it on load also)?
             var featAtts = {
                 'category_name' : m.getName(),
                 'default' : m.isDefault(),
                 'stroke_width' : m.getLineWidth(),
+                'stroke_dasharray' : m.getLineStyle(),
+                'stroke_linecap' : m.getLineCap(),
+                'stroke_linejoin' : m.getLineCorner(),
                 'stroke_color' : this._prefixColorForServer(m.getLineColor()),
                 'border_width' : m.getAreaLineWidth(),
+                'border_dasharray' : m.getAreaLineStyle(),
+                'border_linecap' : m.getAreaLineCap(),
+                'border_linejoin' : m.getAreaLineCorner(),
                 'border_color' : this._prefixColorForServer(m.getAreaLineColor()),
+                'fill_pattern' : m.getAreaFillStyle(),
                 'fill_color' : this._prefixColorForServer(m.getAreaFillColor()),
-                'shape' : m.getDotShape(),
                 'dot_color' : this._prefixColorForServer(m.getDotColor()),
                 'dot_size' : m.getDotSize(),
                 'dot_shape' : m.getDotShape(),

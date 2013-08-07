@@ -173,6 +173,7 @@ function(instance) {
         }; 
         // save button
         content[0].actions[loc.buttons.save] = function() {
+debugger;
             me._saveForm();
         }; 
 
@@ -237,7 +238,7 @@ function(instance) {
         var errors = this._validateForm(formValues);
         if(errors.length != 0) {
             this._showValidationErrorMessage(errors);
-            return;
+//            return;
         }
         // validation passed -> go save stuff
         // new category given -> save it first 

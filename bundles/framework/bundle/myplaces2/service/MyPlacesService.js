@@ -104,17 +104,21 @@ function(url, uuid, sandbox, defaults, pInstance) {
             defaultCategory.setName('My map layer');
         }
         defaultCategory.setName(this.defaults.name);
+        defaultCategory.setDotShape(this.defaults.point.shape);
+        defaultCategory.setDotColor(this.defaults.point.color);
+        defaultCategory.setDotSize(this.defaults.point.size);
         defaultCategory.setLineStyle(this.defaults.line.style);
         defaultCategory.setLineCap(this.defaults.line.cap);
         defaultCategory.setLineCorner(this.defaults.line.corner);
         defaultCategory.setLineWidth(this.defaults.line.width);
-        defaultCategory.setLineColor(this.defaults.point.color);
-        defaultCategory.setAreaLineWidth(2);         // todo
-        defaultCategory.setAreaLineColor('cc9900');  // todo
-        defaultCategory.setAreaFillColor('ffdc00');  // todo
-        defaultCategory.setDotShape(this.defaults.point.shape);
-        defaultCategory.setDotColor(this.defaults.point.color);
-        defaultCategory.setDotSize(this.defaults.point.size);
+        defaultCategory.setLineColor(this.defaults.line.color);
+        defaultCategory.setAreaLineWidth(this.defaults.area.linewidth);
+        defaultCategory.setAreaLineCorner(this.defaults.area.linecorner);
+        defaultCategory.setAreaLineCap(this.defaults.area.linecap);
+        defaultCategory.setAreaLineStyle(this.defaults.area.linestyle);
+        defaultCategory.setAreaLineColor(this.defaults.area.linecolor);
+        defaultCategory.setAreaFillColor(this.defaults.area.fillcolor);
+        defaultCategory.setAreaFillStyle(this.defaults.area.style);
         defaultCategory.setDefault(true);
         
         var defaultCategoryCreationCallback = function() {
@@ -361,11 +365,17 @@ function(url, uuid, sandbox, defaults, pInstance) {
 
                     category.setLineWidth(categoryModel.getLineWidth());
                     category.setLineColor(categoryModel.getLineColor());
-                    
+                    category.setLineCap(categoryModel.getLineCap());
+                    category.setLineCorner(categoryModel.getLineCorner());
+                    category.setLineStyle(categoryModel.getLineStyle());
+
                     category.setAreaLineWidth(categoryModel.getAreaLineWidth());
+                    category.setAreaLineCorner(categoryModel.getAreaLineCorner());
+                    category.setAreaLineCap(categoryModel.getAreaLineCap());
+                    category.setAreaLineStyle(categoryModel.getAreaLineStyle());
                     category.setAreaLineColor(categoryModel.getAreaLineColor());
                     category.setAreaFillColor(categoryModel.getAreaFillColor());
-
+                    category.setAreaFillStyle(categoryModel.getAreaFillStyle());
                     category.setDefault(categoryModel.isDefault());
                 } else {
                     // couldn't load it -> failed to save it

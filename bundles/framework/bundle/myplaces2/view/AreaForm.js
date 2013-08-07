@@ -462,6 +462,7 @@ function(instance) {
      * Returns form values as an object
      * @return {Object}
      */
+    /*
     getValues : function() {
         var newShape = null;
         for (var buttonName in this.symbolButtons) {
@@ -472,12 +473,10 @@ function(instance) {
             }
         }
         return {
-          color: this.values.color,
-          size: 10*this.values.size,
-          shape: newShape
-//          shape: this.symbolButtons[this.values.shape].iconId
+          color: this.values.color
         };
     },
+    */
 
     /**
      * @method _styleSelectedButton
