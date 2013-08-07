@@ -154,17 +154,39 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         var me = e.data.me;
         var sandbox = me.getSandbox()
         var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        /*
+         * NORMAL LAYERS
+         */
         // remove layer from mapLayerService
         if(e.command == "removeLayer") {
-            mapLayerService.removeLayer(e.modelId);
+            if (e.baseLayerId) {
+                // If this is a sublayer, remove it from its parent's sublayer array
+                var parentLayerId = 'base_' + e.baseLayerId;
+                console.log("Parent id: ", parentLayerId);
+                console.log("Sublayer id: ", e.modelId);
+                mapLayerService.removeSubLayer(parentLayerId, e.modelId);
+            } else {
+                // otherwise just remove it from map layer service.
+                mapLayerService.removeLayer(e.modelId);
+            }
         } 
         // add layer into mapLayerService
         else if(e.command == "addLayer") {
             e.layerData.name = e.layerData.admin.nameFi;
             var mapLayer = mapLayerService.createMapLayer(e.layerData);
             mapLayer.admin = e.layerData.admin;
-            if(mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
-                mapLayerService.addLayer(mapLayer);
+
+            if (e.baseLayerId) {
+                // If this is a sublayer, add it to its parent's sublayer array
+                var parentLayerId = 'base_' + e.baseLayerId;
+                console.log("Parent id: ", parentLayerId);
+                console.log("Sublayer id: ", mapLayer.getId());
+                mapLayerService.addSubLayer(parentLayerId, mapLayer);
+            } else {
+                // Otherwise just add it to the map layer service.
+                if(mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
+                    mapLayerService.addLayer(mapLayer);
+                }
             }
         }
         // update layer info
@@ -173,10 +195,24 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             e.layerData.name = e.layerData.admin.nameFi; //TODO this should be in mapLayerService
             mapLayerService.updateLayer(e.layerData.id, e.layerData);
         }
+
+        /*
+         * BASE OR GROUP LAYERS
+         */
         // load the map layers again
-        else if(e.command == "addGroup" || e.command === "deleteGroup") {
-            // TODO: some callback perhaps?
+        else if(e.command == "addGroup") {
             mapLayerService.loadAllLayersAjax();
+        }
+        // delete the base/group layer from mapLayerService
+        // and load it again from backend,
+        // since we edited the layer class and the changes
+        // will not be reflected to the corresponding map layer
+        else if(e.command == "editGroup") {
+            mapLayerService.removeLayer(e.id, true);
+            mapLayerService.loadAllLayersAjax();
+        }
+        else if(e.command == "deleteGroup") {
+            mapLayerService.removeLayer(e.id);
         }
     }
 

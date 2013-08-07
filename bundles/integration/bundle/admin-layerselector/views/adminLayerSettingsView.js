@@ -143,8 +143,6 @@ define([
                     this.model.admin.style_decoded = styles;
                 }
 
-                //console.log(this.classes.getGroupTitles());
-
                 // add opacity
                 var opacity = 100;
                 if(this.model != null && this.model.admin.opacity != null) {
@@ -213,6 +211,8 @@ define([
          * @method removeLayer
          */
         removeLayer: function(e) {
+            e.stopPropagation();
+            
             var me = this;
             var element = jQuery(e.currentTarget);
             var addLayerDiv = element.parents('.admin-add-layer');
@@ -244,7 +244,8 @@ define([
                                 element.trigger({
                                     type: "adminAction",
                                     command: 'removeLayer',
-                                    modelId: me.model.getId()
+                                    modelId: me.model.getId(),
+                                    baseLayerId: me.options.baseLayerId
                                 });
                                 addLayerDiv.remove();
                             },300);
@@ -313,7 +314,7 @@ define([
             data.title.en        = form.find('#add-layer-en-title').val(),
 
             // type can be either wmslayer, base or groupMap
-            data.type           = form.find('#add-layer-type').val(),
+            data.type           = form.find('#add-layer-type').val() || 'wmslayer',
             data.wmsName        = form.find('#add-layer-wms-id').val(),
             data.wmsUrl         = form.find('#add-layer-wms-url').val(),
 
@@ -403,14 +404,16 @@ define([
                                 accordion.trigger({
                                     type: "adminAction",
                                     command: 'addLayer',
-                                    layerData: resp
+                                    layerData: resp,
+                                    baseLayerId: me.options.baseLayerId
                                 });
                             } else {
                                 //trigger event to View.js so that it can act accordingly
                                 accordion.trigger({
                                     type: "adminAction",
                                     command: 'editLayer',
-                                    layerData: resp
+                                    layerData: resp,
+                                    baseLayerId: me.options.baseLayerId
                                 });
                             }
                         },300);
@@ -474,10 +477,18 @@ define([
                 success : function(resp) {
                     // Load the map layers again, since we want the newly created
                     // group/base layer to show as a map layer, not as a layer class.
-                    accordion.trigger({
-                        type: "adminAction",
-                        command: 'addGroup'
-                    })
+                    if (me.model == null) {
+                        accordion.trigger({
+                            type: "adminAction",
+                            command: 'addGroup'
+                        });
+                    } else {
+                        accordion.trigger({
+                            type: "adminAction",
+                            command: 'editGroup',
+                            id: me.model.getId()
+                        });
+                    }
                 },
                 error : function(jqXHR, textStatus) {
                     alert(' false ');
@@ -511,8 +522,9 @@ define([
                 success : function(resp) {
                     accordion.trigger({
                         type: "adminAction",
-                        command: 'deleteGroup'
-                    })
+                        command: 'deleteGroup',
+                        id: me.model.getId()
+                    });
                 },
                 error : function(jqXHR, textStatus) {
                     alert(' false ');
