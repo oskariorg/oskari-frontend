@@ -15,21 +15,21 @@ Oskari.registerLocalization({
     "tools": {
       "point": {
         "tooltip": "Add point",
-        "new": "Add point by clicking the map.",
+        "add": "Add point by clicking the map.",
         "next": "You can save or draw more points into the same drawing.",
         "edit": "Move point by clicking and dragging.",
         "save": "Save location"
       },
       "line": {
         "tooltip": "Add line",
-        "new": "Add a break point on the line by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'.",
+        "add": "Add a break point on the line by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'.",
         "next": "You can save or draw more lines into the same drawing.",
         "edit": "Edit the line by clicking and dragging its break points.",
         "save": "Save shape"
       },
       "area": {
         "tooltip": "Add area",
-        "new": "Add break points to your area polygon by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'. To create holes in polygons, hold down the Alt key.",
+        "add": "Add break points to your area polygon by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'. To create holes in polygons, hold down the Alt key.",
         "next": "You can save or draw more polygons into the same drawing.",
         "edit": "Edit the shape of the area by clicking and dragging the break points on its edge line.",
         "save": "Save shape"

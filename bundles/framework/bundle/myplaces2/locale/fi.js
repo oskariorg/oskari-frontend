@@ -15,21 +15,21 @@ Oskari.registerLocalization({
     "tools": {
       "point": {
         "tooltip": "Lisää piste",
-        "new": "Lisää piste klikkaamalla karttaa.",
+        "add": "Lisää piste klikkaamalla karttaa.",
         "next": "Voit tallentaa tai piirtää pisteitä samaan kohteeseen.",
         "edit": "Siirrä pistettä raahaamalla.",
         "save": "Tallenna sijainti"
       },
       "line": {
         "tooltip": "Lisää viiva",
-        "new": "Lisää viivan taitepiste klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella tai painamalla 'Lopeta piirto'.",
+        "add": "Lisää viivan taitepiste klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella tai painamalla 'Lopeta piirto'.",
         "next": "Voit tallentaa tai piirtää lisää viivoja samaan kohteeseen.",
         "edit": "Muokkaa viivaa raahaamalla viivan taitepisteitä.",
         "save": "Tallenna muoto"
       },
       "area": {
         "tooltip": "Lisää alue",
-        "new": "Lisää alueen taitepisteet klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella tai painamalla 'Lopeta piirto'. Voit piirtää alueeseen reiän pitämällä pohjassa Alt-näppäintä.",
+        "add": "Lisää alueen taitepisteet klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella tai painamalla 'Lopeta piirto'. Voit piirtää alueeseen reiän pitämällä pohjassa Alt-näppäintä.",
         "next": "Voit tallentaa tai piirtää lisää alueita samaan kohteeseen.",
         "edit": "Muokkaa muotoa raahaamalla reunaviivan taitepisteitä.",
         "save": "Tallenna muoto"

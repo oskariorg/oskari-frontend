@@ -15,21 +15,21 @@ Oskari.registerLocalization({
     "tools": {
       "point": {
         "tooltip": "Tillägg punkt",
-        "new": "Tillägg punkt genom att klicka på kartan.",
+        "add": "Tillägg punkt genom att klicka på kartan.",
         "next": "Du kan lagra eller tillägga fler punkter till samma området.",
         "edit": "Flytta på punkten genom att klicka och dra.",
         "save": "Lagra läge"
       },
       "line": {
         "tooltip": "Tillägg linje",
-        "new": "Tillägg en brytningspunkt på linjen genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'.",
+        "add": "Tillägg en brytningspunkt på linjen genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'.",
         "next": "Du kan lagra eller tillägga fler linjer till samma området.",
         "edit": "Editera linjen genom att klicka och dra brytningspunkterna.",
         "save": "Lagra form"
       },
       "area": {
         "tooltip": "Tillägg område",
-        "new": "Tillägg områdets hörnpunkter genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'. Håll ned Alt-tangenten för att skapa hål i polygonerna.",
+        "add": "Tillägg områdets hörnpunkter genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'. Håll ned Alt-tangenten för att skapa hål i polygonerna.",
         "next": "Du kan lagra eller tillägga fler polygoner till samma området.",
         "edit": "Editera områdets form genom att klicka och dra brytningspunkterna på omkretslinjen.",
         "save": "Lagra form"
