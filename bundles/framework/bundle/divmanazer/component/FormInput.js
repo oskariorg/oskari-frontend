@@ -290,9 +290,54 @@ function(name,psandbox) {
         var input = this._field.find('input');
         input.keypress(function(event){
             if(me._isEnterPress(event)) {
-                callback();
+                callback(event);
             }
         });
+    },
+    /**
+     * @method bindUpKey
+     * Binds <up> keypress to trigger given function
+     * @param {Function} callback method that is called if up is pressed on the input 
+     */
+    bindUpKey : function(callback) {
+        var me = this;
+        var input = this._field.find('input');
+        
+        input.keydown(function(event){
+            if(me._isUpPress(event)) {
+                event.preventDefault();
+                callback(event);
+            }
+        });
+    },
+    /**
+     * @method bindDownKey
+     * Binds <down> keypress to trigger given function
+     * @param {Function} callback method that is called if down is pressed on the input 
+     */
+    bindDownKey : function(callback) {
+        var me = this;
+        var input = this._field.find('input');
+        
+        input.keydown(function(event){
+            if(me._isDownPress(event)) {
+                event.preventDefault();
+                callback(event);
+            }
+        });
+    },
+    /**
+     * @method bindOnBlur
+     * Binds <blur> effect to trigger given function
+     * @param {Function} callback method that is called if blur has happened for the input 
+     */
+    bindOnBlur : function(callback) {
+        // all set, ready to bind requests
+        var input = this._field.find('input');
+        input.blur(function(){
+            callback();
+        });
+
     },
     /**
      * @method bindChange
@@ -311,6 +356,7 @@ function(name,psandbox) {
             input.keyup(callback); 
         }
     },
+
     /**
      * @method addClearButton
      * Adds a clear button to the field 
@@ -364,5 +410,29 @@ function(name,psandbox) {
         var keycode = event.which;
         // true if <enter>
         return (keycode == 13);
+    },
+    /**
+     * @method _isDownPress
+     * Detects if <down> key was pressed and calls #_doSearch if it was
+     * @private
+     * @param {Object} event
+     *      keypress event object from browser
+     */
+    _isDownPress : function(event) {
+        var keycode = event.which;
+        // true if <up>
+        return (keycode == 40);
+    },
+    /**
+     * @method _isUpPress
+     * Detects if <up> key was pressed and calls #_doSearch if it was
+     * @private
+     * @param {Object} event
+     *      keypress event object from browser
+     */
+    _isUpPress : function(event) {
+        var keycode = event.which;
+        // true if <up>
+        return (keycode == 38);
     }
 });
