@@ -112,12 +112,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.MyPlacesBundle", function
            // NOTE! EXTERNAL LIBRARY!
             "type" : "text/javascript",
             "src" : "../../../../libraries/jscolor/jscolor.js"
-		},
-		// css
-		{
-            "type" : "text/css",
-            "src" : "../../../../resources/lupapiste/bundle/lupapiste-myplaces2/css/myplaces.css"
-        }],
+		}],
 
         "locales" : [{
             "lang" : "fi",

@@ -1,5 +1,5 @@
 Oskari.clazz.define(
-        'Oskari.mapframework.myplaces.event.MyPlaceSelectedEvent',
+        'Oskari.lupapiste.myplaces2.event.MyPlaceSelectedEvent',
         function(pMyPlace, dblClick) {
             this._creator = null;
             this._myPlace = pMyPlace;

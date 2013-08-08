@@ -308,8 +308,9 @@ function() {
 			});
 
 			var requestBuilder = this.sandbox.getRequestBuilder('lupakartta.AddMarkerRequest');
-			var request = requestBuilder(event._drawing,  null, null, null, 'http://www.openlayers.org/dev/img/marker-green.png');
-			sandbox.request("lupakartta", request);
+			//var request = requestBuilder(event._drawing,  null, null, null, 'http://www.openlayers.org/dev/img/marker-green.png');
+			var request = requestBuilder(event._drawing.x, event._drawing.y, null, null, 'http://www.openlayers.org/dev/img/marker-green.png');
+			this.sandbox.request("lupakartta", request);
 			var requestBuilder = this.sandbox.getRequestBuilder('LupaPisteMyPlaces.StopDrawingRequest');
 			var request = requestBuilder();
 			this.sandbox.request("lupakartta", request);

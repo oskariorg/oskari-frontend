@@ -1,5 +1,5 @@
 Oskari.clazz.define(
-        'Oskari.mapframework.myplaces.event.MyPlaceHoverEvent',
+        'Oskari.lupapiste.myplaces2.event.MyPlaceHoverEvent',
         function(pLonlat, pEvent, zoomLevel) {
             this._creator = null;
             this._lonlat = pLonlat;
