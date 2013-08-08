@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.view.PlaceForm
+ * @class Oskari.lupapiste.bundle.myplaces2.view.PlaceForm
  * 
  * Shows a form for my place
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
+Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.view.PlaceForm",
 
 /**
  * @method create called automatically on construction
@@ -41,7 +41,7 @@ function(instance) {
 }, {
     /**
      * @method getForm
-     * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory[]} categories array containing available categories
+     * @param {Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory[]} categories array containing available categories
      * @return {jQuery} jquery reference for the form 
      */
     getForm : function(categories) {
@@ -159,7 +159,7 @@ function(instance) {
             var form = me._getOnScreenForm();
             // show category form
             if(value == me.newCategoryId) {
-                me.categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.CategoryForm', me.instance);
+                me.categoryForm = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.view.CategoryForm', me.instance);
                 form.append(me.categoryForm.getForm());
             }
             // remove category form is initialized

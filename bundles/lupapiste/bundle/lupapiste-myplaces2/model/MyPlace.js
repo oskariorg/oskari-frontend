@@ -1,5 +1,5 @@
 
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.model.MyPlace', 
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.model.MyPlace', 
 
 /**
  * @method create called automatically on construction
@@ -102,7 +102,7 @@ function() {
     /**
      * @method setCreateDate
      * Date format is 2011-11-02T15:27:48.981+02:00 (time part is optional).
-     * See Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
+     * See Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService
      * @param {String} value
      */
     setCreateDate : function(value) {
@@ -112,7 +112,7 @@ function() {
      * @method getCreateDate
      * Returns date in string format:
      * Date format is 2011-11-02T15:27:48.981+02:00 (time part is optional).
-     * See Oskari.mapframework.bundle.myplaces2.service.MyPlacesService 
+     * See Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService 
      * @return {String} 
      */
     getCreateDate : function() {
@@ -121,7 +121,7 @@ function() {
     /**
      * @method setUpdateDate 
      * Date format is 2011-11-02T15:27:48.981+02:00 (time part is optional).
-     * See Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
+     * See Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService
      * @param {String} value
      */
     setUpdateDate : function(value) {
@@ -131,7 +131,7 @@ function() {
      * @method getUpdateDate 
      * Returns date in string format:
      * Date format is 2011-11-02T15:27:48.981+02:00 (time part is optional).
-     * See Oskari.mapframework.bundle.myplaces2.service.MyPlacesService 
+     * See Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService 
      * @return {String}
      */
     getUpdateDate : function() {

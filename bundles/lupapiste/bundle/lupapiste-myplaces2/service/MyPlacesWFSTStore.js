@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore
+ * @class Oskari.lupapiste.bundle.myplaces2.service.MyPlacesWFSTStore
  *
  * Transforms Ext Model & OpenLayers geometry to WFS Transactions
  *
@@ -19,7 +19,7 @@
  * @TODO DELETE
  *
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore', 
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.service.MyPlacesWFSTStore', 
 
 /**
  * @method create called automatically on construction
@@ -108,7 +108,7 @@ function(url, uuid) {
 
             var id = this._parseNumericId(f.fid);
 
-            var category = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory');
+            var category = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory');
             category.setId(id);
             category.setDefault("true" === featAtts['default']);
             category.setName(featAtts['category_name']);
@@ -360,7 +360,7 @@ function(url, uuid) {
             var featAtts = f.attributes;
 
             var id = this._parseNumericId(f.fid);
-            var place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlace');
+            var place = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.model.MyPlace');
             place.setId(id);
             place.setName(featAtts['name']);
             place.setDescription(featAtts['place_desc']);

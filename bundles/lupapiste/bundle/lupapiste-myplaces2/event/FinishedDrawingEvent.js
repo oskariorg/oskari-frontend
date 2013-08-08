@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.event.FinishedDrawingEvent
+ * @class Oskari.lupapiste.bundle.myplaces2.event.FinishedDrawingEvent
  * 
  * Used to notify components that the drawing has been finished. 
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.event.FinishedDrawingEvent', 
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.event.FinishedDrawingEvent', 
 /**
  * @method create called automatically on construction
  * @static

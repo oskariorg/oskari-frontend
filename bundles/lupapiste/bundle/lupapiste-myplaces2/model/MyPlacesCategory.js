@@ -1,7 +1,7 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory
+ * @class Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory', 
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory', 
 
 /**
  * @method create called automatically on construction

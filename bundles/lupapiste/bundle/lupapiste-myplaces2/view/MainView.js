@@ -1,10 +1,10 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance
+ * @class Oskari.lupapiste.bundle.myplaces2.MyPlacesBundleInstance
  * 
  * Registers and starts the 
- * Oskari.mapframework.bundle.myplaces2.plugin.CoordinatesPlugin plugin for main map.
+ * Oskari.lupapiste.bundle.myplaces2.plugin.CoordinatesPlugin plugin for main map.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
+Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.view.MainView",
 
 /**
  * @method create called automatically on construction
@@ -52,14 +52,14 @@ function(instance) {
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
         
         // register plugin for map (drawing for my places)
-        var drawPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin');
+        var drawPlugin = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin');
         mapModule.registerPlugin(drawPlugin);
         mapModule.startPlugin(drawPlugin);
         this.drawPlugin = drawPlugin;
         
         // register plugin for map (hover tooltip for my places)
         // TODO: start when a myplaces layer is added and stop when last is removed?
-        /*var hoverPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.HoverPlugin');
+        /*var hoverPlugin = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.plugin.HoverPlugin');
         mapModule.registerPlugin(hoverPlugin);
         mapModule.startPlugin(hoverPlugin);
         this.hoverPlugin = hoverPlugin;
@@ -107,7 +107,7 @@ function(instance) {
         },
         /**
          * @method MyPlaces.FinishedDrawingEvent
-         * @param {Oskari.mapframework.bundle.myplaces2.event.FinishedDrawingEvent} event
+         * @param {Oskari.lupapiste.bundle.myplaces2.event.FinishedDrawingEvent} event
          */
         'MyPlaces.FinishedDrawingEvent' : function(event) {
             this._handleFinishedDrawingEvent(event);
@@ -117,7 +117,7 @@ function(instance) {
      * @method _handleFinishedDrawingEvent
      * Handles custom event when drawing is finished
      * @private
-     * @param {Oskari.mapframework.bundle.myplaces2.event.FinishedDrawingEvent} event
+     * @param {Oskari.lupapiste.bundle.myplaces2.event.FinishedDrawingEvent} event
      */
     _handleFinishedDrawingEvent : function(event) {
         var center = event.getDrawing().getCentroid();
@@ -131,14 +131,14 @@ function(instance) {
      * @method showPlaceForm
      * Displays a form popup on given location. Prepopulates the form if place is given
      * @param {OpenLayers.LonLat} location location to point with the popup
-     * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlace} place prepoluate form with place data (optional)
+     * @param {Oskari.lupapiste.bundle.myplaces2.model.MyPlace} place prepoluate form with place data (optional)
      */
     showPlaceForm : function(location, place) {
         var me = this;
         var sandbox = this.instance.sandbox;
         sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
         var loc = this.instance.getLocalization();
-        this.form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.PlaceForm', this.instance);
+        this.form = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.view.PlaceForm', this.instance);
         var categories = this.instance.getService().getAllCategories();
         if(place) {
             var param = {
@@ -179,7 +179,7 @@ function(instance) {
      * Validates form data, returns an object array if any errors. 
      * Error objects have field and error properties ({field : 'name', error: 'Name missing'}). 
      * @private
-     * @param {Object} values form values as returned by Oskari.mapframework.bundle.myplaces2.view.PlaceForm.getValues()
+     * @param {Object} values form values as returned by Oskari.lupapiste.bundle.myplaces2.view.PlaceForm.getValues()
      * @return {Object[]} 
      */
     _validateForm : function(values) {
@@ -282,7 +282,7 @@ function(instance) {
     		me.instance.showMessage(loc.title, loc.savePlace);
             return;
         }
-        var place = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlace');
+        var place = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.model.MyPlace');
         var oldCategory = -1;
         if(values.id) {
             place = this.instance.getService().findMyPlace(values.id);

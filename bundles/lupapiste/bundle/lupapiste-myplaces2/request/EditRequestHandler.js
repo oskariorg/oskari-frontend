@@ -1,15 +1,15 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler
+ * @class Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandler
  * Handles sequests for a saved "my place" or my places categorires to be opened for editing
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler', 
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandler', 
 
 /**
  * @method create called automatically on construction
  * @static
  * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
  *          reference to application sandbox
- * @param {Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance} instance 
+ * @param {Oskari.lupapiste.bundle.myplaces2.MyPlacesBundleInstance} instance 
  *          reference to my places bundle instance
  */
 function(sandbox, instance) {
@@ -21,7 +21,7 @@ function(sandbox, instance) {
      * Shows/hides the maplayer specified in the request in OpenLayers implementation.
      * @param {Oskari.mapframework.core.Core} core
      *      reference to the application core (reference sandbox core.getSandbox())
-     * @param {Oskari.mapframework.bundle.myplaces2.request.EditPlaceRequest/Oskari.mapframework.bundle.myplaces2.request.EditCategoryRequest} request
+     * @param {Oskari.lupapiste.bundle.myplaces2.request.EditPlaceRequest/Oskari.lupapiste.bundle.myplaces2.request.EditCategoryRequest} request
      *      request to handle
      */
     handleRequest : function(core, request) {
@@ -40,7 +40,7 @@ function(sandbox, instance) {
         }
     },
     _handleEditPlace : function(sandbox, request) {
-        this.sandbox.printDebug("[Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler] edit requested for place " + request.getId());
+        this.sandbox.printDebug("[Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandler] edit requested for place " + request.getId());
         var service = this.instance.getService();
         var place = service.findMyPlace(request.getId());
         if(place) {
@@ -64,7 +64,7 @@ function(sandbox, instance) {
         }
     },
     _handleEditCategory : function(sandbox, request) {
-        this.sandbox.printDebug("[Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler] edit requested for category " + request.getId());
+        this.sandbox.printDebug("[Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandler] edit requested for category " + request.getId());
         var service = this.instance.getService();
         var category = service.findCategory(request.getId());
         if(category) {
@@ -72,7 +72,7 @@ function(sandbox, instance) {
         }
     },
     _handleDeleteCategory : function(sandbox, request) {
-        this.sandbox.printDebug("[Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler] delete requested for category " + request.getId());
+        this.sandbox.printDebug("[Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandler] delete requested for category " + request.getId());
         var service = this.instance.getService();
         var category = service.findCategory(request.getId());
         if(category) {
@@ -80,7 +80,7 @@ function(sandbox, instance) {
         }
     },
     _handlePublishCategory : function(sandbox, request) {
-        this.sandbox.printDebug("[Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler] (un/)publish requested for category " + request.getId());
+        this.sandbox.printDebug("[Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandler] (un/)publish requested for category " + request.getId());
         var service = this.instance.getService();
         var category = service.findCategory(request.getId());
         if(category) {

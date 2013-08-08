@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.view.CategoryForm
+ * @class Oskari.lupapiste.bundle.myplaces2.view.CategoryForm
  * 
  * Shows a form for a myplaces category
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.CategoryForm",
+Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.view.CategoryForm",
 
 /**
  * @method create called automatically on construction

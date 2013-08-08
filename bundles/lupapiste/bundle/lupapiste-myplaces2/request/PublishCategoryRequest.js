@@ -1,11 +1,11 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.request.PublishCategoryRequest
+ * @class Oskari.lupapiste.bundle.myplaces2.request.PublishCategoryRequest
  * Requests a "my place" maplayer/category to be made publishable or private
  * 
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.PublishCategoryRequest', 
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.request.PublishCategoryRequest', 
 
 /**
  * @method create called automatically on construction

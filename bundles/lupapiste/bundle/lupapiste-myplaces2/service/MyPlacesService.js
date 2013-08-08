@@ -1,8 +1,8 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
+ * @class Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService
  * 
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService', 
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService', 
 
 /**
  * @method create called automatically on construction
@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
  * @param {String} uuid current users uuid
  * @param {Oskari.mapframework.sandbox.Sandbox} sandbox reference to Oskari sandbox
  * @param {String} categoryName default category name
- * @param {Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance} pInstance 
+ * @param {Oskari.lupapiste.bundle.myplaces2.MyPlacesBundleInstance} pInstance 
  *  instance to notify if problems with default category 
  * 
  */
@@ -21,13 +21,13 @@ function(url, uuid, sandbox, defaultName, pInstance) {
     this._categoryList = [];
     this._placesList = [];
 
-    this.wfstStore = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore', url, uuid);
+    this.wfstStore = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.service.MyPlacesWFSTStore', url, uuid);
     this._sandbox = sandbox;
     this.defaultCategory = null;
     this.defaultCategoryName = defaultName;
     this._instance = pInstance;
 }, {
-    __qname : "Oskari.mapframework.bundle.myplaces2.service.MyPlacesService",
+    __qname : "Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService",
     getQName : function() {
         return this.__qname;
     },
@@ -85,7 +85,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
      */
     _createDefaultCategory : function() {
     	var me = this;
-        var defaultCategory = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory');
+        var defaultCategory = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory');
         defaultCategory.setName(me.defaultCategoryName);
         if(!me.defaultCategoryName) {
             // should not happen
@@ -120,7 +120,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
      * @method _addCategory
      * @private
      * Adds the category to the selection
-     * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory} categoryModel
+     * @param {Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory} categoryModel
      */
     _addCategory : function(categoryModel) {
         if(categoryModel.isDefault()) {
@@ -237,7 +237,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
      * @method getPlacesInCategory
      * Returns all places in given category or empty array if none.
      * @param {Number} categoryId category id to delete from
-     * @return {Oskari.mapframework.bundle.myplaces2.model.MyPlace[]}
+     * @return {Oskari.lupapiste.bundle.myplaces2.model.MyPlace[]}
      */
     getPlacesInCategory : function(categoryId) {
         var placesInCategory = [];
@@ -321,7 +321,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
     /**
      * @method saveCategory
      * Saves given category to backend and internal data structure. Adds it if new and updates if existing (has an id).
-     * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory} categoryModel category to save
+     * @param {Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory} categoryModel category to save
      * @param {Function} callback function to call when done, receives boolean as 
      *      first argument(true == successful), categoryModel as second parameter and boolean as third parameter (true if the category was new)  
      */
@@ -362,7 +362,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
     /**
      * @method getAllCategories
      * Returns all categories ("maplayers" for my places) that is loaded in the system. 
-     * @return {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory[]}  
+     * @return {Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory[]}  
      */
     getAllCategories : function() {
         return this._categoryList;
@@ -371,7 +371,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
     /**
      * @method getDefaultCategory
      * Returns users default category or undefined 
-     * @return {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory}  
+     * @return {Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory}  
      */
     getDefaultCategory : function() {
         return this.defaultCategory;
@@ -382,7 +382,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
      * @private
      * Adds given place to internal data structure. Called when similar backend function 
      * has returned successfully.
-     * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlace} myplaceModel place to add
+     * @param {Oskari.lupapiste.bundle.myplaces2.model.MyPlace} myplaceModel place to add
      */
     _addMyPlace : function(myplaceModel) {
         this._placesList.push(myplaceModel);
@@ -436,7 +436,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
      *
      * @param {OpenLayers.LonLat} lonlat
      * @param {Number} zoom zoomlevel
-     * @return {Oskari.mapframework.bundle.myplaces2.model.MyPlace[]}
+     * @return {Oskari.lupapiste.bundle.myplaces2.model.MyPlace[]}
      */
     findMyPlaceByLonLat : function(lonlat, zoom) {
         var places = [];
@@ -472,7 +472,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
      * @method findMyPlace
      * Tries to find place with given id
      * @param {Number} id
-     * @return {Oskari.mapframework.bundle.myplaces2.model.MyPlace}
+     * @return {Oskari.lupapiste.bundle.myplaces2.model.MyPlace}
      */
     findMyPlace : function(id) {
         var index = this.findBy(this._placesList, 'id', id);
@@ -485,7 +485,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
      * @method findCategory
      * Tries to find category with given id
      * @param {Number} id
-     * @return {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory}
+     * @return {Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory}
      */
     findCategory : function(id) {
         var index = this.findBy(this._categoryList, 'id', id);
@@ -518,7 +518,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
     /**
      * @method saveMyPlace
      * Saves given category to backend and internal data structure. Adds it if new and updates if existing (has an id).
-     * @return {Oskari.mapframework.bundle.myplaces2.model.MyPlace} myplaceModel place to save
+     * @return {Oskari.lupapiste.bundle.myplaces2.model.MyPlace} myplaceModel place to save
      * @param {Function} callback function to call when done, receives boolean as 
      *      first argument(true == successful), myplaceModel as second parameter and boolean as third parameter (true if the category was new)  
      */
@@ -555,7 +555,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
     /**
      * @method getAllMyPlaces
      * Returns all users my places
-     * @return {Oskari.mapframework.bundle.myplaces2.model.MyPlace[]}
+     * @return {Oskari.lupapiste.bundle.myplaces2.model.MyPlace[]}
      */
     getAllMyPlaces : function() {
         return this._placesList;

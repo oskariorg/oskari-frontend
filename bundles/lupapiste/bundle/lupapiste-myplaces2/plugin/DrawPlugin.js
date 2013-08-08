@@ -1,7 +1,7 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin
+ * @class Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', function() {
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', function() {
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
@@ -127,9 +127,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
     init : function(sandbox) {
         var me = this;
         this.requestHandlers = {
-            startDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.request.StartDrawingRequestPluginHandler', sandbox, me),
-            stopDrawingHandler : Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.request.StopDrawingRequestPluginHandler', sandbox, me),
-            getGeometryHandler : Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.request.GetGeometryRequestPluginHandler', sandbox, me)
+            startDrawingHandler : Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.request.StartDrawingRequestPluginHandler', sandbox, me),
+            stopDrawingHandler : Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.request.StopDrawingRequestPluginHandler', sandbox, me),
+            getGeometryHandler : Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.request.GetGeometryRequestPluginHandler', sandbox, me)
         };
 
         this.drawLayer = new OpenLayers.Layer.Vector("MyPlaces Draw Layer", {

@@ -1,11 +1,11 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.request.EditCategoryRequest
+ * @class Oskari.lupapiste.bundle.myplaces2.request.EditCategoryRequest
  * Requests a "my place" maplayer/category to be opened for editing
  * 
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditCategoryRequest', 
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.request.EditCategoryRequest', 
 
 /**
  * @method create called automatically on construction

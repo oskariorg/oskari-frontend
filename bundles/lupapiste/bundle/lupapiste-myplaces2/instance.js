@@ -99,7 +99,7 @@ function() {
     /**
      * @method getService
      * Returns the my places main service
-     * @return {Oskari.mapframework.bundle.myplaces2.service.MyPlacesService}
+     * @return {Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService}
      */
     getService : function() {
         return this.myPlacesService;
@@ -107,7 +107,7 @@ function() {
     /**
      * @method getDrawPlugin
      * Returns reference to the draw plugin
-     * @return {Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin}
+     * @return {Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin}
      */
     getDrawPlugin : function() {
         return this.view.drawPlugin;
@@ -115,7 +115,7 @@ function() {
     /**
      * @method getCategoryHandler
      * Returns reference to the category handler
-     * @return {Oskari.mapframework.bundle.myplaces2.CategoryHandler}
+     * @return {Oskari.lupapiste.bundle.myplaces2.CategoryHandler}
      */
     getCategoryHandler : function() {
         return this.categoryHandler;
@@ -123,7 +123,7 @@ function() {
     /**
      * @method getMainView
      * Returns reference to the main view
-     * @return {Oskari.mapframework.bundle.myplaces2.view.MainView}
+     * @return {Oskari.lupapiste.bundle.myplaces2.view.MainView}
      */
     getMainView : function() {
         return this.view;
@@ -148,7 +148,7 @@ function() {
         sandbox.printDebug("Initializing my places module...");
         
         // handles toolbar buttons related to my places 
-        this.buttons = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.ButtonHandler", this);
+        this.buttons = Oskari.clazz.create("Oskari.lupapiste.bundle.myplaces2.ButtonHandler", this);
         this.buttons.start();
         
         var user = sandbox.getUser();
@@ -157,7 +157,7 @@ function() {
             return;
         }
         // handles category related logic - syncs categories to my places map layers etc
-        this.categoryHandler = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.CategoryHandler', this);
+        this.categoryHandler = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.CategoryHandler', this);
         this.categoryHandler.start();        
 
         var defaultCategoryName = this.getLocalization('category').defaultName;
@@ -166,7 +166,7 @@ function() {
         //'/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&myplaces=WFS';
         // this.conf.queryUrl; 
         // back end communication
-        this.myPlacesService = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService', 
+        this.myPlacesService = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService', 
             actionUrl, user.getUuid(), sandbox, defaultCategoryName, this);
         // register service so personal data can access it
         this.sandbox.registerService(this.myPlacesService);
@@ -174,10 +174,10 @@ function() {
         this.myPlacesService.init();
         
         // handles my places insert form etc
-        this.view = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.view.MainView", this);
+        this.view = Oskari.clazz.create("Oskari.lupapiste.bundle.myplaces2.view.MainView", this);
         this.view.start();
         
-        this.editRequestHandler = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler', sandbox, me);
+        this.editRequestHandler = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandler', sandbox, me);
         sandbox.addRequestHandler('MyPlaces.EditPlaceRequest', this.editRequestHandler);
         sandbox.addRequestHandler('MyPlaces.EditCategoryRequest', this.editRequestHandler);
         sandbox.addRequestHandler('MyPlaces.DeleteCategoryRequest', this.editRequestHandler);

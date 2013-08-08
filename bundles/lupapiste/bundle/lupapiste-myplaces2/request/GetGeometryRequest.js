@@ -1,6 +1,6 @@
 Oskari.clazz
         .define(
-                'Oskari.mapframework.bundle.myplaces2.request.GetGeometryRequest',
+                'Oskari.lupapiste.bundle.myplaces2.request.GetGeometryRequest',
                 function(callbackMethod) {
                     this._creator = null;
                     this._callbackMethod = callbackMethod;

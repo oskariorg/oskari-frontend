@@ -1,11 +1,11 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.request.EditPlaceRequest
+ * @class Oskari.lupapiste.bundle.myplaces2.request.EditPlaceRequest
  * Requests a saved "my place" to be opened for editing
  * 
  * Requests are build and sent through Oskari.mapframework.sandbox.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditPlaceRequest', 
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.request.EditPlaceRequest', 
 
 /**
  * @method create called automatically on construction

@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.CategoryHandler
+ * @class Oskari.lupapiste.bundle.myplaces2.CategoryHandler
  * 
  * Handles category related functionality for my places (map layers etc)
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.CategoryHandler",
+Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.CategoryHandler",
 
 /**
  * @method create called automatically on construction
@@ -271,7 +271,7 @@ function(instance) {
         var me = this;
         
         this.instance.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
-        var form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.CategoryForm', me.instance);
+        var form = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.view.CategoryForm', me.instance);
         var values = {
             name : category.getName(),
             id : category.getId(),
@@ -426,7 +426,7 @@ function(instance) {
         return errors;
     },
     getCategoryFromFormValues : function(values) {
-        var category = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory');
+        var category = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory');
         category.setName(values.name);
         category.setId(values.id);
         

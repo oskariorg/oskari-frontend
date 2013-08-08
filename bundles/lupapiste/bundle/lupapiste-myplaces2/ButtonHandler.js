@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.ButtonHandler
+ * @class Oskari.lupapiste.bundle.myplaces2.ButtonHandler
  * 
  * Handles the buttons for myplaces functionality
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.ButtonHandler",
+Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.ButtonHandler",
 
 /**
  * @method create called automatically on construction
@@ -241,7 +241,7 @@ function(instance) {
         /**
          * @method MyPlaces.MyPlaceSelectedEvent
          * Place was selected
-         * @param {Oskari.mapframework.bundle.myplaces2.event.MyPlaceSelectedEvent} event
+         * @param {Oskari.lupapiste.bundle.myplaces2.event.MyPlaceSelectedEvent} event
          */
         'MyPlaces.MyPlaceSelectedEvent' : function(event) {
         	if(!event.getPlace()) {
@@ -254,7 +254,7 @@ function(instance) {
         /**
          * @method MyPlaces.FinishedDrawingEvent
          * Requests toolbar to select default tool
-         * @param {Oskari.mapframework.bundle.myplaces2.event.FinishedDrawingEvent} event
+         * @param {Oskari.lupapiste.bundle.myplaces2.event.FinishedDrawingEvent} event
          */
         'MyPlaces.FinishedDrawingEvent' : function(event) {
             // set ignore so we don't cancel our drawing unintentionally

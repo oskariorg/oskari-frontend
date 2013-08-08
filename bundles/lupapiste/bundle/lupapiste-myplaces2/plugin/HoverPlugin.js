@@ -1,7 +1,7 @@
 /**
- * @class Oskari.mapframework.bundle.myplaces2.plugin.HoverPlugin
+ * @class Oskari.lupapiste.bundle.myplaces2.plugin.HoverPlugin
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.HoverPlugin', function() {
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.HoverPlugin', function() {
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
