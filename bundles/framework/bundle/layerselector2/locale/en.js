@@ -15,7 +15,7 @@ Oskari.registerLocalization({
         "filter" : {
             "text" : "Search map layers",
             "shortDescription" : "Search layers using title, organization, or keywords.",
-            "description" : "You can search map layers by typing part of the name of that layer. Furthermore, you can search usig synonyms and other keywords. Keyword search opens when there is at least 4 letters in the search field and enter key has been pressed."
+            "description" : "You can search map layers by typing part of the name of that layer. Furthermore, you can search usig synonyms and other keywords. Keyword search opens when there is at least 4 letters in the search field and enter key has been pressed.",
             "inspire" : "By theme",
             "organization" : "By data providers",
             "published" : "Users"
