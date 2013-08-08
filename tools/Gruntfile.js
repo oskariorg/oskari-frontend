@@ -71,6 +71,8 @@ module.exports = function(grunt) {
             dev: {
                 background: true
             },
+            test: {
+            },
             coverage: {
                 preprocessors : {
                     '../dist/*.js': 'coverage'

@@ -231,8 +231,7 @@ define([
             data.xslt           = me.classes.encode64(data.xslt);//me.layerGroupingModel.encode64(data.xslt);
             data.gfiType        = form.find('#add-layer-responsetype').val();
 			
-			
-
+            
             // id of layer class
             var url = baseUrl + action_route + id + idValue;
             if(lcId != null) {
@@ -245,7 +244,7 @@ define([
                 "&titleSv=" + data.desc.sv +
                 "&titleEn=" + data.desc.en +
                 "&wmsName=" + data.wmsName +
-                "&wmsUrl=" + data.wmsUrl +
+                "&wmsUrl=" + encodeURIComponent(data.wmsUrl) +
                 "&opacity=" + data.opacity +
                 "&style=" + data.style +
                 "&minScale=" + data.minScale +
@@ -253,12 +252,13 @@ define([
                 "&orderNumber=" + data.orderNumber +
                 "&layerType=" + data.layerType +
                 "&version=" + data.version +
-                "&legendImage=" + data.legendImage +
+                "&legendImage=" + encodeURIComponent(data.legendImage) +
                 "&inspireTheme=" + data.inspireTheme +
-                "&dataUrl=" + data.dataUrl +
+                "&dataUrl=" + encodeURIComponent(data.dataUrl) +
                 "&xslt=" + data.xslt +
                 "&gfiType=" + data.gfiType +
-				"&metadataUrl=" + data.metadataUrl;
+				"&metadataUrl=" + encodeURIComponent(data.metadataUrl);
+            console.log('generated url:', url);
 
             jQuery.ajax({
                 type : "GET",
@@ -383,6 +383,9 @@ define([
             var selected = jQuery('#admin-select-capability').val();
             var capability = this.getValue(this.capabilities, 'Capability');
             var selectedLayer = capability.Layer.Layer[selected];
+
+            //title
+            jQuery('#add-layer-fi-name').val(selectedLayer.Title);
 
             // wmsname
             var wmsname = selectedLayer.Name;

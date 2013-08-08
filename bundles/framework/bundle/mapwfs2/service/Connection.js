@@ -10,103 +10,106 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.service.Connection',
  * @param {Object} mediator
  */
 function(config, mediator) {
-        var cookieName = 'JSESSIONID';
-        var cookieValue = jQuery.cookie(cookieName);
+    this.config = config;
+    this.mediator = mediator;
+    this.cometd = jQuery.cometd;
 
-        var cometURL = location.protocol + "//" +
-            config.hostname + ":" + config.port  +
-            config.contextPath + "/cometd";
+    this.cookieName = 'JSESSIONID';
+    this.cookieValue = jQuery.cookie(this.cookieName);
 
-        var cometd = jQuery.cometd;
+    this._connected = false;
+    this._errorSub = null;
 
-        cometd.configure({
-            url : cometURL
-            //, logLevel: 'debug'
-        });
+    this.cometURL = location.protocol + "//" +
+        this.config.hostname + ":" + this.config.port  +
+        this.config.contextPath + "/cometd";
 
-        cometd.addListener('/meta/handshake', _metaHandshake);
-        cometd.addListener('/meta/connect', _metaConnect);
-        //cometd.addListener('/service/**', getData); // debug
-        //cometd.addListener('/meta/**', getData); // debug
-        cometd.handshake();
+    this.cometd.configure({
+        url : this.cometURL
+        //, logLevel: 'debug'
+    });
 
-        // get browser information
-        function getBrowser() {
-            if(jQuery.browser.msie)
-                jQuery.browser.name = "msie";
-            else if(jQuery.browser.chrome)
-                jQuery.browser.name = "chrome"
-            else if(jQuery.browser.mozilla)
-                jQuery.browser.name = "mozilla"
-            else if(jQuery.browser.safari)
-                jQuery.browser.name = "safari"
-            else
-                jQuery.browser.name = "unknown"
-            jQuery.browser.versionNum = parseInt(jQuery.browser.version, 10)
-        }
-        getBrowser();
+    this.getBrowser();
 
-        var _connected = false;
+    var self = this;
+    this.cometd.addListener('/meta/handshake', function () { self._metaHandshake.apply(self, arguments) });
+    this.cometd.addListener('/meta/connect', function () { self._metaConnect.apply(self, arguments) });
+    //this.cometd.addListener('/service/**', this.getData); // debug
+    //this.cometd.addListener('/meta/**', this.getData); // debug
+    this.cometd.handshake();
 
-        // connect
-        function _metaConnect(message) {
-            if(cometd.isDisconnected()) {
-                _connected = false;
-                mediator.setConnection(null);
-                return;
-            }
-
-            var wasConnected = _connected;
-            _connected = message.successful === true;
-            if(!wasConnected && _connected) {
-                mediator.setConnection(cometd);
-                mediator.getPlugin().clearConnectionErrorTriggers(); // clear errors
-            } else if(wasConnected && !_connected) {
-                mediator.setConnection(null);
-                mediator.getPlugin().showErrorPopup("connection_broken", null, true);
-            }
-        }
-
-        // handshake
-        function _metaHandshake(handshake) {
-            if(handshake.successful === true) {
-                cometd.batch(function() {
-                    mediator.setConnection(cometd);
-                    _errorSub = cometd.subscribe('/error', getError);
-                    mediator.subscribe();
-
-                    mediator.startup({
-                        "clientId" : handshake.clientId,
-                        "session" : cookieValue,
-                        "browser" : jQuery.browser.name,
-                        "browserVersion" : jQuery.browser.versionNum
-                    });
-                });
-            } else {
-                mediator.getPlugin().showErrorPopup("connection_not_available", null, true);
-            }
-        }
-
-        // Disconnect when the page unloads
-        jQuery(window).unload(function() {
-            cometd.disconnect(true);
-        });
-
-        // error handling
-        function getError(data)
-        {
-            console.log(data);
-            var message = data.data.message;
-            var layer = mediator.getPlugin().getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
-            var once = data.data.once;
-            mediator.getPlugin().showErrorPopup(message, layer, once);
-        }
-/*
-        // debug
-        function getData(data) {
-            console.log("getData:", data);
-        }
-*/
+    // Disconnect when the page unloads
+    jQuery(window).unload(function() {
+        this.cometd.disconnect(true);
+    });
 }, {
 
+    // get browser information
+    getBrowser : function() {
+        if(jQuery.browser.msie)
+            jQuery.browser.name = "msie";
+        else if(jQuery.browser.chrome)
+            jQuery.browser.name = "chrome"
+        else if(jQuery.browser.mozilla)
+            jQuery.browser.name = "mozilla"
+        else if(jQuery.browser.safari)
+            jQuery.browser.name = "safari"
+        else
+            jQuery.browser.name = "unknown"
+        jQuery.browser.versionNum = parseInt(jQuery.browser.version, 10)
+    },
+
+    // connect
+    _metaConnect : function(message) {
+        if(this.cometd.isDisconnected()) {
+            this._connected = false;
+            this.mediator.setConnection(null);
+            return;
+        }
+
+        var wasConnected = this._connected;
+        this._connected = message.successful === true;
+        if(!wasConnected && this._connected) {
+            this.mediator.setConnection(this.cometd);
+            this.mediator.getPlugin().clearConnectionErrorTriggers(); // clear errors
+        } else if(wasConnected && !this._connected) {
+            this.mediator.setConnection(null);
+            this.mediator.getPlugin().showErrorPopup("connection_broken", null, true);
+        }
+    },
+
+    // handshake
+    _metaHandshake : function(handshake) {
+        if(handshake.successful === true) {
+            var self = this;
+            this.mediator.setConnection(self.cometd);
+            this.cometd.batch(function() {
+                self._errorSub = self.cometd.subscribe('/error', self.getError);
+                self.mediator.subscribe();
+                self.mediator.startup({
+                    "clientId" : handshake.clientId,
+                    "session" : self.cookieValue,
+                    "browser" : jQuery.browser.name,
+                    "browserVersion" : jQuery.browser.versionNum
+                });
+            });
+        } else {
+            this.mediator.getPlugin().showErrorPopup("connection_not_available", null, true);
+        }
+    },
+
+    // error handling
+    getError : function(data) {
+        var message = data.data.message;
+        var layer = mediator.getPlugin().getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
+        var once = data.data.once;
+        this.mediator.getPlugin().showErrorPopup(message, layer, once);
+    }//,
+
+    // debug
+    /*
+    getData : function(data) {
+        console.log("getData:", data);
+    }
+    */
 });

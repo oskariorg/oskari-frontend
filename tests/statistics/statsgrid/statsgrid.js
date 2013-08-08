@@ -85,7 +85,7 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
         });
     });
 
-    describe.only('grid mode', function() {
+    describe('grid mode', function() {
         before(function(done) {
             startApplication(function() {
                 sandbox.postRequestByName('AddMapLayerRequest', [testLayerId, true]);
@@ -230,7 +230,7 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
         });
 
         // This test expects Test indicator metadata to be fetched
-        it('should add checkbox column when statsgrid-show-row-selects checkbox is clicked', function() {
+        it('should filter column data', function() {
             menuToolbar = jQuery('body').find('div.oskariui-menutoolbar'),
             statsGridContainer = jQuery('body').find('.statsgrid_100');
 
@@ -254,8 +254,10 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
             jQuery('.filter-input1').val(10);
             jQuery('.divmanazerpopup input.primary').click();
 
+            var gridPlugin = statsModule.gridPlugin;
             var filterSuccess = false;
-            var groups = statsModule.gridPlugin.grid.getData().getGroups();
+            var groups = gridPlugin.grid.getData().getGroups();
+            var filteredMunicipalitiesCount = 0;
             for (var i = 0; i < groups.length; i++) {
                 var group = groups[i];
                 if(group.groupingKey == 'checked') {
@@ -266,6 +268,8 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
                         if(row['indicator42011total'] < 10) {
                             filterSuccess = false;
                             break;
+                        } else {
+                            filteredMunicipalitiesCount++;
                         }
                     };
                     break;        
@@ -273,6 +277,7 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
             };
 
             expect(filterSuccess).to.be(true);
+            expect(statsModule.getState().municipalities.length).to.be(filteredMunicipalitiesCount); 
         });
 
 

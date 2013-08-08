@@ -1,5 +1,5 @@
 // requires jetty + redis open with wfs2
-describe('Test Suite for mapwfs2', function() {
+describe.only('Test Suite for mapwfs2', function() {
     var module = null,
         connection = null,
         mediator = null,
@@ -152,7 +152,6 @@ describe('Test Suite for mapwfs2', function() {
             // Find handles to sandbox and statehandler id
             sandbox = Oskari.$("sandbox");
             module = sandbox.findRegisteredModuleInstance('MainMapModuleWfsLayerPlugin');
-            connection = module.getConnection();
             mediator = module.getIO();
             mediator.session = {
                 "clientId" : "testId",
@@ -160,6 +159,7 @@ describe('Test Suite for mapwfs2', function() {
                 "browser" : jQuery.browser.name,
                 "browserVersion" : jQuery.browser.versionNum
             }
+            connection = module.getConnection();
             done();
         });
     };
@@ -406,7 +406,7 @@ describe('Test Suite for mapwfs2', function() {
     });
 
     // TODO: make the feature :)
-    describe.skip('setting map size', function() {
+    describe('setting map size', function() {
         before(startApplication);
         after(teardown);
 
@@ -430,7 +430,8 @@ describe('Test Suite for mapwfs2', function() {
             }
             self.onEvent = function(event) {
                 if(event.getName() === "AfterMapLayerAddEvent") { // wait that the layer has been added
-                    // TODO: no caller - make an event!
+                    var event = sandbox.getEventBuilder("MapSizeChangedEvent")(800, 600);
+                    sandbox.notifyAll(event);
                 } else if(event.getName() === "WFSPropertiesEvent") {
                     properties = true;
                     expect(properties).to.be(true);
