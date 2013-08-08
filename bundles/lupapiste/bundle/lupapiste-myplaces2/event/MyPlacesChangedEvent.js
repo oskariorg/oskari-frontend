@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.myplaces.event.MyPlacesChangedEvent',
 function(config) {
 }, {
     /** @static @property __name event name */
-    __name : "MyPlaces.MyPlacesChangedEvent",
+    __name : "LupaPisteMyPlaces.MyPlacesChangedEvent",
     /**
      * @method getName
      * Returns event name

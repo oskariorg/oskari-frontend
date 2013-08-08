@@ -106,10 +106,10 @@ function(instance) {
             this._cleanupPopup();
         },
         /**
-         * @method MyPlaces.FinishedDrawingEvent
+         * @method LupaPisteMyPlaces.FinishedDrawingEvent
          * @param {Oskari.lupapiste.bundle.myplaces2.event.FinishedDrawingEvent} event
          */
-        'MyPlaces.FinishedDrawingEvent' : function(event) {
+        'LupaPisteMyPlaces.FinishedDrawingEvent' : function(event) {
             this._handleFinishedDrawingEvent(event);
         }
     },

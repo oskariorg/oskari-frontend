@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
     this.editMode = false;
     this.currentDrawMode = null;
 }, {
-    __name : 'MyPlaces.DrawPlugin',
+    __name : 'LupaPisteMyPlaces.DrawPlugin',
 
     getName : function() {
         return this.pluginName;
@@ -76,7 +76,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
     	catch(error) {
     		// happens when the sketch isn't even started -> reset state
         	this.stopDrawing();
-	        var event = this._sandbox.getEventBuilder('MyPlaces.MyPlaceSelectedEvent')();
+	        var event = this._sandbox.getEventBuilder('LupaPisteMyPlaces.MyPlaceSelectedEvent')();
 	        this._sandbox.notifyAll(event);
     	}
     },
@@ -84,7 +84,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
     /**
      * Called when drawing is finished.
      * Disables all draw controls and
-     * sends a MyPlaces.FinishedDrawingEvent with the drawn the geometry.
+     * sends a LupaPisteMyPlaces.FinishedDrawingEvent with the drawn the geometry.
      * @method
      */
     finishedDrawing : function() {
@@ -94,7 +94,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
 	        // http://lists.osgeo.org/pipermail/openlayers-users/2009-February/010601.html
         	this.modifyControls.modify.selectControl.select(this.drawLayer.features[0]);
         }
-        var event = this._sandbox.getEventBuilder('MyPlaces.FinishedDrawingEvent')(this.getDrawing(), this.editMode);
+        var event = this._sandbox.getEventBuilder('LupaPisteMyPlaces.FinishedDrawingEvent')(this.getDrawing(), this.editMode);
         this._sandbox.notifyAll(event);
     },
     /**
@@ -194,16 +194,16 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
         this._sandbox = sandbox;
 
         sandbox.register(this);
-        sandbox.addRequestHandler('MyPlaces.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
-        sandbox.addRequestHandler('MyPlaces.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
-        sandbox.addRequestHandler('MyPlaces.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
+        sandbox.addRequestHandler('LupaPisteMyPlaces.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
+        sandbox.addRequestHandler('LupaPisteMyPlaces.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
+        sandbox.addRequestHandler('LupaPisteMyPlaces.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
 
     },
     stopPlugin : function(sandbox) {
 
-        sandbox.removeRequestHandler('MyPlaces.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
-        sandbox.removeRequestHandler('MyPlaces.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
-        sandbox.removeRequestHandler('MyPlaces.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
+        sandbox.removeRequestHandler('LupaPisteMyPlaces.StartDrawingRequest', this.requestHandlers.startDrawingHandler);
+        sandbox.removeRequestHandler('LupaPisteMyPlaces.StopDrawingRequest', this.requestHandlers.stopDrawingHandler);
+        sandbox.removeRequestHandler('LupaPisteMyPlaces.GetGeometryRequest', this.requestHandlers.getGeometryHandler);
         sandbox.unregister(this);
 
         this._map = null;

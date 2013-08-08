@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.request.DeleteCategoryReq
 function(categoryId) {
     this._categoryId = categoryId;
 }, {
-    __name : "MyPlaces.DeleteCategoryRequest",
+    __name : "LupaPisteMyPlaces.DeleteCategoryRequest",
     /**
      * @method getName
      * @return {String} request name

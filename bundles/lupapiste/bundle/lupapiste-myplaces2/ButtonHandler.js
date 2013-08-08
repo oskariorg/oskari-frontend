@@ -120,7 +120,7 @@ function(instance) {
      */
     startNewDrawing : function(config) {
         // notify components to reset any saved "selected place" data
-        var event = this.instance.sandbox.getEventBuilder('MyPlaces.MyPlaceSelectedEvent')();
+        var event = this.instance.sandbox.getEventBuilder('LupaPisteMyPlaces.MyPlaceSelectedEvent')();
         this.instance.sandbox.notifyAll(event);
 
         // notify plugin to start drawing new geometry
@@ -134,7 +134,7 @@ function(instance) {
      */
     sendDrawRequest : function(config) {
         var me = this;
-        var startRequest = this.instance.sandbox.getRequestBuilder('MyPlaces.StartDrawingRequest')(config);
+        var startRequest = this.instance.sandbox.getRequestBuilder('LupaPisteMyPlaces.StartDrawingRequest')(config);
         this.instance.sandbox.request(this, startRequest);
 
         if(!config.geometry) {
@@ -191,7 +191,7 @@ function(instance) {
      */
     sendStopDrawRequest : function(isCancel) {
         var me = this;
-        var request = this.instance.sandbox.getRequestBuilder('MyPlaces.StopDrawingRequest')(isCancel);
+        var request = this.instance.sandbox.getRequestBuilder('LupaPisteMyPlaces.StopDrawingRequest')(isCancel);
         this.instance.sandbox.request(this, request);
         if(this.dialog) {
             this.dialog.close();
@@ -239,11 +239,11 @@ function(instance) {
             }
         },
         /**
-         * @method MyPlaces.MyPlaceSelectedEvent
+         * @method LupaPisteMyPlaces.MyPlaceSelectedEvent
          * Place was selected
          * @param {Oskari.lupapiste.bundle.myplaces2.event.MyPlaceSelectedEvent} event
          */
-        'MyPlaces.MyPlaceSelectedEvent' : function(event) {
+        'LupaPisteMyPlaces.MyPlaceSelectedEvent' : function(event) {
         	if(!event.getPlace()) {
         		// cleanup
 	            // ask toolbar to select default tool
@@ -252,11 +252,11 @@ function(instance) {
         	}
         },
         /**
-         * @method MyPlaces.FinishedDrawingEvent
+         * @method LupaPisteMyPlaces.FinishedDrawingEvent
          * Requests toolbar to select default tool
          * @param {Oskari.lupapiste.bundle.myplaces2.event.FinishedDrawingEvent} event
          */
-        'MyPlaces.FinishedDrawingEvent' : function(event) {
+        'LupaPisteMyPlaces.FinishedDrawingEvent' : function(event) {
             // set ignore so we don't cancel our drawing unintentionally
             this.ignoreEvents = true;
             // ask toolbar to select default tool

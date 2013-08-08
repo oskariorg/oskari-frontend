@@ -20,7 +20,7 @@ function(categoryId, isPublic) {
     this._categoryId = categoryId;
     this._isPublic = isPublic == true;
 }, {
-    __name : "MyPlaces.PublishCategoryRequest",
+    __name : "LupaPisteMyPlaces.PublishCategoryRequest",
     /**
      * @method getName
      * @return {String} request name

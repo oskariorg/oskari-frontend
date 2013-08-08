@@ -72,11 +72,11 @@ function(instance) {
      */
     eventHandlers : {
         /**
-         * @method MyPlaces.MyPlacesChangedEvent
+         * @method LupaPisteMyPlaces.MyPlacesChangedEvent
          * Checks if categories have been changed and updates corresponding maplayers accordingly
          * @param {Oskari.mapframework.myplaces.event.MyPlacesChangedEvent} event
          */
-        'MyPlaces.MyPlacesChangedEvent' : function(event) {
+        'LupaPisteMyPlaces.MyPlacesChangedEvent' : function(event) {
             this._handlePlacesChanged();
         }
     },

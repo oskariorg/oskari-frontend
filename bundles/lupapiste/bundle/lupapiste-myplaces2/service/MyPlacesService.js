@@ -403,10 +403,10 @@ function(url, uuid, sandbox, defaultName, pInstance) {
     /**
      * @method _notifyDataChanged
      * @private
-     * Notifies components that places/categories have changed with 'MyPlaces.MyPlacesChangedEvent'
+     * Notifies components that places/categories have changed with 'LupaPisteMyPlaces.MyPlacesChangedEvent'
      */
     _notifyDataChanged : function() {
-        var event = this._sandbox.getEventBuilder('MyPlaces.MyPlacesChangedEvent')();
+        var event = this._sandbox.getEventBuilder('LupaPisteMyPlaces.MyPlacesChangedEvent')();
         this._sandbox.notifyAll(event);
     },
 

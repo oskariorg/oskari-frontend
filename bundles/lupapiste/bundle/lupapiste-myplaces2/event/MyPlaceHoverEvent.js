@@ -6,7 +6,7 @@ Oskari.clazz.define(
             this._hoverEvent = pEvent;
             this._zoom = zoomLevel; // 0-12
         }, {
-            __name : "MyPlaces.MyPlaceHoverEvent",
+            __name : "LupaPisteMyPlaces.MyPlaceHoverEvent",
             getName : function() {
                 return this.__name;
             },

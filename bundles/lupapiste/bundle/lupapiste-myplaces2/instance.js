@@ -178,10 +178,10 @@ function() {
         this.view.start();
         
         this.editRequestHandler = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandler', sandbox, me);
-        sandbox.addRequestHandler('MyPlaces.EditPlaceRequest', this.editRequestHandler);
-        sandbox.addRequestHandler('MyPlaces.EditCategoryRequest', this.editRequestHandler);
-        sandbox.addRequestHandler('MyPlaces.DeleteCategoryRequest', this.editRequestHandler);
-        sandbox.addRequestHandler('MyPlaces.PublishCategoryRequest', this.editRequestHandler);
+        sandbox.addRequestHandler('LupaPisteMyPlaces.EditPlaceRequest', this.editRequestHandler);
+        sandbox.addRequestHandler('LupaPisteMyPlaces.EditCategoryRequest', this.editRequestHandler);
+        sandbox.addRequestHandler('LupaPisteMyPlaces.DeleteCategoryRequest', this.editRequestHandler);
+        sandbox.addRequestHandler('LupaPisteMyPlaces.PublishCategoryRequest', this.editRequestHandler);
     },
     /**
      * @method stop

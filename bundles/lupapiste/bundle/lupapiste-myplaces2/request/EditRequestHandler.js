@@ -26,16 +26,16 @@ function(sandbox, instance) {
      */
     handleRequest : function(core, request) {
         var sandbox = core.getSandbox();
-        if(request.getName() == 'MyPlaces.EditPlaceRequest') {
+        if(request.getName() == 'LupaPisteMyPlaces.EditPlaceRequest') {
             this._handleEditPlace(sandbox, request);
         }
-        else if(request.getName() == 'MyPlaces.EditCategoryRequest') {
+        else if(request.getName() == 'LupaPisteMyPlaces.EditCategoryRequest') {
             this._handleEditCategory(sandbox, request);
         }
-        else if(request.getName() == 'MyPlaces.DeleteCategoryRequest') {
+        else if(request.getName() == 'LupaPisteMyPlaces.DeleteCategoryRequest') {
             this._handleDeleteCategory(sandbox, request);
         }
-        else if(request.getName() == 'MyPlaces.PublishCategoryRequest') {
+        else if(request.getName() == 'LupaPisteMyPlaces.PublishCategoryRequest') {
             this._handlePublishCategory(sandbox, request);
         }
     },
