@@ -78,6 +78,9 @@ function(instance, title) {
         field.bindChange(function(event) {
             me._searchTrigger(field.getValue());
         }, true);
+        field.bindEnterKey(function(event) {
+            me._relatedSearchTrigger(field.getValue());
+        });
         this.filterField = field;
         return field;
     },
@@ -97,6 +100,17 @@ function(instance, title) {
                 me._search(keyword);
                 me.searchTimer = undefined;
             }, 500);
+        }
+    },
+    _relatedSearchTrigger : function(keyword) {
+        var me = this;
+        // clear any previous search if search field changes
+        if(this.searchTimer) {
+            clearTimeout(this.searchTimer);
+        }
+        // if field is was cleared -> do immediately
+        if (!keyword || keyword.length == 0) {
+//TODO!            me._search(keyword);
         }
     },
     tabSelected : function() {

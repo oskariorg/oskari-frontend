@@ -13,6 +13,8 @@ A new MapSizeChangedEvent is sent when map size is changed (event is sent on map
 - Columns can be filtered now by clicking filter link in drop down menu (funnel icon in the header). 
 - Chosen municipalities are now saved to the state.
 
+### layerselector2
+- layer search now supports ontology search. Type min 4 letters and press enter to open up a popup
 
 ## 1.12
 
