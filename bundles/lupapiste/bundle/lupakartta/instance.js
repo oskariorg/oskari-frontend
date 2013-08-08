@@ -47,7 +47,7 @@ function() {
 		
 		var mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
 
-		var drawplugin = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin');
+		var drawplugin = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin');
 		mapmodule.registerPlugin(drawplugin);
 		mapmodule.startPlugin(drawplugin);
 
@@ -118,7 +118,7 @@ function() {
 				sandbox.request("lupakartta", request);
 			}
 			//aloitetaan piirto
-			requestBuilder = sandbox.getRequestBuilder('MyPlaces.StartDrawingRequest');
+			requestBuilder = sandbox.getRequestBuilder('LupaPisteMyPlaces.StartDrawingRequest');
 			request = requestBuilder(config);
 			sandbox.request("lupakartta", request);
 		});
@@ -128,7 +128,7 @@ function() {
 	
 			var sandbox = Oskari.$('sandbox');
 			sandbox.printDebug("[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] map-stop-editing-request");
-			var requestBuilder = sandbox.getRequestBuilder('MyPlaces.GetGeometryRequest');
+			var requestBuilder = sandbox.getRequestBuilder('LupaPisteMyPlaces.GetGeometryRequest');
 			var request = requestBuilder(
 			function(ee) {
 						hub.send("map-draw-done", {
@@ -144,12 +144,12 @@ function() {
 		});
 		hub.subscribe("map-stop-editing-request", function(e) {
 		
-			var requestBuilder = sandbox.getRequestBuilder('MyPlaces.StopDrawingRequest');
+			var requestBuilder = sandbox.getRequestBuilder('LupaPisteMyPlaces.StopDrawingRequest');
 			var request = requestBuilder();
 			sandbox.request("lupakartta", request);
 		});
 		
-		//var requestBuilder = this.sandbox.getRequestBuilder('MyPlaces.StopDrawingRequest');
+		//var requestBuilder = this.sandbox.getRequestBuilder('LupaPisteMyPlaces.StopDrawingRequest');
 			//var request = requestBuilder();
 			//this.sandbox.request("lupakartta", request);
 			
@@ -182,17 +182,17 @@ function() {
 				drawMode : 'area',
 				geometry : drawing
 			};
-			requestBuilder = sandbox.getRequestBuilder('MyPlaces.StartDrawingRequest');
+			requestBuilder = sandbox.getRequestBuilder('LupaPisteMyPlaces.StartDrawingRequest');
 			request = requestBuilder(config);
 			sandbox.request("lupakartta", request);
 			
-			var requestBuilder = sandbox.getRequestBuilder('MyPlaces.StopDrawingRequest');
+			var requestBuilder = sandbox.getRequestBuilder('LupaPisteMyPlaces.StopDrawingRequest');
 			var request = requestBuilder();
 			sandbox.request("lupakartta", request);
 			
 					
 			}else{
-			requestBuilder = sandbox.getRequestBuilder('MyPlaces.StartDrawingRequest');
+			requestBuilder = sandbox.getRequestBuilder('LupaPisteMyPlaces.StartDrawingRequest');
 			request = requestBuilder(config);
 			sandbox.request("lupakartta", request);
 			
@@ -274,7 +274,7 @@ function() {
 		 jQuery("#eventMessages").html("AfterMapMoveEvent<br/>" + jQuery("#eventMessages").html());
 		 },*/
 
-		'MyPlaces.FinishedDrawingEvent' : function(event) {
+		'LupaPisteMyPlaces.FinishedDrawingEvent' : function(event) {
 
 		    if(this.getJemma('currentdrawmode').indexOf('inforequest_') ==0){
 		   
@@ -310,7 +310,7 @@ function() {
 			var requestBuilder = this.sandbox.getRequestBuilder('lupakartta.AddMarkerRequest');
 			var request = requestBuilder(event._drawing,  null, null, null, 'http://www.openlayers.org/dev/img/marker-green.png');
 			sandbox.request("lupakartta", request);
-			var requestBuilder = this.sandbox.getRequestBuilder('MyPlaces.StopDrawingRequest');
+			var requestBuilder = this.sandbox.getRequestBuilder('LupaPisteMyPlaces.StopDrawingRequest');
 			var request = requestBuilder();
 			this.sandbox.request("lupakartta", request);
 			}
@@ -330,7 +330,7 @@ function() {
 						
 					});
 			
-			var requestBuilder = this.sandbox.getRequestBuilder('MyPlaces.StopDrawingRequest');
+			var requestBuilder = this.sandbox.getRequestBuilder('LupaPisteMyPlaces.StopDrawingRequest');
 			var request = requestBuilder();
 			this.sandbox.request("lupakartta", request);
 			
@@ -341,7 +341,7 @@ function() {
 				continueCurrent : false
 			};
 			this.setJemma('alapuhdista', 1);
-			requestBuilder = this.sandbox.getRequestBuilder('MyPlaces.StartDrawingRequest');
+			requestBuilder = this.sandbox.getRequestBuilder('LupaPisteMyPlaces.StartDrawingRequest');
 			request = requestBuilder(config);
 			this.sandbox.request("lupakartta", request);
 			}
