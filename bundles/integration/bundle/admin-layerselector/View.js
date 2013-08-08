@@ -154,16 +154,17 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         var me = e.data.me;
         var sandbox = me.getSandbox()
         var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+
         /*
-         * NORMAL LAYERS
+         *****************
+         * NORMAL LAYERS *
+         *****************
          */
         // remove layer from mapLayerService
         if(e.command == "removeLayer") {
             if (e.baseLayerId) {
                 // If this is a sublayer, remove it from its parent's sublayer array
                 var parentLayerId = 'base_' + e.baseLayerId;
-                console.log("Parent id: ", parentLayerId);
-                console.log("Sublayer id: ", e.modelId);
                 mapLayerService.removeSubLayer(parentLayerId, e.modelId);
             } else {
                 // otherwise just remove it from map layer service.
@@ -179,8 +180,6 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             if (e.baseLayerId) {
                 // If this is a sublayer, add it to its parent's sublayer array
                 var parentLayerId = 'base_' + e.baseLayerId;
-                console.log("Parent id: ", parentLayerId);
-                console.log("Sublayer id: ", mapLayer.getId());
                 mapLayerService.addSubLayer(parentLayerId, mapLayer);
             } else {
                 // Otherwise just add it to the map layer service.
@@ -197,16 +196,18 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         }
 
         /*
-         * BASE OR GROUP LAYERS
+         ************************
+         * BASE OR GROUP LAYERS *
+         ************************
          */
         // load the map layers again
         else if(e.command == "addGroup") {
             mapLayerService.loadAllLayersAjax();
         }
-        // delete the base/group layer from mapLayerService
-        // and load it again from backend,
-        // since we edited the layer class and the changes
-        // will not be reflected to the corresponding map layer
+        // Remove the base/group layer from mapLayerService
+        // and load it again from backend, since we edited
+        // the layer class and the changes will not be
+        // reflected to the corresponding map layer directly.
         else if(e.command == "editGroup") {
             mapLayerService.removeLayer(e.id, true);
             mapLayerService.loadAllLayersAjax();
