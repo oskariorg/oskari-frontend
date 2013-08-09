@@ -1,8 +1,8 @@
 /**
- * @class Oskari.mapframework.bundle.coordinatedisplay.MapQuestionsBundleInstance
+ * @class Oskari.harava.bundle.MapQuestionsBundleInstance
  *
  * Registers and starts the
- * Oskari.mapframework.bundle.coordinatedisplay.MapQuestions bundle
+ * Oskari.harava.bundle.MapQuestions bundle
  */
 Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
 
@@ -18,9 +18,15 @@ function() {
 	this.modules = null;
 	this._lastfeature = null;
 	this.drawLayerSubfix = 'Map Questions Layer - ';
+	this.templateToolbar = jQuery('<div class="harava-map-question-toggle-toolbar harava-toolbar-hide"></div>');
+	this.templateQuestionsTitle = jQuery('<div class="harava-map-question-title"></div>');
+	this.templateQuestionsContent = jQuery('<div id="harava-map-questions-content"></div>');	
+	this.templateQuestion = jQuery('<div class="harava-question"></div>');
+	this.templateQuestionTitle = jQuery('<div class="harava-question-title"></div>');
+	this.templateQuestionTool = jQuery('<div class="harava-question-tool"></div>');	
 }, {
 	_currentStep: '',
-	_currentStepAndQuestion: '',
+	_currentModule: '',
 	/**
 	 * @static
 	 * @property __name
@@ -75,40 +81,39 @@ function() {
 		var me = this;
 		if(me._currentStep!=null){
     		var module = me.getModuleById(me._currentStep);
-    		if(module!=null){
-    			var module = me.getModuleById(me._currentStep);    		
+    		var prev = jQuery(module.appendTo).prev();
+    		if(module!=null){  		
     			jQuery(module.appendTo).prev().removeClass('harava-toolbar-hide');
     			jQuery(module.appendTo).prev().addClass('harava-toolbar-show');
-    			
-    			jQuery(module.appendTo).animate({left:'-25%'},'slow');
-    			jQuery(module.appendTo).prev().animate({left:'0'},'slow');
+    			jQuery(prev).animate({left:'0'}, 'slow');
+    			jQuery(module.appendTo).animate({left:'-25%'},'slow');				
     		}
 		}
 	},
 	/**
 	 * @method showTools
 	 * Show map question tools
-	 * @param fast need fast drawing
+	 * @param {Boolean} fast need fast drawing
 	 */
 	showTools: function(fast){
 		var me = this;
 		if(me._currentStep!=null){
     		var module = me.getModuleById(me._currentStep);
     		if(module!=null){
-    			var module = me.getModuleById(me._currentStep);    		
     			jQuery(module.appendTo).prev().removeClass('harava-toolbar-show');
     			jQuery(module.appendTo).prev().addClass('harava-toolbar-hide');
-    			
+    			var prev = jQuery(module.appendTo).prev();
     			if(fast===true){
-    				jQuery(module.appendTo).animate({left:'0'},'fast');
-    				jQuery(module.appendTo).prev().animate({left:'25%'},'fast');
+    				jQuery(prev).css('left','25%');
+    				jQuery(module.appendTo).css('left','0');
     			}
     			else {
-    				jQuery(module.appendTo).animate({left:'0'},'slow');
-    				jQuery(module.appendTo).prev().animate({left:'25%'},'slow');
+    				jQuery(prev).animate({left:'25%'}, 'slow');
+					jQuery(module.appendTo).animate({left:'0'},'slow');
+					
     			}
     		}
-		}	
+		}
 	},
     /**
      * @method start
@@ -121,7 +126,6 @@ function() {
     	}
     	
     	me.started = true;
-    	
     	var sandbox = Oskari.$("sandbox");
         me.sandbox = sandbox;
         
@@ -138,31 +142,51 @@ function() {
         	
         	/* Add all configured Question modules */
         	jQuery.each(me.modules, function(k, module){
-        		var t = '';
+        		var title = '';
         		if(module.questionTitle!=''){
-        			t = '<p>'+module.questionTitle+'</p>';
+        			title = '<p>'+module.questionTitle+'</p>';
         		}
-        		jQuery(module.appendTo).before('<div class="harava-map-question-toggle-toolbar harava-toolbar-hide"></div>');
+        		
+        		jQuery(module.appendTo).before(me.templateToolbar.clone());
         		
         		jQuery(module.appendTo).prev().bind('click',function(){
         			me.toggleTools();
         		});
         		
-        		jQuery(module.appendTo).append('<div class="harava-map-question-title">'+t+'</div>');
-    	        jQuery(module.appendTo).append('<div id="harava-map-questions-content"></div>');
+        		var titleContainer = me.templateQuestionsTitle.clone();
+        		titleContainer.append(title);
+        		jQuery(module.appendTo).append(titleContainer);        		
+        		
+        		var questionsContent = me.templateQuestionsContent.clone();
+    	        jQuery(module.appendTo).append(questionsContent);
     	        
 	            // Create questions
 	            jQuery.each(module.questions, function(k, question){
-    	        	var text = question.title;
-    	        	var html = '<div class="harava-question"><div class="harava-question-title">'+text+'</div><div id="harava-question-tool_'
-    	        		+module.questionId+'_'+question.id +'" class="harava-question-tool harava-question-tool-'+module.questionId
-    	        		+' harava-question-tool-'+question.type+'" qId="1" title="'+text+'"></div></div>';
-    	        	jQuery(module.appendTo).append(html);
-    	        	jQuery('#harava-question-tool_'+module.questionId+'_'+question.id).bind('click',
+    	        	var title = question.title;
+    	        	var tooltip = '';
+    	        	if(question.tooltip!=null){
+    	        		tooltip = question.tooltip;
+    	        	}
+    	        	
+    	        	var questionContainer = me.templateQuestion.clone();
+    	        	var questionTitleContainer = me.templateQuestionTitle.clone();
+    	        	questionTitleContainer.append(title);    	        	
+    	        	var questionToolContainer = me.templateQuestionTool.clone();
+    	        	questionToolContainer.attr('id','harava-question-tool_'+ module.questionId+'_'+question.id);
+    	        	questionToolContainer.attr('title',tooltip);
+    	        	questionToolContainer.addClass('harava-question-tool-'+module.questionId);
+    	        	questionToolContainer.addClass('harava-question-tool-'+question.type);
+    	        	questionToolContainer.bind('click',
         					function(){
-        						me.activateControl(''+module.questionId+'',''+question.id+'');
-					});
-    	        });  
+    	        				if(!jQuery(this).hasClass('disabled')){
+    	        					me.activateControl(''+module.questionId+'',''+question.id+'');
+    	        				}
+        					}
+    	        	);
+    	        	questionContainer.append(questionTitleContainer);
+    	        	questionContainer.append(questionToolContainer);    	        	
+    	        	jQuery(module.appendTo).append(questionContainer);    	        	
+    	        });
     	        
         	});
         	
@@ -175,17 +199,19 @@ function() {
     			showQuestionStepRequest : Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.ShowQuestionStepRequestHandler', sandbox, me),
     			showQuestionToolsRequestHandler : Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.ShowQuestionToolsRequestHandler', sandbox, me),
     			hideQuestionToolsRequestHandler : Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.HideQuestionToolsRequestHandler', sandbox, me),
-    			toggleQuestionToolsRequestHandler : Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.ToggleQuestionToolsRequestHandler', sandbox, me)
+    			toggleQuestionToolsRequestHandler : Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.ToggleQuestionToolsRequestHandler', sandbox, me),
+    			visibilityQuestionToolsRequestHandler : Oskari.clazz.create('Oskari.harava.bundle.mapquestions.request.VisibilityQuestionRequestHandler', sandbox, me),
     	};
         me.sandbox.addRequestHandler('ShowQuestionStepRequest', this.requestHandlers.showQuestionStepRequest);
         me.sandbox.addRequestHandler('ShowQuestionToolsRequest', this.requestHandlers.showQuestionToolsRequestHandler);
         me.sandbox.addRequestHandler('HideQuestionToolsRequest', this.requestHandlers.hideQuestionToolsRequestHandler);
         me.sandbox.addRequestHandler('ToggleQuestionToolsRequest', this.requestHandlers.toggleQuestionToolsRequestHandler);
+        me.sandbox.addRequestHandler('VisibilityQuestionRequest', this.requestHandlers.visibilityQuestionToolsRequestHandler);
     },
     /**
      * @method getCurrentModuleFeatures
      * Get current module all features
-     * @returns {Array} features
+     * @return {OpenLayers.Feature[]} features
      */
     "getCurrentModuleFeatures" :function(){
     	var me = this;
@@ -195,7 +221,7 @@ function() {
     /**
      * @method getAllModuleFeatures
      * Get all modules all features
-     * @returns {Array} features
+     * @return {OpenLayers.Feature[]} features
      */
     "getAllModuleFeatures": function(){
     	var me = this;
@@ -212,7 +238,6 @@ function() {
     	var me = sandbox.findRegisteredModuleInstance('HaravaMapQuestions');
     	me.plugin.onPopupClose();
     	me.showTools();
-    	
     },
     /**
      * @method deActivateAll
@@ -221,9 +246,7 @@ function() {
     "deActivateAll" : function(){
     	var me = this;
     	jQuery('.harava-question-tool').removeClass('active');
-    	jQuery('.harava-question-tool').css({
-			"background-color": "transparent"
-		});
+    	jQuery('.harava-question-tool').removeClass('selected');
     },
     /**
      * @method showStep
@@ -232,17 +255,16 @@ function() {
      */
     "showStep" : function(moduleId){
     	var me = this;
-    	
     	var oldmodule = me.getModuleById(me._currentStep);
 		if(oldmodule!=null){
 			if(jQuery(oldmodule.appendTo).prev().hasClass('harava-toolbar-show')){
-	    		me.showTools();
+	    		me.showTools(true);
 	    	}
 		}
     	
     	me.deActivateAll();
     	me.plugin.showStep(moduleId);    	
-    	me._currentStep=moduleId;  	
+    	me._currentStep=moduleId;
     },
     /**
      * @method activateControl
@@ -251,37 +273,30 @@ function() {
      * @param {String} questionId selected qustion id
      */
     "activateControl" : function(moduleId, questionId){
-    	var me = this;    	
+    	var me = this;
     	var module = me.getModuleById(moduleId);    	
     	var isSelected = jQuery('#harava-question-tool_' + moduleId + '_' + questionId).hasClass('active');    	
     	me.deActivateAll();
-    	me.plugin.activateControl(moduleId, questionId);
     	
     	if(isSelected){
     		jQuery('#harava-question-tool_' + moduleId + '_' + questionId).removeClass('active');
-    		jQuery('#harava-question-tool_' + moduleId + '_' + questionId).css({
-    			"background-color": "transparent"
-    		});
+    		jQuery('#harava-question-tool_' + moduleId + '_' + questionId).css('selected');
+    		
+    		me.plugin.deActivateAll();
+    		
     	} else {
     		jQuery('#harava-question-tool_' + moduleId + '_' + questionId).addClass('active');
-    		jQuery('#harava-question-tool_' + moduleId + '_' + questionId).css({
-    			"background-color": "#A3D4C7"
-    		});
-    		me._currentStepAndQuestion = '';
+    		jQuery('#harava-question-tool_' + moduleId + '_' + questionId).addClass('selected');
+    		me.plugin.activateControl(moduleId, questionId);
     	}
     	
-    	if(module!=null){
-    		var question = me.getQuestionById(questionId, module.questions);
-    		if(question!=null){
-    			me._currentStepAndQuestion = moduleId + '_' +questionId;
-    		}
-    	}
+    	me._currentModule = moduleId;
     },
     /**
      * @method getModuleById
      * Get module by id
      * @param {String} moduleId
-     * @returns founded module if exists. If not return null.
+     * @return {Object} founded module if exists. If not return null.
      */
     "getModuleById" : function(moduleId){
     	var me = this;
@@ -297,8 +312,8 @@ function() {
      * @method getQuestionById
      * Get question by id
      * @param {String} questionId
-     * @param {Array} questions
-     * @returns founded question if exists. If not return null.
+     * @param {String[]} questions
+     * @return {Object} founded question if exists. If not return null.
      */
     "getQuestionById" : function(questionId, questions){
     	var me = this;
@@ -328,6 +343,21 @@ function() {
     	me.plugin.hideSelectedFeature(notCloseTools);
     },
     /**
+     * @method changeToolVisibility
+     * @param {String} moduleId
+     * @param {String} question id
+     * @param {Boolean} enabled
+     */
+    "changeToolVisibility": function(moduleId,questionId,enabled){
+    	if(enabled===true){
+    		jQuery('#harava-question-tool_'+moduleId+'_'+questionId).removeClass('disabled');
+    		jQuery('#harava-question-tool_'+moduleId+'_'+questionId).prev().removeClass('disabled');
+    	} else{
+    		jQuery('#harava-question-tool_'+moduleId+'_'+questionId).addClass('disabled');
+    		jQuery('#harava-question-tool_'+moduleId+'_'+questionId).prev().addClass('disabled');
+    	}
+    },
+    /**
      * @method stop
      * BundleInstance protocol method
      */
@@ -341,7 +371,8 @@ function() {
         sandbox.removeRequestHandler('ShowQuestionStepRequest', this.requestHandlers['showQuestionStepRequest']);        
         sandbox.removeRequestHandler('ShowQuestionToolsRequest', this.requestHandlers['showQuestionToolsRequestHandler']);
         sandbox.removeRequestHandler('HideQuestionToolsRequest', this.requestHandlers['hideQuestionToolsRequestHandler']);
-        sandbox.removeRequestHandler('ToggleQuestionToolsRequest', this.requestHandlers['toggleQuestionToolsRequestHandler']);        
+        sandbox.removeRequestHandler('ToggleQuestionToolsRequest', this.requestHandlers['toggleQuestionToolsRequestHandler']);
+        sandbox.removeRequestHandler('VisibilityQuestionRequest', this.requestHandlers['visibilityQuestionToolsRequestHandler']);
         
         var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
 

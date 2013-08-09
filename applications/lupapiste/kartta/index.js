@@ -30,10 +30,26 @@ jQuery(document).ready(function() {
 					x.overrideMimeType("application/j-son;charset=UTF-8");
 				}
 			},
-			success : function(setup) {
-				appSetup = setup;
-				notifyCallback();
+			// For some braindead reason success and error callbacks won't
+			// work for downloadAppSetup, even though they worked for downloadConfig.
+			complete: function(xhr, status) {
+				if (status === 'error' || !xhr.responseText) {
+					console.log("error ", xhr);
+				} else {
+					appSetup = xhr.responseText;
+					appSetup = JSON.parse(appSetup);
+				}
 			}
+			// success : function(appSetup) {
+			// 	console.log("appsetup");
+			// 	appSetup = appSetup;
+			// 	notifyCallback();
+			// },
+			// error : function(jqXHR, textStatus, errorThrown) {
+			// 	console.log("jqXHR ", jqXHR);
+			// 	console.log("textStatus ", textStatus);
+			// 	console.log("errorThrown ", errorThrown);
+			// }
 		});
 	};
 
@@ -45,7 +61,6 @@ jQuery(document).ready(function() {
 			app.setApplicationSetup(appSetup);
 			app.setConfiguration(appConfig);
 			app.startApplication(function(startupInfos) {
-
 			});
 		}
 	};
