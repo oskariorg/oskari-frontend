@@ -7,6 +7,13 @@
  */
 Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ShowQuestionStepRequest', 
 
+/**
+ * @method create called automatically on construction
+ * @static
+ *
+ * @param {Boolean}
+ *            moduleId showed question module id
+ */
 function(moduleId) {
 	this._moduleId = moduleId;
 }, {

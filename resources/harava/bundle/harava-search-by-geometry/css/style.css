@@ -1,56 +1,84 @@
+@CHARSET "UTF-8";
+
+.search-by-geometry{    
+    
+}
+
+.searchbygeom-tool{
+    width: 32px;
+    height: 32px;
+    float:left;
+    margin: 2px;
+    cursor: pointer;
+}
 
 
-#searchbygeom {
-  position: absolute;
-  z-index: 1000;
-  top: 5px;
-  left: 5px; }
 
-.searchbygeom-tool {
-  width: 32px;
-  height: 32px;
-  float: left;
-  margin: 2px; }
+.searchbygeom-tool.active{
+	background-color: #939393;
+}
 
-.searchbygeom-point {
-  background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/selectPoint.png') no-repeat;
-  background-position: center center; }
+.searchbygeom-tool:hover{
+    background-color: #939393;
+}
 
-.searchbygeom-point.active {
-  background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/selectPoint_active.png') no-repeat !important; }
+.searchbygeom-pan{
+    background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/hand.png') no-repeat;
+    background-position: center center;
+    background-color: #A7A7A7;   
+}
 
-.searchbygeom-mapextent {
-  background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/selectMapExtent.png') no-repeat;
-  background-position: center center; }
+.searchbygeom-home{
+    background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/home.png') no-repeat;
+    background-position: center center;
+    background-color: #A7A7A7;
+}
 
-.searchbygeom-mapextent.active {
-  background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/selectMapExtent_active.png') no-repeat !important; }
+.searchbygeom-point{
+    background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/point.png') no-repeat;
+    background-position: center center;
+    background-color: #A7A7A7;
+}
 
-.searchbygeom-line {
-  background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/selectLine.png') no-repeat;
-  background-position: center center; }
+.searchbygeom-mapextent{
+    background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/eye.png') no-repeat;
+    background-position: center center;
+    background-color: #A7A7A7;
+}
 
-.searchbygeom-line.active {
-  background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/selectLine_active.png') no-repeat !important; }
+.searchbygeom-regular-polygon{
+    background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/square.png') no-repeat;
+    background-position: center center;
+    background-color: #A7A7A7;
+}
 
-.searchbygeom-regular-polygon {
-  background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/selectRegularPolygon.png') no-repeat;
-  background-position: center center; }
+.searchbygeom-polygon{
+    background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/multipolygon.png') no-repeat;
+    background-position: center center;
+    background-color: #A7A7A7;
+}
 
-.searchbygeom-regular-polygon.active {
-  background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/selectRegularPolygon_active.png') no-repeat !important; }
+.searchbygeom-searchindicator{
+	cursor: default;
+	float:left;
+    height: 32px;
+    margin: 2px;
+    width: 32px;
+    background-color: transparent;
+}
 
-.searchbygeom-polygon {
-  background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/selectPolygon.png') no-repeat;
-  background-position: center center; }
+.searchbygeom-searchindicator.show{
+    background: url("/Oskari/resources/harava/bundle/harava-search-by-geometry/images/ajax-loader.gif") no-repeat;
+    background-color: #A7A7A7;
+    background-position: center center; 
+}
 
-.searchbygeom-polygon.active {
-  background: url('/Oskari/resources/harava/bundle/harava-search-by-geometry/images/selectPolygon_active.png') no-repeat !important; }
+.searchbygeom-link{
+	cursor: pointer;
+	color: #000000;
+	text-decoration: underline;
+}
 
-.searchbygeom-link {
-  cursor: pointer;
-  color: #000000;
-  text-decoration: underline; }
-
-.searchbygeom-link:hover {
-  color: #aaaaaa; }
+.searchbygeom-link:hover{
+    color: #aaaaaa;
+}

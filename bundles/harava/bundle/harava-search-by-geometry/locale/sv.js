@@ -12,7 +12,9 @@ Oskari.registerLocalization({
 				"searchByPolygon": "?",
 				"searchByMapExtent": "?",
 				"searchNotFound": "?",
-				"searchNotFoundOkButton": "?"
+				"searchNotFoundOkButton": "?",
+				"panMap": "?",
+				"homeMap": "?"
 			}
 		}
 	}

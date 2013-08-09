@@ -156,7 +156,7 @@ function(config) {
         jQuery(me.__parent).append(me.__elements['zoombarSlider']);
 
        	var sliderEl = me.__elements['zoombarSlider'].find('div.slider');
-       	sliderEl.css("height",(this._map.getNumZoomLevels()*11)+"px")
+       	sliderEl.css("height",(this._map.getNumZoomLevels()*11)+"px");
        	me._slider = sliderEl.slider({
             orientation: "vertical",
             range: "min",
