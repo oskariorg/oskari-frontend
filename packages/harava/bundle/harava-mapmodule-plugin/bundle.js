@@ -51,12 +51,16 @@ function() {
             "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/plugin/getinfo/HaravaGetInfoPlugin.js"
         },
         {
-            "type" : "text/javascript",
-            "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/plugin/wmslayer/HaravaWMSLayerPlugin.js"
-        },
-        {
 		    "type" : "text/css",
 		    "src" : "../../../../resources/harava/bundle/harava-mapmodule-plugin/css/style.css"	  
+		},
+		{
+			"type" : "text/javascript",
+            "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/plugin/attribution/AttributionPlugin.js"	  
+		},
+		{
+		    "type" : "text/css",
+		    "src" : "../../../../resources/harava/bundle/harava-mapmodule-plugin/css/attribution.css"	  
 		},
         /*
          * Requests and handlers
@@ -76,6 +80,14 @@ function() {
         {
             "type" : "text/javascript",
             "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/request/AddControlToMapRequestHandler.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/request/ZoomToExtentRequest.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/harava/bundle/harava-mapmodule-plugin/request/ZoomToExtentRequestHandler.js"
         }
         ]
     },
