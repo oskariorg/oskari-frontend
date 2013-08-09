@@ -461,7 +461,6 @@ define([
             if (layerClass) {
                 params += "&layerclass_id=" + layerClass.replace('base_', '');
             }
-            debugger;
 
             var url = baseUrl + action_route + params;
             console.log(url);
