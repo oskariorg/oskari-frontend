@@ -6,6 +6,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
 /**
  * @method create called automatically on construction
  * @static
+ * @param {Object} locale array
  */
 function(locale) {
     this.mapModule = null;
@@ -35,7 +36,16 @@ function(locale) {
                 strokeOpacity: 0.4,
                 strokeWidth: 3
         })
-    });
+    });    
+    this.templateSearchByGeom = jQuery('<div class="search-by-geometry"></div>');
+    this.templateSearchByGeomHomeTool = jQuery('<div id="searchbygeom-home" class="searchbygeom-tool searchbygeom-home"></div>');
+    this.templateSearchByGeomPanTool = jQuery('<div id="searchbygeom-pan" class="searchbygeom-tool searchbygeom-pan"></div>');
+    this.templateSearchByGeomPointTool = jQuery('<div id="searchbygeom-point" class="searchbygeom-tool searchbygeom-point"></div>');
+    this.templateSearchByGeomMapExtentTool = jQuery('<div id="searchbygeom-mapextent" class="searchbygeom-tool searchbygeom-mapextent"></div>');
+    this.templateSearchByGeomRegularPolygonTool = jQuery('<div id="searchbygeom-regular-polygon" class="searchbygeom-tool searchbygeom-regular-polygon"></div>');
+    this.templateSearchByGeomPolygonTool = jQuery('<div id="searchbygeom-polygon" class="searchbygeom-tool searchbygeom-polygon"></div>');
+    this.templateSearchByGeomSearchIndicator = jQuery('<div id="searchbygeom-searchindicator" class="searchbygeom-searchindicator"></div>');
+    this.templateSearchByGeomEmpty = jQuery('<div style="clear:both;"></div>');
 }, {
     /** @static @property __name plugin name */
     __name : 'HaravaDrawSearchGeometryPlugin',
@@ -77,6 +87,22 @@ function(locale) {
         return true;
     },
     /**
+     * Toggle plugin visibility
+     * @param visible
+     */
+    toggleVisibility: function(visible){
+    	var me = this;
+    	if(visible){
+    		jQuery('#searchbygeom').show();
+    	}
+    	else{
+    		jQuery('#searchbygeom').hide();
+    		jQuery('#searchbygeom-pan').trigger('click');
+    		me.removeAllDrawings();
+    		me._closeGfiInfo();
+    	}
+    },
+    /**
      * @method init
      *
      * Interface method for the module protocol
@@ -111,21 +137,41 @@ function(locale) {
             regularPolygon: new OpenLayers.Control.DrawFeature(me._searchLayer,
                                 OpenLayers.Handler.RegularPolygon),
             polygon: new OpenLayers.Control.DrawFeature(me._searchLayer,
-                        OpenLayers.Handler.Polygon),
+                        OpenLayers.Handler.Polygon)
         };
     	
     	this.searchControls.regularPolygon.handler.setOptions({irregular: true});
     	
-    	jQuery('#searchbygeom').append('<div class="search-by-geometry">'
-    			+ '<div id="searchbygeom-point" class="searchbygeom-tool searchbygeom-point" title="'+this._locale.tooltips.searchByPoint+'"></div>'
-    			//+ '<div id="searchbygeom-line" class="searchbygeom-tool searchbygeom-line" title="'+this._locale.tooltips.searchByLine+'"></div>'
-    			+ '<div id="searchbygeom-mapextent" class="searchbygeom-tool searchbygeom-mapextent" title="'+this._locale.tooltips.searchByMapExtent+'"></div>'
-    			+ '<div id="searchbygeom-regular-polygon" class="searchbygeom-tool searchbygeom-regular-polygon" title="'+this._locale.tooltips.searchByRegularPolygon+'"></div>'
-    			+ '<div id="searchbygeom-polygon" class="searchbygeom-tool searchbygeom-polygon" title="'+this._locale.tooltips.searchByPolygon+'"></div></div>');    	
+    	var searchContainer = me.templateSearchByGeom.clone();
+    	var searchHomeContainer = me.templateSearchByGeomHomeTool.clone();
+    	searchHomeContainer.attr('title',this._locale.tooltips.homeMap);    	
+    	var searchPanContainer = me.templateSearchByGeomPanTool.clone();
+    	searchPanContainer.attr('title',this._locale.tooltips.panMap);    	
+    	var searchPointContainer = me.templateSearchByGeomPointTool.clone();
+    	searchPointContainer.attr('title',this._locale.tooltips.searchByPoint);    		
+    	var searchMapExtentContainer = me.templateSearchByGeomMapExtentTool.clone();
+    	searchMapExtentContainer.attr('title',this._locale.tooltips.searchByMapExtent);    	
+    	var searchRegularPolygonContainer = me.templateSearchByGeomRegularPolygonTool.clone();
+    	searchRegularPolygonContainer.attr('title',this._locale.tooltips.searchByRegularPolygon);    	
+    	var searchPolygonContainer = me.templateSearchByGeomPolygonTool.clone();
+    	searchPolygonContainer.attr('title',this._locale.tooltips.searchByPolygon);    	
+    	
+    	var searchIndicator = me.templateSearchByGeomSearchIndicator.clone();
+    	var searchEmptyContainer = me.templateSearchByGeomEmpty.clone();
+    	
+    	jQuery('#searchbygeom').append(searchContainer);
+    	jQuery(searchContainer).append(searchIndicator);
+    	jQuery(searchContainer).append(searchHomeContainer);
+    	jQuery(searchContainer).append(searchPanContainer);
+    	jQuery(searchContainer).append(searchPointContainer);
+    	jQuery(searchContainer).append(searchMapExtentContainer);    	
+    	jQuery(searchContainer).append(searchPolygonContainer);
+    	jQuery(searchContainer).append(searchRegularPolygonContainer);    	
+    	jQuery(searchContainer).append(searchEmptyContainer);
     	
     	jQuery('.searchbygeom-tool').live('click', function(){
     		var id = this.id;
-    		if(id!='searchbygeom-mapextent'){
+    		if(id!='searchbygeom-mapextent' && id!='searchbygeom-home'){
     			jQuery('.searchbygeom-tool').removeClass('active');
     			jQuery(this).addClass('active');
     		}
@@ -146,15 +192,31 @@ function(locale) {
 			    	},200);
 			    	
     				break;
-    			/*case 'searchbygeom-line':
+    			case 'searchbygeom-line':
     				me.toggleControl('line'); 
-    				break;*/
+    				break;
     			case 'searchbygeom-polygon':
     				me.toggleControl('polygon'); 
     				break;
     			case 'searchbygeom-regular-polygon':
     				me.toggleControl('regularPolygon');
     				break;
+    			case 'searchbygeom-pan':
+    				me.toggleControl('pan');
+    				break;
+    			case 'searchbygeom-home':
+    				var mapExtent = me._map.getExtent();
+    	        	var mapExtentPolygon = 'POLYGON(('+mapExtent.left+' ' +mapExtent.top + ','+mapExtent.right+' ' +mapExtent.top + ','+mapExtent.right+' ' +mapExtent.bottom + ','+mapExtent.left+' ' +mapExtent.bottom + ','+mapExtent.left+' ' +mapExtent.top + '))';
+    	        	me._handleSearchByGeom(mapExtentPolygon,'returnToHome');
+    	        	me._closeGfiInfo();
+			    	me.removeAllDrawings();
+			    	jQuery('#searchbygeom-home').addClass('active');
+			    	window.setTimeout(function(){
+			    		jQuery('#searchbygeom-home').removeClass('active');
+			    	},200);
+			    	
+			    	// Do default tool selection
+			    	jQuery('#searchbygeom-pan').trigger('click');
     		}
     	});
     	
@@ -164,7 +226,7 @@ function(locale) {
         }
     	
     	// Do default tool selection
-    	$('#searchbygeom-point').trigger('click');
+    	jQuery('#searchbygeom-pan').trigger('click');
     },
     /**
      * @method _handleSearchByGeom
@@ -196,7 +258,7 @@ function(locale) {
         	me._sandbox.printDebug("[GetInfoPlugin] NO layers with featureInfoEnabled, in scale and visible");
         	return;
         }
-        
+        $('#searchbygeom-searchindicator').addClass('show');
         me._startAjaxRequest(dteMs);
 		
         var ajaxUrl = this._sandbox.getAjaxUrl(); 
@@ -216,164 +278,17 @@ function(locale) {
                 }
             },
             success : function(resp) {
-            	var mapWidth = mapVO.getWidth();
-            	var showAll = false;
-            	if(mapWidth>500)
-            	{
-            		showAll = true;
-            	}
-            	
-            	var data1 = resp.data1;
-            	var data2 = resp.data2;
-            	var data3 = resp.data3;
             	var funcs = resp.funcs;
             	
-            	var html = '';
+            	var html = resp.html;
             	
-            	var data1Name = null;
-            	var data1Id = null;
-            	var data1Html = "";
-            	
-            	if(data1.length>0){
-            		if(showAll){
-            			data1Html += '<table class="harava-gfi-table gfi-full"><tr><td colspan="8" class="harava-gfi-header">'+resp.data1Lang+'</td></tr>';
-            			data1Html += resp.data1Header;
-            		}
-            		else{
-            			data1Html += '<table class="harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.data1Lang+'</td></tr>';
-            		}
-            	}
-            	jQuery.each(data1, function(k, data){
-            		if(!showAll){           			
-            			data1Html += data.html2;
-            			data1Name = data.layerName;
-            			data1Id = data.layerId;
-					} else {
-						data1Html += data.html;
-						data1Name = data.layerName;
-						data1Id = data.layerId;
-					}
-            	});
-            	if(data1.length>0){
-            		data1Html += '</table>';
-            	}
-            	
-            	var data2Name = null;
-            	var data2Id = null;
-            	var data2Html = "";
-            	if(data2.length>0){
-            		if(showAll){
-            			data2Html += '<table class="harava-gfi-table gfi-full"><tr><td colspan="7" class="harava-gfi-header">'+resp.data2Lang+'</td></tr>';
-            			data2Html += resp.data2Header;
-            		}
-            		else{
-            			data2Html += '<table class="harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.data2Lang+'</td></tr>';
-            		}
-            	}
-            	jQuery.each(data2, function(k, data){            		
-					if(!showAll){
-						data2Html += data.html2;
-						data2Name = data.layerName;
-						data2Id = data.layerId;
-					} else {
-						data2Html += data.html;
-						data2Name = data.layerName;
-						data2Id = data.layerId;
-					}
-				});
-            	if(data2.length>0){
-            		data2Html += '</table>';
-            	}
-            	
-            	var data3Name = null;
-            	var data3Id = null;
-            	var data3Html = "";
-            	if(data3.length>0){
-            		if(showAll){
-            			data3Html += '<table class="harava-gfi-table gfi-full"><tr><td colspan="7" class="harava-gfi-header">'+resp.data3Lang+'</td></tr>';
-            			data3Html += resp.data3Header;
-            		}
-            		else{
-            			data3Html += '<table class="harava-gfi-table"><tr><td colspan="4" class="harava-gfi-header">'+resp.data3Lang+'</td></tr>';
-            		}
-            	}
-            	jQuery.each(data3, function(k, data){
-            		if(data3Id==null){
-            			data3Id = data.layerId;
-        			}
-					if(!showAll){
-						data3Html += data.html2;
-						data3Name = data.layerName;
-						data3Id = data.layerId;
-					} else {
-						data3Html += data.html;
-						data3Name = data.layerName;
-						data3Id = data.layerId;
-					}
-				});            	
-            	if(data3.length>0){
-            		data3Html += '</table>';
-            	}
+            	me._finishAjaxRequest();
             	
             	jQuery.each(funcs, function(k, func){
             		eval(func);
             	});
             	
-            	
-            	/* Resolve showing order */
-            	if(resp.first == 'data3'){
-            		if(data3Name!=null && data3Id!=null){
-                		html += data3Html;
-                	}
-            		
-            		if(data1Name!=null && data1Id!=null){
-            			html += data1Html;
-                	}
-                	
-                	if(data2Name!=null && data2Id!=null){
-                		html += data2Html;
-                	}
-            	}
-            	else if(resp.first == 'data2'){
-            		if(data2Name!=null && data2Id!=null){
-            			html += data2Html;
-                	}
-            		
-            		if(data1Name!=null && data1Id!=null){
-            			html += data1Html;
-                	}               	
-                	
-                	if(data3Name!=null && data3Id!=null){
-                		html += data3Html;
-                	}
-            	}
-            	else if(resp.first == 'data1'){
-            		if(data1Name!=null && data1Id!=null){
-            			html += data1Html;
-                	}
-                	
-                	if(data2Name!=null && data2Id!=null){
-                		html += data2Html;
-                	}
-                	
-                	if(data3Name!=null && data3Id!=null){
-                		html += data3Html;
-                	}
-            	} else {
-            		if(data1Name!=null && data1Id!=null){
-            			html += data1Html;
-                	}
-                	
-                	if(data2Name!=null && data2Id!=null){
-                		html += data2Html;
-                	}
-                	
-                	if(data3Name!=null && data3Id!=null){
-                		html += data3Html;
-                	}
-            	}
-            	
-				if(html!=''){
+				if(html!=null && html!=''){
 					var lonlat = new OpenLayers.LonLat(resp.center.lon, resp.center.lat);
 					var parsed = {html: html, title: "Tiedot"};
 					parsed.lonlat = lonlat;
@@ -382,21 +297,22 @@ function(locale) {
 				} else {
 			    	me._closeGfiInfo();
 			    	me.removeAllDrawings();
-			    	
-			    	if(Message!=null && typeof Message.createMessage === "function" 
-			    		&& typeof Message.showMessage === "function" 
-			    			&& typeof Message.closeMessage === "function"){
-			    		Message.createMessage(me._locale.tooltips.searchNotFound,me._locale.tooltips.searchNotFoundOkButton);
-			    		Message.showMessage();
-			    		$("#aMessage").click(function(){
-			    			Message.closeMessage();
-			    			return false;
-			    		});
-			    	} else {
-			    		alert(me._locale.tooltips.searchNotFound);
+			    	if(resp.funcs==null || resp.funcs.length==0 || resp.funcs=='' ){
+				    	if(Message!=null && typeof Message.createMessage === "function" 
+				    		&& typeof Message.showMessage === "function" 
+				    			&& typeof Message.closeMessage === "function"){
+				    		Message.createMessage(me._locale.tooltips.searchNotFound,me._locale.tooltips.searchNotFoundOkButton);
+				    		Message.showMessage();
+				    		$("#aMessage").click(function(){
+				    			Message.closeMessage();
+				    			return false;
+				    		});
+				    	} else {
+				    		alert(me._locale.tooltips.searchNotFound);
+				    	}
 			    	}
 				}
-            	me._finishAjaxRequest();
+            	
             },
             error : function() {
             	me._finishAjaxRequest();
@@ -463,6 +379,7 @@ function(locale) {
     	var me = this;
     	me._pendingAjaxQuery.busy = false;
         me._pendingAjaxQuery.jqhr = null;
+        $('#searchbygeom-searchindicator').removeClass('show');
         this._sandbox.printDebug("[HaravaDrawSearchGeometryPlugin] finished jqhr ajax request");
     },
     /**
@@ -479,7 +396,7 @@ function(locale) {
  		var mapScale = me._sandbox.getMap().getScale();
         
         for (var i = 0; i < selected.length; i++) {
-        	var layer = selected[i]
+        	var layer = selected[i];
 
         	if( !layer.isInScale(mapScale) ) {
 				continue;
@@ -565,7 +482,7 @@ function(locale) {
         content.html = data.html;
         var rn = "HaravaInfoBox.ShowInfoBoxRequest";
         var rb = me._sandbox.getRequestBuilder(rn);
-        var r = rb(data.popupid, "Info", [content], data.lonlat, true);
+        var r = rb(data.popupid, "Info", [content], data.lonlat, true,null,null,true);
         me._sandbox.request(me, r);
     },
     /**
@@ -577,7 +494,23 @@ function(locale) {
     	var me = this;
     	me._closeGfiInfo();
     	me.removeAllDrawings();
-    	me.toggleControl(searchMode);    	
+    	switch(searchMode){
+			case 'point':
+				jQuery('#searchbygeom-point').trigger('click');
+				break;
+			case 'mapextent':
+				jQuery('#searchbygeom-mapextent').trigger('click');
+				break;
+			case 'polygon':
+				jQuery('#searchbygeom-polygon').trigger('click'); 
+				break;
+			case 'regularPolygon':
+				jQuery('#searchbygeom-regular-polygon').trigger('click');
+				break;
+			case 'pan':
+				jQuery('#searchbygeom-pan').trigger('click');
+				break;
+		}
     },
     /**
      * Enables the given search control
