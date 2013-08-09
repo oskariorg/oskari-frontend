@@ -58,17 +58,28 @@ function() {
     	var sandbox = Oskari.$("sandbox");
         me.sandbox = sandbox;
         
+        var conf = me.conf;
+        
+        sandbox.register(me);
+        var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+        plugin = Oskari.clazz.create('Oskari.harava.bundle.mapmodule.plugin.AttributionPlugin', conf);
+        mapModule.registerPlugin(plugin);
+        mapModule.startPlugin(plugin);
+        this.plugin = plugin;
+        
         sandbox.register(me);
     	
     	// request
     	var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
     	this.requestHandlers = {
     			updateMapRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.UpdateMapRequestHandler', sandbox, mapModule),
-    			addControlToMapRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.AddControlToMapRequestHandler', sandbox, mapModule)
+    			addControlToMapRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.AddControlToMapRequestHandler', sandbox, mapModule),
+    			zoomToExtentRequest : Oskari.clazz.create('Oskari.harava.bundle.mapmodule.request.ZoomToExtentRequestHandler', sandbox, mapModule)
     	};
-
         sandbox.addRequestHandler('UpdateMapRequest', this.requestHandlers.updateMapRequest);
         sandbox.addRequestHandler('AddControlToMapRequest', this.requestHandlers.addControlToMapRequest);
+        sandbox.addRequestHandler('ZoomToExtentRequest', this.requestHandlers.zoomToExtentRequest);
+        
     },
 
     /**
@@ -85,6 +96,7 @@ function() {
         // request handler cleanup 
         sandbox.removeRequestHandler('UpdateMapRequest', this.requestHandlers['updateMapRequest']);
         sandbox.removeRequestHandler('AddControlToMapRequest', this.requestHandlers['addControlToMapRequest']);
+        sandbox.removeRequestHandler('ZoomToExtentRequest', this.requestHandlers['zoomToExtentRequest']);
 
         var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
 
