@@ -206,10 +206,6 @@ function(instance, localization) {
         var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
         panel.setTitle(this.loc.method.label);
         var contentPanel = panel.getContainer();
-        // tooltip
-        var tooltipCont = this.template.help.clone();
-        tooltipCont.attr('title', this.loc.method.tooltip);
-        contentPanel.append(tooltipCont);
         // content
         var closureMagic = function(tool) {
             return function() {
@@ -242,6 +238,10 @@ function(instance, localization) {
             if (option.selected) {
                 toolContainer.find('input').attr('checked', 'checked');
             }
+            var tooltipCont = this.template.help.clone();
+            tooltipCont.attr('title', option.tooltip);
+            toolContainer.append(tooltipCont);
+
             contentPanel.append(toolContainer);
             toolContainer.find('input').attr({
                 'value' : option.id,
@@ -895,7 +895,7 @@ function(instance, localization) {
     _modifyAnalyseData : function(contentPanel) {
         var me = this;
         // Open layerselector
-        me.instance.setAnalyseMode(false);
+        //me.instance.setAnalyseMode(false);
         var name = 'LayerSelector';
         var extension = me._getFakeExtension(name);
         var rn = 'userinterface.UpdateExtensionRequest';

@@ -19,19 +19,23 @@ Oskari.registerLocalization({
                         "id": "oskari_analyse_buffer",
                         "label": "zon",
                         "classForMethod": "buffer",
-                        "selected": true
+                        "selected": true,
+                        "tooltip": ""
                     }, {
                         "id": "oskari_analyse_aggregate",
                         "label": "Sammandrag",
-                        "classForPreview": "aggregate"
+                        "classForPreview": "aggregate",
+                        "tooltip": ""
                     }, {
                         "id": "oskari_analyse_union",
                         "label": "Union",
-                        "classForPreview": "union"
+                        "classForPreview": "union",
+                        "tooltip": ""
                     }, {
                         "id": "oskari_analyse_intersect",
                         "label": "Sektion",
-                        "classForPreview": "intersect"
+                        "classForPreview": "intersect",
+                        "tooltip": ""
                     }
                 ]
             },
