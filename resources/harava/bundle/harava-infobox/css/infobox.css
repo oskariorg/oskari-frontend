@@ -1,85 +1,74 @@
 div.popupHeader {
-    background-color: #228CA5;
-    color: #FFFFFF;
-    display: inline-block;
-    float: left;
-    height: 40px;
-    left: 0;
-    margin: 0;
-    padding: 0;
-    position: relative;
-}
-
+  background-color: #A59B78;
+  border-radius: 6px 6px 0 0;
+  color: #FFFFFF;
+  display: inline-block;
+  float: left;
+  height: 40px;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  position: relative; }
 
 div.popupHeader div {
-    padding-left: 8px;
-    padding-top: 9px;
-    vertical-align: top;
-}
+  padding-left: 8px;
+  padding-top: 9px;
+  vertical-align: top; }
 
 div.popupHeaderArrow {
-	width: 0;
-	height: 0;	
-	border-top: 10px solid transparent;
-	border-bottom: 10px solid transparent;
-	border-right:10px solid #228CA5;	
-	display: inline-block;
-	float: left;
-	margin-top:10px;
-}
-
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid #A59B78;
+  display: inline-block;
+  float: left;
+  margin-top: 10px; }
 
 div.popupContent {
-	clear: both;
-	margin-left: 10px;
-	background-color:#FFFFFF;
-	position:relative;
-	left: 0px;
-	top: -5px;
-	height: 200px;
-	border: 1px solid;
-	border-color:#FFFFFF;
-	overflow: auto;	
-	padding: 8px 8px 8px 8px;
-}
+  clear: both;
+  margin-left: 10px;
+  background-color: #FFFFFF;
+  position: relative;
+  left: 0px;
+  top: -5px;
+  height: 200px;
+  border-radius: 0px 0px 6px 6px;
+  border: 1px solid;
+  border-color: #A59B78;
+  overflow: auto;
+  padding: 8px 8px 8px 8px; }
 
 div.olPopup {
-	margin: 0;
-	padding: 0;
-	background-color: #ffffff;
-		
-}
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff; }
+
 div.olPopupContent {
-    overflow: visible;
-    padding: 0px;
-    margin: 0px;
-    left:0px;
-    top:0px;
-    
-}
+  overflow: visible;
+  padding: 0px;
+  margin: 0px;
+  left: 0px;
+  top: 0px; }
 
 div.popupContent hr.infoboxLine {
-	border: 1px solid;
-	width: 90%;
-	margin-top: 10px;
-}
+  border: 1px solid;
+  width: 90%;
+  margin-top: 10px; }
 
 div.popupContent span.infoboxActionLinks {
-	padding-right: 15px;
-	padding-left: 15px;
-} 
-
+  padding-right: 15px;
+  padding-left: 15px; }
 
 .olPopupCloseBox {
-	cursor: pointer;
-    background-attachment: scroll;
-    background-clip: border-box;
-    background-color: transparent;
-    background-origin: padding-box;
-    background-position: -368px 0px;
-    background-repeat: repeat;
-    background-size: auto auto;
-    right: 0px;
-    position: absolute;
-    top: 14px;
-}
+  cursor: pointer;
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-color: transparent;
+  background-origin: padding-box;
+  background-position: -368px 0px;
+  background-repeat: repeat;
+  background-size: auto auto;
+  right: 0px;
+  position: absolute;
+  top: 14px; }

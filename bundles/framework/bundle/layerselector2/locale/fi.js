@@ -9,13 +9,15 @@ Oskari.registerLocalization({
             "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin.",
             "loadFailed" : "Karttatasojen latauksessa tapahtui virhe. Lataa sivu selaimeesi uudelleen ja valitse karttatasot.",
             "noResults": "Haulla ei löytynyt yhtään tulosta.",
+            "noResultsForKeyword": "Karttatasoja ei löydy tällä avainsanalla.",
             "minChars" : "Kirjoita ainakin 4 merkkiä."
         },
         "loading" : "Ladataan...",
         "filter" : {
             "text" : "Hae karttatasoja",
+            "keywordsTitle": "Avainsanat:",
             "shortDescription" : "Hae karttasoa nimeen, tiedontuottajaan ja avainsanaan perustuen.",
-            "description" : "Voit hakea karttatasoja kirjoittamalla osan karttatason tai tiedontuottajan nimestä. Lisäksi voit hakea karttatasoja hakusanan synonyymejä ja muita avainsanoja käyttäen. Avainsanahaku onnistuu kirjoittamalla vähintään 4 merkkiä ja painamalla enter-näppäintä.",
+            "description" : "Voit hakea karttatasoja kirjoittamalla osan karttatason tai tiedontuottajan nimestä. Kirjoittamalla vähintään 4 merkkiä ja painamalla enter-näppäintä voit hakea myös karttatasoihin liittyviä avainsanoja. Ehdotetuista avainsanoista voit valita uuden hakusanan. Lukema avainsanan perässä kertoo, kuinka moneen karttatasoon sana on liitetty.",
             "inspire" : "Aiheittain",
             "organization" : "Tiedontuottajittain",
             "published" : "Käyttäjät"

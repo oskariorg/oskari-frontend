@@ -71,8 +71,14 @@ div.layerselector2 div.tab-content div.oskarifield {
     -moz-box-shadow: 2px 2px 6px rgba(0,0,0,.4);
     box-shadow: 2px 2px 6px rgba(0,0,0,.4);
     overflow: hidden;
-    padding: 3px 5px;
-
+    .keywords-title {
+        box-sizing: border-box;
+        height: 30px;
+        line-height: 30px;
+        padding: 0 10px;
+        color: black;
+        font-weight: bold;
+    }
     .keyword-cont{
         box-sizing: border-box;
         height: 30px;
@@ -104,7 +110,7 @@ div.layerselector2 div.tab-content div.oskarifield {
         color: white;
     }
     .keyword-cont:hover {
-        background-color: #bdbdbd;
+        background-color: #4E4E4E;
         color: white;
     }
   }
