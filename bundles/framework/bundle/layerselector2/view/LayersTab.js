@@ -118,14 +118,16 @@ function(instance, title) {
         field.addClearButton();
 
         field.bindChange(function(event) {
+            event.stopPropagation(); // JUST BECAUSE TEST ENVIRONMENT FAILS
             // up = 38, down= 40, enter= 13
             if( event.which && 
                 event.which != 38 &&
                 event.which != 40 &&
                 event.which != 13) {
-                        me.filterLayers(field.getValue());
-            //if user types more characters we need to hide the related keywords popup
-            me.clearRelatedKeywordsPopup(field.getValue(), jQuery(event.currentTarget).parents('.oskarifield'));
+                
+                me.filterLayers(field.getValue());
+                //if user types more characters we need to hide the related keywords popup
+                me.clearRelatedKeywordsPopup(field.getValue(), jQuery(event.currentTarget).parents('.oskarifield'));
             }
         }, true);
 
@@ -384,6 +386,7 @@ function(instance, title) {
 
         // select one word below current one;
         me.filterField.bindDownKey(function(event) {
+            event.stopPropagation();
             var suggestions = relatedKeywordsCont.find('.keyword-cont');
             var moved = false;
             for (var i = 0; i < suggestions.length; i++) {
@@ -409,6 +412,7 @@ function(instance, title) {
 
         // select one word below current one
         me.filterField.bindUpKey(function(event) {
+            event.stopPropagation();
             var suggestions = relatedKeywordsCont.find('.keyword-cont');
             var moved = false;
 
