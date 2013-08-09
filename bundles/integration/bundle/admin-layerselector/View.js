@@ -47,6 +47,8 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             this._previousLayerUpdateTimer = setTimeout(function() {
                 me._layerUpdateHandler();
             }, interval);
+
+            jQuery("body").css({cursor: "auto"});
         }
     },
     /**

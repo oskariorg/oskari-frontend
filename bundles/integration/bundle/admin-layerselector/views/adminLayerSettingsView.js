@@ -454,13 +454,14 @@ define([
                 "&sub_name_sv=" + addClass.find("#add-group-sv-name").val() +
                 "&sub_name_en=" + addClass.find("#add-group-en-name").val();
 
-            if (layerType === 'groupMap') {
+            if (layerType === 'groupMap' || ( me.model && me.model.isGroupLayer() )) {
                 params += "&group_map=" + true;
             }
 
             if (layerClass) {
                 params += "&layerclass_id=" + layerClass.replace('base_', '');
             }
+            debugger;
 
             var url = baseUrl + action_route + params;
             console.log(url);
@@ -472,6 +473,7 @@ define([
                     if(x && x.overrideMimeType) {
                         x.overrideMimeType("application/j-son;charset=UTF-8");
                     }
+                    jQuery("body").css({cursor: "wait"});
                 },
                 url : url,
                 success : function(resp) {
