@@ -235,4 +235,5 @@ div.renderdialog input.color-source {
   margin: 5px; }
 
 div.renderdialog input.linewidth {
+  width: 50px;
   margin-top: 5px; }
