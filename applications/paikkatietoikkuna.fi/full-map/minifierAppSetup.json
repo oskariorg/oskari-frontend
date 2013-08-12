@@ -443,6 +443,20 @@
                     }
                 }
             }
+        }, {
+        	"title": "Admin Layer Rights",
+        	"fi": "Tasojen Oikeuksienhallinta",
+        	"sv": "",
+        	"en": "",
+        	"bundlename": "admin-layerrights",
+        	"bundleinstancename": "admin-layerrights",
+        	"metadata": {
+        		"Import-Bundle": {
+        			"admin-layerrights": {
+        				"bundlePath": "../../../packages/framework/bundle/"
+        			}
+        		}
+        	}
         }
 	]
 }

@@ -1,10 +1,11 @@
 # CreateAnalysisLayer (POST)
-1. Receives parameter for WPS processing and for analysis db transactions
-2. Creates WPS execute request to GeoServer
-3. Proxy request WPS execute and transforms response results (FeatureCollection) to WFS-T
-4. Executes WFS-T (analysis geom data) through GeoServer to Analysis DB
-5. Stores other data (column mappings, styles) to Analysis db (iBatis)
-6. Responses results back to front
+1. Receives parameters for WPS processing and for analysis db transactions
+2. Receives query filter parameters and builds filter xml for WPS processing
+3. Refills WPS execute xml and post requests that to GeoServer wps service
+4. Proxy request WPS execute and transforms response results (FeatureCollection) to WFS-T
+5. Executes WFS-T (analysis geom data) through GeoServer to Analysis DB
+6. Stores other data (column mappings, styles) to Analysis db (iBatis)
+7. Responses results back to front (layeranalysis id)
 
 
 ## Parameters
