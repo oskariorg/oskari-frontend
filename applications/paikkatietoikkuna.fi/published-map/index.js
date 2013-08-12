@@ -82,7 +82,7 @@ jQuery(document).ready(function() {
             }
         },
         data : getAppSetupParams,
-        url : ajaxUrl + 'action_route=GetAppSetup&noSavedState=true',
+        url : ajaxUrl + 'viewId=' +viewId +'&action_route=GetAppSetup&noSavedState=true',
         success : function(app) {
             if (app.startupSequence && app.configuration) {
               var appSetup = {

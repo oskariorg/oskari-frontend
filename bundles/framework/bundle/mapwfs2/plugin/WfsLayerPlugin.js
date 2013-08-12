@@ -24,6 +24,10 @@ function(config) {
 
     this._mapClickData = { comet: false, ajax: false, wfs: [] };
 
+    this.errorTriggers = { 
+        "connection_not_available" : { limit: 1, count: 0 },
+        "connection_broken" : { limit: 1, count: 0 },
+    };
     /* templates */
     this.template = {};
     for (p in this.__templates ) {
@@ -265,6 +269,12 @@ function(config) {
             if(layer.isLayerOfType("WFS")) {
                 this.getIO().removeMapLayer(layer.getId());
                 this.removeMapLayerFromMap(layer);
+
+                // delete possible error triggers
+                delete this.errorTriggers["wfs_no_permissions_" + layer.getId()];
+                delete this.errorTriggers["wfs_configuring_layer_failed_" + layer.getId()];
+                delete this.errorTriggers["wfs_request_failed_" + layer.getId()];
+                delete this.errorTriggers["features_parsing_failed_" + layer.getId()];
             }
         },
 
@@ -408,6 +418,15 @@ function(config) {
     onEvent : function(event) {
         return this.eventHandlers[event.getName()].apply(this, [ event ]);
     },
+
+    /**
+     * @method clearConnectionErrorTriggers
+     */
+    clearConnectionErrorTriggers : function() {
+        this.errorTriggers["connection_not_available"] = { limit: 1, count: 0 };
+        this.errorTriggers["connection_broken"] = { limit: 1, count: 0 };
+    },
+
 
     /**
      * @method showInfoBox
@@ -890,6 +909,66 @@ function(config) {
             this.tileData[layer.getId()] = [];
         }
         this.tileData[layer.getId()].push({"bbox": bbox, "url": imageUrl});
+    },
+
+    /**
+     * @method getLocalization
+     * Convenience method to call from Tile and Flyout
+     * Returns JSON presentation of bundles localization data for 
+     * current language. If key-parameter is not given, returns 
+     * the whole localization data.
+     * 
+     * @param {String} key (optional) if given, returns the value for key
+     * @return {String/Object} returns single localization string or
+     *      JSON object for complete data depending on localization
+     *      structure and if parameter key is given
+     */
+    getLocalization : function(key) {
+        if(!this._localization) {
+            this._localization = Oskari.getLocalization("MapWfs2");
+        }
+        if(key) {
+            return this._localization[key];
+        }
+        return this._localization;
+    },
+
+    /*
+     * @method setTile
+     *
+     * @param {Oskari.mapframework.domain.WfsLayer} layer
+     *           WFS layer that we want to update
+     * @param {OpenLayers.Bounds} bbox
+     * @param imageUrl
+     */
+    showErrorPopup : function(message, layer, once) {
+        if(once == true) {
+            if(this.errorTriggers[message]) {
+                if(this.errorTriggers[message].count >= this.errorTriggers[message].limit) {
+                    return;
+                }
+                this.errorTriggers[message].count++;
+            } else {
+                if(this.errorTriggers[message + "_" + layer.getId()]) {
+                    return;
+                } else {
+                    this.errorTriggers[message + "_" + layer.getId()] = true;
+                }
+            }
+        }
+
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var popupLoc = this.getLocalization("error").title;
+        var content = this.getLocalization("error")[message]; 
+        if(layer) {
+            content = content.replace(/\{layer\}/, layer.getName());
+        }
+        var okBtn = dialog.createCloseButton( this.getLocalization().button.close);
+
+        okBtn.addClass('primary');
+        dialog.addClass('error_handling');
+        dialog.show(popupLoc, content, [okBtn]);
+        dialog.fadeout(5000);
     }
 
 }, {

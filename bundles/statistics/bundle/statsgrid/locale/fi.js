@@ -23,7 +23,8 @@ Oskari.registerLocalization({
 		"year" :         "Vuosi",
 		"buttons" : {
 			"ok" :     "OK",
-			"cancel" : "Peruuta"
+			"cancel" : "Peruuta",
+			"filter" : "Suodata"
 		},
 		"sotka" : {
 			"municipality" :           "Kunta",
@@ -75,11 +76,25 @@ Oskari.registerLocalization({
 			"std" : "Keskihajonta",
 			"sum" : "Yhteensä"
 		},
-		"values" 		:   "arvoa",
-		"municipality" 	:   "Kunnat",
-		"not_included" 	:   "Poistettu laskuista",
-		"selectRows" 	:   "Valitse rivit",
-		"noMatch" 		:   "Indikaattoria ei löytynyt",
-		"selectIndicator" : "Valitse indikaattori"
+		"values" 		: "arvoa",
+		"municipality" 	: "Kunnat",
+		"not_included" 	: "Poistettu laskuista",
+		"selectRows" 	: "Valitse rivit",
+		"select4Municipalities" : "Valitse ainakin 4 kuntaa",
+		"showSelected"  : "Näytä vain valitut alueet taulukossa",
+		"noMatch" 		: "Indikaattoria ei löytynyt",
+		"selectIndicator": "Valitse indikaattori",
+		"filterTitle" 			: "Suodata sarakkeen arvoja",
+		"indicatorFilterDesc" 	: "Suodattamalla halutut tilastoyksiköt korostuvat taulukossa. Voit asettaa suodatuksen jokaiselle sarakkeelle erikseen.",
+		"filterIndicator" 		: "Muuttuja:",
+		"filterCondition"		: "Ehto:",
+		"filterSelectCondition" : "Valitse ehto",
+		"filterGT" 				: "Suurempi (>)",
+		"filterGTOE" 			: "Suurempi tai yhtäsuuri (>=)",
+		"filterE" 				: "Yhtäsuuri (=)",
+		"filterLTOE" 			: "Pienempi tai yhtäsuuri (<=)",
+		"filterLT" 				: "Pienempi (<)",
+		"filterBetween" 		: "Arvoväli",
+		"filter" 				: "Suodata"
 	}
 });

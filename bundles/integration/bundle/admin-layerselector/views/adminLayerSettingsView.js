@@ -336,11 +336,9 @@ define([
             data.xslt           = form.find('#add-layer-xslt').val(),
             data.xslt           = me.classes.encode64(data.xslt);//me.layerGroupingModel.encode64(data.xslt);
             data.gfiType        = form.find('#add-layer-responsetype').val();
-
             // Layer class id aka. orgName id
             data.lcId           = lcId;
 
-            // The old way
             var url = baseUrl + action_route + id + idValue;
             if(lcId != null) {
                 url += "&lcId=" + lcId;
@@ -364,10 +362,11 @@ define([
                 "&version=" + data.version +
                 "&legendImage=" + encodeURIComponent(data.legendImage) +
                 "&inspireTheme=" + data.inspireTheme +
-                "&dataUrl=" + data.dataUrl +
+                "&dataUrl=" + encodeURIComponent(data.dataUrl) +
                 "&xslt=" + data.xslt +
                 "&gfiType=" + data.gfiType +
-				"&metadataUrl=" + data.metadataUrl;
+				"&metadataUrl=" + encodeURIComponent(data.metadataUrl);
+            console.log('generated url:', url);
 
             // New way
             /*
@@ -649,6 +648,8 @@ define([
         updateLayerValues: function(selectedLayer, capability) {
             // Clear out the old values
             this.clearAllFields();
+            //title
+            jQuery('#add-layer-fi-name').val(selectedLayer.Title);
 
             // wmsname
             var wmsname = selectedLayer.Name;

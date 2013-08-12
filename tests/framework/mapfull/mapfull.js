@@ -150,8 +150,8 @@ describe('Test Suite for Mapfull', function() {
                 var x = sandbox.getMap().getX(),
                     y = sandbox.getMap().getY();
 
-                expect(x).to.be(2820835); // the coordinates are off by a bit, most likely due to transformation
-                expect(y).to.be(9494985); // the coordinates are off by a bit, most likely due to transformation
+                expect(x).to.be(2820835.8967016); // the coordinates are off by a bit, most likely due to transformation
+                expect(y).to.be(9494985.5420647); // the coordinates are off by a bit, most likely due to transformation
 
                 // cleanup
                 sandbox.unregisterFromEventByName(self, "AfterMapMoveEvent");
@@ -192,8 +192,8 @@ describe('Test Suite for Mapfull', function() {
                 var x = sandbox.getMap().getX(),
                     y = sandbox.getMap().getY();
 
-                expect(x).to.be(420893);
-                expect(y).to.be(7177728);
+                expect(x).to.be(420893.93415203);
+                expect(y).to.be(7177728.7708151);
 
                 // cleanup
                 sandbox.unregisterFromEventByName(self, "AfterMapMoveEvent");

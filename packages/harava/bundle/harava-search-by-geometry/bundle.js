@@ -50,6 +50,14 @@ function() {
             "type" : "text/javascript",
             "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/StopGeometrySearchRequestHandler.js"
         },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/ToggleVisibilityGeometrySearchRequest.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/harava/bundle/harava-search-by-geometry/request/ToggleVisibilityGeometrySearchRequestHandler.js"
+        },
         /* Resources */
         {
 		    "type" : "text/css",

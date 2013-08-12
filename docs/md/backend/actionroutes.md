@@ -62,3 +62,6 @@ GetWmsServices
 ## SOTKA
 - [GetSotkaRegion](<%= docsurl %>backend/actionroutes/getsotkaregion.html)
 
+## ANALYSIS
+- [CreateAnalysisLayer](<%= docsurl %>backend/actionroutes/createanalysislayer.html)
+

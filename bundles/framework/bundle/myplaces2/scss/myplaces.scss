@@ -5,8 +5,11 @@ div.myplacesform div.help {
 div.myplacesform div.field {
     padding-bottom: 10px;
 }
-div.myplacesform input {
+div.myplacesform input[type="text"] {
     width: 80%;
+}
+div.myplacesform input[type="checkbox"] {
+    margin: 0.5em;
 }
 div.myplacesform textarea {
 	width: 80%;

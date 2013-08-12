@@ -60,6 +60,7 @@ function() {
         // - the grid.
         var gridConf = {
             'state': me.getState(),
+            //'csvDownload' : true,
             "statistics" : [
                 {"id" : "avg", "visible": true},
                 {"id" : "max", "visible": true},
@@ -208,6 +209,10 @@ function() {
         } else {
             return null;
         }
+    },
+
+    getView : function() {
+        return this.plugins['Oskari.userinterface.View'];
     },
 
     /**

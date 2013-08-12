@@ -49,5 +49,6 @@ function(title) {
     matchesKeyword : function(layerId, keyword) {
         var searchableIndex = this.searchIndex[layerId];
         return searchableIndex.indexOf(keyword.toLowerCase()) != -1;
-    }
+    },
+
 });

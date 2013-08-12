@@ -86,6 +86,9 @@
                 },
                 "harava-search-by-geometry": {
                     "bundlePath": "../../../packages/harava/bundle/"
+                },
+                 "harava-draw" : { 
+                    "bundlePath" : "../../../packages/harava/bundle/" 
                 }
             },
             "Require-Bundle-Instance": []
@@ -188,5 +191,23 @@
         "instanceProps": {
             
         }
-    }]
+    },
+    { 
+         "title" : "Harava draw geometry", 
+         "fi" : "Harava draw geometry", 
+         "sv" : "?", 
+         "en" : "Harava draw geometry", 
+         "bundlename" : "harava-draw", 
+         "bundleinstancename" : "harava-draw", 
+         "metadata" : { 
+             "Import-Bundle" : { 
+                 "harava-draw" : { 
+                     "bundlePath" : "../../../packages/harava/bundle/" 
+                 } 
+             }, 
+             "Require-Bundle-Instance" : [] 
+         }, 
+         "instanceProps" : {} 
+     }
+    ]
 }

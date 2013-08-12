@@ -23,7 +23,8 @@ Oskari.registerLocalization({
         "year":          "Year",
         "buttons" :      {
             "ok" :     "OK",
-            "cancel" : "Cancel"
+            "cancel" : "Cancel",
+            "filter" : "Filter"
         },
         "sotka": {
             "municipality":             "Municipality",
@@ -76,12 +77,25 @@ Oskari.registerLocalization({
             "std" : "Standard deviation",
             "sum" : "Sum"
         },
-        "values"        :   "values",
-        "municipality"  :   "Municipalities",
-        "selectRows"    :   "Select rows",
-        "not_included"  :   "Not included municipalities",
-        "noMatch"       :   "No results matched",
-        "selectIndicator" : "Select an indicator"
-
+        "values"        : "values",
+        "municipality"  : "Municipalities",
+        "selectRows"    : "Select rows",
+        "select4Municipalities" : "Select 4 municipalities",
+        "showSelected"  : "Show only selected areas on the grid",
+        "not_included"  : "Not included municipalities",
+        "noMatch"       : "No results matched",
+        "selectIndicator": "Select an indicator",
+        "filterTitle"           : "Filter out column data",
+        "indicatorFilterDesc"   : "Filtered values are selected in the grid. You can set filtering separately for every column.",
+        "filterIndicator"       : "Indicator:",
+        "filterCondition"       : "Condition:",
+        "filterSelectCondition" : "Select condition",
+        "filterGT"              : "Greater than (>)",
+        "filterGTOE"            : "Greater than or equal to (>=)",
+        "filterE"               : "Equal (=)",
+        "filterLTOE"            : "Less than or equal to (<=)",
+        "filterLT"              : "Less than (<)",
+        "filterBetween"         : "In between",
+        "filter"                : "Filter"
     }
 });

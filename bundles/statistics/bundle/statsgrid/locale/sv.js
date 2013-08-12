@@ -23,7 +23,8 @@ Oskari.registerLocalization({
         "year": "År",
         "buttons" : {
             "ok"    : "OK",
-            "cancel": "Avbryta"
+            "cancel": "Avbryta",
+            "filter": "Filter"
         },
         "sotka": {
             "municipality" :            "Kommun",
@@ -79,9 +80,23 @@ Oskari.registerLocalization({
         "values"        : "värden",
         "municipality"  : "Kommuner",
         "selectRows"    : "Markera rader",
+        "select4Municipalities" : "Välj minst 4 kommuner",
+        "showSelected"  : "Visa endast utvalda områden på nätet",
         "not_included"  : "Inte inlcuded kommuner",
         "noMatch"       : "Inga matchade indikatorer",
-        "selectIndicator": "Välja en indikator"
+        "selectIndicator": "Välja en indikator",
+        "filterTitle"           : "Filtrera kolumndata",
+        "indicatorFilterDesc"   : "Filtrerade värdena kommer att väljas i tabellen. Du kan ställa in filtrering separat för varje kolumn.",
+        "filterIndicator"       : "Indikator:",
+        "filterCondition"       : "Filter:",
+        "filterSelectCondition" : "välj filter",
+        "filterGT"              : "Större (>)",
+        "filterGTOE"            : "Större än eller lika med (>=)",
+        "filterE"               : "Lika med (=)",
+        "filterLTOE"            : "Mindre än eller lika med (<=)",
+        "filterLT"              : "Mindre (<)",
+        "filterBetween"         : "Värdeintervallet",
+        "filter"                : "Filter"
 
     }
 });

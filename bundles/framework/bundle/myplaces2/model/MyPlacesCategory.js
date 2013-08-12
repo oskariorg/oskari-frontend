@@ -192,5 +192,19 @@ function() {
      */
     getUUID : function() {
         return this.uuid;
+    },
+    /**
+     * @method setVisibleFields
+     * @param {Array[String]} value
+     */
+    setVisibleFields: function(value) {
+        this.visibleFields = value;
+    },
+    /**
+     * @method getVisibleFields
+     * @return {Array[String]}
+     */
+    getVisibleFields: function() {
+        return this.visibleFields;
     }
 });

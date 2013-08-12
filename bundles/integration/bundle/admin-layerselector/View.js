@@ -19,9 +19,6 @@
 Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', function() {
 }, {
 
-//    _mapLayerUrl : '/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&action_route=GetMapLayerClasses',
-    _mapLayerUrl : '/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&action_route=GetAdminMapLayers',
-
     /**
      * @property eventHandlers
      * a set of event handling functions for this view
