@@ -366,15 +366,6 @@ define([
                 "&xslt=" + data.xslt +
                 "&gfiType=" + data.gfiType +
 				"&metadataUrl=" + encodeURIComponent(data.metadataUrl);
-            console.log('generated url:', url);
-
-            // New way
-            /*
-            var url = baseUrl + action_route;
-            var postData = JSON.stringify(data);
-            */
-
-            console.log(data);
 
             jQuery.ajax({
                 type : "GET",
@@ -462,7 +453,6 @@ define([
             }
 
             var url = baseUrl + action_route + params;
-            console.log(url);
             // make AJAX call
             jQuery.ajax({
                 type : "GET",

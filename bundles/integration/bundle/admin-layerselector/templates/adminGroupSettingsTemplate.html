@@ -42,7 +42,7 @@
         <div class="add-group-record">
             <div class="add-class-grouping" title="<%= instance.getLocalization('admin').subLayers %>"><%= instance.getLocalization('admin').subLayers %> </div>
             <% for (var i = 0; i < subLayers.length; ++i) { %>
-                <%= subLayerTemplate({subLayer: subLayers[i]}) %>
+                <%= subLayerTemplate({subLayer: subLayers[i], index: i}) %>
             <% } %>
             <div class="add-sublayer-wrapper"><button class="add-class-btn admin-add-sublayer"><%= instance.getLocalization('admin').addSubLayer %></button></div>
         </div>
