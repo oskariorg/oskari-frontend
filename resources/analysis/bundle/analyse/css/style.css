@@ -92,66 +92,52 @@ table.layer-icons {
   margin: 0 0 2px;
   width: 30%; }
 
-
 /* Analyse filter CSS */
 div.analyse-filter-popup-content {
-  padding: 8px;
-}
+  padding: 8px; }
 
 div.analyse-filter-popup-content div.analyse-filter {
   padding: 12px 8px;
   border-bottom: 1px solid #888;
-  border-top: 1px solid #E8E8E8;
-}
+  border-top: 1px solid #E8E8E8; }
 
 div.analyse-filter-popup-content div.analyse-filter:first-child {
   border-top: none;
-  padding-top: 0;
-}
+  padding-top: 0; }
 
 div.analyse-filter-popup-content div.analyse-filter:last-child {
   border-bottom: none;
-  padding-bottom: 0;
-}
+  padding-bottom: 0; }
 
-div.analyse-filter-popup-content div.bbox-title,
-div.analyse-filter-popup-content div.bbox-radio {
-  display: inline-block;
-}
+div.analyse-filter-popup-content div.bbox-title, div.analyse-filter-popup-content div.bbox-radio {
+  display: inline-block; }
 
 div.analyse-filter-popup-content div.bbox-title {
-  float: left;
-}
+  float: left; }
 
 div.analyse-filter-popup-content div.bbox-radio {
-  margin-left: 25px;
-}
+  margin-left: 25px; }
 
-div.analyse-filter-popup-content div.bbox-radio div.bbox-on,
-div.analyse-filter-popup-content div.bbox-radio div.bbox-off {
- margin-top: 5px;
-}
+div.analyse-filter-popup-content div.bbox-radio div.bbox-on, div.analyse-filter-popup-content div.bbox-radio div.bbox-off {
+  margin-top: 5px; }
 
 div.analyse-filter-popup-content div.filter-option {
-  padding-bottom: 10px;
-}
-div.analyse-filter-popup-content div.filter-option select.operator,
-div.analyse-filter-popup-content div.filter-option select.boolean {
-  width: 60px;
-}
+  padding-bottom: 10px; }
+
+div.analyse-filter-popup-content div.filter-option select.operator, div.analyse-filter-popup-content div.filter-option select.boolean {
+  width: 60px; }
+
 div.analyse-filter-popup-content div.filter-option div.manage-filter-option {
-  display: inline-block;
-}
-div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.add-filter-option,
-div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.remove-filter-option {
+  display: inline-block; }
+
+div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.add-filter-option, div.analyse-filter-popup-content div.filter-option div.manage-filter-option div.remove-filter-option {
   display: inline-block;
   font-size: 200%;
   font-weight: bold;
-  cursor: pointer;
-}
+  cursor: pointer; }
+
 div.analyse-filter-popup-content div.filter-option input[name="attribute-value"] {
-  width: 120px;
-}
+  width: 120px; }
+
 div.analyse-filter-popup-content div.filter-option select.attribute {
-  width: 150px;
-}
+  width: 150px; }

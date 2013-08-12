@@ -528,10 +528,14 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             i;
 
         for (i = 0; i < fields.length; ++i) {
-            attributes.push({
-                id: fields[i],
-                name: (locales[i] || fields[i])
-            });
+            // Get only the fields which originate from the service,
+            // that is, exclude those which are added by Oskari (starts with '__').
+            if (!fields[i].match(/^__/)) {
+                attributes.push({
+                    id: fields[i],
+                    name: (locales[i] || fields[i])
+                });
+            }
         }
 
         return attributes;

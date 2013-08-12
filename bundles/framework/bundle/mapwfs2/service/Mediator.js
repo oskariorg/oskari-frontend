@@ -15,10 +15,11 @@ function(config, plugin) {
     this.config = config;
     this.plugin = plugin;
     this.layerProperties = {};
-    // TODO: make more general - may be in another server than the service...
+
     this.rootURL = location.protocol + "//" +
-            location.hostname + ":" +  this.config.port  +
+            this.config.hostname + ":" +  this.config.port  +
             this.config.contextPath;
+            
     this.session = null;
 }, {
     /**
@@ -287,7 +288,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         // TODO [AL-1253]: check if wanted to have highlight images (full map images - tileSize == mapSize)
         // TODO: check how tileSize is taken care of @ print service
         // send the most recent tileData as an event to printout - links work only if session open to the transport
-        console.log(this.rootURL + data.data.url + "&session=" + this.session.session);
         if(layerPostFix == "normal") {
             this.plugin.setTile(layer, data.data.bbox, this.rootURL + data.data.url + "&session=" + this.session.session);
             var printoutEvent = this.plugin.getSandbox().getEventBuilder('Printout.PrintableContentEvent');

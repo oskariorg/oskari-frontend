@@ -1,5 +1,5 @@
 // requires jetty + redis open with wfs2
-describe.only('Test Suite for mapwfs2', function() {
+describe('Test Suite for mapwfs2', function() {
     var module = null,
         connection = null,
         mediator = null,
@@ -53,6 +53,20 @@ describe.only('Test Suite for mapwfs2', function() {
             "keepPrevious":false,
             "layerId":216,
             "url":"/image?layerId=216&srs=EPSG:3067&bbox[0]=383488.0&bbox[1]=6672384.0&bbox[2]=384000.0&bbox[3]=6672896.0&zoom=9"
+        },
+        "channel":"/wfs/image"
+    };
+    var imageData2 = { // tile (IE edition without data)
+        "data": {
+            "height":256,
+            "zoom":9,
+            "bbox":[383490.0,6672394.0,384010.0,6672806.0],
+            "width":256,
+            "srs":"EPSG:3067",
+            "type":"normal",
+            "keepPrevious":false,
+            "layerId":216,
+            "url":"/image?layerId=216&srs=EPSG:3067&bbox[0]=383490.0&bbox[1]=6672394.0&bbox[2]=384010.0&bbox[3]=6672806.0&zoom=9"
         },
         "channel":"/wfs/image"
     };
@@ -354,12 +368,14 @@ describe.only('Test Suite for mapwfs2', function() {
                 mediator.getWFSProperties(propertiesData);
                 mediator.getWFSFeature(featureData);
                 mediator.getWFSImage(imageData);
+                mediator.getWFSImage(imageData2);
             });
 
             // expect these events
             var properties = false;
             var feature = false;
             var image = false;
+            var printout = [];
 
             var self = this;
             self.getName = function() {
@@ -377,6 +393,9 @@ describe.only('Test Suite for mapwfs2', function() {
                 } else if(event.getName() === "WFSImageEvent") {
                     image = true;
                     expect(image).to.be(true);
+                } else if(event.getName() === "Printout.PrintableContentEvent") {
+                    printout.push(event.getTileData());
+                    expect(printout.length).to.be.greaterThan(0);
                 }
             }
 
@@ -384,6 +403,7 @@ describe.only('Test Suite for mapwfs2', function() {
             sandbox.registerForEventByName(self, "WFSPropertiesEvent");
             sandbox.registerForEventByName(self, "WFSFeatureEvent");
             sandbox.registerForEventByName(self, "WFSImageEvent");
+            sandbox.registerForEventByName(self, "Printout.PrintableContentEvent");
 
             // move map "AfterMapMoveEvent"
             var selectedLayers = addLayers(module, [216]); // adds layer
@@ -398,8 +418,9 @@ describe.only('Test Suite for mapwfs2', function() {
 
             // finish
             waitsFor(function() {
-                return (properties && feature && image);
+                return (properties && feature && image && (printout.length === 2));
             }, function() {
+                expect(printout[0]['216'][0].url).not.to.be(printout[0]['216'][1].url);
                 done();
             }, 'Waiting for responses', 10000);
         });
@@ -522,11 +543,20 @@ describe.only('Test Suite for mapwfs2', function() {
             var doSpy = sinon.stub(mediator, 'setMapClick', function(longitude, latitude, keepPrevious) {
                 mediator.getWFSMapClick(mapClickData);
             });
+            var getInfoPlugin = sandbox.findRegisteredModuleInstance('MainMapModuleGetInfoPlugin');
+            var handleGetInfoSpy = sinon.stub(getInfoPlugin, 'handleGetInfo', function() {
+                var data = {
+                    fragments: [{layerName: "testLayer", markup: "test markup", layerId: "testLayerId"}]
+                };
+                var event = sandbox.getEventBuilder("GetInfoResultEvent")(data);
+                sandbox.notifyAll(event);
+            });
 
             var selectedLayers = null;
 
             // expect these events
             var selected = false;
+            var fragments = [];
 
             var self = this;
             self.getName = function() {
@@ -543,7 +573,9 @@ describe.only('Test Suite for mapwfs2', function() {
                 } else if(event.getName() === "WFSFeaturesSelectedEvent") {
                     selected = true;
                     expect(selected).to.be(true);
-                    done();
+                    //done();
+                } else if(event.getName() === "GetInfoResultEvent") {
+                    fragments = event.getData().fragments;
                 }
             }
 
@@ -551,16 +583,21 @@ describe.only('Test Suite for mapwfs2', function() {
             sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
             sandbox.registerForEventByName(self, "WFSFeaturesSelectedEvent");
             sandbox.registerForEventByName(self, "MapClickedEvent");
+            sandbox.registerForEventByName(self, "GetInfoResultEvent");
 
             // move map with projection coordinates
             sandbox.postRequestByName('MapMoveRequest', [385402, 6671502, 9]);
 
             // check called once
             waitsFor(function() {
-                return (doSpy.callCount > 0);
+                return (doSpy.callCount > 0 && handleGetInfoSpy.callCount > 0);
             }, function() {
                 expect(doSpy.callCount).to.be(1);
+                expect(handleGetInfoSpy.callCount).to.be(1);
+                expect(fragments.length).to.be(2);
                 doSpy.restore();
+                handleGetInfoSpy.restore();
+                done();
             }, 'Waiting for map click', 5000);
         });
     });

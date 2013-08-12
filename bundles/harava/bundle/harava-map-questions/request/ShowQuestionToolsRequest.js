@@ -7,6 +7,13 @@
  */
 Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ShowQuestionToolsRequest', 
 
+/**
+ * @method create called automatically on construction
+ * @static
+ *
+ * @param {Boolean}
+ *            fast need draw fast question tools
+ */
 function(fast) {
     this._fast = fast;
 }, {
