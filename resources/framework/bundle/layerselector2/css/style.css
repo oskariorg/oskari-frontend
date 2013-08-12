@@ -67,8 +67,14 @@ div.layerselector2 div.tab-content div.oskarifield {
     -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
     -moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
     box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
-    overflow: hidden;
-    padding: 3px 5px; }
+    overflow: hidden; }
+    div.layerselector2 div.tab-content div.oskarifield .related-keywords .keywords-title {
+      box-sizing: border-box;
+      height: 30px;
+      line-height: 30px;
+      padding: 0 10px;
+      color: black;
+      font-weight: bold; }
     div.layerselector2 div.tab-content div.oskarifield .related-keywords .keyword-cont {
       box-sizing: border-box;
       height: 30px;
@@ -95,7 +101,7 @@ div.layerselector2 div.tab-content div.oskarifield {
       background-color: #333438;
       color: white; }
     div.layerselector2 div.tab-content div.oskarifield .related-keywords .keyword-cont:hover {
-      background-color: #bdbdbd;
+      background-color: #4E4E4E;
       color: white; }
 
 div.layerselector2 div.accordion div.accordion_panel div.content {

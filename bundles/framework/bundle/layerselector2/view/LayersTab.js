@@ -18,6 +18,7 @@ function(instance, title) {
         'shortDescription'  : '<div class="field-description"></div>',
         'description'       : '<div><h4 class="indicator-msg-popup"></h4><p></p></div>',
         'relatedKeywords'   : '<div class="related-keywords"></div>',
+        'keywordsTitle'     : '<div class="keywords-title"></div>',
         'keywordContainer'  : '<div class="keyword-cont"><div class="keyword"></div></div>',
         'keywordType'       : '<div class="type"></div>'
     };
@@ -141,7 +142,7 @@ function(instance, title) {
             this.relatedKeywords = null;
             var oskarifield = jQuery(field.getField()[0]);
             oskarifield.find('input').off("keydown");
-            oskarifield.find('.related-keywords').remove();
+//FIXME            oskarifield.find('.related-keywords').remove();
         });
 
         this.filterField = field;
@@ -284,7 +285,7 @@ function(instance, title) {
 
             var loc = me.instance.getLocalization('errors');
             var relatedKeywordsCont = jQuery(me.templates.relatedKeywords);
-            relatedKeywordsCont.css({top: positionY, left: positionX});
+            relatedKeywordsCont.css({top: positionY, left: positionX, padding: '3px 5px'});
             relatedKeywordsCont.text(loc.minChars);
             oskarifield.append(relatedKeywordsCont);
             return;
@@ -359,20 +360,31 @@ function(instance, title) {
         //create a popup div for related keywords;
         var relatedKeywordsCont = jQuery(me.templates.relatedKeywords);
         relatedKeywordsCont.css({top: positionY, left: positionX});
-        for (var i = 0; i < keywords.length; i++) {
-            var keyword = keywords[i];
-            var keywordTmpl = jQuery(me.templates.keywordContainer);
-            keywordTmpl
-                .addClass((i%2 != 0 ? ' odd': ''))
-                .attr('data-id', keyword.id)
-                .find('.keyword').text(keyword.keyword+ ' (' +keyword.layers.length+')');
-            if(keyword.type) {
-                var keywordType = jQuery(me.templates.keywordType);
-                keywordType.attr('title', me._locale.types[keyword.type]);
-                keywordTmpl.append(keywordType.text(keyword.type.toUpperCase()));
-            }
+        
+        // no results for keyword text was preferred over "keyword(0)"
+        if(keywords.length == 1 && !keywords[0].type && keywords[0].layers.length == 0) {
+            relatedKeywordsCont.append(jQuery(me.templates.keywordsTitle).text(me._locale.errors.noResultsForKeyword));
+        } else {
+            relatedKeywordsCont.append(jQuery(me.templates.keywordsTitle).text('Avainsanat:'));
 
-            relatedKeywordsCont.append(keywordTmpl);
+            for (var i = 0; i < keywords.length; i++) {
+                var keyword = keywords[i];
+                if(keyword.layers.length > 0){
+                    var keywordTmpl = jQuery(me.templates.keywordContainer);
+                    keywordTmpl
+                        .addClass((i%2 != 0 ? ' odd': ''))
+                        .attr('data-id', keyword.id)
+                        .find('.keyword').text(keyword.keyword+ ' (' +keyword.layers.length+')');
+
+                    if(keyword.type) {
+                        var keywordType = jQuery(me.templates.keywordType);
+                        keywordType.attr('title', me._locale.types[keyword.type]);
+                        keywordTmpl.append(keywordType.text(keyword.type.toUpperCase()));
+                    }
+
+                    relatedKeywordsCont.append(keywordTmpl);
+                }
+            }
         }
         //add related keywords popup
         oskarifield.append(relatedKeywordsCont);
