@@ -71,8 +71,8 @@ Oskari.registerLocalization({
       },
       "imagelink": {
         "placeholder": "Image URL",
-        "previewLabel": "Image preview"
-        "new": "New layer..."
+        "previewLabel": "Image preview",
+        "add": "New layer..."
       },
       "rendering": {
         "label": "Object rendering",
@@ -115,6 +115,98 @@ Oskari.registerLocalization({
         "title": "Edit map layer",
         "save": "Save",
         "cancel": "Back"
+      },
+      "rendering": {
+        "label": "Tason kohteiden esitystavat",
+        "point": {
+          "tooltip": "Piste"
+        }
+      }
+    },
+    "pointform": {
+      "title": "",
+      "tooltip": "",
+      "symbol": {
+        "label": ""
+      },
+      "size": {
+        "label": ""
+      },
+      "color": {
+        "label": "",
+        "labelOr": "",
+        "labelCustom": ""
+      },
+      "preview": {
+        "label": ""
+      },
+      "buttons": {
+        "save": "",
+        "cancel": ""
+      }
+    },
+    "lineform": {
+      "title": "",
+      "tooltip": "",
+      "style": {
+        "label": ""
+      },
+      "cap": {
+        "label": ""
+      },
+      "corner": {
+        "label": ""
+      },
+      "width": {
+        "label": ""
+      },
+      "color": {
+        "label": "",
+        "labelOr": "",
+        "labelCustom": ""
+      },
+      "preview": {
+        "label": ""
+      },
+      "buttons": {
+        "save": "",
+        "cancel": ""
+      }
+    },
+    "areaform": {
+      "title": "",
+      "tooltip": "",
+      "linestyle": {
+        "label": ""
+      },
+      "linecap": {
+        "label": ""
+      },
+      "linecorner": {
+        "label": ""
+      },
+      "linewidth": {
+        "label": ""
+      },
+      "linecolor": {
+        "label": "",
+        "labelOr": "",
+        "labelCustom": ""
+      },
+      "color": {
+        "label": "",
+        "labelOr": "",
+        "labelCustom": ""
+      },
+      "fill": {
+        "label": ""
+      },
+      "preview": {
+        "label": ""
+      },
+      "buttons": {
+        "save": "",
+        "cancel": ""
       }
     },
     "notification": {

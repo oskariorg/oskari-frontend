@@ -36,7 +36,7 @@ Oskari.registerLocalization({
       }/*,
       "cut": {
         "tooltip": "Tillägg hål",
-        "new": "Tillägg hålets hörnpunkter genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'.",
+        "add": "Tillägg hålets hörnpunkter genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'.",
         "edit": "Editera hålets form genom att klicka och dra brytningspunkterna på omkretslinjen.",
         "save": "Lagra form"
       }*/
@@ -66,7 +66,19 @@ Oskari.registerLocalization({
       },
       "category": {
         "label": "Kartlager",
-        "newLayer": "Ny nivå..."
+        "newLayer": "Ny nivå...",
+        "choose": " tai valitse olemassa olevista tasoista:"
+      },
+      "imagelink": {
+        "placeholder": "Kuva-URL",
+        "previewLabel": "Valokuvan esikatselu",
+        "add": "Uusi taso"
+      },
+      "rendering": {
+        "label": "Tason kohteiden esitystavat",
+        "point": {
+          "tooltip": "Piste"
+        }
       }
     },
     "categoryform": {
@@ -93,10 +105,108 @@ Oskari.registerLocalization({
           "size": "Linjens tjocklek"
         }
       },
+      "visibleFields": {
+        "label": "",
+        "placename": "",
+        "placedesc": "",
+        "image": ""
+      },
       "edit": {
         "title": "Editera kartlagret",
         "save": "Lagra",
         "cancel": "Tillbaka"
+      },
+      "rendering": {
+        "label": "",
+        "point": {
+          "tooltip": ""
+        }
+      }
+    },
+    "pointform": {
+      "title": "",
+      "tooltip": "",
+      "symbol": {
+        "label": ""
+      },
+      "size": {
+        "label": ""
+      },
+      "color": {
+        "label": "",
+        "labelOr": "",
+        "labelCustom": ""
+      },
+      "preview": {
+        "label": ""
+      },
+      "buttons": {
+        "save": "",
+        "cancel": ""
+      }
+    },
+    "lineform": {
+      "title": "",
+      "tooltip": "",
+      "style": {
+        "label": ""
+      },
+      "cap": {
+        "label": ""
+      },
+      "corner": {
+        "label": ""
+      },
+      "width": {
+        "label": ""
+      },
+      "color": {
+        "label": "",
+        "labelOr": "",
+        "labelCustom": ""
+      },
+      "preview": {
+        "label": ""
+      },
+      "buttons": {
+        "save": "",
+        "cancel": ""
+      }
+    },
+    "areaform": {
+      "title": "",
+      "tooltip": "",
+      "linestyle": {
+        "label": ""
+      },
+      "linecap": {
+        "label": ""
+      },
+      "linecorner": {
+        "label": ""
+      },
+      "linewidth": {
+        "label": ""
+      },
+      "linecolor": {
+        "label": "",
+        "labelOr": "",
+        "labelCustom": ""
+      },
+      "color": {
+        "label": "",
+        "labelOr": "",
+        "labelCustom": ""
+      },
+      "fill": {
+        "label": ""
+      },
+      "preview": {
+        "label": ""
+      },
+      "buttons": {
+        "save": "",
+        "cancel": ""
       }
     },
     "notification": {

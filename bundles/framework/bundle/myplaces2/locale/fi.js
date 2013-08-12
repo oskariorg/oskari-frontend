@@ -6,7 +6,7 @@ Oskari.registerLocalization({
     "desc": "",
     "category": {
       "defaultName": "Oma karttataso",
-      "organization": "Omat kohteet",
+      "organizationnew": "Omat kohteet",
       "inspire": "Kohteet"
     },
     "guest": {
@@ -36,7 +36,7 @@ Oskari.registerLocalization({
       }/*,
       "cut": {
         "tooltip": "Lisää aukko",
-        "new": "Lisää aukon taitepisteet klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella tai painamalla 'Lopeta piirto'.",
+        "add": "Lisää aukon taitepisteet klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella tai painamalla 'Lopeta piirto'.",
         "edit": "Muokkaa muotoa raahaamalla reunaviivan taitepisteitä.",
         "save": "Tallenna muoto"
       }*/
@@ -72,7 +72,7 @@ Oskari.registerLocalization({
       "imagelink": {
         "placeholder": "Kuva-URL",
         "previewLabel": "Valokuvan esikatselu",
-        "new": "Uusi taso"
+        "add": "Uusi taso"
       },
       "rendering": {
         "label": "Tason kohteiden esitystavat",

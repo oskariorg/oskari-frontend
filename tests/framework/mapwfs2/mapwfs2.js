@@ -1,5 +1,5 @@
 // requires jetty + redis open with wfs2
-describe.only('Test Suite for mapwfs2', function() {
+describe('Test Suite for mapwfs2', function() {
     var module = null,
         connection = null,
         mediator = null,

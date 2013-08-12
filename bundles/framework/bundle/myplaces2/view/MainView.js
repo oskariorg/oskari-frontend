@@ -173,7 +173,6 @@ function(instance) {
         }; 
         // save button
         content[0].actions[loc.buttons.save] = function() {
-debugger;
             me._saveForm();
         }; 
 
