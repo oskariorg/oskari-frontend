@@ -136,7 +136,46 @@ function(instance) {
         roleSelectLabel.html(this.instance.getLocalization('selectRole'));
         container.append(content);
         flyout.append(container);
+        var roleSelect = flyout.find('select-admin-layerrights-role');
+        me.getExternalIdsAjaxRequest("ROLE", 0);
+
+    },
+
+    getExternalIdsAjaxRequest : function(externalType, selectedId) {
+        var me = this;
+        ajaxRequestGoing = true;
+        jQuery.getJSON(ajaxUrl, {
+            cmd: "ajax.jsp",
+            getExternalIds: externalType
+        }, function (result) {
+            me.makeExternalIdsSelect(result, externalType, selectedId);
+        })
+    },
+
+    // result, (c)0/user/role, (b)selected id
+    makeExternalIdsSelect : function(result, externalType, selectedId) {
+        var externalIdSelect = jQuery(this.container).find("select.admin-layerrights-role");
+        externalIdSelect.html("");
+        if (externalType != "0") {
+            var a;
+            if (selectedId != "0") {
+                a = '<option value="0" >-- Valitse tunniste --</option>';
+            } else {
+                a = '<option value="0" selected="selected">-- Valitse tunniste --</option>';
+            }
+            for (var d = 0; d < result.external.length; d++) {
+                if (result.external[d].id == selectedId) {
+                    a += '<option selected="selected" value="' + result.external[d].id + '">' + result.external[d].name + "</option>";
+                } else {
+                    a += '<option value="' + result.external[d].id + '">' + result.external[d].name + "</option>";
+                }
+            }
+            externalIdSelect.html(a);
+        } else {
+            externalIdSelect.html("");
+        }
     }
+
 }, {
     /**
      * @property {String[]} protocol
