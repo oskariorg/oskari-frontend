@@ -119,11 +119,18 @@ function(instance) {
         return this.state;
     },
 
+    doSave : function() {
+        // save data
+        // get stuff from slickgrid, pass it as json to actionroute
+        alert("Savety save.");
+    },
+
     /**
      * @method setContent
      * Creates the UI for a fresh start
      */
     setContent : function(content) {
+        // TODO add filters (provider/theme etc.)
         var me = this;
         var sandbox = me.instance.getSandbox();
 
@@ -133,11 +140,8 @@ function(instance) {
         
         var button = Oskari.clazz.create('Oskari.userinterface.component.Button');
         button.setTitle(this.instance.getLocalization('save'));
-        var doSave = function() {
-            // save datá
-        };
 
-        button.setHandler(doSave);
+        button.setHandler(me.doSave);
         //field.bindEnterKey(doSave);
         
         var controls = container.find('div.controls');
@@ -148,20 +152,122 @@ function(instance) {
         container.append(content);
         flyout.append(container);
         var roleSelect = flyout.find('select-admin-layerrights-role');
+        // We're only supporting ROLE ATM, USER support might be added later
         me.getExternalIdsAjaxRequest("ROLE", 0);
 
     },
 
     getExternalIdsAjaxRequest : function(externalType, selectedId) {
         var me = this;
-        ajaxRequestGoing = true;
+        /*
+        //ajaxRequestGoing = true;
         // TODO add error handling
         jQuery.getJSON(ajaxUrl, {
             cmd: "ajax.jsp",
             getExternalIds: externalType
         }, function (result) {
             me.makeExternalIdsSelect(result, externalType, selectedId);
-        })
+        })*/
+        var fakeResult = {
+            "external": [{
+                "id": 10113,
+                "name": "Administrator"
+            }, {
+                "id": 10118,
+                "name": "Community Administrator"
+            }, {
+                "id": 271954,
+                "name": "Community Content Reviewer"
+            }, {
+                "id": 10119,
+                "name": "Community Member"
+            }, {
+                "id": 10120,
+                "name": "Community Owner"
+            }, {
+                "id": 10114,
+                "name": "Guest"
+            }, {
+                "id": 129919,
+                "name": "Karttajulkaisija_Demo"
+            }, {
+                "id": 141182,
+                "name": "Karttajulkaisija_Espoo"
+            }, {
+                "id": 142380,
+                "name": "Karttajulkaisija_GTK"
+            }, {
+                "id": 267632,
+                "name": "Karttajulkaisija_Helsinki"
+            }, {
+                "id": 238361,
+                "name": "Karttajulkaisija_MML"
+            }, {
+                "id": 143017,
+                "name": "Karttajulkaisija_NBA"
+            }, {
+                "id": 176071,
+                "name": "Karttajulkaisija_Oulu"
+            }, {
+                "id": 214735,
+                "name": "Karttajulkaisija_SKV"
+            }, {
+                "id": 174213,
+                "name": "Karttajulkaisija_SYKE"
+            }, {
+                "id": 170924,
+                "name": "Karttajulkaisija_TEM"
+            }, {
+                "id": 143970,
+                "name": "Karttajulkaisija_Tre"
+            }, {
+                "id": 167679,
+                "name": "Karttajulkaisija_Vihti"
+            }, {
+                "id": 11048,
+                "name": "Karttakäyttäjät"
+            }, {
+                "id": 10121,
+                "name": "Organization Administrator"
+            }, {
+                "id": 271955,
+                "name": "Organization Content Reviewer"
+            }, {
+                "id": 10122,
+                "name": "Organization Member"
+            }, {
+                "id": 10123,
+                "name": "Organization Owner"
+            }, {
+                "id": 10115,
+                "name": "Owner"
+            }, {
+                "id": 271956,
+                "name": "Portal Content Reviewer"
+            }, {
+                "id": 10116,
+                "name": "Power User"
+            }, {
+                "id": 51772,
+                "name": "Termitalkoolaiset"
+            }, {
+                "id": 173056,
+                "name": "Tiedontuottaja"
+            }, {
+                "id": 10117,
+                "name": "User"
+            }, {
+                "id": 291301,
+                "name": "Viranomainen"
+            }, {
+                "id": 51546,
+                "name": "Wiki-admin"
+            }, {
+                "id": 26374,
+                "name": "Yhteisön vastuukäyttäjä"
+            }]
+        };
+        me.makeExternalIdsSelect(fakeResult, externalType, selectedId);
     },
 
     // result, (c)0/user/role, (b)selected id
