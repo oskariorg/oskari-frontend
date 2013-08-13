@@ -124,7 +124,7 @@ jQuery(document).ready(function() {
             }
         },
         data : getAppSetupParams,
-        url: ajaxUrl + 'viewId=' +viewId +'&action_route=GetAppSetup',
+        url: ajaxUrl + 'action_route=GetAppSetup',
         success: function(app) {
             if (app.startupSequence && app.configuration) {
               var appSetup = {
