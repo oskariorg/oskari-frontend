@@ -9,13 +9,15 @@ Oskari.registerLocalization({
             "generic": "System error. Please try again later.",
             "loadFailed" : "Error loading map layers. Reload the page in your browser and select map layers.",
             "noResults": "The search returned no results.",
+            "noResultsForKeyword": "The search returned no keywords.",
             "minChars" : "Minimum length is 4 characters."
         },
         "loading" : "Loading...",
         "filter" : {
             "text" : "Search map layers",
-            "shortDescription" : "Search layers using title, organization, or keywords.",
-            "description" : "You can search map layers by typing part of the name of that layer. Furthermore, you can search usig synonyms and other keywords. Keyword search opens when there is at least 4 letters in the search field and enter key has been pressed.",
+            "keywordsTitle": "Keywords:",
+            "shortDescription" : "Search map layers by name, producer or keyword.",
+            "description" : "You can search map layers by writing a part of the name or producer of the layer. By writing at 4 least characters and pushing enter key you can also search for keywords that are related to the layers. The number after the keyword in the list tells you how many map layers are related to it.",
             "inspire" : "By theme",
             "organization" : "By data providers",
             "published" : "Users"
@@ -52,10 +54,10 @@ Oskari.registerLocalization({
         },
         "types" : {
             "syn"   : "Synonym",
-            "lk"    : "related term",
-            "vk"    : "meronym",
-            "ak"    : "hyponym",
-            "yk"    : "hypernym"
+            "lk"    : "Related concept",
+            "vk"    : "Coordinate concept",
+            "ak"    : "Subordinate concept",
+            "yk"    : "Superordinate concept"
         }
     }
 });

@@ -949,14 +949,17 @@ function(instance, localization) {
         // Get the name of the method
         var selectedMethod = container.find('input[name=method]:checked').val();
         var methodName = selectedMethod && selectedMethod.replace(this.id_prefix, '');
+        
+         var layer = this._getSelectedMapLayer();
 
         // Get the feature fields
         // TODO: in case of 'select', parse given array.
         var selectedColumnmode = container.find('input[name=params]:checked').val();
         var fields = selectedColumnmode && selectedColumnmode.replace(this.id_prefix, '');
+        if(fields == "all") fields = (layer.getFields && layer.getFields()) ? layer.getFields().slice(0):[0];
 
         var title = container.find('.settings_name_field').val();
-        var layer = this._getSelectedMapLayer();
+       
 
         // Get method specific selections
         var selections = this._getMethodSelections(layer, {

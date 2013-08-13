@@ -14,9 +14,6 @@
             },
             "openlayers-single-full": {
                "bundlePath": "../packages/openlayers/bundle/"
-            },
-            "oskariui": {
-               "bundlePath": "../packages/framework/bundle/"
             }
          },
          "Require-Bundle-Instance": []
@@ -59,6 +56,9 @@
                "bundlePath": "../packages/framework/bundle/"
             },
             "core-base": {
+               "bundlePath": "../packages/framework/bundle/"
+            },
+            "oskariui": {
                "bundlePath": "../packages/framework/bundle/"
             },
             "request-base": {
