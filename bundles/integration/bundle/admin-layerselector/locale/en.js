@@ -59,6 +59,9 @@ Oskari.registerLocalization({
 			}
 		},
 		"admin" : {
+			"selectLayer"			: "Select layer",
+			"selectSubLayer"		: "Select sublayer",
+
 			"addOrganization" 		: "Add organization",
 			"addOrganizationDesc"	: "Add organization i.e. new content producer",
 			"addInspire" 			: "Add class",
