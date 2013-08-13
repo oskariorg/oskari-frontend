@@ -91,7 +91,7 @@ function(instance, localization) {
         "main" : '<div class="basic_analyse">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '</div>',
         "paramsOptionExtra" : '<div class="extra_params"></div>',
         "paramsOptionTool" : '<div class="tool ">' + '<input type="radio" name="params" />' + '<label></label></div>',
-        "aggreOptionTool" : '<div class="tool ">' + '<input type="radio" name="aggre" />' + '<label></label></div>',
+        "aggreOptionTool" : '<div class="tool ">' + '<input type="checkbox" name="aggre" />' + '<label></label></div>',
         "spatialOptionTool" : '<div class="tool ">' + '<input type="radio" name="spatial" />' + '<label></label></div>',
         "intersectOptionTool" : '<div class="tool ">' + '<input type="radio" name="intersect" />' + '<label></label></div>',
         "unionOptionTool" : '<div class="tool ">' + '<input type="radio" name="union" />' + '<label></label></div>',
@@ -206,10 +206,6 @@ function(instance, localization) {
         var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
         panel.setTitle(this.loc.method.label);
         var contentPanel = panel.getContainer();
-        // tooltip
-        var tooltipCont = this.template.help.clone();
-        tooltipCont.attr('title', this.loc.method.tooltip);
-        contentPanel.append(tooltipCont);
         // content
         var closureMagic = function(tool) {
             return function() {
@@ -242,6 +238,10 @@ function(instance, localization) {
             if (option.selected) {
                 toolContainer.find('input').attr('checked', 'checked');
             }
+            var tooltipCont = this.template.help.clone();
+            tooltipCont.attr('title', option.tooltip);
+            toolContainer.append(tooltipCont);
+
             contentPanel.append(toolContainer);
             toolContainer.find('input').attr({
                 'value' : option.id,
@@ -895,7 +895,7 @@ function(instance, localization) {
     _modifyAnalyseData : function(contentPanel) {
         var me = this;
         // Open layerselector
-        me.instance.setAnalyseMode(false);
+        //me.instance.setAnalyseMode(false);
         var name = 'LayerSelector';
         var extension = me._getFakeExtension(name);
         var rn = 'userinterface.UpdateExtensionRequest';
@@ -985,14 +985,17 @@ function(instance, localization) {
      * @return {Object} selections for a given method
      */
     _getMethodSelections : function(layer, defaultSelections) {
+        var me = this;
         var container = this.mainPanel;
         var methodName = defaultSelections.method;
 
         // buffer
         var bufferSize = container.find('.settings_buffer_field').val();
         // aggregate
-        var aggregateFunction = container.find('input[name=aggre]:checked').val();
-        aggregateFunction = aggregateFunction && aggregateFunction.replace(this.id_prefix, '');
+        var aggregateFunctions = container.find('input[name=aggre]:checked');
+        aggregateFunctions = jQuery.map(aggregateFunctions, function(val, i) {
+            return val.value.replace(me.id_prefix, '');
+        });
         // union
         var unionLayerId = container.find('input[name=union]:checked').val();
         unionLayerId = unionLayerId && unionLayerId.replace((this.id_prefix + 'layer_'), '');
@@ -1011,7 +1014,7 @@ function(instance, localization) {
             },
             'aggregate' : {
                 methodParams : {
-                    'function' : aggregateFunction // TODO: param name?
+                    functions : aggregateFunctions // TODO: param name?
                 }
             },
             'union' : {

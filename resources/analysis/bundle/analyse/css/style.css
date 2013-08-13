@@ -85,12 +85,23 @@ div.basic_analyse div.previewNotes {
   margin-right: 8px;
   margin-bottom: 2px; }
 
+
+label.params_checklabel {
+  text-overflow: ellipsis;
+  display: inline-block;
+  width: 117px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 table.layer-icons {
   font-family: Arial, sans-serif;
   font-size: 12px;
   line-height: 18px;
   margin: 0 0 2px;
-  width: 30%; }
+  width: 30%;
+  display: inline-table;
+}
 
 /* Analyse filter CSS */
 div.analyse-filter-popup-content {

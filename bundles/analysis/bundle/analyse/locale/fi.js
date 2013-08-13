@@ -19,19 +19,23 @@ Oskari.registerLocalization({
                         "id": "oskari_analyse_buffer",
                         "label": "Vyöhyke",
                         "classForMethod": "buffer",
-                        "selected": true
+                        "selected": true,
+                        "tooltip": "Lisää valittujen kohteiden ympärille vyöhykkeet ja käyttää näitä vyöhyke-geometrioita (buffer) analyysissä"
                     }, {
                         "id": "oskari_analyse_aggregate",
                         "label": "Koostetyökalu",
-                        "classForPreview": "aggregate"
+                        "classForPreview": "aggregate",
+                        "tooltip": "Laskee kohteen ominaisuuksille aggregointiominaisuuksia esim. summat"
                     }, {
                         "id": "oskari_analyse_union",
                         "label": "Unioni",
-                        "classForPreview": "union"
+                        "classForPreview": "union",
+                        "tooltip": "Kohteiden yhdistäminen taulukosta valitsemalla tai yhteisten ominaisuustietoarvojen perusteella"
                     }, {
                         "id": "oskari_analyse_intersect",
                         "label": "Leikkaus",
-                        "classForPreview": "intersect"
+                        "classForPreview": "intersect",
+                        "tooltip": "Valitaan uudet kohteet leikkaamalla leikkaavan tason kohteilla leikattavaa tasoa"
                     }
                 ]
             },
