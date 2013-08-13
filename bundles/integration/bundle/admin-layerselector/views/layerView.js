@@ -144,16 +144,12 @@ define([
                 //this.$el.find("#add-layer-inspire-theme").tagit({availableTags: ["Hallinnolliset yksiköt", "Hydrografia", "Kiinteistöt", "Kohteet", "Koordinaattijärjestelmät", "Korkeus", "Liikenneverkot", "Maankäyttö", "Maanpeite","Maaperä","Merialueet", "Metatieto"]});
 
 
-                setTimeout(function(){
-                    element.find('.admin-add-layer').addClass('show-edit-layer');
-                }, 30);
+                element.find('.admin-add-layer').addClass('show-edit-layer');
             }
             //hide layer settings
             else {
                 element.find('.admin-add-layer').removeClass('show-edit-layer');
-                setTimeout(function(){
-                    element.find('.admin-add-layer').remove();
-                },300);
+                element.find('.admin-add-layer').remove();
 
             }
         },
@@ -197,16 +193,12 @@ define([
                 //this.$el.find("#add-layer-inspire-theme").tagit({availableTags: ["Hallinnolliset yksiköt", "Hydrografia", "Kiinteistöt", "Kohteet", "Koordinaattijärjestelmät", "Korkeus", "Liikenneverkot", "Maankäyttö", "Maanpeite","Maaperä","Merialueet", "Metatieto"]});
 
 
-                setTimeout(function(){
-                    element.addClass('show-edit-sublayer');
-                }, 30);
+                element.addClass('show-edit-sublayer');
             }
             //hide layer settings
             else {
                 element.removeClass('show-edit-sublayer');
-                setTimeout(function(){
-                    element.find('.admin-add-layer').remove();
-                },300);
+                element.find('.admin-add-layer').remove();
 
             }
         },
@@ -221,9 +213,7 @@ define([
             var element = jQuery(e.currentTarget);
             if(element.parents('.admin-add-layer').hasClass('show-edit-layer')) {
                 element.parents('.admin-add-layer').removeClass('show-edit-layer');
-                setTimeout(function(){
-                    element.parents('.admin-add-layer').remove();
-                },300);
+                element.parents('.admin-add-layer').remove();
 
             }
         },

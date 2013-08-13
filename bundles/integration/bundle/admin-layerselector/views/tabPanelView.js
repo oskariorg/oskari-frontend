@@ -281,9 +281,7 @@ define([
             } else {
                 layer.find('.admin-add-layer').removeClass('show-add-layer');
                 element.html(this.options.instance.getLocalization('admin').addLayer);
-                setTimeout(function(){
-                    layer.find('.admin-add-layer').remove();
-                },300);
+                layer.find('.admin-add-layer').remove();
             }
         },
         /**
@@ -296,9 +294,7 @@ define([
             var element = jQuery(e.currentTarget);
             if(element.parents('.admin-add-layer').hasClass('show-add-layer')) {
                 element.parents('.admin-add-layer').removeClass('show-add-layer');
-                setTimeout(function(){
-                    element.parents('.admin-add-layer').remove();
-                },300);
+                element.parents('.admin-add-layer').remove();
 
             }
         },

@@ -183,9 +183,7 @@ define([
                 element.parents('.admin-add-layer').hasClass('show-add-layer')) {
                 
                 element.parents('.admin-add-layer').removeClass('show-edit-layer');
-                setTimeout(function(){
-                    element.parents('.admin-add-layer').remove();
-                },300);
+                element.parents('.admin-add-layer').remove();
 
                 var addLayerBtn = element.parents('.create-layer').children('.admin-add-layer-btn').html(this.options.instance.getLocalization('admin').addLayer);
             }
@@ -200,9 +198,7 @@ define([
             e.stopPropagation();
             var element = jQuery(e.currentTarget);
             element.parents('add-sublayer-wrapper').first().removeClass('show-edit-sublayer');
-            setTimeout(function() {
-                element.parents('add-sublayer-wrapper').first().find('.admin-add-layer').remove();
-            }, 300);
+            element.parents('add-sublayer-wrapper').first().find('.admin-add-layer').remove();
         },
 
         /**
@@ -238,17 +234,15 @@ define([
                         //close this
                         if(addLayerDiv.hasClass('show-edit-layer')) {
                             addLayerDiv.removeClass('show-edit-layer');
-                            setTimeout(function(){
-                                // bubble this action to the View
-                                // = outside of backbone implementation
-                                element.trigger({
-                                    type: "adminAction",
-                                    command: 'removeLayer',
-                                    modelId: me.model.getId(),
-                                    baseLayerId: me.options.baseLayerId
-                                });
-                                addLayerDiv.remove();
-                            },300);
+                            // bubble this action to the View
+                            // = outside of backbone implementation
+                            element.trigger({
+                                type: "adminAction",
+                                command: 'removeLayer',
+                                modelId: me.model.getId(),
+                                baseLayerId: me.options.baseLayerId
+                            });
+                            addLayerDiv.remove();
 
                         }
 
@@ -386,27 +380,25 @@ define([
                         if(createLayer != null) {
                             createLayer.find('.admin-add-layer-btn').html(me.instance.getLocalization('admin').addLayer);
                         }
-                        setTimeout(function(){
-                            form.remove();
-                            resp.admin.style = me.classes.encode64(resp.admin.style);
-                            if(me.model == null) {
-                                //trigger event to View.js so that it can act accordingly
-                                accordion.trigger({
-                                    type: "adminAction",
-                                    command: 'addLayer',
-                                    layerData: resp,
-                                    baseLayerId: me.options.baseLayerId
-                                });
-                            } else {
-                                //trigger event to View.js so that it can act accordingly
-                                accordion.trigger({
-                                    type: "adminAction",
-                                    command: 'editLayer',
-                                    layerData: resp,
-                                    baseLayerId: me.options.baseLayerId
-                                });
-                            }
-                        },300);
+                        form.remove();
+                        resp.admin.style = me.classes.encode64(resp.admin.style);
+                        if(me.model == null) {
+                            //trigger event to View.js so that it can act accordingly
+                            accordion.trigger({
+                                type: "adminAction",
+                                command: 'addLayer',
+                                layerData: resp,
+                                baseLayerId: me.options.baseLayerId
+                            });
+                        } else {
+                            //trigger event to View.js so that it can act accordingly
+                            accordion.trigger({
+                                type: "adminAction",
+                                command: 'editLayer',
+                                layerData: resp,
+                                baseLayerId: me.options.baseLayerId
+                            });
+                        }
 
                     } else {
                         //problem
