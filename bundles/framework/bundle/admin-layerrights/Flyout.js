@@ -142,6 +142,7 @@ function(instance) {
         button.setTitle(this.instance.getLocalization('save'));
 
         button.setHandler(me.doSave);
+        // Not sure if we want savew on enter
         //field.bindEnterKey(doSave);
         
         var controls = container.find('div.controls');
@@ -151,10 +152,19 @@ function(instance) {
         roleSelectLabel.html(this.instance.getLocalization('selectRole'));
         container.append(content);
         flyout.append(container);
-        var roleSelect = flyout.find('select-admin-layerrights-role');
+        var roleSelect = flyout.find('select.admin-layerrights-role');
+        console.log(roleSelect);
+        roleSelect.change(function(eventObject) {
+            console.log("change");
+            me.updatePermissionsTable(roleSelect.find("option:selected").val());
+        });
         // We're only supporting ROLE ATM, USER support might be added later
         me.getExternalIdsAjaxRequest("ROLE", 0);
 
+    },
+
+    updatePermissionsTable : function(activeRole) {
+        alert("Update permissions table with role: " + activeRole);
     },
 
     getExternalIdsAjaxRequest : function(externalType, selectedId) {
