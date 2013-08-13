@@ -1,0 +1,15 @@
+<div class="layer-type-wrapper">
+    <div class="add-layer-record">
+        <div class="add-layer-label-area">
+            <label for="add-layer-type" class="add-layer-label" title="<%= instance.getLocalization('admin').type %>"><%= instance.getLocalization('admin').type %></label>
+        </div>
+        <div class="add-layer-input-area">
+            <select id="add-layer-type">
+                <option value="" <% if(model != null && !model.admin.type ) { %>selected<% } %> ><%= instance.getLocalization('admin').typePlaceholder %></option>
+                <option value="wmslayer" <% if(model != null && model.admin.type == 'wmslayer' ) { %>selected<% } %> ><%= instance.getLocalization('admin').normalLayer %></option>
+                <option value="base" <% if(model != null && model.admin.type == 'base' ) { %>selected<% } %> ><%= instance.getLocalization('admin').baseLayer %></option>
+                <option value="groupMap" <% if(model != null && model.admin.type == 'groupMap' ) { %>selected<% } %> ><%= instance.getLocalization('admin').groupLayer %></option>
+            </select>
+        </div>
+    </div>
+</div>

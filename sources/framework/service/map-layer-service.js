@@ -91,6 +91,39 @@ function(mapLayerUrl, sandbox) {
             this._sandbox.notifyAll(event);
         }
     },
+
+    /**
+     * @method addSubLayer
+     * Adds the layer to parent layer's sublayer list
+     * @param {String} parentLayerId the id of the parent layer to which we're adding the layerModel.
+     * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layerModel
+     *            parsed layer model to be added (must be of type declared in #typeMapping)
+     * @param {Boolean} suppressEvent (optional)
+     *            true to not send event (should only be used on initial load to avoid unnecessary events)
+     */
+    addSubLayer : function(parentLayerId, layerModel, suppressEvent) {
+        var parentLayer = this.findMapLayer(parentLayerId),
+            subLayers, len, i;
+
+        if(parentLayer && (parentLayer.isBaseLayer() || parentLayer.isGroupLayer())) {
+            subLayers = parentLayer.getSubLayers();
+
+            for (i = 0, len = subLayers.length; i < len; ++i) {
+                if (subLayers[i].getId() === layerModel.getId()) {
+                    return false;
+                }
+            }
+
+            subLayers.push(layerModel);
+
+            if(suppressEvent !== true) {
+                // notify components of added layer if not suppressed
+                var event = this._sandbox.getEventBuilder('MapLayerEvent')(layerModel.getId(), 'add');
+                this._sandbox.notifyAll(event);
+            }
+        }
+    },
+
     /**
      * @method removeLayer
      * Removes the layer from internal layerlist and
@@ -117,6 +150,40 @@ function(mapLayerUrl, sandbox) {
         this._reservedLayerIds[layerId] = false;
         // TODO: notify if layer not found?
     },
+
+    /**
+     * @method removeSubLayer
+     * Removes the layer from parent layer's sublayers and
+     * sends out a MapLayerEvent if it was found & removed
+     * @param {String} parentLayerId
+     * @param {String} layerId
+     *            id for the layer to be removed
+     * @param {Boolean} suppressEvent (optional)
+     *            true to not send event (should only be used on test cases to avoid unnecessary events)
+     */
+    removeSubLayer : function(parentLayerId, layerId, suppressEvent) {
+        var parentLayer = this.findMapLayer(parentLayerId),
+            subLayers, subLayer, len, i;
+
+        if(parentLayer && (parentLayer.isBaseLayer() || parentLayer.isGroupLayer())) {
+            subLayers = parentLayer.getSubLayers();
+
+            for (i = 0, len = subLayers.length; i < len; ++i) {
+                if (subLayers[i].getId() === layerId) {
+                    subLayer = subLayers[i];
+                    subLayers.splice(i, 1);
+                    break;
+                }
+            }
+
+            if(subLayer && suppressEvent !== true) {
+                // notify components of added layer if not suppressed
+                var event = this._sandbox.getEventBuilder('MapLayerEvent')(subLayer.getId(), 'remove');
+                this._sandbox.notifyAll(event);
+            }
+        }
+    },
+
     /**
      * @method updateLayer
      * Updates layer in internal layerlist and
@@ -282,6 +349,9 @@ function(mapLayerUrl, sandbox) {
             var mapLayer = this.createMapLayer(allLayers[i]);
             if(allLayers[i].admin != null) {
                 mapLayer.admin = allLayers[i].admin;                
+            }
+            if (allLayers[i].names) {
+                mapLayer.names = allLayers[i].names;
             }
             if(this._reservedLayerIds[mapLayer.getId()] !== true) {
                 this.addLayer(mapLayer, true);
@@ -476,6 +546,10 @@ function(mapLayerUrl, sandbox) {
             for(var i = 0; i < baseMapJson.subLayer.length; i++) {
                 // Notice that we are adding layers to baselayers sublayers array
                 var subLayer = this._createActualMapLayer(baseMapJson.subLayer[i]);
+
+                //if (baseMapJson.subLayer[i].admin) {
+                    subLayer.admin = baseMapJson.subLayer[i].admin || {};
+                //}
                 
                 baseLayer.getSubLayers().push(subLayer);
             }
