@@ -62,7 +62,7 @@ function(instance) {
             '       <select id="admin-layerrights-dataprovider"></select>\n' +*/
             '       <table class="admin-layerrights-layers">' +
             '       </table>' +
-            '       <button class="admin-layerrights-submit" type="submit"></button>' +
+            '       <div class="controls"></div>' +
             '   </form>' +
             '</div>\n');
     },
@@ -130,8 +130,19 @@ function(instance) {
         var flyout = jQuery(this.container);
         flyout.empty();
         var container = this.template.clone();
-        var saveButton = container.find('button.admin-layerrights-submit');
-        saveButton.html(this.instance.getLocalization('save'));
+        
+        var button = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        button.setTitle(this.instance.getLocalization('save'));
+        var doSave = function() {
+            // save datá
+        };
+
+        button.setHandler(doSave);
+        //field.bindEnterKey(doSave);
+        
+        var controls = container.find('div.controls');
+        controls.append(button.getButton());
+
         var roleSelectLabel = container.find('label > span');
         roleSelectLabel.html(this.instance.getLocalization('selectRole'));
         container.append(content);
@@ -144,6 +155,7 @@ function(instance) {
     getExternalIdsAjaxRequest : function(externalType, selectedId) {
         var me = this;
         ajaxRequestGoing = true;
+        // TODO add error handling
         jQuery.getJSON(ajaxUrl, {
             cmd: "ajax.jsp",
             getExternalIds: externalType
