@@ -77,8 +77,8 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
     _validate_method_aggregate: function(selections, errorTitle) {
         var noErrors = true;
 
-        if (!selections.methodParams['function']) {
-            this._notifyValidationError('Aggregate function not selected', errorTitle);
+        if (!selections.methodParams['functions'] || selections.methodParams['functions'].length === 0) {
+            this._notifyValidationError('Aggregate functions not selected', errorTitle);
             noErrors = false;
         }
         return noErrors;

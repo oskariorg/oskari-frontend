@@ -84,7 +84,13 @@ div.basic_analyse div.buttons input, div.analyse div.startview div.buttons input
     margin-right: 1px;
 }
 
-
+label.params_checklabel {
+  text-overflow: ellipsis;
+  display: inline-block;
+  width: 117px;
+  white-space: nowrap;
+  overflow: hidden;
+}
 
 div.basic_analyse div.location {
     height: 30px;
@@ -108,6 +114,7 @@ table.layer-icons {
     line-height: 18px;
     margin: 0 0 2px;
     width: 30%;
+    display: inline-table;
 }
 
 /* Analyse filter CSS */

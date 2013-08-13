@@ -7,8 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.WFSSetFilter'
 /**
  * @method create called automatically on construction
  * @static
- *
- * <GIEV MIEH! PARAMS>
+ * @param {Object} geojson
  *
  */
 function(geojson) {
