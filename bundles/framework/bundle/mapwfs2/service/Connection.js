@@ -20,6 +20,10 @@ function(config, mediator) {
     this._connected = false;
     this._errorSub = null;
 
+    if(this.config.hostname == "localhost") {
+        this.config.hostname = location.hostname;
+    }
+
     this.cometURL = location.protocol + "//" +
         this.config.hostname + ":" + this.config.port  +
         this.config.contextPath + "/cometd";
