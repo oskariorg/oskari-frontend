@@ -31,7 +31,7 @@ function() {
 	insertTo : function(container) {
 		this.container = container;
 	},
-	setContent : function(pContent, status) {
+	setContent : function(pContent, status, cannotClose) {
 		if( this.ui ) {
 			this.ui.remove();
 			this.ui = null;
@@ -42,9 +42,14 @@ function() {
 		this.container.prepend(txtdiv);
 		this.ui = txtdiv;
 		var me = this;
-		txtdiv.children('.oskari-alert-icon-close').click(function(){
-			me.hide();
-		});
+
+		if (!cannotClose) {
+			txtdiv.children('.oskari-alert-icon-close').click(function(){
+				me.hide();
+			});
+		} else {
+			txtdiv.children('.oskari-alert-icon-close').remove();
+		}
 	},
 	hide : function() {
 		if( this.ui)  {

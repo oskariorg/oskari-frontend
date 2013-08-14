@@ -20,19 +20,23 @@ Oskari.registerLocalization({
                         "id": "oskari_analyse_buffer",
                         "label": "Buffer",
                         "classForMethod": "buffer",
-                        "selected": true
+                        "selected": true,
+                        "tooltip": ""
                     }, {
                         "id": "oskari_analyse_aggregate",
                         "label": "Aggregate",
-                        "classForPreview": "aggregate"
+                        "classForPreview": "aggregate",
+                        "tooltip": ""
                     }, {
                         "id": "oskari_analyse_union",
                         "label": "Union",
-                        "classForPreview": "union"
+                        "classForPreview": "union",
+                        "tooltip": ""
                     }, {
                         "id": "oskari_analyse_intersect",
                         "label": "Intersect",
-                        "classForPreview": "intersect"
+                        "classForPreview": "intersect",
+                        "tooltip": ""
                     }
                 ]
             },

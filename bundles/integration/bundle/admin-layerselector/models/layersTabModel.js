@@ -237,7 +237,7 @@
                             group.id = obj.id;
                             groups.push(group);
                         }
-                   }
+                    }
                 }
                 // refresh layerGroups
                 me.set('layerGroups', groups);

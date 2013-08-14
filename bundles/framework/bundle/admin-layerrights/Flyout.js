@@ -62,7 +62,7 @@ function(instance) {
             '       <select id="admin-layerrights-dataprovider"></select>\n' +*/
             '       <table class="admin-layerrights-layers">' +
             '       </table>' +
-            '       <button class="admin-layerrights-submit" type="submit"></button>' +
+            '       <div class="controls"></div>' +
             '   </form>' +
             '</div>\n');
     },
@@ -119,24 +119,100 @@ function(instance) {
         return this.state;
     },
 
+    doSave : function() {
+        // save data
+        // get stuff from slickgrid, pass it as json to actionroute
+        alert("Savety save.");
+    },
+
     /**
      * @method setContent
      * Creates the UI for a fresh start
      */
     setContent : function(content) {
+        // TODO add filters (provider/theme etc.)
         var me = this;
         var sandbox = me.instance.getSandbox();
 
         var flyout = jQuery(this.container);
         flyout.empty();
         var container = this.template.clone();
-        var saveButton = container.find('button.admin-layerrights-submit');
-        saveButton.html(this.instance.getLocalization('save'));
+        
+        var button = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        button.setTitle(me.instance.getLocalization('save'));
+
+        button.setHandler(me.doSave);
+        // Not sure if we want savew on enter
+        //field.bindEnterKey(doSave);
+        
+        var controls = container.find('div.controls');
+        controls.append(button.getButton());
+
         var roleSelectLabel = container.find('label > span');
         roleSelectLabel.html(this.instance.getLocalization('selectRole'));
         container.append(content);
         flyout.append(container);
+        var roleSelect = flyout.find('select.admin-layerrights-role');
+        roleSelect.change(function(eventObject) {
+            console.log("change");
+            me.updatePermissionsTable(roleSelect.find("option:selected").val(), "ROLE");
+        });
+        // We're only supporting ROLE ATM, USER support might be added later
+        me.getExternalIdsAjaxRequest("ROLE", 0);
+
+    },
+
+    updatePermissionsTable : function(activeRole, externalType) {
+        alert("Update permissions table with role: " + activeRole);
+        jQuery.getJSON(ajaxUrl, {
+            cmd: "ajax.jsp",
+            lang: Oskari.getLang(),
+            timestamp: new Date().getTime(),
+            externalId: activeRole,
+            resourceType: "WMS_LAYER", // default karttataso, hardcoded for now (TODO move to backend)
+            externalType: externalType
+        }, function(result) {
+            console.log(result);
+        });
+    },
+
+    getExternalIdsAjaxRequest : function(externalType, selectedId) {
+        var me = this;
+        
+        //ajaxRequestGoing = true;
+        // TODO add error handling
+        jQuery.getJSON(ajaxUrl, {
+            action_route: "GetAllRoles",
+            getExternalIds: externalType
+        }, function (result) {
+            me.makeExternalIdsSelect(result, externalType, selectedId);
+        });
+    },
+
+    // result, (c)0/user/role, (b)selected id
+    makeExternalIdsSelect : function(result, externalType, selectedId) {
+        var externalIdSelect = jQuery(this.container).find("select.admin-layerrights-role");
+        externalIdSelect.html("");
+        if (externalType != "0") {
+            var a;
+            if (selectedId != "0") {
+                a = '<option value="0" >-- Valitse tunniste --</option>';
+            } else {
+                a = '<option value="0" selected="selected">-- Valitse tunniste --</option>';
+            }
+            for (var d = 0; d < result.external.length; d++) {
+                if (result.external[d].id == selectedId) {
+                    a += '<option selected="selected" value="' + result.external[d].id + '">' + result.external[d].name + "</option>";
+                } else {
+                    a += '<option value="' + result.external[d].id + '">' + result.external[d].name + "</option>";
+                }
+            }
+            externalIdSelect.html(a);
+        } else {
+            externalIdSelect.html("");
+        }
     }
+
 }, {
     /**
      * @property {String[]} protocol

@@ -18,7 +18,7 @@ define([
         AdminAddLayerBtnTemplate,
         TabPanelTemplate, 
         AccordionPanelTemplate,
-        LayerRowTemplate, 
+        LayerRowTemplate,
         AdminLayerSettingsView,
         LayerView) {
 
@@ -39,7 +39,7 @@ define([
             "click .accordion-header"       : "toggleLayerGroup",
             "click .admin-add-layer-btn"    : "toggleAddLayer",
             "click .admin-add-layer-cancel" : "hideAddLayer",
- 
+
             "click .admin-edit-class-btn"   : "toggleGroupingSettings",
             "click .admin-edit-org-btn"     : "toggleGroupingSettings",
             "click .admin-add-class-cancel" : "toggleGroupingSettings",
@@ -281,9 +281,7 @@ define([
             } else {
                 layer.find('.admin-add-layer').removeClass('show-add-layer');
                 element.html(this.options.instance.getLocalization('admin').addLayer);
-                setTimeout(function(){
-                    layer.find('.admin-add-layer').remove();
-                },300);
+                layer.find('.admin-add-layer').remove();
             }
         },
         /**
@@ -296,9 +294,7 @@ define([
             var element = jQuery(e.currentTarget);
             if(element.parents('.admin-add-layer').hasClass('show-add-layer')) {
                 element.parents('.admin-add-layer').removeClass('show-add-layer');
-                setTimeout(function(){
-                    element.parents('.admin-add-layer').remove();
-                },300);
+                element.parents('.admin-add-layer').remove();
 
             }
         },
@@ -378,7 +374,7 @@ define([
          * 
          * @method _save
          */
-         _save: function(e, url, successCallback) {
+        _save: function(e, url, successCallback) {
             var me = this,
                 element = jQuery(e.currentTarget),
                 addClass = element.parents('.admin-add-class');
@@ -398,7 +394,7 @@ define([
                     }
                 },
                 error : function(jqXHR, textStatus) {
-                    if(callbackFailure && jqXHR.status != 0) {
+                    if(jqXHR.status != 0) {
                         alert(' false ');
                     }
                 }
@@ -463,7 +459,7 @@ define([
                     }
                 },
                 error : function(jqXHR, textStatus) {
-                    if(callbackFailure && jqXHR.status != 0) {
+                    if(jqXHR.status != 0) {
                         alert(' false ');
                     }
                 }
