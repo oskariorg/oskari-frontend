@@ -119,11 +119,18 @@ function(instance) {
         return this.state;
     },
 
+    doSave : function() {
+        // save data
+        // get stuff from slickgrid, pass it as json to actionroute
+        alert("Savety save.");
+    },
+
     /**
      * @method setContent
      * Creates the UI for a fresh start
      */
     setContent : function(content) {
+        // TODO add filters (provider/theme etc.)
         var me = this;
         var sandbox = me.instance.getSandbox();
 
@@ -132,12 +139,10 @@ function(instance) {
         var container = this.template.clone();
         
         var button = Oskari.clazz.create('Oskari.userinterface.component.Button');
-        button.setTitle(this.instance.getLocalization('save'));
-        var doSave = function() {
-            // save datá
-        };
+        button.setTitle(me.instance.getLocalization('save'));
 
-        button.setHandler(doSave);
+        button.setHandler(me.doSave);
+        // Not sure if we want savew on enter
         //field.bindEnterKey(doSave);
         
         var controls = container.find('div.controls');
@@ -147,21 +152,41 @@ function(instance) {
         roleSelectLabel.html(this.instance.getLocalization('selectRole'));
         container.append(content);
         flyout.append(container);
-        var roleSelect = flyout.find('select-admin-layerrights-role');
+        var roleSelect = flyout.find('select.admin-layerrights-role');
+        roleSelect.change(function(eventObject) {
+            console.log("change");
+            me.updatePermissionsTable(roleSelect.find("option:selected").val(), "ROLE");
+        });
+        // We're only supporting ROLE ATM, USER support might be added later
         me.getExternalIdsAjaxRequest("ROLE", 0);
 
     },
 
-    getExternalIdsAjaxRequest : function(externalType, selectedId) {
-        var me = this;
-        ajaxRequestGoing = true;
-        // TODO add error handling
+    updatePermissionsTable : function(activeRole, externalType) {
+        alert("Update permissions table with role: " + activeRole);
         jQuery.getJSON(ajaxUrl, {
             cmd: "ajax.jsp",
+            lang: Oskari.getLang(),
+            timestamp: new Date().getTime(),
+            externalId: activeRole,
+            resourceType: "WMS_LAYER", // default karttataso, hardcoded for now (TODO move to backend)
+            externalType: externalType
+        }, function(result) {
+            console.log(result);
+        });
+    },
+
+    getExternalIdsAjaxRequest : function(externalType, selectedId) {
+        var me = this;
+        
+        //ajaxRequestGoing = true;
+        // TODO add error handling
+        jQuery.getJSON(ajaxUrl, {
+            action_route: "GetAllRoles",
             getExternalIds: externalType
         }, function (result) {
             me.makeExternalIdsSelect(result, externalType, selectedId);
-        })
+        });
     },
 
     // result, (c)0/user/role, (b)selected id

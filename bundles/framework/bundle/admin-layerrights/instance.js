@@ -97,11 +97,12 @@ Oskari.clazz
 
                 this.localization = Oskari.getLocalization(this.getName());
 
+                // TODO ajaxUrl can only have the baseUrl as we have multiple actionroutes
                 var ajaxUrl = null;
                 if (this.conf && this.conf.url) {
                     ajaxUrl = this.conf.url;
                 } else {
-                    ajaxUrl = sandbox.getAjaxUrl() + 'action_route=SearchKeywords';
+                    ajaxUrl = sandbox.getAjaxUrl() + 'action_route=GetAllRoles';
                 }
 
 
