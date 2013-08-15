@@ -11,6 +11,12 @@ Oskari.registerLocalization({
             "title" : "Tasojen Oikeuksien Hallinta",
             "message" : "Tasojen Oikeuksien Hallinta"
         },
+        "rights" : {
+            "rightToPublish"    : "Julkaisuoikeus",
+            "rightToView"       : "Katseluoikeus",
+            "rightToDownload"   : "Latausoikeus",
+            "rightToPublishView": "Näkymän julkaisuoikeus"
+        },
         "save" : "Tallenna",
         "selectRole" : "Rooli"
     }

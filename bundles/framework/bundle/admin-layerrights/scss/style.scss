@@ -1,4 +1,11 @@
-/*.admin-layerrights-layers {
-	width: 100%;
-	height: 100%;
-}*/
+.admin-layerrights-layers {
+	.layer-rights-table {
+		margin-top: 20px;
+		th {
+			padding: 2px 5px;
+		}
+		th, td {
+			text-align: center;
+		}
+	}
+}

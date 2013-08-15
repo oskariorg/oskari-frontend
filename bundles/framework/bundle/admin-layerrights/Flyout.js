@@ -137,19 +137,24 @@ function(instance) {
         container.append(content);
         flyout.append(container);
 
-         var columns = [
+        var rightsLoc = this.instance._localization.rights;
+        var columns = [
             {id: "name", "name": "Name"},
-            {id: "isSelected", "name": "Right to Publish"},
-            {id: "isViewSelected", "name": "Right to View"},
-            {id: "isDownloadSelected", "name": "Right to Download"},
-            {id: "isViewPublishedSelected", "name": "Right to PublishView"},
+            {id: "isSelected", "name": rightsLoc.rightToPublish},
+            {id: "isViewSelected", "name": rightsLoc.rightToView},
+            {id: "isDownloadSelected", "name": rightsLoc.rightToDownload},
+            {id: "isViewPublishedSelected", "name": rightsLoc.rightToPublishView},
         ];
 
-//        me.createLayerRightGrid(columns, me._testJSON(), container.find('.admin-layerrights-layers'));
+        var table = me.createLayerRightGrid(columns, me._testJSON());
+
+        container.find('.admin-layerrights-layers').append(table);
+
+        //this.extractSelections(container.find('.admin-layerrights-layers'));
     }, 
 
-/*    createLayerRightGrid: function(columnHeaders, layerRightsJSON, container) {
-        var table = '<table>';
+    createLayerRightGrid: function(columnHeaders, layerRightsJSON) {
+        var table = '<table class="layer-rights-table">';
 
         table += "<thead><tr>";
         for (var i = 0; i < columnHeaders.length; i++) {
@@ -172,27 +177,49 @@ function(instance) {
                 var value = layerRight[header.id];
 
                 if(header.id === 'name') {
-                    table += '<td><span class="layer-name">'+value+'</span></td>';                    
+                    table += '<td><span class="layer-name" data-resource="'+layerRight.resourceName+'" data-namespace="'+layerRight.namespace+'">'+value+'</span></td>';
                 } else if(value != null && value === 'true') {
-                    table += '<td><input type="checkbox" checked="checked" /></td>';
+                    table += '<td><input type="checkbox" checked="checked" data-right="'+header.id+'" /></td>';
                 } else {
-                    table += '<td><input type="checkbox" /></td>';                    
+                    table += '<td><input type="checkbox" data-right="'+header.id+'" /></td>';                    
                 }
             };
 
             table += "</tr>";
         };
         table += "</tbody>";
-
+        return table;
     },
-*/
+    
+    extractSelections: function(container) {
+        var data = [];
+        var trs = container.find('tbody tr');
+        for (var i = 0; i < trs.length; i++) {
+            var dataObj = {};
+            var tr      = jQuery(trs[i]);
 
+            var tdName = tr.find('td span');
+            dataObj.name            = tdName.text();
+            dataObj.resourceName    = tdName.attr('data-resource');
+            dataObj.namespace       = tdName.attr('data-namespace');
 
+            var tds = tr.find('td input');
+            for (var j = 0; j < tds.length; j++) {
+                var td      = jQuery(tds[j]);
+                var right   = td.attr('data-right');
+                var value   = td.prop('checked');
+
+                dataObj[right] = value;
+            };
+            data.push(dataObj);
+        };
+        return data;
+    },
 
     _testJSON: function() {
         return [
             {
-              "isViewSelected": "checked=\"yes\"",
+              "isViewSelected": "true",
               "isDownloadSelected": "",
               "isSelected": "",
               "name": "Aeromagneettiset matalalentomittaukset",
@@ -201,7 +228,7 @@ function(instance) {
               "namespace": "http://geomaps2.gtk.fi/ArcGIS/services/GTKWMS/MapServer/WMSServer"
             },
             {
-              "isViewSelected": "checked=\"yes\"",
+              "isViewSelected": "true",
               "isDownloadSelected": "",
               "isSelected": "",
               "name": "Ajoradan leveys",
@@ -210,25 +237,25 @@ function(instance) {
               "namespace": "http://kartta.liikennevirasto.fi/maaliikenne/wms"
             },
             {
-              "isViewSelected": "checked=\"yes\"",
+              "isViewSelected": "true",
               "isDownloadSelected": "",
               "isSelected": "",
-              "name": "Avoimet metsÃ¤maat",
+              "name": "Avoimet metsämaat",
               "isViewPublishedSelected": "",
               "resourceName": "mtk_avoimet_metsamaat",
               "namespace": "http://a.karttatiili.fi/dataset/peruskarttarasteri/service/wms,http://b.karttatiili.fi/dataset/peruskarttarasteri/service/wms,http://c.karttatiili.fi/dataset/peruskarttarasteri/service/wms,http://d.karttatiili.fi/dataset/peruskarttarasteri/service/wms"
             },
             {
-              "isViewSelected": "checked=\"yes\"",
+              "isViewSelected": "true",
               "isDownloadSelected": "",
               "isSelected": "",
-              "name": "BussipysÃ¤kit",
+              "name": "Bussipysäkit",
               "isViewPublishedSelected": "",
               "resourceName": "katselupalvelu:bussipysakit",
               "namespace": "http://kartta.liikennevirasto.fi/maaliikenne/wms"
             },
             {
-              "isViewSelected": "checked=\"yes\"",
+              "isViewSelected": "true",
               "isDownloadSelected": "",
               "isSelected": "",
               "name": "Corine Land Cover 2000, 25 ha",
@@ -237,7 +264,7 @@ function(instance) {
               "namespace": "http://paikkatieto.ymparisto.fi/ArcGIS/services/INSPIRE/SYKE_Maanpeite/MapServer/WMSServer"
             },
             {
-              "isViewSelected": "checked=\"yes\"",
+              "isViewSelected": "true",
               "isDownloadSelected": "",
               "isSelected": "",
               "name": "Corine Land Cover 2000, 25 m",
