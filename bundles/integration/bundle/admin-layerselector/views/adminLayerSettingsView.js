@@ -337,12 +337,12 @@ define([
             if(lcId != null) {
                 url += "&lcId=" + lcId;
             }
-            url += "&nameFi=" + data.names.fi +
-                "&nameSv=" + data.names.sv +
-                "&nameEn=" + data.names.en +
-                "&titleFi=" + data.title.fi +
-                "&titleSv=" + data.title.sv +
-                "&titleEn=" + data.title.en +
+            url += "&nameFi=" + encodeURIComponent(data.names.fi) +
+                "&nameSv=" + encodeURIComponent(data.names.sv) +
+                "&nameEn=" + encodeURIComponent(data.names.en) +
+                "&titleFi=" + encodeURIComponent(data.title.fi) +
+                "&titleSv=" + encodeURIComponent(data.title.sv) +
+                "&titleEn=" + encodeURIComponent(data.title.en) +
                 "&type=" + data.type +
                 "&wmsName=" + data.wmsName +
                 "&wmsUrl=" + encodeURIComponent(data.wmsUrl) +
