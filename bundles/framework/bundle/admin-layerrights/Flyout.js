@@ -60,8 +60,8 @@ function(instance) {
             '       <select id="admin-layerrights-theme"></select>\n' +
             '       <label for="admin-layerrights-dataprovidere">Data provider</label>' +
             '       <select id="admin-layerrights-dataprovider"></select>\n' +*/
-            '       <table class="admin-layerrights-layers">' +
-            '       </table>' +
+            '       <div class="admin-layerrights-layers">' +
+            '       </div>' +
             '       <button class="admin-layerrights-submit" type="submit"></button>' +
             '   </form>' +
             '</div>\n');
@@ -136,7 +136,120 @@ function(instance) {
         roleSelectLabel.html(this.instance.getLocalization('selectRole'));
         container.append(content);
         flyout.append(container);
+
+         var columns = [
+            {id: "name", "name": "Name"},
+            {id: "isSelected", "name": "Right to Publish"},
+            {id: "isViewSelected", "name": "Right to View"},
+            {id: "isDownloadSelected", "name": "Right to Download"},
+            {id: "isViewPublishedSelected", "name": "Right to PublishView"},
+        ];
+
+//        me.createLayerRightGrid(columns, me._testJSON(), container.find('.admin-layerrights-layers'));
+    }, 
+
+/*    createLayerRightGrid: function(columnHeaders, layerRightsJSON, container) {
+        var table = '<table>';
+
+        table += "<thead><tr>";
+        for (var i = 0; i < columnHeaders.length; i++) {
+            var header = columnHeaders[i];
+            table += '<th>' + header.name + '</th>';
+        };
+        table += "</tr></thead>";
+
+        table += "<tbody>";
+        for (var tr = 0; tr < layerRightsJSON.length; tr++) {
+            var layerRight = layerRightsJSON[tr];
+
+            table += "<tr>";
+
+            // lets loop through header
+            for (var i = 0; i < columnHeaders.length; i++) {
+                var header = columnHeaders[i];
+
+                //select input value based on arrangement of header columns
+                var value = layerRight[header.id];
+
+                if(header.id === 'name') {
+                    table += '<td><span class="layer-name">'+value+'</span></td>';                    
+                } else if(value != null && value === 'true') {
+                    table += '<td><input type="checkbox" checked="checked" /></td>';
+                } else {
+                    table += '<td><input type="checkbox" /></td>';                    
+                }
+            };
+
+            table += "</tr>";
+        };
+        table += "</tbody>";
+
+    },
+*/
+
+
+
+    _testJSON: function() {
+        return [
+            {
+              "isViewSelected": "checked=\"yes\"",
+              "isDownloadSelected": "",
+              "isSelected": "",
+              "name": "Aeromagneettiset matalalentomittaukset",
+              "isViewPublishedSelected": "",
+              "resourceName": "0",
+              "namespace": "http://geomaps2.gtk.fi/ArcGIS/services/GTKWMS/MapServer/WMSServer"
+            },
+            {
+              "isViewSelected": "checked=\"yes\"",
+              "isDownloadSelected": "",
+              "isSelected": "",
+              "name": "Ajoradan leveys",
+              "isViewPublishedSelected": "",
+              "resourceName": "katselupalvelu:Ajoradan leveys",
+              "namespace": "http://kartta.liikennevirasto.fi/maaliikenne/wms"
+            },
+            {
+              "isViewSelected": "checked=\"yes\"",
+              "isDownloadSelected": "",
+              "isSelected": "",
+              "name": "Avoimet metsÃ¤maat",
+              "isViewPublishedSelected": "",
+              "resourceName": "mtk_avoimet_metsamaat",
+              "namespace": "http://a.karttatiili.fi/dataset/peruskarttarasteri/service/wms,http://b.karttatiili.fi/dataset/peruskarttarasteri/service/wms,http://c.karttatiili.fi/dataset/peruskarttarasteri/service/wms,http://d.karttatiili.fi/dataset/peruskarttarasteri/service/wms"
+            },
+            {
+              "isViewSelected": "checked=\"yes\"",
+              "isDownloadSelected": "",
+              "isSelected": "",
+              "name": "BussipysÃ¤kit",
+              "isViewPublishedSelected": "",
+              "resourceName": "katselupalvelu:bussipysakit",
+              "namespace": "http://kartta.liikennevirasto.fi/maaliikenne/wms"
+            },
+            {
+              "isViewSelected": "checked=\"yes\"",
+              "isDownloadSelected": "",
+              "isSelected": "",
+              "name": "Corine Land Cover 2000, 25 ha",
+              "isViewPublishedSelected": "",
+              "resourceName": "CorineLandCover2000_25ha",
+              "namespace": "http://paikkatieto.ymparisto.fi/ArcGIS/services/INSPIRE/SYKE_Maanpeite/MapServer/WMSServer"
+            },
+            {
+              "isViewSelected": "checked=\"yes\"",
+              "isDownloadSelected": "",
+              "isSelected": "",
+              "name": "Corine Land Cover 2000, 25 m",
+              "isViewPublishedSelected": "",
+              "resourceName": "CorineLandCover2000_25m",
+              "namespace": "http://paikkatieto.ymparisto.fi/ArcGIS/services/INSPIRE/SYKE_Maanpeite/MapServer/WMSServer"
+            }
+        ];
     }
+
+
+
 }, {
     /**
      * @property {String[]} protocol

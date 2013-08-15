@@ -48,6 +48,63 @@ function() {
         },{
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/admin-layerrights/Tile.js"
+        }, {
+            "type" : "text/css",
+            "src" : "../../../../libraries/slickgrid/css/slick-default-theme.css"
+        },{
+            "src" : "../../../../libraries/jquery/jquery.event.drag-2.0.min.js",
+            "type" : "text/javascript"
+        },{
+            "src" : "../../../../libraries/slickgrid/slick.core.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/slick.formatters.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/slick.editors.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.cellrangedecorator.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.cellrangeselector.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.cellselectionmodel.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.headermenu2.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.headermenu2.css",
+            "type" : "text/css"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.rowselectionmodel.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/plugins/slick.checkboxselectcolumn2.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/slick.grid.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/slick.groupitemmetadataprovider.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/slick.dataview.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/controls/slick.pager.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/slickgrid/controls/slick.columnpicker.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/chosen/chosen.jquery.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/chosen/chosen.css",
+            "type" : "text/css"
         }],
 
         "locales" : [{
