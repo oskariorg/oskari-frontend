@@ -137,6 +137,7 @@ Oskari.registerLocalization({
                 "values": {
                     "title": "Suodatin",
                     "placeholders": {
+                        "case-sensitive": "Case sensitive",
                         "attribute": "Attribuutti",
                         "boolean": "Looginen operaattori",
                         "operator": "Operaattori",
