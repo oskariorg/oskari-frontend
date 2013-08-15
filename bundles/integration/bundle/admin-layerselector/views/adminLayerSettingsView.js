@@ -317,8 +317,8 @@ define([
             data.style          = form.find('#add-layer-style').val(),
             data.style          = me.classes.encode64(data.style);//me.layerGroupingModel.encode64(data.style);
 
-            data.minScale       = form.find('#add-layer-minscale').val(),
-            data.maxScale       = form.find('#add-layer-maxscale').val(),
+            data.minScale       = form.find('#add-layer-minscale').val() || 16000000,
+            data.maxScale       = form.find('#add-layer-maxscale').val() || 1,
             data.epsg           = form.find('#add-layer-srsname').val(),
             data.epsg           = Number(data.epsg.replace('EPSG:', '')),
 
