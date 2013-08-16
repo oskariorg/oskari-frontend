@@ -11,6 +11,13 @@ Oskari.registerLocalization({
             "title" : "Layer Rights Management",
             "message" : "Layer Rights Management"
         },
+        "rights" : {
+            "name"              : "Namn",
+            "rightToPublish"    : "rätt att publicera",
+            "rightToView"       : "rätt att visa",
+            "rightToDownload"   : "rätt att ladda ner",
+            "rightToPublishView": "rätt att publicera en vy"
+        },
         "save" : "save",
         "selectRole" : "Role"
     }
