@@ -23,6 +23,10 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     '</div>' +
                 '</div>' +
             '</div>',
+        "filterClickedFeatures": '<div class="analyse-filter analyse-filter-clicked-features">' +
+                '<div class="clicked-features-title"></div>' +
+                '<input type="checkbox" name="analyse-clicked-features"></input><label for="analyse-clicked-features"></label>' +
+            '</div>',
         "filterContentValues": '<div class="analyse-filter analyse-filter-popup-values">' +
                 '<div class="values-title"></div>' +
             '</div>',
@@ -168,6 +172,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
     _getFilterDialogContent: function(layer) {
         var content = jQuery(this.__filterTemplates['filterContent']),
             bboxSelection = jQuery(this.__filterTemplates['filterContentBBOX']),
+            clickedFeaturesSelection = jQuery(this.__filterTemplates['filterClickedFeatures']),
             valuesSelection = jQuery(this.__filterTemplates['filterContentValues']),
             filterOption;
 
@@ -176,6 +181,12 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         bboxSelection.find('div.bbox-on').find('label').html(this.loc.filter.bbox.on);
         bboxSelection.find('div.bbox-off').find('label').html(this.loc.filter.bbox.off);
         content.append(bboxSelection);
+
+        // Filter clicked features
+        clickedFeaturesSelection.find('div.clicked-features-title').
+            html('<h4>' + this.loc.filter.clickedFeatures.title + '</h4>');
+        clickedFeaturesSelection.find('label').html(this.loc.filter.clickedFeatures.label);
+        content.append(clickedFeaturesSelection);
 
         // Filter values selection
         valuesSelection.find('div.values-title').html('<h4>' + this.loc.filter.values.title + '</h4>');
@@ -199,6 +210,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
      */
     _fillDialogContent: function(dialog, values, layer) {
         var bboxDiv = dialog.find('div.bbox-radio'),
+            clickedFeaturesDiv = dialog.find('div.analyse-filter-clicked-features'),
             filterDiv = dialog.find('div.filter-option'),
             filter,
             i;
@@ -212,6 +224,10 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // BBOX disabled
             bboxDiv.find('div.bbox-off').find('input[name=filter-bbox]').attr('checked', 'checked');
             bboxDiv.find('div.bbox-on').find('input[name=filter-bbox]').removeAttr('checked');
+        }
+
+        if (values.featureIds) {
+            clickedFeaturesDiv.find('input[name=analyse-clicked-features]').attr('checked', 'checked');
         }
 
         if (values.filters && values.filters.length) {
@@ -480,12 +496,21 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
      */
     _getFilterValues: function(popupContent) {
         var filterValues = {},
-            bboxValue, domFilters, domFilter, filter, boolOperator, emptyFilter, i;
+            bboxValue, clickedFeatures, domFilters, domFilter, filter,
+            boolOperator, emptyFilter, i;
 
         // Get the map window bbox if chosen.
         bboxValue = jQuery(popupContent).find('input[name=filter-bbox]:checked').val();
         if ("true" === bboxValue) {
             filterValues.bbox = this.instance.getSandbox().getMap().getBbox();
+        }
+
+        clickedFeatures = jQuery(popupContent).
+            find('input[name=analyse-clicked-features]').is(':checked');
+        if (clickedFeatures) {
+            // At this point, just set this to 'true', since we can't
+            // get hold of the layer - and consequently the clicked features - yet.
+            filterValues.featureIds = true;
         }
 
         // Get the actual filters.
@@ -515,7 +540,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         // NOTE! This is quite an ugly hack, used so that we don't send empty filters to backend.
         emptyFilter = filterValues.filters[0];
         if (domFilters.length === 1 &&
-            (!emptyFilter.attribute && !emptyFilter.operator && !emptyFilter.value)) {
+            (!emptyFilter.attribute && !emptyFilter.value)) {
             delete filterValues.filters;
         }
 
