@@ -75,6 +75,7 @@ module.exports = function(grunt) {
                         link: topics[topic]
                     });
                 }
+
             }
             return html;
         }
@@ -112,7 +113,6 @@ module.exports = function(grunt) {
                 for(var c = 0; c < pathLength; c++) {
                     cssPath = "../" + cssPath;
                 }
-
                 files.push({
                     "mdFilePath": path.join(cwd, markdownDirectory, file),
                     "output": file.substr(0, file.lastIndexOf(".")) + ".html",
