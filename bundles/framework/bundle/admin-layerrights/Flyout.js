@@ -1,3 +1,4 @@
+
 /**
  * @class Oskari.framework.bundle.admin-layerrights.Flyout
  *
@@ -18,6 +19,9 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
         me.container = null;
         me.state = null;
         me.template = null;
+        me.columns = null;
+        me.cleanData = null;
+        me.activeRole = null;
     }, {
         /**
          * @method getName
@@ -71,6 +75,14 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     '   </form>' +
                     '</div>\n'
             );
+            var rightsLoc = this.instance._localization.rights;
+            this.columns = [
+                {id: "name", "name": rightsLoc.name},
+                {id: "isSelected", "name": rightsLoc.rightToPublish},
+                {id: "isViewSelected", "name": rightsLoc.rightToView},
+                {id: "isDownloadSelected", "name": rightsLoc.rightToDownload},
+                {id: "isViewPublishedSelected", "name": rightsLoc.rightToPublishView}
+            ];
         },
 
         /**
@@ -132,20 +144,32 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
 
         doSave : function () {
             "use strict";
-            // save data
-            // get stuff from slickgrid, pass it as json to actionroute
-            alert("Savety save.");
+            var me = this,
+                saveData = me.extractSelections(jQuery(me.container));
+            jQuery.ajax({
+                type: 'POST',
+                url: ajaxUrl,
+                action_route: 'SAVEACTIONROUTE',
+                dataType: 'json',
+                data: saveData,
+                success: function () {
+                    me.updatePermissionsTable(me.activeRole, "ROLE");
+                },
+                error: function() {
+                    // TODO add error handling
+                }
+            });
         },
 
         /**
          * @method setContent
          * Creates the UI for a fresh start
+         * @param {String} content
          */
         setContent : function (content) {
             "use strict";
             // TODO add filters (provider/theme etc.)
             var me = this,
-                //sandbox = me.instance.getSandbox(),
                 flyout = jQuery(this.container),
                 container = this.template.clone(),
                 button = Oskari.clazz.create('Oskari.userinterface.component.Button'),
@@ -156,7 +180,11 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             flyout.empty();
             button.setTitle(me.instance.getLocalization('save'));
 
-            button.setHandler(me.doSave);
+            button.setHandler(
+                function () {
+                    me.doSave();
+                }
+            );
             // Not sure if we want save on enter
             //field.bindEnterKey(doSave);
 
@@ -164,31 +192,163 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
 
             roleSelectLabel.html(this.instance.getLocalization('selectRole'));
             container.append(content);
-            
+
             roleSelect.change(function () {
-                me.updatePermissionsTable(roleSelect.find("option:selected").val(), "ROLE");
+                me.activeRole = roleSelect.find("option:selected").val();
+                me.updatePermissionsTable(this.activeRole, "ROLE");
             });
+
             flyout.append(container);
             // We're only supporting ROLE ATM, USER support might be added later
             me.getExternalIdsAjaxRequest("ROLE", 0);
-
         },
 
+        /**
+         * @method createLayerRightGrid
+         * Creates the permissions table as a String
+         * @param {Array} columnHeaders
+         * @param {Object} layerRightsJSON
+         * @return {String} Permissions table
+         */
+        createLayerRightGrid: function (columnHeaders, layerRightsJSON) {
+            "use strict";
+            var table = '<table class="layer-rights-table">',
+                i = 0,
+                tr = 0,
+                layerRight = null,
+                header = null,
+                value = null;
+
+            table += "<thead><tr>";
+            for (i  = 0; i < columnHeaders.length; i += 1) {
+                table += '<th>' + columnHeaders[i].name + '</th>';
+            }
+            table += "</tr></thead>";
+
+            table += "<tbody>";
+            for (i = 0; tr < layerRightsJSON.length; tr += 1) {
+                layerRight = layerRightsJSON[tr];
+
+                table += "<tr>";
+
+                // lets loop through header
+                for (i = 0; i < columnHeaders.length; i += 1) {
+                    header = columnHeaders[i];
+                    //select input value based on arrangement of header columns
+                    value = layerRight[header.id];
+
+                    if (header.id === 'name') {
+                        table += '<td><span class="layer-name" data-resource="' + layerRight.resourceName + '" data-namespace="' + layerRight.namespace + '">' + value + '</span></td>';
+                    } else if (value !== null && value === 'true') {
+                        table += '<td><input type="checkbox" checked="checked" data-right="' + header.id + '" /></td>';
+                    } else {
+                        table += '<td><input type="checkbox" data-right="' + header.id + '" /></td>';
+                    }
+                }
+
+                table += "</tr>";
+            }
+            table += "</tbody>";
+            return table;
+        },
+
+        /**
+         * @method extractSelections
+         * Returns dirty table rows as JSON
+         * @param {Object} container
+         * @return {Object} Dirty table rows
+         */
+        extractSelections : function (container) {
+            "use strict";
+            var me = this,
+                data = [],
+                trs = container.find('tbody tr'),
+                i = 0,
+                j = 0,
+                dataObj = null,
+                cleanDataObj = null,
+                tr = null,
+                tdName = null,
+                tds = null,
+                td = null,
+                right = null,
+                value = null,
+                dirty = false;
+            for (i = 0; i < trs.length; i += 1) {
+                // TODO check if data has changed on this row before adding to output
+                dirty = false;
+                cleanDataObj = me.cleanData[i];
+                dataObj = {};
+                tr = jQuery(trs[i]);
+                tdName = tr.find('td span');
+                tds = tr.find('td input');
+                dataObj.name            = tdName.text();
+                dataObj.resourceName    = tdName.attr('data-resource');
+                dataObj.namespace       = tdName.attr('data-namespace');
+                dataObj.roleId = me.activeRole;
+
+                for (j = 0; j < tds.length; j += 1) {
+                    td = jQuery(tds[j]);
+                    right = td.attr('data-right');
+                    value = td.prop('checked');
+
+                    if ((cleanDataObj[right] === 'true') !== value) {
+                        //console.log("Dirty value on " + right + ": " + cleanDataObj[right] + " : " + value);
+                        dirty = true;
+                    }
+                    dataObj[right] = value;
+                }
+
+                if (cleanDataObj.resourceName !== dataObj.resourceName) {
+                    // Don't save stuff in the wrong place...
+                    dirty = false;
+                    //console.err("Resource name mismatch: " + cleanDataObj.resourceName + ", " + dataObj.resourceName);
+                }
+
+                if (cleanDataObj.namespace !== dataObj.namespace) {
+                    // Don't save stuff in the wrong place...
+                    dirty = false;
+                    //console.err("Namespace mismatch: " + cleanDataObj.namespace + ", " + dataObj.namespace);
+                }
+
+                if (dirty) {
+                    //console.log(dataObj);
+                    data.push(dataObj);
+                }
+            }
+            return data;
+        },
+
+        /**
+         * @method updatePermissionsTable
+         * Refreshes the permissions table with the given role and type
+         * @param {String} activeRole
+         * @param {String} externalType
+         */
         updatePermissionsTable : function (activeRole, externalType) {
             "use strict";
-            alert("Update permissions table with role: " + activeRole);
+            var me = this;
             jQuery.getJSON(ajaxUrl, {
-                cmd: "ajax.jsp",
+                action_route: "GetPermissionsLayerHandlers",
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
                 externalId: activeRole,
-                resourceType: "WMS_LAYER", // default karttataso, hardcoded for now (TODO move to backend)
+               //resourceType: "WMS_LAYER",
                 externalType: externalType
             }, function (result) {
-                console.log(result);
+                // store unaltered data so we can do a dirty check on save
+                me.cleanData = result.resource;
+                var table = me.createLayerRightGrid(me.columns, result.resource);
+                jQuery(me.container).find('.admin-layerrights-layers').append(table);
             });
         },
 
+        /**
+         * @method getExternalIdsAjaxRequest
+         * Retrieves permissions data for the given type and role
+         * @param {String} externalType
+         * @param {String} selectedId
+         */
         getExternalIdsAjaxRequest : function (externalType, selectedId) {
             "use strict";
             var me = this;
@@ -197,13 +357,14 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             // TODO add error handling
             jQuery.getJSON(ajaxUrl, {
                 action_route: "GetAllRoles",
+                lang: Oskari.getLang(),
+                timestamp: new Date().getTime(),
                 getExternalIds: externalType
             }, function (result) {
                 me.makeExternalIdsSelect(result, externalType, selectedId);
             });
         },
 
-        // result, (c)0/user/role (STRING!), (b)selected id
         /**
          * @param (Object) result
          * @param {String} externalType
