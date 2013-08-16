@@ -58,6 +58,9 @@ Oskari.registerLocalization({
 			}
 		},
 		"admin" : {
+			"selectLayer" 			: "Valitse ylätaso",
+			"selectSubLayer"		: "Valitse alataso",
+
 			"addOrganization" 		: "Lisää tiedontuottaja",
 			"addOrganizationDesc"	: "Lisää tiedontuottaja eli uusi orgasaatio",
 			"addInspire" 			: "Lisää aihe",
@@ -68,6 +71,11 @@ Oskari.registerLocalization({
 			"editDesc" 				: "Muokkaa nimeä",
 			"layerType"				: "Tason tyyppi",
 			"layerTypeDesc" 		: "Tason tyyppi: WMS, WFS, WMTS",
+			"type"					: "Tason tyyppi",
+			"typePlaceholder"		: "Valitse tason tyyppi",
+			"normalLayer"			: "Normaali taso",
+			"baseLayer"				: "Taustataso",
+			"groupLayer"			: "Ryhmätaso",
 			"interfaceVersion"		: "Rajapinnan versio",
 			"interfaceVersionDesc" 	: "Rajapinnan versio",
 			"wmslayer"				: "WMS Taso",
@@ -78,6 +86,11 @@ Oskari.registerLocalization({
 			"getInfo" 				: "Hae tiedot",
 			"selectClass" 			: "Valitse aihe",
 			"selectClassDesc" 		: "Valitse aihe",
+
+			"baseName"				: "Taustatason nimi",
+			"groupName"				: "Ryhmätason nimi",
+			"subLayers" 			: "Alatasot",
+			"addSubLayer"			: "Lisää alataso",
 
 			"wmsInterfaceAddress" 	: "WMS&shy;-rajapinnan osoitteet",
 			"wmsInterfaceAddressDesc": "WMS&shy;-rajapinnan URL-osoitteet pilkulla eroteltuna",
@@ -110,6 +123,8 @@ Oskari.registerLocalization({
 			"maxScale" 				: "Maximi&shy;mittakaava",
 			"maxScaleDesc" 			: "Tason maximimittakaava (1:1)",
 			"maxScalePlaceholder" 	: "1 (1:1) Maximimittakaava ",
+			"srsName"				: "Koordinaatti&shy;järjestelmä",
+			"srsNamePlaceholder"	: "Koordinaattijärjestelmä",
 			"legendImage" 			: "Legenda&shy;-kuvan osoite",
 			"legendImageDesc" 		: "Legenda-kuvan osoite",
 			"legendImagePlaceholder" : "Legenda-kuvan osoite",

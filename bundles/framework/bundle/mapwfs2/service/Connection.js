@@ -20,6 +20,10 @@ function(config, mediator) {
     this._connected = false;
     this._errorSub = null;
 
+    if(this.config.hostname == "localhost") {
+        this.config.hostname = location.hostname;
+    }
+
     this.cometURL = location.protocol + "//" +
         this.config.hostname + ":" + this.config.port  +
         this.config.contextPath + "/cometd";
@@ -44,7 +48,11 @@ function(config, mediator) {
     });
 }, {
 
-    // get browser information
+    /**
+     * @method getBrowser
+     *
+     * Get browser information
+     */
     getBrowser : function() {
         if(jQuery.browser.msie)
             jQuery.browser.name = "msie";
@@ -59,7 +67,10 @@ function(config, mediator) {
         jQuery.browser.versionNum = parseInt(jQuery.browser.version, 10)
     },
 
-    // connect
+    /**
+     * @method _metaConnect
+     * @param {Object} message
+     */
     _metaConnect : function(message) {
         if(this.cometd.isDisconnected()) {
             this._connected = false;
@@ -78,7 +89,10 @@ function(config, mediator) {
         }
     },
 
-    // handshake
+    /**
+     * @method _metaHandshake
+     * @param {Object} handshake
+     */
     _metaHandshake : function(handshake) {
         if(handshake.successful === true) {
             var self = this;
@@ -98,7 +112,10 @@ function(config, mediator) {
         }
     },
 
-    // error handling
+    /**
+     * @method getError
+     * @param {Object} data
+     */
     getError : function(data) {
         var message = data.data.message;
         var layer = mediator.getPlugin().getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
@@ -106,7 +123,10 @@ function(config, mediator) {
         this.mediator.getPlugin().showErrorPopup(message, layer, once);
     }//,
 
-    // debug
+    /**
+     * @method getData
+     * @param {Object} data
+     */
     /*
     getData : function(data) {
         console.log("getData:", data);

@@ -91,7 +91,7 @@ function(instance, localization) {
         "main" : '<div class="basic_analyse">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '</div>',
         "paramsOptionExtra" : '<div class="extra_params"></div>',
         "paramsOptionTool" : '<div class="tool ">' + '<input type="radio" name="params" />' + '<label></label></div>',
-        "aggreOptionTool" : '<div class="tool ">' + '<input type="radio" name="aggre" />' + '<label></label></div>',
+        "aggreOptionTool" : '<div class="tool ">' + '<input type="checkbox" name="aggre" />' + '<label></label></div>',
         "spatialOptionTool" : '<div class="tool ">' + '<input type="radio" name="spatial" />' + '<label></label></div>',
         "intersectOptionTool" : '<div class="tool ">' + '<input type="radio" name="intersect" />' + '<label></label></div>',
         "unionOptionTool" : '<div class="tool ">' + '<input type="radio" name="union" />' + '<label></label></div>',
@@ -102,7 +102,10 @@ function(instance, localization) {
         "title_extra" : '<div class="analyse_title_extra analyse_output_cont"><div class="extra_title_label"></div></div>',
         "icon_colors" : '<div class="icon-menu"></div>',
         "option" : '<div class="analyse_option_cont analyse_settings_cont">' + '<input type="radio" name="selectedlayer" />' + '<label></label></div>',
-        "methodOptionTool" : '<div class="tool ">' + '<input type="radio" name="method" />' + '<label></label></div>'
+        "methodOptionTool" : '<div class="tool ">' + '<input type="radio" name="method" />' + '<label></label></div>',
+        "featureListSelect" : '<div class="analyse-select-featurelist"><a href="#">...</a></div>',
+        "featureList" : '<div class="analyse-featurelist"><ul></ul></div>',
+        "featureListElement" : '<li><input type="checkbox"></input><label></label></li>'
 
     },
     /**
@@ -206,10 +209,6 @@ function(instance, localization) {
         var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
         panel.setTitle(this.loc.method.label);
         var contentPanel = panel.getContainer();
-        // tooltip
-        var tooltipCont = this.template.help.clone();
-        tooltipCont.attr('title', this.loc.method.tooltip);
-        contentPanel.append(tooltipCont);
         // content
         var closureMagic = function(tool) {
             return function() {
@@ -242,6 +241,10 @@ function(instance, localization) {
             if (option.selected) {
                 toolContainer.find('input').attr('checked', 'checked');
             }
+            var tooltipCont = this.template.help.clone();
+            tooltipCont.attr('title', option.tooltip);
+            toolContainer.append(tooltipCont);
+
             contentPanel.append(toolContainer);
             toolContainer.find('input').attr({
                 'value' : option.id,
@@ -305,15 +308,20 @@ function(instance, localization) {
                 'class' : 'params_radiolabel'
             });
             if (option.selected) {
-                toolContainer.find('input').attr('checked', 'checked');
+                toolContainer.find('input[name=params]').attr('checked', 'checked');
             }
+
+            if (option.id === 'oskari_analyse_select') {
+                this._appendFeatureList(toolContainer);
+            }
+
             contentPanel.append(toolContainer);
-            toolContainer.find('input').attr({
+            toolContainer.find('input[name=params]').attr({
                 'value' : option.id,
                 'name' : 'params',
                 'id' : option.id
             });
-            toolContainer.find('input').change(closureMagic(option));
+            toolContainer.find('input[name=params]').change(closureMagic(option));
         }
         // Analyse NAME
         var selected_layers = me._selectedLayers();
@@ -337,6 +345,52 @@ function(instance, localization) {
 
         return panel;
     },
+
+    /**
+     * Creates a list to select fields to include in analyse
+     *
+     * @method _appendFeatureList
+     * @param {jQuery object} toolContainer
+     */
+    _appendFeatureList: function(toolContainer) {
+        var featureListSelect = this.template.featureListSelect.clone(),
+            featureList = this.template.featureList.clone();
+
+        featureListSelect.append(featureList);
+        toolContainer.append(featureListSelect);
+        featureList.hide();
+        featureList.find('ul').empty();
+        this._appendFields(featureList);
+
+        featureListSelect.find('a').on('click', function(e) {
+            e.preventDefault();
+            featureList.toggle();
+        });
+    },
+
+    /**
+     * Appeds the fields from the layer to the feature list
+     *
+     * @method _appendFields
+     * @param {jQuery object} featureList
+     */
+    _appendFields: function(featureList) {
+        var selectedLayer = this._getSelectedMapLayer(),
+            fields = selectedLayer.getFields().slice(),
+            locales = selectedLayer.getLocales().slice(),
+            i, featureListElement, localizedLabel;
+
+        for (i = 0; i < fields.length; ++i) {
+            localizedLabel = locales[i] || fields[i];
+            featureListElement = this.template.featureListElement.clone();
+            featureListElement.find('input').val(fields[i]);
+            featureListElement.find('label').append(localizedLabel).attr({
+                'for': fields[i]
+            });
+            featureList.find('ul').append(featureListElement);
+        }
+    },
+
     /**
      * @method _createOutputPanel
      * @private
@@ -542,6 +596,10 @@ function(instance, localization) {
             opt.find('input').attr({
                 'id' : dat.id,
                 'checked' : dat.checked
+            }).change(function(e) {
+                var featureList = jQuery('div.analyse-featurelist');
+                featureList.find('ul').empty();
+                me._appendFields(featureList);
             });
             opt.find('label').html(dat.label).attr({
                 'for' : dat.id,
@@ -895,7 +953,7 @@ function(instance, localization) {
     _modifyAnalyseData : function(contentPanel) {
         var me = this;
         // Open layerselector
-        me.instance.setAnalyseMode(false);
+        //me.instance.setAnalyseMode(false);
         var name = 'LayerSelector';
         var extension = me._getFakeExtension(name);
         var rn = 'userinterface.UpdateExtensionRequest';
@@ -953,10 +1011,23 @@ function(instance, localization) {
          var layer = this._getSelectedMapLayer();
 
         // Get the feature fields
-        // TODO: in case of 'select', parse given array.
         var selectedColumnmode = container.find('input[name=params]:checked').val();
         var fields = selectedColumnmode && selectedColumnmode.replace(this.id_prefix, '');
-        if(fields == "all") fields = (layer.getFields && layer.getFields()) ? layer.getFields().slice(0):[0];
+        // All fields
+        if(fields == 'all') {
+            fields = ( (layer.getFields && layer.getFields()) ? layer.getFields().slice() : [0] );
+        }
+        // Selected fields
+        else if (fields == 'select') {
+            var fieldsList = jQuery('div.analyse-featurelist').find('ul li input:checked');
+            fields = jQuery.map(fieldsList, function(val, i) {
+                return val.value;
+            });
+        }
+        // None
+        else {
+            fields = [];
+        }
 
         var title = container.find('.settings_name_field').val();
        
@@ -988,14 +1059,17 @@ function(instance, localization) {
      * @return {Object} selections for a given method
      */
     _getMethodSelections : function(layer, defaultSelections) {
+        var me = this;
         var container = this.mainPanel;
         var methodName = defaultSelections.method;
 
         // buffer
         var bufferSize = container.find('.settings_buffer_field').val();
         // aggregate
-        var aggregateFunction = container.find('input[name=aggre]:checked').val();
-        aggregateFunction = aggregateFunction && aggregateFunction.replace(this.id_prefix, '');
+        var aggregateFunctions = container.find('input[name=aggre]:checked');
+        aggregateFunctions = jQuery.map(aggregateFunctions, function(val, i) {
+            return val.value.replace(me.id_prefix, '');
+        });
         // union
         var unionLayerId = container.find('input[name=union]:checked').val();
         unionLayerId = unionLayerId && unionLayerId.replace((this.id_prefix + 'layer_'), '');
@@ -1014,7 +1088,7 @@ function(instance, localization) {
             },
             'aggregate' : {
                 methodParams : {
-                    'function' : aggregateFunction // TODO: param name?
+                    functions : aggregateFunctions // TODO: param name?
                 }
             },
             'union' : {
@@ -1054,7 +1128,6 @@ function(instance, localization) {
         if (this.getFilterJson(layerId)) {
             data.filter = JSON.stringify(this.getFilterJson(layerId));
         }
-
         // Check that parameters are a-okay
         if (me._checkSelections(selections)) {
             // Send the data for analysis to the backend
@@ -1062,7 +1135,6 @@ function(instance, localization) {
             // Success callback
             function(response) {
                 if (response) {
-                    console.log(response);
                     me._handleAnalyseMapResponse(response);
                 }
             },

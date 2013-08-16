@@ -402,6 +402,9 @@
             "Import-Bundle": {
                 "statsgrid": {
                     "bundlePath": "../../../packages/statistics/bundle/"
+                },
+                "geostats": {
+                    "bundlePath": "../../../packages/libraries/bundle/"
                 }
             }
         }

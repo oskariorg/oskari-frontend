@@ -41,7 +41,7 @@ function(instance, localization) {
 
         this.alert.insertTo(container);
         
-        this.alert.setContent(this.loc.text, 'default');
+        this.alert.setContent(this.loc.text, 'default', true);
        
             var continueButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             continueButton.addClass('primary');

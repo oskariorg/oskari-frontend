@@ -6,6 +6,10 @@
 
 A new MapSizeChangedEvent is sent when map size is changed (event is sent on mapmodule.updateSize() function call which should always be called if the map size is changed programmatically)
 
+### admin-layerselector
+
+Adding base and group layers and sublayers to them is now possible. Also, adding sublayers individually from GetCapabilities query now works.
+
 ### statsgrid bundle
 
 - There is now a mode for selecting municipalities from the map instead of the grid. 
@@ -15,6 +19,10 @@ A new MapSizeChangedEvent is sent when map size is changed (event is sent on map
 
 ### layerselector2
 - layer search now supports ontology search. Type min 4 letters and press enter to open up a popup
+
+### analyse bundle
+
+- now supports choosing the features to send to the analyse from those available to the layer
 
 ## 1.12
 

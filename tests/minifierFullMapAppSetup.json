@@ -462,6 +462,25 @@
       },
       "instanceProps": {}
    }, {
+      "title": "Admin layerselector",
+      "fi": "",
+      "sv": "",
+      "en": "",
+      "bundlename": "admin-layerselector",
+      "bundleinstancename": "admin-layerselector",
+      "metadata": {
+         "Import-Bundle": {
+            "bb": {
+               "bundlePath":"../packages/integration/bundle/"
+            },
+            "admin-layerselector": {
+               "bundlePath": "../packages/integration/bundle/"
+            }
+         },
+         "Require-Bundle-Instance": []
+      },
+   }, {
+      "instanceProps": {},
        "title" : "Analyse",
        "fi" : "Analyysi",
        "sv" : "Analys",

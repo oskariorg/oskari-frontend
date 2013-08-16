@@ -166,7 +166,8 @@ div.admin-layerselector div.create-layer .layer-title {
 div.admin-layerselector .add-layer-record,
 div.admin-layerselector .add-layer-send,
 div.admin-layerselector .add-class-record,
-div.admin-layerselector .add-class-send {
+div.admin-layerselector .add-class-send,
+div.admin-layerselector .add-group-record {
     width: 100%;
     margin-bottom: 5px;
     overflow: hidden;
@@ -181,7 +182,7 @@ div.admin-layerselector .admin-add-layer-btn {
 div.admin-layerselector .admin-add-layer {
     padding: 10px 0px;
     overflow: hidden;
-    height: 0px;
+    height: auto;
     -webkit-transition-duration: 300ms;
     -webkit-transition-property: height;
     -moz-transition-duration: 300ms;
