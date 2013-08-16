@@ -350,6 +350,7 @@ function(instance, localization) {
      * Creates a list to select fields to include in analyse
      *
      * @method _appendFeatureList
+     * @param {jQuery object} toolContainer
      */
     _appendFeatureList: function(toolContainer) {
         var featureListSelect = this.template.featureListSelect.clone(),
@@ -371,6 +372,7 @@ function(instance, localization) {
      * Appeds the fields from the layer to the feature list
      *
      * @method _appendFields
+     * @param {jQuery object} featureList
      */
     _appendFields: function(featureList) {
         var selectedLayer = this._getSelectedMapLayer(),
