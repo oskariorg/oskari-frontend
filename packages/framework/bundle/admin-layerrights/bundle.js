@@ -51,6 +51,12 @@ function() {
         }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/admin-layerrights/css/style.css"
+        }, {
+            "src" : "../../../../libraries/chosen/chosen.jquery.js",
+            "type" : "text/javascript"
+        }, {
+            "src" : "../../../../libraries/chosen/chosen.css",
+            "type" : "text/css"
         }],
 
         "locales" : [{
