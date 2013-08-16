@@ -246,7 +246,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
 
                     if (header.id === 'name') {
                         table += '<td><span class="layer-name" data-resource="' + layerRight.resourceName + '" data-namespace="' + layerRight.namespace + '">' + value + '</span></td>';
-                    } else if (value !== null && value === 'true') {
+                    } else if (value) {
                         table += '<td><input type="checkbox" checked="checked" data-right="' + header.id + '" /></td>';
                     } else {
                         table += '<td><input type="checkbox" data-right="' + header.id + '" /></td>';
@@ -299,7 +299,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     right = td.attr('data-right');
                     value = td.prop('checked');
 
-                    if ((cleanDataObj[right] === 'true') !== value) {
+                    if (cleanDataObj[right] !== value) {
                         //console.log("Dirty value on " + right + ": " + cleanDataObj[right] + " : " + value);
                         dirty = true;
                     }
