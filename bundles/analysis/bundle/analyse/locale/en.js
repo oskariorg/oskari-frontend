@@ -138,6 +138,7 @@ Oskari.registerLocalization({
                 "values": {
                     "title": "Filter",
                     "placeholders": {
+                        "case-sensitive": "",
                         "attribute": "Attribute",
                         "boolean": "Logical operator",
                         "operator": "Oprator",

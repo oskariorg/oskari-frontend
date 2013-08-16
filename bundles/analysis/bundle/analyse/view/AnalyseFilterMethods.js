@@ -27,6 +27,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 '<div class="values-title"></div>' +
             '</div>',
         "filterContentOption": '<div class="filter-option">' +
+                '<input name="case-sensitive" type="checkbox"></input>' +
                 '<select class="attribute"></select>' +
                 '<select class="operator"></select>' +
                 '<input name="attribute-value" type="text"></input>' +
@@ -262,6 +263,9 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             return (jQuery(this).val() == analyseFilter.operator); 
         }).prop('selected', 'selected');
 
+        // Set the case-sensitive checkbox
+        div.find('input[name=case-sensitive]').attr('checked', analyseFilter.caseSensitive);
+
         // Set the value of the value field ;)
         div.find('input[name=attribute-value]').val(analyseFilter.value);
     },
@@ -285,13 +289,18 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         // Appends values to the attribute select.
         this._appendOptionValues(attrSelect, attrPlaceHolder, layerAttributes);
         // Appends values to the operator select.
-        this._appendOptionValues(opSelect, opPlaceHolder, [
-            '=', '~=', '≠', '>', '<', '≥', '≤'
+        // values: equals, like, not equals, not like, greater than, less than,
+        //         greater or equal than, less or equal than
+        this._appendOptionValues(opSelect, null, [
+            '=', '~=', '≠', '~≠', '>', '<', '≥', '≤'
         ]);
 
         // Placeholder to the attribute value input.
         filterOption.find('input[name=attribute-value]').
             attr('placeholder', this.loc.filter.values.placeholders['attribute-value']);
+
+        filterOption.find('input[name=case-sensitive]').
+            attr('title', this.loc.filter.values.placeholders['case-sensitive']);
 
         // Add the buttons to remove this filter and to add a new filter.
         filterOption.append(this._addManageFilterOption(layer));
@@ -408,8 +417,8 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             boolPlaceHolder = this.loc.filter.values.placeholders.boolean;
 
         // Put the default boolean values to the select.
-        this._appendOptionValues(boolOption, boolPlaceHolder, [
-            'AND', 'OR', 'NOT'
+        this._appendOptionValues(boolOption, null, [
+            'AND', 'OR'
         ]);
 
         return boolOption;
@@ -488,6 +497,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 domFilter = jQuery(domFilters[i]);
 
                 filter = {};
+                filter.caseSensitive = domFilter.find('input[name="case-sensitive"]').is(':checked');
                 filter.attribute = domFilter.find('select.attribute').val();
                 filter.operator = domFilter.find('select.operator').val();
                 filter.value = domFilter.find('input[name=attribute-value]').val();
