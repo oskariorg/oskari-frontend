@@ -375,20 +375,39 @@ function(instance, localization) {
      * @param {jQuery object} featureList
      */
     _appendFields: function(featureList) {
-        var selectedLayer = this._getSelectedMapLayer(),
-            fields = selectedLayer.getFields().slice(),
+        var selectedLayer = this._getSelectedMapLayer();
+        if (!selectedLayer) {
+            return;
+        }
+
+        var fields = selectedLayer.getFields().slice(),
             locales = selectedLayer.getLocales().slice(),
             i, featureListElement, localizedLabel;
 
         for (i = 0; i < fields.length; ++i) {
-            localizedLabel = locales[i] || fields[i];
-            featureListElement = this.template.featureListElement.clone();
-            featureListElement.find('input').val(fields[i]);
-            featureListElement.find('label').append(localizedLabel).attr({
-                'for': fields[i]
-            });
-            featureList.find('ul').append(featureListElement);
+            // Get only the fields which originate from the service,
+            // that is, exclude those which are added by Oskari (starts with '__').
+            if (!fields[i].match(/^__/)) {
+                localizedLabel = locales[i] || fields[i];
+                featureListElement = this.template.featureListElement.clone();
+                featureListElement.find('input').val(fields[i]);
+                featureListElement.find('label').append(localizedLabel).attr({
+                    'for': fields[i]
+                });
+                featureList.find('ul').append(featureListElement);
+            }
         }
+    },
+
+    /**
+     * Refreshes the fields list after a layer has been added or changed.
+     *
+     * @method _refreshFields
+     */
+    _refreshFields: function() {
+        var featureList = jQuery('div.analyse-featurelist');
+        featureList.find('ul').empty();
+        this._appendFields(featureList);
     },
 
     /**
@@ -597,9 +616,7 @@ function(instance, localization) {
                 'id' : dat.id,
                 'checked' : dat.checked
             }).change(function(e) {
-                var featureList = jQuery('div.analyse-featurelist');
-                featureList.find('ul').empty();
-                me._appendFields(featureList);
+                me._refreshFields();
             });
             opt.find('label').html(dat.label).attr({
                 'for' : dat.id,
@@ -617,6 +634,8 @@ function(instance, localization) {
             contentPanel.after(opt);
 
         }
+
+        me._refreshFields();
     },
     /**
      * @method _addExtraParameters
