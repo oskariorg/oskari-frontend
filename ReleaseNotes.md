@@ -20,6 +20,10 @@ Adding base and group layers and sublayers to them is now possible. Also, adding
 ### layerselector2
 - layer search now supports ontology search. Type min 4 letters and press enter to open up a popup
 
+### analyse bundle
+
+- now supports choosing the features to send to the analyse from those available to the layer
+
 ## 1.12
 
 ### mapmodule plugin
