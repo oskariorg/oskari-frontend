@@ -149,7 +149,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
 
             jQuery.ajax({
                 type: 'POST',
-                url: ajaxUrl + 'action_route=SAVEACTIONROUTE',
+                url: ajaxUrl + 'action_route=SaveLayerPermission',
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
                 beforeSend : function (x) {
