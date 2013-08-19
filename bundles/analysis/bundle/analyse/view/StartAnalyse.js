@@ -1144,8 +1144,15 @@ function(instance, localization) {
         data.analyse = JSON.stringify(selections);
 
         var layerId = selections.layerId;
+        var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
         if (this.getFilterJson(layerId)) {
-            data.filter = JSON.stringify(this.getFilterJson(layerId));
+            var filterJson = this.getFilterJson(layerId);
+            // If the user wanted to include only selected/clicked
+            // features, get them now from the layer.
+            if (filterJson.featureIds) {
+                this._getSelectedFeatureIds(layer, filterJson);
+            }
+            data.filter = JSON.stringify(filterJson);
         }
         // Check that parameters are a-okay
         if (me._checkSelections(selections)) {
@@ -1270,6 +1277,18 @@ function(instance, localization) {
         selectedLayer = selectedLayer && selectedLayer.replace((this.id_prefix + 'layer_'), '');
 
         return this.instance.getSandbox().findMapLayerFromSelectedMapLayers(selectedLayer);
+    },
+
+    /**
+     * Gets the clicked/selected features' ids and sets it to filterJson.
+     *
+     * @method _getSelectedFeatureIds
+     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
+     * @param {JSON} filterJson
+     */
+    _getSelectedFeatureIds: function(layer, filterJson) {
+        if (!layer || !filterJson) return;
+        filterJson.featureIds = ( layer.getClickedFeatureListIds ? layer.getClickedFeatureListIds().slice() : [] );
     },
 
     /**
