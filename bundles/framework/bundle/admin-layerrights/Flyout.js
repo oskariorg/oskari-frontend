@@ -145,7 +145,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
         doSave : function () {
             "use strict";
             var me = this,
-                saveData = {"resource" : me.extractSelections(jQuery(me.container)) };
+                saveData = {"resource" : me.extractSelections() };
 
             jQuery.ajax({
                 type: 'POST',
@@ -262,13 +262,13 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
         /**
          * @method extractSelections
          * Returns dirty table rows as JSON
-         * @param {Object} container
          * @return {Object} Dirty table rows
          */
-        extractSelections : function (container) {
+        extractSelections : function () {
             "use strict";
             var me = this,
                 data = [],
+                container = jQuery(me.container),
                 trs = container.find('tbody tr'),
                 i = 0,
                 j = 0,
