@@ -27,8 +27,6 @@ describe.only('Test Suite for mapwfs2 connections', function() {
         },
         cometd;
 
-    var ONLINE_TESTS = true; // testing the connection
-
     //
     // DATA MOCKS (io from bk)
     //
@@ -184,7 +182,7 @@ describe.only('Test Suite for mapwfs2 connections', function() {
         });
     };
 
-    describe('Incoming channels', function() {
+    describe('Channels', function() {
         before(startApplication);
         after(teardown);
 
@@ -207,15 +205,14 @@ describe.only('Test Suite for mapwfs2 connections', function() {
             }, 'Waits for the subscription', 20000);
         });
 
-        it('should respond to /wfs/properties', function(done) {
-            var cometd = cometd || mediator.getConnection();
-            var imageResp = false,
+        it('should respond to /service/wfs/init', function(done) {
+            var imageSub, propertiesSub, featureSub,
+                imageResp = false,
                 propertiesResp = false,
                 featureResp = false;
 
-            cometd.subscribe('/wfs/image', function(data) {
+            imageSub = cometd.subscribe('/wfs/image', function(data) {
                 imageResp = true;
-                console.log('/wfs/image');
                 expect(data).to.be.ok();
                 // There should be no data.data key in under IE v. 10
                 if (jQuery.browser.msie && jQuery.browser.versionNum < 10) {
@@ -224,18 +221,17 @@ describe.only('Test Suite for mapwfs2 connections', function() {
                     expect(data.data).to.be.ok();
                 }
             });
-            cometd.subscribe('/wfs/properties', function(data) {
+            propertiesSub = cometd.subscribe('/wfs/properties', function(data) {
                 propertiesResp = true;
-                console.log('/wfs/properties');
                 expect(data.layerId).to.be(216);
                 expect(data.fields).to.be.ok();
             });
-            cometd.subscribe('/wfs/feature', function(data) {
+            featureSub = cometd.subscribe('/wfs/feature', function(data) {
                 featureResp = true;
-                console.log('/wfs/feature');
                 expect(data).to.be.ok();
             });
 
+            // THE BEEF OF THE TEST
             cometd.publish('/service/wfs/init', {
                 "session" : 'test_session',
                 "language": Oskari.getLang(),
@@ -266,14 +262,136 @@ describe.only('Test Suite for mapwfs2 connections', function() {
             waitsFor(function() {
                 return (imageResp && propertiesResp && featureResp);
             }, function() {
+                console.log('/service/wfs/init succeeded');
+                cometd.unsubscribe(imageSub);
+                cometd.unsubscribe(propertiesSub);
+                cometd.unsubscribe(featureSub);
                 done();
-            }, 'Waiting for response channels', 20000);
+            }, 'Waiting for response channels after "init"', 20000);
         });
-    });
 
-    describe('Outgoing channels', function() {
-        before(startApplication);
-        after(teardown);
+        it('should respond to /service/wfs/removeMapLayer', function() {
+            // THE BEEF OF THE TEST
+            cometd.publish('/service/wfs/removeMapLayer', {
+                "layerId": 216
+            });
+        });
+
+        it('should respond to /service/wfs/addMapLayer', function(done) {
+            var imageSub, propertiesSub, featureSub,
+                imageResp = false,
+                propertiesResp = false,
+                featureResp = false;
+
+            imageSub = cometd.subscribe('/wfs/image', function(data) {
+                imageResp = true;
+                expect(data).to.be.ok();
+                // There should be no data.data key in under IE v. 10
+                if (jQuery.browser.msie && jQuery.browser.versionNum < 10) {
+                    expect(data.data).not.to.be.ok();
+                } else {
+                    expect(data.data).to.be.ok();
+                }
+            });
+            propertiesSub = cometd.subscribe('/wfs/properties', function(data) {
+                propertiesResp = true;
+                expect(data.layerId).to.be(216);
+                expect(data.fields).to.be.ok();
+            });
+            featureSub = cometd.subscribe('/wfs/feature', function(data) {
+                featureResp = true;
+                expect(data).to.be.ok();
+            });
+
+            // THE BEEF OF THE TEST
+            cometd.publish('/service/wfs/addMapLayer', {
+                "layerId": 216,
+                "styleName": "default"
+            });
+
+            waitsFor(function() {
+                return (imageResp && propertiesResp && featureResp);
+            }, function() {
+                console.log('/service/wfs/addMapLayer succeeded');
+                cometd.unsubscribe(imageSub);
+                cometd.unsubscribe(propertiesSub);
+                cometd.unsubscribe(featureSub);
+                done();
+            }, 'Waiting for response channels after "addMapLayer"', 20000);
+        });
+
+        it('should respond to /service/wfs/setLocation', function(done) {
+            var imageSub, propertiesSub, featureSub,
+                imageResp = false,
+                propertiesResp = false,
+                featureResp = false;
+
+            imageSub = cometd.subscribe('/wfs/image', function(data) {
+                imageResp = true;
+                expect(data).to.be.ok();
+                // There should be no data.data key in under IE v. 10
+                if (jQuery.browser.msie && jQuery.browser.versionNum < 10) {
+                    expect(data.data).not.to.be.ok();
+                } else {
+                    expect(data.data).to.be.ok();
+                }
+            });
+            propertiesSub = cometd.subscribe('/wfs/properties', function(data) {
+                propertiesResp = true;
+                expect(data.layerId).to.be(216);
+                expect(data.fields).to.be.ok();
+            });
+            featureSub = cometd.subscribe('/wfs/feature', function(data) {
+                featureResp = true;
+                expect(data).to.be.ok();
+            });
+
+            // THE BEEF OF THE TEST
+            cometd.publish('/service/wfs/setLocation', {
+                "srs": "EPSG:3067",
+                "bbox": [382396,6670334,389236,6672942],
+                "zoom": 8,
+                "grid": {
+                    "rows": 4,
+                    "columns": 8,
+                    "bounds": [[381952,6672384,382976,6673408],[382976,6672384,384000,6673408],[384000,6672384,385024,6673408],[385024,6672384,386048,6673408],[386048,6672384,387072,6673408],[387072,6672384,388096,6673408],[388096,6672384,389120,6673408],[389120,6672384,390144,6673408],[381952,6671360,382976,6672384],[382976,6671360,384000,6672384],[384000,6671360,385024,6672384],[385024,6671360,386048,6672384],[386048,6671360,387072,6672384],[387072,6671360,388096,6672384],[388096,6671360,389120,6672384],[389120,6671360,390144,6672384],[381952,6670336,382976,6671360],[382976,6670336,384000,6671360],[384000,6670336,385024,6671360],[385024,6670336,386048,6671360],[386048,6670336,387072,6671360],[387072,6670336,388096,6671360],[388096,6670336,389120,6671360],[389120,6670336,390144,6671360],[381952,6669312,382976,6670336],[382976,6669312,384000,6670336],[384000,6669312,385024,6670336],[385024,6669312,386048,6670336],[386048,6669312,387072,6670336],[387072,6669312,388096,6670336],[388096,6669312,389120,6670336],[389120,6669312,390144,6670336]]
+                }
+            });
+
+            waitsFor(function() {
+                return (imageResp && propertiesResp && featureResp);
+            }, function() {
+                console.log('/service/wfs/setLocation succeeded');
+                cometd.unsubscribe(imageSub);
+                cometd.unsubscribe(propertiesSub);
+                cometd.unsubscribe(featureSub);
+                done();
+            }, 'Waiting for response channels after "setLocation"', 20000);
+        });
+
+        it.skip('should respond to /service/wfs/setMapSize', function(done) {
+            done();
+        });
+
+        it.skip('should respond to /service/wfs/setMapLayerStyle', function(done) {
+            done();
+        });
+
+        it.skip('should respond to /service/wfs/setMapClick', function(done) {
+            done();
+        });
+
+        it.skip('should respond to /service/wfs/setFilter', function(done) {
+            done();
+        });
+
+        it.skip('should respond to /service/wfs/setMapLayerVisibility', function(done) {
+            done();
+        });
+
+        it.skip('should respond to /service/wfs/highlightFeatures', function(done) {
+            done();
+        });
     });
 });
 
