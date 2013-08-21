@@ -66,7 +66,7 @@ Oskari.registerLocalization({
       },
       "category": {
         "label": "Kartlager",
-        "newLayer": "Ny nivå..."
+        "new": "Ny nivå..."
       }
     },
     "categoryform": {
