@@ -31,7 +31,7 @@ describe.only('Test Suite for mapwfs2 connections', function() {
             contextPath: '/transport-0.0.1',
             port: '8888'
         },
-        cometd;
+        cometd, imageURL;
 
     function startApplication(done, setup, conf) {
         if(!setup) {
@@ -130,6 +130,7 @@ describe.only('Test Suite for mapwfs2 connections', function() {
                 } else {
                     expect(resp.data.data).to.be.ok();
                 }
+                imageURL = resp.data.url;
                 imageResp = true;
             });
 
@@ -401,6 +402,16 @@ describe.only('Test Suite for mapwfs2 connections', function() {
 
                 done();
             }, 'Waiting for response channels after "highlightFeatures"', 20000);
+        });
+
+        it('should respond to the image url', function(done) {
+            var url = mediator.rootURL + imageURL + '&session=' + mediator.session.session;
+
+            jQuery.get(url, function(resp) {
+                console.log('/image succeeded');
+                // Check the content type.
+                done();
+            });
         });
     });
 });
