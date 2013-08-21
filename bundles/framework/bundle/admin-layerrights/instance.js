@@ -111,7 +111,7 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-layerrights.AdminLayerRightsB
 
 
             sandbox.register(me);
-            for (p in me.eventHandlers) {
+            for (var p in me.eventHandlers) {
                 sandbox.registerForEventByName(me, p);
             }
 
@@ -179,7 +179,7 @@ Oskari.clazz.define("Oskari.framework.bundle.admin-layerrights.AdminLayerRightsB
                 reqName = 'userinterface.RemoveExtensionRequest',
                 reqBuilder = sandbox.getRequestBuilder(reqName);
 
-            for (p in me.eventHandlers) {
+            for (var p in me.eventHandlers) {
                 sandbox.unregisterFromEventByName(me, p);
             }
 

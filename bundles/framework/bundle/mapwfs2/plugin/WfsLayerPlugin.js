@@ -284,6 +284,27 @@ function(config) {
          */
         'WFSFeaturesSelectedEvent' : function(event) {
             if(event.getMapLayer().isLayerOfType("WFS")) {
+                var layer = this.getSandbox().findMapLayerFromSelectedMapLayers(event.getMapLayer().getId());
+                var ids = layer.getClickedFeatureListIds();
+                var tmpIds = event.getWfsFeatureIds();
+                if(!event.isKeepSelection()) {
+                    layer.setClickedFeatureListIds(event.getWfsFeatureIds());
+                } else {
+                    var isFound = false;
+                    for (var i = 0; i < tmpIds.length; ++i) {
+                        isFound = false;
+                        for (var j = 0; j < ids.length; ++j) {
+                            if(tmpIds[i] == ids[j]) {
+                                isFound = true;
+                                continue;
+                            }
+                        }
+                        if(!isFound) {
+                            ids.push(tmpIds[i]);
+                        }
+
+                    }
+                }
                 this.getIO().highlightMapLayerFeatures(event.getMapLayer().getId(), event.getWfsFeatureIds(), event.isKeepSelection());
             }
         },

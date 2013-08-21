@@ -145,14 +145,21 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
         doSave : function () {
             "use strict";
             var me = this,
-                saveData = me.extractSelections(jQuery(me.container));
+                saveData = {"resource" : me.extractSelections() };
+
             jQuery.ajax({
                 type: 'POST',
-                url: ajaxUrl,
-                action_route: 'SAVEACTIONROUTE',
-                dataType: 'json',
+                url: ajaxUrl + 'action_route=SaveLayerPermission',
+                lang: Oskari.getLang(),
+                timestamp: new Date().getTime(),
+                beforeSend : function (x) {
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                    }
+                },
                 data: saveData,
                 success: function () {
+                    // TODO use promises
                     me.updatePermissionsTable(me.activeRole, "ROLE");
                 },
                 error: function() {
@@ -239,7 +246,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
 
                     if (header.id === 'name') {
                         table += '<td><span class="layer-name" data-resource="' + layerRight.resourceName + '" data-namespace="' + layerRight.namespace + '">' + value + '</span></td>';
-                    } else if (value !== null && value === 'true') {
+                    } else if (value) {
                         table += '<td><input type="checkbox" checked="checked" data-right="' + header.id + '" /></td>';
                     } else {
                         table += '<td><input type="checkbox" data-right="' + header.id + '" /></td>';
@@ -255,13 +262,13 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
         /**
          * @method extractSelections
          * Returns dirty table rows as JSON
-         * @param {Object} container
          * @return {Object} Dirty table rows
          */
-        extractSelections : function (container) {
+        extractSelections : function () {
             "use strict";
             var me = this,
                 data = [],
+                container = jQuery(me.container),
                 trs = container.find('tbody tr'),
                 i = 0,
                 j = 0,
@@ -292,7 +299,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     right = td.attr('data-right');
                     value = td.prop('checked');
 
-                    if ((cleanDataObj[right] === 'true') !== value) {
+                    if (cleanDataObj[right] !== value) {
                         //console.log("Dirty value on " + right + ": " + cleanDataObj[right] + " : " + value);
                         dirty = true;
                     }

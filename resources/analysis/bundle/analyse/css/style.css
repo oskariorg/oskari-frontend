@@ -154,6 +154,14 @@ div.analyse-filter-popup-content div.bbox-radio {
 div.analyse-filter-popup-content div.bbox-radio div.bbox-on, div.analyse-filter-popup-content div.bbox-radio div.bbox-off {
   margin-top: 5px; }
 
+div.analyse-filter-popup-content div.analyse-filter-clicked-features div.clicked-features-title {
+  display: inline-block;
+  margin-right: 25px;
+}
+div.analyse-filter-popup-content div.analyse-filter-clicked-features label {
+  margin-left: 8px;
+}
+
 div.analyse-filter-popup-content div.filter-option {
   padding-bottom: 10px; }
 
