@@ -1198,7 +1198,7 @@ function(instance, localization) {
             mapLayer = mapLayerService.createMapLayer(analyseJson);
             // TODO: get these two parameters from somewhere else, where?
             mapLayer.setWpsUrl('/karttatiili/wpshandler?');
-            mapLayer.setWpsName('ows:analysis_data');
+            mapLayer.setWpsName('ana:analysis_data');
             // Add the layer to the map layer service
             mapLayerService.addLayer(mapLayer);
 
