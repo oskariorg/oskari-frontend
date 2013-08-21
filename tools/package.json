@@ -12,7 +12,7 @@
     "grunt-contrib-clean": "latest",
     "grunt-contrib-copy": "latest",
     "grunt-contrib-watch": "latest",
-    "grunt-contrib-yuidoc": "latest",
+    "yuidocjs": "latest",
     "grunt-karma": "latest",
     "jshint": "latest",
     "uglify-js": "latest",
@@ -32,7 +32,7 @@
   "dependencies": {
     "grunt-cli": "0.1.9",
     "grunt-contrib-watch": "0.4.4",
-    "grunt-contrib-yuidoc": "0.4.0",
+    "yuidocjs": "0.3.45",
     "grunt-karma": "0.4.4",
     "grunt-lib-contrib": "0.6.1",
     "grunt-contrib-clean": "0.4.1",

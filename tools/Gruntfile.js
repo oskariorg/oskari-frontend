@@ -1,4 +1,5 @@
 /*global module:false*/
+/*NB: DO NOT try to run grunt with cygwin... */
 module.exports = function(grunt) {
 
     // Project configuration.
@@ -95,7 +96,8 @@ module.exports = function(grunt) {
             dist: {
                 options: {
                     paths: ['../sources/framework', '../bundles/framework', '../bundles/sample', '../bundles/catalogue'],
-                    outdir: '../dist/<%= version %>api/'
+                    outdir: '../dist/<%= version %>api/',
+                    themedir: '../docs/yui/theme/'
                 }
             }
         },
@@ -128,7 +130,7 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-yuidoc');
+//    grunt.loadNpmTasks('grunt-contrib-yuidoc');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-sass');
@@ -275,11 +277,11 @@ module.exports = function(grunt) {
             grunt.config.set("sprite." + appName + ".options", options);
         }
 
-        grunt.task.run('validate');
-        grunt.task.run('copy');
-        grunt.task.run('compile');
-        grunt.task.run('compileAppCSS');
-        grunt.task.run('sprite');
+//        grunt.task.run('validate');
+//        grunt.task.run('copy');
+//        grunt.task.run('compile');
+//        grunt.task.run('compileAppCSS');
+//        grunt.task.run('sprite');
         grunt.task.run('yuidoc');
         grunt.task.run('mddocs');
     });

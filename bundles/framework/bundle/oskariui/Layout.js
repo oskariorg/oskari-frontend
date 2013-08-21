@@ -1,7 +1,6 @@
 /**
  * @class Oskari.framework.bundle.oskariui.Layout
  *
-
  *
  */
 Oskari.clazz.define('Oskari.framework.bundle.oskariui.Layout',
