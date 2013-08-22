@@ -380,8 +380,8 @@ function(instance, localization) {
             return;
         }
 
-        var fields = selectedLayer.getFields().slice(),
-            locales = selectedLayer.getLocales().slice(),
+        var fields = ( (selectedLayer.getFields && selectedLayer.getFields()) ? selectedLayer.getFields().slice() : [] ),
+            locales = ( (selectedLayer.getLocales && selectedLayer.getLocales()) ? selectedLayer.getLocales().slice() : [] ),
             i, featureListElement, localizedLabel;
 
         for (i = 0; i < fields.length; ++i) {
@@ -1198,7 +1198,7 @@ function(instance, localization) {
             mapLayer = mapLayerService.createMapLayer(analyseJson);
             // TODO: get these two parameters from somewhere else, where?
             mapLayer.setWpsUrl('/karttatiili/wpshandler?');
-            mapLayer.setWpsName('ows:analysis_data');
+            mapLayer.setWpsName('ana:analysis_data');
             // Add the layer to the map layer service
             mapLayerService.addLayer(mapLayer);
 

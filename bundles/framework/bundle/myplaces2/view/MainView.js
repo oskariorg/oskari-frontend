@@ -150,7 +150,6 @@ function(instance) {
                     id: place.getId(),
                     name : place.getName(),
                     link : place.getLink(),
-                    imageLink : place.getImageLink(),
                     desc : place.getDescription(),
                     category : place.getCategoryID()
                 }
@@ -296,7 +295,6 @@ function(instance) {
         place.setId(values.id);
         place.setName(values.name);
         place.setLink(values.link);
-        place.setImageLink(values.imageLink);
         place.setDescription(values.desc);
         place.setCategoryID(values.category);
         // fetch the latest geometry if edited after FinishedDrawingEvent

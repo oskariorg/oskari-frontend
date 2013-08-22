@@ -276,7 +276,6 @@ function(instance) {
             name : category.getName(),
             id : category.getId(),
             _isDefault : category.isDefault(),
-            visibleFields: category.getVisibleFields(),
             dot : {
                 size : category.getDotSize(),
                 color : category.getDotColor()
@@ -443,9 +442,6 @@ function(instance) {
         category.setAreaFillColor(values.area.fillColor);
 
         category.setDefault(values._isDefault);
-
-        category.setVisibleFields(values.visibleFields);
-
         return category;
     },
     saveCategory : function(category) {
