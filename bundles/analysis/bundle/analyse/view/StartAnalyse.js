@@ -380,8 +380,8 @@ function(instance, localization) {
             return;
         }
 
-        var fields = selectedLayer.getFields().slice(),
-            locales = selectedLayer.getLocales().slice(),
+        var fields = ( (selectedLayer.getFields && selectedLayer.getFields()) ? selectedLayer.getFields().slice() : [] ),
+            locales = ( (selectedLayer.getLocales && selectedLayer.getLocales()) ? selectedLayer.getLocales().slice() : [] ),
             i, featureListElement, localizedLabel;
 
         for (i = 0; i < fields.length; ++i) {
