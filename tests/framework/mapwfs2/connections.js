@@ -99,12 +99,12 @@ describe.only('Test Suite for mapwfs2 connections', function() {
             sandbox = Oskari.getSandbox();
             module = sandbox.findRegisteredModuleInstance('MainMapModuleWfsLayerPlugin');
             mediator = module.getIO();
-            mediator.session = {
-                "clientId" : "testId_" + jQuery.browser.name,
-                "session" : "test_session_" + jQuery.browser.name,
+            /*mediator.session = {
+                "clientId" : "testId",
+                "session" : "test_session",
                 "browser" : jQuery.browser.name,
                 "browserVersion" : jQuery.browser.versionNum
-            }
+            }*/
             connection = module.getConnection();
             done();
         });
@@ -115,11 +115,11 @@ describe.only('Test Suite for mapwfs2 connections', function() {
         after(teardown);
 
         var imageSub, propertiesSub, featureSub, mapClickSub, filterSub;
-        var imageResp = false,
-            propertiesResp = false,
-            featureResp = false,
-            mapClickResp = false,
-            filterResp = false;
+        var imageResp       = false,
+            propertiesResp  = false,
+            featureResp     = false,
+            mapClickResp    = false,
+            filterResp      = false;
 
         function setSubscriptions() {
             imageSub = cometd.subscribe('/wfs/image', function(resp) {
@@ -169,11 +169,11 @@ describe.only('Test Suite for mapwfs2 connections', function() {
             cometd.unsubscribe(mapClickSub);
             cometd.unsubscribe(filterSub);
 
-            imageResp = false;
-            propertiesResp = false;
-            featureResp = false;
-            mapClickResp = false;
-            filterResp = false;
+            imageResp       = false;
+            propertiesResp  = false;
+            featureResp     = false;
+            mapClickResp    = false;
+            filterResp      = false;
         }
 
         it('should be defined', function(done) {
@@ -193,7 +193,7 @@ describe.only('Test Suite for mapwfs2 connections', function() {
             setSubscriptions();
 
             cometd.publish('/service/wfs/init', {
-                "session" : 'test_session_' + jQuery.browser.name,
+                "session" : 'test_session',
                 "language": Oskari.getLang(),
                 "browser" : jQuery.browser.name,
                 "browserVersion" : jQuery.browser.versionNum,
@@ -216,7 +216,7 @@ describe.only('Test Suite for mapwfs2 connections', function() {
                     "height": sandbox.getMap().getHeight()
                 },
                 "mapScales": [5669294.4, 2834647.2, 1417323.6, 566929.44, 283464.72, 141732.36, 56692.944, 28346.472, 11338.5888, 5669.2944, 2834.6472, 1417.3236, 708.6618],
-                "layers": {216: {'styleName': 'default'}}
+                "layers": {'216': {'styleName': 'default'}}
             });
             
             waitsFor(function() {
@@ -276,34 +276,6 @@ describe.only('Test Suite for mapwfs2 connections', function() {
 
                 done();
             }, 'Waiting for response channels after "setLocation"', 20000);
-        });
-
-        /*
-         * setMapSize doesn't respond to any channels.
-         * After map size has been changed, setLocation is published
-         * with the new bounds etc. which in turns responds with the images and so on.
-         */
-        it.skip('should respond to /service/wfs/setMapSize', function(done) {
-            setSubscriptions();
-
-            cometd.publish('/service/wfs/setMapSize', {
-                "width": sandbox.getMap().getWidth() + 1,
-                "height": sandbox.getMap().getHeight() + 1,
-                "grid": {
-                    "rows": 4,
-                    "columns": 8,
-                    "bounds": [[381952,6672384,382976,6673408],[382976,6672384,384000,6673408],[384000,6672384,385024,6673408],[385024,6672384,386048,6673408],[386048,6672384,387072,6673408],[387072,6672384,388096,6673408],[388096,6672384,389120,6673408],[389120,6672384,390144,6673408],[381952,6671360,382976,6672384],[382976,6671360,384000,6672384],[384000,6671360,385024,6672384],[385024,6671360,386048,6672384],[386048,6671360,387072,6672384],[387072,6671360,388096,6672384],[388096,6671360,389120,6672384],[389120,6671360,390144,6672384],[381952,6670336,382976,6671360],[382976,6670336,384000,6671360],[384000,6670336,385024,6671360],[385024,6670336,386048,6671360],[386048,6670336,387072,6671360],[387072,6670336,388096,6671360],[388096,6670336,389120,6671360],[389120,6670336,390144,6671360],[381952,6669312,382976,6670336],[382976,6669312,384000,6670336],[384000,6669312,385024,6670336],[385024,6669312,386048,6670336],[386048,6669312,387072,6670336],[387072,6669312,388096,6670336],[388096,6669312,389120,6670336],[389120,6669312,390144,6670336]]
-                }
-            });
-
-            waitsFor(function() {
-                return (imageResp && propertiesResp && featureResp);
-            }, function() {
-                removeSubscriptions();
-                console.log('/service/wfs/setMapSize succeeded');
-
-                done();
-            }, 'Waiting for response channels after "setMapSize"', 20000);
         });
 
         it('should respond to /service/wfs/setMapLayerStyle', function(done) {
@@ -405,13 +377,22 @@ describe.only('Test Suite for mapwfs2 connections', function() {
         });
 
         it('should respond to the image url', function(done) {
-            var url = mediator.rootURL + imageURL + '&session=' + mediator.session.session;
+            var session = mediator.session.session;
+            var url = mediator.rootURL + imageURL + '&session=' + session;
 
-            jQuery.get(url, function(resp) {
-                console.log('/image succeeded');
-                // Check the content type.
-                done();
-            });
+            jQuery.get(url)
+                .done(function(resp, status, xhr) {
+                    var contentType = xhr.getResponseHeader('content-type');
+                    expect(contentType).to.be('image/png');
+                    console.log('/image succeeded');
+
+                    done();
+                })
+                .fail(function(resp, status, statusText) {
+                    console.log('/image FAILED: ' + resp.status + ' - ' + statusText);
+
+                    done()
+                });
         });
     });
 });
