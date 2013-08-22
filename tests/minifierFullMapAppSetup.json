@@ -478,7 +478,7 @@
             }
          },
          "Require-Bundle-Instance": []
-      },
+      }
    }, {
       "instanceProps": {},
        "title" : "Analyse",
