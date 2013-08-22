@@ -198,7 +198,7 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
             statsModule._createPrintParams(testLayer);
         });
 
-        it('should add checkbox column when statsgrid-show-row-selects checkbox is clicked', function(done) {
+        it.skip('should add checkbox column when statsgrid-show-row-selects checkbox is clicked', function(done) {
             var fetchCallbackGridSpy = sinon.spy(viewPlugin, 'createMunicipalitySlickGrid'),
                 fetchCallbackIndicatorSpy = sinon.spy(viewPlugin, 'createIndicatorsSelect');
 
@@ -215,12 +215,8 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
                 expect(statsGridContainer.is(':visible')).to.be(true);
 
                 //open drop down for statistical variable selector
-                jQuery('.slick-header-menubutton').click();
+                jQuery('.slick-header-menubutton:first').click();
                 expect(jQuery('.slick-header-menu').css('visibility')).to.be('visible');
-
-                //open row selector checbox column
-                jQuery('.statsgrid-show-row-selects').find('input').click();
-                expect(jQuery('.slick-cell-checkboxsel').length).to.be.greaterThan(0);
 
                 //uncheck one of the municipalities and check if the name of the first group changes
                 expect(jQuery('.slick-group-title:first').text()).to.contain('Kunnat');
@@ -231,6 +227,57 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
                 fetchCallbackIndicatorSpy.restore();
                 done();
             }, "Waits for the stats grid mode request", 45000);
+        });
+
+        // This test expects Test indicator metadata to be fetched
+        it('should filter column data', function() {
+            menuToolbar = jQuery('body').find('div.oskariui-menutoolbar'),
+            statsGridContainer = jQuery('body').find('.statsgrid_100');
+
+            expect(statsGridContainer.is(':visible')).to.be(true);
+
+            //open drop down for statistical variable selector
+            jQuery('.slick-header-menubutton:eq(1)').click();
+
+            var items = jQuery('.slick-header-menuitem a');
+            for (var i = 0; i < items.length; i++) {
+                var item = jQuery(items[i]);
+                if(item.text() == 'Suodata') {
+                    item.click();
+                }
+
+            };
+
+            expect(jQuery('.divmanazerpopup h3').text()).to.be('Suodata sarakkeen arvoja');
+
+            jQuery('.filter-select').prop('selectedIndex', 2);
+            jQuery('.filter-input1').val(10);
+            jQuery('.divmanazerpopup input.primary').click();
+
+            var gridPlugin = statsModule.gridPlugin;
+            var filterSuccess = false;
+            var groups = gridPlugin.grid.getData().getGroups();
+            var filteredMunicipalitiesCount = 0;
+            for (var i = 0; i < groups.length; i++) {
+                var group = groups[i];
+                if(group.groupingKey == 'checked') {
+                    filterSuccess = true;
+                    var rows = group.rows;
+                    for (var i = 0; i < rows.length; i++) {
+                        var row = rows[i];
+                        if(row['indicator42011total'] < 10) {
+                            filterSuccess = false;
+                            break;
+                        } else {
+                            filteredMunicipalitiesCount++;
+                        }
+                    };
+                    break;        
+                }
+            };
+
+            expect(filterSuccess).to.be(true);
+            expect(statsModule.getState().municipalities.length).to.be(filteredMunicipalitiesCount); 
         });
 
 

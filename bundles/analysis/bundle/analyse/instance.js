@@ -169,6 +169,9 @@ function() {
             this.isMapStateChanged = true;
             if (this.analyse && this.analyse.isEnabled) {
                 this.analyse.refreshAnalyseData(false);
+                // Remove the filter JSON of the layer
+                var layer = event.getMapLayer();
+                this.analyse.removeFilterJson(layer.getId());
             }
         },
         'AfterChangeMapLayerStyleEvent' : function(event) {

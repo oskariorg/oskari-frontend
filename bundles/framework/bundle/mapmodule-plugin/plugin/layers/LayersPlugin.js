@@ -392,43 +392,11 @@ function() {
             this._map.setLayerIndex(changeLayer[0], opLayersLength);
             opLayersLength--;
         }
-        /* 
-        // TODO: could this be used here also?
-        // get openlayers layer objects from map
-        var layers = this.getMapModule().getOLMapLayers(layer.getId());
-        for ( var i = 0; i < layers.length; i++) {
-            layers[i].setVisibility(layer.isVisible());
-            layers[i].display(layer.isVisible());
-        }
-         */
 
-        for(var i = 0; i < layers.length; i++) {
-
-            if(layers[i].isBaseLayer()||layers[i].isGroupLayer()) {
-                for(var bl = 0; bl < layers[i].getSubLayers().length; bl++) {
-                    var changeLayer = this._map.getLayersByName('basemap_' + layers[i]
-                    .getSubLayers()[bl].getId());
-                    this._map.setLayerIndex(changeLayer[0], layerIndex);
-                    layerIndex++;
-                }
-            } else if(layers[i].isLayerOfType('WFS')) {
-                var wfsReqExp = new RegExp('wfs_layer_' + layers[i].getId() + '_WFS_LAYER_IMAGE*', 'i');
-                var mapLayers = this._map.getLayersByName(wfsReqExp);
-                for(var k = 0; k < mapLayers.length; k++) {
-                    this._map.setLayerIndex(mapLayers[k], layerIndex);
-                    layerIndex++;
-                }
-
-                var wfsReqExp = new RegExp('wfs_layer_' + layers[i].getId() + '_HIGHLIGHTED_FEATURE*', 'i');
-                var changeLayer = this._map.getLayersByName(wfsReqExp);
-                if(changeLayer.length > 0) {
-                    this._map.setLayerIndex(changeLayer[0], layerIndex);
-                    layerIndex++;
-                }
-
-            } else {
-                var changeLayer = this._map.getLayersByName('layer_' + layers[i].getId());
-                this._map.setLayerIndex(changeLayer[0], layerIndex);
+        for(var i = 0, ilen = layers.length; i < ilen; i++) {
+            var olLayers = this.getMapModule().getOLMapLayers(layers[i].getId());
+            for(var j = 0, jlen = olLayers.length; j < jlen; j++) {
+                this._map.setLayerIndex(olLayers[j], layerIndex);
                 layerIndex++;
             }
         }

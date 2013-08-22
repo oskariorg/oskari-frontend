@@ -16,7 +16,8 @@ function() {
     this._locales = []; // property name locales
     this._activeFeatures = []; // features on screen
     this._selectedFeatures = []; // filtered features
-    this._clickedFeatureIds = []; // clicked feature ids
+    this._clickedFeatureIds = []; // clicked feature ids (map)
+    this._clickedFeatureListIds = []; // clicked feature ids (list)
 }, {
    /* Layer type specific functions */
 
@@ -122,6 +123,30 @@ function() {
      */
     setClickedFeatureIds : function(ids) {
         this._clickedFeatureIds = ids;
+    },
+
+    /**
+     * @method getClickedFeatureListIds
+     * @return {String[]} featureIds
+     */
+    getClickedFeatureListIds : function() {
+        return this._clickedFeatureListIds;
+    },
+
+    /**
+     * @method setClickedFeatureListId
+     * @param {String} id
+     */
+    setClickedFeatureListId : function(id) {
+        this._clickedFeatureListIds.push(id);
+    },
+
+    /**
+     * @method setClickedFeatureListIds
+     * @param {String} id
+     */
+    setClickedFeatureListIds : function(ids) {
+        this._clickedFeatureListIds = ids;
     }
 }, {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]

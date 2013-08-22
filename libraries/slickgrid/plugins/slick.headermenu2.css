@@ -2,11 +2,10 @@
 .slick-header-menubutton {
   position: absolute;
   right: 3px;
-  bottom: 5px;
-  width: 15px;
-  height: 15px;
-  background-repeat: no-repeat;
-  background-position: left center;
+  bottom: 3px;
+  width: 16px;
+  height: 16px;
+  padding: 2px;
   cursor: pointer;
   display: inline-block;
   background-color: #ddd;
@@ -17,6 +16,10 @@
 .slick-header-column:hover > .slick-header-menubutton,
 .slick-header-column-active .slick-header-menubutton {
   background-color: #cdcdcd;
+}
+
+.slick-header-column-sorted .slick-header-menubutton {
+  background-color: #ffffb2;
 }
 
 /* Menu */
@@ -56,4 +59,13 @@
 /* Disabled */
 .slick-header-menuitem-disabled {
   color: silver;
+}
+
+.slick-column-name {
+  width: 100%;
+  overflow: hidden;
+  display: inline-block;
+  text-overflow: ellipsis;
+  padding-right: 20px;
+  box-sizing: border-box;  
 }

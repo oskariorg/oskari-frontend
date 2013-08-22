@@ -15,9 +15,14 @@ Bundle fetches data from the SotkaNET statistics and indicator bank (www.sotkane
 
 The grid and the classifier are initialized as plugins so they can be used individually as well. They both use the StatisticsService to send events and make the actual AJAX calls to fetch the data.
 
+Grid section: selected municipalities will be visualized on the map.
+Map section: selected municipalities are hilighted in the grid.
+Select hilighted mode: selected municipalities (map) are also selected in the grid.
+
 ## TODO
 
-* Summary statistics (as of May 20th. About to be implemented in the next sprint)
+* remove hilighted borders when going away from select hilighted mode
+* selected grid items should be sent somehow to statsplugin.
 
 ## Screenshot
 
@@ -135,6 +140,14 @@ state : {
     <td>StatsGrid.SotkadataChangedEvent</td>
     <td>Classifies the data and sends an event to visualize it on the map</td>
   </tr>
+  <tr>
+    <td>StatsGrid.SelectHilightsModeEvent</td>
+    <td>Activates mode (isSelectHilightedMode)</td>
+  </tr>
+  <tr>
+    <td>StatsGrid.ClearHilightsEvent</td>
+    <td>Deactivates mode (isSelectHilightedMode)</td>
+  </tr>
 </table>
 
 ### ManageStatsPlugin
@@ -178,6 +191,20 @@ state : {
     <td>When the TooltipContentRequest is handled to send the tooltip info to the mapstats bundle.</td>
   </tr>
 </table>
+
+### StatsToolbar
+
+<table>
+  <tr>
+    <td>StatsGrid.SelectHilightsModeEvent</td>
+    <td>Activates mode (isSelectHilightedMode)</td>
+  </tr>
+  <tr>
+    <td>StatsGrid.ClearHilightsEvent</td>
+    <td>Deactivates mode (isSelectHilightedMode)</td>
+  </tr>
+</table>
+
 
 ## Dependencies
 

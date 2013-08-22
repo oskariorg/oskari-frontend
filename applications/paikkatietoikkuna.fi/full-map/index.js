@@ -35,6 +35,8 @@ jQuery(document).ready(function() {
         var pathIdx = ajaxUrl.indexOf('/', hostIdx);
         ajaxUrl = ajaxUrl.substring(pathIdx);
     }
+
+    
     
     // populate url with possible control parameters
     var getAppSetupParams = {};

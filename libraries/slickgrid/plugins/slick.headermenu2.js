@@ -105,7 +105,6 @@
 //      $(document.body).bind("mousedown", handleBodyMouseDown);
     }
 
-
     function destroy() {
       _handler.unsubscribeAll();
       $(document.body).unbind("mousedown", handleBodyMouseDown);
@@ -142,8 +141,15 @@
           $el.addClass(options.buttonCssClass);
         }
 
-        if (options.buttonImage) {
-          $el.css("background-image", "url(" + options.buttonImage + ")");
+        if (column.header.icon) {
+          $el.append($("<div></div>").addClass(column.header.icon));
+        } else if (options.buttonImage) {
+          $el.append($("<div></div>").css({
+            "background-image": "url(" + options.buttonImage + ")",
+            "width"           : "16px",
+            "height"          : "16px",
+            "background-position": "center"
+          }));
         }
 
         if (menu.tooltip) {
@@ -205,8 +211,13 @@
         var $li = $("<div class='slick-header-menuitem'></div>")
           .data("command", item.command || '')
           .data("column", columnDef)
-          .bind("change", handleMenuItemClick)
           .appendTo($menu);
+
+        if(item.actionType && item.actionType == 'link') {
+          $li.bind("click", handleMenuItemClick);
+        } else {
+          $li.bind("change", handleMenuItemClick);          
+        }
 
         if (item.tooltip) {
           $li.attr("title", item.tooltip);
@@ -248,6 +259,7 @@
     $.extend(this, {
       "init": init,
       "destroy": destroy,
+      "hide": hideMenu,
 
       "onBeforeMenuShow": new Slick.Event(),
       "onCommand": new Slick.Event()

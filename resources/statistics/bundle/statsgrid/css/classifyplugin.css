@@ -130,3 +130,6 @@ table.colo_table1 div {
   display: inline-block;
   height: 15px;
   width: 5px; }
+
+.manageClassificationPlugin .classification-guide {
+  padding-left: 5px; }

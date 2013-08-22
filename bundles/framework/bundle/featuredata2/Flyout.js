@@ -355,8 +355,8 @@ function(instance) {
             // get data
             var featureData;
             var values;
-            var fields = layer.getFields();
-            var features = layer.getActiveFeatures();
+            var fields = layer.getFields().slice(0);
+            var features = layer.getActiveFeatures().slice(0);
             var selectedFeatures = layer.getSelectedFeatures().slice(0); // filter
 
             this._addFeatureValues(model, fields, hiddenFields, features, selectedFeatures);
@@ -369,7 +369,7 @@ function(instance) {
                 var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid',this.instance.getLocalization('columnSelectorTooltip'));
 
                 // localizations
-                var locales = layer.getLocales();
+                var locales = layer.getLocales().slice(0);
                 if(locales) {
                     for(var k = 0; k < locales.length; k++) {
                         grid.setColumnUIName(fields[k], locales[k]);

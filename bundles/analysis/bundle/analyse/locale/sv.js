@@ -19,42 +19,51 @@ Oskari.registerLocalization({
                         "id": "oskari_analyse_buffer",
                         "label": "zon",
                         "classForMethod": "buffer",
-                        "selected": true
+                        "selected": true,
+                        "tooltip": ""
                     }, {
                         "id": "oskari_analyse_aggregate",
                         "label": "Sammandrag",
-                        "classForPreview": "aggregate"
+                        "classForPreview": "aggregate",
+                        "tooltip": ""
                     }, {
                         "id": "oskari_analyse_union",
                         "label": "Union",
-                        "classForPreview": "union"
+                        "classForPreview": "union",
+                        "tooltip": ""
                     }, {
                         "id": "oskari_analyse_intersect",
                         "label": "Sektion",
-                        "classForPreview": "intersect"
+                        "classForPreview": "intersect",
+                        "tooltip": ""
                     }
                 ]
             },
-            "aggregate": {
-                "label": "Aggregate funktion",
-                "options": [{
-                        "id": "oskari_analyse_sum",
-                        "label": "Summa",
-                        "selected": true
-                    }, {
-                        "id": "oskari_analyse_count",
-                        "label": "Antal"
-                    }, {
-                        "id": "oskari_analyse_min",
-                        "label": "Minimum"
-                    }, {
-                        "id": "oskari_analyse_max",
-                        "label": "Maximum"
-                    }, {
-                        "id": "oskari_analyse_med",
-                        "label": "Medeltal"
-                    }
-                ]
+             "aggregate" : {
+                 "label" : "Aggregate funktion",
+                "options" : [{
+                    "id" : "oskari_analyse_Sum",
+                    "label" : "Summa",
+                    "selected" : true
+                }, {
+                    "id" : "oskari_analyse_Count",
+                    "label" : "Antal"
+                }, {
+                    "id" : "oskari_analyse_Min",
+                    "label" : "Minimum"
+                },{
+                    "id" : "oskari_analyse_Max",
+                    "label" : "Maximum"
+                },{
+                    "id" : "oskari_analyse_Average",
+                    "label" : "Medeltal"
+                },{
+                    "id" : "oskari_analyse_StdDev",
+                    "label" : "Medel spridning"
+                },{
+                    "id" : "oskari_analyse_Median",
+                    "label" : "Mediaan"
+                }]
             },
             "buffer_size": {
                 "label": "Zon storlek (m)",
@@ -71,17 +80,19 @@ Oskari.registerLocalization({
             "intersect": {
                 "label": "Intersect lag"
             },
-            "spatial": {
-                "label": "Spatial operator",
-                "options": [{
-                        "id": "oskari_analyse_intersect",
-                        "label": "Klip",
-                        "selected": true
-                    }, {
-                        "id": "oskari_analyse_contains",
-                        "label": "Inkludera"
-                    }
-                ]
+             "union" : {
+                "label" : "Andra lag för union input"
+            },
+            "spatial" : {
+                "label" : "Spatial operator",
+                "options" : [{
+                    "id" : "oskari_analyse_intersect",
+                    "label" : "Klip",
+                    "selected" : true
+                }, {
+                    "id" : "oskari_analyse_contains",
+                    "label" : "Inkludera"
+                }  ]
             },
             "params": {
                 "label": "Väljad attribut data",
@@ -105,14 +116,48 @@ Oskari.registerLocalization({
                 "colorset_tooltip": "Ändra färg inställning",
                 "tooltip": "Passa färg för analys layout"
             },
-
-            "buttons": {
-                "save": "Lagra",
-                "analyse": "Fortsätta analys",
-                "data": "Öka data",
-                "cancel": "Avbryta"
+            "buttons" : {
+                "save" : "Lagra",
+                "analyse" : "Fortsätta analys",
+                "data" : "Öka data",
+                "cancel" : "Avbryta",
+                "ok": "OK"
             },
-            "help": "Anvisning",
+            "filter": {
+                "title": "Suodatus",
+                "description": "Suodatin tasolle ",
+                "clearButton": "Tyhjennä suodatin",
+                "refreshButton": "Päivitä suodatin",
+                "addFilter": "Lisää uusi suodatin",
+                "removeFilter": "Poista suodatin",
+                "bbox": {
+                    "title": "Ikkunarajaus",
+                    "on": "Käytössä",
+                    "off": "Pois käytöstä"
+                },
+                "clickedFeatures": {
+                    "title": "Kohderajaus",
+                    "label": "Sisällytä vain kartalta valitut kohteet"
+                },
+                "values": {
+                    "title": "Suodatin",
+                    "placeholders": {
+                        "case-sensitive": "Case sensitive",
+                        "attribute": "Attribuutti",
+                        "boolean": "Looginen operaattori",
+                        "operator": "Operaattori",
+                        "attribute-value": "Arvo"
+                    }
+                },
+                "validation": {
+                    "title": "Seuraavat virheet estivät suodattimen päivityksen:",
+                    "attribute_missing": "Attribuutti puuttuu",
+                    "operator_missing": "Operaattori puuttuu",
+                    "value_missing": "Arvo puuttuu",
+                    "boolean_operator_missing": "Looginen operaattori puuttuu"
+                }
+            },
+            "help" : "Anvisning",
             "success": {
                 "layerAdded": {
                     "title": "Karttataso {layer} lisätty",

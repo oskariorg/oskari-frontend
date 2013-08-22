@@ -19,42 +19,51 @@ Oskari.registerLocalization({
                         "id": "oskari_analyse_buffer",
                         "label": "Vyöhyke",
                         "classForMethod": "buffer",
-                        "selected": true
+                        "selected": true,
+                        "tooltip": "Lisää valittujen kohteiden ympärille vyöhykkeet ja käyttää näitä vyöhyke-geometrioita (buffer) analyysissä"
                     }, {
                         "id": "oskari_analyse_aggregate",
                         "label": "Koostetyökalu",
-                        "classForPreview": "aggregate"
+                        "classForPreview": "aggregate",
+                        "tooltip": "Laskee kohteen ominaisuuksille aggregointiominaisuuksia esim. summat"
                     }, {
                         "id": "oskari_analyse_union",
                         "label": "Unioni",
-                        "classForPreview": "union"
+                        "classForPreview": "union",
+                        "tooltip": "Kohteiden yhdistäminen taulukosta valitsemalla tai yhteisten ominaisuustietoarvojen perusteella"
                     }, {
                         "id": "oskari_analyse_intersect",
                         "label": "Leikkaus",
-                        "classForPreview": "intersect"
+                        "classForPreview": "intersect",
+                        "tooltip": "Valitaan uudet kohteet leikkaamalla leikkaavan tason kohteilla leikattavaa tasoa"
                     }
                 ]
             },
-            "aggregate": {
-                "label": "Valittu aggrekointifunktio",
-                "options": [{
-                        "id": "oskari_analyse_sum",
-                        "label": "Summa",
-                        "selected": true
-                    }, {
-                        "id": "oskari_analyse_count",
-                        "label": "Lkm"
-                    }, {
-                        "id": "oskari_analyse_min",
-                        "label": "Minimi"
-                    }, {
-                        "id": "oskari_analyse_max",
-                        "label": "Maximi"
-                    }, {
-                        "id": "oskari_analyse_med",
-                        "label": "Keskiarvo"
-                    }
-                ]
+          "aggregate" : {
+                "label" : "Aggregointifunktio",
+                "options" : [{
+                    "id" : "oskari_analyse_Sum",
+                    "label" : "Summa",
+                    "selected" : true
+                }, {
+                    "id" : "oskari_analyse_Count",
+                    "label" : "Lukumäärä"
+                }, {
+                    "id" : "oskari_analyse_Min",
+                    "label" : "Minimi"
+                }, {
+                    "id" : "oskari_analyse_Max",
+                    "label" : "Maksimi"
+                }, {
+                    "id" : "oskari_analyse_Average",
+                    "label" : "Keskiarvo"
+                }, {
+                    "id" : "oskari_analyse_StdDev",
+                    "label" : "Keskihajonta"
+                },{
+                    "id" : "oskari_analyse_Median",
+                    "label" : "Mediaani"
+                }]
             },
             "buffer_size": {
                 "label": "Vyöhykkeen koko (m)",
@@ -71,47 +80,83 @@ Oskari.registerLocalization({
             "intersect": {
                 "label": "Valittu leikkaava taso"
             },
-            "spatial": {
-                "label": "Valittu spatial operaattori",
-                "options": [{
-                        "id": "oskari_analyse_intersect",
-                        "label": "Leikkaa",
-                        "selected": true
-                    }, {
-                        "id": "oskari_analyse_contains",
-                        "label": "Sisältää"
+            "union" : {
+                "label" : "Valittu yhdistettävä taso"
+            },
+            "spatial" : {
+                "label" : "Valittu spatial operaattori",
+                "options" : [{
+                    "id" : "oskari_analyse_intersect",
+                    "label" : "Leikkaa",
+                    "selected" : true
+                }, {
+                    "id" : "oskari_analyse_contains",
+                    "label" : "Sisältää"
+                }]
+            },
+            "params" : {
+                "label" : "Valitut ominaisuustiedot",
+                "tooltip" : "",
+                "options" : [{
+                    "id" : "oskari_analyse_all",
+                    "selected" : true,
+                    "label" : "Kaikki"
+                }, {
+                    "id" : "oskari_analyse_none",
+                    "label" : "Ei mitään"
+                }, {
+                    "id" : "oskari_analyse_select",
+                    "label" : "Valitse listalta"
+                }]
+            },
+            "output" : {
+                "label" : "Ulkoasu",
+                "color_label" : "Valitse tyylit:",
+                "colorset_tooltip" : "Valitse tyylit eri geometria tyyleille",
+                "tooltip" : "Voit valita analyysin tuloksille sivuillesi sopivan tyylimaailman"
+            },
+            "buttons" : {
+                "save" : "Tallenna",
+                "analyse" : "Jatka analyysia",
+                "data" : "Päivitä tietoaineisto",
+                "cancel" : "Poistu",
+                "ok": "OK"
+            },
+            "filter": {
+                "title": "Suodatus",
+                "description": "Suodatin tasolle ",
+                "clearButton": "Tyhjennä suodatin",
+                "refreshButton": "Päivitä suodatin",
+                "addFilter": "Lisää uusi suodatin",
+                "removeFilter": "Poista suodatin",
+                "bbox": {
+                    "title": "Ikkunarajaus",
+                    "on": "Käytössä",
+                    "off": "Pois käytöstä"
+                },
+                "clickedFeatures": {
+                    "title": "Kohderajaus",
+                    "label": "Sisällytä vain kartalta valitut kohteet"
+                },
+                "values": {
+                    "title": "Suodatin",
+                    "placeholders": {
+                        "case-sensitive": "Case sensitive",
+                        "attribute": "Attribuutti",
+                        "boolean": "Looginen operaattori",
+                        "operator": "Operaattori",
+                        "attribute-value": "Arvo"
                     }
-                ]
+                },
+                "validation": {
+                    "title": "Seuraavat virheet estivät suodattimen päivityksen:",
+                    "attribute_missing": "Attribuutti puuttuu",
+                    "operator_missing": "Operaattori puuttuu",
+                    "value_missing": "Arvo puuttuu",
+                    "boolean_operator_missing": "Looginen operaattori puuttuu"
+                }
             },
-            "params": {
-                "label": "Valitut ominaisuustiedot",
-                "tooltip": "",
-                "options": [{
-                        "id": "oskari_analyse_all",
-                        "selected": true,
-                        "label": "Kaikki"
-                    }, {
-                        "id": "oskari_analyse_none",
-                        "label": "Ei mitään"
-                    }, {
-                        "id": "oskari_analyse_select",
-                        "label": "Valitse listalta"
-                    }
-                ]
-            },
-            "output": {
-                "label": "Ulkoasu",
-                "color_label": "Valitse tyylit:",
-                "colorset_tooltip": "Valitse tyylit eri geometria tyyleille",
-                "tooltip": "Voit valita analyysin tuloksille sivuillesi sopivan tyylimaailman"
-            },
-            "buttons": {
-                "save": "Tallenna",
-                "analyse": "Jatka analyysia",
-                "data": "Päivitä tietoaineisto",
-                "cancel": "Poistu"
-            },
-            "help": "Ohje",
+            "help" : "Ohje",
             "success": {
                 "layerAdded": {
                     "title": "Karttataso {layer} lisätty",

@@ -14,9 +14,6 @@
             },
             "openlayers-single-full": {
                "bundlePath": "../packages/openlayers/bundle/"
-            },
-            "oskariui": {
-               "bundlePath": "../packages/framework/bundle/"
             }
          },
          "Require-Bundle-Instance": []
@@ -61,6 +58,9 @@
             "core-base": {
                "bundlePath": "../packages/framework/bundle/"
             },
+            "oskariui": {
+               "bundlePath": "../packages/framework/bundle/"
+            },
             "request-base": {
                "bundlePath": "../packages/framework/bundle/"
             },
@@ -89,6 +89,9 @@
                "bundlePath": "../packages/framework/bundle/"
             },
             "mapstats": {
+               "bundlePath": "../packages/framework/bundle/"
+            },
+            "mapanalysis": {
                "bundlePath": "../packages/framework/bundle/"
             }
          },
@@ -458,5 +461,40 @@
          "Require-Bundle-Instance": []
       },
       "instanceProps": {}
+   }, {
+      "title": "Admin layerselector",
+      "fi": "",
+      "sv": "",
+      "en": "",
+      "bundlename": "admin-layerselector",
+      "bundleinstancename": "admin-layerselector",
+      "metadata": {
+         "Import-Bundle": {
+            "bb": {
+               "bundlePath":"../packages/integration/bundle/"
+            },
+            "admin-layerselector": {
+               "bundlePath": "../packages/integration/bundle/"
+            }
+         },
+         "Require-Bundle-Instance": []
+      },
+   }, {
+      "instanceProps": {},
+       "title" : "Analyse",
+       "fi" : "Analyysi",
+       "sv" : "Analys",
+       "en" : "Analyse",
+       "bundlename" : "analyse",
+       "bundleinstancename" : "analyse",
+       "metadata" : {
+           "Import-Bundle" : {
+               "analyse" : {
+                   "bundlePath" : "../packages/analysis/bundle/"
+               }
+           },
+           "Require-Bundle-Instance" : []
+       },
+       "instanceProps" : {}
    }]
 }

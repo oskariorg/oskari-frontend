@@ -11,7 +11,7 @@
 
 ## Description
 
-The bundle offers admin a listing for all the maplayers available in Oskari platform. The maplayers are grouped by topic or organization by selecting a tab in the upper part of the flyout. For each maplayer there is an icon presenting layer type (wms/wfs/base/wmts/vector)and an i-icon if the layer has a "dataurl" property. The admin can add new organizations and remove them. It is also possible to add new maplayers and remove old ones.
+The bundle offers admin a listing for all the maplayers available in Oskari platform. The maplayers are grouped by topic or organization by selecting a tab in the upper part of the flyout. For each maplayer there is an icon presenting layer type (wms/wfs/base/wmts/vector)and an i-icon if the layer has a "dataurl" property. The admin can add new organizations and remove them. It is also possible to add new maplayers and remove old ones. Support for adding group and base layers and sublayers to them was added in Oskari version 1.13.
 
 ## TODO
 

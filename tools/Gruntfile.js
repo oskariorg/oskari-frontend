@@ -71,6 +71,8 @@ module.exports = function(grunt) {
             dev: {
                 background: true
             },
+            test: {
+            },
             coverage: {
                 preprocessors : {
                     '../dist/*.js': 'coverage'
@@ -101,9 +103,9 @@ module.exports = function(grunt) {
             options: {
                 "toolsPath": process.cwd(),
                 "docsPath": "../docs",
-                "docsurl": "/Oskari/<%= version %>/docs",
+                "docsurl": "/Oskari/<%= version %>docs/",
                 "apiurl": "http://oskari.org/",
-                "outdir": "../dist/<%= version %>docs"
+                "outdir": "../dist/<%= version %>docs/"
             }
         },
         "regex-replace": {
@@ -193,7 +195,6 @@ module.exports = function(grunt) {
     grunt.registerTask('release', 'Release build', function(version, configs) {
         var apps = [],
             tasks = [];
-
         if(!version || !configs) {
             grunt.fail.fatal('Missing parameter\nUsage: grunt release:1.7:"../path/to/minifierAppSetup.json"', 1);
         }

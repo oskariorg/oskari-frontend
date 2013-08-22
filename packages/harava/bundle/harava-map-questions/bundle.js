@@ -64,6 +64,14 @@ function() {
 	            "type" : "text/javascript",
 	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/ToggleQuestionToolsRequestHandler.js"
 	        },
+	        {
+	            "type" : "text/javascript",
+	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/VisibilityQuestionRequest.js"
+	        },
+	        {
+	            "type" : "text/javascript",
+	            "src" : "../../../../bundles/harava/bundle/harava-map-questions/request/VisibilityQuestionRequestHandler.js"
+	        },
 			/* Resources */
 			{
 				"type" : "text/css",
