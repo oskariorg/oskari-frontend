@@ -48,7 +48,7 @@ describe.only('Test Suite for mapwfs2 connections', function() {
         conf["mapfull"]["conf"]["plugins"].push(
             {
                 "id": "Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
-                "config": { hostname: wfsConf.hostname, contextPath : wfsConf.contextPath, port : wfsConf.port }
+                "config": { hostname: wfsConf.hostname, contextPath: wfsConf.contextPath, port: wfsConf.port }
             }
         );
 
@@ -376,7 +376,7 @@ describe.only('Test Suite for mapwfs2 connections', function() {
             }, 'Waiting for response channels after "highlightFeatures"', 20000);
         });
 
-        it.only('should respond to the image url', function(done) {
+        it('should respond to the image url', function(done) {
             var session = 'test_session';
             var url = mediator.rootURL + imageURL + '&session=' + session;
 
@@ -391,7 +391,7 @@ describe.only('Test Suite for mapwfs2 connections', function() {
                 .fail(function(resp, status, statusText) {
                     console.log('/image FAILED: ' + resp.status + ' - ' + statusText);
 
-                    done()
+                    done();
                 });
         });
     });
