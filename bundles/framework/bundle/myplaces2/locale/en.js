@@ -66,12 +66,7 @@ Oskari.registerLocalization({
       },
       "category": {
         "label": "Map layer",
-        "newLayer": "Create a new layer",
-        "choose": " or choose from your layers:"
-      },
-      "imagelink": {
-        "placeholder": "Image URL",
-        "previewLabel": "Image preview"
+        "new": "New layer..."
       }
     },
     "categoryform": {
@@ -97,12 +92,6 @@ Oskari.registerLocalization({
           "linecolor": "Line colour",
           "size": "Line thickness"
         }
-      },
-      "visibleFields": {
-        "label": "Visible fields",
-        "placename": "Place name",
-        "placedesc": "Place description",
-        "image": "Image"
       },
       "edit": {
         "title": "Edit map layer",

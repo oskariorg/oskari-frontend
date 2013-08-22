@@ -56,31 +56,26 @@ Oskari.registerLocalization({
       "title": "Kohteen tiedot",
       "tooltip": "Kun lisäät kohteen kartalle, se tallentuu Omiin tietoihisi. Anna kohteelle nimi ja kuvaus. Voit valita, mille karttatasolle tallennat kohteen tai lisätä uuden karttatason valitsemalla 'Uusi taso' karttatasojen pudotusvalikosta.",
       "placename": {
-        "placeholder": "Nimi"
+        "placeholder": "Anna kohteelle nimi"
       },
       "placelink": {
-        "placeholder": "Lisätietoja-URL"
+        "placeholder": "Anna URL-osoite"
       },
       "placedesc": {
-        "placeholder": "Kuvaus"
+        "placeholder": "Kuvaile kohdetta"
       },
       "category": {
         "label": "Karttataso",
-        "newLayer": "Luo uusi karttataso",
-        "choose": " tai valitse olemassa olevista tasoista:"
-      },
-      "imagelink": {
-        "placeholder": "Kuva-URL",
-        "previewLabel": "Valokuvan esikatselu"
+        "new": "Uusi taso..."
       }
     },
     "categoryform": {
       "name": {
-        "label": "Tason nimi",
+        "label": "Nimi",
         "placeholder": "Anna tasolle nimi"
       },
       "drawing": {
-        "label": "Tason kohteiden esitystavat",
+        "label": "Piirtojälki",
         "point": {
           "label": "Piste",
           "color": "Väri",
@@ -97,12 +92,6 @@ Oskari.registerLocalization({
           "linecolor": "Viivan väri",
           "size": "Viivan paksuus"
         }
-      },
-      "visibleFields": {
-        "label": "Näytettävät kohteen tiedot",
-        "placename": "Nimi",
-        "placedesc": "Kuvaus",
-        "image": "Kuva"
       },
       "edit": {
         "title": "Muokkaa karttatasoa",
