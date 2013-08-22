@@ -156,7 +156,6 @@ module.exports = function (grunt) {
     grunt.registerTask('compileAppSetupToStartupSequence', function () {
         var done = this.async(),
             starttime = (new Date()).getTime(),
-            endTime,
             files,
             outputFilename,
             fs = require('fs'),
@@ -194,8 +193,7 @@ module.exports = function (grunt) {
         // write file to be used in testing as is
         fs.writeFileSync(outputFilename, result, 'utf8');
 
-        endtime = (new Date()).getTime();
-        grunt.log.writeln('compileAppSetupToStartupSequence completed in ' + ((endtime - starttime) / 1000) + ' seconds');
+        grunt.log.writeln('compileAppSetupToStartupSequence completed in ' + (((new Date()).getTime() - starttime) / 1000) + ' seconds');
         done();
     });
 
