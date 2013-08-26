@@ -14,7 +14,7 @@
 
 1. Install Cygwin (windows)
 2. Install git
-3. Install Jetty
+3. Install Jetty (deprecated)
     - create jetty-env.xml (location doesn't matter)
 	
         <pre>
@@ -32,7 +32,7 @@
             ...
         &lt;/Configure&gt;
         </pre>
-4. Install Maven
+4. Install Maven (deprecated)
 	- set up reference to jetty-env.xml in maven's settings, e.g.
 	
         <pre>
@@ -84,8 +84,47 @@
 
 ## C. Authorization
 
-### 1. Add new users
-       * Edit MapFullServlet.java
+### 1. Add new users and roles
+       * Edit user.json and roles.json files in map-servlet resource path
+       sample user.json:
+       {    "users": [
+        {
+            "firstName": "Antti",
+            "id": 2,
+            "lastName": "Aalto",
+            "pass": "oskari",
+            "roles": [
+                3,
+                4
+            ],
+            "user": "admin"
+        },
+        {
+            "firstName": "Oskari",
+            "id": 3,
+            "lastName": "Olematon",
+            "pass": "user",
+            "roles": [
+                3
+            ],
+            "user": "user"
+        }
+       ]
+     }
+     sample role.json:
+     {
+  "roles": [
+    {
+        "id": 3,
+        "name": "Karttakäyttäjä"
+    },
+    {
+        "id": 4,
+        "name": "Admin"
+    }
+      ]
+    }
+       
        
 ### 2. Add new user roles and permissions 
        (edit script file ..work\oskari-backend\servlet-map\src\main\resources\fi\nls\oskari\map\servlet\db\exampleLayersAndRoles.sql)
