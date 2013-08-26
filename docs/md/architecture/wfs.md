@@ -349,12 +349,7 @@ Doesn't return anything
 
 ##### Response channels
 
-Only sends if the current map size gets bigger
-
-- /wfs/image
-- /wfs/properties
-- /wfs/feature
-- /error
+Only changes session information about the map size. No response.
 
 
 #### /service/wfs/setMapLayerStyle
@@ -390,10 +385,7 @@ Only sends if the current map size gets bigger
 
 ##### Response channels
 
-* TODO: send only new image
-
 - /wfs/image
-- /wfs/feature
 - /error
 
 
@@ -979,12 +971,9 @@ Oskari.$("sandbox").popUpSeqDiagram();
 
 Function listening to AfterMapMoveEvent calls for Mediator's setLocation(). Backend gets a message and updates every WFS layer that is in the user's session and answers with updated properties, features and images. Upcoming sends trigger WFSPropertiesEvents, WFSFeatureEvents and WFSImageEvents. Updates the properties and features for object data and draws new tiles.
 
-### Resizing map - xxEvent ?!?!?!??!
+### Resizing map - MapSizeChangedEvent
 
-Function listening to xxEvent calls for Mediator's setMapSize(). Backend gets a message and saves new map size in user's session. Every WFS layer in user's session are updated if the map's height or width has grown bigger. The update process is same than for moving map.
-
-* TODO: Event throw and handling
-* TODO: grid update
+Function listening to MapSizeChangedEvent calls for Mediator's setMapSize() and setLocation(). Backend gets a message and saves new map size in user's session. Every WFS layer in user's session are updated. The update process is same than for moving map.
 
 ### Adding a WFS layer - AfterMapLayerAddEvent
 

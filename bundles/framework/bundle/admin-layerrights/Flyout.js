@@ -145,18 +145,14 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
         doSave : function () {
             "use strict";
             var me = this,
-                saveData = {"resource" : me.extractSelections() };
+                saveData = {"resource" : JSON.stringify(me.extractSelections()) };
 
             jQuery.ajax({
                 type: 'POST',
                 url: ajaxUrl + 'action_route=SaveLayerPermission',
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
-                beforeSend : function (x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
-                    }
-                },
+               
                 data: saveData,
                 success: function () {
                     // TODO use promises
