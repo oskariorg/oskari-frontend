@@ -64,7 +64,8 @@ Oskari.registerLocalization({
                 },{
                     "id" : "oskari_analyse_Median",
                     "label" : "Median"
-                }]  
+                }],
+                "attribute": "Choose an attribute"
             },
             "buffer_size": {
                 "label": "Buffer size (meters)",
