@@ -22,6 +22,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         }
         this.template = jQuery('<table class="oskari-grid"><thead><tr></tr></thead><tbody></tbody></table>');
         this.templateTableHeader = jQuery('<th><a href="JavaScript:void(0);"></a></th>');
+        this.templateDiv = jQuery('<div></div>');
         this.templateRow = jQuery('<tr></tr>');
         this.templateCell = jQuery('<td></td>');
         this.templatePopupLink = jQuery('<a href="JavaScript: void(0);"></a>');
@@ -210,6 +211,17 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 }
                 return value;
             }
+
+            // format array
+            if(jQuery.isArray(data)) {
+                var valueDiv = this.templateDiv.clone();
+                for(var i=0; i < data.length;++i) {
+                    var innerTable = this._renderAdditionalData(data[i]);
+                    valueDiv.append(innerTable);
+                }
+                return valueDiv;
+            }
+
             // else format as table
             for (field in data) {
                 if (data.hasOwnProperty(field)) {
@@ -553,7 +565,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             if (this.showColumnSelector) {
                 this._renderColumnSelector(table, fieldNames);
                 container.append(this.visibleColumnSelector);
-                if (state !== null && typeof state !== 'undefined') && state.columnSelector === 'open') {
+                if (state !== null && typeof state !== 'undefined' && state.columnSelector === 'open') {
                     this.visibleColumnSelector.find('.column-selector').css('visibility', 'visible');
                 }
             }

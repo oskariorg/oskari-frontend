@@ -162,7 +162,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      */
     getWFSFeature : function(data) {
         var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
-        if(data.data.feature != "empty") {
+        if(data.data.feature != "empty" && data.data.feature != "max") {
             layer.setActiveFeature(data.data.feature);
         }
 

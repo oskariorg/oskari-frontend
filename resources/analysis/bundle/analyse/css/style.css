@@ -77,44 +77,38 @@ div.basic_analyse div.buttons, div.analyse div.startview div.buttons {
 div.basic_analyse div.buttons input, div.analyse div.startview div.buttons input {
   margin-right: 1px; }
 
-div.basic_analyse div.location {
-  height: 30px; }
-
-div.basic_analyse div.previewNotes {
-  margin-left: 8px;
-  margin-right: 8px;
-  margin-bottom: 2px;
-}
-
 div.basic_analyse div.analyse-select-featurelist {
   display: inline;
-  margin-left: 6px;
-}
+  margin-left: 6px; }
 
 div.basic_analyse div.analyse-select-featurelist a {
   font-size: 150%;
   color: #37B7FF;
-  text-decoration: none;
-}
+  text-decoration: none; }
 
 div.basic_analyse div.analyse-select-featurelist ul {
   font-size: 100%;
   line-height: 100%;
   padding: 0;
-  padding-top: 10px;
-}
+  padding-top: 10px; }
 
 div.basic_analyse div.analyse-select-featurelist ul li {
-  list-style-type: none;
-}
+  list-style-type: none; }
 
 label.params_checklabel {
   text-overflow: ellipsis;
   display: inline-block;
   width: 117px;
   white-space: nowrap;
-  overflow: hidden;
-}
+  overflow: hidden; }
+
+div.basic_analyse div.location {
+  height: 30px; }
+
+div.basic_analyse div.previewNotes {
+  margin-left: 8px;
+  margin-right: 8px;
+  margin-bottom: 2px; }
 
 table.layer-icons {
   font-family: Arial, sans-serif;
@@ -122,8 +116,7 @@ table.layer-icons {
   line-height: 18px;
   margin: 0 0 2px;
   width: 30%;
-  display: inline-table;
-}
+  display: inline-table; }
 
 /* Analyse filter CSS */
 div.analyse-filter-popup-content {
@@ -156,11 +149,10 @@ div.analyse-filter-popup-content div.bbox-radio div.bbox-on, div.analyse-filter-
 
 div.analyse-filter-popup-content div.analyse-filter-clicked-features div.clicked-features-title {
   display: inline-block;
-  margin-right: 25px;
-}
+  margin-right: 25px; }
+
 div.analyse-filter-popup-content div.analyse-filter-clicked-features label {
-  margin-left: 8px;
-}
+  margin-left: 8px; }
 
 div.analyse-filter-popup-content div.filter-option {
   padding-bottom: 10px; }
@@ -182,6 +174,6 @@ div.analyse-filter-popup-content div.filter-option input[name="attribute-value"]
 
 div.analyse-filter-popup-content div.filter-option select.attribute {
   width: 150px; }
+
 div.analyse-filter-popup-content div.filter-option input[name="case-sensitive"] {
-  margin-right: 5px;
-}
+  margin-right: 5px; }
