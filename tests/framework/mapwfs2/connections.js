@@ -377,22 +377,42 @@ describe.only('Test Suite for mapwfs2 connections', function() {
         });
 
         it('should respond to the image url', function(done) {
-            var session = 'test_session';
-            var url = mediator.rootURL + imageURL + '&session=' + session;
+            setSubscriptions();
 
-            jQuery.get(url)
-                .done(function(resp, status, xhr) {
-                    var contentType = xhr.getResponseHeader('content-type');
-                    expect(contentType).to.be('image/png');
-                    console.log('/image succeeded');
+            cometd.publish('/service/wfs/setLocation', {
+                "srs": "EPSG:3067",
+                "bbox": [382396,6670334,389236,6672942],
+                "zoom": 8,
+                "grid": {
+                    "rows": 4,
+                    "columns": 8,
+                    "bounds": [[381952,6672384,382976,6673408],[382976,6672384,384000,6673408],[384000,6672384,385024,6673408],[385024,6672384,386048,6673408],[386048,6672384,387072,6673408],[387072,6672384,388096,6673408],[388096,6672384,389120,6673408],[389120,6672384,390144,6673408],[381952,6671360,382976,6672384],[382976,6671360,384000,6672384],[384000,6671360,385024,6672384],[385024,6671360,386048,6672384],[386048,6671360,387072,6672384],[387072,6671360,388096,6672384],[388096,6671360,389120,6672384],[389120,6671360,390144,6672384],[381952,6670336,382976,6671360],[382976,6670336,384000,6671360],[384000,6670336,385024,6671360],[385024,6670336,386048,6671360],[386048,6670336,387072,6671360],[387072,6670336,388096,6671360],[388096,6670336,389120,6671360],[389120,6670336,390144,6671360],[381952,6669312,382976,6670336],[382976,6669312,384000,6670336],[384000,6669312,385024,6670336],[385024,6669312,386048,6670336],[386048,6669312,387072,6670336],[387072,6669312,388096,6670336],[388096,6669312,389120,6670336],[389120,6669312,390144,6670336]]
+                }
+            });
 
-                    done();
-                })
-                .fail(function(resp, status, statusText) {
-                    console.log('/image FAILED: ' + resp.status + ' - ' + statusText);
+            waitsFor(function() {
+                return (imageResp && propertiesResp && featureResp);
+            }, function() {
+                var session = mediator.session.session //|| 'test_session';
+                var url = mediator.rootURL + imageURL + '&session=' + session;
 
-                    done();
-                });
+                jQuery.get(url)
+                    .done(function(resp, status, xhr) {
+                        var contentType = xhr.getResponseHeader('content-type');
+                        expect(contentType).to.be('image/png');
+                        console.log('/image succeeded');
+
+                        removeSubscriptions();
+                        done();
+                    })
+                    .fail(function(resp, status, statusText) {
+                        console.log('/image FAILED: ' + resp.status + ' - ' + statusText);
+
+                        removeSubscriptions();
+                        done();
+                    });
+            }, 'Waiting for response channels after "setLocation"', 20000);
+
         });
     });
 });
