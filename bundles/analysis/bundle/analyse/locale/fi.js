@@ -134,9 +134,14 @@ Oskari.registerLocalization({
                     "on": "Käytössä",
                     "off": "Pois käytöstä"
                 },
+                "clickedFeatures": {
+                    "title": "Kohderajaus",
+                    "label": "Sisällytä vain kartalta valitut kohteet"
+                },
                 "values": {
                     "title": "Suodatin",
                     "placeholders": {
+                        "case-sensitive": "Case sensitive",
                         "attribute": "Attribuutti",
                         "boolean": "Looginen operaattori",
                         "operator": "Operaattori",

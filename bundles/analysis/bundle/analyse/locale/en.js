@@ -135,9 +135,14 @@ Oskari.registerLocalization({
                     "on": "In use",
                     "off": "Not in use"
                 },
+                "clickedFeatures": {
+                    "title": "Feature filter",
+                    "label": "Include only selected features"
+                },
                 "values": {
                     "title": "Filter",
                     "placeholders": {
+                        "case-sensitive": "",
                         "attribute": "Attribute",
                         "boolean": "Logical operator",
                         "operator": "Oprator",

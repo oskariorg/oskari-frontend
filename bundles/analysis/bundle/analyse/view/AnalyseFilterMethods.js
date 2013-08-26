@@ -23,10 +23,15 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     '</div>' +
                 '</div>' +
             '</div>',
+        "filterClickedFeatures": '<div class="analyse-filter analyse-filter-clicked-features">' +
+                '<div class="clicked-features-title"></div>' +
+                '<input type="checkbox" name="analyse-clicked-features"></input><label for="analyse-clicked-features"></label>' +
+            '</div>',
         "filterContentValues": '<div class="analyse-filter analyse-filter-popup-values">' +
                 '<div class="values-title"></div>' +
             '</div>',
         "filterContentOption": '<div class="filter-option">' +
+                '<input name="case-sensitive" type="checkbox"></input>' +
                 '<select class="attribute"></select>' +
                 '<select class="operator"></select>' +
                 '<input name="attribute-value" type="text"></input>' +
@@ -167,6 +172,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
     _getFilterDialogContent: function(layer) {
         var content = jQuery(this.__filterTemplates['filterContent']),
             bboxSelection = jQuery(this.__filterTemplates['filterContentBBOX']),
+            clickedFeaturesSelection = jQuery(this.__filterTemplates['filterClickedFeatures']),
             valuesSelection = jQuery(this.__filterTemplates['filterContentValues']),
             filterOption;
 
@@ -175,6 +181,12 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         bboxSelection.find('div.bbox-on').find('label').html(this.loc.filter.bbox.on);
         bboxSelection.find('div.bbox-off').find('label').html(this.loc.filter.bbox.off);
         content.append(bboxSelection);
+
+        // Filter clicked features
+        clickedFeaturesSelection.find('div.clicked-features-title').
+            html('<h4>' + this.loc.filter.clickedFeatures.title + '</h4>');
+        clickedFeaturesSelection.find('label').html(this.loc.filter.clickedFeatures.label);
+        content.append(clickedFeaturesSelection);
 
         // Filter values selection
         valuesSelection.find('div.values-title').html('<h4>' + this.loc.filter.values.title + '</h4>');
@@ -198,6 +210,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
      */
     _fillDialogContent: function(dialog, values, layer) {
         var bboxDiv = dialog.find('div.bbox-radio'),
+            clickedFeaturesDiv = dialog.find('div.analyse-filter-clicked-features'),
             filterDiv = dialog.find('div.filter-option'),
             filter,
             i;
@@ -211,6 +224,10 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // BBOX disabled
             bboxDiv.find('div.bbox-off').find('input[name=filter-bbox]').attr('checked', 'checked');
             bboxDiv.find('div.bbox-on').find('input[name=filter-bbox]').removeAttr('checked');
+        }
+
+        if (values.featureIds) {
+            clickedFeaturesDiv.find('input[name=analyse-clicked-features]').attr('checked', 'checked');
         }
 
         if (values.filters && values.filters.length) {
@@ -262,6 +279,9 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             return (jQuery(this).val() == analyseFilter.operator); 
         }).prop('selected', 'selected');
 
+        // Set the case-sensitive checkbox
+        div.find('input[name=case-sensitive]').attr('checked', analyseFilter.caseSensitive);
+
         // Set the value of the value field ;)
         div.find('input[name=attribute-value]').val(analyseFilter.value);
     },
@@ -285,13 +305,18 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         // Appends values to the attribute select.
         this._appendOptionValues(attrSelect, attrPlaceHolder, layerAttributes);
         // Appends values to the operator select.
-        this._appendOptionValues(opSelect, opPlaceHolder, [
-            '=', '~=', '≠', '>', '<', '≥', '≤'
+        // values: equals, like, not equals, not like, greater than, less than,
+        //         greater or equal than, less or equal than
+        this._appendOptionValues(opSelect, null, [
+            '=', '~=', '≠', '~≠', '>', '<', '≥', '≤'
         ]);
 
         // Placeholder to the attribute value input.
         filterOption.find('input[name=attribute-value]').
             attr('placeholder', this.loc.filter.values.placeholders['attribute-value']);
+
+        filterOption.find('input[name=case-sensitive]').
+            attr('title', this.loc.filter.values.placeholders['case-sensitive']);
 
         // Add the buttons to remove this filter and to add a new filter.
         filterOption.append(this._addManageFilterOption(layer));
@@ -408,8 +433,8 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             boolPlaceHolder = this.loc.filter.values.placeholders.boolean;
 
         // Put the default boolean values to the select.
-        this._appendOptionValues(boolOption, boolPlaceHolder, [
-            'AND', 'OR', 'NOT'
+        this._appendOptionValues(boolOption, null, [
+            'AND', 'OR'
         ]);
 
         return boolOption;
@@ -471,12 +496,21 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
      */
     _getFilterValues: function(popupContent) {
         var filterValues = {},
-            bboxValue, domFilters, domFilter, filter, boolOperator, emptyFilter, i;
+            bboxValue, clickedFeatures, domFilters, domFilter, filter,
+            boolOperator, emptyFilter, i;
 
         // Get the map window bbox if chosen.
         bboxValue = jQuery(popupContent).find('input[name=filter-bbox]:checked').val();
         if ("true" === bboxValue) {
             filterValues.bbox = this.instance.getSandbox().getMap().getBbox();
+        }
+
+        clickedFeatures = jQuery(popupContent).
+            find('input[name=analyse-clicked-features]').is(':checked');
+        if (clickedFeatures) {
+            // At this point, just set this to 'true', since we can't
+            // get hold of the layer - and consequently the clicked features - yet.
+            filterValues.featureIds = true;
         }
 
         // Get the actual filters.
@@ -488,6 +522,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 domFilter = jQuery(domFilters[i]);
 
                 filter = {};
+                filter.caseSensitive = domFilter.find('input[name="case-sensitive"]').is(':checked');
                 filter.attribute = domFilter.find('select.attribute').val();
                 filter.operator = domFilter.find('select.operator').val();
                 filter.value = domFilter.find('input[name=attribute-value]').val();
@@ -505,7 +540,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         // NOTE! This is quite an ugly hack, used so that we don't send empty filters to backend.
         emptyFilter = filterValues.filters[0];
         if (domFilters.length === 1 &&
-            (!emptyFilter.attribute && !emptyFilter.operator && !emptyFilter.value)) {
+            (!emptyFilter.attribute && !emptyFilter.value)) {
             delete filterValues.filters;
         }
 

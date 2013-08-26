@@ -106,7 +106,23 @@
         ]
     }
 }
+### Methods (status 13.8.2013)
 
+## Buffer (WPS vec:BufferFeatureCollection)
+Buffers features by a distance value supplied either as a parameter or by a feature attribute. 
+Calculates buffers based on Cartesian distances.
+
+## Aggregate (WPS vec:Aggregate)
+Computes one or more aggregation functions on a feature attribute. 
+Functions include Count, Average, Max, Median, Min, StdDev, and Sum.
+
+## Union (WPS vec:UnionFeatureCollection)
+Returns single feature collection containing all features from two input feature collections. 
+The output attribute schema is a combination of the attributes from the inputs. 
+Attributes with same name but different types will be converted to strings.
+
+## Intersection (WPS vec:IntersectionFeatureCollection)
+Spatial intersection of two feature collections, incuding combining attributes from both.
 ## Response
 
 ### Raw example

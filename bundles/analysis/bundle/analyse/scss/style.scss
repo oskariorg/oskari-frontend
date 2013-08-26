@@ -84,6 +84,28 @@ div.basic_analyse div.buttons input, div.analyse div.startview div.buttons input
     margin-right: 1px;
 }
 
+div.basic_analyse div.analyse-select-featurelist {
+  display: inline;
+  margin-left: 6px;
+}
+
+div.basic_analyse div.analyse-select-featurelist a {
+  font-size: 150%;
+  color: #37B7FF;
+  text-decoration: none;
+}
+
+div.basic_analyse div.analyse-select-featurelist ul {
+  font-size: 100%;
+  line-height: 100%;
+  padding: 0;
+  padding-top: 10px;
+}
+
+div.basic_analyse div.analyse-select-featurelist ul li {
+  list-style-type: none;
+}
+
 label.params_checklabel {
   text-overflow: ellipsis;
   display: inline-block;
@@ -156,6 +178,15 @@ div.analyse-filter-popup-content div.bbox-radio div.bbox-off {
  margin-top: 5px;
 }
 
+div.analyse-filter-popup-content div.analyse-filter-clicked-features div.clicked-features-title {
+  display: inline-block;
+  margin-right: 25px;
+}
+
+div.analyse-filter-popup-content div.analyse-filter-clicked-features label {
+  margin-left: 8px;
+}
+
 div.analyse-filter-popup-content div.filter-option {
   padding-bottom: 10px;
 }
@@ -178,4 +209,7 @@ div.analyse-filter-popup-content div.filter-option input[name="attribute-value"]
 }
 div.analyse-filter-popup-content div.filter-option select.attribute {
   width: 150px;
+}
+div.analyse-filter-popup-content div.filter-option input[name="case-sensitive"] {
+  margin-right: 5px;
 }

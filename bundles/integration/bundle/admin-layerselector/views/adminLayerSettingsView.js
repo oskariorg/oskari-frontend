@@ -317,8 +317,8 @@ define([
             data.style          = form.find('#add-layer-style').val(),
             data.style          = me.classes.encode64(data.style);//me.layerGroupingModel.encode64(data.style);
 
-            data.minScale       = form.find('#add-layer-minscale').val(),
-            data.maxScale       = form.find('#add-layer-maxscale').val(),
+            data.minScale       = form.find('#add-layer-minscale').val() || 16000000,
+            data.maxScale       = form.find('#add-layer-maxscale').val() || 1,
             data.epsg           = form.find('#add-layer-srsname').val(),
             data.epsg           = Number(data.epsg.replace('EPSG:', '')),
 
@@ -337,12 +337,12 @@ define([
             if(lcId != null) {
                 url += "&lcId=" + lcId;
             }
-            url += "&nameFi=" + data.names.fi +
-                "&nameSv=" + data.names.sv +
-                "&nameEn=" + data.names.en +
-                "&titleFi=" + data.title.fi +
-                "&titleSv=" + data.title.sv +
-                "&titleEn=" + data.title.en +
+            url += "&nameFi=" + encodeURIComponent(data.names.fi) +
+                "&nameSv=" + encodeURIComponent(data.names.sv) +
+                "&nameEn=" + encodeURIComponent(data.names.en) +
+                "&titleFi=" + encodeURIComponent(data.title.fi) +
+                "&titleSv=" + encodeURIComponent(data.title.sv) +
+                "&titleEn=" + encodeURIComponent(data.title.en) +
                 "&type=" + data.type +
                 "&wmsName=" + data.wmsName +
                 "&wmsUrl=" + encodeURIComponent(data.wmsUrl) +
