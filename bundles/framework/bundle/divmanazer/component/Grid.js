@@ -553,7 +553,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             if (this.showColumnSelector) {
                 this._renderColumnSelector(table, fieldNames);
                 container.append(this.visibleColumnSelector);
-                if (state !== null && typeof state !== 'undefined') && state.columnSelector === 'open') {
+                if ((state !== null && typeof state !== 'undefined') && state.columnSelector === 'open') {
                     this.visibleColumnSelector.find('.column-selector').css('visibility', 'visible');
                 }
             }
