@@ -81,7 +81,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             this._notifyValidationError('Aggregate functions not selected', errorTitle);
             noErrors = false;
         }
-        if (!selections.methodParams['attibute']) {
+        if (!selections.methodParams['attribute']) {
             this._notifyValidationError('Aggregate attribute not selected', errorTitle);
             noErrors = false;
         }
