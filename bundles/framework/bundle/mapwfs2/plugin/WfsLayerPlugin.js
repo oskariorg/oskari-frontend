@@ -599,7 +599,6 @@ function(config) {
         var keyColumn = null;
         var valColumn = null;
 
-        console.log(node);
         for (var key in node) {
             var value = node[key];
             if(!value || !key) {
