@@ -5,7 +5,7 @@
  * perfectly and some of the test cases might fail. In case that happens, just rerun the
  * tests and they should work. All of these tests require jetty + redis open with wfs2.
  */
-describe.only('Test Suite for mapwfs2 connections', function() {
+describe('Test Suite for mapwfs2 connections', function() {
     var module = null,
         connection = null,
         mediator = null,
@@ -230,7 +230,6 @@ describe.only('Test Suite for mapwfs2 connections', function() {
         });
 
         it('should respond to /service/wfs/removeMapLayer', function() {
-            // THE BEEF OF THE TEST
             cometd.publish('/service/wfs/removeMapLayer', {
                 "layerId": 216
             });
@@ -335,13 +334,18 @@ describe.only('Test Suite for mapwfs2 connections', function() {
         /*
          * THE LAYER SHOULD BE INVISIBLE TO START WITH!!!!!1!!1!11311321
          */
-        it.skip('should respond to /service/wfs/setMapLayerVisibility', function(done) {
+        it('should respond to /service/wfs/setMapLayerVisibility', function(done) {
             setSubscriptions();
 
-            // THE BEEF OF THE TEST
-            cometd.publish('/service/wfs/setMapLayerVisibility', {
-                "layerId": 216,
-                "visible": true
+            cometd.batch(function() {
+                cometd.publish('/service/wfs/setMapLayerVisibility', {
+                    "layerId": 216,
+                    "visible": false
+                });
+                cometd.publish('/service/wfs/setMapLayerVisibility', {
+                    "layerId": 216,
+                    "visible": true
+                });
             });
 
             waitsFor(function() {
@@ -357,7 +361,6 @@ describe.only('Test Suite for mapwfs2 connections', function() {
         it('should respond to /service/wfs/highlightFeatures', function(done) {
             setSubscriptions();
 
-            // THE BEEF OF THE TEST
             cometd.publish('/service/wfs/highlightFeatures', {
                 "layerId": 216,
                 // Helsingin maistraatti / Holhoustoimi
