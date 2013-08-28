@@ -44,7 +44,7 @@ function(config, mediator) {
 
     // Disconnect when the page unloads
     jQuery(window).unload(function() {
-        this.cometd.disconnect(true);
+        self.cometd.disconnect(true);
     });
 }, {
 

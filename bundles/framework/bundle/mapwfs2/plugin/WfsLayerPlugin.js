@@ -546,7 +546,7 @@ function(config) {
             var locales = layer.getLocales();
             if(locales != null) {
                 for(var l = 0; l < fields.length; l++) {
-                    if(locales.length >= l) {
+                    if(locales.length >= 1) {
                         fields[l] = locales[l];
                     }
                 }
@@ -598,8 +598,12 @@ function(config) {
         var row = null;
         var keyColumn = null;
         var valColumn = null;
+
         for (var key in node) {
             var value = node[key];
+            if(!value || !key) {
+                continue;
+            }
             var vType = (typeof value).toLowerCase();
             var vPres = ''
             switch (vType) {
@@ -625,7 +629,17 @@ function(config) {
                     valpres = '?';
                     break;
                 case 'object':
-                    valpres = this._json2html(value);
+                    // format array
+                    if(jQuery.isArray(value)) {
+                        var valueDiv = this.template.wrapper.clone();
+                        for(var i=0; i < value.length;++i) {
+                            var innerTable = this._json2html(value[i]);
+                            valueDiv.append(innerTable);
+                        }
+                        valpres = valueDiv;
+                    } else {
+                        valpres = this._json2html(value);
+                    }
                     break;
                 default:
                     valpres = '';

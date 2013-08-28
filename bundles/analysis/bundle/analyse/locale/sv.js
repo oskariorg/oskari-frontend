@@ -63,7 +63,8 @@ Oskari.registerLocalization({
                 },{
                     "id" : "oskari_analyse_Median",
                     "label" : "Mediaan"
-                }]
+                }],
+                "attribute": "Välj ett attribut"
             },
             "buffer_size": {
                 "label": "Zon storlek (m)",

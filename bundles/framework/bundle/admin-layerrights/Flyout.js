@@ -153,11 +153,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 url: ajaxUrl + 'action_route=SaveLayerPermission',
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
-                beforeSend : function (x) {
-                    if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
-                    }
-                },
+               
                 data: saveData,
                 success: function () {
                     // TODO use promises
