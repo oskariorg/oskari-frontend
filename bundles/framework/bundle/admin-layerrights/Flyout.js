@@ -1,4 +1,5 @@
 
+
 /**
  * @class Oskari.framework.bundle.admin-layerrights.Flyout
  *
@@ -69,8 +70,8 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                     '       <select id="admin-layerrights-theme"></select>\n' +
                     '       <label for="admin-layerrights-dataprovidere">Data provider</label>' +
                     '       <select id="admin-layerrights-dataprovider"></select>\n' +*/
-                    '       <table class="admin-layerrights-layers">' +
-                    '       </table>' +
+                    '       <div class="admin-layerrights-layers">' +
+                    '       </div>' +
                     '       <div class="controls"></div>' +
                     '   </form>' +
                     '</div>\n'
@@ -145,7 +146,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
         doSave : function () {
             "use strict";
             var me = this,
-                saveData = {"resource" : me.extractSelections() };
+                saveData = {"resource" : JSON.stringify(me.extractSelections()) };
 
             jQuery.ajax({
                 type: 'POST',
@@ -200,9 +201,9 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
             roleSelectLabel.html(this.instance.getLocalization('selectRole'));
             container.append(content);
 
-            roleSelect.change(function () {
-                me.activeRole = roleSelect.find("option:selected").val();
-                me.updatePermissionsTable(this.activeRole, "ROLE");
+            roleSelect.change(function (event) {
+                me.activeRole = jQuery(event.currentTarget).val();
+                me.updatePermissionsTable(me.activeRole, "ROLE");
             });
 
             flyout.append(container);
@@ -335,6 +336,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
         updatePermissionsTable : function (activeRole, externalType) {
             "use strict";
             var me = this;
+
             jQuery.getJSON(ajaxUrl, {
                 action_route: "GetPermissionsLayerHandlers",
                 lang: Oskari.getLang(),
@@ -346,7 +348,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 // store unaltered data so we can do a dirty check on save
                 me.cleanData = result.resource;
                 var table = me.createLayerRightGrid(me.columns, result.resource);
-                jQuery(me.container).find('.admin-layerrights-layers').append(table);
+                jQuery(me.container).find('.admin-layerrights-layers').empty().append(table);
             });
         },
 
