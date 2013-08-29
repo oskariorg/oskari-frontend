@@ -55,7 +55,49 @@
 ## C. Authorization
 
 ### 1. Add new users
-       * Edit MapFullServlet.java
+       ### 1. Add new users and roles
+       * Edit user.json and roles.json files in map-servlet resource path
+       * role data for user must be in portti_permission and portti_recource_user tables
+       sample user.json:
+       {    "users": [
+        {
+            "firstName": "Antti",
+            "id": 2,
+            "lastName": "Aalto",
+            "pass": "oskari",
+            "roles": [
+                3,
+                4
+            ],
+            "user": "admin"
+        },
+        {
+            "firstName": "Oskari",
+            "id": 3,
+            "lastName": "Olematon",
+            "pass": "user",
+            "roles": [
+                3
+            ],
+            "user": "user"
+        }
+       ]
+     }
+     sample role.json:
+     {
+  "roles": [
+    {
+        "id": 3,
+        "name": "Karttakäyttäjä"
+    },
+    {
+        "id": 4,
+        "name": "Admin"
+    }
+      ]
+    }
+       
+       
 
 ### 2. Add new user roles and permissions
        (edit script file ..work\oskari-backend\servlet-map\src\main\resources\fi\nls\oskari\map\servlet\db\exampleLayersAndRoles.sql)
@@ -64,7 +106,7 @@
        * add row to portti_permissions table
        (e.q. add "5";"PUBLISH")
 
-       * execute tips&tricks 1
+       * execute tips&tricks F
 
 ## D. Map layers
 
@@ -76,7 +118,7 @@
        e.g.
        3;"Maaperäkartta 1:20 000 / 1:50 000";"Jordartskarta 1:20 000 / 1:50 000";"Superficial deposits map 1:20 000 / 1:50 000";"3";"http://geomaps2.gtk.fi/ArcGIS/services/GTKWMS/MapServer/WMSServer";75;"''";100000;10000;"http://www.paikkatietoikkuna.fi/web/guest/maaperakartta-1/20000";"http://geomaps2.gtk.fi/GTKWMS/wms/maaperakartta20k.png";11;"0f3f054f-ad70-4cf1-a1d1-93589261bd04";"''";2;"wmslayer";"";"";"";"";"";"";"";"";"";;"";"";"''";"''";"''";"";"1.3.0";3067;"{ fi:{name:"Maaperäkartta 1:20 000 / 1:50 000",subtitle:""},sv:{name:"Jordartskarta 1:20 000 / 1:50 000",subtitle:""},en:{name:"Superficial deposits map 1:20 000 / 1:50 000",subtitle:""}}"
        
-       * execute tips&tricks 1
+       * execute tips&tricks F
 
 ## E. Database
 
@@ -104,7 +146,7 @@
        * portti_capabilities_cache (prefetched wms capabilities requests )
 
 
-## E. Tips and Tricks
+## F. Tips and Tricks
 
        1. Recreate database --> delete files under /oskari-backend/data  and rebuild all ( mvn -f servlet-map-pom.xml clean install)
 
