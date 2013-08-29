@@ -2,7 +2,7 @@
 
 ## Short description
 
-WFS 2 contains separate backend from other backend action routes and Liferay portlet with own frontend bundle implementations. All the communication between backend and frontend is done with Bayeux protocol supporting websocket with ajax fallback. Service implements JSON API through Bayeux channels. Backend gets layer configurations and user permissions from the oskari-backend with HTTP GET requests (soon maybe through redis).
+WFS 2 contains separate backend from other backend action routes and map portlet with own frontend bundle implementations. To build WFS 2 needs the oskari-server's oskari-base package. The communication between backend and frontend is done with Bayeux protocol supporting websocket with ajax fallback except image route. Service implements JSON API through Bayeux channels. Backend gets layer configurations and user permissions from the oskari-backend with HTTP GET requests if there is no data in redis.
 
 ## Dependencies
 
@@ -13,6 +13,7 @@ WFS 2 contains separate backend from other backend action routes and Liferay por
 - Jackson (JSON)
 - Axiom (XML)
 - Jedis (Redis client)
+- oskari-base
 
 ... other minor dependencies
 
@@ -1046,8 +1047,8 @@ Caching is done with redis on backend. Basic key-value storage is used in most o
 
 ### Permissions
 
-* key: Permission_#{client}
-* unique part is Bayeux client id
+* key: Permission_#{session}
+* unique part is JSESSIONID
 * expires in one day
 
 * created for all users
