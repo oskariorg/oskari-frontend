@@ -108,6 +108,11 @@ module.exports = function (grunt) {
                 "outdir": "../dist/<%= version %>docs/"
             }
         },
+        beautifyJS: {
+            target: {
+                src: ['../{applications,bundles,packages}/**/*.js']
+            }
+        },
         "regex-replace": {
             karma: {
                 src: ['node_modules/grunt-karma/node_modules/karma/lib/server.js'],
@@ -513,6 +518,29 @@ module.exports = function (grunt) {
             grunt.fail.fatal("Couldn't find options.");
         }
 
+    });
+
+    grunt.registerMultiTask('beautifyJS', 'Clean up JS code style', function () {
+        var startTime = new Date().getTime(),
+            beautify = require("js-beautify"),
+            beautifyOptions = {
+                "jslint_happy": true
+            },
+            contents;
+        this.files.forEach(function (file) {
+            file.src.filter(function (filepath) {
+                if (!grunt.file.exists(filepath)) {
+                    // This is not fatal...
+                    grunt.log.warn('Source file "' + filepath + '" not found.');
+                    return false;
+                }
+                grunt.log.writeln("Beautifying " + filepath);
+                contents =  grunt.file.read(filepath);
+                grunt.file.write(filePath, beautify(contents, beautifyOptions));
+                return true;
+            });
+        });
+        grunt.log.writeln("Beautification took " + ((new Date().getTime() - startTime) / 1000) + " seconds.");
     });
 
     grunt.registerTask("compileBundleCSS", "Compile bundle SASS to CSS", function () {
