@@ -82,3 +82,12 @@ div.basic_publisher div.buttons, div.publisher div.startview div.buttons {
 
 div.basic_publisher div.buttons input, div.publisher div.startview div.buttons input {
   margin: 5px 2px; }
+
+/* Layout */
+div.basic_publisher p#publisher-selected-colour {
+  display: inline;
+}
+
+div.basic_publisher button#publisher-colours {
+  float: right;
+}

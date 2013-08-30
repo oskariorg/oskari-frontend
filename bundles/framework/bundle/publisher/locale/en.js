@@ -60,6 +60,25 @@ Oskari.registerLocalization(
                     "tooltip": "Show the data related to map.",
                     "grid" : "Show statistic grid"
                 },
+                "layout": {
+                    "label": "Layout",
+                    "fields": {
+                        "colours": {
+                            "label": "Color scheme",
+                            "buttonLabel": "Change"
+                        },
+                        "fonts": {
+                            "label": "Choose font"
+                        },
+                        "toolStyles": {
+                            "label": "Tool styles"
+                        }
+                    },
+                    "popup": {
+                        "title": "Choose the colour scheme",
+                        "close": "Close"
+                    }
+                },
                 "layers": {
                     "label": "Map layers",
                     "defaultLayer": "(Default layer)",

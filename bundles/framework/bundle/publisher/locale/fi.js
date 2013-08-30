@@ -60,6 +60,25 @@ Oskari.registerLocalization(
                     "tooltip": "Näytä karttaan liittyvä taulukko.",
                     "grid" : "Näytä tilastotaulukko"
                 },
+                "layout": {
+                    "label": "Ulkoasu",
+                    "fields": {
+                        "colours": {
+                            "label": "Värimaailma",
+                            "buttonLabel": "Vaihda"
+                        },
+                        "fonts": {
+                            "label": "Valitse fontti"
+                        },
+                        "toolStyles": {
+                            "label": "Työkalujen tyyli"
+                        }
+                    },
+                    "popup": {
+                        "title": "Värimaailman valinta",
+                        "close": "Sulje"
+                    }
+                },
                 "layers": {
                     "label": "Karttatasot",
                     "defaultLayer": "(Oletusvalinta)",

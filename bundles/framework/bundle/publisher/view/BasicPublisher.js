@@ -230,6 +230,15 @@ function(instance, localization, data) {
         accordion.addPanel(this._createSizePanel());
         accordion.addPanel(this._createToolsPanel());
 
+        // Add the layout panel to the accordion.
+        this.layoutPanel = Oskari.clazz.create(
+            'Oskari.mapframework.bundle.publisher.view.PublisherLayoutForm',
+            this.loc,
+            this
+        );
+        this.layoutPanel.init();
+        accordion.addPanel(this.layoutPanel.getPanel());
+
         this.maplayerPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLayerForm', this.loc, this.instance);
         this.maplayerPanel.init();
         

@@ -60,6 +60,25 @@ Oskari.registerLocalization(
                     "tooltip": "Show the data related to map.",
                     "grid" : "Visa statistik bord"
                 },
+                "layout": {
+                    "label": "Ulkoasu",
+                    "fields": {
+                        "colours": {
+                            "label": "Värimaailma",
+                            "buttonLabel": "Vaihda"
+                        },
+                        "fonts": {
+                            "label": "Valitse fontti"
+                        },
+                        "toolStyles": {
+                            "label": "Työkalujen tyyli"
+                        }
+                    },
+                    "popup": {
+                        "title": "Värimaailman valinta",
+                        "close": "Sulje"
+                    }
+                },
                 "layers": {
                     "label": "Kartlager",
                     "defaultLayer": "(Förvald kartlager)",
