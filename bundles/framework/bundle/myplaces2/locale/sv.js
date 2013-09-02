@@ -33,13 +33,7 @@ Oskari.registerLocalization({
         "next": "Du kan lagra eller tillägga fler polygoner till samma området.",
         "edit": "Editera områdets form genom att klicka och dra brytningspunkterna på omkretslinjen.",
         "save": "Lagra form"
-      }/*,
-      "cut": {
-        "tooltip": "Tillägg hål",
-        "new": "Tillägg hålets hörnpunkter genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'.",
-        "edit": "Editera hålets form genom att klicka och dra brytningspunkterna på omkretslinjen.",
-        "save": "Lagra form"
-      }*/
+      }
     },
     "buttons": {
       "ok": "OK",
