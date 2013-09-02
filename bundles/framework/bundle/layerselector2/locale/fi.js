@@ -20,7 +20,8 @@ Oskari.registerLocalization({
             "description": "Voit hakea karttatasoja kirjoittamalla osan karttatason tai tiedontuottajan nimestä. Kirjoittamalla vähintään 4 merkkiä ja painamalla enter-näppäintä voit hakea myös karttatasoihin liittyviä avainsanoja. Ehdotetuista avainsanoista voit valita uuden hakusanan. Lukema avainsanan perässä kertoo, kuinka moneen karttatasoon sana on liitetty.",
             "inspire": "Aiheittain",
             "organization": "Tiedontuottajittain",
-            "published": "Käyttäjät"
+            "published": "Käyttäjät",
+            "didYouMean": "Tarkoititko:"
         },
         "published": {
             "organization": "Julkaistu taso",

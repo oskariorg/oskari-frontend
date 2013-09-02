@@ -19,8 +19,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
         this.ui = this._createLayerContainer(layer);
     }, {
         __template: '<div class="layer"><input type="checkbox" /> ' + '<div class="layer-tools"><div class="layer-backendstatus-icon backendstatus-ok"></div>' + '<div class="layer-icon"></div><div class="layer-info"></div></div>' + '<div class="layer-title"></div>' +
-            //'<div class="layer-keywords"></div>' + 
-            '</div>',
+        //'<div class="layer-keywords"></div>' + 
+        '</div>',
         /**
          * @method getId
          * @return {String} layer id
@@ -31,6 +31,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
         },
         setVisible: function (bln) {
             //"use strict";
+            // TODO assúme boolean and clean up everyhting that passes somehting else
             // checking since we dont assume param is boolean
             if (bln == true) {
                 this.ui.show();
@@ -40,6 +41,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
         },
         setSelected: function (isSelected) {
             //"use strict";
+            // TODO assúme boolean and clean up everyhting that passes somehting else
             // checking since we dont assume param is boolean
             this.ui.find('input').attr('checked', (isSelected == true));
         },
@@ -165,8 +167,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
 
                     }
 
-                    sandbox.postRequestByName(rn, [
-                        {
+                    sandbox.postRequestByName(rn, [{
                             uuid: uuid
                         },
                         additionalUuids

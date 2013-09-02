@@ -20,7 +20,8 @@ Oskari.registerLocalization({
             "description": "You can search map layers by writing a part of the name or producer of the layer. By writing at 4 least characters and pushing enter key you can also search for keywords that are related to the layers. The number after the keyword in the list tells you how many map layers are related to it.",
             "inspire": "By theme",
             "organization": "By data providers",
-            "published": "Users"
+            "published": "Users",
+            "didYouMean": "Did you mean:"
         },
         "published": {
             "organization": "Published map layer",

@@ -33,13 +33,7 @@ Oskari.registerLocalization({
         "next": "Voit tallentaa tai piirtää lisää alueita samaan kohteeseen.",
         "edit": "Muokkaa muotoa raahaamalla reunaviivan taitepisteitä.",
         "save": "Tallenna muoto"
-      }/*,
-      "cut": {
-        "tooltip": "Lisää aukko",
-        "new": "Lisää aukon taitepisteet klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella tai painamalla 'Lopeta piirto'.",
-        "edit": "Muokkaa muotoa raahaamalla reunaviivan taitepisteitä.",
-        "save": "Tallenna muoto"
-      }*/
+      }
     },
     "buttons": {
       "ok": "OK",

@@ -20,7 +20,8 @@ Oskari.registerLocalization({
             "description": "Du kan söka kartlager genom att skriva några bokstäver som ingår i namnet eller producent av den dataprodukt. Genom att skriva minst 4 bokstäver och trycka enter-knappen, du kan också söka efter nyckelord som beskriver kartlager. Numret efter nyckelord i listan står för mängd av kartlager relaterad för det ord.",
             "inspire": "Enligt tema",
             "organization": "Enligt dataproducent",
-            "published": "Användare"
+            "published": "Användare",
+            "didYouMean": "Menade du:"
         },
         "published": {
             "organization": "Publicerad kartlager",
