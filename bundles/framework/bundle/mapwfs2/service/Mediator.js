@@ -147,6 +147,15 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      */
     getWFSProperties : function(data) {
         var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
+
+        var oldFields = layer.getFields();
+        var oldLocales = layer.getLocales();
+        if(oldFields.length > 0 && 
+            !this.plugin.isArrayEqual(data.data.fields, oldFields) && 
+            !this.plugin.isArrayEqual(data.data.locales, oldLocales)) {
+            this.plugin.mapMoveHandler();
+        }
+
         layer.setFields(data.data.fields);
         layer.setLocales(data.data.locales);
 

@@ -1,5 +1,11 @@
 # Release Notes
 
+## 1.14
+
+### mapmodule-plugin/getinfo
+
+The look of my_places GFI popup has been simplified and a possibility of displaying an image is now accounted for.
+
 ## 1.13
 
 ### mapmodule plugin
