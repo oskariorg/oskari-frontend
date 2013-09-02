@@ -146,7 +146,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             if (blnFilteredValue) {
                 value = value.match(this._regExp);
             }
-            return value;
+            return String(value);
         },
         /**
          * @method setValue
