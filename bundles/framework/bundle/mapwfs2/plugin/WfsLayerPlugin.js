@@ -199,43 +199,7 @@ function(config) {
          * @param {Object} event
          */
         "AfterMapMoveEvent" : function(event) {
-            var srs = this.getSandbox().getMap().getSrsName();
-            var bbox = this.getSandbox().getMap().getExtent();
-            var zoom = this.getSandbox().getMap().getZoom();
-
-
-            /// clean features lists
-            var layers = this.getSandbox().findAllSelectedMapLayers(); // get array of AbstractLayer (WFS|WMS..)
-            for (var i = 0; i < layers.length; ++i) {
-                if (layers[i].isLayerOfType('WFS')) {
-                    layers[i].setActiveFeatures([]);
-                }
-            }
-
-            // update location
-            var grid = this.getGrid();
-            if(grid != null) {
-                this.getIO().setLocation(srs, [bbox.left,bbox.bottom,bbox.right,bbox.top], zoom, grid);
-                this._tilesLayer.redraw();
-            }
-
-            // update zoomLevel and highlight pictures
-            if(this.zoomLevel != zoom) {
-                this.zoomLevel = zoom;
-                for (var j = 0; j < layers.length; ++j) {
-                    if (layers[j].isLayerOfType('WFS')) {
-                        // get all feature ids
-                        var fids = layers[j].getClickedFeatureIds().slice(0);
-                        for(var k = 0; k < layers[j].getSelectedFeatures().length; ++k) {
-                            fids.push(layers[j].getSelectedFeatures()[k][0]);
-                        }
-                        this.getIO().highlightMapLayerFeatures(layers[j].getId(), fids, false);
-                    }
-                }
-            }
-
-            var creator = this.getSandbox().getObjectCreator(event);
-            this.getSandbox().printDebug("[WfsLayerPlugin] got AfterMapMoveEvent from " + creator);
+            this.mapMoveHandler();
         },
 
         /**
@@ -438,6 +402,45 @@ function(config) {
      */
     onEvent : function(event) {
         return this.eventHandlers[event.getName()].apply(this, [ event ]);
+    },
+
+    /**
+     * @method mapMoveHandler
+     */
+    mapMoveHandler : function() {
+        var srs = this.getSandbox().getMap().getSrsName();
+        var bbox = this.getSandbox().getMap().getExtent();
+        var zoom = this.getSandbox().getMap().getZoom();
+
+        /// clean features lists
+        var layers = this.getSandbox().findAllSelectedMapLayers(); // get array of AbstractLayer (WFS|WMS..)
+        for (var i = 0; i < layers.length; ++i) {
+            if (layers[i].isLayerOfType('WFS')) {
+                layers[i].setActiveFeatures([]);
+            }
+        }
+
+        // update location
+        var grid = this.getGrid();
+        if(grid != null) {
+            this.getIO().setLocation(srs, [bbox.left,bbox.bottom,bbox.right,bbox.top], zoom, grid);
+            this._tilesLayer.redraw();
+        }
+
+        // update zoomLevel and highlight pictures
+        if(this.zoomLevel != zoom) {
+            this.zoomLevel = zoom;
+            for (var j = 0; j < layers.length; ++j) {
+                if (layers[j].isLayerOfType('WFS')) {
+                    // get all feature ids
+                    var fids = layers[j].getClickedFeatureIds().slice(0);
+                    for(var k = 0; k < layers[j].getSelectedFeatures().length; ++k) {
+                        fids.push(layers[j].getSelectedFeatures()[k][0]);
+                    }
+                    this.getIO().highlightMapLayerFeatures(layers[j].getId(), fids, false);
+                }
+            }
+        }
     },
 
     /**
@@ -944,6 +947,27 @@ function(config) {
             this.tileData[layer.getId()] = [];
         }
         this.tileData[layer.getId()].push({"bbox": bbox, "url": imageUrl});
+    },
+
+    /**
+     * @method _isArrayEqual
+     * @param {String[]} current
+     * @param {String[]} old
+     *
+     * Checks if the arrays are equal
+     */
+    isArrayEqual : function(current, old) {
+        if(old.length != current.length) { // same size?
+            return false;
+        }
+
+        for(var i = 0; i < current.length; i++) {
+            if(current[i] != old[i]) {
+                return false;
+            }
+        }
+
+        return true;
     },
 
     /**
