@@ -13,7 +13,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
      */
 
     function (pEmptyMsg) {
-        "use strict";
         this.panels = [];
         this.tabChangeListeners = [];
         if (pEmptyMsg) {
@@ -35,7 +34,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * @param {Oskari.userinterface.component.TabPanel} panel
          */
         addPanel: function (panel) {
-            "use strict";
             var me = this,
                 content,
                 headerContainer,
@@ -76,7 +74,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * @param {Function} pCallback function to call when tabs are changed
          */
         addTabChangeListener: function (pCallback) {
-            "use strict";
             this.tabChangeListeners.push(pCallback);
         },
 
@@ -86,7 +83,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * @param {Oskari.userinterface.component.TabPanel} panel
          */
         select: function (panel) {
-            "use strict";
             var previousPanel = null,
                 i,
                 headerContainer,
@@ -120,7 +116,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * @return {Boolean} true if given panel is currently selected
          */
         isSelected: function (panel) {
-            "use strict";
             return panel.getHeader().hasClass('active');
         },
         /**
@@ -131,7 +126,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * @param {Oskari.userinterface.component.TabPanel} pPanel
          */
         removePanel: function (pPanel) {
-            "use strict";
             var panel = null,
                 i;
             for (i = 0; i < this.panels.length; i += 1) {
@@ -165,7 +159,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * @param {jQuery} container reference to DOM element
          */
         insertTo: function (container) {
-            "use strict";
             container.append(this.ui);
         }
     });

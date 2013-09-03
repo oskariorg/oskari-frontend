@@ -13,7 +13,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
      */
 
     function (pEmptyMsg) {
-        "use strict";
         this.panels = [];
         this.tabChangeListeners = [];
         if (pEmptyMsg) {
@@ -36,7 +35,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
          * @param {Oskari.userinterface.component.TabPanel} panel
          */
         addPanel: function (panel) {
-            "use strict";
             var me = this,
                 content,
                 headerContainer,
@@ -76,7 +74,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
          * @param {Function} pCallback function to call when tabs are changed
          */
         addTabChangeListener: function (pCallback) {
-            "use strict";
             this.tabChangeListeners.push(pCallback);
         },
 
@@ -86,7 +83,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
          * @param {Oskari.userinterface.component.TabPanel} panel
          */
         select: function (panel) {
-            "use strict";
             var previousPanel = null,
                 i,
                 tabs,
@@ -125,7 +121,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
          * @return {Boolean} true if given panel is currently selected
          */
         isSelected: function (panel) {
-            "use strict";
             var headerContainer = this.ui.find('ul li select :selected');
             return headerContainer.index() === this._getPanelIndex(panel);
         },
@@ -137,7 +132,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
          * @return {Number} panels index or -1 if not found
          */
         _getPanelIndex: function (panel) {
-            "use strict";
             var i;
             for (i = 0; i < this.panels.length; i += 1) {
                 if (this.panels[i] === panel) {
@@ -154,7 +148,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
          * @param {Oskari.userinterface.component.TabPanel} pPanel
          */
         removePanel: function (pPanel) {
-            "use strict";
             var panel = null,
                 i;
             for (i = 0; i < this.panels.length; i += 1) {
@@ -188,7 +181,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
          * @param {jQuery} container reference to DOM element
          */
         insertTo: function (container) {
-            "use strict";
             container.append(this.ui);
         }
     });

@@ -10,7 +10,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
      */
 
     function () {
-        "use strict";
         this.template = jQuery('<div class="divmanazerpopup"><h3></h3><div class="content"></div><div class="actions"></div></div>');
         this.templateButton = jQuery('<div class="button"><a href="JavaScript:void(0);"></a></div>');
         this.dialog = this.template.clone();
@@ -24,7 +23,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @param {Oskari.userinterface.component.Button[]} buttons buttons to show on dialog
          */
         show: function (title, message, buttons) {
-            "use strict";
             var me = this,
                 contentDiv = this.dialog.find('div.content'),
                 actionDiv,
@@ -65,7 +63,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @param {Number} timeout milliseconds
          */
         fadeout: function (timeout) {
-            "use strict";
             var me = this,
                 timer = 3000;
             if (timeout) {
@@ -81,7 +78,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @param {String} pClass css class name
          */
         addClass: function (pClass) {
-            "use strict";
             this.dialog.addClass(pClass);
         },
         /**
@@ -92,7 +88,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @return {Oskari.userinterface.component.Button} button that closes the dialog
          */
         createCloseButton: function (label) {
-            "use strict";
             var me = this,
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             okBtn.setTitle(label);
@@ -107,7 +102,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @param {Boolean} noAnimation true to close immediately (optional, defaults to fade out animation)
          */
         close: function (noAnimation) {
-            "use strict";
             var me = this;
             if (this.overlay) {
                 this.overlay.close();
@@ -136,7 +130,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @param {String} alignment - one of #alignment (optional, defaults to right)
          */
         moveTo: function (target, alignment) {
-            "use strict";
             var me = this,
                 align = 'right',
                 //get the position of the target element
@@ -187,7 +180,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * Resets any previous locations and centers the popup on screen
          */
         resetPosition: function () {
-            "use strict";
             var i;
             this.dialog.removeClass('arrow');
             for (i = 0; i < this.alignment.length; i += 1) {
@@ -201,7 +193,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * the popup to block user input outside the popup
          */
         makeModal: function () {
-            "use strict";
             var overlay = Oskari.clazz.create('Oskari.userinterface.component.Overlay');
             overlay.overlay('body');
             this.overlay = overlay;
@@ -214,7 +205,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @param {HTML/DOM/jQueryObject}
          */
         setContent: function (content) {
-            "use strict";
             var contentEl = this.dialog.find('div.content');
             contentEl.empty();
             contentEl.append(content);
@@ -226,12 +216,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @return {String} dialog content
          */
         getContent: function () {
-            "use strict";
             return this.dialog.find('div.content')[0].textContent;
         },
 
         getJqueryContent: function () {
-            "use strict";
             return this.dialog.find('div.content');
         },
 
@@ -240,7 +228,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * Makes dialog draggable with jQuery Event Drag plugin
          */
         makeDraggable: function () {
-            "use strict";
             var me = this;
             me.dialog.css("position", "absolute");
             me.dialog.draggable({

@@ -10,7 +10,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
      */
 
     function (name, psandbox) {
-        "use strict";
         var sandbox = psandbox || Oskari.getSandbox(),
             label,
             input;
@@ -45,7 +44,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {String} pLabel
          */
         setLabel: function (pLabel) {
-            "use strict";
             var label = this._field.find('label');
             label.html(pLabel);
         },
@@ -56,7 +54,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {String} pDataTags comma separated list of article tags identifying the help article for this field
          */
         setTooltip: function (pTooltip, pDataTags) {
-            "use strict";
             // TODO: check existing tooltip
             var tooltip = this.templateTooltip.clone(),
                 label;
@@ -74,7 +71,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {String} pLabel
          */
         setPlaceholder: function (pLabel) {
-            "use strict";
             var input = this._field.find('input');
             input.attr('placeholder', pLabel);
         },
@@ -85,7 +81,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {String} reqMsg error message to show when validation fails (field is empty)
          */
         setRequired: function (blnParam, reqMsg) {
-            "use strict";
             this._required = (blnParam === true);
             if (reqMsg) {
                 this._requiredMsg = reqMsg;
@@ -99,7 +94,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Pattern} regexp pattern to check content with (optional)
          */
         setContentCheck: function (blnParam, errorMsg, regexp) {
-            "use strict";
             this._contentCheck = (blnParam === true);
             if (regexp) {
                 this._regExp = regexp;
@@ -110,7 +104,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         },
 
         showErrors: function (errors) {
-            "use strict";
             this.clearErrors();
             var errorDiv = this.templateErrors.clone(),
                 i;
@@ -121,7 +114,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             this._field.append(errorDiv);
         },
         clearErrors: function () {
-            "use strict";
             var errors = this._field.find('div.error');
             errors.remove();
         },
@@ -131,7 +123,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @return {jQuery}
          */
         getField: function () {
-            "use strict";
             return this._field;
         },
         /**
@@ -141,7 +132,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @return {String}
          */
         getValue: function (blnFilteredValue) {
-            "use strict";
             var value = this._field.find('input').val();
             if (blnFilteredValue) {
                 value = value.match(this._regExp);
@@ -154,7 +144,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {String} value
          */
         setValue: function (value) {
-            "use strict";
             this._field.find('input').attr('value', value);
         },
         /**
@@ -163,7 +152,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @return {String}
          */
         getName: function () {
-            "use strict";
             return this._name;
         },
         /**
@@ -172,7 +160,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Boolean} blnEnabled true to enable, false to disable
          */
         setEnabled: function (blnEnabled) {
-            "use strict";
             if (blnEnabled === true) {
                 this._field.find('input').removeAttr('disabled');
             } else {
@@ -186,7 +173,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {RegExp} regex
          */
         setRegExp: function (regex) {
-            "use strict";
             this._regExp = regex;
         },
 
@@ -201,7 +187,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} pValidator validator function
          */
         setValidator: function (pValidator) {
-            "use strict";
             this._validator = pValidator;
         },
         /**
@@ -215,7 +200,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @return {Object[]}
          */
         validate: function () {
-            "use strict";
             var errors = [],
                 value;
             if (this._validator) {
@@ -250,7 +234,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @return true if in range
          */
         checkLength: function (pStr, min, max) {
-            "use strict";
             if (pStr) {
                 var str = jQuery.trim(pStr.toString());
                 if (min && str.length < min) {
@@ -269,7 +252,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @return {Boolean}
          */
         checkValue: function () {
-            "use strict";
             var value = this.getValue(),
                 filtered = this.getValue(true);
             // if values match, everything ok
@@ -283,7 +265,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * Validates number range
          */
         validateNumberRange: function (value, min, max) {
-            "use strict";
             if (isNaN(parseInt(value, 10))) {
                 return false;
             }
@@ -301,7 +282,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {String} value hex-string to validate
          */
         validateHexColor: function (value) {
-            "use strict";
             return this._colorRegExp.test(value);
         },
 
@@ -311,7 +291,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if enter is pressed on the input
          */
         bindEnterKey: function (callback) {
-            "use strict";
             var me = this,
                 input = this._field.find('input');
             input.keypress(function (event) {
@@ -375,7 +354,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Boolean} blnImmediate true to bind to keyup event, false to bind to change event
          */
         bindChange: function (callback, blnImmediate) {
-            "use strict";
             var input = this._field.find('input');
 
             if (!blnImmediate) {
@@ -390,7 +368,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * Adds a clear button to the field
          */
         addClearButton: function () {
-            "use strict";
             var clearButton = this.templateClearButton.clone(),
                 input = this._field.find('input');
             clearButton.bind('click', function () {
@@ -406,7 +383,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @private
          */
         _bindFocusAndBlur: function () {
-            "use strict";
             var sandbox = this.sandbox,
                 enabler,
                 disabler,
@@ -439,7 +415,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          *      keypress event object from browser
          */
         _isEnterPress: function (event) {
-            "use strict";
             var keycode = event.which;
             // true if <enter>
             return (keycode === 13);
@@ -452,7 +427,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          *      keypress event object from browser
          */
         _isDownPress: function (event) {
-            "use strict";
             var keycode = event.which;
             // true if <up>
             return (keycode === 40);
@@ -465,7 +439,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          *      keypress event object from browser
          */
         _isUpPress: function (event) {
-            "use strict";
             var keycode = event.which;
             // true if <up>
             return (keycode === 38);

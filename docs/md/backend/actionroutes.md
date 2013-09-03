@@ -19,6 +19,7 @@
 - [GetViews](<%= docsurl %>backend/actionroutes/getviews.html)
 - [AdjustViewAccess](<%= docsurl %>backend/actionroutes/adjustviewaccess.html)
 - [Publish](<%= docsurl %>backend/actionroutes/publish.html)
+GetThematicMap
 
 ## Layers
 - [GetMapLayers](<%= docsurl %>backend/actionroutes/getMapLayers.html)
@@ -39,7 +40,7 @@ GetWmsServices
 - GetWFSLayerConfiguration (soon to be deprecated)
 
 ## WFS (soon to be deprecated)
-- GET\_PNG\_MAP 
+- GET\_PNG\_MAP
 - GET\_HIGHLIGHT\_WFS\_FEATURE\_IMAGE
 - GET\_XML\_DATA
 - QUERY\_FIND\_RAW\_DATA\_TO\_TABLE
@@ -49,12 +50,16 @@ GetWmsServices
 - [GetFeatureInfoWMS](<%= docsurl %>backend/actionroutes/getfeatureinfowms.html)
 - [GetSearchResult](<%= docsurl %>backend/actionroutes/getsearchresult.html)
 - [GetSotkaData](<%= docsurl %>backend/actionroutes/getsotkadata.html)
+GetFeatureDataXML
+GetInspireThemes
 - [GetPreview](<%= docsurl %>backend/actionroutes/getpreview.html)
 - [HasAcceptedPublishedTermsOfUse](<%= docsurl %>backend/actionroutes/hasacceptedpublishedtermsofuse.html)
 - [AcceptPublishedTermsOfUse](<%= docsurl %>backend/actionroutes/acceptpublishedtermsofuse.html)
 - GetWfsFeatureData (soon to be deprecated)
+GetProxyRequest
 
 ## My places
+GetPublishedMyPlaceLayers
 - [PublishMyPlaceLayer](<%= docsurl %>backend/actionroutes/publishmyplacelayer.html)
 - [FreeFindFromMyPlaceLayers](<%= docsurl %>backend/actionroutes/freefindfrommyplacelayers.html)
 - [MyPlaces](<%= docsurl %>backend/actionroutes/myplaces.html)
@@ -65,3 +70,10 @@ GetWmsServices
 ## ANALYSIS
 - [CreateAnalysisLayer](<%= docsurl %>backend/actionroutes/createanalysislayer.html)
 
+* added by MapFull as this is liferay specific
+    - GetArticlesByTag
+
+* Not used anymore
+    - SaveMapState
+    - GetUserData
+    - PublishMigration

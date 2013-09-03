@@ -356,6 +356,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 	 * evt - {Event}
 	 */
 	defaultClick : function(evt) {
+		console.log("DEFAULTCLICK",evt);
 		if(evt.lastTouches && evt.lastTouches.length == 2) {
 			/*this.map.zoomOut();*/
 			this.sendMapZoomOut();
@@ -570,7 +571,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 		var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
 
 		var hoverEvent = this._hoverEventBuilder();
-		hoverEvent.set(lonlat.lon, lonlat.lat, false, evt.pageX, evt.pageY);
+		hoverEvent.set(lonlat.lon, lonlat.lat, false, evt.pageX, evt.pageY,true);
 
 		this.sandbox.notifyAll(hoverEvent);
 	},
