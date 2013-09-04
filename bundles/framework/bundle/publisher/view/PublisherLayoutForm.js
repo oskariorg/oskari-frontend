@@ -26,7 +26,6 @@ function(localization, publisher) {
 
     this.values = null;
 
-    // TODO: these should probably come from conf or smth...
     this.initialValues = {
         colours: [{
             val: 'light_grey',
@@ -69,67 +68,14 @@ function(localization, publisher) {
             {name: 'Arial', val: 'arial'},
             {name: 'Comic Sans', val: 'comic_sans'}
         ],
-        toolStyles: [{
-            val: 'rounded-dark',
-            search: {
-                widthLeft: '17px', widthRight: '32px'
-            },
-            zoombar: {
-                widthPlus: '22px', widthMinus: '22px', widthCenter: '22px',
-                heightPlus: '38px', heightMinus: '39px', heightCenter: '12px',
-                heightCursor: 18, widthCursor: '17px'
-            }
-        }, {
-            val: 'rounded-light',
-            search: {
-                widthLeft: '17px', widthRight: '32px'
-            },
-            zoombar: {
-                widthPlus: '22px', widthMinus: '22px', widthCenter: '22px',
-                heightPlus: '38px', heightMinus: '39px', heightCenter: '12px',
-                heightCursor: 18, widthCursor: '17px'
-            }
-        }, {
-            val: 'sharp-dark',
-            search: {
-                widthLeft: '5px', widthRight: '30px'
-            },
-            zoombar: {
-                widthPlus: '23px', widthMinus: '23px', widthCenter: '23px',
-                heightPlus: '17px', heightMinus: '18px', heightCenter: '16px',
-                heightCursor: 16, widthCursor: '23px'
-            }
-        }, {
-            val: 'sharp-light',
-            search: {
-                widthLeft: '5px', widthRight: '30px'
-            },
-            zoombar: {
-                widthPlus: '23px', widthMinus: '23px', widthCenter: '23px',
-                heightPlus: '17px', heightMinus: '18px', heightCenter: '16px',
-                heightCursor: 16, widthCursor: '23px'
-            }
-        }, {
-            val: '3d-dark',
-            search: {
-                widthLeft: '5px', widthRight: '44px'
-            },
-            zoombar: {
-                widthPlus: '23px', widthMinus: '23px', widthCenter: '23px',
-                heightPlus: '35px', heightMinus: '36px', heightCenter: '13px',
-                heightCursor: 13, widthCursor: '23px'
-            }
-        }, {
-            val: '3d-light',
-            search: {
-                widthLeft: '5px', widthRight: '44px'
-            },
-            zoombar: {
-                widthPlus: '23px', widthMinus: '23px', widthCenter: '23px',
-                heightPlus: '35px', heightMinus: '36px', heightCenter: '13px',
-                heightCursor: 13, widthCursor: '23px'
-            }
-        }]
+        toolStyles: [
+            'rounded-dark',
+            'rounded-light',
+            'sharp-dark',
+            'sharp-light',
+            '3d-dark',
+            '3d-light'
+        ]
     };
 
 	this.fields = {
@@ -176,7 +122,7 @@ function(localization, publisher) {
      * prepopulates the fields if pData parameter is given.
      * 
      * @method init
-     * @param {Object} pData initial data 
+     * @param {Object} pData initial data (optional)
      */
 	init : function(pData) {
         var self = this,
@@ -196,6 +142,7 @@ function(localization, publisher) {
             field.content = template;
         }
 	},
+
     /**
      * Returns the UI panel and populates it with the data that we want to show the user.
      * 
@@ -216,8 +163,9 @@ function(localization, publisher) {
 		
 		return panel;
 	},
+
     /**
-     * Returns the selections the user has done with the form inputs (all strings).
+     * Returns the selections the user has done with the form inputs (all values are strings).
      * {
      *     colourScheme : <selected colour scheme>,
      *     font : <selected font>,
@@ -228,7 +176,7 @@ function(localization, publisher) {
      * @return {Object}
      */
 	getValues : function() {
-        //this.values.colourScheme = jQuery('p#publisher-selected-colour').text() || null;
+        this.values.colourScheme = jQuery('p#publisher-selected-colour').attr('colour-code') || null;
         this.values.font = jQuery('select[name=publisher-fonts]').val();
         this.values.toolStyle = jQuery('select[name=publisher-toolStyles]').val();
 
@@ -237,40 +185,45 @@ function(localization, publisher) {
 
     /**
      * @method _getColoursTemplate
+     * @return {jQuery} the colours template
      */
     _getColoursTemplate: function() {
         var self = this,
             template = this.template.colours.clone(),
-            selectedColour = this.values.colourScheme;
+            selectedColour = this.values.colourScheme,
+            colourName = this.loc.layout.fields.colours[selectedColour],
+            colourLabel = this.loc.layout.fields.colours.label,
+            buttonLabel = this.loc.layout.fields.colours.buttonLabel;
 
         // Set the localizations.
-        template.find('label').html(this.loc.layout.fields.colours.label);
+        template.find('label').html(colourLabel);
 
         // Set the button handler
-        template.find('button').html(this.loc.layout.fields.colours.buttonLabel).on('click', function(e) {
-            // TODO: create the popup to choose the colour scheme from.
+        template.find('button').html(buttonLabel).on('click', function(e) {
             self._openColourDialog(jQuery(this));
         });
 
         // Prepopulate data
-        template.find('p#publisher-selected-colour').html(this.loc.layout.fields.colours[selectedColour]);
+        template.find('p#publisher-selected-colour').html(colourName);
 
         return template;
     },
 
     /**
      * @method _getFontsTemplate
+     * @return {jQuery} the fonts template
      */
     _getFontsTemplate: function() {
         var self = this,
             template = this.template.fonts.clone(),
+            fontLabel = this.loc.layout.fields.fonts.label,
             fonts = this.initialValues.fonts,
             fLen = fonts.length,
             fontOption,
             i;
 
         // Set the localization.
-        template.find('label').html(this.loc.layout.fields.fonts.label);
+        template.find('label').html(fontLabel);
 
         for (i = 0; i < fLen; ++i) {
             fontOption = this.template.option.clone();
@@ -294,10 +247,12 @@ function(localization, publisher) {
 
     /**
      * @method _getToolStylesTemplate
+     * @return {jQuery} the tool styles template
      */
     _getToolStylesTemplate: function() {
         var self = this,
             template = this.template.toolStyles.clone(),
+            toolStylesLabel = this.loc.layout.fields.toolStyles.label,
             toolStyles = this.initialValues.toolStyles,
             tsLen = toolStyles.length,
             toolStyleOption,
@@ -305,26 +260,26 @@ function(localization, publisher) {
             i;
 
         // Set the localizations.
-        template.find('label').html(this.loc.layout.fields.toolStyles.label);
+        template.find('label').html(toolStylesLabel);
 
         for (i = 0; i < tsLen; ++i) {
             toolStyleOption = this.template.option.clone();
-            toolStyleName = this.loc.layout.fields.toolStyles[toolStyles[i].val];
+            toolStyleName = this.loc.layout.fields.toolStyles[toolStyles[i]];
             toolStyleOption.attr({
-                value: toolStyles[i].val
+                value: toolStyles[i]
             }).html(toolStyleName);
             template.find('select').append(toolStyleOption);
         }
 
         // Set the select change handler.
         template.find('select').on('change', function(e) {
+            // Send an event notifying the plugins that the style has changed.
             var selectedToolStyleCode = jQuery(this).val(),
-                selectedToolStyle = self._getToolStyleByCode(selectedToolStyleCode),
                 eventBuilder = self._sandbox.getEventBuilder('Publisher.ToolStyleChangedEvent'),
                 event;
 
             if (eventBuilder) {
-                event = eventBuilder(selectedToolStyle);
+                event = eventBuilder(selectedToolStyleCode);
                 self._sandbox.notifyAll(event);
             }
         });
@@ -338,6 +293,9 @@ function(localization, publisher) {
     },
 
     /**
+     * Creates and opens the dialog from which to choose the colour scheme.
+     * Also handles the creation of the sample gfi popup.
+     *
      * @method _openColourDialog
      */
     _openColourDialog: function(target) {
@@ -353,8 +311,9 @@ function(localization, publisher) {
         closeButton.setTitle(this.loc.layout.popup.close);
         closeButton.setHandler(function() {
             var colour = content.find('input[name=colour]:checked');
-            self.values.colourScheme = colour.val();
-            jQuery('div.basic_publisher').find('p#publisher-selected-colour').html(colour.attr('colour-name'));
+            jQuery('div.basic_publisher').find('p#publisher-selected-colour').
+                html(colour.attr('colour-name')).
+                attr('colour-code', colour.val());
             popup.close(true);
         });
 
@@ -374,6 +333,7 @@ function(localization, publisher) {
                 'for': colours[i].val
             });
 
+            // Set the selected colour or default to 'dark_grey' if non-existant.
             if (self.values.colourScheme === colours[i].val || (!self.values.colourScheme && colours[i].val === 'dark_grey')) {
                 colourInput.find('input[type=radio]').attr('checked', 'checked');
                 self._changeGfiColours(colours[i], content);
@@ -394,7 +354,10 @@ function(localization, publisher) {
     },
 
     /**
+     * Creates the sample gfi where the user can see the effects of the chosen colour scheme.
+     *
      * @method _createGfiPreview
+     * @return {jQuery} returns the sample gfi
      */
     _createGfiPreview: function() {
         // Example data
@@ -445,7 +408,11 @@ function(localization, publisher) {
     },
 
     /**
+     * Sets the styles of the sample gfi with the selected colour scheme.
+     *
      * @method _changeGfiColours
+     * @param {Object} selectedColour
+     * @param {jQuery} container (optional, defaults to the colour preview element on page)
      */
     _changeGfiColours: function(selectedColour, container) {
         container = container || jQuery('div#publisher-colour-preview');
@@ -474,7 +441,7 @@ function(localization, publisher) {
     /**
      * @method _getColourByCode
      * @param {String} code
-     * @param {Array[Object]} colours defaults to initial colours
+     * @param {Array[Object]} colours (optional, defaults to initial colours)
      * @return {Object} colour object
      */
     _getColourByCode: function(code, colours) {
@@ -484,23 +451,6 @@ function(localization, publisher) {
 
         for (i = 0; i < cLen; ++i) {
             if (colours[i].val === code) return colours[i];
-        }
-        return null;
-    },
-
-    /**
-     * @method _getToolStyleByCode
-     * @param {String} code
-     * @param {Array[Object]} toolStyles defaults to initial tool styles
-     * @return {Object} toolstyle object
-     */
-    _getToolStyleByCode: function(code, toolStyles) {
-        var toolStyles = toolStyles || this.initialValues.toolStyles,
-            tsLen = toolStyles.length,
-            i;
-
-        for (i = 0; i < tsLen; ++i) {
-            if (toolStyles[i].val === code) return toolStyles[i];
         }
         return null;
     }

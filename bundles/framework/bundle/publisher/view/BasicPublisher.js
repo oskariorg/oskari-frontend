@@ -81,7 +81,8 @@ function(instance, localization, data) {
         selected : true
     }, {
         id : 'Oskari.mapframework.mapmodule.GetInfoPlugin',
-        selected : true
+        selected : true,
+        config: {}
     }];
 
 
@@ -1127,17 +1128,34 @@ function(instance, localization, data) {
      * Changes the style of each tool, if the tool's plugin supports it.
      *
      * @method changeToolStyles
-     * @param {String} style
+     * @param {String} styleName
      */
-    changeToolStyles: function(style) {
-        if (!style) return;
+    changeToolStyles: function(styleName) {
+        if (!styleName) return;
 
+        // Set the toolStyle to the config of each tool
+        // and change the style immedately. 
         for (var i = 0; i < this.tools.length; ++i) {
             var tool = this.tools[i];
-            if (tool.config) tool.config.toolStyle = style;
+            if (tool.config) tool.config.toolStyle = styleName;
             if (tool._isPluginStarted && tool.plugin.changeToolStyle) {
-                tool.plugin.changeToolStyle(style);
+                tool.plugin.changeToolStyle(styleName);
             }
+        }
+
+        // Change the style of the layer selection plugin
+        this._setLayerSelectionStyle(styleName);
+    },
+
+    /**
+     * @method _setLayerSelectionStyle
+     */
+    _setLayerSelectionStyle: function(styleName) {
+        var mlp = this.maplayerPanel;
+        mlp.pluginConfig = mlp.pluginConfig || {};
+        mlp.pluginConfig.toolStyle = styleName;
+        if (mlp.isEnabled() && mlp.plugin.changeToolStyle) {
+            mlp.plugin.changeToolStyle(styleName);
         }
     }
 });

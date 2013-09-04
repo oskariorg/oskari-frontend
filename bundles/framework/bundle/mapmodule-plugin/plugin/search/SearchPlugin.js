@@ -19,6 +19,27 @@ function(config) {
 	this._conf = config;
 	this.container = null;
 	this.loc = null;
+
+	this.toolStyles = {
+		'rounded-dark': {
+            widthLeft: '17px', widthRight: '32px'
+        },
+        'rounded-light': {
+            widthLeft: '17px', widthRight: '32px'
+        },
+        'sharp-dark': {
+            widthLeft: '5px', widthRight: '30px'
+        },
+        'sharp-light': {
+            widthLeft: '5px', widthRight: '30px'
+        },
+        '3d-dark': {
+            widthLeft: '5px', widthRight: '44px'
+        },
+        '3d-light': {
+            widthLeft: '5px', widthRight: '44px'
+        }
+    };
 }, {
 	/** @static @property __name plugin name */
 	__name : 'SearchPlugin',
@@ -440,11 +461,12 @@ function(config) {
      * Changes the tool style of the plugin
      *
      * @method changeToolStyle
-     * @param {String} style
+     * @param {String} styleName
      * @param {jQuery} div
      */
-	changeToolStyle: function(style, div) {
-		var div = div || this.container;
+	changeToolStyle: function(styleName, div) {
+		var style = this.toolStyles[styleName];
+		div = div || this.container;
 
 		if (!style || !div) return;
 
@@ -457,16 +479,16 @@ function(config) {
 
 		var	resourcesPath = this.getMapModule().getImageUrl(),
 			imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/search/images/',
-			bgLeft = imgPath + 'search-tool-' + style.val + '_01.png',
-			bgMiddle = imgPath + 'search-tool-' + style.val + '_02.png',
-			bgRight = imgPath + 'search-tool-' + style.val + '_03.png',
+			bgLeft = imgPath + 'search-tool-' + styleName + '_01.png',
+			bgMiddle = imgPath + 'search-tool-' + styleName + '_02.png',
+			bgRight = imgPath + 'search-tool-' + styleName + '_03.png',
 			left = div.find('div.search-left'),
 			middle = div.find('div.search-middle'),
 			right = div.find('div.search-right');
 
 		left.css({
 			'background-image': 'url("' + bgLeft + '")',
-			'width': style.search.widthLeft
+			'width': style.widthLeft
 		});
 		middle.css({
 			'background-image': 'url("' + bgMiddle + '")',
@@ -474,7 +496,7 @@ function(config) {
 		});
 		right.css({
 			'background-image': 'url("' + bgRight + '")',
-			'width': style.search.widthRight
+			'width': style.widthRight
 		});
 	}
 }, {

@@ -24,6 +24,39 @@ function(config) {
     this._zoombar_messages = {};
     this._suppressEvents = false;
     this._conf = config;
+
+    this.toolStyles = {
+        'rounded-dark' : {
+            widthPlus: '22px', widthMinus: '22px', widthCenter: '22px',
+            heightPlus: '38px', heightMinus: '39px', heightCenter: 12,
+            heightCursor: '18px', widthCursor: '17px'
+        },
+        'rounded-light': {
+            widthPlus: '22px', widthMinus: '22px', widthCenter: '22px',
+            heightPlus: '38px', heightMinus: '39px', heightCenter: 12,
+            heightCursor: '18px', widthCursor: '17px'
+        },
+        'sharp-dark': {
+            widthPlus: '23px', widthMinus: '23px', widthCenter: '23px',
+            heightPlus: '17px', heightMinus: '18px', heightCenter: 16,
+            heightCursor: '16px', widthCursor: '23px'
+        },
+        'sharp-light': {
+            widthPlus: '23px', widthMinus: '23px', widthCenter: '23px',
+            heightPlus: '17px', heightMinus: '18px', heightCenter: 16,
+            heightCursor: '16px', widthCursor: '23px'
+        },
+        '3d-dark': {
+            widthPlus: '23px', widthMinus: '23px', widthCenter: '23px',
+            heightPlus: '35px', heightMinus: '36px', heightCenter: 13,
+            heightCursor: '13px', widthCursor: '23px'
+        },
+        '3d-light': {
+            widthPlus: '23px', widthMinus: '23px', widthCenter: '23px',
+            heightPlus: '35px', heightMinus: '36px', heightCenter: 13,
+            heightCursor: '13px', widthCursor: '23px'
+        }
+    };
 }, {
     /**
      * @static
@@ -279,20 +312,21 @@ function(config) {
      * Changes the tool style of the plugin
      *
      * @method changeToolStyle
-     * @param {String} style
+     * @param {String} styleName
      * @param {jQuery} div
      */
-    changeToolStyle: function(style, div) {
+    changeToolStyle: function(styleName, div) {
+        var style = this.toolStyles[styleName];
         div = div || this.__elements['zoombarSlider'];
 
         if (!style || !div) return;
 
         var resourcesPath = this.getMapModule().getImageUrl(),
             imgUrl = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/',
-            zoombarImg = imgUrl + 'zoombar-' + style.val + '.png',
-            zoombarCursorImg = imgUrl + 'zoombar-cursor-' + style.val + '.png',
-            zoombarMinusImg = imgUrl + 'zoombar_minus-' + style.val + '.png',
-            zoombarPlusImg = imgUrl + 'zoombar_plus-' + style.val + '.png',
+            zoombarImg = imgUrl + 'zoombar-' + styleName + '.png',
+            zoombarCursorImg = imgUrl + 'zoombar-cursor-' + styleName + '.png',
+            zoombarMinusImg = imgUrl + 'zoombar_minus-' + styleName + '.png',
+            zoombarPlusImg = imgUrl + 'zoombar_plus-' + styleName + '.png',
             bar = div.find('.ui-slider-vertical'),
             cursor = div.find('.ui-slider-handle'),
             plus = div.find('.pzbDiv-plus'),
@@ -302,30 +336,30 @@ function(config) {
         // HACK ALERT!
         // Used to get the cursor to the right position since
         // it's off by 2 pixels with the 'rounded' style.
-        var isRounded = style.val.match(/^rounded/);
+        var isRounded = styleName.match(/^rounded/);
 
-        var sliderHeight = this._map.getNumZoomLevels() * style.zoombar.heightCursor;
+        var sliderHeight = this._map.getNumZoomLevels() * style.heightCenter;
 
         bar.css({
             'background-image': 'url("' + zoombarImg + '")',
-            'width': style.zoombar.widthCenter,
+            'width': style.widthCenter,
             'margin-left': '0'
         });
         cursor.css({
             'background-image': 'url("' + zoombarCursorImg + '")',
-            'width': style.zoombar.widthCursor,
-            'height': style.zoombar.heightCursor + 'px',
+            'width': style.widthCursor,
+            'height': style.heightCursor,
             'margin-left': (isRounded ? '2px' : '0')
         });
         plus.css({
             'background-image': 'url("' + zoombarPlusImg + '")',
-            'width': style.zoombar.widthPlus,
-            'height': style.zoombar.heightPlus
+            'width': style.widthPlus,
+            'height': style.heightPlus
         });
         minus.css({
             'background-image': 'url("' + zoombarMinusImg + '")',
-            'width': style.zoombar.widthMinus,
-            'height': style.zoombar.heightMinus
+            'width': style.widthMinus,
+            'height': style.heightMinus
         });
         slider.css({
             'height': sliderHeight + 'px'

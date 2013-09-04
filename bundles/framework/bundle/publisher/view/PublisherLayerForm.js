@@ -34,6 +34,7 @@ function(localization, instance) {
             preselect : ['base_35']
         }
     };
+    this.pluginConfig = {};
     this.showLayerSelection = false;
 }, {
     /**
@@ -46,7 +47,7 @@ function(localization, instance) {
 	        this.panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
 	        this.panel.setTitle(this.loc.layers.label);
 		}
-        this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin');  
+        //this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin', this.pluginConfig);
 	},
 
     /**
@@ -108,6 +109,7 @@ function(localization, instance) {
      * @method start
      */
 	start : function() {
+        this.plugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin', this.pluginConfig);
         var mapModule = this.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
         mapModule.registerPlugin(this.plugin);
         if(this.showLayerSelection) {

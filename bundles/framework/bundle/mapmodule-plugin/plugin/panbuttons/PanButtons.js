@@ -369,17 +369,17 @@ function(config) {
      * Changes the tool style of the plugin
      *
      * @method changeToolStyle
-     * @param {Object} style
+     * @param {Object} styleName
      * @param {jQuery} div
      */
-    changeToolStyle: function(style, div) {
+    changeToolStyle: function(styleName, div) {
         div = div || this.__elements['panbuttons'];
 
-        if (!style || !div) return;
+        if (!styleName || !div) return;
 
         var resourcesPath = this.getMapModule().getImageUrl(),
             imgUrl = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/',
-            bgImg = imgUrl + 'panbutton-sprites-' + style.val + '.png',
+            bgImg = imgUrl + 'panbutton-sprites-' + styleName + '.png',
             panButtons = div.find('img.panbuttonDivImg');
 
         panButtons.css({

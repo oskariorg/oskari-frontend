@@ -93,7 +93,6 @@ function(config) {
         this.templateCheckbox = jQuery("<input type='checkbox' />");
         this.templateRadiobutton = jQuery("<input type='radio' name='defaultBaselayer'/>");
     	this.templateBaseLayerHeader = jQuery('<div class="baseLayerHeader"></div>');
-        
     },
     /**
      * @method startPlugin
@@ -502,7 +501,8 @@ function(config) {
      */
     _createUI : function() {
         var me = this;
-        if(!this.element) {
+
+        if (!this.element) {
             this.element = this.template.clone();
         }
         
@@ -545,6 +545,49 @@ function(config) {
         		existingPlugins.first().before(this.element);
         	}
         }
+
+        if (this.conf && this.conf.toolStyle) {
+            this.changeToolStyle(this.conf.toolStyle, this.element);
+        }
+    },
+
+    /**
+     * Changes the tool style of the plugin
+     *
+     * @method changeToolStyle
+     * @param {String} styleName
+     * @param {jQuery} div
+     */
+    changeToolStyle: function(styleName, div) {
+        div = div || this.element;
+
+        if (!div || !styleName) return;
+
+        var header = div.find('div.header'),
+            content = div.find('div.content'),
+            resourcesPath = this.getMapModule().getImageUrl(),
+            imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/layers/images/',
+            bgImg = imgPath + 'map-layer-button-' + styleName + '.png';
+
+        div.css({
+            'position': 'relative'
+        });
+
+        content.css({
+            'position': 'absolute',
+            'top': '38px',
+            'right': '0px'
+        });
+
+        header.empty();
+        header.css({
+            'background-image': 'url("' + bgImg + '")',
+            'width': '38px',
+            'height': '38px',
+            'padding': '0px',
+            'background-color': 'transparent',
+            'float': 'right'
+        });
     }
 }, {
     /**
