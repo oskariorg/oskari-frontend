@@ -33,13 +33,7 @@ Oskari.registerLocalization({
         "next": "You can save or draw more polygons into the same drawing.",
         "edit": "Edit the shape of the area by clicking and dragging the break points on its edge line.",
         "save": "Save shape"
-      }/*,
-      "cut": {
-        "tooltip": "Add hole",
-        "new": "Add break points to your hole polygon by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'.",
-        "edit": "Edit the shape of the hole by clicking and dragging the break points on its edge line.",
-        "save": "Save shape"
-      }*/
+      }
     },
     "buttons": {
       "ok": "OK",

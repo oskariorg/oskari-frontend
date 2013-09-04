@@ -101,17 +101,7 @@ Oskari.registerLocalization({
                     "label" : "Lägg till datum",
                     "tooltip" : "Det är möjligt att lägga till datumet till utskriften",
                         "checked" : "checked"
-                }/*, {
-                    "id" : "pageLegend",
-                    "label" : "Lägg till Förklaringar",
-                    "tooltip" : "Det är möjligt att lägga till förklaringar till utskriften",
-                        "checked" : "checked"
-                }, {
-                    "id" : "pageCopyleft",
-                    "label" : "Lägg till copyright information",
-                    "tooltip" : "Det är möjligt att lägga till copyright till utskriften",
-                        "checked" : "checked"
-                }*/]
+                }]
             },
              "legend" : {
                 "label" : "Legend",
