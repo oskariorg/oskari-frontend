@@ -65,18 +65,34 @@ Oskari.registerLocalization(
                     "fields": {
                         "colours": {
                             "label": "Värimaailma",
-                            "buttonLabel": "Vaihda"
+                            "buttonLabel": "Vaihda",
+                            "light_grey": "Vaalean harmaa",
+                            "dark_grey": "Tumman harmaa",
+                            "blue": "Sininen",
+                            "red": "Punainen",
+                            "green": "Vihreä",
+                            "yellow": "Keltainen"
                         },
                         "fonts": {
                             "label": "Valitse fontti"
                         },
                         "toolStyles": {
-                            "label": "Työkalujen tyyli"
+                            "label": "Työkalujen tyyli",
+                            "rounded-dark": "Pyöristetty (tumma)",
+                            "rounded-light": "Pyöristetty (vaalea)",
+                            "sharp-dark": "Kulmikas (tumma)",
+                            "sharp-light": "Kulmikas (vaalea)",
+                            "3d-dark": "3D (tumma)",
+                            "3d-light": "3D (vaalea)"
                         }
                     },
                     "popup": {
                         "title": "Värimaailman valinta",
-                        "close": "Sulje"
+                        "close": "Sulje",
+                        "gfiDialog": {
+                            "title": "Kohteen tiedot",
+                            "featureDesc": "Tähän joku selite"
+                        }
                     }
                 },
                 "layers": {

@@ -179,6 +179,14 @@ function() {
                 
             dialog.show(loc['published'].title, content, [okBtn]);
             this.setPublishMode(false);
+        },
+        /**
+         * @method Publisher.ToolStyleChangedEvent
+         */
+        'Publisher.ToolStyleChangedEvent': function(event) {
+            if (!this.publisher) return;
+
+            this.publisher.changeToolStyles(event.getStyle());
         }
     },
 

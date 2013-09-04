@@ -91,3 +91,7 @@ div.basic_publisher p#publisher-selected-colour {
 div.basic_publisher button#publisher-colours {
   float: right;
 }
+
+div#publisher-colour-inputs {
+  margin-bottom: 15px;
+}

@@ -65,18 +65,34 @@ Oskari.registerLocalization(
                     "fields": {
                         "colours": {
                             "label": "Color scheme",
-                            "buttonLabel": "Change"
+                            "buttonLabel": "Change",
+                            "light_grey": "Light grey",
+                            "dark_grey": "Dark grey",
+                            "blue": "Blue",
+                            "red": "Red",
+                            "green": "Green",
+                            "yellow": "Yellow"
                         },
                         "fonts": {
                             "label": "Choose font"
                         },
                         "toolStyles": {
-                            "label": "Tool styles"
+                            "label": "Tool styles",
+                            "rounded-dark": "Rounded (dark)",
+                            "rounded-light": "Rounded (light)",
+                            "sharp-dark": "Sharp edges (dark)",
+                            "sharp-light": "Sharp edges (light)",
+                            "3d-dark": "3D (dark)",
+                            "3d-light": "3D (light)"
                         }
                     },
                     "popup": {
                         "title": "Choose the colour scheme",
-                        "close": "Close"
+                        "close": "Close",
+                        "gfiDialog": {
+                            "title": "Feature info",
+                            "featureDesc": "Description here"
+                        }
                     }
                 },
                 "layers": {

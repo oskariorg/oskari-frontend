@@ -27,10 +27,10 @@
   text-overflow: ellipsis;
 }
 
-#getinforesult div.myplaces_wrapper div.myplaces_place {
+div.myplaces_wrapper div.myplaces_place {
   padding-bottom: 18px;
 }
 
-#getinforesult div.myplaces_wrapper div.myplaces_place img.myplaces_img {
+div.myplaces_wrapper div.myplaces_place img.myplaces_img {
   padding-bottom: 15px;
 }

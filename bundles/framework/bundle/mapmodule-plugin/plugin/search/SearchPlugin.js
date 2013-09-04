@@ -69,12 +69,38 @@ function(config) {
 		var pluginLoc = this.getMapModule().getLocalization('plugin', true);
 		this.loc = pluginLoc[this.__name];
 
-		this.template = jQuery('<div class="search-div">' + 
-		'<div class="search-textarea-and-button">' + 
-		'<input placeholder="' + this.loc['placeholder'] + '" type="text" />' + 
-		'<input type="button" value="' + this.loc['search'] + '" name="search" />' + '</div>' + 
-		'<div class="results">' + '<div class="header"><div class="close icon-close" title="' + this.loc['close'] + '"></div></div>' + 
-		'<div class="content">&nbsp;</div>' + '</div>' + '</div>');
+		this.template = jQuery(
+			'<div class="search-div">' + 
+				'<div class="search-textarea-and-button">' + 
+					'<input placeholder="' + this.loc['placeholder'] + '" type="text" />' + 
+					'<input type="button" value="' + this.loc['search'] + '" name="search" />' +
+				'</div>' + 
+				'<div class="results">' +
+					'<div class="header">' +
+						'<div class="close icon-close" title="' + this.loc['close'] + '"></div>' +
+					'</div>' + 
+					'<div class="content">&nbsp;</div>' +
+				'</div>' +
+			'</div>'
+		);
+
+		this.styledTemplate = jQuery(
+			'<div class="published-search-div">' +
+				'<div class="search-area-div">' +
+					'<div class="search-left"></div>' +
+					'<div class="search-middle">' +
+						'<input class="search-input" placeholder="' + this.loc['placeholder'] + '" type="text" />' +
+					'</div>' +
+					'<div class="search-right"></div>' +
+				'</div>' +
+				'<div class="results published-search-results">' +
+					'<div class="header published-search-header">' +
+						'<div class="close icon-close" title="' + this.loc['close'] + '"></div>' +
+					'</div>' +
+					'<div class="content published-search-content">&nbsp;</div>' +
+				'</div>' +
+			'</div>'
+		);
 
 		this.templateResultsTable = jQuery("<table class='search-results'><thead><tr>" + 
 		"<th>" + this.loc['column_name'] + "</th>" + "<th>" + this.loc['column_village'] + "</th>" + "<th>" + this.loc['column_type'] + 
@@ -182,11 +208,18 @@ function(config) {
 	 * Creates UI for search functionality and places it on the maps
 	 * div where this plugin registered.
 	 */
-	_createUI : function() {
-		var sandbox = this._sandbox;
-		var me = this;
+	_createUI : function(isStyled) {
+		var sandbox = this._sandbox,
+			me = this,
+			content;
 
-		var content = this.template.clone();
+		if (isStyled || (this._conf && this._conf.toolStyle)) {
+			content = this.styledTemplate.clone();
+			this.changeToolStyle(this._conf.toolStyle, content);
+		} else {
+			content = this.template.clone();
+		}
+
 		this.container = content;
 
 		// get div where the map is rendered from openlayers
@@ -214,7 +247,10 @@ function(config) {
 			me._checkForEnter(event);
 		});
 		// to search button
-		content.find('input[type=button]').click(function(event) {
+		//content.find('input[type=button]').click(function(event) {
+		//	me._doSearch();
+		//});
+		content.find('div.search-right').click(function(event) {
 			me._doSearch();
 		});
 		// to close button
@@ -398,6 +434,48 @@ function(config) {
 		this.container.find('div.results').hide();
 		// Send hide marker request
 		this._sandbox.request(this.getName(), this._sandbox.getRequestBuilder('HideMapMarkerRequest')());
+	},
+
+	/**
+     * Changes the tool style of the plugin
+     *
+     * @method changeToolStyle
+     * @param {String} style
+     * @param {jQuery} div
+     */
+	changeToolStyle: function(style, div) {
+		var div = div || this.container;
+
+		if (!style || !div) return;
+
+		// Remove the old unstyled search box and create a new one.
+		if (div.hasClass('search-div')) {
+			div.remove();
+			this._createUI(true);
+			return;
+		}
+
+		var	resourcesPath = this.getMapModule().getImageUrl(),
+			imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/search/images/',
+			bgLeft = imgPath + 'search-tool-' + style.val + '_01.png',
+			bgMiddle = imgPath + 'search-tool-' + style.val + '_02.png',
+			bgRight = imgPath + 'search-tool-' + style.val + '_03.png',
+			left = div.find('div.search-left'),
+			middle = div.find('div.search-middle'),
+			right = div.find('div.search-right');
+
+		left.css({
+			'background-image': 'url("' + bgLeft + '")',
+			'width': style.search.widthLeft
+		});
+		middle.css({
+			'background-image': 'url("' + bgMiddle + '")',
+			'background-repeat': 'repeat-x',
+		});
+		right.css({
+			'background-image': 'url("' + bgRight + '")',
+			'width': style.search.widthRight
+		});
 	}
 }, {
 	/**

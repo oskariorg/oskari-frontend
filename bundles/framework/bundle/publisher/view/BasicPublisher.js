@@ -74,7 +74,8 @@ function(instance, localization, data) {
         }
     }, {
         id : 'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
-        selected : false
+        selected : false,
+        config: {}
     }, {
         id : 'Oskari.mapframework.mapmodule.ControlsPlugin',
         selected : true
@@ -1119,6 +1120,24 @@ function(instance, localization, data) {
             // Initialize the grid
             me.gridPlugin.createStatsOut(me.statsContainer);
 
+        }
+    },
+
+    /**
+     * Changes the style of each tool, if the tool's plugin supports it.
+     *
+     * @method changeToolStyles
+     * @param {String} style
+     */
+    changeToolStyles: function(style) {
+        if (!style) return;
+
+        for (var i = 0; i < this.tools.length; ++i) {
+            var tool = this.tools[i];
+            if (tool.config) tool.config.toolStyle = style;
+            if (tool._isPluginStarted && tool.plugin.changeToolStyle) {
+                tool.plugin.changeToolStyle(style);
+            }
         }
     }
 });

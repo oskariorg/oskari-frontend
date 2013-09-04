@@ -252,16 +252,20 @@ function(config) {
         var panbuttonDivImg = pb.find('.panbuttonDivImg');
         // update path from config
         panbuttonDivImg.attr('src', pbimg + "empty.png");
+
+        if (me.__conf && me.__conf.toolStyle) {
+            me.changeToolStyle(me.__conf.toolStyle, pb);
+        }
         
         var center = pb.find('.panbuttons_center');
 
         center.bind('mouseover', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'root.png');
-			panbuttonDivImg.addClass("root");
+            panbuttonDivImg.addClass("root");
         });
         center.bind('mouseout', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'default.png');
-			panbuttonDivImg.removeClass("root");
+            panbuttonDivImg.removeClass("root");
         });
         center.bind('click', function(event) {
             var rn = 'StateHandler.SetStateRequest';
@@ -278,11 +282,11 @@ function(config) {
         var left = pb.find('.panbuttons_left');
         left.bind('mouseover', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'left.png');
-			panbuttonDivImg.addClass("left");
+            panbuttonDivImg.addClass("left");
         });
         left.bind('mouseout', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'default.png');
-			panbuttonDivImg.removeClass("left");
+            panbuttonDivImg.removeClass("left");
         });
         left.bind('click', function(event) {
             me.getMapModule().panMapByPixels(-100, 0, true);
@@ -291,11 +295,11 @@ function(config) {
         var right = pb.find('.panbuttons_right');
         right.bind('mouseover', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'right.png');
-			panbuttonDivImg.addClass("right");
+            panbuttonDivImg.addClass("right");
         });
         right.bind('mouseout', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'default.png');
-			panbuttonDivImg.removeClass("right");
+            panbuttonDivImg.removeClass("right");
         });
         right.bind('click', function(event) {
             me.getMapModule().panMapByPixels(100, 0, true);
@@ -304,11 +308,11 @@ function(config) {
         var top = pb.find('.panbuttons_up');
         top.bind('mouseover', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'up.png');
-			panbuttonDivImg.addClass("up");
+            panbuttonDivImg.addClass("up");
         });
         top.bind('mouseout', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'default.png');
-			panbuttonDivImg.removeClass("up");
+            panbuttonDivImg.removeClass("up");
         });
         top.bind('click', function(event) {
             me.getMapModule().panMapByPixels(0, -100, true);
@@ -317,11 +321,11 @@ function(config) {
         var bottom = pb.find('.panbuttons_down');
         bottom.bind('mouseover', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'down.png');
-			panbuttonDivImg.addClass("down");
+            panbuttonDivImg.addClass("down");
         });
         bottom.bind('mouseout', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'default.png');
-			panbuttonDivImg.removeClass("down");
+            panbuttonDivImg.removeClass("down");
         });
         bottom.bind('click', function(event) {
             me.getMapModule().panMapByPixels(0, 100, true);
@@ -359,6 +363,28 @@ function(config) {
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      */
     stop : function(sandbox) {
+    },
+
+    /**
+     * Changes the tool style of the plugin
+     *
+     * @method changeToolStyle
+     * @param {Object} style
+     * @param {jQuery} div
+     */
+    changeToolStyle: function(style, div) {
+        div = div || this.__elements['panbuttons'];
+
+        if (!style || !div) return;
+
+        var resourcesPath = this.getMapModule().getImageUrl(),
+            imgUrl = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/',
+            bgImg = imgUrl + 'panbutton-sprites-' + style.val + '.png',
+            panButtons = div.find('img.panbuttonDivImg');
+
+        panButtons.css({
+            'background-image': 'url("' + bgImg + '")'
+        });
     }
 }, {
     /**
