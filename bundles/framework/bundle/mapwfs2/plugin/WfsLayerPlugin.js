@@ -748,7 +748,6 @@ function(config) {
     drawImageTile : function(layer, imageUrl, imageBbox, imageSize, layerPostFix, keepPrevious) {
         var layerName = "wfs_layer_" + layer.getId() + "_" + layerPostFix;
         var boundsObj = new OpenLayers.Bounds(imageBbox);
-
         /** Safety checks */
         if (!(imageUrl && layer && boundsObj)) {
             return;
@@ -801,15 +800,13 @@ function(config) {
         }
 
         // highlight picture on top of normal layer images
-        if(layerPostFix == "normal") {
-            var highlightLayerExp = new RegExp("wfs_layer_" + layer.getId() + "_highlight");
-            var highlightLayer = this._map.getLayersByName(highlightLayerExp);
-            var normalLayer = this._map.getLayersByName(layerName);
-
-            if (normalLayer.length > 0 && highlightLayer.length > 0) {
-                var normalLayerIndex = this._map.getLayerIndex(normalLayer[normalLayer.length - 1]);
-                this._map.setLayerIndex(highlightLayer[0], normalLayerIndex+1);
-            }
+        var normalLayerExp = new RegExp("wfs_layer_" + layer.getId() + "_normal");
+        var highlightLayerExp = new RegExp("wfs_layer_" + layer.getId() + "_highlight");
+        var normalLayer = this._map.getLayersByName(normalLayerExp);
+        var highlightLayer = this._map.getLayersByName(highlightLayerExp);
+        if (normalLayer.length > 0 && highlightLayer.length > 0) {
+            var normalLayerIndex = this._map.getLayerIndex(normalLayer[normalLayer.length - 1]);
+            this._map.setLayerIndex(highlightLayer[0], normalLayerIndex+10);
         }
     },
 
