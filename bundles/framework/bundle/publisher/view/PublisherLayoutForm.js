@@ -1,8 +1,8 @@
 /**
- * @class Oskari.mapframework.bundle.publisher.view.PublisherLayoutForm
- * 
  * Represents the layout (colours, fonts, tool style etc.) view for the publisher 
  * as an Oskari.userinterface.component.AccordionPanel
+ *
+ * @class Oskari.mapframework.bundle.publisher.view.PublisherLayoutForm
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutForm',
 
@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayoutFo
  * @param {Object} localization
  *       publisher localization data
  * @param {Oskari.mapframework.bundle.publisher.view.BasicPublisher} publisher
- *       publisher reference for language change
+ *       publisher reference
  */
 function(localization, publisher) {
 	this.loc = localization;
@@ -26,12 +26,13 @@ function(localization, publisher) {
 
     this.values = null;
 
+    // The values with which to populate the field inputs.
     this.initialValues = {
         colours: [{
             val: 'light_grey',
-            bgColour: '#CCC',
-            titleColour: '#424343',
-            headerColour: '#424343',
+            bgColour: '#EFF2F2',
+            titleColour: '#333438',
+            headerColour: '#333438',
             iconCls: 'icon-close'
         }, {
             val: 'dark_grey',
@@ -41,27 +42,27 @@ function(localization, publisher) {
             iconCls: 'icon-close-white'
         }, {
             val: 'blue',
-            bgColour: '#0000FF',
+            bgColour: '#0091FF',
             titleColour: '#FFFFFF',
-            headerColour: '#0000FF',
+            headerColour: '#0091FF',
             iconCls: 'icon-close-white'
         }, {
             val: 'red',
-            bgColour: '#FF0000',
+            bgColour: '#FF3333',
             titleColour: '#FFFFFF',
-            headerColour: '#FF0000',
+            headerColour: '#FF3333',
             iconCls: 'icon-close-white'
         }, {
             val: 'green',
-            bgColour: '#00FF00',
+            bgColour: '#26BF4C',
             titleColour: '#FFFFFF',
-            headerColour: '#00FF00',
+            headerColour: '#48732E',
             iconCls: 'icon-close-white'
         }, {
             val: 'yellow',
-            bgColour: '#FFFF00',
-            titleColour: '#424343',
-            headerColour: '#424343',
+            bgColour: '#FFDE00',
+            titleColour: '#333438',
+            headerColour: '#333438',
             iconCls: 'icon-close'
         }],
         fonts: [
@@ -78,6 +79,10 @@ function(localization, publisher) {
         ]
     };
 
+    // Visible fields:
+    // - colour input
+    // - font input
+    // - tool style input
 	this.fields = {
         'colours': {
             'label': this.loc.layout.fields.colours.label,
@@ -97,7 +102,7 @@ function(localization, publisher) {
         "colours":      '<div id="publisher-layout-colours">' +
                             '<label for="publisher-colours"></label>' +
                             '<div id="publisher-layout-coloursSelector">' +
-                                '<p id="publisher-selected-colour"></p>' +
+                                '<input type="text" name="publisher-colour" disabled />' +
                                 '<button id="publisher-colours"></button>' +
                             '</div>' +
                         '</div>',
@@ -129,8 +134,9 @@ function(localization, publisher) {
             f, field, template;
         pData = pData || {};
 
+        // Set the initial values
         this.values = {
-            colourScheme: pData.colourScheme || 'dark_grey',
+            colourScheme: pData.colourScheme,
             font: pData.font,
             toolStyle: pData.toolStyle
         };
@@ -165,18 +171,19 @@ function(localization, publisher) {
 	},
 
     /**
-     * Returns the selections the user has done with the form inputs (all values are strings).
+     * Returns the selections the user has done with the form inputs.
      * {
-     *     colourScheme : <selected colour scheme>,
-     *     font : <selected font>,
-     *     toolStyle : <selected toolStyle>
+     *     colourScheme : <selected colour scheme (object)>,
+     *     font : <selected font (string)>,
+     *     toolStyle : <selected toolStyle (string)>
      * }
      * 
      * @method getValues
      * @return {Object}
      */
 	getValues : function() {
-        this.values.colourScheme = jQuery('p#publisher-selected-colour').attr('colour-code') || null;
+        var colourCode = jQuery('input[name=publisher-colour]').attr('colour-code');
+        this.values.colourScheme = this._getColourByCode(colourCode);
         this.values.font = jQuery('select[name=publisher-fonts]').val();
         this.values.toolStyle = jQuery('select[name=publisher-toolStyles]').val();
 
@@ -190,9 +197,10 @@ function(localization, publisher) {
     _getColoursTemplate: function() {
         var self = this,
             template = this.template.colours.clone(),
-            selectedColour = this.values.colourScheme,
-            colourName = this.loc.layout.fields.colours[selectedColour],
+            selectedColour = this.getValues().colourScheme || {},
+            colourName = this.loc.layout.fields.colours[selectedColour.val],
             colourLabel = this.loc.layout.fields.colours.label,
+            colourPlaceholder = this.loc.layout.fields.colours.placeholder,
             buttonLabel = this.loc.layout.fields.colours.buttonLabel;
 
         // Set the localizations.
@@ -204,7 +212,9 @@ function(localization, publisher) {
         });
 
         // Prepopulate data
-        template.find('p#publisher-selected-colour').html(colourName);
+        template.find('input[name=publisher-colour]').
+            attr('placeholder', colourPlaceholder).
+            val(colourName);
 
         return template;
     },
@@ -235,11 +245,12 @@ function(localization, publisher) {
 
         // Set the select change handler.
         template.find('select').on('change', function(e) {
+            // TODO: What to do when the font changes?
         });
 
         // Prepopulate data
         jQuery(template.find('select option')).filter(function () {
-            return (jQuery(this).val() == self.values.font); 
+            return (jQuery(this).val() == self.getValues().font); 
         }).prop('selected', 'selected');
 
         return template;
@@ -257,7 +268,7 @@ function(localization, publisher) {
             tsLen = toolStyles.length,
             toolStyleOption,
             toolStyleName,
-            i;
+            i, selectedToolStyleCode;
 
         // Set the localizations.
         template.find('label').html(toolStylesLabel);
@@ -274,19 +285,13 @@ function(localization, publisher) {
         // Set the select change handler.
         template.find('select').on('change', function(e) {
             // Send an event notifying the plugins that the style has changed.
-            var selectedToolStyleCode = jQuery(this).val(),
-                eventBuilder = self._sandbox.getEventBuilder('Publisher.ToolStyleChangedEvent'),
-                event;
-
-            if (eventBuilder) {
-                event = eventBuilder(selectedToolStyleCode);
-                self._sandbox.notifyAll(event);
-            }
+            selectedToolStyleCode = jQuery(this).val();
+            self._sendToolStyleChangedEvent(selectedToolStyleCode);
         });
 
         // Prepopulate data
         jQuery(template.find('select option')).filter(function () {
-            return (jQuery(this).val() == self.values.toolStyle); 
+            return (jQuery(this).val() == self.getValues().toolStyle); 
         }).prop('selected', 'selected');
 
         return template;
@@ -306,14 +311,10 @@ function(localization, publisher) {
             content = this.template.coloursPopup.clone(),
             colours = this.initialValues.colours,
             cLen = colours.length,
-            colourInput, colourName, i;
+            colourInput, colourName, i, prevColour, selectedColour;
 
         closeButton.setTitle(this.loc.layout.popup.close);
         closeButton.setHandler(function() {
-            var colour = content.find('input[name=colour]:checked');
-            jQuery('div.basic_publisher').find('p#publisher-selected-colour').
-                html(colour.attr('colour-name')).
-                attr('colour-code', colour.val());
             popup.close(true);
         });
 
@@ -326,15 +327,15 @@ function(localization, publisher) {
             colourInput.find('input[type=radio]').attr({
                 'id': colours[i].val,
                 'name': 'colour',
-                'value': colours[i].val,
-                'colour-name': colourName
+                'value': colours[i].val
             });
             colourInput.find('label').html(colourName).attr({
                 'for': colours[i].val
             });
 
             // Set the selected colour or default to 'dark_grey' if non-existant.
-            if (self.values.colourScheme === colours[i].val || (!self.values.colourScheme && colours[i].val === 'dark_grey')) {
+            prevColour = self.getValues().colourScheme;
+            if (prevColour && prevColour.val === colours[i].val || (!prevColour && colours[i].val === 'dark_grey')) {
                 colourInput.find('input[type=radio]').attr('checked', 'checked');
                 self._changeGfiColours(colours[i], content);
             }
@@ -342,11 +343,19 @@ function(localization, publisher) {
             content.find('div#publisher-colour-inputs').append(colourInput);
         }
 
-
+        // Things to do when the user changes the colour scheme:
         content.find('input[name=colour]').change(function(e) {
-            var selectedColour = jQuery(this).val();
+            selectedColour = jQuery(this).val();
             selectedColour = self._getColourByCode(selectedColour);
-            self._changeGfiColours(selectedColour);
+            // * change the preview gfi
+            self._changeGfiColours(selectedColour, content);
+            // * change the value of the colour scheme input in the layout panel
+            colourName = self.loc.layout.fields.colours[selectedColour.val];
+            jQuery('div.basic_publisher').find('input[name=publisher-colour]').
+                val(colourName).
+                attr('colour-code', selectedColour.val);
+            // * notify others of the changed colour scheme
+            self._sendColourSchemeChangedEvent(selectedColour);
         });
 
         //popup.moveTo(target);
@@ -364,7 +373,7 @@ function(localization, publisher) {
         var title = this.loc.layout.popup.gfiDialog.title,
             featureName = this.loc.layout.popup.gfiDialog.featureName,
             featureDesc = this.loc.layout.popup.gfiDialog.featureDesc,
-            linkUrl = 'http://www.paikkatietoikkuna.fi/';
+            linkUrl = 'http://www.paikkatietoikkuna.fi/web/' + Oskari.getLang();
         // Templates
         var dialogContent = jQuery('<div></div>');
             header = jQuery('<div class="popupTitle"></div>'),
@@ -415,7 +424,6 @@ function(localization, publisher) {
      * @param {jQuery} container (optional, defaults to the colour preview element on page)
      */
     _changeGfiColours: function(selectedColour, container) {
-        container = container || jQuery('div#publisher-colour-preview');
         var gfiHeader = container.find('div.popupHeader');
         var gfiTitle = container.find('div.popupTitle');
         var featureHeader = container.find('h3.myplaces_header');
@@ -436,6 +444,43 @@ function(localization, publisher) {
         closeButton.removeClass('icon-close-white');
         closeButton.removeClass('icon-close');
         closeButton.addClass(selectedColour.iconCls);
+    },
+
+    /**
+     * Sends an event to notify interested parties that the colour scheme has changed.
+     *
+     * @method _sendColourSchemeChangedEvent
+     * @param {Object} colourScheme the changed colour scheme
+     */
+    _sendColourSchemeChangedEvent: function(colourScheme) {
+        this._sendEvent('Publisher.ColourSchemeChangedEvent', colourScheme);
+    },
+
+    /**
+     * Sends an event to notify interested parties that the tool style has changed.
+     *
+     * @method _sendToolStyleChangedEvent
+     * @param {String} the changed tool style code
+     */
+    _sendToolStyleChangedEvent: function(selectedToolStyleCode) {
+        this._sendEvent('Publisher.ToolStyleChangedEvent', selectedToolStyleCode);
+    },
+
+    /**
+     * "Sends" an event, that is, notifies other components of something.
+     *
+     * @method _sendEvent
+     * @param {String} eventName the name of the event
+     * @param {Whatever} eventData the data we want to send with the event
+     */
+    _sendEvent: function(eventName, eventData) {
+        var eventBuilder = this._sandbox.getEventBuilder(eventName),
+            event;
+
+        if (eventBuilder) {
+            event = eventBuilder(eventData);
+            this._sandbox.notifyAll(event);
+        }
     },
 
     /**

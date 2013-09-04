@@ -82,7 +82,9 @@ function(instance, localization, data) {
     }, {
         id : 'Oskari.mapframework.mapmodule.GetInfoPlugin',
         selected : true,
-        config: {}
+        config: {
+            infoBox: true
+        }
     }];
 
 
@@ -1156,6 +1158,28 @@ function(instance, localization, data) {
         mlp.pluginConfig.toolStyle = styleName;
         if (mlp.isEnabled() && mlp.plugin.changeToolStyle) {
             mlp.plugin.changeToolStyle(styleName);
+        }
+    },
+
+    /**
+     * Changes the colour scheme of the getinfo plugin (currently no other changes).
+     *
+     * @method changeColourScheme
+     * @param {Object} colourScheme
+     */
+    changeColourScheme: function(colourScheme) {
+        var tool, i, infoPlugin;
+
+        for (i = 0; i < this.tools.length; ++i) {
+            tool = this.tools[i];
+            if (tool.id === 'Oskari.mapframework.mapmodule.GetInfoPlugin') {
+                infoPlugin = tool;
+                break;   
+            }
+        }
+        if (infoPlugin) {
+            infoPlugin.config = infoPlugin.config || {};
+            infoPlugin.config.colourScheme = colourScheme;
         }
     }
 });

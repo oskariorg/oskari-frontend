@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.event.ToolStyleChanged
 /**
  * @method create called automatically on construction
  * @static
- * @param {Object} style the new style
+ * @param {String} style the id of new style
  */
 function(style) {
     this._style = style;
@@ -25,8 +25,8 @@ function(style) {
     },
     /**
      * @method getStyle
-     * Returns the new style
-     * @return {Object}
+     * Returns the id of new style
+     * @return {String}
      */
     getStyle : function() {
         return this._style;

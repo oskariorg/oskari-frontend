@@ -114,6 +114,8 @@ function() {
      * 		JSON presentation for the popup data
      * @param {OpenLayers.LonLat} lonlat
      * 		coordinates where to show the popup
+     * @param {Object} colourScheme
+     *      the colour scheme for the popup (optional, uses the default colour scheme if not provided)
      * 
      * Displays a popup with given title and data in the given coordinates.
      * 
@@ -128,7 +130,7 @@ function() {
 	 * }
 	 * }]
      */
-    popup : function(id, title, contentData, lonlat) {
+    popup : function(id, title, contentData, lonlat, colourScheme) {
     	var me = this;
     	 
     	var arrow = this._arrow.clone();
@@ -232,6 +234,9 @@ function() {
         }
 		this._panMapToShowPopup(lonlat);
 		
+        if (colourScheme) {
+            this._changeColourScheme(colourScheme);
+        }
     },
     setAdaptable: function(isAdaptable) {
         this.adaptable = isAdaptable;
@@ -300,6 +305,60 @@ function() {
         if(panx != 0 || pany != 0) {
             this.getMapModule().panMapByPixels(-panx, -pany);
         }
+    },
+    /**
+     * Changes the colour scheme of the plugin
+     *
+     * @method changeColourScheme
+     * @param {Object} colourScheme object containing the colour settings for the plugin
+     *      {
+     *          bgColour: <the background color of the gfi header>,
+     *          titleColour: <the colour of the gfi title>,
+     *          headerColour: <the colour of the feature name>,
+     *          iconCls: <the icon class of the gfi close icon>
+     *      }
+     * @param {jQuery} div
+     */
+    _changeColourScheme: function(colourScheme, div) {
+        div = div || jQuery('div#getinforesult');
+
+        if (!colourScheme || !div) return;
+
+        var gfiHeaderArrow = div.find('div.popupHeaderArrow'),
+            gfiHeader = div.find('div.popupHeader'),
+            gfiTitle = div.find('div.popupTitle'),
+            layerHeader = div.find('div.getinforesult_header'),
+            featureHeader = div.find('h3.myplaces_header'),
+            closeButton = div.find('div.olPopupCloseBox');
+
+        gfiHeaderArrow.css({
+            'border-right': '10px solid ' + colourScheme.bgColour
+        });
+
+        gfiHeader.css({
+            'background-color': colourScheme.bgColour,
+            'color': colourScheme.titleColour
+        });
+
+        gfiTitle.css({
+            'color': colourScheme.titleColour
+        });
+
+        layerHeader.css({
+            'background-color': colourScheme.bgColour
+        });
+
+        layerHeader.find('div.getinforesult_header_title').css({
+            'color': colourScheme.titleColour
+        })
+
+        featureHeader.css({
+            'color': colourScheme.headerColour
+        });
+
+        closeButton.removeClass('icon-close-white');
+        closeButton.removeClass('icon-close');
+        closeButton.addClass(colourScheme.iconCls);
     },
     /**
      * @method close

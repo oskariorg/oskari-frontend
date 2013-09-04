@@ -65,6 +65,7 @@ Oskari.registerLocalization(
                     "fields": {
                         "colours": {
                             "label": "Color scheme",
+                            "placeholder": "Choose the colour scheme",
                             "buttonLabel": "Change",
                             "light_grey": "Light grey",
                             "dark_grey": "Dark grey",
@@ -90,8 +91,8 @@ Oskari.registerLocalization(
                         "title": "Choose the colour scheme",
                         "close": "Close",
                         "gfiDialog": {
-                            "title": "Feature info",
-                            "featureDesc": "Description here"
+                            "title": "Preview",
+                            "featureDesc": "Changing the colour scheme has effect only on the feature info popup"
                         }
                     }
                 },

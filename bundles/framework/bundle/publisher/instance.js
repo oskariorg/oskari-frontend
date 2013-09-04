@@ -187,7 +187,15 @@ function() {
             if (!this.publisher) return;
 
             this.publisher.changeToolStyles(event.getStyle());
-        }
+        },
+        /**
+         * @method Publisher.ColourSchemeChangedEvent
+         */
+        'Publisher.ColourSchemeChangedEvent': function(event) {
+            if (!this.publisher) return;
+
+            this.publisher.changeColourScheme(event.getColourScheme());
+        },
     },
 
     /**

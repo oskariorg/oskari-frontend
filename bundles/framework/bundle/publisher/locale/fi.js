@@ -65,6 +65,7 @@ Oskari.registerLocalization(
                     "fields": {
                         "colours": {
                             "label": "Värimaailma",
+                            "placeholder": "Valitse värimaailma",
                             "buttonLabel": "Vaihda",
                             "light_grey": "Vaalean harmaa",
                             "dark_grey": "Tumman harmaa",
@@ -91,7 +92,7 @@ Oskari.registerLocalization(
                         "close": "Sulje",
                         "gfiDialog": {
                             "title": "Kohteen tiedot",
-                            "featureName": "Esimerkkikohde",
+                            "featureName": "Esikatselu",
                             "featureDesc": "Värimaailman valinta vaikuttaa ainoastaan kohdetietolaatikon väritykseen"
                         }
                     }

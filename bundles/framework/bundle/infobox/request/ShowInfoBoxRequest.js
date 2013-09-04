@@ -21,6 +21,8 @@ Oskari.clazz
 	   * 		coordinates where to show the popup
 	   * @param {Boolean} hidePrevious
 	   * 		if true, hides any previous popups when showing this, defaults to false
+	   * @param {Object} colourScheme
+	   *		the colour scheme object for the popup (optional, not used if passed falsy value)
 	   * 
 	   * contentData format example:
 	   * [{
@@ -31,13 +33,14 @@ Oskari.clazz
 	   * }
 	   * }]
 	   */
-	  function(id,title, content, position, hidePrevious) {
+	  function(id,title, content, position, hidePrevious, colourScheme) {
 	    this._creator = null;
 	    this._id = id;
 	    this._title = title;
 	    this._content = content;
 	    this._position = position;
 	    this._hidePrevious = (hidePrevious == true);
+	    this._colourScheme = colourScheme;
 	  }, {
 	    /** @static @property __name request name */
 	    __name : "InfoBox.ShowInfoBoxRequest",
@@ -90,6 +93,13 @@ Oskari.clazz
 	     */
 	    getHidePrevious : function() {
 	      return this._hidePrevious;
+	    },
+	    /**
+	     * @method getColourScheme
+	     * @return {Object} the colour scheme object for the popup
+	     */
+	    getColourScheme: function() {
+	    	return this._colourScheme;
 	    }
 	  }, {
 	    /**

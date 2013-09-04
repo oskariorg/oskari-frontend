@@ -25,7 +25,13 @@ function(popupPlugin) {
     	if(request.getHidePrevious()) {
         	this.popupPlugin.close();
     	}
-        this.popupPlugin.popup(request.getId(),request.getTitle(),request.getContent(), request.getPosition());
+        this.popupPlugin.popup(
+            request.getId(),
+            request.getTitle(),
+            request.getContent(),
+            request.getPosition(),
+            request.getColourScheme()
+        );
    }
 }, {
     /**
