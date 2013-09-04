@@ -96,15 +96,13 @@ function(ajaxUrl) {
 
 		jQuery.cookie("oskaristate", data, {expires: expiredays});
 
+		// need to serialize json data so parameters are sent correctly
+		data.viewData = JSON.stringify(data.viewData);
+		
 		// save to ajaxUrl
 		jQuery.ajax({
 			//dataType : "json",
 			type : "POST",
-			beforeSend : function(x) {
-				if (x && x.overrideMimeType) {
-					x.overrideMimeType("application/j-son;charset=UTF-8");
-				}
-			},
 			url : this._ajaxUrl + 'action_route=AddView',
 			data : data,
 			success : function(newView) {

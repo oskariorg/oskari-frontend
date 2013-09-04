@@ -20,10 +20,10 @@
          - cd [..]work/
          - git clone ssh://git@haisulike01.nls.fi/Oskari
        * Install Oskari backend
-         - cd [..]work/ 
-         - git clone ssh://git@haisulike01.nls.fi/oskari-backend
+         - cd [..]work/
+         - git clone ssh://git@haisulike01.nls.fi/oskari-server
        * Create jetty configuration file
-         - cd [..]work/oskari-backend/servlet-map/src/main/webapp/WEB-INF
+         - cd [..]work/oskari-server/servlet-map/src/main/webapp/WEB-INF
          - cp jetty-env.sample.xml jetty-env.xml
 
        [Installed items:]
@@ -36,7 +36,7 @@
        - etc
 
 ### 3. Start  (build all)
-       * cd [..]work/oskari-backend/external-libs
+       * cd [..]work/oskari-server/external-libs
            * run all commands in mvn-install.txt
            * cd ..
        * mvn -f servlet-map-pom.xml install
@@ -44,83 +44,85 @@
        - creates Oskaridb HSQL database, if not created
        - inserts minimal data to the database tables for to use Oskari
        - starts Jetty and servlet
-       - Webapp directory = ..\work\oskari-backend\servlet-map\src\main\webapp
+       - webapp directory = [..]/work/oskari-server/servlet-map/src/main/webapp
 
        * Start Oskari  ( http://localhost:2373 )
 
 ### 4. Properties
-       [oskari.properties file:]
+       File [..]work/oskari-server/servlet-map/src/main/resources/fi/nls/oskari/map/servlet/oskari.properties:
        - setup of various url links for search service, GIS metadata, GeoServer myplaces, print service, etc
 
 ## C. Authorization
 
-### 1. Add new users
-       ### 1. Add new users and roles
-       * Edit user.json and roles.json files in map-servlet resource path
-       * role data for user must be in portti_permission and portti_recource_user tables
+### 1. Add new users and roles
+   
+       * edit user.json and roles.json files in resource path [..]work/oskari-server/servlet-map/src/main/resources/fi/nls/oskari/user/user.json
+       * role data for user must be in portti_permission and portti_recource_user tables (see next subsection)
+       
        sample user.json:
-       {    "users": [
+       
         {
-            "firstName": "Antti",
-            "id": 2,
-            "lastName": "Aalto",
-            "pass": "oskari",
-            "roles": [
-                3,
-                4
-            ],
-            "user": "admin"
-        },
-        {
-            "firstName": "Oskari",
-            "id": 3,
-            "lastName": "Olematon",
-            "pass": "user",
-            "roles": [
-                3
-            ],
-            "user": "user"
+            "users": [
+                {
+                    "firstName": "Antti",
+                    "id": 2,
+                    "lastName": "Aalto",
+                    "pass": "oskari",
+                    "roles": [
+                        3,
+                        4
+                    ],
+                    "user": "admin"
+                },
+                {
+                    "firstName": "Oskari",
+                    "id": 3,
+                    "lastName": "Olematon",
+                    "pass": "user",
+                    "roles": [
+                        3
+                    ],
+                    "user": "user"
+                }
+            ]
         }
-       ]
-     }
-     sample role.json:
-     {
-  "roles": [
-    {
-        "id": 3,
-        "name": "Karttakäyttäjä"
-    },
-    {
-        "id": 4,
-        "name": "Admin"
-    }
-      ]
-    }
-       
-       
+
+        sample role.json:
+        
+        {
+          "roles": [
+            {
+                "id": 3,
+                "name": "Karttakäyttäjä"
+            },
+            {
+                "id": 4,
+                "name": "Admin"
+            }
+          ]
+        }
+
+
 
 ### 2. Add new user roles and permissions
-       (edit script file ..work\oskari-backend\servlet-map\src\main\resources\fi\nls\oskari\map\servlet\db\exampleLayersAndRoles.sql)
-       * add row to portti_resource_user table
-       (e.g. add "Osoitekartta";"http://wms.w.paikkatietoikkuna.fi/wms/kartat.espoo.fi/TeklaOgcWeb/WMS.ashx?";"WMS_LAYER";"10114";"ROLE" )
-       * add row to portti_permissions table
-       (e.q. add "5";"PUBLISH")
+       * edit script file  [..]work/oskari-server/servlet-map/src/main/resources/fi/nls/oskari/map/servlet/db/exampleLayersAndRoles.sql       
+        - add row to portti_resource_user table, e.g. INSERT INTO portti_resource_user (resource_name, resource_namespace, resource_type, externalid, externalid_type) values ('Osoitekartta', 'http://wms.w.paikkatietoikkuna.fi/wms/kartat.espoo.fi/TeklaOgcWeb/WMS.ashx?', 'WMS_LAYER', 10114, 'ROLE');
+        - add row to portti_permissions table, e.g. INSERT INTO portti_permissions (resource_user_id, permissions_type) values (10, 'PUBLISH');
 
-       * execute tips&tricks F
+       * execute F. Tips and Tricks 1
 
 ## D. Map layers
 
 ### 1. Add new layer
-       (edit script file ..work\oskari-backend\servlet-map\src\main\resources\fi\nls\oskari\map\servlet\db\exampleLayersAndRoles.sql)
-       * Add row to portti_layerclass table
-       "Geologian tutkimuskeskus";"Geologiska forskningscentralen";"Geological Survey of Finland";TRUE;;"";"";FALSE;"{ fi:{name:"Geologian tutkimuskeskus"},sv:{name:"Geologiska forskningscentralen"},en:{name:"Geological Survey of Finland"}}"
-       * Add row to portti_maplayer table
-       e.g.
-       3;"Maaperäkartta 1:20 000 / 1:50 000";"Jordartskarta 1:20 000 / 1:50 000";"Superficial deposits map 1:20 000 / 1:50 000";"3";"http://geomaps2.gtk.fi/ArcGIS/services/GTKWMS/MapServer/WMSServer";75;"''";100000;10000;"http://www.paikkatietoikkuna.fi/web/guest/maaperakartta-1/20000";"http://geomaps2.gtk.fi/GTKWMS/wms/maaperakartta20k.png";11;"0f3f054f-ad70-4cf1-a1d1-93589261bd04";"''";2;"wmslayer";"";"";"";"";"";"";"";"";"";;"";"";"''";"''";"''";"";"1.3.0";3067;"{ fi:{name:"Maaperäkartta 1:20 000 / 1:50 000",subtitle:""},sv:{name:"Jordartskarta 1:20 000 / 1:50 000",subtitle:""},en:{name:"Superficial deposits map 1:20 000 / 1:50 000",subtitle:""}}"
-       
-       * execute tips&tricks F
+       * edit script file [..]work/oskari-server/servlet-map/src/main/resources/fi/nls/oskari/map/servlet/db/exampleLayersAndRoles.sql
+       - add row to portti_layerclass table, e.g. INSERT INTO portti_layerclass (namefi, namesv, nameen, maplayers_selectable, group_map, locale, parent) values ('Geologian tutkimuskeskus','Geologiska forskningscentralen','Geological Survey of Finland',true,false,'{ fi:{name:"Geologian tutkimuskeskus"},sv:{name:"Geologiska forskningscentralen"},en:{name:"Geological Survey of Finland"}}',null);
+       - add row to portti_maplayer table, e.g. INSERT INTO portti_maplayer (layerclassid, namefi, namesv, nameen, wmsname, wmsurl, opacity, style, minscale, maxscale, description_link, legend_image, inspire_theme_id, dataurl, metadataurl, order_number, layer_type, locale) VALUES (3,'Maaperäkartta 1:20 000 / 1:50 000','Jordartskarta 1:20 000 / 1:50 000','Superficial deposits map 1:20 000 / 1:50 000','3','http://geomaps2.gtk.fi/ArcGIS/services/GTKWMS/MapServer/WMSServer',75,'',100000,10000,'http://www.paikkatietoikkuna.fi/web/guest/maaperakartta-1/20000', 'http://geomaps2.gtk.fi/GTKWMS/wms/maaperakartta20k.png',11,'0f3f054f-ad70-4cf1-a1d1-93589261bd04','',2,'wmslayer', '{ fi:{name:"Maaperäkartta 1:20 000 / 1:50 000",subtitle:""},sv:{name:"Jordartskarta 1:20 000 / 1:50 000",subtitle:""},en:{name:"Superficial deposits map 1:20 000 / 1:50 000",subtitle:""}}');
+
+       * execute F. Tips and Tricks 1
 
 ## E. Database
+
+The SQL scripts that generate the HSQL database are located in the directory [..]work/servlet-map/src/main/resources/fi/nls/oskari/map/servlet/db/. The actual database files will be generated into the directory [..]work/oskari-server/data. The database structure is documented in detail in the md file [..]work/Oskari/docs/md/architecture/database.md.
 
 ### 1. Bundle tables
        * portti_bundle  (definition of all available  bundles)
@@ -148,9 +150,11 @@
 
 ## F. Tips and Tricks
 
-       1. Recreate database --> delete files under /oskari-backend/data  and rebuild all ( mvn -f servlet-map-pom.xml clean install)
+       1. Recreate database --> delete files under [..]work/oskari-server/data and rebuild all:
+          - mvn -f servlet-map-pom.xml clean install
 
        2. Start Oskari without rebuilding
-          --> start Jetty: cd ..\work\oskari-backend\servlet-map  / mvn jetty:run
+          --> start Jetty:
+              - cd [..]work/oskari-server/servlet-map
+              - mvn jetty:run
           --> start Oskari: http://localhost:2373
-

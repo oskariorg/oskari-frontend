@@ -108,6 +108,11 @@ module.exports = function (grunt) {
                 "outdir": "../dist/<%= version %>docs/"
             }
         },
+        validateLocalizationJSON: {
+            target: {
+                src: ['../bundles/**/locale/*.js']
+            }
+        },
         beautifyJS: {
             target: {
                 src: ['../{applications,bundles,packages}/**/*.js']
@@ -518,6 +523,29 @@ module.exports = function (grunt) {
             grunt.fail.fatal("Couldn't find options.");
         }
 
+    });
+
+    grunt.registerMultiTask('validateLocalizationJSON', 'Make sure localization files are actual JSON', function () {
+        var startTime = new Date().getTime(),
+            content;
+        this.files.forEach(function (file) {
+            file.src.filter(function (filepath) {
+                if (!grunt.file.exists(filepath)) {
+                    // This is not fatal...
+                    grunt.log.warn('Source file "' + filepath + '" not found.');
+                    return false;
+                }
+                content = grunt.file.read(filepath);
+                // Remove Oskari function call so we don't have to use eval...
+                content = content.replace("Oskari.registerLocalization(", "");
+                content = content.substring(0, content.lastIndexOf(");"));
+                try {
+                    JSON.parse(content);
+                } catch (err) {
+                    grunt.fail.fatal(filepath + ": " + err);
+                }
+            });
+        });
     });
 
     grunt.registerMultiTask('beautifyJS', 'Clean up JS code style', function () {
