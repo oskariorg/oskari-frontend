@@ -22,7 +22,9 @@ Oskari.clazz
 	   * @param {Boolean} hidePrevious
 	   * 		if true, hides any previous popups when showing this, defaults to false
 	   * @param {Object} colourScheme
-	   *		the colour scheme object for the popup (optional, not used if passed falsy value)
+	   *		the colour scheme object for the popup (optional, uses the default colour scheme if not passed)
+	   * @param {String} font
+	   *		the id of the font for the popup (optional, uses the default font if not passed)
 	   * 
 	   * contentData format example:
 	   * [{
@@ -33,7 +35,7 @@ Oskari.clazz
 	   * }
 	   * }]
 	   */
-	  function(id,title, content, position, hidePrevious, colourScheme) {
+	  function(id,title, content, position, hidePrevious, colourScheme, font) {
 	    this._creator = null;
 	    this._id = id;
 	    this._title = title;
@@ -41,6 +43,7 @@ Oskari.clazz
 	    this._position = position;
 	    this._hidePrevious = (hidePrevious == true);
 	    this._colourScheme = colourScheme;
+	    this._font = font;
 	  }, {
 	    /** @static @property __name request name */
 	    __name : "InfoBox.ShowInfoBoxRequest",
@@ -100,6 +103,13 @@ Oskari.clazz
 	     */
 	    getColourScheme: function() {
 	    	return this._colourScheme;
+	    },
+	    /**
+	     * @method getFont
+	     * @return {String} the id of the font for the popup
+	     */
+	    getFont: function() {
+	    	return this._font;
 	    }
 	  }, {
 	    /**

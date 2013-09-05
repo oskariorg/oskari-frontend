@@ -30,7 +30,8 @@ function(popupPlugin) {
             request.getTitle(),
             request.getContent(),
             request.getPosition(),
-            request.getColourScheme()
+            request.getColourScheme(),
+            request.getFont()
         );
    }
 }, {

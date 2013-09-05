@@ -116,6 +116,8 @@ function() {
      * 		coordinates where to show the popup
      * @param {Object} colourScheme
      *      the colour scheme for the popup (optional, uses the default colour scheme if not provided)
+     * @param {String} font
+     *      the font for the popup (optional, uses the default font if not provided)
      * 
      * Displays a popup with given title and data in the given coordinates.
      * 
@@ -130,7 +132,7 @@ function() {
 	 * }
 	 * }]
      */
-    popup : function(id, title, contentData, lonlat, colourScheme) {
+    popup : function(id, title, contentData, lonlat, colourScheme, font) {
     	var me = this;
     	 
     	var arrow = this._arrow.clone();
@@ -234,8 +236,14 @@ function() {
         }
 		this._panMapToShowPopup(lonlat);
 		
+        // Set the colour scheme if one provided
         if (colourScheme) {
             this._changeColourScheme(colourScheme);
+        }
+
+        // Set the font if one provided
+        if (font) {
+            this._changeFont(font);
         }
     },
     setAdaptable: function(isAdaptable) {
@@ -359,6 +367,46 @@ function() {
         closeButton.removeClass('icon-close-white');
         closeButton.removeClass('icon-close');
         closeButton.addClass(colourScheme.iconCls);
+    },
+    /**
+     * Changes the font used by plugin by adding a CSS class to its DOM elements.
+     *
+     * @method _changeFont
+     * @param {String} fontId
+     * @param {jQuery} div
+     */
+    _changeFont: function(fontId, div) {
+        div = div || jQuery('div#getinforesult');
+
+        if (!div || !fontId) return;
+
+        // The elements where the font style should be applied to.
+        var elements = [];
+        elements.push(div);
+        elements.push(div.find('table.getinforesult_table'));
+
+        // Remove possible old font classes.
+        for (var j = 0; j < elements.length; j++) {
+            var el = elements[j];
+
+            el.removeClass(function() {
+                var removeThese = '',
+                    classNames = this.className.split(' ');
+
+                // Check if there are any old font classes.
+                for (var i = 0; i < classNames.length; ++i) {
+                    if(/oskari-publisher-font-/.test(classNames[i])) {
+                        removeThese += classNames[i] + ' ';
+                    }
+                }
+
+                // Return the class names to be removed.
+                return removeThese;
+            });
+
+            // Add the new font as a CSS class.
+            el.addClass('oskari-publisher-font-' + fontId);
+        }
     },
     /**
      * @method close

@@ -1167,15 +1167,7 @@ function(instance, localization, data) {
      * @param {Object} colourScheme
      */
     changeColourScheme: function(colourScheme) {
-        var tool, i, infoPlugin;
-
-        for (i = 0; i < this.tools.length; ++i) {
-            tool = this.tools[i];
-            if (tool.id === 'Oskari.mapframework.mapmodule.GetInfoPlugin') {
-                infoPlugin = tool;
-                break;   
-            }
-        }
+        var infoPlugin = this._getGetInfoPlugin();
         if (infoPlugin) {
             infoPlugin.config = infoPlugin.config || {};
             infoPlugin.config.colourScheme = colourScheme;
@@ -1204,9 +1196,17 @@ function(instance, localization, data) {
 
         // Change the font of the layer selection plugin
         this._setLayerSelectionFont(font);
+        
         // Change the font of the logo plugin
         if (this.logoPlugin && this.logoPlugin.changeFont) {
             this.logoPlugin.changeFont(font);
+        }
+
+        // Change the font of the info plugin
+        var infoPlugin = this._getGetInfoPlugin();
+        if (infoPlugin) {
+            infoPlugin.config = infoPlugin.config || {};
+            infoPlugin.config.font = font;
         }
     },
 
@@ -1219,5 +1219,23 @@ function(instance, localization, data) {
         if (mlp.isEnabled() && mlp.plugin.changeFont) {
             mlp.plugin.changeFont(font);
         }
+    },
+
+    /**
+     * @method _getGetInfoPlugin
+     */
+    _getGetInfoPlugin: function() {
+        var infoPlugin = null,
+            i, tool;
+
+        for (i = 0; i < this.tools.length; ++i) {
+            tool = this.tools[i];
+            if (tool.id === 'Oskari.mapframework.mapmodule.GetInfoPlugin') {
+                infoPlugin = tool;
+                break;   
+            }
+        }
+
+        return infoPlugin;
     }
 });

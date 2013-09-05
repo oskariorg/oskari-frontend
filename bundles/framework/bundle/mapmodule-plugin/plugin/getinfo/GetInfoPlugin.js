@@ -851,6 +851,8 @@ function(config, locale) {
         var content = {};
         var wrapper = me.template.wrapper.clone();
         var colourScheme = null;
+        var font = null;
+
         content.html = '';
         content.actions = {};
         for (var di = 0; di < data.fragments.length; di++) {
@@ -880,6 +882,10 @@ function(config, locale) {
             colourScheme = this.config.colourScheme;
         }
 
+        if (this.config && this.config.font) {
+            font = this.config.font;
+        }
+
         content.html = wrapper;
 
         var pluginLoc = this.getMapModule().getLocalization('plugin', true);
@@ -889,7 +895,7 @@ function(config, locale) {
         if(!this.config || this.config.infoBox) {
             var reqBuilder = me._sandbox.getRequestBuilder("InfoBox.ShowInfoBoxRequest");
             if (reqBuilder) {
-                var request = reqBuilder(data.popupid, data.title, [content], data.lonlat, true, colourScheme);
+                var request = reqBuilder(data.popupid, data.title, [content], data.lonlat, true, colourScheme, font);
                 me._sandbox.request(me, request);
             }
         }
