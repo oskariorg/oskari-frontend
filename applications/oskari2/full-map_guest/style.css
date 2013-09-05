@@ -1,0 +1,39 @@
+@media screen {
+	body {
+		margin:0;
+		padding:0;
+		height:100%;
+	}
+    #loginbar {
+        padding: 10px 10px 0 16px;
+        color: #CCC;
+        vertical-align: bottom;
+        margin-bottom: 8px;
+        margin-top: 20px;
+    }
+    #loginbar a {
+        color: #FFDE00;
+        font-size: 8pt;
+        line-height: 150%;
+    }
+    #mapdiv {
+        width: 100%;
+        background : white;
+    }
+	#maptools {
+		background-color:#333438;
+		height:100%;
+		position:absolute;
+		top:0;
+		width:153px;
+		z-index:2;
+	}
+    #contentMap {
+        background : #333333;
+        height: 100%;
+        margin-left: 153px;
+    }
+    #contentMap div.oskariui-center {
+        margin-left: 0;
+    }
+}

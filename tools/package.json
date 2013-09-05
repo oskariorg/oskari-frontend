@@ -27,7 +27,8 @@
     "grunt-contrib-concat": "latest",
     "grunt-sass": "latest",
     "grunt": "latest",
-    "grunt-regex-replace": "latest"
+    "grunt-regex-replace": "latest",
+    "grunt-contrib-requirejs": "latest"
   },
   "dependencies": {
     "grunt-cli": "0.1.9",
@@ -50,7 +51,8 @@
     "grunt-contrib-concat": "0.3.0",
     "grunt-sass": "0.6.0",
     "grunt": "0.4.1",
-    "grunt-regex-replace": "0.2.5"
+    "grunt-regex-replace": "0.2.5",
+    "grunt-contrib-requirejs": "0.4.1"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -124,6 +124,13 @@ module.exports = function (grunt) {
                     }
                 ]
             }
+        },
+        requirejs: {
+          compile: {
+            options: {
+              mainConfigFile: "../applications/oskari2/full-map_guest/build.js"
+            }
+          }
         }
     });
 
@@ -138,6 +145,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-regex-replace');
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
 
     // Default task(s).
     grunt.registerTask('default', ['regex-replace', 'karma:dev', 'compileAppSetupToStartupSequence', 'compileDev', 'karma:dev:run', 'watch']);
