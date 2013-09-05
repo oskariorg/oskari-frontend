@@ -1,107 +1,110 @@
 Oskari.registerLocalization({
-    "lang" : "en",
+    "lang" : "cs",
     "key" : "Printout",
     "value" : {
-        "title" : "Print Map view",
-        "flyouttitle" : "Print Map view",
+        "title" : "Tisknout zobrazení mapy",
+        "flyouttitle" : "Tisknout zobrazení mapy",
         "desc" : "",
-        "btnTooltip" : "Print",
+        "btnTooltip" : "Tisk",
         "BasicView" : {
-            "title" : "Print Map view",
+            "title" : "Tisknout zobrazení mapy",
             "name" : {
                 "label" : "The name of the map",
                 "placeholder" : "required",
                 "tooltip" : "Give your map a descriptive name. Please note the language of the user interface."
             },
             "language" : {
-                "label" : "Language",
+                "label" : "Jazyk",
                 "options" : {
-                    "fi" : "Finnish",
-                    "sv" : "Swedish",
-                    "en" : "English"
+                    "fi": "finština",
+                    "sv": "švédština",
+                    "en": "angličtina",
+                    "de" : "němčina",
+                    "es" : "španělština",
+                    "cs" : "čeština"
                 },
                 "tooltip" : "Select the language of the map interface and map data."
             },
             "size" : {
-                "label" : "Size",
-                "tooltip" : "Choose print layout. Preview map is updated accordingly.",
+                "label" : "Velikost",
+                "tooltip" : "Vyberte rozložení tisku| Současně je aktualizován náhled mapy.",
                 "options" : [{
                     "id" : "A4",
-                    "label" : "A4 portrait",
+                    "label" : "A4 na výšku",
                     "classForPreview" : "preview-portrait",
                     "selected" : true
                 }, {
                     "id" : "A4_Landscape",
-                    "label" : "A4 landscape",
+                    "label" : "A4 na šířku",
                     "classForPreview" : "preview-landscape"
                 }, {
                     "id" : "A3",
-                    "label" : "A3 portrait",
+                    "label" : "A3 na výšku",
                     "classForPreview" : "preview-portrait"
                 }, {
                     "id" : "A3_Landscape",
-                    "label" : "A3 landscape",
+                    "label" : "A3 na šířku",
                     "classForPreview" : "preview-landscape"
                 }]
             },
             "preview" : {
-                "label" : "Preview",
-                "tooltip" : "Click the small preview to open a larger preview",
-                "pending" : "Preview will be updated shortly",
+                "label" : "Náhled",
+                "tooltip" : "Klikněte na malý náhled pro zvětšení",
+                "pending" : "Náhled bude rychle aktualizován",
                 "notes" : {
-                    "extent" : "Preview can be used to figure out the map extent for printout",
-                    "restriction" : "Not all map layers are shown in the preview"
+                    "extent" : "Náhled lze použít pro výpočet rozsahu mapy výtisku",
+                    "restriction" : "V náhledu nejsou zobrazeny všechny mapové vrstvy"
                 }
 
             },
 
             "buttons" : {
-                "save" : "Get Printout",
+                "save" : "Získat výtisk",
                 "ok" : "OK",
-                "cancel" : "Cancel"
+                "cancel" : "Storno"
             },
             "location" : {
-                "label" : "Location and zoom level",
-                "tooltip" : "Printout scale matches the scale of the map in browser.",
-                "zoomlevel" : "Zoom level"
+                "label" : "Umístění a úroveň přiblížení",
+                "tooltip" : "Měřítko výtisku odpovídá měřítku mapy v prohlížeči.",
+                "zoomlevel" : "Úroveň přiblížení"
             },
             "settings" : {
-                "label" : "More settings",
-                "tooltip" : "Make additional settings like format, title, and scale"
+                "label" : "Více nastavení",
+                "tooltip" : "Provést dodatečná nastavení jako formát, titul a měřítko"
             },
             "format" : {
                 "label" : "Format",
-                "tooltip" : "Select file format",
+                "tooltip" : "Vyberte formát souboru",
                 "options" : [{
                     "id" : "png",
                     "format" : "image/png",
-                    "label" : "PNG image"
+                    "label" : "Obrázek PNG"
                 }, {
                     "id" : "pdf",
                     "format" : "application/pdf",
                     "selected" : true,
-                    "label" : "PDF document"
+                    "label" : "Dokument PDF"
                 }]
             },
             "mapTitle" : {
-                "label" : "Add title",
-                "tooltip" : "add a title for the map"
+                "label" : "Vložit název",
+                "tooltip" : "vložit název mapy"
             },
             "content" : {
                 "options" : [{
                     "id" : "pageLogo",
-                    "label" : "Add the logo of Paikkatietoikkuna",
-                    "tooltip" : "You can hide the logo if necessary",
+                    "label" : "Přidat logo Paikkatietoikkuna",
+                    "tooltip" : "Je-li to nezbytné, lze logo skrýt",
                         "checked" : "checked"
                 }, {
                     "id" : "pageScale",
-                    "label" : "Add scale to the map",
-                    "tooltip" : "Add scale to the map",
+                    "label" : "Vložit do mapy měřítko",
+                    "tooltip" : "Vložit do mapy měřítko",
                         "checked" : "checked"
                 }, {
                     "id" : "pageDate",
-                    "label" : "Add date",
-                    "tooltip" : "You can add date to the printout",
+                    "label" : "Vložit datum",
+                    "tooltip" : "Do výtisku lze vložit datum",
                         "checked" : "checked"
                 }]
             },
@@ -142,25 +145,25 @@ Oskari.registerLocalization({
                     }
                 ]
             },
-            "help" : "Help",
+            "help" : "Nápověda",
             "error" : {
-                "title" : "Error",
+                "title" : "Chyba",
                 "size" : "Error in size definitions",
                 "name" : "Name is required information",
-                "nohelp" : "No help is available",
-                "saveFailed" : "Map printout failed. Try again later.",
+                "nohelp" : "Nápověda není dostupná",
+                "saveFailed" : "Tisk mapy selhal. Zkuste to později.",
                 "nameIllegalCharacters" : "The name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens."
             }
         },
         "StartView" : {
-            "text" : "You can print the Map view you just created.",
+            "text" : "Zobrazení mapy, které jste právě vytvořili, lze vytisknout.",
             "info" : {
-                "maxLayers" : "Max layer count for printout is 8",
-                "printoutProcessingTime" : "Printout processing takes some time when multiple layers are selected."
+                "maxLayers" : "Najednou lze vytisknout maximálně 8 vrstev.",
+                "printoutProcessingTime" : "Pokud je vybrán soutisk více vrstev, tisk trvá déle."
             },
             "buttons" : {
-                "continue" : "Continue",
-                "cancel" : "Cancel"
+                "continue" : "Pokračuj",
+                "cancel" : "Storno"
             }
         }
     }
