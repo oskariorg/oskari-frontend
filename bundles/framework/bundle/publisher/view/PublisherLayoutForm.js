@@ -498,6 +498,23 @@ function(localization, publisher) {
             if (colours[i].val === code) return colours[i];
         }
         return null;
+    },
+
+    /**
+     * @method _getFontByCode
+     * @param {String} code
+     * @param {Array[Object]} fonts (optional, defaults to initial fonts)
+     * @return {Object} font object
+     */
+    _getFontByCode: function(code, fonts) {
+        var fonts = fonts || this.initialValues.fonts,
+            fLen = fonts.length,
+            i;
+
+        for (i = 0; i < fLen; ++i) {
+            if (fonts[i].val === code) return fonts[i];
+        }
+        return null;
     }
 });
 

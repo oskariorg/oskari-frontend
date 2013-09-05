@@ -332,7 +332,7 @@ function() {
             closeButton = div.find('div.olPopupCloseBox');
 
         gfiHeaderArrow.css({
-            'border-right': '10px solid ' + colourScheme.bgColour
+            'border-right-color': colourScheme.bgColour
         });
 
         gfiHeader.css({
