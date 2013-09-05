@@ -204,6 +204,8 @@ function(instance) {
             event.preventDefault();
             me.categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.CategoryForm', me.instance);
             form.find('div#newLayerForm').html(me.categoryForm.getForm());
+            //add listeners etc.
+            me.categoryForm.start();
         });
     },
 

@@ -258,10 +258,10 @@ function(instance) {
                     // blnNew should always be true since we are adding a category
                     var loc = me.instance.getLocalization('notification')['error'];
                     if(blnNew) {
-                		me.instance.showMessage(loc['error'].title, loc['error'].addCategory);
+                		me.instance.showMessage(loc.title, loc.addCategory);
                     }
                     else {
-                		me.instance.showMessage(loc['error'].title, loc['error'].editCategory);
+                		me.instance.showMessage(loc.title, loc.editCategory);
                     }
                 }
             }

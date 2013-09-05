@@ -279,22 +279,31 @@ function(instance) {
             visibleFields: category.getVisibleFields(),
             dot : {
                 size : category.getDotSize(),
-                color : category.getDotColor()
+                color : category.getDotColor(),
+                shape : ((category.getDotShape() != null) ? category.getDotShape() : 1),
             },
             line : {
-                size : category.getLineWidth(),
-                color : category.getLineColor()
+                cap :       category.getLineCap(),
+                corner :    category.getLineCorner(),
+                style :     category.getLineStyle(),
+                size :      category.getLineWidth(),
+                color :     category.getLineColor()
             },
             area : {
-                size : category.getAreaLineWidth(),
+                lineWidth : category.getAreaLineWidth(),
+                lineCap : category.getAreaLineCap(),
+                lineCorner : category.getAreaLineCorner(),
+                lineStyle : category.getAreaLineStyle(),
                 lineColor : category.getAreaLineColor(),
-                fillColor : category.getAreaFillColor()
+                fillColor : category.getAreaFillColor(),
+                fillStyle : category.getAreaFillStyle()
             }
         };
         
         form.setValues(values);
         var content = form.getForm();
-        
+        content.find('input[name=categoryname]').val(category.name);
+
     	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
     	
         var buttons = [];
@@ -306,10 +315,10 @@ function(instance) {
     	saveBtn.setHandler(function() {
             var values = form.getValues();
             var errors = me.validateCategoryFormValues(values);
-            if(errors.length != 0) {
-                me.showValidationErrorMessage(errors);
-                return;
-            }
+//            if(errors.length != 0) {
+//                me.showValidationErrorMessage(errors);
+//                return;
+//            }
             var category = me.getCategoryFromFormValues(values);
             me.saveCategory(category);
             
@@ -323,10 +332,12 @@ function(instance) {
     	});
         buttons.push(cancelBtn);
         buttons.push(saveBtn);
-        
     	dialog.show(catLoc.title, content, buttons);
     	dialog.moveTo('div.personaldata ul li select', 'right');
     	dialog.makeModal();
+        //bind listeners etc. for category form
+        form.start();
+
     },
     showValidationErrorMessage : function(errors) {
         var loc = this.instance.getLocalization();
@@ -436,12 +447,20 @@ function(instance) {
         category.setDotColor(values.dot.color);
         category.setDotShape(values.dot.shape);
         
-        category.setLineWidth(values.line.size);
+//        category.setLineWidth(values.line.size);
+        category.setLineWidth(values.line.width);
         category.setLineColor(values.line.color);
+        category.setLineCap(values.line.cap);
+        category.setLineCorner(values.line.corner);
+        category.setLineStyle(values.line.style);
         
-        category.setAreaLineWidth(values.area.size);
+        category.setAreaLineWidth(values.area.lineWidth);
         category.setAreaLineColor(values.area.lineColor);
+        category.setAreaLineCap(values.area.lineCap);
+        category.setAreaLineCorner(values.area.lineCorner);
+        category.setAreaLineStyle(values.area.lineStyle);
         category.setAreaFillColor(values.area.fillColor);
+        category.setAreaFillStyle(values.area.fillStyle);
 
         category.setDefault(values._isDefault);
 

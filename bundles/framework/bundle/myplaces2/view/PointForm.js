@@ -214,8 +214,12 @@ function(instance) {
      * @param {Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory[]} categories array containing available categories
      * @return {jQuery} jquery reference for the form 
      */
-    showForm : function(renderButton) {
+    showForm : function(renderButton, state) {
         var me = this;
+        if(state != null) {
+            jQuery.extend(true, me.values, state.dot);
+        }
+
         var renderDialog = me._getOnScreenForm();
         renderDialog.die();
         renderDialog.remove();
@@ -278,6 +282,7 @@ function(instance) {
             }
         });
 
+        var statedChosenColor = false;
         // Color chooser
         content = dialogContent.find('.color-grid');
         for (var i = 0; i < me.basicColors.length; i++) {
@@ -303,12 +308,20 @@ function(instance) {
                 jQuery('#'+me.activeColorCell+'ColorCell').css('border','3px solid #ffffff');
                 me._updatePreview(dialogContent);
             });
-            if (i === this.activeColorCell) colorCell.css('border','3px solid #ffffff');
+            //instead of selecting always black,
+            // we should use the color that comes from the state
+            if ('#'+me.values.color == me.basicColors[i]) {
+                colorCell.css('border','3px solid #ffffff');
+                me.activeColorCell = i;
+                statedChosenColor = true;
+            }
             content.append(colorCell);
         }
+
         // Custom color
         content = dialogContent.find('.color-source-selector');
         var colorCheckbox = me.templateColorSource.clone();
+
         colorCheckbox.change(function() {
             jQuery("input.custom-color").prop('disabled',!this.checked);
             var activeCell = jQuery("#"+me.activeColorCell+"ColorCell");
@@ -320,6 +333,15 @@ function(instance) {
             me._updatePreview(dialogContent);
         });
         content.prepend(colorCheckbox);
+
+        // if the color is not picked from selection, it must be users own color
+        // select user colors checkbox
+        if(!statedChosenColor) {
+            colorCheckbox.checked = true;
+            content.find("input.color-source").prop('disabled', false).attr('checked', 'checked');
+
+        }
+
 
         content = dialogContent.find('.custom-colors');
         var customColorEditor = this.templateCustomColor.clone();
@@ -339,6 +361,16 @@ function(instance) {
         blueValue.addClass("custom-blue-value");
         dialogContent.find('.colorcolumn22').append(blueValue);
         dialogContent.find('label.custom-blue-value').text('B');
+
+        // if the color is not picked from selection, it must be users own color
+        // add color values to the input fields
+        if(!statedChosenColor) {
+            var rgb = me.instance.hexToRgb(me.values.color);
+
+            dialogContent.find('input.custom-color.custom-red-value').val(rgb.r);
+            dialogContent.find('input.custom-color.custom-green-value').val(rgb.g);
+            dialogContent.find('input.custom-color.custom-blue-value').val(rgb.b);
+        }
 
         dialogContent.find('.custom-color').change(function() {
             var values = [];
@@ -521,4 +553,5 @@ function(instance) {
     _supportsSVG : function() {
         return !!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', "svg").createSVGRect;
     }
+
 });

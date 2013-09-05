@@ -13,6 +13,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
 function() {
     this.template = jQuery('<div class="tab-content"></div>');
     this.templateTabHeader = jQuery('<li><a href="JavaScript:void(0);"></a></li>');
+    this.id = null;
     this.title = null;
     this.content = null;
     this.header = null;
@@ -20,6 +21,24 @@ function() {
     this.html=this.template.clone();
     this.html.hide();
 }, {
+
+    /**
+     * @method setId
+     * Sets the panel id
+     * @param {String} pId id for the panel
+     */
+    setId : function(pId) {
+        this.id = pId;
+    },
+    /**
+     * @method getId
+     * Returns the panel id
+     * @return {String} id for the panel
+     */
+    getId : function() {
+        return this.id;
+    },
+
     /**
      * @method setTitle
      * Sets the panel title

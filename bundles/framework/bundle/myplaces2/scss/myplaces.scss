@@ -2,13 +2,15 @@ div.myplacesform div.help {
   float: right; }
 
 /* Wide fields for place inputs  */
-div.myplacesform div.field {
+div.myplacesform div.field,
+div.myplacescategoryform div.field {
   padding-bottom: 10px; }
 
 div.myplacesform input[type="text"] {
-  width: 80%; }
+  width: 83%; }
 
-div.myplacesform input[type="checkbox"] {
+div.myplacesform input[type="checkbox"],
+div.myplacescategoryform input[type="checkbox"] {
   margin: 0.5em;
 }
 
@@ -18,7 +20,8 @@ div.myplacesform textarea {
 div.myplacesform select {
   width: 80%; }
 
-div.myplacesform div.renderButton {
+div.myplacesform div.renderButton,
+div.myplacescategoryform div.renderButton {
     margin: 5px;
 }
 
