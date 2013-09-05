@@ -296,6 +296,10 @@ function(config) {
 				content.css('bottom', this._conf.location.bottom);
 			}
 		}
+
+		if (this._conf && this._conf.font) {
+			this.changeFont(this._conf.font, content);
+		}
 	},
 	/**
 	 * @method _checkForEnter
@@ -419,7 +423,11 @@ function(config) {
 
 			content.html(table);
 			resultsContainer.show();
-			
+
+			// Change the font of the rendered table as well
+			if (this._conf && this._conf.font) {
+				this.changeFont(this._conf.font, content);
+			}
 		}
 	},
 	/**
@@ -498,6 +506,47 @@ function(config) {
 			'background-image': 'url("' + bgRight + '")',
 			'width': style.widthRight
 		});
+	},
+
+	/**
+	 * Changes the font used by plugin by adding a CSS class to its DOM elements.
+	 *
+	 * @method changeFont
+	 * @param {String} fontId
+	 * @param {jQuery} div
+	 */
+	changeFont: function(fontId, div) {
+		div = div || this.container;
+
+		if (!div || !fontId) return;
+
+		// The elements where the font style should be applied to.
+		var elements = [];
+		elements.push(div.find('table.search-results'));
+		elements.push(div.find('input'));
+
+		// Remove possible old font classes.
+		for (var j = 0; j < elements.length; j++) {
+			var el = elements[j];
+
+			el.removeClass(function() {
+				var removeThese = '',
+					classNames = this.className.split(' ');
+
+				// Check if there are any old font classes.
+				for (var i = 0; i < classNames.length; ++i) {
+					if(/oskari-publisher-font-/.test(classNames[i])) {
+						removeThese += classNames[i] + ' ';
+					}
+				}
+
+				// Return the class names to be removed.
+				return removeThese;
+			});
+
+			// Add the new font as a CSS class.
+			el.addClass('oskari-publisher-font-' + fontId);
+		}
 	}
 }, {
 	/**

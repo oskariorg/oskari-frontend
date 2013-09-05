@@ -67,7 +67,8 @@ function(localization, publisher) {
         }],
         fonts: [
             {name: 'Arial', val: 'arial'},
-            {name: 'Comic Sans', val: 'comic_sans'}
+            {name: 'Comic Sans', val: 'comic_sans'},
+            {name: 'Georgia', val: 'georgia'}
         ],
         toolStyles: [
             'rounded-dark',
@@ -230,7 +231,7 @@ function(localization, publisher) {
             fonts = this.initialValues.fonts,
             fLen = fonts.length,
             fontOption,
-            i;
+            i, selectedFont;
 
         // Set the localization.
         template.find('label').html(fontLabel);
@@ -245,7 +246,9 @@ function(localization, publisher) {
 
         // Set the select change handler.
         template.find('select').on('change', function(e) {
-            // TODO: What to do when the font changes?
+            // Send an event notifying the plugins that the font has changed.
+            selectedFont = jQuery(this).val();
+            self._sendFontChangedEvent(selectedFont);
         });
 
         // Prepopulate data
@@ -454,6 +457,16 @@ function(localization, publisher) {
      */
     _sendColourSchemeChangedEvent: function(colourScheme) {
         this._sendEvent('Publisher.ColourSchemeChangedEvent', colourScheme);
+    },
+
+    /**
+     * Sends an event to notify interested parties that the font has changed.
+     *
+     * @method _sendFontChangedEvent
+     * @param {String} font the changed font value
+     */
+    _sendFontChangedEvent: function(font) {
+        this._sendEvent('Publisher.FontChangedEvent', font);
     },
 
     /**

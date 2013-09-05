@@ -196,6 +196,14 @@ function() {
 
             this.publisher.changeColourScheme(event.getColourScheme());
         },
+        /**
+         * @method Publisher.FontChangedEvent
+         */
+        'Publisher.FontChangedEvent': function(event) {
+            if (!this.publisher) return;
+
+            this.publisher.changeFont(event.getFont());
+        }
     },
 
     /**

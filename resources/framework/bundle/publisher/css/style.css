@@ -85,7 +85,7 @@ div.basic_publisher div.buttons input, div.publisher div.startview div.buttons i
 
 /* Layout */
 div.basic_publisher div#publisher-layout-colours input[name=publisher-colour] {
-  width: 140px;
+  width: 125px;
 }
 div.basic_publisher p#publisher-selected-colour {
   display: inline;

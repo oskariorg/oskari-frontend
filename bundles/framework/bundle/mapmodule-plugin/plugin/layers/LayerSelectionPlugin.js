@@ -549,6 +549,10 @@ function(config) {
         if (this.conf && this.conf.toolStyle) {
             this.changeToolStyle(this.conf.toolStyle, this.element);
         }
+
+        if (this.conf && this.conf.font) {
+            this.changeFont(this.conf.font, this.element);
+        }
     },
 
     /**
@@ -588,6 +592,38 @@ function(config) {
             'background-color': 'transparent',
             'float': 'right'
         });
+    },
+
+    /**
+     * Changes the font used by plugin by adding a CSS class to its DOM elements.
+     *
+     * @method changeFont
+     * @param {String} fontId
+     * @param {jQuery} div
+     */
+    changeFont: function(fontId, div) {
+        div = div || this.element;
+
+        if (!div || !fontId) return;
+
+        // Remove possible old font classes.
+        div.removeClass(function() {
+            var removeThese = '',
+                classNames = this.className.split(' ');
+
+            // Check if there are any old font classes.
+            for (var i = 0; i < classNames.length; ++i) {
+                if(/oskari-publisher-font-/.test(classNames[i])) {
+                    removeThese += classNames[i] + ' ';
+                }
+            }
+
+            // Return the class names to be removed.
+            return removeThese;
+        });
+
+        // Add the new font as a CSS class.
+        div.addClass('oskari-publisher-font-' + fontId);
     }
 }, {
     /**

@@ -195,6 +195,38 @@ function() {
 	    	window.open(url, '_blank');
             return false;
 	    });
+    },
+
+    /**
+     * Changes the font used by plugin by adding a CSS class to its DOM elements.
+     *
+     * @method changeFont
+     * @param {String} fontId
+     * @param {jQuery} div
+     */
+    changeFont: function(fontId, div) {
+        div = div || this.element;
+
+        if (!div || !fontId) return;
+
+        // Remove possible old font classes.
+        div.removeClass(function() {
+            var removeThese = '',
+                classNames = this.className.split(' ');
+
+            // Check if there are any old font classes.
+            for (var i = 0; i < classNames.length; ++i) {
+                if(/oskari-publisher-font-/.test(classNames[i])) {
+                    removeThese += classNames[i] + ' ';
+                }
+            }
+
+            // Return the class names to be removed.
+            return removeThese;
+        });
+
+        // Add the new font as a CSS class.
+        div.addClass('oskari-publisher-font-' + fontId);
     }
 }, {
     /**

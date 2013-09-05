@@ -1154,7 +1154,6 @@ function(instance, localization, data) {
      */
     _setLayerSelectionStyle: function(styleName) {
         var mlp = this.maplayerPanel;
-        mlp.pluginConfig = mlp.pluginConfig || {};
         mlp.pluginConfig.toolStyle = styleName;
         if (mlp.isEnabled() && mlp.plugin.changeToolStyle) {
             mlp.plugin.changeToolStyle(styleName);
@@ -1180,6 +1179,45 @@ function(instance, localization, data) {
         if (infoPlugin) {
             infoPlugin.config = infoPlugin.config || {};
             infoPlugin.config.colourScheme = colourScheme;
+        }
+    },
+
+    /**
+     * Changes the font of each tool (has to be done separately for each one)
+     * if the plugin supports it.
+     *
+     * @method changeFont
+     * @param {String} font the id of the font
+     */
+    changeFont: function(font) {
+        if (!font) return;
+
+        // Set the font to the config of each tool
+        // and change the font immedately. 
+        for (var i = 0; i < this.tools.length; ++i) {
+            var tool = this.tools[i];
+            if (tool.config) tool.config.font = font;
+            if (tool._isPluginStarted && tool.plugin.changeFont) {
+                tool.plugin.changeFont(font);
+            }
+        }
+
+        // Change the font of the layer selection plugin
+        this._setLayerSelectionFont(font);
+        // Change the font of the logo plugin
+        if (this.logoPlugin && this.logoPlugin.changeFont) {
+            this.logoPlugin.changeFont(font);
+        }
+    },
+
+    /**
+     * @method _setLayerSelectionStyle
+     */
+    _setLayerSelectionFont: function(font) {
+        var mlp = this.maplayerPanel;
+        mlp.pluginConfig.font = font;
+        if (mlp.isEnabled() && mlp.plugin.changeFont) {
+            mlp.plugin.changeFont(font);
         }
     }
 });
