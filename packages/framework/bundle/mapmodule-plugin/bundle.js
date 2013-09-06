@@ -293,6 +293,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
 			//"lang" : "en",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/locale/en.js"
+		}, {
+			//"lang" : "cs",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/locale/cs.js"
+		}, {
+			//"lang" : "de",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/locale/de.js"
+		}, {
+			//"lang" : "es",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/locale/es.js"
 		}]
 	},
 	"bundle" : {
