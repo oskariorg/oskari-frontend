@@ -58,6 +58,7 @@ div.layerselector2 div.tab-content div.oskarifield {
     div.layerselector2 div.tab-content div.oskarifield .field-description .icon-info {
       display: inline-block; }
   div.layerselector2 div.tab-content div.oskarifield .related-keywords {
+    display: none;
     overflow: hidden;
     height: 30px;
     line-height: 30px; }
@@ -122,7 +123,3 @@ div.layerselector2 div.layer div.backendstatus-ok {
 div.layerselector2 div.layer div.backendstatus-unknown {
   height: 20px !important;
   margin-bottom: 2px; }
-
-.spinner-text {
-    display: inline-block;
-}

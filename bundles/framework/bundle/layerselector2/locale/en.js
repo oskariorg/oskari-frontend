@@ -12,12 +12,12 @@ Oskari.registerLocalization({
             "noResultsForKeyword": "The search returned no keywords.",
             "minChars": "Minimum length is 4 characters."
         },
-        "loading": "Loading...",
+        "loading": "Searching...",
         "filter": {
             "text": "Search map layers",
             "keywordsTitle": "Keywords:",
             "shortDescription": "Search map layers by name, producer or keyword.",
-            "description": "You can search map layers by writing a part of the name or producer of the layer. By writing at 4 least characters and pushing enter key you can also search for keywords that are related to the layers. The number after the keyword in the list tells you how many map layers are related to it.",
+            "description": "You can search map layers by writing a part of the name, producer or keyword of the layer. Keyword search starts when at 4 least characters has been written.",
             "inspire": "By theme",
             "organization": "By data providers",
             "published": "Users",
