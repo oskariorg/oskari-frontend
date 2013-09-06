@@ -13,7 +13,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
      */
 
     function (pEmptyMsg) {
-        "use strict";
         this.panels = [];
         this.tabChangeListeners = [];
         if (pEmptyMsg) {
@@ -23,8 +22,8 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
         }
         this.template = jQuery('<div class="oskariTabs">' + this.emptyMsg + '</div>');
 
-        this.templateTabs = jQuery('<div class="tabsHeader"><ul></ul></div><br clear="all"/>' +
-            '<div class="tabsContent"></div>');
+        this.templateTabs = jQuery('<div class="tabsHeader"><ul class="tabsItem"></ul></div><br clear="all"/>' +
+            '<div class="tabsContent tabsContentItem"></div>');
 
         this.ui = this.template.clone();
     }, {
@@ -34,8 +33,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * The first tab is selected as active immediately on add.
          * @param {Oskari.userinterface.component.TabPanel} panel
          */
-        addPanel: function (panel) {
-            "use strict";
+        addPanel: function (panel, first) {
             var me = this,
                 content,
                 headerContainer,
@@ -45,11 +43,17 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
                 content = this.templateTabs.clone();
                 this.ui.html(content);
             }
-            headerContainer = this.ui.find('ul');
-            header = panel.getHeader();
-            headerContainer.append(header);
 
-            panel.insertTo(this.ui.find('div.tabsContent'));
+            // ensure order is correct
+            headerContainer = this.ui.find('ul.tabsItem');
+            header = panel.getHeader();
+            if (first) {
+                headerContainer.prepend(header);
+            } else {
+                headerContainer.append(header);
+            }
+
+            panel.insertTo(this.ui.find('div.tabsContentItem'));
             this.panels.push(panel);
             if (this.panels.length === 1) {
                 // select first by default
@@ -76,7 +80,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * @param {Function} pCallback function to call when tabs are changed
          */
         addTabChangeListener: function (pCallback) {
-            "use strict";
             this.tabChangeListeners.push(pCallback);
         },
 
@@ -86,7 +89,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * @param {Oskari.userinterface.component.TabPanel} panel
          */
         select: function (panel) {
-            "use strict";
             var previousPanel = null,
                 i,
                 headerContainer,
@@ -120,7 +122,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * @return {Boolean} true if given panel is currently selected
          */
         isSelected: function (panel) {
-            "use strict";
             return panel.getHeader().hasClass('active');
         },
         /**
@@ -131,7 +132,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * @param {Oskari.userinterface.component.TabPanel} pPanel
          */
         removePanel: function (pPanel) {
-            "use strict";
             var panel = null,
                 i;
             for (i = 0; i < this.panels.length; i += 1) {
@@ -165,7 +165,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * @param {jQuery} container reference to DOM element
          */
         insertTo: function (container) {
-            "use strict";
             container.append(this.ui);
         }
     });
