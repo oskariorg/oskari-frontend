@@ -1,111 +1,114 @@
 Oskari.registerLocalization({
-    "lang" : "en",
+    "lang" : "de",
     "key" : "Printout",
     "value" : {
-        "title" : "Print Map view",
-        "flyouttitle" : "Print Map view",
+        "title" : "Kartenansicht drucken",
+        "flyouttitle" : "Kartenansicht drucken",
         "desc" : "",
-        "btnTooltip" : "Print",
+        "btnTooltip" : "Drucken",
         "BasicView" : {
-            "title" : "Print Map view",
+            "title" : "Kartenansicht drucken",
             "name" : {
                 "label" : "The name of the map",
                 "placeholder" : "required",
                 "tooltip" : "Give your map a descriptive name. Please note the language of the user interface."
             },
             "language" : {
-                "label" : "Language",
+                "label" : "Sprache",
                 "options" : {
-                    "fi" : "Finnish",
-                    "sv" : "Swedish",
-                    "en" : "English"
+                    "fi": "Finnisch",
+                    "sv": "Schwedisch",
+                    "en": "Englisch",
+                    "de" : "Deutsch",
+                    "es" : "Spanisch",
+                    "cs" : "Tschechisch"
                 },
                 "tooltip" : "Select the language of the map interface and map data."
             },
             "size" : {
-                "label" : "Size",
-                "tooltip" : "Choose print layout. Preview map is updated accordingly.",
+                "label" : "Größe",
+                "tooltip" : "Wählen Sie das Druck-Layout. Die Vorschau wird entsprechend aktualisiert.",
                 "options" : [{
                     "id" : "A4",
-                    "label" : "A4 portrait",
+                    "label" : "A4 Hochformat",
                     "classForPreview" : "preview-portrait",
                     "selected" : true
                 }, {
                     "id" : "A4_Landscape",
-                    "label" : "A4 landscape",
+                    "label" : "A4 Querformat",
                     "classForPreview" : "preview-landscape"
                 }, {
                     "id" : "A3",
-                    "label" : "A3 portrait",
+                    "label" : "A3 Hochformat",
                     "classForPreview" : "preview-portrait"
                 }, {
                     "id" : "A3_Landscape",
-                    "label" : "A3 landscape",
+                    "label" : "A3 Querformat",
                     "classForPreview" : "preview-landscape"
                 }]
             },
             "preview" : {
-                "label" : "Preview",
-                "tooltip" : "Click the small preview to open a larger preview",
-                "pending" : "Preview will be updated shortly",
+                "label" : "Vorschau",
+                "tooltip" : "Klicken Sie auf die Vorschau, um eine vergrößerte Ansicht zu erhalten.",
+                "pending" : "Die Vorschau wird in Kürze aktualisiert",
                 "notes" : {
-                    "extent" : "Preview can be used to figure out the map extent for printout",
-                    "restriction" : "Not all map layers are shown in the preview"
+                    "extent" : "Die Vorschau kann verwendet werden, um die Größe des Druckbereichs festzustellen.",
+                    "restriction" : "Es werden nicht alle Kartenebenen in der Vorschau angezeigt."
                 }
 
             },
 
             "buttons" : {
-                "save" : "Get Printout",
+                "save" : "Ausdruck erstellen",
                 "ok" : "OK",
-                "cancel" : "Cancel"
+                "cancel" : "Abbrechen"
             },
             "location" : {
-                "label" : "Location and zoom level",
-                "tooltip" : "Printout scale matches the scale of the map in browser.",
-                "zoomlevel" : "Zoom level"
+                "label" : "Ort und Zoomstufe",
+                "tooltip" : "Der Maßstab des Ausdrucks entspricht dem der Karte im Browser.",
+                "zoomlevel" : "Zoomstufe"
             },
             "settings" : {
-                "label" : "More settings",
-                "tooltip" : "Make additional settings like format, title, and scale"
+                "label" : "Weitere Einstellungen",
+                "tooltip" : "Geben Sie weitere Einstellungen ein: Format, Titel und Maßstab"
             },
             "format" : {
                 "label" : "Format",
-                "tooltip" : "Select file format",
+                "tooltip" : "Dateiformat auswählen",
                 "options" : [{
                     "id" : "png",
                     "format" : "image/png",
-                    "label" : "PNG image"
+                    "label" : "PNG-Bild"
                 }, {
                     "id" : "pdf",
                     "format" : "application/pdf",
                     "selected" : true,
-                    "label" : "PDF document"
+                    "label" : "PDF-Dokument"
                 }]
             },
             "mapTitle" : {
-                "label" : "Add title",
-                "tooltip" : "add a title for the map"
+                "label" : "Titel hinzufügen",
+                "tooltip" : "Fügen Sie der Karte einen Titel hinzu"
             },
             "content" : {
                 "options" : [{
                     "id" : "pageLogo",
-                    "label" : "Add the logo of Paikkatietoikkuna",
-                    "tooltip" : "You can hide the logo if necessary",
+                    "label" : "Paikkatietoikkuna-Logo hinzufügen",
+                    "tooltip" : "Sie können das Logo bei Bedarf verbergen",
                         "checked" : "checked"
                 }, {
                     "id" : "pageScale",
-                    "label" : "Add scale to the map",
-                    "tooltip" : "Add scale to the map",
+                    "label" : "Maßstab zur Karte hinzufügen",
+                    "tooltip" : "Maßstab zur Karte hinzufügen",
                         "checked" : "checked"
                 }, {
                     "id" : "pageDate",
-                    "label" : "Add date",
-                    "tooltip" : "You can add date to the printout",
+                    "label" : "Datum hinzufügen",
+                    "tooltip" : "Sie können dem Ausdruck ein Datum hinzufügen",
                         "checked" : "checked"
                 }]
             },
-                "legend" : {
+            "legend" : {
                 "label" : "Legend",
                 "tooltip" : "Select legend position",
                 "options" : [{
@@ -142,25 +145,25 @@ Oskari.registerLocalization({
                     }
                 ]
             },
-            "help" : "Help",
+            "help" : "Hilfe",
             "error" : {
-                "title" : "Error",
+                "title" : "Fehler",
                 "size" : "Error in size definitions",
                 "name" : "Name is required information",
-                "nohelp" : "No help is available",
-                "saveFailed" : "Map printout failed. Try again later.",
+                "nohelp" : "Keine Hilfe verfügbar",
+                "saveFailed" : "Ausdrucken der Karte fehlgeschlagen. Bitte versuchen Sie es später noch mal.",
                 "nameIllegalCharacters" : "The name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens."
             }
         },
         "StartView" : {
-            "text" : "You can print the Map view you just created.",
+            "text" : "Sie können die gerade von Ihnen erzeugte Kartenansicht ausdrucken.",
             "info" : {
-                "maxLayers" : "Max layer count for printout is 8",
-                "printoutProcessingTime" : "Printout processing takes some time when multiple layers are selected."
+                "maxLayers" : "Sie können maximal 8 Kartenebenen gleichzeitg drucken.",
+                "printoutProcessingTime" : "Das Ausdrucken nimmt etwas mehr Zeit in Anspruch, wenn mehrere Kartenebenen ausgewählt sind."
             },
             "buttons" : {
-                "continue" : "Continue",
-                "cancel" : "Cancel"
+                "continue" : "Weiter",
+                "cancel" : "Abbrechen"
             }
         }
     }
