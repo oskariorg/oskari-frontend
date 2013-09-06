@@ -12,7 +12,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.request.AddTabReque
  * @param {String} viewname for the view to be saved
  */
 function(title, content, first) {
-    console.log('got', title, content, first);
     this._title = title;
     this._content = content;
     this._first = !!first;

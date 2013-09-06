@@ -63,7 +63,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
             link = header.find('a');
             // bind tab changing
             link.bind('click', function () {
-                console.log('I was clicked', me, panel);
                 me.select(panel);
                 return false;
             });

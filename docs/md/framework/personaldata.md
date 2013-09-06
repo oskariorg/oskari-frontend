@@ -52,13 +52,13 @@ No statehandling has been implemented.
     <th>Request</th><th>How does the bundle react</th>
   </tr>
   <tr>
-    <td>AddTabRequest</td><td>*Adds tab to Flyout Tab container*</td>
+    <td>PersonalData.AddTabRequest</td><td>*Adds tab to Flyout Tab container*</td>
   </tr>
 </table>
 
 ```javascript
 var title = "Tab Title";
-var content = "<div>Lorem ipsum</div>";
+var content = jQuery("<div>Lorem ipsum</div>");
 var first = true;
 var reqName = 'PersonalData.AddTabRequest';
 var reqBuilder = sandbox.getRequestBuilder(reqName);

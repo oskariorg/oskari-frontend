@@ -53,6 +53,7 @@ function(instance) {
 		var me = this;
         
         var tabsLocalization = this.instance.getLocalization('tabs');
+        // TODO: move these to correct bundle and use AddTabRequest to add itself to PersonalData
 		this.tabsData = {
 			"myPlaces" : Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyPlacesTab', this.instance, tabsLocalization.myplaces),
 			"myViews" : Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyViewsTab', this.instance, tabsLocalization.myviews),
@@ -141,7 +142,6 @@ function(instance) {
      *
      */
     addTab : function(item) {
-        console.log('Tab added!', item);
         var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
         panel.setTitle(item.title);
         panel.setContent(item.content);
