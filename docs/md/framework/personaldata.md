@@ -47,7 +47,23 @@ No statehandling has been implemented.
 
 ## Requests the bundle handles
 
-This bundle doesn't handle any requests.
+<table>
+  <tr>
+    <th>Request</th><th>How does the bundle react</th>
+  </tr>
+  <tr>
+    <td>AddTabRequest</td><td>*Adds tab to Flyout Tab container*</td>
+  </tr>
+</table>
+
+```javascript
+var title = "Tab Title";
+var content = "<div>Lorem ipsum</div>";
+var first = true;
+var reqName = 'PersonalData.AddTabRequest';
+var reqBuilder = sandbox.getRequestBuilder(reqName);
+var req = reqBuilder(title, content, first);
+```
 
 ## Requests the bundle sends out
 

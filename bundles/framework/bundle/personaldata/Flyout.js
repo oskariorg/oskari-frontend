@@ -124,6 +124,9 @@ function(instance) {
 	        var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
             panel.setTitle(tab.getTitle());
             
+            // Eikö sen pitäisi asettaa tabin contentti paneliin?
+            // panel.setContent(tab.getContent());
+            // sen sijaan että addTabContentille annetaan container mihin dom ammutaan?
 	    	tab.addTabContent(panel.getContainer());
 	    	// binds tab to events
 	    	if(tab.bindEvents) {
@@ -131,6 +134,18 @@ function(instance) {
 	    	}
             this.tabsContainer.addPanel(panel);
         }
+    },
+
+    /**
+     *
+     *
+     */
+    addTab : function(item) {
+        console.log('Tab added!', item);
+        var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+        panel.setTitle(item.title);
+        panel.setContent(item.content);
+        this.tabsContainer.addPanel(panel, item.first);
     }
 }, {
 	/**
