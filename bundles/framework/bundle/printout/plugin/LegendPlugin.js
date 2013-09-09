@@ -341,8 +341,8 @@ function(instance, conf, locale) {
         var ring = new OpenLayers.Geometry.LinearRing(points);
         var polygon = new OpenLayers.Geometry.Polygon([ring]);
 
-        var myempty = '\0';
         // property value for empty label - not in IE
+        var myempty = '\0';
 
         // create some attributes for the feature
         var attributes = {
@@ -404,7 +404,7 @@ function(instance, conf, locale) {
             var range = ranges[i];
             var mycolor = "#FFFFFF";
             if (range.boxcolor.split(':').length > 1)
-                mycolor = range.boxcolor.split(':')[1];
+                mycolor = range.boxcolor.split(':')[1].replace(/^\s+|\s+$/g, '');
 
             var x = x_LU;
             var y = y_LU;
