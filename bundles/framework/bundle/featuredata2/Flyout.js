@@ -356,6 +356,7 @@ function(instance) {
             var featureData;
             var values;
             var fields = layer.getFields().slice(0);
+            var locales = layer.getLocales().slice(0);
             var features = layer.getActiveFeatures().slice(0);
             var selectedFeatures = layer.getSelectedFeatures().slice(0); // filter
 
@@ -365,11 +366,22 @@ function(instance) {
             fields = model.getFields();
             hiddenFields.push("__fid");
 
-            if(!panel.grid) {
+            // check if properties (fields or locales) have changed
+            if(!panel.fields || 
+                !panel.locales || 
+                !this._isArrayEqual(fields, panel.fields) || 
+                !this._isArrayEqual(locales, panel.locales)) {
+                panel.fields = fields;
+                panel.locales = locales;
+                panel.propertiesChanged = true;
+            }
+
+            if(!panel.grid || panel.propertiesChanged) {
+                panel.propertiesChanged = false;
+
                 var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid',this.instance.getLocalization('columnSelectorTooltip'));
 
                 // localizations
-                var locales = layer.getLocales().slice(0);
                 if(locales) {
                     for(var k = 0; k < locales.length; k++) {
                         grid.setColumnUIName(fields[k], locales[k]);
@@ -467,6 +479,27 @@ function(instance) {
         }
     },
 
+    /**
+     * @method _isArrayEqual
+     * @private
+     * @param {String[]} current
+     * @param {String[]} old
+     *
+     * Checks if the arrays are equal
+     */
+    _isArrayEqual : function(current, old) {
+        if(old.length != current.length) { // same size?
+            return false;
+        }
+
+        for(var i = 0; i < current.length; i++) {
+            if(current[i] != old[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    },
 
     /**
      * @method _handleGridSelect

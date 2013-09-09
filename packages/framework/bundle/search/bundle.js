@@ -51,6 +51,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.search.SearchBundle", function()
 			"lang" : "en",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/search/locale/en.js"
+		}, {
+			"lang" : "cs",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/search/locale/cs.js"
+		}, {
+			"lang" : "de",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/search/locale/de.js"
+		}, {
+			"lang" : "es",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/search/locale/es.js"
 		}]
 	},
 	"bundle" : {

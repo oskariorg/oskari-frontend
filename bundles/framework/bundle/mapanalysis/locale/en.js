@@ -1,8 +1,12 @@
 Oskari.registerLocalization({
-	"lang" : "en",
-	"key" : "MapAnalysis",
+
+    "lang" : "en",
+    "key" : "MapAnalysis",
     "value" : {
-        "layer" : {
+        "title" : "MapAnalysis",
+        "desc" : "",
+        "object-data": "Object data",
+         "layer" : {
                 "organization" : "Analysis",
                 "inspire" : "Analysis"
 

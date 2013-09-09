@@ -12,7 +12,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
      */
 
     function () {
-        "use strict";
         this.template = jQuery('<div class="tab-content"></div>');
         this.templateTabHeader = jQuery('<li><a href="JavaScript:void(0);"></a></li>');
         this.title = null;
@@ -28,7 +27,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
          * @param {String} pTitle title for the panel
          */
         setTitle: function (pTitle) {
-            "use strict";
             var header,
                 link;
             this.title = pTitle;
@@ -43,7 +41,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
          * @return {String} title for the panel
          */
         getTitle: function () {
-            "use strict";
             return this.title;
         },
         /**
@@ -52,7 +49,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
          * Sets the tabs header DOM element
          */
         setHeader: function (reference) {
-            "use strict";
             this.header = reference;
         },
         /**
@@ -61,7 +57,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
          * Returns the tabs header DOM element
          */
         getHeader: function () {
-            "use strict";
             return this.header;
         },
         /**
@@ -71,7 +66,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
          * @param {jQuery} pContent reference to DOM element
          */
         setContent: function (pContent) {
-            "use strict";
             this.content = pContent;
             this.html.html(this.content);
         },
@@ -80,7 +74,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
          * Destroys the panel/removes it from document
          */
         destroy: function () {
-            "use strict";
             this.header.remove();
             this.html.remove();
         },
@@ -91,7 +84,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
          * @return {jQuery} reference to this panels content DOM element
          */
         getContainer: function () {
-            "use strict";
             return this.html;
         },
 
@@ -102,7 +94,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
          * @param {Function} pHandler handler function
          */
         setSelectionHandler: function (pHandler) {
-            "use strict";
             this.selectionHandler = pHandler;
         },
         /**
@@ -110,7 +101,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
          * @param {Boolean} true if panel was selected, false if unselected
          */
         handleSelection: function (isSelected) {
-            "use strict";
             if (this.selectionHandler) {
                 this.selectionHandler(isSelected === true);
             }
@@ -122,7 +112,6 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
          * @param {jQuery} container reference to DOM element
          */
         insertTo: function (container) {
-            "use strict";
             container.append(this.html);
         }
     });

@@ -58,29 +58,25 @@ div.layerselector2 div.tab-content div.oskarifield {
     div.layerselector2 div.tab-content div.oskarifield .field-description .icon-info {
       display: inline-block; }
   div.layerselector2 div.tab-content div.oskarifield .related-keywords {
-    position: absolute;
-    background-color: white;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    border: solid 1px #b7b7b7;
-    -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
-    -moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
-    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
-    overflow: hidden; }
+    display: none;
+    overflow: hidden;
+    height: 30px;
+    line-height: 30px; }
     div.layerselector2 div.tab-content div.oskarifield .related-keywords .keywords-title {
       box-sizing: border-box;
       height: 30px;
       line-height: 30px;
-      padding: 0 10px;
       color: black;
-      font-weight: bold; }
+      font-weight: bold;
+      float: left; }
     div.layerselector2 div.tab-content div.oskarifield .related-keywords .keyword-cont {
+      display: block;
       box-sizing: border-box;
       height: 30px;
       line-height: 30px;
       padding: 0 10px;
-      color: black; }
+      float: left;
+      color: #0085D1; }
       div.layerselector2 div.tab-content div.oskarifield .related-keywords .keyword-cont .keyword {
         float: left;
         min-width: 91px; }
@@ -95,13 +91,8 @@ div.layerselector2 div.tab-content div.oskarifield {
         float: right;
         display: inline-block;
         text-align: center; }
-    div.layerselector2 div.tab-content div.oskarifield .related-keywords .odd {
-      background-color: #f3f3f3; }
     div.layerselector2 div.tab-content div.oskarifield .related-keywords .focus {
       background-color: #333438;
-      color: white; }
-    div.layerselector2 div.tab-content div.oskarifield .related-keywords .keyword-cont:hover {
-      background-color: #4E4E4E;
       color: white; }
 
 div.layerselector2 div.accordion div.accordion_panel div.content {

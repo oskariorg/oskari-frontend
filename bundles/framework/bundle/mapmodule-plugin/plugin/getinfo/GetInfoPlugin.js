@@ -47,7 +47,13 @@ function(config, locale) {
         "tableCell" : '<td></td>',
         "span" : '<span></span>',
         "header" : '<div class="getinforesult_header"><div class="icon-bubble-left"></div>',
-        "headerTitle" : '<div class="getinforesult_header_title"></div>'
+        "headerTitle" : '<div class="getinforesult_header_title"></div>',
+        "myPlacesWrapper" : '<div class="myplaces_place">' +
+                                '<h3 class="myplaces_header"></h3>' +
+                                '<p class="myplaces_desc"></p>' +
+                                '<img class="myplaces_img"></img>' +
+                                '<a class="myplaces_link"></a>' +
+                            '</div>'
 	},
 
     /** @static @property __name plugin name */
@@ -574,12 +580,20 @@ function(config, locale) {
             } else {
                 var pretty = this._formatGfiDatum(datum);
                 if (pretty != null) {
-                    coll.push({
+                    var isMyPlace;
+                    if (datum.layerId && typeof datum.layerId === 'string' && datum.layerId.match('myplaces_')) {
+                        isMyPlace = true;
+                    } else {
+                        isMyPlace = false;
+                    }
+                    var fragmentData = {
                         markup : pretty,
                         layerId : layerId,
                         layerName : layerName,
-                        type : type
-                    });
+                        type : type,
+                        isMyPlace : isMyPlace
+                    };
+                    coll.push(fragmentData);
                 }
             }
         }
@@ -660,6 +674,11 @@ function(config, locale) {
             hasHtml = hasHtml || (datum.content.indexOf('<HTML>') >= 0);
         }
         if (datum.presentationType == 'JSON' || (datum.content && datum.content.parsed)) {
+            // This is for my places info popup
+            if (datum.layerId && typeof datum.layerId === 'string' && datum.layerId.match('myplaces_')) {
+                return me._formatMyPlacesGfi(datum);
+            }
+
             var even = false;
             var rawJsonData = datum.content.parsed;
             var dataArray = [];
@@ -704,6 +723,46 @@ function(config, locale) {
             return response;
         }
         return html;
+    },
+
+    /**
+     * Formats the html to show for my places layers' gfi dialog.
+     *
+     * @method _formatMyPlacesGfi
+     * @param {Object} datum response data to format
+     * @return {jQuery} formatted html
+     */
+    _formatMyPlacesGfi: function(datum) {
+        var me = this,
+            wrapper = me.template.wrapper.clone(),
+            places = datum.content.parsed.places,
+            pLen = places.length,
+            place,
+            content,
+            i;
+
+        wrapper.addClass('myplaces_wrapper');
+
+        for (i = 0; i < pLen; ++i) {
+            place = places[i];
+
+            content = me.template.myPlacesWrapper.clone();
+            content.find('h3.myplaces_header').html(place.name);
+            content.find('p.myplaces_desc').html(place.description);
+            if (place.imageUrl) {
+                content.find('img.myplaces_img').attr({
+                    'src': place.imageUrl
+                });
+            } else {
+                content.find('img.myplaces_img').remove();
+            }
+            content.find('a.myplaces_link').attr({
+                'href': place.link
+            }).html(place.link);
+            wrapper.append(content);
+        }
+
+        return wrapper;
     },
 
     /**
@@ -800,13 +859,15 @@ function(config, locale) {
 
             var contentWrapper = me.template.wrapper.clone();
 
-            var headerWrapper = me.template.header.clone();
-            var titleWrapper = me.template.headerTitle.clone();
-            titleWrapper.append(fragmentTitle);
-			titleWrapper.attr('title', fragmentTitle);
-            headerWrapper.append(titleWrapper);
-            contentWrapper.append(headerWrapper);
-
+            // Do not show the layer name if this is a my_places layer.
+            if (!fragment.isMyPlace) {
+                var headerWrapper = me.template.header.clone();
+                var titleWrapper = me.template.headerTitle.clone();
+                titleWrapper.append(fragmentTitle);
+    			titleWrapper.attr('title', fragmentTitle);
+                headerWrapper.append(titleWrapper);
+                contentWrapper.append(headerWrapper);                
+            }
 
             if (fragmentMarkup) {
                 contentWrapper.append(fragmentMarkup);

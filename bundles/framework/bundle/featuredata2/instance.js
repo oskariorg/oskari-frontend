@@ -122,7 +122,7 @@ function() {
         // check if preselected layers included wfs layers -> act if they are added now
         var layers = sandbox.findAllSelectedMapLayers();
         for (var i = 0; i < layers.length; ++i) {
-            if (layers[i].isLayerOfType('WFS')) {
+            if (layers[i].hasFeatureData()) {
                 this.plugin.update();
                 this.plugins['Oskari.userinterface.Flyout'].layerAdded(layers[i]);
             }
@@ -185,7 +185,7 @@ function() {
          * Calls flyouts layerRemoved() method
          */
         'AfterMapLayerRemoveEvent': function(event) {
-            if (event.getMapLayer().isLayerOfType('WFS')) {
+            if (event.getMapLayer().hasFeatureData()) {
                 this.plugin.update();
                 this.plugins['Oskari.userinterface.Flyout'].layerRemoved(event.getMapLayer());
             }
@@ -198,7 +198,7 @@ function() {
          * Calls flyouts layerAdded() method
          */
         'AfterMapLayerAddEvent': function(event) {
-            if (event.getMapLayer().isLayerOfType('WFS')) {
+            if (event.getMapLayer().hasFeatureData()) {
                 this.plugin.update();
                 this.plugins['Oskari.userinterface.Flyout'].layerAdded(event.getMapLayer());
             }
