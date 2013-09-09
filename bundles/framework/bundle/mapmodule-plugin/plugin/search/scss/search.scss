@@ -106,9 +106,10 @@ div.published-search-div div.search-area-div input.search-input {
   outline: none;
 }
 div.published-search-div div.published-search-results {
-  height: auto;
-  overflow-y: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
   max-height: 320px;
+  white-space: nowrap;
   position: absolute;
   top: 35px;
   right: 0px;

@@ -184,7 +184,7 @@ function(localization, publisher) {
      */
 	getValues : function() {
         var colourCode = jQuery('input[name=publisher-colour]').attr('colour-code');
-        this.values.colourScheme = this._getColourByCode(colourCode);
+        this.values.colourScheme = this._getItemByCode(colourCode, this.initialValues.colours);
         this.values.font = jQuery('select[name=publisher-fonts]').val();
         this.values.toolStyle = jQuery('select[name=publisher-toolStyles]').val();
 
@@ -349,7 +349,7 @@ function(localization, publisher) {
         // Things to do when the user changes the colour scheme:
         content.find('input[name=colour]').change(function(e) {
             selectedColour = jQuery(this).val();
-            selectedColour = self._getColourByCode(selectedColour);
+            selectedColour = self._getItemByCode(selectedColour, self.initialValues.colours);
             // * change the preview gfi
             self._changeGfiColours(selectedColour, content);
             // * change the value of the colour scheme input in the layout panel
@@ -497,35 +497,19 @@ function(localization, publisher) {
     },
 
     /**
-     * @method _getColourByCode
+     * Retrieves the item from the list which value matches the code given
+     * or null if not found on the list.
+     *
+     * @method _getItemByCode
      * @param {String} code
-     * @param {Array[Object]} colours (optional, defaults to initial colours)
-     * @return {Object} colour object
+     * @param {Array[Object]} list
+     * @return {Object/null}
      */
-    _getColourByCode: function(code, colours) {
-        var colours = colours || this.initialValues.colours,
-            cLen = colours.length,
-            i;
+    _getItemByCode: function(code, list) {
+        var listLen = list.length, i;
 
-        for (i = 0; i < cLen; ++i) {
-            if (colours[i].val === code) return colours[i];
-        }
-        return null;
-    },
-
-    /**
-     * @method _getFontByCode
-     * @param {String} code
-     * @param {Array[Object]} fonts (optional, defaults to initial fonts)
-     * @return {Object} font object
-     */
-    _getFontByCode: function(code, fonts) {
-        var fonts = fonts || this.initialValues.fonts,
-            fLen = fonts.length,
-            i;
-
-        for (i = 0; i < fLen; ++i) {
-            if (fonts[i].val === code) return fonts[i];
+        for (i = 0; i < listLen; ++i) {
+            if (list[i].val === code) return list[i];
         }
         return null;
     }
