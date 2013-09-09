@@ -12,7 +12,7 @@ Oskari.registerLocalization({
             "noResultsForKeyword": "Karttatasoja ei löydy tällä avainsanalla.",
             "minChars": "Kirjoita ainakin 4 merkkiä."
         },
-        "loading": "Ladataan...",
+        "loading": "Haetaan...",
         "filter": {
             "text": "Hae karttatasoja",
             "keywordsTitle": "Avainsanat:",

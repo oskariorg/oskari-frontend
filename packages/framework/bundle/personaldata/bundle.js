@@ -44,6 +44,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundle"
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/personaldata/AccountTab.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/personaldata/request/AddTabRequest.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/personaldata/request/AddTabRequestHandler.js"
 		}, {
 		    "type" : "text/css",
 		    "src" : "../../../../resources/framework/bundle/personaldata/css/personaldata.css"		  
@@ -61,6 +67,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundle"
 			"lang" : "en",
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/personaldata/locale/en.js"
+		}, {
+			"lang" : "cs",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/personaldata/locale/cs.js"
+		}, {
+			"lang" : "de",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/personaldata/locale/de.js"
+		}, {
+			"lang" : "es",
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/personaldata/locale/es.js"
 		}]
 	},
 	"bundle" : {
