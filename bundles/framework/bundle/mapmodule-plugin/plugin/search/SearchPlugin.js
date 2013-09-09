@@ -229,12 +229,12 @@ function(config) {
 	 * Creates UI for search functionality and places it on the maps
 	 * div where this plugin registered.
 	 */
-	_createUI : function(isStyled) {
+	_createUI : function() {
 		var sandbox = this._sandbox,
 			me = this,
 			content;
 
-		if (isStyled || (this._conf && this._conf.toolStyle)) {
+		if (this._conf && this._conf.toolStyle) {
 			content = this.styledTemplate.clone();
 			this.changeToolStyle(this._conf.toolStyle, content);
 		} else {
@@ -268,9 +268,9 @@ function(config) {
 			me._checkForEnter(event);
 		});
 		// to search button
-		//content.find('input[type=button]').click(function(event) {
-		//	me._doSearch();
-		//});
+		content.find('input[type=button]').click(function(event) {
+			me._doSearch();
+		});
 		content.find('div.search-right').click(function(event) {
 			me._doSearch();
 		});
@@ -299,6 +299,14 @@ function(config) {
 
 		if (this._conf && this._conf.font) {
 			this.changeFont(this._conf.font, content);
+		}
+		if (this._conf && this._conf.toolStyle) {
+			// Hide the results if esc was pressed or if the field is empty.
+			inputField.keyup(function(e) {
+				if (e.keyCode == 27 || (e.keyCode == 8 && !jQuery(this).val())) {
+					me._hideSearch();
+				}
+			})
 		}
 	},
 	/**
@@ -428,6 +436,9 @@ function(config) {
 			if (this._conf && this._conf.font) {
 				this.changeFont(this._conf.font, content);
 			}
+			if (this._conf && this._conf.toolStyle) {
+				header.remove();
+			}
 		}
 	},
 	/**
@@ -481,7 +492,7 @@ function(config) {
 		// Remove the old unstyled search box and create a new one.
 		if (div.hasClass('search-div')) {
 			div.remove();
-			this._createUI(true);
+			this._createUI();
 			return;
 		}
 

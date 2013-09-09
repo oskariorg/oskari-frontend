@@ -93,6 +93,9 @@ function(config) {
         this.templateCheckbox = jQuery("<input type='checkbox' />");
         this.templateRadiobutton = jQuery("<input type='radio' name='defaultBaselayer'/>");
     	this.templateBaseLayerHeader = jQuery('<div class="baseLayerHeader"></div>');
+
+        this.templateHeaderArrow = jQuery('<div class="styled-header-arrow"></div>');
+        this.templateContentHeader = jQuery('<div class="content-header"><div class="content-header-title"></div><div class="content-close icon-close-white"></div></div>');
     },
     /**
      * @method startPlugin
@@ -567,30 +570,35 @@ function(config) {
 
         if (!div || !styleName) return;
 
-        var header = div.find('div.header'),
+        var self = this,
+            pluginLoc = this.getMapModule().getLocalization('plugin', true),
+            header = div.find('div.header'),
+            headerArrow = this.templateHeaderArrow.clone(),
             content = div.find('div.content'),
+            contentHeader = this.templateContentHeader.clone(),
             resourcesPath = this.getMapModule().getImageUrl(),
             imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/layers/images/',
             bgImg = imgPath + 'map-layer-button-' + styleName + '.png';
 
-        div.css({
-            'position': 'relative'
+        div.addClass('published-styled-layerselector');
+        content.addClass('published-styled-layerselector-content');
+        header.addClass('published-styled-layerselector-header');
+
+        content.find('div.content-header').remove();
+        content.find('div.styled-header-arrow').remove();
+        contentHeader.find('div.content-header-title').append(pluginLoc[this.__name].title);
+        content.prepend(contentHeader);
+        content.prepend(headerArrow);
+
+        contentHeader.find('div.content-close').on('click', function() {
+            self.closeSelection();
         });
 
-        content.css({
-            'position': 'absolute',
-            'top': '38px',
-            'right': '0px'
-        });
+        content.addClass('layerselection-styled-content');
 
         header.empty();
         header.css({
-            'background-image': 'url("' + bgImg + '")',
-            'width': '38px',
-            'height': '38px',
-            'padding': '0px',
-            'background-color': 'transparent',
-            'float': 'right'
+            'background-image': 'url("' + bgImg + '")'
         });
     },
 

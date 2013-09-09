@@ -105,6 +105,11 @@ div.published-search-div div.published-search-results {
   border-radius: 6px;
   -moz-border-radius: 6px;
   -webkit-border-radius: 6px;
+  height: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 320px;
+  white-space: nowrap;
 }
 div.published-search-div div.published-search-results div.published-search-header {
   padding: 5px;
