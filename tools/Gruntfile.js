@@ -527,7 +527,9 @@ module.exports = function (grunt) {
 
     grunt.registerMultiTask('validateLocalizationJSON', 'Make sure localization files are actual JSON', function () {
         var startTime = new Date().getTime(),
-            content;
+            content,
+            parsed,
+            languageCode;
         this.files.forEach(function (file) {
             file.src.filter(function (filepath) {
                 if (!grunt.file.exists(filepath)) {
@@ -540,7 +542,11 @@ module.exports = function (grunt) {
                 content = content.replace("Oskari.registerLocalization(", "");
                 content = content.substring(0, content.lastIndexOf(");"));
                 try {
-                    JSON.parse(content);
+                    parsed = JSON.parse(content);
+                    languageCode = filepath.substring(filepath.lastIndexOf("/") + 1, filepath.lastIndexOf("."));
+                    if (languageCode !== parsed.lang) {
+                        grunt.fail.fatal("Language code mismatch in " + filepath + ":\nExpected " + languageCode + ", found " + parsed.lang +".");
+                    }
                 } catch (err) {
                     grunt.fail.fatal(filepath + ": " + err);
                 }

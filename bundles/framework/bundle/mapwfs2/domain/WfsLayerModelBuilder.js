@@ -6,8 +6,8 @@ Oskari.clazz.define(
 	'Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder',
 
 function(sandbox) {
-	this.sandbox = sandbox;
 	this.localization = Oskari.getLocalization('MapWfs2');
+	this.sandbox = sandbox;
 }, {
 	/**
 	 * parses any additional fields to model

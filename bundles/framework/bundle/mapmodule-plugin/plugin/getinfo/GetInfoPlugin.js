@@ -847,7 +847,6 @@ function(config, locale) {
      * @param {Array} data
      */
     _showFeatures : function(data) {
-        console.log(data);
         var me = this;
         var content = {};
         var wrapper = me.template.wrapper.clone();

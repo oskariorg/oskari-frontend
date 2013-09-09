@@ -17,7 +17,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
         this.layerGroups = [];
         this.layerContainers = {};
         this.templates = {
-            'spinner': '<div class="spinner-text"></div>',
+            'spinner': '<span class="spinner-text"></span>',
             'shortDescription': '<div class="field-description"></div>',
             'description': '<div><h4 class="indicator-msg-popup"></h4><p></p></div>',
             'relatedKeywords': '<div class="related-keywords"></div>',
@@ -187,7 +187,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             // get new suggestions if user input is long enough
             me._relatedKeywordsPopup(keyword, event, me);
         },
-        // Apparently unused ?
+        
         showLayerGroups: function (groups) {
             //"use strict";
             var me = this,
@@ -250,7 +250,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
          */
         filterLayers: function (keyword, ids) {
             //"use strict";
-            var visibleGroupCount = 0,
+            var me = this,
+                visibleGroupCount = 0,
                 visibleLayerCount,
                 i,
                 n,
@@ -261,23 +262,26 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
                 layerCont,
                 bln,
                 loc;
+
+            if (!ids && me.sentKeyword === keyword) {
+                ids = me.ontologyLayers;
+            }
             // show all groups
-            this.accordion.showPanels();
+            me.accordion.showPanels();
             if (!keyword || keyword.length === 0) {
                 this._showAllLayers();
                 return;
             }
             // filter
-            for (i = 0; i < this.layerGroups.length; i += 1) {
-                group = this.layerGroups[i];
+            for (i = 0; i < me.layerGroups.length; i += 1) {
+                group = me.layerGroups[i];
                 layers = group.getLayers();
                 visibleLayerCount = 0;
                 for (n = 0; n < layers.length; n += 1) {
                     layer = layers[n];
                     layerId = layer.getId();
                     layerCont = this.layerContainers[layerId];
-                    bln = group.matchesKeyword(layerId, keyword) || (ids && ids
-                        .indexOf(layerId) > -1);
+                    bln = group.matchesKeyword(layerId, keyword) || (ids && me._arrayContains(ids, layerId));
                     layerCont.setVisible(bln);
                     if (bln) {
                         visibleLayerCount += 1;
@@ -302,10 +306,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             // else clear any previous message
             if (visibleGroupCount === 0) {
                 // empty result
-                loc = this.instance.getLocalization('errors');
-                this.accordion.showMessage(loc.noResults);
+                loc = me.instance.getLocalization('errors');
+                me.accordion.showMessage(loc.noResults);
             } else {
-                this.accordion.removeMessage();
+                me.accordion.removeMessage();
             }
         },
 
@@ -322,7 +326,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             //"use strict";
             // clear only if sent keyword has changed or it is not null
             if (this.sentKeyword && this.sentKeyword !== keyword) {
-                oskarifield.find('.related-keywords').html("");
+                oskarifield.find('.related-keywords').html("").hide();
             }
         },
 
@@ -340,7 +344,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
          */
         _relatedKeywordsPopup: function (keyword, event, me) {
             //"use strict";
-            event.preventDefault();
+            //event.preventDefault();
             var oskarifield = jQuery(event.currentTarget).parents(
                 '.oskarifield'),
                 loc,
@@ -353,11 +357,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             }
             if (keyword.length < 4) {
                 // empty result
-                relatedKeywordsCont = oskarifield.find('.related-keywords');
-                relatedKeywordsCont.html("");
-
-                loc = me.instance.getLocalization('errors');
-                relatedKeywordsCont.text(loc.minChars);
+                oskarifield.find('.related-keywords').hide();
                 return;
             }
 
@@ -375,7 +375,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
                             "application/j-son;charset=UTF-8");
                     }
                 },
-                url: ajaxUrl + 'action_route=SearchKeywords&keyword=' + keyword + '&lang=' + Oskari
+                url: ajaxUrl + 'action_route=SearchKeywords&keyword=' + encodeURIComponent(keyword) + '&lang=' + Oskari
                     .getLang(),
                 success: function (pResp) {
                     me.relatedKeywords = pResp;
@@ -391,6 +391,28 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
         },
 
         /**
+         * @method _arrayContaines
+         * @private
+         * @param {Array} arr
+         *     Array to be checked
+         * @param {String} val
+         *     Value to be searched
+         * IE8 doesn't have Array.indexOf so we use this...
+         */
+        _arrayContains: function (arr, val) {
+            var i;
+            if (arr.indexOf) {
+                return arr.indexOf(val) > -1;
+            }
+            for (i = 0; i < arr.length; i += 1) {
+                if (arr[i] === val) {
+                    return true;
+                }
+            }
+            return false;
+        },
+
+        /**
          * @method _concatNew
          * @private
          * @param {Array} arr1
@@ -401,14 +423,21 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
          */
         _concatNew: function (arr1, arr2) {
             //"use strict";
-            var i;
+            var me = this,
+                i;
             for (i = arr2.length - 1; i >= 0; i -= 1) {
-                if (arr1.indexOf(arr2[i]) < 0) {
+                if (!me._arrayContains(arr1, arr2[i])) {
                     arr1.push(arr2[i]);
                 }
             }
         },
 
+        /**
+         * @method _isDefined
+         * @private
+         * @param value
+         * Determines if the given value... has a value.
+         */
         _isDefined: function (value) {
             //"use strict";
             return typeof value !== 'undefined' && value !== null && value !== '';
@@ -462,31 +491,29 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
 
             me.clearRelatedKeywordsPopup(null, oskarifield);
 
-            if (!(keywords.length === 1 && !keywords[0].type && keywords[0].layers
-                .length === 0)) {
-                // Go through related keywords, get top 3, show only them
-                for (i = 0; i < keywords.length; i += 1) {
-                    keyword = keywords[i];
-                    if (keyword.layers.length > 0) {
-                        // check if we want to show matching layers instead of a suggestion
-                        if (me._matchesIgnoreCase(keyword.type, 'syn') || (!me._isDefined(
-                            keyword.type) && me._containsIgnoreCase(
-                            keyword.keyword, userInput))) {
-                            // copy keyword layerids to ontologyLayers, avoid duplicates just because
-                            if (ontologyLayers.size === 0) {
-                                ontologyLayers.concat(keyword.layers);
-                            } else {
-                                me._concatNew(ontologyLayers, keyword.layers);
-                            }
+            // Go through related keywords, get top 3, show only them
+            for (i = 0; i < keywords.length; i += 1) {
+                keyword = keywords[i];
+                if (keyword.layers.length > 0) {
+                    // check if we want to show matching layers instead of a suggestion
+                    if (me._matchesIgnoreCase(keyword.type, 'syn') || (!me._isDefined(
+                        keyword.type) && me._containsIgnoreCase(
+                        keyword.keyword, userInput))) {
+                        // copy keyword layerids to ontologyLayers, avoid duplicates just because
+                        if (ontologyLayers.size === 0) {
+                            ontologyLayers.concat(keyword.layers);
                         } else {
-                            ontologySuggestions.push({
-                                idx: i,
-                                count: keyword.layers.length
-                            });
+                            me._concatNew(ontologyLayers, keyword.layers);
                         }
+                    } else {
+                        ontologySuggestions.push({
+                            idx: i,
+                            count: keyword.layers.length
+                        });
                     }
                 }
             }
+
 
             if (ontologySuggestions.length > 0) {
                 relatedKeywordsCont.prepend(jQuery(me.templates.keywordsTitle).text(
@@ -521,7 +548,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
 
                 relatedKeywordsCont.append(keywordTmpl);
             }
+            if(ontologySuggestions.length) {
+                relatedKeywordsCont.show();
+            }
 
+            me.ontologyLayers = ontologyLayers;
             // Show ontologyLayers in accordion
             me.filterLayers(userInput, ontologyLayers);
 
