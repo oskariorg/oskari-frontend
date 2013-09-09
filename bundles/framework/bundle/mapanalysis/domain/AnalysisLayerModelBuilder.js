@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
 	 */
 	parseLayerData : function(layer, mapLayerJson, maplayerService) {
         var me = this;
-
+        var loclayer = me.localization.layer;
 		if(mapLayerJson.fields){
 			layer.setFields(mapLayerJson.fields);
 		}
@@ -30,5 +30,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
 		if (mapLayerJson.wpsLayerId) {
 			layer.setWpsLayerId(mapLayerJson.wpsLayerId);
 		}
+		if (loclayer.organization) {
+		layer.setOrganizationName(loclayer.organization);
+		}
+		if (loclayer.inspire) {
+        layer.setInspireName(loclayer.inspire);
+        }
 	}
 });
