@@ -148,6 +148,16 @@ function() {
      */
     setClickedFeatureListIds : function(ids) {
         this._clickedFeatureListIds = ids;
+    },
+
+    /**
+     * Overriding getLegendImage for WFS
+     *
+     * @method getLegendImage
+     * @return {String} URL to a legend image
+     */
+    getLegendImage : function() {
+        return null;
     }
 }, {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]
