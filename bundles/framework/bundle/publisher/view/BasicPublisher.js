@@ -1130,23 +1130,40 @@ function(instance, localization, data) {
      * Changes the style of each tool, if the tool's plugin supports it.
      *
      * @method changeToolStyles
-     * @param {String} styleName
+     * @param {Object} style
      */
-    changeToolStyles: function(styleName) {
-        if (!styleName) return;
+    changeToolStyles: function(style) {
+        if (!style) return;
+
+        var styleConfig;
 
         // Set the toolStyle to the config of each tool
         // and change the style immedately. 
         for (var i = 0; i < this.tools.length; ++i) {
             var tool = this.tools[i];
-            if (tool.config) tool.config.toolStyle = styleName;
+            // special object for zoombar
+            if (tool.id.indexOf('Portti2Zoombar') >= 0) {
+                styleConfig = style.zoombar;
+                styleConfig.val = style.val;
+            }
+            // same for search plugin
+            else if (tool.id.indexOf('SearchPlugin') >= 0) {
+                styleConfig = style.search;
+                styleConfig.val = style.val;
+            }
+            // otherwise just use the style's id
+            else {
+                styleConfig = style.val;
+            }
+
+            if (tool.config) tool.config.toolStyle = styleConfig;
             if (tool._isPluginStarted && tool.plugin.changeToolStyle) {
-                tool.plugin.changeToolStyle(styleName);
+                tool.plugin.changeToolStyle(styleConfig);
             }
         }
 
         // Change the style of the layer selection plugin
-        this._setLayerSelectionStyle(styleName);
+        this._setLayerSelectionStyle(style.val);
     },
 
     /**

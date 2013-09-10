@@ -24,39 +24,6 @@ function(config) {
     this._zoombar_messages = {};
     this._suppressEvents = false;
     this._conf = config;
-
-    this.toolStyles = {
-        'rounded-dark' : {
-            widthPlus: '22px', widthMinus: '22px', widthCenter: '22px',
-            heightPlus: '38px', heightMinus: '39px', heightCenter: 12,
-            heightCursor: '18px', widthCursor: '17px'
-        },
-        'rounded-light': {
-            widthPlus: '22px', widthMinus: '22px', widthCenter: '22px',
-            heightPlus: '38px', heightMinus: '39px', heightCenter: 12,
-            heightCursor: '18px', widthCursor: '17px'
-        },
-        'sharp-dark': {
-            widthPlus: '23px', widthMinus: '23px', widthCenter: '23px',
-            heightPlus: '17px', heightMinus: '18px', heightCenter: 16,
-            heightCursor: '16px', widthCursor: '23px'
-        },
-        'sharp-light': {
-            widthPlus: '23px', widthMinus: '23px', widthCenter: '23px',
-            heightPlus: '17px', heightMinus: '18px', heightCenter: 16,
-            heightCursor: '16px', widthCursor: '23px'
-        },
-        '3d-dark': {
-            widthPlus: '23px', widthMinus: '23px', widthCenter: '23px',
-            heightPlus: '35px', heightMinus: '36px', heightCenter: 13,
-            heightCursor: '13px', widthCursor: '23px'
-        },
-        '3d-light': {
-            widthPlus: '23px', widthMinus: '23px', widthCenter: '23px',
-            heightPlus: '35px', heightMinus: '36px', heightCenter: 13,
-            heightCursor: '13px', widthCursor: '23px'
-        }
-    };
 }, {
     /**
      * @static
@@ -312,17 +279,17 @@ function(config) {
      * Changes the tool style of the plugin
      *
      * @method changeToolStyle
-     * @param {String} styleName
+     * @param {Object} style
      * @param {jQuery} div
      */
-    changeToolStyle: function(styleName, div) {
-        var style = this.toolStyles[styleName];
+    changeToolStyle: function(style, div) {
         div = div || this.__elements['zoombarSlider'];
 
         if (!style || !div) return;
 
         var resourcesPath = this.getMapModule().getImageUrl(),
             imgUrl = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/',
+            styleName = style.val,
             zoombarImg = imgUrl + 'zoombar-' + styleName + '.png',
             zoombarCursorImg = imgUrl + 'zoombar-cursor-' + styleName + '.png',
             zoombarMinusImg = imgUrl + 'zoombar_minus-' + styleName + '.png',

@@ -19,27 +19,6 @@ function(config) {
 	this._conf = config;
 	this.container = null;
 	this.loc = null;
-
-	this.toolStyles = {
-		'rounded-dark': {
-            widthLeft: '17px', widthRight: '32px'
-        },
-        'rounded-light': {
-            widthLeft: '17px', widthRight: '32px'
-        },
-        'sharp-dark': {
-            widthLeft: '5px', widthRight: '30px'
-        },
-        'sharp-light': {
-            widthLeft: '5px', widthRight: '30px'
-        },
-        '3d-dark': {
-            widthLeft: '5px', widthRight: '44px'
-        },
-        '3d-light': {
-            widthLeft: '5px', widthRight: '44px'
-        }
-    };
 }, {
 	/** @static @property __name plugin name */
 	__name : 'SearchPlugin',
@@ -480,11 +459,10 @@ function(config) {
      * Changes the tool style of the plugin
      *
      * @method changeToolStyle
-     * @param {String} styleName
+     * @param {Object} style
      * @param {jQuery} div
      */
-	changeToolStyle: function(styleName, div) {
-		var style = this.toolStyles[styleName];
+	changeToolStyle: function(style, div) {
 		div = div || this.container;
 
 		if (!style || !div) return;
@@ -498,6 +476,7 @@ function(config) {
 
 		var	resourcesPath = this.getMapModule().getImageUrl(),
 			imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/search/images/',
+			styleName = style.val,
 			bgLeft = imgPath + 'search-tool-' + styleName + '_01.png',
 			bgMiddle = imgPath + 'search-tool-' + styleName + '_02.png',
 			bgRight = imgPath + 'search-tool-' + styleName + '_03.png',

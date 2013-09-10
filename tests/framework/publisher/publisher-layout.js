@@ -1,4 +1,4 @@
-describe.only('Test Suite for Publisher - Layout changes', function() {
+describe('Test Suite for Publisher - Layout changes', function() {
     var appSetup = null,
         appConf = null; 
  
@@ -20,7 +20,17 @@ describe.only('Test Suite for Publisher - Layout changes', function() {
             headerColour: '#0091FF',
             iconCls: 'icon-close-white'
         },
-        testToolStyle = '3d-dark';
+        testToolStyle = {
+            val: '3d-dark',
+            zoombar: {
+                widthPlus: '23px', widthMinus: '23px', widthCenter: '23px',
+                heightPlus: '35px', heightMinus: '36px', heightCenter: 13,
+                heightCursor: '13px', widthCursor: '23px'
+            },
+            search: {
+                widthLeft: '5px', widthRight: '44px'
+            }
+        };
 
     before(function() {
         // startup the oskari application with publisher bundle, 1 test layer and a signed in user
@@ -139,7 +149,7 @@ describe.only('Test Suite for Publisher - Layout changes', function() {
         it('should change the tool style to "3d-dark" when chosen from the select', function(done) {
             var toolStyleChangedStub = sinon.stub(publisherView.layoutPanel, '_sendToolStyleChangedEvent');
             var toolStyleSelect = layoutPanelContent.find('div#publisher-layout-toolStyles select[name=publisher-toolStyles]');
-            toolStyleSelect.val(testToolStyle).change();
+            toolStyleSelect.val(testToolStyle.val).change();
 
             waitsFor(function() {
                 return toolStyleChangedStub.callCount > 0;
@@ -156,7 +166,7 @@ describe.only('Test Suite for Publisher - Layout changes', function() {
             var testValues = publisherView.layoutPanel.getValues();
             expect(testValues.colourScheme).to.eql(testColour);
             expect(testValues.font).to.be(testFont);
-            expect(testValues.toolStyle).to.be(testToolStyle);
+            expect(testValues.toolStyle).to.eql(testToolStyle);
         })
     });
 });

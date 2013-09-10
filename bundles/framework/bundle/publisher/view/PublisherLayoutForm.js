@@ -26,7 +26,7 @@ function(localization, publisher) {
 
     this.values = null;
 
-    // The values with which to populate the field inputs.
+    // The values to be sent to plugins to actually change the style.
     this.initialValues = {
         colours: [{
             val: 'light_grey',
@@ -69,14 +69,67 @@ function(localization, publisher) {
             {name: 'Arial', val: 'arial'},
             {name: 'Georgia', val: 'georgia'}
         ],
-        toolStyles: [
-            'rounded-dark',
-            'rounded-light',
-            'sharp-dark',
-            'sharp-light',
-            '3d-dark',
-            '3d-light'
-        ]
+        toolStyles: [{
+            val: 'rounded-dark',
+            zoombar: {
+                widthPlus: '22px', widthMinus: '22px', widthCenter: '22px',
+                heightPlus: '38px', heightMinus: '39px', heightCenter: 12,
+                heightCursor: '18px', widthCursor: '17px'
+            },
+            search: {
+                widthLeft: '17px', widthRight: '32px'
+            }
+        }, {
+            val: 'rounded-light',
+            zoombar: {
+                widthPlus: '22px', widthMinus: '22px', widthCenter: '22px',
+                heightPlus: '38px', heightMinus: '39px', heightCenter: 12,
+                heightCursor: '18px', widthCursor: '17px'
+            },
+            search: {
+                widthLeft: '17px', widthRight: '32px'
+            }
+        }, {
+            val: 'sharp-dark',
+            zoombar: {
+                widthPlus: '23px', widthMinus: '23px', widthCenter: '23px',
+                heightPlus: '17px', heightMinus: '18px', heightCenter: 16,
+                heightCursor: '16px', widthCursor: '23px'
+            },
+            search: {
+                widthLeft: '5px', widthRight: '30px'
+            }
+        }, {
+            val: 'sharp-light',
+            zoombar: {
+                widthPlus: '23px', widthMinus: '23px', widthCenter: '23px',
+                heightPlus: '17px', heightMinus: '18px', heightCenter: 16,
+                heightCursor: '16px', widthCursor: '23px'
+            },
+            search: {
+                widthLeft: '5px', widthRight: '30px'
+            }
+        }, {
+            val: '3d-dark',
+            zoombar: {
+                widthPlus: '23px', widthMinus: '23px', widthCenter: '23px',
+                heightPlus: '35px', heightMinus: '36px', heightCenter: 13,
+                heightCursor: '13px', widthCursor: '23px'
+            },
+            search: {
+                widthLeft: '5px', widthRight: '44px'
+            }
+        }, {
+            val: '3d-light',
+            zoombar: {
+                widthPlus: '23px', widthMinus: '23px', widthCenter: '23px',
+                heightPlus: '35px', heightMinus: '36px', heightCenter: 13,
+                heightCursor: '13px', widthCursor: '23px'
+            },
+            search: {
+                widthLeft: '5px', widthRight: '44px'
+            }
+        }]
     };
 
     // Visible fields:
@@ -182,10 +235,11 @@ function(localization, publisher) {
      * @return {Object}
      */
 	getValues : function() {
-        var colourCode = jQuery('input[name=publisher-colour]').attr('colour-code');
+        var colourCode = jQuery('input[name=publisher-colour]').attr('data-colour-code');
         this.values.colourScheme = this._getItemByCode(colourCode, this.initialValues.colours);
         this.values.font = jQuery('select[name=publisher-fonts]').val();
-        this.values.toolStyle = jQuery('select[name=publisher-toolStyles]').val();
+        var toolStyleCode = jQuery('select[name=publisher-toolStyles]').val();
+        this.values.toolStyle = this._getItemByCode(toolStyleCode, this.initialValues.toolStyles);
 
 		return this.values;
     },
@@ -270,16 +324,16 @@ function(localization, publisher) {
             tsLen = toolStyles.length,
             toolStyleOption,
             toolStyleName,
-            i, selectedToolStyleCode;
+            i, selectedToolStyleCode, selectedToolStyle;
 
         // Set the localizations.
         template.find('label').html(toolStylesLabel);
 
         for (i = 0; i < tsLen; ++i) {
             toolStyleOption = this.template.option.clone();
-            toolStyleName = this.loc.layout.fields.toolStyles[toolStyles[i]];
+            toolStyleName = this.loc.layout.fields.toolStyles[toolStyles[i].val];
             toolStyleOption.attr({
-                value: toolStyles[i]
+                value: toolStyles[i].val
             }).html(toolStyleName);
             template.find('select').append(toolStyleOption);
         }
@@ -288,12 +342,13 @@ function(localization, publisher) {
         template.find('select').on('change', function(e) {
             // Send an event notifying the plugins that the style has changed.
             selectedToolStyleCode = jQuery(this).val();
-            self._sendToolStyleChangedEvent(selectedToolStyleCode);
+            selectedToolStyle = self._getItemByCode(selectedToolStyleCode, self.initialValues.toolStyles);
+            self._sendToolStyleChangedEvent(selectedToolStyle);
         });
 
         // Prepopulate data
         jQuery(template.find('select option')).filter(function () {
-            return (jQuery(this).val() == self.getValues().toolStyle); 
+            return (self.getValues().toolStyle && jQuery(this).val() == self.getValues().toolStyle.val); 
         }).prop('selected', 'selected');
 
         return template;
@@ -355,7 +410,7 @@ function(localization, publisher) {
             colourName = self.loc.layout.fields.colours[selectedColour.val];
             jQuery('div.basic_publisher').find('input[name=publisher-colour]').
                 val(colourName).
-                attr('colour-code', selectedColour.val);
+                attr('data-colour-code', selectedColour.val);
             // * notify others of the changed colour scheme
             self._sendColourSchemeChangedEvent(selectedColour);
         });
@@ -472,10 +527,10 @@ function(localization, publisher) {
      * Sends an event to notify interested parties that the tool style has changed.
      *
      * @method _sendToolStyleChangedEvent
-     * @param {String} the changed tool style code
+     * @param {Object} the changed tool style
      */
-    _sendToolStyleChangedEvent: function(selectedToolStyleCode) {
-        this._sendEvent('Publisher.ToolStyleChangedEvent', selectedToolStyleCode);
+    _sendToolStyleChangedEvent: function(selectedToolStyle) {
+        this._sendEvent('Publisher.ToolStyleChangedEvent', selectedToolStyle);
     },
 
     /**
