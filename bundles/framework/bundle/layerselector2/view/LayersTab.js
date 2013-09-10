@@ -14,6 +14,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
         //"use strict";
         this.instance = instance;
         this.title = title;
+        this.showSearchSuggestions = instance.conf.showSearchSuggestions;
         this.layerGroups = [];
         this.layerContainers = {};
         this.templates = {
@@ -106,21 +107,23 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             var me = this,
                 oskarifield;
 
-            me._locale = this.instance._localization;
+            me._locale = me.instance._localization;
             me.tabPanel = Oskari.clazz.create(
                 'Oskari.userinterface.component.TabPanel');
             me.tabPanel.setTitle(me.title);
 
             oskarifield = me.getFilterField().getField();
 
-            oskarifield.append(
-                jQuery(me.templates.spinner)
-                .text(me._locale.loading)
-            );
+            if (me.showSearchSuggestions) {
+                oskarifield.append(
+                    jQuery(me.templates.spinner)
+                    .text(me._locale.loading)
+                );
 
-            oskarifield.append(
-                jQuery(me.templates.relatedKeywords)
-            );
+                oskarifield.append(
+                    jQuery(me.templates.relatedKeywords)
+                );
+            }
 
             oskarifield.append(
                 jQuery(me.templates.shortDescription)
@@ -134,7 +137,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
 
             me.accordion = Oskari.clazz.create(
                 'Oskari.userinterface.component.Accordion');
-            me.accordion.insertTo(this.tabPanel.getContainer());
+            me.accordion.insertTo(me.tabPanel.getContainer());
         },
 
         getFilterField: function () {
@@ -147,7 +150,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             }
             field = Oskari.clazz.create(
                 'Oskari.userinterface.component.FormInput');
-            field.setPlaceholder(this.instance.getLocalization('filter').text);
+            field.setPlaceholder(me.instance.getLocalization('filter').text);
             field.addClearButton();
             field.bindChange(function (event) {
                 event.stopPropagation(); // JUST BECAUSE TEST ENVIRONMENT FAILS
@@ -181,11 +184,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             //"use strict";
             // Filter by name
             me.filterLayers(keyword);
-            // User input has changed, clear suggestions
-            me.clearRelatedKeywordsPopup(keyword, jQuery(event.currentTarget).parents(
-                '.oskarifield'));
-            // get new suggestions if user input is long enough
-            me._relatedKeywordsPopup(keyword, event, me);
+            
+            if (me.showSearchSuggestions) {
+                // User input has changed, clear suggestions
+                me.clearRelatedKeywordsPopup(keyword, jQuery(event.currentTarget).parents(
+                    '.oskarifield'));
+                // get new suggestions if user input is long enough
+                me._relatedKeywordsPopup(keyword, event, me);
+            }
         },
         
         showLayerGroups: function (groups) {
@@ -221,22 +227,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
                     layerWrapper =
                         Oskari.clazz.create(
                             'Oskari.mapframework.bundle.layerselector2.view.Layer',
-                            layer, this.instance.sandbox, this.instance.getLocalization()
+                            layer, me.instance.sandbox, me.instance.getLocalization()
                     );
                     layerContainer = layerWrapper.getContainer();
                     groupContainer.append(layerContainer);
 
-                    this.layerContainers[layer.getId()] = layerWrapper;
+                    me.layerContainers[layer.getId()] = layerWrapper;
                 }
-                this.accordion.addPanel(groupPanel);
+                me.accordion.addPanel(groupPanel);
             }
 
-            selectedLayers = this.instance.sandbox.findAllSelectedMapLayers();
+            selectedLayers = me.instance.sandbox.findAllSelectedMapLayers();
             for (i = 0; i < selectedLayers.length; i += 1) {
-                this.setLayerSelected(selectedLayers[i].getId(), true);
+                me.setLayerSelected(selectedLayers[i].getId(), true);
             }
 
-            this.filterLayers(this.filterField.getValue());
+            me.filterLayers(me.filterField.getValue());
         },
 
         /**
@@ -269,7 +275,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             // show all groups
             me.accordion.showPanels();
             if (!keyword || keyword.length === 0) {
-                this._showAllLayers();
+                me._showAllLayers();
                 return;
             }
             // filter
@@ -280,8 +286,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
                 for (n = 0; n < layers.length; n += 1) {
                     layer = layers[n];
                     layerId = layer.getId();
-                    layerCont = this.layerContainers[layerId];
-                    bln = group.matchesKeyword(layerId, keyword) || (ids && me._arrayContains(ids, layerId));
+                    layerCont = me.layerContainers[layerId];
+                    bln = group.matchesKeyword(layerId, keyword) || (me.showSearchSuggestions && ids && me._arrayContains(ids, layerId));
                     layerCont.setVisible(bln);
                     if (bln) {
                         visibleLayerCount += 1;

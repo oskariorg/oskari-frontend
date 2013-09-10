@@ -103,15 +103,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
             }
 
             //Let's extend UI
-            request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
-            sandbox.request(this, request);
+            request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
+            sandbox.request(me, request);
 
             // draw ui
             me.createUi();
 
-            mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
-            sandbox.registerAsStateful(this.mediator.bundleId, this);
+            sandbox.registerAsStateful(me.mediator.bundleId, me);
 
             successCB = function () {
                 // massive update so just recreate the whole ui
@@ -184,27 +184,28 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
              */
             'MapLayerEvent': function (event) {
                 //"use strict";
-                var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService'),
+                var me = this,
+                    mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService'),
                     layerId = event.getLayerId(),
                     layer;
 
                 if (event.getOperation() === 'update') {
                     layer = mapLayerService.findMapLayer(layerId);
-                    this.plugins['Oskari.userinterface.Flyout'].handleLayerModified(layer);
+                    me.plugins['Oskari.userinterface.Flyout'].handleLayerModified(layer);
                 } else if (event.getOperation() === 'add') {
                     layer = mapLayerService.findMapLayer(layerId);
-                    this.plugins['Oskari.userinterface.Flyout'].handleLayerAdded(layer);
+                    me.plugins['Oskari.userinterface.Flyout'].handleLayerAdded(layer);
                     // refresh layer count
-                    this.plugins['Oskari.userinterface.Tile'].refresh();
+                    me.plugins['Oskari.userinterface.Tile'].refresh();
                 } else if (event.getOperation() === 'remove') {
-                    this.plugins['Oskari.userinterface.Flyout'].handleLayerRemoved(layerId);
+                    me.plugins['Oskari.userinterface.Flyout'].handleLayerRemoved(layerId);
                     // refresh layer count
-                    this.plugins['Oskari.userinterface.Tile'].refresh();
+                    me.plugins['Oskari.userinterface.Tile'].refresh();
                 } else if (event.getOperation() === 'sticky') {
                     layer = mapLayerService.findMapLayer(layerId);
-                    this.plugins['Oskari.userinterface.Flyout'].handleLayerSticky(layer);
+                    me.plugins['Oskari.userinterface.Flyout'].handleLayerSticky(layer);
                     // refresh layer count
-                    this.plugins['Oskari.userinterface.Tile'].refresh();
+                    me.plugins['Oskari.userinterface.Tile'].refresh();
                 }
             }
         },
