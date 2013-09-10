@@ -614,24 +614,10 @@ function(config) {
 
         if (!div || !fontId) return;
 
-        // Remove possible old font classes.
-        div.removeClass(function() {
-            var removeThese = '',
-                classNames = this.className.split(' ');
+        var classToAdd = 'oskari-publisher-font-' + fontId;
+        var testRegex = /oskari-publisher-font-/;
 
-            // Check if there are any old font classes.
-            for (var i = 0; i < classNames.length; ++i) {
-                if(/oskari-publisher-font-/.test(classNames[i])) {
-                    removeThese += classNames[i] + ' ';
-                }
-            }
-
-            // Return the class names to be removed.
-            return removeThese;
-        });
-
-        // Add the new font as a CSS class.
-        div.addClass('oskari-publisher-font-' + fontId);
+        this.getMapModule().changeCssClasses(classToAdd, testRegex, [div]);
     }
 }, {
     /**

@@ -67,7 +67,6 @@ function(localization, publisher) {
         }],
         fonts: [
             {name: 'Arial', val: 'arial'},
-            {name: 'Comic Sans', val: 'comic_sans'},
             {name: 'Georgia', val: 'georgia'}
         ],
         toolStyles: [

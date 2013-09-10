@@ -1136,6 +1136,41 @@ function(id, imageUrl, options) {
             sandbox.printDebug('preselecting ' + p);
             layersPlugin.preselectLayers(layers);
         }
+    },
+
+    /**
+     * Removes all the css classes which respond to given regex from all elements
+     * and adds the given class to them.
+     *
+     * @method changeCssClasses
+     * @param {String} classToAdd the css class to add to all elements.
+     * @param {RegExp} removeClassRegex the regex to test against to determine which classes should be removec
+     * @param {Array[jQuery]} elements The elements where the classes should be changed.
+     */
+    changeCssClasses: function(classToAdd, removeClassRegex, elements) {
+        var i, j, el;
+
+        for (var i = 0; i < elements.length; i++) {
+            el = elements[i];
+
+            el.removeClass(function(i, classes) {
+                var removeThese = '',
+                    classNames = classes.split(' ');
+
+                // Check if there are any old font classes.
+                for (var j = 0; j < classNames.length; ++j) {
+                    if(removeClassRegex.test(classNames[j])) {
+                        removeThese += classNames[j] + ' ';
+                    }
+                }
+
+                // Return the class names to be removed.
+                return removeThese;
+            });
+
+            // Add the new font as a CSS class.
+            el.addClass(classToAdd);
+        }
     }
 }, {
     /**
