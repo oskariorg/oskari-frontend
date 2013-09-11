@@ -50,7 +50,7 @@ describe('Test Suite for Publisher - Guest user', function() {
 
         it("should show login message to guest users", function() {
             var notLoggedInView = publisherContent.find('div.notLoggedIn');
-            expect(notLoggedInView.length).to.be(43);
+            expect(notLoggedInView.length).to.be(3);
         });
     });
 });
