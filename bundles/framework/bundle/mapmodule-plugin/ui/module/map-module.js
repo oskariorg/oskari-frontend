@@ -1150,15 +1150,15 @@ function(id, imageUrl, options) {
     changeCssClasses: function(classToAdd, removeClassRegex, elements) {
         var i, j, el;
 
-        for (var i = 0; i < elements.length; i++) {
+        for (i = 0; i < elements.length; i++) {
             el = elements[i];
 
-            el.removeClass(function(i, classes) {
+            el.removeClass(function(index, classes) {
                 var removeThese = '',
                     classNames = classes.split(' ');
 
                 // Check if there are any old font classes.
-                for (var j = 0; j < classNames.length; ++j) {
+                for (j = 0; j < classNames.length; ++j) {
                     if(removeClassRegex.test(classNames[j])) {
                         removeThese += classNames[j] + ' ';
                     }

@@ -17,12 +17,13 @@
 
 No configuration is required. Following is optional:
 
-The styling and font of the plugin are configurable, with variables `toolStyle` (String) and `font` (String), respectively. A CSS class of `oskari-publisher-font-<font>` is expected to be defined with font-family definition. Following values are supported for the `toolStyle`: `rounded-light`, `rounded-dark`, `sharp-dark`, `sharp-light`, `3d-dark` and `3d-light`. Images for search field background are expected to be found in plugin's image resources directory for left, middle and right sides of the field: `search-tool-<toolStyle>_01.png`, `search-tool-<toolStyle>_02.png` and `search-tool-<toolStyle>_03.png`, respectively. Also, the widths of the images are expected to be defined in plugin's `this.toolStyles` object:
+The styling and font of the plugin are configurable, with variables `toolStyle` (Object) and `font` (String), respectively. A CSS class of `oskari-publisher-font-<font>` is expected to be defined with font-family definition. Following styles are supported for the `toolStyle.val`: `rounded-light`, `rounded-dark`, `sharp-dark`, `sharp-light`, `3d-dark` and `3d-light`. Images for search field background are expected to be found in plugin's image resources directory for left, middle and right sides of the field: `search-tool-<toolStyle>_01.png`, `search-tool-<toolStyle>_02.png` and `search-tool-<toolStyle>_03.png`, respectively. Also, the widths of the images are expected to be defined in config object:
 
 ```javascript
-'rounded-dark': {
-    widthLeft: '17px', // Width of the left side image.
-    widthRight: '32px' // Width of the right side image.
+{
+  val: 'rounded-dark', // The id of the style.
+  widthLeft: '17px',   // Width of the left side image.
+  widthRight: '32px'   // Width of the right side image.
 }
 ```
 

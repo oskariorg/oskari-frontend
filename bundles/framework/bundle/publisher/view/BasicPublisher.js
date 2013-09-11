@@ -1143,12 +1143,12 @@ function(instance, localization, data) {
             var tool = this.tools[i];
             // special object for zoombar
             if (tool.id.indexOf('Portti2Zoombar') >= 0) {
-                styleConfig = style.zoombar;
+                styleConfig = style.zoombar || {};
                 styleConfig.val = style.val;
             }
             // same for search plugin
             else if (tool.id.indexOf('SearchPlugin') >= 0) {
-                styleConfig = style.search;
+                styleConfig = style.search || {};
                 styleConfig.val = style.val;
             }
             // otherwise just use the style's id

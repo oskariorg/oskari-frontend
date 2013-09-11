@@ -300,7 +300,6 @@ function(config) {
             minus = div.find('.pzbDiv-minus'),
             slider = div.find('div.slider');
 
-        // HACK ALERT!
         // Used to get the cursor to the right position since
         // it's off by 2 pixels with the 'rounded' style.
         var isRounded = styleName.match(/^rounded/);

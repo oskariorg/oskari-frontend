@@ -66,8 +66,8 @@ function(localization, publisher) {
             iconCls: 'icon-close'
         }],
         fonts: [
-            {name: 'Arial', val: 'arial'},
-            {name: 'Georgia', val: 'georgia'}
+            {name: 'Arial (sans-serif)', val: 'arial'},
+            {name: 'Georgia (serif)', val: 'georgia'}
         ],
         toolStyles: [{
             val: 'rounded-dark',

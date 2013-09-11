@@ -33,18 +33,19 @@ No configuration is required, but optionally location can be overridden by givin
 
 Bottom and right can also be used.
 
-The styling and font of the plugin are configurable, with variables `toolStyle` (String) and `font` (String), respectively. A CSS class of `oskari-publisher-font-<font>` is expected to be defined with font-family definition. Following values are supported for the `toolStyle`: `rounded-light`, `rounded-dark`, `sharp-dark`, `sharp-light`, `3d-dark` and `3d-light`. Images `zoombar-<toolStyle>.png`, `zoombar-cursor-<toolStyle>.png`, `zoombar_minus-<toolStyle>.png` and `zoombar_minus-<toolStyle>.png` are expected to be found in plugin's image resources directory. Also, widths and heights should be configured in plugin's `this.toolSyles` object following the example:
+The styling and font of the plugin are configurable, with variables `toolStyle` (Object) and `font` (String), respectively. A CSS class of `oskari-publisher-font-<font>` is expected to be defined with font-family definition. Following styles are supported for the `toolStyle.val`: `rounded-light`, `rounded-dark`, `sharp-dark`, `sharp-light`, `3d-dark` and `3d-light`. Images `zoombar-<toolStyle>.png`, `zoombar-cursor-<toolStyle>.png`, `zoombar_minus-<toolStyle>.png` and `zoombar_minus-<toolStyle>.png` are expected to be found in plugin's image resources directory. Also, widths and heights should be configured following the example:
 
 ```javascript
-'rounded-dark' : {
-    widthPlus: '22px',    // Width of the 'plus' image.
-    widthMinus: '22px',   // Width of the 'minus' image.
-    widthCenter: '22px',  // Width of the 'center' image.
-    heightPlus: '38px',   // Height of the 'plus' image.
-    heightMinus: '39px',  // Height of the 'minus' image.
-    heightCenter: 12,     // Height of the 'center' image. NOTE! an integer.
-    heightCursor: '18px', // Height of the 'cursor' image.
-    widthCursor: '17px'   // Width of the 'cursor' image.
+{
+  val: 'rounded-dark',  // The id of the style.
+  widthPlus: '22px',    // Width of the 'plus' image.
+  widthMinus: '22px',   // Width of the 'minus' image.
+  widthCenter: '22px',  // Width of the 'center' image.
+  heightPlus: '38px',   // Height of the 'plus' image.
+  heightMinus: '39px',  // Height of the 'minus' image.
+  heightCenter: 12,     // Height of the 'center' image. NOTE! an integer.
+  heightCursor: '18px', // Height of the 'cursor' image.
+  widthCursor: '17px'   // Width of the 'cursor' image.
 }
 ```
 
