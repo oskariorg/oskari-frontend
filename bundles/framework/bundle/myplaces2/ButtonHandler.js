@@ -163,7 +163,7 @@ function(instance) {
         var locTool = this.instance.getLocalization('tools')[drawMode];
         var locBtns = this.instance.getLocalization('buttons');
     	var title = this.instance.getLocalization('title');
-    	var message = locTool["new"];
+    	var message = locTool["add"];
     	
     	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
     	this.dialog = dialog;
