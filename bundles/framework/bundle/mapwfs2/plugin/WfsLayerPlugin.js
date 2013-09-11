@@ -207,21 +207,7 @@ function(config) {
          * @param {Object} event
          */
         'AfterMapLayerAddEvent' : function(event) {
-            // TODO: add style info when ready [check if coming for WFS]
-            if(event.getMapLayer().isLayerOfType("WFS")) {
-                var styleName = null;
-                if(event.getMapLayer().getCurrentStyle()) {
-                    styleName = event.getMapLayer().getCurrentStyle().getName();
-                }
-                if(styleName == null || styleName == "") {
-                    styleName = "default";
-                }
-
-                this.getIO().addMapLayer(
-                    event.getMapLayer().getId(),
-                    styleName
-                );
-            }
+            this.mapLayerAddHandler(event);
         },
 
         /**
@@ -229,17 +215,7 @@ function(config) {
          * @param {Object} event
          */
         'AfterMapLayerRemoveEvent' : function(event) {
-            var layer = event.getMapLayer();
-            if(layer.isLayerOfType("WFS")) {
-                this.getIO().removeMapLayer(layer.getId());
-                this.removeMapLayerFromMap(layer);
-
-                // delete possible error triggers
-                delete this.errorTriggers["wfs_no_permissions_" + layer.getId()];
-                delete this.errorTriggers["wfs_configuring_layer_failed_" + layer.getId()];
-                delete this.errorTriggers["wfs_request_failed_" + layer.getId()];
-                delete this.errorTriggers["features_parsing_failed_" + layer.getId()];
-            }
+            this.mapLayerRemoveHandler(event);
         },
 
         /**
@@ -247,30 +223,7 @@ function(config) {
          * @param {Object} event
          */
         'WFSFeaturesSelectedEvent' : function(event) {
-            if(event.getMapLayer().isLayerOfType("WFS")) {
-                var layer = this.getSandbox().findMapLayerFromSelectedMapLayers(event.getMapLayer().getId());
-                var ids = layer.getClickedFeatureListIds();
-                var tmpIds = event.getWfsFeatureIds();
-                if(!event.isKeepSelection()) {
-                    layer.setClickedFeatureListIds(event.getWfsFeatureIds());
-                } else {
-                    var isFound = false;
-                    for (var i = 0; i < tmpIds.length; ++i) {
-                        isFound = false;
-                        for (var j = 0; j < ids.length; ++j) {
-                            if(tmpIds[i] == ids[j]) {
-                                isFound = true;
-                                continue;
-                            }
-                        }
-                        if(!isFound) {
-                            ids.push(tmpIds[i]);
-                        }
-
-                    }
-                }
-                this.getIO().highlightMapLayerFeatures(event.getMapLayer().getId(), event.getWfsFeatureIds(), event.isKeepSelection());
-            }
+            this.featuresSelectedHandler(event);
         },
 
         /**
@@ -278,14 +231,7 @@ function(config) {
          * @param {Object} event
          */
         'MapClickedEvent' : function(event) {
-            // don't process while moving
-            if(this.getSandbox().getMap().isMoving()) {
-                return;
-            }
-
-            var lonlat = event.getLonLat();
-            var keepPrevious = this.getSandbox().isCtrlKeyDown();
-            this.getIO().setMapClick(lonlat.lon, lonlat.lat, keepPrevious);
+            this.mapClickedHandler(event);
         },
 
         /**
@@ -293,34 +239,15 @@ function(config) {
          * @param {Object} event
          */
         'GetInfoResultEvent' : function(event) {
-            /// check if any selected layer is WFS
-            var isWFSOpen = false;
-            var layers = this.getSandbox().findAllSelectedMapLayers();
-            for (var i = 0; i < layers.length; ++i) {
-                if (layers[i].isLayerOfType('WFS')) {
-                    isWFSOpen = true;
-                    break;
-                }
-            }
-
-            this._mapClickData.ajax = true;
-            this._mapClickData.data = event.getData();
-            if(!isWFSOpen || this._mapClickData.comet) {
-                this.showInfoBox();
-            }
+            this.getInfoResultHandler(event);
         },
 
         /**
          * @method AfterChangeMapLayerStyleEvent
          * @param {Object} event
          */
-        'AfterChangeMapLayerStyleEvent' : function(event) { // TODO: check out where thrown that doesn't block WFS layers..
-            if(event.getMapLayer().isLayerOfType("WFS")) {
-                this.getIO().setMapLayerStyle(
-                    event.getMapLayer().getId(),
-                    event.getMapLayer().getCurrentStyle().getName() // TODO: @BACKEND make sure if changed or coming from the event itself
-                );
-            }
+        'AfterChangeMapLayerStyleEvent' : function(event) {
+            this.changeMapLayerStyleHandler(event);
         },
 
         /**
@@ -328,12 +255,7 @@ function(config) {
          * @param {Object} event
          */
         'MapLayerVisibilityChangedEvent' : function(event) {
-            if(event.getMapLayer().isLayerOfType("WFS")) {
-                this.getIO().setMapLayerVisibility(
-                    event.getMapLayer().getId(),
-                    event.getMapLayer().isVisible()
-                );
-            }
+            this.mapLayerVisibilityChangedHandler(event);
         },
 
         /**
@@ -350,17 +272,7 @@ function(config) {
          * @param {Object} event
          */
         'MapSizeChangedEvent' : function(event) {
-            this.getIO().setMapSize(event.getWidth(), event.getHeight());
-
-            // update tiles
-            var srs = this.getSandbox().getMap().getSrsName();
-            var bbox = this.getSandbox().getMap().getExtent();
-            var zoom = this.getSandbox().getMap().getZoom();
-            var grid = this.getGrid();
-            if(grid != null) {
-                this.getIO().setLocation(srs, [bbox.left,bbox.bottom,bbox.right,bbox.top], zoom, grid);
-                this._tilesLayer.redraw();
-            }
+            this.mapSizeChangedHandler(event);
         },
 
         /**
@@ -368,15 +280,7 @@ function(config) {
          * @param {Object} event
          */
         'WFSSetFilter' : function(event) {
-            /// clean selected features lists
-            var layers = this.getSandbox().findAllSelectedMapLayers();
-            for (var i = 0; i < layers.length; ++i) {
-                if (layers[i].isLayerOfType('WFS')) {
-                    layers[i].setSelectedFeatures([]);
-                }
-            }
-
-            this.getIO().setFilter(event.getGeoJson());
+            this.setFilterHandler(event);
         },
 
         /**
@@ -441,6 +345,165 @@ function(config) {
                 }
             }
         }
+    },
+
+    /**
+     * @method mapLayerAddHandler
+     */
+    mapLayerAddHandler : function(event) {
+        // TODO: add style info when ready [check if coming for WFS]
+        if(event.getMapLayer().isLayerOfType("WFS")) {
+            var styleName = null;
+            if(event.getMapLayer().getCurrentStyle()) {
+                styleName = event.getMapLayer().getCurrentStyle().getName();
+            }
+            if(styleName == null || styleName == "") {
+                styleName = "default";
+            }
+
+            this.getIO().addMapLayer(
+                event.getMapLayer().getId(),
+                styleName
+            );
+        }
+    },
+
+    /**
+     * @method mapLayerRemoveHandler
+     */
+    mapLayerRemoveHandler : function(event) {
+        var layer = event.getMapLayer();
+        if(layer.isLayerOfType("WFS")) {
+            this.getIO().removeMapLayer(layer.getId());
+            this.removeMapLayerFromMap(layer);
+
+            // delete possible error triggers
+            delete this.errorTriggers["wfs_no_permissions_" + layer.getId()];
+            delete this.errorTriggers["wfs_configuring_layer_failed_" + layer.getId()];
+            delete this.errorTriggers["wfs_request_failed_" + layer.getId()];
+            delete this.errorTriggers["features_parsing_failed_" + layer.getId()];
+        }
+    },
+
+    /**
+     * @method featuresSelectedHandler
+     */
+    featuresSelectedHandler : function(event) {
+        if(event.getMapLayer().isLayerOfType("WFS")) {
+            var layer = this.getSandbox().findMapLayerFromSelectedMapLayers(event.getMapLayer().getId());
+            var ids = layer.getClickedFeatureListIds();
+            var tmpIds = event.getWfsFeatureIds();
+            if(!event.isKeepSelection()) {
+                layer.setClickedFeatureListIds(event.getWfsFeatureIds());
+            } else {
+                var isFound = false;
+                for (var i = 0; i < tmpIds.length; ++i) {
+                    isFound = false;
+                    for (var j = 0; j < ids.length; ++j) {
+                        if(tmpIds[i] == ids[j]) {
+                            isFound = true;
+                            continue;
+                        }
+                    }
+                    if(!isFound) {
+                        ids.push(tmpIds[i]);
+                    }
+
+                }
+            }
+            this.getIO().highlightMapLayerFeatures(event.getMapLayer().getId(), event.getWfsFeatureIds(), event.isKeepSelection());
+        }
+    },
+
+    /**
+     * @method mapClickedHandler
+     */
+    mapClickedHandler : function(event) {
+        // don't process while moving
+        if(this.getSandbox().getMap().isMoving()) {
+            return;
+        }
+
+        var lonlat = event.getLonLat();
+        var keepPrevious = this.getSandbox().isCtrlKeyDown();
+        this.getIO().setMapClick(lonlat.lon, lonlat.lat, keepPrevious);
+    },
+
+    /**
+     * @method getInfoResultHandler
+     */
+    getInfoResultHandler : function(event) {
+        /// check if any selected layer is WFS
+        var isWFSOpen = false;
+        var layers = this.getSandbox().findAllSelectedMapLayers();
+        for (var i = 0; i < layers.length; ++i) {
+            if (layers[i].isLayerOfType('WFS')) {
+                isWFSOpen = true;
+                break;
+            }
+        }
+
+        this._mapClickData.ajax = true;
+        this._mapClickData.data = event.getData();
+        if(!isWFSOpen || this._mapClickData.comet) {
+            this.showInfoBox();
+        }
+    },
+
+    /**
+     * @method changeMapLayerStyleHandler
+     */
+    changeMapLayerStyleHandler : function(event) {
+        if(event.getMapLayer().isLayerOfType("WFS")) {
+            this.getIO().setMapLayerStyle(
+                event.getMapLayer().getId(),
+                event.getMapLayer().getCurrentStyle().getName()
+            );
+        }
+    },
+
+    /**
+     * @method mapLayerVisibilityChangedHandler
+     */
+    mapLayerVisibilityChangedHandler : function(event) {
+        if(event.getMapLayer().isLayerOfType("WFS")) {
+            this.getIO().setMapLayerVisibility(
+                event.getMapLayer().getId(),
+                event.getMapLayer().isVisible()
+            );
+        }
+    },
+
+    /**
+     * @method mapSizeChangedHandler
+     */
+    mapSizeChangedHandler : function(event) {
+        this.getIO().setMapSize(event.getWidth(), event.getHeight());
+
+        // update tiles
+        var srs = this.getSandbox().getMap().getSrsName();
+        var bbox = this.getSandbox().getMap().getExtent();
+        var zoom = this.getSandbox().getMap().getZoom();
+        var grid = this.getGrid();
+        if(grid != null) {
+            this.getIO().setLocation(srs, [bbox.left,bbox.bottom,bbox.right,bbox.top], zoom, grid);
+            this._tilesLayer.redraw();
+        }
+    },
+
+    /**
+     * @method setFilterHandler
+     */
+    setFilterHandler : function(event) {
+        /// clean selected features lists
+        var layers = this.getSandbox().findAllSelectedMapLayers();
+        for (var i = 0; i < layers.length; ++i) {
+            if (layers[i].isLayerOfType('WFS')) {
+                layers[i].setSelectedFeatures([]);
+            }
+        }
+
+        this.getIO().setFilter(event.getGeoJson());
     },
 
     /**
@@ -748,7 +811,6 @@ function(config) {
     drawImageTile : function(layer, imageUrl, imageBbox, imageSize, layerPostFix, keepPrevious) {
         var layerName = "wfs_layer_" + layer.getId() + "_" + layerPostFix;
         var boundsObj = new OpenLayers.Bounds(imageBbox);
-
         /** Safety checks */
         if (!(imageUrl && layer && boundsObj)) {
             return;
@@ -801,15 +863,13 @@ function(config) {
         }
 
         // highlight picture on top of normal layer images
-        if(layerPostFix == "normal") {
-            var highlightLayerExp = new RegExp("wfs_layer_" + layer.getId() + "_highlight");
-            var highlightLayer = this._map.getLayersByName(highlightLayerExp);
-            var normalLayer = this._map.getLayersByName(layerName);
-
-            if (normalLayer.length > 0 && highlightLayer.length > 0) {
-                var normalLayerIndex = this._map.getLayerIndex(normalLayer[normalLayer.length - 1]);
-                this._map.setLayerIndex(highlightLayer[0], normalLayerIndex+1);
-            }
+        var normalLayerExp = new RegExp("wfs_layer_" + layer.getId() + "_normal");
+        var highlightLayerExp = new RegExp("wfs_layer_" + layer.getId() + "_highlight");
+        var normalLayer = this._map.getLayersByName(normalLayerExp);
+        var highlightLayer = this._map.getLayersByName(highlightLayerExp);
+        if (normalLayer.length > 0 && highlightLayer.length > 0) {
+            var normalLayerIndex = this._map.getLayerIndex(normalLayer[normalLayer.length - 1]);
+            this._map.setLayerIndex(highlightLayer[0], normalLayerIndex+10);
         }
     },
 

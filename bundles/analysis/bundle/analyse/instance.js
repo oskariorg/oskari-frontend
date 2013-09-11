@@ -107,6 +107,9 @@ function() {
       
         // draw ui
         me._createUi();
+        
+        // Load analysis layers
+        this.analyseService.loadAnalyseLayers();
 
         /* stateful */
         if(conf && conf.stateful === true) {
@@ -372,10 +375,10 @@ function() {
         if (event.getOperation() === 'add') {
             var layer = this.mapLayerService.findMapLayer(layerId);
             if (layer && layer.isLayerOfType('ANALYSIS')) {
-                this.showMessage(
+              /*  this.showMessage(
                     loc.success.layerAdded.title.replace(/\{layer\}/, layer.getName()),
                     loc.success.layerAdded.message
-                );
+                ); */
             }
         }
     }

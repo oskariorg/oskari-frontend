@@ -365,6 +365,8 @@ function(instance) {
 
             fields = model.getFields();
             hiddenFields.push("__fid");
+            hiddenFields.push("__centerX");
+            hiddenFields.push("__centerY");
 
             // check if properties (fields or locales) have changed
             if(!panel.fields || 

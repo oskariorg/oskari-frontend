@@ -16,6 +16,10 @@ Below are ER models of views and example layers and roles.
 
 ## Table create scripts
 
+namefi, namesv and nameen columns are deprecated, use locale column, which will contain localization in i18n.
+
+This table contains maplayers. Layerclassid indicates the layer's class position in the layer hierarchy.
+
 ### Maplayer
 
 
@@ -72,8 +76,6 @@ Below are ER models of views and example layers and roles.
     OIDS=FALSE
     );
     ALTER TABLE portti_maplayer
-    OWNER TO liferay;
-    GRANT ALL ON TABLE portti_maplayer TO liferay;
     GRANT SELECT, UPDATE ON TABLE portti_maplayer TO maplog;
 
     -- Index: portti_maplayer_q1
@@ -106,6 +108,11 @@ Below are ER models of views and example layers and roles.
 
 ### Layerclass
 
+LayerClass specifies the layer's organization for normal layers, basemaps and groupmaps. If the layer is a basemap or a groupmap it has parent which refers to another layerclass. 
+
+
+
+
 
     -- DROP TABLE portti_layerclass;
 
@@ -129,8 +136,7 @@ Below are ER models of views and example layers and roles.
     WITH (
     OIDS=FALSE
     );
-    ALTER TABLE portti_layerclass
-    OWNER TO liferay;
+
 
     -- Index: portti_layerclass_q1
 
@@ -142,6 +148,9 @@ Below are ER models of views and example layers and roles.
     (parent);
 
 ### InspireTheme
+
+This table tells the layers inspire name.
+
 
 	-- Table: portti_inspiretheme
 
@@ -158,11 +167,13 @@ Below are ER models of views and example layers and roles.
 	WITH (
 	  OIDS=FALSE
 	);
-	ALTER TABLE portti_inspiretheme
-	  OWNER TO liferay;
+
 
 
 ### Maplayer metadata
+
+This table specifies layers bbox.
+
     -- Table: portti_maplayer_metadata
 
 	-- DROP TABLE portti_maplayer_metadata;
@@ -189,7 +200,7 @@ Below are ER models of views and example layers and roles.
 	  OWNER TO postgres;
 	GRANT ALL ON TABLE portti_maplayer_metadata TO postgres;
 	GRANT SELECT, UPDATE, INSERT, DELETE, REFERENCES ON TABLE portti_maplayer_metadata TO maplog;
-	GRANT SELECT ON TABLE portti_maplayer_metadata TO liferay;
+
 
 	-- Index: portti_maplayer_metadata_q1
 
@@ -211,6 +222,8 @@ Below are ER models of views and example layers and roles.
 
 
 ### Backend status
+
+This table indicates whether the layer's server is online. This is updated in Paikkatietoikkuna as a cron process.
 
 	-- Table: portti_backendstatus
 
@@ -234,7 +247,7 @@ Below are ER models of views and example layers and roles.
 	  OWNER TO postgres;
 	GRANT ALL ON TABLE portti_backendstatus TO postgres;
 	GRANT SELECT, UPDATE, INSERT, TRUNCATE, DELETE ON TABLE portti_backendstatus TO maplog;
-	GRANT SELECT ON TABLE portti_backendstatus TO liferay;
+
 
 	-- Index: portti_backendstatus_maplayer_id_q1
 
@@ -274,6 +287,8 @@ Below are ER models of views and example layers and roles.
 
 ### Capabilities cache
 
+Cababilities requests are stored here and updated by a cron process.
+
 	-- Table: portti_capabilities_cache
 
 	-- DROP TABLE portti_capabilities_cache;
@@ -289,8 +304,9 @@ Below are ER models of views and example layers and roles.
 	WITH (
 	  OIDS=FALSE
 	);
-	ALTER TABLE portti_capabilities_cache
-	  OWNER TO liferay;
+
+
+
 
 	-- Trigger: update_capabilities_cache_timestamp on portti_capabilities_cache
 
@@ -303,6 +319,8 @@ Below are ER models of views and example layers and roles.
 	  EXECUTE PROCEDURE update_timestamp();
 
 ### Permissions
+
+This table maps resource user to permission type. permission_type can be for example "viewlayer" or "publish"
 
 	-- Table: portti_permissions
 
@@ -318,8 +336,7 @@ Below are ER models of views and example layers and roles.
 	WITH (
 	  OIDS=FALSE
 	);
-	ALTER TABLE portti_permissions
-	  OWNER TO liferay;
+
 
 	-- Index: portti_permissions_q1
 
@@ -350,6 +367,8 @@ Below are ER models of views and example layers and roles.
 
 ### Resource user
 
+This table describes wms layer or base layer resources. Check [user management documentation](<%=docsurl %>/md/backend/usermanagement.md).
+
 	-- Table: portti_resource_user
 
 	-- DROP TABLE portti_resource_user;
@@ -368,9 +387,7 @@ Below are ER models of views and example layers and roles.
 	WITH (
 	  OIDS=FALSE
 	);
-	ALTER TABLE portti_resource_user
-	  OWNER TO liferay;
-	GRANT ALL ON TABLE portti_resource_user TO liferay;
+
 	GRANT SELECT, UPDATE ON TABLE portti_resource_user TO maplog;
 
 	-- Index: portti_resource_user_q1
@@ -393,6 +410,8 @@ Below are ER models of views and example layers and roles.
 
 
 ### View
+
+Oskari view is stored here.
 
 	-- Table: portti_view
 
@@ -418,11 +437,12 @@ Below are ER models of views and example layers and roles.
 	WITH (
 	  OIDS=FALSE
 	);
-	ALTER TABLE portti_view
-	  OWNER TO liferay;
+
 
 
 ### View supplement
+
+This table will be removed.
 
 	-- Table: portti_view_supplement
 
@@ -448,10 +468,12 @@ Below are ER models of views and example layers and roles.
 	WITH (
 	  OIDS=FALSE
 	);
-	ALTER TABLE portti_view_supplement
-	  OWNER TO liferay;
+
 
 ### View bundle sequence
+
+Bundles belonging to a view and their organization are specified here.
+
 
 	-- Table: portti_view_bundle_seq
 
@@ -477,11 +499,12 @@ Below are ER models of views and example layers and roles.
 	WITH (
 	  OIDS=FALSE
 	);
-	ALTER TABLE portti_view_bundle_seq
-	  OWNER TO liferay;
+
 
 
 ### Bundle
+
+Default values for the bundles are found in this table. The values can be overwritten in the View bundle sequence table.
 
 	-- Table: portti_bundle
 
@@ -500,5 +523,4 @@ Below are ER models of views and example layers and roles.
 	WITH (
 	  OIDS=FALSE
 	);
-	ALTER TABLE portti_bundle
-	  OWNER TO liferay;
+

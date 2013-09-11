@@ -188,7 +188,7 @@ function(config) {
         // count amount of wfs layers == number of tabs
         for(var i = 0; i < layers.length; i++) {
             var layer = layers[i];
-            if(layer.isLayerOfType('WFS')) {
+            if(layer.hasFeatureData()) {
                 layerCount++;
             }
         }
