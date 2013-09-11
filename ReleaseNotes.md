@@ -4,7 +4,27 @@
 
 ### mapmodule-plugin/getinfo
 
-The look of my_places GFI popup has been simplified and a possibility of displaying an image is now accounted for.
+The look of my_places GFI popup has been simplified and a possibility of displaying an image is now accounted for. The colour scheme and font are now configurable.
+
+### mapmodule-plugin/layers
+
+The style and font of the LayerSelectionPlugin.js are now configurable. See the bundle documentation for more information.
+
+### mapmodule-plugin/panbuttons
+
+The style of the pan buttons plugin is now configurable. See the bundle documentation for more information.
+
+### mapmodule-plugin/search
+
+The style and font of the search plugin are now configurable. See the bundle documentation for more information.
+
+### mapmodule-plugin/zoombar
+
+The style of the zoombar plugin is now configurable. See the bundle documentation for more information.
+
+### publisher
+
+A new panel for choosing the layout, or styling of the published map was added. The panel has three input fields for choosing the colour scheme used in GFI popups, the font and the style of map tools (pan buttons, zoombar, search plugin and layer selection plugin).
 
 ## 1.13
 

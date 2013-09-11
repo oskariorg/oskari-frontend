@@ -18,6 +18,18 @@ This plugin provides view of the from GetFeatureInfo and similar results what ar
 
 Handling infoBox and ignoredLayerTypes in the plugin are made configurable. infoBox variable makes it possible to request infoBox with additional information later on. ignoredLayerTypes is an array of layer types that are ignored in the requests. This functionality is made because of new mapwfs2 which controls WFS's GFI data.
 
+The colour scheme and font of the plugin are configurable, with variables `colourScheme` (Object) and `font` (String), respectively. A CSS class of `oskari-publisher-font-<font>` is expected to be defined with font-family definition. The structure of `colourScheme` should be of following format:
+
+```javascript
+{
+  "val": "<id of the colour scheme, eg. 'blue'>",
+  "bgColour": "<the colour of the gfi popup header background, eg. '#0091FF'>",
+  "titleColour": "<the colour of the gfi popup header text, eg. '#FFFFFF'>",
+  "headerColour": "<the colour of myplaces popup title text, eg. '#0091FF'>",
+  "iconCls": "<either 'icon-close' or 'icon-close-white'>"
+}
+```
+
 ## Requests the plugin handles
 
 This plugin doesn't handle any requests.

@@ -93,7 +93,9 @@ function(config) {
         this.templateCheckbox = jQuery("<input type='checkbox' />");
         this.templateRadiobutton = jQuery("<input type='radio' name='defaultBaselayer'/>");
     	this.templateBaseLayerHeader = jQuery('<div class="baseLayerHeader"></div>');
-        
+
+        this.templateHeaderArrow = jQuery('<div class="styled-header-arrow"></div>');
+        this.templateContentHeader = jQuery('<div class="content-header"><div class="content-header-title"></div><div class="content-close icon-close-white"></div></div>');
     },
     /**
      * @method startPlugin
@@ -502,7 +504,8 @@ function(config) {
      */
     _createUI : function() {
         var me = this;
-        if(!this.element) {
+
+        if (!this.element) {
             this.element = this.template.clone();
         }
         
@@ -545,6 +548,76 @@ function(config) {
         		existingPlugins.first().before(this.element);
         	}
         }
+
+        if (this.conf && this.conf.toolStyle) {
+            this.changeToolStyle(this.conf.toolStyle, this.element);
+        }
+
+        if (this.conf && this.conf.font) {
+            this.changeFont(this.conf.font, this.element);
+        }
+    },
+
+    /**
+     * Changes the tool style of the plugin
+     *
+     * @method changeToolStyle
+     * @param {String} styleName
+     * @param {jQuery} div
+     */
+    changeToolStyle: function(styleName, div) {
+        div = div || this.element;
+
+        if (!div || !styleName) return;
+
+        var self = this,
+            pluginLoc = this.getMapModule().getLocalization('plugin', true),
+            header = div.find('div.header'),
+            headerArrow = this.templateHeaderArrow.clone(),
+            content = div.find('div.content'),
+            contentHeader = this.templateContentHeader.clone(),
+            resourcesPath = this.getMapModule().getImageUrl(),
+            imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/layers/images/',
+            bgImg = imgPath + 'map-layer-button-' + styleName + '.png';
+
+        div.addClass('published-styled-layerselector');
+        content.addClass('published-styled-layerselector-content');
+        header.addClass('published-styled-layerselector-header');
+
+        content.find('div.content-header').remove();
+        content.find('div.styled-header-arrow').remove();
+        contentHeader.find('div.content-header-title').append(pluginLoc[this.__name].title);
+        content.prepend(contentHeader);
+        content.prepend(headerArrow);
+
+        contentHeader.find('div.content-close').on('click', function() {
+            self.closeSelection();
+        });
+
+        content.addClass('layerselection-styled-content');
+
+        header.empty();
+        header.css({
+            'background-image': 'url("' + bgImg + '")'
+        });
+    },
+
+    /**
+     * Changes the font used by plugin by adding a CSS class to its DOM elements.
+     *
+     * @method changeFont
+     * @param {String} fontId
+     * @param {jQuery} div
+     */
+    changeFont: function(fontId, div) {
+        div = div || this.element;
+
+        if (!div || !fontId) return;
+
+        var classToAdd = 'oskari-publisher-font-' + fontId;
+        var testRegex = /oskari-publisher-font-/;
+
+        this.getMapModule().changeCssClasses(classToAdd, testRegex, [div]);
     }
 }, {
     /**

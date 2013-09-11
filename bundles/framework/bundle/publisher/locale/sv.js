@@ -60,6 +60,42 @@ Oskari.registerLocalization(
                     "tooltip": "Show the data related to map.",
                     "grid" : "Visa statistik bord"
                 },
+                "layout": {
+                    "label": "Ulkoasu",
+                    "fields": {
+                        "colours": {
+                            "label": "Värimaailma",
+                            "placeholder": "Valitse värimaailma",
+                            "buttonLabel": "Vaihda",
+                            "light_grey": "Vaalean harmaa",
+                            "dark_grey": "Tumman harmaa",
+                            "blue": "Sininen",
+                            "red": "Punainen",
+                            "green": "Vihreä",
+                            "yellow": "Keltainen"
+                        },
+                        "fonts": {
+                            "label": "Valitse fontti"
+                        },
+                        "toolStyles": {
+                            "label": "Työkalujen tyyli",
+                            "rounded-dark": "Pyöristetty (tumma)",
+                            "rounded-light": "Pyöristetty (vaalea)",
+                            "sharp-dark": "Kulmikas (tumma)",
+                            "sharp-light": "Kulmikas (vaalea)",
+                            "3d-dark": "3D (tumma)",
+                            "3d-light": "3D (vaalea)"
+                        }
+                    },
+                    "popup": {
+                        "title": "Värimaailman valinta",
+                        "close": "Sulje",
+                        "gfiDialog": {
+                            "title": "Esikatselu",
+                            "featureDesc": "Värimaailman valinta vaikuttaa ainoastaan kohdetietolaatikon väritykseen"
+                        }
+                    }
+                },
                 "layers": {
                     "label": "Kartlager",
                     "defaultLayer": "(Förvald kartlager)",

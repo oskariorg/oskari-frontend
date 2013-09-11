@@ -97,3 +97,22 @@ div.basic_publisher div.buttons, div.publisher div.startview div.buttons {
 div.basic_publisher div.buttons input, div.publisher div.startview div.buttons input {
     margin: 5px 2px;
 }
+
+/* Layout */
+div.basic_publisher {
+    div#publisher-layout-coloursSelector {
+        input[name="publisher-colour"] {
+            width: 125px;
+        }
+    }
+    p#publisher-selected-colour {
+        display: inline;
+    }
+    button#publisher-colours {
+        float: right;
+    }
+}
+
+div#publisher-colour-inputs {
+    margin-bottom: 15px;
+}

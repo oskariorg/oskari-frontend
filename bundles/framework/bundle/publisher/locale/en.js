@@ -60,6 +60,42 @@ Oskari.registerLocalization(
                     "tooltip": "Show the data related to map.",
                     "grid" : "Show statistic grid"
                 },
+                "layout": {
+                    "label": "Layout",
+                    "fields": {
+                        "colours": {
+                            "label": "Color scheme",
+                            "placeholder": "Choose the colour scheme",
+                            "buttonLabel": "Change",
+                            "light_grey": "Light grey",
+                            "dark_grey": "Dark grey",
+                            "blue": "Blue",
+                            "red": "Red",
+                            "green": "Green",
+                            "yellow": "Yellow"
+                        },
+                        "fonts": {
+                            "label": "Choose font"
+                        },
+                        "toolStyles": {
+                            "label": "Tool styles",
+                            "rounded-dark": "Rounded (dark)",
+                            "rounded-light": "Rounded (light)",
+                            "sharp-dark": "Sharp edges (dark)",
+                            "sharp-light": "Sharp edges (light)",
+                            "3d-dark": "3D (dark)",
+                            "3d-light": "3D (light)"
+                        }
+                    },
+                    "popup": {
+                        "title": "Choose the colour scheme",
+                        "close": "Close",
+                        "gfiDialog": {
+                            "title": "Preview",
+                            "featureDesc": "Changing the colour scheme has effect only on the feature info popup"
+                        }
+                    }
+                },
                 "layers": {
                     "label": "Map layers",
                     "defaultLayer": "(Default layer)",

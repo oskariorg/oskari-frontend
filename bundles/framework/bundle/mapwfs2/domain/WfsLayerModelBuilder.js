@@ -31,21 +31,6 @@ function(sandbox) {
 		});
 		layer.addTool(toolObjData);
 
-		/*
-		// DEBUG [AL-1187]
-		var style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
-		style.setName("default");
-		style.setTitle("default");
-		style.setLegend("");
-		layer.addStyle(style);
-
-		var style2 = Oskari.clazz.create('Oskari.mapframework.domain.Style');
-		style2.setName("lollero");
-		style2.setTitle("lollero");
-		style2.setLegend("");
-		layer.addStyle(style2);
-		*/
-
 		maplayerService.populateStyles(layer, mapLayerJson);
 	}
 });

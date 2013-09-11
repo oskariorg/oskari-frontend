@@ -4,6 +4,11 @@ Oskari.registerLocalization({
     "value" : {
         "title" : "MapAnalysis",
         "desc" : "",
-        "object-data": "Objektuppgifter"
+        "object-data": "Objektuppgifter",
+        "layer" : {
+                "organization" : "Analys",
+                "inspire" : "Analys"
+
+            }
     }
 });
