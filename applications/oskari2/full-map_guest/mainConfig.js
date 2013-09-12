@@ -1,10 +1,6 @@
 require.config({
-
-    /* the base is set to requirejs lib to help requiring 3rd party libs */
-    "baseUrl" : "/Oskari/libraries/requirejs/lib",
-
-    /* some path shortcuts to ease declarations */
-    paths : {
+    "baseUrl" : "/Oskari/libraries/requirejs/lib", // the base is set to requirejs lib to help requiring 3rd party libs
+    paths : { // some path shortcuts to ease declarations
         _libraries_ : '/Oskari/libraries',    	
         _bundles_ : '/Oskari/bundles',
         _applications_ : '/Oskari/applications',
@@ -12,8 +8,6 @@ require.config({
         jquery: "http://code.jquery.com/jquery-1.9.1",
         "jquery-migrate": "/Oskari/libraries/jquery/jquery-migrate-1.2.1-modified"
     },
-    // Add this map config in addition to any baseUrl or
-    // paths config you may already have in the project.
     map: {
       // '*' means all modules will get 'jquery-private'
       // for their 'jquery' dependency.
@@ -23,6 +17,11 @@ require.config({
       // though. If this line was not here, there would
       // be an unresolvable cyclic dependency.
       'jquery-migrate': { 'jquery': 'jquery' }
+    },
+    shim: {
+      'oskari' : {
+        exports: 'Oskari'
+      }
     },
     config : {
         i18n : {

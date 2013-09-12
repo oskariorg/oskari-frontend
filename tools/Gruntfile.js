@@ -125,6 +125,42 @@ module.exports = function (grunt) {
                 ]
             }
         },
+        modulizeAll: {
+          'admin-layerrights': '../packages/framework/bundle/admin-layerrights',
+          'backendstatus': '../packages/framework/bundle/backendstatus',
+          'coordinatedisplay': '../packages/framework/bundle/coordinatedisplay',
+          'divmanazer': '../packages/framework/bundle/divmanazer',
+          'featuredata': '../packages/framework/bundle/featuredata',
+          'featuredata2': '../packages/framework/bundle/featuredata2',
+          'guidedtour': '../packages/framework/bundle/guidedtour',
+          'infobox': '../packages/framework/bundle/infobox',
+          'layerselection2': '../packages/framework/bundle/layerselection2',
+          'layerselector2': '../packages/framework/bundle/layerselector2',
+          'mapanalysis': '../packages/framework/bundle/mapanalysis',
+          'mapfull': '../packages/framework/bundle/mapfull',
+          'maplegend': '../packages/framework/bundle/maplegend',
+// Manual modification          'mapmodule-plugin': '../packages/framework/bundle/mapmodule-plugin',
+          'mapstats': '../packages/framework/bundle/mapstats',
+          'mapwfs': '../packages/framework/bundle/mapwfs',
+          'mapwfs2': '../packages/framework/bundle/mapwfs2',
+          'mapwmts': '../packages/framework/bundle/mapwmts',
+          'metadata': '../packages/framework/bundle/metadata',
+          'myplaces2': '../packages/framework/bundle/myplaces2',
+          'oskariui': '../packages/framework/bundle/oskariui',
+          'parcel': '../packages/framework/bundle/parcel',
+          'parcelinfo': '../packages/framework/bundle/parcelinfo',
+          'parcelselector': '../packages/framework/bundle/parcelselector',
+          'personaldata': '../packages/framework/bundle/personaldata',
+          'postprocessor': '../packages/framework/bundle/postprocessor',
+          'printout': '../packages/framework/bundle/printout',
+          'promote': '../packages/framework/bundle/promote',
+          'publisher': '../packages/framework/bundle/publisher',
+          'search': '../packages/framework/bundle/search',
+          'statehandler': '../packages/framework/bundle/statehandler',
+          'toolbar': '../packages/framework/bundle/toolbar',
+          'usagetracker': '../packages/framework/bundle/usagetracker',
+          'userguide': '../packages/framework/bundle/userguide'
+        },
         requirejs: {
           compile: {
             options: {
@@ -617,5 +653,9 @@ module.exports = function (grunt) {
             cssfiles = cssfiles.concat(pasFiles);
         }
         this.minifyCSS(cssfiles, options.dest + 'oskari.min.css');
+    });
+
+    grunt.registerMultiTask("modulizeAll", "Convert all bundles to modules", function () {
+        grunt.task.run('bundle2module:' + this.data);
     });
 };

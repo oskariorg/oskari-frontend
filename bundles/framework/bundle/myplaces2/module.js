@@ -1,0 +1,7 @@
+define(["oskari","jquery","./event/FinishedDrawingEvent","./event/AddedFeatureEvent","./event/MyPlaceHoverEvent","./event/MyPlacesChangedEvent","./event/MyPlaceSelectedEvent","./model/MyPlace","./model/MyPlacesCategory","./plugin/DrawPlugin","./plugin/HoverPlugin","./request/StopDrawingRequest","./request/StartDrawingRequest","./request/GetGeometryRequest","./request/GetGeometryRequestHandler","./request/StartDrawingRequestHandler","./request/StopDrawingRequestHandler","./request/EditPlaceRequest","./request/EditCategoryRequest","./request/DeleteCategoryRequest","./request/PublishCategoryRequest","./request/EditRequestHandler","./service/MyPlacesService","./service/MyPlacesWFSTStore","./view/MainView","./view/PlaceForm","./view/CategoryForm","./ButtonHandler","./CategoryHandler","./instance","_libraries_/jscolor/jscolor","css!_resources_/framework/bundle/myplaces2/css/myplaces.css","./locale/fi","./locale/sv","./locale/en"], function(Oskari,jQuery) {
+    return Oskari.bundleCls("myplaces2").category({create: function () {
+		return Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance");
+	},update: function (manager, bundle, bi, info) {
+		manager.alert("RECEIVED update notification " + info);
+	}})
+});

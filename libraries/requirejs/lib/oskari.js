@@ -16,9 +16,9 @@
  * This is free software.
  *
  */
-var Oskari;
-
-define(['jquery', 'exports', 'css'], function($, exports) {
+(function() {
+    var global = this; // in non-strict mode this will refer to the global "window" object
+    console.log('global is defined?', global);
 
     var isDebug = false;
     var isConsole = window.console != null && window.console.debug;
@@ -144,7 +144,7 @@ define(['jquery', 'exports', 'css'], function($, exports) {
             var cdef = args[0], pdefsp = this.pdefsp(cdef);
 
             if (!pdefsp)
-                throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
+                throw "clazz " + cdef + " does not exist";
 
             return pdefsp._metadata;
 
@@ -512,7 +512,7 @@ define(['jquery', 'exports', 'css'], function($, exports) {
                 throw "missing arguments";
             var instargs = this.slicer.apply(arguments, [1]), cdef = args[0], pdefsp = this.pdefsp(cdef);
             if (!pdefsp)
-                throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
+                throw "clazz " + cdef + " does not exist";
 
             var inst = new pdefsp._class(), ctors = pdefsp._constructors;
             if (ctors) {
@@ -531,7 +531,7 @@ define(['jquery', 'exports', 'css'], function($, exports) {
                 throw "missing arguments";
             var instargs = arguments[1], pdefsp = args[0];
             if (!pdefsp)
-                throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
+                throw "clazz does not exist";
 
             var inst = new pdefsp._class(), ctors = pdefsp._constructors;
             if (ctors) {
@@ -552,7 +552,7 @@ define(['jquery', 'exports', 'css'], function($, exports) {
             var cdef = args[0], instprops = args[1], pdefsp = this.pdefsp(cdef);
 
             if (!pdefsp)
-                throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
+                throw "clazz " + cdef + " does not exist";
 
             var inst = new pdefsp._class(), ctors = pdefsp._constructors;
             if (ctors) {
@@ -579,7 +579,7 @@ define(['jquery', 'exports', 'css'], function($, exports) {
             var cdef = args[0], pdefsp = this.pdefsp(cdef);
 
             if (!pdefsp)
-                throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
+                throw "clazz " + cdef + " does not exist";
 
             if (pdefsp._builder)
                 return pdefsp._builder;
@@ -613,7 +613,7 @@ define(['jquery', 'exports', 'css'], function($, exports) {
             var pdefsp = args[0];
 
             if (!pdefsp)
-                throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
+                throw "clazz does not exist";
 
             if (pdefsp._builder)
                 return pdefsp._builder;
@@ -1184,7 +1184,7 @@ define(['jquery', 'exports', 'css'], function($, exports) {
         }
     });
 
-    var domMgr = cs.create('Oskari.DomManager', $);
+    var domMgr = cs.create('Oskari.DomManager');
 
     /* o2 clazz module  */
     var o2anonclass = 0;
@@ -1647,8 +1647,13 @@ define(['jquery', 'exports', 'css'], function($, exports) {
 
     ga.apply(cs, ['Oskari', o2main]);
 
-    Oskari = o2main;
+    global.Oskari = o2main;
 
-    exports.Oskari = o2main;
-    return o2main;
-});
+    console.log('global Oskari?', global.Oskari, window, window.Oskari)
+
+    define(['exports'], function(exports) {
+
+        exports.Oskari = o2main;
+        return o2main;
+    });
+})();

@@ -65,6 +65,7 @@ function() {
 	 */
 	start : function() {
 		var me = this;
+
 		if(me.started) {
 			return;
 		}

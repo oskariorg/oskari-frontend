@@ -32,7 +32,8 @@ function() {
     this.legendPlugin = undefined;
 
     /* default configuration */
-     this.conf = {
+     this.conf = {
+
         "backendConfiguration" : {
             "formatProducers" : {
                 "application/pdf" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.pdf?",

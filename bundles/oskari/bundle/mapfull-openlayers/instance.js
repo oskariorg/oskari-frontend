@@ -91,8 +91,11 @@ function() {
             adjustMapSize();
         }
         
-		
+		  console.log('here before start');
+
         module.start(this.sandbox);
+  console.log('here after start... not seen?');
+
 
 		map.render(this.mapDivId);
         // startup plugins
