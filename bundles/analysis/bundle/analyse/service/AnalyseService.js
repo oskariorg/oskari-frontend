@@ -86,9 +86,10 @@ function(instance) {
      *
      */
     loadAnalyseLayers : function() {
-        var me = this;
-        var sandbox = this.instance.getSandbox();
-        var url = sandbox.getAjaxUrl();
+        var me = this,
+            sandbox = me.instance.getSandbox(),
+            url = sandbox.getAjaxUrl(),
+            loc = Oskari.getLocalization(me.instance.getName());
 
         // Request analyis layers via the backend
         me._getAnalysisLayers(
@@ -100,7 +101,7 @@ function(instance) {
         },
         // Error callback
         function(jqXHR, textStatus, errorThrown) {
-            me.instance.showMessage(me.loc.error.title, me.loc.error.saveFailed);
+            me.instance.showMessage(loc.AnalyseView.error.title, loc.AnalyseView.error.saveFailed);
         });
 
     },
