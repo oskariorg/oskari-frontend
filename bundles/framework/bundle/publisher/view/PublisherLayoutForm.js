@@ -165,6 +165,9 @@ function(localization, publisher) {
         header: null,
         iconCsl: null
     };
+
+    this.maxColourValue = 255;
+    this.minColourValue = 0;
 }, {
     __templates: {
         "colours":      '<div id="publisher-layout-colours">' +
@@ -195,13 +198,13 @@ function(localization, publisher) {
                             '<div id="publisher-custom-colours-iconcls"></div>' +
                         '</div>',
         "rgbInput":    '<div class="rgbInput">' +
-                            '<label for="red">R</label><input type="text" name="red" />' +
-                            '<label for="green">G</label><input type="text" name="green" />' +
-                            '<label for="blue">B</label><input type="text" name="blue" />' +
+                            '<label for="red">R</label><input type="text" name="red" maxlength="3" />' +
+                            '<label for="green">G</label><input type="text" name="green" maxlength="3" />' +
+                            '<label for="blue">B</label><input type="text" name="blue" maxlength="3" />' +
                         '</div>',
         "iconClsInput": '<div class="iconClsInput">' +
                             '<input type="radio" name="custom-icon-class" value="icon-close" /><label for="icon-close"></label>' +
-                            '<input type="radio" name="custom-icon-class" value="icon-close-white" checked /><label for="icon-close-white"></label>' +
+                            '<input type="radio" name="custom-icon-class" value="icon-close-white" /><label for="icon-close-white"></label>' +
                         '</div>'
     },
 
@@ -406,8 +409,10 @@ function(localization, publisher) {
             popup.close(true);
         });
 
+        // Create the preview GFI dialog.
         content.find('div#publisher-colour-preview').append(self._createGfiPreview());
 
+        // Append the colour scheme inputs to the dialog.
         for (i = 0; i < cLen; ++i) {
             colourInput = this.template.inputRadio.clone();
             colourName = this.loc.layout.fields.colours[colours[i].val];
@@ -458,6 +463,12 @@ function(localization, publisher) {
         popup.show(title, content, [closeButton]);
     },
 
+    /**
+     * Creates a popup from which custom colour scheme can be defined.
+     * 
+     * @method _createCustomColoursPopup
+     * @return {undefined}
+     */
     _createCustomColoursPopup: function() {
         var self = this,
             popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
@@ -502,7 +513,8 @@ function(localization, publisher) {
             iconClsInputs = this.template.iconClsInput.clone(),
             iconClsLoc = this.loc.layout.fields.colours.customLabels.iconLabel,
             iconCloseLoc = this.loc.layout.fields.colours.customLabels.iconCloseLabel,
-            iconCloseWhiteLoc = this.loc.layout.fields.colours.customLabels.iconCloseWhiteLabel;
+            iconCloseWhiteLoc = this.loc.layout.fields.colours.customLabels.iconCloseWhiteLabel,
+            rgbValue;
 
         iconClsInputs.find('label[for=icon-close]').html(iconCloseLoc);
         iconClsInputs.find('label[for=icon-close-white]').html(iconCloseWhiteLoc);
@@ -513,6 +525,13 @@ function(localization, publisher) {
         template.find('div#publisher-custom-colours-iconcls').append(iconClsLoc).append(iconClsInputs);
 
         this._prepopulateCustomColoursTemplate(template);
+
+        template.find('input[type=text]').change(function() {
+            // If the value is not a number or is out of range (0-255), set the value to proper value.
+            rgbValue = jQuery(this).val();
+            if (isNaN(rgbValue) || (rgbValue < self.minColourValue)) jQuery(this).val(self.minColourValue);
+            else if (rgbValue > self.maxColourValue) jQuery(this).val(self.maxColourValue);
+        });
 
         return template;
     },
