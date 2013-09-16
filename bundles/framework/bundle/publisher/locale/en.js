@@ -158,6 +158,7 @@ Oskari.registerLocalization(
                 "layerlist_empty": "The map layers you selected cannot be embedded. The menu Selected map layers shows whether or not a map layer can be embedded.",
                 "layerlist_denied": "Cannot be embedded",
                 "denied_tooltip": "The providers of this map data have not granted permission to publish these materials on other websites. Check rights to publish in the menu Selected map layers before embedding.",
+                "myPlacesDisclaimer": "NB. you are going to publish your own map layer.",
                 "buttons": {
                     "continue": "Continue",
                     "continueAndAccept": "Accept Terms of use and continue",

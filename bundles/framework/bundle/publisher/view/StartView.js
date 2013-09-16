@@ -160,7 +160,11 @@ function(instance, localization) {
         for (var i = 0; i < list.length; ++i) {
             var layer = list[i];
             var item = this.templateListItem.clone();
-            item.append(layer.getName());
+            if(layer.getId().indexOf('myplaces_') > -1) {
+                item.append(layer.getName() + " ("+ this.loc.myPlacesDisclaimer +")");
+            } else {
+                item.append(layer.getName());
+            }
             listElement.append(item);
         }
         return layerList;

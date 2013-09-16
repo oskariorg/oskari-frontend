@@ -159,6 +159,7 @@ Oskari.registerLocalization(
                 "layerlist_empty": "Valitsemiasi karttatasoja ei voida julkaista. Valitut karttatasot -valikosta näet, voiko karttatason julkaista.",
                 "layerlist_denied": "Ei julkaistavissa",
                 "denied_tooltip": "Kartta-aineistojen tuottajat eivät ole antaneet näille aineistoilleen julkaisuoikeutta muissa verkkopalveluissa. Tarkista julkaisuoikeus Valitut karttatasot -valikosta ennen julkaisua.",
+                "myPlacesDisclaimer": "Huom. Olet julkaisemassa omaa karttatasoa.",
                 "buttons": {
                     "continue": "Jatka",
                     "continueAndAccept": "Hyväksy ehdot ja jatka",
