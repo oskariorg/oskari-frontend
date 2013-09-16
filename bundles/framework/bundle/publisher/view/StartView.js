@@ -99,7 +99,7 @@ function(instance, localization) {
         var selectedLayers = this.instance.sandbox.findAllSelectedMapLayers();
         for (var i = 0; i < selectedLayers.length; ++i) {
             var layer = selectedLayers[i];
-            if (!this.instance.hasPublishRight(layer)) {
+            if (!this.instance.hasPublishRight(layer) && layer.getId().indexOf('myplaces_') < 0) {
                 deniedLayers.push(layer);
             } else {
                 layers.push(layer);
