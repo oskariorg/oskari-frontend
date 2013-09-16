@@ -116,3 +116,11 @@ div.basic_publisher {
 div#publisher-colour-inputs {
     margin-bottom: 15px;
 }
+
+div#publisher-custom-colours {
+    div.rgbInput {
+        input[type="text"] {
+            width: 30px;
+        }
+    }
+}
