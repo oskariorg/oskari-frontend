@@ -98,3 +98,20 @@ div.basic_publisher button#publisher-colours {
 div#publisher-colour-inputs {
   margin-bottom: 15px;
 }
+div#publisher-custom-colours {
+  padding: 10px 20px;
+}
+div#publisher-custom-colours div#publisher-custom-colours-bg,
+div#publisher-custom-colours div#publisher-custom-colours-title,
+div#publisher-custom-colours div#publisher-custom-colours-header,
+div#publisher-custom-colours div#publisher-custom-colours-iconcls {
+  margin-bottom: 12px;
+}
+div#publisher-custom-colours div.rgbInput {
+  padding: 5px;
+  border: 1px solid black;
+}
+div#publisher-custom-colours div.rgbInput input[type="text"] {
+  margin: 0 8px;
+  width: 30px;
+}
