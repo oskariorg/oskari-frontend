@@ -100,27 +100,34 @@ div.basic_publisher div.buttons input, div.publisher div.startview div.buttons i
 
 /* Layout */
 div.basic_publisher {
-    div#publisher-layout-coloursSelector {
-        input[name="publisher-colour"] {
-            width: 125px;
-        }
+    div#publisher-layout-colours input[name=publisher-colour] {
+      width: 125px;
     }
     p#publisher-selected-colour {
-        display: inline;
+      display: inline;
     }
     button#publisher-colours {
-        float: right;
+      float: right;
     }
 }
 
 div#publisher-colour-inputs {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
-
 div#publisher-custom-colours {
-    div.rgbInput {
-        input[type="text"] {
-            width: 30px;
-        }
-    }
+  padding: 10px 20px;
+}
+div#publisher-custom-colours div#publisher-custom-colours-bg,
+div#publisher-custom-colours div#publisher-custom-colours-title,
+div#publisher-custom-colours div#publisher-custom-colours-header,
+div#publisher-custom-colours div#publisher-custom-colours-iconcls {
+  margin-bottom: 12px;
+}
+div#publisher-custom-colours div.rgbInput {
+  padding: 5px;
+  border: 1px solid black;
+}
+div#publisher-custom-colours div.rgbInput input[type="text"] {
+  margin: 0 8px;
+  width: 30px;
 }
