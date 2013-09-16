@@ -72,7 +72,16 @@ Oskari.registerLocalization(
                             "blue": "Sininen",
                             "red": "Punainen",
                             "green": "Vihreä",
-                            "yellow": "Keltainen"
+                            "yellow": "Keltainen",
+                            "custom": "Omat värit",
+                            "customLabels": {
+                                "bgLabel": "Tunnisteen tausta",
+                                "titleLabel": "Tunnisteen teksti",
+                                "headerLabel": "Otsikon teksti",
+                                "iconLabel": "Ikoni",
+                                "iconCloseLabel": "Tumma",
+                                "iconCloseWhiteLabel": "Vaalea"
+                            }
                         },
                         "fonts": {
                             "label": "Valitse fontti"

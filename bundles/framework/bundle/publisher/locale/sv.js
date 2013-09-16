@@ -72,7 +72,16 @@ Oskari.registerLocalization(
                             "blue": "Sininen",
                             "red": "Punainen",
                             "green": "Vihreä",
-                            "yellow": "Keltainen"
+                            "yellow": "Keltainen",
+                            "custom": {
+                                "name": "Omat värit",
+                                "bgLabel": "Tunnisteen tausta",
+                                "titleLabel": "Tunnisteen teksti",
+                                "headerLabel": "Otsikon teksti",
+                                "iconLabel": "Ikoni",
+                                "iconCloseLabel": "Tumma",
+                                "iconCloseWhiteLabel": "Vaalea"
+                            }
                         },
                         "fonts": {
                             "label": "Valitse fontti"
@@ -92,6 +101,7 @@ Oskari.registerLocalization(
                         "close": "Sulje",
                         "gfiDialog": {
                             "title": "Esikatselu",
+                            "featureName": "Esikatselu",
                             "featureDesc": "Värimaailman valinta vaikuttaa ainoastaan kohdetietolaatikon väritykseen"
                         }
                     }

@@ -72,7 +72,16 @@ Oskari.registerLocalization(
                             "blue": "Blue",
                             "red": "Red",
                             "green": "Green",
-                            "yellow": "Yellow"
+                            "yellow": "Yellow",
+                            "custom": {
+                                "name": "Custom colours",
+                                "bgLabel": "Header background",
+                                "titleLabel": "Header text",
+                                "headerLabel": "Title text",
+                                "iconLabel": "Icon",
+                                "iconCloseLabel": "Dark",
+                                "iconCloseWhiteLabel": "Light"
+                            }
                         },
                         "fonts": {
                             "label": "Choose font"
@@ -91,7 +100,8 @@ Oskari.registerLocalization(
                         "title": "Choose the colour scheme",
                         "close": "Close",
                         "gfiDialog": {
-                            "title": "Preview",
+                            "title": "Feature info",
+                            "featureName": "Preview",
                             "featureDesc": "Changing the colour scheme has effect only on the feature info popup"
                         }
                     }
