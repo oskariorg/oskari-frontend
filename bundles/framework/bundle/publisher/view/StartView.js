@@ -99,7 +99,8 @@ function(instance, localization) {
         var selectedLayers = this.instance.sandbox.findAllSelectedMapLayers();
         for (var i = 0; i < selectedLayers.length; ++i) {
             var layer = selectedLayers[i];
-            if (!this.instance.hasPublishRight(layer) && layer.getId().indexOf('myplaces_') < 0) {
+            if (!this.instance.hasPublishRight(layer) && 
+                layer.getId().toString().indexOf('myplaces_') < 0) {
                 deniedLayers.push(layer);
             } else {
                 layers.push(layer);
@@ -160,7 +161,7 @@ function(instance, localization) {
         for (var i = 0; i < list.length; ++i) {
             var layer = list[i];
             var item = this.templateListItem.clone();
-            if(layer.getId().indexOf('myplaces_') > -1) {
+            if(layer.getId().toString().indexOf('myplaces_') > -1) {
                 item.append(layer.getName() + " ("+ this.loc.myPlacesDisclaimer +")");
             } else {
                 item.append(layer.getName());
