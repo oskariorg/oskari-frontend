@@ -168,7 +168,7 @@ Oskari.registerLocalization(
                 "layerlist_empty": "Kartlagren som du valt kan inte avskiljas. Menyn Valda kartlager visar vilka kartlager kan avskiljas.",
                 "layerlist_denied": "Kan inte avskiljas",
                 "denied_tooltip": "Kartdataproducenterna har inte gett publiceringstillstånd till dessa material i andra webbtjänster. Kontrollera publiceringstillståndet i menyn Valda kartlager innan du avskiljer dem.",
-                "myPlacesDisclaimer": "Obs! du ska publicera din egen kartlagret."
+                "myPlacesDisclaimer": "Obs! du ska publicera din egen kartlagret.",
                 "buttons": {
                     "continue": "Fortsätt",
                     "continueAndAccept": "Godkänn användningsvillkor och fortsätt",
