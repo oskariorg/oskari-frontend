@@ -215,6 +215,18 @@ Oskari.registerLocalization({
                 "save": "Tallenna",
                 "cancel": "Peruuta"
             }
+        },
+        "personalDataTab" : {
+            "grid" : {
+                "name" : "Nimi",
+                "delete": " "
+            },
+            "title" : "Analyysi",
+            "confirmDeleteMsg" : "Haluatko poistaa analyysin:",
+            "buttons" : {
+                "cancel" : "Peruuta",
+                "delete" : "Poista"
+            }
         }
 
     }

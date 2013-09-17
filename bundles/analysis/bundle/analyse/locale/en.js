@@ -216,6 +216,18 @@ Oskari.registerLocalization({
                 "save": "Save",
                 "cancel": "Back"
             }
+        },
+        "personalDataTab" : {
+            "grid" : {
+                "name" : "Name",
+                "delete": " "
+            },
+            "title" : "Analysis",
+            "confirmDeleteMsg" : "Do you want to delete:",
+            "buttons" : {
+                "cancel" : "Cancel",
+                "delete" : "Delete"
+            }
         }
     }
 });
