@@ -95,7 +95,8 @@ module.exports = function (grunt) {
             dist: {
                 options: {
                     paths: ['../sources/framework', '../bundles/framework', '../bundles/sample', '../bundles/catalogue'],
-                    outdir: '../dist/<%= version %>api/'
+                    outdir: '../dist/<%= version %>api/',
+                    themedir: '../docs/yui/theme/'
                 }
             }
         },
@@ -300,11 +301,11 @@ module.exports = function (grunt) {
             grunt.config.set("sprite." + appName + ".options", options);
         }
 
-        grunt.task.run('validate');
-        grunt.task.run('copy');
-        grunt.task.run('compile');
-        grunt.task.run('compileAppCSS');
-        grunt.task.run('sprite');
+//        grunt.task.run('validate');
+//        grunt.task.run('copy');
+//        grunt.task.run('compile');
+//        grunt.task.run('compileAppCSS');
+//        grunt.task.run('sprite');
         grunt.task.run('yuidoc');
         grunt.task.run('mddocs');
     });
