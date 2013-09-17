@@ -16,7 +16,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
 function() {
     this.sandbox = undefined;
     this.started = false;
-    this.plugins = {};
+    this.plugins = {}; 
     this.localization = undefined;
     this.analyse = undefined;
     this.buttonGroup = 'viewtools';

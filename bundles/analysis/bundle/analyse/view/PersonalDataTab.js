@@ -96,7 +96,7 @@ function(instance, localization) {
                 'id': layers[i].getId(),
                 'name' : layers[i].getName(),
                 'layer' : layers[i],
-                'delete' : this.loc.buttons.delete
+                'delete' : this.loc.buttons['delete']
             });
         }
         this.grid.setDataModel(gridModel);
@@ -116,7 +116,7 @@ function(instance, localization) {
         //var loc = this.loc.notification['delete'];
     	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
     	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-    	okBtn.setTitle(this.loc.buttons.delete);
+    	okBtn.setTitle(this.loc.buttons['delete']);
     	okBtn.addClass('primary');
     	var service = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 

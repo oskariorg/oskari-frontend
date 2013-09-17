@@ -1,4 +1,4 @@
-describe('Test Suite for layerselector2 bundle', function() {
+describe('Test Suite for layerselector2 bundle with keyword config', function() {
     var appSetup = null,
         appConf = null,
         statsPlugin = null,
@@ -20,6 +20,11 @@ describe('Test Suite for layerselector2 bundle', function() {
             "mapfull": mapfullConf,
             "toolbar": {
                 conf: {}
+            },
+            "layerselector2" : {
+              "conf" : {
+                "showSearchSuggestions" : true
+              }
             }
 
         };
@@ -74,57 +79,90 @@ describe('Test Suite for layerselector2 bundle', function() {
             for (var i = 0; i < titles.length; i++) {
                 var title = jQuery(titles[i]);
                 if(title.text() === 'Karttatasot') {
-                    title.click();
+                    title.click(); 
                     setTimeout(function() {
                         // ...then visible...
                         expect(jQuery('.oskari-flyout').hasClass('oskari-closed')).to.be(false);
                         done();
                     }, 100);
                 }
-            }; 
+            };
         });
-        it('should NOT open popup with no config', function(done) {
+        it('should show keyword list', function(done) { 
             
             var input = jQuery('.oskarifield input:first');
             var tab = module.plugins['Oskari.userinterface.Flyout'].layerTabs[0];
-            // configuration for keyword search not enabled
-            expect(tab.showSearchSuggestions != true).to.be(true);
+            // configuration for keyword search should be enabled
+            expect(tab.showSearchSuggestions == true).to.be(true);
+
             var oskarifield = jQuery(tab.filterField.getField());
             oskarifield.find('input').val('testi');
 
             var doSpy = sinon.stub(tab, '_relatedKeywordsPopup', function(keyword, event, me) {
                 event.preventDefault();
-                var oskarifield = jQuery(event.currentTarget).parents('.oskarifield');
 
                 me.sentKeyword = keyword;
-                // if there is a popup already -> select related keyword and quit.
-                if(me._selectedKeywordFromPopup(event, me)) {
-                    return;
-                }
-
                 var pResp = [
                     {"id":300,"layers":[],"keyword":"testi","shortcut":false},
                     {"id":301,"layers":[],"keyword":"2testi2","shortcut":false},
                     {"id":250,"layers":[248],"keyword":"laituripaikat","type":"yk","shortcut":false}
                 ];
                 me.relatedKeywords = pResp;
-                me._showRelatedKeywords(pResp, oskarifield);
+                me._showRelatedKeywords(keyword, pResp, oskarifield);
             });
+            // keywords should not be visible yet
+            expect(oskarifield.find('.related-keywords:visible').length).to.be(0);
 
-            expect(oskarifield.find('.related-keywords').length).to.be(0);
-
-            var e = jQuery.Event("keypress");
-            e.which = 13; //choose the one you want
+            var e = jQuery.Event("keypress"); 
+            e.which = 13; //choose the one you want 
             e.keyCode = 13;
             oskarifield.find('input').trigger(e);
-            setTimeout(function() {
-                // ...then visible...
-                expect(oskarifield.find('.related-keywords').length).to.be(0);
-                expect(doSpy.callCount == 0).to.be(true);
+
+            oskarifield.find('input').trigger(jQuery.Event("keyup"));
+            oskarifield.find('input').trigger(jQuery.Event("change"));
+            // Waits for searchFlyout to recieve results
+            waitsFor(function() {
+              return(doSpy.callCount > 0);
+            }, function() {
+                expect(doSpy.callCount > 0).to.be(true);
+                // now keywords should be visible
+                expect(oskarifield.find('.related-keywords:visible').length).to.be(1);
                 done();
-            }, 500);
+            }, "Waits for search spied method to be called", 3000);
+
 
         });
+        // skipped since functionality has changed, popup is no longer shown and keywords are listed differently
+        it.skip('should be able to select offered keyword with up and enter', function(done) {
+            var input = jQuery('.oskarifield input:first');
+            var tab = module.plugins['Oskari.userinterface.Flyout'].layerTabs[0];
+            var oskarifield = jQuery(tab.filterField.getField());
+
+            var e = jQuery.Event("keydown");
+            e.which = 38; //up
+            e.keyCode = 38;
+            oskarifield.find('input').trigger(e);
+
+            setTimeout(function() {
+                // one keyword should be hilighted (the bottom one)
+                expect(oskarifield.find('.focus').length).to.be(1);
+
+                var e = jQuery.Event("keypress");
+                e.which = 13; //enter
+                e.keyCode = 13;
+                oskarifield.find('input').trigger(e);
+
+                setTimeout(function() {
+                    // related-keywords should not be in dom
+                    expect(oskarifield.find('.related-keywords').length).to.be(1);
+                    // search input should contain text laituripaikat
+                    expect(oskarifield.find('input').val()).to.be('laituripaikat');
+                    done();
+                }, 100);
+            }, 100);
+
+        });
+
     });
 
 
