@@ -27,7 +27,7 @@ function() {
     this.isMapStateChanged = true;
     this.state = undefined;
     this.conf =  {};
-
+    this.personalDataTab = undefined;
 }, {
     /**
      * @static
@@ -116,6 +116,17 @@ function() {
             sandbox.registerAsStateful(this.mediator.bundleId, this);
         }
 
+ 
+        // Request tab to be added to personal data
+        var tab = Oskari.clazz.create('Oskari.mapframework.bundle.analyse.view.PersonalDataTab', this, this.localization.personalDataTab);
+        var reqBuilder = sandbox.getRequestBuilder('PersonalData.AddTabRequest');
+
+        if(reqBuilder) {
+            // TODO: fix localization!!
+            sandbox.request(this, reqBuilder(this.localization.personalDataTab.title, tab.getContent()));
+            tab.update();
+        }
+        this.personalDataTab = tab;
     },
     /**
      * @method init
@@ -381,6 +392,8 @@ function() {
                 ); */
             }
         }
+        // maplayers changed so update the tab content in personaldata
+        this.personalDataTab.update();
     }
 }, {
     /**

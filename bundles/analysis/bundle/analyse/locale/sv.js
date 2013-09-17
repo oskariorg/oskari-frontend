@@ -213,6 +213,18 @@ Oskari.registerLocalization({
                 "save": "Lagra",
                 "cancel": "Tillbaka"
             }
+        },
+        "personalDataTab" : {
+            "grid" : {
+                "name" : "Namn",
+                "delete": " "
+            },
+            "title" : "Analys",
+            "confirmDeleteMsg" : "Vill du ta bort:",
+            "buttons" : {
+                "cancel" : "Avbryta",
+                "delete" : "Ta bort"
+            }
         }
     }
 });
