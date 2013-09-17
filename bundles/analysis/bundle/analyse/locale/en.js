@@ -227,6 +227,10 @@ Oskari.registerLocalization({
             "buttons" : {
                 "cancel" : "Cancel",
                 "delete" : "Delete"
+            },
+            "error" : {
+                "title": "Error!",
+                "generic": "System error. Please try again later."
             }
         }
     }

@@ -1,6 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.analyse.view.PersonalDataTab
  * Renders the analysis tab content to be shown in "personal data" bundle.
+ * Also handles the delete functionality it provides in the UI.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
 
@@ -59,7 +60,7 @@ function(instance, localization) {
             link.append(name);
             link.bind('click', function() {
                 // delete analysis layer
-                me._deleteAnalysis(data);
+                me._confirmDeleteAnalysis(data);
                 return false;
             });
             return link;
@@ -79,7 +80,7 @@ function(instance, localization) {
     },
     /**
      * Updates the tab content with current analysis layers listing
-     * @method redraw
+     * @method update
      */
     update : function() {
         var service = this.instance.sandbox.getService('Oskari.mapframework.service.MapLayerService');
@@ -101,34 +102,88 @@ function(instance, localization) {
         this.grid.renderTo(this.container);
     },
     /**
-     * @method _deleteAnalysis
      * Confirms delete for given place and deletes it if confirmed. Also shows 
      * notification about cancel, deleted or error on delete. 
+     * @method _confirmDeleteAnalysis
      * @param {Object} data grid data object for place
      * @private
      */
-    _deleteAnalysis : function(data) {
+    _confirmDeleteAnalysis : function(data) {
     	var me = this;
-    	var sandbox = this.instance.sandbox;
         //var loc = this.loc.notification['delete'];
     	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
     	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
     	okBtn.setTitle(this.loc.buttons['delete']);
     	okBtn.addClass('primary');
-    	var service = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
     	okBtn.setHandler(function() {
-        	// TODO: shouldn't maplayerservice send removelayer request by default on remove layer?!?!?
-        	var removeMLrequestBuilder = sandbox.getRequestBuilder('RemoveMapLayerRequest');
-	        var request = removeMLrequestBuilder(data.layer.getId());
-	        sandbox.request(me.instance, request);
-            // TODO: call server to delete analysis
-        	service.removeLayer(data.layer.getId());
-			dialog.close();
+            me._deleteAnalysis(data.layer);
+            dialog.close();
     	});
     	var cancelBtn = dialog.createCloseButton(this.loc.buttons.cancel);
         var confirmMsg = this.loc.confirmDeleteMsg + '"' + data.name + '"' + '?';
     	dialog.show(this.loc.title, confirmMsg, [cancelBtn, okBtn]);
     	dialog.makeModal();
+    },
+    /**
+     * @method _deleteAnalysis
+     * Request backend to delete analysis data for the layer. On success removes the layer 
+     * from map and layerservice. On failure displays a notification.
+     * @param {Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer} layer analysis data to be destroyed
+     * @private
+     */
+    _deleteAnalysis : function(layer) {
+
+        var me = this;
+        var sandbox = this.instance.sandbox;
+
+        // parse actual id from layer id
+        var tokenIndex = layer.getId().lastIndexOf("_") + 1;
+        var idParam = layer.getId().substring(tokenIndex); 
+
+        jQuery.ajax({
+            url : sandbox.getAjaxUrl(),
+            data : {
+                action_route : 'DeleteAnalysisData',
+                id : idParam
+            },
+            type : 'POST',
+            success : function(response) {
+                if(response && response.result === 'success') {
+                    me._deleteSuccess();
+                }
+                else {
+                    me._deleteFailure();
+                }
+            },
+            error : function() {
+                    me._deleteFailure();
+            }
+        });
+
+    },
+    /**
+     * Success callback for backend operation.
+     * @method _deleteSuccess
+     * @private
+     */
+    _deleteSuccess : function() {
+        var service = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        // TODO: shouldn't maplayerservice send removelayer request by default on remove layer?
+        // also we need to do it before service.remove() to avoid problems on other components
+        var removeMLrequestBuilder = sandbox.getRequestBuilder('RemoveMapLayerRequest');
+        var request = removeMLrequestBuilder(data.layer.getId());
+        sandbox.request(me.instance, request);
+        service.removeLayer(data.layer.getId());
+    },
+    /**
+     * Failure callback for backend operation.
+     * @method _deleteFailure
+     * @private
+     */
+    _deleteFailure : function() {
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var okBtn = dialog.createCloseButton(this.loc.buttons.ok);
+        dialog.show(this.loc.error.title, this.loc.error.generic , [okBtn]);
     }
 });

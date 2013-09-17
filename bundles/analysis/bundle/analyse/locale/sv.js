@@ -222,8 +222,13 @@ Oskari.registerLocalization({
             "title" : "Analys",
             "confirmDeleteMsg" : "Vill du ta bort:",
             "buttons" : {
+                "ok": "OK",
                 "cancel" : "Avbryta",
                 "delete" : "Ta bort"
+            },
+            "error" : {
+                "title": "Fel!",
+                "generic": "Systemfel. Försök på nytt senare."
             }
         }
     }

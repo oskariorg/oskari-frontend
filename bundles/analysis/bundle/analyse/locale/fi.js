@@ -224,10 +224,14 @@ Oskari.registerLocalization({
             "title" : "Analyysi",
             "confirmDeleteMsg" : "Haluatko poistaa analyysin:",
             "buttons" : {
+                "ok": "OK",
                 "cancel" : "Peruuta",
                 "delete" : "Poista"
+            },
+            "error" : {
+                "title": "Virhe!",
+                "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin."
             }
         }
-
     }
 });
