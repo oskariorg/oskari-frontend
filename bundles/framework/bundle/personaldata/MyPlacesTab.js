@@ -103,7 +103,8 @@ function(instance, localization) {
                 deleteLink.bind('click', deletelinkClosure(id));
                 panel.getContainer().append(deleteLink);
                 
-/*                var publishLink = this.linkTemplate.clone();
+/*
+                var publishLink = this.linkTemplate.clone();
                 publishLink.addClass('categoryOp');
                 var isPublic = categories[i].isPublic();
                 var publishIcon = this.iconTemplate.clone();
