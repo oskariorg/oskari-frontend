@@ -317,6 +317,11 @@ define([
             data.style          = form.find('#add-layer-style').val(),
             data.style          = me.classes.encode64(data.style);//me.layerGroupingModel.encode64(data.style);
 
+            if(data.style == null) {
+                data.style = '';
+            }
+
+
             data.minScale       = form.find('#add-layer-minscale').val() || 16000000,
             data.maxScale       = form.find('#add-layer-maxscale').val() || 1,
             data.epsg           = form.find('#add-layer-srsname').val(),
@@ -330,6 +335,13 @@ define([
             data.xslt           = form.find('#add-layer-xslt').val(),
             data.xslt           = me.classes.encode64(data.xslt);//me.layerGroupingModel.encode64(data.xslt);
             data.gfiType        = form.find('#add-layer-responsetype').val();
+
+            if(data.gfiType == null) {
+                data.gfiType = '';
+            }
+
+
+
             // Layer class id aka. orgName id
             data.lcId           = lcId;
 
