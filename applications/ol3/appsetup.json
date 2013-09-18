@@ -118,21 +118,7 @@
                     }
                 }
             }
-        }, {
-            "title": "Printout",
-            "bundleinstancename": "printout",
-            "fi": "printout",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "printout",
-            "metadata": {
-                "Import-Bundle": {
-                    "printout": {
-                        "bundlePath": "../../packages/framework/bundle/"
-                    }
-                }
-            }
-        }, {
+        },  {
 			"instanceProps": {},
 			"title": "Valitut karttatasot",
 			"bundleinstancename": "layerselection2",
