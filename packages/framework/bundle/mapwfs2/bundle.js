@@ -42,6 +42,9 @@ function() {
             "src" : "../../../../bundles/framework/bundle/mapwfs2/plugin/QueuedTilesStrategy.js"
         }, {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapwfs2/plugin/TileCache.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/mapwfs2/plugin/WfsLayerPlugin.js"
         }, {
             "type" : "text/javascript",

@@ -176,12 +176,14 @@ function(instance) {
         var panel = this.layers[layerId];
         this.tabsContainer.removePanel(panel);
         // clean up
-        panel.grid = null;
-        delete panel.grid;
-        panel.layer = null;
-        delete panel.layer;
-        this.layers[layerId] = null;
-        delete this.layers[layerId];
+        if(panel) {
+            panel.grid = null;
+            delete panel.grid;
+            panel.layer = null;
+            delete panel.layer;
+            this.layers[layerId] = null;
+            delete this.layers[layerId];
+        }
     },
 
     /**
