@@ -207,8 +207,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         }
 
         // remove highlight image
-        console.log("@mapClick");
-        console.log(data);
         if(!keepPrevious) {
             this.plugin.removeHighlightImage(layer);
         }

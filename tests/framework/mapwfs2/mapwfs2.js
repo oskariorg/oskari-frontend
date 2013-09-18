@@ -116,7 +116,12 @@ describe('Test Suite for mapwfs2', function() {
         conf["mapfull"]["conf"]["plugins"].push(
             {
                 "id": "Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
-                "config": { contextPath : '/transport-0.0.1', port : '6060' }
+                "config": { 
+                    hostname: 'localhost',
+                    contextPath: '/transport-0.0.1',
+                    port: '8888', 
+                    lazy: false 
+                }
             }
         );
 
@@ -173,7 +178,7 @@ describe('Test Suite for mapwfs2', function() {
                 "browser" : jQuery.browser.name,
                 "browserVersion" : jQuery.browser.versionNum
             }
-            connection = module.getConnection();
+            connection = module.getConnection().get();
             done();
         });
     };
@@ -209,7 +214,7 @@ describe('Test Suite for mapwfs2', function() {
 
             // needs transport service ONLINE
             if(ONLINE_TESTS) {
-                expect(mediator.getConnection()).to.be.ok();
+                expect(connection.isConnected()).to.be(true);
             }
         });
     });

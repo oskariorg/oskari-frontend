@@ -897,14 +897,6 @@ function(config) {
         var ols = new OpenLayers.Size(imageSize.width, imageSize.height);
 
         if (layerPostFix == "highlight") {
-            console.log(layerName);
-            /*
-            if(!keepPrevious) {
-                console.log("@imageDraw");
-                this.removeHighlightImage(layer);
-            }
-            */
-
             var wfsMapImageLayer = new OpenLayers.Layer.Image(
                 layerName,
                 imageUrl,
@@ -1084,7 +1076,6 @@ function(config) {
      *           WFS layer that we want to update
      */
     removeHighlightImage : function(layer) {
-        console.log("removeHighlightImage", layer.getId());
         var layerName = "wfs_layer_" + layer.getId() + "_highlight";
 
         var removeLayers = this._map.getLayersByName(layerName);

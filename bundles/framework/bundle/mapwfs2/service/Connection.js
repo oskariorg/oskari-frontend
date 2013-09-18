@@ -21,7 +21,8 @@ function(config, plugin) {
     this._errorSub = null;
 
     // config defaults
-    this._lazy = this.config.lazy || true; // if lazy connection
+    if(typeof this.config.lazy === "undefined") this.config.lazy = true;
+    this._lazy = this.config.lazy;
     this._disconnectTime = this.config.disconnectTime || 30000;
     this._backoffIncrement = this.config.backoffIncrement || 1000;
     this._maxBackoff = this.config.maxBackoff || 60000;
