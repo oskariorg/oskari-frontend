@@ -228,6 +228,10 @@ Oskari.registerLocalization({
                 "cancel" : "Peruuta",
                 "delete" : "Poista"
             },
+            "notification": {
+                "deletedTitle": "Karttatason poisto",
+                "deletedMsg": "Karttataso poistettu."
+            },
             "error" : {
                 "title": "Virhe!",
                 "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin."
