@@ -1,0 +1,204 @@
+{
+    "startupSequence": [
+        {
+            "title": "OpenLayers 3",
+            "bundleinstancename": "ol3",
+            "bundlename": "ol3",
+            "metadata": {
+                "Import-Bundle": {
+                    "ol3": {
+                        "bundlePath": "../../packages/ol3/bundle/"
+                    },
+                    "oskariui": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "title": "Map",
+            "bundleinstancename": "mapfull",
+            "fi": "Map",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "mapfull",
+            "metadata": {
+                "Import-Bundle": {
+                    "mapwfs": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
+                    "service-base": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
+                    "event-map-layer": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
+                    "request-map-layer": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
+                    "mapmodule-plugin": {
+                        "bundlePath": "../../packages/ol3/bundle/"
+                    },
+                    "event-base": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
+                    "mapfull": {
+                        "bundlePath": "../../packages/ol3/bundle/"
+                    },
+                    "core-base": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
+                    "request-base": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
+                    "domain": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
+                    "core-map": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
+                    "request-map": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
+                    "sandbox-base": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
+                    "service-map": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
+                    "sandbox-map": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
+                    "event-map": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    },
+                    "mapstats" : {
+                         "bundlePath": "../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "title": "Oskari DIV Manazer",
+            "bundleinstancename": "divmanazer",
+            "fi": "Oskari DIV Manazer",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "divmanazer",
+            "metadata": {
+                "Import-Bundle": {
+                    "divmanazer": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "title": "Search",
+            "bundleinstancename": "search",
+            "fi": "search",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "search",
+            "metadata": {
+                "Import-Bundle": {
+                    "search": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "title": "Toolbar",
+            "bundleinstancename": "toolbar",
+            "fi": "toolbar",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "toolbar",
+            "metadata": {
+                "Import-Bundle": {
+                    "toolbar": {
+                        "bundlePath": "../../packages/framework/bundle/"
+                    }
+                }
+            }
+        },  {
+			"instanceProps": {},
+			"title": "Valitut karttatasot",
+			"bundleinstancename": "layerselection2",
+			"fi": "layerselection",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "layerselection2",
+			"metadata": {
+				"Import-Bundle": {
+					"layerselection2": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}, {
+			"instanceProps": {},
+			"title": "statehandler",
+			"bundleinstancename": "statehandler",
+			"fi": "statehandler",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "statehandler",
+			"metadata": {
+				"Import-Bundle": {
+					"statehandler": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		},{
+			"instanceProps": {},
+			"title": "Karttatasot",
+			"bundleinstancename": "layerselector2",
+			"fi": "layerselector2",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "layerselector2",
+			"metadata": {
+				"Import-Bundle": {
+					"layerselector2": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		},{
+			"instanceProps": {},
+			"title": "InfoBox",
+			"bundleinstancename": "infobox",
+			"fi": "infobox",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "infobox",
+			"metadata": {
+				"Import-Bundle": {
+					"infobox": {
+						"bundlePath": "../../packages/ol3/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		},{
+			"instanceProps": {},
+			"title": "statehandler",
+			"bundleinstancename": "statehandler",
+			"fi": "statehandler",
+			"sv": "?",
+			"en": "?",
+			"bundlename": "statehandler",
+			"metadata": {
+				"Import-Bundle": {
+					"statehandler": {
+						"bundlePath": "../../packages/framework/bundle/"
+					}
+				},
+				"Require-Bundle-Instance": []
+			}
+		}
+    ]
+    
+}
