@@ -101,6 +101,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
             "src" : "../../../../bundles/framework/bundle/myplaces2/view/PlaceForm.js"
         }, {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/myplaces2/view/PointForm.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/myplaces2/view/LineForm.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/myplaces2/view/AreaForm.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/myplaces2/view/CategoryForm.js"
         }, {
             "type" : "text/javascript",
@@ -115,6 +124,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
            // NOTE! EXTERNAL LIBRARY!
             "type" : "text/javascript",
             "src" : "../../../../libraries/jscolor/jscolor.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../libraries/jquery/plugins/jquery.svg.package-1.4.5/jquery.svg.js"
 		},
 		// css
 		{

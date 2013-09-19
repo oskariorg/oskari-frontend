@@ -5,7 +5,7 @@
     <td>ID</td><td>publisher</td>
   </tr>
   <tr>
-    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.publisher.PublisherBundleInstance)</td>
+    <td>API</td><td>[link](<%= apiurl %>classes/Oskari.mapframework.bundle.publisher.PublisherBundleInstance.html)</td>
   </tr>
 </table>
 

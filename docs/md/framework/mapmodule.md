@@ -5,7 +5,7 @@
     <td>ID</td><td>mapmodule</td>
   </tr>
   <tr>
-    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.ui.module.common.MapModule)</td>
+    <td>API</td><td>[link](<%= apiurl %>Oskari.mapframework.ui.module.common.MapModule.html)</td>
   </tr>
 </table>
 

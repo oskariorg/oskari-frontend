@@ -142,7 +142,7 @@ function() {
         
         // Should this not come as a param?
         var me = this;
-        	var conf = me.conf ;
+        var conf = me.conf ;
 		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
 		var sandbox = Oskari.getSandbox(sandboxName);
         this.sandbox = sandbox;
@@ -163,14 +163,14 @@ function() {
         this.categoryHandler = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.CategoryHandler', this);
         this.categoryHandler.start();        
 
-        var defaultCategoryName = this.getLocalization('category').defaultName;
+        var defaults = this._getCategoryDefaults();
         
         var actionUrl = this.conf.queryUrl; 
         //'/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&myplaces=WFS';
         // this.conf.queryUrl; 
         // back end communication
         this.myPlacesService = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService', 
-            actionUrl, user.getUuid(), sandbox, defaultCategoryName, this);
+            actionUrl, user.getUuid(), sandbox, defaults, this);
         // register service so personal data can access it
         this.sandbox.registerService(this.myPlacesService);
         // init loads the places/categories
@@ -192,8 +192,67 @@ function() {
      */
     stop : function() {
         this.sandbox = null;
+    },
+
+    _getCategoryDefaults : function() {
+         var defaults = {
+             name: this.getLocalization('category').defaultName,
+             point: {
+                 shape: 1,
+                 color: "000000",
+                 size: 3
+             },
+             line: {
+                 style: 0,
+                 cap: 0,
+                 corner: 0,
+                 width: 1,
+                 color: "000000"
+             },
+             area: {
+                 linestyle: 0,
+                 linecap: 0,
+                 linecorner: 0,
+                 linewidth: 1,
+                 linecolor: "000000",
+                 color: "ffde00",
+                 fill: -1
+
+             }
+         };
+         if (!this.conf) return defaults;
+         if (!this.conf.defaults) return defaults;
+         for (var prop in defaults) {
+             if(this.conf.defaults[prop]) {
+                 defaults[prop] = this.conf.defaults[prop];
+             }
+         }
+         return defaults;
+     },
+
+    /**
+     * Convert hexadecimal color values to decimal values (255,255,255)
+     * Green: hexToRgb("#0033ff").g 
+     * http://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+     *
+     * @method hex
+     * hexadecimal color value e.g. '#00ff99'
+     */
+    hexToRgb: function(hex) {
+        // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+        var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+        hex = hex.replace(shorthandRegex, function(m, r, g, b) {
+            return r + r + g + g + b + b;
+        });
+
+        var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : null;
     }
-    
+
 }, {
     /**
      * @property {String[]} protocol
