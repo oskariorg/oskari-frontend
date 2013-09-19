@@ -7,7 +7,7 @@
  *
  * See http://www.oskari.org/trac/wiki/DocumentationBundleMapmodule
  */
-Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
+Oskari.clazz.define('Oskari.leaflet.ui.module.common.MapModule',
 /**
  * @method create called automatically on construction
  * @static
@@ -208,7 +208,7 @@ function(id, imageUrl, options) {
      */
     init : function(sandbox) {
 
-        sandbox.printDebug("Initializing OL3 map module...#############################################");
+        sandbox.printDebug("Initializing leaflet map module...#############################################");
 
         this._sandbox = sandbox;
 
@@ -234,7 +234,7 @@ function(id, imageUrl, options) {
 
         this.requestHandlers = {
             mapLayerUpdateHandler : Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler', sandbox, this),
-            mapMoveRequestHandler : Oskari.clazz.create('Oskari.ol3.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this)
+            mapMoveRequestHandler : Oskari.clazz.create('Oskari.leaflet.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this)
         };
         sandbox.addRequestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
         sandbox.addRequestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
@@ -431,66 +431,87 @@ function(id, imageUrl, options) {
         var maxExtent = this._maxExtent;
         var extent = this._extent;
 
-        var projection = ol.proj.configureProj4jsProjection({
-            code : this._projectionCode,
-            extent : extent
+        L.CRS.proj4js = ( function() {
+                var createProjection = function(code, def, /*L.Transformation*/transformation) {
+                    if ( typeof (def) !== 'undefined') {
+                        Proj4js.defs[code] = def;
+                    }
+                    var proj = new Proj4js.Proj(code);
+
+                    return {
+                        project : function(latlng) {
+                            var point = new L.Point(latlng.lng, latlng.lat);
+                            return Proj4js.transform(Proj4js.WGS84, proj, point);
+                        },
+
+                        unproject : function(point, unbounded) {
+                            var point2 = Proj4js.transform(proj, Proj4js.WGS84, point.clone());
+                            return new L.LatLng(point2.y, point2.x, unbounded);
+                        }
+                    };
+                };
+
+                return function(code, def, transformation) {
+                    return L.Util.extend({}, L.CRS, {
+                        code : code,
+                        transformation : transformation ? transformation : new L.Transformation(1, 0, -1, 0),
+                        projection : createProjection(code, def)
+                    });
+                };
+            }());
+
+        /* TODO support others as well */
+        console.log("WARNING: EPSG:3067 hard coded temporarily");
+        var crs = L.CRS.proj4js('EPSG:3067', '+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs', new L.Transformation(1, 548576.0, -1, 8388608));
+
+        crs.scale = function(zoom) {
+            return 1 / resolutions[zoom];
+            //    return 1 / ( 8192 / Math.pow(2, zoom) );
+        };
+
+        this._projection = crs;
+
+        var resolutions = this._mapResolutions;
+
+        var map = L.map('mapdiv', {
+            crs : crs,
+            scale : function(zoom) {
+                //  return 1 / ( 8192 / Math.pow(2, zoom) );
+                return 1 / resolutions[zoom];
+            },
+            center : [65.53425, 24.86703333],
+            zoom : 2,
+            continuousWorld : true,
+            trackResize: true
         });
-        ol.proj.addProjection(projection);
-        var bprojection = ol.proj.configureProj4jsProjection({
-            code : 'urn:ogc:def:crs:EPSG:6.3:3067',
-            extent : extent
-        });
-        ol.proj.addProjection(bprojection);
-
-        if (!ol.proj.get(this._projectionCode))
-            throw "NO CRS? " + this._projectionCode;
-        /*       	if( !ol.proj.get('urn:ogc:def:crs:EPSG:6.3:3067') )
-         throw "NO CRS? + urn EPSG 3067";*/
-
-        var projectionExtent = projection.getExtent();
-
-        this._projection = projection;
-
-        var map = new ol.Map({
-            extent : projectionExtent,
-            controls : ol.control.defaults({}, [/*new ol.control.ScaleLine({
-             units : ol.control.ScaleLineUnits.METRIC
-             })*/]),
-            layers : [],
-            //renderers : ol.RendererHints.createFromQueryData(),
-            renderer : ol.RendererHint.CANVAS,
-            target : 'mapdiv'
-
-        });
-
-        var zoomslider = new ol.control.ZoomSlider({
-            map : map
-        });
-
-        map.setView(new ol.View2D({
-            projection : projection,
-            center : [383341, 6673843],
-            zoom : 5
-        }));
 
         var me = this;
 
-        map.on('moveend', function(evt) {
-            
-            var map = evt.map;
-            var extent = map.getView().calculateExtent(map.getSize());
-            var center = map.getView().getCenter();
+        map.on('moveend', function(e) {
+            //
 
-            var sandbox = me._sandbox;
-            sandbox.getMap().setMoving(false);
-            sandbox.printDebug("sending AFTERMAPMOVE EVENT from map Event handler");
+            var extent = me.getMapExtent();
+            var center = map.getCenter();
+            var zoom = map.getZoom();
+            var lonlat = me._map2Crs(center.lng, center.lat);
+            console.log("MOVEEND", e, extent, center, zoom, lonlat);
 
-            var lonlat = map.getView().getCenter();
             me._updateDomain();
-            var sboxevt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[1], map.getView().getZoom(), false, me.getMapScale());
+            var sboxevt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[1], map.getZoom(), false, me.getMapScale());
             sandbox.notifyAll(sboxevt);
 
         });
+
+        /*var kunnat = L.tileLayer.wms("http://viljonkkatu01.nls.fi:8280/geoserver/wms", {
+         layers : 'tilastoalueet%3Akunnat2013',
+         format : 'image/png',
+         transparent : true,
+         attribution : "MML",
+         continuousWorld : true
+
+         });
+
+         map.addLayer(kunnat);*/
 
         this._map = map;
 
@@ -536,7 +557,9 @@ function(id, imageUrl, options) {
         var isDragging = (pIsDragging === true);
         // using panTo BREAKS IE on startup so do not
         // should we spam events on dragmoves?
-        this._map.getView().setCenter([lonlat.lon, lonlat.lat]);
+        var mapLatLon = this._crs2Map(lonlat.lon, lonlat.lat);
+        this._map.setView(mapLatLon);
+
         if (zoomAdjust) {
             this.adjustZoomLevel(zoomAdjust, true);
         }
@@ -570,7 +593,8 @@ function(id, imageUrl, options) {
      *     wanting to notify at end of the chain for performance reasons or similar) (optional)
      */
     panMapToLonLat : function(lonlat, suppressEnd) {
-        this._map.getView().setCenter([lonlat.lon, lonlat.lat]);
+        var mapLatLon = this._crs2Map(lonlat.lon, lonlat.lat);
+        this._map.setView(mapLatLon);
         this._updateDomain();
         if (suppressEnd !== true) {
             this.notifyMoveEnd();
@@ -605,7 +629,9 @@ function(id, imageUrl, options) {
      */
     centerMap : function(lonlat, zoom, suppressEnd) {
         // TODO: openlayers has isValidLonLat(); maybe use it here
-        this._map.getView().setCenter([lonlat.lon, lonlat.lat]);
+        var mapLatLon = this._crs2Map(lonlat.lon, lonlat.lat);
+        this._map.setView(mapLatLon, zoom || this._map.getZoom());
+
         this._updateDomain();
         if (suppressEnd !== true) {
             this.notifyMoveEnd();
@@ -638,7 +664,7 @@ function(id, imageUrl, options) {
      * Pans the map toward east by 3/4 of the map width
      */
     panMapEast : function() {
-        var size = this._map.getSize();
+        var size = this.getMapSize();
         this.panMapByPixels(0.75 * size.w, 0);
     },
     /**
@@ -646,7 +672,7 @@ function(id, imageUrl, options) {
      * Pans the map toward west by 3/4 of the map width
      */
     panMapWest : function() {
-        var size = this._map.getSize();
+        var size = this.getMapSize();
         this.panMapByPixels(-0.75 * size.w, 0);
     },
     /**
@@ -654,7 +680,7 @@ function(id, imageUrl, options) {
      * Pans the map toward north by 3/4 of the map height
      */
     panMapNorth : function() {
-        var size = this._map.getSize();
+        var size = this.getMapSize();
         this.panMapByPixels(0, -0.75 * size.h);
     },
     /**
@@ -662,7 +688,7 @@ function(id, imageUrl, options) {
      * Pans the map toward south by 3/4 of the map height
      */
     panMapSouth : function() {
-        var size = this._map.getSize();
+        var size = this.getMapSize();
         this.panMapByPixels(0, 0.75 * size.h);
     },
     /**
@@ -679,41 +705,20 @@ function(id, imageUrl, options) {
      * @param {Boolean} isDrag true if the user is dragging the map to a new location currently (optional)
      */
     panMapByPixels : function(pX, pY, suppressStart, suppressEnd, isDrag) {
-        // usually programmatically for gfi centering
-        /*this._map.pan(pX, pY, {
-         dragging : ( isDrag ? true : false),
-         animate : false
-         });*/
-        var map = this._map;
-        var view = map.getView();
 
-        var res = view.getResolution();
-        var cxy = view.getCenter();
-        var panTo = [cxy[0] - pX * res, cxy[1] - pY * res];
+        console.log("NYI: panMapByPixels", arguments);
+        /*
 
-        (function() {
-            var duration = 1000;
-            var start = +new Date();
-            var pan = ol.animation.pan({
-                duration : duration,
-                source : view.getCenter(),
-                start : start
-            });
-          
-            map.beforeRender(pan);
-            view.setCenter(panTo);
-        })()
+         this._updateDomain();
+         // send note about map change
+         if (suppressStart !== true) {
+         this.notifyStartMove();
+         }
+         if (suppressEnd !== true) {
+         this.notifyMoveEnd();
+         }
 
-        // view.setCenter(panTo);
-
-        this._updateDomain();
-        // send note about map change
-        if (suppressStart !== true) {
-            this.notifyStartMove();
-        }
-        if (suppressEnd !== true) {
-            this.notifyMoveEnd();
-        }
+         */
     },
     /**
      * @method moveMapByPixels
@@ -792,9 +797,12 @@ function(id, imageUrl, options) {
      *     wanting to notify at end of the chain for performance reasons or similar) (optional)
      */
     zoomToExtent : function(bounds, suppressStart, suppressEnd) {
-        //this._map.zoomToExtent(bounds);
-        var bbox = [bounds.left, bounds.bottom, bounds.right, bounds.top];
-        this._map.getView().fitExtent(bbox, this._map.getSize());
+        
+        var sw = this._crs2Map(bounds.left,bounds.bottom);
+        var ne = this._crs2Map(bounds.right,bounds.top);
+        var mapBounds = new L.LatLngBounds(sw,ne); 
+        
+        this._map.fitBounds(mapBounds);
 
         this._updateDomain();
         // send note about map change
@@ -818,9 +826,8 @@ function(id, imageUrl, options) {
 
          this._map.zoomTo(requestedZoomLevel);*/
         var delta = amount;
-        var view = this._map.getView().getView2D();
-        var currZoom = view.getZoom();
-        view.setZoom(currZoom + delta);
+        var currZoom = this._map.getZoom();
+        this._map.setZoom(currZoom + delta);
 
         this._updateDomain();
         if (suppressEvent !== true) {
@@ -837,14 +844,14 @@ function(id, imageUrl, options) {
      *     wanting to notify at end of the chain for performance reasons or similar) (optional)
      */
     setZoomLevel : function(newZoomLevel, suppressEvent) {
-        if (newZoomLevel == this._map.getView().getZoom()) {
+        if (newZoomLevel == this._map.getZoom()) {
             // do nothing if requested zoom is same as current
             return;
         }
         if (newZoomLevel < 0 || newZoomLevel > this._map.getNumZoomLevels) {
-            newZoomLevel = this._map.getView().getZoom();
+            newZoomLevel = this._map.getZoom();
         }
-        this._map.getView().setZoom(newZoomLevel);
+        this._map.setZoom(newZoomLevel);
         this._updateDomain();
         if (suppressEvent !== true) {
             // send note about map change
@@ -861,13 +868,13 @@ function(id, imageUrl, options) {
      */
     _getNewZoomLevel : function(adjustment) {
         // TODO: check isNaN?
-        var requestedZoomLevel = this._map.getView().getZoom() + adjustment;
+        var requestedZoomLevel = this._map.getZoom() + adjustment;
 
         if (requestedZoomLevel >= 0 && requestedZoomLevel <= this._map.getNumZoomLevels()) {
             return requestedZoomLevel;
         }
         // if not in valid bounds, return original
-        return this._map.getView().getZoom();
+        return this._map.getZoom();
     },
     /**
      * @method notifyStartMove
@@ -881,7 +888,7 @@ function(id, imageUrl, options) {
             return;
         }
         this._sandbox.getMap().setMoving(true);
-        var center = this._map.getView().getCenter();
+        var center = this._map.getCenter();
         var centerX = center[0];
         var centerY = center[1];
         var event = this._sandbox.getEventBuilder('MapMoveStartEvent')(centerX, centerY);
@@ -903,10 +910,10 @@ function(id, imageUrl, options) {
          var sandbox = this._sandbox;
          sandbox.getMap().setMoving(false);
 
-         var lonlat = this._map.getView().getCenter();
+         var lonlat = this._map.getCenter();
          this._updateDomain();
          var scale = this.getMapScale();
-         var zoom = this._map.getView().getZoom();
+         var zoom = this._map.getZoom();
          var evt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[0], zoom, false, scale);
          sandbox.notifyAll(evt);
          */
@@ -927,19 +934,19 @@ function(id, imageUrl, options) {
         }
         var sandbox = this._sandbox;
         var mapVO = sandbox.getMap();
-        var lonlat = this._map.getView().getCenter();
-        var zoom = this._map.getView().getZoom();
-        mapVO.moveTo(lonlat[0], lonlat[1], zoom);
-
+        var latlng = this._map.getCenter();
+        var lonlat = this._map2Crs(latlng.lng,latlng.lat);
+        
+        var zoom = this._map.getZoom();
+        mapVO.moveTo(lonlat.x, lonlat.y, zoom);
         mapVO.setScale(this.getMapScale());
 
-        var size = this._map.getSize();
+        var size = this.getMapSize();
         mapVO.setWidth(size[0]);
         mapVO.setHeight(size[1]);
-        mapVO.setResolution(this._map.getView().getResolution());
+        //mapVO.setResolution(this._map.getResolution());
 
-        var extent = this._map.getView().calculateExtent(this._map.getSize());
-
+        var extent = this.getMapExtent();
         var bbox = new OpenLayers.Bounds(extent[0], extent[1], extent[2], extent[3]);
 
         mapVO.setExtent(bbox);
@@ -966,6 +973,27 @@ function(id, imageUrl, options) {
             }
         }
         return layerScales;
+    },
+     /**
+     * @method calculateLayerScales
+     * Calculate a subset of maps scales array that matches the given boundaries.
+     * If boundaries are not defined, returns all possible scales.
+     * @param {Number} maxScale maximum scale boundary (optional)
+     * @param {Number} minScale minimum scale boundary (optional)
+     * @return {Number[]} calculated mapscales that are within given bounds
+     */
+    calculateLayerMinMaxResolutions : function(maxScale, minScale) {
+        var minScaleZoom = undefined;
+        var maxScaleZoom = undefined;
+        for (var i = 0; i < this._mapScales.length; i++) {
+            if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
+                if( minScaleZoom === undefined ) {
+                    minScaleZoom = i; 
+                }
+                maxScaleZoom = i; 
+            }
+        }
+        return { min: minScaleZoom, max: maxScaleZoom };
     },
     /**
      * @method calculateLayerScales
@@ -1141,7 +1169,7 @@ function(id, imageUrl, options) {
     },
 
     getLayers : function() {
-        return this._map.getLayers().getArray();
+        return this.layerDefs;
     },
 
     getLayerDefs : function() {
@@ -1180,21 +1208,19 @@ function(id, imageUrl, options) {
     },
 
     setLayerIndex : function(layerImpl, index) {
-        var layerColl = this._map.getLayers();
+        /*var layerColl = this._map.getLayers();
         var layerIndex = this.getLayerIndex(layerImpl);
 
-        /* find */
-        /* remove */
-        /* insert at */
-
+        
+        
         if (index === layerIndex) {
             return
         } else if (index === layerColl.getLength()) {
-            /* to top */
+           
             layerColl.removeAt(layerIndex);
             layerColl.insertAt(index, layerImpl);
         } else if (layerIndex < index) {
-            /* must adjust change */
+           
             layerColl.removeAt(layerIndex);
             layerColl.insertAt(index - 1, layerImpl);
 
@@ -1202,25 +1228,48 @@ function(id, imageUrl, options) {
             layerColl.removeAt(layerIndex);
             layerColl.insertAt(index, layerImpl);
         }
-
+        */
     },
 
     getLayerIndex : function(layerImpl) {
-        var layerColl = this._map.getLayers();
+        /*var layerColl = this._map.getLayers();
         var layerArr = layerColl.getArray();
 
         for (var n = 0; n < layerArr.length; n++) {
             if (layerArr[n] === layerImpl) {
                 return n;
             }
-        }
+        }*/
         return -1;
 
     },
 
     getMapScale : function() {
-        return OpenLayers.Util.getScaleFromResolution(this._map.getView().getResolution(), 'm');
+        var size = this.getMapSize();
+        var extent = this.getMapExtent();
+        var res = (extent[2] - extent[0] ) / size[0];
+        return OpenLayers.Util.getScaleFromResolution(res, 'm');
 
+    },
+
+    getMapSize : function() {
+        var mapContainer = jQuery(this._map.getContainer());
+        return [mapContainer.width(), mapContainer.height()];
+    },
+    getMapExtent : function() {
+        var bounds = this._map.getBounds();
+        var bsw = bounds.getSouthWest();
+        var sw = this._map2Crs(bsw.lng, bsw.lat);
+        var bne = bounds.getNorthEast();
+        var ne = this._map2Crs(bne.lng, bsw.lat);
+        return [sw.x, sw.y, ne.x, ne.y];
+    },
+
+    _crs2Map : function(x, y) {
+        return this._projection.projection.unproject(new L.Point(x, y));
+    },
+    _map2Crs : function(x, y) {
+        return this._projection.projection.project(new L.LatLng(y, x));
     }
 }, {
     /**

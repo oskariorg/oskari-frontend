@@ -6,7 +6,7 @@
  * 
  * See bundle documentation at http://www.oskari.org/trac/wiki/DocumentationBundleMapfull
  */
-Oskari.clazz.define("Oskari.ol3.bundle.mapfull.MapFullBundleInstance", 
+Oskari.clazz.define("Oskari.leaflet.bundle.mapfull.MapFullBundleInstance", 
 /**
  * @method create called automatically on construction
  * @static
@@ -54,7 +54,7 @@ function() {
 	_createUi : function() {
         var me = this;
 
-        var module = Oskari.clazz.create('Oskari.mapframework.ui.module.common.MapModule', "Main", this.conf.imageLocation, this.conf.mapOptions);
+        var module = Oskari.clazz.create('Oskari.leaflet.ui.module.common.MapModule', "Main", this.conf.imageLocation, this.conf.mapOptions);
 
         this.mapmodule = module;
         var map = this.sandbox.register(module);
@@ -79,7 +79,7 @@ function() {
                     if(contentMap.find('.oskariui-menutoolbar').length > 0) {
                         mapDiv.height(jQuery(window).height() - contentMap.find('.oskariui-menutoolbar').height());
                     }
-                   map.updateSize();
+                    //map.updateSize();
                 }
             };
         

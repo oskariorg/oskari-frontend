@@ -95,8 +95,7 @@ module.exports = function (grunt) {
             dist: {
                 options: {
                     paths: ['../sources/framework', '../bundles/framework', '../bundles/sample', '../bundles/catalogue'],
-                    outdir: '../dist/<%= version %>api/',
-                    themedir: '../docs/yui/theme/'
+                    outdir: '../dist/<%= version %>api/'
                 }
             }
         },
