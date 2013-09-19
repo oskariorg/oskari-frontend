@@ -79,7 +79,7 @@ function() {
                     if(contentMap.find('.oskariui-menutoolbar').length > 0) {
                         mapDiv.height(jQuery(window).height() - contentMap.find('.oskariui-menutoolbar').height());
                     }
-                    map.updateSize();
+                   map.updateSize();
                 }
             };
         

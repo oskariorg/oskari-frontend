@@ -481,7 +481,8 @@ function(id, imageUrl, options) {
             },
             center : [65.53425, 24.86703333],
             zoom : 2,
-            continuousWorld : true
+            continuousWorld : true,
+            trackResize: true
         });
 
         var me = this;

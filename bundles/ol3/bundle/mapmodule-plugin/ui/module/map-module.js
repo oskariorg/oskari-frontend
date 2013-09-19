@@ -487,7 +487,7 @@ function(id, imageUrl, options) {
 
             var lonlat = map.getView().getCenter();
             me._updateDomain();
-            var sboxevt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[0], map.getView().getZoom(), false, me.getMapScale());
+            var sboxevt = sandbox.getEventBuilder('AfterMapMoveEvent')(lonlat[0], lonlat[1], map.getView().getZoom(), false, me.getMapScale());
             sandbox.notifyAll(sboxevt);
 
         });
@@ -1145,7 +1145,7 @@ function(id, imageUrl, options) {
     },
 
     getLayerDefs : function() {
-        return this._layerDefs;
+        return this.layerDefs;
     },
 
     addLayer : function(layerImpl, layer, name) {
