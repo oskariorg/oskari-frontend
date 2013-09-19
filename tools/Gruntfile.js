@@ -301,11 +301,11 @@ module.exports = function (grunt) {
             grunt.config.set("sprite." + appName + ".options", options);
         }
 
-//        grunt.task.run('validate');
-//        grunt.task.run('copy');
-//        grunt.task.run('compile');
-//        grunt.task.run('compileAppCSS');
-//        grunt.task.run('sprite');
+        grunt.task.run('validate');
+        grunt.task.run('copy');
+        grunt.task.run('compile');
+        grunt.task.run('compileAppCSS');
+        grunt.task.run('sprite');
         grunt.task.run('yuidoc');
         grunt.task.run('mddocs');
     });
