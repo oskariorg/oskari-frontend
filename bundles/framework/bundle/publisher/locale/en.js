@@ -72,7 +72,16 @@ Oskari.registerLocalization(
                             "blue": "Blue",
                             "red": "Red",
                             "green": "Green",
-                            "yellow": "Yellow"
+                            "yellow": "Yellow",
+                            "custom": {
+                                "name": "Custom colours",
+                                "bgLabel": "Header background",
+                                "titleLabel": "Header text",
+                                "headerLabel": "Title text",
+                                "iconLabel": "Icon",
+                                "iconCloseLabel": "Dark",
+                                "iconCloseWhiteLabel": "Light"
+                            }
                         },
                         "fonts": {
                             "label": "Choose font"
@@ -91,7 +100,8 @@ Oskari.registerLocalization(
                         "title": "Choose the colour scheme",
                         "close": "Close",
                         "gfiDialog": {
-                            "title": "Preview",
+                            "title": "Feature info",
+                            "featureName": "Preview",
                             "featureDesc": "Changing the colour scheme has effect only on the feature info popup"
                         }
                     }
@@ -158,6 +168,7 @@ Oskari.registerLocalization(
                 "layerlist_empty": "The map layers you selected cannot be embedded. The menu Selected map layers shows whether or not a map layer can be embedded.",
                 "layerlist_denied": "Cannot be embedded",
                 "denied_tooltip": "The providers of this map data have not granted permission to publish these materials on other websites. Check rights to publish in the menu Selected map layers before embedding.",
+                "myPlacesDisclaimer": "NB. you are going to publish your own map layer.",
                 "buttons": {
                     "continue": "Continue",
                     "continueAndAccept": "Accept Terms of use and continue",

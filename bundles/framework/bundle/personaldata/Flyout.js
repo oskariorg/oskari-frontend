@@ -142,6 +142,10 @@ function(instance) {
      *
      */
     addTab : function(item) {
+        var sandbox = this.instance.getSandbox();
+        if(!sandbox.getUser().isLoggedIn()) {
+            return;
+        }
         var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
         panel.setTitle(item.title);
         panel.setContent(item.content);

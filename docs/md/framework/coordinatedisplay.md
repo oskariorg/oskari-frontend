@@ -5,7 +5,7 @@
     <td>ID</td><td>coordinatedisplay</td>
   </tr>
   <tr>
-    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisplayBundleInstance)</td>
+    <td>API</td><td>[link](<%= apiurl %>Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisplayBundleInstance.html)</td>
   </tr>
 </table>
 

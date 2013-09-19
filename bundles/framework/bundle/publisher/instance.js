@@ -417,7 +417,8 @@ function() {
         var selectedLayers = this.sandbox.findAllSelectedMapLayers();
         for (var i = 0; i < selectedLayers.length; ++i) {
             var layer = selectedLayers[i];
-            if (!this.hasPublishRight(layer)) {
+            if (!this.hasPublishRight(layer) && 
+                layer.getId().toString().indexOf('myplaces_') < 0) {
                 deniedLayers.push(layer);
             }
         }

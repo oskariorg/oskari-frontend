@@ -54,6 +54,7 @@ function(instance, localization) {
             var categories = service.getAllCategories();
             var places = service.getAllMyPlaces();
             var me = this;
+/*
             var publishLinkClosure = function(id, isPublic) {
                 return function() {
                     var request = me.instance.sandbox.getRequestBuilder('MyPlaces.PublishCategoryRequest')(id, isPublic);
@@ -61,6 +62,7 @@ function(instance, localization) {
                     return false;
                 };
             }
+*/
             var editLinkClosure = function(id) {
                 return function() {
                     var request = me.instance.sandbox.getRequestBuilder('MyPlaces.EditCategoryRequest')(id);
@@ -106,6 +108,7 @@ function(instance, localization) {
                 deleteLink.bind('click', deletelinkClosure(id));
                 panel.getContainer().append(deleteLink);
                 
+/*
                 var publishLink = this.linkTemplate.clone();
                 publishLink.addClass('categoryOp');
                 var isPublic = categories[i].isPublic();
@@ -122,6 +125,7 @@ function(instance, localization) {
                 publishLink.append(publishIcon);
                 publishLink.bind('click', publishLinkClosure(id, !isPublic));
                 panel.getContainer().append(publishLink);
+*/
             }
             this._removeObsoleteCategories();
         }

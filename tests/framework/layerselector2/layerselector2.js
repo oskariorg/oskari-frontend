@@ -1,4 +1,4 @@
-describe.only('Test Suite for layerselector2 bundle', function() {
+describe('Test Suite for layerselector2 bundle', function() {
     var appSetup = null,
         appConf = null,
         statsPlugin = null,
@@ -81,12 +81,14 @@ describe.only('Test Suite for layerselector2 bundle', function() {
                         done();
                     }, 100);
                 }
-            };
+            }; 
         });
-        it('should open popup', function(done) {
+        it('should NOT open popup with no config', function(done) {
             
             var input = jQuery('.oskarifield input:first');
             var tab = module.plugins['Oskari.userinterface.Flyout'].layerTabs[0];
+            // configuration for keyword search not enabled
+            expect(tab.showSearchSuggestions != true).to.be(true);
             var oskarifield = jQuery(tab.filterField.getField());
             oskarifield.find('input').val('testi');
 
@@ -117,42 +119,12 @@ describe.only('Test Suite for layerselector2 bundle', function() {
             oskarifield.find('input').trigger(e);
             setTimeout(function() {
                 // ...then visible...
-                expect(oskarifield.find('.related-keywords').length).to.be(1);
-                expect(doSpy.callCount > 0).to.be(true);
+                expect(oskarifield.find('.related-keywords').length).to.be(0);
+                expect(doSpy.callCount == 0).to.be(true);
                 done();
-            }, 100);
+            }, 500);
 
         });
-        it('should open popup', function(done) {
-            var input = jQuery('.oskarifield input:first');
-            var tab = module.plugins['Oskari.userinterface.Flyout'].layerTabs[0];
-            var oskarifield = jQuery(tab.filterField.getField());
-
-            var e = jQuery.Event("keydown");
-            e.which = 38; //up
-            e.keyCode = 38;
-            oskarifield.find('input').trigger(e);
-            setTimeout(function() {
-                // one keyword should be hilighted (the bottom one)
-                expect(oskarifield.find('.focus').length).to.be(1);
-
-                var e = jQuery.Event("keypress");
-                e.which = 13; //enter
-                e.keyCode = 13;
-                oskarifield.find('input').trigger(e);
-
-                setTimeout(function() {
-                    // related-keywords should not be in dom
-                    expect(oskarifield.find('.related-keywords').length).to.be(0);
-                    // search input should contain text laituripaikat
-                    expect(oskarifield.find('input').val()).to.be('laituripaikat');
-                    done();
-                }, 100);
-            }, 100);
-
-
-        });
-
     });
 
 
