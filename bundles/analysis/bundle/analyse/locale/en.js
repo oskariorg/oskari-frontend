@@ -225,8 +225,17 @@ Oskari.registerLocalization({
             "title" : "Analysis",
             "confirmDeleteMsg" : "Do you want to delete:",
             "buttons" : {
+                "ok": "OK",
                 "cancel" : "Cancel",
                 "delete" : "Delete"
+            },
+            "notification": {
+                "deletedTitle": "Delete map layer",
+                "deletedMsg": "Map layer deleted"
+            },
+            "error" : {
+                "title": "Error!",
+                "generic": "System error. Please try again later."
             }
         }
     }
