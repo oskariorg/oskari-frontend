@@ -105,7 +105,7 @@ module.exports = function (grunt) {
                 "toolsPath": process.cwd(),
                 "docsPath": "../docs",
                 "docsurl": "/Oskari/<%= version %>docs/",
-                "apiurl": "http://oskari.org/",
+                "apiurl": "/Oskari/<%= version %>api/classes/",
                 "outdir": "../dist/<%= version %>docs/"
             }
         },

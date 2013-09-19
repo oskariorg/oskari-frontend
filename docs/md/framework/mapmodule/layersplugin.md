@@ -2,7 +2,7 @@
 
 <table>
   <tr>
-    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin)</td>
+    <td>API</td><td>[link](<%= apiurl %>Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin.html)</td>
   </tr>
 </table>
 

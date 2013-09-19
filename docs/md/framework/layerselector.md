@@ -5,7 +5,7 @@
     <td>ID</td><td>layerselector2</td>
   </tr>
   <tr>
-    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.layerselector2.LayerSelectorBundleInstance)</td>
+    <td>API</td><td>[link](<%= apiurl %>Oskari.mapframework.bundle.layerselector2.LayerSelectorBundleInstance.html)</td>
   </tr>
 </table>
 
