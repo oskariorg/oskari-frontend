@@ -298,6 +298,9 @@ function(localization, publisher) {
     _closePopups: function() {
         if (this._colourSchemePopup) this._colourSchemePopup.close(true);
         if (this._customColoursPopup) this._customColoursPopup.close(true);
+
+        this._colourSchemePopup = null;
+        this._customColoursPopup = null;
     },
 
     /**
