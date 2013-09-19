@@ -5,7 +5,7 @@
     <td>ID</td><td>infobox</td>
   </tr>
   <tr>
-    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance)</td>
+    <td>API</td><td>[link](<%= apiurl %>Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance.html)</td>
   </tr>
 </table>
 

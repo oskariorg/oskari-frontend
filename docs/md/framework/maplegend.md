@@ -5,7 +5,7 @@
     <td>ID</td><td>maplegend</td>
   </tr>
   <tr>
-    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.maplegend.MapLegendBundleInstance)</td>
+    <td>API</td><td>[link](<%= apiurl %>Oskari.mapframework.bundle.maplegend.MapLegendBundleInstance.html)</td>
   </tr>
 </table>
 
