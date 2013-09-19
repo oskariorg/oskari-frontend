@@ -81,6 +81,7 @@ function(instance, localization) {
     this.aggreOptionDivs = {};
 
     this._filterJsons = {};
+    this._filterPopups = {};
 
 }, {
     __templates : {

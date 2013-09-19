@@ -25,7 +25,8 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             '</div>',
         "filterClickedFeatures": '<div class="analyse-filter analyse-filter-clicked-features">' +
                 '<div class="clicked-features-title"></div>' +
-                '<input type="checkbox" name="analyse-clicked-features"></input><label for="analyse-clicked-features"></label>' +
+                '<input type="checkbox" name="analyse-clicked-features" id="analyse-clicked-features" />' +
+                '<label for="analyse-clicked-features"></label>' +
             '</div>',
         "filterContentValues": '<div class="analyse-filter analyse-filter-popup-values">' +
                 '<div class="values-title"></div>' +
@@ -62,6 +63,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
      * @param {String} layer_id
      */
     removeFilterJson: function(layer_id) {
+        this._filterJsons[layer_id] = null;
         delete this._filterJsons[layer_id];
     },
 
@@ -100,7 +102,9 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         // </remove this>
 
         tools.find('div.filter').bind('click', function() {
-            me._createFilterDialog(layer);
+            if (!me._filterPopups[layer.getId()]) {
+                me._createFilterDialog(layer);
+            }
         });
     },
 
@@ -113,7 +117,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
     _createFilterDialog: function(layer) {
         var me = this,
             popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-            closeButton = popup.createCloseButton(this.loc.buttons.cancel),
+            closeButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
             // Clears the filter values
             clearButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
             // Updates the filter values
@@ -122,7 +126,13 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             popupTitle = this.loc.filter.description + layer.getName(),
             filterJson, filterErrors, prevJson;
 
+        me._filterPopups[layer.getId()] = true;
+
+        closeButton.setTitle(this.loc.buttons.cancel);
         closeButton.addClass('analyse-close-filter');
+        closeButton.setHandler(function() {
+            me._closePopup(popup, layer.getId());
+        });
 
         clearButton.setTitle(this.loc.filter.clearButton);
         clearButton.addClass('analyse-clear-filter');
@@ -149,7 +159,7 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 // Else, set the filter JSON for the layer
                 // and close the dialog
                 me.setFilterJson(layer.getId(), filterJson);
-                popup.close();
+                me._closePopup(popup, layer.getId());
             }
         });
 
@@ -160,7 +170,22 @@ Oskari.clazz.category('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         }
 
         popup.show(popupTitle, popupContent, [closeButton, clearButton, updateButton]);
-        popup.makeModal();
+
+        // Make the popup draggable
+        popup.makeDraggable();
+    },
+
+    /**
+     * Closes the popup.
+     * 
+     * @method _closePopup
+     * @param  {Oskari.userinterface.component.Popup} popup
+     * @param  {String} layerId
+     * @return {undefined}
+     */
+    _closePopup: function(popup, layerId) {
+        this._filterPopups[layerId] = null;
+        popup.close(true);
     },
 
     /**
