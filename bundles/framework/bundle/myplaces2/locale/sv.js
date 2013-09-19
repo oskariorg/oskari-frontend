@@ -15,21 +15,21 @@ Oskari.registerLocalization({
     "tools": {
       "point": {
         "tooltip": "Tillägg punkt",
-        "new": "Tillägg punkt genom att klicka på kartan.",
+        "add": "Tillägg punkt genom att klicka på kartan.",
         "next": "Du kan lagra eller tillägga fler punkter till samma området.",
         "edit": "Flytta på punkten genom att klicka och dra.",
         "save": "Lagra läge"
       },
       "line": {
         "tooltip": "Tillägg linje",
-        "new": "Tillägg en brytningspunkt på linjen genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'.",
+        "add": "Tillägg en brytningspunkt på linjen genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'.",
         "next": "Du kan lagra eller tillägga fler linjer till samma området.",
         "edit": "Editera linjen genom att klicka och dra brytningspunkterna.",
         "save": "Lagra form"
       },
       "area": {
         "tooltip": "Tillägg område",
-        "new": "Tillägg områdets hörnpunkter genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'. Håll ned Alt-tangenten för att skapa hål i polygonerna.",
+        "add": "Tillägg områdets hörnpunkter genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'. Håll ned Alt-tangenten för att skapa hål i polygonerna.",
         "next": "Du kan lagra eller tillägga fler polygoner till samma området.",
         "edit": "Editera områdets form genom att klicka och dra brytningspunkterna på omkretslinjen.",
         "save": "Lagra form"
@@ -60,7 +60,19 @@ Oskari.registerLocalization({
       },
       "category": {
         "label": "Kartlager",
-        "new": "Ny nivå..."
+        "newLayer": "Ny nivå...",
+        "choose": " tai valitse olemassa olevista tasoista:"
+      },
+      "imagelink": {
+        "placeholder": "Kuva-URL",
+        "previewLabel": "Valokuvan esikatselu",
+        "add": "Uusi taso"
+      },
+      "rendering": {
+        "label": "Tason kohteiden esitystavat",
+        "point": {
+          "tooltip": "Piste"
+        }
       }
     },
     "categoryform": {
@@ -87,10 +99,108 @@ Oskari.registerLocalization({
           "size": "Linjens tjocklek"
         }
       },
+      "visibleFields": {
+        "label": "",
+        "placename": "",
+        "placedesc": "",
+        "image": ""
+      },
       "edit": {
         "title": "Editera kartlagret",
         "save": "Lagra",
         "cancel": "Tillbaka"
+      },
+      "rendering": {
+        "label": "",
+        "point": {
+          "tooltip": ""
+        }
+      }
+    },
+    "pointform": {
+      "title": "",
+      "tooltip": "",
+      "symbol": {
+        "label": ""
+      },
+      "size": {
+        "label": ""
+      },
+      "color": {
+        "label": "",
+        "labelOr": "",
+        "labelCustom": ""
+      },
+      "preview": {
+        "label": ""
+      },
+      "buttons": {
+        "save": "",
+        "cancel": ""
+      }
+    },
+    "lineform": {
+      "title": "",
+      "tooltip": "",
+      "style": {
+        "label": ""
+      },
+      "cap": {
+        "label": ""
+      },
+      "corner": {
+        "label": ""
+      },
+      "width": {
+        "label": ""
+      },
+      "color": {
+        "label": "",
+        "labelOr": "",
+        "labelCustom": ""
+      },
+      "preview": {
+        "label": ""
+      },
+      "buttons": {
+        "save": "",
+        "cancel": ""
+      }
+    },
+    "areaform": {
+      "title": "",
+      "tooltip": "",
+      "linestyle": {
+        "label": ""
+      },
+      "linecap": {
+        "label": ""
+      },
+      "linecorner": {
+        "label": ""
+      },
+      "linewidth": {
+        "label": ""
+      },
+      "linecolor": {
+        "label": "",
+        "labelOr": "",
+        "labelCustom": ""
+      },
+      "color": {
+        "label": "",
+        "labelOr": "",
+        "labelCustom": ""
+      },
+      "fill": {
+        "label": ""
+      },
+      "preview": {
+        "label": ""
+      },
+      "buttons": {
+        "save": "",
+        "cancel": ""
       }
     },
     "notification": {
