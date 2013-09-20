@@ -366,7 +366,6 @@ function(config) {
 
         // update zoomLevel and highlight pictures
         if(this.zoomLevel != zoom) {
-            console.log("zoomLevel changed");
             this.zoomLevel = zoom;
             for (var j = 0; j < layers.length; ++j) {
                 if (layers[j].isLayerOfType('WFS')) {
@@ -387,7 +386,7 @@ function(config) {
      */
     mapLayerAddHandler : function(event) {
         if(event.getMapLayer().isLayerOfType("WFS")) {
-            if(!this.getConnection().isConnected()) {
+            if(this.getConnection().isLazy() && !this.getConnection().isConnected()) {
                 this.getConnection().connect();
             }
 
@@ -405,13 +404,14 @@ function(config) {
             this.addMapLayerToMap(event.getMapLayer(), 'normal'); // add WMS layer
 
             // send together
-            this.getConnection().get().startBatch();
-            this.getIO().addMapLayer(
-                event.getMapLayer().getId(),
-                styleName
-            );
-            this.mapMoveHandler(); // setLocation
-            this.getConnection().get().endBatch();
+            var self = this;
+            this.getConnection().get().batch(function() {
+                self.getIO().addMapLayer(
+                    event.getMapLayer().getId(),
+                    styleName
+                );
+                self.mapMoveHandler(); // setLocation
+            });
         }
     },
 
