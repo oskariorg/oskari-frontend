@@ -12,6 +12,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.service.AnalyseService',
 function(instance) {
     this.instance = instance;
     this.sandbox = instance.sandbox;
+    this.loc = instance.getLocalization('AnalyseView');
 }, {
     __name : "Analyse.AnalyseService",
     __qname : "Oskari.analysis.bundle.analyse.service.AnalyseService",
@@ -100,7 +101,7 @@ function(instance) {
         },
         // Error callback
         function(jqXHR, textStatus, errorThrown) {
-            me.instance.showMessage(me.loc.error.title, me.loc.error.saveFailed);
+            me.instance.showMessage(me.loc.error.title, me.loc.error.loadLayersFailed);
         });
 
     },

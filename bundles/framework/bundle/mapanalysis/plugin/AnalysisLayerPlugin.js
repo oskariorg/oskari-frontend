@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayer
 function(config) {
     this.mapModule = null;
     this.pluginName = null;
+    this.wfsLayerPlugin = null;
     this._sandbox = null;
     this._map = null;
     this._supportedFormats = {};
@@ -94,6 +95,10 @@ function(config) {
             var layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayerModelBuilder', sandbox);
             mapLayerService.registerLayerModelBuilder('analysislayer', layerModelBuilder);
         }
+    
+        this.wfsLayerPlugin = sandbox.findRegisteredModuleInstance('MainMapModuleWfsLayerPlugin');
+
+        
     },
     /**
      * @method startPlugin
@@ -113,6 +118,7 @@ function(config) {
         if(!this.ajaxUrl) {
             this.ajaxUrl = sandbox.getAjaxUrl() + 'action_route=GetAnalysis?';
         }
+       
     },
     /**
      * @method stopPlugin
@@ -150,19 +156,86 @@ function(config) {
      */
     stop : function(sandbox) {
     },
-    /**
-     * @property {Object} eventHandlers
+      /**
      * @static
+     * @property eventHandlers
      */
     eventHandlers : {
-        'AfterMapLayerAddEvent' : function(event) {
+        /**
+         * @method AfterMapMoveEvent
+         * @param {Object} event
+         */
+        "AfterMapMoveEvent" : function(event) {
+            this.wfsLayerPlugin.mapMoveHandler();
+        },
+
+        /**
+         * @method WFSFeaturesSelectedEvent
+         * @param {Object} event
+         */
+        'WFSFeaturesSelectedEvent' : function(event) {
+            this.wfsLayerPlugin.featuresSelectedHandler(event);
+        },
+
+        /**
+         * @method MapClickedEvent
+         * @param {Object} event
+         */
+        'MapClickedEvent' : function(event) {
+            this.wfsLayerPlugin.mapClickedHandler(event);
+        },
+
+        /**
+         * @method GetInfoResultEvent
+         * @param {Object} event
+         */
+        'GetInfoResultEvent' : function(event) {
+            this.wfsLayerPlugin.getInfoResultHandler(event);
+        },
+
+        /**
+         * @method AfterChangeMapLayerStyleEvent
+         * @param {Object} event
+         */
+        'AfterChangeMapLayerStyleEvent' : function(event) {
+            this.wfsLayerPlugin.changeMapLayerStyleHandler(event);
+        },
+
+        /**
+         * @method MapLayerVisibilityChangedEvent
+         * @param {Object} event
+         */
+        'MapLayerVisibilityChangedEvent' : function(event) {
+           // this.wfsLayerPlugin.mapLayerVisibilityChangedHandler(event);
+        },
+        /**
+         * @method MapSizeChangedEvent
+         * @param {Object} event
+         */
+        'MapSizeChangedEvent' : function(event) {
+            this.wfsLayerPlugin.mapSizeChangedHandler(event);
+        },
+
+        /**
+         * @method WFSSetFilter
+         * @param {Object} event
+         */
+        'WFSSetFilter' : function(event) {
+            this.wfsLayerPlugin.setFilterHandler(event);
+        },
+
+
+         'AfterMapLayerAddEvent' : function(event) {
             this._afterMapLayerAddEvent(event);
+            this.wfsLayerPlugin.mapLayerAddHandler(event);
         },
         'AfterMapLayerRemoveEvent' : function(event) {
             this._afterMapLayerRemoveEvent(event);
+            this.wfsLayerPlugin.mapLayerRemoveHandler(event);
         },
         'AfterChangeMapLayerOpacityEvent' : function(event) {
             this._afterChangeMapLayerOpacityEvent(event);
+            //this.wfsLayerPlugin.afterChangeMapLayerOpacityEvent(event);
         },
         'MapAnalysis.AnalysisVisualizationChangeEvent': function(event) {
             this._afterAnalysisVisualizationChangeEvent(event);
@@ -308,7 +381,6 @@ function(config) {
      * @return {OpenLayers.Layer[]}
      */
     getOLMapLayers : function(layer) {
-
         if(!layer.isLayerOfType(this._layerType)) {
             return null;
         }
@@ -333,6 +405,7 @@ function(config) {
         
        
     }
+    
 }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}

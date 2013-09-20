@@ -174,7 +174,8 @@ Oskari.registerLocalization({
                 "bufferSize" : "Error in buffer size",
                 "illegalCharacters" : "No alfabets - use digits",
                 "nohelp" : "No guide found",
-                "saveFailed" : "Storing analysis failed. Try again a little later."
+                "saveFailed" : "Storing analysis failed. Try again a little later.",
+                "loadLayersFailed": "Analysis layer load failed"
             }
         },
         "StartView": {

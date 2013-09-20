@@ -93,6 +93,7 @@ function(config) {
             var layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder', sandbox);
             mapLayerService.registerLayerModelBuilder('wfslayer', layerModelBuilder);
         }
+        
     },
 
     /**
@@ -122,7 +123,6 @@ function(config) {
         this._map = this.getMapModule().getMap();
 
         this.createTilesGrid();
-
         sandbox.register(this);
         for (p in this.eventHandlers) {
             sandbox.registerForEventByName(this, p);
@@ -319,7 +319,7 @@ function(config) {
         /// clean features lists
         var layers = this.getSandbox().findAllSelectedMapLayers(); // get array of AbstractLayer (WFS|WMS..)
         for (var i = 0; i < layers.length; ++i) {
-            if (layers[i].isLayerOfType('WFS')) {
+            if (layers[i].hasFeatureData()) {
                 layers[i].setActiveFeatures([]);
             }
         }
@@ -335,7 +335,7 @@ function(config) {
         if(this.zoomLevel != zoom) {
             this.zoomLevel = zoom;
             for (var j = 0; j < layers.length; ++j) {
-                if (layers[j].isLayerOfType('WFS')) {
+                if (layers[j].hasFeatureData()) {
                     // get all feature ids
                     var fids = layers[j].getClickedFeatureIds().slice(0);
                     for(var k = 0; k < layers[j].getSelectedFeatures().length; ++k) {
@@ -352,7 +352,7 @@ function(config) {
      */
     mapLayerAddHandler : function(event) {
         // TODO: add style info when ready [check if coming for WFS]
-        if(event.getMapLayer().isLayerOfType("WFS")) {
+        if(event.getMapLayer().hasFeatureData()) {
             var styleName = null;
             if(event.getMapLayer().getCurrentStyle()) {
                 styleName = event.getMapLayer().getCurrentStyle().getName();
@@ -373,7 +373,7 @@ function(config) {
      */
     mapLayerRemoveHandler : function(event) {
         var layer = event.getMapLayer();
-        if(layer.isLayerOfType("WFS")) {
+        if(layer.hasFeatureData()) {
             this.getIO().removeMapLayer(layer.getId());
             this.removeMapLayerFromMap(layer);
 
@@ -389,7 +389,7 @@ function(config) {
      * @method featuresSelectedHandler
      */
     featuresSelectedHandler : function(event) {
-        if(event.getMapLayer().isLayerOfType("WFS")) {
+        if(event.getMapLayer().hasFeatureData()) {
             var layer = this.getSandbox().findMapLayerFromSelectedMapLayers(event.getMapLayer().getId());
             var ids = layer.getClickedFeatureListIds();
             var tmpIds = event.getWfsFeatureIds();
@@ -437,7 +437,7 @@ function(config) {
         var isWFSOpen = false;
         var layers = this.getSandbox().findAllSelectedMapLayers();
         for (var i = 0; i < layers.length; ++i) {
-            if (layers[i].isLayerOfType('WFS')) {
+            if (layers[i].hasFeatureData()) {
                 isWFSOpen = true;
                 break;
             }
@@ -454,7 +454,7 @@ function(config) {
      * @method changeMapLayerStyleHandler
      */
     changeMapLayerStyleHandler : function(event) {
-        if(event.getMapLayer().isLayerOfType("WFS")) {
+        if(event.getMapLayer().hasFeatureData()) {
             this.getIO().setMapLayerStyle(
                 event.getMapLayer().getId(),
                 event.getMapLayer().getCurrentStyle().getName()
@@ -466,7 +466,7 @@ function(config) {
      * @method mapLayerVisibilityChangedHandler
      */
     mapLayerVisibilityChangedHandler : function(event) {
-        if(event.getMapLayer().isLayerOfType("WFS")) {
+        if(event.getMapLayer().hasFeatureData()) {
             this.getIO().setMapLayerVisibility(
                 event.getMapLayer().getId(),
                 event.getMapLayer().isVisible()
@@ -498,7 +498,7 @@ function(config) {
         /// clean selected features lists
         var layers = this.getSandbox().findAllSelectedMapLayers();
         for (var i = 0; i < layers.length; ++i) {
-            if (layers[i].isLayerOfType('WFS')) {
+            if (layers[i].hasFeatureData()) {
                 layers[i].setSelectedFeatures([]);
             }
         }
@@ -738,7 +738,7 @@ function(config) {
             var layer = layers[i];
             var layerId = layer.getId();
 
-            if (!layer.isLayerOfType('WFS')) {
+            if (!layer.hasFeatureData()) {
                 continue;
             }
 
@@ -753,7 +753,7 @@ function(config) {
     afterChangeMapLayerOpacityEvent : function(event) {
         var layer = event.getMapLayer();
 
-        if (!layer.isLayerOfType('WFS')) {
+        if (!layer.hasFeatureData()) {
             return;
         }
         var layers = this.getOLMapLayers(layer);
@@ -779,7 +779,7 @@ function(config) {
      * @param {Object} layer
      */
     getOLMapLayers : function(layer) {
-        if (layer && !layer.isLayerOfType('WFS')) {
+        if (layer && !layer.hasFeatureData()) {
             return;
         }
         var layerPart = '';
