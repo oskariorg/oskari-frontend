@@ -11,8 +11,7 @@ div.mapplugin.layerSelectionPlugin {
   background-color: #333333;
   color: white !important;
   padding: 8px;
-  cursor: pointer;
-}
+  cursor: pointer; }
 
 .layerSelectionPlugin div.content {
   background-color: white; }
@@ -36,33 +35,31 @@ div.mapplugin.layerSelectionPlugin {
 .layerSelectionPlugin div.content div.baseLayerHeader {
   background-color: #DDDDDD;
   padding: 10px;
-  text-align: left;
-}
+  text-align: left; }
 
 .layerSelectionPlugin div.layerselection-styled-content {
   width: 200px;
   border: 1px solid #333438;
   border-radius: 6px;
   -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
-}
+  -webkit-border-radius: 6px; }
+
 .layerSelectionPlugin div.content div.content-header {
   background-color: #333438;
   color: #FFFFFF;
   text-align: left;
   height: 25px;
-  padding: 5px;
-}
+  padding: 5px; }
+
 .layerSelectionPlugin div.content div.content-header .content-close {
   display: inline-block;
   float: right;
-  cursor: pointer;
-}
+  cursor: pointer; }
+
 .layerSelectionPlugin div.content div.content-header div.content-header-title {
   display: inline-block;
   float: left;
-  padding: 5px;
-}
+  padding: 5px; }
 
 .layerSelectionPlugin div.content div.styled-header-arrow {
   width: 0px;
@@ -72,23 +69,19 @@ div.mapplugin.layerSelectionPlugin {
   border-top: 10px solid transparent;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-bottom: 10px solid #333438;
-}
+  border-bottom: 10px solid #333438; }
 
 .published-styled-layerselector {
-  position: relative !important;
-}
+  position: relative !important; }
 
 .published-styled-layerselector-header {
   width: 38px !important;
   height: 38px !important;
   padding: 0px !important;
   background-color: transparent !important;
-  float: right !important;
-}
+  float: right !important; }
 
 .published-styled-layerselector-content {
   position: absolute !important;
   top: 44px !important;
-  right: 0px !important;
-}
+  right: 0px !important; }

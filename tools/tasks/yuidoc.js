@@ -12,7 +12,7 @@ module.exports = function(grunt) {
     // TODO: ditch this when grunt v0.4 is released
     grunt.util = grunt.util || grunt.utils;
 
-    grunt.registerMultiTask('yuidoc', 'Create YUIDocs', function() {
+    grunt.registerMultiTask('oskaridoc', 'Create YUIDocs', function() {
 
         var kindOf = grunt.util.kindOf;
         var helpers = require('grunt-lib-contrib').init(grunt);
