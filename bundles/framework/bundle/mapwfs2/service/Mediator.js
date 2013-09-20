@@ -199,11 +199,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             layer.setClickedFeatureIds(featureIds);
         }
 
-
         this.plugin.getmapClickData().wfs.push(data.data);
-        this.plugin.getmapClickData().comet = true;
-        if(this.plugin.getmapClickData().ajax) {
-            this.plugin.showInfoBox();
+        if(this.plugin.getLayerCount() == this.plugin.getmapClickData().wfs.length) {
+            this.plugin.getmapClickData().comet = true;
+            if(this.plugin.getmapClickData().ajax) {
+                this.plugin.showInfoBox();
+            }
         }
 
         // remove highlight image

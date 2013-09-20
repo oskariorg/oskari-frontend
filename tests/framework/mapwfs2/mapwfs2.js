@@ -21,7 +21,7 @@ describe('Test Suite for mapwfs2', function() {
             }
         };
 
-    var ONLINE_TESTS = false; // if testing the connection
+    var ONLINE_TESTS = true; // if testing the connection
 
     //
     // DATA MOCKS (io from bk)
@@ -120,7 +120,7 @@ describe('Test Suite for mapwfs2', function() {
                     hostname: 'localhost',
                     contextPath: '/transport-0.0.1',
                     port: '8888', 
-                    lazy: false 
+                    lazy: !ONLINE_TESTS 
                 }
             }
         );
@@ -178,7 +178,7 @@ describe('Test Suite for mapwfs2', function() {
                 "browser" : jQuery.browser.name,
                 "browserVersion" : jQuery.browser.versionNum
             }
-            connection = module.getConnection().get();
+            connection = module.getConnection();
             done();
         });
     };
@@ -208,13 +208,17 @@ describe('Test Suite for mapwfs2', function() {
         before(startApplication);
         after(teardown);
 
-        it('should be defined', function() {
+        it('should be defined', function(done) {
             expect(connection).to.be.ok();
             expect(mediator).to.be.ok();
 
-            // needs transport service ONLINE
+            // finish
             if(ONLINE_TESTS) {
-                expect(connection.isConnected()).to.be(true);
+                waitsFor(function() {
+                    return connection.isConnected();
+                }, function() {
+                    done();
+                }, 'Waiting for responses', 10000);
             }
         });
     });
@@ -254,7 +258,14 @@ describe('Test Suite for mapwfs2', function() {
 
     describe('layer adding', function() {
         before(startApplication);
-        after(teardown);
+
+        var self = this;
+        after(function() {
+            sandbox.unregisterFromEventByName(self, "WFSPropertiesEvent");
+            sandbox.unregisterFromEventByName(self, "WFSFeatureEvent");
+            sandbox.unregisterFromEventByName(self, "WFSImageEvent");
+            teardown();
+        });
 
         it('should be activated', function(done) {
             this.timeout(20000);
@@ -271,7 +282,6 @@ describe('Test Suite for mapwfs2', function() {
             var feature = false;
             var image = false;
 
-            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -314,7 +324,14 @@ describe('Test Suite for mapwfs2', function() {
 
     describe('highlighting features', function() {
         before(startApplication);
-        after(teardown);
+
+        var self = this;
+        after(function() {
+            sandbox.unregisterFromEventByName(self, "AfterMapLayerAddEvent");
+            sandbox.unregisterFromEventByName(self, "AfterMapMoveEvent");
+            sandbox.unregisterFromEventByName(self, "WFSImageEvent");
+            teardown();
+        });
 
         it('should be activated', function(done) {
             this.timeout(20000);
@@ -327,7 +344,6 @@ describe('Test Suite for mapwfs2', function() {
             var image = false;
 
             var selectedLayers = null;
-            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -364,12 +380,21 @@ describe('Test Suite for mapwfs2', function() {
 
     describe('moving map / setting location', function() {
         before(startApplication);
-        after(teardown);
+
+        var self = this;
+        after(function() {
+            sandbox.unregisterFromEventByName(self, "AfterMapLayerAddEvent");
+            sandbox.unregisterFromEventByName(self, "WFSPropertiesEvent");
+            sandbox.unregisterFromEventByName(self, "WFSFeatureEvent");
+            sandbox.unregisterFromEventByName(self, "WFSImageEvent");
+            sandbox.unregisterFromEventByName(self, "Printout.PrintableContentEvent");
+            teardown();
+        });
 
         it('should be activated', function(done) {
             this.timeout(20000);
 
-            var doSpy = sinon.stub(mediator, 'setLocation', function(srs, bbox, zoom, grid) {
+            var doSpy = sinon.stub(mediator, 'setLocation', function(layerId, srs, bbox, zoom, grid, tiles) {
                 mediator.getWFSProperties(propertiesData);
                 mediator.getWFSFeature(featureData);
                 mediator.getWFSImage(imageData);
@@ -382,7 +407,6 @@ describe('Test Suite for mapwfs2', function() {
             var image = false;
             var printout = [];
 
-            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -423,7 +447,7 @@ describe('Test Suite for mapwfs2', function() {
 
             // finish
             waitsFor(function() {
-                return (properties && feature && image && (printout.length === 2));
+                return (properties && feature && image && (printout.length >= 2));
             }, function() {
                 expect(printout[0]['216'][0].url).not.to.be(printout[0]['216'][1].url);
                 done();
@@ -434,7 +458,15 @@ describe('Test Suite for mapwfs2', function() {
     // TODO: make the feature :)
     describe('setting map size', function() {
         before(startApplication);
-        after(teardown);
+
+        var self = this;
+        after(function() {
+            sandbox.unregisterFromEventByName(self, "AfterMapLayerAddEvent");
+            sandbox.unregisterFromEventByName(self, "WFSPropertiesEvent");
+            sandbox.unregisterFromEventByName(self, "WFSFeatureEvent");
+            sandbox.unregisterFromEventByName(self, "WFSImageEvent");
+            teardown();
+        });
 
         it('should be activated', function(done) {
             this.timeout(20000);
@@ -450,7 +482,6 @@ describe('Test Suite for mapwfs2', function() {
             var feature = false;
             var image = false;
 
-            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -494,10 +525,16 @@ describe('Test Suite for mapwfs2', function() {
         });
     });
 
-    // TODO: make the feature :)
-    describe.skip('changing style', function() {
+    describe('changing style', function() {
         before(startApplication);
-        after(teardown);
+
+        var self = this;
+        after(function() {
+            sandbox.unregisterFromEventByName(self, "AfterMapLayerAddEvent");
+            sandbox.unregisterFromEventByName(self, "AfterChangeMapLayerStyleEvent");
+            sandbox.unregisterFromEventByName(self, "WFSImageEvent");
+            teardown();
+        });
 
         it('should be activated', function(done) {
             this.timeout(20000);
@@ -508,14 +545,18 @@ describe('Test Suite for mapwfs2', function() {
 
             // expect these events
             var image = false;
+            var image = false;
 
-            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
             self.onEvent = function(event) {
                 if(event.getName() === "AfterMapLayerAddEvent") { // wait that the layer has been added
-                    // TODO: no caller [make functionality first]
+                    var layer = sandbox.findMapLayerFromSelectedMapLayers(216);
+                    layer.selectStyle("testi");
+                    var event = sandbox.getEventBuilder("AfterChangeMapLayerStyleEvent")(layer);
+                    sandbox.notifyAll(event);
+                } else if(event.getName() === "AfterChangeMapLayerStyleEvent") {
                 } else if(event.getName() === "WFSImageEvent") {
                     image = true;
                     expect(image).to.be(true);
@@ -524,6 +565,7 @@ describe('Test Suite for mapwfs2', function() {
             }
 
             sandbox.registerForEventByName(self, "AfterMapLayerAddEvent");
+            sandbox.registerForEventByName(self, "AfterChangeMapLayerStyleEvent");
             sandbox.registerForEventByName(self, "WFSImageEvent");
 
             var selectedLayers = addLayers(module, [216]); // adds layer
@@ -535,12 +577,28 @@ describe('Test Suite for mapwfs2', function() {
                 expect(doSpy.callCount).to.be(1);
                 doSpy.restore();
             }, 'Waiting for style change', 5000);
+
+            // finish
+            waitsFor(function() {
+                return (image);
+            }, function() {
+                done();
+            }, 'Waiting for responses', 10000);
         });
     });
 
     describe('selecting feature', function() {
         before(startApplication);
-        after(teardown);
+
+        var self = this;
+        after(function() {
+            sandbox.unregisterFromEventByName(self, "AfterMapMoveEvent");
+            sandbox.unregisterFromEventByName(self, "AfterMapLayerAddEvent");
+            sandbox.unregisterFromEventByName(self, "WFSFeaturesSelectedEvent");
+            sandbox.unregisterFromEventByName(self, "MapClickedEvent");
+            sandbox.unregisterFromEventByName(self, "GetInfoResultEvent");
+            teardown();
+        });
 
         it('should be activated', function(done) {
             this.timeout(20000);
@@ -563,7 +621,6 @@ describe('Test Suite for mapwfs2', function() {
             var selected = false;
             var fragments = [];
 
-            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -609,7 +666,15 @@ describe('Test Suite for mapwfs2', function() {
 
     describe('setting filter', function() {
         before(startApplication);
-        after(teardown);
+
+        var self = this;
+        after(function() {
+            sandbox.unregisterFromEventByName(self, "AfterMapMoveEvent");
+            sandbox.unregisterFromEventByName(self, "AfterMapLayerAddEvent");
+            sandbox.unregisterFromEventByName(self, "WFSFeaturesSelectedEvent");
+            sandbox.unregisterFromEventByName(self, "FeatureData.FinishedDrawingEvent");
+            teardown();
+        });
 
         it('should be activated', function(done) {
             this.timeout(10000);
@@ -620,7 +685,6 @@ describe('Test Suite for mapwfs2', function() {
 
             var selectedLayers = null;
 
-            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }
@@ -682,7 +746,14 @@ describe('Test Suite for mapwfs2', function() {
 
     describe('setting visibility', function() {
         before(startApplication);
-        after(teardown);
+
+        var self = this;
+        after(function() {
+            sandbox.unregisterFromEventByName(self, "WFSPropertiesEvent");
+            sandbox.unregisterFromEventByName(self, "WFSFeatureEvent");
+            sandbox.unregisterFromEventByName(self, "WFSImageEvent");
+            teardown();
+        });
 
         it('should be activated', function(done) {
             this.timeout(10000);
@@ -700,7 +771,6 @@ describe('Test Suite for mapwfs2', function() {
             var feature = false;
             var image = false;
 
-            var self = this;
             self.getName = function() {
                 return "Test.WfsLayerPlugin";
             }

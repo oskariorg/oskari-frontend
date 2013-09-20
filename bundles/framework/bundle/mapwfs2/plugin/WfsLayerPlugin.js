@@ -366,6 +366,7 @@ function(config) {
 
         // update zoomLevel and highlight pictures
         if(this.zoomLevel != zoom) {
+            console.log("zoomLevel changed");
             this.zoomLevel = zoom;
             for (var j = 0; j < layers.length; ++j) {
                 if (layers[j].isLayerOfType('WFS')) {
@@ -374,6 +375,7 @@ function(config) {
                     for(var k = 0; k < layers[j].getSelectedFeatures().length; ++k) {
                         fids.push(layers[j].getSelectedFeatures()[k][0]);
                     }
+                    this.removeHighlightImage(layers[j]);
                     this.getIO().highlightMapLayerFeatures(layers[j].getId(), fids, false);
                 }
             }
@@ -665,7 +667,7 @@ function(config) {
 
         for(var x = 0; x < wfsLayers.length; x++) {
             if(wfsLayers[x].features == "empty") {
-                break;
+                continue;
             }
             // define layer specific information
             layerId = wfsLayers[x].layerId;
@@ -690,11 +692,28 @@ function(config) {
                 }
             }
 
+            // helper function for visibleFields
+            var contains = function(a, obj) {
+                for(var i = 0; i < a.length; i++) {
+                    if(a[i] == obj)
+                        return true;
+                }
+                return false;
+            }
+
+            var hiddenFields = [];
+            hiddenFields.push("__fid");
+            hiddenFields.push("__centerX");
+            hiddenFields.push("__centerY");
+
             // key:value
             for(var i = 0; i < wfsLayers[x].features.length; i++) {
                 feature = {};
                 values = wfsLayers[x].features[i];
                 for(var j = 0; j < fields.length; j++) {
+                    if(contains(hiddenFields, fields[j])) { // skip hidden
+                        continue;
+                    }
                     if(values[j] == null || values[j] == "") {
                         feature[fields[j]] = "";
                     } else {
@@ -1238,6 +1257,13 @@ function(config) {
         if(this._isWFSOpen > 0)
             return true;
         return false;
+    },
+
+    /*
+     * @method getLayerCount
+     */
+    getLayerCount : function() {
+        return this._isWFSOpen;
     },
 
     /**

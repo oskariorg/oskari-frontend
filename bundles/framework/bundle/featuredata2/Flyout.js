@@ -412,7 +412,7 @@ function(instance) {
                         if(a[i] == obj)
                             return true;
                     }
-                    return false
+                    return false;
                 }
 
                 // filter out certain fields
