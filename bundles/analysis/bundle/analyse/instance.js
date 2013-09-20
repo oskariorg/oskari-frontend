@@ -16,7 +16,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.AnalyseBundleInstance",
 function() {
     this.sandbox = undefined;
     this.started = false;
-    this.plugins = {};
+    this.plugins = {}; 
     this.localization = undefined;
     this.analyse = undefined;
     this.buttonGroup = 'viewtools';
@@ -27,7 +27,7 @@ function() {
     this.isMapStateChanged = true;
     this.state = undefined;
     this.conf =  {};
-
+    this.personalDataTab = undefined;
 }, {
     /**
      * @static
@@ -115,7 +115,15 @@ function() {
         if(conf && conf.stateful === true) {
             sandbox.registerAsStateful(this.mediator.bundleId, this);
         }
+ 
+        // Request tab to be added to personal data
+        var tab = Oskari.clazz.create('Oskari.mapframework.bundle.analyse.view.PersonalDataTab', this, this.localization.personalDataTab);
+        var reqBuilder = sandbox.getRequestBuilder('PersonalData.AddTabRequest');
 
+        if(reqBuilder) {
+            sandbox.request(this, reqBuilder(this.localization.personalDataTab.title, tab.getContent()));
+        }
+        this.personalDataTab = tab;
     },
     /**
      * @method init
@@ -381,6 +389,8 @@ function() {
                 ); */
             }
         }
+        // maplayers changed so update the tab content in personaldata
+        this.personalDataTab.update();
     }
 }, {
     /**

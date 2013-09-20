@@ -984,6 +984,8 @@ function(instance, localization, data) {
         }
         this.maplayerPanel.stop();
 
+        this.layoutPanel.stop();
+
         // return map size to normal
         var mapElement = jQuery(mapModule.getMap().div);
         // remove width definition to resume size correctly

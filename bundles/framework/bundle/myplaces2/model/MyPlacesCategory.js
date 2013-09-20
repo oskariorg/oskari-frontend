@@ -12,13 +12,16 @@ function() {
     this.name = undefined;
     this._isDefault = false;
     this._isPublic = false;
+    this.style = 0;
+    this.cap = 0;
+    this.corner = 0;
     this.lineWidth = 1;
-    this.lineColor = '993300';
+    this.lineColor = '0000ff';
     this.areaLineWidth = 1;
     this.areaLineColor = '993300';
     this.areaFillColor = '993300';
-    this.dotSize = 4;
-    this.dotColor = '993300';
+    this.dotSize = 3;
+    this.dotColor = '000000';
     this.uuid = undefined;
 }, {
     /**
@@ -78,6 +81,48 @@ function() {
         return (this._isPublic == true);
     },
     /**
+     * @method setLineStyle
+     * @param {Number} value
+     */
+    setLineStyle : function(value) {
+        this.lineStyle = value;
+    },
+    /**
+     * @method getLineStyle
+     * @return {Number}
+     */
+    getLineStyle : function() {
+        return this.lineStyle;
+    },
+    /**
+     * @method setLineCap
+     * @param {Number} value
+     */
+    setLineCap : function(value) {
+        this.lineCap = value;
+    },
+    /**
+     * @method getLineCap
+     * @return {Number}
+     */
+    getLineCap : function() {
+        return this.lineCap;
+    },
+    /**
+     * @method setLineCorner
+     * @param {Number} value
+     */
+    setLineCorner : function(value) {
+        this.lineCorner = value;
+    },
+    /**
+     * @method getLineCorner
+     * @return {Number}
+     */
+    getLineCorner : function() {
+        return this.lineCorner;
+    },
+    /**
      * @method setLineWidth
      * @param {Number} value
      */
@@ -121,6 +166,48 @@ function() {
         return this.areaLineWidth;
     }, 
     /**
+     * @method setAreaLineCorner
+     * @param {Number} value
+     */
+    setAreaLineCorner : function(value) {
+        this.areaLineCorner = value;
+    },
+    /**
+     * @method getAreaLineCorner
+     * @return {Number}
+     */
+    getAreaLineCorner : function() {
+        return this.areaLineCorner;
+    },
+    /**
+     * @method setAreaLineCap
+     * @param {Number} value
+     */
+    setAreaLineCap : function(value) {
+        this.areaLineCap = value;
+    },
+    /**
+     * @method getAreaLineCap
+     * @return {Number}
+     */
+    getAreaLineCap : function() {
+        return this.areaLineCap;
+    },
+    /**
+     * @method setAreaLineStyle
+     * @param {Number} value
+     */
+    setAreaLineStyle : function(value) {
+        this.areaLineStyle = value;
+    },
+    /**
+     * @method getAreaLineStyle
+     * @return {Number}
+     */
+    getAreaLineStyle : function() {
+        return this.areaLineStyle;
+    },
+    /**
      * @method setAreaLineColor 
      * @param {String} value color as hex string 
      */
@@ -149,6 +236,34 @@ function() {
      */
     getAreaFillColor : function() {
         return this.areaFillColor;
+    },
+    /**
+     * @method setAreaFillStyle
+     * @param {String} value
+     */
+    setAreaFillStyle : function(value) {
+        this.areaFillStyle = value;
+    },
+    /**
+     * @method getAreaFillStyle
+     * @return {String}
+     */
+    getAreaFillStyle : function() {
+        return this.areaFillStyle;
+    },
+    /**
+     * @method setDotShape
+     * @param {Number} value
+     */
+    setDotShape : function(value) {
+        this.dotShape = value;
+    },
+    /**
+     * @method getDotShape
+     * @return {Number}
+     */
+    getDotShape : function() {
+        return this.dotShape;
     },
     /**
      * @method setDotSize

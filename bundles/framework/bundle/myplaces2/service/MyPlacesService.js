@@ -10,12 +10,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
  * @param {String} url
  * @param {String} uuid current users uuid
  * @param {Oskari.mapframework.sandbox.Sandbox} sandbox reference to Oskari sandbox
- * @param {String} categoryName default category name
+ * @param {Object} defaults category default values
  * @param {Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance} pInstance 
  *  instance to notify if problems with default category 
  * 
  */
-function(url, uuid, sandbox, defaultName, pInstance) {
+function(url, uuid, sandbox, defaults, pInstance) {
 
     // list of loaded categories & myplaces
     this._categoryList = [];
@@ -24,7 +24,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
     this.wfstStore = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore', url, uuid);
     this._sandbox = sandbox;
     this.defaultCategory = null;
-    this.defaultCategoryName = defaultName;
+    this.defaults = defaults;
     this._instance = pInstance;
 }, {
     __qname : "Oskari.mapframework.bundle.myplaces2.service.MyPlacesService",
@@ -53,7 +53,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
             if (loadedPlaces && loadedCategories) {
                 me._notifyDataChanged();
             }
-        }
+        };
 
         var initialLoadCallBackCategories = function(categories) {
             if(categories) {
@@ -65,7 +65,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
             var categoriesLoaded = function() {
                 loadedCategories = true;
                 allLoaded();
-            }
+            };
 
             if (!me.getDefaultCategory()) {
                 // user doesn't have default category, propably a new user
@@ -103,13 +103,22 @@ function(url, uuid, sandbox, defaultName, pInstance) {
             // should not happen
             defaultCategory.setName('My map layer');
         }
-        defaultCategory.setLineWidth(2);
-        defaultCategory.setLineColor('cc9900');
-        defaultCategory.setAreaLineWidth(2);
-        defaultCategory.setAreaLineColor('cc9900');
-        defaultCategory.setAreaFillColor('ffdc00');
-        defaultCategory.setDotColor('cc9900');
-        defaultCategory.setDotSize(4);
+        defaultCategory.setName(this.defaults.name);
+        defaultCategory.setDotShape(this.defaults.point.shape);
+        defaultCategory.setDotColor(this.defaults.point.color);
+        defaultCategory.setDotSize(this.defaults.point.size);
+        defaultCategory.setLineStyle(this.defaults.line.style);
+        defaultCategory.setLineCap(this.defaults.line.cap);
+        defaultCategory.setLineCorner(this.defaults.line.corner);
+        defaultCategory.setLineWidth(this.defaults.line.width);
+        defaultCategory.setLineColor(this.defaults.line.color);
+        defaultCategory.setAreaLineWidth(this.defaults.area.linewidth);
+        defaultCategory.setAreaLineCorner(this.defaults.area.linecorner);
+        defaultCategory.setAreaLineCap(this.defaults.area.linecap);
+        defaultCategory.setAreaLineStyle(this.defaults.area.linestyle);
+        defaultCategory.setAreaLineColor(this.defaults.area.linecolor);
+        defaultCategory.setAreaFillColor(this.defaults.area.fillcolor);
+        defaultCategory.setAreaFillStyle(this.defaults.area.style);
         defaultCategory.setDefault(true);
         
         var defaultCategoryCreationCallback = function() {
@@ -352,14 +361,21 @@ function(url, uuid, sandbox, defaultName, pInstance) {
                     category.setName(categoryModel.getName());
                     category.setDotSize(categoryModel.getDotSize());
                     category.setDotColor(categoryModel.getDotColor());
-                    
+                    category.setDotShape(categoryModel.getDotShape());
+
                     category.setLineWidth(categoryModel.getLineWidth());
                     category.setLineColor(categoryModel.getLineColor());
-                    
+                    category.setLineCap(categoryModel.getLineCap());
+                    category.setLineCorner(categoryModel.getLineCorner());
+                    category.setLineStyle(categoryModel.getLineStyle());
+
                     category.setAreaLineWidth(categoryModel.getAreaLineWidth());
+                    category.setAreaLineCorner(categoryModel.getAreaLineCorner());
+                    category.setAreaLineCap(categoryModel.getAreaLineCap());
+                    category.setAreaLineStyle(categoryModel.getAreaLineStyle());
                     category.setAreaLineColor(categoryModel.getAreaLineColor());
                     category.setAreaFillColor(categoryModel.getAreaFillColor());
-
+                    category.setAreaFillStyle(categoryModel.getAreaFillStyle());
                     category.setDefault(categoryModel.isDefault());
                 } else {
                     // couldn't load it -> failed to save it

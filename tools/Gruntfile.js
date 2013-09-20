@@ -91,7 +91,7 @@ module.exports = function (grunt) {
             build: ["../build"],
             dist: ["../dist"]
         },
-        yuidoc: {
+        oskaridoc: {
             dist: {
                 options: {
                     paths: ['../sources/framework', '../bundles/framework', '../bundles/sample', '../bundles/catalogue'],
@@ -104,7 +104,7 @@ module.exports = function (grunt) {
                 "toolsPath": process.cwd(),
                 "docsPath": "../docs",
                 "docsurl": "/Oskari/<%= version %>docs/",
-                "apiurl": "http://oskari.org/",
+                "apiurl": "/Oskari/<%= version %>api/classes/",
                 "outdir": "../dist/<%= version %>docs/"
             }
         },
@@ -305,7 +305,7 @@ module.exports = function (grunt) {
         grunt.task.run('compile');
         grunt.task.run('compileAppCSS');
         grunt.task.run('sprite');
-        grunt.task.run('yuidoc');
+        grunt.task.run('oskaridoc');
         grunt.task.run('mddocs');
     });
 

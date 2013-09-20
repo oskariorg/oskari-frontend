@@ -18,6 +18,8 @@ function(localization, publisher) {
 	this.loc = localization;
     this._publisher = publisher;
     this._sandbox = publisher.instance.sandbox;
+    this._colourSchemePopup = null;
+    this._customColoursPopup = null;
 
     this.template = {};
     for (var t in this.__templates ) {
@@ -64,6 +66,13 @@ function(localization, publisher) {
             titleColour: '#333438',
             headerColour: '#333438',
             iconCls: 'icon-close'
+        }, {
+            // Custom colour scheme, so fields default to null
+            val: 'custom',
+            bgColour: null,
+            titleColour: null,
+            headerColour: null,
+            iconCls: 'icon-close-white'
         }],
         fonts: [
             {name: 'Arial (sans-serif)', val: 'arial'},
@@ -150,6 +159,17 @@ function(localization, publisher) {
             'getContent': this._getToolStylesTemplate
         }
 	};
+
+    // Save the custom colour values here to prepopulate the popup.
+    this.customColourValues = {
+        bg: null,
+        title: null,
+        header: null,
+        iconCsl: null
+    };
+
+    this.maxColourValue = 255;
+    this.minColourValue = 0;
 }, {
     __templates: {
         "colours":      '<div id="publisher-layout-colours">' +
@@ -172,6 +192,21 @@ function(localization, publisher) {
         "coloursPopup": '<div id="publisher-colour-popup">' +
                             '<div id="publisher-colour-inputs"></div>' +
                             '<div id="publisher-colour-preview"></div>' +
+                        '</div>',
+        "customClrs":   '<div id="publisher-custom-colours">' +
+                            '<div id="publisher-custom-colours-bg"></div>' +
+                            '<div id="publisher-custom-colours-title"></div>' +
+                            '<div id="publisher-custom-colours-header"></div>' +
+                            '<div id="publisher-custom-colours-iconcls"></div>' +
+                        '</div>',
+        "rgbInput":    '<div class="rgbInput">' +
+                            '<label for="red">R</label><input type="text" name="red" maxlength="3" />' +
+                            '<label for="green">G</label><input type="text" name="green" maxlength="3" />' +
+                            '<label for="blue">B</label><input type="text" name="blue" maxlength="3" />' +
+                        '</div>',
+        "iconClsInput": '<div class="iconClsInput">' +
+                            '<input type="radio" name="custom-icon-class" value="icon-close" /><label for="icon-close"></label>' +
+                            '<input type="radio" name="custom-icon-class" value="icon-close-white" /><label for="icon-close-white"></label>' +
                         '</div>'
     },
 
@@ -201,6 +236,16 @@ function(localization, publisher) {
             field.content = template;
         }
 	},
+
+    /**
+     * For now, only closes popups if they're visible.
+     * 
+     * @method stop
+     * @return {undefined}
+     */
+    stop: function() {
+        this._closePopups();
+    },
 
     /**
      * Returns the UI panel and populates it with the data that we want to show the user.
@@ -242,6 +287,20 @@ function(localization, publisher) {
         this.values.toolStyle = this._getItemByCode(toolStyleCode, this.initialValues.toolStyles);
 
 		return this.values;
+    },
+
+    /**
+     * Closes the popups if they are open on the screen.
+     * 
+     * @method _closePopups
+     * @return {undefined}
+     */
+    _closePopups: function() {
+        if (this._colourSchemePopup) this._colourSchemePopup.close(true);
+        if (this._customColoursPopup) this._customColoursPopup.close(true);
+
+        this._colourSchemePopup = null;
+        this._customColoursPopup = null;
     },
 
     /**
@@ -368,15 +427,19 @@ function(localization, publisher) {
             content = this.template.coloursPopup.clone(),
             colours = this.initialValues.colours,
             cLen = colours.length,
-            colourInput, colourName, i, prevColour, selectedColour;
+            colourInput, colourName, i, prevColour,
+            selectedColour, customColourButton;
 
         closeButton.setTitle(this.loc.layout.popup.close);
         closeButton.setHandler(function() {
             popup.close(true);
+            self._colourSchemePopup = null;
         });
 
+        // Create the preview GFI dialog.
         content.find('div#publisher-colour-preview').append(self._createGfiPreview());
 
+        // Append the colour scheme inputs to the dialog.
         for (i = 0; i < cLen; ++i) {
             colourInput = this.template.inputRadio.clone();
             colourName = this.loc.layout.fields.colours[colours[i].val];
@@ -398,12 +461,21 @@ function(localization, publisher) {
             }
 
             content.find('div#publisher-colour-inputs').append(colourInput);
+
+            // Create the inputs for custom colour
+            if ('custom' === colours[i].val) {
+                customColourButton = jQuery('<button>' + this.loc.layout.fields.colours.buttonLabel + '</button>');
+                customColourButton.click(function() {
+                    colourInput.find('input[type=radio]').attr('checked', 'checked');
+                    self._createCustomColoursPopup();
+                });
+                content.find('div#publisher-colour-inputs').append(customColourButton);
+            }
         }
 
         // Things to do when the user changes the colour scheme:
         content.find('input[name=colour]').change(function(e) {
-            selectedColour = jQuery(this).val();
-            selectedColour = self._getItemByCode(selectedColour, self.initialValues.colours);
+            selectedColour = self._getItemByCode(jQuery(this).val(), self.initialValues.colours);
             // * change the preview gfi
             self._changeGfiColours(selectedColour, content);
             // * change the value of the colour scheme input in the layout panel
@@ -417,6 +489,187 @@ function(localization, publisher) {
 
         //popup.moveTo(target);
         popup.show(title, content, [closeButton]);
+        this._colourSchemePopup = popup;
+    },
+
+    /**
+     * Creates a popup from which custom colour scheme can be defined.
+     * 
+     * @method _createCustomColoursPopup
+     * @return {undefined}
+     */
+    _createCustomColoursPopup: function() {
+        var self = this,
+            popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            closeButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+            title = this.loc.layout.fields.colours.custom,
+            content = this._createCustomColoursInputs(),
+            isChecked = jQuery('div#publisher-colour-inputs input#custom').attr('checked'),
+            customColours;
+
+        closeButton.setTitle(this.loc.layout.popup.close);
+        closeButton.setHandler(function() {
+            self._collectCustomColourValues(content);
+            // Change the preview gfi and send event only if currently checked
+            if (isChecked) {
+                customColours = self._getItemByCode('custom', self.initialValues.colours);
+                // Change the colours of the preview popup
+                self._changeGfiColours(customColours);
+                // Send an event notifying the changed colours
+                self._sendColourSchemeChangedEvent(customColours);
+            }
+            popup.close(true);
+            self._customColoursPopup = null;
+        });
+
+        popup.show(title, content, [closeButton]);
+        this._customColoursPopup = popup;
+    },
+
+    /**
+     * Creates the inputs for putting in your favourite colours.
+     *
+     * @method _createCustomColoursInputs
+     * @return {jQuery} return the template to select custom colours
+     */
+    _createCustomColoursInputs: function() {
+        var self = this,
+            template = this.template.customClrs.clone(),
+            bgInputs = this.template.rgbInput.clone(),
+            bgLoc = this.loc.layout.fields.colours.customLabels.bgLabel,
+            titleInputs = this.template.rgbInput.clone(),
+            titleLoc = this.loc.layout.fields.colours.customLabels.titleLabel,
+            headerInputs = this.template.rgbInput.clone(),
+            headerLoc = this.loc.layout.fields.colours.customLabels.headerLabel,
+            iconClsInputs = this.template.iconClsInput.clone(),
+            iconClsLoc = this.loc.layout.fields.colours.customLabels.iconLabel,
+            iconCloseLoc = this.loc.layout.fields.colours.customLabels.iconCloseLabel,
+            iconCloseWhiteLoc = this.loc.layout.fields.colours.customLabels.iconCloseWhiteLabel,
+            rgbValue;
+
+        iconClsInputs.find('label[for=icon-close]').html(iconCloseLoc);
+        iconClsInputs.find('label[for=icon-close-white]').html(iconCloseWhiteLoc);
+
+        template.find('div#publisher-custom-colours-bg').append(bgLoc).append(bgInputs);
+        template.find('div#publisher-custom-colours-title').append(titleLoc).append(titleInputs);
+        template.find('div#publisher-custom-colours-header').append(headerLoc).append(headerInputs);
+        template.find('div#publisher-custom-colours-iconcls').append(iconClsLoc).append(iconClsInputs);
+
+        this._prepopulateCustomColoursTemplate(template);
+
+        template.find('input[type=text]').change(function() {
+            // If the value is not a number or is out of range (0-255), set the value to proper value.
+            rgbValue = jQuery(this).val();
+            if (isNaN(rgbValue) || (rgbValue < self.minColourValue)) jQuery(this).val(self.minColourValue);
+            else if (rgbValue > self.maxColourValue) jQuery(this).val(self.maxColourValue);
+        });
+
+        return template;
+    },
+
+    /**
+     * Prepopulates the custom colours template with saved colour values.
+     * 
+     * @method  _prepopulateCustomColoursTemplate
+     * @param  {jQuery} template
+     * @return {undefined}
+     */
+    _prepopulateCustomColoursTemplate: function(template) {
+        var bgInputs = template.find('div#publisher-custom-colours-bg'),
+            titleInputs = template.find('div#publisher-custom-colours-title'),
+            headerInputs = template.find('div#publisher-custom-colours-header'),
+            iconClsInputs = template.find('div#publisher-custom-colours-iconcls'),
+            customColours = this.customColourValues;
+
+        this._prepopulateRgbDiv(bgInputs, customColours.bg);
+        this._prepopulateRgbDiv(titleInputs, customColours.title);
+        this._prepopulateRgbDiv(headerInputs, customColours.header);
+        iconClsInputs.find('input[type=radio]').removeAttr('checked');
+        iconClsInputs.find('input[value=' + customColours.iconCls + ']').attr('checked', 'checked');
+    },
+
+    /**
+     * Collects the custom colours values from the content div.
+     * 
+     * @method _collectCustomColourValues
+     * @param  {jQuery} content
+     * @return {undefined}
+     */
+    _collectCustomColourValues: function(content) {
+        var bgColours = this._getColourFromRgbDiv(content.find('div#publisher-custom-colours-bg')),
+            titleColours = this._getColourFromRgbDiv(content.find('div#publisher-custom-colours-title')),
+            headerColours = this._getColourFromRgbDiv(content.find('div#publisher-custom-colours-header'))
+            iconCls = content.find('div#publisher-custom-colours-iconcls input[name=custom-icon-class]:checked').val(),
+            customColours = this._getItemByCode('custom', this.initialValues.colours);
+
+        // Save the values.
+        this.customColourValues.bg = bgColours;
+        this.customColourValues.title = titleColours;
+        this.customColourValues.header = headerColours;
+        this.customColourValues.iconCls = iconCls;
+
+        // Set the values to initial values
+        customColours.bgColour = this._getCssRgb(bgColours);
+        customColours.titleColour = this._getCssRgb(titleColours);
+        customColours.headerColour = this._getCssRgb(headerColours);
+        customColours.iconCls = iconCls;
+    },
+
+    /**
+     * Prepopulates an rgb div with given values
+     * 
+     * @method _prepopulateRgbDiv
+     * @param  {jQuery} rgbDiv
+     * @param  {Object} colours
+     *          {
+     *              red: <0-255>,
+     *              green: <0-255>,
+     *              blue: <0-255>
+     *          }
+     * @return {undefined}
+     */
+    _prepopulateRgbDiv: function(rgbDiv, colours) {
+        if (!colours) return;
+
+        rgbDiv.find('input[name=red]').val(colours.red);
+        rgbDiv.find('input[name=green]').val(colours.green);
+        rgbDiv.find('input[name=blue]').val(colours.blue);
+    },
+
+    /**
+     * Returns an rgb colour object parsed from the div.
+     *
+     * @method _getColourFromRgbDiv
+     * @param {jQuery} rgbDiv
+     * @return {String} returns an rgb colour object
+     *          {
+     *              red: <0-255>,
+     *              green: <0-255>,
+     *              blue: <0-255>
+     *          }
+     */
+    _getColourFromRgbDiv: function(rgbDiv) {
+        var red = rgbDiv.find('input[name=red]').val(),
+            green = rgbDiv.find('input[name=green]').val(),
+            blue = rgbDiv.find('input[name=blue]').val();
+
+        return {red: red, green: green, blue: blue};
+    },
+
+    /**
+     * Returns an rgb colour object in css formatted string.
+     * 
+     * @method _getCssRgb
+     * @param  {Object} rgb
+     *          {
+     *              red: <0-255>,
+     *              green: <0-255>,
+     *              blue: <0-255>
+     *          }
+     * @return {String}
+     */
+    _getCssRgb: function(rgb) {
+        return 'rgb(' + rgb.red + ', ' + rgb.green + ', ' + rgb.blue + ')';
     },
 
     /**
@@ -481,6 +734,8 @@ function(localization, publisher) {
      * @param {jQuery} container (optional, defaults to the colour preview element on page)
      */
     _changeGfiColours: function(selectedColour, container) {
+        container = container || jQuery('div#publisher-colour-popup');
+
         var gfiHeader = container.find('div.popupHeader');
         var gfiTitle = container.find('div.popupTitle');
         var featureHeader = container.find('h3.myplaces_header');

@@ -46,7 +46,7 @@ describe('Test Suite for statistics/statsgrid bundle', function() {
                     "basictools": false,
                     "viewtools": false
                 }
-            },
+            }
         };
     });
 
