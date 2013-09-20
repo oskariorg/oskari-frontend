@@ -196,10 +196,7 @@ Client sends the starting state to the server when the /meta/handshake is trigge
 
 ##### Response channels
 
-- /wfs/image
-- /wfs/properties
-- /wfs/feature
-- /error
+Doesn't return anything
 
 
 #### /service/wfs/removeMapLayer
@@ -243,6 +240,11 @@ Doesn't return anything
 		<th>Description</th>
 	</tr>
 	<tr>
+		<td>layerId</td>
+		<td>long</td>
+		<td>maplayer_id</td>
+	</tr>
+	<tr>
 		<td>srs</td>
 		<td>String</td>
 		<td>Spatial reference system eg. EPSG:3067</td>
@@ -272,12 +274,18 @@ Doesn't return anything
 		<td>ArrayList&lt;ArrayList&lt;Double&gt;&gt;</td>
 		<td>bounds of the tiles</td>
 	</tr>
+	<tr>
+		<td>tiles</td>
+		<td>ArrayList&lt;ArrayList&lt;Double&gt;&gt;</td>
+		<td>bounds of tiles to render</td>
+	</tr>
 </table>
 
 ##### Example
 
 ```javascript
 {
+		"layerId": 216,
 		"srs": "EPSG:3067",
 		"bbox": [385800, 6690267, 397380, 6697397],
 		"zoom": 8,
@@ -285,7 +293,8 @@ Doesn't return anything
 				"rows": 5,
 				"columns": 8,
 				"bounds": [[345600,6694400,358400,6707200]..]
-		}
+		},
+		"tiles": [[345600,6694400,358400,6707200]..]
 }
 ```
 
@@ -800,6 +809,7 @@ Client channels are used to send information from the server to the client. Most
 {
 		"layerId" : 216,
 		"features": "empty",
+		"keepPrevious": false
 }
 ```
 
@@ -846,7 +856,7 @@ Client channels are used to send information from the server to the client. Most
 ```javascript
 {
 		"layerId" : 216,
-		"features": "empty",
+		"features": "empty"
 }
 ```
 
@@ -978,7 +988,7 @@ Function listening to MapSizeChangedEvent calls for Mediator's setMapSize() and 
 
 ### Adding a WFS layer - AfterMapLayerAddEvent
 
-Function listening to AfterMapLayerAddEvent calls for Mediator's addMapLayer(). Backend gets a message and adds the WFS layer to the user's session and answers with the new layer's properties, features and images. Upcoming sends trigger WFSPropertiesEvent, WFSFeatureEvents and WFSImageEvents. Updates the properties and features for object data and draws new tiles.
+Function listening to AfterMapLayerAddEvent calls for Mediator's addMapLayer() and calls AfterMapMoveEvent's handler. Backend gets a message and adds the WFS layer to the user's session and answers with the new layer's properties, features and images. Upcoming sends trigger WFSPropertiesEvent, WFSFeatureEvents and WFSImageEvents. Updates the properties and features for object data and draws new tiles.
 
 ### Removing a WFS layer - AfterMapLayerRemoveEvent
 
