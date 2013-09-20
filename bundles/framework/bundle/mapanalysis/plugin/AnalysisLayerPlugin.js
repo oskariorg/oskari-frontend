@@ -227,7 +227,7 @@ function(config) {
 
          'AfterMapLayerAddEvent' : function(event) {
             this._afterMapLayerAddEvent(event);
-            this.wfsLayerPlugin.mapLayerAddHandler(event);
+           //this.wfsLayerPlugin.mapLayerAddHandler(event);
         },
         'AfterMapLayerRemoveEvent' : function(event) {
             this._afterMapLayerRemoveEvent(event);
