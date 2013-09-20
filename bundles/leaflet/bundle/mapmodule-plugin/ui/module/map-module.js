@@ -1007,7 +1007,7 @@ function(id, imageUrl, options) {
      * @return {Number} zoomLevel (0-12)
      */
     getClosestZoomLevel : function(maxScale, minScale) {
-        var zoomLevel = this._map.getView().getZoom();
+        var zoomLevel = this._map.getZoom();
 
         if (!minScale || !maxScale) {
             return zoomLevel;
