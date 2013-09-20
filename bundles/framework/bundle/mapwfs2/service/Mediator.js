@@ -18,6 +18,7 @@ function(config, plugin) {
     this.cometd = this.connection.get();
     this.layerProperties = {};
 
+
     this.rootURL = location.protocol + "//" +
             this.config.hostname + this.config.port  +
             this.config.contextPath;
@@ -55,6 +56,7 @@ function(config, plugin) {
             }
         };
 
+
         for(var c in channels ) {
             this.cometd.subscribe(c, channels[c]);
         }
@@ -68,14 +70,17 @@ function(config, plugin) {
      */
     startup : function(session) {
         var self = this;
-        if(session) { // use objects session if not defined as parameter
+        if (session) {// use objects session if not defined as parameter
             this.session = session;
         }
+
         var layers = this.plugin.getSandbox().findAllSelectedMapLayers(); // get array of AbstractLayer (WFS|WMS..)
         var initLayers = {};
         for (var i = 0; i < layers.length; ++i) {
-            if (layers[i].isLayerOfType('WFS')) {
-                initLayers[layers[i].getId() + ""] = { styleName: layers[i].getCurrentStyle().getName() };
+            if (layers[i].hasFeatureData()) {
+                initLayers[layers[i].getId() + ""] = {
+                    styleName : layers[i].getCurrentStyle().getName()
+                };
             }
         }
 
@@ -84,32 +89,32 @@ function(config, plugin) {
         var zoom = this.plugin.getSandbox().getMap().getZoom();
         var mapScales = this.plugin.mapModule.getMapScales();
         var grid = this.plugin.getGrid();
-        if(grid == null) {
+        if (grid == null) {
             grid = {};
         }
         var tileSize = this.plugin.getTileSize();
-        if(tileSize == null) {
+        if (tileSize == null) {
             tileSize = {};
         }
 
         this.cometd.publish('/service/wfs/init', {
             "session" : this.session.session,
-            "language": Oskari.getLang(),
+            "language" : Oskari.getLang(),
             "browser" : this.session.browser,
             "browserVersion" : this.session.browserVersion,
-            "location": {
-                "srs": srs,
-                "bbox": [bbox.left,bbox.bottom,bbox.right,bbox.top],
-                "zoom": zoom
+            "location" : {
+                "srs" : srs,
+                "bbox" : [bbox.left, bbox.bottom, bbox.right, bbox.top],
+                "zoom" : zoom
             },
-            "grid": grid,
-            "tileSize": tileSize,
-            "mapSize": {
-                "width": self.plugin.getSandbox().getMap().getWidth(),
-                "height": self.plugin.getSandbox().getMap().getHeight()
+            "grid" : grid,
+            "tileSize" : tileSize,
+            "mapSize" : {
+                "width" : self.plugin.getSandbox().getMap().getWidth(),
+                "height" : self.plugin.getSandbox().getMap().getHeight()
             },
-            "mapScales": mapScales,
-            "layers": initLayers
+            "mapScales" : mapScales,
+            "layers" : initLayers
         });
     }
 });
@@ -125,17 +130,17 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      */
     getWFSProperties : function(data) {
         var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
+        if (layer.getLayerType() != 'analysis') {
+            var oldFields = layer.getFields();
+            var oldLocales = layer.getLocales();
+            if (oldFields.length > 0 && !this.plugin.isArrayEqual(data.data.fields, oldFields) && !this.plugin.isArrayEqual(data.data.locales, oldLocales)) {
+                this.plugin.mapMoveHandler();
+            }
 
-        var oldFields = layer.getFields();
-        var oldLocales = layer.getLocales();
-        if(oldFields.length > 0 && 
-            !this.plugin.isArrayEqual(data.data.fields, oldFields) && 
-            !this.plugin.isArrayEqual(data.data.locales, oldLocales)) {
-            this.plugin.mapMoveHandler();
+            layer.setFields(data.data.fields);
+            layer.setLocales(data.data.locales);
+
         }
-
-        layer.setFields(data.data.fields);
-        layer.setLocales(data.data.locales);
 
         var self = this;
         if(this._propertyTimer) {
@@ -156,7 +161,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      */
     getWFSFeature : function(data) {
         var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
-        if(data.data.feature != "empty" && data.data.feature != "max") {
+        if (data.data.feature != "empty" && data.data.feature != "max") {
             layer.setActiveFeature(data.data.feature);
         }
 
@@ -186,23 +191,25 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         var keepPrevious = data.data.keepPrevious;
         var featureIds = [];
 
-        if(data.data.features != "empty") {
-            layer.setSelectedFeatures([]); // empty selected
+        if (data.data.features != "empty") {
+            layer.setSelectedFeatures([]);
+            // empty selected
             for (var i = 0; i < data.data.features.length; ++i) {
                 featureIds.push(data.data.features[i][0]);
             }
         }
 
-        if(keepPrevious) {
+        if (keepPrevious) {
             layer.setClickedFeatureIds(layer.getClickedFeatureIds().concat(featureIds));
         } else {
             layer.setClickedFeatureIds(featureIds);
         }
 
+
         this.plugin.getmapClickData().wfs.push(data.data);
         if(this.plugin.getLayerCount() == this.plugin.getmapClickData().wfs.length) {
             this.plugin.getmapClickData().comet = true;
-            if(this.plugin.getmapClickData().ajax) {
+            if (this.plugin.getmapClickData().ajax) {
                 this.plugin.showInfoBox();
             }
         }
@@ -216,7 +223,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         this.plugin.getSandbox().notifyAll(event);
     },
 
-
     /**
      * @method getWFSFilter
      * @param {Object} data
@@ -228,14 +234,14 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
         var featureIds = [];
 
-        if(data.data.features != "empty") {
+        if (data.data.features != "empty") {
             layer.setClickedFeatureIds([]);
             for (var i = 0; i < data.data.features.length; ++i) {
                 featureIds.push(data.data.features[i][0]);
             }
         }
 
-        if(data.data.features != "empty") {
+        if (data.data.features != "empty") {
             layer.setSelectedFeatures(data.data.features);
         } else {
             layer.setSelectedFeatures([]);
@@ -255,7 +261,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
         var imageUrl = "";
         try {
-            if(typeof data.data.data != "undefined") {
+            if ( typeof data.data.data != "undefined") {
                 imageUrl = 'data:image/png;base64,' + data.data.data;
             } else {
                 imageUrl = this.rootURL + data.data.url + "&session=" + this.session.session;
@@ -263,20 +269,19 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         } catch(error) {
             this.plugin.getSandbox().printDebug(error);
         }
-        var layerPostFix = data.data.type; // "highlight" | "normal"
-        var keepPrevious = data.data.keepPrevious; // true | false
-        var size = { width: data.data.width, height: data.data.height };
+        var layerPostFix = data.data.type;
+        // "highlight" | "normal"
+        var keepPrevious = data.data.keepPrevious;
+        // true | false
+        var size = {
+            width : data.data.width,
+            height : data.data.height
+        };
 
         // send as an event forward to WFSPlugin (draws)
-        var event = this.plugin.getSandbox().getEventBuilder("WFSImageEvent")(
-            layer,
-            imageUrl,
-            data.data.bbox,
-            size,
-            layerPostFix,
-            keepPrevious
-        );
+        var event = this.plugin.getSandbox().getEventBuilder("WFSImageEvent")(layer, imageUrl, data.data.bbox, size, layerPostFix, keepPrevious);
         this.plugin.getSandbox().notifyAll(event);
+
 
         if(layerPostFix == "normal") {
             this.plugin.setPrintTile(layer, data.data.bbox, this.rootURL + data.data.url + "&session=" + this.session.session);
@@ -295,7 +300,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
     resetWFS : function(data) {
         this.startup(null);
     }
-
 });
 
 // send to backend
@@ -309,6 +313,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
      * sends message to /service/wfs/addMapLayer
      */
     addMapLayer : function(id, style) {
+
         if(this.connection.isConnected()) {
             this.cometd.publish('/service/wfs/addMapLayer', {
                 "layerId" : id,
@@ -324,6 +329,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
      * sends message to /service/wfs/removeMapLayer
      */
     removeMapLayer : function(id) {
+
         if(this.connection.isConnected()) {
             this.cometd.publish('/service/wfs/removeMapLayer', {
                 "layerId" : id
@@ -343,8 +349,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
         if(this.connection.isConnected()) {
             this.cometd.publish('/service/wfs/highlightFeatures', {
                 "layerId" : id,
-                "featureIds": featureIds,
-                "keepPrevious": keepPrevious
+                "featureIds" : featureIds,
+                "keepPrevious" : keepPrevious
             });
         }
     },
@@ -417,7 +423,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
             this.cometd.publish('/service/wfs/setMapClick', {
                 "longitude" : longitude,
                 "latitude" : latitude,
-                "keepPrevious": keepPrevious
+                "keepPrevious" : keepPrevious
             });
         }
     },
@@ -430,9 +436,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'se
      */
     setFilter : function(geojson) {
         filter = {
-            geojson: geojson
+            geojson : geojson
         };
-
         if(this.connection.isConnected()) {
             this.cometd.publish('/service/wfs/setFilter', {
                 "filter" : filter

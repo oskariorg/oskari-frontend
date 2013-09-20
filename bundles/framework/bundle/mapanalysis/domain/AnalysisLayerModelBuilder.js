@@ -23,6 +23,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
 		if(mapLayerJson.fields){
 			layer.setFields(mapLayerJson.fields);
 		}
+		if(mapLayerJson.locales){
+            layer.setLocales(mapLayerJson.locales);
+        }
 		if(mapLayerJson.name){
 			layer.setName(mapLayerJson.name);	
 		}

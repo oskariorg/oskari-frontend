@@ -302,7 +302,7 @@ function(instance) {
 				sandbox.request(me.instance.getName(), req);
 			});
 			if (hasOpts) {
-				sel.val(layer.getCurrentStyle().getName());
+				if(layer.getCurrentStyle()) sel.val(layer.getCurrentStyle().getName());
 				stylesel.show();
 			}
 		}
