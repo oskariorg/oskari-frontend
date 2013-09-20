@@ -13,7 +13,7 @@ Oskari.registerLocalization({
             "message" : "MapWfs2"
         },
         "error" : {
-            "title": "Virhe!",
+            "title": "Virhe",
             "connection_not_available": "Yhteyttä ei voitu muodostaa WFS-taustapalveluun.",
             "connection_broken": "Yhteys WFS-taustapalveluun katkesi.",
             "wfs_no_permissions": "WFS-tasoon ({layer}) ei ole riittäviä oikeuksia",

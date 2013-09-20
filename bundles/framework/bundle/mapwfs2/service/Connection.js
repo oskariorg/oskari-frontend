@@ -20,6 +20,8 @@ function(config, plugin) {
     this._connected = false;
     this._errorSub = null;
 
+    this._connectionProblemWaitTime = 5000; // wait before say that we have disconnected (retry change)
+
     // config defaults
     if(typeof this.config.lazy === "undefined") this.config.lazy = true;
     this._lazy = this.config.lazy;
@@ -27,6 +29,9 @@ function(config, plugin) {
     this._backoffIncrement = this.config.backoffIncrement || 1000;
     this._maxBackoff = this.config.maxBackoff || 60000;
     this._maxNetworkDelay = this.config.maxNetworkDelay || 10000;
+
+    this.browser = {};
+    this.getBrowser();
 
     this.cometURL = location.protocol + "//" +
         this.config.hostname + this.config.port  +
@@ -40,7 +45,6 @@ function(config, plugin) {
         maxNetworkDelay : this._maxNetworkDelay // max request time before considering that the request failed (ms)
     });
 
-    this.getBrowser();
 
     var self = this;
     this.cometd.addListener('/meta/handshake', function () { self._metaHandshake.apply(self, arguments) });
@@ -98,17 +102,22 @@ function(config, plugin) {
      * Get browser information
      */
     getBrowser : function() {
+        this.browser = { 
+            name: "", 
+            versionNum: ""
+        };
+
         if(jQuery.browser.msie)
-            jQuery.browser.name = "msie";
+            this.browser.name = "msie";
         else if(jQuery.browser.chrome)
-            jQuery.browser.name = "chrome"
+            this.browser.name = "chrome"
         else if(jQuery.browser.mozilla)
-            jQuery.browser.name = "mozilla"
+            this.browser.name = "mozilla"
         else if(jQuery.browser.safari)
-            jQuery.browser.name = "safari"
+            this.browser.name = "safari"
         else
-            jQuery.browser.name = "unknown"
-        jQuery.browser.versionNum = parseInt(jQuery.browser.version, 10)
+            this.browser.name = "unknown"
+        this.browser.versionNum = parseInt(jQuery.browser.version, 10)
     },
 
     updateLazyDisconnect : function(isWFSOpen) {
@@ -140,9 +149,17 @@ function(config, plugin) {
         var wasConnected = this._connected;
         this._connected = message.successful === true;
         if(!wasConnected && this._connected) {
-            this.plugin.clearConnectionErrorTriggers(); // clear errors
+            // clear errors
+            if(this._brokenConnectionTimer) {
+                clearTimeout(this._brokenConnectionTimer);
+                this._brokenConnectionTimer = null;
+            }
+            this.plugin.clearConnectionErrorTriggers();
         } else if(wasConnected && !this._connected) {
-            this.plugin.showErrorPopup("connection_broken", null, true);
+            var self = this;
+            this._brokenConnectionTimer = setTimeout(function() {
+                self.plugin.showErrorPopup("connection_broken", null, true);
+            }, this._connectionProblemWaitTime);
         }
     },
 
@@ -152,6 +169,12 @@ function(config, plugin) {
      */
     _metaHandshake : function(handshake) {
         if(handshake.successful === true) {
+            // clear errors
+            if(this._connectionNotAvailableTimer) {
+                clearTimeout(this._connectionNotAvailableTimer);
+                this._connectionNotAvailableTimer = null;
+            }
+
             var self = this;
             this.cometd.batch(function() {
                 self._errorSub = self.cometd.subscribe('/error', self.getError);
@@ -159,12 +182,15 @@ function(config, plugin) {
                 self.plugin.getIO().startup({
                     "clientId" : handshake.clientId,
                     "session" : self.cookieValue,
-                    "browser" : jQuery.browser.name,
-                    "browserVersion" : jQuery.browser.versionNum
+                    "browser" : self.browser.name,
+                    "browserVersion" : self.browser.versionNum
                 });
             });
         } else {
-            this.plugin.showErrorPopup("connection_not_available", null, true);
+            var self = this;
+            this._connectionNotAvailableTimer = setTimeout(function() {
+                self.plugin.showErrorPopup("connection_not_available", null, true);
+            }, this._connectionProblemWaitTime);
         }
     },
 
@@ -177,14 +203,14 @@ function(config, plugin) {
         var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
         var once = data.data.once;
         this.plugin.showErrorPopup(message, layer, once);
-    }//,
+    }
 
     /**
      * @method getData
      * @param {Object} data
      */
     /*
-    getData : function(data) {
+    , getData : function(data) {
         console.log("getData:", data);
     }
     */
