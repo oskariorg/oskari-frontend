@@ -149,6 +149,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             "src" : "../../../../resources/framework/bundle/divmanazer/css/alert.css"
         }, {
             "type" : "text/css",
+            "src" : "../../../../resources/framework/bundle/divmanazer/css/forminput.css"
+        }, {
+            "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/divmanazer/css/grid.css"
         }, {
             "type" : "text/css",
