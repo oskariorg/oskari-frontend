@@ -54,7 +54,7 @@ function() {
 	_createUi : function() {
         var me = this;
 
-        var module = Oskari.clazz.create('Oskari.mapframework.ui.module.common.MapModule', "Main", this.conf.imageLocation, this.conf.mapOptions);
+        var module = Oskari.clazz.create('Oskari.ol3.ui.module.common.MapModule', "Main", this.conf.imageLocation, this.conf.mapOptions);
 
         this.mapmodule = module;
         var map = this.sandbox.register(module);
@@ -79,7 +79,7 @@ function() {
                     if(contentMap.find('.oskariui-menutoolbar').length > 0) {
                         mapDiv.height(jQuery(window).height() - contentMap.find('.oskariui-menutoolbar').height());
                     }
-                   map.updateSize();
+                   module.updateSize();
                 }
             };
         
@@ -352,7 +352,7 @@ function() {
     */
     toggleFullScreen: function() {
         jQuery('#' + this.contentMapDivId).toggleClass('oskari-map-window-fullscreen');
-        this.mapmodule.getMap().updateSize();
+        this.mapmodule.updateSize();
     }
 }, {
     /**

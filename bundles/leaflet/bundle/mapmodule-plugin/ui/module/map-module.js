@@ -482,7 +482,7 @@ function(id, imageUrl, options) {
             center : [65.53425, 24.86703333],
             zoom : 2,
             continuousWorld : true,
-            trackResize: true
+            trackResize: false
         });
 
         var me = this;
@@ -748,7 +748,8 @@ function(id, imageUrl, options) {
      *     wanting to notify at end of the chain for performance reasons or similar) (optional)
      */
     centerMapByPixels : function(pX, pY, suppressStart, suppressEnd) {
-        var newXY = new OpenLayers.Pixel(pX, pY);
+        
+        /*var newXY = new OpenLayers.Pixel(pX, pY);
         var newCenter = this._map.getLonLatFromViewPortPx(newXY);
         // check that the coordinates are reasonable, otherwise its easy to
         // scrollwheel the map out of view
@@ -757,7 +758,7 @@ function(id, imageUrl, options) {
             return;
         }
         this.moveMapToLanLot(newCenter);
-
+        */
         // send note about map change
         if (suppressStart !== true) {
             this.notifyStartMove();
@@ -1208,38 +1209,40 @@ function(id, imageUrl, options) {
     },
 
     setLayerIndex : function(layerImpl, index) {
-        /*var layerColl = this._map.getLayers();
+        var layerArr = this.getLayerDefs();
         var layerIndex = this.getLayerIndex(layerImpl);
-
+        var newLayerArr = [];
+        var prevDef = layerArr[layerIndex];
         
-        
-        if (index === layerIndex) {
-            return
-        } else if (index === layerColl.getLength()) {
-           
-            layerColl.removeAt(layerIndex);
-            layerColl.insertAt(index, layerImpl);
-        } else if (layerIndex < index) {
-           
-            layerColl.removeAt(layerIndex);
-            layerColl.insertAt(index - 1, layerImpl);
-
-        } else {
-            layerColl.removeAt(layerIndex);
-            layerColl.insertAt(index, layerImpl);
+        var n = 0 ;
+        for( n = 0 ; n < layerArr.length ;n++) {
+            if( n === index && prevDef ) {
+                newLayerArr.push(prevDef);
+                prevDef = null;
+            }
+            if( !( layerArr[n].impl === layerImpl ) ) {
+                newLayerArr.push(layerArr[n]);
+            } 
         }
-        */
+        if( n === index && prevDef ) {
+                newLayerArr.push(prevDef);
+        }
+        
+        this.layerDefs = newLayerArr;
+        for( n = 0 ; n < layerArr.length;n++ ) {
+            layerArr[n].impl.setZIndex(n); 
+        }
+            
     },
 
     getLayerIndex : function(layerImpl) {
-        /*var layerColl = this._map.getLayers();
-        var layerArr = layerColl.getArray();
+        var layerArr = this.getLayerDefs();
 
         for (var n = 0; n < layerArr.length; n++) {
-            if (layerArr[n] === layerImpl) {
+            if (layerArr[n].impl === layerImpl) {
                 return n;
             }
-        }*/
+        }
         return -1;
 
     },
@@ -1270,6 +1273,10 @@ function(id, imageUrl, options) {
     },
     _map2Crs : function(x, y) {
         return this._projection.projection.project(new L.LatLng(y, x));
+    },
+    
+    updateSize : function() {
+        this._map._onResize(); /* api bypass */
     }
 }, {
     /**
