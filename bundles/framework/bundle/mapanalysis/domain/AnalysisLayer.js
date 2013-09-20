@@ -12,6 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
 function() {
     /* Layer Type */
     this._layerType = "ANALYSIS";
+    this._metaType = "ANALYSIS";
 }, {
 	/* Layer type specific functions */
 

@@ -72,6 +72,20 @@ function() {
         return this.link;
     },
     /**
+     * @method setImageLink
+     * @param {String} value
+     */
+    setImageLink : function(value) {
+        this.imageLink = value;
+    },
+    /**
+     * @method getImageLink
+     * @return {String}
+     */
+    getImageLink : function() {
+        return this.imageLink;
+    },
+    /**
      * @method setCategoryID 
      * @param {Number} value
      */

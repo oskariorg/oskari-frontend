@@ -5,7 +5,7 @@
     <td>ID</td><td>search</td>
   </tr>
   <tr>
-    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.search.SearchBundleInstance)</td>
+    <td>API</td><td>[link](<%= apiurl %>Oskari.mapframework.bundle.search.SearchBundleInstance.html)</td>
   </tr>
 </table>
 

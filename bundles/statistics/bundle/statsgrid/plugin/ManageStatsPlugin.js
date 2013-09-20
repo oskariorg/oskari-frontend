@@ -1135,7 +1135,7 @@ function(config, locale) {
             // Exclude null values
             if (row.sel == "checked"){
                 municipalities.push(row.id);
-                if(row[curCol.field]) {
+                if(row[curCol.field] != null) {
                     statArray.push(row[curCol.field]);
                     // Municipality codes (kuntakoodit)
                     munArray.push(row['code']);
@@ -1967,7 +1967,7 @@ function(config, locale) {
         var currColumn = this._state.currentColumn;
         var item = this.getItemByCode(featAtts.kuntakoodi);
         var content = '<p>' + item.municipality;
-        content += ((currColumn && item[currColumn]) ? '<br />' + item[currColumn] : ''); 
+        content += ((currColumn && item[currColumn] != null) ? '<br />' + item[currColumn] : ''); 
         content += '</p>';
 
         if (eventBuilder) {

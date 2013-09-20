@@ -36,6 +36,15 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundle", func
 			"src" : "../../../../bundles/framework/bundle/publisher/event/MapPublishedEvent.js"
 		}, {
 			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/publisher/event/ToolStyleChangedEvent.js"
+		}, {
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/publisher/event/ColourSchemeChangedEvent.js"
+		}, {
+			"type" : "text/javascript",
+			"src" : "../../../../bundles/framework/bundle/publisher/event/FontChangedEvent.js"
+		}, {
+			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/publisher/view/NotLoggedIn.js"
 		}, {
 			"type" : "text/javascript",
@@ -49,6 +58,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundle", func
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/publisher/view/PublisherLayerForm.js"
+        }, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/publisher/view/PublisherLayoutForm.js"
         }, {
             "type" : "text/css",
             "src" : "../../../../resources/framework/bundle/publisher/css/style.css"

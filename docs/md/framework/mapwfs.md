@@ -5,7 +5,7 @@
     <td>ID</td><td>mapwfs</td>
   </tr>
   <tr>
-    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.mapwfs.MapWfsBundleInstance)</td>
+    <td>API</td><td>[link](<%= apiurl %>Oskari.mapframework.bundle.mapwfs.MapWfsBundleInstance.html)</td>
   </tr>
 </table>
 

@@ -64,3 +64,50 @@ table.search-results th {
     z-index: 10001;
 }
 */
+div.published-search-div {
+  position: relative; }
+
+div.published-search-div div.search-area-div {
+  min-width: 180px;
+  display: block;
+  float: right; }
+
+div.published-search-div div.search-area-div div.search-left, div.published-search-div div.search-area-div div.search-middle, div.published-search-div div.search-area-div div.search-right {
+  display: inline-block;
+  float: left;
+  height: 38px; }
+
+div.published-search-div div.search-area-div div.search-middle {
+  width: 180px; }
+
+div.published-search-div div.search-area-div div.search-right {
+  cursor: pointer; }
+
+div.published-search-div div.search-area-div input.search-input {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  background-image: none;
+  width: 170px;
+  outline: none; }
+
+div.published-search-div div.published-search-results {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 320px;
+  white-space: nowrap;
+  position: absolute;
+  top: 35px;
+  right: 0px;
+  display: block;
+  background-color: #FFFFFF;
+  border: 1px solid black;
+  border-radius: 6px;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px; }
+
+div.published-search-div div.published-search-results div.published-search-header {
+  padding: 5px; }
+
+div.published-search-div div.published-search-results table.search-results {
+  margin: 0 0 6px 0; }

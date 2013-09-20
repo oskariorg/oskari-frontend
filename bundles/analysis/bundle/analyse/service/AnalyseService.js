@@ -87,9 +87,10 @@ function(instance) {
      *
      */
     loadAnalyseLayers : function() {
-        var me = this;
-        var sandbox = this.instance.getSandbox();
-        var url = sandbox.getAjaxUrl();
+        var me = this,
+            sandbox = me.instance.getSandbox(),
+            url = sandbox.getAjaxUrl(),
+            loc = Oskari.getLocalization(me.instance.getName());
 
         // Request analyis layers via the backend
         me._getAnalysisLayers(

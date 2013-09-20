@@ -69,12 +69,38 @@ function(config) {
 		var pluginLoc = this.getMapModule().getLocalization('plugin', true);
 		this.loc = pluginLoc[this.__name];
 
-		this.template = jQuery('<div class="search-div">' + 
-		'<div class="search-textarea-and-button">' + 
-		'<input placeholder="' + this.loc['placeholder'] + '" type="text" />' + 
-		'<input type="button" value="' + this.loc['search'] + '" name="search" />' + '</div>' + 
-		'<div class="results">' + '<div class="header"><div class="close icon-close" title="' + this.loc['close'] + '"></div></div>' + 
-		'<div class="content">&nbsp;</div>' + '</div>' + '</div>');
+		this.template = jQuery(
+			'<div class="search-div">' + 
+				'<div class="search-textarea-and-button">' + 
+					'<input placeholder="' + this.loc['placeholder'] + '" type="text" />' + 
+					'<input type="button" value="' + this.loc['search'] + '" name="search" />' +
+				'</div>' + 
+				'<div class="results">' +
+					'<div class="header">' +
+						'<div class="close icon-close" title="' + this.loc['close'] + '"></div>' +
+					'</div>' + 
+					'<div class="content">&nbsp;</div>' +
+				'</div>' +
+			'</div>'
+		);
+
+		this.styledTemplate = jQuery(
+			'<div class="published-search-div">' +
+				'<div class="search-area-div">' +
+					'<div class="search-left"></div>' +
+					'<div class="search-middle">' +
+						'<input class="search-input" placeholder="' + this.loc['placeholder'] + '" type="text" />' +
+					'</div>' +
+					'<div class="search-right"></div>' +
+				'</div>' +
+				'<div class="results published-search-results">' +
+					'<div class="header published-search-header">' +
+						'<div class="close icon-close" title="' + this.loc['close'] + '"></div>' +
+					'</div>' +
+					'<div class="content published-search-content">&nbsp;</div>' +
+				'</div>' +
+			'</div>'
+		);
 
 		this.templateResultsTable = jQuery("<table class='search-results'><thead><tr>" + 
 		"<th>" + this.loc['column_name'] + "</th>" + "<th>" + this.loc['column_village'] + "</th>" + "<th>" + this.loc['column_type'] + 
@@ -183,10 +209,17 @@ function(config) {
 	 * div where this plugin registered.
 	 */
 	_createUI : function() {
-		var sandbox = this._sandbox;
-		var me = this;
+		var sandbox = this._sandbox,
+			me = this,
+			content;
 
-		var content = this.template.clone();
+		if (this._conf && this._conf.toolStyle) {
+			content = this.styledTemplate.clone();
+			this.changeToolStyle(this._conf.toolStyle, content);
+		} else {
+			content = this.template.clone();
+		}
+
 		this.container = content;
 
 		// get div where the map is rendered from openlayers
@@ -217,6 +250,9 @@ function(config) {
 		content.find('input[type=button]').click(function(event) {
 			me._doSearch();
 		});
+		content.find('div.search-right').click(function(event) {
+			me._doSearch();
+		});
 		// to close button
 		content.find('div.close').click(function(event) {
 			me._hideSearch();
@@ -238,6 +274,18 @@ function(config) {
 			if(this._conf.location.bottom) {
 				content.css('bottom', this._conf.location.bottom);
 			}
+		}
+
+		if (this._conf && this._conf.font) {
+			this.changeFont(this._conf.font, content);
+		}
+		if (this._conf && this._conf.toolStyle) {
+			// Hide the results if esc was pressed or if the field is empty.
+			inputField.keyup(function(e) {
+				if (e.keyCode == 27 || (e.keyCode == 8 && !jQuery(this).val())) {
+					me._hideSearch();
+				}
+			})
 		}
 	},
 	/**
@@ -362,7 +410,14 @@ function(config) {
 
 			content.html(table);
 			resultsContainer.show();
-			
+
+			// Change the font of the rendered table as well
+			if (this._conf && this._conf.font) {
+				this.changeFont(this._conf.font, content);
+			}
+			if (this._conf && this._conf.toolStyle) {
+				header.remove();
+			}
 		}
 	},
 	/**
@@ -398,6 +453,72 @@ function(config) {
 		this.container.find('div.results').hide();
 		// Send hide marker request
 		this._sandbox.request(this.getName(), this._sandbox.getRequestBuilder('HideMapMarkerRequest')());
+	},
+
+	/**
+     * Changes the tool style of the plugin
+     *
+     * @method changeToolStyle
+     * @param {Object} style
+     * @param {jQuery} div
+     */
+	changeToolStyle: function(style, div) {
+		div = div || this.container;
+
+		if (!style || !div) return;
+
+		// Remove the old unstyled search box and create a new one.
+		if (div.hasClass('search-div')) {
+			div.remove();
+			this._createUI();
+			return;
+		}
+
+		var	resourcesPath = this.getMapModule().getImageUrl(),
+			imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/search/images/',
+			styleName = style.val,
+			bgLeft = imgPath + 'search-tool-' + styleName + '_01.png',
+			bgMiddle = imgPath + 'search-tool-' + styleName + '_02.png',
+			bgRight = imgPath + 'search-tool-' + styleName + '_03.png',
+			left = div.find('div.search-left'),
+			middle = div.find('div.search-middle'),
+			right = div.find('div.search-right');
+
+		left.css({
+			'background-image': 'url("' + bgLeft + '")',
+			'width': style.widthLeft
+		});
+		middle.css({
+			'background-image': 'url("' + bgMiddle + '")',
+			'background-repeat': 'repeat-x',
+		});
+		right.css({
+			'background-image': 'url("' + bgRight + '")',
+			'width': style.widthRight
+		});
+	},
+
+	/**
+	 * Changes the font used by plugin by adding a CSS class to its DOM elements.
+	 *
+	 * @method changeFont
+	 * @param {String} fontId
+	 * @param {jQuery} div
+	 */
+	changeFont: function(fontId, div) {
+		div = div || this.container;
+
+		if (!div || !fontId) return;
+
+		// The elements where the font style should be applied to.
+		var elements = [];
+		elements.push(div.find('table.search-results'));
+		elements.push(div.find('input'));
+
+		var classToAdd = 'oskari-publisher-font-' + fontId;
+		var testRegex = /oskari-publisher-font-/;
+
+		this.getMapModule().changeCssClasses(classToAdd, testRegex, elements);
 	}
 }, {
 	/**

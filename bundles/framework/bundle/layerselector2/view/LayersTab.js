@@ -14,7 +14,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
         //"use strict";
         this.instance = instance;
         this.title = title;
-        this.showSearchSuggestions = instance.conf.showSearchSuggestions;
+        // TODO: maybe pass as param instead of digging through instance.conf?
+        this.showSearchSuggestions = (instance.conf && instance.conf.showSearchSuggestions === true);
         this.layerGroups = [];
         this.layerContainers = {};
         this.templates = {

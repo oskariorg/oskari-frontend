@@ -54,6 +54,7 @@ function(instance, localization) {
             var categories = service.getAllCategories();
             var places = service.getAllMyPlaces();
             var me = this;
+/*
             var publishLinkClosure = function(id, isPublic) {
                 return function() {
                     var request = me.instance.sandbox.getRequestBuilder('MyPlaces.PublishCategoryRequest')(id, isPublic);
@@ -61,6 +62,7 @@ function(instance, localization) {
                     return false;
                 };
             }
+*/
             var editLinkClosure = function(id) {
                 return function() {
                     var request = me.instance.sandbox.getRequestBuilder('MyPlaces.EditCategoryRequest')(id);
@@ -83,6 +85,11 @@ function(instance, localization) {
                     panel = this._createCategoryTab(categories[i]);
                     this.tabsContainer.addPanel(panel);
                     this.tabPanels[id] = panel;
+                } else {
+                    //lets set a name for the panel
+                    panel.setTitle(categories[i].name);
+                    // update panel graphics
+                    me.tabsContainer.updatePanel(panel);
                 }
                 // update places
                 this._populatePlaces(id);
@@ -101,6 +108,7 @@ function(instance, localization) {
                 deleteLink.bind('click', deletelinkClosure(id));
                 panel.getContainer().append(deleteLink);
                 
+/*
                 var publishLink = this.linkTemplate.clone();
                 publishLink.addClass('categoryOp');
                 var isPublic = categories[i].isPublic();
@@ -117,6 +125,7 @@ function(instance, localization) {
                 publishLink.append(publishIcon);
                 publishLink.bind('click', publishLinkClosure(id, !isPublic));
                 panel.getContainer().append(publishLink);
+*/
             }
             this._removeObsoleteCategories();
         }
@@ -235,6 +244,7 @@ function(instance, localization) {
         var id = category.getId();
         
         var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+        panel.setId(id);
         panel.setTitle(category.getName());
 
         panel.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
