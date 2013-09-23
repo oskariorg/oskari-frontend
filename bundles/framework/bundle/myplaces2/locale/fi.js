@@ -173,9 +173,6 @@ Oskari.registerLocalization({
       "linestyle": {
         "label": "Alueen viivan tyyli"
       },
-      "linecap": {
-        "label": "Viivan päädyt"
-      },
       "linecorner": {
         "label": "Kulmat"
       },

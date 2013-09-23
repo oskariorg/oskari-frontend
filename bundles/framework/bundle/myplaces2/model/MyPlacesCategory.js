@@ -180,20 +180,6 @@ function() {
         return this.areaLineCorner;
     },
     /**
-     * @method setAreaLineCap
-     * @param {Number} value
-     */
-    setAreaLineCap : function(value) {
-        this.areaLineCap = value;
-    },
-    /**
-     * @method getAreaLineCap
-     * @return {Number}
-     */
-    getAreaLineCap : function() {
-        return this.areaLineCap;
-    },
-    /**
      * @method setAreaLineStyle
      * @param {Number} value
      */

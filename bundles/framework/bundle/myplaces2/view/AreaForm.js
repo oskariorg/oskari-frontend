@@ -17,39 +17,23 @@ function(instance) {
                 instance.myPlacesService.defaults.area.color],
         line: {
             style: instance.myPlacesService.defaults.area.linestyle,
-            cap: instance.myPlacesService.defaults.area.linecap,
             corner: instance.myPlacesService.defaults.area.linecorner,
             width: instance.myPlacesService.defaults.area.linewidth,
             color: instance.myPlacesService.defaults.area.linecolor
         },
         fill: instance.myPlacesService.defaults.area.fill
     };
-/*    this.values = {
-        color: this.defaultValues.color,
-        line: {
-            style: this.defaultValues.line.style,
-            cap: this.defaultValues.line.cap,
-            corner: this.defaultValues.line.corner,
-            width: this.defaultValues.line.width
-        },
-        fill: this.defaultValues.fill
-    };
-*/
 
     this.values = {
         lineWidth : this.defaultValues.line.width,
-        lineCap : this.defaultValues.line.cap,
         lineCorner : this.defaultValues.line.corner,
         lineStyle : this.defaultValues.line.style,
-        lineColor : this.defaultValues.line.color,
+        lineColor : this.defaultValues.color[0],
         fillColor : this.defaultValues.color[1],
         fillStyle : this.defaultValues.fill
-    }
-
-
+    };
 
     this.styleButtonNames = ["icon-line-basic", "icon-line-dashed", "icon-double-line"];
-    this.capButtonNames = ["icon-line-flat_cap", "icon-line-round_cap"];
     this.cornerButtonNames = ["icon-corner-sharp", "icon-corner-round"];
 
     this.colorTypes = ["line","fill"];
@@ -73,8 +57,6 @@ function(instance) {
             '<div class="column1">' +
                 '<label>' + this.loc.linestyle.label + '</label>' +
                 '<div class="style icon-buttons"></div>' +
-                '<label>' + this.loc.linecap.label + '</label>' +
-                '<div class="cap icon-buttons"></div>' +
                 '<label>' + this.loc.linecorner.label + '</label>' +
                 '<div class="corner icon-buttons"></div>' +
                 '<label>' + this.loc.linewidth.label + '</label><br>' +
@@ -152,6 +134,7 @@ function(instance) {
         renderDialog.addClass('top');
         renderDialog.addClass('arrow');
         renderDialog.addClass('renderdialog');
+        renderDialog.addClass('areavisualization');
         var title = me.loc.title;
 
         // Line style
@@ -169,22 +152,6 @@ function(instance) {
                 me._updatePreview(dialogContent);
             });
             content.append(styleBtnContainer);
-        }
-
-        // Line cap
-        content = dialogContent.find('div.cap');
-        for (var i=0; i<me.capButtonNames.length; i++) {
-            var capBtnContainer = me.templateButton.clone();
-            capBtnContainer.addClass(me.capButtonNames[i]);
-            capBtnContainer.attr('id',i+"linecap");
-            if (i === me.values.lineCap) this._styleSelectedButton(capBtnContainer);
-            capBtnContainer.click(function(){
-                var newValue = parseInt(jQuery(this).attr('id').charAt(0));
-                me._selectButton("lineCap",newValue);
-                me.values.lineCap = newValue;
-                me._updatePreview(dialogContent);
-            });
-            content.append(capBtnContainer);
         }
 
         // Line corner
@@ -218,7 +185,6 @@ function(instance) {
 
         // Color chooser
         for (var c = 0; c < 2; c++) {
-
             var statedChosenColor = false;
             var cType = (c==0)?'lineColor':'fillColor';
             content = dialogContent.find('.color-grid.'+me.colorTypes[c]);
@@ -342,7 +308,6 @@ function(instance) {
                 content.find('input.custom-color.custom-blue-value').val(rgb.b);
             }
 
-
             content.find('.custom-color').change(function() {
                 var colorType = this.id.substring(0,1);
                 var values = [];
@@ -398,7 +363,10 @@ function(instance) {
         cancelBtn.setTitle(me.loc.buttons.cancel);
         cancelBtn.setHandler(function() {
             me.values.lineWidth = me.defaultValues.line.width;
-            me.values.fillColor = me.defaultValues.color;
+            me.values.lineCorner = me.defaultValues.line.corner;
+            me.values.lineStyle = me.defaultValues.line.style;
+            me.values.lineColor = me.defaultValues.color[0];
+            me.values.fillColor = me.defaultValues.color[1];
             me.values.fillStyle = me.defaultValues.fill;
             jQuery(".renderdialog").hide();
         });
@@ -433,7 +401,6 @@ function(instance) {
                 fill: fill,
                 strokeWidth: me.values.lineWidth,
                 strokeLineJoin: me.values.lineCorner === 0 ? "miter" : "round",
-                strokeLineCap: me.values.lineCap === 0 ? "butt" : "round",
                 strokeDashArray: me.values.lineStyle === 1 ? [3,2+0.25*me.values.lineWidth] : null
             });
 
