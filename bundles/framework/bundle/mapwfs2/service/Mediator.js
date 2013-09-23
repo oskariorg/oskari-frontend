@@ -214,11 +214,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             }
         }
 
-        // remove highlight image
-        if(!keepPrevious) {
-            this.plugin.removeHighlightImage(layer);
-        }
-
         var event = this.plugin.getSandbox().getEventBuilder("WFSFeaturesSelectedEvent")(featureIds, layer, keepPrevious);
         this.plugin.getSandbox().notifyAll(event);
     },
@@ -269,7 +264,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         } catch(error) {
             this.plugin.getSandbox().printDebug(error);
         }
-        var layerPostFix = data.data.type;
+        var layerType = data.data.type;
         // "highlight" | "normal"
         var keepPrevious = data.data.keepPrevious;
         // true | false
@@ -279,11 +274,11 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         };
 
         // send as an event forward to WFSPlugin (draws)
-        var event = this.plugin.getSandbox().getEventBuilder("WFSImageEvent")(layer, imageUrl, data.data.bbox, size, layerPostFix, keepPrevious);
+        var event = this.plugin.getSandbox().getEventBuilder("WFSImageEvent")(layer, imageUrl, data.data.bbox, size, layerType, keepPrevious);
         this.plugin.getSandbox().notifyAll(event);
 
 
-        if(layerPostFix == "normal") {
+        if(layerType == "normal") {
             this.plugin.setPrintTile(layer, data.data.bbox, this.rootURL + data.data.url + "&session=" + this.session.session);
             var printoutEvent = this.plugin.getSandbox().getEventBuilder('Printout.PrintableContentEvent');
             if (printoutEvent) {

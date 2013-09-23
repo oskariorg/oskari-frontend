@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin',
+Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
 /**
  * @method create called automatically on construction
  * @static
@@ -16,6 +16,7 @@ function(config) {
 
     this.mapModule = null;
     this.pluginName = null;
+    this.layerPrefix = "wfs_layer_";
 
     // connection and communication
     this._connection = null;
@@ -47,7 +48,7 @@ function(config) {
         this.template[p] = jQuery(this.__templates[p]);
     }
 }, {
-    __name : 'WfsLayerPlugin',
+    __name : "WfsLayerPlugin",
 
     __templates : {
         "getinfo_result_header" : '<div class="getinforesult_header"><div class="icon-bubble-left"></div>',
@@ -90,7 +91,7 @@ function(config) {
      * Initiliazes the connection to the CometD servlet and registers the domain model
      */
     init : function() {
-        var sandboxName = ( this.config ? this.config.sandbox : null ) || 'sandbox';
+        var sandboxName = ( this.config ? this.config.sandbox : null ) || "sandbox";
         var sandbox = Oskari.getSandbox(sandboxName);
         this._sandbox = sandbox;
 
@@ -103,22 +104,22 @@ function(config) {
                 this.config.port = ":" + this.config.port;
             }
         }
-        this._connection = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.service.Connection', this.config, this);
-        this._io = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.service.Mediator', this.config, this);
+        this._connection = Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.service.Connection", this.config, this);
+        this._io = Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.service.Mediator", this.config, this);
 
         // register domain model
-        var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        var mapLayerService = sandbox.getService("Oskari.mapframework.service.MapLayerService");
         if(mapLayerService) {
-            mapLayerService.registerLayerModel('wfslayer', 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer');
+            mapLayerService.registerLayerModel("wfslayer", "Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer");
 
-            var layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder', sandbox);
-            mapLayerService.registerLayerModelBuilder('wfslayer', layerModelBuilder);
+            var layerModelBuilder = Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder", sandbox);
+            mapLayerService.registerLayerModelBuilder("wfslayer", layerModelBuilder);
         }
 
         // tiles to draw  - key: layerId + bbox
-        this._tilesToUpdate = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.plugin.TileCache');
+        this._tilesToUpdate = Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache");
         // data for tiles - key: layerId + bbox
-        this._tileData = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.plugin.TileCache');
+        this._tileData = Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache");
     },
 
     /**
@@ -127,7 +128,7 @@ function(config) {
      * Registers plugin into mapModule
      */
     register : function() {
-        this.getMapModule().setLayerPlugin('wfslayer', this);
+        this.getMapModule().setLayerPlugin("wfslayer", this);
     },
 
     /**
@@ -136,7 +137,7 @@ function(config) {
      * Removes registration of the plugin from mapModule
      */
     unregister : function() {
-        this.getMapModule().setLayerPlugin('wfslayer', null);
+        this.getMapModule().setLayerPlugin("wfslayer", null);
     },
 
     /**
@@ -231,7 +232,7 @@ function(config) {
          * @method AfterMapLayerAddEvent
          * @param {Object} event
          */
-        'AfterMapLayerAddEvent' : function(event) {
+        "AfterMapLayerAddEvent" : function(event) {
             this.mapLayerAddHandler(event);
         },
 
@@ -239,7 +240,7 @@ function(config) {
          * @method AfterMapLayerRemoveEvent
          * @param {Object} event
          */
-        'AfterMapLayerRemoveEvent' : function(event) {
+        "AfterMapLayerRemoveEvent" : function(event) {
             this.mapLayerRemoveHandler(event);
         },
 
@@ -247,7 +248,7 @@ function(config) {
          * @method WFSFeaturesSelectedEvent
          * @param {Object} event
          */
-        'WFSFeaturesSelectedEvent' : function(event) {
+        "WFSFeaturesSelectedEvent" : function(event) {
             this.featuresSelectedHandler(event);
         },
 
@@ -255,7 +256,7 @@ function(config) {
          * @method MapClickedEvent
          * @param {Object} event
          */
-        'MapClickedEvent' : function(event) {
+        "MapClickedEvent" : function(event) {
             this.mapClickedHandler(event);
         },
 
@@ -263,7 +264,7 @@ function(config) {
          * @method GetInfoResultEvent
          * @param {Object} event
          */
-        'GetInfoResultEvent' : function(event) {
+        "GetInfoResultEvent" : function(event) {
             this.getInfoResultHandler(event);
         },
 
@@ -271,7 +272,7 @@ function(config) {
          * @method AfterChangeMapLayerStyleEvent
          * @param {Object} event
          */
-        'AfterChangeMapLayerStyleEvent' : function(event) {
+        "AfterChangeMapLayerStyleEvent" : function(event) {
             this.changeMapLayerStyleHandler(event);
         },
 
@@ -279,7 +280,7 @@ function(config) {
          * @method MapLayerVisibilityChangedEvent
          * @param {Object} event
          */
-        'MapLayerVisibilityChangedEvent' : function(event) {
+        "MapLayerVisibilityChangedEvent" : function(event) {
             this.mapLayerVisibilityChangedHandler(event);
         },
 
@@ -287,7 +288,7 @@ function(config) {
          * @method AfterChangeMapLayerOpacityEvent
          * @param {Object} event
          */
-        'AfterChangeMapLayerOpacityEvent' : function(event) {
+        "AfterChangeMapLayerOpacityEvent" : function(event) {
             this.afterChangeMapLayerOpacityEvent(event);
         },
 
@@ -296,7 +297,7 @@ function(config) {
          * @method MapSizeChangedEvent
          * @param {Object} event
          */
-        'MapSizeChangedEvent' : function(event) {
+        "MapSizeChangedEvent" : function(event) {
             this.mapSizeChangedHandler(event);
         },
 
@@ -304,7 +305,7 @@ function(config) {
          * @method WFSSetFilter
          * @param {Object} event
          */
-        'WFSSetFilter' : function(event) {
+        "WFSSetFilter" : function(event) {
             this.setFilterHandler(event);
         },
 
@@ -312,13 +313,13 @@ function(config) {
          * @method WFSImageEvent
          * @param {Object} event
          */
-        'WFSImageEvent' : function(event) {
+        "WFSImageEvent" : function(event) {
             this.drawImageTile(
                 event.getLayer(),
                 event.getImageUrl(),
                 event.getBBOX(),
                 event.getSize(),
-                event.getLayerPostFix(),
+                event.getLayerType(),
                 event.isKeepPrevious()
             );
         }
@@ -373,7 +374,7 @@ function(config) {
                     for(var k = 0; k < layers[j].getSelectedFeatures().length; ++k) {
                         fids.push(layers[j].getSelectedFeatures()[k][0]);
                     }
-                    this.removeHighlightImage(layers[j]);
+                    this.removeHighlightImages(layers[j]);
                     this.getIO().highlightMapLayerFeatures(layers[j].getId(), fids, false);
                 }
             }
@@ -400,7 +401,7 @@ function(config) {
                 styleName = "default";
             }
 
-            this.addMapLayerToMap(event.getMapLayer(), 'normal'); // add WMS layer
+            this.addMapLayerToMap(event.getMapLayer(), "normal"); // add WMS layer
 
             // send together
             var self = this;
@@ -464,6 +465,12 @@ function(config) {
 
                 }
             }
+
+            // remove highlight image
+            if(!event.isKeepSelection()) {
+                this.removeHighlightImages();
+            }
+
             this.getIO().highlightMapLayerFeatures(event.getMapLayer().getId(), event.getWfsFeatureIds(), event.isKeepSelection());
         }
     },
@@ -616,7 +623,7 @@ function(config) {
         var content = {};
         var wrapper = this.template.wrapper.clone();
 
-        content.html = '';
+        content.html = "";
         content.actions = {};
         for (var di = 0; di < data.fragments.length; di++) {
             var fragment = data.fragments[di]
@@ -676,7 +683,7 @@ function(config) {
             if(layer == null) {
                 continue;
             }
-            layerName = layer ? layer.getName() : '';
+            layerName = layer ? layer.getName() : "";
 
             var features = [];
             var feature;
@@ -748,7 +755,7 @@ function(config) {
      */
     _json2html : function(node) {
         if (node == null) {
-            return '';
+            return "";
         }
         var even = true;
 
@@ -763,30 +770,30 @@ function(config) {
                 continue;
             }
             var vType = (typeof value).toLowerCase();
-            var vPres = ''
+            var vPres = ""
             switch (vType) {
-                case 'string':
-                    if (value.indexOf('http://') == 0) {
+                case "string":
+                    if (value.indexOf("http://") == 0) {
                         valpres = this.template.link_outside.clone();
-                        valpres.attr('href', value);
+                        valpres.attr("href", value);
                         valpres.append(value);
                     } else {
                         valpres = value;
                     }
                     break;
-                case 'undefined':
-                    valpres = 'n/a';
+                case "undefined":
+                    valpres = "n/a";
                     break;
-                case 'boolean':
-                    valpres = ( value ? 'true' : 'false');
+                case "boolean":
+                    valpres = ( value ? "true" : "false");
                     break;
-                case 'number':
-                    valpres = '' + value + '';
+                case "number":
+                    valpres = "" + value;
                     break;
-                case 'function':
-                    valpres = '?';
+                case "function":
+                    valpres = "?";
                     break;
-                case 'object':
+                case "object":
                     // format array
                     if(jQuery.isArray(value)) {
                         var valueDiv = this.template.wrapper.clone();
@@ -800,7 +807,7 @@ function(config) {
                     }
                     break;
                 default:
-                    valpres = '';
+                    valpres = "";
             }
             even = !even;
 
@@ -839,6 +846,33 @@ function(config) {
     },
 
     /**
+     * @method removeHighlightImages
+     *
+     * Removes a tile from the Openlayers map
+     *
+     * @param {Oskari.mapframework.domain.WfsLayer} layer
+     *           WFS layer that we want to remove
+     */
+    removeHighlightImages : function(layer) {
+        if (layer && !layer.hasFeatureData()) {
+            return;
+        }
+
+        var layerPart = "(.*)";
+        if(layer) {
+            layerPart = layer.getId();
+        }
+
+        var layerName = new RegExp(this.layerPrefix + layerPart + "_highlight");
+
+        var removeLayers = this._map.getLayersByName(layerName);
+        for ( var i = 0; i < removeLayers.length; i++) {
+            layerIndex = this._map.getLayerIndex(removeLayers[i]);
+            removeLayers[i].destroy();
+        }
+    },
+
+    /**
      * @method removeMapLayerFromMap
      * @param {Object} layer
      */
@@ -857,12 +891,13 @@ function(config) {
         if (layer && !layer.hasFeatureData()) {
             return;
         }
-        var layerPart = '';
+
+        var layerPart = "";
         if(layer) {
             layerPart = layer.getId();
         }
 
-        var wfsReqExp = new RegExp('wfs_layer_' + layerPart + '*', 'i');
+        var wfsReqExp = new RegExp(this.layerPrefix + layerPart + "*", "i");
         return this._map.getLayersByName(wfsReqExp);
     },
 
@@ -876,7 +911,7 @@ function(config) {
             return null;
         }
 
-        var layerName = "wfs_layer_" + layer.getId() + "_" + type;
+        var layerName = this.layerPrefix + layer.getId() + "_" + type;
         var wfsReqExp = new RegExp(layerName);
         return this._map.getLayersByName(wfsReqExp)[0];
     },
@@ -893,13 +928,13 @@ function(config) {
      * @param {OpenLayers.Bounds} imageBbox
      *           bounds for the tile
      * @param {Object} imageSize
-     * @param {String} layerPostFix
+     * @param {String} layerType
      *           postfix so we can identify the tile as highlight/normal
      * @param {Boolean} keepPrevious
      *           true to not delete existing tile
      */
-    drawImageTile : function(layer, imageUrl, imageBbox, imageSize, layerPostFix, keepPrevious) {
-        var layerName = "wfs_layer_" + layer.getId() + "_" + layerPostFix;
+    drawImageTile : function(layer, imageUrl, imageBbox, imageSize, layerType, keepPrevious) {
+        var layerName = this.layerPrefix + layer.getId() + "_" + layerType;
         var boundsObj = new OpenLayers.Bounds(imageBbox);
 
         /** Safety checks */
@@ -916,7 +951,7 @@ function(config) {
 
         var ols = new OpenLayers.Size(imageSize.width, imageSize.height);
 
-        if (layerPostFix == "highlight") {
+        if (layerType == "highlight") {
             var wfsMapImageLayer = new OpenLayers.Layer.Image(
                 layerName,
                 imageUrl,
@@ -944,8 +979,8 @@ function(config) {
             }
 
             // highlight picture on top of normal layer images
-            var normalLayerExp = new RegExp("wfs_layer_" + layer.getId() + "_normal");
-            var highlightLayerExp = new RegExp("wfs_layer_" + layer.getId() + "_highlight");
+            var normalLayerExp = new RegExp(this.layerPrefix + layer.getId() + "_normal");
+            var highlightLayerExp = new RegExp(this.layerPrefix + layer.getId() + "_highlight");
             var normalLayer = this._map.getLayersByName(normalLayerExp);
             var highlightLayer = this._map.getLayersByName(highlightLayerExp);
             if (normalLayer.length > 0 && highlightLayer.length > 0) {
@@ -954,7 +989,7 @@ function(config) {
             }
         } else { // "normal"
             var BBOX = boundsObj.toArray(false);
-            var bboxKey = BBOX.join(',');
+            var bboxKey = BBOX.join(",");
 
             var style = layer.getCurrentStyle().getName();
             var tileToUpdate = this._tilesToUpdate.mget(layer.getId(), bboxKey, "");
@@ -974,15 +1009,15 @@ function(config) {
      * @method addMapLayerToMap
      *
      * @param {Object} layer
-     * @param {String} layerPostFix
+     * @param {String} layerType
      */
-    addMapLayerToMap : function(_layer, layerPostfix) {
-        var layerName = "wfs_layer_" + _layer.getId() + "_" + layerPostfix;
+    addMapLayerToMap : function(_layer, layerType) {
+        var layerName = this.layerPrefix + _layer.getId() + "_" + layerType;
         var layerScales = this.getMapModule().calculateLayerScales(_layer.getMaxScale(), _layer.getMinScale());
 
         // default params and options
         var defaultParams = {
-            layers : '',
+            layers : "",
             transparent : true,
             id : _layer.getId(),
             styles : _layer.getCurrentStyle().getName(),
@@ -1000,7 +1035,7 @@ function(config) {
                 bounds = this.adjustBounds(bounds);
                 
                 var BBOX = bounds.toArray(false);
-                var bboxKey = BBOX.join(',');
+                var bboxKey = BBOX.join(",");
                 
                 var layer = this._plugin.getSandbox().findMapLayerFromSelectedMapLayers(this.layerId);
                 var style = layer.getCurrentStyle().getName();
@@ -1035,7 +1070,7 @@ function(config) {
                         this.layer.div.appendChild(this.getTile());
                         if (this.layer.async) {
                             // Asynchronous image requests call the asynchronous getURL method
-                            // on the layer to fetch an image that covers 'this.bounds'.
+                            // on the layer to fetch an image that covers "this.bounds".
                             var id = this.asyncRequestId = (this.asyncRequestId || 0) + 1;
                             this.layer.getURLasync(this.bounds, function(url) {
                                 if (id == this.asyncRequestId) {
@@ -1056,7 +1091,7 @@ function(config) {
                 this._plugin._tiles[tile.id] = tile;
 
                 var BBOX = bounds.toArray(false);
-                var bboxKey = BBOX.join(',');
+                var bboxKey = BBOX.join(",");
                 var layer = this._plugin.getSandbox().findMapLayerFromSelectedMapLayers(this.layerId);
                 var style = layer.getCurrentStyle().getName();
                 this._plugin._tilesToUpdate.mput(this.layerId, bboxKey, "", tile);
@@ -1081,28 +1116,10 @@ function(config) {
             defaultOptions[key] = layerOptions[key];
         }
 
-        var openLayer = new OpenLayers.Layer.WMS(layerName, '', defaultParams, defaultOptions);
+        var openLayer = new OpenLayers.Layer.WMS(layerName, "", defaultParams, defaultOptions);
         openLayer.opacity = _layer.getOpacity() / 100;
 
         this._map.addLayer(openLayer);
-    },
-
-    /**
-     * @method removeHighlightImage
-     *
-     * Removes a tile from the Openlayers map
-     *
-     * @param {Oskari.mapframework.domain.WfsLayer} layer
-     *           WFS layer that we want to update
-     */
-    removeHighlightImage : function(layer) {
-        var layerName = "wfs_layer_" + layer.getId() + "_highlight";
-
-        var removeLayers = this._map.getLayersByName(layerName);
-        for ( var i = 0; i < removeLayers.length; i++) {
-            layerIndex = this._map.getLayerIndex(removeLayers[i]);
-            removeLayers[i].destroy();
-        }
     },
 
 // from tilesgridplugin
@@ -1129,7 +1146,7 @@ function(config) {
                 pointRadius: 3,
                 strokeColor: "red",
                 strokeWidth: 2,
-                fillColor: '#800000'
+                fillColor: "#800000"
             }),
             "tile": new OpenLayers.Style({
                 strokeColor: "#008080",
@@ -1241,7 +1258,7 @@ function(config) {
         var style = layer.getCurrentStyle().getName();
         var result = [];
         for(var i = 0; i < grid.bounds.length; i++) {
-            var bboxKey = grid.bounds[i].join(',');
+            var bboxKey = grid.bounds[i].join(",");
             var dataForTile = this._tileData.mget(layerId, bboxKey, style);
             if(!dataForTile) {
                 result.push(grid.bounds[i]);
@@ -1334,7 +1351,7 @@ function(config) {
             }
         }
 
-        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var dialog = Oskari.clazz.create("Oskari.userinterface.component.Popup");
         var popupLoc = this.getLocalization("error").title;
         var content = this.getLocalization("error")[message]; 
         if(layer) {
@@ -1342,13 +1359,13 @@ function(config) {
         }
         var okBtn = dialog.createCloseButton( this.getLocalization().button.close);
 
-        okBtn.addClass('primary');
-        dialog.addClass('error_handling');
+        okBtn.addClass("primary");
+        dialog.addClass("error_handling");
         dialog.show(popupLoc, content, [okBtn]);
         dialog.fadeout(5000);
     }
 
 }, {
-    'protocol' : [ "Oskari.mapframework.module.Module",
+    "protocol" : [ "Oskari.mapframework.module.Module",
             "Oskari.mapframework.ui.module.common.mapmodule.Plugin" ]
 });
