@@ -227,7 +227,7 @@ function(instance) {
         var catLoc = this.instance.getLocalization('category');
         var json = {
             wmsName: 'ows:my_places_categories',
-            type: "wmslayer",
+            type: "myplaceslayer",
             isQueryable:true,
             opacity: 50,
             metaType: this.instance.idPrefix,
