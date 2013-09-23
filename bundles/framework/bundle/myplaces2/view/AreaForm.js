@@ -205,13 +205,7 @@ function(instance) {
                         if (me.activeColorCell[colorType] < 10) activeCell = "0"+activeCell;
                         jQuery('#'+activeCell+colorType+'ColorCell').css('border','1px solid #000000');
                     }
-                    var parts = this.style.backgroundColor.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-                    delete (parts[0]);
-                    for (var j = 1; j <= 3; ++j) {
-                        parts[j] = parseInt(parts[j]).toString(16);
-                        if (parts[j].length == 1) parts[j] = '0' + parts[j];
-                    }
-                    me.values[colorType == 0 ? 'lineColor':'fillColor'] = parts.join('');
+                    me.values[colorType == 0 ? 'lineColor':'fillColor'] = me.instance.rgbToHex(this.style.backgroundColor);
                     me.activeColorCell[colorType] = cellIndex;
                     if (cellIndex < 10) cellIndex = "0"+cellIndex.toString();
                     jQuery('#'+cellIndex+colorType+'ColorCell').css('border','3px solid #ffffff');
