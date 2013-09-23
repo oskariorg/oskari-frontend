@@ -535,6 +535,9 @@ define([
             var me = this;
             var element = jQuery(e.currentTarget);
             var input = element.parents('.add-layer-wrapper').find('#add-layer-interface');
+            var wmsurlField = element.parents('.add-layer-wrapper').find('#add-layer-wms-url');
+            wmsurlField.html(input.val());
+
             var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
                 route = "action_route=GetWSCapabilities",
                 type = "&wmsurl=";
