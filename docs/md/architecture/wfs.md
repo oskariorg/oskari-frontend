@@ -6,16 +6,17 @@ WFS 2 contains separate backend from other backend action routes and map portlet
 
 ## Dependencies
 
-- Java
-- Jetty
-- CometD (Bayeux protocol)
-- Geotools (WFS queries)
-- Jackson (JSON)
-- Axiom (XML)
-- Jedis (Redis client)
-- oskari-base
+WFS2's front is built with Javascript as Oskari bundle that handles its inner communication with Oskari's events and requests and communication with server is mostly handled with CometD connection that tries first to initialize Websocket handshake and fallbacks to callback-polling that has cross-domain support. Backend is implemented with Java as an independent part of oskari-server meaning that some packages and classes that WFS2 transport uses are shared with other backend services.
 
-... other minor dependencies
+XML Parsing is handled at the backend with Axiom that is a StAX (Streaming API for XML) Parser for Java and Geotools. Axiom was selected because of small memory print and fast XML processing especially with medium and large XML documents.
+
+We decided not use Geotools' libraries as much as we could. Geometry transformation, drawing and styling are done with Geotools. As of generating XML payload for WFS requests we use OGC Filter and it's configuration from Geotools. Even if we have developed our own XML Parser that outputs Geotools' own SimpleFeatureCollection and uses GML Parser to just parse geometries, we have support to use GML Parser for the whole WFS XML response parsing. Our own parser handles some special cases that aren't supported in SimpleFeature format, for example possibility to have features in features.
+
+Jedis is our choice for handling our Redis cache connections. Criteria for choosing were simplicity and usability that come with Jedis. We have wrapped all the needed Jedis actions inside our own JedisManager that handles connections with JedisPool. Every action always gets a connection from the pool and releases it when the action is finalizing.
+
+JSON handling is partly done with CometDs parameter handling but mostly with Jackson that is easy and fast Java JSON parser and data binder. All cached data in Redis are in JSON format that can be easily serialized back to usable Java objects.
+
+WFS2 backend is hosted with Jetty. CometDs Websocket is supported from Jetty 7. WFS2 doesn't make any other restrictions for choosing platform than what CometD needs.
 
 ## Interfaces (API channels)
 
