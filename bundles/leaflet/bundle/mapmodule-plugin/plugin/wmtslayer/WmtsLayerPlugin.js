@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapframework.mapmodule.WmtsLayerPlugin
- * Provides functionality to draw Wmts layers on the map
+ * Provides functionality to draw WMS layers on the map
  */
 Oskari.clazz.define('Oskari.leaflet.mapmodule.plugin.WmtsLayerPlugin',
 
@@ -13,7 +13,6 @@ function() {
     this.pluginName = null;
     this._sandbox = null;
     this._supportedFormats = {};
-
 
     this.tileSize = [256, 256];
 
@@ -59,7 +58,7 @@ function() {
      * Registers self as a layerPlugin to mapmodule with mapmodule.setLayerPlugin()
      */
     register : function() {
-        this.getMapModule().setLayerPlugin('Wmtslayer', this);
+        this.getMapModule().setLayerPlugin('wmslayer', this);
     },
     /**
      * @method unregister
@@ -67,7 +66,7 @@ function() {
      * Unregisters self from mapmodules layerPlugins
      */
     unregister : function() {
-        this.getMapModule().setLayerPlugin('Wmtslayer', null);
+        this.getMapModule().setLayerPlugin('wmslayer', null);
     },
     /**
      * @method init
@@ -158,7 +157,7 @@ function() {
     },
     /**
      * @method preselectLayers
-     * Adds given layers to map if of type Wmts
+     * Adds given layers to map if of type WMS
      * @param {Oskari.mapframework.domain.WmtsLayer[]} layers
      */
     preselectLayers : function(layers) {
@@ -186,6 +185,7 @@ function() {
     _afterMapLayerAddEvent : function(event) {
         this._addMapLayerToMap(event.getMapLayer(), event.getKeepLayersOrder(), event.isBasemap());
     },
+
     /**
      * @method _addMapLayerToMap
      * @private
@@ -215,15 +215,13 @@ function() {
         for (var i = 0, ilen = layers.length; i < ilen; i++) {
             var _layer = layers[i];
 
+            var wmtsLayerDef = _layer.getWmtsLayerDef();
             var wmtsUrl = _layer.getWmtsUrls()[0][0].url;
             var matrixSet = _layer.getWmtsMatrixSet();
             var matrixSetId = matrixSet.identifier;
             var layerName = _layer.getWmtsName();
             var style = _layer.getCurrentStyle().getName();
-            var projection = this.mapModule.getProjectionObject();
-            var projectionExtent = projection.getExtent();
 
-            
             var matrixIds = [];
             var resolutions = [];
             var serverResolutions = [];
@@ -236,17 +234,35 @@ function() {
                 var res = scaleDenom / 90.71446714322 * OpenLayers.METERS_PER_INCH;
                 resolutions.push(res)
                 serverResolutions.push(res);
-                
-            }	        
-	        
-	        
-	        var wmtsCaps = _layer.getWmtsCaps();
-	        	        
-	        
-	    
+
+            }
+
+            var maxMin = this.mapModule.calculateLayerMinMaxResolutions(_layer.getMaxScale(), _layer.getMinScale());
+
+            /* Temp Hack compatible with what we got - practically assumes NLS WMTS service for now */
+            var urlParts = {
+                "{TileMatrixSet}" : wmtsLayerDef.tileMatrixSetLinks[0].tileMatrixSet,
+                "{TileMatrix}" : '{z}',
+                "{TileRow}" : '{y}',
+                "{TileCol}" : '{x}'
+            };
+
+            var url = '' + wmtsLayerDef.resourceUrls.tile["image/png"];
+
+            for (var p in urlParts ) {
+                url = url.replace(p, urlParts[p]);
+            }
+
+            var wmtsOpts = {
+                URL : url
+            };
+
+            var layerImpl = new L.tileLayer(wmtsOpts.URL, {
+                tms : false,
+                continuousWorld : true
+            });
 
             this.mapModule.addLayer(layerImpl, _layer, layerIdPrefix + _layer.getId());
-            
 
             if (keepLayerOnTop) {
                 this.mapModule.setLayerIndex(layerImpl, this.mapModule.getLayers().length);
@@ -288,8 +304,7 @@ function() {
                     var subtmp = layer.getSubLayers()[i];
                     var name = 'basemap_' + subtmp.getId();
                     var remLayer = this.mapModule.getLayersByName(name);
-                    if (remLayer && remLayer[0] && remLayer[0].destroy) {
-                        /*remLayer[0].destroy();*/
+                    if (remLayer && remLayer[0]) {
                         this.mapModule.removeLayer(remLayer[0], layer, name);
                     }
                 }
@@ -302,7 +317,7 @@ function() {
             var name = 'layer_' + layer.getId();
             var remLayer = this.mapModule.getLayersByName(name);
             /* This should free all memory */
-            this.mapModule.removeLayer( remLayer[0], layer, name);
+            this.mapModule.removeLayer(remLayer[0], layer, name);
         }
     },
     /**
@@ -376,17 +391,15 @@ function() {
      */
     _afterChangeMapLayerStyleEvent : function(event) {
         var layer = event.getMapLayer();
-        if (!layer.isLayerOfType('WMTS'))
-            return;
 
         // Change selected layer style to defined style
         if (!layer.isBaseLayer()) {
             var styledLayer = this.mapModule.getLayersByName('layer_' + layer.getId());
-            /*if (styledLayer != null) {
-                styledLayer[0].mergeNewParams({
+            if (styledLayer != null) {
+                styledLayer[0].setParams({
                     styles : layer.getCurrentStyle().getName()
                 });
-            }*/
+            }
         }
     }
 }, {
@@ -396,3 +409,4 @@ function() {
      */
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
+

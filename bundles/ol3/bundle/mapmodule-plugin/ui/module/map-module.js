@@ -7,7 +7,7 @@
  *
  * See http://www.oskari.org/trac/wiki/DocumentationBundleMapmodule
  */
-Oskari.clazz.define('Oskari.mapframework.ui.module.common.MapModule',
+Oskari.clazz.define('Oskari.ol3.ui.module.common.MapModule',
 /**
  * @method create called automatically on construction
  * @static
@@ -1221,6 +1221,10 @@ function(id, imageUrl, options) {
     getMapScale : function() {
         return OpenLayers.Util.getScaleFromResolution(this._map.getView().getResolution(), 'm');
 
+    },
+    
+    updateSize : function() {
+        this._map.updateSize();
     }
 }, {
     /**

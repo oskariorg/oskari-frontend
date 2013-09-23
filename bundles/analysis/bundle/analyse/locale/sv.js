@@ -170,7 +170,8 @@ Oskari.registerLocalization({
                 "bufferSize": "Fel i zon storlek",
                 "nohelp": "ingen anvisning",
                 "saveFailed": "Fel i analys lagring. Försök senare igen.",
-                "illegalCharacters": "ingen bokstaver - använda sifror"
+                "illegalCharacters": "ingen bokstaver - använda sifror",
+                 "loadLayersFailed": "Fel i analys ladda ner"
             }
 
         },
