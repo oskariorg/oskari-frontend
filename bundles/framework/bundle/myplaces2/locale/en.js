@@ -173,12 +173,6 @@ Oskari.registerLocalization({
       "linestyle": {
         "label": ""
       },
-      "linecap": {
-        "label": ""
-      },
-      "linecorner": {
-        "label": ""
-      },
       "linewidth": {
         "label": ""
       },

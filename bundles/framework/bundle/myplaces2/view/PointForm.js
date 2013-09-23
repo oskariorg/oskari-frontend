@@ -228,6 +228,7 @@ function(instance) {
         renderDialog.addClass('top');
         renderDialog.addClass('arrow');
         renderDialog.addClass('renderdialog');
+        renderDialog.addClass('pointvisualization');
         var title = me.loc.title;
 
         // Shape selection

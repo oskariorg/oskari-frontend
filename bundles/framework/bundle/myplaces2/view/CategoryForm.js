@@ -155,16 +155,14 @@ start : function() {
             };
             var areaLineWidth = this.areaRenderForm.values.lineWidth;
             var areaLineCorner = this.areaRenderForm.values.lineCorner;
-            var areaLineCap = this.areaRenderForm.values.lineCap;
             var areaLineStyle = this.areaRenderForm.values.lineStyle;
             var areaLineColor = this.areaRenderForm.values.lineColor;
             var areaFillColor = this.areaRenderForm.values.fillColor;
             var areaFillStyle = this.areaRenderForm.values.fillStyle;
             values.area = {
                 lineWidth : areaLineWidth,
-                lineCorner :    this.lineCornerMap[areaLineCorner],
-                lineCap :       this.lineCapMap[areaLineCap],
-                lineStyle :     this.lineStyleMap[areaLineStyle],
+                lineCorner : this.lineCornerMap[areaLineCorner],
+                lineStyle : this.lineStyleMap[areaLineStyle],
                 lineColor : areaLineColor,
                 fillColor : areaFillColor,
                 fillStyle : areaFillStyle
@@ -212,10 +210,7 @@ start : function() {
             if(data.line.cap === this.lineCapMap[i]) {
                 data.line.cap = i;
             }
-            if(data.area.lineCap === this.lineCapMap[i]) {
-                data.area.lineCap = i;
-            }
-        };
+        }
         for (var i = 0; i < this.lineCornerMap.length; i++) {
             if(data.line.corner === this.lineCornerMap[i]) {
                 data.line.corner = i;
@@ -223,7 +218,7 @@ start : function() {
             if(data.area.lineCorner === this.lineCornerMap[i]) {
                 data.area.lineCorner = i;
             }
-        };
+        }
         for (var i = 0; i < this.lineStyleMap.length; i++) {
             if(data.line.style === this.lineStyleMap[i]) {
                 data.line.style = i;
@@ -231,7 +226,7 @@ start : function() {
             if(data.area.lineStyle === this.lineStyleMap[i]) {
                 data.area.lineStyle = i;
             }
-        };
+        }
 
         this.initialValues = data;
     },

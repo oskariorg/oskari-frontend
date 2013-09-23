@@ -186,7 +186,6 @@ function(url, uuid) {
                 'stroke_color' : this._prefixColorForServer(m.getLineColor()),
                 'border_width' : m.getAreaLineWidth(),
                 'border_dasharray' : m.getAreaLineStyle(),
-                'border_linecap' : m.getAreaLineCap(),
                 'border_linejoin' : m.getAreaLineCorner(),
                 'border_color' : this._prefixColorForServer(m.getAreaLineColor()),
                 'fill_pattern' : m.getAreaFillStyle(),

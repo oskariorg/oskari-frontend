@@ -114,7 +114,6 @@ function(url, uuid, sandbox, defaults, pInstance) {
         defaultCategory.setLineColor(this.defaults.line.color);
         defaultCategory.setAreaLineWidth(this.defaults.area.linewidth);
         defaultCategory.setAreaLineCorner(this.defaults.area.linecorner);
-        defaultCategory.setAreaLineCap(this.defaults.area.linecap);
         defaultCategory.setAreaLineStyle(this.defaults.area.linestyle);
         defaultCategory.setAreaLineColor(this.defaults.area.linecolor);
         defaultCategory.setAreaFillColor(this.defaults.area.fillcolor);
@@ -371,7 +370,6 @@ function(url, uuid, sandbox, defaults, pInstance) {
 
                     category.setAreaLineWidth(categoryModel.getAreaLineWidth());
                     category.setAreaLineCorner(categoryModel.getAreaLineCorner());
-                    category.setAreaLineCap(categoryModel.getAreaLineCap());
                     category.setAreaLineStyle(categoryModel.getAreaLineStyle());
                     category.setAreaLineColor(categoryModel.getAreaLineColor());
                     category.setAreaFillColor(categoryModel.getAreaFillColor());

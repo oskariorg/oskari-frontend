@@ -113,6 +113,7 @@ function(instance) {
         renderDialog.addClass('top');
         renderDialog.addClass('arrow');
         renderDialog.addClass('renderdialog');
+        renderDialog.addClass('linevisualization');
         var title = me.loc.title;
 
         // Line style
