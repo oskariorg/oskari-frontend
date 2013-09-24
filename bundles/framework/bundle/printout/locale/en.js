@@ -23,8 +23,8 @@ Oskari.registerLocalization({
                 "tooltip" : "Select the language of the map interface and map data."
             },
             "size" : {
-                "label" : "Koko",
-                "tooltip" : "Valitse arkkikoko. Näet vaikutuksen esikatselukartassa.",
+                "label" : "Size",
+                "tooltip" : "Choose print layout. Preview map is updated accordingly.",
                 "options" : [{
                     "id" : "A4",
                     "label" : "A4 portrait",
@@ -103,17 +103,7 @@ Oskari.registerLocalization({
                     "label" : "Add date",
                     "tooltip" : "You can add date to the printout",
                         "checked" : "checked"
-                }/*, {
-                    "id" : "pageLegend",
-                    "label" : "Add legend",
-                    "tooltip" : "You can add legend to the printout",
-                        "checked" : "checked"
-                }, {
-                    "id" : "pageCopyleft",
-                    "label" : "Add copyright information",
-                    "tooltip" : "You can add copyright to the printout",
-                        "checked" : "checked"
-                }*/]
+                }]
             },
                 "legend" : {
                 "label" : "Legend",

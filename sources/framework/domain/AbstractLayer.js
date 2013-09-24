@@ -95,6 +95,9 @@ function(params, options) {
 	this._metadataIdentifier = null;
 
 	this._backendStatus = null;
+
+	/* does this layer have Feature Data boolean */
+	this._featureData = false;
 }, {
 	/**
 	 * @method setId
@@ -738,5 +741,12 @@ function(params, options) {
 	 */
 	getOptions : function() {
 		return this._options;
+	},
+	/**
+	 * @method hasFeatureData
+	 * @return {Boolean} true if the layer has feature data
+	 */
+	hasFeatureData : function() {
+		return this._featureData;
 	}
 }); 

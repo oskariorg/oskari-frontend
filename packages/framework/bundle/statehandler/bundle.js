@@ -24,6 +24,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.statehandler.StateHandlerBundle"
             "src" : "../../../../bundles/framework/bundle/statehandler/instance.js"
         },{
             "type" : "text/javascript",
+            "src" : "../../../../libraries/jquery/plugins/jquery.cookie.js"
+        },{
+            "type" : "text/javascript",
             "src" : "../../../../bundles/framework/bundle/statehandler/state-methods.js"
         },{
             "type" : "text/javascript",

@@ -179,6 +179,30 @@ function() {
                 
             dialog.show(loc['published'].title, content, [okBtn]);
             this.setPublishMode(false);
+        },
+        /**
+         * @method Publisher.ToolStyleChangedEvent
+         */
+        'Publisher.ToolStyleChangedEvent': function(event) {
+            if (!this.publisher) return;
+
+            this.publisher.changeToolStyles(event.getStyle());
+        },
+        /**
+         * @method Publisher.ColourSchemeChangedEvent
+         */
+        'Publisher.ColourSchemeChangedEvent': function(event) {
+            if (!this.publisher) return;
+
+            this.publisher.changeColourScheme(event.getColourScheme());
+        },
+        /**
+         * @method Publisher.FontChangedEvent
+         */
+        'Publisher.FontChangedEvent': function(event) {
+            if (!this.publisher) return;
+
+            this.publisher.changeFont(event.getFont());
         }
     },
 
@@ -393,7 +417,8 @@ function() {
         var selectedLayers = this.sandbox.findAllSelectedMapLayers();
         for (var i = 0; i < selectedLayers.length; ++i) {
             var layer = selectedLayers[i];
-            if (!this.hasPublishRight(layer)) {
+            if (!this.hasPublishRight(layer) && 
+                layer.getId().toString().indexOf('myplaces_') < 0) {
                 deniedLayers.push(layer);
             }
         }

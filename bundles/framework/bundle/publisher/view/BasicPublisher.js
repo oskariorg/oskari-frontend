@@ -74,13 +74,17 @@ function(instance, localization, data) {
         }
     }, {
         id : 'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
-        selected : false
+        selected : false,
+        config: {}
     }, {
         id : 'Oskari.mapframework.mapmodule.ControlsPlugin',
         selected : true
     }, {
         id : 'Oskari.mapframework.mapmodule.GetInfoPlugin',
-        selected : true
+        selected : true,
+        config: {
+            infoBox: true
+        }
     }];
 
 
@@ -229,6 +233,15 @@ function(instance, localization, data) {
 
         accordion.addPanel(this._createSizePanel());
         accordion.addPanel(this._createToolsPanel());
+
+        // Add the layout panel to the accordion.
+        this.layoutPanel = Oskari.clazz.create(
+            'Oskari.mapframework.bundle.publisher.view.PublisherLayoutForm',
+            this.loc,
+            this
+        );
+        this.layoutPanel.init();
+        accordion.addPanel(this.layoutPanel.getPanel());
 
         this.maplayerPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLayerForm', this.loc, this.instance);
         this.maplayerPanel.init();
@@ -971,6 +984,8 @@ function(instance, localization, data) {
         }
         this.maplayerPanel.stop();
 
+        this.layoutPanel.stop();
+
         // return map size to normal
         var mapElement = jQuery(mapModule.getMap().div);
         // remove width definition to resume size correctly
@@ -1111,5 +1126,135 @@ function(instance, localization, data) {
             me.gridPlugin.createStatsOut(me.statsContainer);
 
         }
+    },
+
+    /**
+     * Changes the style of each tool, if the tool's plugin supports it.
+     *
+     * @method changeToolStyles
+     * @param {Object} style
+     */
+    changeToolStyles: function(style) {
+        if (!style) return;
+
+        var styleConfig;
+
+        // Set the toolStyle to the config of each tool
+        // and change the style immedately. 
+        for (var i = 0; i < this.tools.length; ++i) {
+            var tool = this.tools[i];
+            // special object for zoombar
+            if (tool.id.indexOf('Portti2Zoombar') >= 0) {
+                styleConfig = style.zoombar || {};
+                styleConfig.val = style.val;
+            }
+            // same for search plugin
+            else if (tool.id.indexOf('SearchPlugin') >= 0) {
+                styleConfig = style.search || {};
+                styleConfig.val = style.val;
+            }
+            // otherwise just use the style's id
+            else {
+                styleConfig = style.val;
+            }
+
+            if (tool.config) tool.config.toolStyle = styleConfig;
+            if (tool._isPluginStarted && tool.plugin.changeToolStyle) {
+                tool.plugin.changeToolStyle(styleConfig);
+            }
+        }
+
+        // Change the style of the layer selection plugin
+        this._setLayerSelectionStyle(style.val);
+    },
+
+    /**
+     * @method _setLayerSelectionStyle
+     */
+    _setLayerSelectionStyle: function(styleName) {
+        var mlp = this.maplayerPanel;
+        mlp.pluginConfig.toolStyle = styleName;
+        if (mlp.isEnabled() && mlp.plugin.changeToolStyle) {
+            mlp.plugin.changeToolStyle(styleName);
+        }
+    },
+
+    /**
+     * Changes the colour scheme of the getinfo plugin (currently no other changes).
+     *
+     * @method changeColourScheme
+     * @param {Object} colourScheme
+     */
+    changeColourScheme: function(colourScheme) {
+        var infoPlugin = this._getGetInfoPlugin();
+        if (infoPlugin) {
+            infoPlugin.config = infoPlugin.config || {};
+            infoPlugin.config.colourScheme = colourScheme;
+        }
+    },
+
+    /**
+     * Changes the font of each tool (has to be done separately for each one)
+     * if the plugin supports it.
+     *
+     * @method changeFont
+     * @param {String} font the id of the font
+     */
+    changeFont: function(font) {
+        if (!font) return;
+
+        // Set the font to the config of each tool
+        // and change the font immedately. 
+        for (var i = 0; i < this.tools.length; ++i) {
+            var tool = this.tools[i];
+            if (tool.config) tool.config.font = font;
+            if (tool._isPluginStarted && tool.plugin.changeFont) {
+                tool.plugin.changeFont(font);
+            }
+        }
+
+        // Change the font of the layer selection plugin
+        this._setLayerSelectionFont(font);
+        
+        // Change the font of the logo plugin
+        if (this.logoPlugin && this.logoPlugin.changeFont) {
+            this.logoPlugin.changeFont(font);
+        }
+
+        // Change the font of the info plugin
+        var infoPlugin = this._getGetInfoPlugin();
+        if (infoPlugin) {
+            infoPlugin.config = infoPlugin.config || {};
+            infoPlugin.config.font = font;
+        }
+    },
+
+    /**
+     * @method _setLayerSelectionStyle
+     */
+    _setLayerSelectionFont: function(font) {
+        var mlp = this.maplayerPanel;
+        mlp.pluginConfig.font = font;
+        if (mlp.isEnabled() && mlp.plugin.changeFont) {
+            mlp.plugin.changeFont(font);
+        }
+    },
+
+    /**
+     * @method _getGetInfoPlugin
+     */
+    _getGetInfoPlugin: function() {
+        var infoPlugin = null,
+            i, tool;
+
+        for (i = 0; i < this.tools.length; ++i) {
+            tool = this.tools[i];
+            if (tool.id === 'Oskari.mapframework.mapmodule.GetInfoPlugin') {
+                infoPlugin = tool;
+                break;   
+            }
+        }
+
+        return infoPlugin;
     }
 });

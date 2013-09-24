@@ -12,6 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
 function() {
     /* Layer Type */
     this._layerType = "WFS";
+    this._featureData = true;
     this._fields = []; // property names
     this._locales = []; // property name locales
     this._activeFeatures = []; // features on screen
@@ -147,6 +148,16 @@ function() {
      */
     setClickedFeatureListIds : function(ids) {
         this._clickedFeatureListIds = ids;
+    },
+
+    /**
+     * Overriding getLegendImage for WFS
+     *
+     * @method getLegendImage
+     * @return {String} URL to a legend image
+     */
+    getLegendImage : function() {
+        return null;
     }
 }, {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]

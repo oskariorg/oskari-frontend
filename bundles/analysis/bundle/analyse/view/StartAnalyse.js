@@ -20,6 +20,7 @@ function(instance, localization) {
     this.instance = instance;
     this.loc = localization;
     this.id_prefix = 'oskari_analyse_';
+    this.layer_prefix = 'analysis_';
 
     /* templates */
     this.template = {};
@@ -80,6 +81,7 @@ function(instance, localization) {
     this.aggreOptionDivs = {};
 
     this._filterJsons = {};
+    this._filterPopups = {};
 
 }, {
     __templates : {
@@ -89,6 +91,8 @@ function(instance, localization) {
         "buttons" : '<div class="buttons"></div>',
         "help" : '<div class="help icon-info"></div>',
         "main" : '<div class="basic_analyse">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '</div>',
+        "columnsContainer" : '<div class="analyse-columns-container"></div>',
+        "columnsDropdown" : '<select class="analyse-columns-dropdown"></select>',
         "paramsOptionExtra" : '<div class="extra_params"></div>',
         "paramsOptionTool" : '<div class="tool ">' + '<input type="radio" name="params" />' + '<label></label></div>',
         "aggreOptionTool" : '<div class="tool ">' + '<input type="checkbox" name="aggre" />' + '<label></label></div>',
@@ -277,16 +281,47 @@ function(instance, localization) {
         // Changing part of parameters ( depends on method)
         var extra = this.template.paramsOptionExtra.clone();
         contentPanel.append(extra);
-        me._addExtraParameters(contentPanel, me.id_prefix + "buffer");
         // buffer is default method
+        me._addExtraParameters(contentPanel, me.id_prefix + "buffer");
+
+        var columnsContainer = this.template.columnsContainer.clone();
+        this._createColumnsSelector(columnsContainer);
+        contentPanel.append(columnsContainer);
+
+        // Analyse NAME
+        var selected_layers = me._selectedLayers();
+        var name = 'Analyysi_';
+        if (selected_layers[0])
+            name = name + selected_layers[0].name.substring(0, 10);
+        var analyseTitle = me.template.title_name.clone();
+        analyseTitle.find('.settings_name_label').html(me.loc.analyse_name.label);
+        analyseTitle.find('.settings_name_field').attr({
+            'value' : name,
+            'placeholder' : me.loc.analyse_name.tooltip
+        });
+
+        contentPanel.append(analyseTitle);
+
+        return panel;
+    },
+
+    /**
+     * Creates the selector to select which attributes should be preserved in the analysis
+     * (all, none or select from list).
+     *
+     * @method _createColumnsSelector
+     * @param {jQuery Object} columnsContainer the dom element the columns selector should be appended to.
+     */
+    _createColumnsSelector : function(columnsContainer) {
+        var me = this;
 
         var columnsTitle = this.template.title_columns.clone();
         columnsTitle.find('.columns_title_label').html(this.loc.params.label);
-        contentPanel.append(columnsTitle);
+        columnsContainer.append(columnsTitle);
 
         var closureMagic = function(tool) {
             return function() {
-                var size = contentPanel.find('input[name=params]:checked').val();
+                var size = columnsContainer.find('input[name=params]:checked').val();
                 // reset previous setting
                 for (var i = 0; i < me.paramsOptions.length; ++i) {
                     me.paramsOptions[i].selected = false;
@@ -315,7 +350,7 @@ function(instance, localization) {
                 this._appendFeatureList(toolContainer);
             }
 
-            contentPanel.append(toolContainer);
+            columnsContainer.append(toolContainer);
             toolContainer.find('input[name=params]').attr({
                 'value' : option.id,
                 'name' : 'params',
@@ -323,27 +358,6 @@ function(instance, localization) {
             });
             toolContainer.find('input[name=params]').change(closureMagic(option));
         }
-        // Analyse NAME
-        var selected_layers = me._selectedLayers();
-        var name = 'Analyysi_';
-        if (selected_layers[0])
-            name = name + selected_layers[0].name.substring(0, 10);
-        var analyseTitle = me.template.title_name.clone();
-        analyseTitle.find('.settings_name_label').html(me.loc.analyse_name.label);
-        analyseTitle.find('.settings_name_field').attr({
-            'value' : name,
-            'placeholder' : me.loc.analyse_name.tooltip
-        });
-
-        contentPanel.append(analyseTitle);
-
-        toolContainer.find('input[id="select"]').click(function() {
-            // selected layers
-            var layers = me._selectedLayers();
-            me._columnSelector(layers);
-        });
-
-        return panel;
     },
 
     /**
@@ -352,9 +366,8 @@ function(instance, localization) {
      * @method _appendFeatureList
      * @param {jQuery object} toolContainer
      */
-    _appendFeatureList: function(toolContainer) {
-        var featureListSelect = this.template.featureListSelect.clone(),
-            featureList = this.template.featureList.clone();
+    _appendFeatureList : function(toolContainer) {
+        var featureListSelect = this.template.featureListSelect.clone(), featureList = this.template.featureList.clone();
 
         featureListSelect.append(featureList);
         toolContainer.append(featureListSelect);
@@ -374,17 +387,15 @@ function(instance, localization) {
      * @method _appendFields
      * @param {jQuery object} featureList
      */
-    _appendFields: function(featureList) {
+    _appendFields : function(featureList) {
         var selectedLayer = this._getSelectedMapLayer();
         if (!selectedLayer) {
             return;
         }
 
-        var fields = ( (selectedLayer.getFields && selectedLayer.getFields()) ? selectedLayer.getFields().slice() : [] ),
-            locales = ( (selectedLayer.getLocales && selectedLayer.getLocales()) ? selectedLayer.getLocales().slice() : [] ),
-            i, featureListElement, localizedLabel;
+        var fields = ((selectedLayer.getFields && selectedLayer.getFields()) ? selectedLayer.getFields().slice() : [] ), locales = ((selectedLayer.getLocales && selectedLayer.getLocales()) ? selectedLayer.getLocales().slice() : [] ), i, featureListElement, localizedLabel;
 
-        for (i = 0; i < fields.length; ++i) {
+        for ( i = 0; i < fields.length; ++i) {
             // Get only the fields which originate from the service,
             // that is, exclude those which are added by Oskari (starts with '__').
             if (!fields[i].match(/^__/)) {
@@ -392,7 +403,7 @@ function(instance, localization) {
                 featureListElement = this.template.featureListElement.clone();
                 featureListElement.find('input').val(fields[i]);
                 featureListElement.find('label').append(localizedLabel).attr({
-                    'for': fields[i]
+                    'for' : fields[i]
                 });
                 featureList.find('ul').append(featureListElement);
             }
@@ -404,7 +415,7 @@ function(instance, localization) {
      *
      * @method _refreshFields
      */
-    _refreshFields: function() {
+    _refreshFields : function() {
         var featureList = jQuery('div.analyse-featurelist');
         featureList.find('ul').empty();
         this._appendFields(featureList);
@@ -954,13 +965,51 @@ function(instance, localization) {
      * @param {String} method  analyse method
      */
     _modifyExtraParameters : function(method) {
-
         var me = this;
         var contentPanel = me.mainPanel.find('div.extra_params');
         // Remove old content
         contentPanel.empty();
-        me._addExtraParameters(contentPanel.parent(), method);
 
+        // Empty the attribute selector for preserved layer attributes
+        // And create it unless the selected method is aggregate,
+        // in which case create a dropdown to select an attribute to aggregate
+        var columnsContainer = me.mainPanel.find('div.analyse-columns-container');
+        columnsContainer.empty();
+        if (me.id_prefix + 'aggregate' === method) {
+            me._createColumnsDropdown(columnsContainer);
+        } else {
+            me._createColumnsSelector(columnsContainer);
+        }
+
+        me._addExtraParameters(contentPanel.parent(), method);
+    },
+
+    /**
+     * Creates a dropdown to choose an attribute to get aggregated.
+     *
+     * @method _createColumnsDropdown
+     * @param {jQuery Object} columnsContainer the container where the dropdown should be appended to.
+     */
+    _createColumnsDropdown : function(columnsContainer) {
+        var selectedLayer = this._getSelectedMapLayer();
+
+        var fields = ((selectedLayer && selectedLayer.getFields && selectedLayer.getFields()) ? selectedLayer.getFields().slice() : [] ), locales = ((selectedLayer && selectedLayer.getLocales && selectedLayer.getLocales()) ? selectedLayer.getLocales().slice() : [] ), dropdown = this.template.columnsDropdown.clone(), i, localizedLabel, featureListOption;
+
+        // Placeholder
+        dropdown.append(jQuery('<option value="' + null + '">' + this.loc.aggregate.attribute + '</option>'));
+
+        for ( i = 0; i < fields.length; ++i) {
+            // Get only the fields which originate from the service,
+            // that is, exclude those which are added by Oskari (starts with '__').
+            // TODO: append only numeric fields. Cannot be done before we get info of fields' types.
+            if (!fields[i].match(/^__/)) {
+                localizedLabel = locales[i] || fields[i];
+                featureListOption = jQuery('<option value="' + fields[i] + '">' + localizedLabel + '</option>');
+                dropdown.append(featureListOption);
+            }
+        }
+
+        columnsContainer.append(dropdown);
     },
 
     /**
@@ -1026,15 +1075,15 @@ function(instance, localization) {
         // Get the name of the method
         var selectedMethod = container.find('input[name=method]:checked').val();
         var methodName = selectedMethod && selectedMethod.replace(this.id_prefix, '');
-        
-         var layer = this._getSelectedMapLayer();
+
+        var layer = this._getSelectedMapLayer();
 
         // Get the feature fields
         var selectedColumnmode = container.find('input[name=params]:checked').val();
         var fields = selectedColumnmode && selectedColumnmode.replace(this.id_prefix, '');
         // All fields
-        if(fields == 'all') {
-            fields = ( (layer.getFields && layer.getFields()) ? layer.getFields().slice() : [0] );
+        if (fields == 'all') {
+            fields = ((layer && layer.getFields && layer.getFields()) ? layer.getFields().slice() : [0] );
         }
         // Selected fields
         else if (fields == 'select') {
@@ -1049,7 +1098,6 @@ function(instance, localization) {
         }
 
         var title = container.find('.settings_name_field').val();
-       
 
         // Get method specific selections
         var selections = this._getMethodSelections(layer, {
@@ -1089,6 +1137,7 @@ function(instance, localization) {
         aggregateFunctions = jQuery.map(aggregateFunctions, function(val, i) {
             return val.value.replace(me.id_prefix, '');
         });
+        var aggregateAttribute = container.find('select.analyse-columns-dropdown option').filter(':selected').val();
         // union
         var unionLayerId = container.find('input[name=union]:checked').val();
         unionLayerId = unionLayerId && unionLayerId.replace((this.id_prefix + 'layer_'), '');
@@ -1107,7 +1156,8 @@ function(instance, localization) {
             },
             'aggregate' : {
                 methodParams : {
-                    functions : aggregateFunctions // TODO: param name?
+                    functions : aggregateFunctions, // TODO: param name?
+                    attribute : aggregateAttribute
                 }
             },
             'union' : {
@@ -1193,12 +1243,13 @@ function(instance, localization) {
             // Prefix the id to avoid collisions
             // FIXME: temporary, server should respond with an actual
             // id so that further analysis with this layer is possible.
-            analyseJson.id = this.id_prefix + analyseJson.id + '_' + analyseJson.wpsLayerId;
+            analyseJson.id = this.layer_prefix + analyseJson.id + '_' + analyseJson.wpsLayerId;
             // Create the layer model
             mapLayer = mapLayerService.createMapLayer(analyseJson);
-            // TODO: get these two parameters from somewhere else, where?
-            mapLayer.setWpsUrl('/karttatiili/wpshandler?');
-            mapLayer.setWpsName('ana:analysis_data');
+            mapLayer.setWpsUrl(analyseJson.wpsUrl);
+            mapLayer.setWpsName(analyseJson.wpsName);
+            //mapLayer.setWpsUrl('/karttatiili/wpshandler?');
+            //mapLayer.setWpsName('ana:analysis_data');
             // Add the layer to the map layer service
             mapLayerService.addLayer(mapLayer);
 
@@ -1286,9 +1337,10 @@ function(instance, localization) {
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      * @param {JSON} filterJson
      */
-    _getSelectedFeatureIds: function(layer, filterJson) {
-        if (!layer || !filterJson) return;
-        filterJson.featureIds = ( layer.getClickedFeatureListIds ? layer.getClickedFeatureListIds().slice() : [] );
+    _getSelectedFeatureIds : function(layer, filterJson) {
+        if (!layer || !filterJson)
+            return;
+        filterJson.featureIds = (layer.getClickedFeatureListIds ? layer.getClickedFeatureListIds().slice() : [] );
     },
 
     /**

@@ -5,7 +5,7 @@
     <td>ID</td><td>myplaces2</td>
   </tr>
   <tr>
-    <td>API</td><td>[link here](<%= apiurl %>/docs/oskari/api/#!/api/Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance)</td>
+    <td>API</td><td>[link here](<%= apiurl %>Oskari.mapframework.bundle.myplaces2.MyPlacesBundleInstance.html)</td>
   </tr>
 </table>
 

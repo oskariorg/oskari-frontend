@@ -5,7 +5,7 @@
     <td>ID</td><td>personaldata</td>
   </tr>
   <tr>
-    <td>API</td><td>[link here](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance)</td>
+    <td>API</td><td>[link here](<%= apiurl %>Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance.html)</td>
   </tr>
 </table>
 
@@ -47,7 +47,23 @@ No statehandling has been implemented.
 
 ## Requests the bundle handles
 
-This bundle doesn't handle any requests.
+<table>
+  <tr>
+    <th>Request</th><th>How does the bundle react</th>
+  </tr>
+  <tr>
+    <td>PersonalData.AddTabRequest</td><td>*Adds tab to Flyout Tab container*</td>
+  </tr>
+</table>
+
+```javascript
+var title = "Tab Title";
+var content = jQuery("<div>Lorem ipsum</div>");
+var first = true;
+var reqName = 'PersonalData.AddTabRequest';
+var reqBuilder = sandbox.getRequestBuilder(reqName);
+var req = reqBuilder(title, content, first);
+```
 
 ## Requests the bundle sends out
 

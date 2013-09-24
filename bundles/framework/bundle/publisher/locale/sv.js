@@ -60,6 +60,52 @@ Oskari.registerLocalization(
                     "tooltip": "Show the data related to map.",
                     "grid" : "Visa statistik bord"
                 },
+                "layout": {
+                    "label": "Ulkoasu",
+                    "fields": {
+                        "colours": {
+                            "label": "Värimaailma",
+                            "placeholder": "Valitse värimaailma",
+                            "buttonLabel": "Vaihda",
+                            "light_grey": "Vaalean harmaa",
+                            "dark_grey": "Tumman harmaa",
+                            "blue": "Sininen",
+                            "red": "Punainen",
+                            "green": "Vihreä",
+                            "yellow": "Keltainen",
+                            "custom": {
+                                "name": "Omat värit",
+                                "bgLabel": "Tunnisteen tausta",
+                                "titleLabel": "Tunnisteen teksti",
+                                "headerLabel": "Otsikon teksti",
+                                "iconLabel": "Ikoni",
+                                "iconCloseLabel": "Tumma",
+                                "iconCloseWhiteLabel": "Vaalea"
+                            }
+                        },
+                        "fonts": {
+                            "label": "Valitse fontti"
+                        },
+                        "toolStyles": {
+                            "label": "Työkalujen tyyli",
+                            "rounded-dark": "Pyöristetty (tumma)",
+                            "rounded-light": "Pyöristetty (vaalea)",
+                            "sharp-dark": "Kulmikas (tumma)",
+                            "sharp-light": "Kulmikas (vaalea)",
+                            "3d-dark": "3D (tumma)",
+                            "3d-light": "3D (vaalea)"
+                        }
+                    },
+                    "popup": {
+                        "title": "Värimaailman valinta",
+                        "close": "Sulje",
+                        "gfiDialog": {
+                            "title": "Esikatselu",
+                            "featureName": "Esikatselu",
+                            "featureDesc": "Värimaailman valinta vaikuttaa ainoastaan kohdetietolaatikon väritykseen"
+                        }
+                    }
+                },
                 "layers": {
                     "label": "Kartlager",
                     "defaultLayer": "(Förvald kartlager)",
@@ -122,6 +168,7 @@ Oskari.registerLocalization(
                 "layerlist_empty": "Kartlagren som du valt kan inte avskiljas. Menyn Valda kartlager visar vilka kartlager kan avskiljas.",
                 "layerlist_denied": "Kan inte avskiljas",
                 "denied_tooltip": "Kartdataproducenterna har inte gett publiceringstillstånd till dessa material i andra webbtjänster. Kontrollera publiceringstillståndet i menyn Valda kartlager innan du avskiljer dem.",
+                "myPlacesDisclaimer": "Obs! du ska publicera din egen kartlagret.",
                 "buttons": {
                     "continue": "Fortsätt",
                     "continueAndAccept": "Godkänn användningsvillkor och fortsätt",

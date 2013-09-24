@@ -5,7 +5,7 @@
     <td>ID</td><td>parcelselector</td>
   </tr>
   <tr>
-    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.parcelselector.ParcelSelectorInstance)</td>
+    <td>API</td><td>[link](<%= apiurl %>Oskari.mapframework.bundle.parcelselector.ParcelSelectorInstance.html)</td>
   </tr>
 </table>
 

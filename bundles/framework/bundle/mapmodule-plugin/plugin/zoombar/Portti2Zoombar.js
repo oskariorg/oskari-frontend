@@ -155,9 +155,9 @@ function(config) {
         
         jQuery(me.__parent).append(me.__elements['zoombarSlider']);
 
-       	var sliderEl = me.__elements['zoombarSlider'].find('div.slider');
-       	sliderEl.css("height",(this._map.getNumZoomLevels()*11)+"px");
-       	me._slider = sliderEl.slider({
+        var sliderEl = me.__elements['zoombarSlider'].find('div.slider');
+        sliderEl.css("height",(this._map.getNumZoomLevels()*11)+"px");
+        me._slider = sliderEl.slider({
             orientation: "vertical",
             range: "min",
             min: 0,
@@ -170,7 +170,6 @@ function(config) {
         
        
         var plus = me.__elements['zoombarSlider'].find('.pzbDiv-plus');
-       
         plus.bind('click', function(event) {
             if(me._slider.slider('value') < me._map.getNumZoomLevels()) {
                 me.getMapModule().zoomTo(me._slider.slider('value') + 1);
@@ -185,6 +184,11 @@ function(config) {
         // override default location if configured
         if(this._conf && this._conf.location) {
             me.setZoombarLocation(this._conf.location, me.__elements['zoombarSlider']);
+        }
+
+        // Change the style if in the conf
+        if (me._conf && me._conf.toolStyle) {
+            me.changeToolStyle(me._conf.toolStyle, me.__elements['zoombarSlider']);
         }
     },
     /**
@@ -269,6 +273,63 @@ function(config) {
      * Module protocol method - does nothing atm
      */
     stop : function(sandbox) {
+    },
+
+    /**
+     * Changes the tool style of the plugin
+     *
+     * @method changeToolStyle
+     * @param {Object} style
+     * @param {jQuery} div
+     */
+    changeToolStyle: function(style, div) {
+        div = div || this.__elements['zoombarSlider'];
+
+        if (!style || !div) return;
+
+        var resourcesPath = this.getMapModule().getImageUrl(),
+            imgUrl = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/',
+            styleName = style.val,
+            zoombarImg = imgUrl + 'zoombar-' + styleName + '.png',
+            zoombarCursorImg = imgUrl + 'zoombar-cursor-' + styleName + '.png',
+            zoombarMinusImg = imgUrl + 'zoombar_minus-' + styleName + '.png',
+            zoombarPlusImg = imgUrl + 'zoombar_plus-' + styleName + '.png',
+            bar = div.find('.ui-slider-vertical'),
+            cursor = div.find('.ui-slider-handle'),
+            plus = div.find('.pzbDiv-plus'),
+            minus = div.find('.pzbDiv-minus'),
+            slider = div.find('div.slider');
+
+        // Used to get the cursor to the right position since
+        // it's off by 2 pixels with the 'rounded' style.
+        var isRounded = styleName.match(/^rounded/);
+
+        var sliderHeight = this._map.getNumZoomLevels() * style.heightCenter;
+
+        bar.css({
+            'background-image': 'url("' + zoombarImg + '")',
+            'width': style.widthCenter,
+            'margin-left': '0'
+        });
+        cursor.css({
+            'background-image': 'url("' + zoombarCursorImg + '")',
+            'width': style.widthCursor,
+            'height': style.heightCursor,
+            'margin-left': (isRounded ? '2px' : '0')
+        });
+        plus.css({
+            'background-image': 'url("' + zoombarPlusImg + '")',
+            'width': style.widthPlus,
+            'height': style.heightPlus
+        });
+        minus.css({
+            'background-image': 'url("' + zoombarMinusImg + '")',
+            'width': style.widthMinus,
+            'height': style.heightMinus
+        });
+        slider.css({
+            'height': sliderHeight + 'px'
+        });
     }
 }, {
     /**

@@ -5,7 +5,7 @@
     <td>ID</td><td>parcel</td>
   </tr>
   <tr>
-    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.parcel.DrawingToolInstance)</td>
+    <td>API</td><td>[link](<%= apiurl %>Oskari.mapframework.bundle.parcel.DrawingToolInstance.html)</td>
   </tr>
 </table>
 

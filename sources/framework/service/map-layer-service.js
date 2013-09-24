@@ -347,16 +347,19 @@ function(mapLayerUrl, sandbox) {
         for(var i = 0; i < allLayers.length; i++) {
             
             var mapLayer = this.createMapLayer(allLayers[i]);
-            if(allLayers[i].admin != null) {
-                mapLayer.admin = allLayers[i].admin;                
-            }
-            if (allLayers[i].names) {
-                mapLayer.names = allLayers[i].names;
-            }
+
             if(this._reservedLayerIds[mapLayer.getId()] !== true) {
                 this.addLayer(mapLayer, true);
             } else {
-				//console.log("Reserved layer ID (" + mapLayer.getId() + ") , won't add");
+                // Set additional data to an existing layer.
+                var existingLayer = this.findMapLayer(mapLayer.getId());
+                
+                if(allLayers[i].admin != null) {
+                    existingLayer.admin = allLayers[i].admin;                
+                }
+                if (allLayers[i].names) {
+                    existingLayer.names = allLayers[i].names;
+                }
 			}
         }
         // notify components of added layer if not suppressed
@@ -477,6 +480,15 @@ function(mapLayerUrl, sandbox) {
             // create map layer
             mapLayer = this._createActualMapLayer(mapLayerJson);
         }
+
+        // Set additional data
+        if(mapLayer && mapLayerJson.admin != null) {
+            mapLayer.admin = mapLayerJson.admin;
+        }
+        if (mapLayer && mapLayerJson.names != null) {
+            mapLayer.names = mapLayerJson.names;
+        }
+
         return mapLayer;
     },
     /**

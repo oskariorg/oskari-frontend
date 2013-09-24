@@ -2,7 +2,7 @@
 
 ## Short description
 
-WFS 2 contains separate backend from other backend action routes and Liferay portlet with own frontend bundle implementations. All the communication between backend and frontend is done with Bayeux protocol supporting websocket with ajax fallback. Service implements JSON API through Bayeux channels. Backend gets layer configurations and user permissions from the oskari-backend with HTTP GET requests (soon maybe through redis).
+WFS 2 contains separate backend from other backend action routes and map portlet with own frontend bundle implementations. To build WFS 2 needs the oskari-server's oskari-base package. The communication between backend and frontend is done with Bayeux protocol supporting websocket with ajax fallback except image route. Service implements JSON API through Bayeux channels. Backend gets layer configurations and user permissions from the oskari-backend with HTTP GET requests if there is no data in redis.
 
 ## Dependencies
 
@@ -13,6 +13,7 @@ WFS 2 contains separate backend from other backend action routes and Liferay por
 - Jackson (JSON)
 - Axiom (XML)
 - Jedis (Redis client)
+- oskari-base
 
 ... other minor dependencies
 
@@ -195,10 +196,7 @@ Client sends the starting state to the server when the /meta/handshake is trigge
 
 ##### Response channels
 
-- /wfs/image
-- /wfs/properties
-- /wfs/feature
-- /error
+Doesn't return anything
 
 
 #### /service/wfs/removeMapLayer
@@ -242,6 +240,11 @@ Doesn't return anything
 		<th>Description</th>
 	</tr>
 	<tr>
+		<td>layerId</td>
+		<td>long</td>
+		<td>maplayer_id</td>
+	</tr>
+	<tr>
 		<td>srs</td>
 		<td>String</td>
 		<td>Spatial reference system eg. EPSG:3067</td>
@@ -271,12 +274,18 @@ Doesn't return anything
 		<td>ArrayList&lt;ArrayList&lt;Double&gt;&gt;</td>
 		<td>bounds of the tiles</td>
 	</tr>
+	<tr>
+		<td>tiles</td>
+		<td>ArrayList&lt;ArrayList&lt;Double&gt;&gt;</td>
+		<td>bounds of tiles to render</td>
+	</tr>
 </table>
 
 ##### Example
 
 ```javascript
 {
+		"layerId": 216,
 		"srs": "EPSG:3067",
 		"bbox": [385800, 6690267, 397380, 6697397],
 		"zoom": 8,
@@ -284,7 +293,8 @@ Doesn't return anything
 				"rows": 5,
 				"columns": 8,
 				"bounds": [[345600,6694400,358400,6707200]..]
-		}
+		},
+		"tiles": [[345600,6694400,358400,6707200]..]
 }
 ```
 
@@ -349,12 +359,7 @@ Doesn't return anything
 
 ##### Response channels
 
-Only sends if the current map size gets bigger
-
-- /wfs/image
-- /wfs/properties
-- /wfs/feature
-- /error
+Only changes session information about the map size. No response.
 
 
 #### /service/wfs/setMapLayerStyle
@@ -390,10 +395,7 @@ Only sends if the current map size gets bigger
 
 ##### Response channels
 
-* TODO: send only new image
-
 - /wfs/image
-- /wfs/feature
 - /error
 
 
@@ -807,6 +809,7 @@ Client channels are used to send information from the server to the client. Most
 {
 		"layerId" : 216,
 		"features": "empty",
+		"keepPrevious": false
 }
 ```
 
@@ -853,7 +856,7 @@ Client channels are used to send information from the server to the client. Most
 ```javascript
 {
 		"layerId" : 216,
-		"features": "empty",
+		"features": "empty"
 }
 ```
 
@@ -979,16 +982,13 @@ Oskari.$("sandbox").popUpSeqDiagram();
 
 Function listening to AfterMapMoveEvent calls for Mediator's setLocation(). Backend gets a message and updates every WFS layer that is in the user's session and answers with updated properties, features and images. Upcoming sends trigger WFSPropertiesEvents, WFSFeatureEvents and WFSImageEvents. Updates the properties and features for object data and draws new tiles.
 
-### Resizing map - xxEvent ?!?!?!??!
+### Resizing map - MapSizeChangedEvent
 
-Function listening to xxEvent calls for Mediator's setMapSize(). Backend gets a message and saves new map size in user's session. Every WFS layer in user's session are updated if the map's height or width has grown bigger. The update process is same than for moving map.
-
-* TODO: Event throw and handling
-* TODO: grid update
+Function listening to MapSizeChangedEvent calls for Mediator's setMapSize() and setLocation(). Backend gets a message and saves new map size in user's session. Every WFS layer in user's session are updated. The update process is same than for moving map.
 
 ### Adding a WFS layer - AfterMapLayerAddEvent
 
-Function listening to AfterMapLayerAddEvent calls for Mediator's addMapLayer(). Backend gets a message and adds the WFS layer to the user's session and answers with the new layer's properties, features and images. Upcoming sends trigger WFSPropertiesEvent, WFSFeatureEvents and WFSImageEvents. Updates the properties and features for object data and draws new tiles.
+Function listening to AfterMapLayerAddEvent calls for Mediator's addMapLayer() and calls AfterMapMoveEvent's handler. Backend gets a message and adds the WFS layer to the user's session and answers with the new layer's properties, features and images. Upcoming sends trigger WFSPropertiesEvent, WFSFeatureEvents and WFSImageEvents. Updates the properties and features for object data and draws new tiles.
 
 ### Removing a WFS layer - AfterMapLayerRemoveEvent
 
@@ -1057,8 +1057,8 @@ Caching is done with redis on backend. Basic key-value storage is used in most o
 
 ### Permissions
 
-* key: Permission_#{client}
-* unique part is Bayeux client id
+* key: Permission_#{session}
+* unique part is JSESSIONID
 * expires in one day
 
 * created for all users

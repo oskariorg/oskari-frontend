@@ -23,17 +23,17 @@ Oskari.registerLocalization({
                         "tooltip": "Lisää valittujen kohteiden ympärille vyöhykkeet ja käyttää näitä vyöhyke-geometrioita (buffer) analyysissä"
                     }, {
                         "id": "oskari_analyse_aggregate",
-                        "label": "Koostetyökalu",
+                        "label": "Kooste",
                         "classForPreview": "aggregate",
                         "tooltip": "Laskee kohteen ominaisuuksille aggregointiominaisuuksia esim. summat"
                     }, {
                         "id": "oskari_analyse_union",
-                        "label": "Unioni",
+                        "label": "Yhdiste",
                         "classForPreview": "union",
                         "tooltip": "Kohteiden yhdistäminen taulukosta valitsemalla tai yhteisten ominaisuustietoarvojen perusteella"
                     }, {
                         "id": "oskari_analyse_intersect",
-                        "label": "Leikkaus",
+                        "label": "Leikkaavien kohteiden suodatus",
                         "classForPreview": "intersect",
                         "tooltip": "Valitaan uudet kohteet leikkaamalla leikkaavan tason kohteilla leikattavaa tasoa"
                     }
@@ -63,7 +63,8 @@ Oskari.registerLocalization({
                 },{
                     "id" : "oskari_analyse_Median",
                     "label" : "Mediaani"
-                }]
+                }],
+                "attribute": "Valitse ominaisuustieto"
             },
             "buffer_size": {
                 "label": "Vyöhykkeen koko (m)",
@@ -78,13 +79,13 @@ Oskari.registerLocalization({
                 "tooltip": "Anna parametrit analyysia varten. Parametrit riippuvat valitusta suodattimesta ja menetelmästä"
             },
             "intersect": {
-                "label": "Valittu leikkaava taso"
+                "label": "Leikkaava taso"
             },
             "union" : {
                 "label" : "Valittu yhdistettävä taso"
             },
             "spatial" : {
-                "label" : "Valittu spatial operaattori",
+                "label" : "Spatiaalinen operaattori",
                 "options" : [{
                     "id" : "oskari_analyse_intersect",
                     "label" : "Leikkaa",
@@ -95,7 +96,7 @@ Oskari.registerLocalization({
                 }]
             },
             "params" : {
-                "label" : "Valitut ominaisuustiedot",
+                "label" : "Säilytettävät ominaisuustiedot",
                 "tooltip" : "",
                 "options" : [{
                     "id" : "oskari_analyse_all",
@@ -172,7 +173,9 @@ Oskari.registerLocalization({
                 "bufferSize": "Virhe vyöhykkeen koossa",
                 "illegalCharacters": "ei kirjaimia - käytä numeroita",
                 "nohelp": "Ohjetta ei löytynyt",
-                "saveFailed": "Analyysin tallennus epäonnistui. Yritä myöhemmin uudelleen."
+                "saveFailed": "Analyysin tallennus epäonnistui. Yritä myöhemmin uudelleen.",
+                "loadLayersFailed": "Analyysitasojen lataus epäonnistui. Yritä myöhemmin uudelleen."
+             
             }
         },
         "StartView": {
@@ -214,7 +217,27 @@ Oskari.registerLocalization({
                 "save": "Tallenna",
                 "cancel": "Peruuta"
             }
+        },
+        "personalDataTab" : {
+            "grid" : {
+                "name" : "Nimi",
+                "delete": " "
+            },
+            "title" : "Analyysi",
+            "confirmDeleteMsg" : "Haluatko poistaa analyysin:",
+            "buttons" : {
+                "ok": "OK",
+                "cancel" : "Peruuta",
+                "delete" : "Poista"
+            },
+            "notification": {
+                "deletedTitle": "Karttatason poisto",
+                "deletedMsg": "Karttataso poistettu."
+            },
+            "error" : {
+                "title": "Virhe!",
+                "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin."
+            }
         }
-
     }
 });

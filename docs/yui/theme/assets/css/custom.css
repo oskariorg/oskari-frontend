@@ -1,0 +1,94 @@
+.aside {
+    float: left;
+    min-width: 90px;
+    width: 5%;
+    height: 100%;
+}
+.aside #logo {
+    background-image: url('http://www.paikkatietoikkuna.fi/mml-2.0-theme/images/logo.png');
+    float: left;
+    height: 50px;
+    width: 50px;
+    background-repeat: no-repeat;
+    background-position: 15px;
+    margin-left: 25px;
+    margin-top: 25px;
+    cursor: pointer;
+}
+
+.aside .vertical-text {
+    white-space: nowrap;
+    margin-top: 520px;
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+
+    /* also accepts left, right, top, bottom coordinates; not required, but a good idea for styling */
+    -webkit-transform-origin: 50% 50%;
+    -moz-transform-origin: 50% 50%;
+    -ms-transform-origin: 50% 50%;
+    -o-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+    font-size: 3em;
+    color: #ddd;
+    letter-spacing: 0;
+}
+#doc>.header {
+    display: none;
+}
+.yui3-u-1-4 {
+    width: 25%;
+}
+.yui3-u-3-4 {
+    width: 66%;
+}
+.yui3-u-3-4 .apidocs {
+    margin-top: 75px;
+}
+.apis a {
+    display: block;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0.3125em 1em;
+    font-size: 1em;
+    text-decoration: none;
+    cursor: pointer;
+    background-color: #eee;
+    margin: 0.3125em 0em;
+    color: black;
+    overflow: hidden;
+    border-radius: none;
+}
+
+#docs-sidebar .apis a:hover,
+#docs-sidebar .apis a:focus {
+    background: none;
+    border-radius: none;
+    border-color: #fff;
+    outline: none;
+    background-color: #666;
+    color: white;
+    text-shadow: none;
+
+}
+
+
+.apidocs .index-list {
+    -moz-column-count: auto;
+    -moz-column-gap: auto;
+    -moz-column-width: auto;
+    -ms-column-count: auto;
+    -ms-column-gap: auto;
+    -ms-column-width: auto;
+    -o-column-count: auto;
+    -o-column-gap: auto;
+    -o-column-width: auto;
+    -webkit-column-count: auto;
+    -webkit-column-gap: auto;
+    -webkit-column-width: auto;
+    column-count: auto;
+    column-gap: auto;
+    column-width: auto;
+}

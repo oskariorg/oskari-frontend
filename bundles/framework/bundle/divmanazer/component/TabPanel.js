@@ -1,6 +1,6 @@
 /**
  * @class Oskari.userinterface.component.TabPanel
- * 
+ *
  * Panel that can be added to Oskari.userinterface.component.TabContainer.
  * Represents a single tab in tabcontainer.
  */
@@ -13,6 +13,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
 function() {
     this.template = jQuery('<div class="tab-content"></div>');
     this.templateTabHeader = jQuery('<li><a href="JavaScript:void(0);"></a></li>');
+    this.id = null;
     this.title = null;
     this.content = null;
     this.header = null;
@@ -20,16 +21,36 @@ function() {
     this.html=this.template.clone();
     this.html.hide();
 }, {
+
+    /**
+     * @method setId
+     * Sets the panel id
+     * @param {String} pId id for the panel
+     */
+    setId : function(pId) {
+        this.id = pId;
+    },
+    /**
+     * @method getId
+     * Returns the panel id
+     * @return {String} id for the panel
+     */
+    getId : function() {
+        return this.id;
+    },
+
     /**
      * @method setTitle
      * Sets the panel title
      * @param {String} pTitle title for the panel
      */
-    setTitle : function(pTitle) {
+    setTitle: function (pTitle) {
+        var header,
+            link;
         this.title = pTitle;
-        var header = this.templateTabHeader.clone();
+        header = this.templateTabHeader.clone();
         this.header = header;
-        var link = header.find('a');
+        link = header.find('a');
         link.html(this.getTitle());
     },
     /**
@@ -37,7 +58,7 @@ function() {
      * Returns the panel title
      * @return {String} title for the panel
      */
-    getTitle : function() {
+    getTitle: function () {
         return this.title;
     },
     /**
@@ -45,7 +66,7 @@ function() {
      * @return {jQuery} reference to header DOM element
      * Sets the tabs header DOM element
      */
-    setHeader : function(reference) {
+    setHeader: function (reference) {
         this.header = reference;
     },
     /**
@@ -53,34 +74,34 @@ function() {
      * @return {jQuery} reference to DOM element
      * Returns the tabs header DOM element
      */
-    getHeader : function() {
+    getHeader: function () {
         return this.header;
     },
     /**
      * @method setContent
-     * Sets the panel content. 
+     * Sets the panel content.
      * This can be also done with #getContainer()
      * @param {jQuery} pContent reference to DOM element
      */
-    setContent : function(pContent) {
-        this.content = pContent; 
+    setContent: function (pContent) {
+        this.content = pContent;
         this.html.html(this.content);
     },
     /**
      * @method destroy
      * Destroys the panel/removes it from document
      */
-    destroy : function() {
+    destroy: function () {
         this.header.remove();
         this.html.remove();
     },
     /**
      * @method getContainer
-     * Returns this panels content container which can be populated. 
+     * Returns this panels content container which can be populated.
      * This can be also done with #setContent().
      * @return {jQuery} reference to this panels content DOM element
      */
-    getContainer : function() {
+    getContainer: function () {
         return this.html;
     },
 
@@ -90,16 +111,16 @@ function() {
      * The function receives a boolean parameter indicating if the panel was selected (true) or unselected(false)
      * @param {Function} pHandler handler function
      */
-    setSelectionHandler : function(pHandler) {
+    setSelectionHandler: function (pHandler) {
         this.selectionHandler = pHandler;
     },
     /**
      * @method handleSelection
      * @param {Boolean} true if panel was selected, false if unselected
      */
-    handleSelection : function(isSelected) {
-        if(this.selectionHandler) {
-            this.selectionHandler(isSelected == true);
+    handleSelection: function (isSelected) {
+        if (this.selectionHandler) {
+            this.selectionHandler(isSelected === true);
         }
     },
     /**
@@ -108,7 +129,7 @@ function() {
      * Usually used by Oskari.userinterface.component.TabContainer internally.
      * @param {jQuery} container reference to DOM element
      */
-    insertTo : function(container) {
+    insertTo: function (container) {
         container.append(this.html);
     }
 });

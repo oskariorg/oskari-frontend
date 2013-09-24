@@ -1,7 +1,7 @@
 /**
  * @class Oskari.userinterface.component.TabDropdownContainer
- * 
- * Provides a base layout/container for adding a set of 
+ *
+ * Provides a base layout/container for adding a set of
  * Oskari.userinterface.component.TabPanel.
  */
 Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
@@ -44,6 +44,7 @@ function(pEmptyMsg) {
         var headerContainer = this.ui.find('ul li select');
         
         var header = this.templateTabOption.clone();
+        header.attr('id', 'layer-id-'+panel.getId());
         header.append(panel.getTitle());
         headerContainer.append(header);
         panel.setHeader(header);
@@ -56,9 +57,27 @@ function(pEmptyMsg) {
             headerContainer.bind("change", function() {
                 me.select(me.panels[this.selectedIndex]); 
             });
-        }
-        
+        }        
     },
+
+    /**
+     * @method updatePanel
+     * Updates the header of the given panel.
+     * @param {Oskari.userinterface.component.TabPanel} panel
+     */
+    updatePanel: function(panel) {
+        var me = this;
+
+        var headerContainer = this.ui.find('ul li select');
+
+        for (var i = 0; i < headerContainer.find('option').length; i++) {
+            var header = jQuery(headerContainer.find('option')[i]);
+            if (header.attr('id') == 'layer-id-' + panel.getId()) {
+                header.html(panel.getTitle());
+            }
+        };
+    },
+
     /**
      * @method addTabChangeListener
      * Adds a listener function that should be called when tab selection changes
@@ -148,6 +167,15 @@ function(pEmptyMsg) {
                 break;
             }
         }
+        //remove header
+        var headerContainer = this.ui.find('ul li select :selected');
+        for (var i = 0; i < headerContainer.length; i++) {
+            var header = jQuery(headerContainer[i]);
+            if (header.attr('id') == 'layer-id-' + panel.getId()) {
+                header.remove();
+            }
+        };
+
         if(this.panels.length == 0) {
             this.ui.html(this.emptyMsg);
             for(var i = 0; i < this.tabChangeListeners.length; i++) {

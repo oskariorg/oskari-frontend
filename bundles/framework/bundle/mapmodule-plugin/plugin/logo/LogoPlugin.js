@@ -195,6 +195,24 @@ function() {
 	    	window.open(url, '_blank');
             return false;
 	    });
+    },
+
+    /**
+     * Changes the font used by plugin by adding a CSS class to its DOM elements.
+     *
+     * @method changeFont
+     * @param {String} fontId
+     * @param {jQuery} div
+     */
+    changeFont: function(fontId, div) {
+        div = div || this.element;
+
+        if (!div || !fontId) return;
+
+        var classToAdd = 'oskari-publisher-font-' + fontId;
+        var testRegex = /oskari-publisher-font-/;
+
+        this.getMapModule().changeCssClasses(classToAdd, testRegex, [div]);
     }
 }, {
     /**

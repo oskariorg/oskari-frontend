@@ -106,7 +106,7 @@ module.exports = function(grunt) {
 
             for(var i = 0, ilen = mdFilePaths.length; i < ilen; i++) {
                 file = mdFilePaths[i];
-                var pathLength = file.split("\\").length - 1;
+                var pathLength = file.split(path.sep).length - 1;
 
                 // create css path
                 var cssPath = "";
@@ -121,7 +121,7 @@ module.exports = function(grunt) {
                         "highlight": true,
                         "data": {
                             "cssPath": cssPath,
-                            "activeId": file.substring(file.lastIndexOf("\\")+1, file.lastIndexOf(".")),
+                            "activeId": file.substring(file.lastIndexOf(path.sep)+1, file.lastIndexOf(".")),
                             "menu": topicsHtml
                         }
                     }

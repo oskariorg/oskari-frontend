@@ -5,7 +5,7 @@
     <td>ID</td><td>metadata</td>
   </tr>
   <tr>
-    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.metadata.MetadataSearchInstance)</td>
+    <td>API</td><td>[link](<%= apiurl %>Oskari.mapframework.bundle.metadata.MetadataSearchInstance.html)</td>
   </tr>
 </table>
 

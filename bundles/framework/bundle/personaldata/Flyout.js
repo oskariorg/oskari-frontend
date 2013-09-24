@@ -53,6 +53,7 @@ function(instance) {
 		var me = this;
         
         var tabsLocalization = this.instance.getLocalization('tabs');
+        // TODO: move these to correct bundle and use AddTabRequest to add itself to PersonalData
 		this.tabsData = {
 			"myPlaces" : Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyPlacesTab', this.instance, tabsLocalization.myplaces),
 			"myViews" : Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.MyViewsTab', this.instance, tabsLocalization.myviews),
@@ -124,6 +125,9 @@ function(instance) {
 	        var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
             panel.setTitle(tab.getTitle());
             
+            // Eikö sen pitäisi asettaa tabin contentti paneliin?
+            // panel.setContent(tab.getContent());
+            // sen sijaan että addTabContentille annetaan container mihin dom ammutaan?
 	    	tab.addTabContent(panel.getContainer());
 	    	// binds tab to events
 	    	if(tab.bindEvents) {
@@ -131,6 +135,21 @@ function(instance) {
 	    	}
             this.tabsContainer.addPanel(panel);
         }
+    },
+
+    /**
+     *
+     *
+     */
+    addTab : function(item) {
+        var sandbox = this.instance.getSandbox();
+        if(!sandbox.getUser().isLoggedIn()) {
+            return;
+        }
+        var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+        panel.setTitle(item.title);
+        panel.setContent(item.content);
+        this.tabsContainer.addPanel(panel, item.first);
     }
 }, {
 	/**

@@ -114,6 +114,10 @@ function() {
      * 		JSON presentation for the popup data
      * @param {OpenLayers.LonLat} lonlat
      * 		coordinates where to show the popup
+     * @param {Object} colourScheme
+     *      the colour scheme for the popup (optional, uses the default colour scheme if not provided)
+     * @param {String} font
+     *      the font for the popup (optional, uses the default font if not provided)
      * 
      * Displays a popup with given title and data in the given coordinates.
      * 
@@ -128,7 +132,7 @@ function() {
 	 * }
 	 * }]
      */
-    popup : function(id, title, contentData, lonlat) {
+    popup : function(id, title, contentData, lonlat, colourScheme, font) {
     	var me = this;
     	 
     	var arrow = this._arrow.clone();
@@ -232,6 +236,15 @@ function() {
         }
 		this._panMapToShowPopup(lonlat);
 		
+        // Set the colour scheme if one provided
+        if (colourScheme) {
+            this._changeColourScheme(colourScheme);
+        }
+
+        // Set the font if one provided
+        if (font) {
+            this._changeFont(font);
+        }
     },
     setAdaptable: function(isAdaptable) {
         this.adaptable = isAdaptable;
@@ -299,6 +312,100 @@ function() {
         }
         if(panx != 0 || pany != 0) {
             this.getMapModule().panMapByPixels(-panx, -pany);
+        }
+    },
+    /**
+     * Changes the colour scheme of the plugin
+     *
+     * @method changeColourScheme
+     * @param {Object} colourScheme object containing the colour settings for the plugin
+     *      {
+     *          bgColour: <the background color of the gfi header>,
+     *          titleColour: <the colour of the gfi title>,
+     *          headerColour: <the colour of the feature name>,
+     *          iconCls: <the icon class of the gfi close icon>
+     *      }
+     * @param {jQuery} div
+     */
+    _changeColourScheme: function(colourScheme, div) {
+        div = div || jQuery('div#getinforesult');
+
+        if (!colourScheme || !div) return;
+
+        var gfiHeaderArrow = div.find('div.popupHeaderArrow'),
+            gfiHeader = div.find('div.popupHeader'),
+            gfiTitle = div.find('div.popupTitle'),
+            layerHeader = div.find('div.getinforesult_header'),
+            featureHeader = div.find('h3.myplaces_header'),
+            closeButton = div.find('div.olPopupCloseBox');
+
+        gfiHeaderArrow.css({
+            'border-right-color': colourScheme.bgColour
+        });
+
+        gfiHeader.css({
+            'background-color': colourScheme.bgColour,
+            'color': colourScheme.titleColour
+        });
+
+        gfiTitle.css({
+            'color': colourScheme.titleColour
+        });
+
+        layerHeader.css({
+            'background-color': colourScheme.bgColour
+        });
+
+        layerHeader.find('div.getinforesult_header_title').css({
+            'color': colourScheme.titleColour
+        })
+
+        featureHeader.css({
+            'color': colourScheme.headerColour
+        });
+
+        closeButton.removeClass('icon-close-white');
+        closeButton.removeClass('icon-close');
+        closeButton.addClass(colourScheme.iconCls);
+    },
+    /**
+     * Changes the font used by plugin by adding a CSS class to its DOM elements.
+     *
+     * @method _changeFont
+     * @param {String} fontId
+     * @param {jQuery} div
+     */
+    _changeFont: function(fontId, div) {
+        div = div || jQuery('div#getinforesult');
+
+        if (!div || !fontId) return;
+
+        // The elements where the font style should be applied to.
+        var elements = [];
+        elements.push(div);
+        elements.push(div.find('table.getinforesult_table'));
+
+        // Remove possible old font classes.
+        for (var j = 0; j < elements.length; j++) {
+            var el = elements[j];
+
+            el.removeClass(function() {
+                var removeThese = '',
+                    classNames = this.className.split(' ');
+
+                // Check if there are any old font classes.
+                for (var i = 0; i < classNames.length; ++i) {
+                    if(/oskari-publisher-font-/.test(classNames[i])) {
+                        removeThese += classNames[i] + ' ';
+                    }
+                }
+
+                // Return the class names to be removed.
+                return removeThese;
+            });
+
+            // Add the new font as a CSS class.
+            el.addClass('oskari-publisher-font-' + fontId);
         }
     },
     /**

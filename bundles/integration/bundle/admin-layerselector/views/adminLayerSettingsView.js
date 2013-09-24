@@ -317,6 +317,11 @@ define([
             data.style          = form.find('#add-layer-style').val(),
             data.style          = me.classes.encode64(data.style);//me.layerGroupingModel.encode64(data.style);
 
+            if(data.style == null) {
+                data.style = '';
+            }
+
+
             data.minScale       = form.find('#add-layer-minscale').val() || 16000000,
             data.maxScale       = form.find('#add-layer-maxscale').val() || 1,
             data.epsg           = form.find('#add-layer-srsname').val(),
@@ -330,6 +335,13 @@ define([
             data.xslt           = form.find('#add-layer-xslt').val(),
             data.xslt           = me.classes.encode64(data.xslt);//me.layerGroupingModel.encode64(data.xslt);
             data.gfiType        = form.find('#add-layer-responsetype').val();
+
+            if(data.gfiType == null) {
+                data.gfiType = '';
+            }
+
+
+
             // Layer class id aka. orgName id
             data.lcId           = lcId;
 
@@ -523,6 +535,9 @@ define([
             var me = this;
             var element = jQuery(e.currentTarget);
             var input = element.parents('.add-layer-wrapper').find('#add-layer-interface');
+            var wmsurlField = element.parents('.add-layer-wrapper').find('#add-layer-wms-url');
+            wmsurlField.html(input.val());
+
             var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
                 route = "action_route=GetWSCapabilities",
                 type = "&wmsurl=";
@@ -585,7 +600,8 @@ define([
          */
         readCapabilities: function(e) {
             var me = this;
-            var selected = jQuery('#admin-select-capability').val();
+            var current = jQuery(e.currentTarget),
+            selected = current.val();
             // If no value (eg. the placeholder option was selected) remove the
             // sublayer select and return.
             if (!selected) {
@@ -611,13 +627,13 @@ define([
                 jQuery('#admin-select-sublayer').on('change', function() {
                     var value = jQuery(this).val();
                     if (value) {
-                        me.updateLayerValues(subLayers[value], capability);
+                        me.updateLayerValues(subLayers[value], capability, current.parents('.add-layer-wrapper'));
                     }
                 });
             }
 
             // update values for the parent layer.
-            me.updateLayerValues(selectedLayer, capability);
+            me.updateLayerValues(selectedLayer, capability, current.parents('.add-layer-wrapper'));
         },
 
         /**
@@ -627,8 +643,9 @@ define([
          * @param {Object} selectedLayer
          * @param {Object} capability
          */
-        updateLayerValues: function(selectedLayer, capability) {
+        updateLayerValues: function(selectedLayer, capability, container) {
             // Clear out the old values
+            var layerInterface = container.find('#add-layer-interface').val();
             this.clearAllFields();
             //title
             jQuery('#add-layer-fi-name').val(selectedLayer.Title);
@@ -674,11 +691,13 @@ define([
             }
 
             // GFI Type
-            var gfiType = capability.Request.GetFeatureInfo.Format;
-            var gfiTypeSelect = jQuery('#add-layer-responsetype');
-            for (var i = 0; i < gfiType.length; i++) {
-                gfiTypeSelect.append('<option>' + gfiType[i] + '</option>');
-            };
+            if(capability.Request.GetFeatureInfo != null) {
+                var gfiType = capability.Request.GetFeatureInfo.Format;
+                var gfiTypeSelect = jQuery('#add-layer-responsetype');
+                for (var i = 0; i < gfiType.length; i++) {
+                    gfiTypeSelect.append('<option>' + gfiType[i] + '</option>');
+                };
+            }
 
             // WMS Metadata Id
             if(capability['inspire_vs:ExtendedCapabilities'] && 
@@ -693,13 +712,19 @@ define([
                 jQuery('#add-layer-metadataid').val(wmsMetadataId.trim());
             }
 
-            // WMS url
+            // WMS url - copied from url the user inserted
+            /*
             var getMapRequest = capability.Request.GetMap;
             if (getMapRequest) {
                 var wmsUrl = getMapRequest.DCPType.HTTP.Get.OnlineResource['xlink:href'];
-                jQuery('#add-layer-wms-url').val(wmsUrl);
+                if(wmsUrl != null && wmsUrl !== "") {
+                    jQuery('#add-layer-wms-url').val(wmsUrl);
+                } else {
+                    jQuery('#add-layer-wms-url').val(layerInterface);
+                }
+                container.find('#add-layer-interface').val(layerInterface)
             }
-
+            */
             //metadata id == uuid
             //"http://www.paikkatietohakemisto.fi/geonetwork/srv/en/main.home?uuid=a22ec97f-d418-4957-9b9d-e8b4d2ec3eac"
             var uuid = this.capabilities.Service.OnlineResource['xlink:href'];
@@ -747,7 +772,7 @@ define([
         clearAllFields: function() {
             var form = jQuery('.create-layer');
             // Clear all the inputs and textareas.
-            form.find('input').val('');
+            var inputs = form.find('input').val('');
             form.find('textarea').val('');
             // Empty the GFI response type select
             jQuery('#add-layer-responsetype').empty();

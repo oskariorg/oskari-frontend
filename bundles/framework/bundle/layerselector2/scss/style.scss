@@ -61,30 +61,26 @@ div.layerselector2 div.tab-content div.oskarifield {
     }
   }
   .related-keywords {
-    position: absolute;
-    background-color: white;
-    -webkit-border-radius: 4px; 
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-    border: solid 1px #b7b7b7;
-    -webkit-box-shadow: 2px 2px 6px rgba(0,0,0,.4);
-    -moz-box-shadow: 2px 2px 6px rgba(0,0,0,.4);
-    box-shadow: 2px 2px 6px rgba(0,0,0,.4);
+    display: none;
     overflow: hidden;
+    height: 30px;
+    line-height: 30px;
     .keywords-title {
         box-sizing: border-box;
         height: 30px;
         line-height: 30px;
-        padding: 0 10px;
         color: black;
         font-weight: bold;
+        float: left;
     }
     .keyword-cont{
+        display: block;
         box-sizing: border-box;
         height: 30px;
         line-height: 30px;
         padding: 0 10px;
-        color: black;
+        color: #0085D1;
+        float: left;
         .keyword {
             float: left;
             min-width: 91px;
@@ -102,15 +98,8 @@ div.layerselector2 div.tab-content div.oskarifield {
             text-align: center;
         }
     }
-    .odd {
-        background-color: #f3f3f3;
-    }
     .focus {
         background-color: #333438;
-        color: white;
-    }
-    .keyword-cont:hover {
-        background-color: #4E4E4E;
         color: white;
     }
   }

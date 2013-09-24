@@ -35,7 +35,21 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapanalysis.MapAnalysisBundle", 
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/bundle/mapanalysis/event/AnalysisVisualizationChangeEvent.js"
-		}]
+		}],
+		       "locales" : [{
+            "lang" : "fi",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapanalysis/locale/fi.js"
+        }, {
+            "lang" : "sv",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapanalysis/locale/sv.js"
+        }, {
+            "lang" : "en",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/mapanalysis/locale/en.js"
+        }
+       ]
 	},
 	"bundle" : {
 		"manifest" : {

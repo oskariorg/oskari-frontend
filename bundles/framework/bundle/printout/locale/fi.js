@@ -101,18 +101,7 @@ Oskari.registerLocalization({
                         "label" : "Näytä päivämäärä",
                         "tooltip" : "Voit halutessasi lisätä tulosteeseen päivämäärän",
                         "checked" : "checked"
-                    }/*,{
-                        "id" : "pageLegend",
-                        "label" : "Näytä karttaselitteet",
-                        "tooltip" : "Voit halutessasi lisätä tulosteeseen karttaselitteet",
-                        "checked" : "checked"
-                    },{
-                        "id" : "pageCopyleft",
-                        "label" : "Näytä copyright tieto",
-                        "tooltip" : "Voit halutessasi lisätä tulosteeseen copyright tiedon",
-                        "checked" : "checked"
-                    }*/
-                ]
+                    }]
             },
             "legend" : {
                 "label" : "Legenda",

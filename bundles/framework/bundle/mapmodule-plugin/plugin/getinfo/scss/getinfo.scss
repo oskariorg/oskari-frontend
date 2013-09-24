@@ -36,3 +36,13 @@
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
+
+div.myplaces_wrapper {
+	padding-bottom: 18px;
+
+	div.myplaces_place {
+		img.myplaces_img {
+			padding-bottom: 15px;
+		}
+	}
+}

@@ -12,18 +12,31 @@ module.exports = function(grunt) {
     // TODO: ditch this when grunt v0.4 is released
     grunt.util = grunt.util || grunt.utils;
 
-    grunt.registerMultiTask('yuidoc', 'Create YUIDocs', function() {
+    grunt.registerMultiTask('oskaridoc', 'Create YUIDocs', function() {
 
-        var kindOf = grunt.utils.kindOf;
+        var kindOf = grunt.util.kindOf;
         var helpers = require('grunt-lib-contrib').init(grunt);
         var Y = require('yuidocjs');
         var done = this.async();
         var starttime = (new Date()).getTime();
         var json;
 
-        var options = helpers.options(this, {
-            quiet: true
+        var options = this.data.options;
+
+        Y.Handlebars.registerHelper('lastdot', function(dottedName) {
+            var parts = dottedName.split('.');
+            if(parts.length > 0) {
+                var text = '';
+                if(parts.length > 1) {
+                    text += parts[parts.length - 2] + '.';
+                }
+                text += parts[parts.length - 1];
+                    return text;
+            }
+            return dottedName;
         });
+
+
 
         // process project data templates
         // TODO: ditch this when grunt v0.4 is released

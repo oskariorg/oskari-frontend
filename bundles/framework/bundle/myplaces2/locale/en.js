@@ -15,31 +15,25 @@ Oskari.registerLocalization({
     "tools": {
       "point": {
         "tooltip": "Add point",
-        "new": "Add point by clicking the map.",
+        "add": "Add point by clicking the map.",
         "next": "You can save or draw more points into the same drawing.",
         "edit": "Move point by clicking and dragging.",
         "save": "Save location"
       },
       "line": {
         "tooltip": "Add line",
-        "new": "Add a break point on the line by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'.",
+        "add": "Add a break point on the line by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'.",
         "next": "You can save or draw more lines into the same drawing.",
         "edit": "Edit the line by clicking and dragging its break points.",
         "save": "Save shape"
       },
       "area": {
         "tooltip": "Add area",
-        "new": "Add break points to your area polygon by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'. To create holes in polygons, hold down the Alt key.",
+        "add": "Add break points to your area polygon by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'. To create holes in polygons, hold down the Alt key.",
         "next": "You can save or draw more polygons into the same drawing.",
         "edit": "Edit the shape of the area by clicking and dragging the break points on its edge line.",
         "save": "Save shape"
-      }/*,
-      "cut": {
-        "tooltip": "Add hole",
-        "new": "Add break points to your hole polygon by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'.",
-        "edit": "Edit the shape of the hole by clicking and dragging the break points on its edge line.",
-        "save": "Save shape"
-      }*/
+      }
     },
     "buttons": {
       "ok": "OK",
@@ -66,7 +60,19 @@ Oskari.registerLocalization({
       },
       "category": {
         "label": "Map layer",
-        "new": "New layer..."
+        "newLayer": "Create a new layer",
+        "choose": " or choose from your layers:"
+      },
+      "imagelink": {
+        "placeholder": "Image URL",
+        "previewLabel": "Image preview",
+        "add": "New layer..."
+      },
+      "rendering": {
+        "label": "Object rendering",
+        "point": {
+          "tooltip": "Point"
+        }
       }
     },
     "categoryform": {
@@ -93,10 +99,102 @@ Oskari.registerLocalization({
           "size": "Line thickness"
         }
       },
+      "visibleFields": {
+        "label": "Visible fields",
+        "placename": "Place name",
+        "placedesc": "Place description",
+        "image": "Image"
+      },
       "edit": {
         "title": "Edit map layer",
         "save": "Save",
         "cancel": "Back"
+      },
+      "rendering": {
+        "label": "Tason kohteiden esitystavat",
+        "point": {
+          "tooltip": "Piste"
+        }
+      }
+    },
+    "pointform": {
+      "title": "",
+      "tooltip": "",
+      "symbol": {
+        "label": ""
+      },
+      "size": {
+        "label": ""
+      },
+      "color": {
+        "label": "",
+        "labelOr": "",
+        "labelCustom": ""
+      },
+      "preview": {
+        "label": ""
+      },
+      "buttons": {
+        "save": "",
+        "cancel": ""
+      }
+    },
+    "lineform": {
+      "title": "",
+      "tooltip": "",
+      "style": {
+        "label": ""
+      },
+      "cap": {
+        "label": ""
+      },
+      "corner": {
+        "label": ""
+      },
+      "width": {
+        "label": ""
+      },
+      "color": {
+        "label": "",
+        "labelOr": "",
+        "labelCustom": ""
+      },
+      "preview": {
+        "label": ""
+      },
+      "buttons": {
+        "save": "",
+        "cancel": ""
+      }
+    },
+    "areaform": {
+      "title": "",
+      "tooltip": "",
+      "linestyle": {
+        "label": ""
+      },
+      "linewidth": {
+        "label": ""
+      },
+      "linecolor": {
+        "label": "",
+        "labelOr": "",
+        "labelCustom": ""
+      },
+      "color": {
+        "label": "",
+        "labelOr": "",
+        "labelCustom": ""
+      },
+      "fill": {
+        "label": ""
+      },
+      "preview": {
+        "label": ""
+      },
+      "buttons": {
+        "save": "",
+        "cancel": ""
       }
     },
     "notification": {
