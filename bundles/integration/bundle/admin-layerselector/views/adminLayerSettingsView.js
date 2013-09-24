@@ -712,7 +712,8 @@ define([
                 jQuery('#add-layer-metadataid').val(wmsMetadataId.trim());
             }
 
-            // WMS url
+            // WMS url - copied from url the user inserted
+            /*
             var getMapRequest = capability.Request.GetMap;
             if (getMapRequest) {
                 var wmsUrl = getMapRequest.DCPType.HTTP.Get.OnlineResource['xlink:href'];
@@ -723,7 +724,7 @@ define([
                 }
                 container.find('#add-layer-interface').val(layerInterface)
             }
-
+            */
             //metadata id == uuid
             //"http://www.paikkatietohakemisto.fi/geonetwork/srv/en/main.home?uuid=a22ec97f-d418-4957-9b9d-e8b4d2ec3eac"
             var uuid = this.capabilities.Service.OnlineResource['xlink:href'];
