@@ -14,8 +14,8 @@ function(config, plugin) {
     this.plugin = plugin;
     this.cometd = jQuery.cometd;
 
-    this.cookieName = 'JSESSIONID';
-    this.cookieValue = jQuery.cookie(this.cookieName);
+    this.sessionCookie = jQuery.cookie('JSESSIONID') || "";
+    this.routeCookie = jQuery.cookie('ROUTEID') || "";
 
     this._connected = false;
     this._errorSub = null;
@@ -181,7 +181,8 @@ function(config, plugin) {
                 self.plugin.getIO().subscribe();
                 self.plugin.getIO().startup({
                     "clientId" : handshake.clientId,
-                    "session" : self.cookieValue,
+                    "session" : self.sessionCookie,
+                    "route" : self.routeCookie,
                     "browser" : self.browser.name,
                     "browserVersion" : self.browser.versionNum
                 });
