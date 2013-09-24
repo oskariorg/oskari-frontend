@@ -113,7 +113,13 @@ Oskari.registerLocalization({
       "rendering": {
         "label": "Tason kohteiden esitystavat",
         "point": {
-          "tooltip": "Piste"
+          "tooltip": "Muokkaa pisteen esitystapaa"
+        },
+        "area": {
+          "tooltip": "Muokkaa alueen esitystapaa"
+        },
+        "line": {
+          "tooltip": "Muokkaa viivan esitystapaa"
         }
       }
     },

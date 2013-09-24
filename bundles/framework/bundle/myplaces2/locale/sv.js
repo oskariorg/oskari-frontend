@@ -61,17 +61,17 @@ Oskari.registerLocalization({
       "category": {
         "label": "Kartlager",
         "newLayer": "Ny nivå...",
-        "choose": " tai valitse olemassa olevista tasoista:"
+        "choose": " eller välj från nivåer:"
       },
       "imagelink": {
-        "placeholder": "Kuva-URL",
-        "previewLabel": "Valokuvan esikatselu",
-        "add": "Uusi taso"
+        "placeholder": "Foto-URL",
+        "previewLabel": "Förhandsvisning av fotot",
+        "add": "Ny nivå"
       },
       "rendering": {
-        "label": "Tason kohteiden esitystavat",
+        "label": "",
         "point": {
-          "tooltip": "Piste"
+          "tooltip": "Punkt"
         }
       }
     },
@@ -100,10 +100,10 @@ Oskari.registerLocalization({
         }
       },
       "visibleFields": {
-        "label": "",
-        "placename": "",
-        "placedesc": "",
-        "image": ""
+        "label": "Objektets uppgifter som visas",
+        "placename": "Namn",
+        "placedesc": "Beskrivning",
+        "image": "Bild"
       },
       "edit": {
         "title": "Editera kartlagret",
@@ -113,94 +113,100 @@ Oskari.registerLocalization({
       "rendering": {
         "label": "",
         "point": {
-          "tooltip": ""
+          "tooltip": "Editera punktens stil"
+        },
+        "area": {
+          "tooltip": "Editera områdets stil"
+        },
+        "line": {
+          "tooltip": "Editera linjens stil"
         }
       }
     },
     "pointform": {
-      "title": "",
-      "tooltip": "",
+      "title": "Punktobjekts visningsstil",
+      "tooltip": "Punktens stil",
       "symbol": {
-        "label": ""
+        "label": "Punktobjekts ikon"
       },
       "size": {
-        "label": ""
+        "label": "Storlek"
       },
       "color": {
-        "label": "",
-        "labelOr": "",
-        "labelCustom": ""
+        "label": "Färg",
+        "labelOr": "eller",
+        "labelCustom": "Egen RGB-färg (0-255)"
       },
       "preview": {
-        "label": ""
+        "label": "Förhandsvisning"
       },
       "buttons": {
-        "save": "",
-        "cancel": ""
-      }
+        "save": "Lagra",
+        "cancel": "Tillbaka"
+      },
     },
     "lineform": {
-      "title": "",
+      "title": "Linjeobjekts visningsstil",
       "tooltip": "",
       "style": {
-        "label": ""
+        "label": "Linjens stil"
       },
       "cap": {
-        "label": ""
+        "label": "Linjens gavel"
       },
       "corner": {
-        "label": ""
+        "label": "Vinklar"
       },
       "width": {
-        "label": ""
+        "label": "Bredd"
       },
       "color": {
-        "label": "",
-        "labelOr": "",
-        "labelCustom": ""
+        "label": "Färg",
+        "labelOr": "eller",
+        "labelCustom": "Egen RGB-färg (0-255)"
       },
       "preview": {
-        "label": ""
+        "label": "Förhandsvisning"
       },
       "buttons": {
-        "save": "",
-        "cancel": ""
+        "save": "Lagra",
+        "cancel": "Tillbaka"
       }
     },
     "areaform": {
-      "title": "",
+      "title": "Områdets visningsstil",
       "tooltip": "",
       "linestyle": {
-        "label": ""
+        "label": "Områdets linjestil"
       },
       "linecap": {
-        "label": ""
+        "label": "Linjens gavel"
       },
       "linecorner": {
-        "label": ""
+        "label": "Vinklar"
       },
       "linewidth": {
-        "label": ""
+        "label": "Bredd"
       },
       "linecolor": {
-        "label": "",
-        "labelOr": "",
-        "labelCustom": ""
+        "label": "Linjensfärg",
+        "labelOr": "eller",
+        "labelCustom": "Egen RGB-färg (0-255)"
       },
       "color": {
-        "label": "",
-        "labelOr": "",
-        "labelCustom": ""
+        "label": "Områdets fyllningsfärg",
+        "labelOr": "eller",
+        "labelCustom": "Egen RGB-färg (0-255)"
       },
       "fill": {
-        "label": ""
+        "label": "Områdets fyllningsmönster"
       },
       "preview": {
-        "label": ""
+        "label": "Förhandsvisning"
       },
       "buttons": {
-        "save": "",
-        "cancel": ""
+        "save": "Lagra",
+        "cancel": "Tillbaka"
       }
     },
     "notification": {
