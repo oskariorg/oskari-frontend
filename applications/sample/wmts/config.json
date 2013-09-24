@@ -71,14 +71,14 @@
                         "resourceUrl": {
                             "tile": {
                                 "format": "image/png",
-                                "template": "http://jkorhonen.nls.fi/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
+                                "template": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
                                 "resourceType": "tile"
                             }
                         },
                         "resourceUrls": [
                             {
                                 "format": "image/png",
-                                "template": "http://jkorhonen.nls.fi/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
+                                "template": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png",
                                 "resourceType": "tile"
                             }
                         ]
