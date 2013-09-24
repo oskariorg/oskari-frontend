@@ -298,13 +298,7 @@ function(instance) {
                 var cellIndex = parseInt(this.id.substring(0,2),10);
                 if (cellIndex === me.activeColorCell) return;
                 jQuery('#'+me.activeColorCell+'ColorCell').css('border','1px solid #000000');
-                var parts = this.style.backgroundColor.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-                delete (parts[0]);
-                for (var j = 1; j <= 3; ++j) {
-                    parts[j] = parseInt(parts[j]).toString(16);
-                    if (parts[j].length == 1) parts[j] = '0' + parts[j];
-                }
-                me.values.color = parts.join('');
+                me.values.color = me.instance.rgbToHex(this.style.backgroundColor);
                 me.activeColorCell = cellIndex;
                 jQuery('#'+me.activeColorCell+'ColorCell').css('border','3px solid #ffffff');
                 me._updatePreview(dialogContent);
