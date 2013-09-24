@@ -20,7 +20,6 @@ Oskari.registerLocalization({
         "guest": "Melden Sie sich an, um diese Kartenebene zu veröffentlichen.",
         "loggedin": "Veröffentlichung erlaubt",
         "official": "Veröffentlichung für die Nutzung durch Behörden zulässig.",
-        "login-url": "<a href='/web/en/login'>Anmelden</a>",
         "need-login": "Sie müssen sich anmelden.",
         "can_be_published_by_provider": {
           "label": "Veröffentlichung erlaubt für Datenanbieter.",
