@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
 	function(sandbox) {
 		this.localization = Oskari.getLocalization("MapMyPlaces");
     	this.sandbox = sandbox;
-    	this.wfsBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder',sandbox);
+   		this.wfsBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder',sandbox);
 }, {
 	/**
 	 * parses any additional fields to model

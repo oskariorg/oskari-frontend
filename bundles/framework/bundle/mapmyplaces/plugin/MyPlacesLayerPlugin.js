@@ -1,6 +1,7 @@
 /**
- * @class Oskari.mapframework.bundle.mapanalysis.plugin.MyPlacesLayerPlugin
  * Provides functionality to draw MyPlaces layers on the map
+ * 
+ * @class Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayerPlugin
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayerPlugin', 
 
@@ -85,7 +86,6 @@ function(config) {
      *          reference to application sandbox
      */
     init : function(sandbox) {
-
         var sandboxName = ( this.config ? this.config.sandbox : null ) || 'sandbox';
         var sandbox = Oskari.getSandbox(sandboxName);
         
@@ -125,7 +125,6 @@ function(config) {
      *          reference to application sandbox
      */
     stopPlugin : function(sandbox) {
-
         for(p in this.eventHandlers) {
             sandbox.unregisterFromEventByName(this, p);
         }
@@ -297,7 +296,7 @@ function(config) {
      */
     _removeMapLayerFromMap : function(layer) {
         if(!layer.isLayerOfType(this._layerType)) {
-            return;
+            return null;
         }
 
         var mapLayer = this.getOLMapLayers(layer);
@@ -312,7 +311,6 @@ function(config) {
      * @return {OpenLayers.Layer[]}
      */
     getOLMapLayers : function(layer) {
-
         if(!layer.isLayerOfType(this._layerType)) {
             return null;
         }
