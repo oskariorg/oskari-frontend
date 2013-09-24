@@ -237,3 +237,15 @@ div.renderdialog input.color-source {
 div.renderdialog input.linewidth {
   width: 50px;
   margin-top: 5px; }
+
+div.pointvisualization {
+    width: 510px;
+}
+
+div.linevisualization {
+    width: 500px;
+}
+
+div.areavisualization {
+    width: 650px;
+}

@@ -111,96 +111,102 @@ Oskari.registerLocalization({
         "cancel": "Back"
       },
       "rendering": {
-        "label": "Tason kohteiden esitystavat",
+        "label": "Layer's features' style",
         "point": {
-          "tooltip": "Piste"
+          "tooltip": "Edit point style"
+        },
+        "area": {
+          "tooltip": "Edit area style"
+        },
+        "line": {
+          "tooltip": "Edit line style"
         }
       }
     },
     "pointform": {
-      "title": "",
+      "title": "Point feature's style",
       "tooltip": "",
       "symbol": {
-        "label": ""
+        "label": "Point feature's icon"
       },
       "size": {
-        "label": ""
+        "label": "Size"
       },
       "color": {
-        "label": "",
-        "labelOr": "",
-        "labelCustom": ""
+        "label": "Colour",
+        "labelOr": "or",
+        "labelCustom": "Own RGB color (0-255)"
       },
       "preview": {
-        "label": ""
+        "label": "Preview"
       },
       "buttons": {
-        "save": "",
-        "cancel": ""
+        "save": "Save",
+        "cancel": "Cancel"
       }
     },
     "lineform": {
-      "title": "",
+      "title": "Line presentation",
       "tooltip": "",
       "style": {
-        "label": ""
+        "label": "Line style"
       },
       "cap": {
-        "label": ""
+        "label": "Line cap style"
       },
       "corner": {
-        "label": ""
+        "label": "Corners"
       },
       "width": {
-        "label": ""
+        "label": "Width"
       },
       "color": {
-        "label": "",
-        "labelOr": "",
-        "labelCustom": ""
+        "label": "Colour",
+        "labelOr": "or",
+        "labelCustom": "Own RGB color (0-255)"
       },
       "preview": {
-        "label": ""
+        "label": "Preview"
       },
       "buttons": {
-        "save": "",
-        "cancel": ""
+        "save": "Save",
+        "cancel": "Cancel"
       }
     },
     "areaform": {
-      "title": "",
+      "title": "Area presentation",
       "tooltip": "",
       "linestyle": {
-        "label": ""
+        "label": "Area line style"
       },
       "linecap": {
-        "label": ""
+        "label": "Area line cap"
       },
       "linecorner": {
-        "label": ""
+        "label": "Corner style"
       },
       "linewidth": {
-        "label": ""
+        "label": "Width"
       },
       "linecolor": {
-        "label": "",
-        "labelOr": "",
-        "labelCustom": ""
+        "label": "Line color",
+        "labelOr": "or",
+        "labelCustom": "Own RGB color (0-255)"
       },
       "color": {
-        "label": "",
-        "labelOr": "",
-        "labelCustom": ""
+        "label": "Area fill color",
+        "labelOr": "or",
+        "labelCustom": "Own RGB color (0-255)"
       },
       "fill": {
-        "label": ""
+        "label": "Area fill pattern"
       },
       "preview": {
-        "label": ""
+        "label": "Preview"
       },
       "buttons": {
-        "save": "",
-        "cancel": ""
+        "save": "Save",
+        "cancel": "Cancel"
       }
     },
     "notification": {

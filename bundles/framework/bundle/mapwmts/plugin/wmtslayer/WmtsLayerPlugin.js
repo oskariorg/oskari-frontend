@@ -141,8 +141,20 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         }
 
         var sandbox = this._sandbox;
+    
+        var imageFormat = "image/png";
+        var reqEnc = "KVP";
 
-        var wmtsUrl = layer.getWmtsUrls()[0][0].url;
+        
+        var wmtsUrl = //layer.getWmtsUrls()[0]; 
+            layerDef.resourceUrl.tile.template;
+            
+        if( !wmtsUrl) {
+            wmtsUrl = layer.getWmtsUrls()[0][0].url;
+        } else {
+            reqEnc = "REST";
+        }
+            
         var matrixSet = layer.getWmtsMatrixSet();
         var matrixIds = [];
         var resolutions = [];
@@ -161,9 +173,10 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         var wmtsLayerConfig = {
             name : layerName.split('.').join(''),
             url : wmtsUrl,
+            requestEncoding:  reqEnc,
             layer : layer.getWmtsName(),
             matrixSet : matrixSet.identifier,
-            format : "image/png",
+            format : imageFormat,
             style : layer.getCurrentStyle().getName(),
             visibility : true,
             isBaseLayer : false,
@@ -176,7 +189,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             /*minScale : layer.getMinScale(),
              maxScale : layer.getMaxScale(),*/
             layerDef : layerDef
-
         };
 
         sandbox.printDebug("[WmtsLayerPlugin] creating WMTS Layer " + matrixSet.identifier + " / " + wmtsLayerConfig.id + "/" + wmtsLayerConfig.layer + "/" + wmtsLayerConfig.url);

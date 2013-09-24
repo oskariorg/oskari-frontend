@@ -228,8 +228,8 @@ function(instance) {
         var json = {
             wmsName: 'ows:my_places_categories',
             type: "wmslayer",
-            isQueryable:true,
-            opacity: 50,
+            isQueryable: true,
+            opacity: 90,
             metaType: this.instance.idPrefix,
             orgName: catLoc.organization,
             inspire: catLoc.inspire
@@ -290,7 +290,6 @@ function(instance) {
             },
             area : {
                 lineWidth : category.getAreaLineWidth(),
-                lineCap : category.getAreaLineCap(),
                 lineCorner : category.getAreaLineCorner(),
                 lineStyle : category.getAreaLineStyle(),
                 lineColor : category.getAreaLineColor(),
@@ -446,7 +445,6 @@ function(instance) {
         category.setDotColor(values.dot.color);
         category.setDotShape(values.dot.shape);
         
-//        category.setLineWidth(values.line.size);
         category.setLineWidth(values.line.width);
         category.setLineColor(values.line.color);
         category.setLineCap(values.line.cap);
@@ -455,7 +453,6 @@ function(instance) {
         
         category.setAreaLineWidth(values.area.lineWidth);
         category.setAreaLineColor(values.area.lineColor);
-        category.setAreaLineCap(values.area.lineCap);
         category.setAreaLineCorner(values.area.lineCorner);
         category.setAreaLineStyle(values.area.lineStyle);
         category.setAreaFillColor(values.area.fillColor);
@@ -613,7 +610,7 @@ function(instance) {
         else {
         	// error handling
         	var loc = me.instance.getLocalization();
-			var okBtn = dialog.createCloseButton(btnLoc.buttons.ok);
+			var okBtn = dialog.createCloseButton(loc.buttons.ok);
     		dialog.show(loc.notification.error.title, loc.notification.error.deleteCategory, [okBtn]);
         }
     },
