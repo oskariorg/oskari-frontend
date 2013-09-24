@@ -90,6 +90,21 @@
             },
             "Require-Bundle-Instance" : [  ]
         }
+      },
+      { 
+        "title" : "LayerSelector",
+        "en" : "LayerSelector",
+        "fi" : "LayerSelector",
+        "sv" : "LayerSelector",
+        "bundleinstancename" : "layerselector2",
+        "bundlename" : "layerselector2",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "layerselector2" : { "bundlePath" : "../../../packages/framework/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
       }
       
   ]
