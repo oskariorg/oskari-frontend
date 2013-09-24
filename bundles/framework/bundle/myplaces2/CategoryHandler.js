@@ -610,7 +610,7 @@ function(instance) {
         else {
         	// error handling
         	var loc = me.instance.getLocalization();
-			var okBtn = dialog.createCloseButton(btnLoc.buttons.ok);
+			var okBtn = dialog.createCloseButton(loc.buttons.ok);
     		dialog.show(loc.notification.error.title, loc.notification.error.deleteCategory, [okBtn]);
         }
     },
