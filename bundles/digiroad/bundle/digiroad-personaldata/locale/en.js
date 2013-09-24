@@ -213,8 +213,7 @@ Oskari.registerLocalization({
         "email": "E-mail",
         "changeInfo": "Change your account information",
         "changePassword": "Change your password",
-        "removeAccount": "Delete your account",
-        "changeInfoUrl": "/web/en/profile"
+        "removeAccount": "Delete your account"
       }
     },
     "button": {
