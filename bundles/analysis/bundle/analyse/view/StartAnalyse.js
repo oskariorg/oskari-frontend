@@ -678,7 +678,7 @@ function(instance, localization) {
 
         } else if (method == this.id_prefix + "union") {
             // union input 2 layer selection
-            me._unionExtra(extra);
+           // deprecated  me._unionExtra(extra);
 
         }
     },
