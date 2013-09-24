@@ -113,6 +113,7 @@ function(instance) {
         renderDialog.addClass('top');
         renderDialog.addClass('arrow');
         renderDialog.addClass('renderdialog');
+        renderDialog.addClass('linevisualization');
         var title = me.loc.title;
 
         // Line style
@@ -196,13 +197,7 @@ function(instance) {
                     if (me.activeColorCell < 10) activeCell = "0"+activeCell;
                     jQuery('#'+activeCell+'ColorCell').css('border','1px solid #000000');
                 }
-                var parts = this.style.backgroundColor.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-                delete (parts[0]);
-                for (var j = 1; j <= 3; ++j) {
-                    parts[j] = parseInt(parts[j]).toString(16);
-                    if (parts[j].length == 1) parts[j] = '0' + parts[j];
-                }
-                me.values.color = parts.join('');
+                me.values.color = me.instance.rgbToHex(this.style.backgroundColor);;
                 me.activeColorCell = cellIndex;
                 if (cellIndex < 10) cellIndex = "0"+cellIndex.toString();
                 jQuery('#'+cellIndex+'ColorCell').css('border','3px solid #ffffff');

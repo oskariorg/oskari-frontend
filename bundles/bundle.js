@@ -536,6 +536,8 @@ Oskari = (function() {
 
             this.pullDown(pdefsp);
             this.pushDown(pdefsp);
+            
+            return pdefsp;
         },
         /**
          * @method inherit
@@ -600,6 +602,7 @@ Oskari = (function() {
             superClazz._composition.subClazz[args[0]] = subClazz;
             subClazz._composition.superClazz = superClazz;
             this.pullDown(subClazz);
+            return subClazz;
         },
         composition : function() {
             var cdef = arguments[0];
@@ -841,6 +844,24 @@ Oskari = (function() {
             }
             return inst;
         },
+        createWithPdefsp : function() {
+            var args = arguments;
+            if (args.length == 0)
+                throw "missing arguments";
+            var instargs = arguments[1], pdefsp = args[0];
+            if (!pdefsp)
+                throw "clazz does not exist ";
+
+            var inst = new pdefsp._class(), ctors = pdefsp._constructors;
+            if (ctors) {
+                for (var c = 0; c < ctors.length; c++) {
+                    ctors[c].apply(inst, instargs);
+                }
+            } else {
+                pdefsp._constructor.apply(inst, instargs);
+            }
+            return inst;
+        },
         /**
          * @method construct
          *
@@ -941,7 +962,42 @@ Oskari = (function() {
             };
             return pdefsp._builder;
 
+        },
+         /**
+         * @builder
+         *
+         * Implements Oskari frameworks support for cached class instance
+         * builders
+         * @param classname
+         */
+        builderFromPdefsp : function() {
+            var args = arguments;
+            if (args.length == 0)
+                throw "missing arguments";
+
+            var pdefsp = args[0];
+
+            if (!pdefsp)
+                throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
+
+            if (pdefsp._builder)
+                return pdefsp._builder;
+
+            pdefsp._builder = function() {
+                var instargs = arguments, inst = new pdefsp._class(), ctors = pdefsp._constructors;
+                if (ctors) {
+                    for (var c = 0; c < ctors.length; c++) {
+                        ctors[c].apply(inst, instargs);
+                    }
+                } else {
+                    pdefsp._constructor.apply(inst, instargs);
+                }
+                return inst;
+            };
+            return pdefsp._builder;
+
         }
+        
     });
 
     /**
@@ -1052,6 +1108,10 @@ Oskari = (function() {
             return ai.create.apply(ai, arguments);
 
         },
+        createWithPdefsp: function() {
+            var ai = this.get.apply(this, arguments);
+            return ai.createWithPdefsp.apply(ai,arguments);
+        },
         /**
          * @method construct
          * @param classname
@@ -1086,6 +1146,11 @@ Oskari = (function() {
             var ai = this.get.apply(this, arguments);
 
             return ai.builder.apply(ai, arguments);
+        },
+        builderFromPdefsp : function() {
+            var ai = this.get.apply(this, arguments);
+
+            return ai.builderFromPdefsp.apply(ai, arguments);
         },
         /**
          * @method global
@@ -1580,6 +1645,24 @@ Oskari = (function() {
             var bp = cs.builder(clazzName);
             var srcs = classmeta.meta.source;
             var bundleMetadata = classmeta.meta.bundle;
+
+            this.install(implid, bp, srcs, bundleMetadata);
+
+        },
+          /**
+         * @method installBundlePdefs
+         * @param implid
+         * @param bp
+         * @param srcs
+         *
+         * Installs a bundle defined as Oskari native Class
+         */
+        installBundlePdefsp : function(implid, pdefsp) {
+            var cs = clazz.prototype.singleton;
+            
+            var bp = cs.builderFromPdefsp(pdefsp);
+            var bundleMetadata = pdefsp._metadata;
+            var srcs = {};
 
             this.install(implid, bp, srcs, bundleMetadata);
 
@@ -2519,6 +2602,120 @@ Oskari = (function() {
 	
 	
 	var domMgr = new bundle_dom_manager(jQuery);
+	
+	
+	/* Oskari 2.x backport begin */
+	
+    /* o2 clazz module  */
+    var o2anonclass = 0;
+    var o2anoncategory = 0;
+    var o2anonbundle = 0;
+
+    /* this is Oskari 2 modulespec prototype which provides a leaner API  */
+   
+   /* @class Oskari.ModuleSpec 
+    * 
+    * helper class instance of which is returned from oskari 2.0 api
+    * Returned class instance may be used to chain class definition calls.
+    */
+    cs.define('Oskari.ModuleSpec', function(clazzInfo, clazzName) {
+        this.cs = cs;
+        this.clazzInfo = clazzInfo;
+        this.clazzName = clazzName;
+
+    }, {
+
+        slicer : Array.prototype.slice,
+        
+        /* @method category 
+         * adds a set of methods to class 
+         */
+        category : function(protoProps, traitsName) {
+            var clazzInfo = cs.category(this.clazzName, traitsName || ( ['__', (++o2anoncategory)].join('_')), protoProps);
+            this.clazzInfo = clazzInfo;
+            return this;
+        },
+        /* @method methods
+         * adds a set of methods to class - alias to category
+         */
+        methods : function(protoProps, traitsName) {
+            var clazzInfo = cs.category(this.clazzName, traitsName || ( ['__', (++o2anoncategory)].join('_')), protoProps);
+            this.clazzInfo = clazzInfo;
+            return this;
+        },
+        
+        /* @method extend
+         * adds inheritance from  a base class
+         * base class can be declared later but must be defined before instantiation 
+         */          
+        extend : function(clsss) {
+            var clazzInfo = cs.extend(this.clazzName, clsss.length ? clsss : [clsss]);
+            this.clazzInfo = clazzInfo;
+            return this;
+        },
+        /* @method create
+         * creates an instance of this class
+         */
+        create : function() {
+            return cs.createWithPdefsp(this.clazzInfo, arguments);
+        },
+        
+        /*
+         * @method returns the class name  
+         */
+        name : function() {
+            return this.clazzName;
+        },
+        
+        /*
+         * @method returns class metadata
+         */
+        metadata : function() {
+            return cs.metadata(this.clazzName);
+        },
+        
+        /*
+         * @method events
+         * adds a set of event handlers to class
+         */
+        events : function(events) {
+            var orgmodspec = this;
+            orgmodspec.category({
+                eventHandlers : events,
+                onEvent : function(event) {
+                    var handler = this.eventHandlers[event.getName()];
+                    if (!handler) {
+                        return;
+                    }
+
+                    return handler.apply(this, [event]);
+                }
+            }, '___events');
+            return orgmodspec;
+        },
+        requests : function(requests) {
+            var orgmodspec = this;
+            orgmodspec.category({
+                requestHandlers : requests,
+                onRequest : function(request) {
+                    var handler = this.requestHandlers[request.getName()];
+                    if (!handler) {
+                        return;
+                    }
+
+                    return handler.apply(this, [request]);
+                }
+            }, '___requests');
+            return orgmodspec;
+        },
+        builder : function() {
+            return cs.builderFromPdefsp(this.clazzInfo);
+        }
+        
+        
+    });
+	/* Oskari 2.x backport end
+	
 
     /**
      * @static
@@ -2648,9 +2845,214 @@ Oskari = (function() {
          */
         setSandbox: function(sandboxName,sandbox) {
         	return ga.apply(cs, [sandboxName||'sandbox',sandbox])
+        },
+        
+        /* Oskari 2.x backport begin */
+       /* Oskari 2.x backport end */
+      
+        /* entry point to new class API see Oskari.ModuleSpec above */
+        cls : function(clazzName, ctor, protoProps, metas) {
+
+            var clazzInfo = undefined;
+
+            if (clazzName == undefined) {
+                clazzName = ['Oskari', '_', (++o2anonclass)].join('.');
+            } else {
+                clazzInfo = cs.lookup(clazzName);
+            }
+
+            if (clazzInfo && clazzInfo._constructor && !ctor) {
+                // lookup
+            } else {
+                clazzInfo = cs.define(clazzName, ctor ||
+                function() {
+                }, protoProps, metas || {});
+            }
+
+            return cs.create('Oskari.ModuleSpec', clazzInfo, clazzName);
+
+        },
+
+        /* o2 helper to access sandbox */
+        sandbox : function(sandboxName) {
+
+            var sandboxref = {
+                sandbox : ga.apply(cs, [sandboxName || 'sandbox'])
+            };
+
+            sandboxref.on = function(instance) {
+                var me = this;
+                if (instance.eventHandlers) {
+                    for (p in instance.eventHandlers) {
+                        me.sandbox.registerForEventByName(instance, p);
+                    }
+                }
+                if (instance.requestHandlers) {
+                    for (r in instance.requestHandlers ) {
+                        me.sandbox.addRequestHandler(r, reqHandlers[r]);
+                    }
+                }
+            }, sandboxref.off = function(instance) {
+                if (instance.eventHandlers) {
+                    for (p in instance.eventHandlers) {
+                        me.sandbox.unregisterFromEventByName(instance, p);
+                    }
+                }
+                if (instance.requestHandlers) {
+                    for (r in instance.requestHandlers ) {
+                        me.sandbox.removeRequestHandler(r, reqHandlers[r]);
+                    }
+                }
+            }, sandboxref.slicer = Array.prototype.slice, sandboxref.notify = function(eventName) {
+                var me = this;
+                var sandbox = me.sandbox;
+                var builder = me.sandbox.getEventBuilder(eventName);
+                var args = me.slicer.apply(arguments, [1]);
+                var eventObj = eventBuilder.apply(eventBuilder, args);
+                return sandbox.notifyAll(eventObj);
+            };
+
+            return sandboxref;
+
+        },
+
+        /* o2 helper to register localisation */
+        loc : function() {
+            return o2main.registerLocalization.apply(o2main, arguments);
         }
+
         
     };
+
+    /* Oskari 2.x backport begin */
+   var o2main = bndl;
+     /* o2 api for event class */
+    
+    o2main.eventCls = function(eventName, constructor, protoProps) {
+        var clazzName = ['Oskari', 'event', 'registry', eventName].join('.');
+        var rv = o2main.cls(clazzName, constructor, protoProps, {
+            protocol : ['Oskari.mapframework.event.Event']
+        });
+
+        rv.category({
+            getName : function() {
+                return eventName;
+            }
+        }, '___event');
+
+        rv.eventName = eventName;
+
+        return rv;
+    };
+
+    /* o2 api for request class */
+    o2main.requestCls = function(requestName, constructor, protoProps) {
+        var clazzName = ['Oskari', 'request', 'registry', requestName].join('.');
+        var rv = o2main.cls(clazzName, constructor, protoProps, {
+            protocol : ['Oskari.mapframework.request.Request']
+        });
+
+        rv.category({
+            getName : function() {
+                return requestName;
+            }
+        }, '___request');
+
+        rv.requestName = requestName;
+
+        return rv;
+    };
+    
+    
+    o2main._baseClassFor = {
+        'extension' : "Oskari.userinterface.extension.EnhancedExtension",
+        'bundle' : "Oskari.mapframework.bundle.extension.ExtensionBundle",
+        'tile' : "Oskari.userinterface.extension.EnhancedTile",
+        'flyout' : "Oskari.userinterface.extension.EnhancedFlyout",
+        'view' : "Oskari.userinterface.extension.EnhancedView"
+    };
+    
+
+    /* o2 api for bundle classes */
+   
+   /* @static @method Oskari.extensionCls
+    * 
+    */ 
+    o2main.extensionCls = function(clazzName) {
+        return o2main.cls(clazzName).extend(this._baseClassFor.extension);
+    /* @static @method Oskari.bundleCls 
+     * 
+     */
+    }, o2main.bundleCls = function(bnldId, clazzName) {
+
+        if (!bnldId) {
+            bnldId = ( ['__', (++o2anonbundle)].join('_'));
+        }
+
+        var rv = o2main.cls(clazzName, function() {
+        }, {
+            update : function() {
+            }
+        }, {
+            "protocol" : ["Oskari.bundle.Bundle", this._baseClassFor.bundle],
+            "manifest" : {
+                "Bundle-Identifier" : bnldId
+            }
+        });
+        bm.installBundlePdefsp(bnldId, rv.clazzInfo);
+
+        rv.___bundleIdentifier = bnldId;
+        rv.loc = function(props) {
+            props.key = this.___bundleIdentifier;
+            o2main.registerLocalization(props);
+            return rv;
+        }, rv.start = function(instanceid) {
+            var bundleid = this.___bundleIdentifier;
+
+            if (!fcd.bundles[bundleid]) {
+                var b = bm.createBundle(bundleid, bundleid);
+                fcd.bundles[bundleid] = b;
+            }
+
+            var bi = bm.createInstance(bundleid);
+            fcd.bundleInstances[bundleid] = bi;
+
+            var configProps = fcd.getBundleInstanceConfigurationByName(bundleid);
+            if (configProps) {
+                for (ip in configProps) {
+                    bi[ip] = configProps[ip];
+                }
+            }
+            bi.start();
+
+            return bi;
+        }, rv.stop = function() {
+            var bundleid = this.___bundleIdentifier;
+            var bi = fcd.bundleInstances[bundleid];
+            return bi.stop();
+        };
+1
+        return rv;
+    },
+    /**
+     * @static @method flyoutCls 
+     */
+     o2main.flyoutCls = function(clazzName) {
+        return o2main.cls(clazzName).extend(this._baseClassFor.flyout);
+     }
+    /* @static @method Oskari.tileCls 
+     * 
+     */
+    o2main.tileCls = function(clazzName) {
+        return o2main.cls(clazzName).extend(this._baseClassFor.tile);
+      },
+    /* @static @method Oskari.bundleCls 
+     * 
+     */
+     o2main.viewCls = function(clazzName) {
+        return o2main.cls(clazzName).extend(this._baseClassFor.view);
+     };
+    /* Oskari 2.x backport end */
 
     /**
      * Let's register Oskari as a Oskari global
