@@ -29,14 +29,14 @@ function(instance) {
         },
         'line' : {
             iconCls : 'icon-line',
-            tooltip : loc.rendering.point.tooltip, //todo
+            tooltip : loc.rendering.line.tooltip, 
             sticky : false,
             callback : function() {
             }
         },
         'area' : {
             iconCls : 'icon-area',
-            tooltip : loc.rendering.point.tooltip, //todo
+            tooltip : loc.rendering.area.tooltip, 
             sticky : false,
             callback : function() {
             }
@@ -105,7 +105,7 @@ start : function() {
         for(var buttonName in this.renderButtons) {
             var btnContainer = this.templateRenderButton.clone();
             var button = this.renderButtons[buttonName];
-            btnContainer.attr("title", "");
+            btnContainer.attr("title", button.tooltip);
         	btnContainer.addClass(button.iconCls);
             content.append(btnContainer);
         }
