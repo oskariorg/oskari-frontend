@@ -55,8 +55,8 @@ function(config, locale) {
         'filterInputs'      : '<input type="text" class="filter-input filter-input1" /><span class="filter-between" style="display:none;">-</span><input type="text" class="filter-input filter-input2" style="display:none;" />',
         'filterLink'        : '<a href="javascript:void(0);"></a>',
         'filterByRegion'    : '<div id="statsgrid-filter-by-region"><p class="filter-desc"></p><div class="filter-container"></div></div>',
-        'regionCatSelect'   : '<div><select class="filter-region-category-select"></select></div>',
-        'regionSelect'      : '<div><select class="filter-region-select" multiple tabindex="3"></select></div>'
+        'regionCatSelect'   : '<div class="filter-region-category-select"><select></select></div>',
+        'regionSelect'      : '<div class="filter-region-select"><select class="filter-region-select" multiple tabindex="3"></select></div>'
     };
 
     this.regionCategories = {};
@@ -1746,6 +1746,14 @@ function(config, locale) {
 
     },
 
+    /**
+     * Creates a popup to filter municipalities according to region groups.
+     * 
+     * @method _createFilterByRegionPopup
+     * @param  {Object} column
+     * @param  {Object} headerMenuPlugin
+     * @return {undefined}
+     */
     _createFilterByRegionPopup: function(column, headerMenuPlugin) {
         var me = this,
             dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
@@ -1757,7 +1765,8 @@ function(config, locale) {
             content = jQuery(me.templates.filterByRegion).clone(),
             regionCatCont = jQuery(me.templates.filterRow).clone(),
             regionCat = jQuery(me.templates.regionCatSelect).clone(),
-            labelsCont = jQuery(me.templates.filterRow).clone();
+            labelsCont = jQuery(me.templates.filterRow).clone(),
+            regionIds;
 
         cancelBtn.setTitle(cancelLoc);
         cancelBtn.setHandler(function() {
@@ -1769,7 +1778,8 @@ function(config, locale) {
         filterBtn.setTitle(filterLoc);
         filterBtn.addClass('primary');
         filterBtn.setHandler(function(e) {
-            me.filterColumnByRegion(column);
+            regionIds = content.find('div.filter-region-select select').val();
+            me.filterColumnByRegion(column, regionIds);
 
             content.off();
             headerMenuPlugin.hide();
@@ -1785,20 +1795,43 @@ function(config, locale) {
         content.find('.filter-container').append(labelsCont);
 
         // Show the region category select
-        console.log(me.regionCategories);
         for (var key in me.regionCategories) {
             var regionCatOption = jQuery(me.templates.filterOption).clone();
             regionCatOption.val(key).text(key);
-            regionCat.append(regionCatOption);
+            regionCat.find('select').append(regionCatOption);
         }
-        regionCat.change(function(e) {
-            console.log(e.target.value);
-        });
         regionCatCont.find('.filter-label').text(me._locale['selectRegionCategory']);
         regionCatCont.find('.filter-value').append(regionCat);
         content.find('.filter-container').append(regionCatCont);
+        regionCat.change(function(e) {
+            me._createFilterByRegionSelect(content, e.target.value);
+        });
 
         dialog.show(dialogTitle, content, [cancelBtn, filterBtn]);
+    },
+
+    _createFilterByRegionSelect: function(container, regionCategory) {
+        container.find('.filter-region-container').remove();
+
+        var regionCont = jQuery(this.templates.filterRow).clone(),
+            regionSelect = jQuery(this.templates.regionSelect).clone(),
+            regions = this.regionCategories[regionCategory],
+            rLen = regions.length,
+            regionCatOption, region, i;
+
+        regionCont.addClass('filter-region-container');
+
+        for (i = 0; i < rLen; ++i) {
+            region = regions[i];
+            regionCatOption = jQuery(this.templates.filterOption).clone();
+            regionCatOption.val(region.id).text(region.title);
+            regionSelect.find('select').append(regionCatOption);
+        }
+
+        regionCont.find('.filter-label').text(this._locale['selectRegion']);
+        regionCont.find('.filter-value').append(regionSelect);
+        container.find('.filter-container').append(regionCont);
+        container.find('div.filter-region-select select').chosen();
     },
 
     /**
@@ -1863,8 +1896,56 @@ function(config, locale) {
 
     },
 
-    filterColumnByRegion: function(column, region) {
+    /**
+     * Filters municipalities whether they belong to any of the
+     * regions provided and updates the grid view accordingly.
+     * 
+     * @method filterColumnByRegion
+     * @param  {Object} column
+     * @param  {Array} regionIds
+     * @return {undefined}
+     */
+    filterColumnByRegion: function(column, regionIds) {
+        if (!regionIds || regionIds.length === 0) return;
 
+        var data = this.grid.getData(); 
+        var items = data.getItems();
+
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            
+            if(item.sel == 'checked'){
+                if (item[column.id] == null) {
+                    item.sel = 'empty'
+                } else {
+                    if (!this._itemBelongsToAnyRegions(item, regionIds)) {
+                        item.sel = 'empty';
+                    }
+                }
+                data.updateItem(item.id, item);
+            }
+
+        };
+        this.dataView.refresh();
+        data.collapseGroup('empty');
+        // sendstats ...update map
+        this.sendStatsData(column);
+    },
+
+    /**
+     * Returns true if the item belongs to any of the regions, false otherwise.
+     * 
+     * @method _itemBelongsToAnyRegions
+     * @param  {Object} item
+     * @param  {Array} regionIds
+     * @return {Boolean}
+     */
+    _itemBelongsToAnyRegions: function(item, regionIds) {
+        for (var i = 0; i < regionIds.length; ++i) {
+            var regionId = Number(regionIds[i]);
+            if (item.memberOf.indexOf(regionId) > -1) return true;
+        }
+        return false;
     },
 
     /**
