@@ -646,7 +646,11 @@ define([
         updateLayerValues: function(selectedLayer, capability, container) {
             // Clear out the old values
             var layerInterface = container.find('#add-layer-interface').val();
+            // keep wms url from reseting... hacky whacky
+            var wmsurlField = container.find('#add-layer-wms-url');
+            var wmsurl = wmsurlField.html();
             this.clearAllFields();
+            wmsurlField.html(wmsurl); 
             //title
             jQuery('#add-layer-fi-name').val(selectedLayer.Title);
 
