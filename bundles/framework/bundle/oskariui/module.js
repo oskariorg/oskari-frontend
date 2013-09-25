@@ -1,4 +1,4 @@
-define(["oskari","jquery","./jquery-ui-1.9.1.custom.min","_libraries_/jquery/plugins/jquery.base64.min","css!_resources_/framework/bundle/oskariui/css/jquery-ui-1.9.1.custom.css","css!_resources_/framework/bundle/oskariui/bootstrap-grid.css","./DomManager","./Layout"], function(Oskari,jQuery) {
+define(["oskari","jquery","./jquery-ui-1.9.1.custom.min","libraries/jquery/plugins/jquery.base64.min","css!resources/framework/bundle/oskariui/css/jquery-ui-1.9.1.custom.css","css!resources/framework/bundle/oskariui/bootstrap-grid.css","./DomManager","./Layout"], function(Oskari,jQuery) {
     return Oskari.bundleCls("oskariui").category({create: function () {
 
 

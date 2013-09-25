@@ -33,7 +33,7 @@ require(["mainConfig"], function() {
             sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
         }
 
-        var config = "json!_applications_/oskari2/full-map_guest/minifierAppSetup.json";
+        var config = "json!applications/oskari2/full-map_guest/minifierAppSetup.json";
         if (window.ajaxUrl) {
             // populate url with possible control parameters
             var getAppSetupParams = "";
@@ -48,10 +48,9 @@ require(["mainConfig"], function() {
 
         /* loading configuration */
         require([config, 
-            "_bundles_/oskari/bundle/map-openlayers/module"], function(appSetup) {
+            "bundles/oskari/bundle/map-openlayers/module"], function(appSetup) {
             Oskari.setLang(language);
             var appConfig = appSetup.configuration;
-            console.log('config', appConfig);
             appConfig.promote = {
                     "conf": {
                         "__name": "Promote",
@@ -96,18 +95,13 @@ require(["mainConfig"], function() {
             Oskari.setConfiguration(appConfig);
 
             /* loading main map and divmanazer */
-            require(["_bundles_/framework/bundle/mapfull/module",
-                "_bundles_/framework/bundle/mapmodule-plugin/module",
-                "_bundles_/framework/bundle/divmanazer/module"], function(mapfull, mapmodule, divmanazer) {
-
-                console.log('starting mapfull');
+            require(["bundles/framework/bundle/mapfull/module",
+                "bundles/framework/bundle/mapmodule-plugin/module",
+                "bundles/framework/bundle/divmanazer/module"], function(mapfull, mapmodule, divmanazer) {
 
                 /* starting to show user that something or another is happening */
                 mapfull.start();
-                console.log('starting divmanazer');
                 divmanazer.start();
-
-                console.log('mapfull and divmanazer started', appConfig);
 
                 var bundles = [];
 
@@ -115,36 +109,36 @@ require(["mainConfig"], function() {
                     if ((bundle === "mapfull") || (bundle === "divmanazer") || (bundle === "openlayers-default-theme")) {
                         // already loaded
                     } else if (bundle === "statsgrid") {
-                        bundles.push("_bundles_/statistics/bundle/" + bundle + "/module");
+                        bundles.push("bundles/statistics/bundle/" + bundle + "/module");
                     } else if (bundle === "metadataflyout") {
-                        bundles.push("_bundles_/catalogue/bundle/" + bundle + "/module");
+                        bundles.push("bundles/catalogue/bundle/" + bundle + "/module");
                     } else {
-                        bundles.push("_bundles_/framework/bundle/" + bundle + "/module");
+                        bundles.push("bundles/framework/bundle/" + bundle + "/module");
                     }
                 }
 
-                console.log('bundles', bundles);
+//                console.log('bundles', bundles);
 
                 require(bundles, function () {
 
 /*                require([
-                    "_bundles_/framework/bundle/backendstatus/module",
-                    "_bundles_/framework/bundle/guidedtour/module",
-                    "_bundles_/framework/bundle/toolbar/module",
-                    "_bundles_/framework/bundle/layerselection2/module",
-                    "_bundles_/framework/bundle/userguide/module",
-                    "_bundles_/framework/bundle/layerselector2/module",
-                    "_bundles_/framework/bundle/personaldata/module",
-                    "_bundles_/framework/bundle/publisher/module",
-                    "_bundles_/framework/bundle/printout/module",
-                    "_bundles_/framework/bundle/search/module",
-                    "_bundles_/framework/bundle/maplegend/module",
-                    "_bundles_/framework/bundle/featuredata/module",
-                    "_bundles_/framework/bundle/divmanazer/module",
-                    "_bundles_/framework/bundle/statehandler/module",
-                    "_bundles_/framework/bundle/infobox/module",
-                    "_bundles_/framework/bundle/coordinatedisplay/module",
-                    "_bundles_/framework/bundle/promote/module"], function () {*/
+                    "bundles/framework/bundle/backendstatus/module",
+                    "bundles/framework/bundle/guidedtour/module",
+                    "bundles/framework/bundle/toolbar/module",
+                    "bundles/framework/bundle/layerselection2/module",
+                    "bundles/framework/bundle/userguide/module",
+                    "bundles/framework/bundle/layerselector2/module",
+                    "bundles/framework/bundle/personaldata/module",
+                    "bundles/framework/bundle/publisher/module",
+                    "bundles/framework/bundle/printout/module",
+                    "bundles/framework/bundle/search/module",
+                    "bundles/framework/bundle/maplegend/module",
+                    "bundles/framework/bundle/featuredata/module",
+                    "bundles/framework/bundle/divmanazer/module",
+                    "bundles/framework/bundle/statehandler/module",
+                    "bundles/framework/bundle/infobox/module",
+                    "bundles/framework/bundle/coordinatedisplay/module",
+                    "bundles/framework/bundle/promote/module"], function () {*/
                         for(var i = 0, ilen = arguments.length; i < ilen; i++) {
                             arguments[i].start();
                         }

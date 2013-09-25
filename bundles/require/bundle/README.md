@@ -417,7 +417,7 @@ define(["oskari", "./instance"], function(Oskari, instanceCls) {
 # referencing, instantiating and starting a bundle instance
 
 ```
-require("_bundles_/framework/bundle/divmanazer/bundle"],function(divmanazer) {
+require("bundles/framework/bundle/divmanazer/bundle"],function(divmanazer) {
 
 	var bi = divmanazer.start();
 	
@@ -437,14 +437,14 @@ var lang = 'fi';
 require.config({
 
     /* the base is set to requirejs lib to help requiring 3rd party libs */
-    "baseUrl" : "../../../libraries/requirejs/lib",
+    "baseUrl" : "../../../",
 
     /* some path shortcuts to ease declarations */
     paths : {
-        _libraries_ : '../../../libraries',    	
-        _bundles_ : '../../../bundles',
-        _applications_ : '../../../applications',
-        _resources_ : '../../../resources'
+        libraries : 'libraries',    	
+        bundles : 'bundles',
+        applications : 'applications',
+        resources : 'resources'
     },
     config : {
         i18n : {
@@ -462,15 +462,15 @@ define("jquery", [], function() {
 /* loading base requirements */
 require(["jquery", "oskari", "domReady!"],
   function($, Oskari) {
-    require(["json!_applications_/oskari2/nextgenbaseonly/config.json", 
-    	"_bundles_/oskari/bundle/map-openlayers/bundle"], 
+    require(["json!applications/oskari2/nextgenbaseonly/config.json", 
+    	"bundles/oskari/bundle/map-openlayers/bundle"], 
     	function(appConfig) {
 
         Oskari.setLang(lang); /* oskari locale */
         Oskari.setConfiguration(appConfig);
 
-        require(["_bundles_/oskari/bundle/mapfull-openlayers/bundle", 
-        	"_bundles_/framework/bundle/divmanazer/bundle"], 
+        require(["bundles/oskari/bundle/mapfull-openlayers/bundle", 
+        	"bundles/framework/bundle/divmanazer/bundle"], 
         	function(mapfull, divmanazer) {
 
             mapfull.start();

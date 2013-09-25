@@ -1,4 +1,4 @@
-define(["oskari","jquery","./instance","./plugin/CoordinatesPlugin","css!_resources_/framework/bundle/coordinatedisplay/css/coordinatedisplay.css","./locale/fi","./locale/sv","./locale/en"], function(Oskari,jQuery) {
+define(["oskari","jquery","./instance","./plugin/CoordinatesPlugin","css!resources/framework/bundle/coordinatedisplay/css/coordinatedisplay.css","./locale/fi","./locale/sv","./locale/en"], function(Oskari,jQuery) {
     return Oskari.bundleCls("coordinatedisplay").category({create: function () {
 		var me = this;
 		var inst = 

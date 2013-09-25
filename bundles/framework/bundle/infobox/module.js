@@ -1,4 +1,4 @@
-define(["oskari","jquery","./instance","./plugin/openlayerspopup/OpenlayersPopupPlugin","./request/ShowInfoBoxRequest","./request/ShowInfoBoxRequestHandler","./request/HideInfoBoxRequest","./request/HideInfoBoxRequestHandler","css!_resources_/framework/bundle/infobox/css/infobox.css"], function(Oskari,jQuery) {
+define(["oskari","jquery","./instance","./plugin/openlayerspopup/OpenlayersPopupPlugin","./request/ShowInfoBoxRequest","./request/ShowInfoBoxRequestHandler","./request/HideInfoBoxRequest","./request/HideInfoBoxRequestHandler","css!resources/framework/bundle/infobox/css/infobox.css"], function(Oskari,jQuery) {
     return Oskari.bundleCls("infobox").category({create: function () {
 		var me = this;
 		var inst = 

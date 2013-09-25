@@ -6,5 +6,4 @@ define(["oskari",
 "./sandbox/module",
 "./service/module"
 ],function(Oskari) {
-    console.log('here oskari platform is defined...');
 });

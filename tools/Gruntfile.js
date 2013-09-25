@@ -161,10 +161,197 @@ module.exports = function (grunt) {
           'usagetracker': '../packages/framework/bundle/usagetracker',
           'userguide': '../packages/framework/bundle/userguide'
         },
-        requirejs: {
-          compile: {
+        minifyAll: {
             options: {
-              mainConfigFile: "../applications/oskari2/full-map_guest/build.js"
+                baseUrl : "../",
+                paths: {
+                    jquery: "empty:",
+                    oskari: "empty:",
+                    css: "libraries/requirejs/lib/css",
+                    json: "libraries/requirejs/lib/json",
+                    domReady: "libraries/requirejs/lib/domReady",
+                    normalize: "libraries/requirejs/lib/normalize",
+                    'css-builder': "libraries/requirejs/lib/css-builder"
+                },
+                optimizeAllPluginResources: true,
+                findNestedDependencies: true,
+                preserveLicenseComments: true
+            },
+            'admin-layerrights': {
+                name: "bundles/framework/bundle/admin-layerrights/module",
+                out: "../bundles/framework/bundle/admin-layerrights/minified.js"
+            },
+            'backendstatus': {
+                name: "bundles/framework/bundle/backendstatus/module",
+                out: "../bundles/framework/bundle/backendstatus/minified.js"
+            },
+            'coordinatedisplay': {
+                name: "bundles/framework/bundle/coordinatedisplay/module",
+                out: "../bundles/framework/bundle/coordinatedisplay/minified.js"
+            },
+            'divmanazer': {
+                name: "bundles/framework/bundle/divmanazer/module",
+                out: "../bundles/framework/bundle/divmanazer/minified.js"
+            },
+            'featuredata': {
+                name: "bundles/framework/bundle/featuredata/module",
+                out: "../bundles/framework/bundle/featuredata/minified.js"
+            },
+            'featuredata2': {
+                name: "bundles/framework/bundle/featuredata2/module",
+                out: "../bundles/framework/bundle/featuredata2/minified.js"
+            },
+            'guidedtour': {
+                name: "bundles/framework/bundle/guidedtour/module",
+                out: "../bundles/framework/bundle/guidedtour/minified.js"
+            },
+            'infobox': {
+                name: "bundles/framework/bundle/infobox/module",
+                out: "../bundles/framework/bundle/infobox/minified.js"
+            },
+            'layerselection2': {
+                name: "bundles/framework/bundle/layerselection2/module",
+                out: "../bundles/framework/bundle/layerselection2/minified.js"
+            },
+            'layerselector2': {
+                name: "bundles/framework/bundle/layerselector2/module",
+                out: "../bundles/framework/bundle/layerselector2/minified.js"
+            },
+            'mapanalysis': {
+                name: "bundles/framework/bundle/mapanalysis/module",
+                out: "../bundles/framework/bundle/mapanalysis/minified.js"
+            },
+            'mapfull': {
+                name: "bundles/framework/bundle/mapfull/module",
+                out: "../bundles/framework/bundle/mapfull/minified.js"
+            },
+            'maplegend': {
+                name: "bundles/framework/bundle/maplegend/module",
+                out: "../bundles/framework/bundle/maplegend/minified.js"
+            },
+            'mapmodule-plugin': {
+                name: "bundles/framework/bundle/mapmodule-plugin/module",
+                out: "../bundles/framework/bundle/mapmodule-plugin/minified.js"
+            },
+            'mapstats': {
+                name: "bundles/framework/bundle/mapstats/module",
+                out: "../bundles/framework/bundle/mapstats/minified.js"
+            },
+            'mapwfs': {
+                name: "bundles/framework/bundle/mapwfs/module",
+                out: "../bundles/framework/bundle/mapwfs/minified.js"
+            },
+            'mapwfs2': {
+                name: "bundles/framework/bundle/mapwfs2/module",
+                out: "../bundles/framework/bundle/mapwfs2/minified.js"
+            },
+            'mapwmts': {
+                name: "bundles/framework/bundle/mapwmts/module",
+                out: "../bundles/framework/bundle/mapwmts/minified.js"
+            },
+            'metadata': {
+                name: "bundles/framework/bundle/metadata/module",
+                out: "../bundles/framework/bundle/metadata/minified.js"
+            },
+            'myplaces2': {
+                name: "bundles/framework/bundle/myplaces2/module",
+                out: "../bundles/framework/bundle/myplaces2/minified.js"
+            },
+            'oskariui': {
+                name: "bundles/framework/bundle/oskariui/module",
+                out: "../bundles/framework/bundle/oskariui/minified.js"
+            },
+            'parcel': {
+                name: "bundles/framework/bundle/parcel/module",
+                out: "../bundles/framework/bundle/parcel/minified.js"
+            },
+            'parcelinfo': {
+                name: "bundles/framework/bundle/parcelinfo/module",
+                out: "../bundles/framework/bundle/parcelinfo/minified.js"
+            },
+            'parcelselector': {
+                name: "bundles/framework/bundle/parcelselector/module",
+                out: "../bundles/framework/bundle/parcelselector/minified.js"
+            },
+            'personaldata': {
+                name: "bundles/framework/bundle/personaldata/module",
+                out: "../bundles/framework/bundle/personaldata/minified.js"
+            },
+            'postprocessor': {
+                name: "bundles/framework/bundle/postprocessor/module",
+                out: "../bundles/framework/bundle/postprocessor/minified.js"
+            },
+            'printout': {
+                name: "bundles/framework/bundle/printout/module",
+                out: "../bundles/framework/bundle/printout/minified.js"
+            },
+            'promote': {
+                name: "bundles/framework/bundle/promote/module",
+                out: "../bundles/framework/bundle/promote/minified.js"
+            },
+            'publisher': {
+                name: "bundles/framework/bundle/publisher/module",
+                out: "../bundles/framework/bundle/publisher/minified.js"
+            },
+            'search': {
+                name: "bundles/framework/bundle/search/module",
+                out: "../bundles/framework/bundle/search/minified.js"
+            },
+            'statehandler': {
+                name: "bundles/framework/bundle/statehandler/module",
+                out: "../bundles/framework/bundle/statehandler/minified.js"
+            },
+            'toolbar': {
+                name: "bundles/framework/bundle/toolbar/module",
+                out: "../bundles/framework/bundle/toolbar/minified.js"
+            },
+            'usagetracker': {
+                name: "bundles/framework/bundle/usagetracker/module",
+                out: "../bundles/framework/bundle/usagetracker/minified.js"
+            },
+            'userguide': {
+                name: "bundles/framework/bundle/userguide/module",
+                out: "../bundles/framework/bundle/userguide/minified.js"
+            }
+        },
+        requirejs: {
+          oskari: {
+            options: {
+                baseUrl : "../",
+                paths: {
+                    jquery: "empty:"
+                },
+                optimizeAllPluginResources: true,
+                findNestedDependencies: true,
+                preserveLicenseComments: true,
+                name: "bundles/oskari/oskari",
+                version: "2.0.0",
+                out: "../libraries/oskari/oskari-<%= requirejs.oskari.options.version %>.min.js"
+            }
+          },
+          'oskari-with-loader': {
+            options: {
+                baseUrl : "../",
+                paths: {
+                    jquery: "empty:",
+                    oskari: "bundles/oskari/oskari",
+                    css: "libraries/requirejs/lib/css",
+                    json: "libraries/requirejs/lib/json",
+                    domReady: "libraries/requirejs/lib/domReady",
+                    normalize: "libraries/requirejs/lib/normalize",
+                    'css-builder': "libraries/requirejs/lib/css-builder"                    
+                },
+                optimizeAllPluginResources: true,
+                findNestedDependencies: true,
+                preserveLicenseComments: true,
+                version: "1.13",
+                name: "bundles/oskari/oskari-with-loader",
+                out: "../libraries/oskari/oskari-<%= requirejs['oskari-with-loader'].options.version %>.min.js"
+            }
+          },
+          'full-map_guest': {
+            options: {
+                mainConfigFile: "../applications/oskari2/full-map_guest/build.js"
             }
           }
         }
@@ -658,4 +845,11 @@ module.exports = function (grunt) {
     grunt.registerMultiTask("modulizeAll", "Convert all bundles to modules", function () {
         grunt.task.run('bundle2module:' + this.data);
     });
+
+    grunt.registerMultiTask("minifyAll", "Minify all modules", function () {
+        var options = this.options(this.data);
+        grunt.config.set('requirejs.' + this.target + '.options', options);
+        grunt.task.run('requirejs:' + this.target);
+    });
+
 };

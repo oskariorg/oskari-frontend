@@ -37,20 +37,22 @@ module.exports = function(grunt) {
             var relativePath = path.relative(basePath, normalizedPath);
 
             // modify path so that RequireJS can find it
-            relativePath = relativePath.replace(/\\/g, '/');
+            relativePath = relativePath.replace(/\\/g, '/'); // change \ to / to have all paths in the same format
+
             if (relativePath.indexOf('.') !== 0) {
                 relativePath = './' + relativePath;
             } else {
-                // replace with RequireJS path configs, so that Require can find the files
-                relativePath = relativePath.replace(/[\.\/]*resources/, '_resources_');
-                relativePath = relativePath.replace(/[\.\/]*bundles/, '_bundles_');
-                relativePath = relativePath.replace(/[\.\/]*libraries/, '_libraries_');
+                // detect relative files regarding resources, bundles and libraries
+                // change path and mark with _ to ensure file extensions are removed so that Require is able to find the file
+                relativePath = relativePath.replace(/[\.\/]*resources/, 'resources');
+                relativePath = relativePath.replace(/[\.\/]*bundles/, 'bundles');
+                relativePath = relativePath.replace(/[\.\/]*libraries/, 'libraries');
             }
-            if ((relativePath.indexOf('./') === 0) || (relativePath.indexOf('_') === 0)) {
-                // dots mess around with RequireJS file extension detection.
-                // In order to make it work, exclude .js from filenames without dots such as jquery.base64.min.js
-                relativePath = relativePath.replace('.js', '');
-            }
+
+            // dots mess around with RequireJS file extension detection.
+            // In order to make it work, exclude .js from filenames without dots such as jquery.base64.min.js
+            relativePath = relativePath.replace('.js', '');
+
             return relativePath;
         }
 

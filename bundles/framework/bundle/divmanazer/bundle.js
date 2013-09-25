@@ -102,37 +102,37 @@ define(["oskari","jquery",
             "./extension/DefaultLayout",
         
             
-            "css!_resources_/framework/bundle/divmanazer/css/divman.css",
+            "css!resources/framework/bundle/divmanazer/css/divman.css",
         
             
-            "css!_resources_/framework/bundle/divmanazer/css/accordion.css",
+            "css!resources/framework/bundle/divmanazer/css/accordion.css",
         
             
-            "css!_resources_/framework/bundle/divmanazer/css/tab.css",
+            "css!resources/framework/bundle/divmanazer/css/tab.css",
         
             
-            "css!_resources_/framework/bundle/divmanazer/css/modal.css",
+            "css!resources/framework/bundle/divmanazer/css/modal.css",
         
             
-            "css!_resources_/framework/bundle/divmanazer/css/badge.css",
+            "css!resources/framework/bundle/divmanazer/css/badge.css",
         
             
-            "css!_resources_/framework/bundle/divmanazer/css/alert.css",
+            "css!resources/framework/bundle/divmanazer/css/alert.css",
         
             
-            "css!_resources_/framework/bundle/divmanazer/css/grid.css",
+            "css!resources/framework/bundle/divmanazer/css/grid.css",
         
             
-            "css!_resources_/framework/bundle/divmanazer/css/popup.css",
+            "css!resources/framework/bundle/divmanazer/css/popup.css",
         
             
-            "css!_resources_/framework/bundle/divmanazer/css/button.css",
+            "css!resources/framework/bundle/divmanazer/css/button.css",
         
             
-            "css!_resources_/framework/bundle/divmanazer/css/overlay.css",
+            "css!resources/framework/bundle/divmanazer/css/overlay.css",
         
             
-            "css!_resources_/framework/bundle/divmanazer/css/popover.css"
+            "css!resources/framework/bundle/divmanazer/css/popover.css"
 ], function(Oskari,jQuery) {
 
 

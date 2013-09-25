@@ -44,7 +44,6 @@ function($, Oskari) {
     require([config, 
     	"_bundles_/oskari/bundle/map-openlayers/module"], function(appConfig) {
         Oskari.setLang(language);
-        console.log('config', appConfig);
         appConfig.promote = {
                 "conf": {
                     "__name": "Promote",
@@ -92,13 +91,9 @@ function($, Oskari) {
         require(["_bundles_/oskari/bundle/mapfull-openlayers/module", 
         	"_bundles_/framework/bundle/divmanazer/module"], function(mapfull, divmanazer) {
 
-                console.log('here sagfdhgsfhd');
-
             /* starting to show user that something or another is happening */
             mapfull.start();
             divmanazer.start();
-
-            console.log('mapfull and divmanazer started');
 
             require([
                 "_bundles_/require/bundle/require/module",

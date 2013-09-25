@@ -1,4 +1,4 @@
-define(["oskari","jquery","./instance","./Flyout","./Tile","css!_resources_/framework/bundle/admin-layerrights/css/style.css","_libraries_/chosen/chosen.jquery","css!_libraries_/chosen/chosen.css","./locale/fi","./locale/sv","./locale/en"], function(Oskari,jQuery) {
+define(["oskari","jquery","./instance","./Flyout","./Tile","css!resources/framework/bundle/admin-layerrights/css/style.css","libraries/chosen/chosen.jquery.js","css!libraries/chosen/chosen.css","./locale/fi","./locale/sv","./locale/en"], function(Oskari,jQuery) {
     return Oskari.bundleCls("admin-layerrights").category({create: function () {
         var me = this;
         

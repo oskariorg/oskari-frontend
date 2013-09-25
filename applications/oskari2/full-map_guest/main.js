@@ -1,13 +1,16 @@
 
 require.config({
-    "baseUrl" : "/Oskari/libraries/requirejs/lib", // the base is set to requirejs lib to help requiring 3rd party libs
+    baseUrl : "/Oskari/", // the base is set to requirejs lib to help requiring 3rd party libs
     paths : { // some path shortcuts to ease declarations
-        _libraries_ : '/Oskari/libraries',    	
-        _bundles_ : '/Oskari/bundles',
-        _applications_ : '/Oskari/applications',
-        _resources_ : '/Oskari/resources',
+        oskari: "bundles/oskari/oskari",
+        "oskari-with-loader": "bundles/oskari/oskari-with-loader",
         jquery: "http://code.jquery.com/jquery-1.9.1",
-        "jquery-migrate": "/Oskari/libraries/jquery/jquery-migrate-1.2.1-modified"
+        "jquery-migrate": "libraries/jquery/jquery-migrate-1.2.1-modified",
+        css: "libraries/requirejs/lib/css",
+        json: "libraries/requirejs/lib/json",
+        domReady: "libraries/requirejs/lib/domReady",
+        text: "libraries/requirejs/lib/text",
+        normalize: "libraries/requirejs/lib/normalize"
     },
     map: {
       // '*' means all modules will get 'jquery-private'
@@ -585,8 +588,6 @@ define('jquery-migrate',['jquery'], function (jQuery) {
  */
 (function() {
     var global = this; // in non-strict mode this will refer to the global "window" object
-    console.log('global is defined?', global);
-
     var isDebug = false;
     var isConsole = window.console != null && window.console.debug;
 
@@ -1869,6 +1870,7 @@ define('jquery-migrate',['jquery'], function (jQuery) {
      * Oskari main entry objects 
      */
     var o2main = {
+        VERSION : "2.0.0",
         bundle_manager : bm, /* */
         bundle_facade : fcd,
         bundle_locale : blocale,
@@ -2215,8 +2217,6 @@ define('jquery-migrate',['jquery'], function (jQuery) {
     ga.apply(cs, ['Oskari', o2main]);
 
     global.Oskari = o2main;
-
-    console.log('global Oskari?', global.Oskari, window, window.Oskari)
 
     define('oskari',['exports'], function(exports) {
 
@@ -2930,7 +2930,7 @@ define('css',['./normalize'], function(normalize) {
   
   return cssAPI;
 });
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/openlayers/theme/default/style.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/openlayers/theme/default/style.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 /*
   proj4js.js -- Javascript reprojection library. 
   
@@ -3147,7 +3147,7 @@ p.x=this.x0+this.a*ksp*cosphi*Math.sin(dlon);p.y=this.y0+this.a*ksp*(this.cos_p1
 var z=rh/this.a;var sinz=Math.sin(z);var cosz=Math.cos(z);var lon=this.long0;var lat;if(Math.abs(rh)<=Proj4js.common.EPSLN){lat=this.lat0;}else{lat=Proj4js.common.asinz(cosz*this.sin_p12+(p.y*sinz*this.cos_p12)/rh);var con=Math.abs(this.lat0)-Proj4js.common.HALF_PI;if(Math.abs(con)<=Proj4js.common.EPSLN){if(lat0>=0.0){lon=Proj4js.common.adjust_lon(this.long0+Math.atan2(p.x,-p.y));}else{lon=Proj4js.common.adjust_lon(this.long0-Math.atan2(-p.x,p.y));}}else{con=cosz-this.sin_p12*Math.sin(lat);if((Math.abs(con)<Proj4js.common.EPSLN)&&(Math.abs(p.x)<Proj4js.common.EPSLN)){}else{var temp=Math.atan2((p.x*sinz*this.cos_p12),(con*rh));lon=Proj4js.common.adjust_lon(this.long0+Math.atan2((p.x*sinz*this.cos_p12),(con*rh)));}}}
 p.x=lon;p.y=lat;return p;}};Proj4js.Proj.moll={init:function(){},forward:function(p){var lon=p.x;var lat=p.y;var delta_lon=Proj4js.common.adjust_lon(lon-this.long0);var theta=lat;var con=Proj4js.common.PI*Math.sin(lat);for(var i=0;true;i++){var delta_theta=-(theta+Math.sin(theta)-con)/(1.0+Math.cos(theta));theta+=delta_theta;if(Math.abs(delta_theta)<Proj4js.common.EPSLN)break;if(i>=50){Proj4js.reportError("moll:Fwd:IterationError");}}
 theta/=2.0;if(Proj4js.common.PI/2-Math.abs(lat)<Proj4js.common.EPSLN)delta_lon=0;var x=0.900316316158*this.a*delta_lon*Math.cos(theta)+this.x0;var y=1.4142135623731*this.a*Math.sin(theta)+this.y0;p.x=x;p.y=y;return p;},inverse:function(p){var theta;var arg;p.x-=this.x0;var arg=p.y/(1.4142135623731*this.a);if(Math.abs(arg)>0.999999999999)arg=0.999999999999;var theta=Math.asin(arg);var lon=Proj4js.common.adjust_lon(this.long0+(p.x/(0.900316316158*this.a*Math.cos(theta))));if(lon<(-Proj4js.common.PI))lon=-Proj4js.common.PI;if(lon>Proj4js.common.PI)lon=Proj4js.common.PI;arg=(2.0*theta+Math.sin(2.0*theta))/Proj4js.common.PI;if(Math.abs(arg)>1.0)arg=1.0;var lat=Math.asin(arg);p.x=lon;p.y=lat;return p;}};
-define("_libraries_/proj4js-1.0.1/proj4js-compressed", function(){});
+define("libraries/proj4js-1.0.1/proj4js-compressed", function(){});
 
 /*
 
@@ -5947,13 +5947,13 @@ return components;},parsePersonConstructs:function(node,name,data){var persons=[
 persons.push(value);}
 if(persons.length>0){data[name+"s"]=persons;}},CLASS_NAME:"OpenLayers.Format.Atom"});OpenLayers.Control.KeyboardDefaults=OpenLayers.Class(OpenLayers.Control,{autoActivate:true,slideFactor:75,observeElement:null,draw:function(){var observeElement=this.observeElement||document;this.handler=new OpenLayers.Handler.Keyboard(this,{"keydown":this.defaultKeyPress},{observeElement:observeElement});},defaultKeyPress:function(evt){var size,handled=true;switch(evt.keyCode){case OpenLayers.Event.KEY_LEFT:this.map.pan(-this.slideFactor,0);break;case OpenLayers.Event.KEY_RIGHT:this.map.pan(this.slideFactor,0);break;case OpenLayers.Event.KEY_UP:this.map.pan(0,-this.slideFactor);break;case OpenLayers.Event.KEY_DOWN:this.map.pan(0,this.slideFactor);break;case 33:size=this.map.getSize();this.map.pan(0,-0.75*size.h);break;case 34:size=this.map.getSize();this.map.pan(0,0.75*size.h);break;case 35:size=this.map.getSize();this.map.pan(0.75*size.w,0);break;case 36:size=this.map.getSize();this.map.pan(-0.75*size.w,0);break;case 43:case 61:case 187:case 107:this.map.zoomIn();break;case 45:case 109:case 189:case 95:this.map.zoomOut();break;default:handled=false;}
 if(handled){OpenLayers.Event.stop(evt);}},CLASS_NAME:"OpenLayers.Control.KeyboardDefaults"});
-define("_libraries_/OpenLayers/OpenLayers-2.12-patched", function(){});
+define("libraries/OpenLayers/OpenLayers-2.12-patched", function(){});
 
-define('_bundles_/oskari/bundle/map-openlayers/module',["oskari",  
+define('bundles/oskari/bundle/map-openlayers/module',["oskari",  
 /* openlayers */ 
-"css!_resources_/openlayers/theme/default/style.css", 
-"_libraries_/proj4js-1.0.1/proj4js-compressed", 
-"_libraries_/OpenLayers/OpenLayers-2.12-patched"
+"css!resources/openlayers/theme/default/style.css", 
+"libraries/proj4js-1.0.1/proj4js-compressed", 
+"libraries/OpenLayers/OpenLayers-2.12-patched"
 ],function(Oskari) {
 	
 	Oskari.bundleCls('oskarimap');
@@ -6349,7 +6349,7 @@ function() {
 	"protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.userinterface.Stateful']
 });
 
-define("_bundles_/framework/bundle/mapfull/instance", function(){});
+define("bundles/framework/bundle/mapfull/instance", function(){});
 
 /**
  * @class Oskari.mapframework.enhancement.mapfull.StartMapWithLinkEnhancement
@@ -6422,7 +6422,7 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.enhancement.Enhancement']
 });
-define("_bundles_/framework/bundle/mapfull/enhancement/start-map-with-link-enhancement", function(){});
+define("bundles/framework/bundle/mapfull/enhancement/start-map-with-link-enhancement", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapfull.request.MapResizeEnabledRequest
@@ -6467,7 +6467,7 @@ function(resizeEnabled) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/framework/bundle/mapfull/request/MapResizeEnabledRequest", function(){});
+define("bundles/framework/bundle/mapfull/request/MapResizeEnabledRequest", function(){});
 
 /**
  * @class 'Oskari.mapframework.bundle.mapfull.request.MapResizeEnabledRequestHandler
@@ -6503,7 +6503,7 @@ function(mapfull) {
     protocol : ['Oskari.mapframework.core.RequestHandler']
 });
 
-define("_bundles_/framework/bundle/mapfull/request/MapResizeEnabledRequestHandler", function(){});
+define("bundles/framework/bundle/mapfull/request/MapResizeEnabledRequestHandler", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapfull.request.MapWindowFullScreenRequest
@@ -6537,7 +6537,7 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/framework/bundle/mapfull/request/MapWindowFullScreenRequest", function(){});
+define("bundles/framework/bundle/mapfull/request/MapWindowFullScreenRequest", function(){});
 
 /**
  * @class 'Oskari.mapframework.bundle.mapfull.request.MapWindowFullScreenRequestHandler
@@ -6572,10 +6572,10 @@ function(mapfull) {
     protocol : ['Oskari.mapframework.core.RequestHandler']
 });
 
-define("_bundles_/framework/bundle/mapfull/request/MapWindowFullScreenRequestHandler", function(){});
+define("bundles/framework/bundle/mapfull/request/MapWindowFullScreenRequestHandler", function(){});
 
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/mapfull/css/style.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
-define('_bundles_/framework/bundle/mapfull/module',["oskari","jquery","./instance","./enhancement/start-map-with-link-enhancement","./request/MapResizeEnabledRequest","./request/MapResizeEnabledRequestHandler","./request/MapWindowFullScreenRequest","./request/MapWindowFullScreenRequestHandler","css!_resources_/framework/bundle/mapfull/css/style.css"], function(Oskari,jQuery) {
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/mapfull/css/style.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+define('bundles/framework/bundle/mapfull/module',["oskari","jquery","./instance","./enhancement/start-map-with-link-enhancement","./request/MapResizeEnabledRequest","./request/MapResizeEnabledRequestHandler","./request/MapWindowFullScreenRequest","./request/MapWindowFullScreenRequestHandler","css!resources/framework/bundle/mapfull/css/style.css"], function(Oskari,jQuery) {
     return Oskari.bundleCls("mapfull").category({create: function () {
         return Oskari.clazz.create("Oskari.mapframework.bundle.mapfull.MapFullBundleInstance");
     },update: function (manager, bundle, bi, info) {
@@ -7029,7 +7029,7 @@ function() {
     }
 });
 
-define("_bundles_/oskari/platform/core/core", function(){});
+define("bundles/oskari/platform/core/core", function(){});
 
 /**
  * @class Oskari.mapframework.core.Core.enhancementMethods
@@ -7053,7 +7053,7 @@ Oskari.clazz.category(
         }
     }
 }); 
-define("_bundles_/oskari/platform/core/core-enhancement-methods", function(){});
+define("bundles/oskari/platform/core/core-enhancement-methods", function(){});
 
 /**
  * @class Oskari.mapframework.core.Core.keyListenerMethods
@@ -7089,7 +7089,7 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'feature-key-listener-met
     }
 });
 
-define("_bundles_/oskari/platform/core/core-key-listener-methods", function(){});
+define("bundles/oskari/platform/core/core-key-listener-methods", function(){});
 
 /**
  * @class Oskari.mapframework.core.Core.mapLayerMethods
@@ -7475,7 +7475,7 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-layer-methods', {
     }
 });
 
-define("_bundles_/oskari/platform/core/core-map-layer-methods", function(){});
+define("bundles/oskari/platform/core/core-map-layer-methods", function(){});
 
 /**
  * @class Oskari.mapframework.core.Core.mapMethods
@@ -7505,9 +7505,9 @@ Oskari.clazz.category('Oskari.mapframework.core.Core', 'map-methods', {
     }
 });
 
-define("_bundles_/oskari/platform/core/core-map-methods", function(){});
+define("bundles/oskari/platform/core/core-map-methods", function(){});
 
-define('_bundles_/oskari/platform/core/module',["oskari", 
+define('bundles/oskari/platform/core/module',["oskari", 
 			"./core",	
 			"./core-enhancement-methods",
 			"./core-key-listener-methods",
@@ -7608,7 +7608,7 @@ function() {
     }
 });
 
-define("_bundles_/oskari/platform/event/event", function(){});
+define("bundles/oskari/platform/event/event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.FeaturesAvailableEvent
@@ -7698,7 +7698,7 @@ function(mapLayer, features, mimeType, projCode, op) {
 });
 
 /* Inheritance */;
-define("_bundles_/oskari/platform/event/common/features-available-event", function(){});
+define("bundles/oskari/platform/event/common/features-available-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterMapLayerAddEvent
@@ -7776,7 +7776,7 @@ function(mapLayer, keepLayersOrder, isBasemap) {
 });
 
 /* Inheritance */;
-define("_bundles_/oskari/platform/event/common/after-map-layer-add-event", function(){});
+define("bundles/oskari/platform/event/common/after-map-layer-add-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterMapLayerRemoveEvent
@@ -7827,7 +7827,7 @@ function(mapLayer) {
 });
 
 /* Inheritance */;
-define("_bundles_/oskari/platform/event/common/after-map-layer-remove-event", function(){});
+define("bundles/oskari/platform/event/common/after-map-layer-remove-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterMapMoveEvent
@@ -7923,7 +7923,7 @@ function(centerX, centerY, zoom, marker, scale) {
 });
 
 /* Inheritance */;
-define("_bundles_/oskari/platform/event/common/after-map-move-event", function(){});
+define("bundles/oskari/platform/event/common/after-map-move-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.MapMoveStartEvent
@@ -7982,7 +7982,7 @@ function(x, y) {
 });
 
 /* Inheritance */;
-define("_bundles_/oskari/platform/event/common/after-map-move-start-event", function(){});
+define("bundles/oskari/platform/event/common/after-map-move-start-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterShowMapLayerInfoEvent
@@ -8032,7 +8032,7 @@ function(mapLayer) {
 });
 
 /* Inheritance */;
-define("_bundles_/oskari/platform/event/common/after-show-map-layer-info-event", function(){});
+define("bundles/oskari/platform/event/common/after-show-map-layer-info-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterHideMapMarkerEvent
@@ -8064,7 +8064,7 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.event.Event']
 });
-define("_bundles_/oskari/platform/event/common/after-hide-map-marker-event", function(){});
+define("bundles/oskari/platform/event/common/after-hide-map-marker-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.MouseHoverEvent
@@ -8154,7 +8154,7 @@ function(lon, lat,isPaused) {
 });
 
 /* Inheritance */;
-define("_bundles_/oskari/platform/event/common/mouse-hover-event", function(){});
+define("bundles/oskari/platform/event/common/mouse-hover-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.MapLayerEvent
@@ -8231,7 +8231,7 @@ function(layerId, operation) {
 });
 
 /* Inheritance */;
-define("_bundles_/oskari/platform/event/common/MapLayerEvent", function(){});
+define("bundles/oskari/platform/event/common/MapLayerEvent", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent
@@ -8299,7 +8299,7 @@ function(movedMapLayer, fromPosition, toPosition) {
 });
 
 /* Inheritance */;
-define("_bundles_/oskari/platform/event/common/after-rearrange-selected-map-layer-event", function(){});
+define("bundles/oskari/platform/event/common/after-rearrange-selected-map-layer-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterChangeMapLayerOpacityEvent
@@ -8346,7 +8346,7 @@ function(mapLayer) {
      */
     'protocol' : ['Oskari.mapframework.event.Event']
 });
-define("_bundles_/oskari/platform/event/common/after-change-map-layer-opacity-event", function(){});
+define("bundles/oskari/platform/event/common/after-change-map-layer-opacity-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterChangeMapLayerStyleEvent
@@ -8394,7 +8394,7 @@ function(mapLayer) {
     'protocol' : ['Oskari.mapframework.event.Event']
 });
 
-define("_bundles_/oskari/platform/event/common/after-change-map-layer-style-event", function(){});
+define("bundles/oskari/platform/event/common/after-change-map-layer-style-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterHighlightMapLayerEvent
@@ -8446,7 +8446,7 @@ function(mapLayer) {
 });
 
 /* Inheritance */;
-define("_bundles_/oskari/platform/event/common/after-highlight-map-layer-event", function(){});
+define("bundles/oskari/platform/event/common/after-highlight-map-layer-event", function(){});
 
 /**
  * @class Oskari.mapframework.event.common.AfterDimMapLayerEvent
@@ -8498,9 +8498,9 @@ function(mapLayer) {
 });
 
 /* Inheritance */;
-define("_bundles_/oskari/platform/event/common/after-dim-map-layer-event", function(){});
+define("bundles/oskari/platform/event/common/after-dim-map-layer-event", function(){});
 
-define('_bundles_/oskari/platform/event/module',["oskari", 
+define('bundles/oskari/platform/event/module',["oskari", 
 			"./event",
 			"./common/features-available-event",
 			"./common/after-map-layer-add-event",
@@ -9262,7 +9262,7 @@ function(params, options) {
 		return this._options;
 	}
 }); 
-define("_bundles_/oskari/platform/domain/AbstractLayer", function(){});
+define("bundles/oskari/platform/domain/AbstractLayer", function(){});
 
 /**
  * @class Oskari.mapframework.domain.WmsLayer
@@ -9320,7 +9320,7 @@ function() {
     "extend" : ["Oskari.mapframework.domain.AbstractLayer"]
 });
 
-define("_bundles_/oskari/platform/domain/wmslayer", function(){});
+define("bundles/oskari/platform/domain/wmslayer", function(){});
 
 /**
  * @class Oskari.mapframework.domain.VectorLayer
@@ -9362,7 +9362,7 @@ function() { /* style definition for this layer */
 }, {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]
 });
-define("_bundles_/oskari/platform/domain/vectorlayer", function(){});
+define("bundles/oskari/platform/domain/vectorlayer", function(){});
 
 /**
  * @class Oskari.mapframework.domain.Map
@@ -9675,7 +9675,7 @@ function() {
     }
 });
 
-define("_bundles_/oskari/platform/domain/map", function(){});
+define("bundles/oskari/platform/domain/map", function(){});
 
 /**
  * @class Oskari.mapframework.domain.Style
@@ -9753,7 +9753,7 @@ function() {
     }
 });
 
-define("_bundles_/oskari/platform/domain/style", function(){});
+define("bundles/oskari/platform/domain/style", function(){});
 
 /**
  * @class Oskari.mapframework.domain.Tool
@@ -9869,7 +9869,7 @@ function() {
     }
 });
 
-define("_bundles_/oskari/platform/domain/tool", function(){});
+define("bundles/oskari/platform/domain/tool", function(){});
 
 /**
  * @class Oskari.mapframework.domain.User
@@ -9975,10 +9975,10 @@ function(userData) {
 		return this._loggedIn;
 	}
 });
-define("_bundles_/oskari/platform/domain/user", function(){});
+define("bundles/oskari/platform/domain/user", function(){});
 
 
-define('_bundles_/oskari/platform/domain/module',["oskari",
+define('bundles/oskari/platform/domain/module',["oskari",
 			"./AbstractLayer",
             "./wmslayer",
 			"./vectorlayer",
@@ -10074,7 +10074,7 @@ function() {
     }
 });
 
-define("_bundles_/oskari/platform/request/request", function(){});
+define("bundles/oskari/platform/request/request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.AddMapLayerRequest
@@ -10154,7 +10154,7 @@ function(mapLayerId, keepLayersOrder, isBasemap, isExternal) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/oskari/platform/request/common/add-map-layer-request", function(){});
+define("bundles/oskari/platform/request/common/add-map-layer-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.RemoveMapLayerRequest
@@ -10201,7 +10201,7 @@ function(mapLayerId) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/oskari/platform/request/common/remove-map-layer-request", function(){});
+define("bundles/oskari/platform/request/common/remove-map-layer-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.MapMoveRequest
@@ -10294,7 +10294,7 @@ function(centerX, centerY, zoom, marker, srsName) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/oskari/platform/request/common/map-move-request", function(){});
+define("bundles/oskari/platform/request/common/map-move-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.ShowMapLayerInfoRequest
@@ -10345,7 +10345,7 @@ function(mapLayerId) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/oskari/platform/request/common/show-map-layer-info-request", function(){});
+define("bundles/oskari/platform/request/common/show-map-layer-info-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.HideMapMarkerRequest
@@ -10376,7 +10376,7 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/oskari/platform/request/common/hide-map-marker-request", function(){});
+define("bundles/oskari/platform/request/common/hide-map-marker-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.CtrlKeyDownRequest
@@ -10410,7 +10410,7 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/oskari/platform/request/common/ctrl-key-down-request", function(){});
+define("bundles/oskari/platform/request/common/ctrl-key-down-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.CtrlKeyUpRequest
@@ -10444,7 +10444,7 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/oskari/platform/request/common/ctrl-key-up-request", function(){});
+define("bundles/oskari/platform/request/common/ctrl-key-up-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.RearrangeSelectedMapLayerRequest
@@ -10505,7 +10505,7 @@ function(mapLayerId, toPosition) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 }); 
-define("_bundles_/oskari/platform/request/common/rearrange-selected-map-layer-request", function(){});
+define("bundles/oskari/platform/request/common/rearrange-selected-map-layer-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.ChangeMapLayerOpacityRequest
@@ -10562,7 +10562,7 @@ function(mapLayerId, opacity) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/oskari/platform/request/common/change-map-layer-opacity-request", function(){});
+define("bundles/oskari/platform/request/common/change-map-layer-opacity-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.ChangeMapLayerStyleRequest
@@ -10620,7 +10620,7 @@ function(mapLayerId, style) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/oskari/platform/request/common/change-map-layer-style-request", function(){});
+define("bundles/oskari/platform/request/common/change-map-layer-style-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.HighlightMapLayerRequest
@@ -10668,7 +10668,7 @@ function(mapLayerId) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/oskari/platform/request/common/highlight-map-layer-request", function(){});
+define("bundles/oskari/platform/request/common/highlight-map-layer-request", function(){});
 
 /**
  * @class Oskari.mapframework.request.common.DimMapLayerRequest
@@ -10717,9 +10717,9 @@ function(mapLayerId) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/oskari/platform/request/common/dim-map-layer-request", function(){});
+define("bundles/oskari/platform/request/common/dim-map-layer-request", function(){});
 
-define('_bundles_/oskari/platform/request/module',["oskari", 
+define('bundles/oskari/platform/request/module',["oskari", 
 			"./request",
 			"./common/add-map-layer-request",
 			"./common/remove-map-layer-request",
@@ -11446,7 +11446,7 @@ function(core) {
     }
 });
 
-define("_bundles_/oskari/platform/sandbox/sandbox", function(){});
+define("bundles/oskari/platform/sandbox/sandbox", function(){});
 
 /**
  * @class Oskari.mapframework.sandbox.Sandbox.keyListenerMethods
@@ -11465,7 +11465,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'key-listener-metho
         return this._core.isCtrlKeyDown();
     }
 }); 
-define("_bundles_/oskari/platform/sandbox/sandbox-key-listener-methods", function(){});
+define("bundles/oskari/platform/sandbox/sandbox-key-listener-methods", function(){});
 
 /**
  * @class Oskari.mapframework.sandbox.Sandbox.mapLayerMethods
@@ -11561,7 +11561,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-layer-methods'
     }
 });
 
-define("_bundles_/oskari/platform/sandbox/sandbox-map-layer-methods", function(){});
+define("bundles/oskari/platform/sandbox/sandbox-map-layer-methods", function(){});
 
 /**
  * @class Oskari.mapframework.sandbox.Sandbox.mapMethods
@@ -11677,7 +11677,7 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'map-methods', {
     }
 });
 
-define("_bundles_/oskari/platform/sandbox/sandbox-map-methods", function(){});
+define("bundles/oskari/platform/sandbox/sandbox-map-methods", function(){});
 
 /**
  * @class Oskari.mapframework.sandbox.Sandbox.abstractionMethods
@@ -11761,9 +11761,9 @@ Oskari.clazz.category('Oskari.mapframework.sandbox.Sandbox', 'abstraction-method
 	}
 });
 
-define("_bundles_/oskari/platform/sandbox/sandbox-abstraction-methods", function(){});
+define("bundles/oskari/platform/sandbox/sandbox-abstraction-methods", function(){});
 
-define('_bundles_/oskari/platform/sandbox/module',["oskari",
+define('bundles/oskari/platform/sandbox/module',["oskari",
 			"./sandbox",
 			"./sandbox-key-listener-methods",
 			"./sandbox-map-layer-methods",
@@ -11799,7 +11799,7 @@ function() {
     }
 });
 
-define("_bundles_/oskari/platform/service/service", function(){});
+define("bundles/oskari/platform/service/service", function(){});
 
 /**
  * @class Oskari.mapframework.service.MapLayerService
@@ -12489,9 +12489,9 @@ function(mapLayerUrl, sandbox) {
      */
     'protocol' : ['Oskari.mapframework.service.Service']
 });
-define("_bundles_/oskari/platform/service/map-layer-service", function(){});
+define("bundles/oskari/platform/service/map-layer-service", function(){});
 
-define('_bundles_/oskari/platform/service/module',["oskari",
+define('bundles/oskari/platform/service/module',["oskari",
 			"./service",
 			"./map-layer-service"], function(Oskari) {
 			
@@ -12500,7 +12500,7 @@ define('_bundles_/oskari/platform/service/module',["oskari",
 			
 		});
 
-define('_bundles_/oskari/platform/module',["oskari",
+define('bundles/oskari/platform/module',["oskari",
 "./core/module",
 "./event/module",
 "./domain/module",
@@ -12508,7 +12508,6 @@ define('_bundles_/oskari/platform/module',["oskari",
 "./sandbox/module",
 "./service/module"
 ],function(Oskari) {
-    console.log('here oskari platform is defined...');
 });
 /*! jQuery UI - v1.9.1 - 2012-11-09
 * http://jqueryui.com
@@ -12516,13 +12515,13 @@ define('_bundles_/oskari/platform/module',["oskari",
 * Copyright (c) 2012 jQuery Foundation and other contributors Licensed MIT */
 
 (function(e,t){function i(t,n){var r,i,o,u=t.nodeName.toLowerCase();return"area"===u?(r=t.parentNode,i=r.name,!t.href||!i||r.nodeName.toLowerCase()!=="map"?!1:(o=e("img[usemap=#"+i+"]")[0],!!o&&s(o))):(/input|select|textarea|button|object/.test(u)?!t.disabled:"a"===u?t.href||n:n)&&s(t)}function s(t){return e.expr.filters.visible(t)&&!e(t).parents().andSelf().filter(function(){return e.css(this,"visibility")==="hidden"}).length}var n=0,r=/^ui-id-\d+$/;e.ui=e.ui||{};if(e.ui.version)return;e.extend(e.ui,{version:"1.9.1",keyCode:{BACKSPACE:8,COMMA:188,DELETE:46,DOWN:40,END:35,ENTER:13,ESCAPE:27,HOME:36,LEFT:37,NUMPAD_ADD:107,NUMPAD_DECIMAL:110,NUMPAD_DIVIDE:111,NUMPAD_ENTER:108,NUMPAD_MULTIPLY:106,NUMPAD_SUBTRACT:109,PAGE_DOWN:34,PAGE_UP:33,PERIOD:190,RIGHT:39,SPACE:32,TAB:9,UP:38}}),e.fn.extend({_focus:e.fn.focus,focus:function(t,n){return typeof t=="number"?this.each(function(){var r=this;setTimeout(function(){e(r).focus(),n&&n.call(r)},t)}):this._focus.apply(this,arguments)},scrollParent:function(){var t;return e.ui.ie&&/(static|relative)/.test(this.css("position"))||/absolute/.test(this.css("position"))?t=this.parents().filter(function(){return/(relative|absolute|fixed)/.test(e.css(this,"position"))&&/(auto|scroll)/.test(e.css(this,"overflow")+e.css(this,"overflow-y")+e.css(this,"overflow-x"))}).eq(0):t=this.parents().filter(function(){return/(auto|scroll)/.test(e.css(this,"overflow")+e.css(this,"overflow-y")+e.css(this,"overflow-x"))}).eq(0),/fixed/.test(this.css("position"))||!t.length?e(document):t},zIndex:function(n){if(n!==t)return this.css("zIndex",n);if(this.length){var r=e(this[0]),i,s;while(r.length&&r[0]!==document){i=r.css("position");if(i==="absolute"||i==="relative"||i==="fixed"){s=parseInt(r.css("zIndex"),10);if(!isNaN(s)&&s!==0)return s}r=r.parent()}}return 0},uniqueId:function(){return this.each(function(){this.id||(this.id="ui-id-"+ ++n)})},removeUniqueId:function(){return this.each(function(){r.test(this.id)&&e(this).removeAttr("id")})}}),e("<a>").outerWidth(1).jquery||e.each(["Width","Height"],function(n,r){function u(t,n,r,s){return e.each(i,function(){n-=parseFloat(e.css(t,"padding"+this))||0,r&&(n-=parseFloat(e.css(t,"border"+this+"Width"))||0),s&&(n-=parseFloat(e.css(t,"margin"+this))||0)}),n}var i=r==="Width"?["Left","Right"]:["Top","Bottom"],s=r.toLowerCase(),o={innerWidth:e.fn.innerWidth,innerHeight:e.fn.innerHeight,outerWidth:e.fn.outerWidth,outerHeight:e.fn.outerHeight};e.fn["inner"+r]=function(n){return n===t?o["inner"+r].call(this):this.each(function(){e(this).css(s,u(this,n)+"px")})},e.fn["outer"+r]=function(t,n){return typeof t!="number"?o["outer"+r].call(this,t):this.each(function(){e(this).css(s,u(this,t,!0,n)+"px")})}}),e.extend(e.expr[":"],{data:e.expr.createPseudo?e.expr.createPseudo(function(t){return function(n){return!!e.data(n,t)}}):function(t,n,r){return!!e.data(t,r[3])},focusable:function(t){return i(t,!isNaN(e.attr(t,"tabindex")))},tabbable:function(t){var n=e.attr(t,"tabindex"),r=isNaN(n);return(r||n>=0)&&i(t,!r)}}),e(function(){var t=document.body,n=t.appendChild(n=document.createElement("div"));n.offsetHeight,e.extend(n.style,{minHeight:"100px",height:"auto",padding:0,borderWidth:0}),e.support.minHeight=n.offsetHeight===100,e.support.selectstart="onselectstart"in n,t.removeChild(n).style.display="none"}),function(){var t=/msie ([\w.]+)/.exec(navigator.userAgent.toLowerCase())||[];e.ui.ie=t.length?!0:!1,e.ui.ie6=parseFloat(t[1],10)===6}(),e.fn.extend({disableSelection:function(){return this.bind((e.support.selectstart?"selectstart":"mousedown")+".ui-disableSelection",function(e){e.preventDefault()})},enableSelection:function(){return this.unbind(".ui-disableSelection")}}),e.extend(e.ui,{plugin:{add:function(t,n,r){var i,s=e.ui[t].prototype;for(i in r)s.plugins[i]=s.plugins[i]||[],s.plugins[i].push([n,r[i]])},call:function(e,t,n){var r,i=e.plugins[t];if(!i||!e.element[0].parentNode||e.element[0].parentNode.nodeType===11)return;for(r=0;r<i.length;r++)e.options[i[r][0]]&&i[r][1].apply(e.element,n)}},contains:e.contains,hasScroll:function(t,n){if(e(t).css("overflow")==="hidden")return!1;var r=n&&n==="left"?"scrollLeft":"scrollTop",i=!1;return t[r]>0?!0:(t[r]=1,i=t[r]>0,t[r]=0,i)},isOverAxis:function(e,t,n){return e>t&&e<t+n},isOver:function(t,n,r,i,s,o){return e.ui.isOverAxis(t,r,s)&&e.ui.isOverAxis(n,i,o)}})})(jQuery);(function(e,t){var n=0,r=Array.prototype.slice,i=e.cleanData;e.cleanData=function(t){for(var n=0,r;(r=t[n])!=null;n++)try{e(r).triggerHandler("remove")}catch(s){}i(t)},e.widget=function(t,n,r){var i,s,o,u,a=t.split(".")[0];t=t.split(".")[1],i=a+"-"+t,r||(r=n,n=e.Widget),e.expr[":"][i.toLowerCase()]=function(t){return!!e.data(t,i)},e[a]=e[a]||{},s=e[a][t],o=e[a][t]=function(e,t){if(!this._createWidget)return new o(e,t);arguments.length&&this._createWidget(e,t)},e.extend(o,s,{version:r.version,_proto:e.extend({},r),_childConstructors:[]}),u=new n,u.options=e.widget.extend({},u.options),e.each(r,function(t,i){e.isFunction(i)&&(r[t]=function(){var e=function(){return n.prototype[t].apply(this,arguments)},r=function(e){return n.prototype[t].apply(this,e)};return function(){var t=this._super,n=this._superApply,s;return this._super=e,this._superApply=r,s=i.apply(this,arguments),this._super=t,this._superApply=n,s}}())}),o.prototype=e.widget.extend(u,{widgetEventPrefix:u.widgetEventPrefix||t},r,{constructor:o,namespace:a,widgetName:t,widgetBaseClass:i,widgetFullName:i}),s?(e.each(s._childConstructors,function(t,n){var r=n.prototype;e.widget(r.namespace+"."+r.widgetName,o,n._proto)}),delete s._childConstructors):n._childConstructors.push(o),e.widget.bridge(t,o)},e.widget.extend=function(n){var i=r.call(arguments,1),s=0,o=i.length,u,a;for(;s<o;s++)for(u in i[s])a=i[s][u],i[s].hasOwnProperty(u)&&a!==t&&(e.isPlainObject(a)?n[u]=e.isPlainObject(n[u])?e.widget.extend({},n[u],a):e.widget.extend({},a):n[u]=a);return n},e.widget.bridge=function(n,i){var s=i.prototype.widgetFullName;e.fn[n]=function(o){var u=typeof o=="string",a=r.call(arguments,1),f=this;return o=!u&&a.length?e.widget.extend.apply(null,[o].concat(a)):o,u?this.each(function(){var r,i=e.data(this,s);if(!i)return e.error("cannot call methods on "+n+" prior to initialization; "+"attempted to call method '"+o+"'");if(!e.isFunction(i[o])||o.charAt(0)==="_")return e.error("no such method '"+o+"' for "+n+" widget instance");r=i[o].apply(i,a);if(r!==i&&r!==t)return f=r&&r.jquery?f.pushStack(r.get()):r,!1}):this.each(function(){var t=e.data(this,s);t?t.option(o||{})._init():new i(o,this)}),f}},e.Widget=function(){},e.Widget._childConstructors=[],e.Widget.prototype={widgetName:"widget",widgetEventPrefix:"",defaultElement:"<div>",options:{disabled:!1,create:null},_createWidget:function(t,r){r=e(r||this.defaultElement||this)[0],this.element=e(r),this.uuid=n++,this.eventNamespace="."+this.widgetName+this.uuid,this.options=e.widget.extend({},this.options,this._getCreateOptions(),t),this.bindings=e(),this.hoverable=e(),this.focusable=e(),r!==this&&(e.data(r,this.widgetName,this),e.data(r,this.widgetFullName,this),this._on(this.element,{remove:function(e){e.target===r&&this.destroy()}}),this.document=e(r.style?r.ownerDocument:r.document||r),this.window=e(this.document[0].defaultView||this.document[0].parentWindow)),this._create(),this._trigger("create",null,this._getCreateEventData()),this._init()},_getCreateOptions:e.noop,_getCreateEventData:e.noop,_create:e.noop,_init:e.noop,destroy:function(){this._destroy(),this.element.unbind(this.eventNamespace).removeData(this.widgetName).removeData(this.widgetFullName).removeData(e.camelCase(this.widgetFullName)),this.widget().unbind(this.eventNamespace).removeAttr("aria-disabled").removeClass(this.widgetFullName+"-disabled "+"ui-state-disabled"),this.bindings.unbind(this.eventNamespace),this.hoverable.removeClass("ui-state-hover"),this.focusable.removeClass("ui-state-focus")},_destroy:e.noop,widget:function(){return this.element},option:function(n,r){var i=n,s,o,u;if(arguments.length===0)return e.widget.extend({},this.options);if(typeof n=="string"){i={},s=n.split("."),n=s.shift();if(s.length){o=i[n]=e.widget.extend({},this.options[n]);for(u=0;u<s.length-1;u++)o[s[u]]=o[s[u]]||{},o=o[s[u]];n=s.pop();if(r===t)return o[n]===t?null:o[n];o[n]=r}else{if(r===t)return this.options[n]===t?null:this.options[n];i[n]=r}}return this._setOptions(i),this},_setOptions:function(e){var t;for(t in e)this._setOption(t,e[t]);return this},_setOption:function(e,t){return this.options[e]=t,e==="disabled"&&(this.widget().toggleClass(this.widgetFullName+"-disabled ui-state-disabled",!!t).attr("aria-disabled",t),this.hoverable.removeClass("ui-state-hover"),this.focusable.removeClass("ui-state-focus")),this},enable:function(){return this._setOption("disabled",!1)},disable:function(){return this._setOption("disabled",!0)},_on:function(t,n){var r,i=this;n?(t=r=e(t),this.bindings=this.bindings.add(t)):(n=t,t=this.element,r=this.widget()),e.each(n,function(n,s){function o(){if(i.options.disabled===!0||e(this).hasClass("ui-state-disabled"))return;return(typeof s=="string"?i[s]:s).apply(i,arguments)}typeof s!="string"&&(o.guid=s.guid=s.guid||o.guid||e.guid++);var u=n.match(/^(\w+)\s*(.*)$/),a=u[1]+i.eventNamespace,f=u[2];f?r.delegate(f,a,o):t.bind(a,o)})},_off:function(e,t){t=(t||"").split(" ").join(this.eventNamespace+" ")+this.eventNamespace,e.unbind(t).undelegate(t)},_delay:function(e,t){function n(){return(typeof e=="string"?r[e]:e).apply(r,arguments)}var r=this;return setTimeout(n,t||0)},_hoverable:function(t){this.hoverable=this.hoverable.add(t),this._on(t,{mouseenter:function(t){e(t.currentTarget).addClass("ui-state-hover")},mouseleave:function(t){e(t.currentTarget).removeClass("ui-state-hover")}})},_focusable:function(t){this.focusable=this.focusable.add(t),this._on(t,{focusin:function(t){e(t.currentTarget).addClass("ui-state-focus")},focusout:function(t){e(t.currentTarget).removeClass("ui-state-focus")}})},_trigger:function(t,n,r){var i,s,o=this.options[t];r=r||{},n=e.Event(n),n.type=(t===this.widgetEventPrefix?t:this.widgetEventPrefix+t).toLowerCase(),n.target=this.element[0],s=n.originalEvent;if(s)for(i in s)i in n||(n[i]=s[i]);return this.element.trigger(n,r),!(e.isFunction(o)&&o.apply(this.element[0],[n].concat(r))===!1||n.isDefaultPrevented())}},e.each({show:"fadeIn",hide:"fadeOut"},function(t,n){e.Widget.prototype["_"+t]=function(r,i,s){typeof i=="string"&&(i={effect:i});var o,u=i?i===!0||typeof i=="number"?n:i.effect||n:t;i=i||{},typeof i=="number"&&(i={duration:i}),o=!e.isEmptyObject(i),i.complete=s,i.delay&&r.delay(i.delay),o&&e.effects&&(e.effects.effect[u]||e.uiBackCompat!==!1&&e.effects[u])?r[t](i):u!==t&&r[u]?r[u](i.duration,i.easing,s):r.queue(function(n){e(this)[t](),s&&s.call(r[0]),n()})}}),e.uiBackCompat!==!1&&(e.Widget.prototype._getCreateOptions=function(){return e.metadata&&e.metadata.get(this.element[0])[this.widgetName]})})(jQuery);(function(e,t){var n=!1;e(document).mouseup(function(e){n=!1}),e.widget("ui.mouse",{version:"1.9.1",options:{cancel:"input,textarea,button,select,option",distance:1,delay:0},_mouseInit:function(){var t=this;this.element.bind("mousedown."+this.widgetName,function(e){return t._mouseDown(e)}).bind("click."+this.widgetName,function(n){if(!0===e.data(n.target,t.widgetName+".preventClickEvent"))return e.removeData(n.target,t.widgetName+".preventClickEvent"),n.stopImmediatePropagation(),!1}),this.started=!1},_mouseDestroy:function(){this.element.unbind("."+this.widgetName),this._mouseMoveDelegate&&e(document).unbind("mousemove."+this.widgetName,this._mouseMoveDelegate).unbind("mouseup."+this.widgetName,this._mouseUpDelegate)},_mouseDown:function(t){if(n)return;this._mouseStarted&&this._mouseUp(t),this._mouseDownEvent=t;var r=this,i=t.which===1,s=typeof this.options.cancel=="string"&&t.target.nodeName?e(t.target).closest(this.options.cancel).length:!1;if(!i||s||!this._mouseCapture(t))return!0;this.mouseDelayMet=!this.options.delay,this.mouseDelayMet||(this._mouseDelayTimer=setTimeout(function(){r.mouseDelayMet=!0},this.options.delay));if(this._mouseDistanceMet(t)&&this._mouseDelayMet(t)){this._mouseStarted=this._mouseStart(t)!==!1;if(!this._mouseStarted)return t.preventDefault(),!0}return!0===e.data(t.target,this.widgetName+".preventClickEvent")&&e.removeData(t.target,this.widgetName+".preventClickEvent"),this._mouseMoveDelegate=function(e){return r._mouseMove(e)},this._mouseUpDelegate=function(e){return r._mouseUp(e)},e(document).bind("mousemove."+this.widgetName,this._mouseMoveDelegate).bind("mouseup."+this.widgetName,this._mouseUpDelegate),t.preventDefault(),n=!0,!0},_mouseMove:function(t){return!e.ui.ie||document.documentMode>=9||!!t.button?this._mouseStarted?(this._mouseDrag(t),t.preventDefault()):(this._mouseDistanceMet(t)&&this._mouseDelayMet(t)&&(this._mouseStarted=this._mouseStart(this._mouseDownEvent,t)!==!1,this._mouseStarted?this._mouseDrag(t):this._mouseUp(t)),!this._mouseStarted):this._mouseUp(t)},_mouseUp:function(t){return e(document).unbind("mousemove."+this.widgetName,this._mouseMoveDelegate).unbind("mouseup."+this.widgetName,this._mouseUpDelegate),this._mouseStarted&&(this._mouseStarted=!1,t.target===this._mouseDownEvent.target&&e.data(t.target,this.widgetName+".preventClickEvent",!0),this._mouseStop(t)),!1},_mouseDistanceMet:function(e){return Math.max(Math.abs(this._mouseDownEvent.pageX-e.pageX),Math.abs(this._mouseDownEvent.pageY-e.pageY))>=this.options.distance},_mouseDelayMet:function(e){return this.mouseDelayMet},_mouseStart:function(e){},_mouseDrag:function(e){},_mouseStop:function(e){},_mouseCapture:function(e){return!0}})})(jQuery);(function(e,t){function h(e,t,n){return[parseInt(e[0],10)*(l.test(e[0])?t/100:1),parseInt(e[1],10)*(l.test(e[1])?n/100:1)]}function p(t,n){return parseInt(e.css(t,n),10)||0}e.ui=e.ui||{};var n,r=Math.max,i=Math.abs,s=Math.round,o=/left|center|right/,u=/top|center|bottom/,a=/[\+\-]\d+%?/,f=/^\w+/,l=/%$/,c=e.fn.position;e.position={scrollbarWidth:function(){if(n!==t)return n;var r,i,s=e("<div style='display:block;width:50px;height:50px;overflow:hidden;'><div style='height:100px;width:auto;'></div></div>"),o=s.children()[0];return e("body").append(s),r=o.offsetWidth,s.css("overflow","scroll"),i=o.offsetWidth,r===i&&(i=s[0].clientWidth),s.remove(),n=r-i},getScrollInfo:function(t){var n=t.isWindow?"":t.element.css("overflow-x"),r=t.isWindow?"":t.element.css("overflow-y"),i=n==="scroll"||n==="auto"&&t.width<t.element[0].scrollWidth,s=r==="scroll"||r==="auto"&&t.height<t.element[0].scrollHeight;return{width:i?e.position.scrollbarWidth():0,height:s?e.position.scrollbarWidth():0}},getWithinInfo:function(t){var n=e(t||window),r=e.isWindow(n[0]);return{element:n,isWindow:r,offset:n.offset()||{left:0,top:0},scrollLeft:n.scrollLeft(),scrollTop:n.scrollTop(),width:r?n.width():n.outerWidth(),height:r?n.height():n.outerHeight()}}},e.fn.position=function(t){if(!t||!t.of)return c.apply(this,arguments);t=e.extend({},t);var n,l,d,v,m,g=e(t.of),y=e.position.getWithinInfo(t.within),b=e.position.getScrollInfo(y),w=g[0],E=(t.collision||"flip").split(" "),S={};return w.nodeType===9?(l=g.width(),d=g.height(),v={top:0,left:0}):e.isWindow(w)?(l=g.width(),d=g.height(),v={top:g.scrollTop(),left:g.scrollLeft()}):w.preventDefault?(t.at="left top",l=d=0,v={top:w.pageY,left:w.pageX}):(l=g.outerWidth(),d=g.outerHeight(),v=g.offset()),m=e.extend({},v),e.each(["my","at"],function(){var e=(t[this]||"").split(" "),n,r;e.length===1&&(e=o.test(e[0])?e.concat(["center"]):u.test(e[0])?["center"].concat(e):["center","center"]),e[0]=o.test(e[0])?e[0]:"center",e[1]=u.test(e[1])?e[1]:"center",n=a.exec(e[0]),r=a.exec(e[1]),S[this]=[n?n[0]:0,r?r[0]:0],t[this]=[f.exec(e[0])[0],f.exec(e[1])[0]]}),E.length===1&&(E[1]=E[0]),t.at[0]==="right"?m.left+=l:t.at[0]==="center"&&(m.left+=l/2),t.at[1]==="bottom"?m.top+=d:t.at[1]==="center"&&(m.top+=d/2),n=h(S.at,l,d),m.left+=n[0],m.top+=n[1],this.each(function(){var o,u,a=e(this),f=a.outerWidth(),c=a.outerHeight(),w=p(this,"marginLeft"),x=p(this,"marginTop"),T=f+w+p(this,"marginRight")+b.width,N=c+x+p(this,"marginBottom")+b.height,C=e.extend({},m),k=h(S.my,a.outerWidth(),a.outerHeight());t.my[0]==="right"?C.left-=f:t.my[0]==="center"&&(C.left-=f/2),t.my[1]==="bottom"?C.top-=c:t.my[1]==="center"&&(C.top-=c/2),C.left+=k[0],C.top+=k[1],e.support.offsetFractions||(C.left=s(C.left),C.top=s(C.top)),o={marginLeft:w,marginTop:x},e.each(["left","top"],function(r,i){e.ui.position[E[r]]&&e.ui.position[E[r]][i](C,{targetWidth:l,targetHeight:d,elemWidth:f,elemHeight:c,collisionPosition:o,collisionWidth:T,collisionHeight:N,offset:[n[0]+k[0],n[1]+k[1]],my:t.my,at:t.at,within:y,elem:a})}),e.fn.bgiframe&&a.bgiframe(),t.using&&(u=function(e){var n=v.left-C.left,s=n+l-f,o=v.top-C.top,u=o+d-c,h={target:{element:g,left:v.left,top:v.top,width:l,height:d},element:{element:a,left:C.left,top:C.top,width:f,height:c},horizontal:s<0?"left":n>0?"right":"center",vertical:u<0?"top":o>0?"bottom":"middle"};l<f&&i(n+s)<l&&(h.horizontal="center"),d<c&&i(o+u)<d&&(h.vertical="middle"),r(i(n),i(s))>r(i(o),i(u))?h.important="horizontal":h.important="vertical",t.using.call(this,e,h)}),a.offset(e.extend(C,{using:u}))})},e.ui.position={fit:{left:function(e,t){var n=t.within,i=n.isWindow?n.scrollLeft:n.offset.left,s=n.width,o=e.left-t.collisionPosition.marginLeft,u=i-o,a=o+t.collisionWidth-s-i,f;t.collisionWidth>s?u>0&&a<=0?(f=e.left+u+t.collisionWidth-s-i,e.left+=u-f):a>0&&u<=0?e.left=i:u>a?e.left=i+s-t.collisionWidth:e.left=i:u>0?e.left+=u:a>0?e.left-=a:e.left=r(e.left-o,e.left)},top:function(e,t){var n=t.within,i=n.isWindow?n.scrollTop:n.offset.top,s=t.within.height,o=e.top-t.collisionPosition.marginTop,u=i-o,a=o+t.collisionHeight-s-i,f;t.collisionHeight>s?u>0&&a<=0?(f=e.top+u+t.collisionHeight-s-i,e.top+=u-f):a>0&&u<=0?e.top=i:u>a?e.top=i+s-t.collisionHeight:e.top=i:u>0?e.top+=u:a>0?e.top-=a:e.top=r(e.top-o,e.top)}},flip:{left:function(e,t){var n=t.within,r=n.offset.left+n.scrollLeft,s=n.width,o=n.isWindow?n.scrollLeft:n.offset.left,u=e.left-t.collisionPosition.marginLeft,a=u-o,f=u+t.collisionWidth-s-o,l=t.my[0]==="left"?-t.elemWidth:t.my[0]==="right"?t.elemWidth:0,c=t.at[0]==="left"?t.targetWidth:t.at[0]==="right"?-t.targetWidth:0,h=-2*t.offset[0],p,d;if(a<0){p=e.left+l+c+h+t.collisionWidth-s-r;if(p<0||p<i(a))e.left+=l+c+h}else if(f>0){d=e.left-t.collisionPosition.marginLeft+l+c+h-o;if(d>0||i(d)<f)e.left+=l+c+h}},top:function(e,t){var n=t.within,r=n.offset.top+n.scrollTop,s=n.height,o=n.isWindow?n.scrollTop:n.offset.top,u=e.top-t.collisionPosition.marginTop,a=u-o,f=u+t.collisionHeight-s-o,l=t.my[1]==="top",c=l?-t.elemHeight:t.my[1]==="bottom"?t.elemHeight:0,h=t.at[1]==="top"?t.targetHeight:t.at[1]==="bottom"?-t.targetHeight:0,p=-2*t.offset[1],d,v;a<0?(v=e.top+c+h+p+t.collisionHeight-s-r,e.top+c+h+p>a&&(v<0||v<i(a))&&(e.top+=c+h+p)):f>0&&(d=e.top-t.collisionPosition.marginTop+c+h+p-o,e.top+c+h+p>f&&(d>0||i(d)<f)&&(e.top+=c+h+p))}},flipfit:{left:function(){e.ui.position.flip.left.apply(this,arguments),e.ui.position.fit.left.apply(this,arguments)},top:function(){e.ui.position.flip.top.apply(this,arguments),e.ui.position.fit.top.apply(this,arguments)}}},function(){var t,n,r,i,s,o=document.getElementsByTagName("body")[0],u=document.createElement("div");t=document.createElement(o?"div":"body"),r={visibility:"hidden",width:0,height:0,border:0,margin:0,background:"none"},o&&e.extend(r,{position:"absolute",left:"-1000px",top:"-1000px"});for(s in r)t.style[s]=r[s];t.appendChild(u),n=o||document.documentElement,n.insertBefore(t,n.firstChild),u.style.cssText="position: absolute; left: 10.7432222px;",i=e(u).offset().left,e.support.offsetFractions=i>10&&i<11,t.innerHTML="",n.removeChild(t)}(),e.uiBackCompat!==!1&&function(e){var n=e.fn.position;e.fn.position=function(r){if(!r||!r.offset)return n.call(this,r);var i=r.offset.split(" "),s=r.at.split(" ");return i.length===1&&(i[1]=i[0]),/^\d/.test(i[0])&&(i[0]="+"+i[0]),/^\d/.test(i[1])&&(i[1]="+"+i[1]),s.length===1&&(/left|center|right/.test(s[0])?s[1]="center":(s[1]=s[0],s[0]="center")),n.call(this,e.extend(r,{at:s[0]+i[0]+" "+s[1]+i[1],offset:t}))}}(jQuery)})(jQuery);(function(e,t){e.widget("ui.draggable",e.ui.mouse,{version:"1.9.1",widgetEventPrefix:"drag",options:{addClasses:!0,appendTo:"parent",axis:!1,connectToSortable:!1,containment:!1,cursor:"auto",cursorAt:!1,grid:!1,handle:!1,helper:"original",iframeFix:!1,opacity:!1,refreshPositions:!1,revert:!1,revertDuration:500,scope:"default",scroll:!0,scrollSensitivity:20,scrollSpeed:20,snap:!1,snapMode:"both",snapTolerance:20,stack:!1,zIndex:!1},_create:function(){this.options.helper=="original"&&!/^(?:r|a|f)/.test(this.element.css("position"))&&(this.element[0].style.position="relative"),this.options.addClasses&&this.element.addClass("ui-draggable"),this.options.disabled&&this.element.addClass("ui-draggable-disabled"),this._mouseInit()},_destroy:function(){this.element.removeClass("ui-draggable ui-draggable-dragging ui-draggable-disabled"),this._mouseDestroy()},_mouseCapture:function(t){var n=this.options;return this.helper||n.disabled||e(t.target).is(".ui-resizable-handle")?!1:(this.handle=this._getHandle(t),this.handle?(e(n.iframeFix===!0?"iframe":n.iframeFix).each(function(){e('<div class="ui-draggable-iframeFix" style="background: #fff;"></div>').css({width:this.offsetWidth+"px",height:this.offsetHeight+"px",position:"absolute",opacity:"0.001",zIndex:1e3}).css(e(this).offset()).appendTo("body")}),!0):!1)},_mouseStart:function(t){var n=this.options;return this.helper=this._createHelper(t),this.helper.addClass("ui-draggable-dragging"),this._cacheHelperProportions(),e.ui.ddmanager&&(e.ui.ddmanager.current=this),this._cacheMargins(),this.cssPosition=this.helper.css("position"),this.scrollParent=this.helper.scrollParent(),this.offset=this.positionAbs=this.element.offset(),this.offset={top:this.offset.top-this.margins.top,left:this.offset.left-this.margins.left},e.extend(this.offset,{click:{left:t.pageX-this.offset.left,top:t.pageY-this.offset.top},parent:this._getParentOffset(),relative:this._getRelativeOffset()}),this.originalPosition=this.position=this._generatePosition(t),this.originalPageX=t.pageX,this.originalPageY=t.pageY,n.cursorAt&&this._adjustOffsetFromHelper(n.cursorAt),n.containment&&this._setContainment(),this._trigger("start",t)===!1?(this._clear(),!1):(this._cacheHelperProportions(),e.ui.ddmanager&&!n.dropBehaviour&&e.ui.ddmanager.prepareOffsets(this,t),this._mouseDrag(t,!0),e.ui.ddmanager&&e.ui.ddmanager.dragStart(this,t),!0)},_mouseDrag:function(t,n){this.position=this._generatePosition(t),this.positionAbs=this._convertPositionTo("absolute");if(!n){var r=this._uiHash();if(this._trigger("drag",t,r)===!1)return this._mouseUp({}),!1;this.position=r.position}if(!this.options.axis||this.options.axis!="y")this.helper[0].style.left=this.position.left+"px";if(!this.options.axis||this.options.axis!="x")this.helper[0].style.top=this.position.top+"px";return e.ui.ddmanager&&e.ui.ddmanager.drag(this,t),!1},_mouseStop:function(t){var n=!1;e.ui.ddmanager&&!this.options.dropBehaviour&&(n=e.ui.ddmanager.drop(this,t)),this.dropped&&(n=this.dropped,this.dropped=!1);var r=this.element[0],i=!1;while(r&&(r=r.parentNode))r==document&&(i=!0);if(!i&&this.options.helper==="original")return!1;if(this.options.revert=="invalid"&&!n||this.options.revert=="valid"&&n||this.options.revert===!0||e.isFunction(this.options.revert)&&this.options.revert.call(this.element,n)){var s=this;e(this.helper).animate(this.originalPosition,parseInt(this.options.revertDuration,10),function(){s._trigger("stop",t)!==!1&&s._clear()})}else this._trigger("stop",t)!==!1&&this._clear();return!1},_mouseUp:function(t){return e("div.ui-draggable-iframeFix").each(function(){this.parentNode.removeChild(this)}),e.ui.ddmanager&&e.ui.ddmanager.dragStop(this,t),e.ui.mouse.prototype._mouseUp.call(this,t)},cancel:function(){return this.helper.is(".ui-draggable-dragging")?this._mouseUp({}):this._clear(),this},_getHandle:function(t){var n=!this.options.handle||!e(this.options.handle,this.element).length?!0:!1;return e(this.options.handle,this.element).find("*").andSelf().each(function(){this==t.target&&(n=!0)}),n},_createHelper:function(t){var n=this.options,r=e.isFunction(n.helper)?e(n.helper.apply(this.element[0],[t])):n.helper=="clone"?this.element.clone().removeAttr("id"):this.element;return r.parents("body").length||r.appendTo(n.appendTo=="parent"?this.element[0].parentNode:n.appendTo),r[0]!=this.element[0]&&!/(fixed|absolute)/.test(r.css("position"))&&r.css("position","absolute"),r},_adjustOffsetFromHelper:function(t){typeof t=="string"&&(t=t.split(" ")),e.isArray(t)&&(t={left:+t[0],top:+t[1]||0}),"left"in t&&(this.offset.click.left=t.left+this.margins.left),"right"in t&&(this.offset.click.left=this.helperProportions.width-t.right+this.margins.left),"top"in t&&(this.offset.click.top=t.top+this.margins.top),"bottom"in t&&(this.offset.click.top=this.helperProportions.height-t.bottom+this.margins.top)},_getParentOffset:function(){this.offsetParent=this.helper.offsetParent();var t=this.offsetParent.offset();this.cssPosition=="absolute"&&this.scrollParent[0]!=document&&e.contains(this.scrollParent[0],this.offsetParent[0])&&(t.left+=this.scrollParent.scrollLeft(),t.top+=this.scrollParent.scrollTop());if(this.offsetParent[0]==document.body||this.offsetParent[0].tagName&&this.offsetParent[0].tagName.toLowerCase()=="html"&&e.ui.ie)t={top:0,left:0};return{top:t.top+(parseInt(this.offsetParent.css("borderTopWidth"),10)||0),left:t.left+(parseInt(this.offsetParent.css("borderLeftWidth"),10)||0)}},_getRelativeOffset:function(){if(this.cssPosition=="relative"){var e=this.element.position();return{top:e.top-(parseInt(this.helper.css("top"),10)||0)+this.scrollParent.scrollTop(),left:e.left-(parseInt(this.helper.css("left"),10)||0)+this.scrollParent.scrollLeft()}}return{top:0,left:0}},_cacheMargins:function(){this.margins={left:parseInt(this.element.css("marginLeft"),10)||0,top:parseInt(this.element.css("marginTop"),10)||0,right:parseInt(this.element.css("marginRight"),10)||0,bottom:parseInt(this.element.css("marginBottom"),10)||0}},_cacheHelperProportions:function(){this.helperProportions={width:this.helper.outerWidth(),height:this.helper.outerHeight()}},_setContainment:function(){var t=this.options;t.containment=="parent"&&(t.containment=this.helper[0].parentNode);if(t.containment=="document"||t.containment=="window")this.containment=[t.containment=="document"?0:e(window).scrollLeft()-this.offset.relative.left-this.offset.parent.left,t.containment=="document"?0:e(window).scrollTop()-this.offset.relative.top-this.offset.parent.top,(t.containment=="document"?0:e(window).scrollLeft())+e(t.containment=="document"?document:window).width()-this.helperProportions.width-this.margins.left,(t.containment=="document"?0:e(window).scrollTop())+(e(t.containment=="document"?document:window).height()||document.body.parentNode.scrollHeight)-this.helperProportions.height-this.margins.top];if(!/^(document|window|parent)$/.test(t.containment)&&t.containment.constructor!=Array){var n=e(t.containment),r=n[0];if(!r)return;var i=n.offset(),s=e(r).css("overflow")!="hidden";this.containment=[(parseInt(e(r).css("borderLeftWidth"),10)||0)+(parseInt(e(r).css("paddingLeft"),10)||0),(parseInt(e(r).css("borderTopWidth"),10)||0)+(parseInt(e(r).css("paddingTop"),10)||0),(s?Math.max(r.scrollWidth,r.offsetWidth):r.offsetWidth)-(parseInt(e(r).css("borderLeftWidth"),10)||0)-(parseInt(e(r).css("paddingRight"),10)||0)-this.helperProportions.width-this.margins.left-this.margins.right,(s?Math.max(r.scrollHeight,r.offsetHeight):r.offsetHeight)-(parseInt(e(r).css("borderTopWidth"),10)||0)-(parseInt(e(r).css("paddingBottom"),10)||0)-this.helperProportions.height-this.margins.top-this.margins.bottom],this.relative_container=n}else t.containment.constructor==Array&&(this.containment=t.containment)},_convertPositionTo:function(t,n){n||(n=this.position);var r=t=="absolute"?1:-1,i=this.options,s=this.cssPosition!="absolute"||this.scrollParent[0]!=document&&!!e.contains(this.scrollParent[0],this.offsetParent[0])?this.scrollParent:this.offsetParent,o=/(html|body)/i.test(s[0].tagName);return{top:n.top+this.offset.relative.top*r+this.offset.parent.top*r-(this.cssPosition=="fixed"?-this.scrollParent.scrollTop():o?0:s.scrollTop())*r,left:n.left+this.offset.relative.left*r+this.offset.parent.left*r-(this.cssPosition=="fixed"?-this.scrollParent.scrollLeft():o?0:s.scrollLeft())*r}},_generatePosition:function(t){var n=this.options,r=this.cssPosition!="absolute"||this.scrollParent[0]!=document&&!!e.contains(this.scrollParent[0],this.offsetParent[0])?this.scrollParent:this.offsetParent,i=/(html|body)/i.test(r[0].tagName),s=t.pageX,o=t.pageY;if(this.originalPosition){var u;if(this.containment){if(this.relative_container){var a=this.relative_container.offset();u=[this.containment[0]+a.left,this.containment[1]+a.top,this.containment[2]+a.left,this.containment[3]+a.top]}else u=this.containment;t.pageX-this.offset.click.left<u[0]&&(s=u[0]+this.offset.click.left),t.pageY-this.offset.click.top<u[1]&&(o=u[1]+this.offset.click.top),t.pageX-this.offset.click.left>u[2]&&(s=u[2]+this.offset.click.left),t.pageY-this.offset.click.top>u[3]&&(o=u[3]+this.offset.click.top)}if(n.grid){var f=n.grid[1]?this.originalPageY+Math.round((o-this.originalPageY)/n.grid[1])*n.grid[1]:this.originalPageY;o=u?f-this.offset.click.top<u[1]||f-this.offset.click.top>u[3]?f-this.offset.click.top<u[1]?f+n.grid[1]:f-n.grid[1]:f:f;var l=n.grid[0]?this.originalPageX+Math.round((s-this.originalPageX)/n.grid[0])*n.grid[0]:this.originalPageX;s=u?l-this.offset.click.left<u[0]||l-this.offset.click.left>u[2]?l-this.offset.click.left<u[0]?l+n.grid[0]:l-n.grid[0]:l:l}}return{top:o-this.offset.click.top-this.offset.relative.top-this.offset.parent.top+(this.cssPosition=="fixed"?-this.scrollParent.scrollTop():i?0:r.scrollTop()),left:s-this.offset.click.left-this.offset.relative.left-this.offset.parent.left+(this.cssPosition=="fixed"?-this.scrollParent.scrollLeft():i?0:r.scrollLeft())}},_clear:function(){this.helper.removeClass("ui-draggable-dragging"),this.helper[0]!=this.element[0]&&!this.cancelHelperRemoval&&this.helper.remove(),this.helper=null,this.cancelHelperRemoval=!1},_trigger:function(t,n,r){return r=r||this._uiHash(),e.ui.plugin.call(this,t,[n,r]),t=="drag"&&(this.positionAbs=this._convertPositionTo("absolute")),e.Widget.prototype._trigger.call(this,t,n,r)},plugins:{},_uiHash:function(e){return{helper:this.helper,position:this.position,originalPosition:this.originalPosition,offset:this.positionAbs}}}),e.ui.plugin.add("draggable","connectToSortable",{start:function(t,n){var r=e(this).data("draggable"),i=r.options,s=e.extend({},n,{item:r.element});r.sortables=[],e(i.connectToSortable).each(function(){var n=e.data(this,"sortable");n&&!n.options.disabled&&(r.sortables.push({instance:n,shouldRevert:n.options.revert}),n.refreshPositions(),n._trigger("activate",t,s))})},stop:function(t,n){var r=e(this).data("draggable"),i=e.extend({},n,{item:r.element});e.each(r.sortables,function(){this.instance.isOver?(this.instance.isOver=0,r.cancelHelperRemoval=!0,this.instance.cancelHelperRemoval=!1,this.shouldRevert&&(this.instance.options.revert=!0),this.instance._mouseStop(t),this.instance.options.helper=this.instance.options._helper,r.options.helper=="original"&&this.instance.currentItem.css({top:"auto",left:"auto"})):(this.instance.cancelHelperRemoval=!1,this.instance._trigger("deactivate",t,i))})},drag:function(t,n){var r=e(this).data("draggable"),i=this,s=function(t){var n=this.offset.click.top,r=this.offset.click.left,i=this.positionAbs.top,s=this.positionAbs.left,o=t.height,u=t.width,a=t.top,f=t.left;return e.ui.isOver(i+n,s+r,a,f,o,u)};e.each(r.sortables,function(s){var o=!1,u=this;this.instance.positionAbs=r.positionAbs,this.instance.helperProportions=r.helperProportions,this.instance.offset.click=r.offset.click,this.instance._intersectsWith(this.instance.containerCache)&&(o=!0,e.each(r.sortables,function(){return this.instance.positionAbs=r.positionAbs,this.instance.helperProportions=r.helperProportions,this.instance.offset.click=r.offset.click,this!=u&&this.instance._intersectsWith(this.instance.containerCache)&&e.ui.contains(u.instance.element[0],this.instance.element[0])&&(o=!1),o})),o?(this.instance.isOver||(this.instance.isOver=1,this.instance.currentItem=e(i).clone().removeAttr("id").appendTo(this.instance.element).data("sortable-item",!0),this.instance.options._helper=this.instance.options.helper,this.instance.options.helper=function(){return n.helper[0]},t.target=this.instance.currentItem[0],this.instance._mouseCapture(t,!0),this.instance._mouseStart(t,!0,!0),this.instance.offset.click.top=r.offset.click.top,this.instance.offset.click.left=r.offset.click.left,this.instance.offset.parent.left-=r.offset.parent.left-this.instance.offset.parent.left,this.instance.offset.parent.top-=r.offset.parent.top-this.instance.offset.parent.top,r._trigger("toSortable",t),r.dropped=this.instance.element,r.currentItem=r.element,this.instance.fromOutside=r),this.instance.currentItem&&this.instance._mouseDrag(t)):this.instance.isOver&&(this.instance.isOver=0,this.instance.cancelHelperRemoval=!0,this.instance.options.revert=!1,this.instance._trigger("out",t,this.instance._uiHash(this.instance)),this.instance._mouseStop(t,!0),this.instance.options.helper=this.instance.options._helper,this.instance.currentItem.remove(),this.instance.placeholder&&this.instance.placeholder.remove(),r._trigger("fromSortable",t),r.dropped=!1)})}}),e.ui.plugin.add("draggable","cursor",{start:function(t,n){var r=e("body"),i=e(this).data("draggable").options;r.css("cursor")&&(i._cursor=r.css("cursor")),r.css("cursor",i.cursor)},stop:function(t,n){var r=e(this).data("draggable").options;r._cursor&&e("body").css("cursor",r._cursor)}}),e.ui.plugin.add("draggable","opacity",{start:function(t,n){var r=e(n.helper),i=e(this).data("draggable").options;r.css("opacity")&&(i._opacity=r.css("opacity")),r.css("opacity",i.opacity)},stop:function(t,n){var r=e(this).data("draggable").options;r._opacity&&e(n.helper).css("opacity",r._opacity)}}),e.ui.plugin.add("draggable","scroll",{start:function(t,n){var r=e(this).data("draggable");r.scrollParent[0]!=document&&r.scrollParent[0].tagName!="HTML"&&(r.overflowOffset=r.scrollParent.offset())},drag:function(t,n){var r=e(this).data("draggable"),i=r.options,s=!1;if(r.scrollParent[0]!=document&&r.scrollParent[0].tagName!="HTML"){if(!i.axis||i.axis!="x")r.overflowOffset.top+r.scrollParent[0].offsetHeight-t.pageY<i.scrollSensitivity?r.scrollParent[0].scrollTop=s=r.scrollParent[0].scrollTop+i.scrollSpeed:t.pageY-r.overflowOffset.top<i.scrollSensitivity&&(r.scrollParent[0].scrollTop=s=r.scrollParent[0].scrollTop-i.scrollSpeed);if(!i.axis||i.axis!="y")r.overflowOffset.left+r.scrollParent[0].offsetWidth-t.pageX<i.scrollSensitivity?r.scrollParent[0].scrollLeft=s=r.scrollParent[0].scrollLeft+i.scrollSpeed:t.pageX-r.overflowOffset.left<i.scrollSensitivity&&(r.scrollParent[0].scrollLeft=s=r.scrollParent[0].scrollLeft-i.scrollSpeed)}else{if(!i.axis||i.axis!="x")t.pageY-e(document).scrollTop()<i.scrollSensitivity?s=e(document).scrollTop(e(document).scrollTop()-i.scrollSpeed):e(window).height()-(t.pageY-e(document).scrollTop())<i.scrollSensitivity&&(s=e(document).scrollTop(e(document).scrollTop()+i.scrollSpeed));if(!i.axis||i.axis!="y")t.pageX-e(document).scrollLeft()<i.scrollSensitivity?s=e(document).scrollLeft(e(document).scrollLeft()-i.scrollSpeed):e(window).width()-(t.pageX-e(document).scrollLeft())<i.scrollSensitivity&&(s=e(document).scrollLeft(e(document).scrollLeft()+i.scrollSpeed))}s!==!1&&e.ui.ddmanager&&!i.dropBehaviour&&e.ui.ddmanager.prepareOffsets(r,t)}}),e.ui.plugin.add("draggable","snap",{start:function(t,n){var r=e(this).data("draggable"),i=r.options;r.snapElements=[],e(i.snap.constructor!=String?i.snap.items||":data(draggable)":i.snap).each(function(){var t=e(this),n=t.offset();this!=r.element[0]&&r.snapElements.push({item:this,width:t.outerWidth(),height:t.outerHeight(),top:n.top,left:n.left})})},drag:function(t,n){var r=e(this).data("draggable"),i=r.options,s=i.snapTolerance,o=n.offset.left,u=o+r.helperProportions.width,a=n.offset.top,f=a+r.helperProportions.height;for(var l=r.snapElements.length-1;l>=0;l--){var c=r.snapElements[l].left,h=c+r.snapElements[l].width,p=r.snapElements[l].top,d=p+r.snapElements[l].height;if(!(c-s<o&&o<h+s&&p-s<a&&a<d+s||c-s<o&&o<h+s&&p-s<f&&f<d+s||c-s<u&&u<h+s&&p-s<a&&a<d+s||c-s<u&&u<h+s&&p-s<f&&f<d+s)){r.snapElements[l].snapping&&r.options.snap.release&&r.options.snap.release.call(r.element,t,e.extend(r._uiHash(),{snapItem:r.snapElements[l].item})),r.snapElements[l].snapping=!1;continue}if(i.snapMode!="inner"){var v=Math.abs(p-f)<=s,m=Math.abs(d-a)<=s,g=Math.abs(c-u)<=s,y=Math.abs(h-o)<=s;v&&(n.position.top=r._convertPositionTo("relative",{top:p-r.helperProportions.height,left:0}).top-r.margins.top),m&&(n.position.top=r._convertPositionTo("relative",{top:d,left:0}).top-r.margins.top),g&&(n.position.left=r._convertPositionTo("relative",{top:0,left:c-r.helperProportions.width}).left-r.margins.left),y&&(n.position.left=r._convertPositionTo("relative",{top:0,left:h}).left-r.margins.left)}var b=v||m||g||y;if(i.snapMode!="outer"){var v=Math.abs(p-a)<=s,m=Math.abs(d-f)<=s,g=Math.abs(c-o)<=s,y=Math.abs(h-u)<=s;v&&(n.position.top=r._convertPositionTo("relative",{top:p,left:0}).top-r.margins.top),m&&(n.position.top=r._convertPositionTo("relative",{top:d-r.helperProportions.height,left:0}).top-r.margins.top),g&&(n.position.left=r._convertPositionTo("relative",{top:0,left:c}).left-r.margins.left),y&&(n.position.left=r._convertPositionTo("relative",{top:0,left:h-r.helperProportions.width}).left-r.margins.left)}!r.snapElements[l].snapping&&(v||m||g||y||b)&&r.options.snap.snap&&r.options.snap.snap.call(r.element,t,e.extend(r._uiHash(),{snapItem:r.snapElements[l].item})),r.snapElements[l].snapping=v||m||g||y||b}}}),e.ui.plugin.add("draggable","stack",{start:function(t,n){var r=e(this).data("draggable").options,i=e.makeArray(e(r.stack)).sort(function(t,n){return(parseInt(e(t).css("zIndex"),10)||0)-(parseInt(e(n).css("zIndex"),10)||0)});if(!i.length)return;var s=parseInt(i[0].style.zIndex)||0;e(i).each(function(e){this.style.zIndex=s+e}),this[0].style.zIndex=s+i.length}}),e.ui.plugin.add("draggable","zIndex",{start:function(t,n){var r=e(n.helper),i=e(this).data("draggable").options;r.css("zIndex")&&(i._zIndex=r.css("zIndex")),r.css("zIndex",i.zIndex)},stop:function(t,n){var r=e(this).data("draggable").options;r._zIndex&&e(n.helper).css("zIndex",r._zIndex)}})})(jQuery);(function(e,t){e.widget("ui.droppable",{version:"1.9.1",widgetEventPrefix:"drop",options:{accept:"*",activeClass:!1,addClasses:!0,greedy:!1,hoverClass:!1,scope:"default",tolerance:"intersect"},_create:function(){var t=this.options,n=t.accept;this.isover=0,this.isout=1,this.accept=e.isFunction(n)?n:function(e){return e.is(n)},this.proportions={width:this.element[0].offsetWidth,height:this.element[0].offsetHeight},e.ui.ddmanager.droppables[t.scope]=e.ui.ddmanager.droppables[t.scope]||[],e.ui.ddmanager.droppables[t.scope].push(this),t.addClasses&&this.element.addClass("ui-droppable")},_destroy:function(){var t=e.ui.ddmanager.droppables[this.options.scope];for(var n=0;n<t.length;n++)t[n]==this&&t.splice(n,1);this.element.removeClass("ui-droppable ui-droppable-disabled")},_setOption:function(t,n){t=="accept"&&(this.accept=e.isFunction(n)?n:function(e){return e.is(n)}),e.Widget.prototype._setOption.apply(this,arguments)},_activate:function(t){var n=e.ui.ddmanager.current;this.options.activeClass&&this.element.addClass(this.options.activeClass),n&&this._trigger("activate",t,this.ui(n))},_deactivate:function(t){var n=e.ui.ddmanager.current;this.options.activeClass&&this.element.removeClass(this.options.activeClass),n&&this._trigger("deactivate",t,this.ui(n))},_over:function(t){var n=e.ui.ddmanager.current;if(!n||(n.currentItem||n.element)[0]==this.element[0])return;this.accept.call(this.element[0],n.currentItem||n.element)&&(this.options.hoverClass&&this.element.addClass(this.options.hoverClass),this._trigger("over",t,this.ui(n)))},_out:function(t){var n=e.ui.ddmanager.current;if(!n||(n.currentItem||n.element)[0]==this.element[0])return;this.accept.call(this.element[0],n.currentItem||n.element)&&(this.options.hoverClass&&this.element.removeClass(this.options.hoverClass),this._trigger("out",t,this.ui(n)))},_drop:function(t,n){var r=n||e.ui.ddmanager.current;if(!r||(r.currentItem||r.element)[0]==this.element[0])return!1;var i=!1;return this.element.find(":data(droppable)").not(".ui-draggable-dragging").each(function(){var t=e.data(this,"droppable");if(t.options.greedy&&!t.options.disabled&&t.options.scope==r.options.scope&&t.accept.call(t.element[0],r.currentItem||r.element)&&e.ui.intersect(r,e.extend(t,{offset:t.element.offset()}),t.options.tolerance))return i=!0,!1}),i?!1:this.accept.call(this.element[0],r.currentItem||r.element)?(this.options.activeClass&&this.element.removeClass(this.options.activeClass),this.options.hoverClass&&this.element.removeClass(this.options.hoverClass),this._trigger("drop",t,this.ui(r)),this.element):!1},ui:function(e){return{draggable:e.currentItem||e.element,helper:e.helper,position:e.position,offset:e.positionAbs}}}),e.ui.intersect=function(t,n,r){if(!n.offset)return!1;var i=(t.positionAbs||t.position.absolute).left,s=i+t.helperProportions.width,o=(t.positionAbs||t.position.absolute).top,u=o+t.helperProportions.height,a=n.offset.left,f=a+n.proportions.width,l=n.offset.top,c=l+n.proportions.height;switch(r){case"fit":return a<=i&&s<=f&&l<=o&&u<=c;case"intersect":return a<i+t.helperProportions.width/2&&s-t.helperProportions.width/2<f&&l<o+t.helperProportions.height/2&&u-t.helperProportions.height/2<c;case"pointer":var h=(t.positionAbs||t.position.absolute).left+(t.clickOffset||t.offset.click).left,p=(t.positionAbs||t.position.absolute).top+(t.clickOffset||t.offset.click).top,d=e.ui.isOver(p,h,l,a,n.proportions.height,n.proportions.width);return d;case"touch":return(o>=l&&o<=c||u>=l&&u<=c||o<l&&u>c)&&(i>=a&&i<=f||s>=a&&s<=f||i<a&&s>f);default:return!1}},e.ui.ddmanager={current:null,droppables:{"default":[]},prepareOffsets:function(t,n){var r=e.ui.ddmanager.droppables[t.options.scope]||[],i=n?n.type:null,s=(t.currentItem||t.element).find(":data(droppable)").andSelf();e:for(var o=0;o<r.length;o++){if(r[o].options.disabled||t&&!r[o].accept.call(r[o].element[0],t.currentItem||t.element))continue;for(var u=0;u<s.length;u++)if(s[u]==r[o].element[0]){r[o].proportions.height=0;continue e}r[o].visible=r[o].element.css("display")!="none";if(!r[o].visible)continue;i=="mousedown"&&r[o]._activate.call(r[o],n),r[o].offset=r[o].element.offset(),r[o].proportions={width:r[o].element[0].offsetWidth,height:r[o].element[0].offsetHeight}}},drop:function(t,n){var r=!1;return e.each(e.ui.ddmanager.droppables[t.options.scope]||[],function(){if(!this.options)return;!this.options.disabled&&this.visible&&e.ui.intersect(t,this,this.options.tolerance)&&(r=this._drop.call(this,n)||r),!this.options.disabled&&this.visible&&this.accept.call(this.element[0],t.currentItem||t.element)&&(this.isout=1,this.isover=0,this._deactivate.call(this,n))}),r},dragStart:function(t,n){t.element.parentsUntil("body").bind("scroll.droppable",function(){t.options.refreshPositions||e.ui.ddmanager.prepareOffsets(t,n)})},drag:function(t,n){t.options.refreshPositions&&e.ui.ddmanager.prepareOffsets(t,n),e.each(e.ui.ddmanager.droppables[t.options.scope]||[],function(){if(this.options.disabled||this.greedyChild||!this.visible)return;var r=e.ui.intersect(t,this,this.options.tolerance),i=!r&&this.isover==1?"isout":r&&this.isover==0?"isover":null;if(!i)return;var s;if(this.options.greedy){var o=this.options.scope,u=this.element.parents(":data(droppable)").filter(function(){return e.data(this,"droppable").options.scope===o});u.length&&(s=e.data(u[0],"droppable"),s.greedyChild=i=="isover"?1:0)}s&&i=="isover"&&(s.isover=0,s.isout=1,s._out.call(s,n)),this[i]=1,this[i=="isout"?"isover":"isout"]=0,this[i=="isover"?"_over":"_out"].call(this,n),s&&i=="isout"&&(s.isout=0,s.isover=1,s._over.call(s,n))})},dragStop:function(t,n){t.element.parentsUntil("body").unbind("scroll.droppable"),t.options.refreshPositions||e.ui.ddmanager.prepareOffsets(t,n)}}})(jQuery);(function(e,t){e.widget("ui.resizable",e.ui.mouse,{version:"1.9.1",widgetEventPrefix:"resize",options:{alsoResize:!1,animate:!1,animateDuration:"slow",animateEasing:"swing",aspectRatio:!1,autoHide:!1,containment:!1,ghost:!1,grid:!1,handles:"e,s,se",helper:!1,maxHeight:null,maxWidth:null,minHeight:10,minWidth:10,zIndex:1e3},_create:function(){var t=this,n=this.options;this.element.addClass("ui-resizable"),e.extend(this,{_aspectRatio:!!n.aspectRatio,aspectRatio:n.aspectRatio,originalElement:this.element,_proportionallyResizeElements:[],_helper:n.helper||n.ghost||n.animate?n.helper||"ui-resizable-helper":null}),this.element[0].nodeName.match(/canvas|textarea|input|select|button|img/i)&&(this.element.wrap(e('<div class="ui-wrapper" style="overflow: hidden;"></div>').css({position:this.element.css("position"),width:this.element.outerWidth(),height:this.element.outerHeight(),top:this.element.css("top"),left:this.element.css("left")})),this.element=this.element.parent().data("resizable",this.element.data("resizable")),this.elementIsWrapper=!0,this.element.css({marginLeft:this.originalElement.css("marginLeft"),marginTop:this.originalElement.css("marginTop"),marginRight:this.originalElement.css("marginRight"),marginBottom:this.originalElement.css("marginBottom")}),this.originalElement.css({marginLeft:0,marginTop:0,marginRight:0,marginBottom:0}),this.originalResizeStyle=this.originalElement.css("resize"),this.originalElement.css("resize","none"),this._proportionallyResizeElements.push(this.originalElement.css({position:"static",zoom:1,display:"block"})),this.originalElement.css({margin:this.originalElement.css("margin")}),this._proportionallyResize()),this.handles=n.handles||(e(".ui-resizable-handle",this.element).length?{n:".ui-resizable-n",e:".ui-resizable-e",s:".ui-resizable-s",w:".ui-resizable-w",se:".ui-resizable-se",sw:".ui-resizable-sw",ne:".ui-resizable-ne",nw:".ui-resizable-nw"}:"e,s,se");if(this.handles.constructor==String){this.handles=="all"&&(this.handles="n,e,s,w,se,sw,ne,nw");var r=this.handles.split(",");this.handles={};for(var i=0;i<r.length;i++){var s=e.trim(r[i]),o="ui-resizable-"+s,u=e('<div class="ui-resizable-handle '+o+'"></div>');u.css({zIndex:n.zIndex}),"se"==s&&u.addClass("ui-icon ui-icon-gripsmall-diagonal-se"),this.handles[s]=".ui-resizable-"+s,this.element.append(u)}}this._renderAxis=function(t){t=t||this.element;for(var n in this.handles){this.handles[n].constructor==String&&(this.handles[n]=e(this.handles[n],this.element).show());if(this.elementIsWrapper&&this.originalElement[0].nodeName.match(/textarea|input|select|button/i)){var r=e(this.handles[n],this.element),i=0;i=/sw|ne|nw|se|n|s/.test(n)?r.outerHeight():r.outerWidth();var s=["padding",/ne|nw|n/.test(n)?"Top":/se|sw|s/.test(n)?"Bottom":/^e$/.test(n)?"Right":"Left"].join("");t.css(s,i),this._proportionallyResize()}if(!e(this.handles[n]).length)continue}},this._renderAxis(this.element),this._handles=e(".ui-resizable-handle",this.element).disableSelection(),this._handles.mouseover(function(){if(!t.resizing){if(this.className)var e=this.className.match(/ui-resizable-(se|sw|ne|nw|n|e|s|w)/i);t.axis=e&&e[1]?e[1]:"se"}}),n.autoHide&&(this._handles.hide(),e(this.element).addClass("ui-resizable-autohide").mouseenter(function(){if(n.disabled)return;e(this).removeClass("ui-resizable-autohide"),t._handles.show()}).mouseleave(function(){if(n.disabled)return;t.resizing||(e(this).addClass("ui-resizable-autohide"),t._handles.hide())})),this._mouseInit()},_destroy:function(){this._mouseDestroy();var t=function(t){e(t).removeClass("ui-resizable ui-resizable-disabled ui-resizable-resizing").removeData("resizable").removeData("ui-resizable").unbind(".resizable").find(".ui-resizable-handle").remove()};if(this.elementIsWrapper){t(this.element);var n=this.element;this.originalElement.css({position:n.css("position"),width:n.outerWidth(),height:n.outerHeight(),top:n.css("top"),left:n.css("left")}).insertAfter(n),n.remove()}return this.originalElement.css("resize",this.originalResizeStyle),t(this.originalElement),this},_mouseCapture:function(t){var n=!1;for(var r in this.handles)e(this.handles[r])[0]==t.target&&(n=!0);return!this.options.disabled&&n},_mouseStart:function(t){var r=this.options,i=this.element.position(),s=this.element;this.resizing=!0,this.documentScroll={top:e(document).scrollTop(),left:e(document).scrollLeft()},(s.is(".ui-draggable")||/absolute/.test(s.css("position")))&&s.css({position:"absolute",top:i.top,left:i.left}),this._renderProxy();var o=n(this.helper.css("left")),u=n(this.helper.css("top"));r.containment&&(o+=e(r.containment).scrollLeft()||0,u+=e(r.containment).scrollTop()||0),this.offset=this.helper.offset(),this.position={left:o,top:u},this.size=this._helper?{width:s.outerWidth(),height:s.outerHeight()}:{width:s.width(),height:s.height()},this.originalSize=this._helper?{width:s.outerWidth(),height:s.outerHeight()}:{width:s.width(),height:s.height()},this.originalPosition={left:o,top:u},this.sizeDiff={width:s.outerWidth()-s.width(),height:s.outerHeight()-s.height()},this.originalMousePosition={left:t.pageX,top:t.pageY},this.aspectRatio=typeof r.aspectRatio=="number"?r.aspectRatio:this.originalSize.width/this.originalSize.height||1;var a=e(".ui-resizable-"+this.axis).css("cursor");return e("body").css("cursor",a=="auto"?this.axis+"-resize":a),s.addClass("ui-resizable-resizing"),this._propagate("start",t),!0},_mouseDrag:function(e){var t=this.helper,n=this.options,r={},i=this,s=this.originalMousePosition,o=this.axis,u=e.pageX-s.left||0,a=e.pageY-s.top||0,f=this._change[o];if(!f)return!1;var l=f.apply(this,[e,u,a]);this._updateVirtualBoundaries(e.shiftKey);if(this._aspectRatio||e.shiftKey)l=this._updateRatio(l,e);return l=this._respectSize(l,e),this._propagate("resize",e),t.css({top:this.position.top+"px",left:this.position.left+"px",width:this.size.width+"px",height:this.size.height+"px"}),!this._helper&&this._proportionallyResizeElements.length&&this._proportionallyResize(),this._updateCache(l),this._trigger("resize",e,this.ui()),!1},_mouseStop:function(t){this.resizing=!1;var n=this.options,r=this;if(this._helper){var i=this._proportionallyResizeElements,s=i.length&&/textarea/i.test(i[0].nodeName),o=s&&e.ui.hasScroll(i[0],"left")?0:r.sizeDiff.height,u=s?0:r.sizeDiff.width,a={width:r.helper.width()-u,height:r.helper.height()-o},f=parseInt(r.element.css("left"),10)+(r.position.left-r.originalPosition.left)||null,l=parseInt(r.element.css("top"),10)+(r.position.top-r.originalPosition.top)||null;n.animate||this.element.css(e.extend(a,{top:l,left:f})),r.helper.height(r.size.height),r.helper.width(r.size.width),this._helper&&!n.animate&&this._proportionallyResize()}return e("body").css("cursor","auto"),this.element.removeClass("ui-resizable-resizing"),this._propagate("stop",t),this._helper&&this.helper.remove(),!1},_updateVirtualBoundaries:function(e){var t=this.options,n,i,s,o,u;u={minWidth:r(t.minWidth)?t.minWidth:0,maxWidth:r(t.maxWidth)?t.maxWidth:Infinity,minHeight:r(t.minHeight)?t.minHeight:0,maxHeight:r(t.maxHeight)?t.maxHeight:Infinity};if(this._aspectRatio||e)n=u.minHeight*this.aspectRatio,s=u.minWidth/this.aspectRatio,i=u.maxHeight*this.aspectRatio,o=u.maxWidth/this.aspectRatio,n>u.minWidth&&(u.minWidth=n),s>u.minHeight&&(u.minHeight=s),i<u.maxWidth&&(u.maxWidth=i),o<u.maxHeight&&(u.maxHeight=o);this._vBoundaries=u},_updateCache:function(e){var t=this.options;this.offset=this.helper.offset(),r(e.left)&&(this.position.left=e.left),r(e.top)&&(this.position.top=e.top),r(e.height)&&(this.size.height=e.height),r(e.width)&&(this.size.width=e.width)},_updateRatio:function(e,t){var n=this.options,i=this.position,s=this.size,o=this.axis;return r(e.height)?e.width=e.height*this.aspectRatio:r(e.width)&&(e.height=e.width/this.aspectRatio),o=="sw"&&(e.left=i.left+(s.width-e.width),e.top=null),o=="nw"&&(e.top=i.top+(s.height-e.height),e.left=i.left+(s.width-e.width)),e},_respectSize:function(e,t){var n=this.helper,i=this._vBoundaries,s=this._aspectRatio||t.shiftKey,o=this.axis,u=r(e.width)&&i.maxWidth&&i.maxWidth<e.width,a=r(e.height)&&i.maxHeight&&i.maxHeight<e.height,f=r(e.width)&&i.minWidth&&i.minWidth>e.width,l=r(e.height)&&i.minHeight&&i.minHeight>e.height;f&&(e.width=i.minWidth),l&&(e.height=i.minHeight),u&&(e.width=i.maxWidth),a&&(e.height=i.maxHeight);var c=this.originalPosition.left+this.originalSize.width,h=this.position.top+this.size.height,p=/sw|nw|w/.test(o),d=/nw|ne|n/.test(o);f&&p&&(e.left=c-i.minWidth),u&&p&&(e.left=c-i.maxWidth),l&&d&&(e.top=h-i.minHeight),a&&d&&(e.top=h-i.maxHeight);var v=!e.width&&!e.height;return v&&!e.left&&e.top?e.top=null:v&&!e.top&&e.left&&(e.left=null),e},_proportionallyResize:function(){var t=this.options;if(!this._proportionallyResizeElements.length)return;var n=this.helper||this.element;for(var r=0;r<this._proportionallyResizeElements.length;r++){var i=this._proportionallyResizeElements[r];if(!this.borderDif){var s=[i.css("borderTopWidth"),i.css("borderRightWidth"),i.css("borderBottomWidth"),i.css("borderLeftWidth")],o=[i.css("paddingTop"),i.css("paddingRight"),i.css("paddingBottom"),i.css("paddingLeft")];this.borderDif=e.map(s,function(e,t){var n=parseInt(e,10)||0,r=parseInt(o[t],10)||0;return n+r})}i.css({height:n.height()-this.borderDif[0]-this.borderDif[2]||0,width:n.width()-this.borderDif[1]-this.borderDif[3]||0})}},_renderProxy:function(){var t=this.element,n=this.options;this.elementOffset=t.offset();if(this._helper){this.helper=this.helper||e('<div style="overflow:hidden;"></div>');var r=e.ui.ie6?1:0,i=e.ui.ie6?2:-1;this.helper.addClass(this._helper).css({width:this.element.outerWidth()+i,height:this.element.outerHeight()+i,position:"absolute",left:this.elementOffset.left-r+"px",top:this.elementOffset.top-r+"px",zIndex:++n.zIndex}),this.helper.appendTo("body").disableSelection()}else this.helper=this.element},_change:{e:function(e,t,n){return{width:this.originalSize.width+t}},w:function(e,t,n){var r=this.options,i=this.originalSize,s=this.originalPosition;return{left:s.left+t,width:i.width-t}},n:function(e,t,n){var r=this.options,i=this.originalSize,s=this.originalPosition;return{top:s.top+n,height:i.height-n}},s:function(e,t,n){return{height:this.originalSize.height+n}},se:function(t,n,r){return e.extend(this._change.s.apply(this,arguments),this._change.e.apply(this,[t,n,r]))},sw:function(t,n,r){return e.extend(this._change.s.apply(this,arguments),this._change.w.apply(this,[t,n,r]))},ne:function(t,n,r){return e.extend(this._change.n.apply(this,arguments),this._change.e.apply(this,[t,n,r]))},nw:function(t,n,r){return e.extend(this._change.n.apply(this,arguments),this._change.w.apply(this,[t,n,r]))}},_propagate:function(t,n){e.ui.plugin.call(this,t,[n,this.ui()]),t!="resize"&&this._trigger(t,n,this.ui())},plugins:{},ui:function(){return{originalElement:this.originalElement,element:this.element,helper:this.helper,position:this.position,size:this.size,originalSize:this.originalSize,originalPosition:this.originalPosition}}}),e.ui.plugin.add("resizable","alsoResize",{start:function(t,n){var r=e(this).data("resizable"),i=r.options,s=function(t){e(t).each(function(){var t=e(this);t.data("resizable-alsoresize",{width:parseInt(t.width(),10),height:parseInt(t.height(),10),left:parseInt(t.css("left"),10),top:parseInt(t.css("top"),10)})})};typeof i.alsoResize=="object"&&!i.alsoResize.parentNode?i.alsoResize.length?(i.alsoResize=i.alsoResize[0],s(i.alsoResize)):e.each(i.alsoResize,function(e){s(e)}):s(i.alsoResize)},resize:function(t,n){var r=e(this).data("resizable"),i=r.options,s=r.originalSize,o=r.originalPosition,u={height:r.size.height-s.height||0,width:r.size.width-s.width||0,top:r.position.top-o.top||0,left:r.position.left-o.left||0},a=function(t,r){e(t).each(function(){var t=e(this),i=e(this).data("resizable-alsoresize"),s={},o=r&&r.length?r:t.parents(n.originalElement[0]).length?["width","height"]:["width","height","top","left"];e.each(o,function(e,t){var n=(i[t]||0)+(u[t]||0);n&&n>=0&&(s[t]=n||null)}),t.css(s)})};typeof i.alsoResize=="object"&&!i.alsoResize.nodeType?e.each(i.alsoResize,function(e,t){a(e,t)}):a(i.alsoResize)},stop:function(t,n){e(this).removeData("resizable-alsoresize")}}),e.ui.plugin.add("resizable","animate",{stop:function(t,n){var r=e(this).data("resizable"),i=r.options,s=r._proportionallyResizeElements,o=s.length&&/textarea/i.test(s[0].nodeName),u=o&&e.ui.hasScroll(s[0],"left")?0:r.sizeDiff.height,a=o?0:r.sizeDiff.width,f={width:r.size.width-a,height:r.size.height-u},l=parseInt(r.element.css("left"),10)+(r.position.left-r.originalPosition.left)||null,c=parseInt(r.element.css("top"),10)+(r.position.top-r.originalPosition.top)||null;r.element.animate(e.extend(f,c&&l?{top:c,left:l}:{}),{duration:i.animateDuration,easing:i.animateEasing,step:function(){var n={width:parseInt(r.element.css("width"),10),height:parseInt(r.element.css("height"),10),top:parseInt(r.element.css("top"),10),left:parseInt(r.element.css("left"),10)};s&&s.length&&e(s[0]).css({width:n.width,height:n.height}),r._updateCache(n),r._propagate("resize",t)}})}}),e.ui.plugin.add("resizable","containment",{start:function(t,r){var i=e(this).data("resizable"),s=i.options,o=i.element,u=s.containment,a=u instanceof e?u.get(0):/parent/.test(u)?o.parent().get(0):u;if(!a)return;i.containerElement=e(a);if(/document/.test(u)||u==document)i.containerOffset={left:0,top:0},i.containerPosition={left:0,top:0},i.parentData={element:e(document),left:0,top:0,width:e(document).width(),height:e(document).height()||document.body.parentNode.scrollHeight};else{var f=e(a),l=[];e(["Top","Right","Left","Bottom"]).each(function(e,t){l[e]=n(f.css("padding"+t))}),i.containerOffset=f.offset(),i.containerPosition=f.position(),i.containerSize={height:f.innerHeight()-l[3],width:f.innerWidth()-l[1]};var c=i.containerOffset,h=i.containerSize.height,p=i.containerSize.width,d=e.ui.hasScroll(a,"left")?a.scrollWidth:p,v=e.ui.hasScroll(a)?a.scrollHeight:h;i.parentData={element:a,left:c.left,top:c.top,width:d,height:v}}},resize:function(t,n){var r=e(this).data("resizable"),i=r.options,s=r.containerSize,o=r.containerOffset,u=r.size,a=r.position,f=r._aspectRatio||t.shiftKey,l={top:0,left:0},c=r.containerElement;c[0]!=document&&/static/.test(c.css("position"))&&(l=o),a.left<(r._helper?o.left:0)&&(r.size.width=r.size.width+(r._helper?r.position.left-o.left:r.position.left-l.left),f&&(r.size.height=r.size.width/r.aspectRatio),r.position.left=i.helper?o.left:0),a.top<(r._helper?o.top:0)&&(r.size.height=r.size.height+(r._helper?r.position.top-o.top:r.position.top),f&&(r.size.width=r.size.height*r.aspectRatio),r.position.top=r._helper?o.top:0),r.offset.left=r.parentData.left+r.position.left,r.offset.top=r.parentData.top+r.position.top;var h=Math.abs((r._helper?r.offset.left-l.left:r.offset.left-l.left)+r.sizeDiff.width),p=Math.abs((r._helper?r.offset.top-l.top:r.offset.top-o.top)+r.sizeDiff.height),d=r.containerElement.get(0)==r.element.parent().get(0),v=/relative|absolute/.test(r.containerElement.css("position"));d&&v&&(h-=r.parentData.left),h+r.size.width>=r.parentData.width&&(r.size.width=r.parentData.width-h,f&&(r.size.height=r.size.width/r.aspectRatio)),p+r.size.height>=r.parentData.height&&(r.size.height=r.parentData.height-p,f&&(r.size.width=r.size.height*r.aspectRatio))},stop:function(t,n){var r=e(this).data("resizable"),i=r.options,s=r.position,o=r.containerOffset,u=r.containerPosition,a=r.containerElement,f=e(r.helper),l=f.offset(),c=f.outerWidth()-r.sizeDiff.width,h=f.outerHeight()-r.sizeDiff.height;r._helper&&!i.animate&&/relative/.test(a.css("position"))&&e(this).css({left:l.left-u.left-o.left,width:c,height:h}),r._helper&&!i.animate&&/static/.test(a.css("position"))&&e(this).css({left:l.left-u.left-o.left,width:c,height:h})}}),e.ui.plugin.add("resizable","ghost",{start:function(t,n){var r=e(this).data("resizable"),i=r.options,s=r.size;r.ghost=r.originalElement.clone(),r.ghost.css({opacity:.25,display:"block",position:"relative",height:s.height,width:s.width,margin:0,left:0,top:0}).addClass("ui-resizable-ghost").addClass(typeof i.ghost=="string"?i.ghost:""),r.ghost.appendTo(r.helper)},resize:function(t,n){var r=e(this).data("resizable"),i=r.options;r.ghost&&r.ghost.css({position:"relative",height:r.size.height,width:r.size.width})},stop:function(t,n){var r=e(this).data("resizable"),i=r.options;r.ghost&&r.helper&&r.helper.get(0).removeChild(r.ghost.get(0))}}),e.ui.plugin.add("resizable","grid",{resize:function(t,n){var r=e(this).data("resizable"),i=r.options,s=r.size,o=r.originalSize,u=r.originalPosition,a=r.axis,f=i._aspectRatio||t.shiftKey;i.grid=typeof i.grid=="number"?[i.grid,i.grid]:i.grid;var l=Math.round((s.width-o.width)/(i.grid[0]||1))*(i.grid[0]||1),c=Math.round((s.height-o.height)/(i.grid[1]||1))*(i.grid[1]||1);/^(se|s|e)$/.test(a)?(r.size.width=o.width+l,r.size.height=o.height+c):/^(ne)$/.test(a)?(r.size.width=o.width+l,r.size.height=o.height+c,r.position.top=u.top-c):/^(sw)$/.test(a)?(r.size.width=o.width+l,r.size.height=o.height+c,r.position.left=u.left-l):(r.size.width=o.width+l,r.size.height=o.height+c,r.position.top=u.top-c,r.position.left=u.left-l)}});var n=function(e){return parseInt(e,10)||0},r=function(e){return!isNaN(parseInt(e,10))}})(jQuery);(function(e,t){e.widget("ui.selectable",e.ui.mouse,{version:"1.9.1",options:{appendTo:"body",autoRefresh:!0,distance:0,filter:"*",tolerance:"touch"},_create:function(){var t=this;this.element.addClass("ui-selectable"),this.dragged=!1;var n;this.refresh=function(){n=e(t.options.filter,t.element[0]),n.addClass("ui-selectee"),n.each(function(){var t=e(this),n=t.offset();e.data(this,"selectable-item",{element:this,$element:t,left:n.left,top:n.top,right:n.left+t.outerWidth(),bottom:n.top+t.outerHeight(),startselected:!1,selected:t.hasClass("ui-selected"),selecting:t.hasClass("ui-selecting"),unselecting:t.hasClass("ui-unselecting")})})},this.refresh(),this.selectees=n.addClass("ui-selectee"),this._mouseInit(),this.helper=e("<div class='ui-selectable-helper'></div>")},_destroy:function(){this.selectees.removeClass("ui-selectee").removeData("selectable-item"),this.element.removeClass("ui-selectable ui-selectable-disabled"),this._mouseDestroy()},_mouseStart:function(t){var n=this;this.opos=[t.pageX,t.pageY];if(this.options.disabled)return;var r=this.options;this.selectees=e(r.filter,this.element[0]),this._trigger("start",t),e(r.appendTo).append(this.helper),this.helper.css({left:t.clientX,top:t.clientY,width:0,height:0}),r.autoRefresh&&this.refresh(),this.selectees.filter(".ui-selected").each(function(){var r=e.data(this,"selectable-item");r.startselected=!0,!t.metaKey&&!t.ctrlKey&&(r.$element.removeClass("ui-selected"),r.selected=!1,r.$element.addClass("ui-unselecting"),r.unselecting=!0,n._trigger("unselecting",t,{unselecting:r.element}))}),e(t.target).parents().andSelf().each(function(){var r=e.data(this,"selectable-item");if(r){var i=!t.metaKey&&!t.ctrlKey||!r.$element.hasClass("ui-selected");return r.$element.removeClass(i?"ui-unselecting":"ui-selected").addClass(i?"ui-selecting":"ui-unselecting"),r.unselecting=!i,r.selecting=i,r.selected=i,i?n._trigger("selecting",t,{selecting:r.element}):n._trigger("unselecting",t,{unselecting:r.element}),!1}})},_mouseDrag:function(t){var n=this;this.dragged=!0;if(this.options.disabled)return;var r=this.options,i=this.opos[0],s=this.opos[1],o=t.pageX,u=t.pageY;if(i>o){var a=o;o=i,i=a}if(s>u){var a=u;u=s,s=a}return this.helper.css({left:i,top:s,width:o-i,height:u-s}),this.selectees.each(function(){var a=e.data(this,"selectable-item");if(!a||a.element==n.element[0])return;var f=!1;r.tolerance=="touch"?f=!(a.left>o||a.right<i||a.top>u||a.bottom<s):r.tolerance=="fit"&&(f=a.left>i&&a.right<o&&a.top>s&&a.bottom<u),f?(a.selected&&(a.$element.removeClass("ui-selected"),a.selected=!1),a.unselecting&&(a.$element.removeClass("ui-unselecting"),a.unselecting=!1),a.selecting||(a.$element.addClass("ui-selecting"),a.selecting=!0,n._trigger("selecting",t,{selecting:a.element}))):(a.selecting&&((t.metaKey||t.ctrlKey)&&a.startselected?(a.$element.removeClass("ui-selecting"),a.selecting=!1,a.$element.addClass("ui-selected"),a.selected=!0):(a.$element.removeClass("ui-selecting"),a.selecting=!1,a.startselected&&(a.$element.addClass("ui-unselecting"),a.unselecting=!0),n._trigger("unselecting",t,{unselecting:a.element}))),a.selected&&!t.metaKey&&!t.ctrlKey&&!a.startselected&&(a.$element.removeClass("ui-selected"),a.selected=!1,a.$element.addClass("ui-unselecting"),a.unselecting=!0,n._trigger("unselecting",t,{unselecting:a.element})))}),!1},_mouseStop:function(t){var n=this;this.dragged=!1;var r=this.options;return e(".ui-unselecting",this.element[0]).each(function(){var r=e.data(this,"selectable-item");r.$element.removeClass("ui-unselecting"),r.unselecting=!1,r.startselected=!1,n._trigger("unselected",t,{unselected:r.element})}),e(".ui-selecting",this.element[0]).each(function(){var r=e.data(this,"selectable-item");r.$element.removeClass("ui-selecting").addClass("ui-selected"),r.selecting=!1,r.selected=!0,r.startselected=!0,n._trigger("selected",t,{selected:r.element})}),this._trigger("stop",t),this.helper.remove(),!1}})})(jQuery);(function(e,t){e.widget("ui.sortable",e.ui.mouse,{version:"1.9.1",widgetEventPrefix:"sort",ready:!1,options:{appendTo:"parent",axis:!1,connectWith:!1,containment:!1,cursor:"auto",cursorAt:!1,dropOnEmpty:!0,forcePlaceholderSize:!1,forceHelperSize:!1,grid:!1,handle:!1,helper:"original",items:"> *",opacity:!1,placeholder:!1,revert:!1,scroll:!0,scrollSensitivity:20,scrollSpeed:20,scope:"default",tolerance:"intersect",zIndex:1e3},_create:function(){var e=this.options;this.containerCache={},this.element.addClass("ui-sortable"),this.refresh(),this.floating=this.items.length?e.axis==="x"||/left|right/.test(this.items[0].item.css("float"))||/inline|table-cell/.test(this.items[0].item.css("display")):!1,this.offset=this.element.offset(),this._mouseInit(),this.ready=!0},_destroy:function(){this.element.removeClass("ui-sortable ui-sortable-disabled"),this._mouseDestroy();for(var e=this.items.length-1;e>=0;e--)this.items[e].item.removeData(this.widgetName+"-item");return this},_setOption:function(t,n){t==="disabled"?(this.options[t]=n,this.widget().toggleClass("ui-sortable-disabled",!!n)):e.Widget.prototype._setOption.apply(this,arguments)},_mouseCapture:function(t,n){var r=this;if(this.reverting)return!1;if(this.options.disabled||this.options.type=="static")return!1;this._refreshItems(t);var i=null,s=e(t.target).parents().each(function(){if(e.data(this,r.widgetName+"-item")==r)return i=e(this),!1});e.data(t.target,r.widgetName+"-item")==r&&(i=e(t.target));if(!i)return!1;if(this.options.handle&&!n){var o=!1;e(this.options.handle,i).find("*").andSelf().each(function(){this==t.target&&(o=!0)});if(!o)return!1}return this.currentItem=i,this._removeCurrentsFromItems(),!0},_mouseStart:function(t,n,r){var i=this.options;this.currentContainer=this,this.refreshPositions(),this.helper=this._createHelper(t),this._cacheHelperProportions(),this._cacheMargins(),this.scrollParent=this.helper.scrollParent(),this.offset=this.currentItem.offset(),this.offset={top:this.offset.top-this.margins.top,left:this.offset.left-this.margins.left},e.extend(this.offset,{click:{left:t.pageX-this.offset.left,top:t.pageY-this.offset.top},parent:this._getParentOffset(),relative:this._getRelativeOffset()}),this.helper.css("position","absolute"),this.cssPosition=this.helper.css("position"),this.originalPosition=this._generatePosition(t),this.originalPageX=t.pageX,this.originalPageY=t.pageY,i.cursorAt&&this._adjustOffsetFromHelper(i.cursorAt),this.domPosition={prev:this.currentItem.prev()[0],parent:this.currentItem.parent()[0]},this.helper[0]!=this.currentItem[0]&&this.currentItem.hide(),this._createPlaceholder(),i.containment&&this._setContainment(),i.cursor&&(e("body").css("cursor")&&(this._storedCursor=e("body").css("cursor")),e("body").css("cursor",i.cursor)),i.opacity&&(this.helper.css("opacity")&&(this._storedOpacity=this.helper.css("opacity")),this.helper.css("opacity",i.opacity)),i.zIndex&&(this.helper.css("zIndex")&&(this._storedZIndex=this.helper.css("zIndex")),this.helper.css("zIndex",i.zIndex)),this.scrollParent[0]!=document&&this.scrollParent[0].tagName!="HTML"&&(this.overflowOffset=this.scrollParent.offset()),this._trigger("start",t,this._uiHash()),this._preserveHelperProportions||this._cacheHelperProportions();if(!r)for(var s=this.containers.length-1;s>=0;s--)this.containers[s]._trigger("activate",t,this._uiHash(this));return e.ui.ddmanager&&(e.ui.ddmanager.current=this),e.ui.ddmanager&&!i.dropBehaviour&&e.ui.ddmanager.prepareOffsets(this,t),this.dragging=!0,this.helper.addClass("ui-sortable-helper"),this._mouseDrag(t),!0},_mouseDrag:function(t){this.position=this._generatePosition(t),this.positionAbs=this._convertPositionTo("absolute"),this.lastPositionAbs||(this.lastPositionAbs=this.positionAbs);if(this.options.scroll){var n=this.options,r=!1;this.scrollParent[0]!=document&&this.scrollParent[0].tagName!="HTML"?(this.overflowOffset.top+this.scrollParent[0].offsetHeight-t.pageY<n.scrollSensitivity?this.scrollParent[0].scrollTop=r=this.scrollParent[0].scrollTop+n.scrollSpeed:t.pageY-this.overflowOffset.top<n.scrollSensitivity&&(this.scrollParent[0].scrollTop=r=this.scrollParent[0].scrollTop-n.scrollSpeed),this.overflowOffset.left+this.scrollParent[0].offsetWidth-t.pageX<n.scrollSensitivity?this.scrollParent[0].scrollLeft=r=this.scrollParent[0].scrollLeft+n.scrollSpeed:t.pageX-this.overflowOffset.left<n.scrollSensitivity&&(this.scrollParent[0].scrollLeft=r=this.scrollParent[0].scrollLeft-n.scrollSpeed)):(t.pageY-e(document).scrollTop()<n.scrollSensitivity?r=e(document).scrollTop(e(document).scrollTop()-n.scrollSpeed):e(window).height()-(t.pageY-e(document).scrollTop())<n.scrollSensitivity&&(r=e(document).scrollTop(e(document).scrollTop()+n.scrollSpeed)),t.pageX-e(document).scrollLeft()<n.scrollSensitivity?r=e(document).scrollLeft(e(document).scrollLeft()-n.scrollSpeed):e(window).width()-(t.pageX-e(document).scrollLeft())<n.scrollSensitivity&&(r=e(document).scrollLeft(e(document).scrollLeft()+n.scrollSpeed))),r!==!1&&e.ui.ddmanager&&!n.dropBehaviour&&e.ui.ddmanager.prepareOffsets(this,t)}this.positionAbs=this._convertPositionTo("absolute");if(!this.options.axis||this.options.axis!="y")this.helper[0].style.left=this.position.left+"px";if(!this.options.axis||this.options.axis!="x")this.helper[0].style.top=this.position.top+"px";for(var i=this.items.length-1;i>=0;i--){var s=this.items[i],o=s.item[0],u=this._intersectsWithPointer(s);if(!u)continue;if(s.instance!==this.currentContainer)continue;if(o!=this.currentItem[0]&&this.placeholder[u==1?"next":"prev"]()[0]!=o&&!e.contains(this.placeholder[0],o)&&(this.options.type=="semi-dynamic"?!e.contains(this.element[0],o):!0)){this.direction=u==1?"down":"up";if(this.options.tolerance!="pointer"&&!this._intersectsWithSides(s))break;this._rearrange(t,s),this._trigger("change",t,this._uiHash());break}}return this._contactContainers(t),e.ui.ddmanager&&e.ui.ddmanager.drag(this,t),this._trigger("sort",t,this._uiHash()),this.lastPositionAbs=this.positionAbs,!1},_mouseStop:function(t,n){if(!t)return;e.ui.ddmanager&&!this.options.dropBehaviour&&e.ui.ddmanager.drop(this,t);if(this.options.revert){var r=this,i=this.placeholder.offset();this.reverting=!0,e(this.helper).animate({left:i.left-this.offset.parent.left-this.margins.left+(this.offsetParent[0]==document.body?0:this.offsetParent[0].scrollLeft),top:i.top-this.offset.parent.top-this.margins.top+(this.offsetParent[0]==document.body?0:this.offsetParent[0].scrollTop)},parseInt(this.options.revert,10)||500,function(){r._clear(t)})}else this._clear(t,n);return!1},cancel:function(){if(this.dragging){this._mouseUp({target:null}),this.options.helper=="original"?this.currentItem.css(this._storedCSS).removeClass("ui-sortable-helper"):this.currentItem.show();for(var t=this.containers.length-1;t>=0;t--)this.containers[t]._trigger("deactivate",null,this._uiHash(this)),this.containers[t].containerCache.over&&(this.containers[t]._trigger("out",null,this._uiHash(this)),this.containers[t].containerCache.over=0)}return this.placeholder&&(this.placeholder[0].parentNode&&this.placeholder[0].parentNode.removeChild(this.placeholder[0]),this.options.helper!="original"&&this.helper&&this.helper[0].parentNode&&this.helper.remove(),e.extend(this,{helper:null,dragging:!1,reverting:!1,_noFinalSort:null}),this.domPosition.prev?e(this.domPosition.prev).after(this.currentItem):e(this.domPosition.parent).prepend(this.currentItem)),this},serialize:function(t){var n=this._getItemsAsjQuery(t&&t.connected),r=[];return t=t||{},e(n).each(function(){var n=(e(t.item||this).attr(t.attribute||"id")||"").match(t.expression||/(.+)[-=_](.+)/);n&&r.push((t.key||n[1]+"[]")+"="+(t.key&&t.expression?n[1]:n[2]))}),!r.length&&t.key&&r.push(t.key+"="),r.join("&")},toArray:function(t){var n=this._getItemsAsjQuery(t&&t.connected),r=[];return t=t||{},n.each(function(){r.push(e(t.item||this).attr(t.attribute||"id")||"")}),r},_intersectsWith:function(e){var t=this.positionAbs.left,n=t+this.helperProportions.width,r=this.positionAbs.top,i=r+this.helperProportions.height,s=e.left,o=s+e.width,u=e.top,a=u+e.height,f=this.offset.click.top,l=this.offset.click.left,c=r+f>u&&r+f<a&&t+l>s&&t+l<o;return this.options.tolerance=="pointer"||this.options.forcePointerForContainers||this.options.tolerance!="pointer"&&this.helperProportions[this.floating?"width":"height"]>e[this.floating?"width":"height"]?c:s<t+this.helperProportions.width/2&&n-this.helperProportions.width/2<o&&u<r+this.helperProportions.height/2&&i-this.helperProportions.height/2<a},_intersectsWithPointer:function(t){var n=this.options.axis==="x"||e.ui.isOverAxis(this.positionAbs.top+this.offset.click.top,t.top,t.height),r=this.options.axis==="y"||e.ui.isOverAxis(this.positionAbs.left+this.offset.click.left,t.left,t.width),i=n&&r,s=this._getDragVerticalDirection(),o=this._getDragHorizontalDirection();return i?this.floating?o&&o=="right"||s=="down"?2:1:s&&(s=="down"?2:1):!1},_intersectsWithSides:function(t){var n=e.ui.isOverAxis(this.positionAbs.top+this.offset.click.top,t.top+t.height/2,t.height),r=e.ui.isOverAxis(this.positionAbs.left+this.offset.click.left,t.left+t.width/2,t.width),i=this._getDragVerticalDirection(),s=this._getDragHorizontalDirection();return this.floating&&s?s=="right"&&r||s=="left"&&!r:i&&(i=="down"&&n||i=="up"&&!n)},_getDragVerticalDirection:function(){var e=this.positionAbs.top-this.lastPositionAbs.top;return e!=0&&(e>0?"down":"up")},_getDragHorizontalDirection:function(){var e=this.positionAbs.left-this.lastPositionAbs.left;return e!=0&&(e>0?"right":"left")},refresh:function(e){return this._refreshItems(e),this.refreshPositions(),this},_connectWith:function(){var e=this.options;return e.connectWith.constructor==String?[e.connectWith]:e.connectWith},_getItemsAsjQuery:function(t){var n=[],r=[],i=this._connectWith();if(i&&t)for(var s=i.length-1;s>=0;s--){var o=e(i[s]);for(var u=o.length-1;u>=0;u--){var a=e.data(o[u],this.widgetName);a&&a!=this&&!a.options.disabled&&r.push([e.isFunction(a.options.items)?a.options.items.call(a.element):e(a.options.items,a.element).not(".ui-sortable-helper").not(".ui-sortable-placeholder"),a])}}r.push([e.isFunction(this.options.items)?this.options.items.call(this.element,null,{options:this.options,item:this.currentItem}):e(this.options.items,this.element).not(".ui-sortable-helper").not(".ui-sortable-placeholder"),this]);for(var s=r.length-1;s>=0;s--)r[s][0].each(function(){n.push(this)});return e(n)},_removeCurrentsFromItems:function(){var t=this.currentItem.find(":data("+this.widgetName+"-item)");this.items=e.grep(this.items,function(e){for(var n=0;n<t.length;n++)if(t[n]==e.item[0])return!1;return!0})},_refreshItems:function(t){this.items=[],this.containers=[this];var n=this.items,r=[[e.isFunction(this.options.items)?this.options.items.call(this.element[0],t,{item:this.currentItem}):e(this.options.items,this.element),this]],i=this._connectWith();if(i&&this.ready)for(var s=i.length-1;s>=0;s--){var o=e(i[s]);for(var u=o.length-1;u>=0;u--){var a=e.data(o[u],this.widgetName);a&&a!=this&&!a.options.disabled&&(r.push([e.isFunction(a.options.items)?a.options.items.call(a.element[0],t,{item:this.currentItem}):e(a.options.items,a.element),a]),this.containers.push(a))}}for(var s=r.length-1;s>=0;s--){var f=r[s][1],l=r[s][0];for(var u=0,c=l.length;u<c;u++){var h=e(l[u]);h.data(this.widgetName+"-item",f),n.push({item:h,instance:f,width:0,height:0,left:0,top:0})}}},refreshPositions:function(t){this.offsetParent&&this.helper&&(this.offset.parent=this._getParentOffset());for(var n=this.items.length-1;n>=0;n--){var r=this.items[n];if(r.instance!=this.currentContainer&&this.currentContainer&&r.item[0]!=this.currentItem[0])continue;var i=this.options.toleranceElement?e(this.options.toleranceElement,r.item):r.item;t||(r.width=i.outerWidth(),r.height=i.outerHeight());var s=i.offset();r.left=s.left,r.top=s.top}if(this.options.custom&&this.options.custom.refreshContainers)this.options.custom.refreshContainers.call(this);else for(var n=this.containers.length-1;n>=0;n--){var s=this.containers[n].element.offset();this.containers[n].containerCache.left=s.left,this.containers[n].containerCache.top=s.top,this.containers[n].containerCache.width=this.containers[n].element.outerWidth(),this.containers[n].containerCache.height=this.containers[n].element.outerHeight()}return this},_createPlaceholder:function(t){t=t||this;var n=t.options;if(!n.placeholder||n.placeholder.constructor==String){var r=n.placeholder;n.placeholder={element:function(){var n=e(document.createElement(t.currentItem[0].nodeName)).addClass(r||t.currentItem[0].className+" ui-sortable-placeholder").removeClass("ui-sortable-helper")[0];return r||(n.style.visibility="hidden"),n},update:function(e,i){if(r&&!n.forcePlaceholderSize)return;i.height()||i.height(t.currentItem.innerHeight()-parseInt(t.currentItem.css("paddingTop")||0,10)-parseInt(t.currentItem.css("paddingBottom")||0,10)),i.width()||i.width(t.currentItem.innerWidth()-parseInt(t.currentItem.css("paddingLeft")||0,10)-parseInt(t.currentItem.css("paddingRight")||0,10))}}}t.placeholder=e(n.placeholder.element.call(t.element,t.currentItem)),t.currentItem.after(t.placeholder),n.placeholder.update(t,t.placeholder)},_contactContainers:function(t){var n=null,r=null;for(var i=this.containers.length-1;i>=0;i--){if(e.contains(this.currentItem[0],this.containers[i].element[0]))continue;if(this._intersectsWith(this.containers[i].containerCache)){if(n&&e.contains(this.containers[i].element[0],n.element[0]))continue;n=this.containers[i],r=i}else this.containers[i].containerCache.over&&(this.containers[i]._trigger("out",t,this._uiHash(this)),this.containers[i].containerCache.over=0)}if(!n)return;if(this.containers.length===1)this.containers[r]._trigger("over",t,this._uiHash(this)),this.containers[r].containerCache.over=1;else{var s=1e4,o=null,u=this.containers[r].floating?"left":"top",a=this.containers[r].floating?"width":"height",f=this.positionAbs[u]+this.offset.click[u];for(var l=this.items.length-1;l>=0;l--){if(!e.contains(this.containers[r].element[0],this.items[l].item[0]))continue;if(this.items[l].item[0]==this.currentItem[0])continue;var c=this.items[l].item.offset()[u],h=!1;Math.abs(c-f)>Math.abs(c+this.items[l][a]-f)&&(h=!0,c+=this.items[l][a]),Math.abs(c-f)<s&&(s=Math.abs(c-f),o=this.items[l],this.direction=h?"up":"down")}if(!o&&!this.options.dropOnEmpty)return;this.currentContainer=this.containers[r],o?this._rearrange(t,o,null,!0):this._rearrange(t,null,this.containers[r].element,!0),this._trigger("change",t,this._uiHash()),this.containers[r]._trigger("change",t,this._uiHash(this)),this.options.placeholder.update(this.currentContainer,this.placeholder),this.containers[r]._trigger("over",t,this._uiHash(this)),this.containers[r].containerCache.over=1}},_createHelper:function(t){var n=this.options,r=e.isFunction(n.helper)?e(n.helper.apply(this.element[0],[t,this.currentItem])):n.helper=="clone"?this.currentItem.clone():this.currentItem;return r.parents("body").length||e(n.appendTo!="parent"?n.appendTo:this.currentItem[0].parentNode)[0].appendChild(r[0]),r[0]==this.currentItem[0]&&(this._storedCSS={width:this.currentItem[0].style.width,height:this.currentItem[0].style.height,position:this.currentItem.css("position"),top:this.currentItem.css("top"),left:this.currentItem.css("left")}),(r[0].style.width==""||n.forceHelperSize)&&r.width(this.currentItem.width()),(r[0].style.height==""||n.forceHelperSize)&&r.height(this.currentItem.height()),r},_adjustOffsetFromHelper:function(t){typeof t=="string"&&(t=t.split(" ")),e.isArray(t)&&(t={left:+t[0],top:+t[1]||0}),"left"in t&&(this.offset.click.left=t.left+this.margins.left),"right"in t&&(this.offset.click.left=this.helperProportions.width-t.right+this.margins.left),"top"in t&&(this.offset.click.top=t.top+this.margins.top),"bottom"in t&&(this.offset.click.top=this.helperProportions.height-t.bottom+this.margins.top)},_getParentOffset:function(){this.offsetParent=this.helper.offsetParent();var t=this.offsetParent.offset();this.cssPosition=="absolute"&&this.scrollParent[0]!=document&&e.contains(this.scrollParent[0],this.offsetParent[0])&&(t.left+=this.scrollParent.scrollLeft(),t.top+=this.scrollParent.scrollTop());if(this.offsetParent[0]==document.body||this.offsetParent[0].tagName&&this.offsetParent[0].tagName.toLowerCase()=="html"&&e.ui.ie)t={top:0,left:0};return{top:t.top+(parseInt(this.offsetParent.css("borderTopWidth"),10)||0),left:t.left+(parseInt(this.offsetParent.css("borderLeftWidth"),10)||0)}},_getRelativeOffset:function(){if(this.cssPosition=="relative"){var e=this.currentItem.position();return{top:e.top-(parseInt(this.helper.css("top"),10)||0)+this.scrollParent.scrollTop(),left:e.left-(parseInt(this.helper.css("left"),10)||0)+this.scrollParent.scrollLeft()}}return{top:0,left:0}},_cacheMargins:function(){this.margins={left:parseInt(this.currentItem.css("marginLeft"),10)||0,top:parseInt(this.currentItem.css("marginTop"),10)||0}},_cacheHelperProportions:function(){this.helperProportions={width:this.helper.outerWidth(),height:this.helper.outerHeight()}},_setContainment:function(){var t=this.options;t.containment=="parent"&&(t.containment=this.helper[0].parentNode);if(t.containment=="document"||t.containment=="window")this.containment=[0-this.offset.relative.left-this.offset.parent.left,0-this.offset.relative.top-this.offset.parent.top,e(t.containment=="document"?document:window).width()-this.helperProportions.width-this.margins.left,(e(t.containment=="document"?document:window).height()||document.body.parentNode.scrollHeight)-this.helperProportions.height-this.margins.top];if(!/^(document|window|parent)$/.test(t.containment)){var n=e(t.containment)[0],r=e(t.containment).offset(),i=e(n).css("overflow")!="hidden";this.containment=[r.left+(parseInt(e(n).css("borderLeftWidth"),10)||0)+(parseInt(e(n).css("paddingLeft"),10)||0)-this.margins.left,r.top+(parseInt(e(n).css("borderTopWidth"),10)||0)+(parseInt(e(n).css("paddingTop"),10)||0)-this.margins.top,r.left+(i?Math.max(n.scrollWidth,n.offsetWidth):n.offsetWidth)-(parseInt(e(n).css("borderLeftWidth"),10)||0)-(parseInt(e(n).css("paddingRight"),10)||0)-this.helperProportions.width-this.margins.left,r.top+(i?Math.max(n.scrollHeight,n.offsetHeight):n.offsetHeight)-(parseInt(e(n).css("borderTopWidth"),10)||0)-(parseInt(e(n).css("paddingBottom"),10)||0)-this.helperProportions.height-this.margins.top]}},_convertPositionTo:function(t,n){n||(n=this.position);var r=t=="absolute"?1:-1,i=this.options,s=this.cssPosition!="absolute"||this.scrollParent[0]!=document&&!!e.contains(this.scrollParent[0],this.offsetParent[0])?this.scrollParent:this.offsetParent,o=/(html|body)/i.test(s[0].tagName);return{top:n.top+this.offset.relative.top*r+this.offset.parent.top*r-(this.cssPosition=="fixed"?-this.scrollParent.scrollTop():o?0:s.scrollTop())*r,left:n.left+this.offset.relative.left*r+this.offset.parent.left*r-(this.cssPosition=="fixed"?-this.scrollParent.scrollLeft():o?0:s.scrollLeft())*r}},_generatePosition:function(t){var n=this.options,r=this.cssPosition!="absolute"||this.scrollParent[0]!=document&&!!e.contains(this.scrollParent[0],this.offsetParent[0])?this.scrollParent:this.offsetParent,i=/(html|body)/i.test(r[0].tagName);this.cssPosition=="relative"&&(this.scrollParent[0]==document||this.scrollParent[0]==this.offsetParent[0])&&(this.offset.relative=this._getRelativeOffset());var s=t.pageX,o=t.pageY;if(this.originalPosition){this.containment&&(t.pageX-this.offset.click.left<this.containment[0]&&(s=this.containment[0]+this.offset.click.left),t.pageY-this.offset.click.top<this.containment[1]&&(o=this.containment[1]+this.offset.click.top),t.pageX-this.offset.click.left>this.containment[2]&&(s=this.containment[2]+this.offset.click.left),t.pageY-this.offset.click.top>this.containment[3]&&(o=this.containment[3]+this.offset.click.top));if(n.grid){var u=this.originalPageY+Math.round((o-this.originalPageY)/n.grid[1])*n.grid[1];o=this.containment?u-this.offset.click.top<this.containment[1]||u-this.offset.click.top>this.containment[3]?u-this.offset.click.top<this.containment[1]?u+n.grid[1]:u-n.grid[1]:u:u;var a=this.originalPageX+Math.round((s-this.originalPageX)/n.grid[0])*n.grid[0];s=this.containment?a-this.offset.click.left<this.containment[0]||a-this.offset.click.left>this.containment[2]?a-this.offset.click.left<this.containment[0]?a+n.grid[0]:a-n.grid[0]:a:a}}return{top:o-this.offset.click.top-this.offset.relative.top-this.offset.parent.top+(this.cssPosition=="fixed"?-this.scrollParent.scrollTop():i?0:r.scrollTop()),left:s-this.offset.click.left-this.offset.relative.left-this.offset.parent.left+(this.cssPosition=="fixed"?-this.scrollParent.scrollLeft():i?0:r.scrollLeft())}},_rearrange:function(e,t,n,r){n?n[0].appendChild(this.placeholder[0]):t.item[0].parentNode.insertBefore(this.placeholder[0],this.direction=="down"?t.item[0]:t.item[0].nextSibling),this.counter=this.counter?++this.counter:1;var i=this.counter;this._delay(function(){i==this.counter&&this.refreshPositions(!r)})},_clear:function(t,n){this.reverting=!1;var r=[];!this._noFinalSort&&this.currentItem.parent().length&&this.placeholder.before(this.currentItem),this._noFinalSort=null;if(this.helper[0]==this.currentItem[0]){for(var i in this._storedCSS)if(this._storedCSS[i]=="auto"||this._storedCSS[i]=="static")this._storedCSS[i]="";this.currentItem.css(this._storedCSS).removeClass("ui-sortable-helper")}else this.currentItem.show();this.fromOutside&&!n&&r.push(function(e){this._trigger("receive",e,this._uiHash(this.fromOutside))}),(this.fromOutside||this.domPosition.prev!=this.currentItem.prev().not(".ui-sortable-helper")[0]||this.domPosition.parent!=this.currentItem.parent()[0])&&!n&&r.push(function(e){this._trigger("update",e,this._uiHash())}),this!==this.currentContainer&&(n||(r.push(function(e){this._trigger("remove",e,this._uiHash())}),r.push(function(e){return function(t){e._trigger("receive",t,this._uiHash(this))}}.call(this,this.currentContainer)),r.push(function(e){return function(t){e._trigger("update",t,this._uiHash(this))}}.call(this,this.currentContainer))));for(var i=this.containers.length-1;i>=0;i--)n||r.push(function(e){return function(t){e._trigger("deactivate",t,this._uiHash(this))}}.call(this,this.containers[i])),this.containers[i].containerCache.over&&(r.push(function(e){return function(t){e._trigger("out",t,this._uiHash(this))}}.call(this,this.containers[i])),this.containers[i].containerCache.over=0);this._storedCursor&&e("body").css("cursor",this._storedCursor),this._storedOpacity&&this.helper.css("opacity",this._storedOpacity),this._storedZIndex&&this.helper.css("zIndex",this._storedZIndex=="auto"?"":this._storedZIndex),this.dragging=!1;if(this.cancelHelperRemoval){if(!n){this._trigger("beforeStop",t,this._uiHash());for(var i=0;i<r.length;i++)r[i].call(this,t);this._trigger("stop",t,this._uiHash())}return this.fromOutside=!1,!1}n||this._trigger("beforeStop",t,this._uiHash()),this.placeholder[0].parentNode.removeChild(this.placeholder[0]),this.helper[0]!=this.currentItem[0]&&this.helper.remove(),this.helper=null;if(!n){for(var i=0;i<r.length;i++)r[i].call(this,t);this._trigger("stop",t,this._uiHash())}return this.fromOutside=!1,!0},_trigger:function(){e.Widget.prototype._trigger.apply(this,arguments)===!1&&this.cancel()},_uiHash:function(t){var n=t||this;return{helper:n.helper,placeholder:n.placeholder||e([]),position:n.position,originalPosition:n.originalPosition,offset:n.positionAbs,item:n.currentItem,sender:t?t.element:null}}})})(jQuery);(function(e,t){var n=5;e.widget("ui.slider",e.ui.mouse,{version:"1.9.1",widgetEventPrefix:"slide",options:{animate:!1,distance:0,max:100,min:0,orientation:"horizontal",range:!1,step:1,value:0,values:null},_create:function(){var t,r,i=this.options,s=this.element.find(".ui-slider-handle").addClass("ui-state-default ui-corner-all"),o="<a class='ui-slider-handle ui-state-default ui-corner-all' href='#'></a>",u=[];this._keySliding=!1,this._mouseSliding=!1,this._animateOff=!0,this._handleIndex=null,this._detectOrientation(),this._mouseInit(),this.element.addClass("ui-slider ui-slider-"+this.orientation+" ui-widget"+" ui-widget-content"+" ui-corner-all"+(i.disabled?" ui-slider-disabled ui-disabled":"")),this.range=e([]),i.range&&(i.range===!0&&(i.values||(i.values=[this._valueMin(),this._valueMin()]),i.values.length&&i.values.length!==2&&(i.values=[i.values[0],i.values[0]])),this.range=e("<div></div>").appendTo(this.element).addClass("ui-slider-range ui-widget-header"+(i.range==="min"||i.range==="max"?" ui-slider-range-"+i.range:""))),r=i.values&&i.values.length||1;for(t=s.length;t<r;t++)u.push(o);this.handles=s.add(e(u.join("")).appendTo(this.element)),this.handle=this.handles.eq(0),this.handles.add(this.range).filter("a").click(function(e){e.preventDefault()}).mouseenter(function(){i.disabled||e(this).addClass("ui-state-hover")}).mouseleave(function(){e(this).removeClass("ui-state-hover")}).focus(function(){i.disabled?e(this).blur():(e(".ui-slider .ui-state-focus").removeClass("ui-state-focus"),e(this).addClass("ui-state-focus"))}).blur(function(){e(this).removeClass("ui-state-focus")}),this.handles.each(function(t){e(this).data("ui-slider-handle-index",t)}),this._on(this.handles,{keydown:function(t){var r,i,s,o,u=e(t.target).data("ui-slider-handle-index");switch(t.keyCode){case e.ui.keyCode.HOME:case e.ui.keyCode.END:case e.ui.keyCode.PAGE_UP:case e.ui.keyCode.PAGE_DOWN:case e.ui.keyCode.UP:case e.ui.keyCode.RIGHT:case e.ui.keyCode.DOWN:case e.ui.keyCode.LEFT:t.preventDefault();if(!this._keySliding){this._keySliding=!0,e(t.target).addClass("ui-state-active"),r=this._start(t,u);if(r===!1)return}}o=this.options.step,this.options.values&&this.options.values.length?i=s=this.values(u):i=s=this.value();switch(t.keyCode){case e.ui.keyCode.HOME:s=this._valueMin();break;case e.ui.keyCode.END:s=this._valueMax();break;case e.ui.keyCode.PAGE_UP:s=this._trimAlignValue(i+(this._valueMax()-this._valueMin())/n);break;case e.ui.keyCode.PAGE_DOWN:s=this._trimAlignValue(i-(this._valueMax()-this._valueMin())/n);break;case e.ui.keyCode.UP:case e.ui.keyCode.RIGHT:if(i===this._valueMax())return;s=this._trimAlignValue(i+o);break;case e.ui.keyCode.DOWN:case e.ui.keyCode.LEFT:if(i===this._valueMin())return;s=this._trimAlignValue(i-o)}this._slide(t,u,s)},keyup:function(t){var n=e(t.target).data("ui-slider-handle-index");this._keySliding&&(this._keySliding=!1,this._stop(t,n),this._change(t,n),e(t.target).removeClass("ui-state-active"))}}),this._refreshValue(),this._animateOff=!1},_destroy:function(){this.handles.remove(),this.range.remove(),this.element.removeClass("ui-slider ui-slider-horizontal ui-slider-vertical ui-slider-disabled ui-widget ui-widget-content ui-corner-all"),this._mouseDestroy()},_mouseCapture:function(t){var n,r,i,s,o,u,a,f,l=this,c=this.options;return c.disabled?!1:(this.elementSize={width:this.element.outerWidth(),height:this.element.outerHeight()},this.elementOffset=this.element.offset(),n={x:t.pageX,y:t.pageY},r=this._normValueFromMouse(n),i=this._valueMax()-this._valueMin()+1,this.handles.each(function(t){var n=Math.abs(r-l.values(t));i>n&&(i=n,s=e(this),o=t)}),c.range===!0&&this.values(1)===c.min&&(o+=1,s=e(this.handles[o])),u=this._start(t,o),u===!1?!1:(this._mouseSliding=!0,this._handleIndex=o,s.addClass("ui-state-active").focus(),a=s.offset(),f=!e(t.target).parents().andSelf().is(".ui-slider-handle"),this._clickOffset=f?{left:0,top:0}:{left:t.pageX-a.left-s.width()/2,top:t.pageY-a.top-s.height()/2-(parseInt(s.css("borderTopWidth"),10)||0)-(parseInt(s.css("borderBottomWidth"),10)||0)+(parseInt(s.css("marginTop"),10)||0)},this.handles.hasClass("ui-state-hover")||this._slide(t,o,r),this._animateOff=!0,!0))},_mouseStart:function(){return!0},_mouseDrag:function(e){var t={x:e.pageX,y:e.pageY},n=this._normValueFromMouse(t);return this._slide(e,this._handleIndex,n),!1},_mouseStop:function(e){return this.handles.removeClass("ui-state-active"),this._mouseSliding=!1,this._stop(e,this._handleIndex),this._change(e,this._handleIndex),this._handleIndex=null,this._clickOffset=null,this._animateOff=!1,!1},_detectOrientation:function(){this.orientation=this.options.orientation==="vertical"?"vertical":"horizontal"},_normValueFromMouse:function(e){var t,n,r,i,s;return this.orientation==="horizontal"?(t=this.elementSize.width,n=e.x-this.elementOffset.left-(this._clickOffset?this._clickOffset.left:0)):(t=this.elementSize.height,n=e.y-this.elementOffset.top-(this._clickOffset?this._clickOffset.top:0)),r=n/t,r>1&&(r=1),r<0&&(r=0),this.orientation==="vertical"&&(r=1-r),i=this._valueMax()-this._valueMin(),s=this._valueMin()+r*i,this._trimAlignValue(s)},_start:function(e,t){var n={handle:this.handles[t],value:this.value()};return this.options.values&&this.options.values.length&&(n.value=this.values(t),n.values=this.values()),this._trigger("start",e,n)},_slide:function(e,t,n){var r,i,s;this.options.values&&this.options.values.length?(r=this.values(t?0:1),this.options.values.length===2&&this.options.range===!0&&(t===0&&n>r||t===1&&n<r)&&(n=r),n!==this.values(t)&&(i=this.values(),i[t]=n,s=this._trigger("slide",e,{handle:this.handles[t],value:n,values:i}),r=this.values(t?0:1),s!==!1&&this.values(t,n,!0))):n!==this.value()&&(s=this._trigger("slide",e,{handle:this.handles[t],value:n}),s!==!1&&this.value(n))},_stop:function(e,t){var n={handle:this.handles[t],value:this.value()};this.options.values&&this.options.values.length&&(n.value=this.values(t),n.values=this.values()),this._trigger("stop",e,n)},_change:function(e,t){if(!this._keySliding&&!this._mouseSliding){var n={handle:this.handles[t],value:this.value()};this.options.values&&this.options.values.length&&(n.value=this.values(t),n.values=this.values()),this._trigger("change",e,n)}},value:function(e){if(arguments.length){this.options.value=this._trimAlignValue(e),this._refreshValue(),this._change(null,0);return}return this._value()},values:function(t,n){var r,i,s;if(arguments.length>1){this.options.values[t]=this._trimAlignValue(n),this._refreshValue(),this._change(null,t);return}if(!arguments.length)return this._values();if(!e.isArray(arguments[0]))return this.options.values&&this.options.values.length?this._values(t):this.value();r=this.options.values,i=arguments[0];for(s=0;s<r.length;s+=1)r[s]=this._trimAlignValue(i[s]),this._change(null,s);this._refreshValue()},_setOption:function(t,n){var r,i=0;e.isArray(this.options.values)&&(i=this.options.values.length),e.Widget.prototype._setOption.apply(this,arguments);switch(t){case"disabled":n?(this.handles.filter(".ui-state-focus").blur(),this.handles.removeClass("ui-state-hover"),this.handles.prop("disabled",!0),this.element.addClass("ui-disabled")):(this.handles.prop("disabled",!1),this.element.removeClass("ui-disabled"));break;case"orientation":this._detectOrientation(),this.element.removeClass("ui-slider-horizontal ui-slider-vertical").addClass("ui-slider-"+this.orientation),this._refreshValue();break;case"value":this._animateOff=!0,this._refreshValue(),this._change(null,0),this._animateOff=!1;break;case"values":this._animateOff=!0,this._refreshValue();for(r=0;r<i;r+=1)this._change(null,r);this._animateOff=!1;break;case"min":case"max":this._animateOff=!0,this._refreshValue(),this._animateOff=!1}},_value:function(){var e=this.options.value;return e=this._trimAlignValue(e),e},_values:function(e){var t,n,r;if(arguments.length)return t=this.options.values[e],t=this._trimAlignValue(t),t;n=this.options.values.slice();for(r=0;r<n.length;r+=1)n[r]=this._trimAlignValue(n[r]);return n},_trimAlignValue:function(e){if(e<=this._valueMin())return this._valueMin();if(e>=this._valueMax())return this._valueMax();var t=this.options.step>0?this.options.step:1,n=(e-this._valueMin())%t,r=e-n;return Math.abs(n)*2>=t&&(r+=n>0?t:-t),parseFloat(r.toFixed(5))},_valueMin:function(){return this.options.min},_valueMax:function(){return this.options.max},_refreshValue:function(){var t,n,r,i,s,o=this.options.range,u=this.options,a=this,f=this._animateOff?!1:u.animate,l={};this.options.values&&this.options.values.length?this.handles.each(function(r){n=(a.values(r)-a._valueMin())/(a._valueMax()-a._valueMin())*100,l[a.orientation==="horizontal"?"left":"bottom"]=n+"%",e(this).stop(1,1)[f?"animate":"css"](l,u.animate),a.options.range===!0&&(a.orientation==="horizontal"?(r===0&&a.range.stop(1,1)[f?"animate":"css"]({left:n+"%"},u.animate),r===1&&a.range[f?"animate":"css"]({width:n-t+"%"},{queue:!1,duration:u.animate})):(r===0&&a.range.stop(1,1)[f?"animate":"css"]({bottom:n+"%"},u.animate),r===1&&a.range[f?"animate":"css"]({height:n-t+"%"},{queue:!1,duration:u.animate}))),t=n}):(r=this.value(),i=this._valueMin(),s=this._valueMax(),n=s!==i?(r-i)/(s-i)*100:0,l[this.orientation==="horizontal"?"left":"bottom"]=n+"%",this.handle.stop(1,1)[f?"animate":"css"](l,u.animate),o==="min"&&this.orientation==="horizontal"&&this.range.stop(1,1)[f?"animate":"css"]({width:n+"%"},u.animate),o==="max"&&this.orientation==="horizontal"&&this.range[f?"animate":"css"]({width:100-n+"%"},{queue:!1,duration:u.animate}),o==="min"&&this.orientation==="vertical"&&this.range.stop(1,1)[f?"animate":"css"]({height:n+"%"},u.animate),o==="max"&&this.orientation==="vertical"&&this.range[f?"animate":"css"]({height:100-n+"%"},{queue:!1,duration:u.animate}))}})})(jQuery);(function(e){function n(t,n){var r=(t.attr("aria-describedby")||"").split(/\s+/);r.push(n),t.data("ui-tooltip-id",n).attr("aria-describedby",e.trim(r.join(" ")))}function r(t){var n=t.data("ui-tooltip-id"),r=(t.attr("aria-describedby")||"").split(/\s+/),i=e.inArray(n,r);i!==-1&&r.splice(i,1),t.removeData("ui-tooltip-id"),r=e.trim(r.join(" ")),r?t.attr("aria-describedby",r):t.removeAttr("aria-describedby")}var t=0;e.widget("ui.tooltip",{version:"1.9.1",options:{content:function(){return e(this).attr("title")},hide:!0,items:"[title]:not([disabled])",position:{my:"left top+15",at:"left bottom",collision:"flipfit flipfit"},show:!0,tooltipClass:null,track:!1,close:null,open:null},_create:function(){this._on({mouseover:"open",focusin:"open"}),this.tooltips={},this.parents={},this.options.disabled&&this._disable()},_setOption:function(t,n){var r=this;if(t==="disabled"){this[n?"_disable":"_enable"](),this.options[t]=n;return}this._super(t,n),t==="content"&&e.each(this.tooltips,function(e,t){r._updateContent(t)})},_disable:function(){var t=this;e.each(this.tooltips,function(n,r){var i=e.Event("blur");i.target=i.currentTarget=r[0],t.close(i,!0)}),this.element.find(this.options.items).andSelf().each(function(){var t=e(this);t.is("[title]")&&t.data("ui-tooltip-title",t.attr("title")).attr("title","")})},_enable:function(){this.element.find(this.options.items).andSelf().each(function(){var t=e(this);t.data("ui-tooltip-title")&&t.attr("title",t.data("ui-tooltip-title"))})},open:function(t){var n=this,r=e(t?t.target:this.element).closest(this.options.items);if(!r.length)return;if(this.options.track&&r.data("ui-tooltip-id")){this._find(r).position(e.extend({of:r},this.options.position)),this._off(this.document,"mousemove");return}r.attr("title")&&r.data("ui-tooltip-title",r.attr("title")),r.data("tooltip-open",!0),t&&t.type==="mouseover"&&r.parents().each(function(){var t;e(this).data("tooltip-open")&&(t=e.Event("blur"),t.target=t.currentTarget=this,n.close(t,!0)),this.title&&(e(this).uniqueId(),n.parents[this.id]={element:this,title:this.title},this.title="")}),this._updateContent(r,t)},_updateContent:function(e,t){var n,r=this.options.content,i=this;if(typeof r=="string")return this._open(t,e,r);n=r.call(e[0],function(n){if(!e.data("tooltip-open"))return;i._delay(function(){this._open(t,e,n)})}),n&&this._open(t,e,n)},_open:function(t,r,i){function f(e){a.of=e;if(s.is(":hidden"))return;s.position(a)}var s,o,u,a=e.extend({},this.options.position);if(!i)return;s=this._find(r);if(s.length){s.find(".ui-tooltip-content").html(i);return}r.is("[title]")&&(t&&t.type==="mouseover"?r.attr("title",""):r.removeAttr("title")),s=this._tooltip(r),n(r,s.attr("id")),s.find(".ui-tooltip-content").html(i),this.options.track&&t&&/^mouse/.test(t.originalEvent.type)?(this._on(this.document,{mousemove:f}),f(t)):s.position(e.extend({of:r},this.options.position)),s.hide(),this._show(s,this.options.show),this.options.show&&this.options.show.delay&&(u=setInterval(function(){s.is(":visible")&&(f(a.of),clearInterval(u))},e.fx.interval)),this._trigger("open",t,{tooltip:s}),o={keyup:function(t){if(t.keyCode===e.ui.keyCode.ESCAPE){var n=e.Event(t);n.currentTarget=r[0],this.close(n,!0)}},remove:function(){this._removeTooltip(s)}};if(!t||t.type==="mouseover")o.mouseleave="close";if(!t||t.type==="focusin")o.focusout="close";this._on(r,o)},close:function(t){var n=this,i=e(t?t.currentTarget:this.element),s=this._find(i);if(this.closing)return;i.data("ui-tooltip-title")&&i.attr("title",i.data("ui-tooltip-title")),r(i),s.stop(!0),this._hide(s,this.options.hide,function(){n._removeTooltip(e(this))}),i.removeData("tooltip-open"),this._off(i,"mouseleave focusout keyup"),i[0]!==this.element[0]&&this._off(i,"remove"),this._off(this.document,"mousemove"),t&&t.type==="mouseleave"&&e.each(this.parents,function(e,t){t.element.title=t.title,delete n.parents[e]}),this.closing=!0,this._trigger("close",t,{tooltip:s}),this.closing=!1},_tooltip:function(n){var r="ui-tooltip-"+t++,i=e("<div>").attr({id:r,role:"tooltip"}).addClass("ui-tooltip ui-widget ui-corner-all ui-widget-content "+(this.options.tooltipClass||""));return e("<div>").addClass("ui-tooltip-content").appendTo(i),i.appendTo(this.document[0].body),e.fn.bgiframe&&i.bgiframe(),this.tooltips[r]=n,i},_find:function(t){var n=t.data("ui-tooltip-id");return n?e("#"+n):e()},_removeTooltip:function(e){e.remove(),delete this.tooltips[e.attr("id")]},_destroy:function(){var t=this;e.each(this.tooltips,function(n,r){var i=e.Event("blur");i.target=i.currentTarget=r[0],t.close(i,!0),e("#"+n).remove(),r.data("ui-tooltip-title")&&(r.attr("title",r.data("ui-tooltip-title")),r.removeData("ui-tooltip-title"))})}})})(jQuery);
-define("_bundles_/framework/bundle/oskariui/jquery-ui-1.9.1.custom.min", function(){});
+define("bundles/framework/bundle/oskariui/jquery-ui-1.9.1.custom.min", function(){});
 
 jQuery.base64=(function($){var _PADCHAR="=",_ALPHA="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",_VERSION="1.0";function _getbyte64(s,i){var idx=_ALPHA.indexOf(s.charAt(i));if(idx===-1){throw"Cannot decode base64"}return idx}function _decode(s){var pads=0,i,b10,imax=s.length,x=[];s=String(s);if(imax===0){return s}if(imax%4!==0){throw"Cannot decode base64"}if(s.charAt(imax-1)===_PADCHAR){pads=1;if(s.charAt(imax-2)===_PADCHAR){pads=2}imax-=4}for(i=0;i<imax;i+=4){b10=(_getbyte64(s,i)<<18)|(_getbyte64(s,i+1)<<12)|(_getbyte64(s,i+2)<<6)|_getbyte64(s,i+3);x.push(String.fromCharCode(b10>>16,(b10>>8)&255,b10&255))}switch(pads){case 1:b10=(_getbyte64(s,i)<<18)|(_getbyte64(s,i+1)<<12)|(_getbyte64(s,i+2)<<6);x.push(String.fromCharCode(b10>>16,(b10>>8)&255));break;case 2:b10=(_getbyte64(s,i)<<18)|(_getbyte64(s,i+1)<<12);x.push(String.fromCharCode(b10>>16));break}return x.join("")}function _getbyte(s,i){var x=s.charCodeAt(i);if(x>255){throw"INVALID_CHARACTER_ERR: DOM Exception 5"}return x}function _encode(s){if(arguments.length!==1){throw"SyntaxError: exactly one argument required"}s=String(s);var i,b10,x=[],imax=s.length-s.length%3;if(s.length===0){return s}for(i=0;i<imax;i+=3){b10=(_getbyte(s,i)<<16)|(_getbyte(s,i+1)<<8)|_getbyte(s,i+2);x.push(_ALPHA.charAt(b10>>18));x.push(_ALPHA.charAt((b10>>12)&63));x.push(_ALPHA.charAt((b10>>6)&63));x.push(_ALPHA.charAt(b10&63))}switch(s.length-imax){case 1:b10=_getbyte(s,i)<<16;x.push(_ALPHA.charAt(b10>>18)+_ALPHA.charAt((b10>>12)&63)+_PADCHAR+_PADCHAR);break;case 2:b10=(_getbyte(s,i)<<16)|(_getbyte(s,i+1)<<8);x.push(_ALPHA.charAt(b10>>18)+_ALPHA.charAt((b10>>12)&63)+_ALPHA.charAt((b10>>6)&63)+_PADCHAR);break}return x.join("")}return{decode:_decode,encode:_encode,VERSION:_VERSION}}(jQuery));
-define("_libraries_/jquery/plugins/jquery.base64.min", function(){});
+define("libraries/jquery/plugins/jquery.base64.min", function(){});
 
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/oskariui/css/jquery-ui-1.9.1.custom.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/oskariui/bootstrap-grid.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/oskariui/css/jquery-ui-1.9.1.custom.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/oskariui/bootstrap-grid.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 /**
  * @class Oskari.framework.bundle.oskariui.DomManager
  *
@@ -12588,7 +12587,7 @@ function(dollar, partsMap) {
 	'protocol' : ['Oskari.dom.DomManager']
 });
 
-define("_bundles_/framework/bundle/oskariui/DomManager", function(){});
+define("bundles/framework/bundle/oskariui/DomManager", function(){});
 
 /**
  * @class Oskari.framework.bundle.oskariui.Layout
@@ -12620,9 +12619,9 @@ function() {
 	"protocol" : ["Oskari.dom.Layout"]
 });
 
-define("_bundles_/framework/bundle/oskariui/Layout", function(){});
+define("bundles/framework/bundle/oskariui/Layout", function(){});
 
-define('_bundles_/framework/bundle/oskariui/module',["oskari","jquery","./jquery-ui-1.9.1.custom.min","_libraries_/jquery/plugins/jquery.base64.min","css!_resources_/framework/bundle/oskariui/css/jquery-ui-1.9.1.custom.css","css!_resources_/framework/bundle/oskariui/bootstrap-grid.css","./DomManager","./Layout"], function(Oskari,jQuery) {
+define('bundles/framework/bundle/oskariui/module',["oskari","jquery","./jquery-ui-1.9.1.custom.min","libraries/jquery/plugins/jquery.base64.min","css!resources/framework/bundle/oskariui/css/jquery-ui-1.9.1.custom.css","css!resources/framework/bundle/oskariui/bootstrap-grid.css","./DomManager","./Layout"], function(Oskari,jQuery) {
     return Oskari.bundleCls("oskariui").category({create: function () {
 
 
@@ -12661,7 +12660,7 @@ function() {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]
 });
 
-define("_bundles_/framework/bundle/mapwfs/domain/WfsLayer", function(){});
+define("bundles/framework/bundle/mapwfs/domain/WfsLayer", function(){});
 
 /*
  * @class Oskari.mapframework.bundle.mapwfs.domain.WfsLayerModelBuilder
@@ -12697,7 +12696,7 @@ function(sandbox) {
 		layer.addTool(toolObjData);
 	}
 });
-define("_bundles_/framework/bundle/mapwfs/domain/WfsLayerModelBuilder", function(){});
+define("bundles/framework/bundle/mapwfs/domain/WfsLayerModelBuilder", function(){});
 
 /**
  * @class Oskari.mapframework.gridcalc.QueuedTile
@@ -12730,7 +12729,7 @@ function(options) {
     }
 });
 
-define("_bundles_/framework/bundle/mapwfs/domain/QueuedTile", function(){});
+define("bundles/framework/bundle/mapwfs/domain/QueuedTile", function(){});
 
 /**
  * @class Oskari.mapframework.gridcalc.TileQueue
@@ -12816,7 +12815,7 @@ function() {
     }
 });
 
-define("_bundles_/framework/bundle/mapwfs/domain/TileQueue", function(){});
+define("bundles/framework/bundle/mapwfs/domain/TileQueue", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapwfs.domain.WfsTileRequest
@@ -12917,7 +12916,7 @@ function(mapLayer, bbox, mapWidth, mapHeight, creator, sequenceNumber) {
     }
 });
 
-define("_bundles_/framework/bundle/mapwfs/domain/WfsTileRequest", function(){});
+define("bundles/framework/bundle/mapwfs/domain/WfsTileRequest", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapwfs.event.WFSFeaturesSelectedEvent
@@ -12983,7 +12982,7 @@ function(wfsFeatureIds, mapLayer, keepSelection) {
 });
 
 /* Inheritance */;
-define("_bundles_/framework/bundle/mapwfs/event/WFSFeaturesSelectedEvent", function(){});
+define("bundles/framework/bundle/mapwfs/event/WFSFeaturesSelectedEvent", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapwfs.service.WfsTileService
@@ -13224,7 +13223,7 @@ function(plugin) {
 }, {
     'protocol' : ['Oskari.mapframework.service.Service']
 });
-define("_bundles_/framework/bundle/mapwfs/service/WfsTileService", function(){});
+define("bundles/framework/bundle/mapwfs/service/WfsTileService", function(){});
 
 /** modifications free software  (c) 2009-IV maanmittauslaitos.fi **/
 /** OpenLayers.Strategy.Grid CLONE - REVIEW NEEDED */
@@ -13643,7 +13642,7 @@ Oskari.clazz.define("Oskari.mapframework.gridcalc.QueuedTilesGrid",
     CLASS_NAME: "NLSFI.OpenLayers.Strategy.QueuedTilesGrid"
 });
 
-define("_bundles_/framework/bundle/mapwfs/plugin/wfslayer/QueuedTilesGrid", function(){});
+define("bundles/framework/bundle/mapwfs/plugin/wfslayer/QueuedTilesGrid", function(){});
 
 /* 
 /* Copyright (c) 2006-2008 MetaCarta, Inc., published under the Clear BSD
@@ -13915,7 +13914,7 @@ Oskari.clazz.define("Oskari.mapframework.gridcalc.QueuedTilesStrategy",
 		CLASS_NAME : "NLSFI.OpenLayers.Strategy.QueuedTilesStrategy"
 		});
 
-define("_bundles_/framework/bundle/mapwfs/plugin/wfslayer/QueuedTilesStrategy", function(){});
+define("bundles/framework/bundle/mapwfs/plugin/wfslayer/QueuedTilesStrategy", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerPlugin
@@ -14463,7 +14462,7 @@ updateWfsImages : function(creator) {
 			"Oskari.mapframework.ui.module.common.mapmodule.Plugin" ]
 });
 
-define("_bundles_/framework/bundle/mapwfs/plugin/wfslayer/WfsLayerPlugin", function(){});
+define("bundles/framework/bundle/mapwfs/plugin/wfslayer/WfsLayerPlugin", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapwfs.MapWfsBundleInstance
@@ -14685,7 +14684,7 @@ function() {
     "protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module']
 });
 
-define("_bundles_/framework/bundle/mapwfs/instance", function(){});
+define("bundles/framework/bundle/mapwfs/instance", function(){});
 
 Oskari.registerLocalization({
   "lang": "fi",
@@ -14694,7 +14693,7 @@ Oskari.registerLocalization({
       "object-data": "Kohdetiedot"
   }
 });
-define("_bundles_/framework/bundle/mapwfs/locale/fi", function(){});
+define("bundles/framework/bundle/mapwfs/locale/fi", function(){});
 
 Oskari.registerLocalization({
   "lang": "sv",
@@ -14703,7 +14702,7 @@ Oskari.registerLocalization({
       "object-data": "Objektuppgifter"
   }
 });	
-define("_bundles_/framework/bundle/mapwfs/locale/sv", function(){});
+define("bundles/framework/bundle/mapwfs/locale/sv", function(){});
 
 Oskari.registerLocalization({
   "lang": "en",
@@ -14712,9 +14711,9 @@ Oskari.registerLocalization({
       "object-data": "Object data"
   }
 });
-define("_bundles_/framework/bundle/mapwfs/locale/en", function(){});
+define("bundles/framework/bundle/mapwfs/locale/en", function(){});
 
-define('_bundles_/framework/bundle/mapwfs/module',["oskari","jquery","./domain/WfsLayer","./domain/WfsLayerModelBuilder","./domain/QueuedTile","./domain/TileQueue","./domain/WfsTileRequest","./event/WFSFeaturesSelectedEvent","./service/WfsTileService","./plugin/wfslayer/QueuedTilesGrid","./plugin/wfslayer/QueuedTilesStrategy","./plugin/wfslayer/WfsLayerPlugin","./instance","./locale/fi","./locale/sv","./locale/en"], function(Oskari,jQuery) {
+define('bundles/framework/bundle/mapwfs/module',["oskari","jquery","./domain/WfsLayer","./domain/WfsLayerModelBuilder","./domain/QueuedTile","./domain/TileQueue","./domain/WfsTileRequest","./event/WFSFeaturesSelectedEvent","./service/WfsTileService","./plugin/wfslayer/QueuedTilesGrid","./plugin/wfslayer/QueuedTilesStrategy","./plugin/wfslayer/WfsLayerPlugin","./instance","./locale/fi","./locale/sv","./locale/en"], function(Oskari,jQuery) {
     return Oskari.bundleCls("mapwfs").category({create: function () {
 
 		return Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs.MapWfsBundleInstance");
@@ -15488,7 +15487,7 @@ function(config) {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("_bundles_/framework/bundle/mapstats/plugin/StatsLayerPlugin", function(){});
+define("bundles/framework/bundle/mapstats/plugin/StatsLayerPlugin", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapstats.domain.StatsLayer
@@ -15538,7 +15537,7 @@ function() {
 }, {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]
 });
-define("_bundles_/framework/bundle/mapstats/domain/StatsLayer", function(){});
+define("bundles/framework/bundle/mapstats/domain/StatsLayer", function(){});
 
 /*
  * @class Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelBuilder
@@ -15666,7 +15665,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapstats.domain.StatsLayerModelB
 	}
 });
 
-define("_bundles_/framework/bundle/mapstats/domain/StatsLayerModelBuilder", function(){});
+define("bundles/framework/bundle/mapstats/domain/StatsLayerModelBuilder", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapstats.event.StatsVisualizationChangeEvent
@@ -15711,7 +15710,7 @@ function(layer, params) {
 }, {
     'protocol' : ['Oskari.mapframework.event.Event']
 });
-define("_bundles_/framework/bundle/mapstats/event/StatsVisualizationChangeEvent", function(){});
+define("bundles/framework/bundle/mapstats/event/StatsVisualizationChangeEvent", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapstats.event.FeatureHighlightedEvent
@@ -15771,7 +15770,7 @@ function(feature, highlighted, highlightType) {
 }, {
     'protocol' : ['Oskari.mapframework.event.Event']
 });
-define("_bundles_/framework/bundle/mapstats/event/FeatureHighlightedEvent", function(){});
+define("bundles/framework/bundle/mapstats/event/FeatureHighlightedEvent", function(){});
 
 /**
  * Returns the content for the tooltip shown after the user hovers over a municipality on the map.
@@ -15806,9 +15805,9 @@ function(content) {
 }, {
     'protocol' : ['Oskari.mapframework.event.Event']
 });
-define("_bundles_/framework/bundle/mapstats/event/HoverTooltipContentEvent", function(){});
+define("bundles/framework/bundle/mapstats/event/HoverTooltipContentEvent", function(){});
 
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/mapstats/css/mapstats.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/mapstats/css/mapstats.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 Oskari.registerLocalization({
 	"lang" : "fi",
 	"key" : "MapStats",
@@ -15833,7 +15832,7 @@ Oskari.registerLocalization({
 	}
 });
 
-define("_bundles_/framework/bundle/mapstats/locale/fi", function(){});
+define("bundles/framework/bundle/mapstats/locale/fi", function(){});
 
 Oskari.registerLocalization({
 	"lang" : "sv",
@@ -15859,7 +15858,7 @@ Oskari.registerLocalization({
 	}
 });
 
-define("_bundles_/framework/bundle/mapstats/locale/sv", function(){});
+define("bundles/framework/bundle/mapstats/locale/sv", function(){});
 
 Oskari.registerLocalization({
 	"lang" : "en",
@@ -15885,9 +15884,9 @@ Oskari.registerLocalization({
 	}
 });
 
-define("_bundles_/framework/bundle/mapstats/locale/en", function(){});
+define("bundles/framework/bundle/mapstats/locale/en", function(){});
 
-define('_bundles_/framework/bundle/mapstats/module',["oskari","jquery","./plugin/StatsLayerPlugin","./domain/StatsLayer","./domain/StatsLayerModelBuilder","./event/StatsVisualizationChangeEvent","./event/FeatureHighlightedEvent","./event/HoverTooltipContentEvent","css!_resources_/framework/bundle/mapstats/css/mapstats.css","./locale/fi","./locale/sv","./locale/en"], function(Oskari,jQuery) {
+define('bundles/framework/bundle/mapstats/module',["oskari","jquery","./plugin/StatsLayerPlugin","./domain/StatsLayer","./domain/StatsLayerModelBuilder","./event/StatsVisualizationChangeEvent","./event/FeatureHighlightedEvent","./event/HoverTooltipContentEvent","css!resources/framework/bundle/mapstats/css/mapstats.css","./locale/fi","./locale/sv","./locale/en"], function(Oskari,jQuery) {
     return Oskari.bundleCls("mapstats").category({create: function () {
 
 		return null;
@@ -16195,7 +16194,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                    "Oskari.mapframework.ui.module.common.mapmodule.Plugin" ]
 });
 
-define("_bundles_/framework/bundle/mapwmts/plugin/wmtslayer/WmtsLayerPlugin", function(){});
+define("bundles/framework/bundle/mapwmts/plugin/wmtslayer/WmtsLayerPlugin", function(){});
 
 /**
  * @class Oskari.mapframework.wmts.domain.WmtsLayer
@@ -16281,7 +16280,7 @@ function() {
     "extend": ["Oskari.mapframework.domain.AbstractLayer"]
 });
 
-define("_bundles_/framework/bundle/mapwmts/domain/WmtsLayer", function(){});
+define("bundles/framework/bundle/mapwmts/domain/WmtsLayer", function(){});
 
 /**
  * 
@@ -16454,7 +16453,7 @@ Oskari.clazz
 					}
 				});
 
-define("_bundles_/framework/bundle/mapwmts/service/WmtsLayerService", function(){});
+define("bundles/framework/bundle/mapwmts/service/WmtsLayerService", function(){});
 
 /*
  * @class
@@ -16513,7 +16512,7 @@ Oskari.clazz
 					}
 				});
 
-define("_bundles_/framework/bundle/mapwmts/service/WmtsLayerModelBuilder", function(){});
+define("bundles/framework/bundle/mapwmts/service/WmtsLayerModelBuilder", function(){});
 
 /**
  * Let's add missing TileMatrixLimits support 
@@ -17005,7 +17004,7 @@ Oskari.clazz
 					'protocol' : [ "Oskari.openlayers.Patch" ]
 				});
 
-define("_bundles_/framework/bundle/mapwmts/format/WMTS_1_0_0_capabilities", function(){});
+define("bundles/framework/bundle/mapwmts/format/WMTS_1_0_0_capabilities", function(){});
 
 /**
  * Let's fix missing tileMatrixSetLimits handling for WMTS layers. (c) 2011-11
@@ -17738,7 +17737,7 @@ Oskari.clazz
 					'protocol' : [ "Oskari.openlayers.Patch" ]
 				});
 
-define("_bundles_/framework/bundle/mapwmts/layer/WMTS", function(){});
+define("bundles/framework/bundle/mapwmts/layer/WMTS", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.MapWmtsBundleInstance
@@ -17823,9 +17822,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.MapWmtsBundleInstance", function
 	"protocol" : ["Oskari.bundle.BundleInstance", "Oskari.mapframework.bundle.extension.Extension"]
 });
 
-define("_bundles_/framework/bundle/mapwmts/instance", function(){});
+define("bundles/framework/bundle/mapwmts/instance", function(){});
 
-define('_bundles_/framework/bundle/mapwmts/module',["oskari","jquery","./plugin/wmtslayer/WmtsLayerPlugin","./domain/WmtsLayer","./service/WmtsLayerService","./service/WmtsLayerModelBuilder","./format/WMTS_1_0_0_capabilities","./layer/WMTS","./instance"], function(Oskari,jQuery) {
+define('bundles/framework/bundle/mapwmts/module',["oskari","jquery","./plugin/wmtslayer/WmtsLayerPlugin","./domain/WmtsLayer","./service/WmtsLayerService","./service/WmtsLayerModelBuilder","./format/WMTS_1_0_0_capabilities","./layer/WMTS","./instance"], function(Oskari,jQuery) {
     return Oskari.bundleCls("mapwmts").category({create: function () {
 
 		return Oskari.clazz.create("Oskari.mapframework.bundle.MapWmtsBundleInstance");
@@ -18980,7 +18979,7 @@ function(id, imageUrl, options) {
     'protocol' : ['Oskari.mapframework.module.Module']
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/ui/module/map-module", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/ui/module/map-module", function(){});
 
 /**
  * @class Oskari.mapframework.ui.module.common.mapmodule.Plugin
@@ -19075,7 +19074,7 @@ function() {
     }
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/Plugin", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/Plugin", function(){});
 
 /**
  * @class Oskari.mapframework.mapmodule.ControlsPlugin
@@ -19444,7 +19443,7 @@ function(config) {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/controls/ControlsPlugin", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/controls/ControlsPlugin", function(){});
 
 /* Copyright (c) 2006-2011 by OpenLayers Contributors (see authors.txt for
 * full list of contributors). Published under the Clear BSD license.
@@ -19574,7 +19573,7 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
     CLASS_NAME : "OpenLayers.Control.PorttiKeyboard"
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/controls/PorttiKeyboard", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/controls/PorttiKeyboard", function(){});
 
 /* new implementation */
 /* this is based on Navigation Control with Hover handler instead of MouseDefaults and some other stuff */
@@ -20175,7 +20174,7 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 	CLASS_NAME : "OpenLayers.Control.PorttiMouse"
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/controls/PorttiMouse", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/controls/PorttiMouse", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.DisableMapKeyboardMovementRequest
@@ -20213,7 +20212,7 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/framework/bundle/mapmodule-plugin/request/DisableMapKeyboardMovementRequest", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/request/DisableMapKeyboardMovementRequest", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.DisableMapMouseMovementRequest
@@ -20250,7 +20249,7 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/framework/bundle/mapmodule-plugin/request/DisableMapMouseMovementRequest", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/request/DisableMapMouseMovementRequest", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.EnableMapKeyboardMovementRequest
@@ -20289,7 +20288,7 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/framework/bundle/mapmodule-plugin/request/EnableMapKeyboardMovementRequest", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/request/EnableMapKeyboardMovementRequest", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.EnableMapMouseMovementRequest
@@ -20326,7 +20325,7 @@ function() {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/framework/bundle/mapmodule-plugin/request/EnableMapMouseMovementRequest", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/request/EnableMapMouseMovementRequest", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.MapMovementControlsRequestHandler
@@ -20390,7 +20389,7 @@ function(mapModule) {
     protocol : ['Oskari.mapframework.core.RequestHandler']
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/request/MapMovementControlsRequestHandler", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/request/MapMovementControlsRequestHandler", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.getinfo.GetFeatureInfoHandler
@@ -20433,7 +20432,7 @@ function(getInfoPlugin) {
     protocol : ['Oskari.mapframework.core.RequestHandler']
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/getinfo/GetFeatureInfoHandler", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/getinfo/GetFeatureInfoHandler", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.GetFeatureInfoRequest
@@ -20509,7 +20508,7 @@ function(lon, lat, coordX, coordY) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/framework/bundle/mapmodule-plugin/request/GetFeatureInfoRequest", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/request/GetFeatureInfoRequest", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.GetFeatureInfoActivationRequest
@@ -20554,7 +20553,7 @@ function(blnEnable) {
     'protocol' : ['Oskari.mapframework.request.Request']
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/request/GetFeatureInfoActivationRequest", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/request/GetFeatureInfoActivationRequest", function(){});
 
 /**
  * @class Oskari.mapframework.mapmodule.GetInfoPlugin
@@ -21393,9 +21392,9 @@ function(config, locale) {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/getinfo/GetInfoPlugin", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/getinfo/GetInfoPlugin", function(){});
 
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/mapmodule-plugin/plugin/getinfo/css/getinfo.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/mapmodule-plugin/plugin/getinfo/css/getinfo.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 /**
  * @class Oskari.mapframework.mapmodule.MarkersPlugin
  * Provides marker functionality for the map. 
@@ -21586,7 +21585,7 @@ function() {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/markers/MarkersPlugin", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/markers/MarkersPlugin", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.RemoveMarkerRequest
@@ -21630,7 +21629,7 @@ function(markerIdList) {
     'protocol' : ['Oskari.mapframework.request.Request']
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/request/RemoveMarkerRequest", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/request/RemoveMarkerRequest", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.MarkerRequestHandler
@@ -21669,7 +21668,7 @@ function(markersPlugin) {
     protocol : ['Oskari.mapframework.core.RequestHandler']
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/request/MarkerRequestHandler", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/request/MarkerRequestHandler", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mappublished.SearchPlugin
@@ -22080,7 +22079,7 @@ function(config) {
 	'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/search/SearchPlugin", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/search/SearchPlugin", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.search.service.SearchService
@@ -22156,9 +22155,9 @@ function(searchUrl) {
 });
 
 /* Inheritance */;
-define("_bundles_/framework/bundle/search/service/searchservice", function(){});
+define("bundles/framework/bundle/search/service/searchservice", function(){});
 
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/mapmodule-plugin/plugin/search/css/search.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/mapmodule-plugin/plugin/search/css/search.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 /**
  * @class Oskari.mapframework.bundle.mappublished.LogoPlugin
  * Displays the NLS logo and provides a link to terms of use on top of the map.
@@ -22365,9 +22364,9 @@ function() {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/logo/LogoPlugin", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/logo/LogoPlugin", function(){});
 
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/mapmodule-plugin/plugin/logo/css/logoplugin.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/mapmodule-plugin/plugin/logo/css/logoplugin.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 /**
  * @class Oskari.mapframework.bundle.plugin.DataSourcePlugin
  * Displays the NLS logo and provides a link to terms of use on top of the map.
@@ -22708,9 +22707,9 @@ function() {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/datasource/DataSourcePlugin", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/datasource/DataSourcePlugin", function(){});
 
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/mapmodule-plugin/plugin/datasource/css/datasource.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/mapmodule-plugin/plugin/datasource/css/datasource.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin
  * 
@@ -22914,9 +22913,9 @@ function(config) {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/indexmap/IndexMapPlugin", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/indexmap/IndexMapPlugin", function(){});
 
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/mapmodule-plugin/plugin/indexmap/css/indexmap.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/mapmodule-plugin/plugin/indexmap/css/indexmap.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin
  * Provides scalebar functionality for map
@@ -23081,7 +23080,7 @@ function() {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/scalebar/ScaleBarPlugin", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/scalebar/ScaleBarPlugin", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.FullScreenPlugin
@@ -23274,9 +23273,9 @@ function() {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/fullscreen/FullScreen", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/fullscreen/FullScreen", function(){});
 
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/mapmodule-plugin/plugin/fullscreen/css/fullscreen.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/mapmodule-plugin/plugin/fullscreen/css/fullscreen.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin
  *
@@ -23833,9 +23832,9 @@ function(config) {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/layers/LayerSelectionPlugin", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/layers/LayerSelectionPlugin", function(){});
 
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/mapmodule-plugin/plugin/layers/css/layersselection.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/mapmodule-plugin/plugin/layers/css/layersselection.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin
  *
@@ -24247,7 +24246,7 @@ function() {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/layers/LayersPlugin", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/layers/LayersPlugin", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequest
@@ -24303,7 +24302,7 @@ function(mapLayerId, visible) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 });
-define("_bundles_/framework/bundle/mapmodule-plugin/request/MapLayerVisibilityRequest", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/request/MapLayerVisibilityRequest", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequestHandler
@@ -24357,7 +24356,7 @@ function(sandbox, layersPlugin) {
     protocol : ['Oskari.mapframework.core.RequestHandler']
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/request/MapLayerVisibilityRequestHandler", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/request/MapLayerVisibilityRequestHandler", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayerContentRequest
@@ -24403,7 +24402,7 @@ function(mapLayerId) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 }); 
-define("_bundles_/framework/bundle/mapmodule-plugin/request/MapMoveByLayerContentRequest", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/request/MapMoveByLayerContentRequest", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayerContentRequestHandler
@@ -24470,7 +24469,7 @@ function(sandbox, layersPlugin) {
     protocol : ['Oskari.mapframework.core.RequestHandler']
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/request/MapMoveByLayerContentRequestHandler", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/request/MapMoveByLayerContentRequestHandler", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.event.MapLayerVisibilityChangedEvent
@@ -24538,7 +24537,7 @@ Oskari.clazz.define(
     'protocol' : [ 'Oskari.mapframework.event.Event' ]
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/event/MapLayerVisibilityChangedEvent", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/event/MapLayerVisibilityChangedEvent", function(){});
 
 /**
  * @class Oskari.mapframework.mapmodule.WmsLayerPlugin
@@ -24958,7 +24957,7 @@ function() {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/wmslayer/WmsLayerPlugin", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/wmslayer/WmsLayerPlugin", function(){});
 
 /**
  * @class Oskari.mapframework.mapmodule.VectorLayerPlugin
@@ -25244,7 +25243,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorLayerPlugin', function(
 	'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/vectorlayer/VectorLayerPlugin", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/vectorlayer/VectorLayerPlugin", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mappublished.GeoLocationPlugin 
@@ -25459,7 +25458,7 @@ function() {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/location/GeoLocationPlugin", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/location/GeoLocationPlugin", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.ToolSelectionRequest
@@ -25542,7 +25541,7 @@ function(toolId) {
     'protocol' : ['Oskari.mapframework.request.Request']
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/request/ToolSelectionRequest", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/request/ToolSelectionRequest", function(){});
 
 /**
  * @class Oskari.mapframework.mapmodule.ToolSelectionHandler
@@ -25615,7 +25614,7 @@ function(sandbox, controlsPlugin) {
     protocol : ['Oskari.mapframework.core.RequestHandler']
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/controls/ToolSelectionHandler", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/controls/ToolSelectionHandler", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequest
@@ -25685,7 +25684,7 @@ function(layerId, forced, optParameters) {
      */
     'protocol' : ['Oskari.mapframework.request.Request']
 }); 
-define("_bundles_/framework/bundle/mapmodule-plugin/request/MapLayerUpdateRequest", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/request/MapLayerUpdateRequest", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.MapLayerUpdateRequestHandler
@@ -25757,7 +25756,7 @@ function(sandbox, mapModule) {
     protocol : ['Oskari.mapframework.core.RequestHandler']
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/request/MapLayerUpdateRequestHandler", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/request/MapLayerUpdateRequestHandler", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler
@@ -25833,7 +25832,7 @@ function(sandbox, mapModule) {
     protocol : ['Oskari.mapframework.core.RequestHandler']
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/request/MapMoveRequestHandler", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/request/MapMoveRequestHandler", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent
@@ -25890,7 +25889,7 @@ function(lonlat, mouseX, mouseY) {
      */
     'protocol' : ['Oskari.mapframework.event.Event']
 });
-define("_bundles_/framework/bundle/mapmodule-plugin/event/MapClickedEvent", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/event/MapClickedEvent", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.event.EscPressedEvent
@@ -25921,7 +25920,7 @@ function() {
     'protocol' : ['Oskari.mapframework.event.Event']
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/event/EscPressedEvent", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/event/EscPressedEvent", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.event.GetInfoResultEvent
@@ -25960,7 +25959,7 @@ function(data, content) {
     'protocol' : ['Oskari.mapframework.event.Event']
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/event/GetInfoResultEvent", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/event/GetInfoResultEvent", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.event.MapSizeChangedEvent
@@ -26008,7 +26007,7 @@ function(width, height) {
      */
     'protocol' : ['Oskari.mapframework.event.Event']
 });
-define("_bundles_/framework/bundle/mapmodule-plugin/event/MapSizeChangedEvent", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/event/MapSizeChangedEvent", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.ClearHistoryRequest
@@ -26040,7 +26039,7 @@ function() {
     'protocol' : ['Oskari.mapframework.request.Request']
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/request/ClearHistoryRequest", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/request/ClearHistoryRequest", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.controls.ClearHistoryHandler
@@ -26081,7 +26080,7 @@ function(sandbox, mapModule) {
     protocol: ['Oskari.mapframework.core.RequestHandler']
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/controls/ClearHistoryHandler", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/controls/ClearHistoryHandler", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar
@@ -26363,9 +26362,9 @@ function(config) {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/zoombar/Portti2Zoombar", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/zoombar/Portti2Zoombar", function(){});
 
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/css/porttizoombar.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/css/porttizoombar.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.PanButtons
  * Adds on-screen pan buttons on the map. In the middle of the pan buttons is a state reset button.
@@ -26736,10 +26735,10 @@ function(config) {
     'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
-define("_bundles_/framework/bundle/mapmodule-plugin/plugin/panbuttons/PanButtons", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/plugin/panbuttons/PanButtons", function(){});
 
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/mapmodule-plugin/plugin/panbuttons/css/panbuttons.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/mapmodule-plugin/css/mapmodule.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/css/panbuttons.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/mapmodule-plugin/css/mapmodule.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 Oskari.registerLocalization({
   "lang": "fi",
   "key": "MapModule",
@@ -26801,7 +26800,7 @@ Oskari.registerLocalization({
     }
   }
 });
-define("_bundles_/framework/bundle/mapmodule-plugin/locale/fi", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/locale/fi", function(){});
 
 Oskari.registerLocalization({
   "lang": "sv",
@@ -26864,7 +26863,7 @@ Oskari.registerLocalization({
     }
   }
 });
-define("_bundles_/framework/bundle/mapmodule-plugin/locale/sv", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/locale/sv", function(){});
 
 Oskari.registerLocalization({
   "lang": "en",
@@ -26927,17 +26926,17 @@ Oskari.registerLocalization({
     }
   }
 });
-define("_bundles_/framework/bundle/mapmodule-plugin/locale/en", function(){});
+define("bundles/framework/bundle/mapmodule-plugin/locale/en", function(){});
 
-define('_bundles_/framework/bundle/mapmodule-plugin/module',[
+define('bundles/framework/bundle/mapmodule-plugin/module',[
     "oskari",
     "jquery",
-    "_bundles_/oskari/platform/module",
-    "_bundles_/framework/bundle/oskariui/module",
-    "_bundles_/framework/bundle/mapwfs/module",
-    "_bundles_/framework/bundle/mapstats/module",
-    "_bundles_/framework/bundle/mapwmts/module",
-    "css!_resources_/openlayers/theme/default/style.css",
+    "bundles/oskari/platform/module",
+    "bundles/framework/bundle/oskariui/module",
+    "bundles/framework/bundle/mapwfs/module",
+    "bundles/framework/bundle/mapstats/module",
+    "bundles/framework/bundle/mapwmts/module",
+    "css!resources/openlayers/theme/default/style.css",
     "./ui/module/map-module",
     "./plugin/Plugin",
     "./plugin/controls/ControlsPlugin",
@@ -26952,24 +26951,24 @@ define('_bundles_/framework/bundle/mapmodule-plugin/module',[
     "./request/GetFeatureInfoRequest",
     "./request/GetFeatureInfoActivationRequest",
     "./plugin/getinfo/GetInfoPlugin",
-    "css!_resources_/framework/bundle/mapmodule-plugin/plugin/getinfo/css/getinfo.css",
+    "css!resources/framework/bundle/mapmodule-plugin/plugin/getinfo/css/getinfo.css",
     "./plugin/markers/MarkersPlugin",
     "./request/RemoveMarkerRequest",
     "./request/MarkerRequestHandler",
     "./plugin/search/SearchPlugin",
-    "_bundles_/framework/bundle/search/service/searchservice",
-    "css!_resources_/framework/bundle/mapmodule-plugin/plugin/search/css/search.css",
+    "bundles/framework/bundle/search/service/searchservice",
+    "css!resources/framework/bundle/mapmodule-plugin/plugin/search/css/search.css",
     "./plugin/logo/LogoPlugin",
-    "css!_resources_/framework/bundle/mapmodule-plugin/plugin/logo/css/logoplugin.css",
+    "css!resources/framework/bundle/mapmodule-plugin/plugin/logo/css/logoplugin.css",
     "./plugin/datasource/DataSourcePlugin",
-    "css!_resources_/framework/bundle/mapmodule-plugin/plugin/datasource/css/datasource.css",
+    "css!resources/framework/bundle/mapmodule-plugin/plugin/datasource/css/datasource.css",
     "./plugin/indexmap/IndexMapPlugin",
-    "css!_resources_/framework/bundle/mapmodule-plugin/plugin/indexmap/css/indexmap.css",
+    "css!resources/framework/bundle/mapmodule-plugin/plugin/indexmap/css/indexmap.css",
     "./plugin/scalebar/ScaleBarPlugin",
     "./plugin/fullscreen/FullScreen",
-    "css!_resources_/framework/bundle/mapmodule-plugin/plugin/fullscreen/css/fullscreen.css",
+    "css!resources/framework/bundle/mapmodule-plugin/plugin/fullscreen/css/fullscreen.css",
     "./plugin/layers/LayerSelectionPlugin",
-    "css!_resources_/framework/bundle/mapmodule-plugin/plugin/layers/css/layersselection.css",
+    "css!resources/framework/bundle/mapmodule-plugin/plugin/layers/css/layersselection.css",
     "./plugin/layers/LayersPlugin",
     "./request/MapLayerVisibilityRequest",
     "./request/MapLayerVisibilityRequestHandler",
@@ -26991,10 +26990,10 @@ define('_bundles_/framework/bundle/mapmodule-plugin/module',[
     "./request/ClearHistoryRequest",
     "./plugin/controls/ClearHistoryHandler",
     "./plugin/zoombar/Portti2Zoombar",
-    "css!_resources_/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/css/porttizoombar.css",
+    "css!resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/css/porttizoombar.css",
     "./plugin/panbuttons/PanButtons",
-    "css!_resources_/framework/bundle/mapmodule-plugin/plugin/panbuttons/css/panbuttons.css",
-    "css!_resources_/framework/bundle/mapmodule-plugin/css/mapmodule.css",
+    "css!resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/css/panbuttons.css",
+    "css!resources/framework/bundle/mapmodule-plugin/css/mapmodule.css",
     "./locale/fi",
     "./locale/sv",
     "./locale/en"], function(Oskari,jQuery) {
@@ -28272,7 +28271,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
 	"protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Stateful']
 });
 
-define("_bundles_/framework/bundle/divmanazer/instance", function(){});
+define("bundles/framework/bundle/divmanazer/instance", function(){});
 
 /**
  * @class Oskari.userinterface.request.AddExtensionRequest
@@ -28291,7 +28290,7 @@ Oskari.clazz.define('Oskari.userinterface.request.AddExtensionRequest', function
 	'protocol' : ['Oskari.mapframework.request.Request']
 });
 
-define("_bundles_/framework/bundle/divmanazer/request/AddExtensionRequest", function(){});
+define("bundles/framework/bundle/divmanazer/request/AddExtensionRequest", function(){});
 
 /**
  *
@@ -28311,7 +28310,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.request.AddExtensionRequestH
 	protocol : ['Oskari.mapframework.core.RequestHandler']
 });
 
-define("_bundles_/framework/bundle/divmanazer/request/AddExtensionRequestHandler", function(){});
+define("bundles/framework/bundle/divmanazer/request/AddExtensionRequestHandler", function(){});
 
 /**
  * @class Oskari.userinterface.request.RemoveExtensionRequest
@@ -28330,7 +28329,7 @@ Oskari.clazz.define('Oskari.userinterface.request.RemoveExtensionRequest', funct
 	'protocol' : ['Oskari.mapframework.request.Request']
 });
 
-define("_bundles_/framework/bundle/divmanazer/request/RemoveExtensionRequest", function(){});
+define("bundles/framework/bundle/divmanazer/request/RemoveExtensionRequest", function(){});
 
 /**
  * @class Oskari.userinterface.bundle.ui.request.RemoveExtensionRequestHandler
@@ -28348,7 +28347,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.request.RemoveExtensionReque
 	protocol : ['Oskari.mapframework.core.RequestHandler']
 });
 
-define("_bundles_/framework/bundle/divmanazer/request/RemoveExtensionRequestHandler", function(){});
+define("bundles/framework/bundle/divmanazer/request/RemoveExtensionRequestHandler", function(){});
 
 /**
  * @class Oskari.userinterface.request.UpdateExtensionRequest
@@ -28376,7 +28375,7 @@ Oskari.clazz.define('Oskari.userinterface.request.UpdateExtensionRequest', funct
 	'protocol' : ['Oskari.mapframework.request.Request']
 });
 
-define("_bundles_/framework/bundle/divmanazer/request/UpdateExtensionRequest", function(){});
+define("bundles/framework/bundle/divmanazer/request/UpdateExtensionRequest", function(){});
 
 /*
  * @class  Oskari.userinterface.bundle.ui.request.UpdateExtensionRequestHandler
@@ -28402,7 +28401,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.request.UpdateExtensionReque
 	protocol : ['Oskari.mapframework.core.RequestHandler']
 });
 
-define("_bundles_/framework/bundle/divmanazer/request/UpdateExtensionRequestHandler", function(){});
+define("bundles/framework/bundle/divmanazer/request/UpdateExtensionRequestHandler", function(){});
 
 /**
  * @class Oskari.userinterface.request.ModalDialogRequest
@@ -28442,7 +28441,7 @@ Oskari.clazz
 		'protocol' : ['Oskari.mapframework.request.Request']
 	    });
 
-define("_bundles_/framework/bundle/divmanazer/request/ModalDialogRequest", function(){});
+define("bundles/framework/bundle/divmanazer/request/ModalDialogRequest", function(){});
 
 /*
  * @class  Oskari.userinterface.bundle.ui.request.ModalDialogRequestHandler
@@ -28514,7 +28513,7 @@ Oskari
 		       }
 	    );
 
-define("_bundles_/framework/bundle/divmanazer/request/ModalDialogRequestHandler", function(){});
+define("bundles/framework/bundle/divmanazer/request/ModalDialogRequestHandler", function(){});
 
 /**
  * @class Oskari.userinterface.event.ExtensionUpdatedEvent
@@ -28568,7 +28567,7 @@ Oskari.clazz
 
 /* Inheritance */
 ;
-define("_bundles_/framework/bundle/divmanazer/event/ExtensionUpdatedEvent", function(){});
+define("bundles/framework/bundle/divmanazer/event/ExtensionUpdatedEvent", function(){});
 
 /**
  * @class Oskari.userinterface.component.Accordion
@@ -28663,7 +28662,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Accordion',
             return this.ui;
         }
     });
-define("_bundles_/framework/bundle/divmanazer/component/Accordion", function(){});
+define("bundles/framework/bundle/divmanazer/component/Accordion", function(){});
 
 /**
  * @class Oskari.userinterface.component.AccordionPanel
@@ -28812,7 +28811,7 @@ Oskari.clazz.define('Oskari.userinterface.component.AccordionPanel',
             container.append(this.html);
         }
     });
-define("_bundles_/framework/bundle/divmanazer/component/AccordionPanel", function(){});
+define("bundles/framework/bundle/divmanazer/component/AccordionPanel", function(){});
 
 /**
  * @class Oskari.userinterface.component.TabContainer
@@ -28979,7 +28978,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
         }
     });
 
-define("_bundles_/framework/bundle/divmanazer/component/TabContainer", function(){});
+define("bundles/framework/bundle/divmanazer/component/TabContainer", function(){});
 
 /**
  * @class Oskari.userinterface.component.TabDropdownContainer
@@ -29168,7 +29167,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
         }
     });
 
-define("_bundles_/framework/bundle/divmanazer/component/TabDropdownContainer", function(){});
+define("bundles/framework/bundle/divmanazer/component/TabDropdownContainer", function(){});
 
 /**
  * @class Oskari.userinterface.component.TabPanel
@@ -29288,7 +29287,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
         }
     });
 
-define("_bundles_/framework/bundle/divmanazer/component/TabPanel", function(){});
+define("bundles/framework/bundle/divmanazer/component/TabPanel", function(){});
 
 /**
  * @class Oskari.userinterface.component.Badge
@@ -29346,7 +29345,7 @@ Oskari.clazz
             }
         });
 
-define("_bundles_/framework/bundle/divmanazer/component/Badge", function(){});
+define("bundles/framework/bundle/divmanazer/component/Badge", function(){});
 
 /**
  * @class Oskari.userinterface.component.Bubble
@@ -29413,7 +29412,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Alert',
 
         }
     });
-define("_bundles_/framework/bundle/divmanazer/component/Alert", function(){});
+define("bundles/framework/bundle/divmanazer/component/Alert", function(){});
 
 /**
  * @class Oskari.userinterface.component.Popup
@@ -29653,7 +29652,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         }
     });
 
-define("_bundles_/framework/bundle/divmanazer/component/Popup", function(){});
+define("bundles/framework/bundle/divmanazer/component/Popup", function(){});
 
 /**
  * @class Oskari.userinterface.component.Popup
@@ -29734,7 +29733,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
         }
     });
 
-define("_bundles_/framework/bundle/divmanazer/component/Overlay", function(){});
+define("bundles/framework/bundle/divmanazer/component/Overlay", function(){});
 
 /**
  * @class Oskari.userinterface.component.Button
@@ -29832,7 +29831,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
         }
     });
 
-define("_bundles_/framework/bundle/divmanazer/component/Button", function(){});
+define("bundles/framework/bundle/divmanazer/component/Button", function(){});
 
 /**
  * @class Oskari.userinterface.component.Form
@@ -29895,7 +29894,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Form',
             }
         }
     });
-define("_bundles_/framework/bundle/divmanazer/component/Form", function(){});
+define("bundles/framework/bundle/divmanazer/component/Form", function(){});
 
 /**
  * @class Oskari.userinterface.component.UIHelper
@@ -29988,7 +29987,7 @@ Oskari.clazz.define('Oskari.userinterface.component.UIHelper',
         }
     });
 
-define("_bundles_/framework/bundle/divmanazer/component/UIHelper", function(){});
+define("bundles/framework/bundle/divmanazer/component/UIHelper", function(){});
 
 /**
  * @class Oskari.userinterface.component.FormInput
@@ -30438,7 +30437,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
     });
 
 
-define("_bundles_/framework/bundle/divmanazer/component/FormInput", function(){});
+define("bundles/framework/bundle/divmanazer/component/FormInput", function(){});
 
 /* ===========================================================
  * bootstrap-tooltip.js v2.0.3 (with popover)
@@ -30851,7 +30850,7 @@ define("_bundles_/framework/bundle/divmanazer/component/FormInput", function(){}
 
 }(window.jQuery);
 
-define("_bundles_/framework/bundle/divmanazer/component/Popover", function(){});
+define("bundles/framework/bundle/divmanazer/component/Popover", function(){});
 
 /**
  * @class Oskari.userinterface.component.Grid
@@ -31562,7 +31561,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         }
     });
 
-define("_bundles_/framework/bundle/divmanazer/component/Grid", function(){});
+define("bundles/framework/bundle/divmanazer/component/Grid", function(){});
 
 /**
  * @class Oskari.userinterface.component.GridModel
@@ -31645,7 +31644,7 @@ Oskari.clazz.define('Oskari.userinterface.component.GridModel',
         }
     });
 
-define("_bundles_/framework/bundle/divmanazer/component/GridModel", function(){});
+define("bundles/framework/bundle/divmanazer/component/GridModel", function(){});
 
 /**
  * @class Oskari.userinterface.component.ProgressSpinner
@@ -32123,7 +32122,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
         })(window, document)
     });
 
-define("_bundles_/framework/bundle/divmanazer/component/ProgressSpinner", function(){});
+define("bundles/framework/bundle/divmanazer/component/ProgressSpinner", function(){});
 
 /**
  * @class Oskari.userinterface.extension.DefaultTile
@@ -32235,7 +32234,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultTile',
         'protocol': ['Oskari.userinterface.Tile']
     });
 
-define("_bundles_/framework/bundle/divmanazer/extension/DefaultTile", function(){});
+define("bundles/framework/bundle/divmanazer/extension/DefaultTile", function(){});
 
 /**
  * @class Oskari.userinterface.extension.DefaultFlyout
@@ -32347,7 +32346,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         'protocol': ['Oskari.userinterface.Flyout']
     });
 
-define("_bundles_/framework/bundle/divmanazer/extension/DefaultFlyout", function(){});
+define("bundles/framework/bundle/divmanazer/extension/DefaultFlyout", function(){});
 
 /**
  * @class Oskari.userinterface.extension.EnhancedFlyout
@@ -32486,7 +32485,7 @@ function(instance, locale) {
     'protocol' : ['Oskari.userinterface.Flyout']
 });
 
-define("_bundles_/framework/bundle/divmanazer/extension/EnhancedFlyout", function(){});
+define("bundles/framework/bundle/divmanazer/extension/EnhancedFlyout", function(){});
 
 /**
  * @class Oskari.userinterface.extension.DefaultExtension
@@ -32720,7 +32719,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultExtension",
         protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
     });
 
-define("_bundles_/framework/bundle/divmanazer/extension/DefaultExtension", function(){});
+define("bundles/framework/bundle/divmanazer/extension/DefaultExtension", function(){});
 
 	/**
  * @class Oskari.userinterface.extension.EnhancedExtension
@@ -33030,7 +33029,7 @@ function(name,locale) {
     protocol : ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension', 'Oskari.mapframework.core.RequestHandler']
 });
 
-define("_bundles_/framework/bundle/divmanazer/extension/EnhancedExtension", function(){});
+define("bundles/framework/bundle/divmanazer/extension/EnhancedExtension", function(){});
 
 /**
  * @class Oskari.userinterface.extension.DefaultView
@@ -33141,7 +33140,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultView',
         'protocol': ['Oskari.userinterface.View']
     });
 
-define("_bundles_/framework/bundle/divmanazer/extension/DefaultView", function(){});
+define("bundles/framework/bundle/divmanazer/extension/DefaultView", function(){});
 
 /**
  * @class Oskari.userinterface.extension.DefaultLayout
@@ -33253,20 +33252,20 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultLayout',
         'protocol': ['Oskari.userinterface.Layout']
     });
 
-define("_bundles_/framework/bundle/divmanazer/extension/DefaultLayout", function(){});
+define("bundles/framework/bundle/divmanazer/extension/DefaultLayout", function(){});
 
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/divmanazer/css/divman.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/divmanazer/css/accordion.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/divmanazer/css/tab.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/divmanazer/css/modal.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/divmanazer/css/badge.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/divmanazer/css/alert.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/divmanazer/css/grid.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/divmanazer/css/popup.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/divmanazer/css/button.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/divmanazer/css/overlay.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('_resources_/framework/bundle/divmanazer/css/popover.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
-define('_bundles_/framework/bundle/divmanazer/module',["oskari","jquery","./instance","./request/AddExtensionRequest","./request/AddExtensionRequestHandler","./request/RemoveExtensionRequest","./request/RemoveExtensionRequestHandler","./request/UpdateExtensionRequest","./request/UpdateExtensionRequestHandler","./request/ModalDialogRequest","./request/ModalDialogRequestHandler","./event/ExtensionUpdatedEvent","./component/Accordion","./component/AccordionPanel","./component/TabContainer","./component/TabDropdownContainer","./component/TabPanel","./component/Badge","./component/Alert","./component/Popup","./component/Overlay","./component/Button","./component/Form","./component/UIHelper","./component/FormInput","./component/Popover","./component/Grid","./component/GridModel","./component/ProgressSpinner","./extension/DefaultTile","./extension/DefaultFlyout","./extension/EnhancedFlyout","./extension/DefaultExtension","./extension/EnhancedExtension","./extension/DefaultView","./extension/DefaultLayout","css!_resources_/framework/bundle/divmanazer/css/divman.css","css!_resources_/framework/bundle/divmanazer/css/accordion.css","css!_resources_/framework/bundle/divmanazer/css/tab.css","css!_resources_/framework/bundle/divmanazer/css/modal.css","css!_resources_/framework/bundle/divmanazer/css/badge.css","css!_resources_/framework/bundle/divmanazer/css/alert.css","css!_resources_/framework/bundle/divmanazer/css/grid.css","css!_resources_/framework/bundle/divmanazer/css/popup.css","css!_resources_/framework/bundle/divmanazer/css/button.css","css!_resources_/framework/bundle/divmanazer/css/overlay.css","css!_resources_/framework/bundle/divmanazer/css/popover.css"], function(Oskari,jQuery) {
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/divman.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/accordion.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/tab.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/modal.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/badge.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/alert.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/grid.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/popup.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/button.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/overlay.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/popover.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+define('bundles/framework/bundle/divmanazer/module',["oskari","jquery","./instance","./request/AddExtensionRequest","./request/AddExtensionRequestHandler","./request/RemoveExtensionRequest","./request/RemoveExtensionRequestHandler","./request/UpdateExtensionRequest","./request/UpdateExtensionRequestHandler","./request/ModalDialogRequest","./request/ModalDialogRequestHandler","./event/ExtensionUpdatedEvent","./component/Accordion","./component/AccordionPanel","./component/TabContainer","./component/TabDropdownContainer","./component/TabPanel","./component/Badge","./component/Alert","./component/Popup","./component/Overlay","./component/Button","./component/Form","./component/UIHelper","./component/FormInput","./component/Popover","./component/Grid","./component/GridModel","./component/ProgressSpinner","./extension/DefaultTile","./extension/DefaultFlyout","./extension/EnhancedFlyout","./extension/DefaultExtension","./extension/EnhancedExtension","./extension/DefaultView","./extension/DefaultLayout","css!resources/framework/bundle/divmanazer/css/divman.css","css!resources/framework/bundle/divmanazer/css/accordion.css","css!resources/framework/bundle/divmanazer/css/tab.css","css!resources/framework/bundle/divmanazer/css/modal.css","css!resources/framework/bundle/divmanazer/css/badge.css","css!resources/framework/bundle/divmanazer/css/alert.css","css!resources/framework/bundle/divmanazer/css/grid.css","css!resources/framework/bundle/divmanazer/css/popup.css","css!resources/framework/bundle/divmanazer/css/button.css","css!resources/framework/bundle/divmanazer/css/overlay.css","css!resources/framework/bundle/divmanazer/css/popover.css"], function(Oskari,jQuery) {
     return Oskari.bundleCls("divmanazer").category({create: function () {
 
         return Oskari.clazz.create("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance");
@@ -33309,7 +33308,7 @@ require(["mainConfig"], function() {
             sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
         }
 
-        var config = "json!_applications_/oskari2/full-map_guest/minifierAppSetup.json";
+        var config = "json!applications/oskari2/full-map_guest/minifierAppSetup.json";
         if (window.ajaxUrl) {
             // populate url with possible control parameters
             var getAppSetupParams = "";
@@ -33324,10 +33323,9 @@ require(["mainConfig"], function() {
 
         /* loading configuration */
         require([config, 
-            "_bundles_/oskari/bundle/map-openlayers/module"], function(appSetup) {
+            "bundles/oskari/bundle/map-openlayers/module"], function(appSetup) {
             Oskari.setLang(language);
             var appConfig = appSetup.configuration;
-            console.log('config', appConfig);
             appConfig.promote = {
                     "conf": {
                         "__name": "Promote",
@@ -33372,18 +33370,13 @@ require(["mainConfig"], function() {
             Oskari.setConfiguration(appConfig);
 
             /* loading main map and divmanazer */
-            require(["_bundles_/framework/bundle/mapfull/module",
-                "_bundles_/framework/bundle/mapmodule-plugin/module",
-                "_bundles_/framework/bundle/divmanazer/module"], function(mapfull, mapmodule, divmanazer) {
-
-                console.log('starting mapfull');
+            require(["bundles/framework/bundle/mapfull/module",
+                "bundles/framework/bundle/mapmodule-plugin/module",
+                "bundles/framework/bundle/divmanazer/module"], function(mapfull, mapmodule, divmanazer) {
 
                 /* starting to show user that something or another is happening */
                 mapfull.start();
-                console.log('starting divmanazer');
                 divmanazer.start();
-
-                console.log('mapfull and divmanazer started', appConfig);
 
                 var bundles = [];
 
@@ -33391,36 +33384,36 @@ require(["mainConfig"], function() {
                     if ((bundle === "mapfull") || (bundle === "divmanazer") || (bundle === "openlayers-default-theme")) {
                         // already loaded
                     } else if (bundle === "statsgrid") {
-                        bundles.push("_bundles_/statistics/bundle/" + bundle + "/module");
+                        bundles.push("bundles/statistics/bundle/" + bundle + "/module");
                     } else if (bundle === "metadataflyout") {
-                        bundles.push("_bundles_/catalogue/bundle/" + bundle + "/module");
+                        bundles.push("bundles/catalogue/bundle/" + bundle + "/module");
                     } else {
-                        bundles.push("_bundles_/framework/bundle/" + bundle + "/module");
+                        bundles.push("bundles/framework/bundle/" + bundle + "/module");
                     }
                 }
 
-                console.log('bundles', bundles);
+//                console.log('bundles', bundles);
 
                 require(bundles, function () {
 
 /*                require([
-                    "_bundles_/framework/bundle/backendstatus/module",
-                    "_bundles_/framework/bundle/guidedtour/module",
-                    "_bundles_/framework/bundle/toolbar/module",
-                    "_bundles_/framework/bundle/layerselection2/module",
-                    "_bundles_/framework/bundle/userguide/module",
-                    "_bundles_/framework/bundle/layerselector2/module",
-                    "_bundles_/framework/bundle/personaldata/module",
-                    "_bundles_/framework/bundle/publisher/module",
-                    "_bundles_/framework/bundle/printout/module",
-                    "_bundles_/framework/bundle/search/module",
-                    "_bundles_/framework/bundle/maplegend/module",
-                    "_bundles_/framework/bundle/featuredata/module",
-                    "_bundles_/framework/bundle/divmanazer/module",
-                    "_bundles_/framework/bundle/statehandler/module",
-                    "_bundles_/framework/bundle/infobox/module",
-                    "_bundles_/framework/bundle/coordinatedisplay/module",
-                    "_bundles_/framework/bundle/promote/module"], function () {*/
+                    "bundles/framework/bundle/backendstatus/module",
+                    "bundles/framework/bundle/guidedtour/module",
+                    "bundles/framework/bundle/toolbar/module",
+                    "bundles/framework/bundle/layerselection2/module",
+                    "bundles/framework/bundle/userguide/module",
+                    "bundles/framework/bundle/layerselector2/module",
+                    "bundles/framework/bundle/personaldata/module",
+                    "bundles/framework/bundle/publisher/module",
+                    "bundles/framework/bundle/printout/module",
+                    "bundles/framework/bundle/search/module",
+                    "bundles/framework/bundle/maplegend/module",
+                    "bundles/framework/bundle/featuredata/module",
+                    "bundles/framework/bundle/divmanazer/module",
+                    "bundles/framework/bundle/statehandler/module",
+                    "bundles/framework/bundle/infobox/module",
+                    "bundles/framework/bundle/coordinatedisplay/module",
+                    "bundles/framework/bundle/promote/module"], function () {*/
                         for(var i = 0, ilen = arguments.length; i < ilen; i++) {
                             arguments[i].start();
                         }
@@ -33433,6 +33426,6 @@ require(["mainConfig"], function() {
         });
     });
 });
-define("../../../applications/oskari2/full-map_guest/main-dev", function(){});
+define("applications/oskari2/full-map_guest/main-dev", function(){});
 
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.setBuffer('div.olMap {\r\n    z-index: 0;\r\n    padding: 0 !important;\r\n    margin: 0 !important;\r\n    cursor: default;\r\n}\r\n\r\ndiv.olMapViewport {\r\n    text-align: left;\r\n}\r\n\r\ndiv.olLayerDiv {\r\n   -moz-user-select: none;\r\n   -khtml-user-select: none;\r\n}\r\n\r\n.olLayerGoogleCopyright {\r\n    left: 2px;\r\n    bottom: 2px;\r\n}\r\n.olLayerGoogleV3.olLayerGoogleCopyright {\r\n    right: auto !important;\r\n}\r\n.olLayerGooglePoweredBy {\r\n    left: 2px;\r\n    bottom: 15px;\r\n}\r\n.olLayerGoogleV3.olLayerGooglePoweredBy {\r\n    bottom: 15px !important;\r\n}\r\n.olControlAttribution {\r\n    font-size: smaller;\r\n    right: 3px;\r\n    bottom: 4.5em;\r\n    position: absolute;\r\n    display: block;\r\n}\r\n.olControlScale {\r\n    right: 3px;\r\n    bottom: 3em;\r\n    display: block;\r\n    position: absolute;\r\n    font-size: smaller;\r\n}\r\n.olControlScaleLine {\r\n   display: block;\r\n   position: absolute;\r\n   left: 10px;\r\n   bottom: 15px;\r\n   font-size: xx-small;\r\n}\r\n.olControlScaleLineBottom {\r\n   border: solid 2px black;\r\n   border-bottom: none;\r\n   margin-top:-2px;\r\n   text-align: center;\r\n}\r\n.olControlScaleLineTop {\r\n   border: solid 2px black;\r\n   border-top: none;\r\n   text-align: center;\r\n}\r\n\r\n.olControlPermalink {\r\n    right: 3px;\r\n    bottom: 1.5em;\r\n    display: block;\r\n    position: absolute;\r\n    font-size: smaller;\r\n}\r\n\r\ndiv.olControlMousePosition {\r\n    bottom: 0;\r\n    right: 3px;\r\n    display: block;\r\n    position: absolute;\r\n    font-family: Arial;\r\n    font-size: smaller;\r\n}\r\n\r\n.olControlOverviewMapContainer {\r\n    position: absolute;\r\n    bottom: 0;\r\n    right: 0;\r\n}\r\n\r\n.olControlOverviewMapElement {\r\n    padding: 10px 18px 10px 10px;\r\n    background-color: #00008B;\r\n    -moz-border-radius: 1em 0 0 0;\r\n}\r\n\r\n.olControlOverviewMapMinimizeButton,\r\n.olControlOverviewMapMaximizeButton {\r\n    height: 18px;\r\n    width: 18px;\r\n    right: 0;\r\n    bottom: 80px;\r\n    cursor: pointer;\r\n}\r\n\r\n.olControlOverviewMapExtentRectangle {\r\n    overflow: hidden;\r\n    background-image: url(\"../../../resources/openlayers/theme/default/img/blank.gif\");\r\n    cursor: move;\r\n    border: 2px dotted red;\r\n}\r\n.olControlOverviewMapRectReplacement {\r\n    overflow: hidden;\r\n    cursor: move;\r\n    background-image: url(\"../../../resources/openlayers/theme/default/img/overview_replacement.gif\");\r\n    background-repeat: no-repeat;\r\n    background-position: center;\r\n}\r\n\r\n.olLayerGeoRSSDescription {\r\n    float:left;\r\n    width:100%;\r\n    overflow:auto;\r\n    font-size:1.0em;\r\n}\r\n.olLayerGeoRSSClose {\r\n    float:right;\r\n    color:gray;\r\n    font-size:1.2em;\r\n    margin-right:6px;\r\n    font-family:sans-serif;\r\n}\r\n.olLayerGeoRSSTitle {\r\n    float:left;font-size:1.2em;\r\n}\r\n\r\n.olPopupContent {\r\n    padding:5px;\r\n    overflow: auto;\r\n}\r\n\r\n.olControlNavigationHistory {\r\n   background-image: url(\"../../../resources/openlayers/theme/default/img/navigation_history.png\");\r\n   background-repeat: no-repeat;\r\n   width:  24px;\r\n   height: 24px;\r\n\r\n}\r\n.olControlNavigationHistoryPreviousItemActive {\r\n  background-position: 0 0;\r\n}\r\n.olControlNavigationHistoryPreviousItemInactive {\r\n   background-position: 0 -24px;\r\n}\r\n.olControlNavigationHistoryNextItemActive {\r\n   background-position: -24px 0;\r\n}\r\n.olControlNavigationHistoryNextItemInactive {\r\n   background-position: -24px -24px;\r\n}\r\n\r\ndiv.olControlSaveFeaturesItemActive {\r\n    background-image: url(../../../resources/openlayers/theme/default/img/save_features_on.png);\r\n    background-repeat: no-repeat;\r\n    background-position: 0 1px;\r\n}\r\ndiv.olControlSaveFeaturesItemInactive {\r\n    background-image: url(../../../resources/openlayers/theme/default/img/save_features_off.png);\r\n    background-repeat: no-repeat;\r\n    background-position: 0 1px;\r\n}\r\n\r\n.olHandlerBoxZoomBox {\r\n    border: 2px solid red;\r\n    position: absolute;\r\n    background-color: white;\r\n    opacity: 0.50;\r\n    font-size: 1px;\r\n    filter: alpha(opacity=50);\r\n}\r\n.olHandlerBoxSelectFeature {\r\n    border: 2px solid blue;\r\n    position: absolute;\r\n    background-color: white;\r\n    opacity: 0.50;\r\n    font-size: 1px;\r\n    filter: alpha(opacity=50);\r\n}\r\n\r\n.olControlPanPanel {\r\n    top: 10px;\r\n    left: 5px;\r\n}\r\n\r\n.olControlPanPanel div {\r\n    background-image: url(../../../resources/openlayers/theme/default/img/pan-panel.png);\r\n    height: 18px;\r\n    width: 18px;\r\n    cursor: pointer;\r\n    position: absolute;\r\n}\r\n\r\n.olControlPanPanel .olControlPanNorthItemInactive {\r\n    top: 0;\r\n    left: 9px;\r\n    background-position: 0 0;\r\n}\r\n.olControlPanPanel .olControlPanSouthItemInactive {\r\n    top: 36px;\r\n    left: 9px;\r\n    background-position: 18px 0;\r\n}\r\n.olControlPanPanel .olControlPanWestItemInactive {\r\n    position: absolute;\r\n    top: 18px;\r\n    left: 0;\r\n    background-position: 0 18px;\r\n}\r\n.olControlPanPanel .olControlPanEastItemInactive {\r\n    top: 18px;\r\n    left: 18px;\r\n    background-position: 18px 18px;\r\n}\r\n\r\n.olControlZoomPanel {\r\n    top: 71px;\r\n    left: 14px;\r\n}\r\n\r\n.olControlZoomPanel div {\r\n    background-image: url(../../../resources/openlayers/theme/default/img/zoom-panel.png);\r\n    position: absolute;\r\n    height: 18px;\r\n    width: 18px;\r\n    cursor: pointer;\r\n}\r\n\r\n.olControlZoomPanel .olControlZoomInItemInactive {\r\n    top: 0;\r\n    left: 0;\r\n    background-position: 0 0;\r\n}\r\n\r\n.olControlZoomPanel .olControlZoomToMaxExtentItemInactive {\r\n    top: 18px;\r\n    left: 0;\r\n    background-position: 0 -18px;\r\n}\r\n\r\n.olControlZoomPanel .olControlZoomOutItemInactive {\r\n    top: 36px;\r\n    left: 0;\r\n    background-position: 0 18px;\r\n}\r\n\r\n/*\r\n * When a potential text is bigger than the image it move the image\r\n * with some headers (closes #3154)\r\n */\r\n.olControlPanZoomBar div {\r\n    font-size: 1px;\r\n}\r\n\r\n.olPopupCloseBox {\r\n  background: url(\"../../../resources/openlayers/theme/default/img/close.gif\") no-repeat;\r\n  cursor: pointer;\r\n}\r\n\r\n.olFramedCloudPopupContent {\r\n    padding: 5px;\r\n    overflow: auto;\r\n}\r\n\r\n.olControlNoSelect {\r\n -moz-user-select: none;\r\n -khtml-user-select: none;\r\n}\r\n\r\n.olImageLoadError {\r\n    background-color: pink;\r\n    opacity: 0.5;\r\n    filter: alpha(opacity=50); /* IE */\r\n}\r\n\r\n/**\r\n * Cursor styles\r\n */\r\n\r\n.olCursorWait {\r\n    cursor: wait;\r\n}\r\n.olDragDown {\r\n    cursor: move;\r\n}\r\n.olDrawBox {\r\n    cursor: crosshair;\r\n}\r\n.olControlDragFeatureOver {\r\n    cursor: move;\r\n}\r\n.olControlDragFeatureActive.olControlDragFeatureOver.olDragDown {\r\n    cursor: -moz-grabbing;\r\n}\r\n\r\n/**\r\n * Layer switcher\r\n */\r\n.olControlLayerSwitcher {\r\n    position: absolute;\r\n    top: 25px;\r\n    right: 0;\r\n    width: 20em;\r\n    font-family: sans-serif;\r\n    font-weight: bold;\r\n    margin-top: 3px;\r\n    margin-left: 3px;\r\n    margin-bottom: 3px;\r\n    font-size: smaller;\r\n    color: white;\r\n    background-color: transparent;\r\n}\r\n\r\n.olControlLayerSwitcher .layersDiv {\r\n    padding-top: 5px;\r\n    padding-left: 10px;\r\n    padding-bottom: 5px;\r\n    padding-right: 10px;\r\n    background-color: darkblue;\r\n}\r\n\r\n.olControlLayerSwitcher .layersDiv .baseLbl,\r\n.olControlLayerSwitcher .layersDiv .dataLbl {\r\n    margin-top: 3px;\r\n    margin-left: 3px;\r\n    margin-bottom: 3px;\r\n}\r\n\r\n.olControlLayerSwitcher .layersDiv .baseLayersDiv,\r\n.olControlLayerSwitcher .layersDiv .dataLayersDiv {\r\n    padding-left: 10px;\r\n}\r\n\r\n.olControlLayerSwitcher .maximizeDiv,\r\n.olControlLayerSwitcher .minimizeDiv {\r\n    width: 18px;\r\n    height: 18px;\r\n    top: 5px;\r\n    right: 0;\r\n    cursor: pointer;\r\n}\r\n\r\n.olBingAttribution {\r\n    color: #DDD;\r\n}\r\n.olBingAttribution.road {\r\n    color: #333;\r\n}\r\n\r\n.olGoogleAttribution.hybrid, .olGoogleAttribution.satellite {\r\n    color: #EEE;\r\n}\r\n.olGoogleAttribution {\r\n    color: #333;\r\n}\r\nspan.olGoogleAttribution a {\r\n    color: #77C;\r\n}\r\nspan.olGoogleAttribution.hybrid a, span.olGoogleAttribution.satellite a {\r\n    color: #EEE;\r\n}\r\n\r\n/**\r\n * Editing and navigation icons.\r\n * (using the editing_tool_bar.png sprint image)\r\n */\r\n.olControlNavToolbar ,\r\n.olControlEditingToolbar {\r\n    margin: 5px 5px 0 0;\r\n}\r\n.olControlNavToolbar div,\r\n.olControlEditingToolbar div {\r\n    background-image: url(\"../../../resources/openlayers/theme/default/img/editing_tool_bar.png\");\r\n    background-repeat: no-repeat;\r\n    margin: 0 0 5px 5px;\r\n    width: 24px;\r\n    height: 22px;\r\n    cursor: pointer\r\n}\r\n/* positions */\r\n.olControlEditingToolbar {\r\n    right: 0;\r\n    top: 0;\r\n}\r\n.olControlNavToolbar {\r\n    top: 295px;\r\n    left: 9px;\r\n}\r\n/* layouts */\r\n.olControlEditingToolbar div {\r\n    float: right;\r\n}\r\n/* individual controls */\r\n.olControlNavToolbar .olControlNavigationItemInactive,\r\n.olControlEditingToolbar .olControlNavigationItemInactive {\r\n    background-position: -103px -1px;\r\n}\r\n.olControlNavToolbar .olControlNavigationItemActive ,\r\n.olControlEditingToolbar .olControlNavigationItemActive  {\r\n    background-position: -103px -24px;\r\n}\r\n.olControlNavToolbar .olControlZoomBoxItemInactive {\r\n    background-position: -128px -1px;\r\n}\r\n.olControlNavToolbar .olControlZoomBoxItemActive  {\r\n    background-position: -128px -24px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePointItemInactive {\r\n    background-position: -77px -1px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePointItemActive {\r\n    background-position: -77px -24px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePathItemInactive {\r\n    background-position: -51px -1px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePathItemActive {\r\n    background-position: -51px -24px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePolygonItemInactive{\r\n    background-position: -26px -1px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePolygonItemActive {\r\n    background-position: -26px -24px;\r\n}\r\n\r\ndiv.olControlZoom {\r\n    position: absolute;\r\n    top: 8px;\r\n    left: 8px;\r\n    background: rgba(255,255,255,0.4);\r\n    border-radius: 4px;\r\n    padding: 2px;\r\n}\r\ndiv.olControlZoom a {\r\n    display: block;\r\n    margin: 1px;\r\n    padding: 0;\r\n    color: white;\r\n    font-size: 18px;\r\n    font-family: \'Lucida Grande\', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;\r\n    font-weight: bold;\r\n    text-decoration: none;\r\n    text-align: center;\r\n    height: 22px;\r\n    width:22px;\r\n    line-height: 19px;\r\n    background: #130085; /* fallback for IE - IE6 requires background shorthand*/\r\n    background: rgba(0, 60, 136, 0.5);\r\n    filter: alpha(opacity=80);\r\n}\r\ndiv.olControlZoom a:hover {\r\n    background: #130085; /* fallback for IE */\r\n    background: rgba(0, 60, 136, 0.7);\r\n    filter: alpha(opacity=100);\r\n}\r\n@media only screen and (max-width: 600px) {\r\n    div.olControlZoom a:hover {\r\n        background: rgba(0, 60, 136, 0.5);\r\n    }\r\n}\r\na.olControlZoomIn {\r\n    border-radius: 4px 4px 0 0;\r\n}\r\na.olControlZoomOut {\r\n    border-radius: 0 0 4px 4px;\r\n}\r\n\r\n\r\n/**\r\n * Animations\r\n */\r\n\r\n.olLayerGrid .olTileImage {\r\n    -webkit-transition: opacity 0.2s linear;\r\n    -moz-transition: opacity 0.2s linear;\r\n    -o-transition: opacity 0.2s linear;\r\n    transition: opacity 0.2s linear;\r\n}\r\n#contentMap.oskari-map-window-fullscreen {\r\n  position: fixed;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100%;\r\n  z-index: 10000;\r\n  margin: 0 !important; }\r\n/*! jQuery UI - v1.9.1 - 2012-11-09\r\n* http://jqueryui.com\r\n* Includes: jquery.ui.core.css, jquery.ui.resizable.css, jquery.ui.selectable.css, jquery.ui.slider.css, jquery.ui.tooltip.css\r\n* To view and modify this theme, visit http://jqueryui.com/themeroller/?ffDefault=Segoe%20UI%2CArial%2Csans-serif&fwDefault=bold&fsDefault=1.1em&cornerRadius=6px&bgColorHeader=333333&bgTextureHeader=12_gloss_wave.png&bgImgOpacityHeader=25&borderColorHeader=333333&fcHeader=ffffff&iconColorHeader=ffffff&bgColorContent=000000&bgTextureContent=05_inset_soft.png&bgImgOpacityContent=25&borderColorContent=666666&fcContent=ffffff&iconColorContent=cccccc&bgColorDefault=555555&bgTextureDefault=02_glass.png&bgImgOpacityDefault=20&borderColorDefault=666666&fcDefault=eeeeee&iconColorDefault=cccccc&bgColorHover=0078a3&bgTextureHover=02_glass.png&bgImgOpacityHover=40&borderColorHover=59b4d4&fcHover=ffffff&iconColorHover=ffffff&bgColorActive=f58400&bgTextureActive=05_inset_soft.png&bgImgOpacityActive=30&borderColorActive=ffaf0f&fcActive=ffffff&iconColorActive=222222&bgColorHighlight=eeeeee&bgTextureHighlight=03_highlight_soft.png&bgImgOpacityHighlight=80&borderColorHighlight=cccccc&fcHighlight=2e7db2&iconColorHighlight=4b8e0b&bgColorError=ffc73d&bgTextureError=02_glass.png&bgImgOpacityError=40&borderColorError=ffb73d&fcError=111111&iconColorError=a83300&bgColorOverlay=5c5c5c&bgTextureOverlay=01_flat.png&bgImgOpacityOverlay=50&opacityOverlay=80&bgColorShadow=cccccc&bgTextureShadow=01_flat.png&bgImgOpacityShadow=30&opacityShadow=60&thicknessShadow=7px&offsetTopShadow=-7px&offsetLeftShadow=-7px&cornerRadiusShadow=8px\r\n* Copyright (c) 2012 jQuery Foundation and other contributors Licensed MIT */\r\n\r\n/* Layout helpers\r\n----------------------------------*/\r\n.oskariui .ui-helper-hidden { display: none; }\r\n.oskariui .ui-helper-hidden-accessible { position: absolute !important; clip: rect(1px,1px,1px,1px); clip: rect(1px,1px,1px,1px); }\r\n.oskariui .ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }\r\n.oskariui .ui-helper-clearfix:before, .ui-helper-clearfix:after { content: \"\"; display: table; }\r\n.oskariui .ui-helper-clearfix:after { clear: both; }\r\n.oskariui .ui-helper-clearfix { zoom: 1; }\r\n.oskariui .ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }\r\n\r\n\r\n/* Interaction Cues\r\n----------------------------------*/\r\n.oskariui .ui-state-disabled { cursor: default !important; }\r\n\r\n\r\n/* Icons\r\n----------------------------------*/\r\n\r\n/* states and images */\r\n.oskariui .ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }\r\n\r\n\r\n/* Misc visuals\r\n----------------------------------*/\r\n\r\n/* Overlays */\r\n.oskariui .ui-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }\r\n.oskariui .ui-resizable { position: relative;}\r\n.oskariui .ui-resizable-handle { position: absolute;font-size: 0.1px; display: block; }\r\n.oskariui .ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }\r\n.oskariui .ui-resizable-n { cursor: n-resize; height: 7px; width: 100%; top: -5px; left: 0; }\r\n.oskariui .ui-resizable-s { cursor: s-resize; height: 7px; width: 100%; bottom: -5px; left: 0; }\r\n.oskariui .ui-resizable-e { cursor: e-resize; width: 7px; right: -5px; top: 0; height: 100%; }\r\n.oskariui .ui-resizable-w { cursor: w-resize; width: 7px; left: -5px; top: 0; height: 100%; }\r\n.oskariui .ui-resizable-se { cursor: se-resize; width: 12px; height: 12px; right: 1px; bottom: 1px; }\r\n.oskariui .ui-resizable-sw { cursor: sw-resize; width: 9px; height: 9px; left: -5px; bottom: -5px; }\r\n.oskariui .ui-resizable-nw { cursor: nw-resize; width: 9px; height: 9px; left: -5px; top: -5px; }\r\n.oskariui .ui-resizable-ne { cursor: ne-resize; width: 9px; height: 9px; right: -5px; top: -5px;}.ui-selectable-helper { position: absolute; border:1px dotted black; }\r\n\r\n.oskariui .ui-slider { position: relative; text-align: left; }\r\n.oskariui .ui-slider .ui-slider-handle { position: absolute; width: 16px; height: 17px; cursor: default; }\r\n.oskariui .ui-slider .ui-slider-range { position: absolute; font-size: .7em; display: block; border: 0; background-position: 0 0; }\r\n\r\n.oskariui .ui-slider-horizontal { height: 14px; }\r\n.oskariui .ui-slider-horizontal .ui-slider-handle { background-image: url(\'/Oskari/resources/framework/bundle/oskariui/images/horizontal_handle.png\'); background-repeat: no-repeat;}\r\n\r\n.oskariui .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }\r\n.oskariui .ui-slider-horizontal .ui-slider-range-min { left: 0; }\r\n.oskariui .ui-slider-horizontal .ui-slider-range-max { right: 0; }\r\n\r\n.oskariui .ui-slider-vertical { margin-left: 2px; width: 24px; background-image: url(\'/Oskari/resources/framework/bundle/oskariui/images/zoombar_part.png\'); background-repeat: repeat-y; }\r\n.oskariui .ui-slider-vertical .ui-slider-handle { margin-left: 0; background-image: url(\'/Oskari/resources/framework/bundle/oskariui/images/zoombar_cursor.png\'); background-repeat: no-repeat;}\r\n.oskariui .ui-slider-vertical .ui-slider-range { left: 0; width: 100%; }\r\n.oskariui .ui-slider-vertical .ui-slider-range-min { bottom: 0; }\r\n.oskariui .ui-slider-vertical .ui-slider-range-max { top: 0; }.ui-tooltip {\r\n\tpadding: 8px;\r\n\tposition: absolute;\r\n\tz-index: 9999;\r\n\tmax-width: 300px;\r\n\t-webkit-box-shadow: 0 0 5px #aaa;\r\n\tbox-shadow: 0 0 5px #aaa;\r\n}\r\n/* Fades and background-images don\'t work well together in IE6, drop the image */\r\n* html .ui-tooltip {\r\n\tbackground-image: none;\r\n}\r\nbody .oskariui .ui-tooltip { border-width: 2px; }\r\n\r\n/* Component containers\r\n----------------------------------*/\r\n.oskariui .ui-widget { font-family: Segoe UI,Arial,sans-serif; font-size: 1.1em; }\r\n.oskariui .ui-widget .ui-widget { font-size: 1em; }\r\n.oskariui .ui-widget input, .oskariui .ui-widget select, .oskariui .ui-widget textarea, .oskariui .ui-widget button { font-family: Segoe UI,Arial,sans-serif; font-size: 1em; }\r\n.oskariui .ui-widget-content {  }\r\n.oskariui .ui-widget-content a {  }\r\n.oskariui .ui-widget-header {  }\r\n.oskariui .ui-widget-header a {  }\r\n\r\n/* Interaction states\r\n----------------------------------*/\r\n.oskariui .ui-state-default, .oskariui .ui-widget-content .ui-state-default, .oskariui .ui-widget-header .ui-state-default {  }\r\n.oskariui .ui-state-default a, .oskariui .ui-state-default a:link, .oskariui .ui-state-default a:visited {  }\r\n.oskariui .ui-state-hover, .oskariui .ui-widget-content .ui-state-hover, .oskariui .ui-widget-header .ui-state-hover, .oskariui .ui-state-focus, .oskariui .ui-widget-content .ui-state-focus, .oskariui .ui-widget-header .ui-state-focus {  }\r\n.oskariui .ui-state-hover a, .oskariui .ui-state-hover a:hover, .oskariui .ui-state-hover a:link, .oskariui .ui-state-hover a:visited { }\r\n.oskariui .ui-state-active, .oskariui .ui-widget-content .ui-state-active, .oskariui .ui-widget-header .ui-state-active {  }\r\n.oskariui .ui-state-active a, .oskariui .ui-state-active a:link, .oskariui .ui-state-active a:visited {  }\r\n\r\n/* Interaction Cues\r\n----------------------------------*/\r\n.oskariui .ui-state-highlight, .oskariui .ui-widget-content .ui-state-highlight, .oskariui .ui-widget-header .ui-state-highlight  { }\r\n.oskariui .ui-state-highlight a, .oskariui .ui-widget-content .ui-state-highlight a,.oskariui .ui-widget-header .ui-state-highlight a { }\r\n.oskariui .ui-state-error, .oskariui .ui-widget-content .ui-state-error, .oskariui .ui-widget-header .ui-state-error { }\r\n.oskariui .ui-state-error a, .oskariui .ui-widget-content .ui-state-error a, .oskariui .ui-widget-header .ui-state-error a { }\r\n.oskariui .ui-state-error-text, .oskariui .ui-widget-content .ui-state-error-text, .oskariui .ui-widget-header .ui-state-error-text {  }\r\n.oskariui .ui-priority-primary, .oskariui .ui-widget-content .ui-priority-primary, .oskariui .ui-widget-header .ui-priority-primary {  }\r\n.oskariui .ui-priority-secondary, .oskariui .ui-widget-content .ui-priority-secondary,  .oskariui .ui-widget-header .ui-priority-secondary { }\r\n.oskariui .ui-state-disabled, .oskariui .ui-widget-content .ui-state-disabled, .oskariui .ui-widget-header .ui-state-disabled {  }\r\n.oskariui .ui-state-disabled .ui-icon { filter:Alpha(Opacity=35); } /* For IE8 - See #6059 */\r\n\r\n/* Icons\r\n----------------------------------*/\r\n\r\n/* states and images */\r\n.oskariui .ui-icon { width: 16px; height: 16px; }\r\n.oskariui .ui-widget-content .ui-icon { }\r\n.oskariui .ui-widget-header .ui-icon { }\r\n.oskariui .ui-state-default .ui-icon {  }\r\n.oskariui .ui-state-hover .ui-icon, .oskariui .ui-state-focus .ui-icon {}\r\n.oskariui .ui-state-active .ui-icon { }\r\n.oskariui .ui-state-highlight .ui-icon { }\r\n.oskariui .ui-state-error .ui-icon, .oskariui .ui-state-error-text .ui-icon { }\r\n\r\n\r\n/* Misc visuals\r\n----------------------------------*/\r\n\r\n/* Corner radius */\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-top, .oskariui .ui-corner-left, .oskariui .ui-corner-tl { -moz-border-radius-topleft: 6px; -webkit-border-top-left-radius: 6px; -khtml-border-top-left-radius: 6px; border-top-left-radius: 6px; }\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-top, .oskariui .ui-corner-right, .oskariui .ui-corner-tr { -moz-border-radius-topright: 6px; -webkit-border-top-right-radius: 6px; -khtml-border-top-right-radius: 6px; border-top-right-radius: 6px; }\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-bottom, .oskariui .ui-corner-left, .oskariui .ui-corner-bl { -moz-border-radius-bottomleft: 6px; -webkit-border-bottom-left-radius: 6px; -khtml-border-bottom-left-radius: 6px; border-bottom-left-radius: 6px; }\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-bottom, .oskariui .ui-corner-right, .oskariui .ui-corner-br { -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; -khtml-border-bottom-right-radius: 6px; border-bottom-right-radius: 6px; }\r\n\r\n/* Overlays */\r\n.oskariui .ui-widget-overlay { background: #5c5c5c url(../../../resources/framework/bundle/oskariui/css/images/ui-bg_flat_50_5c5c5c_40x100.png) 50% 50% repeat-x; opacity: .8;filter:Alpha(Opacity=80); }\r\n.oskariui .ui-widget-shadow { margin: -7px 0 0 -7px; padding: 7px; background: #cccccc url(../../../resources/framework/bundle/oskariui/css/images/ui-bg_flat_30_cccccc_40x100.png) 50% 50% repeat-x; opacity: .6;filter:Alpha(Opacity=60); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }\r\n/*!\r\n * Bootstrap v2.3.1\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\r\n.oskariui .clearfix {\r\n  *zoom: 1;\r\n}\r\n.oskariui .clearfix:before,\r\n.oskariui .clearfix:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .clearfix:after {\r\n  clear: both;\r\n}\r\n.oskariui .hide-text {\r\n  font: 0/0 a;\r\n  color: transparent;\r\n  text-shadow: none;\r\n  background-color: transparent;\r\n  border: 0;\r\n}\r\n.oskariui .input-block-level {\r\n  display: block;\r\n  width: 100%;\r\n  min-height: 30px;\r\n  -webkit-box-sizing: border-box;\r\n  -moz-box-sizing: border-box;\r\n  box-sizing: border-box;\r\n}\r\n.oskariui .row {\r\n  margin-left: -20px;\r\n  *zoom: 1;\r\n}\r\n.oskariui .row:before,\r\n.oskariui .row:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .row:after {\r\n  clear: both;\r\n}\r\n[class*=\"span\"] {\r\n  float: left;\r\n  min-height: 1px;\r\n  margin-left: 20px;\r\n}\r\n.oskariui .container,\r\n.oskariui .navbar-static-top .container,\r\n.oskariui .navbar-fixed-top .container,\r\n.oskariui .navbar-fixed-bottom .container {\r\n  width: 940px;\r\n}\r\n.oskariui .span12 {\r\n  width: 940px;\r\n}\r\n.oskariui .span11 {\r\n  width: 860px;\r\n}\r\n.oskariui .span10 {\r\n  width: 780px;\r\n}\r\n.oskariui .span9 {\r\n  width: 700px;\r\n}\r\n.oskariui .span8 {\r\n  width: 620px;\r\n}\r\n.oskariui .span7 {\r\n  width: 540px;\r\n}\r\n.oskariui .span6 {\r\n  width: 460px;\r\n}\r\n.oskariui .span5 {\r\n  width: 380px;\r\n}\r\n.oskariui .span4 {\r\n  width: 300px;\r\n}\r\n.oskariui .span3 {\r\n  width: 220px;\r\n}\r\n.oskariui .span2 {\r\n  width: 140px;\r\n}\r\n.oskariui .span1 {\r\n  width: 60px;\r\n}\r\n.oskariui .offset12 {\r\n  margin-left: 980px;\r\n}\r\n.oskariui .offset11 {\r\n  margin-left: 900px;\r\n}\r\n.oskariui .offset10 {\r\n  margin-left: 820px;\r\n}\r\n.oskariui .offset9 {\r\n  margin-left: 740px;\r\n}\r\n.oskariui .offset8 {\r\n  margin-left: 660px;\r\n}\r\n.oskariui .offset7 {\r\n  margin-left: 580px;\r\n}\r\n.oskariui .offset6 {\r\n  margin-left: 500px;\r\n}\r\n.oskariui .offset5 {\r\n  margin-left: 420px;\r\n}\r\n.oskariui .offset4 {\r\n  margin-left: 340px;\r\n}\r\n.oskariui .offset3 {\r\n  margin-left: 260px;\r\n}\r\n.oskariui .offset2 {\r\n  margin-left: 180px;\r\n}\r\n.oskariui .offset1 {\r\n  margin-left: 100px;\r\n}\r\n.oskariui .row-fluid {\r\n  width: 100%;\r\n  *zoom: 1;\r\n}\r\n.oskariui .row-fluid:before,\r\n.oskariui .row-fluid:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .row-fluid:after {\r\n  clear: both;\r\n}\r\n.oskariui .row-fluid [class*=\"span\"] {\r\n  display: block;\r\n  width: 100%;\r\n  min-height: 30px;\r\n  -webkit-box-sizing: border-box;\r\n  -moz-box-sizing: border-box;\r\n  box-sizing: border-box;\r\n  float: left;\r\n  margin-left: 2.127659574468085%;\r\n  *margin-left: 2.074468085106383%;\r\n}\r\n.oskariui .row-fluid [class*=\"span\"]:first-child {\r\n  margin-left: 0;\r\n}\r\n.oskariui .row-fluid .controls-row [class*=\"span\"] + [class*=\"span\"] {\r\n  margin-left: 2.127659574468085%;\r\n}\r\n.oskariui .row-fluid .span12 {\r\n  width: 100%;\r\n  *width: 99.94680851063829%;\r\n}\r\n.oskariui .row-fluid .span11 {\r\n  width: 91.48936170212765%;\r\n  *width: 91.43617021276594%;\r\n}\r\n.oskariui .row-fluid .span10 {\r\n  width: 82.97872340425532%;\r\n  *width: 82.92553191489361%;\r\n}\r\n.oskariui .row-fluid .span9 {\r\n  width: 74.46808510638297%;\r\n  *width: 74.41489361702126%;\r\n}\r\n.oskariui .row-fluid .span8 {\r\n  width: 65.95744680851064%;\r\n  *width: 65.90425531914893%;\r\n}\r\n.oskariui .row-fluid .span7 {\r\n  width: 57.44680851063829%;\r\n  *width: 57.39361702127659%;\r\n}\r\n.oskariui .row-fluid .span6 {\r\n  width: 48.93617021276595%;\r\n  *width: 48.88297872340425%;\r\n}\r\n.oskariui .row-fluid .span5 {\r\n  width: 40.42553191489362%;\r\n  *width: 40.37234042553192%;\r\n}\r\n.oskariui .row-fluid .span4 {\r\n  width: 31.914893617021278%;\r\n  *width: 31.861702127659576%;\r\n}\r\n.oskariui .row-fluid .span3 {\r\n  width: 23.404255319148934%;\r\n  *width: 23.351063829787233%;\r\n}\r\n.oskariui .row-fluid .span2 {\r\n  width: 14.893617021276595%;\r\n  *width: 14.840425531914894%;\r\n}\r\n.oskariui .row-fluid .span1 {\r\n  width: 6.382978723404255%;\r\n  *width: 6.329787234042553%;\r\n}\r\n.oskariui .row-fluid .offset12 {\r\n  margin-left: 104.25531914893617%;\r\n  *margin-left: 104.14893617021275%;\r\n}\r\n.oskariui .row-fluid .offset12:first-child {\r\n  margin-left: 102.12765957446808%;\r\n  *margin-left: 102.02127659574467%;\r\n}\r\n.oskariui .row-fluid .offset11 {\r\n  margin-left: 95.74468085106382%;\r\n  *margin-left: 95.6382978723404%;\r\n}\r\n.oskariui .row-fluid .offset11:first-child {\r\n  margin-left: 93.61702127659574%;\r\n  *margin-left: 93.51063829787232%;\r\n}\r\n.oskariui .row-fluid .offset10 {\r\n  margin-left: 87.23404255319149%;\r\n  *margin-left: 87.12765957446807%;\r\n}\r\n.oskariui .row-fluid .offset10:first-child {\r\n  margin-left: 85.1063829787234%;\r\n  *margin-left: 84.99999999999999%;\r\n}\r\n.oskariui .row-fluid .offset9 {\r\n  margin-left: 78.72340425531914%;\r\n  *margin-left: 78.61702127659572%;\r\n}\r\n.oskariui .row-fluid .offset9:first-child {\r\n  margin-left: 76.59574468085106%;\r\n  *margin-left: 76.48936170212764%;\r\n}\r\n.oskariui .row-fluid .offset8 {\r\n  margin-left: 70.2127659574468%;\r\n  *margin-left: 70.10638297872339%;\r\n}\r\n.oskariui .row-fluid .offset8:first-child {\r\n  margin-left: 68.08510638297872%;\r\n  *margin-left: 67.9787234042553%;\r\n}\r\n.oskariui .row-fluid .offset7 {\r\n  margin-left: 61.70212765957446%;\r\n  *margin-left: 61.59574468085106%;\r\n}\r\n.oskariui .row-fluid .offset7:first-child {\r\n  margin-left: 59.574468085106375%;\r\n  *margin-left: 59.46808510638297%;\r\n}\r\n.oskariui .row-fluid .offset6 {\r\n  margin-left: 53.191489361702125%;\r\n  *margin-left: 53.085106382978715%;\r\n}\r\n.oskariui .row-fluid .offset6:first-child {\r\n  margin-left: 51.063829787234035%;\r\n  *margin-left: 50.95744680851063%;\r\n}\r\n.oskariui .row-fluid .offset5 {\r\n  margin-left: 44.68085106382979%;\r\n  *margin-left: 44.57446808510638%;\r\n}\r\n.oskariui .row-fluid .offset5:first-child {\r\n  margin-left: 42.5531914893617%;\r\n  *margin-left: 42.4468085106383%;\r\n}\r\n.oskariui .row-fluid .offset4 {\r\n  margin-left: 36.170212765957444%;\r\n  *margin-left: 36.06382978723405%;\r\n}\r\n.oskariui .row-fluid .offset4:first-child {\r\n  margin-left: 34.04255319148936%;\r\n  *margin-left: 33.93617021276596%;\r\n}\r\n.oskariui .row-fluid .offset3 {\r\n  margin-left: 27.659574468085104%;\r\n  *margin-left: 27.5531914893617%;\r\n}\r\n.oskariui .row-fluid .offset3:first-child {\r\n  margin-left: 25.53191489361702%;\r\n  *margin-left: 25.425531914893618%;\r\n}\r\n.oskariui .row-fluid .offset2 {\r\n  margin-left: 19.148936170212764%;\r\n  *margin-left: 19.04255319148936%;\r\n}\r\n.oskariui .row-fluid .offset2:first-child {\r\n  margin-left: 17.02127659574468%;\r\n  *margin-left: 16.914893617021278%;\r\n}\r\n.oskariui .row-fluid .offset1 {\r\n  margin-left: 10.638297872340425%;\r\n  *margin-left: 10.53191489361702%;\r\n}\r\n.oskariui .row-fluid .offset1:first-child {\r\n  margin-left: 8.51063829787234%;\r\n  *margin-left: 8.404255319148938%;\r\n}\r\n[class*=\"span\"].hide,\r\n.oskariui .row-fluid [class*=\"span\"].hide {\r\n  display: none;\r\n}\r\n[class*=\"span\"].pull-right,\r\n.oskariui .row-fluid [class*=\"span\"].pull-right {\r\n  float: right;\r\n}\r\n.oskariui .container {\r\n  margin-right: auto;\r\n  margin-left: auto;\r\n  *zoom: 1;\r\n}\r\n.oskariui .container:before,\r\n.oskariui .container:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .container:after {\r\n  clear: both;\r\n}\r\n.oskariui .container-fluid {\r\n  padding-right: 20px;\r\n  padding-left: 20px;\r\n  *zoom: 1;\r\n}\r\n.oskariui .container-fluid:before,\r\n.oskariui .container-fluid:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .container-fluid:after {\r\n  clear: both;\r\n}\r\n#mapstatsHover_contentDiv {\n  padding: 5px; }\n.getinforesult_table tr {\r\n  padding: 5px; }\r\n  .getinforesult_table tr.odd {\r\n    background-color: #EEEEEE; }\r\n.getinforesult_table td {\r\n  padding: 2px; }\r\n\r\n.getinforesult_header {\r\n  border: 1pt solid navy;\r\n  background-color: #424343;\r\n  margin-top: 14px;\r\n  margin-bottom: 10px;\r\n  height: 15px; }\r\n  .getinforesult_header .icon-bubble-left {\r\n    height: 15px;\r\n    display: inline;\r\n    float: left; }\r\n\r\n.getinforesult_header_title {\r\n  color: #FFF;\r\n  float: left;\r\n  display: inline;\r\n  margin-left: 8px;\r\n  max-width: 85%;\r\n  overflow: hidden;\r\n  white-space: nowrap;\r\n  text-overflow: ellipsis; }\r\ndiv.mapplugin.search-div {\n  top: 10px;\n  right: 10px; }\n\ndiv.search-div div.close {\n  float: right; }\n\ndiv.search-div input[type=text] {\n  width: 124px !important; }\n\ndiv.search-div input[type=button] {\n  width: 35px;\n  margin-left: 3px; }\n\ndiv.search-div div.results {\n  border: 1px solid #f3f3f3;\n  background: white;\n  max-width: 255px;\n  width: 255px;\n  overflow: scroll;\n  margin-top: 5px;\n  padding: 4px; }\n\ndiv.search-div div.results div.header {\n  background: #DDDDDD; }\n\ndiv.search-div div.results div.content table {\n  width: 100%;\n  text-align: center;\n  border-spacing: 2px; }\n\ndiv.search-div div.results div.content table tr {\n  cursor: pointer; }\n\n/* IE8 Cleared */\ntable.search-results td {\n  text-align: left;\n  padding: 2px;\n  padding-left: 4px;\n  padding-right: 12px; }\n\ntable.search-results tr.odd {\n  background-color: #f3f3f3; }\n\ntable.search-results {\n  width: 100%;\n  margin: 4px; }\n\ntable.search-results a {\n  color: #0085D1; }\n\ntable.search-results th {\n  text-align: left;\n  padding: 2px;\n  padding-left: 4px;\n  padding-right: 12px;\n  font-weight: bold; }\n\n/*\r\n#search-loading-image {\r\n    position: absolute;\r\n    right: 56px;\r\n    top: 6px;\r\n    z-index: 10001;\r\n}\r\n*/\n.logoplugin {\r\n  background-color: #FFF;\r\n  background-repeat: no-repeat;\r\n  display: block;\r\n  position: absolute;\r\n  bottom: 0px;\r\n  left: 0px;\r\n  z-index: 100000000 !important;\r\n  filter: alpha(opacity=80);\r\n  /* unquote for libsass bug */\r\n  opacity: 0.8 !important; }\r\n  .logoplugin a, .logoplugin a:hover, .logoplugin a:active, .logoplugin a:visited {\r\n    color: #333333 !important; }\r\n  .logoplugin .icon {\r\n    background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/logo/images/logo_pieni.png\');\r\n    display: inline-block;\r\n    height: 25px;\r\n    width: 25px;\r\n    vertical-align: bottom; }\r\n  .logoplugin .terms {\r\n    display: inline-block;\r\n    margin: 5px; }\r\n\r\n/* Force measurement bar up a notch so it isn\'t occluded by the logo */\r\n#mapdiv .olControlScaleLine {\r\n  bottom: 30px; }\r\n.oskari-datasource .link {\r\n  background-color: none;\r\n  background-repeat: no-repeat;\r\n  display: block;\r\n  font-size: 13px;\r\n  position: fixed;\r\n  bottom: 15px;\r\n  right: 70px;\r\n  z-index: 100000000 !important;\r\n  filter: alpha(opacity=80);\r\n  /* unquote for libsass bug */\r\n  opacity: 0.8 !important; }\r\n\r\n.oskari-datasource a, .oskari-datasource a:hover, .oskari-datasource:active, .oskari-datasource a:visited {\r\n  color: blue !important; }\r\n.olControlOverviewMapElement  {\r\n    padding: 5px !important;\r\n    background-color: #FFFFFF !important;\r\n    border-color: #D0D0D0 !important;\r\n    border-style: solid;\r\n    border-left-width: 2px;\r\n    border-top-width: 2px;\r\n    \r\n}\r\n#olControlOverviewMapMaximizeButton\r\n{\r\n    position: absolute !important;\r\n    right: 10px;\r\n    bottom: 2px;\r\n}\r\n\r\n#OpenLayers_Control_minimizeDiv\r\n{\r\n    width: 46px !important;\r\n    height: 46px !important;\r\n    right: 0px;\r\n    bottom: 0px;\r\n    cursor: default;\r\n    background: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png\')  !important;\r\n    \r\n}\r\n\r\n#olControlOverviewMapMaximizeButton_innerImage, #OpenLayers_Control_minimizeDiv_innerImage{\r\n    display: none !important;\r\n}\r\n\r\n#olControlOverviewMapMaximizeButton{\r\n    width: 46px !important;\r\n    height: 46px !important;\r\n    right: 0px;\r\n    bottom: 0px;\r\n    cursor: default;\r\n    background: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap.png\') 0px 0px !important;\r\n}\r\n\r\n#olControlOverviewMapMaximizeButton:hover\r\n{\r\n    background: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png\') !important;\r\n}\r\n\r\n#OpenLayers_Control_minimizeDiv{\r\n    position: absolute !important;\r\n    right: 0px;\r\n    bottom: 0px;\r\n}\r\n\r\n.olControlOverviewMapExtentRectangle  {\r\n    border:2px dashed #f47729 !important;\r\n}\r\n.fullscreenDiv {\r\n  position: absolute;\r\n  top: 10px;\r\n  left: 10px;\r\n  display: block;\r\n  color: black;\r\n  background: transparent;\r\n  z-index: 15000; }\r\n\r\n.fullscreenDiv .fullscreenDivImg {\r\n  cursor: pointer; }\r\ndiv.mapplugin.layerSelectionPlugin {\r\n  position: absolute;\r\n  top: 20px;\r\n  right: 20px;\r\n  z-index: 100000000 !important; }\r\n\r\n.layerSelectionPlugin {\r\n  max-width: 200px; }\r\n\r\n.layerSelectionPlugin div.header {\r\n  background-color: #333333 !important;\r\n  color: white !important;\r\n  padding: 8px; }\r\n\r\n.layerSelectionPlugin div.content {\r\n  background-color: white; }\r\n\r\n.layerSelectionPlugin div.header div.header-icon {\r\n  display: inline-block;\r\n  margin-right: 10px;\r\n  vertical-align: middle; }\r\n\r\n.layerSelectionPlugin div.content div.layers, .layerSelectionPlugin div.content div.baselayers {\r\n  padding: 10px; }\r\n\r\n.layerSelectionPlugin div.content div.layer {\r\n  margin: 5px 0;\r\n  text-align: left; }\r\n\r\n.layerSelectionPlugin div.content div.layer input {\r\n  margin-right: 10px;\r\n  float: left; }\r\n\r\n.layerSelectionPlugin div.content div.baseLayerHeader {\r\n  background-color: #DDDDDD;\r\n  padding: 10px; }\r\ndiv.pzbDiv.mapplugin {\r\n    top : 140px;\r\n    right : 64px;\r\n    background : transparent;\r\n    z-index: 15000;\r\n}\r\ndiv.pzbDiv div.pzbDiv-plus {\r\n    width : 18px;\r\n    height : 46px;\r\n    background-image : url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_plus_patched.png\');\r\n}\r\n\r\ndiv.pzbDiv div.pzbDiv-minus {\r\n    width : 18px;\r\n    height : 18px;\r\n    background-image : url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_minus.png\');\r\n}\r\ndiv.pzbDiv div.rui-slider-vertical {\r\n    background-color : transparent;\r\n    background-image : url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar.png\');\r\n    height : 148px;\r\n    width : 18px;\r\n    border : 0;\r\n    margin : 0;\r\n}\r\n\r\n\r\n\r\n\r\n.panbuttonDiv.mapplugin {\r\n  top: 10px;\r\n  right: 36px;\r\n  display: block;\r\n  color: black;\r\n  background: transparent;\r\n  font-size: 12px;\r\n  z-index: 15000;\r\n  /*64738;*/\r\n  font-weight: bold;\r\n  /*background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/default.png\');*/\r\n  height: 90px;\r\n  width: 90px; }\r\n\r\n.panbuttonDivImg {\r\n  background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/sprite.png\'); }\r\n\r\n.panbuttonDivImg.root {\r\n  background-position: 0px -90px; }\r\n\r\n.panbuttonDivImg.left {\r\n  background-position: 0px -180px; }\r\n\r\n.panbuttonDivImg.right {\r\n  background-position: 0px -270px; }\r\n\r\n.panbuttonDivImg.up {\r\n  background-position: 0px -360px; }\r\n\r\n.panbuttonDivImg.down {\r\n  background-position: 0px -450px; }\r\n\r\n.panbutton_left {\r\n  float: left; }\r\n\r\n.panbutton_right {\r\n  float: right; }\r\n.olMap {\r\n  position: relative; }\r\n\r\ndiv.mapplugin {\r\n  position: absolute;\r\n  z-index: 15000; }\r\n\r\ndiv.mapplugins.left {\r\n  position: absolute;\r\n  z-index: 15000;\r\n  top: 20px;\r\n  right: 20px;\r\n  text-align: right;\r\n  max-width: 85%; }\r\n\r\ndiv.mapplugins.left > div {\r\n  display: inline-block;\r\n  margin: 5px;\r\n  vertical-align: top; }\r\n/* setup document body so flyouts will not make scrollbars to browser window */\nbody {\n  position: fixed;\n  width: 100%;\n  height: 100%; }\n\n/* flyout toolbar */\n.oskari-flyoutheading {\n  background-color: #ffd400;\n  border-top: 1px solid #ffdf00;\n  border-bottom: 1px solid #ebb819;\n  height: 14px;\n  width: 100%; }\n\n.oskari-flyouttoolbar {\n  height: 57px;\n  width: 100%;\n  background-color: #fdf8d9;\n  border-top: #fdfdfd;\n  border-bottom: #fef2ba; }\n\n.oskari-flyout-title {\n  float: left;\n  margin-left: 20px;\n  margin-top: 12px;\n  height: 20px;\n  display: inline-block; }\n\n.oskari-flyout-title p {\n  margin: 0;\n  padding: 0;\n  font: 16px/20px \"Open Sans\", \"Helvetica Neue\", \"HelveticaNeue\", Helvetica, Arial, sans-serif; }\n\n/** flyout toolbar tools and tool states  */\n.oskari-flyouttools {\n  float: right;\n  margin-right: 25px;\n  height: 16px;\n  display: inline-block;\n  margin-top: 15px; }\n\n.oskari-flyouttool-detach {\n  display: none;\n  /* visualise here if this tool required */ }\n\n.oskari-detached .oskari-flyouttool-detach {\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-detach {\n  display: none; }\n\n.oskari-flyouttool-attach {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-attached .oskari-flyouttool-attach {\n  display: none; }\n\n.oskari-flyouttool-minimize {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-attached .oskari-flyouttool-minimize {\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-minimize {\n  display: none; }\n\n.oskari-flyouttool-restore {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-flyouttool-help {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-restore {\n  display: inline-block; }\n\n.oskari-minimized .oskari-flyouttool-attach {\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-detach {\n  display: none; }\n\n.oskari-flyouttool-close {\n  display: inline-block;\n  width: 16px;\n  height: 16px;\n  margin-right: 2px;\n  margin-left: auto; }\n\n/* flyout */\n.oskari-flyout {\n  background-color: #fafafa;\n  position: absolute;\n  z-index: 1100;\n  margin: 0px;\n  padding: 0px;\n  border: 1px solid rgba(0, 0, 0, 0.2); }\n\n/* flyout states */\n/*.oskari-minimized {\r\n width: 640px;\r\n height: 64px;\r\n overflow: hidden;\r\n\r\n min-height: 64px;\r\n max-height: 64px;\r\n }*/\n.oskari-closed {\n  display: none; }\n\n.oskari-minimized {\n  display: none; }\n\n.oskari-flyoutcontent {\n  margin: 0;\n  padding: 20px 20px 20px 25px;\n  border: 0;\n  /*overflow: auto;*/ }\n\n/** tile */\n/* tile states */\n.oskari-tile-attached {\n  border-bottom: 1px solid white;\n  background-color: white; }\n\n.oskari-tile-detached {\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  background-color: white; }\n\n.oskari-tile-minimized {\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  background-color: #2d2d2d; }\n\n.oskari-tile-closed {\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  background-color: #2d2d2d; }\n\n.oskari-tile-container {\n  margin: 0; }\n\n.oskari-tile {\n  margin: 0;\n  padding: 0;\n  cursor: pointer;\n  height: 31px;\n  width: 153px;\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  line-height: 24px; }\n\n.oskari-tile-title {\n  display: inline-block;\n  margin: 0;\n  margin-top: 2px;\n  margin-left: 16px;\n  padding: 0;\n  float: left;\n  height: 28px;\n  width: 112px;\n  font-family: Arial, Helvetica;\n  font-weight: bold;\n  font-size: 11px;\n  text-align: left;\n  text-transform: uppercase;\n  /*color: white;*/ }\n\n.oskari-tile-attached .oskari-tile-title {\n  color: #333438; }\n\n.oskari-tile-detached .oskari-tile-title {\n  color: #333438; }\n\n.oskari-tile-minimized .oskari-tile-title {\n  color: white; }\n\n.oskari-tile-closed .oskari-tile-title {\n  color: white; }\n\n.oskari-tile-status {\n  float: right;\n  text-align: center;\n  display: inline-block;\n  font-size: 11px;\n  font-weight: bold;\n  height: 19px !important;\n  width: 20px !important;\n  margin: 1px;\n  padding: 1px; }\n\n.oskari-tile-close {\n  display: none; }\n\n.oskariform .oskarifield {\n  padding: 10px; }\n\n/** media queries */\n@media screen {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 500px;\n    /* overflow: auto; */ } }\n@media screen {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 500px;\n    /* overflow: auto; */ } }\n@media only screen and (min-width: 400px) and (max-width: 599px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 500px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 500px; } }\n@media only screen and (min-width: 600px) and (max-width: 799px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 600px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 600px; } }\n@media only screen and (min-width: 800px) and (max-width: 1199px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 1000px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 600px; } }\n@media only screen and (min-width: 1200px) and (max-width: 1599px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 600px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 600px; } }\n@media only screen and (min-height: 400px) and (max-height: 599px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 300px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 600px) and (max-height: 799px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 500px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 800px) and (max-height: 999px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 700px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 1000px) and (max-height: 1199px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 900px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 1200px) and (max-height: 1399px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 1100px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 1400px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 1300px;\n    /* overflow: auto; */ } }\n/* IE8 TEMP fixes */\n.oskari-flyoutcontentcontainer_IE_400_599 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 300px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_600_799 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 500px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_800_999 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 700px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_1000_1199 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 900px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_1200_1399 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 1100px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_1400 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 1300px;\n  /* overflow: auto; */ }\n/* Accordion */\r\ndiv.accordion div.accordion_panel {\r\n  background-color: #f3f3f3;\r\n  border: 1pt solid #c0d0d0;\r\n  margin: 0;\r\n  padding: 0; }\r\n\r\ndiv.accordion_panel div.header div.headerIcon {\r\n  display: inline-block;\r\n  margin-left: 12px;\r\n  vertical-align: middle; }\r\n\r\ndiv.accordion_panel div.header div.headerText {\r\n  display: inline-block;\r\n  font-weight: bold;\r\n  padding: 8px 10px 8px 12px;\r\n  font: 14pt Arial, sans-serif; }\r\n\r\ndiv.accordion div.accordion_panel.open {\r\n  background-color: #FFFFFF; }\r\n\r\ndiv.accordion div.accordion_panel div.content {\r\n  padding: 5px; }\r\n\r\ndiv.accordion div.accordionmsg {\r\n  padding: 10px; }\r\n/* \"tab\" content */\r\ndiv.oskariTabs div.tabsContent {\r\n  border-left: 1px solid #999999;\r\n  border-right: 1px solid #999999;\r\n  border-top: 0px solid #999999;\r\n  border-bottom: 1px solid #999999;\r\n  color: #000000;\r\n  height: 90%; }\r\n\r\ndiv.oskariTabs div.tab-content {\r\n  padding: 10px; }\r\n\r\n/* tab headers */\r\ndiv.oskariTabs div.tabsHeader {\r\n  background: url(\'/Oskari/resources/framework/bundle/divmanazer/images/tab_bg.png\') repeat-x scroll center bottom;\r\n  /* #FFFFFF*/\r\n  clear: left;\r\n  float: left;\r\n  font: 12pt Arial, sans-serif;\r\n  font-weight: bold;\r\n  overflow: hidden;\r\n  padding: 0;\r\n  width: 100%; }\r\n\r\ndiv.oskariTabs div.tabsHeader ul {\r\n  float: left;\r\n  list-style: none outside none;\r\n  margin: 0;\r\n  padding: 0;\r\n  text-align: center; }\r\n\r\ndiv.oskariTabs div.tabsHeader ul li {\r\n  display: block;\r\n  float: left;\r\n  list-style: none outside none;\r\n  margin: 10px 0 0;\r\n  padding: 0;\r\n  right: 50%; }\r\n\r\ndiv.oskariTabs div.tabsHeader ul li a {\r\n  background: none repeat scroll 0 0 #FFFFFF;\r\n  border-bottom: 1px solid #999999;\r\n  color: #3333FF;\r\n  display: block;\r\n  float: left;\r\n  padding: 10px 20px;\r\n  position: relative;\r\n  text-decoration: none; }\r\n\r\ndiv.oskariTabs div.tabsHeader ul li.active a {\r\n  border-left: 1px solid #999999;\r\n  border-right: 1px solid #999999;\r\n  border-top: 1px solid #999999;\r\n  border-bottom: 0px solid #999999;\r\n  color: #000000; }\r\n\r\ndiv.oskariTabs div.tabsHeader ul li.fill a {\r\n  width: 100%; }\r\n.modaldialog {\r\n  border: 1px solid #3C3C3C;\r\n  margin: 0px; }\r\n\r\n.modaltitle {\r\n  margin: 0px;\r\n  border-bottom: 1px solid #3C3C3C;\r\n  color: #3C3C3C;\r\n  padding: 8px 16px 4px 16px; }\r\n\r\n.modalmessage {\r\n  width: 100%;\r\n  color: #3C3C3C;\r\n  padding: 8px 16px 8px 16px; }\r\n\r\n.modalbuttons {\r\n  width: 100%;\r\n  display: inline-block;\r\n  padding: 0px 16px 4px 16px; }\r\n\r\n.modalbutton {\r\n  margin: 2px;\r\n  display: inline-block; }\r\n/*!\r\n * Bootstrap v2.0.3\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\n.oskari-badge {\n  font-size: 10.998px;\n  font-weight: bold;\n  line-height: 14px;\n  color: #ffffff;\n  vertical-align: baseline;\n  white-space: nowrap;\n  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);\n  background-color: #999999; }\n\n.oskari-badge {\n  padding: 1px 9px 2px;\n  -webkit-border-radius: 9px;\n  -moz-border-radius: 9px;\n  border-radius: 9px; }\n\na.oskari-badge:hover {\n  color: #ffffff;\n  text-decoration: none;\n  cursor: pointer; }\n\n.oskari-badge-important {\n  background-color: #b94a48; }\n\n.oskari-badge-important[href] {\n  background-color: #953b39; }\n\n.oskari-badge-warning {\n  background-color: #f89406; }\n\n.oskari-badge-warning[href] {\n  background-color: #c67605; }\n\n.oskari-badge-success {\n  background-color: #468847; }\n\n.oskari-badge-success[href] {\n  background-color: #356635; }\n\n.oskari-badge-info {\n  background-color: #3a87ad; }\n\n.oskari-badge-info[href] {\n  background-color: #2d6987; }\n\n.oskari-badge-inverse {\n  background-color: #333333; }\n\n.oskari-badge-inverse[href] {\n  background-color: #1a1a1a; }\n/*!\r\n * Bootstrap v2.0.3\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\n.oskari-alert {\n  padding-left: 8px;\n  padding-top: 4px;\n  margin: 4px;\n  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);\n  background-color: #fcf8e3;\n  border: 1px solid #fbeed5;\n  -webkit-border-radius: 4px;\n  -moz-border-radius: 4px;\n  border-radius: 4px;\n  color: #c09853;\n  position: relative;\n  height: 24px; }\n\n.oskari-alert-heading {\n  color: inherit; }\n\n.oskari-alert-icon-close {\n  position: absolute;\n  top: 4px;\n  right: 0px;\n  width: 24px;\n  height: 24px; }\n\n.oskari-alert-success {\n  background-color: #dff0d8;\n  border-color: #d6e9c6;\n  color: #468847; }\n\n.oskari-alert-danger, .oskari-alert-error {\n  background-color: #f2dede;\n  border-color: #eed3d7;\n  color: #b94a48; }\n\n.oskari-alert-info {\n  background-color: #d9edf7;\n  border-color: #bce8f1;\n  color: #3a87ad; }\nth.asc {\r\n  background-image: url(\'/Oskari/resources/framework/bundle/divmanazer/images/asc_arrow.png\');\r\n  background-repeat: no-repeat;\r\n  background-position: center center; }\r\n\r\nth.desc {\r\n  background-image: url(\'/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png\');\r\n  background-repeat: no-repeat;\r\n  background-position: center center; }\r\n\r\ndiv.column-selector-placeholder {\r\n  border-style: none;\r\n  float: left;\r\n  opacity: 1.0;\r\n  margin: 0;\r\n  padding: 0;\r\n  right: 0;\r\n  width: 25px;\r\n  height: 7px;\r\n  max-width: 25px;\r\n  max-height: 7px; }\r\n\r\ndiv.icon-menu {\r\n  position: absolute;\r\n  opacity: 1.0;\r\n  margin: 0;\r\n  cursor: pointer;\r\n  padding: 0;\r\n  width: 25px;\r\n  height: 8px;\r\n  max-width: 25px;\r\n  max-height: 7px; }\r\n\r\ndiv.column-selector {\r\n  position: absolute;\r\n  visibility: hidden;\r\n  background-color: white;\r\n  margin-top: 7px;\r\n  margin-right: 50px;\r\n  padding: 0;\r\n  border: 1px solid;\r\n  z-index: 10001; }\r\n\r\ndiv.column-selector div.close-selector-button {\r\n  width: 16px;\r\n  height: 16px;\r\n  position: absolute;\r\n  top: 5px;\r\n  right: 5px; }\r\n\r\ndiv.column-selector ul.column-selector-list {\r\n  list-style-type: none;\r\n  padding-right: 30px; }\r\n\r\ndiv.column-selector label.column-label {\r\n  padding-left: 5px; }\r\ndiv.divmanazerpopup {\n  max-width: 500px;\n  min-width: 200px;\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  background-color: white;\n  -moz-background-clip: border;\n  /* Firefox 3.6 */\n  -webkit-background-clip: border;\n  /* Safari 4? Chrome 6? */\n  background-clip: border-box;\n  /* Firefox 4, Safari 5, Opera 10, IE 9 */\n  -moz-background-clip: padding;\n  /* Firefox 3.6 */\n  -webkit-background-clip: padding;\n  /* Safari 4? Chrome 6? */\n  background-clip: padding-box;\n  /* Firefox 4, Safari 5, Opera 10, IE 9 */\n  -moz-background-clip: content;\n  /* Firefox 3.6 */\n  -webkit-background-clip: content;\n  /* Safari 4? Chrome 6? */\n  background-clip: content-box;\n  /* Firefox 4, Safari 5, Opera 10, IE 9 */\n  border: 5px solid rgba(0, 0, 0, 0.2);\n  border-radius: 7px;\n  /*\r\n    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.80);\r\n    -moz-box-shadow: 0px 3px 3px black;\r\n    -webkit-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.80);\r\n    */\n  z-index: 9000; }\n\ndiv.divmanazerpopup h3 {\n  background-color: #FDF8D9;\n  border-radius: 5px 5px 0 0;\n  font-size: 18px;\n  line-height: 28px;\n  padding: 5px 10px; }\n\ndiv.divmanazerpopup div.content {\n  margin: 10px; }\n\ndiv.divmanazerpopup div.content textarea {\n  resize: none; }\n\ndiv.divmanazerpopup div.content ul {\n  margin: 10px; }\n\ndiv.divmanazerpopup.no_resize div.content textarea {\n  resize: none; }\n\ndiv.divmanazerpopup div.actions {\n  margin: 10px;\n  text-align: center; }\n\ndiv.divmanazerpopup div.actions input {\n  margin: 10px; }\n\n.divmanazerpopup.arrow:after, .divmanazerpopup.arrow:before {\n  border: solid transparent;\n  content: \" \";\n  height: 0;\n  width: 0;\n  position: absolute;\n  /*pointer-events: none; */ }\n\n/* Bottom alignment */\n.divmanazerpopup.bottom:after, .divmanazerpopup.bottom:before {\n  bottom: 100%; }\n\n.divmanazerpopup.bottom:after {\n  border-bottom-color: #FDF8D9;\n  border-width: 5px;\n  margin-left: -5px;\n  left: 50%; }\n\n.divmanazerpopup.bottom:before {\n  border-bottom-color: #000000;\n  border-width: 6px;\n  margin-left: -6px;\n  left: 50%; }\n\n/* top alignment */\n.divmanazerpopup.top:after, .divmanazerpopup.top:before {\n  top: 100%; }\n\n.divmanazerpopup.top:after {\n  border-top-color: #FFFFFF;\n  border-width: 5px;\n  margin-left: -5px;\n  left: 50%; }\n\n.divmanazerpopup.top:before {\n  border-top-color: #000000;\n  border-width: 6px;\n  margin-left: -6px;\n  left: 50%; }\n\n/* left alignment */\n.divmanazerpopup.left:after, .divmanazerpopup.left:before {\n  left: 100%; }\n\n.divmanazerpopup.left:after {\n  border-left-color: #FDF8D9;\n  border-width: 5px;\n  margin-top: -5px;\n  top: 50%; }\n\n.divmanazerpopup.left:before {\n  border-left-color: #000000;\n  border-width: 6px;\n  margin-top: -6px;\n  top: 50%; }\n\n/* right alignment */\n.divmanazerpopup.right:after, .divmanazerpopup.right:before {\n  right: 100%; }\n\n.divmanazerpopup.right:after {\n  border-right-color: #FDF8D9;\n  border-width: 5px;\n  margin-top: -5px;\n  top: 50%; }\n\n.divmanazerpopup.right:before {\n  border-right-color: #000000;\n  border-width: 6px;\n  margin-top: -6px;\n  top: 50%; }\ndiv.oskaributton {\r\n  display: inline-block;\r\n  margin: 5px; }\r\n\r\ndiv.oskaributton.primary input {\r\n  color: #3CA9FC; }\r\ndiv.oskarioverlay {\r\n  position: absolute;\r\n  background-color: black;\r\n  z-index: 8000; }\r\n\r\n.transparent {\r\n  zoom: 1;\r\n  filter: alpha(opacity=50);\r\n  /* unquote for libsass bug */\r\n  opacity: 0.5; }\r\n/*!\r\n * Bootstrap v2.0.3\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\n.oskari-tooltip {\n  position: absolute;\n  z-index: 1200;\n  display: block;\n  visibility: visible;\n  padding: 5px;\n  font-size: 11px;\n  opacity: 0;\n  filter: alpha(opacity=0);\n  /* unquote for libsass bug */ }\n\n.oskari-tooltip.in {\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  /* unquote for libsass bug */ }\n\n.oskari-tooltip.top {\n  margin-top: -2px; }\n\n.oskari-tooltip.right {\n  margin-left: 2px; }\n\n.oskari-tooltip.bottom {\n  margin-top: 2px; }\n\n.oskari-tooltip.left {\n  margin-left: -2px; }\n\n.oskari-tooltip.top .oskari-tooltip-arrow {\n  bottom: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-top: 5px solid #000000; }\n\n.oskari-tooltip.left .oskari-tooltip-arrow {\n  top: 50%;\n  right: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-left: 5px solid #000000; }\n\n.oskari-tooltip.bottom .oskari-tooltip-arrow {\n  top: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-bottom: 5px solid #000000; }\n\n.oskari-tooltip.right .oskari-tooltip-arrow {\n  top: 50%;\n  left: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-right: 5px solid #000000; }\n\n.oskari-tooltip-inner {\n  max-width: 640px;\n  padding: 3px 8px;\n  color: #ffffff;\n  text-align: center;\n  text-decoration: none;\n  background-color: #000000;\n  -webkit-border-radius: 4px;\n  -moz-border-radius: 4px;\n  border-radius: 4px; }\n\n.oskari-tooltip-arrow {\n  position: absolute;\n  width: 0;\n  height: 0; }\n\n.oskari-popover {\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 1210;\n  display: none;\n  padding: 5px; }\n\n.oskari-popover.top {\n  margin-top: -5px; }\n\n.oskari-popover.right {\n  margin-left: 5px; }\n\n.oskari-popover.bottom {\n  margin-top: 5px; }\n\n.oskari-popover.left {\n  margin-left: -5px; }\n\n.oskari-popover.top .oskari-arrow {\n  bottom: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-top: 5px solid #000000; }\n\n.oskari-popover.right .oskari-arrow {\n  top: 50%;\n  left: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-right: 5px solid #000000; }\n\n.oskari-popover.bottom .oskari-arrow {\n  top: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-bottom: 5px solid #000000; }\n\n.oskari-popover.left .oskari-arrow {\n  top: 50%;\n  right: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-left: 5px solid #000000; }\n\n.oskari-popover .oskari-arrow {\n  position: absolute;\n  width: 0;\n  height: 0; }\n\n.oskari-popover-inner {\n  padding: 3px;\n  /*width: 280px;*/\n  overflow: hidden;\n  background: #000000;\n  background: rgba(0, 0, 0, 0.8);\n  -webkit-border-radius: 6px;\n  -moz-border-radius: 6px;\n  border-radius: 6px;\n  -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3); }\n\n.oskari-popover-title {\n  padding: 9px 15px;\n  line-height: 1;\n  background-color: #f5f5f5;\n  border-bottom: 1px solid #eee;\n  -webkit-border-radius: 3px 3px 0 0;\n  -moz-border-radius: 3px 3px 0 0;\n  border-radius: 3px 3px 0 0; }\n\n.oskari-popover-content {\n  padding: 14px;\n  background-color: #ffffff;\n  -webkit-border-radius: 0 0 3px 3px;\n  -moz-border-radius: 0 0 3px 3px;\n  border-radius: 0 0 3px 3px;\n  -webkit-background-clip: padding-box;\n  -moz-background-clip: padding-box;\n  background-clip: padding-box; }\n\n.oskari-popover-content p, .oskari-popover-content ul, .oskari-popover-content ol {\n  margin-bottom: 0; }\n'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick; 
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.setBuffer('div.olMap {\r\n    z-index: 0;\r\n    padding: 0 !important;\r\n    margin: 0 !important;\r\n    cursor: default;\r\n}\r\n\r\ndiv.olMapViewport {\r\n    text-align: left;\r\n}\r\n\r\ndiv.olLayerDiv {\r\n   -moz-user-select: none;\r\n   -khtml-user-select: none;\r\n}\r\n\r\n.olLayerGoogleCopyright {\r\n    left: 2px;\r\n    bottom: 2px;\r\n}\r\n.olLayerGoogleV3.olLayerGoogleCopyright {\r\n    right: auto !important;\r\n}\r\n.olLayerGooglePoweredBy {\r\n    left: 2px;\r\n    bottom: 15px;\r\n}\r\n.olLayerGoogleV3.olLayerGooglePoweredBy {\r\n    bottom: 15px !important;\r\n}\r\n.olControlAttribution {\r\n    font-size: smaller;\r\n    right: 3px;\r\n    bottom: 4.5em;\r\n    position: absolute;\r\n    display: block;\r\n}\r\n.olControlScale {\r\n    right: 3px;\r\n    bottom: 3em;\r\n    display: block;\r\n    position: absolute;\r\n    font-size: smaller;\r\n}\r\n.olControlScaleLine {\r\n   display: block;\r\n   position: absolute;\r\n   left: 10px;\r\n   bottom: 15px;\r\n   font-size: xx-small;\r\n}\r\n.olControlScaleLineBottom {\r\n   border: solid 2px black;\r\n   border-bottom: none;\r\n   margin-top:-2px;\r\n   text-align: center;\r\n}\r\n.olControlScaleLineTop {\r\n   border: solid 2px black;\r\n   border-top: none;\r\n   text-align: center;\r\n}\r\n\r\n.olControlPermalink {\r\n    right: 3px;\r\n    bottom: 1.5em;\r\n    display: block;\r\n    position: absolute;\r\n    font-size: smaller;\r\n}\r\n\r\ndiv.olControlMousePosition {\r\n    bottom: 0;\r\n    right: 3px;\r\n    display: block;\r\n    position: absolute;\r\n    font-family: Arial;\r\n    font-size: smaller;\r\n}\r\n\r\n.olControlOverviewMapContainer {\r\n    position: absolute;\r\n    bottom: 0;\r\n    right: 0;\r\n}\r\n\r\n.olControlOverviewMapElement {\r\n    padding: 10px 18px 10px 10px;\r\n    background-color: #00008B;\r\n    -moz-border-radius: 1em 0 0 0;\r\n}\r\n\r\n.olControlOverviewMapMinimizeButton,\r\n.olControlOverviewMapMaximizeButton {\r\n    height: 18px;\r\n    width: 18px;\r\n    right: 0;\r\n    bottom: 80px;\r\n    cursor: pointer;\r\n}\r\n\r\n.olControlOverviewMapExtentRectangle {\r\n    overflow: hidden;\r\n    background-image: url(\"resources/openlayers/theme/default/img/blank.gif\");\r\n    cursor: move;\r\n    border: 2px dotted red;\r\n}\r\n.olControlOverviewMapRectReplacement {\r\n    overflow: hidden;\r\n    cursor: move;\r\n    background-image: url(\"resources/openlayers/theme/default/img/overview_replacement.gif\");\r\n    background-repeat: no-repeat;\r\n    background-position: center;\r\n}\r\n\r\n.olLayerGeoRSSDescription {\r\n    float:left;\r\n    width:100%;\r\n    overflow:auto;\r\n    font-size:1.0em;\r\n}\r\n.olLayerGeoRSSClose {\r\n    float:right;\r\n    color:gray;\r\n    font-size:1.2em;\r\n    margin-right:6px;\r\n    font-family:sans-serif;\r\n}\r\n.olLayerGeoRSSTitle {\r\n    float:left;font-size:1.2em;\r\n}\r\n\r\n.olPopupContent {\r\n    padding:5px;\r\n    overflow: auto;\r\n}\r\n\r\n.olControlNavigationHistory {\r\n   background-image: url(\"resources/openlayers/theme/default/img/navigation_history.png\");\r\n   background-repeat: no-repeat;\r\n   width:  24px;\r\n   height: 24px;\r\n\r\n}\r\n.olControlNavigationHistoryPreviousItemActive {\r\n  background-position: 0 0;\r\n}\r\n.olControlNavigationHistoryPreviousItemInactive {\r\n   background-position: 0 -24px;\r\n}\r\n.olControlNavigationHistoryNextItemActive {\r\n   background-position: -24px 0;\r\n}\r\n.olControlNavigationHistoryNextItemInactive {\r\n   background-position: -24px -24px;\r\n}\r\n\r\ndiv.olControlSaveFeaturesItemActive {\r\n    background-image: url(resources/openlayers/theme/default/img/save_features_on.png);\r\n    background-repeat: no-repeat;\r\n    background-position: 0 1px;\r\n}\r\ndiv.olControlSaveFeaturesItemInactive {\r\n    background-image: url(resources/openlayers/theme/default/img/save_features_off.png);\r\n    background-repeat: no-repeat;\r\n    background-position: 0 1px;\r\n}\r\n\r\n.olHandlerBoxZoomBox {\r\n    border: 2px solid red;\r\n    position: absolute;\r\n    background-color: white;\r\n    opacity: 0.50;\r\n    font-size: 1px;\r\n    filter: alpha(opacity=50);\r\n}\r\n.olHandlerBoxSelectFeature {\r\n    border: 2px solid blue;\r\n    position: absolute;\r\n    background-color: white;\r\n    opacity: 0.50;\r\n    font-size: 1px;\r\n    filter: alpha(opacity=50);\r\n}\r\n\r\n.olControlPanPanel {\r\n    top: 10px;\r\n    left: 5px;\r\n}\r\n\r\n.olControlPanPanel div {\r\n    background-image: url(resources/openlayers/theme/default/img/pan-panel.png);\r\n    height: 18px;\r\n    width: 18px;\r\n    cursor: pointer;\r\n    position: absolute;\r\n}\r\n\r\n.olControlPanPanel .olControlPanNorthItemInactive {\r\n    top: 0;\r\n    left: 9px;\r\n    background-position: 0 0;\r\n}\r\n.olControlPanPanel .olControlPanSouthItemInactive {\r\n    top: 36px;\r\n    left: 9px;\r\n    background-position: 18px 0;\r\n}\r\n.olControlPanPanel .olControlPanWestItemInactive {\r\n    position: absolute;\r\n    top: 18px;\r\n    left: 0;\r\n    background-position: 0 18px;\r\n}\r\n.olControlPanPanel .olControlPanEastItemInactive {\r\n    top: 18px;\r\n    left: 18px;\r\n    background-position: 18px 18px;\r\n}\r\n\r\n.olControlZoomPanel {\r\n    top: 71px;\r\n    left: 14px;\r\n}\r\n\r\n.olControlZoomPanel div {\r\n    background-image: url(resources/openlayers/theme/default/img/zoom-panel.png);\r\n    position: absolute;\r\n    height: 18px;\r\n    width: 18px;\r\n    cursor: pointer;\r\n}\r\n\r\n.olControlZoomPanel .olControlZoomInItemInactive {\r\n    top: 0;\r\n    left: 0;\r\n    background-position: 0 0;\r\n}\r\n\r\n.olControlZoomPanel .olControlZoomToMaxExtentItemInactive {\r\n    top: 18px;\r\n    left: 0;\r\n    background-position: 0 -18px;\r\n}\r\n\r\n.olControlZoomPanel .olControlZoomOutItemInactive {\r\n    top: 36px;\r\n    left: 0;\r\n    background-position: 0 18px;\r\n}\r\n\r\n/*\r\n * When a potential text is bigger than the image it move the image\r\n * with some headers (closes #3154)\r\n */\r\n.olControlPanZoomBar div {\r\n    font-size: 1px;\r\n}\r\n\r\n.olPopupCloseBox {\r\n  background: url(\"resources/openlayers/theme/default/img/close.gif\") no-repeat;\r\n  cursor: pointer;\r\n}\r\n\r\n.olFramedCloudPopupContent {\r\n    padding: 5px;\r\n    overflow: auto;\r\n}\r\n\r\n.olControlNoSelect {\r\n -moz-user-select: none;\r\n -khtml-user-select: none;\r\n}\r\n\r\n.olImageLoadError {\r\n    background-color: pink;\r\n    opacity: 0.5;\r\n    filter: alpha(opacity=50); /* IE */\r\n}\r\n\r\n/**\r\n * Cursor styles\r\n */\r\n\r\n.olCursorWait {\r\n    cursor: wait;\r\n}\r\n.olDragDown {\r\n    cursor: move;\r\n}\r\n.olDrawBox {\r\n    cursor: crosshair;\r\n}\r\n.olControlDragFeatureOver {\r\n    cursor: move;\r\n}\r\n.olControlDragFeatureActive.olControlDragFeatureOver.olDragDown {\r\n    cursor: -moz-grabbing;\r\n}\r\n\r\n/**\r\n * Layer switcher\r\n */\r\n.olControlLayerSwitcher {\r\n    position: absolute;\r\n    top: 25px;\r\n    right: 0;\r\n    width: 20em;\r\n    font-family: sans-serif;\r\n    font-weight: bold;\r\n    margin-top: 3px;\r\n    margin-left: 3px;\r\n    margin-bottom: 3px;\r\n    font-size: smaller;\r\n    color: white;\r\n    background-color: transparent;\r\n}\r\n\r\n.olControlLayerSwitcher .layersDiv {\r\n    padding-top: 5px;\r\n    padding-left: 10px;\r\n    padding-bottom: 5px;\r\n    padding-right: 10px;\r\n    background-color: darkblue;\r\n}\r\n\r\n.olControlLayerSwitcher .layersDiv .baseLbl,\r\n.olControlLayerSwitcher .layersDiv .dataLbl {\r\n    margin-top: 3px;\r\n    margin-left: 3px;\r\n    margin-bottom: 3px;\r\n}\r\n\r\n.olControlLayerSwitcher .layersDiv .baseLayersDiv,\r\n.olControlLayerSwitcher .layersDiv .dataLayersDiv {\r\n    padding-left: 10px;\r\n}\r\n\r\n.olControlLayerSwitcher .maximizeDiv,\r\n.olControlLayerSwitcher .minimizeDiv {\r\n    width: 18px;\r\n    height: 18px;\r\n    top: 5px;\r\n    right: 0;\r\n    cursor: pointer;\r\n}\r\n\r\n.olBingAttribution {\r\n    color: #DDD;\r\n}\r\n.olBingAttribution.road {\r\n    color: #333;\r\n}\r\n\r\n.olGoogleAttribution.hybrid, .olGoogleAttribution.satellite {\r\n    color: #EEE;\r\n}\r\n.olGoogleAttribution {\r\n    color: #333;\r\n}\r\nspan.olGoogleAttribution a {\r\n    color: #77C;\r\n}\r\nspan.olGoogleAttribution.hybrid a, span.olGoogleAttribution.satellite a {\r\n    color: #EEE;\r\n}\r\n\r\n/**\r\n * Editing and navigation icons.\r\n * (using the editing_tool_bar.png sprint image)\r\n */\r\n.olControlNavToolbar ,\r\n.olControlEditingToolbar {\r\n    margin: 5px 5px 0 0;\r\n}\r\n.olControlNavToolbar div,\r\n.olControlEditingToolbar div {\r\n    background-image: url(\"resources/openlayers/theme/default/img/editing_tool_bar.png\");\r\n    background-repeat: no-repeat;\r\n    margin: 0 0 5px 5px;\r\n    width: 24px;\r\n    height: 22px;\r\n    cursor: pointer\r\n}\r\n/* positions */\r\n.olControlEditingToolbar {\r\n    right: 0;\r\n    top: 0;\r\n}\r\n.olControlNavToolbar {\r\n    top: 295px;\r\n    left: 9px;\r\n}\r\n/* layouts */\r\n.olControlEditingToolbar div {\r\n    float: right;\r\n}\r\n/* individual controls */\r\n.olControlNavToolbar .olControlNavigationItemInactive,\r\n.olControlEditingToolbar .olControlNavigationItemInactive {\r\n    background-position: -103px -1px;\r\n}\r\n.olControlNavToolbar .olControlNavigationItemActive ,\r\n.olControlEditingToolbar .olControlNavigationItemActive  {\r\n    background-position: -103px -24px;\r\n}\r\n.olControlNavToolbar .olControlZoomBoxItemInactive {\r\n    background-position: -128px -1px;\r\n}\r\n.olControlNavToolbar .olControlZoomBoxItemActive  {\r\n    background-position: -128px -24px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePointItemInactive {\r\n    background-position: -77px -1px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePointItemActive {\r\n    background-position: -77px -24px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePathItemInactive {\r\n    background-position: -51px -1px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePathItemActive {\r\n    background-position: -51px -24px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePolygonItemInactive{\r\n    background-position: -26px -1px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePolygonItemActive {\r\n    background-position: -26px -24px;\r\n}\r\n\r\ndiv.olControlZoom {\r\n    position: absolute;\r\n    top: 8px;\r\n    left: 8px;\r\n    background: rgba(255,255,255,0.4);\r\n    border-radius: 4px;\r\n    padding: 2px;\r\n}\r\ndiv.olControlZoom a {\r\n    display: block;\r\n    margin: 1px;\r\n    padding: 0;\r\n    color: white;\r\n    font-size: 18px;\r\n    font-family: \'Lucida Grande\', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;\r\n    font-weight: bold;\r\n    text-decoration: none;\r\n    text-align: center;\r\n    height: 22px;\r\n    width:22px;\r\n    line-height: 19px;\r\n    background: #130085; /* fallback for IE - IE6 requires background shorthand*/\r\n    background: rgba(0, 60, 136, 0.5);\r\n    filter: alpha(opacity=80);\r\n}\r\ndiv.olControlZoom a:hover {\r\n    background: #130085; /* fallback for IE */\r\n    background: rgba(0, 60, 136, 0.7);\r\n    filter: alpha(opacity=100);\r\n}\r\n@media only screen and (max-width: 600px) {\r\n    div.olControlZoom a:hover {\r\n        background: rgba(0, 60, 136, 0.5);\r\n    }\r\n}\r\na.olControlZoomIn {\r\n    border-radius: 4px 4px 0 0;\r\n}\r\na.olControlZoomOut {\r\n    border-radius: 0 0 4px 4px;\r\n}\r\n\r\n\r\n/**\r\n * Animations\r\n */\r\n\r\n.olLayerGrid .olTileImage {\r\n    -webkit-transition: opacity 0.2s linear;\r\n    -moz-transition: opacity 0.2s linear;\r\n    -o-transition: opacity 0.2s linear;\r\n    transition: opacity 0.2s linear;\r\n}\r\n#contentMap.oskari-map-window-fullscreen {\r\n  position: fixed;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100%;\r\n  z-index: 10000;\r\n  margin: 0 !important; }\r\n/*! jQuery UI - v1.9.1 - 2012-11-09\r\n* http://jqueryui.com\r\n* Includes: jquery.ui.core.css, jquery.ui.resizable.css, jquery.ui.selectable.css, jquery.ui.slider.css, jquery.ui.tooltip.css\r\n* To view and modify this theme, visit http://jqueryui.com/themeroller/?ffDefault=Segoe%20UI%2CArial%2Csans-serif&fwDefault=bold&fsDefault=1.1em&cornerRadius=6px&bgColorHeader=333333&bgTextureHeader=12_gloss_wave.png&bgImgOpacityHeader=25&borderColorHeader=333333&fcHeader=ffffff&iconColorHeader=ffffff&bgColorContent=000000&bgTextureContent=05_inset_soft.png&bgImgOpacityContent=25&borderColorContent=666666&fcContent=ffffff&iconColorContent=cccccc&bgColorDefault=555555&bgTextureDefault=02_glass.png&bgImgOpacityDefault=20&borderColorDefault=666666&fcDefault=eeeeee&iconColorDefault=cccccc&bgColorHover=0078a3&bgTextureHover=02_glass.png&bgImgOpacityHover=40&borderColorHover=59b4d4&fcHover=ffffff&iconColorHover=ffffff&bgColorActive=f58400&bgTextureActive=05_inset_soft.png&bgImgOpacityActive=30&borderColorActive=ffaf0f&fcActive=ffffff&iconColorActive=222222&bgColorHighlight=eeeeee&bgTextureHighlight=03_highlight_soft.png&bgImgOpacityHighlight=80&borderColorHighlight=cccccc&fcHighlight=2e7db2&iconColorHighlight=4b8e0b&bgColorError=ffc73d&bgTextureError=02_glass.png&bgImgOpacityError=40&borderColorError=ffb73d&fcError=111111&iconColorError=a83300&bgColorOverlay=5c5c5c&bgTextureOverlay=01_flat.png&bgImgOpacityOverlay=50&opacityOverlay=80&bgColorShadow=cccccc&bgTextureShadow=01_flat.png&bgImgOpacityShadow=30&opacityShadow=60&thicknessShadow=7px&offsetTopShadow=-7px&offsetLeftShadow=-7px&cornerRadiusShadow=8px\r\n* Copyright (c) 2012 jQuery Foundation and other contributors Licensed MIT */\r\n\r\n/* Layout helpers\r\n----------------------------------*/\r\n.oskariui .ui-helper-hidden { display: none; }\r\n.oskariui .ui-helper-hidden-accessible { position: absolute !important; clip: rect(1px,1px,1px,1px); clip: rect(1px,1px,1px,1px); }\r\n.oskariui .ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }\r\n.oskariui .ui-helper-clearfix:before, .ui-helper-clearfix:after { content: \"\"; display: table; }\r\n.oskariui .ui-helper-clearfix:after { clear: both; }\r\n.oskariui .ui-helper-clearfix { zoom: 1; }\r\n.oskariui .ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }\r\n\r\n\r\n/* Interaction Cues\r\n----------------------------------*/\r\n.oskariui .ui-state-disabled { cursor: default !important; }\r\n\r\n\r\n/* Icons\r\n----------------------------------*/\r\n\r\n/* states and images */\r\n.oskariui .ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }\r\n\r\n\r\n/* Misc visuals\r\n----------------------------------*/\r\n\r\n/* Overlays */\r\n.oskariui .ui-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }\r\n.oskariui .ui-resizable { position: relative;}\r\n.oskariui .ui-resizable-handle { position: absolute;font-size: 0.1px; display: block; }\r\n.oskariui .ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }\r\n.oskariui .ui-resizable-n { cursor: n-resize; height: 7px; width: 100%; top: -5px; left: 0; }\r\n.oskariui .ui-resizable-s { cursor: s-resize; height: 7px; width: 100%; bottom: -5px; left: 0; }\r\n.oskariui .ui-resizable-e { cursor: e-resize; width: 7px; right: -5px; top: 0; height: 100%; }\r\n.oskariui .ui-resizable-w { cursor: w-resize; width: 7px; left: -5px; top: 0; height: 100%; }\r\n.oskariui .ui-resizable-se { cursor: se-resize; width: 12px; height: 12px; right: 1px; bottom: 1px; }\r\n.oskariui .ui-resizable-sw { cursor: sw-resize; width: 9px; height: 9px; left: -5px; bottom: -5px; }\r\n.oskariui .ui-resizable-nw { cursor: nw-resize; width: 9px; height: 9px; left: -5px; top: -5px; }\r\n.oskariui .ui-resizable-ne { cursor: ne-resize; width: 9px; height: 9px; right: -5px; top: -5px;}.ui-selectable-helper { position: absolute; border:1px dotted black; }\r\n\r\n.oskariui .ui-slider { position: relative; text-align: left; }\r\n.oskariui .ui-slider .ui-slider-handle { position: absolute; width: 16px; height: 17px; cursor: default; }\r\n.oskariui .ui-slider .ui-slider-range { position: absolute; font-size: .7em; display: block; border: 0; background-position: 0 0; }\r\n\r\n.oskariui .ui-slider-horizontal { height: 14px; }\r\n.oskariui .ui-slider-horizontal .ui-slider-handle { background-image: url(\'/Oskari/resources/framework/bundle/oskariui/images/horizontal_handle.png\'); background-repeat: no-repeat;}\r\n\r\n.oskariui .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }\r\n.oskariui .ui-slider-horizontal .ui-slider-range-min { left: 0; }\r\n.oskariui .ui-slider-horizontal .ui-slider-range-max { right: 0; }\r\n\r\n.oskariui .ui-slider-vertical { margin-left: 2px; width: 24px; background-image: url(\'/Oskari/resources/framework/bundle/oskariui/images/zoombar_part.png\'); background-repeat: repeat-y; }\r\n.oskariui .ui-slider-vertical .ui-slider-handle { margin-left: 0; background-image: url(\'/Oskari/resources/framework/bundle/oskariui/images/zoombar_cursor.png\'); background-repeat: no-repeat;}\r\n.oskariui .ui-slider-vertical .ui-slider-range { left: 0; width: 100%; }\r\n.oskariui .ui-slider-vertical .ui-slider-range-min { bottom: 0; }\r\n.oskariui .ui-slider-vertical .ui-slider-range-max { top: 0; }.ui-tooltip {\r\n\tpadding: 8px;\r\n\tposition: absolute;\r\n\tz-index: 9999;\r\n\tmax-width: 300px;\r\n\t-webkit-box-shadow: 0 0 5px #aaa;\r\n\tbox-shadow: 0 0 5px #aaa;\r\n}\r\n/* Fades and background-images don\'t work well together in IE6, drop the image */\r\n* html .ui-tooltip {\r\n\tbackground-image: none;\r\n}\r\nbody .oskariui .ui-tooltip { border-width: 2px; }\r\n\r\n/* Component containers\r\n----------------------------------*/\r\n.oskariui .ui-widget { font-family: Segoe UI,Arial,sans-serif; font-size: 1.1em; }\r\n.oskariui .ui-widget .ui-widget { font-size: 1em; }\r\n.oskariui .ui-widget input, .oskariui .ui-widget select, .oskariui .ui-widget textarea, .oskariui .ui-widget button { font-family: Segoe UI,Arial,sans-serif; font-size: 1em; }\r\n.oskariui .ui-widget-content {  }\r\n.oskariui .ui-widget-content a {  }\r\n.oskariui .ui-widget-header {  }\r\n.oskariui .ui-widget-header a {  }\r\n\r\n/* Interaction states\r\n----------------------------------*/\r\n.oskariui .ui-state-default, .oskariui .ui-widget-content .ui-state-default, .oskariui .ui-widget-header .ui-state-default {  }\r\n.oskariui .ui-state-default a, .oskariui .ui-state-default a:link, .oskariui .ui-state-default a:visited {  }\r\n.oskariui .ui-state-hover, .oskariui .ui-widget-content .ui-state-hover, .oskariui .ui-widget-header .ui-state-hover, .oskariui .ui-state-focus, .oskariui .ui-widget-content .ui-state-focus, .oskariui .ui-widget-header .ui-state-focus {  }\r\n.oskariui .ui-state-hover a, .oskariui .ui-state-hover a:hover, .oskariui .ui-state-hover a:link, .oskariui .ui-state-hover a:visited { }\r\n.oskariui .ui-state-active, .oskariui .ui-widget-content .ui-state-active, .oskariui .ui-widget-header .ui-state-active {  }\r\n.oskariui .ui-state-active a, .oskariui .ui-state-active a:link, .oskariui .ui-state-active a:visited {  }\r\n\r\n/* Interaction Cues\r\n----------------------------------*/\r\n.oskariui .ui-state-highlight, .oskariui .ui-widget-content .ui-state-highlight, .oskariui .ui-widget-header .ui-state-highlight  { }\r\n.oskariui .ui-state-highlight a, .oskariui .ui-widget-content .ui-state-highlight a,.oskariui .ui-widget-header .ui-state-highlight a { }\r\n.oskariui .ui-state-error, .oskariui .ui-widget-content .ui-state-error, .oskariui .ui-widget-header .ui-state-error { }\r\n.oskariui .ui-state-error a, .oskariui .ui-widget-content .ui-state-error a, .oskariui .ui-widget-header .ui-state-error a { }\r\n.oskariui .ui-state-error-text, .oskariui .ui-widget-content .ui-state-error-text, .oskariui .ui-widget-header .ui-state-error-text {  }\r\n.oskariui .ui-priority-primary, .oskariui .ui-widget-content .ui-priority-primary, .oskariui .ui-widget-header .ui-priority-primary {  }\r\n.oskariui .ui-priority-secondary, .oskariui .ui-widget-content .ui-priority-secondary,  .oskariui .ui-widget-header .ui-priority-secondary { }\r\n.oskariui .ui-state-disabled, .oskariui .ui-widget-content .ui-state-disabled, .oskariui .ui-widget-header .ui-state-disabled {  }\r\n.oskariui .ui-state-disabled .ui-icon { filter:Alpha(Opacity=35); } /* For IE8 - See #6059 */\r\n\r\n/* Icons\r\n----------------------------------*/\r\n\r\n/* states and images */\r\n.oskariui .ui-icon { width: 16px; height: 16px; }\r\n.oskariui .ui-widget-content .ui-icon { }\r\n.oskariui .ui-widget-header .ui-icon { }\r\n.oskariui .ui-state-default .ui-icon {  }\r\n.oskariui .ui-state-hover .ui-icon, .oskariui .ui-state-focus .ui-icon {}\r\n.oskariui .ui-state-active .ui-icon { }\r\n.oskariui .ui-state-highlight .ui-icon { }\r\n.oskariui .ui-state-error .ui-icon, .oskariui .ui-state-error-text .ui-icon { }\r\n\r\n\r\n/* Misc visuals\r\n----------------------------------*/\r\n\r\n/* Corner radius */\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-top, .oskariui .ui-corner-left, .oskariui .ui-corner-tl { -moz-border-radius-topleft: 6px; -webkit-border-top-left-radius: 6px; -khtml-border-top-left-radius: 6px; border-top-left-radius: 6px; }\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-top, .oskariui .ui-corner-right, .oskariui .ui-corner-tr { -moz-border-radius-topright: 6px; -webkit-border-top-right-radius: 6px; -khtml-border-top-right-radius: 6px; border-top-right-radius: 6px; }\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-bottom, .oskariui .ui-corner-left, .oskariui .ui-corner-bl { -moz-border-radius-bottomleft: 6px; -webkit-border-bottom-left-radius: 6px; -khtml-border-bottom-left-radius: 6px; border-bottom-left-radius: 6px; }\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-bottom, .oskariui .ui-corner-right, .oskariui .ui-corner-br { -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; -khtml-border-bottom-right-radius: 6px; border-bottom-right-radius: 6px; }\r\n\r\n/* Overlays */\r\n.oskariui .ui-widget-overlay { background: #5c5c5c url(resources/framework/bundle/oskariui/css/images/ui-bg_flat_50_5c5c5c_40x100.png) 50% 50% repeat-x; opacity: .8;filter:Alpha(Opacity=80); }\r\n.oskariui .ui-widget-shadow { margin: -7px 0 0 -7px; padding: 7px; background: #cccccc url(resources/framework/bundle/oskariui/css/images/ui-bg_flat_30_cccccc_40x100.png) 50% 50% repeat-x; opacity: .6;filter:Alpha(Opacity=60); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }\r\n/*!\r\n * Bootstrap v2.3.1\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\r\n.oskariui .clearfix {\r\n  *zoom: 1;\r\n}\r\n.oskariui .clearfix:before,\r\n.oskariui .clearfix:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .clearfix:after {\r\n  clear: both;\r\n}\r\n.oskariui .hide-text {\r\n  font: 0/0 a;\r\n  color: transparent;\r\n  text-shadow: none;\r\n  background-color: transparent;\r\n  border: 0;\r\n}\r\n.oskariui .input-block-level {\r\n  display: block;\r\n  width: 100%;\r\n  min-height: 30px;\r\n  -webkit-box-sizing: border-box;\r\n  -moz-box-sizing: border-box;\r\n  box-sizing: border-box;\r\n}\r\n.oskariui .row {\r\n  margin-left: -20px;\r\n  *zoom: 1;\r\n}\r\n.oskariui .row:before,\r\n.oskariui .row:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .row:after {\r\n  clear: both;\r\n}\r\n[class*=\"span\"] {\r\n  float: left;\r\n  min-height: 1px;\r\n  margin-left: 20px;\r\n}\r\n.oskariui .container,\r\n.oskariui .navbar-static-top .container,\r\n.oskariui .navbar-fixed-top .container,\r\n.oskariui .navbar-fixed-bottom .container {\r\n  width: 940px;\r\n}\r\n.oskariui .span12 {\r\n  width: 940px;\r\n}\r\n.oskariui .span11 {\r\n  width: 860px;\r\n}\r\n.oskariui .span10 {\r\n  width: 780px;\r\n}\r\n.oskariui .span9 {\r\n  width: 700px;\r\n}\r\n.oskariui .span8 {\r\n  width: 620px;\r\n}\r\n.oskariui .span7 {\r\n  width: 540px;\r\n}\r\n.oskariui .span6 {\r\n  width: 460px;\r\n}\r\n.oskariui .span5 {\r\n  width: 380px;\r\n}\r\n.oskariui .span4 {\r\n  width: 300px;\r\n}\r\n.oskariui .span3 {\r\n  width: 220px;\r\n}\r\n.oskariui .span2 {\r\n  width: 140px;\r\n}\r\n.oskariui .span1 {\r\n  width: 60px;\r\n}\r\n.oskariui .offset12 {\r\n  margin-left: 980px;\r\n}\r\n.oskariui .offset11 {\r\n  margin-left: 900px;\r\n}\r\n.oskariui .offset10 {\r\n  margin-left: 820px;\r\n}\r\n.oskariui .offset9 {\r\n  margin-left: 740px;\r\n}\r\n.oskariui .offset8 {\r\n  margin-left: 660px;\r\n}\r\n.oskariui .offset7 {\r\n  margin-left: 580px;\r\n}\r\n.oskariui .offset6 {\r\n  margin-left: 500px;\r\n}\r\n.oskariui .offset5 {\r\n  margin-left: 420px;\r\n}\r\n.oskariui .offset4 {\r\n  margin-left: 340px;\r\n}\r\n.oskariui .offset3 {\r\n  margin-left: 260px;\r\n}\r\n.oskariui .offset2 {\r\n  margin-left: 180px;\r\n}\r\n.oskariui .offset1 {\r\n  margin-left: 100px;\r\n}\r\n.oskariui .row-fluid {\r\n  width: 100%;\r\n  *zoom: 1;\r\n}\r\n.oskariui .row-fluid:before,\r\n.oskariui .row-fluid:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .row-fluid:after {\r\n  clear: both;\r\n}\r\n.oskariui .row-fluid [class*=\"span\"] {\r\n  display: block;\r\n  width: 100%;\r\n  min-height: 30px;\r\n  -webkit-box-sizing: border-box;\r\n  -moz-box-sizing: border-box;\r\n  box-sizing: border-box;\r\n  float: left;\r\n  margin-left: 2.127659574468085%;\r\n  *margin-left: 2.074468085106383%;\r\n}\r\n.oskariui .row-fluid [class*=\"span\"]:first-child {\r\n  margin-left: 0;\r\n}\r\n.oskariui .row-fluid .controls-row [class*=\"span\"] + [class*=\"span\"] {\r\n  margin-left: 2.127659574468085%;\r\n}\r\n.oskariui .row-fluid .span12 {\r\n  width: 100%;\r\n  *width: 99.94680851063829%;\r\n}\r\n.oskariui .row-fluid .span11 {\r\n  width: 91.48936170212765%;\r\n  *width: 91.43617021276594%;\r\n}\r\n.oskariui .row-fluid .span10 {\r\n  width: 82.97872340425532%;\r\n  *width: 82.92553191489361%;\r\n}\r\n.oskariui .row-fluid .span9 {\r\n  width: 74.46808510638297%;\r\n  *width: 74.41489361702126%;\r\n}\r\n.oskariui .row-fluid .span8 {\r\n  width: 65.95744680851064%;\r\n  *width: 65.90425531914893%;\r\n}\r\n.oskariui .row-fluid .span7 {\r\n  width: 57.44680851063829%;\r\n  *width: 57.39361702127659%;\r\n}\r\n.oskariui .row-fluid .span6 {\r\n  width: 48.93617021276595%;\r\n  *width: 48.88297872340425%;\r\n}\r\n.oskariui .row-fluid .span5 {\r\n  width: 40.42553191489362%;\r\n  *width: 40.37234042553192%;\r\n}\r\n.oskariui .row-fluid .span4 {\r\n  width: 31.914893617021278%;\r\n  *width: 31.861702127659576%;\r\n}\r\n.oskariui .row-fluid .span3 {\r\n  width: 23.404255319148934%;\r\n  *width: 23.351063829787233%;\r\n}\r\n.oskariui .row-fluid .span2 {\r\n  width: 14.893617021276595%;\r\n  *width: 14.840425531914894%;\r\n}\r\n.oskariui .row-fluid .span1 {\r\n  width: 6.382978723404255%;\r\n  *width: 6.329787234042553%;\r\n}\r\n.oskariui .row-fluid .offset12 {\r\n  margin-left: 104.25531914893617%;\r\n  *margin-left: 104.14893617021275%;\r\n}\r\n.oskariui .row-fluid .offset12:first-child {\r\n  margin-left: 102.12765957446808%;\r\n  *margin-left: 102.02127659574467%;\r\n}\r\n.oskariui .row-fluid .offset11 {\r\n  margin-left: 95.74468085106382%;\r\n  *margin-left: 95.6382978723404%;\r\n}\r\n.oskariui .row-fluid .offset11:first-child {\r\n  margin-left: 93.61702127659574%;\r\n  *margin-left: 93.51063829787232%;\r\n}\r\n.oskariui .row-fluid .offset10 {\r\n  margin-left: 87.23404255319149%;\r\n  *margin-left: 87.12765957446807%;\r\n}\r\n.oskariui .row-fluid .offset10:first-child {\r\n  margin-left: 85.1063829787234%;\r\n  *margin-left: 84.99999999999999%;\r\n}\r\n.oskariui .row-fluid .offset9 {\r\n  margin-left: 78.72340425531914%;\r\n  *margin-left: 78.61702127659572%;\r\n}\r\n.oskariui .row-fluid .offset9:first-child {\r\n  margin-left: 76.59574468085106%;\r\n  *margin-left: 76.48936170212764%;\r\n}\r\n.oskariui .row-fluid .offset8 {\r\n  margin-left: 70.2127659574468%;\r\n  *margin-left: 70.10638297872339%;\r\n}\r\n.oskariui .row-fluid .offset8:first-child {\r\n  margin-left: 68.08510638297872%;\r\n  *margin-left: 67.9787234042553%;\r\n}\r\n.oskariui .row-fluid .offset7 {\r\n  margin-left: 61.70212765957446%;\r\n  *margin-left: 61.59574468085106%;\r\n}\r\n.oskariui .row-fluid .offset7:first-child {\r\n  margin-left: 59.574468085106375%;\r\n  *margin-left: 59.46808510638297%;\r\n}\r\n.oskariui .row-fluid .offset6 {\r\n  margin-left: 53.191489361702125%;\r\n  *margin-left: 53.085106382978715%;\r\n}\r\n.oskariui .row-fluid .offset6:first-child {\r\n  margin-left: 51.063829787234035%;\r\n  *margin-left: 50.95744680851063%;\r\n}\r\n.oskariui .row-fluid .offset5 {\r\n  margin-left: 44.68085106382979%;\r\n  *margin-left: 44.57446808510638%;\r\n}\r\n.oskariui .row-fluid .offset5:first-child {\r\n  margin-left: 42.5531914893617%;\r\n  *margin-left: 42.4468085106383%;\r\n}\r\n.oskariui .row-fluid .offset4 {\r\n  margin-left: 36.170212765957444%;\r\n  *margin-left: 36.06382978723405%;\r\n}\r\n.oskariui .row-fluid .offset4:first-child {\r\n  margin-left: 34.04255319148936%;\r\n  *margin-left: 33.93617021276596%;\r\n}\r\n.oskariui .row-fluid .offset3 {\r\n  margin-left: 27.659574468085104%;\r\n  *margin-left: 27.5531914893617%;\r\n}\r\n.oskariui .row-fluid .offset3:first-child {\r\n  margin-left: 25.53191489361702%;\r\n  *margin-left: 25.425531914893618%;\r\n}\r\n.oskariui .row-fluid .offset2 {\r\n  margin-left: 19.148936170212764%;\r\n  *margin-left: 19.04255319148936%;\r\n}\r\n.oskariui .row-fluid .offset2:first-child {\r\n  margin-left: 17.02127659574468%;\r\n  *margin-left: 16.914893617021278%;\r\n}\r\n.oskariui .row-fluid .offset1 {\r\n  margin-left: 10.638297872340425%;\r\n  *margin-left: 10.53191489361702%;\r\n}\r\n.oskariui .row-fluid .offset1:first-child {\r\n  margin-left: 8.51063829787234%;\r\n  *margin-left: 8.404255319148938%;\r\n}\r\n[class*=\"span\"].hide,\r\n.oskariui .row-fluid [class*=\"span\"].hide {\r\n  display: none;\r\n}\r\n[class*=\"span\"].pull-right,\r\n.oskariui .row-fluid [class*=\"span\"].pull-right {\r\n  float: right;\r\n}\r\n.oskariui .container {\r\n  margin-right: auto;\r\n  margin-left: auto;\r\n  *zoom: 1;\r\n}\r\n.oskariui .container:before,\r\n.oskariui .container:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .container:after {\r\n  clear: both;\r\n}\r\n.oskariui .container-fluid {\r\n  padding-right: 20px;\r\n  padding-left: 20px;\r\n  *zoom: 1;\r\n}\r\n.oskariui .container-fluid:before,\r\n.oskariui .container-fluid:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .container-fluid:after {\r\n  clear: both;\r\n}\r\n#mapstatsHover_contentDiv {\n  padding: 5px; }\n.getinforesult_table tr {\r\n  padding: 5px; }\r\n  .getinforesult_table tr.odd {\r\n    background-color: #EEEEEE; }\r\n.getinforesult_table td {\r\n  padding: 2px; }\r\n\r\n.getinforesult_header {\r\n  border: 1pt solid navy;\r\n  background-color: #424343;\r\n  margin-top: 14px;\r\n  margin-bottom: 10px;\r\n  height: 15px; }\r\n  .getinforesult_header .icon-bubble-left {\r\n    height: 15px;\r\n    display: inline;\r\n    float: left; }\r\n\r\n.getinforesult_header_title {\r\n  color: #FFF;\r\n  float: left;\r\n  display: inline;\r\n  margin-left: 8px;\r\n  max-width: 85%;\r\n  overflow: hidden;\r\n  white-space: nowrap;\r\n  text-overflow: ellipsis; }\r\ndiv.mapplugin.search-div {\n  top: 10px;\n  right: 10px; }\n\ndiv.search-div div.close {\n  float: right; }\n\ndiv.search-div input[type=text] {\n  width: 124px !important; }\n\ndiv.search-div input[type=button] {\n  width: 35px;\n  margin-left: 3px; }\n\ndiv.search-div div.results {\n  border: 1px solid #f3f3f3;\n  background: white;\n  max-width: 255px;\n  width: 255px;\n  overflow: scroll;\n  margin-top: 5px;\n  padding: 4px; }\n\ndiv.search-div div.results div.header {\n  background: #DDDDDD; }\n\ndiv.search-div div.results div.content table {\n  width: 100%;\n  text-align: center;\n  border-spacing: 2px; }\n\ndiv.search-div div.results div.content table tr {\n  cursor: pointer; }\n\n/* IE8 Cleared */\ntable.search-results td {\n  text-align: left;\n  padding: 2px;\n  padding-left: 4px;\n  padding-right: 12px; }\n\ntable.search-results tr.odd {\n  background-color: #f3f3f3; }\n\ntable.search-results {\n  width: 100%;\n  margin: 4px; }\n\ntable.search-results a {\n  color: #0085D1; }\n\ntable.search-results th {\n  text-align: left;\n  padding: 2px;\n  padding-left: 4px;\n  padding-right: 12px;\n  font-weight: bold; }\n\n/*\r\n#search-loading-image {\r\n    position: absolute;\r\n    right: 56px;\r\n    top: 6px;\r\n    z-index: 10001;\r\n}\r\n*/\n.logoplugin {\r\n  background-color: #FFF;\r\n  background-repeat: no-repeat;\r\n  display: block;\r\n  position: absolute;\r\n  bottom: 0px;\r\n  left: 0px;\r\n  z-index: 100000000 !important;\r\n  filter: alpha(opacity=80);\r\n  /* unquote for libsass bug */\r\n  opacity: 0.8 !important; }\r\n  .logoplugin a, .logoplugin a:hover, .logoplugin a:active, .logoplugin a:visited {\r\n    color: #333333 !important; }\r\n  .logoplugin .icon {\r\n    background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/logo/images/logo_pieni.png\');\r\n    display: inline-block;\r\n    height: 25px;\r\n    width: 25px;\r\n    vertical-align: bottom; }\r\n  .logoplugin .terms {\r\n    display: inline-block;\r\n    margin: 5px; }\r\n\r\n/* Force measurement bar up a notch so it isn\'t occluded by the logo */\r\n#mapdiv .olControlScaleLine {\r\n  bottom: 30px; }\r\n.oskari-datasource .link {\r\n  background-color: none;\r\n  background-repeat: no-repeat;\r\n  display: block;\r\n  font-size: 13px;\r\n  position: fixed;\r\n  bottom: 15px;\r\n  right: 70px;\r\n  z-index: 100000000 !important;\r\n  filter: alpha(opacity=80);\r\n  /* unquote for libsass bug */\r\n  opacity: 0.8 !important; }\r\n\r\n.oskari-datasource a, .oskari-datasource a:hover, .oskari-datasource:active, .oskari-datasource a:visited {\r\n  color: blue !important; }\r\n.olControlOverviewMapElement  {\r\n    padding: 5px !important;\r\n    background-color: #FFFFFF !important;\r\n    border-color: #D0D0D0 !important;\r\n    border-style: solid;\r\n    border-left-width: 2px;\r\n    border-top-width: 2px;\r\n    \r\n}\r\n#olControlOverviewMapMaximizeButton\r\n{\r\n    position: absolute !important;\r\n    right: 10px;\r\n    bottom: 2px;\r\n}\r\n\r\n#OpenLayers_Control_minimizeDiv\r\n{\r\n    width: 46px !important;\r\n    height: 46px !important;\r\n    right: 0px;\r\n    bottom: 0px;\r\n    cursor: default;\r\n    background: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png\')  !important;\r\n    \r\n}\r\n\r\n#olControlOverviewMapMaximizeButton_innerImage, #OpenLayers_Control_minimizeDiv_innerImage{\r\n    display: none !important;\r\n}\r\n\r\n#olControlOverviewMapMaximizeButton{\r\n    width: 46px !important;\r\n    height: 46px !important;\r\n    right: 0px;\r\n    bottom: 0px;\r\n    cursor: default;\r\n    background: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap.png\') 0px 0px !important;\r\n}\r\n\r\n#olControlOverviewMapMaximizeButton:hover\r\n{\r\n    background: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png\') !important;\r\n}\r\n\r\n#OpenLayers_Control_minimizeDiv{\r\n    position: absolute !important;\r\n    right: 0px;\r\n    bottom: 0px;\r\n}\r\n\r\n.olControlOverviewMapExtentRectangle  {\r\n    border:2px dashed #f47729 !important;\r\n}\r\n.fullscreenDiv {\r\n  position: absolute;\r\n  top: 10px;\r\n  left: 10px;\r\n  display: block;\r\n  color: black;\r\n  background: transparent;\r\n  z-index: 15000; }\r\n\r\n.fullscreenDiv .fullscreenDivImg {\r\n  cursor: pointer; }\r\ndiv.mapplugin.layerSelectionPlugin {\r\n  position: absolute;\r\n  top: 20px;\r\n  right: 20px;\r\n  z-index: 100000000 !important; }\r\n\r\n.layerSelectionPlugin {\r\n  max-width: 200px; }\r\n\r\n.layerSelectionPlugin div.header {\r\n  background-color: #333333 !important;\r\n  color: white !important;\r\n  padding: 8px; }\r\n\r\n.layerSelectionPlugin div.content {\r\n  background-color: white; }\r\n\r\n.layerSelectionPlugin div.header div.header-icon {\r\n  display: inline-block;\r\n  margin-right: 10px;\r\n  vertical-align: middle; }\r\n\r\n.layerSelectionPlugin div.content div.layers, .layerSelectionPlugin div.content div.baselayers {\r\n  padding: 10px; }\r\n\r\n.layerSelectionPlugin div.content div.layer {\r\n  margin: 5px 0;\r\n  text-align: left; }\r\n\r\n.layerSelectionPlugin div.content div.layer input {\r\n  margin-right: 10px;\r\n  float: left; }\r\n\r\n.layerSelectionPlugin div.content div.baseLayerHeader {\r\n  background-color: #DDDDDD;\r\n  padding: 10px; }\r\ndiv.pzbDiv.mapplugin {\r\n    top : 140px;\r\n    right : 64px;\r\n    background : transparent;\r\n    z-index: 15000;\r\n}\r\ndiv.pzbDiv div.pzbDiv-plus {\r\n    width : 18px;\r\n    height : 46px;\r\n    background-image : url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_plus_patched.png\');\r\n}\r\n\r\ndiv.pzbDiv div.pzbDiv-minus {\r\n    width : 18px;\r\n    height : 18px;\r\n    background-image : url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_minus.png\');\r\n}\r\ndiv.pzbDiv div.rui-slider-vertical {\r\n    background-color : transparent;\r\n    background-image : url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar.png\');\r\n    height : 148px;\r\n    width : 18px;\r\n    border : 0;\r\n    margin : 0;\r\n}\r\n\r\n\r\n\r\n\r\n.panbuttonDiv.mapplugin {\r\n  top: 10px;\r\n  right: 36px;\r\n  display: block;\r\n  color: black;\r\n  background: transparent;\r\n  font-size: 12px;\r\n  z-index: 15000;\r\n  /*64738;*/\r\n  font-weight: bold;\r\n  /*background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/default.png\');*/\r\n  height: 90px;\r\n  width: 90px; }\r\n\r\n.panbuttonDivImg {\r\n  background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/sprite.png\'); }\r\n\r\n.panbuttonDivImg.root {\r\n  background-position: 0px -90px; }\r\n\r\n.panbuttonDivImg.left {\r\n  background-position: 0px -180px; }\r\n\r\n.panbuttonDivImg.right {\r\n  background-position: 0px -270px; }\r\n\r\n.panbuttonDivImg.up {\r\n  background-position: 0px -360px; }\r\n\r\n.panbuttonDivImg.down {\r\n  background-position: 0px -450px; }\r\n\r\n.panbutton_left {\r\n  float: left; }\r\n\r\n.panbutton_right {\r\n  float: right; }\r\n.olMap {\r\n  position: relative; }\r\n\r\ndiv.mapplugin {\r\n  position: absolute;\r\n  z-index: 15000; }\r\n\r\ndiv.mapplugins.left {\r\n  position: absolute;\r\n  z-index: 15000;\r\n  top: 20px;\r\n  right: 20px;\r\n  text-align: right;\r\n  max-width: 85%; }\r\n\r\ndiv.mapplugins.left > div {\r\n  display: inline-block;\r\n  margin: 5px;\r\n  vertical-align: top; }\r\n/* setup document body so flyouts will not make scrollbars to browser window */\nbody {\n  position: fixed;\n  width: 100%;\n  height: 100%; }\n\n/* flyout toolbar */\n.oskari-flyoutheading {\n  background-color: #ffd400;\n  border-top: 1px solid #ffdf00;\n  border-bottom: 1px solid #ebb819;\n  height: 14px;\n  width: 100%; }\n\n.oskari-flyouttoolbar {\n  height: 57px;\n  width: 100%;\n  background-color: #fdf8d9;\n  border-top: #fdfdfd;\n  border-bottom: #fef2ba; }\n\n.oskari-flyout-title {\n  float: left;\n  margin-left: 20px;\n  margin-top: 12px;\n  height: 20px;\n  display: inline-block; }\n\n.oskari-flyout-title p {\n  margin: 0;\n  padding: 0;\n  font: 16px/20px \"Open Sans\", \"Helvetica Neue\", \"HelveticaNeue\", Helvetica, Arial, sans-serif; }\n\n/** flyout toolbar tools and tool states  */\n.oskari-flyouttools {\n  float: right;\n  margin-right: 25px;\n  height: 16px;\n  display: inline-block;\n  margin-top: 15px; }\n\n.oskari-flyouttool-detach {\n  display: none;\n  /* visualise here if this tool required */ }\n\n.oskari-detached .oskari-flyouttool-detach {\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-detach {\n  display: none; }\n\n.oskari-flyouttool-attach {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-attached .oskari-flyouttool-attach {\n  display: none; }\n\n.oskari-flyouttool-minimize {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-attached .oskari-flyouttool-minimize {\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-minimize {\n  display: none; }\n\n.oskari-flyouttool-restore {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-flyouttool-help {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-restore {\n  display: inline-block; }\n\n.oskari-minimized .oskari-flyouttool-attach {\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-detach {\n  display: none; }\n\n.oskari-flyouttool-close {\n  display: inline-block;\n  width: 16px;\n  height: 16px;\n  margin-right: 2px;\n  margin-left: auto; }\n\n/* flyout */\n.oskari-flyout {\n  background-color: #fafafa;\n  position: absolute;\n  z-index: 1100;\n  margin: 0px;\n  padding: 0px;\n  border: 1px solid rgba(0, 0, 0, 0.2); }\n\n/* flyout states */\n/*.oskari-minimized {\r\n width: 640px;\r\n height: 64px;\r\n overflow: hidden;\r\n\r\n min-height: 64px;\r\n max-height: 64px;\r\n }*/\n.oskari-closed {\n  display: none; }\n\n.oskari-minimized {\n  display: none; }\n\n.oskari-flyoutcontent {\n  margin: 0;\n  padding: 20px 20px 20px 25px;\n  border: 0;\n  /*overflow: auto;*/ }\n\n/** tile */\n/* tile states */\n.oskari-tile-attached {\n  border-bottom: 1px solid white;\n  background-color: white; }\n\n.oskari-tile-detached {\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  background-color: white; }\n\n.oskari-tile-minimized {\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  background-color: #2d2d2d; }\n\n.oskari-tile-closed {\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  background-color: #2d2d2d; }\n\n.oskari-tile-container {\n  margin: 0; }\n\n.oskari-tile {\n  margin: 0;\n  padding: 0;\n  cursor: pointer;\n  height: 31px;\n  width: 153px;\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  line-height: 24px; }\n\n.oskari-tile-title {\n  display: inline-block;\n  margin: 0;\n  margin-top: 2px;\n  margin-left: 16px;\n  padding: 0;\n  float: left;\n  height: 28px;\n  width: 112px;\n  font-family: Arial, Helvetica;\n  font-weight: bold;\n  font-size: 11px;\n  text-align: left;\n  text-transform: uppercase;\n  /*color: white;*/ }\n\n.oskari-tile-attached .oskari-tile-title {\n  color: #333438; }\n\n.oskari-tile-detached .oskari-tile-title {\n  color: #333438; }\n\n.oskari-tile-minimized .oskari-tile-title {\n  color: white; }\n\n.oskari-tile-closed .oskari-tile-title {\n  color: white; }\n\n.oskari-tile-status {\n  float: right;\n  text-align: center;\n  display: inline-block;\n  font-size: 11px;\n  font-weight: bold;\n  height: 19px !important;\n  width: 20px !important;\n  margin: 1px;\n  padding: 1px; }\n\n.oskari-tile-close {\n  display: none; }\n\n.oskariform .oskarifield {\n  padding: 10px; }\n\n/** media queries */\n@media screen {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 500px;\n    /* overflow: auto; */ } }\n@media screen {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 500px;\n    /* overflow: auto; */ } }\n@media only screen and (min-width: 400px) and (max-width: 599px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 500px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 500px; } }\n@media only screen and (min-width: 600px) and (max-width: 799px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 600px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 600px; } }\n@media only screen and (min-width: 800px) and (max-width: 1199px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 1000px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 600px; } }\n@media only screen and (min-width: 1200px) and (max-width: 1599px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 600px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 600px; } }\n@media only screen and (min-height: 400px) and (max-height: 599px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 300px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 600px) and (max-height: 799px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 500px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 800px) and (max-height: 999px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 700px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 1000px) and (max-height: 1199px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 900px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 1200px) and (max-height: 1399px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 1100px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 1400px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 1300px;\n    /* overflow: auto; */ } }\n/* IE8 TEMP fixes */\n.oskari-flyoutcontentcontainer_IE_400_599 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 300px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_600_799 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 500px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_800_999 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 700px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_1000_1199 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 900px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_1200_1399 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 1100px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_1400 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 1300px;\n  /* overflow: auto; */ }\n/* Accordion */\r\ndiv.accordion div.accordion_panel {\r\n  background-color: #f3f3f3;\r\n  border: 1pt solid #c0d0d0;\r\n  margin: 0;\r\n  padding: 0; }\r\n\r\ndiv.accordion_panel div.header div.headerIcon {\r\n  display: inline-block;\r\n  margin-left: 12px;\r\n  vertical-align: middle; }\r\n\r\ndiv.accordion_panel div.header div.headerText {\r\n  display: inline-block;\r\n  font-weight: bold;\r\n  padding: 8px 10px 8px 12px;\r\n  font: 14pt Arial, sans-serif; }\r\n\r\ndiv.accordion div.accordion_panel.open {\r\n  background-color: #FFFFFF; }\r\n\r\ndiv.accordion div.accordion_panel div.content {\r\n  padding: 5px; }\r\n\r\ndiv.accordion div.accordionmsg {\r\n  padding: 10px; }\r\n/* \"tab\" content */\r\ndiv.oskariTabs div.tabsContent {\r\n  border-left: 1px solid #999999;\r\n  border-right: 1px solid #999999;\r\n  border-top: 0px solid #999999;\r\n  border-bottom: 1px solid #999999;\r\n  color: #000000;\r\n  height: 90%; }\r\n\r\ndiv.oskariTabs div.tab-content {\r\n  padding: 10px; }\r\n\r\n/* tab headers */\r\ndiv.oskariTabs div.tabsHeader {\r\n  background: url(\'/Oskari/resources/framework/bundle/divmanazer/images/tab_bg.png\') repeat-x scroll center bottom;\r\n  /* #FFFFFF*/\r\n  clear: left;\r\n  float: left;\r\n  font: 12pt Arial, sans-serif;\r\n  font-weight: bold;\r\n  overflow: hidden;\r\n  padding: 0;\r\n  width: 100%; }\r\n\r\ndiv.oskariTabs div.tabsHeader ul {\r\n  float: left;\r\n  list-style: none outside none;\r\n  margin: 0;\r\n  padding: 0;\r\n  text-align: center; }\r\n\r\ndiv.oskariTabs div.tabsHeader ul li {\r\n  display: block;\r\n  float: left;\r\n  list-style: none outside none;\r\n  margin: 10px 0 0;\r\n  padding: 0;\r\n  right: 50%; }\r\n\r\ndiv.oskariTabs div.tabsHeader ul li a {\r\n  background: none repeat scroll 0 0 #FFFFFF;\r\n  border-bottom: 1px solid #999999;\r\n  color: #3333FF;\r\n  display: block;\r\n  float: left;\r\n  padding: 10px 20px;\r\n  position: relative;\r\n  text-decoration: none; }\r\n\r\ndiv.oskariTabs div.tabsHeader ul li.active a {\r\n  border-left: 1px solid #999999;\r\n  border-right: 1px solid #999999;\r\n  border-top: 1px solid #999999;\r\n  border-bottom: 0px solid #999999;\r\n  color: #000000; }\r\n\r\ndiv.oskariTabs div.tabsHeader ul li.fill a {\r\n  width: 100%; }\r\n.modaldialog {\r\n  border: 1px solid #3C3C3C;\r\n  margin: 0px; }\r\n\r\n.modaltitle {\r\n  margin: 0px;\r\n  border-bottom: 1px solid #3C3C3C;\r\n  color: #3C3C3C;\r\n  padding: 8px 16px 4px 16px; }\r\n\r\n.modalmessage {\r\n  width: 100%;\r\n  color: #3C3C3C;\r\n  padding: 8px 16px 8px 16px; }\r\n\r\n.modalbuttons {\r\n  width: 100%;\r\n  display: inline-block;\r\n  padding: 0px 16px 4px 16px; }\r\n\r\n.modalbutton {\r\n  margin: 2px;\r\n  display: inline-block; }\r\n/*!\r\n * Bootstrap v2.0.3\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\n.oskari-badge {\n  font-size: 10.998px;\n  font-weight: bold;\n  line-height: 14px;\n  color: #ffffff;\n  vertical-align: baseline;\n  white-space: nowrap;\n  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);\n  background-color: #999999; }\n\n.oskari-badge {\n  padding: 1px 9px 2px;\n  -webkit-border-radius: 9px;\n  -moz-border-radius: 9px;\n  border-radius: 9px; }\n\na.oskari-badge:hover {\n  color: #ffffff;\n  text-decoration: none;\n  cursor: pointer; }\n\n.oskari-badge-important {\n  background-color: #b94a48; }\n\n.oskari-badge-important[href] {\n  background-color: #953b39; }\n\n.oskari-badge-warning {\n  background-color: #f89406; }\n\n.oskari-badge-warning[href] {\n  background-color: #c67605; }\n\n.oskari-badge-success {\n  background-color: #468847; }\n\n.oskari-badge-success[href] {\n  background-color: #356635; }\n\n.oskari-badge-info {\n  background-color: #3a87ad; }\n\n.oskari-badge-info[href] {\n  background-color: #2d6987; }\n\n.oskari-badge-inverse {\n  background-color: #333333; }\n\n.oskari-badge-inverse[href] {\n  background-color: #1a1a1a; }\n/*!\r\n * Bootstrap v2.0.3\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\n.oskari-alert {\n  padding-left: 8px;\n  padding-top: 4px;\n  margin: 4px;\n  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);\n  background-color: #fcf8e3;\n  border: 1px solid #fbeed5;\n  -webkit-border-radius: 4px;\n  -moz-border-radius: 4px;\n  border-radius: 4px;\n  color: #c09853;\n  position: relative;\n  height: 24px; }\n\n.oskari-alert-heading {\n  color: inherit; }\n\n.oskari-alert-icon-close {\n  position: absolute;\n  top: 4px;\n  right: 0px;\n  width: 24px;\n  height: 24px; }\n\n.oskari-alert-success {\n  background-color: #dff0d8;\n  border-color: #d6e9c6;\n  color: #468847; }\n\n.oskari-alert-danger, .oskari-alert-error {\n  background-color: #f2dede;\n  border-color: #eed3d7;\n  color: #b94a48; }\n\n.oskari-alert-info {\n  background-color: #d9edf7;\n  border-color: #bce8f1;\n  color: #3a87ad; }\nth.asc {\r\n  background-image: url(\'/Oskari/resources/framework/bundle/divmanazer/images/asc_arrow.png\');\r\n  background-repeat: no-repeat;\r\n  background-position: center center; }\r\n\r\nth.desc {\r\n  background-image: url(\'/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png\');\r\n  background-repeat: no-repeat;\r\n  background-position: center center; }\r\n\r\ndiv.column-selector-placeholder {\r\n  border-style: none;\r\n  float: left;\r\n  opacity: 1.0;\r\n  margin: 0;\r\n  padding: 0;\r\n  right: 0;\r\n  width: 25px;\r\n  height: 7px;\r\n  max-width: 25px;\r\n  max-height: 7px; }\r\n\r\ndiv.icon-menu {\r\n  position: absolute;\r\n  opacity: 1.0;\r\n  margin: 0;\r\n  cursor: pointer;\r\n  padding: 0;\r\n  width: 25px;\r\n  height: 8px;\r\n  max-width: 25px;\r\n  max-height: 7px; }\r\n\r\ndiv.column-selector {\r\n  position: absolute;\r\n  visibility: hidden;\r\n  background-color: white;\r\n  margin-top: 7px;\r\n  margin-right: 50px;\r\n  padding: 0;\r\n  border: 1px solid;\r\n  z-index: 10001; }\r\n\r\ndiv.column-selector div.close-selector-button {\r\n  width: 16px;\r\n  height: 16px;\r\n  position: absolute;\r\n  top: 5px;\r\n  right: 5px; }\r\n\r\ndiv.column-selector ul.column-selector-list {\r\n  list-style-type: none;\r\n  padding-right: 30px; }\r\n\r\ndiv.column-selector label.column-label {\r\n  padding-left: 5px; }\r\ndiv.divmanazerpopup {\n  max-width: 500px;\n  min-width: 200px;\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  background-color: white;\n  -moz-background-clip: border;\n  /* Firefox 3.6 */\n  -webkit-background-clip: border;\n  /* Safari 4? Chrome 6? */\n  background-clip: border-box;\n  /* Firefox 4, Safari 5, Opera 10, IE 9 */\n  -moz-background-clip: padding;\n  /* Firefox 3.6 */\n  -webkit-background-clip: padding;\n  /* Safari 4? Chrome 6? */\n  background-clip: padding-box;\n  /* Firefox 4, Safari 5, Opera 10, IE 9 */\n  -moz-background-clip: content;\n  /* Firefox 3.6 */\n  -webkit-background-clip: content;\n  /* Safari 4? Chrome 6? */\n  background-clip: content-box;\n  /* Firefox 4, Safari 5, Opera 10, IE 9 */\n  border: 5px solid rgba(0, 0, 0, 0.2);\n  border-radius: 7px;\n  /*\r\n    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.80);\r\n    -moz-box-shadow: 0px 3px 3px black;\r\n    -webkit-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.80);\r\n    */\n  z-index: 9000; }\n\ndiv.divmanazerpopup h3 {\n  background-color: #FDF8D9;\n  border-radius: 5px 5px 0 0;\n  font-size: 18px;\n  line-height: 28px;\n  padding: 5px 10px; }\n\ndiv.divmanazerpopup div.content {\n  margin: 10px; }\n\ndiv.divmanazerpopup div.content textarea {\n  resize: none; }\n\ndiv.divmanazerpopup div.content ul {\n  margin: 10px; }\n\ndiv.divmanazerpopup.no_resize div.content textarea {\n  resize: none; }\n\ndiv.divmanazerpopup div.actions {\n  margin: 10px;\n  text-align: center; }\n\ndiv.divmanazerpopup div.actions input {\n  margin: 10px; }\n\n.divmanazerpopup.arrow:after, .divmanazerpopup.arrow:before {\n  border: solid transparent;\n  content: \" \";\n  height: 0;\n  width: 0;\n  position: absolute;\n  /*pointer-events: none; */ }\n\n/* Bottom alignment */\n.divmanazerpopup.bottom:after, .divmanazerpopup.bottom:before {\n  bottom: 100%; }\n\n.divmanazerpopup.bottom:after {\n  border-bottom-color: #FDF8D9;\n  border-width: 5px;\n  margin-left: -5px;\n  left: 50%; }\n\n.divmanazerpopup.bottom:before {\n  border-bottom-color: #000000;\n  border-width: 6px;\n  margin-left: -6px;\n  left: 50%; }\n\n/* top alignment */\n.divmanazerpopup.top:after, .divmanazerpopup.top:before {\n  top: 100%; }\n\n.divmanazerpopup.top:after {\n  border-top-color: #FFFFFF;\n  border-width: 5px;\n  margin-left: -5px;\n  left: 50%; }\n\n.divmanazerpopup.top:before {\n  border-top-color: #000000;\n  border-width: 6px;\n  margin-left: -6px;\n  left: 50%; }\n\n/* left alignment */\n.divmanazerpopup.left:after, .divmanazerpopup.left:before {\n  left: 100%; }\n\n.divmanazerpopup.left:after {\n  border-left-color: #FDF8D9;\n  border-width: 5px;\n  margin-top: -5px;\n  top: 50%; }\n\n.divmanazerpopup.left:before {\n  border-left-color: #000000;\n  border-width: 6px;\n  margin-top: -6px;\n  top: 50%; }\n\n/* right alignment */\n.divmanazerpopup.right:after, .divmanazerpopup.right:before {\n  right: 100%; }\n\n.divmanazerpopup.right:after {\n  border-right-color: #FDF8D9;\n  border-width: 5px;\n  margin-top: -5px;\n  top: 50%; }\n\n.divmanazerpopup.right:before {\n  border-right-color: #000000;\n  border-width: 6px;\n  margin-top: -6px;\n  top: 50%; }\ndiv.oskaributton {\r\n  display: inline-block;\r\n  margin: 5px; }\r\n\r\ndiv.oskaributton.primary input {\r\n  color: #3CA9FC; }\r\ndiv.oskarioverlay {\r\n  position: absolute;\r\n  background-color: black;\r\n  z-index: 8000; }\r\n\r\n.transparent {\r\n  zoom: 1;\r\n  filter: alpha(opacity=50);\r\n  /* unquote for libsass bug */\r\n  opacity: 0.5; }\r\n/*!\r\n * Bootstrap v2.0.3\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\n.oskari-tooltip {\n  position: absolute;\n  z-index: 1200;\n  display: block;\n  visibility: visible;\n  padding: 5px;\n  font-size: 11px;\n  opacity: 0;\n  filter: alpha(opacity=0);\n  /* unquote for libsass bug */ }\n\n.oskari-tooltip.in {\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  /* unquote for libsass bug */ }\n\n.oskari-tooltip.top {\n  margin-top: -2px; }\n\n.oskari-tooltip.right {\n  margin-left: 2px; }\n\n.oskari-tooltip.bottom {\n  margin-top: 2px; }\n\n.oskari-tooltip.left {\n  margin-left: -2px; }\n\n.oskari-tooltip.top .oskari-tooltip-arrow {\n  bottom: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-top: 5px solid #000000; }\n\n.oskari-tooltip.left .oskari-tooltip-arrow {\n  top: 50%;\n  right: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-left: 5px solid #000000; }\n\n.oskari-tooltip.bottom .oskari-tooltip-arrow {\n  top: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-bottom: 5px solid #000000; }\n\n.oskari-tooltip.right .oskari-tooltip-arrow {\n  top: 50%;\n  left: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-right: 5px solid #000000; }\n\n.oskari-tooltip-inner {\n  max-width: 640px;\n  padding: 3px 8px;\n  color: #ffffff;\n  text-align: center;\n  text-decoration: none;\n  background-color: #000000;\n  -webkit-border-radius: 4px;\n  -moz-border-radius: 4px;\n  border-radius: 4px; }\n\n.oskari-tooltip-arrow {\n  position: absolute;\n  width: 0;\n  height: 0; }\n\n.oskari-popover {\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 1210;\n  display: none;\n  padding: 5px; }\n\n.oskari-popover.top {\n  margin-top: -5px; }\n\n.oskari-popover.right {\n  margin-left: 5px; }\n\n.oskari-popover.bottom {\n  margin-top: 5px; }\n\n.oskari-popover.left {\n  margin-left: -5px; }\n\n.oskari-popover.top .oskari-arrow {\n  bottom: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-top: 5px solid #000000; }\n\n.oskari-popover.right .oskari-arrow {\n  top: 50%;\n  left: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-right: 5px solid #000000; }\n\n.oskari-popover.bottom .oskari-arrow {\n  top: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-bottom: 5px solid #000000; }\n\n.oskari-popover.left .oskari-arrow {\n  top: 50%;\n  right: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-left: 5px solid #000000; }\n\n.oskari-popover .oskari-arrow {\n  position: absolute;\n  width: 0;\n  height: 0; }\n\n.oskari-popover-inner {\n  padding: 3px;\n  /*width: 280px;*/\n  overflow: hidden;\n  background: #000000;\n  background: rgba(0, 0, 0, 0.8);\n  -webkit-border-radius: 6px;\n  -moz-border-radius: 6px;\n  border-radius: 6px;\n  -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3); }\n\n.oskari-popover-title {\n  padding: 9px 15px;\n  line-height: 1;\n  background-color: #f5f5f5;\n  border-bottom: 1px solid #eee;\n  -webkit-border-radius: 3px 3px 0 0;\n  -moz-border-radius: 3px 3px 0 0;\n  border-radius: 3px 3px 0 0; }\n\n.oskari-popover-content {\n  padding: 14px;\n  background-color: #ffffff;\n  -webkit-border-radius: 0 0 3px 3px;\n  -moz-border-radius: 0 0 3px 3px;\n  border-radius: 0 0 3px 3px;\n  -webkit-background-clip: padding-box;\n  -moz-background-clip: padding-box;\n  background-clip: padding-box; }\n\n.oskari-popover-content p, .oskari-popover-content ul, .oskari-popover-content ol {\n  margin-bottom: 0; }\n'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick; 
