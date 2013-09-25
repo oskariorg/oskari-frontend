@@ -356,7 +356,6 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 	 * evt - {Event}
 	 */
 	defaultClick : function(evt) {
-		console.log("DEFAULTCLICK",evt);
 		if(evt.lastTouches && evt.lastTouches.length == 2) {
 			/*this.map.zoomOut();*/
 			this.sendMapZoomOut();

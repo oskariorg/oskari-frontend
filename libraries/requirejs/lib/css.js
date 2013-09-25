@@ -35,6 +35,7 @@
  */
 
 define(['./normalize'], function(normalize) {
+  var i = 0;
   function indexOf(a, e) { for (var i=0, l=a.length; i < l; i++) if (a[i] === e) return i; return -1 }
 
   if (typeof window == 'undefined')
@@ -214,8 +215,12 @@ define(['./normalize'], function(normalize) {
         curImport.cb(curImport.ss);
         ieLoadNextImport(style);
       };
+      try {
       var curSheet = style.styleSheet;
       curImport.ss = curSheet.imports[curSheet.addImport(curImport.url)];
+      } catch (e) {
+        alert("Got Error:" + e);
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-define(["oskari","jquery","./plugin/AnalysisLayerPlugin","./domain/AnalysisLayer","./domain/AnalysisLayerModelBuilder","./event/AnalysisVisualizationChangeEvent"], function(Oskari,jQuery) {
+define(["oskari","jquery","./plugin/AnalysisLayerPlugin","./domain/AnalysisLayer","./domain/AnalysisLayerModelBuilder","./event/AnalysisVisualizationChangeEvent","./locale/fi","./locale/sv","./locale/en"], function(Oskari,jQuery) {
     return Oskari.bundleCls("mapanalysis").category({create: function () {
 
 		return null;

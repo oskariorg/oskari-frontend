@@ -30,5 +30,6 @@ require.config({
         i18n : {
             locale : language
         }
-    }
+    },
+    waitSeconds: 30
 });

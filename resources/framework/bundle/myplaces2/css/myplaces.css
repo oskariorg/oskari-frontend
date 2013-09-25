@@ -239,13 +239,10 @@ div.renderdialog input.linewidth {
   margin-top: 5px; }
 
 div.pointvisualization {
-    width: 510px;
-}
+  width: 510px; }
 
 div.linevisualization {
-    width: 500px;
-}
+  width: 500px; }
 
 div.areavisualization {
-    width: 650px;
-}
+  width: 650px; }

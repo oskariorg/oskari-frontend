@@ -33,11 +33,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * The first tab is selected as active immediately on add.
          * @param {Oskari.userinterface.component.TabPanel} panel
          */
-<<<<<<< HEAD
-        addPanel: function (panel) {
-=======
         addPanel: function (panel, first) {
->>>>>>> ab24ab07a10a3d2d93fa1892a11b1b6a132ad902
             var me = this,
                 content,
                 headerContainer,

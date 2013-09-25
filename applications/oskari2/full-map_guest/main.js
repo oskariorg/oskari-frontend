@@ -31,7 +31,8 @@ require.config({
         i18n : {
             locale : language
         }
-    }
+    },
+    waitSeconds: 30
 });
 define("mainConfig", function(){});
 
@@ -2530,6 +2531,7 @@ define('normalize',['require', 'module'], function(require, module) {
  */
 
 define('css',['./normalize'], function(normalize) {
+  var i = 0;
   function indexOf(a, e) { for (var i=0, l=a.length; i < l; i++) if (a[i] === e) return i; return -1 }
 
   if (typeof window == 'undefined')
@@ -2709,8 +2711,12 @@ define('css',['./normalize'], function(normalize) {
         curImport.cb(curImport.ss);
         ieLoadNextImport(style);
       };
+      try {
       var curSheet = style.styleSheet;
       curImport.ss = curSheet.imports[curSheet.addImport(curImport.url)];
+      } catch (e) {
+        alert("Got Error:" + e);
+      }
     }
   }
 
@@ -5679,7 +5685,11 @@ obj=OpenLayers.Layer.Grid.prototype.clone.apply(this,[obj]);return obj;},getURL:
 var urlParams=OpenLayers.Util.upperCaseObject(OpenLayers.Util.getParameters(url));for(var key in allParams){if(key.toUpperCase()in urlParams){delete allParams[key];}}
 paramsString=OpenLayers.Util.getParameterString(allParams);var requestString=url;paramsString=paramsString.replace(/,/g,"+");if(paramsString!=""){var lastServerChar=url.charAt(url.length-1);if((lastServerChar=="&")||(lastServerChar=="?")){requestString+=paramsString;}else{if(url.indexOf('?')==-1){requestString+='?'+paramsString;}else{requestString+='&'+paramsString;}}}
 return requestString;},CLASS_NAME:"OpenLayers.Layer.MapServer"});OpenLayers.Renderer.VML=OpenLayers.Class(OpenLayers.Renderer.Elements,{xmlns:"urn:schemas-microsoft-com:vml",symbolCache:{},offset:null,initialize:function(containerID){if(!this.supported()){return;}
-if(!document.namespaces.olv){document.namespaces.add("olv",this.xmlns);var style=document.createStyleSheet();var shapes=['shape','rect','oval','fill','stroke','imagedata','group','textbox'];for(var i=0,len=shapes.length;i<len;i++){style.addRule('olv\\:'+shapes[i],"behavior: url(#default#VML); "+"position: absolute; display: inline-block;");}}
+if(!document.namespaces.olv){
+    document.namespaces.add("olv",this.xmlns);
+    var style=document.createStyleSheet();
+var shapes=['shape','rect','oval','fill','stroke','imagedata','group','textbox'];
+for(var i=0,len=shapes.length;i<len;i++){style.addRule('olv\\:'+shapes[i],"behavior: url(#default#VML); "+"position: absolute; display: inline-block;");}}
 OpenLayers.Renderer.Elements.prototype.initialize.apply(this,arguments);},supported:function(){return!!(document.namespaces);},setExtent:function(extent,resolutionChanged){var coordSysUnchanged=OpenLayers.Renderer.Elements.prototype.setExtent.apply(this,arguments);var resolution=this.getResolution();var left=(extent.left/resolution)|0;var top=(extent.top/resolution-this.size.h)|0;if(resolutionChanged||!this.offset){this.offset={x:left,y:top};left=0;top=0;}else{left=left-this.offset.x;top=top-this.offset.y;}
 var org=(left-this.xOffset)+" "+top;this.root.coordorigin=org;var roots=[this.root,this.vectorRoot,this.textRoot];var root;for(var i=0,len=roots.length;i<len;++i){root=roots[i];var size=this.size.w+" "+this.size.h;root.coordsize=size;}
 this.root.style.flip="y";return coordSysUnchanged;},setSize:function(size){OpenLayers.Renderer.prototype.setSize.apply(this,arguments);var roots=[this.rendererRoot,this.root,this.vectorRoot,this.textRoot];var w=this.size.w+"px";var h=this.size.h+"px";var root;for(var i=0,len=roots.length;i<len;++i){root=roots[i];root.style.width=w;root.style.height=h;}},getNodeType:function(geometry,style){var nodeType=null;switch(geometry.CLASS_NAME){case"OpenLayers.Geometry.Point":if(style.externalGraphic){nodeType="olv:rect";}else if(this.isComplexSymbol(style.graphicName)){nodeType="olv:shape";}else{nodeType="olv:oval";}
@@ -6222,7 +6232,6 @@ function() {
      * @param {Boolean} ignoreLocation true to NOT set map location based on state
      */
     setState : function(state, ignoreLocation) {
-        //console.log('state is', state);
         var mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
         this._teardownState(mapmodule);
         
@@ -10956,16 +10965,18 @@ function(core) {
      *            module
      */
     unregister : function(module) {
-        var remainingModules = [];
-        for (var m = 0; m < this._modules.length; m++) {
-            if (module === this._modules[m]) {
+        var me = this,
+            remainingModules = [],
+            m;
+        for (m = 0; m < me._modules.length; m++) {
+            if (module === me._modules[m]) {
                 continue;
             }
-            remainingModules.push(this._modules[m]);
+            remainingModules.push(me._modules[m]);
         }
-        this._modules = remainingModules;
-        this._modulesByName[module.getName()] = undefined;
-        delete this._modulesByName[module.getName()];
+        me._modules = remainingModules;
+        me._modulesByName[module.getName()] = undefined;
+        delete me._modulesByName[module.getName()];
     },
 
     /**
@@ -10997,15 +11008,16 @@ function(core) {
      */
     unregisterFromEventByName : function(module, eventName) {
         this._core.printDebug("Sandbox is unregistering module '" + module.getName() + "' from event '" + eventName + "'");
-        var oldListeners = this._listeners[eventName];
+        var oldListeners = this._listeners[eventName],
+            deleteIndex = -1,
+            d;
         if (oldListeners == null) {
             // no listeners
             this._core.printDebug("Module does not listen to that event, skipping.");
             return;
         }
 
-        var deleteIndex = -1;
-        for (var d = 0; d < oldListeners.length; d++) {
+        for (d = 0; d < oldListeners.length; d++) {
             if (oldListeners[d] == module) {
                 deleteIndex = d;
                 break;
@@ -11055,13 +11067,15 @@ function(core) {
      *            request to be performed
      */
     request : function(creator, request) {
-        var creatorName = null;
+        var creatorName = null,
+            creatorComponent,
+            rv = null;
         if (creator.getName != null) {
             creatorName = creator.getName();
         } else {
             creatorName = creator;
         }
-        var creatorComponent = this.findRegisteredModuleInstance(creatorName);
+        creatorComponent = this.findRegisteredModuleInstance(creatorName);
 
         if (creatorComponent == null) {
             throw "Attempt to create request with unknown component '" + creator + "' as creator";
@@ -11074,8 +11088,6 @@ function(core) {
         if (this.gatherDebugRequests) {
             this._pushRequestAndEventGather(creatorName + "->Sandbox: ", this.getObjectName(request));
         }
-
-        var rv = null;
 
         this._debugPushRequest(creatorName, request);
         rv = this._core.processRequest(request);
@@ -11130,21 +11142,21 @@ function(core) {
      * @param {Array} requestArgs (optional)
      */
     postRequestByName : function(requestName, requestArgs) {
-        var me = this;
-        var requestBuilder = me.getRequestBuilder(requestName);
+        var me = this,
+            requestBuilder = me.getRequestBuilder(requestName);
         if(!requestBuilder) {
             return;
         }
         window.setTimeout(function() {
             
-            var request = requestBuilder.apply(me, requestArgs||[]);
-            var creatorComponent = this.postMasterComponent;
+            var request = requestBuilder.apply(me, requestArgs||[]),
+                creatorComponent = this.postMasterComponent,
+                rv = null;
             me._core.setObjectCreator(request, creatorComponent);
 
             if (me.gatherDebugRequests) {
                 me._pushRequestAndEventGather(creatorComponent + "->Sandbox: ", me.getObjectName(request));
             }
-            var rv = null;
 
 			if (this.debugRequests) {
 	            me._debugPushRequest(creatorComponent, request);
@@ -11169,8 +11181,8 @@ function(core) {
      * @return {Oskari.mapframework.module.Module[]} modules listening to the event
      */
     _findModulesInterestedIn : function(event) {
-        var eventName = event.getName();
-        var currentListeners = this._listeners[eventName];
+        var eventName = event.getName(),
+            currentListeners = this._listeners[eventName];
         if(!currentListeners) {
             return [];
         }
@@ -11248,6 +11260,7 @@ function(core) {
      * @return {Object} object with properties width and height as the window size in pixels
      */
     getBrowserWindowSize : function() {
+        // FIXME get rid of jQuery.browser and make this code sane... height isn't used for anything?
         if (jQuery.browser.opera && window.innerHeight != null) {
             var height = window.innerHeight;
         }
@@ -11430,19 +11443,42 @@ function(core) {
      * Uses www.websequencediagrams.com to create the diagram.
      */
     popUpSeqDiagram : function() {
-        var seq_html = '<html><head></head><body><div class="wsd" wsd_style="modern-blue"><pre>';
-        var seq_commands = '';
+        var seq_html = '<html><head></head><body><div class="wsd" wsd_style="modern-blue"><pre>',
+            seq_commands = '',
+            openedWindow;
         for (x in this.requestAndEventGather) {
             seq_commands += this.requestAndEventGather[x].name + this.requestAndEventGather[x].request + "\n";
         }
         if (seq_commands != '') {
             seq_html += seq_commands + '</pre></div><script type="text/javascript" src="http://www.websequencediagrams.com/service.js"></script></body></html>';
-            var openedWindow = window.open();
+            openedWindow = window.open();
             openedWindow.document.write(seq_html);
             this.requestAndEventGather = [];
         } else {
             alert('No requests in queue');
         }
+    },
+    /**
+     * @method getLocalizedProperty
+     * @param property Property
+     */
+    getLocalizedProperty : function (property) {
+        var ret;
+        if (property === null || typeof property === 'undefined') {
+            return null;
+        }
+        if (typeof property === 'object') {
+            // property value is an object, so it's prolly localized
+            ret = property[Oskari.getLang()];
+            if (ret === null) {
+                // TODO (needs supportedLocales)
+                // try default lang
+                // try any lang?
+            }
+            return ret;
+        }
+        // property is not localized
+        return property;
     }
 });
 
@@ -12621,7 +12657,7 @@ function() {
 
 define("bundles/framework/bundle/oskariui/Layout", function(){});
 
-define('bundles/framework/bundle/oskariui/module',["oskari","jquery","./jquery-ui-1.9.1.custom.min","libraries/jquery/plugins/jquery.base64.min","css!resources/framework/bundle/oskariui/css/jquery-ui-1.9.1.custom.css","css!resources/framework/bundle/oskariui/bootstrap-grid.css","./DomManager","./Layout"], function(Oskari,jQuery) {
+define('bundles/framework/bundle/oskariui/module',["oskari","jquery","./jquery-ui-1.9.1.custom.min","libraries/jquery/plugins/jquery.base64.min","css!resources/framework/bundle/oskariui/css/jquery-ui-1.9.1.custom","css!resources/framework/bundle/oskariui/bootstrap-grid","./DomManager","./Layout"], function(Oskari,jQuery) {
     return Oskari.bundleCls("oskariui").category({create: function () {
 
 
@@ -15898,14 +15934,13 @@ define('bundles/framework/bundle/mapstats/module',["oskari","jquery","./plugin/S
  * A Plugin to manage WMTS OpenLayers map layers
  *
  */
-Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin', 
-                    function(config) {
+Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin', function(config) {
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;
     this._map = null;
     this._supportedFormats = {};
-    this._wmtsLayerClazz = Oskari.clazz.create("Oskari.openlayers.Patch.layer.WMTS");
+
     this.config = config;
 }, {
     __name : 'WmtsLayerPlugin',
@@ -15930,12 +15965,12 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         this.getMapModule().setLayerPlugin('WmtsLayer', null);
     },
     init : function(sandbox) {
-        var sandboxName = ( this.config ? this.config.sandbox : null ) || 'sandbox' ;
+        var sandboxName = (this.config ? this.config.sandbox : null ) || 'sandbox';
         var sandbox = Oskari.getSandbox(sandboxName);
-        
+
         // register domain builder
         var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-        if(mapLayerService) {
+        if (mapLayerService) {
             mapLayerService.registerLayerModel('wmtslayer', 'Oskari.mapframework.wmts.domain.WmtsLayer')
 
             var layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder');
@@ -15947,13 +15982,13 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         this._map = this.getMapModule().getMap();
 
         sandbox.register(this);
-        for(p in this.eventHandlers) {
+        for (p in this.eventHandlers) {
             sandbox.registerForEventByName(this, p);
         }
     },
     stopPlugin : function(sandbox) {
 
-        for(p in this.eventHandlers) {
+        for (p in this.eventHandlers) {
             sandbox.unregisterFromEventByName(this, p);
         }
 
@@ -15997,11 +16032,11 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
     preselectLayers : function(layers) {
 
         var sandbox = this._sandbox;
-        for(var i = 0; i < layers.length; i++) {
+        for (var i = 0; i < layers.length; i++) {
             var layer = layers[i];
             var layerId = layer.getId();
 
-            if(!layer.isLayerOfType('WMTS'))
+            if (!layer.isLayerOfType('WMTS'))
                 continue;
 
             sandbox.printDebug("preselecting " + layerId);
@@ -16018,74 +16053,90 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
     afterMapLayerAddEvent : function(event) {
         this.addMapLayerToMap(event.getMapLayer(), event.getKeepLayersOrder(), event.isBasemap());
     },
-    /**
-     * primitive for adding layer to this map
-     */
+
     addMapLayerToMap : function(layer, keepLayerOnTop, isBaseMap) {
 
-        if(!layer.isLayerOfType('WMTS'))
+        if (!layer.isLayerOfType('WMTS'))
             return;
 
         var me = this;
         var map = me.getMap();
-        
+
         var matrixIds = layer.getWmtsMatrixSet().matrixIds;
         var layerDef = layer.getWmtsLayerDef();
 
         var layerName = null;
-        if(layer.isBaseLayer()||layer.isGroupLayer()) {
+        if (layer.isBaseLayer() || layer.isGroupLayer()) {
             layerName = 'basemap_' + layer.getId();
         } else {
             layerName = 'layer_' + layer.getId();
         }
 
         var sandbox = this._sandbox;
+    
+        var imageFormat = "image/png";
+        var reqEnc = "KVP";
 
-        var wmtsUrl = layer.getWmtsUrls()[0];
+        
+        var wmtsUrl = //layer.getWmtsUrls()[0]; 
+            layerDef.resourceUrl.tile.template;
+            
+        if( !wmtsUrl) {
+            wmtsUrl = layer.getWmtsUrls()[0][0].url;
+        } else {
+            reqEnc = "REST";
+        }
+            
         var matrixSet = layer.getWmtsMatrixSet();
+        var matrixIds = [];
+        var resolutions = [];
+        var serverResolutions = [];
+
+        for (var n = 0; n < matrixSet.matrixIds.length; n++) {
+
+            matrixIds.push(matrixSet.matrixIds[n]);
+            //.identifier);
+            var scaleDenom = matrixSet.matrixIds[n].scaleDenominator;
+            var res = scaleDenom / 90.71446714322 * OpenLayers.METERS_PER_INCH;
+            resolutions.push(res)
+            serverResolutions.push(res);
+        }
 
         var wmtsLayerConfig = {
-            visibility : true,
-            transparent : true,
-            // id : layerId, // this would break OpenLayers
-            format : "image/png",
+            name : layerName.split('.').join(''),
             url : wmtsUrl,
+            requestEncoding:  reqEnc,
             layer : layer.getWmtsName(),
-            style : layer.getCurrentStyle().getName(),
-            matrixIds : matrixSet.matrixIds,
             matrixSet : matrixSet.identifier,
+            format : imageFormat,
+            style : layer.getCurrentStyle().getName(),
+            visibility : true,
+            isBaseLayer : false,
+            transparent : true,
+            style : layer.getCurrentStyle().getName(),
+            matrixIds : matrixIds,
             isBaseLayer : layer.isBaseLayer(),
             buffer : 0,
-            minScale : layer.getMinScale(),
-            maxScale : layer.getMaxScale()
+            serverResolutions : serverResolutions,
+            /*minScale : layer.getMinScale(),
+             maxScale : layer.getMaxScale(),*/
+            layerDef : layerDef
         };
 
-        sandbox.printDebug("[WmtsLayerPlugin] creating WMTS Layer " + 
-                           matrixSet.identifier + " / " + 
-                           wmtsLayerConfig.id + "/" + 
-                           wmtsLayerConfig.layer + "/" + 
-                           wmtsLayerConfig.url);
+        sandbox.printDebug("[WmtsLayerPlugin] creating WMTS Layer " + matrixSet.identifier + " / " + wmtsLayerConfig.id + "/" + wmtsLayerConfig.layer + "/" + wmtsLayerConfig.url);
 
-        var fix = OpenLayers.Util.applyDefaults(wmtsLayerConfig, {
-            url : wmtsUrl,
-            name : layerName,
-            style : layer.getCurrentStyle().getName(),
-            matrixIds : matrixSet.matrixIds,
-            layerDef : layerDef
-        });
-
-        // var wmtsLayer = new OpenLayers.Layer.WMTS(fix);
-        var layerClazz = this._wmtsLayerClazz.getPatch();
+        var wmtsLayer = new OpenLayers.Layer.WMTS(wmtsLayerConfig);
+        //var layerClazz = this._wmtsLayerClazz.getPatch();
         // Oskari.$("WMTSLayer");
-        var wmtsLayer = new layerClazz(fix);
+        //var wmtsLayer = new layerClazz(fix);
         wmtsLayer.opacity = layer.getOpacity() / 100;
 
-        sandbox.printDebug("[WmtsLayerPlugin] created WMTS layer " + 
-                           wmtsLayer);
+        sandbox.printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
 
         map.addLayers([wmtsLayer]);
 
     },
+
     /***********************************************************
      * Handle AfterMapLayerRemoveEvent
      *
@@ -16099,13 +16150,13 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
     },
     removeMapLayerFromMap : function(layer) {
 
-        if(!layer.isLayerOfType('WMTS'))
+        if (!layer.isLayerOfType('WMTS'))
             return;
 
-        if(layer.isBaseLayer()||layer.isGroupLayer()) {
+        if (layer.isBaseLayer() || layer.isGroupLayer()) {
             var baseLayerId = "";
-            if(layer.getSubLayers().length > 0) {
-                for(var i = 0; i < layer.getSubLayers().length; i++) {
+            if (layer.getSubLayers().length > 0) {
+                for (var i = 0; i < layer.getSubLayers().length; i++) {
                     var remLayer = this._map.getLayersByName('basemap_' + layer
                     .getSubLayers()[i].getId());
                     remLayer[0].destroy();
@@ -16122,13 +16173,13 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
     },
     getOLMapLayers : function(layer) {
 
-        if(!layer.isLayerOfType('WMTS'))
+        if (!layer.isLayerOfType('WMTS'))
             return null;
 
-        if(layer.isBaseLayer()||layer.isGroupLayer()) {
+        if (layer.isBaseLayer() || layer.isGroupLayer()) {
             var baseLayerId = "";
-            if(layer.getSubLayers().length > 0) {
-                for(var i = 0; i < layer.getSubLayers().length; i++) {
+            if (layer.getSubLayers().length > 0) {
+                for (var i = 0; i < layer.getSubLayers().length; i++) {
                     return this._map.getLayersByName('basemap_' + layer
                     .getSubLayers()[i].getId());
                 }
@@ -16143,26 +16194,26 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
     afterChangeMapLayerOpacityEvent : function(event) {
         var layer = event.getMapLayer();
 
-        if(!layer.isLayerOfType('WMTS'))
+        if (!layer.isLayerOfType('WMTS'))
             return;
 
-        if(layer.isBaseLayer()||layer.isGroupLayer()) {
-            if(layer.getSubLayers().length > 0) {
-                for(var bl = 0; bl < layer.getSubLayers().length; bl++) {
+        if (layer.isBaseLayer() || layer.isGroupLayer()) {
+            if (layer.getSubLayers().length > 0) {
+                for (var bl = 0; bl < layer.getSubLayers().length; bl++) {
                     var mapLayer = this._map.getLayersByName('basemap_' + layer
                     .getSubLayers()[bl].getId());
                     mapLayer[0].setOpacity(layer.getOpacity() / 100);
                 }
             } else {
                 var mapLayer = this._map.getLayersByName('layer_' + layer.getId());
-                if(mapLayer[0] != null) {
+                if (mapLayer[0] != null) {
                     mapLayer[0].setOpacity(layer.getOpacity() / 100);
                 }
             }
         } else {
             this._sandbox.printDebug("Setting Layer Opacity for " + layer.getId() + " to " + layer.getOpacity());
             var mapLayer = this._map.getLayersByName('layer_' + layer.getId());
-            if(mapLayer[0] != null) {
+            if (mapLayer[0] != null) {
                 mapLayer[0].setOpacity(layer.getOpacity() / 100);
             }
         }
@@ -16176,13 +16227,13 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
     afterChangeMapLayerStyleEvent : function(event) {
         var layer = event.getMapLayer();
 
-        if(!layer.isLayerOfType('WMTS'))
+        if (!layer.isLayerOfType('WMTS'))
             return;
 
         /** Change selected layer style to defined style */
-        if(!layer.isBaseLayer()) {
+        if (!layer.isBaseLayer()) {
             var styledLayer = this._map.getLayersByName('layer_' + layer.getId());
-            if(styledLayer != null) {
+            if (styledLayer != null) {
                 styledLayer[0].mergeNewParams({
                     styles : layer.getCurrentStyle().getName()
                 });
@@ -16190,8 +16241,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
         }
     }
 }, {
-    'protocol' : [ "Oskari.mapframework.module.Module",
-                   "Oskari.mapframework.ui.module.common.mapmodule.Plugin" ]
+    'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
 });
 
 define("bundles/framework/bundle/mapwmts/plugin/wmtslayer/WmtsLayerPlugin", function(){});
@@ -16283,175 +16333,166 @@ function() {
 define("bundles/framework/bundle/mapwmts/domain/WmtsLayer", function(){});
 
 /**
- * 
+ *
  * A service to act as a WMTS Layer Source
- * 
+ *
  * Requires services from MapLayerService (addLayer,removeLayer) (Will create
  * own domain objects, though)
- * 
- * This implements temporarily WMTS Caps parsing. WMTS Caps will be parsed in
- * backend.
- * 
- * 
+ *
  */
 
-Oskari.clazz
-		.define(
-				'Oskari.mapframework.wmts.service.WMTSLayerService',
-				function(mapLayerService) {
-					this.mapLayerService = mapLayerService;
-					this.capabilities = {};
-					this.capabilitiesClazz = Oskari.clazz
-							.create("Oskari.openlayers.Patch.WMTSCapabilities_v1_0_0");
-				},
-				{
-					/**
-					 * TEmp
-					 */
-					setCapabilities : function(name, caps) {
-						this.capabilities[name] = caps;
+Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', function(mapLayerService) {
+    this.mapLayerService = mapLayerService;
+    this.capabilities = {};
+    //this.capabilitiesClazz = Oskari.clazz.create("Oskari.openlayers.Patch.WMTSCapabilities_v1_0_0");
+}, {
+    /**
+     * TEmp
+     */
+    setCapabilities : function(name, caps) {
+        this.capabilities[name] = caps;
 
-					},
+    },
 
-					/**
-					 * Temp
-					 */
-					getCapabilities : function(name) {
-						return this.capabilities[name];
-					},
+    /**
+     * Temp
+     */
+    getCapabilities : function(name) {
+        return this.capabilities[name];
+    },
 
-					/**
-					 * This is a temporary solution actual capabilities to be
-					 * read in backend
-					 * 
-					 */
-					readWMTSCapabilites : function(wmtsName, capsPath,
-							matrixSet) {
+    /**
+     * This is a temporary solution actual capabilities to be
+     * read in backend
+     *
+     */
+    readWMTSCapabilites : function(wmtsName, capsPath, matrixSet, cb) {
 
-						var me = this;
-						var formatClazz = this.capabilitiesClazz.getPatch();
-						// Oskari.$("WMTSCapabilities_v1_0_0");
-						var format = new formatClazz();// OpenLayers.Format.WMTSCapabilities();
+        var me = this;
+        var format = new OpenLayers.Format.WMTSCapabilities();
 
-						OpenLayers.Request.GET( {
-							url : capsPath,
-							params : {
-								SERVICE : "WMTS",
-								VERSION : "1.0.0",
-								REQUEST : "GetCapabilities"
-							},
-							success : function(request) {
-								var doc = request.responseXML;
-								if (!doc || !doc.documentElement) {
-									doc = request.responseText;
-								}
-								var caps = format.read(doc);
+        OpenLayers.Request.GET({
+            url : capsPath,
+            params : {
+                SERVICE : "WMTS",
+                VERSION : "1.0.0",
+                REQUEST : "GetCapabilities"
+            },
+            success : function(request) {
+                var doc = request.responseXML;
+                if (!doc || !doc.documentElement) {
+                    doc = request.responseText;
+                }
+                var caps = format.read(doc);
 
-								me.setCapabilities(wmtsName, caps);
-								me.parseCapabilitiesToLayers(wmtsName, caps,
-										matrixSet);
+                me.setCapabilities(wmtsName, caps);
+                var layersCreated = me.parseCapabilitiesToLayers(wmtsName, caps, matrixSet);
+                if (cb)
+                    cb(layersCreated, caps);
 
-							},
-							failure : function() {
-								alert("Trouble getting capabilities doc");
-								OpenLayers.Console.error.apply(
-										OpenLayers.Console, arguments);
-							}
-						});
+            },
+            failure : function() {
+                alert("Trouble getting capabilities doc");
+                OpenLayers.Console.error.apply(OpenLayers.Console, arguments);
+            }
+        });
 
-					},
+    },
+    /**
+     * This is a temporary solution actual capabilities to be
+     * read in backend
+     *
+     */
+    parseCapabilitiesToLayers : function(wmtsName, caps, matrixSet) {
 
-					/**
-					 * This is a temporary solution actual capabilities to be
-					 * read in backend
-					 * 
-					 */
-					parseCapabilitiesToLayers : function(wmtsName, caps,
-							matrixSet) {
+        
+        var me = this;
+        var mapLayerService = this.mapLayerService;
+        var getTileUrl = null;
+        if (caps.operationsMetadata.GetTile.dcp.http.getArray) {
+            getTileUrl = caps.operationsMetadata.GetTile.dcp.http.getArray;
+        } else {
+            getTileUrl = caps.operationsMetadata.GetTile.dcp.http.get;
+        }
+        var capsLayers = caps.contents.layers;
+        var contents = caps.contents;
+        var matrixSet = contents.tileMatrixSets[matrixSet];
+        var layersCreated = [];
 
-						var me = this;
-						var mapLayerService = this.mapLayerService;
-						var getTileUrl = null;
-						if( caps.operationsMetadata.GetTile.dcp.http.getArray ) {
-							getTileUrl = caps.operationsMetadata.GetTile.dcp.http.getArray;
-						} else {
-							getTileUrl = caps.operationsMetadata.GetTile.dcp.http.get;
-						}
-						var capsLayers = caps.contents.layers;
-						var contents = caps.contents;
-						var matrixSet = contents.tileMatrixSets[matrixSet];
+        for (var n = 0; n < capsLayers.length; n++) {
 
-						for ( var n = 0; n < capsLayers.length; n++) {
+            var spec = capsLayers[n];
 
-							var spec = capsLayers[n];
-							var mapLayerId = spec.identifier;
-							var mapLayerName = spec.identifier;
-							/*
-							 * hack
-							 */
-							var mapLayerJson = {
-								wmtsName : mapLayerId,
-								descriptionLink : "",
-								orgName : "WMTS",
-								type : "wmtslayer",
-								legendImage : "",
-								formats : {
-									value : "text/html"
-								},
-								isQueryable : true,
-								minScale : 4 * 4 * 4 * 4 * 40000,
-								style : "",
-								dataUrl : "",
+            var mapLayerId = spec.identifier;
+            var mapLayerName = spec.identifier;
+            /*
+             * hack
+             */
+            var mapLayerJson = {
+                wmtsName : mapLayerId,
+                descriptionLink : "",
+                orgName : wmtsName,
+                type : "wmtslayer",
+                legendImage : "",
+                formats : {
+                    value : "text/html"
+                },
+                isQueryable : true,
+                //minScale : 4 * 4 * 4 * 4 * 40000,
+                style : "",
+                dataUrl : "",
 
-								name : mapLayerId,
-								opacity : 100,
-								inspire : "WMTS",
-								maxScale : 1
-							};
+                name : mapLayerId,
+                opacity : 100,
+                inspire : wmtsName, //"WMTS",
+                maxScale : 1
+            };
 
-							var layer = Oskari.clazz
-									.create('Oskari.mapframework.wmts.domain.WmtsLayer');
+            var layer = Oskari.clazz.create('Oskari.mapframework.wmts.domain.WmtsLayer');
 
-							layer.setAsNormalLayer();
-							layer.setId(mapLayerId);
-							layer.setName(mapLayerJson.name);
-							layer.setWmtsName(mapLayerJson.wmtsName);
-							layer.setOpacity(mapLayerJson.opacity);
-							layer.setMaxScale(mapLayerJson.maxScale);
-							layer.setMinScale(mapLayerJson.minScale);
-							layer.setDescription(mapLayerJson.info);
-							layer.setDataUrl(mapLayerJson.dataUrl);
-							layer.setOrganizationName(mapLayerJson.orgName);
-							layer.setInspireName(mapLayerJson.inspire);
-							layer.setWmtsMatrixSet(matrixSet)
-							layer.setWmtsLayerDef(spec);
+            layer.setAsNormalLayer();
+            layer.setId(mapLayerId.split('.').join('_'));
+            layer.setName(mapLayerJson.name);
+            layer.setWmtsName(mapLayerJson.wmtsName);
+            layer.setOpacity(mapLayerJson.opacity);
+            layer.setMaxScale(mapLayerJson.maxScale);
+            layer.setMinScale(mapLayerJson.minScale);
+            layer.setDescription(mapLayerJson.info);
+            layer.setDataUrl(mapLayerJson.dataUrl);
+            layer.setOrganizationName(mapLayerJson.orgName);
+            layer.setInspireName(mapLayerJson.inspire);
+            layer.setWmtsMatrixSet(matrixSet)
+            layer.setWmtsLayerDef(spec);
+            layer.setVisible(true);
 
-							layer.addWmtsUrl(getTileUrl);
+            layer.addWmtsUrl(getTileUrl);
 
-							var styleBuilder = Oskari.clazz
-									.builder('Oskari.mapframework.domain.Style');
+            var styleBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Style');
 
-							var styleSpec;
+            var styleSpec;
 
-							for ( var i = 0, ii = spec.styles.length; i < ii; ++i) {
-								styleSpec = spec.styles[i];
-								var style = styleBuilder();
-								style.setName(styleSpec.identifier);
-								style.setTitle(styleSpec.identifier);
+            for (var i = 0, ii = spec.styles.length; i < ii; ++i) {
+                styleSpec = spec.styles[i];
+                var style = styleBuilder();
+                style.setName(styleSpec.identifier);
+                style.setTitle(styleSpec.identifier);
 
-								layer.addStyle(style);
-								if (styleSpec.isDefault) {
-									layer.selectStyle(styleSpec.identifier);
-									break;
-								}
-							}
+                layer.addStyle(style);
+                if (styleSpec.isDefault) {
+                    layer.selectStyle(styleSpec.identifier);
+                    break;
+                }
+            }
 
-							mapLayerService.addLayer(layer, false);
+            mapLayerService.addLayer(layer, false);
+            layersCreated.push(layer);
 
-						}
+        }
 
-					}
-				});
+        return layersCreated;
+
+    }
+});
 
 define("bundles/framework/bundle/mapwmts/service/WmtsLayerService", function(){});
 
@@ -16513,1231 +16554,6 @@ Oskari.clazz
 				});
 
 define("bundles/framework/bundle/mapwmts/service/WmtsLayerModelBuilder", function(){});
-
-/**
- * Let's add missing TileMatrixLimits support 
- * (c) 2011-11 NLSFI 
- */
-/* Copyright (c) 2006-2011 by OpenLayers Contributors (see authors.txt for 
- * full list of contributors). Published under the Clear BSD license.  
- * See http://svn.openlayers.org/trunk/openlayers/license.txt for the
- * full text of the license. */
-
-/**
- * @requires OpenLayers/Format/WMTSCapabilities.js
- * @requires OpenLayers/Format/OWSCommon/v1_1_0.js
- */
-
-/**
- * Class: OpenLayers.Format.WMTSCapabilities.v1_0_0 Read WMTS Capabilities
- * version 1.0.0.
- * 
- * Inherits from: - <OpenLayers.Format.WMTSCapabilities>
- */
-Oskari.clazz
-		.define(
-				'Oskari.openlayers.Patch.WMTSCapabilities_v1_0_0',
-				function() {
-
-				},
-
-				{
-					getPatch : function() {
-
-						if (this.patch)
-							return this.patch;
-						
-						return this.buildPatch();
-					},
-
-					buildPatch : function() {
-
-						this.patch = OpenLayers
-								.Class(
-										OpenLayers.Format.OWSCommon.v1_1_0,
-										{
-
-											/**
-											 * Property: version {String} The
-											 * parser version ("1.0.0").
-											 */
-											version : "1.0.0",
-
-											/**
-											 * Property: namespaces {Object}
-											 * Mapping of namespace aliases to
-											 * namespace URIs.
-											 */
-											namespaces : {
-												ows : "http://www.opengis.net/ows/1.1",
-												wmts : "http://www.opengis.net/wmts/1.0",
-												xlink : "http://www.w3.org/1999/xlink"
-											},
-
-											/**
-											 * Property: yx {Object} Members in
-											 * the yx object are used to
-											 * determine if a CRS URN
-											 * corresponds to a CRS with y,x
-											 * axis order. Member names are CRS
-											 * URNs and values are boolean.
-											 * Defaults come from the
-											 * <OpenLayers.Format.WMTSCapabilities>
-											 * prototype.
-											 */
-											yx : null,
-
-											/**
-											 * Property: defaultPrefix {String}
-											 * The default namespace alias for
-											 * creating element nodes.
-											 */
-											defaultPrefix : "wmts",
-
-											/**
-											 * Constructor:
-											 * OpenLayers.Format.WMTSCapabilities.v1_0_0
-											 * Create a new parser for WMTS
-											 * capabilities version 1.0.0.
-											 * 
-											 * Parameters: options - {Object} An
-											 * optional object whose properties
-											 * will be set on this instance.
-											 */
-											initialize : function(options) {
-												OpenLayers.Format.XML.prototype.initialize
-														.apply(this,
-																[ options ]);
-												this.options = options;
-												var yx = OpenLayers.Util
-														.extend(
-																{},
-																OpenLayers.Format.WMTSCapabilities.prototype.yx);
-												this.yx = OpenLayers.Util
-														.extend(yx, this.yx);
-											},
-
-											/**
-											 * APIMethod: read Read capabilities
-											 * data from a string, and return
-											 * info about the WMTS.
-											 * 
-											 * Parameters: data - {String} or
-											 * {DOMElement} data to read/parse.
-											 * 
-											 * Returns: {Object} Information
-											 * about the SOS service.
-											 */
-											read : function(data) {
-												if (typeof data == "string") {
-													data = OpenLayers.Format.XML.prototype.read
-															.apply(this,
-																	[ data ]);
-												}
-												if (data && data.nodeType == 9) {
-													data = data.documentElement;
-												}
-												var capabilities = {};
-												this.readNode(data,
-														capabilities);
-												capabilities.version = this.version;
-												return capabilities;
-											},
-
-											props : {
-												'wmts' : {
-													'TileMatrixLimits' : {
-														"MinTileRow" : [
-																"minTileRow",
-																parseInt ],
-														"MaxTileRow" : [
-																"maxTileRow",
-																parseInt ],
-														"MinTileCol" : [
-																"minTileCol",
-																parseInt ],
-														"MaxTileCol" : [
-																"maxTileCol",
-																parseInt ],
-														"TileMatrix" : [
-																"tileMatrix",
-																null ]
-													}
-												}
-											},
-											/**
-											 * Property: readers Contains public
-											 * functions, grouped by namespace
-											 * prefix, that will be applied when
-											 * a namespaced node is found
-											 * matching the function name. The
-											 * function will be applied in the
-											 * scope of this parser with two
-											 * arguments: the node being read
-											 * and a context object passed from
-											 * the parent.
-											 */
-											readers : {
-												
-												"wmts" : {
-													"Capabilities" : function(
-															node, obj) {
-														this.readChildNodes(
-																node, obj);
-													},
-													"Contents" : function(node,
-															obj) {
-														obj.contents = {};
-														obj.contents.layers = [];
-														obj.contents.tileMatrixSets = {};
-														this.readChildNodes(
-																node,
-																obj.contents);
-													},
-													"Layer" : function(node,
-															obj) {
-														var layer = {
-															styles : [],
-															formats : [],
-															tileMatrixSetLinks : [],
-															tileMatrixSetLinksMap : {}
-														};
-														layer.layers = [];
-														this.readChildNodes(
-																node, layer);
-														obj.layers.push(layer);
-													},
-													"Style" : function(node,
-															obj) {
-														var style = {};
-														style.isDefault = (node
-																.getAttribute("isDefault") === "true");
-														this.readChildNodes(
-																node, style);
-														obj.styles.push(style);
-													},
-													"Format" : function(node,
-															obj) {
-														obj.formats
-																.push(this
-																		.getChildValue(node));
-													},
-													"TileMatrixSetLink" : function(
-															node, obj) {
-														var tileMatrixSetLink = {};
-														this
-																.readChildNodes(
-																		node,
-																		tileMatrixSetLink);
-														obj.tileMatrixSetLinks
-																.push(tileMatrixSetLink);
-														obj.tileMatrixSetLinksMap[tileMatrixSetLink.tileMatrixSet] = tileMatrixSetLink;
-													},
-													"TileMatrixSet" : function(
-															node, obj) {
-														// node
-														// could be
-														// child of
-														// wmts:Contents
-														// or
-														// wmts:TileMatrixSetLink
-														// duck type
-														// wmts:Contents
-														// by
-														// looking
-														// for
-														// layers
-														if (obj.layers) {
-															// TileMatrixSet
-															// as
-															// object
-															// type
-															// in
-															// schema
-															var tileMatrixSet = {
-																matrixIds : []
-															};
-															this
-																	.readChildNodes(
-																			node,
-																			tileMatrixSet);
-															obj.tileMatrixSets[tileMatrixSet.identifier] = tileMatrixSet;
-														} else {
-															// TileMatrixSet
-															// as
-															// string
-															// type
-															// in
-															// schema
-															obj.tileMatrixSet = this
-																	.getChildValue(node);
-														}
-													},
-													"TileMatrix" : function(
-															node, obj) {
-														var tileMatrix = {
-															supportedCRS : obj.supportedCRS
-														};
-														this.readChildNodes(
-																node,
-																tileMatrix);
-														obj.matrixIds
-																.push(tileMatrix);
-													},
-													"ScaleDenominator" : function(
-															node, obj) {
-														obj.scaleDenominator = parseFloat(this
-																.getChildValue(node));
-													},
-													"TopLeftCorner" : function(
-															node, obj) {
-														var topLeftCorner = this
-																.getChildValue(node);
-														var coords = topLeftCorner
-																.split(" ");
-														// decide on
-														// axis
-														// order for
-														// the
-														// given CRS
-														var yx;
-														if (obj.supportedCRS) {
-															// extract
-															// out
-															// version
-															// from
-															// URN
-															var crs = obj.supportedCRS
-																	.replace(
-																			/urn:ogc:def:crs:(\w+):.+:(\w+)$/,
-																			"urn:ogc:def:crs:$1::$2");
-															yx = !!this.yx[crs];
-														}
-														if (yx) {
-															obj.topLeftCorner = new OpenLayers.LonLat(
-																	coords[1],
-																	coords[0]);
-														} else {
-															obj.topLeftCorner = new OpenLayers.LonLat(
-																	coords[0],
-																	coords[1]);
-														}
-													},
-													"TileWidth" : function(
-															node, obj) {
-														obj.tileWidth = parseInt(this
-																.getChildValue(node));
-													},
-													"TileHeight" : function(
-															node, obj) {
-														obj.tileHeight = parseInt(this
-																.getChildValue(node));
-													},
-													"MatrixWidth" : function(
-															node, obj) {
-														obj.matrixWidth = parseInt(this
-																.getChildValue(node));
-													},
-													"MatrixHeight" : function(
-															node, obj) {
-														obj.matrixHeight = parseInt(this
-																.getChildValue(node));
-													},
-													"ResourceURL" : function(
-															node, obj) {
-														obj.resourceUrl = obj.resourceUrl
-																|| {};
-														obj.resourceUrl[node
-																.getAttribute("resourceType")] = {
-															format : node
-																	.getAttribute("format"),
-															template : node
-																	.getAttribute("template")
-														};
-													},
-													// not used for
-													// now, can be
-													// added in
-													// the future
-													// though
-													/*
-													 * "Themes": function(node,
-													 * obj) { obj.themes = [];
-													 * this.readChildNodes(node,
-													 * obj.themes); }, "Theme":
-													 * function(node, obj) { var
-													 * theme = {};
-													 * this.readChildNodes(node,
-													 * theme); obj.push(theme); },
-													 */
-													"WSDL" : function(node, obj) {
-														obj.wsdl = {};
-														obj.wsdl.href = node
-																.getAttribute("xlink:href");
-														// TODO:
-														// other
-														// attributes
-														// of
-														// <WSDL>
-														// element
-													},
-													"ServiceMetadataURL" : function(
-															node, obj) {
-														obj.serviceMetadataUrl = {};
-														obj.serviceMetadataUrl.href = node
-																.getAttribute("xlink:href");
-														// TODO:
-														// other
-														// attributes
-														// of
-														// <ServiceMetadataURL>
-														// element
-													},
-													"TileMatrixSetLimits" : function(
-															node, obj) {
-
-														var tileMatrixSetLimits = {
-															tileMatrixLimits : []
-														};
-
-														obj.tileMatrixSetLimits = tileMatrixSetLimits;
-
-														/**
-														 * Too deep recursion
-														 * and you'll break IE
-														 * Let's see what
-														 * happens
-														 */
-														this
-																.readChildNodes(
-																		node,
-																		tileMatrixSetLimits);
-
-														/**
-														 * Let's enhance
-														 * original data
-														 * assuming single entry
-														 * per tileMatrix URI
-														 * (should read spec)
-														 */
-														var tileMatrixSetLimitsMap = {};
-
-														for ( var n = 0; n < tileMatrixSetLimits.tileMatrixLimits.length; n++) {
-															var limit = tileMatrixSetLimits.tileMatrixLimits[n];
-															tileMatrixSetLimitsMap[limit.tileMatrix] = limit;
-														}
-
-														obj.tileMatrixSetLimitsMap = tileMatrixSetLimitsMap;
-
-													},
-													"TileMatrixLimits" : function(
-															node, obj) {
-
-														var nodes = this
-																.getElementsByTagNameNS(
-																		node,
-																		this.namespaces.wmts,
-																		'*');
-														var props = this.props.wmts['TileMatrixLimits'];
-
-														var tileMatrixLimits = {};
-
-														for ( var n = 0; n < nodes.length; n++) {
-															var nd = nodes[n];
-															// .item(n);
-															var val = this
-																	.getChildValue(nd);
-															var local = nd.localName
-																	|| nd.nodeName
-																			.split(
-																					":")
-																			.pop();
-															var prop = props[local][0];
-															var propFunc = props[local][1];
-															tileMatrixLimits[prop] = propFunc ? propFunc(val)
-																	: val;
-														}
-
-														/**
-														 * 
-														 */
-
-														obj.tileMatrixLimits
-																.push(tileMatrixLimits);
-													}
-												},
-												/**
-												 * Let's override DCP/HTTP[Get]
-												 */
-												"ows" : OpenLayers.Util.applyDefaults({
-													"HTTP": function(node, dcp) {
-									                	dcp.http = {};
-									                	this.readChildNodes(node, dcp.http);
-									            	},
-									            	"Get": function(node, http) {
-									            		var href = this.getAttributeNS(node, 
-									            				this.namespaces.xlink, "href");
-									            		
-									            		if( !http.get )
-									            			http.get = href;
-
-									            		if( !http.getArray )
-									            			http.getArray = [];
-
-									            		http.getArray.push(href);
-									            		
-									            	}
-													
-												},OpenLayers.Format.OWSCommon.v1_1_0.prototype.readers["ows"])
-											},
-
-					
-
-											CLASS_NAME : "OpenLayers.Format.WMTSCapabilities.v1_0_0"
-
-										});
-
-						return this.patch;
-					}
-
-				}, {
-					'protocol' : [ "Oskari.openlayers.Patch" ]
-				});
-
-define("bundles/framework/bundle/mapwmts/format/WMTS_1_0_0_capabilities", function(){});
-
-/**
- * Let's fix missing tileMatrixSetLimits handling for WMTS layers. (c) 2011-11
- * NLSFI
- */
-/*
- var x = {
- "styles" : [ {
- "isDefault" : true,
- "identifier" : "_null"
- } ],
- "formats" : [ "image/png" ],
- "tileMatrixSetLinks" : [ {
- "tileMatrixSet" : "EPSG_3067_PTI",
- "tileMatrixSetLimits" : {
- "tileMatrixLimits" : [ {
- "tileMatrix" : "EPSG_3067_PTI:0",
- "minTileRow" : "5",
- "maxTileRow" : "8",
- "minTileCol" : "0",
- "maxTileCol" : "1"
- } ]
- }
- } ],
- "layers" : [],
- "title" : "pti_yleiskartta_8m",
- "identifier" : "pti_yleiskartta_8m"
- };
- */
-
-/*
- * Copyright (c) 2006-2011 by OpenLayers Contributors (see authors.txt for full
- * list of contributors). Published under the Clear BSD license. See
- * http://svn.openlayers.org/trunk/openlayers/license.txt for the full text of
- * the license.
- */
-
-/**
- * @requires OpenLayers/Layer/Grid.js
- * @requires OpenLayers/Tile/Image.js
- */
-
-/**
- * Class: OpenLayers.Layer.WMTS Instances of the WMTS class allow viewing of
- * tiles from a service that implements the OGC WMTS specification version
- * 1.0.0.
- * 
- * Inherits from: - <OpenLayers.Layer.Grid>
- */
-Oskari.clazz
-		.define(
-				'Oskari.openlayers.Patch.layer.WMTS',
-				function() {
-
-				},
-				{
-					getPatch : function() {
-						if (this.patch)
-							return this.patch;
-
-						return this.buildPatch();
-					},
-					buildPatch : function() {
-						this.patch = OpenLayers
-								.Class(
-										OpenLayers.Layer.Grid,
-										{
-
-											/**
-											 * APIProperty: isBaseLayer
-											 * {Boolean} The layer will be
-											 * considered a base layer. Default
-											 * is true.
-											 */
-											isBaseLayer : true,
-
-											/**
-											 * Property: version {String} WMTS
-											 * version. Default is "1.0.0".
-											 */
-											version : "1.0.0",
-
-											/**
-											 * APIProperty: requestEncoding
-											 * {String} Request encoding. Can be
-											 * "REST" or "KVP". Default is
-											 * "KVP".
-											 */
-											requestEncoding : "KVP",
-
-											/**
-											 * APIProperty: url {String} The
-											 * base URL for the WMTS service.
-											 * Must be provided.
-											 */
-											url : null,
-
-											/**
-											 * APIProperty: layer {String} The
-											 * layer identifier advertised by
-											 * the WMTS service. Must be
-											 * provided.
-											 */
-											layer : null,
-
-											/**
-											 * WMTS Layer definition to support
-											 * TileMatrixSetLimits processing
-											 */
-											layerDef : null,
-
-											/**
-											 * APIProperty: matrixSet {String}
-											 * One of the advertised matrix set
-											 * identifiers. Must be provided.
-											 */
-											matrixSet : null,
-
-											/**
-											 * APIProperty: style {String} One
-											 * of the advertised layer styles.
-											 * Must be provided.
-											 */
-											style : null,
-
-											/**
-											 * APIProperty: format {String} The
-											 * image MIME type. Default is
-											 * "image/jpeg".
-											 */
-											format : "image/jpeg",
-
-											/**
-											 * APIProperty: tileOrigin {<OpenLayers.LonLat>}
-											 * The top-left corner of the tile
-											 * matrix in map units. If the tile
-											 * origin for each matrix in a set
-											 * is different, the <matrixIds>
-											 * should include a topLeftCorner
-											 * property. If not provided, the
-											 * tile origin will default to the
-											 * top left corner of the layer
-											 * <maxExtent>.
-											 */
-											tileOrigin : null,
-
-											/**
-											 * APIProperty: tileFullExtent {<OpenLayers.Bounds>}
-											 * The full extent of the tile set.
-											 * If not supplied, the layer's
-											 * <maxExtent> property will be
-											 * used.
-											 */
-											tileFullExtent : null,
-
-											/**
-											 * APIProperty: formatSuffix
-											 * {String} For REST request
-											 * encoding, an image format suffix
-											 * must be included in the request.
-											 * If not provided, the suffix will
-											 * be derived from the <format>
-											 * property.
-											 */
-											formatSuffix : null,
-
-											/**
-											 * APIProperty: matrixIds {Array} A
-											 * list of tile matrix identifiers.
-											 * If not provided, the matrix
-											 * identifiers will be assumed to be
-											 * integers corresponding to the map
-											 * zoom level. If a list of strings
-											 * is provided, each item should be
-											 * the matrix identifier that
-											 * corresponds to the map zoom
-											 * level. Additionally, a list of
-											 * objects can be provided. Each
-											 * object should describe the matrix
-											 * as presented in the WMTS
-											 * capabilities. These objects
-											 * should have the propertes shown
-											 * below.
-											 * 
-											 * Matrix properties: identifier -
-											 * {String} The matrix identifier
-											 * (required). topLeftCorner - {<OpenLayers.LonLat>}
-											 * The top left corner of the
-											 * matrix. Must be provided if
-											 * different than the layer
-											 * <tileOrigin>. tileWidth -
-											 * {Number} The tile width for the
-											 * matrix. Must be provided if
-											 * different than the width given in
-											 * the layer <tileSize>. tileHeight -
-											 * {Number} The tile height for the
-											 * matrix. Must be provided if
-											 * different than the height given
-											 * in the layer <tileSize>.
-											 */
-											matrixIds : null,
-
-											/**
-											 * APIProperty: dimensions {Array}
-											 * For RESTful request encoding,
-											 * extra dimensions may be
-											 * specified. Items in this list
-											 * should be property names in the
-											 * <params> object. Values of extra
-											 * dimensions will be determined
-											 * from the corresponding values in
-											 * the <params> object.
-											 */
-											dimensions : null,
-
-											/**
-											 * APIProperty: params {Object}
-											 * Extra parameters to include in
-											 * tile requests. For KVP
-											 * <requestEncoding>, these
-											 * properties will be encoded in the
-											 * request query string. For REST
-											 * <requestEncoding>, these
-											 * properties will become part of
-											 * the request path, with order
-											 * determined by the <dimensions>
-											 * list.
-											 */
-											params : null,
-
-											/**
-											 * APIProperty: zoomOffset {Number}
-											 * If your cache has more levels
-											 * than you want to provide access
-											 * to with this layer, supply a
-											 * zoomOffset. This zoom offset is
-											 * added to the current map zoom
-											 * level to determine the level for
-											 * a requested tile. For example, if
-											 * you supply a zoomOffset of 3,
-											 * when the map is at the zoom 0,
-											 * tiles will be requested from
-											 * level 3 of your cache. Default is
-											 * 0 (assumes cache level and map
-											 * zoom are equivalent).
-											 * Additionally, if this layer is to
-											 * be used as an overlay and the
-											 * cache has fewer zoom levels than
-											 * the base layer, you can supply a
-											 * negative zoomOffset. For example,
-											 * if a map zoom level of 1
-											 * corresponds to your cache level
-											 * zero, you would supply a -1
-											 * zoomOffset (and set the
-											 * maxResolution of the layer
-											 * appropriately). The zoomOffset
-											 * value has no effect if complete
-											 * matrix definitions (including
-											 * scaleDenominator) are supplied in
-											 * the <matrixIds> property.
-											 * Defaults to 0 (no zoom offset).
-											 */
-											zoomOffset : 0,
-
-											/**
-											 * Property: formatSuffixMap
-											 * {Object} a map between WMTS
-											 * 'format' request parameter and
-											 * tile image file suffix
-											 */
-											formatSuffixMap : {
-												"image/png" : "png",
-												"image/png8" : "png",
-												"image/png24" : "png",
-												"image/png32" : "png",
-												"png" : "png",
-												"image/jpeg" : "jpg",
-												"image/jpg" : "jpg",
-												"jpeg" : "jpg",
-												"jpg" : "jpg"
-											},
-
-											/**
-											 * Property: matrix {Object} Matrix
-											 * definition for the current map
-											 * resolution. Updated by the
-											 * <updateMatrixProperties> method.
-											 */
-											matrix : null,
-
-											/**
-											 * Constructor:
-											 * OpenLayers.Layer.WMTS Create a
-											 * new WMTS layer.
-											 * 
-											 * Example: (code) var wmts = new
-											 * OpenLayers.Layer.WMTS({ name: "My
-											 * WMTS Layer", url:
-											 * "http://example.com/wmts", layer:
-											 * "layer_id", style: "default",
-											 * matrixSet: "matrix_id" }); (end)
-											 * 
-											 * Parameters: config - {Object}
-											 * Configuration properties for the
-											 * layer.
-											 * 
-											 * Required configuration
-											 * properties: url - {String} The
-											 * base url for the service. See the
-											 * <url> property. layer - {String}
-											 * The layer identifier. See the
-											 * <layer> property. style -
-											 * {String} The layer style
-											 * identifier. See the <style>
-											 * property. matrixSet - {String}
-											 * The tile matrix set identifier.
-											 * See the <matrixSet> property.
-											 * 
-											 * Any other documented layer
-											 * properties can be provided in the
-											 * config object.
-											 */
-											initialize : function(config) {
-
-												// confirm required properties
-												// are
-												// supplied
-												var required = {
-													url : true,
-													layer : true,
-													style : true,
-													matrixSet : true
-												};
-												for ( var prop in required) {
-													if (!(prop in config)) {
-														throw new Error(
-																"Missing property '"
-																		+ prop
-																		+ "' in layer configuration.");
-													}
-												}
-
-												config.params = OpenLayers.Util
-														.upperCaseObject(config.params);
-												var args = [ config.name,
-														config.url,
-														config.params, config ];
-												OpenLayers.Layer.Grid.prototype.initialize
-														.apply(this, args);
-
-												// determine format suffix (for
-												// REST)
-												if (!this.formatSuffix) {
-													this.formatSuffix = this.formatSuffixMap[this.format]
-															|| this.format
-																	.split("/")
-																	.pop();
-												}
-
-												// expand matrixIds (may be
-												// array of
-												// string or array of
-												// object)
-												if (this.matrixIds) {
-													var len = this.matrixIds.length;
-													if (len
-															&& typeof this.matrixIds[0] === "string") {
-														var ids = this.matrixIds;
-														this.matrixIds = new Array(
-																len);
-														for ( var i = 0; i < len; ++i) {
-															this.matrixIds[i] = {
-																identifier : ids[i]
-															};
-														}
-													}
-												}
-
-											},
-
-											/**
-											 * Method: setMap
-											 */
-											setMap : function() {
-												OpenLayers.Layer.Grid.prototype.setMap
-														.apply(this, arguments);
-												this.updateMatrixProperties();
-											},
-
-											/**
-											 * Method: updateMatrixProperties
-											 * Called when map resolution
-											 * changes to update matrix related
-											 * properties.
-											 */
-											updateMatrixProperties : function() {
-												this.matrix = this.getMatrix();
-												if (this.matrix) {
-													if (this.matrix.topLeftCorner) {
-														this.tileOrigin = this.matrix.topLeftCorner;
-													}
-													if (this.matrix.tileWidth
-															&& this.matrix.tileHeight) {
-														this.tileSize = new OpenLayers.Size(
-																this.matrix.tileWidth,
-																this.matrix.tileHeight);
-													}
-													if (!this.tileOrigin) {
-														this.tileOrigin = new OpenLayers.LonLat(
-																this.maxExtent.left,
-																this.maxExtent.top);
-													}
-													if (!this.tileFullExtent) {
-														this.tileFullExtent = this.maxExtent;
-													}
-												}
-											},
-
-											/**
-											 * Method: moveTo
-											 * 
-											 * Parameters: bound - {<OpenLayers.Bounds>}
-											 * zoomChanged - {Boolean} Tells
-											 * when zoom has changed, as layers
-											 * have to do some init work in that
-											 * case. dragging - {Boolean}
-											 */
-											moveTo : function(bounds,
-													zoomChanged, dragging) {
-												if (zoomChanged || !this.matrix) {
-													this
-															.updateMatrixProperties();
-												}
-												return OpenLayers.Layer.Grid.prototype.moveTo
-														.apply(this, arguments);
-											},
-
-											/**
-											 * APIMethod: clone
-											 * 
-											 * Parameters: obj - {Object}
-											 * 
-											 * Returns: {<OpenLayers.Layer.WMTS>}
-											 * An exact clone of this
-											 * <OpenLayers.Layer.WMTS>
-											 */
-											clone : function(obj) {
-												if (obj == null) {
-													obj = new OpenLayers.Layer.WMTS(
-															this.options);
-												}
-												// get all additions from
-												// superclasses
-												obj = OpenLayers.Layer.Grid.prototype.clone
-														.apply(this, [ obj ]);
-												// copy/set any non-init,
-												// non-simple
-												// values here
-												return obj;
-											},
-
-											/**
-											 * Method: getMatrix Get the
-											 * appropriate matrix definition for
-											 * the current map resolution.
-											 */
-											getMatrix : function() {
-												var matrix;
-												if (!this.matrixIds
-														|| this.matrixIds.length === 0) {
-													matrix = {
-														identifier : this.map
-																.getZoom()
-																+ this.zoomOffset
-													};
-												} else {
-													// get appropriate matrix
-													// given
-													// the
-													// map scale if
-													// possible
-													if ("scaleDenominator" in this.matrixIds[0]) {
-														// scale denominator
-														// calculation
-														// based on WMTS
-														// spec
-														var denom = OpenLayers.METERS_PER_INCH
-																* OpenLayers.INCHES_PER_UNIT[this.units]
-																* this.map
-																		.getResolution()
-																/ 0.28E-3;
-														var diff = Number.POSITIVE_INFINITY;
-														var delta;
-														for ( var i = 0, ii = this.matrixIds.length; i < ii; ++i) {
-															delta = Math
-																	.abs(1 - (this.matrixIds[i].scaleDenominator / denom));
-															if (delta < diff) {
-																diff = delta;
-																matrix = this.matrixIds[i];
-															}
-														}
-													} else {
-														// fall back on zoom as
-														// index
-														matrix = this.matrixIds[this.map
-																.getZoom()
-																+ this.zoomOffset];
-													}
-												}
-												return matrix;
-											},
-
-											/**
-											 * Method: getTileInfo Get tile
-											 * information for a given location
-											 * at the current map resolution.
-											 * 
-											 * Parameters: loc - {<OpenLayers.LonLat}
-											 * A location in map coordinates.
-											 * 
-											 * Returns: {Object} An object with
-											 * "col", "row", "i", and "j"
-											 * properties. The col and row
-											 * values are zero based tile
-											 * indexes from the top left. The i
-											 * and j values are the number of
-											 * pixels to the left and top
-											 * (respectively) of the given
-											 * location within the target tile.
-											 */
-											getTileInfo : function(loc) {
-												var res = this.map
-														.getResolution();
-
-												var fx = (loc.lon - this.tileOrigin.lon)
-														/ (res * this.tileSize.w);
-												var fy = (this.tileOrigin.lat - loc.lat)
-														/ (res * this.tileSize.h);
-
-												var col = Math.floor(fx);
-												var row = Math.floor(fy);
-
-												return {
-													col : col,
-													row : row,
-													i : Math.floor((fx - col)
-															* this.tileSize.w),
-													j : Math.floor((fy - row)
-															* this.tileSize.h)
-												};
-											},
-
-											/**
-											 * Method: getURL
-											 * 
-											 * Parameters: bounds - {<OpenLayers.Bounds>}
-											 * 
-											 * Returns: {String} A URL for the
-											 * tile corresponding to the given
-											 * bounds.
-											 */
-											getURL : function(bounds) {
-												bounds = this
-														.adjustBounds(bounds);
-												var url = "";
-
-												/**
-												 * Check whether we should do
-												 * anything (NLSFI)
-												 */
-												/**
-												 * Extent checks default if
-												 * negated (NLSFI)
-												 */
-												if (!(!this.tileFullExtent || this.tileFullExtent
-														.intersectsBounds(bounds)))
-													return url;
-
-												var center = bounds
-														.getCenterLonLat();
-												var info = this
-														.getTileInfo(center);
-												var matrixId = this.matrix.identifier;
-
-												/*
-												 * Let's check TileMatrixLimits
-												 * (NLSFI)
-												 */
-												if (this.layerDef
-														&& this.layerDef.tileMatrixSetLinksMap) {
-
-													/*
-													 * this.matrixSet is key to
-													 * tileMatrixSetLinkMap
-													 * this.matrix.identifier is
-													 * key to
-													 * tileMatrixSetLimitsMap
-													 */
-													var tileMatrixSetLink = this.layerDef.tileMatrixSetLinksMap[this.matrixSet];
-													var tileMatrixSetLimits = tileMatrixSetLink ? tileMatrixSetLink.tileMatrixSetLimitsMap[this.matrix.identifier]
-															: null;
-
-													/*
-													 * Now we should or should
-													 * not have
-													 * tileMatrixSetLimits
-													 */
-													var inRowRange = tileMatrixSetLimits ? (info.row >= tileMatrixSetLimits.minTileRow && info.row <= tileMatrixSetLimits.maxTileRow)
-															: false;
-													var inColRange = tileMatrixSetLimits ? (info.col >= tileMatrixSetLimits.minTileCol && info.col <= tileMatrixSetLimits.maxTileCol)
-															: false;
-													if (!(inRowRange && inColRange)) {
-														return OpenLayers.Util
-																.getImagesLocation()
-																+ "blank.gif";
-													}
-
-												}
-
-												/**
-												 * proceed with default
-												 * OpenLayers implentation
-												 */
-
-												if (this.requestEncoding
-														.toUpperCase() === "REST") {
-
-													// include 'version',
-													// 'layer'
-													// and
-													// 'style' in
-													// tile resource url
-													var path = this.version
-															+ "/" + this.layer
-															+ "/" + this.style
-															+ "/";
-
-													// append optional dimension
-													// path
-													// elements
-													if (this.dimensions) {
-														for ( var i = 0; i < this.dimensions.length; i++) {
-															if (this.params[this.dimensions[i]]) {
-																path = path
-																		+ this.params[this.dimensions[i]]
-																		+ "/";
-															}
-														}
-													}
-
-													// append other required
-													// path
-													// elements
-													path = path
-															+ this.matrixSet
-															+ "/"
-															+ this.matrix.identifier
-															+ "/" + info.row
-															+ "/" + info.col
-															+ "."
-															+ this.formatSuffix;
-
-													if (OpenLayers.Util
-															.isArray(this.url)) {
-														url = this.selectUrl(
-																path, this.url);
-													} else {
-														url = this.url;
-													}
-													if (!url.match(/\/$/)) {
-														url = url + "/";
-													}
-													url = url + path;
-
-												} else if (this.requestEncoding
-														.toUpperCase() === "KVP") {
-
-													// assemble all required
-													// parameters
-													var params = {
-														SERVICE : "WMTS",
-														REQUEST : "GetTile",
-														VERSION : this.version,
-														LAYER : this.layer,
-														STYLE : this.style,
-														TILEMATRIXSET : this.matrixSet,
-														TILEMATRIX : this.matrix.identifier,
-														TILEROW : info.row,
-														TILECOL : info.col,
-														FORMAT : this.format
-													};
-													url = OpenLayers.Layer.Grid.prototype.getFullRequestString
-															.apply(this,
-																	[ params ]);
-
-												}
-
-												return url;
-											},
-
-											/**
-											 * APIMethod: mergeNewParams Extend
-											 * the existing layer <params> with
-											 * new properties. Tiles will be
-											 * reloaded with updated params in
-											 * the request.
-											 * 
-											 * Parameters: newParams - {Object}
-											 * Properties to extend to existing
-											 * <params>.
-											 */
-											mergeNewParams : function(newParams) {
-												if (this.requestEncoding
-														.toUpperCase() === "KVP") {
-													return OpenLayers.Layer.Grid.prototype.mergeNewParams
-															.apply(
-																	this,
-																	[ OpenLayers.Util
-																			.upperCaseObject(newParams) ]);
-												}
-											},
-
-											CLASS_NAME : "OpenLayers.Layer.WMTS"
-										});
-
-						return this.patch;
-					}
-
-				}, {
-					'protocol' : [ "Oskari.openlayers.Patch" ]
-				});
-
-define("bundles/framework/bundle/mapwmts/layer/WMTS", function(){});
 
 /**
  * @class Oskari.mapframework.bundle.MapWmtsBundleInstance
@@ -17824,7 +16640,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.MapWmtsBundleInstance", function
 
 define("bundles/framework/bundle/mapwmts/instance", function(){});
 
-define('bundles/framework/bundle/mapwmts/module',["oskari","jquery","./plugin/wmtslayer/WmtsLayerPlugin","./domain/WmtsLayer","./service/WmtsLayerService","./service/WmtsLayerModelBuilder","./format/WMTS_1_0_0_capabilities","./layer/WMTS","./instance"], function(Oskari,jQuery) {
+define('bundles/framework/bundle/mapwmts/module',["oskari","jquery","./plugin/wmtslayer/WmtsLayerPlugin","./domain/WmtsLayer","./service/WmtsLayerService","./service/WmtsLayerModelBuilder","./instance"], function(Oskari,jQuery) {
     return Oskari.bundleCls("mapwmts").category({create: function () {
 
 		return Oskari.clazz.create("Oskari.mapframework.bundle.MapWmtsBundleInstance");
@@ -18970,6 +17786,41 @@ function(id, imageUrl, options) {
             sandbox.printDebug('preselecting ' + p);
             layersPlugin.preselectLayers(layers);
         }
+    },
+
+    /**
+     * Removes all the css classes which respond to given regex from all elements
+     * and adds the given class to them.
+     *
+     * @method changeCssClasses
+     * @param {String} classToAdd the css class to add to all elements.
+     * @param {RegExp} removeClassRegex the regex to test against to determine which classes should be removec
+     * @param {Array[jQuery]} elements The elements where the classes should be changed.
+     */
+    changeCssClasses: function(classToAdd, removeClassRegex, elements) {
+        var i, j, el;
+
+        for (i = 0; i < elements.length; i++) {
+            el = elements[i];
+
+            el.removeClass(function(index, classes) {
+                var removeThese = '',
+                    classNames = classes.split(' ');
+
+                // Check if there are any old font classes.
+                for (j = 0; j < classNames.length; ++j) {
+                    if(removeClassRegex.test(classNames[j])) {
+                        removeThese += classNames[j] + ' ';
+                    }
+                }
+
+                // Return the class names to be removed.
+                return removeThese;
+            });
+
+            // Add the new font as a CSS class.
+            el.addClass(classToAdd);
+        }
     }
 }, {
     /**
@@ -19473,6 +18324,11 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
         });
     },
     defaultKeyDown : function(evt) {
+        if(jQuery('input:focus').length > 0) {
+            // cancel all handling if there are inputs with focus
+            // (user might be writing something)
+            return;
+        }
         switch(evt.keyCode) {
             case OpenLayers.Event.KEY_LEFT:
             	this.mapmodule.panMapByPixels(-this.slideFactor,0, false, true);
@@ -19933,7 +18789,6 @@ OpenLayers.Control.PorttiMouse = OpenLayers.Class(OpenLayers.Control, {
 	 * evt - {Event}
 	 */
 	defaultClick : function(evt) {
-		console.log("DEFAULTCLICK",evt);
 		if(evt.lastTouches && evt.lastTouches.length == 2) {
 			/*this.map.zoomOut();*/
 			this.sendMapZoomOut();
@@ -20604,7 +19459,13 @@ function(config, locale) {
         "tableCell" : '<td></td>',
         "span" : '<span></span>',
         "header" : '<div class="getinforesult_header"><div class="icon-bubble-left"></div>',
-        "headerTitle" : '<div class="getinforesult_header_title"></div>'
+        "headerTitle" : '<div class="getinforesult_header_title"></div>',
+        "myPlacesWrapper" : '<div class="myplaces_place">' +
+                                '<h3 class="myplaces_header"></h3>' +
+                                '<p class="myplaces_desc"></p>' +
+                                '<img class="myplaces_img"></img>' +
+                                '<a class="myplaces_link"></a>' +
+                            '</div>'
 	},
 
     /** @static @property __name plugin name */
@@ -21131,12 +19992,20 @@ function(config, locale) {
             } else {
                 var pretty = this._formatGfiDatum(datum);
                 if (pretty != null) {
-                    coll.push({
+                    var isMyPlace;
+                    if (datum.layerId && typeof datum.layerId === 'string' && datum.layerId.match('myplaces_')) {
+                        isMyPlace = true;
+                    } else {
+                        isMyPlace = false;
+                    }
+                    var fragmentData = {
                         markup : pretty,
                         layerId : layerId,
                         layerName : layerName,
-                        type : type
-                    });
+                        type : type,
+                        isMyPlace : isMyPlace
+                    };
+                    coll.push(fragmentData);
                 }
             }
         }
@@ -21217,6 +20086,11 @@ function(config, locale) {
             hasHtml = hasHtml || (datum.content.indexOf('<HTML>') >= 0);
         }
         if (datum.presentationType == 'JSON' || (datum.content && datum.content.parsed)) {
+            // This is for my places info popup
+            if (datum.layerId && typeof datum.layerId === 'string' && datum.layerId.match('myplaces_')) {
+                return me._formatMyPlacesGfi(datum);
+            }
+
             var even = false;
             var rawJsonData = datum.content.parsed;
             var dataArray = [];
@@ -21261,6 +20135,46 @@ function(config, locale) {
             return response;
         }
         return html;
+    },
+
+    /**
+     * Formats the html to show for my places layers' gfi dialog.
+     *
+     * @method _formatMyPlacesGfi
+     * @param {Object} datum response data to format
+     * @return {jQuery} formatted html
+     */
+    _formatMyPlacesGfi: function(datum) {
+        var me = this,
+            wrapper = me.template.wrapper.clone(),
+            places = datum.content.parsed.places,
+            pLen = places.length,
+            place,
+            content,
+            i;
+
+        wrapper.addClass('myplaces_wrapper');
+
+        for (i = 0; i < pLen; ++i) {
+            place = places[i];
+
+            content = me.template.myPlacesWrapper.clone();
+            content.find('h3.myplaces_header').html(place.name);
+            content.find('p.myplaces_desc').html(place.description);
+            if (place.imageUrl) {
+                content.find('img.myplaces_img').attr({
+                    'src': place.imageUrl
+                });
+            } else {
+                content.find('img.myplaces_img').remove();
+            }
+            content.find('a.myplaces_link').attr({
+                'href': place.link
+            }).html(place.link);
+            wrapper.append(content);
+        }
+
+        return wrapper;
     },
 
     /**
@@ -21348,6 +20262,9 @@ function(config, locale) {
         var me = this;
         var content = {};
         var wrapper = me.template.wrapper.clone();
+        var colourScheme = null;
+        var font = null;
+
         content.html = '';
         content.actions = {};
         for (var di = 0; di < data.fragments.length; di++) {
@@ -21357,19 +20274,30 @@ function(config, locale) {
 
             var contentWrapper = me.template.wrapper.clone();
 
-            var headerWrapper = me.template.header.clone();
-            var titleWrapper = me.template.headerTitle.clone();
-            titleWrapper.append(fragmentTitle);
-			titleWrapper.attr('title', fragmentTitle);
-            headerWrapper.append(titleWrapper);
-            contentWrapper.append(headerWrapper);
-
+            // Do not show the layer name if this is a my_places layer.
+            if (!fragment.isMyPlace) {
+                var headerWrapper = me.template.header.clone();
+                var titleWrapper = me.template.headerTitle.clone();
+                titleWrapper.append(fragmentTitle);
+    			titleWrapper.attr('title', fragmentTitle);
+                headerWrapper.append(titleWrapper);
+                contentWrapper.append(headerWrapper);                
+            }
 
             if (fragmentMarkup) {
                 contentWrapper.append(fragmentMarkup);
             }
             wrapper.append(contentWrapper);
         }
+
+        if (this.config && this.config.colourScheme) {
+            colourScheme = this.config.colourScheme;
+        }
+
+        if (this.config && this.config.font) {
+            font = this.config.font;
+        }
+
         content.html = wrapper;
 
         var pluginLoc = this.getMapModule().getLocalization('plugin', true);
@@ -21377,8 +20305,11 @@ function(config, locale) {
         data.title = myLoc.title;
 
         if(!this.config || this.config.infoBox) {
-            var request = me._sandbox.getRequestBuilder("InfoBox.ShowInfoBoxRequest")(data.popupid, data.title, [content], data.lonlat, true);
-            me._sandbox.request(me, request);
+            var reqBuilder = me._sandbox.getRequestBuilder("InfoBox.ShowInfoBoxRequest");
+            if (reqBuilder) {
+                var request = reqBuilder(data.popupid, data.title, [content], data.lonlat, true, colourScheme, font);
+                me._sandbox.request(me, request);
+            }
         }
 
         var event = me._sandbox.getEventBuilder("GetInfoResultEvent")(data);
@@ -21741,12 +20672,38 @@ function(config) {
 		var pluginLoc = this.getMapModule().getLocalization('plugin', true);
 		this.loc = pluginLoc[this.__name];
 
-		this.template = jQuery('<div class="search-div">' + 
-		'<div class="search-textarea-and-button">' + 
-		'<input placeholder="' + this.loc['placeholder'] + '" type="text" />' + 
-		'<input type="button" value="' + this.loc['search'] + '" name="search" />' + '</div>' + 
-		'<div class="results">' + '<div class="header"><div class="close icon-close" title="' + this.loc['close'] + '"></div></div>' + 
-		'<div class="content">&nbsp;</div>' + '</div>' + '</div>');
+		this.template = jQuery(
+			'<div class="search-div">' + 
+				'<div class="search-textarea-and-button">' + 
+					'<input placeholder="' + this.loc['placeholder'] + '" type="text" />' + 
+					'<input type="button" value="' + this.loc['search'] + '" name="search" />' +
+				'</div>' + 
+				'<div class="results">' +
+					'<div class="header">' +
+						'<div class="close icon-close" title="' + this.loc['close'] + '"></div>' +
+					'</div>' + 
+					'<div class="content">&nbsp;</div>' +
+				'</div>' +
+			'</div>'
+		);
+
+		this.styledTemplate = jQuery(
+			'<div class="published-search-div">' +
+				'<div class="search-area-div">' +
+					'<div class="search-left"></div>' +
+					'<div class="search-middle">' +
+						'<input class="search-input" placeholder="' + this.loc['placeholder'] + '" type="text" />' +
+					'</div>' +
+					'<div class="search-right"></div>' +
+				'</div>' +
+				'<div class="results published-search-results">' +
+					'<div class="header published-search-header">' +
+						'<div class="close icon-close" title="' + this.loc['close'] + '"></div>' +
+					'</div>' +
+					'<div class="content published-search-content">&nbsp;</div>' +
+				'</div>' +
+			'</div>'
+		);
 
 		this.templateResultsTable = jQuery("<table class='search-results'><thead><tr>" + 
 		"<th>" + this.loc['column_name'] + "</th>" + "<th>" + this.loc['column_village'] + "</th>" + "<th>" + this.loc['column_type'] + 
@@ -21855,10 +20812,17 @@ function(config) {
 	 * div where this plugin registered.
 	 */
 	_createUI : function() {
-		var sandbox = this._sandbox;
-		var me = this;
+		var sandbox = this._sandbox,
+			me = this,
+			content;
 
-		var content = this.template.clone();
+		if (this._conf && this._conf.toolStyle) {
+			content = this.styledTemplate.clone();
+			this.changeToolStyle(this._conf.toolStyle, content);
+		} else {
+			content = this.template.clone();
+		}
+
 		this.container = content;
 
 		// get div where the map is rendered from openlayers
@@ -21889,6 +20853,9 @@ function(config) {
 		content.find('input[type=button]').click(function(event) {
 			me._doSearch();
 		});
+		content.find('div.search-right').click(function(event) {
+			me._doSearch();
+		});
 		// to close button
 		content.find('div.close').click(function(event) {
 			me._hideSearch();
@@ -21910,6 +20877,18 @@ function(config) {
 			if(this._conf.location.bottom) {
 				content.css('bottom', this._conf.location.bottom);
 			}
+		}
+
+		if (this._conf && this._conf.font) {
+			this.changeFont(this._conf.font, content);
+		}
+		if (this._conf && this._conf.toolStyle) {
+			// Hide the results if esc was pressed or if the field is empty.
+			inputField.keyup(function(e) {
+				if (e.keyCode == 27 || (e.keyCode == 8 && !jQuery(this).val())) {
+					me._hideSearch();
+				}
+			})
 		}
 	},
 	/**
@@ -22034,7 +21013,14 @@ function(config) {
 
 			content.html(table);
 			resultsContainer.show();
-			
+
+			// Change the font of the rendered table as well
+			if (this._conf && this._conf.font) {
+				this.changeFont(this._conf.font, content);
+			}
+			if (this._conf && this._conf.toolStyle) {
+				header.remove();
+			}
 		}
 	},
 	/**
@@ -22070,6 +21056,72 @@ function(config) {
 		this.container.find('div.results').hide();
 		// Send hide marker request
 		this._sandbox.request(this.getName(), this._sandbox.getRequestBuilder('HideMapMarkerRequest')());
+	},
+
+	/**
+     * Changes the tool style of the plugin
+     *
+     * @method changeToolStyle
+     * @param {Object} style
+     * @param {jQuery} div
+     */
+	changeToolStyle: function(style, div) {
+		div = div || this.container;
+
+		if (!style || !div) return;
+
+		// Remove the old unstyled search box and create a new one.
+		if (div.hasClass('search-div')) {
+			div.remove();
+			this._createUI();
+			return;
+		}
+
+		var	resourcesPath = this.getMapModule().getImageUrl(),
+			imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/search/images/',
+			styleName = style.val,
+			bgLeft = imgPath + 'search-tool-' + styleName + '_01.png',
+			bgMiddle = imgPath + 'search-tool-' + styleName + '_02.png',
+			bgRight = imgPath + 'search-tool-' + styleName + '_03.png',
+			left = div.find('div.search-left'),
+			middle = div.find('div.search-middle'),
+			right = div.find('div.search-right');
+
+		left.css({
+			'background-image': 'url("' + bgLeft + '")',
+			'width': style.widthLeft
+		});
+		middle.css({
+			'background-image': 'url("' + bgMiddle + '")',
+			'background-repeat': 'repeat-x',
+		});
+		right.css({
+			'background-image': 'url("' + bgRight + '")',
+			'width': style.widthRight
+		});
+	},
+
+	/**
+	 * Changes the font used by plugin by adding a CSS class to its DOM elements.
+	 *
+	 * @method changeFont
+	 * @param {String} fontId
+	 * @param {jQuery} div
+	 */
+	changeFont: function(fontId, div) {
+		div = div || this.container;
+
+		if (!div || !fontId) return;
+
+		// The elements where the font style should be applied to.
+		var elements = [];
+		elements.push(div.find('table.search-results'));
+		elements.push(div.find('input'));
+
+		var classToAdd = 'oskari-publisher-font-' + fontId;
+		var testRegex = /oskari-publisher-font-/;
+
+		this.getMapModule().changeCssClasses(classToAdd, testRegex, elements);
 	}
 }, {
 	/**
@@ -22164,206 +21216,242 @@ requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(cs
  * Gets base urls from localization files.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
-/**
- * @method create called automatically on construction
- * @static
- */
-function() {
-    this.mapModule = null;
-    this.pluginName = null;
-    this._sandbox = null;
-    this._map = null;
-    this.element = null;
-}, {
-
-	templates : {
-		main : jQuery("<div class='logoplugin'><div class='icon'></div>" +
-                "<div class='terms'><a href='JavaScript:void(0);'></a></div>" +
-            "</div>")
-	},
-
-    /** @static @property __name plugin name */
-    __name : 'LogoPlugin',
-
     /**
-     * @method getName
-     * @return {String} plugin name
-     */
-    getName : function() {
-        return this.pluginName;
-    },
-    /**
-     * @method getMapModule
-     * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map module
-     */
-    getMapModule : function() {
-        return this.mapModule;
-    },
-    /**
-     * @method setMapModule
-     * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map module
-     */
-    setMapModule : function(mapModule) {
-        this.mapModule = mapModule;
-        if(mapModule) {
-            this.pluginName = mapModule.getName() + this.__name;
-        }
-    },
-    /**
-     * @method hasUI
-     * @return {Boolean} true
-     * This plugin has an UI so always returns true
-     */
-    hasUI : function() {
-        return true;
-    },
-    /**
-     * @method init
-     * Interface method for the module protocol
-     *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     * 			reference to application sandbox
-     */
-    init : function(sandbox) {
-    },
-    /**
-     * @method register
-     * Interface method for the plugin protocol
-     */
-    register : function() {
-
-    },
-    /**
-     * @method unregister
-     * Interface method for the plugin protocol
-     */
-    unregister : function() {
-
-    },
-    /**
-     * @method startPlugin
-     * Interface method for the plugin protocol
-     *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     * 			reference to application sandbox
-     */
-    startPlugin : function(sandbox) {
-		var me = this;
-        me._sandbox = sandbox;
-        me._map = me.getMapModule().getMap();
-
-        sandbox.register(me);
-        for(p in me.eventHandlers ) {
-            sandbox.registerForEventByName(me, p);
-        }
-        me._createUI();
-    },
-    /**
-     * @method stopPlugin
-     *
-     * Interface method for the plugin protocol
-     *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     * 			reference to application sandbox
-     */
-    stopPlugin : function(sandbox) {
-	
-		var me = this;
-
-        for(p in me.eventHandlers ) {
-            sandbox.unregisterFromEventByName(me, p);
-        }
-
-        sandbox.unregister(me);
-        me._map = null;
-        me._sandbox = null;
-        
-        // TODO: check if added?
-        // unbind change listener and remove ui
-        if (me.element) {
-            me.element.find('a').unbind('click');
-            me.element.remove();
-            me.element = undefined;
-        }
-    },
-    /**
-     * @method start
-     * Interface method for the module protocol
-     *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     * 			reference to application sandbox
-     */
-    start : function(sandbox) {
-    },
-    /**
-     * @method stop
-     * Interface method for the module protocol
-     *
-     * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-     * 			reference to application sandbox
-     */
-    stop : function(sandbox) {
-    },
-	/** 
-	 * @property {Object} eventHandlers 
-	 * @static 
-	 */
-    eventHandlers : {
-    },
-
-	/** 
-	 * @method onEvent
-	 * @param {Oskari.mapframework.event.Event} event a Oskari event object
-	 * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-	 */
-    onEvent : function(event) {
-        return this.eventHandlers[event.getName()].apply(this, [event]);
-    },
-    
-    /**
-     * @method _createUI
-     * @private
-     * Creates logo and terms of use links on top of map
-     */
-    _createUI : function() {
-		var me = this;
-		var sandbox = me._sandbox;
-
-        // get div where the map is rendered from openlayers
-        var parentContainer = jQuery(me._map.div);
-        if(!me.element) {
-            me.element = me.templates.main.clone();
-        }
-        		
-        parentContainer.append(me.element);
-        
-        var pluginLoc = me.getMapModule().getLocalization('plugin', true);
-        var myLoc = pluginLoc[me.__name];
-        
-        var link = me.element.find('div.icon');
-        link.bind('click', function(){
-			var linkParams = sandbox.generateMapLinkParameters();
-	    	var url = myLoc.mapLinkBase + linkParams;
-	    	window.open(url, '_blank');
-            return false;
-	    });
-        
-        var link = me.element.find('a');
-        link.append(myLoc["terms"]); // 
-        link.bind('click', function(){
-	    	var url = myLoc["termsLink"]
-	    	window.open(url, '_blank');
-            return false;
-	    });
-    }
-}, {
-    /**
-     * @property {String[]} protocol array of superclasses as {String}
+     * @method create called automatically on construction
      * @static
      */
-    'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
-});
 
+    function (conf) {
+        this.conf = conf;
+        this.mapModule = null;
+        this.pluginName = null;
+        this._sandbox = null;
+        this._map = null;
+        this.element = null;
+    }, {
+
+        templates: {
+            main: jQuery("<div class='logoplugin'><div class='icon'></div>" +
+                "<div class='terms'><a href='JavaScript:void(0);'></a></div>" +
+                "</div>")
+        },
+
+        /** @static @property __name plugin name */
+        __name: 'LogoPlugin',
+
+        /**
+         * @method getName
+         * @return {String} plugin name
+         */
+        getName: function () {
+            return this.pluginName;
+        },
+        /**
+         * @method getMapModule
+         * @return {Oskari.mapframework.ui.module.common.MapModule} reference to map module
+         */
+        getMapModule: function () {
+            return this.mapModule;
+        },
+        /**
+         * @method setMapModule
+         * @param {Oskari.mapframework.ui.module.common.MapModule} reference to map module
+         */
+        setMapModule: function (mapModule) {
+            this.mapModule = mapModule;
+            if (mapModule) {
+                this.pluginName = mapModule.getName() + this.__name;
+            }
+        },
+        /**
+         * @method hasUI
+         * @return {Boolean} true
+         * This plugin has an UI so always returns true
+         */
+        hasUI: function () {
+            return true;
+        },
+        /**
+         * @method init
+         * Interface method for the module protocol
+         *
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         *          reference to application sandbox
+         */
+        init: function (sandbox) {
+        },
+        /**
+         * @method register
+         * Interface method for the plugin protocol
+         */
+        register: function () {
+        },
+        /**
+         * @method unregister
+         * Interface method for the plugin protocol
+         */
+        unregister: function () {
+        },
+        /**
+         * @method startPlugin
+         * Interface method for the plugin protocol
+         *
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         *          reference to application sandbox
+         */
+        startPlugin: function (sandbox) {
+            var me = this,
+                p;
+            me._sandbox = sandbox;
+            me._map = me.getMapModule().getMap();
+
+            sandbox.register(me);
+            for (p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.registerForEventByName(me, p);
+                }
+            }
+            me._createUI();
+        },
+        /**
+         * @method stopPlugin
+         *
+         * Interface method for the plugin protocol
+         *
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         *          reference to application sandbox
+         */
+        stopPlugin: function (sandbox) {
+            var me = this,
+                p;
+
+            for (p in me.eventHandlers) {
+                if (me.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.unregisterFromEventByName(me, p);
+                }
+            }
+
+            sandbox.unregister(me);
+            me._map = null;
+            me._sandbox = null;
+
+            // TODO: check if added?
+            // unbind change listener and remove ui
+            if (me.element) {
+                me.element.find('a').unbind('click');
+                me.element.remove();
+                me.element = undefined;
+            }
+        },
+        /**
+         * @method start
+         * Interface method for the module protocol
+         *
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         *          reference to application sandbox
+         */
+        start: function (sandbox) {
+        },
+        /**
+         * @method stop
+         * Interface method for the module protocol
+         *
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         *          reference to application sandbox
+         */
+        stop: function (sandbox) {
+        },
+        /** 
+         * @property {Object} eventHandlers
+         * @static
+         */
+        eventHandlers: {},
+
+        /** 
+         * @method onEvent
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         */
+        onEvent: function (event) {
+            return this.eventHandlers[event.getName()].apply(this, [event]);
+        },
+
+        /**
+         * @method _createUI
+         * @private
+         * Creates logo and terms of use links on top of map
+         */
+        _createUI: function () {
+            var me = this,
+                sandbox = me._sandbox,
+                parentContainer = jQuery(me._map.div), // div where the map is rendered from openlayers
+                pluginLoc = me.getMapModule().getLocalization('plugin', true),
+                myLoc = pluginLoc[me.__name],
+                link,
+                linkParams,
+                mapUrl,
+                termsUrl;
+
+            if (me.conf) {
+                mapUrl = sandbox.getLocalizedProperty(me.conf.mapUrlPrefix);
+                termsUrl = sandbox.getLocalizedProperty(me.conf.termsUrl);
+            }
+
+            if (!me.element) {
+                me.element = me.templates.main.clone();
+            }
+
+            parentContainer.append(me.element);
+            link = me.element.find('div.icon');
+            if (mapUrl) {
+                link.bind('click', function () {
+                    linkParams = sandbox.generateMapLinkParameters();
+                    mapUrl += linkParams;
+                    window.open(mapUrl, '_blank');
+                    return false;
+                });
+            }
+
+            link = me.element.find('a');
+            if (termsUrl) {
+                link.append(myLoc.terms);
+                link.bind('click', function () {
+                    window.open(termsUrl, '_blank');
+                    return false;
+                });
+            } else {
+                link.hide();
+            }
+        },
+
+        /**
+         * Changes the font used by plugin by adding a CSS class to its DOM elements.
+         *
+         * @method changeFont
+         * @param {String} fontId
+         * @param {jQuery} div
+         */
+        changeFont: function (fontId, div) {
+            var classToAdd,
+                testRegex;
+            div = div || this.element;
+
+            if (!div || !fontId) {
+                return;
+            }
+
+            classToAdd = 'oskari-publisher-font-' + fontId;
+            testRegex = /oskari-publisher-font-/;
+
+            this.getMapModule().changeCssClasses(classToAdd, testRegex, [div]);
+        }
+    }, {
+        /**
+         * @property {String[]} protocol array of superclasses as {String}
+         * @static
+         */
+        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+    });
 define("bundles/framework/bundle/mapmodule-plugin/plugin/logo/LogoPlugin", function(){});
 
 requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/mapmodule-plugin/plugin/logo/css/logoplugin.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
@@ -23371,7 +22459,9 @@ function(config) {
         this.templateCheckbox = jQuery("<input type='checkbox' />");
         this.templateRadiobutton = jQuery("<input type='radio' name='defaultBaselayer'/>");
     	this.templateBaseLayerHeader = jQuery('<div class="baseLayerHeader"></div>');
-        
+
+        this.templateHeaderArrow = jQuery('<div class="styled-header-arrow"></div>');
+        this.templateContentHeader = jQuery('<div class="content-header"><div class="content-header-title"></div><div class="content-close icon-close-white"></div></div>');
     },
     /**
      * @method startPlugin
@@ -23780,7 +22870,8 @@ function(config) {
      */
     _createUI : function() {
         var me = this;
-        if(!this.element) {
+
+        if (!this.element) {
             this.element = this.template.clone();
         }
         
@@ -23823,6 +22914,76 @@ function(config) {
         		existingPlugins.first().before(this.element);
         	}
         }
+
+        if (this.conf && this.conf.toolStyle) {
+            this.changeToolStyle(this.conf.toolStyle, this.element);
+        }
+
+        if (this.conf && this.conf.font) {
+            this.changeFont(this.conf.font, this.element);
+        }
+    },
+
+    /**
+     * Changes the tool style of the plugin
+     *
+     * @method changeToolStyle
+     * @param {String} styleName
+     * @param {jQuery} div
+     */
+    changeToolStyle: function(styleName, div) {
+        div = div || this.element;
+
+        if (!div || !styleName) return;
+
+        var self = this,
+            pluginLoc = this.getMapModule().getLocalization('plugin', true),
+            header = div.find('div.header'),
+            headerArrow = this.templateHeaderArrow.clone(),
+            content = div.find('div.content'),
+            contentHeader = this.templateContentHeader.clone(),
+            resourcesPath = this.getMapModule().getImageUrl(),
+            imgPath = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/layers/images/',
+            bgImg = imgPath + 'map-layer-button-' + styleName + '.png';
+
+        div.addClass('published-styled-layerselector');
+        content.addClass('published-styled-layerselector-content');
+        header.addClass('published-styled-layerselector-header');
+
+        content.find('div.content-header').remove();
+        content.find('div.styled-header-arrow').remove();
+        contentHeader.find('div.content-header-title').append(pluginLoc[this.__name].title);
+        content.prepend(contentHeader);
+        content.prepend(headerArrow);
+
+        contentHeader.find('div.content-close').on('click', function() {
+            self.closeSelection();
+        });
+
+        content.addClass('layerselection-styled-content');
+
+        header.empty();
+        header.css({
+            'background-image': 'url("' + bgImg + '")'
+        });
+    },
+
+    /**
+     * Changes the font used by plugin by adding a CSS class to its DOM elements.
+     *
+     * @method changeFont
+     * @param {String} fontId
+     * @param {jQuery} div
+     */
+    changeFont: function(fontId, div) {
+        div = div || this.element;
+
+        if (!div || !fontId) return;
+
+        var classToAdd = 'oskari-publisher-font-' + fontId;
+        var testRegex = /oskari-publisher-font-/;
+
+        this.getMapModule().changeCssClasses(classToAdd, testRegex, [div]);
     }
 }, {
     /**
@@ -26239,9 +25400,9 @@ function(config) {
         
         jQuery(me.__parent).append(me.__elements['zoombarSlider']);
 
-       	var sliderEl = me.__elements['zoombarSlider'].find('div.slider');
-       	sliderEl.css("height",(this._map.getNumZoomLevels()*11)+"px");
-       	me._slider = sliderEl.slider({
+        var sliderEl = me.__elements['zoombarSlider'].find('div.slider');
+        sliderEl.css("height",(this._map.getNumZoomLevels()*11)+"px");
+        me._slider = sliderEl.slider({
             orientation: "vertical",
             range: "min",
             min: 0,
@@ -26254,7 +25415,6 @@ function(config) {
         
        
         var plus = me.__elements['zoombarSlider'].find('.pzbDiv-plus');
-       
         plus.bind('click', function(event) {
             if(me._slider.slider('value') < me._map.getNumZoomLevels()) {
                 me.getMapModule().zoomTo(me._slider.slider('value') + 1);
@@ -26269,6 +25429,11 @@ function(config) {
         // override default location if configured
         if(this._conf && this._conf.location) {
             me.setZoombarLocation(this._conf.location, me.__elements['zoombarSlider']);
+        }
+
+        // Change the style if in the conf
+        if (me._conf && me._conf.toolStyle) {
+            me.changeToolStyle(me._conf.toolStyle, me.__elements['zoombarSlider']);
         }
     },
     /**
@@ -26353,6 +25518,63 @@ function(config) {
      * Module protocol method - does nothing atm
      */
     stop : function(sandbox) {
+    },
+
+    /**
+     * Changes the tool style of the plugin
+     *
+     * @method changeToolStyle
+     * @param {Object} style
+     * @param {jQuery} div
+     */
+    changeToolStyle: function(style, div) {
+        div = div || this.__elements['zoombarSlider'];
+
+        if (!style || !div) return;
+
+        var resourcesPath = this.getMapModule().getImageUrl(),
+            imgUrl = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/',
+            styleName = style.val,
+            zoombarImg = imgUrl + 'zoombar-' + styleName + '.png',
+            zoombarCursorImg = imgUrl + 'zoombar-cursor-' + styleName + '.png',
+            zoombarMinusImg = imgUrl + 'zoombar_minus-' + styleName + '.png',
+            zoombarPlusImg = imgUrl + 'zoombar_plus-' + styleName + '.png',
+            bar = div.find('.ui-slider-vertical'),
+            cursor = div.find('.ui-slider-handle'),
+            plus = div.find('.pzbDiv-plus'),
+            minus = div.find('.pzbDiv-minus'),
+            slider = div.find('div.slider');
+
+        // Used to get the cursor to the right position since
+        // it's off by 2 pixels with the 'rounded' style.
+        var isRounded = styleName.match(/^rounded/);
+
+        var sliderHeight = this._map.getNumZoomLevels() * style.heightCenter;
+
+        bar.css({
+            'background-image': 'url("' + zoombarImg + '")',
+            'width': style.widthCenter,
+            'margin-left': '0'
+        });
+        cursor.css({
+            'background-image': 'url("' + zoombarCursorImg + '")',
+            'width': style.widthCursor,
+            'height': style.heightCursor,
+            'margin-left': (isRounded ? '2px' : '0')
+        });
+        plus.css({
+            'background-image': 'url("' + zoombarPlusImg + '")',
+            'width': style.widthPlus,
+            'height': style.heightPlus
+        });
+        minus.css({
+            'background-image': 'url("' + zoombarMinusImg + '")',
+            'width': style.widthMinus,
+            'height': style.heightMinus
+        });
+        slider.css({
+            'height': sliderHeight + 'px'
+        });
     }
 }, {
     /**
@@ -26619,16 +25841,20 @@ function(config) {
         var panbuttonDivImg = pb.find('.panbuttonDivImg');
         // update path from config
         panbuttonDivImg.attr('src', pbimg + "empty.png");
+
+        if (me.__conf && me.__conf.toolStyle) {
+            me.changeToolStyle(me.__conf.toolStyle, pb);
+        }
         
         var center = pb.find('.panbuttons_center');
 
         center.bind('mouseover', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'root.png');
-			panbuttonDivImg.addClass("root");
+            panbuttonDivImg.addClass("root");
         });
         center.bind('mouseout', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'default.png');
-			panbuttonDivImg.removeClass("root");
+            panbuttonDivImg.removeClass("root");
         });
         center.bind('click', function(event) {
             var rn = 'StateHandler.SetStateRequest';
@@ -26645,11 +25871,11 @@ function(config) {
         var left = pb.find('.panbuttons_left');
         left.bind('mouseover', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'left.png');
-			panbuttonDivImg.addClass("left");
+            panbuttonDivImg.addClass("left");
         });
         left.bind('mouseout', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'default.png');
-			panbuttonDivImg.removeClass("left");
+            panbuttonDivImg.removeClass("left");
         });
         left.bind('click', function(event) {
             me.getMapModule().panMapByPixels(-100, 0, true);
@@ -26658,11 +25884,11 @@ function(config) {
         var right = pb.find('.panbuttons_right');
         right.bind('mouseover', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'right.png');
-			panbuttonDivImg.addClass("right");
+            panbuttonDivImg.addClass("right");
         });
         right.bind('mouseout', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'default.png');
-			panbuttonDivImg.removeClass("right");
+            panbuttonDivImg.removeClass("right");
         });
         right.bind('click', function(event) {
             me.getMapModule().panMapByPixels(100, 0, true);
@@ -26671,11 +25897,11 @@ function(config) {
         var top = pb.find('.panbuttons_up');
         top.bind('mouseover', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'up.png');
-			panbuttonDivImg.addClass("up");
+            panbuttonDivImg.addClass("up");
         });
         top.bind('mouseout', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'default.png');
-			panbuttonDivImg.removeClass("up");
+            panbuttonDivImg.removeClass("up");
         });
         top.bind('click', function(event) {
             me.getMapModule().panMapByPixels(0, -100, true);
@@ -26684,11 +25910,11 @@ function(config) {
         var bottom = pb.find('.panbuttons_down');
         bottom.bind('mouseover', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'down.png');
-			panbuttonDivImg.addClass("down");
+            panbuttonDivImg.addClass("down");
         });
         bottom.bind('mouseout', function(event) {
             //panbuttonDivImg.attr('src', pbimg + 'default.png');
-			panbuttonDivImg.removeClass("down");
+            panbuttonDivImg.removeClass("down");
         });
         bottom.bind('click', function(event) {
             me.getMapModule().panMapByPixels(0, 100, true);
@@ -26726,6 +25952,28 @@ function(config) {
      * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
      */
     stop : function(sandbox) {
+    },
+
+    /**
+     * Changes the tool style of the plugin
+     *
+     * @method changeToolStyle
+     * @param {Object} styleName
+     * @param {jQuery} div
+     */
+    changeToolStyle: function(styleName, div) {
+        div = div || this.__elements['panbuttons'];
+
+        if (!styleName || !div) return;
+
+        var resourcesPath = this.getMapModule().getImageUrl(),
+            imgUrl = resourcesPath + '/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/',
+            bgImg = imgUrl + 'panbutton-sprites-' + styleName + '.png',
+            panButtons = div.find('img.panbuttonDivImg');
+
+        panButtons.css({
+            'background-image': 'url("' + bgImg + '")'
+        });
     }
 }, {
     /**
@@ -27344,9 +26592,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
 
             extensionInfo.draggableHandle = handle;
             extensionInfo.draggableTarget = flyoutTarget;
-
-            /* jQueryUI won't work without this */
-            flyout.css("position", "absolute");
 
             extensionInfo.draggable = $(flyout).draggable({
                 handle: jQuery(handle),
@@ -28837,8 +28082,8 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
         }
         this.template = jQuery('<div class="oskariTabs">' + this.emptyMsg + '</div>');
 
-        this.templateTabs = jQuery('<div class="tabsHeader"><ul></ul></div><br clear="all"/>' +
-            '<div class="tabsContent"></div>');
+        this.templateTabs = jQuery('<div class="tabsHeader"><ul class="tabsItem"></ul></div><br clear="all"/>' +
+            '<div class="tabsContent tabsContentItem"></div>');
 
         this.ui = this.template.clone();
     }, {
@@ -28848,7 +28093,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * The first tab is selected as active immediately on add.
          * @param {Oskari.userinterface.component.TabPanel} panel
          */
-        addPanel: function (panel) {
+        addPanel: function (panel, first) {
             var me = this,
                 content,
                 headerContainer,
@@ -28858,11 +28103,17 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
                 content = this.templateTabs.clone();
                 this.ui.html(content);
             }
-            headerContainer = this.ui.find('ul');
-            header = panel.getHeader();
-            headerContainer.append(header);
 
-            panel.insertTo(this.ui.find('div.tabsContent'));
+            // ensure order is correct
+            headerContainer = this.ui.find('ul.tabsItem');
+            header = panel.getHeader();
+            if (first) {
+                headerContainer.prepend(header);
+            } else {
+                headerContainer.append(header);
+            }
+
+            panel.insertTo(this.ui.find('div.tabsContentItem'));
             this.panels.push(panel);
             if (this.panels.length === 1) {
                 // select first by default
@@ -28988,184 +28239,204 @@ define("bundles/framework/bundle/divmanazer/component/TabContainer", function(){
  */
 Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
 
-    /**
-     * @method create called automatically on construction
-     * @static
-     * @param {String} pEmptyMsg message that will be displayed if there is no tabs added
-     */
-
-    function (pEmptyMsg) {
-        this.panels = [];
-        this.tabChangeListeners = [];
-        if (pEmptyMsg) {
-            this.emptyMsg = pEmptyMsg;
-        } else {
-            this.emptyMsg = 'No content';
-        }
-        this.template = jQuery('<div class="oskariTabs">' + this.emptyMsg + '</div>');
-        this.templateTabOption = jQuery('<option></option>');
-
-        this.templateTabs = jQuery('<div class="tabsHeader"><ul><li><select name="tabs"></select></li></ul></div><br clear="all"/>' +
+/**
+ * @method create called automatically on construction
+ * @static
+ * @param {String} pEmptyMsg message that will be displayed if there is no tabs added
+ */
+function(pEmptyMsg) {
+    
+    this.panels = [];
+    this.tabChangeListeners = [];
+    if(pEmptyMsg) {
+        this.emptyMsg = pEmptyMsg;
+    }
+    else {
+        this.emptyMsg = 'No content';
+    }
+    this.template = jQuery('<div class="oskariTabs">' + this.emptyMsg + '</div>');
+    this.templateTabOption = jQuery('<option></option>');
+            
+    this.templateTabs = jQuery('<div class="tabsHeader"><ul><li><select name="tabs"></select></li></ul></div><br clear="all"/>' +
             '<div class="tabsContent"></div>');
+            
+    this.ui = this.template.clone();
+}, {
+    /**
+     * @method addPanel
+     * Adds the given panel to the set of tabs shown.
+     * The first tab is selected as active immediately on add.
+     * @param {Oskari.userinterface.component.TabPanel} panel
+     */
+    addPanel : function(panel) {
+        var me = this;
+        if(this.panels.length == 0) {
+            var content = this.templateTabs.clone();
+            this.ui.html(content);
+        }
+        var headerContainer = this.ui.find('ul li select');
+        
+        var header = this.templateTabOption.clone();
+        header.attr('id', 'layer-id-'+panel.getId());
+        header.append(panel.getTitle());
+        headerContainer.append(header);
+        panel.setHeader(header);
+        
+        panel.insertTo(this.ui.find('div.tabsContent'));
+        this.panels.push(panel);
+        if(this.panels.length == 1) {
+            // select first by default
+            this.select(panel);
+            headerContainer.bind("change", function() {
+                me.select(me.panels[this.selectedIndex]); 
+            });
+        }        
+    },
 
-        this.ui = this.template.clone();
-    }, {
-        /**
-         * @method addPanel
-         * Adds the given panel to the set of tabs shown.
-         * The first tab is selected as active immediately on add.
-         * @param {Oskari.userinterface.component.TabPanel} panel
-         */
-        addPanel: function (panel) {
-            var me = this,
-                content,
-                headerContainer,
-                header;
-            if (this.panels.length === 0) {
-                content = this.templateTabs.clone();
-                this.ui.html(content);
+    /**
+     * @method updatePanel
+     * Updates the header of the given panel.
+     * @param {Oskari.userinterface.component.TabPanel} panel
+     */
+    updatePanel: function(panel) {
+        var me = this;
+
+        var headerContainer = this.ui.find('ul li select');
+
+        for (var i = 0; i < headerContainer.find('option').length; i++) {
+            var header = jQuery(headerContainer.find('option')[i]);
+            if (header.attr('id') == 'layer-id-' + panel.getId()) {
+                header.html(panel.getTitle());
             }
-            headerContainer = this.ui.find('ul li select');
+        };
+    },
 
-            header = this.templateTabOption.clone();
-            header.append(panel.getTitle());
-            headerContainer.append(header);
-            panel.setHeader(header);
-
-            panel.insertTo(this.ui.find('div.tabsContent'));
-            this.panels.push(panel);
-            if (this.panels.length === 1) {
-                // select first by default
-                this.select(panel);
-                headerContainer.bind("change", function () {
-                    me.select(me.panels[this.selectedIndex]);
-                });
-            }
-
-        },
-        /**
-         * @method addTabChangeListener
-         * Adds a listener function that should be called when tab selection changes
-         * (tab is selected).
-         * The function will receive two parameters:
-         * - first the previously selected panel
-         * - second the newly selected panel
-         * function(previousTab, newTab)
-         * If previousTab is undefined, this was the first tab added.
-         * If newTab is undefined, all tabs have been removed.
-         * @param {Function} pCallback function to call when tabs are changed
-         */
-        addTabChangeListener: function (pCallback) {
-            this.tabChangeListeners.push(pCallback);
-        },
-
-        /**
-         * @method select
-         * Selects the given panel programmatically and notifies tabChangeListeners if any.
-         * @param {Oskari.userinterface.component.TabPanel} panel
-         */
-        select: function (panel) {
-            var previousPanel = null,
-                i,
-                tabs,
-                headerContainer,
-                options,
-                panelIndex;
-            if (this.tabChangeListeners.length > 0) {
-                // get previous panel for listeners if any
-                for (i = 0; i < this.panels.length; i += 1) {
-                    if (this.isSelected(this.panels[i])) {
-                        previousPanel = this.panels[i];
-                        break;
-                    }
-                }
-            }
-            //var tabs = this.ui.find('> div.tab-content');
-            tabs = this.ui.children().children('div.tab-content');
-            tabs.hide();
-
-            headerContainer = this.ui.find('ul li select');
-            options = headerContainer.find('option');
-            options.removeAttr('selected');
-            panelIndex = this._getPanelIndex(panel);
-            jQuery(options[panelIndex]).attr('selected', 'selected');
-            panel.getContainer().show();
-            // notify listeners
-            for (i = 0; i < this.tabChangeListeners.length; i += 1) {
-                this.tabChangeListeners[i](previousPanel, panel);
-            }
-        },
-
-        /**
-         * @method isSelected
-         * Tests if given panel is currently selected/active
-         * @param {Oskari.userinterface.component.TabPanel} pPanel
-         * @return {Boolean} true if given panel is currently selected
-         */
-        isSelected: function (panel) {
-            var headerContainer = this.ui.find('ul li select :selected');
-            return headerContainer.index() === this._getPanelIndex(panel);
-        },
-        /**
-         * @method _getPanelIndex
-         * Returns the index location for the panel
-         * @private
-         * @param {Oskari.userinterface.component.TabPanel} pPanel
-         * @return {Number} panels index or -1 if not found
-         */
-        _getPanelIndex: function (panel) {
-            var i;
-            for (i = 0; i < this.panels.length; i += 1) {
-                if (this.panels[i] === panel) {
-                    return i;
-                }
-            }
-            return -1;
-        },
-        /**
-         * @method addPanel
-         * Removes the given panel from the set of tabs shown.
-         * The first tab is selected as active if currently selected tab is removed.
-         * If the tab was the last one, tabchangelisteners will receive the second parameter as undefined.
-         * @param {Oskari.userinterface.component.TabPanel} pPanel
-         */
-        removePanel: function (pPanel) {
-            var panel = null,
-                i;
-            for (i = 0; i < this.panels.length; i += 1) {
-                if (this.panels[i] === pPanel) {
-                    panel = this.panels[i];
-                    this.panels.splice(i, 1);
+    /**
+     * @method addTabChangeListener
+     * Adds a listener function that should be called when tab selection changes
+     * (tab is selected).
+     * The function will receive two parameters:
+     * - first the previously selected panel
+     * - second the newly selected panel
+     * function(previousTab, newTab)
+     * If previousTab is undefined, this was the first tab added.
+     * If newTab is undefined, all tabs have been removed.
+     * @param {Function} pCallback function to call when tabs are changed
+     */
+    addTabChangeListener : function(pCallback) {
+        this.tabChangeListeners.push(pCallback);
+    },
+    
+    /**
+     * @method select
+     * Selects the given panel programmatically and notifies tabChangeListeners if any.
+     * @param {Oskari.userinterface.component.TabPanel} panel
+     */
+    select : function(panel) {
+        var previousPanel = null;
+        if(this.tabChangeListeners.length > 0) {
+            // get previous panel for listeners if any
+            for(var i = 0; i < this.panels.length; i++) {
+                if(this.isSelected(this.panels[i])) {
+                    previousPanel = this.panels[i];
                     break;
                 }
             }
-            if (this.panels.length === 0) {
-                this.ui.html(this.emptyMsg);
-                for (i = 0; i < this.tabChangeListeners.length; i += 1) {
-                    // notify tabs have changed
-                    // giving only removed panel & new panel as undefined -> should be considered all tabs were removed
-                    this.tabChangeListeners[i](pPanel);
-                }
-            } else {
-                this.select(this.panels[0]);
-            }
-            if (panel) {
-                panel.destroy();
-                // TODO: remove header
-                // notify components of layer removal
-                return true;
-            }
-            return false;
-        },
-        /**
-         * @method insertTo
-         * Adds this set of tabs to given container.
-         * @param {jQuery} container reference to DOM element
-         */
-        insertTo: function (container) {
-            container.append(this.ui);
         }
-    });
+        //var tabs = this.ui.find('> div.tab-content');
+        var tabs = this.ui.children().children('div.tab-content');
+        tabs.hide();
+        
+        var headerContainer = this.ui.find('ul li select');
+        var options = headerContainer.find('option');
+        options.removeAttr('selected');
+        var panelIndex = this._getPanelIndex(panel);
+        jQuery(options[panelIndex]).attr('selected', 'selected');
+        panel.getContainer().show();
+        // notify listeners
+        for(var i = 0; i < this.tabChangeListeners.length; i++) {
+            this.tabChangeListeners[i](previousPanel, panel);
+        }
+    },
+    
+    /**
+     * @method isSelected
+     * Tests if given panel is currently selected/active
+     * @param {Oskari.userinterface.component.TabPanel} pPanel
+     * @return {Boolean} true if given panel is currently selected
+     */
+    isSelected : function(panel) {
+        var headerContainer = this.ui.find('ul li select :selected');
+        return headerContainer.index() == this._getPanelIndex(panel);
+    },
+    /**
+     * @method _getPanelIndex
+     * Returns the index location for the panel
+     * @private
+     * @param {Oskari.userinterface.component.TabPanel} pPanel
+     * @return {Number} panels index or -1 if not found
+     */
+    _getPanelIndex : function(panel) {
+        for(var i = 0; i < this.panels.length; i++) {
+            if(this.panels[i] == panel) {
+                return i;
+            }
+        }
+        return -1;
+    },
+    /**
+     * @method addPanel
+     * Removes the given panel from the set of tabs shown.
+     * The first tab is selected as active if currently selected tab is removed.
+     * If the tab was the last one, tabchangelisteners will receive the second parameter as undefined.
+     * @param {Oskari.userinterface.component.TabPanel} pPanel
+     */
+    removePanel : function(pPanel) {
+        var panel = null;
+        for(var i = 0; i < this.panels.length; i++) {
+            if(this.panels[i] === pPanel) {
+                panel = this.panels[i];
+                this.panels.splice(i, 1);
+                break;
+            }
+        }
+        //remove header
+        var headerContainer = this.ui.find('ul li select :selected');
+        for (var i = 0; i < headerContainer.length; i++) {
+            var header = jQuery(headerContainer[i]);
+            if (header.attr('id') == 'layer-id-' + panel.getId()) {
+                header.remove();
+            }
+        };
+
+        if(this.panels.length == 0) {
+            this.ui.html(this.emptyMsg);
+            for(var i = 0; i < this.tabChangeListeners.length; i++) {
+                // notify tabs have changed
+                // giving only removed panel & new panel as undefined -> should be considered all tabs were removed
+                this.tabChangeListeners[i](pPanel);
+            }
+        }
+        else {
+            this.select(this.panels[0]);
+        }
+        if(panel) {
+            panel.destroy();
+            // TODO: remove header
+            // notify components of layer removal
+            return true;
+        }
+        return false;
+    },
+    /**
+     * @method insertTo
+     * Adds this set of tabs to given container.
+     * @param {jQuery} container reference to DOM element
+     */
+    insertTo : function(container) {
+        container.append(this.ui);
+    }
+});
 
 define("bundles/framework/bundle/divmanazer/component/TabDropdownContainer", function(){});
 
@@ -29177,115 +28448,133 @@ define("bundles/framework/bundle/divmanazer/component/TabDropdownContainer", fun
  */
 Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
 
+/**
+ * @method create called automatically on construction
+ * @static
+ */
+function() {
+    this.template = jQuery('<div class="tab-content"></div>');
+    this.templateTabHeader = jQuery('<li><a href="JavaScript:void(0);"></a></li>');
+    this.id = null;
+    this.title = null;
+    this.content = null;
+    this.header = null;
+    this.selectionHandler = null;
+    this.html=this.template.clone();
+    this.html.hide();
+}, {
+
     /**
-     * @method create called automatically on construction
-     * @static
+     * @method setId
+     * Sets the panel id
+     * @param {String} pId id for the panel
      */
+    setId : function(pId) {
+        this.id = pId;
+    },
+    /**
+     * @method getId
+     * Returns the panel id
+     * @return {String} id for the panel
+     */
+    getId : function() {
+        return this.id;
+    },
 
-    function () {
-        this.template = jQuery('<div class="tab-content"></div>');
-        this.templateTabHeader = jQuery('<li><a href="JavaScript:void(0);"></a></li>');
-        this.title = null;
-        this.content = null;
-        this.header = null;
-        this.selectionHandler = null;
-        this.html = this.template.clone();
-        this.html.hide();
-    }, {
-        /**
-         * @method setTitle
-         * Sets the panel title
-         * @param {String} pTitle title for the panel
-         */
-        setTitle: function (pTitle) {
-            var header,
-                link;
-            this.title = pTitle;
-            header = this.templateTabHeader.clone();
-            this.header = header;
-            link = header.find('a');
-            link.html(this.getTitle());
-        },
-        /**
-         * @method getTitle
-         * Returns the panel title
-         * @return {String} title for the panel
-         */
-        getTitle: function () {
-            return this.title;
-        },
-        /**
-         * @method setHeader
-         * @return {jQuery} reference to header DOM element
-         * Sets the tabs header DOM element
-         */
-        setHeader: function (reference) {
-            this.header = reference;
-        },
-        /**
-         * @method getHeader
-         * @return {jQuery} reference to DOM element
-         * Returns the tabs header DOM element
-         */
-        getHeader: function () {
-            return this.header;
-        },
-        /**
-         * @method setContent
-         * Sets the panel content.
-         * This can be also done with #getContainer()
-         * @param {jQuery} pContent reference to DOM element
-         */
-        setContent: function (pContent) {
-            this.content = pContent;
-            this.html.html(this.content);
-        },
-        /**
-         * @method destroy
-         * Destroys the panel/removes it from document
-         */
-        destroy: function () {
-            this.header.remove();
-            this.html.remove();
-        },
-        /**
-         * @method getContainer
-         * Returns this panels content container which can be populated.
-         * This can be also done with #setContent().
-         * @return {jQuery} reference to this panels content DOM element
-         */
-        getContainer: function () {
-            return this.html;
-        },
+    /**
+     * @method setTitle
+     * Sets the panel title
+     * @param {String} pTitle title for the panel
+     */
+    setTitle: function (pTitle) {
+        var header,
+            link;
+        this.title = pTitle;
+        header = this.templateTabHeader.clone();
+        this.header = header;
+        link = header.find('a');
+        link.html(this.getTitle());
+    },
+    /**
+     * @method getTitle
+     * Returns the panel title
+     * @return {String} title for the panel
+     */
+    getTitle: function () {
+        return this.title;
+    },
+    /**
+     * @method setHeader
+     * @return {jQuery} reference to header DOM element
+     * Sets the tabs header DOM element
+     */
+    setHeader: function (reference) {
+        this.header = reference;
+    },
+    /**
+     * @method getHeader
+     * @return {jQuery} reference to DOM element
+     * Returns the tabs header DOM element
+     */
+    getHeader: function () {
+        return this.header;
+    },
+    /**
+     * @method setContent
+     * Sets the panel content.
+     * This can be also done with #getContainer()
+     * @param {jQuery} pContent reference to DOM element
+     */
+    setContent: function (pContent) {
+        this.content = pContent;
+        this.html.html(this.content);
+    },
+    /**
+     * @method destroy
+     * Destroys the panel/removes it from document
+     */
+    destroy: function () {
+        this.header.remove();
+        this.html.remove();
+    },
+    /**
+     * @method getContainer
+     * Returns this panels content container which can be populated.
+     * This can be also done with #setContent().
+     * @return {jQuery} reference to this panels content DOM element
+     */
+    getContainer: function () {
+        return this.html;
+    },
 
-        /**
-         * @method setSelectionHandler
-         * Sets a handler function that is called when the panel is selected or unselected.
-         * The function receives a boolean parameter indicating if the panel was selected (true) or unselected(false)
-         * @param {Function} pHandler handler function
-         */
-        setSelectionHandler: function (pHandler) {
-            this.selectionHandler = pHandler;
-        },
-        /**
-         * @method handleSelection
-         * @param {Boolean} true if panel was selected, false if unselected
-         */
-        handleSelection: function (isSelected) {
-            if (this.selectionHandler) {
-                this.selectionHandler(isSelected === true);
-            }
-        },
-        /**
-         * @method insertTo
-         * Adds this panel to given container.
-         * Usually used by Oskari.userinterface.component.TabContainer internally.
-         * @param {jQuery} container reference to DOM element
-         */
-        insertTo: function (container) {
-            container.append(this.html);
+    /**
+     * @method setSelectionHandler
+     * Sets a handler function that is called when the panel is selected or unselected.
+     * The function receives a boolean parameter indicating if the panel was selected (true) or unselected(false)
+     * @param {Function} pHandler handler function
+     */
+    setSelectionHandler: function (pHandler) {
+        this.selectionHandler = pHandler;
+    },
+    /**
+     * @method handleSelection
+     * @param {Boolean} true if panel was selected, false if unselected
+     */
+    handleSelection: function (isSelected) {
+        if (this.selectionHandler) {
+            this.selectionHandler(isSelected === true);
         }
-    });
+    },
+    /**
+     * @method insertTo
+     * Adds this panel to given container.
+     * Usually used by Oskari.userinterface.component.TabContainer internally.
+     * @param {jQuery} container reference to DOM element
+     */
+    insertTo: function (container) {
+        container.append(this.html);
+    }
+});
 
 define("bundles/framework/bundle/divmanazer/component/TabPanel", function(){});
 
@@ -29426,7 +28715,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
      */
 
     function () {
-        this.template = jQuery('<div class="divmanazerpopup"><h3></h3><div class="content"></div><div class="actions"></div></div>');
+        this.template = jQuery('<div class="divmanazerpopup"><h3 class="popupHeader"></h3><div class="content"></div><div class="actions"></div></div>');
         this.templateButton = jQuery('<div class="button"><a href="JavaScript:void(0);"></a></div>');
         this.dialog = this.template.clone();
         this.overlay = null;
@@ -30008,7 +29297,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         this.template = jQuery('<div class="oskarifield"><label></label><input type="text" autofocus/></div>');
         this.templateErrors = jQuery('<div class="error"></div>');
         this.templateTooltip = jQuery('<div class="icon-info"></div>');
-        this.templateClearButton = jQuery('<div class="icon-close" style="margin-left: 0px; position: relative; display: inline-block; left: -20px; top: 3px;"></div>');
+        this.templateClearButton = jQuery('<div class="icon-close"></div>');
         this._field = this.template.clone();
 
         label = this._field.find('label');
@@ -30127,7 +29416,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             if (blnFilteredValue) {
                 value = value.match(this._regExp);
             }
-            return value;
+            return String(value);
         },
         /**
          * @method setValue
@@ -33254,18 +32543,92 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultLayout',
 
 define("bundles/framework/bundle/divmanazer/extension/DefaultLayout", function(){});
 
+/**
+ * @class Oskari.userinterface.extension.EnhancedTile
+ * 
+ * Enhanced Menu Tile implementation which assumes a locale
+ * of kind
+ * {
+ *     "title" : "<title shown to user>",
+ *     "description" : "<a longer localised description>"
+ * } 
+ * 
+ */
+Oskari.clazz.define('Oskari.userinterface.extension.EnhancedTile',
+
+/**
+ * @method create called automatically on construction
+ * @static
+ *
+ * Always extend this class, never use as is.
+ */
+function() {
+  
+}, {
+    /**
+     * @method getName
+     * @return {String} tile implementation name
+     */
+    getName : function() {
+        return 'Oskari.userinterface.extension.EnhancedTile';
+    }   
+    
+}, {
+    'protocol' : ['Oskari.userinterface.Tile'],
+    "extend" : ["Oskari.userinterface.extension.DefaultTile"]
+});
+
+define("bundles/framework/bundle/divmanazer/extension/EnhancedTile", function(){});
+
+/**
+ * @class Oskari.userinterface.extension.EnhancedTile
+ *
+ * Enhanced Menu Tile implementation which assumes a locale
+ * of kind
+ * {
+ *     "title" : "<title shown to user>",
+ *     "description" : "<a longer localised description>"
+ * }
+ *
+ */
+Oskari.clazz.define('Oskari.userinterface.extension.EnhancedView',
+
+/**
+ * @method create called automatically on construction
+ * @static
+ *
+ * Always extend this class, never use as is.
+ */
+function() {
+
+}, {
+    /**
+     * @method getName
+     * @return {String} tile implementation name
+     */
+    getName : function() {
+        return 'Oskari.userinterface.extension.EnhancedView';
+    }
+}, {
+    'protocol' : ['Oskari.userinterface.View'],
+    "extend" : ["Oskari.userinterface.extension.DefaultView"]
+});
+
+define("bundles/framework/bundle/divmanazer/extension/EnhancedView", function(){});
+
 requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/divman.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/accordion.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/tab.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/modal.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/badge.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/alert.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/forminput.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/grid.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/popup.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/button.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/overlay.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
 requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.addBuffer('resources/framework/bundle/divmanazer/css/popover.css'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick;
-define('bundles/framework/bundle/divmanazer/module',["oskari","jquery","./instance","./request/AddExtensionRequest","./request/AddExtensionRequestHandler","./request/RemoveExtensionRequest","./request/RemoveExtensionRequestHandler","./request/UpdateExtensionRequest","./request/UpdateExtensionRequestHandler","./request/ModalDialogRequest","./request/ModalDialogRequestHandler","./event/ExtensionUpdatedEvent","./component/Accordion","./component/AccordionPanel","./component/TabContainer","./component/TabDropdownContainer","./component/TabPanel","./component/Badge","./component/Alert","./component/Popup","./component/Overlay","./component/Button","./component/Form","./component/UIHelper","./component/FormInput","./component/Popover","./component/Grid","./component/GridModel","./component/ProgressSpinner","./extension/DefaultTile","./extension/DefaultFlyout","./extension/EnhancedFlyout","./extension/DefaultExtension","./extension/EnhancedExtension","./extension/DefaultView","./extension/DefaultLayout","css!resources/framework/bundle/divmanazer/css/divman.css","css!resources/framework/bundle/divmanazer/css/accordion.css","css!resources/framework/bundle/divmanazer/css/tab.css","css!resources/framework/bundle/divmanazer/css/modal.css","css!resources/framework/bundle/divmanazer/css/badge.css","css!resources/framework/bundle/divmanazer/css/alert.css","css!resources/framework/bundle/divmanazer/css/grid.css","css!resources/framework/bundle/divmanazer/css/popup.css","css!resources/framework/bundle/divmanazer/css/button.css","css!resources/framework/bundle/divmanazer/css/overlay.css","css!resources/framework/bundle/divmanazer/css/popover.css"], function(Oskari,jQuery) {
+define('bundles/framework/bundle/divmanazer/module',["oskari","jquery","./instance","./request/AddExtensionRequest","./request/AddExtensionRequestHandler","./request/RemoveExtensionRequest","./request/RemoveExtensionRequestHandler","./request/UpdateExtensionRequest","./request/UpdateExtensionRequestHandler","./request/ModalDialogRequest","./request/ModalDialogRequestHandler","./event/ExtensionUpdatedEvent","./component/Accordion","./component/AccordionPanel","./component/TabContainer","./component/TabDropdownContainer","./component/TabPanel","./component/Badge","./component/Alert","./component/Popup","./component/Overlay","./component/Button","./component/Form","./component/UIHelper","./component/FormInput","./component/Popover","./component/Grid","./component/GridModel","./component/ProgressSpinner","./extension/DefaultTile","./extension/DefaultFlyout","./extension/EnhancedFlyout","./extension/DefaultExtension","./extension/EnhancedExtension","./extension/DefaultView","./extension/DefaultLayout","./extension/EnhancedTile","./extension/EnhancedFlyout","./extension/EnhancedExtension","./extension/EnhancedView","css!resources/framework/bundle/divmanazer/css/divman.css","css!resources/framework/bundle/divmanazer/css/accordion.css","css!resources/framework/bundle/divmanazer/css/tab.css","css!resources/framework/bundle/divmanazer/css/modal.css","css!resources/framework/bundle/divmanazer/css/badge.css","css!resources/framework/bundle/divmanazer/css/alert.css","css!resources/framework/bundle/divmanazer/css/forminput.css","css!resources/framework/bundle/divmanazer/css/grid.css","css!resources/framework/bundle/divmanazer/css/popup.css","css!resources/framework/bundle/divmanazer/css/button.css","css!resources/framework/bundle/divmanazer/css/overlay.css","css!resources/framework/bundle/divmanazer/css/popover.css"], function(Oskari,jQuery) {
     return Oskari.bundleCls("divmanazer").category({create: function () {
 
         return Oskari.clazz.create("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance");
@@ -33428,4 +32791,4 @@ require(["mainConfig"], function() {
 });
 define("applications/oskari2/full-map_guest/main-dev", function(){});
 
-requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.setBuffer('div.olMap {\r\n    z-index: 0;\r\n    padding: 0 !important;\r\n    margin: 0 !important;\r\n    cursor: default;\r\n}\r\n\r\ndiv.olMapViewport {\r\n    text-align: left;\r\n}\r\n\r\ndiv.olLayerDiv {\r\n   -moz-user-select: none;\r\n   -khtml-user-select: none;\r\n}\r\n\r\n.olLayerGoogleCopyright {\r\n    left: 2px;\r\n    bottom: 2px;\r\n}\r\n.olLayerGoogleV3.olLayerGoogleCopyright {\r\n    right: auto !important;\r\n}\r\n.olLayerGooglePoweredBy {\r\n    left: 2px;\r\n    bottom: 15px;\r\n}\r\n.olLayerGoogleV3.olLayerGooglePoweredBy {\r\n    bottom: 15px !important;\r\n}\r\n.olControlAttribution {\r\n    font-size: smaller;\r\n    right: 3px;\r\n    bottom: 4.5em;\r\n    position: absolute;\r\n    display: block;\r\n}\r\n.olControlScale {\r\n    right: 3px;\r\n    bottom: 3em;\r\n    display: block;\r\n    position: absolute;\r\n    font-size: smaller;\r\n}\r\n.olControlScaleLine {\r\n   display: block;\r\n   position: absolute;\r\n   left: 10px;\r\n   bottom: 15px;\r\n   font-size: xx-small;\r\n}\r\n.olControlScaleLineBottom {\r\n   border: solid 2px black;\r\n   border-bottom: none;\r\n   margin-top:-2px;\r\n   text-align: center;\r\n}\r\n.olControlScaleLineTop {\r\n   border: solid 2px black;\r\n   border-top: none;\r\n   text-align: center;\r\n}\r\n\r\n.olControlPermalink {\r\n    right: 3px;\r\n    bottom: 1.5em;\r\n    display: block;\r\n    position: absolute;\r\n    font-size: smaller;\r\n}\r\n\r\ndiv.olControlMousePosition {\r\n    bottom: 0;\r\n    right: 3px;\r\n    display: block;\r\n    position: absolute;\r\n    font-family: Arial;\r\n    font-size: smaller;\r\n}\r\n\r\n.olControlOverviewMapContainer {\r\n    position: absolute;\r\n    bottom: 0;\r\n    right: 0;\r\n}\r\n\r\n.olControlOverviewMapElement {\r\n    padding: 10px 18px 10px 10px;\r\n    background-color: #00008B;\r\n    -moz-border-radius: 1em 0 0 0;\r\n}\r\n\r\n.olControlOverviewMapMinimizeButton,\r\n.olControlOverviewMapMaximizeButton {\r\n    height: 18px;\r\n    width: 18px;\r\n    right: 0;\r\n    bottom: 80px;\r\n    cursor: pointer;\r\n}\r\n\r\n.olControlOverviewMapExtentRectangle {\r\n    overflow: hidden;\r\n    background-image: url(\"resources/openlayers/theme/default/img/blank.gif\");\r\n    cursor: move;\r\n    border: 2px dotted red;\r\n}\r\n.olControlOverviewMapRectReplacement {\r\n    overflow: hidden;\r\n    cursor: move;\r\n    background-image: url(\"resources/openlayers/theme/default/img/overview_replacement.gif\");\r\n    background-repeat: no-repeat;\r\n    background-position: center;\r\n}\r\n\r\n.olLayerGeoRSSDescription {\r\n    float:left;\r\n    width:100%;\r\n    overflow:auto;\r\n    font-size:1.0em;\r\n}\r\n.olLayerGeoRSSClose {\r\n    float:right;\r\n    color:gray;\r\n    font-size:1.2em;\r\n    margin-right:6px;\r\n    font-family:sans-serif;\r\n}\r\n.olLayerGeoRSSTitle {\r\n    float:left;font-size:1.2em;\r\n}\r\n\r\n.olPopupContent {\r\n    padding:5px;\r\n    overflow: auto;\r\n}\r\n\r\n.olControlNavigationHistory {\r\n   background-image: url(\"resources/openlayers/theme/default/img/navigation_history.png\");\r\n   background-repeat: no-repeat;\r\n   width:  24px;\r\n   height: 24px;\r\n\r\n}\r\n.olControlNavigationHistoryPreviousItemActive {\r\n  background-position: 0 0;\r\n}\r\n.olControlNavigationHistoryPreviousItemInactive {\r\n   background-position: 0 -24px;\r\n}\r\n.olControlNavigationHistoryNextItemActive {\r\n   background-position: -24px 0;\r\n}\r\n.olControlNavigationHistoryNextItemInactive {\r\n   background-position: -24px -24px;\r\n}\r\n\r\ndiv.olControlSaveFeaturesItemActive {\r\n    background-image: url(resources/openlayers/theme/default/img/save_features_on.png);\r\n    background-repeat: no-repeat;\r\n    background-position: 0 1px;\r\n}\r\ndiv.olControlSaveFeaturesItemInactive {\r\n    background-image: url(resources/openlayers/theme/default/img/save_features_off.png);\r\n    background-repeat: no-repeat;\r\n    background-position: 0 1px;\r\n}\r\n\r\n.olHandlerBoxZoomBox {\r\n    border: 2px solid red;\r\n    position: absolute;\r\n    background-color: white;\r\n    opacity: 0.50;\r\n    font-size: 1px;\r\n    filter: alpha(opacity=50);\r\n}\r\n.olHandlerBoxSelectFeature {\r\n    border: 2px solid blue;\r\n    position: absolute;\r\n    background-color: white;\r\n    opacity: 0.50;\r\n    font-size: 1px;\r\n    filter: alpha(opacity=50);\r\n}\r\n\r\n.olControlPanPanel {\r\n    top: 10px;\r\n    left: 5px;\r\n}\r\n\r\n.olControlPanPanel div {\r\n    background-image: url(resources/openlayers/theme/default/img/pan-panel.png);\r\n    height: 18px;\r\n    width: 18px;\r\n    cursor: pointer;\r\n    position: absolute;\r\n}\r\n\r\n.olControlPanPanel .olControlPanNorthItemInactive {\r\n    top: 0;\r\n    left: 9px;\r\n    background-position: 0 0;\r\n}\r\n.olControlPanPanel .olControlPanSouthItemInactive {\r\n    top: 36px;\r\n    left: 9px;\r\n    background-position: 18px 0;\r\n}\r\n.olControlPanPanel .olControlPanWestItemInactive {\r\n    position: absolute;\r\n    top: 18px;\r\n    left: 0;\r\n    background-position: 0 18px;\r\n}\r\n.olControlPanPanel .olControlPanEastItemInactive {\r\n    top: 18px;\r\n    left: 18px;\r\n    background-position: 18px 18px;\r\n}\r\n\r\n.olControlZoomPanel {\r\n    top: 71px;\r\n    left: 14px;\r\n}\r\n\r\n.olControlZoomPanel div {\r\n    background-image: url(resources/openlayers/theme/default/img/zoom-panel.png);\r\n    position: absolute;\r\n    height: 18px;\r\n    width: 18px;\r\n    cursor: pointer;\r\n}\r\n\r\n.olControlZoomPanel .olControlZoomInItemInactive {\r\n    top: 0;\r\n    left: 0;\r\n    background-position: 0 0;\r\n}\r\n\r\n.olControlZoomPanel .olControlZoomToMaxExtentItemInactive {\r\n    top: 18px;\r\n    left: 0;\r\n    background-position: 0 -18px;\r\n}\r\n\r\n.olControlZoomPanel .olControlZoomOutItemInactive {\r\n    top: 36px;\r\n    left: 0;\r\n    background-position: 0 18px;\r\n}\r\n\r\n/*\r\n * When a potential text is bigger than the image it move the image\r\n * with some headers (closes #3154)\r\n */\r\n.olControlPanZoomBar div {\r\n    font-size: 1px;\r\n}\r\n\r\n.olPopupCloseBox {\r\n  background: url(\"resources/openlayers/theme/default/img/close.gif\") no-repeat;\r\n  cursor: pointer;\r\n}\r\n\r\n.olFramedCloudPopupContent {\r\n    padding: 5px;\r\n    overflow: auto;\r\n}\r\n\r\n.olControlNoSelect {\r\n -moz-user-select: none;\r\n -khtml-user-select: none;\r\n}\r\n\r\n.olImageLoadError {\r\n    background-color: pink;\r\n    opacity: 0.5;\r\n    filter: alpha(opacity=50); /* IE */\r\n}\r\n\r\n/**\r\n * Cursor styles\r\n */\r\n\r\n.olCursorWait {\r\n    cursor: wait;\r\n}\r\n.olDragDown {\r\n    cursor: move;\r\n}\r\n.olDrawBox {\r\n    cursor: crosshair;\r\n}\r\n.olControlDragFeatureOver {\r\n    cursor: move;\r\n}\r\n.olControlDragFeatureActive.olControlDragFeatureOver.olDragDown {\r\n    cursor: -moz-grabbing;\r\n}\r\n\r\n/**\r\n * Layer switcher\r\n */\r\n.olControlLayerSwitcher {\r\n    position: absolute;\r\n    top: 25px;\r\n    right: 0;\r\n    width: 20em;\r\n    font-family: sans-serif;\r\n    font-weight: bold;\r\n    margin-top: 3px;\r\n    margin-left: 3px;\r\n    margin-bottom: 3px;\r\n    font-size: smaller;\r\n    color: white;\r\n    background-color: transparent;\r\n}\r\n\r\n.olControlLayerSwitcher .layersDiv {\r\n    padding-top: 5px;\r\n    padding-left: 10px;\r\n    padding-bottom: 5px;\r\n    padding-right: 10px;\r\n    background-color: darkblue;\r\n}\r\n\r\n.olControlLayerSwitcher .layersDiv .baseLbl,\r\n.olControlLayerSwitcher .layersDiv .dataLbl {\r\n    margin-top: 3px;\r\n    margin-left: 3px;\r\n    margin-bottom: 3px;\r\n}\r\n\r\n.olControlLayerSwitcher .layersDiv .baseLayersDiv,\r\n.olControlLayerSwitcher .layersDiv .dataLayersDiv {\r\n    padding-left: 10px;\r\n}\r\n\r\n.olControlLayerSwitcher .maximizeDiv,\r\n.olControlLayerSwitcher .minimizeDiv {\r\n    width: 18px;\r\n    height: 18px;\r\n    top: 5px;\r\n    right: 0;\r\n    cursor: pointer;\r\n}\r\n\r\n.olBingAttribution {\r\n    color: #DDD;\r\n}\r\n.olBingAttribution.road {\r\n    color: #333;\r\n}\r\n\r\n.olGoogleAttribution.hybrid, .olGoogleAttribution.satellite {\r\n    color: #EEE;\r\n}\r\n.olGoogleAttribution {\r\n    color: #333;\r\n}\r\nspan.olGoogleAttribution a {\r\n    color: #77C;\r\n}\r\nspan.olGoogleAttribution.hybrid a, span.olGoogleAttribution.satellite a {\r\n    color: #EEE;\r\n}\r\n\r\n/**\r\n * Editing and navigation icons.\r\n * (using the editing_tool_bar.png sprint image)\r\n */\r\n.olControlNavToolbar ,\r\n.olControlEditingToolbar {\r\n    margin: 5px 5px 0 0;\r\n}\r\n.olControlNavToolbar div,\r\n.olControlEditingToolbar div {\r\n    background-image: url(\"resources/openlayers/theme/default/img/editing_tool_bar.png\");\r\n    background-repeat: no-repeat;\r\n    margin: 0 0 5px 5px;\r\n    width: 24px;\r\n    height: 22px;\r\n    cursor: pointer\r\n}\r\n/* positions */\r\n.olControlEditingToolbar {\r\n    right: 0;\r\n    top: 0;\r\n}\r\n.olControlNavToolbar {\r\n    top: 295px;\r\n    left: 9px;\r\n}\r\n/* layouts */\r\n.olControlEditingToolbar div {\r\n    float: right;\r\n}\r\n/* individual controls */\r\n.olControlNavToolbar .olControlNavigationItemInactive,\r\n.olControlEditingToolbar .olControlNavigationItemInactive {\r\n    background-position: -103px -1px;\r\n}\r\n.olControlNavToolbar .olControlNavigationItemActive ,\r\n.olControlEditingToolbar .olControlNavigationItemActive  {\r\n    background-position: -103px -24px;\r\n}\r\n.olControlNavToolbar .olControlZoomBoxItemInactive {\r\n    background-position: -128px -1px;\r\n}\r\n.olControlNavToolbar .olControlZoomBoxItemActive  {\r\n    background-position: -128px -24px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePointItemInactive {\r\n    background-position: -77px -1px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePointItemActive {\r\n    background-position: -77px -24px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePathItemInactive {\r\n    background-position: -51px -1px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePathItemActive {\r\n    background-position: -51px -24px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePolygonItemInactive{\r\n    background-position: -26px -1px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePolygonItemActive {\r\n    background-position: -26px -24px;\r\n}\r\n\r\ndiv.olControlZoom {\r\n    position: absolute;\r\n    top: 8px;\r\n    left: 8px;\r\n    background: rgba(255,255,255,0.4);\r\n    border-radius: 4px;\r\n    padding: 2px;\r\n}\r\ndiv.olControlZoom a {\r\n    display: block;\r\n    margin: 1px;\r\n    padding: 0;\r\n    color: white;\r\n    font-size: 18px;\r\n    font-family: \'Lucida Grande\', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;\r\n    font-weight: bold;\r\n    text-decoration: none;\r\n    text-align: center;\r\n    height: 22px;\r\n    width:22px;\r\n    line-height: 19px;\r\n    background: #130085; /* fallback for IE - IE6 requires background shorthand*/\r\n    background: rgba(0, 60, 136, 0.5);\r\n    filter: alpha(opacity=80);\r\n}\r\ndiv.olControlZoom a:hover {\r\n    background: #130085; /* fallback for IE */\r\n    background: rgba(0, 60, 136, 0.7);\r\n    filter: alpha(opacity=100);\r\n}\r\n@media only screen and (max-width: 600px) {\r\n    div.olControlZoom a:hover {\r\n        background: rgba(0, 60, 136, 0.5);\r\n    }\r\n}\r\na.olControlZoomIn {\r\n    border-radius: 4px 4px 0 0;\r\n}\r\na.olControlZoomOut {\r\n    border-radius: 0 0 4px 4px;\r\n}\r\n\r\n\r\n/**\r\n * Animations\r\n */\r\n\r\n.olLayerGrid .olTileImage {\r\n    -webkit-transition: opacity 0.2s linear;\r\n    -moz-transition: opacity 0.2s linear;\r\n    -o-transition: opacity 0.2s linear;\r\n    transition: opacity 0.2s linear;\r\n}\r\n#contentMap.oskari-map-window-fullscreen {\r\n  position: fixed;\r\n  top: 0;\r\n  left: 0;\r\n  width: 100%;\r\n  z-index: 10000;\r\n  margin: 0 !important; }\r\n/*! jQuery UI - v1.9.1 - 2012-11-09\r\n* http://jqueryui.com\r\n* Includes: jquery.ui.core.css, jquery.ui.resizable.css, jquery.ui.selectable.css, jquery.ui.slider.css, jquery.ui.tooltip.css\r\n* To view and modify this theme, visit http://jqueryui.com/themeroller/?ffDefault=Segoe%20UI%2CArial%2Csans-serif&fwDefault=bold&fsDefault=1.1em&cornerRadius=6px&bgColorHeader=333333&bgTextureHeader=12_gloss_wave.png&bgImgOpacityHeader=25&borderColorHeader=333333&fcHeader=ffffff&iconColorHeader=ffffff&bgColorContent=000000&bgTextureContent=05_inset_soft.png&bgImgOpacityContent=25&borderColorContent=666666&fcContent=ffffff&iconColorContent=cccccc&bgColorDefault=555555&bgTextureDefault=02_glass.png&bgImgOpacityDefault=20&borderColorDefault=666666&fcDefault=eeeeee&iconColorDefault=cccccc&bgColorHover=0078a3&bgTextureHover=02_glass.png&bgImgOpacityHover=40&borderColorHover=59b4d4&fcHover=ffffff&iconColorHover=ffffff&bgColorActive=f58400&bgTextureActive=05_inset_soft.png&bgImgOpacityActive=30&borderColorActive=ffaf0f&fcActive=ffffff&iconColorActive=222222&bgColorHighlight=eeeeee&bgTextureHighlight=03_highlight_soft.png&bgImgOpacityHighlight=80&borderColorHighlight=cccccc&fcHighlight=2e7db2&iconColorHighlight=4b8e0b&bgColorError=ffc73d&bgTextureError=02_glass.png&bgImgOpacityError=40&borderColorError=ffb73d&fcError=111111&iconColorError=a83300&bgColorOverlay=5c5c5c&bgTextureOverlay=01_flat.png&bgImgOpacityOverlay=50&opacityOverlay=80&bgColorShadow=cccccc&bgTextureShadow=01_flat.png&bgImgOpacityShadow=30&opacityShadow=60&thicknessShadow=7px&offsetTopShadow=-7px&offsetLeftShadow=-7px&cornerRadiusShadow=8px\r\n* Copyright (c) 2012 jQuery Foundation and other contributors Licensed MIT */\r\n\r\n/* Layout helpers\r\n----------------------------------*/\r\n.oskariui .ui-helper-hidden { display: none; }\r\n.oskariui .ui-helper-hidden-accessible { position: absolute !important; clip: rect(1px,1px,1px,1px); clip: rect(1px,1px,1px,1px); }\r\n.oskariui .ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }\r\n.oskariui .ui-helper-clearfix:before, .ui-helper-clearfix:after { content: \"\"; display: table; }\r\n.oskariui .ui-helper-clearfix:after { clear: both; }\r\n.oskariui .ui-helper-clearfix { zoom: 1; }\r\n.oskariui .ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }\r\n\r\n\r\n/* Interaction Cues\r\n----------------------------------*/\r\n.oskariui .ui-state-disabled { cursor: default !important; }\r\n\r\n\r\n/* Icons\r\n----------------------------------*/\r\n\r\n/* states and images */\r\n.oskariui .ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }\r\n\r\n\r\n/* Misc visuals\r\n----------------------------------*/\r\n\r\n/* Overlays */\r\n.oskariui .ui-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }\r\n.oskariui .ui-resizable { position: relative;}\r\n.oskariui .ui-resizable-handle { position: absolute;font-size: 0.1px; display: block; }\r\n.oskariui .ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }\r\n.oskariui .ui-resizable-n { cursor: n-resize; height: 7px; width: 100%; top: -5px; left: 0; }\r\n.oskariui .ui-resizable-s { cursor: s-resize; height: 7px; width: 100%; bottom: -5px; left: 0; }\r\n.oskariui .ui-resizable-e { cursor: e-resize; width: 7px; right: -5px; top: 0; height: 100%; }\r\n.oskariui .ui-resizable-w { cursor: w-resize; width: 7px; left: -5px; top: 0; height: 100%; }\r\n.oskariui .ui-resizable-se { cursor: se-resize; width: 12px; height: 12px; right: 1px; bottom: 1px; }\r\n.oskariui .ui-resizable-sw { cursor: sw-resize; width: 9px; height: 9px; left: -5px; bottom: -5px; }\r\n.oskariui .ui-resizable-nw { cursor: nw-resize; width: 9px; height: 9px; left: -5px; top: -5px; }\r\n.oskariui .ui-resizable-ne { cursor: ne-resize; width: 9px; height: 9px; right: -5px; top: -5px;}.ui-selectable-helper { position: absolute; border:1px dotted black; }\r\n\r\n.oskariui .ui-slider { position: relative; text-align: left; }\r\n.oskariui .ui-slider .ui-slider-handle { position: absolute; width: 16px; height: 17px; cursor: default; }\r\n.oskariui .ui-slider .ui-slider-range { position: absolute; font-size: .7em; display: block; border: 0; background-position: 0 0; }\r\n\r\n.oskariui .ui-slider-horizontal { height: 14px; }\r\n.oskariui .ui-slider-horizontal .ui-slider-handle { background-image: url(\'/Oskari/resources/framework/bundle/oskariui/images/horizontal_handle.png\'); background-repeat: no-repeat;}\r\n\r\n.oskariui .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }\r\n.oskariui .ui-slider-horizontal .ui-slider-range-min { left: 0; }\r\n.oskariui .ui-slider-horizontal .ui-slider-range-max { right: 0; }\r\n\r\n.oskariui .ui-slider-vertical { margin-left: 2px; width: 24px; background-image: url(\'/Oskari/resources/framework/bundle/oskariui/images/zoombar_part.png\'); background-repeat: repeat-y; }\r\n.oskariui .ui-slider-vertical .ui-slider-handle { margin-left: 0; background-image: url(\'/Oskari/resources/framework/bundle/oskariui/images/zoombar_cursor.png\'); background-repeat: no-repeat;}\r\n.oskariui .ui-slider-vertical .ui-slider-range { left: 0; width: 100%; }\r\n.oskariui .ui-slider-vertical .ui-slider-range-min { bottom: 0; }\r\n.oskariui .ui-slider-vertical .ui-slider-range-max { top: 0; }.ui-tooltip {\r\n\tpadding: 8px;\r\n\tposition: absolute;\r\n\tz-index: 9999;\r\n\tmax-width: 300px;\r\n\t-webkit-box-shadow: 0 0 5px #aaa;\r\n\tbox-shadow: 0 0 5px #aaa;\r\n}\r\n/* Fades and background-images don\'t work well together in IE6, drop the image */\r\n* html .ui-tooltip {\r\n\tbackground-image: none;\r\n}\r\nbody .oskariui .ui-tooltip { border-width: 2px; }\r\n\r\n/* Component containers\r\n----------------------------------*/\r\n.oskariui .ui-widget { font-family: Segoe UI,Arial,sans-serif; font-size: 1.1em; }\r\n.oskariui .ui-widget .ui-widget { font-size: 1em; }\r\n.oskariui .ui-widget input, .oskariui .ui-widget select, .oskariui .ui-widget textarea, .oskariui .ui-widget button { font-family: Segoe UI,Arial,sans-serif; font-size: 1em; }\r\n.oskariui .ui-widget-content {  }\r\n.oskariui .ui-widget-content a {  }\r\n.oskariui .ui-widget-header {  }\r\n.oskariui .ui-widget-header a {  }\r\n\r\n/* Interaction states\r\n----------------------------------*/\r\n.oskariui .ui-state-default, .oskariui .ui-widget-content .ui-state-default, .oskariui .ui-widget-header .ui-state-default {  }\r\n.oskariui .ui-state-default a, .oskariui .ui-state-default a:link, .oskariui .ui-state-default a:visited {  }\r\n.oskariui .ui-state-hover, .oskariui .ui-widget-content .ui-state-hover, .oskariui .ui-widget-header .ui-state-hover, .oskariui .ui-state-focus, .oskariui .ui-widget-content .ui-state-focus, .oskariui .ui-widget-header .ui-state-focus {  }\r\n.oskariui .ui-state-hover a, .oskariui .ui-state-hover a:hover, .oskariui .ui-state-hover a:link, .oskariui .ui-state-hover a:visited { }\r\n.oskariui .ui-state-active, .oskariui .ui-widget-content .ui-state-active, .oskariui .ui-widget-header .ui-state-active {  }\r\n.oskariui .ui-state-active a, .oskariui .ui-state-active a:link, .oskariui .ui-state-active a:visited {  }\r\n\r\n/* Interaction Cues\r\n----------------------------------*/\r\n.oskariui .ui-state-highlight, .oskariui .ui-widget-content .ui-state-highlight, .oskariui .ui-widget-header .ui-state-highlight  { }\r\n.oskariui .ui-state-highlight a, .oskariui .ui-widget-content .ui-state-highlight a,.oskariui .ui-widget-header .ui-state-highlight a { }\r\n.oskariui .ui-state-error, .oskariui .ui-widget-content .ui-state-error, .oskariui .ui-widget-header .ui-state-error { }\r\n.oskariui .ui-state-error a, .oskariui .ui-widget-content .ui-state-error a, .oskariui .ui-widget-header .ui-state-error a { }\r\n.oskariui .ui-state-error-text, .oskariui .ui-widget-content .ui-state-error-text, .oskariui .ui-widget-header .ui-state-error-text {  }\r\n.oskariui .ui-priority-primary, .oskariui .ui-widget-content .ui-priority-primary, .oskariui .ui-widget-header .ui-priority-primary {  }\r\n.oskariui .ui-priority-secondary, .oskariui .ui-widget-content .ui-priority-secondary,  .oskariui .ui-widget-header .ui-priority-secondary { }\r\n.oskariui .ui-state-disabled, .oskariui .ui-widget-content .ui-state-disabled, .oskariui .ui-widget-header .ui-state-disabled {  }\r\n.oskariui .ui-state-disabled .ui-icon { filter:Alpha(Opacity=35); } /* For IE8 - See #6059 */\r\n\r\n/* Icons\r\n----------------------------------*/\r\n\r\n/* states and images */\r\n.oskariui .ui-icon { width: 16px; height: 16px; }\r\n.oskariui .ui-widget-content .ui-icon { }\r\n.oskariui .ui-widget-header .ui-icon { }\r\n.oskariui .ui-state-default .ui-icon {  }\r\n.oskariui .ui-state-hover .ui-icon, .oskariui .ui-state-focus .ui-icon {}\r\n.oskariui .ui-state-active .ui-icon { }\r\n.oskariui .ui-state-highlight .ui-icon { }\r\n.oskariui .ui-state-error .ui-icon, .oskariui .ui-state-error-text .ui-icon { }\r\n\r\n\r\n/* Misc visuals\r\n----------------------------------*/\r\n\r\n/* Corner radius */\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-top, .oskariui .ui-corner-left, .oskariui .ui-corner-tl { -moz-border-radius-topleft: 6px; -webkit-border-top-left-radius: 6px; -khtml-border-top-left-radius: 6px; border-top-left-radius: 6px; }\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-top, .oskariui .ui-corner-right, .oskariui .ui-corner-tr { -moz-border-radius-topright: 6px; -webkit-border-top-right-radius: 6px; -khtml-border-top-right-radius: 6px; border-top-right-radius: 6px; }\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-bottom, .oskariui .ui-corner-left, .oskariui .ui-corner-bl { -moz-border-radius-bottomleft: 6px; -webkit-border-bottom-left-radius: 6px; -khtml-border-bottom-left-radius: 6px; border-bottom-left-radius: 6px; }\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-bottom, .oskariui .ui-corner-right, .oskariui .ui-corner-br { -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; -khtml-border-bottom-right-radius: 6px; border-bottom-right-radius: 6px; }\r\n\r\n/* Overlays */\r\n.oskariui .ui-widget-overlay { background: #5c5c5c url(resources/framework/bundle/oskariui/css/images/ui-bg_flat_50_5c5c5c_40x100.png) 50% 50% repeat-x; opacity: .8;filter:Alpha(Opacity=80); }\r\n.oskariui .ui-widget-shadow { margin: -7px 0 0 -7px; padding: 7px; background: #cccccc url(resources/framework/bundle/oskariui/css/images/ui-bg_flat_30_cccccc_40x100.png) 50% 50% repeat-x; opacity: .6;filter:Alpha(Opacity=60); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }\r\n/*!\r\n * Bootstrap v2.3.1\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\r\n.oskariui .clearfix {\r\n  *zoom: 1;\r\n}\r\n.oskariui .clearfix:before,\r\n.oskariui .clearfix:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .clearfix:after {\r\n  clear: both;\r\n}\r\n.oskariui .hide-text {\r\n  font: 0/0 a;\r\n  color: transparent;\r\n  text-shadow: none;\r\n  background-color: transparent;\r\n  border: 0;\r\n}\r\n.oskariui .input-block-level {\r\n  display: block;\r\n  width: 100%;\r\n  min-height: 30px;\r\n  -webkit-box-sizing: border-box;\r\n  -moz-box-sizing: border-box;\r\n  box-sizing: border-box;\r\n}\r\n.oskariui .row {\r\n  margin-left: -20px;\r\n  *zoom: 1;\r\n}\r\n.oskariui .row:before,\r\n.oskariui .row:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .row:after {\r\n  clear: both;\r\n}\r\n[class*=\"span\"] {\r\n  float: left;\r\n  min-height: 1px;\r\n  margin-left: 20px;\r\n}\r\n.oskariui .container,\r\n.oskariui .navbar-static-top .container,\r\n.oskariui .navbar-fixed-top .container,\r\n.oskariui .navbar-fixed-bottom .container {\r\n  width: 940px;\r\n}\r\n.oskariui .span12 {\r\n  width: 940px;\r\n}\r\n.oskariui .span11 {\r\n  width: 860px;\r\n}\r\n.oskariui .span10 {\r\n  width: 780px;\r\n}\r\n.oskariui .span9 {\r\n  width: 700px;\r\n}\r\n.oskariui .span8 {\r\n  width: 620px;\r\n}\r\n.oskariui .span7 {\r\n  width: 540px;\r\n}\r\n.oskariui .span6 {\r\n  width: 460px;\r\n}\r\n.oskariui .span5 {\r\n  width: 380px;\r\n}\r\n.oskariui .span4 {\r\n  width: 300px;\r\n}\r\n.oskariui .span3 {\r\n  width: 220px;\r\n}\r\n.oskariui .span2 {\r\n  width: 140px;\r\n}\r\n.oskariui .span1 {\r\n  width: 60px;\r\n}\r\n.oskariui .offset12 {\r\n  margin-left: 980px;\r\n}\r\n.oskariui .offset11 {\r\n  margin-left: 900px;\r\n}\r\n.oskariui .offset10 {\r\n  margin-left: 820px;\r\n}\r\n.oskariui .offset9 {\r\n  margin-left: 740px;\r\n}\r\n.oskariui .offset8 {\r\n  margin-left: 660px;\r\n}\r\n.oskariui .offset7 {\r\n  margin-left: 580px;\r\n}\r\n.oskariui .offset6 {\r\n  margin-left: 500px;\r\n}\r\n.oskariui .offset5 {\r\n  margin-left: 420px;\r\n}\r\n.oskariui .offset4 {\r\n  margin-left: 340px;\r\n}\r\n.oskariui .offset3 {\r\n  margin-left: 260px;\r\n}\r\n.oskariui .offset2 {\r\n  margin-left: 180px;\r\n}\r\n.oskariui .offset1 {\r\n  margin-left: 100px;\r\n}\r\n.oskariui .row-fluid {\r\n  width: 100%;\r\n  *zoom: 1;\r\n}\r\n.oskariui .row-fluid:before,\r\n.oskariui .row-fluid:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .row-fluid:after {\r\n  clear: both;\r\n}\r\n.oskariui .row-fluid [class*=\"span\"] {\r\n  display: block;\r\n  width: 100%;\r\n  min-height: 30px;\r\n  -webkit-box-sizing: border-box;\r\n  -moz-box-sizing: border-box;\r\n  box-sizing: border-box;\r\n  float: left;\r\n  margin-left: 2.127659574468085%;\r\n  *margin-left: 2.074468085106383%;\r\n}\r\n.oskariui .row-fluid [class*=\"span\"]:first-child {\r\n  margin-left: 0;\r\n}\r\n.oskariui .row-fluid .controls-row [class*=\"span\"] + [class*=\"span\"] {\r\n  margin-left: 2.127659574468085%;\r\n}\r\n.oskariui .row-fluid .span12 {\r\n  width: 100%;\r\n  *width: 99.94680851063829%;\r\n}\r\n.oskariui .row-fluid .span11 {\r\n  width: 91.48936170212765%;\r\n  *width: 91.43617021276594%;\r\n}\r\n.oskariui .row-fluid .span10 {\r\n  width: 82.97872340425532%;\r\n  *width: 82.92553191489361%;\r\n}\r\n.oskariui .row-fluid .span9 {\r\n  width: 74.46808510638297%;\r\n  *width: 74.41489361702126%;\r\n}\r\n.oskariui .row-fluid .span8 {\r\n  width: 65.95744680851064%;\r\n  *width: 65.90425531914893%;\r\n}\r\n.oskariui .row-fluid .span7 {\r\n  width: 57.44680851063829%;\r\n  *width: 57.39361702127659%;\r\n}\r\n.oskariui .row-fluid .span6 {\r\n  width: 48.93617021276595%;\r\n  *width: 48.88297872340425%;\r\n}\r\n.oskariui .row-fluid .span5 {\r\n  width: 40.42553191489362%;\r\n  *width: 40.37234042553192%;\r\n}\r\n.oskariui .row-fluid .span4 {\r\n  width: 31.914893617021278%;\r\n  *width: 31.861702127659576%;\r\n}\r\n.oskariui .row-fluid .span3 {\r\n  width: 23.404255319148934%;\r\n  *width: 23.351063829787233%;\r\n}\r\n.oskariui .row-fluid .span2 {\r\n  width: 14.893617021276595%;\r\n  *width: 14.840425531914894%;\r\n}\r\n.oskariui .row-fluid .span1 {\r\n  width: 6.382978723404255%;\r\n  *width: 6.329787234042553%;\r\n}\r\n.oskariui .row-fluid .offset12 {\r\n  margin-left: 104.25531914893617%;\r\n  *margin-left: 104.14893617021275%;\r\n}\r\n.oskariui .row-fluid .offset12:first-child {\r\n  margin-left: 102.12765957446808%;\r\n  *margin-left: 102.02127659574467%;\r\n}\r\n.oskariui .row-fluid .offset11 {\r\n  margin-left: 95.74468085106382%;\r\n  *margin-left: 95.6382978723404%;\r\n}\r\n.oskariui .row-fluid .offset11:first-child {\r\n  margin-left: 93.61702127659574%;\r\n  *margin-left: 93.51063829787232%;\r\n}\r\n.oskariui .row-fluid .offset10 {\r\n  margin-left: 87.23404255319149%;\r\n  *margin-left: 87.12765957446807%;\r\n}\r\n.oskariui .row-fluid .offset10:first-child {\r\n  margin-left: 85.1063829787234%;\r\n  *margin-left: 84.99999999999999%;\r\n}\r\n.oskariui .row-fluid .offset9 {\r\n  margin-left: 78.72340425531914%;\r\n  *margin-left: 78.61702127659572%;\r\n}\r\n.oskariui .row-fluid .offset9:first-child {\r\n  margin-left: 76.59574468085106%;\r\n  *margin-left: 76.48936170212764%;\r\n}\r\n.oskariui .row-fluid .offset8 {\r\n  margin-left: 70.2127659574468%;\r\n  *margin-left: 70.10638297872339%;\r\n}\r\n.oskariui .row-fluid .offset8:first-child {\r\n  margin-left: 68.08510638297872%;\r\n  *margin-left: 67.9787234042553%;\r\n}\r\n.oskariui .row-fluid .offset7 {\r\n  margin-left: 61.70212765957446%;\r\n  *margin-left: 61.59574468085106%;\r\n}\r\n.oskariui .row-fluid .offset7:first-child {\r\n  margin-left: 59.574468085106375%;\r\n  *margin-left: 59.46808510638297%;\r\n}\r\n.oskariui .row-fluid .offset6 {\r\n  margin-left: 53.191489361702125%;\r\n  *margin-left: 53.085106382978715%;\r\n}\r\n.oskariui .row-fluid .offset6:first-child {\r\n  margin-left: 51.063829787234035%;\r\n  *margin-left: 50.95744680851063%;\r\n}\r\n.oskariui .row-fluid .offset5 {\r\n  margin-left: 44.68085106382979%;\r\n  *margin-left: 44.57446808510638%;\r\n}\r\n.oskariui .row-fluid .offset5:first-child {\r\n  margin-left: 42.5531914893617%;\r\n  *margin-left: 42.4468085106383%;\r\n}\r\n.oskariui .row-fluid .offset4 {\r\n  margin-left: 36.170212765957444%;\r\n  *margin-left: 36.06382978723405%;\r\n}\r\n.oskariui .row-fluid .offset4:first-child {\r\n  margin-left: 34.04255319148936%;\r\n  *margin-left: 33.93617021276596%;\r\n}\r\n.oskariui .row-fluid .offset3 {\r\n  margin-left: 27.659574468085104%;\r\n  *margin-left: 27.5531914893617%;\r\n}\r\n.oskariui .row-fluid .offset3:first-child {\r\n  margin-left: 25.53191489361702%;\r\n  *margin-left: 25.425531914893618%;\r\n}\r\n.oskariui .row-fluid .offset2 {\r\n  margin-left: 19.148936170212764%;\r\n  *margin-left: 19.04255319148936%;\r\n}\r\n.oskariui .row-fluid .offset2:first-child {\r\n  margin-left: 17.02127659574468%;\r\n  *margin-left: 16.914893617021278%;\r\n}\r\n.oskariui .row-fluid .offset1 {\r\n  margin-left: 10.638297872340425%;\r\n  *margin-left: 10.53191489361702%;\r\n}\r\n.oskariui .row-fluid .offset1:first-child {\r\n  margin-left: 8.51063829787234%;\r\n  *margin-left: 8.404255319148938%;\r\n}\r\n[class*=\"span\"].hide,\r\n.oskariui .row-fluid [class*=\"span\"].hide {\r\n  display: none;\r\n}\r\n[class*=\"span\"].pull-right,\r\n.oskariui .row-fluid [class*=\"span\"].pull-right {\r\n  float: right;\r\n}\r\n.oskariui .container {\r\n  margin-right: auto;\r\n  margin-left: auto;\r\n  *zoom: 1;\r\n}\r\n.oskariui .container:before,\r\n.oskariui .container:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .container:after {\r\n  clear: both;\r\n}\r\n.oskariui .container-fluid {\r\n  padding-right: 20px;\r\n  padding-left: 20px;\r\n  *zoom: 1;\r\n}\r\n.oskariui .container-fluid:before,\r\n.oskariui .container-fluid:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .container-fluid:after {\r\n  clear: both;\r\n}\r\n#mapstatsHover_contentDiv {\n  padding: 5px; }\n.getinforesult_table tr {\r\n  padding: 5px; }\r\n  .getinforesult_table tr.odd {\r\n    background-color: #EEEEEE; }\r\n.getinforesult_table td {\r\n  padding: 2px; }\r\n\r\n.getinforesult_header {\r\n  border: 1pt solid navy;\r\n  background-color: #424343;\r\n  margin-top: 14px;\r\n  margin-bottom: 10px;\r\n  height: 15px; }\r\n  .getinforesult_header .icon-bubble-left {\r\n    height: 15px;\r\n    display: inline;\r\n    float: left; }\r\n\r\n.getinforesult_header_title {\r\n  color: #FFF;\r\n  float: left;\r\n  display: inline;\r\n  margin-left: 8px;\r\n  max-width: 85%;\r\n  overflow: hidden;\r\n  white-space: nowrap;\r\n  text-overflow: ellipsis; }\r\ndiv.mapplugin.search-div {\n  top: 10px;\n  right: 10px; }\n\ndiv.search-div div.close {\n  float: right; }\n\ndiv.search-div input[type=text] {\n  width: 124px !important; }\n\ndiv.search-div input[type=button] {\n  width: 35px;\n  margin-left: 3px; }\n\ndiv.search-div div.results {\n  border: 1px solid #f3f3f3;\n  background: white;\n  max-width: 255px;\n  width: 255px;\n  overflow: scroll;\n  margin-top: 5px;\n  padding: 4px; }\n\ndiv.search-div div.results div.header {\n  background: #DDDDDD; }\n\ndiv.search-div div.results div.content table {\n  width: 100%;\n  text-align: center;\n  border-spacing: 2px; }\n\ndiv.search-div div.results div.content table tr {\n  cursor: pointer; }\n\n/* IE8 Cleared */\ntable.search-results td {\n  text-align: left;\n  padding: 2px;\n  padding-left: 4px;\n  padding-right: 12px; }\n\ntable.search-results tr.odd {\n  background-color: #f3f3f3; }\n\ntable.search-results {\n  width: 100%;\n  margin: 4px; }\n\ntable.search-results a {\n  color: #0085D1; }\n\ntable.search-results th {\n  text-align: left;\n  padding: 2px;\n  padding-left: 4px;\n  padding-right: 12px;\n  font-weight: bold; }\n\n/*\r\n#search-loading-image {\r\n    position: absolute;\r\n    right: 56px;\r\n    top: 6px;\r\n    z-index: 10001;\r\n}\r\n*/\n.logoplugin {\r\n  background-color: #FFF;\r\n  background-repeat: no-repeat;\r\n  display: block;\r\n  position: absolute;\r\n  bottom: 0px;\r\n  left: 0px;\r\n  z-index: 100000000 !important;\r\n  filter: alpha(opacity=80);\r\n  /* unquote for libsass bug */\r\n  opacity: 0.8 !important; }\r\n  .logoplugin a, .logoplugin a:hover, .logoplugin a:active, .logoplugin a:visited {\r\n    color: #333333 !important; }\r\n  .logoplugin .icon {\r\n    background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/logo/images/logo_pieni.png\');\r\n    display: inline-block;\r\n    height: 25px;\r\n    width: 25px;\r\n    vertical-align: bottom; }\r\n  .logoplugin .terms {\r\n    display: inline-block;\r\n    margin: 5px; }\r\n\r\n/* Force measurement bar up a notch so it isn\'t occluded by the logo */\r\n#mapdiv .olControlScaleLine {\r\n  bottom: 30px; }\r\n.oskari-datasource .link {\r\n  background-color: none;\r\n  background-repeat: no-repeat;\r\n  display: block;\r\n  font-size: 13px;\r\n  position: fixed;\r\n  bottom: 15px;\r\n  right: 70px;\r\n  z-index: 100000000 !important;\r\n  filter: alpha(opacity=80);\r\n  /* unquote for libsass bug */\r\n  opacity: 0.8 !important; }\r\n\r\n.oskari-datasource a, .oskari-datasource a:hover, .oskari-datasource:active, .oskari-datasource a:visited {\r\n  color: blue !important; }\r\n.olControlOverviewMapElement  {\r\n    padding: 5px !important;\r\n    background-color: #FFFFFF !important;\r\n    border-color: #D0D0D0 !important;\r\n    border-style: solid;\r\n    border-left-width: 2px;\r\n    border-top-width: 2px;\r\n    \r\n}\r\n#olControlOverviewMapMaximizeButton\r\n{\r\n    position: absolute !important;\r\n    right: 10px;\r\n    bottom: 2px;\r\n}\r\n\r\n#OpenLayers_Control_minimizeDiv\r\n{\r\n    width: 46px !important;\r\n    height: 46px !important;\r\n    right: 0px;\r\n    bottom: 0px;\r\n    cursor: default;\r\n    background: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png\')  !important;\r\n    \r\n}\r\n\r\n#olControlOverviewMapMaximizeButton_innerImage, #OpenLayers_Control_minimizeDiv_innerImage{\r\n    display: none !important;\r\n}\r\n\r\n#olControlOverviewMapMaximizeButton{\r\n    width: 46px !important;\r\n    height: 46px !important;\r\n    right: 0px;\r\n    bottom: 0px;\r\n    cursor: default;\r\n    background: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap.png\') 0px 0px !important;\r\n}\r\n\r\n#olControlOverviewMapMaximizeButton:hover\r\n{\r\n    background: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png\') !important;\r\n}\r\n\r\n#OpenLayers_Control_minimizeDiv{\r\n    position: absolute !important;\r\n    right: 0px;\r\n    bottom: 0px;\r\n}\r\n\r\n.olControlOverviewMapExtentRectangle  {\r\n    border:2px dashed #f47729 !important;\r\n}\r\n.fullscreenDiv {\r\n  position: absolute;\r\n  top: 10px;\r\n  left: 10px;\r\n  display: block;\r\n  color: black;\r\n  background: transparent;\r\n  z-index: 15000; }\r\n\r\n.fullscreenDiv .fullscreenDivImg {\r\n  cursor: pointer; }\r\ndiv.mapplugin.layerSelectionPlugin {\r\n  position: absolute;\r\n  top: 20px;\r\n  right: 20px;\r\n  z-index: 100000000 !important; }\r\n\r\n.layerSelectionPlugin {\r\n  max-width: 200px; }\r\n\r\n.layerSelectionPlugin div.header {\r\n  background-color: #333333 !important;\r\n  color: white !important;\r\n  padding: 8px; }\r\n\r\n.layerSelectionPlugin div.content {\r\n  background-color: white; }\r\n\r\n.layerSelectionPlugin div.header div.header-icon {\r\n  display: inline-block;\r\n  margin-right: 10px;\r\n  vertical-align: middle; }\r\n\r\n.layerSelectionPlugin div.content div.layers, .layerSelectionPlugin div.content div.baselayers {\r\n  padding: 10px; }\r\n\r\n.layerSelectionPlugin div.content div.layer {\r\n  margin: 5px 0;\r\n  text-align: left; }\r\n\r\n.layerSelectionPlugin div.content div.layer input {\r\n  margin-right: 10px;\r\n  float: left; }\r\n\r\n.layerSelectionPlugin div.content div.baseLayerHeader {\r\n  background-color: #DDDDDD;\r\n  padding: 10px; }\r\ndiv.pzbDiv.mapplugin {\r\n    top : 140px;\r\n    right : 64px;\r\n    background : transparent;\r\n    z-index: 15000;\r\n}\r\ndiv.pzbDiv div.pzbDiv-plus {\r\n    width : 18px;\r\n    height : 46px;\r\n    background-image : url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_plus_patched.png\');\r\n}\r\n\r\ndiv.pzbDiv div.pzbDiv-minus {\r\n    width : 18px;\r\n    height : 18px;\r\n    background-image : url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_minus.png\');\r\n}\r\ndiv.pzbDiv div.rui-slider-vertical {\r\n    background-color : transparent;\r\n    background-image : url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar.png\');\r\n    height : 148px;\r\n    width : 18px;\r\n    border : 0;\r\n    margin : 0;\r\n}\r\n\r\n\r\n\r\n\r\n.panbuttonDiv.mapplugin {\r\n  top: 10px;\r\n  right: 36px;\r\n  display: block;\r\n  color: black;\r\n  background: transparent;\r\n  font-size: 12px;\r\n  z-index: 15000;\r\n  /*64738;*/\r\n  font-weight: bold;\r\n  /*background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/default.png\');*/\r\n  height: 90px;\r\n  width: 90px; }\r\n\r\n.panbuttonDivImg {\r\n  background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/sprite.png\'); }\r\n\r\n.panbuttonDivImg.root {\r\n  background-position: 0px -90px; }\r\n\r\n.panbuttonDivImg.left {\r\n  background-position: 0px -180px; }\r\n\r\n.panbuttonDivImg.right {\r\n  background-position: 0px -270px; }\r\n\r\n.panbuttonDivImg.up {\r\n  background-position: 0px -360px; }\r\n\r\n.panbuttonDivImg.down {\r\n  background-position: 0px -450px; }\r\n\r\n.panbutton_left {\r\n  float: left; }\r\n\r\n.panbutton_right {\r\n  float: right; }\r\n.olMap {\r\n  position: relative; }\r\n\r\ndiv.mapplugin {\r\n  position: absolute;\r\n  z-index: 15000; }\r\n\r\ndiv.mapplugins.left {\r\n  position: absolute;\r\n  z-index: 15000;\r\n  top: 20px;\r\n  right: 20px;\r\n  text-align: right;\r\n  max-width: 85%; }\r\n\r\ndiv.mapplugins.left > div {\r\n  display: inline-block;\r\n  margin: 5px;\r\n  vertical-align: top; }\r\n/* setup document body so flyouts will not make scrollbars to browser window */\nbody {\n  position: fixed;\n  width: 100%;\n  height: 100%; }\n\n/* flyout toolbar */\n.oskari-flyoutheading {\n  background-color: #ffd400;\n  border-top: 1px solid #ffdf00;\n  border-bottom: 1px solid #ebb819;\n  height: 14px;\n  width: 100%; }\n\n.oskari-flyouttoolbar {\n  height: 57px;\n  width: 100%;\n  background-color: #fdf8d9;\n  border-top: #fdfdfd;\n  border-bottom: #fef2ba; }\n\n.oskari-flyout-title {\n  float: left;\n  margin-left: 20px;\n  margin-top: 12px;\n  height: 20px;\n  display: inline-block; }\n\n.oskari-flyout-title p {\n  margin: 0;\n  padding: 0;\n  font: 16px/20px \"Open Sans\", \"Helvetica Neue\", \"HelveticaNeue\", Helvetica, Arial, sans-serif; }\n\n/** flyout toolbar tools and tool states  */\n.oskari-flyouttools {\n  float: right;\n  margin-right: 25px;\n  height: 16px;\n  display: inline-block;\n  margin-top: 15px; }\n\n.oskari-flyouttool-detach {\n  display: none;\n  /* visualise here if this tool required */ }\n\n.oskari-detached .oskari-flyouttool-detach {\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-detach {\n  display: none; }\n\n.oskari-flyouttool-attach {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-attached .oskari-flyouttool-attach {\n  display: none; }\n\n.oskari-flyouttool-minimize {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-attached .oskari-flyouttool-minimize {\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-minimize {\n  display: none; }\n\n.oskari-flyouttool-restore {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-flyouttool-help {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-restore {\n  display: inline-block; }\n\n.oskari-minimized .oskari-flyouttool-attach {\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-detach {\n  display: none; }\n\n.oskari-flyouttool-close {\n  display: inline-block;\n  width: 16px;\n  height: 16px;\n  margin-right: 2px;\n  margin-left: auto; }\n\n/* flyout */\n.oskari-flyout {\n  background-color: #fafafa;\n  position: absolute;\n  z-index: 1100;\n  margin: 0px;\n  padding: 0px;\n  border: 1px solid rgba(0, 0, 0, 0.2); }\n\n/* flyout states */\n/*.oskari-minimized {\r\n width: 640px;\r\n height: 64px;\r\n overflow: hidden;\r\n\r\n min-height: 64px;\r\n max-height: 64px;\r\n }*/\n.oskari-closed {\n  display: none; }\n\n.oskari-minimized {\n  display: none; }\n\n.oskari-flyoutcontent {\n  margin: 0;\n  padding: 20px 20px 20px 25px;\n  border: 0;\n  /*overflow: auto;*/ }\n\n/** tile */\n/* tile states */\n.oskari-tile-attached {\n  border-bottom: 1px solid white;\n  background-color: white; }\n\n.oskari-tile-detached {\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  background-color: white; }\n\n.oskari-tile-minimized {\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  background-color: #2d2d2d; }\n\n.oskari-tile-closed {\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  background-color: #2d2d2d; }\n\n.oskari-tile-container {\n  margin: 0; }\n\n.oskari-tile {\n  margin: 0;\n  padding: 0;\n  cursor: pointer;\n  height: 31px;\n  width: 153px;\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  line-height: 24px; }\n\n.oskari-tile-title {\n  display: inline-block;\n  margin: 0;\n  margin-top: 2px;\n  margin-left: 16px;\n  padding: 0;\n  float: left;\n  height: 28px;\n  width: 112px;\n  font-family: Arial, Helvetica;\n  font-weight: bold;\n  font-size: 11px;\n  text-align: left;\n  text-transform: uppercase;\n  /*color: white;*/ }\n\n.oskari-tile-attached .oskari-tile-title {\n  color: #333438; }\n\n.oskari-tile-detached .oskari-tile-title {\n  color: #333438; }\n\n.oskari-tile-minimized .oskari-tile-title {\n  color: white; }\n\n.oskari-tile-closed .oskari-tile-title {\n  color: white; }\n\n.oskari-tile-status {\n  float: right;\n  text-align: center;\n  display: inline-block;\n  font-size: 11px;\n  font-weight: bold;\n  height: 19px !important;\n  width: 20px !important;\n  margin: 1px;\n  padding: 1px; }\n\n.oskari-tile-close {\n  display: none; }\n\n.oskariform .oskarifield {\n  padding: 10px; }\n\n/** media queries */\n@media screen {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 500px;\n    /* overflow: auto; */ } }\n@media screen {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 500px;\n    /* overflow: auto; */ } }\n@media only screen and (min-width: 400px) and (max-width: 599px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 500px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 500px; } }\n@media only screen and (min-width: 600px) and (max-width: 799px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 600px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 600px; } }\n@media only screen and (min-width: 800px) and (max-width: 1199px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 1000px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 600px; } }\n@media only screen and (min-width: 1200px) and (max-width: 1599px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 600px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 600px; } }\n@media only screen and (min-height: 400px) and (max-height: 599px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 300px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 600px) and (max-height: 799px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 500px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 800px) and (max-height: 999px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 700px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 1000px) and (max-height: 1199px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 900px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 1200px) and (max-height: 1399px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 1100px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 1400px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 1300px;\n    /* overflow: auto; */ } }\n/* IE8 TEMP fixes */\n.oskari-flyoutcontentcontainer_IE_400_599 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 300px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_600_799 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 500px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_800_999 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 700px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_1000_1199 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 900px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_1200_1399 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 1100px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_1400 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 1300px;\n  /* overflow: auto; */ }\n/* Accordion */\r\ndiv.accordion div.accordion_panel {\r\n  background-color: #f3f3f3;\r\n  border: 1pt solid #c0d0d0;\r\n  margin: 0;\r\n  padding: 0; }\r\n\r\ndiv.accordion_panel div.header div.headerIcon {\r\n  display: inline-block;\r\n  margin-left: 12px;\r\n  vertical-align: middle; }\r\n\r\ndiv.accordion_panel div.header div.headerText {\r\n  display: inline-block;\r\n  font-weight: bold;\r\n  padding: 8px 10px 8px 12px;\r\n  font: 14pt Arial, sans-serif; }\r\n\r\ndiv.accordion div.accordion_panel.open {\r\n  background-color: #FFFFFF; }\r\n\r\ndiv.accordion div.accordion_panel div.content {\r\n  padding: 5px; }\r\n\r\ndiv.accordion div.accordionmsg {\r\n  padding: 10px; }\r\n/* \"tab\" content */\r\ndiv.oskariTabs div.tabsContent {\r\n  border-left: 1px solid #999999;\r\n  border-right: 1px solid #999999;\r\n  border-top: 0px solid #999999;\r\n  border-bottom: 1px solid #999999;\r\n  color: #000000;\r\n  height: 90%; }\r\n\r\ndiv.oskariTabs div.tab-content {\r\n  padding: 10px; }\r\n\r\n/* tab headers */\r\ndiv.oskariTabs div.tabsHeader {\r\n  background: url(\'/Oskari/resources/framework/bundle/divmanazer/images/tab_bg.png\') repeat-x scroll center bottom;\r\n  /* #FFFFFF*/\r\n  clear: left;\r\n  float: left;\r\n  font: 12pt Arial, sans-serif;\r\n  font-weight: bold;\r\n  overflow: hidden;\r\n  padding: 0;\r\n  width: 100%; }\r\n\r\ndiv.oskariTabs div.tabsHeader ul {\r\n  float: left;\r\n  list-style: none outside none;\r\n  margin: 0;\r\n  padding: 0;\r\n  text-align: center; }\r\n\r\ndiv.oskariTabs div.tabsHeader ul li {\r\n  display: block;\r\n  float: left;\r\n  list-style: none outside none;\r\n  margin: 10px 0 0;\r\n  padding: 0;\r\n  right: 50%; }\r\n\r\ndiv.oskariTabs div.tabsHeader ul li a {\r\n  background: none repeat scroll 0 0 #FFFFFF;\r\n  border-bottom: 1px solid #999999;\r\n  color: #3333FF;\r\n  display: block;\r\n  float: left;\r\n  padding: 10px 20px;\r\n  position: relative;\r\n  text-decoration: none; }\r\n\r\ndiv.oskariTabs div.tabsHeader ul li.active a {\r\n  border-left: 1px solid #999999;\r\n  border-right: 1px solid #999999;\r\n  border-top: 1px solid #999999;\r\n  border-bottom: 0px solid #999999;\r\n  color: #000000; }\r\n\r\ndiv.oskariTabs div.tabsHeader ul li.fill a {\r\n  width: 100%; }\r\n.modaldialog {\r\n  border: 1px solid #3C3C3C;\r\n  margin: 0px; }\r\n\r\n.modaltitle {\r\n  margin: 0px;\r\n  border-bottom: 1px solid #3C3C3C;\r\n  color: #3C3C3C;\r\n  padding: 8px 16px 4px 16px; }\r\n\r\n.modalmessage {\r\n  width: 100%;\r\n  color: #3C3C3C;\r\n  padding: 8px 16px 8px 16px; }\r\n\r\n.modalbuttons {\r\n  width: 100%;\r\n  display: inline-block;\r\n  padding: 0px 16px 4px 16px; }\r\n\r\n.modalbutton {\r\n  margin: 2px;\r\n  display: inline-block; }\r\n/*!\r\n * Bootstrap v2.0.3\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\n.oskari-badge {\n  font-size: 10.998px;\n  font-weight: bold;\n  line-height: 14px;\n  color: #ffffff;\n  vertical-align: baseline;\n  white-space: nowrap;\n  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);\n  background-color: #999999; }\n\n.oskari-badge {\n  padding: 1px 9px 2px;\n  -webkit-border-radius: 9px;\n  -moz-border-radius: 9px;\n  border-radius: 9px; }\n\na.oskari-badge:hover {\n  color: #ffffff;\n  text-decoration: none;\n  cursor: pointer; }\n\n.oskari-badge-important {\n  background-color: #b94a48; }\n\n.oskari-badge-important[href] {\n  background-color: #953b39; }\n\n.oskari-badge-warning {\n  background-color: #f89406; }\n\n.oskari-badge-warning[href] {\n  background-color: #c67605; }\n\n.oskari-badge-success {\n  background-color: #468847; }\n\n.oskari-badge-success[href] {\n  background-color: #356635; }\n\n.oskari-badge-info {\n  background-color: #3a87ad; }\n\n.oskari-badge-info[href] {\n  background-color: #2d6987; }\n\n.oskari-badge-inverse {\n  background-color: #333333; }\n\n.oskari-badge-inverse[href] {\n  background-color: #1a1a1a; }\n/*!\r\n * Bootstrap v2.0.3\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\n.oskari-alert {\n  padding-left: 8px;\n  padding-top: 4px;\n  margin: 4px;\n  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);\n  background-color: #fcf8e3;\n  border: 1px solid #fbeed5;\n  -webkit-border-radius: 4px;\n  -moz-border-radius: 4px;\n  border-radius: 4px;\n  color: #c09853;\n  position: relative;\n  height: 24px; }\n\n.oskari-alert-heading {\n  color: inherit; }\n\n.oskari-alert-icon-close {\n  position: absolute;\n  top: 4px;\n  right: 0px;\n  width: 24px;\n  height: 24px; }\n\n.oskari-alert-success {\n  background-color: #dff0d8;\n  border-color: #d6e9c6;\n  color: #468847; }\n\n.oskari-alert-danger, .oskari-alert-error {\n  background-color: #f2dede;\n  border-color: #eed3d7;\n  color: #b94a48; }\n\n.oskari-alert-info {\n  background-color: #d9edf7;\n  border-color: #bce8f1;\n  color: #3a87ad; }\nth.asc {\r\n  background-image: url(\'/Oskari/resources/framework/bundle/divmanazer/images/asc_arrow.png\');\r\n  background-repeat: no-repeat;\r\n  background-position: center center; }\r\n\r\nth.desc {\r\n  background-image: url(\'/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png\');\r\n  background-repeat: no-repeat;\r\n  background-position: center center; }\r\n\r\ndiv.column-selector-placeholder {\r\n  border-style: none;\r\n  float: left;\r\n  opacity: 1.0;\r\n  margin: 0;\r\n  padding: 0;\r\n  right: 0;\r\n  width: 25px;\r\n  height: 7px;\r\n  max-width: 25px;\r\n  max-height: 7px; }\r\n\r\ndiv.icon-menu {\r\n  position: absolute;\r\n  opacity: 1.0;\r\n  margin: 0;\r\n  cursor: pointer;\r\n  padding: 0;\r\n  width: 25px;\r\n  height: 8px;\r\n  max-width: 25px;\r\n  max-height: 7px; }\r\n\r\ndiv.column-selector {\r\n  position: absolute;\r\n  visibility: hidden;\r\n  background-color: white;\r\n  margin-top: 7px;\r\n  margin-right: 50px;\r\n  padding: 0;\r\n  border: 1px solid;\r\n  z-index: 10001; }\r\n\r\ndiv.column-selector div.close-selector-button {\r\n  width: 16px;\r\n  height: 16px;\r\n  position: absolute;\r\n  top: 5px;\r\n  right: 5px; }\r\n\r\ndiv.column-selector ul.column-selector-list {\r\n  list-style-type: none;\r\n  padding-right: 30px; }\r\n\r\ndiv.column-selector label.column-label {\r\n  padding-left: 5px; }\r\ndiv.divmanazerpopup {\n  max-width: 500px;\n  min-width: 200px;\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  background-color: white;\n  -moz-background-clip: border;\n  /* Firefox 3.6 */\n  -webkit-background-clip: border;\n  /* Safari 4? Chrome 6? */\n  background-clip: border-box;\n  /* Firefox 4, Safari 5, Opera 10, IE 9 */\n  -moz-background-clip: padding;\n  /* Firefox 3.6 */\n  -webkit-background-clip: padding;\n  /* Safari 4? Chrome 6? */\n  background-clip: padding-box;\n  /* Firefox 4, Safari 5, Opera 10, IE 9 */\n  -moz-background-clip: content;\n  /* Firefox 3.6 */\n  -webkit-background-clip: content;\n  /* Safari 4? Chrome 6? */\n  background-clip: content-box;\n  /* Firefox 4, Safari 5, Opera 10, IE 9 */\n  border: 5px solid rgba(0, 0, 0, 0.2);\n  border-radius: 7px;\n  /*\r\n    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.80);\r\n    -moz-box-shadow: 0px 3px 3px black;\r\n    -webkit-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.80);\r\n    */\n  z-index: 9000; }\n\ndiv.divmanazerpopup h3 {\n  background-color: #FDF8D9;\n  border-radius: 5px 5px 0 0;\n  font-size: 18px;\n  line-height: 28px;\n  padding: 5px 10px; }\n\ndiv.divmanazerpopup div.content {\n  margin: 10px; }\n\ndiv.divmanazerpopup div.content textarea {\n  resize: none; }\n\ndiv.divmanazerpopup div.content ul {\n  margin: 10px; }\n\ndiv.divmanazerpopup.no_resize div.content textarea {\n  resize: none; }\n\ndiv.divmanazerpopup div.actions {\n  margin: 10px;\n  text-align: center; }\n\ndiv.divmanazerpopup div.actions input {\n  margin: 10px; }\n\n.divmanazerpopup.arrow:after, .divmanazerpopup.arrow:before {\n  border: solid transparent;\n  content: \" \";\n  height: 0;\n  width: 0;\n  position: absolute;\n  /*pointer-events: none; */ }\n\n/* Bottom alignment */\n.divmanazerpopup.bottom:after, .divmanazerpopup.bottom:before {\n  bottom: 100%; }\n\n.divmanazerpopup.bottom:after {\n  border-bottom-color: #FDF8D9;\n  border-width: 5px;\n  margin-left: -5px;\n  left: 50%; }\n\n.divmanazerpopup.bottom:before {\n  border-bottom-color: #000000;\n  border-width: 6px;\n  margin-left: -6px;\n  left: 50%; }\n\n/* top alignment */\n.divmanazerpopup.top:after, .divmanazerpopup.top:before {\n  top: 100%; }\n\n.divmanazerpopup.top:after {\n  border-top-color: #FFFFFF;\n  border-width: 5px;\n  margin-left: -5px;\n  left: 50%; }\n\n.divmanazerpopup.top:before {\n  border-top-color: #000000;\n  border-width: 6px;\n  margin-left: -6px;\n  left: 50%; }\n\n/* left alignment */\n.divmanazerpopup.left:after, .divmanazerpopup.left:before {\n  left: 100%; }\n\n.divmanazerpopup.left:after {\n  border-left-color: #FDF8D9;\n  border-width: 5px;\n  margin-top: -5px;\n  top: 50%; }\n\n.divmanazerpopup.left:before {\n  border-left-color: #000000;\n  border-width: 6px;\n  margin-top: -6px;\n  top: 50%; }\n\n/* right alignment */\n.divmanazerpopup.right:after, .divmanazerpopup.right:before {\n  right: 100%; }\n\n.divmanazerpopup.right:after {\n  border-right-color: #FDF8D9;\n  border-width: 5px;\n  margin-top: -5px;\n  top: 50%; }\n\n.divmanazerpopup.right:before {\n  border-right-color: #000000;\n  border-width: 6px;\n  margin-top: -6px;\n  top: 50%; }\ndiv.oskaributton {\r\n  display: inline-block;\r\n  margin: 5px; }\r\n\r\ndiv.oskaributton.primary input {\r\n  color: #3CA9FC; }\r\ndiv.oskarioverlay {\r\n  position: absolute;\r\n  background-color: black;\r\n  z-index: 8000; }\r\n\r\n.transparent {\r\n  zoom: 1;\r\n  filter: alpha(opacity=50);\r\n  /* unquote for libsass bug */\r\n  opacity: 0.5; }\r\n/*!\r\n * Bootstrap v2.0.3\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\n.oskari-tooltip {\n  position: absolute;\n  z-index: 1200;\n  display: block;\n  visibility: visible;\n  padding: 5px;\n  font-size: 11px;\n  opacity: 0;\n  filter: alpha(opacity=0);\n  /* unquote for libsass bug */ }\n\n.oskari-tooltip.in {\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  /* unquote for libsass bug */ }\n\n.oskari-tooltip.top {\n  margin-top: -2px; }\n\n.oskari-tooltip.right {\n  margin-left: 2px; }\n\n.oskari-tooltip.bottom {\n  margin-top: 2px; }\n\n.oskari-tooltip.left {\n  margin-left: -2px; }\n\n.oskari-tooltip.top .oskari-tooltip-arrow {\n  bottom: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-top: 5px solid #000000; }\n\n.oskari-tooltip.left .oskari-tooltip-arrow {\n  top: 50%;\n  right: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-left: 5px solid #000000; }\n\n.oskari-tooltip.bottom .oskari-tooltip-arrow {\n  top: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-bottom: 5px solid #000000; }\n\n.oskari-tooltip.right .oskari-tooltip-arrow {\n  top: 50%;\n  left: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-right: 5px solid #000000; }\n\n.oskari-tooltip-inner {\n  max-width: 640px;\n  padding: 3px 8px;\n  color: #ffffff;\n  text-align: center;\n  text-decoration: none;\n  background-color: #000000;\n  -webkit-border-radius: 4px;\n  -moz-border-radius: 4px;\n  border-radius: 4px; }\n\n.oskari-tooltip-arrow {\n  position: absolute;\n  width: 0;\n  height: 0; }\n\n.oskari-popover {\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 1210;\n  display: none;\n  padding: 5px; }\n\n.oskari-popover.top {\n  margin-top: -5px; }\n\n.oskari-popover.right {\n  margin-left: 5px; }\n\n.oskari-popover.bottom {\n  margin-top: 5px; }\n\n.oskari-popover.left {\n  margin-left: -5px; }\n\n.oskari-popover.top .oskari-arrow {\n  bottom: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-top: 5px solid #000000; }\n\n.oskari-popover.right .oskari-arrow {\n  top: 50%;\n  left: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-right: 5px solid #000000; }\n\n.oskari-popover.bottom .oskari-arrow {\n  top: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-bottom: 5px solid #000000; }\n\n.oskari-popover.left .oskari-arrow {\n  top: 50%;\n  right: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-left: 5px solid #000000; }\n\n.oskari-popover .oskari-arrow {\n  position: absolute;\n  width: 0;\n  height: 0; }\n\n.oskari-popover-inner {\n  padding: 3px;\n  /*width: 280px;*/\n  overflow: hidden;\n  background: #000000;\n  background: rgba(0, 0, 0, 0.8);\n  -webkit-border-radius: 6px;\n  -moz-border-radius: 6px;\n  border-radius: 6px;\n  -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3); }\n\n.oskari-popover-title {\n  padding: 9px 15px;\n  line-height: 1;\n  background-color: #f5f5f5;\n  border-bottom: 1px solid #eee;\n  -webkit-border-radius: 3px 3px 0 0;\n  -moz-border-radius: 3px 3px 0 0;\n  border-radius: 3px 3px 0 0; }\n\n.oskari-popover-content {\n  padding: 14px;\n  background-color: #ffffff;\n  -webkit-border-radius: 0 0 3px 3px;\n  -moz-border-radius: 0 0 3px 3px;\n  border-radius: 0 0 3px 3px;\n  -webkit-background-clip: padding-box;\n  -moz-background-clip: padding-box;\n  background-clip: padding-box; }\n\n.oskari-popover-content p, .oskari-popover-content ul, .oskari-popover-content ol {\n  margin-bottom: 0; }\n'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick; 
+requirejs.s.contexts._.nextTick = function(f){f()}; require(['css'], function(css) { css.setBuffer('div.olMap {\r\n    z-index: 0;\r\n    padding: 0 !important;\r\n    margin: 0 !important;\r\n    cursor: default;\r\n}\r\n\r\ndiv.olMapViewport {\r\n    text-align: left;\r\n}\r\n\r\ndiv.olLayerDiv {\r\n   -moz-user-select: none;\r\n   -khtml-user-select: none;\r\n}\r\n\r\n.olLayerGoogleCopyright {\r\n    left: 2px;\r\n    bottom: 2px;\r\n}\r\n.olLayerGoogleV3.olLayerGoogleCopyright {\r\n    right: auto !important;\r\n}\r\n.olLayerGooglePoweredBy {\r\n    left: 2px;\r\n    bottom: 15px;\r\n}\r\n.olLayerGoogleV3.olLayerGooglePoweredBy {\r\n    bottom: 15px !important;\r\n}\r\n.olControlAttribution {\r\n    font-size: smaller;\r\n    right: 3px;\r\n    bottom: 4.5em;\r\n    position: absolute;\r\n    display: block;\r\n}\r\n.olControlScale {\r\n    right: 3px;\r\n    bottom: 3em;\r\n    display: block;\r\n    position: absolute;\r\n    font-size: smaller;\r\n}\r\n.olControlScaleLine {\r\n   display: block;\r\n   position: absolute;\r\n   left: 10px;\r\n   bottom: 15px;\r\n   font-size: xx-small;\r\n}\r\n.olControlScaleLineBottom {\r\n   border: solid 2px black;\r\n   border-bottom: none;\r\n   margin-top:-2px;\r\n   text-align: center;\r\n}\r\n.olControlScaleLineTop {\r\n   border: solid 2px black;\r\n   border-top: none;\r\n   text-align: center;\r\n}\r\n\r\n.olControlPermalink {\r\n    right: 3px;\r\n    bottom: 1.5em;\r\n    display: block;\r\n    position: absolute;\r\n    font-size: smaller;\r\n}\r\n\r\ndiv.olControlMousePosition {\r\n    bottom: 0;\r\n    right: 3px;\r\n    display: block;\r\n    position: absolute;\r\n    font-family: Arial;\r\n    font-size: smaller;\r\n}\r\n\r\n.olControlOverviewMapContainer {\r\n    position: absolute;\r\n    bottom: 0;\r\n    right: 0;\r\n}\r\n\r\n.olControlOverviewMapElement {\r\n    padding: 10px 18px 10px 10px;\r\n    background-color: #00008B;\r\n    -moz-border-radius: 1em 0 0 0;\r\n}\r\n\r\n.olControlOverviewMapMinimizeButton,\r\n.olControlOverviewMapMaximizeButton {\r\n    height: 18px;\r\n    width: 18px;\r\n    right: 0;\r\n    bottom: 80px;\r\n    cursor: pointer;\r\n}\r\n\r\n.olControlOverviewMapExtentRectangle {\r\n    overflow: hidden;\r\n    background-image: url(\"resources/openlayers/theme/default/img/blank.gif\");\r\n    cursor: move;\r\n    border: 2px dotted red;\r\n}\r\n.olControlOverviewMapRectReplacement {\r\n    overflow: hidden;\r\n    cursor: move;\r\n    background-image: url(\"resources/openlayers/theme/default/img/overview_replacement.gif\");\r\n    background-repeat: no-repeat;\r\n    background-position: center;\r\n}\r\n\r\n.olLayerGeoRSSDescription {\r\n    float:left;\r\n    width:100%;\r\n    overflow:auto;\r\n    font-size:1.0em;\r\n}\r\n.olLayerGeoRSSClose {\r\n    float:right;\r\n    color:gray;\r\n    font-size:1.2em;\r\n    margin-right:6px;\r\n    font-family:sans-serif;\r\n}\r\n.olLayerGeoRSSTitle {\r\n    float:left;font-size:1.2em;\r\n}\r\n\r\n.olPopupContent {\r\n    padding:5px;\r\n    overflow: auto;\r\n}\r\n\r\n.olControlNavigationHistory {\r\n   background-image: url(\"resources/openlayers/theme/default/img/navigation_history.png\");\r\n   background-repeat: no-repeat;\r\n   width:  24px;\r\n   height: 24px;\r\n\r\n}\r\n.olControlNavigationHistoryPreviousItemActive {\r\n  background-position: 0 0;\r\n}\r\n.olControlNavigationHistoryPreviousItemInactive {\r\n   background-position: 0 -24px;\r\n}\r\n.olControlNavigationHistoryNextItemActive {\r\n   background-position: -24px 0;\r\n}\r\n.olControlNavigationHistoryNextItemInactive {\r\n   background-position: -24px -24px;\r\n}\r\n\r\ndiv.olControlSaveFeaturesItemActive {\r\n    background-image: url(resources/openlayers/theme/default/img/save_features_on.png);\r\n    background-repeat: no-repeat;\r\n    background-position: 0 1px;\r\n}\r\ndiv.olControlSaveFeaturesItemInactive {\r\n    background-image: url(resources/openlayers/theme/default/img/save_features_off.png);\r\n    background-repeat: no-repeat;\r\n    background-position: 0 1px;\r\n}\r\n\r\n.olHandlerBoxZoomBox {\r\n    border: 2px solid red;\r\n    position: absolute;\r\n    background-color: white;\r\n    opacity: 0.50;\r\n    font-size: 1px;\r\n    filter: alpha(opacity=50);\r\n}\r\n.olHandlerBoxSelectFeature {\r\n    border: 2px solid blue;\r\n    position: absolute;\r\n    background-color: white;\r\n    opacity: 0.50;\r\n    font-size: 1px;\r\n    filter: alpha(opacity=50);\r\n}\r\n\r\n.olControlPanPanel {\r\n    top: 10px;\r\n    left: 5px;\r\n}\r\n\r\n.olControlPanPanel div {\r\n    background-image: url(resources/openlayers/theme/default/img/pan-panel.png);\r\n    height: 18px;\r\n    width: 18px;\r\n    cursor: pointer;\r\n    position: absolute;\r\n}\r\n\r\n.olControlPanPanel .olControlPanNorthItemInactive {\r\n    top: 0;\r\n    left: 9px;\r\n    background-position: 0 0;\r\n}\r\n.olControlPanPanel .olControlPanSouthItemInactive {\r\n    top: 36px;\r\n    left: 9px;\r\n    background-position: 18px 0;\r\n}\r\n.olControlPanPanel .olControlPanWestItemInactive {\r\n    position: absolute;\r\n    top: 18px;\r\n    left: 0;\r\n    background-position: 0 18px;\r\n}\r\n.olControlPanPanel .olControlPanEastItemInactive {\r\n    top: 18px;\r\n    left: 18px;\r\n    background-position: 18px 18px;\r\n}\r\n\r\n.olControlZoomPanel {\r\n    top: 71px;\r\n    left: 14px;\r\n}\r\n\r\n.olControlZoomPanel div {\r\n    background-image: url(resources/openlayers/theme/default/img/zoom-panel.png);\r\n    position: absolute;\r\n    height: 18px;\r\n    width: 18px;\r\n    cursor: pointer;\r\n}\r\n\r\n.olControlZoomPanel .olControlZoomInItemInactive {\r\n    top: 0;\r\n    left: 0;\r\n    background-position: 0 0;\r\n}\r\n\r\n.olControlZoomPanel .olControlZoomToMaxExtentItemInactive {\r\n    top: 18px;\r\n    left: 0;\r\n    background-position: 0 -18px;\r\n}\r\n\r\n.olControlZoomPanel .olControlZoomOutItemInactive {\r\n    top: 36px;\r\n    left: 0;\r\n    background-position: 0 18px;\r\n}\r\n\r\n/*\r\n * When a potential text is bigger than the image it move the image\r\n * with some headers (closes #3154)\r\n */\r\n.olControlPanZoomBar div {\r\n    font-size: 1px;\r\n}\r\n\r\n.olPopupCloseBox {\r\n  background: url(\"resources/openlayers/theme/default/img/close.gif\") no-repeat;\r\n  cursor: pointer;\r\n}\r\n\r\n.olFramedCloudPopupContent {\r\n    padding: 5px;\r\n    overflow: auto;\r\n}\r\n\r\n.olControlNoSelect {\r\n -moz-user-select: none;\r\n -khtml-user-select: none;\r\n}\r\n\r\n.olImageLoadError {\r\n    background-color: pink;\r\n    opacity: 0.5;\r\n    filter: alpha(opacity=50); /* IE */\r\n}\r\n\r\n/**\r\n * Cursor styles\r\n */\r\n\r\n.olCursorWait {\r\n    cursor: wait;\r\n}\r\n.olDragDown {\r\n    cursor: move;\r\n}\r\n.olDrawBox {\r\n    cursor: crosshair;\r\n}\r\n.olControlDragFeatureOver {\r\n    cursor: move;\r\n}\r\n.olControlDragFeatureActive.olControlDragFeatureOver.olDragDown {\r\n    cursor: -moz-grabbing;\r\n}\r\n\r\n/**\r\n * Layer switcher\r\n */\r\n.olControlLayerSwitcher {\r\n    position: absolute;\r\n    top: 25px;\r\n    right: 0;\r\n    width: 20em;\r\n    font-family: sans-serif;\r\n    font-weight: bold;\r\n    margin-top: 3px;\r\n    margin-left: 3px;\r\n    margin-bottom: 3px;\r\n    font-size: smaller;\r\n    color: white;\r\n    background-color: transparent;\r\n}\r\n\r\n.olControlLayerSwitcher .layersDiv {\r\n    padding-top: 5px;\r\n    padding-left: 10px;\r\n    padding-bottom: 5px;\r\n    padding-right: 10px;\r\n    background-color: darkblue;\r\n}\r\n\r\n.olControlLayerSwitcher .layersDiv .baseLbl,\r\n.olControlLayerSwitcher .layersDiv .dataLbl {\r\n    margin-top: 3px;\r\n    margin-left: 3px;\r\n    margin-bottom: 3px;\r\n}\r\n\r\n.olControlLayerSwitcher .layersDiv .baseLayersDiv,\r\n.olControlLayerSwitcher .layersDiv .dataLayersDiv {\r\n    padding-left: 10px;\r\n}\r\n\r\n.olControlLayerSwitcher .maximizeDiv,\r\n.olControlLayerSwitcher .minimizeDiv {\r\n    width: 18px;\r\n    height: 18px;\r\n    top: 5px;\r\n    right: 0;\r\n    cursor: pointer;\r\n}\r\n\r\n.olBingAttribution {\r\n    color: #DDD;\r\n}\r\n.olBingAttribution.road {\r\n    color: #333;\r\n}\r\n\r\n.olGoogleAttribution.hybrid, .olGoogleAttribution.satellite {\r\n    color: #EEE;\r\n}\r\n.olGoogleAttribution {\r\n    color: #333;\r\n}\r\nspan.olGoogleAttribution a {\r\n    color: #77C;\r\n}\r\nspan.olGoogleAttribution.hybrid a, span.olGoogleAttribution.satellite a {\r\n    color: #EEE;\r\n}\r\n\r\n/**\r\n * Editing and navigation icons.\r\n * (using the editing_tool_bar.png sprint image)\r\n */\r\n.olControlNavToolbar ,\r\n.olControlEditingToolbar {\r\n    margin: 5px 5px 0 0;\r\n}\r\n.olControlNavToolbar div,\r\n.olControlEditingToolbar div {\r\n    background-image: url(\"resources/openlayers/theme/default/img/editing_tool_bar.png\");\r\n    background-repeat: no-repeat;\r\n    margin: 0 0 5px 5px;\r\n    width: 24px;\r\n    height: 22px;\r\n    cursor: pointer\r\n}\r\n/* positions */\r\n.olControlEditingToolbar {\r\n    right: 0;\r\n    top: 0;\r\n}\r\n.olControlNavToolbar {\r\n    top: 295px;\r\n    left: 9px;\r\n}\r\n/* layouts */\r\n.olControlEditingToolbar div {\r\n    float: right;\r\n}\r\n/* individual controls */\r\n.olControlNavToolbar .olControlNavigationItemInactive,\r\n.olControlEditingToolbar .olControlNavigationItemInactive {\r\n    background-position: -103px -1px;\r\n}\r\n.olControlNavToolbar .olControlNavigationItemActive ,\r\n.olControlEditingToolbar .olControlNavigationItemActive  {\r\n    background-position: -103px -24px;\r\n}\r\n.olControlNavToolbar .olControlZoomBoxItemInactive {\r\n    background-position: -128px -1px;\r\n}\r\n.olControlNavToolbar .olControlZoomBoxItemActive  {\r\n    background-position: -128px -24px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePointItemInactive {\r\n    background-position: -77px -1px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePointItemActive {\r\n    background-position: -77px -24px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePathItemInactive {\r\n    background-position: -51px -1px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePathItemActive {\r\n    background-position: -51px -24px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePolygonItemInactive{\r\n    background-position: -26px -1px;\r\n}\r\n.olControlEditingToolbar .olControlDrawFeaturePolygonItemActive {\r\n    background-position: -26px -24px;\r\n}\r\n\r\ndiv.olControlZoom {\r\n    position: absolute;\r\n    top: 8px;\r\n    left: 8px;\r\n    background: rgba(255,255,255,0.4);\r\n    border-radius: 4px;\r\n    padding: 2px;\r\n}\r\ndiv.olControlZoom a {\r\n    display: block;\r\n    margin: 1px;\r\n    padding: 0;\r\n    color: white;\r\n    font-size: 18px;\r\n    font-family: \'Lucida Grande\', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;\r\n    font-weight: bold;\r\n    text-decoration: none;\r\n    text-align: center;\r\n    height: 22px;\r\n    width:22px;\r\n    line-height: 19px;\r\n    background: #130085; /* fallback for IE - IE6 requires background shorthand*/\r\n    background: rgba(0, 60, 136, 0.5);\r\n    filter: alpha(opacity=80);\r\n}\r\ndiv.olControlZoom a:hover {\r\n    background: #130085; /* fallback for IE */\r\n    background: rgba(0, 60, 136, 0.7);\r\n    filter: alpha(opacity=100);\r\n}\r\n@media only screen and (max-width: 600px) {\r\n    div.olControlZoom a:hover {\r\n        background: rgba(0, 60, 136, 0.5);\r\n    }\r\n}\r\na.olControlZoomIn {\r\n    border-radius: 4px 4px 0 0;\r\n}\r\na.olControlZoomOut {\r\n    border-radius: 0 0 4px 4px;\r\n}\r\n\r\n\r\n/**\r\n * Animations\r\n */\r\n\r\n.olLayerGrid .olTileImage {\r\n    -webkit-transition: opacity 0.2s linear;\r\n    -moz-transition: opacity 0.2s linear;\r\n    -o-transition: opacity 0.2s linear;\r\n    transition: opacity 0.2s linear;\r\n}\r\n#contentMap.oskari-map-window-fullscreen {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  z-index: 10000;\n  margin: 0 !important; }\n/*! jQuery UI - v1.9.1 - 2012-11-09\r\n* http://jqueryui.com\r\n* Includes: jquery.ui.core.css, jquery.ui.resizable.css, jquery.ui.selectable.css, jquery.ui.slider.css, jquery.ui.tooltip.css\r\n* To view and modify this theme, visit http://jqueryui.com/themeroller/?ffDefault=Segoe%20UI%2CArial%2Csans-serif&fwDefault=bold&fsDefault=1.1em&cornerRadius=6px&bgColorHeader=333333&bgTextureHeader=12_gloss_wave.png&bgImgOpacityHeader=25&borderColorHeader=333333&fcHeader=ffffff&iconColorHeader=ffffff&bgColorContent=000000&bgTextureContent=05_inset_soft.png&bgImgOpacityContent=25&borderColorContent=666666&fcContent=ffffff&iconColorContent=cccccc&bgColorDefault=555555&bgTextureDefault=02_glass.png&bgImgOpacityDefault=20&borderColorDefault=666666&fcDefault=eeeeee&iconColorDefault=cccccc&bgColorHover=0078a3&bgTextureHover=02_glass.png&bgImgOpacityHover=40&borderColorHover=59b4d4&fcHover=ffffff&iconColorHover=ffffff&bgColorActive=f58400&bgTextureActive=05_inset_soft.png&bgImgOpacityActive=30&borderColorActive=ffaf0f&fcActive=ffffff&iconColorActive=222222&bgColorHighlight=eeeeee&bgTextureHighlight=03_highlight_soft.png&bgImgOpacityHighlight=80&borderColorHighlight=cccccc&fcHighlight=2e7db2&iconColorHighlight=4b8e0b&bgColorError=ffc73d&bgTextureError=02_glass.png&bgImgOpacityError=40&borderColorError=ffb73d&fcError=111111&iconColorError=a83300&bgColorOverlay=5c5c5c&bgTextureOverlay=01_flat.png&bgImgOpacityOverlay=50&opacityOverlay=80&bgColorShadow=cccccc&bgTextureShadow=01_flat.png&bgImgOpacityShadow=30&opacityShadow=60&thicknessShadow=7px&offsetTopShadow=-7px&offsetLeftShadow=-7px&cornerRadiusShadow=8px\r\n* Copyright (c) 2012 jQuery Foundation and other contributors Licensed MIT */\r\n\r\n/* Layout helpers\r\n----------------------------------*/\r\n.oskariui .ui-helper-hidden { display: none; }\r\n.oskariui .ui-helper-hidden-accessible { position: absolute !important; clip: rect(1px,1px,1px,1px); clip: rect(1px,1px,1px,1px); }\r\n.oskariui .ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }\r\n.oskariui .ui-helper-clearfix:before, .ui-helper-clearfix:after { content: \"\"; display: table; }\r\n.oskariui .ui-helper-clearfix:after { clear: both; }\r\n.oskariui .ui-helper-clearfix { zoom: 1; }\r\n.oskariui .ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }\r\n\r\n\r\n/* Interaction Cues\r\n----------------------------------*/\r\n.oskariui .ui-state-disabled { cursor: default !important; }\r\n\r\n\r\n/* Icons\r\n----------------------------------*/\r\n\r\n/* states and images */\r\n.oskariui .ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }\r\n\r\n\r\n/* Misc visuals\r\n----------------------------------*/\r\n\r\n/* Overlays */\r\n.oskariui .ui-widget-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }\r\n.oskariui .ui-resizable { position: relative;}\r\n.oskariui .ui-resizable-handle { position: absolute;font-size: 0.1px; display: block; }\r\n.oskariui .ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }\r\n.oskariui .ui-resizable-n { cursor: n-resize; height: 7px; width: 100%; top: -5px; left: 0; }\r\n.oskariui .ui-resizable-s { cursor: s-resize; height: 7px; width: 100%; bottom: -5px; left: 0; }\r\n.oskariui .ui-resizable-e { cursor: e-resize; width: 7px; right: -5px; top: 0; height: 100%; }\r\n.oskariui .ui-resizable-w { cursor: w-resize; width: 7px; left: -5px; top: 0; height: 100%; }\r\n.oskariui .ui-resizable-se { cursor: se-resize; width: 12px; height: 12px; right: 1px; bottom: 1px; }\r\n.oskariui .ui-resizable-sw { cursor: sw-resize; width: 9px; height: 9px; left: -5px; bottom: -5px; }\r\n.oskariui .ui-resizable-nw { cursor: nw-resize; width: 9px; height: 9px; left: -5px; top: -5px; }\r\n.oskariui .ui-resizable-ne { cursor: ne-resize; width: 9px; height: 9px; right: -5px; top: -5px;}.ui-selectable-helper { position: absolute; border:1px dotted black; }\r\n\r\n.oskariui .ui-slider { position: relative; text-align: left; }\r\n.oskariui .ui-slider .ui-slider-handle { position: absolute; width: 16px; height: 17px; cursor: default; }\r\n.oskariui .ui-slider .ui-slider-range { position: absolute; font-size: .7em; display: block; border: 0; background-position: 0 0; }\r\n\r\n.oskariui .ui-slider-horizontal { height: 14px; }\r\n.oskariui .ui-slider-horizontal .ui-slider-handle { background-image: url(\'/Oskari/resources/framework/bundle/oskariui/images/horizontal_handle.png\'); background-repeat: no-repeat;}\r\n\r\n.oskariui .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }\r\n.oskariui .ui-slider-horizontal .ui-slider-range-min { left: 0; }\r\n.oskariui .ui-slider-horizontal .ui-slider-range-max { right: 0; }\r\n\r\n.oskariui .ui-slider-vertical { margin-left: 2px; width: 24px; background-image: url(\'/Oskari/resources/framework/bundle/oskariui/images/zoombar_part.png\'); background-repeat: repeat-y; }\r\n.oskariui .ui-slider-vertical .ui-slider-handle { margin-left: 0; background-image: url(\'/Oskari/resources/framework/bundle/oskariui/images/zoombar_cursor.png\'); background-repeat: no-repeat;}\r\n.oskariui .ui-slider-vertical .ui-slider-range { left: 0; width: 100%; }\r\n.oskariui .ui-slider-vertical .ui-slider-range-min { bottom: 0; }\r\n.oskariui .ui-slider-vertical .ui-slider-range-max { top: 0; }.ui-tooltip {\r\n\tpadding: 8px;\r\n\tposition: absolute;\r\n\tz-index: 9999;\r\n\tmax-width: 300px;\r\n\t-webkit-box-shadow: 0 0 5px #aaa;\r\n\tbox-shadow: 0 0 5px #aaa;\r\n}\r\n/* Fades and background-images don\'t work well together in IE6, drop the image */\r\n* html .ui-tooltip {\r\n\tbackground-image: none;\r\n}\r\nbody .oskariui .ui-tooltip { border-width: 2px; }\r\n\r\n/* Component containers\r\n----------------------------------*/\r\n.oskariui .ui-widget { font-family: Segoe UI,Arial,sans-serif; font-size: 1.1em; }\r\n.oskariui .ui-widget .ui-widget { font-size: 1em; }\r\n.oskariui .ui-widget input, .oskariui .ui-widget select, .oskariui .ui-widget textarea, .oskariui .ui-widget button { font-family: Segoe UI,Arial,sans-serif; font-size: 1em; }\r\n.oskariui .ui-widget-content {  }\r\n.oskariui .ui-widget-content a {  }\r\n.oskariui .ui-widget-header {  }\r\n.oskariui .ui-widget-header a {  }\r\n\r\n/* Interaction states\r\n----------------------------------*/\r\n.oskariui .ui-state-default, .oskariui .ui-widget-content .ui-state-default, .oskariui .ui-widget-header .ui-state-default {  }\r\n.oskariui .ui-state-default a, .oskariui .ui-state-default a:link, .oskariui .ui-state-default a:visited {  }\r\n.oskariui .ui-state-hover, .oskariui .ui-widget-content .ui-state-hover, .oskariui .ui-widget-header .ui-state-hover, .oskariui .ui-state-focus, .oskariui .ui-widget-content .ui-state-focus, .oskariui .ui-widget-header .ui-state-focus {  }\r\n.oskariui .ui-state-hover a, .oskariui .ui-state-hover a:hover, .oskariui .ui-state-hover a:link, .oskariui .ui-state-hover a:visited { }\r\n.oskariui .ui-state-active, .oskariui .ui-widget-content .ui-state-active, .oskariui .ui-widget-header .ui-state-active {  }\r\n.oskariui .ui-state-active a, .oskariui .ui-state-active a:link, .oskariui .ui-state-active a:visited {  }\r\n\r\n/* Interaction Cues\r\n----------------------------------*/\r\n.oskariui .ui-state-highlight, .oskariui .ui-widget-content .ui-state-highlight, .oskariui .ui-widget-header .ui-state-highlight  { }\r\n.oskariui .ui-state-highlight a, .oskariui .ui-widget-content .ui-state-highlight a,.oskariui .ui-widget-header .ui-state-highlight a { }\r\n.oskariui .ui-state-error, .oskariui .ui-widget-content .ui-state-error, .oskariui .ui-widget-header .ui-state-error { }\r\n.oskariui .ui-state-error a, .oskariui .ui-widget-content .ui-state-error a, .oskariui .ui-widget-header .ui-state-error a { }\r\n.oskariui .ui-state-error-text, .oskariui .ui-widget-content .ui-state-error-text, .oskariui .ui-widget-header .ui-state-error-text {  }\r\n.oskariui .ui-priority-primary, .oskariui .ui-widget-content .ui-priority-primary, .oskariui .ui-widget-header .ui-priority-primary {  }\r\n.oskariui .ui-priority-secondary, .oskariui .ui-widget-content .ui-priority-secondary,  .oskariui .ui-widget-header .ui-priority-secondary { }\r\n.oskariui .ui-state-disabled, .oskariui .ui-widget-content .ui-state-disabled, .oskariui .ui-widget-header .ui-state-disabled {  }\r\n.oskariui .ui-state-disabled .ui-icon { filter:Alpha(Opacity=35); } /* For IE8 - See #6059 */\r\n\r\n/* Icons\r\n----------------------------------*/\r\n\r\n/* states and images */\r\n.oskariui .ui-icon { width: 16px; height: 16px; }\r\n.oskariui .ui-widget-content .ui-icon { }\r\n.oskariui .ui-widget-header .ui-icon { }\r\n.oskariui .ui-state-default .ui-icon {  }\r\n.oskariui .ui-state-hover .ui-icon, .oskariui .ui-state-focus .ui-icon {}\r\n.oskariui .ui-state-active .ui-icon { }\r\n.oskariui .ui-state-highlight .ui-icon { }\r\n.oskariui .ui-state-error .ui-icon, .oskariui .ui-state-error-text .ui-icon { }\r\n\r\n\r\n/* Misc visuals\r\n----------------------------------*/\r\n\r\n/* Corner radius */\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-top, .oskariui .ui-corner-left, .oskariui .ui-corner-tl { -moz-border-radius-topleft: 6px; -webkit-border-top-left-radius: 6px; -khtml-border-top-left-radius: 6px; border-top-left-radius: 6px; }\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-top, .oskariui .ui-corner-right, .oskariui .ui-corner-tr { -moz-border-radius-topright: 6px; -webkit-border-top-right-radius: 6px; -khtml-border-top-right-radius: 6px; border-top-right-radius: 6px; }\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-bottom, .oskariui .ui-corner-left, .oskariui .ui-corner-bl { -moz-border-radius-bottomleft: 6px; -webkit-border-bottom-left-radius: 6px; -khtml-border-bottom-left-radius: 6px; border-bottom-left-radius: 6px; }\r\n.oskariui .ui-corner-all, .oskariui .ui-corner-bottom, .oskariui .ui-corner-right, .oskariui .ui-corner-br { -moz-border-radius-bottomright: 6px; -webkit-border-bottom-right-radius: 6px; -khtml-border-bottom-right-radius: 6px; border-bottom-right-radius: 6px; }\r\n\r\n/* Overlays */\r\n.oskariui .ui-widget-overlay { background: #5c5c5c url(resources/framework/bundle/oskariui/css/images/ui-bg_flat_50_5c5c5c_40x100.png) 50% 50% repeat-x; opacity: .8;filter:Alpha(Opacity=80); }\r\n.oskariui .ui-widget-shadow { margin: -7px 0 0 -7px; padding: 7px; background: #cccccc url(resources/framework/bundle/oskariui/css/images/ui-bg_flat_30_cccccc_40x100.png) 50% 50% repeat-x; opacity: .6;filter:Alpha(Opacity=60); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }\r\n/*!\r\n * Bootstrap v2.3.1\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\r\n.oskariui .clearfix {\r\n  *zoom: 1;\r\n}\r\n.oskariui .clearfix:before,\r\n.oskariui .clearfix:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .clearfix:after {\r\n  clear: both;\r\n}\r\n.oskariui .hide-text {\r\n  font: 0/0 a;\r\n  color: transparent;\r\n  text-shadow: none;\r\n  background-color: transparent;\r\n  border: 0;\r\n}\r\n.oskariui .input-block-level {\r\n  display: block;\r\n  width: 100%;\r\n  min-height: 30px;\r\n  -webkit-box-sizing: border-box;\r\n  -moz-box-sizing: border-box;\r\n  box-sizing: border-box;\r\n}\r\n.oskariui .row {\r\n  margin-left: -20px;\r\n  *zoom: 1;\r\n}\r\n.oskariui .row:before,\r\n.oskariui .row:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .row:after {\r\n  clear: both;\r\n}\r\n[class*=\"span\"] {\r\n  float: left;\r\n  min-height: 1px;\r\n  margin-left: 20px;\r\n}\r\n.oskariui .container,\r\n.oskariui .navbar-static-top .container,\r\n.oskariui .navbar-fixed-top .container,\r\n.oskariui .navbar-fixed-bottom .container {\r\n  width: 940px;\r\n}\r\n.oskariui .span12 {\r\n  width: 940px;\r\n}\r\n.oskariui .span11 {\r\n  width: 860px;\r\n}\r\n.oskariui .span10 {\r\n  width: 780px;\r\n}\r\n.oskariui .span9 {\r\n  width: 700px;\r\n}\r\n.oskariui .span8 {\r\n  width: 620px;\r\n}\r\n.oskariui .span7 {\r\n  width: 540px;\r\n}\r\n.oskariui .span6 {\r\n  width: 460px;\r\n}\r\n.oskariui .span5 {\r\n  width: 380px;\r\n}\r\n.oskariui .span4 {\r\n  width: 300px;\r\n}\r\n.oskariui .span3 {\r\n  width: 220px;\r\n}\r\n.oskariui .span2 {\r\n  width: 140px;\r\n}\r\n.oskariui .span1 {\r\n  width: 60px;\r\n}\r\n.oskariui .offset12 {\r\n  margin-left: 980px;\r\n}\r\n.oskariui .offset11 {\r\n  margin-left: 900px;\r\n}\r\n.oskariui .offset10 {\r\n  margin-left: 820px;\r\n}\r\n.oskariui .offset9 {\r\n  margin-left: 740px;\r\n}\r\n.oskariui .offset8 {\r\n  margin-left: 660px;\r\n}\r\n.oskariui .offset7 {\r\n  margin-left: 580px;\r\n}\r\n.oskariui .offset6 {\r\n  margin-left: 500px;\r\n}\r\n.oskariui .offset5 {\r\n  margin-left: 420px;\r\n}\r\n.oskariui .offset4 {\r\n  margin-left: 340px;\r\n}\r\n.oskariui .offset3 {\r\n  margin-left: 260px;\r\n}\r\n.oskariui .offset2 {\r\n  margin-left: 180px;\r\n}\r\n.oskariui .offset1 {\r\n  margin-left: 100px;\r\n}\r\n.oskariui .row-fluid {\r\n  width: 100%;\r\n  *zoom: 1;\r\n}\r\n.oskariui .row-fluid:before,\r\n.oskariui .row-fluid:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .row-fluid:after {\r\n  clear: both;\r\n}\r\n.oskariui .row-fluid [class*=\"span\"] {\r\n  display: block;\r\n  width: 100%;\r\n  min-height: 30px;\r\n  -webkit-box-sizing: border-box;\r\n  -moz-box-sizing: border-box;\r\n  box-sizing: border-box;\r\n  float: left;\r\n  margin-left: 2.127659574468085%;\r\n  *margin-left: 2.074468085106383%;\r\n}\r\n.oskariui .row-fluid [class*=\"span\"]:first-child {\r\n  margin-left: 0;\r\n}\r\n.oskariui .row-fluid .controls-row [class*=\"span\"] + [class*=\"span\"] {\r\n  margin-left: 2.127659574468085%;\r\n}\r\n.oskariui .row-fluid .span12 {\r\n  width: 100%;\r\n  *width: 99.94680851063829%;\r\n}\r\n.oskariui .row-fluid .span11 {\r\n  width: 91.48936170212765%;\r\n  *width: 91.43617021276594%;\r\n}\r\n.oskariui .row-fluid .span10 {\r\n  width: 82.97872340425532%;\r\n  *width: 82.92553191489361%;\r\n}\r\n.oskariui .row-fluid .span9 {\r\n  width: 74.46808510638297%;\r\n  *width: 74.41489361702126%;\r\n}\r\n.oskariui .row-fluid .span8 {\r\n  width: 65.95744680851064%;\r\n  *width: 65.90425531914893%;\r\n}\r\n.oskariui .row-fluid .span7 {\r\n  width: 57.44680851063829%;\r\n  *width: 57.39361702127659%;\r\n}\r\n.oskariui .row-fluid .span6 {\r\n  width: 48.93617021276595%;\r\n  *width: 48.88297872340425%;\r\n}\r\n.oskariui .row-fluid .span5 {\r\n  width: 40.42553191489362%;\r\n  *width: 40.37234042553192%;\r\n}\r\n.oskariui .row-fluid .span4 {\r\n  width: 31.914893617021278%;\r\n  *width: 31.861702127659576%;\r\n}\r\n.oskariui .row-fluid .span3 {\r\n  width: 23.404255319148934%;\r\n  *width: 23.351063829787233%;\r\n}\r\n.oskariui .row-fluid .span2 {\r\n  width: 14.893617021276595%;\r\n  *width: 14.840425531914894%;\r\n}\r\n.oskariui .row-fluid .span1 {\r\n  width: 6.382978723404255%;\r\n  *width: 6.329787234042553%;\r\n}\r\n.oskariui .row-fluid .offset12 {\r\n  margin-left: 104.25531914893617%;\r\n  *margin-left: 104.14893617021275%;\r\n}\r\n.oskariui .row-fluid .offset12:first-child {\r\n  margin-left: 102.12765957446808%;\r\n  *margin-left: 102.02127659574467%;\r\n}\r\n.oskariui .row-fluid .offset11 {\r\n  margin-left: 95.74468085106382%;\r\n  *margin-left: 95.6382978723404%;\r\n}\r\n.oskariui .row-fluid .offset11:first-child {\r\n  margin-left: 93.61702127659574%;\r\n  *margin-left: 93.51063829787232%;\r\n}\r\n.oskariui .row-fluid .offset10 {\r\n  margin-left: 87.23404255319149%;\r\n  *margin-left: 87.12765957446807%;\r\n}\r\n.oskariui .row-fluid .offset10:first-child {\r\n  margin-left: 85.1063829787234%;\r\n  *margin-left: 84.99999999999999%;\r\n}\r\n.oskariui .row-fluid .offset9 {\r\n  margin-left: 78.72340425531914%;\r\n  *margin-left: 78.61702127659572%;\r\n}\r\n.oskariui .row-fluid .offset9:first-child {\r\n  margin-left: 76.59574468085106%;\r\n  *margin-left: 76.48936170212764%;\r\n}\r\n.oskariui .row-fluid .offset8 {\r\n  margin-left: 70.2127659574468%;\r\n  *margin-left: 70.10638297872339%;\r\n}\r\n.oskariui .row-fluid .offset8:first-child {\r\n  margin-left: 68.08510638297872%;\r\n  *margin-left: 67.9787234042553%;\r\n}\r\n.oskariui .row-fluid .offset7 {\r\n  margin-left: 61.70212765957446%;\r\n  *margin-left: 61.59574468085106%;\r\n}\r\n.oskariui .row-fluid .offset7:first-child {\r\n  margin-left: 59.574468085106375%;\r\n  *margin-left: 59.46808510638297%;\r\n}\r\n.oskariui .row-fluid .offset6 {\r\n  margin-left: 53.191489361702125%;\r\n  *margin-left: 53.085106382978715%;\r\n}\r\n.oskariui .row-fluid .offset6:first-child {\r\n  margin-left: 51.063829787234035%;\r\n  *margin-left: 50.95744680851063%;\r\n}\r\n.oskariui .row-fluid .offset5 {\r\n  margin-left: 44.68085106382979%;\r\n  *margin-left: 44.57446808510638%;\r\n}\r\n.oskariui .row-fluid .offset5:first-child {\r\n  margin-left: 42.5531914893617%;\r\n  *margin-left: 42.4468085106383%;\r\n}\r\n.oskariui .row-fluid .offset4 {\r\n  margin-left: 36.170212765957444%;\r\n  *margin-left: 36.06382978723405%;\r\n}\r\n.oskariui .row-fluid .offset4:first-child {\r\n  margin-left: 34.04255319148936%;\r\n  *margin-left: 33.93617021276596%;\r\n}\r\n.oskariui .row-fluid .offset3 {\r\n  margin-left: 27.659574468085104%;\r\n  *margin-left: 27.5531914893617%;\r\n}\r\n.oskariui .row-fluid .offset3:first-child {\r\n  margin-left: 25.53191489361702%;\r\n  *margin-left: 25.425531914893618%;\r\n}\r\n.oskariui .row-fluid .offset2 {\r\n  margin-left: 19.148936170212764%;\r\n  *margin-left: 19.04255319148936%;\r\n}\r\n.oskariui .row-fluid .offset2:first-child {\r\n  margin-left: 17.02127659574468%;\r\n  *margin-left: 16.914893617021278%;\r\n}\r\n.oskariui .row-fluid .offset1 {\r\n  margin-left: 10.638297872340425%;\r\n  *margin-left: 10.53191489361702%;\r\n}\r\n.oskariui .row-fluid .offset1:first-child {\r\n  margin-left: 8.51063829787234%;\r\n  *margin-left: 8.404255319148938%;\r\n}\r\n[class*=\"span\"].hide,\r\n.oskariui .row-fluid [class*=\"span\"].hide {\r\n  display: none;\r\n}\r\n[class*=\"span\"].pull-right,\r\n.oskariui .row-fluid [class*=\"span\"].pull-right {\r\n  float: right;\r\n}\r\n.oskariui .container {\r\n  margin-right: auto;\r\n  margin-left: auto;\r\n  *zoom: 1;\r\n}\r\n.oskariui .container:before,\r\n.oskariui .container:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .container:after {\r\n  clear: both;\r\n}\r\n.oskariui .container-fluid {\r\n  padding-right: 20px;\r\n  padding-left: 20px;\r\n  *zoom: 1;\r\n}\r\n.oskariui .container-fluid:before,\r\n.oskariui .container-fluid:after {\r\n  display: table;\r\n  content: \"\";\r\n  line-height: 0;\r\n}\r\n.oskariui .container-fluid:after {\r\n  clear: both;\r\n}\r\n#mapstatsHover_contentDiv {\n  padding: 5px; }\n.getinforesult_table tr {\n  padding: 5px; }\n  .getinforesult_table tr.odd {\n    background-color: #EEEEEE; }\n.getinforesult_table td {\n  padding: 2px; }\n\n.getinforesult_header {\n  border: 1pt solid navy;\n  background-color: #424343;\n  margin-top: 14px;\n  margin-bottom: 10px;\n  height: 15px; }\n  .getinforesult_header .icon-bubble-left {\n    height: 15px;\n    display: inline;\n    float: left; }\n\n.getinforesult_header_title {\n  color: #FFF;\n  float: left;\n  display: inline;\n  margin-left: 8px;\n  max-width: 85%;\n  overflow: hidden;\n  white-space: nowrap;\n  text-overflow: ellipsis; }\n\ndiv.myplaces_wrapper {\n  padding-bottom: 18px; }\n  div.myplaces_wrapper div.myplaces_place img.myplaces_img {\n    padding-bottom: 15px;\n    max-height: 350px;\n    max-width: 350px; }\ndiv.mapplugin.search-div {\n  top: 10px;\n  right: 10px; }\n\ndiv.search-div div.close {\n  float: right; }\n\ndiv.search-div input[type=text] {\n  width: 124px !important; }\n\ndiv.search-div input[type=button] {\n  width: 35px;\n  margin-left: 3px; }\n\ndiv.search-div div.results {\n  border: 1px solid #f3f3f3;\n  background: white;\n  max-width: 255px;\n  width: 255px;\n  overflow: scroll;\n  margin-top: 5px;\n  padding: 4px; }\n\ndiv.search-div div.results div.header {\n  background: #DDDDDD; }\n\ndiv.search-div div.results div.content table {\n  width: 100%;\n  text-align: center;\n  border-spacing: 2px; }\n\ndiv.search-div div.results div.content table tr {\n  cursor: pointer; }\n\n/* IE8 Cleared */\ntable.search-results td {\n  text-align: left;\n  padding: 2px;\n  padding-left: 4px;\n  padding-right: 12px; }\n\ntable.search-results tr.odd {\n  background-color: #f3f3f3; }\n\ntable.search-results {\n  width: 100%;\n  margin: 4px; }\n\ntable.search-results a {\n  color: #0085D1; }\n\ntable.search-results th {\n  text-align: left;\n  padding: 2px;\n  padding-left: 4px;\n  padding-right: 12px;\n  font-weight: bold; }\n\n/*\r\n#search-loading-image {\r\n    position: absolute;\r\n    right: 56px;\r\n    top: 6px;\r\n    z-index: 10001;\r\n}\r\n*/\ndiv.published-search-div {\n  position: relative; }\n\ndiv.published-search-div div.search-area-div {\n  min-width: 180px;\n  display: block;\n  float: right; }\n\ndiv.published-search-div div.search-area-div div.search-left, div.published-search-div div.search-area-div div.search-middle, div.published-search-div div.search-area-div div.search-right {\n  display: inline-block;\n  float: left;\n  height: 38px; }\n\ndiv.published-search-div div.search-area-div div.search-middle {\n  width: 180px; }\n\ndiv.published-search-div div.search-area-div div.search-right {\n  cursor: pointer; }\n\ndiv.published-search-div div.search-area-div input.search-input {\n  background-color: transparent;\n  border: none;\n  box-shadow: none;\n  background-image: none;\n  width: 170px;\n  outline: none; }\n\ndiv.published-search-div div.published-search-results {\n  overflow-y: scroll;\n  overflow-x: hidden;\n  max-height: 320px;\n  white-space: nowrap;\n  position: absolute;\n  top: 35px;\n  right: 0px;\n  display: block;\n  background-color: #FFFFFF;\n  border: 1px solid black;\n  border-radius: 6px;\n  -moz-border-radius: 6px;\n  -webkit-border-radius: 6px; }\n\ndiv.published-search-div div.published-search-results div.published-search-header {\n  padding: 5px; }\n\ndiv.published-search-div div.published-search-results table.search-results {\n  margin: 0 0 6px 0; }\n.logoplugin {\n  background-color: #FFF;\n  background-repeat: no-repeat;\n  display: block;\n  position: absolute;\n  bottom: 0px;\n  left: 0px;\n  z-index: 100000000 !important;\n  filter: alpha(opacity=80);\n  /* unquote for libsass bug */\n  opacity: 0.8 !important; }\n  .logoplugin a, .logoplugin a:hover, .logoplugin a:active, .logoplugin a:visited {\n    color: #333333 !important; }\n  .logoplugin .icon {\n    background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/logo/images/logo_pieni.png\');\n    display: inline-block;\n    height: 25px;\n    width: 25px;\n    vertical-align: bottom; }\n  .logoplugin .terms {\n    display: inline-block;\n    margin: 5px; }\n\n/* Force measurement bar up a notch so it isn\'t occluded by the logo */\n#mapdiv .olControlScaleLine {\n  bottom: 30px; }\n.oskari-datasource .link {\n  background-color: none;\n  background-repeat: no-repeat;\n  display: block;\n  font-size: 13px;\n  position: fixed;\n  bottom: 15px;\n  right: 70px;\n  z-index: 100000000 !important;\n  filter: alpha(opacity=80);\n  /* unquote for libsass bug */\n  opacity: 0.8 !important; }\n\n.oskari-datasource a, .oskari-datasource a:hover, .oskari-datasource:active, .oskari-datasource a:visited {\n  color: blue !important; }\n.olControlOverviewMapElement  {\r\n    padding: 5px !important;\r\n    background-color: #FFFFFF !important;\r\n    border-color: #D0D0D0 !important;\r\n    border-style: solid;\r\n    border-left-width: 2px;\r\n    border-top-width: 2px;\r\n    \r\n}\r\n#olControlOverviewMapMaximizeButton\r\n{\r\n    position: absolute !important;\r\n    right: 10px;\r\n    bottom: 2px;\r\n}\r\n\r\n#OpenLayers_Control_minimizeDiv\r\n{\r\n    width: 46px !important;\r\n    height: 46px !important;\r\n    right: 0px;\r\n    bottom: 0px;\r\n    cursor: default;\r\n    background: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png\')  !important;\r\n    \r\n}\r\n\r\n#olControlOverviewMapMaximizeButton_innerImage, #OpenLayers_Control_minimizeDiv_innerImage{\r\n    display: none !important;\r\n}\r\n\r\n#olControlOverviewMapMaximizeButton{\r\n    width: 46px !important;\r\n    height: 46px !important;\r\n    right: 0px;\r\n    bottom: 0px;\r\n    cursor: default;\r\n    background: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap.png\') 0px 0px !important;\r\n}\r\n\r\n#olControlOverviewMapMaximizeButton:hover\r\n{\r\n    background: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/indexmap/images/component-indexmap_hover.png\') !important;\r\n}\r\n\r\n#OpenLayers_Control_minimizeDiv{\r\n    position: absolute !important;\r\n    right: 0px;\r\n    bottom: 0px;\r\n}\r\n\r\n.olControlOverviewMapExtentRectangle  {\r\n    border:2px dashed #f47729 !important;\r\n}\r\n.fullscreenDiv {\n  position: absolute;\n  top: 10px;\n  left: 10px;\n  display: block;\n  color: black;\n  background: transparent;\n  z-index: 15000; }\n\n.fullscreenDiv .fullscreenDivImg {\n  cursor: pointer; }\ndiv.mapplugin.layerSelectionPlugin {\n  position: absolute;\n  top: 20px;\n  right: 20px;\n  z-index: 100000000 !important; }\n\n.layerSelectionPlugin {\n  max-width: 200px; }\n\n.layerSelectionPlugin div.header {\n  background-color: #333333;\n  color: white !important;\n  padding: 8px;\n  cursor: pointer; }\n\n.layerSelectionPlugin div.content {\n  background-color: white; }\n\n.layerSelectionPlugin div.header div.header-icon {\n  display: inline-block;\n  margin-right: 10px;\n  vertical-align: middle; }\n\n.layerSelectionPlugin div.content div.layers, .layerSelectionPlugin div.content div.baselayers {\n  padding: 10px; }\n\n.layerSelectionPlugin div.content div.layer {\n  margin: 5px 0;\n  text-align: left; }\n\n.layerSelectionPlugin div.content div.layer input {\n  margin-right: 10px;\n  float: left; }\n\n.layerSelectionPlugin div.content div.baseLayerHeader {\n  background-color: #DDDDDD;\n  padding: 10px;\n  text-align: left; }\n\n.layerSelectionPlugin div.layerselection-styled-content {\n  width: 200px;\n  border: 1px solid #333438;\n  border-radius: 6px;\n  -moz-border-radius: 6px;\n  -webkit-border-radius: 6px; }\n\n.layerSelectionPlugin div.content div.content-header {\n  background-color: #333438;\n  color: #FFFFFF;\n  text-align: left;\n  height: 25px;\n  padding: 5px; }\n\n.layerSelectionPlugin div.content div.content-header .content-close {\n  display: inline-block;\n  float: right;\n  cursor: pointer; }\n\n.layerSelectionPlugin div.content div.content-header div.content-header-title {\n  display: inline-block;\n  float: left;\n  padding: 5px; }\n\n.layerSelectionPlugin div.content div.styled-header-arrow {\n  width: 0px;\n  height: 0px;\n  margin-left: 170px;\n  margin-top: -20px;\n  border-top: 10px solid transparent;\n  border-left: 10px solid transparent;\n  border-right: 10px solid transparent;\n  border-bottom: 10px solid #333438; }\n\n.published-styled-layerselector {\n  position: relative !important; }\n\n.published-styled-layerselector-header {\n  width: 38px !important;\n  height: 38px !important;\n  padding: 0px !important;\n  background-color: transparent !important;\n  float: right !important; }\n\n.published-styled-layerselector-content {\n  position: absolute !important;\n  top: 44px !important;\n  right: 0px !important; }\ndiv.pzbDiv.mapplugin {\r\n    top : 140px;\r\n    right : 64px;\r\n    background : transparent;\r\n    z-index: 15000;\r\n}\r\ndiv.pzbDiv div.pzbDiv-plus {\r\n    width : 18px;\r\n    height : 46px;\r\n    background-image : url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_plus_patched.png\');\r\n}\r\n\r\ndiv.pzbDiv div.pzbDiv-minus {\r\n    width : 18px;\r\n    height : 18px;\r\n    background-image : url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar_minus.png\');\r\n}\r\ndiv.pzbDiv div.rui-slider-vertical {\r\n    background-color : transparent;\r\n    background-image : url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/images/zoombar.png\');\r\n    height : 148px;\r\n    width : 18px;\r\n    border : 0;\r\n    margin : 0;\r\n}\r\n\r\n\r\n\r\n\r\n.panbuttonDiv.mapplugin {\n  top: 10px;\n  right: 36px;\n  display: block;\n  color: black;\n  background: transparent;\n  font-size: 12px;\n  z-index: 15000;\n  /*64738;*/\n  font-weight: bold;\n  /*background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/default.png\');*/\n  height: 90px;\n  width: 90px; }\n\n.panbuttonDivImg {\n  background-image: url(\'/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/sprite.png\'); }\n\n.panbuttonDivImg.root {\n  background-position: 0px -90px; }\n\n.panbuttonDivImg.left {\n  background-position: 0px -180px; }\n\n.panbuttonDivImg.right {\n  background-position: 0px -270px; }\n\n.panbuttonDivImg.up {\n  background-position: 0px -360px; }\n\n.panbuttonDivImg.down {\n  background-position: 0px -450px; }\n\n.panbutton_left {\n  float: left; }\n\n.panbutton_right {\n  float: right; }\n.olMap {\n  position: relative; }\n\ndiv.mapplugin {\n  position: absolute;\n  z-index: 15000; }\n\ndiv.mapplugins.left {\n  position: absolute;\n  z-index: 15000;\n  top: 20px;\n  right: 20px;\n  text-align: right;\n  max-width: 85%; }\n\ndiv.mapplugins.left > div {\n  display: inline-block;\n  margin: 5px;\n  vertical-align: top; }\n\n.oskari-publisher-font-arial {\n  font-family: Arial, sans-serif !important; }\n\n.oskari-publisher-font-georgia {\n  font-family: Georgia, serif !important; }\n/* setup document body so flyouts will not make scrollbars to browser window */\nbody {\n  position: fixed;\n  width: 100%;\n  height: 100%; }\n\n/* flyout toolbar */\n.oskari-flyoutheading {\n  background-color: #ffd400;\n  border-top: 1px solid #ffdf00;\n  border-bottom: 1px solid #ebb819;\n  height: 14px;\n  width: 100%; }\n\n.oskari-flyouttoolbar {\n  height: 57px;\n  width: 100%;\n  background-color: #fdf8d9;\n  border-top: #fdfdfd;\n  border-bottom: #fef2ba; }\n\n.oskari-flyout-title {\n  float: left;\n  margin-left: 20px;\n  margin-top: 12px;\n  height: 20px;\n  display: inline-block; }\n\n.oskari-flyout-title p {\n  margin: 0;\n  padding: 0;\n  font: 16px/20px \"Open Sans\", \"Helvetica Neue\", \"HelveticaNeue\", Helvetica, Arial, sans-serif; }\n\n/** flyout toolbar tools and tool states  */\n.oskari-flyouttools {\n  float: right;\n  margin-right: 25px;\n  height: 16px;\n  display: inline-block;\n  margin-top: 15px; }\n\n.oskari-flyouttool-detach {\n  display: none;\n  /* visualise here if this tool required */ }\n\n.oskari-detached .oskari-flyouttool-detach {\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-detach {\n  display: none; }\n\n.oskari-flyouttool-attach {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-attached .oskari-flyouttool-attach {\n  display: none; }\n\n.oskari-flyouttool-minimize {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-attached .oskari-flyouttool-minimize {\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-minimize {\n  display: none; }\n\n.oskari-flyouttool-restore {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-flyouttool-help {\n  /* visualise here if this tool required */\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-restore {\n  display: inline-block; }\n\n.oskari-minimized .oskari-flyouttool-attach {\n  display: none; }\n\n.oskari-minimized .oskari-flyouttool-detach {\n  display: none; }\n\n.oskari-flyouttool-close {\n  display: inline-block;\n  width: 16px;\n  height: 16px;\n  margin-right: 2px;\n  margin-left: auto; }\n\n/* flyout */\n.oskari-flyout {\n  background-color: #fafafa;\n  position: absolute;\n  z-index: 1100;\n  margin: 0px;\n  padding: 0px;\n  border: 1px solid rgba(0, 0, 0, 0.2); }\n\n/* flyout states */\n/*.oskari-minimized {\r\n width: 640px;\r\n height: 64px;\r\n overflow: hidden;\r\n\r\n min-height: 64px;\r\n max-height: 64px;\r\n }*/\n.oskari-closed {\n  display: none; }\n\n.oskari-minimized {\n  display: none; }\n\n.oskari-flyoutcontent {\n  margin: 0;\n  padding: 20px 20px 20px 25px;\n  border: 0;\n  /*overflow: auto;*/ }\n\n/** tile */\n/* tile states */\n.oskari-tile-attached {\n  border-bottom: 1px solid white;\n  background-color: white; }\n\n.oskari-tile-detached {\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  background-color: white; }\n\n.oskari-tile-minimized {\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  background-color: #2d2d2d; }\n\n.oskari-tile-closed {\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  background-color: #2d2d2d; }\n\n.oskari-tile-container {\n  margin: 0; }\n\n.oskari-tile {\n  margin: 0;\n  padding: 0;\n  cursor: pointer;\n  height: 31px;\n  width: 153px;\n  border-top: 1px solid #484846;\n  border-bottom: 1px solid #212121;\n  line-height: 24px; }\n\n.oskari-tile-title {\n  display: inline-block;\n  margin: 0;\n  margin-top: 2px;\n  margin-left: 16px;\n  padding: 0;\n  float: left;\n  height: 28px;\n  width: 112px;\n  font-family: Arial, Helvetica;\n  font-weight: bold;\n  font-size: 11px;\n  text-align: left;\n  text-transform: uppercase;\n  /*color: white;*/ }\n\n.oskari-tile-attached .oskari-tile-title {\n  color: #333438; }\n\n.oskari-tile-detached .oskari-tile-title {\n  color: #333438; }\n\n.oskari-tile-minimized .oskari-tile-title {\n  color: white; }\n\n.oskari-tile-closed .oskari-tile-title {\n  color: white; }\n\n.oskari-tile-status {\n  float: right;\n  text-align: center;\n  display: inline-block;\n  font-size: 11px;\n  font-weight: bold;\n  height: 19px !important;\n  width: 20px !important;\n  margin: 1px;\n  padding: 1px; }\n\n.oskari-tile-close {\n  display: none; }\n\n.oskariform .oskarifield {\n  padding: 10px; }\n\n/** media queries */\n@media screen {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 500px;\n    /* overflow: auto; */ } }\n@media screen {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 640px; }\n\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 500px;\n    /* overflow: auto; */ } }\n@media only screen and (min-width: 400px) and (max-width: 599px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 500px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 500px; } }\n@media only screen and (min-width: 600px) and (max-width: 799px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 600px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 600px; } }\n@media only screen and (min-width: 800px) and (max-width: 1199px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 1000px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 600px; } }\n@media only screen and (min-width: 1200px) and (max-width: 1599px) {\n  .oskari-attached {\n    min-width: 520px;\n    max-width: 600px; }\n\n  .oskari-detached {\n    min-width: 520px;\n    max-width: 600px; } }\n@media only screen and (min-height: 400px) and (max-height: 599px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 300px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 600px) and (max-height: 799px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 500px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 800px) and (max-height: 999px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 700px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 1000px) and (max-height: 1199px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 900px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 1200px) and (max-height: 1399px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 1100px;\n    /* overflow: auto; */ } }\n@media only screen and (min-height: 1400px) {\n  .oskari-flyoutcontentcontainer {\n    width: 100%;\n    height: 100%;\n    padding: 0;\n    border: 0;\n    overflow: auto;\n    max-height: 1300px;\n    /* overflow: auto; */ } }\n/* IE8 TEMP fixes */\n.oskari-flyoutcontentcontainer_IE_400_599 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 300px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_600_799 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 500px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_800_999 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 700px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_1000_1199 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 900px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_1200_1399 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 1100px;\n  /* overflow: auto; */ }\n\n.oskari-flyoutcontentcontainer_IE_1400 {\n  width: 100%;\n  height: 100%;\n  padding: 0;\n  border: 0;\n  overflow: auto;\n  max-height: 1300px;\n  /* overflow: auto; */ }\n/* Accordion */\ndiv.accordion div.accordion_panel {\n  background-color: #f3f3f3;\n  border: 1pt solid #c0d0d0;\n  margin: 0;\n  padding: 0; }\n\ndiv.accordion_panel div.header div.headerIcon {\n  display: inline-block;\n  margin-left: 12px;\n  vertical-align: middle; }\n\ndiv.accordion_panel div.header div.headerText {\n  display: inline-block;\n  font-weight: bold;\n  padding: 8px 10px 8px 12px;\n  font: 14pt Arial, sans-serif; }\n\ndiv.accordion div.accordion_panel.open {\n  background-color: #FFFFFF; }\n\ndiv.accordion div.accordion_panel div.content {\n  padding: 5px; }\n\ndiv.accordion div.accordionmsg {\n  padding: 10px; }\n/* \"tab\" content */\ndiv.oskariTabs div.tabsContent {\n  border-left: 1px solid #999999;\n  border-right: 1px solid #999999;\n  border-top: 0px solid #999999;\n  border-bottom: 1px solid #999999;\n  color: #000000;\n  height: 90%; }\n\ndiv.oskariTabs div.tab-content {\n  padding: 10px; }\n\n/* tab headers */\ndiv.oskariTabs div.tabsHeader {\n  background: url(\'/Oskari/resources/framework/bundle/divmanazer/images/tab_bg.png\') repeat-x scroll center bottom;\n  /* #FFFFFF*/\n  clear: left;\n  float: left;\n  font: 12pt Arial, sans-serif;\n  font-weight: bold;\n  overflow: hidden;\n  padding: 0;\n  width: 100%; }\n\ndiv.oskariTabs div.tabsHeader ul {\n  float: left;\n  list-style: none outside none;\n  margin: 0;\n  padding: 0;\n  text-align: center; }\n\ndiv.oskariTabs div.tabsHeader ul li {\n  display: block;\n  float: left;\n  list-style: none outside none;\n  margin: 10px 0 0;\n  padding: 0;\n  right: 50%; }\n\ndiv.oskariTabs div.tabsHeader ul li a {\n  background: none repeat scroll 0 0 #FFFFFF;\n  border-bottom: 1px solid #999999;\n  color: #3333FF;\n  display: block;\n  float: left;\n  padding: 10px 20px;\n  position: relative;\n  text-decoration: none; }\n\ndiv.oskariTabs div.tabsHeader ul li.active a {\n  border-left: 1px solid #999999;\n  border-right: 1px solid #999999;\n  border-top: 1px solid #999999;\n  border-bottom: 0px solid #999999;\n  color: #000000; }\n\ndiv.oskariTabs div.tabsHeader ul li.fill a {\n  width: 100%; }\n.modaldialog {\n  border: 1px solid #3C3C3C;\n  margin: 0px; }\n\n.modaltitle {\n  margin: 0px;\n  border-bottom: 1px solid #3C3C3C;\n  color: #3C3C3C;\n  padding: 8px 16px 4px 16px; }\n\n.modalmessage {\n  width: 100%;\n  color: #3C3C3C;\n  padding: 8px 16px 8px 16px; }\n\n.modalbuttons {\n  width: 100%;\n  display: inline-block;\n  padding: 0px 16px 4px 16px; }\n\n.modalbutton {\n  margin: 2px;\n  display: inline-block; }\n/*!\r\n * Bootstrap v2.0.3\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\n.oskari-badge {\n  font-size: 10.998px;\n  font-weight: bold;\n  line-height: 14px;\n  color: #ffffff;\n  vertical-align: baseline;\n  white-space: nowrap;\n  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);\n  background-color: #999999; }\n\n.oskari-badge {\n  padding: 1px 9px 2px;\n  -webkit-border-radius: 9px;\n  -moz-border-radius: 9px;\n  border-radius: 9px; }\n\na.oskari-badge:hover {\n  color: #ffffff;\n  text-decoration: none;\n  cursor: pointer; }\n\n.oskari-badge-important {\n  background-color: #b94a48; }\n\n.oskari-badge-important[href] {\n  background-color: #953b39; }\n\n.oskari-badge-warning {\n  background-color: #f89406; }\n\n.oskari-badge-warning[href] {\n  background-color: #c67605; }\n\n.oskari-badge-success {\n  background-color: #468847; }\n\n.oskari-badge-success[href] {\n  background-color: #356635; }\n\n.oskari-badge-info {\n  background-color: #3a87ad; }\n\n.oskari-badge-info[href] {\n  background-color: #2d6987; }\n\n.oskari-badge-inverse {\n  background-color: #333333; }\n\n.oskari-badge-inverse[href] {\n  background-color: #1a1a1a; }\n/*!\r\n * Bootstrap v2.0.3\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\n.oskari-alert {\n  padding-left: 8px;\n  padding-top: 4px;\n  margin: 4px;\n  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);\n  background-color: #fcf8e3;\n  border: 1px solid #fbeed5;\n  -webkit-border-radius: 4px;\n  -moz-border-radius: 4px;\n  border-radius: 4px;\n  color: #c09853;\n  position: relative;\n  height: 24px; }\n\n.oskari-alert-heading {\n  color: inherit; }\n\n.oskari-alert-icon-close {\n  position: absolute;\n  top: 4px;\n  right: 0px;\n  width: 24px;\n  height: 24px; }\n\n.oskari-alert-success {\n  background-color: #dff0d8;\n  border-color: #d6e9c6;\n  color: #468847; }\n\n.oskari-alert-danger, .oskari-alert-error {\n  background-color: #f2dede;\n  border-color: #eed3d7;\n  color: #b94a48; }\n\n.oskari-alert-info {\n  background-color: #d9edf7;\n  border-color: #bce8f1;\n  color: #3a87ad; }\ndiv.oskarifield div.icon-close {\n  display: inline-block;\n  left: -20px;\n  margin-left: 0px;\n  position: relative;\n  top: 3px; }\nth.asc {\n  background-image: url(\'/Oskari/resources/framework/bundle/divmanazer/images/asc_arrow.png\');\n  background-repeat: no-repeat;\n  background-position: center center; }\n\nth.desc {\n  background-image: url(\'/Oskari/resources/framework/bundle/divmanazer/images/desc_arrow.png\');\n  background-repeat: no-repeat;\n  background-position: center center; }\n\ndiv.column-selector-placeholder {\n  border-style: none;\n  float: left;\n  opacity: 1.0;\n  margin: 0;\n  padding: 0;\n  right: 0;\n  width: 25px;\n  height: 7px;\n  max-width: 25px;\n  max-height: 7px; }\n\ndiv.icon-menu {\n  position: absolute;\n  opacity: 1.0;\n  margin: 0;\n  cursor: pointer;\n  padding: 0;\n  width: 25px;\n  height: 8px;\n  max-width: 25px;\n  max-height: 7px; }\n\ndiv.column-selector {\n  position: absolute;\n  visibility: hidden;\n  background-color: white;\n  margin-top: 7px;\n  margin-right: 50px;\n  padding: 0;\n  border: 1px solid;\n  z-index: 10001; }\n\ndiv.column-selector div.close-selector-button {\n  width: 16px;\n  height: 16px;\n  position: absolute;\n  top: 5px;\n  right: 5px; }\n\ndiv.column-selector ul.column-selector-list {\n  list-style-type: none;\n  padding-right: 30px; }\n\ndiv.column-selector label.column-label {\n  padding-left: 5px; }\ndiv.divmanazerpopup {\n  max-width: 700px;\n  min-width: 200px;\n  position: fixed;\n  top: 50%;\n  left: 50%;\n  background-color: white;\n  -moz-background-clip: border;\n  /* Firefox 3.6 */\n  -webkit-background-clip: border;\n  /* Safari 4? Chrome 6? */\n  background-clip: border-box;\n  /* Firefox 4, Safari 5, Opera 10, IE 9 */\n  -moz-background-clip: padding;\n  /* Firefox 3.6 */\n  -webkit-background-clip: padding;\n  /* Safari 4? Chrome 6? */\n  background-clip: padding-box;\n  /* Firefox 4, Safari 5, Opera 10, IE 9 */\n  -moz-background-clip: content;\n  /* Firefox 3.6 */\n  -webkit-background-clip: content;\n  /* Safari 4? Chrome 6? */\n  background-clip: content-box;\n  /* Firefox 4, Safari 5, Opera 10, IE 9 */\n  border: 5px solid rgba(0, 0, 0, 0.2);\n  border-radius: 7px;\n  /*\r\n    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.80);\r\n    -moz-box-shadow: 0px 3px 3px black;\r\n    -webkit-box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.80);\r\n    */\n  z-index: 9000; }\n\ndiv.divmanazerpopup h3.popupHeader {\n  background-color: #FDF8D9;\n  border-radius: 5px 5px 0 0;\n  font-size: 18px;\n  line-height: 28px;\n  padding: 5px 10px; }\n\ndiv.divmanazerpopup div.content {\n  margin: 10px; }\n\ndiv.divmanazerpopup div.content textarea {\n  resize: none; }\n\ndiv.divmanazerpopup div.content ul {\n  margin: 10px; }\n\ndiv.divmanazerpopup.no_resize div.content textarea {\n  resize: none; }\n\ndiv.divmanazerpopup div.actions {\n  margin: 10px;\n  text-align: center; }\n\ndiv.divmanazerpopup div.actions input {\n  margin: 10px; }\n\n.divmanazerpopup.arrow:after, .divmanazerpopup.arrow:before {\n  border: solid transparent;\n  content: \" \";\n  height: 0;\n  width: 0;\n  position: absolute;\n  /*pointer-events: none; */ }\n\n/* Bottom alignment */\n.divmanazerpopup.bottom:after, .divmanazerpopup.bottom:before {\n  bottom: 100%; }\n\n.divmanazerpopup.bottom:after {\n  border-bottom-color: #FDF8D9;\n  border-width: 5px;\n  margin-left: -5px;\n  left: 50%; }\n\n.divmanazerpopup.bottom:before {\n  border-bottom-color: #000000;\n  border-width: 6px;\n  margin-left: -6px;\n  left: 50%; }\n\n/* top alignment */\n.divmanazerpopup.top:after, .divmanazerpopup.top:before {\n  top: 100%; }\n\n.divmanazerpopup.top:after {\n  border-top-color: #FFFFFF;\n  border-width: 5px;\n  margin-left: -5px;\n  left: 50%; }\n\n.divmanazerpopup.top:before {\n  border-top-color: #000000;\n  border-width: 6px;\n  margin-left: -6px;\n  left: 50%; }\n\n/* left alignment */\n.divmanazerpopup.left:after, .divmanazerpopup.left:before {\n  left: 100%; }\n\n.divmanazerpopup.left:after {\n  border-left-color: #FDF8D9;\n  border-width: 5px;\n  margin-top: -5px;\n  top: 50%; }\n\n.divmanazerpopup.left:before {\n  border-left-color: #000000;\n  border-width: 6px;\n  margin-top: -6px;\n  top: 50%; }\n\n/* right alignment */\n.divmanazerpopup.right:after, .divmanazerpopup.right:before {\n  right: 100%; }\n\n.divmanazerpopup.right:after {\n  border-right-color: #FDF8D9;\n  border-width: 5px;\n  margin-top: -5px;\n  top: 50%; }\n\n.divmanazerpopup.right:before {\n  border-right-color: #000000;\n  border-width: 6px;\n  margin-top: -6px;\n  top: 50%; }\ndiv.oskaributton {\n  display: inline-block;\n  margin: 5px; }\n\ndiv.oskaributton.primary input {\n  color: #3CA9FC; }\ndiv.oskarioverlay {\n  position: absolute;\n  background-color: black;\n  z-index: 8000; }\n\n.transparent {\n  zoom: 1;\n  filter: alpha(opacity=50);\n  /* unquote for libsass bug */\n  opacity: 0.5; }\n/*!\r\n * Bootstrap v2.0.3\r\n *\r\n * Copyright 2012 Twitter, Inc\r\n * Licensed under the Apache License v2.0\r\n * http://www.apache.org/licenses/LICENSE-2.0\r\n *\r\n * Designed and built with all the love in the world @twitter by @mdo and @fat.\r\n */\n.oskari-tooltip {\n  position: absolute;\n  z-index: 1200;\n  display: block;\n  visibility: visible;\n  padding: 5px;\n  font-size: 11px;\n  opacity: 0;\n  filter: alpha(opacity=0);\n  /* unquote for libsass bug */ }\n\n.oskari-tooltip.in {\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  /* unquote for libsass bug */ }\n\n.oskari-tooltip.top {\n  margin-top: -2px; }\n\n.oskari-tooltip.right {\n  margin-left: 2px; }\n\n.oskari-tooltip.bottom {\n  margin-top: 2px; }\n\n.oskari-tooltip.left {\n  margin-left: -2px; }\n\n.oskari-tooltip.top .oskari-tooltip-arrow {\n  bottom: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-top: 5px solid #000000; }\n\n.oskari-tooltip.left .oskari-tooltip-arrow {\n  top: 50%;\n  right: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-left: 5px solid #000000; }\n\n.oskari-tooltip.bottom .oskari-tooltip-arrow {\n  top: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-bottom: 5px solid #000000; }\n\n.oskari-tooltip.right .oskari-tooltip-arrow {\n  top: 50%;\n  left: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-right: 5px solid #000000; }\n\n.oskari-tooltip-inner {\n  max-width: 640px;\n  padding: 3px 8px;\n  color: #ffffff;\n  text-align: center;\n  text-decoration: none;\n  background-color: #000000;\n  -webkit-border-radius: 4px;\n  -moz-border-radius: 4px;\n  border-radius: 4px; }\n\n.oskari-tooltip-arrow {\n  position: absolute;\n  width: 0;\n  height: 0; }\n\n.oskari-popover {\n  position: absolute;\n  top: 0;\n  left: 0;\n  z-index: 1210;\n  display: none;\n  padding: 5px; }\n\n.oskari-popover.top {\n  margin-top: -5px; }\n\n.oskari-popover.right {\n  margin-left: 5px; }\n\n.oskari-popover.bottom {\n  margin-top: 5px; }\n\n.oskari-popover.left {\n  margin-left: -5px; }\n\n.oskari-popover.top .oskari-arrow {\n  bottom: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-top: 5px solid #000000; }\n\n.oskari-popover.right .oskari-arrow {\n  top: 50%;\n  left: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-right: 5px solid #000000; }\n\n.oskari-popover.bottom .oskari-arrow {\n  top: 0;\n  left: 50%;\n  margin-left: -5px;\n  border-left: 5px solid transparent;\n  border-right: 5px solid transparent;\n  border-bottom: 5px solid #000000; }\n\n.oskari-popover.left .oskari-arrow {\n  top: 50%;\n  right: 0;\n  margin-top: -5px;\n  border-top: 5px solid transparent;\n  border-bottom: 5px solid transparent;\n  border-left: 5px solid #000000; }\n\n.oskari-popover .oskari-arrow {\n  position: absolute;\n  width: 0;\n  height: 0; }\n\n.oskari-popover-inner {\n  padding: 3px;\n  /*width: 280px;*/\n  overflow: hidden;\n  background: #000000;\n  background: rgba(0, 0, 0, 0.8);\n  -webkit-border-radius: 6px;\n  -moz-border-radius: 6px;\n  border-radius: 6px;\n  -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);\n  -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);\n  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3); }\n\n.oskari-popover-title {\n  padding: 9px 15px;\n  line-height: 1;\n  background-color: #f5f5f5;\n  border-bottom: 1px solid #eee;\n  -webkit-border-radius: 3px 3px 0 0;\n  -moz-border-radius: 3px 3px 0 0;\n  border-radius: 3px 3px 0 0; }\n\n.oskari-popover-content {\n  padding: 14px;\n  background-color: #ffffff;\n  -webkit-border-radius: 0 0 3px 3px;\n  -moz-border-radius: 0 0 3px 3px;\n  border-radius: 0 0 3px 3px;\n  -webkit-background-clip: padding-box;\n  -moz-background-clip: padding-box;\n  background-clip: padding-box; }\n\n.oskari-popover-content p, .oskari-popover-content ul, .oskari-popover-content ol {\n  margin-bottom: 0; }\n'); }); requirejs.s.contexts._.nextTick = requirejs.nextTick; 
