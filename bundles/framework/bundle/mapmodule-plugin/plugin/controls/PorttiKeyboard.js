@@ -26,6 +26,11 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
         });
     },
     defaultKeyDown : function(evt) {
+        if(jQuery('input:focus').length > 0) {
+            // cancel all handling if there are inputs with focus
+            // (user might be writing something)
+            return;
+        }
         switch(evt.keyCode) {
             case OpenLayers.Event.KEY_LEFT:
             	this.mapmodule.panMapByPixels(-this.slideFactor,0, false, true);

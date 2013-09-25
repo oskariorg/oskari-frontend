@@ -173,7 +173,9 @@ Oskari.registerLocalization({
                 "bufferSize": "Virhe vyöhykkeen koossa",
                 "illegalCharacters": "ei kirjaimia - käytä numeroita",
                 "nohelp": "Ohjetta ei löytynyt",
-                "saveFailed": "Analyysin tallennus epäonnistui. Yritä myöhemmin uudelleen."
+                "saveFailed": "Analyysin tallennus epäonnistui. Yritä myöhemmin uudelleen.",
+                "loadLayersFailed": "Analyysitasojen lataus epäonnistui. Yritä myöhemmin uudelleen."
+             
             }
         },
         "StartView": {
@@ -215,7 +217,27 @@ Oskari.registerLocalization({
                 "save": "Tallenna",
                 "cancel": "Peruuta"
             }
+        },
+        "personalDataTab" : {
+            "grid" : {
+                "name" : "Nimi",
+                "delete": " "
+            },
+            "title" : "Analyysi",
+            "confirmDeleteMsg" : "Haluatko poistaa analyysin:",
+            "buttons" : {
+                "ok": "OK",
+                "cancel" : "Peruuta",
+                "delete" : "Poista"
+            },
+            "notification": {
+                "deletedTitle": "Karttatason poisto",
+                "deletedMsg": "Karttataso poistettu."
+            },
+            "error" : {
+                "title": "Virhe!",
+                "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin."
+            }
         }
-
     }
 });

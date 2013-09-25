@@ -22,8 +22,8 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
         }
         this.template = jQuery('<div class="oskariTabs">' + this.emptyMsg + '</div>');
 
-        this.templateTabs = jQuery('<div class="tabsHeader"><ul></ul></div><br clear="all"/>' +
-            '<div class="tabsContent"></div>');
+        this.templateTabs = jQuery('<div class="tabsHeader"><ul class="tabsItem"></ul></div><br clear="all"/>' +
+            '<div class="tabsContent tabsContentItem"></div>');
 
         this.ui = this.template.clone();
     }, {
@@ -33,7 +33,11 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * The first tab is selected as active immediately on add.
          * @param {Oskari.userinterface.component.TabPanel} panel
          */
+<<<<<<< HEAD
         addPanel: function (panel) {
+=======
+        addPanel: function (panel, first) {
+>>>>>>> ab24ab07a10a3d2d93fa1892a11b1b6a132ad902
             var me = this,
                 content,
                 headerContainer,
@@ -43,11 +47,17 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
                 content = this.templateTabs.clone();
                 this.ui.html(content);
             }
-            headerContainer = this.ui.find('ul');
-            header = panel.getHeader();
-            headerContainer.append(header);
 
-            panel.insertTo(this.ui.find('div.tabsContent'));
+            // ensure order is correct
+            headerContainer = this.ui.find('ul.tabsItem');
+            header = panel.getHeader();
+            if (first) {
+                headerContainer.prepend(header);
+            } else {
+                headerContainer.append(header);
+            }
+
+            panel.insertTo(this.ui.find('div.tabsContentItem'));
             this.panels.push(panel);
             if (this.panels.length === 1) {
                 // select first by default

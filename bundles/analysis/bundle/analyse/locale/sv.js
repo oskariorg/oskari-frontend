@@ -170,7 +170,8 @@ Oskari.registerLocalization({
                 "bufferSize": "Fel i zon storlek",
                 "nohelp": "ingen anvisning",
                 "saveFailed": "Fel i analys lagring. Försök senare igen.",
-                "illegalCharacters": "ingen bokstaver - använda sifror"
+                "illegalCharacters": "ingen bokstaver - använda sifror",
+                 "loadLayersFailed": "Fel i analys ladda ner"
             }
 
         },
@@ -212,6 +213,27 @@ Oskari.registerLocalization({
                 "title": "Editera kartlagret",
                 "save": "Lagra",
                 "cancel": "Tillbaka"
+            }
+        },
+        "personalDataTab" : {
+            "grid" : {
+                "name" : "Namn",
+                "delete": " "
+            },
+            "title" : "Analys",
+            "confirmDeleteMsg" : "Vill du ta bort:",
+            "buttons" : {
+                "ok": "OK",
+                "cancel" : "Avbryta",
+                "delete" : "Ta bort"
+            },
+            "notification": {
+                "deletedTitle": "Ta bort kartlager",
+                "deletedMsg": "Kartlagret borttaget"
+            },
+            "error" : {
+                "title": "Fel!",
+                "generic": "Systemfel. Försök på nytt senare."
             }
         }
     }

@@ -60,6 +60,52 @@ Oskari.registerLocalization(
                     "tooltip": "Show the data related to map.",
                     "grid" : "Show statistic grid"
                 },
+                "layout": {
+                    "label": "Layout",
+                    "fields": {
+                        "colours": {
+                            "label": "Color scheme",
+                            "placeholder": "Choose the colour scheme",
+                            "buttonLabel": "Change",
+                            "light_grey": "Light grey",
+                            "dark_grey": "Dark grey",
+                            "blue": "Blue",
+                            "red": "Red",
+                            "green": "Green",
+                            "yellow": "Yellow",
+                            "custom": {
+                                "name": "Custom colours",
+                                "bgLabel": "Header background",
+                                "titleLabel": "Header text",
+                                "headerLabel": "Title text",
+                                "iconLabel": "Icon",
+                                "iconCloseLabel": "Dark",
+                                "iconCloseWhiteLabel": "Light"
+                            }
+                        },
+                        "fonts": {
+                            "label": "Choose font"
+                        },
+                        "toolStyles": {
+                            "label": "Tool styles",
+                            "rounded-dark": "Rounded (dark)",
+                            "rounded-light": "Rounded (light)",
+                            "sharp-dark": "Sharp edges (dark)",
+                            "sharp-light": "Sharp edges (light)",
+                            "3d-dark": "3D (dark)",
+                            "3d-light": "3D (light)"
+                        }
+                    },
+                    "popup": {
+                        "title": "Choose the colour scheme",
+                        "close": "Close",
+                        "gfiDialog": {
+                            "title": "Feature info",
+                            "featureName": "Preview",
+                            "featureDesc": "Changing the colour scheme has effect only on the feature info popup"
+                        }
+                    }
+                },
                 "layers": {
                     "label": "Map layers",
                     "defaultLayer": "(Default layer)",
@@ -122,6 +168,7 @@ Oskari.registerLocalization(
                 "layerlist_empty": "The map layers you selected cannot be embedded. The menu Selected map layers shows whether or not a map layer can be embedded.",
                 "layerlist_denied": "Cannot be embedded",
                 "denied_tooltip": "The providers of this map data have not granted permission to publish these materials on other websites. Check rights to publish in the menu Selected map layers before embedding.",
+                "myPlacesDisclaimer": "NB. you are going to publish your own map layer.",
                 "buttons": {
                     "continue": "Continue",
                     "continueAndAccept": "Accept Terms of use and continue",

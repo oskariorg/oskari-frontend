@@ -5,6 +5,7 @@
 Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayerModelBuilder', function(sandbox) {
 	this.localization = Oskari.getLocalization("MapAnalysis");
     this.sandbox = sandbox;
+    this.wfsBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder',sandbox);
 }, {
 	/**
 	 * parses any additional fields to model
@@ -14,10 +15,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
 	 */
 	parseLayerData : function(layer, mapLayerJson, maplayerService) {
         var me = this;
+        var loclayer = me.localization.layer;
+
+        // call parent parseLayerData
+        this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
 
 		if(mapLayerJson.fields){
 			layer.setFields(mapLayerJson.fields);
 		}
+		if(mapLayerJson.locales){
+            layer.setLocales(mapLayerJson.locales);
+        }
 		if(mapLayerJson.name){
 			layer.setName(mapLayerJson.name);	
 		}
@@ -30,5 +38,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
 		if (mapLayerJson.wpsLayerId) {
 			layer.setWpsLayerId(mapLayerJson.wpsLayerId);
 		}
+		if (loclayer.organization) {
+		layer.setOrganizationName(loclayer.organization);
+		}
+		if (loclayer.inspire) {
+        layer.setInspireName(loclayer.inspire);
+        }
 	}
 });

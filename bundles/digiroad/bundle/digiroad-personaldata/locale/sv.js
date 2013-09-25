@@ -203,8 +203,7 @@ Oskari.registerLocalization({
         "email": "E-postadress",
         "changeInfo": "Ändra uppgifter",
         "changePassword": "Byt ut lösenordet",
-        "removeAccount": "Radera konto",
-        "changeInfoUrl": "/web/sv/profil"
+        "removeAccount": "Radera konto"
       }
     },
     "button": {

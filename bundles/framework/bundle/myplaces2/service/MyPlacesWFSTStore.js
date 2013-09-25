@@ -112,11 +112,15 @@ function(url, uuid) {
             category.setId(id);
             category.setDefault("true" === featAtts['default']);
             category.setName(featAtts['category_name']);
+            category.setLineWidth(featAtts['stroke_style']);
+            category.setLineWidth(featAtts['stroke_cap']);
+            category.setLineWidth(featAtts['stroke_corner']);
             category.setLineWidth(featAtts['stroke_width']);
             category.setLineColor(this._formatColorFromServer(featAtts['stroke_color']));
             category.setAreaLineWidth(featAtts['border_width']);
             category.setAreaLineColor(this._formatColorFromServer(featAtts['border_color']));
             category.setAreaFillColor(this._formatColorFromServer(featAtts['fill_color']));
+            category.setDotShape(featAtts['shape']);
             category.setDotColor(this._formatColorFromServer(featAtts['dot_color']));
             category.setDotSize(featAtts['dot_size']);
             category.setUUID(uuid);
@@ -171,18 +175,24 @@ function(url, uuid) {
             var m = list[l];
             var m_id = m.getId();
 
-            // TODO: add area line width and area line color after support on server
             // TODO: also prefix colors with # so server doesn't need to (handle it on load also)?
             var featAtts = {
                 'category_name' : m.getName(),
                 'default' : m.isDefault(),
                 'stroke_width' : m.getLineWidth(),
+                'stroke_dasharray' : m.getLineStyle(),
+                'stroke_linecap' : m.getLineCap(),
+                'stroke_linejoin' : m.getLineCorner(),
                 'stroke_color' : this._prefixColorForServer(m.getLineColor()),
                 'border_width' : m.getAreaLineWidth(),
+                'border_dasharray' : m.getAreaLineStyle(),
+                'border_linejoin' : m.getAreaLineCorner(),
                 'border_color' : this._prefixColorForServer(m.getAreaLineColor()),
+                'fill_pattern' : m.getAreaFillStyle(),
                 'fill_color' : this._prefixColorForServer(m.getAreaFillColor()),
                 'dot_color' : this._prefixColorForServer(m.getDotColor()),
                 'dot_size' : m.getDotSize(),
+                'dot_shape' : m.getDotShape(),
                 'uuid' : uuid
             };
             var feat = new OpenLayers.Feature.Vector(null, featAtts);
@@ -365,6 +375,7 @@ function(url, uuid) {
             place.setName(featAtts['name']);
             place.setDescription(featAtts['place_desc']);
             place.setLink(featAtts['link']);
+            place.setImageLink(featAtts['image_url']);
             place.setCategoryID(featAtts['category_id']);
             place.setCreateDate(featAtts['created']);
             place.setUpdateDate(featAtts['updated']);
@@ -431,6 +442,7 @@ function(url, uuid) {
                 'name' : m.getName(),
                 'place_desc' : m.getDescription(),
                 'link' : m.getLink(),
+                'image_url': m.getImageLink(),
                 'category_id' : m.getCategoryID(),
                 'uuid' : uuid
             };

@@ -2,7 +2,7 @@
 
 <table>
   <tr>
-    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.mapmodule.plugin.PanButtons)</td>
+    <td>API</td><td>[link](<%= apiurl %>Oskari.mapframework.bundle.mapmodule.plugin.PanButtons.html)</td>
   </tr>
 </table>
 
@@ -20,7 +20,9 @@ The plugin offers the user a move my by pan buttons
 
 ## Bundle configuration
 
-No configuration is required.
+No configuration is required. Following is optional:
+
+The styling and font of the plugin are configurable, with variables `toolStyle` (String) and `font` (String), respectively. A CSS class of `oskari-publisher-font-<font>` is expected to be defined with font-family definition. Following values are supported for the `toolStyle`: `rounded-light`, `rounded-dark`, `sharp-dark`, `sharp-light`, `3d-dark` and `3d-light`. An image `panbutton-sprites-<toolStyle>.png` is expected to be found in plugin's image resources directory.
 
 ## Requests the plugin handles
 

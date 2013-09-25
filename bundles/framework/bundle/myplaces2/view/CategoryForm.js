@@ -11,11 +11,38 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.CategoryForm",
  */
 function(instance) {
     this.instance = instance;
+    this.pointRenderForm = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.view.PointForm",this.instance);
+    this.lineRenderForm = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.view.LineForm",this.instance);
+    this.areaRenderForm = Oskari.clazz.create("Oskari.mapframework.bundle.myplaces2.view.AreaForm",this.instance);
     // problems in demo with autodetect
-    jscolor.dir = '/Oskari/libraries/jscolor/';
+//    jscolor.dir = '/Oskari/libraries/jscolor/';
     
     var loc = instance.getLocalization('categoryform');
     
+    this.renderButtons = {
+        'point' : {
+            iconCls : 'icon-point',
+            tooltip : loc.rendering.point.tooltip,
+            sticky : false,
+            callback : function() {
+            }
+        },
+        'line' : {
+            iconCls : 'icon-line',
+            tooltip : loc.rendering.line.tooltip, 
+            sticky : false,
+            callback : function() {
+            }
+        },
+        'area' : {
+            iconCls : 'icon-area',
+            tooltip : loc.rendering.area.tooltip, 
+            sticky : false,
+            callback : function() {
+            }
+        }
+    };
+
     this.template = jQuery('<div class="myplacescategoryform">' +
             '<div class="field">' +   
                 '<label for="categoryname">' + loc.name.label + '</label><br clear="all" />' +
@@ -23,12 +50,19 @@ function(instance) {
             '</div>' +
             '<div class="field drawing">' + 
                 '<label>' + loc.drawing.label + '</label><br clear="all" />' +
-                '<table></table>' +
+                '<div class="rendering"></div>'+
+            '</div>' +
+            '<div class="field visibleFields">' +
+                '<label>' + loc.visibleFields.label + '</label><br clear="all" />' +
+                '<input type="checkbox" name="placename" checked="checked" />' + loc.visibleFields.placename + '<br/>' +
+                '<input type="checkbox" name="placedesc" checked="checked" />' + loc.visibleFields.placedesc + '<br/>' +
+                '<input type="checkbox" name="image" checked="checked" />' + loc.visibleFields.image + '<br/>' +
             '</div>' +
         '</div>');
     this.templateTableRow = jQuery('<tr></tr>');
     this.templateTableCell = jQuery('<td></td>');
     this.templateTextInput = jQuery('<input type="text"/>');
+    this.templateRenderButton = jQuery('<div class="renderButton" style= "display: inline-block; border: 1px solid;"></div>');
     this.defaults = {
         dotSize : 4,
         dotColor : 'cc9900',
@@ -41,54 +75,51 @@ function(instance) {
     this.categoryId = undefined;
     this._isDefault = undefined;
     this.initialValues = undefined;
+
+    //magical mappings from getValues function
+    this.lineCapMap = ["butt","round"];
+    this.lineCornerMap = ["mitre","round","bevel"];
+    this.lineStyleMap = ["","5 2",""];
+
+
+
 }, {
+
+start : function() {
+    this._bindRenderButtons();    
+},
     /**
      * @method getForm
      * @return {jQuery} jquery reference for the form 
      */
     getForm : function() {
+
         var ui = this.template.clone();
         var table = ui.find('div.drawing table');
-        this._populatePointTool(table);
-        this._populateLineTool(table);
-        this._populateAreaTool(table);
-        
-        if(this.initialValues) {
-            ui.find('input[name=categoryname]').attr('value', this.initialValues.name);
-            ui.find('input[name=dotSize]').attr('value', this.initialValues.dot.size);
-            //document.getElementById('myColor').color.fromString('F2C80A')
-            var dotColor = ui.find('input[name=dotColor]');
-            dotColor.attr('value', this.initialValues.dot.color);
-            new jscolor.color(dotColor[0]);
-            //.fromString(this.initialValues.dot.color)
-            //.attr('value', this.initialValues.dot.color);
-            ui.find('input[name=lineSize]').attr('value', this.initialValues.line.size);
-            
-            var lineColor = ui.find('input[name=lineColor]');
-            lineColor.attr('value', this.initialValues.line.color);
-            new jscolor.color(lineColor[0]);
-            //ui.find('input[name=lineColor]').attr('value', this.initialValues.line.color);
-            
-            ui.find('input[name=areaLineSize]').attr('value', this.initialValues.area.size);
-            
-            var areaLineColor = ui.find('input[name=areaLineColor]');
-            areaLineColor.attr('value', this.initialValues.area.lineColor);
-            new jscolor.color(areaLineColor[0]);
-            //ui.find('input[name=areaLineColor]').attr('value', this.initialValues.area.lineColor);
-            
-            var areaFillColor = ui.find('input[name=areaFillColor]');
-            areaFillColor.attr('value', this.initialValues.area.fillColor);
-            new jscolor.color(areaFillColor[0]);
-            //ui.find('input[name=areaFillColor]').attr('value', this.initialValues.area.fillColor);
+        // this._populatePointTool(table);
+        // this._populateLineTool(table);
+        // this._populateAreaTool(table);
+
+        // populate the rendering fields
+        var content = ui.find('div.rendering');
+        for(var buttonName in this.renderButtons) {
+            var btnContainer = this.templateRenderButton.clone();
+            var button = this.renderButtons[buttonName];
+            btnContainer.attr("title", button.tooltip);
+        	btnContainer.addClass(button.iconCls);
+            content.append(btnContainer);
         }
+
         return ui;
     },
+
     /**
      * @method getValues
      * Returns form values as an object
      * @return {Object} 
      */
     getValues : function() {
+        // Mappings
         var values = {};
         // infobox will make us lose our reference so search 
         // from document using the form-class
@@ -96,33 +127,52 @@ function(instance) {
         
         if(onScreenForm.length > 0) {
             // found form on screen
-            var catName = onScreenForm.find('input[name=categoryname]').val();
-            values.name = catName;
+            values.name = onScreenForm.find('input[name=categoryname]').val();
             if(this.categoryId) {
                 values.id = this.categoryId;
             }
             values._isDefault = this._isDefault || false;
             
-            var dotSize = onScreenForm.find('input[name=dotSize]').val();
-            var dotColor = onScreenForm.find('input[name=dotColor]').val();
+            var dotSize = this.pointRenderForm.values.size;
+            var dotColor = this.pointRenderForm.values.color;
+            var dotShape = this.pointRenderForm.values.shape;
             values.dot = {
                 size : dotSize,
-                color : dotColor
-            }
-            var lineSize = onScreenForm.find('input[name=lineSize]').val();
-            var lineColor = onScreenForm.find('input[name=lineColor]').val();
+                color : dotColor,
+                shape : dotShape
+            };
+            var lineWidth = this.lineRenderForm.values.width;
+            var lineColor = this.lineRenderForm.values.color;
+            var lineCorner = this.lineRenderForm.values.corner;
+            var lineCap = this.lineRenderForm.values.cap;
+            var lineStyle = this.lineRenderForm.values.style;
             values.line = {
-                size : lineSize,
-                color : lineColor
-            }
-            var areaLineSize = onScreenForm.find('input[name=areaLineSize]').val();
-            var areaLineColor = onScreenForm.find('input[name=areaLineColor]').val();
-            var areaFillColor = onScreenForm.find('input[name=areaFillColor]').val();
+                width : lineWidth,
+                color : lineColor,
+                cap : this.lineCapMap[lineCap],
+                corner : this.lineCornerMap[lineCorner],
+                style : this.lineStyleMap[lineStyle]
+            };
+            var areaLineWidth = this.areaRenderForm.values.lineWidth;
+            var areaLineCorner = this.areaRenderForm.values.lineCorner;
+            var areaLineStyle = this.areaRenderForm.values.lineStyle;
+            var areaLineColor = this.areaRenderForm.values.lineColor;
+            var areaFillColor = this.areaRenderForm.values.fillColor;
+            var areaFillStyle = this.areaRenderForm.values.fillStyle;
             values.area = {
-                size : areaLineSize,
+                lineWidth : areaLineWidth,
+                lineCorner : this.lineCornerMap[areaLineCorner],
+                lineStyle : this.lineStyleMap[areaLineStyle],
                 lineColor : areaLineColor,
-                fillColor : areaFillColor
-            }
+                fillColor : areaFillColor,
+                fillStyle : areaFillStyle
+            };
+
+            // Get the names of the fields the user has checked.
+            values.visibleFields = [];
+            onScreenForm.find('div.visibleFields').find('input[type=checkbox]:checked').each(function() {
+                values.visibleFields.push(this.name);
+            });
         }
         return values;
     },
@@ -138,125 +188,76 @@ function(instance) {
         // from document using the form-class
         var onScreenForm = this._getOnScreenForm();
         
+//TODO: is this necessary anymore? 
         if(onScreenForm.length > 0) {
             // found form on screen
-            onScreenForm.find('input[name=categoryname]').val(data.name);
+
             onScreenForm.find('input[name=dotSize]').val(data.dot.size);
             onScreenForm.find('input[name=dotColor]').val(data.dot.color);
+
             onScreenForm.find('input[name=lineSize]').val(data.line.size);
             onScreenForm.find('input[name=lineColor]').val(data.line.color);
             
-            onScreenForm.find('input[name=areaLineSize]').val(data.area.size);
+            onScreenForm.find('input[name=areaLineSize]').val(data.area.lineWidth);
             onScreenForm.find('input[name=areaLineColor]').val(data.area.lineColor);
             onScreenForm.find('input[name=areaFillColor]').val(data.area.fillColor);
+
+            this._checkVisibleFields(data.visibleFields);
         }
-        
+
+        // 'round' -> 1
+        for (var i = 0; i < this.lineCapMap.length; i++) {
+            if(data.line.cap === this.lineCapMap[i]) {
+                data.line.cap = i;
+            }
+        }
+        for (var i = 0; i < this.lineCornerMap.length; i++) {
+            if(data.line.corner === this.lineCornerMap[i]) {
+                data.line.corner = i;
+            }
+            if(data.area.lineCorner === this.lineCornerMap[i]) {
+                data.area.lineCorner = i;
+            }
+        }
+        for (var i = 0; i < this.lineStyleMap.length; i++) {
+            if(data.line.style === this.lineStyleMap[i]) {
+                data.line.style = i;
+            }
+            if(data.area.lineStyle === this.lineStyleMap[i]) {
+                data.area.lineStyle = i;
+            }
+        }
+
         this.initialValues = data;
     },
-    _createInput : function(name, value, classes) {
-        var input = this.templateTextInput.clone();
-        input.attr('name', name);
-        input.attr('value', value);
-        if(classes) {
-            input.attr('class', classes);
-        }
-        if(classes == 'oskaricolor') {
-            input.picker = new jscolor.color(input[0]);
-        }
-        return input;
+    /**
+     * @method _bindRenderButtons
+     * Binds listeners for render buttons.
+     * NOTE! THIS IS A WORKAROUND since infobox uses OpenLayers popup which accepts
+     * only HTML -> any bindings will be lost
+     * @private
+     */
+    _bindRenderButtons : function() {
+        var me = this;
+        var onScreenForm = this._getOnScreenForm();
+
+        var point = onScreenForm.find('div.renderButton'+".icon-point");
+        point.off('click');
+        point.on('click', function() {
+            me.pointRenderForm.showForm(this, me.initialValues);
+        });
+        var line = onScreenForm.find('div.renderButton'+".icon-line")
+        line.off('click');
+        line.on('click', function() {
+            me.lineRenderForm.showForm(this, me.initialValues);
+        });
+        var area = onScreenForm.find('div.renderButton'+".icon-area")
+        area.off('click');
+        area.on('click', function() {
+            me.areaRenderForm.showForm(this, me.initialValues);
+        });
     },
-    _populatePointTool : function(table) {
-        var loc = this.instance.getLocalization('categoryform').drawing.point;
-        
-        var labelRow = this.templateTableRow.clone();
-        for(var title in loc) {
-            var label = this.templateTableCell.clone();
-            label.append(loc[title]);
-            labelRow.append(label);
-        }
-        // empty cell because area tool has one extra
-        labelRow.append(this.templateTableCell.clone());
-        
-        var toolRow = this.templateTableRow.clone();
-        // empty cell
-        toolRow.append(this.templateTableCell.clone());
-        
-        var pointColorpicker = this.templateTableCell.clone();
-        pointColorpicker.append(
-            this._createInput('dotColor', this.defaults.dotColor, 'oskaricolor'));
-        toolRow.append(pointColorpicker);
-        
-        var size = this.templateTableCell.clone();
-        size.append(this._createInput('dotSize', this.defaults.dotSize));
-        toolRow.append(size);
-        
-        // empty cell because area tool has one extra
-        toolRow.append(this.templateTableCell.clone());
-        
-        table.append(labelRow);
-        table.append(toolRow);
-    },
-    _populateLineTool : function(table) {
-        var loc = this.instance.getLocalization('categoryform').drawing.line;
-        
-        var labelRow = this.templateTableRow.clone();
-        for(var title in loc) {
-            var label = this.templateTableCell.clone();
-            label.append(loc[title]);
-            labelRow.append(label);
-        }
-        // empty cell because area tool has one extra
-        labelRow.append(this.templateTableCell.clone());
-        
-        var toolRow = this.templateTableRow.clone();
-        // empty cell
-        toolRow.append(this.templateTableCell.clone());
-        
-        var lineColorpicker = this.templateTableCell.clone();
-        lineColorpicker.append(
-            this._createInput('lineColor', this.defaults.lineColor, 'oskaricolor'));
-        toolRow.append(lineColorpicker);
-        
-        var size = this.templateTableCell.clone();
-        size.append(this._createInput('lineSize', this.defaults.lineSize));
-        toolRow.append(size);
-        
-        // empty cell because area tool has one extra
-        toolRow.append(this.templateTableCell.clone());
-        
-        table.append(labelRow);
-        table.append(toolRow);
-    },
-    _populateAreaTool : function(table) {
-        var loc = this.instance.getLocalization('categoryform').drawing.area;
-        
-        var labelRow = this.templateTableRow.clone();
-        for(var title in loc) {
-            var label = this.templateTableCell.clone();
-            label.append(loc[title]);
-            labelRow.append(label);
-        }
-        var toolRow = this.templateTableRow.clone();
-        // empty cell
-        toolRow.append(this.templateTableCell.clone());
-        
-        var areaColorpicker = this.templateTableCell.clone();
-        areaColorpicker.append(
-            this._createInput('areaFillColor', this.defaults.areaFillColor, 'oskaricolor'));
-        toolRow.append(areaColorpicker);
-        
-        var lineColorpicker = this.templateTableCell.clone();
-        lineColorpicker.append(
-            this._createInput('areaLineColor', this.defaults.areaLineColor, 'oskaricolor'));
-        toolRow.append(lineColorpicker);
-        
-        var size = this.templateTableCell.clone();
-        size.append(this._createInput('areaLineSize', this.defaults.areaLineSize));
-        toolRow.append(size);
-        
-        table.append(labelRow);
-        table.append(toolRow);
-    },
+
     /**
      * @method _getOnScreenForm
      * Returns reference to the on screen version shown by OpenLayers 
@@ -265,6 +266,7 @@ function(instance) {
     _getOnScreenForm : function() {
         return jQuery('div.myplacescategoryform');
     },
+
     /**
      * @method destroy
      */

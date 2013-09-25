@@ -60,6 +60,52 @@ Oskari.registerLocalization(
                     "tooltip": "Näytä karttaan liittyvä taulukko.",
                     "grid" : "Näytä tilastotaulukko"
                 },
+                "layout": {
+                    "label": "Ulkoasu",
+                    "fields": {
+                        "colours": {
+                            "label": "Värimaailma",
+                            "placeholder": "Valitse värimaailma",
+                            "buttonLabel": "Vaihda",
+                            "light_grey": "Vaalean harmaa",
+                            "dark_grey": "Tumman harmaa",
+                            "blue": "Sininen",
+                            "red": "Punainen",
+                            "green": "Vihreä",
+                            "yellow": "Keltainen",
+                            "custom": "Omat värit",
+                            "customLabels": {
+                                "bgLabel": "Tunnisteen tausta",
+                                "titleLabel": "Tunnisteen teksti",
+                                "headerLabel": "Otsikon teksti",
+                                "iconLabel": "Ikoni",
+                                "iconCloseLabel": "Tumma",
+                                "iconCloseWhiteLabel": "Vaalea"
+                            }
+                        },
+                        "fonts": {
+                            "label": "Valitse fontti"
+                        },
+                        "toolStyles": {
+                            "label": "Työkalujen tyyli",
+                            "rounded-dark": "Pyöristetty (tumma)",
+                            "rounded-light": "Pyöristetty (vaalea)",
+                            "sharp-dark": "Kulmikas (tumma)",
+                            "sharp-light": "Kulmikas (vaalea)",
+                            "3d-dark": "3D (tumma)",
+                            "3d-light": "3D (vaalea)"
+                        }
+                    },
+                    "popup": {
+                        "title": "Värimaailman valinta",
+                        "close": "Sulje",
+                        "gfiDialog": {
+                            "title": "Kohteen tiedot",
+                            "featureName": "Esikatselu",
+                            "featureDesc": "Värimaailman valinta vaikuttaa ainoastaan kohdetietolaatikon väritykseen"
+                        }
+                    }
+                },
                 "layers": {
                     "label": "Karttatasot",
                     "defaultLayer": "(Oletusvalinta)",
@@ -122,6 +168,7 @@ Oskari.registerLocalization(
                 "layerlist_empty": "Valitsemiasi karttatasoja ei voida julkaista. Valitut karttatasot -valikosta näet, voiko karttatason julkaista.",
                 "layerlist_denied": "Ei julkaistavissa",
                 "denied_tooltip": "Kartta-aineistojen tuottajat eivät ole antaneet näille aineistoilleen julkaisuoikeutta muissa verkkopalveluissa. Tarkista julkaisuoikeus Valitut karttatasot -valikosta ennen julkaisua.",
+                "myPlacesDisclaimer": "Huom. Olet julkaisemassa omaa karttatasoa.",
                 "buttons": {
                     "continue": "Jatka",
                     "continueAndAccept": "Hyväksy ehdot ja jatka",

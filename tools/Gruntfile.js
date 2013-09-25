@@ -91,11 +91,12 @@ module.exports = function (grunt) {
             build: ["../build"],
             dist: ["../dist"]
         },
-        yuidoc: {
+        oskaridoc: {
             dist: {
                 options: {
                     paths: ['../sources/framework', '../bundles/framework', '../bundles/sample', '../bundles/catalogue'],
-                    outdir: '../dist/<%= version %>api/'
+                    outdir: '../dist/<%= version %>api/',
+                    themedir: '../docs/yui/theme'
                 }
             }
         },
@@ -104,8 +105,13 @@ module.exports = function (grunt) {
                 "toolsPath": process.cwd(),
                 "docsPath": "../docs",
                 "docsurl": "/Oskari/<%= version %>docs/",
-                "apiurl": "http://oskari.org/",
+                "apiurl": "/Oskari/<%= version %>api/classes/",
                 "outdir": "../dist/<%= version %>docs/"
+            }
+        },
+        validateLocalizationJSON: {
+            target: {
+                src: ['../bundles/**/locale/*.js']
             }
         },
         beautifyJS: {
@@ -531,7 +537,7 @@ module.exports = function (grunt) {
         grunt.task.run('compile');
         grunt.task.run('compileAppCSS');
         grunt.task.run('sprite');
-        grunt.task.run('yuidoc');
+        grunt.task.run('oskaridoc');
         grunt.task.run('mddocs');
     });
 
@@ -749,6 +755,35 @@ module.exports = function (grunt) {
             grunt.fail.fatal("Couldn't find options.");
         }
 
+    });
+
+    grunt.registerMultiTask('validateLocalizationJSON', 'Make sure localization files are actual JSON', function () {
+        var startTime = new Date().getTime(),
+            content,
+            parsed,
+            languageCode;
+        this.files.forEach(function (file) {
+            file.src.filter(function (filepath) {
+                if (!grunt.file.exists(filepath)) {
+                    // This is not fatal...
+                    grunt.log.warn('Source file "' + filepath + '" not found.');
+                    return false;
+                }
+                content = grunt.file.read(filepath);
+                // Remove Oskari function call so we don't have to use eval...
+                content = content.replace("Oskari.registerLocalization(", "");
+                content = content.substring(0, content.lastIndexOf(");"));
+                try {
+                    parsed = JSON.parse(content);
+                    languageCode = filepath.substring(filepath.lastIndexOf("/") + 1, filepath.lastIndexOf("."));
+                    if (languageCode !== parsed.lang) {
+                        grunt.fail.fatal("Language code mismatch in " + filepath + ":\nExpected " + languageCode + ", found " + parsed.lang +".");
+                    }
+                } catch (err) {
+                    grunt.fail.fatal(filepath + ": " + err);
+                }
+            });
+        });
     });
 
     grunt.registerMultiTask('beautifyJS', 'Clean up JS code style', function () {
