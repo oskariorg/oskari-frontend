@@ -178,7 +178,9 @@ function(instance) {
             '<div class="column2">' +
                 '<div class="column21">' +
                     '<label>' + this.loc.color.label + '</label>' +
-                    '<div class="color-grid"></div>' +
+                    '<div class="color-grid">' +
+                        '<div class="color-rectangle"></div>'+
+                    '</div>' +
                     '<div class="color-label">' +
                         '<label>' + this.loc.color.labelOr + '</label>' +
                     '</div>'+
@@ -220,13 +222,8 @@ function(instance) {
             jQuery.extend(true, me.values, state.dot);
         }
 
-        var renderDialog = me._getOnScreenForm();
-        renderDialog.die();
-        renderDialog.remove();
-        renderDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var renderDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
-        renderDialog.addClass('top');
-        renderDialog.addClass('arrow');
         renderDialog.addClass('renderdialog');
         renderDialog.addClass('pointvisualization');
         var title = me.loc.title;
@@ -285,22 +282,27 @@ function(instance) {
 
         var statedChosenColor = false;
         // Color chooser
-        content = dialogContent.find('.color-grid');
+        content = dialogContent.find('.color-rectangle');
         for (var i = 0; i < me.basicColors.length; i++) {
             var colorCell = me.templateColorCell.clone();
             colorCell.css('background-color',me.basicColors[i]);
             var idExt = "ColorCell";
             var id = i+idExt;
-            if (id.length === idExt+1) id = "0"+id;
+            if (id.length === idExt.length+1) id = "0"+id;
             colorCell.attr("id",id);
             colorCell.click(function(){
                 if (jQuery('.color-source').prop('checked')) return;
                 var cellIndex = parseInt(this.id.substring(0,2),10);
                 if (cellIndex === me.activeColorCell) return;
-                jQuery('#'+me.activeColorCell+'ColorCell').css('border','1px solid #000000');
+                if (me.activeColorCell > -1) {
+                    var activeCell = me.activeColorCell.toString();
+                    if (me.activeColorCell < 10) activeCell = "0"+activeCell;
+                    jQuery('#'+activeCell+'ColorCell').css('border','1px solid #000000');
+                }
                 me.values.color = me.instance.rgbToHex(this.style.backgroundColor);
                 me.activeColorCell = cellIndex;
-                jQuery('#'+me.activeColorCell+'ColorCell').css('border','3px solid #ffffff');
+                if (cellIndex < 10) cellIndex = "0"+cellIndex.toString();
+                jQuery('#'+cellIndex+'ColorCell').css('border','3px solid #ffffff');
                 me._updatePreview(dialogContent);
             });
             //instead of selecting always black,
@@ -389,7 +391,7 @@ function(instance) {
         saveBtn.setTitle(me.loc.buttons.save);
         saveBtn.addClass('primary showSelection');
         saveBtn.setHandler(function() {
-            jQuery(".renderdialog").hide();
+            renderDialog.close();
         });
 
         var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -398,11 +400,11 @@ function(instance) {
             me.values.size = me.defaultValues.size;
             me.values.color = me.defaultValues.color;
             me.values.shape = me.defaultValues.shape;
-            jQuery(".renderdialog").hide();
+            renderDialog.close();
         });
         renderDialog.show(title, dialogContent, [saveBtn, cancelBtn]);
         renderDialog.moveTo(renderButton, 'top');
-
+        return renderDialog;
     },
 
     /**

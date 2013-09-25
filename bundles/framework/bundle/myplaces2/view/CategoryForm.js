@@ -29,14 +29,14 @@ function(instance) {
         },
         'line' : {
             iconCls : 'icon-line',
-            tooltip : loc.rendering.line.tooltip, 
+            tooltip : loc.rendering.line.tooltip,
             sticky : false,
             callback : function() {
             }
         },
         'area' : {
             iconCls : 'icon-area',
-            tooltip : loc.rendering.area.tooltip, 
+            tooltip : loc.rendering.area.tooltip,
             sticky : false,
             callback : function() {
             }
@@ -240,21 +240,29 @@ start : function() {
     _bindRenderButtons : function() {
         var me = this;
         var onScreenForm = this._getOnScreenForm();
-
         var point = onScreenForm.find('div.renderButton'+".icon-point");
         point.off('click');
         point.on('click', function() {
-            me.pointRenderForm.showForm(this, me.initialValues);
+            if(me.dialog) {
+                me.dialog.close(true);
+            }
+            me.dialog = me.pointRenderForm.showForm(this, me.initialValues);
         });
         var line = onScreenForm.find('div.renderButton'+".icon-line")
         line.off('click');
         line.on('click', function() {
-            me.lineRenderForm.showForm(this, me.initialValues);
+            if(me.dialog) {
+                me.dialog.close(true);
+            }
+            me.dialog = me.lineRenderForm.showForm(this, me.initialValues);
         });
         var area = onScreenForm.find('div.renderButton'+".icon-area")
         area.off('click');
         area.on('click', function() {
-            me.areaRenderForm.showForm(this, me.initialValues);
+            if(me.dialog) {
+                me.dialog.close(true);
+            }
+            me.dialog = me.areaRenderForm.showForm(this, me.initialValues);
         });
     },
 
@@ -273,6 +281,7 @@ start : function() {
     destroy : function() {
         // remember to remove live bindings if any
         //jQuery('div.myplacescategoryform input.oskaricolor').off();
+        this.dialog.close();
         var onScreenForm = this._getOnScreenForm();
         onScreenForm.remove();
     }
