@@ -646,7 +646,11 @@ define([
         updateLayerValues: function(selectedLayer, capability, container) {
             // Clear out the old values
             var layerInterface = container.find('#add-layer-interface').val();
+            // keep wms url from reseting... hacky whacky
+            var wmsurlField = container.find('#add-layer-wms-url');
+            var wmsurl = wmsurlField.text();
             this.clearAllFields();
+            wmsurlField.text(wmsurl); 
             //title
             jQuery('#add-layer-fi-name').val(selectedLayer.Title);
 
@@ -773,7 +777,7 @@ define([
             var form = jQuery('.create-layer');
             // Clear all the inputs and textareas.
             var inputs = form.find('input').val('');
-            form.find('textarea').val('');
+            form.find('textarea').text('');
             // Empty the GFI response type select
             jQuery('#add-layer-responsetype').empty();
             // Empty the layer style select

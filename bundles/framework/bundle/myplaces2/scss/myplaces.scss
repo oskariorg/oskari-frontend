@@ -210,7 +210,14 @@ div.renderdialog div.icon-buttons{
 div.renderdialog div.color-grid{
     width: 120px;
     height: 40px;
-    margin:5px;
+    margin: 5px;
+}
+
+div.renderdialog div.color-rectangle {
+    width: 120px;
+    height: 40px;
+    border: 1px solid #000000;
+    position: absolute;
 }
 
 div.renderdialog div.color-cell{

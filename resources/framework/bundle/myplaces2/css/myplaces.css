@@ -185,6 +185,13 @@ div.renderdialog div.color-grid {
   height: 40px;
   margin: 5px; }
 
+div.renderdialog div.color-rectangle {
+    width: 120px;
+    height: 40px;
+    border: 1px solid #000000;
+    position: absolute;
+}
+
 div.renderdialog div.color-cell {
   width: 20px;
   height: 20px;

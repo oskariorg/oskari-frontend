@@ -133,7 +133,7 @@ Oskari.registerLocalization({
       "placeNameIllegal": "Der Ortsname enthält unzulässige Zeichen. Erlaubte Zeichen sind die Buchstaben a-z, å, ä, ö sowie Zahlen, Bindestriche und die Backspace-Taste.",
       "descIllegal": "Die Beschreibung enthält unzulässige Zeichen. Erlaubte Zeichen sind die Buchstaben a-z, å, ä, ö sowie Zahlen, Bindestriche und die Backspace-Taste.",
       "categoryNameIllegal": "Die Ebenenbeschreibung enthält unzulässige Zeichen. Erlaubte Zeichen sind die Buchstaben a-z, å, ä, ö sowie Zahlen, Bindestriche und die Backspace-Taste.",
-      "dotSize": "Die Punktgröße liegt außerhalb der Größenbeschränkung (1-50).",
+      "dotSize": "Die Punktgröße liegt außerhalb der Größenbeschränkung (1-5).",
       "dotColor": "Falsche Punktfarbe.",
       "lineSize": "Die Linienstärke liegt außerhalb der Größenbeschränkung (1-50).",
       "lineColor": "Falsche Linienfarbe.",
