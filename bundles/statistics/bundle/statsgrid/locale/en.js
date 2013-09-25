@@ -96,6 +96,8 @@ Oskari.registerLocalization({
         "filterLTOE"            : "Less than or equal to (<=)",
         "filterLT"              : "Less than (<)",
         "filterBetween"         : "In between",
-        "filter"                : "Filter"
+        "filter"                : "Filter",
+        "filterByValue"         : "By value",
+        "filterByRegion"        : "By region"
     }
 });

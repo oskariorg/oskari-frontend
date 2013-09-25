@@ -53,8 +53,21 @@ function(config, locale) {
         'filterSelect'      : '<div><select class="filter-select"></select><div class="filter-inputs-container"></div></div>',
         'filterOption'      : '<option></option>',
         'filterInputs'      : '<input type="text" class="filter-input filter-input1" /><span class="filter-between" style="display:none;">-</span><input type="text" class="filter-input filter-input2" style="display:none;" />',
-        'filterLink'        : '<a href="javascript:void(0);"></a>'
-    }
+        'filterLink'        : '<a href="javascript:void(0);"></a>',
+        'filterByRegion'    : '<div id="statsgrid-filter-by-region"><p class="filter-desc"></p><div class="filter-container"></div></div>',
+        'regionCatSelect'   : '<div><select class="filter-region-category-select"></select></div>',
+        'regionSelect'      : '<div><select class="filter-region-select" multiple tabindex="3"></select></div>'
+    };
+
+    this.regionCategories = {};
+    this._acceptedRegionCategories = [
+        'ALUEHALLINTOVIRASTO',
+        'MAAKUNTA',
+        'NUTS1',
+        'SAIRAANHOITOPIIRI',
+        'SEUTUKUNTA',
+        'SUURALUE'
+    ];
 }, {
     /** 
      * @property __name module name
@@ -274,6 +287,7 @@ function(config, locale) {
         // success callback
         function(regionData) {
             if (regionData) {
+                me.setRegionCategories(regionData);
                 // get the actual data
                 //me.createMunicipalitySlickGrid(container, indicator, genders, years, indicatorMeta, regionData);
                 me.createMunicipalitySlickGrid(container, regionData);
@@ -290,6 +304,36 @@ function(config, locale) {
         function(jqXHR, textStatus) {
             me.showMessage(me._locale['sotka'].errorTitle, me._locale['sotka'].regionDataXHRError);
         });
+    },
+
+    setRegionCategories: function(regionData) {
+        var rLen = regionData.length,
+            i, region;
+
+        for (i = 0; i < rLen; ++i) {
+            region = regionData[i];
+            if (this._isAcceptedRegionCategory(region)) {
+                if (!this.regionCategories[region.category]) {
+                    this.regionCategories[region.category] = [];
+                }
+                this.regionCategories[region.category].push({
+                    id: region.id,
+                    code: region.code,
+                    title: region.title[Oskari.getLang()]
+                });
+            }
+        }
+    },
+
+    _isAcceptedRegionCategory: function(region) {
+        var catLen = this._acceptedRegionCategories.length,
+            i, category;
+
+        for (i = 0; i < catLen; ++i) {
+            category = this._acceptedRegionCategories[i];
+            if (category === region.category) return true;
+        }
+        return false;
     },
 
     /**
@@ -344,6 +388,7 @@ function(config, locale) {
                     id : indicData.id,
                     code : indicData.code,
                     municipality : indicData.title[Oskari.getLang()],
+                    memberOf: indicData.memberOf,
                     sel : 'checked'
                 }
                 rowId++;
@@ -906,7 +951,11 @@ function(config, locale) {
             sortable : true,
             header : {
                   menu: {
-                    items: [{element: jQuery(me.templates.filterLink).text(me._locale.filter), command: 'filter', actionType: 'link'}]
+                    items: [
+                        {element: jQuery('<div></div>').text(me._locale.filter)},
+                        {element: jQuery(me.templates.filterLink).text(me._locale.filterByValue), command: 'filter', actionType: 'link'},
+                        {element: jQuery(me.templates.filterLink).text(me._locale.filterByRegion), command: 'filterByRegion', actionType: 'link'}
+                    ]
                   },
                   icon: 'icon-funnel'
 
@@ -1571,6 +1620,8 @@ function(config, locale) {
 
             } else if(args.command == 'filter') {
                 me._createFilterPopup(args.column, this);
+            } else if (args.command == 'filterByRegion') {
+                me._createFilterByRegionPopup(args.column, this);
             } else {
 
                 for (var i = 0; i < me.conf.statistics.length; i++) {
@@ -1695,6 +1746,61 @@ function(config, locale) {
 
     },
 
+    _createFilterByRegionPopup: function(column, headerMenuPlugin) {
+        var me = this,
+            dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            dialogTitle = me._locale['filterTitle'],
+            cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+            cancelLoc = me._locale['buttons'].cancel,
+            filterBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
+            filterLoc = me._locale['buttons'].filter,
+            content = jQuery(me.templates.filterByRegion).clone(),
+            regionCatCont = jQuery(me.templates.filterRow).clone(),
+            regionCat = jQuery(me.templates.regionCatSelect).clone(),
+            labelsCont = jQuery(me.templates.filterRow).clone();
+
+        cancelBtn.setTitle(cancelLoc);
+        cancelBtn.setHandler(function() {
+            content.off();
+            headerMenuPlugin.hide();
+            dialog.close(true);
+        });
+
+        filterBtn.setTitle(filterLoc);
+        filterBtn.addClass('primary');
+        filterBtn.setHandler(function(e) {
+            me.filterColumnByRegion(column);
+
+            content.off();
+            headerMenuPlugin.hide();
+            dialog.close(true);
+        });
+
+        // Description text
+        content.find('.filter-desc').text(me._locale['indicatorFilterDesc']);
+
+        // Show the column name
+        labelsCont.find('.filter-label').text(me._locale['filterIndicator']);
+        labelsCont.find('.filter-value').text(column.name);
+        content.find('.filter-container').append(labelsCont);
+
+        // Show the region category select
+        console.log(me.regionCategories);
+        for (var key in me.regionCategories) {
+            var regionCatOption = jQuery(me.templates.filterOption).clone();
+            regionCatOption.val(key).text(key);
+            regionCat.append(regionCatOption);
+        }
+        regionCat.change(function(e) {
+            console.log(e.target.value);
+        });
+        regionCatCont.find('.filter-label').text(me._locale['selectRegionCategory']);
+        regionCatCont.find('.filter-value').append(regionCat);
+        content.find('.filter-container').append(regionCatCont);
+
+        dialog.show(dialogTitle, content, [cancelBtn, filterBtn]);
+    },
+
     /**
      * Filters municipalities according to method and constraints (i.e. inputArray)
      * @param column Apply this filter to column
@@ -1754,6 +1860,10 @@ function(config, locale) {
         data.collapseGroup('empty');
         // sendstats ...update map
         this.sendStatsData(column);
+
+    },
+
+    filterColumnByRegion: function(column, region) {
 
     },
 

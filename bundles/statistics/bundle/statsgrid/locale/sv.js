@@ -96,7 +96,9 @@ Oskari.registerLocalization({
         "filterLTOE"            : "Mindre än eller lika med (<=)",
         "filterLT"              : "Mindre (<)",
         "filterBetween"         : "Värdeintervallet",
-        "filter"                : "Filter"
+        "filter"                : "Filter",
+        "filterByValue"         : "Med värde",
+        "filterByRegion"        : "Med region"
 
     }
 });

@@ -95,6 +95,12 @@ Oskari.registerLocalization({
 		"filterLTOE" 			: "Pienempi tai yhtäsuuri (<=)",
 		"filterLT" 				: "Pienempi (<)",
 		"filterBetween" 		: "Arvoväli",
-		"filter" 				: "Suodata"
+		"filter" 				: "Suodata",
+		"filterByValue" 		: "Arvoilla",
+		"filterByRegion" 		: "Alueilla",
+
+		"selectRegionCategory" 	: "Aluejako",
+		"regionCatPlaceholder"	: "Valitse aluejako",
+		"selectRegion"			: "Alue"
 	}
 });
