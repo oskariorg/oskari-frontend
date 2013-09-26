@@ -238,7 +238,6 @@ function(instance) {
         if(!statedChosenColor) {
             colorCheckbox.checked = true;
             content.find("input.color-source").prop('disabled', false).attr('checked', 'checked');
-            dialogContent.find('input.custom-color').prop('disabled',false);
         }
 
         content = dialogContent.find('.custom-colors');
@@ -276,10 +275,10 @@ function(instance) {
         // add color values to the input fields
         if(!statedChosenColor) {
             var rgb = me.instance.hexToRgb(me.values.color);
-
             dialogContent.find('input.custom-color.custom-red-value').val(rgb.r);
             dialogContent.find('input.custom-color.custom-green-value').val(rgb.g);
             dialogContent.find('input.custom-color.custom-blue-value').val(rgb.b);
+            dialogContent.find('input.custom-color').prop('disabled',false);
         }
 
         dialogContent.find('.custom-color').change(function() {
