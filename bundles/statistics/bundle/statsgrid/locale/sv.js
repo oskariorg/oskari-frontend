@@ -100,16 +100,18 @@ Oskari.registerLocalization({
         "filterByValue"         : "Med värde",
         "filterByRegion"        : "Med region",
 
-        "selectRegionCategory"  : "Aluejako",
+        "selectRegionCategory"  : "Aluejako:",
         "regionCatPlaceholder"  : "Valitse aluejako",
-        "selectRegion"          : "Alue",
+        "selectRegion"          : "Alue:",
+        "chosenRegionText"      : "Valitse alueita",
+        "noRegionFound"         : "Aluetta ei löytynyt",
         "regionCategories"      : {
-            'ALUEHALLINTOVIRASTO' : 'Aluehallintovirasto',
-            'MAAKUNTA' : 'Maakunta',
-            'NUTS1' : 'Manner-Suomi ja Ahvenanmaa',
-            'SAIRAANHOITOPIIRI' : 'Sairaanhoitopiiri',
-            'SEUTUKUNTA' : 'Seutukunta',
-            'SUURALUE' : 'Suuralue'
+            "ALUEHALLINTOVIRASTO"   : "Aluehallintovirasto",
+            "MAAKUNTA"              : "Maakunta",
+            "NUTS1"                 : "Manner-Suomi ja Ahvenanmaa",
+            "SAIRAANHOITOPIIRI"     : "Sairaanhoitopiiri",
+            "SEUTUKUNTA"            : "Seutukunta",
+            "SUURALUE"              : "Suuralue"
         }
     }
 });

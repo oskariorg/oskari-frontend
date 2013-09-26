@@ -484,7 +484,7 @@ function(config, locale) {
 
         grid.onColumnsReordered.subscribe(function(e, args){
             me.dataView.refresh();
-        })
+        });
 
         // register checboxSelector plugin
         grid.registerPlugin(checkboxSelector);
@@ -536,6 +536,10 @@ function(config, locale) {
 
 
         me._initHeaderPlugin(columns, grid);
+
+        // register header buttons plugin
+        var headerButtonsPlugin = new Slick.Plugins.HeaderButtons();
+        grid.registerPlugin(headerButtonsPlugin);
 
         // notify dataview that we are starting to update data
         dataView.beginUpdate();
@@ -950,15 +954,21 @@ function(config, locale) {
             toolTip : name,
             sortable : true,
             header : {
-                  menu: {
+                menu: {
                     items: [
                         {element: jQuery('<div></div>').text(me._locale.filter)},
                         {element: jQuery(me.templates.filterLink).text(me._locale.filterByValue), command: 'filter', actionType: 'link'},
                         {element: jQuery(me.templates.filterLink).text(me._locale.filterByRegion), command: 'filterByRegion', actionType: 'link'}
                     ]
-                  },
-                  icon: 'icon-funnel'
-
+                },
+                icon: 'icon-funnel',
+                buttons: [{
+                    cssClass: 'icon-close-dark statsgrid-remove-indicator',
+                    tooltip: me._locale.removeColumn,
+                    handler: function(e) {
+                        me.removeIndicatorDataFromGrid(indicatorId, gender, year);
+                    }
+                }]
             },
             groupTotalsFormatter: function(totals, columnDef) {
                 var text = "";
@@ -1840,7 +1850,11 @@ function(config, locale) {
         regionCont.find('.filter-label').text(this._locale['selectRegion']);
         regionCont.find('.filter-value').append(regionSelect);
         container.find('.filter-container').append(regionCont);
-        container.find('div.filter-region-select select').chosen();
+        container.find('div.filter-region-select select').chosen({
+            width: '90%',
+            no_results_text : this._locale['noRegionFound'],
+            placeholder_text : this._locale['chosenRegionText']
+        });
     },
 
     /**
