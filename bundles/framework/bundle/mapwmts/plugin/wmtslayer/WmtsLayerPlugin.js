@@ -147,7 +147,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
 
         
         var wmtsUrl = //layer.getWmtsUrls()[0]; 
-            layerDef.resourceUrl.tile.template;
+            layerDef.resourceUrl ? ( layerDef.resourceUrl.tile ? layerDef.resourceUrl.tile.template : undefined) : undefined;
             
         if( !wmtsUrl) {
             wmtsUrl = layer.getWmtsUrls()[0][0].url;
@@ -193,10 +193,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
 
         sandbox.printDebug("[WmtsLayerPlugin] creating WMTS Layer " + matrixSet.identifier + " / " + wmtsLayerConfig.id + "/" + wmtsLayerConfig.layer + "/" + wmtsLayerConfig.url);
 
-        var wmtsLayer = new OpenLayers.Layer.WMTS(wmtsLayerConfig);
-        //var layerClazz = this._wmtsLayerClazz.getPatch();
-        // Oskari.$("WMTSLayer");
-        //var wmtsLayer = new layerClazz(fix);
+        var wmtsLayer = new OpenLayers.Layer.WMTS(wmtsLayerConfig);      
         wmtsLayer.opacity = layer.getOpacity() / 100;
 
         sandbox.printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
