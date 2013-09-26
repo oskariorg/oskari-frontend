@@ -946,6 +946,14 @@ function(config, locale) {
             return false;
         }
 
+        var headerButtons = [{
+            cssClass: 'icon-close-dark statsgrid-remove-indicator',
+            tooltip: me._locale.removeColumn,
+            handler: function(e) {
+                me.removeIndicatorDataFromGrid(indicatorId, gender, year);
+            }
+        }];
+
         var name = indicatorName + '/' + year + '/' + gender;
         columns.push({
             id : columnId,
@@ -962,13 +970,7 @@ function(config, locale) {
                     ]
                 },
                 icon: 'icon-funnel',
-                buttons: [{
-                    cssClass: 'icon-close-dark statsgrid-remove-indicator',
-                    tooltip: me._locale.removeColumn,
-                    handler: function(e) {
-                        me.removeIndicatorDataFromGrid(indicatorId, gender, year);
-                    }
-                }]
+                buttons: ( (this.conf && this.conf.published) ? null : headerButtons )
             },
             groupTotalsFormatter: function(totals, columnDef) {
                 var text = "";
@@ -1863,7 +1865,6 @@ function(config, locale) {
      * @method of filtering
      * @inputArray constraints
      */
-
     filterColumn : function(column, method, inputArray) {
         var data = this.grid.getData(); 
         var items = data.getItems();
