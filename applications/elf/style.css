@@ -3,7 +3,7 @@
         margin: 0;
         padding: 0;
         height: 100%;
-        font: 14px/16px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif !important;
+        font: 14px/16px "Open Sans", "Helvetica Neue", "HelveticaNeue", Helvetica, Arial, sans-serif
     }
     #mapdiv {
         width: 100%;
@@ -37,21 +37,6 @@
         margin-top: 4px;
     }
 
-    h4 {
-        font-family: 'Open Sans' !important;;
-        font-size: 14px !important;
-        font-style: normal !important;
-        font-variant: normal !important;
-        font-weight: normal !important;
-    }
-    div.headerText {
-        font-family: 'Open Sans' !important;
-        font-size: 14px !important;
-        font-style: normal !important;
-        font-variant: normal !important;
-        font-weight: normal !important;
-    }
-
     .oskari-tile-closed {
         background-color: #0099CB !important;
         border-bottom: 1px solid #0099CB !important;
@@ -74,7 +59,7 @@
         width: 153px;
         overflow: hidden;
         background-color: white;
-        background-image: url('Logo.png');
+        background-image: url('ELF_web_logo_small.jpg');
         background-repeat: no-repeat;
     }
 
@@ -97,8 +82,5 @@
         margin: 0px !important;
     }
 
-    div.popupContent {
-        margin-left: 0px !important;
-    }
 }
 
