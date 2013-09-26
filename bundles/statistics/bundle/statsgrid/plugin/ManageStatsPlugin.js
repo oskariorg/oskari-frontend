@@ -1766,7 +1766,7 @@ function(config, locale) {
             regionCatCont = jQuery(me.templates.filterRow).clone(),
             regionCat = jQuery(me.templates.regionCatSelect).clone(),
             labelsCont = jQuery(me.templates.filterRow).clone(),
-            regionIds;
+            regionIds, key, regionCatOption, regionCatLoc;
 
         cancelBtn.setTitle(cancelLoc);
         cancelBtn.setHandler(function() {
@@ -1795,9 +1795,16 @@ function(config, locale) {
         content.find('.filter-container').append(labelsCont);
 
         // Show the region category select
-        for (var key in me.regionCategories) {
-            var regionCatOption = jQuery(me.templates.filterOption).clone();
-            regionCatOption.val(key).text(key);
+        // Create an empty option first
+        regionCatOption = jQuery(me.templates.filterOption).clone();
+        regionCatLoc = me._locale.regionCatPlaceholder;
+        regionCatOption.val('').text(regionCatLoc);
+        regionCat.find('select').append(regionCatOption);
+
+        for (key in me.regionCategories) {
+            regionCatOption = jQuery(me.templates.filterOption).clone();
+            regionCatLoc = me._locale.regionCategories[key];
+            regionCatOption.val(key).text(regionCatLoc);
             regionCat.find('select').append(regionCatOption);
         }
         regionCatCont.find('.filter-label').text(me._locale['selectRegionCategory']);
@@ -1813,19 +1820,21 @@ function(config, locale) {
     _createFilterByRegionSelect: function(container, regionCategory) {
         container.find('.filter-region-container').remove();
 
+        if (!regionCategory) return null;
+
         var regionCont = jQuery(this.templates.filterRow).clone(),
             regionSelect = jQuery(this.templates.regionSelect).clone(),
             regions = this.regionCategories[regionCategory],
             rLen = regions.length,
-            regionCatOption, region, i;
+            regionOption, region, i;
 
         regionCont.addClass('filter-region-container');
 
         for (i = 0; i < rLen; ++i) {
             region = regions[i];
-            regionCatOption = jQuery(this.templates.filterOption).clone();
-            regionCatOption.val(region.id).text(region.title);
-            regionSelect.find('select').append(regionCatOption);
+            regionOption = jQuery(this.templates.filterOption).clone();
+            regionOption.val(region.id).text(region.title);
+            regionSelect.find('select').append(regionOption);
         }
 
         regionCont.find('.filter-label').text(this._locale['selectRegion']);

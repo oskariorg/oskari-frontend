@@ -101,6 +101,14 @@ Oskari.registerLocalization({
 
 		"selectRegionCategory" 	: "Aluejako",
 		"regionCatPlaceholder"	: "Valitse aluejako",
-		"selectRegion"			: "Alue"
+		"selectRegion"			: "Alue",
+		"regionCategories"      : {
+            'ALUEHALLINTOVIRASTO' : 'Aluehallintovirasto',
+            'MAAKUNTA' : 'Maakunta',
+            'NUTS1' : 'Manner-Suomi ja Ahvenanmaa',
+            'SAIRAANHOITOPIIRI' : 'Sairaanhoitopiiri',
+            'SEUTUKUNTA' : 'Seutukunta',
+            'SUURALUE' : 'Suuralue'
+        }
 	}
 });

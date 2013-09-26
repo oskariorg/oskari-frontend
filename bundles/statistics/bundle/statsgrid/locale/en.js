@@ -98,6 +98,18 @@ Oskari.registerLocalization({
         "filterBetween"         : "In between",
         "filter"                : "Filter",
         "filterByValue"         : "By value",
-        "filterByRegion"        : "By region"
+        "filterByRegion"        : "By region",
+
+        "selectRegionCategory"  : "Region categories",
+        "regionCatPlaceholder"  : "Choose a region category",
+        "selectRegion"          : "Regions",
+        "regionCategories"      : {
+            'ALUEHALLINTOVIRASTO' : 'Aluehallintovirasto',
+            'MAAKUNTA' : 'Maakunta',
+            'NUTS1' : 'Manner-Suomi ja Ahvenanmaa',
+            'SAIRAANHOITOPIIRI' : 'Sairaanhoitopiiri',
+            'SEUTUKUNTA' : 'Seutukunta',
+            'SUURALUE' : 'Suuralue'
+        }
     }
 });
