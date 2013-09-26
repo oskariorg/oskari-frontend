@@ -336,26 +336,25 @@ function(instance) {
         if(!statedChosenColor) {
             colorCheckbox.checked = true;
             content.find("input.color-source").prop('disabled', false).attr('checked', 'checked');
-
+            dialogContent.find('input.custom-color').prop('disabled',false);
         }
-
 
         content = dialogContent.find('.custom-colors');
         var customColorEditor = this.templateCustomColor.clone();
         content.append(customColorEditor);
 
         var redValue = me.templateColorValue.clone();
-        redValue.addClass("custom-red-value");
+        redValue.addClass('custom-red-value');
         dialogContent.find('.colorcolumn1').append(redValue);
         dialogContent.find('label.custom-red-value').text('R');
 
         var greenValue = me.templateColorValue.clone();
-        greenValue.addClass("custom-green-value");
+        greenValue.addClass('custom-green-value');
         dialogContent.find('.colorcolumn21').append(greenValue);
         dialogContent.find('label.custom-green-value').text('G');
 
         var blueValue = me.templateColorValue.clone();
-        blueValue.addClass("custom-blue-value");
+        blueValue.addClass('custom-blue-value');
         dialogContent.find('.colorcolumn22').append(blueValue);
         dialogContent.find('label.custom-blue-value').text('B');
 

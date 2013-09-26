@@ -238,6 +238,7 @@ function(instance) {
         if(!statedChosenColor) {
             colorCheckbox.checked = true;
             content.find("input.color-source").prop('disabled', false).attr('checked', 'checked');
+            dialogContent.find('input.custom-color').prop('disabled',false);
         }
 
         content = dialogContent.find('.custom-colors');
