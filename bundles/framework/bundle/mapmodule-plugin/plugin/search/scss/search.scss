@@ -106,7 +106,7 @@ div.published-search-div div.search-area-div input.search-input {
   outline: none;
 }
 div.published-search-div div.published-search-results {
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   max-height: 320px;
   white-space: nowrap;
@@ -116,14 +116,29 @@ div.published-search-div div.published-search-results {
   display: block;
   background-color: #FFFFFF;
   border: 1px solid black;
-  border-radius: 6px;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px;
 }
-div.published-search-div div.published-search-results div.published-search-header {
+div.published-search-div div.published-search-results div.published-search-content {
   padding: 5px;
 }
 div.published-search-div div.published-search-results table.search-results {
   margin: 0 0 6px 0;
 }
 
+div.published-search-div .oskari-publisher-search-results-rounded-dark,
+div.published-search-div .oskari-publisher-search-results-rounded-light {
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px;
+}
+div.published-search-div .oskari-publisher-search-results-sharp-dark,
+div.published-search-div .oskari-publisher-search-results-sharp-light {
+  border-radius: 0px;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+}
+div.published-search-div .oskari-publisher-search-results-3d-dark,
+div.published-search-div .oskari-publisher-search-results-3d-light {
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
