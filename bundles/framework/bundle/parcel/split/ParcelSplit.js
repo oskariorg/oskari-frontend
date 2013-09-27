@@ -283,6 +283,10 @@ function(drawPlugin) {
             case "OpenLayers.Geometry.LineString":
                 var newFeatures = this.splitLine(baseMultiPolygon,operatingFeature);
                 this.drawPlugin.drawLayer.removeAllFeatures();
+alert(newFeatures);
+alert(newFeatures.length);
+alert(newFeatures[0]);
+alert(newFeatures[0].geometry);
                 for (var i = 0; i < newFeatures[0].geometry.components.length; i++) {
                     this.drawPlugin.drawLayer.addFeatures(new OpenLayers.Feature.Vector(newFeatures[0].geometry.components[i]));
                     this.drawPlugin.drawLayer.features[i].style = this.drawPlugin.basicStyle;
@@ -442,6 +446,27 @@ function(drawPlugin) {
             var scale = 1;
             var marker;
             var logText = "";
+
+            // IE8 compatibility
+            if (!Array.prototype.indexOf) {
+                Array.prototype.indexOf = function (elt /*, from*/) {
+                    var len = this.length >>> 0;
+
+                    var from = Number(arguments[1]) || 0;
+                    from = (from < 0)
+                        ? Math.ceil(from)
+                        : Math.floor(from);
+                    if (from < 0)
+                        from += len;
+
+                    for (; from < len; from++) {
+                        if (from in this &&
+                            this[from] === elt)
+                            return from;
+                    }
+                    return -1;
+                };
+            }
 
             for (i=0; i<olOldFeatures.length; i++) {
                 if (olOldFeatures[i].id.indexOf("Polygon") !== -1) {
