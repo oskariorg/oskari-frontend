@@ -406,7 +406,9 @@ function(config) {
 				tableBody.append(row);
 			}
 			
-			tableBody.find(":odd").addClass("odd");
+			if (!(this._conf && this._conf.toolStyle)) {
+				tableBody.find(":odd").addClass("odd");
+			}
 
 			content.html(table);
 			resultsContainer.show();
