@@ -1829,6 +1829,15 @@ function(config, locale) {
         dialog.show(dialogTitle, content, [cancelBtn, filterBtn]);
     },
 
+    /**
+     * Creates an element to select regions from a region category.
+     *
+     * @method _createFilterByRegionSelect
+     * @private
+     * @param  {jQuery} container      The container of the popup's content
+     * @param  {String} regionCategory the region category id
+     * @return {undefined}
+     */
     _createFilterByRegionSelect: function(container, regionCategory) {
         container.find('.filter-region-container').remove();
 

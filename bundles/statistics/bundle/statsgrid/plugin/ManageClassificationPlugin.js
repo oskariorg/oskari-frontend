@@ -280,8 +280,13 @@ function(config, locale) {
             //params eg. CUL_COL:"indicator..." , VIS_NAME: "ows:kunnat2013", VIS_ATTR: "kuntakoodi", VIS_CODES: munArray, COL_VALUES: statArray
             this._params = event.getParams();
             // Classify data
-            this.classifyData(event);
-
+            if (this._params && this._params.COL_VALUES && this._params.COL_VALUES.length === 0) {
+                // If the values are empty, just send the empty values to visualization
+                this.sendEmptyValues(event);
+            } else {
+                // Else classify data
+                this.classifyData(event);
+            }
         }
     },
 
@@ -452,6 +457,27 @@ function(config, locale) {
         // Show legend in content
         this.element.find('div.content').show();
 
+    },
+
+    /**
+     * Sends empty values for visualization. Used because #classifyData
+     * does a whole lot of other things besides just sending the values.
+     *
+     * @method sendEmptyValues
+     * @param  {Object} event The event with layer and params
+     * @return {undefined}
+     */
+    sendEmptyValues: function(event) {
+        var layer = event.getLayer(),
+            params = event.getParams();
+
+        this.statsService.sendVisualizationData(layer, {
+            VIS_ID : -1,
+            VIS_NAME : params.VIS_NAME,
+            VIS_ATTR : params.VIS_ATTR,
+            VIS_CLASSES : "",
+            VIS_COLORS : "choro:"
+        });
     },
 
     /**
