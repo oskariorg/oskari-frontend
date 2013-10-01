@@ -157,7 +157,8 @@ Oskari.registerLocalization({
 			},
 
 			"interfaceAddress" 		: "Rajapinnan osoite",
-			"interfaceAddressDesc" 	: "WMS&shy;-tasomäärittelyjen osoite"
+			"interfaceAddressDesc" 	: "WMS&shy;-tasomäärittelyjen osoite",
+			"viewingRightsRoles" 	: "Katseluoikeudet rooleille"
 		},
 		"cancel" 	: "Peruuta",
 		"add" 		: "Tallenna",

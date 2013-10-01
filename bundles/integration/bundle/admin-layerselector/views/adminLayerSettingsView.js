@@ -2,13 +2,15 @@ define([
     'text!_bundle/templates/adminTypeSelectTemplate.html',
     'text!_bundle/templates/adminLayerSettingsTemplate.html',
     'text!_bundle/templates/adminGroupSettingsTemplate.html',
-    'text!_bundle/templates/group/subLayerTemplate.html'
+    'text!_bundle/templates/group/subLayerTemplate.html',
+    '_bundle/collections/userRoleCollection'
     ], 
     function(
         TypeSelectTemplate,
         LayerSettingsTemplate,
         GroupSettingsTemplate,
-        SubLayerTemplate
+        SubLayerTemplate,
+        userRoleCollection
         ) {
     return Backbone.View.extend({
 //<div class="admin-add-layer" data-id="<% if(model != null && model.getId()) { %><%= model.getId() %><% } %>">
@@ -54,6 +56,9 @@ define([
             this.groupTemplate      = _.template(GroupSettingsTemplate);
             this.subLayerTemplate   = _.template(SubLayerTemplate);
             _.bindAll(this);
+    
+            this._rolesUpdateHandler();
+
             this.render();
         },
 
@@ -91,12 +96,24 @@ define([
             // otherwise create a new layer
             else {
                 // add html template
+                console.dir(this.options.instance);
                 this.$el.html(this.typeSelectTemplate({
                     model: this.model, 
                     instance : this.options.instance,
                     classNames : this.classes.getGroupTitles()
                 }));
             }
+        },
+        /**
+         * @method _rolesUpdateHandler
+         * @private
+         * Updates user roles.
+         */
+        _rolesUpdateHandler : function() {
+            var sandbox = Oskari.getSandbox();
+            var roles = sandbox.getUser().getRoles();
+            
+            this.roles = new userRoleCollection(roles).getRoles();
         },
 
         /**
@@ -125,7 +142,8 @@ define([
                 model: this.model,
                 instance : this.options.instance,
                 classNames : this.classes.getGroupTitles(),
-                isSubLayer : this.options.baseLayerId
+                isSubLayer : this.options.baseLayerId,
+                roles : this.roles
             }));
             // if settings are hidden, we need to populate template and
             // add it to the DOM
@@ -167,7 +185,8 @@ define([
                 instance : this.options.instance,
                 groupTitle : groupTitle,
                 subLayers : subLayers,
-                subLayerTemplate : this.subLayerTemplate
+                subLayerTemplate : this.subLayerTemplate,
+                roles : this.roles
             }));
         },
 
@@ -304,28 +323,22 @@ define([
             form.find('[id$=-name]').filter('[id^=add-layer-]').each(function (index) {
                 lang = this.id.substring(10, this.id.indexOf("-name"));
                 console.log(lang, this.value);
-                //data.names[lang] = this.value;
+                data.names[lang] = this.value;
             });
             form.find('[id$=-title]').filter('[id^=add-layer-]').each(function (index) {
                 lang = this.id.substring(10, this.id.indexOf("-title"));
                 console.log(lang, this.value);
-                //data.title[lang] = this.value;
+                data.title[lang] = this.value;
             });
-            data.names.fi       = form.find('#add-layer-fi-name').val(),
-            data.names.sv       = form.find('#add-layer-sv-name').val(),
-            data.names.en       = form.find('#add-layer-en-name').val(),
-            data.title.fi        = form.find('#add-layer-fi-title').val(),
-            data.title.sv        = form.find('#add-layer-sv-title').val(),
-            data.title.en        = form.find('#add-layer-en-title').val(),
 
             // type can be either wmslayer, base or groupMap
-            data.type           = form.find('#add-layer-type').val() || 'wmslayer',
-            data.wmsName        = form.find('#add-layer-wms-id').val(),
-            data.wmsUrl         = form.find('#add-layer-wms-url').val(),
+            data.type           = form.find('#add-layer-type').val() || 'wmslayer';
+            data.wmsName        = form.find('#add-layer-wms-id').val();
+            data.wmsUrl         = form.find('#add-layer-wms-url').val();
 
-            data.opacity        = form.find('#opacity-slider').val(),
+            data.opacity        = form.find('#opacity-slider').val();
 
-            data.style          = form.find('#add-layer-style').val(),
+            data.style          = form.find('#add-layer-style').val();
             data.style          = me.classes.encode64(data.style);//me.layerGroupingModel.encode64(data.style);
 
             if(data.style == null) {
@@ -351,6 +364,12 @@ define([
                 data.gfiType = '';
             }
 
+            data.viewPermissions = '';
+            for(var i = 0; i < this.roles.length; i++) {
+                if (form.find('#layer-view-roles-'+this.roles[i].id).is(':checked')) {
+                   data.viewPermissions += this.roles[i].id + ',';
+                } 
+            }
 
 
             // Layer class id aka. orgName id
@@ -377,6 +396,7 @@ define([
                 "&dataUrl=" + encodeURIComponent(data.dataUrl) +
                 "&xslt=" + data.xslt +
                 "&gfiType=" + data.gfiType +
+                "&viewPermissions=" + data.viewPermissions +
 				"&metadataUrl=" + encodeURIComponent(data.metadataUrl);
             for (lang in data.names) {
                 if (data.names.hasOwnProperty(lang)) {
@@ -464,11 +484,16 @@ define([
             addClass.find('[id$=-name]').filter('[id^=add-group-]').each(function (index) {
                 lang = this.id.substring(10, this.id.indexOf("-name"));
                 console.log(lang, this.value);
-                //params += "&sub_name_" + lang + "=" + this.value;
+                params += "&sub_name_" + lang + "=" + this.value;
             });
-                "&sub_name_fi=" + addClass.find("#add-group-fi-name").val() +
-                "&sub_name_sv=" + addClass.find("#add-group-sv-name").val() +
-                "&sub_name_en=" + addClass.find("#add-group-en-name").val();
+
+            var viewPermissions = '';
+            for(var i = 0; i < this.roles.length; i++) {
+                if (form.find('#layer-view-roles-'+this.roles[i].id).is(':checked')) {
+                   viewPermissions += this.roles[i].id + ',';
+                } 
+            }
+            params += "&viewPermissions=" + viewPermissions;                    
 
             if (layerType === 'groupMap' || ( me.model && me.model.isGroupLayer() )) {
                 params += "&group_map=" + true;
@@ -621,9 +646,9 @@ define([
          * @method readCapabilities
          */
         readCapabilities: function(e) {
-            var me = this;
-            var current = jQuery(e.currentTarget),
-            selected = current.val();
+            var me = this,
+                current = jQuery(e.currentTarget),
+                selected = current.val();
             // If no value (eg. the placeholder option was selected) remove the
             // sublayer select and return.
             if (!selected) {
@@ -694,8 +719,9 @@ define([
                 //Styles
                 var styleSelect = jQuery('#add-layer-style');
                 if(Object.prototype.toString.call(styles) === '[object Array]') {
-                    var s = [];
-                    for (var i = 0; i < styles.length; i++) {
+                    var s = [],
+                        i;
+                    for (i = 0; i < styles.length; i++) {
                         styleSelect.append('<option>' +styles[i].Title + '</option>');
                     };
                 } else {
@@ -719,9 +745,10 @@ define([
 
             // GFI Type
             if(capability.Request.GetFeatureInfo != null) {
-                var gfiType = capability.Request.GetFeatureInfo.Format;
-                var gfiTypeSelect = jQuery('#add-layer-responsetype');
-                for (var i = 0; i < gfiType.length; i++) {
+                var gfiType = capability.Request.GetFeatureInfo.Format,
+                    gfiTypeSelect = jQuery('#add-layer-responsetype'),
+                    i;
+                for (i = 0; i < gfiType.length; i++) {
                     gfiTypeSelect.append('<option>' + gfiType[i] + '</option>');
                 };
             }
@@ -783,9 +810,9 @@ define([
             }
         },
         clearInput: function(e) {
-            var me = this;
-            var element = jQuery(e.currentTarget);
-            var input = element.parent().children(':input');
+            var me = this,
+                element = jQuery(e.currentTarget),
+                input = element.parent().children(':input');
             if(input.length == 1) {
                 input.val('');
             }

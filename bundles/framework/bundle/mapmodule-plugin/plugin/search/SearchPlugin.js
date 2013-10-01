@@ -406,7 +406,9 @@ function(config) {
 				tableBody.append(row);
 			}
 			
-			tableBody.find(":odd").addClass("odd");
+			if (!(this._conf && this._conf.toolStyle)) {
+				tableBody.find(":odd").addClass("odd");
+			}
 
 			content.html(table);
 			resultsContainer.show();
@@ -417,6 +419,7 @@ function(config) {
 			}
 			if (this._conf && this._conf.toolStyle) {
 				header.remove();
+				me.changeResultListStyle(me._conf.toolStyle, resultsContainer);
 			}
 		}
 	},
@@ -519,6 +522,21 @@ function(config) {
 		var testRegex = /oskari-publisher-font-/;
 
 		this.getMapModule().changeCssClasses(classToAdd, testRegex, elements);
+	},
+
+	/**
+	 * Changes the style of the search result list.
+	 *
+	 * @method changeResultListStyle
+	 * @param  {Object} toolStyle
+	 * @param  {jQuery} div
+	 * @return {undefined}
+	 */
+	changeResultListStyle: function(toolStyle, div) {
+		var cssClass = 'oskari-publisher-search-results-' + toolStyle.val;
+		var testRegex = /oskari-publisher-search-results-/;
+
+		this.getMapModule().changeCssClasses(cssClass, testRegex, [div]);
 	}
 }, {
 	/**

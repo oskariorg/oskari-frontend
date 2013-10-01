@@ -76,7 +76,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         }
         */
     },
-
+    
     /**
      * @property requirementsConfig
      *
@@ -98,7 +98,6 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
      */
     init : function() {
         // if something needs to be initiated.
-
     },
 
     /**
@@ -184,8 +183,8 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             }
         } else if(e.command == "editLayer") {
             // update layer info
-			console.log("Editing layer");
-            console.log(e.layerData.admin);
+			//console.log("Editing layer");
+            //console.log(e.layerData.admin);
             e.layerData.name = e.layerData.admin.name[Oskari.getDefaultLanguage()]; //TODO this should be in mapLayerService
             mapLayerService.updateLayer(e.layerData.id, e.layerData);
         }

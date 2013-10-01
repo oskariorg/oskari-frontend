@@ -596,6 +596,19 @@ function(config) {
 
         content.addClass('layerselection-styled-content');
 
+        // Set the styling to the content div based on the tool style.
+        this.getMapModule().changeCssClasses(
+            'oskari-publisher-layers-' + styleName,
+            /oskari-publisher-layers-/,
+            [content]
+        );
+        // Set the styling of the header as well since the border rounding affects them
+        this.getMapModule().changeCssClasses(
+            'oskari-publisher-layers-header-' + styleName,
+            /oskari-publisher-layers-header-/,
+            [contentHeader]
+        );
+
         header.empty();
         header.css({
             'background-image': 'url("' + bgImg + '")'

@@ -146,6 +146,7 @@ Oskari.registerLocalization({
 
 			"interfaceAddress" 		: "Gränssnitten address",
 			"interfaceAddressDesc" 	: "WMS address för lager definitionen"
+			"viewingRightsRoles" 	: "Kollar rättigheter roller"
 
 		},
 		"cancel" 	: "Tillbaka",

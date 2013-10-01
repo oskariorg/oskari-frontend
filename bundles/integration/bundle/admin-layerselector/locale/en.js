@@ -147,7 +147,8 @@ Oskari.registerLocalization({
 			},
 
 			"interfaceAddress" 		: "interface URL",
-			"interfaceAddressDesc" 	: "URL for WMS layer definitions"
+			"interfaceAddressDesc" 	: "URL for WMS layer definitions",
+			"viewingRightsRoles" 	: "Viewing Rights roles"
 		},
 		"cancel" 	: "Cancel",
 		"add" 		: "Add",

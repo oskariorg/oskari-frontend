@@ -137,8 +137,8 @@ define([
         toggleTab : function(e) {
             // this event does not need to bubble up.
             e.stopPropagation(); 
-            var target  = jQuery(e.currentTarget);
-            var type    = target.attr('data-tab');
+            var target  = jQuery(e.currentTarget),
+                type    = target.attr('data-tab');
 
             // change class 'active' to correct tab
             jQuery('.tabsHeader').find('.active').removeClass('active');

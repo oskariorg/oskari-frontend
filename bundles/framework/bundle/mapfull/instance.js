@@ -266,11 +266,11 @@ function() {
         
         // setting state
         if(state.selectedLayers) {
-            var rbAdd = this.sandbox.getRequestBuilder('AddMapLayerRequest');
-            var rbOpacity = this.sandbox.getRequestBuilder('ChangeMapLayerOpacityRequest');
-            var visibilityRequestBuilder = this.sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
-            var styleReqBuilder = this.sandbox.getRequestBuilder('ChangeMapLayerStyleRequest');
-            var len = state.selectedLayers.length;
+            var rbAdd = this.sandbox.getRequestBuilder('AddMapLayerRequest'),
+              rbOpacity = this.sandbox.getRequestBuilder('ChangeMapLayerOpacityRequest'),
+              visibilityRequestBuilder = this.sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest'),
+              styleReqBuilder = this.sandbox.getRequestBuilder('ChangeMapLayerStyleRequest'),
+              len = state.selectedLayers.length;
             for(var i = 0; i < len; ++i ) {
                 var layer = state.selectedLayers[i];
                 this.sandbox.request(mapmodule.getName(), rbAdd(layer.id, true));
@@ -302,19 +302,18 @@ function() {
 	 */
 	getState : function() {
         // get applications current state
-        var map = this.sandbox.getMap();
-        var selectedLayers = this.sandbox.findAllSelectedMapLayers();
-        var zoom = map.getZoom();
-        var lat = map.getX();
-        var lon = map.getY();
-
-        var state = {
-            north : lon,
-            east : lat,
-            zoom : map.getZoom(),
-            srs : map.getSrsName(),
-            selectedLayers : []
-        };
+        var map = this.sandbox.getMap(),
+            selectedLayers = this.sandbox.findAllSelectedMapLayers(),
+            zoom = map.getZoom(),
+            lat = map.getX(),
+            lon = map.getY(),
+            state = {
+                north : lon,
+                east : lat,
+                zoom : map.getZoom(),
+                srs : map.getSrsName(),
+                selectedLayers : []
+            };
         
         for(var i = 0; i < selectedLayers.length; i++) {
             var layer = selectedLayers[i];
