@@ -337,19 +337,19 @@ define([
                 // id = "&layercl_id=", // this param is used in remove 
                 lcId = element.parents('.accordion').attr('lcid'),
                 parentId = "&parent_id=",
-                nameFi = "&name_fi=",
-                nameSv = "&name_sv=",
-                nameEn = "&name_en=",
-                fi = addClass.find("#add-class-fi-name").val(),
-                sv = addClass.find("#add-class-sv-name").val(),
-                en = addClass.find("#add-class-en-name").val();
+                names = '';
 
+            addClass.find('[id$=-name]').filter('[id^=add-layer-]').each(function (index) {
+                lang = this.id.substring(10, this.id.indexOf("-name"));
+                console.log(lang, this.value);
+                names += "&name_" + lang + "=" + this.value;
+            });
             var url = baseUrl + action_route + id;
             //add id of layer class
             if(lcId != null) {
                 url += lcId;
             }
-            url += parentId+nameFi+fi+nameSv+sv+nameEn+en;
+            url += parentId+names;
             // make AJAX call
             me._save(e, url, function(response){
 				//console.log("Save...");

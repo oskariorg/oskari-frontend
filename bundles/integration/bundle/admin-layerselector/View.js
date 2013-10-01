@@ -35,13 +35,13 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         'MapLayerEvent' : function(event) {
             // trigger after interval since events are being spammed by backendstatus
             // this way browser doesn't crash
-            var interval = 500;
-            var me = this;
-            if(this._previousLayerUpdateTimer) {
-                clearTimeout(this._previousLayerUpdateTimer);
-                this._previousLayerUpdateTimer = null;
+            var interval = 500,
+                me = this;
+            if(me._previousLayerUpdateTimer) {
+                clearTimeout(me._previousLayerUpdateTimer);
+                me._previousLayerUpdateTimer = null;
             }
-            this._previousLayerUpdateTimer = setTimeout(function() {
+            me._previousLayerUpdateTimer = setTimeout(function() {
                 me._layerUpdateHandler();
             }, interval);
 
@@ -59,10 +59,10 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         // the same code. This needs to be updated when mapLayerService
         // can handle updates better. 
         // (updates everything instead of layer.name)
-        var sandbox = this.getSandbox();
+        var sandbox = this.getSandbox(),
         // populate layer list
-        var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-        var layers = mapLayerService.getAllLayers();
+            mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService'),
+            layers = mapLayerService.getAllLayers();
         if(this.view != null){
             this.view.addToCollection(layers);
         } else {
@@ -108,18 +108,18 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
      * defined order.
      */
     "render" : function() {
-        var me = this;
-        var container = this.getEl();
+        var me = this,
+            container = me.getEl();
         // admin-layerselector is rendered under this container
         container.addClass("admin-layerselector");
         // backbone will fire adminAction events if they need to be 
         // passed to other bundles
-        container.on("adminAction", {me: this}, me.handleAction);
+        container.on("adminAction", {me: me}, me.handleAction);
 
-        var locale = this.getLocalization();
-        var confRequirementsConfig = 
-            (this.getConfiguration()||{}).requirementsConfig;
-        var requirementsConfig = 
+        var locale = me.getLocalization(),
+            confRequirementsConfig = 
+            (this.getConfiguration()||{}).requirementsConfig,
+            requirementsConfig = 
             confRequirementsConfig||this.requirementsConfig;
 
         require.config(requirementsConfig);
@@ -148,17 +148,16 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
      */
     handleAction: function(e) {
         e.stopPropagation();
-        var me = e.data.me;
-        var sandbox = me.getSandbox()
-        var mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-
+        var me = e.data.me,
+            sandbox = me.getSandbox(),
+            mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
         /*
          *****************
          * NORMAL LAYERS *
          *****************
          */
-        // remove layer from mapLayerService
         if(e.command == "removeLayer") {
+            // remove layer from mapLayerService
             if (e.baseLayerId) {
                 // If this is a sublayer, remove it from its parent's sublayer array
                 var parentLayerId = 'base_' + e.baseLayerId;
@@ -167,10 +166,9 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                 // otherwise just remove it from map layer service.
                 mapLayerService.removeLayer(e.modelId);
             }
-        } 
-        // add layer into mapLayerService
-        else if(e.command == "addLayer") {
-            e.layerData.name = e.layerData.admin.nameFi;
+        } else if(e.command == "addLayer") {
+            // add layer into mapLayerService
+            e.layerData.name = e.layerData.admin.name[Oskari.getDefaultLanguage()];
             var mapLayer = mapLayerService.createMapLayer(e.layerData);
             mapLayer.admin = e.layerData.admin;
 
@@ -184,11 +182,11 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                     mapLayerService.addLayer(mapLayer);
                 }
             }
-        }
-        // update layer info
-        else if(e.command == "editLayer") {
-			//console.log("Editing layer");
-            e.layerData.name = e.layerData.admin.nameFi; //TODO this should be in mapLayerService
+        } else if(e.command == "editLayer") {
+            // update layer info
+			console.log("Editing layer");
+            console.log(e.layerData.admin);
+            e.layerData.name = e.layerData.admin.name[Oskari.getDefaultLanguage()]; //TODO this should be in mapLayerService
             mapLayerService.updateLayer(e.layerData.id, e.layerData);
         }
 

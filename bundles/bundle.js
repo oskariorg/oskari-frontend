@@ -42,7 +42,7 @@ Oskari = (function() {
     var bundle_locale = function() {
         this.lang = null;
         this.localizations = {};
-
+        this.supportedLocales = null;
     };
 
     bundle_locale.prototype = {
@@ -54,11 +54,31 @@ Oskari = (function() {
         setLang : function(lang) {
             this.lang = lang;
         },
+        setSupportedLocales : function(locales) {
+            this.supportedLocales = locales;
+        },
         getLang : function() {
             return this.lang;
         },
         getLocalization : function(key) {
             return this.localizations[this.lang][key];
+        },
+        getSupportedLocales : function() {
+            return this.supportedLocales;
+        },
+        getDefaultLanguage : function() {
+            var locale = this.supportedLocales[0];
+            return locale.substring(0, locale.indexOf("_"));
+        },
+        getSupportedLanguages : function() {
+            var langs = [],
+                locale,
+                i;
+            for (i = 0; i < this.supportedLocales.length; i += 1) {
+                locale = this.supportedLocales[i];
+                langs.push(locale.substring(0, locale.indexOf("_")));
+            }
+            return langs;
         }
     };
 
@@ -66,6 +86,20 @@ Oskari = (function() {
      * let's create locale support
      */
     var blocale = new bundle_locale();
+    var localesURL = null;
+    jQuery.ajax({
+        type: 'POST',
+        url: ajaxUrl + 'action_route=GetSupportedLocales',
+        timestamp: new Date().getTime(),
+       
+        success: function (data) {
+            blocale.setSupportedLocales(data.supportedLocales);
+            console.log(blocale.getSupportedLocales());
+        },
+        error: function() {
+            // TODO add error handling
+        }
+    });
 
     /*
      * 'dev' adds ?ts=<instTs> parameter to js loads 'default' does not add
@@ -2808,6 +2842,34 @@ Oskari = (function() {
         setLang : function(lang) {
             return blocale.setLang(lang);
         },
+        /**
+         * @static
+         * @method Oskari.setSupportedLocales
+         */
+         setSupportedLocales : function(locales) {
+            return blocale.setSupportedLocales(locales);
+         },
+        /**
+         * @static
+         * @method Oskari.getSupportedLocales
+         */
+        getSupportedLocales : function() {
+            return blocale.getSupportedLocales();
+        },
+        /**
+         * @static
+         * @method Oskari.getDefaultLanguage
+         */
+         getDefaultLanguage : function() {
+            return blocale.getDefaultLanguage();
+         },
+        /**
+         * @static
+         * @method Oskari.getSupportedLanguages
+         */
+         getSupportedLanguages : function() {
+            return blocale.getSupportedLanguages();
+         },
         /**
          * @static
          * @method Oskari.purge

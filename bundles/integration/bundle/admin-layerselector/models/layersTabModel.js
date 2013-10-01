@@ -23,7 +23,8 @@
              * @return {String} title
              */
             getTitle : function() {
-                return (this.title != null) ? this.title : this.names.fi;
+                // FIXME use default language
+                return (this.title != null) ? this.title : this.names[Oskari.getDefaultLanguage()];
             },
 
 
@@ -95,13 +96,13 @@
                 
                 // filter
                 var selectedGroups = [];
-                var visibleGroupCount = 0;
+                //var visibleGroupCount = 0;
                 for(var i = 0; i < this.layerGroups.length; ++i) {
                     var group = this.layerGroups[i];
                     if(group.getLayers != null) {
                         var layers = group.getLayers();
                         var selectedGroup = new LayerGroupCollection(null, group.getTitle());
-                        var visibleLayerCount = 0;
+                        //var visibleLayerCount = 0;
                         for(var n = 0; n < layers.length; ++n) {
                             var layer = layers[n];
                             var layerId = layer.getId();
@@ -174,7 +175,6 @@
              */
             getClasses: function(baseUrl, action_route) {
                 var me = this
-
                 jQuery.ajax({
                     type : "GET",
                     dataType: 'json',
@@ -203,8 +203,10 @@
              * @param {Array} classes
              */
             loadClasses: function(classes) {
-                var me = this;
-                var groups = me.layerGroups;
+                console.log("loadClasses");
+                var me = this,
+                    groups = me.layerGroups,
+                    lang;
                 //TODO: we need a better data from backend
                 for (var key in classes) {
                     var obj = classes[key];
@@ -212,16 +214,24 @@
                     if(obj.parentid == null) {
                         var updated = false;
                         for (var i = groups.length - 1; i >= 0; i--) {
-                            var group = groups[i];
-                            if(group.name == obj.nameFi ||
-                                group.name == obj.nameSv ||
-                                group.name == obj.nameEn ||
-                                group.id === obj.id) {
+                            var group = groups[i],
+                                gotMatch = group.id === obj.id;
+                            if (!gotMatch) {
+                                for (lang in obj.name) {
+                                    if (obj.name.hasOwnProperty(lang) && obj.name[lang] === group.name) {
+                                        gotMatch = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(gotMatch) {
 
                                 group.names = (group.names != null) ? group.names : {};
-                                group.names.fi = obj.nameFi;
-                                group.names.sv = obj.nameSv;
-                                group.names.en = obj.nameEn;
+                                for (lang in obj.name) {
+                                    if (obj.name.hasOwnProperty(lang)) {
+                                        group.names[lang] = obj.name[lang];
+                                    }
+                                }
                                 group.name = group.names[Oskari.getLang()];
                                 group.id = obj.id;
                                 updated = true;
@@ -231,9 +241,11 @@
                         if(!updated && obj.id != null){
                             var group = {};
                             group.names = (group.names != null) ? group.names : {};
-                            group.names.fi = obj.nameFi;
-                            group.names.sv = obj.nameSv;
-                            group.names.en = obj.nameEn;
+                            for (lang in obj.name) {
+                                if (obj.name.hasOwnProperty(lang)) {
+                                    group.names[lang] = obj.name[lang];
+                                }
+                            }
                             group.id = obj.id;
                             groups.push(group);
                         }

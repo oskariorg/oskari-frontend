@@ -123,18 +123,28 @@ Oskari.registerLocalization({
 			"gfiStyle" 				: "GFI style",
 			"gfiStyleDesc" 			: "GFI style (XSLT)",
 
-			"finnish" 				: "Finnish:",
-			"finnishTitle" 			: "Fi",
-			"finnishPlaceholder" 	: "Name in Finnish",
-			"finnishDescPlaceholder" : "Description in Finnish",
-			"swedish" 				: "Swedish",
-			"swedishTitle" 			: "Sv",
-			"swedishPlaceholder" 	: "Name in Swedish",
-			"swedishDescPlaceholder" : "Description in Swedish",
-			"english" 				: "English:",
-			"englishTitle" 			: "En",
-			"englishPlaceholder" 	: "Name in English",
-			"englishDescPlaceholder" : "Description in English",
+			"generic"               : {
+				"placeholder"     : "Name in {0}",
+				"descplaceholder" : "Description in {0}"
+			},
+			"en"                    : {
+				"lang"            : "English:",
+				"title"           : "En",
+				"placeholder"     : "Name in English",
+				"descplaceholder" : "Description in English"
+			},
+			"fi"                    : {
+				"lang"            : "Finnish:",
+				"title"           : "Fi",
+				"placeholder"     : "Name in Finnish",
+				"descplaceholder" : "Description in Finnish"
+			},
+			"sv"                    : {
+				"lang"            : "Swedish:",
+				"title"           : "Sv",
+				"placeholder"     : "Name in Swedish",
+				"descplaceholder" : "Description in Swedish"
+			},
 
 			"interfaceAddress" 		: "interface URL",
 			"interfaceAddressDesc" 	: "URL for WMS layer definitions"

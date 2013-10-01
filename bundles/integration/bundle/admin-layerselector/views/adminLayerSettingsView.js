@@ -209,16 +209,15 @@ define([
         removeLayer: function(e) {
             e.stopPropagation();
             
-            var me = this;
-            var element = jQuery(e.currentTarget);
-            var addLayerDiv = element.parents('.admin-add-layer');
-            var id = element.parents('.admin-add-layer').attr('data-id');
-            var baseUrl =  me.options.instance.getSandbox().getAjaxUrl(),
+            var me = this,
+                element = jQuery(e.currentTarget),
+                addLayerDiv = element.parents('.admin-add-layer'),
+                id = element.parents('.admin-add-layer').attr('data-id'),
+                baseUrl =  me.options.instance.getSandbox().getAjaxUrl(),
                 action_route = "action_route=DeleteLayer",
-                idKey = "&layer_id=";
-
-            // create url for action_route
-            var url = baseUrl + action_route + idKey + id;
+                idKey = "&layer_id=",
+                // create url for action_route
+                url = baseUrl + action_route + idKey + id;
 
             jQuery.ajax({
                 type : "GET",
@@ -266,11 +265,12 @@ define([
         addLayer: function(e) {
             e.stopPropagation();
 
-            var me = this;
-            var element = jQuery(e.currentTarget),
+            var me = this,
+                element = jQuery(e.currentTarget),
                 accordion = element.parents('.accordion'),
                 lcId = accordion.attr('lcid'),
-                form = element.parents('.admin-add-layer');
+                form = element.parents('.admin-add-layer')
+                lang;
 
             // If this is a sublayer the layer class id should be of its base layer's
             if (this.options.baseLayerId) {
@@ -300,6 +300,17 @@ define([
             data.title = {};
             data.orderNumber    = 1,
             data.layer_id       = idValue;
+            // FIXME get ALL the languages... somehow
+            form.find('[id$=-name]').filter('[id^=add-layer-]').each(function (index) {
+                lang = this.id.substring(10, this.id.indexOf("-name"));
+                console.log(lang, this.value);
+                //data.names[lang] = this.value;
+            });
+            form.find('[id$=-title]').filter('[id^=add-layer-]').each(function (index) {
+                lang = this.id.substring(10, this.id.indexOf("-title"));
+                console.log(lang, this.value);
+                //data.title[lang] = this.value;
+            });
             data.names.fi       = form.find('#add-layer-fi-name').val(),
             data.names.sv       = form.find('#add-layer-sv-name').val(),
             data.names.en       = form.find('#add-layer-en-name').val(),
@@ -349,13 +360,8 @@ define([
             if(lcId != null) {
                 url += "&lcId=" + lcId;
             }
-            url += "&nameFi=" + encodeURIComponent(data.names.fi) +
-                "&nameSv=" + encodeURIComponent(data.names.sv) +
-                "&nameEn=" + encodeURIComponent(data.names.en) +
-                "&titleFi=" + encodeURIComponent(data.title.fi) +
-                "&titleSv=" + encodeURIComponent(data.title.sv) +
-                "&titleEn=" + encodeURIComponent(data.title.en) +
-                "&type=" + data.type +
+
+            url += "&type=" + data.type +
                 "&wmsName=" + data.wmsName +
                 "&wmsUrl=" + encodeURIComponent(data.wmsUrl) +
                 "&opacity=" + data.opacity +
@@ -372,6 +378,16 @@ define([
                 "&xslt=" + data.xslt +
                 "&gfiType=" + data.gfiType +
 				"&metadataUrl=" + encodeURIComponent(data.metadataUrl);
+            for (lang in data.names) {
+                if (data.names.hasOwnProperty(lang)) {
+                    url += "name" + lang.charAt(0).toUpperCase() + lang.substring(1) + "=" + data.names[lang];
+                }
+            }
+            for (lang in data.title) {
+                if (data.title.hasOwnProperty(lang)) {
+                    url += "title" + lang.charAt(0).toUpperCase() + lang.substring(1) + "=" + data.title[lang];
+                }
+            }
 
             jQuery.ajax({
                 type : "GET",
@@ -443,7 +459,13 @@ define([
                 layerType = element.parents('.admin-add-layer').find('#add-layer-type').val(),
                 parentId = element.parents('.accordion').attr('lcid');
 
-            var params = "&parent_id=" + parentId +
+            // FIXME get all the languages
+            var params = "&parent_id=" + parentId;
+            addClass.find('[id$=-name]').filter('[id^=add-group-]').each(function (index) {
+                lang = this.id.substring(10, this.id.indexOf("-name"));
+                console.log(lang, this.value);
+                //params += "&sub_name_" + lang + "=" + this.value;
+            });
                 "&sub_name_fi=" + addClass.find("#add-group-fi-name").val() +
                 "&sub_name_sv=" + addClass.find("#add-group-sv-name").val() +
                 "&sub_name_en=" + addClass.find("#add-group-en-name").val();
@@ -645,14 +667,15 @@ define([
          */
         updateLayerValues: function(selectedLayer, capability, container) {
             // Clear out the old values
-            var layerInterface = container.find('#add-layer-interface').val();
+            var layerInterface = container.find('#add-layer-interface').val(),
             // keep wms url from reseting... hacky whacky
-            var wmsurlField = container.find('#add-layer-wms-url');
-            var wmsurl = wmsurlField.text();
+                wmsurlField = container.find('#add-layer-wms-url'),
+                wmsurl = wmsurlField.text(),
+                defaultLanguage = Oskari.getDefaultLanguage();
             this.clearAllFields();
             wmsurlField.text(wmsurl); 
             //title
-            jQuery('#add-layer-fi-name').val(selectedLayer.Title);
+            jQuery('#add-layer-' + defaultLanguage + '-name').val(selectedLayer.Title);
 
             // wmsname
             var wmsname = selectedLayer.Name;
