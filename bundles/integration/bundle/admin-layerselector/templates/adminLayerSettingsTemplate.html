@@ -109,22 +109,6 @@
 
     <div class="add-layer-record">
         <div class="add-layer-label-area">
-            <label for="add-layer-cs-name" class="add-layer-label" title="<%= instance.getLocalization('admin')['cs'] ? instance.getLocalization('admin')['cs'].title : 'cs' %>"><%= instance.getLocalization('admin')['cs'] ? instance.getLocalization('admin')['cs'].lang : 'Cs:' %></label>
-        </div>
-        <div class="add-layer-input-area">
-            <div class="input-controls">
-                <input type="text" id="add-layer-cs-name" class="add-layer-input" placeholder="<%= instance.getLocalization('admin')['cs'] ? instance.getLocalization('admin')['cs'].placeholder : instance.getLocalization('admin')['generic'].placeholder.replace('{0}', 'cs') %>" <% if(model != null && model.admin.name != null && model.admin.name.cs != null) { %> value="<%= model.admin.name.cs %>" <% } %>  />
-                <div class="icon-close"></div>
-            </div>
-            <div class="input-controls">
-                <input type="text" id="add-layer-cs-title" class="add-layer-input" placeholder="<%= instance.getLocalization('admin')['cs'] ? instance.getLocalization('admin')['cs'].descplaceholder : instance.getLocalization('admin')['generic'].descplaceholder.replace('{0}', 'cs') %>" <% if(model != null && model.admin.title != null && model.admin.title.cs != null) { %> value="<%= model.admin.title.cs %>" <% } %> />
-                <div class="icon-close"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="add-layer-record">
-        <div class="add-layer-label-area">
             <label for="add-layer-datauuid" class="add-layer-label" title="<%= instance.getLocalization('admin').metaInfoIdDesc %>"><%= instance.getLocalization('admin').metaInfoId %></label>
         </div>
         <div class="add-layer-input-area">
