@@ -256,3 +256,8 @@ div.linevisualization {
 div.areavisualization {
     width: 650px;
 }
+
+div#imagePreview img {
+  max-height: 350px;
+  max-width: 350px;
+}
