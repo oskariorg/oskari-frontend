@@ -76,7 +76,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         }
         */
     },
-
+    
     /**
      * @property requirementsConfig
      *
@@ -98,7 +98,6 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
      */
     init : function() {
         // if something needs to be initiated.
-
     },
 
     /**

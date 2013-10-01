@@ -27,10 +27,11 @@ function(userData) {
 		this._nickName = userData.nickName;
 		this._loginName = userData.loginName;
 		this._uuid = userData.userUUID;
+        this._roles = userData.roles;
 		if(userData.userUUID) {
 			this._loggedIn = true;
 		}
-	}
+    }
 }, {
     /**
      * @method getName
@@ -100,5 +101,15 @@ function(userData) {
      */
 	isLoggedIn : function() {
 		return this._loggedIn;
-	}
+	},
+    /**
+     * @method getRoles
+     * Roles for the user
+     *
+     * @return {Object}
+     *            roles
+     */
+    getRoles : function() {
+        return this._roles;
+    }
 });

@@ -2,13 +2,15 @@ define([
     'text!_bundle/templates/adminTypeSelectTemplate.html',
     'text!_bundle/templates/adminLayerSettingsTemplate.html',
     'text!_bundle/templates/adminGroupSettingsTemplate.html',
-    'text!_bundle/templates/group/subLayerTemplate.html'
+    'text!_bundle/templates/group/subLayerTemplate.html',
+    '_bundle/collections/userRoleCollection'
     ], 
     function(
         TypeSelectTemplate,
         LayerSettingsTemplate,
         GroupSettingsTemplate,
-        SubLayerTemplate
+        SubLayerTemplate,
+        userRoleCollection
         ) {
     return Backbone.View.extend({
 //<div class="admin-add-layer" data-id="<% if(model != null && model.getId()) { %><%= model.getId() %><% } %>">
@@ -54,6 +56,9 @@ define([
             this.groupTemplate      = _.template(GroupSettingsTemplate);
             this.subLayerTemplate   = _.template(SubLayerTemplate);
             _.bindAll(this);
+    
+            this._rolesUpdateHandler();
+
             this.render();
         },
 
@@ -91,12 +96,24 @@ define([
             // otherwise create a new layer
             else {
                 // add html template
+                console.dir(this.options.instance);
                 this.$el.html(this.typeSelectTemplate({
                     model: this.model, 
                     instance : this.options.instance,
                     classNames : this.classes.getGroupTitles()
                 }));
             }
+        },
+        /**
+         * @method _rolesUpdateHandler
+         * @private
+         * Updates user roles.
+         */
+        _rolesUpdateHandler : function() {
+            var sandbox = Oskari.getSandbox();
+            var roles = sandbox.getUser().getRoles();
+            
+            this.roles = new userRoleCollection(roles).getRoles();
         },
 
         /**
@@ -125,7 +142,8 @@ define([
                 model: this.model,
                 instance : this.options.instance,
                 classNames : this.classes.getGroupTitles(),
-                isSubLayer : this.options.baseLayerId
+                isSubLayer : this.options.baseLayerId,
+                roles : this.roles
             }));
             // if settings are hidden, we need to populate template and
             // add it to the DOM
@@ -167,7 +185,8 @@ define([
                 instance : this.options.instance,
                 groupTitle : groupTitle,
                 subLayers : subLayers,
-                subLayerTemplate : this.subLayerTemplate
+                subLayerTemplate : this.subLayerTemplate,
+                roles : this.roles
             }));
         },
 
@@ -340,6 +359,12 @@ define([
                 data.gfiType = '';
             }
 
+            data.viewPermissions = '';
+            for(var i = 0; i < this.roles.length; i++) {
+                if (form.find('#layer-view-roles-'+this.roles[i].id).is(':checked')) {
+                   data.viewPermissions += this.roles[i].id + ',';
+                } 
+            }
 
 
             // Layer class id aka. orgName id
@@ -371,6 +396,7 @@ define([
                 "&dataUrl=" + encodeURIComponent(data.dataUrl) +
                 "&xslt=" + data.xslt +
                 "&gfiType=" + data.gfiType +
+                "&viewPermissions=" + data.viewPermissions +
 				"&metadataUrl=" + encodeURIComponent(data.metadataUrl);
 
             jQuery.ajax({
@@ -443,10 +469,19 @@ define([
                 layerType = element.parents('.admin-add-layer').find('#add-layer-type').val(),
                 parentId = element.parents('.accordion').attr('lcid');
 
+
+            var viewPermissions = '';
+            for(var i = 0; i < this.roles.length; i++) {
+                if (form.find('#layer-view-roles-'+this.roles[i].id).is(':checked')) {
+                   viewPermissions += this.roles[i].id + ',';
+                } 
+            }    
+
             var params = "&parent_id=" + parentId +
                 "&sub_name_fi=" + addClass.find("#add-group-fi-name").val() +
                 "&sub_name_sv=" + addClass.find("#add-group-sv-name").val() +
-                "&sub_name_en=" + addClass.find("#add-group-en-name").val();
+                "&sub_name_en=" + addClass.find("#add-group-en-name").val() +
+                "&viewPermissions=" + viewPermissions;
 
             if (layerType === 'groupMap' || ( me.model && me.model.isGroupLayer() )) {
                 params += "&group_map=" + true;
