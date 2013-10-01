@@ -64,7 +64,7 @@ Oskari.registerLocalization({
         "choose": " eller välj från nivåer:"
       },
       "imagelink": {
-        "placeholder": "Foto-URL",
+        "placeholder": "Bild-URL",
         "previewLabel": "Förhandsvisning av fotot",
         "add": "Ny nivå"
       },
@@ -100,7 +100,7 @@ Oskari.registerLocalization({
         }
       },
       "visibleFields": {
-        "label": "Objektets uppgifter som visas",
+        "label": "Uppgifter om objektet som visas",
         "placename": "Namn",
         "placedesc": "Beskrivning",
         "image": "Bild"
@@ -124,10 +124,10 @@ Oskari.registerLocalization({
       }
     },
     "pointform": {
-      "title": "Punktobjekts visningsstil",
+      "title": "Visualisering av punktobjekt",
       "tooltip": "Punktens stil",
       "symbol": {
-        "label": "Punktobjekts ikon"
+        "label": "Ikon för punktobjekt"
       },
       "size": {
         "label": "Storlek"
@@ -138,7 +138,7 @@ Oskari.registerLocalization({
         "labelCustom": "Egen RGB-färg (0-255)"
       },
       "preview": {
-        "label": "Förhandsvisning"
+        "label": "Förhandsgranska"
       },
       "buttons": {
         "save": "Lagra",
@@ -146,16 +146,16 @@ Oskari.registerLocalization({
       },
     },
     "lineform": {
-      "title": "Linjeobjekts visningsstil",
+      "title": "Visualisering av linje",
       "tooltip": "",
       "style": {
         "label": "Linjens stil"
       },
       "cap": {
-        "label": "Linjens gavel"
+        "label": "Linjens ändpunkter"
       },
       "corner": {
-        "label": "Vinklar"
+        "label": "Hörn"
       },
       "width": {
         "label": "Bredd"
@@ -166,7 +166,7 @@ Oskari.registerLocalization({
         "labelCustom": "Egen RGB-färg (0-255)"
       },
       "preview": {
-        "label": "Förhandsvisning"
+        "label": "Förhandsgranska"
       },
       "buttons": {
         "save": "Lagra",
@@ -174,32 +174,32 @@ Oskari.registerLocalization({
       }
     },
     "areaform": {
-      "title": "Områdets visningsstil",
+      "title": "Visualisering av området",
       "tooltip": "",
       "linestyle": {
-        "label": "Områdets linjestil"
+        "label": "Konturlinjens stil"
       },
       "linecap": {
-        "label": "Linjens gavel"
+        "label": "Linjens ändpunkter"
       },
       "linecorner": {
-        "label": "Vinklar"
+        "label": "Hörn"
       },
       "linewidth": {
         "label": "Bredd"
       },
       "linecolor": {
-        "label": "Linjensfärg",
+        "label": "Linjens färg",
         "labelOr": "eller",
         "labelCustom": "Egen RGB-färg (0-255)"
       },
       "color": {
-        "label": "Områdets fyllningsfärg",
+        "label": "Ifyllnadsfärg för område",
         "labelOr": "eller",
         "labelCustom": "Egen RGB-färg (0-255)"
       },
       "fill": {
-        "label": "Områdets fyllningsmönster"
+        "label": "Ifyllnandsmönster för område"
       },
       "preview": {
         "label": "Förhandsvisning"
