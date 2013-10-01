@@ -15,21 +15,21 @@ Oskari.registerLocalization({
     "tools": {
       "point": {
         "tooltip": "Add point",
-        "new": "Add point by clicking the map.",
+        "add": "Add point by clicking the map.",
         "next": "You can save or draw more points into the same drawing.",
         "edit": "Move point by clicking and dragging.",
         "save": "Save location"
       },
       "line": {
         "tooltip": "Add line",
-        "new": "Add a break point on the line by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'.",
+        "add": "Add a break point on the line by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'.",
         "next": "You can save or draw more lines into the same drawing.",
         "edit": "Edit the line by clicking and dragging its break points.",
         "save": "Save shape"
       },
       "area": {
         "tooltip": "Add area",
-        "new": "Add break points to your area polygon by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'. To create holes in polygons, hold down the Alt key.",
+        "add": "Add break points to your area polygon by clicking the map. Stop drawing by double clicking or by clicking 'Finish drawing'. To create holes in polygons, hold down the Alt key.",
         "next": "You can save or draw more polygons into the same drawing.",
         "edit": "Edit the shape of the area by clicking and dragging the break points on its edge line.",
         "save": "Save shape"
@@ -60,7 +60,19 @@ Oskari.registerLocalization({
       },
       "category": {
         "label": "Map layer",
-        "new": "New layer..."
+        "newLayer": "Create a new layer",
+        "choose": " or choose from your layers:"
+      },
+      "imagelink": {
+        "placeholder": "Image URL",
+        "previewLabel": "Image preview",
+        "add": "New layer..."
+      },
+      "rendering": {
+        "label": "Object rendering",
+        "point": {
+          "tooltip": "Point"
+        }
       }
     },
     "categoryform": {
@@ -87,10 +99,114 @@ Oskari.registerLocalization({
           "size": "Line thickness"
         }
       },
+      "visibleFields": {
+        "label": "Visible fields",
+        "placename": "Place name",
+        "placedesc": "Place description",
+        "image": "Image"
+      },
       "edit": {
         "title": "Edit map layer",
         "save": "Save",
         "cancel": "Back"
+      },
+      "rendering": {
+        "label": "Layer's features' style",
+        "point": {
+          "tooltip": "Edit point style"
+        },
+        "area": {
+          "tooltip": "Edit area style"
+        },
+        "line": {
+          "tooltip": "Edit line style"
+        }
+      }
+    },
+    "pointform": {
+      "title": "Point feature's style",
+      "tooltip": "",
+      "symbol": {
+        "label": "Point feature's icon"
+      },
+      "size": {
+        "label": "Size"
+      },
+      "color": {
+        "label": "Colour",
+        "labelOr": "or",
+        "labelCustom": "Own RGB color (0-255)"
+      },
+      "preview": {
+        "label": "Preview"
+      },
+      "buttons": {
+        "save": "Save",
+        "cancel": "Cancel"
+      }
+    },
+    "lineform": {
+      "title": "Line presentation",
+      "tooltip": "",
+      "style": {
+        "label": "Line style"
+      },
+      "cap": {
+        "label": "Line cap style"
+      },
+      "corner": {
+        "label": "Corners"
+      },
+      "width": {
+        "label": "Width"
+      },
+      "color": {
+        "label": "Colour",
+        "labelOr": "or",
+        "labelCustom": "Own RGB color (0-255)"
+      },
+      "preview": {
+        "label": "Preview"
+      },
+      "buttons": {
+        "save": "Save",
+        "cancel": "Cancel"
+      }
+    },
+    "areaform": {
+      "title": "Area presentation",
+      "tooltip": "",
+      "linestyle": {
+        "label": "Area line style"
+      },
+      "linecap": {
+        "label": "Area line cap"
+      },
+      "linecorner": {
+        "label": "Corner style"
+      },
+      "linewidth": {
+        "label": "Width"
+      },
+      "linecolor": {
+        "label": "Line color",
+        "labelOr": "or",
+        "labelCustom": "Own RGB color (0-255)"
+      },
+      "color": {
+        "label": "Area fill color",
+        "labelOr": "or",
+        "labelCustom": "Own RGB color (0-255)"
+      },
+      "fill": {
+        "label": "Area fill pattern"
+      },
+      "preview": {
+        "label": "Preview"
+      },
+      "buttons": {
+        "save": "Save",
+        "cancel": "Cancel"
       }
     },
     "notification": {
@@ -133,8 +249,9 @@ Oskari.registerLocalization({
       "placeNameIllegal": "The object name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
       "descIllegal": "The object description contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
       "categoryNameIllegal": "The layer description contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
-      "dotSize": "The dot size does not fit the size limits (1-50).",
+      "dotSize": "The dot size does not fit the size limits (1-5).",
       "dotColor": "Wrong dot colour.",
+      "dotShape": "Wrong dot shape.",
       "lineSize": "The line size does not fit the size limits (1-50).",
       "lineColor": "Wrong line colour.",
       "areaLineSize": "The area edge size does not fit the limits (0-50).",

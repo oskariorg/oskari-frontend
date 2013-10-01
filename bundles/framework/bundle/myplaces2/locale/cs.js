@@ -133,7 +133,7 @@ Oskari.registerLocalization({
       "placeNameIllegal": "Jméno objektu obsahuje nepovolené znaky. Povolené znaky jsou a-z, å, ä a ö, čísla, mezery a pomlčky.",
       "descIllegal": "Popis objektu  obsahuje nepovolené znaky. Povolené znaky jsou a-z, å, ä a ö, čísla, mezery a pomlčky.",
       "categoryNameIllegal": "Popis vrstvy obsahuje nepovolené znaky. Povolené znaky jsou a-z, å, ä a ö, čísla, mezery a pomlčky.",
-      "dotSize": "Velikost bodu nesplňuje velikostní omezení (1-50).",
+      "dotSize": "Velikost bodu nesplňuje velikostní omezení (1-5).",
       "dotColor": "Chybná barva bodu.",
       "lineSize": "Velikost linie nesplňuje velikostní omezení (1-50).",
       "lineColor": "Chybná barva čáry",

@@ -15,21 +15,21 @@ Oskari.registerLocalization({
     "tools": {
       "point": {
         "tooltip": "Tillägg punkt",
-        "new": "Tillägg punkt genom att klicka på kartan.",
+        "add": "Tillägg punkt genom att klicka på kartan.",
         "next": "Du kan lagra eller tillägga fler punkter till samma området.",
         "edit": "Flytta på punkten genom att klicka och dra.",
         "save": "Lagra läge"
       },
       "line": {
         "tooltip": "Tillägg linje",
-        "new": "Tillägg en brytningspunkt på linjen genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'.",
+        "add": "Tillägg en brytningspunkt på linjen genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'.",
         "next": "Du kan lagra eller tillägga fler linjer till samma området.",
         "edit": "Editera linjen genom att klicka och dra brytningspunkterna.",
         "save": "Lagra form"
       },
       "area": {
         "tooltip": "Tillägg område",
-        "new": "Tillägg områdets hörnpunkter genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'. Håll ned Alt-tangenten för att skapa hål i polygonerna.",
+        "add": "Tillägg områdets hörnpunkter genom att klicka på kartan. Sluta rita genom att dubbelklicka eller klicka på 'Sluta rita'. Håll ned Alt-tangenten för att skapa hål i polygonerna.",
         "next": "Du kan lagra eller tillägga fler polygoner till samma området.",
         "edit": "Editera områdets form genom att klicka och dra brytningspunkterna på omkretslinjen.",
         "save": "Lagra form"
@@ -60,7 +60,19 @@ Oskari.registerLocalization({
       },
       "category": {
         "label": "Kartlager",
-        "new": "Ny nivå..."
+        "newLayer": "Ny nivå...",
+        "choose": " eller välj från nivåer:"
+      },
+      "imagelink": {
+        "placeholder": "Foto-URL",
+        "previewLabel": "Förhandsvisning av fotot",
+        "add": "Ny nivå"
+      },
+      "rendering": {
+        "label": "",
+        "point": {
+          "tooltip": "Punkt"
+        }
       }
     },
     "categoryform": {
@@ -87,8 +99,112 @@ Oskari.registerLocalization({
           "size": "Linjens tjocklek"
         }
       },
+      "visibleFields": {
+        "label": "Objektets uppgifter som visas",
+        "placename": "Namn",
+        "placedesc": "Beskrivning",
+        "image": "Bild"
+      },
       "edit": {
         "title": "Editera kartlagret",
+        "save": "Lagra",
+        "cancel": "Tillbaka"
+      },
+      "rendering": {
+        "label": "",
+        "point": {
+          "tooltip": "Editera punktens stil"
+        },
+        "area": {
+          "tooltip": "Editera områdets stil"
+        },
+        "line": {
+          "tooltip": "Editera linjens stil"
+        }
+      }
+    },
+    "pointform": {
+      "title": "Punktobjekts visningsstil",
+      "tooltip": "Punktens stil",
+      "symbol": {
+        "label": "Punktobjekts ikon"
+      },
+      "size": {
+        "label": "Storlek"
+      },
+      "color": {
+        "label": "Färg",
+        "labelOr": "eller",
+        "labelCustom": "Egen RGB-färg (0-255)"
+      },
+      "preview": {
+        "label": "Förhandsvisning"
+      },
+      "buttons": {
+        "save": "Lagra",
+        "cancel": "Tillbaka"
+      }
+    },
+    "lineform": {
+      "title": "Linjeobjekts visningsstil",
+      "tooltip": "",
+      "style": {
+        "label": "Linjens stil"
+      },
+      "cap": {
+        "label": "Linjens gavel"
+      },
+      "corner": {
+        "label": "Vinklar"
+      },
+      "width": {
+        "label": "Bredd"
+      },
+      "color": {
+        "label": "Färg",
+        "labelOr": "eller",
+        "labelCustom": "Egen RGB-färg (0-255)"
+      },
+      "preview": {
+        "label": "Förhandsvisning"
+      },
+      "buttons": {
+        "save": "Lagra",
+        "cancel": "Tillbaka"
+      }
+    },
+    "areaform": {
+      "title": "Områdets visningsstil",
+      "tooltip": "",
+      "linestyle": {
+        "label": "Områdets linjestil"
+      },
+      "linecap": {
+        "label": "Linjens gavel"
+      },
+      "linecorner": {
+        "label": "Vinklar"
+      },
+      "linewidth": {
+        "label": "Bredd"
+      },
+      "linecolor": {
+        "label": "Linjensfärg",
+        "labelOr": "eller",
+        "labelCustom": "Egen RGB-färg (0-255)"
+      },
+      "color": {
+        "label": "Områdets fyllningsfärg",
+        "labelOr": "eller",
+        "labelCustom": "Egen RGB-färg (0-255)"
+      },
+      "fill": {
+        "label": "Områdets fyllningsmönster"
+      },
+      "preview": {
+        "label": "Förhandsvisning"
+      },
+      "buttons": {
         "save": "Lagra",
         "cancel": "Tillbaka"
       }
@@ -133,8 +249,9 @@ Oskari.registerLocalization({
       "placeNameIllegal": "I objekts namnet ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck.",
       "descIllegal": "I objekts beskrivning ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck.",
       "categoryNameIllegal": "I kartlagers beskrivning ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck.",
-      "dotSize": "Punkternas storlek är utanför de tillåtna gränserna (1-50).",
+      "dotSize": "Punkternas storlek är utanför de tillåtna gränserna (1-5).",
       "dotColor": "Punktens färg är felaktig.",
+      "dotShape": "Punktens form är felaktig.",
       "lineSize": "Linjens storlek är utanför de tillåtna gränserna (1-50).",
       "lineColor": "Linjens färg är felaktig.",
       "areaLineSize": "Områdets konturlinje är utanför de tillåtna gränserna (0-50).",

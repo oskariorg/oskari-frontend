@@ -228,8 +228,8 @@ function(instance) {
         var json = {
             wmsName: 'ows:my_places_categories',
             type: "wmslayer",
-            isQueryable:true,
-            opacity: 50,
+            isQueryable: true,
+            opacity: 90,
             metaType: this.instance.idPrefix,
             orgName: catLoc.organization,
             inspire: catLoc.inspire
@@ -278,22 +278,30 @@ function(instance) {
             _isDefault : category.isDefault(),
             dot : {
                 size : category.getDotSize(),
-                color : category.getDotColor()
+                color : category.getDotColor(),
+                shape : ((category.getDotShape() != null) ? category.getDotShape() : 1)
             },
             line : {
-                size : category.getLineWidth(),
-                color : category.getLineColor()
+                cap :       category.getLineCap(),
+                corner :    category.getLineCorner(),
+                style :     category.getLineStyle(),
+                size :      category.getLineWidth(),
+                color :     category.getLineColor()
             },
             area : {
-                size : category.getAreaLineWidth(),
+                lineWidth : category.getAreaLineWidth(),
+                lineCorner : category.getAreaLineCorner(),
+                lineStyle : category.getAreaLineStyle(),
                 lineColor : category.getAreaLineColor(),
-                fillColor : category.getAreaFillColor()
+                fillColor : category.getAreaFillColor(),
+                fillStyle : category.getAreaFillStyle()
             }
         };
         
         form.setValues(values);
         var content = form.getForm();
-        
+        content.find('input[name=categoryname]').val(category.name);
+
     	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
     	
         var buttons = [];
@@ -322,10 +330,12 @@ function(instance) {
     	});
         buttons.push(cancelBtn);
         buttons.push(saveBtn);
-        
     	dialog.show(catLoc.title, content, buttons);
     	dialog.moveTo('div.personaldata ul li select', 'right');
     	dialog.makeModal();
+        //bind listeners etc. for category form
+        form.start();
+
     },
     showValidationErrorMessage : function(errors) {
         var loc = this.instance.getLocalization();
@@ -402,21 +412,23 @@ function(instance) {
         else if(this.hasIllegalChars(values.name)) {
             errors.push({field : 'name', error : loc.categoryNameIllegal});
         }
-        
-        if(!this._validateNumber(values.dot.size, 1, 50)) {
+        if(!this._validateNumber(values.dot.shape, 0, 6)) {
+            errors.push({field : 'dotShape', error : loc.dotShape});
+        }
+        if(!this._validateNumber(values.dot.size, 1, 5)) {
             errors.push({field : 'dotSize', error : loc.dotSize});
         }
         if(!this._isColor(values.dot.color)) {
             errors.push({field : 'dotColor', error : loc.dotColor});
         }
-        if(!this._validateNumber(values.line.size, 1, 50)) {
-            errors.push({field : 'lineSize', error : loc.lineSize});
+        if(!this._validateNumber(values.line.width, 1, 50)) {
+            errors.push({field : 'lineWidth', error : loc.lineSize});
         }
         if(!this._isColor(values.line.color)) {
             errors.push({field : 'lineColor', error : loc.lineColor});
         }
-        if(!this._validateNumber(values.area.size, 0, 50)) {
-            errors.push({field : 'areaLineSize', error : loc.areaLineSize});
+        if(!this._validateNumber(values.area.lineWidth, 0, 50)) {
+            errors.push({field : 'areaLineWidth', error : loc.areaLineSize});
         }
         if(!this._isColor(values.area.lineColor)) {
             errors.push({field : 'areaLineColor', error : loc.areaLineColor});
@@ -433,13 +445,20 @@ function(instance) {
         
         category.setDotSize(values.dot.size);
         category.setDotColor(values.dot.color);
+        category.setDotShape(values.dot.shape);
         
-        category.setLineWidth(values.line.size);
+        category.setLineWidth(values.line.width);
         category.setLineColor(values.line.color);
+        category.setLineCap(values.line.cap);
+        category.setLineCorner(values.line.corner);
+        category.setLineStyle(values.line.style);
         
-        category.setAreaLineWidth(values.area.size);
+        category.setAreaLineWidth(values.area.lineWidth);
         category.setAreaLineColor(values.area.lineColor);
+        category.setAreaLineCorner(values.area.lineCorner);
+        category.setAreaLineStyle(values.area.lineStyle);
         category.setAreaFillColor(values.area.fillColor);
+        category.setAreaFillStyle(values.area.fillStyle);
 
         category.setDefault(values._isDefault);
         return category;
@@ -593,7 +612,7 @@ function(instance) {
         else {
         	// error handling
         	var loc = me.instance.getLocalization();
-			var okBtn = dialog.createCloseButton(btnLoc.buttons.ok);
+			var okBtn = dialog.createCloseButton(loc.buttons.ok);
     		dialog.show(loc.notification.error.title, loc.notification.error.deleteCategory, [okBtn]);
         }
     },

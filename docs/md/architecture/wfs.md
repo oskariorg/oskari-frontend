@@ -6,16 +6,17 @@ WFS 2 contains separate backend from other backend action routes and map portlet
 
 ## Dependencies
 
-- Java
-- Jetty
-- CometD (Bayeux protocol)
-- Geotools (WFS queries)
-- Jackson (JSON)
-- Axiom (XML)
-- Jedis (Redis client)
-- oskari-base
+WFS2's front is built with Javascript as Oskari bundle that handles its inner communication with Oskari's events and requests and communication with server is mostly handled with CometD connection that tries first to initialize Websocket handshake and fallbacks to callback-polling that has cross-domain support. Backend is implemented with Java as an independent part of oskari-server meaning that some packages and classes that WFS2 transport uses are shared with other backend services.
 
-... other minor dependencies
+XML Parsing is handled at the backend with Axiom that is a StAX (Streaming API for XML) Parser for Java and Geotools. Axiom was selected because of small memory print and fast XML processing especially with medium and large XML documents.
+
+We decided not use Geotools' libraries as much as we could. Geometry transformation, drawing and styling are done with Geotools. As of generating XML payload for WFS requests we use OGC Filter and it's configuration from Geotools. Even if we have developed our own XML Parser that outputs Geotools' own SimpleFeatureCollection and uses GML Parser to just parse geometries, we have support to use GML Parser for the whole WFS XML response parsing. Our own parser handles some special cases that aren't supported in SimpleFeature format, for example possibility to have features in features.
+
+Jedis is our choice for handling our Redis cache connections. Criteria for choosing were simplicity and usability that come with Jedis. We have wrapped all the needed Jedis actions inside our own JedisManager that handles connections with JedisPool. Every action always gets a connection from the pool and releases it when the action is finalizing.
+
+JSON handling is partly done with CometDs parameter handling but mostly with Jackson that is easy and fast Java JSON parser and data binder. All cached data in Redis are in JSON format that can be easily serialized back to usable Java objects.
+
+WFS2 backend is hosted with Jetty. CometDs Websocket is supported from Jetty 7. WFS2 doesn't make any other restrictions for choosing platform than what CometD needs.
 
 ## Interfaces (API channels)
 
@@ -196,10 +197,7 @@ Client sends the starting state to the server when the /meta/handshake is trigge
 
 ##### Response channels
 
-- /wfs/image
-- /wfs/properties
-- /wfs/feature
-- /error
+Doesn't return anything
 
 
 #### /service/wfs/removeMapLayer
@@ -243,6 +241,11 @@ Doesn't return anything
 		<th>Description</th>
 	</tr>
 	<tr>
+		<td>layerId</td>
+		<td>long</td>
+		<td>maplayer_id</td>
+	</tr>
+	<tr>
 		<td>srs</td>
 		<td>String</td>
 		<td>Spatial reference system eg. EPSG:3067</td>
@@ -272,12 +275,18 @@ Doesn't return anything
 		<td>ArrayList&lt;ArrayList&lt;Double&gt;&gt;</td>
 		<td>bounds of the tiles</td>
 	</tr>
+	<tr>
+		<td>tiles</td>
+		<td>ArrayList&lt;ArrayList&lt;Double&gt;&gt;</td>
+		<td>bounds of tiles to render</td>
+	</tr>
 </table>
 
 ##### Example
 
 ```javascript
 {
+		"layerId": 216,
 		"srs": "EPSG:3067",
 		"bbox": [385800, 6690267, 397380, 6697397],
 		"zoom": 8,
@@ -285,7 +294,8 @@ Doesn't return anything
 				"rows": 5,
 				"columns": 8,
 				"bounds": [[345600,6694400,358400,6707200]..]
-		}
+		},
+		"tiles": [[345600,6694400,358400,6707200]..]
 }
 ```
 
@@ -800,6 +810,7 @@ Client channels are used to send information from the server to the client. Most
 {
 		"layerId" : 216,
 		"features": "empty",
+		"keepPrevious": false
 }
 ```
 
@@ -846,7 +857,7 @@ Client channels are used to send information from the server to the client. Most
 ```javascript
 {
 		"layerId" : 216,
-		"features": "empty",
+		"features": "empty"
 }
 ```
 
@@ -978,7 +989,7 @@ Function listening to MapSizeChangedEvent calls for Mediator's setMapSize() and 
 
 ### Adding a WFS layer - AfterMapLayerAddEvent
 
-Function listening to AfterMapLayerAddEvent calls for Mediator's addMapLayer(). Backend gets a message and adds the WFS layer to the user's session and answers with the new layer's properties, features and images. Upcoming sends trigger WFSPropertiesEvent, WFSFeatureEvents and WFSImageEvents. Updates the properties and features for object data and draws new tiles.
+Function listening to AfterMapLayerAddEvent calls for Mediator's addMapLayer() and calls AfterMapMoveEvent's handler. Backend gets a message and adds the WFS layer to the user's session and answers with the new layer's properties, features and images. Upcoming sends trigger WFSPropertiesEvent, WFSFeatureEvents and WFSImageEvents. Updates the properties and features for object data and draws new tiles.
 
 ### Removing a WFS layer - AfterMapLayerRemoveEvent
 

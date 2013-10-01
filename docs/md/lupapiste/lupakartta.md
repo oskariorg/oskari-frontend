@@ -5,7 +5,7 @@
     <td>ID</td><td>lupakartta</td>
   </tr>
   <tr>
-    <td>API</td><td>[link here](<%= apiurl %>docs/oskari/api/#!/api/Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance)</td>
+    <td>API</td><td>[link here](<%= apiurl %>Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance.html)</td>
   </tr>
 </table>
 

@@ -5,7 +5,7 @@
     <td>ID</td><td>promote</td>
   </tr>
   <tr>
-    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.promote.PromoteBundleInstance)</td>
+    <td>API</td><td>[link](<%= apiurl %>Oskari.mapframework.bundle.promote.PromoteBundleInstance.html)</td>
   </tr>
 </table>
 

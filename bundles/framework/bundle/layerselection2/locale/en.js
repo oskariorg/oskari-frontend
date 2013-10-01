@@ -20,7 +20,6 @@ Oskari.registerLocalization({
         "guest": "Log in to publish this map layer.",
         "loggedin": "Publication permitted",
         "official": "Publication permitted for use by authorities.",
-        "login-url": "<a href='/web/en/login'>Log in</a>",
         "need-login": "You must log in.",
         "can_be_published_by_provider": {
           "label": "Publication permitted for data providers.",

@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         this.template = jQuery('<div class="oskarifield"><label></label><input type="text" autofocus/></div>');
         this.templateErrors = jQuery('<div class="error"></div>');
         this.templateTooltip = jQuery('<div class="icon-info"></div>');
-        this.templateClearButton = jQuery('<div class="icon-close" style="margin-left: 0px; position: relative; display: inline-block; left: -20px; top: 3px;"></div>');
+        this.templateClearButton = jQuery('<div class="icon-close"></div>');
         this._field = this.template.clone();
 
         label = this._field.find('label');

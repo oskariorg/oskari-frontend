@@ -85,6 +85,11 @@ function(instance, localization) {
                     panel = this._createCategoryTab(categories[i]);
                     this.tabsContainer.addPanel(panel);
                     this.tabPanels[id] = panel;
+                } else {
+                    //lets set a name for the panel
+                    panel.setTitle(categories[i].name);
+                    // update panel graphics
+                    me.tabsContainer.updatePanel(panel);
                 }
                 // update places
                 this._populatePlaces(id);
@@ -239,6 +244,7 @@ function(instance, localization) {
         var id = category.getId();
         
         var panel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
+        panel.setId(id);
         panel.setTitle(category.getName());
 
         panel.grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');

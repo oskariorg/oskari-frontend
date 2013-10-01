@@ -20,7 +20,6 @@ Oskari.registerLocalization({
         "guest": "Pro publikaci této mapové vrstvy se přihlaste.",
         "loggedin": "Publikace povolena",
         "official": "Publikace povolena pro použití úřady.",
-        "login-url": "<a href='/web/en/login'>Přihlásit se</a>",
         "need-login": "Musíte se přihlásit.",
         "can_be_published_by_provider": {
           "label": "Publikace povolena pro poskytovatele dat.",

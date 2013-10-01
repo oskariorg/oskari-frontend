@@ -6,7 +6,7 @@ Oskari.registerLocalization({
     "desc": "",
     "category": {
       "defaultName": "Oma karttataso",
-      "organization": "Omat kohteet",
+      "organizationnew": "Omat kohteet",
       "inspire": "Kohteet"
     },
     "guest": {
@@ -15,27 +15,27 @@ Oskari.registerLocalization({
     "tools": {
       "point": {
         "tooltip": "Lisää piste",
-        "new": "Lisää piste klikkaamalla karttaa.",
+        "add": "Lisää piste klikkaamalla karttaa.",
         "next": "Voit tallentaa tai piirtää pisteitä samaan kohteeseen.",
         "edit": "Siirrä pistettä raahaamalla.",
         "save": "Tallenna sijainti"
       },
       "line": {
         "tooltip": "Lisää viiva",
-        "new": "Lisää viivan taitepiste klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella tai painamalla 'Lopeta piirto'.",
+        "add": "Lisää viivan taitepiste klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella tai painamalla 'Lopeta piirto'.",
         "next": "Voit tallentaa tai piirtää lisää viivoja samaan kohteeseen.",
         "edit": "Muokkaa viivaa raahaamalla viivan taitepisteitä.",
         "save": "Tallenna muoto"
       },
       "area": {
         "tooltip": "Lisää alue",
-        "new": "Lisää alueen taitepisteet klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella tai painamalla 'Lopeta piirto'. Voit piirtää alueeseen reiän pitämällä pohjassa Alt-näppäintä.",
+        "add": "Lisää alueen taitepisteet klikkaamalla karttaa. Lopeta piirto tuplaklikkauksella tai painamalla 'Lopeta piirto'. Voit piirtää alueeseen reiän pitämällä pohjassa Alt-näppäintä.",
         "next": "Voit tallentaa tai piirtää lisää alueita samaan kohteeseen.",
         "edit": "Muokkaa muotoa raahaamalla reunaviivan taitepisteitä.",
         "save": "Tallenna muoto"
       }
     },
-    "buttons": {
+     "buttons": {
       "ok": "OK",
       "cancel": "Peruuta",
       "finish": "Lopeta piirto",
@@ -60,7 +60,19 @@ Oskari.registerLocalization({
       },
       "category": {
         "label": "Karttataso",
-        "new": "Uusi taso..."
+        "newLayer": "Luo uusi karttataso",
+        "choose": " tai valitse olemassa olevista tasoista:"
+      },
+      "imagelink": {
+        "placeholder": "Kuva-URL",
+        "previewLabel": "Valokuvan esikatselu",
+        "add": "Uusi taso"
+      },
+      "rendering": {
+        "label": "Tason kohteiden esitystavat",
+        "point": {
+          "tooltip": "Piste"
+        }
       }
     },
     "categoryform": {
@@ -87,8 +99,109 @@ Oskari.registerLocalization({
           "size": "Viivan paksuus"
         }
       },
+      "visibleFields": {
+        "label": "Näytettävät kohteen tiedot",
+        "placename": "Nimi",
+        "placedesc": "Kuvaus",
+        "image": "Kuva"
+      },
       "edit": {
         "title": "Muokkaa karttatasoa",
+        "save": "Tallenna",
+        "cancel": "Peruuta"
+      },
+      "rendering": {
+        "label": "Tason kohteiden esitystavat",
+        "point": {
+          "tooltip": "Muokkaa pisteen esitystapaa"
+        },
+        "area": {
+          "tooltip": "Muokkaa alueen esitystapaa"
+        },
+        "line": {
+          "tooltip": "Muokkaa viivan esitystapaa"
+        }
+      }
+    },
+    "pointform": {
+      "title": "Pistekohteen esitystapa",
+      "tooltip": "",
+      "symbol": {
+        "label": "Pistekohteen kuvake"
+      },
+      "size": {
+        "label": "Koko"
+      },
+      "color": {
+        "label": "Väri",
+        "labelOr": "tai",
+        "labelCustom": "Oma RGB-väri (0-255)"
+      },
+      "preview": {
+        "label": "Esikatselu"
+      },
+      "buttons": {
+        "save": "Tallenna",
+        "cancel": "Peruuta"
+      }
+    },
+    "lineform": {
+      "title": "Viivan esitystapa",
+      "tooltip": "",
+      "style": {
+        "label": "Viivan tyyli"
+      },
+      "cap": {
+        "label": "Viivan päädyt"
+      },
+      "corner": {
+        "label": "Kulmat"
+      },
+      "width": {
+        "label": "Leveys"
+      },
+      "color": {
+        "label": "Väri",
+        "labelOr": "tai",
+        "labelCustom": "Oma RGB-väri (0-255)"
+      },
+      "preview": {
+        "label": "Esikatselu"
+      },
+      "buttons": {
+        "save": "Tallenna",
+        "cancel": "Peruuta"
+      }
+    },
+    "areaform": {
+      "title": "Alueen esitystapa",
+      "tooltip": "",
+      "linestyle": {
+        "label": "Alueen viivan tyyli"
+      },
+      "linecorner": {
+        "label": "Kulmat"
+      },
+      "linewidth": {
+        "label": "Leveys"
+      },
+      "linecolor": {
+        "label": "Viivan väri",
+        "labelOr": "tai",
+        "labelCustom": "Oma RGB-väri (0-255)"
+      },
+      "color": {
+        "label": "Alueen täyttöväri",
+        "labelOr": "tai",
+        "labelCustom": "Oma RGB-väri (0-255)"
+      },
+      "fill": {
+        "label": "Alueen täyttökuvio"
+      },
+      "preview": {
+        "label": "Esikatselu"
+      },
+      "buttons": {
         "save": "Tallenna",
         "cancel": "Peruuta"
       }
@@ -133,8 +246,9 @@ Oskari.registerLocalization({
       "placeNameIllegal": "Kohteen nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
       "descIllegal": "Kohteen kuvauksessa on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
       "categoryNameIllegal": "Tason nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
-      "dotSize": "Pisteen koko ei ole sallituissa rajoissa (1-50).",
+      "dotSize": "Pisteen koko ei ole sallituissa rajoissa (1-5).",
       "dotColor": "Pisteen väri virheellinen.",
+      "dotShape": "Pisteen muoto virheellinen.",
       "lineSize": "Viivan koko ei ole sallituissa rajoissa (1-50).",
       "lineColor": "Viivan väri virheellinen.",
       "areaLineSize": "Alueen viivan koko ei ole sallituissa rajoissa (0-50).",

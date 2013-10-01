@@ -570,6 +570,9 @@ define([
             var me = this;
             var element = jQuery(e.currentTarget);
             var input = element.parents('.add-layer-wrapper').find('#add-layer-interface');
+            var wmsurlField = element.parents('.add-layer-wrapper').find('#add-layer-wms-url');
+            wmsurlField.html(input.val());
+
             var baseUrl = me.options.instance.getSandbox().getAjaxUrl(),
                 route = "action_route=GetWSCapabilities",
                 type = "&wmsurl=";
@@ -678,7 +681,11 @@ define([
         updateLayerValues: function(selectedLayer, capability, container) {
             // Clear out the old values
             var layerInterface = container.find('#add-layer-interface').val();
+            // keep wms url from reseting... hacky whacky
+            var wmsurlField = container.find('#add-layer-wms-url');
+            var wmsurl = wmsurlField.text();
             this.clearAllFields();
+            wmsurlField.text(wmsurl); 
             //title
             jQuery('#add-layer-fi-name').val(selectedLayer.Title);
 
@@ -744,7 +751,8 @@ define([
                 jQuery('#add-layer-metadataid').val(wmsMetadataId.trim());
             }
 
-            // WMS url
+            // WMS url - copied from url the user inserted
+            /*
             var getMapRequest = capability.Request.GetMap;
             if (getMapRequest) {
                 var wmsUrl = getMapRequest.DCPType.HTTP.Get.OnlineResource['xlink:href'];
@@ -755,7 +763,7 @@ define([
                 }
                 container.find('#add-layer-interface').val(layerInterface)
             }
-
+            */
             //metadata id == uuid
             //"http://www.paikkatietohakemisto.fi/geonetwork/srv/en/main.home?uuid=a22ec97f-d418-4957-9b9d-e8b4d2ec3eac"
             var uuid = this.capabilities.Service.OnlineResource['xlink:href'];
@@ -804,7 +812,7 @@ define([
             var form = jQuery('.create-layer');
             // Clear all the inputs and textareas.
             var inputs = form.find('input').val('');
-            form.find('textarea').val('');
+            form.find('textarea').text('');
             // Empty the GFI response type select
             jQuery('#add-layer-responsetype').empty();
             // Empty the layer style select

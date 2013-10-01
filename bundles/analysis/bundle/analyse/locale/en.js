@@ -174,7 +174,8 @@ Oskari.registerLocalization({
                 "bufferSize" : "Error in buffer size",
                 "illegalCharacters" : "No alfabets - use digits",
                 "nohelp" : "No guide found",
-                "saveFailed" : "Storing analysis failed. Try again a little later."
+                "saveFailed" : "Storing analysis failed. Try again a little later.",
+                "loadLayersFailed": "Analysis layer load failed"
             }
         },
         "StartView": {
@@ -225,8 +226,13 @@ Oskari.registerLocalization({
             "title" : "Analysis",
             "confirmDeleteMsg" : "Do you want to delete:",
             "buttons" : {
+                "ok": "OK",
                 "cancel" : "Cancel",
                 "delete" : "Delete"
+            },
+            "notification": {
+                "deletedTitle": "Delete map layer",
+                "deletedMsg": "Map layer deleted"
             },
             "error" : {
                 "title": "Error!",

@@ -13,13 +13,13 @@ Oskari.registerLocalization({
             "message" : "MapWfs2"
         },
         "error" : {
-            "title": "Error",
-            "connection_not_available": "Yhteyttä ei voitu muodostaa WFS-taustapalveluun.",
-            "connection_broken": "Yhteys WFS-taustapalveluun katkesi.",
-            "wfs_no_permissions": "WFS-tasoon ({layer}) ei ole riittäviä oikeuksia",
-            "wfs_configuring_layer_failed": "WFS-tason ({layer}) konfigurointi epäonnistui",
-            "wfs_request_failed": "Tason ({layer}) WFS-kysely epäonnistui ",
-            "features_parsing_failed": "WFS-tason ({layer}) featureiden käsittely epäonnistui"
+            "title": "Felmeddelande",
+            "connection_not_available": "Kontakt med WFS-bakgrundstjänsten fås inte.",
+            "connection_broken": "Kontakten med WFS-bakgrundstjänsten har avbrutits.",
+            "wfs_no_permissions": "Rättigheter till WFS-lager ({layer}) saknas.",
+            "wfs_configuring_layer_failed": "Konfigureringen av WFS-lager ({layer}) misslyckades.",
+            "wfs_request_failed": "Din förfrågan för WFS-lager ({layer}) misslyckades.",
+            "features_parsing_failed": "Hanteringen av features i WFS-lager ({layer}) misslyckades."
         },
         "button": {
             "cancel": "Avbryt",

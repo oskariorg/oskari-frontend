@@ -2,7 +2,7 @@
 
 <table>
   <tr>
-    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerPlugin)</td>
+    <td>API</td><td>[link](<%= apiurl %>Oskari.mapframework.bundle.mapwfs.plugin.wfslayer.WfsLayerPlugin.html)</td>
   </tr>
 </table>
 

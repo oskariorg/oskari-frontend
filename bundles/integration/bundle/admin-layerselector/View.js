@@ -134,9 +134,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             });
             // If call for layers is ready before backbone is created,
             // we'll instantiate our view with that data 
-            if(me.layers != null) {
-                me.view.addToCollection(me.layers);
-            }
+            me._layerUpdateHandler();
         });
     },
 

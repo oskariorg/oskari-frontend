@@ -24,8 +24,8 @@ function(mapLayerUrl, sandbox) {
     this._loadedLayersList = new Array();
     // used to detect duplicate ids since looping through the list is slow
     this._reservedLayerIds = {};
-    // used to keep sticky layer ids
-    this._stickyLayerIds = [];
+    // used to store sticky layer ids - key = layer id, value = true if sticky (=layer cant be removed)
+    this._stickyLayerIds = {};
 
     /**
      * @property typeMapping 
@@ -283,17 +283,17 @@ function(mapLayerUrl, sandbox) {
     },
      /**
      * @method makeLayerSticky
-     * Set layer visibility swicth off disable
+     * Set layer visibility switch off disable
      *
      * @param {String} layerId
      *            id for the layer to be set
-     * @param {boolean} if true, set layer swicth off disable
+     * @param {boolean} if true, set layer switch off disable
      *            
      */
     makeLayerSticky : function(layerId, isSticky) {
         var layer = this.findMapLayer(layerId);
         // Get id for postprocess after map layer load
-        this._stickyLayerIds.push(layerId);
+        this._stickyLayerIds[layerId] = (isSticky === true);
         if(layer) {
             layer.setSticky(isSticky);
             // notify components of layer update
@@ -347,23 +347,25 @@ function(mapLayerUrl, sandbox) {
         for(var i = 0; i < allLayers.length; i++) {
             
             var mapLayer = this.createMapLayer(allLayers[i]);
-            if(allLayers[i].admin != null) {
-                mapLayer.admin = allLayers[i].admin;                
-            }
-            if (allLayers[i].names) {
-                mapLayer.names = allLayers[i].names;
-            }
+
             if(this._reservedLayerIds[mapLayer.getId()] !== true) {
                 this.addLayer(mapLayer, true);
             } else {
-				//console.log("Reserved layer ID (" + mapLayer.getId() + ") , won't add");
+                // Set additional data to an existing layer.
+                var existingLayer = this.findMapLayer(mapLayer.getId());
+                
+                if(allLayers[i].admin != null) {
+                    existingLayer.admin = allLayers[i].admin;                
+                }
+                if (allLayers[i].names) {
+                    existingLayer.names = allLayers[i].names;
+                }
 			}
         }
         // notify components of added layer if not suppressed
         this._allLayersAjaxLoaded = true;
         var event = this._sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
         this._sandbox.notifyAll(event);
-        this._resetStickyLayers();
         if(callbackSuccess) {
             callbackSuccess();
         }
@@ -477,6 +479,19 @@ function(mapLayerUrl, sandbox) {
             // create map layer
             mapLayer = this._createActualMapLayer(mapLayerJson);
         }
+
+        // Set additional data
+        if(mapLayer && mapLayerJson.admin != null) {
+            mapLayer.admin = mapLayerJson.admin;
+        }
+        if (mapLayer && mapLayerJson.names != null) {
+            mapLayer.names = mapLayerJson.names;
+        }
+
+        if(this._stickyLayerIds[mapLayer.getId()]) {
+            mapLayer.setSticky(true);
+        }
+
         return mapLayer;
     },
     /**
@@ -781,19 +796,6 @@ function(mapLayerUrl, sandbox) {
             var foundLayer = this.findMapLayer(id);
             throw "Trying to add map layer with id '" + id + " (" + name + ")' but that id is already reserved for '" + foundLayer.getName() + "'";
         }
-    },
-     /**
-     * @method _resetStickyLayers
-     * Reset sticky layers 
-     *
-   
-     */
-    _resetStickyLayers : function() {
-        
-      	for (var i in this._stickyLayerIds) {
-				var layerId = this._stickyLayerIds[i];
-        	    this.makeLayerSticky(layerId,true);
-			}
     },
     /**
      * @method findMapLayer

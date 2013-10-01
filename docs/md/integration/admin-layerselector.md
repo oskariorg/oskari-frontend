@@ -5,7 +5,7 @@
     <td>ID</td><td>admin-layerselector</td>
   </tr>
   <tr>
-    <td>API</td><td>[link](<%= apiurl %>docs/oskari/api/#!/api/Oskari.integration.bundle.admin.layerselector.View)</td>
+    <td>API</td><td>[link](<%= apiurl %>Oskari.integration.bundle.admin.layerselector.View.html)</td>
   </tr>
 </table>
 

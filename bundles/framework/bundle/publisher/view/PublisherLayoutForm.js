@@ -18,6 +18,8 @@ function(localization, publisher) {
 	this.loc = localization;
     this._publisher = publisher;
     this._sandbox = publisher.instance.sandbox;
+    this._colourSchemePopup = null;
+    this._customColoursPopup = null;
 
     this.template = {};
     for (var t in this.__templates ) {
@@ -236,6 +238,16 @@ function(localization, publisher) {
 	},
 
     /**
+     * For now, only closes popups if they're visible.
+     * 
+     * @method stop
+     * @return {undefined}
+     */
+    stop: function() {
+        this._closePopups();
+    },
+
+    /**
      * Returns the UI panel and populates it with the data that we want to show the user.
      * 
      * @method getPanel
@@ -275,6 +287,20 @@ function(localization, publisher) {
         this.values.toolStyle = this._getItemByCode(toolStyleCode, this.initialValues.toolStyles);
 
 		return this.values;
+    },
+
+    /**
+     * Closes the popups if they are open on the screen.
+     * 
+     * @method _closePopups
+     * @return {undefined}
+     */
+    _closePopups: function() {
+        if (this._colourSchemePopup) this._colourSchemePopup.close(true);
+        if (this._customColoursPopup) this._customColoursPopup.close(true);
+
+        this._colourSchemePopup = null;
+        this._customColoursPopup = null;
     },
 
     /**
@@ -407,6 +433,7 @@ function(localization, publisher) {
         closeButton.setTitle(this.loc.layout.popup.close);
         closeButton.setHandler(function() {
             popup.close(true);
+            self._colourSchemePopup = null;
         });
 
         // Create the preview GFI dialog.
@@ -439,6 +466,7 @@ function(localization, publisher) {
             if ('custom' === colours[i].val) {
                 customColourButton = jQuery('<button>' + this.loc.layout.fields.colours.buttonLabel + '</button>');
                 customColourButton.click(function() {
+                    colourInput.find('input[type=radio]').attr('checked', 'checked');
                     self._createCustomColoursPopup();
                 });
                 content.find('div#publisher-colour-inputs').append(customColourButton);
@@ -461,6 +489,7 @@ function(localization, publisher) {
 
         //popup.moveTo(target);
         popup.show(title, content, [closeButton]);
+        this._colourSchemePopup = popup;
     },
 
     /**
@@ -490,9 +519,11 @@ function(localization, publisher) {
                 self._sendColourSchemeChangedEvent(customColours);
             }
             popup.close(true);
+            self._customColoursPopup = null;
         });
 
         popup.show(title, content, [closeButton]);
+        this._customColoursPopup = popup;
     },
 
     /**

@@ -18,8 +18,16 @@ function(instance, localization) {
     this.grid = undefined;
     this.container = undefined;
     
-    this.linkTemplate = jQuery('<a href="JavaScript:void(0);"></a>');
+    /* templates */
+    this.template = {};
+    for (var p in this.__templates ) {
+        this.template[p] = jQuery(this.__templates[p]);
+    }
 }, {
+    __templates : {
+        "main" : '<div class="oskari-analysis-listing-tab"></div>',
+        "link" : '<a href="JavaScript:void(0);"></a>'
+    },
     /**
      * Returns reference to a container that should be shown in personal data
      * @method getContent
@@ -40,7 +48,7 @@ function(instance, localization) {
         grid.setVisibleFields(visibleFields);
         // set up the link from name field
         var nameRenderer = function(name, data) {
-            var link = me.linkTemplate.clone();
+            var link = me.template['link'].clone();
             var layer = data.layer;
             
             link.append(name);
@@ -55,7 +63,7 @@ function(instance, localization) {
         grid.setColumnValueRenderer('name', nameRenderer);
         // set up the link from edit field
         var deleteRenderer = function(name, data) {
-            var link = me.linkTemplate.clone();
+            var link = me.template['link'].clone();
             var layer = data.layer;
             link.append(name);
             link.bind('click', function() {
@@ -73,7 +81,7 @@ function(instance, localization) {
             grid.setColumnUIName(key, this.loc.grid[key]);
         }
 
-        this.container = jQuery('<div></div>');
+        this.container = this.template['main'].clone();
         // populate initial grid content
         this.update();
     	return this.container;
@@ -150,7 +158,7 @@ function(instance, localization) {
             type : 'POST',
             success : function(response) {
                 if(response && response.result === 'success') {
-                    me._deleteSuccess();
+                    me._deleteSuccess(layer);
                 }
                 else {
                     me._deleteFailure();
@@ -165,16 +173,21 @@ function(instance, localization) {
     /**
      * Success callback for backend operation.
      * @method _deleteSuccess
+     * @param {Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer} layer layer that was removed
      * @private
      */
-    _deleteSuccess : function() {
+    _deleteSuccess : function(layer) {
+        var sandbox = this.instance.sandbox;
         var service = sandbox.getService('Oskari.mapframework.service.MapLayerService');
         // TODO: shouldn't maplayerservice send removelayer request by default on remove layer?
         // also we need to do it before service.remove() to avoid problems on other components
         var removeMLrequestBuilder = sandbox.getRequestBuilder('RemoveMapLayerRequest');
-        var request = removeMLrequestBuilder(data.layer.getId());
-        sandbox.request(me.instance, request);
-        service.removeLayer(data.layer.getId());
+        var request = removeMLrequestBuilder(layer.getId());
+        sandbox.request(this.instance, request);
+        service.removeLayer(layer.getId());
+        // show msg to user about successful removal
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        dialog.show(this.loc.notification.deletedTitle, this.loc.notification.deletedMsg);
     },
     /**
      * Failure callback for backend operation.

@@ -150,6 +150,7 @@ function(instance) {
                     id: place.getId(),
                     name : place.getName(),
                     link : place.getLink(),
+                    imageLink : place.getImageLink(),
                     desc : place.getDescription(),
                     category : place.getCategoryID()
                 }
@@ -234,11 +235,10 @@ function(instance) {
         var formValues = this.form.getValues();
         // validation
         var errors = this._validateForm(formValues);
-        // Validation disabled temporarily:
-        // if(errors.length != 0) {
-        //     this._showValidationErrorMessage(errors);
-        //     return;
-        // }
+        if(errors.length != 0) {
+            this._showValidationErrorMessage(errors);
+            return;
+        }
         // validation passed -> go save stuff
         // new category given -> save it first 
         if(formValues.category) {
@@ -258,10 +258,10 @@ function(instance) {
                     // blnNew should always be true since we are adding a category
                     var loc = me.instance.getLocalization('notification')['error'];
                     if(blnNew) {
-                		me.instance.showMessage(loc['error'].title, loc['error'].addCategory);
+                		me.instance.showMessage(loc.title, loc.addCategory);
                     }
                     else {
-                		me.instance.showMessage(loc['error'].title, loc['error'].editCategory);
+                		me.instance.showMessage(loc.title, loc.editCategory);
                     }
                 }
             }
@@ -296,6 +296,7 @@ function(instance) {
         place.setId(values.id);
         place.setName(values.name);
         place.setLink(values.link);
+        place.setImageLink(values.imageLink);
         place.setDescription(values.desc);
         place.setCategoryID(values.category);
         // fetch the latest geometry if edited after FinishedDrawingEvent
