@@ -281,7 +281,7 @@ start : function() {
     destroy : function() {
         // remember to remove live bindings if any
         //jQuery('div.myplacescategoryform input.oskaricolor').off();
-        this.dialog.close();
+        if (typeof this.dialog !== "undefined") this.dialog.close();
         var onScreenForm = this._getOnScreenForm();
         onScreenForm.remove();
     }
