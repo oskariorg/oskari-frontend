@@ -8,7 +8,7 @@ Oskari.registerLocalization({
 			"title" : "admin: Kartlager"
 		},
 		"tile" : {
-			"title" : "A: karttatasot",
+			"title" : "A: Kartlager",
 			"tooltip" : "."
 		},
 		"view" : {
@@ -38,6 +38,7 @@ Oskari.registerLocalization({
 			"type-base" : "Bakgrundskarta",
 			"type-wms" : "kartlager",
 			"type-wfs" : "Dataprodukt"
+		},
 		"backendStatus" : {
 			"OK" : {
 				"tooltip" : "Kartlagret är tillgängligt just nu.",
@@ -70,6 +71,11 @@ Oskari.registerLocalization({
 			"editDesc" 				: "Editera namn",
 			"layerType"				: "Lagertyp",
 			"layerTypeDesc" 		: "Lagrets typ: WMS, WFS, WMTS",
+			"type"					: "Tason tyyppi",
+			"typePlaceholder"		: "Valitse tason tyyppi",
+			"normalLayer"			: "Normaali taso",
+			"baseLayer"				: "Taustataso",
+			"groupLayer"			: "Ryhmätaso",
 			"interfaceVersion"		: "Gränss&shy;nittets version",
 			"interfaceVersionDesc" 	: "Gränss&shy;nittets version",
 			"wmslayer"				: "WMS Lager",
@@ -80,6 +86,11 @@ Oskari.registerLocalization({
 			"getInfo" 				: "Sök data",
 			"selectClass" 			: "Valitse aihe",
 			"selectClassDesc" 		: "Valitse aihe",
+
+			"baseName"				: "Taustatason nimi",
+			"groupName"				: "Ryhmätason nimi",
+			"subLayers" 			: "Alatasot",
+			"addSubLayer"			: "Lisää alataso",
 
 			"wmsInterfaceAddress" 	: "WMS&shy;-gränssnittets address",
 			"wmsInterfaceAddressDesc": "WMS&shy;-gränssnittets URL-address separerat med komma",
@@ -112,6 +123,8 @@ Oskari.registerLocalization({
 			"maxScale" 				: "Maximi&shy;skala",
 			"maxScaleDesc" 			: "Lagrets maximiskala (1:1)",
 			"maxScalePlaceholder" 	: "1 (1:1) Lagrets maximiskala",
+			"srsName"				: "Koordinaatti&shy;järjestelmä",
+			"srsNamePlaceholder"	: "Koordinaattijärjestelmä",
 			"legendaImage" 			: "Förklarings&shy;bildens address",
 			"legendaImageDesc" 		: "Förklarings&shy;bildens address",
 			"legendaImagePlaceholder" : "Förklarings&shy;bildens address",
@@ -146,7 +159,6 @@ Oskari.registerLocalization({
 			"interfaceAddress" 		: "Gränssnitten address",
 			"interfaceAddressDesc" 	: "WMS address för lager definitionen",
 			"viewingRightsRoles" 	: "Kollar rättigheter roller"
-
 		},
 		"cancel" 	: "Tillbaka",
 		"add" 		: "Tillägg",
