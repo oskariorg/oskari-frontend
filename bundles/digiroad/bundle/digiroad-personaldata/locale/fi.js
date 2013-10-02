@@ -204,8 +204,7 @@ Oskari.registerLocalization({
         "email": "Sähköpostiosoite",
         "changeInfo": "Muuta tietoja",
         "changePassword": "Muuta salasana",
-        "removeAccount": "Poista tili",
-        "changeInfoUrl": "/web/fi/profiili"
+        "removeAccount": "Poista tili"
       }
     },
     "button": {

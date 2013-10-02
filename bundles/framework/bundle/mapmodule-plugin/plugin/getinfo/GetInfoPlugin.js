@@ -51,7 +51,7 @@ function(config, locale) {
         "myPlacesWrapper" : '<div class="myplaces_place">' +
                                 '<h3 class="myplaces_header"></h3>' +
                                 '<p class="myplaces_desc"></p>' +
-                                '<img class="myplaces_img"></img>' +
+                                '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' +
                                 '<a class="myplaces_link"></a>' +
                             '</div>'
 	},
@@ -752,6 +752,9 @@ function(config, locale) {
             if (place.imageUrl) {
                 content.find('img.myplaces_img').attr({
                     'src': place.imageUrl
+                });
+                content.find('a.myplaces_imglink').attr({
+                    'href': place.imageUrl
                 });
             } else {
                 content.find('img.myplaces_img').remove();

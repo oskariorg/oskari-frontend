@@ -133,7 +133,7 @@ Oskari.registerLocalization({
       "placeNameIllegal": "El nombre del objeto contiene caracteres no permitidos. Los caracteres permitidos son las letras entre a-z, números, espacios y guiones.",
       "descIllegal": "La descripción del objeto contiene caracteres no permitidos. Los caracteres permitidos son las letras entre a-z, números, espacios y guiones.",
       "categoryNameIllegal": "La descripción de la capa contiene caracteres no permitidos. Los caracteres permitidos son las letras entre a-z, números, espacios y guiones.",
-      "dotSize": "El tamaño del punto no está dentro de los límites de tamaño (1-50).",
+      "dotSize": "El tamaño del punto no está dentro de los límites de tamaño (1-5).",
       "dotColor": "Color de punto incorrecto",
       "lineSize": "El tamaño de la línea no está dentro de los límites de tamaño (1-50).",
       "lineColor": "Color de línea incorrecto",

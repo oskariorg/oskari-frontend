@@ -121,21 +121,32 @@ Oskari.registerLocalization({
 			"gfiStyle" 				: "GFI stil",
 			"gfiStyleDesc" 			: "GFI stil (XSLT)",
 
-			"finnish" 				: "Suomeksi:",
-			"finnishTitle" 			: "Fi",
-			"finnishPlaceholder" 	: "Nimi suomeksi",
-			"finnishDescPlaceholder" : "Kuvaus suomeksi",
-			"swedish" 				: "På svenska:",
-			"swedishTitle" 			: "Sv",
-			"swedishPlaceholder" 	: "Namn på svenska",
-			"swedishDescPlaceholder" : "Beskrivning på svenska",
-			"english" 				: "In English:",
-			"englishTitle" 			: "En",
-			"englishPlaceholder" 	: "Name in English",
-			"englishDescPlaceholder" : "Description in English",
+			"generic"               : {
+				"placeholder"     : "Name in {0}",
+				"descplaceholder" : "Description in {0}"
+			},
+			"en"                    : {
+				"lang"            : "In English:",
+				"title"           : "En",
+				"placeholder"     : "Name in English",
+				"descplaceholder" : "Description in English"
+			},
+			"fi"                    : {
+				"lang"            : "Suomeksi:",
+				"title"           : "Fi",
+				"placeholder"     : "Nimi suomeksi",
+				"descplaceholder" : "Kuvaus suomeksi"
+			},
+			"sv"                    : {
+				"lang"            : "På svenska:",
+				"title"           : "Sv",
+				"placeholder"     : "Namn på svenska",
+				"descplaceholder" : "Beskrivning på svenska"
+			},
 
 			"interfaceAddress" 		: "Gränssnitten address",
 			"interfaceAddressDesc" 	: "WMS address för lager definitionen"
+			"viewingRightsRoles" 	: "Kollar rättigheter roller"
 
 		},
 		"cancel" 	: "Tillbaka",

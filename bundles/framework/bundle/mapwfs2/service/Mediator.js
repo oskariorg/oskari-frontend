@@ -99,6 +99,7 @@ function(config, plugin) {
 
         this.cometd.publish('/service/wfs/init', {
             "session" : this.session.session,
+            "route" : this.session.route,
             "language" : Oskari.getLang(),
             "browser" : this.session.browser,
             "browserVersion" : this.session.browserVersion,

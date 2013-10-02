@@ -143,7 +143,7 @@ Oskari.registerLocalization({
       "buttons": {
         "save": "Lagra",
         "cancel": "Tillbaka"
-      },
+      }
     },
     "lineform": {
       "title": "Visualisering av linje",
@@ -249,8 +249,9 @@ Oskari.registerLocalization({
       "placeNameIllegal": "I objekts namnet ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck.",
       "descIllegal": "I objekts beskrivning ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck.",
       "categoryNameIllegal": "I kartlagers beskrivning ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck.",
-      "dotSize": "Punkternas storlek är utanför de tillåtna gränserna (1-50).",
+      "dotSize": "Punkternas storlek är utanför de tillåtna gränserna (1-5).",
       "dotColor": "Punktens färg är felaktig.",
+      "dotShape": "Punktens form är felaktig.",
       "lineSize": "Linjens storlek är utanför de tillåtna gränserna (1-50).",
       "lineColor": "Linjens färg är felaktig.",
       "areaLineSize": "Områdets konturlinje är utanför de tillåtna gränserna (0-50).",

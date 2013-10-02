@@ -98,9 +98,8 @@ define([
 
                 // Loop through layer groupings
                 for(var i = 0; i < this.layerGroupingModel.layerGroups.length; ++i) {
-                    var group = this.layerGroupingModel.layerGroups[i];
-
-                    var visibleLayerCount = 0;
+                    var group = this.layerGroupingModel.layerGroups[i],
+                        visibleLayerCount = 0;
                     //create groupPanel / accordion
                     var groupPanel = jQuery(this.accordionTemplate({
                         title: this.layerGroupingModel.getGroupingTitle(i, Oskari.getLang()),
@@ -191,8 +190,8 @@ define([
         toggleGroupingSettings : function(e) {
             //show grouping settings
             e.stopPropagation();
-            var element = jQuery(e.currentTarget);
-            var grouping = element.parents('.accordion-header');
+            var element = jQuery(e.currentTarget),
+                grouping = element.parents('.accordion-header');
             // if there is no accordion-header 
             if(grouping.length == 0) {
                 element.parents('.admin-add-class').removeClass('show-add-class');;
@@ -304,9 +303,9 @@ define([
          * @method toggleLayerGroup
          */
         toggleLayerGroup : function(e) {
-            var element = jQuery(e.currentTarget);
-            var panel = element.parents('.accordion:first');
-            var headerIcon = panel.find('.headerIcon');
+            var element = jQuery(e.currentTarget),
+                panel = element.parents('.accordion:first'),
+                headerIcon = panel.find('.headerIcon');
             if(panel.hasClass('open')) {
                 panel.removeClass('open');
                 headerIcon.removeClass('icon-arrow-down');
@@ -337,19 +336,18 @@ define([
                 // id = "&layercl_id=", // this param is used in remove 
                 lcId = element.parents('.accordion').attr('lcid'),
                 parentId = "&parent_id=",
-                nameFi = "&name_fi=",
-                nameSv = "&name_sv=",
-                nameEn = "&name_en=",
-                fi = addClass.find("#add-class-fi-name").val(),
-                sv = addClass.find("#add-class-sv-name").val(),
-                en = addClass.find("#add-class-en-name").val();
+                names = '';
 
+            addClass.find('[id$=-name]').filter('[id^=add-layer-]').each(function (index) {
+                lang = this.id.substring(10, this.id.indexOf("-name"));
+                names += "&name_" + lang + "=" + this.value;
+            });
             var url = baseUrl + action_route + id;
             //add id of layer class
             if(lcId != null) {
                 url += lcId;
             }
-            url += parentId+nameFi+fi+nameSv+sv+nameEn+en;
+            url += parentId+names;
             // make AJAX call
             me._save(e, url, function(response){
 				//console.log("Save...");
@@ -441,9 +439,9 @@ define([
          * @method _remove
          */
         _remove: function(e, url, successCallback) {
-            var me = this;
-            var element = jQuery(e.currentTarget);
-            var addClass = element.parents('.admin-add-class');
+            var me = this,
+                element = jQuery(e.currentTarget),
+                addClass = element.parents('.admin-add-class');
             jQuery.ajax({
                 type : "GET",
                 dataType: 'json',

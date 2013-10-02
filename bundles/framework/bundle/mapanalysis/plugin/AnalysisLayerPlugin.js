@@ -166,7 +166,7 @@ function(config) {
          * @param {Object} event
          */
         "AfterMapMoveEvent" : function(event) {
-            this.wfsLayerPlugin.mapMoveHandler();
+          // tk  this.wfsLayerPlugin.mapMoveHandler();
         },
 
         /**
@@ -174,7 +174,7 @@ function(config) {
          * @param {Object} event
          */
         'WFSFeaturesSelectedEvent' : function(event) {
-            this.wfsLayerPlugin.featuresSelectedHandler(event);
+          // tk  this.wfsLayerPlugin.featuresSelectedHandler(event);
         },
 
         /**
@@ -182,7 +182,7 @@ function(config) {
          * @param {Object} event
          */
         'MapClickedEvent' : function(event) {
-            this.wfsLayerPlugin.mapClickedHandler(event);
+          // tk this.wfsLayerPlugin.mapClickedHandler(event);
         },
 
         /**
@@ -190,7 +190,7 @@ function(config) {
          * @param {Object} event
          */
         'GetInfoResultEvent' : function(event) {
-            this.wfsLayerPlugin.getInfoResultHandler(event);
+           // tk this.wfsLayerPlugin.getInfoResultHandler(event);
         },
 
         /**
@@ -198,7 +198,7 @@ function(config) {
          * @param {Object} event
          */
         'AfterChangeMapLayerStyleEvent' : function(event) {
-            this.wfsLayerPlugin.changeMapLayerStyleHandler(event);
+          // tk  this.wfsLayerPlugin.changeMapLayerStyleHandler(event);
         },
 
         /**
@@ -213,7 +213,7 @@ function(config) {
          * @param {Object} event
          */
         'MapSizeChangedEvent' : function(event) {
-            this.wfsLayerPlugin.mapSizeChangedHandler(event);
+           // tk this.wfsLayerPlugin.mapSizeChangedHandler(event);
         },
 
         /**
@@ -221,7 +221,7 @@ function(config) {
          * @param {Object} event
          */
         'WFSSetFilter' : function(event) {
-            this.wfsLayerPlugin.setFilterHandler(event);
+           // tk this.wfsLayerPlugin.setFilterHandler(event);
         },
 
 
@@ -231,7 +231,7 @@ function(config) {
         },
         'AfterMapLayerRemoveEvent' : function(event) {
             this._afterMapLayerRemoveEvent(event);
-            this.wfsLayerPlugin.mapLayerRemoveHandler(event);
+          // tk  this.wfsLayerPlugin.mapLayerRemoveHandler(event);
         },
         'AfterChangeMapLayerOpacityEvent' : function(event) {
             this._afterChangeMapLayerOpacityEvent(event);

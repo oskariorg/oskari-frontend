@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Capabilities xmlns="http://www.opengis.net/wmts/1.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml" xsi:schemaLocation="http://www.opengis.net/wmts/1.0 http://schemas.opengis.net/wmts/1.0/wmtsGetCapabilities_response.xsd" version="1.0.0">
+    <!--
+       server urls removed
+-->
+	<ows:ServiceIdentification>
+		<ows:ServiceType>OGC WMTS</ows:ServiceType>
+		<ows:ServiceTypeVersion>1.0.0</ows:ServiceTypeVersion>
+	</ows:ServiceIdentification>
+	<ows:ServiceProvider>
+		<ows:ServiceContact>
+			<ows:ContactInfo></ows:ContactInfo>
+		</ows:ServiceContact>
+	</ows:ServiceProvider>
+	<ows:OperationsMetadata>
+		<ows:Operation name="GetCapabilities">
+			<ows:DCP>
+				<ows:HTTP>
+					<ows:Get xlink:href="/elf/cgi-bin/elfmc/wmts">
+						<ows:Constraint name="GetEncoding">
+							<ows:AllowedValues>
+								<ows:Value>KVP</ows:Value>
+							</ows:AllowedValues>
+						</ows:Constraint>
+					</ows:Get>
+				</ows:HTTP>
+			</ows:DCP>
+		</ows:Operation>
+		<ows:Operation name="GetTile">
+			<ows:DCP>
+				<ows:HTTP>
+					<ows:Get xlink:href="/elf/cgi-bin/elfmc/wmts">
+						<ows:Constraint name="GetEncoding">
+							<ows:AllowedValues>
+								<ows:Value>KVP</ows:Value>
+							</ows:AllowedValues>
+						</ows:Constraint>
+					</ows:Get>
+				</ows:HTTP>
+			</ows:DCP>
+		</ows:Operation>
+		<ows:Operation name="GetFeatureInfo">
+			<ows:DCP>
+				<ows:HTTP>
+					<ows:Get xlink:href="/elf/cgi-bin/elfmc/wmts">
+						<ows:Constraint name="GetEncoding">
+							<ows:AllowedValues>
+								<ows:Value>KVP</ows:Value>
+							</ows:AllowedValues>
+						</ows:Constraint>
+					</ows:Get>
+				</ows:HTTP>
+			</ows:DCP>
+		</ows:Operation>
+	</ows:OperationsMetadata>
+	<Contents>
+		<Layer>
+			<ows:Title>BU.Building</ows:Title>
+			<ows:Identifier>BU.Building</ows:Identifier>
+			<Style isDefault="true">
+				<ows:Identifier>default</ows:Identifier>
+			</Style>
+			<Format>image/png</Format>
+			<TileMatrixSetLink>
+				<TileMatrixSet>LAEA</TileMatrixSet>
+			</TileMatrixSetLink>
+			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/BU.Building/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+		</Layer>
+		<Layer>
+			<ows:Title>TN.RailTransportNetwork.RailwayLink</ows:Title>
+			<ows:Identifier>TN.RailTransportNetwork.RailwayLink</ows:Identifier>
+			<Style isDefault="true">
+				<ows:Identifier>default</ows:Identifier>
+			</Style>
+			<Format>image/png</Format>
+			<TileMatrixSetLink>
+				<TileMatrixSet>LAEA</TileMatrixSet>
+			</TileMatrixSetLink>
+			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/TN.RailTransportNetwork.RailwayLink/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+		</Layer>
+		<Layer>
+			<ows:Title>HY.PhysicalWaters.Watercourse</ows:Title>
+			<ows:Identifier>HY.PhysicalWaters.Watercourse</ows:Identifier>
+			<Style isDefault="true">
+				<ows:Identifier>default</ows:Identifier>
+			</Style>
+			<Format>image/png</Format>
+			<TileMatrixSetLink>
+				<TileMatrixSet>LAEA</TileMatrixSet>
+			</TileMatrixSetLink>
+			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/HY.PhysicalWaters.Watercourse/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+		</Layer>
+		<Layer>
+			<ows:Title>HY.PhysicalWaters.LandWaterBoundary</ows:Title>
+			<ows:Identifier>HY.PhysicalWaters.LandWaterBoundary</ows:Identifier>
+			<Style isDefault="true">
+				<ows:Identifier>default</ows:Identifier>
+			</Style>
+			<Format>image/png</Format>
+			<TileMatrixSetLink>
+				<TileMatrixSet>LAEA</TileMatrixSet>
+			</TileMatrixSetLink>
+			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/HY.PhysicalWaters.LandWaterBoundary/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+		</Layer>
+		<Layer>
+			<ows:Title>AU.AdministrativeUnit</ows:Title>
+			<ows:Identifier>AU.AdministrativeUnit</ows:Identifier>
+			<Style isDefault="true">
+				<ows:Identifier>default</ows:Identifier>
+			</Style>
+			<Format>image/png</Format>
+			<TileMatrixSetLink>
+				<TileMatrixSet>LAEA</TileMatrixSet>
+			</TileMatrixSetLink>
+			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/AU.AdministrativeUnit/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+		</Layer>
+		<Layer>
+			<ows:Title>TN.RoadTransportNetwork.RoadLink.Master</ows:Title>
+			<ows:Identifier>TN.RoadTransportNetwork.RoadLink.Master</ows:Identifier>
+			<Style isDefault="true">
+				<ows:Identifier>default</ows:Identifier>
+			</Style>
+			<Format>image/png</Format>
+			<TileMatrixSetLink>
+				<TileMatrixSet>LAEA</TileMatrixSet>
+			</TileMatrixSetLink>
+			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/TN.RoadTransportNetwork.RoadLink.Master/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+		</Layer>
+		<Layer>
+			<ows:Title>HY.PhysicalWaters.StandingWater</ows:Title>
+			<ows:Identifier>HY.PhysicalWaters.StandingWater</ows:Identifier>
+			<Style isDefault="true">
+				<ows:Identifier>default</ows:Identifier>
+			</Style>
+			<Format>image/png</Format>
+			<TileMatrixSetLink>
+				<TileMatrixSet>LAEA</TileMatrixSet>
+			</TileMatrixSetLink>
+			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/HY.PhysicalWaters.StandingWater/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+		</Layer>
+		<Layer>
+			<ows:Title>AU.AdministrativeBoundary</ows:Title>
+			<ows:Identifier>AU.AdministrativeBoundary</ows:Identifier>
+			<Style isDefault="true">
+				<ows:Identifier>default</ows:Identifier>
+			</Style>
+			<Format>image/png</Format>
+			<TileMatrixSetLink>
+				<TileMatrixSet>LAEA</TileMatrixSet>
+			</TileMatrixSetLink>
+			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/AU.AdministrativeBoundary/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+		</Layer>
+		<Layer>
+			<ows:Title>GN.GeographicalNames</ows:Title>
+			<ows:Identifier>GN.GeographicalNames</ows:Identifier>
+			<Style isDefault="true">
+				<ows:Identifier>default</ows:Identifier>
+			</Style>
+			<Format>image/png</Format>
+			<TileMatrixSetLink>
+				<TileMatrixSet>LAEA</TileMatrixSet>
+			</TileMatrixSetLink>
+			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/GN.GeographicalNames/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+		</Layer>
+		<Layer>
+			<ows:Title>TN.RoadTransportNetwork.RoadLink</ows:Title>
+			<ows:Identifier>TN.RoadTransportNetwork.RoadLink</ows:Identifier>
+			<Style isDefault="true">
+				<ows:Identifier>default</ows:Identifier>
+			</Style>
+			<Format>image/png</Format>
+			<TileMatrixSetLink>
+				<TileMatrixSet>LAEA</TileMatrixSet>
+			</TileMatrixSetLink>
+			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/TN.RoadTransportNetwork.RoadLink/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+		</Layer>
+		<TileMatrixSet>
+			<ows:Identifier>LAEA</ows:Identifier>
+			<ows:BoundingBox crs="urn:ogc:def:crs:EPSG:6.3:3035">
+				<ows:LowerCorner>2600000.000000 1300000.000000</ows:LowerCorner>
+				<ows:UpperCorner>6000000.000000 5500000.000000</ows:UpperCorner>
+			</ows:BoundingBox>
+			<ows:SupportedCRS>urn:ogc:def:crs:EPSG:6.3:3035</ows:SupportedCRS>
+			<TileMatrix>
+				<ows:Identifier>0</ows:Identifier>
+				<ScaleDenominator>2790178.57142857182770967484</ScaleDenominator>
+				<TopLeftCorner>5500000.000000 2600000.000000</TopLeftCorner>
+				<TileWidth>256</TileWidth>
+				<TileHeight>256</TileHeight>
+				<MatrixWidth>17</MatrixWidth>
+				<MatrixHeight>21</MatrixHeight>
+			</TileMatrix>
+			<TileMatrix>
+				<ows:Identifier>1</ows:Identifier>
+				<ScaleDenominator>1395089.28571428591385483742</ScaleDenominator>
+				<TopLeftCorner>2600000.000000 5500000.000000</TopLeftCorner>
+				<TileWidth>256</TileWidth>
+				<TileHeight>256</TileHeight>
+				<MatrixWidth>34</MatrixWidth>
+				<MatrixHeight>42</MatrixHeight>
+			</TileMatrix>
+			<TileMatrix>
+				<ows:Identifier>2</ows:Identifier>
+				<ScaleDenominator>558035.71428571431897580624</ScaleDenominator>
+				<TopLeftCorner>2600000.000000 5500000.000000</TopLeftCorner>
+				<TileWidth>256</TileWidth>
+				<TileHeight>256</TileHeight>
+				<MatrixWidth>85</MatrixWidth>
+				<MatrixHeight>105</MatrixHeight>
+			</TileMatrix>
+			<TileMatrix>
+				<ows:Identifier>3</ows:Identifier>
+				<ScaleDenominator>279017.85714285715948790312</ScaleDenominator>
+				<TopLeftCorner>2600000.000000 5500000.000000</TopLeftCorner>
+				<TileWidth>256</TileWidth>
+				<TileHeight>256</TileHeight>
+				<MatrixWidth>170</MatrixWidth>
+				<MatrixHeight>210</MatrixHeight>
+			</TileMatrix>
+			<TileMatrix>
+				<ows:Identifier>4</ows:Identifier>
+				<ScaleDenominator>139508.92857142857974395156</ScaleDenominator>
+				<TopLeftCorner>2600000.000000 5500000.000000</TopLeftCorner>
+				<TileWidth>256</TileWidth>
+				<TileHeight>256</TileHeight>
+				<MatrixWidth>340</MatrixWidth>
+				<MatrixHeight>420</MatrixHeight>
+			</TileMatrix>
+			<TileMatrix>
+				<ows:Identifier>5</ows:Identifier>
+				<ScaleDenominator>69754.46428571428987197578</ScaleDenominator>
+				<TopLeftCorner>2600000.000000 5500000.000000</TopLeftCorner>
+				<TileWidth>256</TileWidth>
+				<TileHeight>256</TileHeight>
+				<MatrixWidth>680</MatrixWidth>
+				<MatrixHeight>840</MatrixHeight>
+			</TileMatrix>
+		</TileMatrixSet>
+	</Contents>
+</Capabilities>

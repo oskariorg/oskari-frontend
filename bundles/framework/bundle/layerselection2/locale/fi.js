@@ -20,7 +20,6 @@ Oskari.registerLocalization({
         "guest": "Kirjaudu sisään julkaistaksesi karttatason",
         "loggedin": "Julkaistavissa",
         "official": "Viranomaiskäyttöön julkaistavissa",
-        "login-url": "<a href='/web/fi/login'>Kirjaudu sisään</a>",
         "need-login": "Vaatii kirjautumisen",
         "can_be_published_by_provider": {
           "label": "Tiedontuottajana julkaistavissa",

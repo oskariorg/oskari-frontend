@@ -65,7 +65,9 @@ function(instance) {
             '<div class="column2">' +
                 '<div class="column21">' +
                     '<label>' + this.loc.linecolor.label + '</label>' +
-                    '<div class="color-grid line"></div>' +
+                    '<div class="color-grid">' +
+                        '<div class="color-rectangle line"></div>'+
+                    '</div>' +
                     '<div class="color-label">' +
                         '<label>' + this.loc.linecolor.labelOr + '</label>' +
                     '</div>'+
@@ -77,7 +79,9 @@ function(instance) {
                 '<div class="column22">' +
                     '<div class="column221">' +
                         '<label>' + this.loc.color.label + '</label>' +
-                        '<div class="color-grid fill"></div>' +
+                        '<div class="color-grid">' +
+                            '<div class="color-rectangle fill"></div>'+
+                        '</div>' +
                         '<div class="color-label">' +
                             '<label>' + this.loc.color.labelOr + '</label>' +
                         '</div>'+
@@ -126,13 +130,8 @@ function(instance) {
             jQuery.extend(true, me.values, state.area);
         }
 
-        var renderDialog = me._getOnScreenForm();
-        renderDialog.die();
-        renderDialog.remove();
-        renderDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var renderDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
-        renderDialog.addClass('top');
-        renderDialog.addClass('arrow');
         renderDialog.addClass('renderdialog');
         renderDialog.addClass('areavisualization');
         var title = me.loc.title;
@@ -187,7 +186,7 @@ function(instance) {
         for (var c = 0; c < 2; c++) {
             var statedChosenColor = false;
             var cType = (c==0)?'lineColor':'fillColor';
-            content = dialogContent.find('.color-grid.'+me.colorTypes[c]);
+            content = dialogContent.find('.color-rectangle.'+me.colorTypes[c]);
             for (i = 0; i < me.basicColors.length; i++) {
                 var colorCell = me.templateColorCell.clone();
                 colorCell.css('background-color',me.basicColors[i]);
@@ -200,7 +199,7 @@ function(instance) {
                     var colorType = parseInt(this.id.substring(2,3),10);
                     if (jQuery('#'+colorType+'color-checkbox').prop('checked')) return;
                     if (cellIndex === me.activeColorCell[colorType]) return;
-                    if (me.activeColorCell[colorType] > 0) {
+                    if (me.activeColorCell[colorType] > -1) {
                         var activeCell = me.activeColorCell[colorType].toString();
                         if (me.activeColorCell[colorType] < 10) activeCell = "0"+activeCell;
                         jQuery('#'+activeCell+colorType+'ColorCell').css('border','1px solid #000000');
@@ -296,10 +295,12 @@ function(instance) {
             // add color values to the input fields
             if(!statedChosenColor) {
                 var rgb = me.instance.hexToRgb(me.values[cType]);
-
                 content.find('input.custom-color.custom-red-value').val(rgb.r);
                 content.find('input.custom-color.custom-green-value').val(rgb.g);
                 content.find('input.custom-color.custom-blue-value').val(rgb.b);
+                dialogContent.find('input#'+ c.toString()+'red-value.custom-color').prop('disabled',false);
+                dialogContent.find('input#'+ c.toString()+'green-value.custom-color').prop('disabled',false);
+                dialogContent.find('input#'+ c.toString()+'blue-value.custom-color').prop('disabled',false);
             }
 
             content.find('.custom-color').change(function() {
@@ -315,7 +316,7 @@ function(instance) {
                     values[i] = intValue.toString(16);
                     if (values[i].length == 1) values[i] = '0' + values[i];
                 }
-                me.values[cType] = values.join('');
+                me.values[(colorType==0)?'lineColor':'fillColor'] = values.join('');
                 me._updatePreview();
             });
         }
@@ -350,7 +351,7 @@ function(instance) {
         saveBtn.setTitle(me.loc.buttons.save);
         saveBtn.addClass('primary showSelection');
         saveBtn.setHandler(function() {
-            jQuery(".renderdialog").hide();
+            renderDialog.close();
         });
 
         var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -362,11 +363,11 @@ function(instance) {
             me.values.lineColor = me.defaultValues.color[0];
             me.values.fillColor = me.defaultValues.color[1];
             me.values.fillStyle = me.defaultValues.fill;
-            jQuery(".renderdialog").hide();
+            renderDialog.close();
         });
         renderDialog.show(title, dialogContent, [saveBtn, cancelBtn]);
         renderDialog.moveTo(renderButton, 'top');
-
+        return renderDialog;
     },
 
     /**

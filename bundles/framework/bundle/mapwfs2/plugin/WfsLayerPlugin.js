@@ -896,8 +896,7 @@ function(config) {
         if(layer) {
             layerPart = layer.getId();
         }
-
-        var wfsReqExp = new RegExp(this.layerPrefix + layerPart + "*", "i");
+        var wfsReqExp = new RegExp(this.layerPrefix + layerPart + "_(.*)", "i"); // that's all folks
         return this._map.getLayersByName(wfsReqExp);
     },
 

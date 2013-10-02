@@ -48,6 +48,22 @@
         </div>
         <% } %>
 
+        <% if(model == null) { %>
+        <!-- roles -->
+        <div class="add-class-record">
+            <div class="add-class-label-area">
+                <label for="add-class-en-name" class="add-class-label" title="<%= instance.getLocalization('admin').roles_for_admin %>"><%= instance.getLocalization('admin').viewingRightsRoles %></label>
+            </div>
+            <div class="add-class-input-area">
+                 <% for(var i = 0; i < roles.length; i++) { %>
+                 <div class="input-controls">
+                    <%= roles[i].name %> <input type="checkbox" class="add-class-input" placeholder="placeholder"  value="<%= roles[i].id %>" />
+                 </div>
+                <% } %>
+            </div>
+        </div>
+        <% } %>
+
         <div class="add-group-send">
             <div class="add-class-button-area">
                 <div class="input-controls">

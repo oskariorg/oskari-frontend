@@ -72,7 +72,7 @@
     #logobar {
         height: 80px;
         width: 153px;
-        overflow: hide;
+        overflow: hidden;
         background-color: white;
         background-image: url('Logo.png');
         background-repeat: no-repeat;

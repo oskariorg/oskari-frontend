@@ -39,10 +39,47 @@ div.mapplugin.layerSelectionPlugin {
 
 .layerSelectionPlugin div.layerselection-styled-content {
   width: 200px;
-  border: 1px solid #333438;
-  border-radius: 6px;
-  -moz-border-radius: 6px;
-  -webkit-border-radius: 6px; }
+  border: 1px solid #333438; }
+
+.layerSelectionPlugin .oskari-publisher-layers-rounded-dark,
+.layerSelectionPlugin .oskari-publisher-layers-rounded-light {
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px; 
+}
+
+.layerSelectionPlugin .oskari-publisher-layers-sharp-dark,
+.layerSelectionPlugin .oskari-publisher-layers-sharp-light {
+  border-radius: 0px;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px; 
+}
+
+.layerSelectionPlugin .oskari-publisher-layers-3d-dark,
+.layerSelectionPlugin .oskari-publisher-layers-3d-light {
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px; 
+}
+
+.layerSelectionPlugin .oskari-publisher-layers-header-rounded-dark,
+.layerSelectionPlugin .oskari-publisher-layers-header-rounded-light {
+  border-radius: 13px 13px 0 0;
+  -moz-border-radius: 13px 13px 0 0;
+  -webkit-border-radius: 13px 13px 0 0;
+}
+.layerSelectionPlugin .oskari-publisher-layers-header-sharp-dark,
+.layerSelectionPlugin .oskari-publisher-layers-header-sharp-light {
+  border-radius: 0px;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px; 
+}
+.layerSelectionPlugin .oskari-publisher-layers-header-3d-dark,
+.layerSelectionPlugin .oskari-publisher-layers-header-3d-light {
+  border-radius: 1px 1px 0 0;
+  -moz-border-radius: 1px 1px 0 0;
+  -webkit-border-radius: 1px 1px 0 0;
+}
 
 .layerSelectionPlugin div.content div.content-header {
   background-color: #333438;
