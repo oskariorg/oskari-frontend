@@ -38,7 +38,6 @@ Oskari.registerLocalization({
 			"type-base" : "Bakgrundskarta",
 			"type-wms" : "kartlager",
 			"type-wfs" : "Dataprodukt"
-		},
 		"backendStatus" : {
 			"OK" : {
 				"tooltip" : "Kartlagret är tillgängligt just nu.",
@@ -145,7 +144,7 @@ Oskari.registerLocalization({
 			},
 
 			"interfaceAddress" 		: "Gränssnitten address",
-			"interfaceAddressDesc" 	: "WMS address för lager definitionen"
+			"interfaceAddressDesc" 	: "WMS address för lager definitionen",
 			"viewingRightsRoles" 	: "Kollar rättigheter roller"
 
 		},
