@@ -1,14 +1,14 @@
-(function() {
-    define(['_bundle/collections/layerGroupCollection'], function(LayerGroupCollection) {
+(function () {
+    define(['_bundle/collections/layerGroupCollection'], function (LayerGroupCollection) {
         return Backbone.Model.extend({
-            layerGroups : null,
+            layerGroups: null,
 
             /**
              * Initialize
              *
              * @method initialize
              */
-            initialize : function() {
+            initialize: function () {
                 this.title = this.attributes.title;
                 this.type = this.attributes.type;
                 this.layerGroups = this.attributes.grouping;
@@ -22,7 +22,7 @@
              * @method getTitle
              * @return {String} title
              */
-            getTitle : function() {
+            getTitle: function () {
                 // FIXME use default language
                 return (this.title != null) ? this.title : this.names[Oskari.getDefaultLanguage()];
             },
@@ -35,11 +35,11 @@
              * @method getState
              * @return {Object} state (title, filter, groups)
              */
-            getState : function() {
+            getState: function () {
                 var state = {
-                    tab : this.getTitle(),
-                    filter : this.filter,
-                    groups : []
+                    tab: this.getTitle(),
+                    filter: this.filter,
+                    groups: []
                 };
                 // TODO: groups listing
                 /*
@@ -57,16 +57,16 @@
              * @method setState
              * @param {Object} state an object containing info about title, filter, groups
              */
-            setState : function(state) {
-                if(!state) {
+            setState: function (state) {
+                if (!state) {
                     return;
                 }
-                
-                if(!state.filter) {
+
+                if (!state.filter) {
                     this.filter = state.filter;
                     this.filterLayers(state.filter);
                 }
-                if(state.groups && state.groups.length > 0) {
+                if (state.groups && state.groups.length > 0) {
                     // TODO: should open panels in this.accordion where groups[i] == panel.title
                 }
             },
@@ -77,11 +77,11 @@
              * TODO: not used yet
              *
              * @method addLayerGroups
-             * @param {Array} groups 
+             * @param {Array} groups
              */
-            addLayerGroups : function(groups) {
+            addLayerGroups: function (groups) {
                 var me = this;
-                this.layerGroups = groups;                
+                this.layerGroups = groups;
             },
 
             /**
@@ -92,25 +92,25 @@
              * Shows and hides layers by comparing the given keyword to the text in layer containers layer-keywords div.
              * Also checks if all layers in a group is hidden and hides the group as well.
              */
-            getFilteredLayerGroups : function(keyword) {
-                
+            getFilteredLayerGroups: function (keyword) {
+
                 // filter
                 var selectedGroups = [];
                 //var visibleGroupCount = 0;
-                for(var i = 0; i < this.layerGroups.length; ++i) {
+                for (var i = 0; i < this.layerGroups.length; ++i) {
                     var group = this.layerGroups[i];
-                    if(group.getLayers != null) {
+                    if (group.getLayers != null) {
                         var layers = group.getLayers();
                         var selectedGroup = new LayerGroupCollection(null, group.getTitle());
                         //var visibleLayerCount = 0;
-                        for(var n = 0; n < layers.length; ++n) {
+                        for (var n = 0; n < layers.length; ++n) {
                             var layer = layers[n];
                             var layerId = layer.getId();
-                            if(group.matchesKeyword(layerId, keyword)) {
+                            if (group.matchesKeyword(layerId, keyword)) {
                                 selectedGroup.addLayer(layer);
                             }
                         }
-                        if(selectedGroup.getLayers().length > 0) {
+                        if (selectedGroup.getLayers().length > 0) {
                             selectedGroups.push(selectedGroup);
                         }
                     }
@@ -121,9 +121,9 @@
              * Return all layer groups
              *
              * @method getAllLayerGroups
-             * @return {Array} groups 
+             * @return {Array} groups
              */
-            getAllLayerGroups : function() {
+            getAllLayerGroups: function () {
                 return this.layerGroups;
             },
             /**
@@ -132,17 +132,20 @@
              * @method getGrouptitles
              * @param {Array} names of all these groups
              */
-            getGroupTitles: function() {
-//                console.log(this.layerGroups);
+            getGroupTitles: function () {
+                //                console.log(this.layerGroups);
                 var groupNames = [];
                 for (var i = 0; i < this.layerGroups.length; i++) {
-                    if(this.layerGroups[i].id != null) {
+                    if (this.layerGroups[i].id != null) {
                         var name = this.layerGroups[i].name;
                         if (!name) {
                             name = this.layerGroups[i].names[Oskari.getLang()];
-//                            console.log(name);
+                            //                            console.log(name);
                         }
-                        groupNames.push({name : name, id : this.layerGroups[i].id});
+                        groupNames.push({
+                            name: name,
+                            id: this.layerGroups[i].id
+                        });
                     }
                 };
                 return groupNames;
@@ -151,13 +154,13 @@
              * Return grouping title
              *
              * @method getGroupingTitle
-             * @param {integer} index 
-             * @param {String} lang 
+             * @param {integer} index
+             * @param {String} lang
              * @return {String} localized name
              */
-            getGroupingTitle: function(index, lang) {
+            getGroupingTitle: function (index, lang) {
                 var group = this.layerGroups[index];
-                if(group.getTitle != null) {
+                if (group.getTitle != null) {
                     return group.getTitle() + ' (' + group.models.length + ')';
                 } else {
                     return group.names[lang];
@@ -165,45 +168,45 @@
             },
 
             /**
-             * Ajax call to get classes / organizations from backend. 
+             * Ajax call to get classes / organizations from backend.
              * loadClasses function will be called if call succeeds
              * TODO: this should not be necessary.
              *
              * @method getClasses
-             * @param {String} baseUrl 
-             * @param {String} action_route 
+             * @param {String} baseUrl
+             * @param {String} action_route
              */
-            getClasses: function(baseUrl, action_route) {
+            getClasses: function (baseUrl, action_route) {
                 var me = this
                 jQuery.ajax({
-                    type : "GET",
+                    type: "GET",
                     dataType: 'json',
-                    beforeSend: function(x) {
-                      if(x && x.overrideMimeType) {
-                       x.overrideMimeType("application/j-son;charset=UTF-8");
-                      }
-                     },
-                    url : baseUrl + action_route + "&iefix="+ (new Date()).getTime(),
-                    success : function(pResp) {
+                    beforeSend: function (x) {
+                        if (x && x.overrideMimeType) {
+                            x.overrideMimeType("application/j-son;charset=UTF-8");
+                        }
+                    },
+                    url: baseUrl + action_route + "&iefix=" + (new Date()).getTime(),
+                    success: function (pResp) {
                         me.loadClasses(pResp);
 
                     },
-                    error : function(jqXHR, textStatus) {
-                        if(jqXHR.status != 0) {
-//                            console.log("Error while retrieving classes" + textStatus);
+                    error: function (jqXHR, textStatus) {
+                        if (jqXHR.status != 0) {
+                            //                            console.log("Error while retrieving classes" + textStatus);
                         }
                     }
-                }); 
+                });
             },
 
             /**
-             * Reads given classes and adds data to this model.. 
+             * Reads given classes and adds data to this model..
              *
              * @method loadClasses
              * @param {Array} classes
              */
-            loadClasses: function(classes) {
-                console.log("loadClasses");
+            loadClasses: function (classes) {
+                //console.log("loadClasses");
                 var me = this,
                     groups = me.layerGroups,
                     lang;
@@ -211,7 +214,7 @@
                 for (var key in classes) {
                     var obj = classes[key];
                     delete obj.maplayers;
-                    if(obj.parentid == null) {
+                    if (obj.parentid == null) {
                         var updated = false;
                         for (var i = groups.length - 1; i >= 0; i--) {
                             var group = groups[i],
@@ -224,8 +227,7 @@
                                     }
                                 }
                             }
-                            if(gotMatch) {
-
+                            if (gotMatch) {
                                 group.names = (group.names != null) ? group.names : {};
                                 for (lang in obj.name) {
                                     if (obj.name.hasOwnProperty(lang)) {
@@ -238,7 +240,7 @@
                                 break;
                             }
                         };
-                        if(!updated && obj.id != null){
+                        if (!updated && obj.id != null) {
                             var group = {};
                             group.names = (group.names != null) ? group.names : {};
                             for (lang in obj.name) {
@@ -258,14 +260,14 @@
             },
             /**
              * Remove a class with given id
-             * 
+             *
              * @method removeClass
              * @param {integer} id of class/organization that needs to be removed
              */
-            removeClass : function(id) {
+            removeClass: function (id) {
                 var groups = this.layerGroups;
                 for (var i = groups.length - 1; i >= 0; i--) {
-                    if(groups[i].id == id){
+                    if (groups[i].id == id) {
                         groups.splice(i, 1);
                     }
                 }
@@ -273,16 +275,16 @@
 
             /**
              * Removes a layer with given id
-             * 
+             *
              * @method removeLayer
-             * @param {integer} id 
+             * @param {integer} id
              */
-            removeLayer : function(id) {
+            removeLayer: function (id) {
                 var groups = this.layerGroups;
                 for (var i = groups.length - 1; i >= 0; i--) {
-                    if(groups[i].id === id){
+                    if (groups[i].id === id) {
                         var removed = groups.removeLayer(id);
-                        if(removed) {
+                        if (removed) {
                             break;
                         }
                     }
@@ -293,12 +295,12 @@
 
             /**
              * Helper function. Encodes data to base64 format
-             * 
+             *
              * @method encode64
-             * @param {Object} data 
+             * @param {Object} data
              * @return {String} encoded data
              */
-            encode64 : function (data) {
+            encode64: function (data) {
                 //http://phpjs.org/functions/base64_encode/
                 // http://kevin.vanzonneveld.net
                 // +   original by: Tyler Akins (http://rumkin.com)
@@ -351,12 +353,12 @@
 
             /**
              * Helper function. Decodes data from base64 format
-             * 
+             *
              * @method decode64
-             * @param {Object} data (in base64 format) 
+             * @param {Object} data (in base64 format)
              * @return {String} decoded data
              */
-            decode64 : function(data) {
+            decode64: function (data) {
                 //http://phpjs.org/functions/base64_encode/
                 // http://kevin.vanzonneveld.net
                 // +   original by: Tyler Akins (http://rumkin.com)
@@ -400,11 +402,11 @@
                     o3 = bits & 0xff;
 
                     if (h3 == 64) {
-                      tmp_arr[ac++] = String.fromCharCode(o1);
+                        tmp_arr[ac++] = String.fromCharCode(o1);
                     } else if (h4 == 64) {
-                      tmp_arr[ac++] = String.fromCharCode(o1, o2);
+                        tmp_arr[ac++] = String.fromCharCode(o1, o2);
                     } else {
-                      tmp_arr[ac++] = String.fromCharCode(o1, o2, o3);
+                        tmp_arr[ac++] = String.fromCharCode(o1, o2, o3);
                     }
                 } while (i < data.length) {
                     dec = tmp_arr.join('');
