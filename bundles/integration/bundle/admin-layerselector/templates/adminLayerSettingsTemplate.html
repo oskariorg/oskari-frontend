@@ -1,6 +1,6 @@
 <div class="add-layer-wrapper">
 
-    <% if(model != null) { %>
+    <% if(model != null && model.admin != null && model.admin.layerType != null) { %>
     <div class="add-layer-record">
         <div class="add-layer-label-area">
             <label for="add-layer-layertype" class="add-layer-label" title="<%= instance.getLocalization('admin').layerTypeDesc %>"><%= instance.getLocalization('admin').layerType %></label>
@@ -56,56 +56,29 @@
             </div>
         </div>
     </div>
+
+    <% if (model.admin && model.admin.locales) { %>
     <div class="add-layer-grouping" title="<%= instance.getLocalization('admin').layerNameAndDesc %>"><%= instance.getLocalization('admin').layerNameAndDesc %></div>
-    <div class="add-layer-record">
-        
 
-        <div class="add-layer-label-area">
-            <label for="add-layer-fi-name" class="add-layer-label" title="<%= instance.getLocalization('admin')['fi'].title %>"><%= instance.getLocalization('admin')['fi'].lang %></label>
-        </div>
-        <div  class="add-layer-input-area">
-            <div class="input-controls">
-                <input type="text" id="add-layer-fi-name" class="add-layer-input" placeholder="<%= instance.getLocalization('admin')['fi'].placeholder %>" <% if(model != null && model.admin.name != null && model.admin.name.fi != null) { %> value="<%= model.admin.name.fi %>" <% } %> />
-                <div class="icon-close"></div>
-            </div>
-            <div class="input-controls">
-                <input type="text" id="add-layer-fi-title" class="add-layer-input" placeholder="<%= instance.getLocalization('admin')['fi'].descplaceholder %>" <% if(model != null && model.admin.title != null && model.admin.title.fi != null) { %> value="<%= model.admin.title.fi %>" <% } %> />
-                <div class="icon-close"></div>
-            </div>
-        </div>
-    </div>
-
+    <% for (var i = 0; i < model.admin.locales.length; i++) {
+           var locale = model.admin.locales[i] %>
     <div class="add-layer-record">
         <div class="add-layer-label-area">
-            <label for="add-layer-se-name" class="add-layer-label" title="<%= instance.getLocalization('admin')['sv'].title %>"><%= instance.getLocalization('admin')['sv'].lang %></label>
-        </div>
-        <div  class="add-layer-input-area">
-            <div class="input-controls">
-                <input type="text" id="add-layer-sv-name" class="add-layer-input" placeholder="<%= instance.getLocalization('admin')['sv'].placeholder %>" <% if(model != null && model.admin.name != null && model.admin.name.sv != null) { %> value="<%= model.admin.name.sv %>" <% } %>  />
-                <div class="icon-close"></div>
-            </div>
-            <div class="input-controls">
-                <input type="text" id="add-layer-sv-title" class="add-layer-input" placeholder="<%= instance.getLocalization('admin')['sv'].descplaceholder %>" <% if(model != null && model.admin.title != null && model.admin.title.sv != null) { %> value="<%= model.admin.title.sv %>" <% } %> />
-                <div class="icon-close"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="add-layer-record">
-        <div class="add-layer-label-area">
-            <label for="add-layer-en-name" class="add-layer-label" title="<%= instance.getLocalization('admin')['en'].title %>"><%= instance.getLocalization('admin')['en'].lang %></label>
+            <label for="add-layer-<%= locale.lang %>-name" class="add-layer-label" title="<%= instance.getLocalization('admin')[locale.lang] ? instance.getLocalization('admin')[locale.lang].title : locale.lang %>"><%= instance.getLocalization('admin')[locale.lang] ? instance.getLocalization('admin')[locale.lang].lang : locale.lang + ':' %></label>
         </div>
         <div class="add-layer-input-area">
             <div class="input-controls">
-                <input type="text" id="add-layer-en-name" class="add-layer-input" placeholder="<%= instance.getLocalization('admin')['en'].placeholder %>" <% if(model != null && model.admin.name != null && model.admin.name.en != null) { %> value="<%= model.admin.name.en %>" <% } %>  />
+                <input type="text" id="add-layer-<%= locale.lang %>-name" class="add-layer-input" placeholder="<%= instance.getLocalization('admin')[locale.lang] ? instance.getLocalization('admin')[locale.lang].placeholder : instance.getLocalization('admin')['generic'].placeholder.replace('{0}', locale.lang) %>" <% if(model != null && model.admin.name != null && model.admin.name[locale.lang] != null) { %> value="<%= model.admin.name[locale.lang] %>" <% } %>  />
                 <div class="icon-close"></div>
             </div>
             <div class="input-controls">
-                <input type="text" id="add-layer-en-title" class="add-layer-input" placeholder="<%= instance.getLocalization('admin')['en'].descplaceholder %>" <% if(model != null && model.admin.title != null && model.admin.title.en != null) { %> value="<%= model.admin.title.en %>" <% } %> />
+                <input type="text" id="add-layer-<%= locale.lang %>-title" class="add-layer-input" placeholder="<%= instance.getLocalization('admin')[locale.lang] ? instance.getLocalization('admin')[locale.lang].descplaceholder : instance.getLocalization('admin')['generic'].descplaceholder.replace('{0}', locale.lang) %>" <% if(model != null && model.admin.title != null && model.admin.title[locale.lang] != null) { %> value="<%= model.admin.title[locale.lang] %>" <% } %> />
                 <div class="icon-close"></div>
             </div>
         </div>
     </div>
+    <% } %>
+    <% } %>
 
     <div class="add-layer-record">
         <div class="add-layer-label-area">
@@ -256,7 +229,7 @@
         </div>
     </div>
 
-    <% if(model == null) { %>
+    <% if(model == null || model.admin == null || model.admin.layerType == null) { %>
     <!-- roles -->
     <div class="add-class-record">
         <div class="add-class-label-area">

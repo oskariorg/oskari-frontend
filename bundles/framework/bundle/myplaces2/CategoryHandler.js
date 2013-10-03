@@ -139,18 +139,20 @@ function(instance) {
                 // add maplayer
                 var json = this._getMapLayerJson(cat);
                 var myplacesLayer = mapLayerService.createMapLayer(json);
-                mapLayerService.addLayer(myplacesLayer);
+                mapLayerService.addLayer(myplacesLayer, this.initialLoad);
             }
             //this.uiItems.gridPanel.addOrUpdateCategory(cat);
         }
-        
+
         if(this.initialLoad) {
-            // add the myplaces layers programmatically since normal link processing 
+            // notify components of added layer if not suppressed
+            var event = sandbox.getEventBuilder('MapLayerEvent')(null, 'add'); // to-do: check if null is valid parameter here
+            sandbox.notifyAll(event); // add the myplaces layers programmatically since normal link processing
             // cant do this (run before the bundle adds the layers)
             this._processStartupLinkLayers(sandbox);
             // done here because layers aren't added to the service before this
             this.initialLoad = false;
-        
+
             // preselect the first category
             //this.uiItems.gridPanel.showCategory();
         }

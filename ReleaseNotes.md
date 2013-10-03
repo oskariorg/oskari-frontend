@@ -1,5 +1,13 @@
 # Release Notes
 
+## 1.15
+
+### myplaces bundle
+
+Clicking a preview image in the My places GFI popup opens the image URL in a new browser tab or window.
+
+Partial fix for cutting of My places point symbols on the tile boundaries.
+
 ## 1.14
 
 ### mapmodule-plugin/getinfo

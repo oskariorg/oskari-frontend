@@ -522,6 +522,7 @@ function(drawPlugin) {
                 };
             }
 
+            // Input data
             for (i=0; i<olOldFeatures.length; i++) {
                 if (olOldFeatures[i].id.indexOf("Polygon") !== -1) {
                     jstsOldPolygon = jstsParser.read(olOldFeatures[i]);
