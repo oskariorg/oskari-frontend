@@ -617,6 +617,12 @@ function(config) {
         header.css({
             'background-image': 'url("' + bgImg + '")'
         });
+
+        // Pretty fugly, but needed here since we're modifying the DOM and
+        // all the style changes disappear like Clint Eastwood rides into the sunset.
+        if (this.conf && this.conf.colourScheme) {
+            this.changeColourScheme(this.conf.colourScheme, this.element);
+        }
     },
 
     /**
