@@ -130,6 +130,7 @@ define([
                                 // Add layerView to group container
                                 groupContainer.append(layerView.$el);
                                 // TODO remove this line
+                                // FIXME why?
                                 this.layerContainers[layer.getId()] = layerView;
                             }
                         }
@@ -141,8 +142,45 @@ define([
                         }
                         // add grouping template to group panel
                         var tab = this.tabTemplate({
-                            lcId: group.id
+                            "lcId" : group.id
                         });
+                        
+                        var j,
+                            lang,
+                            usedLanguages = {};
+                        group.locales = [];
+                        for (lang in group.names) {
+                            if (group.names.hasOwnProperty(lang)) {
+                                usedLanguages[lang] = true;
+                                group.locales.push({
+                                    "lang" : lang,
+                                    "name" : group.names[lang]
+                                });
+                            }
+                        }
+                        
+                        // Make sure all supported languages are present
+                        var supportedLanguages = Oskari.getSupportedLanguages();
+                        
+                        for (j = 0; j < supportedLanguages.length; j++) {
+                            if (!usedLanguages[supportedLanguages[j]]) {
+                                group.locales.push({
+                                    "lang" : supportedLanguages[j],
+                                    "name": ""
+                                });
+                            }
+                        }
+                        /* FIXME test sort, use it
+                        group.locales.sort(function (a, b) {
+                            if (a.lang < b.lang) {
+                                return -1;
+                            }
+                            if (a.lang > b.lang) {
+                                return 1;
+                            }
+                            return 0;
+                        });
+                        */
                         groupPanel.find('.accordion-header').append((this.options.tabId == 'inspire') ?
                             this.addInspireTemplate({
                                 data: group,
@@ -161,13 +199,25 @@ define([
                     this.$el.prepend(this.filterTemplate({
                         instance: this.options.instance
                     }));
+                    var newGroup = {
+                        "locales" : []
+                    };
+                    var supportedLanguages = Oskari.getSupportedLanguages();
+                    supportedLanguages.sort();
+                    for (var i = 0; i < supportedLanguages.length; i++) {
+                        newGroup.locales.push({
+                            "lang" : supportedLanguages[i],
+                            "name" : ""
+                        });
+                    }
+
                     if (this.options.tabId == 'inspire') {
                         this.$el.find('.oskarifield').append(
                             this.addInspireButtonTemplate({
                                 instance: this.options.instance
                             })).append(
                             this.addInspireTemplate({
-                                data: null,
+                                data: newGroup,
                                 instance: this.options.instance
                             }));
                     } else {
@@ -176,7 +226,7 @@ define([
                                 instance: this.options.instance
                             })).append(
                             this.addOrganizationTemplate({
-                                data: null,
+                                data: newGroup,
                                 instance: this.options.instance
                             }));
                     }
@@ -361,7 +411,7 @@ define([
                     parentId = "&parent_id=",
                     names = '';
 
-                addClass.find('[id$=-name]').filter('[id^=add-layer-]').each(function (index) {
+                addClass.find('[id$=-name]').filter('[id^=add-class-]').each(function (index) {
                     lang = this.id.substring(10, this.id.indexOf("-name"));
                     names += "&name_" + lang + "=" + this.value;
                 });
@@ -384,7 +434,7 @@ define([
             /**
              * Save class
              *
-             * @method saveOrganization
+             * @method saveClass
              */
             saveClass: function (e) {
                 //TODO

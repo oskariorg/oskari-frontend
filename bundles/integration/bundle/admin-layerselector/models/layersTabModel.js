@@ -23,8 +23,7 @@
              * @return {String} title
              */
             getTitle: function () {
-                // FIXME use default language
-                return (this.title != null) ? this.title : this.names[Oskari.getDefaultLanguage()];
+                return this.title || this.names[Oskari.getDefaultLanguage()];
             },
 
 
@@ -65,10 +64,10 @@
                 if (!state.filter) {
                     this.filter = state.filter;
                     this.filterLayers(state.filter);
-                }
+                }/*
                 if (state.groups && state.groups.length > 0) {
                     // TODO: should open panels in this.accordion where groups[i] == panel.title
-                }
+                }*/
             },
 
 
@@ -80,7 +79,6 @@
              * @param {Array} groups
              */
             addLayerGroups: function (groups) {
-                var me = this;
                 this.layerGroups = groups;
             },
 
@@ -95,17 +93,24 @@
             getFilteredLayerGroups: function (keyword) {
 
                 // filter
-                var selectedGroups = [];
-                //var visibleGroupCount = 0;
-                for (var i = 0; i < this.layerGroups.length; ++i) {
-                    var group = this.layerGroups[i];
-                    if (group.getLayers != null) {
-                        var layers = group.getLayers();
-                        var selectedGroup = new LayerGroupCollection(null, group.getTitle());
+                var selectedGroups = [],
+                    i,
+                    n,
+                    group,
+                    layer,
+                    layerId,
+                    layers,
+                    selectedGroup;
+
+                for (i = 0; i < this.layerGroups.length; i += 1) {
+                    group = this.layerGroups[i];
+                    if (group.getLayers) {
+                        layers = group.getLayers();
+                        selectedGroup = new LayerGroupCollection(null, group.getTitle());
                         //var visibleLayerCount = 0;
-                        for (var n = 0; n < layers.length; ++n) {
-                            var layer = layers[n];
-                            var layerId = layer.getId();
+                        for (n = 0; n < layers.length; n += 1) {
+                            layer = layers[n];
+                            layerId = layer.getId();
                             if (group.matchesKeyword(layerId, keyword)) {
                                 selectedGroup.addLayer(layer);
                             }
@@ -134,10 +139,12 @@
              */
             getGroupTitles: function () {
                 //                console.log(this.layerGroups);
-                var groupNames = [];
-                for (var i = 0; i < this.layerGroups.length; i++) {
-                    if (this.layerGroups[i].id != null) {
-                        var name = this.layerGroups[i].name;
+                var groupNames = [],
+                    i,
+                    name;
+                for (i = 0; i < this.layerGroups.length; i += 1) {
+                    if (this.layerGroups[i].id) {
+                        name = this.layerGroups[i].name;
                         if (!name) {
                             name = this.layerGroups[i].names[Oskari.getLang()];
                             //                            console.log(name);
@@ -147,7 +154,7 @@
                             id: this.layerGroups[i].id
                         });
                     }
-                };
+                }
                 return groupNames;
             },
             /**
@@ -160,11 +167,10 @@
              */
             getGroupingTitle: function (index, lang) {
                 var group = this.layerGroups[index];
-                if (group.getTitle != null) {
+                if (group.getTitle) {
                     return group.getTitle() + ' (' + group.models.length + ')';
-                } else {
-                    return group.names[lang];
                 }
+                return group.names[lang];
             },
 
             /**
@@ -177,7 +183,7 @@
              * @param {String} action_route
              */
             getClasses: function (baseUrl, action_route) {
-                var me = this
+                var me = this;
                 jQuery.ajax({
                     type: "GET",
                     dataType: 'json',
@@ -192,9 +198,9 @@
 
                     },
                     error: function (jqXHR, textStatus) {
-                        if (jqXHR.status != 0) {
+                        /*if (jqXHR.status !== 0) {
                             //                            console.log("Error while retrieving classes" + textStatus);
-                        }
+                        }*/
                     }
                 });
             },
@@ -209,16 +215,22 @@
                 //console.log("loadClasses");
                 var me = this,
                     groups = me.layerGroups,
-                    lang;
+                    lang,
+                    key,
+                    obj,
+                    updated,
+                    i,
+                    gotMatch,
+                    group;
                 //TODO: we need a better data from backend
-                for (var key in classes) {
-                    var obj = classes[key];
+                for (key in classes) {
+                    obj = classes[key];
                     delete obj.maplayers;
-                    if (obj.parentid == null) {
-                        var updated = false;
-                        for (var i = groups.length - 1; i >= 0; i--) {
-                            var group = groups[i],
-                                gotMatch = group.id === obj.id;
+                    if (!obj.parentid) {
+                        updated = false;
+                        for (i = groups.length - 1; i >= 0; i -= 1) {
+                            group = groups[i];
+                            gotMatch = group.id === obj.id;
                             if (!gotMatch) {
                                 for (lang in obj.name) {
                                     if (obj.name.hasOwnProperty(lang) && obj.name[lang] === group.name) {
@@ -228,7 +240,7 @@
                                 }
                             }
                             if (gotMatch) {
-                                group.names = (group.names != null) ? group.names : {};
+                                group.names = group.names || {};
                                 for (lang in obj.name) {
                                     if (obj.name.hasOwnProperty(lang)) {
                                         group.names[lang] = obj.name[lang];
@@ -239,10 +251,10 @@
                                 updated = true;
                                 break;
                             }
-                        };
-                        if (!updated && obj.id != null) {
-                            var group = {};
-                            group.names = (group.names != null) ? group.names : {};
+                        }
+                        if (!updated && obj.id) {
+                            group = {};
+                            group.names = group.names || {};
                             for (lang in obj.name) {
                                 if (obj.name.hasOwnProperty(lang)) {
                                     group.names[lang] = obj.name[lang];
@@ -265,9 +277,10 @@
              * @param {integer} id of class/organization that needs to be removed
              */
             removeClass: function (id) {
-                var groups = this.layerGroups;
-                for (var i = groups.length - 1; i >= 0; i--) {
-                    if (groups[i].id == id) {
+                var groups = this.layerGroups,
+                    i;
+                for (i = groups.length - 1; i >= 0; i -= 1) {
+                    if (groups[i].id === id) {
                         groups.splice(i, 1);
                     }
                 }
@@ -280,10 +293,12 @@
              * @param {integer} id
              */
             removeLayer: function (id) {
-                var groups = this.layerGroups;
-                for (var i = groups.length - 1; i >= 0; i--) {
+                var groups = this.layerGroups,
+                    i,
+                    removed;
+                for (i = groups.length - 1; i >= 0; i -= 1) {
                     if (groups[i].id === id) {
-                        var removed = groups.removeLayer(id);
+                        removed = groups.removeLayer(id);
                         if (removed) {
                             break;
                         }
@@ -317,20 +332,29 @@
                 //if (typeof this.window['btoa'] == 'function') {
                 //    return btoa(data);
                 //}
-                var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-                var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
+                var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+                    o1,
+                    o2,
+                    o3,
+                    h1,
+                    h2,
+                    h3,
+                    h4,
+                    bits,
+                    i = 0,
                     ac = 0,
                     enc = "",
-                    tmp_arr = [];
+                    tmp_arr = [],
+                    r;
 
                 if (!data) {
                     return data;
                 }
 
                 do { // pack three octets into four hexets
-                    o1 = data.charCodeAt(i++);
-                    o2 = data.charCodeAt(i++);
-                    o3 = data.charCodeAt(i++);
+                    o1 = data.charCodeAt(i += 1);
+                    o2 = data.charCodeAt(i += 1);
+                    o3 = data.charCodeAt(i += 1);
 
                     bits = o1 << 16 | o2 << 8 | o3;
 
@@ -340,12 +364,12 @@
                     h4 = bits & 0x3f;
 
                     // use hexets to index into b64, and append result to encoded string
-                    tmp_arr[ac++] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
+                    tmp_arr[ac += 1] = b64.charAt(h1) + b64.charAt(h2) + b64.charAt(h3) + b64.charAt(h4);
                 } while (i < data.length);
 
                 enc = tmp_arr.join('');
 
-                var r = data.length % 3;
+                r = data.length % 3;
 
                 return (r ? enc.slice(0, r - 3) : enc) + '==='.slice(r || 3);
 
@@ -377,8 +401,16 @@
                 //if (typeof this.window['atob'] == 'function') {
                 //    return atob(data);
                 //}
-                var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-                var o1, o2, o3, h1, h2, h3, h4, bits, i = 0,
+                var b64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+                    o1,
+                    o2,
+                    o3,
+                    h1,
+                    h2,
+                    h3,
+                    h4,
+                    bits,
+                    i = 0,
                     ac = 0,
                     dec = "",
                     tmp_arr = [];
@@ -390,10 +422,10 @@
                 data += '';
 
                 do { // unpack four hexets into three octets using index points in b64
-                    h1 = b64.indexOf(data.charAt(i++));
-                    h2 = b64.indexOf(data.charAt(i++));
-                    h3 = b64.indexOf(data.charAt(i++));
-                    h4 = b64.indexOf(data.charAt(i++));
+                    h1 = b64.indexOf(data.charAt(i += 1));
+                    h2 = b64.indexOf(data.charAt(i += 1));
+                    h3 = b64.indexOf(data.charAt(i += 1));
+                    h4 = b64.indexOf(data.charAt(i += 1));
 
                     bits = h1 << 18 | h2 << 12 | h3 << 6 | h4;
 
@@ -401,12 +433,12 @@
                     o2 = bits >> 8 & 0xff;
                     o3 = bits & 0xff;
 
-                    if (h3 == 64) {
-                        tmp_arr[ac++] = String.fromCharCode(o1);
-                    } else if (h4 == 64) {
-                        tmp_arr[ac++] = String.fromCharCode(o1, o2);
+                    if (h3 === 64) {
+                        tmp_arr[ac += 1] = String.fromCharCode(o1);
+                    } else if (h4 === 64) {
+                        tmp_arr[ac += 1] = String.fromCharCode(o1, o2);
                     } else {
-                        tmp_arr[ac++] = String.fromCharCode(o1, o2, o3);
+                        tmp_arr[ac += 1] = String.fromCharCode(o1, o2, o3);
                     }
                 } while (i < data.length) {
                     dec = tmp_arr.join('');

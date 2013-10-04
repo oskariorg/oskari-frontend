@@ -22,33 +22,33 @@
  */
 Oskari = (function () {
 
-    var isDebug = false;
-    var isConsole = window.console != null && window.console.debug;
+    var isDebug = false,
+        isConsole = window.console && window.console.debug,
+        logMsg = function (msg) {
+            if (!isDebug) {
+                return;
+            }
 
-    var logMsg = function (msg) {
-        if (!isDebug) {
-            return;
-        }
+            if (!isConsole) {
+                return;
+            }
+            window.console.debug(msg);
 
-        if (!isConsole) {
-            return;
-        }
-        window.console.debug(msg);
-
-    }
+        },
     /**
      * @class Oskari.bundle_locale
      */
-    var bundle_locale = function () {
-        this.lang = null;
-        this.localizations = {};
-        this.supportedLocales = null;
-    };
+        bundle_locale = function () {
+            this.lang = null;
+            this.localizations = {};
+            this.supportedLocales = null;
+        };
 
     bundle_locale.prototype = {
         setLocalization: function (lang, key, value) {
-            if (!this.localizations[lang])
+            if (!this.localizations[lang]) {
                 this.localizations[lang] = {};
+            }
             this.localizations[lang][key] = value;
         },
         setLang: function (lang) {
@@ -88,35 +88,33 @@ Oskari = (function () {
     /**
      * let's create locale support
      */
-    var blocale = new bundle_locale();
-    var localesURL = null;
+    var blocale = new bundle_locale(),
+        localesURL = null;
 
     /*
      * 'dev' adds ?ts=<instTs> parameter to js loads 'default' does not add
      * 'static' assumes srcs are already loaded <any-other> is assumed as a
      * request to load built js packs using this path pattern .../<bundles-path>/<bundle-name>/build/<any-ohther>.js
      */
-    var supportBundleAsync = false;
-    var mode = 'dev';
-    // 'static' / 'dynamic'
-    var instTs = new Date().getTime();
-
-    var basePathForBundles = null;
-
-    var pathBuilders = {
-        'default': function (fn, bpath) {
-            if (basePathForBundles) {
-                return basePathForBundles + fn;
+    var supportBundleAsync = false,
+        mode = 'dev',
+        // 'static' / 'dynamic'
+        instTs = new Date().getTime();
+        basePathForBundles = null,
+        pathBuilders = {
+            'default': function (fn, bpath) {
+                if (basePathForBundles) {
+                    return basePathForBundles + fn;
+                }
+                return fn;
+            },
+            'dev': function (fn, bpath) {
+                if (basePathForBundles) {
+                    return basePathForBundles + fn + "?ts=" + instTs;
+                }
+                return fn + "?ts=" + instTs;
             }
-            return fn;
-        },
-        'dev': function (fn, bpath) {
-            if (basePathForBundles) {
-                return basePathForBundles + fn + "?ts=" + instTs;
-            }
-            return fn + "?ts=" + instTs;
-        }
-    };
+        };
 
     function buildPathForLoaderMode(fn, bpath) {
         var pathBuilder = pathBuilders[mode];
@@ -164,6 +162,7 @@ Oskari = (function () {
      * This is an adapter class template that should not be used directly
      */
     var clazzadapter = function (i, md) {
+        var p;
         this.impl = i;
 
         /* set overridden methods intentionally to instance */
@@ -295,24 +294,28 @@ Oskari = (function () {
          *            the name of the class as string
          */
         "metadata": function () {
-            var args = arguments;
+            var args = arguments,
+                cdef,
+                pdefsp,
+                bp = null,
+                pp = null,
+                sp = null,
+                parts,
+                pdef;
             if (args.length == 0)
                 throw "missing arguments";
 
-            var cdef = args[0];
+            cdef = args[0];
 
-            var pdefsp = this.impl.clazzcache[cdef];
+            pdefsp = this.impl.clazzcache[cdef];
 
-            var bp = null;
-            var pp = null;
-            var sp = null;
             if (!pdefsp) {
-                var parts = cdef.split('.');
+                parts = cdef.split('.');
                 bp = parts[0];
                 pp = parts[1];
                 sp = parts.slice(2).join('.');
 
-                var pdef = this.impl.packages[pp];
+                pdef = this.impl.packages[pp];
                 if (!pdef) {
                     pdef = {};
                     this.impl.packages[pp] = pdef;
@@ -335,21 +338,26 @@ Oskari = (function () {
          * Updates and binds class metadata
          */
         "updateMetadata": function (bp, pp, sp, pdefsp, classMeta) {
-            if (!pdefsp._metadata)
+            var protocols,
+                p,
+                pt,
+                cn;
+            if (!pdefsp._metadata) {
                 pdefsp._metadata = {};
+            }
 
             pdefsp._metadata['meta'] = classMeta;
 
-            var protocols = classMeta['protocol'];
+            protocols = classMeta['protocol'];
             if (protocols) {
-                for (var p = 0; p < protocols.length; p++) {
-                    var pt = protocols[p];
+                for (p = 0; p < protocols.length; p++) {
+                    pt = protocols[p];
 
                     if (!this.impl.protocols[pt]) {
                         this.impl.protocols[pt] = {};
                     }
 
-                    var cn = bp + "." + pp + "." + sp;
+                    cn = bp + "." + pp + "." + sp;
 
                     this.impl.protocols[pt][cn] = pdefsp;
                 }
@@ -357,9 +365,9 @@ Oskari = (function () {
 
         },
         _super: function () {
-            var supCat = arguments[0];
-            var supMet = arguments[1];
-            var me = this;
+            var supCat = arguments[0],
+                supMet = arguments[1],
+                me = this;
             return function () {
                 return me['_']._superCategory[supCat][supMet].apply(me, arguments);
             }
@@ -379,50 +387,66 @@ Oskari = (function () {
          *            metadata optional metadata for the class
          */
         define: function () {
-            var args = arguments;
+            var args = arguments,
+                cdef,
+                parts,
+                bp,
+                pp,
+                sp,
+                pdef,
+                pdefsp,
+                catFuncs,
+                prot,
+                pi,
+                catName,
+                extnds,
+                e,
+                superClazz,
+                cd,
+                compo;
             if (args.length == 0)
                 throw "missing arguments";
 
-            var cdef = args[0];
-            var parts = cdef.split('.');
+            cdef = args[0];
+            parts = cdef.split('.');
 
             /*
              * bp base part pp package part sp rest
              */
-            var bp = parts[0];
+            bp = parts[0];
 
-            var pp = parts[1];
+            pp = parts[1];
 
-            var sp = parts.slice(2).join('.');
+            sp = parts.slice(2).join('.');
 
-            var pdef = this.impl.packages[pp];
+            pdef = this.impl.packages[pp];
             if (!pdef) {
                 pdef = {};
                 this.impl.packages[pp] = pdef;
             }
 
-            var pdefsp = pdef[sp];
+            pdefsp = pdef[sp];
 
             if (pdefsp) {
                 // update constrcutor
                 pdefsp._constructor = args[1];
 
                 // update prototype
-                var catFuncs = args[2];
-                var prot = pdefsp._class.prototype;
+                catFuncs = args[2];
+                prot = pdefsp._class.prototype;
 
                 for (p in catFuncs) {
-                    var pi = catFuncs[p];
+                    pi = catFuncs[p];
 
                     prot[p] = pi;
                 }
-                var catName = cdef;
+                catName = cdef;
                 pdefsp._category[catName] = catFuncs;
                 if (args.length > 3) {
 
-                    var extnds = args[3].extend;
-                    for (var e = 0; extnds && e < extnds.length; e++) {
-                        var superClazz = this.lookup(extnds[e]);
+                    extnds = args[3].extend;
+                    for (e = 0; extnds && e < extnds.length; e++) {
+                        superClazz = this.lookup(extnds[e]);
                         if (!superClazz._composition.subClazz)
                             superClazz._composition.subClazz = {};
                         superClazz._composition.subClazz[extnds[e]] = pdefsp;
@@ -438,8 +462,8 @@ Oskari = (function () {
                 return pdefsp;
             }
 
-            var cd = function () {};
-            var compo = {
+            cd = function () {};
+            compo = {
                 clazzName: cdef,
                 superClazz: null,
                 subClazz: null
@@ -456,28 +480,28 @@ Oskari = (function () {
             cd.prototype['_super'] = this['_super'];
 
             // update prototype
-            var catFuncs = args[2];
-            var prot = cd.prototype;
+            catFuncs = args[2];
+            prot = cd.prototype;
 
             for (p in catFuncs) {
-                var pi = catFuncs[p];
+                pi = catFuncs[p];
 
                 prot[p] = pi;
             }
-            var catName = cdef;
+            catName = cdef;
             pdefsp._category[catName] = catFuncs;
 
             this.impl.inheritance[cdef] = compo;
             pdef[sp] = pdefsp;
 
-            var catName = cdef;
+            catName = cdef;
             pdefsp._category[catName] = args[2];
 
             if (args.length > 3) {
 
-                var extnds = args[3].extend;
-                for (var e = 0; extnds && e < extnds.length; e++) {
-                    var superClazz = this.lookup(extnds[e]);
+                extnds = args[3].extend;
+                for (e = 0; extnds && e < extnds.length; e++) {
+                    superClazz = this.lookup(extnds[e]);
                     if (!superClazz._composition.subClazz)
                         superClazz._composition.subClazz = {};
                     superClazz._composition.subClazz[cdef] = pdefsp;
@@ -500,31 +524,45 @@ Oskari = (function () {
          * 'map-layer-funcs',{ "xxx": function() {} });
          */
         category: function () {
-            var args = arguments;
+            var args = arguments,
+                cdef,
+                parts,
+                bp,
+                pp,
+                sp,
+                pdef,
+                pdefsp,
+                cd,
+                compo,
+                catName,
+                catFuncs,
+                prot,
+                pi,
+                p;
             if (args.length == 0)
                 throw "missing arguments";
 
-            var cdef = args[0];
-            var parts = cdef.split('.');
+            cdef = args[0];
+            parts = cdef.split('.');
             /*
              * bp base part pp package part sp rest
              */
-            var bp = parts[0];
+            bp = parts[0];
 
-            var pp = parts[1];
+            pp = parts[1];
 
-            var sp = parts.slice(2).join('.');
+            sp = parts.slice(2).join('.');
 
-            var pdef = this.impl.packages[pp];
+            pdef = this.impl.packages[pp];
             if (!pdef) {
                 pdef = {};
                 this.impl.packages[pp] = pdef;
             }
-            var pdefsp = pdef[sp];
+            pdefsp = pdef[sp];
 
             if (!pdefsp) {
-                var cd = function () {};
-                var compo = {
+                cd = function () {};
+                compo = {
                     clazzName: cdef,
                     superClazz: null,
                     subClazz: null
@@ -543,12 +581,12 @@ Oskari = (function () {
 
             }
 
-            var catName = args[1];
-            var catFuncs = args[2];
-            var prot = pdefsp._class.prototype;
+            catName = args[1];
+            catFuncs = args[2];
+            prot = pdefsp._class.prototype;
 
             for (p in catFuncs) {
-                var pi = catFuncs[p];
+                pi = catFuncs[p];
 
                 prot[p] = pi;
             }
@@ -570,32 +608,41 @@ Oskari = (function () {
          *
          */
         lookup: function () {
-            var args = arguments;
+            var args = arguments,
+                cdef,
+                parts,
+                bp,
+                pp,
+                sp,
+                pdef,
+                pdefsp,
+                cd,
+                compo;
             if (args.length == 0)
                 throw "missing arguments";
 
-            var cdef = args[0];
-            var parts = cdef.split('.');
+            cdef = args[0];
+            parts = cdef.split('.');
             /*
              * bp base part pp package part sp rest
              */
-            var bp = parts[0];
+            bp = parts[0];
 
-            var pp = parts[1];
+            pp = parts[1];
 
-            var sp = parts.slice(2).join('.');
+            sp = parts.slice(2).join('.');
 
-            var pdef = this.impl.packages[pp];
+            pdef = this.impl.packages[pp];
             if (!pdef) {
                 pdef = {};
                 this.impl.packages[pp] = pdef;
             }
-            var pdefsp = pdef[sp];
+            pdefsp = pdef[sp];
 
             if (!pdefsp) {
-                var cd = function () {};
+                cd = function () {};
                 cd.prototype = {};
-                var compo = {
+                compo = {
                     clazzName: cdef,
                     superClazz: null,
                     subClazz: null
@@ -614,9 +661,9 @@ Oskari = (function () {
             return pdefsp;
         },
         extend: function () {
-            var args = arguments;
-            var superClazz = this.lookup(args[1]);
-            var subClazz = this.lookup(args[0]);
+            var args = arguments,
+                superClazz = this.lookup(args[1]),
+                subClazz = this.lookup(args[0]);
             if (!superClazz._composition.subClazz)
                 superClazz._composition.subClazz = {};
             superClazz._composition.subClazz[args[0]] = subClazz;
@@ -625,20 +672,20 @@ Oskari = (function () {
             return subClazz;
         },
         composition: function () {
-            var cdef = arguments[0];
-
-            var pdefsp = this.impl.clazzcache[cdef];
-
-            var bp = null;
-            var pp = null;
-            var sp = null;
+            var cdef = arguments[0],
+                pdefsp = this.impl.clazzcache[cdef],
+                bp = null,
+                pp = null,
+                sp = null,
+                parts,
+                pdef;
             if (!pdefsp) {
-                var parts = cdef.split('.');
+                parts = cdef.split('.');
                 bp = parts[0];
                 pp = parts[1];
                 sp = parts.slice(2).join('.');
 
-                var pdef = this.impl.packages[pp];
+                pdef = this.impl.packages[pp];
                 if (!pdef) {
                     pdef = {};
                     this.impl.packages[pp] = pdef;
@@ -659,12 +706,14 @@ Oskari = (function () {
          *
          */
         pushDown: function (pdefsp) {
+            var sub,
+                pdefsub;
             /* !self */
             if (!pdefsp._composition.subClazz) {
                 return;
             }
-            for (var sub in pdefsp._composition.subClazz) {
-                var pdefsub = pdefsp._composition.subClazz[sub];
+            for (sub in pdefsp._composition.subClazz) {
+                pdefsub = pdefsp._composition.subClazz[sub];
                 this.pullDown(pdefsub);
                 this.pushDown(pdefsub);
             }
@@ -677,15 +726,26 @@ Oskari = (function () {
          *
          */
         pullDown: function (pdefsp) {
+            var clazzHierarchy = [],
+                funcs = {},
+                spr,
+                prot,
+                constructors = [],
+                superClazzMethodCats = {},
+                s,
+                cn,
+                ctor,
+                superClazzMetCat,
+                c,
+                catName,
+                catFuncs,
+                p,
+                pi;
             if (!pdefsp._composition.superClazz) {
                 return;
             }
-
-            var clazzHierarchy = [];
             clazzHierarchy.push(pdefsp);
-
-            var funcs = {};
-            var spr = pdefsp;
+            spr = pdefsp;
             while (true) {
                 spr = spr._composition.superClazz;
                 if (!spr) {
@@ -694,22 +754,20 @@ Oskari = (function () {
                 clazzHierarchy.push(spr);
             }
 
-            var prot = pdefsp._class.prototype;
-            var constructors = [];
-            var superClazzMethodCats = {};
-            for (var s = clazzHierarchy.length - 1; s >= 0; s--) {
-                var cn = clazzHierarchy[s]._composition.clazzName;
+            prot = pdefsp._class.prototype;
+            for (s = clazzHierarchy.length - 1; s >= 0; s -= 1) {
+                cn = clazzHierarchy[s]._composition.clazzName;
 
-                var ctor = clazzHierarchy[s]._constructor;
+                ctor = clazzHierarchy[s]._constructor;
                 constructors.push(ctor);
 
-                var superClazzMetCat = {};
-                for (var c in clazzHierarchy[s]._category) {
+                superClazzMetCat = {};
+                for (c in clazzHierarchy[s]._category) {
 
-                    var catName = cn + "#" + c;
-                    var catFuncs = clazzHierarchy[s]._category[c];
+                    catName = cn + "#" + c;
+                    catFuncs = clazzHierarchy[s]._category[c];
                     for (p in catFuncs) {
-                        var pi = catFuncs[p];
+                        pi = catFuncs[p];
                         prot[p] = pi;
                         superClazzMetCat[p] = pi;
                     }
@@ -726,15 +784,17 @@ Oskari = (function () {
          * prints class inheritance to console
          */
         printAncestry: function () {
-            var pdefsp = this.lookup.apply(this, arguments);
+            var pdefsp = this.lookup.apply(this, arguments),
+                clazzHierarchy = [],
+                spr,
+                s;
             if (!pdefsp._composition.superClazz) {
                 return;
             }
 
-            var clazzHierarchy = [];
             clazzHierarchy.push(pdefsp);
 
-            var spr = pdefsp;
+            spr = pdefsp;
             while (true) {
                 spr = spr._composition.superClazz;
                 if (!spr) {
@@ -742,7 +802,7 @@ Oskari = (function () {
                 }
                 clazzHierarchy.push(spr);
             }
-            for (var s = clazzHierarchy.length - 1; s >= 0; s--) {
+            for (s = clazzHierarchy.length - 1; s >= 0; s--) {
                 if (console && console.log) {
                     console.log("                 ".substring(0, clazzHierarchy.length - s) + "|_ " + clazzHierarchy[s]._composition.clazzName);
                 }
@@ -753,12 +813,18 @@ Oskari = (function () {
          * print subclasses to console
          */
         printHierarchy: function () {
-            var pdefsp = this.lookup.apply(this, arguments);
+            var pdefsp = this.lookup.apply(this, arguments),
+                clazzHierarchy = [],
+                taskList = [],
+                task,
+                pdefc,
+                pdefsub,
+                p,
+                s;
             if (!pdefsp._composition.subClazz) {
                 return;
             }
-            var clazzHierarchy = [];
-            var taskList = [];
+
 
             taskList.push({
                 c: null,
@@ -767,7 +833,7 @@ Oskari = (function () {
             });
 
             while (true) {
-                var task = taskList.shift();
+                task = taskList.shift();
                 if (!task) {
                     break;
 
@@ -775,12 +841,12 @@ Oskari = (function () {
                 /*clazzHierarchy.push({ level: task.level, sub: task.sub });*/
                 clazzHierarchy.push("                 ".substring(0, task.level) + "|_ " + task.sub._composition.clazzName);
 
-                var pdefc = task.c;
-                var pdefsub = task.sub;
+                pdefc = task.c;
+                pdefsub = task.sub;
                 if (!pdefsub._composition.subClazz)
                     continue;
 
-                for (var p in pdefsub._composition.subClazz) {
+                for (p in pdefsub._composition.subClazz) {
                     taskList.push({
                         c: pdefc,
                         sub: pdefsub._composition.subClazz[p],
@@ -789,7 +855,7 @@ Oskari = (function () {
                 }
             }
 
-            for (var s = 0; s < clazzHierarchy.length; s++) {
+            for (s = 0; s < clazzHierarchy.length; s++) {
                 if (console && console.log) {
                     console.log(clazzHierarchy[s]);
                 }
@@ -820,28 +886,39 @@ Oskari = (function () {
          * Oskari.clazz.create('Oskari.mapframework.request.common.ActivateOpenlayersMapControlRequest','12313');
          */
         create: function () {
-            var args = arguments;
+            var args = arguments,
+                instargs,
+                cdef,
+                pdef,
+                pdefsp,
+                bp,
+                pp,
+                sp,
+                parts,
+                inst,
+                ctors,
+                c;
             if (args.length == 0)
                 throw "missing arguments";
-            var instargs = this.slicer.apply(arguments, [1])
+            instargs = this.slicer.apply(arguments, [1])
             /*[];
              for(var n = 1; n < args.length; n++)
              instargs.push(args[n]);*/
 
-            var cdef = args[0];
+            cdef = args[0];
 
-            var pdefsp = this.impl.clazzcache[cdef];
+            pdefsp = this.impl.clazzcache[cdef];
 
-            var bp = null;
-            var pp = null;
-            var sp = null;
+            bp = null;
+            pp = null;
+            sp = null;
             if (!pdefsp) {
-                var parts = cdef.split('.');
+                parts = cdef.split('.');
                 bp = parts[0];
                 pp = parts[1];
                 sp = parts.slice(2).join('.');
 
-                var pdef = this.impl.packages[pp];
+                pdef = this.impl.packages[pp];
                 if (!pdef) {
                     pdef = {};
                     this.impl.packages[pp] = pdef;
@@ -854,10 +931,10 @@ Oskari = (function () {
             if (!pdefsp)
                 throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
 
-            var inst = new pdefsp._class();
-            var ctors = pdefsp._constructors;
+            inst = new pdefsp._class();
+            ctors = pdefsp._constructors;
             if (ctors) {
-                for (var c = 0; c < ctors.length; c++) {
+                for (c = 0; c < ctors.length; c++) {
                     ctors[c].apply(inst, instargs);
                 }
             } else {
@@ -866,18 +943,25 @@ Oskari = (function () {
             return inst;
         },
         createWithPdefsp: function () {
-            var args = arguments;
-            if (args.length == 0)
+            var args = arguments,
+                instargs,
+                pdefsp,
+                inst,
+                ctors,
+                c;
+            if (args.length == 0) {
                 throw "missing arguments";
-            var instargs = arguments[1],
-                pdefsp = args[0];
-            if (!pdefsp)
+            }
+            instargs = arguments[1];
+            pdefsp = args[0];
+            if (!pdefsp) {
                 throw "clazz does not exist ";
+            }
 
-            var inst = new pdefsp._class(),
-                ctors = pdefsp._constructors;
+            inst = new pdefsp._class();
+            ctors = pdefsp._constructors;
             if (ctors) {
-                for (var c = 0; c < ctors.length; c++) {
+                for (c = 0; c < ctors.length; c++) {
                     ctors[c].apply(inst, instargs);
                 }
             } else {
@@ -894,25 +978,31 @@ Oskari = (function () {
          *
          */
         construct: function () {
-            var args = arguments;
+            var args = arguments,
+                cdef,
+                instprops,
+                pdefsp,
+                bp = null,
+                pp = null,
+                sp = null,
+                parts,
+                pdef,
+                inst;
             if (args.length != 2)
                 throw "missing arguments";
 
-            var cdef = args[0];
-            var instprops = args[1];
+            cdef = args[0];
+            instprops = args[1];
 
-            var pdefsp = this.impl.clazzcache[cdef];
+            pdefsp = this.impl.clazzcache[cdef];
 
-            var bp = null;
-            var pp = null;
-            var sp = null;
             if (!pdefsp) {
-                var parts = cdef.split('.');
+                parts = cdef.split('.');
                 bp = parts[0];
                 pp = parts[1];
                 sp = parts.slice(2).join('.');
 
-                var pdef = this.impl.packages[pp];
+                pdef = this.impl.packages[pp];
                 if (!pdef) {
                     pdef = {};
                     this.impl.packages[pp] = pdef;
@@ -922,10 +1012,11 @@ Oskari = (function () {
 
             }
 
-            if (!pdefsp)
+            if (!pdefsp) {
                 throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
+            }
 
-            var inst = new pdefsp._class();
+            inst = new pdefsp._class();
             pdefsp._constructor.apply(inst, [instprops]);
             return inst;
         },
@@ -937,25 +1028,32 @@ Oskari = (function () {
          * @param classname
          */
         builder: function () {
-            var args = arguments;
-            if (args.length == 0)
+            var args = arguments,
+                cdef,
+                pdefsp,
+                bp = null,
+                pp = null,
+                sp = null,
+                parts,
+                pdef,
+                instargs,
+                inst,
+                ctors,
+                c;
+            if (args.length == 0) {
                 throw "missing arguments";
+            }
 
-            var cdef = args[0];
-
-            var pdefsp = this.impl.clazzcache[cdef];
-
-            var bp = null;
-            var pp = null;
-            var sp = null;
+            cdef = args[0];
+            pdefsp = this.impl.clazzcache[cdef];
 
             if (!pdefsp) {
-                var parts = cdef.split('.');
+                parts = cdef.split('.');
                 bp = parts[0];
                 pp = parts[1];
                 sp = parts.slice(2).join('.');
 
-                var pdef = this.impl.packages[pp];
+                pdef = this.impl.packages[pp];
                 if (!pdef) {
                     pdef = {};
                     this.impl.packages[pp] = pdef;
@@ -972,11 +1070,11 @@ Oskari = (function () {
                 return pdefsp._builder;
 
             pdefsp._builder = function () {
-                var instargs = arguments;
-                var inst = new pdefsp._class();
-                var ctors = pdefsp._constructors;
+                instargs = arguments;
+                inst = new pdefsp._class();
+                ctors = pdefsp._constructors;
                 if (ctors) {
-                    for (var c = 0; c < ctors.length; c++) {
+                    for (c = 0; c < ctors.length; c++) {
                         ctors[c].apply(inst, instargs);
                     }
                 }
@@ -994,24 +1092,32 @@ Oskari = (function () {
          * @param classname
          */
         builderFromPdefsp: function () {
-            var args = arguments;
-            if (args.length == 0)
+            var args = arguments,
+                pdefsp,
+                instargs,
+                inst,
+                ctors,
+                c;
+            if (args.length == 0) {
                 throw "missing arguments";
+            }
 
-            var pdefsp = args[0];
+            pdefsp = args[0];
 
-            if (!pdefsp)
+            if (!pdefsp) {
                 throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
+            }
 
-            if (pdefsp._builder)
+            if (pdefsp._builder) {
                 return pdefsp._builder;
+            }
 
             pdefsp._builder = function () {
-                var instargs = arguments,
-                    inst = new pdefsp._class(),
-                    ctors = pdefsp._constructors;
+                instargs = arguments;
+                inst = new pdefsp._class();
+                ctors = pdefsp._constructors;
                 if (ctors) {
-                    for (var c = 0; c < ctors.length; c++) {
+                    for (c = 0; c < ctors.length; c += 1) {
                         ctors[c].apply(inst, instargs);
                     }
                 } else {
@@ -1046,17 +1152,20 @@ Oskari = (function () {
     clazz.prototype = {
 
         get: function () {
-            var args = arguments;
+            var args = arguments,
+                parts,
+                bp,
+                ai;
             if (!this.hasOtherNs || this.defRex.test(args[0])) {
                 return this.def;
             }
 
-            var parts = args[0].split('.');
-            var bp = parts[0];
-
-            var ai = this.ns[bp];
-            if (!ai)
+            parts = args[0].split('.');
+            bp = parts[0];
+            ai = this.ns[bp];
+            if (!ai) {
                 throw "clazz: ns NOT bound " + bp;
+            }
             return ai;
         },
         /*
@@ -1185,10 +1294,12 @@ Oskari = (function () {
          *            value gets or sets a global variable for Oskari context
          */
         global: function () {
-            if (arguments.length == 0)
+            var name;
+            if (arguments.length === 0) {
                 return this.globals;
-            var name = arguments[0];
-            if (arguments.length == 2) {
+            }
+            name = arguments[0];
+            if (arguments.length === 2) {
                 this.globals[name] = arguments[1];
             }
             return this.globals[name];
@@ -1276,9 +1387,10 @@ Oskari = (function () {
          * @method adds a script loading request
          */
         "add": function (fn, pdef) {
-            var me = this;
+            var me = this,
+                def;
             if (!me.files[fn]) {
-                var def = {
+                def = {
                     src: fn,
                     type: (pdef ? pdef.type : null) || "text/javascript",
                     id: pdef ? pdef.id : null,
@@ -1305,10 +1417,16 @@ Oskari = (function () {
          * commits any script loading requests
          */
         "commit": function () {
-            var head = document.getElementsByTagName("head")[0];
-            var fragment = document.createDocumentFragment();
-            var me = this;
-            var numFiles = this.filesRequested;
+            var head = document.getElementsByTagName("head")[0],
+                fragment = document.createDocumentFragment(),
+                me = this,
+                numFiles = me.filesRequested,
+                onFileLoaded,
+                f,
+                n,
+                def,
+                fn,
+                st;
             if (numFiles == 0) {
                 me.callback();
                 me.manager.notifyLoaderStateChanged(me, true);
@@ -1320,7 +1438,7 @@ Oskari = (function () {
                 return;
             }
 
-            var onFileLoaded = function () {
+            onFileLoaded = function () {
                 me.filesLoaded++;
                 me.manager.log("Files loaded " + me.filesLoaded + "/" + me.filesRequested);
 
@@ -1331,11 +1449,11 @@ Oskari = (function () {
                     me.manager.notifyLoaderStateChanged(me, false);
                 }
             };
-            var f = false;
-            for (var n = 0; n < me.fileList.length; n++) {
-                var def = me.fileList[n];
-                var fn = def.src;
-                var st = me.buildScriptTag(fn, onFileLoaded, def.type, def.id);
+            f = false;
+            for (n = 0; n < me.fileList.length; n++) {
+                def = me.fileList[n];
+                fn = def.src;
+                st = me.buildScriptTag(fn, onFileLoaded, def.type, def.id);
                 if (st) {
                     // If this breaks something, revert to using method 1
                     if (preloaded()) {
@@ -1357,8 +1475,8 @@ Oskari = (function () {
          * builds a script tag to be applied to document head assumes UTF-8
          */
         "buildScriptTag": function (filename, callback, elementtype, elementId) {
-            var me = this;
-            var script = document.createElement('script');
+            var me = this,
+                script = document.createElement('script');
             if (elementId)
                 script.id = elementId;
             script.type = elementtype; //||'text/javascript';
@@ -1377,7 +1495,7 @@ Oskari = (function () {
              */
             if (script.readyState) {
                 script.onreadystatechange = function () {
-                    if (script.readyState == "loaded" || script.readyState == "complete") {
+                    if (script.readyState === "loaded" || script.readyState === "complete") {
                         script.onreadystatechange = null;
                         callback();
                     }
@@ -1398,10 +1516,13 @@ Oskari = (function () {
      *
      */
     var bundle_mediator = function (opts) {
+        var p;
         this.manager = null;
 
         for (p in opts) {
-            this[p] = opts[p];
+            if (opts.hasOwnProperty(p)) {
+                this[p] = opts[p];
+            }
         };
     };
     bundle_mediator.prototype = {
@@ -1441,15 +1562,17 @@ Oskari = (function () {
          * executes a trigger callback based on bundle state
          */
         "execute": function (manager, b, bi, info) {
-
-            var me = this;
+            var me = this,
+                p,
+                srcState,
+                cb;
             if (me.fired) {
                 //manager.log("trigger already fired " + info || this.info);
                 return;
             }
 
             for (p in me.config["Import-Bundle"]) {
-                var srcState = manager.stateForBundleSources[p];
+                srcState = manager.stateForBundleSources[p];
                 if (!srcState || srcState.state != 1) {
                     manager.log("trigger not fired due " + p + " for " + info || this.info);
                     return;
@@ -1457,7 +1580,7 @@ Oskari = (function () {
             }
             me.fired = true;
             manager.log("posting trigger");
-            var cb = this.callback;
+            cb = this.callback;
 
             window.setTimeout(function () {
                 cb(manager);
@@ -1508,13 +1631,14 @@ Oskari = (function () {
 
     bundle_manager.prototype = {
         purge: function () {
-            for (var p in this.sources) {
+            var p;
+            for (p in this.sources) {
                 delete this.sources[p];
             }
-            for (var p in this.stateForBundleDefinitions) {
+            for (p in this.stateForBundleDefinitions) {
                 delete this.stateForBundleDefinitions[p].loader;
             }
-            for (var p in this.stateForBundleSources) {
+            for (p in this.stateForBundleSources) {
                 delete this.stateForBundleSources[p].loader;
             }
         },
@@ -1522,10 +1646,12 @@ Oskari = (function () {
          * @
          */
         notifyLoaderStateChanged: function (bl, finished) {
+            var l,
+                cb;
             if (this.loaderStateListeners.length == 0)
                 return;
-            for (var l = 0; l < this.loaderStateListeners.length; l++) {
-                var cb = this.loaderStateListeners[l];
+            for (l = 0; l < this.loaderStateListeners.length; l += 1) {
+                cb = this.loaderStateListeners[l];
                 cb(bl, finished);
             }
         },
@@ -1563,9 +1689,11 @@ Oskari = (function () {
          */
         "loadCss": function (sScriptSrc, oCallback) {
             this.log("loading CSS " + sScriptSrc);
-            var h = document.getElementsByTagName("head").length ? document
-                .getElementsByTagName("head")[0] : document.body;
+            var cssParentElement = document.getElementsByTagName("head").length ? document.getElementsByTagName("head")[0] : document.body,
+                styles,
+                linkElement;
             if (!preloaded()) {
+                // FIXME jQuery.browser is deprecated
                 if (jQuery.browser.msie) {
                     // IE has a limitation of 31 stylesheets.
                     // It can be increased to 31*31 by using import in the stylesheets,
@@ -1576,14 +1704,14 @@ Oskari = (function () {
                         url: sScriptSrc,
                         dataType: "text"
                     }).done(function (css) {
-                        var styles = document.getElementById("concatenated");
+                        styles = document.getElementById("concatenated");
                         if (styles) {
                             // styles found, append
                             styles.styleSheet.cssText += css;
                         } else {
                             // styles was not found, create new style element
-                            var styles = document.createElement('style');
-                            h.appendChild(styles);
+                            styles = document.createElement('style');
+                            cssParentElement.appendChild(styles);
                             styles.setAttribute('type', 'text/css');
                             styles.styleSheet.cssText = css;
                             styles.id = "concatenated";
@@ -1591,11 +1719,11 @@ Oskari = (function () {
                         return css;
                     });
                 } else {
-                    var s = document.createElement("link");
-                    s.type = "text/css";
-                    s.rel = "stylesheet";
-                    s.href = sScriptSrc;
-                    h.appendChild(s);
+                    linkElement = document.createElement("link");
+                    linkElement.type = "text/css";
+                    linkElement.rel = "stylesheet";
+                    linkElement.href = sScriptSrc;
+                    cssParentElement.appendChild(linkElement);
                 }
             }
         },
@@ -1622,9 +1750,10 @@ Oskari = (function () {
             // DOES not INSTANTIATE only register bp as function
             // declares any additional sources required
 
-            var me = this;
-            var bundleImpl = implid;
-            var defState = me.stateForBundleDefinitions[bundleImpl];
+            var me = this,
+                bundleImpl = implid,
+                defState = me.stateForBundleDefinitions[bundleImpl],
+                srcState;
             if (defState) {
                 defState.state = 1;
                 me.log("SETTING STATE FOR BUNDLEDEF " + bundleImpl + " existing state to " + defState.state);
@@ -1641,7 +1770,7 @@ Oskari = (function () {
             me.impls[bundleImpl] = bp;
             me.sources[bundleImpl] = srcs;
 
-            var srcState = me.stateForBundleSources[bundleImpl];
+            srcState = me.stateForBundleSources[bundleImpl];
             if (srcState) {
                 if (srcState.state == -1) {
                     me.log("triggering loadBundleSources for " + bundleImpl + " at loadBundleDefinition");
@@ -1663,12 +1792,11 @@ Oskari = (function () {
          * Installs a bundle defined as Oskari native Class
          */
         "installBundleClass": function (implid, clazzName) {
-            var cs = clazz.prototype.singleton;
-
-            var classmeta = cs.metadata(clazzName);
-            var bp = cs.builder(clazzName);
-            var srcs = classmeta.meta.source;
-            var bundleMetadata = classmeta.meta.bundle;
+            var cs = clazz.prototype.singleton,
+                classmeta = cs.metadata(clazzName),
+                bp = cs.builder(clazzName),
+                srcs = classmeta.meta.source,
+                bundleMetadata = classmeta.meta.bundle;
 
             this.install(implid, bp, srcs, bundleMetadata);
 
@@ -1682,11 +1810,10 @@ Oskari = (function () {
          * Installs a bundle defined as Oskari native Class
          */
         installBundlePdefsp: function (implid, pdefsp) {
-            var cs = clazz.prototype.singleton;
-
-            var bp = cs.builderFromPdefsp(pdefsp);
-            var bundleMetadata = pdefsp._metadata;
-            var srcs = {};
+            var cs = clazz.prototype.singleton,
+                bp = cs.builderFromPdefsp(pdefsp),
+                bundleMetadata = pdefsp._metadata,
+                srcs = {};
 
             this.install(implid, bp, srcs, bundleMetadata);
 
@@ -1710,10 +1837,12 @@ Oskari = (function () {
          * install or installBundleClass call.
          */
         "loadBundleDefinition": function (implid, bundleSrc, pbundlePath) {
-            var me = this;
-            var bundleImpl = implid;
+            var me = this,
+                bundleImpl = implid,
+                defState = me.stateForBundleDefinitions[bundleImpl],
+                bundlePath,
+                bl;
             me.log("loadBundleDefinition called with " + bundleImpl);
-            var defState = me.stateForBundleDefinitions[bundleImpl];
             if (defState) {
                 if (defState.state == 1) {
                     me.log("bundle definition already loaded for " + bundleImpl);
@@ -1733,10 +1862,10 @@ Oskari = (function () {
             }
 
             defState.bundleSrcPath = bundleSrc;
-            var bundlePath = pbundlePath || (bundleSrc.substring(0, bundleSrc.lastIndexOf('/')));
+            bundlePath = pbundlePath || (bundleSrc.substring(0, bundleSrc.lastIndexOf('/')));
             defState.bundlePath = bundlePath;
 
-            var bl = new bundle_loader(this, function () {
+            bl = new bundle_loader(this, function () {
                 me.log("bundle_def_loaded_callback");
             });
             bl.metadata['context'] = 'bundleDefinition';
@@ -1757,11 +1886,23 @@ Oskari = (function () {
         "loadBundleSources": function (implid) {
             // load any JavaScripts for bundle
             // MUST be done before createBundle
-            var me = this;
-            var bundleImpl = implid;
-
+            var me = this,
+                bundleImpl = implid,
+                defState = me.stateForBundleDefinitions[bundleImpl],
+                srcFiles,
+                srcState,
+                callback,
+                bundlePath,
+                srcs,
+                p,
+                def,
+                defs,
+                defSrc,
+                n,
+                fn,
+                fnWithPath,
+                requiredLocale;
             me.log("loadBundleSources called with " + bundleImpl);
-            var defState = me.stateForBundleDefinitions[bundleImpl];
             // log(defState);
 
             if (!defState) {
@@ -1776,7 +1917,7 @@ Oskari = (function () {
                 return;
             }
 
-            var srcState = me.stateForBundleSources[bundleImpl];
+            srcState = me.stateForBundleSources[bundleImpl];
 
             if (srcState) {
                 if (srcState.state == 1) {
@@ -1803,40 +1944,39 @@ Oskari = (function () {
 
             me.log("STARTING load for sources " + bundleImpl);
 
-            var srcFiles = {
+            srcFiles = {
                 count: 0,
                 loaded: 0,
                 files: {},
                 css: {}
             };
-            var me = this;
-            var callback = function () {
+            callback = function () {
                 me.log("finished loading " + srcFiles.count + " files for " + bundleImpl + ".");
                 me.stateForBundleSources[bundleImpl].state = 1;
                 me.log("set NEW state post source load for " + bundleImpl + " to " + me.stateForBundleSources[bundleImpl].state);
 
                 me.postChange(null, null, "bundle_sources_loaded");
             };
-            var bundlePath = defState.bundlePath;
+            bundlePath = defState.bundlePath;
 
-            var srcs = me.sources[bundleImpl];
+            srcs = me.sources[bundleImpl];
 
             if (srcs) {
 
                 me.log("got sources for " + bundleImpl);
 
                 for (p in srcs) {
-                    if (p == 'scripts') {
+                    if (p === 'scripts') {
 
-                        var defs = srcs[p];
+                        defs = srcs[p];
 
-                        for (var n = 0; n < defs.length; n++) {
-                            var def = defs[n];
-                            if (def.type == "text/css") {
+                        for (n = 0; n < defs.length; n += 1) {
+                            def = defs[n];
+                            if (def.type === "text/css") {
 
-                                var fn = def.src;
-                                var fnWithPath = null;
-                                if (fn.indexOf('http') != -1) {
+                                fn = def.src;
+                                fnWithPath = null;
+                                if (fn.indexOf('http') !== -1) {
                                     fnWithPath = fn;
                                 } else {
                                     fnWithPath = bundlePath + '/' + fn;
@@ -1845,12 +1985,12 @@ Oskari = (function () {
                                 srcFiles.css[fnWithPath] = def;
 
                             } else if (def.type) {
-                                srcFiles.count++;
+                                srcFiles.count += 1;
                                 /* var fn = def.src + "?ts=" + instTs; */
-                                var fn = buildPathForLoaderMode(def.src, bundlePath);
+                                fn = buildPathForLoaderMode(def.src, bundlePath);
 
-                                var fnWithPath = null;
-                                if (fn.indexOf('http') != -1) {
+                                fnWithPath = null;
+                                if (fn.indexOf('http') !== -1) {
                                     fnWithPath = fn;
                                 } else {
                                     fnWithPath = bundlePath + '/' + fn;
@@ -1860,26 +2000,26 @@ Oskari = (function () {
                             }
 
                         }
-                    } else if (p == 'locales') {
-                        var requiredLocale = blocale.getLang();
-                        var defs = srcs[p];
+                    } else if (p === 'locales') {
+                        requiredLocale = blocale.getLang();
+                        defs = srcs[p];
 
                         /*console.log("locales",defs);*/
-                        for (var n = 0; n < defs.length; n++) {
-                            var def = defs[n];
+                        for (n = 0; n < defs.length; n += 1) {
+                            def = defs[n];
 
                             /*console.log("locale",def,requiredLocale);*/
 
-                            if (requiredLocale && def.lang && def.lang != requiredLocale) {
+                            if (requiredLocale && def.lang && def.lang !== requiredLocale) {
                                 /*console.log("locale",def,def.lang,requiredLocale, "NO MATCH?");*/
                                 continue;
                             }
 
-                            if (def.type == "text/css") {
+                            if (def.type === "text/css") {
 
-                                var fn = def.src;
-                                var fnWithPath = null;
-                                if (fn.indexOf('http') != -1) {
+                                fn = def.src;
+                                fnWithPath = null;
+                                if (fn.indexOf('http') !== -1) {
                                     fnWithPath = fn;
                                 } else {
                                     fnWithPath = bundlePath + '/' + fn;
@@ -1888,12 +2028,12 @@ Oskari = (function () {
                                 srcFiles.css[fnWithPath] = def;
 
                             } else if (def.type) {
-                                srcFiles.count++;
+                                srcFiles.count += 1;
                                 /* var fn = def.src + "?ts=" + instTs; */
-                                var fn = buildPathForLoaderMode(def.src, bundlePath);
+                                fn = buildPathForLoaderMode(def.src, bundlePath);
 
-                                var fnWithPath = null;
-                                if (fn.indexOf('http') != -1) {
+                                fnWithPath = null;
+                                if (fn.indexOf('http') !== -1) {
                                     fnWithPath = fn;
                                 } else {
                                     fnWithPath = bundlePath + '/' + fn;
@@ -1916,8 +2056,8 @@ Oskari = (function () {
              */
             for (src in srcFiles.css) {
                 // var def = srcFiles.css[src];
-                var defSrc = src;
-                var fn = buildPathForLoaderMode(defSrc, bundlePath);
+                defSrc = src;
+                fn = buildPathForLoaderMode(defSrc, bundlePath);
                 me.loadCss(fn, callback);
                 me.log("- added css source " + fn + " for " + bundleImpl);
             }
@@ -1978,21 +2118,25 @@ Oskari = (function () {
          */
         "postChange": function (b, bi, info) {
             // self
-            var me = this;
+            var me = this,
+                bid,
+                o,
+                i;
             me.update(b, bi, info);
 
             // bundles
-            for (var bid in me.bundles) {
-                var o = me.bundles[bid];
+            for (bid in me.bundles) {
+                o = me.bundles[bid];
                 /* if (o != b) { */
                 o.update(me, b, bi, info);
                 // }
             }
             // and instances
-            for (var i in me.instances) {
-                var o = me.instances[i];
-                if (!o)
+            for (i in me.instances) {
+                o = me.instances[i];
+                if (!o) {
                     continue;
+                }
                 // stopped are null here
                 // if (!bi || o != bi) {
                 o.update(me, b, bi, info);
@@ -2012,19 +2156,21 @@ Oskari = (function () {
         "createBundle": function (implid, bundleid) {
             // sets up bundle runs the registered func to instantiate bundle
             // this enables 'late binding'
-            var bundlImpl = implid;
-            var me = this;
-            var defState = me.stateForBundleDefinitions[bundlImpl];
+            var bundlImpl = implid,
+                me = this,
+                defState = me.stateForBundleDefinitions[bundlImpl],
+                bp,
+                b;
             if (!defState) {
                 throw "INVALID_STATE: for createBundle / " + "definition not loaded " + implid + "/" + bundleid;
             }
 
-            var bp = this.impls[implid];
+            bp = this.impls[implid];
             if (!bp) {
                 alert("this.impls[" + implid + "] is null!");
                 return;
             }
-            var b = bp(defState);
+            b = bp(defState);
 
             this.bundles[bundleid] = b;
             this.stateForBundles[bundleid] = {
@@ -2102,11 +2248,13 @@ Oskari = (function () {
             // - bind any Namespaces (== Globals imported )
             // - fire any pending triggers
 
-            var me = this;
+            var me = this,
+                n,
+                t;
             me.log("update called with info " + info);
 
-            for (var n = 0; n < me.triggers.length; n++) {
-                var t = me.triggers[n];
+            for (n = 0; n < me.triggers.length; n++) {
+                t = me.triggers[n];
                 t.execute(me);
             }
         },
@@ -2199,8 +2347,8 @@ Oskari = (function () {
          */
         "destroyInstance": function (instanceid) {
 
-            var bi = this.instances[instanceid];
-            var mediator = bi.mediator;
+            var bi = this.instances[instanceid],
+                mediator = bi.mediator;
             mediator.bundle = null;
             mediator.manager = null;
             mediator.clazz = null;
@@ -2285,8 +2433,8 @@ Oskari = (function () {
          *
          */
         requireBundle: function (implid, bundleid, cb) {
-            var me = this;
-            var b = me.manager.createBundle(implid, bundleid);
+            var me = this,
+                b = me.manager.createBundle(implid, bundleid);
 
             cb(me.manager, b);
 
@@ -2300,12 +2448,12 @@ Oskari = (function () {
 
             var me = this;
             me.manager.on(config, cb, info);
-            var imports = config['Import-Bundle'];
+            var imports = config['Import-Bundle'],
+                p;
             for (p in imports) {
-                var pp = p;
-                var def = imports[p];
-
-                var bundlePath = def.bundlePath || me.bundlePath;
+                var pp = p,
+                    def = imports[p],
+                    bundlePath = def.bundlePath || me.bundlePath;
                 /*
                  * var bundleDefFilename = bundlePath + pp + "/bundle.js?ts=" +
                  * (new Date().getTime());
@@ -2328,15 +2476,17 @@ Oskari = (function () {
          * @method loadBundleDeps
          */
         loadBundleDeps: function (deps, callback, manager, info) {
-            var me = this;
-            var bdep = deps["Import-Bundle"];
-            var depslist = [];
-
-            var hasPhase = false;
+            var me = this,
+                bdep = deps["Import-Bundle"],
+                depslist = [],
+                hasPhase = false,
+                p,
+                name,
+                def;
 
             for (p in bdep) {
-                var name = p;
-                var def = bdep[p];
+                name = p;
+                def = bdep[p];
                 depslist.push({
                     name: name,
                     def: def,
@@ -2372,18 +2522,22 @@ Oskari = (function () {
          * maintains some a sort of order in loading
          */
         loadBundleDep: function (depslist, callback, manager, info) {
-            var me = this;
-            var bundledef = depslist.pop();
+            var me = this,
+                bundledef = depslist.pop(),
+                def,
+                bundlename,
+                fcd,
+                bdep;
             if (!bundledef) {
                 callback(manager);
                 return;
             }
 
-            var def = bundledef.def;
-            var bundlename = bundledef.name;
+            def = bundledef.def;
+            bundlename = bundledef.name;
 
-            var fcd = this;
-            var bdep = {
+            fcd = this;
+            bdep = {
                 "Import-Bundle": {}
             };
             bdep["Import-Bundle"][bundlename] = def;
@@ -2397,11 +2551,7 @@ Oskari = (function () {
          * load bundles regardless of order
          */
         loadBundleDepAsync: function (deps, callback, manager, info) {
-
-            var me = this;
-            var fcd = this;
-
-            fcd.require(deps, callback, info);
+            this.require(deps, callback, info);
         },
         /**
          * @method playBundle
@@ -2413,34 +2563,42 @@ Oskari = (function () {
         playBundle: function (recData, cb) {
 
             // alert(bundleRec.get('title'));
-            var metas = recData['metadata'];
-            var bundlename = recData['bundlename'];
-            var bundleinstancename = recData['bundleinstancename'];
-            var isSingleton = metas["Singleton"];
-            var fcd = this;
-            var me = this;
-            var instanceRequirements = metas["Require-Bundle-Instance"] || [];
-            var instanceProps = recData.instanceProps;
+            var metas = recData['metadata'],
+                bundlename = recData['bundlename'],
+                bundleinstancename = recData['bundleinstancename'],
+                isSingleton = metas["Singleton"],
+                fcd = this,
+                me = this,
+                instanceRequirements = metas["Require-Bundle-Instance"] || [],
+                instanceProps = recData.instanceProp,
+                r,
+                implInfo,
+                implid,
+                bundleid,
+                b,
+                bi,
+                configProps,
+                yy;
 
             me.loadBundleDeps(metas, function (manager) {
-                for (var r = 0; r < instanceRequirements.length; r++) {
-                    var implInfo = instanceRequirements[r];
+                for (r = 0; r < instanceRequirements.length; r += 1) {
+                    implInfo = instanceRequirements[r];
                     /* implname */
-                    var implid = (typeof (implInfo) === 'object') ? implInfo.bundlename : implInfo;
+                    implid = (typeof (implInfo) === 'object') ? implInfo.bundlename : implInfo;
                     /* bundlename */
-                    var bundleid = (typeof (implInfo) === 'object') ? implInfo.bundleinstancename : implInfo + "Instance";
-                    var b = me.bundles[implid];
+                    bundleid = (typeof (implInfo) === 'object') ? implInfo.bundleinstancename : implInfo + "Instance";
+                    b = me.bundles[implid];
                     if (!b) {
                         b = manager.createBundle(implid, bundleid);
                         me.bundles[implid] = b;
                     }
 
-                    var bi = me.bundleInstances[bundleid];
+                    bi = me.bundleInstances[bundleid];
                     if (!bi || !isSingleton) {
                         bi = manager.createInstance(bundleid);
                         me.bundleInstances[bundleid] = bi;
 
-                        var configProps = me.getBundleInstanceConfigurationByName(bundleid);
+                        configProps = me.getBundleInstanceConfigurationByName(bundleid);
                         if (configProps) {
                             for (ip in configProps) {
                                 bi[ip] = configProps[ip];
@@ -2451,13 +2609,13 @@ Oskari = (function () {
                 }
 
                 fcd.requireBundle(bundlename, bundleinstancename, function () {
-                    var yy = manager.createInstance(bundleinstancename);
+                    yy = manager.createInstance(bundleinstancename);
 
                     for (ip in instanceProps) {
                         yy[ip] = instanceProps[ip];
                     }
 
-                    var configProps = me.getBundleInstanceConfigurationByName(bundleinstancename);
+                    configProps = me.getBundleInstanceConfigurationByName(bundleinstancename);
                     if (configProps) {
                         for (ip in configProps) {
                             yy[ip] = configProps[ip];
@@ -2502,16 +2660,15 @@ Oskari = (function () {
          *
          */
         startApplication: function (cb) {
-            var me = this;
-            var appSetup = this.appSetup;
-            var appConfig = this.appConfig;
-            var seq = this.appSetup.startupSequence.slice(0);
-            var seqLen = seq.length;
-
-            var startupInfo = {
-                bundlesInstanceConfigurations: appConfig,
-                bundlesInstanceInfos: {}
-            };
+            var me = this,
+                appSetup = this.appSetup,
+                appConfig = this.appConfig,
+                seq = this.appSetup.startupSequence.slice(0),
+                seqLen = seq.length,
+                startupInfo = {
+                    bundlesInstanceConfigurations: appConfig,
+                    bundlesInstanceInfos: {}
+                };
 
             /**
              * Let's shift and playBundle until all done
@@ -2546,8 +2703,8 @@ Oskari = (function () {
 
                 mediator.facade.playBundle(mediator.bndl, function (bi) {
 
-                    var bndlName = mediator.bndl.bundlename;
-                    var bndlInstanceName = mediator.bndl.bundleinstancename;
+                    var bndlName = mediator.bndl.bundlename,
+                        bndlInstanceName = mediator.bndl.bundleinstancename;
 
                     mediator.startupInfo
                         .bundlesInstanceInfos[bndlInstanceName] = {
@@ -2590,13 +2747,12 @@ Oskari = (function () {
     /**
      * let's create bundle facade for bundle manager
      */
-    var fcd = new bundle_facade(bm);
-    var ga = cs.global;
+    var fcd = new bundle_facade(bm),
+        ga = cs.global,
+        bundle_dom_manager = function (dollar) {
+            this.$ = dollar;
+        };
 
-
-    var bundle_dom_manager = function (dollar) {
-        this.$ = dollar;
-    };
     bundle_dom_manager.prototype = {
         getEl: function (selector) {
             return this.$(selector);
@@ -2631,9 +2787,9 @@ Oskari = (function () {
     /* Oskari 2.x backport begin */
 
     /* o2 clazz module  */
-    var o2anonclass = 0;
-    var o2anoncategory = 0;
-    var o2anonbundle = 0;
+    var o2anonclass = 0,
+        o2anoncategory = 0,
+        o2anonbundle = 0;
 
     /* this is Oskari 2 modulespec prototype which provides a leaner API  */
 
@@ -2802,10 +2958,12 @@ Oskari = (function () {
          * @method Oskari.registerLocalization
          */
         registerLocalization: function (props) {
+            var p,
+                pp;
             /*console.log("registerLocalization",props);*/
             if (props.length) {
-                for (var p = 0; p < props.length; p++) {
-                    var pp = props[p];
+                for (p = 0; p < props.length; p++) {
+                    pp = props[p];
                     blocale.setLocalization(pp.lang, pp.key, pp.value);
                 }
             } else {
@@ -2927,7 +3085,6 @@ Oskari = (function () {
 
         /* o2 helper to access sandbox */
         sandbox: function (sandboxName) {
-
             var sandboxref = {
                 sandbox: ga.apply(cs, [sandboxName || 'sandbox'])
             };
@@ -2956,11 +3113,11 @@ Oskari = (function () {
                     }
                 }
             }, sandboxref.slicer = Array.prototype.slice, sandboxref.notify = function (eventName) {
-                var me = this;
-                var sandbox = me.sandbox;
-                var builder = me.sandbox.getEventBuilder(eventName);
-                var args = me.slicer.apply(arguments, [1]);
-                var eventObj = eventBuilder.apply(eventBuilder, args);
+                var me = this,
+                    sandbox = me.sandbox,
+                    builder = me.sandbox.getEventBuilder(eventName),
+                    args = me.slicer.apply(arguments, [1]),
+                    eventObj = eventBuilder.apply(eventBuilder, args);
                 return sandbox.notifyAll(eventObj);
             };
 
@@ -2981,10 +3138,10 @@ Oskari = (function () {
     /* o2 api for event class */
 
     o2main.eventCls = function (eventName, constructor, protoProps) {
-        var clazzName = ['Oskari', 'event', 'registry', eventName].join('.');
-        var rv = o2main.cls(clazzName, constructor, protoProps, {
-            protocol: ['Oskari.mapframework.event.Event']
-        });
+        var clazzName = ['Oskari', 'event', 'registry', eventName].join('.'),
+            rv = o2main.cls(clazzName, constructor, protoProps, {
+                protocol: ['Oskari.mapframework.event.Event']
+            });
 
         rv.category({
             getName: function () {
@@ -2999,10 +3156,10 @@ Oskari = (function () {
 
     /* o2 api for request class */
     o2main.requestCls = function (requestName, constructor, protoProps) {
-        var clazzName = ['Oskari', 'request', 'registry', requestName].join('.');
-        var rv = o2main.cls(clazzName, constructor, protoProps, {
-            protocol: ['Oskari.mapframework.request.Request']
-        });
+        var clazzName = ['Oskari', 'request', 'registry', requestName].join('.'),
+            rv = o2main.cls(clazzName, constructor, protoProps, {
+                protocol: ['Oskari.mapframework.request.Request']
+            });
 
         rv.category({
             getName: function () {
@@ -3077,8 +3234,8 @@ Oskari = (function () {
 
             return bi;
         }, rv.stop = function () {
-            var bundleid = this.___bundleIdentifier;
-            var bi = fcd.bundleInstances[bundleid];
+            var bundleid = this.___bundleIdentifier,
+                bi = fcd.bundleInstances[bundleid];
             return bi.stop();
         };
         1
