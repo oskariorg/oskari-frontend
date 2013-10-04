@@ -52,7 +52,7 @@
 		"state": {
 			"selectedLayers": [
 				{
-					"id": "ERM"
+					"id": "base_35"
 				}
 			],
 			"zoom": 1,
@@ -100,6 +100,24 @@
 					"id": "Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar"
 				}, {
                     "id": "Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin"
+                }, {
+                	"id": "Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin",
+                	"config": {
+                		"backoffIncrement": 1000,
+						"contextPath": "/transport-0.0.1",
+						"disconnectTime": 30000,
+						"hostname": "localhost",
+						"lazy": true,
+						"maxBackoff": 60000,
+						"maxNetworkDelay": 10000,
+						"port": "8888"
+                	}
+                }, {
+                	"id": "Oskari.mapframework.mapmodule.GetInfoPlugin",
+                	"config": {
+                		"ignoredLayerTypes": ["WFS"],
+                		"infoBox": false
+                	}
                 }
 			],
 			"layers": [
@@ -107,7 +125,7 @@
 					"wmsName": "meri_manner_tk",
 					"type": "wmslayer",
 					"id": "NLS",
-					"wmsUrl": "/karttatiili/dataset/inspire/service/wms?",
+					"wmsUrl": "http://a.karttatiili.fi/dataset/inspire/service/wms?",
 					"maxScale" : 1,
 					"minScale" : 2214570,
 					"name": "NLS Coast",
@@ -118,6 +136,38 @@
 					}
 				},
 				{
+					"dataUrl_uuid":"",
+					"wmsName":"kunnat_plus_2013",
+					"styles":{},
+					"orgName":"asdf",
+					"type":"wfslayer",
+					"baseLayerId":114,
+					"formats":{},
+					"isQueryable":true,
+					"id":425,
+					"minScale":1000000,
+					"dataUrl":"",
+					"style":"default",
+					"wmsUrl":"",
+					"title":{
+						"fi":"","sv":"","en":""
+					},
+					"epsg":4326,
+					"layerType":"wfslayer",
+					"resource_daily_max_per_ip":-1,
+					"inspireTheme":34,
+					"name":{
+						"fi":"Kunnat plus 2013 EPSG:4326",
+						"sv":"Kunnat plus 2013 EPSG:4326",
+						"en":"Kunnat plus 2013 EPSG:4326"
+					},
+					"name":"Kunnat plus 2013 EPSG:4326",
+					"opacity":100,
+					"subtitle":"",
+					"inspire":"Muut",
+					"maxScale":1
+				},
+				{
 					"type": "base",
 					"id": "base_35",
 					"name": "Background Map Series",
@@ -126,7 +176,7 @@
 							"wmsName": "taustakartta_800k",
 							"type": "wmslayer",
 							"id": 800,
-							"wmsUrl": "/karttatiili/dataset/inspire/service/wms?",
+							"wmsUrl": "http://a.karttatiili.fi/dataset/inspire/service/wms?",
 							"maxScale" : 200000,
 							"minScale" : 400000
 
@@ -135,7 +185,7 @@
 							"wmsName": "taustakartta_2000k",
 							"type": "wmslayer",
 							"id": 2000,
-							"wmsUrl": "/karttatiili/dataset/inspire/service/wms?",
+							"wmsUrl": "http://a.karttatiili.fi/dataset/inspire/service/wms?",
 							"maxScale" : 400000,
 							"minScale" : 800000
 
@@ -144,7 +194,7 @@
 							"wmsName": "taustakartta_4000k",
 							"type": "wmslayer",
 							"id": 4000,
-							"wmsUrl": "/karttatiili/dataset/inspire/service/wms?",
+							"wmsUrl": "http://a.karttatiili.fi/dataset/inspire/service/wms?",
 							"maxScale" : 800000
 
 						},
@@ -152,7 +202,7 @@
 							"wmsName": "taustakartta_8000k",
 							"type": "wmslayer",
 							"id": 8000,
-							"wmsUrl": "/karttatiili/dataset/inspire/service/wms?",
+							"wmsUrl": "http://a.karttatiili.fi/dataset/inspire/service/wms?",
 							"maxScale" : 2000000,
 							"minScale" : 2214570
 						}
@@ -178,5 +228,12 @@
 				"center": ".oskariui-center"
 			}
 		}
+	},
+
+	"featuredata2": {
+		"conf": {
+			"selectionTools": true
+		},
+		"state": {}
 	}
 }
