@@ -556,6 +556,10 @@ function(config) {
         if (this.conf && this.conf.font) {
             this.changeFont(this.conf.font, this.element);
         }
+
+        if (this.conf && this.conf.colourScheme) {
+            this.changeColourScheme(this.conf.colourScheme, this.element);
+        }
     },
 
     /**
@@ -612,6 +616,45 @@ function(config) {
         header.empty();
         header.css({
             'background-image': 'url("' + bgImg + '")'
+        });
+    },
+
+    /**
+     * Changes the colour scheme of the plugin
+     *
+     * @method changeColourScheme
+     * @param {Object} colourScheme object containing the colour settings for the plugin
+     *      {
+     *          bgColour: <the background color of the gfi header>,
+     *          titleColour: <the colour of the gfi title>,
+     *          headerColour: <the colour of the feature name>,
+     *          iconCls: <the icon class of the gfi close icon>
+     *      }
+     * @param {jQuery} div
+     */
+    changeColourScheme: function(colourScheme, div) {
+        div = div || this.element;
+
+        if (!div || !colourScheme) return;
+
+        // Change the colour of the header background
+        div.find('div.content-header').css({
+            'background-color': colourScheme.bgColour
+        });
+
+        // Change the colour of the arrow
+        div.find('div.styled-header-arrow').css({
+            'border-bottom-color': colourScheme.bgColour
+        });
+
+        // Change the icon class
+        var closeIcon = div.find('div.content-header div.content-close');
+        closeIcon.removeClass('icon-close').removeClass('icon-close-white');
+        closeIcon.addClass(colourScheme.iconCls);
+
+        // Change the colour of the header font
+        div.find('div.content-header div.content-header-title').css({
+            'color': colourScheme.titleColour
         });
     },
 

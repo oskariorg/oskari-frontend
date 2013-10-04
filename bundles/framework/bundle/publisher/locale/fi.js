@@ -102,7 +102,7 @@ Oskari.registerLocalization(
                         "gfiDialog": {
                             "title": "Kohteen tiedot",
                             "featureName": "Esikatselu",
-                            "featureDesc": "Värimaailman valinta vaikuttaa ainoastaan kohdetietolaatikon väritykseen"
+                            "featureDesc": "Värimaailman valinta vaikuttaa ainoastaan kohdetietolaatikon ja karttatasovalikon väritykseen"
                         }
                     }
                 },
