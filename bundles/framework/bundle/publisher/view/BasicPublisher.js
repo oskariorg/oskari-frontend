@@ -1180,7 +1180,7 @@ function(instance, localization, data) {
     },
 
     /**
-     * Changes the colour scheme of the getinfo plugin (currently no other changes).
+     * Changes the colour scheme of the getinfo plugin and layer selection plugin.
      *
      * @method changeColourScheme
      * @param {Object} colourScheme
@@ -1190,6 +1190,12 @@ function(instance, localization, data) {
         if (infoPlugin) {
             infoPlugin.config = infoPlugin.config || {};
             infoPlugin.config.colourScheme = colourScheme;
+        }
+
+        var mlp = this.maplayerPanel;
+        mlp.pluginConfig.colourScheme = colourScheme;
+        if (mlp.isEnabled() && mlp.plugin.changeColourScheme) {
+            mlp.plugin.changeColourScheme(colourScheme);
         }
     },
 
