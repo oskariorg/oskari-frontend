@@ -20,17 +20,17 @@
  * - this implementation does not provide super.func() calls - may be added at a later stage
  *
  */
-Oskari = (function() {
+Oskari = (function () {
 
     var isDebug = false;
     var isConsole = window.console != null && window.console.debug;
 
-    var logMsg = function(msg) {
-        if(!isDebug) {
+    var logMsg = function (msg) {
+        if (!isDebug) {
             return;
         }
 
-        if(!isConsole) {
+        if (!isConsole) {
             return;
         }
         window.console.debug(msg);
@@ -39,26 +39,49 @@ Oskari = (function() {
     /**
      * @class Oskari.bundle_locale
      */
-    var bundle_locale = function() {
+    var bundle_locale = function () {
         this.lang = null;
         this.localizations = {};
-
+        this.supportedLocales = null;
     };
 
     bundle_locale.prototype = {
-        setLocalization : function(lang, key, value) {
-            if(!this.localizations[lang])
+        setLocalization: function (lang, key, value) {
+            if (!this.localizations[lang])
                 this.localizations[lang] = {};
             this.localizations[lang][key] = value;
         },
-        setLang : function(lang) {
+        setLang: function (lang) {
             this.lang = lang;
         },
-        getLang : function() {
+        setSupportedLocales: function (locales) {
+            this.supportedLocales = locales;
+        },
+        getLang: function () {
             return this.lang;
         },
-        getLocalization : function(key) {
+        getLocalization: function (key) {
             return this.localizations[this.lang][key];
+        },
+        getSupportedLocales: function () {
+            if (this.supportedLocales) {
+                return this.supportedLocales;
+            }
+            return [];
+        },
+        getDefaultLanguage: function () {
+            var locale = this.supportedLocales[0];
+            return locale.substring(0, locale.indexOf("_"));
+        },
+        getSupportedLanguages: function () {
+            var langs = [],
+                locale,
+                i;
+            for (i = 0; i < this.supportedLocales.length; i += 1) {
+                locale = this.supportedLocales[i];
+                langs.push(locale.substring(0, locale.indexOf("_")));
+            }
+            return langs;
         }
     };
 
@@ -66,6 +89,7 @@ Oskari = (function() {
      * let's create locale support
      */
     var blocale = new bundle_locale();
+    var localesURL = null;
 
     /*
      * 'dev' adds ?ts=<instTs> parameter to js loads 'default' does not add
@@ -80,14 +104,14 @@ Oskari = (function() {
     var basePathForBundles = null;
 
     var pathBuilders = {
-        'default' : function(fn, bpath) {
-            if(basePathForBundles) {
+        'default': function (fn, bpath) {
+            if (basePathForBundles) {
                 return basePathForBundles + fn;
             }
             return fn;
         },
-        'dev' : function(fn, bpath) {
-            if(basePathForBundles) {
+        'dev': function (fn, bpath) {
+            if (basePathForBundles) {
                 return basePathForBundles + fn + "?ts=" + instTs;
             }
             return fn + "?ts=" + instTs;
@@ -96,8 +120,8 @@ Oskari = (function() {
 
     function buildPathForLoaderMode(fn, bpath) {
         var pathBuilder = pathBuilders[mode];
-        if(!pathBuilder) {
-            if(basePathForBundles) {
+        if (!pathBuilder) {
+            if (basePathForBundles) {
                 return basePathForBundles + fn;
             }
             return fn;
@@ -107,9 +131,9 @@ Oskari = (function() {
     }
 
     var isNotPackMode = {
-        'dev' : true,
-        'default' : true,
-        'static' : true
+        'dev': true,
+        'default': true,
+        'static': true
     };
 
     function isPackedMode() {
@@ -117,6 +141,7 @@ Oskari = (function() {
     }
 
     var _preloaded = false;
+
     function preloaded() {
         return _preloaded;
     }
@@ -138,11 +163,11 @@ Oskari = (function() {
      *
      * This is an adapter class template that should not be used directly
      */
-    var clazzadapter = function(i, md) {
+    var clazzadapter = function (i, md) {
         this.impl = i;
 
         /* set overridden methods intentionally to instance */
-        for(p in md) {
+        for (p in md) {
             this[p] = md[p];
         }
     };
@@ -150,7 +175,7 @@ Oskari = (function() {
         /**
          * @method define
          */
-        "define" : function() {
+        "define": function () {
             throw "define not supported for this adapter " + this.impl;
         },
         /**
@@ -163,7 +188,7 @@ Oskari = (function() {
          * required to support asynchronous javascript loading.
          *
          */
-        "category" : function() {
+        "category": function () {
             throw "category not supported for this adapter " + this.impl;
         },
         /**
@@ -171,7 +196,7 @@ Oskari = (function() {
          *
          * Creates an class instance initialized with constructors varargs
          */
-        "create" : function() {
+        "create": function () {
             throw "create not supported for this adapter " + this.impl;
 
         },
@@ -180,7 +205,7 @@ Oskari = (function() {
          *
          * Constructs an object initialised with a property object
          */
-        "construct" : function() {
+        "construct": function () {
             throw "construct not supported for this adapter " + this.impl;
 
         },
@@ -189,7 +214,7 @@ Oskari = (function() {
          *
          * Accesses or sets a global (in this context) variable value
          */
-        "global" : function() {
+        "global": function () {
             throw "global not supported for this adapter " + this.impl;
 
         },
@@ -199,7 +224,7 @@ Oskari = (function() {
          * Provides access to class metadata
          *
          */
-        "metadata" : function() {
+        "metadata": function () {
             throw "metadata not supported for this adapter " + this.impl;
 
         },
@@ -208,11 +233,11 @@ Oskari = (function() {
          *
          * Provides access to all classes that implement queried protocol
          */
-        "protocol" : function() {
+        "protocol": function () {
             throw "protocol not supported for this adapter " + this.impl;
 
         },
-        "purge" : function() {
+        "purge": function () {
             throw "purge not supported for this adapter " + this.impl;
         }
     };
@@ -222,7 +247,7 @@ Oskari = (function() {
      *
      * A Container for any Oskari class definitions
      */
-    var clazzdef = function() {
+    var clazzdef = function () {
 
         this.packages = {};
         this.protocols = {};
@@ -239,7 +264,7 @@ Oskari = (function() {
      */
     var nativeadapter = new clazzadapter(new clazzdef(), {
 
-        "purge" : function() {
+        "purge": function () {
 
         },
         /**
@@ -251,9 +276,9 @@ Oskari = (function() {
          *            the name of the protocol as string
          *
          */
-        "protocol" : function() {
+        "protocol": function () {
             var args = arguments;
-            if(args.length == 0)
+            if (args.length == 0)
                 throw "missing arguments";
 
             // var cdef = args[0];
@@ -269,9 +294,9 @@ Oskari = (function() {
          * @param classname
          *            the name of the class as string
          */
-        "metadata" : function() {
+        "metadata": function () {
             var args = arguments;
-            if(args.length == 0)
+            if (args.length == 0)
                 throw "missing arguments";
 
             var cdef = args[0];
@@ -281,14 +306,14 @@ Oskari = (function() {
             var bp = null;
             var pp = null;
             var sp = null;
-            if(!pdefsp) {
+            if (!pdefsp) {
                 var parts = cdef.split('.');
                 bp = parts[0];
                 pp = parts[1];
                 sp = parts.slice(2).join('.');
 
                 var pdef = this.impl.packages[pp];
-                if(!pdef) {
+                if (!pdef) {
                     pdef = {};
                     this.impl.packages[pp] = pdef;
                 }
@@ -297,7 +322,7 @@ Oskari = (function() {
 
             }
 
-            if(!pdefsp)
+            if (!pdefsp)
                 throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
 
             return pdefsp._metadata;
@@ -309,18 +334,18 @@ Oskari = (function() {
          *
          * Updates and binds class metadata
          */
-        "updateMetadata" : function(bp, pp, sp, pdefsp, classMeta) {
-            if(!pdefsp._metadata)
+        "updateMetadata": function (bp, pp, sp, pdefsp, classMeta) {
+            if (!pdefsp._metadata)
                 pdefsp._metadata = {};
 
             pdefsp._metadata['meta'] = classMeta;
 
             var protocols = classMeta['protocol'];
-            if(protocols) {
-                for(var p = 0; p < protocols.length; p++) {
+            if (protocols) {
+                for (var p = 0; p < protocols.length; p++) {
                     var pt = protocols[p];
 
-                    if(!this.impl.protocols[pt]) {
+                    if (!this.impl.protocols[pt]) {
                         this.impl.protocols[pt] = {};
                     }
 
@@ -331,11 +356,11 @@ Oskari = (function() {
             }
 
         },
-        _super : function() {
+        _super: function () {
             var supCat = arguments[0];
             var supMet = arguments[1];
             var me = this;
-            return function() {
+            return function () {
                 return me['_']._superCategory[supCat][supMet].apply(me, arguments);
             }
         },
@@ -353,9 +378,9 @@ Oskari = (function() {
          * @param {Object}
          *            metadata optional metadata for the class
          */
-        define : function() {
+        define: function () {
             var args = arguments;
-            if(args.length == 0)
+            if (args.length == 0)
                 throw "missing arguments";
 
             var cdef = args[0];
@@ -371,14 +396,14 @@ Oskari = (function() {
             var sp = parts.slice(2).join('.');
 
             var pdef = this.impl.packages[pp];
-            if(!pdef) {
+            if (!pdef) {
                 pdef = {};
                 this.impl.packages[pp] = pdef;
             }
 
             var pdefsp = pdef[sp];
 
-            if(pdefsp) {
+            if (pdefsp) {
                 // update constrcutor
                 pdefsp._constructor = args[1];
 
@@ -386,19 +411,19 @@ Oskari = (function() {
                 var catFuncs = args[2];
                 var prot = pdefsp._class.prototype;
 
-                for(p in catFuncs) {
+                for (p in catFuncs) {
                     var pi = catFuncs[p];
 
                     prot[p] = pi;
                 }
                 var catName = cdef;
                 pdefsp._category[catName] = catFuncs;
-                if(args.length > 3) {
+                if (args.length > 3) {
 
                     var extnds = args[3].extend;
-                    for(var e = 0; extnds && e < extnds.length; e++) {
+                    for (var e = 0; extnds && e < extnds.length; e++) {
                         var superClazz = this.lookup(extnds[e]);
-                        if(!superClazz._composition.subClazz)
+                        if (!superClazz._composition.subClazz)
                             superClazz._composition.subClazz = {};
                         superClazz._composition.subClazz[extnds[e]] = pdefsp;
                         pdefsp._composition.superClazz = superClazz;
@@ -413,21 +438,19 @@ Oskari = (function() {
                 return pdefsp;
             }
 
-            var cd = function() {
-            };
+            var cd = function () {};
             var compo = {
-                clazzName : cdef,
-                superClazz : null,
-                subClazz : null
+                clazzName: cdef,
+                superClazz: null,
+                subClazz: null
             };
-            cd.prototype = {
-            };
+            cd.prototype = {};
             //args[2];
             pdefsp = {
-                _class : cd,
-                _constructor : args[1],
-                _category : {},
-                _composition : compo
+                _class: cd,
+                _constructor: args[1],
+                _category: {},
+                _composition: compo
             };
             cd.prototype['_'] = pdefsp;
             cd.prototype['_super'] = this['_super'];
@@ -436,7 +459,7 @@ Oskari = (function() {
             var catFuncs = args[2];
             var prot = cd.prototype;
 
-            for(p in catFuncs) {
+            for (p in catFuncs) {
                 var pi = catFuncs[p];
 
                 prot[p] = pi;
@@ -450,12 +473,12 @@ Oskari = (function() {
             var catName = cdef;
             pdefsp._category[catName] = args[2];
 
-            if(args.length > 3) {
+            if (args.length > 3) {
 
                 var extnds = args[3].extend;
-                for(var e = 0; extnds && e < extnds.length; e++) {
+                for (var e = 0; extnds && e < extnds.length; e++) {
                     var superClazz = this.lookup(extnds[e]);
-                    if(!superClazz._composition.subClazz)
+                    if (!superClazz._composition.subClazz)
                         superClazz._composition.subClazz = {};
                     superClazz._composition.subClazz[cdef] = pdefsp;
                     pdefsp._composition.superClazz = superClazz;
@@ -476,9 +499,9 @@ Oskari = (function() {
          * Oskari.clazz.category('Oskari.mapframework.request.common.ActivateOpenlayersMapControlRequest',
          * 'map-layer-funcs',{ "xxx": function() {} });
          */
-        category : function() {
+        category: function () {
             var args = arguments;
-            if(args.length == 0)
+            if (args.length == 0)
                 throw "missing arguments";
 
             var cdef = args[0];
@@ -493,27 +516,25 @@ Oskari = (function() {
             var sp = parts.slice(2).join('.');
 
             var pdef = this.impl.packages[pp];
-            if(!pdef) {
+            if (!pdef) {
                 pdef = {};
                 this.impl.packages[pp] = pdef;
             }
             var pdefsp = pdef[sp];
 
-            if(!pdefsp) {
-                var cd = function() {
-                };
+            if (!pdefsp) {
+                var cd = function () {};
                 var compo = {
-                    clazzName : cdef,
-                    superClazz : null,
-                    subClazz : null
+                    clazzName: cdef,
+                    superClazz: null,
+                    subClazz: null
                 };
-                cd.prototype = {
-                };
+                cd.prototype = {};
                 pdefsp = {
-                    _class : cd,
-                    _constructor : args[1],
-                    _category : {},
-                    _composition : compo
+                    _class: cd,
+                    _constructor: args[1],
+                    _category: {},
+                    _composition: compo
                 };
                 cd.prototype['_'] = pdefsp;
                 cd.prototype['_super'] = this['_super'];
@@ -526,7 +547,7 @@ Oskari = (function() {
             var catFuncs = args[2];
             var prot = pdefsp._class.prototype;
 
-            for(p in catFuncs) {
+            for (p in catFuncs) {
                 var pi = catFuncs[p];
 
                 prot[p] = pi;
@@ -536,7 +557,7 @@ Oskari = (function() {
 
             this.pullDown(pdefsp);
             this.pushDown(pdefsp);
-            
+
             return pdefsp;
         },
         /**
@@ -548,9 +569,9 @@ Oskari = (function() {
          * -
          *
          */
-        lookup : function() {
+        lookup: function () {
             var args = arguments;
-            if(args.length == 0)
+            if (args.length == 0)
                 throw "missing arguments";
 
             var cdef = args[0];
@@ -565,26 +586,25 @@ Oskari = (function() {
             var sp = parts.slice(2).join('.');
 
             var pdef = this.impl.packages[pp];
-            if(!pdef) {
+            if (!pdef) {
                 pdef = {};
                 this.impl.packages[pp] = pdef;
             }
             var pdefsp = pdef[sp];
 
-            if(!pdefsp) {
-                var cd = function() {
-                };
+            if (!pdefsp) {
+                var cd = function () {};
                 cd.prototype = {};
                 var compo = {
-                    clazzName : cdef,
-                    superClazz : null,
-                    subClazz : null
+                    clazzName: cdef,
+                    superClazz: null,
+                    subClazz: null
                 };
                 pdefsp = {
-                    _class : cd,
-                    _constructor : args[1],
-                    _category : {},
-                    _composition : compo
+                    _class: cd,
+                    _constructor: args[1],
+                    _category: {},
+                    _composition: compo
                 };
                 this.impl.inheritance[cdef] = compo;
                 pdef[sp] = pdefsp;
@@ -593,18 +613,18 @@ Oskari = (function() {
 
             return pdefsp;
         },
-        extend : function() {
+        extend: function () {
             var args = arguments;
             var superClazz = this.lookup(args[1]);
             var subClazz = this.lookup(args[0]);
-            if(!superClazz._composition.subClazz)
+            if (!superClazz._composition.subClazz)
                 superClazz._composition.subClazz = {};
             superClazz._composition.subClazz[args[0]] = subClazz;
             subClazz._composition.superClazz = superClazz;
             this.pullDown(subClazz);
             return subClazz;
         },
-        composition : function() {
+        composition: function () {
             var cdef = arguments[0];
 
             var pdefsp = this.impl.clazzcache[cdef];
@@ -612,14 +632,14 @@ Oskari = (function() {
             var bp = null;
             var pp = null;
             var sp = null;
-            if(!pdefsp) {
+            if (!pdefsp) {
                 var parts = cdef.split('.');
                 bp = parts[0];
                 pp = parts[1];
                 sp = parts.slice(2).join('.');
 
                 var pdef = this.impl.packages[pp];
-                if(!pdef) {
+                if (!pdef) {
                     pdef = {};
                     this.impl.packages[pp] = pdef;
                 }
@@ -638,12 +658,12 @@ Oskari = (function() {
          * implemented
          *
          */
-        pushDown : function(pdefsp) {
+        pushDown: function (pdefsp) {
             /* !self */
-            if(!pdefsp._composition.subClazz) {
+            if (!pdefsp._composition.subClazz) {
                 return;
             }
-            for(var sub in pdefsp._composition.subClazz) {
+            for (var sub in pdefsp._composition.subClazz) {
                 var pdefsub = pdefsp._composition.subClazz[sub];
                 this.pullDown(pdefsub);
                 this.pushDown(pdefsub);
@@ -656,8 +676,8 @@ Oskari = (function() {
          * no intermediate results are being consolidated
          *
          */
-        pullDown : function(pdefsp) {
-            if(!pdefsp._composition.superClazz) {
+        pullDown: function (pdefsp) {
+            if (!pdefsp._composition.superClazz) {
                 return;
             }
 
@@ -666,9 +686,9 @@ Oskari = (function() {
 
             var funcs = {};
             var spr = pdefsp;
-            while(true) {
+            while (true) {
                 spr = spr._composition.superClazz;
-                if(!spr) {
+                if (!spr) {
                     break;
                 }
                 clazzHierarchy.push(spr);
@@ -677,18 +697,18 @@ Oskari = (function() {
             var prot = pdefsp._class.prototype;
             var constructors = [];
             var superClazzMethodCats = {};
-            for(var s = clazzHierarchy.length - 1; s >= 0; s--) {
+            for (var s = clazzHierarchy.length - 1; s >= 0; s--) {
                 var cn = clazzHierarchy[s]._composition.clazzName;
 
                 var ctor = clazzHierarchy[s]._constructor;
                 constructors.push(ctor);
 
                 var superClazzMetCat = {};
-                for(var c in clazzHierarchy[s]._category ) {
+                for (var c in clazzHierarchy[s]._category) {
 
                     var catName = cn + "#" + c;
                     var catFuncs = clazzHierarchy[s]._category[c];
-                    for(p in catFuncs) {
+                    for (p in catFuncs) {
                         var pi = catFuncs[p];
                         prot[p] = pi;
                         superClazzMetCat[p] = pi;
@@ -705,9 +725,9 @@ Oskari = (function() {
          * @method printAncestry
          * prints class inheritance to console
          */
-        printAncestry : function() {
+        printAncestry: function () {
             var pdefsp = this.lookup.apply(this, arguments);
-            if(!pdefsp._composition.superClazz) {
+            if (!pdefsp._composition.superClazz) {
                 return;
             }
 
@@ -715,40 +735,40 @@ Oskari = (function() {
             clazzHierarchy.push(pdefsp);
 
             var spr = pdefsp;
-            while(true) {
+            while (true) {
                 spr = spr._composition.superClazz;
-                if(!spr) {
+                if (!spr) {
                     break;
                 }
                 clazzHierarchy.push(spr);
             }
-            for(var s = clazzHierarchy.length - 1; s >= 0; s--) {
-				if (console && console.log) {
-					console.log("                 ".substring(0, clazzHierarchy.length - s) + "|_ " + clazzHierarchy[s]._composition.clazzName);
-				}
+            for (var s = clazzHierarchy.length - 1; s >= 0; s--) {
+                if (console && console.log) {
+                    console.log("                 ".substring(0, clazzHierarchy.length - s) + "|_ " + clazzHierarchy[s]._composition.clazzName);
+                }
             }
         },
         /**
          * @method printHierarchy
          * print subclasses to console
          */
-        printHierarchy : function() {
+        printHierarchy: function () {
             var pdefsp = this.lookup.apply(this, arguments);
-            if(!pdefsp._composition.subClazz) {
+            if (!pdefsp._composition.subClazz) {
                 return;
             }
             var clazzHierarchy = [];
             var taskList = [];
 
             taskList.push({
-                c : null,
-                sub : pdefsp,
-                level : 0
+                c: null,
+                sub: pdefsp,
+                level: 0
             });
 
-            while(true) {
+            while (true) {
                 var task = taskList.shift();
-                if(!task) {
+                if (!task) {
                     break;
 
                 }
@@ -757,38 +777,38 @@ Oskari = (function() {
 
                 var pdefc = task.c;
                 var pdefsub = task.sub;
-                if(!pdefsub._composition.subClazz)
+                if (!pdefsub._composition.subClazz)
                     continue;
 
-                for(var p in pdefsub._composition.subClazz ) {
+                for (var p in pdefsub._composition.subClazz) {
                     taskList.push({
-                        c : pdefc,
-                        sub : pdefsub._composition.subClazz[p],
-                        level : task.level + 1
+                        c: pdefc,
+                        sub: pdefsub._composition.subClazz[p],
+                        level: task.level + 1
                     });
                 }
             }
 
-            for(var s = 0; s < clazzHierarchy.length; s++) {
-				if (console && console.log) {
-					console.log(clazzHierarchy[s]);
-				}
+            for (var s = 0; s < clazzHierarchy.length; s++) {
+                if (console && console.log) {
+                    console.log(clazzHierarchy[s]);
+                }
             }
 
         },
         /**
          * @method apropos
          */
-        apropos : function() {
+        apropos: function () {
             var pdefsp = this.lookup.apply(this, arguments);
 
-            for(p in pdefsp._category[arguments[0]]) {
-				if (console && console.log) {
-					console.log(p);
-				}
+            for (p in pdefsp._category[arguments[0]]) {
+                if (console && console.log) {
+                    console.log(p);
+                }
             }
         },
-        slicer : Array.prototype.slice,
+        slicer: Array.prototype.slice,
 
         /*
          * @method create
@@ -799,11 +819,12 @@ Oskari = (function() {
          * var x =
          * Oskari.clazz.create('Oskari.mapframework.request.common.ActivateOpenlayersMapControlRequest','12313');
          */
-        create : function() {
+        create: function () {
             var args = arguments;
-            if(args.length == 0)
+            if (args.length == 0)
                 throw "missing arguments";
-            var instargs = this.slicer.apply(arguments, [1])/*[];
+            var instargs = this.slicer.apply(arguments, [1])
+            /*[];
              for(var n = 1; n < args.length; n++)
              instargs.push(args[n]);*/
 
@@ -814,14 +835,14 @@ Oskari = (function() {
             var bp = null;
             var pp = null;
             var sp = null;
-            if(!pdefsp) {
+            if (!pdefsp) {
                 var parts = cdef.split('.');
                 bp = parts[0];
                 pp = parts[1];
                 sp = parts.slice(2).join('.');
 
                 var pdef = this.impl.packages[pp];
-                if(!pdef) {
+                if (!pdef) {
                     pdef = {};
                     this.impl.packages[pp] = pdef;
                 }
@@ -830,13 +851,13 @@ Oskari = (function() {
 
             }
 
-            if(!pdefsp)
+            if (!pdefsp)
                 throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
 
             var inst = new pdefsp._class();
             var ctors = pdefsp._constructors;
-            if(ctors) {
-                for(var c = 0; c < ctors.length; c++) {
+            if (ctors) {
+                for (var c = 0; c < ctors.length; c++) {
                     ctors[c].apply(inst, instargs);
                 }
             } else {
@@ -844,15 +865,17 @@ Oskari = (function() {
             }
             return inst;
         },
-        createWithPdefsp : function() {
+        createWithPdefsp: function () {
             var args = arguments;
             if (args.length == 0)
                 throw "missing arguments";
-            var instargs = arguments[1], pdefsp = args[0];
+            var instargs = arguments[1],
+                pdefsp = args[0];
             if (!pdefsp)
                 throw "clazz does not exist ";
 
-            var inst = new pdefsp._class(), ctors = pdefsp._constructors;
+            var inst = new pdefsp._class(),
+                ctors = pdefsp._constructors;
             if (ctors) {
                 for (var c = 0; c < ctors.length; c++) {
                     ctors[c].apply(inst, instargs);
@@ -870,9 +893,9 @@ Oskari = (function() {
          *
          *
          */
-        construct : function() {
+        construct: function () {
             var args = arguments;
-            if(args.length != 2)
+            if (args.length != 2)
                 throw "missing arguments";
 
             var cdef = args[0];
@@ -883,14 +906,14 @@ Oskari = (function() {
             var bp = null;
             var pp = null;
             var sp = null;
-            if(!pdefsp) {
+            if (!pdefsp) {
                 var parts = cdef.split('.');
                 bp = parts[0];
                 pp = parts[1];
                 sp = parts.slice(2).join('.');
 
                 var pdef = this.impl.packages[pp];
-                if(!pdef) {
+                if (!pdef) {
                     pdef = {};
                     this.impl.packages[pp] = pdef;
                 }
@@ -899,7 +922,7 @@ Oskari = (function() {
 
             }
 
-            if(!pdefsp)
+            if (!pdefsp)
                 throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
 
             var inst = new pdefsp._class();
@@ -913,9 +936,9 @@ Oskari = (function() {
          * builders
          * @param classname
          */
-        builder : function() {
+        builder: function () {
             var args = arguments;
-            if(args.length == 0)
+            if (args.length == 0)
                 throw "missing arguments";
 
             var cdef = args[0];
@@ -926,14 +949,14 @@ Oskari = (function() {
             var pp = null;
             var sp = null;
 
-            if(!pdefsp) {
+            if (!pdefsp) {
                 var parts = cdef.split('.');
                 bp = parts[0];
                 pp = parts[1];
                 sp = parts.slice(2).join('.');
 
                 var pdef = this.impl.packages[pp];
-                if(!pdef) {
+                if (!pdef) {
                     pdef = {};
                     this.impl.packages[pp] = pdef;
                 }
@@ -942,18 +965,18 @@ Oskari = (function() {
 
             }
 
-            if(!pdefsp)
+            if (!pdefsp)
                 throw "clazz " + sp + " does not exist in package " + pp + " bundle " + bp;
 
-            if(pdefsp._builder)
+            if (pdefsp._builder)
                 return pdefsp._builder;
 
-            pdefsp._builder = function() {
+            pdefsp._builder = function () {
                 var instargs = arguments;
                 var inst = new pdefsp._class();
                 var ctors = pdefsp._constructors;
-                if(ctors) {
-                    for(var c = 0; c < ctors.length; c++) {
+                if (ctors) {
+                    for (var c = 0; c < ctors.length; c++) {
                         ctors[c].apply(inst, instargs);
                     }
                 }
@@ -963,14 +986,14 @@ Oskari = (function() {
             return pdefsp._builder;
 
         },
-         /**
+        /**
          * @builder
          *
          * Implements Oskari frameworks support for cached class instance
          * builders
          * @param classname
          */
-        builderFromPdefsp : function() {
+        builderFromPdefsp: function () {
             var args = arguments;
             if (args.length == 0)
                 throw "missing arguments";
@@ -983,8 +1006,10 @@ Oskari = (function() {
             if (pdefsp._builder)
                 return pdefsp._builder;
 
-            pdefsp._builder = function() {
-                var instargs = arguments, inst = new pdefsp._class(), ctors = pdefsp._constructors;
+            pdefsp._builder = function () {
+                var instargs = arguments,
+                    inst = new pdefsp._class(),
+                    ctors = pdefsp._constructors;
                 if (ctors) {
                     for (var c = 0; c < ctors.length; c++) {
                         ctors[c].apply(inst, instargs);
@@ -997,7 +1022,7 @@ Oskari = (function() {
             return pdefsp._builder;
 
         }
-        
+
     });
 
     /**
@@ -1008,7 +1033,7 @@ Oskari = (function() {
      * different class libraries
      *
      */
-    var clazz = function(regExp, adapter) {
+    var clazz = function (regExp, adapter) {
         this.defRex = new RegExp(regExp);
         this.def = adapter;
         this.hasOtherNs = false;
@@ -1020,9 +1045,9 @@ Oskari = (function() {
 
     clazz.prototype = {
 
-        get : function() {
+        get: function () {
             var args = arguments;
-            if(!this.hasOtherNs || this.defRex.test(args[0])) {
+            if (!this.hasOtherNs || this.defRex.test(args[0])) {
                 return this.def;
             }
 
@@ -1030,7 +1055,7 @@ Oskari = (function() {
             var bp = parts[0];
 
             var ai = this.ns[bp];
-            if(!ai)
+            if (!ai)
                 throw "clazz: ns NOT bound " + bp;
             return ai;
         },
@@ -1040,9 +1065,9 @@ Oskari = (function() {
          * returns class adapter for the given class libray
          *
          */
-        self : function(bp) {
+        self: function (bp) {
             var ai = this.ns[bp];
-            if(!ai)
+            if (!ai)
                 throw "clazz: ns NOT bound " + bp;
 
             return ai.self;
@@ -1052,7 +1077,7 @@ Oskari = (function() {
          *
          * registers an adapter to the class system
          */
-        adapt : function(base, adapter) {
+        adapt: function (base, adapter) {
             this.ns[base] = adapter;
             this.hasOtherNs = true;
         },
@@ -1065,7 +1090,7 @@ Oskari = (function() {
          *
          * Parameters differ for different class adapters
          */
-        define : function() {
+        define: function () {
             var ai = this.get.apply(this, arguments);
 
             return ai.define.apply(ai, arguments);
@@ -1078,19 +1103,19 @@ Oskari = (function() {
          * @param classname
          *            Parameters differ for different class adapters
          */
-        category : function() {
+        category: function () {
             var ai = this.get.apply(this, arguments);
 
             return ai.category.apply(ai, arguments);
 
         },
-        composition : function() {
+        composition: function () {
             var ai = this.get.apply(this, arguments);
 
             return ai.composition.apply(ai, arguments);
 
         },
-        extend : function() {
+        extend: function () {
             var ai = this.get.apply(this, arguments);
 
             return ai.extend.apply(ai, arguments);
@@ -1102,15 +1127,15 @@ Oskari = (function() {
          *            Parameters differ for different class adapters
          *
          */
-        create : function() {
+        create: function () {
             var ai = this.get.apply(this, arguments);
 
             return ai.create.apply(ai, arguments);
 
         },
-        createWithPdefsp: function() {
+        createWithPdefsp: function () {
             var ai = this.get.apply(this, arguments);
-            return ai.createWithPdefsp.apply(ai,arguments);
+            return ai.createWithPdefsp.apply(ai, arguments);
         },
         /**
          * @method construct
@@ -1119,7 +1144,7 @@ Oskari = (function() {
          *
          * Constructs an instance with a property object
          */
-        construct : function() {
+        construct: function () {
             var ai = this.get.apply(this, arguments);
 
             return ai.construct.apply(ai, arguments);
@@ -1132,7 +1157,7 @@ Oskari = (function() {
          *            element in array
          *
          */
-        createArrArgs : function(args) {
+        createArrArgs: function (args) {
             var ai = this.get.apply(this, arguments);
             return ai.create.apply(ai, args);
 
@@ -1142,12 +1167,12 @@ Oskari = (function() {
          * @param classname
          *            returns a class instance builder that can be reused
          */
-        builder : function() {
+        builder: function () {
             var ai = this.get.apply(this, arguments);
 
             return ai.builder.apply(ai, arguments);
         },
-        builderFromPdefsp : function() {
+        builderFromPdefsp: function () {
             var ai = this.get.apply(this, arguments);
 
             return ai.builderFromPdefsp.apply(ai, arguments);
@@ -1159,11 +1184,11 @@ Oskari = (function() {
          * @param optional
          *            value gets or sets a global variable for Oskari context
          */
-        global : function() {
-            if(arguments.length == 0)
+        global: function () {
+            if (arguments.length == 0)
                 return this.globals;
             var name = arguments[0];
-            if(arguments.length == 2) {
+            if (arguments.length == 2) {
                 this.globals[name] = arguments[1];
             }
             return this.globals[name];
@@ -1175,7 +1200,7 @@ Oskari = (function() {
          * returns class metadata if available
          * @param classname
          */
-        "metadata" : function() {
+        "metadata": function () {
             var ai = this.get.apply(this, arguments);
 
             return ai.metadata.apply(ai, arguments);
@@ -1187,33 +1212,33 @@ Oskari = (function() {
          * definition is present, creates a template class definition
          *
          */
-        "protocol" : function() {
+        "protocol": function () {
             var ai = this.get.apply(this, arguments);
 
             return ai.protocol.apply(ai, arguments);
         },
-        "purge" : function() {
+        "purge": function () {
             var ai = this.get.apply(this, arguments);
 
             return ai.purge.apply(ai, arguments);
 
         },
-        "printAncestry" : function() {
+        "printAncestry": function () {
             var ai = this.get.apply(this, arguments);
             return ai.printAncestry.apply(ai, arguments);
 
         },
-        "printHierarchy" : function() {
+        "printHierarchy": function () {
             var ai = this.get.apply(this, arguments);
             return ai.printHierarchy.apply(ai, arguments);
 
         },
-        "apropos" : function() {
+        "apropos": function () {
             var ai = this.get.apply(this, arguments);
             return ai.apropos.apply(ai, arguments);
 
         },
-        "lookup" : function() {
+        "lookup": function () {
             var ai = this.get.apply(this, arguments);
             return ai.lookup.apply(ai, arguments);
         }
@@ -1234,7 +1259,7 @@ Oskari = (function() {
      * various javascript loaders (Ext, ...)
      *
      */
-    var bundle_loader = function(manager, cb) {
+    var bundle_loader = function (manager, cb) {
         this.loader_identifier = ++bundle_loader_id;
         this.manager = manager;
         this.callback = cb;
@@ -1250,26 +1275,26 @@ Oskari = (function() {
         /**
          * @method adds a script loading request
          */
-        "add" : function(fn,pdef) {
+        "add": function (fn, pdef) {
             var me = this;
-            if(!me.files[fn]) {
+            if (!me.files[fn]) {
                 var def = {
-                    src : fn,
-                    type: ( pdef ? pdef.type : null ) ||"text/javascript",
+                    src: fn,
+                    type: (pdef ? pdef.type : null) || "text/javascript",
                     id: pdef ? pdef.id : null,
                     state: false
-                    
+
                 };
                 me.files[fn] = def;
-                
-                if( "text/javascript" === def.type) {
-                	me.filesRequested++;
+
+                if ("text/javascript" === def.type) {
+                    me.filesRequested++;
                 }
                 me.fileList.push(def);
             }
         },
-        getState : function() {
-            if(this.filesRequested == 0)
+        getState: function () {
+            if (this.filesRequested == 0)
                 return 1;
 
             return (this.filesLoaded / this.filesRequested);
@@ -1279,27 +1304,27 @@ Oskari = (function() {
          *
          * commits any script loading requests
          */
-        "commit" : function() {
+        "commit": function () {
             var head = document.getElementsByTagName("head")[0];
             var fragment = document.createDocumentFragment();
             var me = this;
             var numFiles = this.filesRequested;
-            if(numFiles == 0) {
+            if (numFiles == 0) {
                 me.callback();
                 me.manager.notifyLoaderStateChanged(me, true);
                 return;
             }
-            if(preloaded()) {
+            if (preloaded()) {
                 me.callback();
                 me.manager.notifyLoaderStateChanged(me, true);
                 return;
             }
 
-            var onFileLoaded = function() {
+            var onFileLoaded = function () {
                 me.filesLoaded++;
                 me.manager.log("Files loaded " + me.filesLoaded + "/" + me.filesRequested);
 
-                if(numFiles == me.filesLoaded) {
+                if (numFiles == me.filesLoaded) {
                     me.callback();
                     me.manager.notifyLoaderStateChanged(me, true);
                 } else {
@@ -1307,13 +1332,13 @@ Oskari = (function() {
                 }
             };
             var f = false;
-            for(var n = 0; n < me.fileList.length; n++) {
-				var def = me.fileList[n];
+            for (var n = 0; n < me.fileList.length; n++) {
+                var def = me.fileList[n];
                 var fn = def.src;
-                var st = me.buildScriptTag(fn, onFileLoaded,def.type,def.id);
-                if(st) {
+                var st = me.buildScriptTag(fn, onFileLoaded, def.type, def.id);
+                if (st) {
                     // If this breaks something, revert to using method 1
-                    if(preloaded()) {
+                    if (preloaded()) {
                         onFileLoaded();
                     } else {
                         fragment.appendChild(st);
@@ -1321,7 +1346,7 @@ Oskari = (function() {
                     }
                 }
             }
-            if(f) {
+            if (f) {
                 head.appendChild(fragment);
             }
         },
@@ -1331,15 +1356,15 @@ Oskari = (function() {
          *
          * builds a script tag to be applied to document head assumes UTF-8
          */
-        "buildScriptTag" : function(filename, callback,elementtype,elementId) {
+        "buildScriptTag": function (filename, callback, elementtype, elementId) {
             var me = this;
             var script = document.createElement('script');
-            if( elementId )
-            	script.id = elementId;
-            script.type = elementtype;//||'text/javascript';
+            if (elementId)
+                script.id = elementId;
+            script.type = elementtype; //||'text/javascript';
             script.charset = 'utf-8';
 
-            if(preloaded()) {
+            if (preloaded()) {
                 // This should be redundant, see "If this..." in commit() above
                 script.src = '/Oskari/empty.js'
             } else {
@@ -1350,9 +1375,9 @@ Oskari = (function() {
              * IE has a different way of handling &lt;script&gt; loads, so we //
              * need to check for it here
              */
-            if(script.readyState) {
-                script.onreadystatechange = function() {
-                    if(script.readyState == "loaded" || script.readyState == "complete") {
+            if (script.readyState) {
+                script.onreadystatechange = function () {
+                    if (script.readyState == "loaded" || script.readyState == "complete") {
                         script.onreadystatechange = null;
                         callback();
                     }
@@ -1372,13 +1397,12 @@ Oskari = (function() {
      * and initialisation as well as bundle state management
      *
      */
-    var bundle_mediator = function(opts) {
+    var bundle_mediator = function (opts) {
         this.manager = null;
 
-        for(p in opts) {
+        for (p in opts) {
             this[p] = opts[p];
-        }
-        ;
+        };
     };
     bundle_mediator.prototype = {
         /**
@@ -1386,7 +1410,7 @@ Oskari = (function() {
          * @param state
          * @returns
          */
-        "setState" : function(state) {
+        "setState": function (state) {
             this.state = state;
             this.manager.postChange(this.bundle, this.instance, this.state);
             return this.state;
@@ -1395,7 +1419,7 @@ Oskari = (function() {
          * @method getState
          * @returns
          */
-        "getState" : function() {
+        "getState": function () {
 
             return this.state;
         }
@@ -1404,7 +1428,7 @@ Oskari = (function() {
     /**
      * @class Oskari.bundle_trigger
      */
-    var bundle_trigger = function(btc, cb, info) {
+    var bundle_trigger = function (btc, cb, info) {
         this.config = btc;
         this.callback = cb;
         this.fired = false;
@@ -1416,17 +1440,17 @@ Oskari = (function() {
          *
          * executes a trigger callback based on bundle state
          */
-        "execute" : function(manager, b, bi, info) {
+        "execute": function (manager, b, bi, info) {
 
             var me = this;
-            if(me.fired) {
+            if (me.fired) {
                 //manager.log("trigger already fired " + info || this.info);
                 return;
             }
 
-            for(p in me.config["Import-Bundle"]) {
+            for (p in me.config["Import-Bundle"]) {
                 var srcState = manager.stateForBundleSources[p];
-                if(!srcState || srcState.state != 1) {
+                if (!srcState || srcState.state != 1) {
                     manager.log("trigger not fired due " + p + " for " + info || this.info);
                     return;
                 }
@@ -1435,7 +1459,7 @@ Oskari = (function() {
             manager.log("posting trigger");
             var cb = this.callback;
 
-            window.setTimeout(function() {
+            window.setTimeout(function () {
                 cb(manager);
             }, 0);
         }
@@ -1445,7 +1469,7 @@ Oskari = (function() {
      * @class Oskari.bundle_manager
      * @singleton
      */
-    var bundle_manager = function() {
+    var bundle_manager = function () {
         this.serial = 0;
         this.impls = {};
         this.sources = {};
@@ -1473,8 +1497,8 @@ Oskari = (function() {
         /* CACHE for binding packages/request/events */
 
         this.stateForPackages = {
-            sources : {},
-            sinks : {}
+            sources: {},
+            sinks: {}
         };
 
         this.triggers = [];
@@ -1483,29 +1507,29 @@ Oskari = (function() {
     };
 
     bundle_manager.prototype = {
-        purge : function() {
-            for(var p in this.sources ) {
+        purge: function () {
+            for (var p in this.sources) {
                 delete this.sources[p];
             }
-            for(var p in this.stateForBundleDefinitions ) {
+            for (var p in this.stateForBundleDefinitions) {
                 delete this.stateForBundleDefinitions[p].loader;
             }
-            for(var p in this.stateForBundleSources ) {
+            for (var p in this.stateForBundleSources) {
                 delete this.stateForBundleSources[p].loader;
             }
         },
         /**
          * @
          */
-        notifyLoaderStateChanged : function(bl, finished) {
-            if(this.loaderStateListeners.length == 0)
+        notifyLoaderStateChanged: function (bl, finished) {
+            if (this.loaderStateListeners.length == 0)
                 return;
-            for(var l = 0; l < this.loaderStateListeners.length; l++) {
+            for (var l = 0; l < this.loaderStateListeners.length; l++) {
                 var cb = this.loaderStateListeners[l];
                 cb(bl, finished);
             }
         },
-        registerLoaderStateListener : function(cb) {
+        registerLoaderStateListener: function (cb) {
             this.loaderStateListeners.push(cb);
         },
         /**
@@ -1514,7 +1538,7 @@ Oskari = (function() {
          *
          * a loggin and debugging function
          */
-        "alert" : function(what) {
+        "alert": function (what) {
             // log(what);
             /*
              * var d = document.createElement('div');
@@ -1528,7 +1552,7 @@ Oskari = (function() {
          * @method log a loggin and debuggin function
          *
          */
-        "log" : function(what) {
+        "log": function (what) {
             logMsg(what);
 
         },
@@ -1537,23 +1561,23 @@ Oskari = (function() {
          * @param sScriptSrc contains css style url
          * @param oCallback not implemented
          */
-        "loadCss" : function(sScriptSrc, oCallback) {
+        "loadCss": function (sScriptSrc, oCallback) {
             this.log("loading CSS " + sScriptSrc);
             var h = document.getElementsByTagName("head").length ? document
-            .getElementsByTagName("head")[0] : document.body;
-            if(!preloaded()) {
-                if(jQuery.browser.msie) {
+                .getElementsByTagName("head")[0] : document.body;
+            if (!preloaded()) {
+                if (jQuery.browser.msie) {
                     // IE has a limitation of 31 stylesheets.
                     // It can be increased to 31*31 by using import in the stylesheets,
                     // but import should be avoided due to performance issues.
                     // Instead we retrieve the css files with xhr and
                     // concatenates the styles into a single inline style declaration.
                     jQuery.ajax({
-                        url : sScriptSrc,
-                        dataType : "text"
-                    }).done(function(css) {
+                        url: sScriptSrc,
+                        dataType: "text"
+                    }).done(function (css) {
                         var styles = document.getElementById("concatenated");
-                        if(styles) {
+                        if (styles) {
                             // styles found, append
                             styles.styleSheet.cssText += css;
                         } else {
@@ -1579,7 +1603,7 @@ Oskari = (function() {
          * @method self
          * @returns {bundle_manager}
          */
-        "self" : function() {
+        "self": function () {
             return this;
         },
         /**
@@ -1593,7 +1617,7 @@ Oskari = (function() {
          *
          *
          */
-        "install" : function(implid, bp, srcs, metadata) {
+        "install": function (implid, bp, srcs, metadata) {
             // installs bundle
             // DOES not INSTANTIATE only register bp as function
             // declares any additional sources required
@@ -1601,12 +1625,12 @@ Oskari = (function() {
             var me = this;
             var bundleImpl = implid;
             var defState = me.stateForBundleDefinitions[bundleImpl];
-            if(defState) {
+            if (defState) {
                 defState.state = 1;
                 me.log("SETTING STATE FOR BUNDLEDEF " + bundleImpl + " existing state to " + defState.state);
             } else {
                 defState = {
-                    state : 1
+                    state: 1
                 };
 
                 me.stateForBundleDefinitions[bundleImpl] = defState;
@@ -1618,10 +1642,10 @@ Oskari = (function() {
             me.sources[bundleImpl] = srcs;
 
             var srcState = me.stateForBundleSources[bundleImpl];
-            if(srcState) {
-                if(srcState.state == -1) {
+            if (srcState) {
+                if (srcState.state == -1) {
                     me.log("triggering loadBundleSources for " + bundleImpl + " at loadBundleDefinition");
-                    window.setTimeout(function() {
+                    window.setTimeout(function () {
                         me.loadBundleSources(bundleImpl);
                     }, 0);
                 } else {
@@ -1638,7 +1662,7 @@ Oskari = (function() {
          *
          * Installs a bundle defined as Oskari native Class
          */
-        "installBundleClass" : function(implid, clazzName) {
+        "installBundleClass": function (implid, clazzName) {
             var cs = clazz.prototype.singleton;
 
             var classmeta = cs.metadata(clazzName);
@@ -1649,7 +1673,7 @@ Oskari = (function() {
             this.install(implid, bp, srcs, bundleMetadata);
 
         },
-          /**
+        /**
          * @method installBundlePdefs
          * @param implid
          * @param bp
@@ -1657,9 +1681,9 @@ Oskari = (function() {
          *
          * Installs a bundle defined as Oskari native Class
          */
-        installBundlePdefsp : function(implid, pdefsp) {
+        installBundlePdefsp: function (implid, pdefsp) {
             var cs = clazz.prototype.singleton;
-            
+
             var bp = cs.builderFromPdefsp(pdefsp);
             var bundleMetadata = pdefsp._metadata;
             var srcs = {};
@@ -1673,7 +1697,7 @@ Oskari = (function() {
          * @returns bundle implemenation
          *
          */
-        "impl" : function(implid) {
+        "impl": function (implid) {
             return this.impls[implid];
         },
         /**
@@ -1685,13 +1709,13 @@ Oskari = (function() {
          * Loads Bundle Definition from JavaScript file JavaScript shall contain
          * install or installBundleClass call.
          */
-        "loadBundleDefinition" : function(implid, bundleSrc, pbundlePath) {
+        "loadBundleDefinition": function (implid, bundleSrc, pbundlePath) {
             var me = this;
             var bundleImpl = implid;
             me.log("loadBundleDefinition called with " + bundleImpl);
             var defState = me.stateForBundleDefinitions[bundleImpl];
-            if(defState) {
-                if(defState.state == 1) {
+            if (defState) {
+                if (defState.state == 1) {
                     me.log("bundle definition already loaded for " + bundleImpl);
                     me.postChange(null, null, "bundle_definition_loaded");
                     return;
@@ -1702,7 +1726,7 @@ Oskari = (function() {
 
             } else {
                 defState = {
-                    state : -1
+                    state: -1
                 };
                 me.stateForBundleDefinitions[bundleImpl] = defState;
                 me.log("set NEW state for DEFINITION " + bundleImpl + " to " + defState.state);
@@ -1712,7 +1736,7 @@ Oskari = (function() {
             var bundlePath = pbundlePath || (bundleSrc.substring(0, bundleSrc.lastIndexOf('/')));
             defState.bundlePath = bundlePath;
 
-            var bl = new bundle_loader(this, function() {
+            var bl = new bundle_loader(this, function () {
                 me.log("bundle_def_loaded_callback");
             });
             bl.metadata['context'] = 'bundleDefinition';
@@ -1730,7 +1754,7 @@ Oskari = (function() {
          * Registers and commits JavaScript load request from bundle manifesst A
          * trigger is fired after all JavaScript files have been loaded.
          */
-        "loadBundleSources" : function(implid) {
+        "loadBundleSources": function (implid) {
             // load any JavaScripts for bundle
             // MUST be done before createBundle
             var me = this;
@@ -1740,38 +1764,38 @@ Oskari = (function() {
             var defState = me.stateForBundleDefinitions[bundleImpl];
             // log(defState);
 
-            if(!defState) {
+            if (!defState) {
                 throw "INVALID_STATE: bundle definition load not requested for " + bundleImpl;
             }
-            if(defState) {
+            if (defState) {
                 me.log("- definition STATE for " + bundleImpl + " at load sources " + defState.state);
             }
 
-            if(mode == 'static') {
+            if (mode == 'static') {
                 me.postChange(null, null, "bundle_definition_loaded");
                 return;
             }
 
             var srcState = me.stateForBundleSources[bundleImpl];
 
-            if(srcState) {
-                if(srcState.state == 1) {
+            if (srcState) {
+                if (srcState.state == 1) {
                     me.log("already loaded sources for : " + bundleImpl);
                     return;
-                } else if(srcState.state == -1) {
+                } else if (srcState.state == -1) {
                     me.log("loading previously pending sources for " + bundleImpl + " " + srcState.state + " or what?");
                 } else {
                     throw "INVALID_STATE: at " + bundleImpl;
                 }
             } else {
                 srcState = {
-                    state : -1
+                    state: -1
                 };
                 me.stateForBundleSources[bundleImpl] = srcState;
                 me.log("setting STATE for sources " + bundleImpl + " to " + srcState.state);
             }
 
-            if(defState.state != 1) {
+            if (defState.state != 1) {
                 me.log("pending DEFINITION at sources for " + bundleImpl + " to " + defState.state + " -> postponed");
 
                 return;
@@ -1780,13 +1804,13 @@ Oskari = (function() {
             me.log("STARTING load for sources " + bundleImpl);
 
             var srcFiles = {
-                count : 0,
-                loaded : 0,
-                files : {},
-                css : {}
+                count: 0,
+                loaded: 0,
+                files: {},
+                css: {}
             };
             var me = this;
-            var callback = function() {
+            var callback = function () {
                 me.log("finished loading " + srcFiles.count + " files for " + bundleImpl + ".");
                 me.stateForBundleSources[bundleImpl].state = 1;
                 me.log("set NEW state post source load for " + bundleImpl + " to " + me.stateForBundleSources[bundleImpl].state);
@@ -1797,22 +1821,22 @@ Oskari = (function() {
 
             var srcs = me.sources[bundleImpl];
 
-            if(srcs) {
+            if (srcs) {
 
                 me.log("got sources for " + bundleImpl);
 
-                for(p in srcs) {
-                    if(p == 'scripts') {
+                for (p in srcs) {
+                    if (p == 'scripts') {
 
                         var defs = srcs[p];
 
-                        for(var n = 0; n < defs.length; n++) {
+                        for (var n = 0; n < defs.length; n++) {
                             var def = defs[n];
-                            if(def.type == "text/css") {
+                            if (def.type == "text/css") {
 
                                 var fn = def.src;
                                 var fnWithPath = null;
-                                if(fn.indexOf('http') != -1) {
+                                if (fn.indexOf('http') != -1) {
                                     fnWithPath = fn;
                                 } else {
                                     fnWithPath = bundlePath + '/' + fn;
@@ -1820,42 +1844,42 @@ Oskari = (function() {
 
                                 srcFiles.css[fnWithPath] = def;
 
-                            } else if(def.type ) {
+                            } else if (def.type) {
                                 srcFiles.count++;
                                 /* var fn = def.src + "?ts=" + instTs; */
                                 var fn = buildPathForLoaderMode(def.src, bundlePath);
 
                                 var fnWithPath = null;
-                                if(fn.indexOf('http') != -1) {
+                                if (fn.indexOf('http') != -1) {
                                     fnWithPath = fn;
                                 } else {
                                     fnWithPath = bundlePath + '/' + fn;
                                 }
 
                                 srcFiles.files[fnWithPath] = def;
-                            }  
+                            }
 
                         }
-                    } else if(p == 'locales') {
+                    } else if (p == 'locales') {
                         var requiredLocale = blocale.getLang();
                         var defs = srcs[p];
 
                         /*console.log("locales",defs);*/
-                        for(var n = 0; n < defs.length; n++) {
+                        for (var n = 0; n < defs.length; n++) {
                             var def = defs[n];
 
                             /*console.log("locale",def,requiredLocale);*/
 
-                            if(requiredLocale && def.lang && def.lang != requiredLocale) {
+                            if (requiredLocale && def.lang && def.lang != requiredLocale) {
                                 /*console.log("locale",def,def.lang,requiredLocale, "NO MATCH?");*/
                                 continue;
                             }
 
-                            if(def.type == "text/css") {
+                            if (def.type == "text/css") {
 
                                 var fn = def.src;
                                 var fnWithPath = null;
-                                if(fn.indexOf('http') != -1) {
+                                if (fn.indexOf('http') != -1) {
                                     fnWithPath = fn;
                                 } else {
                                     fnWithPath = bundlePath + '/' + fn;
@@ -1863,13 +1887,13 @@ Oskari = (function() {
 
                                 srcFiles.css[fnWithPath] = def;
 
-                            } else if(def.type ) {
+                            } else if (def.type) {
                                 srcFiles.count++;
                                 /* var fn = def.src + "?ts=" + instTs; */
                                 var fn = buildPathForLoaderMode(def.src, bundlePath);
 
                                 var fnWithPath = null;
-                                if(fn.indexOf('http') != -1) {
+                                if (fn.indexOf('http') != -1) {
                                     fnWithPath = fn;
                                 } else {
                                     fnWithPath = bundlePath + '/' + fn;
@@ -1890,7 +1914,7 @@ Oskari = (function() {
             /**
              * def.src is requested / src is adjusted path
              */
-            for(src in srcFiles.css) {
+            for (src in srcFiles.css) {
                 // var def = srcFiles.css[src];
                 var defSrc = src;
                 var fn = buildPathForLoaderMode(defSrc, bundlePath);
@@ -1911,20 +1935,20 @@ Oskari = (function() {
             /**
              * if using compiled javascript
              */
-            if(isPackedMode()) {
+            if (isPackedMode()) {
 
                 var fileCount = 0;
-                for(js in srcFiles.files) {
+                for (js in srcFiles.files) {
                     fileCount++;
                 }
-                if(fileCount > 0) {
+                if (fileCount > 0) {
 
                     var srcsFn = buildPathForPackedMode(bundlePath);
-                    bl.add(srcsFn,"text/javascript");
+                    bl.add(srcsFn, "text/javascript");
                     me.log("- added PACKED javascript source " + srcsFn + " for " + bundleImpl);
 
                     var localesFn = buildLocalePathForPackedMode(bundlePath);
-                    bl.add(localesFn,"text/javascript");
+                    bl.add(localesFn, "text/javascript");
                     me.log("- added PACKED locale javascript source " + localesFn + " for " + bundleImpl);
                 }
 
@@ -1932,8 +1956,8 @@ Oskari = (function() {
                  * else load any files
                  */
             } else {
-                for(js in srcFiles.files) {
-                    bl.add(js,srcFiles.files[js]);
+                for (js in srcFiles.files) {
+                    bl.add(js, srcFiles.files[js]);
                     me.log("- added script source " + js + " for " + bundleImpl);
 
                 }
@@ -1952,22 +1976,22 @@ Oskari = (function() {
          * posts a notification to bundles and bundle instances
          *
          */
-        "postChange" : function(b, bi, info) {
+        "postChange": function (b, bi, info) {
             // self
             var me = this;
             me.update(b, bi, info);
 
             // bundles
-            for(var bid in me.bundles) {
+            for (var bid in me.bundles) {
                 var o = me.bundles[bid];
                 /* if (o != b) { */
                 o.update(me, b, bi, info);
                 // }
             }
             // and instances
-            for(var i in me.instances) {
+            for (var i in me.instances) {
                 var o = me.instances[i];
-                if(!o)
+                if (!o)
                     continue;
                 // stopped are null here
                 // if (!bi || o != bi) {
@@ -1985,18 +2009,18 @@ Oskari = (function() {
          *
          * Creates a Bundle
          */
-        "createBundle" : function(implid, bundleid) {
+        "createBundle": function (implid, bundleid) {
             // sets up bundle runs the registered func to instantiate bundle
             // this enables 'late binding'
             var bundlImpl = implid;
             var me = this;
             var defState = me.stateForBundleDefinitions[bundlImpl];
-            if(!defState) {
+            if (!defState) {
                 throw "INVALID_STATE: for createBundle / " + "definition not loaded " + implid + "/" + bundleid;
             }
 
             var bp = this.impls[implid];
-            if(!bp) {
+            if (!bp) {
                 alert("this.impls[" + implid + "] is null!");
                 return;
             }
@@ -2004,8 +2028,8 @@ Oskari = (function() {
 
             this.bundles[bundleid] = b;
             this.stateForBundles[bundleid] = {
-                state : true,
-                bundlImpl : bundlImpl
+                state: true,
+                bundlImpl: bundlImpl
             };
 
             this.postChange(b, null, "bundle_created");
@@ -2018,7 +2042,7 @@ Oskari = (function() {
          * NYI. Shall bind any imported packages to bundle mediator
          *
          */
-        "bindImportedPackages" : function() {
+        "bindImportedPackages": function () {
             // TBD
         },
         /**
@@ -2026,7 +2050,7 @@ Oskari = (function() {
          *
          * NYI. Shall bind any imported namespaces to bundle mediator
          */
-        "bindImportedNamespaces" : function() {
+        "bindImportedNamespaces": function () {
             // TBD
         },
         /**
@@ -2035,7 +2059,7 @@ Oskari = (function() {
          *
          * not needed. registrations will be based on actual event handlers.
          */
-        "bindImportedEvents" : function() {
+        "bindImportedEvents": function () {
 
         },
         /**
@@ -2043,21 +2067,21 @@ Oskari = (function() {
          *
          * NYI. Shall support publishing a package from bundle
          */
-        "bindExportedPackages" : function() {
+        "bindExportedPackages": function () {
             // TBD
         },
         /**
          * @method bindExportedNamespaces NYI. Shall support publishing namespaces
          *         from bundle
          */
-        "bindExportedNamespaces" : function() {
+        "bindExportedNamespaces": function () {
             // TBD
         },
         /**
          * @methdod bindExportedRequests
          * @deprecated
          */
-        "bindExportedRequests" : function() {
+        "bindExportedRequests": function () {
 
         },
         /**
@@ -2068,7 +2092,7 @@ Oskari = (function() {
          * fires any pending bundle or bundle instance triggers
          *
          */
-        "update" : function(b, bi, info) {
+        "update": function (b, bi, info) {
             // resolves any bundle dependencies
             // this must be done before any starts
             // TO-DO
@@ -2081,7 +2105,7 @@ Oskari = (function() {
             var me = this;
             me.log("update called with info " + info);
 
-            for(var n = 0; n < me.triggers.length; n++) {
+            for (var n = 0; n < me.triggers.length; n++) {
                 var t = me.triggers[n];
                 t.execute(me);
             }
@@ -2091,7 +2115,7 @@ Oskari = (function() {
          * @param bundleid
          * @returns bundle
          */
-        "bundle" : function(bundleid) {
+        "bundle": function (bundleid) {
             return this.bundles[bundleid];
         },
         /**
@@ -2100,7 +2124,7 @@ Oskari = (function() {
          *
          * NYI. Shall DESTROY bundle definition
          */
-        "destroyBundle" : function(bundleid) {
+        "destroyBundle": function (bundleid) {
             // var bi = this.impls[bundleid];
         },
         /**
@@ -2111,7 +2135,7 @@ Oskari = (function() {
          * removes bundle definition from manager Does NOT remove bundles or bundle
          * instances currently.
          */
-        "uninstall" : function(implid) {
+        "uninstall": function (implid) {
             var bp = this.impls[implid];
             return bp;
         },
@@ -2122,13 +2146,13 @@ Oskari = (function() {
          *
          * creates a bundle instance for previously installed and created bundle
          */
-        "createInstance" : function(bundleid) {
+        "createInstance": function (bundleid) {
             // creates a bundle_instance
             // any configuration and setup IS BUNDLE / BUNDLE INSTANCE specific
             // create / config / start / process / stop / destroy ...
 
             var me = this;
-            if(!me.stateForBundles[bundleid] || !me.stateForBundles[bundleid].state) {
+            if (!me.stateForBundles[bundleid] || !me.stateForBundles[bundleid].state) {
                 throw "INVALID_STATE: for createInstance / " + "definition not loaded " + bundleid;
             }
 
@@ -2138,20 +2162,20 @@ Oskari = (function() {
             var bi = b["create"]();
 
             bi.mediator = new bundle_mediator({
-                "bundleId" : bundleid,
-                "instanceid" : s,
-                "state" : "initial",
-                "bundle" : b,
-                "instance" : bi,
-                "manager" : this,
-                "clazz" : clazz.prototype.singleton,
-                "requestMediator" : {}
+                "bundleId": bundleid,
+                "instanceid": s,
+                "state": "initial",
+                "bundle": b,
+                "instance": bi,
+                "manager": this,
+                "clazz": clazz.prototype.singleton,
+                "requestMediator": {}
             });
 
             this.instances[s] = bi;
             this.stateForBundleInstances[s] = {
-                state : true,
-                bundleid : bundleid
+                state: true,
+                bundleid: bundleid
             };
 
             this.postChange(b, bi, "instance_created");
@@ -2162,7 +2186,7 @@ Oskari = (function() {
          * @param instanceid
          * @returns bundle instance
          */
-        "instance" : function(instanceid) {
+        "instance": function (instanceid) {
 
             return this.instances[instanceid];
         },
@@ -2173,7 +2197,7 @@ Oskari = (function() {
          *
          * destroys and unregisters bundle instance
          */
-        "destroyInstance" : function(instanceid) {
+        "destroyInstance": function (instanceid) {
 
             var bi = this.instances[instanceid];
             var mediator = bi.mediator;
@@ -2195,7 +2219,7 @@ Oskari = (function() {
          *
          * trigger registration
          */
-        "on" : function(cfg, cb, info) {
+        "on": function (cfg, cb, info) {
             this.triggers.push(new bundle_trigger(cfg, cb, info));
         }
     };
@@ -2205,7 +2229,7 @@ Oskari = (function() {
      *
      * highlevel interface to bundle management Work in progress
      */
-    var bundle_facade = function(bm) {
+    var bundle_facade = function (bm) {
         this.manager = bm;
 
         this.bundles = {};
@@ -2242,7 +2266,7 @@ Oskari = (function() {
          *
          * returns bundle_instance by bundleinstancename defined in player json
          */
-        getBundleInstanceByName : function(bundleinstancename) {
+        getBundleInstanceByName: function (bundleinstancename) {
             var me = this;
             return me.bundleInstances[bundleinstancename];
         },
@@ -2251,7 +2275,7 @@ Oskari = (function() {
          *
          * returns configuration for instance by bundleinstancename
          */
-        getBundleInstanceConfigurationByName : function(bundleinstancename) {
+        getBundleInstanceConfigurationByName: function (bundleinstancename) {
             var me = this;
             return me.appConfig[bundleinstancename];
         },
@@ -2260,7 +2284,7 @@ Oskari = (function() {
          * been loaded an d bundle has been created
          *
          */
-        requireBundle : function(implid, bundleid, cb) {
+        requireBundle: function (implid, bundleid, cb) {
             var me = this;
             var b = me.manager.createBundle(implid, bundleid);
 
@@ -2272,12 +2296,12 @@ Oskari = (function() {
          *         manifest have been met Work In Progress
          *
          */
-        require : function(config, cb, info) {
+        require: function (config, cb, info) {
 
             var me = this;
             me.manager.on(config, cb, info);
             var imports = config['Import-Bundle'];
-            for(p in imports) {
+            for (p in imports) {
                 var pp = p;
                 var def = imports[p];
 
@@ -2286,7 +2310,7 @@ Oskari = (function() {
                  * var bundleDefFilename = bundlePath + pp + "/bundle.js?ts=" +
                  * (new Date().getTime());
                  */
-                if(isPackedMode()) {
+                if (isPackedMode()) {
                     var packedBundleFn = buildBundlePathForPackedMode(bundlePath + pp);
                     bundleDefFilename = buildPathForLoaderMode(packedBundleFn, bundlePath);
                 } else {
@@ -2297,36 +2321,36 @@ Oskari = (function() {
                 me.manager.loadBundleSources(pp);
             }
         },
-        setBundlePath : function(p) {
+        setBundlePath: function (p) {
             this.bundlePath = p;
         },
         /*
          * @method loadBundleDeps
          */
-        loadBundleDeps : function(deps, callback, manager, info) {
+        loadBundleDeps: function (deps, callback, manager, info) {
             var me = this;
             var bdep = deps["Import-Bundle"];
             var depslist = [];
 
             var hasPhase = false;
 
-            for(p in bdep) {
+            for (p in bdep) {
                 var name = p;
                 var def = bdep[p];
                 depslist.push({
-                    name : name,
-                    def : def,
-                    phase : def.phase
+                    name: name,
+                    def: def,
+                    phase: def.phase
                 });
                 hasPhase = hasPhase || def.phase;
             }
 
-            depslist.sort(function(a, b) {
-                if(!a.phase && !b.phase)
+            depslist.sort(function (a, b) {
+                if (!a.phase && !b.phase)
                     return 0;
-                if(!a.phase)
+                if (!a.phase)
                     return 1;
-                if(!b.phase)
+                if (!b.phase)
                     return -1;
                 return a.phase < b.phase ? -1 : 1;
             });
@@ -2336,7 +2360,7 @@ Oskari = (function() {
              * "+depslist[d].name);
              */
 
-            if(hasPhase || !supportBundleAsync) {
+            if (hasPhase || !supportBundleAsync) {
                 me.loadBundleDep(depslist, callback, manager, info);
             } else {
                 me.loadBundleDepAsync(deps, callback, manager, info);
@@ -2347,10 +2371,10 @@ Oskari = (function() {
          *
          * maintains some a sort of order in loading
          */
-        loadBundleDep : function(depslist, callback, manager, info) {
+        loadBundleDep: function (depslist, callback, manager, info) {
             var me = this;
             var bundledef = depslist.pop();
-            if(!bundledef) {
+            if (!bundledef) {
                 callback(manager);
                 return;
             }
@@ -2360,10 +2384,10 @@ Oskari = (function() {
 
             var fcd = this;
             var bdep = {
-                "Import-Bundle" : {}
+                "Import-Bundle": {}
             };
             bdep["Import-Bundle"][bundlename] = def;
-            fcd.require(bdep, function(manager) {
+            fcd.require(bdep, function (manager) {
                 me.loadBundleDep(depslist, callback, manager, info);
             }, info);
         },
@@ -2372,7 +2396,7 @@ Oskari = (function() {
          *
          * load bundles regardless of order
          */
-        loadBundleDepAsync : function(deps, callback, manager, info) {
+        loadBundleDepAsync: function (deps, callback, manager, info) {
 
             var me = this;
             var fcd = this;
@@ -2386,7 +2410,7 @@ Oskari = (function() {
          * required bundle instances
          *
          */
-        playBundle : function(recData, cb) {
+        playBundle: function (recData, cb) {
 
             // alert(bundleRec.get('title'));
             var metas = recData['metadata'];
@@ -2398,27 +2422,27 @@ Oskari = (function() {
             var instanceRequirements = metas["Require-Bundle-Instance"] || [];
             var instanceProps = recData.instanceProps;
 
-            me.loadBundleDeps(metas, function(manager) {
-                for(var r = 0; r < instanceRequirements.length; r++) {
+            me.loadBundleDeps(metas, function (manager) {
+                for (var r = 0; r < instanceRequirements.length; r++) {
                     var implInfo = instanceRequirements[r];
                     /* implname */
-                    var implid = ( typeof (implInfo) === 'object' ) ? implInfo.bundlename : implInfo;
+                    var implid = (typeof (implInfo) === 'object') ? implInfo.bundlename : implInfo;
                     /* bundlename */
-                    var bundleid = ( typeof (implInfo) === 'object' ) ? implInfo.bundleinstancename : implInfo + "Instance";
+                    var bundleid = (typeof (implInfo) === 'object') ? implInfo.bundleinstancename : implInfo + "Instance";
                     var b = me.bundles[implid];
-                    if(!b) {
+                    if (!b) {
                         b = manager.createBundle(implid, bundleid);
                         me.bundles[implid] = b;
                     }
 
                     var bi = me.bundleInstances[bundleid];
-                    if(!bi || !isSingleton) {
+                    if (!bi || !isSingleton) {
                         bi = manager.createInstance(bundleid);
                         me.bundleInstances[bundleid] = bi;
 
                         var configProps = me.getBundleInstanceConfigurationByName(bundleid);
-                        if(configProps) {
-                            for(ip in configProps) {
+                        if (configProps) {
+                            for (ip in configProps) {
                                 bi[ip] = configProps[ip];
                             }
                         }
@@ -2426,16 +2450,16 @@ Oskari = (function() {
                     }
                 }
 
-                fcd.requireBundle(bundlename, bundleinstancename, function() {
+                fcd.requireBundle(bundlename, bundleinstancename, function () {
                     var yy = manager.createInstance(bundleinstancename);
 
-                    for(ip in instanceProps) {
+                    for (ip in instanceProps) {
                         yy[ip] = instanceProps[ip];
                     }
 
                     var configProps = me.getBundleInstanceConfigurationByName(bundleinstancename);
-                    if(configProps) {
-                        for(ip in configProps) {
+                    if (configProps) {
+                        for (ip in configProps) {
                             yy[ip] = configProps[ip];
                         }
                     }
@@ -2455,20 +2479,20 @@ Oskari = (function() {
          * property may be set to receive some feedback - as well as
          * registerLoaderStateListener
          */
-        setApplicationSetup : function(setup) {
+        setApplicationSetup: function (setup) {
             this.appSetup = setup;
         },
         /**
          * @method getApplicationSetup
          * @return JSON application setup
          */
-        getApplicationSetup : function() {
+        getApplicationSetup: function () {
             return this.appSetup;
         },
-        setConfiguration : function(config) {
+        setConfiguration: function (config) {
             this.appConfig = config;
         },
-        getConfiguration : function() {
+        getConfiguration: function () {
             return this.appConfig;
         },
         /**
@@ -2477,7 +2501,7 @@ Oskari = (function() {
          * Starts JSON setup (set with setApplicationSetup)
          *
          */
-        startApplication : function(cb) {
+        startApplication: function (cb) {
             var me = this;
             var appSetup = this.appSetup;
             var appConfig = this.appConfig;
@@ -2485,8 +2509,8 @@ Oskari = (function() {
             var seqLen = seq.length;
 
             var startupInfo = {
-                bundlesInstanceConfigurations : appConfig,
-                bundlesInstanceInfos : {}
+                bundlesInstanceConfigurations: appConfig,
+                bundlesInstanceInfos: {}
             };
 
             /**
@@ -2494,11 +2518,11 @@ Oskari = (function() {
              */
 
             var mediator = {
-                facade : me,
-                seq : seq,
-                bndl : null,
-                player : null,
-                startupInfo : startupInfo
+                facade: me,
+                seq: seq,
+                bndl: null,
+                player: null,
+                startupInfo: startupInfo
             };
 
             function schedule() {
@@ -2506,13 +2530,13 @@ Oskari = (function() {
             }
 
 
-            mediator.player = function() {
+            mediator.player = function () {
 
                 /*console.log("BUNDLEPLAYER","shifting",mediator.seq);*/
                 mediator.bndl = mediator.seq.shift();
-                if(mediator.bndl == null) {
+                if (mediator.bndl == null) {
                     /*console.log("BUNDLEPLAYER","finished");*/
-                    if(cb) {
+                    if (cb) {
                         cb(startupInfo);
                     }
                     return;
@@ -2520,19 +2544,19 @@ Oskari = (function() {
 
                 /*console.log("BUNDLEPLAYER","playing",mediator.bndl.title,mediator.bndl);*/
 
-                mediator.facade.playBundle(mediator.bndl, function(bi) {
+                mediator.facade.playBundle(mediator.bndl, function (bi) {
 
                     var bndlName = mediator.bndl.bundlename;
                     var bndlInstanceName = mediator.bndl.bundleinstancename;
 
                     mediator.startupInfo
-                    .bundlesInstanceInfos[bndlInstanceName] = {
-                        bundlename : bndlName,
-                        bundleinstancename : bndlInstanceName,
-                        bundleInstance : bi
+                        .bundlesInstanceInfos[bndlInstanceName] = {
+                            bundlename: bndlName,
+                            bundleinstancename: bndlInstanceName,
+                            bundleInstance: bi
                     };
-                    if(mediator.bndl.callback) {
-                        if( typeof mediator.bndl.callback === "string") {
+                    if (mediator.bndl.callback) {
+                        if (typeof mediator.bndl.callback === "string") {
                             eval(mediator.bndl.callback);
                         }
                         mediator.bndl.callback.apply(this, [bi, bndl]);
@@ -2546,7 +2570,7 @@ Oskari = (function() {
         /**
          * @method stopApplication Might stop application if all stops implemented
          */
-        stopApplication : function() {
+        stopApplication: function () {
             throw "NYI";
         }
     };
@@ -2569,86 +2593,86 @@ Oskari = (function() {
     var fcd = new bundle_facade(bm);
     var ga = cs.global;
 
-	
-	var bundle_dom_manager = function(dollar) {
-		this.$ = dollar;
-	};
-	bundle_dom_manager.prototype = {
-		getEl: function(selector) {
-			return this.$(selector);
-		},
-		getElForPart : function(part) {
-			throw "N/A";
-		},
-		setElForPart : function(part,el) {
-			throw "N/A";
-		},
-		setElParts : function(partsMap) {
-			throw "N/A";
-		},
-		getElParts : function() {
-			throw "N/A";
-		},
-		pushLayout : function(s) {
-			throw "N/A";
-		},
-		popLayout : function(s) {
-			throw "N/A";
-		},
-		getLayout : function() {
-			throw "N/A";
-		}
-	};
-	
-	
-	var domMgr = new bundle_dom_manager(jQuery);
-	
-	
-	/* Oskari 2.x backport begin */
-	
+
+    var bundle_dom_manager = function (dollar) {
+        this.$ = dollar;
+    };
+    bundle_dom_manager.prototype = {
+        getEl: function (selector) {
+            return this.$(selector);
+        },
+        getElForPart: function (part) {
+            throw "N/A";
+        },
+        setElForPart: function (part, el) {
+            throw "N/A";
+        },
+        setElParts: function (partsMap) {
+            throw "N/A";
+        },
+        getElParts: function () {
+            throw "N/A";
+        },
+        pushLayout: function (s) {
+            throw "N/A";
+        },
+        popLayout: function (s) {
+            throw "N/A";
+        },
+        getLayout: function () {
+            throw "N/A";
+        }
+    };
+
+
+    var domMgr = new bundle_dom_manager(jQuery);
+
+
+    /* Oskari 2.x backport begin */
+
     /* o2 clazz module  */
     var o2anonclass = 0;
     var o2anoncategory = 0;
     var o2anonbundle = 0;
 
     /* this is Oskari 2 modulespec prototype which provides a leaner API  */
-   
-   /* @class Oskari.ModuleSpec 
-    * 
-    * helper class instance of which is returned from oskari 2.0 api
-    * Returned class instance may be used to chain class definition calls.
-    */
-    cs.define('Oskari.ModuleSpec', function(clazzInfo, clazzName) {
+
+    /* @class Oskari.ModuleSpec 
+     *
+     * helper class instance of which is returned from oskari 2.0 api
+     * Returned class instance may be used to chain class definition calls.
+     */
+    cs.define('Oskari.ModuleSpec', function (clazzInfo, clazzName) {
         this.cs = cs;
         this.clazzInfo = clazzInfo;
         this.clazzName = clazzName;
 
     }, {
 
-        slicer : Array.prototype.slice,
-        
+        slicer: Array.prototype.slice,
+
         /* @method category 
-         * adds a set of methods to class 
+         * adds a set of methods to class
          */
-        category : function(protoProps, traitsName) {
-            var clazzInfo = cs.category(this.clazzName, traitsName || ( ['__', (++o2anoncategory)].join('_')), protoProps);
+        category: function (protoProps, traitsName) {
+            var clazzInfo = cs.category(this.clazzName, traitsName || (['__', (++o2anoncategory)].join('_')), protoProps);
             this.clazzInfo = clazzInfo;
             return this;
         },
         /* @method methods
          * adds a set of methods to class - alias to category
          */
-        methods : function(protoProps, traitsName) {
-            var clazzInfo = cs.category(this.clazzName, traitsName || ( ['__', (++o2anoncategory)].join('_')), protoProps);
+        methods: function (protoProps, traitsName) {
+            var clazzInfo = cs.category(this.clazzName, traitsName || (['__', (++o2anoncategory)].join('_')), protoProps);
             this.clazzInfo = clazzInfo;
             return this;
         },
-        
+
         /* @method extend
          * adds inheritance from  a base class
-         * base class can be declared later but must be defined before instantiation 
-         */          
-        extend : function(clsss) {
+         * base class can be declared later but must be defined before instantiation
+         */
+        extend: function (clsss) {
             var clazzInfo = cs.extend(this.clazzName, clsss.length ? clsss : [clsss]);
             this.clazzInfo = clazzInfo;
             return this;
@@ -2656,33 +2680,33 @@ Oskari = (function() {
         /* @method create
          * creates an instance of this class
          */
-        create : function() {
+        create: function () {
             return cs.createWithPdefsp(this.clazzInfo, arguments);
         },
-        
+
         /*
-         * @method returns the class name  
+         * @method returns the class name
          */
-        name : function() {
+        name: function () {
             return this.clazzName;
         },
-        
+
         /*
          * @method returns class metadata
          */
-        metadata : function() {
+        metadata: function () {
             return cs.metadata(this.clazzName);
         },
-        
+
         /*
          * @method events
          * adds a set of event handlers to class
          */
-        events : function(events) {
+        events: function (events) {
             var orgmodspec = this;
             orgmodspec.category({
-                eventHandlers : events,
-                onEvent : function(event) {
+                eventHandlers: events,
+                onEvent: function (event) {
                     var handler = this.eventHandlers[event.getName()];
                     if (!handler) {
                         return;
@@ -2693,11 +2717,11 @@ Oskari = (function() {
             }, '___events');
             return orgmodspec;
         },
-        requests : function(requests) {
+        requests: function (requests) {
             var orgmodspec = this;
             orgmodspec.category({
-                requestHandlers : requests,
-                onRequest : function(request) {
+                requestHandlers: requests,
+                onRequest: function (request) {
                     var handler = this.requestHandlers[request.getName()];
                     if (!handler) {
                         return;
@@ -2708,78 +2732,79 @@ Oskari = (function() {
             }, '___requests');
             return orgmodspec;
         },
-        builder : function() {
+        builder: function () {
             return cs.builderFromPdefsp(this.clazzInfo);
         }
-        
-        
+
+
     });
-	/* Oskari 2.x backport end
-	
+    /* Oskari 2.x backport end
+    
 
     /**
      * @static
      * @property Oskari
      */
     var bndl = {
-        bundle_manager : bm, /* */
-        bundle_facade : fcd,
-        bundle_locale : blocale,
-        app : fcd, /* */
-        clazz : cs,
+        bundle_manager: bm,
+        /* */
+        bundle_facade: fcd,
+        bundle_locale: blocale,
+        app: fcd,
+        /* */
+        clazz: cs,
 
         /**
          * @method Oskari.$
          */
-        "$" : function() {
-            ;
+        "$": function () {;
             return ga.apply(cs, arguments);
         },
         /** @static
          *  @property Oskari.clazzadapter
          *  prototype for a class namespace adapter class
          */
-        clazzadapter : clazzadapter,
+        clazzadapter: clazzadapter,
 
-        run : function(func) {
+        run: function (func) {
             func();
         },
         /**
          * @static
          * @method Oskari.setLoaderMode
          */
-        setLoaderMode : function(m) {
+        setLoaderMode: function (m) {
             mode = m;
         },
-        getLoaderMode : function() {
+        getLoaderMode: function () {
             return mode;
         },
-        setDebugMode : function(d) {
+        setDebugMode: function (d) {
             isDebug = d;
         },
-        setSupportBundleAsync : function(a) {
+        setSupportBundleAsync: function (a) {
             supportBundleAsync = a;
         },
-        getSupportBundleAsync : function() {
+        getSupportBundleAsync: function () {
             return supportBundleAsync;
         },
-        setBundleBasePath : function(bp) {
+        setBundleBasePath: function (bp) {
             basePathForBundles = bp;
         },
-        getBundleBasePath : function() {
+        getBundleBasePath: function () {
             return basePathForBundles;
         },
-        setPreloaded : function(usep) {
+        setPreloaded: function (usep) {
             _preloaded = usep;
         },
         /**
          * @static
          * @method Oskari.registerLocalization
          */
-        registerLocalization : function(props) {
+        registerLocalization: function (props) {
             /*console.log("registerLocalization",props);*/
-            if(props.length) {
-                for(var p = 0; p < props.length; p++) {
+            if (props.length) {
+                for (var p = 0; p < props.length; p++) {
                     var pp = props[p];
                     blocale.setLocalization(pp.lang, pp.key, pp.value);
                 }
@@ -2791,67 +2816,95 @@ Oskari = (function() {
          * @static
          * @method Oskari.getLocalization
          */
-        getLocalization : function(key) {
+        getLocalization: function (key) {
             return blocale.getLocalization(key);
         },
         /**
          * @static
          * @method Oskari.getLang
          */
-        getLang : function() {
+        getLang: function () {
             return blocale.getLang();
         },
         /**
          * @static
          * @method Oskari.setLang
          */
-        setLang : function(lang) {
+        setLang: function (lang) {
             return blocale.setLang(lang);
+        },
+        /**
+         * @static
+         * @method Oskari.setSupportedLocales
+         */
+        setSupportedLocales: function (locales) {
+            return blocale.setSupportedLocales(locales);
+        },
+        /**
+         * @static
+         * @method Oskari.getSupportedLocales
+         */
+        getSupportedLocales: function () {
+            return blocale.getSupportedLocales();
+        },
+        /**
+         * @static
+         * @method Oskari.getDefaultLanguage
+         */
+        getDefaultLanguage: function () {
+            return blocale.getDefaultLanguage();
+        },
+        /**
+         * @static
+         * @method Oskari.getSupportedLanguages
+         */
+        getSupportedLanguages: function () {
+            return blocale.getSupportedLanguages();
         },
         /**
          * @static
          * @method Oskari.purge
          */
-        purge : function() {
+        purge: function () {
             bm.purge();
             cs.purge("Oskari");
         },
-        
+
         /**
          * @static
          * @method Oskari.getDomManager
          */
-        getDomManager : function() {
-        	return domMgr;
+        getDomManager: function () {
+            return domMgr;
         },
         /**
          * @static
          * @method Oskari.setDomManager
          */
-        setDomManager : function(dm) {
-        	domMgr = dm; 
+        setDomManager: function (dm) {
+            domMgr = dm;
         },
-        
+
         /**
          * @static
          * @method getSandbox
          */
-        getSandbox: function(sandboxName)  {
-        	return ga.apply(cs, [sandboxName||'sandbox'])
+        getSandbox: function (sandboxName) {
+            return ga.apply(cs, [sandboxName || 'sandbox'])
         },
         /**
          * @static
          * @method setSandbox
          */
-        setSandbox: function(sandboxName,sandbox) {
-        	return ga.apply(cs, [sandboxName||'sandbox',sandbox])
+        setSandbox: function (sandboxName, sandbox) {
+            return ga.apply(cs, [sandboxName || 'sandbox', sandbox])
         },
-        
+
         /* Oskari 2.x backport begin */
-       /* Oskari 2.x backport end */
-      
+        /* Oskari 2.x backport end */
+
         /* entry point to new class API see Oskari.ModuleSpec above */
-        cls : function(clazzName, ctor, protoProps, metas) {
+        cls: function (clazzName, ctor, protoProps, metas) {
 
             var clazzInfo = undefined;
 
@@ -2865,8 +2918,7 @@ Oskari = (function() {
                 // lookup
             } else {
                 clazzInfo = cs.define(clazzName, ctor ||
-                function() {
-                }, protoProps, metas || {});
+                    function () {}, protoProps, metas || {});
             }
 
             return cs.create('Oskari.ModuleSpec', clazzInfo, clazzName);
@@ -2874,13 +2926,13 @@ Oskari = (function() {
         },
 
         /* o2 helper to access sandbox */
-        sandbox : function(sandboxName) {
+        sandbox: function (sandboxName) {
 
             var sandboxref = {
-                sandbox : ga.apply(cs, [sandboxName || 'sandbox'])
+                sandbox: ga.apply(cs, [sandboxName || 'sandbox'])
             };
 
-            sandboxref.on = function(instance) {
+            sandboxref.on = function (instance) {
                 var me = this;
                 if (instance.eventHandlers) {
                     for (p in instance.eventHandlers) {
@@ -2888,22 +2940,22 @@ Oskari = (function() {
                     }
                 }
                 if (instance.requestHandlers) {
-                    for (r in instance.requestHandlers ) {
+                    for (r in instance.requestHandlers) {
                         me.sandbox.addRequestHandler(r, reqHandlers[r]);
                     }
                 }
-            }, sandboxref.off = function(instance) {
+            }, sandboxref.off = function (instance) {
                 if (instance.eventHandlers) {
                     for (p in instance.eventHandlers) {
                         me.sandbox.unregisterFromEventByName(instance, p);
                     }
                 }
                 if (instance.requestHandlers) {
-                    for (r in instance.requestHandlers ) {
+                    for (r in instance.requestHandlers) {
                         me.sandbox.removeRequestHandler(r, reqHandlers[r]);
                     }
                 }
-            }, sandboxref.slicer = Array.prototype.slice, sandboxref.notify = function(eventName) {
+            }, sandboxref.slicer = Array.prototype.slice, sandboxref.notify = function (eventName) {
                 var me = this;
                 var sandbox = me.sandbox;
                 var builder = me.sandbox.getEventBuilder(eventName);
@@ -2917,25 +2969,25 @@ Oskari = (function() {
         },
 
         /* o2 helper to register localisation */
-        loc : function() {
+        loc: function () {
             return o2main.registerLocalization.apply(o2main, arguments);
         }
 
-        
+
     };
 
     /* Oskari 2.x backport begin */
-   var o2main = bndl;
-     /* o2 api for event class */
-    
-    o2main.eventCls = function(eventName, constructor, protoProps) {
+    var o2main = bndl;
+    /* o2 api for event class */
+
+    o2main.eventCls = function (eventName, constructor, protoProps) {
         var clazzName = ['Oskari', 'event', 'registry', eventName].join('.');
         var rv = o2main.cls(clazzName, constructor, protoProps, {
-            protocol : ['Oskari.mapframework.event.Event']
+            protocol: ['Oskari.mapframework.event.Event']
         });
 
         rv.category({
-            getName : function() {
+            getName: function () {
                 return eventName;
             }
         }, '___event');
@@ -2946,14 +2998,14 @@ Oskari = (function() {
     };
 
     /* o2 api for request class */
-    o2main.requestCls = function(requestName, constructor, protoProps) {
+    o2main.requestCls = function (requestName, constructor, protoProps) {
         var clazzName = ['Oskari', 'request', 'registry', requestName].join('.');
         var rv = o2main.cls(clazzName, constructor, protoProps, {
-            protocol : ['Oskari.mapframework.request.Request']
+            protocol: ['Oskari.mapframework.request.Request']
         });
 
         rv.category({
-            getName : function() {
+            getName: function () {
                 return requestName;
             }
         }, '___request');
@@ -2962,51 +3014,49 @@ Oskari = (function() {
 
         return rv;
     };
-    
-    
+
+
     o2main._baseClassFor = {
-        'extension' : "Oskari.userinterface.extension.EnhancedExtension",
-        'bundle' : "Oskari.mapframework.bundle.extension.ExtensionBundle",
-        'tile' : "Oskari.userinterface.extension.EnhancedTile",
-        'flyout' : "Oskari.userinterface.extension.EnhancedFlyout",
-        'view' : "Oskari.userinterface.extension.EnhancedView"
+        'extension': "Oskari.userinterface.extension.EnhancedExtension",
+        'bundle': "Oskari.mapframework.bundle.extension.ExtensionBundle",
+        'tile': "Oskari.userinterface.extension.EnhancedTile",
+        'flyout': "Oskari.userinterface.extension.EnhancedFlyout",
+        'view': "Oskari.userinterface.extension.EnhancedView"
     };
-    
+
 
     /* o2 api for bundle classes */
-   
-   /* @static @method Oskari.extensionCls
-    * 
-    */ 
-    o2main.extensionCls = function(clazzName) {
-        return o2main.cls(clazzName).extend(this._baseClassFor.extension);
-    /* @static @method Oskari.bundleCls 
-     * 
+
+    /* @static @method Oskari.extensionCls
+     *
      */
-    }, o2main.bundleCls = function(bnldId, clazzName) {
+    o2main.extensionCls = function (clazzName) {
+        return o2main.cls(clazzName).extend(this._baseClassFor.extension);
+        /* @static @method Oskari.bundleCls 
+         *
+         */
+    }, o2main.bundleCls = function (bnldId, clazzName) {
 
         if (!bnldId) {
-            bnldId = ( ['__', (++o2anonbundle)].join('_'));
+            bnldId = (['__', (++o2anonbundle)].join('_'));
         }
 
-        var rv = o2main.cls(clazzName, function() {
+        var rv = o2main.cls(clazzName, function () {}, {
+            update: function () {}
         }, {
-            update : function() {
-            }
-        }, {
-            "protocol" : ["Oskari.bundle.Bundle", this._baseClassFor.bundle],
-            "manifest" : {
-                "Bundle-Identifier" : bnldId
+            "protocol": ["Oskari.bundle.Bundle", this._baseClassFor.bundle],
+            "manifest": {
+                "Bundle-Identifier": bnldId
             }
         });
         bm.installBundlePdefsp(bnldId, rv.clazzInfo);
 
         rv.___bundleIdentifier = bnldId;
-        rv.loc = function(props) {
+        rv.loc = function (props) {
             props.key = this.___bundleIdentifier;
             o2main.registerLocalization(props);
             return rv;
-        }, rv.start = function(instanceid) {
+        }, rv.start = function (instanceid) {
             var bundleid = this.___bundleIdentifier;
 
             if (!fcd.bundles[bundleid]) {
@@ -3026,32 +3076,32 @@ Oskari = (function() {
             bi.start();
 
             return bi;
-        }, rv.stop = function() {
+        }, rv.stop = function () {
             var bundleid = this.___bundleIdentifier;
             var bi = fcd.bundleInstances[bundleid];
             return bi.stop();
         };
-1
+        1
         return rv;
     },
     /**
-     * @static @method flyoutCls 
+     * @static @method flyoutCls
      */
-     o2main.flyoutCls = function(clazzName) {
+    o2main.flyoutCls = function (clazzName) {
         return o2main.cls(clazzName).extend(this._baseClassFor.flyout);
-     }
+    }
     /* @static @method Oskari.tileCls 
-     * 
+     *
      */
-    o2main.tileCls = function(clazzName) {
+    o2main.tileCls = function (clazzName) {
         return o2main.cls(clazzName).extend(this._baseClassFor.tile);
-      },
+    },
     /* @static @method Oskari.bundleCls 
-     * 
+     *
      */
-     o2main.viewCls = function(clazzName) {
+    o2main.viewCls = function (clazzName) {
         return o2main.cls(clazzName).extend(this._baseClassFor.view);
-     };
+    };
     /* Oskari 2.x backport end */
 
     /**

@@ -2,13 +2,13 @@ Oskari.registerLocalization({
 	"lang" : "en",
 	"key" : "admin-layerselector",
 	"value" : {
-		"title" : "admin: Karttatasot",
+		"title" : "admin: Map layers",
 		"desc" : "",
 		"flyout" : {
-			"title" : "admin: karttatasot"
+			"title" : "admin: Map layers"
 		},
 		"tile" : {
-			"title" : "A: karttatasot",
+			"title" : "A: Map layers",
 			"tooltip" : "."
 		},
 		"view" : {
@@ -17,40 +17,39 @@ Oskari.registerLocalization({
 			"templates" : {
 			}
 		},
-
 		"errors" : {
-            "title": "Virhe!",
-            "generic": "Järjestelmässä tapahtui virhe. Yritä uudelleen myöhemmin.",
-			"loadFailed" : "Karttatasojen latauksessa tapahtui virhe. Lataa sivu selaimeesi uudelleen ja valitse karttatasot.",
-			"noResults": "Haulla ei löytynyt yhtään tulosta."
+            "title": "Error!",
+            "generic": "There was an error in the system. Try again later.",
+			"loadFailed" : "Error loading map layers. Reload the page and choose admin map layers.",
+			"noResults": "The search found no results.."
 		},
-        "loading" : "Ladataan...",
+        "loading" : "Loading...",
 		"filter" : {
-			"text" : "Hae karttatasoja",
-			"inspire" : "Aiheittain",
-			"organization" : "Tiedontuottajittain",
-			"published" : "Käyttäjät"
+			"text" : "Search map layers",
+			"inspire" : "By theme",
+			"organization" : "By data providers",
+			"published" : "Users"
 		},
 		"published" : {
-			"organization" : "Julkaistu taso",
-			"inspire" : "Julkaistu taso"
+			"organization" : "Published layers",
+			"inspire" : "Published layer"
 		},
 		"tooltip" : {
-			"type-base" : "Taustakartta",
-			"type-wms" : "Karttataso",
-			"type-wfs" : "Tietotuote"
+			"type-base" : "Base",
+			"type-wms" : "Map layer",
+			"type-wfs" : "Data product"
 		},
 		"backendStatus" : {
 			"OK" : {
-				"tooltip" : "Karttataso on saatavilla tällä hetkellä.",
+				"tooltip" : "Map layer is currently available.",
 				"iconClass" : "backendstatus-ok"
 			},
 			"DOWN" : {
-				"tooltip" : "Karttataso ei ole saatavilla tällä hetkellä.",
+				"tooltip" : "Map layer is currently not available.",
 				"iconClass" : "backendstatus-down"
 			},
 			"MAINTENANCE" : {
-				"tooltip" : "Karttatason saatavuudessa on tiedossa käyttökatkoja lähipäivinä.",
+				"tooltip" : "Map layer availability Karttatason saatavuudessa on tiedossa käyttökatkoja lähipäivinä.",
 				"iconClass" : "backendstatus-maintenance"
 			},
 			"UNKNOWN" : {
@@ -72,6 +71,11 @@ Oskari.registerLocalization({
 			"editDesc" 				: "Edit name",
 			"layerType"				: "Layer type",
 			"layerTypeDesc" 		: "Layer type: WMS, WFS, WMTS",
+			"type"					: "Layer type",
+			"typePlaceholder"		: "Choose layer type",
+			"normalLayer"			: "Normal layer",
+			"baseLayer"				: "Base layer",
+			"groupLayer"			: "Group layer",
 			"interfaceVersion"		: "Interface version",
 			"interfaceVersionDesc" 	: "Interface version",
 			"wmslayer"				: "WMS layer",
@@ -83,6 +87,10 @@ Oskari.registerLocalization({
 			"selectClass" 			: "Select class",
 			"selectClassDesc" 		: "Select Inspire theme",
 
+			"baseName"				: "Base layer name",
+			"groupName"				: "Group layer name",
+			"subLayers" 			: "Sublayers",
+			"addSubLayer"			: "Add sublayer",
 
 			"wmsInterfaceAddress" 	: "WMS interface URL",
 			"wmsInterfaceAddressDesc": "WMS interface URL-addresses separated with commas",
@@ -115,6 +123,8 @@ Oskari.registerLocalization({
 			"maxScale" 				: "Maximum scale",
 			"maxScaleDesc" 			: "Layer's maximum scale",
 			"maxScalePlaceholder" 	: "Layer's maximum scale",
+			"srsName"				: "Coordinate system",
+			"srsNamePlaceholder"	: "Coordinate system",
 			"legendImage" 			: "Legenda image",
 			"legendImageDesc" 		: "URL for legenda image",
 			"legendImagePlaceholder" : "URL for legenda image",
@@ -123,18 +133,28 @@ Oskari.registerLocalization({
 			"gfiStyle" 				: "GFI style",
 			"gfiStyleDesc" 			: "GFI style (XSLT)",
 
-			"finnish" 				: "Finnish:",
-			"finnishTitle" 			: "Fi",
-			"finnishPlaceholder" 	: "Name in Finnish",
-			"finnishDescPlaceholder" : "Description in Finnish",
-			"swedish" 				: "Swedish",
-			"swedishTitle" 			: "Sv",
-			"swedishPlaceholder" 	: "Name in Swedish",
-			"swedishDescPlaceholder" : "Description in Swedish",
-			"english" 				: "English:",
-			"englishTitle" 			: "En",
-			"englishPlaceholder" 	: "Name in English",
-			"englishDescPlaceholder" : "Description in English",
+			"generic"               : {
+				"placeholder"     : "Name in {0}",
+				"descplaceholder" : "Description in {0}"
+			},
+			"en"                    : {
+				"lang"            : "English:",
+				"title"           : "En",
+				"placeholder"     : "Name in English",
+				"descplaceholder" : "Description in English"
+			},
+			"fi"                    : {
+				"lang"            : "Finnish:",
+				"title"           : "Fi",
+				"placeholder"     : "Name in Finnish",
+				"descplaceholder" : "Description in Finnish"
+			},
+			"sv"                    : {
+				"lang"            : "Swedish:",
+				"title"           : "Sv",
+				"placeholder"     : "Name in Swedish",
+				"descplaceholder" : "Description in Swedish"
+			},
 
 			"interfaceAddress" 		: "interface URL",
 			"interfaceAddressDesc" 	: "URL for WMS layer definitions",

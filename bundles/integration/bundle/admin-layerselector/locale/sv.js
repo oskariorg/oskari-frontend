@@ -8,7 +8,7 @@ Oskari.registerLocalization({
 			"title" : "admin: Kartlager"
 		},
 		"tile" : {
-			"title" : "A: karttatasot",
+			"title" : "A: Kartlager",
 			"tooltip" : "."
 		},
 		"view" : {
@@ -71,6 +71,11 @@ Oskari.registerLocalization({
 			"editDesc" 				: "Editera namn",
 			"layerType"				: "Lagertyp",
 			"layerTypeDesc" 		: "Lagrets typ: WMS, WFS, WMTS",
+			"type"					: "Tason tyyppi",
+			"typePlaceholder"		: "Valitse tason tyyppi",
+			"normalLayer"			: "Normaali taso",
+			"baseLayer"				: "Taustataso",
+			"groupLayer"			: "Ryhmätaso",
 			"interfaceVersion"		: "Gränss&shy;nittets version",
 			"interfaceVersionDesc" 	: "Gränss&shy;nittets version",
 			"wmslayer"				: "WMS Lager",
@@ -81,6 +86,11 @@ Oskari.registerLocalization({
 			"getInfo" 				: "Sök data",
 			"selectClass" 			: "Valitse aihe",
 			"selectClassDesc" 		: "Valitse aihe",
+
+			"baseName"				: "Taustatason nimi",
+			"groupName"				: "Ryhmätason nimi",
+			"subLayers" 			: "Alatasot",
+			"addSubLayer"			: "Lisää alataso",
 
 			"wmsInterfaceAddress" 	: "WMS&shy;-gränssnittets address",
 			"wmsInterfaceAddressDesc": "WMS&shy;-gränssnittets URL-address separerat med komma",
@@ -113,6 +123,8 @@ Oskari.registerLocalization({
 			"maxScale" 				: "Maximi&shy;skala",
 			"maxScaleDesc" 			: "Lagrets maximiskala (1:1)",
 			"maxScalePlaceholder" 	: "1 (1:1) Lagrets maximiskala",
+			"srsName"				: "Koordinaatti&shy;järjestelmä",
+			"srsNamePlaceholder"	: "Koordinaattijärjestelmä",
 			"legendaImage" 			: "Förklarings&shy;bildens address",
 			"legendaImageDesc" 		: "Förklarings&shy;bildens address",
 			"legendaImagePlaceholder" : "Förklarings&shy;bildens address",
@@ -121,23 +133,32 @@ Oskari.registerLocalization({
 			"gfiStyle" 				: "GFI stil",
 			"gfiStyleDesc" 			: "GFI stil (XSLT)",
 
-			"finnish" 				: "Suomeksi:",
-			"finnishTitle" 			: "Fi",
-			"finnishPlaceholder" 	: "Nimi suomeksi",
-			"finnishDescPlaceholder" : "Kuvaus suomeksi",
-			"swedish" 				: "På svenska:",
-			"swedishTitle" 			: "Sv",
-			"swedishPlaceholder" 	: "Namn på svenska",
-			"swedishDescPlaceholder" : "Beskrivning på svenska",
-			"english" 				: "In English:",
-			"englishTitle" 			: "En",
-			"englishPlaceholder" 	: "Name in English",
-			"englishDescPlaceholder" : "Description in English",
+			"generic"               : {
+				"placeholder"     : "Name in {0}",
+				"descplaceholder" : "Description in {0}"
+			},
+			"en"                    : {
+				"lang"            : "In English:",
+				"title"           : "En",
+				"placeholder"     : "Name in English",
+				"descplaceholder" : "Description in English"
+			},
+			"fi"                    : {
+				"lang"            : "Suomeksi:",
+				"title"           : "Fi",
+				"placeholder"     : "Nimi suomeksi",
+				"descplaceholder" : "Kuvaus suomeksi"
+			},
+			"sv"                    : {
+				"lang"            : "På svenska:",
+				"title"           : "Sv",
+				"placeholder"     : "Namn på svenska",
+				"descplaceholder" : "Beskrivning på svenska"
+			},
 
 			"interfaceAddress" 		: "Gränssnitten address",
-			"interfaceAddressDesc" 	: "WMS address för lager definitionen"
+			"interfaceAddressDesc" 	: "WMS address för lager definitionen",
 			"viewingRightsRoles" 	: "Kollar rättigheter roller"
-
 		},
 		"cancel" 	: "Tillbaka",
 		"add" 		: "Tillägg",

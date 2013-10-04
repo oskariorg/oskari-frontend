@@ -20,6 +20,9 @@ div.myplacesform textarea {
 div.myplacesform select {
   width: 80%; }
 
+div.myplacesform .imagePreview {
+  cursor: pointer; }
+
 div.myplacesform div.renderButton,
 div.myplacescategoryform div.renderButton {
     margin: 5px;
@@ -298,7 +301,7 @@ div.areavisualization {
     width: 650px;
 }
 
-div#imagePreview img {
+div.imagePreview img {
   max-height: 350px;
   max-width: 350px;
 }

@@ -96,7 +96,7 @@ Oskari.registerLocalization({
 			"wmsInterfaceAddressDesc": "WMS&shy;-rajapinnan URL-osoitteet pilkulla eroteltuna",
 			"wmsServiceMetaId" 		: "WMS metatiedon tunniste",
 			"wmsServiceMetaIdDesc" 	: "WMS&shy;-palvelun metatiedon tiedostotunniste",
-			"layerNameAndDesc" 		: "Tason nimi ja lisätieto",
+			"layerNameAndDesc" 		: "Tason nimi ja kuvaus",
 
 			"metaInfoIdDesc" 		: "Paikkatieto&shy;hakemiston metatiedon tiedostotunniste, joka yksilöi metatiedon XML kuvailun",
 			"metaInfoId" 			: "Metatiedon tiedosto&shy;tunniste",
@@ -133,18 +133,28 @@ Oskari.registerLocalization({
 			"gfiStyle" 				: "GFI:n tyyli",
 			"gfiStyleDesc" 			: "GFI:n tyyli (XSLT)",
 
-			"finnish" 				: "Suomeksi:",
-			"finnishTitle" 			: "Fi",
-			"finnishPlaceholder" 	: "Nimi suomeksi",
-			"finnishDescPlaceholder" : "Kuvaus suomeksi",
-			"swedish" 				: "Ruotsiksi:",
-			"swedishTitle" 			: "Sv",
-			"swedishPlaceholder" 	: "Nimi ruotsiksi",
-			"swedishDescPlaceholder" : "Kuvaus ruotsiksi",
-			"english" 				: "Englanniksi:",
-			"englishTitle" 			: "En",
-			"englishPlaceholder" 	: "Nimi englanniksi",
-			"englishDescPlaceholder" : "Kuvaus englanniksi",
+			"generic"               : {
+				"placeholder"     : "Nimi kielellä {0}",
+				"descplaceholder" : "Kuvaus kielellä {0}"
+			},
+			"en"                    : {
+				"lang"            : "Englanniksi:",
+				"title"           : "En",
+				"placeholder"     : "Nimi englanniksi",
+				"descplaceholder" : "Kuvaus englanniksi"
+			},
+			"fi"                    : {
+				"lang"            : "Suomeksi:",
+				"title"           : "Fi",
+				"placeholder"     : "Nimi suomeksi",
+				"descplaceholder" : "Kuvaus suomeksi"
+			},
+			"sv"                    : {
+				"lang"            : "Ruotsiksi:",
+				"title"           : "Sv",
+				"placeholder"     : "Nimi ruotsiksi",
+				"descplaceholder" : "Kuvaus ruotsiksi"
+			},
 
 			"interfaceAddress" 		: "Rajapinnan osoite",
 			"interfaceAddressDesc" 	: "WMS&shy;-tasomäärittelyjen osoite",
