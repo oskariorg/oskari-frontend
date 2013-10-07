@@ -597,6 +597,8 @@ function(instance, localization) {
         var me = this;
         var contentPanel = contentPanel_in.find('.help:first');
         var layers = this.instance.getSandbox().findAllSelectedMapLayers();
+        // Add property types for WFS layer, if not there
+        this._addPropertyTypes(layers);
         var options = [];
         var ii = 0;
         // request updates for map tiles
@@ -678,7 +680,7 @@ function(instance, localization) {
 
         } else if (method == this.id_prefix + "union") {
             // union input 2 layer selection
-           // deprecated  me._unionExtra(extra);
+            // deprecated  me._unionExtra(extra);
 
         }
     },
@@ -1341,6 +1343,16 @@ function(instance, localization) {
         if (!layer || !filterJson)
             return;
         filterJson.featureIds = (layer.getClickedFeatureListIds ? layer.getClickedFeatureListIds().slice() : [] );
+    },
+    _addPropertyTypes : function(layers) {
+        var me = this;
+        for (var i = 0; i < layers.length; i++) {
+            if (layers[i].isLayerOfType('WFS')) {
+                if (jQuery.isEmptyObject(layers[i].getPropertyTypes())) {
+                    me.instance.analyseService.loadWFSLayerPropertiesAndTypes(layers[i].getId())
+                }
+            }
+        }
     },
 
     /**

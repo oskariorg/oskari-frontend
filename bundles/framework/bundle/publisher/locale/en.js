@@ -102,7 +102,7 @@ Oskari.registerLocalization(
                         "gfiDialog": {
                             "title": "Preview",
                             "featureName": "Preview",
-                            "featureDesc": "The selected colour scheme only affects the colours of the map feature box"
+                            "featureDesc": "The selected colour scheme only affects the colours of the feature info and layer selection popups"
                         }
                     }
                 },

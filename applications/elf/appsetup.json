@@ -59,7 +59,7 @@
                 "sandbox-map" : { "bundlePath" : "../../packages/framework/bundle/" },
                 "service-base" : { "bundlePath" : "../../packages/framework/bundle/" },
                 "service-map" : { "bundlePath" : "../../packages/framework/bundle/" },
-                "mapwfs" : { "bundlePath" : "../../packages/framework/bundle/" }
+                "mapwfs2" : { "bundlePath" : "../../packages/framework/bundle/" }
                 
             },
             "Require-Bundle-Instance" : [  ]
@@ -163,7 +163,38 @@
             },
             "Require-Bundle-Instance" : [  ]
         }
-      } 
+      },
+      {
+        "title": "Feature data",
+        "en": "featuredata2",
+        "fi": "featuredata2",
+        "sv": "featuredata2",
+        "bundleinstancename": "featuredata2",
+        "bundlename": "featuredata2",
+        "instanceProps": {},
+        "metadata" : {
+            "Import-Bundle" : {
+                "featuredata2": { "bundlePath" : "../../packages/framework/bundle/" }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }, {
+        "instanceProps": {},
+        "title": "Info Box",
+        "bundleinstancename": "infobox",
+        "fi": "infobox",
+        "sv": "?",
+        "en": "?",
+        "bundlename": "infobox",
+        "metadata": {
+            "Import-Bundle": {
+                "infobox": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            },
+            "Require-Bundle-Instance": []
+        }
+    }
        
   ]
 }
