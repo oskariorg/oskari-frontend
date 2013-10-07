@@ -403,13 +403,14 @@ function(instance, localization, backendConfiguration) {
         var me = this;
         var selections = this._gatherSelections("image/png");
 
-        //
-        this.backendConfiguration = {
+        // 
+        // ?
+        /*this.backendConfiguration = {
             "formatProducers" : {
                 "application/pdf" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.pdf?",
                 "image/png" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.png?"
             }
-        };
+        };*/
         //
 
         var urlBase = this.backendConfiguration.formatProducers[selections.format];
