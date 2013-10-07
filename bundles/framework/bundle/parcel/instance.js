@@ -93,9 +93,9 @@ function() {
 	 * @param {String} message popup message
 	 */
 	showMessage : function(title, message) {
-		var loc = this.getLocalization();
-		var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-		var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+		var loc = this.getLocalization(),
+			dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+			okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
 		okBtn.setTitle(loc.buttons.ok);
 		okBtn.addClass('primary');
 		okBtn.setHandler(function() {
@@ -139,38 +139,42 @@ function() {
 	 */
 	start : function() {
 		// Should this not come as a param?
-		var sandbox = Oskari.$('sandbox');
+		var sandbox = Oskari.$('sandbox'),
+			mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService'),
+			me = this,
+			i,
+			layerId;
 		this.sandbox = sandbox;
-		var mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-
-		var me = this;
-		if (this.conf && this.conf.proxyUrl) {
+		if (me.conf && me.conf.proxyUrl) {
 			// Use proxy if requesting features cross-domain.
 			// Also, proxy is required to provide application specific authorization for WFS data.
 			// Notice, OpenLayers will automatically encode URL parameters.
-			OpenLayers.ProxyHost = this.conf.proxyUrl;
+			OpenLayers.ProxyHost = me.conf.proxyUrl;
 		}
 
-		if(this.conf && this.conf.stickyLayerIds) {
+		if(me.conf && me.conf.stickyLayerIds) {
 			// Layer switch off disable
-			for (var i in this.conf.stickyLayerIds) {
-				var layerId = this.conf.stickyLayerIds[i];
+			for (i in me.conf.stickyLayerIds) {
+				layerId = me.conf.stickyLayerIds[i];
         	    mapLayerService.makeLayerSticky(layerId,true);
 			}
 		}
 		// back end communication
-		this.parcelService = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelService', this);
-		this.sandbox.registerService(this.parcelService);
+		me.parcelService = Oskari.clazz.create('Oskari.mapframework.bundle.parcel.service.ParcelService', me);
+		me.sandbox.registerService(me.parcelService);
 		// init loads the places
-		this.parcelService.init();
+		me.parcelService.init();
 
 		// handles parcels save form
-		this.view = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.view.MainView", this);
-		this.view.start();
+		me.view = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.view.MainView", me);
+		me.view.start();
 
 		// handles selection events related to parcels
-		this.parcelSelectorHandler = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.handler.ParcelSelectorHandler", this);
-		this.parcelSelectorHandler.start();
+		me.parcelSelectorHandler = Oskari.clazz.create("Oskari.mapframework.bundle.parcel.handler.ParcelSelectorHandler", me);
+		me.parcelSelectorHandler.start();
+		if (me.state && me.state.initRef) {
+			me.parcelSelectorHandler.loadParcel(me.state.initRef);
+		}
 	},
 	/**
 	 * @method stop

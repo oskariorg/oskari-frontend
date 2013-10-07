@@ -48,10 +48,9 @@ function(instance) {
      * Interface method implementation, assigns tab views that will be used to create the UI.
      */
     startPlugin : function() {
-        var me = this;
-
-        var parcelTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').parcel, 'ParcelSelector.ParcelSelectedEvent');
-        var registerUnitTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').registerUnit, 'ParcelSelector.RegisterUnitSelectedEvent');
+        var me = this,
+            parcelTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').parcel, 'ParcelSelector.ParcelSelectedEvent'),
+            registerUnitTab = Oskari.clazz.create("Oskari.mapframework.bundle.parcelselector.view.ParcelsTab", this.instance, this.instance.getLocalization('filter').registerUnit, 'ParcelSelector.RegisterUnitSelectedEvent');
 
         this.parcelTabs.push(parcelTab);
         this.parcelTabs.push(registerUnitTab);
@@ -91,17 +90,17 @@ function(instance) {
      * Creates the UI for a fresh start
      */
     createUi : function() {
-        var me = this;
-        var sandbox = me.instance.getSandbox();
-
-        // clear container
-        var cel = jQuery(this.container);
+        var me = this,
+            i,
+            tab,
+            sandbox = me.instance.getSandbox(),
+            cel = jQuery(this.container); // clear container
         cel.empty();
 
         this.tabContainer = Oskari.clazz.create('Oskari.userinterface.component.TabContainer');
         this.tabContainer.insertTo(cel);
-        for (var i = 0; i < this.parcelTabs.length; ++i) {
-            var tab = this.parcelTabs[i];
+        for (i = 0; i < this.parcelTabs.length; ++i) {
+            tab = this.parcelTabs[i];
             this.tabContainer.addPanel(tab.getTabPanel());
         }
     }
