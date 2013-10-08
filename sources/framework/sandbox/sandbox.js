@@ -711,7 +711,9 @@ function(core) {
      * @param property Property
      */
     getLocalizedProperty : function (property) {
-        var ret;
+        var ret,
+            supportedLocales,
+            i;
         if (property === null || typeof property === 'undefined') {
             return null;
         }
@@ -719,6 +721,14 @@ function(core) {
             // property value is an object, so it's prolly localized
             ret = property[Oskari.getLang()];
             if (ret === null) {
+                supportedLocales = Oskari.getSupportedLocales();
+                for (i = 0; i < supportedLocales.length; i += 1) {
+                    ret = property[supportedLocales[i]];
+                    if (ret) {
+                        // We found the property in _some_ language...
+                        break;
+                    }
+                }
                 // TODO (needs supportedLocales)
                 // try default lang
                 // try any lang?
