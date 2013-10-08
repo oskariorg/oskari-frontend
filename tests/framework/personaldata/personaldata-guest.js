@@ -15,9 +15,17 @@ describe('Test Suite for PersonalData - Guest user', function() {
         ]);
     
         var mapfullConf = getConfigForMapfull();
+        var personaldataConf = {
+                "changeInfoUrl": {
+                    "en": "https://www.paikkatietoikkuna.fi/web/en/profile",
+                    "fi": "https://www.paikkatietoikkuna.fi/web/fi/profiili",
+                    "sv": "https://www.paikkatietoikkuna.fi/web/sv/profil"
+                }
+        };
         // overwrite test wide appConf
         appConf = { 
-            "mapfull" : mapfullConf
+            "mapfull" : mapfullConf,
+            "personaldata" : personaldataConf
         };
     });
 
@@ -26,6 +34,8 @@ describe('Test Suite for PersonalData - Guest user', function() {
         jQuery("body").html(getDefaultHTML());  
         // startup Oskari
         setupOskari(appSetup, appConf, function() {
+            // Set supported locales
+            Oskari.setSupportedLocales(['fi_FI', 'sv_SE', 'en_US']);
             sandbox = Oskari.$("sandbox");
             module = sandbox.findRegisteredModuleInstance('PersonalData'); 
             done();

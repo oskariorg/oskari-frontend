@@ -39,6 +39,8 @@ describe.skip('Test Suite for integration/admin-layerselector bundle', function(
         jQuery("body").html(getDefaultHTML());
         // startup Oskari
         setupOskari(setup, conf, function() {
+            // Set supported locales
+            Oskari.setSupportedLocales(['fi_FI', 'sv_SE', 'en_US']);
             // Find handles to sandbox
             sandbox = Oskari.getSandbox();
             adminLayerSelector = sandbox.findRegisteredModuleInstance('admin-layerselector');
@@ -65,9 +67,9 @@ describe.skip('Test Suite for integration/admin-layerselector bundle', function(
         it('should be ok', function() {
             // We should probably stub the "_save" function from views/tabPanelView.js
             // so that we test the interface and not the server. But how? x___X
-            var addOrgSpy = sinon.stub();
-            var flyout = adminLayerSelector.plugins['Oskari.userinterface.Flyout'];
-            var container = flyout.ui.container;
+            var addOrgSpy = sinon.stub(),
+                flyout = adminLayerSelector.plugins['Oskari.userinterface.Flyout'],
+                container = flyout.ui.container;
             container.show();
             container.find('button.admin-add-org-btn').click();
             container.find('input#add-class-fi-name').val('testFi');

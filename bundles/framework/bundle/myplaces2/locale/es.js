@@ -6,7 +6,7 @@ Oskari.registerLocalization({
     "desc": "",
     "category": {
       "defaultName": "Mi capa",
-      "organization": "Mis sitios",
+      "organizationnew": "Mis sitios",
       "inspire": "Sitios"
     },
     "guest": {

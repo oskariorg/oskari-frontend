@@ -29,6 +29,11 @@ describe('Test suite for Toolbar bundle', function() {
             "toolbar": {
                 "state": {},
                 "conf": {
+                    "mapUrlPrefix": {
+                        "en": "http://www.paikkatietoikkuna.fi/web/en/map-window?",
+                        "fi": "http://www.paikkatietoikkuna.fi/web/fi/kartta?",
+                        "sv": "http://www.paikkatietoikkuna.fi/web/sv/kartfonstret?"
+                    },
                     "logUrl": "http://localhost:8080/logger"
                 }
             }
@@ -48,6 +53,8 @@ describe('Test suite for Toolbar bundle', function() {
         jQuery("body").html(getDefaultHTML());
         // startup Oskari
         setupOskari(setup, conf, function() {
+            // Set supported locales
+            Oskari.setSupportedLocales(['fi_FI', 'sv_SE', 'en_US']);
             // Find handles to sandbox and toolbar module
             sandbox = Oskari.getSandbox();
             toolbarModule = sandbox.findRegisteredModuleInstance('Toolbar');
