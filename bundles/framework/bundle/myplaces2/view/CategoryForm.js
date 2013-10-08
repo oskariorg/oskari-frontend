@@ -64,13 +64,20 @@ function(instance) {
     this.templateTextInput = jQuery('<input type="text"/>');
     this.templateRenderButton = jQuery('<div class="renderButton" style= "display: inline-block; border: 1px solid;"></div>');
     this.defaults = {
-        dotSize : 4,
-        dotColor : 'cc9900',
-        lineSize : 2,
-        lineColor : 'cc9900',
-        areaLineSize : 2,
-        areaLineColor : 'cc9900',
-        areaFillColor : 'ffdc00'
+        lineStyle : '',
+        lineCap : 0,
+        lineCorner : 0,
+        lineWidth : 1,
+        lineColor : '3233ff',
+        areaLineWidth : 1,
+        areaLineCorner : 0,
+        areaLineStyle : '',
+        areaLineColor : '000000',
+        areaFillColor : 'ffde00',
+        areaFillStyle : -1,
+        dotShape : 1,
+        dotSize : 3,
+        dotColor : '000000'
     };
     this.categoryId = undefined;
     this._isDefault = undefined;

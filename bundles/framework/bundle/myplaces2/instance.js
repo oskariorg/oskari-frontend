@@ -208,15 +208,14 @@ function() {
                  size: 3
              },
              line: {
-                 style: 0,
+                 style: "",
                  cap: 0,
                  corner: 0,
                  width: 1,
-                 color: "000000"
+                 color: "3233ff"
              },
              area: {
-                 linestyle: 0,
-                 linecap: 0,
+                 linestyle: "",
                  linecorner: 0,
                  linewidth: 1,
                  linecolor: "000000",

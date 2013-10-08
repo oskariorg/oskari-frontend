@@ -115,8 +115,8 @@ function(url, uuid, sandbox, defaults, pInstance) {
         defaultCategory.setAreaLineCorner(this.defaults.area.linecorner);
         defaultCategory.setAreaLineStyle(this.defaults.area.linestyle);
         defaultCategory.setAreaLineColor(this.defaults.area.linecolor);
-        defaultCategory.setAreaFillColor(this.defaults.area.fillcolor);
-        defaultCategory.setAreaFillStyle(this.defaults.area.style);
+        defaultCategory.setAreaFillColor(this.defaults.area.color);
+        defaultCategory.setAreaFillStyle(this.defaults.area.fill);
         defaultCategory.setDefault(true);
         
         var defaultCategoryCreationCallback = function() {
