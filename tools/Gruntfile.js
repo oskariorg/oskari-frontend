@@ -71,17 +71,16 @@ module.exports = function (grunt) {
             dev: {
                 background: true
             },
-            test: {
-            },
-            coverage: {
-                preprocessors : {
-                    '../dist/*.js': 'coverage'
+            ci: {
+                browsers: ['PhantomJS'],
+                proxies: {
+                    '/': 'http://dev.paikkatietoikkuna.fi/'
                 },
-                coverageReporter : {
-                    type : 'html',
-                    dir : 'coverage/'
+                reporters: ['junit'],
+                junitReporter: {
+                    outputFile: 'test-results.xml'
                 },
-                reporters : ['dots', 'coverage']
+                singleRun: true
             }
         },
         clean: {
@@ -118,18 +117,6 @@ module.exports = function (grunt) {
             target: {
                 src: ['../{applications,bundles,packages}/**/*.js']
             }
-        },
-        "regex-replace": {
-            karma: {
-                src: ['node_modules/grunt-karma/node_modules/karma/lib/server.js'],
-                actions: [
-                    {
-                        name: 'removeFlashSocketAsItDoesNotWorkInIE',
-                        search: "'websocket', 'flashsocket', 'xhr-polling', 'jsonp-polling'",
-                        replace: "'websocket', 'xhr-polling', 'jsonp-polling'"
-                    }
-                ]
-            }
         }
     });
 
@@ -139,14 +126,13 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-yuidoc');
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-regex-replace');
 
     // Default task(s).
-    grunt.registerTask('default', ['regex-replace', 'karma:dev', 'compileAppSetupToStartupSequence', 'compileDev', 'karma:dev:run', 'watch']);
+    grunt.registerTask('default', ['karma:dev', 'compileAppSetupToStartupSequence', 'compileDev', 'karma:dev:run', 'watch']);
     // Default task.
     //    grunt.registerTask('default', 'watch testacularServer:dev');
     //    grunt.registerTask('default', 'testacularServer:dev watch');
