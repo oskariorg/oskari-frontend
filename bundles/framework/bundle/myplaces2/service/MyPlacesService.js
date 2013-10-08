@@ -20,8 +20,7 @@ function(url, uuid, sandbox, defaults, pInstance) {
     // list of loaded categories & myplaces
     this._categoryList = [];
     this._placesList = [];
-
-    this.wfstStore = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore', url, uuid);
+    this.wfstStore = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore', url, uuid, pInstance.featureNS);
     this._sandbox = sandbox;
     this.defaultCategory = null;
     this.defaults = defaults;

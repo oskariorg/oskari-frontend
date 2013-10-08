@@ -1,15 +1,20 @@
 /**
  * Start when dom ready
  */
-jQuery(document).ready(function() {
+jQuery(document).ready(function () {
+    "use strict";
+    var getAppSetupParams = {},
+        key,
+        hostIdx,
+        pathIdx;
     if (!ajaxUrl) {
         alert('Ajax URL not set - cannot proceed');
         return;
     }
 
     function getURLParameter(name) {
-        var re = name + '=' + '([^&]*)(&|$)';
-        var value = RegExp(re).exec(location.search);
+        var re = name + '=' + '([^&]*)(&|$)',
+            value = new RegExp(re).exec(location.search);
         if (value && value.length && value.length > 1) {
             value = value[1];
         }
@@ -30,100 +35,105 @@ jQuery(document).ready(function() {
     }
 
     // remove host part from url
-    if (ajaxUrl.indexOf('http') == 0) {
-        var hostIdx = ajaxUrl.indexOf('://') + 3;
-        var pathIdx = ajaxUrl.indexOf('/', hostIdx);
+    if (ajaxUrl.indexOf('http') === 0) {
+        hostIdx = ajaxUrl.indexOf('://') + 3;
+        pathIdx = ajaxUrl.indexOf('/', hostIdx);
         ajaxUrl = ajaxUrl.substring(pathIdx);
     }
 
     // populate url with possible control parameters
-    ajaxUrl += getAdditionalParam('zoomLevel');
-    ajaxUrl += getAdditionalParam('coord');
-    ajaxUrl += getAdditionalParam('mapLayers');
-    ajaxUrl += getAdditionalParam('oldId');
-    ajaxUrl += getAdditionalParam('viewId');
-
-    ajaxUrl += getAdditionalParam('isCenterMarker');
-    ajaxUrl += getAdditionalParam('address')
-    ajaxUrl += getAdditionalParam('showGetFeatureInfo');
-    ajaxUrl += getAdditionalParam('nationalCadastralReference');
-
-    ajaxUrl += getAdditionalParam('nationalCadastralReferenceHighlight');
-    ajaxUrl += getAdditionalParam('wfsFeature');
-    ajaxUrl += getAdditionalParam('wfsHighlightLayer');
-
+    if (typeof window.controlParams === 'object') {
+        for (key in window.controlParams) {
+            if (window.controlParams.hasOwnProperty(key)) {
+                getAppSetupParams[key] = window.controlParams[key];
+            }
+        }
+    }
 
     if (!language) {
         // default to finnish
         language = 'fi';
     }
     Oskari.setLang(language);
-
     Oskari.setLoaderMode('dev');
     Oskari.setPreloaded(preloaded);
 
     function gfiParamHandler(sandbox) {
-        if (getURLParameter('showGetFeatureInfo') != 'true') {
+        if (getURLParameter('showGetFeatureInfo') !== 'true') {
             return;
         }
-        var lon = sandbox.getMap().getX();
-        var lat = sandbox.getMap().getY();
-        var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        var px = mapModule.getMap().getViewPortPxFromLonLat({
-            lon: lon,
-            lat: lat
-        });
+        var lon = sandbox.getMap().getX(),
+            lat = sandbox.getMap().getY(),
+            mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
+            px = mapModule.getMap().getViewPortPxFromLonLat({
+                lon: lon,
+                lat: lat
+            });
         sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoRequest', [lon, lat, px.x, px.y]);
     }
 
     function start(appSetup, appConfig, cb) {
         var app = Oskari.app;
 
+        // Analyse bundle
+        /*
+        appConfig.mapfull.conf.plugins.push({
+            "id" : "Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayerPlugin"
+        });
+        appSetup.startupSequence[1].metadata["Import-Bundle"]["mapanalysis"] = {
+            bundlePath : '/Oskari/packages/framework/bundle/'
+        };
+*/
         app.setApplicationSetup(appSetup);
         app.setConfiguration(appConfig);
-        app.startApplication(function(startupInfos) {
-          var instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
-          if (cb) {
-              cb(instance);
-          }
-        });
-    }
-
-    // TODO: handle cookie data in backend
-    // === Look for old mapfull state - cookie set in SaveViewPlugin.js   ===
-    var cookiename = "mymapview1";
-    var cookieviewdata = "";
-    if (document.cookie.length > 0) {
-        var cookieStart = document.cookie.indexOf(cookiename + "=");
-        if (cookieStart != -1) {
-            cookieStart += cookiename.length + 1;
-            var cookieEnd = document.cookie.indexOf(";", cookieStart);
-            if (cookieEnd == -1) {
-                cookieEnd = document.cookie.length;
+        app.startApplication(function (startupInfos) {
+            var instance = startupInfos.bundlesInstanceInfos.mapfull.bundleInstance;
+            if (cb) {
+                cb(instance);
             }
-            cookieviewdata = document.cookie.substring(cookieStart, cookieEnd);
+            /*
+             var ugStartup = {
+                title : 'Analyse',
+                fi : 'Analyysi',
+                sv : 'Analys',
+                en : 'Analyse',
+                bundlename : 'analyse',
+                bundleinstancename : 'analyse',
+                metadata : {
+                    "Import-Bundle" : {
+                        "analyse" : {
+                            bundlePath : '/Oskari/packages/analysis/bundle/'
+                        }
+                    },
+                    "Require-Bundle-Instance" : []
+                },
+                instanceProps : {}
+            };
 
-        }
+            Oskari.bundle_facade.playBundle(ugStartup, function() {
+            });
+*/
+        });
+
     }
-    var data = {
-        viewData: cookieviewdata
-    };
+
+
     jQuery.ajax({
         type: 'POST',
         dataType: 'json',
-        beforeSend: function(x) {
+        beforeSend: function (x) {
             if (x && x.overrideMimeType) {
                 x.overrideMimeType("application/j-son;charset=UTF-8");
             }
         },
+        data : getAppSetupParams,
         url: ajaxUrl + 'action_route=GetAppSetup',
-        data: data,
-        success: function(app) {
+        success: function (app) {
             if (app.startupSequence && app.configuration) {
-              var appSetup = {
-                "startupSequence": app.startupSequence
-              };
-              start(appSetup, app.configuration, function(instance) {
+                var appSetup = {
+                    "startupSequence": app.startupSequence
+                };
+                start(appSetup, app.configuration, function (instance) {
                     var sb = instance.getSandbox();
                     gfiParamHandler(sb);
                 });
@@ -131,8 +141,8 @@ jQuery(document).ready(function() {
                 jQuery('#mapdiv').append('Unable to start');
             }
         },
-        error: function(jqXHR, textStatus) {
-            if (jqXHR.status != 0) {
+        error: function (jqXHR, textStatus) {
+            if (jqXHR.status !== 0) {
                 jQuery('#mapdiv').append('Unable to start');
             }
         }

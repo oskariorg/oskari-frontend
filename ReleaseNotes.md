@@ -8,6 +8,10 @@ Clicking a preview image in the My places GFI popup opens the image URL in a new
 
 Partial fix for cutting of My places point symbols on the tile boundaries.
 
+Larger mouse click area for GFI dialogs of My places symbols.
+
+Localized URLs have been moved from bundles to bundle configurations.
+
 ## 1.14
 
 ### mapmodule-plugin/getinfo

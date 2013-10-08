@@ -8,8 +8,7 @@ Oskari.registerLocalization(
             "desc": "",
             "published": {
                 "title": "Kartan har avskilts",
-                "desc": "Inbädda kartan genom att tillägga HTML-koden nedan på din webbplats.",
-                "urlPrefix": "http://www.paikkatietoikkuna.fi"
+                "desc": "Inbädda kartan genom att tillägga HTML-koden nedan på din webbplats."
             },
             "edit" : {
               "popup" : {

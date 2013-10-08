@@ -15,6 +15,7 @@ function() {
     this.buttons = undefined;
     this.categoryHandler = undefined;
     this.myPlacesService = undefined;
+    this.featureNS = undefined;
     this.idPrefix = 'myplaces';
 }, {
     __name : 'MyPlaces2',
@@ -146,8 +147,12 @@ function() {
 		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
 		var sandbox = Oskari.getSandbox(sandboxName);
         this.sandbox = sandbox;
-        
-        var me = this;
+
+        this.featureNS = conf ? conf.featureNS : null;
+        if (!this.featureNS) {
+            return;
+        }
+
         sandbox.printDebug("Initializing my places module...");
         
         // handles toolbar buttons related to my places 

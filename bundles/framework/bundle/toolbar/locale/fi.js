@@ -5,7 +5,6 @@ Oskari.registerLocalization({
     "buttons": {
       "link": {
         "tooltip": "Linkki",
-        "prefixUrl": "www.paikkatietoikkuna.fi/web/fi/kartta?",
         "ok": "Ok",
         "title": "Linkki karttanäkymään"
       },

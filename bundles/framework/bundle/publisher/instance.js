@@ -73,6 +73,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 sandbox = Oskari.getSandbox(sandboxName),
                 request,
                 p;
+            // The publish tile won't be shown if config doesn't have urlPrefix
+            if (!me.conf.urlPrefix) {
+                return;
+            }
             if (me.started) {
                 return;
             }

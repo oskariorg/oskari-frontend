@@ -142,7 +142,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         if (me.conf) {
             mapUrlPrefix = me.getSandbox().getLocalizedProperty(me.conf.mapUrlPrefix);
         }
-        if (me._isButtonConfigured('link', 'viewtools') && loc.link.prefixUrl && mapUrlPrefix) {
+        if (me._isButtonConfigured('link', 'viewtools') && mapUrlPrefix) {
             me.addToolButton('link', 'viewtools', {
                 iconCls: 'tool-link',
                 tooltip: loc.link.tooltip,

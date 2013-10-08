@@ -683,7 +683,7 @@ function(localization, publisher) {
         var title = this.loc.layout.popup.gfiDialog.title,
             featureName = this.loc.layout.popup.gfiDialog.featureName,
             featureDesc = this.loc.layout.popup.gfiDialog.featureDesc,
-            linkUrl = 'http://www.paikkatietoikkuna.fi/web/' + Oskari.getLang();
+            linkUrl = this._publisher.urlBase + Oskari.getLang();
         // Templates
         var dialogContent = jQuery('<div></div>');
             header = jQuery('<div class="popupTitle"></div>'),

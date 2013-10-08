@@ -168,6 +168,7 @@ function(instance, localization, data) {
     this.normalMapPlugins = [];
     this.logoPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin');
     this.latestGFI = null;
+    this.urlBase = instance.conf.urlPrefix+"/web/";
 }, {
     /**
      * @method render
