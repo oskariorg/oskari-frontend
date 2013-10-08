@@ -46,7 +46,7 @@ Above parameters are for:
 
 ## Bundle state
 
-No statehandling has been implemented.
+An 'initRef'-parameter can be passed in the state, which will automatically do a search for the given parcel id.
 
 ## Requests the bundle handles
 

@@ -179,6 +179,9 @@ Oskari.registerLocalization({
       "linestyle": {
         "label": "Alueen viivan tyyli"
       },
+      "linecap": {
+        "label": "Alueen viivan päädyt"
+      },
       "linecorner": {
         "label": "Kulmat"
       },

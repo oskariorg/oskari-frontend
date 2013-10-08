@@ -23,6 +23,7 @@ describe('Test Suite for MapModule', function() {
         jQuery("body").html(getDefaultHTML()); 
         // startup Oskari
         setupOskari(appSetup, appConf, function() {
+            Oskari.setSupportedLocales(['fi_FI', 'sv_SE', 'en_US']);
             sandbox = Oskari.$("sandbox");
             module = sandbox.findRegisteredModuleInstance('MainMapModule');
             done();

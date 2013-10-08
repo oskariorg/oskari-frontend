@@ -167,7 +167,9 @@ Oskari = (function () {
 
         /* set overridden methods intentionally to instance */
         for (p in md) {
-            this[p] = md[p];
+            if (md.hasOwnProperty(p)) {
+                this[p] = md[p];
+            }
         }
     };
     clazzadapter.prototype = {
