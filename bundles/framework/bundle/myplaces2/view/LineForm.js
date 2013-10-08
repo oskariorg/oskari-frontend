@@ -116,6 +116,7 @@ function(instance) {
         // Line style
         var dialogContent = me.templateLineStyleDialogContent.clone();
         var content = dialogContent.find('div.style');
+        if (me.values.style.length === 0) me.values.style = 0;
         for (var i=0; i<me.styleButtonNames.length; i++) {
             var styleBtnContainer = me.templateButton.clone();
             styleBtnContainer.addClass(me.styleButtonNames[i]);
