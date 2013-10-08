@@ -19,7 +19,23 @@ Provides abstraction for map implementation (Openlayers) and provides a plugin m
 
 ## Bundle configuration
 
-No configuration is required and it is not handled like normal bundles. 
+Some configuration is needed for URLs:
+```javascript
+{
+  "termsUrl" : {
+    "fi" : "//www.paikkatietoikkuna.fi/web/fi/kayttoehdot",
+    "sv" : "//www.paikkatietoikkuna.fi/web/sv/anvandningsvillkor",
+    "en" : "//www.paikkatietoikkuna.fi/web/en/terms-and-conditions"
+  },
+  "mapUrlPrefix" : {
+    "fi":"//www.paikkatietoikkuna.fi/web/fi/kartta?",
+    "sv":"//www.paikkatietoikkuna.fi/web/sv/kartfonstret?",
+    "en":"//www.paikkatietoikkuna.fi/web/en/map-window?"
+  }
+}
+```
+
+Configuration is not handled like normal bundles. 
 
 Configuration can be given when constructing the mapmodule through constructor call. Usually its passed through the mapfull bundle configuration:
 
