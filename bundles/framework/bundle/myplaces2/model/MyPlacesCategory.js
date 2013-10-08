@@ -12,14 +12,14 @@ function() {
     this.name = undefined;
     this._isDefault = false;
     this._isPublic = false;
-    this.lineStyle = 0;
+    this.lineStyle = '';
     this.lineCap = 0;
     this.lineCorner = 0;
     this.lineWidth = 1;
     this.lineColor = '3233ff';
     this.areaLineWidth = 1;
     this.areaLineCorner = 0;
-    this.areaLineStyle = 0;
+    this.areaLineStyle = '';
     this.areaLineColor = '000000';
     this.areaFillColor = 'ffde00';
     this.areaFillStyle = -1;
