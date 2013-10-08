@@ -133,6 +133,7 @@ module.exports = function (grunt) {
 
     // Default task(s).
     grunt.registerTask('default', ['karma:dev', 'compileAppSetupToStartupSequence', 'compileDev', 'karma:dev:run', 'watch']);
+    grunt.registerTask('ci', ['compileAppSetupToStartupSequence', 'compileDev', 'karma:ci']);
     // Default task.
     //    grunt.registerTask('default', 'watch testacularServer:dev');
     //    grunt.registerTask('default', 'testacularServer:dev watch');

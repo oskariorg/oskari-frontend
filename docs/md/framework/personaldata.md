@@ -31,7 +31,17 @@ config : {
 
 OR
 
-No configuration is required.
+Some configuration is needed for URLs:
+
+```javascript
+"conf": {
+  "changeInfoUrl": {
+    "en": "https://www.paikkatietoikkuna.fi/web/en/profile",
+    "fi": "https://www.paikkatietoikkuna.fi/web/fi/profiili",
+    "sv": "https://www.paikkatietoikkuna.fi/web/sv/profil"
+  }
+}
+```
 
 ## Bundle state
 
