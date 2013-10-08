@@ -46,9 +46,6 @@ module.exports = function(config) {
         '/': 'http://localhost:8080/'
     },
 
-    // cli runner port
-    runnerPort: 9100,
-
     transports: ['websocket', 'xhr-polling', 'jsonp-polling'],
 
     // custom root for karma
