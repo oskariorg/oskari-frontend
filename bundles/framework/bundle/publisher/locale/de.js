@@ -8,8 +8,7 @@ Oskari.registerLocalization(
             "desc": "",
             "published": {
                 "title": "Ihre Karte wurde erzeugt",
-                "desc": "Binden Sie die Karte auf Ihrer Webseite ein, indem Sie den untenstehenden HTML-Code einfügen.",
-                "urlPrefix": "http://www.paikkatietoikkuna.fi"
+                "desc": "Binden Sie die Karte auf Ihrer Webseite ein, indem Sie den untenstehenden HTML-Code einfügen."
             },
             "edit" : {
               "popup" : {

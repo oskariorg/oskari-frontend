@@ -26,11 +26,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
  * @static
  * @param {String} url
  * @param {String} uuid current users uuid
+ * @param {String} featureNS
  */
-function(url, uuid) {
+function(url, uuid, featureNS) {
     this.uuid = uuid;
     this.protocols = {};
     this.url = url;
+    this.featureNS = featureNS;
 }, {
 
     /**
@@ -44,7 +46,7 @@ function(url, uuid) {
             version : '1.1.0',
             srsName : 'EPSG:3067',
             featureType : 'categories',
-            featureNS : 'http://www.paikkatietoikkuna.fi',
+            featureNS : this.featureNS,
             url : url
         });
         this.protocols['my_places'] = new OpenLayers.Protocol.WFS({
@@ -52,7 +54,7 @@ function(url, uuid) {
             srsName : 'EPSG:3067',
             geometryName : 'geometry',
             featureType : 'my_places',
-            featureNS : 'http://www.paikkatietoikkuna.fi',
+            featureNS : this.featureNS,
             url : url
         });
     },
