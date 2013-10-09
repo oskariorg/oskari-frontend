@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Capabilities xmlns="http://www.opengis.net/wmts/1.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml" xsi:schemaLocation="http://www.opengis.net/wmts/1.0 http://schemas.opengis.net/wmts/1.0/wmtsGetCapabilities_response.xsd" version="1.0.0">
-    <!--
-       server urls removed
--->
 	<ows:ServiceIdentification>
 		<ows:ServiceType>OGC WMTS</ows:ServiceType>
 		<ows:ServiceTypeVersion>1.0.0</ows:ServiceTypeVersion>
@@ -16,7 +13,7 @@
 		<ows:Operation name="GetCapabilities">
 			<ows:DCP>
 				<ows:HTTP>
-					<ows:Get xlink:href="/elf/cgi-bin/elfmc/wmts">
+					<ows:Get xlink:href="http://54.228.221.191/cgi-bin/elfmc/wmts">
 						<ows:Constraint name="GetEncoding">
 							<ows:AllowedValues>
 								<ows:Value>KVP</ows:Value>
@@ -29,7 +26,7 @@
 		<ows:Operation name="GetTile">
 			<ows:DCP>
 				<ows:HTTP>
-					<ows:Get xlink:href="/elf/cgi-bin/elfmc/wmts">
+					<ows:Get xlink:href="http://54.228.221.191/cgi-bin/elfmc/wmts">
 						<ows:Constraint name="GetEncoding">
 							<ows:AllowedValues>
 								<ows:Value>KVP</ows:Value>
@@ -42,7 +39,7 @@
 		<ows:Operation name="GetFeatureInfo">
 			<ows:DCP>
 				<ows:HTTP>
-					<ows:Get xlink:href="/elf/cgi-bin/elfmc/wmts">
+					<ows:Get xlink:href="http://54.228.221.191/cgi-bin/elfmc/wmts">
 						<ows:Constraint name="GetEncoding">
 							<ows:AllowedValues>
 								<ows:Value>KVP</ows:Value>
@@ -64,7 +61,7 @@
 			<TileMatrixSetLink>
 				<TileMatrixSet>LAEA</TileMatrixSet>
 			</TileMatrixSetLink>
-			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/BU.Building/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+			<ResourceURL format="image/png" resourceType="tile" template="http://ec2-54-228-221-191.eu-west-1.compute.amazonaws.com/cgi-bin/elfmc/wmts/1.0.0/BU.Building/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
 		</Layer>
 		<Layer>
 			<ows:Title>TN.RailTransportNetwork.RailwayLink</ows:Title>
@@ -76,7 +73,7 @@
 			<TileMatrixSetLink>
 				<TileMatrixSet>LAEA</TileMatrixSet>
 			</TileMatrixSetLink>
-			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/TN.RailTransportNetwork.RailwayLink/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+			<ResourceURL format="image/png" resourceType="tile" template="http://ec2-54-228-221-191.eu-west-1.compute.amazonaws.com/cgi-bin/elfmc/wmts/1.0.0/TN.RailTransportNetwork.RailwayLink/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
 		</Layer>
 		<Layer>
 			<ows:Title>HY.PhysicalWaters.Watercourse</ows:Title>
@@ -88,7 +85,7 @@
 			<TileMatrixSetLink>
 				<TileMatrixSet>LAEA</TileMatrixSet>
 			</TileMatrixSetLink>
-			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/HY.PhysicalWaters.Watercourse/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+			<ResourceURL format="image/png" resourceType="tile" template="http://ec2-54-228-221-191.eu-west-1.compute.amazonaws.com/cgi-bin/elfmc/wmts/1.0.0/HY.PhysicalWaters.Watercourse/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
 		</Layer>
 		<Layer>
 			<ows:Title>HY.PhysicalWaters.LandWaterBoundary</ows:Title>
@@ -100,7 +97,7 @@
 			<TileMatrixSetLink>
 				<TileMatrixSet>LAEA</TileMatrixSet>
 			</TileMatrixSetLink>
-			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/HY.PhysicalWaters.LandWaterBoundary/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+			<ResourceURL format="image/png" resourceType="tile" template="http://ec2-54-228-221-191.eu-west-1.compute.amazonaws.com/cgi-bin/elfmc/wmts/1.0.0/HY.PhysicalWaters.LandWaterBoundary/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
 		</Layer>
 		<Layer>
 			<ows:Title>AU.AdministrativeUnit</ows:Title>
@@ -112,7 +109,7 @@
 			<TileMatrixSetLink>
 				<TileMatrixSet>LAEA</TileMatrixSet>
 			</TileMatrixSetLink>
-			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/AU.AdministrativeUnit/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+			<ResourceURL format="image/png" resourceType="tile" template="http://ec2-54-228-221-191.eu-west-1.compute.amazonaws.com/cgi-bin/elfmc/wmts/1.0.0/AU.AdministrativeUnit/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
 		</Layer>
 		<Layer>
 			<ows:Title>TN.RoadTransportNetwork.RoadLink.Master</ows:Title>
@@ -124,7 +121,7 @@
 			<TileMatrixSetLink>
 				<TileMatrixSet>LAEA</TileMatrixSet>
 			</TileMatrixSetLink>
-			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/TN.RoadTransportNetwork.RoadLink.Master/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+			<ResourceURL format="image/png" resourceType="tile" template="http://ec2-54-228-221-191.eu-west-1.compute.amazonaws.com/cgi-bin/elfmc/wmts/1.0.0/TN.RoadTransportNetwork.RoadLink.Master/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
 		</Layer>
 		<Layer>
 			<ows:Title>HY.PhysicalWaters.StandingWater</ows:Title>
@@ -136,7 +133,7 @@
 			<TileMatrixSetLink>
 				<TileMatrixSet>LAEA</TileMatrixSet>
 			</TileMatrixSetLink>
-			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/HY.PhysicalWaters.StandingWater/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+			<ResourceURL format="image/png" resourceType="tile" template="http://ec2-54-228-221-191.eu-west-1.compute.amazonaws.com/cgi-bin/elfmc/wmts/1.0.0/HY.PhysicalWaters.StandingWater/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
 		</Layer>
 		<Layer>
 			<ows:Title>AU.AdministrativeBoundary</ows:Title>
@@ -148,7 +145,7 @@
 			<TileMatrixSetLink>
 				<TileMatrixSet>LAEA</TileMatrixSet>
 			</TileMatrixSetLink>
-			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/AU.AdministrativeBoundary/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+			<ResourceURL format="image/png" resourceType="tile" template="http://ec2-54-228-221-191.eu-west-1.compute.amazonaws.com/cgi-bin/elfmc/wmts/1.0.0/AU.AdministrativeBoundary/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
 		</Layer>
 		<Layer>
 			<ows:Title>GN.GeographicalNames</ows:Title>
@@ -160,7 +157,7 @@
 			<TileMatrixSetLink>
 				<TileMatrixSet>LAEA</TileMatrixSet>
 			</TileMatrixSetLink>
-			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/GN.GeographicalNames/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+			<ResourceURL format="image/png" resourceType="tile" template="http://ec2-54-228-221-191.eu-west-1.compute.amazonaws.com/cgi-bin/elfmc/wmts/1.0.0/GN.GeographicalNames/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
 		</Layer>
 		<Layer>
 			<ows:Title>TN.RoadTransportNetwork.RoadLink</ows:Title>
@@ -172,7 +169,7 @@
 			<TileMatrixSetLink>
 				<TileMatrixSet>LAEA</TileMatrixSet>
 			</TileMatrixSetLink>
-			<ResourceURL format="image/png" resourceType="tile" template="/elf-cloud/cgi-bin/elfmc/wmts/1.0.0/TN.RoadTransportNetwork.RoadLink/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
+			<ResourceURL format="image/png" resourceType="tile" template="http://ec2-54-228-221-191.eu-west-1.compute.amazonaws.com/cgi-bin/elfmc/wmts/1.0.0/TN.RoadTransportNetwork.RoadLink/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"></ResourceURL>
 		</Layer>
 		<TileMatrixSet>
 			<ows:Identifier>LAEA</ows:Identifier>
