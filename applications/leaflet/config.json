@@ -79,7 +79,7 @@
                     "wmsName": "taustakartta",
                     "type": "wmtslayer",
                     "id": "base_35",
-                    "wmsUrl": "/maasto/wmts?",
+                    "wmsUrl": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?",
                     "name": "Taustakartta",
                     "inspire": "Taustakartta",
                     "orgName": "Maanmittauslaitos",
@@ -102,7 +102,7 @@
                         "identifier": "taustakartta",
                         "resourceUrls": {
                             "tile": {
-                                "image/png": ["/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
+                                "image/png": ["http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
                             }
                         }
                     },
@@ -291,7 +291,7 @@
                                     "http": {
                                         "get": [
                                             {
-                                                "url": "/maasto/wmts?",
+                                                "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?",
                                                 "constraints": {
                                                     "GetEncoding": {
                                                         "allowedValues": {
@@ -309,7 +309,7 @@
                                     "http": {
                                         "get": [
                                             {
-                                                "url": "/maasto/wmts?",
+                                                "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?",
                                                 "constraints": {
                                                     "GetEncoding": {
                                                         "allowedValues": {
@@ -327,7 +327,7 @@
                                     "http": {
                                         "get": [
                                             {
-                                                "url": "/maasto/wmts?",
+                                                "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?",
                                                 "constraints": {
                                                     "GetEncoding": {
                                                         "allowedValues": {
@@ -362,7 +362,7 @@
                                     "identifier": "taustakartta",
                                     "resourceUrls": {
                                         "tile": {
-                                            "image/png": ["/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
+                                            "image/png": ["http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
                                         }
                                     }
                                 }, {
@@ -384,7 +384,7 @@
                                     "identifier": "ortokuva",
                                     "resourceUrls": {
                                         "tile": {
-                                            "image/jpeg": ["/maasto/wmts/1.0.0/ortokuva/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"]
+                                            "image/jpeg": ["http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/ortokuva/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"]
                                         }
                                     }
                                 }, {
@@ -406,7 +406,7 @@
                                     "identifier": "maastokartta",
                                     "resourceUrls": {
                                         "tile": {
-                                            "image/png": ["/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
+                                            "image/png": ["http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
                                         }
                                     }
                                 }
@@ -573,7 +573,7 @@
                     "wmsName": "maastokartta",
                     "type": "wmtslayer",
                     "id": "base_2",
-                    "wmsUrl": "/maasto/wmts?",
+                    "wmsUrl": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?",
                     "name": "maastokartta",
                     "inspire": "maastokartta",
                     "orgName": "Maanmittauslaitos",
@@ -596,7 +596,7 @@
                         "identifier": "maastokartta",
                         "resourceUrls": {
                             "tile": {
-                                "image/png": ["/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
+                                "image/png": ["http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
                             }
                         }
                     },
@@ -785,7 +785,7 @@
                                     "http": {
                                         "get": [
                                             {
-                                                "url": "/maasto/wmts?",
+                                                "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?",
                                                 "constraints": {
                                                     "GetEncoding": {
                                                         "allowedValues": {
@@ -803,7 +803,7 @@
                                     "http": {
                                         "get": [
                                             {
-                                                "url": "/maasto/wmts?",
+                                                "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?",
                                                 "constraints": {
                                                     "GetEncoding": {
                                                         "allowedValues": {
@@ -821,7 +821,7 @@
                                     "http": {
                                         "get": [
                                             {
-                                                "url": "/maasto/wmts?",
+                                                "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?",
                                                 "constraints": {
                                                     "GetEncoding": {
                                                         "allowedValues": {
@@ -856,7 +856,7 @@
                                     "identifier": "taustakartta",
                                     "resourceUrls": {
                                         "tile": {
-                                            "image/png": ["/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
+                                            "image/png": ["http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
                                         }
                                     }
                                 }, {
@@ -878,7 +878,7 @@
                                     "identifier": "ortokuva",
                                     "resourceUrls": {
                                         "tile": {
-                                            "image/jpeg": ["/maasto/wmts/1.0.0/ortokuva/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"]
+                                            "image/jpeg": ["http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/ortokuva/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"]
                                         }
                                     }
                                 }, {
@@ -900,7 +900,7 @@
                                     "identifier": "maastokartta",
                                     "resourceUrls": {
                                         "tile": {
-                                            "image/png": ["/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
+                                            "image/png": ["http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
                                         }
                                     }
                                 }
