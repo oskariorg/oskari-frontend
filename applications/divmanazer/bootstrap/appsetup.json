@@ -105,6 +105,20 @@
             },
             "Require-Bundle-Instance" : [  ]
         }
+      },{ 
+        "title" : "LayerSelection",
+        "en" : "LayerSelection",
+        "fi" : "LayerSelection",
+        "sv" : "LayerSelection",
+        "bundleinstancename" : "layerselection2",
+        "bundlename" : "layerselection2",
+        "instanceProps" : {  },
+        "metadata" : { 
+            "Import-Bundle" : { 
+                "layerselection2" : { "bundlePath" : "../../../packages/framework/bundle/" } 
+            },
+            "Require-Bundle-Instance" : [  ]
+        }
       }
       
   ]

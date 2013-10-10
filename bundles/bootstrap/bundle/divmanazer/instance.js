@@ -174,7 +174,7 @@ Oskari.clazz.define("Oskari.userinterface.bundle.bootstrap.UserInterfaceBundleIn
         "templates": {
 
             /* menu tile */
-            "Oskari.userinterface.Tile": '<li class="oskari-tile-closed">' + '<a href="#" class="oskari-tile-title"></a>' + '<div class="oskari-tile-status"></div>' + '</li>',
+            "Oskari.userinterface.Tile": '<li class="oskari-tile-closed">' + '<a href="#" class="oskari-tile-title"></a>' + '<div class="badge oskari-tile-status"></div>' + '</li>',
 
             /* flyout */
             "Oskari.userinterface.Flyout": '<div class="panel oskari-flyout oskari-closed">' + '<div class="oskari-flyouttoolbar">' + '<div class="panel-heading oskari-flyoutheading"></div>' + '<div class="panel-title oskari-flyout-title">' + '<p></p>' + '</div>' + '<div class="oskari-flyouttools">' + '<div class="oskari-flyouttool-help">' + '</div>' + '<div class="oskari-flyouttool-attach">' + '</div>' + '<div class="oskari-flyouttool-detach">' + '</div>' + '<div class="oskari-flyouttool-minimize">' + '</div>' + '<div class="oskari-flyouttool-restore">' + '</div>' + '<div class="oskari-flyouttool-close icon-close icon-close:hover">' + '</div>' + '</div>' + '</div>' + '<div class="panel-body oskari-flyoutcontentcontainer">' + '<div class="oskari-flyoutcontent"></div>' + '</div>' + '</div>',
