@@ -57,7 +57,9 @@ describe('Test Suite for Publisher - Logged in user', function () {
         };
         appConf = {
             "mapfull" : mapfullConf,
-            "publisher" : publisherConf
+            "publisher" : {
+                "conf": publisherConf
+            }
         };
     });
 
