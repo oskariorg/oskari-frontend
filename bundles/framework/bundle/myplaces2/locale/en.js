@@ -6,7 +6,7 @@ Oskari.registerLocalization({
     "desc": "",
     "category": {
       "defaultName": "My map layer",
-      "organizationnew": "My places",
+      "organization": "My places",
       "inspire": "Places"
     },
     "guest": {
