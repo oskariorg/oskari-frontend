@@ -8,7 +8,7 @@
  * to move map to location/scale based on layer content. Also optimizes openlayers maplayers
  * visibility setting if it detects that content is not in the viewport.
  */
-Oskari.clazz.define('Oskari.ol3.mapmodule.plugin.LayersPlugin',
+Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.LayersPlugin',
 /**
  * @method create called automatically on construction
  * @static
@@ -89,7 +89,7 @@ function() {
      */
     init : function(sandbox) {
         this.requestHandlers = {
-            layerVisibilityHandler : Oskari.clazz.create('Oskari.ol3.bundle.mapmodule.request.MapLayerVisibilityRequestHandler', sandbox, this),
+            layerVisibilityHandler : Oskari.clazz.create('Oskari.mapping.bundle.mapmodule.request.MapLayerVisibilityRequestHandler', sandbox, this),
             layerContentHandler : Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayerContentRequestHandler', sandbox, this)
         };
     },
@@ -351,16 +351,16 @@ function() {
             // show non-baselayer if in scale, in geometry and layer visible
             var mapLayers = mapModule.getLayersByName('layer_' + layer.getId());
             var mapLayer = mapLayers.length ? mapLayers[0] : null;
-            if(mapLayer && !mapLayer.getVisible()) {
+/*            if(mapLayer && !mapLayer.getVisible()) {
                 mapLayer.setVisible(true);
-            }
+            }*/
         } else {
             // otherwise hide non-baselayer
             var mapLayers = mapModule.getLayersByName('layer_' + layer.getId());
             var mapLayer = mapLayers.length ? mapLayers[0]: null;
-            if(mapLayer && mapLayer.getVisible()) {
+            /*if(mapLayer && mapLayer.getVisible()) {
                 mapLayer.setVisible(false);
-            }
+            }*/
         }
         var event = this._sandbox.getEventBuilder('MapLayerVisibilityChangedEvent')(layer, scaleOk, geometryMatch);
         this._sandbox.notifyAll(event);

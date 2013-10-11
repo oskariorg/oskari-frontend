@@ -22,7 +22,7 @@
                 {
                     "id": "Oskari.leaflet.mapmodule.plugin.ControlsPlugin"
                 }, {
-                    "id": "Oskari.leaflet.mapmodule.plugin.LayersPlugin"
+                    "id": "Oskari.mapping.mapmodule.plugin.LayersPlugin"
                 }, {
                     "id": "Oskari.leaflet.mapmodule.plugin.WmsLayerPlugin"
                 }, {

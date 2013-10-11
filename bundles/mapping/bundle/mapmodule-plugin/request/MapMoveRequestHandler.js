@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler
  * Handles MapMoveRequest requests
  */
-Oskari.clazz.define('Oskari.leaflet.bundle.mapmodule.request.MapMoveRequestHandler', 
+Oskari.clazz.define('Oskari.mapping.bundle.mapmodule.request.MapMoveRequestHandler', 
 
 /**
  * @method create called automatically on construction
