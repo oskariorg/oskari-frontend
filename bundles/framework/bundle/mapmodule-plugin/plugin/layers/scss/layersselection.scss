@@ -1,114 +1,138 @@
 
 div.mapplugin.layerSelectionPlugin {
   position: absolute;
-  top:20px;
-  right:20px;
-  z-index:100000000 !important;
+  top: 20px;
+  right: 20px;
+  z-index: 100000000 !important;
 }
+
 .layerSelectionPlugin {
-  max-width:200px;
-}
-.layerSelectionPlugin div.header {
-  background-color: #333333;
-  color: white !important;
-  padding: 8px;
-  cursor: pointer;
-}
-.layerSelectionPlugin div.content {
-  background-color: white;
-}
-.layerSelectionPlugin div.header div.header-icon {
-	display : inline-block;
-    margin-right: 10px;
-    vertical-align: middle;
-}
+  max-width: 200px;
 
-.layerSelectionPlugin div.content div.layers, .layerSelectionPlugin div.content div.baselayers {
-  padding: 10px;
-}
+  div.content {
+    background-color: white;
 
-.layerSelectionPlugin div.content div.layer {
-    margin: 5px 0;
-    text-align: left;
-}
+    div.content-header {
+      background-color: #333438;
+      color: #FFFFFF;
+      text-align: left;
+      height: 25px;
+      padding: 5px;
 
-.layerSelectionPlugin div.content div.layer input {
-    margin-right : 10px;
-    float : left;
-}
-.layerSelectionPlugin div.content div.baseLayerHeader {
-  background-color: #DDDDDD;
-  padding: 10px;
-  text-align: left;
-}
+      .content-close {
+        display: inline-block;
+        float: right;
+        cursor: pointer;
+      }
 
-.layerSelectionPlugin div.layerselection-styled-content {
-  width: 200px;
-  border: 1px solid #333438;
-}
-.layerSelectionPlugin .oskari-publisher-layers-rounded-dark,
-.layerSelectionPlugin .oskari-publisher-layers-rounded-light {
-  border-radius: 15px;
-  -moz-border-radius: 15px;
-  -webkit-border-radius: 15px; 
-}
-.layerSelectionPlugin .oskari-publisher-layers-sharp-dark,
-.layerSelectionPlugin .oskari-publisher-layers-sharp-light {
-  border-radius: 0px;
-  -moz-border-radius: 0px;
-  -webkit-border-radius: 0px; 
-}
-.layerSelectionPlugin .oskari-publisher-layers-3d-dark,
-.layerSelectionPlugin .oskari-publisher-layers-3d-light {
-  border-radius: 3px;
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px; 
-}
-.layerSelectionPlugin .oskari-publisher-layers-header-rounded-dark,
-.layerSelectionPlugin .oskari-publisher-layers-header-rounded-light {
-  border-radius: 13px 13px 0 0;
-  -moz-border-radius: 13px 13px 0 0;
-  -webkit-border-radius: 13px 13px 0 0;
-}
-.layerSelectionPlugin .oskari-publisher-layers-header-sharp-dark,
-.layerSelectionPlugin .oskari-publisher-layers-header-sharp-light {
-  border-radius: 0px;
-  -moz-border-radius: 0px;
-  -webkit-border-radius: 0px; 
-}
-.layerSelectionPlugin .oskari-publisher-layers-header-3d-dark,
-.layerSelectionPlugin .oskari-publisher-layers-header-3d-light {
-  border-radius: 1px 1px 0 0;
-  -moz-border-radius: 1px 1px 0 0;
-  -webkit-border-radius: 1px 1px 0 0;
-}
-.layerSelectionPlugin div.content div.content-header {
-  background-color: #333438;
-  color: #FFFFFF;
-  text-align: left;
-  height: 25px;
-  padding: 5px;
-}
-.layerSelectionPlugin div.content div.content-header .content-close {
-  display: inline-block;
-  float: right;
-  cursor: pointer;
-}
-.layerSelectionPlugin div.content div.content-header div.content-header-title {
-  display: inline-block;
-  float: left;
-  padding: 5px;
-}
+      div.content-header-title {
+        display: inline-block;
+        float: left;
+        padding: 5px;
+      }
 
-.layerSelectionPlugin div.content div.styled-header-arrow {
-  width: 0px;
-  height: 0px;
-  margin-left: 170px;
-  margin-top: -20px;
-  border-top: 10px solid transparent;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid #333438;
+    }
+
+    div.baseLayerHeader {
+      background-color: #DDDDDD;
+      padding: 10px;
+      text-align: left;
+    }
+
+    div.layer {
+      margin: 5px 0;
+      text-align: left;
+      clear: both;
+
+      input {
+          margin-right: 10px;
+          float: left;
+      }
+
+      span {
+        display: block;
+        margin-left: 30px;
+      }
+
+    }
+
+    div.styled-header-arrow {
+      width: 0px;
+      height: 0px;
+      margin-left: 170px;
+      margin-top: -20px;
+      border-top: 10px solid transparent;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid #333438;
+    }
+
+  }
+
+  div.layers, div.baselayers {
+    padding: 10px;
+  }
+
+  div.header {
+    background-color: #333333;
+    color: white !important;
+    padding: 8px;
+    cursor: pointer;
+    div.header-icon {
+      display: inline-block;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+  }
+
+  div.layerselection-styled-content {
+    width: 200px;
+    border: 1px solid #333438;
+  }
+
+
+  .oskari-publisher-layers-rounded-dark,
+  .oskari-publisher-layers-rounded-light {
+    border-radius: 15px;
+    -moz-border-radius: 15px;
+    -webkit-border-radius: 15px; 
+  }
+
+  .oskari-publisher-layers-sharp-dark,
+  .oskari-publisher-layers-sharp-light {
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px; 
+  }
+
+  .oskari-publisher-layers-3d-dark,
+  .oskari-publisher-layers-3d-light {
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px; 
+  }
+
+  .oskari-publisher-layers-header-rounded-dark,
+  .oskari-publisher-layers-header-rounded-light {
+    border-radius: 13px 13px 0 0;
+    -moz-border-radius: 13px 13px 0 0;
+    -webkit-border-radius: 13px 13px 0 0;
+  }
+
+  .oskari-publisher-layers-header-sharp-dark,
+  .oskari-publisher-layers-header-sharp-light {
+    border-radius: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px; 
+  }
+
+  .oskari-publisher-layers-header-3d-dark,
+  .oskari-publisher-layers-header-3d-light {
+    border-radius: 1px 1px 0 0;
+    -moz-border-radius: 1px 1px 0 0;
+    -webkit-border-radius: 1px 1px 0 0;
+  }
+
 }
 
 .published-styled-layerselector {
