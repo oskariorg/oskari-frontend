@@ -268,10 +268,9 @@ define([
                 if (element.parents('.admin-add-layer').hasClass('show-edit-layer') ||
                         element.parents('.admin-add-layer').hasClass('show-add-layer')) {
 
+                    element.parents('.create-layer').children('.admin-add-layer-btn').html(this.options.instance.getLocalization('admin').addLayer);
                     element.parents('.admin-add-layer').removeClass('show-edit-layer');
                     element.parents('.admin-add-layer').remove();
-
-                    element.parents('.create-layer').children('.admin-add-layer-btn').html(this.options.instance.getLocalization('admin').addLayer);
                 }
             },
 

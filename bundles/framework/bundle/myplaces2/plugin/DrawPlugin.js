@@ -106,6 +106,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
             for (var i=0; i < activeControls.length; i++) {
                 // only lines and polygons have the finishGeometry function
                 if (typeof this.drawControls[activeControls[i]].handler.finishGeometry == typeof Function) {
+                    // No need to finish geometry if already finished
+                    switch (activeControls[i]) {
+                        case "line":
+                            if (this.drawControls.line.handler.line.geometry.components.length < 2) {
+                                continue;
+                            }
+                            break;
+                        case "area":
+                            var components = this.drawControls.area.handler.polygon.geometry.components;
+                            if (components[components.length-1].components.length < 3) {
+                                continue;
+                            }
+                            break;
+                    }
                     this.drawControls[activeControls[i]].handler.finishGeometry();
                 }
             }
