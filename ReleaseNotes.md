@@ -6,13 +6,9 @@
 
 Clicking a preview image in the My places GFI popup opens the image URL in a new browser tab or window.
 
-Partial fix for cutting of My places point symbols on the tile boundaries.
-
-Larger mouse click area for GFI dialogs of My places symbols.
-
-Localized URLs have been moved from bundles to bundle configurations.
-
 Improved parameter handling for My places visualizations.
+
+Improved "Finish drawing" button functionality when drawing new lines and polygons.
 
 ## 1.14
 
