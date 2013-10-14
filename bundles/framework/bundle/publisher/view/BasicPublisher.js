@@ -146,6 +146,7 @@ function(instance, localization, data) {
             var option = this.tools[i];
             for (var j = 0; j< plugins.length; ++j) {
                 var plugin = plugins[j];
+
                 if(option.id == plugin.id) {
                     option.selected = true;
                     break;
@@ -235,17 +236,18 @@ function(instance, localization, data) {
         accordion.addPanel(this._createSizePanel());
         accordion.addPanel(this._createToolsPanel());
 
+        this.maplayerPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLayerForm', this.loc, this.instance);
+        this.maplayerPanel.init();
+
         // Add the layout panel to the accordion.
         this.layoutPanel = Oskari.clazz.create(
             'Oskari.mapframework.bundle.publisher.view.PublisherLayoutForm',
             this.loc,
             this
         );
-        this.layoutPanel.init();
+        var layoutData = this._getInitialLayoutData(this.data);
+        this.layoutPanel.init(layoutData);
         accordion.addPanel(this.layoutPanel.getPanel());
-
-        this.maplayerPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLayerForm', this.loc, this.instance);
-        this.maplayerPanel.init();
         
         accordion.addPanel(this.maplayerPanel.getPanel());
         accordion.insertTo(contentDiv);
@@ -1263,5 +1265,43 @@ function(instance, localization, data) {
         }
 
         return infoPlugin;
+    },
+
+    /**
+     * @method _getInitialLayoutData
+     * @param  {Object} data
+     * @return {Object}
+     */
+    _getInitialLayoutData: function(data) {
+        if (!data) return null;
+
+        var plugins = data.state.mapfull.config.plugins,
+            pLen = plugins.length,
+            layoutConf = {},
+            i, plugin;
+
+        for (i = 0; i < pLen; ++i) {
+            plugin = plugins[i];
+
+            if (plugin.config) {
+                if (plugin.config.font) {
+                    layoutConf.font = plugin.config.font;
+                }
+
+                if (plugin.config.colourScheme) {
+                    layoutConf.colourScheme = plugin.config.colourScheme;
+                }
+
+                if (plugin.config.toolStyle) {
+                    if (typeof plugin.config.toolStyle === 'string') {
+                        layoutConf.toolStyle = plugin.config.toolStyle;
+                    } else {
+                        layoutConf.toolStyle = plugin.config.toolStyle.val;
+                    }
+                }
+            }
+        }
+
+        return layoutConf;
     }
 });
