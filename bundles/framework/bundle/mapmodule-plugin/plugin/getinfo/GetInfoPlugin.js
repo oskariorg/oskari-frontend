@@ -882,11 +882,11 @@ function(config, locale) {
         }
 
         if (this.config && this.config.colourScheme) {
-            colourScheme = this.config.colourScheme;
+            data.colourScheme = this.config.colourScheme;
         }
 
         if (this.config && this.config.font) {
-            font = this.config.font;
+            data.font = this.config.font;
         }
 
         content.html = wrapper;
@@ -898,7 +898,7 @@ function(config, locale) {
         if(!this.config || this.config.infoBox) {
             var reqBuilder = me._sandbox.getRequestBuilder("InfoBox.ShowInfoBoxRequest");
             if (reqBuilder) {
-                var request = reqBuilder(data.popupid, data.title, [content], data.lonlat, true, colourScheme, font);
+                var request = reqBuilder(data.popupid, data.title, [content], data.lonlat, true, data.colourScheme, data.font);
                 me._sandbox.request(me, request);
             }
         }

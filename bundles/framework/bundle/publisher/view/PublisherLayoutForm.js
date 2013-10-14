@@ -219,14 +219,14 @@ function(localization, publisher) {
      */
 	init : function(pData) {
         var self = this,
+            iData = pData || {},
             f, field, template;
-        pData = pData || {};
 
         // Set the initial values
         this.values = {
-            colourScheme: pData.colourScheme,
-            font: pData.font,
-            toolStyle: pData.toolStyle
+            colourScheme: iData.colourScheme,
+            font: iData.font,
+            toolStyle: iData.toolStyle
         };
 
         // "Precompile" the templates
@@ -234,6 +234,12 @@ function(localization, publisher) {
             field = this.fields[f];
             template = field.getContent.apply(self, arguments);
             field.content = template;
+        }
+
+        if (pData != null) {
+            this._sendFontChangedEvent(this.values.font);
+            this._sendColourSchemeChangedEvent(this.values.colourScheme);
+            this._sendToolStyleChangedEvent(this._getItemByCode(this.values.toolStyle, this.initialValues.toolStyles));
         }
 	},
 
@@ -310,7 +316,7 @@ function(localization, publisher) {
     _getColoursTemplate: function() {
         var self = this,
             template = this.template.colours.clone(),
-            selectedColour = this.getValues().colourScheme || {},
+            selectedColour = this.values.colourScheme || {},
             colourName = this.loc.layout.fields.colours[selectedColour.val],
             colourLabel = this.loc.layout.fields.colours.label,
             colourPlaceholder = this.loc.layout.fields.colours.placeholder,
@@ -365,7 +371,7 @@ function(localization, publisher) {
 
         // Prepopulate data
         jQuery(template.find('select option')).filter(function () {
-            return (jQuery(this).val() == self.getValues().font); 
+            return (jQuery(this).val() == self.values.font); 
         }).prop('selected', 'selected');
 
         return template;
@@ -407,7 +413,7 @@ function(localization, publisher) {
 
         // Prepopulate data
         jQuery(template.find('select option')).filter(function () {
-            return (self.getValues().toolStyle && jQuery(this).val() == self.getValues().toolStyle.val); 
+            return (self.values.toolStyle && jQuery(this).val() == self.values.toolStyle); 
         }).prop('selected', 'selected');
 
         return template;
@@ -454,7 +460,7 @@ function(localization, publisher) {
             });
 
             // Set the selected colour or default to 'dark_grey' if non-existant.
-            prevColour = self.getValues().colourScheme;
+            prevColour = self.values.colourScheme;
             if (prevColour && prevColour.val === colours[i].val || (!prevColour && colours[i].val === 'dark_grey')) {
                 colourInput.find('input[type=radio]').attr('checked', 'checked');
                 self._changeGfiColours(colours[i], content);

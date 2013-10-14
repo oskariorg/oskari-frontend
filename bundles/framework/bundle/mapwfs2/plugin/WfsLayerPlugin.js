@@ -653,7 +653,9 @@ function(config) {
             data.title,
             [content],
             data.lonlat,
-            true
+            true,
+            data.colourScheme,
+            data.font
         );
         this.getSandbox().request(this, request);
 
