@@ -49,7 +49,7 @@ Oskari.registerLocalization({
 				"iconClass" : "backendstatus-down"
 			},
 			"MAINTENANCE" : {
-				"tooltip" : "Map layer availability Karttatason saatavuudessa on tiedossa käyttökatkoja lähipäivinä.",
+				"tooltip" : "Interruptions in the availability of map levels is expected during the next few days.",
 				"iconClass" : "backendstatus-maintenance"
 			},
 			"UNKNOWN" : {
