@@ -10,6 +10,8 @@ for oskari.
 This version inherits from a generalised mapmodule implementation.
 
 This is only a partial implementation and will change.
+This DOES NOT atm implement all generalised layer handling.
+
 Work-in-Progress. 
 
 # Features migrated

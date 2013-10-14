@@ -625,6 +625,29 @@ function(id, imageUrl, options) {
 
     _removeMapControlImpl : function(ctl) {
         this._map.removeControl(ctl);   
+    },
+    
+    getMapScale : function() {
+        return this._map.getScale();
+    },
+    getMapSize : function() {
+        var wh =this._map.getSize(); 
+        return [wh.w,wh.h];
+        
+    },
+    
+    /* TEMP : layer handling in Plugins to be replaced by one inherited from  
+     *  Oskari.mapping.mapmodule.AbstractMapModule
+     */
+    /* TEMP : shall be replaced by *Impl variants */
+    
+    setLayerIndex: function(layerImpl,index) {
+        console.log("setLAYERINDEX",layerImpl,index);
+        return this._map.setLayerIndex(layerImpl,index);
+    },
+    
+    getLayersByName: function(name) {
+        return this._map.getLayersByName(name);
     }
     
 }, {
