@@ -8,6 +8,8 @@
 Proof-of-Concept leaflet ( https://github.com/openlayers/Leaflet/Leaflet ) based mapfull/mapmodule implementation
 for oskari.
 
+This version inherits from a generalised mapmodule implementation.
+
 This is only a partial implementation and will change.
 Work-in-Progress. 
 
@@ -43,9 +45,6 @@ Only the minimum required was coded.
 
 # Future work
 
-Remove duplicate PoC code and implementations.
-
-Generalise implementations for ol2,ol3,leaflet, other-map.
 
 Design and document dependencies for bundles dependent on ol2, ol3, leaflet or a generic dependency of 
 a map implementation.
