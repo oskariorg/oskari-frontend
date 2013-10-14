@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.ui.module.common.MapModule
+ * @class Oskari.mapping.mapmodule.AbstractMapModule
  *
  * Provides map functionality/Wraps actual map implementation (Openlayers).
  * Currently hardcoded at 13 zoomlevels (0-12) and SRS projection code 'EPSG:3067'.
@@ -116,7 +116,7 @@ function(id, imageUrl, options) {
      */
     addMapControl : function(id, ctl) {
         this._controls[id] = ctl;
-
+        this._addMapControlImpl(ctl);
     },
     /**
      * @method removeMapControl
@@ -125,7 +125,7 @@ function(id, imageUrl, options) {
      * @param {String} id control id/name
      */
     removeMapControl : function(id) {
-
+        this._removeMapControlImpl(ctl);
         this._controls[id] = null;
         delete this._controls[id];
     },
@@ -260,7 +260,6 @@ function(id, imageUrl, options) {
             this._mapScales.push(calculatedScale);
         }
 
-        this._createBaseLayer();
 
         return this._map;
     },
@@ -443,14 +442,7 @@ function(id, imageUrl, options) {
     getExtentArray : function() {
         return this._extent;
     },
-    /**
-     * @method createBaseLayer
-     * Creates a dummy base layer and adds it to the map. Nothing to do with Oskari maplayers really.
-     * @private
-     */
-    _createBaseLayer : function() {
-
-    },
+  
 
     /**
      * @method zoomIn
@@ -948,12 +940,12 @@ function(id, imageUrl, options) {
 
     getMapSize : Oskari.AbstractFunc("getMapSize"),
     getMapExtent : Oskari.AbstractFunc("getMapExtent"),
-    
-    _setLayerImplVisible: Oskari.AbstractFunc("_setLayerImplVisible"),
-    
-    _setLayerImplOpacity: Oskari.AbstractFunc("_setLayerImplOpacity"),
-    
-     /**
+
+    _setLayerImplVisible : Oskari.AbstractFunc("_setLayerImplVisible"),
+
+    _setLayerImplOpacity : Oskari.AbstractFunc("_setLayerImplOpacity"),
+
+    /**
      * @method calculateLayerScales
      * Calculate a subset of maps scales array that matches the given boundaries.
      * If boundaries are not defined, returns all possible scales.
@@ -966,13 +958,16 @@ function(id, imageUrl, options) {
         var maxScaleZoom = undefined;
         for (var i = 0; i < this._mapScales.length; i++) {
             if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
-                if( minScaleZoom === undefined ) {
-                    minScaleZoom = i; 
+                if (minScaleZoom === undefined) {
+                    minScaleZoom = i;
                 }
-                maxScaleZoom = i; 
+                maxScaleZoom = i;
             }
         }
-        return { min: minScaleZoom, max: maxScaleZoom };
+        return {
+            min : minScaleZoom,
+            max : maxScaleZoom
+        };
     },
     /**
      * @method calculateLayerScales
@@ -991,11 +986,19 @@ function(id, imageUrl, options) {
         }
         return layerScales;
     },
-    
+
     adjustZoomLevel : Oskari.AbstractFunc("adjustZoomLevel(amount, suppressEvent)"),
-    
-    notifyMoveEnd : function() { }
-     
+
+    notifyMoveEnd : function() {
+    },
+
+    _addMapControlImpl : function(ctl) {
+
+    },
+
+    _removeMapControlImpl : function(ctl) {
+
+    }
 }, {
     /**
      * @property {String[]} protocol
