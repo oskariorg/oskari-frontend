@@ -206,6 +206,7 @@ function(instance, localization, data) {
         
         var panel = form.getPanel();
         panel.open();
+        // 1st panel: location panel
         accordion.addPanel(panel);
         
         // add grid checkbox
@@ -229,11 +230,13 @@ function(instance, localization, data) {
 
             var dataPanel = this._createDataPanel();
             dataPanel.open();
+            // 2nd (optional) panel: stats panel
             accordion.addPanel(dataPanel);
         }
 
-
+        // 3rd panel: size panel
         accordion.addPanel(this._createSizePanel());
+        // 4th panel: tools panel
         accordion.addPanel(this._createToolsPanel());
 
         this.maplayerPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLayerForm', this.loc, this.instance);
@@ -247,11 +250,12 @@ function(instance, localization, data) {
         );
         var layoutData = this._getInitialLayoutData(this.data);
         this.layoutPanel.init(layoutData);
+        // 5th panel: layout panel
         accordion.addPanel(this.layoutPanel.getPanel());
-        
+        // 6th panel: map layer panel
         accordion.addPanel(this.maplayerPanel.getPanel());
-        accordion.insertTo(contentDiv);
 
+        accordion.insertTo(contentDiv);
 
         // buttons
         // close
@@ -1268,9 +1272,26 @@ function(instance, localization, data) {
     },
 
     /**
+     * Retrieves the layout config params from the different plugins
+     * for the layout form component to use to prepopulate values.
+     * Kind of hackish, but since they're not saved into any other place
+     * than the plugins' conf in the database, we must do this.
+     * Returns an object with 0..3 keys. Example:
+     * {
+     *     'font': <String>,
+     *     'toolStyle': <String>,
+     *     'colourScheme': {
+     *         'val': <String>,
+     *         'bgColour': <String>,
+     *         'titleColour': <String>,
+     *         'headerColour': <String>,
+     *         'iconCls': <String>
+     *     }
+     * }
+     * 
      * @method _getInitialLayoutData
      * @param  {Object} data
-     * @return {Object}
+     * @return {Object} returns the config for layout
      */
     _getInitialLayoutData: function(data) {
         if (!data) return null;
