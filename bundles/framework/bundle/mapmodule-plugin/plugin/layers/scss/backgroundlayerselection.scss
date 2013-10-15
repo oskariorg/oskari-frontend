@@ -1,0 +1,203 @@
+div.backgroundLayerSelectionPlugin {
+    $buttonHeight: 28px;
+    $buttonWidthWithoutPadding: 110px;
+    $buttonHorizontalPadding: 10px;
+    $buttonColor: #FFF; 
+    $buttonBackgroundColor: #3C3C3C;
+    $buttonSelectedColor: #3C3C3C;
+    $buttonSelectedBackgroundColor: #FAFAFA;
+    $buttonBorderColor: #E6E6E6;
+    $buttonBorderRadius: 2px;
+    $buttonFontSize: 14px;
+    $contentVerticalMargin: 8px;
+    $backgroundColor: #000;
+    $backgroundOpacity: 0.3;
+
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    /* override these, otherwise they're inherited from div.pzbDiv.mapplugin (which we need for z-index) */
+    right: auto !important;
+    top: auto !important;
+    width: 100%;
+    height: $buttonHeight + $contentVerticalMargin + $contentVerticalMargin;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+
+    div.bg {
+        background-color: $backgroundColor;
+        opacity: $backgroundOpacity;
+        filter: unquote("alpha(opacity=")$backgroundOpacity * 100 unquote(")");
+        width: 100%;
+        height: $buttonHeight + $contentVerticalMargin + $contentVerticalMargin;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+
+    div.content {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        margin: $contentVerticalMargin 0;
+        padding: 0;
+        width: 100%;
+
+        div.currentSelection {
+            display: none;
+            cursor: pointer;
+            margin: 0 auto;
+            height: $buttonHeight;
+            line-height: $buttonHeight;
+            font-size: $buttonFontSize;
+            width: $buttonWidthWithoutPadding;
+            padding: 0 $buttonHorizontalPadding;
+            background-color: $buttonBackgroundColor;
+            color: $buttonColor;
+            overflow: hidden;
+            white-space: nowrap;
+            text-align: center;
+            text-overflow: ellipsis;
+            -webkit-border-radius: $buttonBorderRadius;
+            -moz-border-radius: $buttonBorderRadius;
+            border-radius: $buttonBorderRadius;
+            box-shadow: 1px 1px 1px rgba(0,0,0,$backgroundOpacity);
+
+            &::selection, &::-moz-selection {
+                background: transparent;
+            }
+
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: $buttonHeight;
+
+            li {
+                display: inline-block;
+                cursor: pointer;
+                width: $buttonWidthWithoutPadding;
+                background-color: $buttonBackgroundColor;
+                color: $buttonColor;
+                margin: 0 1px 0 0;
+                padding: 0 $buttonHorizontalPadding;
+                line-height: $buttonHeight;
+                font-size: $buttonFontSize;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                box-shadow: 1px 1px 1px rgba(0,0,0,$backgroundOpacity);
+
+                &::selection, &::-moz-selection {
+                    background: transparent;
+                }
+
+                &:first-child {
+                    -webkit-border-top-left-radius: $buttonBorderRadius;
+                    -webkit-border-bottom-left-radius: $buttonBorderRadius;
+                    -moz-border-radius-topleft: $buttonBorderRadius;
+                    -moz-border-radius-bottomleft: $buttonBorderRadius;
+                    border-top-left-radius: $buttonBorderRadius;
+                    border-bottom-left-radius: $buttonBorderRadius;
+                }
+
+                &:last-child {
+                    -webkit-border-top-right-radius: $buttonBorderRadius;
+                    -webkit-border-bottom-right-radius: $buttonBorderRadius;
+                    -moz-border-radius-topright: $buttonBorderRadius;
+                    -moz-border-radius-bottomright: $buttonBorderRadius;
+                    border-top-right-radius: $buttonBorderRadius;
+                    border-bottom-right-radius: $buttonBorderRadius;
+                }
+
+                &.selected {
+                    background-color: $buttonSelectedBackgroundColor;
+                    color: $buttonSelectedColor;
+                }
+
+            }
+        }
+
+        /* dropdown version */
+        &.dropdown {
+
+            div.currentSelection {
+                display: block;
+
+                div.header-icon {
+                    float: left;
+                    clear: none;
+                    margin-left: $buttonHorizontalPadding / -2;
+                    margin-top: 7px;
+                }
+
+            }
+
+            ul {
+                display: none;
+                width: $buttonWidthWithoutPadding + $buttonHorizontalPadding + $buttonHorizontalPadding - 2px;
+                margin: 0 auto;
+                height: auto;
+                border: 1px solid $buttonBackgroundColor;
+                border-bottom-width: 0;
+
+                li {
+                    background-color: $buttonSelectedBackgroundColor;
+                    color: $buttonSelectedColor;
+                    display: block;
+                    text-align: left;
+                    padding: 0 $buttonHorizontalPadding - 1px;
+                    line-height: $buttonHeight - 2px;
+                    height: $buttonHeight - 2px;
+                    border-bottom: 1px solid $buttonBorderColor;
+                    -webkit-border-radius: 0;
+                    -moz-border-radius: 0;
+                    border-radius: 0;
+
+                    &.selected {
+                        display: none;
+                    }
+
+                }
+
+            }
+
+            &.open {
+
+                ul {
+                    display: block;
+                }
+
+                div.currentSelection {
+                    -webkit-border-top-left-radius: 0;
+                    -webkit-border-top-right-radius: 0;
+                    -moz-border-radius-topleft: 0;
+                    -moz-border-radius-topright: 0;
+                    border-top-left-radius: 0;
+                    border-top-right-radius: 0;
+                }
+
+            }
+
+        }
+
+    }
+
+    div.error {
+        margin: 0 auto;
+        display: inline-block;
+        height: $buttonHeight;
+        line-height: $buttonHeight;
+        font-size: $buttonFontSize;
+        margin: $contentVerticalMargin 0;
+        padding: 0 $buttonHorizontalPadding;
+        background-color: #911;
+        color: $buttonColor;
+        text-align: center;
+    }
+
+}
