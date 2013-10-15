@@ -14,7 +14,7 @@ module.exports = function(config) {
       '../packages/openlayers/startup.js',
       '../bundles/bundle.js',
       '../dist/oskari.min.js',
-    //  '../applications/paikkatietoikkuna.fi/full-map/pack.js',
+      //  '../applications/paikkatietoikkuna.fi/full-map/pack.js',
       '../dist/oskari_lang_fi.js',
       '../dist/oskari_lang_sv.js',
       '../dist/oskari_lang_en.js',
@@ -23,11 +23,9 @@ module.exports = function(config) {
     ],
 
     // list of files to exclude
-    exclude: [
-    ],
+    exclude: [],
 
-    preprocessors: {
-    },
+    preprocessors: {},
 
     // use dots reporter, as travis terminal does not support escaping sequences
     // possible values: 'dots', 'progress'
@@ -43,7 +41,7 @@ module.exports = function(config) {
     colors: true,
 
     proxies: {
-        '/': 'http://localhost:8080/'
+      '/': 'http://localhost:8080/'
     },
 
     transports: ['websocket', 'xhr-polling', 'jsonp-polling'],

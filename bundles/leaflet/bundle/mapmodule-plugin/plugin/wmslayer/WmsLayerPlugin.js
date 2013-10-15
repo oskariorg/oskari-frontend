@@ -368,10 +368,12 @@ function() {
         // Change selected layer style to defined style
         if (!layer.isBaseLayer()) {
             var styledLayer = this.mapModule.getLayersByName('layer_' + layer.getId());
-            if (styledLayer != null) {
-                styledLayer[0].setParams({
+            if (styledLayer != null && styledLayer.length> 0) {
+                var params = {
                     styles : layer.getCurrentStyle().getName()
-                });
+                };
+                console.log("STYLE NOT SET",styledLayer[0], params);
+                /*styledLayer[0].setParams(params);*/
             }
         }
     }

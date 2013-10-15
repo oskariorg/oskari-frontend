@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequestHandler
  * Shows/hides the maplayer specified in the request in OpenLayers implementation.
  */
-Oskari.clazz.define('Oskari.ol3.bundle.mapmodule.request.MapLayerVisibilityRequestHandler', 
+Oskari.clazz.define('Oskari.mapping.bundle.mapmodule.request.MapLayerVisibilityRequestHandler', 
 /**
  * @method create called automatically on construction
  * @static
@@ -35,7 +35,7 @@ function(sandbox, layersPlugin) {
         // get openlayers layer objects from map
         var layers = module.getOLMapLayers(layer.getId());
         for ( var i = 0; i < layers.length; i++) {
-            layers[i].setVisible(layer.isVisible());
+            module._setLayerImplVisible(layers[i],layer.isVisible());
             
         }
 		

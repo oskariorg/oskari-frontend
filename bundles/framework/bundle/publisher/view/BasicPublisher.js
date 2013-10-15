@@ -146,6 +146,7 @@ function(instance, localization, data) {
             var option = this.tools[i];
             for (var j = 0; j< plugins.length; ++j) {
                 var plugin = plugins[j];
+
                 if(option.id == plugin.id) {
                     option.selected = true;
                     break;
@@ -205,6 +206,7 @@ function(instance, localization, data) {
         
         var panel = form.getPanel();
         panel.open();
+        // 1st panel: location panel
         accordion.addPanel(panel);
         
         // add grid checkbox
@@ -228,12 +230,17 @@ function(instance, localization, data) {
 
             var dataPanel = this._createDataPanel();
             dataPanel.open();
+            // 2nd (optional) panel: stats panel
             accordion.addPanel(dataPanel);
         }
 
-
+        // 3rd panel: size panel
         accordion.addPanel(this._createSizePanel());
+        // 4th panel: tools panel
         accordion.addPanel(this._createToolsPanel());
+
+        this.maplayerPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLayerForm', this.loc, this.instance);
+        this.maplayerPanel.init();
 
         // Add the layout panel to the accordion.
         this.layoutPanel = Oskari.clazz.create(
@@ -241,15 +248,14 @@ function(instance, localization, data) {
             this.loc,
             this
         );
-        this.layoutPanel.init();
+        var layoutData = this._getInitialLayoutData(this.data);
+        this.layoutPanel.init(layoutData);
+        // 5th panel: layout panel
         accordion.addPanel(this.layoutPanel.getPanel());
-
-        this.maplayerPanel = Oskari.clazz.create('Oskari.mapframework.bundle.publisher.view.PublisherLayerForm', this.loc, this.instance);
-        this.maplayerPanel.init();
-        
+        // 6th panel: map layer panel
         accordion.addPanel(this.maplayerPanel.getPanel());
-        accordion.insertTo(contentDiv);
 
+        accordion.insertTo(contentDiv);
 
         // buttons
         // close
@@ -1263,5 +1269,60 @@ function(instance, localization, data) {
         }
 
         return infoPlugin;
+    },
+
+    /**
+     * Retrieves the layout config params from the different plugins
+     * for the layout form component to use to prepopulate values.
+     * Kind of hackish, but since they're not saved into any other place
+     * than the plugins' conf in the database, we must do this.
+     * Returns an object with 0..3 keys. Example:
+     * {
+     *     'font': <String>,
+     *     'toolStyle': <String>,
+     *     'colourScheme': {
+     *         'val': <String>,
+     *         'bgColour': <String>,
+     *         'titleColour': <String>,
+     *         'headerColour': <String>,
+     *         'iconCls': <String>
+     *     }
+     * }
+     * 
+     * @method _getInitialLayoutData
+     * @param  {Object} data
+     * @return {Object} returns the config for layout
+     */
+    _getInitialLayoutData: function(data) {
+        if (!data) return null;
+
+        var plugins = data.state.mapfull.config.plugins,
+            pLen = plugins.length,
+            layoutConf = {},
+            i, plugin;
+
+        for (i = 0; i < pLen; ++i) {
+            plugin = plugins[i];
+
+            if (plugin.config) {
+                if (plugin.config.font) {
+                    layoutConf.font = plugin.config.font;
+                }
+
+                if (plugin.config.colourScheme) {
+                    layoutConf.colourScheme = plugin.config.colourScheme;
+                }
+
+                if (plugin.config.toolStyle) {
+                    if (typeof plugin.config.toolStyle === 'string') {
+                        layoutConf.toolStyle = plugin.config.toolStyle;
+                    } else {
+                        layoutConf.toolStyle = plugin.config.toolStyle.val;
+                    }
+                }
+            }
+        }
+
+        return layoutConf;
     }
 });
