@@ -30,6 +30,14 @@ Oskari.clazz.define("Oskari.ol2.bundle.PluginMapModuleBundle", function() {
         },
         {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/mapping/bundle/mapmodule-plugin/plugin/MapPlugin.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/mapping/bundle/mapmodule-plugin/plugin/panbuttons/PanButtons.js"
+        },
+        {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/mapping/bundle/mapmodule-plugin/plugin/layers/LayersPlugin.js"
         }, 
         {
@@ -278,7 +286,7 @@ Oskari.clazz.define("Oskari.ol2.bundle.PluginMapModuleBundle", function() {
 		    "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/portti2zoombar/css/porttizoombar.css"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/panbuttons/PanButtons.js"
+			"src" : "../../../../bundles/ol2/bundle/mapmodule-plugin/plugin/panbuttons/PanButtons.js"
 		},{
 		    "type" : "text/css",
 		    "src" : "../../../../resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/css/panbuttons.css"

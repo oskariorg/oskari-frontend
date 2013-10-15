@@ -457,6 +457,15 @@ function(id, imageUrl, options) {
     
     updateSize : function() {
         this._map.updateSize();
+    },
+    
+    _addMapControlImpl : function(ctl) {
+        this._map.addControl(ctl);
+    },
+    
+    _removeMapControlImpl : function(ctl) {
+        this._map.removeControl(ctl);
+        
     }
 }, {
     /**
