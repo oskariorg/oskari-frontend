@@ -6,7 +6,7 @@ Oskari.registerLocalization({
     "desc": "",
     "category": {
       "defaultName": "Oma karttataso",
-      "organizationnew": "Omat kohteet",
+      "organization": "Omat kohteet",
       "inspire": "Kohteet"
     },
     "guest": {

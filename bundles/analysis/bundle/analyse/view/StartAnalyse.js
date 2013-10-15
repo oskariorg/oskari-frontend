@@ -669,10 +669,22 @@ function(instance, localization) {
 
             extra.append(bufferTitle);
 
-        } else if (method == this.id_prefix + "aggregate") {
+        }
+        else if (method == this.id_prefix + "aggregate") {
             // sum, count, min, max, med
 
             me._aggregateExtra(extra);
+
+        }
+        else if (method == this.id_prefix + "aggregateNumeric") {
+            // sum, count, min, max, med
+
+            me._aggregateExtra(extra);
+
+        }else if (method == this.id_prefix + "aggregateText") {
+            // sum, count, min, max, med
+
+            me._aggregateExtraText(extra);
 
         } else if (method == this.id_prefix + "intersect") {
             // intersecting layer selection
@@ -734,6 +746,57 @@ function(instance, localization) {
         }
 
     },
+        /**
+         * @method _aggregateExtraText
+         * @private
+         ** Add extra parameters for params UI according to method aggregate
+         * @param {jQuery} contentPanel  div to append extra params
+         */
+        _aggregateExtraText : function(contentPanel) {
+            var me = this;
+            var text_parm_len = 1;
+            //title
+            var title = this.template.title_extra.clone();
+            title.find('.extra_title_label').html(this.loc.aggregate.label);
+            contentPanel.append(title);
+
+            // sum, count, min, max, med
+            var closureMagic = function(tool) {
+                return function() {
+                    var size = contentPanel.find('input[name=aggre]:checked').val();
+                    // reset previous setting
+                    for (var i = 0; i < text_parm_len; ++i) {
+                        me.aggreOptions[i].selected = false;
+                    }
+                    tool.selected = true;
+
+                };
+            };
+
+            for (var i = 0; i < text_parm_len; ++i) {
+                var option = this.aggreOptions[i];
+                var toolContainer = this.template.aggreOptionTool.clone();
+                var label = option.label;
+                if (option.width && option.height) {
+                    label = label + ' (' + option.width + ' x ' + option.height + 'px)';
+                }
+                toolContainer.find('label').append(label).attr({
+                    'for' : option.id,
+                    'class' : 'params_radiolabel'
+                });
+                if (option.selected) {
+                    toolContainer.find('input').attr('checked', 'checked');
+                }
+                contentPanel.append(toolContainer);
+                toolContainer.find('input').attr({
+                    'value' : option.id,
+                    'name' : 'aggre',
+                    'id' : option.id
+                });
+                toolContainer.find('input').change(closureMagic(option));
+            }
+
+        },
     /**
      * @method _intersectExtra
      * @private
@@ -976,10 +1039,17 @@ function(instance, localization) {
         // And create it unless the selected method is aggregate,
         // in which case create a dropdown to select an attribute to aggregate
         var columnsContainer = me.mainPanel.find('div.analyse-columns-container');
-        columnsContainer.empty();
-        if (me.id_prefix + 'aggregate' === method) {
+        if (me.id_prefix + 'aggregate' === method ) {
+            columnsContainer.empty();
             me._createColumnsDropdown(columnsContainer);
-        } else {
+        }
+        else if (me.id_prefix + 'aggregateText' === method ) {
+            // nop
+        }
+        else if (me.id_prefix + 'aggregateNumeric' === method ) {
+            // nop
+        }else {
+            columnsContainer.empty();
             me._createColumnsSelector(columnsContainer);
         }
 
@@ -994,6 +1064,14 @@ function(instance, localization) {
      */
     _createColumnsDropdown : function(columnsContainer) {
         var selectedLayer = this._getSelectedMapLayer();
+        var me = this;
+        var aggreMagic = function() {
+            return function() {
+               if (me._isNumericField(this.value))
+               me._modifyExtraParameters(me.id_prefix+'aggregateNumeric');
+               else me._modifyExtraParameters(me.id_prefix+'aggregateText');
+            };
+        };
 
         var fields = ((selectedLayer && selectedLayer.getFields && selectedLayer.getFields()) ? selectedLayer.getFields().slice() : [] ), locales = ((selectedLayer && selectedLayer.getLocales && selectedLayer.getLocales()) ? selectedLayer.getLocales().slice() : [] ), dropdown = this.template.columnsDropdown.clone(), i, localizedLabel, featureListOption;
 
@@ -1010,8 +1088,9 @@ function(instance, localization) {
                 dropdown.append(featureListOption);
             }
         }
-
+        dropdown.change(aggreMagic());
         columnsContainer.append(dropdown);
+
     },
 
     /**
@@ -1106,6 +1185,7 @@ function(instance, localization) {
             name : title,
             method : methodName,
             fields : fields,
+            fieldTypes : layer.getPropertyTypes(),
             layerId : layer.getId(),
             layerType : layer.getLayerType()
         });
@@ -1344,17 +1424,41 @@ function(instance, localization) {
             return;
         filterJson.featureIds = (layer.getClickedFeatureListIds ? layer.getClickedFeatureListIds().slice() : [] );
     },
+        /**
+         * Add field property types {fieldname1:type1,...} to layer
+         * @param layers selected layers
+         * @private
+         */
     _addPropertyTypes : function(layers) {
         var me = this;
         for (var i = 0; i < layers.length; i++) {
-            if (layers[i].isLayerOfType('WFS')) {
+            if (layers[i].hasFeatureData()) {
                 if (jQuery.isEmptyObject(layers[i].getPropertyTypes())) {
                     me.instance.analyseService.loadWFSLayerPropertiesAndTypes(layers[i].getId())
                 }
             }
         }
     },
+        /**
+         * Check if wfs field type is numeric
+         * @param layers
+         * @private
+         */
+        _isNumericField : function(fieldName) {
+            var me = this;
+            var isIt = false;
+            var selectedLayer = me._getSelectedMapLayer();
+            var data = selectedLayer.getPropertyTypes();
+            jQuery.each(data, function(key, value){
+                if(fieldName === key)
+                {
+                  if(value == 'numeric')  isIt = true;
+                }
+            });
 
+
+            return isIt;
+        },
     /**
      * @method destroy
      * Destroyes/removes this view from the screen.

@@ -6,7 +6,7 @@ Oskari.registerLocalization({
     "desc": "",
     "category": {
       "defaultName": "Mitt kartlager",
-      "organizationnew": "Mina objekt",
+      "organization": "Mina objekt",
       "inspire": "Objekt"
     },
     "guest": {
