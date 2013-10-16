@@ -93,7 +93,16 @@ function(instance) {
 		this.editLayer = new OpenLayers.Layer.Vector("Parcel Edit Layer", {
 			eventListeners : {
 				"featuremodified" : function(event) {
-					this.updateLine();
+                    switch (event.feature.geometry.CLASS_NAME) {
+                        case "OpenLayers.Geometry.MultiLineString":
+                            this.updateLine();
+                            break;
+                        case "OpenLayers.Geometry.LineString":
+                            this.updateHole(event.feature);
+                            break;
+                    }
+        			this.redraw();
+		        	me.drawLayer.redraw();
 				}
 			}
 		});
@@ -171,12 +180,19 @@ function(instance) {
 				// me.controls.select.select(me.getDrawing());
 
 			}
-			this.redraw();
-			me.drawLayer.redraw();
 		};
 
+     	this.editLayer.updateHole = function(lineFeature) {
+            var points = lineFeature.geometry.components;
+            if (points.length != lineFeature.numPoints) {
+                var polygonFeature = me.drawLayer.features[me.drawLayer.features.length-1];
+                polygonFeature.geometry.components[0].components = points;
+                lineFeature.numPoints = points.length;
+            }
+        };
+
 		this.basicStyle = OpenLayers.Util.applyDefaults(this.basicStyle, OpenLayers.Feature.Vector.style['default']);
-		this.basicStyle.fillColor = "#ffff00";
+		this.basicStyle.fillColor = "#bbbb00";
 		this.basicStyle.fillOpacity = 0.4;
 
 		this.selectStyle = OpenLayers.Util.applyDefaults(this.selectStyle, OpenLayers.Feature.Vector.style['default']);

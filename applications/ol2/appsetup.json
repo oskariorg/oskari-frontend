@@ -56,9 +56,7 @@
                     "mapmodule-plugin": {
                         "bundlePath": "../../packages/ol2/bundle/"
                     },
-                    "mapwmts": {
-                        "bundlePath": "../../packages/framework/bundle/"
-                    },
+                    
                     "request-base": {
                         "bundlePath": "../../packages/framework/bundle/"
                     },

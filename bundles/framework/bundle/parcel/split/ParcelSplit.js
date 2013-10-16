@@ -291,6 +291,8 @@ function(drawPlugin) {
                 break;
         }
         OpenLayers.Feature.Vector.style['default']['strokeWidth'] = '2';
+        this.drawPlugin.drawLayer.features[0].style = this.drawPlugin.selectStyle;
+        this.drawPlugin.selectedFeature = 0;
         parcelLayer.redraw();
         editLayer.redraw();
         return editLayer.features[0];
@@ -334,8 +336,13 @@ function(drawPlugin) {
                 parcelLayer.addFeatures([newFeature]);
             }
             inPolygon.style = this.drawPlugin.basicStyle;
-            editLayer.addFeatures([inPolygon]);
             parcelLayer.addFeatures([inPolygon]);
+
+            var editPoints = inPolygon.geometry.components[0].components;
+            var editFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(editPoints));
+            editFeature.numPoints = editPoints.length;
+            editLayer.addFeatures([editFeature]);
+
             break;
         }
     },
