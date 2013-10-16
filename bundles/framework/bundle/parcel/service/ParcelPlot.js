@@ -126,7 +126,15 @@ function(instance) {
 	 */
 	_plotNewParcel : function(featurein, placeName, placeDescription, cb) {
 		var me = this;
-		var feature = new OpenLayers.Feature.Vector(featurein.geometry, null, this.parcelLayer.style);
+
+        // Component collection for IE8 compatibility
+        var  linearRings = [];
+        for (var i=0; i<featurein.geometry.components.length; i++) {
+            linearRings.push(featurein.geometry.components[i]);
+        }
+        var polygon = new OpenLayers.Geometry.Polygon(linearRings);
+        var feature = new OpenLayers.Feature.Vector(polygon);
+
 		// Set the place and description for the feature if they are given.
 		// If they are not given, then do not set them.
 		if (feature.attributes) {

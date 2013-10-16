@@ -212,7 +212,7 @@ function(id, imageUrl, options) {
 
         var res = view.getResolution();
         var cxy = view.getCenter();
-        var panTo = [cxy[0] - pX * res, cxy[1] - pY * res];
+        var panTo = [cxy[0] + pX * res, cxy[1] - pY * res];
 
         (function() {
             var duration = 1000;

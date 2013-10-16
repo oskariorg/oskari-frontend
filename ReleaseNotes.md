@@ -6,13 +6,17 @@
 
 New plugin for selecting a background layer from a preset list. See the bundle documentation for more information.
 
-### myplaces bundle
+### myplaces
 
 Clicking a preview image in the My places GFI popup opens the image URL in a new browser tab or window.
 
 Improved parameter handling for My places visualizations.
 
 Improved "Finish drawing" button functionality when drawing new lines and polygons.
+
+### admin-layerselector
+
+User interface bug fixes.
 
 ## 1.14
 

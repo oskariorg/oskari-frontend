@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
             // if dropdown is open, li with selected-class will be hidden
             // currentSelection stores the current selection so we don't have to reorder the list elements
             this.template = jQuery(
-                '<div class="backgroundLayerSelectionPlugin oskariui mapplugin pzbDiv">' +
+                '<div class="backgroundLayerSelectionPlugin oskariui mapplugin">' +
                     '<div class="bg"></div>' +
                     '<div class="content">' +
                     '    <ul></ul>' +
@@ -111,7 +111,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
             this.layerSelectionTemplate = jQuery('<li></li>');
             // used in case the module config is faulty
             this.errorTemplate = jQuery(
-                '<div class="backgroundLayerSelectionPlugin oskariui mapplugin pzbDiv">' +
+                '<div class="backgroundLayerSelectionPlugin oskariui mapplugin">' +
                     '<div class="bg"></div>' +
                     '<div class="error">No baseLayers defined in configuration</div>' +
                     '</div>'
