@@ -14,7 +14,7 @@
 
 
 define(['oskari', 'jquery', 'exports', 'css'], function(Oskari, $, exports) {
-    Oskari.VERSION = "1.13"; // Overwrite
+    Oskari.VERSION = "1.15"; // Overwrite
 
     var instTs = new Date().getTime();
 

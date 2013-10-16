@@ -1,0 +1,1678 @@
+{
+    "startupSequence": [
+        {
+            "instanceProps": {},
+            "title": "Leaflet",
+            "bundleinstancename": "leaflet",
+            "fi": "Leaflet",
+            "sv": "Leaflet",
+            "en": "Leaflet",
+            "bundlename": "leaflet",
+            "metadata": {
+                "Import-Bundle": {
+                    "leaflet": {
+                        "bundlePath": "/Oskari/packages/leaflet/bundle/"
+                    },
+                    "oskariui": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "instanceProps": {},
+            "title": "Map",
+            "bundleinstancename": "mapfull",
+            "fi": "Kartta",
+            "sv": "Karta",
+            "en": "Map",
+            "bundlename": "mapfull",
+            "metadata": {
+                "Import-Bundle": {
+                    "mapwmts": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "mapwfs": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "mapstats": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "service-base": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "event-map-layer": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "request-map-layer": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "mapmodule-plugin": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "event-base": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "mapfull": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "core-base": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "oskariui": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "request-base": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "domain": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "core-map": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "request-map": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "sandbox-base": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "service-map": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "sandbox-map": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    },
+                    "event-map": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "instanceProps": {},
+            "title": "Oskari DIV Manazer",
+            "bundleinstancename": "divmanazer",
+            "fi": "Oskari DIV Manazer",
+            "sv": "?",
+            "en": "Oskari DIV Manazer",
+            "bundlename": "divmanazer",
+            "metadata": {
+                "Import-Bundle": {
+                    "divmanazer": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "instanceProps": {},
+            "title": "Toolbar",
+            "bundleinstancename": "toolbar",
+            "fi": "toolbar",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "toolbar",
+            "metadata": {
+                "Import-Bundle": {
+                    "toolbar": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "instanceProps": {},
+            "title": "StateHandler",
+            "bundleinstancename": "statehandler",
+            "fi": "jquery",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "statehandler",
+            "metadata": {
+                "Import-Bundle": {
+                    "statehandler": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "instanceProps": {},
+            "title": "Info Box",
+            "bundleinstancename": "infobox",
+            "fi": "infobox",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "infobox",
+            "metadata": {
+                "Import-Bundle": {
+                    "infobox": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "instanceProps": {},
+            "title": "Haku",
+            "bundleinstancename": "search",
+            "fi": "search",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "search",
+            "metadata": {
+                "Import-Bundle": {
+                    "search": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "instanceProps": {},
+            "title": "Karttatasot",
+            "bundleinstancename": "layerselector2",
+            "fi": "layerselector",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "layerselector2",
+            "metadata": {
+                "Import-Bundle": {
+                    "layerselector2": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "instanceProps": {},
+            "title": "Valitut karttatasot",
+            "bundleinstancename": "layerselection2",
+            "fi": "layerselection",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "layerselection2",
+            "metadata": {
+                "Import-Bundle": {
+                    "layerselection2": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "instanceProps": {},
+            "title": "Omat tiedot",
+            "bundleinstancename": "personaldata",
+            "fi": "personaldata",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "promote",
+            "metadata": {
+                "Import-Bundle": {
+                    "promote": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "instanceProps": {},
+            "title": "Koordinaattin�ytt�",
+            "bundleinstancename": "coordinatedisplay",
+            "fi": "coordinatedisplay",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "coordinatedisplay",
+            "metadata": {
+                "Import-Bundle": {
+                    "coordinatedisplay": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "instanceProps": {},
+            "title": "maplegend",
+            "fi": "maplegend",
+            "bundleinstancename": "maplegend",
+            "sv": "maplegend",
+            "en": "maplegend",
+            "bundlename": "maplegend",
+            "metadata": {
+                "Import-Bundle": {
+                    "maplegend": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "instanceProps": {},
+            "title": "UserGuide",
+            "bundleinstancename": "userguide",
+            "fi": "userguide",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "userguide",
+            "metadata": {
+                "Import-Bundle": {
+                    "userguide": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "instanceProps": {},
+            "title": "Metadata Flyout",
+            "bundleinstancename": "metadataflyout",
+            "fi": "metadataflyout",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "metadataflyout",
+            "metadata": {
+                "Import-Bundle": {
+                    "metadataflyout": {
+                        "bundlePath": "/Oskari/packages/catalogue/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "instanceProps": {},
+            "title": "Featuredata",
+            "bundleinstancename": "featuredata",
+            "fi": "Kohdetiedot",
+            "sv": "?",
+            "en": "?",
+            "bundlename": "featuredata",
+            "metadata": {
+                "Import-Bundle": {
+                    "featuredata": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "instanceProps": {},
+            "title": "guidedtour",
+            "fi": "guidedtour",
+            "bundleinstancename": "guidedtour",
+            "sv": "guidedtour",
+            "en": "guidedtour",
+            "bundlename": "guidedtour",
+            "metadata": {
+                "Import-Bundle": {
+                    "guidedtour": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "instanceProps": {},
+            "title": "backendstatus",
+            "fi": "backendstatus",
+            "bundleinstancename": "backendstatus",
+            "sv": "backendstatus",
+            "en": "backendstatus",
+            "bundlename": "backendstatus",
+            "metadata": {
+                "Import-Bundle": {
+                    "backendstatus": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            }
+        }, {
+            "title": "Printout",
+            "fi": "Karttatuloste",
+            "sv": "Kartutskrift",
+            "en": "Map Printout",
+            "bundlename": "printout",
+            "bundleinstancename": "printout",
+            "metadata": {
+                "Import-Bundle": {
+                    "printout": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            },
+            "instanceProps": {}
+        }, {
+            "title": "PostProcessor",
+            "fi": "PostProcessor",
+            "sv": "PostProcessor",
+            "en": "PostProcessor",
+            "bundlename": "postprocessor",
+            "bundleinstancename": "postprocessor",
+            "metadata": {
+                "Import-Bundle": {
+                    "postprocessor": {
+                        "bundlePath": "/Oskari/packages/framework/bundle/"
+                    }
+                },
+                "Require-Bundle-Instance": []
+            },
+            "instanceProps": {}
+        }, {
+            "bundleinstancename": "statsgrid",
+            "bundlename": "statsgrid",
+            "metadata": {
+                "Import-Bundle": {
+                    "statsgrid": {
+                        "bundlePath": "/Oskari/packages/statistics/bundle/"
+                    },
+                    "geostats": {
+                        "bundlePath": "/Oskari/packages/libraries/bundle/"
+                    }
+                }
+            }
+        }
+    ],
+    "configuration" : {
+        "backendstatus": {
+            "state": {},
+            "conf": {}
+        },
+        "guidedtour": {
+            "state": {},
+            "conf": {}
+        },
+        "toolbar": {
+            "state": {
+                "selected": {
+                    "id": "select",
+                    "group": "basictools"
+                }
+            },
+            "conf": {
+                "viewtools": {
+                    "print": false
+                }
+            }
+        },
+        "mapviewlog": {
+            "conf": {
+                "name": "mapviewlog",
+                "tileClazz": "Oskari.userinterface.extension.DefaultTile",
+                "flyoutClazz": "Oskari.social.bundle.mapviewlog.Flyout",
+                "formatProducers": {
+                    "image/png": "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.png"
+                }
+            }
+        },
+        "layerselection2": {
+            "state": {},
+            "conf": {}
+        },
+        "userguide": {
+            "state": {},
+            "conf": {}
+        },
+        "statsgrid": {
+            "state": {},
+            "conf": {
+                "stateful": true,
+                "viewClazz": "Oskari.statistics.bundle.statsgrid.StatsView",
+                "sandbox": "sandbox",
+                "name": "StatsGrid"
+            }
+        },
+        "layerselector2": {
+            "state": {
+                "tab": "Aiheittain",
+                "filter": "",
+                "groups": []
+            },
+            "conf": {}
+        },
+        "metadataflyout": {
+            "state": {},
+            "conf": {}
+        },
+        "mapfull": {
+            "state": {
+                "selectedLayers": [
+                    {
+                        "id": "base_35",
+                        "opacity": 100
+                    }
+                ],
+                "zoom": 1,
+                "srs": "EPSG:3067",
+                "north": 6935042,
+                "east": 540620
+            },
+            "conf": {
+                "globalMapAjaxUrl": "/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=2&",
+                "projectionDefs": {
+                    "EPSG:3067": "+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs",
+                    "urn:ogc:def:crs:EPSG:6.3:3067": "+proj=utm +zone=35 +ellps=GRS80 +units=m +no_defs",
+                    "EPSG:4326": "+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
+                },
+                "plugins": [
+                    {
+                        "id": "Oskari.leaflet.mapmodule.plugin.ControlsPlugin"
+                    }, {
+                        "id": "Oskari.leaflet.mapmodule.plugin.LayersPlugin"
+                    }, {
+                        "id": "Oskari.leaflet.mapmodule.plugin.WmsLayerPlugin"
+                    }, {
+                        "id": "Oskari.leaflet.mapmodule.plugin.WmtsLayerPlugin"
+                    }
+                ],
+                "layers": [
+                    {
+                        "dataUrl_uuid": "6e058894-2f7b-410d-9c7f-04eafed07ee4",
+                        "wmsName": "katselupalvelu:Ajoradan leveys",
+                        "styles": {
+                            "title": "Ajoradan leveys",
+                            "legend": "http://kartta.liikennevirasto.fi/maaliikenne/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=Ajoradan+leveys",
+                            "name": "ajoradan_leveys"
+                        },
+                        "descriptionLink": "",
+                        "baseLayerId": 10,
+                        "orgName": "Liikennevirasto",
+                        "type": "wmslayer",
+                        "legendImage": "http://kartta.liikennevirasto.fi/maaliikenne/ows?service=WMS&request=GetLegendGraphic&format=image%2Fpng&width=20&height=20&layer=katselupalvelu:Ajoradan%20leveys",
+                        "formats": {
+                            "value": "text/html"
+                        },
+                        "isQueryable": true,
+                        "id": 250,
+                        "minScale": 1.5E7,
+                        "dataUrl": "/catalogue/ui/metadata.html?uuid=6e058894-2f7b-410d-9c7f-04eafed07ee4",
+                        "style": "",
+                        "updated": "Tue Jul 03 09:29:52 EEST 2012",
+                        "created": "Tue Jul 03 09:29:52 EEST 2012",
+                        "wmsUrl": "http://kartta.liikennevirasto.fi/maaliikenne/wms",
+                        "admin": {},
+                        "orderNumber": 356,
+                        "name": "Ajoradan leveys",
+                        "permissions": {
+                            "publish": "no_publication_permission"
+                        },
+                        "opacity": 100,
+                        "inspire": "Liikenneverkot",
+                        "maxScale": 1
+                    }, {
+                        "wmsName": "meri_manner_tk",
+                        "type": "wmslayer",
+                        "id": "888",
+                        "wmsUrl": "http://karttatiili.fi/dataset/inspire/service/wms?",
+                        "maxScale": 1,
+                        "name": "NLS Coast",
+                        "inspire": "NLS",
+                        "orgName": "National Land Survey of Finland",
+                        "params": {
+                            "bgcolor": "0xdaf0e1"
+                        }
+                    }, {
+                        "wmsName": "taustakartta",
+                        "type": "wmtslayer",
+                        "id": "base_35",
+                        "wmsUrl": "/maasto/wmts?",
+                        "name": "Taustakartta",
+                        "inspire": "Taustakartta",
+                        "orgName": "Maanmittauslaitos",
+                        "tileLayerData": {
+                            "styles": [
+                                {
+                                    "isDefault": true,
+                                    "identifier": "default"
+                                }
+                            ],
+                            "formats": ["image/png"],
+                            "dimensions": [],
+                            "tileMatrixSetLinks": [
+                                {
+                                    "tileMatrixSet": "ETRS-TM35FIN"
+                                }
+                            ],
+                            "layers": [],
+                            "title": "Taustakartta",
+                            "identifier": "taustakartta",
+                            "resourceUrls": {
+                                "tile": {
+                                    "image/png": ["/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
+                                }
+                            }
+                        },
+                        "tileMatrixSetData": {
+                            "matrixIds": [
+                                {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "0",
+                                    "scaleDenominator": 29257142.85714286,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 1,
+                                    "matrixHeight": 1
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "1",
+                                    "scaleDenominator": 14628571.42857143,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 2,
+                                    "matrixHeight": 2
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "2",
+                                    "scaleDenominator": 7314285.714285715,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 4,
+                                    "matrixHeight": 4
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "3",
+                                    "scaleDenominator": 3657142.8571428573,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 8,
+                                    "matrixHeight": 8
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "4",
+                                    "scaleDenominator": 1828571.4285714286,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 16,
+                                    "matrixHeight": 16
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "5",
+                                    "scaleDenominator": 914285.7142857143,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 32,
+                                    "matrixHeight": 32
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "6",
+                                    "scaleDenominator": 457142.85714285716,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 64,
+                                    "matrixHeight": 64
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "7",
+                                    "scaleDenominator": 228571.42857142858,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 128,
+                                    "matrixHeight": 128
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "8",
+                                    "scaleDenominator": 114285.71428571429,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 256,
+                                    "matrixHeight": 256
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "9",
+                                    "scaleDenominator": 57142.857142857145,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 512,
+                                    "matrixHeight": 512
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "10",
+                                    "scaleDenominator": 28571.428571428572,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 1024,
+                                    "matrixHeight": 1024
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "11",
+                                    "scaleDenominator": 14285.714285714286,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 2048,
+                                    "matrixHeight": 2048
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "12",
+                                    "scaleDenominator": 7142.857142857143,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 4096,
+                                    "matrixHeight": 4096
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "13",
+                                    "scaleDenominator": 3571.4285714285716,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 8192,
+                                    "matrixHeight": 8192
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "14",
+                                    "scaleDenominator": 1785.7142857142858,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 16384,
+                                    "matrixHeight": 16384
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "15",
+                                    "scaleDenominator": 892.8571428571429,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 32768,
+                                    "matrixHeight": 32768
+                                }
+                            ],
+                            "identifier": "ETRS-TM35FIN",
+                            "projection": "EPSG:3067",
+                            "bounds": [-548576, 1548576, 6291456, 8388608],
+                            "supportedCRS": "EPSG:3067"
+                        },
+                        "caps": {
+                            "serviceIdentification": {
+                                "title": "Maanmittauslaitoksen Karttakuvapalvelu (WMTS)",
+                                "abstract": "Palvelun kautta saat käyttöösi maasto- ja taustakartat, ortokuvat sekä kiinteistörajat JHS 180 - suosituksen mukaisessa karttatiilimallissa ETRS-TM35FIN-karttaprojektiossa.",
+                                "serviceType": {
+                                    "codeSpace": null,
+                                    "value": "OGC WMTS"
+                                },
+                                "serviceTypeVersion": "1.0.0",
+                                "accessConstraints": "Vaatii käyttäjätunnuksen"
+                            },
+                            "serviceProvider": {
+                                "providerName": "Maanmittauslaitos",
+                                "providerSite": "http://www.maanmittauslaitos.fi",
+                                "serviceContact": {
+                                    "individualName": "Verkkopalvelut - sovellustuki",
+                                    "contactInfo": {
+                                        "phone": {
+                                            "voice": "+358 29 530 1116"
+                                        },
+                                        "address": {
+                                            "electronicMailAddress": "sovellustuki@maanmittauslaitos.fi"
+                                        }
+                                    }
+                                }
+                            },
+                            "operationsMetadata": {
+                                "GetCapabilities": {
+                                    "dcp": {
+                                        "http": {
+                                            "get": [
+                                                {
+                                                    "url": "/maasto/wmts?",
+                                                    "constraints": {
+                                                        "GetEncoding": {
+                                                            "allowedValues": {
+                                                                "KVP": true
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                },
+                                "GetTile": {
+                                    "dcp": {
+                                        "http": {
+                                            "get": [
+                                                {
+                                                    "url": "/maasto/wmts?",
+                                                    "constraints": {
+                                                        "GetEncoding": {
+                                                            "allowedValues": {
+                                                                "KVP": true
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                },
+                                "GetFeatureInfo": {
+                                    "dcp": {
+                                        "http": {
+                                            "get": [
+                                                {
+                                                    "url": "/maasto/wmts?",
+                                                    "constraints": {
+                                                        "GetEncoding": {
+                                                            "allowedValues": {
+                                                                "KVP": true
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            "contents": {
+                                "layers": [
+                                    {
+                                        "styles": [
+                                            {
+                                                "isDefault": true,
+                                                "identifier": "default"
+                                            }
+                                        ],
+                                        "formats": ["image/png"],
+                                        "dimensions": [],
+                                        "tileMatrixSetLinks": [
+                                            {
+                                                "tileMatrixSet": "ETRS-TM35FIN"
+                                            }
+                                        ],
+                                        "layers": [],
+                                        "title": "Taustakartta",
+                                        "identifier": "taustakartta",
+                                        "resourceUrls": {
+                                            "tile": {
+                                                "image/png": ["/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
+                                            }
+                                        }
+                                    }, {
+                                        "styles": [
+                                            {
+                                                "isDefault": true,
+                                                "identifier": "default"
+                                            }
+                                        ],
+                                        "formats": ["image/jpeg"],
+                                        "dimensions": [],
+                                        "tileMatrixSetLinks": [
+                                            {
+                                                "tileMatrixSet": "ETRS-TM35FIN"
+                                            }
+                                        ],
+                                        "layers": [],
+                                        "title": "Ortokuva",
+                                        "identifier": "ortokuva",
+                                        "resourceUrls": {
+                                            "tile": {
+                                                "image/jpeg": ["/maasto/wmts/1.0.0/ortokuva/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"]
+                                            }
+                                        }
+                                    }, {
+                                        "styles": [
+                                            {
+                                                "isDefault": true,
+                                                "identifier": "default"
+                                            }
+                                        ],
+                                        "formats": ["image/png"],
+                                        "dimensions": [],
+                                        "tileMatrixSetLinks": [
+                                            {
+                                                "tileMatrixSet": "ETRS-TM35FIN"
+                                            }
+                                        ],
+                                        "layers": [],
+                                        "title": "Maastokartta",
+                                        "identifier": "maastokartta",
+                                        "resourceUrls": {
+                                            "tile": {
+                                                "image/png": ["/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
+                                            }
+                                        }
+                                    }
+                                ],
+                                "tileMatrixSets": {
+                                    "ETRS-TM35FIN": {
+                                        "matrixIds": [
+                                            {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "0",
+                                                "scaleDenominator": 29257142.85714286,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 1,
+                                                "matrixHeight": 1
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "1",
+                                                "scaleDenominator": 14628571.42857143,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 2,
+                                                "matrixHeight": 2
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "2",
+                                                "scaleDenominator": 7314285.714285715,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 4,
+                                                "matrixHeight": 4
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "3",
+                                                "scaleDenominator": 3657142.8571428573,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 8,
+                                                "matrixHeight": 8
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "4",
+                                                "scaleDenominator": 1828571.4285714286,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 16,
+                                                "matrixHeight": 16
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "5",
+                                                "scaleDenominator": 914285.7142857143,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 32,
+                                                "matrixHeight": 32
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "6",
+                                                "scaleDenominator": 457142.85714285716,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 64,
+                                                "matrixHeight": 64
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "7",
+                                                "scaleDenominator": 228571.42857142858,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 128,
+                                                "matrixHeight": 128
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "8",
+                                                "scaleDenominator": 114285.71428571429,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 256,
+                                                "matrixHeight": 256
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "9",
+                                                "scaleDenominator": 57142.857142857145,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 512,
+                                                "matrixHeight": 512
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "10",
+                                                "scaleDenominator": 28571.428571428572,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 1024,
+                                                "matrixHeight": 1024
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "11",
+                                                "scaleDenominator": 14285.714285714286,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 2048,
+                                                "matrixHeight": 2048
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "12",
+                                                "scaleDenominator": 7142.857142857143,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 4096,
+                                                "matrixHeight": 4096
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "13",
+                                                "scaleDenominator": 3571.4285714285716,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 8192,
+                                                "matrixHeight": 8192
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "14",
+                                                "scaleDenominator": 1785.7142857142858,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 16384,
+                                                "matrixHeight": 16384
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "15",
+                                                "scaleDenominator": 892.8571428571429,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 32768,
+                                                "matrixHeight": 32768
+                                            }
+                                        ],
+                                        "identifier": "ETRS-TM35FIN",
+                                        "projection": "EPSG:3067",
+                                        "bounds": [-548576, 1548576, 6291456, 8388608],
+                                        "supportedCRS": "EPSG:3067"
+                                    }
+                                }
+                            },
+                            "version": "1.0.0"
+                        }
+                    }, {
+                        "wmsName": "maastokartta",
+                        "type": "wmtslayer",
+                        "id": "base_2",
+                        "wmsUrl": "/maasto/wmts?",
+                        "name": "maastokartta",
+                        "inspire": "maastokartta",
+                        "orgName": "Maanmittauslaitos",
+                        "tileLayerData": {
+                            "styles": [
+                                {
+                                    "isDefault": true,
+                                    "identifier": "default"
+                                }
+                            ],
+                            "formats": ["image/png"],
+                            "dimensions": [],
+                            "tileMatrixSetLinks": [
+                                {
+                                    "tileMatrixSet": "ETRS-TM35FIN"
+                                }
+                            ],
+                            "layers": [],
+                            "title": "maastokartta",
+                            "identifier": "maastokartta",
+                            "resourceUrls": {
+                                "tile": {
+                                    "image/png": ["/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
+                                }
+                            }
+                        },
+                        "tileMatrixSetData": {
+                            "matrixIds": [
+                                {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "0",
+                                    "scaleDenominator": 29257142.85714286,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 1,
+                                    "matrixHeight": 1
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "1",
+                                    "scaleDenominator": 14628571.42857143,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 2,
+                                    "matrixHeight": 2
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "2",
+                                    "scaleDenominator": 7314285.714285715,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 4,
+                                    "matrixHeight": 4
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "3",
+                                    "scaleDenominator": 3657142.8571428573,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 8,
+                                    "matrixHeight": 8
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "4",
+                                    "scaleDenominator": 1828571.4285714286,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 16,
+                                    "matrixHeight": 16
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "5",
+                                    "scaleDenominator": 914285.7142857143,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 32,
+                                    "matrixHeight": 32
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "6",
+                                    "scaleDenominator": 457142.85714285716,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 64,
+                                    "matrixHeight": 64
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "7",
+                                    "scaleDenominator": 228571.42857142858,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 128,
+                                    "matrixHeight": 128
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "8",
+                                    "scaleDenominator": 114285.71428571429,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 256,
+                                    "matrixHeight": 256
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "9",
+                                    "scaleDenominator": 57142.857142857145,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 512,
+                                    "matrixHeight": 512
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "10",
+                                    "scaleDenominator": 28571.428571428572,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 1024,
+                                    "matrixHeight": 1024
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "11",
+                                    "scaleDenominator": 14285.714285714286,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 2048,
+                                    "matrixHeight": 2048
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "12",
+                                    "scaleDenominator": 7142.857142857143,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 4096,
+                                    "matrixHeight": 4096
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "13",
+                                    "scaleDenominator": 3571.4285714285716,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 8192,
+                                    "matrixHeight": 8192
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "14",
+                                    "scaleDenominator": 1785.7142857142858,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 16384,
+                                    "matrixHeight": 16384
+                                }, {
+                                    "supportedCRS": "EPSG:3067",
+                                    "identifier": "15",
+                                    "scaleDenominator": 892.8571428571429,
+                                    "topLeftCorner": [-548576, 8388608],
+                                    "tileWidth": 256,
+                                    "tileHeight": 256,
+                                    "matrixWidth": 32768,
+                                    "matrixHeight": 32768
+                                }
+                            ],
+                            "identifier": "ETRS-TM35FIN",
+                            "projection": "EPSG:3067",
+                            "bounds": [-548576, 1548576, 6291456, 8388608],
+                            "supportedCRS": "EPSG:3067"
+                        },
+                        "caps": {
+                            "serviceIdentification": {
+                                "title": "Maanmittauslaitoksen Karttakuvapalvelu (WMTS)",
+                                "abstract": "Palvelun kautta saat käyttöösi maasto- ja taustakartat, ortokuvat sekä kiinteistörajat JHS 180 - suosituksen mukaisessa karttatiilimallissa ETRS-TM35FIN-karttaprojektiossa.",
+                                "serviceType": {
+                                    "codeSpace": null,
+                                    "value": "OGC WMTS"
+                                },
+                                "serviceTypeVersion": "1.0.0",
+                                "accessConstraints": "Vaatii käyttäjätunnuksen"
+                            },
+                            "serviceProvider": {
+                                "providerName": "Maanmittauslaitos",
+                                "providerSite": "http://www.maanmittauslaitos.fi",
+                                "serviceContact": {
+                                    "individualName": "Verkkopalvelut - sovellustuki",
+                                    "contactInfo": {
+                                        "phone": {
+                                            "voice": "+358 29 530 1116"
+                                        },
+                                        "address": {
+                                            "electronicMailAddress": "sovellustuki@maanmittauslaitos.fi"
+                                        }
+                                    }
+                                }
+                            },
+                            "operationsMetadata": {
+                                "GetCapabilities": {
+                                    "dcp": {
+                                        "http": {
+                                            "get": [
+                                                {
+                                                    "url": "/maasto/wmts?",
+                                                    "constraints": {
+                                                        "GetEncoding": {
+                                                            "allowedValues": {
+                                                                "KVP": true
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                },
+                                "GetTile": {
+                                    "dcp": {
+                                        "http": {
+                                            "get": [
+                                                {
+                                                    "url": "/maasto/wmts?",
+                                                    "constraints": {
+                                                        "GetEncoding": {
+                                                            "allowedValues": {
+                                                                "KVP": true
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                },
+                                "GetFeatureInfo": {
+                                    "dcp": {
+                                        "http": {
+                                            "get": [
+                                                {
+                                                    "url": "/maasto/wmts?",
+                                                    "constraints": {
+                                                        "GetEncoding": {
+                                                            "allowedValues": {
+                                                                "KVP": true
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            },
+                            "contents": {
+                                "layers": [
+                                    {
+                                        "styles": [
+                                            {
+                                                "isDefault": true,
+                                                "identifier": "default"
+                                            }
+                                        ],
+                                        "formats": ["image/png"],
+                                        "dimensions": [],
+                                        "tileMatrixSetLinks": [
+                                            {
+                                                "tileMatrixSet": "ETRS-TM35FIN"
+                                            }
+                                        ],
+                                        "layers": [],
+                                        "title": "Taustakartta",
+                                        "identifier": "taustakartta",
+                                        "resourceUrls": {
+                                            "tile": {
+                                                "image/png": ["/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
+                                            }
+                                        }
+                                    }, {
+                                        "styles": [
+                                            {
+                                                "isDefault": true,
+                                                "identifier": "default"
+                                            }
+                                        ],
+                                        "formats": ["image/jpeg"],
+                                        "dimensions": [],
+                                        "tileMatrixSetLinks": [
+                                            {
+                                                "tileMatrixSet": "ETRS-TM35FIN"
+                                            }
+                                        ],
+                                        "layers": [],
+                                        "title": "Ortokuva",
+                                        "identifier": "ortokuva",
+                                        "resourceUrls": {
+                                            "tile": {
+                                                "image/jpeg": ["/maasto/wmts/1.0.0/ortokuva/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"]
+                                            }
+                                        }
+                                    }, {
+                                        "styles": [
+                                            {
+                                                "isDefault": true,
+                                                "identifier": "default"
+                                            }
+                                        ],
+                                        "formats": ["image/png"],
+                                        "dimensions": [],
+                                        "tileMatrixSetLinks": [
+                                            {
+                                                "tileMatrixSet": "ETRS-TM35FIN"
+                                            }
+                                        ],
+                                        "layers": [],
+                                        "title": "Maastokartta",
+                                        "identifier": "maastokartta",
+                                        "resourceUrls": {
+                                            "tile": {
+                                                "image/png": ["/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
+                                            }
+                                        }
+                                    }
+                                ],
+                                "tileMatrixSets": {
+                                    "ETRS-TM35FIN": {
+                                        "matrixIds": [
+                                            {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "0",
+                                                "scaleDenominator": 29257142.85714286,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 1,
+                                                "matrixHeight": 1
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "1",
+                                                "scaleDenominator": 14628571.42857143,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 2,
+                                                "matrixHeight": 2
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "2",
+                                                "scaleDenominator": 7314285.714285715,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 4,
+                                                "matrixHeight": 4
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "3",
+                                                "scaleDenominator": 3657142.8571428573,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 8,
+                                                "matrixHeight": 8
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "4",
+                                                "scaleDenominator": 1828571.4285714286,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 16,
+                                                "matrixHeight": 16
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "5",
+                                                "scaleDenominator": 914285.7142857143,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 32,
+                                                "matrixHeight": 32
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "6",
+                                                "scaleDenominator": 457142.85714285716,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 64,
+                                                "matrixHeight": 64
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "7",
+                                                "scaleDenominator": 228571.42857142858,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 128,
+                                                "matrixHeight": 128
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "8",
+                                                "scaleDenominator": 114285.71428571429,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 256,
+                                                "matrixHeight": 256
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "9",
+                                                "scaleDenominator": 57142.857142857145,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 512,
+                                                "matrixHeight": 512
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "10",
+                                                "scaleDenominator": 28571.428571428572,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 1024,
+                                                "matrixHeight": 1024
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "11",
+                                                "scaleDenominator": 14285.714285714286,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 2048,
+                                                "matrixHeight": 2048
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "12",
+                                                "scaleDenominator": 7142.857142857143,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 4096,
+                                                "matrixHeight": 4096
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "13",
+                                                "scaleDenominator": 3571.4285714285716,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 8192,
+                                                "matrixHeight": 8192
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "14",
+                                                "scaleDenominator": 1785.7142857142858,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 16384,
+                                                "matrixHeight": 16384
+                                            }, {
+                                                "supportedCRS": "EPSG:3067",
+                                                "identifier": "15",
+                                                "scaleDenominator": 892.8571428571429,
+                                                "topLeftCorner": [-548576, 8388608],
+                                                "tileWidth": 256,
+                                                "tileHeight": 256,
+                                                "matrixWidth": 32768,
+                                                "matrixHeight": 32768
+                                            }
+                                        ],
+                                        "identifier": "ETRS-TM35FIN",
+                                        "projection": "EPSG:3067",
+                                        "bounds": [-548576, 1548576, 6291456, 8388608],
+                                        "supportedCRS": "EPSG:3067"
+                                    }
+                                }
+                            },
+                            "version": "1.0.0"
+                        }
+                    }
+                ],
+                "imageLocation": "/Oskari/resources",
+                "user": {
+                    "userID": 10110,
+                    "lastName": "",
+                    "nickName": "10110",
+                    "userUUID": "",
+                    "firstName": "",
+                    "loginName": "default@maanmittauslaitos.fi"
+                },
+                "mapOptions": {
+                    "resolutions": [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5],
+                    "maxExtent": {
+                        "left": -548576.000000,
+                        "bottom": 6291456.000000,
+                        "right": 1548576.000000,
+                        "top": 8388608.000000
+                    },
+                    "srsName": "EPSG:3067"
+                }
+            }
+        },
+        "personaldata": {
+            "state": {},
+            "conf": {
+                "register": {
+                    "fi": "Rekisteröidy",
+                    "sv": "Rekisteröidy",
+                    "en": "Register"
+                },
+                "toolbarButtons": {
+                    "myplaces": {
+                        "point": {
+                            "iconCls": "myplaces-draw-point",
+                            "tooltip": {
+                                "fi": "Lisää piste - Kirjaudu sisään käyttääksesi",
+                                "sv": "Tillägg punkt - Logga in för att använda",
+                                "en": "Add point - Log in to use"
+                            }
+                        },
+                        "area": {
+                            "iconCls": "myplaces-draw-area",
+                            "tooltip": {
+                                "fi": "Lisää alue - Kirjaudu sisään käyttääksesi",
+                                "sv": "Tillägg område - Logga in för att använda",
+                                "en": "Add area - Log in to use"
+                            }
+                        },
+                        "line": {
+                            "iconCls": "myplaces-draw-line",
+                            "tooltip": {
+                                "fi": "Lisää viiva - Kirjaudu sisään käyttääksesi",
+                                "sv": "Tillägg linje - Logga in för att använda",
+                                "en": "Add line - Log in to use"
+                            }
+                        }
+                    }
+                },
+                "title": {
+                    "fi": "Omat tiedot",
+                    "sv": "Mina uppgifter",
+                    "en": "My data"
+                },
+                "signupUrl": {
+                    "fi": "/web/fi/login",
+                    "sv": "/web/sv/login",
+                    "en": "/web/en/login"
+                },
+                "desc": {
+                    "fi": "Omiin tietoihin voit tallentaa omia karttanäkymiä ja kohteita sekä nähdä muille sivustoille julkaisemasi kartat.",
+                    "sv": "Du kan lagra dina egna kartvyer och titta på kartor som du har inbäddat på andra webbplatser i Mina uppgifter.",
+                    "en": "You can save map views and browse maps that you have embedded on other websites in My data."
+                },
+                "registerUrl": {
+                    "fi": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account",
+                    "sv": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account",
+                    "en": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+                },
+                "__name": "Personaldata",
+                "signup": {
+                    "fi": "Kirjaudu palveluun",
+                    "sv": "Logga in",
+                    "en": "Log in"
+                }
+            }
+        },
+        "publisher": {
+            "state": {},
+            "conf": {
+                "register": {
+                    "fi": "Rekisteröidy",
+                    "sv": "Registrera dig",
+                    "en": "Register"
+                },
+                "title": {
+                    "fi": "Julkaise kartta",
+                    "sv": "Definiera karta",
+                    "en": "Create map"
+                },
+                "signupUrl": {
+                    "fi": "/web/fi/login",
+                    "sv": "/web/sv/login",
+                    "en": "/web/en/login"
+                },
+                "desc": {
+                    "fi": "Voit käyttää julkaisutoimintoa kirjauduttuasi palveluun.",
+                    "sv": "Logga in i tjänsten för att definiera en karta som ska inbäddas.",
+                    "en": "You need to log in before using the embedding function."
+                },
+                "registerUrl": {
+                    "fi": "/web/fi/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account",
+                    "sv": "/web/sv/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account",
+                    "en": "/web/en/login?p_p_id=58&p_p_lifecycle=1&p_p_state=maximized&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&saveLastPath=0&_58_struts_action=%2Flogin%2Fcreate_account"
+                },
+                "__name": "Publisher",
+                "signup": {
+                    "fi": "Kirjaudu sisään",
+                    "sv": "Logga in",
+                    "en": "Log in"
+                }
+            }
+        },
+        "printout": {
+            "state": {},
+            "conf": {
+                "backendConfiguration": {
+                    "formatProducers": {
+                        "image/png": "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.png?",
+                        "application/pdf": "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.pdf?"
+                    }
+                }
+            }
+        },
+        "openlayers-default-theme": {
+            "state": {},
+            "conf": {}
+        },
+        "search": {
+            "state": {},
+            "conf": {
+                "url": "/ajax?action_route=GetSearchResult&"
+            }
+        },
+        "maplegend": {
+            "state": {},
+            "conf": {}
+        },
+        "featuredata": {
+            "state": {},
+            "conf": {
+                "selectionTools": true
+            }
+        },
+        "divmanazer": {
+            "state": {},
+            "conf": {}
+        },
+        "statehandler": {
+            "state": {},
+            "conf": {}
+        },
+        "infobox": {
+            "state": {},
+            "conf": {
+                "adaptable": true
+            }
+        },
+        "coordinatedisplay": {
+            "state": {},
+            "conf": {}
+        }
+    }
+}
