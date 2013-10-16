@@ -35,6 +35,9 @@ Oskari.clazz.define("Oskari.userinterface.bundle.bootstrap.UserInterfaceBundle",
          */
         "scripts" : [{
             "type" : "text/javascript",
+            "src" : "../../../../bundles/framework/bundle/divmanazer/instance.js"
+        }, {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/bootstrap/bundle/divmanazer/instance.js"
         }, {
             "type" : "text/javascript",
