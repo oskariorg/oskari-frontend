@@ -346,6 +346,11 @@ module.exports = function (grunt) {
             options: {
                 mainConfigFile: "../applications/oskari2/full-map_guest/build.js"
             }
+          },
+          'leaflet': {
+            options: {
+                mainConfigFile: "../applications/oskari2/leaflet/build.js"
+            }
           }
         }
     });
