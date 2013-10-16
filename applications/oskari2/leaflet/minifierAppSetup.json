@@ -12,9 +12,6 @@
                 "Import-Bundle": {
                     "leaflet": {
                         "bundlePath": "/Oskari/packages/leaflet/bundle/"
-                    },
-                    "oskariui": {
-                        "bundlePath": "/Oskari/packages/framework/bundle/"
                     }
                 },
                 "Require-Bundle-Instance": []
@@ -219,22 +216,6 @@
             }
         }, {
             "instanceProps": {},
-            "title": "Koordinaattin�ytt�",
-            "bundleinstancename": "coordinatedisplay",
-            "fi": "coordinatedisplay",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "coordinatedisplay",
-            "metadata": {
-                "Import-Bundle": {
-                    "coordinatedisplay": {
-                        "bundlePath": "/Oskari/packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }, {
-            "instanceProps": {},
             "title": "maplegend",
             "fi": "maplegend",
             "bundleinstancename": "maplegend",
@@ -267,54 +248,6 @@
             }
         }, {
             "instanceProps": {},
-            "title": "Metadata Flyout",
-            "bundleinstancename": "metadataflyout",
-            "fi": "metadataflyout",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "metadataflyout",
-            "metadata": {
-                "Import-Bundle": {
-                    "metadataflyout": {
-                        "bundlePath": "/Oskari/packages/catalogue/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }, {
-            "instanceProps": {},
-            "title": "Featuredata",
-            "bundleinstancename": "featuredata",
-            "fi": "Kohdetiedot",
-            "sv": "?",
-            "en": "?",
-            "bundlename": "featuredata",
-            "metadata": {
-                "Import-Bundle": {
-                    "featuredata": {
-                        "bundlePath": "/Oskari/packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }, {
-            "instanceProps": {},
-            "title": "guidedtour",
-            "fi": "guidedtour",
-            "bundleinstancename": "guidedtour",
-            "sv": "guidedtour",
-            "en": "guidedtour",
-            "bundlename": "guidedtour",
-            "metadata": {
-                "Import-Bundle": {
-                    "guidedtour": {
-                        "bundlePath": "/Oskari/packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            }
-        }, {
-            "instanceProps": {},
             "title": "backendstatus",
             "fi": "backendstatus",
             "bundleinstancename": "backendstatus",
@@ -329,22 +262,6 @@
                 },
                 "Require-Bundle-Instance": []
             }
-        }, {
-            "title": "Printout",
-            "fi": "Karttatuloste",
-            "sv": "Kartutskrift",
-            "en": "Map Printout",
-            "bundlename": "printout",
-            "bundleinstancename": "printout",
-            "metadata": {
-                "Import-Bundle": {
-                    "printout": {
-                        "bundlePath": "/Oskari/packages/framework/bundle/"
-                    }
-                },
-                "Require-Bundle-Instance": []
-            },
-            "instanceProps": {}
         }, {
             "title": "PostProcessor",
             "fi": "PostProcessor",
@@ -381,10 +298,6 @@
             "state": {},
             "conf": {}
         },
-        "guidedtour": {
-            "state": {},
-            "conf": {}
-        },
         "toolbar": {
             "state": {
                 "selected": {
@@ -395,16 +308,6 @@
             "conf": {
                 "viewtools": {
                     "print": false
-                }
-            }
-        },
-        "mapviewlog": {
-            "conf": {
-                "name": "mapviewlog",
-                "tileClazz": "Oskari.userinterface.extension.DefaultTile",
-                "flyoutClazz": "Oskari.social.bundle.mapviewlog.Flyout",
-                "formatProducers": {
-                    "image/png": "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.png"
                 }
             }
         },
@@ -433,10 +336,6 @@
             },
             "conf": {}
         },
-        "metadataflyout": {
-            "state": {},
-            "conf": {}
-        },
         "mapfull": {
             "state": {
                 "selectedLayers": [
@@ -461,7 +360,7 @@
                     {
                         "id": "Oskari.leaflet.mapmodule.plugin.ControlsPlugin"
                     }, {
-                        "id": "Oskari.leaflet.mapmodule.plugin.LayersPlugin"
+                        "id": "Oskari.mapping.mapmodule.plugin.LayersPlugin"
                     }, {
                         "id": "Oskari.leaflet.mapmodule.plugin.WmsLayerPlugin"
                     }, {
@@ -518,7 +417,7 @@
                         "wmsName": "taustakartta",
                         "type": "wmtslayer",
                         "id": "base_35",
-                        "wmsUrl": "/maasto/wmts?",
+                        "wmsUrl": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?",
                         "name": "Taustakartta",
                         "inspire": "Taustakartta",
                         "orgName": "Maanmittauslaitos",
@@ -541,7 +440,7 @@
                             "identifier": "taustakartta",
                             "resourceUrls": {
                                 "tile": {
-                                    "image/png": ["/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
+                                    "image/png": ["http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
                                 }
                             }
                         },
@@ -730,7 +629,7 @@
                                         "http": {
                                             "get": [
                                                 {
-                                                    "url": "/maasto/wmts?",
+                                                    "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?",
                                                     "constraints": {
                                                         "GetEncoding": {
                                                             "allowedValues": {
@@ -748,7 +647,7 @@
                                         "http": {
                                             "get": [
                                                 {
-                                                    "url": "/maasto/wmts?",
+                                                    "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?",
                                                     "constraints": {
                                                         "GetEncoding": {
                                                             "allowedValues": {
@@ -766,7 +665,7 @@
                                         "http": {
                                             "get": [
                                                 {
-                                                    "url": "/maasto/wmts?",
+                                                    "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?",
                                                     "constraints": {
                                                         "GetEncoding": {
                                                             "allowedValues": {
@@ -801,7 +700,7 @@
                                         "identifier": "taustakartta",
                                         "resourceUrls": {
                                             "tile": {
-                                                "image/png": ["/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
+                                                "image/png": ["http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
                                             }
                                         }
                                     }, {
@@ -823,7 +722,7 @@
                                         "identifier": "ortokuva",
                                         "resourceUrls": {
                                             "tile": {
-                                                "image/jpeg": ["/maasto/wmts/1.0.0/ortokuva/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"]
+                                                "image/jpeg": ["http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/ortokuva/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"]
                                             }
                                         }
                                     }, {
@@ -845,7 +744,7 @@
                                         "identifier": "maastokartta",
                                         "resourceUrls": {
                                             "tile": {
-                                                "image/png": ["/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
+                                                "image/png": ["http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
                                             }
                                         }
                                     }
@@ -1012,7 +911,7 @@
                         "wmsName": "maastokartta",
                         "type": "wmtslayer",
                         "id": "base_2",
-                        "wmsUrl": "/maasto/wmts?",
+                        "wmsUrl": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?",
                         "name": "maastokartta",
                         "inspire": "maastokartta",
                         "orgName": "Maanmittauslaitos",
@@ -1035,7 +934,7 @@
                             "identifier": "maastokartta",
                             "resourceUrls": {
                                 "tile": {
-                                    "image/png": ["/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
+                                    "image/png": ["http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
                                 }
                             }
                         },
@@ -1224,7 +1123,7 @@
                                         "http": {
                                             "get": [
                                                 {
-                                                    "url": "/maasto/wmts?",
+                                                    "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?",
                                                     "constraints": {
                                                         "GetEncoding": {
                                                             "allowedValues": {
@@ -1242,7 +1141,7 @@
                                         "http": {
                                             "get": [
                                                 {
-                                                    "url": "/maasto/wmts?",
+                                                    "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?",
                                                     "constraints": {
                                                         "GetEncoding": {
                                                             "allowedValues": {
@@ -1260,7 +1159,7 @@
                                         "http": {
                                             "get": [
                                                 {
-                                                    "url": "/maasto/wmts?",
+                                                    "url": "http://karttamoottori.maanmittauslaitos.fi/maasto/wmts?",
                                                     "constraints": {
                                                         "GetEncoding": {
                                                             "allowedValues": {
@@ -1295,7 +1194,7 @@
                                         "identifier": "taustakartta",
                                         "resourceUrls": {
                                             "tile": {
-                                                "image/png": ["/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
+                                                "image/png": ["http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/taustakartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
                                             }
                                         }
                                     }, {
@@ -1317,7 +1216,7 @@
                                         "identifier": "ortokuva",
                                         "resourceUrls": {
                                             "tile": {
-                                                "image/jpeg": ["/maasto/wmts/1.0.0/ortokuva/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"]
+                                                "image/jpeg": ["http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/ortokuva/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg"]
                                             }
                                         }
                                     }, {
@@ -1339,7 +1238,7 @@
                                         "identifier": "maastokartta",
                                         "resourceUrls": {
                                             "tile": {
-                                                "image/png": ["/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
+                                                "image/png": ["http://karttamoottori.maanmittauslaitos.fi/maasto/wmts/1.0.0/maastokartta/default/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.png"]
                                             }
                                         }
                                     }
@@ -1625,17 +1524,6 @@
                 }
             }
         },
-        "printout": {
-            "state": {},
-            "conf": {
-                "backendConfiguration": {
-                    "formatProducers": {
-                        "image/png": "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.png?",
-                        "application/pdf": "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.pdf?"
-                    }
-                }
-            }
-        },
         "openlayers-default-theme": {
             "state": {},
             "conf": {}
@@ -1650,12 +1538,6 @@
             "state": {},
             "conf": {}
         },
-        "featuredata": {
-            "state": {},
-            "conf": {
-                "selectionTools": true
-            }
-        },
         "divmanazer": {
             "state": {},
             "conf": {}
@@ -1669,10 +1551,6 @@
             "conf": {
                 "adaptable": true
             }
-        },
-        "coordinatedisplay": {
-            "state": {},
-            "conf": {}
         }
     }
 }

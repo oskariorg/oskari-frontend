@@ -4,6 +4,7 @@ define([
     "bundles/oskari/platform/module",
 	"../../../mapping/bundle/mapmodule-plugin/map-module",
 	"../../../mapping/bundle/mapmodule-plugin/plugin/MapPlugin",
+	"../../../mapping/bundle/mapmodule-plugin/plugin/MapLayerPlugin",
 	"../../../mapping/bundle/mapmodule-plugin/plugin/panbuttons/PanButtons",
 	"../../../mapping/bundle/mapmodule-plugin/plugin/layers/LayersPlugin",
 	"../../../framework/bundle/mapmodule-plugin/request/MapLayerVisibilityRequest",
