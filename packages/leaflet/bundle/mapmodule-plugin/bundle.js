@@ -39,6 +39,10 @@ Oskari.clazz.define("Oskari.leaflet.bundle.MapModulePluginBundle", function() {
         },
         {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/mapping/bundle/mapmodule-plugin/plugin/MapLayerPlugin.js"
+        }, 
+        {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/mapping/bundle/mapmodule-plugin/plugin/panbuttons/PanButtons.js"
         },
         {
