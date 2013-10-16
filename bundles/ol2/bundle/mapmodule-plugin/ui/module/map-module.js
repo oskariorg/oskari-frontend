@@ -620,6 +620,7 @@ function(id, imageUrl, options) {
     },
     
      _addMapControlImpl : function(ctl) {
+         console.log("_addMapControlImpl",ctl);
         this._map.addControl(ctl);
     },
 

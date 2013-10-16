@@ -2,6 +2,10 @@
 
 ## 1.15
 
+### mapmodule-plugin/layers/backgroundlayerselector
+
+New plugin for selecting a background layer from a preset list. See the bundle documentation for more information.
+
 ### myplaces bundle
 
 Clicking a preview image in the My places GFI popup opens the image URL in a new browser tab or window.

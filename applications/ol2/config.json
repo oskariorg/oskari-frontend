@@ -24,6 +24,8 @@
                 }, {
                     "id": "Oskari.mapframework.mapmodule.ControlsPlugin"
                 }, {
+                    "id": "Oskari.ol2.mapmodule.plugin.PanButtons"
+                }, {
                     "id": "Oskari.mapframework.mapmodule.WmsLayerPlugin"
                 }, {
                     "id": "Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin"
