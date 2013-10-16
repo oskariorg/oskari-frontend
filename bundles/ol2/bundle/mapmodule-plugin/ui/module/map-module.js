@@ -40,8 +40,8 @@ function(id, imageUrl, options) {
         units : 'm'
     };
     // override defaults
-    if(options) {
-        for(var key in options) {
+    if (options) {
+        for (var key in options) {
             this._options[key] = options[key];
         }
     }
@@ -66,7 +66,7 @@ function(id, imageUrl, options) {
     this._navigationHistoryTool.id = "navigationhistory";
     this._localization = null;
 }, {
-     
+
     clearNavigationHistory : function() {
         this._navigationHistoryTool.clear();
     },
@@ -89,7 +89,6 @@ function(id, imageUrl, options) {
         return this._map.layerContainerDiv;
     },
 
-
     /**
      * @method createMap
      * @private
@@ -105,14 +104,10 @@ function(id, imageUrl, options) {
         var lonlat = new OpenLayers.LonLat(0, 0);
 
         var mapExtent = new OpenLayers.Bounds(0, 0, 10000000, 10000000);
-        if(this._options!=null && this._options.maxExtent !=null
-        		&& this._options.maxExtent.left != null && this._options.maxExtent.bottom != null
-        		&& this._options.maxExtent.right != null && this._options.maxExtent.top != null){
-        	mapExtent = new OpenLayers.Bounds(this._options.maxExtent.left, this._options.maxExtent.bottom, this._options.maxExtent.right, this._options.maxExtent.top);
+        if (this._options != null && this._options.maxExtent != null && this._options.maxExtent.left != null && this._options.maxExtent.bottom != null && this._options.maxExtent.right != null && this._options.maxExtent.top != null) {
+            mapExtent = new OpenLayers.Bounds(this._options.maxExtent.left, this._options.maxExtent.bottom, this._options.maxExtent.right, this._options.maxExtent.top);
         }
-        
-        
-        
+
         this._map = new OpenLayers.Map({
             controls : [],
             units : this._options.units, //'m',
@@ -124,15 +119,11 @@ function(id, imageUrl, options) {
             theme : null,
             zoom : 0
         });
-        
-        this._createBaseLayer();
 
-        
-        
+        this._createBaseLayer();
 
         this.addMapControl('navigationHistoryTool', this._navigationHistoryTool);
         this.getMapControl('navigationHistoryTool').activate();
-
 
         return this._map;
     },
@@ -175,7 +166,7 @@ function(id, imageUrl, options) {
         // using panTo BREAKS IE on startup so do not
         // should we spam events on dragmoves?
         this._map.setCenter(lonlat, this._map.getZoom(), isDragging);
-        if(zoomAdjust) {
+        if (zoomAdjust) {
             this.adjustZoomLevel(zoomAdjust, true);
         }
         this._updateDomain();
@@ -191,7 +182,7 @@ function(id, imageUrl, options) {
     panMapToLonLat : function(lonlat, suppressEnd) {
         this._map.setCenter(lonlat, this._map.getZoom());
         this._updateDomain();
-        if(suppressEnd !== true) {
+        if (suppressEnd !== true) {
             this.notifyMoveEnd();
         }
     },
@@ -206,10 +197,10 @@ function(id, imageUrl, options) {
      *     wanting to notify at end of the chain for performance reasons or similar) (optional)
      */
     zoomToScale : function(scale, closest, suppressEnd) {
-    	var isClosest = (closest === true);
-        this._map.zoomToScale(scale,isClosest);
+        var isClosest = (closest === true);
+        this._map.zoomToScale(scale, isClosest);
         this._updateDomain();
-        if(suppressEnd !== true) {
+        if (suppressEnd !== true) {
             this.notifyMoveEnd();
         }
     },
@@ -222,15 +213,15 @@ function(id, imageUrl, options) {
      *  (other components wont know that the map has moved, only use when chaining moves and
      *     wanting to notify at end of the chain for performance reasons or similar) (optional)
      */
-    centerMap: function(lonlat,zoom, suppressEnd) {
+    centerMap : function(lonlat, zoom, suppressEnd) {
         // TODO: openlayers has isValidLonLat(); maybe use it here
-    	this._map.setCenter(lonlat,zoom,false);
-    	this._updateDomain();
-    	if(suppressEnd !== true) {
+        this._map.setCenter(lonlat, zoom, false);
+        this._updateDomain();
+        if (suppressEnd !== true) {
             this.notifyMoveEnd();
         }
     },
- 
+
     /**
      * @method panMapByPixels
      * Pans the map by given amount of pixels.
@@ -244,16 +235,19 @@ function(id, imageUrl, options) {
      *     wanting to notify at end of the chain for performance reasons or similar) (optional)
      * @param {Boolean} isDrag true if the user is dragging the map to a new location currently (optional)
      */
-    panMapByPixels : function(pX, pY, suppressStart, suppressEnd,isDrag) {
+    panMapByPixels : function(pX, pY, suppressStart, suppressEnd, isDrag) {
         // usually programmatically for gfi centering
-        this._map.pan(pX, pY,{dragging: (isDrag?true:false), animate: false});
+        this._map.pan(pX, pY, {
+            dragging : ( isDrag ? true : false),
+            animate : false
+        });
 
         this._updateDomain();
         // send note about map change
-        if(suppressStart !== true) {
+        if (suppressStart !== true) {
             this.notifyStartMove();
         }
-        if(suppressEnd !== true) {
+        if (suppressEnd !== true) {
             this.notifyMoveEnd();
         }
     },
@@ -274,10 +268,10 @@ function(id, imageUrl, options) {
         this._map.moveByPx(pX, pY);
         this._updateDomain();
         // send note about map change
-        if(suppressStart !== true) {
+        if (suppressStart !== true) {
             this.notifyStartMove();
         }
-        if(suppressEnd !== true) {
+        if (suppressEnd !== true) {
             this.notifyMoveEnd();
         }
     },
@@ -298,21 +292,21 @@ function(id, imageUrl, options) {
         var newCenter = this._map.getLonLatFromViewPortPx(newXY);
         // check that the coordinates are reasonable, otherwise its easy to
         // scrollwheel the map out of view
-        if(!this.isValidLonLat(newCenter.lon, newCenter.lat)) {
+        if (!this.isValidLonLat(newCenter.lon, newCenter.lat)) {
             // do nothing if not valid
             return;
         }
         this.moveMapToLanLot(newCenter);
 
         // send note about map change
-        if(suppressStart !== true) {
+        if (suppressStart !== true) {
             this.notifyStartMove();
         }
-        if(suppressEnd !== true) {
+        if (suppressEnd !== true) {
             this.notifyMoveEnd();
         }
     },
-   
+
     /**
      * @method zoomToExtent
      * Zooms the map to fit given bounds on the viewport
@@ -328,10 +322,10 @@ function(id, imageUrl, options) {
         this._map.zoomToExtent(bounds);
         this._updateDomain();
         // send note about map change
-        if(suppressStart !== true) {
+        if (suppressStart !== true) {
             this.notifyStartMove();
         }
-        if(suppressEnd !== true) {
+        if (suppressEnd !== true) {
             this.notifyMoveEnd();
         }
     },
@@ -348,7 +342,7 @@ function(id, imageUrl, options) {
 
         this._map.zoomTo(requestedZoomLevel);
         this._updateDomain();
-        if(suppressEvent !== true) {
+        if (suppressEvent !== true) {
             // send note about map change
             this.notifyMoveEnd();
         }
@@ -363,25 +357,25 @@ function(id, imageUrl, options) {
      */
     setZoomLevel : function(newZoomLevel, suppressEvent) {
         //console.log('zoom to ' + requestedZoomLevel);
-        if(newZoomLevel == this._map.getZoom()) {
-        	// do nothing if requested zoom is same as current
-        	return;
+        if (newZoomLevel == this._map.getZoom()) {
+            // do nothing if requested zoom is same as current
+            return;
         }
-        if(newZoomLevel < 0 || newZoomLevel > this._map.getNumZoomLevels) {
+        if (newZoomLevel < 0 || newZoomLevel > this._map.getNumZoomLevels) {
             newZoomLevel = this._map.getZoom();
         }
         this._map.zoomTo(newZoomLevel);
         this._updateDomain();
-        if(suppressEvent !== true) {
+        if (suppressEvent !== true) {
             // send note about map change
             this.notifyMoveEnd();
         }
     },
-    
+
     getZoomLevel : function() {
-      return this._map.getZoom();  
+        return this._map.getZoom();
     },
-    
+
     /**
      * @method _getNewZoomLevel
      * @private
@@ -394,7 +388,7 @@ function(id, imageUrl, options) {
         // TODO: check isNaN?
         var requestedZoomLevel = this._map.getZoom() + adjustment;
 
-        if(requestedZoomLevel >= 0 && requestedZoomLevel <= this._map.getNumZoomLevels()) {
+        if (requestedZoomLevel >= 0 && requestedZoomLevel <= this._map.getNumZoomLevels()) {
             return requestedZoomLevel;
         }
         // if not in valid bounds, return original
@@ -407,7 +401,7 @@ function(id, imageUrl, options) {
      * Ignores the call if map is in stealth mode
      */
     notifyStartMove : function() {
-        if(this.getStealth()) {
+        if (this.getStealth()) {
             // ignore if in "stealth mode"
             return;
         }
@@ -426,7 +420,7 @@ function(id, imageUrl, options) {
      * (this class) calls this automatically if not stated otherwise in API documentation.
      */
     notifyMoveEnd : function() {
-        if(this.getStealth()) {
+        if (this.getStealth()) {
             // ignore if in "stealth mode"
             return;
         }
@@ -446,7 +440,6 @@ function(id, imageUrl, options) {
         this.getMap().updateSize();
         this._updateDomain();
 
-
         var sandbox = this._sandbox;
         var mapVO = sandbox.getMap();
         // send as an event forward to WFSPlugin (draws)
@@ -461,7 +454,7 @@ function(id, imageUrl, options) {
      */
     _updateDomain : function() {
 
-        if(this.getStealth()) {
+        if (this.getStealth()) {
             // ignore if in "stealth mode"
             return;
         }
@@ -482,7 +475,7 @@ function(id, imageUrl, options) {
         mapVO.setMaxExtent(this._map.getMaxExtent());
 
         mapVO.setBbox(this._map.calculateBounds());
-        
+
         // TODO: not sure if this is supposed to work like this
         // this resets the marker set by url control parameter so dont do it
         //mapVO.setMarkerVisible(this._hasMarkers());
@@ -494,7 +487,7 @@ function(id, imageUrl, options) {
     getMapScales : function() {
         return this._mapScales;
     },
- 
+
     /**
      * @method _drawMarker
      * @private
@@ -523,9 +516,9 @@ function(id, imageUrl, options) {
     _removeMarkers : function() {
 
         var markerLayer = this._map.getLayersByName("Markers");
-        if(markerLayer) {
-            for(var i = 0; i < markerLayer.length; i++) {
-                if(markerLayer[i]) {
+        if (markerLayer) {
+            for (var i = 0; i < markerLayer.length; i++) {
+                if (markerLayer[i]) {
                     this._map.removeLayer(markerLayer[i], false);
                 }
             }
@@ -539,9 +532,9 @@ function(id, imageUrl, options) {
      */
     _hasMarkers : function() {
         var markerLayer = this._map.getLayersByName("Markers");
-        if(markerLayer) {
-            for(var i = 0; i < markerLayer.length; i++) {
-                if(markerLayer[i] && markerLayer[i].markers && markerLayer[i].markers.length > 0) {
+        if (markerLayer) {
+            for (var i = 0; i < markerLayer.length; i++) {
+                if (markerLayer[i] && markerLayer[i].markers && markerLayer[i].markers.length > 0) {
                     return true;
                 }
             }
@@ -557,7 +550,7 @@ function(id, imageUrl, options) {
             this._removeMarkers();
         }
     },
-       
+
     /**
      * @method updateCurrentState
      * Setup layers from selected layers
@@ -576,7 +569,7 @@ function(id, imageUrl, options) {
         var layers = sandbox.findAllSelectedMapLayers();
         var lps = this.getLayerPlugins();
 
-        for(p in lps) {
+        for (p in lps) {
             var layersPlugin = lps[p];
 
             sandbox.printDebug('preselecting ' + p);
@@ -593,19 +586,18 @@ function(id, imageUrl, options) {
      * @param {RegExp} removeClassRegex the regex to test against to determine which classes should be removec
      * @param {Array[jQuery]} elements The elements where the classes should be changed.
      */
-    changeCssClasses: function(classToAdd, removeClassRegex, elements) {
+    changeCssClasses : function(classToAdd, removeClassRegex, elements) {
         var i, j, el;
 
-        for (i = 0; i < elements.length; i++) {
+        for ( i = 0; i < elements.length; i++) {
             el = elements[i];
 
             el.removeClass(function(index, classes) {
-                var removeThese = '',
-                    classNames = classes.split(' ');
+                var removeThese = '', classNames = classes.split(' ');
 
                 // Check if there are any old font classes.
-                for (j = 0; j < classNames.length; ++j) {
-                    if(removeClassRegex.test(classNames[j])) {
+                for ( j = 0; j < classNames.length; ++j) {
+                    if (removeClassRegex.test(classNames[j])) {
                         removeThese += classNames[j] + ' ';
                     }
                 }
@@ -618,38 +610,47 @@ function(id, imageUrl, options) {
             el.addClass(classToAdd);
         }
     },
-    
-     _addMapControlImpl : function(ctl) {
-         console.log("_addMapControlImpl",ctl);
+
+    _addMapControlImpl : function(ctl) {
+        console.log("_addMapControlImpl", ctl);
         this._map.addControl(ctl);
     },
 
     _removeMapControlImpl : function(ctl) {
-        this._map.removeControl(ctl);   
+        this._map.removeControl(ctl);
     },
-    
+
     getMapScale : function() {
         return this._map.getScale();
     },
     getMapSize : function() {
-        var wh =this._map.getSize(); 
-        return [wh.w,wh.h];
-        
+        var wh = this._map.getSize();
+        return [wh.w, wh.h];
+
     },
-    
-    /* TEMP : layer handling in Plugins to be replaced by one inherited from  
+
+    /* TEMP : layer handling in Plugins to be replaced by one inherited from
      *  Oskari.mapping.mapmodule.AbstractMapModule
      */
     /* TEMP : shall be replaced by *Impl variants */
-    
-    setLayerIndex: function(layerImpl,index) {
-        console.log("setLAYERINDEX",layerImpl,index);
-        return this._map.setLayerIndex(layerImpl,index);
+
+    _setLayerImplIndex : function(layerImpl, index) {
+        return this._map.setLayerIndex(layerImpl, index);
+    },
+
+    getLayersByName : function(name) {
+        return this._map.getLayersByName(name);
     },
     
-    getLayersByName: function(name) {
-        return this._map.getLayersByName(name);
+    _addLayerImpl : function(layerImpl) {
+        this._map.addLayer(layerImpl);
+    },
+
+    _removeLayerImpl : function(layerImpl) {
+        this._map.removeLayer(layerImpl);
+        layerImpl.destroy();
     }
+
     
 }, {
     /**

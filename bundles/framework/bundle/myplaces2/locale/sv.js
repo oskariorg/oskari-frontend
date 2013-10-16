@@ -7,7 +7,7 @@ Oskari.registerLocalization({
     "category": {
       "defaultName": "Mitt kartlager",
       "organization": "Mina objekt",
-      "inspire": "Objekt"
+      "inspire": "Mina objekt"
     },
     "guest": {
       "loginShort": "Logga in för att använda"

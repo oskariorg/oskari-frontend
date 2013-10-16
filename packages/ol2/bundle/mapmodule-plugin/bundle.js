@@ -34,6 +34,10 @@ Oskari.clazz.define("Oskari.ol2.bundle.PluginMapModuleBundle", function() {
         },
         {
             "type" : "text/javascript",
+            "src" : "../../../../bundles/mapping/bundle/mapmodule-plugin/plugin/MapLayerPlugin.js"
+        }, 
+        {
+            "type" : "text/javascript",
             "src" : "../../../../bundles/mapping/bundle/mapmodule-plugin/plugin/panbuttons/PanButtons.js"
         },
         {
@@ -227,8 +231,20 @@ Oskari.clazz.define("Oskari.ol2.bundle.PluginMapModuleBundle", function() {
 		/** Layers backport */
 		{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/wmslayer/WmsLayerPlugin.js"
+			"src" : "../../../../bundles/ol2/bundle/mapmodule-plugin/plugin/wmslayer/WmsLayerPlugin.js"
 		},
+		{
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/ol2/bundle/mapmodule-plugin/plugin/wmtslayer/WmtsLayer.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/ol2/bundle/mapmodule-plugin/plugin/wmtslayer/WmtsLayerModelBuilder.js"
+        },
+        {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/ol2/bundle/mapmodule-plugin/plugin/wmtslayer/WmtsLayerPlugin.js"
+        },
 
 		/**
 		 * Vector Layer plugin
