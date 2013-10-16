@@ -738,6 +738,7 @@ define([
                 capability = this.getValue(this.capabilities, 'Capability');
                 selectedLayer = capability.Layer.Layer[selected];
 
+                jQuery('#admin-select-sublayer').remove();
                 if (selectedLayer.Layer) {
                     // If the selected layer has sub-layers create a dropdown to show them.
 
@@ -749,7 +750,6 @@ define([
                         subLayerSelect += '<option value="' + i + '">' + subLayers[i].Title + '</option>';
                     }
                     subLayerSelect += '</select>';
-                    jQuery('#admin-select-sublayer').remove();
                     jQuery(subLayerSelect).insertAfter('#admin-select-capability');
                     jQuery('#admin-select-sublayer').on('change', function () {
                         value = jQuery(this).val();
