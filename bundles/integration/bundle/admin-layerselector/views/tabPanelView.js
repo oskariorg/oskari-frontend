@@ -347,12 +347,14 @@ define([
                     });
                     // change the title of the button
                     element.html(this.options.instance.getLocalization('cancel'));
+                    element.attr('title',this.options.instance.getLocalization('cancel'));
                     setTimeout(function () {
                         layer.find('.admin-add-layer').addClass('show-add-layer');
                     }, 30);
                 } else {
                     layer.find('.admin-add-layer').removeClass('show-add-layer');
                     element.html(this.options.instance.getLocalization('admin').addLayer);
+                    element.attr('title',this.options.instance.getLocalization('admin').addLayerDesc);
                     layer.find('.admin-add-layer').remove();
                 }
             },

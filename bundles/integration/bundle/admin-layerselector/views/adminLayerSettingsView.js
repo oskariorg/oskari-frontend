@@ -269,6 +269,7 @@ define([
                         element.parents('.admin-add-layer').hasClass('show-add-layer')) {
 
                     element.parents('.create-layer').children('.admin-add-layer-btn').html(this.options.instance.getLocalization('admin').addLayer);
+                    element.parents('.create-layer').children('.admin-add-layer-btn').attr('title',this.options.instance.getLocalization('admin').addLayerDesc);
                     element.parents('.admin-add-layer').removeClass('show-edit-layer');
                     element.parents('.admin-add-layer').remove();
                 }
@@ -498,6 +499,7 @@ define([
                             createLayer = form.parents('.create-layer');
                             if (createLayer) {
                                 createLayer.find('.admin-add-layer-btn').html(me.instance.getLocalization('admin').addLayer);
+                                createLayer.find('.admin-add-layer-btn').attr('title',me.instance.getLocalization('admin').addLayerDesc);
                             }
                             form.remove();
                             resp.admin.style = me.classes.encode64(resp.admin.style);
