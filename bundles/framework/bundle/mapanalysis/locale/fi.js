@@ -8,7 +8,7 @@ Oskari.registerLocalization({
         "object-data": "Kohdetiedot",
         "layer" : {
                 "organization" : "Omat analyysit",
-                "inspire" : "Analyysit"
+                "inspire" : "Omat analyysit"
 
             }
     }
