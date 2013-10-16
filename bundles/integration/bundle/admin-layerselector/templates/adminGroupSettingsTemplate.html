@@ -1,42 +1,21 @@
 <div class="admin-add-group">
     <div class="add-group-wrapper">
-        <div class="add-group-record">
-            <div class="add-class-grouping" title="<%= instance.getLocalization('admin')[groupTitle] %>"><%= instance.getLocalization('admin')[groupTitle] %></div>
+        <div class="add-class-grouping" title="<%= instance.getLocalization('admin')[groupTitle] %>"><%= instance.getLocalization('admin')[groupTitle] %></div>
 
+    <% for (var i = 0; i < model.locales.length; i++) {
+           var locale = model.locales[i] %>
+        <div class="add-group-record">
             <div class="add-class-label-area">
-                <label for="add-class-fi-name" class="add-class-label" title="<%= instance.getLocalization('admin').finnishTitle %>"><%= instance.getLocalization('admin').finnish %></label>
+                <label for="add-class-<%= locale.lang %>-name" class="add-class-label" title="<%= instance.getLocalization('admin')[locale.lang] ? instance.getLocalization('admin')[locale.lang].title : locale.lang %>"><%= instance.getLocalization('admin')[locale.lang] ? instance.getLocalization('admin')[locale.lang].lang : locale.lang + ':' %></label>
             </div>
             <div  class="add-class-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-group-fi-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin').finnishPlaceholder %>"  <% if(model != null  && model.names && model.names.fi) { %>value="<%= model.names.fi %>"  <% } %> />
+                    <input type="text" id="add-group-<%= locale.lang %>-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin')[locale.lang] ? instance.getLocalization('admin')[locale.lang].placeholder : instance.getLocalization('admin')['generic'].placeholder.replace('{0}', locale.lang) %>"  <% if(locale != null  && locale.name != null) { %>value="<%= locale.name %>"  <% } %> />
                     <div class="icon-close"></div>
                 </div>
             </div>
         </div>
-
-        <div class="add-group-record">
-            <div class="add-class-label-area">
-                <label for="add-class-sv-name" class="add-class-label" title="<%= instance.getLocalization('admin').swedishTitle %>"><%= instance.getLocalization('admin').swedish %></label>
-            </div>
-            <div  class="add-class-input-area">
-                <div class="input-controls">
-                    <input type="text" id="add-group-sv-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin').swedishPlaceholder %>"  <% if(model != null && model.names && model.names.sv) { %>value="<%= model.names.sv %>"  <% } %> />
-                    <div class="icon-close"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="add-group-record">
-            <div class="add-class-label-area">
-                <label for="add-class-en-name" class="add-class-label" title="<%= instance.getLocalization('admin').englishTitle %>"><%= instance.getLocalization('admin').english %></label>
-            </div>
-            <div class="add-class-input-area">
-                <div class="input-controls">
-                    <input type="text" id="add-group-en-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin').englishPlaceholder %>"  <% if(model != null && model.names && model.names.en) { %>value="<%= model.names.en %>"  <% } %> />
-                    <div class="icon-close"></div>
-                </div>
-            </div>
-        </div>
+        <% } %>
 
         <% if (model) { %>
         <div class="add-group-record">
@@ -45,6 +24,22 @@
                 <%= subLayerTemplate({subLayer: subLayers[i], index: i}) %>
             <% } %>
             <div class="add-sublayer-wrapper"><button class="add-class-btn admin-add-sublayer"><%= instance.getLocalization('admin').addSubLayer %></button></div>
+        </div>
+        <% } %>
+
+        <% if(model != null && !model.getId) { %>
+        <!-- roles -->
+        <div class="add-class-record">
+            <div class="add-class-label-area">
+                <label for="add-class-en-name" class="add-class-label" title="<%= instance.getLocalization('admin').roles_for_admin %>"><%= instance.getLocalization('admin').viewingRightsRoles %></label>
+            </div>
+            <div class="add-class-input-area">
+                 <% for(var i = 0; i < roles.length; i++) { %>
+                 <div class="input-controls">
+                    <%= roles[i].name %> <input type="checkbox" class="add-class-input layer-view-role" data-role-id="<%= roles[i].id %>" placeholder="placeholder"  value="<%= roles[i].id %>" />
+                 </div>
+                <% } %>
+            </div>
         </div>
         <% } %>
 

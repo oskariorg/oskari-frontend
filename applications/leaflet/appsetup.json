@@ -1,7 +1,7 @@
 {
     "startupSequence": [
         {
-            "title": "OpenLayers 3",
+            "title": "Leaflet",
             "bundleinstancename": "leaflet",
             "bundlename": "leaflet",
             "metadata": {

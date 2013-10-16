@@ -101,8 +101,8 @@ Oskari.registerLocalization({
       },
       "visibleFields": {
         "label": "Visible fields",
-        "placename": "Place name",
-        "placedesc": "Place description",
+        "placename": "Name",
+        "placedesc": "Description",
         "image": "Image"
       },
       "edit": {
@@ -124,10 +124,10 @@ Oskari.registerLocalization({
       }
     },
     "pointform": {
-      "title": "Point feature's style",
+      "title": "Point feature portrayal",
       "tooltip": "",
       "symbol": {
-        "label": "Point feature's icon"
+        "label": "Point feature icon"
       },
       "size": {
         "label": "Size"
@@ -135,7 +135,7 @@ Oskari.registerLocalization({
       "color": {
         "label": "Colour",
         "labelOr": "or",
-        "labelCustom": "Own RGB color (0-255)"
+        "labelCustom": "Custom RGB color (0-255)"
       },
       "preview": {
         "label": "Preview"
@@ -146,13 +146,13 @@ Oskari.registerLocalization({
       }
     },
     "lineform": {
-      "title": "Line presentation",
+      "title": "Line portrayal",
       "tooltip": "",
       "style": {
         "label": "Line style"
       },
       "cap": {
-        "label": "Line cap style"
+        "label": "Line endigs"
       },
       "corner": {
         "label": "Corners"
@@ -163,7 +163,7 @@ Oskari.registerLocalization({
       "color": {
         "label": "Colour",
         "labelOr": "or",
-        "labelCustom": "Own RGB color (0-255)"
+        "labelCustom": "Custom RGB colour (0-255)"
       },
       "preview": {
         "label": "Preview"
@@ -174,29 +174,29 @@ Oskari.registerLocalization({
       }
     },
     "areaform": {
-      "title": "Area presentation",
+      "title": "Area portrayal",
       "tooltip": "",
       "linestyle": {
         "label": "Area line style"
       },
       "linecap": {
-        "label": "Area line cap"
+        "label": "Area line endings"
       },
       "linecorner": {
-        "label": "Corner style"
+        "label": "Corners"
       },
       "linewidth": {
         "label": "Width"
       },
       "linecolor": {
-        "label": "Line color",
+        "label": "Line colour",
         "labelOr": "or",
-        "labelCustom": "Own RGB color (0-255)"
+        "labelCustom": "Custom RGB colour (0-255)"
       },
       "color": {
-        "label": "Area fill color",
+        "label": "Area fill colour",
         "labelOr": "or",
-        "labelCustom": "Own RGB color (0-255)"
+        "labelCustom": "Own RGB colour (0-255)"
       },
       "fill": {
         "label": "Area fill pattern"
@@ -249,8 +249,9 @@ Oskari.registerLocalization({
       "placeNameIllegal": "The object name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
       "descIllegal": "The object description contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
       "categoryNameIllegal": "The layer description contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
-      "dotSize": "The dot size does not fit the size limits (1-50).",
+      "dotSize": "The dot size does not fit the size limits (1-5).",
       "dotColor": "Wrong dot colour.",
+      "dotShape": "Wrong dot shape.",
       "lineSize": "The line size does not fit the size limits (1-50).",
       "lineColor": "Wrong line colour.",
       "areaLineSize": "The area edge size does not fit the limits (0-50).",

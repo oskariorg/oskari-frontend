@@ -49,7 +49,7 @@ goto end
 :binexists
 echo Setting grunt to path
 set path=%path%;%binpath%
-echo Starting remove flash socket from socket.io and run grunt default
+echo Starting grunt default
 cd tools
 grunt.cmd
 REM Note that the script will terminate and grunt.cmd will continue execution.

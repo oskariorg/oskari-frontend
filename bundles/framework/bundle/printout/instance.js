@@ -30,19 +30,13 @@ function() {
     this.tileData = undefined;
     this.printService = undefined;
     this.legendPlugin = undefined;
-
-    /* default configuration */
-     this.conf = {
-
-        "backendConfiguration" : {
-            "formatProducers" : {
-                "application/pdf" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.pdf?",
-                "image/png" : "http://wps.paikkatietoikkuna.fi/dataset/map/process/imaging/service/thumbnail/maplink.png?"
-            }
-
+    //  Format producers
+    this.backendConfiguration = {
+        formatProducers : {
+            "application/pdf" : "",
+            "image/png" : ""
         }
-    }; 
-
+    };
 
 }, {
     /**
@@ -105,6 +99,9 @@ function() {
         for (p in me.eventHandlers) {
             sandbox.registerForEventByName(me, p);
         }
+
+        me.backendConfiguration.formatProducers["application/pdf"] = ( conf ? conf.backendConfiguration.formatProducers["application/pdf"] : null ) || '';
+        me.backendConfiguration.formatProducers["image/png"] = ( conf ? conf.backendConfiguration.formatProducers["image/png"] : null ) || '';
 
         // requesthandler
         this.printoutHandler = Oskari.clazz.create('Oskari.mapframework.bundle.printout.request.PrintMapRequestHandler', sandbox, function() {
@@ -361,7 +358,7 @@ function() {
 
             // proceed with printout view
             if (!this.printout) {
-                this.printout = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.BasicPrintout', this, this.getLocalization('BasicView'), this.conf.backendConfiguration);
+                this.printout = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.BasicPrintout', this, this.getLocalization('BasicView'), this.backendConfiguration);
                 this.printout.render(map);
             }
             if (this.state && this.state.form) {

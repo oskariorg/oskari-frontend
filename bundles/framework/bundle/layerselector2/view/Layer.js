@@ -187,6 +187,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                 }
             });
 
+            /* set sticky */
+            if (layer.isSticky()) {
+               jQuery(layerDiv).find('input').attr('disabled', 'disabled');
+            }
+            
             /*
              * backend status
              */

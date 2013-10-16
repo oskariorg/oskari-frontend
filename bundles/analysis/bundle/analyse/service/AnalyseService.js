@@ -134,6 +134,68 @@ function(instance) {
             } 
         }
     },
+     /**
+     * Get WFS layer properties and property types
+     *
+     * @method _getWFSLayerPropertiesAndTypes
+     * @param {Function} success2 the success callback
+     * @param {Function} failure the failure callback
+     */
+    _getWFSLayerPropertiesAndTypes : function(layer_id, success2, failure) {
+        var url = this.sandbox.getAjaxUrl() + 'action_route=GetWFSDescribeFeature&layer_id='+layer_id;
+        jQuery.ajax({
+            type : 'GET',
+            dataType : 'json',
+            url : url,
+            beforeSend : function(x) {
+                if (x && x.overrideMimeType) {
+                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                }
+            },
+            success : success2,
+            error : failure
+        });
+    },
+    /**
+     * @method loadWFSLayerPropertiesAndTypes
+     * @private
+     * Load analysis layers in start.
+     *
+     */
+    loadWFSLayerPropertiesAndTypes : function(layer_id) {
+        var me = this,
+            sandbox = me.instance.getSandbox(),
+            url = sandbox.getAjaxUrl(),
+            loc = Oskari.getLocalization(me.instance.getName());
+
+        // Request analyis layers via the backend
+        me._getWFSLayerPropertiesAndTypes(layer_id,
+        // Success callback
+        function(response) {
+            if (response) {
+                me._handleWFSLayerPropertiesAndTypesResponse(response);
+            }
+        },
+        // Error callback
+        function(jqXHR, textStatus, errorThrown) {
+            me.instance.showMessage(me.loc.error.title, me.loc.error.loadLayersFailed);
+        });
+
+    },
+       /**
+     * Put property types to WFS and analysis layer
+     *
+     * @method _handleWFSLayerPropertiesAndTypesResponse
+     * @private
+     * @param {JSON} propertyJson properties and property types of WFS layer JSON returned by server.
+     */
+    _handleWFSLayerPropertiesAndTypesResponse : function(propertyJson) {
+                var me = this;
+                // alert(JSON.stringify(propertyJson));
+                var layer = null;
+                if(propertyJson.layer_id) layer = me.instance.getSandbox().findMapLayerFromSelectedMapLayers(propertyJson.layer_id);
+                if(layer) layer.setPropertyTypes(propertyJson.propertyTypes);     
+    }
 }, {
     'protocol' : ['Oskari.mapframework.service.Service']
 }); 

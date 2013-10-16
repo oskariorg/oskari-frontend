@@ -51,7 +51,7 @@ function(config, locale) {
         "myPlacesWrapper" : '<div class="myplaces_place">' +
                                 '<h3 class="myplaces_header"></h3>' +
                                 '<p class="myplaces_desc"></p>' +
-                                '<img class="myplaces_img"></img>' +
+                                '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' +
                                 '<a class="myplaces_link"></a>' +
                             '</div>'
 	},
@@ -753,6 +753,9 @@ function(config, locale) {
                 content.find('img.myplaces_img').attr({
                     'src': place.imageUrl
                 });
+                content.find('a.myplaces_imglink').attr({
+                    'href': place.imageUrl
+                });
             } else {
                 content.find('img.myplaces_img').remove();
             }
@@ -879,11 +882,11 @@ function(config, locale) {
         }
 
         if (this.config && this.config.colourScheme) {
-            colourScheme = this.config.colourScheme;
+            data.colourScheme = this.config.colourScheme;
         }
 
         if (this.config && this.config.font) {
-            font = this.config.font;
+            data.font = this.config.font;
         }
 
         content.html = wrapper;
@@ -895,7 +898,7 @@ function(config, locale) {
         if(!this.config || this.config.infoBox) {
             var reqBuilder = me._sandbox.getRequestBuilder("InfoBox.ShowInfoBoxRequest");
             if (reqBuilder) {
-                var request = reqBuilder(data.popupid, data.title, [content], data.lonlat, true, colourScheme, font);
+                var request = reqBuilder(data.popupid, data.title, [content], data.lonlat, true, data.colourScheme, data.font);
                 me._sandbox.request(me, request);
             }
         }

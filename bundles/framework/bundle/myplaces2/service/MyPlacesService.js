@@ -20,8 +20,7 @@ function(url, uuid, sandbox, defaults, pInstance) {
     // list of loaded categories & myplaces
     this._categoryList = [];
     this._placesList = [];
-
-    this.wfstStore = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore', url, uuid);
+    this.wfstStore = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTStore', url, uuid, pInstance.featureNS);
     this._sandbox = sandbox;
     this.defaultCategory = null;
     this.defaults = defaults;
@@ -116,8 +115,8 @@ function(url, uuid, sandbox, defaults, pInstance) {
         defaultCategory.setAreaLineCorner(this.defaults.area.linecorner);
         defaultCategory.setAreaLineStyle(this.defaults.area.linestyle);
         defaultCategory.setAreaLineColor(this.defaults.area.linecolor);
-        defaultCategory.setAreaFillColor(this.defaults.area.fillcolor);
-        defaultCategory.setAreaFillStyle(this.defaults.area.style);
+        defaultCategory.setAreaFillColor(this.defaults.area.color);
+        defaultCategory.setAreaFillStyle(this.defaults.area.fill);
         defaultCategory.setDefault(true);
         
         var defaultCategoryCreationCallback = function() {

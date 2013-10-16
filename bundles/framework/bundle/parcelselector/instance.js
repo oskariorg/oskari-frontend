@@ -23,7 +23,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.parcelselector.ParcelSelectorIns
  */
 function() {
     this.started = false;
-    this.plugins = {}
+    this.plugins = {};
 }, {
     /**
      * @method getName
@@ -63,7 +63,9 @@ function() {
      * implements BundleInstance protocol start method
      */
     "start" : function() {
-        var me = this;
+        var me = this,
+            sandbox,
+            request;
 
         if (me.started) {
             return;
@@ -71,13 +73,13 @@ function() {
 
         me.started = true;
 
-        var sandbox = Oskari.$("sandbox");
+        sandbox = Oskari.$("sandbox");
         me.sandbox = sandbox;
 
         sandbox.register(me);
 
         //Let's extend UI
-        var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+        request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
         sandbox.request(this, request);
 
         // draw ui
@@ -101,8 +103,8 @@ function() {
      * implements BundleInstance protocol stop method
      */
     "stop" : function() {
-        var sandbox = this.sandbox();
-        var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+        var sandbox = this.sandbox(),
+            request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
         sandbox.request(this, request);
         this.sandbox.unregister(this);
         this.started = false;
@@ -150,8 +152,8 @@ function() {
      * @param {String} message popup message
      */
     showMessage : function(title, message) {
-        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         okBtn.setTitle(this.getLocalization('buttons').ok);
         okBtn.addClass('primary');
         okBtn.setHandler(function() {

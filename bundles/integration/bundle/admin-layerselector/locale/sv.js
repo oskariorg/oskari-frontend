@@ -8,11 +8,11 @@ Oskari.registerLocalization({
 			"title" : "admin: Kartlager"
 		},
 		"tile" : {
-			"title" : "A: karttatasot",
+			"title" : "A: Kartlager",
 			"tooltip" : "."
 		},
 		"view" : {
-			"title" : "",
+			"title" : "", 
 			"prompt" : "",
 			"templates" : {
 			}
@@ -58,8 +58,8 @@ Oskari.registerLocalization({
 			}
 		},
 		"admin" : {
-			"selectLayer"			: "Valitse ylätaso",
-			"selectSubLayer"		: "Valitse alataso",
+			"selectLayer"			: "Välj nivå",
+			"selectSubLayer"		: "Välj undernivå",
 
 			"addOrganization" 		: "Tillägg dataproducent",
 			"addOrganizationDesc"	: "Tillägg dataproducent dvs en ny organisation",
@@ -71,6 +71,11 @@ Oskari.registerLocalization({
 			"editDesc" 				: "Editera namn",
 			"layerType"				: "Lagertyp",
 			"layerTypeDesc" 		: "Lagrets typ: WMS, WFS, WMTS",
+			"type"					: "Typ av kartnivå",
+			"typePlaceholder"		: "Välj kartnivåns typ",
+			"normalLayer"			: "Normal nivå",
+			"baseLayer"				: "Bakgrundsnivå",
+			"groupLayer"			: "Gruppnivå",
 			"interfaceVersion"		: "Gränss&shy;nittets version",
 			"interfaceVersionDesc" 	: "Gränss&shy;nittets version",
 			"wmslayer"				: "WMS Lager",
@@ -79,8 +84,13 @@ Oskari.registerLocalization({
 			"wfslayer"				: "WFS Lager",
 			"wmtslayer"				: "WMTS Lager",
 			"getInfo" 				: "Sök data",
-			"selectClass" 			: "Valitse aihe",
-			"selectClassDesc" 		: "Valitse aihe",
+			"selectClass" 			: "Välj tema",
+			"selectClassDesc" 		: "Välj tema",
+
+			"baseName"				: "Bakgrundsnivåns namn",
+			"groupName"				: "Gruppnivåns namn",
+			"subLayers" 			: "Undernivå",
+			"addSubLayer"			: "Tillägg en undernivå",
 
 			"wmsInterfaceAddress" 	: "WMS&shy;-gränssnittets address",
 			"wmsInterfaceAddressDesc": "WMS&shy;-gränssnittets URL-address separerat med komma",
@@ -113,6 +123,8 @@ Oskari.registerLocalization({
 			"maxScale" 				: "Maximi&shy;skala",
 			"maxScaleDesc" 			: "Lagrets maximiskala (1:1)",
 			"maxScalePlaceholder" 	: "1 (1:1) Lagrets maximiskala",
+			"srsName"				: "Koordinatsystem",
+			"srsNamePlaceholder"	: "Koordinatsystem",
 			"legendaImage" 			: "Förklarings&shy;bildens address",
 			"legendaImageDesc" 		: "Förklarings&shy;bildens address",
 			"legendaImagePlaceholder" : "Förklarings&shy;bildens address",
@@ -121,22 +133,32 @@ Oskari.registerLocalization({
 			"gfiStyle" 				: "GFI stil",
 			"gfiStyleDesc" 			: "GFI stil (XSLT)",
 
-			"finnish" 				: "Suomeksi:",
-			"finnishTitle" 			: "Fi",
-			"finnishPlaceholder" 	: "Nimi suomeksi",
-			"finnishDescPlaceholder" : "Kuvaus suomeksi",
-			"swedish" 				: "På svenska:",
-			"swedishTitle" 			: "Sv",
-			"swedishPlaceholder" 	: "Namn på svenska",
-			"swedishDescPlaceholder" : "Beskrivning på svenska",
-			"english" 				: "In English:",
-			"englishTitle" 			: "En",
-			"englishPlaceholder" 	: "Name in English",
-			"englishDescPlaceholder" : "Description in English",
+			"generic"               : {
+				"placeholder"     : "Name in {0}",
+				"descplaceholder" : "Description in {0}"
+			},
+			"en"                    : {
+				"lang"            : "In English:",
+				"title"           : "En",
+				"placeholder"     : "Name in English",
+				"descplaceholder" : "Description in English"
+			},
+			"fi"                    : {
+				"lang"            : "Suomeksi:",
+				"title"           : "Fi",
+				"placeholder"     : "Nimi suomeksi",
+				"descplaceholder" : "Kuvaus suomeksi"
+			},
+			"sv"                    : {
+				"lang"            : "På svenska:",
+				"title"           : "Sv",
+				"placeholder"     : "Namn på svenska",
+				"descplaceholder" : "Beskrivning på svenska"
+			},
 
 			"interfaceAddress" 		: "Gränssnitten address",
-			"interfaceAddressDesc" 	: "WMS address för lager definitionen"
-
+			"interfaceAddressDesc" 	: "WMS address för lager definitionen",
+			"viewingRightsRoles" 	: "Kollar rättigheter roller"
 		},
 		"cancel" 	: "Tillbaka",
 		"add" 		: "Tillägg",

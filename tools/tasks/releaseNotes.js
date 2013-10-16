@@ -12,10 +12,10 @@ module.exports = function(grunt) {
             exec = require('child_process').exec,
             child,
             credentials = username + ':' + password,
-            jiraJQL = "project=EXAP+and+fixVersion='" + version + "'+and+(status=closed+OR+status=resolved)+order+by+priority+desc&fields=customfield_10310";
+            jiraJQL = 'project=AH+and+cf%5B10310%5D+is+not+EMPTY+order+by+priority+desc&fields=customfield_10310';
 
         if(!version || !username || !password) {
-            grunt.fail.fatal('Missing parameter!\nUsage: grunt releaseNotes:1.0.0:username:password', 1);
+            grunt.fail.fatal('Missing parameter!\nNote! version is not used at the moment. Edit JQL to include fixVersion if taken into use.\nUsage: grunt releaseNotes:1.0.0:username:password', 1);
         }
 
         // http://nodejs.org/api.html#_child_processes

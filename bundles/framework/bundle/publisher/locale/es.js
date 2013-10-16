@@ -8,8 +8,7 @@ Oskari.registerLocalization(
             "desc": "",
             "published": {
                 "title": "Se ha creado su mapa",
-                "desc": "Incorpore su mapa añadiendo el siguiente código HTML a tu portal web.",
-                "urlPrefix": "http://www.paikkatietoikkuna.fi"
+                "desc": "Incorpore su mapa añadiendo el siguiente código HTML a tu portal web."
             },
             "edit" : {
               "popup" : {

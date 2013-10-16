@@ -235,11 +235,10 @@ function(instance) {
         var formValues = this.form.getValues();
         // validation
         var errors = this._validateForm(formValues);
-        // Validation disabled temporarily:
-        // if(errors.length != 0) {
-        //     this._showValidationErrorMessage(errors);
-        //     return;
-        // }
+        if(errors.length != 0) {
+            this._showValidationErrorMessage(errors);
+            return;
+        }
         // validation passed -> go save stuff
         // new category given -> save it first 
         if(formValues.category) {

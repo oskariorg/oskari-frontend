@@ -8,8 +8,7 @@ Oskari.registerLocalization(
             "desc": "",
             "published": {
                 "title": "Kartan har avskilts",
-                "desc": "Inbädda kartan genom att tillägga HTML-koden nedan på din webbplats.",
-                "urlPrefix": "http://www.paikkatietoikkuna.fi"
+                "desc": "Inbädda kartan genom att tillägga HTML-koden nedan på din webbplats."
             },
             "edit" : {
               "popup" : {
@@ -61,48 +60,49 @@ Oskari.registerLocalization(
                     "grid" : "Visa statistik bord"
                 },
                 "layout": {
-                    "label": "Ulkoasu",
+                    "label": "Layout",
                     "fields": {
                         "colours": {
-                            "label": "Värimaailma",
-                            "placeholder": "Valitse värimaailma",
-                            "buttonLabel": "Vaihda",
-                            "light_grey": "Vaalean harmaa",
-                            "dark_grey": "Tumman harmaa",
-                            "blue": "Sininen",
-                            "red": "Punainen",
-                            "green": "Vihreä",
-                            "yellow": "Keltainen",
-                            "custom": {
-                                "name": "Omat värit",
-                                "bgLabel": "Tunnisteen tausta",
-                                "titleLabel": "Tunnisteen teksti",
-                                "headerLabel": "Otsikon teksti",
-                                "iconLabel": "Ikoni",
-                                "iconCloseLabel": "Tumma",
-                                "iconCloseWhiteLabel": "Vaalea"
+                            "label": "Färgschema",
+                            "placeholder": "Välj färgschema",
+                            "buttonLabel": "Byt",
+                            "light_grey": "Ljusgrå",
+                            "dark_grey": "Mörkgrå",
+                            "blue": "Blå",
+                            "red": "Röd",
+                            "green": "Grön",
+                            "yellow": "Gul",
+                            "custom": "Egna färger",
+                            "customLabels": {
+                                "bgLabel": "Etikettens bakgrundsfärg",
+                                "titleLabel": "Etikettext",
+                                "headerLabel": "Rubriktext",
+                                "iconLabel": "Ikon",
+                                "iconCloseLabel": "Mörk",
+                                "iconCloseWhiteLabel": "Ljus"
                             }
                         },
                         "fonts": {
-                            "label": "Valitse fontti"
+                            "label": "Välj typsnitt"
                         },
                         "toolStyles": {
-                            "label": "Työkalujen tyyli",
-                            "rounded-dark": "Pyöristetty (tumma)",
-                            "rounded-light": "Pyöristetty (vaalea)",
-                            "sharp-dark": "Kulmikas (tumma)",
-                            "sharp-light": "Kulmikas (vaalea)",
-                            "3d-dark": "3D (tumma)",
-                            "3d-light": "3D (vaalea)"
+                            "label": "Verktygens stil",
+                            "rounded-dark": "Avrundad (mörk)",
+                            "rounded-light": "Avrundad (ljus)",
+                            "sharp-dark": "Kantig (mörk)",
+                            "sharp-light": "Kantig (ljus)",
+                            "3d-dark": "3D (mörk)",
+                            "3d-light": "3D (ljus)"
                         }
                     },
                     "popup": {
-                        "title": "Värimaailman valinta",
-                        "close": "Sulje",
+                        "title": "Välj färgschema",
+                        "close": "Stäng",
                         "gfiDialog": {
-                            "title": "Esikatselu",
-                            "featureName": "Esikatselu",
-                            "featureDesc": "Värimaailman valinta vaikuttaa ainoastaan kohdetietolaatikon väritykseen"
+                            "title": "Förhandsgranskning",
+                            "featureName": "Förhandsgranskning",
+                            "featureDesc": "Valet av färgschema påverkar endast färgen på faktarutan för kartobjekt"
+
                         }
                     }
                 },

@@ -52,7 +52,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
 			"legend" : "",
 			"name" : "1"
 		},
-		"descriptionLink" : "http://www.paikkatietohakemisto.fi/",
+		"descriptionLink" : "",
 		"orgName" : "Metadata",
 		"inspire" : "Metadata",
 		"legendImage" : "",

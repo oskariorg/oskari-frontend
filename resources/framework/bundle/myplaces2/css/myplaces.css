@@ -17,6 +17,9 @@ div.myplacesform textarea {
 div.myplacesform select {
   width: 80%; }
 
+div.myplacesform .imagePreview {
+  cursor: pointer; }
+
 div.myplacesform div.renderButton, div.myplacescategoryform div.renderButton {
   margin: 5px; }
 
@@ -185,6 +188,12 @@ div.renderdialog div.color-grid {
   height: 40px;
   margin: 5px; }
 
+div.renderdialog div.color-rectangle {
+  width: 120px;
+  height: 40px;
+  border: 1px solid #000000;
+  position: absolute; }
+
 div.renderdialog div.color-cell {
   width: 20px;
   height: 20px;
@@ -246,3 +255,7 @@ div.linevisualization {
 
 div.areavisualization {
   width: 650px; }
+
+div.imagePreview img {
+  max-height: 350px;
+  max-width: 350px; }
