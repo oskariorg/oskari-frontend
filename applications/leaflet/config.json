@@ -27,6 +27,8 @@
                     "id": "Oskari.leaflet.mapmodule.plugin.WmsLayerPlugin"
                 }, {
                     "id": "Oskari.leaflet.mapmodule.plugin.WmtsLayerPlugin"
+                },{
+                    "id": "Oskari.leaflet.mapmodule.plugin.PanButtons"
                 }
             ],
             "layers": [

@@ -126,8 +126,7 @@ function(id, imageUrl, options) {
      */
     removeMapControl : function(id) {
         this._removeMapControlImpl(ctl);
-        this._controls[id] = null;
-        delete this._controls[id];
+        delete this._controls[id] ;        
     },
     /**
      * @method setLayerPlugin
@@ -259,7 +258,6 @@ function(id, imageUrl, options) {
             calculatedScale = calculatedScale / 10000;
             this._mapScales.push(calculatedScale);
         }
-
 
         return this._map;
     },
@@ -442,7 +440,6 @@ function(id, imageUrl, options) {
     getExtentArray : function() {
         return this._extent;
     },
-  
 
     /**
      * @method zoomIn
@@ -812,6 +809,50 @@ function(id, imageUrl, options) {
         return [sw.x, sw.y, ne.x, ne.y];
     },
 
+    /**
+     * @method calculateLayerScales
+     * Calculate a subset of maps scales array that matches the given boundaries.
+     * If boundaries are not defined, returns all possible scales.
+     * @param {Number} maxScale maximum scale boundary (optional)
+     * @param {Number} minScale minimum scale boundary (optional)
+     * @return {Number[]} calculated mapscales that are within given bounds
+     */
+    calculateLayerMinMaxResolutions : function(maxScale, minScale) {
+        var minScaleZoom = undefined;
+        var maxScaleZoom = undefined;
+        for (var i = 0; i < this._mapScales.length; i++) {
+            if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
+                if (minScaleZoom === undefined) {
+                    minScaleZoom = i;
+                }
+                maxScaleZoom = i;
+            }
+        }
+        return {
+            min : minScaleZoom,
+            max : maxScaleZoom
+        };
+    },
+    /**
+     * @method calculateLayerScales
+     * Calculate a subset of maps scales array that matches the given boundaries.
+     * If boundaries are not defined, returns all possible scales.
+     * @param {Number} maxScale maximum scale boundary (optional)
+     * @param {Number} minScale minimum scale boundary (optional)
+     * @return {Number[]} calculated mapscales that are within given bounds
+     */
+    calculateLayerScales : function(maxScale, minScale) {
+        var layerScales = [];
+        for (var i = 0; i < this._mapScales.length; i++) {
+            if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
+                layerScales.push(this._mapScales[i]);
+            }
+        }
+        return layerScales;
+    },
+
+    /* IMPL specific */
+
     _crs2Map : Oskari.AbstractFunc("_crs2Map"),
     _map2Crs : Oskari.AbstractFunc("_map2Crs"),
 
@@ -945,61 +986,11 @@ function(id, imageUrl, options) {
 
     _setLayerImplOpacity : Oskari.AbstractFunc("_setLayerImplOpacity"),
 
-    /**
-     * @method calculateLayerScales
-     * Calculate a subset of maps scales array that matches the given boundaries.
-     * If boundaries are not defined, returns all possible scales.
-     * @param {Number} maxScale maximum scale boundary (optional)
-     * @param {Number} minScale minimum scale boundary (optional)
-     * @return {Number[]} calculated mapscales that are within given bounds
-     */
-    calculateLayerMinMaxResolutions : function(maxScale, minScale) {
-        var minScaleZoom = undefined;
-        var maxScaleZoom = undefined;
-        for (var i = 0; i < this._mapScales.length; i++) {
-            if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
-                if (minScaleZoom === undefined) {
-                    minScaleZoom = i;
-                }
-                maxScaleZoom = i;
-            }
-        }
-        return {
-            min : minScaleZoom,
-            max : maxScaleZoom
-        };
-    },
-    /**
-     * @method calculateLayerScales
-     * Calculate a subset of maps scales array that matches the given boundaries.
-     * If boundaries are not defined, returns all possible scales.
-     * @param {Number} maxScale maximum scale boundary (optional)
-     * @param {Number} minScale minimum scale boundary (optional)
-     * @return {Number[]} calculated mapscales that are within given bounds
-     */
-    calculateLayerScales : function(maxScale, minScale) {
-        var layerScales = [];
-        for (var i = 0; i < this._mapScales.length; i++) {
-            if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
-                layerScales.push(this._mapScales[i]);
-            }
-        }
-        return layerScales;
-    },
-
     adjustZoomLevel : Oskari.AbstractFunc("adjustZoomLevel(amount, suppressEvent)"),
 
     notifyMoveEnd : function() {
     },
 
-    _addMapControlImpl : function(ctl) {
-
-    },
-
-    _removeMapControlImpl : function(ctl) {
-
-    },
-    
     /**
      * @method calculateLayerResolutions
      * Calculate a subset of maps resolutions array that matches the given boundaries.
@@ -1010,17 +1001,19 @@ function(id, imageUrl, options) {
      */
     calculateLayerResolutions : function(maxScale, minScale) {
         var layerResolutions = [];
-        for(var i = 0; i < this._mapScales.length; i++) {
-            if((!minScale || minScale >= this._mapScales[i]) &&
-               (!maxScale || maxScale <= this._mapScales[i])) {
-                    // resolutions are in the same order as scales so just use them
-                    layerResolutions.push(this._options.resolutions[i]);
-               }
+        for (var i = 0; i < this._mapScales.length; i++) {
+            if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
+                // resolutions are in the same order as scales so just use them
+                layerResolutions.push(this._options.resolutions[i]);
+            }
         }
         return layerResolutions;
-    }
-    
-    
+    },
+
+    _addMapControlImpl : Oskari.AbstractFunc("_addMapControlImpl(ctl)"),
+
+    _removeMapControlImpl : Oskari.AbstractFunc("_removeMapControlImpl(ctl)")
+
 }, {
     /**
      * @property {String[]} protocol
