@@ -19,30 +19,14 @@ function(config) {
         var me = this;
         var loc = this.__conf.location;
 
-        /*var ctl = new OpenLayers.Control({
-         type : OpenLayers.Control.TYPE_BUTTON,
-         loc : loc,
-         div : el.get()[0],
-         moveTo : function(px) {
-         this.div.style.right = loc.right;
-         this.div.style.top = loc.top;
-         },
-
-         draw : function(px) {
-         this.moveTo(this.position);
-         return this.div;
-         }
-         });
-         */
         var ctl = new OpenLayers.Control();
         OpenLayers.Util.extend(ctl, {
-            div : el.get()[0],
+            eldiv : el.get()[0],
             draw : function() {
-                // this Handler.Box will intercept the shift-mousedown
-                // before Control.MouseDefault gets to see it
-
-                return this.div;
-            }
+                OpenLayers.Control.prototype.draw.apply(this, arguments);
+                return this.eldiv;
+            },
+            CLASS_NAME : "Oskari.PanButtons"
         });
 
         return ctl;
