@@ -7,7 +7,7 @@ Oskari.registerLocalization({
     "category": {
       "defaultName": "Meine Kartenebene",
       "organization": "Meine Orte",
-      "inspire": "Orte"
+      "inspire": "Meine orte"
     },
     "guest": {
       "loginShort": "Melden Sie sich an, um den Dienst zu nutzen"

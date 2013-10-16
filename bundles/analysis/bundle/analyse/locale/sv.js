@@ -217,7 +217,7 @@ Oskari.registerLocalization({
                 "name" : "Namn",
                 "delete": " "
             },
-            "title" : "Analys",
+            "title" : "Analyser",
             "confirmDeleteMsg" : "Vill du ta bort:",
             "buttons" : {
                 "ok": "OK",

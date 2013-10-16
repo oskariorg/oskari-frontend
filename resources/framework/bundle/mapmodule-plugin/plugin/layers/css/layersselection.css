@@ -35,7 +35,8 @@ div.mapplugin.layerSelectionPlugin {
         float: left; }
       .layerSelectionPlugin div.content div.layer span {
         display: block;
-        margin-left: 30px; }
+        margin-left: 30px;
+        word-break: break-all; }
     .layerSelectionPlugin div.content div.styled-header-arrow {
       width: 0px;
       height: 0px;
