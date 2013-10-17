@@ -351,6 +351,11 @@ module.exports = function (grunt) {
             options: {
                 mainConfigFile: "../applications/oskari2/leaflet/build.js"
             }
+          },
+          'ol3': {
+            options: {
+                mainConfigFile: "../applications/oskari2/ol3/build.js"
+            }
           }
         }
     });
