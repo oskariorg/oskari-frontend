@@ -268,10 +268,10 @@ define([
                 if (element.parents('.admin-add-layer').hasClass('show-edit-layer') ||
                         element.parents('.admin-add-layer').hasClass('show-add-layer')) {
 
+                    element.parents('.create-layer').children('.admin-add-layer-btn').html(this.options.instance.getLocalization('admin').addLayer);
+                    element.parents('.create-layer').children('.admin-add-layer-btn').attr('title',this.options.instance.getLocalization('admin').addLayerDesc);
                     element.parents('.admin-add-layer').removeClass('show-edit-layer');
                     element.parents('.admin-add-layer').remove();
-
-                    element.parents('.create-layer').children('.admin-add-layer-btn').html(this.options.instance.getLocalization('admin').addLayer);
                 }
             },
 
@@ -499,6 +499,7 @@ define([
                             createLayer = form.parents('.create-layer');
                             if (createLayer) {
                                 createLayer.find('.admin-add-layer-btn').html(me.instance.getLocalization('admin').addLayer);
+                                createLayer.find('.admin-add-layer-btn').attr('title',me.instance.getLocalization('admin').addLayerDesc);
                             }
                             form.remove();
                             resp.admin.style = me.classes.encode64(resp.admin.style);
@@ -739,6 +740,7 @@ define([
                 capability = this.getValue(this.capabilities, 'Capability');
                 selectedLayer = capability.Layer.Layer[selected];
 
+                jQuery('#admin-select-sublayer').remove();
                 if (selectedLayer.Layer) {
                     // If the selected layer has sub-layers create a dropdown to show them.
 
@@ -750,7 +752,6 @@ define([
                         subLayerSelect += '<option value="' + i + '">' + subLayers[i].Title + '</option>';
                     }
                     subLayerSelect += '</select>';
-                    jQuery('#admin-select-sublayer').remove();
                     jQuery(subLayerSelect).insertAfter('#admin-select-capability');
                     jQuery('#admin-select-sublayer').on('change', function () {
                         value = jQuery(this).val();

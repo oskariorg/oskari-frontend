@@ -1,9 +1,9 @@
 /**
- * @class Oskari.ol3.mapmodule.plugin.PanButtons
+ * @class Oskari.ol2.mapmodule.plugin.PanButtons
  * Adds on-screen pan buttons on the map. In the middle of the pan buttons is a state reset button.
  * See http://www.oskari.org/trac/wiki/DocumentationBundleMapModulePluginPanButtons
  */
-Oskari.clazz.define('Oskari.ol3.mapmodule.plugin.PanButtons',
+Oskari.clazz.define('Oskari.ol2.mapmodule.plugin.PanButtons',
 
 /**
  * @method create called automatically on construction
@@ -16,13 +16,19 @@ function(config) {
     };
 }, {
     createControlAdapter : function(el) {
-        var elPanBtn = el.get()[0];
-        var ctl = new ol.control.Control({
-            element : elPanBtn
-        });
-        ctl.handleMapPostrender = function() {
+        var me = this;
+        var loc = this.__conf.location;
 
-        };
+        var ctl = new OpenLayers.Control();
+        OpenLayers.Util.extend(ctl, {
+            eldiv : el.get()[0],
+            draw : function() {
+                OpenLayers.Control.prototype.draw.apply(this, arguments);
+                return this.eldiv;
+            },
+            CLASS_NAME : "Oskari.PanButtons"
+        });
+
         return ctl;
     }
 }, {

@@ -42,12 +42,12 @@ Oskari.registerLocalization({
              "aggregate" : {
                  "label" : "Aggregate funktion",
                 "options" : [{
-                    "id" : "oskari_analyse_Sum",
-                    "label" : "Summa",
-                    "selected" : true
-                }, {
                     "id" : "oskari_analyse_Count",
-                    "label" : "Antal"
+                    "label" : "Antal",
+                    "selected" : true
+                },{
+                    "id" : "oskari_analyse_Sum",
+                    "label" : "Summa"
                 }, {
                     "id" : "oskari_analyse_Min",
                     "label" : "Minimum"
@@ -60,9 +60,6 @@ Oskari.registerLocalization({
                 },{
                     "id" : "oskari_analyse_StdDev",
                     "label" : "Medel spridning"
-                },{
-                    "id" : "oskari_analyse_Median",
-                    "label" : "Mediaan"
                 }],
                 "attribute": "Välj ett attribut"
             },
@@ -171,7 +168,8 @@ Oskari.registerLocalization({
                 "nohelp": "ingen anvisning",
                 "saveFailed": "Fel i analys lagring. Försök senare igen.",
                 "illegalCharacters": "ingen bokstaver - använda sifror",
-                 "loadLayersFailed": "Fel i analys ladda ner"
+                 "loadLayersFailed": "Fel i analys ladda ner",
+                "loadLayerTypesFailed": "Analys eller WFS data typ request fel"
             }
 
         },
@@ -220,7 +218,7 @@ Oskari.registerLocalization({
                 "name" : "Namn",
                 "delete": " "
             },
-            "title" : "Analys",
+            "title" : "Analyser",
             "confirmDeleteMsg" : "Vill du ta bort:",
             "buttons" : {
                 "ok": "OK",

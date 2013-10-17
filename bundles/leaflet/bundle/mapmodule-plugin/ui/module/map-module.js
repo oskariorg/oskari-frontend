@@ -224,19 +224,17 @@ function(id, imageUrl, options) {
      */
     panMapByPixels : function(pX, pY, suppressStart, suppressEnd, isDrag) {
 
-        console.log("NYI: panMapByPixels", arguments);
-        /*
-
-         this._updateDomain();
-         // send note about map change
-         if (suppressStart !== true) {
-         this.notifyStartMove();
-         }
-         if (suppressEnd !== true) {
-         this.notifyMoveEnd();
-         }
-
-         */
+        this._map.panBy([pX, pY], {
+            animate : false
+        });
+        this._updateDomain();
+        // send note about map change
+        if (suppressStart !== true) {
+            this.notifyStartMove();
+        }
+        if (suppressEnd !== true) {
+            this.notifyMoveEnd();
+        }
     },
 
     /**
@@ -254,15 +252,16 @@ function(id, imageUrl, options) {
     centerMapByPixels : function(pX, pY, suppressStart, suppressEnd) {
 
         /*var newXY = new OpenLayers.Pixel(pX, pY);
-        var newCenter = this._map.getLonLatFromViewPortPx(newXY);
-        // check that the coordinates are reasonable, otherwise its easy to
-        // scrollwheel the map out of view
-        if (!this.isValidLonLat(newCenter.lon, newCenter.lat)) {
-        // do nothing if not valid
-        return;
-        }
-        this.moveMapToLanLot(newCenter);
-        */
+         var newCenter = this._map.getLonLatFromViewPortPx(newXY);
+         // check that the coordinates are reasonable, otherwise its easy to
+         // scrollwheel the map out of view
+         if (!this.isValidLonLat(newCenter.lon, newCenter.lat)) {
+         // do nothing if not valid
+         return;
+         }
+         this.moveMapToLanLot(newCenter);
+         */
+        throw "centerMapByPixels NYI";
         // send note about map change
         if (suppressStart !== true) {
             this.notifyStartMove();
@@ -337,11 +336,11 @@ function(id, imageUrl, options) {
             this.notifyMoveEnd();
         }
     },
-    
-    getZoomLevel: function() {
+
+    getZoomLevel : function() {
         return this._map.getZoom();
     },
-    
+
     /**
      * @method _getNewZoomLevel
      * @private
@@ -488,8 +487,13 @@ function(id, imageUrl, options) {
     },
     _setLayerImplVisible : function(layerImpl, visibility) {
         layerImpl.setVisible(visibility);
+    },
+    _addMapControlImpl : function(ctl) {
+        this._map.addControl(ctl);
+    },
+    _removeMapControlImpl : function(ctl) {
+        this._map.removeControl(ctl);
     }
-      
 }, {
     /**
      * @property {String[]} protocol

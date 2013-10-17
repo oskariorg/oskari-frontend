@@ -178,13 +178,12 @@ function(instance) {
         },
         // Error callback
         function(jqXHR, textStatus, errorThrown) {
-            me.instance.showMessage(me.loc.error.title, me.loc.error.loadLayersFailed);
+            me.instance.showMessage(me.loc.error.title, me.loc.error.loadLayerTypesFailed);
         });
 
     },
        /**
-     * Put property types to WFS layer
-     * Propertytypes are retreaved only for native WFS layers, which are input layers for analyse
+     * Put property types to WFS and analysis layer
      *
      * @method _handleWFSLayerPropertiesAndTypesResponse
      * @private
@@ -196,7 +195,7 @@ function(instance) {
                 var layer = null;
                 if(propertyJson.layer_id) layer = me.instance.getSandbox().findMapLayerFromSelectedMapLayers(propertyJson.layer_id);
                 if(layer) layer.setPropertyTypes(propertyJson.propertyTypes);     
-    },
+    }
 }, {
     'protocol' : ['Oskari.mapframework.service.Service']
 }); 

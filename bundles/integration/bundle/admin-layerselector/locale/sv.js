@@ -12,7 +12,7 @@ Oskari.registerLocalization({
 			"tooltip" : "."
 		},
 		"view" : {
-			"title" : "",
+			"title" : "", 
 			"prompt" : "",
 			"templates" : {
 			}
@@ -58,8 +58,8 @@ Oskari.registerLocalization({
 			}
 		},
 		"admin" : {
-			"selectLayer"			: "Valitse ylätaso",
-			"selectSubLayer"		: "Valitse alataso",
+			"selectLayer"			: "Välj nivå",
+			"selectSubLayer"		: "Välj undernivå",
 
 			"addOrganization" 		: "Tillägg dataproducent",
 			"addOrganizationDesc"	: "Tillägg dataproducent dvs en ny organisation",
@@ -71,11 +71,11 @@ Oskari.registerLocalization({
 			"editDesc" 				: "Editera namn",
 			"layerType"				: "Lagertyp",
 			"layerTypeDesc" 		: "Lagrets typ: WMS, WFS, WMTS",
-			"type"					: "Tason tyyppi",
-			"typePlaceholder"		: "Valitse tason tyyppi",
-			"normalLayer"			: "Normaali taso",
-			"baseLayer"				: "Taustataso",
-			"groupLayer"			: "Ryhmätaso",
+			"type"					: "Typ av kartnivå",
+			"typePlaceholder"		: "Välj kartnivåns typ",
+			"normalLayer"			: "Normal nivå",
+			"baseLayer"				: "Bakgrundsnivå",
+			"groupLayer"			: "Gruppnivå",
 			"interfaceVersion"		: "Gränss&shy;nittets version",
 			"interfaceVersionDesc" 	: "Gränss&shy;nittets version",
 			"wmslayer"				: "WMS Lager",
@@ -84,13 +84,13 @@ Oskari.registerLocalization({
 			"wfslayer"				: "WFS Lager",
 			"wmtslayer"				: "WMTS Lager",
 			"getInfo" 				: "Sök data",
-			"selectClass" 			: "Valitse aihe",
-			"selectClassDesc" 		: "Valitse aihe",
+			"selectClass" 			: "Välj tema",
+			"selectClassDesc" 		: "Välj tema",
 
-			"baseName"				: "Taustatason nimi",
-			"groupName"				: "Ryhmätason nimi",
-			"subLayers" 			: "Alatasot",
-			"addSubLayer"			: "Lisää alataso",
+			"baseName"				: "Bakgrundsnivåns namn",
+			"groupName"				: "Gruppnivåns namn",
+			"subLayers" 			: "Undernivå",
+			"addSubLayer"			: "Tillägg en undernivå",
 
 			"wmsInterfaceAddress" 	: "WMS&shy;-gränssnittets address",
 			"wmsInterfaceAddressDesc": "WMS&shy;-gränssnittets URL-address separerat med komma",
@@ -123,8 +123,8 @@ Oskari.registerLocalization({
 			"maxScale" 				: "Maximi&shy;skala",
 			"maxScaleDesc" 			: "Lagrets maximiskala (1:1)",
 			"maxScalePlaceholder" 	: "1 (1:1) Lagrets maximiskala",
-			"srsName"				: "Koordinaatti&shy;järjestelmä",
-			"srsNamePlaceholder"	: "Koordinaattijärjestelmä",
+			"srsName"				: "Koordinatsystem",
+			"srsNamePlaceholder"	: "Koordinatsystem",
 			"legendaImage" 			: "Förklarings&shy;bildens address",
 			"legendaImageDesc" 		: "Förklarings&shy;bildens address",
 			"legendaImagePlaceholder" : "Förklarings&shy;bildens address",

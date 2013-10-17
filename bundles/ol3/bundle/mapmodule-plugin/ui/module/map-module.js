@@ -212,7 +212,7 @@ function(id, imageUrl, options) {
 
         var res = view.getResolution();
         var cxy = view.getCenter();
-        var panTo = [cxy[0] - pX * res, cxy[1] - pY * res];
+        var panTo = [cxy[0] + pX * res, cxy[1] - pY * res];
 
         (function() {
             var duration = 1000;
@@ -457,6 +457,15 @@ function(id, imageUrl, options) {
     
     updateSize : function() {
         this._map.updateSize();
+    },
+    
+    _addMapControlImpl : function(ctl) {
+        this._map.addControl(ctl);
+    },
+    
+    _removeMapControlImpl : function(ctl) {
+        this._map.removeControl(ctl);
+        
     }
 }, {
     /**
