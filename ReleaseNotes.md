@@ -18,6 +18,15 @@ Improved "Finish drawing" button functionality when drawing new lines and polygo
 
 User interface bug fixes.
 
+### statistics/statsgrid
+
+Sorting is now disabled when clicking the header menu buttons of an indicator in the grid.
+The classification now shows distinct class ranges thanks to the geostats library update.
+
+### libraries/geostats
+
+Updated the geostats library to version per 10/17/2013.
+
 ## 1.14
 
 ### mapmodule-plugin/getinfo
