@@ -88,13 +88,15 @@ div.published-search-div div.search-area-div input.search-input {
   border: none;
   box-shadow: none;
   background-image: none;
-  width: 170px;
+  width: 145px;
+  float: left;
   outline: none; }
 
 div.published-search-div div.published-search-results {
-  overflow-y: auto;
-  overflow-x: hidden;
+  width: 316px;
   max-height: 320px;
+  clear: both;
+  overflow: hidden;
   white-space: nowrap;
   position: absolute;
   top: 35px;
@@ -103,11 +105,80 @@ div.published-search-div div.published-search-results {
   background-color: #FFFFFF;
   border: 1px solid black; }
 
-div.published-search-div div.published-search-results div.published-search-content {
-  padding: 5px; }
-
 div.published-search-div div.published-search-results table.search-results {
-  margin: 0 0 6px 0; }
+  float: left;
+  width: 316px;
+  margin: 0 0 10px 0; }
+div.published-search-div div.published-search-results table.search-results thead {
+  float: left;
+}
+div.published-search-div div.published-search-results table.search-results thead tr {
+  display: block;
+}
+
+div.published-search-div div.published-search-results table.search-results tbody {
+  overflow: hidden;
+  overflow-y: auto;
+  float: left;
+  display: block;
+  width: 100%;
+  max-height: 250px;
+  min-height: 30px;
+}
+
+div.published-search-div div.published-search-results table.search-results thead tr th {
+  padding: 5px;
+  background-color: #efefef;
+  width: 90px;
+}
+div.published-search-div div.published-search-results table.search-results thead tr th:last-child {
+  width: 106px;
+}
+div.published-search-div .oskari-publisher-search-results-rounded-dark div.published-search-results table.search-results thead tr th:first-child,
+div.published-search-div .oskari-publisher-search-results-rounded-light div.published-search-results table.search-results thead tr th:first-child {
+  border-radius: 15px 0 0 0;
+  -moz-border-radius: 15px 0 0 0;
+  -webkit-border-radius: 15px 0 0 0;
+}
+div.published-search-div .oskari-publisher-search-results-rounded-dark div.published-search-results table.search-results thead tr th:last-child,
+div.published-search-div .oskari-publisher-search-results-rounded-light div.published-search-results table.search-results thead tr th:last-child {
+  border-radius: 0 15px 0 0;
+  -moz-border-radius: 0 15px 0 0;
+  -webkit-border-radius: 0 15px 0 0;
+}
+div.published-search-div .oskari-publisher-search-results-sharp-dark div.published-search-results table.search-results thead tr th:first-child,
+div.published-search-div .oskari-publisher-search-results-sharp-light div.published-search-results table.search-results thead tr th:first-child {
+  border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+}
+div.published-search-div .oskari-publisher-search-results-sharp-dark div.published-search-results table.search-results thead tr th:last-child,
+div.published-search-div .oskari-publisher-search-results-sharp-light div.published-search-results table.search-results thead tr th:last-child {
+  border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+}
+div.published-search-div .oskari-publisher-search-results-3d-dark div.published-search-results table.search-results thead tr th:first-child,
+div.published-search-div .oskari-publisher-search-results-3d-light div.published-search-results table.search-results thead tr th:first-child {
+  border-radius: 3px 0 0 0;
+  -moz-border-radius: 3px 0 0 0;
+  -webkit-border-radius: 3px 0 0 0;
+}
+div.published-search-div .oskari-publisher-search-results-3d-dark div.published-search-results table.search-results thead tr th:last-child,
+div.published-search-div .oskari-publisher-search-results-3d-light div.published-search-results table.search-results thead tr th:last-child {
+  border-radius: 0 3px 0 0;
+  -moz-border-radius: 0 3px 0 0;
+  -webkit-border-radius: 0 3px 0 0;
+}
+div.published-search-div div.published-search-results table.search-results tbody td {
+  display: inline-block;
+  padding: 2px 0 2px 5px;
+  text-overflow: ellipsis;
+  width: 95px;
+}
+div.published-search-div div.published-search-results table.search-results tbody td:last-child {
+  width: 111px;
+}
 
 div.published-search-div .oskari-publisher-search-results-rounded-dark, div.published-search-div .oskari-publisher-search-results-rounded-light {
   border-radius: 15px;
@@ -123,3 +194,32 @@ div.published-search-div .oskari-publisher-search-results-3d-dark, div.published
   border-radius: 3px;
   -moz-border-radius: 3px;
   -webkit-border-radius: 3px; }
+
+div.published-search-div div.search-middle div.close-results {
+  margin-right: 5px;
+  display: inline-block;
+  float: right;
+  cursor: pointer;
+}
+
+div.published-search-div .oskari-publisher-search-results-rounded-dark, div.published-search-div .oskari-publisher-search-results-rounded-light {
+  border-radius: 15px;
+  -moz-border-radius: 15px;
+  -webkit-border-radius: 15px; }
+
+div.published-search-div .oskari-publisher-search-results-sharp-dark, div.published-search-div .oskari-publisher-search-results-sharp-light {
+  border-radius: 0px;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px; }
+
+div.published-search-div .oskari-publisher-search-results-3d-dark, div.published-search-div .oskari-publisher-search-results-3d-light {
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px; }
+
+div.published-search-div div.search-middle div.close-results {
+  margin-right: 5px;
+  display: inline-block;
+  float: right;
+  cursor: pointer;
+}
