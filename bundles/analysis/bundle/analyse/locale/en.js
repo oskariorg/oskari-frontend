@@ -172,7 +172,8 @@ Oskari.registerLocalization({
                 "illegalCharacters" : "No alfabets - use digits",
                 "nohelp" : "No guide found",
                 "saveFailed" : "Storing analysis failed. Try again a little later.",
-                "loadLayersFailed": "Analysis layer load failed"
+                "loadLayersFailed": "Analysis layer load failed",
+                "loadLayerTypesFailed": "Analysis or WFS layer field types request failed"
             }
         },
         "StartView": {

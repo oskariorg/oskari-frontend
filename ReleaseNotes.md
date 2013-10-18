@@ -10,7 +10,7 @@ Environment specific localized values (URLs) have been move to bundle configurat
 
 New plugin for selecting a background layer from a preset list. See the bundle documentation for more information.
 
-### myplaces bundle
+### myplaces
 
 Clicking a preview image in the My places GFI popup opens the image URL in a new browser tab or window.
 
@@ -67,6 +67,19 @@ Fixed WMS interface address pre-filling problem.
 Compatibility fixed for old WMTS layer json format
 
 Every inline style removed that made any sense to remove.
+
+### admin-layerselector
+
+User interface bug fixes.
+
+### statistics/statsgrid
+
+Sorting is now disabled when clicking the header menu buttons of an indicator in the grid.
+The classification now shows distinct class ranges thanks to the geostats library update.
+
+### libraries/geostats
+
+Updated the geostats library to version per 10/17/2013.
 
 ## 1.14
 

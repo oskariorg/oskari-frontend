@@ -90,14 +90,12 @@ function(config) {
 					'<div class="search-left"></div>' +
 					'<div class="search-middle">' +
 						'<input class="search-input" placeholder="' + this.loc['placeholder'] + '" type="text" />' +
+						'<div class="close-results icon-close" title="' + this.loc['close'] + '"></div>' +
 					'</div>' +
 					'<div class="search-right"></div>' +
 				'</div>' +
 				'<div class="results published-search-results">' +
-					'<div class="header published-search-header">' +
-						'<div class="close icon-close" title="' + this.loc['close'] + '"></div>' +
-					'</div>' +
-					'<div class="content published-search-content">&nbsp;</div>' +
+					'<div class="content published-search-content"></div>' +
 				'</div>' +
 			'</div>'
 		);
@@ -106,7 +104,7 @@ function(config) {
 		"<th>" + this.loc['column_name'] + "</th>" + "<th>" + this.loc['column_village'] + "</th>" + "<th>" + this.loc['column_type'] + 
 		"</th>" + "</tr></thead><tbody></tbody></table>");
 
-		this.templateResultsRow = jQuery("<tr><td nowrap='nowrap'><a href='JavaScript:void(0);'></a></td><td nowrap='nowrap'></td><td nowrap='nowrap'></td></tr>");
+		this.templateResultsRow = jQuery("<tr><td><a href='JavaScript:void(0);'></a></td><td></td><td></td></tr>");
 
 		var ajaxUrl = null;
 		if(this.conf && this.conf.url) {
@@ -258,6 +256,10 @@ function(config) {
 			me._hideSearch();
 			// TODO: this should also unbind the TR tag click listeners?
 		});
+		content.find('div.close-results').click(function(event) {
+			me._hideSearch();
+			inputField.val('');
+		});
 		content.find('div.results').hide();
 		parentContainer.append(content);
 		// override default location if configured
@@ -403,6 +405,12 @@ function(config) {
 
 				jQuery(cells[1]).append(municipality);
 				jQuery(cells[2]).append(type);
+
+				// IE hack to get scroll bar on tbody element
+				if (jQuery.browser.msie) {
+					row.append(jQuery('<td style="width: 0px;"></td>'));
+				}
+
 				tableBody.append(row);
 			}
 			
@@ -423,6 +431,7 @@ function(config) {
 			}
 		}
 	},
+
 	/**
 	 * @method _resultClicked
      * Click event handler for search result HTML table rows.
@@ -485,20 +494,52 @@ function(config) {
 			bgRight = imgPath + 'search-tool-' + styleName + '_03.png',
 			left = div.find('div.search-left'),
 			middle = div.find('div.search-middle'),
-			right = div.find('div.search-right');
+			right = div.find('div.search-right'),
+			closeResults = middle.find('div.close-results'),
+			inputField = div.find('input.search-input'),
+			// Left and right widths substracted from the results table width
+			middleWidth = (318 - (style.widthLeft + style.widthRight)),
+			// Close search width substracted from the middle width
+			inputWidth = (middleWidth - 35);
 
 		left.css({
 			'background-image': 'url("' + bgLeft + '")',
-			'width': style.widthLeft
+			'width': style.widthLeft + 'px'
 		});
 		middle.css({
 			'background-image': 'url("' + bgMiddle + '")',
 			'background-repeat': 'repeat-x',
+			'width': middleWidth + 'px'
 		});
 		right.css({
 			'background-image': 'url("' + bgRight + '")',
-			'width': style.widthRight
+			'width': style.widthRight + 'px'
 		});
+		inputField.css({
+			'width': inputWidth + 'px'
+		})
+
+		closeResults.removeClass('icon-close icon-close-white');
+
+		// Change the font colour to whitish and the close icon to white
+		// if the style is dark themed
+		if (/dark/.test(styleName)) {
+			closeResults.addClass('icon-close-white');
+			closeResults.css({
+				'margin-top': '8px'
+			});
+			inputField.css({
+				'color': '#ddd'
+			});
+		} else {
+			closeResults.addClass('icon-close');
+			closeResults.css({
+				'margin-top': '10px'
+			});
+			inputField.css({
+				'color': ''
+			})
+		}
 	},
 
 	/**

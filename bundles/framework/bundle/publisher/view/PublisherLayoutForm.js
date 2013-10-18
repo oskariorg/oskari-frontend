@@ -86,7 +86,7 @@ function(localization, publisher) {
                 heightCursor: '18px', widthCursor: '17px'
             },
             search: {
-                widthLeft: '17px', widthRight: '32px'
+                widthLeft: 17, widthRight: 32
             }
         }, {
             val: 'rounded-light',
@@ -96,7 +96,7 @@ function(localization, publisher) {
                 heightCursor: '18px', widthCursor: '17px'
             },
             search: {
-                widthLeft: '17px', widthRight: '32px'
+                widthLeft: 17, widthRight: 32
             }
         }, {
             val: 'sharp-dark',
@@ -106,7 +106,7 @@ function(localization, publisher) {
                 heightCursor: '16px', widthCursor: '23px'
             },
             search: {
-                widthLeft: '5px', widthRight: '30px'
+                widthLeft: 5, widthRight: 30
             }
         }, {
             val: 'sharp-light',
@@ -116,7 +116,7 @@ function(localization, publisher) {
                 heightCursor: '16px', widthCursor: '23px'
             },
             search: {
-                widthLeft: '5px', widthRight: '30px'
+                widthLeft: 5, widthRight: 30
             }
         }, {
             val: '3d-dark',
@@ -126,7 +126,7 @@ function(localization, publisher) {
                 heightCursor: '13px', widthCursor: '23px'
             },
             search: {
-                widthLeft: '5px', widthRight: '44px'
+                widthLeft: 5, widthRight: 44
             }
         }, {
             val: '3d-light',
@@ -136,7 +136,7 @@ function(localization, publisher) {
                 heightCursor: '13px', widthCursor: '23px'
             },
             search: {
-                widthLeft: '5px', widthRight: '44px'
+                widthLeft: 5, widthRight: 44
             }
         }]
     };

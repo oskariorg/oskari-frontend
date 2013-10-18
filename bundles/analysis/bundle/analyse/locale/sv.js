@@ -168,7 +168,8 @@ Oskari.registerLocalization({
                 "nohelp": "ingen anvisning",
                 "saveFailed": "Fel i analys lagring. Försök senare igen.",
                 "illegalCharacters": "ingen bokstaver - använda sifror",
-                 "loadLayersFailed": "Fel i analys ladda ner"
+                 "loadLayersFailed": "Fel i analys ladda ner",
+                "loadLayerTypesFailed": "Analys eller WFS data typ request fel"
             }
 
         },
