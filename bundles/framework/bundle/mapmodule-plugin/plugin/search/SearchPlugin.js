@@ -13,13 +13,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
      */
 
     function (config) {
-        this.mapModule = null;
-        this.pluginName = null;
-        this._sandbox = null;
-        this._map = null;
-        this.conf = config;
-        this.container = null;
-        this.loc = null;
+        var me = this;
+        me.mapModule = null;
+        me.pluginName = null;
+        me._sandbox = null;
+        me._map = null;
+        me.conf = config;
+        me.container = null;
+        me.loc = null;
     }, {
 
         /** @static @property __name plugin name */
@@ -338,9 +339,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             }
 
             var me = this;
-            this._hideSearch();
-            this._searchInProgess = true;
-            var inputField = this.container.find('input[type=text]');
+            me._hideSearch();
+            me._searchInProgess = true;
+            var inputField = me.container.find('input[type=text]');
             inputField.addClass("search-loading");
             var searchText = inputField.val(),
                 searchCallback = function (msg) {
@@ -350,7 +351,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 onErrorCallback = function () {
                     me._enableSearch();
                 };
-            this.service.doSearch(searchText, searchCallback, onErrorCallback);
+            me.service.doSearch(searchText, searchCallback, onErrorCallback);
         },
         /**
          * @method _showResults
@@ -367,7 +368,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             // check if there is a problem with search string
             var errorMsg = msg.error,
                 me = this,
-                resultsContainer = this.container.find('div.results'),
+                resultsContainer = me.container.find('div.results'),
                 header = resultsContainer.find('div.header'),
                 content = resultsContainer.find('div.content');
 
@@ -391,11 +392,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 lat = msg.locations[0].lat;
                 zoom = msg.locations[0].zoomLevel;
 
-                this._sandbox.request(this.getName(), this._sandbox.getRequestBuilder('MapMoveRequest')(lon, lat, zoom, false));
+                me._sandbox.request(me.getName(), me._sandbox.getRequestBuilder('MapMoveRequest')(lon, lat, zoom, false));
             } else {
 
                 // many results, show all
-                var table = this.templateResultsTable.clone(),
+                var table = me.templateResultsTable.clone(),
                     tableBody = table.find('tbody'),
                     i,
                     clickFunction = function () {
@@ -405,14 +406,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
 
                 for (i = 0; i < totalCount; i += 1) {
                     if (i >= 100) {
-                        tableBody.append("<tr><td class='search-result-too-many' colspan='3'>" + this.loc.toomanyresults + "</td></tr>");
+                        tableBody.append("<tr><td class='search-result-too-many' colspan='3'>" + me.loc.toomanyresults + "</td></tr>");
                         break;
                     }
                     lon = msg.locations[i].lon;
                     lat = msg.locations[i].lat;
                     zoom = msg.locations[i].zoomLevel;
                     var dataLocation = lon + "---" + lat + "---" + zoom,
-                        row = this.templateResultsRow.clone(),
+                        row = me.templateResultsRow.clone(),
                         name = msg.locations[i].name,
                         municipality = msg.locations[i].village,
                         type = msg.locations[i].type,
@@ -435,7 +436,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                     tableBody.append(row);
                 }
 
-                if (!(this.conf && this.conf.toolStyle)) {
+                if (!(me.conf && me.conf.toolStyle)) {
                     tableBody.find(":odd").addClass("odd");
                 }
 
@@ -443,10 +444,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 resultsContainer.show();
 
                 // Change the font of the rendered table as well
-                if (this.conf && this.conf.font) {
-                    this.changeFont(this.conf.font, content);
+                if (me.conf && me.conf.font) {
+                    me.changeFont(me.conf.font, content);
                 }
-                if (this.conf && this.conf.toolStyle) {
+                if (me.conf && me.conf.toolStyle) {
                     header.remove();
                     me.changeResultListStyle(me.conf.toolStyle, resultsContainer);
                 }
