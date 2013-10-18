@@ -20,6 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
         this._map = null;
         this.element = undefined;
         this.conf = config;
+        this.conf.baseLayers = ['base_2', '24', 'base_35']; // maastokartta, ortoilmakuva, taustakartat
         this.error = !(this.conf && this.conf.baseLayers && this.conf.baseLayers.length);
         // Make sure baseLayers aren't Numbers
         if (!this.error) {
@@ -280,6 +281,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
             return null;
         },
         /**
+         * @method _arrayContains
+         * @param  {Array} arr Array
+         * @param  {String} val Value
+         * @return {Boolean} True if arr contains val
+         */
+        _arrayContains: function (arr, val) {
+            var i;
+            if (arr.indexOf) {
+                return arr.indexOf(val) > -1;
+            }
+            for (i = arr.length; i > -1; i -= 1) {
+                if (arr[i] === val) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        /**
          * Does the actual layer selection update
          * @param  {Number} newSelectionId Id of the new base layer
          * @private
@@ -289,7 +308,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                 return;
             }
             var me = this,
-                layerIds = me.conf.baseLayers,
                 currentBottom = me._getBottomLayer(),
                 currentBottomId = "",
                 currentSelection = me.element.find('div.currentSelection'),
@@ -297,14 +315,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                 i;
             // switch bg layer (no need to call update on ui, we should catch the event)
             // - check if current bottom layer exists & is in our list (if so, remove)
-            if (currentBottom && currentBottom.isBaseLayer()) {
+            if (currentBottom) {
                 currentBottomId += currentBottom.getId();
-                for (i = 0; i < layerIds.length; i += 1) {
-                    if (currentBottomId === layerIds[i]) {
-                        // Remove current bottom layer (see layerselection)
-                        me._sandbox.postRequestByName('RemoveMapLayerRequest', [layerIds[i]]);
-                        break;
-                    }
+                if (me._arrayContains(me.conf.baseLayers, currentBottomId)) {
+                    me._sandbox.postRequestByName('RemoveMapLayerRequest', [currentBottomId]);
                 }
             }
             // - check if new selection is already selected, remove if so as rearrange doesn't seem to work
@@ -339,7 +353,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                 icon;
 
             // find bottom-most bg layer
-            if (newSelection && newSelection.isBaseLayer && newSelection.isBaseLayer()) {
+            if (newSelection) {
                 newSelectionId += newSelection.getId();
                 newSelectionName = newSelection.getName();
             }
@@ -353,21 +367,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
                 listElement = jQuery(this);
                 listElement.toggleClass('selected', listElement.attr("data-layerId") === newSelectionId);
             });
-            // - update currentSelection with the new selection's information
+            // - update currentSelection with the new selection's information if it's in baseLayers
             currentSelection.empty();
-            currentSelection.attr("data-layerId", newSelectionId);
-            currentSelection.attr("title", newSelectionName);
-            currentSelection.html(newSelectionName);
+            if (me._arrayContains(me.conf.baseLayers, newSelectionId)) {
+                currentSelection.attr("data-layerId", newSelectionId);
+                currentSelection.attr("title", newSelectionName);
+                currentSelection.html(newSelectionName);
+            }
             icon = me.dropdownArrowTemplate.clone();
             if (me.element.find('div.content').hasClass('open')) {
                 icon.removeClass('icon-arrow-white-right').addClass('icon-arrow-white-down');
             }
             currentSelection.prepend(icon);
             if (me.conf) {
+                /* TODO is there any tool style to be configured?
                 if (me.conf.toolStyle) {
-                    // TODO is there any tool style to be configured?
-                    //me.changeToolStyle(me.conf.toolStyle, me.element);
+                    me.changeToolStyle(me.conf.toolStyle, me.element);
                 }
+                */
                 if (me.conf.font) {
                     me.changeFont(me.conf.font, me.element);
                 }
