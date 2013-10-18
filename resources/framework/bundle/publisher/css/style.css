@@ -1,9 +1,18 @@
 div.notLoggedIn {
   padding: 10px; }
 
-
 #contentMap.mapPublishMode {
-  margin-left: 255px; }
+  margin-left: 0px; }
+
+#contentMap.mapPublishMode > #mapdiv {
+  position: relative;
+  left: 255px
+}
+
+#contentMap.mapPublishMode > div.row-fluid {
+  position: relative;
+  left: 255px
+}
 
 div.publisher div.startview div.icon-info, div.basic_publisher div.icon-info {
   float: right; }
@@ -35,7 +44,7 @@ div.publisher div.startview div.error ul li {
   position: absolute;
   height: 100%;
   top: 0;
-  left: 40px;
+ /* left: 40px;*/
   /* sidebar has 3, we want to open it on top of this */
   z-index: 2;
   width: 255px; }
