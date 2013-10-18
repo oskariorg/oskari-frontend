@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
         this.pluginName = null;
         this._sandbox = null;
         this._map = null;
-        this._conf = config;
+        this.conf = config;
         this.container = null;
         this.loc = null;
     }, {
@@ -238,9 +238,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 sandbox = me._sandbox,
                 content;
 
-            if (this._conf && this._conf.toolStyle) {
+            if (this.conf && this.conf.toolStyle) {
                 content = this.styledTemplate.clone();
-                this.changeToolStyle(this._conf.toolStyle, content);
+                this.changeToolStyle(this.conf.toolStyle, content);
             } else {
                 content = this.template.clone();
             }
@@ -292,14 +292,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             content.find('div.results').hide();
             parentContainer.append(content);
             // override default location if configured
-            if (me._conf && me._conf.location) {
-                me.setSearchLocation(me._conf.location, content);
+            if (me.conf && me.conf.location) {
+                me.setSearchLocation(me.conf.location, content);
             }
 
-            if (me._conf && me._conf.font) {
-                me.changeFont(me._conf.font, content);
+            if (me.conf && me.conf.font) {
+                me.changeFont(me.conf.font, content);
             }
-            if (me._conf && me._conf.toolStyle) {
+            if (me.conf && me.conf.toolStyle) {
                 // Hide the results if esc was pressed or if the field is empty.
                 inputField.keyup(function (e) {
                     if (e.keyCode === 27 || (e.keyCode === 8 && !jQuery(this).val())) {
@@ -342,15 +342,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             this._searchInProgess = true;
             var inputField = this.container.find('input[type=text]');
             inputField.addClass("search-loading");
-            var searchText = inputField.val();
-
-            var searchCallback = function (msg) {
-                me._showResults(msg);
-                me._enableSearch();
-            };
-            var onErrorCallback = function () {
-                me._enableSearch();
-            };
+            var searchText = inputField.val(),
+                searchCallback = function (msg) {
+                    me._showResults(msg);
+                    me._enableSearch();
+                },
+                onErrorCallback = function () {
+                    me._enableSearch();
+                };
             this.service.doSearch(searchText, searchCallback, onErrorCallback);
         },
         /**
@@ -436,21 +435,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                     tableBody.append(row);
                 }
 
-                if (!(this._conf && this._conf.toolStyle)) {
+                if (!(this.conf && this.conf.toolStyle)) {
                     tableBody.find(":odd").addClass("odd");
                 }
 
                 content.html(table);
                 resultsContainer.show();
 
-				// Change the font of the rendered table as well
-				if (this._conf && this._conf.font) {
-					this.changeFont(this._conf.font, content);
-				}
-				if (this._conf && this._conf.toolStyle) {
-					header.remove();
-					me.changeResultListStyle(me._conf.toolStyle, resultsContainer);
-				}
+                // Change the font of the rendered table as well
+                if (this.conf && this.conf.font) {
+                    this.changeFont(this.conf.font, content);
+                }
+                if (this.conf && this.conf.toolStyle) {
+                    header.remove();
+                    me.changeResultListStyle(me.conf.toolStyle, resultsContainer);
+                }
             }
         },
         /**
@@ -461,10 +460,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          * @param {String} paramStr String that has coordinates and zoom level separated with '---'.
          */
         _resultClicked: function (paramStr) {
-            var values = paramStr.split('---');
-            var lon = values[0];
-            var lat = values[1];
-            var zoom = values[2];
+            var values = paramStr.split('---'),
+                lon = values[0],
+                lat = values[1],
+                zoom = values[2];
             this._sandbox.request(this.getName(), this._sandbox.getRequestBuilder('MapMoveRequest')(lon, lat, zoom, false));
         },
         /**
@@ -584,8 +583,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             elements.push(div.find('table.search-results'));
             elements.push(div.find('input'));
 
-            var classToAdd = 'oskari-publisher-font-' + fontId;
-            var testRegex = /oskari-publisher-font-/;
+            var classToAdd = 'oskari-publisher-font-' + fontId,
+                testRegex = /oskari-publisher-font-/;
 
             this.getMapModule().changeCssClasses(classToAdd, testRegex, elements);
         },
@@ -599,8 +598,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          * @return {undefined}
          */
         changeResultListStyle: function (toolStyle, div) {
-            var cssClass = 'oskari-publisher-search-results-' + toolStyle.val;
-            var testRegex = /oskari-publisher-search-results-/;
+            var cssClass = 'oskari-publisher-search-results-' + toolStyle.val,
+                testRegex = /oskari-publisher-search-results-/;
 
             this.getMapModule().changeCssClasses(cssClass, testRegex, [div]);
         }
