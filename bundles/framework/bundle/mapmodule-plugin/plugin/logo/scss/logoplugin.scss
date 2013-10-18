@@ -1,4 +1,7 @@
 .logoplugin {
+
+	$logoOpacity: 0.8;
+
 	background-color: #FFF;
 	background-repeat: no-repeat;
 	display: block;
@@ -6,8 +9,8 @@
 	bottom: 0px;
 	left: 0px;
 	z-index: 100000000 !important;
-	filter: unquote("alpha(opacity=80)"); /* unquote for libsass bug */
-	opacity: 0.8 !important;
+	filter: unquote("alpha(opacity=")$logoOpacity * 100 unquote(")"); /* unquote for libsass bug */
+	opacity: $logoOpacity !important;
 	
 	a, a:hover, a:active, a:visited {
 		color: #333333 !important;
@@ -25,6 +28,22 @@
 		display: inline-block;
 		margin: 5px;
 	}
+
+	&.bottom {
+		bottom: 0;
+		top: auto;
+	}
+
+	&.left {
+		left: 0;
+		right: auto;
+	}
+
+	&.right {
+		left: auto;
+		right: 0;
+	}
+
 }
 
 /* Force measurement bar up a notch so it isn't occluded by the logo */
