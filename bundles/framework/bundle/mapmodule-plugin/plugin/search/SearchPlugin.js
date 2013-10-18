@@ -397,6 +397,7 @@ function(config) {
 				var cells = row.find('td');
 				var xref = jQuery(cells[0]).find('a');
 				xref.attr('data-location', dataLocation);
+				xref.attr('title', name);
 				xref.append(name);
 				xref.click(function() {
 					me._resultClicked(jQuery(this).attr('data-location'));
@@ -404,7 +405,9 @@ function(config) {
 				});
 
 				jQuery(cells[1]).append(municipality);
+				jQuery(cells[1]).attr('title', municipality);
 				jQuery(cells[2]).append(type);
+				jQuery(cells[2]).attr('title', type);
 
 				// IE hack to get scroll bar on tbody element
 				if (jQuery.browser.msie) {
