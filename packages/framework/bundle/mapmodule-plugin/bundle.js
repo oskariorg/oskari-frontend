@@ -147,6 +147,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.PluginMapModuleBundle", function
                 {
                     "type": "text/javascript",
                     "src": "../../../../bundles/framework/bundle/mapmodule-plugin/plugin/scalebar/ScaleBarPlugin.js"
+                }, {
+                    "type": "text/css",
+                    "src": "../../../../resources/framework/bundle/mapmodule-plugin/plugin/scalebar/css/scalebar.css"
                 },
 
                 // FullScreen

@@ -18755,7 +18755,7 @@ function(config) {
 		this.container = content;
 
 		// get div where the map is rendered from openlayers
-		var parentContainer = jQuery('div.mapplugins.left');
+		var parentContainer = jQuery('div.mapplugins.right');
 		if(!parentContainer || parentContainer.length == 0) {
 			// fallback to OL map div
 			parentContainer = jQuery(this._map.div);
@@ -30544,7 +30544,8 @@ function() {
 		hub.subscribe("map-update-size", function(e) {
 			var sandbox = Oskari.$('sandbox');
 			sandbox.printDebug("[Oskari.lupapiste.bundle.lupakartta.lupakarttaInstance] map-update-size");
-			//set new center to old center			var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
+			//set new center to old center
+			var mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
 			var center = mapmodule.getMap().getCenter();
 			mapmodule.getMap().updateSize();
 			mapmodule.getMap().setCenter(center);
