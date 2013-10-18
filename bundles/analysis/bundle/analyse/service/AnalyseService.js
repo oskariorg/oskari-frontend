@@ -178,7 +178,7 @@ function(instance) {
         },
         // Error callback
         function(jqXHR, textStatus, errorThrown) {
-            me.instance.showMessage(me.loc.error.title, me.loc.error.loadLayersFailed);
+            me.instance.showMessage(me.loc.error.title, me.loc.error.loadLayerTypesFailed);
         });
 
     },

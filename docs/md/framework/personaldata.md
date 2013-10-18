@@ -23,14 +23,6 @@
 
 ## Bundle configuration
 
-```javascript
-config : {
-  test : 1
-}
-```
-
-OR
-
 Some configuration is needed for URLs:
 
 ```javascript
@@ -39,19 +31,16 @@ Some configuration is needed for URLs:
     "en": "https://www.paikkatietoikkuna.fi/web/en/profile",
     "fi": "https://www.paikkatietoikkuna.fi/web/fi/profiili",
     "sv": "https://www.paikkatietoikkuna.fi/web/sv/profil"
-  }
+  },
+  "publishedMapUrl": {
+    "en": "/web/en/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&published=true&viewId=",
+    "fi": "/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&published=true&viewId=",
+    "sv": "/web/sv/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&published=true&viewId="
+  }  
 }
 ```
 
 ## Bundle state
-
-```javascript
-state : {
-  test : 2
-}
-```
-
-OR
 
 No statehandling has been implemented.
 

@@ -339,7 +339,7 @@ function(drawPlugin) {
             parcelLayer.addFeatures([inPolygon]);
 
             var editPoints = inPolygon.geometry.components[0].components;
-            var editFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.LineString(editPoints));
+            var editFeature = new OpenLayers.Feature.Vector(new OpenLayers.Geometry.MultiLineString([new OpenLayers.Geometry.LineString(editPoints)]));
             editFeature.numPoints = editPoints.length;
             editLayer.addFeatures([editFeature]);
 

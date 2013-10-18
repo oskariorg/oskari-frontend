@@ -93,13 +93,12 @@ function(instance) {
 		this.editLayer = new OpenLayers.Layer.Vector("Parcel Edit Layer", {
 			eventListeners : {
 				"featuremodified" : function(event) {
-                    switch (event.feature.geometry.CLASS_NAME) {
-                        case "OpenLayers.Geometry.MultiLineString":
-                            this.updateLine();
-                            break;
-                        case "OpenLayers.Geometry.LineString":
-                            this.updateHole(event.feature);
-                            break;
+                    var line = event.feature.geometry.components[0];
+                    // Line or hole?
+                    if (line.components[0].id !== line.components[line.components.length-1].id) {
+                        this.updateLine();
+                    } else {
+                        this.updateHole(event.feature);
                     }
         			this.redraw();
 		        	me.drawLayer.redraw();
@@ -183,7 +182,7 @@ function(instance) {
 		};
 
      	this.editLayer.updateHole = function(lineFeature) {
-            var points = lineFeature.geometry.components;
+            var points = lineFeature.geometry.components[0].components;
             if (points.length != lineFeature.numPoints) {
                 var polygonFeature = me.drawLayer.features[me.drawLayer.features.length-1];
                 polygonFeature.geometry.components[0].components = points;

@@ -1,9 +1,11 @@
 /**
  * @class Oskari.userinterface.bundle.bootstrap.UserInterfaceBundleInstance
  *
- * Default DIV Manager implementation handles menu like and detached DIVs
- * handles hiding showing DIVS.
+ * Alternate DIV Manager implementation handles menu tiles in toolbar like fashion 
+ * shows detached DIVs. handles hiding showing DIVS.
  * Draggability is enabled in top-border element when DIV is detached
+ * 
+ * This overrides HTML templates with bootstrap 3 compatible ones.
  *
  */
 Oskari.clazz.define("Oskari.userinterface.bundle.bootstrap.UserInterfaceBundleInstance",

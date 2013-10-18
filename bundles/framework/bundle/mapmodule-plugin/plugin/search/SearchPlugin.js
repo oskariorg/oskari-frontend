@@ -21,6 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
         this.container = null;
         this.loc = null;
     }, {
+
         /** @static @property __name plugin name */
         __name: 'SearchPlugin',
 
@@ -64,7 +65,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          * Initializes ui templates and search service.
          *
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-         *     reference to application sandbox
+         *          reference to application sandbox
          */
         init: function (sandbox) {
             var me = this,
@@ -92,14 +93,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                     '<div class="search-left"></div>' +
                     '<div class="search-middle">' +
                     '<input class="search-input" placeholder="' + me.loc.placeholder + '" type="text" />' +
+                    '<div class="close-results icon-close" title="' + me.loc.close + '"></div>' +
                     '</div>' +
                     '<div class="search-right"></div>' +
                     '</div>' +
                     '<div class="results published-search-results">' +
-                    '<div class="header published-search-header">' +
-                    '<div class="close icon-close" title="' + me.loc.close + '"></div>' +
-                    '</div>' +
-                    '<div class="content published-search-content">&nbsp;</div>' +
+                    '<div class="content published-search-content"></div>' +
                     '</div>' +
                     '</div>'
             );
@@ -108,7 +107,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 "<th>" + me.loc.column_name + "</th>" + "<th>" + me.loc.column_village + "</th>" + "<th>" + me.loc.column_type +
                 "</th>" + "</tr></thead><tbody></tbody></table>");
 
-            me.templateResultsRow = jQuery("<tr><td nowrap='nowrap'><a href='JavaScript:void(0);'></a></td><td nowrap='nowrap'></td><td nowrap='nowrap'></td></tr>");
+            me.templateResultsRow = jQuery("<tr><td><a href='JavaScript:void(0);'></a></td><td></td><td></td></tr>");
 
             var ajaxUrl = null;
             if (me.conf && me.conf.url) {
@@ -239,14 +238,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 sandbox = me._sandbox,
                 content;
 
-            if (me._conf && me._conf.toolStyle) {
-                content = me.styledTemplate.clone();
-                me.changeToolStyle(me._conf.toolStyle, content);
+            if (this._conf && this._conf.toolStyle) {
+                content = this.styledTemplate.clone();
+                this.changeToolStyle(this._conf.toolStyle, content);
             } else {
-                content = me.template.clone();
+                content = this.template.clone();
             }
 
-            me.container = content;
+            this.container = content;
 
             // get div where the map is rendered from openlayers
             var parentContainer = jQuery('div.mapplugins.left');
@@ -285,6 +284,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             content.find('div.close').click(function (event) {
                 me._hideSearch();
                 // TODO: this should also unbind the TR tag click listeners?
+            });
+            content.find('div.close-results').click(function (event) {
+                me._hideSearch();
+                inputField.val('');
             });
             content.find('div.results').hide();
             parentContainer.append(content);
@@ -363,11 +366,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
          */
         _showResults: function (msg) {
             // check if there is a problem with search string
-            var errorMsg = msg.error;
-            var me = this;
-            var resultsContainer = this.container.find('div.results');
-            var header = resultsContainer.find('div.header');
-            var content = resultsContainer.find('div.content');
+            var errorMsg = msg.error,
+                me = this,
+                resultsContainer = this.container.find('div.results'),
+                header = resultsContainer.find('div.header'),
+                content = resultsContainer.find('div.content');
 
             if (errorMsg) {
                 content.html(errorMsg);
@@ -377,10 +380,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
 
             // success
             var totalCount = msg.totalCount,
-                lon,
                 lat,
+                lon,
                 zoom;
-            console.log(msg);
             if (totalCount === 0) {
                 content.html(this.loc.noresults);
                 resultsContainer.show();
@@ -397,7 +399,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 var table = this.templateResultsTable.clone(),
                     tableBody = table.find('tbody'),
                     i,
-                    resultClicked = function () {
+                    clickFunction = function () {
                         me._resultClicked(jQuery(this).attr('data-location'));
                         return false;
                     };
@@ -411,20 +413,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                     lat = msg.locations[i].lat;
                     zoom = msg.locations[i].zoomLevel;
                     var dataLocation = lon + "---" + lat + "---" + zoom,
-                        row = this.templateResultsRow.clone();
-                    row.attr('data-location', dataLocation);
-
-                    var name = msg.locations[i].name,
+                        row = this.templateResultsRow.clone(),
+                        name = msg.locations[i].name,
                         municipality = msg.locations[i].village,
                         type = msg.locations[i].type,
                         cells = row.find('td'),
                         xref = jQuery(cells[0]).find('a');
+                    row.attr('data-location', dataLocation);
                     xref.attr('data-location', dataLocation);
                     xref.append(name);
-                    xref.click(resultClicked);
+                    xref.click(clickFunction);
 
                     jQuery(cells[1]).append(municipality);
                     jQuery(cells[2]).append(type);
+
+                    // IE hack to get scroll bar on tbody element
+                    if (jQuery.browser.msie) {
+                        row.append(jQuery('<td style="width: 0px;"></td>'));
+                    }
+
                     tableBody.append(row);
                 }
 
@@ -435,13 +442,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 content.html(table);
                 resultsContainer.show();
 
-                // Change the font of the rendered table as well
                 if (this._conf && this._conf.font) {
                     this.changeFont(this._conf.font, content);
                 }
                 if (this._conf && this._conf.toolStyle) {
-                    header.remove();
-                    me.changeResultListStyle(me._conf.toolStyle, resultsContainer);
+                    // Hide the results if esc was pressed or if the field is empty.
+                    var inputField = content.find('input[type=text]');
+                    inputField.keyup(function (e) {
+                        if (e.keyCode === 27 || (e.keyCode === 8 && !jQuery(this).val())) {
+                            me._hideSearch();
+                        }
+                    });
                 }
             }
         },
@@ -509,20 +520,52 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
                 bgRight = imgPath + 'search-tool-' + styleName + '_03.png',
                 left = div.find('div.search-left'),
                 middle = div.find('div.search-middle'),
-                right = div.find('div.search-right');
+                right = div.find('div.search-right'),
+                closeResults = middle.find('div.close-results'),
+                inputField = div.find('input.search-input'),
+                // Left and right widths substracted from the results table width
+                middleWidth = (318 - (style.widthLeft + style.widthRight)),
+                // Close search width substracted from the middle width
+                inputWidth = (middleWidth - 35);
 
             left.css({
                 'background-image': 'url("' + bgLeft + '")',
-                'width': style.widthLeft
+                'width': style.widthLeft + 'px'
             });
             middle.css({
                 'background-image': 'url("' + bgMiddle + '")',
-                'background-repeat': 'repeat-x'
+                'background-repeat': 'repeat-x',
+                'width': middleWidth + 'px'
             });
             right.css({
                 'background-image': 'url("' + bgRight + '")',
-                'width': style.widthRight
+                'width': style.widthRight + 'px'
             });
+            inputField.css({
+                'width': inputWidth + 'px'
+            });
+
+            closeResults.removeClass('icon-close icon-close-white');
+
+            // Change the font colour to whitish and the close icon to white
+            // if the style is dark themed
+            if (/dark/.test(styleName)) {
+                closeResults.addClass('icon-close-white');
+                closeResults.css({
+                    'margin-top': '8px'
+                });
+                inputField.css({
+                    'color': '#ddd'
+                });
+            } else {
+                closeResults.addClass('icon-close');
+                closeResults.css({
+                    'margin-top': '10px'
+                });
+                inputField.css({
+                    'color': ''
+                });
+            }
         },
 
         /**
