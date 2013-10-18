@@ -84,7 +84,7 @@ function() {
 
         me.started = true;
 
-                var conf = this.conf ;
+        var conf = this.conf ;
         var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
         var sandbox = Oskari.getSandbox(sandboxName);
 
@@ -116,8 +116,6 @@ function() {
      * implements Module protocol init method - adds tab request handler
      */
     "init" : function() {
-        window.personaldataTest = this;
-
         return null;
     },
     /**
