@@ -499,24 +499,26 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.LayersTab",
             me.clearRelatedKeywordsPopup(null, oskarifield);
 
             // Go through related keywords, get top 3, show only them
-            for (i = 0; i < keywords.length; i += 1) {
-                keyword = keywords[i];
-                if (keyword.layers.length > 0) {
-                    // check if we want to show matching layers instead of a suggestion
-                    if (me._matchesIgnoreCase(keyword.type, 'syn') || (!me._isDefined(
-                        keyword.type) && me._containsIgnoreCase(
-                        keyword.keyword, userInput))) {
-                        // copy keyword layerids to ontologyLayers, avoid duplicates just because
-                        if (ontologyLayers.size === 0) {
-                            ontologyLayers.concat(keyword.layers);
+            if (keywords.length > 0) {
+                for (i = 0; i < keywords.length; i += 1) {
+                    keyword = keywords[i];
+                    if (keyword.layers.length > 0) {
+                        // check if we want to show matching layers instead of a suggestion
+                        if (me._matchesIgnoreCase(keyword.type, 'syn') || (!me._isDefined(
+                            keyword.type) && me._containsIgnoreCase(
+                            keyword.keyword, userInput))) {
+                            // copy keyword layerids to ontologyLayers, avoid duplicates just because
+                            if (ontologyLayers.size === 0) {
+                                ontologyLayers.concat(keyword.layers);
+                            } else {
+                                me._concatNew(ontologyLayers, keyword.layers);
+                            }
                         } else {
-                            me._concatNew(ontologyLayers, keyword.layers);
+                            ontologySuggestions.push({
+                                idx: i,
+                                count: keyword.layers.length
+                            });
                         }
-                    } else {
-                        ontologySuggestions.push({
-                            idx: i,
-                            count: keyword.layers.length
-                        });
                     }
                 }
             }
