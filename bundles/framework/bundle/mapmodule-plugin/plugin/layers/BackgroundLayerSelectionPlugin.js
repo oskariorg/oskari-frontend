@@ -20,7 +20,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
         this._map = null;
         this.element = undefined;
         this.conf = config;
-        this.conf.baseLayers = ['base_2', '24', 'base_35']; // maastokartta, ortoilmakuva, taustakartat
         this.error = !(this.conf && this.conf.baseLayers && this.conf.baseLayers.length);
         // Make sure baseLayers aren't Numbers
         if (!this.error) {
