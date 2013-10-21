@@ -10,32 +10,50 @@
     /*background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/default.png');*/
     height: 90px;
     width: 90px;
+
+    &.top {
+        bottom: auto;
+        top: 10px;
+    }
+
+    &.left {
+        left: 10px;
+        right: auto;
+    }
+
+    &.right {
+        left: auto;
+        right: 10px;
+    }
+
 }
 
 .panbuttonDivImg {
 	background-image: url('/Oskari/resources/framework/bundle/mapmodule-plugin/plugin/panbuttons/images/sprite.png');
+
+    &.root {
+        background-position: 0px -90px;
+    }
+
+    &.up {
+        background-position: 0px -360px;
+    }
+
+    &.right {
+        background-position: 0px -270px;
+    }
+
+    &.down {
+        background-position: 0px -450px;
+    }
+
+    &.left {
+        background-position: 0px -180px;
+    }
+
 }
 
-.panbuttonDivImg.root {
-	background-position: 0px -90px;
-}
-
-.panbuttonDivImg.left {
-	background-position: 0px -180px;
-}
-
-.panbuttonDivImg.right {
-	background-position: 0px -270px;
-}
-
-.panbuttonDivImg.up {
-	background-position: 0px -360px;
-}
-
-.panbuttonDivImg.down {
-	background-position: 0px -450px;
-}
-
+/* TODO check if it's safe to remove these... */
 .panbutton_left {
 	float:left;
 }

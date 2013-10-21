@@ -360,15 +360,15 @@ function(url, uuid, featureNS) {
      */
     _handleMyPlacesResponse : function(response, cb) {
         var uuid = this.uuid;
+        var list = [];
         var feats = response.features;
-        if (feats == null || feats.length == 0) {
+        if (feats == null || feats.length == 0 || jQuery.isEmptyObject(feats)) {
 	        if (cb) {
-	            cb();
+	            cb(list);
 	        }
             return;
         }
-            
-        var list = [];
+
         for (var n = 0; n < feats.length; n++) {
             var f = feats[n];
             var featAtts = f.attributes;
@@ -505,7 +505,8 @@ function(url, uuid, featureNS) {
             // make another roundtrip to get the updated models from server
             // to get the create/update date
             var modelUpdateCb = function(pList) {
-                cb(true, pList);
+                if (pList.length < 1)cb(false, pList);
+                else cb(true, pList);
             };
             this.getMyPlacesByIdList(formattedIdList, modelUpdateCb);
 

@@ -126,7 +126,7 @@ function(id, imageUrl, options) {
      */
     removeMapControl : function(id) {
         this._removeMapControlImpl(ctl);
-        delete this._controls[id] ;        
+        delete this._controls[id];
     },
     /**
      * @method setLayerPlugin
@@ -850,6 +850,24 @@ function(id, imageUrl, options) {
         }
         return layerScales;
     },
+    /**
+     * @method calculateLayerResolutions
+     * Calculate a subset of maps resolutions array that matches the given boundaries.
+     * If boundaries are not defined, returns all possible resolutions.
+     * @param {Number} maxScale maximum scale boundary (optional)
+     * @param {Number} minScale minimum scale boundary (optional)
+     * @return {Number[]} calculated resolutions that are within given bounds
+     */
+    calculateLayerResolutions : function(maxScale, minScale) {
+        var layerResolutions = [];
+        for (var i = 0; i < this._mapScales.length; i++) {
+            if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
+                // resolutions are in the same order as scales so just use them
+                layerResolutions.push(this._options.resolutions[i]);
+            }
+        }
+        return layerResolutions;
+    },
 
     /* IMPL specific */
 
@@ -875,7 +893,9 @@ function(id, imageUrl, options) {
      * @param {Number} zoomAdjust relative change to the zoom level f.ex -1 (optional)
      * @param {Boolean} pIsDragging true if the user is dragging the map to a new location currently (optional)
      */
-    moveMapToLanLot : Oskari.AbstractFunc("moveMapToLanLot"),
+    moveMapToLanLot : function() {
+        return this.panMapToLonLat.apply(this, arguments);
+    },
     /**
      * @method panMapToLonLat
      * Pans the map to the given position.
@@ -989,25 +1009,6 @@ function(id, imageUrl, options) {
     adjustZoomLevel : Oskari.AbstractFunc("adjustZoomLevel(amount, suppressEvent)"),
 
     notifyMoveEnd : function() {
-    },
-
-    /**
-     * @method calculateLayerResolutions
-     * Calculate a subset of maps resolutions array that matches the given boundaries.
-     * If boundaries are not defined, returns all possible resolutions.
-     * @param {Number} maxScale maximum scale boundary (optional)
-     * @param {Number} minScale minimum scale boundary (optional)
-     * @return {Number[]} calculated resolutions that are within given bounds
-     */
-    calculateLayerResolutions : function(maxScale, minScale) {
-        var layerResolutions = [];
-        for (var i = 0; i < this._mapScales.length; i++) {
-            if ((!minScale || minScale >= this._mapScales[i]) && (!maxScale || maxScale <= this._mapScales[i])) {
-                // resolutions are in the same order as scales so just use them
-                layerResolutions.push(this._options.resolutions[i]);
-            }
-        }
-        return layerResolutions;
     },
 
     _addMapControlImpl : Oskari.AbstractFunc("_addMapControlImpl(ctl)"),

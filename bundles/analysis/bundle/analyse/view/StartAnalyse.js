@@ -653,6 +653,8 @@ function(instance, localization) {
             contentPanel.after(opt);
 
         }
+        // Analyse name
+        me._modifyAnalyseName();
         var clickMagic = function() {
             return function() {
                 me._modifyAnalyseName();

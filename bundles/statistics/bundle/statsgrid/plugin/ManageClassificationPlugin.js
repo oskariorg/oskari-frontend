@@ -441,7 +441,7 @@ function(config, locale) {
                 return (Math.round(i * 10) / 10);
         };
 
-        var colortab = gstats.getHtmlLegend(null, sortcol.name, true, legendRounder);
+        var colortab = gstats.getHtmlLegend(null, sortcol.name, true, legendRounder, 'distinct');
         var classify = me.element.find('.classificationMethod');
         classify.find('.block').remove();
         var block = jQuery('<div class="block"></div>');

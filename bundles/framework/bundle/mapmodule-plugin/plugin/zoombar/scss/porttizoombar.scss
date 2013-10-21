@@ -24,4 +24,35 @@ div.pzbDiv.mapplugin {
 		border : 0;
 		margin : 0;
 	}
+
+	&.top {
+		bottom: auto;
+		top: 10px;
+	}
+
+	&.left {
+		left: 10px;
+		right: auto;
+	}
+
+	&.right {
+		left: auto;
+		right: 10px;
+	}
+	/* Remember to removeClass */
+	&.with-panbuttons {
+		&.top {
+			/* Add panbuttons' height and top to top */
+			top: 110px !important;
+		}
+
+		&.left {
+			left: 45px !important;
+		}
+
+		&.right {
+			right: 45px !important;
+		}
+	}
+	
 }

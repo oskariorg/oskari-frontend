@@ -73,10 +73,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                 sandbox = Oskari.getSandbox(sandboxName),
                 request,
                 p;
-            // The publish tile won't be shown if config doesn't have urlPrefix
-            if (!me.conf.urlPrefix) {
-                return;
-            }
             if (me.started) {
                 return;
             }
@@ -178,10 +174,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher.PublisherBundleInstanc
                     content;
                 okBtn.addClass('primary');
 
-                // /published/{language}/{mapId}
-                // FIXME publish tile shouldn't be shown if config doesn't have urlPrefix
-                url = this.sandbox.getLocalizedProperty(this.conf.urlPrefix) +
-                    '/published/' + event.getLanguage() + '/' + event.getId();
+                url = this.sandbox.getLocalizedProperty(this.conf.publishedMapUrl) + event.getId();
                 iframeCode = '<iframe src="' + url + '" width="' + event.getWidth() +
                     '" height="' + event.getHeight() + '"></iframe>';
                 textarea =

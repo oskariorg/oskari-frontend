@@ -2,18 +2,18 @@
 var development = true;
 
 // fix expect.js fail error
-expect.Assertion.prototype.fail = function(msg) {
+expect.Assertion.prototype.fail = function (msg) {
     msg = msg || "explicit failure";
-    this.assert(false, function() {
-        return msg
-    }, function() {
-        return msg
+    this.assert(false, function () {
+        return msg;
+    }, function () {
+        return msg;
     });
     return this;
 };
 
 // waitFor variables from Jasmine https://github.com/pivotal/jasmine/blob/master/src/core
-var isCommonJS = typeof window == "undefined" && typeof exports == "object";
+var isCommonJS = typeof window === "undefined" && typeof exports === "object";
 expect.TIMEOUT_INCREMENT = 10;
 
 // add css
@@ -33,17 +33,19 @@ document.getElementsByTagName("head")[0].appendChild(s);
  **/
 
 function waitsFor(waitCondition, callback, timeoutMessage, timeout) {
-    if(waitCondition()) {
+    if (waitCondition()) {
         return callback();
-    } else if(timeout > 0) {
-        setTimeout(function() {
+    } else if (timeout > 0) {
+        setTimeout(function () {
             waitsFor(waitCondition, callback, timeoutMessage, (timeout - expect.TIMEOUT_INCREMENT));
         }, expect.TIMEOUT_INCREMENT);
     } else {
         return expect().fail(timeoutMessage);
     }
-};
-if(isCommonJS) exports.waitsFor = waitsFor;
+}
+if (isCommonJS) {
+    exports.waitsFor = waitsFor;
+}
 
 // Dependeny on map-full should be explicit to avoid defects
 // Improve, when there is a real test case that benefits from moving the map to a specific position
@@ -63,7 +65,9 @@ function simulateMouseClick(map, x, y) {
         xy: new OpenLayers.Pixel(x, y)
     });
 }
-if(isCommonJS) exports.simulateMouseClick = simulateMouseClick;
+if (isCommonJS) {
+    exports.simulateMouseClick = simulateMouseClick;
+}
 
 function simulateMouseDblClick(map, x, y) {
     map.events.triggerEvent("mousemove", {
@@ -79,7 +83,9 @@ function simulateMouseDblClick(map, x, y) {
         xy: new OpenLayers.Pixel(x, y)
     });
 }
-if(isCommonJS) exports.simulateMouseDblClick = simulateMouseDblClick;
+if (isCommonJS) {
+    exports.simulateMouseDblClick = simulateMouseDblClick;
+}
 
 function simulateMouseDrag(map, x0, y0, x1, y1) {
     map.events.triggerEvent("mousemove", {
@@ -126,20 +132,20 @@ function setupOskari(appSetup, appConf, done) {
     app.setConfiguration(appConf);
 
     // Start Oskari App
-    app.startApplication(function() {
+    app.startApplication(function () {
         done();
     });
-};
+}
 
 function deletePluginsFromConfig(appConf, id) {
-    var plugins = appConf["mapfull"]["conf"]["plugins"];
+    var plugins = appConf.mapfull.conf.plugins;
     for (var i = 0; i < plugins.length; ++i) {
-        if(plugins[i]["id"] == id) {
+        if (plugins[i].id == id) {
             plugins.splice(i, 1);
             break;
         }
     }
-};
+}
 
 var _mapfullConfig = {
     "state": {
@@ -147,7 +153,7 @@ var _mapfullConfig = {
             "id": "base_35"
         }],
         "zoom": 1,
-        "srs":"EPSG:3067",
+        "srs": "EPSG:3067",
         "east": "517620",
         "north": "6874042"
     },
@@ -272,9 +278,9 @@ function getStartupSequence(dependencyArray) {
         startupSequence: []
     };
 
-    for(var i = 0, ilen = dependencyArray.length; i < ilen; i++) {
+    for (var i = 0, ilen = dependencyArray.length; i < ilen; i++) {
         var bundle = dependencyArray[i];
-        if(typeof bundle !== 'object') {
+        if (typeof bundle !== 'object') {
             // not object == bundlename -> get default block for bundle
             bundle = _defaultsStartupSeq[bundle];
         }
@@ -292,15 +298,15 @@ function removeLayers(module, idList) {
     var sandbox = module.getSandbox();
     // remove selected layer
     var rbRemove = sandbox.getRequestBuilder('RemoveMapLayerRequest');
-    if(idList) {
-        for(var i = 0; i < idList.length; ++i) {
+    if (idList) {
+        for (var i = 0; i < idList.length; ++i) {
             sandbox.request(module, rbRemove(idList[i]));
         }
     }
     // remove all selected layers
     else {
         var selectedLayers = sandbox.findAllSelectedMapLayers();
-        for(var i = 0; i < selectedLayers.length; ++i) {
+        for (var i = 0; i < selectedLayers.length; ++i) {
             sandbox.request(module, rbRemove(selectedLayers[i].getId()));
         }
     }
@@ -311,8 +317,8 @@ function addLayers(module, idList) {
     // add selected layers
     var sandbox = module.getSandbox();
     var rbAdd = sandbox.getRequestBuilder('AddMapLayerRequest');
-    if(idList) {
-        for(var i = 0; i < idList.length; ++i) {
+    if (idList) {
+        for (var i = 0; i < idList.length; ++i) {
             sandbox.request(module, rbAdd(idList[i], true));
         }
     }
@@ -337,11 +343,11 @@ function getDummyUser() {
 
 function getDefaultHTML() {
     var template = '<nav id="maptools"><div id="loginbar"></div><div id="menubar"></div><div id="divider"></div><div id="toolbar"></div></nav>';
-    template += '<div id="contentMap" class="oskariui container-fluid"><div id="menutoolbar" class="container-fluid"></div><div class="row-fluid" style="height: 100%; background-color:white;"><div class="oskariui-left"></div><div class="span12 oskariui-center" style="height: 100%; margin: 0;"><div id="mapdiv"><div class="mapplugins left"></div></div></div><div class="oskari-closed oskariui-right"><div id="mapdivB"></div></div></div></div>';
+    template += '<div id="contentMap" class="oskariui container-fluid"><div id="menutoolbar" class="container-fluid"></div><div class="row-fluid" style="height: 100%; background-color:white;"><div class="oskariui-left"></div><div class="span12 oskariui-center" style="height: 100%; margin: 0;"><div id="mapdiv"><div class="mapplugins top right"></div></div></div><div class="oskari-closed oskariui-right"><div id="mapdivB"></div></div></div></div>';
     return template;
 }
 
-if(isCommonJS) {
+if (isCommonJS) {
     exports.getStartupSequence = getStartupSequence;
     exports.getConfig = getConfig;
     exports.getDefaultHTML = getDefaultHTML;

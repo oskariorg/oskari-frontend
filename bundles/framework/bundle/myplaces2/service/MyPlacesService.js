@@ -553,23 +553,29 @@ function(url, uuid, sandbox, defaults, pInstance) {
         var me = this;
         var isNew = !(myplaceModel.getId());
 
-        var callBackWrapper = function(success, list) {
+        var callBackWrapper = function (success, list) {
             if (isNew && success) {
                 me._addMyPlace(list[0]);
             } else {
-                // update models updateDate in store
-                var myplace = me.findMyPlace(list[0].getId());
-                if (myplace) {
-                    // update values
-                    myplace.setName(myplaceModel.getName());
-                    myplace.setDescription(myplaceModel.getDescription());
-                    myplace.setLink(myplaceModel.getLink());
-                    myplace.setCategoryID(myplaceModel.getCategoryID());
-                    myplace.setGeometry(myplaceModel.getGeometry());
-                    myplace.setUpdateDate(list[0].getUpdateDate());
-                } else {
-                    // couldn't load it -> failed to save it
+                if (list.length < 1) {
+                    // couldn't parse myplaces featurecollection
                     success = false;
+                }
+                else {
+                    // update models updateDate in store
+                    var myplace = me.findMyPlace(list[0].getId());
+                    if (myplace) {
+                        // update values
+                        myplace.setName(myplaceModel.getName());
+                        myplace.setDescription(myplaceModel.getDescription());
+                        myplace.setLink(myplaceModel.getLink());
+                        myplace.setCategoryID(myplaceModel.getCategoryID());
+                        myplace.setGeometry(myplaceModel.getGeometry());
+                        myplace.setUpdateDate(list[0].getUpdateDate());
+                    } else {
+                        // couldn't load it -> failed to save it
+                        success = false;
+                    }
                 }
             }
             me._notifyDataChanged();

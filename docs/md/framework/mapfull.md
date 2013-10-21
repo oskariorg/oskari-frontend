@@ -11,11 +11,9 @@
 
 ## Description
 
-Initializes Oskari core with Oskari.mapframework.service.MapLayerService, starts up Oskari.mapframework.ui.module.common.MapModule and renders the map to a HTML element with id "mapdiv".  The bundle doesn't create the "mapdiv" element but assumes it exists on the page. Adds maplayers to the map and moves it to a location and zoom level as specified in state.
+Initializes Oskari core with Oskari.mapframework.service.MapLayerService, starts up Oskari.mapframework.ui.module.common.MapModule and renders the map to a HTML element with id "mapdiv".
 
-## TODO
-
-* HTML element id via configuration?
+The bundle doesn't create the "mapdiv" element but assumes it exists on the page. Adds maplayers to the map and moves it to a location and zoom level as specified in state.
 
 ## Screenshot
 
@@ -66,7 +64,11 @@ ProjectionDefs will replace the default projections "EPSG:3067" and "EPSG:4326".
   },
   "imageLocation":"<base url mapmodulen for images(optional, defaults to  "/Oskari/resources")>",
   "mapElement": "<DOM element id for OpenLayers map, defaults to 'mapdiv'>",
-  "mapContainer": "<DOM element id for Oskari map container, defaults to 'contentMap'>""
+  "mapContainer": "<DOM element id for Oskari map container, defaults to 'contentMap'>",
+  "size": {
+    "width" : <map window width>,
+    "height" : <map window height>
+  }
 }
 ```
 
@@ -75,6 +77,7 @@ ProjectionDefs will replace the default projections "EPSG:3067" and "EPSG:4326".
 * globalMapAjaxUrl is set to Oskari.mapframework.sandbox.Sandbox and can be asked everywhere with sandbox.getAjaxUrl()
 * mapOptions is passed to mapmodule-plugin constructor
 * user is optional and should have information about the logged in user. It will be set to Oskari.mapframework.sandbox.Sandbox and can be asked everywhere with sandbox.getUser(). The format of the data should in a form accepted by Oskari.mapframework.domain.User constructor.
+* size is optional but if given will set the map elements size. If size isn't specified the map elements height will be set to window height and the bundle will listen to window resizing to adjust the map size.
 
 ## Bundle state
 
@@ -90,16 +93,11 @@ ProjectionDefs will replace the default projections "EPSG:3067" and "EPSG:4326".
   ],
   "zoom": <zoomlevel 0-12>,
   "east": "<latitude>",
-  "north": "<longitude>",
-  "size": {
-    "width" : <map window width>,
-    "height" : <map window height>
-  }
+  "north": "<longitude>"
 }
 ```
 
 * selectedLayers is an array specifying which layers should be added to map on startup. It can have only id property, but other listed properties are supported as well.
-* size is optional but if given will set the map elements size. If size isn't specified the map elements height will be set to window height and the bundle will listen to window resizing to adjust the map size.
 
 ## Requests the bundle handles
 

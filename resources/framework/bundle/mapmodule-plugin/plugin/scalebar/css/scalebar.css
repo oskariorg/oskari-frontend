@@ -1,0 +1,9 @@
+#mapdiv .olControlScaleLine.bottom {
+  bottom: 30px;
+  top: auto; }
+#mapdiv .olControlScaleLine.left {
+  left: 10px;
+  right: auto; }
+#mapdiv .olControlScaleLine.right {
+  right: 10px;
+  left: auto; }

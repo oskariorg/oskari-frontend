@@ -396,7 +396,11 @@ function(config, locale) {
         // we need to provide sort-function
         grid.onSort.subscribe(function(e, args) {
             var target = jQuery(e.target);
-            if(target.hasClass('slick-header-menubutton')) return;
+            // Don't sort if the clicked spot was a menu button.
+            if (target.hasClass('slick-header-menubutton') ||
+                target.parent().hasClass('slick-header-menubutton')) {
+                return false;
+            }
 
             var cols = args.sortCols;
             dataView.sort(function(dataRow1, dataRow2) {
