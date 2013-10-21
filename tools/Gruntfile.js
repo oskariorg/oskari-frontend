@@ -356,6 +356,11 @@ module.exports = function (grunt) {
             options: {
                 mainConfigFile: "../applications/oskari2/ol3/build.js"
             }
+          },
+          'ol2': {
+            options: {
+                mainConfigFile: "../applications/oskari2/ol2/build.js"
+            }
           }
         }
     });

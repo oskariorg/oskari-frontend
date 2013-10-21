@@ -1,7 +1,5 @@
 define(["oskari", "jquery", 
 "bundles/framework/bundle/oskariui/module",
-"bundles/oskari/bundle/map-openlayers/module",
-"bundles/oskari/platform/module",
 "bundles/framework/bundle/mapmodule-plugin/ui/module/map-module",
 			"bundles/framework/bundle/mapmodule-plugin/plugin/Plugin",            
             "bundles/framework/bundle/mapmodule-plugin/plugin/controls/ControlsPlugin",			

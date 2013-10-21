@@ -93,7 +93,6 @@ require(["mainConfig"], function() {
                 };
 
             Oskari.setConfiguration(appConfig);
-
             /* loading main map and divmanazer */
             require(["bundles/ol3/bundle/mapfull/module",
                 "bundles/ol3/bundle/mapmodule-plugin/module",
@@ -102,9 +101,7 @@ require(["mainConfig"], function() {
 
                 /* starting to show user that something or another is happening */
                 mapfull.start();
-                console.log('starting divmanazer');
                 divmanazer.start();
-                console.log('divmanazer started');
 
                 var bundles = [];
 

@@ -21,8 +21,8 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder', fu
 
         var styleSpec;
 
-        for (var i = 0, ii = mapLayerJson.styles.length; i < ii; ++i) {
-            styleSpec = mapLayerJson.styles[i];
+        for (var i = 0, ii = mapLayerJson.tileLayerData.styles.length; i < ii; ++i) {
+            styleSpec = mapLayerJson.tileLayerData.styles[i];
             var style = styleBuilder();
             style.setName(styleSpec.identifier);
             style.setTitle(styleSpec.identifier);

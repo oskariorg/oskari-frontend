@@ -9095,7 +9095,6 @@ define('bundles/ol3/bundle/mapfull/module',[
 	"../../../framework/bundle/mapfull/request/MapWindowFullScreenRequestHandler",
 	"css!resources/framework/bundle/mapfull/css/style.css"
 ], function(Oskari, jQuery) {
-	
 	Oskari.bundleCls('oskariui');
 	
 	return Oskari.bundleCls("mapfull").category({
@@ -20590,9 +20589,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance"
             extensionInfo.draggableHandle = handle;
             extensionInfo.draggableTarget = flyoutTarget;
 
-            console.log(flyout);
-            console.dir($(flyout));
-            console.log($().jquery);
             extensionInfo.draggable = $(flyout).draggable({
                 handle: jQuery(handle),
                 helper: useHelper ? function () {
@@ -26731,7 +26727,6 @@ require(["mainConfig"], function() {
                 };
 
             Oskari.setConfiguration(appConfig);
-
             /* loading main map and divmanazer */
             require(["bundles/ol3/bundle/mapfull/module",
                 "bundles/ol3/bundle/mapmodule-plugin/module",
