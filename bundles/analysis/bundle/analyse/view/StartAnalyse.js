@@ -601,7 +601,7 @@ function(instance, localization) {
         var ii = 0;
         // request updates for map tiles
         for (var i = 0; i < layers.length; i++) {
-            if (layers[i].isLayerOfType('WFS') || layers[i].isLayerOfType('ANALYSIS')) {
+            if (layers[i].isLayerOfType('WFS') || layers[i].isLayerOfType('ANALYSIS') || layers[i].isLayerOfType('MYPLACES')) {
                 var option = {
                     id : me.id_prefix + 'layer_' + layers[i].getId(),
                     label : layers[i].getName()
