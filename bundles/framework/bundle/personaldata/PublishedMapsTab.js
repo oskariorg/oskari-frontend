@@ -301,7 +301,7 @@ function(instance, localization) {
                 var req = publishMapEditorRequestBuilder(data);
                 sandbox.request(instance, req);
             }
-        }
+        };
         
         //sending a request to publisher for editing view
         var editRenderer = function(name, data) {
