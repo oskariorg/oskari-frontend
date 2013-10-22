@@ -7,8 +7,8 @@ Oskari.registerLocalization({
         "desc" : "",
         "object-data": "Object data",
          "layer" : {
-                "organization" : "Analysis",
-                "inspire" : "Analysis"
+                "organization" : "User's analysis",
+                "inspire" : "User's analysis"
 
             }
     }

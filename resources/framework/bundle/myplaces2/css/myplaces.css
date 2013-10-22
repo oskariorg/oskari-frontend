@@ -2,17 +2,14 @@ div.myplacesform div.help {
   float: right; }
 
 /* Wide fields for place inputs  */
-div.myplacesform div.field,
-div.myplacescategoryform div.field {
+div.myplacesform div.field, div.myplacescategoryform div.field {
   padding-bottom: 10px; }
 
 div.myplacesform input[type="text"] {
   width: 83%; }
 
-div.myplacesform input[type="checkbox"],
-div.myplacescategoryform input[type="checkbox"] {
-  margin: 0.5em;
-}
+div.myplacesform input[type="checkbox"], div.myplacescategoryform input[type="checkbox"] {
+  margin: 0.5em; }
 
 div.myplacesform textarea {
   width: 80%; }
@@ -20,10 +17,11 @@ div.myplacesform textarea {
 div.myplacesform select {
   width: 80%; }
 
-div.myplacesform div.renderButton,
-div.myplacescategoryform div.renderButton {
-    margin: 5px;
-}
+div.myplacesform .imagePreview {
+  cursor: pointer; }
+
+div.myplacesform div.renderButton, div.myplacescategoryform div.renderButton {
+  margin: 5px; }
 
 div.renderdialog div.sizer {
   margin: 5px; }
@@ -190,6 +188,12 @@ div.renderdialog div.color-grid {
   height: 40px;
   margin: 5px; }
 
+div.renderdialog div.color-rectangle {
+  width: 120px;
+  height: 40px;
+  border: 1px solid #000000;
+  position: absolute; }
+
 div.renderdialog div.color-cell {
   width: 20px;
   height: 20px;
@@ -242,3 +246,16 @@ div.renderdialog input.color-source {
 div.renderdialog input.linewidth {
   width: 50px;
   margin-top: 5px; }
+
+div.pointvisualization {
+  width: 510px; }
+
+div.linevisualization {
+  width: 500px; }
+
+div.areavisualization {
+  width: 650px; }
+
+div.imagePreview img {
+  max-height: 350px;
+  max-width: 350px; }

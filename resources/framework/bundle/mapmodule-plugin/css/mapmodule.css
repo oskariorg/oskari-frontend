@@ -5,27 +5,28 @@ div.mapplugin {
   position: absolute;
   z-index: 15000; }
 
-div.mapplugins.left {
+div.mapplugins.top {
+  bottom: auto;
+  top: 20px; }
+div.mapplugins.left, div.mapplugins.right {
   position: absolute;
   z-index: 15000;
-  top: 20px;
-  right: 20px;
-  text-align: right;
   max-width: 85%; }
-
-div.mapplugins.left > div {
-  display: inline-block;
-  margin: 5px;
-  vertical-align: top; }
+  div.mapplugins.left > div, div.mapplugins.right > div {
+    display: inline-block;
+    margin: 5px;
+    vertical-align: top; }
+div.mapplugins.left {
+  left: 20px;
+  right: auto;
+  text-align: left; }
+div.mapplugins.right {
+  left: auto;
+  right: 20px;
+  text-align: right; }
 
 .oskari-publisher-font-arial {
-  font-family: Arial, sans-serif !important;
-}
+  font-family: Arial, sans-serif !important; }
 
 .oskari-publisher-font-georgia {
-  font-family: Georgia, serif !important;
-}
-
-.oskari-publisher-font-comic_sans {
-  font-family: "Comic Sans", sans-serif !important;
-}
+  font-family: Georgia, serif !important; }

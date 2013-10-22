@@ -5,7 +5,7 @@
     position : absolute;
     z-index: 15000;
 }
-div.mapplugins.left {
+div.mapplugins.right {
     position : absolute;
     z-index: 15000;
     top : 20px;
@@ -13,7 +13,7 @@ div.mapplugins.left {
     text-align: right;
     max-width : 85%;
 }
-div.mapplugins.left > div {
+div.mapplugins.right > div {
 	display: inline-block;
     margin: 5px;
     vertical-align: top;

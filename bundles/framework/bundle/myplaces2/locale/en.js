@@ -7,7 +7,7 @@ Oskari.registerLocalization({
     "category": {
       "defaultName": "My map layer",
       "organization": "My places",
-      "inspire": "Places"
+      "inspire": "My places"
     },
     "guest": {
       "loginShort": "Log in to use"
@@ -101,8 +101,8 @@ Oskari.registerLocalization({
       },
       "visibleFields": {
         "label": "Visible fields",
-        "placename": "Place name",
-        "placedesc": "Place description",
+        "placename": "Name",
+        "placedesc": "Description",
         "image": "Image"
       },
       "edit": {
@@ -111,96 +111,102 @@ Oskari.registerLocalization({
         "cancel": "Back"
       },
       "rendering": {
-        "label": "Tason kohteiden esitystavat",
+        "label": "Layer's features' style",
         "point": {
-          "tooltip": "Piste"
+          "tooltip": "Edit point style"
+        },
+        "area": {
+          "tooltip": "Edit area style"
+        },
+        "line": {
+          "tooltip": "Edit line style"
         }
       }
     },
     "pointform": {
-      "title": "",
+      "title": "Point feature portrayal",
       "tooltip": "",
       "symbol": {
-        "label": ""
+        "label": "Point feature icon"
       },
       "size": {
-        "label": ""
+        "label": "Size"
       },
       "color": {
-        "label": "",
-        "labelOr": "",
-        "labelCustom": ""
+        "label": "Colour",
+        "labelOr": "or",
+        "labelCustom": "Custom RGB color (0-255)"
       },
       "preview": {
-        "label": ""
+        "label": "Preview"
       },
       "buttons": {
-        "save": "",
-        "cancel": ""
+        "save": "Save",
+        "cancel": "Cancel"
       }
     },
     "lineform": {
-      "title": "",
+      "title": "Line portrayal",
       "tooltip": "",
       "style": {
-        "label": ""
+        "label": "Line style"
       },
       "cap": {
-        "label": ""
+        "label": "Line endigs"
       },
       "corner": {
-        "label": ""
+        "label": "Corners"
       },
       "width": {
-        "label": ""
+        "label": "Width"
       },
       "color": {
-        "label": "",
-        "labelOr": "",
-        "labelCustom": ""
+        "label": "Colour",
+        "labelOr": "or",
+        "labelCustom": "Custom RGB colour (0-255)"
       },
       "preview": {
-        "label": ""
+        "label": "Preview"
       },
       "buttons": {
-        "save": "",
-        "cancel": ""
+        "save": "Save",
+        "cancel": "Cancel"
       }
     },
     "areaform": {
-      "title": "",
+      "title": "Area portrayal",
       "tooltip": "",
       "linestyle": {
-        "label": ""
+        "label": "Area line style"
       },
       "linecap": {
-        "label": ""
+        "label": "Area line endings"
       },
       "linecorner": {
-        "label": ""
+        "label": "Corners"
       },
       "linewidth": {
-        "label": ""
+        "label": "Width"
       },
       "linecolor": {
-        "label": "",
-        "labelOr": "",
-        "labelCustom": ""
+        "label": "Line colour",
+        "labelOr": "or",
+        "labelCustom": "Custom RGB colour (0-255)"
       },
       "color": {
-        "label": "",
-        "labelOr": "",
-        "labelCustom": ""
+        "label": "Area fill colour",
+        "labelOr": "or",
+        "labelCustom": "Own RGB colour (0-255)"
       },
       "fill": {
-        "label": ""
+        "label": "Area fill pattern"
       },
       "preview": {
-        "label": ""
+        "label": "Preview"
       },
       "buttons": {
-        "save": "",
-        "cancel": ""
+        "save": "Save",
+        "cancel": "Cancel"
       }
     },
     "notification": {
@@ -243,8 +249,9 @@ Oskari.registerLocalization({
       "placeNameIllegal": "The object name contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
       "descIllegal": "The object description contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
       "categoryNameIllegal": "The layer description contains disallowed characters. Allowed characters are the letters a-z as well as å, ä and ö, numbers, backspaces and hyphens.",
-      "dotSize": "The dot size does not fit the size limits (1-50).",
+      "dotSize": "The dot size does not fit the size limits (1-5).",
       "dotColor": "Wrong dot colour.",
+      "dotShape": "Wrong dot shape.",
       "lineSize": "The line size does not fit the size limits (1-50).",
       "lineColor": "Wrong line colour.",
       "areaLineSize": "The area edge size does not fit the limits (0-50).",

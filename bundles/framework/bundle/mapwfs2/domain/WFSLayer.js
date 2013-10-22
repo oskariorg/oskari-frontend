@@ -19,6 +19,7 @@ function() {
     this._selectedFeatures = []; // filtered features
     this._clickedFeatureIds = []; // clicked feature ids (map)
     this._clickedFeatureListIds = []; // clicked feature ids (list)
+    this._propertyTypes = {}; // name and describeFeatureType type (hashmap, json)
 }, {
    /* Layer type specific functions */
 
@@ -148,6 +149,21 @@ function() {
      */
     setClickedFeatureListIds : function(ids) {
         this._clickedFeatureListIds = ids;
+    },
+      /**
+     * @method setPropertyTypes
+     * @param {json} propertyTypes
+     */
+    setPropertyTypes : function(propertyTypes) {
+        this._propertyTypes = propertyTypes;
+    },
+
+    /**
+     * @method getPropertyTypes
+     * @return {json} propertyTypes
+     */
+    getPropertyTypes : function() {
+        return this._propertyTypes;
     },
 
     /**

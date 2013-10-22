@@ -102,6 +102,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
     finishedDrawing : function(isForced) {
         if(!this.multipart || isForced) {
             // not a multipart, stop editing
+            var activeControls = this._getActiveDrawControls();
+            for (var i=0; i < activeControls.length; i++) {
+                // only lines and polygons have the finishGeometry function
+                if (typeof this.drawControls[activeControls[i]].handler.finishGeometry == typeof Function) {
+                    // No need to finish geometry if already finished
+                    switch (activeControls[i]) {
+                        case "line":
+                            if (this.drawControls.line.handler.line.geometry.components.length < 2) {
+                                continue;
+                            }
+                            break;
+                        case "area":
+                            var components = this.drawControls.area.handler.polygon.geometry.components;
+                            if (components[components.length-1].components.length < 3) {
+                                continue;
+                            }
+                            break;
+                    }
+                    this.drawControls[activeControls[i]].handler.finishGeometry();
+                }
+            }
             this.toggleControl();
         }
 
@@ -250,6 +271,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.plugin.DrawPlugin', fu
         }
         return drawing;
     },
+
+    /**
+     * Returns active draw control names
+     * @method
+     */
+    _getActiveDrawControls : function(){
+        var activeDrawControls = [];
+        for (var drawControl in this.drawControls) {
+            if (this.drawControls[drawControl].active) {
+                activeDrawControls.push(drawControl);
+            }
+        }
+        return activeDrawControls;
+    },
+
     register : function() {
 
     },

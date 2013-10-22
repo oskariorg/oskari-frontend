@@ -6,8 +6,8 @@ Oskari.registerLocalization({
         "desc" : "",
         "object-data": "Objektuppgifter",
         "layer" : {
-                "organization" : "Analys",
-                "inspire" : "Analys"
+                "organization" : "Mina analyser",
+                "inspire" : "Mina analyser"
 
             }
     }

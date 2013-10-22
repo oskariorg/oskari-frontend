@@ -6,7 +6,7 @@
   bottom: 0px;
   left: 0px;
   z-index: 100000000 !important;
-  filter: alpha(opacity=80);
+  filter: alpha(opacity= 80 );
   /* unquote for libsass bug */
   opacity: 0.8 !important; }
   .logoplugin a, .logoplugin a:hover, .logoplugin a:active, .logoplugin a:visited {
@@ -20,6 +20,15 @@
   .logoplugin .terms {
     display: inline-block;
     margin: 5px; }
+  .logoplugin.bottom {
+    bottom: 0;
+    top: auto; }
+  .logoplugin.left {
+    left: 0;
+    right: auto; }
+  .logoplugin.right {
+    left: auto;
+    right: 0; }
 
 /* Force measurement bar up a notch so it isn't occluded by the logo */
 #mapdiv .olControlScaleLine {

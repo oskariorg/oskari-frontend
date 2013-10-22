@@ -1,9 +1,18 @@
 div.notLoggedIn {
   padding: 10px; }
 
-
 #contentMap.mapPublishMode {
-  margin-left: 255px; }
+  margin-left: 0px; }
+
+#contentMap.mapPublishMode > #mapdiv {
+  position: relative;
+  left: 255px
+}
+
+#contentMap.mapPublishMode > div.row-fluid {
+  position: relative;
+  left: 255px
+}
 
 div.publisher div.startview div.icon-info, div.basic_publisher div.icon-info {
   float: right; }
@@ -35,7 +44,7 @@ div.publisher div.startview div.error ul li {
   position: absolute;
   height: 100%;
   top: 0;
-  left: 40px;
+ /* left: 40px;*/
   /* sidebar has 3, we want to open it on top of this */
   z-index: 2;
   width: 255px; }
@@ -85,33 +94,25 @@ div.basic_publisher div.buttons input, div.publisher div.startview div.buttons i
 
 /* Layout */
 div.basic_publisher div#publisher-layout-colours input[name=publisher-colour] {
-  width: 125px;
-}
+  width: 125px; }
 div.basic_publisher p#publisher-selected-colour {
-  display: inline;
-}
-
+  display: inline; }
 div.basic_publisher button#publisher-colours {
-  float: right;
-}
+  float: right; }
 
 div#publisher-colour-inputs {
-  margin-bottom: 15px;
-}
+  margin-bottom: 15px; }
+
 div#publisher-custom-colours {
-  padding: 10px 20px;
-}
-div#publisher-custom-colours div#publisher-custom-colours-bg,
-div#publisher-custom-colours div#publisher-custom-colours-title,
-div#publisher-custom-colours div#publisher-custom-colours-header,
-div#publisher-custom-colours div#publisher-custom-colours-iconcls {
-  margin-bottom: 12px;
-}
+  padding: 10px 20px; }
+
+div#publisher-custom-colours div#publisher-custom-colours-bg, div#publisher-custom-colours div#publisher-custom-colours-title, div#publisher-custom-colours div#publisher-custom-colours-header, div#publisher-custom-colours div#publisher-custom-colours-iconcls {
+  margin-bottom: 12px; }
+
 div#publisher-custom-colours div.rgbInput {
   padding: 5px;
-  border: 1px solid black;
-}
+  border: 1px solid black; }
+
 div#publisher-custom-colours div.rgbInput input[type="text"] {
   margin: 0 8px;
-  width: 30px;
-}
+  width: 30px; }

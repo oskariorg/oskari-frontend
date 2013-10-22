@@ -8,8 +8,7 @@ Oskari.registerLocalization(
             "desc": "",
             "published": {
                 "title": "Your map has been created",
-                "desc": "Embed the map by adding the HTML code below to your website.",
-                "urlPrefix": "http://www.paikkatietoikkuna.fi"
+                "desc": "Embed the map by adding the HTML code below to your website."
             },
             "edit" : {
               "popup" : {
@@ -64,8 +63,8 @@ Oskari.registerLocalization(
                     "label": "Layout",
                     "fields": {
                         "colours": {
-                            "label": "Color scheme",
-                            "placeholder": "Choose the colour scheme",
+                            "label": "Colour scheme",
+                            "placeholder": "Select colour scheme",
                             "buttonLabel": "Change",
                             "light_grey": "Light grey",
                             "dark_grey": "Dark grey",
@@ -73,36 +72,36 @@ Oskari.registerLocalization(
                             "red": "Red",
                             "green": "Green",
                             "yellow": "Yellow",
-                            "custom": {
-                                "name": "Custom colours",
-                                "bgLabel": "Header background",
-                                "titleLabel": "Header text",
-                                "headerLabel": "Title text",
+                            "custom": "Custom colours",
+                            "customLabels": {
+                                "bgLabel": "Identifier background",
+                                "titleLabel": "Identifier text",
+                                "headerLabel": "Header text",
                                 "iconLabel": "Icon",
                                 "iconCloseLabel": "Dark",
                                 "iconCloseWhiteLabel": "Light"
                             }
                         },
                         "fonts": {
-                            "label": "Choose font"
+                            "label": "Select font"
                         },
                         "toolStyles": {
-                            "label": "Tool styles",
+                            "label": "Tool style",
                             "rounded-dark": "Rounded (dark)",
                             "rounded-light": "Rounded (light)",
-                            "sharp-dark": "Sharp edges (dark)",
-                            "sharp-light": "Sharp edges (light)",
+                            "sharp-dark": "Polygon (dark)",
+                            "sharp-light": "Polygon (light)",
                             "3d-dark": "3D (dark)",
                             "3d-light": "3D (light)"
                         }
                     },
                     "popup": {
-                        "title": "Choose the colour scheme",
+                        "title": "Select colour scheme",
                         "close": "Close",
                         "gfiDialog": {
-                            "title": "Feature info",
+                            "title": "Preview",
                             "featureName": "Preview",
-                            "featureDesc": "Changing the colour scheme has effect only on the feature info popup"
+                            "featureDesc": "The selected colour scheme only affects the colours of the feature info and layer selection popups"
                         }
                     }
                 },

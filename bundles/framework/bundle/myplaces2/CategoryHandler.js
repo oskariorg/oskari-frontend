@@ -139,18 +139,20 @@ function(instance) {
                 // add maplayer
                 var json = this._getMapLayerJson(cat);
                 var myplacesLayer = mapLayerService.createMapLayer(json);
-                mapLayerService.addLayer(myplacesLayer);
+                mapLayerService.addLayer(myplacesLayer, this.initialLoad);
             }
             //this.uiItems.gridPanel.addOrUpdateCategory(cat);
         }
-        
+
         if(this.initialLoad) {
-            // add the myplaces layers programmatically since normal link processing 
+            // notify components of added layer if not suppressed
+            var event = sandbox.getEventBuilder('MapLayerEvent')(null, 'add'); // to-do: check if null is valid parameter here
+            sandbox.notifyAll(event); // add the myplaces layers programmatically since normal link processing
             // cant do this (run before the bundle adds the layers)
             this._processStartupLinkLayers(sandbox);
             // done here because layers aren't added to the service before this
             this.initialLoad = false;
-        
+
             // preselect the first category
             //this.uiItems.gridPanel.showCategory();
         }
@@ -230,6 +232,9 @@ function(instance) {
             type: "myplaceslayer",
             isQueryable:true,
             opacity: 50,
+       //     type: "wmslayer",
+       //     isQueryable: true,
+       //     opacity: 90,
             metaType: this.instance.idPrefix,
             orgName: catLoc.organization,
             inspire: catLoc.inspire
@@ -279,7 +284,7 @@ function(instance) {
             dot : {
                 size : category.getDotSize(),
                 color : category.getDotColor(),
-                shape : ((category.getDotShape() != null) ? category.getDotShape() : 1),
+                shape : ((category.getDotShape() != null) ? category.getDotShape() : 1)
             },
             line : {
                 cap :       category.getLineCap(),
@@ -290,7 +295,6 @@ function(instance) {
             },
             area : {
                 lineWidth : category.getAreaLineWidth(),
-                lineCap : category.getAreaLineCap(),
                 lineCorner : category.getAreaLineCorner(),
                 lineStyle : category.getAreaLineStyle(),
                 lineColor : category.getAreaLineColor(),
@@ -314,10 +318,10 @@ function(instance) {
     	saveBtn.setHandler(function() {
             var values = form.getValues();
             var errors = me.validateCategoryFormValues(values);
-//            if(errors.length != 0) {
-//                me.showValidationErrorMessage(errors);
-//                return;
-//            }
+            if(errors.length != 0) {
+                me.showValidationErrorMessage(errors);
+                return;
+            }
             var category = me.getCategoryFromFormValues(values);
             me.saveCategory(category);
             
@@ -413,21 +417,23 @@ function(instance) {
         else if(this.hasIllegalChars(values.name)) {
             errors.push({field : 'name', error : loc.categoryNameIllegal});
         }
-        
-        if(!this._validateNumber(values.dot.size, 1, 50)) {
+        if(!this._validateNumber(values.dot.shape, 0, 6)) {
+            errors.push({field : 'dotShape', error : loc.dotShape});
+        }
+        if(!this._validateNumber(values.dot.size, 1, 5)) {
             errors.push({field : 'dotSize', error : loc.dotSize});
         }
         if(!this._isColor(values.dot.color)) {
             errors.push({field : 'dotColor', error : loc.dotColor});
         }
-        if(!this._validateNumber(values.line.size, 1, 50)) {
-            errors.push({field : 'lineSize', error : loc.lineSize});
+        if(!this._validateNumber(values.line.width, 1, 50)) {
+            errors.push({field : 'lineWidth', error : loc.lineSize});
         }
         if(!this._isColor(values.line.color)) {
             errors.push({field : 'lineColor', error : loc.lineColor});
         }
-        if(!this._validateNumber(values.area.size, 0, 50)) {
-            errors.push({field : 'areaLineSize', error : loc.areaLineSize});
+        if(!this._validateNumber(values.area.lineWidth, 0, 50)) {
+            errors.push({field : 'areaLineWidth', error : loc.areaLineSize});
         }
         if(!this._isColor(values.area.lineColor)) {
             errors.push({field : 'areaLineColor', error : loc.areaLineColor});
@@ -446,7 +452,6 @@ function(instance) {
         category.setDotColor(values.dot.color);
         category.setDotShape(values.dot.shape);
         
-//        category.setLineWidth(values.line.size);
         category.setLineWidth(values.line.width);
         category.setLineColor(values.line.color);
         category.setLineCap(values.line.cap);
@@ -455,7 +460,6 @@ function(instance) {
         
         category.setAreaLineWidth(values.area.lineWidth);
         category.setAreaLineColor(values.area.lineColor);
-        category.setAreaLineCap(values.area.lineCap);
         category.setAreaLineCorner(values.area.lineCorner);
         category.setAreaLineStyle(values.area.lineStyle);
         category.setAreaFillColor(values.area.fillColor);
@@ -613,7 +617,7 @@ function(instance) {
         else {
         	// error handling
         	var loc = me.instance.getLocalization();
-			var okBtn = dialog.createCloseButton(btnLoc.buttons.ok);
+			var okBtn = dialog.createCloseButton(loc.buttons.ok);
     		dialog.show(loc.notification.error.title, loc.notification.error.deleteCategory, [okBtn]);
         }
     },

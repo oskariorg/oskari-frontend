@@ -2,41 +2,21 @@
     <div class="add-class-wrapper">
         <div class="add-class-record">
             <div class="add-class-grouping" title="<%= instance.getLocalization('admin').addOrganizationNameTitle %>"><%= instance.getLocalization('admin').addOrganizationName %></div>
-
+        </div>
+        <% for (var i = 0; i < data.locales.length; i++) {
+               var locale = data.locales[i]; %>
+        <div class="add-class-record">
             <div class="add-class-label-area">
-                <label for="add-class-fi-name" class="add-class-label" title="<%= instance.getLocalization('admin').finnishTitle %>"><%= instance.getLocalization('admin').finnish %></label>
+                <label for="add-class-<%= locale.lang %>-name" class="add-class-label" title="<%= instance.getLocalization('admin')[locale.lang] ? instance.getLocalization('admin')[locale.lang].title : locale.lang %>"><%= instance.getLocalization('admin')[locale.lang] ? instance.getLocalization('admin')[locale.lang].lang : locale.lang + ':' %></label>
             </div>
             <div  class="add-class-input-area">
                 <div class="input-controls">
-                    <input type="text" id="add-class-fi-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin').finnishPlaceholder %>"  <% if(data != null  && data.names && data.names.fi) { %>value="<%= data.names.fi %>"  <% } %> />
+                    <input type="text" id="add-class-<%= locale.lang %>-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin')[locale.lang] ? instance.getLocalization('admin')[locale.lang].placeholder : instance.getLocalization('admin')['generic'].placeholder.replace('{0}', locale.lang) %>" <% if(locale != null && locale.name != null) { %>value="<%= locale.name %>"  <% } %> />
                     <div class="icon-close"></div>
                 </div>
             </div>
         </div>
-
-        <div class="add-class-record">
-            <div class="add-class-label-area">
-                <label for="add-class-sv-name" class="add-class-label" title="<%= instance.getLocalization('admin').swedishTitle %>"><%= instance.getLocalization('admin').swedish %></label>
-            </div>
-            <div  class="add-class-input-area">
-                <div class="input-controls">
-                    <input type="text" id="add-class-sv-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin').swedishPlaceholder %>"  <% if(data != null && data.names && data.names.sv) { %>value="<%= data.names.sv %>"  <% } %> />
-                    <div class="icon-close"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="add-class-record">
-            <div class="add-class-label-area">
-                <label for="add-class-en-name" class="add-class-label" title="<%= instance.getLocalization('admin').englishTitle %>"><%= instance.getLocalization('admin').english %></label>
-            </div>
-            <div class="add-class-input-area">
-                <div class="input-controls">
-                    <input type="text" id="add-class-en-name" class="add-class-input" placeholder="<%= instance.getLocalization('admin').englishPlaceholder %>"  <% if(data != null && data.names && data.names.en) { %>value="<%= data.names.en %>"  <% } %> />
-                    <div class="icon-close"></div>
-                </div>
-            </div>
-        </div>
+        <% } %>
 
         <div class="add-class-send">
             <div class="add-class-button-area">

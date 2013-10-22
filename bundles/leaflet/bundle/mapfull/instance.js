@@ -79,7 +79,7 @@ function() {
                     if(contentMap.find('.oskariui-menutoolbar').length > 0) {
                         mapDiv.height(jQuery(window).height() - contentMap.find('.oskariui-menutoolbar').height());
                     }
-                    //map.updateSize();
+                    module.updateSize();
                 }
             };
         
@@ -352,7 +352,7 @@ function() {
     */
     toggleFullScreen: function() {
         jQuery('#' + this.contentMapDivId).toggleClass('oskari-map-window-fullscreen');
-        this.mapmodule.getMap().updateSize();
+        this.mapmodule.updateSize();
     }
 }, {
     /**

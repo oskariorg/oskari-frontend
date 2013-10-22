@@ -253,8 +253,8 @@ function(instance, localization) {
             var link = me.templateLink.clone();
             link.append(name);
             link.bind('click', function() {
-                // FIXME: debugging code - open published map in a new window
-                window.open ('/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&published=true&viewId=' + data.id,
+                var publishedMapUrl = sandbox.getLocalizedProperty(me.instance.conf.publishedMapUrl);
+                window.open (publishedMapUrl + data.id,
                     "Published", "location=1,status=1,scrollbars=yes,width=850,height=800");
                 return false;
             });
@@ -262,9 +262,9 @@ function(instance, localization) {
         };
         grid.setColumnValueRenderer('name', nameRenderer);
 
-        var setStateRequestBuilder = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
         var service = instance.getViewService();
         var setMapState = function(data, forced, confirmCallback) {
+            var setStateRequestBuilder = sandbox.getRequestBuilder('StateHandler.SetStateRequest');
             // error handling: check if the layers referenced in view are loaded 
             var resp = service.isViewLayersLoaded(data, sandbox);
             if(resp.status || forced === true) {
@@ -295,8 +295,8 @@ function(instance, localization) {
         };
         grid.setColumnValueRenderer('show', showRenderer);
         
-        var publishMapEditorRequestBuilder = sandbox.getRequestBuilder('Publisher.PublishMapEditorRequest');
         var editRequestSender = function(data) {
+            var publishMapEditorRequestBuilder = sandbox.getRequestBuilder('Publisher.PublishMapEditorRequest');
             if(publishMapEditorRequestBuilder) {
                 var req = publishMapEditorRequestBuilder(data);
                 sandbox.request(instance, req);

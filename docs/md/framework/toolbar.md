@@ -24,7 +24,19 @@ The toolbar bundle provides a common interface for other bundles to add and mani
 
 ## Bundle configuration
 
-No configuration is required, but toolgroups and tools can be excluded from being added by default.
+Some configuration is needed for URLs:
+
+```javascript
+"conf": {
+  "changeInfoUrl": {
+    "en": "https://www.paikkatietoikkuna.fi/web/en/profile",
+    "fi": "https://www.paikkatietoikkuna.fi/web/fi/profiili",
+    "sv": "https://www.paikkatietoikkuna.fi/web/sv/profil"
+  }
+}
+```
+
+Toolgroups and tools can be excluded from being added by default.
 
 In the example below, all tools are excluded from the toolbar.
 

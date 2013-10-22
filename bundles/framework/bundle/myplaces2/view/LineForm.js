@@ -57,7 +57,9 @@ function(instance) {
             '<div class="column2">' +
                 '<div class="column21">' +
                     '<label>' + this.loc.color.label + '</label>' +
-                    '<div class="color-grid"></div>' +
+                    '<div class="color-grid">' +
+                        '<div class="color-rectangle"></div>'+
+                    '</div>' +
                     '<div class="color-label">' +
                         '<label>' + this.loc.color.labelOr + '</label>' +
                     '</div>'+
@@ -105,19 +107,16 @@ function(instance) {
             me.values.width = Number(me.values.size);
         }
 
-        var renderDialog = me._getOnScreenForm();
-        renderDialog.die();
-        renderDialog.remove();
-        renderDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var renderDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
-        renderDialog.addClass('top');
-        renderDialog.addClass('arrow');
         renderDialog.addClass('renderdialog');
+        renderDialog.addClass('linevisualization');
         var title = me.loc.title;
 
         // Line style
         var dialogContent = me.templateLineStyleDialogContent.clone();
         var content = dialogContent.find('div.style');
+        if (me.values.style.length === 0) me.values.style = 0;
         for (var i=0; i<me.styleButtonNames.length; i++) {
             var styleBtnContainer = me.templateButton.clone();
             styleBtnContainer.addClass(me.styleButtonNames[i]);
@@ -179,7 +178,7 @@ function(instance) {
 
         var statedChosenColor = false;
         // Color chooser
-        content = dialogContent.find('.color-grid');
+        content = dialogContent.find('.color-rectangle');
         for (i = 0; i < me.basicColors.length; i++) {
             var colorCell = me.templateColorCell.clone();
             colorCell.css('background-color',me.basicColors[i]);
@@ -191,18 +190,12 @@ function(instance) {
                 if (jQuery('.color-source').prop('checked')) return;
                 var cellIndex = parseInt(this.id.substring(0,2),10);
                 if (cellIndex === me.activeColorCell) return;
-                if (me.activeColorCell > 0) {
+                if (me.activeColorCell > -1) {
                     var activeCell = me.activeColorCell.toString();
                     if (me.activeColorCell < 10) activeCell = "0"+activeCell;
                     jQuery('#'+activeCell+'ColorCell').css('border','1px solid #000000');
                 }
-                var parts = this.style.backgroundColor.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-                delete (parts[0]);
-                for (var j = 1; j <= 3; ++j) {
-                    parts[j] = parseInt(parts[j]).toString(16);
-                    if (parts[j].length == 1) parts[j] = '0' + parts[j];
-                }
-                me.values.color = parts.join('');
+                me.values.color = me.instance.rgbToHex(this.style.backgroundColor);
                 me.activeColorCell = cellIndex;
                 if (cellIndex < 10) cellIndex = "0"+cellIndex.toString();
                 jQuery('#'+cellIndex+'ColorCell').css('border','3px solid #ffffff');
@@ -283,10 +276,10 @@ function(instance) {
         // add color values to the input fields
         if(!statedChosenColor) {
             var rgb = me.instance.hexToRgb(me.values.color);
-
             dialogContent.find('input.custom-color.custom-red-value').val(rgb.r);
             dialogContent.find('input.custom-color.custom-green-value').val(rgb.g);
             dialogContent.find('input.custom-color.custom-blue-value').val(rgb.b);
+            dialogContent.find('input.custom-color').prop('disabled',false);
         }
 
         dialogContent.find('.custom-color').change(function() {
@@ -311,7 +304,7 @@ function(instance) {
         saveBtn.setTitle(me.loc.buttons.save);
         saveBtn.addClass('primary showSelection');
         saveBtn.setHandler(function() {
-            jQuery(".renderdialog").hide();
+            renderDialog.close();
         });
 
         var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -320,13 +313,13 @@ function(instance) {
             me.values.size = me.defaultValues.size;
             me.values.color = me.defaultValues.color;
             me.values.shape = me.defaultValues.shape;
-            jQuery(".renderdialog").hide();
+            renderDialog.close();
         });
         renderDialog.show(title, dialogContent, [saveBtn, cancelBtn]);
         renderDialog.moveTo(renderButton, 'top');
                 
         me._updatePreview();
-
+        return renderDialog;
     },
 
     /**

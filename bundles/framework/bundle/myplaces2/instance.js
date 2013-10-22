@@ -15,6 +15,7 @@ function() {
     this.buttons = undefined;
     this.categoryHandler = undefined;
     this.myPlacesService = undefined;
+    this.featureNS = undefined;
     this.idPrefix = 'myplaces';
 }, {
     __name : 'MyPlaces2',
@@ -146,8 +147,12 @@ function() {
 		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
 		var sandbox = Oskari.getSandbox(sandboxName);
         this.sandbox = sandbox;
-        
-        var me = this;
+
+        this.featureNS = conf ? conf.featureNS : null;
+        if (!this.featureNS) {
+            return;
+        }
+
         sandbox.printDebug("Initializing my places module...");
         
         // handles toolbar buttons related to my places 
@@ -203,15 +208,14 @@ function() {
                  size: 3
              },
              line: {
-                 style: 0,
+                 style: "",
                  cap: 0,
                  corner: 0,
                  width: 1,
-                 color: "000000"
+                 color: "3233ff"
              },
              area: {
-                 linestyle: 0,
-                 linecap: 0,
+                 linestyle: "",
                  linecorner: 0,
                  linewidth: 1,
                  linecolor: "000000",
@@ -251,6 +255,23 @@ function() {
             g: parseInt(result[2], 16),
             b: parseInt(result[3], 16)
         } : null;
+    },
+
+    /**
+     * Convert rgb values to hexadecimal color values
+     *
+     * @method rgb
+     * decimal color values e.g. 'rgb(255,0,0)'
+     */
+    rgbToHex: function(rgb) {
+        if (rgb.charAt(0) === '#') return rgb.substring(1);
+        var parts = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+        delete (parts[0]);
+        for (var j = 1; j <= 3; ++j) {
+            parts[j] = parseInt(parts[j]).toString(16);
+            if (parts[j].length == 1) parts[j] = '0' + parts[j];
+        }
+        return parts.join('');
     }
 
 }, {

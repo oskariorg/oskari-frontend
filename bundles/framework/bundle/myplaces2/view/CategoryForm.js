@@ -29,14 +29,14 @@ function(instance) {
         },
         'line' : {
             iconCls : 'icon-line',
-            tooltip : loc.rendering.point.tooltip, //todo
+            tooltip : loc.rendering.line.tooltip,
             sticky : false,
             callback : function() {
             }
         },
         'area' : {
             iconCls : 'icon-area',
-            tooltip : loc.rendering.point.tooltip, //todo
+            tooltip : loc.rendering.area.tooltip,
             sticky : false,
             callback : function() {
             }
@@ -64,13 +64,20 @@ function(instance) {
     this.templateTextInput = jQuery('<input type="text"/>');
     this.templateRenderButton = jQuery('<div class="renderButton" style= "display: inline-block; border: 1px solid;"></div>');
     this.defaults = {
-        dotSize : 4,
-        dotColor : 'cc9900',
-        lineSize : 2,
-        lineColor : 'cc9900',
-        areaLineSize : 2,
-        areaLineColor : 'cc9900',
-        areaFillColor : 'ffdc00'
+        lineStyle : '',
+        lineCap : 0,
+        lineCorner : 0,
+        lineWidth : 1,
+        lineColor : '3233ff',
+        areaLineWidth : 1,
+        areaLineCorner : 0,
+        areaLineStyle : '',
+        areaLineColor : '000000',
+        areaFillColor : 'ffde00',
+        areaFillStyle : -1,
+        dotShape : 1,
+        dotSize : 3,
+        dotColor : '000000'
     };
     this.categoryId = undefined;
     this._isDefault = undefined;
@@ -105,7 +112,7 @@ start : function() {
         for(var buttonName in this.renderButtons) {
             var btnContainer = this.templateRenderButton.clone();
             var button = this.renderButtons[buttonName];
-            btnContainer.attr("title", "");
+            btnContainer.attr("title", button.tooltip);
         	btnContainer.addClass(button.iconCls);
             content.append(btnContainer);
         }
@@ -155,16 +162,14 @@ start : function() {
             };
             var areaLineWidth = this.areaRenderForm.values.lineWidth;
             var areaLineCorner = this.areaRenderForm.values.lineCorner;
-            var areaLineCap = this.areaRenderForm.values.lineCap;
             var areaLineStyle = this.areaRenderForm.values.lineStyle;
             var areaLineColor = this.areaRenderForm.values.lineColor;
             var areaFillColor = this.areaRenderForm.values.fillColor;
             var areaFillStyle = this.areaRenderForm.values.fillStyle;
             values.area = {
                 lineWidth : areaLineWidth,
-                lineCorner :    this.lineCornerMap[areaLineCorner],
-                lineCap :       this.lineCapMap[areaLineCap],
-                lineStyle :     this.lineStyleMap[areaLineStyle],
+                lineCorner : this.lineCornerMap[areaLineCorner],
+                lineStyle : this.lineStyleMap[areaLineStyle],
                 lineColor : areaLineColor,
                 fillColor : areaFillColor,
                 fillStyle : areaFillStyle
@@ -212,10 +217,7 @@ start : function() {
             if(data.line.cap === this.lineCapMap[i]) {
                 data.line.cap = i;
             }
-            if(data.area.lineCap === this.lineCapMap[i]) {
-                data.area.lineCap = i;
-            }
-        };
+        }
         for (var i = 0; i < this.lineCornerMap.length; i++) {
             if(data.line.corner === this.lineCornerMap[i]) {
                 data.line.corner = i;
@@ -223,7 +225,7 @@ start : function() {
             if(data.area.lineCorner === this.lineCornerMap[i]) {
                 data.area.lineCorner = i;
             }
-        };
+        }
         for (var i = 0; i < this.lineStyleMap.length; i++) {
             if(data.line.style === this.lineStyleMap[i]) {
                 data.line.style = i;
@@ -231,7 +233,7 @@ start : function() {
             if(data.area.lineStyle === this.lineStyleMap[i]) {
                 data.area.lineStyle = i;
             }
-        };
+        }
 
         this.initialValues = data;
     },
@@ -245,21 +247,29 @@ start : function() {
     _bindRenderButtons : function() {
         var me = this;
         var onScreenForm = this._getOnScreenForm();
-
         var point = onScreenForm.find('div.renderButton'+".icon-point");
         point.off('click');
         point.on('click', function() {
-            me.pointRenderForm.showForm(this, me.initialValues);
+            if(me.dialog) {
+                me.dialog.close(true);
+            }
+            me.dialog = me.pointRenderForm.showForm(this, me.initialValues);
         });
         var line = onScreenForm.find('div.renderButton'+".icon-line")
         line.off('click');
         line.on('click', function() {
-            me.lineRenderForm.showForm(this, me.initialValues);
+            if(me.dialog) {
+                me.dialog.close(true);
+            }
+            me.dialog = me.lineRenderForm.showForm(this, me.initialValues);
         });
         var area = onScreenForm.find('div.renderButton'+".icon-area")
         area.off('click');
         area.on('click', function() {
-            me.areaRenderForm.showForm(this, me.initialValues);
+            if(me.dialog) {
+                me.dialog.close(true);
+            }
+            me.dialog = me.areaRenderForm.showForm(this, me.initialValues);
         });
     },
 
@@ -278,6 +288,7 @@ start : function() {
     destroy : function() {
         // remember to remove live bindings if any
         //jQuery('div.myplacescategoryform input.oskaricolor').off();
+        if (typeof this.dialog !== "undefined") this.dialog.close();
         var onScreenForm = this._getOnScreenForm();
         onScreenForm.remove();
     }

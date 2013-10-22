@@ -110,7 +110,7 @@ function(instance) {
 	/**
 	 * @method setState
 	 * @param {Object} state
-	 * 		state that this component should use
+	 *     state that this component should use
 	 * Interface method implementation, does nothing atm
 	 */
 	setState : function(state) {
@@ -122,21 +122,22 @@ function(instance) {
 	 * Creates the UI for a fresh start
 	 */
 	createUi : function() {
-		var me = this;
-
-		var celOriginal = jQuery(this.container);
+		var me = this,
+			celOriginal = jQuery(this.container);
 		celOriginal.empty();
 		var listContainer = this.template.clone();
 		celOriginal.append(listContainer);
 
-		var sandbox = me.instance.getSandbox();
-		var layers = sandbox.findAllSelectedMapLayers();
+		var sandbox = me.instance.getSandbox(),
+			layers = sandbox.findAllSelectedMapLayers(),
+			scale = sandbox.getMap().getScale(),
+			n,
+			layer,
+			layerContainer;
 
-		var scale = sandbox.getMap().getScale();
-
-		for (var n = layers.length - 1; n >= 0; --n) {
-			var layer = layers[n];
-			var layerContainer = this._createLayerContainer(layer);
+		for (n = layers.length - 1; n >= 0; --n) {
+			layer = layers[n];
+			layerContainer = this._createLayerContainer(layer);
 			listContainer.append(layerContainer);
 
 			// footer tools
@@ -302,7 +303,7 @@ function(instance) {
 				sandbox.request(me.instance.getName(), req);
 			});
 			if (hasOpts) {
-				sel.val(layer.getCurrentStyle().getName());
+				if(layer.getCurrentStyle()) sel.val(layer.getCurrentStyle().getName());
 				stylesel.show();
 			}
 		}

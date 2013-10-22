@@ -6,8 +6,8 @@ Oskari.registerLocalization({
     "desc": "",
     "category": {
       "defaultName": "Oma karttataso",
-      "organizationnew": "Omat kohteet",
-      "inspire": "Kohteet"
+      "organization": "Omat kohteet",
+      "inspire": "Omat kohteet"
     },
     "guest": {
       "loginShort": "Kirjaudu sisään käyttääksesi"
@@ -113,7 +113,13 @@ Oskari.registerLocalization({
       "rendering": {
         "label": "Tason kohteiden esitystavat",
         "point": {
-          "tooltip": "Piste"
+          "tooltip": "Muokkaa pisteen esitystapaa"
+        },
+        "area": {
+          "tooltip": "Muokkaa alueen esitystapaa"
+        },
+        "line": {
+          "tooltip": "Muokkaa viivan esitystapaa"
         }
       }
     },
@@ -174,7 +180,7 @@ Oskari.registerLocalization({
         "label": "Alueen viivan tyyli"
       },
       "linecap": {
-        "label": "Viivan päädyt"
+        "label": "Alueen viivan päädyt"
       },
       "linecorner": {
         "label": "Kulmat"
@@ -243,8 +249,9 @@ Oskari.registerLocalization({
       "placeNameIllegal": "Kohteen nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
       "descIllegal": "Kohteen kuvauksessa on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
       "categoryNameIllegal": "Tason nimessä on luvattomia merkkejä. Sallittuja merkkejä ovat kaikki suomen kielen aakkoset, numerot sekä välilyönti ja yhdysmerkki.",
-      "dotSize": "Pisteen koko ei ole sallituissa rajoissa (1-50).",
+      "dotSize": "Pisteen koko ei ole sallituissa rajoissa (1-5).",
       "dotColor": "Pisteen väri virheellinen.",
+      "dotShape": "Pisteen muoto virheellinen.",
       "lineSize": "Viivan koko ei ole sallituissa rajoissa (1-50).",
       "lineColor": "Viivan väri virheellinen.",
       "areaLineSize": "Alueen viivan koko ei ole sallituissa rajoissa (0-50).",

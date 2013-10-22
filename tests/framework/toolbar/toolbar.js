@@ -1,8 +1,7 @@
-describe('Test suite for Toolbar bundle', function() {
+describe('Test suite for Toolbar bundle', function () {
     var toolbarModule = null,
         sandbox = null,
-        appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull',
-        {
+        appSetup = getStartupSequence(['openlayers-default-theme', 'mapfull', {
             "instanceProps": {
 
             },
@@ -29,17 +28,22 @@ describe('Test suite for Toolbar bundle', function() {
             "toolbar": {
                 "state": {},
                 "conf": {
+                    "mapUrlPrefix": {
+                        "en": "http://www.paikkatietoikkuna.fi/web/en/map-window?",
+                        "fi": "http://www.paikkatietoikkuna.fi/web/fi/kartta?",
+                        "sv": "http://www.paikkatietoikkuna.fi/web/sv/kartfonstret?"
+                    },
                     "logUrl": "http://localhost:8080/logger"
                 }
             }
         };
 
     function startApplication(done, setup, conf) {
-        if(!setup) {
+        if (!setup) {
             // clone original settings
             setup = jQuery.extend(true, {}, appSetup);
         }
-        if(!conf) {
+        if (!conf) {
             // clone original settings
             conf = jQuery.extend(true, {}, appConf);
         }
@@ -47,7 +51,9 @@ describe('Test suite for Toolbar bundle', function() {
         //setup HTML
         jQuery("body").html(getDefaultHTML());
         // startup Oskari
-        setupOskari(setup, conf, function() {
+        setupOskari(setup, conf, function () {
+            // Set supported locales
+            Oskari.setSupportedLocales(['fi_FI', 'sv_SE', 'en_US']);
             // Find handles to sandbox and toolbar module
             sandbox = Oskari.getSandbox();
             toolbarModule = sandbox.findRegisteredModuleInstance('Toolbar');
@@ -55,10 +61,10 @@ describe('Test suite for Toolbar bundle', function() {
         });
     };
 
-    describe('initialization', function() {
+    describe('initialization', function () {
         var $toolbarContainer;
 
-        before(function(done) {
+        before(function (done) {
             startApplication(done);
         });
 
@@ -67,7 +73,7 @@ describe('Test suite for Toolbar bundle', function() {
         });
 
         it('should be defined', function() {
-           expect(toolbarModule).to.be.ok();
+            expect(toolbarModule).to.be.ok();
         });
 
         it('should be found in the DOM', function() {
@@ -80,10 +86,12 @@ describe('Test suite for Toolbar bundle', function() {
         var testButtonId = 'testButton',
             testButtonGroup = 'testGroup',
             testButtonConf = {
-                iconCls : 'test-button-icon',
-                tooltip : '',
-                sticky : false,
-                callback: function() {return false;}
+                iconCls: 'test-button-icon',
+                tooltip: '',
+                sticky: false,
+                callback: function() {
+                    return false;
+                }
             },
             $toolbarContainer;
 
@@ -99,7 +107,7 @@ describe('Test suite for Toolbar bundle', function() {
             toolbarModule.addToolButton(testButtonId, testButtonGroup, testButtonConf);
 
             $toolbarContainer = toolbarModule.getToolbarContainer();
-            var testToolRow = $toolbarContainer.find('div.toolrow[tbgroup=' + testButtonGroup +']');
+            var testToolRow = $toolbarContainer.find('div.toolrow[tbgroup=' + testButtonGroup + ']');
             var testButton = $toolbarContainer.find('div.tool[tool="' + testButtonId + '"]');
 
             expect(testToolRow.length).to.equal(1);
@@ -113,7 +121,7 @@ describe('Test suite for Toolbar bundle', function() {
             toolbarModule.addToolButton(testButtonId, testButtonGroup, testButtonConf);
 
             $toolbarContainer = toolbarModule.getToolbarContainer();
-            var testToolRow = $toolbarContainer.find('div.toolrow[tbgroup=' + testButtonGroup +']');
+            var testToolRow = $toolbarContainer.find('div.toolrow[tbgroup=' + testButtonGroup + ']');
             var testButton = $toolbarContainer.find('div.tool[tool="' + testButtonId + '"]');
 
             expect(testToolRow.length).to.equal(1);

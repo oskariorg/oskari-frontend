@@ -7,7 +7,7 @@ Oskari.registerLocalization({
     "category": {
       "defaultName": "Mitt kartlager",
       "organization": "Mina objekt",
-      "inspire": "Objekt"
+      "inspire": "Mina objekt"
     },
     "guest": {
       "loginShort": "Logga in för att använda"
@@ -61,17 +61,17 @@ Oskari.registerLocalization({
       "category": {
         "label": "Kartlager",
         "newLayer": "Ny nivå...",
-        "choose": " tai valitse olemassa olevista tasoista:"
+        "choose": " eller välj från nivåer:"
       },
       "imagelink": {
-        "placeholder": "Kuva-URL",
-        "previewLabel": "Valokuvan esikatselu",
-        "add": "Uusi taso"
+        "placeholder": "Bild-URL",
+        "previewLabel": "Förhandsvisning av fotot",
+        "add": "Ny nivå"
       },
       "rendering": {
-        "label": "Tason kohteiden esitystavat",
+        "label": "",
         "point": {
-          "tooltip": "Piste"
+          "tooltip": "Punkt"
         }
       }
     },
@@ -100,10 +100,10 @@ Oskari.registerLocalization({
         }
       },
       "visibleFields": {
-        "label": "",
-        "placename": "",
-        "placedesc": "",
-        "image": ""
+        "label": "Uppgifter om objektet som visas",
+        "placename": "Namn",
+        "placedesc": "Beskrivning",
+        "image": "Bild"
       },
       "edit": {
         "title": "Editera kartlagret",
@@ -113,94 +113,100 @@ Oskari.registerLocalization({
       "rendering": {
         "label": "",
         "point": {
-          "tooltip": ""
+          "tooltip": "Editera punktens stil"
+        },
+        "area": {
+          "tooltip": "Editera områdets stil"
+        },
+        "line": {
+          "tooltip": "Editera linjens stil"
         }
       }
     },
     "pointform": {
-      "title": "",
-      "tooltip": "",
+      "title": "Visualisering av punktobjekt",
+      "tooltip": "Punktens stil",
       "symbol": {
-        "label": ""
+        "label": "Ikon för punktobjekt"
       },
       "size": {
-        "label": ""
+        "label": "Storlek"
       },
       "color": {
-        "label": "",
-        "labelOr": "",
-        "labelCustom": ""
+        "label": "Färg",
+        "labelOr": "eller",
+        "labelCustom": "Egen RGB-färg (0-255)"
       },
       "preview": {
-        "label": ""
+        "label": "Förhandsgranska"
       },
       "buttons": {
-        "save": "",
-        "cancel": ""
+        "save": "Lagra",
+        "cancel": "Tillbaka"
       }
     },
     "lineform": {
-      "title": "",
+      "title": "Visualisering av linje",
       "tooltip": "",
       "style": {
-        "label": ""
+        "label": "Linjens stil"
       },
       "cap": {
-        "label": ""
+        "label": "Linjens ändpunkter"
       },
       "corner": {
-        "label": ""
+        "label": "Hörn"
       },
       "width": {
-        "label": ""
+        "label": "Bredd"
       },
       "color": {
-        "label": "",
-        "labelOr": "",
-        "labelCustom": ""
+        "label": "Färg",
+        "labelOr": "eller",
+        "labelCustom": "Egen RGB-färg (0-255)"
       },
       "preview": {
-        "label": ""
+        "label": "Förhandsgranska"
       },
       "buttons": {
-        "save": "",
-        "cancel": ""
+        "save": "Lagra",
+        "cancel": "Tillbaka"
       }
     },
     "areaform": {
-      "title": "",
+      "title": "Visualisering av området",
       "tooltip": "",
       "linestyle": {
-        "label": ""
+        "label": "Konturlinjens stil"
       },
       "linecap": {
-        "label": ""
+        "label": "Linjens ändpunkter"
       },
       "linecorner": {
-        "label": ""
+        "label": "Hörn"
       },
       "linewidth": {
-        "label": ""
+        "label": "Bredd"
       },
       "linecolor": {
-        "label": "",
-        "labelOr": "",
-        "labelCustom": ""
+        "label": "Linjens färg",
+        "labelOr": "eller",
+        "labelCustom": "Egen RGB-färg (0-255)"
       },
       "color": {
-        "label": "",
-        "labelOr": "",
-        "labelCustom": ""
+        "label": "Ifyllnadsfärg för område",
+        "labelOr": "eller",
+        "labelCustom": "Egen RGB-färg (0-255)"
       },
       "fill": {
-        "label": ""
+        "label": "Ifyllnandsmönster för område"
       },
       "preview": {
-        "label": ""
+        "label": "Förhandsvisning"
       },
       "buttons": {
-        "save": "",
-        "cancel": ""
+        "save": "Lagra",
+        "cancel": "Tillbaka"
       }
     },
     "notification": {
@@ -243,8 +249,9 @@ Oskari.registerLocalization({
       "placeNameIllegal": "I objekts namnet ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck.",
       "descIllegal": "I objekts beskrivning ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck.",
       "categoryNameIllegal": "I kartlagers beskrivning ingår otillåtna tecken. Tillåtna är alla bokstäver i det svenska alfabetet, siffror, mellanslag och bindestreck.",
-      "dotSize": "Punkternas storlek är utanför de tillåtna gränserna (1-50).",
+      "dotSize": "Punkternas storlek är utanför de tillåtna gränserna (1-5).",
       "dotColor": "Punktens färg är felaktig.",
+      "dotShape": "Punktens form är felaktig.",
       "lineSize": "Linjens storlek är utanför de tillåtna gränserna (1-50).",
       "lineColor": "Linjens färg är felaktig.",
       "areaLineSize": "Områdets konturlinje är utanför de tillåtna gränserna (0-50).",

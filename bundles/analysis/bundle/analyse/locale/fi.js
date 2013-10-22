@@ -41,14 +41,14 @@ Oskari.registerLocalization({
             },
           "aggregate" : {
                 "label" : "Aggregointifunktio",
-                "options" : [{
-                    "id" : "oskari_analyse_Sum",
-                    "label" : "Summa",
-                    "selected" : true
-                }, {
+                "options" : [ {
                     "id" : "oskari_analyse_Count",
-                    "label" : "Lukumäärä"
-                }, {
+                    "label" : "Lukumäärä",
+                    "selected" : true
+                },{
+                    "id" : "oskari_analyse_Sum",
+                    "label" : "Summa"
+                },{
                     "id" : "oskari_analyse_Min",
                     "label" : "Minimi"
                 }, {
@@ -60,10 +60,8 @@ Oskari.registerLocalization({
                 }, {
                     "id" : "oskari_analyse_StdDev",
                     "label" : "Keskihajonta"
-                },{
-                    "id" : "oskari_analyse_Median",
-                    "label" : "Mediaani"
-                }],
+                }
+                ],
                 "attribute": "Valitse ominaisuustieto"
             },
             "buffer_size": {
@@ -173,7 +171,10 @@ Oskari.registerLocalization({
                 "bufferSize": "Virhe vyöhykkeen koossa",
                 "illegalCharacters": "ei kirjaimia - käytä numeroita",
                 "nohelp": "Ohjetta ei löytynyt",
-                "saveFailed": "Analyysin tallennus epäonnistui. Yritä myöhemmin uudelleen."
+                "saveFailed": "Analyysin tallennus epäonnistui. Yritä myöhemmin uudelleen.",
+                "loadLayersFailed": "Analyysitasojen lataus epäonnistui. Yritä myöhemmin uudelleen.",
+                "loadLayerTypesFailed": "Analyysi- tai WFS-tason tietotyyppien haku epäonnistui "
+             
             }
         },
         "StartView": {
@@ -221,7 +222,7 @@ Oskari.registerLocalization({
                 "name" : "Nimi",
                 "delete": " "
             },
-            "title" : "Analyysi",
+            "title" : "Analyysit",
             "confirmDeleteMsg" : "Haluatko poistaa analyysin:",
             "buttons" : {
                 "ok": "OK",

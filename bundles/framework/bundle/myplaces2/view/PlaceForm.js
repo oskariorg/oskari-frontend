@@ -33,9 +33,9 @@ function(instance) {
             '<div class="field">' + 
                 '<input type="text" name="imagelink" placeholder="' + loc.imagelink.placeholder + '"/>' +
             '</div>' +
-            '<div class="field" id="imagePreview">' +
+            '<div class="field imagePreview">' +
                 '<label>' + loc.imagelink.previewLabel + '</label><br clear="all" />' +
-                '<img src=""></img>' +
+                '<a class="myplaces_imglink" target="_blank"><img src=""></img></a>' +
             '</div>' +
             '<div class="field" id="newLayerForm">' + 
                 '<label for="category">' + '<a href="#" class="newLayerLink">' + loc.category.newLayer + '</a>' + loc.category.choose + '</label><br clear="all" />' +
@@ -83,7 +83,7 @@ function(instance) {
 
         this._bindImageUrlChange();
         this._bindCreateNewLayer();
-        
+
         if(this.initialValues) {
             ui.find('input[name=placename]').attr('value', this.initialValues.place.name);
             ui.find('textarea[name=placedesc]').append(this.initialValues.place.desc);
@@ -180,6 +180,7 @@ function(instance) {
      * value of the image link field.
      *
      * @method _bindImageUrlChange
+     * @private
      */
     _bindImageUrlChange: function() {
         var me = this;
@@ -187,7 +188,10 @@ function(instance) {
         onScreenForm.find('input[name=imagelink]').live('change', function() {
             var form = me._getOnScreenForm();
             var src = jQuery(this).val();
-            form.find('div#imagePreview').find('img').attr('src', src);
+            form.find('div.imagePreview').find('img').attr('src', src);
+            form.find('a.myplaces_imglink').attr({
+                'href': src
+            });
         });
     },
 
@@ -195,6 +199,7 @@ function(instance) {
      * Binds the link for creating a new category.
      *
      * @method _bindCreateNewLayer
+     * @private
      */
     _bindCreateNewLayer: function() {
         var me = this;

@@ -12,14 +12,18 @@ function() {
     this.name = undefined;
     this._isDefault = false;
     this._isPublic = false;
-    this.style = 0;
-    this.cap = 0;
-    this.corner = 0;
+    this.lineStyle = '';
+    this.lineCap = 0;
+    this.lineCorner = 0;
     this.lineWidth = 1;
-    this.lineColor = '0000ff';
+    this.lineColor = '3233ff';
     this.areaLineWidth = 1;
-    this.areaLineColor = '993300';
-    this.areaFillColor = '993300';
+    this.areaLineCorner = 0;
+    this.areaLineStyle = '';
+    this.areaLineColor = '000000';
+    this.areaFillColor = 'ffde00';
+    this.areaFillStyle = -1;
+    this.dotShape = 1;
     this.dotSize = 3;
     this.dotColor = '000000';
     this.uuid = undefined;
@@ -178,20 +182,6 @@ function() {
      */
     getAreaLineCorner : function() {
         return this.areaLineCorner;
-    },
-    /**
-     * @method setAreaLineCap
-     * @param {Number} value
-     */
-    setAreaLineCap : function(value) {
-        this.areaLineCap = value;
-    },
-    /**
-     * @method getAreaLineCap
-     * @return {Number}
-     */
-    getAreaLineCap : function() {
-        return this.areaLineCap;
     },
     /**
      * @method setAreaLineStyle

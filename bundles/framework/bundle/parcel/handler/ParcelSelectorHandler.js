@@ -31,11 +31,14 @@ function(instance) {
      * implements Module protocol start methdod
      */
     start : function() {
-        var me = this;
-        var sandbox = this.instance.sandbox;
+        var me = this,
+            sandbox = this.instance.sandbox,
+            p;
         sandbox.register(me);
         for (p in me.eventHandlers) {
-            sandbox.registerForEventByName(me, p);
+            if (me.eventHandlers.hasOwnProperty(p)) {
+                sandbox.registerForEventByName(me, p);
+            }
         }
     },
     /**
@@ -56,6 +59,12 @@ function(instance) {
         }
         return handler.apply(this, [event]);
     },
+    loadParcel : function (fid) {
+        var me = this;
+        me.instance.getService().loadParcel(fid, function(feature) {
+                        me._loadCallback.call(me, feature, me.instance.conf.parcelFeatureType);
+                    });
+    },
     /**
      * @property {Object} eventHandlers
      * @static
@@ -63,19 +72,17 @@ function(instance) {
     eventHandlers : {
         'ParcelSelector.ParcelSelectedEvent' : function(event) {
             var me = this;
-            if (!this.ignoreEvents) {
+            if (!me.ignoreEvents) {
                 if (event && event.getFid()) {
-                    this.instance.getService().loadParcel(event.getFid(), function(feature) {
-                        me._loadCallback.call(me, feature, me.instance.conf.parcelFeatureType);
-                    });
+                    me.loadParcel(event.getFid());
                 }
             }
         },
         'ParcelSelector.RegisterUnitSelectedEvent' : function(event) {
             var me = this;
-            if (!this.ignoreEvents) {
+            if (!me.ignoreEvents) {
                 if (event && event.getFid()) {
-                    this.instance.getService().loadRegisterUnit(event.getFid(), function(feature) {
+                    me.instance.getService().loadRegisterUnit(event.getFid(), function(feature) {
                         me._loadCallback.call(me, feature, me.instance.conf.registerUnitFeatureType);
                     });
                 }
