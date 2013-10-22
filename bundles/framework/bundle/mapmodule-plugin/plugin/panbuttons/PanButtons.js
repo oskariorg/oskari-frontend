@@ -136,13 +136,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 }
                 var mapheight = jQuery(me._map.div).height();
                 // var mybtm = mapheight - ((mytop * 1) + 90);
-                var mybtm = 'auto';
-                var myheight = 90;
-                var margin = 10;
-                var zbheight = 185;
-
-                var zbtop = zb.css('top');
-                var zbbtm = zb.css('bottom');
+                var mybtm = 'auto',
+                    myheight = 90,
+                    margin = 10,
+                    zbheight = 185,
+                    zbtop = zb.css('top'),
+                    zbbtm = zb.css('bottom');
                 if (!zbtop) {
                     zbtop = 'auto';
                 }
@@ -211,27 +210,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             sandbox.unregister(this);
         },
 
-        setPanButtonLocation: function (location, panbuttonContainer) {
+        setLocation: function (location, panbuttonContainer) {
+            var container = panbuttonContainer || this.__elements.panbuttons;
             // override default location if configured
             if (location) {
                 if (location.top) {
-                    panbuttonContainer.css('bottom', 'auto');
-                    panbuttonContainer.css(location.top);
+                    container.css('bottom', 'auto');
+                    container.css(location.top);
                 }
                 if (location.left) {
-                    panbuttonContainer.css('right', 'auto');
-                    panbuttonContainer.css('left', location.left);
+                    container.css('right', 'auto');
+                    container.css('left', location.left);
                 }
                 if (location.right) {
-                    panbuttonContainer.css('left', 'auto');
-                    panbuttonContainer.css('right', location.right);
+                    container.css('left', 'auto');
+                    container.css('right', location.right);
                 }
                 if (location.bottom) {
-                    panbuttonContainer.css('top', 'auto');
-                    panbuttonContainer.css('bottom', location.bottom);
+                    container.css('top', 'auto');
+                    container.css('bottom', location.bottom);
                 }
                 if (location.classes) {
-                    panbuttonContainer.removeClass('top left bottom right center').addClass(location.classes);
+                    container.removeClass('top left bottom right center').addClass(location.classes);
                 }
             }
         },
@@ -287,7 +287,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             });
 
             if (me.conf && me.conf.location) {
-                me.setPanButtonLocation(me.conf.location, pb);
+                me.setLocation(me.conf.location, pb);
             }
 
             var left = pb.find('.panbuttons_left');
@@ -342,10 +342,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 me.getMapModule().panMapByPixels(0, 100, true);
             });
             pb.mousedown(function (event) {
-                var radius = Math.round(0.5 * panbuttonDivImg[0].width);
-                var pbOffset = panbuttonDivImg.offset();
-                var centerX = pbOffset.left + radius;
-                var centerY = pbOffset.top + radius;
+                var radius = Math.round(0.5 * panbuttonDivImg[0].width),
+                    pbOffset = panbuttonDivImg.offset(),
+                    centerX = pbOffset.left + radius,
+                    centerY = pbOffset.top + radius;
                 if (Math.sqrt(Math.pow(centerX - event.pageX, 2) + Math.pow(centerY - event.pageY, 2)) < radius) {
                     event.stopPropagation();
                 }

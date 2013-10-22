@@ -186,7 +186,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             });
             // override default location if configured
             if (me.conf && me.conf.location) {
-                me.setZoombarLocation(this.conf.location, me.__elements.zoombarSlider);
+                me.setLocation(this.conf.location, me.__elements.zoombarSlider);
             }
 
             // Change the style if in the conf
@@ -214,34 +214,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         /**
          * Sets the location of the zoombar.
          *
-         * @method setZoombarLocation
+         * @method setLocation
          * @param {Object} location The new location
          * @param {Object} zoombarContainer The element where the zoombar is contained in
          */
-        setZoombarLocation: function (location, zoombarContainer) {
-            if (!zoombarContainer) {
-                zoombarContainer = this.__elements.zoombarSlider;
-            }
+        setLocation: function (location, zoombarContainer) {
+            var container = zoombarContainer || this.__elements.zoombarSlider;
+
             // clear possible opposite position with 'auto'
             if (location.top) {
-                zoombarContainer.css('bottom', 'auto');
-                zoombarContainer.css('top', location.top);
+                container.css('bottom', 'auto');
+                container.css('top', location.top);
             }
             if (location.left) {
-                zoombarContainer.css('right', 'auto');
-                zoombarContainer.css('left', location.left);
+                container.css('right', 'auto');
+                container.css('left', location.left);
             }
             if (location.right) {
-                zoombarContainer.css('left', 'auto');
-                zoombarContainer.css('right', location.right);
+                container.css('left', 'auto');
+                container.css('right', location.right);
             }
             if (location.bottom) {
-                zoombarContainer.css('top', 'auto');
-                zoombarContainer.css('bottom', location.bottom);
+                container.css('top', 'auto');
+                container.css('bottom', location.bottom);
             }
             if (location.classes) {
-                console.log(location.classes);
-                zoombarContainer.removeClass('top left bottom right center with-panbuttons').addClass(location.classes);
+                container.removeClass('top left bottom right center with-panbuttons').addClass(location.classes);
             }
         },
 

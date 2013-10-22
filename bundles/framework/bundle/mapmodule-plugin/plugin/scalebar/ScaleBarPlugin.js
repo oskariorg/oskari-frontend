@@ -81,27 +81,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
 
         },
 
-        setScaleBarLocation: function (location, scaleBarContainer) {
+        setLocation: function (location, scaleBarContainer) {
+            var container = scaleBarContainer || jQuery(this._scalebar.div);
             // override default location if configured
             if (location) {
                 if (location.top) {
-                    scaleBarContainer.css('bottom', 'auto');
-                    scaleBarContainer.css('top', location.top);
+                    container.css('bottom', 'auto');
+                    container.css('top', location.top);
                 }
                 if (location.left) {
-                    scaleBarContainer.css('right', 'auto');
-                    scaleBarContainer.css('left', location.left);
+                    container.css('right', 'auto');
+                    container.css('left', location.left);
                 }
                 if (location.right) {
-                    scaleBarContainer.css('left', 'auto');
-                    scaleBarContainer.css('right', location.right);
+                    container.css('left', 'auto');
+                    container.css('right', location.right);
                 }
                 if (location.bottom) {
-                    scaleBarContainer.css('top', 'auto');
-                    scaleBarContainer.css('bottom', location.bottom);
+                    container.css('top', 'auto');
+                    container.css('bottom', location.bottom);
                 }
                 if (location.classes) {
-                    scaleBarContainer.removeClass('top left bottom right center').addClass(location.classes);
+                    container.removeClass('top left bottom right center').addClass(location.classes);
                 }
             }
         },
@@ -130,9 +131,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
             me.getMapModule().addMapControl('scaleBar', me._scalebar);
 
             if (me.conf && me.conf.location) {
-                console.log(me._scalebar);
-                // FIXME: it's a tad ugly to fetch the div from scalebar's innards... alas, OL doesn't allow us to add classes trough its API
-                me.setScaleBarLocation(me.conf.location, jQuery(me._scalebar.div));
+                // FIXME: it's a tad ugly to fetch the div from scalebar's innards... alas, OL doesn't allow us to add classes trough its API?
+                me.setLocation(me.conf.location, jQuery(me._scalebar.div));
             }
         },
         /**

@@ -70,27 +70,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
 
         },
 
-        setIndexMapLocation: function (location, indexMapContainer) {
+        setLocation: function (location, indexMapContainer) {
+            var container = indexMapContainer || jQuery(this._indexMap.div);
             // override default location if configured
             if (location) {
                 if (location.top) {
-                    indexMapContainer.css('bottom', 'auto');
-                    indexMapContainer.css('top', location.top);
+                    container.css('bottom', 'auto');
+                    container.css('top', location.top);
                 }
                 if (location.left) {
-                    indexMapContainer.css('right', 'auto');
-                    indexMapContainer.css('left', location.left);
+                    container.css('right', 'auto');
+                    container.css('left', location.left);
                 }
                 if (location.right) {
-                    indexMapContainer.css('left', 'auto');
-                    indexMapContainer.css('right', location.right);
+                    container.css('left', 'auto');
+                    container.css('right', location.right);
                 }
                 if (location.bottom) {
-                    indexMapContainer.css('top', 'auto');
-                    indexMapContainer.css('bottom', location.bottom);
+                    container.css('top', 'auto');
+                    container.css('bottom', location.bottom);
                 }
                 if (location.classes) {
-                    indexMapContainer.removeClass('top left bottom right center').addClass(location.classes);
+                    container.removeClass('top left bottom right center').addClass(location.classes);
                 }
             }
         },
@@ -126,11 +127,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
 
             /* Indexmap */
             me._indexMap = new OpenLayers.Control.OverviewMap(controlOptions);
-
+            // asynchronicity issue... the control div isn't created yet so we have to wait a bit.
             if (me.conf && me.conf.location) {
-                // FIXME change pb to whatever...
-                // - we need to apply the class to .olControlOverviewMapContainer
-                me.setIndexMapLocation(me.conf.location, graphic);
+                window.setTimeout(function () {
+                    var div = me._indexMap.div;
+                    if (div) {
+                        me.setLocation(me.conf.location, jQuery(div));
+                    }
+                }, 50);
             }
 
         },

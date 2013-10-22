@@ -209,22 +209,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             return this.eventHandlers[event.getName()].apply(this, [event]);
         },
 
-        setSearchLocation: function (location, searchContainer) {
+        setLocation: function (location, searchContainer) {
+            var container = searchContainer || this.container;
             if (location) {
                 if (location.top) {
-                    searchContainer.css('top', location.top);
+                    container.css('top', location.top);
                 }
                 if (location.left) {
-                    searchContainer.css('left', location.left);
+                    container.css('left', location.left);
                 }
                 if (location.right) {
-                    searchContainer.css('right', location.right);
+                    container.css('right', location.right);
                 }
                 if (location.bottom) {
-                    searchContainer.css('bottom', location.bottom);
+                    container.css('bottom', location.bottom);
                 }
                 if (location.classes) {
-                    searchContainer.parent().removeClass('top left bottom right center').addClass(location.classes);
+                    container.parent().removeClass('top left bottom right center').addClass(location.classes);
                 }
             }
         },
@@ -294,7 +295,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
             parentContainer.append(content);
             // override default location if configured
             if (me.conf && me.conf.location) {
-                me.setSearchLocation(me.conf.location, content);
+                me.setLocation(me.conf.location, content);
             }
 
             if (me.conf && me.conf.font) {

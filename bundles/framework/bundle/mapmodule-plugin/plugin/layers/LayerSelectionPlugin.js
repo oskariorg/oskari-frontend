@@ -19,12 +19,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         this._map = null;
         this.element = undefined;
         this.conf = config;
-        if (!this.conf) {
-            this.conf = {};
-        }
-        this.conf.location = {
-            "classes": "top left"
-        };
         this.initialSetup = true;
     }, {
         /** @static @property __name module name */
@@ -508,22 +502,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             };
         },
 
-        setLayerSelectionLocation: function (location, layerSelectionContainer) {
+        setLocation: function (location, layerSelectionContainer) {
+            var container = layerSelectionContainer || this.element;
             if (location) {
                 if (location.top) {
-                    layerSelectionContainer.css('top', location.top);
+                    container.css('top', location.top);
                 }
                 if (location.left) {
-                    layerSelectionContainer.css('left', location.left);
+                    container.css('left', location.left);
                 }
                 if (location.right) {
-                    layerSelectionContainer.css('right', location.right);
+                    container.css('right', location.right);
                 }
                 if (location.bottom) {
-                    layerSelectionContainer.css('bottom', location.bottom);
+                    container.css('bottom', location.bottom);
                 }
                 if (location.classes) {
-                    layerSelectionContainer.parent().removeClass('top left bottom right center').addClass(location.classes);
+                    container.parent().removeClass('top left bottom right center').addClass(location.classes);
                 }
             }
         },
@@ -574,7 +569,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             parentContainer.prepend(me.element);
 
             if (me.conf && me.conf.location) {
-                me.setLayerSelectionLocation(me.conf.location, me.element);
+                me.setLocation(me.conf.location, me.element);
             }
 
             if (me.conf && me.conf.toolStyle) {
