@@ -361,6 +361,27 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     if (allLayers[i].names) {
                         existingLayer.names = allLayers[i].names;
                     }
+
+                    if (existingLayer.getSubLayers() != null) {
+
+                        var exSubLayers = existingLayer.getSubLayers(); // haetaan alitasot
+
+                        for (var subI = 0; subI < exSubLayers.length; subI++) { 
+                           
+                           var existingSubLayer = this.findMapLayer(exSubLayers[subI].getId()); // etsitään taso
+
+                           console.dir(existingSubLayer);
+
+                            if (exSubLayers[subI].admin != null) { // katsotaan onko admin tietoa
+                                existingSubLayer.admin = allLayers[subI].admin; // lisätään admin tieto
+                            }
+                            if (exSubLayers[subI].names) { // onko nimitietoa
+                                existingSubLayer.names = allLayers[subI].names; // lisätään nimitieto
+                            } 
+                        }
+                    }
+
+
                 }
             }
             // notify components of added layer if not suppressed
