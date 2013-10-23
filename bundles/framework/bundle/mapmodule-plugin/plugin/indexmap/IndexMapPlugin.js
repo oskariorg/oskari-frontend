@@ -72,6 +72,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
 
         setLocation: function (location, indexMapContainer) {
             var container = indexMapContainer || jQuery(this._indexMap.div);
+            if (this.conf) {
+                this.conf.location = location;
+            }
             // override default location if configured
             if (location) {
                 if (location.top) {

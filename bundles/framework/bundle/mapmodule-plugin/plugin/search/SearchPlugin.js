@@ -211,6 +211,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin',
 
         setLocation: function (location, searchContainer) {
             var container = searchContainer || this.container;
+            if (this.conf) {
+                this.conf.location = location;
+            }
             if (location) {
                 if (location.top) {
                     container.css('top', location.top);

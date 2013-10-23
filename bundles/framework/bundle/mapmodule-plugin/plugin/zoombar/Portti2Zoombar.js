@@ -220,7 +220,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          */
         setLocation: function (location, zoombarContainer) {
             var container = zoombarContainer || this.__elements.zoombarSlider;
-
+            if (this.conf) {
+                this.conf.location = location;
+            }
             // clear possible opposite position with 'auto'
             if (location.top) {
                 container.css('bottom', 'auto');

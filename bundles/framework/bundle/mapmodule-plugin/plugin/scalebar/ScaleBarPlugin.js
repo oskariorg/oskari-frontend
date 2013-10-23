@@ -83,6 +83,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'
 
         setLocation: function (location, scaleBarContainer) {
             var container = scaleBarContainer || jQuery(this._scalebar.div);
+            if (this.conf) {
+                this.conf.location = location;
+            }
             // override default location if configured
             if (location) {
                 if (location.top) {

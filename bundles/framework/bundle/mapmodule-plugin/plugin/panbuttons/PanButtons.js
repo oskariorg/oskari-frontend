@@ -212,6 +212,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
 
         setLocation: function (location, panbuttonContainer) {
             var container = panbuttonContainer || this.__elements.panbuttons;
+            if (this.conf) {
+                this.conf.location = location;
+            }
             // override default location if configured
             if (location) {
                 if (location.top) {

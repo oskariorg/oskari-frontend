@@ -504,6 +504,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
         setLocation: function (location, layerSelectionContainer) {
             var container = layerSelectionContainer || this.element;
+            if (this.conf) {
+                this.conf.location = location;
+            }
             if (location) {
                 if (location.top) {
                     container.css('top', location.top);

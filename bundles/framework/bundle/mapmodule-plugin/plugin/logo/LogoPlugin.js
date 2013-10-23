@@ -161,6 +161,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
 
         setLocation: function (location, logoContainer) {
             var container = logoContainer || this.element;
+            if (this.conf) {
+                this.conf.location = location;
+            }
             // override default location if configured
             if (location) {
                 if (location.top) {
