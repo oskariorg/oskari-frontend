@@ -115,7 +115,7 @@ module.exports = function (grunt) {
         },
         beautifyJS: {
             target: {
-                src: ['../{applications,bundles,packages}/**/*.js']
+                src: ['../{bundles,packages}/**/*.js']
             }
         }
     });
@@ -558,7 +558,8 @@ module.exports = function (grunt) {
                     return false;
                 }
                 grunt.log.writeln("Beautifying " + filepath);
-                contents =  grunt.file.read(filepath);
+                // replace tabs with four spaces, beautify only does this for indentation
+                contents = grunt.file.read(filepath).replace(/\t/g, '    ');
                 grunt.file.write(filepath, beautify(contents, beautifyOptions));
                 return true;
             });
