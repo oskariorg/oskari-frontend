@@ -346,9 +346,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         _loadAllLayersAjaxCallBack: function (pResp, callbackSuccess) {
             var allLayers = pResp.layers;
 
-
-            //console.dir(allLayers);
-
             for (var i = 0; i < allLayers.length; i++) {
 
                 var mapLayer = this.createMapLayer(allLayers[i]);
@@ -374,19 +371,14 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                         for (var subI = 0; subI < exSubLayers.length; subI++) { 
                            
                            var existingSubLayer = exSubLayers[subI]; 
-                           //console.log(mapLayer.getId() + ": subId" + existingSubLayer.getId())
                             if (exSubLayers[subI].admin != null) { 
                                 existingSubLayer.admin = mapSubLayers[subI].admin;
                             }
                             if (exSubLayers[subI].names) { 
                                 existingSubLayer.names = mapSubLayers[subI].names; 
                             }
-                           
-                             
                         }
                     }
-
-
                 }
             }
             // notify components of added layer if not suppressed
