@@ -152,7 +152,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                     for (s = 0; s < subLayers.length; s += 1) {
 
                         subUuid = subLayers[s].getMetadataIdentifier();
-                        console.log(subUuid + " " + subLayers[s].getName());
                         if (!subUuid || subUuid == "" ) {
                           subLmeta = false;      
                           break;
