@@ -345,6 +345,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         _loadAllLayersAjaxCallBack: function (pResp, callbackSuccess) {
             var allLayers = pResp.layers;
+
+
+            //console.dir(allLayers);
+
             for (var i = 0; i < allLayers.length; i++) {
 
                 var mapLayer = this.createMapLayer(allLayers[i]);
@@ -362,22 +366,23 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                         existingLayer.names = allLayers[i].names;
                     }
 
-                    if (existingLayer.getSubLayers() != null) {
+                    if (existingLayer.getSubLayers() != null) { // Set additional data to an sublayers
 
-                        var exSubLayers = existingLayer.getSubLayers(); // haetaan alitasot
+                        var exSubLayers = existingLayer.getSubLayers(); 
+                        var mapSubLayers = mapLayer.getSubLayers();
 
                         for (var subI = 0; subI < exSubLayers.length; subI++) { 
                            
-                           var existingSubLayer = this.findMapLayer(exSubLayers[subI].getId()); // etsitään taso
-
-                           console.dir(existingSubLayer);
-
-                            if (exSubLayers[subI].admin != null) { // katsotaan onko admin tietoa
-                                existingSubLayer.admin = allLayers[subI].admin; // lisätään admin tieto
+                           var existingSubLayer = exSubLayers[subI]; 
+                           //console.log(mapLayer.getId() + ": subId" + existingSubLayer.getId())
+                            if (exSubLayers[subI].admin != null) { 
+                                existingSubLayer.admin = mapSubLayers[subI].admin;
                             }
-                            if (exSubLayers[subI].names) { // onko nimitietoa
-                                existingSubLayer.names = allLayers[subI].names; // lisätään nimitieto
-                            } 
+                            if (exSubLayers[subI].names) { 
+                                existingSubLayer.names = mapSubLayers[subI].names; 
+                            }
+                           
+                             
                         }
                     }
 
