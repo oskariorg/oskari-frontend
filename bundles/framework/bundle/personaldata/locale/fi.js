@@ -38,7 +38,7 @@ Oskari.registerLocalization({
         }
       },
       "myviews": {
-        "title": "Omat näkymät",
+        "title": "Näkymät",
         "edit": "Muokkaa",
         "publish": "Muuta julkiseksi",
         "unpublish": "Muuta yksityiseksi",

@@ -290,9 +290,9 @@ function(instance, localization) {
 
         // Analyse NAME
         var selected_layers = me._selectedLayers();
-        var name = 'Analyysi_';
+        var name = '_';
         if (selected_layers[0])
-            name = name + selected_layers[0].name.substring(0, 10);
+            name = selected_layers[0].name.substring(0, 15)+name;
         var analyseTitle = me.template.title_name.clone();
         analyseTitle.find('.settings_name_label').html(me.loc.analyse_name.label);
         analyseTitle.find('.settings_name_field').attr({
@@ -601,6 +601,7 @@ function(instance, localization) {
         this._addPropertyTypes(layers);
         var options = [];
         var ii = 0;
+        var selected_layer = me._getSelectedMapLayer();
         // request updates for map tiles
         for (var i = 0; i < layers.length; i++) {
             if (layers[i].isLayerOfType('WFS') || layers[i].isLayerOfType('ANALYSIS')) {
@@ -609,8 +610,13 @@ function(instance, localization) {
                     label : layers[i].getName()
                 };
                 ii++;
-                if (ii == 1)
-                    option.checked = "checked";
+                if(selected_layer)
+                {
+                    // keep previous setup
+                    if(selected_layer.getName() === layers[i].getName() )option.checked = "checked";
+                }
+                else if (ii == 1) option.checked = "checked";
+
                 options.push(option);
             }
         }
@@ -647,6 +653,16 @@ function(instance, localization) {
             contentPanel.after(opt);
 
         }
+        // Analyse name
+        me._modifyAnalyseName();
+        var clickMagic = function() {
+            return function() {
+                me._modifyAnalyseName();
+            };
+        };
+
+        // layer changed cb
+        me.contentPanel.find('input').click(clickMagic());
 
         me._refreshFields();
     },
@@ -730,17 +746,16 @@ function(instance, localization) {
                 label = label + ' (' + option.width + ' x ' + option.height + 'px)';
             }
             toolContainer.find('label').append(label).attr({
-                'for' : option.id,
-                'class' : 'params_radiolabel'
-            });
-            if (option.selected) {
-                toolContainer.find('input').attr('checked', 'checked');
-            }
+                'for': option.id,
+                'class': 'params_radiolabel'
+            })
+            toolContainer.find('input').attr('checked', 'checked');
+
             contentPanel.append(toolContainer);
             toolContainer.find('input').attr({
-                'value' : option.id,
-                'name' : 'aggre',
-                'id' : option.id
+                'value': option.id,
+                'name': 'aggre',
+                'id': option.id
             });
             toolContainer.find('input').change(closureMagic(option));
         }
@@ -781,17 +796,17 @@ function(instance, localization) {
                     label = label + ' (' + option.width + ' x ' + option.height + 'px)';
                 }
                 toolContainer.find('label').append(label).attr({
-                    'for' : option.id,
-                    'class' : 'params_radiolabel'
+                    'for': option.id,
+                    'class': 'params_radiolabel'
                 });
-                if (option.selected) {
-                    toolContainer.find('input').attr('checked', 'checked');
-                }
+
+                toolContainer.find('input').attr('checked', 'checked');
+
                 contentPanel.append(toolContainer);
                 toolContainer.find('input').attr({
-                    'value' : option.id,
-                    'name' : 'aggre',
-                    'id' : option.id
+                    'value': option.id,
+                    'name': 'aggre',
+                    'id': option.id
                 });
                 toolContainer.find('input').change(closureMagic(option));
             }
@@ -1438,28 +1453,43 @@ function(instance, localization) {
                 }
             }
         }
-    },
+        },
         /**
          * Check if wfs field type is numeric
          * @param layers
          * @private
          */
-        _isNumericField : function(fieldName) {
+        _isNumericField: function (fieldName) {
             var me = this;
             var isIt = false;
             var selectedLayer = me._getSelectedMapLayer();
             var data = selectedLayer.getPropertyTypes();
-            jQuery.each(data, function(key, value){
-                if(fieldName === key)
-                {
-                  if(value == 'numeric')  isIt = true;
+            jQuery.each(data, function (key, value) {
+                if (fieldName === key) {
+                    if (value == 'numeric')  isIt = true;
                 }
             });
 
 
             return isIt;
         },
-    /**
+        /**
+         * Modify analyse name when analyse layer is changed
+         * @private
+         */
+        _modifyAnalyseName: function () {
+            var me = this;
+            var container = me.mainPanel;
+            var selected_layer = me._getSelectedMapLayer();
+            var name = '_';
+            if (selected_layer)
+                name = selected_layer.getName().substring(0, 15)+name;
+            container.find('.settings_name_field').attr({
+                'value' : name,
+                'placeholder' : me.loc.analyse_name.tooltip
+            });
+        },
+        /**
      * @method destroy
      * Destroyes/removes this view from the screen.
      */

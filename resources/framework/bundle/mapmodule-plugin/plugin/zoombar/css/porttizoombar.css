@@ -2,7 +2,8 @@ div.pzbDiv.mapplugin {
   top: 140px;
   right: 64px;
   background: transparent;
-  z-index: 15000; }
+  z-index: 15000;
+  /* Remember to removeClass */ }
   div.pzbDiv.mapplugin div.pzbDiv-plus {
     width: 18px;
     height: 46px;
@@ -18,3 +19,19 @@ div.pzbDiv.mapplugin {
     width: 18px;
     border: 0;
     margin: 0; }
+  div.pzbDiv.mapplugin.top {
+    bottom: auto;
+    top: 10px; }
+  div.pzbDiv.mapplugin.left {
+    left: 10px;
+    right: auto; }
+  div.pzbDiv.mapplugin.right {
+    left: auto;
+    right: 10px; }
+  div.pzbDiv.mapplugin.with-panbuttons.top {
+    /* Add panbuttons' height and top to top */
+    top: 110px !important; }
+  div.pzbDiv.mapplugin.with-panbuttons.left {
+    left: 45px !important; }
+  div.pzbDiv.mapplugin.with-panbuttons.right {
+    right: 43px !important; }

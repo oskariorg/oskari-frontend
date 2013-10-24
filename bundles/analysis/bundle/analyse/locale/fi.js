@@ -172,7 +172,8 @@ Oskari.registerLocalization({
                 "illegalCharacters": "ei kirjaimia - käytä numeroita",
                 "nohelp": "Ohjetta ei löytynyt",
                 "saveFailed": "Analyysin tallennus epäonnistui. Yritä myöhemmin uudelleen.",
-                "loadLayersFailed": "Analyysitasojen lataus epäonnistui. Yritä myöhemmin uudelleen."
+                "loadLayersFailed": "Analyysitasojen lataus epäonnistui. Yritä myöhemmin uudelleen.",
+                "loadLayerTypesFailed": "Analyysi- tai WFS-tason tietotyyppien haku epäonnistui "
              
             }
         },
@@ -221,7 +222,7 @@ Oskari.registerLocalization({
                 "name" : "Nimi",
                 "delete": " "
             },
-            "title" : "Analyysi",
+            "title" : "Analyysit",
             "confirmDeleteMsg" : "Haluatko poistaa analyysin:",
             "buttons" : {
                 "ok": "OK",

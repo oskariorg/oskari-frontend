@@ -122,16 +122,21 @@ function(instance) {
             // TODO: Handle WPS results when no FeatureCollection eg. aggregate
             if (analyseJson.wpsLayerId == "-1") {
                 // no analyse layer case  eg. aggregate wps function
-                this.instance.showMessage("Tulokset", analyseJson.result);
+              //  this.instance.showMessage("Tulokset", analyseJson.result);
             } else {
                 mapLayerService = this.instance.mapLayerService;
                 mapLayer = mapLayerService.createMapLayer(analyseJson);
                 mapLayer.setWpsUrl(analyseJson.wpsUrl);
                 mapLayer.setWpsName(analyseJson.wpsName);
                 // Add the layer to the map layer service
-                mapLayerService.addLayer(mapLayer);
+                mapLayerService.addLayer(mapLayer, true);
 
             } 
+        }
+        if (layerarr.length > 0) {
+            // notify components of added layer if not suppressed
+            var event = sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
+            sandbox.notifyAll(event); // add the analysis layers programmatically since normal link processing
         }
     },
      /**
@@ -178,7 +183,7 @@ function(instance) {
         },
         // Error callback
         function(jqXHR, textStatus, errorThrown) {
-            me.instance.showMessage(me.loc.error.title, me.loc.error.loadLayersFailed);
+            me.instance.showMessage(me.loc.error.title, me.loc.error.loadLayerTypesFailed);
         });
 
     },

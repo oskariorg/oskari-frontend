@@ -115,7 +115,7 @@ module.exports = function (grunt) {
         },
         beautifyJS: {
             target: {
-                src: ['../{applications,bundles,packages}/**/*.js']
+                src: ['../{bundles,packages}/**/*.js']
             }
         }
     });
@@ -331,9 +331,11 @@ module.exports = function (grunt) {
             files = fs.readdirSync(process.cwd());
             file = "";
             for (i in files) {
-                file = files[i];
-                if (file.indexOf('.cfg') !== -1) {
-                    packages.push(file);
+                if (files.hasOwnProperty(i)) {
+                    file = files[i];
+                    if (file.indexOf('.cfg') !== -1) {
+                        packages.push(file);
+                    }
                 }
             }
         } else {
@@ -532,7 +534,7 @@ module.exports = function (grunt) {
                     parsed = JSON.parse(content);
                     languageCode = filepath.substring(filepath.lastIndexOf("/") + 1, filepath.lastIndexOf("."));
                     if (languageCode !== parsed.lang) {
-                        grunt.fail.fatal("Language code mismatch in " + filepath + ":\nExpected " + languageCode + ", found " + parsed.lang +".");
+                        grunt.fail.fatal("Language code mismatch in " + filepath + ":\nExpected " + languageCode + ", found " + parsed.lang + ".");
                     }
                 } catch (err) {
                     grunt.fail.fatal(filepath + ": " + err);
@@ -556,8 +558,9 @@ module.exports = function (grunt) {
                     return false;
                 }
                 grunt.log.writeln("Beautifying " + filepath);
-                contents =  grunt.file.read(filepath);
-                grunt.file.write(filePath, beautify(contents, beautifyOptions));
+                // replace tabs with four spaces, beautify only does this for indentation
+                contents = grunt.file.read(filepath).replace(/\t/g, '    ');
+                grunt.file.write(filepath, beautify(contents, beautifyOptions));
                 return true;
             });
         });

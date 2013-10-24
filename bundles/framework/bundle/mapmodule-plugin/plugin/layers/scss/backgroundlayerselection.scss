@@ -13,16 +13,10 @@ div.backgroundLayerSelectionPlugin {
     $backgroundColor: #000;
     $backgroundOpacity: 0.3;
 
-    position: absolute;
     bottom: 0;
     left: 0;
-    /* override these, otherwise they're inherited from div.pzbDiv.mapplugin (which we need for z-index) */
-    right: auto !important;
-    top: auto !important;
     width: 100%;
     height: $buttonHeight + $contentVerticalMargin + $contentVerticalMargin;
-    margin: 0;
-    padding: 0;
     text-align: center;
 
     div.bg {
@@ -41,7 +35,6 @@ div.backgroundLayerSelectionPlugin {
         bottom: 0;
         left: 0;
         margin: $contentVerticalMargin 0;
-        padding: 0;
         width: 100%;
 
         div.currentSelection {

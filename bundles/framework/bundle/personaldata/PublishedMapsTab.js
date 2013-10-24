@@ -253,8 +253,8 @@ function(instance, localization) {
             var link = me.templateLink.clone();
             link.append(name);
             link.bind('click', function() {
-                // FIXME: debugging code - open published map in a new window
-                window.open ('/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=0&p_p_state=exclusive&published=true&viewId=' + data.id,
+                var publishedMapUrl = sandbox.getLocalizedProperty(me.instance.conf.publishedMapUrl);
+                window.open (publishedMapUrl + data.id,
                     "Published", "location=1,status=1,scrollbars=yes,width=850,height=800");
                 return false;
             });
@@ -301,7 +301,7 @@ function(instance, localization) {
                 var req = publishMapEditorRequestBuilder(data);
                 sandbox.request(instance, req);
             }
-        }
+        };
         
         //sending a request to publisher for editing view
         var editRenderer = function(name, data) {
