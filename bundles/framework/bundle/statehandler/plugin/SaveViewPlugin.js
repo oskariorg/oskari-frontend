@@ -9,175 +9,179 @@
  * the user returns to the map.
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlugin',
-/**
- * @method create called automatically on construction
- * @static
- * @param {String} ajaxUrl
- * 		URL that is called to save the state
- */
-function(ajaxUrl) {
-	this.handler = null;
-	this.pluginName = null;
-	this._sandbox = null;
-	this._ajaxUrl = ajaxUrl;
-}, {
-	/** @static @property __name plugin name */
-	__name : 'statehandler.SaveViewPlugin',
+    /**
+     * @method create called automatically on construction
+     * @static
+     * @param {String} ajaxUrl
+     *      URL that is called to save the state
+     */
 
-	/**
-	 * @method getName
-	 * @return {String} plugin name
-	 */
-	getName : function() {
-		return this.pluginName;
-	},
-	/**
-	 * @method getHandler
-	 * @return
-	 * {Oskari.mapframework.bundle.ui.module.statehandler.StateHandlerModule}
-	 * reference to state handler
-	 */
-	getHandler : function() {
-		return this.handler;
-	},
-	/**
-	 * @method setHandler
-	 * @param
-	 * {Oskari.mapframework.bundle.ui.module.statehandler.StateHandlerModule}
-	 * reference to state handler
-	 */
-	setHandler : function(statehandler) {
-		this.handler = statehandler;
-		this.pluginName = statehandler.getName() + this.__name;
-	},
-	/**
-	 * @method getState
-	 * @return null
-	 * Does nothing
-	 */
-	getState : function() {
-	},
-	/**
-	 * @method resetState
-	 * Does nothing
-	 */
-	resetState : function() {
-	},
-	/**
-	 * @method saveState
-	 * Saves current or given application state to server.
-	 * @param {Object} view (name, description)
-	 * @param {Object} pState view state (optional, uses
-	 * handler.getCurrentState() if not given)
-	 */
-	saveState : function(view, pState) {
+    function (ajaxUrl) {
+        this.handler = null;
+        this.pluginName = null;
+        this._sandbox = null;
+        this._ajaxUrl = ajaxUrl;
+    }, {
+        /** @static @property __name plugin name */
+        __name: 'statehandler.SaveViewPlugin',
 
-		var state = pState;
-		var me = this;
-		if (!state) {
-			state = this.handler.getCurrentState();
-		}
-		var data = {
-			currentViewId : me.handler.getCurrentViewId(),
-			viewData : state
-		};
+        /**
+         * @method getName
+         * @return {String} plugin name
+         */
+        getName: function () {
+            return this.pluginName;
+        },
+        /**
+         * @method getHandler
+         * @return
+         * {Oskari.mapframework.bundle.ui.module.statehandler.StateHandlerModule}
+         * reference to state handler
+         */
+        getHandler: function () {
+            return this.handler;
+        },
+        /**
+         * @method setHandler
+         * @param
+         * {Oskari.mapframework.bundle.ui.module.statehandler.StateHandlerModule}
+         * reference to state handler
+         */
+        setHandler: function (statehandler) {
+            this.handler = statehandler;
+            this.pluginName = statehandler.getName() + this.__name;
+        },
+        /**
+         * @method getState
+         * @return null
+         * Does nothing
+         */
+        getState: function () {},
+        /**
+         * @method resetState
+         * Does nothing
+         */
+        resetState: function () {},
+        /**
+         * @method saveState
+         * Saves current or given application state to server.
+         * @param {Object} view (name, description)
+         * @param {Object} pState view state (optional, uses
+         * handler.getCurrentState() if not given)
+         */
+        saveState: function (view, pState) {
 
-		if (view) {
-			data.viewName = view.name;
-			data.viewDescription = view.description;
-		}
+            var state = pState;
+            var me = this;
+            if (!state) {
+                state = this.handler.getCurrentState();
+            }
+            var data = {
+                currentViewId: me.handler.getCurrentViewId(),
+                viewData: state
+            };
 
-		var builder = me._sandbox.getEventBuilder('StateSavedEvent');
-		var event = builder(data.viewName, state);
+            if (view) {
+                data.viewName = view.name;
+                data.viewDescription = view.description;
+            }
 
-		//Create Cookie of map state save
-        jQuery.cookie.json = true;
-		var expiredays = 7;
+            var builder = me._sandbox.getEventBuilder('StateSavedEvent');
+            var event = builder(data.viewName, state);
 
-		jQuery.cookie("oskaristate", data, {expires: expiredays});
+            //Create Cookie of map state save
+            jQuery.cookie.json = true;
+            var expiredays = 7;
 
-		// need to serialize json data so parameters are sent correctly
-		data.viewData = JSON.stringify(data.viewData);
-		
-		// save to ajaxUrl
-		jQuery.ajax({
-			//dataType : "json",
-			type : "POST",
-			url : this._ajaxUrl + 'action_route=AddView',
-			data : data,
-			success : function(newView) {
-				me._sandbox.notifyAll(event);
-				me.handler.setCurrentViewId(newView.id);
-			},
-			error : function() {
-				// only show error if explicitly calling save
+            jQuery.cookie("oskaristate", data, {
+                expires: expiredays
+            });
 
-				if (data.viewName) {
-					event.setError(true);
-					me._sandbox.notifyAll(event);
-				}
-			}
-		});
-	},
-	// TODO: move to some util
-	serializeJSON : function(obj) {
-		var me = this;
-		var t = typeof (obj);
-		if (t != "object" || obj === null) {
-			// simple data type
-			if (t == "string")
-				obj = '"' + obj + '"';
-			return String(obj);
-		} else {
-			// array or object
-			var json = [], arr = (obj && obj.constructor == Array);
+            // need to serialize json data so parameters are sent correctly
+            data.viewData = JSON.stringify(data.viewData);
 
-			jQuery.each(obj, function(k, v) {
-				t = typeof (v);
-				if (t == "string") {
-					v = '"' + v + '"';
-				} else if (t == "object" & v !== null) {
-					v = me.serializeJSON(v);
-				}
-				json.push(( arr ? "" : '"' + k + '":') + String(v));
-			});
-			return ( arr ? "[" : "{") + String(json) + ( arr ? "]" : "}");
-		}
-	},
-	/**
-	 * @method startPlugin
-	 *
-	 * Interface method for the plugin protocol.
-	 * Binds window.onbeforeunload to saving the state.
-	 *
-	 * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-	 * 			reference to application sandbox
-	 */
-	startPlugin : function(sandbox) {
-		this._sandbox = sandbox;
-		var me = this;
-		jQuery(document).ready(function() {
-			window.onbeforeunload = function() {
-				// save state to session when leaving map window
-				me.saveState();
-			};
-		});
-	},
-	/**
-	 * @method stopPlugin
-	 *
-	 * Interface method for the plugin protocol
-	 *
-	 * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
-	 * 			reference to application sandbox
-	 */
-	stopPlugin : function(sandbox) {
-		this._sandbox = null;
-	}
-}, {
-	/**
-	 * @property {String[]} protocol array of superclasses as {String}
-	 * @static
-	 */
-	'protocol' : ['Oskari.mapframework.bundle.statehandler.plugin.Plugin']
-});
+            // save to ajaxUrl
+            jQuery.ajax({
+                //dataType : "json",
+                type: "POST",
+                url: this._ajaxUrl + 'action_route=AddView',
+                data: data,
+                success: function (newView) {
+                    me._sandbox.notifyAll(event);
+                    me.handler.setCurrentViewId(newView.id);
+                },
+                error: function () {
+                    // only show error if explicitly calling save
+
+                    if (data.viewName) {
+                        event.setError(true);
+                        me._sandbox.notifyAll(event);
+                    }
+                }
+            });
+        },
+        // TODO: move to some util
+        serializeJSON: function (obj) {
+            var me = this;
+            var t = typeof obj;
+            if (t !== "object" || obj === null) {
+                // simple data type
+                if (t === "string") {
+                    obj = '"' + obj + '"';
+                }
+                return String(obj);
+            } else {
+                // FIXME use ===
+                // array or object
+                var json = [],
+                    arr = (obj && obj.constructor == Array);
+
+                jQuery.each(obj, function (k, v) {
+                    t = typeof v;
+                    if (t === "string") {
+                        v = '"' + v + '"';
+                    } else if (t === "object" && v !== null) {
+                        v = me.serializeJSON(v);
+                    }
+                    json.push((arr ? "" : '"' + k + '":') + String(v));
+                });
+                return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
+            }
+        },
+        /**
+         * @method startPlugin
+         *
+         * Interface method for the plugin protocol.
+         * Binds window.onbeforeunload to saving the state.
+         *
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         *          reference to application sandbox
+         */
+        startPlugin: function (sandbox) {
+            this._sandbox = sandbox;
+            var me = this;
+            jQuery(document).ready(function () {
+                window.onbeforeunload = function () {
+                    // save state to session when leaving map window
+                    me.saveState();
+                };
+            });
+        },
+        /**
+         * @method stopPlugin
+         *
+         * Interface method for the plugin protocol
+         *
+         * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
+         *          reference to application sandbox
+         */
+        stopPlugin: function (sandbox) {
+            this._sandbox = null;
+        }
+    }, {
+        /**
+         * @property {String[]} protocol array of superclasses as {String}
+         * @static
+         */
+        'protocol': ['Oskari.mapframework.bundle.statehandler.plugin.Plugin']
+    });

@@ -144,8 +144,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
             }
 
 
-            if(! layer.getMetadataIdentifier()) {
-               subLayers = layer.getSubLayers();
+            if (!layer.getMetadataIdentifier()) {
+                subLayers = layer.getSubLayers();
                 subLmeta = false;
                 if (subLayers && subLayers.length > 0) {
                     subLmeta = true;
@@ -156,11 +156,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
                           subLmeta = false;      
                           break;
                         }
-                    }  
+                    }
                 }
             }
             if (layer.getMetadataIdentifier() || subLmeta) {
-               
+
                 tools.find('div.layer-info').addClass('icon-info');
                 tools.find('div.layer-info').click(function () {
                     rn = 'catalogue.ShowMetadataRequest';
@@ -205,9 +205,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.view.Layer",
 
             /* set sticky */
             if (layer.isSticky()) {
-               jQuery(layerDiv).find('input').attr('disabled', 'disabled');
+                jQuery(layerDiv).find('input').attr('disabled', 'disabled');
             }
-            
+
             /*
              * backend status
              */

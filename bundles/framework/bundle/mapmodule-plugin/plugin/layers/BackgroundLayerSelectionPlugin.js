@@ -280,24 +280,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
             return null;
         },
         /**
-         * @method _arrayContains
-         * @param  {Array} arr Array
-         * @param  {String} val Value
-         * @return {Boolean} True if arr contains val
-         */
-        _arrayContains: function (arr, val) {
-            var i;
-            if (arr.indexOf) {
-                return arr.indexOf(val) > -1;
-            }
-            for (i = arr.length; i > -1; i -= 1) {
-                if (arr[i] === val) {
-                    return true;
-                }
-            }
-            return false;
-        },
-        /**
          * Does the actual layer selection update
          * @param  {Number} newSelectionId Id of the new base layer
          * @private
@@ -316,7 +298,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
             // - check if current bottom layer exists & is in our list (if so, remove)
             if (currentBottom) {
                 currentBottomId += currentBottom.getId();
-                if (me._arrayContains(me.conf.baseLayers, currentBottomId)) {
+                if (jQuery.inArray(currentBottomId, me.conf.baseLayers) > -1) {
                     me._sandbox.postRequestByName('RemoveMapLayerRequest', [currentBottomId]);
                 }
             }
@@ -368,7 +350,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.BackgroundLayer
             });
             // - update currentSelection with the new selection's information if it's in baseLayers
             currentSelection.empty();
-            if (me._arrayContains(me.conf.baseLayers, newSelectionId)) {
+            if (jQuery.inArray(newSelectionId, me.conf.baseLayers) > -1) {
                 currentSelection.attr("data-layerId", newSelectionId);
                 currentSelection.attr("title", newSelectionName);
                 currentSelection.html(newSelectionName);
