@@ -450,7 +450,8 @@ function(config) {
      */
     featuresSelectedHandler : function(event) {
         if(event.getMapLayer().hasFeatureData()) {
-            var layer = this.getSandbox().findMapLayerFromSelectedMapLayers(event.getMapLayer().getId());
+            //var layer = this.getSandbox().findMapLayerFromSelectedMapLayers(event.getMapLayer().getId());
+            var layer = event.getMapLayer();
             var ids = layer.getClickedFeatureListIds();
             var tmpIds = event.getWfsFeatureIds();
             if(!event.isKeepSelection()) {
@@ -477,7 +478,7 @@ function(config) {
                 this.removeHighlightImages();
             }
 
-            this.getIO().highlightMapLayerFeatures(event.getMapLayer().getId(), event.getWfsFeatureIds(), event.isKeepSelection());
+            this.getIO().highlightMapLayerFeatures(layer.getId(), event.getWfsFeatureIds(), event.isKeepSelection());
         }
     },
 
