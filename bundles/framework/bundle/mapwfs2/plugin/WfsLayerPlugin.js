@@ -33,6 +33,7 @@ function(config) {
     this._tiles = {};
     this._tilesToUpdate = null;
     this._tileData = null;
+    this._tileDataTemp = null;
 
     this._mapClickData = { comet: false, ajax: false, wfs: [] };
 
@@ -123,6 +124,7 @@ function(config) {
         this._tilesToUpdate = Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache");
         // data for tiles - key: layerId + bbox
         this._tileData = Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache");
+        this._tileDataTemp = Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache");
     },
 
     /**
@@ -323,6 +325,7 @@ function(config) {
                 event.getBBOX(),
                 event.getSize(),
                 event.getLayerType(),
+                event.isBoundaryTile(),
                 event.isKeepPrevious()
             );
         }
@@ -934,28 +937,30 @@ function(config) {
      * @param {Object} imageSize
      * @param {String} layerType
      *           postfix so we can identify the tile as highlight/normal
+     * @param {Boolean} boundaryTile
+     *           true if on the boundary and should be redrawn
      * @param {Boolean} keepPrevious
      *           true to not delete existing tile
      */
-    drawImageTile : function(layer, imageUrl, imageBbox, imageSize, layerType, keepPrevious) {
+    drawImageTile : function(layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
         var layerName = this.__layerPrefix + layer.getId() + "_" + layerType;
         var boundsObj = new OpenLayers.Bounds(imageBbox);
 
         /** Safety checks */
-        if (!(imageUrl && layer && boundsObj)) {
+        if (!imageUrl || !layer || !boundsObj) {
             return;
         }
 
-        var layerScales = this.mapModule.calculateLayerScales(
-            layer.getMaxScale(),
-            layer.getMinScale()
-        );
-
         var layerIndex = null;
 
-        var ols = new OpenLayers.Size(imageSize.width, imageSize.height);
-
         if (layerType == this.__typeHighlight) {
+            var ols = new OpenLayers.Size(imageSize.width, imageSize.height);
+
+            var layerScales = this.mapModule.calculateLayerScales(
+                layer.getMaxScale(),
+                layer.getMinScale()
+            );
+
             var wfsMapImageLayer = new OpenLayers.Layer.Image(
                 layerName,
                 imageUrl,
@@ -997,16 +1002,22 @@ function(config) {
 
             var style = layer.getCurrentStyle().getName();
             var tileToUpdate = this._tilesToUpdate.mget(layer.getId(), bboxKey, "");
-                          
-            if (tileToUpdate && imageUrl) {
+                   
+            // put the data in cache      
+            if(!boundaryTile) { // normal case and cached
                 this._tileData.mput(layer.getId(), bboxKey, style, imageUrl);
+            } else { // temp cached and redrawn if gotten better
+                var dataForTileTemp = this._tileDataTemp.mget(layer.getId(), bboxKey, style);
+                if (dataForTileTemp) {
+                    return;
+                }
+                this._tileDataTemp.mput(layer.getId(), bboxKey, style, imageUrl);
+            }
+
+            if (tileToUpdate) {
                 tileToUpdate.draw(); // QUEUES updates! 
-            } else if (imageUrl) {
-                //console.log("UPDATING DATA FOR NON-EXISTING TILE?", bboxKey, style);
-                this._tileData.mput(layer.getId(), bboxKey, style, imageUrl);
             }
         }
-
     },
 
     /**
@@ -1047,6 +1058,9 @@ function(config) {
                 if (dataForTile) {
                      this._plugin._tilesToUpdate.mdel(this.layerId, bboxKey, ""); // remove from drawing
                 } else {
+                    // temp cache
+                    dataForTile = this._plugin._tileDataTemp.mget(this.layerId, bboxKey, style);
+
                     this._plugin._tilesToUpdate.mput(this.layerId, bboxKey, "", theTile); // put in drawing
                     // DEBUG image (red)
                     //dataForTile = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
@@ -1249,6 +1263,7 @@ function(config) {
      */
     refreshCaches : function() {
         this._tileData.purgeOffset(4*60*1000);
+        this._tileDataTemp.purgeOffset(4*60*1000);
     },
 
 
