@@ -345,6 +345,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         _loadAllLayersAjaxCallBack: function (pResp, callbackSuccess) {
             var allLayers = pResp.layers;
+
             for (var i = 0; i < allLayers.length; i++) {
 
                 var mapLayer = this.createMapLayer(allLayers[i]);
@@ -360,6 +361,23 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     }
                     if (allLayers[i].names) {
                         existingLayer.names = allLayers[i].names;
+                    }
+
+                    if (existingLayer.getSubLayers() != null) { // Set additional data to an sublayers
+
+                        var exSubLayers = existingLayer.getSubLayers(); 
+                        var mapSubLayers = mapLayer.getSubLayers();
+
+                        for (var subI = 0; subI < exSubLayers.length; subI++) { 
+                           
+                           var existingSubLayer = exSubLayers[subI]; 
+                            if (exSubLayers[subI].admin != null) { 
+                                existingSubLayer.admin = mapSubLayers[subI].admin;
+                            }
+                            if (exSubLayers[subI].names) { 
+                                existingSubLayer.names = mapSubLayers[subI].names; 
+                            }
+                        }
                     }
                 }
             }

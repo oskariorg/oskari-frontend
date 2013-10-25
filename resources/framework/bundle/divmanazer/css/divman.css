@@ -153,6 +153,11 @@ body {
   border-top: 1px solid #484846;
   border-bottom: 1px solid #212121;
   line-height: 24px; }
+  .oskari-tile.disabled {
+    opacity: 0.25;
+    filter: alpha(opacity=25);
+    /* For IE8 and earlier, unquote for libsass bug */
+    cursor: default; }
 
 .oskari-tile-title {
   display: inline-block;
