@@ -133,7 +133,7 @@ function(instance) {
 
             } 
         }
-        if (layerarr.length > 0) {
+        if (layerarr && layerarr.length > 0) {
             // notify components of added layer if not suppressed
             var event = sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
             sandbox.notifyAll(event); // add the analysis layers programmatically since normal link processing
