@@ -92,10 +92,10 @@ Oskari.registerLocalization({
 			"subLayers" 			: "Undernivå",
 			"addSubLayer"			: "Tillägg en undernivå",
 
-			"wmsInterfaceAddress" 	: "WMS&shy;-gränssnittets address",
-			"wmsInterfaceAddressDesc": "WMS&shy;-gränssnittets URL-address separerat med komma",
+			"wmsInterfaceAddress" 	: "WMS-gränssnittets address",
+			"wmsInterfaceAddressDesc": "WMS-gränssnittets URL-address separerat med komma",
 			"wmsServiceMetaId" 		: "WMS metadata tagg",
-			"wmsServiceMetaIdDesc" 	: "WMS&shy;-tjänstens metadata filtagg",
+			"wmsServiceMetaIdDesc" 	: "WMS-tjänstens metadata filtagg",
 			"layerNameAndDesc" 		: "Lagrets namn och kort beskrivning",
 
 			"metaInfoIdDesc" 		: "Geodata&shy;registrets metadata filtagg, som unikt identifierar metadatans XML beskrivning",

@@ -16,7 +16,6 @@ function(config) {
 
     this.mapModule = null;
     this.pluginName = null;
-    this.layerPrefix = "wfs_layer_";
 
     // connection and communication
     this._connection = null;
@@ -34,6 +33,7 @@ function(config) {
     this._tiles = {};
     this._tilesToUpdate = null;
     this._tileData = null;
+    this._tileDataTemp = null;
 
     this._mapClickData = { comet: false, ajax: false, wfs: [] };
 
@@ -59,6 +59,10 @@ function(config) {
         "tableRow" : '<tr></tr>',
         "tableCell" : '<td></td>'
     },
+
+    __layerPrefix : "wfs_layer_",
+    __typeHighlight : "highlight",
+    __typeNormal : "normal",
 
     /**
      * @method getName
@@ -120,6 +124,7 @@ function(config) {
         this._tilesToUpdate = Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache");
         // data for tiles - key: layerId + bbox
         this._tileData = Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache");
+        this._tileDataTemp = Oskari.clazz.create("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache");
     },
 
     /**
@@ -320,6 +325,7 @@ function(config) {
                 event.getBBOX(),
                 event.getSize(),
                 event.getLayerType(),
+                event.isBoundaryTile(),
                 event.isKeepPrevious()
             );
         }
@@ -401,7 +407,7 @@ function(config) {
                 styleName = "default";
             }
 
-            this.addMapLayerToMap(event.getMapLayer(), "normal"); // add WMS layer
+            this.addMapLayerToMap(event.getMapLayer(), this.__typeNormal); // add WMS layer
 
             // send together
             var self = this;
@@ -507,7 +513,7 @@ function(config) {
     changeMapLayerStyleHandler : function(event) {
         if(event.getMapLayer().hasFeatureData()) {
             // render "normal" layer with new style
-            var OLLayer = this.getOLMapLayer(event.getMapLayer(), "normal");
+            var OLLayer = this.getOLMapLayer(event.getMapLayer(), this.__typeNormal);
             OLLayer.redraw();
 
             this.getIO().setMapLayerStyle(
@@ -865,7 +871,7 @@ function(config) {
             layerPart = layer.getId();
         }
 
-        var layerName = new RegExp(this.layerPrefix + layerPart + "_highlight");
+        var layerName = new RegExp(this.__layerPrefix + layerPart + "_" + this.__typeHighlight);
 
         var removeLayers = this._map.getLayersByName(layerName);
         for ( var i = 0; i < removeLayers.length; i++) {
@@ -898,7 +904,7 @@ function(config) {
         if(layer) {
             layerPart = layer.getId();
         }
-        var wfsReqExp = new RegExp(this.layerPrefix + layerPart + "_(.*)", "i"); // that's all folks
+        var wfsReqExp = new RegExp(this.__layerPrefix + layerPart + "_(.*)", "i"); // that's all folks
         return this._map.getLayersByName(wfsReqExp);
     },
 
@@ -912,7 +918,7 @@ function(config) {
             return null;
         }
 
-        var layerName = this.layerPrefix + layer.getId() + "_" + type;
+        var layerName = this.__layerPrefix + layer.getId() + "_" + type;
         var wfsReqExp = new RegExp(layerName);
         return this._map.getLayersByName(wfsReqExp)[0];
     },
@@ -931,28 +937,30 @@ function(config) {
      * @param {Object} imageSize
      * @param {String} layerType
      *           postfix so we can identify the tile as highlight/normal
+     * @param {Boolean} boundaryTile
+     *           true if on the boundary and should be redrawn
      * @param {Boolean} keepPrevious
      *           true to not delete existing tile
      */
-    drawImageTile : function(layer, imageUrl, imageBbox, imageSize, layerType, keepPrevious) {
-        var layerName = this.layerPrefix + layer.getId() + "_" + layerType;
+    drawImageTile : function(layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
+        var layerName = this.__layerPrefix + layer.getId() + "_" + layerType;
         var boundsObj = new OpenLayers.Bounds(imageBbox);
 
         /** Safety checks */
-        if (!(imageUrl && layer && boundsObj)) {
+        if (!imageUrl || !layer || !boundsObj) {
             return;
         }
 
-        var layerScales = this.mapModule.calculateLayerScales(
-            layer.getMaxScale(),
-            layer.getMinScale()
-        );
-
         var layerIndex = null;
 
-        var ols = new OpenLayers.Size(imageSize.width, imageSize.height);
+        if (layerType == this.__typeHighlight) {
+            var ols = new OpenLayers.Size(imageSize.width, imageSize.height);
 
-        if (layerType == "highlight") {
+            var layerScales = this.mapModule.calculateLayerScales(
+                layer.getMaxScale(),
+                layer.getMinScale()
+            );
+
             var wfsMapImageLayer = new OpenLayers.Layer.Image(
                 layerName,
                 imageUrl,
@@ -980,8 +988,8 @@ function(config) {
             }
 
             // highlight picture on top of normal layer images
-            var normalLayerExp = new RegExp(this.layerPrefix + layer.getId() + "_normal");
-            var highlightLayerExp = new RegExp(this.layerPrefix + layer.getId() + "_highlight");
+            var normalLayerExp = new RegExp(this.__layerPrefix + layer.getId() + "_" + this.__typeNormal);
+            var highlightLayerExp = new RegExp(this.__layerPrefix + layer.getId() + "_" + this.__typeHighlight);
             var normalLayer = this._map.getLayersByName(normalLayerExp);
             var highlightLayer = this._map.getLayersByName(highlightLayerExp);
             if (normalLayer.length > 0 && highlightLayer.length > 0) {
@@ -994,16 +1002,22 @@ function(config) {
 
             var style = layer.getCurrentStyle().getName();
             var tileToUpdate = this._tilesToUpdate.mget(layer.getId(), bboxKey, "");
-                          
-            if (tileToUpdate && imageUrl) {
+                   
+            // put the data in cache      
+            if(!boundaryTile) { // normal case and cached
                 this._tileData.mput(layer.getId(), bboxKey, style, imageUrl);
+            } else { // temp cached and redrawn if gotten better
+                var dataForTileTemp = this._tileDataTemp.mget(layer.getId(), bboxKey, style);
+                if (dataForTileTemp) {
+                    return;
+                }
+                this._tileDataTemp.mput(layer.getId(), bboxKey, style, imageUrl);
+            }
+
+            if (tileToUpdate) {
                 tileToUpdate.draw(); // QUEUES updates! 
-            } else if (imageUrl) {
-                //console.log("UPDATING DATA FOR NON-EXISTING TILE?", bboxKey, style);
-                this._tileData.mput(layer.getId(), bboxKey, style, imageUrl);
             }
         }
-
     },
 
     /**
@@ -1013,7 +1027,7 @@ function(config) {
      * @param {String} layerType
      */
     addMapLayerToMap : function(_layer, layerType) {
-        var layerName = this.layerPrefix + _layer.getId() + "_" + layerType;
+        var layerName = this.__layerPrefix + _layer.getId() + "_" + layerType;
         var layerScales = this.getMapModule().calculateLayerScales(_layer.getMaxScale(), _layer.getMinScale());
 
         // default params and options
@@ -1044,6 +1058,9 @@ function(config) {
                 if (dataForTile) {
                      this._plugin._tilesToUpdate.mdel(this.layerId, bboxKey, ""); // remove from drawing
                 } else {
+                    // temp cache
+                    dataForTile = this._plugin._tileDataTemp.mget(this.layerId, bboxKey, style);
+
                     this._plugin._tilesToUpdate.mput(this.layerId, bboxKey, "", theTile); // put in drawing
                     // DEBUG image (red)
                     //dataForTile = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
@@ -1246,6 +1263,7 @@ function(config) {
      */
     refreshCaches : function() {
         this._tileData.purgeOffset(4*60*1000);
+        this._tileDataTemp.purgeOffset(4*60*1000);
     },
 
 

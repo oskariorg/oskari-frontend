@@ -1,12 +1,11 @@
 @font-face {
   font-family: "Liberation Sans";
-  src: url("/Oskari/resources/framework/bundle/printout/fonts/LiberationSans-Regular.ttf");
-}
+  src: url("/Oskari/resources/framework/bundle/printout/fonts/LiberationSans-Regular.ttf"); }
+
 @font-face {
   font-family: "Liberation Sans";
   src: url("/Oskari/resources/framework/bundle/printout/fonts/LiberationSans-Bold.ttf");
-  font-weight: bold;
-}
+  font-weight: bold; }
 
 div.notLoggedIn {
   padding: 10px; }

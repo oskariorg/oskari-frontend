@@ -12,12 +12,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSImageEvent',
  * @param {String} post fix
  * @param {Boolean} keep previous
  */
-function(layer, imageUrl, bbox, size, layerType, keepPrevious) {
+function(layer, imageUrl, bbox, size, layerType, boundaryTile, keepPrevious) {
     this._layer = layer;
     this._imageUrl = imageUrl;
     this._bbox = bbox;
     this._size = size;
     this._layerType = layerType;
+    this._boundaryTile = boundaryTile;
     this._keepPrevious = keepPrevious;
 }, {
     /** @static @property __name event name */
@@ -69,6 +70,14 @@ function(layer, imageUrl, bbox, size, layerType, keepPrevious) {
      */
     getLayerType : function() {
         return this._layerType;
+    },
+
+    /**
+     * @method isBoundaryTile
+     * @return {Boolean} boundary tile
+     */
+    isBoundaryTile : function() {
+        return this._boundaryTile;
     },
 
     /**

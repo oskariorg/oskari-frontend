@@ -27,6 +27,9 @@ function() {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/statistics/bundle/statsgrid/instance.js"
 		}, {
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/statistics/bundle/statsgrid/Tile.js"
+        }, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/statistics/bundle/statsgrid/StatsView.js"
 		}, {

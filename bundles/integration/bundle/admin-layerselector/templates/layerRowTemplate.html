@@ -1,6 +1,13 @@
+
+
 <div class="layer-tools">
     <div class="layer-backendstatus-icon backendstatus-ok"></div>
     <div class="layer-icon"></div><div class="layer-info"></div>
 </div>
-<div class="layer-title"><%= model.getName() %></div>
+<div class="layer-title">
+	<% if (!model.getPermission('edit')) { %><strike><% } %>
+		<%= model.getName() %>
+	<% if (!model.getPermission('edit')) { %></strike><% } %>
+</div>
+
 

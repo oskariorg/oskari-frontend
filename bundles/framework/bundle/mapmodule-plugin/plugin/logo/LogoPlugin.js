@@ -159,27 +159,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             return this.eventHandlers[event.getName()].apply(this, [event]);
         },
 
-        setLogoLocation: function (location, logoContainer) {
+        setLocation: function (location, logoContainer) {
+            var container = logoContainer || this.element;
+            if (this.conf) {
+                this.conf.location = location;
+            }
             // override default location if configured
             if (location) {
                 if (location.top) {
-                    logoContainer.css('bottom', 'auto');
-                    logoContainer.css('top', location.top);
+                    container.css('bottom', 'auto');
+                    container.css('top', location.top);
                 }
                 if (location.left) {
-                    logoContainer.css('right', 'auto');
-                    logoContainer.css('left', location.left);
+                    container.css('right', 'auto');
+                    container.css('left', location.left);
                 }
                 if (location.right) {
-                    logoContainer.css('left', 'auto');
-                    logoContainer.css('right', location.right);
+                    container.css('left', 'auto');
+                    container.css('right', location.right);
                 }
                 if (location.bottom) {
-                    logoContainer.css('top', 'auto');
-                    logoContainer.css('bottom', location.bottom);
+                    container.css('top', 'auto');
+                    container.css('bottom', location.bottom);
                 }
                 if (location.classes) {
-                    logoContainer.removeClass('top left bottom right center').addClass(location.classes);
+                    container.removeClass('top left bottom right center').addClass(location.classes);
                 }
             }
         },
@@ -212,7 +216,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             parentContainer.append(me.element);
 
             if (me.conf && me.conf.location) {
-                me.setLogoLocation(me.conf.location, me.element);
+                me.setLocation(me.conf.location, me.element);
             }
 
             link = me.element.find('div.icon');
