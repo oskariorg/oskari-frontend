@@ -16,7 +16,6 @@ function(config) {
 
     this.mapModule = null;
     this.pluginName = null;
-    this.layerPrefix = "wfs_layer_";
 
     // connection and communication
     this._connection = null;
@@ -59,6 +58,10 @@ function(config) {
         "tableRow" : '<tr></tr>',
         "tableCell" : '<td></td>'
     },
+
+    __layerPrefix : "wfs_layer_",
+    __typeHighlight : "highlight",
+    __typeNormal : "normal",
 
     /**
      * @method getName
@@ -401,7 +404,7 @@ function(config) {
                 styleName = "default";
             }
 
-            this.addMapLayerToMap(event.getMapLayer(), "normal"); // add WMS layer
+            this.addMapLayerToMap(event.getMapLayer(), this.__typeNormal); // add WMS layer
 
             // send together
             var self = this;
@@ -507,7 +510,7 @@ function(config) {
     changeMapLayerStyleHandler : function(event) {
         if(event.getMapLayer().hasFeatureData()) {
             // render "normal" layer with new style
-            var OLLayer = this.getOLMapLayer(event.getMapLayer(), "normal");
+            var OLLayer = this.getOLMapLayer(event.getMapLayer(), this.__typeNormal);
             OLLayer.redraw();
 
             this.getIO().setMapLayerStyle(
@@ -865,7 +868,7 @@ function(config) {
             layerPart = layer.getId();
         }
 
-        var layerName = new RegExp(this.layerPrefix + layerPart + "_highlight");
+        var layerName = new RegExp(this.__layerPrefix + layerPart + "_" + this.__typeHighlight);
 
         var removeLayers = this._map.getLayersByName(layerName);
         for ( var i = 0; i < removeLayers.length; i++) {
@@ -898,7 +901,7 @@ function(config) {
         if(layer) {
             layerPart = layer.getId();
         }
-        var wfsReqExp = new RegExp(this.layerPrefix + layerPart + "_(.*)", "i"); // that's all folks
+        var wfsReqExp = new RegExp(this.__layerPrefix + layerPart + "_(.*)", "i"); // that's all folks
         return this._map.getLayersByName(wfsReqExp);
     },
 
@@ -912,7 +915,7 @@ function(config) {
             return null;
         }
 
-        var layerName = this.layerPrefix + layer.getId() + "_" + type;
+        var layerName = this.__layerPrefix + layer.getId() + "_" + type;
         var wfsReqExp = new RegExp(layerName);
         return this._map.getLayersByName(wfsReqExp)[0];
     },
@@ -935,7 +938,7 @@ function(config) {
      *           true to not delete existing tile
      */
     drawImageTile : function(layer, imageUrl, imageBbox, imageSize, layerType, keepPrevious) {
-        var layerName = this.layerPrefix + layer.getId() + "_" + layerType;
+        var layerName = this.__layerPrefix + layer.getId() + "_" + layerType;
         var boundsObj = new OpenLayers.Bounds(imageBbox);
 
         /** Safety checks */
@@ -952,7 +955,7 @@ function(config) {
 
         var ols = new OpenLayers.Size(imageSize.width, imageSize.height);
 
-        if (layerType == "highlight") {
+        if (layerType == this.__typeHighlight) {
             var wfsMapImageLayer = new OpenLayers.Layer.Image(
                 layerName,
                 imageUrl,
@@ -980,8 +983,8 @@ function(config) {
             }
 
             // highlight picture on top of normal layer images
-            var normalLayerExp = new RegExp(this.layerPrefix + layer.getId() + "_normal");
-            var highlightLayerExp = new RegExp(this.layerPrefix + layer.getId() + "_highlight");
+            var normalLayerExp = new RegExp(this.__layerPrefix + layer.getId() + "_" + this.__typeNormal);
+            var highlightLayerExp = new RegExp(this.__layerPrefix + layer.getId() + "_" + this.__typeHighlight);
             var normalLayer = this._map.getLayersByName(normalLayerExp);
             var highlightLayer = this._map.getLayersByName(highlightLayerExp);
             if (normalLayer.length > 0 && highlightLayer.length > 0) {
@@ -1013,7 +1016,7 @@ function(config) {
      * @param {String} layerType
      */
     addMapLayerToMap : function(_layer, layerType) {
-        var layerName = this.layerPrefix + _layer.getId() + "_" + layerType;
+        var layerName = this.__layerPrefix + _layer.getId() + "_" + layerType;
         var layerScales = this.getMapModule().calculateLayerScales(_layer.getMaxScale(), _layer.getMinScale());
 
         // default params and options
