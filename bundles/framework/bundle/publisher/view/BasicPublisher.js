@@ -575,10 +575,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
             me.layerSelectionClasses.classes = me.layerSelectionClasses[layout];
             if (me.maplayerPanel.isEnabled()) {
-                console.log("lsp enabled, setting layout to ", me.layerSelectionClasses);
+//                console.log("lsp enabled, setting layout to ", me.layerSelectionClasses);
                 me.maplayerPanel.plugin.setLocation(me.layerSelectionClasses);
             } else {
-                console.log("lsp disabled, setting layout to ", me.layerSelectionClasses);
+//                console.log("lsp disabled, setting layout to ", me.layerSelectionClasses);
                 if (!me.maplayerPanel.plugin.conf) {
                     me.maplayerPanel.plugin.conf = {
                         "location": {
@@ -1261,7 +1261,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
          * @private
          */
         _resetLayerSelectionPlugin: function () {
-            console.log("_resetLayerSelectionPlugin");
             // stop and start if enabled to change language
             if (this.maplayerPanel.isEnabled()) {
                 var values = this.maplayerPanel.plugin.getBaseLayers();

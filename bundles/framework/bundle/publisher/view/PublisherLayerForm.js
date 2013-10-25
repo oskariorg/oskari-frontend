@@ -94,7 +94,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.PublisherLayerFor
         enablePlugin: function (blnEnabled) {
             if (blnEnabled) {
                 this.plugin.startPlugin(this.instance.sandbox);
-                console.log("Enabling LayerSelectionPlugin with location ", this.plugin.conf.location);
                 this.plugin.setLocation(this.plugin.conf.location);
             } else {
                 this.plugin.stopPlugin(this.instance.sandbox);
