@@ -409,7 +409,7 @@ module.exports = function (grunt) {
 
             // set configuration to concat
             grunt.config.set("concat." + profile + ".src", cfg.include);
-            grunt.config.set("concat." + profile + ".dest", "../libraries/OpenLayers/OpenLayers." + profile + ".js");
+            grunt.config.set("concat." + profile + ".dest", "../libraries/OpenLayers/OpenLayers-2.13.1." + profile + ".js");
         }
 
         // concatenate the files
