@@ -190,8 +190,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 option;
             for (i = 0; i < me.sizeOptions.length; i += 1) {
                 option = me.sizeOptions[i];
-                // FIXME use ===
-                if (initWidth === option.width && initHeight == option.height) {
+                if (initWidth === option.width && initHeight === option.height) {
                     option.selected = true;
                     sizeIsSet = true;
                 } else {
@@ -714,10 +713,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                 width;
             // get state of statsgrid
             var statsGrid = sandbox.getStatefulComponents().statsgrid;
-            // FIXME use !== or smthn
             if (statsGrid &&
                     statsGrid.state &&
-                    statsGrid.state.indicators != null) {
+                    statsGrid.state.indicators !== null && statsGrid.state.indicators !== undefined) {
 
                 //indicators + municipality (name & code)
                 var columns = statsGrid.state.indicators.length + 2;
@@ -1158,7 +1156,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
                     this._activatePreviewPlugin(this.tools[i], true);
                 }
             }
-
             mapModule.registerPlugin(this.logoPlugin);
             this.logoPlugin.startPlugin(me.instance.sandbox);
         },
@@ -1203,7 +1200,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.view.BasicPublisher',
             }
             // reset listing
             this.normalMapPlugins = [];
-
             mapModule.unregisterPlugin(this.logoPlugin);
             this.logoPlugin.stopPlugin(me.instance.sandbox);
         },
