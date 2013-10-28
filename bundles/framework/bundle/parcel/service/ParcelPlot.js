@@ -34,7 +34,7 @@ function(instance) {
 			fontColor : "#000000",
 			fontSize : "22px",
 			fontFamily : "SansSerif",
-			fontWeight : "bold",
+			fontWeight : "bold"
 		}
 	});
 

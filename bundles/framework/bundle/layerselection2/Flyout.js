@@ -541,10 +541,28 @@ function(instance) {
 		});
 
 		// data url link
+		 subLmeta = false;
 		if (!layer.getMetadataIdentifier()) {
-			// no functionality -> hide
-			tools.find('div.layer-description').hide();
-		} else {
+			//Check if sublayers have metadata info		
+ 			 subLayers = layer.getSubLayers();
+               
+                if (subLayers && subLayers.length > 0) {
+                    subLmeta = true;
+                    for (s = 0; s < subLayers.length; s += 1) {
+
+                        subUuid = subLayers[s].getMetadataIdentifier();
+                        if (!subUuid || subUuid == "" ) {
+                          subLmeta = false;      
+                          break;
+                        }
+                    }  
+                }
+            if (!subLmeta) {
+				// no functionality -> hide
+				tools.find('div.layer-description').hide();
+			}
+		} 
+		if (layer.getMetadataIdentifier() || subLmeta) {
 			tools.find('div.icon-info').bind('click', function() {
 				var rn = 'catalogue.ShowMetadataRequest';
 				var uuid = layer.getMetadataIdentifier();
