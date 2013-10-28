@@ -130,6 +130,7 @@ function() {
         me.sandbox = sandbox;
         
         var conf = me.conf;
+        console.log(conf);
         var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 		var plugin = Oskari.clazz.create('Oskari.harava.bundle.mapquestions.plugin.HaravaQuestionsMapPlugin', conf);
 		mapModule.registerPlugin(plugin);
